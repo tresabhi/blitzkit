@@ -10,8 +10,6 @@ import {
 import { readdirSync } from 'fs';
 import config from '../config.json' assert { type: 'json' };
 
-const VERIFY_CHANNEL = '1097677884266643527';
-
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
 });
@@ -22,7 +20,7 @@ client.on('ready', (c) => {
 });
 
 client.on('guildMemberAdd', (member) => {
-  member.guild.channels.cache.get(VERIFY_CHANNEL).send({
+  member.guild.channels.cache.get(config.verifyChannel)?.send({
     embeds: [
       new EmbedBuilder()
         .setColor('#8e3cf5')
