@@ -12,5 +12,8 @@
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
     "discord.js": "^12.5.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
   }
 }

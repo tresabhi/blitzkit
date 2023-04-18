@@ -8,7 +8,7 @@ module.exports = (client) => {
     member.guild.channels.cache
       .get(CHAT_CHANNEL)
       .send(
-        `Welcome <@${
+        `[YARN & DENO TEST] Welcome <@${
           member.id
         }> to Skilled! Use \`/verify <your in-game name>\` to continue.\nExample: \`/verify ${faker.internet.userName(
           undefined,
