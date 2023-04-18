@@ -1,3 +1,5 @@
 {
-  "cSpell.words": ["Abhi"]
+  "cSpell.words": ["Abhi"],
+  "deno.enable": false,
+  "deno.unstable": false
 }
