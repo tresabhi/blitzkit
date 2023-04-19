@@ -16,11 +16,15 @@ export async function execute(
   const serverName = SERVER_NAMES[server as keyof typeof SERVER_NAMES];
   const players = (await fetch(
     `https://api.wotblitz.${server}/wotb/account/list/?application_id=${config.wargaming_application_id}&search=${ign}`,
-  ).then((response) => response.json())) as {
-    data: { nickname: string; account_id: number }[];
-  };
+  ).then((response) => response.json())) as
+    | {
+        data: { nickname: string; account_id: number }[] | undefined;
+      }
+    | undefined;
 
-  if (players.data[0].nickname === ign) {
+  console.log(players);
+
+  if (players?.data?.[0].nickname === ign) {
     // good match
     const clanData = (await fetch(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${config.wargaming_application_id}&account_id=${players.data[0].account_id}&extra=clan`,
@@ -79,9 +83,13 @@ export async function execute(
           .setTitle(`Account not found`)
           .setDescription(
             `Are you sure your username is exactly "${ign}" in the ${serverName} server? I found ${
-              players.data.length < 100 ? players.data.length : 'over 100'
+              players?.data
+                ? players.data.length < 100
+                  ? players.data.length
+                  : 'over 100'
+                : 'no'
             } similarly spelled account${
-              players.data.length !== 1 ? 's' : ''
+              players?.data?.length !== 1 ? 's' : ''
             }. Try re-running the command. There might be a typo and capitalization matters.`,
           ),
       ],
