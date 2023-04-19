@@ -1,15 +1,80 @@
-import { CommandInteraction, SlashCommandBuilder } from 'discord.js';
+import {
+  CommandInteraction,
+  EmbedBuilder,
+  SlashCommandBuilder,
+} from 'discord.js';
+import config from '../../config.json' assert { type: 'json' };
 
-export function execute(interaction: CommandInteraction) {
-  interaction.reply(
-    //@ts-ignore
-    `you said your blitz username was ${interaction.options.getString(
-      'ign',
-    )} in ${
+export async function execute(interaction: CommandInteraction) {
+  const response = (await fetch(
+    `https://api.wotblitz.${
       //@ts-ignore
-      interaction.options.getString('server')
-    }`,
-  );
+      interaction.options.getString('server') === 'na'
+        ? 'com'
+        : //@ts-ignore
+          interaction.options.getString('server')
+    }/wotb/account/list/?application_id=${
+      config.wargaming_application_id
+      //@ts-ignore
+    }&search=${interaction.options.getString('ign')}`,
+  ).then((response) => response.json())) as {
+    data: { nickname: string; account_id: number }[];
+  };
+
+  if (response.data.length === 1) {
+    //@ts-ignore
+    if (response.data[0].nickname === interaction.options.getString('ign')) {
+      interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor('#82ff29')
+            .setTitle(`${interaction.user.username} is verified`)
+            .setDescription(
+              `The user is now verified as ${
+                //@ts-ignore
+                interaction.options.getString('ign')
+              }`,
+            ),
+        ],
+      });
+    } else {
+      interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor('#ff4747')
+            .setTitle(`Account not found`)
+            .setDescription(
+              //@ts-ignore
+              `No exact matches were found for "${interaction.options.getString(
+                'ign',
+              )}" in the ${
+                //@ts-ignore
+                interaction.options.getString('server')
+              } server. Are you sure you have no typos? Capitalization matters.`,
+            ),
+        ],
+      });
+    }
+  } else {
+    interaction.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor('#ff4747')
+          .setTitle(`Account not found`)
+          .setDescription(
+            //@ts-ignore
+            `Are you sure your username is "${interaction.options.getString(
+              'ign',
+            )}" in the ${
+              //@ts-ignore
+              interaction.options.getString('server')
+            } server? I found ${
+              response.data.length < 100 ? response.data.length : 'over 100'
+            } accounts. Try re-running the command.`,
+          ),
+      ],
+    });
+  }
 }
 
 export const data = new SlashCommandBuilder()

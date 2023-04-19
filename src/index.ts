@@ -22,6 +22,8 @@ client.on('ready', (c) => {
 });
 
 client.on('guildMemberAdd', async (member) => {
+  console.log(`${member.user.tag} joined`);
+
   //@ts-ignore
   await member.guild.channels.cache.get(config.discord_verify_channel)?.send({
     embeds: [

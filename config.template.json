@@ -1,5 +1,7 @@
 {
-  "token": "",
-  "clientId": "",
-  "guildId": ""
+  "discord_token": "",
+  "discord_client_id": "",
+  "discord_guild_id": "",
+  "discord_verify_channel": "",
+  "wargaming_application_id": ""
 }
