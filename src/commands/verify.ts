@@ -1,43 +1,75 @@
 import {
-  CommandInteraction,
+  CacheType,
+  ChatInputCommandInteraction,
   EmbedBuilder,
   SlashCommandBuilder,
 } from 'discord.js';
 import config from '../../config.json' assert { type: 'json' };
-import getBlitzURL from '../utilities/getBlitzURL.js';
 
-export async function execute(interaction: CommandInteraction) {
-  //@ts-ignore
-  const ign = interaction.options.getString('ign');
-  //@ts-ignore
-  const server = interaction.options.getString('server');
-  const blitzURL = getBlitzURL(server);
+const SERVER_NAMES = { com: 'North America', eu: 'Europe', asia: 'Asia' };
+
+export async function execute(
+  interaction: ChatInputCommandInteraction<CacheType>,
+) {
+  const ign = interaction.options.getString('ign')!;
+  const server = interaction.options.getString('server')!;
+  const serverName = SERVER_NAMES[server as keyof typeof SERVER_NAMES];
   const players = (await fetch(
-    `${blitzURL}account/list/?application_id=${config.wargaming_application_id}&search=${ign}`,
+    `https://api.wotblitz.${server}/wotb/account/list/?application_id=${config.wargaming_application_id}&search=${ign}`,
   ).then((response) => response.json())) as {
     data: { nickname: string; account_id: number }[];
   };
 
   if (players.data[0].nickname === ign) {
     // good match
-    const clan = (await fetch(
-      `${blitzURL}clans/accountinfo/?application_id=${config.wargaming_application_id}&account_id=${players.data[0].account_id}&extra=clan`,
+    const clanData = (await fetch(
+      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${config.wargaming_application_id}&account_id=${players.data[0].account_id}&extra=clan`,
     ).then((response) => response.json())) as {
-      data: { [key: number]: { clan: { tag: string } } };
+      data: { [key: number]: { clan: { tag: string } | null } };
     };
+    const clan = clanData.data[players.data[0].account_id].clan;
+    const clanTag = clan === null ? '' : ` [${clan.tag}]`;
 
-    interaction.reply({
-      embeds: [
-        new EmbedBuilder()
-          .setColor('#82ff29')
-          .setTitle(`${interaction.user.username} is verified`)
-          .setDescription(
-            `The user is now verified as ${ign} [${
-              clan.data[players.data[0].account_id].clan.tag
-            }]`,
-          ),
-      ],
-    });
+    if (interaction.member && interaction.guild) {
+      const member = interaction.guild?.members.cache.get(
+        interaction.member?.user.id,
+      );
+
+      member
+        ?.setNickname(`${ign}${clanTag}`)
+        .then(async () => {
+          await member.roles.remove(config.discord_verify_role);
+          await member.roles.add(config.discord_peasant_role);
+          await interaction.reply({
+            embeds: [
+              new EmbedBuilder()
+                .setColor('#82ff29')
+                .setTitle(`${interaction.user.username} is verified`)
+                .setDescription(`The user is now verified as ${ign}${clanTag}`),
+            ],
+          });
+
+          console.log(
+            `${interaction.user.username} verified as ${ign}${clanTag}`,
+          );
+        })
+        .catch(async () => {
+          await interaction.reply({
+            embeds: [
+              new EmbedBuilder()
+                .setColor('#ff4747')
+                .setTitle(`${interaction.user.username} failed to verify`)
+                .setDescription(
+                  'I may not have the permission to change your nickname.',
+                ),
+            ],
+          });
+
+          console.warn(
+            `${interaction.user.username} failed to verify as ${ign}${clanTag}`,
+          );
+        });
+    }
   } else {
     // no exact match
     interaction.reply({
@@ -46,7 +78,7 @@ export async function execute(interaction: CommandInteraction) {
           .setColor('#ff4747')
           .setTitle(`Account not found`)
           .setDescription(
-            `Are you sure your username is exactly "${ign}" in the ${server} server? I found ${
+            `Are you sure your username is exactly "${ign}" in the ${serverName} server? I found ${
               players.data.length < 100 ? players.data.length : 'over 100'
             } similarly spelled account${
               players.data.length !== 1 ? 's' : ''
@@ -66,9 +98,9 @@ export const data = new SlashCommandBuilder()
       .setDescription('The Blitz server you are in')
       .setRequired(true)
       .addChoices(
-        { name: 'NA', value: 'na' },
-        { name: 'EU', value: 'eu' },
-        { name: 'ASIA', value: 'asia' },
+        { name: SERVER_NAMES.com, value: 'com' },
+        { name: SERVER_NAMES.eu, value: 'eu' },
+        { name: SERVER_NAMES.asia, value: 'asia' },
       ),
   )
   .addStringOption((option) =>
