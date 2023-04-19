@@ -22,8 +22,6 @@ export async function execute(
       }
     | undefined;
 
-  console.log(players);
-
   if (players?.data?.[0].nickname === ign) {
     // good match
     const clanData = (await fetch(
