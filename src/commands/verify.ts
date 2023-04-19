@@ -48,7 +48,9 @@ export async function execute(interaction: CommandInteraction) {
           .setDescription(
             `Are you sure your username is exactly "${ign}" in the ${server} server? I found ${
               players.data.length < 100 ? players.data.length : 'over 100'
-            } account(s). Try re-running the command. There might be a typo and capitalization matters.`,
+            } similarly spelled account${
+              players.data.length !== 1 ? 's' : ''
+            }. Try re-running the command. There might be a typo and capitalization matters.`,
           ),
       ],
     });
