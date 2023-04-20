@@ -20,7 +20,7 @@ export async function execute(
     `https://api.wotblitz.${server}/wotb/account/list/?application_id=${process.env.WARGAMING_APPLICATION_ID}&search=${ign}`,
   ).then((response) => response.json())) as AccountList;
 
-  if (players?.data?.[0].nickname === ign) {
+  if (players?.data?.[0]?.nickname === ign) {
     // good match
     const clanData = (await fetch(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${process.env.WARGAMING_APPLICATION_ID}&account_id=${players.data[0].account_id}&extra=clan`,
