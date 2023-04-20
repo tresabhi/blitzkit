@@ -5,6 +5,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import config from '../../config.json' assert { type: 'json' };
+import AccountList from '../types/accountList.js';
 
 const SERVER_NAMES = { com: 'North America', eu: 'Europe', asia: 'Asia' };
 
@@ -16,11 +17,7 @@ export async function execute(
   const serverName = SERVER_NAMES[server as keyof typeof SERVER_NAMES];
   const players = (await fetch(
     `https://api.wotblitz.${server}/wotb/account/list/?application_id=${config.wargaming_application_id}&search=${ign}`,
-  ).then((response) => response.json())) as
-    | {
-        data: { nickname: string; account_id: number }[] | undefined;
-      }
-    | undefined;
+  ).then((response) => response.json())) as AccountList;
 
   if (players?.data?.[0].nickname === ign) {
     // good match

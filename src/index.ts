@@ -8,6 +8,7 @@ import {
   REST,
   Routes,
   SlashCommandBuilder,
+  TextChannel,
 } from 'discord.js';
 import { readdirSync } from 'fs';
 import config from '../config.json' assert { type: 'json' };
@@ -24,8 +25,11 @@ client.on('ready', (c) => {
 client.on('guildMemberAdd', async (member) => {
   console.log(`${member.user.tag} joined`);
 
-  //@ts-ignore
-  await member.guild.channels.cache.get(config.discord_verify_channel)?.send({
+  await (
+    member.guild.channels.cache.get(
+      config.discord_verify_channel,
+    ) as TextChannel
+  ).send({
     embeds: [
       new EmbedBuilder()
         .setColor('#8e3cf5')
@@ -39,10 +43,11 @@ client.on('guildMemberAdd', async (member) => {
         ),
     ],
   });
-  await member.guild.channels.cache
-    .get(config.discord_verify_channel)
-    //@ts-ignore
-    ?.send(member.toString());
+  await (
+    member.guild.channels.cache.get(
+      config.discord_verify_channel,
+    ) as TextChannel
+  ).send(member.toString());
 });
 
 export interface CommandRegistry {
