@@ -86,7 +86,7 @@ export async function execute(
                 : 'no'
             } similarly spelled account${
               players?.data?.length !== 1 ? 's' : ''
-            }. Try re-running the command. There might be a typo and capitalization matters.`,
+            }. Try re-running the command. Don't make typos and capitalize correctly.`,
           ),
       ],
     });
