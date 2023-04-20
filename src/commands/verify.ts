@@ -5,6 +5,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import config from '../../config.json' assert { type: 'json' };
+import discord from '../../discord.json' assert { type: 'json' };
 import AccountList from '../types/accountList.js';
 
 const SERVER_NAMES = { com: 'North America', eu: 'Europe', asia: 'Asia' };
@@ -37,8 +38,8 @@ export async function execute(
       member
         ?.setNickname(`${ign}${clanTag}`)
         .then(async () => {
-          await member.roles.remove(config.discord_verify_role);
-          await member.roles.add(config.discord_peasant_role);
+          await member.roles.remove(discord.verify_role);
+          await member.roles.add(discord.peasant_role);
           await interaction.reply({
             embeds: [
               new EmbedBuilder()

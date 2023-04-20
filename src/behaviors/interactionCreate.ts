@@ -1,3 +1,4 @@
+import discord from '../../discord.json' assert { type: 'json' };
 import {
   CacheType,
   Collection,
@@ -31,8 +32,8 @@ try {
 
   const data = (await rest.put(
     Routes.applicationGuildCommands(
-      config.discord_client_id,
-      config.discord_guild_id,
+      discord.client_id,
+      discord.guild_id,
     ),
     { body: commands },
   )) as { length: number };

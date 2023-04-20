@@ -1,14 +1,12 @@
 import { faker } from '@faker-js/faker';
 import { EmbedBuilder, GuildMember, TextChannel } from 'discord.js';
-import config from '../../config.json' assert { type: 'json' };
+import discord from '../../discord.json' assert { type: 'json' };
 
 export default async function (member: GuildMember) {
   console.log(`${member.user.tag} joined`);
 
   await (
-    member.guild.channels.cache.get(
-      config.discord_verify_channel,
-    ) as TextChannel
+    member.guild.channels.cache.get(discord.verify_channel) as TextChannel
   ).send({
     embeds: [
       new EmbedBuilder()
@@ -24,8 +22,6 @@ export default async function (member: GuildMember) {
     ],
   });
   await (
-    member.guild.channels.cache.get(
-      config.discord_verify_channel,
-    ) as TextChannel
+    member.guild.channels.cache.get(discord.verify_channel) as TextChannel
   ).send(member.toString());
 }
