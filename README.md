@@ -12,7 +12,7 @@ yarn
 
 ### Configuring
 
-Add an `.env` file to the root of the project with your `DISCORD_TOKEN` and `b001f1746167d1f1102720ff336a1f9b`
+Add an `.env` file to the root of the project with your `DISCORD_TOKEN` and `WARGAMING_APPLICATION_ID`
 
 ### Running
 
