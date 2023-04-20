@@ -4,11 +4,8 @@ import {
   EmbedBuilder,
   SlashCommandBuilder,
 } from 'discord.js';
-import { config } from 'dotenv';
 import discord from '../../discord.json' assert { type: 'json' };
 import AccountList from '../types/accountList.js';
-
-config();
 
 const SERVER_NAMES = { com: 'North America', eu: 'Europe', asia: 'Asia' };
 

@@ -7,11 +7,8 @@ import {
   Routes,
   SlashCommandBuilder,
 } from 'discord.js';
-import { config } from 'dotenv';
 import { readdirSync } from 'fs';
 import discord from '../../discord.json' assert { type: 'json' };
-
-config();
 
 export interface CommandRegistry {
   data: SlashCommandBuilder;

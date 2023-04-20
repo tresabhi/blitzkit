@@ -1,11 +1,9 @@
 import { Client, GatewayIntentBits } from 'discord.js';
-import { config } from 'dotenv';
 import guildMemberAdd from './behaviors/guildMemberAdd.js';
 import interactionCreate from './behaviors/interactionCreate.js';
 import ready from './behaviors/ready.js';
 import tokenRequirements from './utilities/tokenRequirements.js';
 
-config();
 tokenRequirements();
 
 const client = new Client({
