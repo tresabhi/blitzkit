@@ -1,4 +1,3 @@
-import discord from '../../discord.json' assert { type: 'json' };
 import {
   CacheType,
   Collection,
@@ -8,8 +7,11 @@ import {
   Routes,
   SlashCommandBuilder,
 } from 'discord.js';
+import { config } from 'dotenv';
 import { readdirSync } from 'fs';
-import config from '../../config.json' assert { type: 'json' };
+import discord from '../../discord.json' assert { type: 'json' };
+
+config();
 
 export interface CommandRegistry {
   data: SlashCommandBuilder;
@@ -19,7 +21,7 @@ export interface CommandRegistry {
 const commandCollection = new Collection<string, CommandRegistry>();
 const commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
 const commandFolders = readdirSync('src/commands/');
-const rest = new REST().setToken(config.discord_token);
+const rest = new REST().setToken(process.env.DISCORD_TOKEN!);
 
 for (const file of commandFolders) {
   const command = (await import(`../commands/${file}`)) as CommandRegistry;
@@ -31,10 +33,7 @@ try {
   console.log(`Started refreshing ${commands.length} command(s).`);
 
   const data = (await rest.put(
-    Routes.applicationGuildCommands(
-      discord.client_id,
-      discord.guild_id,
-    ),
+    Routes.applicationGuildCommands(discord.client_id, discord.guild_id),
     { body: commands },
   )) as { length: number };
 

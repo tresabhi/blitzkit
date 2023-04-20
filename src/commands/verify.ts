@@ -4,9 +4,11 @@ import {
   EmbedBuilder,
   SlashCommandBuilder,
 } from 'discord.js';
-import config from '../../config.json' assert { type: 'json' };
+import { config } from 'dotenv';
 import discord from '../../discord.json' assert { type: 'json' };
 import AccountList from '../types/accountList.js';
+
+config();
 
 const SERVER_NAMES = { com: 'North America', eu: 'Europe', asia: 'Asia' };
 
@@ -17,13 +19,13 @@ export async function execute(
   const server = interaction.options.getString('server')!;
   const serverName = SERVER_NAMES[server as keyof typeof SERVER_NAMES];
   const players = (await fetch(
-    `https://api.wotblitz.${server}/wotb/account/list/?application_id=${config.wargaming_application_id}&search=${ign}`,
+    `https://api.wotblitz.${server}/wotb/account/list/?application_id=${process.env.WARGAMING_APPLICATION_ID}&search=${ign}`,
   ).then((response) => response.json())) as AccountList;
 
   if (players?.data?.[0].nickname === ign) {
     // good match
     const clanData = (await fetch(
-      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${config.wargaming_application_id}&account_id=${players.data[0].account_id}&extra=clan`,
+      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${process.env.WARGAMING_APPLICATION_ID}&account_id=${players.data[0].account_id}&extra=clan`,
     ).then((response) => response.json())) as {
       data: { [key: number]: { clan: { tag: string } | null } };
     };
