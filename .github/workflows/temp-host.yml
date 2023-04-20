@@ -3,6 +3,9 @@ name: Temporary Host
 on:
   schedule:
     - cron: '*/50 */5 * * *'
+  push:
+    branches:
+      - 'main'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
