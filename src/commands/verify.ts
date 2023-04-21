@@ -6,16 +6,17 @@ import {
 } from 'discord.js';
 import fetch from 'node-fetch';
 import discord from '../../discord.json' assert { type: 'json' };
+import { SERVERS } from '../constants/servers.js';
 import AccountList from '../types/accountList.js';
 
-const SERVER_NAMES = { com: 'North America', eu: 'Europe', asia: 'Asia' };
+export const disabled = true;
 
 export async function execute(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
   const ign = interaction.options.getString('ign')!;
   const server = interaction.options.getString('server')!;
-  const serverName = SERVER_NAMES[server as keyof typeof SERVER_NAMES];
+  const serverName = SERVERS[server as keyof typeof SERVERS];
   const players = (await fetch(
     `https://api.wotblitz.${server}/wotb/account/list/?application_id=${process.env.WARGAMING_APPLICATION_ID}&search=${ign}`,
   ).then((response) => response.json())) as AccountList;
@@ -102,9 +103,9 @@ export const data = new SlashCommandBuilder()
       .setDescription('The Blitz server you are in')
       .setRequired(true)
       .addChoices(
-        { name: SERVER_NAMES.com, value: 'com' },
-        { name: SERVER_NAMES.eu, value: 'eu' },
-        { name: SERVER_NAMES.asia, value: 'asia' },
+        { name: SERVERS.com, value: 'com' },
+        { name: SERVERS.eu, value: 'eu' },
+        { name: SERVERS.asia, value: 'asia' },
       ),
   )
   .addStringOption((option) =>
