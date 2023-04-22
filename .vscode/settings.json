@@ -1,5 +1,12 @@
 {
-  "cSpell.words": ["Abhi", "accountinfo", "SKLLD", "wargaming", "winrate"],
+  "cSpell.words": [
+    "Abhi",
+    "accountinfo",
+    "SKLLD",
+    "Smri",
+    "wargaming",
+    "winrate"
+  ],
   "deno.enable": false,
   "deno.unstable": false
 }

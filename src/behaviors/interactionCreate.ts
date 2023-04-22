@@ -10,9 +10,10 @@ import {
 import { readdirSync } from 'fs';
 import discord from '../../discord.json' assert { type: 'json' };
 import getClientId from '../utilities/getClientId.js';
+import isDev from '../utilities/isDev.js';
 
 export interface CommandRegistry {
-  disabled?: boolean;
+  inDev?: boolean;
   data: SlashCommandBuilder;
   execute: (interaction: Interaction) => void;
 }
@@ -25,7 +26,7 @@ const rest = new REST().setToken(process.env.DISCORD_TOKEN!);
 for (const file of commandFolders) {
   const command = (await import(`../commands/${file}`)) as CommandRegistry;
 
-  if (!command.disabled) {
+  if (isDev() ? command.inDev ?? false : true) {
     commands.push(command.data.toJSON());
     commandCollection.set(command.data.name, command);
   }

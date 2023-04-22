@@ -1,8 +1,6 @@
-import { argv } from 'process';
 import discord from '../../discord.json' assert { type: 'json' };
-
-const isDev = argv.includes('--dev');
+import isDev from './isDev.js';
 
 export default function getClientId() {
-  return isDev ? discord.client_id_dev : discord.client_id;
+  return isDev() ? discord.client_id_dev : discord.client_id;
 }
