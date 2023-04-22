@@ -68,7 +68,7 @@ export async function execute(
                   ],
                   [
                     'XP per battle',
-                    (stats.all.xp / stats.all.battles).toFixed(2),
+                    (stats.all.xp / stats.all.battles).toFixed(0),
                   ],
                   [],
                   ['Damage ratio', stats.special.damageRatio.toFixed(2)],
