@@ -3,6 +3,7 @@ import {
   ChatInputCommandInteraction,
   EmbedBuilder,
 } from 'discord.js';
+import fetch from 'node-fetch';
 import { NEGATIVE_COLOR } from '../constants/colors.js';
 import { SERVERS } from '../constants/servers.js';
 import AccountList, { Account } from '../types/accountList.js';
