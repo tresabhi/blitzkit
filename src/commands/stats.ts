@@ -30,7 +30,6 @@ export async function execute(
           period === 'career' ? data.statistics : data[`period${period}d`];
 
         interaction.reply({
-          content: 'ass',
           embeds: [
             new EmbedBuilder()
               .setColor(SKILLED_COLOR)
