@@ -1,6 +1,11 @@
+export interface Account {
+  nickname: string;
+  account_id: number;
+}
+
 type AccountList =
   | {
-      data?: { nickname: string; account_id: number }[];
+      data?: Account[];
     }
   | undefined;
 

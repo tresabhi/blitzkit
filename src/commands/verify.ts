@@ -6,8 +6,9 @@ import {
 } from 'discord.js';
 import fetch from 'node-fetch';
 import discord from '../../discord.json' assert { type: 'json' };
+import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { SERVERS } from '../constants/servers.js';
-import AccountList from '../types/accountList.js';
+import getBlitzAccount from '../utilities/getBlitzAccount.js';
 
 export const disabled = true;
 
@@ -15,20 +16,18 @@ export async function execute(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
   const ign = interaction.options.getString('ign')!;
-  const server = interaction.options.getString('server')!;
-  const serverName = SERVERS[server as keyof typeof SERVERS];
-  const players = (await fetch(
-    `https://api.wotblitz.${server}/wotb/account/list/?application_id=${process.env.WARGAMING_APPLICATION_ID}&search=${ign}`,
-  ).then((response) => response.json())) as AccountList;
+  const server = interaction.options.getString(
+    'server',
+  ) as keyof typeof SERVERS;
 
-  if (players?.data?.[0]?.nickname === ign) {
+  getBlitzAccount(interaction, ign, server, async (account) => {
     // good match
     const clanData = (await fetch(
-      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${process.env.WARGAMING_APPLICATION_ID}&account_id=${players.data[0].account_id}&extra=clan`,
+      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${process.env.WARGAMING_APPLICATION_ID}&account_id=${account.account_id}&extra=clan`,
     ).then((response) => response.json())) as {
       data: { [key: number]: { clan: { tag: string } | null } };
     };
-    const clan = clanData.data[players.data[0].account_id].clan;
+    const clan = clanData.data[account.account_id].clan;
     const clanTag = clan === null ? '' : ` [${clan.tag}]`;
 
     if (interaction.member && interaction.guild) {
@@ -44,7 +43,7 @@ export async function execute(
           await interaction.reply({
             embeds: [
               new EmbedBuilder()
-                .setColor('#82ff29')
+                .setColor(POSITIVE_COLOR)
                 .setTitle(`${interaction.user.username} is verified`)
                 .setDescription(`The user is now verified as ${ign}${clanTag}`),
             ],
@@ -58,7 +57,7 @@ export async function execute(
           await interaction.reply({
             embeds: [
               new EmbedBuilder()
-                .setColor('#ff4747')
+                .setColor(NEGATIVE_COLOR)
                 .setTitle(`${interaction.user.username} failed to verify`)
                 .setDescription(
                   'I may not have the permission to change your nickname.',
@@ -71,27 +70,7 @@ export async function execute(
           );
         });
     }
-  } else {
-    // no exact match
-    interaction.reply({
-      embeds: [
-        new EmbedBuilder()
-          .setColor('#ff4747')
-          .setTitle(`Account not found`)
-          .setDescription(
-            `Are you sure your username is exactly "${ign}" in the ${serverName} server? I found ${
-              players?.data
-                ? players.data.length < 100
-                  ? players.data.length
-                  : 'over 100'
-                : 'no'
-            } similarly spelled account${
-              players?.data?.length !== 1 ? 's' : ''
-            }. Try re-running the command. Don't make typos and capitalize correctly.`,
-          ),
-      ],
-    });
-  }
+  });
 }
 
 export const data = new SlashCommandBuilder()

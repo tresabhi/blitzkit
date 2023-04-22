@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { EmbedBuilder, GuildMember, TextChannel } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
+import { SKILLED_COLOR } from '../constants/colors.js';
 
 export default async function (member: GuildMember) {
   console.log(`${member.user.tag} joined`);
@@ -10,7 +11,7 @@ export default async function (member: GuildMember) {
   ).send({
     embeds: [
       new EmbedBuilder()
-        .setColor('#8e3cf5')
+        .setColor(SKILLED_COLOR)
         .setTitle(`Welcome ${member.user.username}`)
         .setDescription(
           `Welcome to the Skilled server, **${
