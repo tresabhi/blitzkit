@@ -18,7 +18,7 @@ export default async function getBlitzAccount(
     `https://api.wotblitz.${server}/wotb/account/list/?application_id=${process.env.WARGAMING_APPLICATION_ID}&search=${ign}`,
   ).then((response) => response.json())) as AccountList;
 
-  if (players?.data?.[0]?.nickname === ign) {
+  if (players?.data && players.data[0]?.nickname === ign) {
     callback(players.data[0]);
   } else {
     // no exact match
@@ -36,7 +36,11 @@ export default async function getBlitzAccount(
                 : 0
             } similarly spelled account${
               players?.data?.length !== 1 ? 's' : ''
-            }. Try re-running the command. Don't make typos and capitalize correctly.`,
+            }. ${
+              players?.data && players.data.length > 0
+                ? `Did you mean "${players.data[0].nickname}"? `
+                : ''
+            }Try re-running the command, don't make typos, and capitalize correctly.`,
           ),
       ],
     });
