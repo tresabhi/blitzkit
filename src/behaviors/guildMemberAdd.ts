@@ -9,6 +9,7 @@ export default async function (member: GuildMember) {
   await (
     member.guild.channels.cache.get(discord.verify_channel) as TextChannel
   ).send({
+    content: member.toString(),
     embeds: [
       new EmbedBuilder()
         .setColor(SKILLED_COLOR)
@@ -22,7 +23,4 @@ export default async function (member: GuildMember) {
         ),
     ],
   });
-  await (
-    member.guild.channels.cache.get(discord.verify_channel) as TextChannel
-  ).send(member.toString());
 }
