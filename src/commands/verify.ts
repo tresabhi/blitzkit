@@ -10,8 +10,6 @@ import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { SERVERS } from '../constants/servers.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 
-export const disabled = true;
-
 export async function execute(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
