@@ -1,4 +1,5 @@
 import { Client, GatewayIntentBits } from 'discord.js';
+import guildMemberAdd from './behaviors/guildMemberAdd.js';
 import interactionCreate from './behaviors/interactionCreate.js';
 import ready from './behaviors/ready.js';
 import tokenRequirements from './utilities/tokenRequirements.js';
@@ -11,6 +12,6 @@ const client = new Client({
 
 client.on('error', console.error);
 client.on('ready', ready);
-// client.on('guildMemberAdd', guildMemberAdd);
+client.on('guildMemberAdd', guildMemberAdd);
 client.on('interactionCreate', interactionCreate);
 client.login(process.env.DISCORD_TOKEN);
