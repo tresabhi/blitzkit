@@ -54,7 +54,7 @@ export async function execute(
                   ['Losses', stats.all.losses],
                   ['Average tier', stats.avg_tier.toFixed(2)],
                   [],
-                  ['Hits per battle', stats.special.hpb.toFixed(0)],
+                  ['Hits per battle', stats.special.hpb.toFixed(2)],
                   ['Damage per battle', stats.special.dpb.toFixed(0)],
                   ['Kills per battle', stats.special.kpb.toFixed(2)],
                   ['Spots per battle', stats.special.spb.toFixed(2)],
