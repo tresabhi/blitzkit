@@ -29,7 +29,7 @@ export default async function getBlitzAccount(
           .setColor(NEGATIVE_COLOR)
           .setTitle(`Account not found`)
           .setDescription(
-            `Are you sure your username is exactly "${ign}" in the ${serverName} server? I found ${
+            `"I couldn't find ${ign}" in the ${serverName} server. I found ${
               players?.data
                 ? players.data.length < 100
                   ? players.data.length
@@ -41,7 +41,7 @@ export default async function getBlitzAccount(
               players?.data && players.data.length > 0
                 ? `Did you mean "${players.data[0].nickname}"? `
                 : ''
-            }Try re-running the command, don't make typos, and capitalize correctly.`,
+            }Re-run the command, don't make typos, and capitalize correctly.`,
           ),
       ],
     });
