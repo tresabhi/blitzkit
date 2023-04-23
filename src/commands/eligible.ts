@@ -12,8 +12,14 @@ import getBlitzStarsAccount from '../utilities/getBlitzStarsAccount.js';
 import poweredByBlitzStars from '../utilities/poweredByBlitzStars.js';
 
 export const CLANS = {
-  sklld: 'Skilled',
-  smri: 'Samurai',
+  sklld: {
+    name: 'Skilled',
+    id: 71559,
+  },
+  smri: {
+    name: 'Samurai',
+    id: 91244,
+  },
 };
 
 export async function execute(
@@ -90,15 +96,17 @@ export async function execute(
             new EmbedBuilder()
               .setTitle(
                 `${data.nickname} is ${eligible ? '' : 'not '}eligible for ${
-                  CLANS[clan]
+                  CLANS[clan].name
                 }`,
               )
               .setColor(eligible ? POSITIVE_COLOR : NEGATIVE_COLOR)
               .setDescription(
                 `${
                   eligible
-                    ? `${data.nickname} meets all the requirements set for ${CLANS[clan]}.`
-                    : `${data.nickname}'s shortcomings for ${CLANS[clan]} (${
+                    ? `${data.nickname} meets all the requirements set for ${CLANS[clan].name}.`
+                    : `${data.nickname}'s shortcomings for ${
+                        CLANS[clan].name
+                      } (${
                         clan === 'sklld' ? '30 days stats' : 'career stats'
                       }):\n\n${issues.join('\n')}`
                 }\n\n${blitzLinks(data)}`,
@@ -107,7 +115,9 @@ export async function execute(
         ],
       });
 
-      console.log(`Showing ${data.nickname}'s eligibility for ${CLANS[clan]}`);
+      console.log(
+        `Showing ${data.nickname}'s eligibility for ${CLANS[clan].name}`,
+      );
     });
   });
 }
@@ -120,8 +130,8 @@ export const data = new SlashCommandBuilder()
       .setName('clan')
       .setDescription('The Skilled clan you are checking')
       .addChoices(
-        { name: CLANS.sklld, value: 'sklld' },
-        { name: CLANS.smri, value: 'smri' },
+        { name: CLANS.sklld.name, value: 'sklld' },
+        { name: CLANS.smri.name, value: 'smri' },
       )
       .setRequired(true),
   )
