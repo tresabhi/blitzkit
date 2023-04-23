@@ -29,7 +29,7 @@ export default async function getBlitzAccount(
           .setColor(NEGATIVE_COLOR)
           .setTitle(`Account not found`)
           .setDescription(
-            `"I couldn't find ${ign}" in the ${serverName} server. I found ${
+            `I couldn't find "${ign}" in the ${serverName} server. I found ${
               players?.data
                 ? players.data.length < 100
                   ? players.data.length
