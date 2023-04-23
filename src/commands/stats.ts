@@ -97,6 +97,17 @@ export const data = new SlashCommandBuilder()
   .setDescription("Gets the user's in-game statistics")
   .addStringOption((option) =>
     option
+      .setName('period')
+      .setDescription('The last number of days of stats')
+      .setChoices(
+        { name: '30 Days', value: '30' },
+        { name: '90 Days', value: '90' },
+        { name: 'Career', value: 'career' },
+      )
+      .setRequired(true),
+  )
+  .addStringOption((option) =>
+    option
       .setName('server')
       .setDescription('The Blitz server you are in')
       .addChoices(
@@ -110,16 +121,5 @@ export const data = new SlashCommandBuilder()
     option
       .setName('ign')
       .setDescription('The username you use in Blitz')
-      .setRequired(true),
-  )
-  .addStringOption((option) =>
-    option
-      .setName('period')
-      .setDescription('The last number of days of stats')
-      .setChoices(
-        { name: '30 Days', value: '30' },
-        { name: '90 Days', value: '90' },
-        { name: 'Career', value: 'career' },
-      )
       .setRequired(true),
   );

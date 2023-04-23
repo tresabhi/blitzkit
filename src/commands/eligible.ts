@@ -16,8 +16,6 @@ export const CLANS = {
   smri: 'Samurai',
 };
 
-export const inDev = true;
-
 export async function execute(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
