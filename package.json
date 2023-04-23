@@ -9,7 +9,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@faker-js/faker": "^7.6.0",
     "@types/node": "^18.15.11",
     "discord.js": "^14.9.0",
     "node-fetch": "^3.3.1",
