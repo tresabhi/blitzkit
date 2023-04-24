@@ -11,6 +11,8 @@ import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getBlitzStarsAccount from '../utilities/getBlitzStarsAccount.js';
 import poweredByBlitzStars from '../utilities/poweredByBlitzStars.js';
 
+export const inDev = true;
+
 export const CLANS = {
   sklld: {
     name: 'Skilled',

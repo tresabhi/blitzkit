@@ -6,13 +6,13 @@ import {
 } from 'discord.js';
 import fetch from 'node-fetch';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
-import { AccountInfo } from '../types/accountInfo.js';
-import { ClanInfo } from '../types/clanInfo.js';
+import { ClanDetails } from '../types/clanDetails.js';
+import { PlayerPersonalData } from '../types/playerPersonalData.js';
 import { CLANS } from './eligible.js';
 
-const DEFAULT_THRESHOLD = 7;
-
 export const inDev = true;
+
+const DEFAULT_THRESHOLD = 7;
 
 export async function execute(
   interaction: ChatInputCommandInteraction<CacheType>,
@@ -25,7 +25,7 @@ export async function execute(
     await fetch(
       `https://api.wotblitz.com/wotb/clans/info/?application_id=${process.env.WARGAMING_APPLICATION_ID}&clan_id=${CLANS[clanName].id}`,
     )
-  ).json()) as ClanInfo;
+  ).json()) as ClanDetails;
   const clan = clanData.data[CLANS[clanName].id];
   const memberIds = clan.members_ids;
   const accountInfo = (await (
@@ -34,7 +34,7 @@ export async function execute(
         process.env.WARGAMING_APPLICATION_ID
       }&account_id=${memberIds.join(',')}`,
     )
-  ).json()) as AccountInfo;
+  ).json()) as PlayerPersonalData;
 
   const inactiveInfo = memberIds
     .map((memberId) => {

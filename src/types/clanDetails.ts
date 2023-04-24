@@ -1,4 +1,6 @@
-export interface ClanInfo {
+import { WargamingResponse } from './wargamingResponse.js';
+
+export interface ClanDetails extends WargamingResponse {
   data: {
     [key: number]: {
       recruiting_options: {

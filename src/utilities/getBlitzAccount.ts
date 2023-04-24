@@ -6,20 +6,24 @@ import {
 import fetch from 'node-fetch';
 import { NEGATIVE_COLOR } from '../constants/colors.js';
 import { SERVERS } from '../constants/servers.js';
-import AccountList, { Account } from '../types/accountList.js';
+import { Player, Players } from '../types/players.js';
 
 export default async function getBlitzAccount(
   interaction: ChatInputCommandInteraction<CacheType>,
   ign: string,
   server: keyof typeof SERVERS,
-  callback: (account: Account) => void,
+  callback: (account: Player) => void,
 ) {
   const serverName = SERVERS[server];
   const players = (await fetch(
     `https://api.wotblitz.${server}/wotb/account/list/?application_id=${process.env.WARGAMING_APPLICATION_ID}&search=${ign}`,
-  ).then((response) => response.json())) as AccountList;
+  ).then((response) => response.json())) as Players;
 
-  if (players?.data && players.data[0]?.nickname === ign) {
+  if (
+    players.status === 'ok' &&
+    players.data.length > 0 &&
+    players.data[0].nickname === ign
+  ) {
     callback(players.data[0]);
   } else {
     // no exact match

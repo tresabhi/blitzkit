@@ -1,4 +1,6 @@
-export interface AccountInfo {
+import { WargamingResponse } from './wargamingResponse.js';
+
+export interface PlayerPersonalData extends WargamingResponse {
   data: {
     [key: number]: {
       statistics: {
