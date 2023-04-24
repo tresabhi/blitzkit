@@ -2,7 +2,7 @@ import { WargamingResponse } from './wargamingResponse.js';
 
 export interface PlayerPersonalData extends WargamingResponse {
   data: {
-    [key: number]: {
+    [accountId: number]: {
       statistics: {
         clan: {
           spotted: number;

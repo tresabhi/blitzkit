@@ -10,8 +10,6 @@ import { ClanDetails } from '../types/clanDetails.js';
 import { PlayerPersonalData } from '../types/playerPersonalData.js';
 import { CLANS } from './eligible.js';
 
-export const inDev = true;
-
 const DEFAULT_THRESHOLD = 7;
 
 export async function execute(
@@ -28,7 +26,7 @@ export async function execute(
   ).json()) as ClanDetails;
   const clan = clanData.data[CLANS[clanName].id];
   const memberIds = clan.members_ids;
-  const accountInfo = (await (
+  const playerPersonalData = (await (
     await fetch(
       `https://api.wotblitz.com/wotb/account/info/?application_id=${
         process.env.WARGAMING_APPLICATION_ID
@@ -38,10 +36,10 @@ export async function execute(
 
   const inactiveInfo = memberIds
     .map((memberId) => {
-      const member = accountInfo.data[memberId];
+      const member = playerPersonalData.data[memberId];
       const inactiveDays = (time - member.last_battle_time) / 60 / 60 / 24;
 
-      return [member.nickname, inactiveDays] as [string, number];
+      return [member.nickname, inactiveDays] as const;
     })
     .filter(([, inactiveDays]) => inactiveDays >= threshold)
     .sort((a, b) => b[1] - a[1])

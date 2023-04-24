@@ -38,7 +38,7 @@ try {
   const data = (await rest.put(
     Routes.applicationGuildCommands(getClientId(), discord.guild_id),
     { body: commands },
-  )) as { length: number };
+  )) as RESTPostAPIChatInputApplicationCommandsJSONBody[];
 
   console.log(`Successfully reloaded ${data.length} command(s).`);
 } catch (error) {

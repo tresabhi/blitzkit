@@ -8,9 +8,8 @@ import fetch from 'node-fetch';
 import discord from '../../discord.json' assert { type: 'json' };
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { SERVERS } from '../constants/servers.js';
+import { PlayerClanData } from '../types/playerClanData.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
-
-export const inDev = true;
 
 export async function execute(
   interaction: ChatInputCommandInteraction<CacheType>,
@@ -24,11 +23,9 @@ export async function execute(
     // good match
     const clanData = (await fetch(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${process.env.WARGAMING_APPLICATION_ID}&account_id=${account.account_id}&extra=clan`,
-    ).then((response) => response.json())) as {
-      data: { [key: number]: { clan: { tag: string } | null } };
-    };
+    ).then((response) => response.json())) as PlayerClanData;
     const clan = clanData.data[account.account_id].clan;
-    const clanTag = clan === null ? '' : ` [${clan.tag}]`;
+    const clanTag = clan === null ? '' : ` [${clan!.tag}]`;
 
     if (interaction.member && interaction.guild) {
       const member = interaction.guild?.members.cache.get(

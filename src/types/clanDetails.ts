@@ -2,7 +2,7 @@ import { WargamingResponse } from './wargamingResponse.js';
 
 export interface ClanDetails extends WargamingResponse {
   data: {
-    [key: number]: {
+    [accountId: number]: {
       recruiting_options: {
         vehicles_level: number;
         wins_ratio: number;
