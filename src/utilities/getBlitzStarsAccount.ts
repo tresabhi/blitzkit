@@ -13,18 +13,26 @@ export default async function getBlitzStarsAccount(
   ign: string,
   callback: (account: PlayerStatistics) => void,
 ) {
+  function notTracked() {
+    interaction.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setTitle('No data to display')
+          .setDescription(`${ign} is not tracked by BlitzStars.`)
+          .setColor(NEGATIVE_COLOR),
+      ],
+    });
+  }
+
   fetch(`https://www.blitzstars.com/api/top/player/${accountId}`)
     .then(async (response) => {
-      callback((await response.json()) as PlayerStatistics);
+      const data = (await response.json()) as PlayerStatistics;
+
+      if (data.statistics) {
+        callback(data);
+      } else {
+        notTracked();
+      }
     })
-    .catch(() => {
-      interaction.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setTitle('No data to display')
-            .setDescription(`${ign} is not tracked by BlitzStars.`)
-            .setColor(NEGATIVE_COLOR),
-        ],
-      });
-    });
+    .catch(notTracked);
 }

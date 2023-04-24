@@ -12,6 +12,8 @@ import { CLANS } from './eligible.js';
 
 const DEFAULT_THRESHOLD = 7;
 
+export const inDev = true;
+
 export async function execute(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
