@@ -109,5 +109,5 @@ export const data = new SlashCommandBuilder()
       .setDescription('The tier you want to see (default: all tiers)')
       .setMinValue(1)
       .setMaxValue(10)
-      .setRequired(false),
+      .setRequired(true),
   );
