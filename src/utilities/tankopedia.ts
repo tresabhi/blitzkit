@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 export type TankType = 'heavyTank' | 'AT-SPG' | 'mediumTank' | 'lightTank';
 
 export interface Tankopedia {
