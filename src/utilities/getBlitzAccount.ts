@@ -5,16 +5,16 @@ import {
 } from 'discord.js';
 import fetch from 'node-fetch';
 import { NEGATIVE_COLOR } from '../constants/colors.js';
-import { SERVERS } from '../constants/servers.js';
+import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import { Player, Players } from '../types/players.js';
 
 export default async function getBlitzAccount(
   interaction: ChatInputCommandInteraction<CacheType>,
   ign: string,
-  server: keyof typeof SERVERS,
+  server: BlitzServer,
   callback: (account: Player) => void,
 ) {
-  const serverName = SERVERS[server];
+  const serverName = BLITZ_SERVERS[server];
   const players = (await fetch(
     `https://api.wotblitz.${server}/wotb/account/list/?application_id=${process.env.WARGAMING_APPLICATION_ID}&search=${ign}`,
   ).then((response) => response.json())) as Players;

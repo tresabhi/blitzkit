@@ -4,19 +4,17 @@ import {
   EmbedBuilder,
   SlashCommandBuilder,
 } from 'discord.js';
+import fetch from 'node-fetch';
 import { SKILLED_COLOR } from '../constants/colors.js';
-import { SERVERS } from '../constants/servers.js';
+import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import { TanksStats } from '../types/tanksStats.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import { tankTypeEmojis, tankopedia } from '../utilities/tankopedia.js';
-import fetch from 'node-fetch';
 
 export async function execute(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
-  const server = interaction.options.getString(
-    'server',
-  ) as keyof typeof SERVERS;
+  const server = interaction.options.getString('server') as BlitzServer;
   const ign = interaction.options.getString('ign')!;
   let tier = interaction.options.getNumber('tier');
 
@@ -92,9 +90,9 @@ export const data = new SlashCommandBuilder()
       .setDescription('The Blitz server you are in')
       .setRequired(true)
       .addChoices(
-        { name: SERVERS.com, value: 'com' },
-        { name: SERVERS.eu, value: 'eu' },
-        { name: SERVERS.asia, value: 'asia' },
+        { name: BLITZ_SERVERS.com, value: 'com' },
+        { name: BLITZ_SERVERS.eu, value: 'eu' },
+        { name: BLITZ_SERVERS.asia, value: 'asia' },
       ),
   )
   .addStringOption((option) =>

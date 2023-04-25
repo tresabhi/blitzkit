@@ -7,7 +7,7 @@ import {
 import fetch from 'node-fetch';
 import discord from '../../discord.json' assert { type: 'json' };
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
-import { SERVERS } from '../constants/servers.js';
+import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 
@@ -15,9 +15,7 @@ export async function execute(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
   const ign = interaction.options.getString('ign')!;
-  const server = interaction.options.getString(
-    'server',
-  ) as keyof typeof SERVERS;
+  const server = interaction.options.getString('server') as BlitzServer;
 
   getBlitzAccount(interaction, ign, server, async (account) => {
     // good match
@@ -79,9 +77,9 @@ export const data = new SlashCommandBuilder()
       .setDescription('The Blitz server you are in')
       .setRequired(true)
       .addChoices(
-        { name: SERVERS.com, value: 'com' },
-        { name: SERVERS.eu, value: 'eu' },
-        { name: SERVERS.asia, value: 'asia' },
+        { name: BLITZ_SERVERS.com, value: 'com' },
+        { name: BLITZ_SERVERS.eu, value: 'eu' },
+        { name: BLITZ_SERVERS.asia, value: 'asia' },
       ),
   )
   .addStringOption((option) =>

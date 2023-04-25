@@ -5,7 +5,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
-import { SERVERS } from '../constants/servers.js';
+import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import blitzLinks from '../utilities/blitzLinks.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getBlitzStarsAccount from '../utilities/getBlitzStarsAccount.js';
@@ -15,9 +15,7 @@ export async function execute(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
   const ign = interaction.options.getString('ign')!;
-  const server = interaction.options.getString(
-    'server',
-  ) as keyof typeof SERVERS;
+  const server = interaction.options.getString('server') as BlitzServer;
   const period = interaction.options.getString('period')! as
     | '30'
     | '90'
@@ -111,9 +109,9 @@ export const data = new SlashCommandBuilder()
       .setName('server')
       .setDescription('The Blitz server you are in')
       .addChoices(
-        { name: SERVERS.com, value: 'com' },
-        { name: SERVERS.eu, value: 'eu' },
-        { name: SERVERS.asia, value: 'asia' },
+        { name: BLITZ_SERVERS.com, value: 'com' },
+        { name: BLITZ_SERVERS.eu, value: 'eu' },
+        { name: BLITZ_SERVERS.asia, value: 'asia' },
       )
       .setRequired(true),
   )
