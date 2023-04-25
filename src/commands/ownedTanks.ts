@@ -9,6 +9,7 @@ import { SERVERS } from '../constants/servers.js';
 import { TanksStats } from '../types/tanksStats.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import { tankTypeEmojis, tankopedia } from '../utilities/tankopedia.js';
+import fetch from 'node-fetch';
 
 export async function execute(
   interaction: ChatInputCommandInteraction<CacheType>,
