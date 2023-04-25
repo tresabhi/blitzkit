@@ -16,9 +16,7 @@ export async function execute(
 ) {
   const server = interaction.options.getString('server') as BlitzServer;
   const ign = interaction.options.getString('ign')!;
-  let tier = interaction.options.getNumber('tier');
-
-  tier = tier === null ? null : Math.round(tier);
+  const tier = Math.round(interaction.options.getNumber('tier')!);
 
   getBlitzAccount(interaction, ign, server, async (account) => {
     const tankStats = (await (
@@ -29,25 +27,7 @@ export async function execute(
 
     const tanks = tankStats.data[account.account_id]!.map(
       (tankData) => tankopedia.data[tankData.tank_id],
-    );
-    const tierSortedTanks: Record<number, typeof tanks> = {};
-    const tiers: number[] = [];
-
-    for (const tank of tanks) {
-      if (!tierSortedTanks[tank.tier]) {
-        tierSortedTanks[tank.tier] = [tank];
-      } else {
-        tierSortedTanks[tank.tier].push(tank);
-      }
-
-      if (tier === null && !tiers.includes(tank.tier)) tiers.push(tank.tier);
-    }
-
-    if (tier === null) {
-      tiers.sort((a, b) => b - a);
-    } else {
-      tiers.push(tier);
-    }
+    ).filter((tank) => tank.tier === tier);
 
     interaction.reply({
       embeds: [
@@ -58,22 +38,16 @@ export async function execute(
             }tanks`,
           )
           .setDescription(
-            tiers
-              .map((iterationTier) => {
-                return `${tier === null ? `**Tier ${iterationTier}**:\n` : ''}${
-                  tierSortedTanks[iterationTier] === undefined
-                    ? `No tanks found for player in tier ${tier}`
-                    : tierSortedTanks[iterationTier]
-                        .map(
-                          (tank) =>
-                            `${tankTypeEmojis[tank.type]} ${tank.name} ${
-                              tank.is_premium ? '⭐' : ''
-                            }`,
-                        )
-                        .join('\n')
-                }`;
-              })
-              .join('\n\n'),
+            tanks.length === 0
+              ? `No tanks found for player in tier ${tier}`
+              : tanks
+                  .map(
+                    (tank) =>
+                      `${tankTypeEmojis[tank.type]} ${tank.name} ${
+                        tank.is_premium ? '⭐' : ''
+                      }`,
+                  )
+                  .join('\n'),
           )
           .setColor(SKILLED_COLOR),
       ],
@@ -82,7 +56,7 @@ export async function execute(
 }
 
 export const data = new SlashCommandBuilder()
-  .setName('ownedtanks')
+  .setName('tanks')
   .setDescription("Shows a player's owned tanks")
   .addStringOption((option) =>
     option
