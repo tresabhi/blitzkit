@@ -22,7 +22,7 @@ export interface CommandRegistry {
   execute: (interaction: ChatInputCommandInteraction<CacheType>) => void;
 }
 
-const rest = new REST().setToken(process.env.DISCORD_TOKEN!);
+export const rest = new REST().setToken(process.env.DISCORD_TOKEN!);
 const commandFolders = readdirSync('src/commands/');
 const commandCollection = new Collection<string, CommandRegistry>();
 const guildCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
