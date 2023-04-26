@@ -1,5 +1,6 @@
 import {
   CacheType,
+  ChatInputCommandInteraction,
   Collection,
   Interaction,
   REST,
@@ -13,34 +14,53 @@ import getClientId from '../utilities/getClientId.js';
 import isDev from '../utilities/isDev.js';
 
 export interface CommandRegistry {
-  inDev?: boolean;
-  data: SlashCommandBuilder;
-  execute: (interaction: Interaction) => void;
+  inDevelopment: boolean; // register with Skilled Bot (default: false)
+  inProduction: boolean; // register with Skilled Canary (default: false)
+  inPublic: boolean; // registers on all servers (default: true)
+
+  command: Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
+  execute: (interaction: ChatInputCommandInteraction<CacheType>) => void;
 }
 
-const commandCollection = new Collection<string, CommandRegistry>();
-const commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
-const commandFolders = readdirSync('src/commands/');
 const rest = new REST().setToken(process.env.DISCORD_TOKEN!);
+const commandFolders = readdirSync('src/commands/');
+const commandCollection = new Collection<string, CommandRegistry>();
+const guildCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
+const publicCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
 
 for (const file of commandFolders) {
-  const command = (await import(`../commands/${file}`)) as CommandRegistry;
+  const command = (await import(`../commands/${file}`))
+    .default as CommandRegistry;
 
-  if (isDev() ? command.inDev ?? false : true) {
-    commands.push(command.data.toJSON());
-    commandCollection.set(command.data.name, command);
+  if (isDev() ? command.inDevelopment : command.inProduction) {
+    if (command.inPublic) {
+      publicCommands.push(command.command.toJSON());
+    } else {
+      guildCommands.push(command.command.toJSON());
+    }
+
+    commandCollection.set(command.command.name, command);
   }
 }
 
 try {
-  console.log(`Started refreshing ${commands.length} command(s).`);
+  console.log(`Refreshing ${guildCommands.length} guild command(s).`);
 
-  const data = (await rest.put(
+  const guildData = (await rest.put(
     Routes.applicationGuildCommands(getClientId(), discord.guild_id),
-    { body: commands },
+    { body: guildCommands },
   )) as RESTPostAPIChatInputApplicationCommandsJSONBody[];
 
-  console.log(`Successfully reloaded ${data.length} command(s).`);
+  console.log(`Successfully refreshed ${guildData.length} guild command(s).`);
+
+  console.log(`Refreshing ${publicCommands.length} public command(s).`);
+
+  const publicData = (await rest.put(
+    Routes.applicationCommands(getClientId()),
+    { body: publicCommands },
+  )) as RESTPostAPIChatInputApplicationCommandsJSONBody[];
+
+  console.log(`Successfully refreshed ${publicData.length} public command(s).`);
 } catch (error) {
   console.error(error);
 }
