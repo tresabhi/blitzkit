@@ -23,7 +23,7 @@ export default {
           .setTitle('Skilled Bot help')
           .setColor(SKILLED_COLOR)
           .setDescription(
-            `**About**\nSkilled Bot automates many mundane tasks and provide statistics in many flexible ways.\n\nMade by TresAbhi from the Skilled [SKLLD] clan.\nGitHub: https://github.com/sklld/bot\nSkilled: https://discord.gg/ZPvcEG7DS8\n\n**Commands**\n${(interaction.guildId ===
+            `**About**\nSkilled Bot automates many mundane tasks and provide statistics in numerous flexible ways.\n\nMade by TresAbhi from the Skilled [SKLLD] clan.\nGitHub: https://github.com/sklld/bot\nSkilled: https://discord.gg/ZPvcEG7DS8\n\n**Commands**\n${(interaction.guildId ===
             discord.guild_id
               ? [...guildCommands, ...publicCommands]
               : publicCommands
