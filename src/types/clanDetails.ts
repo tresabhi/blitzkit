@@ -29,6 +29,6 @@ export interface ClanDetailsData {
   description: string;
 }
 
-export interface ClanDetails extends WargamingResponse {
-  data: { [accountId: number]: ClanDetailsData };
-}
+export type ClanDetails = WargamingResponse<{
+  [accountId: number]: ClanDetailsData;
+}>;

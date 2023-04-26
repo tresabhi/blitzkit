@@ -8,6 +8,4 @@ export interface Clan {
   name: string;
 }
 
-export interface ClanList extends WargamingResponse {
-  data: Clan[];
-}
+export type ClanList = WargamingResponse<Clan[]>;

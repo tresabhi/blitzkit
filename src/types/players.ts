@@ -5,6 +5,4 @@ export interface Player {
   account_id: number;
 }
 
-export interface Players extends WargamingResponse {
-  data: Player[];
-}
+export type Players = WargamingResponse<Player[]>;
