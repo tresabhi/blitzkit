@@ -49,21 +49,21 @@ export default {
     )
     .addStringOption((option) =>
       option
-        .setName('ign')
+        .setName('name')
         .setDescription('The username you use in Blitz')
         .setRequired(true),
     ),
 
   execute(interaction) {
-    const ign = interaction.options.getString('ign')!;
+    const name = interaction.options.getString('name')!;
     const server = interaction.options.getString('server') as BlitzServer;
     const clan = interaction.options.getString('clan') as keyof typeof CLANS;
 
-    getBlitzAccount(interaction, ign, server, async (account) => {
+    getBlitzAccount(interaction, name, server, async (account) => {
       getBlitzStarsAccount(
         interaction,
         account.account_id,
-        ign,
+        name,
         async (data) => {
           const issues: string[] = [];
 

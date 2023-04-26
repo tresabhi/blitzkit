@@ -28,16 +28,16 @@ export default {
     )
     .addStringOption((option) =>
       option
-        .setName('ign')
+        .setName('name')
         .setDescription('The username you use in Blitz')
         .setRequired(true),
     ),
 
   execute(interaction) {
-    const ign = interaction.options.getString('ign')!;
+    const name = interaction.options.getString('name')!;
     const server = interaction.options.getString('server') as BlitzServer;
 
-    getBlitzAccount(interaction, ign, server, async (account) => {
+    getBlitzAccount(interaction, name, server, async (account) => {
       // good match
       const clanData = (await fetch(
         `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${process.env.WARGAMING_APPLICATION_ID}&account_id=${account.account_id}&extra=clan`,
@@ -51,7 +51,7 @@ export default {
         );
 
         member
-          ?.setNickname(`${ign}${clanTag}`)
+          ?.setNickname(`${name}${clanTag}`)
           .then(async () => {
             await member.roles.remove(discord.verify_role);
             await member.roles.add(discord.peasant_role);
@@ -61,13 +61,13 @@ export default {
                   .setColor(POSITIVE_COLOR)
                   .setTitle(`${interaction.user.username} is verified`)
                   .setDescription(
-                    `The user is now verified as ${ign}${clanTag}`,
+                    `The user is now verified as ${name}${clanTag}`,
                   ),
               ],
             });
 
             console.log(
-              `${interaction.user.username} verified as ${ign}${clanTag}`,
+              `${interaction.user.username} verified as ${name}${clanTag}`,
             );
           })
           .catch(async () => {
@@ -83,7 +83,7 @@ export default {
             });
 
             console.warn(
-              `${interaction.user.username} failed to verify as ${ign}${clanTag}`,
+              `${interaction.user.username} failed to verify as ${name}${clanTag}`,
             );
           });
       }

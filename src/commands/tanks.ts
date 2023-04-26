@@ -28,7 +28,7 @@ export default {
     )
     .addStringOption((option) =>
       option
-        .setName('ign')
+        .setName('name')
         .setDescription('The username you use in Blitz')
         .setRequired(true),
     )
@@ -43,10 +43,10 @@ export default {
 
   execute(interaction) {
     const server = interaction.options.getString('server') as BlitzServer;
-    const ign = interaction.options.getString('ign')!;
+    const name = interaction.options.getString('name')!;
     const tier = Math.round(interaction.options.getNumber('tier')!);
 
-    getBlitzAccount(interaction, ign, server, async (account) => {
+    getBlitzAccount(interaction, name, server, async (account) => {
       const tankStats = (await (
         await fetch(
           `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${process.env.WARGAMING_APPLICATION_ID}&account_id=${account.account_id}`,

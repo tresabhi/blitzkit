@@ -10,7 +10,7 @@ import { PlayerStatistics } from '../types/statistics.js';
 export default async function getBlitzStarsAccount(
   interaction: ChatInputCommandInteraction<CacheType>,
   accountId: number,
-  ign: string,
+  name: string,
   callback: (account: PlayerStatistics) => void,
 ) {
   function notTracked() {
@@ -18,7 +18,7 @@ export default async function getBlitzStarsAccount(
       embeds: [
         new EmbedBuilder()
           .setTitle('No data to display')
-          .setDescription(`${ign} is not tracked by BlitzStars.`)
+          .setDescription(`${name} is not tracked by BlitzStars.`)
           .setColor(NEGATIVE_COLOR),
       ],
     });
