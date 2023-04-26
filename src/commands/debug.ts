@@ -22,7 +22,7 @@ export default {
     await interaction.reply({
       embeds: [
         new EmbedBuilder()
-          .setTitle('Skilled Bot information')
+          .setTitle('Skilled Bot debug information')
           .setColor(SKILLED_COLOR)
           .setDescription(
             `**Version**: ${packageJSON.version}\n**Uptime**: ${Math.floor(

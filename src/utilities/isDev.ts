@@ -1,6 +1,4 @@
-import { argv } from 'process';
-
-const isDevBoolean = argv.includes('--dev');
+const isDevBoolean = process.argv.includes('--dev');
 
 export default function isDev() {
   return isDevBoolean;
