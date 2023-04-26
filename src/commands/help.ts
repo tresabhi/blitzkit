@@ -8,8 +8,8 @@ import {
 import { SKILLED_COLOR } from '../constants/colors.js';
 
 export default {
-  inProduction: false,
-  inDevelopment: true,
+  inProduction: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()

@@ -7,8 +7,8 @@ import getClientId from '../utilities/getClientId.js';
 import { tankopedia } from '../utilities/tankopedia.js';
 
 export default {
-  inProduction: false,
-  inDevelopment: true,
+  inProduction: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
