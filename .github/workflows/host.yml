@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  host:
     name: Host
     runs-on: ubuntu-latest
 

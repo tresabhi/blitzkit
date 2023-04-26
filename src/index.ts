@@ -5,6 +5,8 @@ import interactionCreate from './behaviors/interactionCreate.js';
 import ready from './behaviors/ready.js';
 import tokenRequirements from './utilities/tokenRequirements.js';
 
+export const executionStart = new Date().getTime();
+
 tokenRequirements();
 
 const client = new Client({

@@ -25,8 +25,10 @@ export interface CommandRegistry {
 export const rest = new REST().setToken(process.env.DISCORD_TOKEN!);
 const commandFolders = readdirSync('src/commands/');
 const commandCollection = new Collection<string, CommandRegistry>();
-const guildCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
-const publicCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
+export const guildCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
+  [];
+export const publicCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
+  [];
 
 for (const file of commandFolders) {
   const command = (await import(`../commands/${file}`))

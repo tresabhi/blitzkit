@@ -13,8 +13,8 @@ export default async function getBlitzStarsAccount(
   name: string,
   callback: (account: PlayerStatistics) => void,
 ) {
-  function notTracked() {
-    interaction.reply({
+  async function notTracked() {
+    await interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setTitle('No data to display')
@@ -22,6 +22,8 @@ export default async function getBlitzStarsAccount(
           .setColor(NEGATIVE_COLOR),
       ],
     });
+
+    console.log(`${name} is not tracked by BlitzStars.`);
   }
 
   fetch(`https://www.blitzstars.com/api/top/player/${accountId}`)

@@ -57,7 +57,7 @@ export default {
         (tankData) => tankopedia.data[tankData.tank_id],
       ).filter((tank) => tank.tier === tier);
 
-      interaction.reply({
+      await interaction.reply({
         embeds: [
           new EmbedBuilder()
             .setTitle(
@@ -80,6 +80,10 @@ export default {
             .setColor(SKILLED_COLOR),
         ],
       });
+
+      console.log(
+        `Displaying ${account.nickname}'s owned tanks in tier ${tier}`,
+      );
     });
   },
 } satisfies CommandRegistry;

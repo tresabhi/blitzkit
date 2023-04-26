@@ -27,7 +27,7 @@ export default async function getBlitzAccount(
     callback(players.data[0]);
   } else {
     // no exact match
-    interaction.reply({
+    await interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setColor(NEGATIVE_COLOR)
@@ -49,5 +49,7 @@ export default async function getBlitzAccount(
           ),
       ],
     });
+
+    console.log(`Account not found for ${name} in ${serverName} server.`);
   }
 }

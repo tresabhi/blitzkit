@@ -28,7 +28,7 @@ export default async function getClan(
     callback(clans.data[0]);
   } else {
     // no exact match
-    interaction.reply({
+    await interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setColor(NEGATIVE_COLOR)
@@ -48,5 +48,7 @@ export default async function getClan(
           ),
       ],
     });
+
+    console.log(`Clan not found for ${name} in ${serverName} server.`);
   }
 }
