@@ -1,6 +1,4 @@
-import { WargamingResponse } from './wargamingResponse.js';
-
-export type PlayerClanData = WargamingResponse<{
+export type PlayerClanData = {
   [accountId: number]: {
     account_id: number;
     joined_at: number;
@@ -17,4 +15,4 @@ export type PlayerClanData = WargamingResponse<{
       emblem_set_id: number;
     };
   };
-}>;
+};

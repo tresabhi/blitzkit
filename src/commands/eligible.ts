@@ -20,7 +20,7 @@ export const CLANS = {
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: false,
 
   command: new SlashCommandBuilder()

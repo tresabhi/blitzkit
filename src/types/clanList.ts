@@ -1,5 +1,3 @@
-import { WargamingResponse } from './wargamingResponse.js';
-
 export interface Clan {
   members_count: number;
   created_at: number;
@@ -8,4 +6,4 @@ export interface Clan {
   name: string;
 }
 
-export type ClanList = WargamingResponse<Clan[]>;
+export type ClanList = Clan[];

@@ -1,6 +1,4 @@
-import { WargamingResponse } from './wargamingResponse.js';
-
-export type PlayerPersonalData = WargamingResponse<{
+export type PlayerPersonalData = {
   [accountId: number]: {
     statistics: {
       clan: {
@@ -54,4 +52,4 @@ export type PlayerPersonalData = WargamingResponse<{
     last_battle_time: number;
     nickname: string;
   };
-}>;
+};

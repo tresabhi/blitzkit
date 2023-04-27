@@ -1,6 +1,4 @@
-import { WargamingResponse } from './wargamingResponse.js';
-
-export type TanksStats = WargamingResponse<{
+export type TanksStats = {
   [accountId: number]: {
     all: {
       spotted: number;
@@ -32,4 +30,4 @@ export type TanksStats = WargamingResponse<{
     in_garage: number | null;
     tank_id: number;
   }[];
-}>;
+};

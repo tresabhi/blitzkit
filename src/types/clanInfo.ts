@@ -1,7 +1,5 @@
-import { WargamingResponse } from './wargamingResponse.js';
-
-export interface ClanDetailsData {
-  recruiting_options: {
+export interface ClanInfo {
+  [clanId:number]:{recruiting_options: {
     vehicles_level: number;
     wins_ratio: number;
     average_battles_per_day: number;
@@ -26,9 +24,5 @@ export interface ClanDetailsData {
   renamed_at: number;
   old_tag: null;
   leader_id: number;
-  description: string;
+  description: string;}
 }
-
-export type ClanDetails = WargamingResponse<{
-  [accountId: number]: ClanDetailsData;
-}>;

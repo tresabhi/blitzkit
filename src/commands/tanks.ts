@@ -1,10 +1,10 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import fetch from 'node-fetch';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import { TanksStats } from '../types/tanksStats.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
+import getWargamingResponse from '../utilities/getWargamingResponse.js';
 import { tankTypeEmojis, tankopedia } from '../utilities/tankopedia.js';
 
 export default {
@@ -47,42 +47,42 @@ export default {
     const tier = Math.round(interaction.options.getNumber('tier')!);
 
     getBlitzAccount(interaction, name, server, async (account) => {
-      const tankStats = (await (
-        await fetch(
-          `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${process.env.WARGAMING_APPLICATION_ID}&account_id=${account.account_id}`,
-        )
-      ).json()) as TanksStats;
+      getWargamingResponse<TanksStats>(
+        `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${process.env.WARGAMING_APPLICATION_ID}&account_id=${account.account_id}`,
+        interaction,
+        async (tankStats) => {
+          const tanks = tankStats[account.account_id]!.map(
+            (tankData) => tankopedia.data[tankData.tank_id],
+          ).filter((tank) => tank.tier === tier);
 
-      const tanks = tankStats.data[account.account_id]!.map(
-        (tankData) => tankopedia.data[tankData.tank_id],
-      ).filter((tank) => tank.tier === tier);
+          await interaction.reply({
+            embeds: [
+              new EmbedBuilder()
+                .setTitle(
+                  `${account.nickname}'s owned ${
+                    tier === null ? '' : `tier ${tier} `
+                  }tanks`,
+                )
+                .setDescription(
+                  tanks.length === 0
+                    ? `No tanks found for player in tier ${tier}`
+                    : tanks
+                        .map(
+                          (tank) =>
+                            `${tankTypeEmojis[tank.type]} ${tank.name} ${
+                              tank.is_premium ? '⭐' : ''
+                            }`,
+                        )
+                        .join('\n'),
+                )
+                .setColor(SKILLED_COLOR),
+            ],
+          });
 
-      await interaction.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setTitle(
-              `${account.nickname}'s owned ${
-                tier === null ? '' : `tier ${tier} `
-              }tanks`,
-            )
-            .setDescription(
-              tanks.length === 0
-                ? `No tanks found for player in tier ${tier}`
-                : tanks
-                    .map(
-                      (tank) =>
-                        `${tankTypeEmojis[tank.type]} ${tank.name} ${
-                          tank.is_premium ? '⭐' : ''
-                        }`,
-                    )
-                    .join('\n'),
-            )
-            .setColor(SKILLED_COLOR),
-        ],
-      });
-
-      console.log(
-        `Displaying ${account.nickname}'s owned tanks in tier ${tier}`,
+          console.log(
+            `Displaying ${account.nickname}'s owned tanks in tier ${tier}`,
+          );
+        },
       );
     });
   },
