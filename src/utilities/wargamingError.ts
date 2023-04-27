@@ -8,7 +8,7 @@ import { NEGATIVE_COLOR } from '../constants/colors.js';
 export default async function wargamingError(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
-  await interaction.reply({
+  await interaction.editReply({
     embeds: [
       new EmbedBuilder()
         .setColor(NEGATIVE_COLOR)
