@@ -7,7 +7,7 @@ import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getBlitzStarsAccount from '../utilities/getBlitzStarsAccount.js';
 import poweredByBlitzStars from '../utilities/poweredByBlitzStars.js';
 
-export const CLANS = {
+const CLANS = {
   sklld: {
     name: 'Skilled',
     id: 71559,

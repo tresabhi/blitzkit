@@ -3,8 +3,8 @@ import discord from '../../discord.json' assert { type: 'json' };
 import { NEGATIVE_COLOR } from '../constants/colors.js';
 import isDev from '../utilities/isDev.js';
 
-export const PROCESS_ERROR_EVENTS = ['uncaughtException'];
-export const CLIENT_ERROR_EVENTS = ['error'];
+const PROCESS_ERROR_EVENTS = ['uncaughtException'];
+const CLIENT_ERROR_EVENTS = ['error'];
 
 function handleError(error: Error, client: Client) {
   console.error(error);
