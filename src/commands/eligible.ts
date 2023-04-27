@@ -8,14 +8,8 @@ import getBlitzStarsAccount from '../utilities/getBlitzStarsAccount.js';
 import poweredByBlitzStars from '../utilities/poweredByBlitzStars.js';
 
 const CLANS = {
-  sklld: {
-    name: 'Skilled',
-    id: 71559,
-  },
-  smri: {
-    name: 'Samurai',
-    id: 91244,
-  },
+  sklld: { id: 71559, name: 'Skilled' },
+  smri: { id: 91244, name: 'Samurai' },
 };
 
 export default {
