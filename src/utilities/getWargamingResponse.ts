@@ -1,4 +1,5 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
+import fetch from 'node-fetch';
 import { WargamingResponse } from '../types/wargamingResponse.js';
 import wargamingError from './wargamingError.js';
 
