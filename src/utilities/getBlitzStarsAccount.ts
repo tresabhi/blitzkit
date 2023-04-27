@@ -13,10 +13,10 @@ export default async function getBlitzStarsAccount(
   name: string,
   callback: (account: PlayerStatistics) => void,
 ) {
-  await interaction.deferReply();
-  
+  if (!interaction.deferred) await interaction.deferReply();
+
   async function notTracked() {
-    await interaction.reply({
+    await interaction.editReply({
       embeds: [
         new EmbedBuilder()
           .setTitle('No data to display')

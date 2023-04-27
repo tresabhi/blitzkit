@@ -62,7 +62,7 @@ export default {
             const stats =
               period === 'career' ? data.statistics : data[`period${period}d`];
 
-            await interaction.reply({
+            await interaction.editReply({
               embeds: [
                 poweredByBlitzStars(
                   new EmbedBuilder()
