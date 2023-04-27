@@ -20,7 +20,7 @@ export const CLANS = {
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: false,
 
   command: new SlashCommandBuilder()
@@ -122,30 +122,37 @@ export default {
 
           const eligible = issues.length === 0;
 
-          await interaction.reply({
-            embeds: [
-              poweredByBlitzStars(
-                new EmbedBuilder()
-                  .setTitle(
-                    `${data.nickname} is ${
-                      eligible ? '' : 'not '
-                    }eligible for ${CLANS[clan].name}`,
-                  )
-                  .setColor(eligible ? POSITIVE_COLOR : NEGATIVE_COLOR)
-                  .setDescription(
-                    `${
-                      eligible
-                        ? `${data.nickname} meets all the requirements set for ${CLANS[clan].name}.`
-                        : `${data.nickname}'s shortcomings for ${
-                            CLANS[clan].name
-                          } (${
-                            clan === 'sklld' ? '30 days stats' : 'career stats'
-                          }):\n\n${issues.join('\n')}`
-                    }\n\n${blitzLinks(data)}`,
-                  ),
-              ),
-            ],
-          });
+          await interaction
+            .reply({
+              embeds: [
+                poweredByBlitzStars(
+                  new EmbedBuilder()
+                    .setTitle(
+                      `${data.nickname} is ${
+                        eligible ? '' : 'not '
+                      }eligible for ${CLANS[clan].name}`,
+                    )
+                    .setColor(eligible ? POSITIVE_COLOR : NEGATIVE_COLOR)
+                    .setDescription(
+                      `${
+                        eligible
+                          ? `${data.nickname} meets all the requirements set for ${CLANS[clan].name}.`
+                          : `${data.nickname}'s shortcomings for ${
+                              CLANS[clan].name
+                            } (${
+                              clan === 'sklld'
+                                ? '30 days stats'
+                                : 'career stats'
+                            }):\n\n${issues.join('\n')}`
+                      }\n\n${blitzLinks(data)}`,
+                    ),
+                ),
+              ],
+            })
+            .catch((e) => {
+              console.log('nooooooooooooooooooooooooo');
+              console.log(e);
+            });
 
           console.log(
             `Showing ${data.nickname}'s eligibility for ${CLANS[clan].name}`,
