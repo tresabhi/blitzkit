@@ -3,9 +3,9 @@ import discord from '../../discord.json' assert { type: 'json' };
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
+import { PlayerClanData } from '../types/playerClanData.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
-import { PlayerClanData } from '../types/playerClanData.js';
 
 export default {
   inProduction: true,
@@ -55,7 +55,7 @@ export default {
               .then(async () => {
                 await member.roles.remove(discord.verify_role);
                 await member.roles.add(discord.peasant_role);
-                await interaction.reply({
+                await interaction.editReply({
                   embeds: [
                     new EmbedBuilder()
                       .setColor(POSITIVE_COLOR)

@@ -27,7 +27,7 @@ export default async function getClan(
         callback(clans[0]);
       } else {
         // no exact match
-        await interaction.reply({
+        await interaction.editReply({
           embeds: [
             new EmbedBuilder()
               .setColor(NEGATIVE_COLOR)

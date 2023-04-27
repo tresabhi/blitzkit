@@ -55,7 +55,7 @@ export default {
             (tankData) => tankopedia.data[tankData.tank_id],
           ).filter((tank) => tank.tier === tier);
 
-          await interaction.reply({
+          await interaction.editReply({
             embeds: [
               new EmbedBuilder()
                 .setTitle(

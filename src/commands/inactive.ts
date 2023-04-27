@@ -80,7 +80,7 @@ export default {
                 });
               const hasInactiveMembers = inactiveInfo.length > 0;
 
-              await interaction.reply({
+              await interaction.editReply({
                 embeds: [
                   new EmbedBuilder()
                     .setColor(

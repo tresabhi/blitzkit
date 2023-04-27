@@ -24,7 +24,7 @@ export default async function getBlitzAccount(
         callback(players[0]);
       } else {
         // no exact match
-        await interaction.reply({
+        await interaction.editReply({
           embeds: [
             new EmbedBuilder()
               .setColor(NEGATIVE_COLOR)
