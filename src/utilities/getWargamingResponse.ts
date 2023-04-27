@@ -8,7 +8,7 @@ export default async function getWargamingResponse<Data extends object>(
   interaction: ChatInputCommandInteraction<CacheType>,
   callback: (data: Data) => void,
 ) {
-  await interaction.deferReply();
+  if (!interaction.deferred) await interaction.deferReply();
 
   fetch(url)
     .then((response) => response.json() as Promise<WargamingResponse<Data>>)
