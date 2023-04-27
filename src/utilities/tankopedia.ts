@@ -32,13 +32,13 @@ export const tankopedia = (await (
   await fetch('https://www.blitzstars.com/bs-tankopedia.json')
 ).json()) as Tankopedia;
 
-export const tankTypeNames: Record<TankType, string> = {
+export const TANK_TYPE_NAMES: Record<TankType, string> = {
   'AT-SPG': 'Tank Destroyer',
   heavyTank: 'Heavy Tank',
   mediumTank: 'Medium Tank',
   lightTank: 'Light Tank',
 };
-export const tankTypeEmojis: Record<TankType, string> = {
+export const TANK_TYPE_EMOJIS: Record<TankType, string> = {
   'AT-SPG': '🔽',
   heavyTank: '🇭',
   mediumTank: '🇲',
