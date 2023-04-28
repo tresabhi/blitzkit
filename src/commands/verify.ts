@@ -11,11 +11,11 @@ import getWargamingResponse from '../utilities/getWargamingResponse.js';
 export default {
   inProduction: true,
   inDevelopment: false,
-  inPublic: false,
+  inPublic: true,
 
   command: new SlashCommandBuilder()
     .setName('verify')
-    .setDescription('Verifies the user with Blitz')
+    .setDescription("Set's the user's username to their in-game name")
     .addStringOption((option) =>
       option
         .setName('server')
@@ -54,8 +54,11 @@ export default {
             member
               ?.setNickname(`${name}${clanTag}`)
               .then(async () => {
-                await member.roles.remove(discord.verify_role);
-                await member.roles.add(discord.peasant_role);
+                if (interaction.guildId === discord.guild_id) {
+                  await member.roles.remove(discord.verify_role);
+                  await member.roles.add(discord.peasant_role);
+                }
+
                 await interaction.editReply({
                   embeds: [
                     new EmbedBuilder()
