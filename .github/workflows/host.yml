@@ -44,4 +44,4 @@ jobs:
         run: yarn
 
       - name: Host
-        run: DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} WARGAMING_APPLICATION_ID=${{ secrets.WARGAMING_APPLICATION_ID }} yarn run start
+        run: yarn run start discord-token=${{ secrets.DISCORD_TOKEN }} wargaming-application-id=${{ secrets.WARGAMING_APPLICATION_ID }}

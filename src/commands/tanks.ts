@@ -3,6 +3,7 @@ import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import { TanksStats } from '../types/tanksStats.js';
+import { args } from '../utilities/args.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
 import { TANK_TYPE_EMOJIS, tankopedia } from '../utilities/tankopedia.js';
@@ -30,7 +31,7 @@ const COMP_TANKS = [
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -69,7 +70,7 @@ export default {
 
     getBlitzAccount(interaction, name, server, async (account) => {
       getWargamingResponse<TanksStats>(
-        `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${process.env.WARGAMING_APPLICATION_ID}&account_id=${account.account_id}`,
+        `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${account.account_id}`,
         interaction,
         async (tankStats) => {
           const tanks = tankStats[account.account_id]!.map(

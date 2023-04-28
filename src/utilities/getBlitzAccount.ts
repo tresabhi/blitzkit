@@ -6,6 +6,7 @@ import {
 import { NEGATIVE_COLOR } from '../constants/colors.js';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import { Player, Players } from '../types/players.js';
+import { args } from './args.js';
 import getWargamingResponse from './getWargamingResponse.js';
 
 export default async function getBlitzAccount(
@@ -17,7 +18,7 @@ export default async function getBlitzAccount(
   const serverName = BLITZ_SERVERS[server];
 
   getWargamingResponse<Players>(
-    `https://api.wotblitz.${server}/wotb/account/list/?application_id=${process.env.WARGAMING_APPLICATION_ID}&search=${name}`,
+    `https://api.wotblitz.${server}/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${name}`,
     interaction,
     async (players) => {
       if (players.length > 0 && players[0].nickname === name) {

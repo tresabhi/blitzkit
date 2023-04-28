@@ -4,6 +4,7 @@ import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import { ClanInfo } from '../types/clanInfo.js';
 import { PlayerPersonalData } from '../types/playerPersonalData.js';
+import { args } from '../utilities/args.js';
 import getClan from '../utilities/getClan.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
 
@@ -53,14 +54,14 @@ export default {
       const time = new Date().getTime() / 1000;
 
       getWargamingResponse<ClanInfo>(
-        `https://api.wotblitz.com/wotb/clans/info/?application_id=${process.env.WARGAMING_APPLICATION_ID}&clan_id=${clan.clan_id}`,
+        `https://api.wotblitz.com/wotb/clans/info/?application_id=${args['wargaming-application-id']}&clan_id=${clan.clan_id}`,
         interaction,
         async (clanInfo) => {
           const memberIds = clanInfo[clan.clan_id].members_ids;
 
           getWargamingResponse<PlayerPersonalData>(
             `https://api.wotblitz.com/wotb/account/info/?application_id=${
-              process.env.WARGAMING_APPLICATION_ID
+              args['wargaming-application-id']
             }&account_id=${memberIds.join(',')}`,
             interaction,
             async (playerPersonalData) => {

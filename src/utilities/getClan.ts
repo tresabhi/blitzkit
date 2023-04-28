@@ -6,6 +6,7 @@ import {
 import { NEGATIVE_COLOR } from '../constants/colors.js';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import { Clan, ClanList } from '../types/clanList.js';
+import { args } from './args.js';
 import getWargamingResponse from './getWargamingResponse.js';
 
 export default async function getClan(
@@ -17,7 +18,7 @@ export default async function getClan(
   const serverName = BLITZ_SERVERS[server];
 
   getWargamingResponse<ClanList>(
-    `https://api.wotblitz.${server}/wotb/clans/list/?application_id=${process.env.WARGAMING_APPLICATION_ID}&search=${name}`,
+    `https://api.wotblitz.${server}/wotb/clans/list/?application_id=${args['wargaming-application-id']}&search=${name}`,
     interaction,
     async (clans) => {
       if (
