@@ -6,6 +6,7 @@ import {
   publicCommands,
 } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
+import { client } from '../index.js';
 
 export default {
   inProduction: true,
@@ -20,10 +21,12 @@ export default {
     await interaction.reply({
       embeds: [
         new EmbedBuilder()
-          .setTitle('Skilled Bot help')
+          .setTitle(`${client.user?.username} help`)
           .setColor(SKILLED_COLOR)
           .setDescription(
-            `**About**\nSkilled Bot automates many mundane tasks and provide statistics in numerous flexible ways.\n\nMade by TresAbhi from the Skilled [SKLLD] clan.\nGitHub: https://github.com/sklld/bot\nSkilled: https://discord.gg/ZPvcEG7DS8\n\n**Commands**\n${(interaction.guildId ===
+            `**About**\n${
+              client.user?.username
+            } automates many mundane tasks and provide statistics in numerous flexible ways.\n\nMade by TresAbhi from the Skilled [SKLLD] clan.\nGitHub: https://github.com/sklld/bot\nSkilled: https://discord.gg/ZPvcEG7DS8\n\n**Commands**\n${(interaction.guildId ===
             discord.guild_id
               ? [...guildCommands, ...publicCommands]
               : publicCommands

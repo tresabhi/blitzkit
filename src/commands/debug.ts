@@ -4,6 +4,7 @@ import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import getClientId from '../utilities/getClientId.js';
 import { tankopedia } from '../utilities/tankopedia.js';
+import { client } from '../index.js';
 
 const executionStart = new Date().getTime();
 
@@ -23,7 +24,7 @@ export default {
     await interaction.reply({
       embeds: [
         new EmbedBuilder()
-          .setTitle('Skilled Bot debug information')
+          .setTitle(`${client.user?.username} debug information`)
           .setColor(SKILLED_COLOR)
           .setDescription(
             `**Version**: ${packageJSON.version}\n**Uptime**: ${Math.floor(

@@ -2,6 +2,10 @@
 
 Executes specific tasks in the Skilled Discord server.
 
+## Invite the Bot
+
+Join the [Skilled Discord server](https://discord.gg/ZPvcEG7DS8), click on the bot's profile, and click "Add to Server".
+
 ## Using
 
 ### Installing dependencies
@@ -10,12 +14,8 @@ Executes specific tasks in the Skilled Discord server.
 yarn
 ```
 
-### Configuring
-
-Add an `.env` file to the root of the project with your `DISCORD_TOKEN` and `WARGAMING_APPLICATION_ID`
-
 ### Running
 
 ```bash
-yarn start
+yarn start discord-token=<token> wargaming-application-id=<id>
 ```

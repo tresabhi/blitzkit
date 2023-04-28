@@ -17,7 +17,7 @@ function handleError(error: Error, client: Client) {
   ).send({
     embeds: [
       new EmbedBuilder()
-        .setTitle('Skilled Bot ran into a catastrophic error')
+        .setTitle(`${client.user?.username} ran into a catastrophic error`)
         .setColor(NEGATIVE_COLOR)
         .setDescription(
           `\`\`\`${error.name}\n${error.message}\n${error.stack}\n${error.cause}\`\`\``,
