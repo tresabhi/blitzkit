@@ -7,26 +7,26 @@ import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
 import { TANK_TYPE_EMOJIS, tankopedia } from '../utilities/tankopedia.js';
 
-const COMP_TANKS: Record<number, { niche?: boolean }> = {
+const COMP_TANKS = [
   // light tanks
-  24321: {}, // t-100 lt
-  20257: {}, // sheridan
-  3649: { niche: true }, // bat chat
-  19537: { niche: true }, // vickers
+  24321, // t-100 lt
+  20257, // sheridan
+  3649, // bat chat
+  19537, // vickers
 
   // heavy tanks
-  6145: {}, // is-4
-  7169: {}, // is-7
-  10785: {}, // t110e5
-  12161: {}, // strvk
-  4481: {}, // kranvagn
-  22817: {}, // m6 yoh
-  6225: {}, // fv215b
-  5425: {}, // wz 113
-  7297: {}, // 60tp
-  9489: { niche: true }, // e 100
-  6753: { niche: true }, // type 71
-};
+  6145, // is-4
+  7169, // is-7
+  10785, // t110e5
+  12161, // strvk
+  4481, // kranvagn
+  22817, // m6 yoh
+  6225, // fv215b
+  5425, // wz 113
+  7297, // 60tp
+  58641, // vk 72
+  6753, // type 71
+];
 
 export default {
   inProduction: true,
@@ -94,9 +94,7 @@ export default {
                               `${TANK_TYPE_EMOJIS[tank.type]} ${tank.name} ${
                                 tank.is_premium ? '⭐' : ''
                               }${
-                                COMP_TANKS[tank.tank_id] === undefined
-                                  ? ''
-                                  : '🏆'
+                                COMP_TANKS.includes(tank.tank_id) ? '🏆' : ''
                               }`,
                           )
                           .join('\n')
