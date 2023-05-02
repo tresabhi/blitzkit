@@ -1,9 +1,10 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
-import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
+import { BlitzServer } from '../constants/servers.js';
 import { ClanInfo } from '../types/clanInfo.js';
 import { PlayerPersonalData } from '../types/playerPersonalData.js';
+import addServerChoices from '../utilities/addServerChoices.js';
 import { args } from '../utilities/args.js';
 import getClan from '../utilities/getClan.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
@@ -18,17 +19,7 @@ export default {
   command: new SlashCommandBuilder()
     .setName('inactive')
     .setDescription('Lists all inactive players')
-    .addStringOption((option) =>
-      option
-        .setName('server')
-        .setDescription('The Blitz server you are in')
-        .setRequired(true)
-        .addChoices(
-          { name: BLITZ_SERVERS.com, value: 'com' },
-          { name: BLITZ_SERVERS.eu, value: 'eu' },
-          { name: BLITZ_SERVERS.asia, value: 'asia' },
-        ),
-    )
+    .addStringOption(addServerChoices)
     .addStringOption((option) =>
       option
         .setName('name')

@@ -16,8 +16,8 @@ export default async function getWargamingResponse<Data extends object>(
       if (response.status === 'ok') {
         callback(response.data);
       } else {
-        wargamingError(interaction);
+        wargamingError(interaction, new Error(`Status ${response.status}`));
       }
     })
-    .catch(() => wargamingError(interaction));
+    .catch((error) => wargamingError(interaction, error));
 }

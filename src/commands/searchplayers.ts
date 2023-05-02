@@ -1,0 +1,54 @@
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { CommandRegistry } from '../behaviors/interactionCreate.js';
+import { SKILLED_COLOR } from '../constants/colors.js';
+import { Players } from '../types/players.js';
+import addIGNOption from '../utilities/addIGNOption.js';
+import addServerChoices from '../utilities/addServerChoices.js';
+import { args } from '../utilities/args.js';
+import getWargamingResponse from '../utilities/getWargamingResponse.js';
+
+export default {
+  inDevelopment: false,
+  inProduction: true,
+  inPublic: true,
+
+  command: new SlashCommandBuilder()
+    .setName('searchplayers')
+    .setDescription('Search players in a Blitz server')
+    .addStringOption(addServerChoices)
+    .addStringOption(addIGNOption)
+    .addIntegerOption((option) =>
+      option
+        .setName('limit')
+        .setDescription('The size of the search result (default: 25)')
+        .setMinValue(1)
+        .setMaxValue(100),
+    ),
+
+  execute(interaction) {
+    const server = interaction.options.getString('server')!;
+    const name = interaction.options.getString('name')!;
+    const limit = interaction.options.getInteger('limit') ?? 25;
+
+    getWargamingResponse<Players>(
+      `https://api.wotblitz.${server}/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${name}&limit=${limit}`,
+      interaction,
+      (players) => {
+        interaction.editReply({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(SKILLED_COLOR)
+              .setTitle(`Player search results for "${name}"`)
+              .setDescription(
+                `\`\`\`${
+                  players.length === 0
+                    ? 'No players found.'
+                    : players.map((player) => player.nickname).join('\n')
+                }\`\`\``,
+              ),
+          ],
+        });
+      },
+    );
+  },
+} satisfies CommandRegistry;

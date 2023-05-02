@@ -3,11 +3,13 @@ import {
   ChatInputCommandInteraction,
   EmbedBuilder,
 } from 'discord.js';
+import { handleError } from '../behaviors/error.js';
 import { NEGATIVE_COLOR } from '../constants/colors.js';
 import { client } from '../index.js';
 
 export default async function wargamingError(
   interaction: ChatInputCommandInteraction<CacheType>,
+  error: Error,
 ) {
   await interaction.editReply({
     embeds: [
@@ -18,5 +20,6 @@ export default async function wargamingError(
     ],
   });
 
-  console.log('Wargaming returned an error.');
+  console.log(`Wargaming returned an error`);
+  handleError(error, client);
 }

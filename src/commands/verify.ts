@@ -2,8 +2,10 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
-import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
+import { BlitzServer } from '../constants/servers.js';
 import { PlayerClanData } from '../types/playerClanData.js';
+import addIGNOption from '../utilities/addIGNOption.js';
+import addServerChoices from '../utilities/addServerChoices.js';
 import { args } from '../utilities/args.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
@@ -16,23 +18,8 @@ export default {
   command: new SlashCommandBuilder()
     .setName('verify')
     .setDescription("Set's the user's username to their in-game name")
-    .addStringOption((option) =>
-      option
-        .setName('server')
-        .setDescription('The Blitz server you are in')
-        .setRequired(true)
-        .addChoices(
-          { name: BLITZ_SERVERS.com, value: 'com' },
-          { name: BLITZ_SERVERS.eu, value: 'eu' },
-          { name: BLITZ_SERVERS.asia, value: 'asia' },
-        ),
-    )
-    .addStringOption((option) =>
-      option
-        .setName('name')
-        .setDescription('The username you use in Blitz')
-        .setRequired(true),
-    ),
+    .addStringOption(addServerChoices)
+    .addStringOption(addIGNOption),
 
   execute(interaction) {
     const name = interaction.options.getString('name')!;

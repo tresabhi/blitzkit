@@ -1,8 +1,10 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
-import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
+import { BlitzServer } from '../constants/servers.js';
 import { TanksStats } from '../types/tanksStats.js';
+import addIGNOption from '../utilities/addIGNOption.js';
+import addServerChoices from '../utilities/addServerChoices.js';
 import { args } from '../utilities/args.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
@@ -37,24 +39,9 @@ export default {
   command: new SlashCommandBuilder()
     .setName('tanks')
     .setDescription("Shows a player's owned tanks")
-    .addStringOption((option) =>
-      option
-        .setName('server')
-        .setDescription('The Blitz server you are in')
-        .setRequired(true)
-        .addChoices(
-          { name: BLITZ_SERVERS.com, value: 'com' },
-          { name: BLITZ_SERVERS.eu, value: 'eu' },
-          { name: BLITZ_SERVERS.asia, value: 'asia' },
-        ),
-    )
-    .addStringOption((option) =>
-      option
-        .setName('name')
-        .setDescription('The username you use in Blitz')
-        .setRequired(true),
-    )
-    .addNumberOption((option) =>
+    .addStringOption(addServerChoices)
+    .addStringOption(addIGNOption)
+    .addIntegerOption((option) =>
       option
         .setName('tier')
         .setDescription('The tier you want to see (default: all tiers)')
@@ -66,7 +53,7 @@ export default {
   execute(interaction) {
     const server = interaction.options.getString('server') as BlitzServer;
     const name = interaction.options.getString('name')!;
-    const tier = Math.round(interaction.options.getNumber('tier')!);
+    const tier = interaction.options.getInteger('tier')!;
 
     getBlitzAccount(interaction, name, server, async (account) => {
       getWargamingResponse<TanksStats>(
