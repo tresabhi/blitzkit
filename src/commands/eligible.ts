@@ -15,7 +15,7 @@ const CLANS = {
 };
 
 export default {
-  inProduction: true,
+  inProduction: false,
   inDevelopment: false,
   inPublic: false,
 
