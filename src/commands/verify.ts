@@ -36,56 +36,86 @@ export default {
           const clan = clanData[account.account_id].clan;
           const clanTag = clan === null ? '' : ` [${clan!.tag}]`;
 
-          if (interaction.member && interaction.guild) {
+          if (
+            !interaction.guild?.members.me?.permissions.has('ManageNicknames')
+          ) {
+            interaction.editReply({
+              embeds: [
+                new EmbedBuilder()
+                  .setColor(NEGATIVE_COLOR)
+                  .setTitle(
+                    `${markdownEscape(
+                      interaction.user.username,
+                    )} failed to verify`,
+                  )
+                  .setDescription(
+                    "I don't have the permission to change your nickname.",
+                  ),
+              ],
+            });
+
+            console.warn(
+              `${interaction.user.username} failed to verify because of no nickname permission.`,
+            );
+
+            return;
+          }
+
+          if (interaction.member) {
             const member = interaction.guild?.members.cache.get(
               interaction.member?.user.id,
             );
 
-            member
-              ?.setNickname(`${name}${clanTag}`)
-              .then(async () => {
-                if (interaction.guildId === discord.guild_id) {
-                  await member.roles.remove(discord.verify_role);
-                  await member.roles.add(discord.peasant_role);
+            if (member) {
+              await member?.setNickname(`${name}${clanTag}`);
+
+              if (interaction.guildId === discord.guild_id) {
+                if (
+                  !interaction.guild.members.me.permissions.has('ManageRoles')
+                ) {
+                  await interaction.editReply({
+                    embeds: [
+                      new EmbedBuilder()
+                        .setColor(NEGATIVE_COLOR)
+                        .setTitle(
+                          `${markdownEscape(
+                            interaction.user.username,
+                          )} failed to verify`,
+                        )
+                        .setDescription(
+                          "I don't have the permission to change your manage roles.",
+                        ),
+                    ],
+                  });
+
+                  console.warn(
+                    `${interaction.user.username} failed to verify because of no manage roles permission.`,
+                  );
+
+                  return;
                 }
 
-                await interaction.editReply({
-                  embeds: [
-                    new EmbedBuilder()
-                      .setColor(POSITIVE_COLOR)
-                      .setTitle(`${interaction.user.username} is verified`)
-                      .setDescription(
-                        `The user is now verified as ${markdownEscape(
-                          name,
-                        )}${markdownEscape(clanTag)}`,
-                      ),
-                  ],
-                });
+                await member.roles.remove(discord.verify_role);
+                await member.roles.add(discord.peasant_role);
+              }
 
-                console.log(
-                  `${interaction.user.username} verified as ${name}${clanTag}`,
-                );
-              })
-              .catch(async () => {
-                await interaction.editReply({
-                  embeds: [
-                    new EmbedBuilder()
-                      .setColor(NEGATIVE_COLOR)
-                      .setTitle(
-                        `${markdownEscape(
-                          interaction.user.username,
-                        )} failed to verify`,
-                      )
-                      .setDescription(
-                        'I may not have the permission to change your nickname.',
-                      ),
-                  ],
-                });
-
-                console.warn(
-                  `${interaction.user.username} failed to verify as ${name}${clanTag}`,
-                );
+              await interaction.editReply({
+                embeds: [
+                  new EmbedBuilder()
+                    .setColor(POSITIVE_COLOR)
+                    .setTitle(`${interaction.user.username} is verified`)
+                    .setDescription(
+                      `The user is now verified as ${markdownEscape(
+                        name,
+                      )}${markdownEscape(clanTag)}`,
+                    ),
+                ],
               });
+
+              console.log(
+                `${interaction.user.username} verified as ${name}${clanTag}`,
+              );
+            }
           }
         },
       );
