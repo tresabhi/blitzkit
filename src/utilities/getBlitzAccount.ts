@@ -3,6 +3,7 @@ import {
   ChatInputCommandInteraction,
   EmbedBuilder,
 } from 'discord.js';
+import markdownEscape from 'markdown-escape';
 import { NEGATIVE_COLOR } from '../constants/colors.js';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import { Player, Players } from '../types/players.js';
@@ -21,7 +22,10 @@ export default async function getBlitzAccount(
     `https://api.wotblitz.${server}/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${name}`,
     interaction,
     async (players) => {
-      if (players.length > 0 && players[0].nickname === name) {
+      if (
+        players.length > 0 &&
+        players[0].nickname.toLowerCase() === name.toLowerCase()
+      ) {
         callback(players[0]);
       } else {
         // no exact match
@@ -31,7 +35,9 @@ export default async function getBlitzAccount(
               .setColor(NEGATIVE_COLOR)
               .setTitle(`Account not found`)
               .setDescription(
-                `I couldn't find "${name}" in the ${serverName} server. I found ${
+                `I couldn't find "${markdownEscape(
+                  name,
+                )}" in the ${serverName} server. I found ${
                   players
                     ? players.length < 100
                       ? players.length
@@ -41,9 +47,9 @@ export default async function getBlitzAccount(
                   players?.length !== 1 ? 's' : ''
                 }. ${
                   players && players.length > 0
-                    ? `Did you mean "${players[0].nickname}"? `
+                    ? `Did you mean "${markdownEscape(players[0].nickname)}"? `
                     : ''
-                }Re-run the command, don't make typos, and capitalize correctly.`,
+                }Re-run the command and don't make typos.`,
               ),
           ],
         });

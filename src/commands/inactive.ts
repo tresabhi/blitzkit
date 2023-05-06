@@ -1,4 +1,5 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
@@ -68,7 +69,9 @@ export default {
                 .sort((a, b) => b[1] - a[1])
                 .map(([nickname, inactiveDays]) => {
                   const days = Math.floor(inactiveDays);
-                  return `**${nickname}**: ${days} day${days === 1 ? '' : 's'}`;
+                  return `**${markdownEscape(nickname)}**: ${days} day${
+                    days === 1 ? '' : 's'
+                  }`;
                 });
               const hasInactiveMembers = inactiveInfo.length > 0;
 
@@ -80,8 +83,8 @@ export default {
                     )
                     .setTitle(
                       hasInactiveMembers
-                        ? `${clan.name}'s inactive members`
-                        : `No inactive members in ${clan.name}`,
+                        ? `${markdownEscape(clan.name)}'s inactive members`
+                        : `No inactive members in ${markdownEscape(clan.name)}`,
                     )
                     .setDescription(
                       hasInactiveMembers

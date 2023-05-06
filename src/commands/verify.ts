@@ -1,4 +1,5 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import markdownEscape from 'markdown-escape';
 import discord from '../../discord.json' assert { type: 'json' };
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
@@ -52,7 +53,9 @@ export default {
                       .setColor(POSITIVE_COLOR)
                       .setTitle(`${interaction.user.username} is verified`)
                       .setDescription(
-                        `The user is now verified as ${name}${clanTag}`,
+                        `The user is now verified as ${markdownEscape(
+                          name,
+                        )}${markdownEscape(clanTag)}`,
                       ),
                   ],
                 });
@@ -66,7 +69,11 @@ export default {
                   embeds: [
                     new EmbedBuilder()
                       .setColor(NEGATIVE_COLOR)
-                      .setTitle(`${interaction.user.username} failed to verify`)
+                      .setTitle(
+                        `${markdownEscape(
+                          interaction.user.username,
+                        )} failed to verify`,
+                      )
                       .setDescription(
                         'I may not have the permission to change your nickname.',
                       ),

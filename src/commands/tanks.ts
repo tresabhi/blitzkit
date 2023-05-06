@@ -1,4 +1,5 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
@@ -68,20 +69,20 @@ export default {
             embeds: [
               new EmbedBuilder()
                 .setTitle(
-                  `${account.nickname}'s owned ${
+                  `${markdownEscape(account.nickname)}'s owned ${
                     tier === null ? '' : `tier ${tier} `
                   }tanks`,
                 )
                 .setDescription(
                   `${
                     tanks.length === 0
-                      ? `No tanks found for player in tier ${tier}`
+                      ? `No tanks found in tier ${tier}`
                       : tanks
                           .map(
                             (tank) =>
-                              `${TANK_TYPE_EMOJIS[tank.type]} ${tank.name} ${
-                                tank.is_premium ? '⭐' : ''
-                              }${
+                              `${TANK_TYPE_EMOJIS[tank.type]} ${markdownEscape(
+                                tank.name,
+                              )} ${tank.is_premium ? '⭐' : ''}${
                                 COMP_TANKS.includes(tank.tank_id) ? '🏆' : ''
                               }`,
                           )

@@ -179,6 +179,11 @@
   resolved "https://registry.npmjs.org/@tokenizer/token/-/token-0.3.0.tgz"
   integrity sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==
 
+"@types/markdown-escape@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@types/markdown-escape/-/markdown-escape-1.1.0.tgz#8bd940d6701880eb7229467542c029bc05a7b22f"
+  integrity sha512-bJZh73L6fSt8MmTON/btR8hiKRipoIoPfLO41lxr6l65QXdG1rwUjR8Hu5xU7XYHBwKHiJZ+sTQ8L2TKkQrBpw==
+
 "@types/node@*", "@types/node@^18.15.11":
   version "18.15.11"
   resolved "https://registry.npmjs.org/@types/node/-/node-18.15.11.tgz"
@@ -330,6 +335,11 @@ lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+
+markdown-escape@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/markdown-escape/-/markdown-escape-2.0.0.tgz#44484d30d7845b91575c77fd8898f23a0a6f890c"
+  integrity sha512-Trz4v0+XWlwy68LJIyw3bLbsJiC8XAbRCKF9DbEtZjyndKOGVx6n+wNB0VfoRmY2LKboQLeniap3xrb6LGSJ8A==
 
 mlly@^1.1.1, mlly@^1.2.0:
   version "1.2.0"

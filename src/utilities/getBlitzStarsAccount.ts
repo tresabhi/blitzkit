@@ -3,6 +3,7 @@ import {
   ChatInputCommandInteraction,
   EmbedBuilder,
 } from 'discord.js';
+import markdownEscape from 'markdown-escape';
 import fetch from 'node-fetch';
 import { NEGATIVE_COLOR } from '../constants/colors.js';
 import { PlayerStatistics } from '../types/statistics.js';
@@ -20,7 +21,9 @@ export default async function getBlitzStarsAccount(
       embeds: [
         new EmbedBuilder()
           .setTitle('No data to display')
-          .setDescription(`${name} is not tracked by BlitzStars.`)
+          .setDescription(
+            `${markdownEscape(name)} is not tracked by BlitzStars.`,
+          )
           .setColor(NEGATIVE_COLOR),
       ],
     });

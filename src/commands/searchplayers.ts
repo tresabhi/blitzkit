@@ -1,4 +1,5 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import { Players } from '../types/players.js';
@@ -38,12 +39,14 @@ export default {
           embeds: [
             new EmbedBuilder()
               .setColor(SKILLED_COLOR)
-              .setTitle(`Player search results for "${name}"`)
+              .setTitle(`Player search results for "${markdownEscape(name)}"`)
               .setDescription(
                 `\`\`\`${
                   players.length === 0
                     ? 'No players found.'
-                    : players.map((player) => player.nickname).join('\n')
+                    : players
+                        .map((player) => markdownEscape(player.nickname))
+                        .join('\n')
                 }\`\`\``,
               ),
           ],

@@ -3,6 +3,7 @@ import {
   ChatInputCommandInteraction,
   EmbedBuilder,
 } from 'discord.js';
+import markdownEscape from 'markdown-escape';
 import { NEGATIVE_COLOR } from '../constants/colors.js';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import { Clan, ClanList } from '../types/clanList.js';
@@ -23,7 +24,8 @@ export default async function getClan(
     async (clans) => {
       if (
         clans.length > 0 &&
-        (clans[0].name === name || clans[0].tag === name.toUpperCase())
+        (clans[0].name.toLowerCase() === name.toLowerCase() ||
+          clans[0].tag.toLowerCase() === name.toLowerCase())
       ) {
         callback(clans[0]);
       } else {
@@ -34,13 +36,17 @@ export default async function getClan(
               .setColor(NEGATIVE_COLOR)
               .setTitle(`Clan not found`)
               .setDescription(
-                `I couldn't find "${name}" in the ${serverName} server. I found ${
+                `I couldn't find "${markdownEscape(
+                  name,
+                )}" in the ${serverName} server. I found ${
                   clans ? (clans.length < 100 ? clans.length : 'over 100') : 0
                 } similarly spelled clan${clans?.length !== 1 ? 's' : ''}. ${
                   clans && clans.length > 0
-                    ? `Did you mean "${clans[0].name}" or "${clans[0].tag}"? `
+                    ? `Did you mean "${markdownEscape(
+                        clans[0].name,
+                      )}" or "${markdownEscape(clans[0].tag)}"? `
                     : ''
-                }Re-run the command, don't make typos, and capitalize correctly.`,
+                }Re-run the command, don't make typos.`,
               ),
           ],
         });

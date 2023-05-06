@@ -1,4 +1,5 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
@@ -108,7 +109,7 @@ export default {
               poweredByBlitzStars(
                 new EmbedBuilder()
                   .setTitle(
-                    `${data.nickname} is ${
+                    `${markdownEscape(data.nickname)} is ${
                       eligible ? '' : 'not '
                     }eligible for ${CLANS[clan].name}`,
                   )
@@ -116,10 +117,14 @@ export default {
                   .setDescription(
                     `${
                       eligible
-                        ? `${data.nickname} meets all the requirements set for ${CLANS[clan].name}.`
-                        : `${data.nickname}'s shortcomings for ${
+                        ? `${markdownEscape(
+                            data.nickname,
+                          )} meets all the requirements set for ${
                             CLANS[clan].name
-                          } (${
+                          }.`
+                        : `${markdownEscape(
+                            data.nickname,
+                          )}'s shortcomings for ${CLANS[clan].name} (${
                             clan === 'sklld' ? '30 days stats' : 'career stats'
                           }):\n\n${issues.join('\n')}`
                     }\n\n${blitzLinks(data)}`,
