@@ -7,7 +7,7 @@ import isDev from '../utilities/isDev.js';
 const PROCESS_ERROR_EVENTS = ['uncaughtException'];
 const CLIENT_ERROR_EVENTS = ['error'];
 
-export function handleError(error: Error, client: Client, command?: string) {
+export function handleError(error: Error, client: Client, command: string) {
   console.error(error);
 
   (
@@ -31,10 +31,10 @@ export function handleError(error: Error, client: Client, command?: string) {
 export function registerErrorHandlers() {
   if (!isDev()) {
     PROCESS_ERROR_EVENTS.forEach((name) =>
-      process.on(name, (error) => handleError(error, client)),
+      process.on(name, (error) => handleError(error, client, 'process error')),
     );
     CLIENT_ERROR_EVENTS.forEach((name) =>
-      client.on(name, (error) => handleError(error, client)),
+      client.on(name, (error) => handleError(error, client, 'client error')),
     );
   }
 

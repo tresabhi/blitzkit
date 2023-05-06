@@ -40,10 +40,12 @@ export default {
     const name = interaction.options.getString('name')!;
     const server = interaction.options.getString('server') as BlitzServer;
     const clan = interaction.options.getString('clan') as keyof typeof CLANS;
+    const command = `eligible ${server} ${name} ${clan}`;
 
-    getBlitzAccount(interaction, name, server, async (account) => {
+    getBlitzAccount(interaction, command, name, server, async (account) => {
       getBlitzStarsAccount(
         interaction,
+        command,
         account.account_id,
         name,
         async (data) => {

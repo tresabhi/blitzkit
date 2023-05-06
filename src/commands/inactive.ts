@@ -14,7 +14,7 @@ const DEFAULT_THRESHOLD = 7;
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -39,8 +39,9 @@ export default {
   async execute(interaction) {
     const name = interaction.options.getString('name')!;
     const server = interaction.options.getString('server') as BlitzServer;
+    const command = `inactive ${server} ${name}`;
 
-    getClan(interaction, name, server, async (clan) => {
+    getClan(interaction, command, name, server, async (clan) => {
       const threshold =
         interaction.options.getNumber('threshold')! ?? DEFAULT_THRESHOLD;
       const time = new Date().getTime() / 1000;
@@ -48,6 +49,7 @@ export default {
       getWargamingResponse<ClanInfo>(
         `https://api.wotblitz.${server}/wotb/clans/info/?application_id=${args['wargaming-application-id']}&clan_id=${clan.clan_id}`,
         interaction,
+        command,
         async (clanInfo) => {
           const memberIds = clanInfo[clan.clan_id].members_ids;
 
@@ -56,6 +58,7 @@ export default {
               args['wargaming-application-id']
             }&account_id=${memberIds.join(',')}`,
             interaction,
+            command,
             async (playerPersonalData) => {
               const inactiveInfo = memberIds
                 .map((memberId) => {

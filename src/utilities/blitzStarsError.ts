@@ -7,7 +7,7 @@ import { handleError } from '../behaviors/error.js';
 import { NEGATIVE_COLOR } from '../constants/colors.js';
 import { client } from '../index.js';
 
-export default async function wargamingError(
+export default async function blitzStarsError(
   interaction: ChatInputCommandInteraction<CacheType>,
   error: Error,
   command: string,
@@ -17,10 +17,12 @@ export default async function wargamingError(
       new EmbedBuilder()
         .setColor(NEGATIVE_COLOR)
         .setTitle(`${client.user?.username} ran into an issue`)
-        .setDescription('Wargaming returned an error. Please try again later.'),
+        .setDescription(
+          'BlitzStars returned an error. Please try again later.',
+        ),
     ],
   });
 
-  console.log(`Wargaming returned an error`);
+  console.log(`BlitzStars returned an error`);
   handleError(error, client, command);
 }

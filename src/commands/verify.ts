@@ -25,11 +25,13 @@ export default {
   execute(interaction) {
     const name = interaction.options.getString('name')!;
     const server = interaction.options.getString('server') as BlitzServer;
+    const command = `verify ${server} ${name}`;
 
-    getBlitzAccount(interaction, name, server, async (account) => {
+    getBlitzAccount(interaction, server, name, server, async (account) => {
       getWargamingResponse<PlayerClanData>(
         `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${account.account_id}&extra=clan`,
         interaction,
+        server,
         async (clanData) => {
           const clan = clanData[account.account_id].clan;
           const clanTag = clan === null ? '' : ` [${clan!.tag}]`;

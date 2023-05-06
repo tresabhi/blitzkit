@@ -12,6 +12,7 @@ import getWargamingResponse from './getWargamingResponse.js';
 
 export default async function getBlitzAccount(
   interaction: ChatInputCommandInteraction<CacheType>,
+  command: string,
   name: string,
   server: BlitzServer,
   callback: (account: Player) => void,
@@ -21,6 +22,7 @@ export default async function getBlitzAccount(
   getWargamingResponse<Players>(
     `https://api.wotblitz.${server}/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${name}`,
     interaction,
+    command,
     async (players) => {
       if (
         players.length > 0 &&

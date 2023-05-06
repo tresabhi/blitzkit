@@ -2,9 +2,9 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import packageJSON from '../../package.json' assert { type: 'json' };
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
+import { client } from '../index.js';
 import getClientId from '../utilities/getClientId.js';
 import { tankopedia } from '../utilities/tankopedia.js';
-import { client } from '../index.js';
 
 const executionStart = new Date().getTime();
 

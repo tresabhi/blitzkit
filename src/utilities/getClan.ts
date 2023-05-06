@@ -12,6 +12,7 @@ import getWargamingResponse from './getWargamingResponse.js';
 
 export default async function getClan(
   interaction: ChatInputCommandInteraction<CacheType>,
+  command: string,
   name: string,
   server: BlitzServer,
   callback: (account: Clan) => void,
@@ -21,6 +22,7 @@ export default async function getClan(
   getWargamingResponse<ClanList>(
     `https://api.wotblitz.${server}/wotb/clans/list/?application_id=${args['wargaming-application-id']}&search=${name}`,
     interaction,
+    command,
     async (clans) => {
       if (
         clans.length > 0 &&

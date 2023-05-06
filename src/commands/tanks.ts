@@ -55,11 +55,13 @@ export default {
     const server = interaction.options.getString('server') as BlitzServer;
     const name = interaction.options.getString('name')!;
     const tier = interaction.options.getInteger('tier')!;
+    const command = `tanks ${server} ${name} ${tier}`;
 
-    getBlitzAccount(interaction, name, server, async (account) => {
+    getBlitzAccount(interaction, command, name, server, async (account) => {
       getWargamingResponse<TanksStats>(
         `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${account.account_id}`,
         interaction,
+        command,
         async (tankStats) => {
           const tanks = tankStats[account.account_id]!.map(
             (tankData) => tankopedia.data[tankData.tank_id],

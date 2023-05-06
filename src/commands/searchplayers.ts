@@ -30,10 +30,12 @@ export default {
     const server = interaction.options.getString('server')!;
     const name = interaction.options.getString('name')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
+    const command = `searchplayers ${server} ${name} ${limit}`;
 
     getWargamingResponse<Players>(
       `https://api.wotblitz.${server}/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${name}&limit=${limit}`,
       interaction,
+      command,
       (players) => {
         interaction.editReply({
           embeds: [

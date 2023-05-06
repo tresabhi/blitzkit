@@ -39,10 +39,12 @@ export default {
       | '30'
       | '90'
       | 'career';
+    const command = `stats ${server} ${name} ${period}`;
 
-    getBlitzAccount(interaction, name, server, async (account) => {
+    getBlitzAccount(interaction, command, name, server, async (account) => {
       getBlitzStarsAccount(
         interaction,
+        command,
         account.account_id,
         name,
         async (data) => {

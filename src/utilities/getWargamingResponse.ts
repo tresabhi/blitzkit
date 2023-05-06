@@ -6,6 +6,7 @@ import wargamingError from './wargamingError.js';
 export default async function getWargamingResponse<Data extends object>(
   url: string,
   interaction: ChatInputCommandInteraction<CacheType>,
+  command: string,
   callback: (data: Data) => void,
 ) {
   if (!interaction.deferred) await interaction.deferReply();
@@ -16,8 +17,12 @@ export default async function getWargamingResponse<Data extends object>(
       if (response.status === 'ok') {
         callback(response.data);
       } else {
-        wargamingError(interaction, new Error(`Status ${response.status}`));
+        wargamingError(
+          interaction,
+          new Error(`Status ${response.status}`),
+          command,
+        );
       }
     })
-    .catch((error) => wargamingError(interaction, error));
+    .catch((error) => wargamingError(interaction, error, command));
 }

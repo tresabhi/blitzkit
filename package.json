@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "vite-node src/index.ts --script"
+    "start": "vite-node src/index.ts --script",
+    "lint": "tsc"
   },
   "license": "MIT",
   "dependencies": {
