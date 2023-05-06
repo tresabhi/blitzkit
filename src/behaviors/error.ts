@@ -7,7 +7,7 @@ import isDev from '../utilities/isDev.js';
 const PROCESS_ERROR_EVENTS = ['uncaughtException'];
 const CLIENT_ERROR_EVENTS = ['error'];
 
-export function handleError(error: Error, client: Client) {
+export function handleError(error: Error, client: Client, command?: string) {
   console.error(error);
 
   (
@@ -20,7 +20,9 @@ export function handleError(error: Error, client: Client) {
         .setTitle(`${client.user?.username} ran into an error`)
         .setColor(NEGATIVE_COLOR)
         .setDescription(
-          `\`\`\`${error.name}\n${error.message}\n${error.stack}\n${error.cause}\`\`\``,
+          `\`\`\`${[command, error.name, error.message, error.stack]
+            .filter((item) => item !== undefined)
+            .join('\n\n')}\`\`\``,
         ),
     ],
   });

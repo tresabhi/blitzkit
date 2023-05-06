@@ -13,7 +13,7 @@ const DEFAULT_THRESHOLD = 7;
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -45,13 +45,13 @@ export default {
       const time = new Date().getTime() / 1000;
 
       getWargamingResponse<ClanInfo>(
-        `https://api.wotblitz.com/wotb/clans/info/?application_id=${args['wargaming-application-id']}&clan_id=${clan.clan_id}`,
+        `https://api.wotblitz.${server}/wotb/clans/info/?application_id=${args['wargaming-application-id']}&clan_id=${clan.clan_id}`,
         interaction,
         async (clanInfo) => {
           const memberIds = clanInfo[clan.clan_id].members_ids;
 
           getWargamingResponse<PlayerPersonalData>(
-            `https://api.wotblitz.com/wotb/account/info/?application_id=${
+            `https://api.wotblitz.${server}/wotb/account/info/?application_id=${
               args['wargaming-application-id']
             }&account_id=${memberIds.join(',')}`,
             interaction,
