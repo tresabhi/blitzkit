@@ -77,6 +77,7 @@ export default async function interactionCreate(
   }
 
   try {
+    await interaction.deferReply();
     command.execute(interaction);
   } catch (error) {
     console.error(error);
@@ -86,9 +87,8 @@ export default async function interactionCreate(
         ephemeral: true,
       });
     } else {
-      await interaction.reply({
+      await interaction.editReply({
         content: 'There was an error while executing this command!',
-        ephemeral: true,
       });
     }
   }

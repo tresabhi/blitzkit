@@ -6,58 +6,49 @@ import {
 import markdownEscape from 'markdown-escape';
 import { NEGATIVE_COLOR } from '../constants/colors.js';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
-import { Player, Players } from '../types/players.js';
+import { Players } from '../types/players.js';
 import { args } from './args.js';
 import getWargamingResponse from './getWargamingResponse.js';
 
 export default async function getBlitzAccount(
   interaction: ChatInputCommandInteraction<CacheType>,
-  command: string,
   name: string,
   server: BlitzServer,
-  callback: (account: Player) => void,
 ) {
   const serverName = BLITZ_SERVERS[server];
 
-  getWargamingResponse<Players>(
+  const players = await getWargamingResponse<Players>(
     `https://api.wotblitz.${server}/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${name}`,
-    interaction,
-    command,
-    async (players) => {
-      if (
-        players.length > 0 &&
-        players[0].nickname.toLowerCase() === name.toLowerCase()
-      ) {
-        callback(players[0]);
-      } else {
-        // no exact match
-        await interaction.editReply({
-          embeds: [
-            new EmbedBuilder()
-              .setColor(NEGATIVE_COLOR)
-              .setTitle(`Account not found`)
-              .setDescription(
-                `I couldn't find "${markdownEscape(
-                  name,
-                )}" in the ${serverName} server. I found ${
-                  players
-                    ? players.length < 100
-                      ? players.length
-                      : 'over 100'
-                    : 0
-                } similarly spelled account${
-                  players?.length !== 1 ? 's' : ''
-                }. ${
-                  players && players.length > 0
-                    ? `Did you mean "${markdownEscape(players[0].nickname)}"? `
-                    : ''
-                }Re-run the command and don't make typos.`,
-              ),
-          ],
-        });
-
-        console.log(`Account not found for ${name} in ${serverName} server.`);
-      }
-    },
   );
+
+  if (
+    players.length > 0 &&
+    players[0].nickname.toLowerCase() === name.toLowerCase()
+  ) {
+    return players[0];
+  } else {
+    // no exact match
+    await interaction.editReply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(NEGATIVE_COLOR)
+          .setTitle(`Account not found`)
+          .setDescription(
+            `I couldn't find "${markdownEscape(
+              name,
+            )}" in the ${serverName} server. I found ${
+              players ? (players.length < 100 ? players.length : 'over 100') : 0
+            } similarly spelled account${players?.length !== 1 ? 's' : ''}. ${
+              players && players.length > 0
+                ? `Did you mean "${markdownEscape(players[0].nickname)}"? `
+                : ''
+            }Use the \`/verify\` command to fix any issues or re-run the command and don't make typos.`,
+          ),
+      ],
+    });
+
+    console.log(`Account not found for ${name} in ${serverName} server.`);
+
+    return null;
+  }
 }

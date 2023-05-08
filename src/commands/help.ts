@@ -10,7 +10,7 @@ import { client } from '../index.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -18,7 +18,7 @@ export default {
     .setDescription('All the help you need about the bot'),
 
   async execute(interaction) {
-    await interaction.reply({
+    await interaction.editReply({
       embeds: [
         new EmbedBuilder()
           .setTitle(`${client.user?.username} help`)

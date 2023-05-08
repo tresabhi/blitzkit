@@ -34,7 +34,7 @@ const COMP_TANKS = [
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -53,64 +53,55 @@ export default {
 
   async execute(interaction) {
     const tier = interaction.options.getInteger('tier')!;
-
-    await interaction.deferReply();
-
     const extractedUser = await extractUser(interaction);
     if (!extractedUser) return;
 
     const { name, server } = extractedUser;
-    const command = `tanks ${server} ${name} ${tier}`;
 
-    getBlitzAccount(interaction, command, name, server, async (account) => {
-      getWargamingResponse<TanksStats>(
-        `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${account.account_id}`,
-        interaction,
-        command,
-        async (tankStats) => {
-          const tanks = tankStats[account.account_id]
-            .map((tankData) => tankopedia.data[tankData.tank_id])
-            .filter((tank) => tank.tier === tier);
+    const account = await getBlitzAccount(interaction, name, server);
+    if (!account) return;
 
-          await interaction.editReply({
-            embeds: [
-              new EmbedBuilder()
-                .setTitle(
-                  `${markdownEscape(account.nickname)}'s owned ${
-                    tier === null ? '' : `tier ${tier} `
-                  }tanks`,
-                )
-                .setDescription(
-                  `${
-                    tanks.length === 0
-                      ? `No tanks found in tier ${tier}`
-                      : tanks
-                          .map(
-                            (tank) =>
-                              `${TANK_TYPE_EMOJIS[tank.type]} ${markdownEscape(
-                                tank.name,
-                              )} ${tank.is_premium ? '⭐' : ''}${
-                                COMP_TANKS.includes(tank.tank_id) ? '🏆' : ''
-                              }`,
-                          )
-                          .join('\n')
-                  }\n\n**Legend**\n⭐ = Premium/Collector\n${
-                    tier === 10 ? '🏆 = Comp Tank\n' : ''
-                  }${TANK_TYPE_EMOJIS.heavyTank} = Heavy\n${
-                    TANK_TYPE_EMOJIS.mediumTank
-                  } = Medium\n${TANK_TYPE_EMOJIS.lightTank} = Light\n${
-                    TANK_TYPE_EMOJIS['AT-SPG']
-                  } = Tank Destroyer`,
-                )
-                .setColor(SKILLED_COLOR),
-            ],
-          });
+    const tankStats = await getWargamingResponse<TanksStats>(
+      `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${account.account_id}`,
+    );
+    const tanks = tankStats[account.account_id]
+      .map((tankData) => tankopedia.data[tankData.tank_id])
+      .filter((tank) => tank.tier === tier);
 
-          console.log(
-            `Displaying ${account.nickname}'s owned tanks in tier ${tier}`,
-          );
-        },
-      );
+    await interaction.editReply({
+      embeds: [
+        new EmbedBuilder()
+          .setTitle(
+            `${markdownEscape(account.nickname)}'s owned ${
+              tier === null ? '' : `tier ${tier} `
+            }tanks`,
+          )
+          .setDescription(
+            `${
+              tanks.length === 0
+                ? `No tanks found in tier ${tier}`
+                : tanks
+                    .map(
+                      (tank) =>
+                        `${TANK_TYPE_EMOJIS[tank.type]} ${markdownEscape(
+                          tank.name,
+                        )} ${tank.is_premium ? '⭐' : ''}${
+                          COMP_TANKS.includes(tank.tank_id) ? '🏆' : ''
+                        }`,
+                    )
+                    .join('\n')
+            }\n\n**Legend**\n⭐ = Premium/Collector\n${
+              tier === 10 ? '🏆 = Comp Tank\n' : ''
+            }${TANK_TYPE_EMOJIS.heavyTank} = Heavy\n${
+              TANK_TYPE_EMOJIS.mediumTank
+            } = Medium\n${TANK_TYPE_EMOJIS.lightTank} = Light\n${
+              TANK_TYPE_EMOJIS['AT-SPG']
+            } = Tank Destroyer`,
+          )
+          .setColor(SKILLED_COLOR),
+      ],
     });
+
+    console.log(`Displaying ${account.nickname}'s owned tanks in tier ${tier}`);
   },
 } satisfies CommandRegistry;

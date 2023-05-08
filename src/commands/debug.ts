@@ -11,7 +11,7 @@ const executionStart = new Date().getTime();
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -22,7 +22,7 @@ export default {
     const currentTime = new Date().getTime();
     const uptime = currentTime - executionStart;
 
-    await interaction.reply({
+    await interaction.editReply({
       embeds: [
         new EmbedBuilder()
           .setTitle(`${client.user?.username} debug information`)

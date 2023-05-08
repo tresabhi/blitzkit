@@ -9,15 +9,15 @@ import { args } from '../utilities/args.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
 
 export default {
-  inDevelopment: false,
+  inDevelopment: true,
   inProduction: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
     .setName('searchplayers')
     .setDescription('Search players in a Blitz server')
-    .addStringOption(addServerChoices)
-    .addStringOption(addIGNOption)
+    .addStringOption((option) => addServerChoices(option).setRequired(true))
+    .addStringOption((option) => addIGNOption(option).setRequired(true))
     .addIntegerOption((option) =>
       option
         .setName('limit')
@@ -26,34 +26,30 @@ export default {
         .setMaxValue(100),
     ),
 
-  execute(interaction) {
+  async execute(interaction) {
     const server = interaction.options.getString('server')!;
     const name = interaction.options.getString('name')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
-    const command = `searchplayers ${server} ${name} ${limit}`;
 
-    getWargamingResponse<Players>(
+    const players = await getWargamingResponse<Players>(
       `https://api.wotblitz.${server}/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${name}&limit=${limit}`,
-      interaction,
-      command,
-      (players) => {
-        interaction.editReply({
-          embeds: [
-            new EmbedBuilder()
-              .setColor(SKILLED_COLOR)
-              .setTitle(`Player search results for "${markdownEscape(name)}"`)
-              .setDescription(
-                `\`\`\`${
-                  players.length === 0
-                    ? 'No players found.'
-                    : players
-                        .map((player) => markdownEscape(player.nickname))
-                        .join('\n')
-                }\`\`\``,
-              ),
-          ],
-        });
-      },
     );
+
+    await interaction.editReply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(SKILLED_COLOR)
+          .setTitle(`Player search results for "${markdownEscape(name)}"`)
+          .setDescription(
+            `\`\`\`${
+              players.length === 0
+                ? 'No players found.'
+                : players
+                    .map((player) => markdownEscape(player.nickname))
+                    .join('\n')
+            }\`\`\``,
+          ),
+      ],
+    });
   },
 } satisfies CommandRegistry;

@@ -14,5 +14,5 @@ export type PlayerClanData = {
       clan_id: number;
       emblem_set_id: number;
     };
-  };
+  } | null;
 };
