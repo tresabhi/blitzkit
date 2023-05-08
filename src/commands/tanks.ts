@@ -38,7 +38,7 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('tanksdev')
+    .setName('tanks')
     .setDescription("Shows a player's owned tanks")
     .addIntegerOption((option) =>
       option

@@ -17,7 +17,7 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('verifydev')
+    .setName('verify')
     .setDescription("Set's the user's username to their in-game name")
     .addStringOption((option) => addServerChoices(option).setRequired(true))
     .addStringOption((Option) => addIGNOption(Option).setRequired(true)),
