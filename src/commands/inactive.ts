@@ -4,7 +4,7 @@ import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
 import { ClanInfo } from '../types/clanInfo.js';
-import { PlayerPersonalData } from '../types/playerPersonalData.js';
+import { AccountInfo } from '../types/accountInfo.js';
 import addServerChoices from '../utilities/addServerChoices.js';
 import { args } from '../utilities/args.js';
 import getClan from '../utilities/getClan.js';
@@ -53,7 +53,7 @@ export default {
         async (clanInfo) => {
           const memberIds = clanInfo[clan.clan_id].members_ids;
 
-          getWargamingResponse<PlayerPersonalData>(
+          getWargamingResponse<AccountInfo>(
             `https://api.wotblitz.${server}/wotb/account/info/?application_id=${
               args['wargaming-application-id']
             }&account_id=${memberIds.join(',')}`,

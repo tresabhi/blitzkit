@@ -4,6 +4,7 @@ import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import { client } from '../index.js';
 import getClientId from '../utilities/getClientId.js';
+import { tankAverages } from '../utilities/tankAverages.js';
 import { tankopedia } from '../utilities/tankopedia.js';
 
 const executionStart = new Date().getTime();
@@ -35,6 +36,8 @@ export default {
               uptime % 1000,
             )}ms\n**Tankopedia**: ${
               tankopedia ? 'cached' : 'not cached'
+            }\n**Tank averages**: ${
+              tankAverages ? 'cached' : 'not cached'
             }\n**Client ID**: ${getClientId()}\n**Tag**: ${
               interaction.client.user.tag
             }`,

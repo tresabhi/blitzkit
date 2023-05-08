@@ -13,7 +13,7 @@ import getWargamingResponse from '../utilities/getWargamingResponse.js';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
