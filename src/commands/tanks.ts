@@ -2,11 +2,11 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
-import { BlitzServer } from '../constants/servers.js';
 import { TanksStats } from '../types/tanksStats.js';
 import addIGNOption from '../utilities/addIGNOption.js';
 import addServerChoices from '../utilities/addServerChoices.js';
 import { args } from '../utilities/args.js';
+import extractUser from '../utilities/extractUser.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
 import { TANK_TYPE_EMOJIS, tankopedia } from '../utilities/tankopedia.js';
@@ -38,23 +38,28 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('tanks')
+    .setName('tanksdev')
     .setDescription("Shows a player's owned tanks")
-    .addStringOption(addServerChoices)
-    .addStringOption(addIGNOption)
     .addIntegerOption((option) =>
       option
         .setName('tier')
-        .setDescription('The tier you want to see (default: all tiers)')
+        .setDescription('The tier you want to see')
         .setMinValue(1)
         .setMaxValue(10)
         .setRequired(true),
-    ),
+    )
+    .addStringOption(addServerChoices)
+    .addStringOption(addIGNOption),
 
-  execute(interaction) {
-    const server = interaction.options.getString('server') as BlitzServer;
-    const name = interaction.options.getString('name')!;
+  async execute(interaction) {
     const tier = interaction.options.getInteger('tier')!;
+
+    await interaction.deferReply();
+
+    const extractedUser = await extractUser(interaction);
+    if (!extractedUser) return;
+
+    const { name, server } = extractedUser;
     const command = `tanks ${server} ${name} ${tier}`;
 
     getBlitzAccount(interaction, command, name, server, async (account) => {
@@ -63,9 +68,9 @@ export default {
         interaction,
         command,
         async (tankStats) => {
-          const tanks = tankStats[account.account_id]!.map(
-            (tankData) => tankopedia.data[tankData.tank_id],
-          ).filter((tank) => tank.tier === tier);
+          const tanks = tankStats[account.account_id]
+            .map((tankData) => tankopedia.data[tankData.tank_id])
+            .filter((tank) => tank.tier === tier);
 
           await interaction.editReply({
             embeds: [

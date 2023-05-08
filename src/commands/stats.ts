@@ -2,13 +2,13 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
-import { BlitzServer } from '../constants/servers.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { PeriodStatistics } from '../types/statistics.js';
 import addIGNOption from '../utilities/addIGNOption.js';
 import addServerChoices from '../utilities/addServerChoices.js';
 import { args } from '../utilities/args.js';
 import blitzLinks from '../utilities/blitzLinks.js';
+import extractUser from '../utilities/extractUser.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getBlitzStarsAccount from '../utilities/getBlitzStarsAccount.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
@@ -39,10 +39,13 @@ export default {
     .addStringOption(addServerChoices)
     .addStringOption(addIGNOption),
 
-  execute(interaction) {
-    const name = interaction.options.getString('name')!;
-    const server = interaction.options.getString('server') as BlitzServer;
+  async execute(interaction) {
     const period = interaction.options.getString('period') as Period;
+
+    const extractedUser = await extractUser(interaction);
+    if (!extractedUser) return;
+
+    const { name, server } = extractedUser;
     const command = `stats ${server} ${name} ${period}`;
 
     getBlitzAccount(
