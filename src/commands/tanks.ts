@@ -2,11 +2,11 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
+import { BlitzServer } from '../constants/servers.js';
 import { TanksStats } from '../types/tanksStats.js';
 import addIGNOption from '../utilities/addIGNOption.js';
 import addServerChoices from '../utilities/addServerChoices.js';
 import { args } from '../utilities/args.js';
-import extractUser from '../utilities/extractUser.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
 import { TANK_TYPE_EMOJIS, tankopedia } from '../utilities/tankopedia.js';
@@ -53,12 +53,10 @@ export default {
 
   async execute(interaction) {
     const tier = interaction.options.getInteger('tier')!;
-    const extractedUser = await extractUser(interaction);
-    if (!extractedUser) return;
-
-    const { name, server } = extractedUser;
-
+    const name = interaction.options.getString('name')!;
+    const server = interaction.options.getString('server') as BlitzServer;
     const account = await getBlitzAccount(interaction, name, server);
+
     if (!account) return;
 
     const tankStats = await getWargamingResponse<TanksStats>(

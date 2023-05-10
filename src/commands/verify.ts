@@ -3,7 +3,7 @@ import markdownEscape from 'markdown-escape';
 import discord from '../../discord.json' assert { type: 'json' };
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
-import { BLITZ_SERVERS_SHORT, BlitzServer } from '../constants/servers.js';
+import { BlitzServer } from '../constants/servers.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 import addIGNOption from '../utilities/addIGNOption.js';
 import addServerChoices from '../utilities/addServerChoices.js';
@@ -19,8 +19,8 @@ export default {
   command: new SlashCommandBuilder()
     .setName('verify')
     .setDescription("Set's the user's username to their in-game name")
-    .addStringOption((option) => addServerChoices(option).setRequired(true))
-    .addStringOption((Option) => addIGNOption(Option).setRequired(true)),
+    .addStringOption(addServerChoices)
+    .addStringOption(addIGNOption),
 
   async execute(interaction) {
     let name = interaction.options.getString('name')!;
@@ -65,9 +65,7 @@ export default {
 
       if (member) {
         try {
-          await member.setNickname(
-            `${name} (${BLITZ_SERVERS_SHORT[server]})${clanTag}`,
-          );
+          await member.setNickname(`${name}${clanTag}`);
 
           if (interaction.guildId === discord.guild_id) {
             if (
@@ -105,15 +103,15 @@ export default {
                 .setColor(POSITIVE_COLOR)
                 .setTitle(`${interaction.user.username} is verified`)
                 .setDescription(
-                  `The user is now verified as ${markdownEscape(name)} (${
-                    BLITZ_SERVERS_SHORT[server]
-                  })${markdownEscape(clanTag)}`,
+                  `The user is now verified as ${markdownEscape(
+                    name,
+                  )}${markdownEscape(clanTag)}`,
                 ),
             ],
           });
 
           console.log(
-            `${interaction.user.username} verified as ${name} (${BLITZ_SERVERS_SHORT[server]})${clanTag}`,
+            `${interaction.user.username} verified as ${name}${clanTag}`,
           );
         } catch (error) {
           await interaction.editReply({

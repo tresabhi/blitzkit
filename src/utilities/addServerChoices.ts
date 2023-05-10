@@ -10,5 +10,5 @@ export default function addServerChoices(option: SlashCommandStringOption) {
       { name: BLITZ_SERVERS.eu, value: 'eu' },
       { name: BLITZ_SERVERS.asia, value: 'asia' },
     )
-    .setRequired(false);
+    .setRequired(true);
 }

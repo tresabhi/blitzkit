@@ -16,8 +16,8 @@ export default {
   command: new SlashCommandBuilder()
     .setName('searchplayers')
     .setDescription('Search players in a Blitz server')
-    .addStringOption((option) => addServerChoices(option).setRequired(true))
-    .addStringOption((option) => addIGNOption(option).setRequired(true))
+    .addStringOption(addServerChoices)
+    .addStringOption(addIGNOption)
     .addIntegerOption((option) =>
       option
         .setName('limit')

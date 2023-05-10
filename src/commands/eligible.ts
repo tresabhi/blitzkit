@@ -2,10 +2,10 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
+import { BlitzServer } from '../constants/servers.js';
 import addIGNOption from '../utilities/addIGNOption.js';
 import addServerChoices from '../utilities/addServerChoices.js';
 import blitzLinks from '../utilities/blitzLinks.js';
-import extractUser from '../utilities/extractUser.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getBlitzStarsAccount from '../utilities/getBlitzStarsAccount.js';
 import poweredByBlitzStars from '../utilities/poweredByBlitzStars.js';
@@ -38,13 +38,10 @@ export default {
 
   async execute(interaction) {
     const clan = interaction.options.getString('clan') as keyof typeof CLANS;
-
-    const extractedUser = await extractUser(interaction);
-    if (!extractedUser) return;
-
-    const { name, server } = extractedUser;
-
+    const name = interaction.options.getString('name')!;
+    const server = interaction.options.getString('server') as BlitzServer;
     const blitzAccount = await getBlitzAccount(interaction, name, server);
+
     if (!blitzAccount) return;
 
     const blitzStarsAccount = await getBlitzStarsAccount(
