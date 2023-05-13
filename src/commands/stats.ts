@@ -129,78 +129,87 @@ export default {
               } stats`,
             )
             .setDescription(
-              `${
-                period === 'today'
-                  ? '**⚠ "Today" stats are in development. Some stats are not available/wrong.**\n\n'
-                  : ''
-              }${[
-                [
-                  'Winrate',
-                  `${(100 * (stats.all.wins / stats.all.battles)).toFixed(2)}%`,
-                ],
-                [
-                  'Survival',
-                  `${(
-                    100 *
-                    (stats.all.survived_battles / stats.all.battles)
-                  ).toFixed(2)}%`,
-                ],
-                [
-                  'Accuracy',
-                  `${((stats.all.hits / stats.all.shots) * 100).toFixed(2)}%`,
-                ],
-                ['WN8', stats.wn8.toFixed(0)],
-                ['WN7', stats.wn7.toFixed(0)],
-                [],
-                ['Battles', stats.all.battles],
-                ['Wins', stats.all.wins],
-                ['Losses', stats.all.losses],
-                ['Average tier', stats.avg_tier.toFixed(2)],
-                [],
-                [
-                  'Shots per battle',
-                  (stats.all.shots / stats.all.battles).toFixed(2),
-                ],
-                [
-                  'Hits per battle',
-                  (stats.all.hits / stats.all.battles).toFixed(2),
-                ],
-                [
-                  'Damage per battle',
-                  (stats.all.damage_dealt / stats.all.battles).toFixed(0),
-                ],
-                [
-                  'Kills per battle',
-                  (stats.all.frags / stats.all.battles).toFixed(2),
-                ],
-                [
-                  'Spots per battle',
-                  (stats.all.spotted / stats.all.battles).toFixed(2),
-                ],
-                [
-                  'XP per battle',
-                  (stats.all.xp / stats.all.battles).toFixed(0),
-                ],
-                [],
-                [
-                  'Damage ratio',
-                  (stats.all.damage_dealt / stats.all.damage_received).toFixed(
-                    2,
-                  ),
-                ],
-                [
-                  'Kills to death ratio',
-                  (
-                    stats.all.frags /
-                    (stats.all.battles - stats.all.survived_battles)
-                  ).toFixed(2),
-                ],
-              ]
-                .filter((array) => array[1] !== `${-Infinity}`)
-                .map((array) =>
-                  array.length === 0 ? '' : `**${array[0]}**: ${array[1]}`,
-                )
-                .join('\n')}\n\n${blitzLinks(server, blitzAccount.nickname)}`,
+              stats.all.battles > 0
+                ? `${
+                    period === 'today'
+                      ? '**⚠ "Today" stats are in development. Some stats are not available/wrong.**\n\n'
+                      : ''
+                  }${[
+                    [
+                      'Winrate',
+                      `${(100 * (stats.all.wins / stats.all.battles)).toFixed(
+                        2,
+                      )}%`,
+                    ],
+                    [
+                      'Survival',
+                      `${(
+                        100 *
+                        (stats.all.survived_battles / stats.all.battles)
+                      ).toFixed(2)}%`,
+                    ],
+                    [
+                      'Accuracy',
+                      `${((stats.all.hits / stats.all.shots) * 100).toFixed(
+                        2,
+                      )}%`,
+                    ],
+                    ['WN8', stats.wn8.toFixed(0)],
+                    ['WN7', stats.wn7.toFixed(0)],
+                    [],
+                    ['Battles', stats.all.battles],
+                    ['Wins', stats.all.wins],
+                    ['Losses', stats.all.losses],
+                    ['Average tier', stats.avg_tier.toFixed(2)],
+                    [],
+                    [
+                      'Shots per battle',
+                      (stats.all.shots / stats.all.battles).toFixed(2),
+                    ],
+                    [
+                      'Hits per battle',
+                      (stats.all.hits / stats.all.battles).toFixed(2),
+                    ],
+                    [
+                      'Damage per battle',
+                      (stats.all.damage_dealt / stats.all.battles).toFixed(0),
+                    ],
+                    [
+                      'Kills per battle',
+                      (stats.all.frags / stats.all.battles).toFixed(2),
+                    ],
+                    [
+                      'Spots per battle',
+                      (stats.all.spotted / stats.all.battles).toFixed(2),
+                    ],
+                    [
+                      'XP per battle',
+                      (stats.all.xp / stats.all.battles).toFixed(0),
+                    ],
+                    [],
+                    [
+                      'Damage ratio',
+                      (
+                        stats.all.damage_dealt / stats.all.damage_received
+                      ).toFixed(2),
+                    ],
+                    [
+                      'Kills to death ratio',
+                      (
+                        stats.all.frags /
+                        (stats.all.battles - stats.all.survived_battles)
+                      ).toFixed(2),
+                    ],
+                  ]
+                    .filter((array) => array[1] !== `${-Infinity}`)
+                    .map((array) =>
+                      array.length === 0 ? '' : `**${array[0]}**: ${array[1]}`,
+                    )
+                    .join('\n')}\n\n${blitzLinks(
+                    server,
+                    blitzAccount.nickname,
+                  )}`
+                : 'No battles played in this period.',
             ),
         ),
       ],
