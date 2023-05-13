@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 export interface Period {
   statsId: number;
   account_id: number;
