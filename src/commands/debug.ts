@@ -2,17 +2,16 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import packageJSON from '../../package.json' assert { type: 'json' };
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
+import { tankopedia } from '../core/blitzstars/tankopedia.js';
+import cmdName from '../core/interaction/cmdName.js';
+import getClientId from '../core/process/getClientId.js';
 import { client } from '../index.js';
-import cmdName from '../utilities/cmdName.js';
-import getClientId from '../utilities/getClientId.js';
-import { tankAverages } from '../utilities/tankAverages.js';
-import { tankopedia } from '../utilities/tankopedia.js';
 
 const executionStart = new Date().getTime();
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -37,8 +36,6 @@ export default {
               uptime % 1000,
             )}ms\n**Tankopedia**: ${
               tankopedia ? 'cached' : 'not cached'
-            }\n**Tank averages**: ${
-              tankAverages ? 'cached' : 'not cached'
             }\n**Client ID**: ${getClientId()}\n**Tag**: ${
               interaction.client.user.tag
             }`,

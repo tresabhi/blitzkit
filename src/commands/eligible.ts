@@ -3,13 +3,13 @@ import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
-import addIGNOption from '../utilities/addIGNOption.js';
-import addServerChoices from '../utilities/addServerChoices.js';
-import blitzLinks from '../utilities/blitzLinks.js';
-import cmdName from '../utilities/cmdName.js';
-import getBlitzAccount from '../utilities/getBlitzAccount.js';
-import getBlitzStarsAccount from '../utilities/getBlitzStarsAccount.js';
-import poweredByBlitzStars from '../utilities/poweredByBlitzStars.js';
+import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import blitzStarsLinks from '../core/blitzstars/blitzStarsLinks.js';
+import getBlitzStarsAccount from '../core/blitzstars/getBlitzStarsAccount.js';
+import poweredByBlitzStars from '../core/blitzstars/poweredByBlitzStars.js';
+import cmdName from '../core/interaction/cmdName.js';
+import addIGNOption from '../core/options/addIGNOption.js';
+import addServerChoices from '../core/options/addServerChoices.js';
 
 const CLANS = {
   sklld: { id: 71559, name: 'Skilled' },
@@ -18,7 +18,7 @@ const CLANS = {
 
 export default {
   inProduction: false,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: false,
 
   command: new SlashCommandBuilder()
@@ -133,7 +133,7 @@ export default {
                     )}'s shortcomings for ${CLANS[clan].name} (${
                       clan === 'sklld' ? '30 days stats' : 'career stats'
                     }):\n\n${issues.join('\n')}`
-              }\n\n${blitzLinks(server, blitzAccount.nickname)}`,
+              }\n\n${blitzStarsLinks(server, blitzAccount.nickname)}`,
             ),
         ),
       ],

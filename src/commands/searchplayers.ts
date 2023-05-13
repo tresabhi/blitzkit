@@ -2,15 +2,15 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
+import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
+import cmdName from '../core/interaction/cmdName.js';
+import addIGNOption from '../core/options/addIGNOption.js';
+import addServerChoices from '../core/options/addServerChoices.js';
+import { args } from '../core/process/args.js';
 import { Players } from '../types/players.js';
-import addIGNOption from '../utilities/addIGNOption.js';
-import addServerChoices from '../utilities/addServerChoices.js';
-import { args } from '../utilities/args.js';
-import cmdName from '../utilities/cmdName.js';
-import getWargamingResponse from '../utilities/getWargamingResponse.js';
 
 export default {
-  inDevelopment: false,
+  inDevelopment: true,
   inProduction: true,
   inPublic: true,
 
@@ -31,10 +31,10 @@ export default {
     const server = interaction.options.getString('server')!;
     const name = interaction.options.getString('name')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
-
     const players = await getWargamingResponse<Players>(
       `https://api.wotblitz.${server}/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${name}&limit=${limit}`,
     );
+    if (!players) return;
 
     await interaction.editReply({
       embeds: [

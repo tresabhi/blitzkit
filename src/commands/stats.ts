@@ -3,18 +3,18 @@ import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
+import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
+import blitzStarsLinks from '../core/blitzstars/blitzStarsLinks.js';
+import getBlitzStarsAccount from '../core/blitzstars/getBlitzStarsAccount.js';
+import poweredByBlitzStars from '../core/blitzstars/poweredByBlitzStars.js';
+import cleanTable from '../core/interaction/cleanTable.js';
+import cmdName from '../core/interaction/cmdName.js';
+import addIGNOption from '../core/options/addIGNOption.js';
+import addServerChoices from '../core/options/addServerChoices.js';
+import { args } from '../core/process/args.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { BlitzStartsComputedPeriodicStatistics } from '../types/statistics.js';
-import addIGNOption from '../utilities/addIGNOption.js';
-import addServerChoices from '../utilities/addServerChoices.js';
-import { args } from '../utilities/args.js';
-import blitzLinks from '../utilities/blitzLinks.js';
-import cleanTable from '../utilities/cleanTable.js';
-import cmdName from '../utilities/cmdName.js';
-import getBlitzAccount from '../utilities/getBlitzAccount.js';
-import getBlitzStarsAccount from '../utilities/getBlitzStarsAccount.js';
-import getWargamingResponse from '../utilities/getWargamingResponse.js';
-import poweredByBlitzStars from '../utilities/poweredByBlitzStars.js';
 
 type Period = 'today' | '30' | '90' | 'career';
 
@@ -27,7 +27,7 @@ const daysInPeriod: Record<Period, number> = {
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -201,7 +201,7 @@ export default {
                         (stats.all.battles - stats.all.survived_battles)
                       ).toFixed(2),
                     ],
-                  ])}\n\n${blitzLinks(server, blitzAccount.nickname)}`
+                  ])}\n\n${blitzStarsLinks(server, blitzAccount.nickname)}`
                 : 'No battles played in this period.',
             ),
         ),

@@ -1,5 +1,5 @@
 import { SlashCommandStringOption } from 'discord.js';
-import { BLITZ_SERVERS } from '../constants/servers.js';
+import { BLITZ_SERVERS } from '../../constants/servers.js';
 
 export default function addServerChoices(option: SlashCommandStringOption) {
   return option

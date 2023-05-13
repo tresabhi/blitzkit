@@ -4,7 +4,8 @@ import {
   CacheType,
 } from 'discord.js';
 import { go } from 'fuzzysort';
-import { tanks } from '../../utilities/tankopedia.js';
+import resolveTankName from '../../utilities/resolveTankName.js';
+import { tanks } from '../blitzstars/tankopedia.js';
 
 export default async function tanksAutocomplete(
   interaction: AutocompleteInteraction<CacheType>,
@@ -16,9 +17,7 @@ export default async function tanksAutocomplete(
       ? go(focusedValue, tanks, { keys: ['name'], limit: 10 }).map(
           (item) =>
             ({
-              name: item.obj.name
-                ? item.obj.name
-                : `Unknown Tank ${item.obj.tank_id}`,
+              name: item.obj.name ? item.obj.name : resolveTankName(item.obj),
               value: `${item.obj.tank_id}`,
             } satisfies ApplicationCommandOptionChoiceData<string>),
         )

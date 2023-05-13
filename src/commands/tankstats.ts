@@ -3,24 +3,25 @@ import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { BlitzServer } from '../constants/servers.js';
 import tanksAutocomplete from '../core/autocomplete/tanks.js';
+import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import { tankopedia } from '../core/blitzstars/tankopedia.js';
 import getPeriodicStats, {
   Period,
 } from '../core/blitztankstats/getPeriodicStats.js';
-import errorEmbed from '../core/embeds/errorEmbed.js';
-import sklldEmbed from '../core/embeds/sklldEmbed.js';
-import addIGNOption from '../utilities/addIGNOption.js';
-import addServerChoices from '../utilities/addServerChoices.js';
-import addTankChoices from '../utilities/addTankChoices.js';
-import cleanTable from '../utilities/cleanTable.js';
-import cmdName from '../utilities/cmdName.js';
-import getBlitzAccount from '../utilities/getBlitzAccount.js';
-import { tankopedia } from '../utilities/tankopedia.js';
+import cleanTable from '../core/interaction/cleanTable.js';
+import cmdName from '../core/interaction/cmdName.js';
+import errorEmbed from '../core/interaction/errorEmbed.js';
+import sklldEmbed from '../core/interaction/sklldEmbed.js';
+import addIGNOption from '../core/options/addIGNOption.js';
+import addServerChoices from '../core/options/addServerChoices.js';
+import addTankChoices from '../core/options/addTankChoices.js';
+import resolveTankName from '../utilities/resolveTankName.js';
 
 type Periods = '30' | '60' | '90';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -76,9 +77,7 @@ export default {
           sklldEmbed(
             `${period} day stats for ${markdownEscape(
               blitzAccount.nickname,
-            )}'s ${
-              tank.name ? markdownEscape(tank.name) : `Unknown Tank ${tankId}`
-            }`,
+            )}'s ${resolveTankName(tank)}`,
             periodicStats.length > 0
               ? cleanTable([
                   [

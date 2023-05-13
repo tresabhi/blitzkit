@@ -3,14 +3,15 @@ import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
+import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
+import { TANK_TYPE_EMOJIS, tankopedia } from '../core/blitzstars/tankopedia.js';
+import cmdName from '../core/interaction/cmdName.js';
+import addIGNOption from '../core/options/addIGNOption.js';
+import addServerChoices from '../core/options/addServerChoices.js';
+import { args } from '../core/process/args.js';
 import { TanksStats } from '../types/tanksStats.js';
-import addIGNOption from '../utilities/addIGNOption.js';
-import addServerChoices from '../utilities/addServerChoices.js';
-import { args } from '../utilities/args.js';
-import cmdName from '../utilities/cmdName.js';
-import getBlitzAccount from '../utilities/getBlitzAccount.js';
-import getWargamingResponse from '../utilities/getWargamingResponse.js';
-import { TANK_TYPE_EMOJIS, tankopedia } from '../utilities/tankopedia.js';
+import resolveTankName from '../utilities/resolveTankName.js';
 
 const COMP_TANKS = [
   // light tanks
@@ -35,7 +36,7 @@ const COMP_TANKS = [
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -57,12 +58,11 @@ export default {
     const name = interaction.options.getString('name')!;
     const server = interaction.options.getString('server') as BlitzServer;
     const account = await getBlitzAccount(interaction, name, server);
-
     if (!account) return;
-
     const tankStats = await getWargamingResponse<TanksStats>(
       `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${account.account_id}`,
     );
+    if (!tankStats) return;
     const tanks = tankStats[account.account_id]
       .map((tankData) => tankopedia.data[tankData.tank_id])
       .filter((tank) => tank.tier === tier);
@@ -82,8 +82,8 @@ export default {
                 : tanks
                     .map(
                       (tank) =>
-                        `${TANK_TYPE_EMOJIS[tank.type]} ${markdownEscape(
-                          tank.name,
+                        `${TANK_TYPE_EMOJIS[tank.type]} ${resolveTankName(
+                          tank,
                         )} ${tank.is_premium ? '⭐' : ''}${
                           COMP_TANKS.includes(tank.tank_id) ? '🏆' : ''
                         }`,

@@ -1,7 +1,7 @@
 import { Client, EmbedBuilder, TextChannel } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
 import { POSITIVE_COLOR } from '../constants/colors.js';
-import isDev from '../utilities/isDev.js';
+import isDev from '../core/process/isDev.js';
 
 export default function ready(client: Client<true>) {
   (

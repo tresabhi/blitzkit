@@ -4,17 +4,17 @@ import discord from '../../discord.json' assert { type: 'json' };
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
+import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
+import cmdName from '../core/interaction/cmdName.js';
+import addIGNOption from '../core/options/addIGNOption.js';
+import addServerChoices from '../core/options/addServerChoices.js';
+import { args } from '../core/process/args.js';
 import { PlayerClanData } from '../types/playerClanData.js';
-import addIGNOption from '../utilities/addIGNOption.js';
-import addServerChoices from '../utilities/addServerChoices.js';
-import { args } from '../utilities/args.js';
-import cmdName from '../utilities/cmdName.js';
-import getBlitzAccount from '../utilities/getBlitzAccount.js';
-import getWargamingResponse from '../utilities/getWargamingResponse.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -24,17 +24,14 @@ export default {
     .addStringOption(addIGNOption),
 
   async execute(interaction) {
-    let name = interaction.options.getString('name')!;
+    const name = interaction.options.getString('name')!;
     const server = interaction.options.getString('server') as BlitzServer;
     const account = await getBlitzAccount(interaction, name, server);
-
     if (!account) return;
-
-    name = account.nickname;
-
     const clanData = await getWargamingResponse<PlayerClanData>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${account.account_id}&extra=clan`,
     );
+    if (!clanData) return;
     const clan = clanData[account.account_id]?.clan;
     const clanTag = clan ? ` [${clan!.tag}]` : '';
 
@@ -66,7 +63,7 @@ export default {
 
       if (member) {
         try {
-          await member.setNickname(`${name}${clanTag}`);
+          await member.setNickname(`${account.nickname}${clanTag}`);
 
           if (interaction.guildId === discord.guild_id) {
             if (
@@ -105,14 +102,14 @@ export default {
                 .setTitle(`${interaction.user.username} is verified`)
                 .setDescription(
                   `The user is now verified as ${markdownEscape(
-                    name,
+                    account.nickname,
                   )}${markdownEscape(clanTag)}`,
                 ),
             ],
           });
 
           console.log(
-            `${interaction.user.username} verified as ${name}${clanTag}`,
+            `${interaction.user.username} verified as ${account.nickname}${clanTag}`,
           );
         } catch (error) {
           await interaction.editReply({

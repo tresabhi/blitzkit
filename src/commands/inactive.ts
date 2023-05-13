@@ -3,26 +3,26 @@ import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
+import getClan from '../core/blitz/getClan.js';
+import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
+import cmdName from '../core/interaction/cmdName.js';
+import addServerChoices from '../core/options/addServerChoices.js';
+import { args } from '../core/process/args.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { ClanInfo } from '../types/clanInfo.js';
 import { Clan } from '../types/clanList.js';
-import addServerChoices from '../utilities/addServerChoices.js';
-import { args } from '../utilities/args.js';
-import cmdName from '../utilities/cmdName.js';
-import getClan from '../utilities/getClan.js';
-import getWargamingResponse from '../utilities/getWargamingResponse.js';
 
 const DEFAULT_THRESHOLD = 7;
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
     .setName(cmdName('inactive'))
     .setDescription('Lists all inactive players')
-    .addStringOption((option) => addServerChoices(option).setRequired(true))
+    .addStringOption(addServerChoices)
     .addStringOption((option) =>
       option
         .setName('name')
@@ -48,19 +48,17 @@ export default {
     const threshold =
       interaction.options.getNumber('threshold')! ?? DEFAULT_THRESHOLD;
     const time = new Date().getTime() / 1000;
-
     const clanInfo = await getWargamingResponse<ClanInfo>(
       `https://api.wotblitz.${server}/wotb/clans/info/?application_id=${args['wargaming-application-id']}&clan_id=${clan.clan_id}`,
     );
-
+    if (!clanInfo) return;
     const memberIds = clanInfo[clan.clan_id].members_ids;
-
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${
         args['wargaming-application-id']
       }&account_id=${memberIds.join(',')}`,
     );
-
+    if (!accountInfo) return;
     const inactiveInfo = memberIds
       .map((memberId) => {
         const member = accountInfo[memberId];

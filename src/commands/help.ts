@@ -6,12 +6,12 @@ import {
   publicCommands,
 } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
+import cmdName from '../core/interaction/cmdName.js';
 import { client } from '../index.js';
-import cmdName from '../utilities/cmdName.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()

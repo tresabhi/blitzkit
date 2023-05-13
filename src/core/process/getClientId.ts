@@ -1,4 +1,4 @@
-import discord from '../../discord.json' assert { type: 'json' };
+import discord from '../../../discord.json' assert { type: 'json' };
 import isDev from './isDev.js';
 
 export default function getClientId() {

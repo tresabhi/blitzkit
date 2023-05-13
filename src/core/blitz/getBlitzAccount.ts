@@ -4,10 +4,10 @@ import {
   EmbedBuilder,
 } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { NEGATIVE_COLOR } from '../constants/colors.js';
-import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
-import { Players } from '../types/players.js';
-import { args } from './args.js';
+import { NEGATIVE_COLOR } from '../../constants/colors.js';
+import { BLITZ_SERVERS, BlitzServer } from '../../constants/servers.js';
+import { Players } from '../../types/players.js';
+import { args } from '../process/args.js';
 import getWargamingResponse from './getWargamingResponse.js';
 
 export default async function getBlitzAccount(

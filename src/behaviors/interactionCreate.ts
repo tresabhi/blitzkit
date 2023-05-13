@@ -11,9 +11,9 @@ import {
 } from 'discord.js';
 import { readdirSync } from 'fs';
 import discord from '../../discord.json' assert { type: 'json' };
-import { args } from '../utilities/args.js';
-import getClientId from '../utilities/getClientId.js';
-import isDev from '../utilities/isDev.js';
+import { args } from '../core/process/args.js';
+import getClientId from '../core/process/getClientId.js';
+import isDev from '../core/process/isDev.js';
 
 export interface CommandRegistry {
   inDevelopment: boolean; // register with Skilled Bot (default: false)
