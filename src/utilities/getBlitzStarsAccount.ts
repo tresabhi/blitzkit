@@ -1,6 +1,6 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import fetch from 'node-fetch';
-import { notTrackedByBlitzStars } from '../embeds/notTrackedByBlitzStars.js';
+import { notTrackedByBlitzStars } from '../core/embeds/notTrackedByBlitzStars.js';
 import { PlayerPeriodicStatsCollection } from '../types/statistics.js';
 
 export default async function getBlitzStarsAccount(

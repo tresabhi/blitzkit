@@ -1,4 +1,5 @@
 import {
+  AutocompleteInteraction,
   CacheType,
   ChatInputCommandInteraction,
   Collection,
@@ -21,6 +22,7 @@ export interface CommandRegistry {
 
   command: Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
   execute: (interaction: ChatInputCommandInteraction<CacheType>) => void;
+  autocomplete?: (interaction: AutocompleteInteraction<CacheType>) => void;
 }
 
 const rest = new REST().setToken(args['discord-token']);
@@ -68,28 +70,46 @@ try {
 export default async function interactionCreate(
   interaction: Interaction<CacheType>,
 ) {
-  if (!interaction.isChatInputCommand()) return;
-  const command = commandCollection.get(interaction.commandName);
+  if (interaction.isAutocomplete()) {
+    const command = commandCollection.get(interaction.commandName);
 
-  if (!command) {
-    console.error(`No command matching ${interaction.commandName} was found.`);
-    return;
-  }
+    if (!command) {
+      console.error(
+        `No command matching ${interaction.commandName} was found.`,
+      );
+      return;
+    }
 
-  try {
-    await interaction.deferReply();
-    command.execute(interaction);
-  } catch (error) {
-    console.error(error);
-    if (interaction.replied || interaction.deferred) {
-      await interaction.followUp({
-        content: 'There was an error while executing this command!',
-        ephemeral: true,
-      });
-    } else {
-      await interaction.editReply({
-        content: 'There was an error while executing this command!',
-      });
+    try {
+      if (command.autocomplete) command.autocomplete(interaction);
+    } catch (error) {
+      console.error(error);
+    }
+  } else if (interaction.isChatInputCommand()) {
+    const command = commandCollection.get(interaction.commandName);
+
+    if (!command) {
+      console.error(
+        `No command matching ${interaction.commandName} was found.`,
+      );
+      return;
+    }
+
+    try {
+      await interaction.deferReply();
+      command.execute(interaction);
+    } catch (error) {
+      console.error(error);
+      if (interaction.replied || interaction.deferred) {
+        await interaction.followUp({
+          content: 'There was an error while executing this command!',
+          ephemeral: true,
+        });
+      } else {
+        await interaction.editReply({
+          content: 'There was an error while executing this command!',
+        });
+      }
     }
   }
 }

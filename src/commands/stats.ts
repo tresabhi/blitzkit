@@ -9,6 +9,7 @@ import addIGNOption from '../utilities/addIGNOption.js';
 import addServerChoices from '../utilities/addServerChoices.js';
 import { args } from '../utilities/args.js';
 import blitzLinks from '../utilities/blitzLinks.js';
+import cleanTable from '../utilities/cleanTable.js';
 import cmdName from '../utilities/cmdName.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getBlitzStarsAccount from '../utilities/getBlitzStarsAccount.js';
@@ -134,7 +135,7 @@ export default {
                     period === 'today'
                       ? '**⚠ "Today" stats are in development. Some stats are not available/wrong.**\n\n'
                       : ''
-                  }${[
+                  }${cleanTable([
                     [
                       'Winrate',
                       `${(100 * (stats.all.wins / stats.all.battles)).toFixed(
@@ -200,15 +201,7 @@ export default {
                         (stats.all.battles - stats.all.survived_battles)
                       ).toFixed(2),
                     ],
-                  ]
-                    .filter((array) => array[1] !== `${-Infinity}`)
-                    .map((array) =>
-                      array.length === 0 ? '' : `**${array[0]}**: ${array[1]}`,
-                    )
-                    .join('\n')}\n\n${blitzLinks(
-                    server,
-                    blitzAccount.nickname,
-                  )}`
+                  ])}\n\n${blitzLinks(server, blitzAccount.nickname)}`
                 : 'No battles played in this period.',
             ),
         ),
