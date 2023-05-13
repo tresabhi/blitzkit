@@ -6,15 +6,16 @@ import { Players } from '../types/players.js';
 import addIGNOption from '../utilities/addIGNOption.js';
 import addServerChoices from '../utilities/addServerChoices.js';
 import { args } from '../utilities/args.js';
+import cmdName from '../utilities/cmdName.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
 
 export default {
-  inDevelopment: true,
+  inDevelopment: false,
   inProduction: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('searchplayers')
+    .setName(cmdName('searchplayers'))
     .setDescription('Search players in a Blitz server')
     .addStringOption(addServerChoices)
     .addStringOption(addIGNOption)

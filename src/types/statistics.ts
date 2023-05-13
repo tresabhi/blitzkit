@@ -1,16 +1,20 @@
 import { AllStats, SpecialStats } from './accountInfo.js';
 
-export interface PeriodStatistics {
+export interface BlitzStartsComputedPeriodicStatistics {
   all: AllStats;
-  special: SpecialStats;
 
   wn7: number;
   wn8: number;
   avg_tier: number;
+}
+
+export interface PeriodStatistics
+  extends BlitzStartsComputedPeriodicStatistics {
+  special: SpecialStats;
   pwp: number;
 }
 
-export interface PlayerStatistics {
+export interface PlayerPeriodicStatsCollection {
   statistics: PeriodStatistics;
   period30d: PeriodStatistics;
   period90d: PeriodStatistics;

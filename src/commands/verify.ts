@@ -8,16 +8,17 @@ import { PlayerClanData } from '../types/playerClanData.js';
 import addIGNOption from '../utilities/addIGNOption.js';
 import addServerChoices from '../utilities/addServerChoices.js';
 import { args } from '../utilities/args.js';
+import cmdName from '../utilities/cmdName.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('verify')
+    .setName(cmdName('verify'))
     .setDescription("Set's the user's username to their in-game name")
     .addStringOption(addServerChoices)
     .addStringOption(addIGNOption),

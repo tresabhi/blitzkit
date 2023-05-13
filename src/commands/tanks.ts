@@ -7,6 +7,7 @@ import { TanksStats } from '../types/tanksStats.js';
 import addIGNOption from '../utilities/addIGNOption.js';
 import addServerChoices from '../utilities/addServerChoices.js';
 import { args } from '../utilities/args.js';
+import cmdName from '../utilities/cmdName.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
 import { TANK_TYPE_EMOJIS, tankopedia } from '../utilities/tankopedia.js';
@@ -34,11 +35,11 @@ const COMP_TANKS = [
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('tanks')
+    .setName(cmdName('tanks'))
     .setDescription("Shows a player's owned tanks")
     .addIntegerOption((option) =>
       option

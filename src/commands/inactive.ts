@@ -8,6 +8,7 @@ import { ClanInfo } from '../types/clanInfo.js';
 import { Clan } from '../types/clanList.js';
 import addServerChoices from '../utilities/addServerChoices.js';
 import { args } from '../utilities/args.js';
+import cmdName from '../utilities/cmdName.js';
 import getClan from '../utilities/getClan.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
 
@@ -15,11 +16,11 @@ const DEFAULT_THRESHOLD = 7;
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('inactive')
+    .setName(cmdName('inactive'))
     .setDescription('Lists all inactive players')
     .addStringOption((option) => addServerChoices(option).setRequired(true))
     .addStringOption((option) =>

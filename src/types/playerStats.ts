@@ -1,4 +1,4 @@
-import { AllStats } from './accountInfo.js';
+import { BlitzStartsComputedPeriodicStatistics } from './statistics.js';
 
 export type PlayerStats = {
   clan: {
@@ -6,12 +6,7 @@ export type PlayerStats = {
     name: string;
     tag: string;
   };
-  statistics: {
-    all: AllStats;
-    wn8: number;
-    wn7: number;
-    average_tier: number;
-  };
+  statistics: BlitzStartsComputedPeriodicStatistics;
   _id: string;
   last_battle_time: number;
   nickname: string;

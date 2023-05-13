@@ -1,4 +1,4 @@
-import errorEmbed from '../utilities/errorEmbed.js';
+import errorEmbed from './errorEmbed.js';
 
 export const noMember = errorEmbed(
   'User of command is not a member',

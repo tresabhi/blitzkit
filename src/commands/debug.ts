@@ -3,6 +3,7 @@ import packageJSON from '../../package.json' assert { type: 'json' };
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import { client } from '../index.js';
+import cmdName from '../utilities/cmdName.js';
 import getClientId from '../utilities/getClientId.js';
 import { tankAverages } from '../utilities/tankAverages.js';
 import { tankopedia } from '../utilities/tankopedia.js';
@@ -11,11 +12,11 @@ const executionStart = new Date().getTime();
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('debug')
+    .setName(cmdName('debug'))
     .setDescription('Debug information about the bot'),
 
   async execute(interaction) {

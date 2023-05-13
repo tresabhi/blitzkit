@@ -7,14 +7,15 @@ import {
 } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import { client } from '../index.js';
+import cmdName from '../utilities/cmdName.js';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('help')
+    .setName(cmdName('help'))
     .setDescription('All the help you need about the bot'),
 
   async execute(interaction) {

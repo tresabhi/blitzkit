@@ -4,11 +4,12 @@ import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
-import { PeriodStatistics, PlayerStatistics } from '../types/statistics.js';
+import { BlitzStartsComputedPeriodicStatistics } from '../types/statistics.js';
 import addIGNOption from '../utilities/addIGNOption.js';
 import addServerChoices from '../utilities/addServerChoices.js';
 import { args } from '../utilities/args.js';
 import blitzLinks from '../utilities/blitzLinks.js';
+import cmdName from '../utilities/cmdName.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getBlitzStarsAccount from '../utilities/getBlitzStarsAccount.js';
 import getWargamingResponse from '../utilities/getWargamingResponse.js';
@@ -16,13 +17,20 @@ import poweredByBlitzStars from '../utilities/poweredByBlitzStars.js';
 
 type Period = 'today' | '30' | '90' | 'career';
 
+const daysInPeriod: Record<Period, number> = {
+  today: 1 * 24 * 60 * 60,
+  30: 30 * 24 * 60 * 60,
+  90: 90 * 24 * 60 * 60,
+  career: Infinity,
+};
+
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('stats')
+    .setName(cmdName('stats'))
     .setDescription("Gets the user's in-game statistics")
     .addStringOption((option) =>
       option
@@ -44,88 +52,21 @@ export default {
     const name = interaction.options.getString('name')!;
     const server = interaction.options.getString('server') as BlitzServer;
     const blitzAccount = await getBlitzAccount(interaction, name, server);
-
     if (!blitzAccount) return;
-
-    const blitzStarsAccount = (await getBlitzStarsAccount(
+    let stats: BlitzStartsComputedPeriodicStatistics;
+    const accountInfo = await getWargamingResponse<AccountInfo>(
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${blitzAccount.account_id}`,
+    );
+    if (!accountInfo) return;
+    const blitzStarsAccount = await getBlitzStarsAccount(
       interaction,
       blitzAccount.account_id,
-      name,
-    )) as PlayerStatistics;
+    );
     if (!blitzStarsAccount) return;
 
-    async function reply(stats: PeriodStatistics) {
-      await interaction.editReply({
-        embeds: [
-          poweredByBlitzStars(
-            new EmbedBuilder()
-              .setColor(SKILLED_COLOR)
-              .setTitle(
-                `${markdownEscape(blitzStarsAccount.nickname)}'s ${
-                  period === 'career' ? period : `${period} day`
-                } stats`,
-              )
-              .setDescription(
-                `${
-                  period === 'today'
-                    ? '**⚠ "Today" stats are in development. Some stats are not available/wrong.**\n\n'
-                    : ''
-                }${[
-                  ['Winrate', `${stats.special.winrate.toFixed(2)}%`],
-                  ['Survival', `${stats.special.survivalRate.toFixed(2)}%`],
-                  [
-                    'Accuracy',
-                    `${((stats.all.hits / stats.all.shots) * 100).toFixed(2)}%`,
-                  ],
-                  ['WN8', stats.wn8.toFixed(0)],
-                  ['WN7', stats.wn7.toFixed(0)],
-                  [],
-                  ['Battles', stats.all.battles],
-                  ['Wins', stats.all.wins],
-                  ['Losses', stats.all.losses],
-                  ['Average tier', stats.avg_tier.toFixed(2)],
-                  [],
-                  [
-                    'Shots per battle',
-                    (stats.all.shots / stats.all.battles).toFixed(2),
-                  ],
-                  ['Hits per battle', stats.special.hpb.toFixed(2)],
-                  ['Damage per battle', stats.special.dpb.toFixed(0)],
-                  ['Kills per battle', stats.special.kpb.toFixed(2)],
-                  ['Spots per battle', stats.special.spb.toFixed(2)],
-                  [
-                    'XP per battle',
-                    (stats.all.xp / stats.all.battles).toFixed(0),
-                  ],
-                  [],
-                  ['Damage ratio', stats.special.damageRatio.toFixed(2)],
-                  ['Kills to death ratio', stats.special.kdr.toFixed(2)],
-                ]
-                  .filter((array) => array[1] !== `${-Infinity}`)
-                  .map((array) =>
-                    array.length === 0 ? '' : `**${array[0]}**: ${array[1]}`,
-                  )
-                  .join('\n')}\n\n${blitzLinks(blitzStarsAccount)}`,
-              ),
-          ),
-        ],
-      });
-
-      console.log(`Showing ${blitzStarsAccount.nickname}'s ${period} stats`);
-    }
-
-    let stats: PeriodStatistics | null = null;
-
-    if (period === 'career') {
-      stats = blitzStarsAccount.statistics;
-    } else if (period === 'today') {
-      const accountInfo = await getWargamingResponse<AccountInfo>(
-        `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${blitzAccount.account_id}`,
-      );
-
+    if (period === 'today') {
       const a1 = blitzStarsAccount.statistics;
       const a2 = accountInfo[blitzAccount.account_id].statistics;
-
       const battles = a2.all.battles - a1.all.battles;
 
       function pb(value: (allStats: AllStats) => number) {
@@ -159,41 +100,112 @@ export default {
           max_xp: pb((a) => a.max_xp),
           max_xp_tank_id: pb((a) => a.max_xp_tank_id),
           shots: diff((a) => a.shots),
-          spotted: pb((a) => a.spotted),
-          survived_battles: pb((a) => a.survived_battles),
-          win_and_survived: pb((a) => a.win_and_survived),
+          spotted: diff((a) => a.spotted),
+          survived_battles: diff((a) => a.survived_battles),
+          win_and_survived: diff((a) => a.win_and_survived),
           wins: diff((a) => a.wins),
           xp: diff((a) => a.xp),
         },
-        special: {
-          winrate: pb((a) => a.wins) * 100,
-          dpb: pb((a) => a.damage_dealt),
-          survivalRate: pb((a) => a.survived_battles) * 100,
-          damageRatio: span(
-            (a) => a.damage_dealt,
-            (a) => a.damage_received,
-          ),
-          hitRate: pb((a) => a.hits / a.shots),
-          hpb: pb((a) => a.hits),
-          kdr:
-            diff((a) => a.frags) / diff((a) => a.battles - a.survived_battles),
-          kpb: pb((a) => a.frags),
-          spb: pb((a) => a.spotted),
-        },
-
         avg_tier: -Infinity,
-        pwp: -Infinity,
         wn7: -Infinity,
         wn8: -Infinity,
       };
-
-      reply(stats);
     } else {
-      stats = blitzStarsAccount[`period${period}d`];
+      stats =
+        period === 'career'
+          ? blitzStarsAccount.statistics
+          : blitzStarsAccount[`period${period}d`];
     }
+    if (!stats!) return;
 
-    if (stats) {
-      reply(stats);
-    }
+    await interaction.editReply({
+      embeds: [
+        poweredByBlitzStars(
+          new EmbedBuilder()
+            .setColor(SKILLED_COLOR)
+            .setTitle(
+              `${markdownEscape(blitzAccount.nickname)}'s ${
+                period === 'career' ? period : `${period} day`
+              } stats`,
+            )
+            .setDescription(
+              `${
+                period === 'today'
+                  ? '**⚠ "Today" stats are in development. Some stats are not available/wrong.**\n\n'
+                  : ''
+              }${[
+                [
+                  'Winrate',
+                  `${(100 * (stats.all.wins / stats.all.battles)).toFixed(2)}%`,
+                ],
+                [
+                  'Survival',
+                  `${(
+                    100 *
+                    (stats.all.survived_battles / stats.all.battles)
+                  ).toFixed(2)}%`,
+                ],
+                [
+                  'Accuracy',
+                  `${((stats.all.hits / stats.all.shots) * 100).toFixed(2)}%`,
+                ],
+                ['WN8', stats.wn8.toFixed(0)],
+                ['WN7', stats.wn7.toFixed(0)],
+                [],
+                ['Battles', stats.all.battles],
+                ['Wins', stats.all.wins],
+                ['Losses', stats.all.losses],
+                ['Average tier', stats.avg_tier.toFixed(2)],
+                [],
+                [
+                  'Shots per battle',
+                  (stats.all.shots / stats.all.battles).toFixed(2),
+                ],
+                [
+                  'Hits per battle',
+                  (stats.all.hits / stats.all.battles).toFixed(2),
+                ],
+                [
+                  'Damage per battle',
+                  (stats.all.damage_dealt / stats.all.battles).toFixed(0),
+                ],
+                [
+                  'Kills per battle',
+                  (stats.all.frags / stats.all.battles).toFixed(2),
+                ],
+                [
+                  'Spots per battle',
+                  (stats.all.spotted / stats.all.battles).toFixed(2),
+                ],
+                [
+                  'XP per battle',
+                  (stats.all.xp / stats.all.battles).toFixed(0),
+                ],
+                [],
+                [
+                  'Damage ratio',
+                  (stats.all.damage_dealt / stats.all.damage_received).toFixed(
+                    2,
+                  ),
+                ],
+                [
+                  'Kills to death ratio',
+                  (
+                    stats.all.frags /
+                    (stats.all.battles - stats.all.survived_battles)
+                  ).toFixed(2),
+                ],
+              ]
+                .filter((array) => array[1] !== `${-Infinity}`)
+                .map((array) =>
+                  array.length === 0 ? '' : `**${array[0]}**: ${array[1]}`,
+                )
+                .join('\n')}\n\n${blitzLinks(server, blitzAccount.nickname)}`,
+            ),
+        ),
+      ],
+    });
+
+    console.log(`Showing stats for ${blitzAccount.nickname}`);
   },
 } satisfies CommandRegistry;

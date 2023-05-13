@@ -6,6 +6,7 @@ import { BlitzServer } from '../constants/servers.js';
 import addIGNOption from '../utilities/addIGNOption.js';
 import addServerChoices from '../utilities/addServerChoices.js';
 import blitzLinks from '../utilities/blitzLinks.js';
+import cmdName from '../utilities/cmdName.js';
 import getBlitzAccount from '../utilities/getBlitzAccount.js';
 import getBlitzStarsAccount from '../utilities/getBlitzStarsAccount.js';
 import poweredByBlitzStars from '../utilities/poweredByBlitzStars.js';
@@ -21,7 +22,7 @@ export default {
   inPublic: false,
 
   command: new SlashCommandBuilder()
-    .setName('eligible')
+    .setName(cmdName('eligible'))
     .setDescription("Gets the user's eligibility for Skilled clans")
     .addStringOption((option) =>
       option
@@ -47,7 +48,6 @@ export default {
     const blitzStarsAccount = await getBlitzStarsAccount(
       interaction,
       blitzAccount.account_id,
-      name,
     );
     if (!blitzStarsAccount) return;
 
@@ -133,7 +133,7 @@ export default {
                     )}'s shortcomings for ${CLANS[clan].name} (${
                       clan === 'sklld' ? '30 days stats' : 'career stats'
                     }):\n\n${issues.join('\n')}`
-              }\n\n${blitzLinks(blitzStarsAccount)}`,
+              }\n\n${blitzLinks(server, blitzAccount.nickname)}`,
             ),
         ),
       ],
