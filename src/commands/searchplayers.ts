@@ -4,10 +4,10 @@ import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cmdName from '../core/interaction/cmdName.js';
-import addIGNOption from '../core/options/addIGNOption.js';
 import addServerChoices from '../core/options/addServerChoices.js';
+import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
-import { Players } from '../types/players.js';
+import { AccountList } from '../types/players.js';
 
 export default {
   inDevelopment: true,
@@ -18,7 +18,9 @@ export default {
     .setName(cmdName('searchplayers'))
     .setDescription('Search players in a Blitz server')
     .addStringOption(addServerChoices)
-    .addStringOption(addIGNOption)
+    .addStringOption((option) =>
+      addUsernameOption(option).setAutocomplete(false),
+    )
     .addIntegerOption((option) =>
       option
         .setName('limit')
@@ -29,9 +31,9 @@ export default {
 
   async execute(interaction) {
     const server = interaction.options.getString('server')!;
-    const name = interaction.options.getString('name')!;
+    const name = interaction.options.getString('username')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
-    const players = await getWargamingResponse<Players>(
+    const players = await getWargamingResponse<AccountList>(
       `https://api.wotblitz.${server}/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${name}&limit=${limit}`,
     );
     if (!players) return;

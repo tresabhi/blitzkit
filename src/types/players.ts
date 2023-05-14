@@ -1,6 +1,6 @@
-export interface Player {
+export interface Account {
   nickname: string;
   account_id: number;
 }
 
-export type Players = Player[];
+export type AccountList = Account[];

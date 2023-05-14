@@ -4,11 +4,12 @@ import discord from '../../discord.json' assert { type: 'json' };
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
-import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import usernameAutocomplete from '../core/autocomplete/username.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
+import validateUsername from '../core/blitz/validateUsername.js';
 import cmdName from '../core/interaction/cmdName.js';
-import addIGNOption from '../core/options/addIGNOption.js';
 import addServerChoices from '../core/options/addServerChoices.js';
+import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 
@@ -21,12 +22,12 @@ export default {
     .setName(cmdName('verify'))
     .setDescription("Set's the user's username to their in-game name")
     .addStringOption(addServerChoices)
-    .addStringOption(addIGNOption),
+    .addStringOption(addUsernameOption),
 
   async execute(interaction) {
-    const name = interaction.options.getString('name')!;
+    const name = interaction.options.getString('username')!;
     const server = interaction.options.getString('server') as BlitzServer;
-    const account = await getBlitzAccount(interaction, name, server);
+    const account = await validateUsername(interaction, name, server);
     if (!account) return;
     const clanData = await getWargamingResponse<PlayerClanData>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${account.account_id}&extra=clan`,
@@ -128,4 +129,6 @@ export default {
       }
     }
   },
+
+  autocomplete: usernameAutocomplete,
 } satisfies CommandRegistry;

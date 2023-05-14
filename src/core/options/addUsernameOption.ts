@@ -1,8 +1,9 @@
 import { SlashCommandStringOption } from 'discord.js';
 
-export default function addIGNOption(option: SlashCommandStringOption) {
+export default function addUsernameOption(option: SlashCommandStringOption) {
   return option
-    .setName('name')
+    .setName('username')
     .setDescription('The username you use in Blitz')
+    .setAutocomplete(true)
     .setRequired(true);
 }

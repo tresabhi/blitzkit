@@ -3,27 +3,21 @@ import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
-import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import usernameAutocomplete from '../core/autocomplete/username.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
+import validateUsername from '../core/blitz/validateUsername.js';
 import blitzStarsLinks from '../core/blitzstars/blitzStarsLinks.js';
 import getBlitzStarsAccount from '../core/blitzstars/getBlitzStarsAccount.js';
 import poweredByBlitzStars from '../core/blitzstars/poweredByBlitzStars.js';
 import cleanTable from '../core/interaction/cleanTable.js';
 import cmdName from '../core/interaction/cmdName.js';
-import addIGNOption from '../core/options/addIGNOption.js';
 import addServerChoices from '../core/options/addServerChoices.js';
+import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { BlitzStartsComputedPeriodicStatistics } from '../types/statistics.js';
 
 type Period = 'today' | '30' | '90' | 'career';
-
-const daysInPeriod: Record<Period, number> = {
-  today: 1 * 24 * 60 * 60,
-  30: 30 * 24 * 60 * 60,
-  90: 90 * 24 * 60 * 60,
-  career: Infinity,
-};
 
 export default {
   inProduction: true,
@@ -46,13 +40,13 @@ export default {
         .setRequired(true),
     )
     .addStringOption(addServerChoices)
-    .addStringOption(addIGNOption),
+    .addStringOption(addUsernameOption),
 
   async execute(interaction) {
     const period = interaction.options.getString('period') as Period;
-    const name = interaction.options.getString('name')!;
+    const username = interaction.options.getString('username')!;
     const server = interaction.options.getString('server') as BlitzServer;
-    const blitzAccount = await getBlitzAccount(interaction, name, server);
+    const blitzAccount = await validateUsername(interaction, username, server);
     if (!blitzAccount) return;
     let stats: BlitzStartsComputedPeriodicStatistics;
     const accountInfo = await getWargamingResponse<AccountInfo>(
@@ -210,4 +204,6 @@ export default {
 
     console.log(`Showing stats for ${blitzAccount.nickname}`);
   },
+
+  autocomplete: usernameAutocomplete,
 } satisfies CommandRegistry;

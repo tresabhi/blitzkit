@@ -3,13 +3,14 @@ import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
-import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import usernameAutocomplete from '../core/autocomplete/username.js';
+import validateUsername from '../core/blitz/validateUsername.js';
 import blitzStarsLinks from '../core/blitzstars/blitzStarsLinks.js';
 import getBlitzStarsAccount from '../core/blitzstars/getBlitzStarsAccount.js';
 import poweredByBlitzStars from '../core/blitzstars/poweredByBlitzStars.js';
 import cmdName from '../core/interaction/cmdName.js';
-import addIGNOption from '../core/options/addIGNOption.js';
 import addServerChoices from '../core/options/addServerChoices.js';
+import addUsernameOption from '../core/options/addUsernameOption.js';
 
 const CLANS = {
   sklld: { id: 71559, name: 'Skilled' },
@@ -35,13 +36,13 @@ export default {
         .setRequired(true),
     )
     .addStringOption(addServerChoices)
-    .addStringOption(addIGNOption),
+    .addStringOption(addUsernameOption),
 
   async execute(interaction) {
     const clan = interaction.options.getString('clan') as keyof typeof CLANS;
-    const name = interaction.options.getString('name')!;
+    const name = interaction.options.getString('username')!;
     const server = interaction.options.getString('server') as BlitzServer;
-    const blitzAccount = await getBlitzAccount(interaction, name, server);
+    const blitzAccount = await validateUsername(interaction, name, server);
 
     if (!blitzAccount) return;
 
@@ -143,4 +144,6 @@ export default {
       `Showing ${blitzStarsAccount.nickname}'s eligibility for ${CLANS[clan].name}`,
     );
   },
+
+  autocomplete: usernameAutocomplete,
 } satisfies CommandRegistry;

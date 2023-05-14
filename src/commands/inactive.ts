@@ -25,7 +25,7 @@ export default {
     .addStringOption(addServerChoices)
     .addStringOption((option) =>
       option
-        .setName('name')
+        .setName('clan')
         .setDescription('The clan name or tag you are checking')
         .setRequired(true),
     )
@@ -39,10 +39,10 @@ export default {
     ),
 
   async execute(interaction) {
-    const name = interaction.options.getString('name')!;
+    const clanName = interaction.options.getString('clan')!;
     const server = interaction.options.getString('server') as BlitzServer;
 
-    const clan = (await getClan(interaction, name, server)) as Clan;
+    const clan = (await getClan(interaction, clanName, server)) as Clan;
     if (!clan) return;
 
     const threshold =

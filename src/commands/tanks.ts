@@ -3,12 +3,13 @@ import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
-import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import usernameAutocomplete from '../core/autocomplete/username.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
+import validateUsername from '../core/blitz/validateUsername.js';
 import { TANK_TYPE_EMOJIS, tankopedia } from '../core/blitzstars/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
-import addIGNOption from '../core/options/addIGNOption.js';
 import addServerChoices from '../core/options/addServerChoices.js';
+import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
 import { TanksStats } from '../types/tanksStats.js';
 import resolveTankName from '../utilities/resolveTankName.js';
@@ -51,13 +52,13 @@ export default {
         .setRequired(true),
     )
     .addStringOption(addServerChoices)
-    .addStringOption(addIGNOption),
+    .addStringOption(addUsernameOption),
 
   async execute(interaction) {
     const tier = interaction.options.getInteger('tier')!;
-    const name = interaction.options.getString('name')!;
+    const name = interaction.options.getString('username')!;
     const server = interaction.options.getString('server') as BlitzServer;
-    const account = await getBlitzAccount(interaction, name, server);
+    const account = await validateUsername(interaction, name, server);
     if (!account) return;
     const tankStats = await getWargamingResponse<TanksStats>(
       `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${account.account_id}`,
@@ -103,4 +104,6 @@ export default {
 
     console.log(`Displaying ${account.nickname}'s owned tanks in tier ${tier}`);
   },
+
+  autocomplete: usernameAutocomplete,
 } satisfies CommandRegistry;

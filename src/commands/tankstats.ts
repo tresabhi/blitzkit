@@ -3,7 +3,8 @@ import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { BlitzServer } from '../constants/servers.js';
 import tanksAutocomplete from '../core/autocomplete/tanks.js';
-import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import usernameAutocomplete from '../core/autocomplete/username.js';
+import validateUsername from '../core/blitz/validateUsername.js';
 import { tankopedia } from '../core/blitzstars/tankopedia.js';
 import getPeriodicStats, {
   Period,
@@ -12,9 +13,9 @@ import cleanTable from '../core/interaction/cleanTable.js';
 import cmdName from '../core/interaction/cmdName.js';
 import errorEmbed from '../core/interaction/errorEmbed.js';
 import sklldEmbed from '../core/interaction/sklldEmbed.js';
-import addIGNOption from '../core/options/addIGNOption.js';
 import addServerChoices from '../core/options/addServerChoices.js';
 import addTankChoices from '../core/options/addTankChoices.js';
+import addUsernameOption from '../core/options/addUsernameOption.js';
 import resolveTankName from '../utilities/resolveTankName.js';
 
 type Periods = '30' | '60' | '90';
@@ -40,14 +41,14 @@ export default {
         .setRequired(true),
     )
     .addStringOption(addServerChoices)
-    .addStringOption(addIGNOption),
+    .addStringOption(addUsernameOption),
 
   async execute(interaction) {
     const server = interaction.options.getString('server') as BlitzServer;
-    const name = interaction.options.getString('name')!;
+    const name = interaction.options.getString('username')!;
     const tankId = interaction.options.getString('tank')!;
     const period = interaction.options.getString('period') as Periods;
-    const blitzAccount = await getBlitzAccount(interaction, name, server);
+    const blitzAccount = await validateUsername(interaction, name, server);
     if (!blitzAccount) return;
     const tank = tankopedia.data[tankId as unknown as number];
 
@@ -164,5 +165,8 @@ export default {
     }
   },
 
-  autocomplete: tanksAutocomplete,
+  autocomplete: (interaction) => {
+    tanksAutocomplete(interaction);
+    usernameAutocomplete(interaction);
+  },
 } satisfies CommandRegistry;
