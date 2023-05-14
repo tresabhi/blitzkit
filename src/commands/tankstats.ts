@@ -55,7 +55,9 @@ export default {
     if (tank) {
       const periodicStats = (
         await getPeriodicStats(blitzAccount.account_id, Number(period))
-      ).filter((stats) => stats.tank_id === tank.tank_id);
+      )
+        .filter((stats) => stats.tank_id === tank.tank_id)
+        .filter((stats) => !stats.isRating);
 
       function sum(summer: (period: Period) => number) {
         return periodicStats.reduce(
