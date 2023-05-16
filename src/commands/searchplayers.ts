@@ -7,10 +7,10 @@ import cmdName from '../core/interaction/cmdName.js';
 import addServerChoices from '../core/options/addServerChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
-import { AccountList } from '../types/players.js';
+import { AccountList } from '../types/accountList.js';
 
 export default {
-  inDevelopment: true,
+  inDevelopment: false,
   inProduction: true,
   inPublic: true,
 
@@ -47,9 +47,7 @@ export default {
             `\`\`\`${
               players.length === 0
                 ? 'No players found.'
-                : players
-                    .map((player) => markdownEscape(player.nickname))
-                    .join('\n')
+                : players.map((player) => player.nickname).join('\n')
             }\`\`\``,
           ),
       ],

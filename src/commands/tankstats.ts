@@ -4,7 +4,7 @@ import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { BlitzServer } from '../constants/servers.js';
 import tanksAutocomplete from '../core/autocomplete/tanks.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
-import validateUsername from '../core/blitz/validateUsername.js';
+import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import { tankopedia } from '../core/blitzstars/tankopedia.js';
 import getPeriodicStats, {
   Period,
@@ -22,7 +22,7 @@ type Periods = '30' | '60' | '90';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -48,7 +48,7 @@ export default {
     const name = interaction.options.getString('username')!;
     const tankId = interaction.options.getString('tank')!;
     const period = interaction.options.getString('period') as Periods;
-    const blitzAccount = await validateUsername(interaction, name, server);
+    const blitzAccount = await getBlitzAccount(interaction, name, server);
     if (!blitzAccount) return;
     const tank = tankopedia.data[tankId as unknown as number];
 

@@ -5,8 +5,8 @@ import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
+import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import validateUsername from '../core/blitz/validateUsername.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addServerChoices from '../core/options/addServerChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
@@ -15,7 +15,7 @@ import { PlayerClanData } from '../types/playerClanData.js';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -27,7 +27,7 @@ export default {
   async execute(interaction) {
     const name = interaction.options.getString('username')!;
     const server = interaction.options.getString('server') as BlitzServer;
-    const account = await validateUsername(interaction, name, server);
+    const account = await getBlitzAccount(interaction, name, server);
     if (!account) return;
     const clanData = await getWargamingResponse<PlayerClanData>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${account.account_id}&extra=clan`,

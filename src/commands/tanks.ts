@@ -2,15 +2,14 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
-import { BlitzServer } from '../constants/servers.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
+import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import validateUsername from '../core/blitz/validateUsername.js';
 import { TANK_TYPE_EMOJIS, tankopedia } from '../core/blitzstars/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
-import addServerChoices from '../core/options/addServerChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
+import { AccountInfo } from '../types/accountInfo.js';
 import { TanksStats } from '../types/tanksStats.js';
 import resolveTankName from '../utilities/resolveTankName.js';
 
@@ -37,7 +36,7 @@ const COMP_TANKS = [
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -51,20 +50,23 @@ export default {
         .setMaxValue(10)
         .setRequired(true),
     )
-    .addStringOption(addServerChoices)
     .addStringOption(addUsernameOption),
 
   async execute(interaction) {
     const tier = interaction.options.getInteger('tier')!;
     const name = interaction.options.getString('username')!;
-    const server = interaction.options.getString('server') as BlitzServer;
-    const account = await validateUsername(interaction, name, server);
+    const account = await getBlitzAccount(interaction, name);
     if (!account) return;
+    const { id, server } = account;
+    const accountInfo = await getWargamingResponse<AccountInfo>(
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
+    );
+    if (!accountInfo) return;
     const tankStats = await getWargamingResponse<TanksStats>(
-      `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${account.account_id}`,
+      `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
     if (!tankStats) return;
-    const tanks = tankStats[account.account_id]
+    const tanks = tankStats[id]
       .map((tankData) => tankopedia.data[tankData.tank_id])
       .filter((tank) => tank.tier === tier);
 
@@ -72,7 +74,7 @@ export default {
       embeds: [
         new EmbedBuilder()
           .setTitle(
-            `${markdownEscape(account.nickname)}'s owned ${
+            `${markdownEscape(accountInfo[id].nickname)}'s owned ${
               tier === null ? '' : `tier ${tier} `
             }tanks`,
           )
@@ -102,7 +104,9 @@ export default {
       ],
     });
 
-    console.log(`Displaying ${account.nickname}'s owned tanks in tier ${tier}`);
+    console.log(
+      `Displaying ${accountInfo[id].nickname}'s owned tanks in tier ${tier}`,
+    );
   },
 
   autocomplete: usernameAutocomplete,

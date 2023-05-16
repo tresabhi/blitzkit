@@ -2,16 +2,14 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
-import { BlitzServer } from '../constants/servers.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
+import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import validateUsername from '../core/blitz/validateUsername.js';
 import blitzStarsLinks from '../core/blitzstars/blitzStarsLinks.js';
 import getBlitzStarsAccount from '../core/blitzstars/getBlitzStarsAccount.js';
 import poweredByBlitzStars from '../core/blitzstars/poweredByBlitzStars.js';
 import cleanTable from '../core/interaction/cleanTable.js';
 import cmdName from '../core/interaction/cmdName.js';
-import addServerChoices from '../core/options/addServerChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
@@ -21,7 +19,7 @@ type Period = 'today' | '30' | '90' | 'career';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -39,29 +37,25 @@ export default {
         )
         .setRequired(true),
     )
-    .addStringOption(addServerChoices)
     .addStringOption(addUsernameOption),
 
   async execute(interaction) {
     const period = interaction.options.getString('period') as Period;
     const username = interaction.options.getString('username')!;
-    const server = interaction.options.getString('server') as BlitzServer;
-    const blitzAccount = await validateUsername(interaction, username, server);
+    const blitzAccount = await getBlitzAccount(interaction, username);
     if (!blitzAccount) return;
+    const { id, server } = blitzAccount;
     let stats: BlitzStartsComputedPeriodicStatistics;
     const accountInfo = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${blitzAccount.account_id}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
     if (!accountInfo) return;
-    const blitzStarsAccount = await getBlitzStarsAccount(
-      interaction,
-      blitzAccount.account_id,
-    );
+    const blitzStarsAccount = await getBlitzStarsAccount(interaction, id);
     if (!blitzStarsAccount) return;
 
     if (period === 'today') {
       const a1 = blitzStarsAccount.statistics;
-      const a2 = accountInfo[blitzAccount.account_id].statistics;
+      const a2 = accountInfo[id].statistics;
       const battles = a2.all.battles - a1.all.battles;
 
       function pb(value: (allStats: AllStats) => number) {
@@ -69,14 +63,6 @@ export default {
       }
       function diff(value: (allStats: AllStats) => number) {
         return value(a2.all) - value(a1.all);
-      }
-      function span(
-        value1: (allStats: AllStats) => number,
-        value2: (allStats: AllStats) => number,
-      ) {
-        return (
-          (value1(a2.all) - value1(a1.all)) / (value2(a2.all) - value2(a1.all))
-        );
       }
 
       stats = {
@@ -119,8 +105,10 @@ export default {
           new EmbedBuilder()
             .setColor(SKILLED_COLOR)
             .setTitle(
-              `${markdownEscape(blitzAccount.nickname)}'s ${
-                period === 'career' ? period : `${period} day`
+              `${markdownEscape(blitzStarsAccount.nickname)}'s ${
+                period === 'career'
+                  ? period
+                  : `${period === 'today' ? 'today' : `${period} day`}`
               } stats`,
             )
             .setDescription(
@@ -195,14 +183,14 @@ export default {
                         (stats.all.battles - stats.all.survived_battles)
                       ).toFixed(2),
                     ],
-                  ])}\n\n${blitzStarsLinks(server, blitzAccount.nickname)}`
+                  ])}\n\n${blitzStarsLinks(server, blitzStarsAccount.nickname)}`
                 : 'No battles played in this period.',
             ),
         ),
       ],
     });
 
-    console.log(`Showing stats for ${blitzAccount.nickname}`);
+    console.log(`Showing stats for ${blitzStarsAccount.nickname}`);
   },
 
   autocomplete: usernameAutocomplete,

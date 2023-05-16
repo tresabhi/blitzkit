@@ -2,33 +2,26 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
-import { BlitzServer } from '../constants/servers.js';
-import getClan from '../core/blitz/getClan.js';
+import clanAutocomplete from '../core/autocomplete/clan.js';
+import getBlitzClan from '../core/blitz/getBlitzClan.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cmdName from '../core/interaction/cmdName.js';
-import addServerChoices from '../core/options/addServerChoices.js';
+import addClanOption from '../core/options/addClanOption.js';
 import { args } from '../core/process/args.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { ClanInfo } from '../types/clanInfo.js';
-import { Clan } from '../types/clanList.js';
 
 const DEFAULT_THRESHOLD = 7;
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
     .setName(cmdName('inactive'))
     .setDescription('Lists all inactive players')
-    .addStringOption(addServerChoices)
-    .addStringOption((option) =>
-      option
-        .setName('clan')
-        .setDescription('The clan name or tag you are checking')
-        .setRequired(true),
-    )
+    .addStringOption(addClanOption)
     .addNumberOption((option) =>
       option
         .setName('threshold')
@@ -40,19 +33,18 @@ export default {
 
   async execute(interaction) {
     const clanName = interaction.options.getString('clan')!;
-    const server = interaction.options.getString('server') as BlitzServer;
-
-    const clan = (await getClan(interaction, clanName, server)) as Clan;
+    const clan = await getBlitzClan(interaction, clanName);
     if (!clan) return;
+    const { server, id } = clan;
 
     const threshold =
       interaction.options.getNumber('threshold')! ?? DEFAULT_THRESHOLD;
     const time = new Date().getTime() / 1000;
     const clanInfo = await getWargamingResponse<ClanInfo>(
-      `https://api.wotblitz.${server}/wotb/clans/info/?application_id=${args['wargaming-application-id']}&clan_id=${clan.clan_id}`,
+      `https://api.wotblitz.${server}/wotb/clans/info/?application_id=${args['wargaming-application-id']}&clan_id=${id}`,
     );
     if (!clanInfo) return;
-    const memberIds = clanInfo[clan.clan_id].members_ids;
+    const memberIds = clanInfo[id].members_ids;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${
         args['wargaming-application-id']
@@ -82,8 +74,8 @@ export default {
           .setColor(hasInactiveMembers ? NEGATIVE_COLOR : POSITIVE_COLOR)
           .setTitle(
             hasInactiveMembers
-              ? `${markdownEscape(clan.name)}'s inactive members`
-              : `No inactive members in ${markdownEscape(clan.name)}`,
+              ? `${markdownEscape(clanInfo[id].name)}'s inactive members`
+              : `No inactive members in ${markdownEscape(clanInfo[id].name)}`,
           )
           .setDescription(
             hasInactiveMembers
@@ -96,7 +88,9 @@ export default {
     });
 
     console.log(
-      `Displaying inactive members in ${clan.name} for ${threshold} days`,
+      `Displaying inactive members in ${clanInfo[id].name} for ${threshold} days`,
     );
   },
+
+  autocomplete: clanAutocomplete,
 } satisfies CommandRegistry;

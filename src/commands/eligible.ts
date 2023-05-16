@@ -4,7 +4,7 @@ import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
-import validateUsername from '../core/blitz/validateUsername.js';
+import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import blitzStarsLinks from '../core/blitzstars/blitzStarsLinks.js';
 import getBlitzStarsAccount from '../core/blitzstars/getBlitzStarsAccount.js';
 import poweredByBlitzStars from '../core/blitzstars/poweredByBlitzStars.js';
@@ -19,7 +19,7 @@ const CLANS = {
 
 export default {
   inProduction: false,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: false,
 
   command: new SlashCommandBuilder()
@@ -42,7 +42,7 @@ export default {
     const clan = interaction.options.getString('clan') as keyof typeof CLANS;
     const name = interaction.options.getString('username')!;
     const server = interaction.options.getString('server') as BlitzServer;
-    const blitzAccount = await validateUsername(interaction, name, server);
+    const blitzAccount = await getBlitzAccount(interaction, name, server);
 
     if (!blitzAccount) return;
 

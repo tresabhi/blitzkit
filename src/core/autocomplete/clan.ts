@@ -4,26 +4,26 @@ import {
   CacheType,
 } from 'discord.js';
 import { BLITZ_SERVERS } from '../../constants/servers.js';
-import listAccountsPanServer from '../blitz/listAccountsPanServer.js';
+import listClansPanServer from '../blitz/listClansPanServer.js';
 
-export default async function usernameAutocomplete(
+export default async function clanAutocomplete(
   interaction: AutocompleteInteraction<CacheType>,
 ) {
   const focusedOption = interaction.options.getFocused(true);
-  if (focusedOption.name !== 'username') return;
-  const players = await listAccountsPanServer(focusedOption.value);
+  if (focusedOption.name !== 'clan') return;
+  const players = await listClansPanServer(focusedOption.value);
 
   await interaction.respond(
     players
       ? players.map(
           (player) =>
             ({
-              name: `${player.nickname} (${BLITZ_SERVERS[player.server]})`,
-              value: `${player.server}/${player.account_id}`,
+              name: `${player.name} (${BLITZ_SERVERS[player.server]})`,
+              value: `${player.server}/${player.clan_id}`,
             } satisfies ApplicationCommandOptionChoiceData<string>),
         )
       : [],
   );
 
-  console.log(`Username autocomplete for ${focusedOption.value}`);
+  console.log(`Clan autocomplete for ${focusedOption.value}`);
 }
