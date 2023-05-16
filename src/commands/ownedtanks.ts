@@ -40,7 +40,7 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('tanks'))
+    .setName(cmdName('ownedtanks'))
     .setDescription("Shows a player's owned tanks")
     .addIntegerOption((option) =>
       option
@@ -68,7 +68,7 @@ export default {
     if (!tankStats) return;
     const tanks = tankStats[id]
       .map((tankData) => tankopedia.data[tankData.tank_id])
-      .filter((tank) => tank.tier === tier);
+      .filter((tank) => tank?.tier === tier);
 
     await interaction.editReply({
       embeds: [
