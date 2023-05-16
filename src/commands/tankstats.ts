@@ -1,10 +1,10 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
-import { BlitzServer } from '../constants/servers.js';
 import tanksAutocomplete from '../core/autocomplete/tanks.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import { tankopedia } from '../core/blitzstars/tankopedia.js';
 import getPeriodicStats, {
   Period,
@@ -13,9 +13,10 @@ import cleanTable from '../core/interaction/cleanTable.js';
 import cmdName from '../core/interaction/cmdName.js';
 import errorEmbed from '../core/interaction/errorEmbed.js';
 import sklldEmbed from '../core/interaction/sklldEmbed.js';
-import addServerChoices from '../core/options/addServerChoices.js';
 import addTankChoices from '../core/options/addTankChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
+import { args } from '../core/process/args.js';
+import { AccountInfo } from '../types/accountInfo.js';
 import resolveTankName from '../utilities/resolveTankName.js';
 
 type Periods = '30' | '60' | '90';
@@ -40,22 +41,23 @@ export default {
         )
         .setRequired(true),
     )
-    .addStringOption(addServerChoices)
     .addStringOption(addUsernameOption),
 
   async execute(interaction) {
-    const server = interaction.options.getString('server') as BlitzServer;
     const name = interaction.options.getString('username')!;
     const tankId = interaction.options.getString('tank')!;
     const period = interaction.options.getString('period') as Periods;
-    const blitzAccount = await getBlitzAccount(interaction, name, server);
+    const blitzAccount = await getBlitzAccount(interaction, name);
     if (!blitzAccount) return;
+    const { server, id } = blitzAccount;
+    const accountInfo = await getWargamingResponse<AccountInfo>(
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
+    );
+    if (!accountInfo) return;
     const tank = tankopedia.data[tankId as unknown as number];
 
     if (tank) {
-      const periodicStats = (
-        await getPeriodicStats(blitzAccount.account_id, Number(period))
-      )
+      const periodicStats = (await getPeriodicStats(id, Number(period)))
         .filter((stats) => stats.tank_id === tank.tank_id)
         .filter((stats) => !stats.isRating);
 
@@ -79,7 +81,7 @@ export default {
         embeds: [
           sklldEmbed(
             `${period} day stats for ${markdownEscape(
-              blitzAccount.nickname,
+              accountInfo[id].nickname,
             )}'s ${resolveTankName(tank)}`,
             periodicStats.length > 0
               ? cleanTable([

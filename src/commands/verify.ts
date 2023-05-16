@@ -3,14 +3,13 @@ import markdownEscape from 'markdown-escape';
 import discord from '../../discord.json' assert { type: 'json' };
 import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
-import { BlitzServer } from '../constants/servers.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cmdName from '../core/interaction/cmdName.js';
-import addServerChoices from '../core/options/addServerChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
+import { AccountInfo } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 
 export default {
@@ -21,19 +20,22 @@ export default {
   command: new SlashCommandBuilder()
     .setName(cmdName('verify'))
     .setDescription("Set's the user's username to their in-game name")
-    .addStringOption(addServerChoices)
     .addStringOption(addUsernameOption),
 
   async execute(interaction) {
     const name = interaction.options.getString('username')!;
-    const server = interaction.options.getString('server') as BlitzServer;
-    const account = await getBlitzAccount(interaction, name, server);
-    if (!account) return;
+    const blitzAccount = await getBlitzAccount(interaction, name);
+    if (!blitzAccount) return;
+    const { id, server } = blitzAccount;
+    const accountInfo = await getWargamingResponse<AccountInfo>(
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
+    );
+    if (!accountInfo) return;
     const clanData = await getWargamingResponse<PlayerClanData>(
-      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${account.account_id}&extra=clan`,
+      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${id}&extra=clan`,
     );
     if (!clanData) return;
-    const clan = clanData[account.account_id]?.clan;
+    const clan = clanData[id]?.clan;
     const clanTag = clan ? ` [${clan!.tag}]` : '';
 
     if (!interaction.guild?.members.me?.permissions.has('ManageNicknames')) {
@@ -64,7 +66,7 @@ export default {
 
       if (member) {
         try {
-          await member.setNickname(`${account.nickname}${clanTag}`);
+          await member.setNickname(`${accountInfo[id].nickname}${clanTag}`);
 
           if (interaction.guildId === discord.guild_id) {
             if (
@@ -103,14 +105,14 @@ export default {
                 .setTitle(`${interaction.user.username} is verified`)
                 .setDescription(
                   `The user is now verified as ${markdownEscape(
-                    account.nickname,
+                    accountInfo[id].nickname,
                   )}${markdownEscape(clanTag)}`,
                 ),
             ],
           });
 
           console.log(
-            `${interaction.user.username} verified as ${account.nickname}${clanTag}`,
+            `${interaction.user.username} verified as ${accountInfo[id].nickname}${clanTag}`,
           );
         } catch (error) {
           await interaction.editReply({
