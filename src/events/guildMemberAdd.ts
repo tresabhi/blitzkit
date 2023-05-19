@@ -3,9 +3,11 @@ import discord from '../../discord.json' assert { type: 'json' };
 import { SKILLED_COLOR } from '../constants/colors.js';
 
 export default async function (member: GuildMember) {
-  if (member.guild.id === discord.guild_id) {
+  if (member.guild.id === discord.sklld_guild_id) {
     await (
-      member.guild.channels.cache.get(discord.verify_channel) as TextChannel
+      member.guild.channels.cache.get(
+        discord.sklld_verify_channel,
+      ) as TextChannel
     ).send({
       content: member.toString(),
       embeds: [

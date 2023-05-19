@@ -68,7 +68,7 @@ export default {
         try {
           await member.setNickname(`${accountInfo[id].nickname}${clanTag}`);
 
-          if (interaction.guildId === discord.guild_id) {
+          if (interaction.guildId === discord.sklld_guild_id) {
             if (
               !interaction.guild?.members.me?.permissions.has('ManageRoles')
             ) {
@@ -94,8 +94,8 @@ export default {
               return;
             }
 
-            await member.roles.remove(discord.verify_role);
-            await member.roles.add(discord.peasant_role);
+            await member.roles.remove(discord.sklld_verify_role);
+            await member.roles.add(discord.sklld_peasant_role);
           }
 
           await interaction.editReply({

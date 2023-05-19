@@ -12,8 +12,8 @@ export function handleError(error: Error, client: Client, command: string) {
 
   (
     client.guilds.cache
-      .get(discord.guild_id)
-      ?.channels.cache.get(discord.log_channel) as TextChannel
+      .get(discord.tres_guild_id)
+      ?.channels.cache.get(discord.tres_log_channel) as TextChannel
   ).send({
     embeds: [
       new EmbedBuilder()

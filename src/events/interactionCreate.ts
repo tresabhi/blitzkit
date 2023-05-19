@@ -59,7 +59,7 @@ try {
 
   console.log(`Refreshing ${guildCommands.length} guild command(s).`);
   const guildData = (await rest.put(
-    Routes.applicationGuildCommands(getClientId(), discord.guild_id),
+    Routes.applicationGuildCommands(getClientId(), discord.sklld_guild_id),
     { body: guildCommands },
   )) as RESTPostAPIChatInputApplicationCommandsJSONBody[];
   console.log(`Successfully refreshed ${guildData.length} guild command(s).`);

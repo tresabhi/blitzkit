@@ -28,7 +28,7 @@ export default {
             `**About**\n${
               client.user?.username
             } automates many mundane tasks and provide statistics in numerous flexible ways.\n\nMade by TresAbhi from the Skilled [SKLLD] clan.\nGitHub: https://github.com/tresabhi/sklld-bot\nDiscord server: https://discord.gg/nDt7AjGJQH\nSkilled server: https://discord.gg/ZPvcEG7DS8\n\n**Commands**\n${(interaction.guildId ===
-            discord.guild_id
+            discord.sklld_guild_id
               ? [...guildCommands, ...publicCommands]
               : publicCommands
             )

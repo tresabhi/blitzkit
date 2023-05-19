@@ -1,9 +1,12 @@
 {
   "client_id": "1097673957865443370",
   "client_id_dev": "1099063696015229078",
-  "guild_id": "894784231677513819",
-  "verify_channel": "909968131873726545",
-  "log_channel": "1101124775100809307",
-  "verify_role": "909968395154358333",
-  "peasant_role": "896878529512370228"
+
+  "sklld_guild_id": "894784231677513819",
+  "sklld_verify_channel": "909968131873726545",
+  "sklld_verify_role": "909968395154358333",
+  "sklld_peasant_role": "896878529512370228",
+
+  "tres_guild_id": "734786591205359697",
+  "tres_log_channel": "1109262265850544148"
 }
