@@ -1,7 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import discord from '../../discord.json' assert { type: 'json' };
-import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
@@ -9,6 +8,7 @@ import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
+import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 

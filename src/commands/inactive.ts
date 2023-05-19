@@ -1,6 +1,5 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import clanAutocomplete from '../core/autocomplete/clan.js';
 import getBlitzClan from '../core/blitz/getBlitzClan.js';
@@ -8,6 +7,7 @@ import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addClanOption from '../core/options/addClanOption.js';
 import { args } from '../core/process/args.js';
+import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { ClanInfo } from '../types/clanInfo.js';
 

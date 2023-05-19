@@ -1,11 +1,11 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import packageJSON from '../../package.json' assert { type: 'json' };
-import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import { tankopedia } from '../core/blitzstars/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
 import getClientId from '../core/process/getClientId.js';
 import { client } from '../index.js';
+import { CommandRegistry } from '../events/interactionCreate.js';
 
 const executionStart = new Date().getTime();
 

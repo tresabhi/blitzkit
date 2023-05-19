@@ -1,6 +1,5 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { NEGATIVE_COLOR, POSITIVE_COLOR } from '../constants/colors.js';
 import { BlitzServer } from '../constants/servers.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
@@ -11,6 +10,7 @@ import poweredByBlitzStars from '../core/blitzstars/poweredByBlitzStars.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addServerChoices from '../core/options/addServerChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
+import { CommandRegistry } from '../events/interactionCreate.js';
 
 const CLANS = {
   sklld: { id: 71559, name: 'Skilled' },

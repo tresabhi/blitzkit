@@ -3,8 +3,8 @@ import {
   ChatInputCommandInteraction,
   EmbedBuilder,
 } from 'discord.js';
-import { handleError } from '../../behaviors/error.js';
 import { NEGATIVE_COLOR } from '../../constants/colors.js';
+import { handleError } from '../../events/error.js';
 import { client } from '../../index.js';
 
 export default async function wargamingError(

@@ -1,13 +1,9 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
-import {
-  CommandRegistry,
-  guildCommands,
-  publicCommands,
-} from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import cmdName from '../core/interaction/cmdName.js';
 import { client } from '../index.js';
+import { CommandRegistry, guildCommands, publicCommands } from '../events/interactionCreate.js';
 
 export default {
   inProduction: true,

@@ -1,12 +1,12 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import { SKILLED_COLOR } from '../constants/colors.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addServerChoices from '../core/options/addServerChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
+import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountList } from '../types/accountList.js';
 
 export default {

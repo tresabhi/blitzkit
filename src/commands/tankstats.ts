@@ -1,6 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { CommandRegistry } from '../behaviors/interactionCreate.js';
 import tanksAutocomplete from '../core/autocomplete/tanks.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
@@ -16,6 +15,7 @@ import sklldEmbed from '../core/interaction/sklldEmbed.js';
 import addTankChoices from '../core/options/addTankChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
+import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import resolveTankName from '../utilities/resolveTankName.js';
 
