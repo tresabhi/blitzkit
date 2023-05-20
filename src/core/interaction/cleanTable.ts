@@ -1,4 +1,5 @@
-export type TableInput = ([] | [string, string | number])[];
+export type TableInputEntry = [string, string | number] | [];
+export type TableInput = TableInputEntry[];
 
 export default function cleanTable(input: TableInput) {
   return input

@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
+import markdownEscape from 'markdown-escape';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
@@ -12,7 +13,7 @@ import { AccountInfo } from '../types/accountInfo.js';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -34,7 +35,7 @@ export default {
     interaction.editReply({
       embeds: [
         sklldEmbed(
-          `${accountInfo.nickname}'s information`,
+          `${markdownEscape(accountInfo.nickname)}'s information`,
 
           cleanTable([
             ['Nickname', `${accountInfo.nickname}`],
