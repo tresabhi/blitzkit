@@ -7,58 +7,45 @@ export type AccountListWithServer = (Account & {
   server: 'com' | 'eu' | 'asia';
 })[];
 
-export default function listAccountsPanServer(search: string, limit = 9) {
-  return new Promise<AccountListWithServer>(async (resolve) => {
-    const trimmed = search.trim();
-    if (trimmed.length < 3 && trimmed.length > 100) resolve([]);
+export default async function listAccountsPanServer(search: string, limit = 9) {
+  const trimmed = search.trim();
+  if (trimmed.length < 3 && trimmed.length > 100) return [];
+  const normalizedLimit = Math.round(limit / 3);
 
-    const normalizedLimit = Math.round(limit / 3);
-    const accountList: AccountListWithServer = [];
-    let done = 0;
-
-    function afterResponse() {
-      done++;
-
-      if (done === 3) {
-        resolve(accountList);
-      }
-    }
-
-    getWargamingResponse<AccountList>(
-      `https://api.wotblitz.com/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${search}&limit=${normalizedLimit}`,
-    ).then((value) => {
-      if (value)
-        accountList.push(
-          ...value.map((account) => ({
+  return (
+    await Promise.all([
+      getWargamingResponse<AccountList>(
+        `https://api.wotblitz.com/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${search}&limit=${normalizedLimit}`,
+      ).then(
+        (value) =>
+          value &&
+          value.map((account) => ({
             ...account,
             server: 'com' as BlitzServer,
           })),
-        );
-      afterResponse();
-    });
-    getWargamingResponse<AccountList>(
-      `https://api.wotblitz.eu/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${search}&limit=${normalizedLimit}`,
-    ).then((value) => {
-      if (value)
-        accountList.push(
-          ...value.map((account) => ({
+      ),
+      getWargamingResponse<AccountList>(
+        `https://api.wotblitz.eu/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${search}&limit=${normalizedLimit}`,
+      ).then(
+        (value) =>
+          value &&
+          value.map((account) => ({
             ...account,
             server: 'eu' as BlitzServer,
           })),
-        );
-      afterResponse();
-    });
-    getWargamingResponse<AccountList>(
-      `https://api.wotblitz.asia/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${search}&limit=${normalizedLimit}`,
-    ).then((value) => {
-      if (value)
-        accountList.push(
-          ...value.map((account) => ({
+      ),
+      getWargamingResponse<AccountList>(
+        `https://api.wotblitz.asia/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${search}&limit=${normalizedLimit}`,
+      ).then(
+        (value) =>
+          value &&
+          value.map((account) => ({
             ...account,
             server: 'asia' as BlitzServer,
           })),
-        );
-      afterResponse();
-    });
-  });
+      ),
+    ])
+  )
+    .filter(Boolean)
+    .flat();
 }
