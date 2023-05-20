@@ -10,8 +10,8 @@ import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountList } from '../types/accountList.js';
 
 export default {
-  inDevelopment: false,
   inProduction: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -52,5 +52,7 @@ export default {
           ),
       ],
     });
+
+    console.log(`Player search results for "${name}"`);
   },
 } satisfies CommandRegistry;
