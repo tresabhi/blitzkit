@@ -34,7 +34,7 @@ export default {
     await interaction.editReply({
       embeds: [
         sklldEmbed(
-          `Tank search results for "${markdownEscape(tank)}"`,
+          `Tank search for "${markdownEscape(tank)}"`,
           results.length === 0
             ? 'No tanks found.'
             : `\`\`\`\n${results.join('\n')}\n\`\`\``,

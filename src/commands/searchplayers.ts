@@ -1,6 +1,7 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { SKILLED_COLOR } from '../constants/colors.js';
+import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addServerChoices from '../core/options/addServerChoices.js';
@@ -30,7 +31,7 @@ export default {
     ),
 
   async execute(interaction) {
-    const server = interaction.options.getString('server')!;
+    const server = interaction.options.getString('server') as BlitzServer;
     const name = interaction.options.getString('username')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
     const players = await getWargamingResponse<AccountList>(
@@ -42,7 +43,11 @@ export default {
       embeds: [
         new EmbedBuilder()
           .setColor(SKILLED_COLOR)
-          .setTitle(`Player search results for "${markdownEscape(name)}"`)
+          .setTitle(
+            `Player search for "${markdownEscape(name)}" in ${
+              BLITZ_SERVERS[server]
+            }`,
+          )
           .setDescription(
             `\`\`\`${
               players.length === 0

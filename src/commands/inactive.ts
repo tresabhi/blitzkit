@@ -5,7 +5,7 @@ import clanAutocomplete from '../core/autocomplete/clan.js';
 import getBlitzClan from '../core/blitz/getBlitzClan.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cmdName from '../core/interaction/cmdName.js';
-import addClanOption from '../core/options/addClanOption.js';
+import addClanChoices from '../core/options/addClanChoices.js';
 import { args } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
@@ -21,7 +21,7 @@ export default {
   command: new SlashCommandBuilder()
     .setName(cmdName('inactive'))
     .setDescription('Lists all inactive players')
-    .addStringOption(addClanOption)
+    .addStringOption(addClanChoices)
     .addNumberOption((option) =>
       option
         .setName('threshold')
