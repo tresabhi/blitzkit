@@ -16,9 +16,9 @@ import getClientId from '../core/process/getClientId.js';
 import isDev from '../core/process/isDev.js';
 
 export interface CommandRegistry {
-  inDevelopment: boolean; // register with Skilled Bot (default: false)
-  inProduction: boolean; // register with Skilled Canary (default: false)
-  inPublic: boolean; // registers on all servers (default: true)
+  inDevelopment: boolean;
+  inProduction: boolean;
+  inPublic: boolean;
 
   command: Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
   execute: (interaction: ChatInputCommandInteraction<CacheType>) => void;

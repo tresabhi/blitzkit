@@ -1,10 +1,10 @@
-# Skilled Bot
+# blitzkrieg
 
-Executes specific tasks in the Skilled Discord server.
+A Discord bot for anything and everything related to World of Tanks Blitz.
 
 ## Invite the Bot
 
-Join the [Skilled Discord server](https://discord.gg/ZPvcEG7DS8), click on the bot's profile, and click "Add to Server".
+Join the [Discord server](https://discord.gg/nDt7AjGJQH), click on the bot's profile, and click "Add to Server".
 
 ## Using
 

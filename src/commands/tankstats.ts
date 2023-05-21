@@ -11,7 +11,7 @@ import getPeriodicStats, {
 import cleanTable from '../core/interaction/cleanTable.js';
 import cmdName from '../core/interaction/cmdName.js';
 import errorEmbed from '../core/interaction/errorEmbed.js';
-import sklldEmbed from '../core/interaction/sklldEmbed.js';
+import infoEmbed from '../core/interaction/infoEmbed.js';
 import addTankChoices from '../core/options/addTankChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
@@ -79,7 +79,7 @@ export default {
 
       interaction.editReply({
         embeds: [
-          sklldEmbed(
+          infoEmbed(
             `${period} day stats for ${markdownEscape(
               accountInfo[id].nickname,
             )}'s ${resolveTankName(tank)}`,

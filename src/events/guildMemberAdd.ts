@@ -1,6 +1,6 @@
 import { EmbedBuilder, GuildMember, TextChannel } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
-import { SKILLED_COLOR } from '../constants/colors.js';
+import { INFO_COLOR } from '../constants/colors.js';
 
 export default async function (member: GuildMember) {
   if (member.guild.id === discord.sklld_guild_id) {
@@ -12,7 +12,7 @@ export default async function (member: GuildMember) {
       content: member.toString(),
       embeds: [
         new EmbedBuilder()
-          .setColor(SKILLED_COLOR)
+          .setColor(INFO_COLOR)
           .setTitle(`Welcome ${member.user.username}`)
           .setDescription(
             `Welcome to the Skilled server, **${member.user.username}**! To continue, please use the \`/verify\` command.\n\nExample: \`/verify Europe Sabina244\``,

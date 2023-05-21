@@ -1,6 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { SKILLED_COLOR } from '../constants/colors.js';
+import { INFO_COLOR } from '../constants/colors.js';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cmdName from '../core/interaction/cmdName.js';
@@ -42,7 +42,7 @@ export default {
     await interaction.editReply({
       embeds: [
         new EmbedBuilder()
-          .setColor(SKILLED_COLOR)
+          .setColor(INFO_COLOR)
           .setTitle(
             `Player search for "${markdownEscape(name)}" in ${
               BLITZ_SERVERS[server]

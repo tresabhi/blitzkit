@@ -3,7 +3,7 @@ import markdownEscape from 'markdown-escape';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cmdName from '../core/interaction/cmdName.js';
-import sklldEmbed from '../core/interaction/sklldEmbed.js';
+import infoEmbed from '../core/interaction/infoEmbed.js';
 import addClanChoices from '../core/options/addClanChoices.js';
 import addServerChoices from '../core/options/addServerChoices.js';
 import { args } from '../core/process/args.js';
@@ -12,7 +12,7 @@ import { ClanList } from '../types/clanList.js';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -39,7 +39,7 @@ export default {
 
     await interaction.editReply({
       embeds: [
-        sklldEmbed(
+        infoEmbed(
           `Clan search for "${markdownEscape(clan)}" in ${
             BLITZ_SERVERS[server]
           }`,

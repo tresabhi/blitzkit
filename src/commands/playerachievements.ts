@@ -6,7 +6,7 @@ import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cleanTable, { TableInputEntry } from '../core/interaction/cleanTable.js';
 import cmdName from '../core/interaction/cmdName.js';
-import sklldEmbed from '../core/interaction/sklldEmbed.js';
+import infoEmbed from '../core/interaction/infoEmbed.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
@@ -57,7 +57,7 @@ export default {
 
     interaction.editReply({
       embeds: [
-        sklldEmbed(
+        infoEmbed(
           `${markdownEscape(accounts[id].nickname)}'s information`,
 
           cleanTable(

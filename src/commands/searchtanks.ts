@@ -3,7 +3,7 @@ import { go } from 'fuzzysort';
 import markdownEscape from 'markdown-escape';
 import { tankNames } from '../core/blitzstars/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
-import sklldEmbed from '../core/interaction/sklldEmbed.js';
+import infoEmbed from '../core/interaction/infoEmbed.js';
 import addTankChoices from '../core/options/addTankChoices.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 
@@ -33,7 +33,7 @@ export default {
 
     await interaction.editReply({
       embeds: [
-        sklldEmbed(
+        infoEmbed(
           `Tank search for "${markdownEscape(tank)}"`,
           results.length === 0
             ? 'No tanks found.'

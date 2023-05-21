@@ -1,6 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { SKILLED_COLOR } from '../constants/colors.js';
+import { INFO_COLOR } from '../constants/colors.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
@@ -100,7 +100,7 @@ export default {
               TANK_TYPE_EMOJIS['AT-SPG']
             } = Tank Destroyer`,
           )
-          .setColor(SKILLED_COLOR),
+          .setColor(INFO_COLOR),
       ],
     });
 
