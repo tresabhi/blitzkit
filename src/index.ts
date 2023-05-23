@@ -5,9 +5,14 @@ import guildMemberAdd from './events/guildMemberAdd.js';
 import interactionCreate from './events/interactionCreate.js';
 import ready from './events/ready.js';
 
+// sudo apt-get install libatk-bridge2.0-0
+// node node_modules/puppeteer/install.js
+
 export const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
 });
+// export const browser = await launch({ headless: 'new' });
+// export const page = await browser.newPage();
 
 registerErrorHandlers();
 
