@@ -15,10 +15,6 @@ export default {
     .addStringOption(addUsernameOption),
 
   async execute(interaction) {
-    // await page.goto('http:///stackoverflow.com', {
-    //   waitUntil: 'networkidle0',
-    // });
-
     interaction.editReply("let's do this!");
   },
 
