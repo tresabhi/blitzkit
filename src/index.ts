@@ -11,10 +11,11 @@ registerErrorHandlers();
 export const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
 });
-export const browser = await chromium.launch();
 
 client
   .on('ready', ready)
   .on('guildMemberAdd', guildMemberAdd)
   .on('interactionCreate', interactionCreate)
   .login(args['discord-token']);
+
+export const browser = await chromium.launch();
