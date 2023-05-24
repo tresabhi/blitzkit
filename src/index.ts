@@ -6,11 +6,11 @@ import guildMemberAdd from './events/guildMemberAdd.js';
 import interactionCreate from './events/interactionCreate.js';
 import ready from './events/ready.js';
 
-registerErrorHandlers();
-
 export const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
 });
+
+registerErrorHandlers();
 
 client
   .on('ready', ready)
