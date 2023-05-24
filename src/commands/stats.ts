@@ -1,25 +1,35 @@
-import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import markdownEscape from 'markdown-escape';
-import { INFO_COLOR } from '../constants/colors.js';
+import { SlashCommandBuilder } from 'discord.js';
+import escapeHTML from 'escape-html';
+import GenericStats from '../components/GenericStats/index.js';
+import Screenshot from '../components/Screenshot.js';
+import TitleBar from '../components/TitleBar.js';
+import Wrapper from '../components/Wrapper.js';
+import { BLITZ_SERVERS } from '../constants/servers.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import blitzStarsLinks from '../core/blitzstars/blitzStarsLinks.js';
 import getBlitzStarsAccount from '../core/blitzstars/getBlitzStarsAccount.js';
-import poweredByBlitzStars from '../core/blitzstars/poweredByBlitzStars.js';
-import cleanTable from '../core/interaction/cleanTable.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
+import { browser } from '../index.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
+import { PlayerClanData } from '../types/playerClanData.js';
 import { BlitzStartsComputedPeriodicStatistics } from '../types/statistics.js';
 
 type Period = 'today' | '30' | '90' | 'career';
 
+const periodNames: Record<Period, string> = {
+  today: "Today's statistics",
+  30: '30-day statistics',
+  90: '90-day statistics',
+  career: 'Career statistics',
+};
+
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -50,6 +60,10 @@ export default {
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
     if (!accountInfo) return;
+    const clanData = await getWargamingResponse<PlayerClanData>(
+      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${id}&extra=clan`,
+    );
+    if (!clanData) return;
     const blitzStarsAccount = await getBlitzStarsAccount(interaction, id);
     if (!blitzStarsAccount) return;
 
@@ -97,98 +111,76 @@ export default {
           ? blitzStarsAccount.statistics
           : blitzStarsAccount[`period${period}d`];
     }
-    if (!stats!) return;
+    if (!stats) return;
 
-    await interaction.editReply({
-      embeds: [
-        poweredByBlitzStars(
-          new EmbedBuilder()
-            .setColor(INFO_COLOR)
-            .setTitle(
-              `${markdownEscape(blitzStarsAccount.nickname)}'s ${
-                period === 'career'
-                  ? period
-                  : `${period === 'today' ? 'today' : `${period} day`}`
-              } stats`,
-            )
-            .setDescription(
-              stats.all.battles > 0
-                ? `${
-                    period === 'today'
-                      ? '**⚠ "Today" stats are in development. Some stats are not available/wrong.**\n\n'
-                      : ''
-                  }${cleanTable([
-                    [
-                      'Winrate',
-                      `${(100 * (stats.all.wins / stats.all.battles)).toFixed(
-                        2,
-                      )}%`,
-                    ],
-                    [
-                      'Survival',
-                      `${(
-                        100 *
-                        (stats.all.survived_battles / stats.all.battles)
-                      ).toFixed(2)}%`,
-                    ],
-                    [
-                      'Accuracy',
-                      `${((stats.all.hits / stats.all.shots) * 100).toFixed(
-                        2,
-                      )}%`,
-                    ],
-                    ['WN8', stats.wn8.toFixed(0)],
-                    ['WN7', stats.wn7.toFixed(0)],
-                    [],
-                    ['Battles', stats.all.battles],
-                    ['Wins', stats.all.wins],
-                    ['Losses', stats.all.losses],
-                    ['Average tier', stats.avg_tier.toFixed(2)],
-                    [],
-                    [
-                      'Shots per battle',
-                      (stats.all.shots / stats.all.battles).toFixed(2),
-                    ],
-                    [
-                      'Hits per battle',
-                      (stats.all.hits / stats.all.battles).toFixed(2),
-                    ],
-                    [
-                      'Damage per battle',
-                      (stats.all.damage_dealt / stats.all.battles).toFixed(0),
-                    ],
-                    [
-                      'Kills per battle',
-                      (stats.all.frags / stats.all.battles).toFixed(2),
-                    ],
-                    [
-                      'Spots per battle',
-                      (stats.all.spotted / stats.all.battles).toFixed(2),
-                    ],
-                    [
-                      'XP per battle',
-                      (stats.all.xp / stats.all.battles).toFixed(0),
-                    ],
-                    [],
-                    [
-                      'Damage ratio',
-                      (
-                        stats.all.damage_dealt / stats.all.damage_received
-                      ).toFixed(2),
-                    ],
-                    [
-                      'Kills to death ratio',
-                      (
-                        stats.all.frags /
-                        (stats.all.battles - stats.all.survived_battles)
-                      ).toFixed(2),
-                    ],
-                  ])}\n\n${blitzStarsLinks(server, blitzStarsAccount.nickname)}`
-                : 'No battles played in this period.',
-            ),
+    const page = await browser.newPage();
+    await page.setViewportSize({ width: 640, height: 1 });
+    await page.setContent(
+      Screenshot(
+        Wrapper(
+          TitleBar(
+            escapeHTML(blitzStarsAccount.nickname),
+            clanData[id]?.clan
+              ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`
+              : 'https://i.imgur.com/uq6pKbh.png',
+            clanData[id]?.clan ? `[${clanData[id]?.clan?.tag}]` : '',
+            `${periodNames[period]} • ${new Date().toDateString()} • ${
+              BLITZ_SERVERS[server]
+            }`,
+          ),
+          GenericStats([
+            [
+              'Winrate',
+              `${(100 * (stats.all.wins / stats.all.battles)).toFixed(2)}%`,
+            ],
+            ['WN8', stats.wn8.toFixed(0)],
+            [
+              'Survival',
+              `${(
+                100 *
+                (stats.all.survived_battles / stats.all.battles)
+              ).toFixed(2)}%`,
+            ],
+            [
+              'Accuracy',
+              `${((stats.all.hits / stats.all.shots) * 100).toFixed(2)}%`,
+            ],
+            ['Battles', stats.all.battles],
+            ['Wins', stats.all.wins],
+            ['Losses', stats.all.losses],
+            [
+              'Average damage',
+              (stats.all.damage_dealt / stats.all.battles).toFixed(0),
+            ],
+            ['Average XP', (stats.all.xp / stats.all.battles).toFixed(0)],
+            ['Average shots', (stats.all.shots / stats.all.battles).toFixed(2)],
+            ['Average hits', (stats.all.hits / stats.all.battles).toFixed(2)],
+            ['Average kills', (stats.all.frags / stats.all.battles).toFixed(2)],
+            [
+              'Average spots',
+              (stats.all.spotted / stats.all.battles).toFixed(2),
+            ],
+            ['Average tier', stats.avg_tier.toFixed(2)],
+            [
+              'Damage ratio',
+              (stats.all.damage_dealt / stats.all.damage_received).toFixed(2),
+            ],
+            [
+              'Kills to death ratio',
+              (
+                stats.all.frags /
+                (stats.all.battles - stats.all.survived_battles)
+              ).toFixed(2),
+            ],
+          ]),
         ),
-      ],
-    });
+      ),
+    );
+    const screenshot = await page
+      .locator('#screenshot')
+      .screenshot({ omitBackground: true, scale: 'css' });
+    await page.close();
+    await interaction.editReply({ files: [screenshot] });
 
     console.log(`Showing stats for ${blitzStarsAccount.nickname}`);
   },
