@@ -1,8 +1,8 @@
 export default function TitleBar(
   name: string,
-  image: string,
-  nameDiscriminator = '',
-  description = '',
+  nameDiscriminator: string,
+  image?: string,
+  description?: string,
 ) {
   return `
     <style>
@@ -51,7 +51,7 @@ export default function TitleBar(
 
     <div class="title-bar">
       <div class="title-bar-info">
-        <img class="title-bar-avatar" src="${image}" />
+        ${image ? `<img class="title-bar-avatar" src="${image}" />` : ''}
 
         <div class="title-bar-text">
           <span class="title-bar-name">

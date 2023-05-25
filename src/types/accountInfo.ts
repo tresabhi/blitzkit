@@ -1,10 +1,8 @@
 export interface AllStats {
   spotted: number;
-  max_frags_tank_id: number;
   hits: number;
   frags: number;
   max_xp: number;
-  max_xp_tank_id: number;
   wins: number;
   losses: number;
   capture_points: number;

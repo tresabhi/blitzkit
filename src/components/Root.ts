@@ -1,6 +1,6 @@
 import Children from './Children.js';
 
-export default function Screenshot(...children: string[]) {
+export default function Root(...children: string[]) {
   return `
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@100..900');
@@ -14,12 +14,12 @@ export default function Screenshot(...children: string[]) {
         font-family: 'Roboto Flex', sans-serif;
       }
 
-      #screenshot {
+      #root {
         display: flex;
       }
     </style>
 
-    <div id="screenshot">
+    <div id="root">
       ${Children(children)}
     </div>
   `;
