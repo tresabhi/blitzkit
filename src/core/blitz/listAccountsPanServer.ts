@@ -15,7 +15,9 @@ export default async function listAccountsPanServer(search: string, limit = 9) {
   return (
     await Promise.all([
       getWargamingResponse<AccountList>(
-        `https://api.wotblitz.com/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${search}&limit=${normalizedLimit}`,
+        `https://api.wotblitz.com/wotb/account/list/?application_id=${
+          args['wargaming-application-id']
+        }&search=${encodeURIComponent(search)}&limit=${normalizedLimit}`,
       ).then(
         (value) =>
           value &&
@@ -25,7 +27,9 @@ export default async function listAccountsPanServer(search: string, limit = 9) {
           })),
       ),
       getWargamingResponse<AccountList>(
-        `https://api.wotblitz.eu/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${search}&limit=${normalizedLimit}`,
+        `https://api.wotblitz.eu/wotb/account/list/?application_id=${
+          args['wargaming-application-id']
+        }&search=${encodeURIComponent(search)}&limit=${normalizedLimit}`,
       ).then(
         (value) =>
           value &&
@@ -35,7 +39,9 @@ export default async function listAccountsPanServer(search: string, limit = 9) {
           })),
       ),
       getWargamingResponse<AccountList>(
-        `https://api.wotblitz.asia/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${search}&limit=${normalizedLimit}`,
+        `https://api.wotblitz.asia/wotb/account/list/?application_id=${
+          args['wargaming-application-id']
+        }&search=${encodeURIComponent(search)}&limit=${normalizedLimit}`,
       ).then(
         (value) =>
           value &&

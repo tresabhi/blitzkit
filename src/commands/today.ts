@@ -1,4 +1,8 @@
-import { SlashCommandBuilder } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  SlashCommandBuilder,
+} from 'discord.js';
 import escapeHTML from 'escape-html';
 import Breakdown from '../components/Breakdown.js';
 import NoBattlesInPeriod from '../components/NoBattlesInPeriod.js';
@@ -6,6 +10,8 @@ import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
+import fullBlitzStarsStats from '../core/actions/fullBlitzStarsStats.js';
+import { supportBlitzStars } from '../core/actions/supportBlitzStars.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
@@ -24,7 +30,7 @@ import resolveTankName from '../utilities/resolveTankName.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -105,7 +111,15 @@ export default {
       ),
     );
 
-    await interaction.editReply({ files: [screenshot] });
+    const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      fullBlitzStarsStats(server, accountInfo[id].nickname),
+      supportBlitzStars,
+    );
+
+    await interaction.editReply({
+      files: [screenshot],
+      components: [actionRow],
+    });
 
     console.log(`Showing daily breakdown for ${accountInfo[id].nickname}`);
   },
