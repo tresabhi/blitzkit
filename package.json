@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "pw": "playwright install && playwright install-deps",
     "install": "playwright install",
     "start": "vite-node src/index.ts --script",
     "lint": "tsc"
