@@ -3,8 +3,7 @@ import {
   ButtonBuilder,
   SlashCommandBuilder,
 } from 'discord.js';
-import escapeHTML from 'escape-html';
-import Breakdown from '../components/Breakdown.js';
+import * as Breakdown from '../components/Breakdown/index.js';
 import NoBattlesInPeriod from '../components/NoBattlesInPeriod.js';
 import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
 import TitleBar from '../components/TitleBar.js';
@@ -21,7 +20,7 @@ import { tankopedia } from '../core/blitzstars/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
-import screenshotHTML from '../core/ui/screenshotHTML.js';
+import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
@@ -30,7 +29,7 @@ import resolveTankName from '../utilities/resolveTankName.js';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -72,43 +71,51 @@ export default {
       ([tankId, tankStats]) => {
         const career = careerStats[tankId as unknown as number];
 
-        return Breakdown.Row(
-          resolveTankName({
-            tank_id: tankId as unknown as number,
-            name: tankopedia.data[tankId as unknown as number].name,
-          }),
-          tankStats.wins / tankStats.battles,
-          career.wins / career.battles,
-          -Infinity,
-          -Infinity,
-          tankStats.damage_dealt / tankStats.battles,
-          career.damage_dealt / career.battles,
-          tankStats.survived_battles / tankStats.battles,
-          career.survived_battles / career.battles,
-          tankStats.battles,
-          career.battles,
-          tankopedia.data[tankId as unknown as number].images.normal,
+        return (
+          <Breakdown.Row
+            key={tankId}
+            name={resolveTankName({
+              tank_id: tankId as unknown as number,
+              name: tankopedia.data[tankId as unknown as number].name,
+            })}
+            winrate={tankStats.wins / tankStats.battles}
+            careerWinrate={career.wins / career.battles}
+            WN8={-Infinity}
+            careerWN8={-Infinity}
+            damage={tankStats.damage_dealt / tankStats.battles}
+            careerDamage={career.damage_dealt / career.battles}
+            survival={tankStats.survived_battles / tankStats.battles}
+            careerSurvival={career.survived_battles / career.battles}
+            battles={tankStats.battles}
+            careerBattles={career.battles}
+            icon={tankopedia.data[tankId as unknown as number].images.normal}
+          />
         );
       },
     );
 
-    const screenshot = await screenshotHTML(
-      Wrapper(
-        TitleBar(
-          escapeHTML(accountInfo[id].nickname),
-          clanData[id]?.clan ? `[${clanData[id]?.clan?.tag}]` : '',
-          clanData[id]?.clan
-            ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`
-            : undefined,
-          `Today's breakdown • ${new Date().toDateString()} • ${
+    const image = await render(
+      <Wrapper>
+        <TitleBar
+          name={accountInfo[id].nickname}
+          nameDiscriminator={
+            clanData[id]?.clan ? `[${clanData[id]?.clan?.tag}]` : undefined
+          }
+          image={
+            clanData[id]?.clan
+              ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`
+              : undefined
+          }
+          description={`Today's breakdown • ${new Date().toDateString()} • ${
             BLITZ_SERVERS[server]
-          }`,
-        ),
+          }`}
+        />
 
-        rows.length === 0 ? NoBattlesInPeriod() : Breakdown.Root(...rows),
+        {rows.length === 0 && <NoBattlesInPeriod />}
+        {rows.length > 0 && <Breakdown.Root>{rows}</Breakdown.Root>}
 
-        PoweredByBlitzStars(),
-      ),
+        <PoweredByBlitzStars />
+      </Wrapper>,
     );
 
     const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -117,7 +124,7 @@ export default {
     );
 
     await interaction.editReply({
-      files: [screenshot],
+      files: [image],
       components: [actionRow],
     });
 

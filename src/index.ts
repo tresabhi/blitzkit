@@ -1,4 +1,3 @@
-import { chromium } from '@playwright/test';
 import { Client, GatewayIntentBits } from 'discord.js';
 import { args } from './core/process/args.js';
 import { registerErrorHandlers } from './events/error.js';
@@ -17,5 +16,3 @@ client
   .on('guildMemberAdd', guildMemberAdd)
   .on('interactionCreate', interactionCreate)
   .login(args['discord-token']);
-
-export const browser = await chromium.launch();

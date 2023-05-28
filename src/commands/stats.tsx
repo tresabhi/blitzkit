@@ -3,7 +3,6 @@ import {
   ButtonBuilder,
   SlashCommandBuilder,
 } from 'discord.js';
-import escapeHTML from 'escape-html';
 import GenericStats from '../components/GenericStats/index.js';
 import NoBattlesInPeriod from '../components/NoBattlesInPeriod.js';
 import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
@@ -19,7 +18,7 @@ import getBlitzStarsAccount from '../core/blitzstars/getBlitzStarsAccount.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
-import screenshotHTML from '../core/ui/screenshotHTML.js';
+import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
@@ -118,22 +117,27 @@ export default {
     }
     if (!stats) return;
 
-    const screenshot = await screenshotHTML(
-      Wrapper(
-        TitleBar(
-          escapeHTML(blitzStarsAccount.nickname),
-          clanData[id]?.clan ? `[${clanData[id]?.clan?.tag}]` : '',
-          clanData[id]?.clan
-            ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`
-            : undefined,
-          `${periodNames[period]} • ${new Date().toDateString()} • ${
-            BLITZ_SERVERS[server]
-          }`,
-        ),
+    const image = await render(
+      <Wrapper>
+        <TitleBar
+          name={blitzStarsAccount.nickname}
+          nameDiscriminator={
+            clanData[id]?.clan ? `[${clanData[id]?.clan?.tag}]` : undefined
+          }
+          image={
+            clanData[id]?.clan
+              ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`
+              : undefined
+          }
+          description={`${
+            periodNames[period]
+          } • ${new Date().toDateString()} • ${BLITZ_SERVERS[server]}`}
+        />
 
-        stats.all.battles === 0
-          ? NoBattlesInPeriod()
-          : GenericStats([
+        {stats.all.battles === 0 && <NoBattlesInPeriod />}
+        {stats.all.battles > 0 && (
+          <GenericStats
+            stats={[
               [
                 'Winrate',
                 `${(100 * (stats.all.wins / stats.all.battles)).toFixed(2)}%`,
@@ -183,10 +187,12 @@ export default {
                   (stats.all.battles - stats.all.survived_battles)
                 ).toFixed(2),
               ],
-            ]),
+            ]}
+          />
+        )}
 
-        PoweredByBlitzStars(),
-      ),
+        <PoweredByBlitzStars />
+      </Wrapper>,
     );
 
     const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -195,7 +201,7 @@ export default {
     );
 
     await interaction.editReply({
-      files: [screenshot],
+      files: [image],
       components: [actionRow],
     });
 

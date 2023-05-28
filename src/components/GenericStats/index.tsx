@@ -2,7 +2,15 @@ import GenericStatsColumn from './components/GenericStatsColumn.js';
 
 export type Stat = [string, string | number];
 
-export default function GenericStats(stats: Stat[], columnCount = 2) {
+export interface GenericStatsProps {
+  stats: Stat[];
+  columnCount?: number;
+}
+
+export default function GenericStats({
+  stats,
+  columnCount = 2,
+}: GenericStatsProps) {
   const itemsPerRow = Math.ceil(stats.length / columnCount);
   const columns: Stat[][] = [];
 
@@ -12,16 +20,14 @@ export default function GenericStats(stats: Stat[], columnCount = 2) {
     columns[column].push(stat);
   });
 
-  return `
-    <style>
-      .generic-stats {
-        display: flex;
-        gap: 32px;
-      }
-    </style>
-
-    <div class="generic-stats">
-      ${columns.map((column) => GenericStatsColumn(column)).join('\n')}
+  return (
+    <div style={{ display: 'flex', gap: 32 }}>
+      {columns.map((stats) => (
+        <GenericStatsColumn
+          key={stats.map((stat) => stat[0]).join('-')}
+          stats={stats}
+        />
+      ))}
     </div>
-  `;
+  );
 }
