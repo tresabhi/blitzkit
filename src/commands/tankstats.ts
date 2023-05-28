@@ -23,7 +23,7 @@ type Periods = '30' | '60' | '90';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()

@@ -97,6 +97,7 @@ export default async function interactionCreate(
 
     try {
       await interaction.deferReply();
+      console.log(interaction.toString());
       command.execute(interaction);
     } catch (error) {
       console.error(error);
