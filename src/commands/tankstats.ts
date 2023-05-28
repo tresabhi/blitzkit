@@ -52,7 +52,7 @@ export default {
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
-    const tank = tankopedia.data[tankId as unknown as number];
+    const tank = tankopedia[tankId as unknown as number];
 
     if (tank) {
       const periodicStats = (await getPeriodicStats(id, Number(period)))

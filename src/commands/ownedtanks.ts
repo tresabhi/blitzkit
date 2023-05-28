@@ -64,7 +64,7 @@ export default {
       `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
     const tanks = tankStats[id]
-      .map((tankData) => tankopedia.data[tankData.tank_id])
+      .map((tankData) => tankopedia[tankData.tank_id])
       .filter((tank) => tank?.tier === tier);
 
     await interaction.editReply({

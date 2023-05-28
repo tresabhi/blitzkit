@@ -29,7 +29,7 @@ import resolveTankName from '../utilities/resolveTankName.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -71,7 +71,7 @@ export default {
             key={tankId}
             name={resolveTankName({
               tank_id: tankId as unknown as number,
-              name: tankopedia.data[tankId as unknown as number].name,
+              name: tankopedia[tankId as unknown as number].name,
             })}
             winrate={tankStats.wins / tankStats.battles}
             careerWinrate={career.wins / career.battles}
@@ -83,7 +83,7 @@ export default {
             careerSurvival={career.survived_battles / career.battles}
             battles={tankStats.battles}
             careerBattles={career.battles}
-            icon={tankopedia.data[tankId as unknown as number].images.normal}
+            icon={tankopedia[tankId as unknown as number].images.normal}
           />
         );
       },
