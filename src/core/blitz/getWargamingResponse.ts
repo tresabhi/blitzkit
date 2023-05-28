@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { WargamingResponse } from '../../types/wargamingResponse.js';
 
 export default async function getWargamingResponse<Data extends object>(

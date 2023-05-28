@@ -1,5 +1,4 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
-import fetch from 'node-fetch';
 import { PlayerStats } from '../../types/playerStats.js';
 
 export default async function getPlayerStats(

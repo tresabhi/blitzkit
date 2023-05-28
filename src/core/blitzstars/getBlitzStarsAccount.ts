@@ -1,5 +1,4 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
-import fetch from 'node-fetch';
 import { PlayerPeriodicStatsCollection } from '../../types/statistics.js';
 import { notTrackedByBlitzStars } from '../interaction/notTrackedByBlitzStars.js';
 

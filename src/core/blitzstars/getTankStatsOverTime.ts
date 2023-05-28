@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { BlitzServer } from '../../constants/servers.js';
 import { AllStats } from '../../types/accountInfo.js';
 import { TanksStats } from '../../types/tanksStats.js';
