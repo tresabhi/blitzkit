@@ -35,7 +35,7 @@ const periodNames: Record<Period, string> = {
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -59,19 +59,15 @@ export default {
     const period = interaction.options.getString('period') as Period;
     const username = interaction.options.getString('username')!;
     const blitzAccount = await getBlitzAccount(interaction, username);
-    if (!blitzAccount) return;
     const { id, server } = blitzAccount;
     let stats: BlitzStartsComputedPeriodicStatistics;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
-    if (!accountInfo) return;
     const clanData = await getWargamingResponse<PlayerClanData>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${id}&extra=clan`,
     );
-    if (!clanData) return;
     const blitzStarsAccount = await getBlitzStarsAccount(interaction, id);
-    if (!blitzStarsAccount) return;
 
     if (period === 'today') {
       const a1 = blitzStarsAccount.statistics;
@@ -115,7 +111,6 @@ export default {
           ? blitzStarsAccount.statistics
           : blitzStarsAccount[`period${period}d`];
     }
-    if (!stats) return;
 
     const image = await render(
       <Wrapper>

@@ -14,7 +14,7 @@ import { PlayerClanData } from '../types/playerClanData.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -25,16 +25,13 @@ export default {
   async execute(interaction) {
     const name = interaction.options.getString('username')!;
     const blitzAccount = await getBlitzAccount(interaction, name);
-    if (!blitzAccount) return;
     const { id, server } = blitzAccount;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
-    if (!accountInfo) return;
     const clanData = await getWargamingResponse<PlayerClanData>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${id}&extra=clan`,
     );
-    if (!clanData) return;
     const clan = clanData[id]?.clan;
     const clanTag = clan ? ` [${clan!.tag}]` : '';
 

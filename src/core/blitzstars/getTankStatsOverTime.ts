@@ -51,7 +51,6 @@ export default async function getTankStatsOverTime(
   const latestTankStatsRaw = await getWargamingResponse<TanksStats>(
     `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
   );
-  if (!latestTankStatsRaw) return;
   const tankHistoriesResponse = await fetch(
     `https://www.blitzstars.com/api/tankhistories/for/${id}/`,
   );

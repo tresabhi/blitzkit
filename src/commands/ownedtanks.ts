@@ -1,11 +1,11 @@
-import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { INFO_COLOR } from '../constants/colors.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import { TANK_TYPE_EMOJIS, tankopedia } from '../core/blitzstars/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
+import infoEmbed from '../core/interaction/infoEmbed.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
@@ -36,7 +36,7 @@ const COMP_TANKS = [
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -56,51 +56,44 @@ export default {
     const tier = interaction.options.getInteger('tier')!;
     const name = interaction.options.getString('username')!;
     const account = await getBlitzAccount(interaction, name);
-    if (!account) return;
     const { id, server } = account;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
-    if (!accountInfo) return;
     const tankStats = await getWargamingResponse<TanksStats>(
       `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
-    if (!tankStats) return;
     const tanks = tankStats[id]
       .map((tankData) => tankopedia.data[tankData.tank_id])
       .filter((tank) => tank?.tier === tier);
 
     await interaction.editReply({
       embeds: [
-        new EmbedBuilder()
-          .setTitle(
-            `${markdownEscape(accountInfo[id].nickname)}'s owned ${
-              tier === null ? '' : `tier ${tier} `
-            }tanks`,
-          )
-          .setDescription(
-            `${
-              tanks.length === 0
-                ? `No tanks found in tier ${tier}`
-                : tanks
-                    .map(
-                      (tank) =>
-                        `${TANK_TYPE_EMOJIS[tank.type]} ${resolveTankName(
-                          tank,
-                        )} ${tank.is_premium ? '⭐' : ''}${
-                          COMP_TANKS.includes(tank.tank_id) ? '🏆' : ''
-                        }`,
-                    )
-                    .join('\n')
-            }\n\n**Legend**\n⭐ = Premium/Collector\n${
-              tier === 10 ? '🏆 = Comp Tank\n' : ''
-            }${TANK_TYPE_EMOJIS.heavyTank} = Heavy\n${
-              TANK_TYPE_EMOJIS.mediumTank
-            } = Medium\n${TANK_TYPE_EMOJIS.lightTank} = Light\n${
-              TANK_TYPE_EMOJIS['AT-SPG']
-            } = Tank Destroyer`,
-          )
-          .setColor(INFO_COLOR),
+        infoEmbed(
+          `${markdownEscape(accountInfo[id].nickname)}'s owned ${
+            tier === null ? '' : `tier ${tier} `
+          }tanks`,
+          `${
+            tanks.length === 0
+              ? `No tanks found in tier ${tier}`
+              : tanks
+                  .map(
+                    (tank) =>
+                      `${TANK_TYPE_EMOJIS[tank.type]} ${resolveTankName(
+                        tank,
+                      )} ${tank.is_premium ? '⭐' : ''}${
+                        COMP_TANKS.includes(tank.tank_id) ? '🏆' : ''
+                      }`,
+                  )
+                  .join('\n')
+          }\n\n**Legend**\n⭐ = Premium/Collector\n${
+            tier === 10 ? '🏆 = Comp Tank\n' : ''
+          }${TANK_TYPE_EMOJIS.heavyTank} = Heavy\n${
+            TANK_TYPE_EMOJIS.mediumTank
+          } = Medium\n${TANK_TYPE_EMOJIS.lightTank} = Light\n${
+            TANK_TYPE_EMOJIS['AT-SPG']
+          } = Tank Destroyer`,
+        ),
       ],
     });
 

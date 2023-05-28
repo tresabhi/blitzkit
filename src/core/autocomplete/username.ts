@@ -13,17 +13,23 @@ export default async function usernameAutocomplete(
   if (focusedOption.name !== 'username') return;
   const players = await listAccountsPanServer(focusedOption.value);
 
-  await interaction.respond(
-    players
-      ? players.map(
-          (player) =>
-            ({
-              name: `${player.nickname} (${BLITZ_SERVERS[player.server]})`,
-              value: `${player.server}/${player.account_id}`,
-            } satisfies ApplicationCommandOptionChoiceData<string>),
-        )
-      : [],
-  );
+  try {
+    await interaction.respond(
+      players
+        ? players.map(
+            (player) =>
+              ({
+                name: `${player.nickname} (${BLITZ_SERVERS[player.server]})`,
+                value: `${player.server}/${player.account_id}`,
+              } satisfies ApplicationCommandOptionChoiceData<string>),
+          )
+        : [],
+    );
 
-  console.log(`Username autocomplete for ${focusedOption.value}`);
+    console.log(`Username autocomplete for ${focusedOption.value}`);
+  } catch (error) {
+    console.warn(
+      `Failed to autocomplete username for ${focusedOption.value} in time`,
+    );
+  }
 }

@@ -1,6 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import packageJSON from '../../package.json' assert { type: 'json' };
-import { INFO_COLOR } from '../constants/colors.js';
+import { ACCENT_COLOR } from '../constants/colors.js';
 import { tankopedia } from '../core/blitzstars/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
 import getClientId from '../core/process/getClientId.js';
@@ -11,7 +11,7 @@ const executionStart = new Date().getTime();
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -26,7 +26,7 @@ export default {
       embeds: [
         new EmbedBuilder()
           .setTitle(`${client.user?.username} debug information`)
-          .setColor(INFO_COLOR)
+          .setColor(ACCENT_COLOR)
           .setDescription(
             `**Version**: ${packageJSON.version}\n**Uptime**: ${Math.floor(
               uptime / 1000 / 60 / 60 / 24,

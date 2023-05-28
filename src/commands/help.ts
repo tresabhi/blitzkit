@@ -1,6 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
-import { INFO_COLOR } from '../constants/colors.js';
+import { ACCENT_COLOR } from '../constants/colors.js';
 import cmdName from '../core/interaction/cmdName.js';
 import {
   CommandRegistry,
@@ -11,7 +11,7 @@ import { client } from '../index.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -23,7 +23,7 @@ export default {
       embeds: [
         new EmbedBuilder()
           .setTitle(`${client.user?.username} help`)
-          .setColor(INFO_COLOR)
+          .setColor(ACCENT_COLOR)
           .setDescription(
             `**About**\n${
               client.user?.username

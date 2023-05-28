@@ -17,7 +17,7 @@ type SortBy = 'name' | 'count';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -38,17 +38,14 @@ export default {
     const sortBy = (interaction.options.getString('sort') ?? 'name') as SortBy;
     const name = interaction.options.getString('username')!;
     const account = await getBlitzAccount(interaction, name);
-    if (!account) return;
     const { id, server } = account;
     const accounts = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
-    if (!accounts) return;
     const accountsAchievements =
       await getWargamingResponse<AccountAchievements>(
         `https://api.wotblitz.${server}/wotb/account/achievements/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
       );
-    if (!accountsAchievements) return;
     const accountAchievements = accountsAchievements[id];
     const compound = {
       ...accountAchievements.achievements,

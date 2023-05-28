@@ -11,9 +11,8 @@ export default async function getWargamingResponse<Data extends object>(
   if (parsed.status === 'ok') {
     return parsed.data;
   } else {
-    console.error(
-      `Wargaming response status ${parsed.status} ${parsed.error.message}`,
+    throw new Error(
+      `Wargaming response error status:"${parsed.status}" message: "${parsed.error.message}" url: "${url}"`,
     );
-    return null;
   }
 }

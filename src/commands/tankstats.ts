@@ -23,7 +23,7 @@ type Periods = '30' | '60' | '90';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -48,12 +48,10 @@ export default {
     const tankId = interaction.options.getString('tank')!;
     const period = interaction.options.getString('period') as Periods;
     const blitzAccount = await getBlitzAccount(interaction, name);
-    if (!blitzAccount) return;
     const { server, id } = blitzAccount;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
-    if (!accountInfo) return;
     const tank = tankopedia.data[tankId as unknown as number];
 
     if (tank) {

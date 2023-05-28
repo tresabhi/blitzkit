@@ -15,7 +15,7 @@ const DEFAULT_THRESHOLD = 7;
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -34,7 +34,6 @@ export default {
   async execute(interaction) {
     const clanName = interaction.options.getString('clan')!;
     const clan = await getBlitzClan(interaction, clanName);
-    if (!clan) return;
     const { server, id } = clan;
 
     const threshold =
@@ -43,14 +42,12 @@ export default {
     const clanInfo = await getWargamingResponse<ClanInfo>(
       `https://api.wotblitz.${server}/wotb/clans/info/?application_id=${args['wargaming-application-id']}&clan_id=${id}`,
     );
-    if (!clanInfo) return;
     const memberIds = clanInfo[id].members_ids;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${
         args['wargaming-application-id']
       }&account_id=${memberIds.join(',')}`,
     );
-    if (!accountInfo) return;
     const inactiveInfo = memberIds
       .map((memberId) => {
         const member = accountInfo[memberId];

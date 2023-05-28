@@ -8,7 +8,7 @@ export const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
 export default async function getBlitzAccount(
   interaction: ChatInputCommandInteraction<CacheType>,
   username: string,
-): Promise<{ server: BlitzServer; id: number } | null> {
+) {
   if (serverAndIdPattern.test(username)) {
     const [server, accountId] = username.split('/');
     return { server: server as BlitzServer, id: Number(accountId) };
@@ -27,7 +27,7 @@ export default async function getBlitzAccount(
         ],
       });
 
-      return null;
+      throw new Error(`Could not find user "${username}"`);
     }
   }
 }

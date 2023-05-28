@@ -7,7 +7,7 @@ import listClansPanServer from './listClansPanServer.js';
 export default async function getBlitzClan(
   interaction: ChatInputCommandInteraction<CacheType>,
   clan: string,
-): Promise<{ server: BlitzServer; id: number } | null> {
+) {
   if (serverAndIdPattern.test(clan)) {
     const [server, accountId] = clan.split('/');
     return { server: server as BlitzServer, id: Number(accountId) };
@@ -20,13 +20,13 @@ export default async function getBlitzClan(
       await interaction.editReply({
         embeds: [
           errorEmbed(
-            'Could not find user',
+            'Could not find clan',
             `I couldn't find clan \`${clan}\`. Try selecting a username from the search result.`,
           ),
         ],
       });
 
-      return null;
+      throw new Error(`Could not find clan "${clan}"`);
     }
   }
 }

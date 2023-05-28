@@ -12,7 +12,7 @@ import { ClanList } from '../types/clanList.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -35,7 +35,6 @@ export default {
     const clanList = await getWargamingResponse<ClanList>(
       `https://api.wotblitz.${server}/wotb/clans/list/?application_id=${args['wargaming-application-id']}&search=${clan}&limit=${limit}`,
     );
-    if (!clanList) return;
 
     await interaction.editReply({
       embeds: [

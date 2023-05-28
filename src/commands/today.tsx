@@ -29,7 +29,7 @@ import resolveTankName from '../utilities/resolveTankName.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -40,7 +40,6 @@ export default {
   async execute(interaction) {
     const username = interaction.options.getString('username')!;
     const blitzAccount = await getBlitzAccount(interaction, username);
-    if (!blitzAccount) return;
     const { id, server } = blitzAccount;
     const tankStatsOverTime = await getTankStatsOverTime(
       server,
@@ -48,19 +47,15 @@ export default {
       last5AM().getTime() / 1000,
       new Date().getTime() / 1000,
     );
-    if (!tankStatsOverTime) return;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
-    if (!accountInfo) return;
     const clanData = await getWargamingResponse<PlayerClanData>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${id}&extra=clan`,
     );
-    if (!clanData) return;
     const careerTankStatsRaw = await getWargamingResponse<TanksStats>(
       `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
-    if (!careerTankStatsRaw) return;
     const careerStats: Record<number, AllStats> = {};
 
     Object.entries(careerTankStatsRaw[id]).forEach(([, tankStats]) => {

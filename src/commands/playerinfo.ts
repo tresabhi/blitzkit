@@ -13,7 +13,7 @@ import { AccountInfo } from '../types/accountInfo.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -24,12 +24,10 @@ export default {
   async execute(interaction) {
     const name = interaction.options.getString('username')!;
     const account = await getBlitzAccount(interaction, name);
-    if (!account) return;
     const { id, server } = account;
     const accounts = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
-    if (!accounts) return;
     const accountInfo = accounts[id];
 
     interaction.editReply({

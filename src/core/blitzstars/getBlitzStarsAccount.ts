@@ -20,8 +20,6 @@ export default async function getBlitzStarsAccount(
       embeds: [notTrackedByBlitzStars],
     });
 
-    console.log(`Not tracked by BlitzStars.`);
-
-    return null;
+    throw new Error(`${accountId} not tracked by BlitzStars.`);
   }
 }
