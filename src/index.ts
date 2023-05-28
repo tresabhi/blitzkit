@@ -4,6 +4,7 @@ import { registerErrorHandlers } from './events/error.js';
 import guildMemberAdd from './events/guildMemberAdd.js';
 import interactionCreate from './events/interactionCreate.js';
 import ready from './events/ready.js';
+import './fetch-polyfill';
 
 export const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
