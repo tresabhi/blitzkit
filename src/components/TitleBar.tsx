@@ -1,3 +1,5 @@
+import { theme } from '../stitches.config.js';
+
 export interface TitleBarProps {
   name: string;
   nameDiscriminator?: string;
@@ -26,18 +28,22 @@ export default function TitleBar({
           <span
             style={{
               fontSize: 32,
-              color: 'white',
+              color: theme.colors.textHighContrast,
               fontWeight: 900,
               gap: 4,
             }}
           >
             {name}
             {nameDiscriminator && (
-              <span style={{ color: '#A0A0A0' }}>{nameDiscriminator}</span>
+              <span style={{ color: theme.colors.textLowContrast }}>
+                {nameDiscriminator}
+              </span>
             )}
           </span>
 
-          <span style={{ color: '#A0A0A0', fontSize: 16 }}>{description}</span>
+          <span style={{ color: theme.colors.textLowContrast, fontSize: 16 }}>
+            {description}
+          </span>
         </div>
       </div>
 

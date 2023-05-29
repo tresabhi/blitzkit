@@ -1,3 +1,4 @@
+import { theme } from '../../../stitches.config.js';
 import { Stat } from '../index.js';
 
 export interface GenericStatsRowProps {
@@ -13,8 +14,10 @@ export default function GenericStatsRow({ stat }: GenericStatsRowProps) {
         alignItems: 'center',
       }}
     >
-      <span style={{ color: '#A0A0A0', fontSize: 16 }}>{stat[0]}</span>
-      <span style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>
+      <span style={{ color: theme.colors.textLowContrast, fontSize: 16 }}>
+        {stat[0]}
+      </span>
+      <span style={{ color: theme.colors.textHighContrast, fontWeight: 'bold', fontSize: 16 }}>
         {stat[1]}
       </span>
     </div>

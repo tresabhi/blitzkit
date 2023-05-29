@@ -1,3 +1,5 @@
+import { theme } from '../../../stitches.config.js';
+
 export interface RowDiscriminatorProps {
   name: string;
   icon?: string;
@@ -25,7 +27,7 @@ export function RowDiscriminator({ name, icon }: RowDiscriminatorProps) {
       )}
       <span
         style={{
-          color: '#A0A0A0',
+          color: theme.colors.textLowContrast,
           fontSize: 16,
           textAlign: 'center',
           display: 'block',

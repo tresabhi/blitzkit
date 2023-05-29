@@ -156,6 +156,11 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.17.19.tgz#8cfaf2ff603e9aabb910e9c0558c26cf32744061"
   integrity sha512-lAhycmKnVOuRYNtRtatQR1LPQf2oYCkRGkSFnseDAKPl8lu5SOsK/e1sXe5a0Pc5kHIHe6P2I/ilntNv2xf3cA==
 
+"@radix-ui/colors@^0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@radix-ui/colors/-/colors-0.1.8.tgz#b08c62536fc462a87632165fb28e9b18f9bd047e"
+  integrity sha512-jwRMXYwC0hUo0mv6wGpuw254Pd9p/R6Td5xsRpOmaWkUHlooNWqVcadgyzlRumMq3xfOTXwJReU0Jv+EIy4Jbw==
+
 "@resvg/resvg-js-android-arm-eabi@2.4.1":
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/@resvg/resvg-js-android-arm-eabi/-/resvg-js-android-arm-eabi-2.4.1.tgz#49dc9722f95096f8aff70186deae8e148d60dce5"
@@ -337,6 +342,11 @@ base64-js@0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-0.0.8.tgz#1101e9544f4a76b1bc3b26d452ca96d7a35e7978"
   integrity sha512-3XSA2cR/h/73EzlXXdU6YNycmYI7+kicTxks4eJg2g39biHR84slg2+des+p7iHYhbRg/udIS4TD53WabcOUkw==
+
+bepaint@^0.1.0-beta.3:
+  version "0.1.0-beta.3"
+  resolved "https://registry.yarnpkg.com/bepaint/-/bepaint-0.1.0-beta.3.tgz#fe8f0d20e35da075a6ed69f42d61156d985da584"
+  integrity sha512-rybuEo674bEal5QUm/qO9jok3TptyRH2bdHDheFO25fw+HCBic5Oiy+ZWnOFnROCGZQy2Zcw7po4KrKSxz02Pg==
 
 busboy@^1.6.0:
   version "1.6.0"

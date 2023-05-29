@@ -1,3 +1,5 @@
+import { theme } from '../stitches.config.js';
+
 export default function PoweredByBlitzStars() {
   return (
     <div style={{ display: 'flex', gap: 4, justifyContent: 'flex-end' }}>
@@ -5,7 +7,7 @@ export default function PoweredByBlitzStars() {
         src="https://www.blitzstars.com/assets/images/4b4cb591.TankyMcPewpew.png"
         style={{ height: 16, width: 16 }}
       />
-      <span style={{ color: '#A0A0A0', fontSize: 16 }}>
+      <span style={{ color: theme.colors.textLowContrast, fontSize: 16 }}>
         Powered by BlitzStars
       </span>
     </div>

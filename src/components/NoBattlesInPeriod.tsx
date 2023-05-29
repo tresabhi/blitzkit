@@ -1,3 +1,5 @@
+import { theme } from '../stitches.config.js';
+
 export default function NoBattlesInPeriod() {
   return (
     <div
@@ -7,7 +9,7 @@ export default function NoBattlesInPeriod() {
         justifyContent: 'center',
       }}
     >
-      <span style={{ fontSize: 16, color: '#A0A0A0' }}>
+      <span style={{ fontSize: 16, color: theme.colors.textLowContrast }}>
         No battles played in this period
       </span>
     </div>

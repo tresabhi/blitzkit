@@ -1,3 +1,5 @@
+import { theme } from '../../../stitches.config.js';
+
 export interface RowStatProps {
   name: string;
   value: string;
@@ -17,7 +19,9 @@ export function RowStat({ name, value, career, delta }: RowStatProps) {
         flex: 1,
       }}
     >
-      <span style={{ color: '#A0A0A0', fontSize: 12 }}>{career}</span>
+      <span style={{ color: theme.colors.textLowContrast, fontSize: 12 }}>
+        {career}
+      </span>
 
       <div
         style={{
@@ -38,12 +42,14 @@ export function RowStat({ name, value, career, delta }: RowStatProps) {
           />
         )}
 
-        <span style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>
+        <span style={{ color: theme.colors.textHighContrast, fontSize: 16, fontWeight: 'bold' }}>
           {value}
         </span>
       </div>
 
-      <span style={{ color: '#A0A0A0', fontSize: 12 }}>{name}</span>
+      <span style={{ color: theme.colors.textLowContrast, fontSize: 12 }}>
+        {name}
+      </span>
     </div>
   );
 }

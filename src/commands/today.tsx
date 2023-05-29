@@ -71,41 +71,44 @@ export default {
 
     const accumulatedStats = sumStats(allStatsToAccumulate);
 
-    const rows = Object.entries({
-      0: accumulatedStats,
-      ...tankStatsOverTime,
-    }).map(([tankId, tankStats]) => {
-      const career = careerStats[tankId as unknown as number];
+    if (Object.keys(tankStatsOverTime).length > 0) {
+      tankStatsOverTime[0] = accumulatedStats;
+    }
 
-      return (
-        <Breakdown.Row
-          key={tankId}
-          name={
-            tankId === '0'
-              ? 'Today'
-              : resolveTankName({
-                  tank_id: tankId as unknown as number,
-                  name: tankopedia[tankId as unknown as number].name,
-                })
-          }
-          winrate={tankStats.wins / tankStats.battles}
-          careerWinrate={career.wins / career.battles}
-          WN8={-Infinity}
-          careerWN8={-Infinity}
-          damage={tankStats.damage_dealt / tankStats.battles}
-          careerDamage={career.damage_dealt / career.battles}
-          survival={tankStats.survived_battles / tankStats.battles}
-          careerSurvival={career.survived_battles / career.battles}
-          battles={tankStats.battles}
-          careerBattles={career.battles}
-          icon={
-            tankId === '0'
-              ? undefined
-              : tankopedia[tankId as unknown as number].images.normal
-          }
-        />
-      );
-    });
+    const rows = Object.entries(tankStatsOverTime).map(
+      ([tankId, tankStats]) => {
+        const career = careerStats[tankId as unknown as number];
+
+        return (
+          <Breakdown.Row
+            key={tankId}
+            name={
+              tankId === '0'
+                ? 'Today'
+                : resolveTankName({
+                    tank_id: tankId as unknown as number,
+                    name: tankopedia[tankId as unknown as number].name,
+                  })
+            }
+            winrate={tankStats.wins / tankStats.battles}
+            careerWinrate={career.wins / career.battles}
+            WN8={-Infinity}
+            careerWN8={-Infinity}
+            damage={tankStats.damage_dealt / tankStats.battles}
+            careerDamage={career.damage_dealt / career.battles}
+            survival={tankStats.survived_battles / tankStats.battles}
+            careerSurvival={career.survived_battles / career.battles}
+            battles={tankStats.battles}
+            careerBattles={career.battles}
+            icon={
+              tankId === '0'
+                ? undefined
+                : tankopedia[tankId as unknown as number].images.normal
+            }
+          />
+        );
+      },
+    );
 
     const image = await render(
       <Wrapper>
