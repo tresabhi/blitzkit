@@ -11,10 +11,11 @@ export default function GenericStats({
   stats,
   columnCount = 2,
 }: GenericStatsProps) {
-  const itemsPerRow = Math.ceil(stats.length / columnCount);
+  const filteredStats = stats.filter(([, value]) => value !== `${-Infinity}`);
+  const itemsPerRow = Math.ceil(filteredStats.length / columnCount);
   const columns: Stat[][] = [];
 
-  stats.forEach((stat, index) => {
+  filteredStats.forEach((stat, index) => {
     const column = Math.floor(index / itemsPerRow);
     if (!columns[column]) columns[column] = [];
     columns[column].push(stat);

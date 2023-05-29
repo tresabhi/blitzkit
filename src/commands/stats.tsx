@@ -35,7 +35,7 @@ const periodNames: Record<Period, string> = {
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()

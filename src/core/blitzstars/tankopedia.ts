@@ -1,3 +1,5 @@
+import isDev from '../process/isDev.js';
+
 export type TankType = 'heavyTank' | 'AT-SPG' | 'mediumTank' | 'lightTank';
 
 export interface Tankopedia {
@@ -54,18 +56,20 @@ export const TANK_TYPE_EMOJIS: Record<TankType, string> = {
   lightTank: '🇱',
 };
 
-console.log('Encoding tank images...');
-await Promise.all(
-  Object.entries(tankopedia).map(async ([, tank]) => {
-    if (tank.images.normal) {
-      const response = await fetch(tank.images.normal);
-      const blob = await response.arrayBuffer();
-      const base64 = `data:${response.headers.get(
-        'content-type',
-      )};base64,${Buffer.from(blob).toString('base64')}`;
+if (!isDev()) {
+  console.log('Encoding tank images...');
+  await Promise.all(
+    Object.entries(tankopedia).map(async ([, tank]) => {
+      if (tank.images.normal) {
+        const response = await fetch(tank.images.normal);
+        const blob = await response.arrayBuffer();
+        const base64 = `data:${response.headers.get(
+          'content-type',
+        )};base64,${Buffer.from(blob).toString('base64')}`;
 
-      tank.images.normal = base64;
-    }
-  }),
-);
-console.log('Encoded tank images');
+        tank.images.normal = base64;
+      }
+    }),
+  );
+  console.log('Encoded tank images');
+}

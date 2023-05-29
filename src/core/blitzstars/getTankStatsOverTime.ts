@@ -95,25 +95,28 @@ export default async function getTankStatsOverTime(
       return Math.max(get(latest.all), get(previous.all));
     }
 
-    tanksBeforeAndAfter[tankId] = {
-      battles: diff((a) => a.battles),
-      capture_points: diff((a) => a.capture_points),
-      damage_dealt: diff((a) => a.damage_dealt),
-      damage_received: diff((a) => a.damage_received),
-      dropped_capture_points: diff((a) => a.dropped_capture_points),
-      frags: diff((a) => a.frags),
-      frags8p: diff((a) => a.frags8p),
-      hits: diff((a) => a.hits),
-      losses: diff((a) => a.losses),
-      max_frags: max((a) => a.max_frags),
-      max_xp: max((a) => a.max_xp),
-      shots: diff((a) => a.shots),
-      spotted: diff((a) => a.spotted),
-      survived_battles: diff((a) => a.survived_battles),
-      win_and_survived: diff((a) => a.win_and_survived),
-      wins: diff((a) => a.wins),
-      xp: diff((a) => a.xp),
-    };
+    // check if there was a change in battles as games in ratings do update last_battle_time
+    if (diff((a) => a.battles) > 0) {
+      tanksBeforeAndAfter[tankId] = {
+        battles: diff((a) => a.battles),
+        capture_points: diff((a) => a.capture_points),
+        damage_dealt: diff((a) => a.damage_dealt),
+        damage_received: diff((a) => a.damage_received),
+        dropped_capture_points: diff((a) => a.dropped_capture_points),
+        frags: diff((a) => a.frags),
+        frags8p: diff((a) => a.frags8p),
+        hits: diff((a) => a.hits),
+        losses: diff((a) => a.losses),
+        max_frags: max((a) => a.max_frags),
+        max_xp: max((a) => a.max_xp),
+        shots: diff((a) => a.shots),
+        spotted: diff((a) => a.spotted),
+        survived_battles: diff((a) => a.survived_battles),
+        win_and_survived: diff((a) => a.win_and_survived),
+        wins: diff((a) => a.wins),
+        xp: diff((a) => a.xp),
+      };
+    }
   });
 
   return tanksBeforeAndAfter;
