@@ -24,9 +24,8 @@ import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 import { BlitzStartsComputedPeriodicStatistics } from '../types/statistics.js';
 
-type Period = 'today' | '30' | '90' | 'career';
-
-const periodNames: Record<Period, string> = {
+export type StatPeriod = 'today' | '30' | '90' | 'career';
+export const statPeriodNames: Record<StatPeriod, string> = {
   today: "Today's statistics",
   30: '30-day statistics',
   90: '90-day statistics',
@@ -35,7 +34,7 @@ const periodNames: Record<Period, string> = {
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -46,17 +45,17 @@ export default {
         .setName('period')
         .setDescription('The last number of days of stats')
         .setChoices(
-          { name: 'Today', value: 'today' satisfies Period },
-          { name: '30 Days', value: '30' satisfies Period },
-          { name: '90 Days', value: '90' satisfies Period },
-          { name: 'Career', value: 'career' satisfies Period },
+          { name: 'Today', value: 'today' satisfies StatPeriod },
+          { name: '30 Days', value: '30' satisfies StatPeriod },
+          { name: '90 Days', value: '90' satisfies StatPeriod },
+          { name: 'Career', value: 'career' satisfies StatPeriod },
         )
         .setRequired(true),
     )
     .addStringOption(addUsernameOption),
 
   async execute(interaction) {
-    const period = interaction.options.getString('period') as Period;
+    const period = interaction.options.getString('period') as StatPeriod;
     const username = interaction.options.getString('username')!;
     const blitzAccount = await getBlitzAccount(interaction, username);
     const { id, server } = blitzAccount;
@@ -74,9 +73,6 @@ export default {
       const a2 = accountInfo[id].statistics;
       const battles = a2.all.battles - a1.all.battles;
 
-      function max(value: (allStats: AllStats) => number) {
-        return Math.max(value(a2.all), value(a1.all));
-      }
       function diff(value: (allStats: AllStats) => number) {
         return value(a2.all) - value(a1.all);
       }
@@ -92,8 +88,8 @@ export default {
           frags8p: diff((a) => a.frags8p),
           hits: diff((a) => a.hits),
           losses: diff((a) => a.losses),
-          max_frags: max((a) => a.max_frags),
-          max_xp: max((a) => a.max_xp),
+          max_frags: a2.all.max_frags,
+          max_xp: a2.all.max_xp,
           shots: diff((a) => a.shots),
           spotted: diff((a) => a.spotted),
           survived_battles: diff((a) => a.survived_battles),
@@ -125,7 +121,7 @@ export default {
               : undefined
           }
           description={`${
-            periodNames[period]
+            statPeriodNames[period]
           } • ${new Date().toDateString()} • ${BLITZ_SERVERS[server]}`}
         />
 

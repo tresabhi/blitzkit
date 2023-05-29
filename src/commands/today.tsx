@@ -14,6 +14,7 @@ import { supportBlitzStars } from '../core/actions/supportBlitzStars.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
+import sumStats from '../core/blitz/sumStats.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
 import last5AM from '../core/blitzstars/last5AM.js';
 import { tankopedia } from '../core/blitzstars/tankopedia.js';
@@ -56,38 +57,55 @@ export default {
     const careerTankStatsRaw = await getWargamingResponse<TanksStats>(
       `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
-    const careerStats: Record<number, AllStats> = {};
+    const careerStats: Record<number, AllStats> = {
+      0: accountInfo[id].statistics.all,
+    };
+    const allStatsToAccumulate: AllStats[] = [];
 
+    Object.entries(tankStatsOverTime).forEach(([, tankStats]) => {
+      allStatsToAccumulate.push(tankStats);
+    });
     Object.entries(careerTankStatsRaw[id]).forEach(([, tankStats]) => {
       careerStats[tankStats.tank_id] = tankStats.all;
     });
 
-    const rows = Object.entries(tankStatsOverTime).map(
-      ([tankId, tankStats]) => {
-        const career = careerStats[tankId as unknown as number];
+    const accumulatedStats = sumStats(allStatsToAccumulate);
 
-        return (
-          <Breakdown.Row
-            key={tankId}
-            name={resolveTankName({
-              tank_id: tankId as unknown as number,
-              name: tankopedia[tankId as unknown as number].name,
-            })}
-            winrate={tankStats.wins / tankStats.battles}
-            careerWinrate={career.wins / career.battles}
-            WN8={-Infinity}
-            careerWN8={-Infinity}
-            damage={tankStats.damage_dealt / tankStats.battles}
-            careerDamage={career.damage_dealt / career.battles}
-            survival={tankStats.survived_battles / tankStats.battles}
-            careerSurvival={career.survived_battles / career.battles}
-            battles={tankStats.battles}
-            careerBattles={career.battles}
-            icon={tankopedia[tankId as unknown as number].images.normal}
-          />
-        );
-      },
-    );
+    const rows = Object.entries({
+      0: accumulatedStats,
+      ...tankStatsOverTime,
+    }).map(([tankId, tankStats]) => {
+      const career = careerStats[tankId as unknown as number];
+
+      return (
+        <Breakdown.Row
+          key={tankId}
+          name={
+            tankId === '0'
+              ? 'Today'
+              : resolveTankName({
+                  tank_id: tankId as unknown as number,
+                  name: tankopedia[tankId as unknown as number].name,
+                })
+          }
+          winrate={tankStats.wins / tankStats.battles}
+          careerWinrate={career.wins / career.battles}
+          WN8={-Infinity}
+          careerWN8={-Infinity}
+          damage={tankStats.damage_dealt / tankStats.battles}
+          careerDamage={career.damage_dealt / career.battles}
+          survival={tankStats.survived_battles / tankStats.battles}
+          careerSurvival={career.survived_battles / career.battles}
+          battles={tankStats.battles}
+          careerBattles={career.battles}
+          icon={
+            tankId === '0'
+              ? undefined
+              : tankopedia[tankId as unknown as number].images.normal
+          }
+        />
+      );
+    });
 
     const image = await render(
       <Wrapper>

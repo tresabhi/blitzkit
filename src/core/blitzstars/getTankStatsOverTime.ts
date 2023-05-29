@@ -13,31 +13,33 @@ export interface TankHistoryNode {
   tank_id: number;
 }
 
+export const emptyAllStats: AllStats = {
+  battles: 0,
+  capture_points: 0,
+  damage_dealt: 0,
+  damage_received: 0,
+  dropped_capture_points: 0,
+  frags: 0,
+  frags8p: 0,
+  hits: 0,
+  losses: 0,
+  max_frags: 0,
+  max_xp: 0,
+  shots: 0,
+  spotted: 0,
+  survived_battles: 0,
+  xp: 0,
+  win_and_survived: 0,
+  wins: 0,
+};
+
 export const emptyTankHistoryNode: TankHistoryNode = {
   account_id: 0,
   battle_life_time: 0,
   last_battle_time: 0,
   mark_of_mastery: 0,
   tank_id: 0,
-  all: {
-    battles: 0,
-    capture_points: 0,
-    damage_dealt: 0,
-    damage_received: 0,
-    dropped_capture_points: 0,
-    frags: 0,
-    frags8p: 0,
-    hits: 0,
-    losses: 0,
-    max_frags: 0,
-    max_xp: 0,
-    shots: 0,
-    spotted: 0,
-    survived_battles: 0,
-    xp: 0,
-    win_and_survived: 0,
-    wins: 0,
-  },
+  all: emptyAllStats,
 };
 
 export type TankHistory = TankHistoryNode[];
@@ -91,9 +93,6 @@ export default async function getTankStatsOverTime(
     function diff(get: (allStats: AllStats) => number) {
       return get(latest.all) - get(previous.all);
     }
-    function max(get: (allStats: AllStats) => number) {
-      return Math.max(get(latest.all), get(previous.all));
-    }
 
     // check if there was a change in battles as games in ratings do update last_battle_time
     if (diff((a) => a.battles) > 0) {
@@ -107,8 +106,8 @@ export default async function getTankStatsOverTime(
         frags8p: diff((a) => a.frags8p),
         hits: diff((a) => a.hits),
         losses: diff((a) => a.losses),
-        max_frags: max((a) => a.max_frags),
-        max_xp: max((a) => a.max_xp),
+        max_frags: latest.all.max_frags,
+        max_xp: latest.all.max_xp,
         shots: diff((a) => a.shots),
         spotted: diff((a) => a.spotted),
         survived_battles: diff((a) => a.survived_battles),
