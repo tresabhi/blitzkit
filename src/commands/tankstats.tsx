@@ -11,37 +11,46 @@ import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
 import fullBlitzStarsStats from '../core/actions/fullBlitzStarsStats.js';
 import { supportBlitzStars } from '../core/actions/supportBlitzStars.js';
+import tanksAutocomplete from '../core/autocomplete/tanks.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import sumStats from '../core/blitz/sumStats.js';
+import resolveTankId from '../core/blitz/resolveTankId.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
 import getPeriodicStart from '../core/blitzstars/getPeriodStart.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
+import { tankopedia } from '../core/blitzstars/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addStatPeriodChoices, {
   StatPeriod,
   statPeriodNames,
 } from '../core/options/addStatPeriodChoices.js';
+import addTankChoices from '../core/options/addTankChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
 import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
-import { PlayerClanData } from '../types/playerClanData.js';
+import { TanksStats } from '../types/tanksStats.js';
+import resolveTankName from '../utilities/resolveTankName.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('stats'))
-    .setDescription("Gets the user's in-game statistics")
+    .setName(cmdName('tankstats'))
+    .setDescription('Stats for a tank over a period')
+    .addStringOption(addTankChoices)
     .addStringOption(addStatPeriodChoices)
     .addStringOption(addUsernameOption),
 
   async execute(interaction) {
+    const tank = await resolveTankId(
+      interaction,
+      interaction.options.getString('tank')!,
+    );
     const period = interaction.options.getString('period') as StatPeriod;
     const username = interaction.options.getString('username')!;
     const blitzAccount = await getBlitzAccount(interaction, username);
@@ -49,38 +58,32 @@ export default {
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
-    const clanData = await getWargamingResponse<PlayerClanData>(
-      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${id}&extra=clan`,
+    const tankStats = await getWargamingResponse<TanksStats>(
+      `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
     let stats: AllStats;
 
     if (period === 'career') {
-      stats = accountInfo[id].statistics.all;
+      stats = tankStats[id].find(
+        (stats) => stats.tank_id === Number(tank),
+      )!.all;
     } else {
-      stats = sumStats(
-        Object.entries(
-          await getTankStatsOverTime(
-            server,
-            id,
-            getPeriodicStart(period),
-            getPeriodNow(),
-          ),
-        ).map(([, stats]) => stats),
-      );
+      stats = (
+        await getTankStatsOverTime(
+          server,
+          id,
+          getPeriodicStart(period),
+          getPeriodNow(),
+        )
+      )[Number(tank)];
     }
 
     const image = await render(
       <Wrapper>
         <TitleBar
           name={accountInfo[id].nickname}
-          nameDiscriminator={
-            clanData[id]?.clan ? `[${clanData[id]?.clan?.tag}]` : undefined
-          }
-          image={
-            clanData[id]?.clan
-              ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`
-              : undefined
-          }
+          nameDiscriminator={`(${resolveTankName(Number(tank))})`}
+          image={tankopedia[Number(tank)].images.normal}
           description={`${
             statPeriodNames[period]
           } • ${new Date().toDateString()} • ${BLITZ_SERVERS[server]}`}
@@ -88,6 +91,7 @@ export default {
 
         {stats.battles === 0 && <NoBattlesInPeriod />}
         {stats.battles > 0 && (
+          // TODO: GenericStats generator for AllStats
           <GenericStats
             stats={[
               [
@@ -145,5 +149,8 @@ export default {
     console.log(`Showing stats for ${accountInfo[id].nickname}`);
   },
 
-  autocomplete: usernameAutocomplete,
+  autocomplete: (interaction) => {
+    tanksAutocomplete(interaction);
+    usernameAutocomplete(interaction);
+  },
 } satisfies CommandRegistry;

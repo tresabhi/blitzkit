@@ -17,29 +17,55 @@ export default function TitleBar({
     <div
       style={{
         display: 'flex',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        gap: 8,
       }}
     >
-      <div style={{ display: 'flex', gap: 8 }}>
-        {image && <img style={{ width: 64, height: 64 }} src={image} />}
+      <div style={{ display: 'flex', gap: 8, flex: 1 }}>
+        {image && (
+          <img
+            style={{ width: 64, height: 64, objectFit: 'contain' }}
+            src={image}
+          />
+        )}
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <span
+        <div
+          style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}
+        >
+          <div
             style={{
-              fontSize: 32,
-              color: theme.colors.textHighContrast,
-              fontWeight: 900,
+              display: 'flex',
               gap: 4,
             }}
           >
-            {name}
+            <span
+              style={{
+                fontSize: 32,
+                color: theme.colors.textHighContrast,
+                fontWeight: 900,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {name}
+            </span>
             {nameDiscriminator && (
-              <span style={{ color: theme.colors.textLowContrast }}>
+              <span
+                style={{
+                  flex: 1,
+                  fontSize: 32,
+                  color: theme.colors.textLowContrast,
+                  fontWeight: 900,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 {nameDiscriminator}
               </span>
             )}
-          </span>
+          </div>
 
           <span style={{ color: theme.colors.textLowContrast, fontSize: 16 }}>
             {description}

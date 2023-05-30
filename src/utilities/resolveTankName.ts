@@ -1,8 +1,6 @@
-import markdownEscape from 'markdown-escape';
+import { tankopedia } from '../core/blitzstars/tankopedia.js';
 
-export default function resolveTankName(tank: {
-  tank_id: number;
-  name?: string;
-}) {
-  return tank.name ? markdownEscape(tank.name) : `Unknown Tank ${tank.tank_id}`;
+export default function resolveTankName(tankId: number) {
+  const tankopediaName = tankopedia[tankId].name;
+  return tankopediaName ? tankopediaName : `Unknown Tank ${tankId}`;
 }

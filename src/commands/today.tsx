@@ -30,7 +30,7 @@ import resolveTankName from '../utilities/resolveTankName.js';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -82,14 +82,7 @@ export default {
         return (
           <Breakdown.Row
             key={tankId}
-            name={
-              tankId === '0'
-                ? 'Today'
-                : resolveTankName({
-                    tank_id: tankId as unknown as number,
-                    name: tankopedia[tankId as unknown as number].name,
-                  })
-            }
+            name={tankId === '0' ? 'Today' : resolveTankName(Number(tankId))}
             winrate={tankStats.wins / tankStats.battles}
             careerWinrate={career.wins / career.battles}
             WN8={-Infinity}

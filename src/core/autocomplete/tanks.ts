@@ -18,7 +18,9 @@ export default async function tanksAutocomplete(
       ? go(focusedOption.value, tanks, { keys: ['name'], limit: 10 }).map(
           (item) =>
             ({
-              name: item.obj.name ? item.obj.name : resolveTankName(item.obj),
+              name: item.obj.name
+                ? item.obj.name
+                : resolveTankName(item.obj.tank_id),
               value: `${item.obj.tank_id}`,
             } satisfies ApplicationCommandOptionChoiceData<string>),
         )

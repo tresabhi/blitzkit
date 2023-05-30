@@ -79,8 +79,8 @@ export default {
               : tanks
                   .map(
                     (tank) =>
-                      `${TANK_TYPE_EMOJIS[tank.type]} ${resolveTankName(
-                        tank,
+                      `${TANK_TYPE_EMOJIS[tank.type]} ${markdownEscape(
+                        resolveTankName(tank.tank_id),
                       )} ${tank.is_premium ? '⭐' : ''}${
                         COMP_TANKS.includes(tank.tank_id) ? '🏆' : ''
                       }`,
