@@ -42,7 +42,13 @@ export function RowStat({ name, value, career, delta }: RowStatProps) {
           />
         )}
 
-        <span style={{ color: theme.colors.textHighContrast, fontSize: 16, fontWeight: 'bold' }}>
+        <span
+          style={{
+            color: theme.colors.textHighContrast,
+            fontSize: 16,
+            fontWeight: 'bold',
+          }}
+        >
           {value}
         </span>
       </div>

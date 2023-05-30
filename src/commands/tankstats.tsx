@@ -18,7 +18,9 @@ import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankId from '../core/blitz/resolveTankId.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
 import getPeriodicStart from '../core/blitzstars/getPeriodStart.js';
-import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
+import getTankStatsOverTime, {
+  emptyAllStats,
+} from '../core/blitzstars/getTankStatsOverTime.js';
 import { tankopedia } from '../core/blitzstars/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addStatPeriodChoices, {
@@ -64,9 +66,9 @@ export default {
     let stats: AllStats;
 
     if (period === 'career') {
-      stats = tankStats[id].find(
-        (stats) => stats.tank_id === Number(tank),
-      )!.all;
+      stats =
+        tankStats[id].find((stats) => stats.tank_id === Number(tank))?.all ??
+        emptyAllStats;
     } else {
       stats = (
         await getTankStatsOverTime(
