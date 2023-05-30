@@ -14,7 +14,7 @@ export default function Wrapper({ children }: WrapperProps) {
         padding: 16,
         gap: 32,
         width: 640,
-        backgroundColor: theme.colors.appBackground1,
+        background: 'url(https://i.imgur.com/PhS06NJ.png)',
         color: theme.colors.textHighContrast,
       }}
     >
