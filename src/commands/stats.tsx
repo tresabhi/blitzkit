@@ -9,8 +9,6 @@ import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
-import fullBlitzStarsStats from '../core/actions/fullBlitzStarsStats.js';
-import { supportBlitzStars } from '../core/actions/supportBlitzStars.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
@@ -19,6 +17,8 @@ import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
 import getPeriodicStart from '../core/blitzstars/getPeriodStart.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
 import cmdName from '../core/interaction/cmdName.js';
+import fullBlitzStarsStats from '../core/interaction/fullBlitzStarsStats.js';
+import { supportBlitzStars } from '../core/interaction/supportBlitzStars.js';
 import addStatPeriodChoices, {
   StatPeriod,
   statPeriodNames,

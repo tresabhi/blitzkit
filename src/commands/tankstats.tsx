@@ -9,20 +9,21 @@ import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
-import fullBlitzStarsStats from '../core/actions/fullBlitzStarsStats.js';
-import { supportBlitzStars } from '../core/actions/supportBlitzStars.js';
 import tanksAutocomplete from '../core/autocomplete/tanks.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankId from '../core/blitz/resolveTankId.js';
+import resolveTankName from '../core/blitz/resolveTankName.js';
+import { tankopedia } from '../core/blitz/tankopedia.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
 import getPeriodicStart from '../core/blitzstars/getPeriodStart.js';
 import getTankStatsOverTime, {
   emptyAllStats,
 } from '../core/blitzstars/getTankStatsOverTime.js';
-import { tankopedia } from '../core/blitzstars/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
+import fullBlitzStarsStats from '../core/interaction/fullBlitzStarsStats.js';
+import { supportBlitzStars } from '../core/interaction/supportBlitzStars.js';
 import addStatPeriodChoices, {
   StatPeriod,
   statPeriodNames,
@@ -34,7 +35,6 @@ import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { TanksStats } from '../types/tanksStats.js';
-import resolveTankName from '../utilities/resolveTankName.js';
 
 export default {
   inProduction: true,

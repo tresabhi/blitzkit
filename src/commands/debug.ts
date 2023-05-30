@@ -1,7 +1,7 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import packageJSON from '../../package.json' assert { type: 'json' };
 import { ACCENT_COLOR } from '../constants/colors.js';
-import { tankopedia } from '../core/blitzstars/tankopedia.js';
+import { tankopedia } from '../core/blitz/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
 import getClientId from '../core/process/getClientId.js';
 import { CommandRegistry } from '../events/interactionCreate.js';

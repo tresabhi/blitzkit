@@ -4,8 +4,8 @@ import {
   CacheType,
 } from 'discord.js';
 import { go } from 'fuzzysort';
-import resolveTankName from '../../utilities/resolveTankName.js';
-import { tanks } from '../blitzstars/tankopedia.js';
+import resolveTankName from '../blitz/resolveTankName.js';
+import { TANKS } from '../blitz/tankopedia.js';
 
 export default async function tanksAutocomplete(
   interaction: AutocompleteInteraction<CacheType>,
@@ -15,7 +15,7 @@ export default async function tanksAutocomplete(
 
   await interaction.respond(
     focusedOption.value
-      ? go(focusedOption.value, tanks, { keys: ['name'], limit: 10 }).map(
+      ? go(focusedOption.value, TANKS, { keys: ['name'], limit: 10 }).map(
           (item) =>
             ({
               name: item.obj.name
