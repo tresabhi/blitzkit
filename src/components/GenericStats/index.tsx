@@ -11,7 +11,9 @@ export default function GenericStats({
   stats,
   columnCount = 2,
 }: GenericStatsProps) {
-  const filteredStats = stats.filter(([, value]) => value !== `${-Infinity}`);
+  const filteredStats = stats.filter(
+    ([, value]) => `${value}` !== `${-Infinity}`,
+  );
   const itemsPerRow = Math.ceil(filteredStats.length / columnCount);
   const columns: Stat[][] = [];
 

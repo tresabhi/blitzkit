@@ -1,144 +1,48 @@
-import { args } from '../process/args.js';
+import { WargamingResponse } from '../../types/wargamingResponse.js';
 import isDev from '../process/isDev.js';
 import URLToBase64 from '../ui/URLToBase64.js';
-import getWargamingResponse from './getWargamingResponse.js';
+
+/*
+"1": {
+      "name": "T-34",
+      "nation": "ussr",
+      "is_premium": false,
+      "tier": 5,
+      "cost": {
+        "price_credit": 400000,
+        "price_gold": 0
+      },
+      "images": {
+        "preview": "/api/bs-cache/tank-icons/https%3A%2F%2Fglossary-eu-static.gcdn.co%2Ficons%2Fwotb%2Fcurrent%2Fuploaded%2Fvehicles%2Fhd_thumbnail%2FT-34.png",
+        "normal": "http://glossary-eu-static.gcdn.co/icons/wotb/current/uploaded/vehicles/hd/T-34.png"
+      },
+      "tank_id": 1,
+      "type": "mediumTank",
+      "description": "The legend of the Soviet armored forces and the most widely-produced Soviet tank of World War II, with a total of 33,805 vehicles manufactured. Three variants of this model were produced at several Soviet factories from 1940 through 1944."
+    },
+    */
 
 export interface Tankopedia {
   [id: number]: {
-    description: string;
-    engines: number[];
-    guns: number[];
-    is_premium: boolean;
     name: string;
     nation: string;
-    next_tanks: { [id: number]: number };
-    prices_xp: { [id: number]: number };
-    suspensions: number[];
-    tank_id: number;
+    is_premium: boolean;
     tier: number;
-    turrets: number[] | null;
+    cost: { price_credit: number; price_gold: number };
+    images: { preview: string; normal: string };
+    tank_id: number;
     type: string;
-    cost: {
-      price_credit: number;
-      price_gold: number;
-    };
-    default_profile: {
-      battle_level_range_max: number;
-      battle_level_range_min: number;
-      engine_id: number;
-      firepower: number;
-      gun_id: number;
-      hp: number;
-      hull_hp: number;
-      hull_weight: number;
-      is_default: boolean;
-      maneuverability: number;
-      max_ammo: number;
-      max_weight: number;
-      profile_id: string;
-      protection: number;
-      shot_efficiency: number;
-      signal_range: number;
-      speed_backward: number;
-      suspension_id: number;
-      turret_id: number;
-      weight: number;
-      armor: {
-        hull: {
-          front: number;
-          rear: number;
-          sides: number;
-        };
-        turret: {
-          front: number;
-          rear: number;
-          sides: number;
-        };
-      };
-      engine: {
-        fire_chance: number;
-        name: string;
-        power: number;
-        tier: number;
-        weight: number;
-      };
-      gun: {
-        aim_time: number;
-        caliber: number;
-        clip_capacity: number;
-        clip_reload_time: number;
-        dispersion: number;
-        fire_rate: number;
-        move_down_arc: number;
-        move_up_arc: number;
-        name: string;
-        reload_time: number;
-        tier: number;
-        traverse_speed: number;
-        weight: number;
-      };
-      shells: {
-        damage: number;
-        penetration: number;
-        type: string;
-      };
-      suspension: {
-        load_limit: number;
-        name: string;
-        tier: number;
-        traverse_speed: number;
-        weight: number;
-      };
-      turret: {
-        hp: number;
-        name: string;
-        tier: number;
-        traverse_left_arc: number;
-        traverse_right_arc: number;
-        traverse_speed: number;
-        view_range: number;
-        weight: number;
-      };
-    };
-    images: {
-      normal: string;
-      preview: string;
-    };
-    modules_tree: {
-      [id: number]: {
-        is_default: boolean;
-        module_id: number;
-        name: string;
-        next_modules: number[] | null;
-        next_tanks: number[] | null;
-        price_credit: number;
-        price_xp: number;
-        type: string;
-      };
-    };
+    description: string;
   };
 }
 
-export interface TankopediaInfo {
-  achievement_sections: { [name: string]: { name: string; order: number } };
-  tanks_updated_at: number;
-  languages: { [name: string]: string };
-  vehicle_types: { [name: string]: string };
-  vehicle_nations: { [name: string]: string };
-  game_version: string;
-}
-
 console.log('Caching tankopedia...');
-export const tankopedia = await getWargamingResponse<Tankopedia>(
-  `https://api.wotblitz.com/wotb/encyclopedia/vehicles/?application_id=${args['wargaming-application-id']}`,
-);
+export const tankopedia = (
+  (await (
+    await fetch('https://www.blitzstars.com/bs-tankopedia.json')
+  ).json()) as WargamingResponse<Tankopedia> & { status: 'ok' }
+).data;
 console.log('Cached tankopedia');
-
-console.log('Caching tankopedia info...');
-export const tankopediaInfo = await getWargamingResponse<TankopediaInfo>(
-  `https://api.wotblitz.com/wotb/encyclopedia/info/?application_id=${args['wargaming-application-id']}`,
-);
-console.log('Cached tankopedia info');
 
 /**
  * @deprecated

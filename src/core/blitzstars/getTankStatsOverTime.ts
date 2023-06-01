@@ -47,8 +47,8 @@ export type TankHistory = TankHistoryNode[];
 export default async function getTankStatsOverTime(
   server: BlitzServer,
   id: number,
-  start = -Infinity,
-  end = Infinity,
+  start: number,
+  end: number,
 ) {
   const latestTankStatsRaw = await getWargamingResponse<TanksStats>(
     `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
