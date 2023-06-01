@@ -19,7 +19,7 @@ export interface AllStats {
 }
 
 export interface SupplementaryStats {
-  wn8: number;
+  WN8: number;
   tier: number;
 }
 

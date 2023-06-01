@@ -100,7 +100,7 @@ export default {
             stats={stats}
             supplementaryStats={{
               tier: tankopedia[tankId].tier,
-              wn8: getWN8(tankAverages[tankId].all, stats),
+              WN8: getWN8(tankAverages[tankId].all, stats),
             }}
           />
         )}

@@ -1,3 +1,4 @@
+import getWN8Percentile from '../core/blitz/getWN8Percentile.js';
 import { AllStats, SupplementaryStats } from '../types/accountInfo.js';
 import GenericStats from './GenericStats/index.js';
 
@@ -14,7 +15,13 @@ export default function GenericAllStats({
     <GenericStats
       stats={[
         ['Winrate', `${(100 * (stats.wins / stats.battles)).toFixed(2)}%`],
-        ['WN8', supplementaryStats?.wn8.toFixed(0) ?? -Infinity],
+        [
+          'WN8',
+          supplementaryStats?.WN8.toFixed(0) ?? -Infinity,
+          supplementaryStats
+            ? getWN8Percentile(supplementaryStats.WN8)
+            : undefined,
+        ],
         [
           'Survival',
           `${(100 * (stats.survived_battles / stats.battles)).toFixed(2)}%`,

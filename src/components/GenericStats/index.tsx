@@ -1,6 +1,9 @@
+import { Percentile } from '../../constants/percentiles.js';
 import GenericStatsColumn from './components/GenericStatsColumn.js';
 
-export type Stat = [string, string | number];
+export type Stat =
+  | [string, string | number]
+  | [string, string | number, Percentile | undefined];
 
 export interface GenericStatsProps {
   stats: Stat[];

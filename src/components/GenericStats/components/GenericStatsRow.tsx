@@ -1,6 +1,9 @@
 import { theme } from '../../../stitches.config.js';
 import { Stat } from '../index.js';
 
+import '../../../core/blitz/getWN8Percentile.js';
+import PercentileIndicator from '../../PercentileIndicator.js';
+
 export interface GenericStatsRowProps {
   stat: Stat;
 }
@@ -17,7 +20,18 @@ export default function GenericStatsRow({ stat }: GenericStatsRowProps) {
       <span style={{ color: theme.colors.textLowContrast, fontSize: 16 }}>
         {stat[0]}
       </span>
-      <span style={{ color: theme.colors.textHighContrast, fontWeight: 'bold', fontSize: 16 }}>
+      <span
+        style={{
+          color: theme.colors.textHighContrast,
+          fontWeight: 'bold',
+          fontSize: 16,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 4,
+        }}
+      >
+        {stat[2] && <PercentileIndicator percentile={stat[2]} />}
         {stat[1]}
       </span>
     </div>

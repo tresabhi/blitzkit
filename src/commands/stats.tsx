@@ -85,12 +85,12 @@ export default {
 
             return accumulator + tankTier * stats.battles;
           }, 0) / totalBattles,
-        wn8:
+        WN8:
           entries.reduce((accumulator, [tankIdString, stats]) => {
             const tankId = Number(tankIdString);
-            const tankWn8 = getWN8(tankAverages[tankId].all, stats);
+            const tankWN8 = getWN8(tankAverages[tankId].all, stats);
 
-            return accumulator + tankWn8 * stats.battles;
+            return accumulator + tankWN8 * stats.battles;
           }, 0) / totalBattles,
       };
 
