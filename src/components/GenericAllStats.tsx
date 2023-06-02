@@ -17,7 +17,7 @@ export default function GenericAllStats({
         ['Winrate', `${(100 * (stats.wins / stats.battles)).toFixed(2)}%`],
         [
           'WN8',
-          supplementaryStats?.WN8.toFixed(0) ?? -Infinity,
+          supplementaryStats?.WN8.toFixed(0),
           supplementaryStats
             ? getWN8Percentile(supplementaryStats.WN8)
             : undefined,
@@ -31,7 +31,7 @@ export default function GenericAllStats({
         ['Wins', stats.wins],
         ['Losses', stats.losses],
         ['Average damage', (stats.damage_dealt / stats.battles).toFixed(0)],
-        ['Average tier', supplementaryStats?.tier.toFixed(2) ?? -Infinity],
+        ['Average tier', supplementaryStats?.tier.toFixed(2)],
         ['Average XP', (stats.xp / stats.battles).toFixed(0)],
         ['Average shots', (stats.shots / stats.battles).toFixed(2)],
         ['Average hits', (stats.hits / stats.battles).toFixed(2)],

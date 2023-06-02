@@ -1,13 +1,22 @@
+import { Percentile } from '../../../constants/percentiles.js';
 import { theme } from '../../../stitches.config.js';
+import PercentileIndicator from '../../PercentileIndicator.js';
 
 export interface RowStatProps {
   name: string;
   value: string;
   career: string;
   delta?: number;
+  percentile?: Percentile;
 }
 
-export function RowStat({ name, value, career, delta }: RowStatProps) {
+export function RowStat({
+  name,
+  value,
+  career,
+  delta,
+  percentile,
+}: RowStatProps) {
   return (
     <div
       style={{
@@ -31,7 +40,7 @@ export function RowStat({ name, value, career, delta }: RowStatProps) {
           justifyContent: 'center',
         }}
       >
-        {delta !== undefined && delta !== 0 && (
+        {percentile === undefined && delta !== undefined && delta !== 0 && (
           <img
             src={
               (delta ?? 0) > 0
@@ -40,6 +49,9 @@ export function RowStat({ name, value, career, delta }: RowStatProps) {
             }
             style={{ width: 12, height: 12 }}
           />
+        )}
+        {percentile !== undefined && (
+          <PercentileIndicator percentile={percentile} />
         )}
 
         <span

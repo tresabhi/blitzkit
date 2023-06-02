@@ -18,7 +18,7 @@ import { tankopedia } from '../core/blitz/tankopedia.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
 import getPeriodicStart from '../core/blitzstars/getPeriodStart.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
-import { tankAverages } from '../core/blitzstars/tankaverages.js';
+import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import cmdName from '../core/interaction/cmdName.js';
 import fullBlitzStarsStats from '../core/interaction/fullBlitzStarsStats.js';
 import { supportBlitzStars } from '../core/interaction/supportBlitzStars.js';

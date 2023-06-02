@@ -3,7 +3,7 @@ export type TableInput = TableInputEntry[];
 
 export default function cleanTable(input: TableInput) {
   return input
-    .filter((array) => array[1] !== `${-Infinity}`)
+    .filter((array) => array[1] !== undefined)
     .map((array) => (array.length === 0 ? '' : `**${array[0]}**: ${array[1]}`))
     .join('\n');
 }

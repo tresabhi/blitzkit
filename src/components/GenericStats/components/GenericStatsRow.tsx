@@ -31,7 +31,7 @@ export default function GenericStatsRow({ stat }: GenericStatsRowProps) {
           gap: 4,
         }}
       >
-        {stat[2] && <PercentileIndicator percentile={stat[2]} />}
+        {stat[2] !== undefined && <PercentileIndicator percentile={stat[2]} />}
         {stat[1]}
       </span>
     </div>
