@@ -7,18 +7,22 @@ import * as Breakdown from '../components/Breakdown/index.js';
 import NoBattlesInPeriod from '../components/NoBattlesInPeriod.js';
 import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
 import TitleBar from '../components/TitleBar.js';
-import Wrapper from '../components/Wrapper.js';
+import Wrapper, { WrapperSize } from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
-import fullBlitzStarsStats from '../core/actions/fullBlitzStarsStats.js';
-import { supportBlitzStars } from '../core/actions/supportBlitzStars.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import getWN8 from '../core/blitz/getWN8.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
+import resolveTankName from '../core/blitz/resolveTankName.js';
 import sumStats from '../core/blitz/sumStats.js';
+import { tankopedia } from '../core/blitz/tankopedia.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
 import last5AM from '../core/blitzstars/last5AM.js';
-import { tankopedia } from '../core/blitzstars/tankopedia.js';
+import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import cmdName from '../core/interaction/cmdName.js';
+import fullBlitzStarsStats from '../core/interaction/fullBlitzStarsStats.js';
+import infoEmbed from '../core/interaction/infoEmbed.js';
+import { supportBlitzStars } from '../core/interaction/supportBlitzStars.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
 import render from '../core/ui/render.js';
@@ -26,11 +30,10 @@ import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 import { TanksStats } from '../types/tanksStats.js';
-import resolveTankName from '../utilities/resolveTankName.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -75,36 +78,88 @@ export default {
       tankStatsOverTime[0] = accumulatedStats;
     }
 
-    const rows = Object.entries(tankStatsOverTime).map(
-      ([tankId, tankStats]) => {
-        const career = careerStats[tankId as unknown as number];
+    const tankStatsOverTimeEntries = Object.entries(tankStatsOverTime);
+    const todayWN8s = tankStatsOverTimeEntries.reduce<Record<number, number>>(
+      (accumulator, [tankIdString, tankStats]) => {
+        const tankId = Number(tankIdString);
 
-        return (
-          <Breakdown.Row
-            key={tankId}
-            name={tankId === '0' ? 'Today' : resolveTankName(Number(tankId))}
-            winrate={tankStats.wins / tankStats.battles}
-            careerWinrate={career.wins / career.battles}
-            WN8={-Infinity}
-            careerWN8={-Infinity}
-            damage={tankStats.damage_dealt / tankStats.battles}
-            careerDamage={career.damage_dealt / career.battles}
-            survival={tankStats.survived_battles / tankStats.battles}
-            careerSurvival={career.survived_battles / career.battles}
-            battles={tankStats.battles}
-            careerBattles={career.battles}
-            icon={
-              tankId === '0'
-                ? undefined
-                : tankopedia[tankId as unknown as number].images.normal
-            }
-          />
-        );
+        return tankId === 0
+          ? accumulator
+          : {
+              ...accumulator,
+              [tankId]: getWN8(tankAverages[tankId].all, tankStats),
+            };
       },
+      {},
     );
+    const careerWN8s = tankStatsOverTimeEntries.reduce<Record<number, number>>(
+      (accumulator, [tankIdString, tankStats]) => {
+        const tankId = Number(tankIdString);
+
+        return tankId === 0
+          ? accumulator
+          : {
+              ...accumulator,
+              [tankId]: getWN8(tankAverages[tankId].all, careerStats[tankId]),
+            };
+      },
+      {},
+    );
+    const todayWN8sEntries = Object.entries(todayWN8s);
+    const careerWN8sEntries = Object.entries(careerWN8s);
+
+    todayWN8s[0] =
+      todayWN8sEntries.reduce(
+        (accumulator, [tankIdString, wn8]) =>
+          accumulator + wn8 * tankStatsOverTime[Number(tankIdString)].battles,
+        0,
+      ) /
+      todayWN8sEntries.reduce(
+        (accumulator, [tankIdString]) =>
+          accumulator + tankStatsOverTime[Number(tankIdString)].battles,
+        0,
+      );
+    careerWN8s[0] =
+      careerWN8sEntries.reduce(
+        (accumulator, [tankIdString, wn8]) =>
+          accumulator + wn8 * careerStats[Number(tankIdString)].battles,
+        0,
+      ) /
+      careerWN8sEntries.reduce(
+        (accumulator, [tankIdString]) =>
+          accumulator + careerStats[Number(tankIdString)].battles,
+        0,
+      );
+
+    const rows = tankStatsOverTimeEntries.map(([tankIdString, tankStats]) => {
+      const tankId = Number(tankIdString);
+      const career = careerStats[tankId];
+
+      return (
+        <Breakdown.Row
+          key={tankId}
+          name={tankId === 0 ? 'Total' : resolveTankName(Number(tankIdString))}
+          winrate={tankStats.wins / tankStats.battles}
+          careerWinrate={career.wins / career.battles}
+          WN8={todayWN8s[tankId]}
+          careerWN8={careerWN8s[tankId]}
+          damage={tankStats.damage_dealt / tankStats.battles}
+          careerDamage={career.damage_dealt / career.battles}
+          survival={tankStats.survived_battles / tankStats.battles}
+          careerSurvival={career.survived_battles / career.battles}
+          battles={tankStats.battles}
+          careerBattles={career.battles}
+          icon={
+            tankId === 0
+              ? undefined
+              : tankopedia[tankIdString as unknown as number].images.normal
+          }
+        />
+      );
+    });
 
     const image = await render(
-      <Wrapper>
+      <Wrapper size={WrapperSize.Roomy}>
         <TitleBar
           name={accountInfo[id].nickname}
           nameDiscriminator={
@@ -125,6 +180,7 @@ export default {
 
         <PoweredByBlitzStars />
       </Wrapper>,
+      WrapperSize.Roomy,
     );
 
     const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -133,6 +189,15 @@ export default {
     );
 
     await interaction.editReply({
+      embeds:
+        rows.length >= 6
+          ? [
+              infoEmbed(
+                'Very large image!',
+                "Don't forget to oom in.",
+              ),
+            ]
+          : undefined,
       files: [image],
       components: [actionRow],
     });

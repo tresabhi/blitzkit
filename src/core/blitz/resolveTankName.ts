@@ -1,4 +1,4 @@
-import { tankopedia } from '../core/blitzstars/tankopedia.js';
+import { tankopedia } from './tankopedia.js';
 
 export default function resolveTankName(tankId: number) {
   const tankopediaName = tankopedia[tankId].name;

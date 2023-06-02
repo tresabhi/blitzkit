@@ -33,7 +33,7 @@ export function RowDiscriminator({ name, icon }: RowDiscriminatorProps) {
           display: 'block',
           whiteSpace: 'nowrap',
           overflow: 'hidden',
-          textOverflow: 'ellipsis',
+          textOverflow: 'clip',
           maxWidth: '100%',
         }}
       >

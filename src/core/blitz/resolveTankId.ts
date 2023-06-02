@@ -1,7 +1,7 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { go } from 'fuzzysort';
-import { tankopedia, tanks } from '../blitzstars/tankopedia.js';
 import errorEmbed from '../interaction/errorEmbed.js';
+import { TANKS, tankopedia } from './tankopedia.js';
 
 export default async function resolveTankId(
   interaction: ChatInputCommandInteraction<CacheType>,
@@ -10,7 +10,7 @@ export default async function resolveTankId(
   const number = Number(tank);
 
   if (Number.isNaN(number)) {
-    const searchResult = go(tank, tanks, { keys: ['name'], limit: 1 });
+    const searchResult = go(tank, TANKS, { keys: ['name'], limit: 1 });
 
     if (searchResult.length === 0) {
       await interaction.editReply({

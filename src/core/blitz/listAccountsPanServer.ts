@@ -7,15 +7,18 @@ export type AccountListWithServer = (Account & {
   server: 'com' | 'eu' | 'asia';
 })[];
 
-export default async function listAccountsPanServer(search: string, limit = 9) {
-  const normalizedSearch = encodeURIComponent(search.trim());
-  const normalizedLimit = Math.round(limit / 3);
+export const usernameRegex = /^[a-zA-Z0-9_]{3,24}$/;
 
-  if (normalizedSearch.length >= 3 && normalizedSearch.length <= 100) {
+export default async function listAccountsPanServer(search: string, limit = 9) {
+  const trimmedSearch = search.trim();
+  const normalizedLimit = Math.round(limit / 3);
+  const encodedSearch = encodeURIComponent(trimmedSearch);
+
+  if (usernameRegex.test(trimmedSearch)) {
     return (
       await Promise.all([
         getWargamingResponse<AccountList>(
-          `https://api.wotblitz.com/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${search}&limit=${normalizedLimit}`,
+          `https://api.wotblitz.com/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${encodedSearch}&limit=${normalizedLimit}`,
         ).then(
           (value) =>
             value &&
@@ -25,7 +28,7 @@ export default async function listAccountsPanServer(search: string, limit = 9) {
             })),
         ),
         getWargamingResponse<AccountList>(
-          `https://api.wotblitz.eu/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${search}&limit=${normalizedLimit}`,
+          `https://api.wotblitz.eu/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${encodedSearch}&limit=${normalizedLimit}`,
         ).then(
           (value) =>
             value &&
@@ -35,7 +38,7 @@ export default async function listAccountsPanServer(search: string, limit = 9) {
             })),
         ),
         getWargamingResponse<AccountList>(
-          `https://api.wotblitz.asia/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${search}&limit=${normalizedLimit}`,
+          `https://api.wotblitz.asia/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${encodedSearch}&limit=${normalizedLimit}`,
         ).then(
           (value) =>
             value &&

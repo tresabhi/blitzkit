@@ -1,6 +1,9 @@
+import { Percentile } from '../../constants/percentiles.js';
 import GenericStatsColumn from './components/GenericStatsColumn.js';
 
-export type Stat = [string, string | number];
+export type Stat =
+  | [string, string | number | undefined]
+  | [string, string | number | undefined, Percentile | undefined];
 
 export interface GenericStatsProps {
   stats: Stat[];
@@ -11,7 +14,7 @@ export default function GenericStats({
   stats,
   columnCount = 2,
 }: GenericStatsProps) {
-  const filteredStats = stats.filter(([, value]) => value !== `${-Infinity}`);
+  const filteredStats = stats.filter(([, value]) => value !== undefined);
   const itemsPerRow = Math.ceil(filteredStats.length / columnCount);
   const columns: Stat[][] = [];
 

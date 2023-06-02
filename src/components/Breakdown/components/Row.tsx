@@ -1,3 +1,4 @@
+import getWN8Percentile from '../../../core/blitz/getWN8Percentile.js';
 import { RowDiscriminator } from './RowDiscriminator.js';
 import { RowStat } from './RowStat.js';
 
@@ -22,8 +23,8 @@ export function Row({
   careerWinrate,
   WN8,
   careerWN8,
-  damage: averageDamage,
-  careerDamage: careerAverageDamage,
+  damage,
+  careerDamage,
   survival,
   careerSurvival,
   battles,
@@ -40,10 +41,16 @@ export function Row({
         delta={winrate - careerWinrate}
       />
       <RowStat
+        name="WN8"
+        value={WN8.toFixed(0)}
+        career={careerWN8.toFixed(0)}
+        percentile={getWN8Percentile(WN8)}
+      />
+      <RowStat
         name="Damage"
-        value={averageDamage.toFixed(2)}
-        career={careerAverageDamage.toFixed(2)}
-        delta={averageDamage - careerAverageDamage}
+        value={damage.toFixed(2)}
+        career={careerDamage.toFixed(2)}
+        delta={damage - careerDamage}
       />
       <RowStat
         name="Survival"

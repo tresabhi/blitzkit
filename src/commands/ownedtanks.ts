@@ -3,7 +3,8 @@ import markdownEscape from 'markdown-escape';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import { TANK_TYPE_EMOJIS, tankopedia } from '../core/blitzstars/tankopedia.js';
+import resolveTankName from '../core/blitz/resolveTankName.js';
+import { TANK_TYPE_EMOJIS, tankopedia } from '../core/blitz/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
@@ -11,7 +12,6 @@ import { args } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { TanksStats } from '../types/tanksStats.js';
-import resolveTankName from '../utilities/resolveTankName.js';
 
 const COMP_TANKS = [
   // light tanks

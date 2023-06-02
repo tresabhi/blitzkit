@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { go } from 'fuzzysort';
 import markdownEscape from 'markdown-escape';
-import { tankNames } from '../core/blitzstars/tankopedia.js';
+import { TANK_NAMES } from '../core/blitz/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import addTankChoices from '../core/options/addTankChoices.js';
@@ -27,7 +27,7 @@ export default {
   async execute(interaction) {
     const tank = interaction.options.getString('tank')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
-    const results = go(tank, tankNames, { limit }).map(
+    const results = go(tank, TANK_NAMES, { limit }).map(
       (result) => result.target,
     );
 

@@ -18,16 +18,9 @@ export interface AllStats {
   dropped_capture_points: number;
 }
 
-export interface SpecialStats {
-  winrate: number;
-  damageRatio: number;
-  kdr: number;
-  dpb: number;
-  kpb: number;
-  hpb: number;
-  spb: number;
-  hitRate: number;
-  survivalRate: number;
+export interface SupplementaryStats {
+  WN8: number;
+  tier: number;
 }
 
 export interface ClanStats {
