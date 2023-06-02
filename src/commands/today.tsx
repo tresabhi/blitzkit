@@ -33,7 +33,7 @@ import { TanksStats } from '../types/tanksStats.js';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -191,12 +191,7 @@ export default {
     await interaction.editReply({
       embeds:
         rows.length >= 6
-          ? [
-              infoEmbed(
-                'Very large image!',
-                "Don't forget to oom in.",
-              ),
-            ]
+          ? [infoEmbed('Very large image!', "Don't forget to oom in.")]
           : undefined,
       files: [image],
       components: [actionRow],
