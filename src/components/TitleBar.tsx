@@ -19,7 +19,7 @@ export default function TitleBar({
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: 8,
+        gap: 16,
       }}
     >
       <div style={{ display: 'flex', gap: 8, flex: 1 }}>
@@ -37,6 +37,7 @@ export default function TitleBar({
             style={{
               display: 'flex',
               gap: 4,
+              overflow: 'hidden',
             }}
           >
             <span
@@ -44,8 +45,6 @@ export default function TitleBar({
                 fontSize: 32,
                 color: theme.colors.textHighContrast,
                 fontWeight: 900,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
               }}
             >
@@ -58,8 +57,6 @@ export default function TitleBar({
                   fontSize: 32,
                   color: theme.colors.textLowContrast,
                   fontWeight: 900,
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
                 }}
               >
