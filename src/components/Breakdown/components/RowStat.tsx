@@ -31,7 +31,7 @@ export function RowStat({ name, value, career, delta }: RowStatProps) {
           justifyContent: 'center',
         }}
       >
-        {delta !== 0 && (
+        {delta !== undefined && delta !== 0 && (
           <img
             src={
               (delta ?? 0) > 0
