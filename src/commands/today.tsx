@@ -194,7 +194,7 @@ export default {
           ? [
               infoEmbed(
                 'Very large image!',
-                'Zoom in or click "Open in Browser."',
+                "Don't forget to oom in.",
               ),
             ]
           : undefined,
