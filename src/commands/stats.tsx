@@ -88,9 +88,12 @@ export default {
         WN8:
           entries.reduce((accumulator, [tankIdString, stats]) => {
             const tankId = Number(tankIdString);
-            const tankWN8 = getWN8(tankAverages[tankId].all, stats);
 
-            return accumulator + tankWN8 * stats.battles;
+            // edge case where new tanks don't have averages
+            if (tankAverages[tankId]) {
+              const tankWN8 = getWN8(tankAverages[tankId].all, stats);
+              return accumulator + tankWN8 * stats.battles;
+            } else return accumulator;
           }, 0) / totalBattles,
       };
 
