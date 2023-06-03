@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import getTankStats from '../core/blitz/getTankStats.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankName from '../core/blitz/resolveTankName.js';
 import { TANK_TYPE_EMOJIS, tankopedia } from '../core/blitz/tankopedia.js';
@@ -11,7 +12,6 @@ import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
-import { TanksStats } from '../types/tanksStats.js';
 
 const COMP_TANKS = [
   // light tanks
@@ -60,10 +60,8 @@ export default {
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
-    const tankStats = await getWargamingResponse<TanksStats>(
-      `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
-    );
-    const tanks = tankStats[id]
+    const tankStats = await getTankStats(interaction, server, id);
+    const tanks = tankStats
       .map((tankData) => tankopedia[tankData.tank_id])
       .filter((tank) => tank?.tier === tier);
 

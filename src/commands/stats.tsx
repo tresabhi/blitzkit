@@ -66,6 +66,7 @@ export default {
       stats = accountInfo[id].statistics.all;
     } else {
       const tankStatsOverTime = await getTankStatsOverTime(
+        interaction,
         server,
         id,
         getPeriodicStart(period),

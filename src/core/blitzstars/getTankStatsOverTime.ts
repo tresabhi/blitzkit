@@ -1,8 +1,7 @@
+import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { BlitzServer } from '../../constants/servers.js';
 import { AllStats } from '../../types/accountInfo.js';
-import { TanksStats } from '../../types/tanksStats.js';
-import getWargamingResponse from '../blitz/getWargamingResponse.js';
-import { args } from '../process/args.js';
+import getTankStats from '../blitz/getTankStats.js';
 
 export interface TankHistoryNode {
   all: AllStats;
@@ -45,19 +44,18 @@ export const emptyTankHistoryNode: TankHistoryNode = {
 export type TankHistory = TankHistoryNode[];
 
 export default async function getTankStatsOverTime(
+  interaction: ChatInputCommandInteraction<CacheType>,
   server: BlitzServer,
   id: number,
   start: number,
   end: number,
 ) {
-  const latestTankStatsRaw = await getWargamingResponse<TanksStats>(
-    `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
-  );
+  const latestTankStatsRaw = await getTankStats(interaction, server, id);
   const tankHistoriesResponse = await fetch(
     `https://www.blitzstars.com/api/tankhistories/for/${id}/`,
   );
   const tankHistories = (await tankHistoriesResponse.json()) as TankHistory;
-  const history = [...tankHistories, ...latestTankStatsRaw[id]];
+  const history = [...tankHistories, ...latestTankStatsRaw];
 
   // sort them even though most won't be used
   const tankSortedHistory: Record<number, TankHistory> = {};
