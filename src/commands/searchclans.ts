@@ -12,7 +12,7 @@ import { ClanList } from '../types/clanList.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()

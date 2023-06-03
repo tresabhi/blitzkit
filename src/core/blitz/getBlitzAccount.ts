@@ -1,14 +1,36 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { BlitzServer } from '../../constants/servers.js';
 import errorEmbed from '../interaction/errorEmbed.js';
-import listAccountsPanServer from './listAccountsPanServer.js';
+import listAccountsPanServer, {
+  usernamePatternWithoutPosition,
+} from './listAccountsPanServer.js';
 
 export const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
 
 export default async function getBlitzAccount(
   interaction: ChatInputCommandInteraction<CacheType>,
-  username: string,
 ) {
+  const commandUsername = interaction.options.getString('username');
+  const displayName = interaction.guild?.members.cache
+    .get(interaction.user.id)
+    ?.displayName.match(usernamePatternWithoutPosition)?.[0];
+  const username = commandUsername ?? displayName;
+
+  if (username === undefined) {
+    await interaction.editReply({
+      embeds: [
+        errorEmbed(
+          'Username could not be inferred',
+          "You didn't provide me a username in the command nor was I able to infer your Blitz username from your Discord nickname. Try providing a username manually in the command or using the `/verify` command to set your Discord nickname to your Blitz username.",
+        ),
+      ],
+    });
+
+    throw new Error(
+      `No username provided commandUsername: ${commandUsername} displayName: ${displayName} username: ${username}`,
+    );
+  }
+
   if (serverAndIdPattern.test(username)) {
     const [server, accountId] = username.split('/');
     return { server: server as BlitzServer, id: Number(accountId) };
@@ -22,7 +44,7 @@ export default async function getBlitzAccount(
         embeds: [
           errorEmbed(
             'Could not find user',
-            `I couldn't find user \`${username}\`. Try selecting a username from the search result.`,
+            `I couldn't find user \`${username}\`. Try providing a username manually or using the \`/verify\` command to set your Discord nickname to your Blitz username.`,
           ),
         ],
       });

@@ -40,7 +40,7 @@ import { AccountInfo, AllStats } from '../types/accountInfo.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -56,8 +56,7 @@ export default {
       interaction.options.getString('tank')!,
     );
     const period = interaction.options.getString('period') as StatPeriod;
-    const username = interaction.options.getString('username')!;
-    const blitzAccount = await getBlitzAccount(interaction, username);
+    const blitzAccount = await getBlitzAccount(interaction);
     const { id, server } = blitzAccount;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,

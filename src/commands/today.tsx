@@ -32,7 +32,7 @@ import { PlayerClanData } from '../types/playerClanData.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -41,9 +41,7 @@ export default {
     .addStringOption(addUsernameOption),
 
   async execute(interaction) {
-    const username = interaction.options.getString('username')!;
-    const blitzAccount = await getBlitzAccount(interaction, username);
-    const { id, server } = blitzAccount;
+    const { id, server } = await getBlitzAccount(interaction);
     const tankStatsOverTime = await getTankStatsOverTime(
       interaction,
       server,

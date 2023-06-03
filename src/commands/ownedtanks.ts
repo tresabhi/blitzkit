@@ -36,7 +36,7 @@ const COMP_TANKS = [
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -54,8 +54,7 @@ export default {
 
   async execute(interaction) {
     const tier = interaction.options.getInteger('tier')!;
-    const name = interaction.options.getString('username')!;
-    const account = await getBlitzAccount(interaction, name);
+    const account = await getBlitzAccount(interaction);
     const { id, server } = account;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
