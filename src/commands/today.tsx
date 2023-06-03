@@ -90,15 +90,16 @@ export default {
       },
       {},
     );
-    const careerWN8s = tankStatsOverTimeEntries.reduce<Record<number, number>>(
-      (accumulator, [tankIdString]) => {
-        const tankId = Number(tankIdString);
-
-        return tankId === 0 || tankAverages[tankId] === undefined
+    const careerWN8s = careerTankStatsRaw.reduce<Record<number, number>>(
+      (accumulator, { tank_id }) => {
+        return tank_id === 0 || tankAverages[tank_id] === undefined
           ? accumulator
           : {
               ...accumulator,
-              [tankId]: getWN8(tankAverages[tankId].all, careerStats[tankId]),
+              [tank_id]: getWN8(
+                tankAverages[tank_id].all,
+                careerStats[tank_id],
+              ),
             };
       },
       {},
@@ -119,13 +120,17 @@ export default {
       );
     careerWN8s[0] =
       careerWN8sEntries.reduce(
-        (accumulator, [tankIdString, wn8]) =>
-          accumulator + wn8 * careerStats[Number(tankIdString)].battles,
+        (accumulator, [tankIdString, WN8]) =>
+          isNaN(WN8)
+            ? accumulator
+            : accumulator + WN8 * careerStats[Number(tankIdString)].battles,
         0,
       ) /
       careerWN8sEntries.reduce(
-        (accumulator, [tankIdString]) =>
-          accumulator + careerStats[Number(tankIdString)].battles,
+        (accumulator, [tankIdString, WN8]) =>
+          isNaN(WN8)
+            ? accumulator
+            : accumulator + careerStats[Number(tankIdString)].battles,
         0,
       );
 

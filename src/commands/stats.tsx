@@ -11,6 +11,7 @@ import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import getTankStats from '../core/blitz/getTankStats.js';
 import getWN8 from '../core/blitz/getWN8.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import sumStats from '../core/blitz/sumStats.js';
@@ -59,11 +60,38 @@ export default {
     const clanData = await getWargamingResponse<PlayerClanData>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${id}&extra=clan`,
     );
+    const tankStats = await getTankStats(interaction, server, id);
     let stats: AllStats;
     let supplementaryStats: SupplementaryStats | undefined;
+    let hasWN8AccumulatedAtAll = false;
 
     if (period === 'career') {
       stats = accountInfo[id].statistics.all;
+      const totalBattles = tankStats.reduce(
+        (accumulator, { all }) => accumulator + all.battles,
+        0,
+      );
+
+      supplementaryStats = {
+        tier:
+          tankStats.reduce(
+            (accumulator, { tank_id, all }) =>
+              accumulator + tankopedia[tank_id].tier * all.battles,
+            0,
+          ) / totalBattles,
+        WN8:
+          tankStats.reduce((accumulator, { tank_id, all }) => {
+            if (tankAverages[tank_id]) {
+              const tankWN8 = getWN8(tankAverages[tank_id].all, all);
+
+              if (isNaN(tankWN8)) return accumulator;
+
+              hasWN8AccumulatedAtAll = true;
+
+              return accumulator + tankWN8 * all.battles;
+            } else return accumulator;
+          }, 0) / totalBattles,
+      };
     } else {
       const tankStatsOverTime = await getTankStatsOverTime(
         interaction,
@@ -78,33 +106,35 @@ export default {
         0,
       );
 
-      let hasWN8AccumulatedAtAll = false;
-
       supplementaryStats = {
         tier:
           entries.reduce((accumulator, [tankIdString, stats]) => {
-            const tankId = Number(tankIdString);
+            const tankId = parseInt(tankIdString);
             const tankTier = tankopedia[tankId].tier;
 
             return accumulator + tankTier * stats.battles;
           }, 0) / totalBattles,
         WN8:
           entries.reduce((accumulator, [tankIdString, stats]) => {
-            const tankId = Number(tankIdString);
+            const tankId = parseInt(tankIdString);
 
             // edge case where new tanks don't have averages
             if (tankAverages[tankId]) {
               const tankWN8 = getWN8(tankAverages[tankId].all, stats);
+
+              if (isNaN(tankWN8)) return accumulator;
+
               hasWN8AccumulatedAtAll = true;
+
               return accumulator + tankWN8 * stats.battles;
             } else return accumulator;
           }, 0) / totalBattles,
       };
 
-      if (!hasWN8AccumulatedAtAll) supplementaryStats.WN8 = undefined;
-
       stats = sumStats(entries.map(([, stats]) => stats));
     }
+
+    if (!hasWN8AccumulatedAtAll) supplementaryStats.WN8 = undefined;
 
     const image = await render(
       <Wrapper>
