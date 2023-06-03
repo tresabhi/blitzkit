@@ -21,7 +21,6 @@ import last5AM from '../core/blitzstars/last5AM.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import cmdName from '../core/interaction/cmdName.js';
 import fullBlitzStarsStats from '../core/interaction/fullBlitzStarsStats.js';
-import infoEmbed from '../core/interaction/infoEmbed.js';
 import { supportBlitzStars } from '../core/interaction/supportBlitzStars.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
@@ -33,7 +32,7 @@ import { TanksStats } from '../types/tanksStats.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -83,7 +82,7 @@ export default {
       (accumulator, [tankIdString, tankStats]) => {
         const tankId = Number(tankIdString);
 
-        return tankId === 0
+        return tankId === 0 || tankAverages[tankId] === undefined
           ? accumulator
           : {
               ...accumulator,
@@ -93,10 +92,10 @@ export default {
       {},
     );
     const careerWN8s = tankStatsOverTimeEntries.reduce<Record<number, number>>(
-      (accumulator, [tankIdString, tankStats]) => {
+      (accumulator, [tankIdString]) => {
         const tankId = Number(tankIdString);
 
-        return tankId === 0
+        return tankId === 0 || tankAverages[tankId] === undefined
           ? accumulator
           : {
               ...accumulator,
@@ -141,8 +140,8 @@ export default {
           name={tankId === 0 ? 'Total' : resolveTankName(Number(tankIdString))}
           winrate={tankStats.wins / tankStats.battles}
           careerWinrate={career.wins / career.battles}
-          WN8={todayWN8s[tankId]}
-          careerWN8={careerWN8s[tankId]}
+          WN8={isNaN(todayWN8s[tankId]) ? undefined : todayWN8s[tankId]}
+          careerWN8={isNaN(careerWN8s[tankId]) ? undefined : careerWN8s[tankId]}
           damage={tankStats.damage_dealt / tankStats.battles}
           careerDamage={career.damage_dealt / career.battles}
           survival={tankStats.survived_battles / tankStats.battles}
@@ -189,10 +188,6 @@ export default {
     );
 
     await interaction.editReply({
-      embeds:
-        rows.length >= 6
-          ? [infoEmbed('Very large image!', "Don't forget to oom in.")]
-          : undefined,
       files: [image],
       components: [actionRow],
     });
