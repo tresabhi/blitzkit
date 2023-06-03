@@ -6,8 +6,8 @@ export interface RowProps {
   name: string;
   winrate: number;
   careerWinrate: number;
-  WN8: number;
-  careerWN8: number;
+  WN8?: number;
+  careerWN8?: number;
   damage: number;
   careerDamage: number;
   survival: number;
@@ -42,9 +42,9 @@ export function Row({
       />
       <RowStat
         name="WN8"
-        value={WN8.toFixed(0)}
-        career={careerWN8.toFixed(0)}
-        percentile={getWN8Percentile(WN8)}
+        value={WN8 === undefined ? '--' : WN8.toFixed(0)}
+        career={careerWN8 === undefined ? '--' : careerWN8.toFixed(0)}
+        percentile={WN8 === undefined ? undefined : getWN8Percentile(WN8)}
       />
       <RowStat
         name="Damage"

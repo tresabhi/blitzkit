@@ -82,7 +82,7 @@ export default {
       (accumulator, [tankIdString, tankStats]) => {
         const tankId = Number(tankIdString);
 
-        return tankId === 0
+        return tankId === 0 || tankAverages[tankId] === undefined
           ? accumulator
           : {
               ...accumulator,
@@ -92,10 +92,10 @@ export default {
       {},
     );
     const careerWN8s = tankStatsOverTimeEntries.reduce<Record<number, number>>(
-      (accumulator, [tankIdString, tankStats]) => {
+      (accumulator, [tankIdString]) => {
         const tankId = Number(tankIdString);
 
-        return tankId === 0
+        return tankId === 0 || tankAverages[tankId] === undefined
           ? accumulator
           : {
               ...accumulator,
@@ -140,8 +140,8 @@ export default {
           name={tankId === 0 ? 'Total' : resolveTankName(Number(tankIdString))}
           winrate={tankStats.wins / tankStats.battles}
           careerWinrate={career.wins / career.battles}
-          WN8={todayWN8s[tankId]}
-          careerWN8={careerWN8s[tankId]}
+          WN8={isNaN(todayWN8s[tankId]) ? undefined : todayWN8s[tankId]}
+          careerWN8={isNaN(careerWN8s[tankId]) ? undefined : careerWN8s[tankId]}
           damage={tankStats.damage_dealt / tankStats.battles}
           careerDamage={career.damage_dealt / career.battles}
           survival={tankStats.survived_battles / tankStats.battles}
