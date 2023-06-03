@@ -11,6 +11,7 @@ import Wrapper, { WrapperSize } from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import getTankStats from '../core/blitz/getTankStats.js';
 import getWN8 from '../core/blitz/getWN8.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankName from '../core/blitz/resolveTankName.js';
@@ -28,7 +29,6 @@ import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
-import { TanksStats } from '../types/tanksStats.js';
 
 export default {
   inProduction: true,
@@ -45,6 +45,7 @@ export default {
     const blitzAccount = await getBlitzAccount(interaction, username);
     const { id, server } = blitzAccount;
     const tankStatsOverTime = await getTankStatsOverTime(
+      interaction,
       server,
       id,
       last5AM().getTime() / 1000,
@@ -56,9 +57,7 @@ export default {
     const clanData = await getWargamingResponse<PlayerClanData>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${id}&extra=clan`,
     );
-    const careerTankStatsRaw = await getWargamingResponse<TanksStats>(
-      `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
-    );
+    const careerTankStatsRaw = await getTankStats(interaction, server, id);
     const careerStats: Record<number, AllStats> = {
       0: accountInfo[id].statistics.all,
     };
@@ -67,7 +66,7 @@ export default {
     Object.entries(tankStatsOverTime).forEach(([, tankStats]) => {
       allStatsToAccumulate.push(tankStats);
     });
-    Object.entries(careerTankStatsRaw[id]).forEach(([, tankStats]) => {
+    Object.entries(careerTankStatsRaw).forEach(([, tankStats]) => {
       careerStats[tankStats.tank_id] = tankStats.all;
     });
 

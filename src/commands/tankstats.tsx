@@ -12,6 +12,7 @@ import { BLITZ_SERVERS } from '../constants/servers.js';
 import tanksAutocomplete from '../core/autocomplete/tanks.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
+import getTankStats from '../core/blitz/getTankStats.js';
 import getWN8 from '../core/blitz/getWN8.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankId from '../core/blitz/resolveTankId.js';
@@ -36,7 +37,6 @@ import { args } from '../core/process/args.js';
 import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
-import { TanksStats } from '../types/tanksStats.js';
 
 export default {
   inProduction: true,
@@ -62,18 +62,17 @@ export default {
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
-    const tankStats = await getWargamingResponse<TanksStats>(
-      `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
-    );
+    const tankStats = await getTankStats(interaction, server, id);
     let stats: AllStats;
     const tankId = Number(tank);
 
     if (period === 'career') {
       stats =
-        tankStats[id].find((stats) => stats.tank_id === tankId)?.all ??
+        tankStats.find((stats) => stats.tank_id === tankId)?.all ??
         emptyAllStats;
     } else {
       const tankStatsOverTime = await getTankStatsOverTime(
+        interaction,
         server,
         id,
         getPeriodicStart(period),

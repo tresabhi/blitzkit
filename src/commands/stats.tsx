@@ -66,6 +66,7 @@ export default {
       stats = accountInfo[id].statistics.all;
     } else {
       const tankStatsOverTime = await getTankStatsOverTime(
+        interaction,
         server,
         id,
         getPeriodicStart(period),
@@ -76,6 +77,8 @@ export default {
         (accumulator, [, stats]) => accumulator + stats.battles,
         0,
       );
+
+      let hasWN8AccumulatedAtAll = false;
 
       supplementaryStats = {
         tier:
@@ -92,10 +95,13 @@ export default {
             // edge case where new tanks don't have averages
             if (tankAverages[tankId]) {
               const tankWN8 = getWN8(tankAverages[tankId].all, stats);
+              hasWN8AccumulatedAtAll = true;
               return accumulator + tankWN8 * stats.battles;
             } else return accumulator;
           }, 0) / totalBattles,
       };
+
+      if (!hasWN8AccumulatedAtAll) supplementaryStats.WN8 = undefined;
 
       stats = sumStats(entries.map(([, stats]) => stats));
     }
