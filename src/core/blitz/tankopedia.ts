@@ -1,5 +1,4 @@
 import { WargamingResponse } from '../../types/wargamingResponse.js';
-import URLToBase64 from '../ui/URLToBase64.js';
 
 /*
 "1": {
@@ -57,16 +56,16 @@ export const TANK_IDS = Object.keys(tankopedia).map((id) => Number(id));
 export const TANKS = TANK_IDS.map((id) => tankopedia[id]);
 export const TANK_NAMES = TANKS.map((tank) => tank.name);
 
-console.log('Encoding tank images...');
-await Promise.all(
-  Object.entries(tankopedia).map(async ([, tank]) => {
-    try {
-      tank.images.normal = await URLToBase64(tank.images.normal);
-    } catch (error) {
-      console.warn(
-        `Failed to encode tank image for ${tank.images.normal}: ${error}`,
-      );
-    }
-  }),
-);
-console.log('Encoded tank images');
+// console.log('Encoding tank images...');
+// await Promise.all(
+//   Object.entries(tankopedia).map(async ([, tank]) => {
+//     try {
+//       tank.images.normal = await URLToBase64(tank.images.normal);
+//     } catch (error) {
+//       console.warn(
+//         `Failed to encode tank image for ${tank.images.normal}: ${error}`,
+//       );
+//     }
+//   }),
+// );
+// console.log('Encoded tank images');
