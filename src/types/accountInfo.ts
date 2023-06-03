@@ -19,7 +19,8 @@ export interface AllStats {
 }
 
 export interface SupplementaryStats {
-  WN8: number;
+  // if undefined, WN8 is not available for tanks without averages
+  WN8?: number;
   tier: number;
 }
 

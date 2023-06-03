@@ -17,10 +17,14 @@ export default function GenericAllStats({
         ['Winrate', `${(100 * (stats.wins / stats.battles)).toFixed(2)}%`],
         [
           'WN8',
-          supplementaryStats?.WN8.toFixed(0),
           supplementaryStats
-            ? getWN8Percentile(supplementaryStats.WN8)
+            ? supplementaryStats.WN8 === undefined
+              ? '--'
+              : supplementaryStats.WN8.toFixed(0)
             : undefined,
+          supplementaryStats?.WN8 === undefined
+            ? undefined
+            : getWN8Percentile(supplementaryStats.WN8),
         ],
         [
           'Survival',
