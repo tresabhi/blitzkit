@@ -80,11 +80,7 @@ export default async function interactionCreate(
       return;
     }
 
-    try {
-      if (command.autocomplete) command.autocomplete(interaction);
-    } catch (error) {
-      console.error(error);
-    }
+    if (command.autocomplete) command.autocomplete(interaction);
   } else if (interaction.isChatInputCommand()) {
     const command = commandCollection.get(interaction.commandName);
 
@@ -95,22 +91,8 @@ export default async function interactionCreate(
       return;
     }
 
-    try {
-      await interaction.deferReply();
-      console.log(interaction.toString());
-      command.execute(interaction);
-    } catch (error) {
-      console.error(error);
-      if (interaction.replied || interaction.deferred) {
-        await interaction.followUp({
-          content: 'There was an error while executing this command!',
-          ephemeral: true,
-        });
-      } else {
-        await interaction.editReply({
-          content: 'There was an error while executing this command!',
-        });
-      }
-    }
+    console.log(interaction.toString());
+    await interaction.deferReply();
+    command.execute(interaction);
   }
 }
