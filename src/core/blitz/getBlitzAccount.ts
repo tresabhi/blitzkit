@@ -1,6 +1,6 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { BlitzServer } from '../../constants/servers.js';
-import errorEmbed from '../interaction/errorEmbed.js';
+import negativeEmbed from '../interaction/negativeEmbed.js';
 import listAccountsPanServer, {
   usernamePatternWithoutPosition,
 } from './listAccountsPanServer.js';
@@ -19,7 +19,7 @@ export default async function getBlitzAccount(
   if (username === undefined) {
     await interaction.editReply({
       embeds: [
-        errorEmbed(
+        negativeEmbed(
           'Username could not be inferred',
           "You didn't provide me a username in the command nor was I able to infer your Blitz username from your Discord nickname. Try providing a username manually in the command or using the `/verify` command to set your Discord nickname to your Blitz username.",
         ),
@@ -42,7 +42,7 @@ export default async function getBlitzAccount(
     } else {
       await interaction.editReply({
         embeds: [
-          errorEmbed(
+          negativeEmbed(
             'Could not find user',
             `I couldn't find user \`${username}\`. Try providing a username manually or using the \`/verify\` command to set your Discord nickname to your Blitz username.`,
           ),

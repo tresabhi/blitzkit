@@ -58,11 +58,19 @@ try {
   console.log(`Successfully refreshed ${publicData.length} public command(s).`);
 
   console.log(`Refreshing ${guildCommands.length} guild command(s).`);
-  const guildData = (await rest.put(
-    Routes.applicationGuildCommands(getClientId(), discord.sklld_guild_id),
-    { body: guildCommands },
-  )) as RESTPostAPIChatInputApplicationCommandsJSONBody[];
-  console.log(`Successfully refreshed ${guildData.length} guild command(s).`);
+  const guildData = [
+    ...((await rest.put(
+      Routes.applicationGuildCommands(getClientId(), discord.sklld_guild_id),
+      { body: guildCommands },
+    )) as RESTPostAPIChatInputApplicationCommandsJSONBody[]),
+    ...((await rest.put(
+      Routes.applicationGuildCommands(getClientId(), discord.tres_guild_id),
+      { body: guildCommands },
+    )) as RESTPostAPIChatInputApplicationCommandsJSONBody[]),
+  ];
+  console.log(
+    `Successfully refreshed ${guildData.length / 2} guild command(s).`,
+  );
 } catch (error) {
   console.error(error);
 }

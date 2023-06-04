@@ -1,6 +1,6 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { BlitzServer } from '../../constants/servers.js';
-import errorEmbed from '../interaction/errorEmbed.js';
+import negativeEmbed from '../interaction/negativeEmbed.js';
 import { serverAndIdPattern } from './getBlitzAccount.js';
 import listClansPanServer from './listClansPanServer.js';
 
@@ -19,7 +19,7 @@ export default async function getBlitzClan(
     } else {
       await interaction.editReply({
         embeds: [
-          errorEmbed(
+          negativeEmbed(
             'Could not find clan',
             `I couldn't find clan \`${clan}\`. Try selecting a username from the search result.`,
           ),

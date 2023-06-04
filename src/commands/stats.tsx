@@ -51,8 +51,7 @@ export default {
 
   async execute(interaction) {
     const period = interaction.options.getString('period') as StatPeriod;
-    const blitzAccount = await getBlitzAccount(interaction);
-    const { id, server } = blitzAccount;
+    const { id, server } = await getBlitzAccount(interaction);
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );

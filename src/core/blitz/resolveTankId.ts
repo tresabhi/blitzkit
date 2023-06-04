@@ -1,6 +1,6 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { go } from 'fuzzysort';
-import errorEmbed from '../interaction/errorEmbed.js';
+import negativeEmbed from '../interaction/negativeEmbed.js';
 import { TANKS, tankopedia } from './tankopedia.js';
 
 export default async function resolveTankId(
@@ -15,7 +15,7 @@ export default async function resolveTankId(
     if (searchResult.length === 0) {
       await interaction.editReply({
         embeds: [
-          errorEmbed(
+          negativeEmbed(
             'Tank not found',
             `Could not find tank by the name "${tank}".`,
           ),
@@ -32,7 +32,7 @@ export default async function resolveTankId(
     } else {
       await interaction.editReply({
         embeds: [
-          errorEmbed(
+          negativeEmbed(
             'Tank not found',
             `Could not find tank by the ID "${number}".`,
           ),
