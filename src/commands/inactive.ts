@@ -83,10 +83,6 @@ export default {
           ),
       ],
     });
-
-    console.log(
-      `Displaying inactive members in ${clanInfo[id].name} for ${threshold} days`,
-    );
   },
 
   autocomplete: clanAutocomplete,

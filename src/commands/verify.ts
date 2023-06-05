@@ -48,10 +48,6 @@ export default {
         ],
       });
 
-      console.warn(
-        `${interaction.user.username} failed to verify because of no nickname permission.`,
-      );
-
       return;
     }
 
@@ -83,10 +79,6 @@ export default {
                 ],
               });
 
-              console.warn(
-                `${interaction.user.username} failed to verify because of no manage roles permission.`,
-              );
-
               return;
             }
 
@@ -106,10 +98,6 @@ export default {
                 ),
             ],
           });
-
-          console.log(
-            `${interaction.user.username} verified as ${accountInfo[id].nickname}${clanTag}`,
-          );
         } catch (error) {
           await interaction.editReply({
             embeds: [
@@ -121,8 +109,6 @@ export default {
                 ),
             ],
           });
-
-          console.warn('Failed to verify because of higher permissions.');
         }
       }
     }

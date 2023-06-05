@@ -75,8 +75,6 @@ export default {
         ),
       ],
     });
-
-    console.log(`Displaying player info for ${accounts[id].nickname}`);
   },
 
   autocomplete: usernameAutocomplete,

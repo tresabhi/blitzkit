@@ -93,10 +93,6 @@ export default {
         ),
       ],
     });
-
-    console.log(
-      `Displaying ${accountInfo[id].nickname}'s owned tanks in tier ${tier}`,
-    );
   },
 
   autocomplete: usernameAutocomplete,

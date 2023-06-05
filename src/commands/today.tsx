@@ -194,7 +194,6 @@ export default {
       components: [actionRow],
     });
 
-    console.log(`Showing daily breakdown for ${accountInfo[id].nickname}`);
   },
 
   autocomplete: usernameAutocomplete,

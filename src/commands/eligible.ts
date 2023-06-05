@@ -171,9 +171,5 @@ export default {
         ? [positiveEmbed(title, body)]
         : [negativeEmbed(title, body)],
     });
-
-    console.log(
-      `Displaying ${server}/${id}'s eligibility information for ${clan}`,
-    );
   },
 } satisfies CommandRegistry;

@@ -116,8 +116,6 @@ export default {
       files: [image],
       components: [actionRow],
     });
-
-    console.log(`Showing stats for ${accountInfo[id].nickname}`);
   },
 
   autocomplete: (interaction) => {

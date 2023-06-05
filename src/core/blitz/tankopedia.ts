@@ -1,5 +1,5 @@
+import { StaticPool } from 'node-worker-threads-pool';
 import { WargamingResponse } from '../../types/wargamingResponse.js';
-import URLToBase64 from '../ui/URLToBase64.js';
 
 export interface TankopediaEntry {
   name: string;
@@ -39,12 +39,38 @@ export const TANK_IDS = Object.keys(tankopedia).map((id) => Number(id));
 export const TANKS = TANK_IDS.map((id) => tankopedia[id]);
 export const TANK_NAMES = TANKS.map((tank) => tank.name);
 
-console.log('Encoding tank images...');
-await Promise.all(
-  Object.entries(tankopedia).map(async ([, tank]) => {
-    if (tank.images.normal) {
-      tank.images.normal = await URLToBase64(tank.images.normal);
-    }
-  }),
-);
-console.log('Encoded tank images');
+const imageEncodingStaticPool = new StaticPool({
+  size: 1,
+  task: async (data: Tankopedia) => {
+    console.log('Encoding tank images...');
+
+    const encoded: [number, string][] = [];
+
+    await Promise.all(
+      Object.entries(data as Tankopedia).map(
+        async ([, tank]: [string, TankopediaEntry]) => {
+          if (tank.images.normal) {
+            const response = await fetch(tank.images.normal);
+            const blob = await response.arrayBuffer();
+            const base64 = `data:${response.headers.get(
+              'content-type',
+            )};base64,${Buffer.from(blob).toString('base64')}`;
+            encoded.push([tank.tank_id, base64]);
+          }
+        },
+      ),
+    );
+
+    console.log('Encoded tank images');
+
+    return encoded;
+  },
+});
+
+imageEncodingStaticPool.exec(tankopedia).then((encoded) => {
+  console.log('Implementing encoded images...');
+  encoded.forEach(([tankId, image]) => {
+    tankopedia[tankId].images.normal = image;
+  });
+  console.log('Implemented encoded images');
+});

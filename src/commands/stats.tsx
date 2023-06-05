@@ -173,7 +173,6 @@ export default {
       components: [actionRow],
     });
 
-    console.log(`Showing stats for ${accountInfo[id].nickname}`);
   },
 
   autocomplete: usernameAutocomplete,

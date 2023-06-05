@@ -50,7 +50,5 @@ export default {
         ),
       ],
     });
-
-    console.log(`Clan search results for "${clan}"`);
   },
 } satisfies CommandRegistry;

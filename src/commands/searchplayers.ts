@@ -58,7 +58,5 @@ export default {
         ),
       ],
     });
-
-    console.log(`Player search results for "${name}"`);
   },
 } satisfies CommandRegistry;
