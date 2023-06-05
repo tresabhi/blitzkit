@@ -172,7 +172,6 @@ export default {
       files: [image],
       components: [actionRow],
     });
-
   },
 
   autocomplete: usernameAutocomplete,
