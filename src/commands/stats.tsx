@@ -4,7 +4,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import GenericAllStats from '../components/GenericAllStats.js';
-import NoBattlesInPeriod from '../components/NoBattlesInPeriod.js';
+import NoData, { NoDataType } from '../components/NoData.js';
 import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
@@ -151,7 +151,7 @@ export default {
           } • ${new Date().toDateString()} • ${BLITZ_SERVERS[server]}`}
         />
 
-        {stats.battles === 0 && <NoBattlesInPeriod />}
+        {stats.battles === 0 && <NoData type={NoDataType.Battles} />}
         {stats.battles > 0 && (
           <GenericAllStats
             stats={stats}

@@ -4,7 +4,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import * as Breakdown from '../components/Breakdown/index.js';
-import NoBattlesInPeriod from '../components/NoBattlesInPeriod.js';
+import NoData, { NoDataType } from '../components/NoData.js';
 import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
@@ -176,7 +176,7 @@ export default {
           }`}
         />
 
-        {rows.length === 0 && <NoBattlesInPeriod />}
+        {rows.length === 0 && <NoData type={NoDataType.Battles} />}
         {rows.length > 0 && <Breakdown.Root>{rows}</Breakdown.Root>}
 
         <PoweredByBlitzStars />
