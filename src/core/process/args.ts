@@ -1,4 +1,5 @@
 import { argv } from 'process';
+import errorWithCause from './errorWithCause.js';
 
 type ArgumentName = 'discord-token' | 'wargaming-application-id';
 
@@ -16,6 +17,9 @@ argv.forEach((arg) => {
 
 Object.keys(args).forEach((arg) => {
   if (args[arg as ArgumentName] === '') {
-    throw new Error(`Missing argument: ${arg}`);
+    throw errorWithCause(
+      `Missing argument: ${arg}`,
+      'Missing required auth key.',
+    );
   }
 });

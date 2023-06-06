@@ -1,6 +1,6 @@
-import errorEmbed from './errorEmbed.js';
+import negativeEmbed from './negativeEmbed.js';
 
-export const noMember = errorEmbed(
+export const noMember = negativeEmbed(
   'User of command is not a member',
   'Discord claims that the user of this command does not have an account... strange!',
 );

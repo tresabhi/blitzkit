@@ -36,8 +36,7 @@ export default {
 
   async execute(interaction) {
     const sortBy = (interaction.options.getString('sort') ?? 'name') as SortBy;
-    const name = interaction.options.getString('username')!;
-    const account = await getBlitzAccount(interaction, name);
+    const account = await getBlitzAccount(interaction);
     const { id, server } = account;
     const accounts = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
@@ -76,8 +75,6 @@ export default {
         ),
       ],
     });
-
-    console.log(`Displaying player info for ${accounts[id].nickname}`);
   },
 
   autocomplete: usernameAutocomplete,

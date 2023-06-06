@@ -1,6 +1,6 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { go } from 'fuzzysort';
-import errorEmbed from '../interaction/errorEmbed.js';
+import errorWithCause from '../process/errorWithCause.js';
 import { TANKS, tankopedia } from './tankopedia.js';
 
 export default async function resolveTankId(
@@ -13,16 +13,10 @@ export default async function resolveTankId(
     const searchResult = go(tank, TANKS, { keys: ['name'], limit: 1 });
 
     if (searchResult.length === 0) {
-      await interaction.editReply({
-        embeds: [
-          errorEmbed(
-            'Tank not found',
-            `Could not find tank by the name "${tank}".`,
-          ),
-        ],
-      });
-
-      throw new Error(`Tank not found by name "${tank}"`);
+      throw errorWithCause(
+        'Tank not found',
+        `Could not find tank by the name "${tank}".`,
+      );
     } else {
       return searchResult[0].obj.tank_id;
     }
@@ -30,16 +24,10 @@ export default async function resolveTankId(
     if (tankopedia[number]) {
       return number;
     } else {
-      await interaction.editReply({
-        embeds: [
-          errorEmbed(
-            'Tank not found',
-            `Could not find tank by the ID "${number}".`,
-          ),
-        ],
-      });
-
-      throw new Error(`Tank not found by ID "${number}"`);
+      throw errorWithCause(
+        'Tank not found',
+        `Could not find tank by the ID "${number}".`,
+      );
     }
   }
 }

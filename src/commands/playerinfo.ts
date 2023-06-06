@@ -22,8 +22,7 @@ export default {
     .addStringOption(addUsernameOption),
 
   async execute(interaction) {
-    const name = interaction.options.getString('username')!;
-    const account = await getBlitzAccount(interaction, name);
+    const account = await getBlitzAccount(interaction);
     const { id, server } = account;
     const accounts = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
@@ -60,8 +59,6 @@ export default {
         ),
       ],
     });
-
-    console.log(`Displaying player info for ${accountInfo.nickname}`);
   },
 
   autocomplete: usernameAutocomplete,

@@ -2,7 +2,6 @@ import { Resvg } from '@resvg/resvg-js';
 import { readFile } from 'fs';
 import { ReactNode } from 'react';
 import satori from 'satori';
-import { WRAPPER_SIZE_WIDTHS, WrapperSize } from '../../components/Wrapper.js';
 
 const FONT_NAME = 'Roboto';
 const FONT_FILES = ['Roboto', 'Roboto-Bold', 'Roboto-Black'];
@@ -21,12 +20,9 @@ const [robotoFlex, robotoFlexBold, robotoFlexBlack] = await Promise.all(
 );
 console.log('Fonts imported');
 
-export default async function render(
-  element: ReactNode,
-  size: WrapperSize = WrapperSize.Regular,
-) {
+export default async function render(element: ReactNode) {
   const svg = await satori(element, {
-    width: WRAPPER_SIZE_WIDTHS[size],
+    width: 640,
     fonts: [
       { data: robotoFlex, name: FONT_NAME, weight: 400 },
       { data: robotoFlexBold, name: FONT_NAME, weight: 700 },

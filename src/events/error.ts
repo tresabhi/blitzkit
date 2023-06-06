@@ -1,4 +1,4 @@
-import { Client, EmbedBuilder, TextChannel } from 'discord.js';
+import { EmbedBuilder, TextChannel } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
 import { NEGATIVE_COLOR } from '../constants/colors.js';
 import isDev from '../core/process/isDev.js';
@@ -7,7 +7,7 @@ import { client } from '../index.js';
 const PROCESS_ERROR_EVENTS = ['uncaughtException'];
 const CLIENT_ERROR_EVENTS = ['error'];
 
-export function handleError(error: Error, client: Client, command: string) {
+export function handleError(error: Error, command: string) {
   console.error(error);
 
   (
@@ -31,10 +31,10 @@ export function handleError(error: Error, client: Client, command: string) {
 export function registerErrorHandlers() {
   if (!isDev()) {
     PROCESS_ERROR_EVENTS.forEach((name) =>
-      process.on(name, (error) => handleError(error, client, 'process error')),
+      process.on(name, (error) => handleError(error, 'process error')),
     );
     CLIENT_ERROR_EVENTS.forEach((name) =>
-      client.on(name, (error) => handleError(error, client, 'client error')),
+      client.on(name, (error) => handleError(error, 'client error')),
     );
   }
 

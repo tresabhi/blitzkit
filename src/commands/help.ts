@@ -39,7 +39,5 @@ export default {
           ),
       ],
     });
-
-    console.log('Displaying help information');
   },
 } satisfies CommandRegistry;

@@ -4,7 +4,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import GenericAllStats from '../components/GenericAllStats.js';
-import NoBattlesInPeriod from '../components/NoBattlesInPeriod.js';
+import NoData, { NoDataType } from '../components/NoData.js';
 import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
@@ -51,9 +51,7 @@ export default {
 
   async execute(interaction) {
     const period = interaction.options.getString('period') as StatPeriod;
-    const username = interaction.options.getString('username')!;
-    const blitzAccount = await getBlitzAccount(interaction, username);
-    const { id, server } = blitzAccount;
+    const { id, server } = await getBlitzAccount(interaction);
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
     );
@@ -153,7 +151,7 @@ export default {
           } • ${new Date().toDateString()} • ${BLITZ_SERVERS[server]}`}
         />
 
-        {stats.battles === 0 && <NoBattlesInPeriod />}
+        {stats.battles === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
         {stats.battles > 0 && (
           <GenericAllStats
             stats={stats}
@@ -174,8 +172,6 @@ export default {
       files: [image],
       components: [actionRow],
     });
-
-    console.log(`Showing stats for ${accountInfo[id].nickname}`);
   },
 
   autocomplete: usernameAutocomplete,

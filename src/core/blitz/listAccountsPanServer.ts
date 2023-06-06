@@ -7,14 +7,15 @@ export type AccountListWithServer = (Account & {
   server: 'com' | 'eu' | 'asia';
 })[];
 
-export const usernameRegex = /^[a-zA-Z0-9_]{3,24}$/;
+export const usernamePattern = /^[a-zA-Z0-9_]{3,24}$/;
+export const usernamePatternWithoutPosition = /[a-zA-Z0-9_]{3,24}/;
 
 export default async function listAccountsPanServer(search: string, limit = 9) {
   const trimmedSearch = search.trim();
   const normalizedLimit = Math.round(limit / 3);
   const encodedSearch = encodeURIComponent(trimmedSearch);
 
-  if (usernameRegex.test(trimmedSearch)) {
+  if (usernamePattern.test(trimmedSearch)) {
     return (
       await Promise.all([
         getWargamingResponse<AccountList>(

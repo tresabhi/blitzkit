@@ -46,7 +46,5 @@ export default {
         ),
       ],
     });
-
-    console.log("Displaying bot's debug information");
   },
 } satisfies CommandRegistry;

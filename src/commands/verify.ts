@@ -20,11 +20,10 @@ export default {
   command: new SlashCommandBuilder()
     .setName(cmdName('verify'))
     .setDescription("Set's the user's username to their in-game name")
-    .addStringOption(addUsernameOption),
+    .addStringOption((option) => addUsernameOption(option).setRequired(true)),
 
   async execute(interaction) {
-    const name = interaction.options.getString('username')!;
-    const blitzAccount = await getBlitzAccount(interaction, name);
+    const blitzAccount = await getBlitzAccount(interaction);
     const { id, server } = blitzAccount;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
@@ -48,10 +47,6 @@ export default {
             ),
         ],
       });
-
-      console.warn(
-        `${interaction.user.username} failed to verify because of no nickname permission.`,
-      );
 
       return;
     }
@@ -84,10 +79,6 @@ export default {
                 ],
               });
 
-              console.warn(
-                `${interaction.user.username} failed to verify because of no manage roles permission.`,
-              );
-
               return;
             }
 
@@ -107,10 +98,6 @@ export default {
                 ),
             ],
           });
-
-          console.log(
-            `${interaction.user.username} verified as ${accountInfo[id].nickname}${clanTag}`,
-          );
         } catch (error) {
           await interaction.editReply({
             embeds: [
@@ -118,12 +105,10 @@ export default {
                 .setColor(NEGATIVE_COLOR)
                 .setTitle(`${interaction.user.username} failed to verify`)
                 .setDescription(
-                  "I can't change your nickname because you have higher permissions than me.",
+                  "I can't change your nickname because you have higher permissions than me. Try setting your nickname to your Blitz username manually.",
                 ),
             ],
           });
-
-          console.warn('Failed to verify because of higher permissions.');
         }
       }
     }

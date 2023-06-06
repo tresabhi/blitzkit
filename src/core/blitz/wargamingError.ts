@@ -22,5 +22,5 @@ export default async function wargamingError(
   });
 
   console.log(`Wargaming returned an error`);
-  handleError(error, client, command);
+  handleError(error, command);
 }

@@ -1,6 +1,6 @@
-import errorEmbed from './errorEmbed.js';
+import negativeEmbed from './negativeEmbed.js';
 
-export const notTrackedByBlitzStars = errorEmbed(
+export const notTrackedByBlitzStars = negativeEmbed(
   'No data to display',
   'Player is not tracked by BlitzStars.',
 );

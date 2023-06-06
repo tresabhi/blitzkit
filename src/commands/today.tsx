@@ -4,10 +4,10 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import * as Breakdown from '../components/Breakdown/index.js';
-import NoBattlesInPeriod from '../components/NoBattlesInPeriod.js';
+import NoData, { NoDataType } from '../components/NoData.js';
 import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
 import TitleBar from '../components/TitleBar.js';
-import Wrapper, { WrapperSize } from '../components/Wrapper.js';
+import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
@@ -41,9 +41,7 @@ export default {
     .addStringOption(addUsernameOption),
 
   async execute(interaction) {
-    const username = interaction.options.getString('username')!;
-    const blitzAccount = await getBlitzAccount(interaction, username);
-    const { id, server } = blitzAccount;
+    const { id, server } = await getBlitzAccount(interaction);
     const tankStatsOverTime = await getTankStatsOverTime(
       interaction,
       server,
@@ -162,7 +160,7 @@ export default {
     });
 
     const image = await render(
-      <Wrapper size={WrapperSize.Roomy}>
+      <Wrapper>
         <TitleBar
           name={accountInfo[id].nickname}
           nameDiscriminator={
@@ -178,12 +176,11 @@ export default {
           }`}
         />
 
-        {rows.length === 0 && <NoBattlesInPeriod />}
+        {rows.length === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
         {rows.length > 0 && <Breakdown.Root>{rows}</Breakdown.Root>}
 
         <PoweredByBlitzStars />
       </Wrapper>,
-      WrapperSize.Roomy,
     );
 
     const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -195,8 +192,6 @@ export default {
       files: [image],
       components: [actionRow],
     });
-
-    console.log(`Showing daily breakdown for ${accountInfo[id].nickname}`);
   },
 
   autocomplete: usernameAutocomplete,

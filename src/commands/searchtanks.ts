@@ -41,7 +41,5 @@ export default {
         ),
       ],
     });
-
-    console.log(`Tank search results for "${tank}"`);
   },
 } satisfies CommandRegistry;

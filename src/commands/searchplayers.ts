@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import { usernameRegex } from '../core/blitz/listAccountsPanServer.js';
+import { usernamePattern } from '../core/blitz/listAccountsPanServer.js';
 import cmdName from '../core/interaction/cmdName.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import addServerChoices from '../core/options/addServerChoices.js';
@@ -21,7 +21,7 @@ export default {
     .setDescription('Search players in a Blitz server')
     .addStringOption(addServerChoices)
     .addStringOption((option) =>
-      addUsernameOption(option).setAutocomplete(false),
+      addUsernameOption(option).setAutocomplete(false).setRequired(true),
     )
     .addIntegerOption((option) =>
       option
@@ -36,7 +36,7 @@ export default {
     const name = interaction.options.getString('username')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
     const trimmedSearch = name.trim();
-    const players = usernameRegex.test(trimmedSearch)
+    const players = usernamePattern.test(trimmedSearch)
       ? await getWargamingResponse<AccountList>(
           `https://api.wotblitz.${server}/wotb/account/list/?application_id=${
             args['wargaming-application-id']
@@ -58,7 +58,5 @@ export default {
         ),
       ],
     });
-
-    console.log(`Player search results for "${name}"`);
   },
 } satisfies CommandRegistry;

@@ -1,5 +1,8 @@
 import {
+  ActionRowBuilder,
   AutocompleteInteraction,
+  ButtonBuilder,
+  ButtonStyle,
   CacheType,
   ChatInputCommandInteraction,
   Collection,
@@ -11,9 +14,11 @@ import {
 } from 'discord.js';
 import { readdirSync } from 'fs';
 import discord from '../../discord.json' assert { type: 'json' };
+import negativeEmbed from '../core/interaction/negativeEmbed.js';
 import { args } from '../core/process/args.js';
 import getClientId from '../core/process/getClientId.js';
 import isDev from '../core/process/isDev.js';
+import { handleError } from './error.js';
 
 export interface CommandRegistry {
   inDevelopment: boolean;
@@ -58,11 +63,19 @@ try {
   console.log(`Successfully refreshed ${publicData.length} public command(s).`);
 
   console.log(`Refreshing ${guildCommands.length} guild command(s).`);
-  const guildData = (await rest.put(
-    Routes.applicationGuildCommands(getClientId(), discord.sklld_guild_id),
-    { body: guildCommands },
-  )) as RESTPostAPIChatInputApplicationCommandsJSONBody[];
-  console.log(`Successfully refreshed ${guildData.length} guild command(s).`);
+  const guildData = [
+    ...((await rest.put(
+      Routes.applicationGuildCommands(getClientId(), discord.sklld_guild_id),
+      { body: guildCommands },
+    )) as RESTPostAPIChatInputApplicationCommandsJSONBody[]),
+    ...((await rest.put(
+      Routes.applicationGuildCommands(getClientId(), discord.tres_guild_id),
+      { body: guildCommands },
+    )) as RESTPostAPIChatInputApplicationCommandsJSONBody[]),
+  ];
+  console.log(
+    `Successfully refreshed ${guildData.length / 2} guild command(s).`,
+  );
 } catch (error) {
   console.error(error);
 }
@@ -93,6 +106,30 @@ export default async function interactionCreate(
 
     console.log(interaction.toString());
     await interaction.deferReply();
-    command.execute(interaction);
+
+    try {
+      await command.execute(interaction);
+    } catch (error) {
+      const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setLabel('Get Help on Discord Server')
+          .setURL('https://discord.gg/nDt7AjGJQH')
+          .setStyle(ButtonStyle.Link),
+      );
+
+      await interaction.editReply({
+        embeds: [
+          negativeEmbed(
+            (error as Error).message,
+            `${
+              (error as Error).cause ?? 'No further information is available.'
+            }`,
+          ),
+        ],
+        components: [actionRow],
+      });
+
+      handleError(error as Error, interaction.commandName);
+    }
   }
 }

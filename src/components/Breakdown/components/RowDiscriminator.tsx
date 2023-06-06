@@ -22,9 +22,11 @@ export function RowDiscriminator({ name, icon }: RowDiscriminatorProps) {
       {icon && (
         <img
           src={icon}
-          style={{ width: '100%', flex: 1, objectFit: 'cover' }}
+          height={0}
+          style={{ flex: 1, width: '100%', objectFit: 'contain' }}
         />
       )}
+
       <span
         style={{
           color: theme.colors.textLowContrast,

@@ -1,17 +1,22 @@
 import { SlashCommandBuilder } from 'discord.js';
-import markdownEscape from 'markdown-escape';
+import NoData, { NoDataType } from '../components/NoData.js';
+import PoweredByWargaming from '../components/PoweredByWargaming.js';
+import * as Tanks from '../components/Tanks/index.js';
+import TitleBar from '../components/TitleBar.js';
+import Wrapper from '../components/Wrapper.js';
+import { BLITZ_SERVERS } from '../constants/servers.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getTankStats from '../core/blitz/getTankStats.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import resolveTankName from '../core/blitz/resolveTankName.js';
-import { TANK_TYPE_EMOJIS, tankopedia } from '../core/blitz/tankopedia.js';
+import { TIER_ROMAN_NUMERALS, tankopedia } from '../core/blitz/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
-import infoEmbed from '../core/interaction/infoEmbed.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { args } from '../core/process/args.js';
+import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
+import { PlayerClanData } from '../types/playerClanData.js';
 
 const COMP_TANKS = [
   // light tanks
@@ -36,7 +41,7 @@ const COMP_TANKS = [
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -54,8 +59,7 @@ export default {
 
   async execute(interaction) {
     const tier = interaction.options.getInteger('tier')!;
-    const name = interaction.options.getString('username')!;
-    const account = await getBlitzAccount(interaction, name);
+    const account = await getBlitzAccount(interaction);
     const { id, server } = account;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
@@ -64,40 +68,48 @@ export default {
     const tanks = tankStats
       .map((tankData) => tankopedia[tankData.tank_id])
       .filter((tank) => tank?.tier === tier);
-
-    await interaction.editReply({
-      embeds: [
-        infoEmbed(
-          `${markdownEscape(accountInfo[id].nickname)}'s owned ${
-            tier === null ? '' : `tier ${tier} `
-          }tanks`,
-          `${
-            tanks.length === 0
-              ? `No tanks found in tier ${tier}`
-              : tanks
-                  .map(
-                    (tank) =>
-                      `${TANK_TYPE_EMOJIS[tank.type]} ${markdownEscape(
-                        resolveTankName(tank.tank_id),
-                      )} ${tank.is_premium ? '⭐' : ''}${
-                        COMP_TANKS.includes(tank.tank_id) ? '🏆' : ''
-                      }`,
-                  )
-                  .join('\n')
-          }\n\n**Legend**\n⭐ = Premium/Collector\n${
-            tier === 10 ? '🏆 = Comp Tank\n' : ''
-          }${TANK_TYPE_EMOJIS.heavyTank} = Heavy\n${
-            TANK_TYPE_EMOJIS.mediumTank
-          } = Medium\n${TANK_TYPE_EMOJIS.lightTank} = Light\n${
-            TANK_TYPE_EMOJIS['AT-SPG']
-          } = Tank Destroyer`,
-        ),
-      ],
-    });
-
-    console.log(
-      `Displaying ${accountInfo[id].nickname}'s owned tanks in tier ${tier}`,
+    const clanData = await getWargamingResponse<PlayerClanData>(
+      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${id}&extra=clan`,
     );
+
+    console.time('ownedtanks');
+    const image = await render(
+      <Wrapper>
+        {/* TODO: integrate some of these into title bar */}
+        <TitleBar
+          name={accountInfo[id].nickname}
+          nameDiscriminator={`(Tier ${TIER_ROMAN_NUMERALS[tier]})`}
+          image={
+            clanData[id]?.clan
+              ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`
+              : undefined
+          }
+          description={`Owned tanks • ${new Date().toDateString()} • ${
+            BLITZ_SERVERS[server]
+          }`}
+        />
+
+        {tanks.length === 0 && <NoData type={NoDataType.TanksFound} />}
+
+        {tanks.length > 0 && (
+          <Tanks.Root>
+            {tanks.map((tank) => (
+              <Tanks.Item
+                key={tank.tank_id}
+                name={tank.name}
+                type={tank.type}
+                icon={tank.images.normal}
+              />
+            ))}
+          </Tanks.Root>
+        )}
+
+        <PoweredByWargaming />
+      </Wrapper>,
+    );
+
+    await interaction.editReply({ files: [image] });
+    console.timeEnd('ownedtanks');
   },
 
   autocomplete: usernameAutocomplete,
