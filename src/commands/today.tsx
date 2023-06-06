@@ -32,7 +32,7 @@ import { PlayerClanData } from '../types/playerClanData.js';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -176,7 +176,7 @@ export default {
           }`}
         />
 
-        {rows.length === 0 && <NoData type={NoDataType.Battles} />}
+        {rows.length === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
         {rows.length > 0 && <Breakdown.Root>{rows}</Breakdown.Root>}
 
         <PoweredByBlitzStars />

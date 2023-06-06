@@ -20,7 +20,7 @@ const DEFAULT_THRESHOLD = 7;
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -78,7 +78,7 @@ export default {
           }`}
         />
 
-        {!hasInactiveMembers && <NoData type={NoDataType.Players} />}
+        {!hasInactiveMembers && <NoData type={NoDataType.PlayersInPeriod} />}
         {hasInactiveMembers && <GenericStats stats={inactive} />}
 
         <PoweredByWargaming />

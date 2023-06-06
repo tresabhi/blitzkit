@@ -40,7 +40,7 @@ import { PlayerClanData } from '../types/playerClanData.js';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -151,7 +151,7 @@ export default {
           } • ${new Date().toDateString()} • ${BLITZ_SERVERS[server]}`}
         />
 
-        {stats.battles === 0 && <NoData type={NoDataType.Battles} />}
+        {stats.battles === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
         {stats.battles > 0 && (
           <GenericAllStats
             stats={stats}

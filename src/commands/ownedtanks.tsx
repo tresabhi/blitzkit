@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
+import NoData, { NoDataType } from '../components/NoData.js';
 import PoweredByWargaming from '../components/PoweredByWargaming.js';
 import * as Tanks from '../components/Tanks/index.js';
 import TitleBar from '../components/TitleBar.js';
@@ -88,16 +89,20 @@ export default {
           }`}
         />
 
-        <Tanks.Root>
-          {tanks.map((tank) => (
-            <Tanks.Item
-              key={tank.tank_id}
-              name={tank.name}
-              type={tank.type}
-              icon={tank.images.normal}
-            />
-          ))}
-        </Tanks.Root>
+        {tanks.length === 0 && <NoData type={NoDataType.TanksFound} />}
+
+        {tanks.length > 0 && (
+          <Tanks.Root>
+            {tanks.map((tank) => (
+              <Tanks.Item
+                key={tank.tank_id}
+                name={tank.name}
+                type={tank.type}
+                icon={tank.images.normal}
+              />
+            ))}
+          </Tanks.Root>
+        )}
 
         <PoweredByWargaming />
       </Wrapper>,

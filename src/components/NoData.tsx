@@ -1,8 +1,9 @@
 import { theme } from '../stitches.config.js';
 
 export enum NoDataType {
-  Battles,
-  Players,
+  BattlesInPeriod,
+  PlayersInPeriod,
+  TanksFound,
 }
 
 export interface NoDataProps {
@@ -10,8 +11,9 @@ export interface NoDataProps {
 }
 
 const NO_DATA_MESSAGES: Record<NoDataType, string> = {
-  [NoDataType.Battles]: 'No battles played in this period',
-  [NoDataType.Players]: 'No players in this period',
+  [NoDataType.BattlesInPeriod]: 'No battles played in this period',
+  [NoDataType.PlayersInPeriod]: 'No players in this period',
+  [NoDataType.TanksFound]: 'No tanks found',
 };
 
 export default function NoData({ type }: NoDataProps) {
