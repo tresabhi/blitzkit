@@ -34,6 +34,7 @@ export function Row({
   return (
     <div style={{ display: 'flex', gap: 16 }}>
       <RowDiscriminator name={name} icon={icon} />
+
       <RowStat
         name="Winrate"
         value={`${(winrate * 100).toFixed(2)}%`}

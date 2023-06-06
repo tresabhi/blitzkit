@@ -7,7 +7,7 @@ import * as Breakdown from '../components/Breakdown/index.js';
 import NoBattlesInPeriod from '../components/NoBattlesInPeriod.js';
 import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
 import TitleBar from '../components/TitleBar.js';
-import Wrapper, { WrapperSize } from '../components/Wrapper.js';
+import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
@@ -32,7 +32,7 @@ import { PlayerClanData } from '../types/playerClanData.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -160,7 +160,7 @@ export default {
     });
 
     const image = await render(
-      <Wrapper size={WrapperSize.Roomy}>
+      <Wrapper>
         <TitleBar
           name={accountInfo[id].nickname}
           nameDiscriminator={
@@ -181,7 +181,6 @@ export default {
 
         <PoweredByBlitzStars />
       </Wrapper>,
-      WrapperSize.Roomy,
     );
 
     const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -193,7 +192,6 @@ export default {
       files: [image],
       components: [actionRow],
     });
-
   },
 
   autocomplete: usernameAutocomplete,
