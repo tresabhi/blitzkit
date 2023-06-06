@@ -1,5 +1,8 @@
 import {
+  ActionRowBuilder,
   AutocompleteInteraction,
+  ButtonBuilder,
+  ButtonStyle,
   CacheType,
   ChatInputCommandInteraction,
   Collection,
@@ -11,9 +14,11 @@ import {
 } from 'discord.js';
 import { readdirSync } from 'fs';
 import discord from '../../discord.json' assert { type: 'json' };
+import negativeEmbed from '../core/interaction/negativeEmbed.js';
 import { args } from '../core/process/args.js';
 import getClientId from '../core/process/getClientId.js';
 import isDev from '../core/process/isDev.js';
+import { handleError } from './error.js';
 
 export interface CommandRegistry {
   inDevelopment: boolean;
@@ -101,6 +106,30 @@ export default async function interactionCreate(
 
     console.log(interaction.toString());
     await interaction.deferReply();
-    command.execute(interaction);
+
+    try {
+      await command.execute(interaction);
+    } catch (error) {
+      const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setLabel('Get Help on Discord Server')
+          .setURL('https://discord.gg/nDt7AjGJQH')
+          .setStyle(ButtonStyle.Link),
+      );
+
+      await interaction.editReply({
+        embeds: [
+          negativeEmbed(
+            (error as Error).message,
+            `${
+              (error as Error).cause ?? 'No further information is available.'
+            }`,
+          ),
+        ],
+        components: [actionRow],
+      });
+
+      handleError(error as Error, interaction.commandName);
+    }
   }
 }

@@ -24,5 +24,5 @@ export default async function blitzStarsError(
   });
 
   console.log(`BlitzStars returned an error`);
-  handleError(error, client, command);
+  handleError(error, command);
 }

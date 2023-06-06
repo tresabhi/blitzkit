@@ -17,7 +17,7 @@ type SortBy = 'name' | 'count';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
