@@ -6,8 +6,12 @@ import satori from 'satori';
 const FONT_NAME = 'Roboto';
 const FONT_FILES = ['Roboto', 'Roboto-Bold', 'Roboto-Black'];
 
+let robotoFlex: Buffer;
+let robotoFlexBold: Buffer;
+let robotoFlexBlack: Buffer;
+
 console.log('Importing fonts...');
-const [robotoFlex, robotoFlexBold, robotoFlexBlack] = await Promise.all(
+await Promise.all(
   FONT_FILES.map(
     (file) =>
       new Promise<Buffer>((resolve, reject) => {
@@ -17,8 +21,10 @@ const [robotoFlex, robotoFlexBold, robotoFlexBlack] = await Promise.all(
         });
       }),
   ),
-);
-console.log('Fonts imported');
+).then((data) => {
+  [robotoFlex, robotoFlexBold, robotoFlexBlack] = data;
+  console.log('Fonts imported');
+});
 
 export default async function render(element: ReactNode) {
   const svg = await satori(element, {
