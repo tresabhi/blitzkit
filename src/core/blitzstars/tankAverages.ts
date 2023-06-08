@@ -63,7 +63,7 @@ export interface MeanSd {
   spbSd: number;
 }
 
-export interface IndividualTankAverages {
+export interface IndividualTankAverage {
   _id: number;
   battle_life_time: number;
   total_battle_life_time: number;
@@ -78,13 +78,14 @@ export interface IndividualTankAverages {
   last_update: number;
 }
 
-console.log('Caching tank averages...');
-const tankAveragesRaw = (await (
-  await fetch('https://www.blitzstars.com/api/tankaverages.json')
-).json()) as IndividualTankAverages[];
-export const tankAverages: Record<number, IndividualTankAverages> = {};
+export const tankAverages: Record<number, IndividualTankAverage> = {};
 
-Object.entries(tankAveragesRaw).forEach(([, tank]) => {
-  tankAverages[tank.tank_id] = tank;
-});
-console.log('Tank averages cached');
+console.log('Caching tank averages...');
+fetch('https://www.blitzstars.com/api/tankaverages.json')
+  .then((response) => response.json() as Promise<IndividualTankAverage[]>)
+  .then((individualTankAverages) => {
+    individualTankAverages.forEach((individualTankAverage) => {
+      tankAverages[individualTankAverage.tank_id] = individualTankAverage;
+    });
+    console.log('Tank averages cached');
+  });

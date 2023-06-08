@@ -18,8 +18,9 @@ export interface Tankopedia {
   [id: number]: TankopediaEntry;
 }
 
-console.log('Caching tankopedia...');
 export const tankopedia: Tankopedia = {};
+
+console.log('Caching tankopedia...');
 fetch('https://www.blitzstars.com/bs-tankopedia.json')
   .then(
     (response) =>
