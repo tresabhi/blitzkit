@@ -11,7 +11,7 @@ let robotoFlexBold: Buffer;
 let robotoFlexBlack: Buffer;
 
 console.log('Importing fonts...');
-await Promise.all(
+Promise.all(
   FONT_FILES.map(
     (file) =>
       new Promise<Buffer>((resolve, reject) => {
