@@ -7,7 +7,7 @@ import cmdName from '../core/interaction/cmdName.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import addServerChoices from '../core/options/addServerChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
-import { args } from '../core/process/args.js';
+import { wargamingApplicationId } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountList } from '../types/accountList.js';
 
@@ -38,9 +38,9 @@ export default {
     const trimmedSearch = name.trim();
     const players = usernamePattern.test(trimmedSearch)
       ? await getWargamingResponse<AccountList>(
-          `https://api.wotblitz.${server}/wotb/account/list/?application_id=${
-            args['wargaming-application-id']
-          }&search=${encodeURIComponent(trimmedSearch)}&limit=${limit}`,
+          `https://api.wotblitz.${server}/wotb/account/list/?application_id=${wargamingApplicationId}&search=${encodeURIComponent(
+            trimmedSearch,
+          )}&limit=${limit}`,
         )
       : [];
 

@@ -15,7 +15,7 @@ import {
 import { readdirSync } from 'fs';
 import discord from '../../discord.json' assert { type: 'json' };
 import negativeEmbed from '../core/interaction/negativeEmbed.js';
-import { args } from '../core/process/args.js';
+import { discordToken } from '../core/process/args.js';
 import getClientId from '../core/process/getClientId.js';
 import isDev from '../core/process/isDev.js';
 import { handleError } from './error.js';
@@ -30,7 +30,7 @@ export interface CommandRegistry {
   autocomplete?: (interaction: AutocompleteInteraction<CacheType>) => void;
 }
 
-const rest = new REST().setToken(args['discord-token']);
+const rest = new REST().setToken(discordToken);
 
 const commandFolders = readdirSync('src/commands/');
 const commandCollection = new Collection<string, CommandRegistry>();

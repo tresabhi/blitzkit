@@ -1,6 +1,6 @@
 import { BlitzServer } from '../../constants/servers.js';
 import { Account, AccountList } from '../../types/accountList.js';
-import { args } from '../process/args.js';
+import { wargamingApplicationId } from '../process/args.js';
 import getWargamingResponse from './getWargamingResponse.js';
 
 export type AccountListWithServer = (Account & {
@@ -19,7 +19,7 @@ export default async function listAccountsPanServer(search: string, limit = 9) {
     return (
       await Promise.all([
         getWargamingResponse<AccountList>(
-          `https://api.wotblitz.com/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${encodedSearch}&limit=${normalizedLimit}`,
+          `https://api.wotblitz.com/wotb/account/list/?application_id=${wargamingApplicationId}&search=${encodedSearch}&limit=${normalizedLimit}`,
         ).then(
           (value) =>
             value &&
@@ -29,7 +29,7 @@ export default async function listAccountsPanServer(search: string, limit = 9) {
             })),
         ),
         getWargamingResponse<AccountList>(
-          `https://api.wotblitz.eu/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${encodedSearch}&limit=${normalizedLimit}`,
+          `https://api.wotblitz.eu/wotb/account/list/?application_id=${wargamingApplicationId}&search=${encodedSearch}&limit=${normalizedLimit}`,
         ).then(
           (value) =>
             value &&
@@ -39,7 +39,7 @@ export default async function listAccountsPanServer(search: string, limit = 9) {
             })),
         ),
         getWargamingResponse<AccountList>(
-          `https://api.wotblitz.asia/wotb/account/list/?application_id=${args['wargaming-application-id']}&search=${encodedSearch}&limit=${normalizedLimit}`,
+          `https://api.wotblitz.asia/wotb/account/list/?application_id=${wargamingApplicationId}&search=${encodedSearch}&limit=${normalizedLimit}`,
         ).then(
           (value) =>
             value &&

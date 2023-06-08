@@ -3,7 +3,7 @@ import errorWithCause from './errorWithCause.js';
 
 type ArgumentName = 'discord-token' | 'wargaming-application-id';
 
-export const args: Record<ArgumentName, string> = {
+const args: Record<ArgumentName, string> = {
   'discord-token': '',
   'wargaming-application-id': '',
 };
@@ -23,3 +23,6 @@ Object.keys(args).forEach((arg) => {
     );
   }
 });
+
+export const discordToken = args['discord-token'];
+export const wargamingApplicationId = args['wargaming-application-id'];

@@ -24,7 +24,7 @@ import cmdName from '../core/interaction/cmdName.js';
 import fullBlitzStarsStats from '../core/interaction/fullBlitzStarsStats.js';
 import { supportBlitzStars } from '../core/interaction/supportBlitzStars.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
-import { args } from '../core/process/args.js';
+import { wargamingApplicationId } from '../core/process/args.js';
 import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
@@ -50,10 +50,10 @@ export default {
       new Date().getTime() / 1000,
     );
     const accountInfo = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${wargamingApplicationId}&account_id=${id}`,
     );
     const clanData = await getWargamingResponse<PlayerClanData>(
-      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${id}&extra=clan`,
+      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${wargamingApplicationId}&account_id=${id}&extra=clan`,
     );
     const careerTankStatsRaw = await getTankStats(interaction, server, id);
     const careerStats: Record<number, AllStats> = {
