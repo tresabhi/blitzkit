@@ -7,12 +7,10 @@ import ready from './events/ready.js';
 
 export const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
-});
-
-registerErrorHandlers();
-
-client
+})
   .on('ready', ready)
   .on('guildMemberAdd', guildMemberAdd)
-  .on('interactionCreate', interactionCreate)
-  .login(discordToken);
+  .on('interactionCreate', interactionCreate);
+
+registerErrorHandlers();
+client.login(discordToken);

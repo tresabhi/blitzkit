@@ -37,6 +37,4 @@ export function registerErrorHandlers() {
       client.on(name, (error) => handleError(error, 'client error')),
     );
   }
-
-  return client;
 }
