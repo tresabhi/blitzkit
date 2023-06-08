@@ -19,12 +19,18 @@ export interface Tankopedia {
 }
 
 console.log('Caching tankopedia...');
-export const tankopedia = (
-  (await (
-    await fetch('https://www.blitzstars.com/bs-tankopedia.json')
-  ).json()) as WargamingResponse<Tankopedia> & { status: 'ok' }
-).data;
-console.log('Cached tankopedia');
+export const tankopedia: Tankopedia = {};
+fetch('https://www.blitzstars.com/bs-tankopedia.json')
+  .then(
+    (response) =>
+      response.json() as Promise<
+        WargamingResponse<Tankopedia> & { status: 'ok' }
+      >,
+  )
+  .then((wargamingResponse) => {
+    Object.assign(tankopedia, wargamingResponse.data);
+    console.log('Cached tankopedia');
+  });
 
 export const TANK_ICONS: Record<TankType, string> = {
   'AT-SPG': 'https://i.imgur.com/BIHSEH0.png',
