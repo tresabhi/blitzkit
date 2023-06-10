@@ -12,6 +12,20 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
+import debug from '../commands/debug.js';
+import eligible from '../commands/eligible.js';
+import help from '../commands/help.js';
+import inactive from '../commands/inactive.js';
+import ownedtanks from '../commands/ownedtanks.js';
+import playerachievements from '../commands/playerachievements.js';
+import playerinfo from '../commands/playerinfo.js';
+import searchclans from '../commands/searchclans.js';
+import searchplayers from '../commands/searchplayers.js';
+import searchtanks from '../commands/searchtanks.js';
+import stats from '../commands/stats.js';
+import tankstats from '../commands/tankstats.js';
+import today from '../commands/today.js';
+import verify from '../commands/verify.js';
 import negativeEmbed from '../core/interaction/negativeEmbed.js';
 import { discordToken } from '../core/process/args.js';
 import getClientId from '../core/process/getClientId.js';
@@ -30,12 +44,22 @@ export interface CommandRegistry {
 
 const rest = new REST().setToken(discordToken);
 
-const commands = Object.entries(
-  import.meta.glob<CommandRegistry>('../commands/*', {
-    eager: true,
-    import: 'default',
-  }),
-).reduce<Record<string, CommandRegistry>>((accumulator, [, registry]) => {
+const commands = [
+  debug,
+  eligible,
+  help,
+  inactive,
+  ownedtanks,
+  playerachievements,
+  playerinfo,
+  searchclans,
+  searchplayers,
+  searchtanks,
+  stats,
+  tankstats,
+  today,
+  verify,
+].reduce<Record<string, CommandRegistry>>((accumulator, registry) => {
   return { ...accumulator, [registry.command.name]: registry };
 }, {});
 
