@@ -1,20 +1,14 @@
-name: Host
+name: CI Build
 
-on:
-  schedule:
-    - cron: '50 */5 * * *'
-  push:
-    branches:
-      - 'main'
-  workflow_dispatch:
+on: [push, pull_request]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  host:
-    name: Host
+  build:
+    name: Build
     runs-on: ubuntu-latest
 
     strategy:
@@ -23,10 +17,10 @@ jobs:
 
     steps:
       - name: Get code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Use node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
@@ -35,7 +29,7 @@ jobs:
         run: npm install --location=global yarn
 
       - name: Use node_modules cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
@@ -43,5 +37,11 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Host
-        run: yarn dev discord-token=${{ secrets.DISCORD_TOKEN }} wargaming-application-id=${{ secrets.WARGAMING_APPLICATION_ID }}
+      - name: Build
+        run: yarn build
+
+      - name: Archive build
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist

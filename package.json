@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "vite-node src/index.ts --script",
+    "dev": "yarn build && yarn start",
+    "start": "node --enable-source-maps dist/index.cjs",
+    "build": "rm -rf dist && esbuild src/index.ts --outfile=dist/index.cjs --bundle --platform=node --loader:.node=copy --minify --sourcemap",
     "lint": "tsc"
   },
   "license": "MIT",
@@ -28,7 +30,7 @@
     "@types/markdown-escape": "^1.1.0",
     "@types/node": "^20.2.1",
     "@types/react": "^18.2.7",
-    "typescript": "^5.0.4",
-    "vite-node": "^0.31.1"
+    "esbuild": "^0.17.19",
+    "typescript": "^5.0.4"
   }
 }

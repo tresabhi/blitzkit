@@ -5,17 +5,29 @@ import {
   ButtonStyle,
   CacheType,
   ChatInputCommandInteraction,
-  Collection,
   Interaction,
   REST,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
   Routes,
   SlashCommandBuilder,
 } from 'discord.js';
-import { readdirSync } from 'fs';
 import discord from '../../discord.json' assert { type: 'json' };
+import debug from '../commands/debug.js';
+import eligible from '../commands/eligible.js';
+import help from '../commands/help.js';
+import inactive from '../commands/inactive.js';
+import ownedtanks from '../commands/ownedtanks.js';
+import playerachievements from '../commands/playerachievements.js';
+import playerinfo from '../commands/playerinfo.js';
+import searchclans from '../commands/searchclans.js';
+import searchplayers from '../commands/searchplayers.js';
+import searchtanks from '../commands/searchtanks.js';
+import stats from '../commands/stats.js';
+import tankstats from '../commands/tankstats.js';
+import today from '../commands/today.js';
+import verify from '../commands/verify.js';
 import negativeEmbed from '../core/interaction/negativeEmbed.js';
-import { args } from '../core/process/args.js';
+import { discordToken } from '../core/process/args.js';
 import getClientId from '../core/process/getClientId.js';
 import isDev from '../core/process/isDev.js';
 import { handleError } from './error.js';
@@ -30,52 +42,70 @@ export interface CommandRegistry {
   autocomplete?: (interaction: AutocompleteInteraction<CacheType>) => void;
 }
 
-const rest = new REST().setToken(args['discord-token']);
+const rest = new REST().setToken(discordToken);
 
-const commandFolders = readdirSync('src/commands/');
-const commandCollection = new Collection<string, CommandRegistry>();
+const commands = [
+  debug,
+  eligible,
+  help,
+  inactive,
+  ownedtanks,
+  playerachievements,
+  playerinfo,
+  searchclans,
+  searchplayers,
+  searchtanks,
+  stats,
+  tankstats,
+  today,
+  verify,
+].reduce<Record<string, CommandRegistry>>((accumulator, registry) => {
+  return { ...accumulator, [registry.command.name]: registry };
+}, {});
+
 export const guildCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
   [];
 export const publicCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
   [];
 
-for (const file of commandFolders) {
-  const command = (await import(`../commands/${file}`))
-    .default as CommandRegistry;
-
-  if (isDev() ? command.inDevelopment : command.inProduction) {
-    if (command.inPublic) {
-      publicCommands.push(command.command.toJSON());
+Object.entries(commands).forEach(([, registry]) => {
+  if (isDev() ? registry.inDevelopment : registry.inProduction) {
+    if (registry.inPublic) {
+      publicCommands.push(registry.command.toJSON());
     } else {
-      guildCommands.push(command.command.toJSON());
+      guildCommands.push(registry.command.toJSON());
     }
-
-    commandCollection.set(command.command.name, command);
   }
-}
+});
 
 try {
   console.log(`Refreshing ${publicCommands.length} public command(s).`);
-  const publicData = (await rest.put(
-    Routes.applicationCommands(getClientId()),
-    { body: publicCommands },
-  )) as RESTPostAPIChatInputApplicationCommandsJSONBody[];
-  console.log(`Successfully refreshed ${publicData.length} public command(s).`);
+  rest
+    .put(Routes.applicationCommands(getClientId()), { body: publicCommands })
+    .then((publicData) => {
+      console.log(
+        `Successfully refreshed ${
+          (publicData as RESTPostAPIChatInputApplicationCommandsJSONBody[])
+            .length
+        } public command(s).`,
+      );
+    });
 
   console.log(`Refreshing ${guildCommands.length} guild command(s).`);
-  const guildData = [
-    ...((await rest.put(
+  Promise.all([
+    rest.put(
       Routes.applicationGuildCommands(getClientId(), discord.sklld_guild_id),
       { body: guildCommands },
-    )) as RESTPostAPIChatInputApplicationCommandsJSONBody[]),
-    ...((await rest.put(
+    ),
+    rest.put(
       Routes.applicationGuildCommands(getClientId(), discord.tres_guild_id),
       { body: guildCommands },
-    )) as RESTPostAPIChatInputApplicationCommandsJSONBody[]),
-  ];
-  console.log(
-    `Successfully refreshed ${guildData.length / 2} guild command(s).`,
-  );
+    ),
+  ]).then((guildData) => {
+    console.log(
+      `Successfully refreshed ${guildData.flat().length / 2} guild command(s).`,
+    );
+  });
 } catch (error) {
   console.error(error);
 }
@@ -84,7 +114,7 @@ export default async function interactionCreate(
   interaction: Interaction<CacheType>,
 ) {
   if (interaction.isAutocomplete()) {
-    const command = commandCollection.get(interaction.commandName);
+    const command = commands[interaction.commandName];
 
     if (!command) {
       console.error(
@@ -95,7 +125,7 @@ export default async function interactionCreate(
 
     if (command.autocomplete) command.autocomplete(interaction);
   } else if (interaction.isChatInputCommand()) {
-    const command = commandCollection.get(interaction.commandName);
+    const command = commands[interaction.commandName];
 
     if (!command) {
       console.error(

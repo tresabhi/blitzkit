@@ -12,7 +12,7 @@ import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import { TIER_ROMAN_NUMERALS, tankopedia } from '../core/blitz/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
-import { args } from '../core/process/args.js';
+import { wargamingApplicationId } from '../core/process/args.js';
 import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
@@ -62,14 +62,14 @@ export default {
     const account = await getBlitzAccount(interaction);
     const { id, server } = account;
     const accountInfo = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${wargamingApplicationId}&account_id=${id}`,
     );
     const tankStats = await getTankStats(interaction, server, id);
     const tanks = tankStats
       .map((tankData) => tankopedia[tankData.tank_id])
       .filter((tank) => tank?.tier === tier);
     const clanData = await getWargamingResponse<PlayerClanData>(
-      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${id}&extra=clan`,
+      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${wargamingApplicationId}&account_id=${id}&extra=clan`,
     );
 
     console.time('ownedtanks');

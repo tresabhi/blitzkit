@@ -28,7 +28,7 @@ import addStatPeriodChoices, {
   statPeriodNames,
 } from '../core/options/addStatPeriodChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
-import { args } from '../core/process/args.js';
+import { wargamingApplicationId } from '../core/process/args.js';
 import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import {
@@ -53,10 +53,10 @@ export default {
     const period = interaction.options.getString('period') as StatPeriod;
     const { id, server } = await getBlitzAccount(interaction);
     const accountInfo = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${args['wargaming-application-id']}&account_id=${id}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${wargamingApplicationId}&account_id=${id}`,
     );
     const clanData = await getWargamingResponse<PlayerClanData>(
-      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${args['wargaming-application-id']}&account_id=${id}&extra=clan`,
+      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${wargamingApplicationId}&account_id=${id}&extra=clan`,
     );
     const tankStats = await getTankStats(interaction, server, id);
     let stats: AllStats;
