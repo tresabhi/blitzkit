@@ -5,3 +5,4 @@ package-lock.json
 /playwright-report/
 /playwright/.cache/
 dist/
+yarn-error.log

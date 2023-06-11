@@ -14,5 +14,3 @@ export const client = new Client({
 
 registerErrorHandlers();
 client.login(discordToken);
-
-console.log(process.env);
