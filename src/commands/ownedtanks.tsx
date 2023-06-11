@@ -72,7 +72,6 @@ export default {
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${wargamingApplicationId}&account_id=${id}&extra=clan`,
     );
 
-    console.time('ownedtanks');
     const image = await render(
       <Wrapper>
         {/* TODO: integrate some of these into title bar */}
@@ -109,7 +108,6 @@ export default {
     );
 
     await interaction.editReply({ files: [image] });
-    console.timeEnd('ownedtanks');
   },
 
   autocomplete: usernameAutocomplete,

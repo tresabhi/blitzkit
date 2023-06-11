@@ -1,28 +1,34 @@
 import { Resvg } from '@resvg/resvg-js';
 import { readFile } from 'fs';
+import { join } from 'path';
 import { ReactNode } from 'react';
 import satori from 'satori';
+import robotoBlackFile from '../../assets/fonts/Roboto-Black.ttf';
+import robotoBoldFile from '../../assets/fonts/Roboto-Bold.ttf';
+import robotoFile from '../../assets/fonts/Roboto.ttf';
 
 const FONT_NAME = 'Roboto';
-const FONT_FILES = ['Roboto', 'Roboto-Bold', 'Roboto-Black'];
+const FONT_FILES = [robotoFile, robotoBoldFile, robotoBlackFile];
 
-let robotoFlex: Buffer;
-let robotoFlexBold: Buffer;
-let robotoFlexBlack: Buffer;
+let roboto: Buffer;
+let robotoBold: Buffer;
+let robotoBlack: Buffer;
 
 console.log('Importing fonts...');
 Promise.all(
   FONT_FILES.map(
     (file) =>
       new Promise<Buffer>((resolve, reject) => {
-        readFile(`src/assets/fonts/${file}.ttf`, (error, data) => {
+        const path = join(__dirname, file);
+
+        readFile(path, (error, data) => {
           if (error) reject(error);
           resolve(data);
         });
       }),
   ),
 ).then((data) => {
-  [robotoFlex, robotoFlexBold, robotoFlexBlack] = data;
+  [roboto, robotoBold, robotoBlack] = data;
   console.log('Fonts imported');
 });
 
@@ -30,9 +36,9 @@ export default async function render(element: ReactNode) {
   const svg = await satori(element, {
     width: 640,
     fonts: [
-      { data: robotoFlex, name: FONT_NAME, weight: 400 },
-      { data: robotoFlexBold, name: FONT_NAME, weight: 700 },
-      { data: robotoFlexBlack, name: FONT_NAME, weight: 900 },
+      { data: roboto, name: FONT_NAME, weight: 400 },
+      { data: robotoBold, name: FONT_NAME, weight: 700 },
+      { data: robotoBlack, name: FONT_NAME, weight: 900 },
     ],
   });
   const png = new Resvg(svg).render().asPng();

@@ -1,5 +1,7 @@
-const isDevBoolean = process.argv.includes('--dev');
+const isDevBoolean = process.env.NODE_ENV === 'development';
 
 export default function isDev() {
   return isDevBoolean;
 }
+
+console.log(process.env.NODE_ENV);
