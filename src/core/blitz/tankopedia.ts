@@ -19,6 +19,9 @@ export interface Tankopedia {
 }
 
 export const tankopedia: Tankopedia = {};
+export const TANK_IDS: number[] = [];
+export const TANKS: TankopediaEntry[] = [];
+export const TANK_NAMES: string[] = [];
 
 console.log('Caching tankopedia...');
 fetch('https://www.blitzstars.com/bs-tankopedia.json')
@@ -30,7 +33,14 @@ fetch('https://www.blitzstars.com/bs-tankopedia.json')
   )
   .then((wargamingResponse) => {
     Object.assign(tankopedia, wargamingResponse.data);
-    console.log('Cached tankopedia');
+    Object.entries(tankopedia).forEach(([idString, entry]) => {
+      const id = Number(idString);
+
+      TANK_IDS.push(id);
+      TANKS.push(entry);
+      TANK_NAMES.push(entry.name);
+    }),
+      console.log('Cached tankopedia');
   });
 
 export const TANK_ICONS: Record<TankType, string> = {
@@ -52,7 +62,3 @@ export const TIER_ROMAN_NUMERALS: Record<number, string> = {
   9: 'IX',
   10: 'X',
 };
-
-export const TANK_IDS = Object.keys(tankopedia).map((id) => Number(id));
-export const TANKS = TANK_IDS.map((id) => tankopedia[id]);
-export const TANK_NAMES = TANKS.map((tank) => tank.name);
