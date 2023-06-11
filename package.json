@@ -1,6 +1,6 @@
 {
   "name": "blitzkrieg",
-  "version": "1.7.3",
+  "version": "1.7.4",
   "description": "",
   "main": "src/index.ts",
   "type": "module",
@@ -8,7 +8,7 @@
     "dev": "yarn build && yarn start",
     "start": "node --enable-source-maps dist/server.cjs",
     "cleandist": "rm -rf dist",
-    "build:raw": "node esbuild.config.js",
+    "build:raw": "esbuild src/index.ts --outfile=dist/server.cjs --platform=node --bundle --sourcemap --loader:.node=copy --loader:.ttf=file",
     "build:package": "cp package.dist.json dist/package.json",
     "build": "yarn cleandist && yarn build:raw && yarn build:package",
     "lint": "tsc"
