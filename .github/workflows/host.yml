@@ -31,7 +31,7 @@ jobs:
 
       - name: Download release assets
         run: |
-          DOWNLOAD_URL=$(curl -s https://api.github.com/repos/:owner/:repo/releases/latest \
+          DOWNLOAD_URL=$(curl -s https://api.github.com/repos/tresabhi/blitzkrieg/releases/latest \
             | grep "browser_download_url.*dist.zip" \
             | cut -d : -f 2,3 \
             | tr -d \")
