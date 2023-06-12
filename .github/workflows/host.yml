@@ -44,4 +44,4 @@ jobs:
         run: yarn
 
       - name: Host
-        run: NODE_ENV=production DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} WARGAMING_APPLICATION_ID=${{ secrets.WARGAMING_APPLICATION_ID }} yarn dev --dev
+        run: NODE_ENV=production DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} WARGAMING_APPLICATION_ID=${{ secrets.WARGAMING_APPLICATION_ID }} yarn dev
