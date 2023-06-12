@@ -1,5 +1,3 @@
-console.log(process.env);
-
 export const discordToken = process.env.DISCORD_TOKEN!;
 export const wargamingApplicationId = process.env.WARGAMING_APPLICATION_ID!;
 
