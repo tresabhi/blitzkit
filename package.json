@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "yarn build && yarn start",
     "start": "node --enable-source-maps dist/index.cjs",
+    "zip": "zip -r dist.zip dist",
     "build": "node scripts/build",
     "lint": "tsc"
   },

@@ -6,3 +6,4 @@ package-lock.json
 /playwright/.cache/
 dist/
 yarn-error.log
+dist.zip
