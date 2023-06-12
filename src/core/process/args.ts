@@ -1,9 +1,9 @@
-export const discordToken = process.env.DISCORD_TOKEN!;
-export const wargamingApplicationId = process.env.WARGAMING_APPLICATION_ID!;
+export const DISCORD_TOKEN = process.env.DISCORD_TOKEN!;
+export const WARGAMING_APPLICATION_ID = process.env.WARGAMING_APPLICATION_ID!;
 
-if (!discordToken) {
+if (!DISCORD_TOKEN) {
   throw new Error('No Discord token provided');
 }
-if (!wargamingApplicationId) {
+if (!WARGAMING_APPLICATION_ID) {
   throw new Error('No Wargaming application id provided}');
 }

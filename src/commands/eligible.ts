@@ -13,7 +13,7 @@ import cmdName from '../core/interaction/cmdName.js';
 import negativeEmbed from '../core/interaction/negativeEmbed.js';
 import positiveEmbed from '../core/interaction/positiveEmbed.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
-import { wargamingApplicationId } from '../core/process/args.js';
+import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
 
@@ -51,7 +51,7 @@ export default {
     const clan = interaction.options.getString('clan') as SkilledClan;
     const { id, server } = await getBlitzAccount(interaction);
     const accountInfo = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${wargamingApplicationId}&account_id=${id}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
     const problems: TableInput = [];
     const title = `${accountInfo[id].nickname}'s eligibility for ${SKILLED_CLANS[clan]}`;

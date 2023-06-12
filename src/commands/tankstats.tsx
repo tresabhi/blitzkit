@@ -33,7 +33,7 @@ import addStatPeriodChoices, {
 } from '../core/options/addStatPeriodChoices.js';
 import addTankChoices from '../core/options/addTankChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
-import { wargamingApplicationId } from '../core/process/args.js';
+import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
@@ -59,7 +59,7 @@ export default {
     const blitzAccount = await getBlitzAccount(interaction);
     const { id, server } = blitzAccount;
     const accountInfo = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${wargamingApplicationId}&account_id=${id}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
     const tankStats = await getTankStats(interaction, server, id);
     let stats: AllStats;

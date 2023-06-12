@@ -6,7 +6,7 @@ import cmdName from '../core/interaction/cmdName.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import addClanChoices from '../core/options/addClanChoices.js';
 import addServerChoices from '../core/options/addServerChoices.js';
-import { wargamingApplicationId } from '../core/process/args.js';
+import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { ClanList } from '../types/clanList.js';
 
@@ -33,7 +33,7 @@ export default {
     const clan = interaction.options.getString('clan')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
     const clanList = await getWargamingResponse<ClanList>(
-      `https://api.wotblitz.${server}/wotb/clans/list/?application_id=${wargamingApplicationId}&search=${clan}&limit=${limit}`,
+      `https://api.wotblitz.${server}/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${clan}&limit=${limit}`,
     );
 
     await interaction.editReply({
