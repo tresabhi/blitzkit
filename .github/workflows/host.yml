@@ -8,40 +8,31 @@ on:
       - 'main'
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   host:
-    name: Host
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x]
-
     steps:
-      - name: Get code
-        uses: actions/checkout@v2
-
       - name: Use node
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
 
-      - name: Install Yarn
-        run: npm install --location=global yarn
-
-      - name: Use node_modules cache
-        uses: actions/cache@v2
+      - name: Get latest release
+        uses: actions/github-script@v4
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          script: |
+            const response = await github.repos.getLatestRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            console.log(response.data.assets[0].browser_download_url);
+            core.setOutput("download_url", response.data.assets[0].browser_download_url);
 
-      - name: Install dependencies
-        run: yarn
+      - name: Download release assets
+        run: |
+          curl -L -o dist.zip ${{ steps.get-latest-release.outputs.download_url }}
+          unzip dist.zip
 
-      - name: Host
-        run: NODE_ENV=production DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} WARGAMING_APPLICATION_ID=${{ secrets.WARGAMING_APPLICATION_ID }} yarn dev
+      - name: Run index.cjs
+        run: NODE_ENV=production DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} WARGAMING_APPLICATION_ID=${{ secrets.WARGAMING_APPLICATION_ID }} node --enable-source-maps dist/index.cjs
