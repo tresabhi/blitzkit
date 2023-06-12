@@ -7,7 +7,7 @@ import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
-import { wargamingApplicationId } from '../core/process/args.js';
+import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
@@ -26,10 +26,10 @@ export default {
     const blitzAccount = await getBlitzAccount(interaction);
     const { id, server } = blitzAccount;
     const accountInfo = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${wargamingApplicationId}&account_id=${id}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
     const clanData = await getWargamingResponse<PlayerClanData>(
-      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${wargamingApplicationId}&account_id=${id}&extra=clan`,
+      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
     );
     const clan = clanData[id]?.clan;
     const clanTag = clan ? ` [${clan!.tag}]` : '';

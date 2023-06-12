@@ -1,7 +1,7 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { BLITZ_SERVERS, BlitzServer } from '../../constants/servers.js';
 import { TanksStats } from '../../types/tanksStats.js';
-import { wargamingApplicationId } from '../process/args.js';
+import { WARGAMING_APPLICATION_ID } from '../process/args.js';
 import errorWithCause from '../process/errorWithCause.js';
 import getWargamingResponse from './getWargamingResponse.js';
 
@@ -11,7 +11,7 @@ export default async function getTankStats(
   id: number,
 ) {
   const tankStats = await getWargamingResponse<TanksStats>(
-    `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${wargamingApplicationId}&account_id=${id}`,
+    `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
   );
 
   if (tankStats[id] === null) {

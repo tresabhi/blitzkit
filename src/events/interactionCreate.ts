@@ -27,7 +27,7 @@ import tankstats from '../commands/tankstats.js';
 import today from '../commands/today.js';
 import verify from '../commands/verify.js';
 import negativeEmbed from '../core/interaction/negativeEmbed.js';
-import { discordToken } from '../core/process/args.js';
+import { DISCORD_TOKEN } from '../core/process/args.js';
 import getClientId from '../core/process/getClientId.js';
 import isDev from '../core/process/isDev.js';
 import { handleError } from './error.js';
@@ -42,7 +42,7 @@ export interface CommandRegistry {
   autocomplete?: (interaction: AutocompleteInteraction<CacheType>) => void;
 }
 
-const rest = new REST().setToken(discordToken);
+const rest = new REST().setToken(DISCORD_TOKEN);
 
 const commands = [
   debug,

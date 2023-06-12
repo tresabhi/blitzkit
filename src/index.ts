@@ -1,5 +1,5 @@
 import { Client, GatewayIntentBits } from 'discord.js';
-import { discordToken } from './core/process/args.js';
+import { DISCORD_TOKEN } from './core/process/args.js';
 import { registerErrorHandlers } from './events/error.js';
 import guildMemberAdd from './events/guildMemberAdd.js';
 import interactionCreate from './events/interactionCreate.js';
@@ -13,4 +13,4 @@ export const client = new Client({
   .on('interactionCreate', interactionCreate);
 
 registerErrorHandlers();
-client.login(discordToken);
+client.login(DISCORD_TOKEN);

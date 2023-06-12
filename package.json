@@ -6,11 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "yarn build && yarn start",
-    "start": "node --enable-source-maps dist/server.cjs",
-    "cleandist": "rm -rf dist",
-    "build:raw": "npx esbuild src/index.ts --outfile=dist/server.cjs --platform=node --bundle --sourcemap --loader:.node=copy --loader:.ttf=file",
-    "build:package": "cp package.dist.json dist/package.json",
-    "build": "yarn cleandist && yarn build:raw && yarn build:package",
+    "start": "node --enable-source-maps dist/index.cjs",
+    "zip": "zip -r dist.zip dist",
+    "build": "node scripts/build",
     "lint": "tsc"
   },
   "license": "MIT",

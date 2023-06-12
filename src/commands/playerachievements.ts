@@ -8,7 +8,7 @@ import cleanTable, { TableInputEntry } from '../core/interaction/cleanTable.js';
 import cmdName from '../core/interaction/cmdName.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
-import { wargamingApplicationId } from '../core/process/args.js';
+import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountAchievements } from '../types/accountAchievements.js';
 import { AccountInfo } from '../types/accountInfo.js';
@@ -39,11 +39,11 @@ export default {
     const account = await getBlitzAccount(interaction);
     const { id, server } = account;
     const accounts = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${wargamingApplicationId}&account_id=${id}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
     const accountsAchievements =
       await getWargamingResponse<AccountAchievements>(
-        `https://api.wotblitz.${server}/wotb/account/achievements/?application_id=${wargamingApplicationId}&account_id=${id}`,
+        `https://api.wotblitz.${server}/wotb/account/achievements/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
       );
     const accountAchievements = accountsAchievements[id];
     const compound = {
