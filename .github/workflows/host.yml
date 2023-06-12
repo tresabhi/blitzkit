@@ -31,7 +31,11 @@ jobs:
 
       - name: Download release assets
         run: |
-          curl -L -o dist.zip ${{ steps.get-latest-release.outputs.download_url }}
+          DOWNLOAD_URL=$(curl -s https://api.github.com/repos/:owner/:repo/releases/latest \
+            | grep "browser_download_url.*dist.zip" \
+            | cut -d : -f 2,3 \
+            | tr -d \")
+          curl -L -o dist.zip $DOWNLOAD_URL
           unzip dist.zip
 
       - name: Run index.cjs
