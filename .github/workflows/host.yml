@@ -2,7 +2,7 @@ name: Host
 
 on:
   schedule:
-    - cron: '50 */5 * * *'
+    - cron: '0 */5 * * *'
   push:
     branches:
       - 'main'
@@ -15,23 +15,15 @@ concurrency:
 jobs:
   host:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
 
     steps:
       - name: Use node
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Get latest release
-        uses: actions/github-script@v4
-        with:
-          script: |
-            const response = await github.repos.getLatestRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo
-            });
-            console.log(response.data.assets[0].browser_download_url);
-            core.setOutput("download_url", response.data.assets[0].browser_download_url);
 
       - name: Download release assets
         run: |
