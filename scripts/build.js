@@ -3,6 +3,7 @@ import { rmSync } from 'fs';
 import { argv } from 'process';
 
 const isDev = argv.includes('--dev');
+const isProd = !isDev;
 
 console.log('Removing dist...');
 rmSync('dist', { recursive: true, force: true });
@@ -18,9 +19,9 @@ build({
     '.ttf': 'file',
   },
 
-  bundle: isDev,
-  sourcemap: isDev,
+  bundle: isProd,
+  sourcemap: isProd,
   minifyIdentifiers: false, // causes errors
-  minifySyntax: isDev,
-  minifyWhitespace: isDev,
+  minifySyntax: isProd,
+  minifyWhitespace: isProd,
 });
