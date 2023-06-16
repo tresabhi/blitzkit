@@ -29,36 +29,32 @@ export default {
     );
     const accountInfo = accounts[id];
 
-    interaction.editReply({
-      embeds: [
-        infoEmbed(
-          `${markdownEscape(accountInfo.nickname)}'s information`,
+    return infoEmbed(
+      `${markdownEscape(accountInfo.nickname)}'s information`,
 
-          cleanTable([
-            ['Nickname', `${accountInfo.nickname}`],
-            ['Battles', `${accountInfo.statistics.all.battles}`],
-            [
-              'Winrate',
-              `${(
-                100 *
-                (accountInfo.statistics.all.wins /
-                  accountInfo.statistics.all.battles)
-              ).toFixed(2)}%`,
-            ],
-            [],
-            ['Account ID', `${accountInfo.account_id}`],
-            [
-              'Created',
-              `${new Date(accountInfo.created_at * 1000).toDateString()}`,
-            ],
-            [
-              'Last battle',
-              `${new Date(accountInfo.last_battle_time * 1000).toDateString()}`,
-            ],
-          ]),
-        ),
-      ],
-    });
+      cleanTable([
+        ['Nickname', `${accountInfo.nickname}`],
+        ['Battles', `${accountInfo.statistics.all.battles}`],
+        [
+          'Winrate',
+          `${(
+            100 *
+            (accountInfo.statistics.all.wins /
+              accountInfo.statistics.all.battles)
+          ).toFixed(2)}%`,
+        ],
+        [],
+        ['Account ID', `${accountInfo.account_id}`],
+        [
+          'Created',
+          `${new Date(accountInfo.created_at * 1000).toDateString()}`,
+        ],
+        [
+          'Last battle',
+          `${new Date(accountInfo.last_battle_time * 1000).toDateString()}`,
+        ],
+      ]),
+    );
   },
 
   autocomplete: usernameAutocomplete,

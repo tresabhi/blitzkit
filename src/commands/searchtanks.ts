@@ -31,15 +31,11 @@ export default {
       (result) => result.target,
     );
 
-    await interaction.editReply({
-      embeds: [
-        infoEmbed(
-          `Tank search for "${markdownEscape(tank)}"`,
-          results.length === 0
-            ? 'No tanks found.'
-            : `\`\`\`\n${results.join('\n')}\n\`\`\``,
-        ),
-      ],
-    });
+    return infoEmbed(
+      `Tank search for "${markdownEscape(tank)}"`,
+      results.length === 0
+        ? 'No tanks found.'
+        : `\`\`\`\n${results.join('\n')}\n\`\`\``,
+    );
   },
 } satisfies CommandRegistry;

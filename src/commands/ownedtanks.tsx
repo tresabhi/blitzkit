@@ -13,7 +13,6 @@ import { TIER_ROMAN_NUMERALS, tankopedia } from '../core/blitz/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
-import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
@@ -41,24 +40,34 @@ const COMP_TANKS = [
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
     .setName(cmdName('ownedtanks'))
     .setDescription("Shows a player's owned tanks")
-    .addIntegerOption((option) =>
+    .addStringOption((option) =>
       option
         .setName('tier')
         .setDescription('The tier you want to see')
-        .setMinValue(1)
-        .setMaxValue(10)
+        .setChoices(
+          { name: 'Tier I', value: '1' },
+          { name: 'Tier II', value: '2' },
+          { name: 'Tier III', value: '3' },
+          { name: 'Tier IV', value: '4' },
+          { name: 'Tier V', value: '5' },
+          { name: 'Tier VI', value: '6' },
+          { name: 'Tier VII', value: '7' },
+          { name: 'Tier VIII', value: '8' },
+          { name: 'Tier IX', value: '9' },
+          { name: 'Tier X', value: '10' },
+        )
         .setRequired(true),
     )
     .addStringOption(addUsernameOption),
 
   async execute(interaction) {
-    const tier = interaction.options.getInteger('tier')!;
+    const tier = Number(interaction.options.getString('tier'));
     const account = await getBlitzAccount(interaction);
     const { id, server } = account;
     const accountInfo = await getWargamingResponse<AccountInfo>(
@@ -72,7 +81,7 @@ export default {
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
     );
 
-    const image = await render(
+    return (
       <Wrapper>
         {/* TODO: integrate some of these into title bar */}
         <TitleBar
@@ -104,10 +113,8 @@ export default {
         )}
 
         <PoweredByWargaming />
-      </Wrapper>,
+      </Wrapper>
     );
-
-    await interaction.editReply({ files: [image] });
   },
 
   autocomplete: usernameAutocomplete,

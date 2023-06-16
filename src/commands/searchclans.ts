@@ -36,19 +36,13 @@ export default {
       `https://api.wotblitz.${server}/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${clan}&limit=${limit}`,
     );
 
-    await interaction.editReply({
-      embeds: [
-        infoEmbed(
-          `Clan search for "${markdownEscape(clan)}" in ${
-            BLITZ_SERVERS[server]
-          }`,
-          clanList.length === 0
-            ? 'No clans found.'
-            : `\`\`\`\n${clanList
-                .map((clan) => `${clan.name} [${clan.tag}]`)
-                .join('\n')}\n\`\`\``,
-        ),
-      ],
-    });
+    return infoEmbed(
+      `Clan search for "${markdownEscape(clan)}" in ${BLITZ_SERVERS[server]}`,
+      clanList.length === 0
+        ? 'No clans found.'
+        : `\`\`\`\n${clanList
+            .map((clan) => `${clan.name} [${clan.tag}]`)
+            .join('\n')}\n\`\`\``,
+    );
   },
 } satisfies CommandRegistry;

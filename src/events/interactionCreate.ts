@@ -5,7 +5,9 @@ import {
   ButtonStyle,
   CacheType,
   ChatInputCommandInteraction,
+  EmbedBuilder,
   Interaction,
+  InteractionEditReplyOptions,
   REST,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
   Routes,
@@ -27,10 +29,16 @@ import tankstats from '../commands/tankstats.js';
 import today from '../commands/today.js';
 import verify from '../commands/verify.js';
 import negativeEmbed from '../core/interaction/negativeEmbed.js';
+import warningEmbed from '../core/interaction/warningEmbed.js';
 import { DISCORD_TOKEN } from '../core/process/args.js';
 import getClientId from '../core/process/getClientId.js';
 import isDev from '../core/process/isDev.js';
+import { psa } from '../core/process/psa.js';
+import render from '../core/ui/render.js';
 import { handleError } from './error.js';
+
+export type CommandReturnable = EmbedBuilder | ButtonBuilder | JSX.Element;
+export type RichCommandReturnable = CommandReturnable | CommandReturnable[];
 
 export interface CommandRegistry {
   inDevelopment: boolean;
@@ -38,28 +46,32 @@ export interface CommandRegistry {
   inPublic: boolean;
 
   command: Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
-  execute: (interaction: ChatInputCommandInteraction<CacheType>) => void;
+  execute: (
+    interaction: ChatInputCommandInteraction<CacheType>,
+  ) => RichCommandReturnable | Promise<RichCommandReturnable>;
   autocomplete?: (interaction: AutocompleteInteraction<CacheType>) => void;
 }
 
 const rest = new REST().setToken(DISCORD_TOKEN);
 
-const commands = [
-  debug,
-  eligible,
-  help,
-  inactive,
-  ownedtanks,
-  playerachievements,
-  playerinfo,
-  searchclans,
-  searchplayers,
-  searchtanks,
-  stats,
-  tankstats,
-  today,
-  verify,
-].reduce<Record<string, CommandRegistry>>((accumulator, registry) => {
+const commands = (
+  [
+    debug,
+    eligible,
+    help,
+    inactive,
+    ownedtanks,
+    playerachievements,
+    playerinfo,
+    searchclans,
+    searchplayers,
+    searchtanks,
+    stats,
+    tankstats,
+    today,
+    verify,
+  ] as CommandRegistry[]
+).reduce<Record<string, CommandRegistry>>((accumulator, registry) => {
   return { ...accumulator, [registry.command.name]: registry };
 }, {});
 
@@ -138,7 +150,36 @@ export default async function interactionCreate(
     await interaction.deferReply();
 
     try {
-      await command.execute(interaction);
+      const result = await command.execute(interaction);
+      const normalizedResult = Array.isArray(result) ? result : [result];
+      const reply: InteractionEditReplyOptions = {};
+
+      if (psa.data) {
+        normalizedResult.push(
+          warningEmbed(psa.data.title, psa.data.description),
+        );
+      }
+
+      await Promise.all(
+        normalizedResult.map(async (item) => {
+          if (item instanceof EmbedBuilder) {
+            if (!reply.embeds) reply.embeds = [];
+            reply.embeds.push(item);
+          } else if (item instanceof ButtonBuilder) {
+            if (!reply.components)
+              reply.components = [new ActionRowBuilder<ButtonBuilder>()];
+            (
+              reply.components[0] as ActionRowBuilder<ButtonBuilder>
+            ).addComponents(item);
+          } else {
+            const image = await render(item);
+            if (!reply.files) reply.files = [];
+            reply.files.push(image);
+          }
+        }),
+      );
+
+      await interaction.editReply(reply);
     } catch (error) {
       const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()

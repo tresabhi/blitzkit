@@ -20,31 +20,27 @@ export default {
     .setName(cmdName('debug'))
     .setDescription('Debug information about the bot'),
 
-  async execute(interaction) {
+  execute(interaction) {
     const currentTime = new Date().getTime();
     const uptime = currentTime - executionStart;
 
-    await interaction.editReply({
-      embeds: [
-        infoEmbed(
-          `${client.user?.username} debug information`,
-          cleanTable([
-            ['Version', packageJSON.version],
-            ['Client ID', getClientId()],
-            ['Tag', interaction.client.user.tag],
-            [
-              'Uptime',
-              `${Math.floor(uptime / 1000 / 60 / 60 / 24)}d ${Math.floor(
-                (uptime / 1000 / 60 / 60) % 24,
-              )}h ${Math.floor((uptime / 1000 / 60) % 60)}m ${Math.floor(
-                (uptime / 1000) % 60,
-              )}s ${Math.floor(uptime % 1000)}ms`,
-            ],
-            ['Tankopedia cached', `${tankopedia !== undefined}`],
-            ['Tank averages cached', `${tankAverages !== undefined}`],
-          ]),
-        ),
-      ],
-    });
+    return infoEmbed(
+      `${client.user?.username} debug information`,
+      cleanTable([
+        ['Version', packageJSON.version],
+        ['Client ID', getClientId()],
+        ['Tag', interaction.client.user.tag],
+        [
+          'Uptime',
+          `${Math.floor(uptime / 1000 / 60 / 60 / 24)}d ${Math.floor(
+            (uptime / 1000 / 60 / 60) % 24,
+          )}h ${Math.floor((uptime / 1000 / 60) % 60)}m ${Math.floor(
+            (uptime / 1000) % 60,
+          )}s ${Math.floor(uptime % 1000)}ms`,
+        ],
+        ['Tankopedia cached', `${tankopedia !== undefined}`],
+        ['Tank averages cached', `${tankAverages !== undefined}`],
+      ]),
+    );
   },
 } satisfies CommandRegistry;

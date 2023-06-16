@@ -1,8 +1,4 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  SlashCommandBuilder,
-} from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 import * as Breakdown from '../components/Breakdown/index.js';
 import NoData, { NoDataType } from '../components/NoData.js';
 import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
@@ -25,7 +21,6 @@ import fullBlitzStarsStats from '../core/interaction/fullBlitzStarsStats.js';
 import { supportBlitzStars } from '../core/interaction/supportBlitzStars.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
-import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
@@ -159,7 +154,7 @@ export default {
       );
     });
 
-    const image = await render(
+    return [
       <Wrapper>
         <TitleBar
           name={accountInfo[id].nickname}
@@ -181,17 +176,9 @@ export default {
 
         <PoweredByBlitzStars />
       </Wrapper>,
-    );
-
-    const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
       fullBlitzStarsStats(server, accountInfo[id].nickname),
       supportBlitzStars,
-    );
-
-    await interaction.editReply({
-      files: [image],
-      components: [actionRow],
-    });
+    ];
   },
 
   autocomplete: usernameAutocomplete,
