@@ -46,18 +46,28 @@ export default {
   command: new SlashCommandBuilder()
     .setName(cmdName('ownedtanks'))
     .setDescription("Shows a player's owned tanks")
-    .addIntegerOption((option) =>
+    .addStringOption((option) =>
       option
         .setName('tier')
         .setDescription('The tier you want to see')
-        .setMinValue(1)
-        .setMaxValue(10)
+        .setChoices(
+          { name: 'Tier I', value: '1' },
+          { name: 'Tier II', value: '2' },
+          { name: 'Tier III', value: '3' },
+          { name: 'Tier IV', value: '4' },
+          { name: 'Tier V', value: '5' },
+          { name: 'Tier VI', value: '6' },
+          { name: 'Tier VII', value: '7' },
+          { name: 'Tier VIII', value: '8' },
+          { name: 'Tier IX', value: '9' },
+          { name: 'Tier X', value: '10' },
+        )
         .setRequired(true),
     )
     .addStringOption(addUsernameOption),
 
   async execute(interaction) {
-    const tier = interaction.options.getInteger('tier')!;
+    const tier = Number(interaction.options.getString('tier'));
     const account = await getBlitzAccount(interaction);
     const { id, server } = account;
     const accountInfo = await getWargamingResponse<AccountInfo>(
