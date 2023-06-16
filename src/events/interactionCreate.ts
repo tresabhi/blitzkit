@@ -29,9 +29,11 @@ import tankstats from '../commands/tankstats.js';
 import today from '../commands/today.js';
 import verify from '../commands/verify.js';
 import negativeEmbed from '../core/interaction/negativeEmbed.js';
+import warningEmbed from '../core/interaction/warningEmbed.js';
 import { DISCORD_TOKEN } from '../core/process/args.js';
 import getClientId from '../core/process/getClientId.js';
 import isDev from '../core/process/isDev.js';
+import { psa } from '../core/process/psa.js';
 import render from '../core/ui/render.js';
 import { handleError } from './error.js';
 
@@ -149,10 +151,17 @@ export default async function interactionCreate(
 
     try {
       const result = await command.execute(interaction);
+      const normalizedResult = Array.isArray(result) ? result : [result];
       const reply: InteractionEditReplyOptions = {};
 
+      if (psa.data) {
+        normalizedResult.push(
+          warningEmbed(psa.data.title, psa.data.description),
+        );
+      }
+
       await Promise.all(
-        (Array.isArray(result) ? result : [result]).map(async (item) => {
+        normalizedResult.map(async (item) => {
           if (item instanceof EmbedBuilder) {
             if (!reply.embeds) reply.embeds = [];
             reply.embeds.push(item);

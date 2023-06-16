@@ -35,7 +35,7 @@ import { AccountInfo, AllStats } from '../types/accountInfo.js';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()

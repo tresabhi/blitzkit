@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "yarn build --dev && yarn start",
-    "start": "node --enable-source-maps dist/index.cjs",
+    "start": "node --enable-source-maps --trace-warnings dist/index.cjs",
     "zip": "zip -r dist.zip dist",
     "build": "node scripts/build",
     "lint": "tsc"
