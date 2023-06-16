@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "yarn build && yarn start",
+    "dev": "yarn build --dev && yarn start",
     "start": "node --enable-source-maps dist/index.cjs",
     "zip": "zip -r dist.zip dist",
     "build": "node scripts/build",

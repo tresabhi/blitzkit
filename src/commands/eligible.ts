@@ -26,7 +26,7 @@ export const SKILLED_CLANS: Record<SkilledClan, string> = {
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: false,
 
   command: new SlashCommandBuilder()
@@ -166,10 +166,6 @@ export default {
           )}`;
     }
 
-    await interaction.editReply({
-      embeds: isEligible
-        ? [positiveEmbed(title, body)]
-        : [negativeEmbed(title, body)],
-    });
+    return (isEligible ? positiveEmbed : negativeEmbed)(title, body);
   },
 } satisfies CommandRegistry;

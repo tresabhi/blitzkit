@@ -13,7 +13,6 @@ import { TIER_ROMAN_NUMERALS, tankopedia } from '../core/blitz/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
-import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
@@ -72,7 +71,7 @@ export default {
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
     );
 
-    const image = await render(
+    return (
       <Wrapper>
         {/* TODO: integrate some of these into title bar */}
         <TitleBar
@@ -104,10 +103,8 @@ export default {
         )}
 
         <PoweredByWargaming />
-      </Wrapper>,
+      </Wrapper>
     );
-
-    await interaction.editReply({ files: [image] });
   },
 
   autocomplete: usernameAutocomplete,

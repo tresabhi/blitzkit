@@ -11,7 +11,6 @@ import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addClanChoices from '../core/options/addClanChoices.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
-import render from '../core/ui/render.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { ClanInfo } from '../types/clanInfo.js';
@@ -20,7 +19,7 @@ const DEFAULT_THRESHOLD = 7;
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -67,7 +66,7 @@ export default {
       );
     const hasInactiveMembers = inactive.length > 0;
 
-    const image = await render(
+    return (
       <Wrapper>
         <TitleBar
           name={clanData.name}
@@ -82,10 +81,8 @@ export default {
         {hasInactiveMembers && <GenericStats stats={inactive} />}
 
         <PoweredByWargaming />
-      </Wrapper>,
+      </Wrapper>
     );
-
-    await interaction.editReply({ files: [image] });
   },
 
   autocomplete: clanAutocomplete,

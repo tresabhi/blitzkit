@@ -17,7 +17,7 @@ type SortBy = 'name' | 'count';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -51,30 +51,26 @@ export default {
       ...accountAchievements.max_series,
     };
 
-    interaction.editReply({
-      embeds: [
-        infoEmbed(
-          `${markdownEscape(accounts[id].nickname)}'s information`,
+    return infoEmbed(
+      `${markdownEscape(accounts[id].nickname)}'s information`,
 
-          cleanTable(
-            Object.keys(compound)
-              .filter((achievement) => compound[achievement] > 0)
-              .sort(
-                sortBy === 'count'
-                  ? (a, b) => compound[b] - compound[a]
-                  : undefined,
-              )
-              .map(
-                (achievement) =>
-                  [
-                    startCase(achievement),
-                    compound[achievement],
-                  ] as TableInputEntry,
-              ),
+      cleanTable(
+        Object.keys(compound)
+          .filter((achievement) => compound[achievement] > 0)
+          .sort(
+            sortBy === 'count'
+              ? (a, b) => compound[b] - compound[a]
+              : undefined,
+          )
+          .map(
+            (achievement) =>
+              [
+                startCase(achievement),
+                compound[achievement],
+              ] as TableInputEntry,
           ),
-        ),
-      ],
-    });
+      ),
+    );
   },
 
   autocomplete: usernameAutocomplete,

@@ -13,7 +13,7 @@ import { AccountList } from '../types/accountList.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -44,19 +44,13 @@ export default {
         )
       : [];
 
-    await interaction.editReply({
-      embeds: [
-        infoEmbed(
-          `Player search for "${markdownEscape(name)}" in ${
-            BLITZ_SERVERS[server]
-          }`,
-          `\`\`\`${
-            players.length === 0
-              ? 'No players found.'
-              : players.map((player) => player.nickname).join('\n')
-          }\`\`\``,
-        ),
-      ],
-    });
+    return infoEmbed(
+      `Player search for "${markdownEscape(name)}" in ${BLITZ_SERVERS[server]}`,
+      `\`\`\`${
+        players.length === 0
+          ? 'No players found.'
+          : players.map((player) => player.nickname).join('\n')
+      }\`\`\``,
+    );
   },
 } satisfies CommandRegistry;
