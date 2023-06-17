@@ -35,4 +35,4 @@ jobs:
           unzip dist.zip
 
       - name: Run index.cjs
-        run: NODE_ENV=production DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} WARGAMING_APPLICATION_ID=${{ secrets.WARGAMING_APPLICATION_ID }} node --enable-source-maps index.cjs
+        run: NODE_ENV=production DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} WARGAMING_APPLICATION_ID=${{ secrets.WARGAMING_APPLICATION_ID }} node --enable-source-maps --trace-warnings index.cjs

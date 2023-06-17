@@ -7,3 +7,4 @@ package-lock.json
 dist/
 yarn-error.log
 dist.zip
+commands.txt

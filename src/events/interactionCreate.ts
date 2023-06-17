@@ -146,7 +146,17 @@ export default async function interactionCreate(
       return;
     }
 
-    console.log(interaction.toString());
+    const metadata = [
+      `${interaction.user.id} (${interaction.user.username})`,
+      `${interaction.guildId}/${interaction.channelId} (${interaction.guild?.name})`,
+      new Date(),
+    ];
+
+    console.log(
+      `${interaction.toString()}\n${metadata
+        .map((item) => `  ${item}`)
+        .join('\n')}`,
+    );
     await interaction.deferReply();
 
     try {
