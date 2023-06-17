@@ -19,6 +19,7 @@ import eligible from '../commands/eligible.js';
 import help from '../commands/help.js';
 import inactive from '../commands/inactive.js';
 import ownedtanks from '../commands/ownedtanks.js';
+import ping from '../commands/ping.js';
 import playerachievements from '../commands/playerachievements.js';
 import playerinfo from '../commands/playerinfo.js';
 import searchclans from '../commands/searchclans.js';
@@ -40,17 +41,25 @@ import { handleError } from './error.js';
 export type CommandReturnable = EmbedBuilder | ButtonBuilder | JSX.Element;
 export type RichCommandReturnable = CommandReturnable | CommandReturnable[];
 
-export interface CommandRegistry {
+export type CommandRegistry = {
   inDevelopment: boolean;
   inProduction: boolean;
   inPublic: boolean;
 
   command: Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
-  execute: (
-    interaction: ChatInputCommandInteraction<CacheType>,
-  ) => RichCommandReturnable | Promise<RichCommandReturnable>;
   autocomplete?: (interaction: AutocompleteInteraction<CacheType>) => void;
-}
+} & (
+  | {
+      handlesInteraction?: false;
+      execute: (
+        interaction: ChatInputCommandInteraction<CacheType>,
+      ) => RichCommandReturnable | Promise<RichCommandReturnable>;
+    }
+  | {
+      handlesInteraction: true;
+      execute: (interaction: ChatInputCommandInteraction<CacheType>) => void;
+    }
+);
 
 const rest = new REST().setToken(DISCORD_TOKEN);
 
@@ -70,6 +79,7 @@ const commands = (
     tankstats,
     today,
     verify,
+    ping,
   ] as CommandRegistry[]
 ).reduce<Record<string, CommandRegistry>>((accumulator, registry) => {
   return { ...accumulator, [registry.command.name]: registry };
@@ -161,6 +171,9 @@ export default async function interactionCreate(
 
     try {
       const result = await command.execute(interaction);
+
+      if (command.handlesInteraction) return;
+
       const normalizedResult = Array.isArray(result) ? result : [result];
       const reply: InteractionEditReplyOptions = {};
 
@@ -182,7 +195,7 @@ export default async function interactionCreate(
               reply.components[0] as ActionRowBuilder<ButtonBuilder>
             ).addComponents(item);
           } else {
-            const image = await render(item);
+            const image = await render(item!);
             if (!reply.files) reply.files = [];
             reply.files.push(image);
           }
