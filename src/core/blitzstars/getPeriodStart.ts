@@ -1,4 +1,5 @@
-import { StatPeriod } from '../options/addStatPeriodChoices.js';
+import { StatPeriod } from '../options/addPeriodChoices.js';
+import getPeriodStartFromDaysAgo from './getPeriodStartFromDaysAgo.js';
 
 export default function getPeriodicStart(period: StatPeriod) {
   if (period === 'career') {
@@ -12,12 +13,6 @@ export default function getPeriodicStart(period: StatPeriod) {
 
     return now.getTime() / 1000;
   } else {
-    const daysAgo = Number(period) - 1;
-    const periodStart = new Date();
-
-    periodStart.setDate(periodStart.getDate() - daysAgo);
-    periodStart.setHours(5, 0, 0, 0);
-
-    return periodStart.getTime() / 1000;
+    return getPeriodStartFromDaysAgo(Number(period));
   }
 }

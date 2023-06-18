@@ -8,7 +8,7 @@ export const statPeriodNames: Record<StatPeriod, string> = {
   90: '90-day statistics',
   career: 'Career statistics',
 };
-export default function addStatPeriodChoices(option: SlashCommandStringOption) {
+export default function addPeriodChoices(option: SlashCommandStringOption) {
   return option
     .setName('period')
     .setDescription('The period to get stats for')

@@ -14,15 +14,17 @@ import sumStats from '../core/blitz/sumStats.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
 import getPeriodicStart from '../core/blitzstars/getPeriodStart.js';
+import getPeriodStartFromDaysAgo from '../core/blitzstars/getPeriodStartFromDaysAgo.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import cmdName from '../core/interaction/cmdName.js';
 import fullBlitzStarsStats from '../core/interaction/fullBlitzStarsStats.js';
 import { supportBlitzStars } from '../core/interaction/supportBlitzStars.js';
-import addStatPeriodChoices, {
+import addCustomPeriodOption from '../core/options/addCustomPeriodOption.js';
+import addPeriodChoices, {
   StatPeriod,
   statPeriodNames,
-} from '../core/options/addStatPeriodChoices.js';
+} from '../core/options/addPeriodChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
@@ -35,14 +37,25 @@ import { PlayerClanData } from '../types/playerClanData.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
     .setName(cmdName('stats'))
     .setDescription("Gets the user's in-game statistics")
-    .addStringOption(addStatPeriodChoices)
-    .addStringOption(addUsernameOption),
+    .addSubcommand((option) =>
+      option
+        .setName('period')
+        .setDescription('Pick from a predetermined periods')
+        .addStringOption(addPeriodChoices)
+        .addStringOption(addUsernameOption),
+    )
+    .addSubcommand((option) =>
+      addCustomPeriodOption(option)
+        .setName('customperiod')
+        .setDescription('Custom periods')
+        .addStringOption(addUsernameOption),
+    ),
 
   async execute(interaction) {
     const period = interaction.options.getString('period') as StatPeriod;
@@ -53,12 +66,25 @@ export default {
     const clanData = await getWargamingResponse<PlayerClanData>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
     );
-    const tankStats = await getTankStats(interaction, server, id);
     let stats: AllStats;
     let supplementaryStats: SupplementaryStats | undefined;
     let hasWN8AccumulatedAtAll = false;
+    const isCustomPeriod =
+      interaction.options.getSubcommand() === 'customperiod';
+    let periodName: string;
+    const startRaw = interaction.options.getInteger('start')!;
+    const endRaw = interaction.options.getInteger('end')!;
+    const start = Math.max(startRaw, endRaw);
+    const end = Math.min(startRaw, endRaw);
+
+    if (isCustomPeriod) {
+      periodName = `${start} to ${end} days ago`;
+    } else {
+      periodName = statPeriodNames[period];
+    }
 
     if (period === 'career') {
+      const tankStats = await getTankStats(server, id);
       stats = accountInfo[id].statistics.all;
       const totalBattles = tankStats.reduce(
         (accumulator, { all }) => accumulator + all.battles,
@@ -87,11 +113,12 @@ export default {
       };
     } else {
       const tankStatsOverTime = await getTankStatsOverTime(
-        interaction,
         server,
         id,
-        getPeriodicStart(period),
-        getPeriodNow(),
+        isCustomPeriod
+          ? getPeriodStartFromDaysAgo(start)
+          : getPeriodicStart(period),
+        isCustomPeriod ? getPeriodStartFromDaysAgo(end) : getPeriodNow(),
       );
       const entries = Object.entries(tankStatsOverTime);
       const totalBattles = entries.reduce(
@@ -141,9 +168,9 @@ export default {
               ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`
               : undefined
           }
-          description={`${
-            statPeriodNames[period]
-          } • ${new Date().toDateString()} • ${BLITZ_SERVERS[server]}`}
+          description={`${periodName} • ${new Date().toDateString()} • ${
+            BLITZ_SERVERS[server]
+          }`}
         />
 
         {stats.battles === 0 && <NoData type={NoDataType.BattlesInPeriod} />}

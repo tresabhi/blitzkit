@@ -38,7 +38,6 @@ export default {
   async execute(interaction) {
     const { id, server } = await getBlitzAccount(interaction);
     const tankStatsOverTime = await getTankStatsOverTime(
-      interaction,
       server,
       id,
       last5AM().getTime() / 1000,
@@ -50,7 +49,7 @@ export default {
     const clanData = await getWargamingResponse<PlayerClanData>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
     );
-    const careerTankStatsRaw = await getTankStats(interaction, server, id);
+    const careerTankStatsRaw = await getTankStats(server, id);
     const careerStats: Record<number, AllStats> = {
       0: accountInfo[id].statistics.all,
     };

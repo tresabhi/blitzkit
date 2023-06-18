@@ -1,4 +1,3 @@
-import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { BlitzServer } from '../../constants/servers.js';
 import { AllStats } from '../../types/accountInfo.js';
 import getTankStats from '../blitz/getTankStats.js';
@@ -44,13 +43,12 @@ export const emptyTankHistoryNode: TankHistoryNode = {
 export type TankHistory = TankHistoryNode[];
 
 export default async function getTankStatsOverTime(
-  interaction: ChatInputCommandInteraction<CacheType>,
   server: BlitzServer,
   id: number,
   start: number,
   end: number,
 ) {
-  const latestTankStatsRaw = await getTankStats(interaction, server, id);
+  const latestTankStatsRaw = await getTankStats(server, id);
   const tankHistoriesResponse = await fetch(
     `https://www.blitzstars.com/api/tankhistories/for/${id}/`,
   );

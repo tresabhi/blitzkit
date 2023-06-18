@@ -60,7 +60,6 @@ export default {
 
     if (clan === 'SKLLD') {
       const tankStatsOverTime = await getTankStatsOverTime(
-        interaction,
         server,
         id,
         getPeriodicStart('30'),

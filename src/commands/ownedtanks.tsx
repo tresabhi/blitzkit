@@ -73,7 +73,7 @@ export default {
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
-    const tankStats = await getTankStats(interaction, server, id);
+    const tankStats = await getTankStats(server, id);
     const tanks = tankStats
       .map((tankData) => tankopedia[tankData.tank_id])
       .filter((tank) => tank?.tier === tier);
