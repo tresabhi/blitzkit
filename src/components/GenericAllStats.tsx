@@ -11,6 +11,10 @@ export default function GenericAllStats({
   stats,
   supplementaryStats,
 }: GenericAllStatsProps) {
+  const damageRatio = stats.damage_dealt / stats.damage_received;
+  const killsToDeathRatio =
+    stats.frags / (stats.battles - stats.survived_battles);
+
   return (
     <GenericStats
       stats={[
@@ -41,13 +45,10 @@ export default function GenericAllStats({
         ['Average hits', (stats.hits / stats.battles).toFixed(2)],
         ['Average kills', (stats.frags / stats.battles).toFixed(2)],
         ['Average spots', (stats.spotted / stats.battles).toFixed(2)],
-        [
-          'Damage ratio',
-          (stats.damage_dealt / stats.damage_received).toFixed(2),
-        ],
+        ['Damage ratio', isFinite(damageRatio) ? damageRatio.toFixed(2) : '--'],
         [
           'Kills to death ratio',
-          (stats.frags / (stats.battles - stats.survived_battles)).toFixed(2),
+          isFinite(killsToDeathRatio) ? killsToDeathRatio.toFixed(2) : '--',
         ],
       ]}
     />
