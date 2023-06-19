@@ -20,7 +20,7 @@ build({
   },
 
   bundle: true,
-  sourcemap: isProd,
+  sourcemap: true,
   minifyIdentifiers: false, // causes errors
   minifySyntax: isProd,
   minifyWhitespace: isProd,

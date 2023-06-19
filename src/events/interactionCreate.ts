@@ -27,7 +27,6 @@ import searchclans from '../commands/searchclans.js';
 import searchplayers from '../commands/searchplayers.js';
 import searchtanks from '../commands/searchtanks.js';
 import stats from '../commands/stats.js';
-import tankstats from '../commands/tankstats.js';
 import today from '../commands/today.js';
 import verify from '../commands/verify.js';
 import negativeEmbed from '../core/interaction/negativeEmbed.js';
@@ -77,7 +76,6 @@ const commands = (
     searchplayers,
     searchtanks,
     stats,
-    tankstats,
     today,
     verify,
     ping,

@@ -5,7 +5,7 @@ import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import sumStats from '../core/blitz/sumStats.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
-import getPeriodicStart from '../core/blitzstars/getPeriodStart.js';
+import getPeriodStart from '../core/blitzstars/getPeriodStart.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import cleanTable, { TableInput } from '../core/interaction/cleanTable.js';
@@ -62,7 +62,7 @@ export default {
       const tankStatsOverTime = await getTankStatsOverTime(
         server,
         id,
-        getPeriodicStart('30'),
+        getPeriodStart('30'),
         getPeriodNow(),
       );
       const entries = Object.entries(tankStatsOverTime);
