@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import GenericAllStats from '../components/GenericAllStats.js';
 import NoData, { NoDataType } from '../components/NoData.js';
 import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
+import TierWeights, { TierWeightsRecord } from '../components/TierWeights.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
@@ -13,7 +14,7 @@ import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankId from '../core/blitz/resolveTankId.js';
 import resolveTankName from '../core/blitz/resolveTankName.js';
 import sumStats from '../core/blitz/sumStats.js';
-import { tankopedia } from '../core/blitz/tankopedia.js';
+import { Tier, tankopedia } from '../core/blitz/tankopedia.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
 import getPeriodStart from '../core/blitzstars/getPeriodStart.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
@@ -113,34 +114,57 @@ export default {
     );
     let stats: AllStats;
     let supplementaryStats: SupplementaryStats;
+    let tierWeights: TierWeightsRecord;
 
     if (commandGroup === 'player') {
       const entries = Object.entries(tankStats);
       stats = sumStats(entries.map(([, stats]) => stats));
-      const battles = entries.reduce(
-        (accumulator, [, stats]) => accumulator + stats.battles,
-        0,
-      );
+      const battles = entries.reduce((accumulator, [tankIdString, stats]) => {
+        const tankId = parseInt(tankIdString);
+        const tankAverage = tankAverages[tankId];
+
+        return tankAverage ? accumulator + stats.battles : accumulator;
+      }, 0);
+
       supplementaryStats = {
         WN8:
-          entries.reduce(
-            (accumulator, [tankIdString, stats]) =>
-              accumulator +
-              getWN8(tankAverages[parseInt(tankIdString)].all, stats) *
-                stats.battles,
-            0,
-          ) / battles,
+          entries.reduce((accumulator, [tankIdString, stats]) => {
+            const tankId = parseInt(tankIdString);
+            const tankAverage = tankAverages[tankId];
+
+            return tankAverage
+              ? accumulator + getWN8(tankAverage.all, stats) * stats.battles
+              : accumulator;
+          }, 0) / battles,
         tier:
-          entries.reduce(
-            (accumulator, [tankIdString, stats]) =>
-              accumulator +
-              tankopedia[parseInt(tankIdString)].tier * stats.battles,
-            0,
-          ) / battles,
+          entries.reduce((accumulator, [tankIdString, stats]) => {
+            const tankId = parseInt(tankIdString);
+            const tankAverage = tankAverages[tankId];
+
+            return tankAverage
+              ? accumulator + tankopedia[tankId].tier * stats.battles
+              : accumulator;
+          }, 0) / battles,
       };
+      tierWeights = entries.reduce<TierWeightsRecord>(
+        (accumulator, [tankIdString, stats]) => {
+          const tankId = parseInt(tankIdString);
+          const tier = tankopedia[tankId].tier as Tier;
+
+          if (accumulator[tier]) {
+            accumulator[tier]! += stats.battles;
+          } else {
+            accumulator[tier] = stats.battles;
+          }
+
+          return accumulator;
+        },
+        {},
+      );
     } else if (commandGroup === 'tank') {
       const tankId = await resolveTankId(tankIdRaw);
       stats = tankStats[tankId];
+
       supplementaryStats = {
         WN8: getWN8(tankAverages[tankId].all, tankStats[tankId]),
         tier: tankopedia[tankId].tier,
@@ -163,6 +187,9 @@ export default {
         />
 
         {stats!.battles === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
+        {stats!.battles > 0 && commandGroup === 'player' && (
+          <TierWeights weights={tierWeights!} />
+        )}
         {stats!.battles > 0 && (
           <GenericAllStats
             stats={stats!}

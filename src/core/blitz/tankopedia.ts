@@ -50,7 +50,9 @@ export const TANK_ICONS: Record<TankType, string> = {
   heavyTank: 'https://i.imgur.com/ECeqlZa.png',
 };
 
-export const TIER_ROMAN_NUMERALS: Record<number, string> = {
+export type Tier = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+
+export const TIER_ROMAN_NUMERALS: Record<Tier, string> = {
   1: 'I',
   2: 'II',
   3: 'III',
