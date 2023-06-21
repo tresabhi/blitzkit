@@ -15,12 +15,11 @@ import { tankopedia } from '../core/blitz/tankopedia.js';
 import getTankHistories from '../core/blitzstars/getTankHistories.js';
 import cmdName from '../core/interaction/cmdName.js';
 import { supportBlitzStars } from '../core/interaction/supportBlitzStars.js';
-import addPeriodSubCommands, {
+import {
   Period,
   RELATIVE_PERIOD_NAMES,
 } from '../core/options/addPeriodSubCommands.js';
-import addTankChoices from '../core/options/addTankChoices.js';
-import addUsernameOption from '../core/options/addUsernameOption.js';
+import addStatsSubCommandGroups from '../core/options/addStatsSubCommandGroups.js';
 import getPeriodDataFromSubcommand from '../core/options/getPeriodDataFromSubcommand.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
@@ -32,25 +31,11 @@ export default {
   inDevelopment: true,
   inPublic: true,
 
-  command: new SlashCommandBuilder()
-    .setName(cmdName('evolution'))
-    .setDescription('Evolution of statistics')
-    .addSubcommandGroup((option) =>
-      addPeriodSubCommands(option, (option) =>
-        option.addStringOption(addUsernameOption),
-      )
-        .setName('player')
-        .setDescription("Player's statistics"),
-    )
-    .addSubcommandGroup((option) =>
-      addPeriodSubCommands(option, (option) =>
-        option
-          .addStringOption(addTankChoices)
-          .addStringOption(addUsernameOption),
-      )
-        .setName('tank')
-        .setDescription("Tank's statistics"),
-    ),
+  command: addStatsSubCommandGroups(
+    new SlashCommandBuilder()
+      .setName(cmdName('evolution'))
+      .setDescription('Evolution of statistics'),
+  ),
 
   async execute(interaction) {
     const commandGroup = interaction.options.getSubcommandGroup()!;

@@ -5,10 +5,11 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "yarn build --dev && yarn start",
+    "dev": "yarn build:raw --dev && yarn start",
     "start": "node --enable-source-maps --trace-warnings dist/index.cjs",
     "zip": "zip -r dist.zip dist",
-    "build": "yarn lint && node scripts/build",
+    "build:raw": "node scripts/build",
+    "build": "yarn lint && yarn build:raw",
     "lint": "tsc"
   },
   "license": "MIT",
