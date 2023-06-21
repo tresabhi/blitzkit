@@ -86,6 +86,10 @@ const commands = (
     evolution,
   ] as CommandRegistry[]
 ).reduce<Record<string, CommandRegistry>>((accumulator, registry) => {
+  registry.command.setName(
+    isDev() ? `${registry.command.name}dev` : registry.command.name,
+  );
+
   return { ...accumulator, [registry.command.name]: registry };
 }, {});
 
@@ -96,9 +100,7 @@ export const publicCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
 
 Object.entries(commands).forEach(([, registry]) => {
   if (isDev() ? registry.inDevelopment : registry.inProduction) {
-    const json = registry.command
-      .setName(isDev() ? `${registry.command.name}dev` : registry.command.name)
-      .toJSON();
+    const json = registry.command.toJSON();
 
     if (registry.inPublic) {
       publicCommands.push(json);
