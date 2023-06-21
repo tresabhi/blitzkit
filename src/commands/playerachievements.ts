@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
-import startCase from 'lodash.startcase';
+import { startCase } from 'lodash';
 import markdownEscape from 'markdown-escape';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';

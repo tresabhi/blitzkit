@@ -1,34 +1,30 @@
-import { SlashCommandBuilder } from 'discord.js';
-import GenericAllStats from '../components/GenericAllStats.js';
+import { ButtonBuilder, ButtonStyle, SlashCommandBuilder } from 'discord.js';
+import * as Graph from '../components/Graph/index.js';
 import NoData, { NoDataType } from '../components/NoData.js';
 import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
-import TierWeights, { TierWeightsRecord } from '../components/TierWeights.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
 import tanksAutocomplete from '../core/autocomplete/tanks.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
-import getWN8 from '../core/blitz/getWN8.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankId from '../core/blitz/resolveTankId.js';
 import resolveTankName from '../core/blitz/resolveTankName.js';
-import sumStats from '../core/blitz/sumStats.js';
-import { Tier, tankopedia } from '../core/blitz/tankopedia.js';
-import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
-import { tankAverages } from '../core/blitzstars/tankAverages.js';
+import { tankopedia } from '../core/blitz/tankopedia.js';
+import getTankHistories from '../core/blitzstars/getTankHistories.js';
 import cmdName from '../core/interaction/cmdName.js';
-import addPeriodSubCommands from '../core/options/addPeriodSubCommands.js';
+import { supportBlitzStars } from '../core/interaction/supportBlitzStars.js';
+import addPeriodSubCommands, {
+  Period,
+  RELATIVE_PERIOD_NAMES,
+} from '../core/options/addPeriodSubCommands.js';
 import addTankChoices from '../core/options/addTankChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import getPeriodDataFromSubcommand from '../core/options/getPeriodDataFromSubcommand.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
-import {
-  AccountInfo,
-  AllStats,
-  SupplementaryStats,
-} from '../types/accountInfo.js';
+import { AccountInfo } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 
 export default {
@@ -37,9 +33,8 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    // TODO: embed cmdName into interaction create
-    .setName(cmdName('stats'))
-    .setDescription('In-game statistics')
+    .setName(cmdName('evolution'))
+    .setDescription('Evolution of statistics')
     .addSubcommandGroup((option) =>
       addPeriodSubCommands(option, (option) =>
         option.addStringOption(addUsernameOption),
@@ -63,6 +58,7 @@ export default {
     let nameDiscriminator: string | undefined;
     let image: string | undefined;
     const tankIdRaw = interaction.options.getString('tank')!;
+    let tankId: number;
 
     if (commandGroup === 'player') {
       const clan = (
@@ -76,106 +72,114 @@ export default {
         ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clan.emblem_set_id}.png`
         : undefined;
     } else if (commandGroup === 'tank') {
-      const tankId = resolveTankId(tankIdRaw);
+      tankId = resolveTankId(tankIdRaw);
       nameDiscriminator = `(${resolveTankName(tankId)})`;
       image = tankopedia[tankId].images.normal;
     }
 
-    const {
-      statsName,
-      start,
-      end,
-    } = getPeriodDataFromSubcommand(interaction);
+    const { evolutionName, start, end } =
+      getPeriodDataFromSubcommand(interaction);
 
-    const tankStats = await getTankStatsOverTime(server, id, start, end);
-    let stats: AllStats;
-    let supplementaryStats: SupplementaryStats;
-    let tierWeights: TierWeightsRecord;
+    let careerWinrate: Graph.Plot;
+    let careerBattles: Graph.Plot;
 
     if (commandGroup === 'player') {
-      const entries = Object.entries(tankStats);
-      stats = sumStats(entries.map(([, stats]) => stats));
-      const battles = entries.reduce((accumulator, [tankIdString, stats]) => {
-        const tankId = parseInt(tankIdString);
-        const tankAverage = tankAverages[tankId];
-
-        return tankAverage ? accumulator + stats.battles : accumulator;
-      }, 0);
-
-      supplementaryStats = {
-        WN8:
-          entries.reduce((accumulator, [tankIdString, stats]) => {
-            const tankId = parseInt(tankIdString);
-            const tankAverage = tankAverages[tankId];
-
-            return tankAverage
-              ? accumulator + getWN8(tankAverage.all, stats) * stats.battles
-              : accumulator;
-          }, 0) / battles,
-        tier:
-          entries.reduce((accumulator, [tankIdString, stats]) => {
-            const tankId = parseInt(tankIdString);
-            const tankAverage = tankAverages[tankId];
-
-            return tankAverage
-              ? accumulator + tankopedia[tankId].tier * stats.battles
-              : accumulator;
-          }, 0) / battles,
-      };
-      tierWeights = entries.reduce<TierWeightsRecord>(
-        (accumulator, [tankIdString, stats]) => {
-          const tankId = parseInt(tankIdString);
-          const tier = tankopedia[tankId].tier as Tier;
-
-          if (accumulator[tier]) {
-            accumulator[tier]! += stats.battles;
-          } else {
-            accumulator[tier] = stats.battles;
-          }
-
-          return accumulator;
-        },
-        {},
-      );
     } else {
       const tankId = resolveTankId(tankIdRaw);
-      stats = tankStats[tankId];
+      const histories = await getTankHistories(server, id, {
+        tankId,
+        start,
+        end,
+        includeLatestHistories: true,
+        includePreviousHistories: true,
+      });
 
-      supplementaryStats = {
-        WN8: getWN8(tankAverages[tankId].all, tankStats[tankId]),
-        tier: tankopedia[tankId].tier,
-      };
+      careerWinrate = histories.map(
+        (history) =>
+          [
+            history.last_battle_time,
+            (history.all.wins / history.all.battles) * 100,
+          ] as Graph.PlotItem,
+      );
+      careerBattles = histories.map(
+        (history) =>
+          [history.last_battle_time, history.all.battles] as Graph.PlotItem,
+      );
     }
+
+    const winrateYs = careerWinrate.map(([, y]) => y);
+    const maxWinrate = Math.max(...winrateYs);
+    const minWinrate = Math.min(...winrateYs);
+    const battleYs = careerBattles.map(([, y]) => y);
+    const maxBattle = Math.max(...battleYs);
+    const minBattle = Math.min(...battleYs);
 
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
 
-    return (
+    return [
       <Wrapper>
         <TitleBar
           name={accountInfo[id].nickname}
           nameDiscriminator={nameDiscriminator}
           image={image}
-          description={`${statsName} • ${new Date().toDateString()} • ${
+          description={`${evolutionName} • ${new Date().toDateString()} • ${
             BLITZ_SERVERS[server]
           }`}
         />
 
-        {stats.battles === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
-        {stats.battles > 0 && commandGroup === 'player' && (
-          <TierWeights weights={tierWeights!} />
+        {/* goofy ahh bug forces me to call them as functions */}
+        {careerWinrate.length > 0 && (
+          <Graph.Root
+            xMinLabel={
+              RELATIVE_PERIOD_NAMES[
+                interaction.options.getSubcommand() as Period
+              ]
+            }
+            xMaxLabel="Today"
+            leftVerticalMargin={{
+              min: minWinrate,
+              max: maxWinrate,
+              suffix: '%',
+            }}
+            rightVerticalMargin={{
+              min: minBattle,
+              max: maxBattle,
+            }}
+          >
+            {Graph.Line({
+              // total battles
+              plot: careerBattles!,
+              color: Graph.LineColor.Blue,
+            })}
+            {Graph.Line({
+              // career winrate
+              plot: careerWinrate!,
+              minY: minWinrate,
+              maxY: maxWinrate,
+            })}
+          </Graph.Root>
         )}
-        {stats.battles > 0 && (
-          <GenericAllStats
-            stats={stats}
-            supplementaryStats={supplementaryStats}
-          />
+
+        {careerWinrate.length === 0 && (
+          <NoData type={NoDataType.BattlesInPeriod} />
         )}
 
         <PoweredByBlitzStars />
-      </Wrapper>
-    );
+      </Wrapper>,
+      new ButtonBuilder()
+        .setStyle(ButtonStyle.Link)
+        .setLabel('View on BlitzStars')
+        .setURL(
+          commandGroup === 'tank'
+            ? `https://www.blitzstars.com/player/com/${
+                accountInfo[id].nickname
+              }/tank/${tankId!}`
+            : `https://www.blitzstars.com/player/com/${accountInfo[id].nickname}`,
+        ),
+      supportBlitzStars,
+    ];
   },
 
   autocomplete: (interaction) => {

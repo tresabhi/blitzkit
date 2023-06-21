@@ -2,15 +2,16 @@ import {
   SlashCommandSubcommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
+import { PERIOD_NAMES } from './getPeriodDataFromSubcommand.js';
 
 export type Period = 'today' | '30' | '60' | '90' | 'career' | 'custom';
 
-export const PERIOD_NAMES: Record<Period, string> = {
-  today: "Today's statistics",
-  '30': "30 days' statistics",
-  '60': "60 days' statistics",
-  '90': "90 days' statistics",
-  career: 'Career statistics',
+export const RELATIVE_PERIOD_NAMES: Record<Period, string> = {
+  today: 'A day ago',
+  '30': '30 days ago',
+  '60': '60 days ago',
+  '90': '90 days ago',
+  career: 'Start of career',
   custom: 'Custom period',
 };
 

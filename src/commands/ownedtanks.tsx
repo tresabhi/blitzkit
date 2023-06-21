@@ -9,7 +9,11 @@ import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getTankStats from '../core/blitz/getTankStats.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import { TIER_ROMAN_NUMERALS, tankopedia } from '../core/blitz/tankopedia.js';
+import {
+  TIER_ROMAN_NUMERALS,
+  Tier,
+  tankopedia,
+} from '../core/blitz/tankopedia.js';
 import cmdName from '../core/interaction/cmdName.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
@@ -86,7 +90,7 @@ export default {
         {/* TODO: integrate some of these into title bar */}
         <TitleBar
           name={accountInfo[id].nickname}
-          nameDiscriminator={`(Tier ${TIER_ROMAN_NUMERALS[tier]})`}
+          nameDiscriminator={`(Tier ${TIER_ROMAN_NUMERALS[tier as Tier]})`}
           image={
             clanData[id]?.clan
               ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`

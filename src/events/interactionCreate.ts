@@ -17,6 +17,7 @@ import {
 import discord from '../../discord.json' assert { type: 'json' };
 import debug from '../commands/debug.js';
 import eligible from '../commands/eligible.js';
+import evolution from '../commands/evolution.js';
 import help from '../commands/help.js';
 import inactive from '../commands/inactive.js';
 import ownedtanks from '../commands/ownedtanks.js';
@@ -46,7 +47,10 @@ export type CommandRegistry = {
   inProduction: boolean;
   inPublic: boolean;
 
-  command: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder;
+  command:
+    | SlashCommandBuilder
+    | SlashCommandSubcommandsOnlyBuilder
+    | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
   autocomplete?: (interaction: AutocompleteInteraction<CacheType>) => void;
 } & (
   | {
@@ -79,6 +83,7 @@ const commands = (
     today,
     verify,
     ping,
+    evolution,
   ] as CommandRegistry[]
 ).reduce<Record<string, CommandRegistry>>((accumulator, registry) => {
   return { ...accumulator, [registry.command.name]: registry };
