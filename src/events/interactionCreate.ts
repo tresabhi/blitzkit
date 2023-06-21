@@ -96,10 +96,14 @@ export const publicCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
 
 Object.entries(commands).forEach(([, registry]) => {
   if (isDev() ? registry.inDevelopment : registry.inProduction) {
+    const json = registry.command
+      .setName(isDev() ? `${registry.command.name}dev` : registry.command.name)
+      .toJSON();
+
     if (registry.inPublic) {
-      publicCommands.push(registry.command.toJSON());
+      publicCommands.push(json);
     } else {
-      guildCommands.push(registry.command.toJSON());
+      guildCommands.push(json);
     }
   }
 });

@@ -1,5 +1,4 @@
 import { SlashCommandBuilder } from 'discord.js';
-import cmdName from '../core/interaction/cmdName.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 
 export default {
@@ -9,7 +8,7 @@ export default {
   handlesInteraction: true,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('ping'))
+    .setName('ping')
     .setDescription('Check if the bot is alive'),
 
   async execute(interaction) {

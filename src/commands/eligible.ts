@@ -9,7 +9,6 @@ import getPeriodStart from '../core/blitzstars/getPeriodStart.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import cleanTable, { TableInput } from '../core/interaction/cleanTable.js';
-import cmdName from '../core/interaction/cmdName.js';
 import negativeEmbed from '../core/interaction/negativeEmbed.js';
 import positiveEmbed from '../core/interaction/positiveEmbed.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
@@ -30,7 +29,7 @@ export default {
   inPublic: false,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('eligible'))
+    .setName('eligible')
     .setDescription('Checks eligibility for any Skilled clan')
     .addStringOption((option) =>
       option

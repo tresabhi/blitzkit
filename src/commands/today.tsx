@@ -16,7 +16,6 @@ import { tankopedia } from '../core/blitz/tankopedia.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
 import last5AM from '../core/blitzstars/last5AM.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
-import cmdName from '../core/interaction/cmdName.js';
 import fullBlitzStarsStats from '../core/interaction/fullBlitzStarsStats.js';
 import { supportBlitzStars } from '../core/interaction/supportBlitzStars.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
@@ -31,7 +30,7 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('today'))
+    .setName('today')
     .setDescription('A general daily breakdown of your performance')
     .addStringOption(addUsernameOption),
 

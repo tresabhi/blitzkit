@@ -1,6 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
-import cmdName from '../core/interaction/cmdName.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import {
   CommandRegistry,
@@ -15,7 +14,7 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('help'))
+    .setName('help')
     .setDescription('All the help you need about the bot'),
 
   execute(interaction) {

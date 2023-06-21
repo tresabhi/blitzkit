@@ -13,7 +13,6 @@ import resolveTankId from '../core/blitz/resolveTankId.js';
 import resolveTankName from '../core/blitz/resolveTankName.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
 import getTankHistories from '../core/blitzstars/getTankHistories.js';
-import cmdName from '../core/interaction/cmdName.js';
 import { supportBlitzStars } from '../core/interaction/supportBlitzStars.js';
 import {
   Period,
@@ -33,7 +32,7 @@ export default {
 
   command: addStatsSubCommandGroups(
     new SlashCommandBuilder()
-      .setName(cmdName('evolution'))
+      .setName('evolution')
       .setDescription('Evolution of statistics'),
   ),
 

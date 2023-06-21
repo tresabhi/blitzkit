@@ -4,7 +4,6 @@ import discord from '../../discord.json' assert { type: 'json' };
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import cmdName from '../core/interaction/cmdName.js';
 import negativeEmbed from '../core/interaction/negativeEmbed.js';
 import positiveEmbed from '../core/interaction/positiveEmbed.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
@@ -19,7 +18,7 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('verify'))
+    .setName('verify')
     .setDescription("Set's the user's username to their in-game name")
     .addStringOption((option) => addUsernameOption(option).setRequired(true)),
 

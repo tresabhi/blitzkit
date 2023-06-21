@@ -14,7 +14,6 @@ import {
   Tier,
   tankopedia,
 } from '../core/blitz/tankopedia.js';
-import cmdName from '../core/interaction/cmdName.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
@@ -48,7 +47,7 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('ownedtanks'))
+    .setName('ownedtanks')
     .setDescription("Shows a player's owned tanks")
     .addStringOption((option) =>
       option

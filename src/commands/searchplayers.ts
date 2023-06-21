@@ -3,7 +3,6 @@ import markdownEscape from 'markdown-escape';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import { usernamePattern } from '../core/blitz/listAccountsPanServer.js';
-import cmdName from '../core/interaction/cmdName.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import addServerChoices from '../core/options/addServerChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
@@ -17,7 +16,7 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('searchplayers'))
+    .setName('searchplayers')
     .setDescription('Search players in a Blitz server')
     .addStringOption(addServerChoices)
     .addStringOption((option) =>

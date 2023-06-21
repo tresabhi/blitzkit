@@ -17,7 +17,6 @@ import sumStats from '../core/blitz/sumStats.js';
 import { Tier, tankopedia } from '../core/blitz/tankopedia.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
-import cmdName from '../core/interaction/cmdName.js';
 import addStatsSubCommandGroups from '../core/options/addStatsSubCommandGroups.js';
 import getPeriodDataFromSubcommand from '../core/options/getPeriodDataFromSubcommand.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
@@ -36,7 +35,7 @@ export default {
 
   command: addStatsSubCommandGroups(
     new SlashCommandBuilder()
-      .setName(cmdName('stats'))
+      .setName('stats')
       .setDescription('In-game statistics'),
   ),
 

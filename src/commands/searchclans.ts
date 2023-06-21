@@ -2,7 +2,6 @@ import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import cmdName from '../core/interaction/cmdName.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import addClanChoices from '../core/options/addClanChoices.js';
 import addServerChoices from '../core/options/addServerChoices.js';
@@ -16,7 +15,7 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('searchclans'))
+    .setName('searchclans')
     .setDescription('Search clans')
     .addStringOption(addServerChoices)
     .addStringOption((option) => addClanChoices(option).setAutocomplete(false))
