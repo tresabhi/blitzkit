@@ -122,7 +122,10 @@ export default {
         ]);
       }
       if (WN8 < 2450) {
-        problems.push(['WN8', `${WN8.toFixed(0)} (${WN8 - 2450})`]);
+        problems.push([
+          'WN8',
+          `${WN8.toFixed(0)} (${(WN8 - 2450).toFixed(0)})`,
+        ]);
       }
       if (tier10Damage < 1250) {
         problems.push([
