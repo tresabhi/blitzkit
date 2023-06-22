@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "yarn build:raw --dev && yarn start",
+    "dev": "yarn build:raw --dev && yarn start --dev",
     "start": "node --enable-source-maps --trace-warnings dist/index.cjs",
     "zip": "zip -r dist.zip dist",
     "build:raw": "node scripts/build",

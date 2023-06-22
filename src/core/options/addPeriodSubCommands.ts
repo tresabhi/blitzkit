@@ -11,7 +11,7 @@ export const RELATIVE_PERIOD_NAMES: Record<Period, string> = {
   '30': '30 days ago',
   '60': '60 days ago',
   '90': '90 days ago',
-  career: 'Start of career',
+  career: 'Extent of data',
   custom: 'Custom period',
 };
 

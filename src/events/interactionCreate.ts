@@ -124,20 +124,18 @@ try {
     });
 
   console.log(`Refreshing ${guildCommands.length} guild command(s).`);
-  Promise.all([
-    rest.put(
-      Routes.applicationGuildCommands(getClientId(), discord.sklld_guild_id),
-      { body: guildCommands },
-    ),
-    rest.put(
+  rest
+    .put(
       Routes.applicationGuildCommands(getClientId(), discord.tres_guild_id),
       { body: guildCommands },
-    ),
-  ]).then((guildData) => {
-    console.log(
-      `Successfully refreshed ${guildData.flat().length / 2} guild command(s).`,
-    );
-  });
+    )
+    .then((guildData) => {
+      console.log(
+        `Successfully refreshed ${
+          (guildData as unknown[]).length
+        } guild command(s).`,
+      );
+    });
 } catch (error) {
   console.error(error);
 }

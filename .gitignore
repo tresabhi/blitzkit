@@ -8,3 +8,4 @@ dist/
 yarn-error.log
 dist.zip
 commands.txt
+/test.*

@@ -12,6 +12,7 @@ import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankId from '../core/blitz/resolveTankId.js';
 import resolveTankName from '../core/blitz/resolveTankName.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
+import getPlayerHistories from '../core/blitzstars/getPlayerHistories.js';
 import getTankHistories from '../core/blitzstars/getTankHistories.js';
 import { supportBlitzStars } from '../core/interaction/supportBlitzStars.js';
 import {
@@ -23,6 +24,7 @@ import getPeriodDataFromSubcommand from '../core/options/getPeriodDataFromSubcom
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
+import { Histories } from '../types/histories.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 
 export default {
@@ -61,36 +63,40 @@ export default {
       image = tankopedia[tankId].images.normal;
     }
 
+    let histories: Histories;
+
     const { evolutionName, start, end } =
       getPeriodDataFromSubcommand(interaction);
 
-    let careerWinrate: Graph.Plot;
-    let careerBattles: Graph.Plot;
-
     if (commandGroup === 'player') {
+      histories = await getPlayerHistories(server, id, {
+        start,
+        end,
+        includeLatestHistories: true,
+        includePreviousHistories: true,
+      });
     } else {
       const tankId = resolveTankId(tankIdRaw);
-      const histories = await getTankHistories(server, id, {
+      histories = await getTankHistories(server, id, {
         tankId,
         start,
         end,
         includeLatestHistories: true,
         includePreviousHistories: true,
       });
-
-      careerWinrate = histories.map(
-        (history) =>
-          [
-            history.last_battle_time,
-            (history.all.wins / history.all.battles) * 100,
-          ] as Graph.PlotItem,
-      );
-      careerBattles = histories.map(
-        (history) =>
-          [history.last_battle_time, history.all.battles] as Graph.PlotItem,
-      );
     }
 
+    const careerWinrate = histories.map(
+      (history) =>
+        [
+          history.last_battle_time,
+          (history.all.wins / history.all.battles) * 100,
+        ] as Graph.PlotItem,
+    );
+    const careerBattles = histories.map(
+      (history) =>
+        [history.last_battle_time, history.all.battles] as Graph.PlotItem,
+    );
     const winrateYs = careerWinrate.map(([, y]) => y);
     const maxWinrate = Math.max(...winrateYs);
     const minWinrate = Math.min(...winrateYs);
@@ -121,7 +127,7 @@ export default {
                 interaction.options.getSubcommand() as Period
               ]
             }
-            xMaxLabel="Today"
+            xMaxLabel="Latest recorded battle"
             leftVerticalMargin={{
               min: minWinrate,
               max: maxWinrate,

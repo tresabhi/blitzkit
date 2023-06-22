@@ -1,41 +1,34 @@
 import { BlitzServer } from '../../constants/servers.js';
-import { AllStats } from '../../types/accountInfo.js';
+import {
+  GetHistoriesOptions,
+  Histories,
+  History,
+  getHistoriesDefaultOptions,
+} from '../../types/histories.js';
 import getTankStats from '../blitz/getTankStats.js';
 import { emptyAllStats } from './getTankStatsOverTime.js';
 
-export interface TankHistory {
-  all: AllStats;
-  last_battle_time: number;
-  mark_of_mastery: number;
-  battle_life_time: number;
-  account_id: number;
+export interface TankHistory extends History {
   tank_id: number;
 }
 
-export const emptyTankHistory: TankHistory = {
-  all: emptyAllStats,
-  last_battle_time: -Infinity,
-  mark_of_mastery: 0,
-  battle_life_time: 0,
-  account_id: 0,
-  tank_id: 0,
-};
-
 export type TankHistories = TankHistory[];
 
-export interface GetTankHistoriesOptions {
-  start: number;
-  end: number;
-  includeLatestHistories: boolean;
-  includePreviousHistories: boolean;
+export interface TankHistoryRaw extends TankHistory {
+  mark_of_mastery: number;
+  battle_life_time: number;
+  account_id: number;
+}
+
+export type TankHistoriesRaw = TankHistoryRaw[];
+
+export interface GetTankHistoriesOptions extends GetHistoriesOptions {
   tankId?: number;
 }
 
 export const getTankHistoriesDefaultOptions: GetTankHistoriesOptions = {
-  start: -Infinity,
-  end: Infinity,
-  includeLatestHistories: false,
-  includePreviousHistories: false,
+  ...getHistoriesDefaultOptions,
+  tankId: undefined,
 };
 
 export default async function getTankHistories(
@@ -47,7 +40,16 @@ export default async function getTankHistories(
   const tankHistoriesResponse = await fetch(
     `https://www.blitzstars.com/api/tankhistories/for/${id}/`,
   );
-  const tankHistories = (await tankHistoriesResponse.json()) as TankHistories;
+  const tankHistories = (
+    (await tankHistoriesResponse.json()) as TankHistoriesRaw
+  ).map(
+    (history) =>
+      ({
+        all: history.all,
+        last_battle_time: history.last_battle_time,
+        tank_id: history.tank_id,
+      } satisfies TankHistory),
+  );
   const compliantTanks: number[] = [];
   const lastBattles: Record<number, number> = {};
   const lastNonCompliantIndex: Record<number, number> = {};
@@ -96,15 +98,16 @@ export default async function getTankHistories(
     compliantTanks.forEach((tankId) => {
       if (tankId in lastNonCompliantIndex) {
         previousNodes.push(
-          tankHistories[lastNonCompliantIndex[tankId]] ?? {
-            ...emptyTankHistory,
-            account_id: id,
-            tank_id: tankId,
-          },
+          tankHistories[lastNonCompliantIndex[tankId]] ??
+            ({
+              all: emptyAllStats,
+              last_battle_time: -Infinity,
+              tank_id: tankId,
+            } satisfies TankHistory),
         );
       }
     });
   }
 
-  return [...previousNodes, ...filtered, ...latestNodes];
+  return [...latestNodes, ...filtered, ...previousNodes] satisfies Histories;
 }
