@@ -6,12 +6,15 @@ import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
-import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getTankStats from '../core/blitz/getTankStats.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import { TIER_ROMAN_NUMERALS, tankopedia } from '../core/blitz/tankopedia.js';
-import cmdName from '../core/interaction/cmdName.js';
+import {
+  TIER_ROMAN_NUMERALS,
+  Tier,
+  tankopedia,
+} from '../core/blitz/tankopedia.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
+import resolvePlayer from '../core/options/resolvePlayer.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
@@ -44,7 +47,7 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('ownedtanks'))
+    .setName('ownedtanks')
     .setDescription("Shows a player's owned tanks")
     .addStringOption((option) =>
       option
@@ -68,12 +71,12 @@ export default {
 
   async execute(interaction) {
     const tier = Number(interaction.options.getString('tier'));
-    const account = await getBlitzAccount(interaction);
+    const account = await resolvePlayer(interaction);
     const { id, server } = account;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
-    const tankStats = await getTankStats(interaction, server, id);
+    const tankStats = await getTankStats(server, id);
     const tanks = tankStats
       .map((tankData) => tankopedia[tankData.tank_id])
       .filter((tank) => tank?.tier === tier);
@@ -86,7 +89,7 @@ export default {
         {/* TODO: integrate some of these into title bar */}
         <TitleBar
           name={accountInfo[id].nickname}
-          nameDiscriminator={`(Tier ${TIER_ROMAN_NUMERALS[tier]})`}
+          nameDiscriminator={`(Tier ${TIER_ROMAN_NUMERALS[tier as Tier]})`}
           image={
             clanData[id]?.clan
               ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`

@@ -2,6 +2,7 @@ import {
   ActionRowBuilder,
   AutocompleteInteraction,
   ButtonBuilder,
+  ButtonInteraction,
   ButtonStyle,
   CacheType,
   ChatInputCommandInteraction,
@@ -12,20 +13,22 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
   Routes,
   SlashCommandBuilder,
+  SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
 import debug from '../commands/debug.js';
 import eligible from '../commands/eligible.js';
+import evolution from '../commands/evolution.js';
 import help from '../commands/help.js';
 import inactive from '../commands/inactive.js';
 import ownedtanks from '../commands/ownedtanks.js';
+import ping from '../commands/ping.js';
 import playerachievements from '../commands/playerachievements.js';
 import playerinfo from '../commands/playerinfo.js';
 import searchclans from '../commands/searchclans.js';
 import searchplayers from '../commands/searchplayers.js';
 import searchtanks from '../commands/searchtanks.js';
 import stats from '../commands/stats.js';
-import tankstats from '../commands/tankstats.js';
 import today from '../commands/today.js';
 import verify from '../commands/verify.js';
 import negativeEmbed from '../core/interaction/negativeEmbed.js';
@@ -40,17 +43,28 @@ import { handleError } from './error.js';
 export type CommandReturnable = EmbedBuilder | ButtonBuilder | JSX.Element;
 export type RichCommandReturnable = CommandReturnable | CommandReturnable[];
 
-export interface CommandRegistry {
+export type CommandRegistry = {
   inDevelopment: boolean;
   inProduction: boolean;
   inPublic: boolean;
 
-  command: Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
-  execute: (
-    interaction: ChatInputCommandInteraction<CacheType>,
-  ) => RichCommandReturnable | Promise<RichCommandReturnable>;
+  command:
+    | SlashCommandBuilder
+    | SlashCommandSubcommandsOnlyBuilder
+    | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
   autocomplete?: (interaction: AutocompleteInteraction<CacheType>) => void;
-}
+} & (
+  | {
+      handlesInteraction?: false;
+      execute: (
+        interaction: ChatInputCommandInteraction<CacheType>,
+      ) => RichCommandReturnable | Promise<RichCommandReturnable>;
+    }
+  | {
+      handlesInteraction: true;
+      execute: (interaction: ChatInputCommandInteraction<CacheType>) => void;
+    }
+);
 
 const rest = new REST().setToken(DISCORD_TOKEN);
 
@@ -67,11 +81,16 @@ const commands = (
     searchplayers,
     searchtanks,
     stats,
-    tankstats,
     today,
     verify,
+    ping,
+    evolution,
   ] as CommandRegistry[]
 ).reduce<Record<string, CommandRegistry>>((accumulator, registry) => {
+  registry.command.setName(
+    isDev() ? `${registry.command.name}dev` : registry.command.name,
+  );
+
   return { ...accumulator, [registry.command.name]: registry };
 }, {});
 
@@ -82,10 +101,12 @@ export const publicCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
 
 Object.entries(commands).forEach(([, registry]) => {
   if (isDev() ? registry.inDevelopment : registry.inProduction) {
+    const json = registry.command.toJSON();
+
     if (registry.inPublic) {
-      publicCommands.push(registry.command.toJSON());
+      publicCommands.push(json);
     } else {
-      guildCommands.push(registry.command.toJSON());
+      guildCommands.push(json);
     }
   }
 });
@@ -104,103 +125,117 @@ try {
     });
 
   console.log(`Refreshing ${guildCommands.length} guild command(s).`);
-  Promise.all([
-    rest.put(
-      Routes.applicationGuildCommands(getClientId(), discord.sklld_guild_id),
-      { body: guildCommands },
-    ),
-    rest.put(
+  rest
+    .put(
       Routes.applicationGuildCommands(getClientId(), discord.tres_guild_id),
       { body: guildCommands },
-    ),
-  ]).then((guildData) => {
-    console.log(
-      `Successfully refreshed ${guildData.flat().length / 2} guild command(s).`,
-    );
-  });
+    )
+    .then((guildData) => {
+      console.log(
+        `Successfully refreshed ${
+          (guildData as unknown[]).length
+        } guild command(s).`,
+      );
+    });
 } catch (error) {
   console.error(error);
 }
+
+//#region Event type handlers
+function handleAutocomplete(interaction: AutocompleteInteraction<CacheType>) {
+  const command = commands[interaction.commandName];
+
+  if (!command) {
+    console.error(`No command matching ${interaction.commandName} was found.`);
+    return;
+  }
+
+  if (command.autocomplete) command.autocomplete(interaction);
+}
+
+async function handleChatInputCommand(
+  interaction: ChatInputCommandInteraction<CacheType>,
+) {
+  const command = commands[interaction.commandName];
+
+  if (!command) {
+    console.error(`No command matching ${interaction.commandName} was found.`);
+    return;
+  }
+
+  console.log(interaction.toString());
+  await interaction.deferReply();
+
+  try {
+    const result = await command.execute(interaction);
+
+    if (command.handlesInteraction) return;
+
+    const normalizedResult = Array.isArray(result) ? result : [result];
+    const reply: InteractionEditReplyOptions = {};
+
+    if (psa.data) {
+      normalizedResult.push(warningEmbed(psa.data.title, psa.data.description));
+    }
+
+    await Promise.all(
+      normalizedResult.map(async (item) => {
+        if (item instanceof EmbedBuilder) {
+          if (!reply.embeds) reply.embeds = [];
+          reply.embeds.push(item);
+        } else if (item instanceof ButtonBuilder) {
+          if (!reply.components)
+            reply.components = [new ActionRowBuilder<ButtonBuilder>()];
+          (
+            reply.components[0] as ActionRowBuilder<ButtonBuilder>
+          ).addComponents(item);
+        } else {
+          const image = await render(item!);
+          if (!reply.files) reply.files = [];
+          reply.files.push(image);
+        }
+      }),
+    );
+
+    await interaction.editReply(reply);
+  } catch (error) {
+    const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder()
+        .setLabel('Get Help on Discord Server')
+        .setURL('https://discord.gg/nDt7AjGJQH')
+        .setStyle(ButtonStyle.Link),
+    );
+
+    await interaction.editReply({
+      embeds: [
+        negativeEmbed(
+          (error as Error).message,
+          `${(error as Error).cause ?? 'No further information is available.'}`,
+        ),
+      ],
+      components: [actionRow],
+    });
+
+    handleError(error as Error, interaction.commandName);
+  }
+}
+
+function handleButton(interaction: ButtonInteraction<CacheType>) {
+  console.log(interaction.customId);
+  interaction.message.edit({
+    files: [],
+  });
+}
+//#endregion
 
 export default async function interactionCreate(
   interaction: Interaction<CacheType>,
 ) {
   if (interaction.isAutocomplete()) {
-    const command = commands[interaction.commandName];
-
-    if (!command) {
-      console.error(
-        `No command matching ${interaction.commandName} was found.`,
-      );
-      return;
-    }
-
-    if (command.autocomplete) command.autocomplete(interaction);
+    handleAutocomplete(interaction);
   } else if (interaction.isChatInputCommand()) {
-    const command = commands[interaction.commandName];
-
-    if (!command) {
-      console.error(
-        `No command matching ${interaction.commandName} was found.`,
-      );
-      return;
-    }
-
-    console.log(interaction.toString());
-    await interaction.deferReply();
-
-    try {
-      const result = await command.execute(interaction);
-      const normalizedResult = Array.isArray(result) ? result : [result];
-      const reply: InteractionEditReplyOptions = {};
-
-      if (psa.data) {
-        normalizedResult.push(
-          warningEmbed(psa.data.title, psa.data.description),
-        );
-      }
-
-      await Promise.all(
-        normalizedResult.map(async (item) => {
-          if (item instanceof EmbedBuilder) {
-            if (!reply.embeds) reply.embeds = [];
-            reply.embeds.push(item);
-          } else if (item instanceof ButtonBuilder) {
-            if (!reply.components)
-              reply.components = [new ActionRowBuilder<ButtonBuilder>()];
-            (
-              reply.components[0] as ActionRowBuilder<ButtonBuilder>
-            ).addComponents(item);
-          } else {
-            const image = await render(item);
-            if (!reply.files) reply.files = [];
-            reply.files.push(image);
-          }
-        }),
-      );
-
-      await interaction.editReply(reply);
-    } catch (error) {
-      const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder()
-          .setLabel('Get Help on Discord Server')
-          .setURL('https://discord.gg/nDt7AjGJQH')
-          .setStyle(ButtonStyle.Link),
-      );
-
-      await interaction.editReply({
-        embeds: [
-          negativeEmbed(
-            (error as Error).message,
-            `${
-              (error as Error).cause ?? 'No further information is available.'
-            }`,
-          ),
-        ],
-        components: [actionRow],
-      });
-
-      handleError(error as Error, interaction.commandName);
-    }
+    handleChatInputCommand(interaction);
+  } else if (interaction.isButton()) {
+    handleButton(interaction);
   }
 }

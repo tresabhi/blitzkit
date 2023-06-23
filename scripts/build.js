@@ -19,9 +19,11 @@ build({
     '.ttf': 'file',
   },
 
-  bundle: isProd,
-  sourcemap: isProd,
+  bundle: true,
+  sourcemap: true,
   minifyIdentifiers: false, // causes errors
   minifySyntax: isProd,
   minifyWhitespace: isProd,
+
+  logLevel: isProd ? 'info' : 'silent',
 });

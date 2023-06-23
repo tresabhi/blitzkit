@@ -1,18 +1,17 @@
 import { SlashCommandBuilder } from 'discord.js';
-import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWN8 from '../core/blitz/getWN8.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import sumStats from '../core/blitz/sumStats.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
-import getPeriodicStart from '../core/blitzstars/getPeriodStart.js';
+import getPeriodStart from '../core/blitzstars/getPeriodStart.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import cleanTable, { TableInput } from '../core/interaction/cleanTable.js';
-import cmdName from '../core/interaction/cmdName.js';
 import negativeEmbed from '../core/interaction/negativeEmbed.js';
 import positiveEmbed from '../core/interaction/positiveEmbed.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
+import resolvePlayer from '../core/options/resolvePlayer.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
@@ -30,7 +29,7 @@ export default {
   inPublic: false,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('eligible'))
+    .setName('eligible')
     .setDescription('Checks eligibility for any Skilled clan')
     .addStringOption((option) =>
       option
@@ -49,7 +48,7 @@ export default {
 
   async execute(interaction) {
     const clan = interaction.options.getString('clan') as SkilledClan;
-    const { id, server } = await getBlitzAccount(interaction);
+    const { id, server } = await resolvePlayer(interaction);
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
@@ -60,10 +59,9 @@ export default {
 
     if (clan === 'SKLLD') {
       const tankStatsOverTime = await getTankStatsOverTime(
-        interaction,
         server,
         id,
-        getPeriodicStart('30'),
+        getPeriodStart('30'),
         getPeriodNow(),
       );
       const entries = Object.entries(tankStatsOverTime);
@@ -124,7 +122,10 @@ export default {
         ]);
       }
       if (WN8 < 2450) {
-        problems.push(['WN8', `${WN8.toFixed(0)} (${WN8 - 2450})`]);
+        problems.push([
+          'WN8',
+          `${WN8.toFixed(0)} (${(WN8 - 2450).toFixed(0)})`,
+        ]);
       }
       if (tier10Damage < 1250) {
         problems.push([

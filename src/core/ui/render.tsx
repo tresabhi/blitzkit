@@ -41,6 +41,7 @@ export default async function render(element: ReactNode) {
       { data: robotoBlack, name: FONT_NAME, weight: 900 },
     ],
   });
+
   const png = new Resvg(svg).render().asPng();
 
   return png;

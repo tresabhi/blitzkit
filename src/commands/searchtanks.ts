@@ -2,7 +2,6 @@ import { SlashCommandBuilder } from 'discord.js';
 import { go } from 'fuzzysort';
 import markdownEscape from 'markdown-escape';
 import { TANK_NAMES } from '../core/blitz/tankopedia.js';
-import cmdName from '../core/interaction/cmdName.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import addTankChoices from '../core/options/addTankChoices.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
@@ -13,7 +12,7 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('searchtanks'))
+    .setName('searchtanks')
     .setDescription('Search tanks')
     .addStringOption((option) => addTankChoices(option).setAutocomplete(false))
     .addIntegerOption((option) =>

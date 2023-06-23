@@ -1,8 +1,6 @@
 import { theme } from '../../../stitches.config.js';
-import { Stat } from '../index.js';
-
-import '../../../core/blitz/getWN8Percentile.js';
 import PercentileIndicator from '../../PercentileIndicator.js';
+import { Stat } from '../index.js';
 
 export interface GenericStatsRowProps {
   stat: Stat;

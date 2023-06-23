@@ -1,13 +1,18 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { BlitzServer } from '../../constants/servers.js';
-import errorWithCause from '../process/errorWithCause.js';
 import listAccountsPanServer, {
   usernamePatternWithoutPosition,
-} from './listAccountsPanServer.js';
+} from '../blitz/listAccountsPanServer.js';
+import errorWithCause from '../process/errorWithCause.js';
 
 export const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
 
-export default async function getBlitzAccount(
+export interface ResolvedPlayer {
+  server: BlitzServer;
+  id: number;
+}
+
+export default async function resolvePlayer(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
   const commandUsername = interaction.options.getString('username');
@@ -25,12 +30,18 @@ export default async function getBlitzAccount(
 
   if (serverAndIdPattern.test(username)) {
     const [server, accountId] = username.split('/');
-    return { server: server as BlitzServer, id: Number(accountId) };
+    return {
+      server: server as BlitzServer,
+      id: Number(accountId),
+    } satisfies ResolvedPlayer;
   } else {
     const accounts = await listAccountsPanServer(username);
 
     if (accounts[0]) {
-      return { server: accounts[0].server, id: accounts[0].account_id };
+      return {
+        server: accounts[0].server,
+        id: accounts[0].account_id,
+      } satisfies ResolvedPlayer;
     } else {
       throw errorWithCause(
         'Could not find user',

@@ -1,4 +1,5 @@
 import getWN8Percentile from '../core/blitz/getWN8Percentile.js';
+import isNumber from '../core/process/isNumber.js';
 import { AllStats, SupplementaryStats } from '../types/accountInfo.js';
 import GenericStats from './GenericStats/index.js';
 
@@ -11,6 +12,10 @@ export default function GenericAllStats({
   stats,
   supplementaryStats,
 }: GenericAllStatsProps) {
+  const damageRatio = stats.damage_dealt / stats.damage_received;
+  const killsToDeathRatio =
+    stats.frags / (stats.battles - stats.survived_battles);
+
   return (
     <GenericStats
       stats={[
@@ -18,13 +23,13 @@ export default function GenericAllStats({
         [
           'WN8',
           supplementaryStats
-            ? supplementaryStats.WN8 === undefined
-              ? '--'
-              : supplementaryStats.WN8.toFixed(0)
+            ? isNumber(supplementaryStats.WN8)
+              ? supplementaryStats.WN8!.toFixed(0)
+              : '--'
             : undefined,
-          supplementaryStats?.WN8 === undefined
-            ? undefined
-            : getWN8Percentile(supplementaryStats.WN8),
+          isNumber(supplementaryStats?.WN8)
+            ? getWN8Percentile(supplementaryStats!.WN8!)
+            : undefined,
         ],
         [
           'Survival',
@@ -41,13 +46,10 @@ export default function GenericAllStats({
         ['Average hits', (stats.hits / stats.battles).toFixed(2)],
         ['Average kills', (stats.frags / stats.battles).toFixed(2)],
         ['Average spots', (stats.spotted / stats.battles).toFixed(2)],
-        [
-          'Damage ratio',
-          (stats.damage_dealt / stats.damage_received).toFixed(2),
-        ],
+        ['Damage ratio', isFinite(damageRatio) ? damageRatio.toFixed(2) : '--'],
         [
           'Kills to death ratio',
-          (stats.frags / (stats.battles - stats.survived_battles)).toFixed(2),
+          isFinite(killsToDeathRatio) ? killsToDeathRatio.toFixed(2) : '--',
         ],
       ]}
     />

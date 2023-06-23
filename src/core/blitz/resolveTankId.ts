@@ -1,12 +1,8 @@
-import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { go } from 'fuzzysort';
 import errorWithCause from '../process/errorWithCause.js';
 import { TANKS, tankopedia } from './tankopedia.js';
 
-export default async function resolveTankId(
-  interaction: ChatInputCommandInteraction<CacheType>,
-  tank: string,
-) {
+export default function resolveTankId(tank: string) {
   const number = Number(tank);
 
   if (Number.isNaN(number)) {

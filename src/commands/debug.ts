@@ -3,7 +3,6 @@ import packageJSON from '../../package.json' assert { type: 'json' };
 import { tankopedia } from '../core/blitz/tankopedia.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import cleanTable from '../core/interaction/cleanTable.js';
-import cmdName from '../core/interaction/cmdName.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import getClientId from '../core/process/getClientId.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
@@ -17,7 +16,7 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('debug'))
+    .setName('debug')
     .setDescription('Debug information about the bot'),
 
   execute(interaction) {

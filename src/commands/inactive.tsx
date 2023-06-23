@@ -8,7 +8,6 @@ import { BLITZ_SERVERS } from '../constants/servers.js';
 import clanAutocomplete from '../core/autocomplete/clan.js';
 import getBlitzClan from '../core/blitz/getBlitzClan.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import cmdName from '../core/interaction/cmdName.js';
 import addClanChoices from '../core/options/addClanChoices.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
@@ -23,7 +22,7 @@ export default {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName(cmdName('inactive'))
+    .setName('inactive')
     .setDescription('Lists all inactive players')
     .addStringOption(addClanChoices)
     .addNumberOption((option) =>

@@ -5,10 +5,11 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "yarn build --dev && yarn start",
+    "dev": "yarn build:raw --dev && yarn start --dev",
     "start": "node --enable-source-maps --trace-warnings dist/index.cjs",
     "zip": "zip -r dist.zip dist",
-    "build": "node scripts/build",
+    "build:raw": "node scripts/build",
+    "build": "yarn lint && yarn build:raw",
     "lint": "tsc"
   },
   "license": "MIT",
@@ -19,7 +20,7 @@
     "discord.js": "^14.9.0",
     "escape-html": "^1.0.3",
     "fuzzysort": "^2.0.4",
-    "lodash.startcase": "^4.4.0",
+    "lodash": "^4.17.21",
     "markdown-escape": "^2.0.0",
     "react": "^18.2.0",
     "satori": "^0.9.1"
@@ -27,7 +28,7 @@
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.4.2",
     "@types/escape-html": "^1.0.2",
-    "@types/lodash.startcase": "^4.4.7",
+    "@types/lodash": "^4.14.195",
     "@types/markdown-escape": "^1.1.0",
     "@types/node": "^20.2.1",
     "@types/react": "^18.2.7",

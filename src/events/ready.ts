@@ -5,6 +5,6 @@ export default function ready(client: Client<true>) {
   console.log(
     `Logged in as ${client.user.tag} in ${
       isDev() ? 'development' : 'production'
-    } mode`,
+    } mode across ${client.guilds.cache.size} servers`,
   );
 }

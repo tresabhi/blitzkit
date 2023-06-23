@@ -6,7 +6,8 @@ import addStatsSubCommandGroups from '../core/options/addStatsSubCommandGroups.j
 import resolvePeriod from '../core/options/resolvePeriod.js';
 import resolvePlayer from '../core/options/resolvePlayer.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
-import stats, { StatType } from '../renderers/stats.js';
+import evolution from '../renderers/evolution.js';
+import { StatType } from '../renderers/stats.js';
 
 export default {
   inProduction: true,
@@ -15,8 +16,8 @@ export default {
 
   command: addStatsSubCommandGroups(
     new SlashCommandBuilder()
-      .setName('stats')
-      .setDescription('In-game statistics'),
+      .setName('evolution')
+      .setDescription('Evolution of statistics'),
   ),
 
   async execute(interaction) {
@@ -28,7 +29,18 @@ export default {
     const tankIdRaw = interaction.options.getString('tank')!;
     const tankId = commandGroup === 'tank' ? resolveTankId(tankIdRaw) : 0;
 
-    return await stats(commandGroup, period, player, tankId);
+    return await evolution(commandGroup, period, player, tankId);
+
+    // new ButtonBuilder()
+    //   .setStyle(ButtonStyle.Link)
+    //   .setLabel('View on BlitzStars')
+    //   .setURL(
+    //     commandGroup === 'tank'
+    //       ? `https://www.blitzstars.com/player/com/${
+    //           accountInfo[id].nickname
+    //         }/tank/${tankId!}`
+    //       : `https://www.blitzstars.com/player/com/${accountInfo[id].nickname}`,
+    //   );
   },
 
   autocomplete: (interaction) => {

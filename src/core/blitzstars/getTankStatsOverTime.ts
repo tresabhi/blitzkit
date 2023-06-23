@@ -1,16 +1,9 @@
-import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { BlitzServer } from '../../constants/servers.js';
 import { AllStats } from '../../types/accountInfo.js';
-import getTankStats from '../blitz/getTankStats.js';
-
-export interface TankHistoryNode {
-  all: AllStats;
-  last_battle_time: number;
-  mark_of_mastery: number;
-  battle_life_time: number;
-  account_id: number;
-  tank_id: number;
-}
+import getTankHistories, {
+  TankHistories,
+  TankHistoryRaw,
+} from './getTankHistories.js';
 
 export const emptyAllStats: AllStats = {
   battles: 0,
@@ -32,7 +25,7 @@ export const emptyAllStats: AllStats = {
   wins: 0,
 };
 
-export const emptyTankHistoryNode: TankHistoryNode = {
+export const emptyTankHistoryNode: TankHistoryRaw = {
   account_id: 0,
   battle_life_time: 0,
   last_battle_time: 0,
@@ -41,24 +34,18 @@ export const emptyTankHistoryNode: TankHistoryNode = {
   all: emptyAllStats,
 };
 
-export type TankHistory = TankHistoryNode[];
-
 export default async function getTankStatsOverTime(
-  interaction: ChatInputCommandInteraction<CacheType>,
   server: BlitzServer,
   id: number,
   start: number,
   end: number,
 ) {
-  const latestTankStatsRaw = await getTankStats(interaction, server, id);
-  const tankHistoriesResponse = await fetch(
-    `https://www.blitzstars.com/api/tankhistories/for/${id}/`,
-  );
-  const tankHistories = (await tankHistoriesResponse.json()) as TankHistory;
-  const history = [...tankHistories, ...latestTankStatsRaw];
+  const history = await getTankHistories(server, id, {
+    includeLatestHistories: true,
+  });
 
   // sort them even though most won't be used
-  const tankSortedHistory: Record<number, TankHistory> = {};
+  const tankSortedHistory: Record<number, TankHistories> = {};
   const tankIds: number[] = [];
   history.forEach((node) => {
     if (!tankSortedHistory[node.tank_id]) {
