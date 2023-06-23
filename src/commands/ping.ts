@@ -9,12 +9,25 @@ export default {
 
   command: new SlashCommandBuilder()
     .setName('ping')
-    .setDescription('Check if the bot is alive'),
+    .setDescription('Check if the bot is alive')
+    .addSubcommand((option) =>
+      option.setName('blitzkrieg').setDescription('Ping Blitzkrieg'),
+    )
+    .addSubcommand((option) =>
+      option.setName('blitz').setDescription('Ping Blitz'),
+    ),
 
   async execute(interaction) {
-    const executionStart = new Date().getTime();
-    await interaction.editReply('Pong 🏓');
-    const executionTime = new Date().getTime() - executionStart;
+    const subcommand = interaction.options.getSubcommand();
+    const executionStart = Date.now();
+
+    if (subcommand === 'blitzkrieg') {
+      await interaction.editReply('Pong 🏓');
+    } else {
+      await fetch('https://api.wotblitz.com/');
+    }
+
+    const executionTime = Date.now() - executionStart;
     interaction.editReply(`Pong 🏓 - ${executionTime}ms`);
   },
 } satisfies CommandRegistry;
