@@ -57,12 +57,24 @@ export default async function stats<Type extends StatType>(
   if (type === 'player') {
     const entries = Object.entries(tankStats);
     stats = sumStats(entries.map(([, stats]) => stats));
-    const battles = entries.reduce((accumulator, [tankIdString, stats]) => {
-      const tankId = parseInt(tankIdString);
-      const tankAverage = tankAverages[tankId];
+    const battlesOfTanksWithAverages = entries.reduce(
+      (accumulator, [tankIdString, stats]) => {
+        const tankId = parseInt(tankIdString);
+        const tankAverage = tankAverages[tankId];
 
-      return tankAverage ? accumulator + stats.battles : accumulator;
-    }, 0);
+        return tankAverage ? accumulator + stats.battles : accumulator;
+      },
+      0,
+    );
+    const battlesOfTanksWithTankopediaEntry = entries.reduce(
+      (accumulator, [tankIdString, stats]) => {
+        const tankId = parseInt(tankIdString);
+        const tankopediaEntry = tankopedia[tankId];
+
+        return tankopediaEntry ? accumulator + stats.battles : accumulator;
+      },
+      0,
+    );
 
     supplementaryStats = {
       WN8:
@@ -73,16 +85,16 @@ export default async function stats<Type extends StatType>(
           return tankAverage
             ? accumulator + getWN8(tankAverage.all, stats) * stats.battles
             : accumulator;
-        }, 0) / battles,
+        }, 0) / battlesOfTanksWithAverages,
       tier:
         entries.reduce((accumulator, [tankIdString, stats]) => {
           const tankId = parseInt(tankIdString);
-          const tankAverage = tankAverages[tankId];
+          const tankopediaEntry = tankopedia[tankId];
 
-          return tankAverage
-            ? accumulator + tankopedia[tankId].tier * stats.battles
+          return tankopediaEntry
+            ? accumulator + tankopediaEntry.tier * stats.battles
             : accumulator;
-        }, 0) / battles,
+        }, 0) / battlesOfTanksWithTankopediaEntry,
     };
     tierWeights = entries.reduce<TierWeightsRecord>(
       (accumulator, [tankIdString, stats]) => {

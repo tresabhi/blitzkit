@@ -12,7 +12,7 @@ import { AccountList } from '../types/accountList.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()

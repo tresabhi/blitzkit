@@ -12,7 +12,7 @@ const executionStart = new Date().getTime();
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()

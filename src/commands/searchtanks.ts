@@ -8,7 +8,7 @@ import { CommandRegistry } from '../events/interactionCreate.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()

@@ -1,4 +1,5 @@
 import getWN8Percentile from '../core/blitz/getWN8Percentile.js';
+import isNumber from '../core/process/isNumber.js';
 import { AllStats, SupplementaryStats } from '../types/accountInfo.js';
 import GenericStats from './GenericStats/index.js';
 
@@ -22,13 +23,13 @@ export default function GenericAllStats({
         [
           'WN8',
           supplementaryStats
-            ? supplementaryStats.WN8 === undefined
-              ? '--'
-              : supplementaryStats.WN8.toFixed(0)
+            ? isNumber(supplementaryStats.WN8)
+              ? supplementaryStats.WN8!.toFixed(0)
+              : '--'
             : undefined,
-          supplementaryStats?.WN8 === undefined
-            ? undefined
-            : getWN8Percentile(supplementaryStats.WN8),
+          isNumber(supplementaryStats?.WN8)
+            ? getWN8Percentile(supplementaryStats!.WN8!)
+            : undefined,
         ],
         [
           'Survival',
