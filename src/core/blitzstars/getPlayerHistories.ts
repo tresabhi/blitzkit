@@ -88,5 +88,5 @@ export default async function getPlayerHistories(
     }
   }
 
-  return [...previousNodes, ...filtered, ...latestNodes] satisfies Histories;
+  return [...latestNodes, ...filtered, ...previousNodes] satisfies Histories;
 }

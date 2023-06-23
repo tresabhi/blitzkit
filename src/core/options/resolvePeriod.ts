@@ -2,7 +2,7 @@ import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import getPeriodNow from '../blitzstars/getPeriodNow.js';
 import getPeriodStart from '../blitzstars/getPeriodStart.js';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo.js';
-import { Period } from './addPeriodSubCommands.js';
+import { Period, RELATIVE_PERIOD_NAMES } from './addPeriodSubCommands.js';
 
 export const PERIOD_NAMES: Record<Period, string> = {
   today: "Today's statistics",
@@ -23,6 +23,7 @@ export const EVOLUTION_PERIOD_NAMES: Record<Period, string> = {
 };
 
 export interface ResolvedPeriod {
+  relativePeriodName: string;
   statsName: string;
   evolutionName: string;
   start: number;
@@ -37,6 +38,8 @@ export default function resolvePeriod(
   let evolutionName: string;
   let start: number;
   let end: number;
+  const relativePeriodName =
+    RELATIVE_PERIOD_NAMES[interaction.options.getSubcommand() as Period];
 
   if (period === 'custom') {
     const startRaw = interaction.options.getInteger('start')!;
@@ -55,5 +58,11 @@ export default function resolvePeriod(
     end = getPeriodNow();
   }
 
-  return { statsName, evolutionName, start, end } satisfies ResolvedPeriod;
+  return {
+    statsName,
+    evolutionName,
+    start,
+    end,
+    relativePeriodName,
+  } satisfies ResolvedPeriod;
 }
