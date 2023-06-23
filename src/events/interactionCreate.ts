@@ -163,17 +163,7 @@ async function handleChatInputCommand(
     return;
   }
 
-  const metadata = [
-    `${interaction.user.id} (${interaction.user.username})`,
-    `${interaction.guildId}/${interaction.channelId} (${interaction.guild?.name})`,
-    new Date(),
-  ];
-
-  console.log(
-    `${interaction.toString()}\n${metadata
-      .map((item) => `  ${item}`)
-      .join('\n')}`,
-  );
+  console.log(interaction.toString());
   await interaction.deferReply();
 
   try {
