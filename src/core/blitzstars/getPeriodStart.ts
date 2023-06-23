@@ -7,6 +7,6 @@ export default function getPeriodStart(period: Exclude<Period, 'custom'>) {
   } else if (period === 'today') {
     return getTimeDaysAgo(0);
   } else {
-    return getTimeDaysAgo(Number(period));
+    return getTimeDaysAgo(parseInt(period));
   }
 }

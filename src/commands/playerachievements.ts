@@ -2,11 +2,11 @@ import { SlashCommandBuilder } from 'discord.js';
 import { startCase } from 'lodash';
 import markdownEscape from 'markdown-escape';
 import usernameAutocomplete from '../core/autocomplete/username.js';
-import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cleanTable, { TableInputEntry } from '../core/interaction/cleanTable.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
+import resolvePlayer from '../core/options/resolvePlayer.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountAchievements } from '../types/accountAchievements.js';
@@ -35,7 +35,7 @@ export default {
 
   async execute(interaction) {
     const sortBy = (interaction.options.getString('sort') ?? 'name') as SortBy;
-    const account = await getBlitzAccount(interaction);
+    const account = await resolvePlayer(interaction);
     const { id, server } = account;
     const accounts = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,

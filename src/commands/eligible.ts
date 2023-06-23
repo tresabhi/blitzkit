@@ -1,5 +1,4 @@
 import { SlashCommandBuilder } from 'discord.js';
-import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWN8 from '../core/blitz/getWN8.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import sumStats from '../core/blitz/sumStats.js';
@@ -12,6 +11,7 @@ import cleanTable, { TableInput } from '../core/interaction/cleanTable.js';
 import negativeEmbed from '../core/interaction/negativeEmbed.js';
 import positiveEmbed from '../core/interaction/positiveEmbed.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
+import resolvePlayer from '../core/options/resolvePlayer.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
@@ -48,7 +48,7 @@ export default {
 
   async execute(interaction) {
     const clan = interaction.options.getString('clan') as SkilledClan;
-    const { id, server } = await getBlitzAccount(interaction);
+    const { id, server } = await resolvePlayer(interaction);
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );

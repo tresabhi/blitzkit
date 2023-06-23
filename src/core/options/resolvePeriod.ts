@@ -6,23 +6,30 @@ import { Period } from './addPeriodSubCommands.js';
 
 export const PERIOD_NAMES: Record<Period, string> = {
   today: "Today's statistics",
-  '30': "30 days' statistics",
-  '60': "60 days' statistics",
-  '90': "90 days' statistics",
+  30: "30 days' statistics",
+  60: "60 days' statistics",
+  90: "90 days' statistics",
   career: 'Career statistics',
   custom: 'Custom period',
 };
 
 export const EVOLUTION_PERIOD_NAMES: Record<Period, string> = {
   today: "Today's evolution",
-  '30': "30 days' evolution",
-  '60': "60 days' evolution",
-  '90': "90 days' evolution",
+  30: "30 days' evolution",
+  60: "60 days' evolution",
+  90: "90 days' evolution",
   career: 'Career evolution',
   custom: 'Custom period',
 };
 
-export default function getPeriodDataFromSubcommand(
+export interface ResolvedPeriod {
+  statsName: string;
+  evolutionName: string;
+  start: number;
+  end: number;
+}
+
+export default function resolvePeriod(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
   const period = interaction.options.getSubcommand(true) as Period;
@@ -48,5 +55,5 @@ export default function getPeriodDataFromSubcommand(
     end = getPeriodNow();
   }
 
-  return { statsName, evolutionName, start, end };
+  return { statsName, evolutionName, start, end } satisfies ResolvedPeriod;
 }

@@ -1,7 +1,7 @@
 import { BlitzServer } from '../../constants/servers.js';
 import { AllStats } from '../../types/accountInfo.js';
 import getTankHistories, {
-  TankHistoriesRaw,
+  TankHistories,
   TankHistoryRaw,
 } from './getTankHistories.js';
 
@@ -45,7 +45,7 @@ export default async function getTankStatsOverTime(
   });
 
   // sort them even though most won't be used
-  const tankSortedHistory: Record<number, TankHistoriesRaw> = {};
+  const tankSortedHistory: Record<number, TankHistories> = {};
   const tankIds: number[] = [];
   history.forEach((node) => {
     if (!tankSortedHistory[node.tank_id]) {

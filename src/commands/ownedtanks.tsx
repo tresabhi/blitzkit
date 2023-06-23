@@ -6,7 +6,6 @@ import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
-import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getTankStats from '../core/blitz/getTankStats.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import {
@@ -15,6 +14,7 @@ import {
   tankopedia,
 } from '../core/blitz/tankopedia.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
+import resolvePlayer from '../core/options/resolvePlayer.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
@@ -71,7 +71,7 @@ export default {
 
   async execute(interaction) {
     const tier = Number(interaction.options.getString('tier'));
-    const account = await getBlitzAccount(interaction);
+    const account = await resolvePlayer(interaction);
     const { id, server } = account;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,

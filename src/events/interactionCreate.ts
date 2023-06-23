@@ -2,6 +2,7 @@ import {
   ActionRowBuilder,
   AutocompleteInteraction,
   ButtonBuilder,
+  ButtonInteraction,
   ButtonStyle,
   CacheType,
   ChatInputCommandInteraction,
@@ -140,98 +141,111 @@ try {
   console.error(error);
 }
 
+//#region Event type handlers
+function handleAutocomplete(interaction: AutocompleteInteraction<CacheType>) {
+  const command = commands[interaction.commandName];
+
+  if (!command) {
+    console.error(`No command matching ${interaction.commandName} was found.`);
+    return;
+  }
+
+  if (command.autocomplete) command.autocomplete(interaction);
+}
+
+async function handleChatInputCommand(
+  interaction: ChatInputCommandInteraction<CacheType>,
+) {
+  const command = commands[interaction.commandName];
+
+  if (!command) {
+    console.error(`No command matching ${interaction.commandName} was found.`);
+    return;
+  }
+
+  const metadata = [
+    `${interaction.user.id} (${interaction.user.username})`,
+    `${interaction.guildId}/${interaction.channelId} (${interaction.guild?.name})`,
+    new Date(),
+  ];
+
+  console.log(
+    `${interaction.toString()}\n${metadata
+      .map((item) => `  ${item}`)
+      .join('\n')}`,
+  );
+  await interaction.deferReply();
+
+  try {
+    const result = await command.execute(interaction);
+
+    if (command.handlesInteraction) return;
+
+    const normalizedResult = Array.isArray(result) ? result : [result];
+    const reply: InteractionEditReplyOptions = {};
+
+    if (psa.data) {
+      normalizedResult.push(warningEmbed(psa.data.title, psa.data.description));
+    }
+
+    await Promise.all(
+      normalizedResult.map(async (item) => {
+        if (item instanceof EmbedBuilder) {
+          if (!reply.embeds) reply.embeds = [];
+          reply.embeds.push(item);
+        } else if (item instanceof ButtonBuilder) {
+          if (!reply.components)
+            reply.components = [new ActionRowBuilder<ButtonBuilder>()];
+          (
+            reply.components[0] as ActionRowBuilder<ButtonBuilder>
+          ).addComponents(item);
+        } else {
+          const image = await render(item!);
+          if (!reply.files) reply.files = [];
+          reply.files.push(image);
+        }
+      }),
+    );
+
+    await interaction.editReply(reply);
+  } catch (error) {
+    const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder()
+        .setLabel('Get Help on Discord Server')
+        .setURL('https://discord.gg/nDt7AjGJQH')
+        .setStyle(ButtonStyle.Link),
+    );
+
+    await interaction.editReply({
+      embeds: [
+        negativeEmbed(
+          (error as Error).message,
+          `${(error as Error).cause ?? 'No further information is available.'}`,
+        ),
+      ],
+      components: [actionRow],
+    });
+
+    handleError(error as Error, interaction.commandName);
+  }
+}
+
+function handleButton(interaction: ButtonInteraction<CacheType>) {
+  console.log(interaction.customId);
+  interaction.message.edit({
+    files: [],
+  });
+}
+//#endregion
+
 export default async function interactionCreate(
   interaction: Interaction<CacheType>,
 ) {
   if (interaction.isAutocomplete()) {
-    const command = commands[interaction.commandName];
-
-    if (!command) {
-      console.error(
-        `No command matching ${interaction.commandName} was found.`,
-      );
-      return;
-    }
-
-    if (command.autocomplete) command.autocomplete(interaction);
+    handleAutocomplete(interaction);
   } else if (interaction.isChatInputCommand()) {
-    const command = commands[interaction.commandName];
-
-    if (!command) {
-      console.error(
-        `No command matching ${interaction.commandName} was found.`,
-      );
-      return;
-    }
-
-    const metadata = [
-      `${interaction.user.id} (${interaction.user.username})`,
-      `${interaction.guildId}/${interaction.channelId} (${interaction.guild?.name})`,
-      new Date(),
-    ];
-
-    console.log(
-      `${interaction.toString()}\n${metadata
-        .map((item) => `  ${item}`)
-        .join('\n')}`,
-    );
-    await interaction.deferReply();
-
-    try {
-      const result = await command.execute(interaction);
-
-      if (command.handlesInteraction) return;
-
-      const normalizedResult = Array.isArray(result) ? result : [result];
-      const reply: InteractionEditReplyOptions = {};
-
-      if (psa.data) {
-        normalizedResult.push(
-          warningEmbed(psa.data.title, psa.data.description),
-        );
-      }
-
-      await Promise.all(
-        normalizedResult.map(async (item) => {
-          if (item instanceof EmbedBuilder) {
-            if (!reply.embeds) reply.embeds = [];
-            reply.embeds.push(item);
-          } else if (item instanceof ButtonBuilder) {
-            if (!reply.components)
-              reply.components = [new ActionRowBuilder<ButtonBuilder>()];
-            (
-              reply.components[0] as ActionRowBuilder<ButtonBuilder>
-            ).addComponents(item);
-          } else {
-            const image = await render(item!);
-            if (!reply.files) reply.files = [];
-            reply.files.push(image);
-          }
-        }),
-      );
-
-      await interaction.editReply(reply);
-    } catch (error) {
-      const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder()
-          .setLabel('Get Help on Discord Server')
-          .setURL('https://discord.gg/nDt7AjGJQH')
-          .setStyle(ButtonStyle.Link),
-      );
-
-      await interaction.editReply({
-        embeds: [
-          negativeEmbed(
-            (error as Error).message,
-            `${
-              (error as Error).cause ?? 'No further information is available.'
-            }`,
-          ),
-        ],
-        components: [actionRow],
-      });
-
-      handleError(error as Error, interaction.commandName);
-    }
+    handleChatInputCommand(interaction);
+  } else if (interaction.isButton()) {
+    handleButton(interaction);
   }
 }

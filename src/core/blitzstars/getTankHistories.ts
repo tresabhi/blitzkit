@@ -109,5 +109,5 @@ export default async function getTankHistories(
     });
   }
 
-  return [...latestNodes, ...filtered, ...previousNodes] satisfies Histories;
+  return [...previousNodes, ...filtered, ...latestNodes] satisfies Histories;
 }

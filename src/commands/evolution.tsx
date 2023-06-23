@@ -7,7 +7,6 @@ import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
 import tanksAutocomplete from '../core/autocomplete/tanks.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
-import getBlitzAccount from '../core/blitz/getBlitzAccount.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankId from '../core/blitz/resolveTankId.js';
 import resolveTankName from '../core/blitz/resolveTankName.js';
@@ -20,7 +19,8 @@ import {
   RELATIVE_PERIOD_NAMES,
 } from '../core/options/addPeriodSubCommands.js';
 import addStatsSubCommandGroups from '../core/options/addStatsSubCommandGroups.js';
-import getPeriodDataFromSubcommand from '../core/options/getPeriodDataFromSubcommand.js';
+import resolvePeriod from '../core/options/resolvePeriod.js';
+import resolvePlayer from '../core/options/resolvePlayer.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate.js';
 import { AccountInfo } from '../types/accountInfo.js';
@@ -29,7 +29,7 @@ import { PlayerClanData } from '../types/playerClanData.js';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: addStatsSubCommandGroups(
@@ -40,7 +40,7 @@ export default {
 
   async execute(interaction) {
     const commandGroup = interaction.options.getSubcommandGroup()!;
-    const { id, server } = await getBlitzAccount(interaction);
+    const { id, server } = await resolvePlayer(interaction);
     let nameDiscriminator: string | undefined;
     let image: string | undefined;
     const tankIdRaw = interaction.options.getString('tank')!;
@@ -65,8 +65,7 @@ export default {
 
     let histories: Histories;
 
-    const { evolutionName, start, end } =
-      getPeriodDataFromSubcommand(interaction);
+    const { evolutionName, start, end } = resolvePeriod(interaction);
 
     if (commandGroup === 'player') {
       histories = await getPlayerHistories(server, id, {
