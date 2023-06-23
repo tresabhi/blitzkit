@@ -25,7 +25,7 @@ export const SKILLED_CLANS: Record<SkilledClan, string> = {
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: false,
 
   command: new SlashCommandBuilder()
