@@ -13,7 +13,7 @@ import positiveEmbed from '../core/interaction/positiveEmbed.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import resolvePlayer from '../core/options/resolvePlayer.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
-import { CommandRegistry } from '../events/interactionCreate.js';
+import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 
 export type SkilledClan = 'SKLLD' | 'SMRI';

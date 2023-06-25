@@ -6,7 +6,7 @@ import infoEmbed from '../core/interaction/infoEmbed.js';
 import addClanChoices from '../core/options/addClanChoices.js';
 import addServerChoices from '../core/options/addServerChoices.js';
 import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
-import { CommandRegistry } from '../events/interactionCreate.js';
+import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { ClanList } from '../types/clanList.js';
 
 export default {

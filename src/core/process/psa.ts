@@ -4,10 +4,10 @@ export interface PSAData {
 }
 
 export interface PSA {
-  data?: PSAData;
+  data: PSAData | null;
 }
 
-export const psa: PSA = {};
+export const psa: PSA = { data: null };
 
 console.log('Caching PSA...');
 fetch(

@@ -4,7 +4,7 @@ import markdownEscape from 'markdown-escape';
 import { TANK_NAMES } from '../core/blitz/tankopedia.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import addTankChoices from '../core/options/addTankChoices.js';
-import { CommandRegistry } from '../events/interactionCreate.js';
+import { CommandRegistry } from '../events/interactionCreate/index.js';
 
 export default {
   inProduction: true,

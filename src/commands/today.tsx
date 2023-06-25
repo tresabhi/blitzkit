@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import usernameAutocomplete from '../core/autocomplete/username.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import resolvePlayer from '../core/options/resolvePlayer.js';
-import { CommandRegistry } from '../events/interactionCreate.js';
+import { CommandRegistry } from '../events/interactionCreate/index.js';
 import today from '../renderers/today.js';
 
 export default {
