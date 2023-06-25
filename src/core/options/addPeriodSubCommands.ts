@@ -6,15 +6,6 @@ import { PERIOD_NAMES } from './resolvePeriod.js';
 
 export type Period = 'today' | '30' | '60' | '90' | 'career' | 'custom';
 
-export const RELATIVE_PERIOD_NAMES: Record<Period, string> = {
-  today: 'A day ago',
-  30: '30 days ago',
-  60: '60 days ago',
-  90: '90 days ago',
-  career: 'Extent of data',
-  custom: 'Custom period',
-};
-
 export default function addPeriodSubCommands(
   option: SlashCommandSubcommandGroupBuilder,
   extra: (

@@ -7,7 +7,7 @@ import { CYCLIC_API } from '../../constants/cyclic.js';
 import getPeriodNow from '../blitzstars/getPeriodNow.js';
 import getPeriodStart from '../blitzstars/getPeriodStart.js';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo.js';
-import { Period, RELATIVE_PERIOD_NAMES } from './addPeriodSubCommands.js';
+import { Period } from './addPeriodSubCommands.js';
 
 export const PERIOD_NAMES: Record<Period, string> = {
   today: "Today's statistics",
@@ -28,7 +28,6 @@ export const EVOLUTION_PERIOD_NAMES: Record<Period, string> = {
 };
 
 export interface ResolvedPeriod {
-  relativePeriodName: string;
   statsName: string;
   evolutionName: string;
   start: number;
@@ -44,21 +43,6 @@ export default function resolvePeriod(
   let evolutionName: string;
   let start: number;
   let end: number;
-  let subcommand: Period;
-  let url: typeof interaction extends ChatInputCommandInteraction
-    ? undefined
-    : URL;
-
-  if (interaction instanceof ChatInputCommandInteraction) {
-    subcommand = interaction.options.getSubcommand() as Period;
-  } else {
-    url = new URL(`${CYCLIC_API}/${interaction.customId}`);
-    const path = url.pathname.split('/').filter(Boolean);
-    subcommand = path[path.length - 1] as Period;
-  }
-
-  const period = subcommand;
-  const relativePeriodName = RELATIVE_PERIOD_NAMES[subcommand];
 
   if (period === 'custom') {
     const startRaw =
@@ -88,6 +72,5 @@ export default function resolvePeriod(
     evolutionName,
     start,
     end,
-    relativePeriodName,
   } satisfies ResolvedPeriod;
 }
