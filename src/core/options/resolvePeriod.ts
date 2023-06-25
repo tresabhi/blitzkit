@@ -1,4 +1,9 @@
-import { CacheType, ChatInputCommandInteraction } from 'discord.js';
+import {
+  ButtonInteraction,
+  CacheType,
+  ChatInputCommandInteraction,
+} from 'discord.js';
+import { CYCLIC_API } from '../../constants/cyclic.js';
 import getPeriodNow from '../blitzstars/getPeriodNow.js';
 import getPeriodStart from '../blitzstars/getPeriodStart.js';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo.js';
@@ -31,19 +36,39 @@ export interface ResolvedPeriod {
 }
 
 export default function resolvePeriod(
-  interaction: ChatInputCommandInteraction<CacheType>,
+  interaction:
+    | ChatInputCommandInteraction<CacheType>
+    | ButtonInteraction<CacheType>,
 ) {
-  const period = interaction.options.getSubcommand(true) as Period;
   let statsName: string;
   let evolutionName: string;
   let start: number;
   let end: number;
-  const relativePeriodName =
-    RELATIVE_PERIOD_NAMES[interaction.options.getSubcommand() as Period];
+  let subcommand: Period;
+  let url: typeof interaction extends ChatInputCommandInteraction
+    ? undefined
+    : URL;
+
+  if (interaction instanceof ChatInputCommandInteraction) {
+    subcommand = interaction.options.getSubcommand() as Period;
+  } else {
+    url = new URL(`${CYCLIC_API}/${interaction.customId}`);
+    const path = url.pathname.split('/').filter(Boolean);
+    subcommand = path[path.length - 1] as Period;
+  }
+
+  const period = subcommand;
+  const relativePeriodName = RELATIVE_PERIOD_NAMES[subcommand];
 
   if (period === 'custom') {
-    const startRaw = interaction.options.getInteger('start')!;
-    const endRaw = interaction.options.getInteger('end')!;
+    const startRaw =
+      interaction instanceof ChatInputCommandInteraction
+        ? interaction.options.getInteger('start')!
+        : parseInt(url!.searchParams.get('start')!);
+    const endRaw =
+      interaction instanceof ChatInputCommandInteraction
+        ? interaction.options.getInteger('end')!
+        : parseInt(url!.searchParams.get('end')!);
     const startMin = Math.min(startRaw, endRaw);
     const endMax = Math.max(startRaw, endRaw);
 

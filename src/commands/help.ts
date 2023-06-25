@@ -5,7 +5,7 @@ import {
   CommandRegistry,
   guildCommands,
   publicCommands,
-} from '../events/interactionCreate.js';
+} from '../events/interactionCreate/index.js';
 import { client } from '../index.js';
 
 export default {

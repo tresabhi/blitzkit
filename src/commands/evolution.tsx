@@ -5,7 +5,7 @@ import resolveTankId from '../core/blitz/resolveTankId.js';
 import addStatsSubCommandGroups from '../core/options/addStatsSubCommandGroups.js';
 import resolvePeriod from '../core/options/resolvePeriod.js';
 import resolvePlayer from '../core/options/resolvePlayer.js';
-import { CommandRegistry } from '../events/interactionCreate.js';
+import { CommandRegistry } from '../events/interactionCreate/index.js';
 import evolution from '../renderers/evolution.js';
 import { StatType } from '../renderers/stats.js';
 

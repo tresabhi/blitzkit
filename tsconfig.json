@@ -11,5 +11,5 @@
     "resolveJsonModule": true,
     "jsx": "react-jsx"
   },
-  "include": ["src/**/*.ts", "src/renderers/stats.tsx"]
+  "include": ["src/**/*.ts", "src/renderers/stats.tsx", "src/events/interactionCreate/handlers/button.tsx"]
 }
