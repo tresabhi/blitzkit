@@ -19,7 +19,7 @@ import { StatType } from './stats.js';
 
 export default async function evolution<Type extends StatType>(
   type: Type,
-  { start, end, evolutionName, relativePeriodName }: ResolvedPeriod,
+  { start, end, evolutionName }: ResolvedPeriod,
   { server, id }: ResolvedPlayer,
   tankId: Type extends 'tank' ? number : never,
 ) {
@@ -78,6 +78,7 @@ export default async function evolution<Type extends StatType>(
   const battleYs = careerBattles.map(([, y]) => y);
   const maxBattle = Math.max(...battleYs);
   const minBattle = Math.min(...battleYs);
+  const minTime = Math.min(...careerBattles.map(([x]) => x));
 
   const accountInfo = await getWargamingResponse<AccountInfo>(
     `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
@@ -97,8 +98,8 @@ export default async function evolution<Type extends StatType>(
       {/* goofy ahh bug forces me to call them as functions */}
       {careerWinrate.length > 0 && (
         <Graph.Root
-          xMinLabel={relativePeriodName}
-          xMaxLabel="Latest recorded battle" // TODO: this is not true in custom periods
+          xMinLabel={new Date(minTime * 1000).toDateString()}
+          xMaxLabel={new Date(end * 1000).toDateString()}
           leftVerticalMargin={{
             min: minWinrate,
             max: maxWinrate,
