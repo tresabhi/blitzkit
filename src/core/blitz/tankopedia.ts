@@ -1,4 +1,5 @@
-import { WargamingResponse } from '../../types/wargamingResponse.js';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export type TankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
 
@@ -18,30 +19,15 @@ export interface Tankopedia {
   [id: number]: TankopediaEntry;
 }
 
-export const tankopedia: Tankopedia = {};
-export const TANK_IDS: number[] = [];
-export const TANKS: TankopediaEntry[] = [];
-export const TANK_NAMES: string[] = [];
-
-console.log('Caching tankopedia...');
-fetch('https://www.blitzstars.com/bs-tankopedia.json')
-  .then(
-    (response) =>
-      response.json() as Promise<
-        WargamingResponse<Tankopedia> & { status: 'ok' }
-      >,
-  )
-  .then((wargamingResponse) => {
-    Object.assign(tankopedia, wargamingResponse.data);
-    Object.entries(tankopedia).forEach(([idString, entry]) => {
-      const id = Number(idString);
-
-      TANK_IDS.push(id);
-      TANKS.push(entry);
-      TANK_NAMES.push(entry.name);
-    }),
-      console.log('Cached tankopedia');
-  });
+export const tankopedia = (
+  JSON.parse(
+    readFileSync(join(__dirname, 'tankopedia.json')) as unknown as string,
+  ) as { data: Tankopedia }
+).data;
+const entries = Object.entries(tankopedia);
+export const TANK_IDS = entries.map(([, { tank_id }]) => tank_id as number);
+export const TANKS = entries.map(([, entry]) => entry as TankopediaEntry);
+export const TANK_NAMES = entries.map(([, { name }]) => name);
 
 export const TANK_ICONS: Record<TankType, string> = {
   'AT-SPG': 'https://i.imgur.com/BIHSEH0.png',

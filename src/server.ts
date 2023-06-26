@@ -15,4 +15,4 @@ app.get('/', async (req, res) => {
   res.end(svg);
 });
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT ?? 3000);
