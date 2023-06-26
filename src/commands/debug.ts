@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from 'discord.js';
 import packageJSON from '../../package.json' assert { type: 'json' };
+import { client } from '../bot.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import cleanTable from '../core/interaction/cleanTable.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import getClientId from '../core/process/getClientId.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
-import { client } from '../index.js';
 
 const executionStart = new Date().getTime();
 

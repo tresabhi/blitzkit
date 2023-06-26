@@ -3,9 +3,9 @@ import {
   ChatInputCommandInteraction,
   EmbedBuilder,
 } from 'discord.js';
+import { client } from '../../bot.js';
 import { NEGATIVE_COLOR } from '../../constants/colors.js';
 import { handleError } from '../../events/error.js';
-import { client } from '../../index.js';
 
 export default async function wargamingError(
   interaction: ChatInputCommandInteraction<CacheType>,

@@ -1,15 +1,15 @@
 {
   "name": "blitzkrieg",
-  "version": "1.7.7",
+  "version": "1.9.0",
   "description": "",
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "yarn build:raw --dev && yarn start --dev",
-    "start": "node --enable-source-maps --trace-warnings dist/index.cjs",
+    "dev:bot": "yarn build:bot --dev && yarn start --dev",
+    "start": "node --enable-source-maps --trace-warnings dist/bot.cjs",
     "zip": "zip -r dist.zip dist",
-    "build:raw": "node scripts/build",
-    "build": "yarn lint && yarn build:raw",
+    "build:bot": "node scripts/build --bot",
+    "build": "yarn lint && yarn build:bot",
     "lint": "tsc"
   },
   "license": "MIT",
@@ -19,6 +19,7 @@
     "bepaint": "^0.1.0-beta.3",
     "discord.js": "^14.9.0",
     "escape-html": "^1.0.3",
+    "express": "^4.18.2",
     "fuzzysort": "^2.0.4",
     "lodash": "^4.17.21",
     "markdown-escape": "^2.0.0",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.4.2",
     "@types/escape-html": "^1.0.2",
+    "@types/express": "^4.17.17",
     "@types/lodash": "^4.14.195",
     "@types/markdown-escape": "^1.1.0",
     "@types/node": "^20.2.1",

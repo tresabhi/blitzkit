@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
+import { client } from '../bot.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
 import {
   CommandRegistry,
   guildCommands,
   publicCommands,
 } from '../events/interactionCreate/index.js';
-import { client } from '../index.js';
 
 export default {
   inProduction: true,

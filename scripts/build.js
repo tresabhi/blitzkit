@@ -2,17 +2,15 @@ import { build } from 'esbuild';
 import { rmSync } from 'fs';
 import { argv } from 'process';
 
-const isDev = argv.includes('--dev');
-const isProd = !isDev;
+const isProd = !argv.includes('--dev');
+const buildAll = argv.includes('--build=all');
+const buildBot = argv.includes('--build=bot') | buildAll;
+const buildServer = argv.includes('--build=server') | buildAll;
 
 console.log('Removing dist...');
 rmSync('dist', { recursive: true, force: true });
 
-console.log('Building...');
-build({
-  entryPoints: ['src/index.ts'],
-  outfile: 'dist/index.cjs',
-
+const commonOptions = {
   platform: 'node',
   loader: {
     '.node': 'copy',
@@ -26,4 +24,10 @@ build({
   minifyWhitespace: isProd,
 
   logLevel: isProd ? 'info' : 'silent',
+};
+
+console.log('Building...');
+build({
+  entryPoints: ['src/bot.ts'],
+  outfile: 'dist/bot.cjs',
 });
