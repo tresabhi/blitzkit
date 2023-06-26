@@ -43,6 +43,16 @@ export default function resolvePeriod(
   let evolutionName: string;
   let start: number;
   let end: number;
+  let url: URL;
+  let period: Period;
+
+  if (interaction instanceof ChatInputCommandInteraction) {
+    period = interaction.options.getSubcommand() as Period;
+  } else {
+    url = new URL(`${CYCLIC_API}/${interaction.customId}`);
+    const path = url.pathname.split('/').filter(Boolean);
+    period = path[path.length - 1] as Period;
+  }
 
   if (period === 'custom') {
     const startRaw =

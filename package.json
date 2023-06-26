@@ -5,9 +5,9 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "build:bot": "node scripts/build --build=bot",
-    "build:server": "node scripts/build --build=server",
-    "build": "yarn lint && yarn build:bot",
+    "build:bot": "yarn lint && node scripts/build --build=bot",
+    "build:server": "yarn lint && node scripts/build --build=server",
+    "build": "yarn lint && node scripts/build --build=all",
     "dev:bot": "yarn build:bot --dev && yarn start:bot --dev",
     "dev:server": "yarn build:server --dev && yarn start:server --dev",
     "start:bot": "node --enable-source-maps --trace-warnings dist/bot.cjs",
