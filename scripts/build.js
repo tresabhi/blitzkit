@@ -27,7 +27,20 @@ const commonOptions = {
 };
 
 console.log('Building...');
-build({
-  entryPoints: ['src/bot.ts'],
-  outfile: 'dist/bot.cjs',
-});
+if (buildBot) {
+  build({
+    ...commonOptions,
+
+    entryPoints: ['src/bot.ts'],
+    outfile: 'dist/bot.cjs',
+  });
+}
+
+if (buildServer) {
+  build({
+    ...commonOptions,
+
+    entryPoints: ['src/server.ts'],
+    outfile: 'dist/server.cjs',
+  });
+}

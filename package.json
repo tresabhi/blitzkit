@@ -5,11 +5,14 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev:bot": "yarn build:bot --dev && yarn start --dev",
-    "start": "node --enable-source-maps --trace-warnings dist/bot.cjs",
-    "zip": "zip -r dist.zip dist",
-    "build:bot": "node scripts/build --bot",
+    "build:bot": "node scripts/build --build=bot",
+    "build:server": "node scripts/build --build=server",
     "build": "yarn lint && yarn build:bot",
+    "dev:bot": "yarn build:bot --dev && yarn start:bot --dev",
+    "dev:server": "yarn build:server --dev && yarn start:server --dev",
+    "start:bot": "node --enable-source-maps --trace-warnings dist/bot.cjs",
+    "start:server": "node --enable-source-maps --trace-warnings dist/server.cjs",
+    "zip": "zip -r dist.zip dist",
     "lint": "tsc"
   },
   "license": "MIT",
