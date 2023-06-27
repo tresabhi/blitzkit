@@ -25,7 +25,7 @@ import playerinfo from '../../commands/playerinfo.js';
 import searchclans from '../../commands/searchclans.js';
 import searchplayers from '../../commands/searchplayers.js';
 import searchtanks from '../../commands/searchtanks.js';
-import stats from '../../commands/stats.js';
+import statsfull from '../../commands/statsfull.js';
 import today from '../../commands/today.js';
 import verify from '../../commands/verify.js';
 import { DISCORD_TOKEN } from '../../core/node/arguments.js';
@@ -81,14 +81,14 @@ export const commands: Record<string, CommandRegistry> = (
     searchclans,
     searchplayers,
     searchtanks,
-    stats,
+    statsfull,
     today,
     verify,
     ping,
     evolution,
   ] as CommandRegistry[]
 ).reduce((accumulator, registry) => {
-  // if (isDev()) registry.command.setName(`${registry.command.name}dev`);
+  if (isDev()) registry.command.setDefaultMemberPermissions(0);
 
   return { ...accumulator, [registry.command.name]: registry };
 }, {});
