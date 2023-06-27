@@ -7,7 +7,7 @@ import {
   getHistoriesDefaultOptions,
 } from '../../types/histories.js';
 import getWargamingResponse from '../blitz/getWargamingResponse.js';
-import { WARGAMING_APPLICATION_ID } from '../node/args.js';
+import { WARGAMING_APPLICATION_ID } from '../node/arguments.js';
 import { emptyAllStats } from './getTankStatsDiffed.js';
 
 export interface PlayerHistoryRaw {

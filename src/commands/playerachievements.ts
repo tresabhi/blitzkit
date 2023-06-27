@@ -9,7 +9,7 @@ import markdownTable, {
   TableInputEntry,
 } from '../core/discord/markdownTable.js';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountAchievements } from '../types/accountAchievements.js';
 import { AccountInfo } from '../types/accountInfo.js';

@@ -9,7 +9,7 @@ import getBlitzClan from '../core/blitz/getBlitzClan.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import addClanChoices from '../core/discord/addClanChoices.js';
 import autocompleteClan from '../core/discord/autocompleteClan.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { ClanInfo } from '../types/clanInfo.js';

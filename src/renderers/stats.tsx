@@ -14,7 +14,7 @@ import getTankStatsDiffed from '../core/blitzstars/getTankStatsDiffed.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand.js';
 import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import {
   AccountInfo,
   AllStats,

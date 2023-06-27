@@ -1,6 +1,6 @@
 import { BlitzServer } from '../../constants/servers.js';
 import { serverAndIdPattern } from '../discord/resolvePlayerFromCommand.js';
-import errorWithCause from '../node/errorWithCause.js';
+import throwError from '../node/throwError.js';
 import listClans from './listClans.js';
 
 export default async function getBlitzClan(clan: string) {
@@ -13,7 +13,7 @@ export default async function getBlitzClan(clan: string) {
     if (accounts[0]) {
       return { server: accounts[0].server, id: accounts[0].clan_id };
     } else {
-      throw errorWithCause(
+      throw throwError(
         'Could not find clan',
         `I couldn't find clan \`${clan}\`. Try selecting a username from the search result.`,
       );

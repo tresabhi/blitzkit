@@ -28,7 +28,7 @@ import searchtanks from '../../commands/searchtanks.js';
 import stats from '../../commands/stats.js';
 import today from '../../commands/today.js';
 import verify from '../../commands/verify.js';
-import { DISCORD_TOKEN } from '../../core/node/args.js';
+import { DISCORD_TOKEN } from '../../core/node/arguments.js';
 import getClientId from '../../core/node/getClientId.js';
 import isDev from '../../core/node/isDev.js';
 import handleAutocomplete from './handlers/autocomplete.js';

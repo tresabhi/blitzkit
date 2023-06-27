@@ -6,7 +6,7 @@ import autocompleteUsername from '../core/discord/autocompleteUsername.js';
 import embedInfo from '../core/discord/embedInfo.js';
 import markdownTable from '../core/discord/markdownTable.js';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 

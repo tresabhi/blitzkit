@@ -1,7 +1,7 @@
 import { BLITZ_SERVERS, BlitzServer } from '../../constants/servers.js';
 import { TanksStats } from '../../types/tanksStats.js';
-import { WARGAMING_APPLICATION_ID } from '../node/args.js';
-import errorWithCause from '../node/errorWithCause.js';
+import { WARGAMING_APPLICATION_ID } from '../node/arguments.js';
+import throwError from '../node/throwError.js';
 import getWargamingResponse from './getWargamingResponse.js';
 
 export default async function getTankStats(server: BlitzServer, id: number) {
@@ -10,7 +10,7 @@ export default async function getTankStats(server: BlitzServer, id: number) {
   );
 
   if (tankStats[id] === null) {
-    throw errorWithCause(
+    throw throwError(
       'No tank stats available',
       `Wargaming says there is no tank stats for this account. This account may not have any battles/tanks or exist in the ${BLITZ_SERVERS[server]} server.`,
     );

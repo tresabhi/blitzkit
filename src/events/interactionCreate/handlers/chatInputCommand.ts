@@ -8,7 +8,7 @@ import {
 import embedNegative from '../../../core/discord/embedNegative.js';
 import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable.js';
 import embedWarning from '../../../core/discord/embedWarning.js';
-import { psa } from '../../../core/node/psa.js';
+import { psa } from '../../../core/discord/psa.js';
 import { handleError } from '../../error.js';
 import { commands } from '../index.js';
 

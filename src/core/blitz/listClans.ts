@@ -1,6 +1,6 @@
 import { BlitzServer } from '../../constants/servers.js';
 import { Clan, ClanList } from '../../types/clanList.js';
-import { WARGAMING_APPLICATION_ID } from '../node/args.js';
+import { WARGAMING_APPLICATION_ID } from '../node/arguments.js';
 import getWargamingResponse from './getWargamingResponse.js';
 
 export type ClanListWithServer = (Clan & {

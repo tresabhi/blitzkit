@@ -1,5 +1,5 @@
 import { Client, GatewayIntentBits } from 'discord.js';
-import { DISCORD_TOKEN } from './core/node/args.js';
+import { DISCORD_TOKEN } from './core/node/arguments.js';
 import { registerErrorHandlers } from './events/error.js';
 import guildMemberAdd from './events/guildMemberAdd.js';
 import interactionCreate from './events/interactionCreate/index.js';

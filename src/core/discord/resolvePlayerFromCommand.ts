@@ -3,7 +3,7 @@ import { BlitzServer } from '../../constants/servers.js';
 import listPlayers, {
   usernamePatternWithoutPosition,
 } from '../blitz/listPlayers.js';
-import errorWithCause from '../node/errorWithCause.js';
+import throwError from '../node/throwError.js';
 
 export const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
 
@@ -22,7 +22,7 @@ export default async function resolvePlayerFromCommand(
   const username = commandUsername ?? displayName;
 
   if (username === undefined) {
-    throw errorWithCause(
+    throw throwError(
       'Username could not be inferred',
       "You didn't provide me a username in the command nor was I able to infer your Blitz username from your Discord nickname. Try providing a username manually in the command or using the `/verify` command to set your Discord nickname to your Blitz username.",
     );
@@ -43,7 +43,7 @@ export default async function resolvePlayerFromCommand(
         id: accounts[0].account_id,
       } satisfies ResolvedPlayer;
     } else {
-      throw errorWithCause(
+      throw throwError(
         'Could not find user',
         `I couldn't find user \`${username}\`. Try providing a valid username manually or using the \`/verify\` command to set your Discord nickname to your Blitz username.`,
       );

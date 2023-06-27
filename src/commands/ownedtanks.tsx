@@ -15,7 +15,7 @@ import {
 import addUsernameChoices from '../core/discord/addUsernameChoices.js';
 import autocompleteUsername from '../core/discord/autocompleteUsername.js';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';

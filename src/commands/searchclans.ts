@@ -5,7 +5,7 @@ import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import addClanChoices from '../core/discord/addClanChoices.js';
 import addServerChoices from '../core/discord/addServerChoices.js';
 import embedInfo from '../core/discord/embedInfo.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { ClanList } from '../types/clanList.js';
 
