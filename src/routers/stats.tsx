@@ -1,7 +1,7 @@
 import { BlitzServer } from '../constants/servers.js';
 import resolvePeriodFromRequest from '../core/express/resolvePeriodFromRequest.js';
 import stats, { StatType } from '../renderers/stats.js';
-import { ResponderRegistry } from '../server.js';
+import { RouterRegistry } from '../server.js';
 
 export default {
   route: '/stats/:type/:period',
@@ -22,4 +22,4 @@ export default {
       parseInt(req.query.tank as string),
     );
   },
-} satisfies ResponderRegistry;
+} satisfies RouterRegistry;
