@@ -1,5 +1,5 @@
 import { WargamingResponse } from '../../types/wargamingResponse.js';
-import errorWithCause from '../process/errorWithCause.js';
+import errorWithCause from '../node/errorWithCause.js';
 
 export default async function getWargamingResponse<Data extends object>(
   url: string,

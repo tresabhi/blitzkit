@@ -3,11 +3,12 @@ import {
   CacheType,
   ChatInputCommandInteraction,
 } from 'discord.js';
+import { Request } from 'express';
 import { CYCLIC_API } from '../../constants/cyclic.js';
 import getPeriodNow from '../blitzstars/getPeriodNow.js';
 import getPeriodStart from '../blitzstars/getPeriodStart.js';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo.js';
-import { Period } from './addPeriodSubCommands.js';
+import { Period } from '../options/addPeriodSubCommands.js';
 
 export const PERIOD_NAMES: Record<Period, string> = {
   today: "Today's statistics",
@@ -34,10 +35,11 @@ export interface ResolvedPeriod {
   end: number;
 }
 
-export default function resolvePeriod(
-  interaction:
+export default function resolvePeriodFromCommand(
+  input:
     | ChatInputCommandInteraction<CacheType>
-    | ButtonInteraction<CacheType>,
+    | ButtonInteraction<CacheType>
+    | Request,
 ) {
   let statsName: string;
   let evolutionName: string;
@@ -46,22 +48,26 @@ export default function resolvePeriod(
   let url: URL;
   let period: Period;
 
-  if (interaction instanceof ChatInputCommandInteraction) {
-    period = interaction.options.getSubcommand() as Period;
+  if (input instanceof ChatInputCommandInteraction) {
+    period = input.options.getSubcommand() as Period;
   } else {
-    url = new URL(`${CYCLIC_API}/${interaction.customId}`);
+    url = new URL(
+      `${CYCLIC_API}${
+        input instanceof ButtonInteraction ? `/${input.customId}` : input.path
+      }`,
+    );
     const path = url.pathname.split('/').filter(Boolean);
     period = path[path.length - 1] as Period;
   }
 
   if (period === 'custom') {
     const startRaw =
-      interaction instanceof ChatInputCommandInteraction
-        ? interaction.options.getInteger('start')!
+      input instanceof ChatInputCommandInteraction
+        ? input.options.getInteger('start')!
         : parseInt(url!.searchParams.get('start')!);
     const endRaw =
-      interaction instanceof ChatInputCommandInteraction
-        ? interaction.options.getInteger('end')!
+      input instanceof ChatInputCommandInteraction
+        ? input.options.getInteger('end')!
         : parseInt(url!.searchParams.get('end')!);
     const startMin = Math.min(startRaw, endRaw);
     const endMax = Math.max(startRaw, endRaw);

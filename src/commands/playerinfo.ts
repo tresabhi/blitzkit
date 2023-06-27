@@ -4,9 +4,9 @@ import usernameAutocomplete from '../core/autocomplete/username.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import cleanTable from '../core/interaction/cleanTable.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import resolvePlayer from '../core/options/resolvePlayer.js';
-import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 
@@ -20,7 +20,7 @@ export default {
     .setDescription('Basic information about a player')
     .addStringOption(addUsernameOption),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const account = await resolvePlayer(interaction);
     const { id, server } = account;
     const accounts = await getWargamingResponse<AccountInfo>(

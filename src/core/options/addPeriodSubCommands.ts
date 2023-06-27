@@ -2,7 +2,7 @@ import {
   SlashCommandSubcommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
-import { PERIOD_NAMES } from './resolvePeriod.js';
+import { PERIOD_NAMES } from '../interaction/resolvePeriodFromCommand.js';
 
 export type Period = 'today' | '30' | '60' | '90' | 'career' | 'custom';
 

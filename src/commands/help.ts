@@ -17,7 +17,7 @@ export default {
     .setName('help')
     .setDescription('All the help you need about the bot'),
 
-  execute(interaction) {
+  handler(interaction) {
     return infoEmbed(
       `${client.user?.username} help`,
       `**About**\n${

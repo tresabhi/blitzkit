@@ -5,9 +5,9 @@ import usernameAutocomplete from '../core/autocomplete/username.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import negativeEmbed from '../core/interaction/negativeEmbed.js';
 import positiveEmbed from '../core/interaction/positiveEmbed.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import resolvePlayer from '../core/options/resolvePlayer.js';
-import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
@@ -22,7 +22,7 @@ export default {
     .setDescription("Set's the user's username to their in-game name")
     .addStringOption((option) => addUsernameOption(option).setRequired(true)),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const blitzAccount = await resolvePlayer(interaction);
     const { id, server } = blitzAccount;
     const accountInfo = await getWargamingResponse<AccountInfo>(

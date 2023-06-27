@@ -15,7 +15,7 @@ export default {
     .setDescription('A general daily breakdown of your performance')
     .addStringOption(addUsernameOption),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const player = await resolvePlayer(interaction);
 
     return await today(player);

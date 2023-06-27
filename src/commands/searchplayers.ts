@@ -4,9 +4,9 @@ import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import { usernamePattern } from '../core/blitz/listAccountsPanServer.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import addServerChoices from '../core/options/addServerChoices.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
-import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountList } from '../types/accountList.js';
 
@@ -30,7 +30,7 @@ export default {
         .setMaxValue(100),
     ),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const server = interaction.options.getString('server') as BlitzServer;
     const name = interaction.options.getString('username')!;
     const limit = interaction.options.getInteger('limit') ?? 25;

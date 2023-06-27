@@ -8,7 +8,7 @@ import { BlitzServer } from '../../constants/servers.js';
 import listAccountsPanServer, {
   usernamePatternWithoutPosition,
 } from '../blitz/listAccountsPanServer.js';
-import errorWithCause from '../process/errorWithCause.js';
+import errorWithCause from '../node/errorWithCause.js';
 
 export const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
 

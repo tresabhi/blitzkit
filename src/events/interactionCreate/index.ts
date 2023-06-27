@@ -28,9 +28,9 @@ import searchtanks from '../../commands/searchtanks.js';
 import stats from '../../commands/stats.js';
 import today from '../../commands/today.js';
 import verify from '../../commands/verify.js';
-import { DISCORD_TOKEN } from '../../core/process/args.js';
-import getClientId from '../../core/process/getClientId.js';
-import isDev from '../../core/process/isDev.js';
+import { DISCORD_TOKEN } from '../../core/node/args.js';
+import getClientId from '../../core/node/getClientId.js';
+import isDev from '../../core/node/isDev.js';
 import handleAutocomplete from './handlers/autocomplete.js';
 import handleButton from './handlers/button.js';
 import handleChatInputCommand from './handlers/chatInputCommand.js';
@@ -46,29 +46,26 @@ export type InteractionReturnable =
   | InteractionIterableReturnable
   | Promise<InteractionIterableReturnable>;
 
-export type CommandRegistry = {
+export interface Registry {
   inDevelopment: boolean;
   inProduction: boolean;
-  inPublic: boolean;
+}
 
+export interface CommandRegistry<HandlesInteraction extends boolean = false>
+  extends Registry {
+  inPublic: boolean;
+  handlesInteraction?: HandlesInteraction;
   command:
     | SlashCommandBuilder
     | SlashCommandSubcommandsOnlyBuilder
     | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
+
+  handler: (
+    interaction: ChatInputCommandInteraction<CacheType>,
+  ) => HandlesInteraction extends true ? void : InteractionReturnable;
   autocomplete?: (interaction: AutocompleteInteraction<CacheType>) => void;
   button?: (interaction: ButtonInteraction<CacheType>) => InteractionReturnable;
-} & (
-  | {
-      handlesInteraction?: false;
-      execute: (
-        interaction: ChatInputCommandInteraction<CacheType>,
-      ) => InteractionReturnable;
-    }
-  | {
-      handlesInteraction: true;
-      execute: (interaction: ChatInputCommandInteraction<CacheType>) => void;
-    }
-);
+}
 
 const rest = new REST().setToken(DISCORD_TOKEN);
 

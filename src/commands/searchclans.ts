@@ -3,9 +3,9 @@ import markdownEscape from 'markdown-escape';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import infoEmbed from '../core/interaction/infoEmbed.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import addClanChoices from '../core/options/addClanChoices.js';
 import addServerChoices from '../core/options/addServerChoices.js';
-import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { ClanList } from '../types/clanList.js';
 
@@ -27,7 +27,7 @@ export default {
         .setMaxValue(100),
     ),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const server = interaction.options.getString('server') as BlitzServer;
     const clan = interaction.options.getString('clan')!;
     const limit = interaction.options.getInteger('limit') ?? 25;

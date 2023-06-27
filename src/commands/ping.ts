@@ -17,7 +17,7 @@ export default {
       option.setName('blitz').setDescription('Ping Blitz'),
     ),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const subcommand = interaction.options.getSubcommand();
     const executionStart = Date.now();
 

@@ -1,5 +1,5 @@
 import { go } from 'fuzzysort';
-import errorWithCause from '../process/errorWithCause.js';
+import errorWithCause from '../node/errorWithCause.js';
 import { TANKS, tankopedia } from './tankopedia.js';
 
 export default function resolveTankId(tank: string) {

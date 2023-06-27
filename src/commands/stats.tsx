@@ -6,9 +6,9 @@ import resolveTankId from '../core/blitz/resolveTankId.js';
 import interactionToURL from '../core/interaction/interactionToURL.js';
 import linkButton from '../core/interaction/linkButton.js';
 import primaryButton from '../core/interaction/primaryButton.js';
+import resolvePeriodFromCommand from '../core/interaction/resolvePeriodFromCommand.js';
 import { Period } from '../core/options/addPeriodSubCommands.js';
 import addStatsSubCommandGroups from '../core/options/addStatsSubCommandGroups.js';
-import resolvePeriod from '../core/options/resolvePeriod.js';
 import resolvePlayer from '../core/options/resolvePlayer.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import stats, { StatType } from '../renderers/stats.js';
@@ -24,13 +24,13 @@ export default {
       .setDescription('In-game statistics'),
   ),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const commandGroup = interaction.options.getSubcommandGroup(
       true,
     ) as StatType;
     const subcommand = interaction.options.getSubcommand() as Period;
     const player = await resolvePlayer(interaction);
-    const period = resolvePeriod(interaction);
+    const period = resolvePeriodFromCommand(interaction);
     const tankIdRaw = interaction.options.getString('tank')!;
     const tankId = commandGroup === 'tank' ? resolveTankId(tankIdRaw) : 0;
     const start = interaction.options.getInteger('start');
@@ -57,7 +57,7 @@ export default {
     const url = new URL(`${CYCLIC_API}/${interaction.customId}`);
     const path = url.pathname.split('/').filter(Boolean);
     const commandGroup = path[1] as StatType;
-    const period = resolvePeriod(interaction);
+    const period = resolvePeriodFromCommand(interaction);
     const player = await resolvePlayer(interaction);
 
     return await stats(

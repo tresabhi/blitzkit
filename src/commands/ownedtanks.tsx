@@ -13,9 +13,9 @@ import {
   Tier,
   tankopedia,
 } from '../core/blitz/tankopedia.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import addUsernameOption from '../core/options/addUsernameOption.js';
 import resolvePlayer from '../core/options/resolvePlayer.js';
-import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
@@ -69,7 +69,7 @@ export default {
     )
     .addStringOption(addUsernameOption),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const tier = Number(interaction.options.getString('tier'));
     const account = await resolvePlayer(interaction);
     const { id, server } = account;

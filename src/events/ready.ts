@@ -1,5 +1,5 @@
 import { Client } from 'discord.js';
-import isDev from '../core/process/isDev.js';
+import isDev from '../core/node/isDev.js';
 
 export default function ready(client: Client<true>) {
   console.log(

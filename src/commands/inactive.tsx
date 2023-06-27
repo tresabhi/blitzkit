@@ -8,8 +8,8 @@ import { BLITZ_SERVERS } from '../constants/servers.js';
 import clanAutocomplete from '../core/autocomplete/clan.js';
 import getBlitzClan from '../core/blitz/getBlitzClan.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import addClanChoices from '../core/options/addClanChoices.js';
-import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { ClanInfo } from '../types/clanInfo.js';
@@ -34,7 +34,7 @@ export default {
         .setMinValue(0),
     ),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const clanName = interaction.options.getString('clan')!;
     const { server, id } = await getBlitzClan(interaction, clanName);
     const threshold =

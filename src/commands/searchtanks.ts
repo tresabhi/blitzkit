@@ -23,7 +23,7 @@ export default {
         .setMaxValue(100),
     ),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const tank = interaction.options.getString('tank')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
     const results = go(tank, TANK_NAMES, { limit }).map(

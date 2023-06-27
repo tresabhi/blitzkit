@@ -1,7 +1,7 @@
 import { BLITZ_SERVERS, BlitzServer } from '../../constants/servers.js';
 import { TanksStats } from '../../types/tanksStats.js';
-import { WARGAMING_APPLICATION_ID } from '../process/args.js';
-import errorWithCause from '../process/errorWithCause.js';
+import { WARGAMING_APPLICATION_ID } from '../node/args.js';
+import errorWithCause from '../node/errorWithCause.js';
 import getWargamingResponse from './getWargamingResponse.js';
 
 export default async function getTankStats(server: BlitzServer, id: number) {
