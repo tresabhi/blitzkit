@@ -1,10 +1,4 @@
-import {
-  ButtonInteraction,
-  CacheType,
-  ChatInputCommandInteraction,
-} from 'discord.js';
-import { Request } from 'express';
-import { CYCLIC_API } from '../../constants/cyclic.js';
+import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import getPeriodNow from '../blitzstars/getPeriodNow.js';
 import getPeriodStart from '../blitzstars/getPeriodStart.js';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo.js';
@@ -36,39 +30,17 @@ export interface ResolvedPeriod {
 }
 
 export default function resolvePeriodFromCommand(
-  input:
-    | ChatInputCommandInteraction<CacheType>
-    | ButtonInteraction<CacheType>
-    | Request,
+  interaction: ChatInputCommandInteraction<CacheType>,
 ) {
   let statsName: string;
   let evolutionName: string;
   let start: number;
   let end: number;
-  let url: URL;
-  let period: Period;
-
-  if (input instanceof ChatInputCommandInteraction) {
-    period = input.options.getSubcommand() as Period;
-  } else {
-    url = new URL(
-      `${CYCLIC_API}${
-        input instanceof ButtonInteraction ? `/${input.customId}` : input.path
-      }`,
-    );
-    const path = url.pathname.split('/').filter(Boolean);
-    period = path[path.length - 1] as Period;
-  }
+  const period = interaction.options.getSubcommand() as Period;
 
   if (period === 'custom') {
-    const startRaw =
-      input instanceof ChatInputCommandInteraction
-        ? input.options.getInteger('start')!
-        : parseInt(url!.searchParams.get('start')!);
-    const endRaw =
-      input instanceof ChatInputCommandInteraction
-        ? input.options.getInteger('end')!
-        : parseInt(url!.searchParams.get('end')!);
+    const startRaw = interaction.options.getInteger('start')!;
+    const endRaw = interaction.options.getInteger('end')!;
     const startMin = Math.min(startRaw, endRaw);
     const endMax = Math.max(startRaw, endRaw);
 

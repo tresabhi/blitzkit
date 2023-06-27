@@ -6,6 +6,7 @@ import addStatsSubCommandGroups from '../core/discord/addStatsSubCommandGroups.j
 import interactionToURL from '../core/discord/interactionToURL.js';
 import linkButton from '../core/discord/linkButton.js';
 import primaryButton from '../core/discord/primaryButton.js';
+import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton.js';
 import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.js';
 import resolvePlayer from '../core/discord/resolvePlayer.js';
 import tanksAutocomplete from '../core/discord/tanksAutocomplete.js';
@@ -57,7 +58,7 @@ export default {
     const url = new URL(`${CYCLIC_API}/${interaction.customId}`);
     const path = url.pathname.split('/').filter(Boolean);
     const commandGroup = path[1] as StatType;
-    const period = resolvePeriodFromCommand(interaction);
+    const period = resolvePeriodFromButton(interaction);
     const player = await resolvePlayer(interaction);
 
     return await stats(

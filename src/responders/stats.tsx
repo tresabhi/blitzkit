@@ -1,5 +1,5 @@
 import { BlitzServer } from '../constants/servers.js';
-import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.js';
+import resolvePeriodFromRequest from '../core/express/resolvePeriodFromRequest.js';
 import stats, { StatType } from '../renderers/stats.js';
 import { ResponderRegistry } from '../server.js';
 
@@ -9,11 +9,12 @@ export default {
   inDevelopment: true,
 
   async handler(req) {
-    console.log('yeah');
+    const type = req.params.type as StatType;
+    const period = resolvePeriodFromRequest(req);
 
     return await stats(
-      req.params.type as StatType,
-      resolvePeriodFromCommand(req),
+      type,
+      period,
       {
         server: req.query.server as BlitzServer,
         id: parseInt(req.query.id as string),

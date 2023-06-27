@@ -25,7 +25,7 @@ export default async function handleChatInputCommand(
 
     if (registry.handlesInteraction) return;
 
-    const reply = await normalizeInteractionReturnable(returnable);
+    const reply = await normalizeInteractionReturnable(returnable!);
 
     if (psa.data) {
       if (!reply.embeds) reply.embeds = [];
