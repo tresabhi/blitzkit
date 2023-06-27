@@ -1,5 +1,5 @@
 import { ResponderReturnable } from '../../server.js';
-import jsxToSvg from '../ui/jsxToSvg.js';
+import jsxToSvg from '../node/jsxToSvg.js';
 
 export default async function normalizeResponderReturnable(
   returnable: ResponderReturnable,

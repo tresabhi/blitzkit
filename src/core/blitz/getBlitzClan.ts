@@ -1,7 +1,7 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { BlitzServer } from '../../constants/servers.js';
+import { serverAndIdPattern } from '../discord/resolvePlayer.js';
 import errorWithCause from '../node/errorWithCause.js';
-import { serverAndIdPattern } from '../options/resolvePlayer.js';
 import listClansPanServer from './listClansPanServer.js';
 
 export default async function getBlitzClan(

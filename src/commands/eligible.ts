@@ -7,12 +7,12 @@ import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
 import getPeriodStart from '../core/blitzstars/getPeriodStart.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
-import cleanTable, { TableInput } from '../core/interaction/cleanTable.js';
-import negativeEmbed from '../core/interaction/negativeEmbed.js';
-import positiveEmbed from '../core/interaction/positiveEmbed.js';
+import addUsernameOption from '../core/discord/addUsernameOption.js';
+import cleanTable, { TableInput } from '../core/discord/cleanTable.js';
+import negativeEmbed from '../core/discord/negativeEmbed.js';
+import positiveEmbed from '../core/discord/positiveEmbed.js';
+import resolvePlayer from '../core/discord/resolvePlayer.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
-import addUsernameOption from '../core/options/addUsernameOption.js';
-import resolvePlayer from '../core/options/resolvePlayer.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 

@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
 import { client } from '../bot.js';
-import infoEmbed from '../core/interaction/infoEmbed.js';
+import infoEmbed from '../core/discord/infoEmbed.js';
 import {
   CommandRegistry,
   guildCommands,

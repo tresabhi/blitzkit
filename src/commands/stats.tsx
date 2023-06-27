@@ -1,15 +1,15 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { CYCLIC_API } from '../constants/cyclic.js';
-import tanksAutocomplete from '../core/autocomplete/tanks.js';
-import usernameAutocomplete from '../core/autocomplete/username.js';
 import resolveTankId from '../core/blitz/resolveTankId.js';
-import interactionToURL from '../core/interaction/interactionToURL.js';
-import linkButton from '../core/interaction/linkButton.js';
-import primaryButton from '../core/interaction/primaryButton.js';
-import resolvePeriodFromCommand from '../core/interaction/resolvePeriodFromCommand.js';
-import { Period } from '../core/options/addPeriodSubCommands.js';
-import addStatsSubCommandGroups from '../core/options/addStatsSubCommandGroups.js';
-import resolvePlayer from '../core/options/resolvePlayer.js';
+import { Period } from '../core/discord/addPeriodSubCommands.js';
+import addStatsSubCommandGroups from '../core/discord/addStatsSubCommandGroups.js';
+import interactionToURL from '../core/discord/interactionToURL.js';
+import linkButton from '../core/discord/linkButton.js';
+import primaryButton from '../core/discord/primaryButton.js';
+import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.js';
+import resolvePlayer from '../core/discord/resolvePlayer.js';
+import tanksAutocomplete from '../core/discord/tanksAutocomplete.js';
+import usernameAutocomplete from '../core/discord/usernameAutocomplete.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import stats, { StatType } from '../renderers/stats.js';
 

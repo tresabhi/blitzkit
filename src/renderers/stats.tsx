@@ -12,9 +12,9 @@ import sumStats from '../core/blitz/sumStats.js';
 import { Tier, tankopedia } from '../core/blitz/tankopedia.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
-import { ResolvedPeriod } from '../core/interaction/resolvePeriodFromCommand.js';
+import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand.js';
+import { ResolvedPlayer } from '../core/discord/resolvePlayer.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
-import { ResolvedPlayer } from '../core/options/resolvePlayer.js';
 import {
   AccountInfo,
   AllStats,

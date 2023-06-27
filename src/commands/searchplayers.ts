@@ -3,10 +3,10 @@ import markdownEscape from 'markdown-escape';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import { usernamePattern } from '../core/blitz/listAccountsPanServer.js';
-import infoEmbed from '../core/interaction/infoEmbed.js';
+import addServerChoices from '../core/discord/addServerChoices.js';
+import addUsernameOption from '../core/discord/addUsernameOption.js';
+import infoEmbed from '../core/discord/infoEmbed.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
-import addServerChoices from '../core/options/addServerChoices.js';
-import addUsernameOption from '../core/options/addUsernameOption.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountList } from '../types/accountList.js';
 

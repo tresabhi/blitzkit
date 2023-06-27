@@ -1,4 +1,4 @@
-import { Period } from '../options/addPeriodSubCommands.js';
+import { Period } from '../discord/addPeriodSubCommands.js';
 import getTimeDaysAgo from './getTimeDaysAgo.js';
 
 export default function getPeriodStart(period: Exclude<Period, 'custom'>) {

@@ -5,7 +5,6 @@ import * as Tanks from '../components/Tanks/index.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
-import usernameAutocomplete from '../core/autocomplete/username.js';
 import getTankStats from '../core/blitz/getTankStats.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import {
@@ -13,9 +12,10 @@ import {
   Tier,
   tankopedia,
 } from '../core/blitz/tankopedia.js';
+import addUsernameOption from '../core/discord/addUsernameOption.js';
+import resolvePlayer from '../core/discord/resolvePlayer.js';
+import usernameAutocomplete from '../core/discord/usernameAutocomplete.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
-import addUsernameOption from '../core/options/addUsernameOption.js';
-import resolvePlayer from '../core/options/resolvePlayer.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';

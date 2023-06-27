@@ -2,8 +2,8 @@ import { SlashCommandBuilder } from 'discord.js';
 import { go } from 'fuzzysort';
 import markdownEscape from 'markdown-escape';
 import { TANK_NAMES } from '../core/blitz/tankopedia.js';
-import infoEmbed from '../core/interaction/infoEmbed.js';
-import addTankChoices from '../core/options/addTankChoices.js';
+import addTankChoices from '../core/discord/addTankChoices.js';
+import infoEmbed from '../core/discord/infoEmbed.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 
 export default {

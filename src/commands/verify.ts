@@ -1,13 +1,13 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import discord from '../../discord.json' assert { type: 'json' };
-import usernameAutocomplete from '../core/autocomplete/username.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import negativeEmbed from '../core/interaction/negativeEmbed.js';
-import positiveEmbed from '../core/interaction/positiveEmbed.js';
+import addUsernameOption from '../core/discord/addUsernameOption.js';
+import negativeEmbed from '../core/discord/negativeEmbed.js';
+import positiveEmbed from '../core/discord/positiveEmbed.js';
+import resolvePlayer from '../core/discord/resolvePlayer.js';
+import usernameAutocomplete from '../core/discord/usernameAutocomplete.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
-import addUsernameOption from '../core/options/addUsernameOption.js';
-import resolvePlayer from '../core/options/resolvePlayer.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';

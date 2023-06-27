@@ -5,9 +5,9 @@ import {
   CacheType,
   ChatInputCommandInteraction,
 } from 'discord.js';
-import negativeEmbed from '../../../core/interaction/negativeEmbed.js';
-import normalizeInteractionReturnable from '../../../core/interaction/normalizeInteractionReturnable.js';
-import warningEmbed from '../../../core/interaction/warningEmbed.js';
+import negativeEmbed from '../../../core/discord/negativeEmbed.js';
+import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable.js';
+import warningEmbed from '../../../core/discord/warningEmbed.js';
 import { psa } from '../../../core/node/psa.js';
 import { handleError } from '../../error.js';
 import { commands } from '../index.js';

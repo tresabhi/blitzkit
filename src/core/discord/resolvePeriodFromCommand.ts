@@ -8,7 +8,7 @@ import { CYCLIC_API } from '../../constants/cyclic.js';
 import getPeriodNow from '../blitzstars/getPeriodNow.js';
 import getPeriodStart from '../blitzstars/getPeriodStart.js';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo.js';
-import { Period } from '../options/addPeriodSubCommands.js';
+import { Period } from '../discord/addPeriodSubCommands.js';
 
 export const PERIOD_NAMES: Record<Period, string> = {
   today: "Today's statistics",

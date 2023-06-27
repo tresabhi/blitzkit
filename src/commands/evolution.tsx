@@ -1,10 +1,10 @@
 import { SlashCommandBuilder } from 'discord.js';
-import tanksAutocomplete from '../core/autocomplete/tanks.js';
-import usernameAutocomplete from '../core/autocomplete/username.js';
 import resolveTankId from '../core/blitz/resolveTankId.js';
-import resolvePeriodFromCommand from '../core/interaction/resolvePeriodFromCommand.js';
-import addStatsSubCommandGroups from '../core/options/addStatsSubCommandGroups.js';
-import resolvePlayer from '../core/options/resolvePlayer.js';
+import addStatsSubCommandGroups from '../core/discord/addStatsSubCommandGroups.js';
+import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.js';
+import resolvePlayer from '../core/discord/resolvePlayer.js';
+import tanksAutocomplete from '../core/discord/tanksAutocomplete.js';
+import usernameAutocomplete from '../core/discord/usernameAutocomplete.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import evolution from '../renderers/evolution.js';
 import { StatType } from '../renderers/stats.js';

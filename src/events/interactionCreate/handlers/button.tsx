@@ -1,5 +1,5 @@
 import { ButtonInteraction, CacheType } from 'discord.js';
-import normalizeInteractionReturnable from '../../../core/interaction/normalizeInteractionReturnable.js';
+import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable.js';
 import { commands } from '../index.js';
 
 export default async function handleButton(

@@ -1,5 +1,5 @@
 import { BlitzServer } from '../constants/servers.js';
-import resolvePeriodFromCommand from '../core/interaction/resolvePeriodFromCommand.js';
+import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.js';
 import stats, { StatType } from '../renderers/stats.js';
 import { ResponderRegistry } from '../server.js';
 

@@ -2,10 +2,10 @@ import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import infoEmbed from '../core/interaction/infoEmbed.js';
+import addClanChoices from '../core/discord/addClanChoices.js';
+import addServerChoices from '../core/discord/addServerChoices.js';
+import infoEmbed from '../core/discord/infoEmbed.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
-import addClanChoices from '../core/options/addClanChoices.js';
-import addServerChoices from '../core/options/addServerChoices.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { ClanList } from '../types/clanList.js';
 
