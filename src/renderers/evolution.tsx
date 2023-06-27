@@ -15,7 +15,7 @@ import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { Histories } from '../types/histories.js';
 import { PlayerClanData } from '../types/playerClanData.js';
-import { StatType } from './stats.js';
+import { StatType } from './statsfull.js';
 
 export default async function evolution<Type extends StatType>(
   type: Type,

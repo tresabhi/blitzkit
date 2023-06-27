@@ -1,6 +1,6 @@
 import resolvePeriodFromRequest from '../core/express/resolvePeriodFromRequest.js';
 import resolvePlayerFromRequest from '../core/express/resolvePlayerFromRequest.js';
-import stats, { StatType } from '../renderers/stats.js';
+import statsfull, { StatType } from '../renderers/statsfull.js';
 import { RouterRegistry } from '../server.js';
 
 export default {
@@ -13,7 +13,7 @@ export default {
     const period = resolvePeriodFromRequest(req);
     const player = resolvePlayerFromRequest(req);
 
-    return await stats(
+    return await statsfull(
       type,
       period,
       player,

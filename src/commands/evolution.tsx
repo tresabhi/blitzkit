@@ -7,7 +7,7 @@ import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.j
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import evolution from '../renderers/evolution.js';
-import { StatType } from '../renderers/stats.js';
+import { StatType } from '../renderers/statsfull.js';
 
 export default {
   inProduction: true,

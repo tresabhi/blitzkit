@@ -24,7 +24,7 @@ import { PlayerClanData } from '../types/playerClanData.js';
 
 export type StatType = 'player' | 'tank';
 
-export default async function stats<Type extends StatType>(
+export default async function statsfull<Type extends StatType>(
   type: Type,
   { start, end, statsName }: ResolvedPeriod,
   { server, id }: ResolvedPlayer,

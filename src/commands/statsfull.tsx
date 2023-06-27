@@ -13,17 +13,17 @@ import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.j
 import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton.js';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
-import stats, { StatType } from '../renderers/stats.js';
+import statsfull, { StatType } from '../renderers/statsfull.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: addStatTypeSubCommandGroups(
     new SlashCommandBuilder()
-      .setName('stats')
-      .setDescription('In-game statistics'),
+      .setName('statsfull')
+      .setDescription('Full in-game statistics'),
   ),
 
   async handler(interaction) {
@@ -37,14 +37,14 @@ export default {
     const tankId = commandGroup === 'tank' ? resolveTankId(tankIdRaw) : 0;
     const start = interaction.options.getInteger('start');
     const end = interaction.options.getInteger('end');
-    const path = `stats/${commandGroup}/${subcommand}?server=${
+    const path = `statsfull/${commandGroup}/${subcommand}?server=${
       player.server
     }&id=${player.id}&tankId=${tankId}&start=${start ?? 0}&end=${end ?? 0}`;
 
     interactionToURL(interaction);
 
     return [
-      await stats(commandGroup, period, player, tankId),
+      await statsfull(commandGroup, period, player, tankId),
       primaryButton(path, 'Refresh'),
       linkButton(path, 'Embed'),
     ];
@@ -62,7 +62,7 @@ export default {
     const period = resolvePeriodFromButton(interaction);
     const player = await resolvePlayerFromButton(interaction);
 
-    return await stats(
+    return await statsfull(
       commandGroup,
       period,
       player,
