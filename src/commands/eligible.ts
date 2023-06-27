@@ -5,7 +5,7 @@ import sumStats from '../core/blitz/sumStats.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
 import getPeriodStart from '../core/blitzstars/getPeriodStart.js';
-import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
+import getTankStatsDiffed from '../core/blitzstars/getTankStatsDiffed.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import addUsernameOption from '../core/discord/addUsernameOption.js';
 import cleanTable, { TableInput } from '../core/discord/cleanTable.js';
@@ -58,7 +58,7 @@ export default {
     let body = '';
 
     if (clan === 'SKLLD') {
-      const tankStatsOverTime = await getTankStatsOverTime(
+      const tankStatsOverTime = await getTankStatsDiffed(
         server,
         id,
         getPeriodStart('30'),

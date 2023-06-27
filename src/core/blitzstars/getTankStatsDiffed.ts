@@ -34,7 +34,7 @@ export const emptyTankHistoryNode: TankHistoryRaw = {
   all: emptyAllStats,
 };
 
-export default async function getTankStatsOverTime(
+export default async function getTankStatsDiffed(
   server: BlitzServer,
   id: number,
   start: number,

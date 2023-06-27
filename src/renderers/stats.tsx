@@ -10,7 +10,7 @@ import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankName from '../core/blitz/resolveTankName.js';
 import sumStats from '../core/blitz/sumStats.js';
 import { Tier, tankopedia } from '../core/blitz/tankopedia.js';
-import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
+import getTankStatsDiffed from '../core/blitzstars/getTankStatsDiffed.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand.js';
 import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand.js';
@@ -49,7 +49,7 @@ export default async function stats<Type extends StatType>(
     image = tankopedia[tankId].images.normal;
   }
 
-  const tankStats = await getTankStatsOverTime(server, id, start, end);
+  const tankStats = await getTankStatsDiffed(server, id, start, end);
   let stats: AllStats;
   let supplementaryStats: SupplementaryStats;
   let tierWeights: TierWeightsRecord;

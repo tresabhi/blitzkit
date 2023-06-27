@@ -11,7 +11,7 @@ import resolveTankName from '../core/blitz/resolveTankName.js';
 import sumStats from '../core/blitz/sumStats.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
-import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
+import getTankStatsDiffed from '../core/blitzstars/getTankStatsDiffed.js';
 import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand.js';
@@ -20,7 +20,7 @@ import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 
 export default async function today({ server, id }: ResolvedPlayer) {
-  const tankStatsOverTime = await getTankStatsOverTime(
+  const tankStatsOverTime = await getTankStatsDiffed(
     server,
     id,
     getTimeDaysAgo(0),
