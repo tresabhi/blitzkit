@@ -2,11 +2,13 @@ import { SlashCommandBuilder } from 'discord.js';
 import { startCase } from 'lodash';
 import markdownEscape from 'markdown-escape';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import addUsernameOption from '../core/discord/addUsernameOption.js';
-import cleanTable, { TableInputEntry } from '../core/discord/cleanTable.js';
-import infoEmbed from '../core/discord/infoEmbed.js';
+import addUsernameChoices from '../core/discord/addUsernameChoices.js';
+import autocompleteUsername from '../core/discord/autocompleteUsername.js';
+import embedInfo from '../core/discord/embedInfo.js';
+import markdownTable, {
+  TableInputEntry,
+} from '../core/discord/markdownTable.js';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import usernameAutocomplete from '../core/discord/usernameAutocomplete.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountAchievements } from '../types/accountAchievements.js';
@@ -22,7 +24,7 @@ export default {
   command: new SlashCommandBuilder()
     .setName('playerachievements')
     .setDescription("All the player's achievements")
-    .addStringOption(addUsernameOption)
+    .addStringOption(addUsernameChoices)
     .addStringOption((option) =>
       option
         .setName('sort')
@@ -50,10 +52,10 @@ export default {
       ...accountAchievements.max_series,
     };
 
-    return infoEmbed(
+    return embedInfo(
       `${markdownEscape(accounts[id].nickname)}'s information`,
 
-      cleanTable(
+      markdownTable(
         Object.keys(compound)
           .filter((achievement) => compound[achievement] > 0)
           .sort(
@@ -72,5 +74,5 @@ export default {
     );
   },
 
-  autocomplete: usernameAutocomplete,
+  autocomplete: autocompleteUsername,
 } satisfies CommandRegistry;

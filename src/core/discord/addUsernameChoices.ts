@@ -1,6 +1,6 @@
 import { SlashCommandStringOption } from 'discord.js';
 
-export default function addUsernameOption(option: SlashCommandStringOption) {
+export default function addUsernameChoices(option: SlashCommandStringOption) {
   return option
     .setName('username')
     .setDescription(

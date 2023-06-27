@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
-import addUsernameOption from '../core/discord/addUsernameOption.js';
+import addUsernameChoices from '../core/discord/addUsernameChoices.js';
+import autocompleteUsername from '../core/discord/autocompleteUsername.js';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import usernameAutocomplete from '../core/discord/usernameAutocomplete.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import today from '../renderers/today.js';
 
@@ -13,7 +13,7 @@ export default {
   command: new SlashCommandBuilder()
     .setName('today')
     .setDescription('A general daily breakdown of your performance')
-    .addStringOption(addUsernameOption),
+    .addStringOption(addUsernameChoices),
 
   async handler(interaction) {
     const player = await resolvePlayerFromCommand(interaction);
@@ -21,5 +21,5 @@ export default {
     return await today(player);
   },
 
-  autocomplete: usernameAutocomplete,
+  autocomplete: autocompleteUsername,
 } satisfies CommandRegistry;

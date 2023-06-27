@@ -1,11 +1,11 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import addUsernameOption from '../core/discord/addUsernameOption.js';
-import cleanTable from '../core/discord/cleanTable.js';
-import infoEmbed from '../core/discord/infoEmbed.js';
+import addUsernameChoices from '../core/discord/addUsernameChoices.js';
+import autocompleteUsername from '../core/discord/autocompleteUsername.js';
+import embedInfo from '../core/discord/embedInfo.js';
+import markdownTable from '../core/discord/markdownTable.js';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import usernameAutocomplete from '../core/discord/usernameAutocomplete.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
@@ -18,7 +18,7 @@ export default {
   command: new SlashCommandBuilder()
     .setName('playerinfo')
     .setDescription('Basic information about a player')
-    .addStringOption(addUsernameOption),
+    .addStringOption(addUsernameChoices),
 
   async handler(interaction) {
     const account = await resolvePlayerFromCommand(interaction);
@@ -28,10 +28,10 @@ export default {
     );
     const accountInfo = accounts[id];
 
-    return infoEmbed(
+    return embedInfo(
       `${markdownEscape(accountInfo.nickname)}'s information`,
 
-      cleanTable([
+      markdownTable([
         ['Nickname', `${accountInfo.nickname}`],
         ['Battles', `${accountInfo.statistics.all.battles}`],
         [
@@ -56,5 +56,5 @@ export default {
     );
   },
 
-  autocomplete: usernameAutocomplete,
+  autocomplete: autocompleteUsername,
 } satisfies CommandRegistry;

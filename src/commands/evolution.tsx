@@ -1,10 +1,10 @@
 import { SlashCommandBuilder } from 'discord.js';
 import resolveTankId from '../core/blitz/resolveTankId.js';
-import addStatsSubCommandGroups from '../core/discord/addStatsSubCommandGroups.js';
+import addStatTypeSubCommandGroups from '../core/discord/addStatTypeSubCommandGroups.js';
+import autocompleteTanks from '../core/discord/autocompleteTanks.js';
+import autocompleteUsername from '../core/discord/autocompleteUsername.js';
 import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.js';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import tanksAutocomplete from '../core/discord/tanksAutocomplete.js';
-import usernameAutocomplete from '../core/discord/usernameAutocomplete.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import evolution from '../renderers/evolution.js';
 import { StatType } from '../renderers/stats.js';
@@ -14,7 +14,7 @@ export default {
   inDevelopment: true,
   inPublic: true,
 
-  command: addStatsSubCommandGroups(
+  command: addStatTypeSubCommandGroups(
     new SlashCommandBuilder()
       .setName('evolution')
       .setDescription('Evolution of statistics'),
@@ -45,7 +45,7 @@ export default {
   },
 
   autocomplete: (interaction) => {
-    usernameAutocomplete(interaction);
-    tanksAutocomplete(interaction);
+    autocompleteUsername(interaction);
+    autocompleteTanks(interaction);
   },
 } satisfies CommandRegistry;

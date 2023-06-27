@@ -4,8 +4,8 @@ import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import { usernamePattern } from '../core/blitz/listPlayers.js';
 import addServerChoices from '../core/discord/addServerChoices.js';
-import addUsernameOption from '../core/discord/addUsernameOption.js';
-import infoEmbed from '../core/discord/infoEmbed.js';
+import addUsernameChoices from '../core/discord/addUsernameChoices.js';
+import embedInfo from '../core/discord/embedInfo.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountList } from '../types/accountList.js';
@@ -20,7 +20,7 @@ export default {
     .setDescription('Search players in a Blitz server')
     .addStringOption(addServerChoices)
     .addStringOption((option) =>
-      addUsernameOption(option).setAutocomplete(false).setRequired(true),
+      addUsernameChoices(option).setAutocomplete(false).setRequired(true),
     )
     .addIntegerOption((option) =>
       option
@@ -43,7 +43,7 @@ export default {
         )
       : [];
 
-    return infoEmbed(
+    return embedInfo(
       `Player search for "${markdownEscape(name)}" in ${BLITZ_SERVERS[server]}`,
       `\`\`\`${
         players.length === 0

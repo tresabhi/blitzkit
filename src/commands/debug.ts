@@ -3,8 +3,8 @@ import packageJSON from '../../package.json' assert { type: 'json' };
 import { client } from '../bot.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
-import cleanTable from '../core/discord/cleanTable.js';
-import infoEmbed from '../core/discord/infoEmbed.js';
+import embedInfo from '../core/discord/embedInfo.js';
+import markdownTable from '../core/discord/markdownTable.js';
 import getClientId from '../core/node/getClientId.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 
@@ -23,9 +23,9 @@ export default {
     const currentTime = new Date().getTime();
     const uptime = currentTime - executionStart;
 
-    return infoEmbed(
+    return embedInfo(
       `${client.user?.username} debug information`,
-      cleanTable([
+      markdownTable([
         ['Version', packageJSON.version],
         ['Client ID', getClientId()],
         ['Tag', interaction.client.user.tag],

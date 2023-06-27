@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
 import { client } from '../bot.js';
-import infoEmbed from '../core/discord/infoEmbed.js';
+import embedInfo from '../core/discord/embedInfo.js';
 import {
   CommandRegistry,
   guildCommands,
@@ -18,7 +18,7 @@ export default {
     .setDescription('All the help you need about the bot'),
 
   handler(interaction) {
-    return infoEmbed(
+    return embedInfo(
       `${client.user?.username} help`,
       `**About**\n${
         client.user?.username

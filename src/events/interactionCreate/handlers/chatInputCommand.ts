@@ -5,9 +5,9 @@ import {
   CacheType,
   ChatInputCommandInteraction,
 } from 'discord.js';
-import negativeEmbed from '../../../core/discord/negativeEmbed.js';
+import embedNegative from '../../../core/discord/embedNegative.js';
 import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable.js';
-import warningEmbed from '../../../core/discord/warningEmbed.js';
+import embedWarning from '../../../core/discord/embedWarning.js';
 import { psa } from '../../../core/node/psa.js';
 import { handleError } from '../../error.js';
 import { commands } from '../index.js';
@@ -29,7 +29,7 @@ export default async function handleChatInputCommand(
 
     if (psa.data) {
       if (!reply.embeds) reply.embeds = [];
-      reply.embeds.push(warningEmbed(psa.data.title, psa.data.description));
+      reply.embeds.push(embedWarning(psa.data.title, psa.data.description));
     }
 
     await interaction.editReply(reply);
@@ -43,7 +43,7 @@ export default async function handleChatInputCommand(
 
     await interaction.editReply({
       embeds: [
-        negativeEmbed(
+        embedNegative(
           (error as Error).message,
           `${(error as Error).cause ?? 'No further information is available.'}`,
         ),

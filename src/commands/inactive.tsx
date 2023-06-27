@@ -8,7 +8,7 @@ import { BLITZ_SERVERS } from '../constants/servers.js';
 import getBlitzClan from '../core/blitz/getBlitzClan.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import addClanChoices from '../core/discord/addClanChoices.js';
-import clanAutocomplete from '../core/discord/clanAutocomplete.js';
+import autocompleteClan from '../core/discord/autocompleteClan.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
@@ -84,5 +84,5 @@ export default {
     );
   },
 
-  autocomplete: clanAutocomplete,
+  autocomplete: autocompleteClan,
 } satisfies CommandRegistry;

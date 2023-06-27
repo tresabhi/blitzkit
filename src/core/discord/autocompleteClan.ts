@@ -6,7 +6,7 @@ import {
 import { BLITZ_SERVERS } from '../../constants/servers.js';
 import listClans from '../blitz/listClans.js';
 
-export default async function clanAutocomplete(
+export default async function autocompleteClan(
   interaction: AutocompleteInteraction<CacheType>,
 ) {
   const focusedOption = interaction.options.getFocused(true);

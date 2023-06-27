@@ -6,7 +6,7 @@ import {
 import { BLITZ_SERVERS } from '../../constants/servers.js';
 import listPlayers from '../blitz/listPlayers.js';
 
-export default async function usernameAutocomplete(
+export default async function autocompleteUsername(
   interaction: AutocompleteInteraction<CacheType>,
 ) {
   const focusedOption = interaction.options.getFocused(true);

@@ -12,9 +12,9 @@ import {
   Tier,
   tankopedia,
 } from '../core/blitz/tankopedia.js';
-import addUsernameOption from '../core/discord/addUsernameOption.js';
+import addUsernameChoices from '../core/discord/addUsernameChoices.js';
+import autocompleteUsername from '../core/discord/autocompleteUsername.js';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import usernameAutocomplete from '../core/discord/usernameAutocomplete.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
@@ -67,7 +67,7 @@ export default {
         )
         .setRequired(true),
     )
-    .addStringOption(addUsernameOption),
+    .addStringOption(addUsernameChoices),
 
   async handler(interaction) {
     const tier = Number(interaction.options.getString('tier'));
@@ -120,5 +120,5 @@ export default {
     );
   },
 
-  autocomplete: usernameAutocomplete,
+  autocomplete: autocompleteUsername,
 } satisfies CommandRegistry;

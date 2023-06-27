@@ -7,10 +7,10 @@ import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
 import getPeriodStart from '../core/blitzstars/getPeriodStart.js';
 import getTankStatsDiffed from '../core/blitzstars/getTankStatsDiffed.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
-import addUsernameOption from '../core/discord/addUsernameOption.js';
-import cleanTable, { TableInput } from '../core/discord/cleanTable.js';
-import negativeEmbed from '../core/discord/negativeEmbed.js';
-import positiveEmbed from '../core/discord/positiveEmbed.js';
+import addUsernameChoices from '../core/discord/addUsernameChoices.js';
+import embedNegative from '../core/discord/embedNegative.js';
+import embedPositive from '../core/discord/embedPositive.js';
+import markdownTable, { TableInput } from '../core/discord/markdownTable.js';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
@@ -44,7 +44,7 @@ export default {
         )
         .setRequired(true),
     )
-    .addStringOption(addUsernameOption),
+    .addStringOption(addUsernameChoices),
 
   async handler(interaction) {
     const clan = interaction.options.getString('clan') as SkilledClan;
@@ -137,7 +137,7 @@ export default {
       isEligible = problems.length === 0;
       body = isEligible
         ? 'Player is fully eligible.'
-        : `Player is not eligible. Shortcomings in 30-day statistics:\n\n${cleanTable(
+        : `Player is not eligible. Shortcomings in 30-day statistics:\n\n${markdownTable(
             problems,
           )}`;
     } else if (clan === 'SMRI') {
@@ -162,11 +162,11 @@ export default {
       isEligible = problems.length === 0;
       body = isEligible
         ? 'Player is fully eligible.'
-        : `Player is not eligible. Shortcomings in career statistics:\n\n${cleanTable(
+        : `Player is not eligible. Shortcomings in career statistics:\n\n${markdownTable(
             problems,
           )}`;
     }
 
-    return (isEligible ? positiveEmbed : negativeEmbed)(title, body);
+    return (isEligible ? embedPositive : embedNegative)(title, body);
   },
 } satisfies CommandRegistry;

@@ -2,7 +2,9 @@ import { SlashCommandBuilder } from 'discord.js';
 import { CYCLIC_API } from '../constants/cyclic.js';
 import resolveTankId from '../core/blitz/resolveTankId.js';
 import { Period } from '../core/discord/addPeriodSubCommands.js';
-import addStatsSubCommandGroups from '../core/discord/addStatsSubCommandGroups.js';
+import addStatTypeSubCommandGroups from '../core/discord/addStatTypeSubCommandGroups.js';
+import autocompleteTanks from '../core/discord/autocompleteTanks.js';
+import autocompleteUsername from '../core/discord/autocompleteUsername.js';
 import interactionToURL from '../core/discord/interactionToURL.js';
 import linkButton from '../core/discord/linkButton.js';
 import primaryButton from '../core/discord/primaryButton.js';
@@ -10,8 +12,6 @@ import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton.js'
 import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.js';
 import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton.js';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import tanksAutocomplete from '../core/discord/tanksAutocomplete.js';
-import usernameAutocomplete from '../core/discord/usernameAutocomplete.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import stats, { StatType } from '../renderers/stats.js';
 
@@ -20,7 +20,7 @@ export default {
   inDevelopment: false,
   inPublic: true,
 
-  command: addStatsSubCommandGroups(
+  command: addStatTypeSubCommandGroups(
     new SlashCommandBuilder()
       .setName('stats')
       .setDescription('In-game statistics'),
@@ -51,8 +51,8 @@ export default {
   },
 
   autocomplete: (interaction) => {
-    usernameAutocomplete(interaction);
-    tanksAutocomplete(interaction);
+    autocompleteUsername(interaction);
+    autocompleteTanks(interaction);
   },
 
   async button(interaction) {
