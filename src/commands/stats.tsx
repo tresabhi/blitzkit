@@ -8,7 +8,8 @@ import linkButton from '../core/discord/linkButton.js';
 import primaryButton from '../core/discord/primaryButton.js';
 import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton.js';
 import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.js';
-import resolvePlayer from '../core/discord/resolvePlayer.js';
+import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton.js';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
 import tanksAutocomplete from '../core/discord/tanksAutocomplete.js';
 import usernameAutocomplete from '../core/discord/usernameAutocomplete.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
@@ -30,7 +31,7 @@ export default {
       true,
     ) as StatType;
     const subcommand = interaction.options.getSubcommand() as Period;
-    const player = await resolvePlayer(interaction);
+    const player = await resolvePlayerFromCommand(interaction);
     const period = resolvePeriodFromCommand(interaction);
     const tankIdRaw = interaction.options.getString('tank')!;
     const tankId = commandGroup === 'tank' ? resolveTankId(tankIdRaw) : 0;
@@ -59,7 +60,7 @@ export default {
     const path = url.pathname.split('/').filter(Boolean);
     const commandGroup = path[1] as StatType;
     const period = resolvePeriodFromButton(interaction);
-    const player = await resolvePlayer(interaction);
+    const player = await resolvePlayerFromButton(interaction);
 
     return await stats(
       commandGroup,

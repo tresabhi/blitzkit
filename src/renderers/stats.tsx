@@ -13,7 +13,7 @@ import { Tier, tankopedia } from '../core/blitz/tankopedia.js';
 import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand.js';
-import { ResolvedPlayer } from '../core/discord/resolvePlayer.js';
+import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import {
   AccountInfo,

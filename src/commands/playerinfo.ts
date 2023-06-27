@@ -4,7 +4,7 @@ import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import addUsernameOption from '../core/discord/addUsernameOption.js';
 import cleanTable from '../core/discord/cleanTable.js';
 import infoEmbed from '../core/discord/infoEmbed.js';
-import resolvePlayer from '../core/discord/resolvePlayer.js';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
 import usernameAutocomplete from '../core/discord/usernameAutocomplete.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
@@ -21,7 +21,7 @@ export default {
     .addStringOption(addUsernameOption),
 
   async handler(interaction) {
-    const account = await resolvePlayer(interaction);
+    const account = await resolvePlayerFromCommand(interaction);
     const { id, server } = account;
     const accounts = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,

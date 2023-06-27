@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import resolveTankId from '../core/blitz/resolveTankId.js';
 import addStatsSubCommandGroups from '../core/discord/addStatsSubCommandGroups.js';
 import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.js';
-import resolvePlayer from '../core/discord/resolvePlayer.js';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
 import tanksAutocomplete from '../core/discord/tanksAutocomplete.js';
 import usernameAutocomplete from '../core/discord/usernameAutocomplete.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
@@ -24,7 +24,7 @@ export default {
     const commandGroup = interaction.options.getSubcommandGroup(
       true,
     ) as StatType;
-    const player = await resolvePlayer(interaction);
+    const player = await resolvePlayerFromCommand(interaction);
     const period = resolvePeriodFromCommand(interaction);
     const tankIdRaw = interaction.options.getString('tank')!;
     const tankId = commandGroup === 'tank' ? resolveTankId(tankIdRaw) : 0;

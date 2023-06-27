@@ -1,6 +1,6 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { BlitzServer } from '../../constants/servers.js';
-import { serverAndIdPattern } from '../discord/resolvePlayer.js';
+import { serverAndIdPattern } from '../discord/resolvePlayerFromCommand.js';
 import errorWithCause from '../node/errorWithCause.js';
 import listClansPanServer from './listClansPanServer.js';
 

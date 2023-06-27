@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import addUsernameOption from '../core/discord/addUsernameOption.js';
-import resolvePlayer from '../core/discord/resolvePlayer.js';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
 import usernameAutocomplete from '../core/discord/usernameAutocomplete.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import today from '../renderers/today.js';
@@ -16,7 +16,7 @@ export default {
     .addStringOption(addUsernameOption),
 
   async handler(interaction) {
-    const player = await resolvePlayer(interaction);
+    const player = await resolvePlayerFromCommand(interaction);
 
     return await today(player);
   },

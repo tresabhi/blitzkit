@@ -11,7 +11,7 @@ import addUsernameOption from '../core/discord/addUsernameOption.js';
 import cleanTable, { TableInput } from '../core/discord/cleanTable.js';
 import negativeEmbed from '../core/discord/negativeEmbed.js';
 import positiveEmbed from '../core/discord/positiveEmbed.js';
-import resolvePlayer from '../core/discord/resolvePlayer.js';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/args.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
@@ -48,7 +48,7 @@ export default {
 
   async handler(interaction) {
     const clan = interaction.options.getString('clan') as SkilledClan;
-    const { id, server } = await resolvePlayer(interaction);
+    const { id, server } = await resolvePlayerFromCommand(interaction);
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
