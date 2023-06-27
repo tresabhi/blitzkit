@@ -1,5 +1,5 @@
-import { BlitzServer } from '../constants/servers.js';
 import resolvePeriodFromRequest from '../core/express/resolvePeriodFromRequest.js';
+import resolvePlayerFromRequest from '../core/express/resolvePlayerFromRequest.js';
 import stats, { StatType } from '../renderers/stats.js';
 import { RouterRegistry } from '../server.js';
 
@@ -11,14 +11,12 @@ export default {
   async handler(req) {
     const type = req.params.type as StatType;
     const period = resolvePeriodFromRequest(req);
+    const player = resolvePlayerFromRequest(req);
 
     return await stats(
       type,
       period,
-      {
-        server: req.query.server as BlitzServer,
-        id: parseInt(req.query.id as string),
-      },
+      player,
       parseInt(req.query.tank as string),
     );
   },

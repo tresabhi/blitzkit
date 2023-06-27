@@ -1,7 +1,7 @@
 import { BlitzServer } from '../../constants/servers.js';
 import { ResolvedPlayer } from '../discord/resolvePlayerFromCommand.js';
 
-export default async function resolvePlayerFromURL(urlString: string) {
+export default function resolvePlayerFromURL(urlString: string) {
   const url = new URL(urlString);
 
   return {
