@@ -10,7 +10,7 @@ export type AccountListWithServer = (Account & {
 export const usernamePattern = /^[a-zA-Z0-9_]{3,24}$/;
 export const usernamePatternWithoutPosition = /[a-zA-Z0-9_]{3,24}/;
 
-export default async function listAccountsPanServer(search: string, limit = 9) {
+export default async function listPlayers(search: string, limit = 9) {
   const trimmedSearch = search.trim();
   const normalizedLimit = Math.round(limit / 3);
   const encodedSearch = encodeURIComponent(trimmedSearch);

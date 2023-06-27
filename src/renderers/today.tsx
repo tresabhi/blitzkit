@@ -4,8 +4,8 @@ import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
+import calculateWN8 from '../core/blitz/calculateWN8.js';
 import getTankStats from '../core/blitz/getTankStats.js';
-import getWN8 from '../core/blitz/getWN8.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankName from '../core/blitz/resolveTankName.js';
 import sumStats from '../core/blitz/sumStats.js';
@@ -60,7 +60,7 @@ export default async function today({ server, id }: ResolvedPlayer) {
         ? accumulator
         : {
             ...accumulator,
-            [tankId]: getWN8(tankAverages[tankId].all, tankStats),
+            [tankId]: calculateWN8(tankAverages[tankId].all, tankStats),
           };
     },
     {},
@@ -71,7 +71,10 @@ export default async function today({ server, id }: ResolvedPlayer) {
         ? accumulator
         : {
             ...accumulator,
-            [tank_id]: getWN8(tankAverages[tank_id].all, careerStats[tank_id]),
+            [tank_id]: calculateWN8(
+              tankAverages[tank_id].all,
+              careerStats[tank_id],
+            ),
           };
     },
     {},

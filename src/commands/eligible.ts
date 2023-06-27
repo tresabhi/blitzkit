@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
-import getWN8 from '../core/blitz/getWN8.js';
+import calculateWN8 from '../core/blitz/calculateWN8.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import sumStats from '../core/blitz/sumStats.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
@@ -79,7 +79,7 @@ export default {
 
           // edge case where new tanks don't have averages
           if (tankAverages[tankId]) {
-            const tankWN8 = getWN8(tankAverages[tankId].all, stats);
+            const tankWN8 = calculateWN8(tankAverages[tankId].all, stats);
 
             if (isNaN(tankWN8)) return accumulator;
             return accumulator + tankWN8 * stats.battles;

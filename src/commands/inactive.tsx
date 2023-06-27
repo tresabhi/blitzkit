@@ -36,7 +36,7 @@ export default {
 
   async handler(interaction) {
     const clanName = interaction.options.getString('clan')!;
-    const { server, id } = await getBlitzClan(interaction, clanName);
+    const { server, id } = await getBlitzClan(clanName);
     const threshold =
       interaction.options.getNumber('threshold')! ?? DEFAULT_THRESHOLD;
     const time = new Date().getTime() / 1000;

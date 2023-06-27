@@ -7,7 +7,7 @@ export type ClanListWithServer = (Clan & {
   server: 'com' | 'eu' | 'asia';
 })[];
 
-export default async function listClansPanServer(search: string, limit = 9) {
+export default async function listClans(search: string, limit = 9) {
   const trimmed = search.trim();
   if (trimmed.length < 3 && trimmed.length > 100) return [];
   const normalizedLimit = Math.round(limit / 3);

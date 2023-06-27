@@ -3,7 +3,7 @@ import { AllStats } from '../../types/accountInfo.js';
 /**
  * Formula from https://web.archive.org/web/20190105064817/http://wiki.wnefficiency.net/pages/WN8
  */
-export default function getWN8(expected: AllStats, average: AllStats) {
+export default function calculateWN8(expected: AllStats, average: AllStats) {
   const avgDmg = average.damage_dealt / average.battles;
   const avgSpot = average.spotted / average.battles;
   const avgFrag = average.frags / average.battles;

@@ -1,8 +1,8 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { BlitzServer } from '../../constants/servers.js';
-import listAccountsPanServer, {
+import listPlayers, {
   usernamePatternWithoutPosition,
-} from '../blitz/listAccountsPanServer.js';
+} from '../blitz/listPlayers.js';
 import errorWithCause from '../node/errorWithCause.js';
 
 export const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
@@ -35,7 +35,7 @@ export default async function resolvePlayerFromCommand(
       id: Number(accountId),
     } satisfies ResolvedPlayer;
   } else {
-    const accounts = await listAccountsPanServer(username);
+    const accounts = await listPlayers(username);
 
     if (accounts[0]) {
       return {

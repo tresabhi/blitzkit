@@ -4,14 +4,14 @@ import {
   CacheType,
 } from 'discord.js';
 import { BLITZ_SERVERS } from '../../constants/servers.js';
-import listClansPanServer from '../blitz/listClansPanServer.js';
+import listClans from '../blitz/listClans.js';
 
 export default async function clanAutocomplete(
   interaction: AutocompleteInteraction<CacheType>,
 ) {
   const focusedOption = interaction.options.getFocused(true);
   if (focusedOption.name !== 'clan') return;
-  const players = await listClansPanServer(focusedOption.value);
+  const players = await listClans(focusedOption.value);
 
   await interaction.respond(
     players

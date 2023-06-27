@@ -4,14 +4,14 @@ import {
   CacheType,
 } from 'discord.js';
 import { BLITZ_SERVERS } from '../../constants/servers.js';
-import listAccountsPanServer from '../blitz/listAccountsPanServer.js';
+import listPlayers from '../blitz/listPlayers.js';
 
 export default async function usernameAutocomplete(
   interaction: AutocompleteInteraction<CacheType>,
 ) {
   const focusedOption = interaction.options.getFocused(true);
   if (focusedOption.name !== 'username') return;
-  const players = await listAccountsPanServer(focusedOption.value);
+  const players = await listPlayers(focusedOption.value);
 
   try {
     await interaction.respond(

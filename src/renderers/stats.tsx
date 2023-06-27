@@ -5,7 +5,7 @@ import TierWeights, { TierWeightsRecord } from '../components/TierWeights.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
-import getWN8 from '../core/blitz/getWN8.js';
+import calculateWN8 from '../core/blitz/calculateWN8.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankName from '../core/blitz/resolveTankName.js';
 import sumStats from '../core/blitz/sumStats.js';
@@ -83,7 +83,7 @@ export default async function stats<Type extends StatType>(
           const tankAverage = tankAverages[tankId];
 
           return tankAverage
-            ? accumulator + getWN8(tankAverage.all, stats) * stats.battles
+            ? accumulator + calculateWN8(tankAverage.all, stats) * stats.battles
             : accumulator;
         }, 0) / battlesOfTanksWithAverages,
       tier:
@@ -115,7 +115,7 @@ export default async function stats<Type extends StatType>(
     stats = tankStats[tankId];
 
     supplementaryStats = {
-      WN8: getWN8(tankAverages[tankId].all, tankStats[tankId]),
+      WN8: calculateWN8(tankAverages[tankId].all, tankStats[tankId]),
       tier: tankopedia[tankId].tier,
     };
   }

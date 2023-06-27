@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import { usernamePattern } from '../core/blitz/listAccountsPanServer.js';
+import { usernamePattern } from '../core/blitz/listPlayers.js';
 import addServerChoices from '../core/discord/addServerChoices.js';
 import addUsernameOption from '../core/discord/addUsernameOption.js';
 import infoEmbed from '../core/discord/infoEmbed.js';
