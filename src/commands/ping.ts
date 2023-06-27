@@ -30,4 +30,4 @@ export default {
     const executionTime = Date.now() - executionStart;
     interaction.editReply(`Pong 🏓 - ${executionTime}ms`);
   },
-} satisfies CommandRegistry;
+} satisfies CommandRegistry<true>;

@@ -51,7 +51,7 @@ export interface Registry {
   inProduction: boolean;
 }
 
-export interface CommandRegistry<HandlesInteraction extends boolean = false>
+export interface CommandRegistry<HandlesInteraction extends boolean = boolean>
   extends Registry {
   inPublic: boolean;
   handlesInteraction?: HandlesInteraction;

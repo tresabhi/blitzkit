@@ -5,7 +5,7 @@ import {
   InteractionEditReplyOptions,
 } from 'discord.js';
 import { InteractionReturnable } from '../../events/interactionCreate/index.js';
-import render from '../ui/render.js';
+import jsxToPng from '../node/jsxToPng.js';
 
 export default async function normalizeInteractionReturnable(
   returnable: InteractionReturnable,
@@ -29,7 +29,7 @@ export default async function normalizeInteractionReturnable(
           item,
         );
       } else {
-        const image = await render(item);
+        const image = await jsxToPng(item);
         if (!reply.files) reply.files = [];
         reply.files.push(image);
       }
