@@ -1,6 +1,6 @@
 import GenericAllStats from '../components/GenericAllStats.js';
 import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
 import TierWeights, { TierWeightsRecord } from '../components/TierWeights.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
@@ -146,7 +146,7 @@ export default async function statsfull<Type extends StatType>(
         />
       )}
 
-      <PoweredByBlitzStars />
+      <PoweredBy type={PoweredByType.BlitzStars} />
     </Wrapper>
   );
 }

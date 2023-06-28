@@ -1,6 +1,6 @@
 import * as Breakdown from '../components/Breakdown/index.js';
 import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
@@ -156,7 +156,7 @@ export default async function today({ server, id }: ResolvedPlayer) {
       {rows.length === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
       {rows.length > 0 && <Breakdown.Root>{rows}</Breakdown.Root>}
 
-      <PoweredByBlitzStars />
+      <PoweredBy type={PoweredByType.BlitzStars} />
     </Wrapper>
   );
 }

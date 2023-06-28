@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import GenericStats from '../components/GenericStats/index.js';
 import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredByWargaming from '../components/PoweredByWargaming.js';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
@@ -79,7 +79,7 @@ export default {
         {!hasInactiveMembers && <NoData type={NoDataType.PlayersInPeriod} />}
         {hasInactiveMembers && <GenericStats stats={inactive} />}
 
-        <PoweredByWargaming />
+        <PoweredBy type={PoweredByType.Wargaming} />
       </Wrapper>
     );
   },

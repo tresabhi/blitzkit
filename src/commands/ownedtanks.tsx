@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredByWargaming from '../components/PoweredByWargaming.js';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
 import * as Tanks from '../components/Tanks/index.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
@@ -115,7 +115,7 @@ export default {
           </Tanks.Root>
         )}
 
-        <PoweredByWargaming />
+        <PoweredBy type={PoweredByType.Wargaming} />
       </Wrapper>
     );
   },

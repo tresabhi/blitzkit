@@ -1,6 +1,6 @@
 import * as Graph from '../components/Graph/index.js';
 import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
@@ -128,7 +128,7 @@ export default async function evolution<Type extends StatType>(
         <NoData type={NoDataType.BattlesInPeriod} />
       )}
 
-      <PoweredByBlitzStars />
+      <PoweredBy type={PoweredByType.BlitzStars} />
     </Wrapper>
   );
 }

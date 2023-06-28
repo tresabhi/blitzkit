@@ -5,7 +5,6 @@ import { Period } from '../core/discord/addPeriodSubCommands.js';
 import addStatTypeSubCommandGroups from '../core/discord/addStatTypeSubCommandGroups.js';
 import autocompleteTanks from '../core/discord/autocompleteTanks.js';
 import autocompleteUsername from '../core/discord/autocompleteUsername.js';
-import interactionToURL from '../core/discord/interactionToURL.js';
 import linkButton from '../core/discord/linkButton.js';
 import primaryButton from '../core/discord/primaryButton.js';
 import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton.js';
@@ -14,7 +13,7 @@ import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton.js'
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import stats from '../renderers/stats.js';
-import statsfull, { StatType } from '../renderers/statsfull.js';
+import { StatType } from '../renderers/statsfull.js';
 
 export default {
   inProduction: true,
@@ -42,7 +41,7 @@ export default {
       player.server
     }&id=${player.id}&tankId=${tankId}&start=${start ?? 0}&end=${end ?? 0}`;
 
-    interactionToURL(interaction);
+    // interactionToURL(interaction);
 
     return [
       await stats(commandGroup, period, player, tankId),
@@ -63,7 +62,7 @@ export default {
     const period = resolvePeriodFromButton(interaction);
     const player = await resolvePlayerFromButton(interaction);
 
-    return await statsfull(
+    return await stats(
       commandGroup,
       period,
       player,
