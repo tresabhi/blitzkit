@@ -29,6 +29,7 @@ export default async function stats<Type extends StatType>(
   { start, end, statsName }: ResolvedPeriod,
   { server, id }: ResolvedPlayer,
   tankId: Type extends 'tank' ? number : null,
+  naked = false,
 ) {
   let nameDiscriminator: string | undefined;
   let image: string | undefined;
@@ -123,8 +124,13 @@ export default async function stats<Type extends StatType>(
   const accountInfo = await getWargamingResponse<AccountInfo>(
     `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
   );
+  const overview = (
+    <AllStatsOverview stats={stats} supplementaryStats={supplementaryStats} />
+  );
 
-  return (
+  return naked ? (
+    overview
+  ) : (
     <Wrapper>
       <TitleBar
         name={accountInfo[id].nickname}
@@ -136,12 +142,7 @@ export default async function stats<Type extends StatType>(
       />
 
       {stats.battles === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
-      {stats.battles > 0 && (
-        <AllStatsOverview
-          stats={stats}
-          supplementaryStats={supplementaryStats}
-        />
-      )}
+      {stats.battles > 0 && overview}
 
       <PoweredBy type={PoweredByType.BlitzStars} />
     </Wrapper>

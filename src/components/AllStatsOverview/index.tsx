@@ -19,8 +19,7 @@ export default function AllStatsOverview({
       style={{
         display: 'flex',
         gap: -64,
-        // alignItems: 'center',
-        // justifyContent: 'center',
+        width: '100%',
       }}
     >
       <div

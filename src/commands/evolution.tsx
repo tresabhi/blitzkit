@@ -54,7 +54,7 @@ export default {
     return [
       await evolution(commandGroup, period, player, tankId),
       primaryButton(path, 'Refresh'),
-      linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
+      // linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
       linkButton(
         `https://www.blitzstars.com/player/${player.server}/${nickname}${
           commandGroup === 'tank' ? `/tank/${tankId!}` : ''
