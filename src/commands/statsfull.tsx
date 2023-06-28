@@ -35,7 +35,7 @@ export default {
     const player = await resolvePlayerFromCommand(interaction);
     const period = resolvePeriodFromCommand(interaction);
     const tankIdRaw = interaction.options.getString('tank')!;
-    const tankId = commandGroup === 'tank' ? resolveTankId(tankIdRaw) : 0;
+    const tankId = commandGroup === 'tank' ? resolveTankId(tankIdRaw) : null;
     const start = interaction.options.getInteger('start');
     const end = interaction.options.getInteger('end');
     const path = interactionToURL(interaction, {
