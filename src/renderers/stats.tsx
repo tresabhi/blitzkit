@@ -15,6 +15,7 @@ import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand.js';
 import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
+import { theme } from '../stitches.config.js';
 import {
   AccountInfo,
   AllStats,
@@ -127,6 +128,18 @@ export default async function stats<Type extends StatType>(
   const overview = (
     <AllStatsOverview stats={stats} supplementaryStats={supplementaryStats} />
   );
+  const footer = (
+    <span
+      style={{
+        color: theme.colors.textLowContrast,
+        fontSize: 16,
+        display: 'flex',
+        gap: 4,
+      }}
+    >
+      <u>/statsfull</u> for all statistics
+    </span>
+  );
 
   return naked ? (
     overview
@@ -144,7 +157,7 @@ export default async function stats<Type extends StatType>(
       {stats.battles === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
       {stats.battles > 0 && overview}
 
-      <PoweredBy type={PoweredByType.BlitzStars} />
+      <PoweredBy type={PoweredByType.BlitzStars} footer={footer} />
     </Wrapper>
   );
 }
