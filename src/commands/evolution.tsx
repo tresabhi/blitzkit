@@ -11,7 +11,7 @@ import { StatType } from '../renderers/statsfull.js';
 
 export default {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: addStatTypeSubCommandGroups(

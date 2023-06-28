@@ -25,6 +25,7 @@ import playerinfo from '../../commands/playerinfo.js';
 import searchclans from '../../commands/searchclans.js';
 import searchplayers from '../../commands/searchplayers.js';
 import searchtanks from '../../commands/searchtanks.js';
+import stats from '../../commands/stats.js';
 import statsfull from '../../commands/statsfull.js';
 import today from '../../commands/today.js';
 import verify from '../../commands/verify.js';
@@ -86,6 +87,7 @@ export const commands: Record<string, CommandRegistry> = (
     verify,
     ping,
     evolution,
+    stats,
   ] as CommandRegistry[]
 ).reduce((accumulator, registry) => {
   if (isDev()) registry.command.setDefaultMemberPermissions(0);
