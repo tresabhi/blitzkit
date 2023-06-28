@@ -3,16 +3,15 @@ import {
   ButtonStyle,
   ComponentEmojiResolvable,
 } from 'discord.js';
-import { CYCLIC_API } from '../../constants/cyclic.js';
 
 export default function linkButton(
-  id: string,
+  url: string,
   label: string,
   emoji?: ComponentEmojiResolvable,
 ) {
   const button = new ButtonBuilder()
     .setStyle(ButtonStyle.Link)
-    .setURL(`${CYCLIC_API}/${id}`)
+    .setURL(url)
     .setLabel(label);
 
   if (emoji) button.setEmoji(emoji);

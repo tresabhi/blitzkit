@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { CYCLIC_API } from '../constants/cyclic.js';
+import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankId from '../core/blitz/resolveTankId.js';
-import { Period } from '../core/discord/addPeriodSubCommands.js';
 import addStatTypeSubCommandGroups from '../core/discord/addStatTypeSubCommandGroups.js';
 import autocompleteTanks from '../core/discord/autocompleteTanks.js';
 import autocompleteUsername from '../core/discord/autocompleteUsername.js';
@@ -12,8 +12,10 @@ import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton.js'
 import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.js';
 import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton.js';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import statsfull, { StatType } from '../renderers/statsfull.js';
+import { AccountInfo } from '../types/accountInfo.js';
 
 export default {
   inProduction: true,
@@ -30,23 +32,32 @@ export default {
     const commandGroup = interaction.options.getSubcommandGroup(
       true,
     ) as StatType;
-    const subcommand = interaction.options.getSubcommand() as Period;
     const player = await resolvePlayerFromCommand(interaction);
     const period = resolvePeriodFromCommand(interaction);
     const tankIdRaw = interaction.options.getString('tank')!;
     const tankId = commandGroup === 'tank' ? resolveTankId(tankIdRaw) : 0;
     const start = interaction.options.getInteger('start');
     const end = interaction.options.getInteger('end');
-    const path = `statsfull/${commandGroup}/${subcommand}?server=${
-      player.server
-    }&id=${player.id}&tankId=${tankId}&start=${start ?? 0}&end=${end ?? 0}`;
-
-    interactionToURL(interaction);
+    const path = interactionToURL(interaction, {
+      ...player,
+      tankId,
+      start,
+      end,
+    });
+    const { nickname } = (
+      await getWargamingResponse<AccountInfo>(
+        `https://api.wotblitz.${player.server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
+      )
+    )[player.id];
 
     return [
       await statsfull(commandGroup, period, player, tankId),
       primaryButton(path, 'Refresh'),
-      linkButton(path, 'Embed'),
+      linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
+      linkButton(
+        `https://www.blitzstars.com/player/${player.server}/${nickname}`,
+        'BlitzStars',
+      ),
     ];
   },
 

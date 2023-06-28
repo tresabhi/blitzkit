@@ -28,7 +28,7 @@ export default async function stats<Type extends StatType>(
   type: Type,
   { start, end, statsName }: ResolvedPeriod,
   { server, id }: ResolvedPlayer,
-  tankId: Type extends 'tank' ? number : never,
+  tankId: Type extends 'tank' ? number : null,
 ) {
   let nameDiscriminator: string | undefined;
   let image: string | undefined;
@@ -45,8 +45,8 @@ export default async function stats<Type extends StatType>(
       ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clan.emblem_set_id}.png`
       : undefined;
   } else if (type === 'tank') {
-    nameDiscriminator = `(${resolveTankName(tankId)})`;
-    image = tankopedia[tankId].images.normal;
+    nameDiscriminator = `(${resolveTankName(tankId!)})`;
+    image = tankopedia[tankId!].images.normal;
   }
 
   const tankStats = await getTankStatsDiffed(server, id, start, end);
@@ -112,11 +112,11 @@ export default async function stats<Type extends StatType>(
       {},
     );
   } else {
-    stats = tankStats[tankId];
+    stats = tankStats[tankId!];
 
     supplementaryStats = {
-      WN8: calculateWN8(tankAverages[tankId].all, tankStats[tankId]),
-      tier: tankopedia[tankId].tier,
+      WN8: calculateWN8(tankAverages[tankId!].all, tankStats[tankId!]),
+      tier: tankopedia[tankId!].tier,
     };
   }
 

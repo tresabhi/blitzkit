@@ -21,7 +21,7 @@ export default async function evolution<Type extends StatType>(
   type: Type,
   { start, end, evolutionName }: ResolvedPeriod,
   { server, id }: ResolvedPlayer,
-  tankId: Type extends 'tank' ? number : never,
+  tankId: Type extends 'tank' ? number : null,
 ) {
   let nameDiscriminator: string | undefined;
   let image: string | undefined;
@@ -38,8 +38,8 @@ export default async function evolution<Type extends StatType>(
       ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clan.emblem_set_id}.png`
       : undefined;
   } else {
-    nameDiscriminator = `(${resolveTankName(tankId)})`;
-    image = tankopedia[tankId].images.normal;
+    nameDiscriminator = `(${resolveTankName(tankId!)})`;
+    image = tankopedia[tankId!].images.normal;
   }
 
   let histories: Histories;
@@ -53,7 +53,7 @@ export default async function evolution<Type extends StatType>(
     });
   } else {
     histories = await getTankHistories(server, id, {
-      tankId,
+      tankId: tankId!,
       start,
       end,
       includeLatestHistories: true,
