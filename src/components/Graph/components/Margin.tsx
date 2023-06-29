@@ -1,32 +1,34 @@
 import { times } from 'lodash';
 import { theme } from '../../../stitches.config.js';
-import { MarginProps } from './Root.js';
+import { MarginProps as RootMarginProps } from './Root.js';
 
-export enum VerticalMarginAlign {
-  Left,
-  Right,
+export enum MarginOrientation {
+  Vertical,
+  Horizontal,
 }
 
-export interface VerticalMarginProps extends MarginProps {
+export interface MarginProps extends RootMarginProps {
   verticalSeparations: number;
-  align?: VerticalMarginAlign;
+  orientation?: MarginOrientation;
 }
 
-export function VerticalMargin({
+export function Margin({
   verticalSeparations,
   max,
   min,
   suffix,
-  align = VerticalMarginAlign.Left,
-}: VerticalMarginProps) {
+  precision = 0,
+  orientation = MarginOrientation.Vertical,
+}: MarginProps) {
+  const isVertical = orientation === MarginOrientation.Vertical;
+
   return (
     <div
       style={{
-        width: 32,
+        paddingLeft: isVertical ? 0 : 64,
+        width: isVertical ? 48 : '100%',
         display: 'flex',
-        flexDirection: 'column',
-        alignItems:
-          align === VerticalMarginAlign.Right ? 'flex-end' : 'flex-start',
+        flexDirection: isVertical ? 'column' : 'row-reverse',
         justifyContent: 'space-between',
       }}
     >
@@ -43,7 +45,7 @@ export function VerticalMargin({
               ((verticalSeparations - (index + 1)) /
                 (verticalSeparations - 1)) +
             min
-          ).toFixed(0)}${suffix ?? ''}`}
+          ).toFixed(precision)}${suffix ?? ''}`}
         </span>
       ))}
     </div>

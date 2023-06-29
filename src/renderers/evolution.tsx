@@ -61,24 +61,22 @@ export default async function evolution<Type extends StatType>(
     });
   }
 
-  const careerWinrate = histories.map(
+  const plot = histories.map(
     (history) =>
       [
-        history.last_battle_time,
+        history.all.battles,
         (history.all.wins / history.all.battles) * 100,
       ] as Graph.PlotItem,
   );
-  const careerBattles = histories.map(
-    (history) =>
-      [history.last_battle_time, history.all.battles] as Graph.PlotItem,
-  );
-  const winrateYs = careerWinrate.map(([, y]) => y);
-  const maxWinrate = Math.max(...winrateYs);
-  const minWinrate = Math.min(...winrateYs);
-  const battleYs = careerBattles.map(([, y]) => y);
-  const maxBattle = Math.max(...battleYs);
-  const minBattle = Math.min(...battleYs);
-  const minTime = Math.min(...careerBattles.map(([x]) => x));
+  const times = histories.map((history) => history.last_battle_time);
+  const minTime = Math.min(...times);
+  const maxTime = Math.max(...times);
+  const ys = plot.map(([, y]) => y);
+  const xs = plot.map(([x]) => x);
+  const maxY = Math.max(...ys);
+  const minY = Math.min(...ys);
+  const maxX = Math.max(...xs);
+  const minX = Math.min(...xs);
 
   const accountInfo = await getWargamingResponse<AccountInfo>(
     `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
@@ -96,37 +94,33 @@ export default async function evolution<Type extends StatType>(
       />
 
       {/* goofy ahh bug forces me to call them as functions */}
-      {careerWinrate.length > 0 && (
+      {plot.length > 0 && (
         <Graph.Root
-          xMinLabel={new Date(minTime * 1000).toDateString()}
-          xMaxLabel={new Date(end * 1000).toDateString()}
-          leftVerticalMargin={{
-            min: minWinrate,
-            max: maxWinrate,
+          verticalMargin={{
+            min: minY,
+            max: maxY,
             suffix: '%',
+            precision: 1,
           }}
-          rightVerticalMargin={{
-            min: minBattle,
-            max: maxBattle,
+          horizontalMargin={{
+            min: minX,
+            max: maxX,
+            precision: 0,
           }}
+          xMinLabel={new Date(minTime * 1000).toDateString()}
+          xMaxLabel={new Date(maxTime * 1000).toDateString()}
         >
           {Graph.Line({
-            // total battles
-            plot: careerBattles!,
-            color: Graph.LineColor.Blue,
-          })}
-          {Graph.Line({
             // career winrate
-            plot: careerWinrate!,
-            minY: minWinrate,
-            maxY: maxWinrate,
+            color: Graph.LineColor.Red,
+            plot: plot,
+            minY,
+            maxY,
           })}
         </Graph.Root>
       )}
 
-      {careerWinrate.length === 0 && (
-        <NoData type={NoDataType.BattlesInPeriod} />
-      )}
+      {plot.length === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
 
       <PoweredBy type={PoweredByType.BlitzStars} />
     </Wrapper>

@@ -1,42 +1,55 @@
 import { times } from 'lodash';
 import { ReactNode } from 'react';
 import { theme } from '../../../stitches.config.js';
-import { VerticalMargin, VerticalMarginAlign } from './VerticalMargin.js';
+import { Margin, MarginOrientation } from './Margin.js';
 
-export const GRAPH_WIDTH = 512;
+export const GRAPH_WIDTH = 544;
 export const GRAPH_HEIGHT = 320;
 
 export interface MarginProps {
   min: number;
   max: number;
   suffix?: string;
+  precision?: number;
 }
 
 export interface RootProps {
   children: ReactNode;
-  leftVerticalMargin?: MarginProps;
-  rightVerticalMargin?: MarginProps;
-  verticalSeparations?: number;
+  verticalMargin?: MarginProps;
+  horizontalMargin?: MarginProps;
+  separations?: number;
   xMinLabel: string;
   xMaxLabel: string;
 }
 
 export function Root({
   children,
-  leftVerticalMargin,
-  rightVerticalMargin,
-  verticalSeparations = 5,
+  verticalMargin,
+  horizontalMargin,
+  separations = 5,
   xMinLabel,
   xMaxLabel,
 }: RootProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div
+        style={{
+          paddingLeft: 64,
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <span style={{ fontSize: 16, color: theme.colors.textLowContrast }}>
+          {xMinLabel}
+        </span>
+        <span style={{ fontSize: 16, color: theme.colors.textLowContrast }}>
+          {xMaxLabel}
+        </span>
+      </div>
+
       <div style={{ display: 'flex', gap: 16 }}>
-        {leftVerticalMargin && (
-          <VerticalMargin
-            {...leftVerticalMargin}
-            verticalSeparations={verticalSeparations}
-          />
+        {verticalMargin && (
+          <Margin {...verticalMargin} verticalSeparations={separations} />
         )}
 
         <svg
@@ -49,8 +62,8 @@ export function Root({
             border: theme.borderStyles.nonInteractive,
           }}
         >
-          {times(verticalSeparations - 2, (index) => {
-            const y = GRAPH_HEIGHT * ((index + 1) / (verticalSeparations - 1));
+          {times(separations - 2, (index) => {
+            const y = GRAPH_HEIGHT * ((index + 1) / (separations - 1));
 
             return (
               <polyline
@@ -66,31 +79,15 @@ export function Root({
 
           {children}
         </svg>
-
-        {rightVerticalMargin && (
-          <VerticalMargin
-            {...rightVerticalMargin}
-            verticalSeparations={verticalSeparations}
-            align={VerticalMarginAlign.Right}
-          />
-        )}
       </div>
 
-      <div
-        style={{
-          paddingLeft: 48,
-          paddingRight: 48,
-          display: 'flex',
-          justifyContent: 'space-between',
-        }}
-      >
-        <span style={{ fontSize: 16, color: theme.colors.textLowContrast }}>
-          {xMinLabel}
-        </span>
-        <span style={{ fontSize: 16, color: theme.colors.textLowContrast }}>
-          {xMaxLabel}
-        </span>
-      </div>
+      {horizontalMargin && (
+        <Margin
+          {...horizontalMargin}
+          verticalSeparations={separations}
+          orientation={MarginOrientation.Horizontal}
+        />
+      )}
     </div>
   );
 }
