@@ -1,7 +1,7 @@
 import resolvePeriodFromRequest from '../core/express/resolvePeriodFromRequest.js';
 import resolvePlayerFromRequest from '../core/express/resolvePlayerFromRequest.js';
 import stats, { StatType } from '../renderers/stats.js';
-import { RouterRegistry } from '../server.js';
+import { RouteRegistry } from '../server.js';
 
 export default {
   route: '/stats/:type/:period',
@@ -21,4 +21,4 @@ export default {
       true,
     );
   },
-} satisfies RouterRegistry;
+} satisfies RouteRegistry;
