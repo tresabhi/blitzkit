@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import normalizeRouteReturnable from './core/express/normalizeRouteReturnable.js';
+import withAutoRefresh from './core/express/withAutoRefresh.js';
 import isDev from './core/node/isDev.js';
 import { Registry } from './events/interactionCreate/index.js';
 import stats from './routes/stats.js';
@@ -23,17 +24,14 @@ const app = express();
   if (!(isDev() ? registry.inDevelopment : registry.inProduction)) return;
 
   app.get(registry.route, async (req, res) => {
-    const returnable = registry.handler(req, res);
+    console.log(req.originalUrl);
 
+    const returnable = registry.handler(req, res);
     if (registry.handlesInteraction) return;
 
-    const response = await normalizeRouteReturnable(returnable);
-
-    res.writeHead(200, {
-      'Content-Type': 'image/svg+xml',
-      'Content-Length': response.length,
-    });
-    res.end(response);
+    res.send(
+      withAutoRefresh(await normalizeRouteReturnable(returnable), 60 * 1000),
+    );
   });
 });
 
