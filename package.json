@@ -13,7 +13,7 @@
     "start:bot": "node --enable-source-maps --trace-warnings dist/bot.cjs",
     "start:server": "node --enable-source-maps --trace-warnings dist/server.cjs",
     "zip": "zip -r dist.zip dist",
-    "lint": "tsc"
+    "lint": "npx tsc"
   },
   "license": "MIT",
   "dependencies": {
