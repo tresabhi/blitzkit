@@ -2,7 +2,7 @@
   "name": "blitzkrieg",
   "version": "1.9.0",
   "description": "",
-  "main": "src/index.ts",
+  "main": "src/server.ts",
   "type": "module",
   "scripts": {
     "build:bot": "node scripts/build --build=bot",
