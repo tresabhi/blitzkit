@@ -3,9 +3,6 @@ name: Host
 on:
   schedule:
     - cron: '0 */5 * * *'
-  push:
-    branches:
-      - 'main'
   workflow_dispatch:
 
 concurrency:
@@ -34,5 +31,5 @@ jobs:
           curl -L -o dist.zip $DOWNLOAD_URL
           unzip dist.zip
 
-      - name: Run index.cjs
+      - name: Run bot
         run: NODE_ENV=production DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} WARGAMING_APPLICATION_ID=${{ secrets.WARGAMING_APPLICATION_ID }} node --enable-source-maps --trace-warnings bot.cjs
