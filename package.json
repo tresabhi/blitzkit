@@ -21,6 +21,7 @@
     "@resvg/resvg-js": "^2.4.1",
     "bepaint": "^0.1.0-beta.3",
     "discord.js": "^14.9.0",
+    "esbuild": "^0.18.10",
     "escape-html": "^1.0.3",
     "express": "^4.18.2",
     "fuzzysort": "^2.0.4",
@@ -37,7 +38,6 @@
     "@types/markdown-escape": "^1.1.0",
     "@types/node": "^20.2.1",
     "@types/react": "^18.2.7",
-    "esbuild": "^0.17.19",
     "typescript": "^5.0.4"
   }
 }
