@@ -20,7 +20,7 @@ import { AccountInfo } from '../types/accountInfo.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: addStatTypeSubCommandGroups(

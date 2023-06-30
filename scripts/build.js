@@ -1,5 +1,5 @@
 import { build } from 'esbuild';
-import { mkdirSync, rmSync, writeFileSync } from 'fs';
+import { copyFile, mkdir, rm, writeFile } from 'fs/promises';
 import { argv } from 'process';
 
 const isProd = !argv.includes('--dev');
@@ -9,21 +9,21 @@ const buildServer = argv.includes('--build=server') | buildAll;
 
 if (isProd) {
   // only remove in production to ensure no time is wasted in dev
-  console.log('Removing dist...');
-  rmSync('dist', { recursive: true, force: true });
+  console.log('🟡 Removing dist...');
+  await rm('dist', { recursive: true, force: true });
+  console.log('✅ Dist removed');
 
-  console.log('Creating dist...');
-  mkdirSync('dist');
+  console.log('🟡 Creating dist...');
+  await mkdir('dist');
+  console.log('✅ Dist created');
 
-  console.log('Caching tankopedia...');
+  console.log('🟡 Caching tankopedia...');
   fetch('https://www.blitzstars.com/bs-tankopedia.json')
     .then((response) => response.text())
-    .then((tankopedia) => {
-      writeFileSync('./dist/tankopedia.json', tankopedia);
-      console.log('Tankopedia cached');
-    });
+    .then((tankopedia) => writeFile('./dist/tankopedia.json', tankopedia))
+    .then(() => console.log('✅ Tankopedia cached'));
 
-  console.log('Caching tank averages...');
+  console.log('🟡 Caching tank averages...');
   fetch('https://www.blitzstars.com/api/tankaverages.json')
     .then((response) => response.json())
     .then((individualTankAverages) => {
@@ -33,10 +33,17 @@ if (isProd) {
         tankAverages[individualTankAverage.tank_id] = individualTankAverage;
       });
 
-      writeFileSync('./dist/tankaverages.json', JSON.stringify(tankAverages));
+      return writeFile(
+        './dist/tankaverages.json',
+        JSON.stringify(tankAverages),
+      );
+    })
+    .then(() => console.log('✅ Tank averages cached'));
 
-      console.log('Tank averages cached');
-    });
+  console.log('🟡 Copying package.json...');
+  copyFile('package.dist.json', 'dist/package.json').then(() =>
+    console.log('✅ package.json copied'),
+  );
 }
 
 const commonOptions = {
@@ -56,25 +63,25 @@ const commonOptions = {
 };
 
 if (buildBot) {
-  console.log('Building bot...');
+  console.log('🟡 Building bot...');
   build({
     ...commonOptions,
 
     entryPoints: ['src/bot.ts'],
     outfile: 'dist/bot.cjs',
   }).then(() => {
-    console.log('Bot built');
+    console.log('✅ Bot built');
   });
 }
 
 if (buildServer) {
-  console.log('Building server...');
+  console.log('🟡 Building server...');
   build({
     ...commonOptions,
 
     entryPoints: ['src/server.ts'],
     outfile: 'dist/server.cjs',
   }).then(() => {
-    console.log('Server built');
+    console.log('✅ Server built');
   });
 }

@@ -6,7 +6,7 @@ import { Margin, MarginOrientation } from './Margin.js';
 export const GRAPH_WIDTH = 544;
 export const GRAPH_HEIGHT = 320;
 
-export interface MarginProps {
+export interface MarginInputProps {
   min: number;
   max: number;
   suffix?: string;
@@ -15,8 +15,8 @@ export interface MarginProps {
 
 export interface RootProps {
   children: ReactNode;
-  verticalMargin?: MarginProps;
-  horizontalMargin?: MarginProps;
+  verticalMargin?: MarginInputProps;
+  horizontalMargin?: MarginInputProps;
   separations?: number;
   xMinLabel: string;
   xMaxLabel: string;
