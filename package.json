@@ -7,7 +7,7 @@
   "scripts": {
     "build:bot": "node scripts/build --build=bot",
     "build:server": "node scripts/build --build=server",
-    "build": "yarn lint && node scripts/build --build=all",
+    "build": "node scripts/build --build=all",
     "dev:bot": "yarn build:bot --dev && yarn start:bot",
     "dev:server": "yarn build:server --dev && yarn start:server",
     "start:bot": "node --enable-source-maps --trace-warnings dist/bot.cjs",
