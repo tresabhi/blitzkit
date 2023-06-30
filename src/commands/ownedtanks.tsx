@@ -1,11 +1,10 @@
 import { SlashCommandBuilder } from 'discord.js';
 import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredByWargaming from '../components/PoweredByWargaming.js';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
 import * as Tanks from '../components/Tanks/index.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
-import usernameAutocomplete from '../core/autocomplete/username.js';
 import getTankStats from '../core/blitz/getTankStats.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import {
@@ -13,9 +12,10 @@ import {
   Tier,
   tankopedia,
 } from '../core/blitz/tankopedia.js';
-import addUsernameOption from '../core/options/addUsernameOption.js';
-import resolvePlayer from '../core/options/resolvePlayer.js';
-import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
+import addUsernameChoices from '../core/discord/addUsernameChoices.js';
+import autocompleteUsername from '../core/discord/autocompleteUsername.js';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
@@ -67,11 +67,11 @@ export default {
         )
         .setRequired(true),
     )
-    .addStringOption(addUsernameOption),
+    .addStringOption(addUsernameChoices),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const tier = Number(interaction.options.getString('tier'));
-    const account = await resolvePlayer(interaction);
+    const account = await resolvePlayerFromCommand(interaction);
     const { id, server } = account;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
@@ -115,10 +115,10 @@ export default {
           </Tanks.Root>
         )}
 
-        <PoweredByWargaming />
+        <PoweredBy type={PoweredByType.Wargaming} />
       </Wrapper>
     );
   },
 
-  autocomplete: usernameAutocomplete,
+  autocomplete: autocompleteUsername,
 } satisfies CommandRegistry;

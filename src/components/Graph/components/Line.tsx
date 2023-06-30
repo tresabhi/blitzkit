@@ -1,16 +1,18 @@
-import { blue, green, red } from '@radix-ui/colors';
+import { blue, green, red, slateDark } from '@radix-ui/colors';
 import { GRAPH_HEIGHT, GRAPH_WIDTH } from './Root.js';
 
 export enum LineColor {
   Red,
   Green,
   Blue,
+  White,
 }
 
 const LINE_COLORS = {
   [LineColor.Red]: red.red9,
   [LineColor.Green]: green.green9,
   [LineColor.Blue]: blue.blue9,
+  [LineColor.White]: slateDark.slate11,
 };
 
 export enum LineStyle {

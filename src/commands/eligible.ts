@@ -1,18 +1,18 @@
 import { SlashCommandBuilder } from 'discord.js';
-import getWN8 from '../core/blitz/getWN8.js';
+import calculateWN8 from '../core/blitz/calculateWN8.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import sumStats from '../core/blitz/sumStats.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
 import getPeriodStart from '../core/blitzstars/getPeriodStart.js';
-import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
+import getTankStatsDiffed from '../core/blitzstars/getTankStatsDiffed.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
-import cleanTable, { TableInput } from '../core/interaction/cleanTable.js';
-import negativeEmbed from '../core/interaction/negativeEmbed.js';
-import positiveEmbed from '../core/interaction/positiveEmbed.js';
-import addUsernameOption from '../core/options/addUsernameOption.js';
-import resolvePlayer from '../core/options/resolvePlayer.js';
-import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
+import addUsernameChoices from '../core/discord/addUsernameChoices.js';
+import embedNegative from '../core/discord/embedNegative.js';
+import embedPositive from '../core/discord/embedPositive.js';
+import markdownTable, { TableInput } from '../core/discord/markdownTable.js';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 
@@ -44,11 +44,11 @@ export default {
         )
         .setRequired(true),
     )
-    .addStringOption(addUsernameOption),
+    .addStringOption(addUsernameChoices),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const clan = interaction.options.getString('clan') as SkilledClan;
-    const { id, server } = await resolvePlayer(interaction);
+    const { id, server } = await resolvePlayerFromCommand(interaction);
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
@@ -58,7 +58,7 @@ export default {
     let body = '';
 
     if (clan === 'SKLLD') {
-      const tankStatsOverTime = await getTankStatsOverTime(
+      const tankStatsOverTime = await getTankStatsDiffed(
         server,
         id,
         getPeriodStart('30'),
@@ -79,7 +79,7 @@ export default {
 
           // edge case where new tanks don't have averages
           if (tankAverages[tankId]) {
-            const tankWN8 = getWN8(tankAverages[tankId].all, stats);
+            const tankWN8 = calculateWN8(tankAverages[tankId].all, stats);
 
             if (isNaN(tankWN8)) return accumulator;
             return accumulator + tankWN8 * stats.battles;
@@ -137,7 +137,7 @@ export default {
       isEligible = problems.length === 0;
       body = isEligible
         ? 'Player is fully eligible.'
-        : `Player is not eligible. Shortcomings in 30-day statistics:\n\n${cleanTable(
+        : `Player is not eligible. Shortcomings in 30-day statistics:\n\n${markdownTable(
             problems,
           )}`;
     } else if (clan === 'SMRI') {
@@ -162,11 +162,11 @@ export default {
       isEligible = problems.length === 0;
       body = isEligible
         ? 'Player is fully eligible.'
-        : `Player is not eligible. Shortcomings in career statistics:\n\n${cleanTable(
+        : `Player is not eligible. Shortcomings in career statistics:\n\n${markdownTable(
             problems,
           )}`;
     }
 
-    return (isEligible ? positiveEmbed : negativeEmbed)(title, body);
+    return (isEligible ? embedPositive : embedNegative)(title, body);
   },
 } satisfies CommandRegistry;

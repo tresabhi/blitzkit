@@ -1,6 +1,6 @@
 import * as Graph from '../components/Graph/index.js';
 import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
@@ -9,19 +9,19 @@ import resolveTankName from '../core/blitz/resolveTankName.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
 import getPlayerHistories from '../core/blitzstars/getPlayerHistories.js';
 import getTankHistories from '../core/blitzstars/getTankHistories.js';
-import { ResolvedPeriod } from '../core/options/resolvePeriod.js';
-import { ResolvedPlayer } from '../core/options/resolvePlayer.js';
-import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
+import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand.js';
+import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { Histories } from '../types/histories.js';
 import { PlayerClanData } from '../types/playerClanData.js';
-import { StatType } from './stats.js';
+import { StatType } from './statsfull.js';
 
 export default async function evolution<Type extends StatType>(
   type: Type,
   { start, end, evolutionName }: ResolvedPeriod,
   { server, id }: ResolvedPlayer,
-  tankId: Type extends 'tank' ? number : never,
+  tankId: Type extends 'tank' ? number : null,
 ) {
   let nameDiscriminator: string | undefined;
   let image: string | undefined;
@@ -38,8 +38,8 @@ export default async function evolution<Type extends StatType>(
       ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clan.emblem_set_id}.png`
       : undefined;
   } else {
-    nameDiscriminator = `(${resolveTankName(tankId)})`;
-    image = tankopedia[tankId].images.normal;
+    nameDiscriminator = `(${resolveTankName(tankId!)})`;
+    image = tankopedia[tankId!].images.normal;
   }
 
   let histories: Histories;
@@ -53,7 +53,7 @@ export default async function evolution<Type extends StatType>(
     });
   } else {
     histories = await getTankHistories(server, id, {
-      tankId,
+      tankId: tankId!,
       start,
       end,
       includeLatestHistories: true,
@@ -61,24 +61,22 @@ export default async function evolution<Type extends StatType>(
     });
   }
 
-  const careerWinrate = histories.map(
+  const plot = histories.map(
     (history) =>
       [
-        history.last_battle_time,
+        history.all.battles,
         (history.all.wins / history.all.battles) * 100,
       ] as Graph.PlotItem,
   );
-  const careerBattles = histories.map(
-    (history) =>
-      [history.last_battle_time, history.all.battles] as Graph.PlotItem,
-  );
-  const winrateYs = careerWinrate.map(([, y]) => y);
-  const maxWinrate = Math.max(...winrateYs);
-  const minWinrate = Math.min(...winrateYs);
-  const battleYs = careerBattles.map(([, y]) => y);
-  const maxBattle = Math.max(...battleYs);
-  const minBattle = Math.min(...battleYs);
-  const minTime = Math.min(...careerBattles.map(([x]) => x));
+  const times = histories.map((history) => history.last_battle_time);
+  const minTime = Math.min(...times);
+  const maxTime = Math.max(...times);
+  const ys = plot.map(([, y]) => y);
+  const xs = plot.map(([x]) => x);
+  const maxY = Math.max(...ys);
+  const minY = Math.min(...ys);
+  const maxX = Math.max(...xs);
+  const minX = Math.min(...xs);
 
   const accountInfo = await getWargamingResponse<AccountInfo>(
     `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
@@ -96,39 +94,35 @@ export default async function evolution<Type extends StatType>(
       />
 
       {/* goofy ahh bug forces me to call them as functions */}
-      {careerWinrate.length > 0 && (
+      {plot.length > 0 && (
         <Graph.Root
-          xMinLabel={new Date(minTime * 1000).toDateString()}
-          xMaxLabel={new Date(end * 1000).toDateString()}
-          leftVerticalMargin={{
-            min: minWinrate,
-            max: maxWinrate,
+          verticalMargin={{
+            min: minY,
+            max: maxY,
             suffix: '%',
+            precision: 1,
           }}
-          rightVerticalMargin={{
-            min: minBattle,
-            max: maxBattle,
+          horizontalMargin={{
+            min: minX,
+            max: maxX,
+            precision: 0,
           }}
+          xMinLabel={new Date(minTime * 1000).toDateString()}
+          xMaxLabel={new Date(maxTime * 1000).toDateString()}
         >
           {Graph.Line({
-            // total battles
-            plot: careerBattles!,
-            color: Graph.LineColor.Blue,
-          })}
-          {Graph.Line({
             // career winrate
-            plot: careerWinrate!,
-            minY: minWinrate,
-            maxY: maxWinrate,
+            color: Graph.LineColor.Red,
+            plot: plot,
+            minY,
+            maxY,
           })}
         </Graph.Root>
       )}
 
-      {careerWinrate.length === 0 && (
-        <NoData type={NoDataType.BattlesInPeriod} />
-      )}
+      {plot.length === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
 
-      <PoweredByBlitzStars />
+      <PoweredBy type={PoweredByType.BlitzStars} />
     </Wrapper>
   );
 }

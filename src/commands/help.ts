@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
-import infoEmbed from '../core/interaction/infoEmbed.js';
+import { client } from '../bot.js';
+import embedInfo from '../core/discord/embedInfo.js';
 import {
   CommandRegistry,
   guildCommands,
   publicCommands,
 } from '../events/interactionCreate/index.js';
-import { client } from '../index.js';
 
 export default {
   inProduction: true,
@@ -17,8 +17,8 @@ export default {
     .setName('help')
     .setDescription('All the help you need about the bot'),
 
-  execute(interaction) {
-    return infoEmbed(
+  handler(interaction) {
+    return embedInfo(
       `${client.user?.username} help`,
       `**About**\n${
         client.user?.username

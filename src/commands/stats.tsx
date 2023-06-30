@@ -1,64 +1,78 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { CYCLIC_API } from '../constants/cyclic.js';
-import tanksAutocomplete from '../core/autocomplete/tanks.js';
-import usernameAutocomplete from '../core/autocomplete/username.js';
+import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankId from '../core/blitz/resolveTankId.js';
-import interactionToURL from '../core/interaction/interactionToURL.js';
-import linkButton from '../core/interaction/linkButton.js';
-import primaryButton from '../core/interaction/primaryButton.js';
-import { Period } from '../core/options/addPeriodSubCommands.js';
-import addStatsSubCommandGroups from '../core/options/addStatsSubCommandGroups.js';
-import resolvePeriod from '../core/options/resolvePeriod.js';
-import resolvePlayer from '../core/options/resolvePlayer.js';
+import addStatTypeSubCommandGroups from '../core/discord/addStatTypeSubCommandGroups.js';
+import autocompleteTanks from '../core/discord/autocompleteTanks.js';
+import autocompleteUsername from '../core/discord/autocompleteUsername.js';
+import interactionToURL from '../core/discord/interactionToURL.js';
+import linkButton from '../core/discord/linkButton.js';
+import primaryButton from '../core/discord/primaryButton.js';
+import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton.js';
+import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.js';
+import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton.js';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
-import stats, { StatType } from '../renderers/stats.js';
+import stats from '../renderers/stats.js';
+import { StatType } from '../renderers/statsfull.js';
+import { AccountInfo } from '../types/accountInfo.js';
 
 export default {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
-  command: addStatsSubCommandGroups(
+  command: addStatTypeSubCommandGroups(
     new SlashCommandBuilder()
       .setName('stats')
       .setDescription('In-game statistics'),
   ),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const commandGroup = interaction.options.getSubcommandGroup(
       true,
     ) as StatType;
-    const subcommand = interaction.options.getSubcommand() as Period;
-    const player = await resolvePlayer(interaction);
-    const period = resolvePeriod(interaction);
+    const player = await resolvePlayerFromCommand(interaction);
+    const period = resolvePeriodFromCommand(interaction);
     const tankIdRaw = interaction.options.getString('tank')!;
-    const tankId = commandGroup === 'tank' ? resolveTankId(tankIdRaw) : 0;
+    const tankId = commandGroup === 'tank' ? resolveTankId(tankIdRaw) : null;
     const start = interaction.options.getInteger('start');
     const end = interaction.options.getInteger('end');
-    const path = `stats/${commandGroup}/${subcommand}?server=${
-      player.server
-    }&id=${player.id}&tankId=${tankId}&start=${start ?? 0}&end=${end ?? 0}`;
-
-    interactionToURL(interaction);
+    const path = interactionToURL(interaction, {
+      ...player,
+      tankId,
+      start,
+      end,
+    });
+    const { nickname } = (
+      await getWargamingResponse<AccountInfo>(
+        `https://api.wotblitz.${player.server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
+      )
+    )[player.id];
 
     return [
       await stats(commandGroup, period, player, tankId),
       primaryButton(path, 'Refresh'),
-      linkButton(path, 'Embed'),
+      linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
+      linkButton(
+        `https://www.blitzstars.com/player/${player.server}/${nickname}`,
+        'BlitzStars',
+      ),
     ];
   },
 
   autocomplete: (interaction) => {
-    usernameAutocomplete(interaction);
-    tanksAutocomplete(interaction);
+    autocompleteUsername(interaction);
+    autocompleteTanks(interaction);
   },
 
   async button(interaction) {
     const url = new URL(`${CYCLIC_API}/${interaction.customId}`);
     const path = url.pathname.split('/').filter(Boolean);
     const commandGroup = path[1] as StatType;
-    const period = resolvePeriod(interaction);
-    const player = await resolvePlayer(interaction);
+    const period = resolvePeriodFromButton(interaction);
+    const player = await resolvePlayerFromButton(interaction);
 
     return await stats(
       commandGroup,

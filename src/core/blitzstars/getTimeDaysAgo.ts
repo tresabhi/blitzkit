@@ -1,4 +1,4 @@
-export default function getTimeDaysAgo(period: number) {
+export default function getTimeDaysAgo(daysAgo: number) {
   const now = new Date();
   now.setHours(5, 0, 0, 0);
 
@@ -6,7 +6,7 @@ export default function getTimeDaysAgo(period: number) {
   if (now.getTime() > Date.now()) now.setDate(now.getDate() - 1);
 
   // subtract the period number of days from now
-  now.setDate(now.getDate() - period);
+  now.setDate(now.getDate() - daysAgo);
 
   return now.getTime() / 1000;
 }

@@ -1,20 +1,21 @@
-import GenericAllStats from '../components/GenericAllStats.js';
+import AllStatsOverview from '../components/AllStatsOverview/index.js';
 import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
-import TierWeights, { TierWeightsRecord } from '../components/TierWeights.js';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
+import { TierWeightsRecord } from '../components/TierWeights.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
-import getWN8 from '../core/blitz/getWN8.js';
+import calculateWN8 from '../core/blitz/calculateWN8.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankName from '../core/blitz/resolveTankName.js';
 import sumStats from '../core/blitz/sumStats.js';
 import { Tier, tankopedia } from '../core/blitz/tankopedia.js';
-import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
+import getTankStatsDiffed from '../core/blitzstars/getTankStatsDiffed.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
-import { ResolvedPeriod } from '../core/options/resolvePeriod.js';
-import { ResolvedPlayer } from '../core/options/resolvePlayer.js';
-import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
+import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand.js';
+import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
+import { theme } from '../stitches.config.js';
 import {
   AccountInfo,
   AllStats,
@@ -28,7 +29,8 @@ export default async function stats<Type extends StatType>(
   type: Type,
   { start, end, statsName }: ResolvedPeriod,
   { server, id }: ResolvedPlayer,
-  tankId: Type extends 'tank' ? number : never,
+  tankId: Type extends 'tank' ? number : null,
+  naked = false,
 ) {
   let nameDiscriminator: string | undefined;
   let image: string | undefined;
@@ -45,11 +47,11 @@ export default async function stats<Type extends StatType>(
       ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clan.emblem_set_id}.png`
       : undefined;
   } else if (type === 'tank') {
-    nameDiscriminator = `(${resolveTankName(tankId)})`;
-    image = tankopedia[tankId].images.normal;
+    nameDiscriminator = `(${resolveTankName(tankId!)})`;
+    image = tankopedia[tankId!].images.normal;
   }
 
-  const tankStats = await getTankStatsOverTime(server, id, start, end);
+  const tankStats = await getTankStatsDiffed(server, id, start, end);
   let stats: AllStats;
   let supplementaryStats: SupplementaryStats;
   let tierWeights: TierWeightsRecord;
@@ -83,7 +85,7 @@ export default async function stats<Type extends StatType>(
           const tankAverage = tankAverages[tankId];
 
           return tankAverage
-            ? accumulator + getWN8(tankAverage.all, stats) * stats.battles
+            ? accumulator + calculateWN8(tankAverage.all, stats) * stats.battles
             : accumulator;
         }, 0) / battlesOfTanksWithAverages,
       tier:
@@ -112,19 +114,36 @@ export default async function stats<Type extends StatType>(
       {},
     );
   } else {
-    stats = tankStats[tankId];
+    stats = tankStats[tankId!];
 
     supplementaryStats = {
-      WN8: getWN8(tankAverages[tankId].all, tankStats[tankId]),
-      tier: tankopedia[tankId].tier,
+      WN8: calculateWN8(tankAverages[tankId!].all, tankStats[tankId!]),
+      tier: tankopedia[tankId!].tier,
     };
   }
 
   const accountInfo = await getWargamingResponse<AccountInfo>(
     `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
   );
+  const overview = (
+    <AllStatsOverview stats={stats} supplementaryStats={supplementaryStats} />
+  );
+  const footer = (
+    <span
+      style={{
+        color: theme.colors.textLowContrast,
+        fontSize: 16,
+        display: 'flex',
+        gap: 4,
+      }}
+    >
+      <u>/statsfull</u> for all statistics
+    </span>
+  );
 
-  return (
+  return naked ? (
+    overview
+  ) : (
     <Wrapper>
       <TitleBar
         name={accountInfo[id].nickname}
@@ -136,17 +155,9 @@ export default async function stats<Type extends StatType>(
       />
 
       {stats.battles === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
-      {stats.battles > 0 && type === 'player' && (
-        <TierWeights weights={tierWeights!} />
-      )}
-      {stats.battles > 0 && (
-        <GenericAllStats
-          stats={stats}
-          supplementaryStats={supplementaryStats}
-        />
-      )}
+      {stats.battles > 0 && overview}
 
-      <PoweredByBlitzStars />
+      <PoweredBy type={PoweredByType.BlitzStars} footer={footer} />
     </Wrapper>
   );
 }

@@ -1,13 +1,15 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { startCase } from 'lodash';
 import markdownEscape from 'markdown-escape';
-import usernameAutocomplete from '../core/autocomplete/username.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import cleanTable, { TableInputEntry } from '../core/interaction/cleanTable.js';
-import infoEmbed from '../core/interaction/infoEmbed.js';
-import addUsernameOption from '../core/options/addUsernameOption.js';
-import resolvePlayer from '../core/options/resolvePlayer.js';
-import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
+import addUsernameChoices from '../core/discord/addUsernameChoices.js';
+import autocompleteUsername from '../core/discord/autocompleteUsername.js';
+import embedInfo from '../core/discord/embedInfo.js';
+import markdownTable, {
+  TableInputEntry,
+} from '../core/discord/markdownTable.js';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountAchievements } from '../types/accountAchievements.js';
 import { AccountInfo } from '../types/accountInfo.js';
@@ -22,7 +24,7 @@ export default {
   command: new SlashCommandBuilder()
     .setName('playerachievements')
     .setDescription("All the player's achievements")
-    .addStringOption(addUsernameOption)
+    .addStringOption(addUsernameChoices)
     .addStringOption((option) =>
       option
         .setName('sort')
@@ -33,9 +35,9 @@ export default {
         ),
     ),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const sortBy = (interaction.options.getString('sort') ?? 'name') as SortBy;
-    const account = await resolvePlayer(interaction);
+    const account = await resolvePlayerFromCommand(interaction);
     const { id, server } = account;
     const accounts = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
@@ -50,10 +52,10 @@ export default {
       ...accountAchievements.max_series,
     };
 
-    return infoEmbed(
+    return embedInfo(
       `${markdownEscape(accounts[id].nickname)}'s information`,
 
-      cleanTable(
+      markdownTable(
         Object.keys(compound)
           .filter((achievement) => compound[achievement] > 0)
           .sort(
@@ -72,5 +74,5 @@ export default {
     );
   },
 
-  autocomplete: usernameAutocomplete,
+  autocomplete: autocompleteUsername,
 } satisfies CommandRegistry;

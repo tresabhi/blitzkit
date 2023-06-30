@@ -1,15 +1,15 @@
 import { go } from 'fuzzysort';
-import errorWithCause from '../process/errorWithCause.js';
+import throwError from '../node/throwError.js';
 import { TANKS, tankopedia } from './tankopedia.js';
 
 export default function resolveTankId(tank: string) {
-  const number = Number(tank);
+  const number = parseInt(tank);
 
   if (Number.isNaN(number)) {
     const searchResult = go(tank, TANKS, { keys: ['name'], limit: 1 });
 
     if (searchResult.length === 0) {
-      throw errorWithCause(
+      throw throwError(
         'Tank not found',
         `Could not find tank by the name "${tank}".`,
       );
@@ -20,7 +20,7 @@ export default function resolveTankId(tank: string) {
     if (tankopedia[number]) {
       return number;
     } else {
-      throw errorWithCause(
+      throw throwError(
         'Tank not found',
         `Could not find tank by the ID "${number}".`,
       );

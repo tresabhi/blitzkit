@@ -7,8 +7,8 @@ import {
   getHistoriesDefaultOptions,
 } from '../../types/histories.js';
 import getWargamingResponse from '../blitz/getWargamingResponse.js';
-import { WARGAMING_APPLICATION_ID } from '../process/args.js';
-import { emptyAllStats } from './getTankStatsOverTime.js';
+import { WARGAMING_APPLICATION_ID } from '../node/arguments.js';
+import { emptyAllStats } from './getTankStatsDiffed.js';
 
 export interface PlayerHistoryRaw {
   clan: { clan_id: number; name: string; tag: string };

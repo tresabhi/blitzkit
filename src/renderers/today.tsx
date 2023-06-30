@@ -1,26 +1,26 @@
 import * as Breakdown from '../components/Breakdown/index.js';
 import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredByBlitzStars from '../components/PoweredByBlitzStars.js';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
 import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
+import calculateWN8 from '../core/blitz/calculateWN8.js';
 import getTankStats from '../core/blitz/getTankStats.js';
-import getWN8 from '../core/blitz/getWN8.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankName from '../core/blitz/resolveTankName.js';
 import sumStats from '../core/blitz/sumStats.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
-import getTankStatsOverTime from '../core/blitzstars/getTankStatsOverTime.js';
+import getTankStatsDiffed from '../core/blitzstars/getTankStatsDiffed.js';
 import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
-import { ResolvedPlayer } from '../core/options/resolvePlayer.js';
-import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
+import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 
 export default async function today({ server, id }: ResolvedPlayer) {
-  const tankStatsOverTime = await getTankStatsOverTime(
+  const tankStatsOverTime = await getTankStatsDiffed(
     server,
     id,
     getTimeDaysAgo(0),
@@ -60,7 +60,7 @@ export default async function today({ server, id }: ResolvedPlayer) {
         ? accumulator
         : {
             ...accumulator,
-            [tankId]: getWN8(tankAverages[tankId].all, tankStats),
+            [tankId]: calculateWN8(tankAverages[tankId].all, tankStats),
           };
     },
     {},
@@ -71,7 +71,10 @@ export default async function today({ server, id }: ResolvedPlayer) {
         ? accumulator
         : {
             ...accumulator,
-            [tank_id]: getWN8(tankAverages[tank_id].all, careerStats[tank_id]),
+            [tank_id]: calculateWN8(
+              tankAverages[tank_id].all,
+              careerStats[tank_id],
+            ),
           };
     },
     {},
@@ -153,7 +156,7 @@ export default async function today({ server, id }: ResolvedPlayer) {
       {rows.length === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
       {rows.length > 0 && <Breakdown.Root>{rows}</Breakdown.Root>}
 
-      <PoweredByBlitzStars />
+      <PoweredBy type={PoweredByType.BlitzStars} />
     </Wrapper>
   );
 }

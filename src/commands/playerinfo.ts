@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import usernameAutocomplete from '../core/autocomplete/username.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import cleanTable from '../core/interaction/cleanTable.js';
-import infoEmbed from '../core/interaction/infoEmbed.js';
-import addUsernameOption from '../core/options/addUsernameOption.js';
-import resolvePlayer from '../core/options/resolvePlayer.js';
-import { WARGAMING_APPLICATION_ID } from '../core/process/args.js';
+import addUsernameChoices from '../core/discord/addUsernameChoices.js';
+import autocompleteUsername from '../core/discord/autocompleteUsername.js';
+import embedInfo from '../core/discord/embedInfo.js';
+import markdownTable from '../core/discord/markdownTable.js';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 
@@ -18,20 +18,20 @@ export default {
   command: new SlashCommandBuilder()
     .setName('playerinfo')
     .setDescription('Basic information about a player')
-    .addStringOption(addUsernameOption),
+    .addStringOption(addUsernameChoices),
 
-  async execute(interaction) {
-    const account = await resolvePlayer(interaction);
+  async handler(interaction) {
+    const account = await resolvePlayerFromCommand(interaction);
     const { id, server } = account;
     const accounts = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
     const accountInfo = accounts[id];
 
-    return infoEmbed(
+    return embedInfo(
       `${markdownEscape(accountInfo.nickname)}'s information`,
 
-      cleanTable([
+      markdownTable([
         ['Nickname', `${accountInfo.nickname}`],
         ['Battles', `${accountInfo.statistics.all.battles}`],
         [
@@ -56,5 +56,5 @@ export default {
     );
   },
 
-  autocomplete: usernameAutocomplete,
+  autocomplete: autocompleteUsername,
 } satisfies CommandRegistry;

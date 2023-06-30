@@ -1,5 +1,14 @@
-import { WargamingResponse } from '../../types/wargamingResponse.js';
-import errorWithCause from '../process/errorWithCause.js';
+import throwError from '../node/throwError.js';
+
+export type WargamingResponse<Data extends object> =
+  | {
+      status: 'error';
+      error: { field: string; message: string; code: 402; value: null };
+    }
+  | {
+      status: 'ok';
+      data: Data;
+    };
 
 export default async function getWargamingResponse<Data extends object>(
   url: string,
@@ -12,7 +21,7 @@ export default async function getWargamingResponse<Data extends object>(
   if (parsed.status === 'ok') {
     return parsed.data;
   } else {
-    throw errorWithCause(
+    throw throwError(
       `Wargaming response error status:"${parsed.status}"`,
       `Message: "${parsed.error.message}"\nURL: "${url}"`,
     );

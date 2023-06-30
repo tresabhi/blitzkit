@@ -17,7 +17,7 @@ export default {
       option.setName('blitz').setDescription('Ping Blitz'),
     ),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const subcommand = interaction.options.getSubcommand();
     const executionStart = Date.now();
 
@@ -30,4 +30,4 @@ export default {
     const executionTime = Date.now() - executionStart;
     interaction.editReply(`Pong 🏓 - ${executionTime}ms`);
   },
-} satisfies CommandRegistry;
+} satisfies CommandRegistry<true>;

@@ -2,8 +2,8 @@ import { SlashCommandBuilder } from 'discord.js';
 import { go } from 'fuzzysort';
 import markdownEscape from 'markdown-escape';
 import { TANK_NAMES } from '../core/blitz/tankopedia.js';
-import infoEmbed from '../core/interaction/infoEmbed.js';
-import addTankChoices from '../core/options/addTankChoices.js';
+import addTankChoices from '../core/discord/addTankChoices.js';
+import embedInfo from '../core/discord/embedInfo.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 
 export default {
@@ -23,14 +23,14 @@ export default {
         .setMaxValue(100),
     ),
 
-  async execute(interaction) {
+  async handler(interaction) {
     const tank = interaction.options.getString('tank')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
     const results = go(tank, TANK_NAMES, { limit }).map(
       (result) => result.target,
     );
 
-    return infoEmbed(
+    return embedInfo(
       `Tank search for "${markdownEscape(tank)}"`,
       results.length === 0
         ? 'No tanks found.'
