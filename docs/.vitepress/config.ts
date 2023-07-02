@@ -12,7 +12,7 @@ export default defineConfig({
 
     sidebar: getSidebar({
       collapsed: false,
-      contentDirs: ['guide', 'legal'],
+      contentDirs: ['guide', 'legal', 'changelogs'],
       contentRoot: '/docs/',
     }) as DefaultTheme.Sidebar,
 
