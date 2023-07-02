@@ -7,11 +7,14 @@
   "scripts": {
     "build:bot": "node scripts/build --build=bot",
     "build:server": "node scripts/build --build=server",
+    "build:docs": "vitepress build docs",
     "build": "node scripts/build --build=all",
     "dev:bot": "yarn build:bot --dev && yarn start:bot",
     "dev:server": "yarn build:server --dev && yarn start:server",
+    "dev:docs": "vitepress dev docs",
     "start:bot": "node --enable-source-maps --trace-warnings dist/bot.cjs",
     "start:server": "node --enable-source-maps --trace-warnings dist/server.cjs",
+    "host:docs": "vitepress preview docs",
     "zip": "zip -r dist.zip dist",
     "lint": "npx tsc"
   },
@@ -28,7 +31,8 @@
     "lodash": "^4.17.21",
     "markdown-escape": "^2.0.0",
     "react": "^18.2.0",
-    "satori": "^0.9.1"
+    "satori": "^0.9.1",
+    "vitepress-plugin-auto-sidebar": "^1.1.0"
   },
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.4.2",
@@ -38,6 +42,7 @@
     "@types/markdown-escape": "^1.1.0",
     "@types/node": "^20.2.1",
     "@types/react": "^18.2.7",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "vitepress": "^1.0.0-beta.3"
   }
 }
