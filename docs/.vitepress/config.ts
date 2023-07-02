@@ -4,6 +4,8 @@ import { getSidebar } from 'vitepress-plugin-auto-sidebar';
 export default defineConfig({
   title: 'blitzkrieg',
   description: '🎉 All-in-one Discord bot for everything World of Tanks Blitz',
+  base: '/blitzkrieg/',
+
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
