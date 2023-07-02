@@ -1,28 +1,23 @@
-import { defineConfig } from 'vitepress'
+import { DefaultTheme, defineConfig } from 'vitepress';
+import { getSidebar } from 'vitepress-plugin-auto-sidebar';
 
-// https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "blitzkrieg",
-  description: "🎉 All-in-one Discord bot for everything World of Tanks Blitz",
+  title: 'blitzkrieg',
+  description: '🎉 All-in-one Discord bot for everything World of Tanks Blitz',
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
+      { text: 'Examples', link: '/markdown-examples' },
     ],
 
-    sidebar: [
-      {
-        text: 'Examples',
-        items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
-        ]
-      }
-    ],
+    sidebar: getSidebar({
+      collapsed: false,
+      contentDirs: ['guide', 'legal'],
+      contentRoot: '/docs/',
+    }) as DefaultTheme.Sidebar,
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-    ]
-  }
-})
+      { icon: 'github', link: 'https://github.com/vuejs/vitepress' },
+    ],
+  },
+});

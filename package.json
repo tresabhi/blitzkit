@@ -31,7 +31,8 @@
     "lodash": "^4.17.21",
     "markdown-escape": "^2.0.0",
     "react": "^18.2.0",
-    "satori": "^0.9.1"
+    "satori": "^0.9.1",
+    "vitepress-plugin-auto-sidebar": "^1.1.0"
   },
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.4.2",
