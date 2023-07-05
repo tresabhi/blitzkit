@@ -2,7 +2,7 @@ import { go } from 'fuzzysort';
 import throwError from '../node/throwError.js';
 import { TANKS, tankopedia } from './tankopedia.js';
 
-export default function resolveTankId(tank: string) {
+export default async function resolveTankId(tank: string) {
   const number = parseInt(tank);
 
   if (Number.isNaN(number)) {
@@ -17,7 +17,7 @@ export default function resolveTankId(tank: string) {
       return searchResult[0].obj.tank_id;
     }
   } else {
-    if (tankopedia[number]) {
+    if ((await tankopedia)[number]) {
       return number;
     } else {
       throw throwError(

@@ -10,16 +10,16 @@ import { CommandRegistry } from '../events/interactionCreate/index.js';
 
 const executionStart = new Date().getTime();
 
-export default {
+export const debugCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
     .setName('debug')
     .setDescription('Debug information about the bot'),
 
-  handler(interaction) {
+  async handler(interaction) {
     const currentTime = new Date().getTime();
     const uptime = currentTime - executionStart;
 
@@ -37,9 +37,9 @@ export default {
             (uptime / 1000) % 60,
           )}s ${Math.floor(uptime % 1000)}ms`,
         ],
-        ['Tankopedia cached', `${tankopedia !== undefined}`],
-        ['Tank averages cached', `${tankAverages !== undefined}`],
+        ['Tankopedia cached', `${(await tankopedia) !== undefined}`],
+        ['Tank averages cached', `${(await tankAverages) !== undefined}`],
       ]),
     );
   },
-} satisfies CommandRegistry;
+};

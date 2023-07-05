@@ -12,9 +12,9 @@ import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 
-export default {
+export const verifyCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -80,4 +80,4 @@ export default {
   },
 
   autocomplete: autocompleteUsername,
-} satisfies CommandRegistry;
+};

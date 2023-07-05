@@ -10,9 +10,9 @@ import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountList } from '../types/accountList.js';
 
-export default {
+export const searchPlayersCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -52,4 +52,4 @@ export default {
       }\`\`\``,
     );
   },
-} satisfies CommandRegistry;
+};

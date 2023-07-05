@@ -15,6 +15,7 @@ import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.j
 import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
+import { PossiblyPromise } from '../types/possiblyPromise.js';
 
 export type SkilledClan = 'SKLLD' | 'SMRI';
 
@@ -23,9 +24,9 @@ export const SKILLED_CLANS: Record<SkilledClan, string> = {
   SMRI: 'Samurai',
 };
 
-export default {
+export const eligibleCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: false,
 
   command: new SlashCommandBuilder()
@@ -67,41 +68,56 @@ export default {
       const entries = Object.entries(tankStatsOverTime);
       const stats = sumStats(entries.map(([, stats]) => stats));
       const averageTier =
-        entries.reduce((accumulator, [tankIdString, stats]) => {
-          const tankId = parseInt(tankIdString);
-          const tankTier = tankopedia[tankId].tier;
+        (await entries.reduce<PossiblyPromise<number>>(
+          async (accumulator, [tankIdString, stats]) => {
+            const tankId = parseInt(tankIdString);
+            const tankTier = (await tankopedia)[tankId].tier;
 
-          return accumulator + tankTier * stats.battles;
-        }, 0) / stats.battles;
+            return (await accumulator) + tankTier * stats.battles;
+          },
+          0,
+        )) / stats.battles;
       const WN8 =
-        entries.reduce((accumulator, [tankIdString, stats]) => {
-          const tankId = parseInt(tankIdString);
+        (await entries.reduce<PossiblyPromise<number>>(
+          async (accumulator, [tankIdString, stats]) => {
+            const tankId = parseInt(tankIdString);
 
-          // edge case where new tanks don't have averages
-          if (tankAverages[tankId]) {
-            const tankWN8 = calculateWN8(tankAverages[tankId].all, stats);
+            // edge case where new tanks don't have averages
+            if ((await tankAverages)[tankId]) {
+              const tankWN8 = calculateWN8(
+                (await tankAverages)[tankId].all,
+                stats,
+              );
 
-            if (isNaN(tankWN8)) return accumulator;
-            return accumulator + tankWN8 * stats.battles;
-          } else return accumulator;
-        }, 0) / stats.battles;
+              if (isNaN(tankWN8)) return accumulator;
+              return (await accumulator) + tankWN8 * stats.battles;
+            } else return accumulator;
+          },
+          0,
+        )) / stats.battles;
       const tier10Damage =
-        entries.reduce((accumulator, [tankIdString, stats]) => {
-          const tankId = parseInt(tankIdString);
+        (await entries.reduce<PossiblyPromise<number>>(
+          async (accumulator, [tankIdString, stats]) => {
+            const tankId = parseInt(tankIdString);
 
-          if (tankopedia[tankId]?.tier === 10) {
-            const tankStats = tankStatsOverTime[tankId];
-            return accumulator + tankStats.damage_dealt;
-          } else return accumulator;
-        }, 0) /
-        entries.reduce((accumulator, [tankIdString, stats]) => {
-          const tankId = parseInt(tankIdString);
+            if ((await tankopedia)[tankId]?.tier === 10) {
+              const tankStats = tankStatsOverTime[tankId];
+              return (await accumulator) + tankStats.damage_dealt;
+            } else return accumulator;
+          },
+          0,
+        )) /
+        (await entries.reduce<PossiblyPromise<number>>(
+          async (accumulator, [tankIdString, stats]) => {
+            const tankId = parseInt(tankIdString);
 
-          if (tankopedia[tankId]?.tier === 10) {
-            const tankStats = tankStatsOverTime[tankId];
-            return accumulator + tankStats.battles;
-          } else return accumulator;
-        }, 0);
+            if ((await tankopedia)[tankId]?.tier === 10) {
+              const tankStats = tankStatsOverTime[tankId];
+              return (await accumulator) + tankStats.battles;
+            } else return accumulator;
+          },
+          0,
+        ));
 
       if (stats.battles < 126) {
         problems.push(['Battles', `${stats.battles} (${stats.battles - 126})`]);
@@ -169,4 +185,4 @@ export default {
 
     return (isEligible ? embedPositive : embedNegative)(title, body);
   },
-} satisfies CommandRegistry;
+};

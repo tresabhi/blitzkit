@@ -16,9 +16,9 @@ import { AccountInfo } from '../types/accountInfo.js';
 
 type SortBy = 'name' | 'count';
 
-export default {
+export const playerAchievementsCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -75,4 +75,4 @@ export default {
   },
 
   autocomplete: autocompleteUsername,
-} satisfies CommandRegistry;
+};

@@ -22,6 +22,7 @@ import {
   SupplementaryStats,
 } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
+import { PossiblyPromise } from '../types/possiblyPromise.js';
 
 export type StatType = 'player' | 'tank';
 
@@ -47,66 +48,73 @@ export default async function stats<Type extends StatType>(
       ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clan.emblem_set_id}.png`
       : undefined;
   } else if (type === 'tank') {
-    nameDiscriminator = `(${resolveTankName(tankId!)})`;
-    image = tankopedia[tankId!].images.normal;
+    nameDiscriminator = `(${await resolveTankName(tankId!)})`;
+    image = (await tankopedia)[tankId!].images.normal;
   }
 
   const tankStats = await getTankStatsDiffed(server, id, start, end);
-  let stats: AllStats;
+  let stats: AllStats | undefined;
   let supplementaryStats: SupplementaryStats;
   let tierWeights: TierWeightsRecord;
 
   if (type === 'player') {
     const entries = Object.entries(tankStats);
     stats = sumStats(entries.map(([, stats]) => stats));
-    const battlesOfTanksWithAverages = entries.reduce(
-      (accumulator, [tankIdString, stats]) => {
-        const tankId = parseInt(tankIdString);
-        const tankAverage = tankAverages[tankId];
+    const battlesOfTanksWithAverages = await entries.reduce<
+      PossiblyPromise<number>
+    >(async (accumulator, [tankIdString, stats]) => {
+      const tankId = parseInt(tankIdString);
+      const tankAverage = (await tankAverages)[tankId];
 
-        return tankAverage ? accumulator + stats.battles : accumulator;
-      },
-      0,
-    );
-    const battlesOfTanksWithTankopediaEntry = entries.reduce(
-      (accumulator, [tankIdString, stats]) => {
-        const tankId = parseInt(tankIdString);
-        const tankopediaEntry = tankopedia[tankId];
+      return tankAverage ? (await accumulator) + stats.battles : accumulator;
+    }, 0);
+    const battlesOfTanksWithTankopediaEntry = await entries.reduce<
+      PossiblyPromise<number>
+    >(async (accumulator, [tankIdString, stats]) => {
+      const tankId = parseInt(tankIdString);
+      const tankopediaEntry = (await tankopedia)[tankId];
 
-        return tankopediaEntry ? accumulator + stats.battles : accumulator;
-      },
-      0,
-    );
+      return tankopediaEntry
+        ? (await accumulator) + stats.battles
+        : accumulator;
+    }, 0);
 
     supplementaryStats = {
       WN8:
-        entries.reduce((accumulator, [tankIdString, stats]) => {
-          const tankId = parseInt(tankIdString);
-          const tankAverage = tankAverages[tankId];
+        (await entries.reduce<PossiblyPromise<number>>(
+          async (accumulator, [tankIdString, stats]) => {
+            const tankId = parseInt(tankIdString);
+            const tankAverage = (await tankAverages)[tankId];
 
-          return tankAverage
-            ? accumulator + calculateWN8(tankAverage.all, stats) * stats.battles
-            : accumulator;
-        }, 0) / battlesOfTanksWithAverages,
+            return tankAverage
+              ? (await accumulator) +
+                  calculateWN8(tankAverage.all, stats) * stats.battles
+              : accumulator;
+          },
+          0,
+        )) / battlesOfTanksWithAverages,
       tier:
-        entries.reduce((accumulator, [tankIdString, stats]) => {
-          const tankId = parseInt(tankIdString);
-          const tankopediaEntry = tankopedia[tankId];
+        (await entries.reduce<PossiblyPromise<number>>(
+          async (accumulator, [tankIdString, stats]) => {
+            const tankId = parseInt(tankIdString);
+            const tankopediaEntry = (await tankopedia)[tankId];
 
-          return tankopediaEntry
-            ? accumulator + tankopediaEntry.tier * stats.battles
-            : accumulator;
-        }, 0) / battlesOfTanksWithTankopediaEntry,
+            return tankopediaEntry
+              ? (await accumulator) + tankopediaEntry.tier * stats.battles
+              : accumulator;
+          },
+          0,
+        )) / battlesOfTanksWithTankopediaEntry,
     };
-    tierWeights = entries.reduce<TierWeightsRecord>(
-      (accumulator, [tankIdString, stats]) => {
+    tierWeights = await entries.reduce<PossiblyPromise<TierWeightsRecord>>(
+      async (accumulator, [tankIdString, stats]) => {
         const tankId = parseInt(tankIdString);
-        const tier = tankopedia[tankId].tier as Tier;
+        const tier = (await tankopedia)[tankId].tier as Tier;
 
-        if (accumulator[tier]) {
-          accumulator[tier]! += stats.battles;
+        if ((await accumulator)[tier]) {
+          (await accumulator)[tier]! += stats.battles;
         } else {
-          accumulator[tier] = stats.battles;
+          (await accumulator)[tier] = stats.battles;
         }
 
         return accumulator;
@@ -117,8 +125,10 @@ export default async function stats<Type extends StatType>(
     stats = tankStats[tankId!];
 
     supplementaryStats = {
-      WN8: calculateWN8(tankAverages[tankId!].all, tankStats[tankId!]),
-      tier: tankopedia[tankId!].tier,
+      WN8: stats
+        ? calculateWN8((await tankAverages)[tankId!].all, tankStats[tankId!])
+        : undefined,
+      tier: (await tankopedia)[tankId!].tier,
     };
   }
 
@@ -154,8 +164,8 @@ export default async function stats<Type extends StatType>(
         }`}
       />
 
-      {stats.battles === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
-      {stats.battles > 0 && overview}
+      {!stats?.battles && <NoData type={NoDataType.BattlesInPeriod} />}
+      {stats?.battles > 0 && overview}
 
       <PoweredBy type={PoweredByType.BlitzStars} footer={footer} />
     </Wrapper>

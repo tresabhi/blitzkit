@@ -6,9 +6,9 @@ import addTankChoices from '../core/discord/addTankChoices.js';
 import embedInfo from '../core/discord/embedInfo.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 
-export default {
+export const searchTanksCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -37,4 +37,4 @@ export default {
         : `\`\`\`\n${results.join('\n')}\n\`\`\``,
     );
   },
-} satisfies CommandRegistry;
+};

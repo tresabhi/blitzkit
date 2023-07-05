@@ -17,9 +17,9 @@ import { CommandRegistry } from '../events/interactionCreate/index.js';
 import statsfull, { StatType } from '../renderers/statsfull.js';
 import { AccountInfo } from '../types/accountInfo.js';
 
-export default {
+export const statsFullCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: addStatTypeSubCommandGroups(
@@ -35,7 +35,8 @@ export default {
     const player = await resolvePlayerFromCommand(interaction);
     const period = resolvePeriodFromCommand(interaction);
     const tankIdRaw = interaction.options.getString('tank')!;
-    const tankId = commandGroup === 'tank' ? resolveTankId(tankIdRaw) : null;
+    const tankId =
+      commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
     const start = interaction.options.getInteger('start');
     const end = interaction.options.getInteger('end');
     const path = interactionToURL(interaction, {
@@ -80,4 +81,4 @@ export default {
       parseInt(url.searchParams.get('tankId')!),
     );
   },
-} satisfies CommandRegistry;
+};

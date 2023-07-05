@@ -3,7 +3,7 @@ import normalizeRouteReturnable from './core/express/normalizeRouteReturnable.js
 import withAutoRefresh from './core/express/withAutoRefresh.js';
 import isDev from './core/node/isDev.js';
 import { Registry } from './events/interactionCreate/index.js';
-import stats from './routes/stats.js';
+import { statsRoute } from './routes/stats.js';
 
 export type RouteReturnable = JSX.Element | Promise<JSX.Element>;
 
@@ -20,7 +20,7 @@ export interface RouteRegistry<HandlesInteraction extends boolean = false>
 
 const app = express();
 
-([stats] as RouteRegistry[]).forEach((registry) => {
+([statsRoute] as RouteRegistry[]).forEach((registry) => {
   if (!(isDev() ? registry.inDevelopment : registry.inProduction)) return;
 
   app.get(registry.route, async (req, res) => {

@@ -18,6 +18,7 @@ import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
+import { PossiblyPromise } from '../types/possiblyPromise.js';
 
 export default async function today({ server, id }: ResolvedPlayer) {
   const tankStatsOverTime = await getTankStatsDiffed(
@@ -52,33 +53,31 @@ export default async function today({ server, id }: ResolvedPlayer) {
   }
 
   const tankStatsOverTimeEntries = Object.entries(tankStatsOverTime);
-  const todayWN8s = tankStatsOverTimeEntries.reduce<Record<number, number>>(
-    (accumulator, [tankIdString, tankStats]) => {
-      const tankId = Number(tankIdString);
+  const todayWN8s = await tankStatsOverTimeEntries.reduce<
+    PossiblyPromise<Record<number, number>>
+  >(async (accumulator, [tankIdString, tankStats]) => {
+    const tankId = Number(tankIdString);
 
-      return tankId === 0 || tankAverages[tankId] === undefined
-        ? accumulator
-        : {
-            ...accumulator,
-            [tankId]: calculateWN8(tankAverages[tankId].all, tankStats),
-          };
-    },
-    {},
-  );
-  const careerWN8s = careerTankStatsRaw.reduce<Record<number, number>>(
-    (accumulator, { tank_id }) => {
-      return tank_id === 0 || tankAverages[tank_id] === undefined
-        ? accumulator
-        : {
-            ...accumulator,
-            [tank_id]: calculateWN8(
-              tankAverages[tank_id].all,
-              careerStats[tank_id],
-            ),
-          };
-    },
-    {},
-  );
+    return tankId === 0 || (await tankAverages)[tankId] === undefined
+      ? accumulator
+      : {
+          ...accumulator,
+          [tankId]: calculateWN8((await tankAverages)[tankId].all, tankStats),
+        };
+  }, {});
+  const careerWN8s = await careerTankStatsRaw.reduce<
+    PossiblyPromise<Record<number, number>>
+  >(async (accumulator, { tank_id }) => {
+    return tank_id === 0 || (await tankAverages)[tank_id] === undefined
+      ? accumulator
+      : {
+          ...accumulator,
+          [tank_id]: calculateWN8(
+            (await tankAverages)[tank_id].all,
+            careerStats[tank_id],
+          ),
+        };
+  }, {});
   const todayWN8sEntries = Object.entries(todayWN8s);
   const careerWN8sEntries = Object.entries(careerWN8s);
 
@@ -109,32 +108,37 @@ export default async function today({ server, id }: ResolvedPlayer) {
       0,
     );
 
-  const rows = tankStatsOverTimeEntries.map(([tankIdString, tankStats]) => {
-    const tankId = Number(tankIdString);
-    const career = careerStats[tankId];
+  const rows = await Promise.all(
+    tankStatsOverTimeEntries.map(async ([tankIdString, tankStats]) => {
+      const tankId = Number(tankIdString);
+      const career = careerStats[tankId];
 
-    return (
-      <Breakdown.Row
-        key={tankId}
-        name={tankId === 0 ? 'Total' : resolveTankName(Number(tankIdString))}
-        winrate={tankStats.wins / tankStats.battles}
-        careerWinrate={career.wins / career.battles}
-        WN8={isNaN(todayWN8s[tankId]) ? undefined : todayWN8s[tankId]}
-        careerWN8={isNaN(careerWN8s[tankId]) ? undefined : careerWN8s[tankId]}
-        damage={tankStats.damage_dealt / tankStats.battles}
-        careerDamage={career.damage_dealt / career.battles}
-        survival={tankStats.survived_battles / tankStats.battles}
-        careerSurvival={career.survived_battles / career.battles}
-        battles={tankStats.battles}
-        careerBattles={career.battles}
-        icon={
-          tankId === 0
-            ? undefined
-            : tankopedia[tankIdString as unknown as number].images.normal
-        }
-      />
-    );
-  });
+      return (
+        <Breakdown.Row
+          key={tankId}
+          name={
+            tankId === 0 ? 'Total' : await resolveTankName(Number(tankIdString))
+          }
+          winrate={tankStats.wins / tankStats.battles}
+          careerWinrate={career.wins / career.battles}
+          WN8={isNaN(todayWN8s[tankId]) ? undefined : todayWN8s[tankId]}
+          careerWN8={isNaN(careerWN8s[tankId]) ? undefined : careerWN8s[tankId]}
+          damage={tankStats.damage_dealt / tankStats.battles}
+          careerDamage={career.damage_dealt / career.battles}
+          survival={tankStats.survived_battles / tankStats.battles}
+          careerSurvival={career.survived_battles / career.battles}
+          battles={tankStats.battles}
+          careerBattles={career.battles}
+          icon={
+            tankId === 0
+              ? undefined
+              : (await tankopedia)[tankIdString as unknown as number].images
+                  .normal
+          }
+        />
+      );
+    }),
+  );
 
   return (
     <Wrapper>

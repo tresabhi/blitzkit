@@ -16,9 +16,9 @@ import { ClanInfo } from '../types/clanInfo.js';
 
 const DEFAULT_THRESHOLD = 7;
 
-export default {
+export const inactiveCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -85,4 +85,4 @@ export default {
   },
 
   autocomplete: autocompleteClan,
-} satisfies CommandRegistry;
+};

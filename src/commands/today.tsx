@@ -12,9 +12,9 @@ import { CommandRegistry } from '../events/interactionCreate/index.js';
 import today from '../renderers/today.js';
 import { AccountInfo } from '../types/accountInfo.js';
 
-export default {
+export const todayCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -49,4 +49,4 @@ export default {
 
     return await today(player);
   },
-} satisfies CommandRegistry;
+};

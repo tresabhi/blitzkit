@@ -1,9 +1,9 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 
-export default {
+export const pingCommand: CommandRegistry<true> = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
   handlesInteraction: true,
 
@@ -30,4 +30,4 @@ export default {
     const executionTime = Date.now() - executionStart;
     interaction.editReply(`Pong 🏓 - ${executionTime}ms`);
   },
-} satisfies CommandRegistry<true>;
+};

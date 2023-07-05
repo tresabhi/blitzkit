@@ -18,7 +18,7 @@ import stats from '../renderers/stats.js';
 import { StatType } from '../renderers/statsfull.js';
 import { AccountInfo } from '../types/accountInfo.js';
 
-export default {
+export const statsCommand: CommandRegistry = {
   inProduction: true,
   inDevelopment: true,
   inPublic: true,
@@ -36,7 +36,8 @@ export default {
     const player = await resolvePlayerFromCommand(interaction);
     const period = resolvePeriodFromCommand(interaction);
     const tankIdRaw = interaction.options.getString('tank')!;
-    const tankId = commandGroup === 'tank' ? resolveTankId(tankIdRaw) : null;
+    const tankId =
+      commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
     const start = interaction.options.getInteger('start');
     const end = interaction.options.getInteger('end');
     const path = interactionToURL(interaction, {
@@ -81,4 +82,4 @@ export default {
       parseInt(url.searchParams.get('tankId')!),
     );
   },
-} satisfies CommandRegistry;
+};
