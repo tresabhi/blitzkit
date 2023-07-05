@@ -18,9 +18,9 @@ import evolution from '../renderers/evolution.js';
 import { StatType } from '../renderers/statsfull.js';
 import { AccountInfo } from '../types/accountInfo.js';
 
-export default {
+export const evolutionCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: addStatTypeSubCommandGroups(
@@ -83,4 +83,4 @@ export default {
       parseInt(url.searchParams.get('tankId')!),
     );
   },
-} satisfies CommandRegistry;
+};

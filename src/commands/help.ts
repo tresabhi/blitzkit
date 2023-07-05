@@ -8,7 +8,7 @@ import {
   publicCommands,
 } from '../events/interactionCreate/index.js';
 
-export default {
+export const helpCommand: CommandRegistry = {
   inProduction: true,
   inDevelopment: false,
   inPublic: true,
@@ -33,4 +33,4 @@ export default {
         )}\n\n*I am a new bot; I may make mistakes and go offline unexpectedly from time to time.*`,
     );
   },
-} satisfies CommandRegistry;
+};

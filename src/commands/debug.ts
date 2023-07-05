@@ -10,7 +10,7 @@ import { CommandRegistry } from '../events/interactionCreate/index.js';
 
 const executionStart = new Date().getTime();
 
-export default {
+export const debugCommand: CommandRegistry = {
   inProduction: true,
   inDevelopment: false,
   inPublic: true,
@@ -42,4 +42,4 @@ export default {
       ]),
     );
   },
-} satisfies CommandRegistry;
+};

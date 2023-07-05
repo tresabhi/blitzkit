@@ -17,7 +17,7 @@ import { CommandRegistry } from '../events/interactionCreate/index.js';
 import statsfull, { StatType } from '../renderers/statsfull.js';
 import { AccountInfo } from '../types/accountInfo.js';
 
-export default {
+export const statsFullCommand: CommandRegistry = {
   inProduction: true,
   inDevelopment: false,
   inPublic: true,
@@ -80,4 +80,4 @@ export default {
       parseInt(url.searchParams.get('tankId')!),
     );
   },
-} satisfies CommandRegistry;
+};

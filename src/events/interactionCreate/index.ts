@@ -13,22 +13,22 @@ import {
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
 import discord from '../../../discord.json' assert { type: 'json' };
-import debug from '../../commands/debug.js';
-import eligible from '../../commands/eligible.js';
-import evolution from '../../commands/evolution.js';
-import help from '../../commands/help.js';
-import inactive from '../../commands/inactive.js';
-import ownedtanks from '../../commands/ownedtanks.js';
-import ping from '../../commands/ping.js';
-import playerachievements from '../../commands/playerachievements.js';
-import playerinfo from '../../commands/playerinfo.js';
-import searchclans from '../../commands/searchclans.js';
-import searchplayers from '../../commands/searchplayers.js';
-import searchtanks from '../../commands/searchtanks.js';
-import stats from '../../commands/stats.js';
-import statsfull from '../../commands/statsfull.js';
-import today from '../../commands/today.js';
-import verify from '../../commands/verify.js';
+import { debugCommand } from '../../commands/debug.js';
+import { eligibleCommand } from '../../commands/eligible.js';
+import { evolutionCommand } from '../../commands/evolution.js';
+import { helpCommand } from '../../commands/help.js';
+import { inactiveCommand } from '../../commands/inactive.js';
+import { ownedTanksCommand } from '../../commands/ownedTanks.js';
+import { pingCommand } from '../../commands/ping.js';
+import { playerAchievementsCommand } from '../../commands/playerAchievements.js';
+import { playerInfoCommand } from '../../commands/playerInfo.js';
+import { searchClansCommand } from '../../commands/searchClans.js';
+import { searchPlayersCommand } from '../../commands/searchPlayers.js';
+import { searchTanksCommand } from '../../commands/searchTanks.js';
+import { statsCommand } from '../../commands/stats.js';
+import { statsFullCommand } from '../../commands/statsFull.js';
+import { todayCommand } from '../../commands/today.js';
+import { verifyCommand } from '../../commands/verify.js';
 import { DISCORD_TOKEN } from '../../core/node/arguments.js';
 import getClientId from '../../core/node/getClientId.js';
 import isDev from '../../core/node/isDev.js';
@@ -72,26 +72,25 @@ const rest = new REST().setToken(DISCORD_TOKEN);
 
 export const commands: Record<string, CommandRegistry> = (
   [
-    debug,
-    eligible,
-    help,
-    inactive,
-    ownedtanks,
-    playerachievements,
-    playerinfo,
-    searchclans,
-    searchplayers,
-    searchtanks,
-    statsfull,
-    today,
-    verify,
-    ping,
-    evolution,
-    stats,
+    debugCommand,
+    eligibleCommand,
+    helpCommand,
+    inactiveCommand,
+    ownedTanksCommand,
+    playerAchievementsCommand,
+    playerInfoCommand,
+    searchClansCommand,
+    searchPlayersCommand,
+    searchTanksCommand,
+    statsFullCommand,
+    todayCommand,
+    verifyCommand,
+    pingCommand,
+    evolutionCommand,
+    statsCommand,
   ] as CommandRegistry[]
 ).reduce((accumulator, registry) => {
   if (isDev()) registry.command.setDefaultMemberPermissions(0);
-
   return { ...accumulator, [registry.command.name]: registry };
 }, {});
 

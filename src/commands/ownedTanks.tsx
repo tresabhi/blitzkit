@@ -41,7 +41,7 @@ const COMP_TANKS = [
   6753, // type 71
 ];
 
-export default {
+export const ownedTanksCommand: CommandRegistry = {
   inProduction: true,
   inDevelopment: false,
   inPublic: true,
@@ -121,4 +121,4 @@ export default {
   },
 
   autocomplete: autocompleteUsername,
-} satisfies CommandRegistry;
+};

@@ -9,7 +9,7 @@ import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { ClanList } from '../types/clanList.js';
 
-export default {
+export const searchClansCommand: CommandRegistry = {
   inProduction: true,
   inDevelopment: false,
   inPublic: true,
@@ -44,4 +44,4 @@ export default {
             .join('\n')}\n\`\`\``,
     );
   },
-} satisfies CommandRegistry;
+};

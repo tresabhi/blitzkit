@@ -10,7 +10,7 @@ import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
 import { AccountInfo } from '../types/accountInfo.js';
 
-export default {
+export const playerInfoCommand: CommandRegistry = {
   inProduction: true,
   inDevelopment: false,
   inPublic: true,
@@ -57,4 +57,4 @@ export default {
   },
 
   autocomplete: autocompleteUsername,
-} satisfies CommandRegistry;
+};

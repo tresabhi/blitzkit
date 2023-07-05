@@ -23,7 +23,7 @@ export const SKILLED_CLANS: Record<SkilledClan, string> = {
   SMRI: 'Samurai',
 };
 
-export default {
+export const eligibleCommand: CommandRegistry = {
   inProduction: true,
   inDevelopment: false,
   inPublic: false,
@@ -169,4 +169,4 @@ export default {
 
     return (isEligible ? embedPositive : embedNegative)(title, body);
   },
-} satisfies CommandRegistry;
+};
