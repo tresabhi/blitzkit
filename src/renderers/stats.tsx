@@ -52,7 +52,7 @@ export default async function stats<Type extends StatType>(
   }
 
   const tankStats = await getTankStatsDiffed(server, id, start, end);
-  let stats: AllStats;
+  let stats: AllStats | undefined;
   let supplementaryStats: SupplementaryStats;
   let tierWeights: TierWeightsRecord;
 
@@ -117,7 +117,9 @@ export default async function stats<Type extends StatType>(
     stats = tankStats[tankId!];
 
     supplementaryStats = {
-      WN8: calculateWN8(tankAverages[tankId!].all, tankStats[tankId!]),
+      WN8: stats
+        ? calculateWN8(tankAverages[tankId!].all, tankStats[tankId!])
+        : undefined,
       tier: tankopedia[tankId!].tier,
     };
   }
@@ -154,8 +156,8 @@ export default async function stats<Type extends StatType>(
         }`}
       />
 
-      {stats.battles === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
-      {stats.battles > 0 && overview}
+      {!stats?.battles && <NoData type={NoDataType.BattlesInPeriod} />}
+      {stats?.battles > 0 && overview}
 
       <PoweredBy type={PoweredByType.BlitzStars} footer={footer} />
     </Wrapper>
