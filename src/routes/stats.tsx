@@ -3,7 +3,7 @@ import resolvePlayerFromRequest from '../core/express/resolvePlayerFromRequest.j
 import stats, { StatType } from '../renderers/stats.js';
 import { RouteRegistry } from '../server.js';
 
-export default {
+export const statsRoute: RouteRegistry = {
   route: '/stats/:type/:period',
   inProduction: true,
   inDevelopment: false,
@@ -21,4 +21,4 @@ export default {
       true,
     );
   },
-} satisfies RouteRegistry;
+};
