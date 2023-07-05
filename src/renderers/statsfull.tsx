@@ -107,6 +107,10 @@ export default async function statsfull<Type extends StatType>(
     tierWeights = await entries.reduce<PossiblyPromise<TierWeightsRecord>>(
       async (accumulator, [tankIdString, stats]) => {
         const tankId = parseInt(tankIdString);
+        const tankopediaEntry = (await tankopedia)[tankId];
+
+        if (!tankopediaEntry) return accumulator;
+
         const tier = (await tankopedia)[tankId].tier as Tier;
 
         if ((await accumulator)[tier]) {
