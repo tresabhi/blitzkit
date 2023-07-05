@@ -23,10 +23,15 @@ export const tankopedia = fetch('https://www.blitzstars.com/bs-tankopedia.json')
     console.log('Tankopedia cached');
     return (wrapperTankopedia as { data: Tankopedia }).data;
   });
-const entries = Object.entries(tankopedia);
-export const TANK_IDS = entries.map(([, { tank_id }]) => tank_id as number);
-export const TANKS = entries.map(([, entry]) => entry as TankopediaEntry);
-export const TANK_NAMES = entries.map(([, { name }]) => name);
+const entries = new Promise<TankopediaEntry[]>(async (resolve) => {
+  resolve(Object.entries(await tankopedia).map(([, entry]) => entry));
+});
+export const TANKS = new Promise<TankopediaEntry[]>(async (resolve) => {
+  resolve((await entries).map((entry) => entry));
+});
+export const TANK_NAMES = new Promise<string[]>(async (resolve) => {
+  resolve((await entries).map(({ name }) => name));
+});
 
 export const TANK_ICONS: Record<TankType, string> = {
   'AT-SPG': 'https://i.imgur.com/BIHSEH0.png',

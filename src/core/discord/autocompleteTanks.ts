@@ -16,7 +16,7 @@ export default async function autocompleteTanks(
   await interaction.respond(
     focusedOption.value
       ? await Promise.all(
-          go(focusedOption.value, TANKS, { keys: ['name'], limit: 10 }).map(
+          go(focusedOption.value, await TANKS, { keys: ['name'], limit: 10 }).map(
             async (item) =>
               ({
                 name: item.obj.name

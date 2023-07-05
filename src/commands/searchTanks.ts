@@ -26,7 +26,7 @@ export const searchTanksCommand: CommandRegistry = {
   async handler(interaction) {
     const tank = interaction.options.getString('tank')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
-    const results = go(tank, TANK_NAMES, { limit }).map(
+    const results = go(tank, await TANK_NAMES, { limit }).map(
       (result) => result.target,
     );
 

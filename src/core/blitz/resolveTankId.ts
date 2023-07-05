@@ -6,7 +6,7 @@ export default async function resolveTankId(tank: string) {
   const number = parseInt(tank);
 
   if (Number.isNaN(number)) {
-    const searchResult = go(tank, TANKS, { keys: ['name'], limit: 1 });
+    const searchResult = go(tank, await TANKS, { keys: ['name'], limit: 1 });
 
     if (searchResult.length === 0) {
       throw throwError(
