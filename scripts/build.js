@@ -1,5 +1,5 @@
 import { build } from 'esbuild';
-import { copyFile, mkdir, rm, writeFile } from 'fs/promises';
+import { copyFile, mkdir, rm } from 'fs/promises';
 import { argv } from 'process';
 
 const isProd = !argv.includes('--dev');
@@ -16,29 +16,6 @@ if (isProd) {
   console.log('🟡 Creating dist...');
   await mkdir('dist');
   console.log('✅ Dist created');
-
-  console.log('🟡 Caching tankopedia...');
-  fetch('https://www.blitzstars.com/bs-tankopedia.json')
-    .then((response) => response.text())
-    .then((tankopedia) => writeFile('./dist/tankopedia.json', tankopedia))
-    .then(() => console.log('✅ Tankopedia cached'));
-
-  console.log('🟡 Caching tank averages...');
-  fetch('https://www.blitzstars.com/api/tankaverages.json')
-    .then((response) => response.json())
-    .then((individualTankAverages) => {
-      const tankAverages = {};
-
-      individualTankAverages.forEach((individualTankAverage) => {
-        tankAverages[individualTankAverage.tank_id] = individualTankAverage;
-      });
-
-      return writeFile(
-        './dist/tankaverages.json',
-        JSON.stringify(tankAverages),
-      );
-    })
-    .then(() => console.log('✅ Tank averages cached'));
 
   console.log('🟡 Copying package.json...');
   copyFile('package.dist.json', 'dist/package.json').then(() =>

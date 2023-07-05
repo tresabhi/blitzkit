@@ -43,7 +43,7 @@ const COMP_TANKS = [
 
 export const ownedTanksCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -77,9 +77,11 @@ export const ownedTanksCommand: CommandRegistry = {
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
     const tankStats = await getTankStats(server, id);
-    const tanks = tankStats
-      .map((tankData) => tankopedia[tankData.tank_id])
-      .filter((tank) => tank?.tier === tier);
+    const tanks = (
+      await Promise.all(
+        tankStats.map(async (tankData) => (await tankopedia)[tankData.tank_id]),
+      )
+    ).filter((tank) => tank?.tier === tier);
     const clanData = await getWargamingResponse<PlayerClanData>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
     );

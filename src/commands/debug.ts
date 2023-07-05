@@ -12,14 +12,14 @@ const executionStart = new Date().getTime();
 
 export const debugCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
     .setName('debug')
     .setDescription('Debug information about the bot'),
 
-  handler(interaction) {
+  async handler(interaction) {
     const currentTime = new Date().getTime();
     const uptime = currentTime - executionStart;
 
@@ -37,8 +37,8 @@ export const debugCommand: CommandRegistry = {
             (uptime / 1000) % 60,
           )}s ${Math.floor(uptime % 1000)}ms`,
         ],
-        ['Tankopedia cached', `${tankopedia !== undefined}`],
-        ['Tank averages cached', `${tankAverages !== undefined}`],
+        ['Tankopedia cached', `${(await tankopedia) !== undefined}`],
+        ['Tank averages cached', `${(await tankAverages) !== undefined}`],
       ]),
     );
   },

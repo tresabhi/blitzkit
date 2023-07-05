@@ -3,7 +3,7 @@ import { emptyAllStats } from './getTankStatsDiffed.js';
 import { tankAverages } from './tankAverages.js';
 
 console.log('Calculating player average...');
-export const playerAverage = Object.entries(tankAverages).reduce(
+export const playerAverage = Object.entries(await tankAverages).reduce(
   (accumulator, [, tankAverage]) => {
     return sumStats([accumulator, tankAverage.all]);
   },

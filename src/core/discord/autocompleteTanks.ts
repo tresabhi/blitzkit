@@ -15,14 +15,16 @@ export default async function autocompleteTanks(
 
   await interaction.respond(
     focusedOption.value
-      ? go(focusedOption.value, TANKS, { keys: ['name'], limit: 10 }).map(
-          (item) =>
-            ({
-              name: item.obj.name
-                ? item.obj.name
-                : resolveTankName(item.obj.tank_id),
-              value: `${item.obj.tank_id}`,
-            } satisfies ApplicationCommandOptionChoiceData<string>),
+      ? await Promise.all(
+          go(focusedOption.value, TANKS, { keys: ['name'], limit: 10 }).map(
+            async (item) =>
+              ({
+                name: item.obj.name
+                  ? item.obj.name
+                  : await resolveTankName(item.obj.tank_id),
+                value: `${item.obj.tank_id}`,
+              } satisfies ApplicationCommandOptionChoiceData<string>),
+          ),
         )
       : [],
   );

@@ -38,8 +38,8 @@ export default async function evolution<Type extends StatType>(
       ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clan.emblem_set_id}.png`
       : undefined;
   } else {
-    nameDiscriminator = `(${resolveTankName(tankId!)})`;
-    image = tankopedia[tankId!].images.normal;
+    nameDiscriminator = `(${await resolveTankName(tankId!)})`;
+    image = (await tankopedia)[tankId!].images.normal;
   }
 
   let histories: Histories;

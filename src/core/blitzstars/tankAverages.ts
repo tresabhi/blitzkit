@@ -1,5 +1,3 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { AllStats } from '../../types/accountInfo.js';
 
 export interface SpecialStats {
@@ -82,6 +80,22 @@ export interface IndividualTankAverage {
 
 export type TankAverages = Record<number, IndividualTankAverage>;
 
-export const tankAverages = JSON.parse(
-  readFileSync(join(__dirname, 'tankaverages.json')) as unknown as string,
-) as TankAverages;
+console.log('Caching tank averages...');
+export const tankAverages = fetch(
+  'https://www.blitzstars.com/api/tankaverages.json',
+)
+  .then((response) => response.json())
+  .then((individualTankAverages) => {
+    const partialTankAverages: TankAverages = {};
+
+    (individualTankAverages as IndividualTankAverage[]).forEach(
+      (individualTankAverage) => {
+        partialTankAverages[individualTankAverage.tank_id] =
+          individualTankAverage;
+      },
+    );
+
+    console.log('Tank averages cached');
+
+    return partialTankAverages;
+  });

@@ -1,6 +1,3 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
-
 export type TankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
 
 export interface TankopediaEntry {
@@ -19,11 +16,13 @@ export interface Tankopedia {
   [id: number]: TankopediaEntry;
 }
 
-export const tankopedia = (
-  JSON.parse(
-    readFileSync(join(__dirname, 'tankopedia.json')) as unknown as string,
-  ) as { data: Tankopedia }
-).data;
+console.log('Caching tankopedia...');
+export const tankopedia = fetch('https://www.blitzstars.com/bs-tankopedia.json')
+  .then((response) => response.json())
+  .then((wrapperTankopedia) => {
+    console.log('Tankopedia cached');
+    return (wrapperTankopedia as { data: Tankopedia }).data;
+  });
 const entries = Object.entries(tankopedia);
 export const TANK_IDS = entries.map(([, { tank_id }]) => tank_id as number);
 export const TANKS = entries.map(([, entry]) => entry as TankopediaEntry);
