@@ -7,6 +7,7 @@ import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
 import getTankStats from '../core/blitz/getTankStats.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
+import resolveTankName from '../core/blitz/resolveTankName.js';
 import {
   TIER_ROMAN_NUMERALS,
   Tier,
@@ -79,7 +80,10 @@ export const ownedTanksCommand: CommandRegistry = {
     const tankStats = await getTankStats(server, id);
     const tanks = (
       await Promise.all(
-        tankStats.map(async (tankData) => (await tankopedia)[tankData.tank_id]),
+        tankStats.map(async (tankData) => ({
+          ...(await tankopedia)[tankData.tank_id],
+          tank_id: tankData.tank_id,
+        })),
       )
     ).filter((tank) => tank?.tier === tier);
     const clanData = await getWargamingResponse<PlayerClanData>(
@@ -106,14 +110,16 @@ export const ownedTanksCommand: CommandRegistry = {
 
         {tanks.length > 0 && (
           <Tanks.Root>
-            {tanks.map((tank) => (
-              <Tanks.Item
-                key={tank.tank_id}
-                name={tank.name}
-                type={tank.type}
-                icon={tank.images.normal}
-              />
-            ))}
+            {await Promise.all(
+              tanks.map(async (tank) => (
+                <Tanks.Item
+                  key={tank.tank_id}
+                  name={await resolveTankName(tank.tank_id)}
+                  type={tank.type}
+                  icon={tank.images?.normal}
+                />
+              )),
+            )}
           </Tanks.Root>
         )}
 

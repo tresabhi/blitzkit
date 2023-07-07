@@ -40,7 +40,10 @@ export default function GenericAllStats({
         ['Wins', stats.wins],
         ['Losses', stats.losses],
         ['Average damage', (stats.damage_dealt / stats.battles).toFixed(0)],
-        ['Average tier', supplementaryStats?.tier.toFixed(2)],
+        [
+          'Average tier',
+          supplementaryStats?.tier ? supplementaryStats?.tier.toFixed(2) : '--',
+        ],
         ['Average XP', (stats.xp / stats.battles).toFixed(0)],
         ['Average shots', (stats.shots / stats.battles).toFixed(2)],
         ['Average hits', (stats.hits / stats.battles).toFixed(2)],

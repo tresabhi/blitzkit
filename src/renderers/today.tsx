@@ -132,7 +132,7 @@ export default async function today({ server, id }: ResolvedPlayer) {
           icon={
             tankId === 0
               ? undefined
-              : (await tankopedia)[tankIdString as unknown as number].images
+              : (await tankopedia)[tankIdString as unknown as number]?.images
                   .normal
           }
         />

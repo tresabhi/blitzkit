@@ -13,7 +13,7 @@ export interface TankopediaEntry {
 }
 
 export interface Tankopedia {
-  [id: number]: TankopediaEntry;
+  [id: number]: TankopediaEntry | undefined;
 }
 
 console.log('Caching tankopedia...');

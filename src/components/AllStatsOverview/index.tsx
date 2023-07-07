@@ -69,7 +69,9 @@ export default function AllStatsOverview({
       >
         <WN8SurroundingStat
           label="Tier"
-          value={supplementaryStats.tier.toFixed(2)}
+          value={
+            supplementaryStats.tier ? supplementaryStats.tier.toFixed(2) : '--'
+          }
         />
         <WN8SurroundingStat
           label="Survival"
