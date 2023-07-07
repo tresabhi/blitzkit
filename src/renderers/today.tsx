@@ -56,22 +56,23 @@ export default async function today({ server, id }: ResolvedPlayer) {
   const todayWN8s = await tankStatsOverTimeEntries.reduce<
     PossiblyPromise<Record<number, number>>
   >(async (accumulator, [tankIdString, tankStats]) => {
-    const tankId = Number(tankIdString);
+    const tankId = parseInt(tankIdString);
 
-    return tankId === 0 || (await tankAverages)[tankId] === undefined
+    return tankId === 0 || !(await tankAverages)[tankId]
       ? accumulator
       : {
-          ...accumulator,
+          ...(await accumulator),
           [tankId]: calculateWN8((await tankAverages)[tankId].all, tankStats),
         };
   }, {});
+
   const careerWN8s = await careerTankStatsRaw.reduce<
     PossiblyPromise<Record<number, number>>
   >(async (accumulator, { tank_id }) => {
     return tank_id === 0 || (await tankAverages)[tank_id] === undefined
       ? accumulator
       : {
-          ...accumulator,
+          ...(await accumulator),
           [tank_id]: calculateWN8(
             (await tankAverages)[tank_id].all,
             careerStats[tank_id],
