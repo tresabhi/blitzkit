@@ -71,12 +71,27 @@ export const eligibleCommand: CommandRegistry = {
         (await entries.reduce<PossiblyPromise<number>>(
           async (accumulator, [tankIdString, stats]) => {
             const tankId = parseInt(tankIdString);
-            const tankTier = (await tankopedia)[tankId].tier;
+            const tankopediaEntry = (await tankopedia)[tankId];
+
+            if (!tankopediaEntry) return accumulator;
+
+            const tankTier = tankopediaEntry.tier;
 
             return (await accumulator) + tankTier * stats.battles;
           },
           0,
-        )) / stats.battles;
+        )) /
+        (await entries.reduce<PossiblyPromise<number>>(
+          async (accumulator, [tankIdString, stats]) => {
+            const tankId = parseInt(tankIdString);
+            const tankopediaEntry = (await tankopedia)[tankId];
+
+            if (!tankopediaEntry) return accumulator;
+
+            return stats.battles;
+          },
+          0,
+        ));
       const WN8 =
         (await entries.reduce<PossiblyPromise<number>>(
           async (accumulator, [tankIdString, stats]) => {

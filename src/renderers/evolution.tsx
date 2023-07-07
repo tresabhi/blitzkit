@@ -39,7 +39,7 @@ export default async function evolution<Type extends StatType>(
       : undefined;
   } else {
     nameDiscriminator = `(${await resolveTankName(tankId!)})`;
-    image = (await tankopedia)[tankId!].images.normal;
+    image = (await tankopedia)[tankId!]?.images.normal;
   }
 
   let histories: Histories;

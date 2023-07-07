@@ -47,7 +47,7 @@ export default async function statsfull<Type extends StatType>(
       : undefined;
   } else if (type === 'tank') {
     nameDiscriminator = `(${await resolveTankName(tankId!)})`;
-    image = (await tankopedia)[tankId!].images.normal;
+    image = (await tankopedia)[tankId!]?.images.normal;
   }
 
   const tankStats = await getTankStatsDiffed(server, id, start, end);
@@ -111,7 +111,7 @@ export default async function statsfull<Type extends StatType>(
 
         if (!tankopediaEntry) return accumulator;
 
-        const tier = (await tankopedia)[tankId].tier as Tier;
+        const tier = tankopediaEntry.tier as Tier;
 
         if ((await accumulator)[tier]) {
           (await accumulator)[tier]! += stats.battles;
@@ -128,7 +128,7 @@ export default async function statsfull<Type extends StatType>(
 
     supplementaryStats = {
       WN8: calculateWN8((await tankAverages)[tankId!].all, tankStats[tankId!]),
-      tier: (await tankopedia)[tankId!].tier,
+      tier: (await tankopedia)[tankId!]?.tier,
     };
   }
 
