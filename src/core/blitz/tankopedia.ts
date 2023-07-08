@@ -1,15 +1,13 @@
-export type TankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
+import { WARGAMING_APPLICATION_ID } from '../node/arguments.js';
+import getWargamingResponse from './getWargamingResponse.js';
 
 export interface TankopediaEntry {
-  name: string;
-  nation: string;
-  is_premium: boolean;
-  tier: number;
-  cost: { price_credit: number; price_gold: number };
-  images: { preview: string; normal: string };
   tank_id: number;
-  type: TankType;
-  description: string;
+  name: string;
+  tier: number;
+  type: string;
+  is_premium: boolean;
+  images: { preview: string; normal: string };
 }
 
 export interface Tankopedia {
@@ -17,12 +15,9 @@ export interface Tankopedia {
 }
 
 console.log('Caching tankopedia...');
-export const tankopedia = fetch('https://www.blitzstars.com/bs-tankopedia.json')
-  .then((response) => response.json())
-  .then((wrapperTankopedia) => {
-    console.log('Tankopedia cached');
-    return (wrapperTankopedia as { data: Tankopedia }).data;
-  });
+export const tankopedia = getWargamingResponse<Tankopedia>(
+  `https://api.wotblitz.com/wotb/encyclopedia/vehicles/?application_id=${WARGAMING_APPLICATION_ID}&fields=name,tier,images,tank_id,type,is_premium`,
+);
 const entries = new Promise<TankopediaEntry[]>(async (resolve) => {
   resolve(Object.entries(await tankopedia).map(([, entry]) => entry));
 });
@@ -33,7 +28,7 @@ export const TANK_NAMES = new Promise<string[]>(async (resolve) => {
   resolve((await entries).map(({ name }) => name));
 });
 
-export const TANK_ICONS: Record<TankType, string> = {
+export const TANK_ICONS: Record<string, string> = {
   'AT-SPG': 'https://i.imgur.com/BIHSEH0.png',
   lightTank: 'https://i.imgur.com/CSNha5V.png',
   mediumTank: 'https://i.imgur.com/wvf3ltm.png',

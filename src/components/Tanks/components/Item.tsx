@@ -1,8 +1,8 @@
-import { TANK_ICONS, TankType } from '../../../core/blitz/tankopedia.js';
+import { TANK_ICONS } from '../../../core/blitz/tankopedia.js';
 
 export interface ItemProps {
   icon?: string;
-  type?: TankType;
+  type?: string;
   name: string;
 }
 
