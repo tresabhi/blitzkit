@@ -11,3 +11,4 @@ commands.txt
 /test.*
 /docs/.vitepress/dist
 /docs/.vitepress/cache
+servers.csv

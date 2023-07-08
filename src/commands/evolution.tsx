@@ -20,7 +20,7 @@ import { AccountInfo } from '../types/accountInfo.js';
 
 export const evolutionCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: addStatTypeSubCommandGroups(
@@ -36,7 +36,8 @@ export const evolutionCommand: CommandRegistry = {
     const player = await resolvePlayerFromCommand(interaction);
     const period = resolvePeriodFromCommand(interaction);
     const tankIdRaw = interaction.options.getString('tank')!;
-    const tankId = commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
+    const tankId =
+      commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
     const start = interaction.options.getInteger('start');
     const end = interaction.options.getInteger('end');
     const { nickname } = (

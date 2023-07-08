@@ -1,6 +1,6 @@
 {
   "name": "blitzkrieg",
-  "version": "1.9.4",
+  "version": "1.10.0",
   "description": "",
   "main": "src/server.ts",
   "type": "module",

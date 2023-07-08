@@ -89,6 +89,10 @@ export const ownedTanksCommand: CommandRegistry = {
     const clanData = await getWargamingResponse<PlayerClanData>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
     );
+    const leftColumnSize = Math.ceil(tanks.length / 2);
+    const rightColumnSize = tanks.length - leftColumnSize;
+    const leftColumn = tanks.slice(0, leftColumnSize);
+    const rightColumn = tanks.slice(leftColumnSize);
 
     return (
       <Wrapper>

@@ -18,7 +18,7 @@ const DEFAULT_THRESHOLD = 7;
 
 export const inactiveCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()

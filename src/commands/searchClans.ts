@@ -11,7 +11,7 @@ import { ClanList } from '../types/clanList.js';
 
 export const searchClansCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
