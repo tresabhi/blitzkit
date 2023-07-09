@@ -90,7 +90,6 @@ export const ownedTanksCommand: CommandRegistry = {
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
     );
     const leftColumnSize = Math.ceil(tanks.length / 2);
-    const rightColumnSize = tanks.length - leftColumnSize;
     const leftColumn = tanks.slice(0, leftColumnSize);
     const rightColumn = tanks.slice(leftColumnSize);
 
@@ -114,16 +113,32 @@ export const ownedTanksCommand: CommandRegistry = {
 
         {tanks.length > 0 && (
           <Tanks.Root>
-            {await Promise.all(
-              tanks.map(async (tank) => (
-                <Tanks.Item
-                  key={tank.tank_id}
-                  name={await resolveTankName(tank.tank_id)}
-                  type={tank.type}
-                  icon={tank.images?.normal}
-                />
-              )),
-            )}
+            <Tanks.Column>
+              {await Promise.all(
+                leftColumn.map(async (tank) => (
+                  <Tanks.Item
+                    key={tank.tank_id}
+                    name={await resolveTankName(tank.tank_id)}
+                    type={tank.type}
+                    image={tank.images?.preview}
+                    isPremium={tank.is_premium}
+                  />
+                )),
+              )}
+            </Tanks.Column>
+            <Tanks.Column>
+              {await Promise.all(
+                rightColumn.map(async (tank) => (
+                  <Tanks.Item
+                    key={tank.tank_id}
+                    name={await resolveTankName(tank.tank_id)}
+                    type={tank.type}
+                    image={tank.images?.preview}
+                    isPremium={tank.is_premium}
+                  />
+                )),
+              )}
+            </Tanks.Column>
           </Tanks.Root>
         )}
 

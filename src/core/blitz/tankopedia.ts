@@ -35,6 +35,13 @@ export const TANK_ICONS: Record<string, string> = {
   heavyTank: 'https://i.imgur.com/ECeqlZa.png',
 };
 
+export const TANK_ICONS_PREMIUM: Record<string, string> = {
+  'AT-SPG': 'https://i.imgur.com/TCu3EdR.png',
+  lightTank: 'https://i.imgur.com/zdkpTRb.png',
+  mediumTank: 'https://i.imgur.com/3z7eHX6.png',
+  heavyTank: 'https://i.imgur.com/P3vbmyA.png',
+};
+
 export type Tier = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
 export const TIER_ROMAN_NUMERALS: Record<Tier, string> = {
