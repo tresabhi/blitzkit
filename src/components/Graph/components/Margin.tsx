@@ -37,7 +37,7 @@ export function Margin({
           key={index}
           style={{
             fontSize: 16,
-            color: theme.colors.textLowContrast,
+            color: theme.colors.textHighContrast,
           }}
         >
           {`${(
