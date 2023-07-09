@@ -26,7 +26,7 @@ import { searchClansCommand } from '../../commands/searchClans.js';
 import { searchPlayersCommand } from '../../commands/searchPlayers.js';
 import { searchTanksCommand } from '../../commands/searchTanks.js';
 import { statsCommand } from '../../commands/stats.js';
-import { statsFullCommand } from '../../commands/statsFull.js';
+import { fullStatsCommand } from '../../commands/fullStats.js';
 import { todayCommand } from '../../commands/today.js';
 import { verifyCommand } from '../../commands/verify.js';
 import { DISCORD_TOKEN } from '../../core/node/arguments.js';
@@ -82,7 +82,7 @@ export const commands: Record<string, CommandRegistry> = (
     searchClansCommand,
     searchPlayersCommand,
     searchTanksCommand,
-    statsFullCommand,
+    fullStatsCommand,
     todayCommand,
     verifyCommand,
     pingCommand,

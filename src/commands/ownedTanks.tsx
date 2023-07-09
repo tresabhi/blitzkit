@@ -44,7 +44,7 @@ const COMP_TANKS = [
 
 export const ownedTanksCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()

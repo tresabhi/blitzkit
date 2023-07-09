@@ -25,7 +25,7 @@ import { PossiblyPromise } from '../types/possiblyPromise.js';
 
 export type StatType = 'player' | 'tank';
 
-export default async function statsfull<Type extends StatType>(
+export default async function fullStats<Type extends StatType>(
   type: Type,
   { start, end, statsName }: ResolvedPeriod,
   { server, id }: ResolvedPlayer,

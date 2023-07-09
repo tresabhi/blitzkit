@@ -14,17 +14,17 @@ import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton.js'
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
-import statsfull, { StatType } from '../renderers/statsfull.js';
+import fullStats, { StatType } from '../renderers/fullStats.js';
 import { AccountInfo } from '../types/accountInfo.js';
 
-export const statsFullCommand: CommandRegistry = {
+export const fullStatsCommand: CommandRegistry = {
   inProduction: true,
   inDevelopment: false,
   inPublic: true,
 
   command: addStatTypeSubCommandGroups(
     new SlashCommandBuilder()
-      .setName('statsfull')
+      .setName('fullstats')
       .setDescription('Full in-game statistics'),
   ),
 
@@ -52,7 +52,7 @@ export const statsFullCommand: CommandRegistry = {
     )[player.id];
 
     return [
-      await statsfull(commandGroup, period, player, tankId),
+      await fullStats(commandGroup, period, player, tankId),
       primaryButton(path, 'Refresh'),
       // linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
       linkButton(
@@ -74,7 +74,7 @@ export const statsFullCommand: CommandRegistry = {
     const period = resolvePeriodFromButton(interaction);
     const player = await resolvePlayerFromButton(interaction);
 
-    return await statsfull(
+    return await fullStats(
       commandGroup,
       period,
       player,

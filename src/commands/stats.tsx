@@ -14,8 +14,8 @@ import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton.js'
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
 import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
 import { CommandRegistry } from '../events/interactionCreate/index.js';
+import { StatType } from '../renderers/fullStats.js';
 import stats from '../renderers/stats.js';
-import { StatType } from '../renderers/statsfull.js';
 import { AccountInfo } from '../types/accountInfo.js';
 
 export const statsCommand: CommandRegistry = {
