@@ -1,13 +1,13 @@
-import { WARGAMING_APPLICATION_ID } from '../node/arguments.js';
-import getWargamingResponse from './getWargamingResponse.js';
-
 export interface TankopediaEntry {
-  tank_id: number;
   name: string;
-  tier: number;
-  type: string;
+  nation: string;
   is_premium: boolean;
+  tier: number;
+  cost: { price_credit: number; price_gold: number };
   images: { preview: string; normal: string };
+  tank_id: number;
+  type: string;
+  description: string;
 }
 
 export interface Tankopedia {
@@ -15,9 +15,12 @@ export interface Tankopedia {
 }
 
 console.log('Caching tankopedia...');
-export const tankopedia = getWargamingResponse<Tankopedia>(
-  `https://api.wotblitz.com/wotb/encyclopedia/vehicles/?application_id=${WARGAMING_APPLICATION_ID}&fields=name,tier,images,tank_id,type,is_premium`,
-);
+export const tankopedia = fetch('https://www.blitzstars.com/bs-tankopedia.json')
+  .then((response) => response.json())
+  .then((wrapperTankopedia) => {
+    console.log('Tankopedia cached');
+    return (wrapperTankopedia as { data: Tankopedia }).data;
+  });
 const entries = new Promise<TankopediaEntry[]>(async (resolve) => {
   resolve(Object.entries(await tankopedia).map(([, entry]) => entry));
 });
