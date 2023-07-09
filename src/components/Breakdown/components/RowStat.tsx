@@ -4,18 +4,18 @@ import PercentileIndicator from '../../PercentileIndicator.js';
 
 export interface RowStatProps {
   name: string;
-  value: string;
-  career: string;
+  value: string | number;
   delta?: number;
   percentile?: Percentile;
+  minimized?: boolean;
 }
 
 export function RowStat({
   name,
   value,
-  career,
   delta,
   percentile,
+  minimized,
 }: RowStatProps) {
   return (
     <div
@@ -28,10 +28,6 @@ export function RowStat({
         flex: 1,
       }}
     >
-      <span style={{ color: theme.colors.textLowContrast, fontSize: 12 }}>
-        {career}
-      </span>
-
       <div
         style={{
           display: 'flex',
@@ -58,16 +54,17 @@ export function RowStat({
           style={{
             color: theme.colors.textHighContrast,
             fontSize: 16,
-            fontWeight: 'bold',
           }}
         >
           {value}
         </span>
       </div>
 
-      <span style={{ color: theme.colors.textLowContrast, fontSize: 12 }}>
-        {name}
-      </span>
+      {!minimized && (
+        <span style={{ color: theme.colors.textLowContrast, fontSize: 12 }}>
+          {name}
+        </span>
+      )}
     </div>
   );
 }

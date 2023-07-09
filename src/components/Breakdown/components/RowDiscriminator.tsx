@@ -3,9 +3,14 @@ import { theme } from '../../../stitches.config.js';
 export interface RowDiscriminatorProps {
   name: string;
   icon?: string;
+  minimized: boolean;
 }
 
-export function RowDiscriminator({ name, icon }: RowDiscriminatorProps) {
+export function RowDiscriminator({
+  name,
+  icon,
+  minimized,
+}: RowDiscriminatorProps) {
   return (
     <div
       style={{
@@ -19,7 +24,7 @@ export function RowDiscriminator({ name, icon }: RowDiscriminatorProps) {
         justifyContent: 'center',
       }}
     >
-      {icon && (
+      {!minimized && icon && (
         <img
           src={icon}
           height={0}

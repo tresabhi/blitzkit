@@ -20,6 +20,7 @@ import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 import { PossiblyPromise } from '../types/possiblyPromise.js';
 
+// TODO: sort tanks by last played
 export default async function today({ server, id }: ResolvedPlayer) {
   const tankStatsOverTime = await getTankStatsDiffed(
     server,
@@ -110,12 +111,14 @@ export default async function today({ server, id }: ResolvedPlayer) {
     );
 
   const rows = await Promise.all(
-    tankStatsOverTimeEntries.map(async ([tankIdString, tankStats]) => {
-      const tankId = Number(tankIdString);
+    tankStatsOverTimeEntries.map(async ([tankIdString, tankStats], index) => {
+      const tankId = parseInt(tankIdString);
       const career = careerStats[tankId];
 
       return (
         <Breakdown.Row
+          isListing={tankId !== 0}
+          minimized={index > 4}
           key={tankId}
           name={
             tankId === 0 ? 'Total' : await resolveTankName(Number(tankIdString))
@@ -126,8 +129,6 @@ export default async function today({ server, id }: ResolvedPlayer) {
           careerWN8={isNaN(careerWN8s[tankId]) ? undefined : careerWN8s[tankId]}
           damage={tankStats.damage_dealt / tankStats.battles}
           careerDamage={career.damage_dealt / career.battles}
-          survival={tankStats.survived_battles / tankStats.battles}
-          careerSurvival={career.survived_battles / career.battles}
           battles={tankStats.battles}
           careerBattles={career.battles}
           icon={
