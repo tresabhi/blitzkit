@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 
-export interface RootProps {
+export interface ColumnProps {
   children: ReactNode;
 }
 
-export function Column({ children }: RootProps) {
+export function Column({ children }: ColumnProps) {
   return (
     <div
       style={{
