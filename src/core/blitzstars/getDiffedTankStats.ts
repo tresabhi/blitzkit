@@ -34,7 +34,7 @@ export const emptyTankHistoryNode: TankHistoryRaw = {
   all: emptyAllStats,
 };
 
-export default async function getTankStatsDiffed(
+export default async function getDiffedTankStats(
   server: BlitzServer,
   id: number,
   start: number,
@@ -46,26 +46,27 @@ export default async function getTankStatsDiffed(
 
   // sort them even though most won't be used
   const tankSortedHistory: Record<number, TankHistories> = {};
-  const tankIds: number[] = [];
+  const tanks: number[] = [];
   history.forEach((node) => {
     if (!tankSortedHistory[node.tank_id]) {
       tankSortedHistory[node.tank_id] = [node];
-      tankIds.push(node.tank_id);
+      tanks.push(node.tank_id);
     } else {
       tankSortedHistory[node.tank_id].push(node);
     }
   });
 
   // find the ones played within the range
-  const tankIdsInRange = tankIds.filter((tankId) =>
+  const inRangeTanks = tanks.filter((tankId) =>
     tankSortedHistory[tankId].some(
       (node) => node.last_battle_time > start && node.last_battle_time < end,
     ),
   );
+  const playedTanks: number[] = [];
 
   // fetch history node right before "start" and right before "end"
-  const tanksBeforeAndAfter: Record<number, AllStats> = {};
-  tankIdsInRange.forEach((tankId) => {
+  const diffed: Record<number, AllStats> = {};
+  inRangeTanks.forEach((tankId) => {
     const sortedHistory = tankSortedHistory[tankId];
     const previousIndex =
       sortedHistory.findIndex((node) => node.last_battle_time > start) - 1;
@@ -81,7 +82,7 @@ export default async function getTankStatsDiffed(
 
     // check if there was a change in battles as games in ratings do update last_battle_time
     if (diff((a) => a.battles) > 0) {
-      tanksBeforeAndAfter[tankId] = {
+      diffed[tankId] = {
         battles: diff((a) => a.battles),
         capture_points: diff((a) => a.capture_points),
         damage_dealt: diff((a) => a.damage_dealt),
@@ -100,8 +101,19 @@ export default async function getTankStatsDiffed(
         wins: diff((a) => a.wins),
         xp: diff((a) => a.xp),
       };
+
+      playedTanks.push(tankId);
     }
   });
 
-  return tanksBeforeAndAfter;
+  const order = playedTanks.sort((a, b) => {
+    const aHistories = tankSortedHistory[a];
+    const bHistories = tankSortedHistory[b];
+    const aLatest = aHistories[aHistories.length - 1];
+    const bLatest = bHistories[bHistories.length - 1];
+
+    return bLatest.last_battle_time - aLatest.last_battle_time;
+  });
+
+  return { diffed, order };
 }

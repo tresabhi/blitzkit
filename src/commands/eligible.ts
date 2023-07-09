@@ -3,9 +3,9 @@ import calculateWN8 from '../core/blitz/calculateWN8.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import sumStats from '../core/blitz/sumStats.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
+import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
 import getPeriodStart from '../core/blitzstars/getPeriodStart.js';
-import getTankStatsDiffed from '../core/blitzstars/getTankStatsDiffed.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import addUsernameChoices from '../core/discord/addUsernameChoices.js';
 import embedNegative from '../core/discord/embedNegative.js';
@@ -59,13 +59,13 @@ export const eligibleCommand: CommandRegistry = {
     let body = '';
 
     if (clan === 'SKLLD') {
-      const tankStatsOverTime = await getTankStatsDiffed(
+      const { diffed } = await getDiffedTankStats(
         server,
         id,
         getPeriodStart('30'),
         getPeriodNow(),
       );
-      const entries = Object.entries(tankStatsOverTime);
+      const entries = Object.entries(diffed);
       const stats = sumStats(entries.map(([, stats]) => stats));
       const averageTier =
         (await entries.reduce<PossiblyPromise<number>>(
@@ -116,7 +116,7 @@ export const eligibleCommand: CommandRegistry = {
             const tankId = parseInt(tankIdString);
 
             if ((await tankopedia)[tankId]?.tier === 10) {
-              const tankStats = tankStatsOverTime[tankId];
+              const tankStats = diffed[tankId];
               return (await accumulator) + tankStats.damage_dealt;
             } else return accumulator;
           },
@@ -127,7 +127,7 @@ export const eligibleCommand: CommandRegistry = {
             const tankId = parseInt(tankIdString);
 
             if ((await tankopedia)[tankId]?.tier === 10) {
-              const tankStats = tankStatsOverTime[tankId];
+              const tankStats = diffed[tankId];
               return (await accumulator) + tankStats.battles;
             } else return accumulator;
           },

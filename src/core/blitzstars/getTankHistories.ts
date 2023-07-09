@@ -6,7 +6,7 @@ import {
   getHistoriesDefaultOptions,
 } from '../../types/histories.js';
 import getTankStats from '../blitz/getTankStats.js';
-import { emptyAllStats } from './getTankStatsDiffed.js';
+import { emptyAllStats } from './getDiffedTankStats.js';
 
 export interface TankHistory extends History {
   tank_id: number;

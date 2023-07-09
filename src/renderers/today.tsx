@@ -10,8 +10,8 @@ import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankName from '../core/blitz/resolveTankName.js';
 import sumStats from '../core/blitz/sumStats.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
+import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
-import getTankStatsDiffed from '../core/blitzstars/getTankStatsDiffed.js';
 import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand.js';
@@ -22,7 +22,7 @@ import { PossiblyPromise } from '../types/possiblyPromise.js';
 
 // TODO: sort tanks by last played
 export default async function today({ server, id }: ResolvedPlayer) {
-  const tankStatsOverTime = await getTankStatsDiffed(
+  const { diffed, order } = await getDiffedTankStats(
     server,
     id,
     getTimeDaysAgo(0),
@@ -40,7 +40,7 @@ export default async function today({ server, id }: ResolvedPlayer) {
   };
   const allStatsToAccumulate: AllStats[] = [];
 
-  Object.entries(tankStatsOverTime).forEach(([, tankStats]) => {
+  Object.entries(diffed).forEach(([, tankStats]) => {
     allStatsToAccumulate.push(tankStats);
   });
   Object.entries(careerTankStatsRaw).forEach(([, tankStats]) => {
@@ -49,11 +49,11 @@ export default async function today({ server, id }: ResolvedPlayer) {
 
   const accumulatedStats = sumStats(allStatsToAccumulate);
 
-  if (Object.keys(tankStatsOverTime).length > 0) {
-    tankStatsOverTime[0] = accumulatedStats;
+  if (Object.keys(diffed).length > 0) {
+    diffed[0] = accumulatedStats;
   }
 
-  const tankStatsOverTimeEntries = Object.entries(tankStatsOverTime);
+  const tankStatsOverTimeEntries = Object.entries(diffed);
   const todayWN8s = await tankStatsOverTimeEntries.reduce<
     PossiblyPromise<Record<number, number>>
   >(async (accumulator, [tankIdString, tankStats]) => {
@@ -86,12 +86,12 @@ export default async function today({ server, id }: ResolvedPlayer) {
   todayWN8s[0] =
     todayWN8sEntries.reduce(
       (accumulator, [tankIdString, wn8]) =>
-        accumulator + wn8 * tankStatsOverTime[Number(tankIdString)].battles,
+        accumulator + wn8 * diffed[Number(tankIdString)].battles,
       0,
     ) /
     todayWN8sEntries.reduce(
       (accumulator, [tankIdString]) =>
-        accumulator + tankStatsOverTime[Number(tankIdString)].battles,
+        accumulator + diffed[Number(tankIdString)].battles,
       0,
     );
   careerWN8s[0] =
@@ -111,8 +111,8 @@ export default async function today({ server, id }: ResolvedPlayer) {
     );
 
   const rows = await Promise.all(
-    tankStatsOverTimeEntries.map(async ([tankIdString, tankStats], index) => {
-      const tankId = parseInt(tankIdString);
+    [0, ...order].map(async (tankId, index) => {
+      const tankStats = diffed[tankId];
       const career = careerStats[tankId];
 
       return (
@@ -120,9 +120,7 @@ export default async function today({ server, id }: ResolvedPlayer) {
           isListing={tankId !== 0}
           minimized={index > 4}
           key={tankId}
-          name={
-            tankId === 0 ? 'Total' : await resolveTankName(Number(tankIdString))
-          }
+          name={tankId === 0 ? 'Total' : await resolveTankName(tankId)}
           winrate={tankStats.wins / tankStats.battles}
           careerWinrate={career.wins / career.battles}
           WN8={isNaN(todayWN8s[tankId]) ? undefined : todayWN8s[tankId]}
@@ -132,10 +130,7 @@ export default async function today({ server, id }: ResolvedPlayer) {
           battles={tankStats.battles}
           careerBattles={career.battles}
           icon={
-            tankId === 0
-              ? undefined
-              : (await tankopedia)[tankIdString as unknown as number]?.images
-                  .normal
+            tankId === 0 ? undefined : (await tankopedia)[tankId]?.images.normal
           }
         />
       );

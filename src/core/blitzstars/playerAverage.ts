@@ -1,5 +1,5 @@
 import sumStats from '../blitz/sumStats.js';
-import { emptyAllStats } from './getTankStatsDiffed.js';
+import { emptyAllStats } from './getDiffedTankStats.js';
 import { tankAverages } from './tankAverages.js';
 
 console.log('Calculating player average...');
