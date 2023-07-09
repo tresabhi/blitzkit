@@ -120,7 +120,7 @@ export const ownedTanksCommand: CommandRegistry = {
                     key={tank.tank_id}
                     name={await resolveTankName(tank.tank_id)}
                     type={tank.type}
-                    image={tank.images?.preview}
+                    image={tank.images?.normal}
                     isPremium={tank.is_premium}
                   />
                 )),
@@ -133,7 +133,7 @@ export const ownedTanksCommand: CommandRegistry = {
                     key={tank.tank_id}
                     name={await resolveTankName(tank.tank_id)}
                     type={tank.type}
-                    image={tank.images?.preview}
+                    image={tank.images?.normal}
                     isPremium={tank.is_premium}
                   />
                 )),
