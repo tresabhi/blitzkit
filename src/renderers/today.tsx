@@ -20,7 +20,10 @@ import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 import { PossiblyPromise } from '../types/possiblyPromise.js';
 
-export default async function today({ server, id }: ResolvedPlayer) {
+export default async function today(
+  { server, id }: ResolvedPlayer,
+  naked?: boolean,
+) {
   const { diffed, order } = await getDiffedTankStats(
     server,
     id,
@@ -117,6 +120,7 @@ export default async function today({ server, id }: ResolvedPlayer) {
 
         return (
           <Breakdown.Row
+            naked={naked}
             isListing={tankId !== 0}
             minimized={index > 4}
             key={tankId}
@@ -142,7 +146,11 @@ export default async function today({ server, id }: ResolvedPlayer) {
     ),
   );
 
-  return (
+  return naked ? (
+    <Wrapper naked>
+      <Breakdown.Root>{rows.slice(1)}</Breakdown.Root>
+    </Wrapper>
+  ) : (
     <Wrapper>
       <TitleBar
         name={accountInfo[id].nickname}

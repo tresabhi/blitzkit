@@ -1,5 +1,5 @@
 import getWN8Percentile from '../../../core/blitz/getWN8Percentile.js';
-import { theme } from '../../../stitches.config.js';
+import { theme, themeTransparent } from '../../../stitches.config.js';
 import { RowDiscriminator } from './RowDiscriminator.js';
 import { RowStat } from './RowStat.js';
 
@@ -16,6 +16,7 @@ export interface RowProps {
   icon?: string;
   minimized: boolean;
   isListing: boolean;
+  naked?: boolean;
 }
 
 export function Row({
@@ -31,6 +32,7 @@ export function Row({
   battles,
   careerBattles,
   icon,
+  naked,
 }: RowProps) {
   return (
     <div
@@ -38,7 +40,11 @@ export function Row({
         display: 'flex',
         borderRadius: 4,
         backgroundColor: isListing
-          ? theme.colors.componentInteractive
+          ? naked
+            ? themeTransparent.colors.componentInteractive
+            : theme.colors.componentInteractive
+          : naked
+          ? themeTransparent.colors.appBackground2
           : theme.colors.appBackground2,
         padding: 8,
       }}

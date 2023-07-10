@@ -3,9 +3,10 @@ import { theme } from '../stitches.config.js';
 
 export interface WrapperProps {
   children: ReactNode;
+  naked?: boolean;
 }
 
-export default function Wrapper({ children }: WrapperProps) {
+export default function Wrapper({ children, naked }: WrapperProps) {
   return (
     <div
       style={{
@@ -14,8 +15,11 @@ export default function Wrapper({ children }: WrapperProps) {
         padding: 16,
         gap: 32,
         width: 640,
-        background: 'url(https://i.imgur.com/PhS06NJ.png)',
         color: theme.colors.textHighContrast,
+
+        ...(!naked && {
+          background: 'url(https://i.imgur.com/PhS06NJ.png)',
+        }),
       }}
     >
       {children}

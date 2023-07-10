@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
+import { CYCLIC_API } from '../constants/cyclic.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import addUsernameChoices from '../core/discord/addUsernameChoices.js';
 import autocompleteUsername from '../core/discord/autocompleteUsername.js';
@@ -34,7 +35,7 @@ export const todayCommand: CommandRegistry = {
     return [
       await today(player),
       primaryButton(path, 'Refresh'),
-      // linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
+      linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
       linkButton(
         `https://www.blitzstars.com/player/${player.server}/${nickname}`,
         'BlitzStars',

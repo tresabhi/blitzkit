@@ -156,7 +156,7 @@ export default async function stats<Type extends StatType>(
   );
 
   return naked ? (
-    overview
+    <Wrapper naked>{overview}</Wrapper>
   ) : (
     <Wrapper>
       <TitleBar
