@@ -15,7 +15,7 @@ import { AccountInfo } from '../types/accountInfo.js';
 
 export const todayCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()

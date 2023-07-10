@@ -19,7 +19,9 @@ export default async function normalizeInteractionReturnable(
 
   await Promise.all(
     normalizedReturnable.map(async (item) => {
-      if (item instanceof EmbedBuilder) {
+      if (typeof item === 'string') {
+        reply.content = item;
+      } else if (item instanceof EmbedBuilder) {
         if (!reply.embeds) reply.embeds = [];
         reply.embeds.push(item);
       } else if (item instanceof ButtonBuilder) {

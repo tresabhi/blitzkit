@@ -40,11 +40,7 @@ export function Row({
         display: 'flex',
         borderRadius: 4,
         backgroundColor: isListing
-          ? naked
-            ? theme.colors.componentInteractive_transparent
-            : theme.colors.componentInteractive
-          : naked
-          ? theme.colors.appBackground2_transparent
+          ? theme.colors.componentInteractive
           : theme.colors.appBackground2,
         padding: 8,
       }}

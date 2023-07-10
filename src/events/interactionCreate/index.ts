@@ -16,6 +16,7 @@ import discord from '../../../discord.json' assert { type: 'json' };
 import { debugCommand } from '../../commands/debug.js';
 import { eligibleCommand } from '../../commands/eligible.js';
 import { evolutionCommand } from '../../commands/evolution.js';
+import { fullStatsCommand } from '../../commands/fullStats.js';
 import { helpCommand } from '../../commands/help.js';
 import { inactiveCommand } from '../../commands/inactive.js';
 import { ownedTanksCommand } from '../../commands/ownedTanks.js';
@@ -26,7 +27,6 @@ import { searchClansCommand } from '../../commands/searchClans.js';
 import { searchPlayersCommand } from '../../commands/searchPlayers.js';
 import { searchTanksCommand } from '../../commands/searchTanks.js';
 import { statsCommand } from '../../commands/stats.js';
-import { fullStatsCommand } from '../../commands/fullStats.js';
 import { todayCommand } from '../../commands/today.js';
 import { verifyCommand } from '../../commands/verify.js';
 import { DISCORD_TOKEN } from '../../core/node/arguments.js';
@@ -37,6 +37,7 @@ import handleButton from './handlers/button.js';
 import handleChatInputCommand from './handlers/chatInputCommand.js';
 
 export type InteractionRawReturnable =
+  | string
   | EmbedBuilder
   | ButtonBuilder
   | JSX.Element;
@@ -70,29 +71,31 @@ export interface CommandRegistry<HandlesInteraction extends boolean = boolean>
 
 const rest = new REST().setToken(DISCORD_TOKEN);
 
-export const commands: Record<string, CommandRegistry> = (
-  [
-    debugCommand,
-    eligibleCommand,
-    helpCommand,
-    inactiveCommand,
-    ownedTanksCommand,
-    playerAchievementsCommand,
-    playerInfoCommand,
-    searchClansCommand,
-    searchPlayersCommand,
-    searchTanksCommand,
-    fullStatsCommand,
-    todayCommand,
-    verifyCommand,
-    pingCommand,
-    evolutionCommand,
-    statsCommand,
-  ] as CommandRegistry[]
-).reduce((accumulator, registry) => {
-  if (isDev()) registry.command.setDefaultMemberPermissions(0);
-  return { ...accumulator, [registry.command.name]: registry };
-}, {});
+export const COMMANDS_RAW: CommandRegistry[] = [
+  debugCommand,
+  eligibleCommand,
+  helpCommand,
+  inactiveCommand,
+  ownedTanksCommand,
+  playerAchievementsCommand,
+  playerInfoCommand,
+  searchClansCommand,
+  searchPlayersCommand,
+  searchTanksCommand,
+  fullStatsCommand,
+  todayCommand,
+  verifyCommand,
+  pingCommand,
+  evolutionCommand,
+  statsCommand,
+];
+export const commands: Record<string, CommandRegistry> = COMMANDS_RAW.reduce(
+  (accumulator, registry) => {
+    if (isDev()) registry.command.setDefaultMemberPermissions(0);
+    return { ...accumulator, [registry.command.name]: registry };
+  },
+  {},
+);
 
 export const guildCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
   [];
