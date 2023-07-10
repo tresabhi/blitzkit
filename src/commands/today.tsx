@@ -21,10 +21,20 @@ export const todayCommand: CommandRegistry = {
   command: new SlashCommandBuilder()
     .setName('today')
     .setDescription('A general daily breakdown of your performance')
-    .addStringOption(addUsernameChoices),
+    .addStringOption(addUsernameChoices)
+    .addIntegerOption((option) =>
+      option
+        .setName('limit')
+        .setDescription(
+          'The maximum number of tanks to display (default: Infinity)',
+        )
+        .setRequired(false)
+        .setMinValue(1),
+    ),
 
   async handler(interaction) {
     const player = await resolvePlayerFromCommand(interaction);
+    const limit = interaction.options.getInteger('limit') ?? Infinity;
     const { nickname } = (
       await getWargamingResponse<AccountInfo>(
         `https://api.wotblitz.${player.server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
@@ -33,7 +43,7 @@ export const todayCommand: CommandRegistry = {
     const path = interactionToURL(interaction, player);
 
     return [
-      await today(player),
+      await today(player, limit, false),
       primaryButton(path, 'Refresh'),
       linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
       linkButton(

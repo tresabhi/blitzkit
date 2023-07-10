@@ -10,6 +10,10 @@ export const todayRoute: RouteRegistry = {
   async handler(req) {
     const player = resolvePlayerFromRequest(req);
 
-    return await today(player, true);
+    return await today(
+      player,
+      req.query.limit ? parseInt(req.query.limit as string) : undefined,
+      true,
+    );
   },
 };
