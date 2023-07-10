@@ -1,5 +1,5 @@
 import { TIER_ROMAN_NUMERALS, Tier } from '../core/blitz/tankopedia.js';
-import { themeLight } from '../stitches.config.js';
+import { theme } from '../stitches.config.js';
 
 export type TierWeightsRecord = Partial<Record<Tier, number>>;
 
@@ -14,9 +14,9 @@ export default function TierWeights({ weights }: TierWeightsProps) {
         <div
           key={tier}
           style={{
-            backgroundColor: themeLight.colors.appBackground1,
+            backgroundColor: theme.colors.appBackground1_light,
             flex: weight,
-            color: themeLight.colors.textHighContrast,
+            color: theme.colors.textHighContrast_light,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

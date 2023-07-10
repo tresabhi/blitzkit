@@ -3,11 +3,12 @@ import { createBorderStyles, createColors } from 'bepaint';
 
 // this isn't really a stitches config, but the object is compliant
 export const theme = {
-  colors: createColors(slateDark),
+  colors: {
+    ...createColors(slateDark),
+    ...createColors(slate, 'light'),
+    ...createColors(slateDarkA, 'transparent'),
+    ...createColors(amberDark, 'amber'),
+  },
+
   borderStyles: createBorderStyles(slateDark),
 };
-export const themeTransparent = {
-  colors: createColors(slateDarkA),
-};
-export const themeLight = { colors: createColors(slate) };
-export const themeAmber = { colors: createColors(amberDark) };

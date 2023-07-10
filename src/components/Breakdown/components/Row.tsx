@@ -1,5 +1,5 @@
 import getWN8Percentile from '../../../core/blitz/getWN8Percentile.js';
-import { theme, themeTransparent } from '../../../stitches.config.js';
+import { theme } from '../../../stitches.config.js';
 import { RowDiscriminator } from './RowDiscriminator.js';
 import { RowStat } from './RowStat.js';
 
@@ -41,10 +41,10 @@ export function Row({
         borderRadius: 4,
         backgroundColor: isListing
           ? naked
-            ? themeTransparent.colors.componentInteractive
+            ? theme.colors.componentInteractive_transparent
             : theme.colors.componentInteractive
           : naked
-          ? themeTransparent.colors.appBackground2
+          ? theme.colors.appBackground2_transparent
           : theme.colors.appBackground2,
         padding: 8,
       }}

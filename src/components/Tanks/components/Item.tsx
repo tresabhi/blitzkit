@@ -2,7 +2,7 @@ import {
   TANK_ICONS,
   TANK_ICONS_PREMIUM,
 } from '../../../core/blitz/tankopedia.js';
-import { theme, themeAmber } from '../../../stitches.config.js';
+import { theme } from '../../../stitches.config.js';
 
 export interface ItemProps {
   image?: string;
@@ -23,7 +23,7 @@ export function Item({ image, type, name, isPremium }: ItemProps) {
         alignItems: 'center',
         borderRadius: 4,
         backgroundColor: isPremium
-          ? themeAmber.colors.componentInteractive
+          ? theme.colors.componentInteractive_amber
           : theme.colors.componentInteractive,
       }}
     >
@@ -48,7 +48,7 @@ export function Item({ image, type, name, isPremium }: ItemProps) {
             fontSize: 16,
             whiteSpace: 'nowrap',
             color: isPremium
-              ? themeAmber.colors.textLowContrast
+              ? theme.colors.textLowContrast_amber
               : theme.colors.textHighContrast,
           }}
         >
