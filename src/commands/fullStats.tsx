@@ -33,7 +33,7 @@ export const fullStatsCommand: CommandRegistry = {
       true,
     ) as StatType;
     const player = await resolvePlayerFromCommand(interaction);
-    const period = resolvePeriodFromCommand(interaction);
+    const period = resolvePeriodFromCommand(player.server, interaction);
     const tankIdRaw = interaction.options.getString('tank')!;
     const tankId =
       commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
@@ -71,8 +71,8 @@ export const fullStatsCommand: CommandRegistry = {
     const url = new URL(`${CYCLIC_API}/${interaction.customId}`);
     const path = url.pathname.split('/').filter(Boolean);
     const commandGroup = path[1] as StatType;
-    const period = resolvePeriodFromButton(interaction);
     const player = await resolvePlayerFromButton(interaction);
+    const period = resolvePeriodFromButton(player.server, interaction);
 
     return await fullStats(
       commandGroup,

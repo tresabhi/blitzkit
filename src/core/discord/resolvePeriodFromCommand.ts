@@ -1,4 +1,5 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
+import { BlitzServer } from '../../constants/servers.js';
 import getPeriodNow from '../blitzstars/getPeriodNow.js';
 import getPeriodStart from '../blitzstars/getPeriodStart.js';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo.js';
@@ -30,6 +31,7 @@ export interface ResolvedPeriod {
 }
 
 export default function resolvePeriodFromCommand(
+  server: BlitzServer,
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
   let statsName: string;
@@ -46,12 +48,12 @@ export default function resolvePeriodFromCommand(
 
     statsName = `${startMin} to ${endMax} days' statistics`;
     evolutionName = `${startMin} to ${endMax} days' evolution`;
-    start = getTimeDaysAgo(startMin);
-    end = getTimeDaysAgo(endMax);
+    start = getTimeDaysAgo(server, startMin);
+    end = getTimeDaysAgo(server, endMax);
   } else {
     statsName = PERIOD_NAMES[period];
     evolutionName = EVOLUTION_PERIOD_NAMES[period];
-    start = getPeriodStart(period);
+    start = getPeriodStart(server, period);
     end = getPeriodNow();
   }
 

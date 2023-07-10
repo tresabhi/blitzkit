@@ -1,12 +1,20 @@
-export default function getTimeDaysAgo(daysAgo: number) {
+import { BlitzServer } from '../../constants/servers.js';
+
+export const TIME_ZONE_MAPPINGS: Record<BlitzServer, number> = {
+  com: -5, // Central North American Time
+  eu: +1, // Central European Time
+  asia: +7, // Central Asia Standard Time
+};
+
+export default function getTimeDaysAgo(server: BlitzServer, daysAgo: number) {
   const now = new Date();
-  now.setHours(5, 0, 0, 0);
+  if (daysAgo === 0) now.getTime() / 1000;
 
-  // if it's after 5:00 AM today, subtract one day
-  if (now.getTime() > Date.now()) now.setDate(now.getDate() - 1);
+  const time = new Date();
 
-  // subtract the period number of days from now
-  now.setDate(now.getDate() - daysAgo);
+  time.setUTCHours(-TIME_ZONE_MAPPINGS[server], 0, 0, 0);
+  if (time > now) time.setUTCDate(time.getUTCDate() - 1);
+  time.setUTCDate(time.getUTCDate() - daysAgo + 1);
 
-  return now.getTime() / 1000;
+  return time.getTime() / 1000;
 }

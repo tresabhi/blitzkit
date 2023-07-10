@@ -5,7 +5,7 @@ import sumStats from '../core/blitz/sumStats.js';
 import { tankopedia } from '../core/blitz/tankopedia.js';
 import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats.js';
 import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
-import getPeriodStart from '../core/blitzstars/getPeriodStart.js';
+import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo.js';
 import { tankAverages } from '../core/blitzstars/tankAverages.js';
 import addUsernameChoices from '../core/discord/addUsernameChoices.js';
 import embedNegative from '../core/discord/embedNegative.js';
@@ -62,7 +62,7 @@ export const eligibleCommand: CommandRegistry = {
       const { diffed } = await getDiffedTankStats(
         server,
         id,
-        getPeriodStart('30'),
+        getTimeDaysAgo(server, 30),
         getPeriodNow(),
       );
       const entries = Object.entries(diffed);
