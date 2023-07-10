@@ -1,17 +1,36 @@
 import {
   TANK_ICONS,
+  TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
 } from '../../../core/blitz/tankopedia.js';
 import { theme } from '../../../stitches.config.js';
 
-export interface ItemProps {
-  image?: string;
-  type?: string;
-  name: string;
-  isPremium?: boolean;
+export enum TreeType {
+  TechTree,
+  Premium,
+  Collector,
 }
 
-export function Item({ image, type, name, isPremium }: ItemProps) {
+export interface ItemProps {
+  image?: string;
+  tankType?: string;
+  name: string;
+  treeType: TreeType;
+}
+
+const TREE_TYPE_COLOR = {
+  [TreeType.TechTree]: '',
+  [TreeType.Premium]: '_amber',
+  [TreeType.Collector]: '_blue',
+} as const;
+
+const TREE_TYPE_ICONS = {
+  [TreeType.TechTree]: TANK_ICONS,
+  [TreeType.Premium]: TANK_ICONS_PREMIUM,
+  [TreeType.Collector]: TANK_ICONS_COLLECTOR,
+};
+
+export function Item({ image, tankType, name, treeType }: ItemProps) {
   return (
     <div
       style={{
@@ -22,9 +41,8 @@ export function Item({ image, type, name, isPremium }: ItemProps) {
         overflow: 'hidden',
         alignItems: 'center',
         borderRadius: 4,
-        backgroundColor: isPremium
-          ? theme.colors.componentInteractive_amber
-          : theme.colors.componentInteractive,
+        backgroundColor:
+          theme.colors[`componentInteractive${TREE_TYPE_COLOR[treeType]}`],
       }}
     >
       <div
@@ -37,9 +55,9 @@ export function Item({ image, type, name, isPremium }: ItemProps) {
           overflow: 'hidden',
         }}
       >
-        {type && (
+        {tankType && (
           <img
-            src={isPremium ? TANK_ICONS_PREMIUM[type] : TANK_ICONS[type]}
+            src={TREE_TYPE_ICONS[treeType][tankType]}
             style={{ width: 14, height: 14 }}
           />
         )}
@@ -47,9 +65,7 @@ export function Item({ image, type, name, isPremium }: ItemProps) {
           style={{
             fontSize: 16,
             whiteSpace: 'nowrap',
-            color: isPremium
-              ? theme.colors.textLowContrast_amber
-              : theme.colors.textHighContrast,
+            color: theme.colors[`textLowContrast${TREE_TYPE_COLOR[treeType]}`],
           }}
         >
           {name}

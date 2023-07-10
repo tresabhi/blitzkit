@@ -2,6 +2,7 @@ export interface TankopediaEntry {
   name: string;
   nation: string;
   is_premium: boolean;
+  is_collectible: boolean;
   tier: number;
   cost: { price_credit: number; price_gold: number };
   images: { preview: string; normal: string };
@@ -43,6 +44,13 @@ export const TANK_ICONS_PREMIUM: Record<string, string> = {
   lightTank: 'https://i.imgur.com/zdkpTRb.png',
   mediumTank: 'https://i.imgur.com/3z7eHX6.png',
   heavyTank: 'https://i.imgur.com/P3vbmyA.png',
+};
+
+export const TANK_ICONS_COLLECTOR: Record<string, string> = {
+  'AT-SPG': 'https://i.imgur.com/WTjeirB.png',
+  lightTank: 'https://i.imgur.com/EwhtKkU.png',
+  mediumTank: 'https://i.imgur.com/u8YDMBh.png',
+  heavyTank: 'https://i.imgur.com/8xRf3nc.png',
 };
 
 export type Tier = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;

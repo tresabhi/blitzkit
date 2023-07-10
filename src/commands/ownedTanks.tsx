@@ -6,6 +6,7 @@ import TitleBar from '../components/TitleBar.js';
 import Wrapper from '../components/Wrapper.js';
 import { BLITZ_SERVERS } from '../constants/servers.js';
 import getTankStats from '../core/blitz/getTankStats.js';
+import getTreeType from '../core/blitz/getTreeType.js';
 import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
 import resolveTankName from '../core/blitz/resolveTankName.js';
 import {
@@ -44,7 +45,7 @@ const COMP_TANKS = [
 
 export const ownedTanksCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -95,7 +96,6 @@ export const ownedTanksCommand: CommandRegistry = {
 
     return (
       <Wrapper>
-        {/* TODO: integrate some of these into title bar */}
         <TitleBar
           name={accountInfo[id].nickname}
           nameDiscriminator={`(Tier ${TIER_ROMAN_NUMERALS[tier as Tier]})`}
@@ -119,9 +119,9 @@ export const ownedTanksCommand: CommandRegistry = {
                   <Tanks.Item
                     key={tank.tank_id}
                     name={await resolveTankName(tank.tank_id)}
-                    type={tank.type}
+                    tankType={tank.type}
                     image={tank.images?.normal}
-                    isPremium={tank.is_premium}
+                    treeType={await getTreeType(tank.tank_id)}
                   />
                 )),
               )}
@@ -132,9 +132,9 @@ export const ownedTanksCommand: CommandRegistry = {
                   <Tanks.Item
                     key={tank.tank_id}
                     name={await resolveTankName(tank.tank_id)}
-                    type={tank.type}
+                    tankType={tank.type}
                     image={tank.images?.normal}
-                    isPremium={tank.is_premium}
+                    treeType={await getTreeType(tank.tank_id)}
                   />
                 )),
               )}
