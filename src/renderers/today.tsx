@@ -20,12 +20,11 @@ import { AccountInfo, AllStats } from '../types/accountInfo.js';
 import { PlayerClanData } from '../types/playerClanData.js';
 import { PossiblyPromise } from '../types/possiblyPromise.js';
 
-// TODO: sort tanks by last played
 export default async function today({ server, id }: ResolvedPlayer) {
   const { diffed, order } = await getDiffedTankStats(
     server,
     id,
-    getTimeDaysAgo(0),
+    getTimeDaysAgo(server, 1),
     getPeriodNow(),
   );
   const accountInfo = await getWargamingResponse<AccountInfo>(
@@ -111,30 +110,36 @@ export default async function today({ server, id }: ResolvedPlayer) {
     );
 
   const rows = await Promise.all(
-    [0, ...order].map(async (tankId, index) => {
-      const tankStats = diffed[tankId];
-      const career = careerStats[tankId];
+    [...(order.length === 0 ? [] : [0]), ...order].map(
+      async (tankId, index) => {
+        const tankStats = diffed[tankId];
+        const career = careerStats[tankId];
 
-      return (
-        <Breakdown.Row
-          isListing={tankId !== 0}
-          minimized={index > 4}
-          key={tankId}
-          name={tankId === 0 ? 'Total' : await resolveTankName(tankId)}
-          winrate={tankStats.wins / tankStats.battles}
-          careerWinrate={career.wins / career.battles}
-          WN8={isNaN(todayWN8s[tankId]) ? undefined : todayWN8s[tankId]}
-          careerWN8={isNaN(careerWN8s[tankId]) ? undefined : careerWN8s[tankId]}
-          damage={tankStats.damage_dealt / tankStats.battles}
-          careerDamage={career.damage_dealt / career.battles}
-          battles={tankStats.battles}
-          careerBattles={career.battles}
-          icon={
-            tankId === 0 ? undefined : (await tankopedia)[tankId]?.images.normal
-          }
-        />
-      );
-    }),
+        return (
+          <Breakdown.Row
+            isListing={tankId !== 0}
+            minimized={index > 4}
+            key={tankId}
+            name={tankId === 0 ? 'Total' : await resolveTankName(tankId)}
+            winrate={tankStats.wins / tankStats.battles}
+            careerWinrate={career.wins / career.battles}
+            WN8={isNaN(todayWN8s[tankId]) ? undefined : todayWN8s[tankId]}
+            careerWN8={
+              isNaN(careerWN8s[tankId]) ? undefined : careerWN8s[tankId]
+            }
+            damage={tankStats.damage_dealt / tankStats.battles}
+            careerDamage={career.damage_dealt / career.battles}
+            battles={tankStats.battles}
+            careerBattles={career.battles}
+            icon={
+              tankId === 0
+                ? undefined
+                : (await tankopedia)[tankId]?.images.normal
+            }
+          />
+        );
+      },
+    ),
   );
 
   return (
