@@ -12,7 +12,7 @@ export default function getTimeDaysAgo(server: BlitzServer, daysAgo: number) {
 
   const time = new Date();
 
-  time.setUTCHours(-TIME_ZONE_MAPPINGS[server] + 5, 0, 0, 0);
+  time.setUTCHours(-TIME_ZONE_MAPPINGS[server], 0, 0, 0);
   if (time > now) time.setUTCDate(time.getUTCDate() - 1);
   time.setUTCDate(time.getUTCDate() - daysAgo + 1);
 
