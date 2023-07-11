@@ -1,6 +1,6 @@
 import { ButtonInteraction, CacheType } from 'discord.js';
-import { CYCLIC_API } from '../../constants/cyclic.js';
-import resolvePlayerFromURL from '../express/resolvePlayerFromURL.js';
+import { CYCLIC_API } from '../../constants/cyclic';
+import resolvePlayerFromURL from '../express/resolvePlayerFromURL';
 
 export default async function resolvePlayerFromButton(
   interaction: ButtonInteraction<CacheType>,

@@ -1,24 +1,24 @@
-import * as Breakdown from '../components/Breakdown/index.js';
-import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
-import TitleBar from '../components/TitleBar.js';
-import Wrapper from '../components/Wrapper.js';
-import { BLITZ_SERVERS } from '../constants/servers.js';
-import calculateWN8 from '../core/blitz/calculateWN8.js';
-import getTankStats from '../core/blitz/getTankStats.js';
-import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import resolveTankName from '../core/blitz/resolveTankName.js';
-import sumStats from '../core/blitz/sumStats.js';
-import { tankopedia } from '../core/blitz/tankopedia.js';
-import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats.js';
-import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
-import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo.js';
-import { tankAverages } from '../core/blitzstars/tankAverages.js';
-import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
-import { AccountInfo, AllStats } from '../types/accountInfo.js';
-import { PlayerClanData } from '../types/playerClanData.js';
-import { PossiblyPromise } from '../types/possiblyPromise.js';
+import * as Breakdown from '../components/Breakdown';
+import NoData, { NoDataType } from '../components/NoData';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy';
+import TitleBar from '../components/TitleBar';
+import Wrapper from '../components/Wrapper';
+import { BLITZ_SERVERS } from '../constants/servers';
+import calculateWN8 from '../core/blitz/calculateWN8';
+import getTankStats from '../core/blitz/getTankStats';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import resolveTankName from '../core/blitz/resolveTankName';
+import sumStats from '../core/blitz/sumStats';
+import { tankopedia } from '../core/blitz/tankopedia';
+import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats';
+import getPeriodNow from '../core/blitzstars/getPeriodNow';
+import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo';
+import { tankAverages } from '../core/blitzstars/tankAverages';
+import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { AccountInfo, AllStats } from '../types/accountInfo';
+import { PlayerClanData } from '../types/playerClanData';
+import { PossiblyPromise } from '../types/possiblyPromise';
 
 export default async function today(
   { server, id }: ResolvedPlayer,

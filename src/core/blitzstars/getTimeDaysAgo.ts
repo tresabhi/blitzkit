@@ -1,4 +1,4 @@
-import { BlitzServer } from '../../constants/servers.js';
+import { BlitzServer } from '../../constants/servers';
 
 export const TIME_ZONE_MAPPINGS: Record<BlitzServer, number> = {
   com: -5, // Central North American Time

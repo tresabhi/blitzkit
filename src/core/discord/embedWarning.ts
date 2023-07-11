@@ -1,5 +1,5 @@
 import { EmbedBuilder } from 'discord.js';
-import { WARNING_COLOR } from '../../constants/colors.js';
+import { WARNING_COLOR } from '../../constants/colors';
 
 export default function embedWarning(title: string, description: string) {
   return new EmbedBuilder()

@@ -1,5 +1,5 @@
-import isDev from '../core/node/isDev.js';
-import { theme } from '../stitches.config.js';
+import isDev from '../core/node/isDev';
+import { theme } from '../stitches.config';
 
 export interface TitleBarProps {
   name: string;

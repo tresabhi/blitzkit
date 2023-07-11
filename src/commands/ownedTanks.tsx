@@ -1,26 +1,26 @@
 import { SlashCommandBuilder } from 'discord.js';
-import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
-import * as Tanks from '../components/Tanks/index.js';
-import TitleBar from '../components/TitleBar.js';
-import Wrapper from '../components/Wrapper.js';
-import { BLITZ_SERVERS } from '../constants/servers.js';
-import getTankStats from '../core/blitz/getTankStats.js';
-import getTreeType from '../core/blitz/getTreeType.js';
-import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import resolveTankName from '../core/blitz/resolveTankName.js';
+import NoData, { NoDataType } from '../components/NoData';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy';
+import * as Tanks from '../components/Tanks';
+import TitleBar from '../components/TitleBar';
+import Wrapper from '../components/Wrapper';
+import { BLITZ_SERVERS } from '../constants/servers';
+import getTankStats from '../core/blitz/getTankStats';
+import getTreeType from '../core/blitz/getTreeType';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import resolveTankName from '../core/blitz/resolveTankName';
 import {
   TIER_ROMAN_NUMERALS,
   Tier,
   tankopedia,
-} from '../core/blitz/tankopedia.js';
-import addUsernameChoices from '../core/discord/addUsernameChoices.js';
-import autocompleteUsername from '../core/discord/autocompleteUsername.js';
-import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
-import { CommandRegistry } from '../events/interactionCreate/index.js';
-import { AccountInfo } from '../types/accountInfo.js';
-import { PlayerClanData } from '../types/playerClanData.js';
+} from '../core/blitz/tankopedia';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
+import autocompleteUsername from '../core/discord/autocompleteUsername';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { CommandRegistry } from '../events/interactionCreate';
+import { AccountInfo } from '../types/accountInfo';
+import { PlayerClanData } from '../types/playerClanData';
 
 const COMP_TANKS = [
   // light tanks

@@ -1,8 +1,8 @@
-import { Percentile } from '../../../../constants/percentiles.js';
-import getWN8Percentile from '../../../../core/blitz/getWN8Percentile.js';
-import { theme } from '../../../../stitches.config.js';
-import { PERCENTILE_COLORS } from '../../../PercentileIndicator.js';
-import { Glow, GlowSide } from './components/Glow.js';
+import { Percentile } from '../../../../constants/percentiles';
+import getWN8Percentile from '../../../../core/blitz/getWN8Percentile';
+import { theme } from '../../../../stitches.config';
+import { PERCENTILE_COLORS } from '../../../PercentileIndicator';
+import { Glow, GlowSide } from './components/Glow';
 
 export interface WN8DisplayProps {
   WN8?: number;

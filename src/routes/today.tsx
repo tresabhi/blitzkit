@@ -1,6 +1,6 @@
-import resolvePlayerFromRequest from '../core/express/resolvePlayerFromRequest.js';
-import today from '../renderers/today.js';
-import { RouteRegistry } from '../server.js';
+import resolvePlayerFromRequest from '../core/express/resolvePlayerFromRequest';
+import today from '../renderers/today';
+import { RouteRegistry } from '../server';
 
 export const todayRoute: RouteRegistry = {
   route: '/today',

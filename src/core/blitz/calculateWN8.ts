@@ -1,4 +1,4 @@
-import { AllStats } from '../../types/accountInfo.js';
+import { AllStats } from '../../types/accountInfo';
 
 /**
  * Formula from https://web.archive.org/web/20190105064817/http://wiki.wnefficiency.net/pages/WN8

@@ -2,8 +2,8 @@ import {
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
-} from '../../../core/blitz/tankopedia.js';
-import { theme } from '../../../stitches.config.js';
+} from '../../../core/blitz/tankopedia';
+import { theme } from '../../../stitches.config';
 
 export enum TreeType {
   TechTree,

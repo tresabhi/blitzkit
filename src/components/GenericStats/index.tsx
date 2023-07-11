@@ -1,5 +1,5 @@
-import { Percentile } from '../../constants/percentiles.js';
-import GenericStatsColumn from './components/GenericStatsColumn.js';
+import { Percentile } from '../../constants/percentiles';
+import GenericStatsColumn from './components/GenericStatsColumn';
 
 export type Stat =
   | [string, string | number | undefined]

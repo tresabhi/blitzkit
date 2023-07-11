@@ -1,5 +1,5 @@
-import { AllStats } from '../../types/accountInfo.js';
-import { emptyAllStats } from '../blitzstars/getDiffedTankStats.js';
+import { AllStats } from '../../types/accountInfo';
+import { emptyAllStats } from '../blitzstars/getDiffedTankStats';
 
 export default function sumStats(allStatsCollection: AllStats[]) {
   return allStatsCollection.reduce((accumulated, current) => {

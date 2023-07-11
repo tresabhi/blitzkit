@@ -2,8 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    // "moduleResolution": "Node", TODO: implement Node module resolution
-    "moduleResolution": "nodenext",
+    "moduleResolution": "Node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -12,5 +11,8 @@
     "resolveJsonModule": true,
     "jsx": "react-jsx"
   },
-  "include": ["src/**/*.ts", "src/components/AllStatsOverview/components/WN8SurroundingStat.tsx"]
+  "include": [
+    "src/**/*.ts",
+    "src/components/AllStatsOverview/components/WN8SurroundingStat.tsx"
+  ]
 }

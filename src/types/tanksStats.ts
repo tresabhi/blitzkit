@@ -1,4 +1,4 @@
-import { AllStats } from './accountInfo.js';
+import { AllStats } from './accountInfo';
 
 export interface IndividualTankStats {
   all: AllStats;

@@ -3,8 +3,8 @@ import {
   AutocompleteInteraction,
   CacheType,
 } from 'discord.js';
-import { BLITZ_SERVERS } from '../../constants/servers.js';
-import listClans from '../blitz/listClans.js';
+import { BLITZ_SERVERS } from '../../constants/servers';
+import listClans from '../blitz/listClans';
 
 export default async function autocompleteClan(
   interaction: AutocompleteInteraction<CacheType>,
@@ -20,7 +20,7 @@ export default async function autocompleteClan(
             ({
               name: `${player.name} (${BLITZ_SERVERS[player.server]})`,
               value: `${player.server}/${player.clan_id}`,
-            } satisfies ApplicationCommandOptionChoiceData<string>),
+            }) satisfies ApplicationCommandOptionChoiceData<string>,
         )
       : [],
   );

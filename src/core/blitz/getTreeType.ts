@@ -1,5 +1,5 @@
-import { TreeType } from '../../components/Tanks/index.js';
-import { tankopedia } from './tankopedia.js';
+import { TreeType } from '../../components/Tanks';
+import { tankopedia } from './tankopedia';
 
 export default async function getTreeType(id: number) {
   const entry = (await tankopedia)[id];

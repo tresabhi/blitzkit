@@ -1,7 +1,7 @@
 import { times } from 'lodash';
 import { ReactNode } from 'react';
-import { theme } from '../../../stitches.config.js';
-import { Margin, MarginOrientation } from './Margin.js';
+import { theme } from '../../../stitches.config';
+import { Margin, MarginOrientation } from './Margin';
 
 export const GRAPH_WIDTH = 544;
 export const GRAPH_HEIGHT = 320;

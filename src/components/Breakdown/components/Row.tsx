@@ -1,7 +1,7 @@
-import getWN8Percentile from '../../../core/blitz/getWN8Percentile.js';
-import { theme } from '../../../stitches.config.js';
-import { RowDiscriminator } from './RowDiscriminator.js';
-import { RowStat } from './RowStat.js';
+import getWN8Percentile from '../../../core/blitz/getWN8Percentile';
+import { theme } from '../../../stitches.config';
+import { RowDiscriminator } from './RowDiscriminator';
+import { RowStat } from './RowStat';
 
 export interface RowProps {
   name: string;

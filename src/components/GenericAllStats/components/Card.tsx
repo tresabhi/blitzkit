@@ -1,6 +1,6 @@
-import { Percentile } from '../../../constants/percentiles.js';
-import { theme } from '../../../stitches.config.js';
-import PercentileIndicator from '../../PercentileIndicator.js';
+import { Percentile } from '../../../constants/percentiles';
+import { theme } from '../../../stitches.config';
+import PercentileIndicator from '../../PercentileIndicator';
 
 export interface CardItem {
   label: string;

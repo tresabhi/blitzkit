@@ -1,4 +1,4 @@
-import { theme } from '../../../stitches.config.js';
+import { theme } from '../../../stitches.config';
 
 export enum WN8SurroundingStatAlign {
   Left,

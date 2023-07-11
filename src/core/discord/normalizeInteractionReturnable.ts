@@ -4,8 +4,8 @@ import {
   EmbedBuilder,
   InteractionEditReplyOptions,
 } from 'discord.js';
-import { InteractionReturnable } from '../../events/interactionCreate/index.js';
-import jsxToPng from '../node/jsxToPng.js';
+import { InteractionReturnable } from '../../events/interactionCreate';
+import jsxToPng from '../node/jsxToPng';
 
 export default async function normalizeInteractionReturnable(
   returnable: InteractionReturnable,

@@ -1,16 +1,16 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import discord from '../../discord.json' assert { type: 'json' };
-import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import addUsernameChoices from '../core/discord/addUsernameChoices.js';
-import autocompleteUsername from '../core/discord/autocompleteUsername.js';
-import embedNegative from '../core/discord/embedNegative.js';
-import embedPositive from '../core/discord/embedPositive.js';
-import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
-import { CommandRegistry } from '../events/interactionCreate/index.js';
-import { AccountInfo } from '../types/accountInfo.js';
-import { PlayerClanData } from '../types/playerClanData.js';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
+import autocompleteUsername from '../core/discord/autocompleteUsername';
+import embedNegative from '../core/discord/embedNegative';
+import embedPositive from '../core/discord/embedPositive';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { CommandRegistry } from '../events/interactionCreate';
+import { AccountInfo } from '../types/accountInfo';
+import { PlayerClanData } from '../types/playerClanData';
 
 export const verifyCommand: CommandRegistry = {
   inProduction: true,

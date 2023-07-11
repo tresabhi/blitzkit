@@ -1,8 +1,8 @@
 import { ButtonInteraction, CacheType } from 'discord.js';
-import { CYCLIC_API } from '../../../constants/cyclic.js';
-import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable.js';
-import throwError from '../../../core/node/throwError.js';
-import { commands } from '../index.js';
+import { commands } from '..';
+import { CYCLIC_API } from '../../../constants/cyclic';
+import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable';
+import throwError from '../../../core/node/throwError';
 
 export default async function handleButton(
   interaction: ButtonInteraction<CacheType>,

@@ -16,7 +16,8 @@
     "start:server": "node --enable-source-maps --trace-warnings dist/server.cjs",
     "host:docs": "vitepress preview docs",
     "zip": "zip -r dist.zip dist",
-    "lint": "npx tsc"
+    "lint": "npx tsc",
+    "format": "prettier --write \"**/*.@(json|js|jsx|css|md|ts|tsx|html|xml|yml|gltf)\""
   },
   "license": "MIT",
   "dependencies": {
@@ -42,6 +43,7 @@
     "@types/markdown-escape": "^1.1.0",
     "@types/node": "^20.2.1",
     "@types/react": "^18.2.7",
+    "prettier": "^3.0.0",
     "typescript": "^5.0.4",
     "vitepress": "^1.0.0-beta.3"
   }

@@ -1,9 +1,9 @@
-import { AllStats, SupplementaryStats } from '../../types/accountInfo.js';
-import { WN8Display } from './components/WN8Display/index.js';
+import { AllStats, SupplementaryStats } from '../../types/accountInfo';
+import { WN8Display } from './components/WN8Display';
 import {
   WN8SurroundingStat,
   WN8SurroundingStatAlign,
-} from './components/WN8SurroundingStat.js';
+} from './components/WN8SurroundingStat';
 
 export interface AllStatsOverviewProps {
   stats: AllStats;

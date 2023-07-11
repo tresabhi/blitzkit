@@ -1,9 +1,9 @@
-import { BlitzServer } from '../../constants/servers.js';
-import { AllStats } from '../../types/accountInfo.js';
+import { BlitzServer } from '../../constants/servers';
+import { AllStats } from '../../types/accountInfo';
 import getTankHistories, {
   TankHistories,
   TankHistoryRaw,
-} from './getTankHistories.js';
+} from './getTankHistories';
 
 export const emptyAllStats: AllStats = {
   battles: 0,

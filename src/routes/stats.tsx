@@ -1,7 +1,7 @@
-import resolvePeriodFromRequest from '../core/express/resolvePeriodFromRequest.js';
-import resolvePlayerFromRequest from '../core/express/resolvePlayerFromRequest.js';
-import stats, { StatType } from '../renderers/stats.js';
-import { RouteRegistry } from '../server.js';
+import resolvePeriodFromRequest from '../core/express/resolvePeriodFromRequest';
+import resolvePlayerFromRequest from '../core/express/resolvePlayerFromRequest';
+import stats, { StatType } from '../renderers/stats';
+import { RouteRegistry } from '../server';
 
 export const statsRoute: RouteRegistry = {
   route: '/stats/:type/:period',

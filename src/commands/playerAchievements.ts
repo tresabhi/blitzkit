@@ -1,18 +1,16 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { startCase } from 'lodash';
 import markdownEscape from 'markdown-escape';
-import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import addUsernameChoices from '../core/discord/addUsernameChoices.js';
-import autocompleteUsername from '../core/discord/autocompleteUsername.js';
-import embedInfo from '../core/discord/embedInfo.js';
-import markdownTable, {
-  TableInputEntry,
-} from '../core/discord/markdownTable.js';
-import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
-import { CommandRegistry } from '../events/interactionCreate/index.js';
-import { AccountAchievements } from '../types/accountAchievements.js';
-import { AccountInfo } from '../types/accountInfo.js';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
+import autocompleteUsername from '../core/discord/autocompleteUsername';
+import embedInfo from '../core/discord/embedInfo';
+import markdownTable, { TableInputEntry } from '../core/discord/markdownTable';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { CommandRegistry } from '../events/interactionCreate';
+import { AccountAchievements } from '../types/accountAchievements';
+import { AccountInfo } from '../types/accountInfo';
 
 type SortBy = 'name' | 'count';
 

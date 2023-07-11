@@ -1,4 +1,4 @@
-import throwError from '../node/throwError.js';
+import throwError from '../node/throwError';
 
 export type WargamingResponse<Data extends object> =
   | {

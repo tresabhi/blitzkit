@@ -1,21 +1,21 @@
 import { SlashCommandBuilder } from 'discord.js';
-import calculateWN8 from '../core/blitz/calculateWN8.js';
-import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import sumStats from '../core/blitz/sumStats.js';
-import { tankopedia } from '../core/blitz/tankopedia.js';
-import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats.js';
-import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
-import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo.js';
-import { tankAverages } from '../core/blitzstars/tankAverages.js';
-import addUsernameChoices from '../core/discord/addUsernameChoices.js';
-import embedNegative from '../core/discord/embedNegative.js';
-import embedPositive from '../core/discord/embedPositive.js';
-import markdownTable, { TableInput } from '../core/discord/markdownTable.js';
-import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
-import { CommandRegistry } from '../events/interactionCreate/index.js';
-import { AccountInfo } from '../types/accountInfo.js';
-import { PossiblyPromise } from '../types/possiblyPromise.js';
+import calculateWN8 from '../core/blitz/calculateWN8';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import sumStats from '../core/blitz/sumStats';
+import { tankopedia } from '../core/blitz/tankopedia';
+import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats';
+import getPeriodNow from '../core/blitzstars/getPeriodNow';
+import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo';
+import { tankAverages } from '../core/blitzstars/tankAverages';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
+import embedNegative from '../core/discord/embedNegative';
+import embedPositive from '../core/discord/embedPositive';
+import markdownTable, { TableInput } from '../core/discord/markdownTable';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { CommandRegistry } from '../events/interactionCreate';
+import { AccountInfo } from '../types/accountInfo';
+import { PossiblyPromise } from '../types/possiblyPromise';
 
 export type SkilledClan = 'SKLLD' | 'SMRI';
 

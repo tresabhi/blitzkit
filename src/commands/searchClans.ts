@@ -1,13 +1,13 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
-import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import addClanChoices from '../core/discord/addClanChoices.js';
-import addServerChoices from '../core/discord/addServerChoices.js';
-import embedInfo from '../core/discord/embedInfo.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
-import { CommandRegistry } from '../events/interactionCreate/index.js';
-import { ClanList } from '../types/clanList.js';
+import { BLITZ_SERVERS, BlitzServer } from '../constants/servers';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import addClanChoices from '../core/discord/addClanChoices';
+import addServerChoices from '../core/discord/addServerChoices';
+import embedInfo from '../core/discord/embedInfo';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { CommandRegistry } from '../events/interactionCreate';
+import { ClanList } from '../types/clanList';
 
 export const searchClansCommand: CommandRegistry = {
   inProduction: true,

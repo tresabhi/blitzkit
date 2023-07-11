@@ -1,5 +1,5 @@
-import { TIER_ROMAN_NUMERALS, Tier } from '../core/blitz/tankopedia.js';
-import { theme } from '../stitches.config.js';
+import { TIER_ROMAN_NUMERALS, Tier } from '../core/blitz/tankopedia';
+import { theme } from '../stitches.config';
 
 export type TierWeightsRecord = Partial<Record<Tier, number>>;
 

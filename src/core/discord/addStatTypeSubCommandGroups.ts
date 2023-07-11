@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
-import addPeriodSubCommands from './addPeriodSubCommands.js';
-import addTankChoices from './addTankChoices.js';
-import addUsernameChoices from './addUsernameChoices.js';
+import addPeriodSubCommands from './addPeriodSubCommands';
+import addTankChoices from './addTankChoices';
+import addUsernameChoices from './addUsernameChoices';
 
 export default function addStatTypeSubCommandGroups(
   option: SlashCommandBuilder,

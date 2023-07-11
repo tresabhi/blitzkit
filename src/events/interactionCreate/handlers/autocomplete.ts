@@ -1,5 +1,5 @@
 import { AutocompleteInteraction, CacheType } from 'discord.js';
-import { commands } from '../index.js';
+import { commands } from '..';
 
 export default function handleAutocomplete(
   interaction: AutocompleteInteraction<CacheType>,

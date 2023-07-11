@@ -1,6 +1,6 @@
-import { BlitzServer } from '../../constants/servers.js';
-import { Period } from '../discord/addPeriodSubCommands.js';
-import getTimeDaysAgo from './getTimeDaysAgo.js';
+import { BlitzServer } from '../../constants/servers';
+import { Period } from '../discord/addPeriodSubCommands';
+import getTimeDaysAgo from './getTimeDaysAgo';
 
 export default function getPeriodStart(
   server: BlitzServer,

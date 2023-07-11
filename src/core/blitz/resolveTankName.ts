@@ -1,4 +1,4 @@
-import { tankopedia } from './tankopedia.js';
+import { tankopedia } from './tankopedia';
 
 export default async function resolveTankName(tankId: number) {
   const tankopediaName = (await tankopedia)[tankId]?.name;

@@ -1,7 +1,7 @@
 import { Request } from 'express';
-import { CYCLIC_API } from '../../constants/cyclic.js';
-import { BlitzServer } from '../../constants/servers.js';
-import resolvePeriodFromURL from './resolvePeriodFromURL.js';
+import { CYCLIC_API } from '../../constants/cyclic';
+import { BlitzServer } from '../../constants/servers';
+import resolvePeriodFromURL from './resolvePeriodFromURL';
 
 export default function resolvePeriodFromRequest(
   server: BlitzServer,

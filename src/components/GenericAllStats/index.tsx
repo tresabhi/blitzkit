@@ -1,9 +1,9 @@
-import getWN8Percentile from '../../core/blitz/getWN8Percentile.js';
-import isNumber from '../../core/node/isNumber.js';
-import { AllStats, SupplementaryStats } from '../../types/accountInfo.js';
-import { Card } from './components/Card.js';
-import { Root } from './components/Root.js';
-import { Row } from './components/Row.js';
+import getWN8Percentile from '../../core/blitz/getWN8Percentile';
+import isNumber from '../../core/node/isNumber';
+import { AllStats, SupplementaryStats } from '../../types/accountInfo';
+import { Card } from './components/Card';
+import { Root } from './components/Root';
+import { Row } from './components/Row';
 
 // TODO: remove the .js endings
 

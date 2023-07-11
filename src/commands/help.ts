@@ -2,10 +2,7 @@ import {
   SlashCommandBuilder,
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
-import {
-  COMMANDS_RAW,
-  CommandRegistry,
-} from '../events/interactionCreate/index.js';
+import { COMMANDS_RAW, CommandRegistry } from '../events/interactionCreate';
 
 const RAW_PATH = `https://raw.githubusercontent.com/tresabhi/blitzkrieg/main/docs/`;
 const DOCS = {

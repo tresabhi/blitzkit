@@ -1,4 +1,4 @@
-import { AllStats } from '../../types/accountInfo.js';
+import { AllStats } from '../../types/accountInfo';
 
 export interface SpecialStats {
   winrate: number;

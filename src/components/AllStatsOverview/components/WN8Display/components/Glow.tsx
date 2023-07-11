@@ -1,6 +1,6 @@
-import { Percentile } from '../../../../../constants/percentiles.js';
-import hslToHex from '../../../../../core/node/hslToHex.js';
-import { PERCENTILE_COLORS } from '../../../../PercentileIndicator.js';
+import { Percentile } from '../../../../../constants/percentiles';
+import hslToHex from '../../../../../core/node/hslToHex';
+import { PERCENTILE_COLORS } from '../../../../PercentileIndicator';
 
 export enum GlowSide {
   Top,

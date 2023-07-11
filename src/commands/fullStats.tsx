@@ -1,21 +1,21 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { CYCLIC_API } from '../constants/cyclic.js';
-import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import resolveTankId from '../core/blitz/resolveTankId.js';
-import addStatTypeSubCommandGroups from '../core/discord/addStatTypeSubCommandGroups.js';
-import autocompleteTanks from '../core/discord/autocompleteTanks.js';
-import autocompleteUsername from '../core/discord/autocompleteUsername.js';
-import interactionToURL from '../core/discord/interactionToURL.js';
-import linkButton from '../core/discord/linkButton.js';
-import primaryButton from '../core/discord/primaryButton.js';
-import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton.js';
-import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.js';
-import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton.js';
-import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
-import { CommandRegistry } from '../events/interactionCreate/index.js';
-import fullStats, { StatType } from '../renderers/fullStats.js';
-import { AccountInfo } from '../types/accountInfo.js';
+import { CYCLIC_API } from '../constants/cyclic';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import resolveTankId from '../core/blitz/resolveTankId';
+import addStatTypeSubCommandGroups from '../core/discord/addStatTypeSubCommandGroups';
+import autocompleteTanks from '../core/discord/autocompleteTanks';
+import autocompleteUsername from '../core/discord/autocompleteUsername';
+import interactionToURL from '../core/discord/interactionToURL';
+import linkButton from '../core/discord/linkButton';
+import primaryButton from '../core/discord/primaryButton';
+import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
+import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand';
+import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { CommandRegistry } from '../events/interactionCreate';
+import fullStats, { StatType } from '../renderers/fullStats';
+import { AccountInfo } from '../types/accountInfo';
 
 export const fullStatsCommand: CommandRegistry = {
   inProduction: true,

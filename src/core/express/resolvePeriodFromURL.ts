@@ -1,13 +1,13 @@
-import { BlitzServer } from '../../constants/servers.js';
-import getPeriodNow from '../blitzstars/getPeriodNow.js';
-import getPeriodStart from '../blitzstars/getPeriodStart.js';
-import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo.js';
-import { Period } from '../discord/addPeriodSubCommands.js';
+import { BlitzServer } from '../../constants/servers';
+import getPeriodNow from '../blitzstars/getPeriodNow';
+import getPeriodStart from '../blitzstars/getPeriodStart';
+import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo';
+import { Period } from '../discord/addPeriodSubCommands';
 import {
   EVOLUTION_PERIOD_NAMES,
   PERIOD_NAMES,
   ResolvedPeriod,
-} from '../discord/resolvePeriodFromCommand.js';
+} from '../discord/resolvePeriodFromCommand';
 
 export default function resolvePeriodFromURL(
   server: BlitzServer,
