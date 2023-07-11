@@ -1,4 +1,4 @@
-import GenericAllStats from '../components/GenericAllStats.js';
+import GenericAllStats from '../components/GenericAllStats/index.js';
 import NoData, { NoDataType } from '../components/NoData.js';
 import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
 import TierWeights, { TierWeightsRecord } from '../components/TierWeights.js';

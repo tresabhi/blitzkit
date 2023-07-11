@@ -19,7 +19,7 @@ import { AccountInfo } from '../types/accountInfo.js';
 
 export const fullStatsCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: addStatTypeSubCommandGroups(
