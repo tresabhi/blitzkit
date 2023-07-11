@@ -1,9 +1,4 @@
-import {
-  SlashCommandBuilder,
-  SlashCommandSubcommandBuilder,
-  SlashCommandSubcommandGroupBuilder,
-} from 'discord.js';
-import embedInfo from '../core/discord/embedInfo.js';
+import { SlashCommandBuilder } from 'discord.js';
 import {
   COMMANDS_RAW,
   CommandRegistry,
@@ -49,52 +44,14 @@ export const helpCommand: CommandRegistry = {
     const subcommand = interaction.options.getSubcommand();
 
     if (subcommand === 'commands') {
-      return [
-        `# Commands\n\nBlitzkrieg offers the following commands:`,
-        embedInfo(
-          '',
-          COMMANDS_RAW.filter(
-            (registry) => registry.inPublic && registry.inProduction,
-          )
-            .map((registry) => {
-              const info = `- \`/${registry.command.name}\`: ${registry.command.description}`;
-              const subcommandGroups = registry.command.options.filter(
-                (option) =>
-                  option instanceof SlashCommandSubcommandGroupBuilder,
-              ) as SlashCommandSubcommandGroupBuilder[];
-              const subcommands = registry.command.options.filter(
-                (option) => option instanceof SlashCommandSubcommandBuilder,
-              ) as SlashCommandSubcommandBuilder[];
-
-              const tree =
-                subcommandGroups.length > 0
-                  ? subcommandGroups
-                      .map((subcommandGroup) => {
-                        const info = `  - \`${subcommandGroup.name}\`: ${subcommandGroup.description}`;
-                        const subcommands = subcommandGroup.options
-                          .map(
-                            (subcommand) =>
-                              `    - \`${subcommand.name}\`: ${subcommand.description}`,
-                          )
-                          .join('\n');
-
-                        return `${info}${
-                          subcommands ? `\n${subcommands}` : ''
-                        }`;
-                      })
-                      .join('\n')
-                  : subcommands
-                      .map(
-                        (subcommand) =>
-                          `  - \`${subcommand.name}\`: ${subcommand.description}`,
-                      )
-                      .join('\n');
-
-              return `${info}${tree ? `\n${tree}` : ''}`;
-            })
-            .join('\n'),
-        ),
-      ];
+      return `# Commands\n\nBlitzkrieg offers the following commands:\n\n${COMMANDS_RAW.filter(
+        (registry) => registry.inPublic && registry.inProduction,
+      )
+        .map(
+          (registry) =>
+            `- \`/${registry.command.name}\`: ${registry.command.description}`,
+        )
+        .join('\n')}`;
     }
 
     const url = `${RAW_PATH}${DOCS[subcommand]}.md`;
