@@ -1,44 +1,51 @@
-import { SlashCommandBuilder } from 'discord.js';
+import {
+  SlashCommandBuilder,
+  SlashCommandSubcommandsOnlyBuilder,
+} from 'discord.js';
 import {
   COMMANDS_RAW,
   CommandRegistry,
 } from '../events/interactionCreate/index.js';
 
 const RAW_PATH = `https://raw.githubusercontent.com/tresabhi/blitzkrieg/main/docs/`;
-const DOCS: Record<string, string> = {
+const DOCS = {
   permissions: 'guide/permissions',
   embeds: 'guide/embeds',
   about: 'guide/about',
   invite: 'guide/invite',
+  timezones: 'guide/timezones',
 };
+const DOC_DESCRIPTIONS: Record<keyof typeof DOCS, string> = {
+  permissions: 'The permissions needed for the bot to function',
+  embeds: 'How embeds work',
+  about: 'About the bot',
+  invite: 'How to invite the bot',
+  timezones: 'How Blitzkrieg infers and uses your timezone',
+};
+
+function addDocsSubcommands(option: SlashCommandSubcommandsOnlyBuilder) {
+  Object.entries(DOC_DESCRIPTIONS).forEach(([key, value]) => {
+    option.addSubcommand((sub) => sub.setName(key).setDescription(value));
+  });
+
+  return option;
+}
 
 export const helpCommand: CommandRegistry = {
   inProduction: true,
   inDevelopment: true,
   inPublic: true,
 
-  command: new SlashCommandBuilder()
-    .setName('help')
-    .setDescription('All the help you need about the bot')
-    .addSubcommand((option) =>
-      option
-        .setName('commands')
-        .setDescription('List of all commands and their descriptions'),
-    )
-    .addSubcommand((option) =>
-      option
-        .setName('permissions')
-        .setDescription('The permissions needed for the bot to function'),
-    )
-    .addSubcommand((option) =>
-      option.setName('about').setDescription('About the bot'),
-    )
-    .addSubcommand((option) =>
-      option.setName('embeds').setDescription('How embeds work'),
-    )
-    .addSubcommand((option) =>
-      option.setName('invite').setDescription('How to invite the bot'),
-    ),
+  command: addDocsSubcommands(
+    new SlashCommandBuilder()
+      .setName('help')
+      .setDescription('All the help you need about the bot')
+      .addSubcommand((option) =>
+        option
+          .setName('commands')
+          .setDescription('List of all commands and their descriptions'),
+      ),
+  ),
 
   handler(interaction) {
     const subcommand = interaction.options.getSubcommand();
@@ -54,7 +61,7 @@ export const helpCommand: CommandRegistry = {
         .join('\n')}`;
     }
 
-    const url = `${RAW_PATH}${DOCS[subcommand]}.md`;
+    const url = `${RAW_PATH}${DOCS[subcommand as keyof typeof DOCS]}.md`;
     const content = fetch(url).then((response) => response.text());
 
     return content;
