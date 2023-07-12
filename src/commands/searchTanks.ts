@@ -1,14 +1,14 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { go } from 'fuzzysort';
 import markdownEscape from 'markdown-escape';
-import { TANK_NAMES } from '../core/blitz/tankopedia.js';
-import addTankChoices from '../core/discord/addTankChoices.js';
-import embedInfo from '../core/discord/embedInfo.js';
-import { CommandRegistry } from '../events/interactionCreate/index.js';
+import { TANK_NAMES } from '../core/blitz/tankopedia';
+import addTankChoices from '../core/discord/addTankChoices';
+import embedInfo from '../core/discord/embedInfo';
+import { CommandRegistry } from '../events/interactionCreate';
 
 export const searchTanksCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()

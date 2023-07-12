@@ -1,5 +1,5 @@
-import { RouteReturnable } from '../../server.js';
-import jsxToSvg from '../node/jsxToSvg.js';
+import { RouteReturnable } from '../../server';
+import jsxToSvg from '../node/jsxToSvg';
 
 export default async function normalizeRouteReturnable(
   returnable: RouteReturnable,

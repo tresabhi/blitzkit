@@ -1,6 +1,6 @@
 import { times } from 'lodash';
-import { theme } from '../../../stitches.config.js';
-import { MarginInputProps } from './Root.js';
+import { theme } from '../../../stitches.config';
+import { MarginInputProps } from './Root';
 
 export enum MarginOrientation {
   Vertical,
@@ -37,7 +37,7 @@ export function Margin({
           key={index}
           style={{
             fontSize: 16,
-            color: theme.colors.textLowContrast,
+            color: theme.colors.textHighContrast,
           }}
         >
           {`${(

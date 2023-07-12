@@ -1,6 +1,6 @@
 // a cleaner simplification of Blitz Stars' histories because it's a mess there
 
-import { AllStats } from './accountInfo.js';
+import { AllStats } from './accountInfo';
 
 export interface History {
   all: AllStats;

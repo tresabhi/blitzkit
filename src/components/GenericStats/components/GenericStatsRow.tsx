@@ -1,6 +1,6 @@
-import { theme } from '../../../stitches.config.js';
-import PercentileIndicator from '../../PercentileIndicator.js';
-import { Stat } from '../index.js';
+import { Stat } from '..';
+import { theme } from '../../../stitches.config';
+import PercentileIndicator from '../../PercentileIndicator';
 
 export interface GenericStatsRowProps {
   stat: Stat;

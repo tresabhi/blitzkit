@@ -1,9 +1,12 @@
 import { EmbedBuilder } from 'discord.js';
-import { ACCENT_COLOR } from '../../constants/colors.js';
+import { ACCENT_COLOR } from '../../constants/colors';
 
 export default function embedInfo(title: string, description: string) {
-  return new EmbedBuilder()
+  const embed = new EmbedBuilder()
     .setColor(ACCENT_COLOR)
-    .setTitle(title)
     .setDescription(description);
+
+  if (title) embed.setTitle(title);
+
+  return embed;
 }

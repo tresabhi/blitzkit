@@ -1,30 +1,34 @@
-import * as Breakdown from '../components/Breakdown/index.js';
-import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
-import TitleBar from '../components/TitleBar.js';
-import Wrapper from '../components/Wrapper.js';
-import { BLITZ_SERVERS } from '../constants/servers.js';
-import calculateWN8 from '../core/blitz/calculateWN8.js';
-import getTankStats from '../core/blitz/getTankStats.js';
-import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import resolveTankName from '../core/blitz/resolveTankName.js';
-import sumStats from '../core/blitz/sumStats.js';
-import { tankopedia } from '../core/blitz/tankopedia.js';
-import getPeriodNow from '../core/blitzstars/getPeriodNow.js';
-import getTankStatsDiffed from '../core/blitzstars/getTankStatsDiffed.js';
-import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo.js';
-import { tankAverages } from '../core/blitzstars/tankAverages.js';
-import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
-import { AccountInfo, AllStats } from '../types/accountInfo.js';
-import { PlayerClanData } from '../types/playerClanData.js';
-import { PossiblyPromise } from '../types/possiblyPromise.js';
+import * as Breakdown from '../components/Breakdown';
+import NoData, { NoDataType } from '../components/NoData';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy';
+import TitleBar from '../components/TitleBar';
+import Wrapper from '../components/Wrapper';
+import { BLITZ_SERVERS } from '../constants/servers';
+import calculateWN8 from '../core/blitz/calculateWN8';
+import getTankStats from '../core/blitz/getTankStats';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import resolveTankName from '../core/blitz/resolveTankName';
+import sumStats from '../core/blitz/sumStats';
+import { tankopedia } from '../core/blitz/tankopedia';
+import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats';
+import getPeriodNow from '../core/blitzstars/getPeriodNow';
+import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo';
+import { tankAverages } from '../core/blitzstars/tankAverages';
+import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { AccountInfo, AllStats } from '../types/accountInfo';
+import { PlayerClanData } from '../types/playerClanData';
+import { PossiblyPromise } from '../types/possiblyPromise';
 
-export default async function today({ server, id }: ResolvedPlayer) {
-  const tankStatsOverTime = await getTankStatsDiffed(
+export default async function today(
+  { server, id }: ResolvedPlayer,
+  limit = Infinity,
+  naked?: boolean,
+) {
+  const { diffed, order } = await getDiffedTankStats(
     server,
     id,
-    getTimeDaysAgo(0),
+    getTimeDaysAgo(server, 1),
     getPeriodNow(),
   );
   const accountInfo = await getWargamingResponse<AccountInfo>(
@@ -39,7 +43,7 @@ export default async function today({ server, id }: ResolvedPlayer) {
   };
   const allStatsToAccumulate: AllStats[] = [];
 
-  Object.entries(tankStatsOverTime).forEach(([, tankStats]) => {
+  Object.entries(diffed).forEach(([, tankStats]) => {
     allStatsToAccumulate.push(tankStats);
   });
   Object.entries(careerTankStatsRaw).forEach(([, tankStats]) => {
@@ -48,11 +52,11 @@ export default async function today({ server, id }: ResolvedPlayer) {
 
   const accumulatedStats = sumStats(allStatsToAccumulate);
 
-  if (Object.keys(tankStatsOverTime).length > 0) {
-    tankStatsOverTime[0] = accumulatedStats;
+  if (Object.keys(diffed).length > 0) {
+    diffed[0] = accumulatedStats;
   }
 
-  const tankStatsOverTimeEntries = Object.entries(tankStatsOverTime);
+  const tankStatsOverTimeEntries = Object.entries(diffed);
   const todayWN8s = await tankStatsOverTimeEntries.reduce<
     PossiblyPromise<Record<number, number>>
   >(async (accumulator, [tankIdString, tankStats]) => {
@@ -85,12 +89,12 @@ export default async function today({ server, id }: ResolvedPlayer) {
   todayWN8s[0] =
     todayWN8sEntries.reduce(
       (accumulator, [tankIdString, wn8]) =>
-        accumulator + wn8 * tankStatsOverTime[Number(tankIdString)].battles,
+        accumulator + wn8 * diffed[Number(tankIdString)].battles,
       0,
     ) /
     todayWN8sEntries.reduce(
       (accumulator, [tankIdString]) =>
-        accumulator + tankStatsOverTime[Number(tankIdString)].battles,
+        accumulator + diffed[Number(tankIdString)].battles,
       0,
     );
   careerWN8s[0] =
@@ -110,38 +114,42 @@ export default async function today({ server, id }: ResolvedPlayer) {
     );
 
   const rows = await Promise.all(
-    tankStatsOverTimeEntries.map(async ([tankIdString, tankStats]) => {
-      const tankId = Number(tankIdString);
+    [
+      // this code unreadable on god will forget tomorrow no cap
+      ...(order.length === 0 ? [] : [0]),
+      ...(isFinite(limit) ? order.slice(0, limit) : order),
+    ].map(async (tankId, index) => {
+      const tankStats = diffed[tankId];
       const career = careerStats[tankId];
 
       return (
         <Breakdown.Row
+          naked={naked}
+          isListing={tankId !== 0}
+          minimized={index > 4}
           key={tankId}
-          name={
-            tankId === 0 ? 'Total' : await resolveTankName(Number(tankIdString))
-          }
+          name={tankId === 0 ? 'Total' : await resolveTankName(tankId)}
           winrate={tankStats.wins / tankStats.battles}
           careerWinrate={career.wins / career.battles}
           WN8={isNaN(todayWN8s[tankId]) ? undefined : todayWN8s[tankId]}
           careerWN8={isNaN(careerWN8s[tankId]) ? undefined : careerWN8s[tankId]}
           damage={tankStats.damage_dealt / tankStats.battles}
           careerDamage={career.damage_dealt / career.battles}
-          survival={tankStats.survived_battles / tankStats.battles}
-          careerSurvival={career.survived_battles / career.battles}
           battles={tankStats.battles}
           careerBattles={career.battles}
           icon={
-            tankId === 0
-              ? undefined
-              : (await tankopedia)[tankIdString as unknown as number]?.images
-                  .normal
+            tankId === 0 ? undefined : (await tankopedia)[tankId]?.images.normal
           }
         />
       );
     }),
   );
 
-  return (
+  return naked ? (
+    <Wrapper naked>
+      <Breakdown.Root>{rows.slice(1)}</Breakdown.Root>
+    </Wrapper>
+  ) : (
     <Wrapper>
       <TitleBar
         name={accountInfo[id].nickname}

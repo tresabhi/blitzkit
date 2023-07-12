@@ -3,8 +3,8 @@ import {
   AutocompleteInteraction,
   CacheType,
 } from 'discord.js';
-import { BLITZ_SERVERS } from '../../constants/servers.js';
-import listPlayers from '../blitz/listPlayers.js';
+import { BLITZ_SERVERS } from '../../constants/servers';
+import listPlayers from '../blitz/listPlayers';
 
 export default async function autocompleteUsername(
   interaction: AutocompleteInteraction<CacheType>,
@@ -21,7 +21,7 @@ export default async function autocompleteUsername(
               ({
                 name: `${player.nickname} (${BLITZ_SERVERS[player.server]})`,
                 value: `${player.server}/${player.account_id}`,
-              } satisfies ApplicationCommandOptionChoiceData<string>),
+              }) satisfies ApplicationCommandOptionChoiceData<string>,
           )
         : [],
     );

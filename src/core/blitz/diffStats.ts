@@ -1,4 +1,4 @@
-import { AllStats } from '../../types/accountInfo.js';
+import { AllStats } from '../../types/accountInfo';
 
 export default function diffStats(stats1: AllStats, stats2: AllStats) {
   function diff(value: (allStats: AllStats) => number) {

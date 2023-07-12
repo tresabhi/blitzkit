@@ -1,9 +1,9 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
-import { BlitzServer } from '../../constants/servers.js';
+import { BlitzServer } from '../../constants/servers';
 import listPlayers, {
   usernamePatternWithoutPosition,
-} from '../blitz/listPlayers.js';
-import throwError from '../node/throwError.js';
+} from '../blitz/listPlayers';
+import throwError from '../node/throwError';
 
 export const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
 

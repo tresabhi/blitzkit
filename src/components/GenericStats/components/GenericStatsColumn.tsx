@@ -1,5 +1,5 @@
-import { Stat } from '../index.js';
-import GenericStatsRow from './GenericStatsRow.js';
+import { Stat } from '..';
+import GenericStatsRow from './GenericStatsRow';
 
 export interface GenericStatsColumnProps {
   stats: Stat[];

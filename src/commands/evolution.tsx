@@ -1,26 +1,26 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { CYCLIC_API } from '../constants/cyclic.js';
-import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import resolveTankId from '../core/blitz/resolveTankId.js';
-import addStatTypeSubCommandGroups from '../core/discord/addStatTypeSubCommandGroups.js';
-import autocompleteTanks from '../core/discord/autocompleteTanks.js';
-import autocompleteUsername from '../core/discord/autocompleteUsername.js';
-import interactionToURL from '../core/discord/interactionToURL.js';
-import linkButton from '../core/discord/linkButton.js';
-import primaryButton from '../core/discord/primaryButton.js';
-import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton.js';
-import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand.js';
-import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton.js';
-import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
-import { CommandRegistry } from '../events/interactionCreate/index.js';
-import evolution from '../renderers/evolution.js';
-import { StatType } from '../renderers/statsfull.js';
-import { AccountInfo } from '../types/accountInfo.js';
+import { CYCLIC_API } from '../constants/cyclic';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import resolveTankId from '../core/blitz/resolveTankId';
+import addStatTypeSubCommandGroups from '../core/discord/addStatTypeSubCommandGroups';
+import autocompleteTanks from '../core/discord/autocompleteTanks';
+import autocompleteUsername from '../core/discord/autocompleteUsername';
+import interactionToURL from '../core/discord/interactionToURL';
+import linkButton from '../core/discord/linkButton';
+import primaryButton from '../core/discord/primaryButton';
+import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
+import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand';
+import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { CommandRegistry } from '../events/interactionCreate';
+import evolution from '../renderers/evolution';
+import { StatType } from '../renderers/fullStats';
+import { AccountInfo } from '../types/accountInfo';
 
 export const evolutionCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: addStatTypeSubCommandGroups(
@@ -34,9 +34,10 @@ export const evolutionCommand: CommandRegistry = {
       true,
     ) as StatType;
     const player = await resolvePlayerFromCommand(interaction);
-    const period = resolvePeriodFromCommand(interaction);
+    const period = resolvePeriodFromCommand(player.server, interaction);
     const tankIdRaw = interaction.options.getString('tank')!;
-    const tankId = commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
+    const tankId =
+      commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
     const start = interaction.options.getInteger('start');
     const end = interaction.options.getInteger('end');
     const { nickname } = (
@@ -73,8 +74,8 @@ export const evolutionCommand: CommandRegistry = {
     const url = new URL(`${CYCLIC_API}/${interaction.customId}`);
     const path = url.pathname.split('/').filter(Boolean);
     const commandGroup = path[1] as StatType;
-    const period = resolvePeriodFromButton(interaction);
     const player = await resolvePlayerFromButton(interaction);
+    const period = resolvePeriodFromButton(player.server, interaction);
 
     return await evolution(
       commandGroup,

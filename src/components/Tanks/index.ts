@@ -1,2 +1,3 @@
-export * from './components/Item.js';
-export * from './components/Root.js';
+export * from './components/Column';
+export * from './components/Item';
+export * from './components/Root';

@@ -1,12 +1,12 @@
-import { BlitzServer } from '../../constants/servers.js';
+import { BlitzServer } from '../../constants/servers';
 import {
   GetHistoriesOptions,
   Histories,
   History,
   getHistoriesDefaultOptions,
-} from '../../types/histories.js';
-import getTankStats from '../blitz/getTankStats.js';
-import { emptyAllStats } from './getTankStatsDiffed.js';
+} from '../../types/histories';
+import getTankStats from '../blitz/getTankStats';
+import { emptyAllStats } from './getDiffedTankStats';
 
 export interface TankHistory extends History {
   tank_id: number;
@@ -48,7 +48,7 @@ export default async function getTankHistories(
         all: history.all,
         last_battle_time: history.last_battle_time,
         tank_id: history.tank_id,
-      } satisfies TankHistory),
+      }) satisfies TankHistory,
   );
   const compliantTanks: number[] = [];
   const lastBattles: Record<number, number> = {};

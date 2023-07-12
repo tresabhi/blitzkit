@@ -1,21 +1,21 @@
-import * as Graph from '../components/Graph/index.js';
-import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
-import TitleBar from '../components/TitleBar.js';
-import Wrapper from '../components/Wrapper.js';
-import { BLITZ_SERVERS } from '../constants/servers.js';
-import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import resolveTankName from '../core/blitz/resolveTankName.js';
-import { tankopedia } from '../core/blitz/tankopedia.js';
-import getPlayerHistories from '../core/blitzstars/getPlayerHistories.js';
-import getTankHistories from '../core/blitzstars/getTankHistories.js';
-import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand.js';
-import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
-import { AccountInfo } from '../types/accountInfo.js';
-import { Histories } from '../types/histories.js';
-import { PlayerClanData } from '../types/playerClanData.js';
-import { StatType } from './statsfull.js';
+import * as Graph from '../components/Graph';
+import NoData, { NoDataType } from '../components/NoData';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy';
+import TitleBar from '../components/TitleBar';
+import Wrapper from '../components/Wrapper';
+import { BLITZ_SERVERS } from '../constants/servers';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import resolveTankName from '../core/blitz/resolveTankName';
+import { tankopedia } from '../core/blitz/tankopedia';
+import getPlayerHistories from '../core/blitzstars/getPlayerHistories';
+import getTankHistories from '../core/blitzstars/getTankHistories';
+import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand';
+import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { AccountInfo } from '../types/accountInfo';
+import { Histories } from '../types/histories';
+import { PlayerClanData } from '../types/playerClanData';
+import { StatType } from './fullStats';
 
 export default async function evolution<Type extends StatType>(
   type: Type,
@@ -96,6 +96,7 @@ export default async function evolution<Type extends StatType>(
       {/* goofy ahh bug forces me to call them as functions */}
       {plot.length > 0 && (
         <Graph.Root
+          xTitle="Battles"
           verticalMargin={{
             min: minY,
             max: maxY,

@@ -1,14 +1,18 @@
-import getPeriodNow from '../blitzstars/getPeriodNow.js';
-import getPeriodStart from '../blitzstars/getPeriodStart.js';
-import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo.js';
-import { Period } from '../discord/addPeriodSubCommands.js';
+import { BlitzServer } from '../../constants/servers';
+import getPeriodNow from '../blitzstars/getPeriodNow';
+import getPeriodStart from '../blitzstars/getPeriodStart';
+import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo';
+import { Period } from '../discord/addPeriodSubCommands';
 import {
   EVOLUTION_PERIOD_NAMES,
   PERIOD_NAMES,
   ResolvedPeriod,
-} from '../discord/resolvePeriodFromCommand.js';
+} from '../discord/resolvePeriodFromCommand';
 
-export default function resolvePeriodFromURL(urlString: string) {
+export default function resolvePeriodFromURL(
+  server: BlitzServer,
+  urlString: string,
+) {
   let statsName: string;
   let evolutionName: string;
   let start: number;
@@ -25,12 +29,12 @@ export default function resolvePeriodFromURL(urlString: string) {
 
     statsName = `${startMin} to ${endMax} days' statistics`;
     evolutionName = `${startMin} to ${endMax} days' evolution`;
-    start = getTimeDaysAgo(startMin);
-    end = getTimeDaysAgo(endMax);
+    start = getTimeDaysAgo(server, startMin);
+    end = getTimeDaysAgo(server, endMax);
   } else {
     statsName = PERIOD_NAMES[period];
     evolutionName = EVOLUTION_PERIOD_NAMES[period];
-    start = getPeriodStart(period);
+    start = getPeriodStart(server, period);
     end = getPeriodNow();
   }
 

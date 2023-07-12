@@ -5,12 +5,12 @@ import {
   CacheType,
   ChatInputCommandInteraction,
 } from 'discord.js';
-import embedNegative from '../../../core/discord/embedNegative.js';
-import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable.js';
-import embedWarning from '../../../core/discord/embedWarning.js';
-import { psa } from '../../../core/discord/psa.js';
-import { handleError } from '../../error.js';
-import { commands } from '../index.js';
+import { commands } from '..';
+import embedNegative from '../../../core/discord/embedNegative';
+import embedWarning from '../../../core/discord/embedWarning';
+import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable';
+import { psa } from '../../../core/discord/psa';
+import { handleError } from '../../error';
 
 export default async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,

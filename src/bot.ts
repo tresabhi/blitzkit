@@ -1,9 +1,9 @@
 import { Client, GatewayIntentBits } from 'discord.js';
-import { DISCORD_TOKEN } from './core/node/arguments.js';
-import { registerErrorHandlers } from './events/error.js';
-import guildMemberAdd from './events/guildMemberAdd.js';
-import interactionCreate from './events/interactionCreate/index.js';
-import ready from './events/ready.js';
+import { DISCORD_TOKEN } from './core/node/arguments';
+import { registerErrorHandlers } from './events/error';
+import guildMemberAdd from './events/guildMemberAdd';
+import interactionCreate from './events/interactionCreate';
+import ready from './events/ready';
 
 export const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],

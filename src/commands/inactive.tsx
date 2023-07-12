@@ -1,24 +1,24 @@
 import { SlashCommandBuilder } from 'discord.js';
-import GenericStats from '../components/GenericStats/index.js';
-import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
-import TitleBar from '../components/TitleBar.js';
-import Wrapper from '../components/Wrapper.js';
-import { BLITZ_SERVERS } from '../constants/servers.js';
-import getBlitzClan from '../core/blitz/getBlitzClan.js';
-import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import addClanChoices from '../core/discord/addClanChoices.js';
-import autocompleteClan from '../core/discord/autocompleteClan.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
-import { CommandRegistry } from '../events/interactionCreate/index.js';
-import { AccountInfo } from '../types/accountInfo.js';
-import { ClanInfo } from '../types/clanInfo.js';
+import GenericStats from '../components/GenericStats';
+import NoData, { NoDataType } from '../components/NoData';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy';
+import TitleBar from '../components/TitleBar';
+import Wrapper from '../components/Wrapper';
+import { BLITZ_SERVERS } from '../constants/servers';
+import getBlitzClan from '../core/blitz/getBlitzClan';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import addClanChoices from '../core/discord/addClanChoices';
+import autocompleteClan from '../core/discord/autocompleteClan';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { CommandRegistry } from '../events/interactionCreate';
+import { AccountInfo } from '../types/accountInfo';
+import { ClanInfo } from '../types/clanInfo';
 
 const DEFAULT_THRESHOLD = 7;
 
 export const inactiveCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()

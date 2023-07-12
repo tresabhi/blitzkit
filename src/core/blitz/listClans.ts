@@ -1,7 +1,7 @@
-import { BlitzServer } from '../../constants/servers.js';
-import { Clan, ClanList } from '../../types/clanList.js';
-import { WARGAMING_APPLICATION_ID } from '../node/arguments.js';
-import getWargamingResponse from './getWargamingResponse.js';
+import { BlitzServer } from '../../constants/servers';
+import { Clan, ClanList } from '../../types/clanList';
+import { WARGAMING_APPLICATION_ID } from '../node/arguments';
+import getWargamingResponse from './getWargamingResponse';
 
 export type ClanListWithServer = (Clan & {
   server: 'com' | 'eu' | 'asia';

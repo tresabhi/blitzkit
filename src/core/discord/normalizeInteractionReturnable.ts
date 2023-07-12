@@ -4,8 +4,8 @@ import {
   EmbedBuilder,
   InteractionEditReplyOptions,
 } from 'discord.js';
-import { InteractionReturnable } from '../../events/interactionCreate/index.js';
-import jsxToPng from '../node/jsxToPng.js';
+import { InteractionReturnable } from '../../events/interactionCreate';
+import jsxToPng from '../node/jsxToPng';
 
 export default async function normalizeInteractionReturnable(
   returnable: InteractionReturnable,
@@ -19,7 +19,9 @@ export default async function normalizeInteractionReturnable(
 
   await Promise.all(
     normalizedReturnable.map(async (item) => {
-      if (item instanceof EmbedBuilder) {
+      if (typeof item === 'string') {
+        reply.content = item;
+      } else if (item instanceof EmbedBuilder) {
         if (!reply.embeds) reply.embeds = [];
         reply.embeds.push(item);
       } else if (item instanceof ButtonBuilder) {

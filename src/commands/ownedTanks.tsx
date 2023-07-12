@@ -1,25 +1,26 @@
 import { SlashCommandBuilder } from 'discord.js';
-import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
-import * as Tanks from '../components/Tanks/index.js';
-import TitleBar from '../components/TitleBar.js';
-import Wrapper from '../components/Wrapper.js';
-import { BLITZ_SERVERS } from '../constants/servers.js';
-import getTankStats from '../core/blitz/getTankStats.js';
-import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import resolveTankName from '../core/blitz/resolveTankName.js';
+import NoData, { NoDataType } from '../components/NoData';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy';
+import * as Tanks from '../components/Tanks';
+import TitleBar from '../components/TitleBar';
+import Wrapper from '../components/Wrapper';
+import { BLITZ_SERVERS } from '../constants/servers';
+import getTankStats from '../core/blitz/getTankStats';
+import getTreeType from '../core/blitz/getTreeType';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import resolveTankName from '../core/blitz/resolveTankName';
 import {
   TIER_ROMAN_NUMERALS,
   Tier,
   tankopedia,
-} from '../core/blitz/tankopedia.js';
-import addUsernameChoices from '../core/discord/addUsernameChoices.js';
-import autocompleteUsername from '../core/discord/autocompleteUsername.js';
-import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
-import { CommandRegistry } from '../events/interactionCreate/index.js';
-import { AccountInfo } from '../types/accountInfo.js';
-import { PlayerClanData } from '../types/playerClanData.js';
+} from '../core/blitz/tankopedia';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
+import autocompleteUsername from '../core/discord/autocompleteUsername';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { CommandRegistry } from '../events/interactionCreate';
+import { AccountInfo } from '../types/accountInfo';
+import { PlayerClanData } from '../types/playerClanData';
 
 const COMP_TANKS = [
   // light tanks
@@ -44,7 +45,7 @@ const COMP_TANKS = [
 
 export const ownedTanksCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -89,10 +90,12 @@ export const ownedTanksCommand: CommandRegistry = {
     const clanData = await getWargamingResponse<PlayerClanData>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
     );
+    const leftColumnSize = Math.ceil(tanks.length / 2);
+    const leftColumn = tanks.slice(0, leftColumnSize);
+    const rightColumn = tanks.slice(leftColumnSize);
 
     return (
       <Wrapper>
-        {/* TODO: integrate some of these into title bar */}
         <TitleBar
           name={accountInfo[id].nickname}
           nameDiscriminator={`(Tier ${TIER_ROMAN_NUMERALS[tier as Tier]})`}
@@ -110,16 +113,32 @@ export const ownedTanksCommand: CommandRegistry = {
 
         {tanks.length > 0 && (
           <Tanks.Root>
-            {await Promise.all(
-              tanks.map(async (tank) => (
-                <Tanks.Item
-                  key={tank.tank_id}
-                  name={await resolveTankName(tank.tank_id)}
-                  type={tank.type}
-                  icon={tank.images?.normal}
-                />
-              )),
-            )}
+            <Tanks.Column>
+              {await Promise.all(
+                leftColumn.map(async (tank) => (
+                  <Tanks.Item
+                    key={tank.tank_id}
+                    name={await resolveTankName(tank.tank_id)}
+                    tankType={tank.type}
+                    image={tank.images?.normal}
+                    treeType={await getTreeType(tank.tank_id)}
+                  />
+                )),
+              )}
+            </Tanks.Column>
+            <Tanks.Column>
+              {await Promise.all(
+                rightColumn.map(async (tank) => (
+                  <Tanks.Item
+                    key={tank.tank_id}
+                    name={await resolveTankName(tank.tank_id)}
+                    tankType={tank.type}
+                    image={tank.images?.normal}
+                    treeType={await getTreeType(tank.tank_id)}
+                  />
+                )),
+              )}
+            </Tanks.Column>
           </Tanks.Root>
         )}
 

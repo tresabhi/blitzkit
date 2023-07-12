@@ -1,7 +1,7 @@
-import { BlitzServer } from '../../constants/servers.js';
-import { serverAndIdPattern } from '../discord/resolvePlayerFromCommand.js';
-import throwError from '../node/throwError.js';
-import listClans from './listClans.js';
+import { BlitzServer } from '../../constants/servers';
+import { serverAndIdPattern } from '../discord/resolvePlayerFromCommand';
+import throwError from '../node/throwError';
+import listClans from './listClans';
 
 export default async function getBlitzClan(clan: string) {
   if (serverAndIdPattern.test(clan)) {

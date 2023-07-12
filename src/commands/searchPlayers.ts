@@ -1,18 +1,18 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { BLITZ_SERVERS, BlitzServer } from '../constants/servers.js';
-import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import { usernamePattern } from '../core/blitz/listPlayers.js';
-import addServerChoices from '../core/discord/addServerChoices.js';
-import addUsernameChoices from '../core/discord/addUsernameChoices.js';
-import embedInfo from '../core/discord/embedInfo.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
-import { CommandRegistry } from '../events/interactionCreate/index.js';
-import { AccountList } from '../types/accountList.js';
+import { BLITZ_SERVERS, BlitzServer } from '../constants/servers';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import { usernamePattern } from '../core/blitz/listPlayers';
+import addServerChoices from '../core/discord/addServerChoices';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
+import embedInfo from '../core/discord/embedInfo';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { CommandRegistry } from '../events/interactionCreate';
+import { AccountList } from '../types/accountList';
 
 export const searchPlayersCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()

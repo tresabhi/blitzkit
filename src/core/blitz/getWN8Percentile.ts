@@ -1,4 +1,4 @@
-import { Percentile } from '../../constants/percentiles.js';
+import { Percentile } from '../../constants/percentiles';
 
 export const WN8_PERCENTILES: [number, Percentile][] = [
   [0, Percentile.VeryBad],

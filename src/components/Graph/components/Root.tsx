@@ -1,7 +1,7 @@
 import { times } from 'lodash';
 import { ReactNode } from 'react';
-import { theme } from '../../../stitches.config.js';
-import { Margin, MarginOrientation } from './Margin.js';
+import { theme } from '../../../stitches.config';
+import { Margin, MarginOrientation } from './Margin';
 
 export const GRAPH_WIDTH = 544;
 export const GRAPH_HEIGHT = 320;
@@ -20,6 +20,7 @@ export interface RootProps {
   separations?: number;
   xMinLabel: string;
   xMaxLabel: string;
+  xTitle: string;
 }
 
 export function Root({
@@ -29,6 +30,7 @@ export function Root({
   separations = 5,
   xMinLabel,
   xMaxLabel,
+  xTitle,
 }: RootProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -39,10 +41,10 @@ export function Root({
           justifyContent: 'space-between',
         }}
       >
-        <span style={{ fontSize: 16, color: theme.colors.textLowContrast }}>
+        <span style={{ fontSize: 16, color: theme.colors.textHighContrast }}>
           {xMinLabel}
         </span>
-        <span style={{ fontSize: 16, color: theme.colors.textLowContrast }}>
+        <span style={{ fontSize: 16, color: theme.colors.textHighContrast }}>
           {xMaxLabel}
         </span>
       </div>
@@ -88,6 +90,19 @@ export function Root({
           orientation={MarginOrientation.Horizontal}
         />
       )}
+
+      <div
+        style={{
+          paddingLeft: 64,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <span style={{ fontSize: 16, color: theme.colors.textLowContrast }}>
+          {xTitle}
+        </span>
+      </div>
     </div>
   );
 }

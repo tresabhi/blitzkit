@@ -9,10 +9,7 @@ export function Root({ children }: RootProps) {
     <div
       style={{
         display: 'flex',
-        flexWrap: 'wrap',
-        gap: 16,
-        alignItems: 'center',
-        justifyContent: 'center',
+        gap: 8,
       }}
     >
       {children}

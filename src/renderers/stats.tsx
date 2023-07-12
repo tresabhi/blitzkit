@@ -1,28 +1,28 @@
-import AllStatsOverview from '../components/AllStatsOverview/index.js';
-import NoData, { NoDataType } from '../components/NoData.js';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy.js';
-import { TierWeightsRecord } from '../components/TierWeights.js';
-import TitleBar from '../components/TitleBar.js';
-import Wrapper from '../components/Wrapper.js';
-import { BLITZ_SERVERS } from '../constants/servers.js';
-import calculateWN8 from '../core/blitz/calculateWN8.js';
-import getWargamingResponse from '../core/blitz/getWargamingResponse.js';
-import resolveTankName from '../core/blitz/resolveTankName.js';
-import sumStats from '../core/blitz/sumStats.js';
-import { Tier, tankopedia } from '../core/blitz/tankopedia.js';
-import getTankStatsDiffed from '../core/blitzstars/getTankStatsDiffed.js';
-import { tankAverages } from '../core/blitzstars/tankAverages.js';
-import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand.js';
-import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand.js';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments.js';
-import { theme } from '../stitches.config.js';
+import AllStatsOverview from '../components/AllStatsOverview';
+import NoData, { NoDataType } from '../components/NoData';
+import PoweredBy, { PoweredByType } from '../components/PoweredBy';
+import { TierWeightsRecord } from '../components/TierWeights';
+import TitleBar from '../components/TitleBar';
+import Wrapper from '../components/Wrapper';
+import { BLITZ_SERVERS } from '../constants/servers';
+import calculateWN8 from '../core/blitz/calculateWN8';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import resolveTankName from '../core/blitz/resolveTankName';
+import sumStats from '../core/blitz/sumStats';
+import { Tier, tankopedia } from '../core/blitz/tankopedia';
+import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats';
+import { tankAverages } from '../core/blitzstars/tankAverages';
+import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand';
+import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
+import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { theme } from '../stitches.config';
 import {
   AccountInfo,
   AllStats,
   SupplementaryStats,
-} from '../types/accountInfo.js';
-import { PlayerClanData } from '../types/playerClanData.js';
-import { PossiblyPromise } from '../types/possiblyPromise.js';
+} from '../types/accountInfo';
+import { PlayerClanData } from '../types/playerClanData';
+import { PossiblyPromise } from '../types/possiblyPromise';
 
 export type StatType = 'player' | 'tank';
 
@@ -52,13 +52,13 @@ export default async function stats<Type extends StatType>(
     image = (await tankopedia)[tankId!]?.images.normal;
   }
 
-  const tankStats = await getTankStatsDiffed(server, id, start, end);
+  const { diffed } = await getDiffedTankStats(server, id, start, end);
   let stats: AllStats | undefined;
   let supplementaryStats: SupplementaryStats;
   let tierWeights: TierWeightsRecord;
 
   if (type === 'player') {
-    const entries = Object.entries(tankStats);
+    const entries = Object.entries(diffed);
     stats = sumStats(entries.map(([, stats]) => stats));
     const battlesOfTanksWithAverages = await entries.reduce<
       PossiblyPromise<number>
@@ -126,11 +126,11 @@ export default async function stats<Type extends StatType>(
       {},
     );
   } else {
-    stats = tankStats[tankId!];
+    stats = diffed[tankId!];
 
     supplementaryStats = {
       WN8: stats
-        ? calculateWN8((await tankAverages)[tankId!].all, tankStats[tankId!])
+        ? calculateWN8((await tankAverages)[tankId!].all, diffed[tankId!])
         : undefined,
       tier: (await tankopedia)[tankId!]?.tier,
     };
@@ -156,7 +156,7 @@ export default async function stats<Type extends StatType>(
   );
 
   return naked ? (
-    overview
+    <Wrapper naked>{overview}</Wrapper>
   ) : (
     <Wrapper>
       <TitleBar

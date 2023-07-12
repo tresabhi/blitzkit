@@ -1,6 +1,6 @@
-import sumStats from '../blitz/sumStats.js';
-import { emptyAllStats } from './getTankStatsDiffed.js';
-import { tankAverages } from './tankAverages.js';
+import sumStats from '../blitz/sumStats';
+import { emptyAllStats } from './getDiffedTankStats';
+import { tankAverages } from './tankAverages';
 
 console.log('Calculating player average...');
 export const playerAverage = Object.entries(await tankAverages).reduce(

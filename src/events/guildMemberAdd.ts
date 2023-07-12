@@ -1,6 +1,6 @@
 import { EmbedBuilder, GuildMember, TextChannel } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
-import { ACCENT_COLOR } from '../constants/colors.js';
+import { ACCENT_COLOR } from '../constants/colors';
 
 export default async function (member: GuildMember) {
   if (member.guild.id === discord.sklld_guild_id) {

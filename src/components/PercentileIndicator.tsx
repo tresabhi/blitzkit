@@ -10,7 +10,7 @@ import {
   teal,
   yellow,
 } from '@radix-ui/colors';
-import { Percentile } from '../constants/percentiles.js';
+import { Percentile } from '../constants/percentiles';
 
 export interface PercentileIndicatorProps {
   percentile: Percentile;

@@ -1,7 +1,7 @@
-import { BlitzServer } from '../../constants/servers.js';
-import { Account, AccountList } from '../../types/accountList.js';
-import { WARGAMING_APPLICATION_ID } from '../node/arguments.js';
-import getWargamingResponse from './getWargamingResponse.js';
+import { BlitzServer } from '../../constants/servers';
+import { Account, AccountList } from '../../types/accountList';
+import { WARGAMING_APPLICATION_ID } from '../node/arguments';
+import getWargamingResponse from './getWargamingResponse';
 
 export type AccountListWithServer = (Account & {
   server: 'com' | 'eu' | 'asia';

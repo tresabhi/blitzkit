@@ -1,6 +1,6 @@
 import { go } from 'fuzzysort';
-import throwError from '../node/throwError.js';
-import { TANKS, tankopedia } from './tankopedia.js';
+import throwError from '../node/throwError';
+import { TANKS, tankopedia } from './tankopedia';
 
 export default async function resolveTankId(tank: string) {
   const number = parseInt(tank);

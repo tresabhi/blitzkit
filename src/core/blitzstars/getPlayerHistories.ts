@@ -1,14 +1,14 @@
-import { BlitzServer } from '../../constants/servers.js';
-import { AccountInfo, AllStats } from '../../types/accountInfo.js';
+import { BlitzServer } from '../../constants/servers';
+import { AccountInfo, AllStats } from '../../types/accountInfo';
 import {
   GetHistoriesOptions,
   Histories,
   History,
   getHistoriesDefaultOptions,
-} from '../../types/histories.js';
-import getWargamingResponse from '../blitz/getWargamingResponse.js';
-import { WARGAMING_APPLICATION_ID } from '../node/arguments.js';
-import { emptyAllStats } from './getTankStatsDiffed.js';
+} from '../../types/histories';
+import getWargamingResponse from '../blitz/getWargamingResponse';
+import { WARGAMING_APPLICATION_ID } from '../node/arguments';
+import { emptyAllStats } from './getDiffedTankStats';
 
 export interface PlayerHistoryRaw {
   clan: { clan_id: number; name: string; tag: string };
@@ -44,7 +44,7 @@ export default async function getPlayerHistories(
       ({
         all: history.statistics.all,
         last_battle_time: history.last_battle_time,
-      } satisfies History),
+      }) satisfies History,
   );
   let lastNonCompliantIndex = -1;
   let hasCompliedOnce = false;
