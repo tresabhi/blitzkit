@@ -3,6 +3,7 @@
   "version": "1.10.0",
   "description": "",
   "main": "src/server.ts",
+  "type": "module",
   "scripts": {
     "build:bot": "node scripts/build --build=bot",
     "build:server": "node scripts/build --build=server",
