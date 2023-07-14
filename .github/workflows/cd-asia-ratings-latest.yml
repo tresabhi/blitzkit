@@ -1,8 +1,8 @@
-name: CD North America Ratings Latest
+name: CD Asia Ratings Latest
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
 
 jobs:
   host:
@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install Yarn
         run: npm install --location=global yarn
@@ -24,7 +24,7 @@ jobs:
       - name: Use node_modules cache
         uses: actions/cache@v3
         with:
-          path: '**/node_modules'
+          path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
