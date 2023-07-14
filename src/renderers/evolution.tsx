@@ -3,7 +3,7 @@ import NoData, { NoDataType } from '../components/NoData';
 import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { BLITZ_SERVERS } from '../constants/servers';
+import { REGION_DOMAIN_NAMES } from '../constants/regions';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankName from '../core/blitz/resolveTankName';
 import { tankopedia } from '../core/blitz/tankopedia';
@@ -89,7 +89,7 @@ export default async function evolution<Type extends StatType>(
         nameDiscriminator={nameDiscriminator}
         image={image}
         description={`${evolutionName} • ${new Date().toDateString()} • ${
-          BLITZ_SERVERS[server]
+          REGION_DOMAIN_NAMES[server]
         }`}
       />
 

@@ -1,4 +1,4 @@
-name: Host
+name: CD Host
 
 on:
   schedule:

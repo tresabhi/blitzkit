@@ -3,7 +3,7 @@ import NoData, { NoDataType } from '../components/NoData';
 import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { BLITZ_SERVERS } from '../constants/servers';
+import { REGION_DOMAIN_NAMES } from '../constants/regions';
 import calculateWN8 from '../core/blitz/calculateWN8';
 import getTankStats from '../core/blitz/getTankStats';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
@@ -162,7 +162,7 @@ export default async function today(
             : undefined
         }
         description={`Today's breakdown • ${new Date().toDateString()} • ${
-          BLITZ_SERVERS[server]
+          REGION_DOMAIN_NAMES[server]
         }`}
       />
 

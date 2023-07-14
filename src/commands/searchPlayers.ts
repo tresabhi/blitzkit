@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { BLITZ_SERVERS, BlitzServer } from '../constants/servers';
+import { REGION_DOMAIN_NAMES, RegionDomain } from '../constants/regions';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import { usernamePattern } from '../core/blitz/listPlayers';
 import addServerChoices from '../core/discord/addServerChoices';
@@ -31,7 +31,7 @@ export const searchPlayersCommand: CommandRegistry = {
     ),
 
   async handler(interaction) {
-    const server = interaction.options.getString('server') as BlitzServer;
+    const server = interaction.options.getString('server') as RegionDomain;
     const name = interaction.options.getString('username')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
     const trimmedSearch = name.trim();
@@ -44,7 +44,9 @@ export const searchPlayersCommand: CommandRegistry = {
       : [];
 
     return embedInfo(
-      `Player search for "${markdownEscape(name)}" in ${BLITZ_SERVERS[server]}`,
+      `Player search for "${markdownEscape(name)}" in ${
+        REGION_DOMAIN_NAMES[server]
+      }`,
       `\`\`\`${
         players.length === 0
           ? 'No players found.'

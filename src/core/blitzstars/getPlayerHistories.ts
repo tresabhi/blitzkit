@@ -1,4 +1,4 @@
-import { BlitzServer } from '../../constants/servers';
+import { RegionDomain } from '../../constants/regions';
 import { AccountInfo, AllStats } from '../../types/accountInfo';
 import {
   GetHistoriesOptions,
@@ -25,13 +25,13 @@ export interface PlayerHistoryRaw {
     account_id: number;
     [key: string]: number;
   };
-  region: BlitzServer;
+  region: RegionDomain;
 }
 
 export type PlayerHistoriesRaw = PlayerHistoryRaw[];
 
 export default async function getPlayerHistories(
-  server: BlitzServer,
+  server: RegionDomain,
   id: number,
   options?: Partial<GetHistoriesOptions>,
 ) {

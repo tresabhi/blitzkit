@@ -1,4 +1,4 @@
-import { BlitzServer } from '../../constants/servers';
+import { RegionDomain } from '../../constants/regions';
 import { Clan, ClanList } from '../../types/clanList';
 import { WARGAMING_APPLICATION_ID } from '../node/arguments';
 import getWargamingResponse from './getWargamingResponse';
@@ -21,7 +21,7 @@ export default async function listClans(search: string, limit = 9) {
           value &&
           value.map((account) => ({
             ...account,
-            server: 'com' as BlitzServer,
+            server: 'com' as RegionDomain,
           })),
       ),
       getWargamingResponse<ClanList>(
@@ -31,7 +31,7 @@ export default async function listClans(search: string, limit = 9) {
           value &&
           value.map((account) => ({
             ...account,
-            server: 'eu' as BlitzServer,
+            server: 'eu' as RegionDomain,
           })),
       ),
       getWargamingResponse<ClanList>(
@@ -41,7 +41,7 @@ export default async function listClans(search: string, limit = 9) {
           value &&
           value.map((account) => ({
             ...account,
-            server: 'asia' as BlitzServer,
+            server: 'asia' as RegionDomain,
           })),
       ),
     ])

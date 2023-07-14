@@ -1,4 +1,4 @@
-import { BlitzServer } from '../../constants/servers';
+import { RegionDomain } from '../../constants/regions';
 import { AllStats } from '../../types/accountInfo';
 import getTankHistories, {
   TankHistories,
@@ -35,7 +35,7 @@ export const emptyTankHistoryNode: TankHistoryRaw = {
 };
 
 export default async function getDiffedTankStats(
-  server: BlitzServer,
+  server: RegionDomain,
   id: number,
   start: number,
   end: number,

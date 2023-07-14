@@ -1,4 +1,4 @@
-import { BlitzServer } from '../../constants/servers';
+import { RegionDomain } from '../../constants/regions';
 import {
   GetHistoriesOptions,
   Histories,
@@ -32,7 +32,7 @@ export const getTankHistoriesDefaultOptions: GetTankHistoriesOptions = {
 };
 
 export default async function getTankHistories(
-  server: BlitzServer,
+  server: RegionDomain,
   id: number,
   options?: Partial<GetTankHistoriesOptions>,
 ) {

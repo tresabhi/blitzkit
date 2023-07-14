@@ -1,14 +1,14 @@
 import { SlashCommandStringOption } from 'discord.js';
-import { BLITZ_SERVERS } from '../../constants/servers';
+import { REGION_DOMAIN_NAMES } from '../../constants/regions';
 
 export default function addServerChoices(option: SlashCommandStringOption) {
   return option
     .setName('server')
     .setDescription('The Blitz server you are in')
     .addChoices(
-      { name: BLITZ_SERVERS.com, value: 'com' },
-      { name: BLITZ_SERVERS.eu, value: 'eu' },
-      { name: BLITZ_SERVERS.asia, value: 'asia' },
+      { name: REGION_DOMAIN_NAMES.com, value: 'com' },
+      { name: REGION_DOMAIN_NAMES.eu, value: 'eu' },
+      { name: REGION_DOMAIN_NAMES.asia, value: 'asia' },
     )
     .setRequired(true);
 }

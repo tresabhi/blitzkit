@@ -1,9 +1,9 @@
-import { BlitzServer } from '../../constants/servers';
+import { RegionDomain } from '../../constants/regions';
 import { Period } from '../discord/addPeriodSubCommands';
 import getTimeDaysAgo from './getTimeDaysAgo';
 
 export default function getPeriodStart(
-  server: BlitzServer,
+  server: RegionDomain,
   period: Exclude<Period, 'custom'>,
 ) {
   if (period === 'career') {
