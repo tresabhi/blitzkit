@@ -3,8 +3,16 @@ import { rm, writeFile } from 'fs/promises';
 import { argv, env } from 'process';
 import commitMultipleFiles from './commitMultipleFiles.js';
 
+/*
+For Central North American Time (UTC-5), use 0 5 * * *.
+For Central European Time (UTC+1), use 0 23 * * *.
+For Central Asia Standard Time (UTC+7), use 0 17 * * *.
+*/
+
 const publish = argv.includes('--publish');
-const server = 'na';
+const server = argv.find((arg) => arg.startsWith('--region='))?.split('=')[1];
+
+if (!server) throw new Error('Region parameter not specified');
 
 const NEIGHBORS = 1000;
 const PLAYERS = await fetch(
@@ -80,7 +88,7 @@ for (let index = 0; index < PLAYERS; index++) {
 const leaderboardJSON = JSON.stringify(leaderboard);
 
 if (publish) {
-  const octokit = new Octokit({ auth: env.GITHUB_TOKEN });
+  const octokit = new Octokit({ auth: env.GH_TOKEN });
 
   const info = await fetch(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,

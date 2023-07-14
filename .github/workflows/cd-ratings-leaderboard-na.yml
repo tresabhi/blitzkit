@@ -1,0 +1,21 @@
+name: CD Ratings Leaderboard North America
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+
+jobs:
+  host:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+
+      - name: Use node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Generate leaderboard
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} yarn publish:ratingsleaderboard --region=asia
