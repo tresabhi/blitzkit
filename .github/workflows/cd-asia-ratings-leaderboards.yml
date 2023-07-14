@@ -1,14 +1,11 @@
-name: CI Build
+name: CD North America Ratings Leaderboards
 
-on: [push, pull_request]
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+on:
+  schedule:
+    - cron: '0 17 * * *'
 
 jobs:
-  build:
-    name: Build
+  host:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,11 +30,5 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Build
-        run: yarn build
-
-      - name: Archive build
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          path: dist
+      - name: Generate leaderboard
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} yarn publish:ratingsleaderboard --region=asia

@@ -4,12 +4,17 @@ import { argv, env } from 'process';
 import commitMultipleFiles from './commitMultipleFiles.js';
 
 /*
-For Central North American Time (UTC-5), use 0 5 * * *.
-For Central European Time (UTC+1), use 0 23 * * *.
-For Central Asia Standard Time (UTC+7), use 0 17 * * *.
-*/
+ * Central North American Time (UTC-5): use 0 5 * * *.
+ * Central European Time (UTC+1): use 0 23 * * *.
+ * Central Asia Standard Time (UTC+7): use 0 17 * * *.
+ *
+ * :region/ratings/:season/info.json: season info like rewards, start & end time, etc.
+ * :region/ratings/:season/latest.json: the absolute latest leaderboard recorded at UTC+0 midnight
+ * :region/ratings/:season/leaderboards/:time.json: collection of all recorded leaderboards at local midnights
+ */
 
 const publish = argv.includes('--publish');
+const latest = argv.includes('--latest');
 const server = argv.find((arg) => arg.startsWith('--region='))?.split('=')[1];
 
 if (!server) throw new Error('Region parameter not specified');
@@ -96,8 +101,10 @@ if (publish) {
   const time = Math.round(Date.now() / 1000);
   const normalizedServer = server === 'na' ? 'com' : server;
 
-  const infoPath = `${normalizedServer}/ratings/seasons/${info.current_season}.json`;
-  const leaderboardPath = `${normalizedServer}/ratings/leaderboards/${info.current_season}/${time}.json`;
+  const infoPath = `${normalizedServer}/ratings/${info.current_season}/info.json`;
+  const leaderboardPath = `${normalizedServer}/ratings/${info.current_season}/${
+    latest ? 'latest.json' : `leaderboards/${time}.json`
+  }`;
   const infoJSON = JSON.stringify(info);
 
   console.log(`Publishing to season ${info.current_season}...`);
