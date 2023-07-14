@@ -12,15 +12,12 @@ concurrency:
 jobs:
   host:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x]
 
     steps:
       - name: Use node
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18
 
       - name: Download release assets
         run: |

@@ -16,18 +16,14 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
-    strategy:
-      matrix:
-        node-version: [18.x]
-
     steps:
-      - name: Get code
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Use node
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18
           cache: 'npm'
 
       - name: Install Yarn
