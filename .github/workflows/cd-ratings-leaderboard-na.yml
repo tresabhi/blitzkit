@@ -18,4 +18,4 @@ jobs:
           node-version: 18
 
       - name: Generate leaderboard
-        run: GH_TOKEN=${{ secrets.GH_TOKEN }} yarn publish:ratingsleaderboard --region=asia
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} yarn publish:ratingsleaderboard --region=na
