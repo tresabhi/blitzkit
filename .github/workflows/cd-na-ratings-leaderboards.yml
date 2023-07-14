@@ -1,4 +1,4 @@
-name: CD Ratings Leaderboard North America
+name: CD North America Ratings Leaderboards
 
 on:
   schedule:
