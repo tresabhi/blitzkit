@@ -4,7 +4,7 @@ import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import * as Tanks from '../components/Tanks';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { BLITZ_SERVERS } from '../constants/servers';
+import { REGION_DOMAIN_NAMES } from '../constants/regions';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
@@ -105,7 +105,7 @@ export const ownedTanksCommand: CommandRegistry = {
               : undefined
           }
           description={`Owned tanks • ${new Date().toDateString()} • ${
-            BLITZ_SERVERS[server]
+            REGION_DOMAIN_NAMES[server]
           }`}
         />
 

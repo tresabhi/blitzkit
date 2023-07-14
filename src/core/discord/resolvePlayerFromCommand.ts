@@ -1,5 +1,5 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
-import { BlitzServer } from '../../constants/servers';
+import { RegionDomain } from '../../constants/regions';
 import listPlayers, {
   usernamePatternWithoutPosition,
 } from '../blitz/listPlayers';
@@ -8,7 +8,7 @@ import throwError from '../node/throwError';
 export const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
 
 export interface ResolvedPlayer {
-  server: BlitzServer;
+  server: RegionDomain;
   id: number;
 }
 
@@ -31,7 +31,7 @@ export default async function resolvePlayerFromCommand(
   if (serverAndIdPattern.test(username)) {
     const [server, accountId] = username.split('/');
     return {
-      server: server as BlitzServer,
+      server: server as RegionDomain,
       id: Number(accountId),
     } satisfies ResolvedPlayer;
   } else {
