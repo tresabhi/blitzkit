@@ -3,6 +3,19 @@ import { rm, writeFile } from 'fs/promises';
 import { argv, env } from 'process';
 import commitMultipleFiles from './commitMultipleFiles.js';
 
+interface RatingsSeasonInfo {
+  count: number;
+}
+
+interface RatingsPlayer {
+  number: number;
+  spa_id: number;
+}
+
+interface RatingsNeighbors {
+  neighbors: RatingsPlayer[];
+}
+
 /*
  * Central North American Time (UTC-5): use 0 5 * * *.
  * Central European Time (UTC+1): use 0 23 * * *.
@@ -23,22 +36,22 @@ const NEIGHBORS = 1000;
 const PLAYERS = await fetch(
   `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,
 )
-  .then((response) => response.json())
+  .then((response) => response.json() as Promise<RatingsSeasonInfo>)
   .then((data) => data.count);
 
-const players = {};
-const leaderboard = [];
+const players: Record<number, RatingsPlayer> = {};
+const leaderboard: RatingsPlayer[] = [];
 let registered = 0;
 
-async function branchFromPlayer(id) {
+async function branchFromPlayer(id: number) {
   const { neighbors } = await fetch(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/user/${id}/?neighbors=${NEIGHBORS}`,
-  ).then((response) => response.json());
+  ).then((response) => response.json() as Promise<RatingsNeighbors>);
 
   const firstPlayer = neighbors[0];
   const lastPlayer = neighbors[neighbors.length - 1];
 
-  const branches = [];
+  const branches: Promise<void>[] = [];
   if (!players[firstPlayer.number])
     branches.push(branchFromPlayer(firstPlayer.spa_id));
   if (!players[lastPlayer.number])
@@ -61,7 +74,7 @@ async function branchFromPlayer(id) {
   await Promise.all(branches);
 }
 
-async function branchFromLeague(id) {
+async function branchFromLeague(id: number) {
   const { result } = await fetch(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/league/${id}/top/`,
   ).then((response) => response.json());
@@ -75,7 +88,7 @@ async function branchFromLeague(id) {
   ]);
 }
 
-console.log('Branching form leagues...');
+console.log('Branching from leagues...');
 await Promise.all([
   branchFromLeague(0),
   branchFromLeague(1),

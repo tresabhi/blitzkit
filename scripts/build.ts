@@ -1,4 +1,4 @@
-import { build } from 'esbuild';
+import { BuildOptions, build } from 'esbuild';
 import { copyFile, mkdir, rm } from 'fs/promises';
 import { argv } from 'process';
 
@@ -6,6 +6,8 @@ const isProd = !argv.includes('--dev');
 const buildAll = argv.includes('--build=all');
 const buildBot = argv.includes('--build=bot') || buildAll;
 const buildServer = argv.includes('--build=server') || buildAll;
+
+console.log(buildAll, buildBot, buildServer);
 
 if (isProd) {
   // only remove in production to ensure no time is wasted in dev
@@ -23,7 +25,7 @@ if (isProd) {
   );
 }
 
-const commonOptions = {
+const commonOptions: BuildOptions = {
   platform: 'node',
   loader: {
     '.node': 'copy',

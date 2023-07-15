@@ -1,10 +1,12 @@
+import { Octokit } from '@octokit/rest';
+
 export default async function commitMultipleFiles(
-  octokit,
-  owner,
-  repo,
-  branch,
-  message,
-  changes,
+  octokit: Octokit,
+  owner: string,
+  repo: string,
+  branch: string,
+  message: string,
+  changes: { path: string; content: string }[],
 ) {
   // Get the latest commit SHA on the specified branch
   const { data: refData } = await octokit.git.getRef({
@@ -31,12 +33,13 @@ export default async function commitMultipleFiles(
         content: change.content,
         encoding: 'utf-8',
       });
+
       return {
         sha: blobData.sha,
         path: change.path,
         mode: '100644',
         type: 'blob',
-      };
+      } as const;
     }),
   );
 
