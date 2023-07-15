@@ -23,6 +23,7 @@ import { ownedTanksCommand } from '../../commands/ownedTanks';
 import { pingCommand } from '../../commands/ping';
 import { playerAchievementsCommand } from '../../commands/playerAchievements';
 import { playerInfoCommand } from '../../commands/playerInfo';
+import { ratingsCommand } from '../../commands/ratings';
 import { searchClansCommand } from '../../commands/searchClans';
 import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { searchTanksCommand } from '../../commands/searchTanks';
@@ -56,6 +57,7 @@ export interface Registry {
 export interface CommandRegistry<HandlesInteraction extends boolean = boolean>
   extends Registry {
   inPublic: boolean;
+  inPreview?: boolean;
   handlesInteraction?: HandlesInteraction;
   command:
     | SlashCommandBuilder
@@ -88,6 +90,7 @@ export const COMMANDS_RAW: CommandRegistry[] = [
   pingCommand,
   evolutionCommand,
   statsCommand,
+  ratingsCommand,
 ];
 export const commands: Record<string, CommandRegistry> = COMMANDS_RAW.reduce(
   (accumulator, registry) => {

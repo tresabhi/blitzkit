@@ -4,7 +4,7 @@ import NoData, { NoDataType } from '../components/NoData';
 import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { REGION_DOMAIN_NAMES } from '../constants/regions';
+import { REGION_NAMES } from '../constants/regions';
 import getBlitzClan from '../core/blitz/getBlitzClan';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import addClanChoices from '../core/discord/addClanChoices';
@@ -72,7 +72,7 @@ export const inactiveCommand: CommandRegistry = {
           nameDiscriminator="(Inactivity)"
           image={`https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData.emblem_set_id}.png`}
           description={`${threshold}+ Days • ${new Date().toDateString()} • ${
-            REGION_DOMAIN_NAMES[server]
+            REGION_NAMES[server]
           }`}
         />
 

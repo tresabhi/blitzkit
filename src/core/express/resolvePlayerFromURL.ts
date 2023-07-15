@@ -1,4 +1,4 @@
-import { RegionDomain } from '../../constants/regions';
+import { Region } from '../../constants/regions';
 import { ResolvedPlayer } from '../discord/resolvePlayerFromCommand';
 
 export default function resolvePlayerFromURL(urlString: string) {
@@ -6,6 +6,6 @@ export default function resolvePlayerFromURL(urlString: string) {
 
   return {
     id: parseInt(url.searchParams.get('id')!),
-    server: url.searchParams.get('server') as RegionDomain,
+    region: url.searchParams.get('server') as Region,
   } satisfies ResolvedPlayer;
 }

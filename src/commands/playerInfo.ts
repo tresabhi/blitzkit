@@ -22,7 +22,7 @@ export const playerInfoCommand: CommandRegistry = {
 
   async handler(interaction) {
     const account = await resolvePlayerFromCommand(interaction);
-    const { id, server } = account;
+    const { id, region: server } = account;
     const accounts = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );

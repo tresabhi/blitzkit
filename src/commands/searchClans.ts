@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { REGION_DOMAIN_NAMES, RegionDomain } from '../constants/regions';
+import { REGION_NAMES, Region } from '../constants/regions';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import addClanChoices from '../core/discord/addClanChoices';
 import addServerChoices from '../core/discord/addServerChoices';
@@ -28,7 +28,7 @@ export const searchClansCommand: CommandRegistry = {
     ),
 
   async handler(interaction) {
-    const server = interaction.options.getString('server') as RegionDomain;
+    const server = interaction.options.getString('server') as Region;
     const clan = interaction.options.getString('clan')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
     const clanList = await getWargamingResponse<ClanList>(
@@ -36,9 +36,7 @@ export const searchClansCommand: CommandRegistry = {
     );
 
     return embedInfo(
-      `Clan search for "${markdownEscape(clan)}" in ${
-        REGION_DOMAIN_NAMES[server]
-      }`,
+      `Clan search for "${markdownEscape(clan)}" in ${REGION_NAMES[server]}`,
       clanList.length === 0
         ? 'No clans found.'
         : `\`\`\`\n${clanList

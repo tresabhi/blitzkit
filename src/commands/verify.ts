@@ -24,7 +24,7 @@ export const verifyCommand: CommandRegistry = {
 
   async handler(interaction) {
     const blitzAccount = await resolvePlayerFromCommand(interaction);
-    const { id, server } = blitzAccount;
+    const { id, region: server } = blitzAccount;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );

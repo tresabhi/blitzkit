@@ -34,7 +34,7 @@ export const evolutionCommand: CommandRegistry = {
       true,
     ) as StatType;
     const player = await resolvePlayerFromCommand(interaction);
-    const period = resolvePeriodFromCommand(player.server, interaction);
+    const period = resolvePeriodFromCommand(player.region, interaction);
     const tankIdRaw = interaction.options.getString('tank')!;
     const tankId =
       commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
@@ -42,7 +42,7 @@ export const evolutionCommand: CommandRegistry = {
     const end = interaction.options.getInteger('end');
     const { nickname } = (
       await getWargamingResponse<AccountInfo>(
-        `https://api.wotblitz.${player.server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
+        `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
       )
     )[player.id];
     const path = interactionToURL(interaction, {
@@ -57,7 +57,7 @@ export const evolutionCommand: CommandRegistry = {
       primaryButton(path, 'Refresh'),
       // linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
       linkButton(
-        `https://www.blitzstars.com/player/${player.server}/${nickname}${
+        `https://www.blitzstars.com/player/${player.region}/${nickname}${
           commandGroup === 'tank' ? `/tank/${tankId!}` : ''
         }`,
         'BlitzStars',

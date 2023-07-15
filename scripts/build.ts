@@ -7,8 +7,6 @@ const buildAll = argv.includes('--build=all');
 const buildBot = argv.includes('--build=bot') || buildAll;
 const buildServer = argv.includes('--build=server') || buildAll;
 
-console.log(buildAll, buildBot, buildServer);
-
 if (isProd) {
   // only remove in production to ensure no time is wasted in dev
   console.log('Removing dist...');

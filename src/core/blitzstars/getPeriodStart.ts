@@ -1,9 +1,9 @@
-import { RegionDomain } from '../../constants/regions';
+import { Region } from '../../constants/regions';
 import { Period } from '../discord/addPeriodSubCommands';
 import getTimeDaysAgo from './getTimeDaysAgo';
 
 export default function getPeriodStart(
-  server: RegionDomain,
+  server: Region,
   period: Exclude<Period, 'custom'>,
 ) {
   if (period === 'career') {

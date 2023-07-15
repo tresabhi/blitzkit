@@ -1,4 +1,4 @@
-import { RegionDomain } from '../../constants/regions';
+import { Region } from '../../constants/regions';
 import { Clan, ClanList } from '../../types/clanList';
 import { WARGAMING_APPLICATION_ID } from '../node/arguments';
 import getWargamingResponse from './getWargamingResponse';
@@ -21,7 +21,7 @@ export default async function listClans(search: string, limit = 9) {
           value &&
           value.map((account) => ({
             ...account,
-            server: 'com' as RegionDomain,
+            server: 'com' as Region,
           })),
       ),
       getWargamingResponse<ClanList>(
@@ -31,7 +31,7 @@ export default async function listClans(search: string, limit = 9) {
           value &&
           value.map((account) => ({
             ...account,
-            server: 'eu' as RegionDomain,
+            server: 'eu' as Region,
           })),
       ),
       getWargamingResponse<ClanList>(
@@ -41,7 +41,7 @@ export default async function listClans(search: string, limit = 9) {
           value &&
           value.map((account) => ({
             ...account,
-            server: 'asia' as RegionDomain,
+            server: 'asia' as Region,
           })),
       ),
     ])

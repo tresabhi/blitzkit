@@ -1,4 +1,4 @@
-import { RegionDomain } from '../../constants/regions';
+import { Region } from '../../constants/regions';
 import { AccountInfo, AllStats } from '../../types/accountInfo';
 import {
   GetHistoriesOptions,
@@ -25,13 +25,13 @@ export interface PlayerHistoryRaw {
     account_id: number;
     [key: string]: number;
   };
-  region: RegionDomain;
+  region: Region;
 }
 
 export type PlayerHistoriesRaw = PlayerHistoryRaw[];
 
 export default async function getPlayerHistories(
-  server: RegionDomain,
+  server: Region,
   id: number,
   options?: Partial<GetHistoriesOptions>,
 ) {

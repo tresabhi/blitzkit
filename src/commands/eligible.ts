@@ -49,7 +49,7 @@ export const eligibleCommand: CommandRegistry = {
 
   async handler(interaction) {
     const clan = interaction.options.getString('clan') as SkilledClan;
-    const { id, server } = await resolvePlayerFromCommand(interaction);
+    const { id, region: server } = await resolvePlayerFromCommand(interaction);
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );

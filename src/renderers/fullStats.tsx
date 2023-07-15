@@ -4,7 +4,7 @@ import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import TierWeights, { TierWeightsRecord } from '../components/TierWeights';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { REGION_DOMAIN_NAMES } from '../constants/regions';
+import { REGION_NAMES } from '../constants/regions';
 import calculateWN8 from '../core/blitz/calculateWN8';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankName from '../core/blitz/resolveTankName';
@@ -28,7 +28,7 @@ export type StatType = 'player' | 'tank';
 export default async function fullStats<Type extends StatType>(
   type: Type,
   { start, end, statsName }: ResolvedPeriod,
-  { server, id }: ResolvedPlayer,
+  { region: server, id }: ResolvedPlayer,
   tankId: Type extends 'tank' ? number : null,
 ) {
   let nameDiscriminator: string | undefined;
@@ -143,7 +143,7 @@ export default async function fullStats<Type extends StatType>(
         nameDiscriminator={nameDiscriminator}
         image={image}
         description={`${statsName} • ${new Date().toDateString()} • ${
-          REGION_DOMAIN_NAMES[server]
+          REGION_NAMES[server]
         }`}
       />
 

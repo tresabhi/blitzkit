@@ -1,4 +1,4 @@
-import { RegionDomain } from '../../constants/regions';
+import { Region } from '../../constants/regions';
 import { AllStats } from '../../types/accountInfo';
 import getTankHistories, {
   TankHistories,
@@ -35,7 +35,7 @@ export const emptyTankHistoryNode: TankHistoryRaw = {
 };
 
 export default async function getDiffedTankStats(
-  server: RegionDomain,
+  server: Region,
   id: number,
   start: number,
   end: number,

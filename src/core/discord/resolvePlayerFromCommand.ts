@@ -1,5 +1,5 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
-import { RegionDomain } from '../../constants/regions';
+import { Region } from '../../constants/regions';
 import listPlayers, {
   usernamePatternWithoutPosition,
 } from '../blitz/listPlayers';
@@ -8,7 +8,7 @@ import throwError from '../node/throwError';
 export const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
 
 export interface ResolvedPlayer {
-  server: RegionDomain;
+  region: Region;
   id: number;
 }
 
@@ -31,7 +31,7 @@ export default async function resolvePlayerFromCommand(
   if (serverAndIdPattern.test(username)) {
     const [server, accountId] = username.split('/');
     return {
-      server: server as RegionDomain,
+      region: server as Region,
       id: Number(accountId),
     } satisfies ResolvedPlayer;
   } else {
@@ -39,7 +39,7 @@ export default async function resolvePlayerFromCommand(
 
     if (accounts[0]) {
       return {
-        server: accounts[0].server,
+        region: accounts[0].server,
         id: accounts[0].account_id,
       } satisfies ResolvedPlayer;
     } else {

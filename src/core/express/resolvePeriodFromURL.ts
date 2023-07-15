@@ -1,4 +1,4 @@
-import { RegionDomain } from '../../constants/regions';
+import { Region } from '../../constants/regions';
 import getPeriodNow from '../blitzstars/getPeriodNow';
 import getPeriodStart from '../blitzstars/getPeriodStart';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo';
@@ -10,7 +10,7 @@ import {
 } from '../discord/resolvePeriodFromCommand';
 
 export default function resolvePeriodFromURL(
-  server: RegionDomain,
+  server: Region,
   urlString: string,
 ) {
   let statsName: string;

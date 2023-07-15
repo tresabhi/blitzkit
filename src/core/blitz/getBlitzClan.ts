@@ -1,4 +1,4 @@
-import { RegionDomain } from '../../constants/regions';
+import { Region } from '../../constants/regions';
 import { serverAndIdPattern } from '../discord/resolvePlayerFromCommand';
 import throwError from '../node/throwError';
 import listClans from './listClans';
@@ -6,7 +6,7 @@ import listClans from './listClans';
 export default async function getBlitzClan(clan: string) {
   if (serverAndIdPattern.test(clan)) {
     const [server, accountId] = clan.split('/');
-    return { server: server as RegionDomain, id: Number(accountId) };
+    return { server: server as Region, id: Number(accountId) };
   } else {
     const accounts = await listClans(clan);
 

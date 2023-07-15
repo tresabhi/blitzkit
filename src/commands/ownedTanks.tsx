@@ -4,7 +4,7 @@ import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import * as Tanks from '../components/Tanks';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { REGION_DOMAIN_NAMES } from '../constants/regions';
+import { REGION_NAMES } from '../constants/regions';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
@@ -74,7 +74,7 @@ export const ownedTanksCommand: CommandRegistry = {
   async handler(interaction) {
     const tier = Number(interaction.options.getString('tier'));
     const account = await resolvePlayerFromCommand(interaction);
-    const { id, server } = account;
+    const { id, region: server } = account;
     const accountInfo = await getWargamingResponse<AccountInfo>(
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
@@ -105,7 +105,7 @@ export const ownedTanksCommand: CommandRegistry = {
               : undefined
           }
           description={`Owned tanks • ${new Date().toDateString()} • ${
-            REGION_DOMAIN_NAMES[server]
+            REGION_NAMES[server]
           }`}
         />
 

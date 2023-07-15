@@ -1,4 +1,4 @@
-import { RegionDomain } from '../../constants/regions';
+import { Region } from '../../constants/regions';
 import { Account, AccountList } from '../../types/accountList';
 import { WARGAMING_APPLICATION_ID } from '../node/arguments';
 import getWargamingResponse from './getWargamingResponse';
@@ -25,7 +25,7 @@ export default async function listPlayers(search: string, limit = 9) {
             value &&
             value.map((account) => ({
               ...account,
-              server: 'com' as RegionDomain,
+              server: 'com' as Region,
             })),
         ),
         getWargamingResponse<AccountList>(
@@ -35,7 +35,7 @@ export default async function listPlayers(search: string, limit = 9) {
             value &&
             value.map((account) => ({
               ...account,
-              server: 'eu' as RegionDomain,
+              server: 'eu' as Region,
             })),
         ),
         getWargamingResponse<AccountList>(
@@ -45,7 +45,7 @@ export default async function listPlayers(search: string, limit = 9) {
             value &&
             value.map((account) => ({
               ...account,
-              server: 'asia' as RegionDomain,
+              server: 'asia' as Region,
             })),
         ),
       ])
