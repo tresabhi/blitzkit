@@ -18,6 +18,8 @@ import commitMultipleFiles from './commitMultipleFiles.js';
  * na/ratings/49/midnight.json: last midnight's leaderboard relative to the region
  */
 
+export type BlitzkriegRatingsLeaderboard = { id: number; score: number }[];
+
 const publish = argv.includes('--publish');
 const latest = argv.includes('--latest');
 const server = argv.find((arg) => arg.startsWith('--region='))?.split('=')[1];
@@ -32,7 +34,7 @@ const PLAYERS = await fetch(
   .then((data) => data.count);
 
 const players: Record<number, RatingsPlayer> = {};
-const leaderboard: RatingsPlayer[] = [];
+const leaderboard: BlitzkriegRatingsLeaderboard = [];
 let registered = 0;
 
 async function branchFromPlayer(id: number) {
@@ -69,7 +71,7 @@ async function branchFromPlayer(id: number) {
 async function branchFromLeague(id: number) {
   const { result } = await fetch(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/league/${id}/top/`,
-  ).then((response) => response.json());
+  ).then((response) => response.json() as Promise<{ result: RatingsPlayer[] }>);
 
   const firstPlayer = result[0];
   const lastPlayer = result[result.length - 1];
@@ -91,8 +93,13 @@ await Promise.all([
 
 console.log('Converting to an array...');
 for (let index = 0; index < PLAYERS; index++) {
-  leaderboard[index] = players[index + 1];
-  if (!leaderboard[index]) console.warn(`${index} had no player`);
+  const listing = players[index + 1];
+  if (!listing) console.warn(`Position ${index + 1} had no player`);
+
+  leaderboard[index] = {
+    id: listing.spa_id,
+    score: listing.score,
+  };
 }
 
 const leaderboardJSON = JSON.stringify(leaderboard);
@@ -102,7 +109,7 @@ if (publish) {
 
   const info = await fetch(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,
-  ).then((response) => response.json());
+  ).then((response) => response.json() as Promise<RatingsInfo>);
   const normalizedServer = server === 'na' ? 'com' : server;
 
   const infoPath = `${normalizedServer}/ratings/${info.current_season}/info.json`;
