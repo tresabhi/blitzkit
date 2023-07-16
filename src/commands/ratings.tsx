@@ -12,7 +12,7 @@ import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
 import { CommandRegistry } from '../events/interactionCreate';
 import { AccountInfo } from '../types/accountInfo';
 
-export interface LeaguePlayer {
+export interface RatingsPlayer {
   spa_id: number;
   mmr: number;
   season_number: number;
@@ -27,7 +27,7 @@ export interface LeaguePlayer {
 }
 
 export interface LeagueTop {
-  result: LeaguePlayer[];
+  result: RatingsPlayer[];
 }
 
 export type RatingsReward = {
@@ -89,6 +89,10 @@ export interface RatingsInfo {
 
   rewards: RatingsReward[];
   leagues: RatingsLeague[];
+}
+
+export interface RatingsNeighbors {
+  neighbors: RatingsPlayer[];
 }
 
 console.log('Caching ratings info...');
