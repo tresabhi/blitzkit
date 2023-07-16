@@ -9,7 +9,7 @@ import getBlitzClan from '../core/blitz/getBlitzClan';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import addClanChoices from '../core/discord/addClanChoices';
 import autocompleteClan from '../core/discord/autocompleteClan';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import { AccountInfo } from '../types/accountInfo';
 import { ClanInfo } from '../types/clanInfo';
@@ -42,14 +42,14 @@ export const inactiveCommand: CommandRegistry = {
     const time = new Date().getTime() / 1000;
     const clanData = (
       await getWargamingResponse<ClanInfo>(
-        `https://api.wotblitz.${server}/wotb/clans/info/?application_id=${WARGAMING_APPLICATION_ID}&clan_id=${id}`,
+        `https://api.wotblitz.${server}/wotb/clans/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&clan_id=${id}`,
       )
     )[id];
     const memberIds = clanData.members_ids;
     const accounts = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${memberIds.join(
-        ',',
-      )}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${
+        secrets.WARGAMING_APPLICATION_ID
+      }&account_id=${memberIds.join(',')}`,
     );
     const inactive = memberIds
       .map((memberId) => {

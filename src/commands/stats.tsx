@@ -12,7 +12,7 @@ import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
 import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand';
 import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import { StatType } from '../renderers/fullStats';
 import stats from '../renderers/stats';
@@ -48,7 +48,7 @@ export const statsCommand: CommandRegistry = {
     });
     const { nickname } = (
       await getWargamingResponse<AccountInfo>(
-        `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
+        `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
       )
     )[player.id];
 
@@ -73,7 +73,7 @@ export const statsCommand: CommandRegistry = {
     const path = url.pathname.split('/').filter(Boolean);
     const commandGroup = path[1] as StatType;
     const player = await resolvePlayerFromButton(interaction);
-    const period = resolvePeriodFromButton(player.server, interaction);
+    const period = resolvePeriodFromButton(player.region, interaction);
 
     return await stats(
       commandGroup,

@@ -1,6 +1,6 @@
 import { Region } from '../../constants/regions';
 import { Account, AccountList } from '../../types/accountList';
-import { WARGAMING_APPLICATION_ID } from '../node/arguments';
+import { secrets } from '../node/secrets';
 import getWargamingResponse from './getWargamingResponse';
 
 export type AccountListWithServer = (Account & {
@@ -19,7 +19,7 @@ export default async function listPlayers(search: string, limit = 9) {
     return (
       await Promise.all([
         getWargamingResponse<AccountList>(
-          `https://api.wotblitz.com/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=${normalizedLimit}`,
+          `https://api.wotblitz.com/wotb/account/list/?application_id=${secrets.WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=${normalizedLimit}`,
         ).then(
           (value) =>
             value &&
@@ -29,7 +29,7 @@ export default async function listPlayers(search: string, limit = 9) {
             })),
         ),
         getWargamingResponse<AccountList>(
-          `https://api.wotblitz.eu/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=${normalizedLimit}`,
+          `https://api.wotblitz.eu/wotb/account/list/?application_id=${secrets.WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=${normalizedLimit}`,
         ).then(
           (value) =>
             value &&
@@ -39,7 +39,7 @@ export default async function listPlayers(search: string, limit = 9) {
             })),
         ),
         getWargamingResponse<AccountList>(
-          `https://api.wotblitz.asia/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=${normalizedLimit}`,
+          `https://api.wotblitz.asia/wotb/account/list/?application_id=${secrets.WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=${normalizedLimit}`,
         ).then(
           (value) =>
             value &&

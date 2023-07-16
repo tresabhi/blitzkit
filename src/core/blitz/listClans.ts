@@ -1,6 +1,6 @@
 import { Region } from '../../constants/regions';
 import { Clan, ClanList } from '../../types/clanList';
-import { WARGAMING_APPLICATION_ID } from '../node/arguments';
+import { secrets } from '../node/secrets';
 import getWargamingResponse from './getWargamingResponse';
 
 export type ClanListWithServer = (Clan & {
@@ -15,7 +15,7 @@ export default async function listClans(search: string, limit = 9) {
   return (
     await Promise.all([
       getWargamingResponse<ClanList>(
-        `https://api.wotblitz.com/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
+        `https://api.wotblitz.com/wotb/clans/list/?application_id=${secrets.WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
       ).then(
         (value) =>
           value &&
@@ -25,7 +25,7 @@ export default async function listClans(search: string, limit = 9) {
           })),
       ),
       getWargamingResponse<ClanList>(
-        `https://api.wotblitz.eu/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
+        `https://api.wotblitz.eu/wotb/clans/list/?application_id=${secrets.WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
       ).then(
         (value) =>
           value &&
@@ -35,7 +35,7 @@ export default async function listClans(search: string, limit = 9) {
           })),
       ),
       getWargamingResponse<ClanList>(
-        `https://api.wotblitz.asia/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
+        `https://api.wotblitz.asia/wotb/clans/list/?application_id=${secrets.WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
       ).then(
         (value) =>
           value &&

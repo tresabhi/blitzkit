@@ -6,7 +6,7 @@ import autocompleteUsername from '../core/discord/autocompleteUsername';
 import embedInfo from '../core/discord/embedInfo';
 import markdownTable from '../core/discord/markdownTable';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import { AccountInfo } from '../types/accountInfo';
 
@@ -24,7 +24,7 @@ export const playerInfoCommand: CommandRegistry = {
     const account = await resolvePlayerFromCommand(interaction);
     const { id, region: server } = account;
     const accounts = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
     const accountInfo = accounts[id];
 

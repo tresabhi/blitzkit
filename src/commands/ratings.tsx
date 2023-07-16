@@ -8,7 +8,7 @@ import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import { AccountInfo } from '../types/accountInfo';
 
@@ -181,7 +181,7 @@ export const ratingsCommand: CommandRegistry = {
         `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/league/${leagueIndex}/top/`,
       ).then((response) => response.json() as Promise<LeagueTop>);
       const { nickname } = await getWargamingResponse<AccountInfo>(
-        `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
+        `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
       ).then((accounts) => accounts[player.id]);
       const awaitedInfo = await ratingsInfo;
       const leagueInfo = awaitedInfo.leagues[leagueIndex];

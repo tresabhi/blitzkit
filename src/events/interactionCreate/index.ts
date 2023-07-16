@@ -30,9 +30,9 @@ import { searchTanksCommand } from '../../commands/searchTanks';
 import { statsCommand } from '../../commands/stats';
 import { todayCommand } from '../../commands/today';
 import { verifyCommand } from '../../commands/verify';
-import { DISCORD_TOKEN } from '../../core/node/arguments';
 import getClientId from '../../core/node/getClientId';
 import isDev from '../../core/node/isDev';
+import { secrets } from '../../core/node/secrets';
 import handleAutocomplete from './handlers/autocomplete';
 import handleButton from './handlers/button';
 import handleChatInputCommand from './handlers/chatInputCommand';
@@ -71,7 +71,7 @@ export interface CommandRegistry<HandlesInteraction extends boolean = boolean>
   button?: (interaction: ButtonInteraction<CacheType>) => InteractionReturnable;
 }
 
-const rest = new REST().setToken(DISCORD_TOKEN);
+const rest = new REST().setToken(secrets.DISCORD_TOKEN);
 
 export const COMMANDS_RAW: CommandRegistry[] = [
   debugCommand,

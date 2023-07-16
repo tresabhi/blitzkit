@@ -17,7 +17,7 @@ import {
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import { AccountInfo } from '../types/accountInfo';
 import { PlayerClanData } from '../types/playerClanData';
@@ -76,7 +76,7 @@ export const ownedTanksCommand: CommandRegistry = {
     const account = await resolvePlayerFromCommand(interaction);
     const { id, region: server } = account;
     const accountInfo = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
     const tankStats = await getTankStats(server, id);
     const tanks = (
@@ -88,7 +88,7 @@ export const ownedTanksCommand: CommandRegistry = {
       )
     ).filter((tank) => tank?.tier === tier);
     const clanData = await getWargamingResponse<PlayerClanData>(
-      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
+      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
     );
     const leftColumnSize = Math.ceil(tanks.length / 2);
     const leftColumn = tanks.slice(0, leftColumnSize);

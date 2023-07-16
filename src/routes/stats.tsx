@@ -11,7 +11,7 @@ export const statsRoute: RouteRegistry = {
   async handler(req) {
     const type = req.params.type as StatType;
     const player = resolvePlayerFromRequest(req);
-    const period = resolvePeriodFromRequest(player.server, req);
+    const period = resolvePeriodFromRequest(player.region, req);
 
     return await stats(
       type,

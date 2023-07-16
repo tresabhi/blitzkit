@@ -15,7 +15,7 @@ import getPeriodNow from '../core/blitzstars/getPeriodNow';
 import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo';
 import { tankAverages } from '../core/blitzstars/tankAverages';
 import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { secrets } from '../core/node/secrets';
 import { AccountInfo, AllStats } from '../types/accountInfo';
 import { PlayerClanData } from '../types/playerClanData';
 import { PossiblyPromise } from '../types/possiblyPromise';
@@ -32,10 +32,10 @@ export default async function today(
     getPeriodNow(),
   );
   const accountInfo = await getWargamingResponse<AccountInfo>(
-    `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
+    `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
   );
   const clanData = await getWargamingResponse<PlayerClanData>(
-    `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
+    `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
   );
   const careerTankStatsRaw = await getTankStats(server, id);
   const careerStats: Record<number, AllStats> = {

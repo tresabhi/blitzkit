@@ -7,7 +7,7 @@ import {
   getHistoriesDefaultOptions,
 } from '../../types/histories';
 import getWargamingResponse from '../blitz/getWargamingResponse';
-import { WARGAMING_APPLICATION_ID } from '../node/arguments';
+import { secrets } from '../node/secrets';
 import { emptyAllStats } from './getDiffedTankStats';
 
 export interface PlayerHistoryRaw {
@@ -67,7 +67,7 @@ export default async function getPlayerHistories(
       statistics: { all },
     } = (
       await getWargamingResponse<AccountInfo>(
-        `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
+        `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
       )
     )[id];
 

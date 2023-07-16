@@ -1,12 +1,12 @@
 import { REGION_NAMES, Region } from '../../constants/regions';
 import { TanksStats } from '../../types/tanksStats';
-import { WARGAMING_APPLICATION_ID } from '../node/arguments';
+import { secrets } from '../node/secrets';
 import throwError from '../node/throwError';
 import getWargamingResponse from './getWargamingResponse';
 
 export default async function getTankStats(server: Region, id: number) {
   const tankStats = await getWargamingResponse<TanksStats>(
-    `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
+    `https://api.wotblitz.${server}/wotb/tanks/stats/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
   );
 
   if (tankStats[id] === null) {

@@ -5,7 +5,7 @@ import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import addClanChoices from '../core/discord/addClanChoices';
 import addServerChoices from '../core/discord/addServerChoices';
 import embedInfo from '../core/discord/embedInfo';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import { ClanList } from '../types/clanList';
 
@@ -32,7 +32,7 @@ export const searchClansCommand: CommandRegistry = {
     const clan = interaction.options.getString('clan')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
     const clanList = await getWargamingResponse<ClanList>(
-      `https://api.wotblitz.${server}/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${clan}&limit=${limit}`,
+      `https://api.wotblitz.${server}/wotb/clans/list/?application_id=${secrets.WARGAMING_APPLICATION_ID}&search=${clan}&limit=${limit}`,
     );
 
     return embedInfo(

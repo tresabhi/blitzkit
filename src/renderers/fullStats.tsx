@@ -14,7 +14,7 @@ import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats';
 import { tankAverages } from '../core/blitzstars/tankAverages';
 import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand';
 import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { secrets } from '../core/node/secrets';
 import {
   AccountInfo,
   AllStats,
@@ -37,7 +37,7 @@ export default async function fullStats<Type extends StatType>(
   if (type === 'player') {
     const clan = (
       await getWargamingResponse<PlayerClanData>(
-        `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
+        `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
       )
     )[id]?.clan;
 
@@ -133,7 +133,7 @@ export default async function fullStats<Type extends StatType>(
   }
 
   const accountInfo = await getWargamingResponse<AccountInfo>(
-    `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
+    `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
   );
 
   return (
