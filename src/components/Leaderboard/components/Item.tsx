@@ -6,7 +6,7 @@ export interface ItemProps {
   deltaPosition?: number;
   points: number;
   deltaPoints?: number;
-  reward: RatingsReward;
+  reward?: RatingsReward;
   nickname: string;
   clan?: string;
 }
@@ -99,6 +99,37 @@ export function Item({
           </span>
         </div>
       )}
+
+      <div
+        style={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 4,
+        }}
+      >
+        {reward && (
+          <img
+            style={{ width: 16, height: 16 }}
+            src={
+              reward.type === 'vehicle'
+                ? reward.vehicle.image_url
+                : reward.stuff.image_url
+            }
+          />
+        )}
+        {reward?.type === 'stuff' && (
+          <span
+            style={{
+              color: theme.colors.textLowContrast,
+              fontSize: 16,
+            }}
+          >
+            x {reward.count}
+          </span>
+        )}
+      </div>
     </div>
   );
 }

@@ -96,7 +96,7 @@ export interface RatingsNeighbors {
 }
 
 console.log('Caching ratings info...');
-const ratingsLeagueInfo = fetch(
+const ratingsInfo = fetch(
   'https://na.wotblitz.com/en/api/rating-leaderboards/season/',
 )
   .then((response) => response.json() as Promise<RatingsInfo>)
@@ -183,21 +183,28 @@ export const ratingsCommand: CommandRegistry = {
       const { nickname } = await getWargamingResponse<AccountInfo>(
         `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
       ).then((accounts) => accounts[player.id]);
-      const leagueInfo = (await ratingsLeagueInfo).leagues[leagueIndex];
-      const items = result
-        .slice(0, limit)
-        .map((player) => (
+      const awaitedInfo = await ratingsInfo;
+      const leagueInfo = awaitedInfo.leagues[leagueIndex];
+      const items = result.slice(0, limit).map((player) => {
+        const reward = awaitedInfo.rewards.find(
+          (reward) =>
+            player.number >= reward.from_position &&
+            player.number <= reward.to_position,
+        );
+
+        return (
           <Leaderboard.Item
             nickname={player.nickname}
             points={player.score}
             position={player.number}
             clan={player.clan_tag}
-            reward=""
+            reward={reward}
             deltaPoints={Math.round(Math.random() * 10 - 5)}
             deltaPosition={Math.round(Math.random() * 10 - 5)}
             key={player.spa_id}
           />
-        ));
+        );
+      });
 
       return (
         <Wrapper>
