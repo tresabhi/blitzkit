@@ -115,7 +115,7 @@ export function Item({
       >
         {reward && (
           <img
-            style={{ width: 16, height: 16, objectFit: 'fill' }}
+            style={{ width: 16, height: 16, objectFit: 'cover' }}
             src={normalizeImage(
               reward.type === 'vehicle'
                 ? reward.vehicle.image_url

@@ -3,7 +3,7 @@ import markdownEscape from 'markdown-escape';
 import { REGION_NAMES, Region } from '../constants/regions';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import { usernamePattern } from '../core/blitz/listPlayers';
-import addServerChoices from '../core/discord/addServerChoices';
+import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import embedInfo from '../core/discord/embedInfo';
 import { secrets } from '../core/node/secrets';
@@ -18,7 +18,7 @@ export const searchPlayersCommand: CommandRegistry = {
   command: new SlashCommandBuilder()
     .setName('searchplayers')
     .setDescription('Search players in a Blitz server')
-    .addStringOption(addServerChoices)
+    .addStringOption(addRegionChoices)
     .addStringOption((option) =>
       addUsernameChoices(option).setAutocomplete(false).setRequired(true),
     )
@@ -31,7 +31,7 @@ export const searchPlayersCommand: CommandRegistry = {
     ),
 
   async handler(interaction) {
-    const server = interaction.options.getString('server') as Region;
+    const server = interaction.options.getString('region') as Region;
     const name = interaction.options.getString('username')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
     const trimmedSearch = name.trim();

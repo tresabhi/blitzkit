@@ -1,10 +1,10 @@
 import { SlashCommandStringOption } from 'discord.js';
 import { REGION_NAMES } from '../../constants/regions';
 
-export default function addServerChoices(option: SlashCommandStringOption) {
+export default function addRegionChoices(option: SlashCommandStringOption) {
   return option
-    .setName('server')
-    .setDescription('The Blitz server you are in')
+    .setName('region')
+    .setDescription('The Blitz region you are in')
     .addChoices(
       { name: REGION_NAMES.com, value: 'com' },
       { name: REGION_NAMES.eu, value: 'eu' },

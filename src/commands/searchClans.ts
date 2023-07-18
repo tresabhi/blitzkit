@@ -3,7 +3,7 @@ import markdownEscape from 'markdown-escape';
 import { REGION_NAMES, Region } from '../constants/regions';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import addClanChoices from '../core/discord/addClanChoices';
-import addServerChoices from '../core/discord/addServerChoices';
+import addRegionChoices from '../core/discord/addRegionChoices';
 import embedInfo from '../core/discord/embedInfo';
 import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
@@ -17,7 +17,7 @@ export const searchClansCommand: CommandRegistry = {
   command: new SlashCommandBuilder()
     .setName('searchclans')
     .setDescription('Search clans')
-    .addStringOption(addServerChoices)
+    .addStringOption(addRegionChoices)
     .addStringOption((option) => addClanChoices(option).setAutocomplete(false))
     .addIntegerOption((option) =>
       option
@@ -28,7 +28,7 @@ export const searchClansCommand: CommandRegistry = {
     ),
 
   async handler(interaction) {
-    const server = interaction.options.getString('server') as Region;
+    const server = interaction.options.getString('region') as Region;
     const clan = interaction.options.getString('clan')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
     const clanList = await getWargamingResponse<ClanList>(

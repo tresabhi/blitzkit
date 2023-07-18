@@ -6,6 +6,6 @@ export default function resolvePlayerFromURL(urlString: string) {
 
   return {
     id: parseInt(url.searchParams.get('id')!),
-    region: url.searchParams.get('server') as Region,
+    region: url.searchParams.get('region') as Region,
   } satisfies ResolvedPlayer;
 }

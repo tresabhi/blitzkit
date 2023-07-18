@@ -4,15 +4,10 @@ import { octokit } from '../bot';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { REGION_NAMES } from '../constants/regions';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import { REGION_NAMES, Region } from '../constants/regions';
 import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
-import addUsernameChoices from '../core/discord/addUsernameChoices';
-import autocompleteUsername from '../core/discord/autocompleteUsername';
-import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { secrets } from '../core/node/secrets';
+import addRegionChoices from '../core/discord/addRegionChoices';
 import { CommandRegistry } from '../events/interactionCreate';
-import { AccountInfo } from '../types/accountInfo';
 
 export interface RatingsPlayer {
   spa_id: number;
@@ -109,6 +104,7 @@ const ratingsInfo = fetch(
 
 function optionalParameters(option: SlashCommandSubcommandBuilder) {
   return option
+    .addStringOption(addRegionChoices)
     .addIntegerOption((option) =>
       option
         .setName('limit')
@@ -116,8 +112,7 @@ function optionalParameters(option: SlashCommandSubcommandBuilder) {
         .setRequired(false)
         .setMinValue(5)
         .setMaxValue(30),
-    )
-    .addStringOption(addUsernameChoices);
+    );
 }
 
 const LEAGUE_INDEXES = ['diamond', 'platinum', 'gold', 'silver', 'bronze'];
@@ -179,22 +174,19 @@ export const ratingsCommand: CommandRegistry = {
       const limit = interaction.options.getInteger('limit') ?? 10;
       const subcommand = interaction.options.getSubcommand(true);
       const leagueIndex = LEAGUE_INDEXES.indexOf(subcommand);
-      const player = await resolvePlayerFromCommand(interaction);
-      const regionSubdomain = regionToRegionSubdomain(player.region);
+      const region = interaction.options.getString('region') as Region;
+      const regionSubdomain = regionToRegionSubdomain(region);
       const result = await fetch(
         `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/league/${leagueIndex}/top/`,
       )
         .then((response) => response.json() as Promise<LeagueTop>)
         .then(({ result }) => result.slice(0, limit));
-      const { nickname } = await getWargamingResponse<AccountInfo>(
-        `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
-      ).then((accounts) => accounts[player.id]);
       const awaitedInfo = await ratingsInfo;
       const leagueInfo = awaitedInfo.leagues[leagueIndex];
       const midnightLeaderboard = await octokit.repos
         .getContent({
           ...DATABASE_REPO,
-          path: `${player.region}/ratings/${awaitedInfo.current_season}/midnight.json`,
+          path: `${region}/ratings/${awaitedInfo.current_season}/midnight.json`,
         })
         .then(({ data }) => {
           if (!Array.isArray(data) && data.type === 'file') {
@@ -252,7 +244,7 @@ export const ratingsCommand: CommandRegistry = {
                 : `https:${leagueInfo.big_icon}`
             }
             description={`Top ${limit} players • ${new Date().toDateString()} • ${
-              REGION_NAMES[player.region]
+              REGION_NAMES[region]
             }`}
           />
 
@@ -267,6 +259,4 @@ export const ratingsCommand: CommandRegistry = {
 
     return [];
   },
-
-  autocomplete: autocompleteUsername,
 };
