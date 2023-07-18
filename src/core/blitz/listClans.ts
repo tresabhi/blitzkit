@@ -1,6 +1,6 @@
-import { RegionDomain } from '../../constants/regions';
+import { Region } from '../../constants/regions';
 import { Clan, ClanList } from '../../types/clanList';
-import { WARGAMING_APPLICATION_ID } from '../node/arguments';
+import { secrets } from '../node/secrets';
 import getWargamingResponse from './getWargamingResponse';
 
 export type ClanListWithServer = (Clan & {
@@ -15,33 +15,33 @@ export default async function listClans(search: string, limit = 9) {
   return (
     await Promise.all([
       getWargamingResponse<ClanList>(
-        `https://api.wotblitz.com/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
+        `https://api.wotblitz.com/wotb/clans/list/?application_id=${secrets.WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
       ).then(
         (value) =>
           value &&
           value.map((account) => ({
             ...account,
-            server: 'com' as RegionDomain,
+            server: 'com' as Region,
           })),
       ),
       getWargamingResponse<ClanList>(
-        `https://api.wotblitz.eu/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
+        `https://api.wotblitz.eu/wotb/clans/list/?application_id=${secrets.WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
       ).then(
         (value) =>
           value &&
           value.map((account) => ({
             ...account,
-            server: 'eu' as RegionDomain,
+            server: 'eu' as Region,
           })),
       ),
       getWargamingResponse<ClanList>(
-        `https://api.wotblitz.asia/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
+        `https://api.wotblitz.asia/wotb/clans/list/?application_id=${secrets.WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
       ).then(
         (value) =>
           value &&
           value.map((account) => ({
             ...account,
-            server: 'asia' as RegionDomain,
+            server: 'asia' as Region,
           })),
       ),
     ])

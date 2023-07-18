@@ -1,6 +1,11 @@
 import { Octokit } from '@octokit/rest';
 import { rm, writeFile } from 'fs/promises';
 import { argv, env } from 'process';
+import {
+  RatingsInfo,
+  RatingsNeighbors,
+  RatingsPlayer,
+} from '../src/commands/ratings';
 import commitMultipleFiles from './commitMultipleFiles.js';
 
 /*
@@ -8,10 +13,12 @@ import commitMultipleFiles from './commitMultipleFiles.js';
  * Central European Time (UTC+1): use 0 23 * * *.
  * Central Asia Standard Time (UTC+7): use 0 17 * * *.
  *
- * :region/ratings/:season/info.json: season info like rewards, start & end time, etc.
- * :region/ratings/:season/latest.json: the absolute latest leaderboard recorded at UTC+0 midnight
- * :region/ratings/:season/leaderboards/:time.json: collection of all recorded leaderboards at local midnights
+ * na/ratings/49/info.json: season info like rewards, start & end time, etc.
+ * na/ratings/49/latest.json: the absolute latest leaderboard recorded at UTC+0 midnight
+ * na/ratings/49/midnight.json: last midnight's leaderboard relative to the region
  */
+
+export type BlitzkriegRatingsLeaderboard = { id: number; score: number }[];
 
 const publish = argv.includes('--publish');
 const latest = argv.includes('--latest');
@@ -23,22 +30,22 @@ const NEIGHBORS = 1000;
 const PLAYERS = await fetch(
   `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,
 )
-  .then((response) => response.json())
+  .then((response) => response.json() as Promise<RatingsInfo>)
   .then((data) => data.count);
 
-const players = {};
-const leaderboard = [];
+const players: Record<number, RatingsPlayer> = {};
+const leaderboard: BlitzkriegRatingsLeaderboard = [];
 let registered = 0;
 
-async function branchFromPlayer(id) {
+async function branchFromPlayer(id: number) {
   const { neighbors } = await fetch(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/user/${id}/?neighbors=${NEIGHBORS}`,
-  ).then((response) => response.json());
+  ).then((response) => response.json() as Promise<RatingsNeighbors>);
 
   const firstPlayer = neighbors[0];
   const lastPlayer = neighbors[neighbors.length - 1];
 
-  const branches = [];
+  const branches: Promise<void>[] = [];
   if (!players[firstPlayer.number])
     branches.push(branchFromPlayer(firstPlayer.spa_id));
   if (!players[lastPlayer.number])
@@ -61,10 +68,10 @@ async function branchFromPlayer(id) {
   await Promise.all(branches);
 }
 
-async function branchFromLeague(id) {
+async function branchFromLeague(id: number) {
   const { result } = await fetch(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/league/${id}/top/`,
-  ).then((response) => response.json());
+  ).then((response) => response.json() as Promise<{ result: RatingsPlayer[] }>);
 
   const firstPlayer = result[0];
   const lastPlayer = result[result.length - 1];
@@ -75,7 +82,7 @@ async function branchFromLeague(id) {
   ]);
 }
 
-console.log('Branching form leagues...');
+console.log('Branching from leagues...');
 await Promise.all([
   branchFromLeague(0),
   branchFromLeague(1),
@@ -86,8 +93,13 @@ await Promise.all([
 
 console.log('Converting to an array...');
 for (let index = 0; index < PLAYERS; index++) {
-  leaderboard[index] = players[index + 1];
-  if (!leaderboard[index]) console.warn(`${index} had no player`);
+  const listing = players[index + 1];
+  if (!listing) console.warn(`Position ${index + 1} had no player`);
+
+  leaderboard[index] = {
+    id: listing.spa_id,
+    score: listing.score,
+  };
 }
 
 const leaderboardJSON = JSON.stringify(leaderboard);
@@ -97,14 +109,13 @@ if (publish) {
 
   const info = await fetch(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,
-  ).then((response) => response.json());
-  const time = Math.round(Date.now() / 1000);
+  ).then((response) => response.json() as Promise<RatingsInfo>);
   const normalizedServer = server === 'na' ? 'com' : server;
 
   const infoPath = `${normalizedServer}/ratings/${info.current_season}/info.json`;
   const leaderboardPath = `${normalizedServer}/ratings/${info.current_season}/${
-    latest ? 'latest.json' : `leaderboards/${time}.json`
-  }`;
+    latest ? 'latest' : 'midnight'
+  }.json`;
   const infoJSON = JSON.stringify(info);
 
   console.log(`Publishing to season ${info.current_season}...`);
@@ -113,7 +124,7 @@ if (publish) {
     'tresabhi',
     'blitzkrieg-db',
     'main',
-    `${info.current_season}/${time}`,
+    new Date().toString(),
     [
       { path: infoPath, content: infoJSON },
       { path: leaderboardPath, content: leaderboardJSON },

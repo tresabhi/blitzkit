@@ -1,5 +1,6 @@
+import { Octokit } from '@octokit/rest';
 import { Client, GatewayIntentBits } from 'discord.js';
-import { DISCORD_TOKEN } from './core/node/arguments';
+import { secrets } from './core/node/secrets';
 import { registerErrorHandlers } from './events/error';
 import guildMemberAdd from './events/guildMemberAdd';
 import interactionCreate from './events/interactionCreate';
@@ -12,5 +13,7 @@ export const client = new Client({
   .on('guildMemberAdd', guildMemberAdd)
   .on('interactionCreate', interactionCreate);
 
+export const octokit = new Octokit({ auth: secrets.GH_TOKEN });
+
 registerErrorHandlers();
-client.login(DISCORD_TOKEN);
+client.login(secrets.DISCORD_TOKEN);

@@ -28,6 +28,7 @@
     "statsfull",
     "Stringifying",
     "strvk",
+    "subnation",
     "tankaverages",
     "tankopedia",
     "tankstats",
@@ -37,6 +38,7 @@
     "vickers",
     "vitepress",
     "wargaming",
+    "webp",
     "winrate"
   ],
   "deno.enable": false,

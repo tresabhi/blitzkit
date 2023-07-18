@@ -11,8 +11,5 @@
     "resolveJsonModule": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "src/**/*.ts",
-    "src/components/AllStatsOverview/components/WN8SurroundingStat.tsx"
-  ]
+  "include": ["src/**/*.ts"]
 }

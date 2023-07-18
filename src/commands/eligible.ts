@@ -12,7 +12,7 @@ import embedNegative from '../core/discord/embedNegative';
 import embedPositive from '../core/discord/embedPositive';
 import markdownTable, { TableInput } from '../core/discord/markdownTable';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import { AccountInfo } from '../types/accountInfo';
 import { PossiblyPromise } from '../types/possiblyPromise';
@@ -49,9 +49,9 @@ export const eligibleCommand: CommandRegistry = {
 
   async handler(interaction) {
     const clan = interaction.options.getString('clan') as SkilledClan;
-    const { id, server } = await resolvePlayerFromCommand(interaction);
+    const { id, region: server } = await resolvePlayerFromCommand(interaction);
     const accountInfo = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
     const problems: TableInput = [];
     const title = `${accountInfo[id].nickname}'s eligibility for ${SKILLED_CLANS[clan]}`;

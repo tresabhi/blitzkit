@@ -1,7 +1,7 @@
-export type RegionDomain = 'com' | 'eu' | 'asia';
+export type Region = 'com' | 'eu' | 'asia';
 export type RegionSubdomain = 'na' | 'eu' | 'asia';
 
-export const REGION_DOMAIN_NAMES: Record<RegionDomain, string> = {
+export const REGION_NAMES: Record<Region, string> = {
   com: 'North America',
   eu: 'Europe',
   asia: 'Asia',

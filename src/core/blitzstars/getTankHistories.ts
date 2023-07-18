@@ -1,4 +1,4 @@
-import { RegionDomain } from '../../constants/regions';
+import { Region } from '../../constants/regions';
 import {
   GetHistoriesOptions,
   Histories,
@@ -32,7 +32,7 @@ export const getTankHistoriesDefaultOptions: GetTankHistoriesOptions = {
 };
 
 export default async function getTankHistories(
-  server: RegionDomain,
+  server: Region,
   id: number,
   options?: Partial<GetTankHistoriesOptions>,
 ) {

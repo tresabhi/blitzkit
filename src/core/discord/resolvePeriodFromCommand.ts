@@ -1,5 +1,5 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
-import { RegionDomain } from '../../constants/regions';
+import { Region } from '../../constants/regions';
 import getPeriodNow from '../blitzstars/getPeriodNow';
 import getPeriodStart from '../blitzstars/getPeriodStart';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo';
@@ -31,7 +31,7 @@ export interface ResolvedPeriod {
 }
 
 export default function resolvePeriodFromCommand(
-  server: RegionDomain,
+  server: Region,
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
   let statsName: string;

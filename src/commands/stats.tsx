@@ -12,7 +12,7 @@ import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
 import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand';
 import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import { StatType } from '../renderers/fullStats';
 import stats from '../renderers/stats';
@@ -26,7 +26,7 @@ export const statsCommand: CommandRegistry = {
   command: addStatTypeSubCommandGroups(
     new SlashCommandBuilder()
       .setName('stats')
-      .setDescription('In-game statistics'),
+      .setDescription('Regular battles statistics'),
   ),
 
   async handler(interaction) {
@@ -34,7 +34,7 @@ export const statsCommand: CommandRegistry = {
       true,
     ) as StatType;
     const player = await resolvePlayerFromCommand(interaction);
-    const period = resolvePeriodFromCommand(player.server, interaction);
+    const period = resolvePeriodFromCommand(player.region, interaction);
     const tankIdRaw = interaction.options.getString('tank')!;
     const tankId =
       commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
@@ -48,7 +48,7 @@ export const statsCommand: CommandRegistry = {
     });
     const { nickname } = (
       await getWargamingResponse<AccountInfo>(
-        `https://api.wotblitz.${player.server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
+        `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
       )
     )[player.id];
 
@@ -57,7 +57,7 @@ export const statsCommand: CommandRegistry = {
       primaryButton(path, 'Refresh'),
       linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
       linkButton(
-        `https://www.blitzstars.com/player/${player.server}/${nickname}`,
+        `https://www.blitzstars.com/player/${player.region}/${nickname}`,
         'BlitzStars',
       ),
     ];
@@ -73,7 +73,7 @@ export const statsCommand: CommandRegistry = {
     const path = url.pathname.split('/').filter(Boolean);
     const commandGroup = path[1] as StatType;
     const player = await resolvePlayerFromButton(interaction);
-    const period = resolvePeriodFromButton(player.server, interaction);
+    const period = resolvePeriodFromButton(player.region, interaction);
 
     return await stats(
       commandGroup,

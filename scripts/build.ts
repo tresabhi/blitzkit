@@ -1,4 +1,4 @@
-import { build } from 'esbuild';
+import { BuildOptions, build } from 'esbuild';
 import { copyFile, mkdir, rm } from 'fs/promises';
 import { argv } from 'process';
 
@@ -23,7 +23,7 @@ if (isProd) {
   );
 }
 
-const commonOptions = {
+const commonOptions: BuildOptions = {
   platform: 'node',
   loader: {
     '.node': 'copy',
@@ -46,9 +46,7 @@ if (buildBot) {
 
     entryPoints: ['src/bot.ts'],
     outfile: 'dist/bot.cjs',
-  }).then(() => {
-    console.log('Bot built');
-  });
+  }).then(() => console.log('Bot built'));
 }
 
 if (buildServer) {

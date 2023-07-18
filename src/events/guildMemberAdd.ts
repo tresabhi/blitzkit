@@ -15,7 +15,7 @@ export default async function (member: GuildMember) {
           .setColor(ACCENT_COLOR)
           .setTitle(`Welcome ${member.user.username}`)
           .setDescription(
-            `Welcome to the Skilled server, **${member.user.username}**! To continue, please use the \`/verify\` command.\n\nExample: \`/verify Europe Sabina244\``,
+            `Welcome to the Skilled server, **${member.user.username}**! To continue, please use the \`/verify\` command.\n\nExample: \`/verify Sabina244\``,
           ),
       ],
     });

@@ -1,4 +1,4 @@
-import { RegionDomain } from '../../constants/regions';
+import { Region } from '../../constants/regions';
 import { AccountInfo, AllStats } from '../../types/accountInfo';
 import {
   GetHistoriesOptions,
@@ -7,7 +7,7 @@ import {
   getHistoriesDefaultOptions,
 } from '../../types/histories';
 import getWargamingResponse from '../blitz/getWargamingResponse';
-import { WARGAMING_APPLICATION_ID } from '../node/arguments';
+import { secrets } from '../node/secrets';
 import { emptyAllStats } from './getDiffedTankStats';
 
 export interface PlayerHistoryRaw {
@@ -25,13 +25,13 @@ export interface PlayerHistoryRaw {
     account_id: number;
     [key: string]: number;
   };
-  region: RegionDomain;
+  region: Region;
 }
 
 export type PlayerHistoriesRaw = PlayerHistoryRaw[];
 
 export default async function getPlayerHistories(
-  server: RegionDomain,
+  server: Region,
   id: number,
   options?: Partial<GetHistoriesOptions>,
 ) {
@@ -67,7 +67,7 @@ export default async function getPlayerHistories(
       statistics: { all },
     } = (
       await getWargamingResponse<AccountInfo>(
-        `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
+        `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
       )
     )[id];
 

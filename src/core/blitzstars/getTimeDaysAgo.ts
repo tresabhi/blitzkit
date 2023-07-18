@@ -1,12 +1,12 @@
-import { RegionDomain } from '../../constants/regions';
+import { Region } from '../../constants/regions';
 
-export const TIME_ZONE_MAPPINGS: Record<RegionDomain, number> = {
+export const TIME_ZONE_MAPPINGS: Record<Region, number> = {
   com: -5, // Central North American Time
   eu: +1, // Central European Time
   asia: +7, // Central Asia Standard Time
 };
 
-export default function getTimeDaysAgo(server: RegionDomain, daysAgo: number) {
+export default function getTimeDaysAgo(server: Region, daysAgo: number) {
   const now = new Date();
   if (daysAgo === 0) now.getTime() / 1000;
 

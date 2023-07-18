@@ -1,11 +1,11 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { REGION_DOMAIN_NAMES, RegionDomain } from '../constants/regions';
+import { REGION_NAMES, Region } from '../constants/regions';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import addClanChoices from '../core/discord/addClanChoices';
-import addServerChoices from '../core/discord/addServerChoices';
+import addRegionChoices from '../core/discord/addRegionChoices';
 import embedInfo from '../core/discord/embedInfo';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import { ClanList } from '../types/clanList';
 
@@ -17,7 +17,7 @@ export const searchClansCommand: CommandRegistry = {
   command: new SlashCommandBuilder()
     .setName('searchclans')
     .setDescription('Search clans')
-    .addStringOption(addServerChoices)
+    .addStringOption(addRegionChoices)
     .addStringOption((option) => addClanChoices(option).setAutocomplete(false))
     .addIntegerOption((option) =>
       option
@@ -28,17 +28,15 @@ export const searchClansCommand: CommandRegistry = {
     ),
 
   async handler(interaction) {
-    const server = interaction.options.getString('server') as RegionDomain;
+    const server = interaction.options.getString('region') as Region;
     const clan = interaction.options.getString('clan')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
     const clanList = await getWargamingResponse<ClanList>(
-      `https://api.wotblitz.${server}/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${clan}&limit=${limit}`,
+      `https://api.wotblitz.${server}/wotb/clans/list/?application_id=${secrets.WARGAMING_APPLICATION_ID}&search=${clan}&limit=${limit}`,
     );
 
     return embedInfo(
-      `Clan search for "${markdownEscape(clan)}" in ${
-        REGION_DOMAIN_NAMES[server]
-      }`,
+      `Clan search for "${markdownEscape(clan)}" in ${REGION_NAMES[server]}`,
       clanList.length === 0
         ? 'No clans found.'
         : `\`\`\`\n${clanList

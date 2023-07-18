@@ -4,7 +4,7 @@ import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import TierWeights, { TierWeightsRecord } from '../components/TierWeights';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { REGION_DOMAIN_NAMES } from '../constants/regions';
+import { REGION_NAMES } from '../constants/regions';
 import calculateWN8 from '../core/blitz/calculateWN8';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankName from '../core/blitz/resolveTankName';
@@ -14,7 +14,7 @@ import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats';
 import { tankAverages } from '../core/blitzstars/tankAverages';
 import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand';
 import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
-import { WARGAMING_APPLICATION_ID } from '../core/node/arguments';
+import { secrets } from '../core/node/secrets';
 import {
   AccountInfo,
   AllStats,
@@ -28,7 +28,7 @@ export type StatType = 'player' | 'tank';
 export default async function fullStats<Type extends StatType>(
   type: Type,
   { start, end, statsName }: ResolvedPeriod,
-  { server, id }: ResolvedPlayer,
+  { region: server, id }: ResolvedPlayer,
   tankId: Type extends 'tank' ? number : null,
 ) {
   let nameDiscriminator: string | undefined;
@@ -37,7 +37,7 @@ export default async function fullStats<Type extends StatType>(
   if (type === 'player') {
     const clan = (
       await getWargamingResponse<PlayerClanData>(
-        `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
+        `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
       )
     )[id]?.clan;
 
@@ -133,7 +133,7 @@ export default async function fullStats<Type extends StatType>(
   }
 
   const accountInfo = await getWargamingResponse<AccountInfo>(
-    `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
+    `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
   );
 
   return (
@@ -143,7 +143,7 @@ export default async function fullStats<Type extends StatType>(
         nameDiscriminator={nameDiscriminator}
         image={image}
         description={`${statsName} • ${new Date().toDateString()} • ${
-          REGION_DOMAIN_NAMES[server]
+          REGION_NAMES[server]
         }`}
       />
 
