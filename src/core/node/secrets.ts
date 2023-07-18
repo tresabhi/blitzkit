@@ -1,8 +1,14 @@
-const SECRET_KEYS = ['DISCORD_TOKEN', 'WARGAMING_APPLICATION_ID'] as const;
+export const SECRET_KEYS = [
+  'DISCORD_TOKEN',
+  'WARGAMING_APPLICATION_ID',
+  'GH_TOKEN',
+] as const;
 
-type SECRET_KEY = typeof SECRET_KEYS extends readonly (infer T)[] ? T : never;
+export type SECRET = typeof SECRET_KEYS extends readonly (infer T)[]
+  ? T
+  : never;
 
-export const secrets = SECRET_KEYS.reduce<Partial<Record<SECRET_KEY, string>>>(
+export const secrets = SECRET_KEYS.reduce<Partial<Record<SECRET, string>>>(
   (accumulator, key) => ({
     ...accumulator,
 
@@ -12,4 +18,4 @@ export const secrets = SECRET_KEYS.reduce<Partial<Record<SECRET_KEY, string>>>(
     },
   }),
   {},
-) as Record<SECRET_KEY, string>;
+) as Record<SECRET, string>;

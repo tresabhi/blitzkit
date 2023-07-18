@@ -4,18 +4,22 @@ import { theme } from '../../../stitches.config';
 export interface ItemProps {
   position: number;
   deltaPosition?: number;
-  points: number;
-  deltaPoints?: number;
+  score: number;
+  deltaScore?: number;
   reward?: RatingsReward;
   nickname: string;
   clan?: string;
 }
 
+function normalizeImage(url: string) {
+  return url.endsWith('.webp') ? 'https://i.imgur.com/ZniCzbO.png' : url;
+}
+
 export function Item({
   position,
   deltaPosition,
-  points,
-  deltaPoints,
+  score,
+  deltaScore,
   reward,
   nickname,
   clan,
@@ -38,7 +42,7 @@ export function Item({
           fontSize: 16,
         }}
       >
-        {position}.
+        {position.toLocaleString()}.
       </span>
 
       <div
@@ -95,7 +99,7 @@ export function Item({
               fontSize: 16,
             }}
           >
-            {deltaPosition}
+            {Math.abs(deltaPosition).toLocaleString()}
           </span>
         </div>
       )}
@@ -111,24 +115,55 @@ export function Item({
       >
         {reward && (
           <img
-            style={{ width: 16, height: 16 }}
-            src={
+            style={{ width: 16, height: 16, objectFit: 'fill' }}
+            src={normalizeImage(
               reward.type === 'vehicle'
                 ? reward.vehicle.image_url
-                : reward.stuff.image_url
-            }
+                : reward.stuff.image_url,
+            )}
           />
         )}
-        {reward?.type === 'stuff' && (
+        {reward && reward.count > 1 && (
           <span
             style={{
               color: theme.colors.textLowContrast,
               fontSize: 16,
             }}
           >
-            x {reward.count}
+            x {reward.count.toLocaleString()}
           </span>
         )}
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          gap: 4,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {deltaScore !== 0 && deltaScore !== undefined && (
+          <span style={{ color: theme.colors.textLowContrast, fontSize: 16 }}>
+            {Math.abs(deltaScore).toLocaleString()}
+          </span>
+        )}
+        {deltaScore !== 0 && deltaScore !== undefined && (
+          <img
+            style={{
+              width: 8,
+              height: 8,
+            }}
+            src={
+              deltaScore > 0
+                ? 'https://i.imgur.com/qbjiXa1.png'
+                : 'https://i.imgur.com/3uyNhun.png'
+            }
+          />
+        )}
+        <span style={{ color: theme.colors.textHighContrast, fontSize: 16 }}>
+          {score.toLocaleString()}
+        </span>
       </div>
     </div>
   );

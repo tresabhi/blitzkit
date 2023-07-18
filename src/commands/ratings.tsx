@@ -1,4 +1,6 @@
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from 'discord.js';
+import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
+import { octokit } from '../bot';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
@@ -110,7 +112,7 @@ function optionalParameters(option: SlashCommandSubcommandBuilder) {
     .addIntegerOption((option) =>
       option
         .setName('limit')
-        .setDescription('How many rows to display (default: 16)')
+        .setDescription('How many rows to display (default: 10)')
         .setRequired(false)
         .setMinValue(5)
         .setMaxValue(30),
@@ -119,6 +121,8 @@ function optionalParameters(option: SlashCommandSubcommandBuilder) {
 }
 
 const LEAGUE_INDEXES = ['diamond', 'platinum', 'gold', 'silver', 'bronze'];
+
+export const DATABASE_REPO = { owner: 'tresabhi', repo: 'blitzkrieg-db' };
 
 export const ratingsCommand: CommandRegistry = {
   inProduction: true,
@@ -172,51 +176,91 @@ export const ratingsCommand: CommandRegistry = {
     const subcommandGroup = interaction.options.getSubcommandGroup(true);
 
     if (subcommandGroup === 'league') {
-      const limit = interaction.options.getInteger('limit') ?? 16;
+      const limit = interaction.options.getInteger('limit') ?? 10;
       const subcommand = interaction.options.getSubcommand(true);
       const leagueIndex = LEAGUE_INDEXES.indexOf(subcommand);
       const player = await resolvePlayerFromCommand(interaction);
       const regionSubdomain = regionToRegionSubdomain(player.region);
-      const { result } = await fetch(
+      const result = await fetch(
         `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/league/${leagueIndex}/top/`,
-      ).then((response) => response.json() as Promise<LeagueTop>);
+      )
+        .then((response) => response.json() as Promise<LeagueTop>)
+        .then(({ result }) => result.slice(0, limit));
       const { nickname } = await getWargamingResponse<AccountInfo>(
         `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
       ).then((accounts) => accounts[player.id]);
       const awaitedInfo = await ratingsInfo;
       const leagueInfo = awaitedInfo.leagues[leagueIndex];
-      const items = result.slice(0, limit).map((player) => {
-        const reward = awaitedInfo.rewards.find(
-          (reward) =>
-            player.number >= reward.from_position &&
-            player.number <= reward.to_position,
-        );
+      const midnightLeaderboard = await octokit.repos
+        .getContent({
+          ...DATABASE_REPO,
+          path: `${player.region}/ratings/${awaitedInfo.current_season}/midnight.json`,
+        })
+        .then(({ data }) => {
+          if (!Array.isArray(data) && data.type === 'file') {
+            const content = Buffer.from(data.content, 'base64').toString();
+            const jsonContent = JSON.parse(
+              content,
+            ) as BlitzkriegRatingsLeaderboard;
 
-        return (
-          <Leaderboard.Item
-            nickname={player.nickname}
-            points={player.score}
-            position={player.number}
-            clan={player.clan_tag}
-            reward={reward}
-            deltaPoints={Math.round(Math.random() * 10 - 5)}
-            deltaPosition={Math.round(Math.random() * 10 - 5)}
-            key={player.spa_id}
-          />
-        );
-      });
+            return jsonContent;
+          }
+        })
+        .catch(() => console.warn('No midnight leaderboard found'));
+      const items = await Promise.all(
+        result.map(async (player) => {
+          const reward = awaitedInfo.rewards.find(
+            (reward) =>
+              player.number >= reward.from_position &&
+              player.number <= reward.to_position,
+          );
+          const midnightIndex = midnightLeaderboard?.findIndex(
+            (item) => item.id === player.spa_id,
+          );
+          const midnightScore =
+            midnightIndex === undefined
+              ? player.score
+              : midnightLeaderboard![midnightIndex].score;
+          const midnightPosition =
+            midnightIndex === undefined ? player.number : midnightIndex + 1;
+
+          return (
+            <Leaderboard.Item
+              nickname={player.nickname}
+              score={player.score}
+              position={player.number}
+              clan={player.clan_tag}
+              reward={reward}
+              deltaScore={player.score - midnightScore}
+              deltaPosition={midnightPosition - player.number}
+              key={player.spa_id}
+            />
+          );
+        }),
+      );
+
+      const playersBefore = result[0].number - 1;
+      const playersAfter = awaitedInfo.count - result[result.length - 1].number;
 
       return (
         <Wrapper>
           <TitleBar
             name={leagueInfo.title}
-            image={`https:${leagueInfo.small_icon}`}
+            image={
+              leagueInfo.big_icon.startsWith('http')
+                ? leagueInfo.big_icon
+                : `https:${leagueInfo.big_icon}`
+            }
             description={`Top ${limit} players • ${new Date().toDateString()} • ${
               REGION_NAMES[player.region]
             }`}
           />
 
-          <Leaderboard.Root>{items}</Leaderboard.Root>
+          <Leaderboard.Root>
+            {playersBefore > 0 && <Leaderboard.Gap number={playersBefore} />}
+            {items}
+            {playersAfter > 0 && <Leaderboard.Gap number={playersAfter} />}
+          </Leaderboard.Root>
         </Wrapper>
       );
     }

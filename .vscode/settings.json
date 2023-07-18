@@ -38,6 +38,7 @@
     "vickers",
     "vitepress",
     "wargaming",
+    "webp",
     "winrate"
   ],
   "deno.enable": false,

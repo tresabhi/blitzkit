@@ -1,5 +1,5 @@
 import { BuildOptions, build } from 'esbuild';
-import { copyFile, mkdir, rm } from 'fs/promises';
+import { mkdir, rm } from 'fs/promises';
 import { argv } from 'process';
 
 const isProd = !argv.includes('--dev');
@@ -46,9 +46,7 @@ if (buildBot) {
 
     entryPoints: ['src/bot.ts'],
     outfile: 'dist/bot.cjs',
-  }).then(() => {
-    console.log('Bot built');
-  });
+  }).then(() => console.log('Bot built'));
 }
 
 if (buildServer) {
