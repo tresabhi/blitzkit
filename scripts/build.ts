@@ -1,5 +1,5 @@
 import { BuildOptions, build } from 'esbuild';
-import { mkdir, rm } from 'fs/promises';
+import { copyFile, mkdir, rm } from 'fs/promises';
 import { argv } from 'process';
 
 const isProd = !argv.includes('--dev');
