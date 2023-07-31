@@ -123,7 +123,6 @@ export const ratingsCommand: CommandRegistry = {
   inProduction: true,
   inDevelopment: true,
   inPublic: true,
-  inPreview: true,
 
   command: new SlashCommandBuilder()
     .setName('ratings')
