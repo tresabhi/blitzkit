@@ -16,7 +16,7 @@ export const playerInfoCommand: CommandRegistry = {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('playerinfo')
+    .setName('player-info')
     .setDescription('Basic information about a player')
     .addStringOption(addUsernameChoices),
 

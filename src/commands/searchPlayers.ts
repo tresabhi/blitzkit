@@ -16,7 +16,7 @@ export const searchPlayersCommand: CommandRegistry = {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('searchplayers')
+    .setName('search-players')
     .setDescription('Search players in a Blitz server')
     .addStringOption(addRegionChoices)
     .addStringOption((option) =>

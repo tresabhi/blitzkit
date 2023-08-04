@@ -12,7 +12,7 @@ export const searchTanksCommand: CommandRegistry = {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('searchtanks')
+    .setName('search-tanks')
     .setDescription('Search tanks')
     .addStringOption((option) => addTankChoices(option).setAutocomplete(false))
     .addIntegerOption((option) =>

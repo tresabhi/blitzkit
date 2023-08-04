@@ -15,7 +15,7 @@ export const searchClansCommand: CommandRegistry = {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('searchclans')
+    .setName('search-clans')
     .setDescription('Search clans')
     .addStringOption(addRegionChoices)
     .addStringOption((option) => addClanChoices(option).setAutocomplete(false))

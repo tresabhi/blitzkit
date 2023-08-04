@@ -21,7 +21,7 @@ export const fullStatsCommand = new Promise<CommandRegistryRaw>(
   async (resolve) => {
     const command = await addStatTypeSubCommandGroups(
       new SlashCommandBuilder()
-        .setName('fullstats')
+        .setName('full-stats')
         .setDescription('Full in-game statistics'),
     );
 

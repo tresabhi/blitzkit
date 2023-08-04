@@ -2,7 +2,7 @@ import { Region } from '../../constants/regions';
 import getPeriodNow from '../blitzstars/getPeriodNow';
 import getPeriodStart from '../blitzstars/getPeriodStart';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo';
-import { Period } from '../discord/addPeriodSubCommands';
+import { PeriodSubcommand } from '../discord/addPeriodSubCommands';
 import {
   EVOLUTION_PERIOD_NAMES,
   PERIOD_NAMES,
@@ -19,7 +19,7 @@ export default function resolvePeriodFromURL(
   let end: number;
   const url = new URL(urlString);
   const path = url.pathname.split('/').filter(Boolean);
-  const period = path[path.length - 1] as Period;
+  const period = path[path.length - 1] as PeriodSubcommand;
 
   if (period === 'custom') {
     const startRaw = parseInt(url!.searchParams.get('start')!);

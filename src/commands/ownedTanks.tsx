@@ -49,7 +49,7 @@ export const ownedTanksCommand: CommandRegistry = {
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('ownedtanks')
+    .setName('owned-tanks')
     .setDescription("Shows a player's owned tanks")
     .addStringOption((option) =>
       option

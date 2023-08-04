@@ -43,7 +43,7 @@ export default async function addStatTypeSubCommandGroups(
           })
           .addStringOption((option) =>
             option
-              .setName('tanktype')
+              .setName('tank-type')
               .setDescription('Type')
               .addChoices(
                 ...Object.entries(awaitedTankopediaInfo.vehicle_types).map(
@@ -65,7 +65,7 @@ export default async function addStatTypeSubCommandGroups(
           )
           .addStringOption((option) =>
             option
-              .setName('treetype')
+              .setName('tree-type')
               .setDescription('Tech tree type')
               .addChoices(
                 { name: 'Tech Tree', value: 'techtree' },
@@ -75,7 +75,7 @@ export default async function addStatTypeSubCommandGroups(
               .setRequired(false),
           ),
       )
-        .setName('tanks')
+        .setName('multi-tank')
         .setDescription('Multiple tanks'),
     );
 }

@@ -6,13 +6,13 @@ export const TIME_ZONE_MAPPINGS: Record<Region, number> = {
   asia: +7, // Central Asia Standard Time
 };
 
-export default function getTimeDaysAgo(server: Region, daysAgo: number) {
+export default function getTimeDaysAgo(region: Region, daysAgo: number) {
   const now = new Date();
   if (daysAgo === 0) now.getTime() / 1000;
 
   const time = new Date();
 
-  time.setUTCHours(-TIME_ZONE_MAPPINGS[server], 0, 0, 0);
+  time.setUTCHours(-TIME_ZONE_MAPPINGS[region], 0, 0, 0);
   if (time > now) time.setUTCDate(time.getUTCDate() - 1);
   time.setUTCDate(time.getUTCDate() - daysAgo + 1);
 
