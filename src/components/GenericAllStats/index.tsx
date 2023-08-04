@@ -96,7 +96,7 @@ export default function GenericAllStats({
           ]}
         />
         <Card
-          title="Efficiency"
+          title="Miscellaneous"
           items={[
             {
               label: 'Average tier',
