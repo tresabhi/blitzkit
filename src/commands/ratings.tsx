@@ -121,7 +121,7 @@ export const DATABASE_REPO = { owner: 'tresabhi', repo: 'blitzkrieg-db' };
 
 export const ratingsCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -165,7 +165,6 @@ export const ratingsCommand: CommandRegistry = {
           ),
         ),
     ),
-
   async handler(interaction) {
     const subcommandGroup = interaction.options.getSubcommandGroup(true);
 

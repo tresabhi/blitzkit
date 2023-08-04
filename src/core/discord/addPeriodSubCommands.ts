@@ -4,7 +4,7 @@ import {
 } from 'discord.js';
 import { PERIOD_NAMES } from '../discord/resolvePeriodFromCommand';
 
-export type Period = 'today' | '30' | '60' | '90' | 'career' | 'custom';
+export type Period = 'period' | 'customperiod';
 
 export default function addPeriodSubCommands(
   option: SlashCommandSubcommandGroupBuilder,
@@ -14,25 +14,30 @@ export default function addPeriodSubCommands(
 ) {
   return option
     .addSubcommand((option) =>
-      extra(option.setName('today').setDescription(PERIOD_NAMES.today)),
-    )
-    .addSubcommand((option) =>
-      extra(option.setName('30').setDescription(PERIOD_NAMES[30])),
-    )
-    .addSubcommand((option) =>
-      extra(option.setName('60').setDescription(PERIOD_NAMES[60])),
-    )
-    .addSubcommand((option) =>
-      extra(option.setName('90').setDescription(PERIOD_NAMES[90])),
-    )
-    .addSubcommand((option) =>
-      extra(option.setName('career').setDescription(PERIOD_NAMES.career)),
+      extra(
+        option
+          .setName('period' satisfies Period)
+          .setDescription(PERIOD_NAMES.period)
+          .addStringOption((option) =>
+            option
+              .setName('days')
+              .setDescription('A preset period')
+              .setChoices(
+                { name: 'Today', value: '1' },
+                { name: '30 days', value: '30' },
+                { name: '60 days', value: '60' },
+                { name: '90 days', value: '90' },
+                { name: 'Career', value: 'Infinity' },
+              )
+              .setRequired(true),
+          ),
+      ),
     )
     .addSubcommand((option) =>
       extra(
         option
-          .setName('custom')
-          .setDescription(PERIOD_NAMES.custom)
+          .setName('customperiod' satisfies Period)
+          .setDescription(PERIOD_NAMES.customperiod)
           .addIntegerOption((option) =>
             option
               .setName('start')

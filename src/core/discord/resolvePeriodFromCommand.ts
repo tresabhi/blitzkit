@@ -7,20 +7,16 @@ import { Period } from '../discord/addPeriodSubCommands';
 
 export const PERIOD_NAMES: Record<Period, string> = {
   today: "Today's statistics",
-  30: "30 days' statistics",
-  60: "60 days' statistics",
-  90: "90 days' statistics",
+  period: "Set number of days' statistics",
   career: 'Career statistics',
-  custom: 'Custom period',
+  customperiod: 'Custom period',
 };
 
 export const EVOLUTION_PERIOD_NAMES: Record<Period, string> = {
   today: "Today's evolution",
-  30: "30 days' evolution",
-  60: "60 days' evolution",
-  90: "90 days' evolution",
+  period: "Set number of days' evolution",
   career: 'Career evolution',
-  custom: 'Custom period',
+  customperiod: 'Custom period',
 };
 
 export interface ResolvedPeriod {
@@ -40,7 +36,7 @@ export default function resolvePeriodFromCommand(
   let end: number;
   const period = interaction.options.getSubcommand() as Period;
 
-  if (period === 'custom') {
+  if (period === 'customperiod') {
     const startRaw = interaction.options.getInteger('start')!;
     const endRaw = interaction.options.getInteger('end')!;
     const startMin = Math.min(startRaw, endRaw);

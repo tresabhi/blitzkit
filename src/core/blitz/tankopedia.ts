@@ -1,3 +1,6 @@
+import { secrets } from '../node/secrets';
+import getWargamingResponse from './getWargamingResponse';
+
 export interface TankopediaEntry {
   name: string;
   nation: string;
@@ -31,6 +34,22 @@ export const TANKS = new Promise<TankopediaEntry[]>(async (resolve) => {
 export const TANK_NAMES = new Promise<string[]>(async (resolve) => {
   resolve((await entries).map(({ name }) => name));
 });
+
+export interface TankopediaInfo {
+  achievement_sections: Record<string, { name: string; order: number }>;
+  tanks_updated_at: number;
+  languages: Record<string, string>;
+  vehicle_types: Record<string, string>;
+  vehicle_nations: Record<string, string>;
+  game_version: string;
+}
+
+// this is blocking because info is needed for command creation
+console.log('Caching tankopedia info...');
+export const tankopediaInfo = getWargamingResponse<TankopediaInfo>(
+  `https://api.wotblitz.com/wotb/encyclopedia/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}`,
+);
+console.log('Cached tankopedia info');
 
 export const TANK_ICONS: Record<string, string> = {
   'AT-SPG': 'https://i.imgur.com/BIHSEH0.png',
