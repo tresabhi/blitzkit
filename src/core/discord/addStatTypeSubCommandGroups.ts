@@ -1,4 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
+import { TreeTypeString } from '../../components/Tanks';
+import { StatType } from '../../renderers/stats';
 import { tankopediaInfo } from '../blitz/tankopedia';
 import addPeriodSubCommands from './addPeriodSubCommands';
 import addTankChoices from './addTankChoices';
@@ -14,7 +16,7 @@ export default async function addStatTypeSubCommandGroups(
       addPeriodSubCommands(option, (option) =>
         option.addStringOption(addUsernameChoices),
       )
-        .setName('player')
+        .setName('player' satisfies StatType)
         .setDescription('Player statistics'),
     )
     .addSubcommandGroup((option) =>
@@ -23,7 +25,7 @@ export default async function addStatTypeSubCommandGroups(
           .addStringOption(addTankChoices)
           .addStringOption(addUsernameChoices),
       )
-        .setName('tank')
+        .setName('tank' satisfies StatType)
         .setDescription('Tank statistics'),
     )
     .addSubcommandGroup((option) =>
@@ -69,14 +71,20 @@ export default async function addStatTypeSubCommandGroups(
               .setName('tree-type')
               .setDescription('Tech tree type')
               .addChoices(
-                { name: 'Tech Tree', value: 'techtree' },
-                { name: 'Premium', value: 'premium' },
-                { name: 'Collector', value: 'collector' },
+                {
+                  name: 'Tech Tree',
+                  value: 'techtree' satisfies TreeTypeString,
+                },
+                { name: 'Premium', value: 'premium' satisfies TreeTypeString },
+                {
+                  name: 'Collector',
+                  value: 'collector' satisfies TreeTypeString,
+                },
               )
               .setRequired(false),
           ),
       )
-        .setName('multi-tank')
+        .setName('multi-tank' satisfies StatType)
         .setDescription('Multiple tanks'),
     );
 }

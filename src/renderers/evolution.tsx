@@ -15,7 +15,7 @@ import { secrets } from '../core/node/secrets';
 import { AccountInfo } from '../types/accountInfo';
 import { Histories } from '../types/histories';
 import { PlayerClanData } from '../types/playerClanData';
-import { StatType } from './fullStats';
+import { StatType } from './stats';
 
 export default async function evolution<Type extends StatType>(
   type: Type,

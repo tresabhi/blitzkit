@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
+import { TreeTypeString } from '../components/Tanks';
 import { CYCLIC_API } from '../constants/cyclic';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankId from '../core/blitz/resolveTankId';
@@ -14,8 +15,7 @@ import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { secrets } from '../core/node/secrets';
 import { CommandRegistryRaw } from '../events/interactionCreate';
-import { StatType } from '../renderers/fullStats';
-import stats from '../renderers/stats';
+import stats, { MultiTankFilters, StatType } from '../renderers/stats';
 import { AccountInfo } from '../types/accountInfo';
 
 export const statsCommand = new Promise<CommandRegistryRaw>(async (resolve) => {
@@ -61,7 +61,23 @@ export const statsCommand = new Promise<CommandRegistryRaw>(async (resolve) => {
       )[player.id];
 
       return [
-        await stats(commandGroup, resolvedPeriod, player, tankId),
+        await stats(
+          commandGroup,
+          resolvedPeriod,
+          player,
+          commandGroup === 'tank'
+            ? tankId
+            : commandGroup === 'multi-tank'
+            ? ({
+                'tank-type':
+                  interaction.options.getString('tank-type') ?? undefined,
+                nation: interaction.options.getString('nation') ?? undefined,
+                tier: interaction.options.getInteger('tier') ?? undefined,
+                'tree-type': (interaction.options.getString('tree-type') ??
+                  undefined) as TreeTypeString | undefined,
+              } satisfies Partial<MultiTankFilters>)
+            : null,
+        ),
         primaryButton(path, 'Refresh'),
         linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
         linkButton(
@@ -87,7 +103,16 @@ export const statsCommand = new Promise<CommandRegistryRaw>(async (resolve) => {
         commandGroup,
         period,
         player,
-        parseInt(url.searchParams.get('tankId')!),
+        commandGroup === 'tank'
+          ? parseInt(url.searchParams.get('tankId')!)
+          : commandGroup === 'multi-tank'
+          ? ({
+              'tank-type': url.searchParams.get('tank-type')!,
+              nation: url.searchParams.get('nation')!,
+              tier: parseInt(url.searchParams.get('tier')!),
+              'tree-type': url.searchParams.get('tree-type') as TreeTypeString,
+            } satisfies MultiTankFilters)
+          : null,
       );
     },
   });

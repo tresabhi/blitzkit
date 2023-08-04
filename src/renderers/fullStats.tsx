@@ -22,8 +22,7 @@ import {
 } from '../types/accountInfo';
 import { PlayerClanData } from '../types/playerClanData';
 import { PossiblyPromise } from '../types/possiblyPromise';
-
-export type StatType = 'player' | 'tank';
+import { StatType } from './stats';
 
 export default async function fullStats<Type extends StatType>(
   type: Type,
