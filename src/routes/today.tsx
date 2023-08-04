@@ -5,7 +5,7 @@ import { RouteRegistry } from '../server';
 export const todayRoute: RouteRegistry = {
   route: '/today',
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
 
   async handler(req) {
     const player = resolvePlayerFromRequest(req);

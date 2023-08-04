@@ -16,7 +16,7 @@ import { handleError } from '../../error';
 export default async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
-  const registry = commands[interaction.commandName];
+  const registry = (await commands)[interaction.commandName];
 
   console.log(interaction.toString());
   await interaction.deferReply();

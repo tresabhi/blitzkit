@@ -2,11 +2,10 @@ import { Region } from '../../constants/regions';
 import getPeriodNow from '../blitzstars/getPeriodNow';
 import getPeriodStart from '../blitzstars/getPeriodStart';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo';
-import { PeriodSubcommand } from '../discord/addPeriodSubCommands';
+import { PeriodSize, PeriodType } from '../discord/addPeriodSubCommands';
 import {
-  EVOLUTION_PERIOD_NAMES,
-  PERIOD_NAMES,
   ResolvedPeriod,
+  getPeriodOptionName,
 } from '../discord/resolvePeriodFromCommand';
 
 export default function resolvePeriodFromURL(
@@ -19,9 +18,10 @@ export default function resolvePeriodFromURL(
   let end: number;
   const url = new URL(urlString);
   const path = url.pathname.split('/').filter(Boolean);
-  const period = path[path.length - 1] as PeriodSubcommand;
+  const periodSubcommand = path[path.length - 1] as PeriodType;
+  const periodOption = url.searchParams.get('period') as PeriodSize;
 
-  if (period === 'custom') {
+  if (periodSubcommand === 'custom') {
     const startRaw = parseInt(url!.searchParams.get('start')!);
     const endRaw = parseInt(url!.searchParams.get('end')!);
     const startMin = Math.min(startRaw, endRaw);
@@ -32,9 +32,9 @@ export default function resolvePeriodFromURL(
     start = getTimeDaysAgo(server, startMin);
     end = getTimeDaysAgo(server, endMax);
   } else {
-    statsName = PERIOD_NAMES[period];
-    evolutionName = EVOLUTION_PERIOD_NAMES[period];
-    start = getPeriodStart(server, period);
+    statsName = `${getPeriodOptionName(periodOption)} Statistics`;
+    evolutionName = `${getPeriodOptionName(periodOption)} Evolution`;
+    start = getPeriodStart(server, periodOption);
     end = getPeriodNow();
   }
 

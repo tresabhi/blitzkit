@@ -29,6 +29,7 @@ export default async function addStatTypeSubCommandGroups(
     .addSubcommandGroup((option) =>
       addPeriodSubCommands(option, (option) =>
         option
+          .addStringOption(addUsernameChoices)
           .addStringOption((option) => {
             option
               .setName('nation')

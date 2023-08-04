@@ -3,17 +3,11 @@ import { Region } from '../../constants/regions';
 import getPeriodNow from '../blitzstars/getPeriodNow';
 import getPeriodStart from '../blitzstars/getPeriodStart';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo';
-import { PeriodSubcommand } from '../discord/addPeriodSubCommands';
+import { PeriodSize, PeriodType } from '../discord/addPeriodSubCommands';
 
-export const PERIOD_NAMES: Record<PeriodSubcommand, string> = {
-  period: "Preset period's statistics",
-  custom: "Custom period's statistics",
-};
-
-export const EVOLUTION_PERIOD_NAMES: Record<PeriodSubcommand, string> = {
-  period: "Preset period's evolution",
-  custom: "Custom period's evolution",
-};
+export function getPeriodOptionName(period: PeriodSize) {
+  return period === 'career' ? 'Career' : `${period}-day`;
+}
 
 export interface ResolvedPeriod {
   statsName: string;
@@ -30,9 +24,10 @@ export default function resolvePeriodFromCommand(
   let evolutionName: string;
   let start: number;
   let end: number;
-  const period = interaction.options.getSubcommand() as PeriodSubcommand;
+  const periodSubcommand = interaction.options.getSubcommand() as PeriodType;
+  const periodOption = interaction.options.getString('period') as PeriodSize;
 
-  if (period === 'custom') {
+  if (periodSubcommand === 'custom') {
     const startRaw = interaction.options.getInteger('start')!;
     const endRaw = interaction.options.getInteger('end')!;
     const startMin = Math.min(startRaw, endRaw);
@@ -43,9 +38,9 @@ export default function resolvePeriodFromCommand(
     start = getTimeDaysAgo(server, startMin);
     end = getTimeDaysAgo(server, endMax);
   } else {
-    statsName = PERIOD_NAMES[period];
-    evolutionName = EVOLUTION_PERIOD_NAMES[period];
-    start = getPeriodStart(server, period);
+    statsName = `${getPeriodOptionName(periodOption)} Statistics`;
+    evolutionName = `${getPeriodOptionName(periodOption)} Evolution`;
+    start = getPeriodStart(server, periodOption);
     end = getPeriodNow();
   }
 

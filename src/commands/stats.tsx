@@ -37,7 +37,11 @@ export const statsCommand = new Promise<CommandRegistryRaw>(async (resolve) => {
         true,
       ) as StatType;
       const player = await resolvePlayerFromCommand(interaction);
-      const period = resolvePeriodFromCommand(player.region, interaction);
+      const resolvedPeriod = resolvePeriodFromCommand(
+        player.region,
+        interaction,
+      );
+      const period = interaction.options.getString('period');
       const tankIdRaw = interaction.options.getString('tank')!;
       const tankId =
         commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
@@ -48,6 +52,7 @@ export const statsCommand = new Promise<CommandRegistryRaw>(async (resolve) => {
         tankId,
         start,
         end,
+        period,
       });
       const { nickname } = (
         await getWargamingResponse<AccountInfo>(
@@ -56,7 +61,7 @@ export const statsCommand = new Promise<CommandRegistryRaw>(async (resolve) => {
       )[player.id];
 
       return [
-        await stats(commandGroup, period, player, tankId),
+        await stats(commandGroup, resolvedPeriod, player, tankId),
         primaryButton(path, 'Refresh'),
         linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
         linkButton(

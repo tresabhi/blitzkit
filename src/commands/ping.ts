@@ -1,9 +1,9 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { CommandRegistry } from '../events/interactionCreate';
 
-export const pingCommand: CommandRegistry<true> = {
+export const pingCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
   handlesInteraction: true,
 

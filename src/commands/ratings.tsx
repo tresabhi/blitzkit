@@ -121,7 +121,7 @@ export const DATABASE_REPO = { owner: 'tresabhi', repo: 'blitzkrieg-db' };
 
 export const ratingsCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()

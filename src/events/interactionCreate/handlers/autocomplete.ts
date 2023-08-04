@@ -1,10 +1,10 @@
 import { AutocompleteInteraction, CacheType } from 'discord.js';
 import { commands } from '..';
 
-export default function handleAutocomplete(
+export default async function handleAutocomplete(
   interaction: AutocompleteInteraction<CacheType>,
 ) {
-  const command = commands[interaction.commandName];
+  const command = (await commands)[interaction.commandName];
 
   if (!command) {
     console.error(`No command matching ${interaction.commandName} was found.`);
