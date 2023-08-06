@@ -1,4 +1,3 @@
-import isDev from '../core/node/isDev';
 import { theme } from '../stitches.config';
 
 export interface TitleBarProps {
@@ -70,15 +69,6 @@ export default function TitleBar({
           </span>
         </div>
       </div>
-
-      <img
-        style={{ width: 64, height: 64 }}
-        src={
-          isDev()
-            ? 'https://i.imgur.com/j6TItdy.png'
-            : 'https://i.imgur.com/pP6RN0x.png'
-        }
-      />
     </div>
   );
 }
