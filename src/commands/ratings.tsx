@@ -4,7 +4,7 @@ import { octokit } from '../bot';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { REGION_NAMES, Region } from '../constants/regions';
+import { Region } from '../constants/regions';
 import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
 import addRegionChoices from '../core/discord/addRegionChoices';
 import { CommandRegistry } from '../events/interactionCreate';
@@ -241,9 +241,7 @@ export const ratingsCommand: CommandRegistry = {
                 ? leagueInfo.big_icon
                 : `https:${leagueInfo.big_icon}`
             }
-            description={`Top ${limit} players • ${new Date().toDateString()} • ${
-              REGION_NAMES[region]
-            }`}
+            description={`Top ${limit} players • ${new Date().toDateString()}`}
           />
 
           <Leaderboard.Root>

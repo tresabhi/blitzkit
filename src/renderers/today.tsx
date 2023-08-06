@@ -3,7 +3,6 @@ import NoData, { NoDataType } from '../components/NoData';
 import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { REGION_NAMES } from '../constants/regions';
 import calculateWN8 from '../core/blitz/calculateWN8';
 import getTankStats from '../core/blitz/getTankStats';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
@@ -161,9 +160,7 @@ export default async function today(
             ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`
             : undefined
         }
-        description={`Today's breakdown • ${new Date().toDateString()} • ${
-          REGION_NAMES[server]
-        }`}
+        description={`Today's breakdown • ${new Date().toDateString()}`}
       />
 
       {rows.length === 0 && <NoData type={NoDataType.BattlesInPeriod} />}

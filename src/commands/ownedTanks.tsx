@@ -4,7 +4,6 @@ import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import * as Tanks from '../components/Tanks';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { REGION_NAMES } from '../constants/regions';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
@@ -104,9 +103,7 @@ export const ownedTanksCommand: CommandRegistry = {
               ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`
               : undefined
           }
-          description={`Owned tanks • ${new Date().toDateString()} • ${
-            REGION_NAMES[server]
-          }`}
+          description={`Owned tanks • ${new Date().toDateString()}`}
         />
 
         {tanks.length === 0 && <NoData type={NoDataType.TanksFound} />}
