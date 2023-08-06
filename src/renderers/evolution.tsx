@@ -93,7 +93,6 @@ export default async function evolution<Type extends StatType>(
       {/* goofy ahh bug forces me to call them as functions */}
       {plot.length > 0 && (
         <Graph.Root
-          xTitle="Battles"
           verticalMargin={{
             min: minY,
             max: maxY,

@@ -28,7 +28,7 @@ export const fullStatsCommand = new Promise<CommandRegistryRaw>(
 
     resolve({
       inProduction: true,
-      inDevelopment: false,
+      inDevelopment: true,
       inPublic: true,
 
       command,

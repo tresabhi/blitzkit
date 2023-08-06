@@ -16,7 +16,7 @@ type SortBy = 'name' | 'count';
 
 export const playerAchievementsCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
