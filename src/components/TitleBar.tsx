@@ -30,7 +30,7 @@ export default function TitleBar({
         )}
 
         <div
-          style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}
+          style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}
         >
           <div
             style={{
