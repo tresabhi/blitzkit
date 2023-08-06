@@ -18,10 +18,11 @@ export default function TitleBar({
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: 16,
+        justifyContent: 'center',
+        overflow: 'hidden',
       }}
     >
-      <div style={{ display: 'flex', gap: 8, flex: 1 }}>
+      <div style={{ display: 'flex', gap: 8 }}>
         {image && (
           <img
             style={{ width: 64, height: 64, objectFit: 'contain' }}
@@ -30,13 +31,18 @@ export default function TitleBar({
         )}
 
         <div
-          style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            gap: 4,
+          }}
         >
           <div
             style={{
               display: 'flex',
               gap: 4,
-              overflow: 'hidden',
             }}
           >
             <span
@@ -45,6 +51,8 @@ export default function TitleBar({
                 color: theme.colors.textHighContrast,
                 fontWeight: 900,
                 whiteSpace: 'nowrap',
+                maxWidth: 240,
+                overflow: 'hidden',
               }}
             >
               {name}
@@ -52,7 +60,6 @@ export default function TitleBar({
             {nameDiscriminator && (
               <span
                 style={{
-                  flex: 1,
                   fontSize: 32,
                   color: theme.colors.textLowContrast,
                   fontWeight: 900,
