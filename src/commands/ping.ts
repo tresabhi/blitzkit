@@ -3,7 +3,7 @@ import { CommandRegistry } from '../events/interactionCreate';
 
 export const pingCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
+  inDevelopment: false,
   inPublic: true,
   handlesInteraction: true,
 

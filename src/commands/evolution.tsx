@@ -28,7 +28,7 @@ export const evolutionCommand = new Promise<CommandRegistryRaw>(
 
     resolve({
       inProduction: true,
-      inDevelopment: true,
+      inDevelopment: false,
       inPublic: true,
 
       command,

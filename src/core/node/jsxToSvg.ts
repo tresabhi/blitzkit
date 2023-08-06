@@ -32,7 +32,7 @@ Promise.all(
 
 export default async function jsxToSvg(jsx: JSX.Element) {
   return await satori(jsx, {
-    width: 640,
+    width: 480,
     fonts: [
       { data: roboto, name: FONT_NAME, weight: 400 },
       { data: robotoBold, name: FONT_NAME, weight: 700 },
