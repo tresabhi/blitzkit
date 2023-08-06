@@ -168,7 +168,7 @@ export default async function stats<Type extends StatType>(
         gap: 4,
       }}
     >
-      <u>/statsfull</u> for all statistics
+      <u>/fullstats</u> for all statistics
     </span>
   );
 
