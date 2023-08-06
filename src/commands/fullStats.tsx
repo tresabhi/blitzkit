@@ -14,7 +14,8 @@ import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { secrets } from '../core/node/secrets';
 import { CommandRegistryRaw } from '../events/interactionCreate';
-import fullStats, { StatType } from '../renderers/fullStats';
+import fullStats from '../renderers/fullStats';
+import { StatType } from '../renderers/stats';
 import { AccountInfo } from '../types/accountInfo';
 
 export const fullStatsCommand = new Promise<CommandRegistryRaw>(
