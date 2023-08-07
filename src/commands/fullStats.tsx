@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
+import { TreeTypeString } from '../components/Tanks';
 import { CYCLIC_API } from '../constants/cyclic';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankId from '../core/blitz/resolveTankId';
@@ -15,7 +16,7 @@ import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { secrets } from '../core/node/secrets';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 import fullStats from '../renderers/fullStats';
-import { StatType } from '../renderers/stats';
+import { MultiTankFilters, StatType } from '../renderers/stats';
 import { AccountInfo } from '../types/accountInfo';
 
 export const fullStatsCommand = new Promise<CommandRegistryRaw>(
@@ -38,7 +39,11 @@ export const fullStatsCommand = new Promise<CommandRegistryRaw>(
           true,
         ) as StatType;
         const player = await resolvePlayerFromCommand(interaction);
-        const period = resolvePeriodFromCommand(player.region, interaction);
+        const resolvedPeriod = resolvePeriodFromCommand(
+          player.region,
+          interaction,
+        );
+        const period = interaction.options.getString('period');
         const tankIdRaw = interaction.options.getString('tank')!;
         const tankId =
           commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
@@ -49,6 +54,7 @@ export const fullStatsCommand = new Promise<CommandRegistryRaw>(
           tankId,
           start,
           end,
+          period,
         });
         const { nickname } = (
           await getWargamingResponse<AccountInfo>(
@@ -57,7 +63,23 @@ export const fullStatsCommand = new Promise<CommandRegistryRaw>(
         )[player.id];
 
         return [
-          await fullStats(commandGroup, period, player, tankId),
+          await fullStats(
+            commandGroup,
+            resolvedPeriod,
+            player,
+            commandGroup === 'tank'
+              ? tankId
+              : commandGroup === 'multi-tank'
+              ? ({
+                  'tank-type':
+                    interaction.options.getString('tank-type') ?? undefined,
+                  nation: interaction.options.getString('nation') ?? undefined,
+                  tier: interaction.options.getInteger('tier') ?? undefined,
+                  'tree-type': (interaction.options.getString('tree-type') ??
+                    undefined) as TreeTypeString | undefined,
+                } satisfies Partial<MultiTankFilters>)
+              : null,
+          ),
           primaryButton(path, 'Refresh'),
           // linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
           linkButton(
