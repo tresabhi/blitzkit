@@ -68,9 +68,8 @@ export const inactiveCommand: CommandRegistry = {
       <Wrapper>
         <TitleBar
           name={clanData.name}
-          nameDiscriminator="(Inactivity)"
           image={`https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData.emblem_set_id}.png`}
-          description={`${threshold}+ Days • ${new Date().toDateString()}`}
+          description={`Inactive for ${threshold}+ Days • ${new Date().toDateString()}`}
         />
 
         {!hasInactiveMembers && <NoData type={NoDataType.PlayersInPeriod} />}

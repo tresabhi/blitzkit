@@ -51,7 +51,7 @@ export default function TitleBar({
                 color: theme.colors.textHighContrast,
                 fontWeight: 900,
                 whiteSpace: 'nowrap',
-                maxWidth: 240,
+                maxWidth: nameDiscriminator === undefined ? Infinity : 240,
                 overflow: 'hidden',
               }}
             >
