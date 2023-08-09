@@ -2,14 +2,13 @@ import AllStatsOverview from '../components/AllStatsOverview';
 import NoData, { NoDataType } from '../components/NoData';
 import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import { TreeTypeString } from '../components/Tanks';
-import { TierWeightsRecord } from '../components/TierWeights';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
 import calculateWN8 from '../core/blitz/calculateWN8';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankName from '../core/blitz/resolveTankName';
 import sumStats from '../core/blitz/sumStats';
-import { Tier, tankopedia } from '../core/blitz/tankopedia';
+import { tankopedia } from '../core/blitz/tankopedia';
 import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats';
 import { tankAverages } from '../core/blitzstars/tankAverages';
 import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand';
@@ -67,7 +66,6 @@ export default async function stats<Type extends StatType>(
   const awaitedTankopedia = await tankopedia;
   let stats: AllStats | undefined;
   let supplementaryStats: SupplementaryStats;
-  let tierWeights: TierWeightsRecord;
 
   if (type === 'player' || type === 'multi-tank') {
     const typedFilters = filters as Partial<MultiTankFilters> | null;
@@ -124,21 +122,6 @@ export default async function stats<Type extends StatType>(
           0,
         ) / battlesOfTanksWithTankopediaEntry,
     };
-    tierWeights = filteredOrder.reduce<TierWeightsRecord>((accumulator, id) => {
-      const tankopediaEntry = awaitedTankopedia[id];
-
-      if (!tankopediaEntry) return accumulator;
-
-      const tier = tankopediaEntry.tier as Tier;
-
-      if (accumulator[tier]) {
-        accumulator[tier]! += diffed[id].battles;
-      } else {
-        accumulator[tier] = diffed[id].battles;
-      }
-
-      return accumulator;
-    }, {});
   } else {
     stats = diffed[(filters as number)!];
 

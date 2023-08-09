@@ -17,7 +17,7 @@ export interface ResolvedPeriod {
 }
 
 export default function resolvePeriodFromCommand(
-  server: Region,
+  region: Region,
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
   let statsName: string;
@@ -28,19 +28,19 @@ export default function resolvePeriodFromCommand(
   const periodOption = interaction.options.getString('period') as PeriodSize;
 
   if (periodSubcommand === 'custom') {
-    const startRaw = interaction.options.getInteger('start')!;
-    const endRaw = interaction.options.getInteger('end')!;
-    const startMin = Math.min(startRaw, endRaw);
-    const endMax = Math.max(startRaw, endRaw);
+    const startRaw = interaction.options.getInteger('start', true);
+    const endRaw = interaction.options.getInteger('end', true);
+    const startDaysAgoMax = Math.min(startRaw, endRaw);
+    const endDaysAgoMin = Math.max(startRaw, endRaw);
 
-    statsName = `${startMin} to ${endMax} days' statistics`;
-    evolutionName = `${startMin} to ${endMax} days' evolution`;
-    start = getTimeDaysAgo(server, startMin);
-    end = getTimeDaysAgo(server, endMax);
+    statsName = `${startDaysAgoMax} to ${endDaysAgoMin} days' statistics`;
+    evolutionName = `${startDaysAgoMax} to ${endDaysAgoMin} days' evolution`;
+    start = getTimeDaysAgo(region, endDaysAgoMin);
+    end = getTimeDaysAgo(region, startDaysAgoMax);
   } else {
     statsName = `${getPeriodOptionName(periodOption)} Statistics`;
     evolutionName = `${getPeriodOptionName(periodOption)} Evolution`;
-    start = getPeriodStart(server, periodOption);
+    start = getPeriodStart(region, periodOption);
     end = getPeriodNow();
   }
 
