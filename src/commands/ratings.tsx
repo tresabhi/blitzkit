@@ -1,13 +1,23 @@
-import { SlashCommandBuilder } from 'discord.js';
+import {
+  APIApplicationCommandOptionChoice,
+  SlashCommandBuilder,
+} from 'discord.js';
 import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
-import { octokit } from '../bot';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { Region } from '../constants/regions';
+import { REGION_NAMES_SHORT, Region } from '../constants/regions';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
+import getMidnightLeaderboard from '../core/database/getMidnightLeaderboard';
 import addRegionChoices from '../core/discord/addRegionChoices';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
+import autocompleteUsername from '../core/discord/autocompleteUsername';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import { secrets } from '../core/node/secrets';
 import { CommandRegistryRaw } from '../events/interactionCreate';
+import { AccountInfo } from '../types/accountInfo';
+import { PlayerClanData } from '../types/playerClanData';
 
 export interface RatingsPlayer {
   spa_id: number;
@@ -102,10 +112,6 @@ const ratingsInfo = fetch(
     return info;
   });
 
-export const DATABASE_REPO = { owner: 'tresabhi', repo: 'blitzkrieg-db' };
-
-const LEAGUE_SUBCOMMAND_TO_INDEX: Record<string, number> = {};
-
 export const ratingsCommand = new Promise<CommandRegistryRaw>(
   async (resolve) => {
     const awaitedRatingsInfo = await ratingsInfo;
@@ -113,33 +119,49 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
     const command = new SlashCommandBuilder()
       .setName('ratings')
       .setDescription('Ratings battles statistics')
-      .addSubcommandGroup((option) => {
-        const subcommandGroup = option
+      .addSubcommand((option) =>
+        option
           .setName('league')
-          .setDescription('Top league players');
-
-        awaitedRatingsInfo.leagues.forEach((league) => {
-          subcommandGroup.addSubcommand((option) => {
-            const subcommandName = league.title.split(' ')[0].toLowerCase();
-            LEAGUE_SUBCOMMAND_TO_INDEX[subcommandName] = league.index;
-
-            return option
-              .setName(subcommandName)
-              .setDescription(`Top ${league.title} players`)
-              .addStringOption(addRegionChoices)
-              .addIntegerOption((option) =>
-                option
-                  .setName('limit')
-                  .setDescription('How many rows to display (default: 10)')
-                  .setRequired(false)
-                  .setMinValue(5)
-                  .setMaxValue(30),
-              );
-          });
-        });
-
-        return subcommandGroup;
-      });
+          .setDescription('Top league players')
+          .addStringOption((option) =>
+            option
+              .setName('league')
+              .setDescription('The league to display')
+              .addChoices(
+                ...awaitedRatingsInfo.leagues.map(
+                  (league) =>
+                    ({
+                      name: league.title.split(' ')[0].toLowerCase(),
+                      value: `${league.index}`,
+                    }) satisfies APIApplicationCommandOptionChoice<string>,
+                ),
+              )
+              .setRequired(true),
+          )
+          .addStringOption(addRegionChoices)
+          .addIntegerOption((option) =>
+            option
+              .setName('limit')
+              .setDescription('How many rows to display (default: 10)')
+              .setRequired(false)
+              .setMinValue(5)
+              .setMaxValue(30),
+          ),
+      )
+      .addSubcommand((option) =>
+        option
+          .setName('neighbours')
+          .setDescription('Your position and neighbours')
+          .addStringOption(addUsernameChoices)
+          .addIntegerOption((option) =>
+            option
+              .setName('limit')
+              .setDescription('How many neighbours to display (default: 10)')
+              .setRequired(false)
+              .setMinValue(5)
+              .setMaxValue(30),
+          ),
+      );
 
     resolve({
       inProduction: true,
@@ -149,12 +171,22 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
       command,
 
       async handler(interaction) {
-        const subcommandGroup = interaction.options.getSubcommandGroup(true);
+        const subcommand = interaction.options.getSubcommand(true);
+        const limit = interaction.options.getInteger('limit') ?? 10;
+        let titleName: string;
+        let titleImage: string | undefined;
+        let titleNameDiscriminator: string | undefined;
+        let titleDescription: string;
+        let playersBefore: number;
+        let playersAfter: number;
+        let players: RatingsPlayer[];
+        let midnightLeaderboard: BlitzkriegRatingsLeaderboard | undefined;
+        let playerId: number | undefined;
 
-        if (subcommandGroup === 'league') {
-          const limit = interaction.options.getInteger('limit') ?? 10;
-          const subcommand = interaction.options.getSubcommand(true);
-          const leagueIndex = LEAGUE_SUBCOMMAND_TO_INDEX[subcommand];
+        if (subcommand === 'league') {
+          const leagueIndex = parseInt(
+            interaction.options.getString('league')!,
+          );
           const region = interaction.options.getString('region') as Region;
           const regionSubdomain = regionToRegionSubdomain(region);
           const result = await fetch(
@@ -162,85 +194,106 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
           )
             .then((response) => response.json() as Promise<LeagueTop>)
             .then(({ result }) => result.slice(0, limit));
-          const awaitedInfo = await ratingsInfo;
-          const leagueInfo = awaitedInfo.leagues[leagueIndex];
-          const midnightLeaderboard = await octokit.repos
-            .getContent({
-              ...DATABASE_REPO,
-              path: `${region}/ratings/${awaitedInfo.current_season}/midnight.json`,
-            })
-            .then(({ data }) => {
-              if (!Array.isArray(data) && data.type === 'file') {
-                const content = Buffer.from(data.content, 'base64').toString();
-                const jsonContent = JSON.parse(
-                  content,
-                ) as BlitzkriegRatingsLeaderboard;
-
-                return jsonContent;
-              }
-            })
-            .catch(() => console.warn('No midnight leaderboard found'));
-          const items = await Promise.all(
-            result.map(async (player) => {
-              const reward = awaitedInfo.rewards.find(
-                (reward) =>
-                  player.number >= reward.from_position &&
-                  player.number <= reward.to_position,
-              );
-              const midnightIndex = midnightLeaderboard?.findIndex(
-                (item) => item.id === player.spa_id,
-              );
-              const midnightScore =
-                midnightIndex === undefined
-                  ? player.score
-                  : midnightLeaderboard![midnightIndex].score;
-              const midnightPosition =
-                midnightIndex === undefined ? player.number : midnightIndex + 1;
-
-              return (
-                <Leaderboard.Item
-                  nickname={player.nickname}
-                  score={player.score}
-                  position={player.number}
-                  clan={player.clan_tag}
-                  reward={reward}
-                  deltaScore={player.score - midnightScore}
-                  deltaPosition={midnightPosition - player.number}
-                  key={player.spa_id}
-                />
-              );
-            }),
+          const leagueInfo = awaitedRatingsInfo.leagues[leagueIndex];
+          midnightLeaderboard = await getMidnightLeaderboard(
+            region,
+            awaitedRatingsInfo.current_season,
           );
 
-          const playersBefore = result[0].number - 1;
-          const playersAfter =
-            awaitedInfo.count - result[result.length - 1].number;
-
-          return (
-            <Wrapper>
-              <TitleBar
-                name={leagueInfo.title}
-                image={
-                  leagueInfo.big_icon.startsWith('http')
-                    ? leagueInfo.big_icon
-                    : `https:${leagueInfo.big_icon}`
-                }
-                description={`Top ${limit} players • ${new Date().toDateString()}`}
-              />
-
-              <Leaderboard.Root>
-                {playersBefore > 0 && (
-                  <Leaderboard.Gap number={playersBefore} />
-                )}
-                {items}
-                {playersAfter > 0 && <Leaderboard.Gap number={playersAfter} />}
-              </Leaderboard.Root>
-            </Wrapper>
+          players = result;
+          playersBefore = result[0].number - 1;
+          playersAfter =
+            awaitedRatingsInfo.count - result[result.length - 1].number;
+          titleName = `${leagueInfo.title} - ${REGION_NAMES_SHORT[region]}`;
+          titleImage = leagueInfo.big_icon.startsWith('http')
+            ? leagueInfo.big_icon
+            : `https:${leagueInfo.big_icon}`;
+          titleDescription = `Top ${limit} players`;
+        } else {
+          const { region, id } = await resolvePlayerFromCommand(interaction);
+          const accountInfo = await getWargamingResponse<AccountInfo>(
+            `https://api.wotblitz.${region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
           );
+          const clan = (
+            await getWargamingResponse<PlayerClanData>(
+              `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
+            )
+          )[id]?.clan;
+          const regionSubdomain = regionToRegionSubdomain(region);
+          const { neighbors } = await fetch(
+            `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/user/${id}/?neighbors=${Math.round(
+              limit / 2,
+            )}`,
+          ).then((response) => response.json() as Promise<RatingsNeighbors>);
+          midnightLeaderboard = await getMidnightLeaderboard(
+            region,
+            awaitedRatingsInfo.current_season,
+          );
+
+          if (clan) titleNameDiscriminator = `[${clan.tag}]`;
+
+          players = neighbors;
+          titleImage = clan
+            ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clan.emblem_set_id}.png`
+            : undefined;
+          titleName = accountInfo[id].nickname;
+          titleDescription = 'Ratings neighbours';
+          playersBefore = neighbors[0].number - 1;
+          playersAfter =
+            awaitedRatingsInfo.count - neighbors[neighbors.length - 1].number;
+          playerId = id;
         }
 
-        return [];
+        const items = players.map((player) => {
+          const reward = awaitedRatingsInfo.rewards.find(
+            (reward) =>
+              player.number >= reward.from_position &&
+              player.number <= reward.to_position,
+          );
+          const midnightIndex = midnightLeaderboard?.findIndex(
+            (item) => item.id === player.spa_id,
+          );
+          const midnightScore =
+            midnightIndex === undefined
+              ? player.score
+              : midnightLeaderboard![midnightIndex].score;
+          const midnightPosition =
+            midnightIndex === undefined ? player.number : midnightIndex + 1;
+
+          return (
+            <Leaderboard.Item
+              nickname={player.nickname}
+              score={player.score}
+              position={player.number}
+              clan={player.clan_tag}
+              reward={reward}
+              deltaScore={player.score - midnightScore}
+              deltaPosition={midnightPosition - player.number}
+              key={player.spa_id}
+              highlight={player.spa_id === playerId}
+            />
+          );
+        });
+
+        return (
+          <Wrapper>
+            <TitleBar
+              name={titleName}
+              image={titleImage}
+              nameDiscriminator={titleNameDiscriminator}
+              description={`${titleDescription} • ${new Date().toDateString()}`}
+            />
+
+            <Leaderboard.Root>
+              {playersBefore > 0 && <Leaderboard.Gap number={playersBefore} />}
+              {items}
+              {playersAfter > 0 && <Leaderboard.Gap number={playersAfter} />}
+            </Leaderboard.Root>
+          </Wrapper>
+        );
       },
+
+      autocomplete: autocompleteUsername,
     });
   },
 );

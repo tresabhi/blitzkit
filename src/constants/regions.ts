@@ -7,6 +7,13 @@ export const REGION_NAMES: Record<Region, string> = {
   asia: 'Asia',
 };
 
+// https://planetarynames.wr.usgs.gov/Abbreviations
+export const REGION_NAMES_SHORT: Record<Region, string> = {
+  com: 'NA',
+  eu: 'EU',
+  asia: 'AS',
+};
+
 export const REGION_SUBDOMAIN_NAMES: Record<RegionSubdomain, string> = {
   na: 'North America',
   eu: 'Europe',

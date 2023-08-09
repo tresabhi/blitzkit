@@ -178,8 +178,8 @@ export default async function stats<Type extends StatType>(
     <Wrapper>
       <TitleBar
         name={accountInfo[id].nickname}
-        nameDiscriminator={nameDiscriminator}
         image={image}
+        nameDiscriminator={nameDiscriminator}
         description={`${statsName} • ${new Date().toDateString()}`}
       />
 

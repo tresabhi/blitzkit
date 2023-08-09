@@ -9,6 +9,7 @@ export interface ItemProps {
   reward?: RatingsReward;
   nickname: string;
   clan?: string;
+  highlight?: boolean;
 }
 
 function normalizeImage(url: string) {
@@ -23,13 +24,16 @@ export function Item({
   reward,
   nickname,
   clan,
+  highlight,
 }: ItemProps) {
   return (
     <div
       style={{
         display: 'flex',
         padding: 8,
-        backgroundColor: theme.colors.componentInteractive,
+        backgroundColor: highlight
+          ? theme.colors.componentInteractive_blue
+          : theme.colors.componentInteractive,
         borderRadius: 4,
         alignItems: 'center',
         justifyContent: 'center',
@@ -38,7 +42,9 @@ export function Item({
     >
       <span
         style={{
-          color: theme.colors.textLowContrast,
+          color: highlight
+            ? theme.colors.textLowContrast_blue
+            : theme.colors.textLowContrast,
           fontSize: 16,
         }}
       >
@@ -55,7 +61,9 @@ export function Item({
       >
         <span
           style={{
-            color: theme.colors.textHighContrast,
+            color: highlight
+              ? theme.colors.textHighContrast_blue
+              : theme.colors.textHighContrast,
             fontSize: 16,
           }}
         >
@@ -64,7 +72,9 @@ export function Item({
         {clan && (
           <span
             style={{
-              color: theme.colors.textLowContrast,
+              color: highlight
+                ? theme.colors.textLowContrast_blue
+                : theme.colors.textLowContrast,
               fontSize: 16,
             }}
           >
@@ -95,7 +105,9 @@ export function Item({
           />
           <span
             style={{
-              color: theme.colors.textLowContrast,
+              color: highlight
+                ? theme.colors.textLowContrast_blue
+                : theme.colors.textLowContrast,
               fontSize: 16,
             }}
           >
@@ -126,7 +138,9 @@ export function Item({
         {reward && reward.count > 1 && (
           <span
             style={{
-              color: theme.colors.textLowContrast,
+              color: highlight
+                ? theme.colors.textLowContrast_blue
+                : theme.colors.textLowContrast,
               fontSize: 16,
             }}
           >
@@ -145,7 +159,14 @@ export function Item({
         }}
       >
         {deltaScore !== 0 && deltaScore !== undefined && (
-          <span style={{ color: theme.colors.textLowContrast, fontSize: 16 }}>
+          <span
+            style={{
+              color: highlight
+                ? theme.colors.textLowContrast_blue
+                : theme.colors.textLowContrast,
+              fontSize: 16,
+            }}
+          >
             {Math.abs(deltaScore).toLocaleString()}
           </span>
         )}
@@ -162,7 +183,14 @@ export function Item({
             }
           />
         )}
-        <span style={{ color: theme.colors.textHighContrast, fontSize: 16 }}>
+        <span
+          style={{
+            color: highlight
+              ? theme.colors.textHighContrast_blue
+              : theme.colors.textHighContrast,
+            fontSize: 16,
+          }}
+        >
           {score.toLocaleString()}
         </span>
       </div>
