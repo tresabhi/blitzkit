@@ -7,6 +7,7 @@ import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
 import { REGION_NAMES_SHORT, Region } from '../constants/regions';
+import getRatingsInfo from '../core/blitz/getRatingsInfo';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
 import getMidnightLeaderboard from '../core/database/getMidnightLeaderboard';
@@ -103,14 +104,10 @@ export interface RatingsNeighbors {
 }
 
 console.log('Caching ratings info...');
-const ratingsInfo = fetch(
-  'https://na.wotblitz.com/en/api/rating-leaderboards/season/',
-)
-  .then((response) => response.json() as Promise<RatingsInfo>)
-  .then((info) => {
-    console.log('Cached ratings info');
-    return info;
-  });
+const ratingsInfo = getRatingsInfo('com').then((info) => {
+  console.log('Cached ratings info');
+  return info;
+});
 
 export const ratingsCommand = new Promise<CommandRegistryRaw>(
   async (resolve) => {
@@ -182,28 +179,30 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
         let players: RatingsPlayer[];
         let midnightLeaderboard: BlitzkriegRatingsLeaderboard | undefined;
         let playerId: number | undefined;
+        let regionRatingsInfo: RatingsInfo;
 
         if (subcommand === 'league') {
           const leagueIndex = parseInt(
             interaction.options.getString('league')!,
           );
           const region = interaction.options.getString('region') as Region;
+          regionRatingsInfo = await getRatingsInfo(region);
           const regionSubdomain = regionToRegionSubdomain(region);
           const result = await fetch(
             `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/league/${leagueIndex}/top/`,
           )
             .then((response) => response.json() as Promise<LeagueTop>)
             .then(({ result }) => result.slice(0, limit));
-          const leagueInfo = awaitedRatingsInfo.leagues[leagueIndex];
+          const leagueInfo = regionRatingsInfo.leagues[leagueIndex];
           midnightLeaderboard = await getMidnightLeaderboard(
             region,
-            awaitedRatingsInfo.current_season,
+            regionRatingsInfo.current_season,
           );
 
           players = result;
           playersBefore = result[0].number - 1;
           playersAfter =
-            awaitedRatingsInfo.count - result[result.length - 1].number;
+            regionRatingsInfo.count - result[result.length - 1].number;
           titleName = `${leagueInfo.title} - ${REGION_NAMES_SHORT[region]}`;
           titleImage = leagueInfo.big_icon.startsWith('http')
             ? leagueInfo.big_icon
@@ -211,6 +210,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
           titleDescription = `Top ${limit} players`;
         } else {
           const { region, id } = await resolvePlayerFromCommand(interaction);
+          regionRatingsInfo = await getRatingsInfo(region);
           const accountInfo = await getWargamingResponse<AccountInfo>(
             `https://api.wotblitz.${region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
           );
@@ -227,7 +227,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
           ).then((response) => response.json() as Promise<RatingsNeighbors>);
           midnightLeaderboard = await getMidnightLeaderboard(
             region,
-            awaitedRatingsInfo.current_season,
+            regionRatingsInfo.current_season,
           );
 
           if (clan) titleNameDiscriminator = `[${clan.tag}]`;
@@ -240,12 +240,12 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
           titleDescription = 'Ratings neighbours';
           playersBefore = neighbors[0].number - 1;
           playersAfter =
-            awaitedRatingsInfo.count - neighbors[neighbors.length - 1].number;
+            regionRatingsInfo.count - neighbors[neighbors.length - 1].number;
           playerId = id;
         }
 
         const items = players.map((player) => {
-          const reward = awaitedRatingsInfo.rewards.find(
+          const reward = regionRatingsInfo.rewards.find(
             (reward) =>
               player.number >= reward.from_position &&
               player.number <= reward.to_position,
