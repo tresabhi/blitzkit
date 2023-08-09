@@ -30,13 +30,13 @@ export default function resolvePeriodFromCommand(
   if (periodSubcommand === 'custom') {
     const startRaw = interaction.options.getInteger('start', true);
     const endRaw = interaction.options.getInteger('end', true);
-    const startDaysAgoMax = Math.min(startRaw, endRaw);
-    const endDaysAgoMin = Math.max(startRaw, endRaw);
+    const startDaysAgoMin = Math.min(startRaw, endRaw);
+    const endDaysAgoMax = Math.max(startRaw, endRaw);
 
-    statsName = `${startDaysAgoMax} to ${endDaysAgoMin} days' statistics`;
-    evolutionName = `${startDaysAgoMax} to ${endDaysAgoMin} days' evolution`;
-    start = getTimeDaysAgo(region, endDaysAgoMin);
-    end = getTimeDaysAgo(region, startDaysAgoMax);
+    statsName = `${startDaysAgoMin} to ${endDaysAgoMax} days' statistics`;
+    evolutionName = `${startDaysAgoMin} to ${endDaysAgoMax} days' evolution`;
+    start = getTimeDaysAgo(region, endDaysAgoMax);
+    end = getTimeDaysAgo(region, startDaysAgoMin);
   } else {
     statsName = `${getPeriodOptionName(periodOption)} Statistics`;
     evolutionName = `${getPeriodOptionName(periodOption)} Evolution`;

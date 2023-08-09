@@ -24,13 +24,13 @@ export default function resolvePeriodFromURL(
   if (periodSubcommand === 'custom') {
     const startRaw = parseInt(url!.searchParams.get('start')!);
     const endRaw = parseInt(url!.searchParams.get('end')!);
-    const startMin = Math.min(startRaw, endRaw);
-    const endMax = Math.max(startRaw, endRaw);
+    const startDaysAgoMin = Math.min(startRaw, endRaw);
+    const endDaysAgoMax = Math.max(startRaw, endRaw);
 
-    statsName = `${startMin} to ${endMax} days' statistics`;
-    evolutionName = `${startMin} to ${endMax} days' evolution`;
-    start = getTimeDaysAgo(server, startMin);
-    end = getTimeDaysAgo(server, endMax);
+    statsName = `${startDaysAgoMin} to ${endDaysAgoMax} days' statistics`;
+    evolutionName = `${startDaysAgoMin} to ${endDaysAgoMax} days' evolution`;
+    start = getTimeDaysAgo(server, endDaysAgoMax);
+    end = getTimeDaysAgo(server, startDaysAgoMin);
   } else {
     statsName = `${getPeriodOptionName(periodOption)} Statistics`;
     evolutionName = `${getPeriodOptionName(periodOption)} Evolution`;
