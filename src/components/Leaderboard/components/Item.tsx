@@ -109,7 +109,7 @@ export function Item({
           flex: 1,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'flex-end',
           gap: 4,
         }}
       >
@@ -140,7 +140,8 @@ export function Item({
           display: 'flex',
           gap: 4,
           alignItems: 'center',
-          justifyContent: 'center',
+          width: 96,
+          justifyContent: 'flex-end',
         }}
       >
         {deltaScore !== 0 && deltaScore !== undefined && (
