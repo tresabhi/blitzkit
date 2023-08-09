@@ -24,6 +24,7 @@ export const evolutionCommand = new Promise<CommandRegistryRaw>(
       new SlashCommandBuilder()
         .setName('evolution')
         .setDescription('Evolution of statistics'),
+      false,
     );
 
     resolve({

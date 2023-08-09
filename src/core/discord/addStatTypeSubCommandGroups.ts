@@ -8,10 +8,11 @@ import addUsernameChoices from './addUsernameChoices';
 
 export default async function addStatTypeSubCommandGroups(
   option: SlashCommandBuilder,
+  addMultiTank = true,
 ) {
   const awaitedTankopediaInfo = await tankopediaInfo;
 
-  return option
+  option
     .addSubcommandGroup((option) =>
       addPeriodSubCommands(option, (option) =>
         option.addStringOption(addUsernameChoices),
@@ -27,8 +28,10 @@ export default async function addStatTypeSubCommandGroups(
       )
         .setName('tank' satisfies StatType)
         .setDescription('Tank statistics'),
-    )
-    .addSubcommandGroup((option) =>
+    );
+
+  if (addMultiTank)
+    option.addSubcommandGroup((option) =>
       addPeriodSubCommands(option, (option) =>
         option
           .addStringOption(addUsernameChoices)
@@ -87,4 +90,6 @@ export default async function addStatTypeSubCommandGroups(
         .setName('multi-tank' satisfies StatType)
         .setDescription('Multiple tanks'),
     );
+
+  return option;
 }
