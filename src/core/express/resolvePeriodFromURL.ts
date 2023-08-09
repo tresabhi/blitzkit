@@ -38,10 +38,5 @@ export default function resolvePeriodFromURL(
     end = getPeriodNow();
   }
 
-  return {
-    statsName,
-    evolutionName,
-    start,
-    end,
-  } satisfies ResolvedPeriod;
+  return { statsName, evolutionName, start, end } satisfies ResolvedPeriod;
 }
