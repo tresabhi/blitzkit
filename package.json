@@ -1,7 +1,7 @@
 {
   "name": "blitzkrieg",
   "version": "1.12.0",
-  "description": "",
+  "description": "🎉 All-in-one Discord bot for everything World of Tanks Blitz",
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
