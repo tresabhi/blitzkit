@@ -1,1 +1,1 @@
-export const CYCLIC_API = 'https://blitzkrieg.cyclic.app';
+export const CYCLIC_API = 'https://blitzkrieg-embeds.cyclic.app';
