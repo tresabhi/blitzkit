@@ -22,9 +22,13 @@ import { PossiblyPromise } from '../types/possiblyPromise';
 
 export default async function today(
   { region: server, id }: ResolvedPlayer,
-  limit = Infinity,
+  cutoff = Infinity,
+  maximized = 4,
+  showTotal = true,
   naked?: boolean,
 ) {
+  console.log(maximized);
+
   const { diffed, order } = await getDiffedTankStats(
     server,
     id,
@@ -38,9 +42,11 @@ export default async function today(
     `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
   );
   const careerTankStatsRaw = await getTankStats(server, id);
-  const careerStats: Record<number, AllStats> = {
-    0: accountInfo[id].statistics.all,
-  };
+  const careerStats: Record<number, AllStats> = showTotal
+    ? {
+        0: accountInfo[id].statistics.all,
+      }
+    : {};
   const allStatsToAccumulate: AllStats[] = [];
 
   Object.entries(diffed).forEach(([, tankStats]) => {
@@ -52,7 +58,7 @@ export default async function today(
 
   const accumulatedStats = sumStats(allStatsToAccumulate);
 
-  if (Object.keys(diffed).length > 0) {
+  if (showTotal && Object.keys(diffed).length > 0) {
     diffed[0] = accumulatedStats;
   }
 
@@ -62,7 +68,7 @@ export default async function today(
   >(async (accumulator, [tankIdString, tankStats]) => {
     const tankId = parseInt(tankIdString);
 
-    return tankId === 0 || !(await tankAverages)[tankId]
+    return (showTotal && tankId === 0) || !(await tankAverages)[tankId]
       ? accumulator
       : {
           ...(await accumulator),
@@ -73,7 +79,8 @@ export default async function today(
   const careerWN8s = await careerTankStatsRaw.reduce<
     PossiblyPromise<Record<number, number>>
   >(async (accumulator, { tank_id }) => {
-    return tank_id === 0 || (await tankAverages)[tank_id] === undefined
+    return (showTotal && tank_id === 0) ||
+      (await tankAverages)[tank_id] === undefined
       ? accumulator
       : {
           ...(await accumulator),
@@ -86,38 +93,40 @@ export default async function today(
   const todayWN8sEntries = Object.entries(todayWN8s);
   const careerWN8sEntries = Object.entries(careerWN8s);
 
-  todayWN8s[0] =
-    todayWN8sEntries.reduce(
-      (accumulator, [tankIdString, wn8]) =>
-        accumulator + wn8 * diffed[Number(tankIdString)].battles,
-      0,
-    ) /
-    todayWN8sEntries.reduce(
-      (accumulator, [tankIdString]) =>
-        accumulator + diffed[Number(tankIdString)].battles,
-      0,
-    );
-  careerWN8s[0] =
-    careerWN8sEntries.reduce(
-      (accumulator, [tankIdString, WN8]) =>
-        isNaN(WN8)
-          ? accumulator
-          : accumulator + WN8 * careerStats[Number(tankIdString)].battles,
-      0,
-    ) /
-    careerWN8sEntries.reduce(
-      (accumulator, [tankIdString, WN8]) =>
-        isNaN(WN8)
-          ? accumulator
-          : accumulator + careerStats[Number(tankIdString)].battles,
-      0,
-    );
+  if (showTotal) {
+    todayWN8s[0] =
+      todayWN8sEntries.reduce(
+        (accumulator, [tankIdString, wn8]) =>
+          accumulator + wn8 * diffed[Number(tankIdString)].battles,
+        0,
+      ) /
+      todayWN8sEntries.reduce(
+        (accumulator, [tankIdString]) =>
+          accumulator + diffed[Number(tankIdString)].battles,
+        0,
+      );
+    careerWN8s[0] =
+      careerWN8sEntries.reduce(
+        (accumulator, [tankIdString, WN8]) =>
+          isNaN(WN8)
+            ? accumulator
+            : accumulator + WN8 * careerStats[Number(tankIdString)].battles,
+        0,
+      ) /
+      careerWN8sEntries.reduce(
+        (accumulator, [tankIdString, WN8]) =>
+          isNaN(WN8)
+            ? accumulator
+            : accumulator + careerStats[Number(tankIdString)].battles,
+        0,
+      );
+  }
 
   const rows = await Promise.all(
     [
       // this code unreadable on god will forget tomorrow no cap
-      ...(order.length === 0 ? [] : [0]),
-      ...(isFinite(limit) ? order.slice(0, limit) : order),
+      ...(order.length === 0 || !showTotal ? [] : [0]),
+      ...(isFinite(cutoff) ? order.slice(0, cutoff) : order),
     ].map(async (id, index) => {
       const tankStats = diffed[id];
       const career = careerStats[id];
@@ -125,12 +134,12 @@ export default async function today(
 
       return (
         <Breakdown.Row
-          isTank={id !== 0}
+          isTank={!showTotal || id !== 0}
           tankType={tankopediaEntry?.type}
           treeType={tankopediaEntry ? await getTreeType(id) : undefined}
-          minimized={index > 4}
+          minimized={showTotal ? index > maximized : index + 1 > maximized}
           key={id}
-          name={id === 0 ? 'Total' : await resolveTankName(id)}
+          name={showTotal && id === 0 ? 'Total' : await resolveTankName(id)}
           winrate={tankStats.wins / tankStats.battles}
           careerWinrate={career.wins / career.battles}
           WN8={isNaN(todayWN8s[id]) ? undefined : todayWN8s[id]}

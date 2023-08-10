@@ -24,26 +24,48 @@ export const todayCommand: CommandRegistry = {
     .addStringOption(addUsernameChoices)
     .addIntegerOption((option) =>
       option
-        .setName('limit')
+        .setName('cutoff')
         .setDescription(
           'The maximum number of tanks to display (default: Infinity)',
         )
         .setRequired(false)
         .setMinValue(1),
+    )
+    .addIntegerOption((option) =>
+      option
+        .setName('maximized')
+        .setDescription(
+          'The number of rows with full stats after which all are collapsed (default: 4)',
+        )
+        .setMinValue(0)
+        .setRequired(false),
+    )
+    .addBooleanOption((option) =>
+      option
+        .setName('show-total')
+        .setDescription('Show the total stats at the top (default: true)')
+        .setRequired(false),
     ),
 
   async handler(interaction) {
     const player = await resolvePlayerFromCommand(interaction);
-    const limit = interaction.options.getInteger('limit') ?? Infinity;
+    const cutoff = interaction.options.getInteger('cutoff') ?? undefined;
+    const maximized = interaction.options.getInteger('maximized') ?? undefined;
+    const showTotal = interaction.options.getBoolean('show-total') ?? undefined;
     const { nickname } = (
       await getWargamingResponse<AccountInfo>(
         `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
       )
     )[player.id];
-    const path = interactionToURL(interaction, player);
+    const path = interactionToURL(interaction, {
+      ...player,
+      cutoff,
+      maximized,
+      'show-total': showTotal,
+    });
 
     return [
-      await today(player, limit, false),
+      await today(player, cutoff, maximized, showTotal, false),
       primaryButton(path, 'Refresh'),
       linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
       linkButton(

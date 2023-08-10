@@ -31,7 +31,7 @@ const app = express();
     if (registry.handlesInteraction) return;
 
     res.send(
-      withAutoRefresh(await normalizeRouteReturnable(returnable), 10 * 1000),
+      withAutoRefresh(await normalizeRouteReturnable(returnable), 30 * 1000),
     );
   });
 });
