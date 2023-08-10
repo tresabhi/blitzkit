@@ -2,10 +2,10 @@ import { BuildOptions, build } from 'esbuild';
 import { copyFile, mkdirSync, rmSync } from 'fs';
 import { argv } from 'process';
 
-const isProd = !argv.includes('--dev');
-const buildAll = argv.includes('--build=all');
-const buildBot = argv.includes('--build=bot') || buildAll;
-const buildServer = argv.includes('--build=server') || buildAll;
+const isProd = argv === undefined || !argv.includes('--dev');
+const buildAll = argv === undefined || argv.includes('--build=all');
+const buildBot = argv?.includes('--build=bot') || buildAll;
+const buildServer = argv?.includes('--build=server') || buildAll;
 
 if (isProd) {
   // only remove in production to ensure no time is wasted in dev
