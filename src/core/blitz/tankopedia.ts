@@ -1,3 +1,4 @@
+import { deburr } from 'lodash';
 import { secrets } from '../node/secrets';
 import getWargamingResponse from './getWargamingResponse';
 
@@ -36,6 +37,20 @@ export const TANKS = new Promise<TankopediaEntry[]>(async (resolve) => {
 export const TANK_NAMES = new Promise<string[]>(async (resolve) => {
   resolve((await entries).map(({ name }) => name));
 });
+export const TANK_NAMES_DIACRITICS = TANK_NAMES.then((tankNames) =>
+  Promise.all(
+    tankNames.map(async (tankName, index) => {
+      const name = tankName ?? `Unknown Tank ${(await TANKS)[index].tank_id}`;
+      const diacriticless = deburr(name);
+
+      return {
+        original: name,
+        diacriticless,
+        combined: `${name}${diacriticless}`,
+      };
+    }),
+  ),
+);
 
 export interface TankopediaInfo {
   achievement_sections: Record<string, { name: string; order: number }>;
