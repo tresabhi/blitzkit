@@ -1,6 +1,8 @@
 import { secrets } from '../node/secrets';
 import getWargamingResponse from './getWargamingResponse';
 
+export type TankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
+
 export interface TankopediaEntry {
   name: string;
   nation: string;
@@ -10,7 +12,7 @@ export interface TankopediaEntry {
   cost: { price_credit: number; price_gold: number };
   images: { preview: string; normal: string };
   tank_id: number;
-  type: string;
+  type: TankType;
   description: string;
 }
 
@@ -51,21 +53,21 @@ export const tankopediaInfo = getWargamingResponse<TankopediaInfo>(
 );
 console.log('Cached tankopedia info');
 
-export const TANK_ICONS: Record<string, string> = {
+export const TANK_ICONS: Record<TankType, string> = {
   'AT-SPG': 'https://i.imgur.com/BIHSEH0.png',
   lightTank: 'https://i.imgur.com/CSNha5V.png',
   mediumTank: 'https://i.imgur.com/wvf3ltm.png',
   heavyTank: 'https://i.imgur.com/ECeqlZa.png',
 };
 
-export const TANK_ICONS_PREMIUM: Record<string, string> = {
+export const TANK_ICONS_PREMIUM: Record<TankType, string> = {
   'AT-SPG': 'https://i.imgur.com/TCu3EdR.png',
   lightTank: 'https://i.imgur.com/zdkpTRb.png',
   mediumTank: 'https://i.imgur.com/3z7eHX6.png',
   heavyTank: 'https://i.imgur.com/P3vbmyA.png',
 };
 
-export const TANK_ICONS_COLLECTOR: Record<string, string> = {
+export const TANK_ICONS_COLLECTOR: Record<TankType, string> = {
   'AT-SPG': 'https://i.imgur.com/WTjeirB.png',
   lightTank: 'https://i.imgur.com/EwhtKkU.png',
   mediumTank: 'https://i.imgur.com/u8YDMBh.png',

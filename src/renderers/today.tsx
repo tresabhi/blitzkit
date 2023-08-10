@@ -5,6 +5,7 @@ import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
 import calculateWN8 from '../core/blitz/calculateWN8';
 import getTankStats from '../core/blitz/getTankStats';
+import getTreeType from '../core/blitz/getTreeType';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankName from '../core/blitz/resolveTankName';
 import sumStats from '../core/blitz/sumStats';
@@ -117,28 +118,27 @@ export default async function today(
       // this code unreadable on god will forget tomorrow no cap
       ...(order.length === 0 ? [] : [0]),
       ...(isFinite(limit) ? order.slice(0, limit) : order),
-    ].map(async (tankId, index) => {
-      const tankStats = diffed[tankId];
-      const career = careerStats[tankId];
+    ].map(async (id, index) => {
+      const tankStats = diffed[id];
+      const career = careerStats[id];
+      const tankopediaEntry = (await tankopedia)[id];
 
       return (
         <Breakdown.Row
-          naked={naked}
-          isListing={tankId !== 0}
+          isTank={id !== 0}
+          tankType={tankopediaEntry?.type}
+          treeType={tankopediaEntry ? await getTreeType(id) : undefined}
           minimized={index > 4}
-          key={tankId}
-          name={tankId === 0 ? 'Total' : await resolveTankName(tankId)}
+          key={id}
+          name={id === 0 ? 'Total' : await resolveTankName(id)}
           winrate={tankStats.wins / tankStats.battles}
           careerWinrate={career.wins / career.battles}
-          WN8={isNaN(todayWN8s[tankId]) ? undefined : todayWN8s[tankId]}
-          careerWN8={isNaN(careerWN8s[tankId]) ? undefined : careerWN8s[tankId]}
+          WN8={isNaN(todayWN8s[id]) ? undefined : todayWN8s[id]}
+          careerWN8={isNaN(careerWN8s[id]) ? undefined : careerWN8s[id]}
           damage={tankStats.damage_dealt / tankStats.battles}
           careerDamage={career.damage_dealt / career.battles}
           battles={tankStats.battles}
           careerBattles={career.battles}
-          icon={
-            tankId === 0 ? undefined : (await tankopedia)[tankId]?.images.normal
-          }
         />
       );
     }),
@@ -146,7 +146,7 @@ export default async function today(
 
   return naked ? (
     <Wrapper naked>
-      <Breakdown.Root>{rows.slice(1)}</Breakdown.Root>
+      <Breakdown.Root>{rows}</Breakdown.Root>
     </Wrapper>
   ) : (
     <Wrapper>
