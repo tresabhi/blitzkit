@@ -11,11 +11,11 @@ import { ClanList } from '../types/clanList';
 
 export const searchClansCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('searchclans')
+    .setName('search-clans')
     .setDescription('Search clans')
     .addStringOption(addRegionChoices)
     .addStringOption((option) => addClanChoices(option).setAutocomplete(false))

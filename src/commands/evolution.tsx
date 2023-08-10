@@ -13,75 +13,82 @@ import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand';
 import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { secrets } from '../core/node/secrets';
-import { CommandRegistry } from '../events/interactionCreate';
+import { CommandRegistryRaw } from '../events/interactionCreate';
 import evolution from '../renderers/evolution';
-import { StatType } from '../renderers/fullStats';
+import { StatType } from '../renderers/stats';
 import { AccountInfo } from '../types/accountInfo';
 
-export const evolutionCommand: CommandRegistry = {
-  inProduction: true,
-  inDevelopment: false,
-  inPublic: true,
-
-  command: addStatTypeSubCommandGroups(
-    new SlashCommandBuilder()
-      .setName('evolution')
-      .setDescription('Evolution of statistics'),
-  ),
-
-  async handler(interaction) {
-    const commandGroup = interaction.options.getSubcommandGroup(
-      true,
-    ) as StatType;
-    const player = await resolvePlayerFromCommand(interaction);
-    const period = resolvePeriodFromCommand(player.region, interaction);
-    const tankIdRaw = interaction.options.getString('tank')!;
-    const tankId =
-      commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
-    const start = interaction.options.getInteger('start');
-    const end = interaction.options.getInteger('end');
-    const { nickname } = (
-      await getWargamingResponse<AccountInfo>(
-        `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
-      )
-    )[player.id];
-    const path = interactionToURL(interaction, {
-      ...player,
-      tankId,
-      start,
-      end,
-    });
-
-    return [
-      await evolution(commandGroup, period, player, tankId),
-      primaryButton(path, 'Refresh'),
-      // linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
-      linkButton(
-        `https://www.blitzstars.com/player/${player.region}/${nickname}${
-          commandGroup === 'tank' ? `/tank/${tankId!}` : ''
-        }`,
-        'BlitzStars',
-      ),
-    ];
-  },
-
-  autocomplete: (interaction) => {
-    autocompleteUsername(interaction);
-    autocompleteTanks(interaction);
-  },
-
-  async button(interaction) {
-    const url = new URL(`${CYCLIC_API}/${interaction.customId}`);
-    const path = url.pathname.split('/').filter(Boolean);
-    const commandGroup = path[1] as StatType;
-    const player = await resolvePlayerFromButton(interaction);
-    const period = resolvePeriodFromButton(player.region, interaction);
-
-    return await evolution(
-      commandGroup,
-      period,
-      player,
-      parseInt(url.searchParams.get('tankId')!),
+export const evolutionCommand = new Promise<CommandRegistryRaw>(
+  async (resolve) => {
+    const command = await addStatTypeSubCommandGroups(
+      new SlashCommandBuilder()
+        .setName('evolution')
+        .setDescription('Evolution of statistics'),
+      false,
     );
+
+    resolve({
+      inProduction: true,
+      inDevelopment: true,
+      inPublic: true,
+
+      command,
+
+      async handler(interaction) {
+        const commandGroup = interaction.options.getSubcommandGroup(
+          true,
+        ) as StatType;
+        const player = await resolvePlayerFromCommand(interaction);
+        const period = resolvePeriodFromCommand(player.region, interaction);
+        const tankIdRaw = interaction.options.getString('tank')!;
+        const tankId =
+          commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
+        const start = interaction.options.getInteger('start');
+        const end = interaction.options.getInteger('end');
+        const { nickname } = (
+          await getWargamingResponse<AccountInfo>(
+            `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
+          )
+        )[player.id];
+        const path = interactionToURL(interaction, {
+          ...player,
+          tankId,
+          start,
+          end,
+        });
+
+        return [
+          await evolution(commandGroup, period, player, tankId),
+          primaryButton(path, 'Refresh'),
+          // linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
+          linkButton(
+            `https://www.blitzstars.com/player/${player.region}/${nickname}${
+              commandGroup === 'tank' ? `/tank/${tankId!}` : ''
+            }`,
+            'BlitzStars',
+          ),
+        ];
+      },
+
+      autocomplete: (interaction) => {
+        autocompleteUsername(interaction);
+        autocompleteTanks(interaction);
+      },
+
+      async button(interaction) {
+        const url = new URL(`${CYCLIC_API}/${interaction.customId}`);
+        const path = url.pathname.split('/').filter(Boolean);
+        const commandGroup = path[1] as StatType;
+        const player = await resolvePlayerFromButton(interaction);
+        const period = resolvePeriodFromButton(player.region, interaction);
+
+        return await evolution(
+          commandGroup,
+          period,
+          player,
+          parseInt(url.searchParams.get('tankId')!),
+        );
+      },
+    });
   },
-};
+);

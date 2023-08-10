@@ -3,7 +3,6 @@ import NoData, { NoDataType } from '../components/NoData';
 import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { REGION_NAMES } from '../constants/regions';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankName from '../core/blitz/resolveTankName';
 import { tankopedia } from '../core/blitz/tankopedia';
@@ -15,7 +14,7 @@ import { secrets } from '../core/node/secrets';
 import { AccountInfo } from '../types/accountInfo';
 import { Histories } from '../types/histories';
 import { PlayerClanData } from '../types/playerClanData';
-import { StatType } from './fullStats';
+import { StatType } from './stats';
 
 export default async function evolution<Type extends StatType>(
   type: Type,
@@ -88,20 +87,17 @@ export default async function evolution<Type extends StatType>(
         name={accountInfo[id].nickname}
         nameDiscriminator={nameDiscriminator}
         image={image}
-        description={`${evolutionName} • ${new Date().toDateString()} • ${
-          REGION_NAMES[server]
-        }`}
+        description={`${evolutionName} • ${new Date().toDateString()}`}
       />
 
       {/* goofy ahh bug forces me to call them as functions */}
       {plot.length > 0 && (
         <Graph.Root
-          xTitle="Battles"
           verticalMargin={{
             min: minY,
             max: maxY,
             suffix: '%',
-            precision: 1,
+            precision: 2,
           }}
           horizontalMargin={{
             min: minX,

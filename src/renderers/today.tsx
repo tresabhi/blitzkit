@@ -3,9 +3,9 @@ import NoData, { NoDataType } from '../components/NoData';
 import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { REGION_NAMES } from '../constants/regions';
 import calculateWN8 from '../core/blitz/calculateWN8';
 import getTankStats from '../core/blitz/getTankStats';
+import getTreeType from '../core/blitz/getTreeType';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankName from '../core/blitz/resolveTankName';
 import sumStats from '../core/blitz/sumStats';
@@ -22,9 +22,13 @@ import { PossiblyPromise } from '../types/possiblyPromise';
 
 export default async function today(
   { region: server, id }: ResolvedPlayer,
-  limit = Infinity,
+  cutoff = Infinity,
+  maximized = 4,
+  showTotal = true,
   naked?: boolean,
 ) {
+  console.log(maximized);
+
   const { diffed, order } = await getDiffedTankStats(
     server,
     id,
@@ -38,9 +42,11 @@ export default async function today(
     `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
   );
   const careerTankStatsRaw = await getTankStats(server, id);
-  const careerStats: Record<number, AllStats> = {
-    0: accountInfo[id].statistics.all,
-  };
+  const careerStats: Record<number, AllStats> = showTotal
+    ? {
+        0: accountInfo[id].statistics.all,
+      }
+    : {};
   const allStatsToAccumulate: AllStats[] = [];
 
   Object.entries(diffed).forEach(([, tankStats]) => {
@@ -52,7 +58,7 @@ export default async function today(
 
   const accumulatedStats = sumStats(allStatsToAccumulate);
 
-  if (Object.keys(diffed).length > 0) {
+  if (showTotal && Object.keys(diffed).length > 0) {
     diffed[0] = accumulatedStats;
   }
 
@@ -62,7 +68,7 @@ export default async function today(
   >(async (accumulator, [tankIdString, tankStats]) => {
     const tankId = parseInt(tankIdString);
 
-    return tankId === 0 || !(await tankAverages)[tankId]
+    return (showTotal && tankId === 0) || !(await tankAverages)[tankId]
       ? accumulator
       : {
           ...(await accumulator),
@@ -73,7 +79,8 @@ export default async function today(
   const careerWN8s = await careerTankStatsRaw.reduce<
     PossiblyPromise<Record<number, number>>
   >(async (accumulator, { tank_id }) => {
-    return tank_id === 0 || (await tankAverages)[tank_id] === undefined
+    return (showTotal && tank_id === 0) ||
+      (await tankAverages)[tank_id] === undefined
       ? accumulator
       : {
           ...(await accumulator),
@@ -86,60 +93,61 @@ export default async function today(
   const todayWN8sEntries = Object.entries(todayWN8s);
   const careerWN8sEntries = Object.entries(careerWN8s);
 
-  todayWN8s[0] =
-    todayWN8sEntries.reduce(
-      (accumulator, [tankIdString, wn8]) =>
-        accumulator + wn8 * diffed[Number(tankIdString)].battles,
-      0,
-    ) /
-    todayWN8sEntries.reduce(
-      (accumulator, [tankIdString]) =>
-        accumulator + diffed[Number(tankIdString)].battles,
-      0,
-    );
-  careerWN8s[0] =
-    careerWN8sEntries.reduce(
-      (accumulator, [tankIdString, WN8]) =>
-        isNaN(WN8)
-          ? accumulator
-          : accumulator + WN8 * careerStats[Number(tankIdString)].battles,
-      0,
-    ) /
-    careerWN8sEntries.reduce(
-      (accumulator, [tankIdString, WN8]) =>
-        isNaN(WN8)
-          ? accumulator
-          : accumulator + careerStats[Number(tankIdString)].battles,
-      0,
-    );
+  if (showTotal) {
+    todayWN8s[0] =
+      todayWN8sEntries.reduce(
+        (accumulator, [tankIdString, wn8]) =>
+          accumulator + wn8 * diffed[Number(tankIdString)].battles,
+        0,
+      ) /
+      todayWN8sEntries.reduce(
+        (accumulator, [tankIdString]) =>
+          accumulator + diffed[Number(tankIdString)].battles,
+        0,
+      );
+    careerWN8s[0] =
+      careerWN8sEntries.reduce(
+        (accumulator, [tankIdString, WN8]) =>
+          isNaN(WN8)
+            ? accumulator
+            : accumulator + WN8 * careerStats[Number(tankIdString)].battles,
+        0,
+      ) /
+      careerWN8sEntries.reduce(
+        (accumulator, [tankIdString, WN8]) =>
+          isNaN(WN8)
+            ? accumulator
+            : accumulator + careerStats[Number(tankIdString)].battles,
+        0,
+      );
+  }
 
   const rows = await Promise.all(
     [
       // this code unreadable on god will forget tomorrow no cap
-      ...(order.length === 0 ? [] : [0]),
-      ...(isFinite(limit) ? order.slice(0, limit) : order),
-    ].map(async (tankId, index) => {
-      const tankStats = diffed[tankId];
-      const career = careerStats[tankId];
+      ...(order.length === 0 || !showTotal ? [] : [0]),
+      ...(isFinite(cutoff) ? order.slice(0, cutoff) : order),
+    ].map(async (id, index) => {
+      const tankStats = diffed[id];
+      const career = careerStats[id];
+      const tankopediaEntry = (await tankopedia)[id];
 
       return (
         <Breakdown.Row
-          naked={naked}
-          isListing={tankId !== 0}
-          minimized={index > 4}
-          key={tankId}
-          name={tankId === 0 ? 'Total' : await resolveTankName(tankId)}
+          isTank={!showTotal || id !== 0}
+          tankType={tankopediaEntry?.type}
+          treeType={tankopediaEntry ? await getTreeType(id) : undefined}
+          minimized={showTotal ? index > maximized : index + 1 > maximized}
+          key={id}
+          name={showTotal && id === 0 ? 'Total' : await resolveTankName(id)}
           winrate={tankStats.wins / tankStats.battles}
           careerWinrate={career.wins / career.battles}
-          WN8={isNaN(todayWN8s[tankId]) ? undefined : todayWN8s[tankId]}
-          careerWN8={isNaN(careerWN8s[tankId]) ? undefined : careerWN8s[tankId]}
+          WN8={isNaN(todayWN8s[id]) ? undefined : todayWN8s[id]}
+          careerWN8={isNaN(careerWN8s[id]) ? undefined : careerWN8s[id]}
           damage={tankStats.damage_dealt / tankStats.battles}
           careerDamage={career.damage_dealt / career.battles}
           battles={tankStats.battles}
           careerBattles={career.battles}
-          icon={
-            tankId === 0 ? undefined : (await tankopedia)[tankId]?.images.normal
-          }
         />
       );
     }),
@@ -147,7 +155,7 @@ export default async function today(
 
   return naked ? (
     <Wrapper naked>
-      <Breakdown.Root>{rows.slice(1)}</Breakdown.Root>
+      <Breakdown.Root>{rows}</Breakdown.Root>
     </Wrapper>
   ) : (
     <Wrapper>
@@ -161,9 +169,7 @@ export default async function today(
             ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`
             : undefined
         }
-        description={`Today's breakdown • ${new Date().toDateString()} • ${
-          REGION_NAMES[server]
-        }`}
+        description={`Today's breakdown • ${new Date().toDateString()}`}
       />
 
       {rows.length === 0 && <NoData type={NoDataType.BattlesInPeriod} />}

@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { theme } from '../../../stitches.config';
 import { Margin, MarginOrientation } from './Margin';
 
-export const GRAPH_WIDTH = 544;
+export const GRAPH_WIDTH = 384;
 export const GRAPH_HEIGHT = 320;
 
 export interface MarginInputProps {
@@ -20,7 +20,7 @@ export interface RootProps {
   separations?: number;
   xMinLabel: string;
   xMaxLabel: string;
-  xTitle: string;
+  xTitle?: string;
 }
 
 export function Root({
@@ -91,18 +91,20 @@ export function Root({
         />
       )}
 
-      <div
-        style={{
-          paddingLeft: 64,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <span style={{ fontSize: 16, color: theme.colors.textLowContrast }}>
-          {xTitle}
-        </span>
-      </div>
+      {xTitle !== undefined && (
+        <div
+          style={{
+            paddingLeft: 64,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <span style={{ fontSize: 16, color: theme.colors.textLowContrast }}>
+            {xTitle}
+          </span>
+        </div>
+      )}
     </div>
   );
 }

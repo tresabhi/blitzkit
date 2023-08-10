@@ -11,6 +11,7 @@ export default async function autocompleteClan(
 ) {
   const focusedOption = interaction.options.getFocused(true);
   if (focusedOption.name !== 'clan') return;
+  if (focusedOption.value.length < 2) return interaction.respond([]);
   const players = await listClans(focusedOption.value);
 
   await interaction.respond(

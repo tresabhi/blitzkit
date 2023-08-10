@@ -3,25 +3,11 @@ import { Region } from '../../constants/regions';
 import getPeriodNow from '../blitzstars/getPeriodNow';
 import getPeriodStart from '../blitzstars/getPeriodStart';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo';
-import { Period } from '../discord/addPeriodSubCommands';
+import { PeriodSize, PeriodType } from '../discord/addPeriodSubCommands';
 
-export const PERIOD_NAMES: Record<Period, string> = {
-  today: "Today's statistics",
-  30: "30 days' statistics",
-  60: "60 days' statistics",
-  90: "90 days' statistics",
-  career: 'Career statistics',
-  custom: 'Custom period',
-};
-
-export const EVOLUTION_PERIOD_NAMES: Record<Period, string> = {
-  today: "Today's evolution",
-  30: "30 days' evolution",
-  60: "60 days' evolution",
-  90: "90 days' evolution",
-  career: 'Career evolution',
-  custom: 'Custom period',
-};
+export function getPeriodOptionName(period: PeriodSize) {
+  return period === 'career' ? 'Career' : `${period}-day`;
+}
 
 export interface ResolvedPeriod {
   statsName: string;
@@ -31,29 +17,30 @@ export interface ResolvedPeriod {
 }
 
 export default function resolvePeriodFromCommand(
-  server: Region,
+  region: Region,
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
   let statsName: string;
   let evolutionName: string;
   let start: number;
   let end: number;
-  const period = interaction.options.getSubcommand() as Period;
+  const periodSubcommand = interaction.options.getSubcommand() as PeriodType;
+  const periodOption = interaction.options.getString('period') as PeriodSize;
 
-  if (period === 'custom') {
-    const startRaw = interaction.options.getInteger('start')!;
-    const endRaw = interaction.options.getInteger('end')!;
-    const startMin = Math.min(startRaw, endRaw);
-    const endMax = Math.max(startRaw, endRaw);
+  if (periodSubcommand === 'custom') {
+    const startRaw = interaction.options.getInteger('start', true);
+    const endRaw = interaction.options.getInteger('end', true);
+    const startDaysAgoMin = Math.min(startRaw, endRaw);
+    const endDaysAgoMax = Math.max(startRaw, endRaw);
 
-    statsName = `${startMin} to ${endMax} days' statistics`;
-    evolutionName = `${startMin} to ${endMax} days' evolution`;
-    start = getTimeDaysAgo(server, startMin);
-    end = getTimeDaysAgo(server, endMax);
+    statsName = `${startDaysAgoMin} to ${endDaysAgoMax} days' statistics`;
+    evolutionName = `${startDaysAgoMin} to ${endDaysAgoMax} days' evolution`;
+    start = getTimeDaysAgo(region, endDaysAgoMax);
+    end = getTimeDaysAgo(region, startDaysAgoMin);
   } else {
-    statsName = PERIOD_NAMES[period];
-    evolutionName = EVOLUTION_PERIOD_NAMES[period];
-    start = getPeriodStart(server, period);
+    statsName = `${getPeriodOptionName(periodOption)} Statistics`;
+    evolutionName = `${getPeriodOptionName(periodOption)} Evolution`;
+    start = getPeriodStart(region, periodOption);
     end = getPeriodNow();
   }
 

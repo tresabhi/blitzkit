@@ -11,7 +11,7 @@ export default async function handleButton(
 
   const url = new URL(`${CYCLIC_API}/${interaction.customId}`);
   const commandName = url.pathname.split('/')[1];
-  const button = commands[commandName]?.button;
+  const button = (await commands)[commandName]?.button;
 
   if (!button) {
     throwError(`Button handler not found for "${commandName}"`);

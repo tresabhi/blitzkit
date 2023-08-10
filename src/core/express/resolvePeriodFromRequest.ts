@@ -7,5 +7,5 @@ export default function resolvePeriodFromRequest(
   server: Region,
   request: Request,
 ) {
-  return resolvePeriodFromURL(server, `${CYCLIC_API}${request.path}`);
+  return resolvePeriodFromURL(server, `${CYCLIC_API}${request.url}`);
 }

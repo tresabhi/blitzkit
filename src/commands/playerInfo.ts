@@ -12,11 +12,11 @@ import { AccountInfo } from '../types/accountInfo';
 
 export const playerInfoCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('playerinfo')
+    .setName('player-info')
     .setDescription('Basic information about a player')
     .addStringOption(addUsernameChoices),
 

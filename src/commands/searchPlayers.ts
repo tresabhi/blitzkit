@@ -12,11 +12,11 @@ import { AccountList } from '../types/accountList';
 
 export const searchPlayersCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('searchplayers')
+    .setName('search-players')
     .setDescription('Search players in a Blitz server')
     .addStringOption(addRegionChoices)
     .addStringOption((option) =>

@@ -24,8 +24,13 @@ const POWERED_BY_NAMES: Record<PoweredByType, string> = {
 
 export default function PoweredBy({ type, footer }: PoweredByProps) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <div style={{ display: 'flex' }}>{footer}</div>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: footer === undefined ? 'space-around' : 'space-between',
+      }}
+    >
+      {footer !== undefined && <div style={{ display: 'flex' }}>{footer}</div>}
 
       <div style={{ display: 'flex', gap: 4 }}>
         <img src={POWERED_BY_IMAGES[type]} style={{ height: 16, width: 16 }} />

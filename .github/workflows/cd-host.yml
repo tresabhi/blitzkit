@@ -29,4 +29,4 @@ jobs:
           unzip dist.zip
 
       - name: Run bot
-        run: NODE_ENV=production GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} WARGAMING_APPLICATION_ID=${{ secrets.WARGAMING_APPLICATION_ID }} node --enable-source-maps --trace-warnings bot.cjs
+        run: NODE_ENV=production GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} WARGAMING_APPLICATION_ID=${{ secrets.WARGAMING_APPLICATION_ID }} node --enable-source-maps --trace-warnings bot.js

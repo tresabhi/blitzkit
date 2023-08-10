@@ -30,7 +30,7 @@ function addDocsSubcommands(option: SlashCommandSubcommandsOnlyBuilder) {
 
 export const helpCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: addDocsSubcommands(
@@ -44,13 +44,14 @@ export const helpCommand: CommandRegistry = {
       ),
   ),
 
-  handler(interaction) {
+  async handler(interaction) {
     const subcommand = interaction.options.getSubcommand();
 
     if (subcommand === 'commands') {
-      return `# Commands\n\nBlitzkrieg offers the following commands:\n\n${COMMANDS_RAW.filter(
-        (registry) => registry.inPublic && registry.inProduction,
+      return `# Commands\n\nBlitzkrieg offers the following commands:\n\n${(
+        await Promise.all(COMMANDS_RAW)
       )
+        .filter((registry) => registry.inPublic && registry.inProduction)
         .map(
           (registry) =>
             `- \`/${registry.command.name}\`: ${registry.command.description}`,

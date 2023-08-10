@@ -19,12 +19,7 @@ export default function interactionToURL(
   ]
     .filter(Boolean)
     .join('/');
-  const params = [
-    ...interaction.options.data.map(
-      (option) => [option.name, option.value] as const,
-    ),
-    ...Object.entries(parameters ?? {}),
-  ]
+  const params = (parameters ? Object.entries(parameters) : [])
     .filter(([, value]) => value !== undefined && value !== null)
     .map(([key, value]) => `${key}=${value}`)
     .join('&');

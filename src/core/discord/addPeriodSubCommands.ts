@@ -2,9 +2,9 @@ import {
   SlashCommandSubcommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
-import { PERIOD_NAMES } from '../discord/resolvePeriodFromCommand';
 
-export type Period = 'today' | '30' | '60' | '90' | 'career' | 'custom';
+export type PeriodType = 'period' | 'custom';
+export type PeriodSize = `${number}` | 'career';
 
 export default function addPeriodSubCommands(
   option: SlashCommandSubcommandGroupBuilder,
@@ -14,36 +14,41 @@ export default function addPeriodSubCommands(
 ) {
   return option
     .addSubcommand((option) =>
-      extra(option.setName('today').setDescription(PERIOD_NAMES.today)),
-    )
-    .addSubcommand((option) =>
-      extra(option.setName('30').setDescription(PERIOD_NAMES[30])),
-    )
-    .addSubcommand((option) =>
-      extra(option.setName('60').setDescription(PERIOD_NAMES[60])),
-    )
-    .addSubcommand((option) =>
-      extra(option.setName('90').setDescription(PERIOD_NAMES[90])),
-    )
-    .addSubcommand((option) =>
-      extra(option.setName('career').setDescription(PERIOD_NAMES.career)),
+      extra(
+        option
+          .setName('period' satisfies PeriodType)
+          .setDescription("Preset period's statistics")
+          .addStringOption((option) =>
+            option
+              .setName('period')
+              .setDescription('A preset period')
+              .setChoices(
+                { name: 'Today', value: '1' satisfies PeriodSize },
+                { name: '30 days', value: '30' satisfies PeriodSize },
+                { name: '60 days', value: '60' satisfies PeriodSize },
+                { name: '90 days', value: '90' satisfies PeriodSize },
+                { name: 'Career', value: 'career' satisfies PeriodSize },
+              )
+              .setRequired(true),
+          ),
+      ),
     )
     .addSubcommand((option) =>
       extra(
         option
-          .setName('custom')
-          .setDescription(PERIOD_NAMES.custom)
+          .setName('custom' satisfies PeriodType)
+          .setDescription("Custom period's statistics")
           .addIntegerOption((option) =>
             option
               .setName('start')
-              .setDescription('Start of period in days ago from today')
+              .setDescription('Days ago from today')
               .setMinValue(0)
               .setRequired(true),
           )
           .addIntegerOption((option) =>
             option
               .setName('end')
-              .setDescription('End of period in days ago from today')
+              .setDescription('Days ago from today')
               .setMinValue(0)
               .setRequired(true),
           ),

@@ -2,32 +2,35 @@ import {
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
+  TankType,
 } from '../../../core/blitz/tankopedia';
 import { theme } from '../../../stitches.config';
 
-export enum TreeType {
+export enum TreeTypeEnum {
   TechTree,
   Premium,
   Collector,
 }
 
+export type TreeTypeString = 'techtree' | 'premium' | 'collector';
+
 export interface ItemProps {
   image?: string;
-  tankType?: string;
+  tankType?: TankType;
   name: string;
-  treeType: TreeType;
+  treeType: TreeTypeEnum;
 }
 
 const TREE_TYPE_COLOR = {
-  [TreeType.TechTree]: '',
-  [TreeType.Premium]: '_amber',
-  [TreeType.Collector]: '_blue',
+  [TreeTypeEnum.TechTree]: '',
+  [TreeTypeEnum.Premium]: '_amber',
+  [TreeTypeEnum.Collector]: '_blue',
 } as const;
 
-const TREE_TYPE_ICONS = {
-  [TreeType.TechTree]: TANK_ICONS,
-  [TreeType.Premium]: TANK_ICONS_PREMIUM,
-  [TreeType.Collector]: TANK_ICONS_COLLECTOR,
+export const TREE_TYPE_ICONS = {
+  [TreeTypeEnum.TechTree]: TANK_ICONS,
+  [TreeTypeEnum.Premium]: TANK_ICONS_PREMIUM,
+  [TreeTypeEnum.Collector]: TANK_ICONS_COLLECTOR,
 };
 
 export function Item({ image, tankType, name, treeType }: ItemProps) {

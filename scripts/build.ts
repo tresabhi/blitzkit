@@ -1,5 +1,5 @@
 import { BuildOptions, build } from 'esbuild';
-import { copyFile, mkdir, rm } from 'fs/promises';
+import { copyFile, mkdirSync, rmSync } from 'fs';
 import { argv } from 'process';
 
 const isProd = !argv.includes('--dev');
@@ -10,15 +10,15 @@ const buildServer = argv.includes('--build=server') || buildAll;
 if (isProd) {
   // only remove in production to ensure no time is wasted in dev
   console.log('Removing dist...');
-  await rm('dist', { recursive: true, force: true });
+  rmSync('dist', { recursive: true, force: true });
   console.log('Dist removed');
 
   console.log('Creating dist...');
-  await mkdir('dist');
+  mkdirSync('dist');
   console.log('Dist created');
 
   console.log('Copying package.json...');
-  copyFile('package.dist.json', 'dist/package.json').then(() =>
+  copyFile('package.dist.json', 'dist/package.json', () =>
     console.log('package.json copied'),
   );
 }
@@ -29,6 +29,7 @@ const commonOptions: BuildOptions = {
     '.node': 'copy',
     '.ttf': 'file',
   },
+  format: 'cjs',
 
   bundle: true,
   sourcemap: true,

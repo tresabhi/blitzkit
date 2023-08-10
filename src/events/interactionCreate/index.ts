@@ -54,22 +54,30 @@ export interface Registry {
   inProduction: boolean;
 }
 
-export interface CommandRegistry<HandlesInteraction extends boolean = boolean>
-  extends Registry {
+export type CommandRegistryRaw = Registry & {
   inPublic: boolean;
   inPreview?: boolean;
-  handlesInteraction?: HandlesInteraction;
+
   command:
     | SlashCommandBuilder
     | SlashCommandSubcommandsOnlyBuilder
     | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
 
-  handler: (
-    interaction: ChatInputCommandInteraction<CacheType>,
-  ) => HandlesInteraction extends true ? void : InteractionReturnable;
   autocomplete?: (interaction: AutocompleteInteraction<CacheType>) => void;
   button?: (interaction: ButtonInteraction<CacheType>) => InteractionReturnable;
-}
+} & (
+    | {
+        handlesInteraction: true;
+        handler: (interaction: ChatInputCommandInteraction<CacheType>) => void;
+      }
+    | {
+        handlesInteraction?: false;
+        handler: (
+          interaction: ChatInputCommandInteraction<CacheType>,
+        ) => InteractionReturnable;
+      }
+  );
+export type CommandRegistry = CommandRegistryRaw | Promise<CommandRegistryRaw>;
 
 const rest = new REST().setToken(secrets.DISCORD_TOKEN);
 
@@ -92,12 +100,19 @@ export const COMMANDS_RAW: CommandRegistry[] = [
   statsCommand,
   ratingsCommand,
 ];
-export const commands: Record<string, CommandRegistry> = COMMANDS_RAW.reduce(
-  (accumulator, registry) => {
-    if (isDev()) registry.command.setDefaultMemberPermissions(0);
-    return { ...accumulator, [registry.command.name]: registry };
-  },
-  {},
+
+export const commands = Promise.all(COMMANDS_RAW).then((rawCommands) =>
+  rawCommands.reduce<Record<string, CommandRegistryRaw>>(
+    (accumulator, registry) => {
+      if (isDev()) registry.command.setDefaultMemberPermissions(0);
+
+      return {
+        ...accumulator,
+        [registry.command.name]: registry,
+      };
+    },
+    {},
+  ),
 );
 
 export const guildCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
@@ -105,47 +120,49 @@ export const guildCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
 export const publicCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
   [];
 
-Object.entries(commands).forEach(([, registry]) => {
-  if (isDev() ? registry.inDevelopment : registry.inProduction) {
-    const json = registry.command.toJSON();
+commands.then((awaitedCommands) => {
+  Object.entries(awaitedCommands).forEach(([, registry]) => {
+    if (isDev() ? registry.inDevelopment : registry.inProduction) {
+      const json = registry.command.toJSON();
 
-    if (registry.inPublic) {
-      publicCommands.push(json);
-    } else {
-      guildCommands.push(json);
+      if (registry.inPublic) {
+        publicCommands.push(json);
+      } else {
+        guildCommands.push(json);
+      }
     }
+  });
+
+  try {
+    console.log(`Refreshing ${publicCommands.length} public command(s).`);
+    rest
+      .put(Routes.applicationCommands(getClientId()), { body: publicCommands })
+      .then((publicData) => {
+        console.log(
+          `Successfully refreshed ${
+            (publicData as RESTPostAPIChatInputApplicationCommandsJSONBody[])
+              .length
+          } public command(s).`,
+        );
+      });
+
+    console.log(`Refreshing ${guildCommands.length} guild command(s).`);
+    rest
+      .put(
+        Routes.applicationGuildCommands(getClientId(), discord.tres_guild_id),
+        { body: guildCommands },
+      )
+      .then((guildData) => {
+        console.log(
+          `Successfully refreshed ${
+            (guildData as unknown[]).length
+          } guild command(s).`,
+        );
+      });
+  } catch (error) {
+    console.error(error);
   }
 });
-
-try {
-  console.log(`Refreshing ${publicCommands.length} public command(s).`);
-  rest
-    .put(Routes.applicationCommands(getClientId()), { body: publicCommands })
-    .then((publicData) => {
-      console.log(
-        `Successfully refreshed ${
-          (publicData as RESTPostAPIChatInputApplicationCommandsJSONBody[])
-            .length
-        } public command(s).`,
-      );
-    });
-
-  console.log(`Refreshing ${guildCommands.length} guild command(s).`);
-  rest
-    .put(
-      Routes.applicationGuildCommands(getClientId(), discord.tres_guild_id),
-      { body: guildCommands },
-    )
-    .then((guildData) => {
-      console.log(
-        `Successfully refreshed ${
-          (guildData as unknown[]).length
-        } guild command(s).`,
-      );
-    });
-} catch (error) {
-  console.error(error);
-}
 
 export default async function interactionCreate(
   interaction: Interaction<CacheType>,

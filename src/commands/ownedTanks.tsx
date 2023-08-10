@@ -4,15 +4,16 @@ import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import * as Tanks from '../components/Tanks';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { REGION_NAMES } from '../constants/regions';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankName from '../core/blitz/resolveTankName';
 import {
   TIER_ROMAN_NUMERALS,
+  TankopediaEntry,
   Tier,
   tankopedia,
+  tankopediaInfo,
 } from '../core/blitz/tankopedia';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
@@ -45,27 +46,27 @@ const COMP_TANKS = [
 
 export const ownedTanksCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('ownedtanks')
+    .setName('owned-tanks')
     .setDescription("Shows a player's owned tanks")
     .addStringOption((option) =>
       option
         .setName('tier')
         .setDescription('The tier you want to see')
         .setChoices(
-          { name: 'Tier I', value: '1' },
-          { name: 'Tier II', value: '2' },
-          { name: 'Tier III', value: '3' },
-          { name: 'Tier IV', value: '4' },
-          { name: 'Tier V', value: '5' },
-          { name: 'Tier VI', value: '6' },
-          { name: 'Tier VII', value: '7' },
-          { name: 'Tier VIII', value: '8' },
-          { name: 'Tier IX', value: '9' },
-          { name: 'Tier X', value: '10' },
+          { name: 'Tier I (1)', value: '1' },
+          { name: 'Tier II (2)', value: '2' },
+          { name: 'Tier III (3)', value: '3' },
+          { name: 'Tier IV (4)', value: '4' },
+          { name: 'Tier V (5)', value: '5' },
+          { name: 'Tier VI (6)', value: '6' },
+          { name: 'Tier VII (7)', value: '7' },
+          { name: 'Tier VIII (8)', value: '8' },
+          { name: 'Tier IX (9)', value: '9' },
+          { name: 'Tier X (10)', value: '10' },
         )
         .setRequired(true),
     )
@@ -79,68 +80,96 @@ export const ownedTanksCommand: CommandRegistry = {
       `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
     const tankStats = await getTankStats(server, id);
-    const tanks = (
+    const filteredTanks = (
       await Promise.all(
         tankStats.map(async (tankData) => ({
-          ...(await tankopedia)[tankData.tank_id],
+          tankopedia: (await tankopedia)[tankData.tank_id]!,
           tank_id: tankData.tank_id,
         })),
       )
-    ).filter((tank) => tank?.tier === tier);
+    ).filter((tank) => tank.tankopedia?.tier === tier);
     const clanData = await getWargamingResponse<PlayerClanData>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
     );
-    const leftColumnSize = Math.ceil(tanks.length / 2);
-    const leftColumn = tanks.slice(0, leftColumnSize);
-    const rightColumn = tanks.slice(leftColumnSize);
+    const groupedTanks: Record<string, TankopediaEntry[]> = {};
+    const nations: string[] = [];
+
+    filteredTanks.forEach((tank) => {
+      if (groupedTanks[tank.tankopedia.nation] === undefined) {
+        groupedTanks[tank.tankopedia.nation] = [tank.tankopedia];
+        nations.push(tank.tankopedia.nation);
+      } else {
+        groupedTanks[tank.tankopedia.nation].push(tank.tankopedia);
+      }
+    });
+
+    nations.sort();
 
     return (
       <Wrapper>
         <TitleBar
           name={accountInfo[id].nickname}
-          nameDiscriminator={`(Tier ${TIER_ROMAN_NUMERALS[tier as Tier]})`}
+          nameDiscriminator={
+            clanData[id]?.clan ? `[${clanData[id]?.clan?.tag}]` : undefined
+          }
           image={
             clanData[id]?.clan
               ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`
               : undefined
           }
-          description={`Owned tanks • ${new Date().toDateString()} • ${
-            REGION_NAMES[server]
-          }`}
+          description={`Tier ${
+            TIER_ROMAN_NUMERALS[tier as Tier]
+          } tanks • ${new Date().toDateString()}`}
         />
 
-        {tanks.length === 0 && <NoData type={NoDataType.TanksFound} />}
+        {filteredTanks.length === 0 && <NoData type={NoDataType.TanksFound} />}
 
-        {tanks.length > 0 && (
-          <Tanks.Root>
-            <Tanks.Column>
-              {await Promise.all(
-                leftColumn.map(async (tank) => (
-                  <Tanks.Item
-                    key={tank.tank_id}
-                    name={await resolveTankName(tank.tank_id)}
-                    tankType={tank.type}
-                    image={tank.images?.normal}
-                    treeType={await getTreeType(tank.tank_id)}
-                  />
-                )),
-              )}
-            </Tanks.Column>
-            <Tanks.Column>
-              {await Promise.all(
-                rightColumn.map(async (tank) => (
-                  <Tanks.Item
-                    key={tank.tank_id}
-                    name={await resolveTankName(tank.tank_id)}
-                    tankType={tank.type}
-                    image={tank.images?.normal}
-                    treeType={await getTreeType(tank.tank_id)}
-                  />
-                )),
-              )}
-            </Tanks.Column>
-          </Tanks.Root>
-        )}
+        {filteredTanks.length > 0 &&
+          (await Promise.all(
+            nations.map(async (nation) => {
+              const tanks = groupedTanks[nation];
+              const leftColumnSize = Math.ceil(tanks.length / 2);
+              const leftColumn = tanks.slice(0, leftColumnSize);
+              const rightColumn = tanks.slice(leftColumnSize);
+
+              return (
+                <Tanks.Root>
+                  <Tanks.Title>
+                    {(await tankopediaInfo).vehicle_nations[nation]}
+                  </Tanks.Title>
+
+                  <Tanks.Row>
+                    <Tanks.Column>
+                      {await Promise.all(
+                        leftColumn.map(async (tank) => (
+                          <Tanks.Item
+                            key={tank.tank_id}
+                            name={await resolveTankName(tank.tank_id)}
+                            tankType={tank.type}
+                            image={tank.images?.normal}
+                            treeType={await getTreeType(tank.tank_id)}
+                          />
+                        )),
+                      )}
+                    </Tanks.Column>
+                    <Tanks.Column>
+                      {await Promise.all(
+                        rightColumn.map(async (tank) => (
+                          <Tanks.Item
+                            key={tank.tank_id}
+                            name={await resolveTankName(tank.tank_id)}
+                            tankType={tank.type}
+                            image={tank.images?.normal}
+                            treeType={await getTreeType(tank.tank_id)}
+                          />
+                        )),
+                      )}
+                    </Tanks.Column>
+                  </Tanks.Row>
+                </Tanks.Root>
+              );
+            }),
+          ))}
 
         <PoweredBy type={PoweredByType.Wargaming} />
       </Wrapper>
@@ -149,3 +178,17 @@ export const ownedTanksCommand: CommandRegistry = {
 
   autocomplete: autocompleteUsername,
 };
+
+// TODO: make this work in the future
+// console.log('Caching tank images...');
+// TANKS.then((tanks) =>
+//   jsxToSvg(
+//     <div style={{ display: 'flex' }}>
+//       {tanks.map(({ images, tank_id }) => {
+//         return (
+//           images.normal && <img key={tank_id} src={images.normal} width={0} />
+//         );
+//       })}
+//     </div>,
+//   ),
+// ).then(() => console.log('Cached tank images'));

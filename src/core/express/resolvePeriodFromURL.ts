@@ -2,11 +2,10 @@ import { Region } from '../../constants/regions';
 import getPeriodNow from '../blitzstars/getPeriodNow';
 import getPeriodStart from '../blitzstars/getPeriodStart';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo';
-import { Period } from '../discord/addPeriodSubCommands';
+import { PeriodSize, PeriodType } from '../discord/addPeriodSubCommands';
 import {
-  EVOLUTION_PERIOD_NAMES,
-  PERIOD_NAMES,
   ResolvedPeriod,
+  getPeriodOptionName,
 } from '../discord/resolvePeriodFromCommand';
 
 export default function resolvePeriodFromURL(
@@ -19,29 +18,25 @@ export default function resolvePeriodFromURL(
   let end: number;
   const url = new URL(urlString);
   const path = url.pathname.split('/').filter(Boolean);
-  const period = path[path.length - 1] as Period;
+  const periodSubcommand = path[path.length - 1] as PeriodType;
+  const periodOption = url.searchParams.get('period') as PeriodSize;
 
-  if (period === 'custom') {
+  if (periodSubcommand === 'custom') {
     const startRaw = parseInt(url!.searchParams.get('start')!);
     const endRaw = parseInt(url!.searchParams.get('end')!);
-    const startMin = Math.min(startRaw, endRaw);
-    const endMax = Math.max(startRaw, endRaw);
+    const startDaysAgoMin = Math.min(startRaw, endRaw);
+    const endDaysAgoMax = Math.max(startRaw, endRaw);
 
-    statsName = `${startMin} to ${endMax} days' statistics`;
-    evolutionName = `${startMin} to ${endMax} days' evolution`;
-    start = getTimeDaysAgo(server, startMin);
-    end = getTimeDaysAgo(server, endMax);
+    statsName = `${startDaysAgoMin} to ${endDaysAgoMax} days' statistics`;
+    evolutionName = `${startDaysAgoMin} to ${endDaysAgoMax} days' evolution`;
+    start = getTimeDaysAgo(server, endDaysAgoMax);
+    end = getTimeDaysAgo(server, startDaysAgoMin);
   } else {
-    statsName = PERIOD_NAMES[period];
-    evolutionName = EVOLUTION_PERIOD_NAMES[period];
-    start = getPeriodStart(server, period);
+    statsName = `${getPeriodOptionName(periodOption)} Statistics`;
+    evolutionName = `${getPeriodOptionName(periodOption)} Evolution`;
+    start = getPeriodStart(server, periodOption);
     end = getPeriodNow();
   }
 
-  return {
-    statsName,
-    evolutionName,
-    start,
-    end,
-  } satisfies ResolvedPeriod;
+  return { statsName, evolutionName, start, end } satisfies ResolvedPeriod;
 }

@@ -14,7 +14,7 @@ export default function Wrapper({ children, naked }: WrapperProps) {
         flexDirection: 'column',
         padding: 16,
         gap: 32,
-        width: 640,
+        width: 480,
         color: theme.colors.textHighContrast,
 
         ...(!naked && {

@@ -1,16 +1,15 @@
 import { ReactNode } from 'react';
 
-export interface RootProps {
+export interface RowProps {
   children: ReactNode;
 }
 
-export function Root({ children }: RootProps) {
+export function Row({ children }: RowProps) {
   return (
     <div
       style={{
         display: 'flex',
-        flexDirection: 'column',
-        gap: 16,
+        gap: 8,
       }}
     >
       {children}

@@ -16,11 +16,11 @@ type SortBy = 'name' | 'count';
 
 export const playerAchievementsCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: false,
+  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
-    .setName('playerachievements')
+    .setName('player-achievements')
     .setDescription("All the player's achievements")
     .addStringOption(addUsernameChoices)
     .addStringOption((option) =>
