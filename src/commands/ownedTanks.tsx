@@ -57,16 +57,16 @@ export const ownedTanksCommand: CommandRegistry = {
         .setName('tier')
         .setDescription('The tier you want to see')
         .setChoices(
-          { name: 'Tier I', value: '1' },
-          { name: 'Tier II', value: '2' },
-          { name: 'Tier III', value: '3' },
-          { name: 'Tier IV', value: '4' },
-          { name: 'Tier V', value: '5' },
-          { name: 'Tier VI', value: '6' },
-          { name: 'Tier VII', value: '7' },
-          { name: 'Tier VIII', value: '8' },
-          { name: 'Tier IX', value: '9' },
-          { name: 'Tier X', value: '10' },
+          { name: 'Tier I (1)', value: '1' },
+          { name: 'Tier II (2)', value: '2' },
+          { name: 'Tier III (3)', value: '3' },
+          { name: 'Tier IV (4)', value: '4' },
+          { name: 'Tier V (5)', value: '5' },
+          { name: 'Tier VI (6)', value: '6' },
+          { name: 'Tier VII (7)', value: '7' },
+          { name: 'Tier VIII (8)', value: '8' },
+          { name: 'Tier IX (9)', value: '9' },
+          { name: 'Tier X (10)', value: '10' },
         )
         .setRequired(true),
     )
