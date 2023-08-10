@@ -97,7 +97,7 @@ export default async function evolution<Type extends StatType>(
             min: minY,
             max: maxY,
             suffix: '%',
-            precision: 1,
+            precision: 2,
           }}
           horizontalMargin={{
             min: minX,
