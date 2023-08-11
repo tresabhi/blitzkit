@@ -1,7 +1,6 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { Region } from '../../constants/regions';
 import listPlayers, {
-  usernamePattern,
   usernamePatternWithoutPosition,
 } from '../blitz/listPlayers';
 import throwError from '../node/throwError';
@@ -20,7 +19,7 @@ export default async function resolvePlayerFromCommand(
   const displayName = interaction.guild?.members.cache
     .get(interaction.user.id)
     ?.displayName.match(usernamePatternWithoutPosition)?.[0];
-  const username = commandUsername?.match(usernamePattern)?.[0] ?? displayName;
+  const username = commandUsername ?? displayName;
 
   if (username === undefined) {
     throw throwError(
