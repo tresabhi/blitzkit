@@ -4,7 +4,7 @@ import {
   CacheType,
 } from 'discord.js';
 import { go } from 'fuzzysort';
-import { TANKS, TANK_NAMES_DIACRITICS } from '../blitz/tankopedia';
+import { TANK_NAMES_DIACRITICS } from '../blitz/tankopedia';
 
 export default async function autocompleteTanks(
   interaction: AutocompleteInteraction<CacheType>,
@@ -19,10 +19,10 @@ export default async function autocompleteTanks(
             keys: ['combined'],
             limit: 10,
           }).map(
-            async (item, index) =>
+            async (item) =>
               ({
                 name: item.obj.original,
-                value: `${(await TANKS)[index].tank_id}`,
+                value: `${item.obj.id}`,
               }) satisfies ApplicationCommandOptionChoiceData<string>,
           ),
         )

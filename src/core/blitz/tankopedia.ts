@@ -40,13 +40,15 @@ export const TANK_NAMES = new Promise<string[]>(async (resolve) => {
 export const TANK_NAMES_DIACRITICS = TANK_NAMES.then((tankNames) =>
   Promise.all(
     tankNames.map(async (tankName, index) => {
-      const name = tankName ?? `Unknown Tank ${(await TANKS)[index].tank_id}`;
+      const id = (await TANKS)[index].tank_id;
+      const name = tankName ?? `Unknown Tank ${id}`;
       const diacriticless = deburr(name);
 
       return {
         original: name,
         diacriticless,
         combined: `${name}${diacriticless}`,
+        id,
       };
     }),
   ),
