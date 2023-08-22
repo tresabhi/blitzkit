@@ -45,7 +45,7 @@ export default async function stats<Type extends StatType>(
   let nameDiscriminator: string | undefined;
   let image: string | undefined;
 
-  if (type === 'player') {
+  if (type === 'player' || type === 'multi-tank') {
     const clan = (
       await getWargamingResponse<PlayerClanData>(
         `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
