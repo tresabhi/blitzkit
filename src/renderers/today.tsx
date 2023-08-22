@@ -27,8 +27,6 @@ export default async function today(
   showTotal = true,
   naked?: boolean,
 ) {
-  console.log(maximized);
-
   const { diffed, order } = await getDiffedTankStats(
     server,
     id,
