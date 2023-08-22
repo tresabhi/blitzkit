@@ -15,7 +15,7 @@ hero:
       link: guide/install
     - theme: alt
       text: Guide
-      link: /guide
+      link: /guide/about
 
 features:
   - title: Clean and Efficient UI
