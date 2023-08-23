@@ -20,7 +20,8 @@
     "zip": "zip -r dist.zip dist",
     "lint": "npx tsc",
     "format": "prettier --write \"**/*.@(json|js|jsx|css|md|ts|tsx|html|xml|yml|gltf)\"",
-    "knip": "knip"
+    "knip": "knip",
+    "update": "yarn upgrade --latest"
   },
   "license": "MIT",
   "dependencies": {
