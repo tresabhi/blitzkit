@@ -1,7 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import GenericStats from '../components/GenericStats';
 import NoData, { NoDataType } from '../components/NoData';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
 import getBlitzClan from '../core/blitz/getBlitzClan';
@@ -74,8 +73,6 @@ export const inactiveCommand: CommandRegistry = {
 
         {!hasInactiveMembers && <NoData type={NoDataType.PlayersInPeriod} />}
         {hasInactiveMembers && <GenericStats stats={inactive} />}
-
-        <PoweredBy type={PoweredByType.Wargaming} />
       </Wrapper>
     );
   },

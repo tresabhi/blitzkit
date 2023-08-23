@@ -1,6 +1,5 @@
 import GenericAllStats from '../components/GenericAllStats';
 import NoData, { NoDataType } from '../components/NoData';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import TierWeights, { TierWeightsRecord } from '../components/TierWeights';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
@@ -35,7 +34,7 @@ export default async function fullStats<Type extends StatType>(
   let nameDiscriminator: string | undefined;
   let image: string | undefined;
 
-  if (type === 'player') {
+  if (type === 'player' || type === 'multi-tank') {
     const clan = (
       await getWargamingResponse<PlayerClanData>(
         `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
@@ -49,7 +48,6 @@ export default async function fullStats<Type extends StatType>(
   } else if (type === 'tank') {
     nameDiscriminator = `(${await resolveTankName(filters as number)})`;
     image = (await tankopedia)[filters as number]?.images.normal;
-  } else {
   }
 
   const { diffed, order } = await getDiffedTankStats(server, id, start, end);
@@ -165,8 +163,6 @@ export default async function fullStats<Type extends StatType>(
           supplementaryStats={supplementaryStats}
         />
       )}
-
-      <PoweredBy type={PoweredByType.BlitzStars} />
     </Wrapper>
   );
 }

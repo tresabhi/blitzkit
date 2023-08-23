@@ -1,6 +1,5 @@
 import AllStatsOverview from '../components/AllStatsOverview';
 import NoData, { NoDataType } from '../components/NoData';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import { TreeTypeString } from '../components/Tanks';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
@@ -45,7 +44,7 @@ export default async function stats<Type extends StatType>(
   let nameDiscriminator: string | undefined;
   let image: string | undefined;
 
-  if (type === 'player') {
+  if (type === 'player' || type === 'multi-tank') {
     const clan = (
       await getWargamingResponse<PlayerClanData>(
         `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
@@ -168,8 +167,6 @@ export default async function stats<Type extends StatType>(
 
       {!stats?.battles && <NoData type={NoDataType.BattlesInPeriod} />}
       {stats?.battles > 0 && overview}
-
-      <PoweredBy type={PoweredByType.BlitzStars} footer={footer} />
     </Wrapper>
   );
 }

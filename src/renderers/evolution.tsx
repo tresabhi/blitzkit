@@ -1,6 +1,5 @@
 import * as Graph from '../components/Graph';
 import NoData, { NoDataType } from '../components/NoData';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
@@ -118,8 +117,6 @@ export default async function evolution<Type extends StatType>(
       )}
 
       {plot.length === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
-
-      <PoweredBy type={PoweredByType.BlitzStars} />
     </Wrapper>
   );
 }

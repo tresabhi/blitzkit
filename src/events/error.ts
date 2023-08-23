@@ -1,7 +1,7 @@
 import { EmbedBuilder, TextChannel } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
-import { client } from '../bot';
 import { NEGATIVE_COLOR } from '../constants/colors';
+import { client } from '../core/discord/client';
 import isDev from '../core/node/isDev';
 
 const PROCESS_ERROR_EVENTS = ['uncaughtException'];

@@ -4,6 +4,7 @@ import { StatType } from '../../renderers/stats';
 import { tankopediaInfo } from '../blitz/tankopedia';
 import addPeriodSubCommands from './addPeriodSubCommands';
 import addTankChoices from './addTankChoices';
+import addTierChoices from './addTierChoices';
 import addUsernameChoices from './addUsernameChoices';
 
 export default async function addStatTypeSubCommandGroups(
@@ -61,13 +62,8 @@ export default async function addStatTypeSubCommandGroups(
               )
               .setRequired(false),
           )
-          .addIntegerOption((option) =>
-            option
-              .setName('tier')
-              .setDescription('Tier')
-              .setMinValue(1)
-              .setMaxValue(10)
-              .setRequired(false),
+          .addStringOption((option) =>
+            addTierChoices(option).setRequired(false),
           )
           .addStringOption((option) =>
             option

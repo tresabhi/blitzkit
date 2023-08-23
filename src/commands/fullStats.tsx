@@ -62,6 +62,8 @@ export const fullStatsCommand = new Promise<CommandRegistryRaw>(
           )
         )[player.id];
 
+        const tierOption = interaction.options.getString('tier');
+
         return [
           await fullStats(
             commandGroup,
@@ -74,7 +76,7 @@ export const fullStatsCommand = new Promise<CommandRegistryRaw>(
                   'tank-type':
                     interaction.options.getString('tank-type') ?? undefined,
                   nation: interaction.options.getString('nation') ?? undefined,
-                  tier: interaction.options.getInteger('tier') ?? undefined,
+                  tier: tierOption ? parseInt(tierOption) : undefined,
                   'tree-type': (interaction.options.getString('tree-type') ??
                     undefined) as TreeTypeString | undefined,
                 } satisfies Partial<MultiTankFilters>)
