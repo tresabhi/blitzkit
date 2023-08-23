@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from 'discord.js';
 import packageJSON from '../../package.json' assert { type: 'json' };
-import { client } from '../bot';
 import { tankopedia } from '../core/blitz/tankopedia';
 import { tankAverages } from '../core/blitzstars/tankAverages';
+import { client } from '../core/discord/client';
 import embedInfo from '../core/discord/embedInfo';
 import markdownTable from '../core/discord/markdownTable';
 import getClientId from '../core/node/getClientId';
