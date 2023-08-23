@@ -1,6 +1,5 @@
 import * as Breakdown from '../components/Breakdown';
 import NoData, { NoDataType } from '../components/NoData';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
 import calculateWN8 from '../core/blitz/calculateWN8';
@@ -172,8 +171,6 @@ export default async function today(
 
       {rows.length === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
       {rows.length > 0 && <Breakdown.Root>{rows}</Breakdown.Root>}
-
-      <PoweredBy type={PoweredByType.BlitzStars} />
     </Wrapper>
   );
 }

@@ -1,6 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
 import NoData, { NoDataType } from '../components/NoData';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import * as Tanks from '../components/Tanks';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
@@ -154,8 +153,6 @@ export const ownedTanksCommand: CommandRegistry = {
               );
             }),
           ))}
-
-        <PoweredBy type={PoweredByType.Wargaming} />
       </Wrapper>
     );
   },

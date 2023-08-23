@@ -1,6 +1,5 @@
 import AllStatsOverview from '../components/AllStatsOverview';
 import NoData, { NoDataType } from '../components/NoData';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import { TreeTypeString } from '../components/Tanks';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
@@ -168,8 +167,6 @@ export default async function stats<Type extends StatType>(
 
       {!stats?.battles && <NoData type={NoDataType.BattlesInPeriod} />}
       {stats?.battles > 0 && overview}
-
-      <PoweredBy type={PoweredByType.BlitzStars} footer={footer} />
     </Wrapper>
   );
 }

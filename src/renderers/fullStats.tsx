@@ -1,6 +1,5 @@
 import GenericAllStats from '../components/GenericAllStats';
 import NoData, { NoDataType } from '../components/NoData';
-import PoweredBy, { PoweredByType } from '../components/PoweredBy';
 import TierWeights, { TierWeightsRecord } from '../components/TierWeights';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
@@ -164,8 +163,6 @@ export default async function fullStats<Type extends StatType>(
           supplementaryStats={supplementaryStats}
         />
       )}
-
-      <PoweredBy type={PoweredByType.BlitzStars} />
     </Wrapper>
   );
 }
