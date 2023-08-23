@@ -15,6 +15,7 @@ import {
   tankopedia,
   tankopediaInfo,
 } from '../core/blitz/tankopedia';
+import addTierChoices from '../core/discord/addTierChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
@@ -52,24 +53,7 @@ export const ownedTanksCommand: CommandRegistry = {
   command: new SlashCommandBuilder()
     .setName('owned-tanks')
     .setDescription("Shows a player's owned tanks")
-    .addStringOption((option) =>
-      option
-        .setName('tier')
-        .setDescription('The tier you want to see')
-        .setChoices(
-          { name: 'Tier I (1)', value: '1' },
-          { name: 'Tier II (2)', value: '2' },
-          { name: 'Tier III (3)', value: '3' },
-          { name: 'Tier IV (4)', value: '4' },
-          { name: 'Tier V (5)', value: '5' },
-          { name: 'Tier VI (6)', value: '6' },
-          { name: 'Tier VII (7)', value: '7' },
-          { name: 'Tier VIII (8)', value: '8' },
-          { name: 'Tier IX (9)', value: '9' },
-          { name: 'Tier X (10)', value: '10' },
-        )
-        .setRequired(true),
-    )
+    .addStringOption(addTierChoices)
     .addStringOption(addUsernameChoices),
 
   async handler(interaction) {
