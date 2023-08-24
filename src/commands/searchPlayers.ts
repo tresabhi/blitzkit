@@ -12,7 +12,6 @@ import { AccountList } from '../types/accountList';
 
 export const searchPlayersCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()

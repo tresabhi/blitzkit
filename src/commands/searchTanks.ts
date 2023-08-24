@@ -8,7 +8,6 @@ import { CommandRegistry } from '../events/interactionCreate';
 
 export const searchTanksCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()

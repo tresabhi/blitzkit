@@ -12,7 +12,6 @@ const executionStart = new Date().getTime();
 
 export const debugCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()

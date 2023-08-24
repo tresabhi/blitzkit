@@ -29,7 +29,6 @@ export const fullStatsCommand = new Promise<CommandRegistryRaw>(
 
     resolve({
       inProduction: true,
-      inDevelopment: true,
       inPublic: true,
 
       command,

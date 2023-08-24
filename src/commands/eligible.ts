@@ -26,7 +26,6 @@ export const SKILLED_CLANS: Record<SkilledClan, string> = {
 
 export const eligibleCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
   inPublic: false,
 
   command: new SlashCommandBuilder()
