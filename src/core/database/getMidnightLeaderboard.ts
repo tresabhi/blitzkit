@@ -15,12 +15,13 @@ export default async function getMidnightLeaderboard(
     });
 
     if (!Array.isArray(data) && data.type === 'file') {
-      const content = Buffer.from(data.content, 'base64').toString();
-      const jsonContent = JSON.parse(content) as BlitzkriegRatingsLeaderboard;
+      const response = await fetch(data.download_url!);
 
-      return jsonContent;
+      return (await response.json()) as BlitzkriegRatingsLeaderboard;
     }
   } catch (error) {
-    console.warn('No midnight leaderboard found');
+    console.warn(
+      `No midnight leaderboard found for season ${season}, region ${region}`,
+    );
   }
 }
