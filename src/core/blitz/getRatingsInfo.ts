@@ -8,5 +8,6 @@ export default async function getRatingsInfo(region: Region) {
       region,
     )}.wotblitz.com/en/api/rating-leaderboards/season/`,
   );
+
   return (await response.json()) as Promise<RatingsInfo>;
 }
