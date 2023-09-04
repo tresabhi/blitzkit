@@ -5,11 +5,12 @@
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
+    "build": "node scripts/build",
     "build:bot": "node scripts/build --build=bot",
     "build:server": "node scripts/build --build=server",
+    "build:website": "",
     "build:docs": "vitepress build docs",
     "build:ratingsleaderboard": "vite-node --script scripts/buildRatingsLeaderboard",
-    "build": "node scripts/build --build=all",
     "dev:bot": "yarn build:bot --dev && yarn start:bot",
     "dev:server": "yarn build:server --dev && yarn start:server",
     "dev:docs": "vitepress dev docs",

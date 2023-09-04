@@ -1,63 +1,35 @@
 import { build } from 'esbuild';
-import { copyFile, mkdirSync, rmSync } from 'fs';
 import { argv } from 'process';
 
-const isProd = !argv.includes('--dev');
-const buildAll = argv.includes('--build=all');
-const buildBot = argv.includes('--build=bot') || buildAll;
-const buildServer = argv.includes('--build=server') || buildAll;
+const targetFile = argv
+  .find((arg) => arg.startsWith('--build='))
+  ?.split('=')[1];
+const files = targetFile ? [targetFile] : ['bot', 'server'];
 
-if (isProd) {
-  // only remove in production to ensure no time is wasted in dev
-  console.log('Removing dist...');
-  rmSync('dist', { recursive: true, force: true });
-  console.log('Dist removed');
+// copyFile('package.dist.json', 'dist/package.json', () =>
+//   console.log('package.json copied'),
+// );
 
-  console.log('Creating dist...');
-  mkdirSync('dist');
-  console.log('Dist created');
+files.forEach(async (file) => {
+  console.log(`Building ${file}...`);
 
-  console.log('Copying package.json...');
-  copyFile('package.dist.json', 'dist/package.json', () =>
-    console.log('package.json copied'),
-  );
-}
+  await build({
+    entryPoints: [`src/${file}.ts`],
+    outfile: `dist/${file}/index.cjs`,
 
-const commonOptions = {
-  platform: 'node',
-  loader: {
-    '.node': 'copy',
-    '.ttf': 'file',
-  },
-  format: 'cjs',
+    platform: 'node',
+    loader: {
+      '.node': 'copy',
+      '.ttf': 'file',
+    },
+    format: 'cjs',
 
-  bundle: true,
-  sourcemap: true,
-  minifyIdentifiers: false, // causes errors
-  minifySyntax: isProd,
-  minifyWhitespace: isProd,
+    bundle: true,
+    sourcemap: true,
+    minify: true,
 
-  logLevel: isProd ? 'info' : 'silent',
-};
-
-if (buildBot) {
-  console.log('Building bot...');
-  build({
-    ...commonOptions,
-
-    entryPoints: ['src/bot.ts'],
-    outfile: 'dist/bot.cjs',
-  }).then(() => console.log('Bot built'));
-}
-
-if (buildServer) {
-  console.log('Building server...');
-  build({
-    ...commonOptions,
-
-    entryPoints: ['src/server.ts'],
-    outfile: 'dist/server.cjs',
-  }).then(() => {
-    console.log('Server built');
+    logLevel: 'info',
   });
-}
+
+  console.log(`Built ${file}`);
+});
