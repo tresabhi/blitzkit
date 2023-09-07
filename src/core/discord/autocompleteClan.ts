@@ -19,8 +19,8 @@ export default async function autocompleteClan(
       ? players.map(
           (player) =>
             ({
-              name: `${player.name} (${REGION_NAMES[player.server]})`,
-              value: `${player.server}/${player.clan_id}`,
+              name: `${player.name} (${REGION_NAMES[player.region]})`,
+              value: `${player.region}/${player.clan_id}`,
             }) satisfies ApplicationCommandOptionChoiceData<string>,
         )
       : [],

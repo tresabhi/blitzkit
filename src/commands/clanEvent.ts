@@ -1,9 +1,16 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
+import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import { PlayerHistoriesRaw } from '../core/blitzstars/getPlayerHistories';
+import addClanChoices from '../core/discord/addClanChoices';
 import autocompleteClan from '../core/discord/autocompleteClan';
-import embedInfo from '../core/discord/embedInfo';
+import embedWarning from '../core/discord/embedWarning';
+import resolveClanFromCommand from '../core/discord/resolveClanFromCommand';
 import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
+import { AccountAchievements } from '../types/accountAchievements';
+import { AccountInfo } from '../types/accountInfo';
+import { ClanInfo } from '../types/clanInfo';
 
 const DEFAULT_THRESHOLD = 7;
 
@@ -15,92 +22,72 @@ export const clanEventCommand: CommandRegistry = {
   command: new SlashCommandBuilder()
     .setName('clan-event')
     .setDescription('Lists all inactive players')
-    .addStringOption((option) =>
-      option
-        .setName('clan')
-        .setDescription('The clan name or tag you are checking')
-        .setRequired(true),
-    ),
+    .addStringOption(addClanChoices),
 
   async handler(interaction) {
-    const REGION = 'com';
-    const CLAN_SEARCH = interaction.options.getString('clan', true);
+    const { region, id } = await resolveClanFromCommand(interaction);
+    const clan = (
+      await getWargamingResponse<ClanInfo>(
+        `https://api.wotblitz.${region}/wotb/clans/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&clan_id=${id}`,
+      )
+    )[id];
+    const memberIds = clan.members_ids.join(',');
+    const [players, achievements, previousJointVictories] = await Promise.all([
+      getWargamingResponse<AccountInfo>(
+        `https://api.wotblitz.${region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${memberIds}`,
+      ),
+      getWargamingResponse<AccountAchievements>(
+        `https://api.wotblitz.${region}/wotb/account/achievements/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${memberIds}`,
+      ),
+      Promise.all(
+        clan.members_ids.map((id) =>
+          fetch(`https://www.blitzstars.com/api/playerstats/${id}`)
+            .then((response) => response.json() as Promise<PlayerHistoriesRaw>)
+            .then((data) => ({
+              id,
+              jointVictory: data[0]?.achievements.jointVictoryCount as
+                | number
+                | undefined,
+            })),
+        ),
+      ).then((data) =>
+        data.reduce<Record<number, number | undefined>>(
+          (accumulator, value) => ({
+            ...accumulator,
+            [value.id]: value.jointVictory,
+          }),
+          {},
+        ),
+      ),
+    ]);
+    const jointVictories = clan.members_ids.map((id) => ({
+      id,
+      joinVictory:
+        previousJointVictories[id] === undefined
+          ? 0
+          : achievements[id].max_series.jointVictory -
+            previousJointVictories[id]!,
+    }));
 
-    const {
-      clan_id,
-      name: clan_name,
-      tag: clan_tag,
-    } = await fetch(
-      `https://api.wotblitz.${REGION}/wotb/clans/list/?application_id=${secrets.WARGAMING_APPLICATION_ID}&search=${CLAN_SEARCH}`,
-    )
-      .then((response) => response.json())
-      .then(({ data }) => data[0]);
-    const memebers = await fetch(
-      `https://api.wotblitz.${REGION}/wotb/clans/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&clan_id=${clan_id}`,
-    )
-      .then((response) => response.json())
-      .then(({ data }) => data[clan_id].members_ids);
-    const stats = await Promise.all(
-      memebers.map(async (id, index) => {
-        await new Promise((resolve) => setTimeout(resolve, index * 200));
-
-        const [yesterdayPlatoonWins, name, todayPlatoonWins] =
-          await Promise.all([
-            fetch(`https://www.blitzstars.com/api/playerstats/${id}`)
-              .then((response) => response.json())
-              .then((data) => data[0]?.achievements.jointVictoryCount),
-            fetch(
-              `https://api.wotblitz.${REGION}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
-            )
-              .then((response) => response.json())
-              .then(({ data }) => data[id].nickname),
-            fetch(
-              `https://api.wotblitz.${REGION}/wotb/account/achievements/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
-            )
-              .then((response) => response.json())
-              .then(({ data }) => data[id].max_series.jointVictory),
-          ]);
-
-        return {
-          id,
-          name,
-          yesterdayPlatoonWins,
-          todayPlatoonWins,
-        };
-      }),
-    );
-
-    return embedInfo(
-      `Estimation of ${clan_name} [${clan_tag}]'s total platoon wins today: ${(
-        stats.reduce(
-          (accumulator, player) =>
-            accumulator +
-            (player.yesterdayPlatoonWins === undefined
-              ? 0
-              : player.todayPlatoonWins - player.yesterdayPlatoonWins),
+    return [
+      `# ${clan.name} [${clan.tag}]'s platoon wins today: ${(
+        jointVictories.reduce(
+          (accumulator, { joinVictory }) => accumulator + joinVictory,
           0,
         ) / 2
-      ).toFixed(0)}`,
-      stats
-        .sort(
-          (playerA, playerB) =>
-            (playerB.yesterdayPlatoonWins === undefined
-              ? 0
-              : playerB.todayPlatoonWins - playerB.yesterdayPlatoonWins) -
-            (playerA.yesterdayPlatoonWins === undefined
-              ? 0
-              : playerA.todayPlatoonWins - playerA.yesterdayPlatoonWins),
-        )
+      ).toFixed(0)}\n${jointVictories
+        .sort((a, b) => b.joinVictory - a.joinVictory)
         .map(
-          (player) =>
-            `${markdownEscape(player.name)}: ${
-              player.yesterdayPlatoonWins === undefined
-                ? 0
-                : player.todayPlatoonWins - player.yesterdayPlatoonWins
-            }`,
+          ({ id, joinVictory }) =>
+            `- ${markdownEscape(players[id].nickname)}: ${joinVictory}`,
         )
-        .join('\n'),
-    );
+        .join('\n')}`,
+
+      embedWarning(
+        'This is an approximation!',
+        'Wargaming provides use with little to no information about platoons. Platooning with mixed clans may inflate the number and platooning in non-regular battles may deflate.',
+      ),
+    ];
   },
 
   autocomplete: autocompleteClan,
