@@ -13,6 +13,7 @@ import {
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
 import discord from '../../../discord.json' assert { type: 'json' };
+import { clanEventCommand } from '../../commands/clanEvent';
 import { debugCommand } from '../../commands/debug';
 import { eligibleCommand } from '../../commands/eligible';
 import { evolutionCommand } from '../../commands/evolution';
@@ -98,6 +99,7 @@ export const COMMANDS_RAW: CommandRegistry[] = [
   evolutionCommand,
   statsCommand,
   ratingsCommand,
+  clanEventCommand,
 ];
 
 export const commands = Promise.all(COMMANDS_RAW).then((rawCommands) =>

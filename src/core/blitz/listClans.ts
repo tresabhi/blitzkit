@@ -3,8 +3,8 @@ import { Clan, ClanList } from '../../types/clanList';
 import { secrets } from '../node/secrets';
 import getWargamingResponse from './getWargamingResponse';
 
-export type ClanListWithServer = (Clan & {
-  server: 'com' | 'eu' | 'asia';
+export type ClanListWithRegion = (Clan & {
+  region: 'com' | 'eu' | 'asia';
 })[];
 
 export default async function listClans(search: string, limit = 9) {
@@ -21,7 +21,7 @@ export default async function listClans(search: string, limit = 9) {
           value &&
           value.map((account) => ({
             ...account,
-            server: 'com' as Region,
+            region: 'com' as Region,
           })),
       ),
       getWargamingResponse<ClanList>(
@@ -31,7 +31,7 @@ export default async function listClans(search: string, limit = 9) {
           value &&
           value.map((account) => ({
             ...account,
-            server: 'eu' as Region,
+            region: 'eu' as Region,
           })),
       ),
       getWargamingResponse<ClanList>(
@@ -41,7 +41,7 @@ export default async function listClans(search: string, limit = 9) {
           value &&
           value.map((account) => ({
             ...account,
-            server: 'asia' as Region,
+            region: 'asia' as Region,
           })),
       ),
     ])
