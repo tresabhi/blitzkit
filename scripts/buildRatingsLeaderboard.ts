@@ -31,7 +31,11 @@ const PLAYERS = await fetch(
   `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,
 )
   .then((response) => response.json() as Promise<RatingsInfo>)
-  .then((data) => data.count);
+  .then((data) => (data.detail === undefined ? data.count : undefined));
+
+if (PLAYERS === undefined) {
+  throw new Error('No current ratings season running');
+}
 
 const players: Record<number, RatingsPlayer> = {};
 const leaderboard: BlitzkriegRatingsLeaderboard = [];
@@ -60,7 +64,7 @@ async function branchFromPlayer(id: number) {
 
   console.log(
     `Registered ${registered} / ${PLAYERS} (${(
-      (registered / PLAYERS) *
+      (registered / PLAYERS!) *
       100
     ).toFixed(2)}%)`,
   );
@@ -109,7 +113,10 @@ if (publish) {
 
   const info = await fetch(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,
-  ).then((response) => response.json() as Promise<RatingsInfo>);
+  ).then(
+    (response) =>
+      response.json() as Promise<RatingsInfo & { detail: undefined }>,
+  );
   const normalizedServer = server === 'na' ? 'com' : server;
 
   const infoPath = `${normalizedServer}/ratings/${info.current_season}/info.json`;

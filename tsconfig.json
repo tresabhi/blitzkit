@@ -9,7 +9,27 @@
     "skipLibCheck": true,
     "noEmit": true,
     "resolveJsonModule": true,
-    "jsx": "react-jsx"
+    "jsx": "preserve",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "incremental": true,
+    "isolatedModules": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["src/**/*.ts", "src/components/Tanks/components/Row.tsx", "src/commands/clanEvent.ts"]
+  "include": [
+    "src/**/*",
+    ".next/types/**/*.ts",
+    "dist/website/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

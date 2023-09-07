@@ -6,7 +6,6 @@ import { RouteRegistry } from '../server';
 export const statsRoute: RouteRegistry = {
   route: '/stats/:type/:period',
   inProduction: true,
-  inDevelopment: true,
 
   async handler(req) {
     const type = req.params.type as StatType;

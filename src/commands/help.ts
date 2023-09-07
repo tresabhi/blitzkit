@@ -30,7 +30,6 @@ function addDocsSubcommands(option: SlashCommandSubcommandsOnlyBuilder) {
 
 export const helpCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
   inPublic: true,
 
   command: addDocsSubcommands(

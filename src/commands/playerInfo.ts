@@ -12,7 +12,6 @@ import { AccountInfo } from '../types/accountInfo';
 
 export const playerInfoCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()

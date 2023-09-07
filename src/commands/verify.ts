@@ -14,7 +14,6 @@ import { PlayerClanData } from '../types/playerClanData';
 
 export const verifyCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()

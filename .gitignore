@@ -9,6 +9,8 @@ dist.*
 yarn-error.log
 commands.txt
 /test.*
+test.*
 /docs/.vitepress/dist
 /docs/.vitepress/cache
 servers.csv
+.next/

@@ -218,7 +218,6 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
 
     resolve({
       inProduction: true,
-      inDevelopment: true,
       inPublic: true,
 
       command,

@@ -51,7 +51,6 @@ export type InteractionReturnable =
   | Promise<InteractionIterableReturnable>;
 
 export interface Registry {
-  inDevelopment: boolean;
   inProduction: boolean;
 }
 
@@ -124,14 +123,12 @@ export const publicCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
 
 commands.then((awaitedCommands) => {
   Object.entries(awaitedCommands).forEach(([, registry]) => {
-    if (isDev() ? registry.inDevelopment : registry.inProduction) {
-      const json = registry.command.toJSON();
+    const json = registry.command.toJSON();
 
-      if (registry.inPublic) {
-        publicCommands.push(json);
-      } else {
-        guildCommands.push(json);
-      }
+    if (registry.inPublic) {
+      publicCommands.push(json);
+    } else {
+      guildCommands.push(json);
     }
   });
 
