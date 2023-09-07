@@ -76,7 +76,10 @@ export function Card({ items, title }: CardProps) {
                 <PercentileIndicator percentile={item.percentile} />
               )}
               <span
-                style={{ fontSize: 16, color: theme.colors.textHighContrast }}
+                style={{
+                  fontSize: 16,
+                  color: theme.colors.textHighContrast,
+                }}
               >
                 {item.value === undefined || Number.isNaN(item.value)
                   ? '--'

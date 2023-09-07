@@ -19,6 +19,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             height: '100vh',
             display: 'flex',
             flexDirection: 'column',
+            background: 'url(https://i.imgur.com/PhS06NJ.png)',
           }}
         >
           <Navbar />
