@@ -78,6 +78,7 @@ export const clanEventCommand: CommandRegistry = {
           0,
         ) / 2
       ).toFixed(0)}\n${jointVictories
+        .filter(({ joinVictory }) => joinVictory)
         .sort((a, b) => b.joinVictory - a.joinVictory)
         .map(
           ({ id, joinVictory }) =>
@@ -87,7 +88,7 @@ export const clanEventCommand: CommandRegistry = {
 
       embedWarning(
         'This is an approximation!',
-        'Wargaming provides use with little to no information about platoons. Platooning with mixed clans may inflate the number and platooning in non-regular battles may deflate.',
+        "Wargaming provides very little information about platoons publicly. Caveats:\n- Players in two different clans platooning artificially inflates the total count\n- Game-mode battles aren't counted since Wargaming doesn't track them",
       ),
     ];
   },
