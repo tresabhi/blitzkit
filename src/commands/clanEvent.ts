@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import { PlayerHistoriesRaw } from '../core/blitzstars/getPlayerHistories';
+import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo';
 import addClanChoices from '../core/discord/addClanChoices';
 import autocompleteClan from '../core/discord/autocompleteClan';
 import embedWarning from '../core/discord/embedWarning';
@@ -16,7 +17,6 @@ const DEFAULT_THRESHOLD = 7;
 
 export const clanEventCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -63,10 +63,12 @@ export const clanEventCommand: CommandRegistry = {
     const jointVictories = clan.members_ids.map((id) => ({
       id,
       joinVictory:
-        previousJointVictories[id] === undefined
-          ? 0
-          : achievements[id].max_series.jointVictory -
-            previousJointVictories[id]!,
+        players[id].last_battle_time > getTimeDaysAgo(region, 1)
+          ? previousJointVictories[id] === undefined
+            ? 0
+            : achievements[id].max_series.jointVictory -
+              previousJointVictories[id]!
+          : 0,
     }));
 
     return [
