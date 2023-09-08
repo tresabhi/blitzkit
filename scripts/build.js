@@ -26,7 +26,9 @@ files.forEach(async (file) => {
 
     bundle: true,
     sourcemap: true,
-    minify: true,
+    minifyIdentifiers: false, // cause goofy errors
+    minifySyntax: true,
+    minifyWhitespace: true,
 
     logLevel: 'info',
   });
