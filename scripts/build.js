@@ -19,6 +19,7 @@ files.forEach(async (file) => {
       '.ttf': 'file',
     },
     format: 'cjs',
+    jsx: 'transform',
 
     bundle: true,
     sourcemap: true,
