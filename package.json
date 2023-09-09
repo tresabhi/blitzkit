@@ -5,7 +5,6 @@
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
-    "build": "node scripts/build && yarn build:website",
     "build:bot": "node scripts/build --build=bot",
     "build:server": "node scripts/build --build=server",
     "build:website": "next build",
