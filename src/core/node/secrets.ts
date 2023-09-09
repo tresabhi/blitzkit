@@ -1,3 +1,7 @@
+import { config } from 'dotenv';
+
+config();
+
 export const SECRET_KEYS = [
   'DISCORD_TOKEN',
   'WARGAMING_APPLICATION_ID',
