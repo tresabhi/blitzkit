@@ -88,7 +88,7 @@ export const clanEventCommand: CommandRegistry = {
 
       embedWarning(
         'This is an approximation!',
-        "Wargaming provides very little information about platoons publicly. Caveats:\n- Players in two different clans platooning artificially inflates the total count\n- Game-mode battles aren't counted since Wargaming doesn't track them",
+        "Wargaming provides very little information about platoons publicly. Caveats:\n- Players in two different clans platooning artificially inflates the total count\n- Game-mode battles aren't counted since Wargaming doesn't publicly share that data",
       ),
     ];
   },
