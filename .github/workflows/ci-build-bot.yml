@@ -34,10 +34,10 @@ jobs:
         run: yarn
 
       - name: Build
-        run: yarn build
+        run: yarn build:bot
 
       - name: Archive build
         uses: actions/upload-artifact@v3
         with:
-          name: dist
-          path: dist
+          name: bot
+          path: dist/bot
