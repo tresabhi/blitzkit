@@ -6,10 +6,6 @@ const targetFile = argv
   ?.split('=')[1];
 const files = targetFile ? [targetFile] : ['bot', 'server'];
 
-// copyFile('package.dist.json', 'dist/package.json', () =>
-//   console.log('package.json copied'),
-// );
-
 files.forEach(async (file) => {
   console.log(`Building ${file}...`);
 
@@ -26,7 +22,9 @@ files.forEach(async (file) => {
 
     bundle: true,
     sourcemap: true,
-    minify: true,
+    minifyIdentifiers: false, // cause goofy errors
+    minifySyntax: true,
+    minifyWhitespace: true,
 
     logLevel: 'info',
   });

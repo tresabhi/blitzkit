@@ -1,7 +1,8 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder, escapeMarkdown } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import { PlayerHistoriesRaw } from '../core/blitzstars/getPlayerHistories';
+import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo';
 import addClanChoices from '../core/discord/addClanChoices';
 import autocompleteClan from '../core/discord/autocompleteClan';
 import embedWarning from '../core/discord/embedWarning';
@@ -12,11 +13,8 @@ import { AccountAchievements } from '../types/accountAchievements';
 import { AccountInfo } from '../types/accountInfo';
 import { ClanInfo } from '../types/clanInfo';
 
-const DEFAULT_THRESHOLD = 7;
-
 export const clanEventCommand: CommandRegistry = {
   inProduction: true,
-  inDevelopment: true,
   inPublic: true,
 
   command: new SlashCommandBuilder()
@@ -63,19 +61,24 @@ export const clanEventCommand: CommandRegistry = {
     const jointVictories = clan.members_ids.map((id) => ({
       id,
       joinVictory:
-        previousJointVictories[id] === undefined
-          ? 0
-          : achievements[id].max_series.jointVictory -
-            previousJointVictories[id]!,
+        players[id].last_battle_time > getTimeDaysAgo(region, 1)
+          ? previousJointVictories[id] === undefined
+            ? 0
+            : achievements[id].max_series.jointVictory -
+              previousJointVictories[id]!
+          : 0,
     }));
 
     return [
-      `# ${clan.name} [${clan.tag}]'s platoon wins today: ${(
+      `# ${escapeMarkdown(clan.name)} [${escapeMarkdown(
+        clan.tag,
+      )}]'s platoon wins today: ${(
         jointVictories.reduce(
           (accumulator, { joinVictory }) => accumulator + joinVictory,
           0,
         ) / 2
       ).toFixed(0)}\n${jointVictories
+        .filter(({ joinVictory }) => joinVictory)
         .sort((a, b) => b.joinVictory - a.joinVictory)
         .map(
           ({ id, joinVictory }) =>
@@ -85,7 +88,7 @@ export const clanEventCommand: CommandRegistry = {
 
       embedWarning(
         'This is an approximation!',
-        'Wargaming provides use with little to no information about platoons. Platooning with mixed clans may inflate the number and platooning in non-regular battles may deflate.',
+        "Wargaming provides very little information about platoons publicly. Caveats:\n- Players in two different clans platooning artificially inflates the total count\n- Game-mode battles aren't counted since Wargaming doesn't publicly share that data\n- This command is also subject to Blitzkrieg's reset times (use `/help timezones` for more info)",
       ),
     ];
   },

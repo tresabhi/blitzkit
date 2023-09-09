@@ -22,11 +22,11 @@ jobs:
       - name: Download release assets
         run: |
           DOWNLOAD_URL=$(curl -s https://api.github.com/repos/tresabhi/blitzkrieg/releases/latest \
-            | grep "browser_download_url.*dist.zip" \
+            | grep "browser_download_url.*bot.zip" \
             | cut -d : -f 2,3 \
             | tr -d \")
-          curl -L -o dist.zip $DOWNLOAD_URL
-          unzip dist.zip
+          curl -L -o bot.zip $DOWNLOAD_URL
+          unzip bot.zip
 
       - name: Run bot
-        run: NODE_ENV=production GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} WARGAMING_APPLICATION_ID=${{ secrets.WARGAMING_APPLICATION_ID }} node --enable-source-maps --trace-warnings bot.cjs
+        run: NODE_ENV=production GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} WARGAMING_APPLICATION_ID=${{ secrets.WARGAMING_APPLICATION_ID }} node --enable-source-maps --trace-warnings bot/index.cjs
