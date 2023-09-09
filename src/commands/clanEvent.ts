@@ -13,8 +13,6 @@ import { AccountAchievements } from '../types/accountAchievements';
 import { AccountInfo } from '../types/accountInfo';
 import { ClanInfo } from '../types/clanInfo';
 
-const DEFAULT_THRESHOLD = 7;
-
 export const clanEventCommand: CommandRegistry = {
   inProduction: true,
   inPublic: true,
@@ -88,7 +86,7 @@ export const clanEventCommand: CommandRegistry = {
 
       embedWarning(
         'This is an approximation!',
-        "Wargaming provides very little information about platoons publicly. Caveats:\n- Players in two different clans platooning artificially inflates the total count\n- Game-mode battles aren't counted since Wargaming doesn't publicly share that data",
+        "Wargaming provides very little information about platoons publicly. Caveats:\n- Players in two different clans platooning artificially inflates the total count\n- Game-mode battles aren't counted since Wargaming doesn't publicly share that data\n- This command is also subject to Blitzkrieg's reset times (use `/help timezones` for more info)",
       ),
     ];
   },
