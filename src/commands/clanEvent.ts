@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder, escapeMarkdown } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import { PlayerHistoriesRaw } from '../core/blitzstars/getPlayerHistories';
@@ -70,7 +70,9 @@ export const clanEventCommand: CommandRegistry = {
     }));
 
     return [
-      `# ${clan.name} [${clan.tag}]'s platoon wins today: ${(
+      `# ${escapeMarkdown(clan.name)} [${escapeMarkdown(
+        clan.tag,
+      )}]'s platoon wins today: ${(
         jointVictories.reduce(
           (accumulator, { joinVictory }) => accumulator + joinVictory,
           0,
