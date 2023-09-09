@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder, escapeMarkdown } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import { PlayerHistoriesRaw } from '../core/blitzstars/getPlayerHistories';
@@ -12,8 +12,6 @@ import { CommandRegistry } from '../events/interactionCreate';
 import { AccountAchievements } from '../types/accountAchievements';
 import { AccountInfo } from '../types/accountInfo';
 import { ClanInfo } from '../types/clanInfo';
-
-const DEFAULT_THRESHOLD = 7;
 
 export const clanEventCommand: CommandRegistry = {
   inProduction: true,
@@ -72,7 +70,9 @@ export const clanEventCommand: CommandRegistry = {
     }));
 
     return [
-      `# ${clan.name} [${clan.tag}]'s platoon wins today: ${(
+      `# ${escapeMarkdown(clan.name)} [${escapeMarkdown(
+        clan.tag,
+      )}]'s platoon wins today: ${(
         jointVictories.reduce(
           (accumulator, { joinVictory }) => accumulator + joinVictory,
           0,
@@ -88,7 +88,7 @@ export const clanEventCommand: CommandRegistry = {
 
       embedWarning(
         'This is an approximation!',
-        "Wargaming provides very little information about platoons publicly. Caveats:\n- Players in two different clans platooning artificially inflates the total count\n- Game-mode battles aren't counted since Wargaming doesn't track them",
+        "Wargaming provides very little information about platoons publicly. Caveats:\n- Players in two different clans platooning artificially inflates the total count\n- Game-mode battles aren't counted since Wargaming doesn't publicly share that data\n- This command is also subject to Blitzkrieg's reset times (use `/help timezones` for more info)",
       ),
     ];
   },
