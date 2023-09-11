@@ -80,7 +80,7 @@ export const statsCommand = new Promise<CommandRegistryRaw>(async (resolve) => {
             : null,
         ),
         primaryButton(path, 'Refresh'),
-        linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
+        // linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
         linkButton(
           `https://www.blitzstars.com/player/${player.region}/${nickname}`,
           'BlitzStars',
