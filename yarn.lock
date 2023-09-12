@@ -1917,6 +1917,11 @@ lodash.curry@^4.1.1:
   resolved "https://registry.yarnpkg.com/lodash.curry/-/lodash.curry-4.1.1.tgz#248e36072ede906501d75966200a86dab8b23170"
   integrity sha512-/u14pXGviLaweY5JI0IUzgzF2J6Ne8INyzAZjImcryjgkZ+ebruBxy2/JaOOkTqScddcYtakjhSaeemV8lR0tA==
 
+lodash.debounce@^4.0.8:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
+  integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
+
 lodash.snakecase@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.snakecase/-/lodash.snakecase-4.1.1.tgz#39d714a35357147837aefd64b5dcbb16becd8f8d"
@@ -2293,6 +2298,14 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-fuzzysort@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-fuzzysort/-/react-fuzzysort-1.0.1.tgz#2878c891394f8af21bd79e3d57052f3fa90d41dd"
+  integrity sha512-RYhOsnX38KmJ0OywZrCiuMCsodL3zES69w6QlYbXxboPBO67REO7YWt98Lc8F+HZRQGArzpNemsufSW065UmFw==
+  dependencies:
+    fuzzysort "^2.0.4"
+    lodash.debounce "^4.0.8"
+
 react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
@@ -2416,7 +2429,7 @@ shell-quote-word@^1.0.1:
   resolved "https://registry.yarnpkg.com/shell-quote-word/-/shell-quote-word-1.0.1.tgz#e2bdfd22d599fd68886491677e38f560f9d469c9"
   integrity sha512-lT297f1WLAdq0A4O+AknIFRP6kkiI3s8C913eJ0XqBxJbZPGWUNkRQk2u8zk4bEAjUJ5i+fSLwB6z1HzeT+DEg==
 
-shiki@^0.14.3:
+shiki@^0.14.4:
   version "0.14.4"
   resolved "https://registry.yarnpkg.com/shiki/-/shiki-0.14.4.tgz#2454969b466a5f75067d0f2fa0d7426d32881b20"
   integrity sha512-IXCRip2IQzKwxArNNq1S+On4KPML3Yyn8Zzs/xRgcgOWIr8ntIK3IKzjFPfjy/7kt9ZMjc+FItfqHRBg8b6tNQ==
@@ -2660,10 +2673,10 @@ vitepress-plugin-auto-sidebar@^1.1.0:
   resolved "https://registry.yarnpkg.com/vitepress-plugin-auto-sidebar/-/vitepress-plugin-auto-sidebar-1.1.0.tgz#d8131e31143e99b6e142cb7d23b9323a578a862b"
   integrity sha512-LgkpjKVlNlQS54PFv5R/Y4+CHtHoXsJ3xgyVTKNi0sG1fXUmViKCg3Hnl9eo/SfNn894qsNRXoNneQmRBP2Lmw==
 
-vitepress@^1.0.0-rc.10:
-  version "1.0.0-rc.10"
-  resolved "https://registry.yarnpkg.com/vitepress/-/vitepress-1.0.0-rc.10.tgz#c33361e84a1ad64d3eb3039dc302dc4f00054585"
-  integrity sha512-+MsahIWqq5WUEmj6MR4obcKYbT7im07jZPCQPdNJExkeOSbOAJ4xypSLx88x7rvtzWHhHc5aXbOhCRvGEGjFrw==
+vitepress@^1.0.0-rc.12:
+  version "1.0.0-rc.12"
+  resolved "https://registry.yarnpkg.com/vitepress/-/vitepress-1.0.0-rc.12.tgz#474fbbc248aad02cf27246badc266dd0ebadc3e2"
+  integrity sha512-mZknN5l9lgbBjXwumwdOQQDM+gPivswFEykEQeenY0tv7eocS+bb801IpFZT3mFV6YRhSddmbutHlFgPPADjEg==
   dependencies:
     "@docsearch/css" "^3.5.2"
     "@docsearch/js" "^3.5.2"
@@ -2673,7 +2686,7 @@ vitepress@^1.0.0-rc.10:
     focus-trap "^7.5.2"
     mark.js "8.11.1"
     minisearch "^6.1.0"
-    shiki "^0.14.3"
+    shiki "^0.14.4"
     vite "^4.4.9"
     vue "^3.3.4"
 

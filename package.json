@@ -43,8 +43,10 @@
     "next": "^13.4.19",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-fuzzysort": "^1.0.1",
     "satori": "^0.10.4",
     "vite-node": "^0.34.4",
+    "vitepress": "^1.0.0-rc.12",
     "vitepress-plugin-auto-sidebar": "^1.1.0"
   },
   "devDependencies": {
@@ -58,7 +60,6 @@
     "compare-versions": "^6.1.0",
     "knip": "^2.22.0",
     "prettier": "^3.0.3",
-    "typescript": "^5.2.2",
-    "vitepress": "^1.0.0-rc.10"
+    "typescript": "^5.2.2"
   }
 }

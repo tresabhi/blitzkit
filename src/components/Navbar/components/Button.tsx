@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { theme } from '../../../stitches.config';
 
 interface ButtonProps {
   children: ReactNode;
@@ -9,7 +8,7 @@ export function Button({ children }: ButtonProps) {
   return (
     <button
       style={{
-        padding: theme.spaces.paddingMajor,
+        padding: 16,
         border: 'none',
         cursor: 'pointer',
         background: 'none',
