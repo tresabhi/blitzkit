@@ -6,6 +6,7 @@ import { useRef } from 'react';
 import { Search, SearchItem } from 'react-fuzzysort';
 import { SearchBar } from '../components/SearchBar';
 import { theme } from '../stitches.config';
+import * as styles from './page.css';
 
 const TOOLS = [
   {
@@ -51,6 +52,7 @@ export default function Page() {
         display: 'flex',
         flexDirection: 'column',
         gap: 16,
+        boxSizing: 'border-box',
       }}
     >
       <SearchBar ref={input} />
@@ -70,55 +72,31 @@ export default function Page() {
                 node: (
                   <Link
                     href={tool.href}
+                    className={styles.tool}
                     style={{
-                      height: 128,
-                      minWidth: 256,
-                      flex: 1,
-                      borderRadius: 4,
-                      textDecoration: 'none',
                       backgroundImage: `url(${tool.banner})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      overflow: 'hidden',
                     }}
                   >
-                    <div
+                    <span
                       style={{
-                        boxSizing: 'border-box',
+                        fontSize: 32,
+                        color: theme.colors.textHighContrast,
                         display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        justifyContent: 'flex-end',
-                        padding: 16,
-                        gap: 4,
-                        background: 'linear-gradient(#00000000, #000000ff)',
-                        height: '100%',
-                        width: '100%',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
-                      <span
-                        style={{
-                          fontSize: 32,
-                          color: theme.colors.textHighContrast,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        {tool.title}
-                        <CaretRightIcon
-                          style={{ width: '1em', height: '1em' }}
-                        />
-                      </span>
-                      <span
-                        style={{
-                          color: theme.colors.textLowContrast,
-                          fontSize: 16,
-                        }}
-                      >
-                        {tool.description}
-                      </span>
-                    </div>
+                      {tool.title}
+                      <CaretRightIcon style={{ width: '1em', height: '1em' }} />
+                    </span>
+                    <span
+                      style={{
+                        color: theme.colors.textLowContrast,
+                        fontSize: 16,
+                      }}
+                    >
+                      {tool.description}
+                    </span>
                   </Link>
                 ),
                 query: `${tool.title} ${tool.description}`,

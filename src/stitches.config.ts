@@ -14,4 +14,8 @@ export const theme = {
   },
 
   borderStyles: createBorderStyles(slateDark),
+
+  durations: {
+    regular: '0.2s',
+  },
 };

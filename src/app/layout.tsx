@@ -17,21 +17,18 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         style={{
           margin: 0,
+          background: 'url(https://i.imgur.com/PhS06NJ.png)',
         }}
       >
+        <Navbar />
+
         <div
           style={{
-            width: '100vw',
-            height: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            background: 'url(https://i.imgur.com/PhS06NJ.png)',
-            alignItems: 'center',
+            flex: 1,
+            width: '100%',
           }}
         >
-          <Navbar />
-
-          <div style={{ flex: 1, maxWidth: 780, width: '100%' }}>
+          <div style={{ maxWidth: 780, margin: 'auto', display: 'block' }}>
             {children}
           </div>
         </div>
