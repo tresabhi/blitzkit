@@ -17,7 +17,7 @@ export const tool = style({
   padding: 16,
   gap: 4,
   boxShadow: 'inset 0 -192px 128px -128px black',
-  transitionDuration: theme.durations.regular,
+  transition: `box-shadow ${theme.durations.regular}`,
 
   ':hover': {
     boxShadow: 'inset 0 -128px 128px -128px black',
