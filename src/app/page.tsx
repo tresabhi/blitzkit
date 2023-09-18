@@ -48,67 +48,54 @@ export default function Page() {
 
   return (
     <PageWrapper>
+      <SearchBar ref={input} />
+
       <div
         style={{
-          width: '100%',
-          padding: 16,
           display: 'flex',
-          flexDirection: 'column',
           gap: 16,
-          boxSizing: 'border-box',
+          flexWrap: 'wrap',
         }}
       >
-        <SearchBar ref={input} />
-
-        <div
-          style={{
-            display: 'flex',
-            gap: 16,
-            flexWrap: 'wrap',
-          }}
-        >
-          <Search
-            input={input}
-            list={TOOLS.map(
-              (tool) =>
-                ({
-                  node: (
-                    <Link
-                      href={`/tools/${tool.id}`}
-                      className={styles.tool}
+        <Search
+          input={input}
+          list={TOOLS.map(
+            (tool) =>
+              ({
+                node: (
+                  <Link
+                    href={`/tools/${tool.id}`}
+                    className={styles.tool}
+                    style={{
+                      backgroundImage: `url(/assets/banners/${tool.id}.png)`,
+                    }}
+                  >
+                    <span
                       style={{
-                        backgroundImage: `url(/assets/banners/${tool.id}.png)`,
+                        fontSize: 32,
+                        color: theme.colors.textHighContrast,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
-                      <span
-                        style={{
-                          fontSize: 32,
-                          color: theme.colors.textHighContrast,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        {tool.title}
-                        <CaretRightIcon
-                          style={{ width: '1em', height: '1em' }}
-                        />
-                      </span>
-                      <span
-                        style={{
-                          color: theme.colors.textLowContrast,
-                          fontSize: 16,
-                        }}
-                      >
-                        {tool.description}
-                      </span>
-                    </Link>
-                  ),
-                  query: `${tool.title} ${tool.description}`,
-                }) satisfies SearchItem,
-            )}
-          />
-        </div>
+                      {tool.title}
+                      <CaretRightIcon style={{ width: '1em', height: '1em' }} />
+                    </span>
+                    <span
+                      style={{
+                        color: theme.colors.textLowContrast,
+                        fontSize: 16,
+                      }}
+                    >
+                      {tool.description}
+                    </span>
+                  </Link>
+                ),
+                query: `${tool.title} ${tool.description}`,
+              }) satisfies SearchItem,
+          )}
+        />
       </div>
     </PageWrapper>
   );

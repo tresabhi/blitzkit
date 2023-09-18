@@ -3,7 +3,7 @@ import { ComponentProps, forwardRef, useImperativeHandle, useRef } from 'react';
 import { theme } from '../stitches.config';
 
 export const SearchBar = forwardRef<HTMLInputElement, ComponentProps<'input'>>(
-  (props, ref) => {
+  ({ style, ...props }, ref) => {
     const input = useRef<HTMLInputElement>(null);
 
     useImperativeHandle(ref, () => input.current!);
@@ -22,10 +22,13 @@ export const SearchBar = forwardRef<HTMLInputElement, ComponentProps<'input'>>(
           justifyContent: 'center',
           gap: 8,
           cursor: 'text',
+
+          ...style,
         }}
         onClick={() => input.current?.focus()}
       >
         <MagnifyingGlassIcon style={{ width: '1em', height: '1em' }} />
+
         <input
           {...props}
           ref={input}

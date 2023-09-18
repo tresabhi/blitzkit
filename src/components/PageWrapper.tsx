@@ -1,13 +1,24 @@
-import { ReactNode } from 'react';
+import { ComponentProps } from 'react';
 
-interface PageWrapperProps {
-  children: ReactNode;
-}
-
-export default function PageWrapper({ children }: PageWrapperProps) {
+export default function PageWrapper({
+  style,
+  ...props
+}: ComponentProps<'div'>) {
   return (
-    <div style={{ maxWidth: 780, margin: 'auto', display: 'block' }}>
-      {children}
-    </div>
+    <div
+      style={{
+        width: '100%',
+        maxWidth: 780,
+        margin: 'auto',
+        display: 'flex',
+        padding: 16,
+        flexDirection: 'column',
+        gap: 16,
+        boxSizing: 'border-box',
+
+        ...style,
+      }}
+      {...props}
+    />
   );
 }
