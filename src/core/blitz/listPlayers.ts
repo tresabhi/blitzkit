@@ -1,10 +1,14 @@
 import { Region } from '../../constants/regions';
-import { Account, AccountList } from '../../types/accountList';
 import { secrets } from '../node/secrets';
 import getWargamingResponse from './getWargamingResponse';
 
+interface Account {
+  nickname: string;
+  account_id: number;
+}
+type AccountList = Account[];
 export type AccountListWithServer = (Account & {
-  server: 'com' | 'eu' | 'asia';
+  region: Region;
 })[];
 
 export const usernamePattern = /^[a-zA-Z0-9_]{3,24}$/;
@@ -25,7 +29,7 @@ export default async function listPlayers(search: string, limit = 9) {
             value &&
             value.map((account) => ({
               ...account,
-              server: 'com' as Region,
+              region: 'com' as Region,
             })),
         ),
         getWargamingResponse<AccountList>(
@@ -35,7 +39,7 @@ export default async function listPlayers(search: string, limit = 9) {
             value &&
             value.map((account) => ({
               ...account,
-              server: 'eu' as Region,
+              region: 'eu' as Region,
             })),
         ),
         getWargamingResponse<AccountList>(
@@ -45,14 +49,14 @@ export default async function listPlayers(search: string, limit = 9) {
             value &&
             value.map((account) => ({
               ...account,
-              server: 'asia' as Region,
+              region: 'asia' as Region,
             })),
         ),
       ])
     )
       .filter(Boolean)
-      .flat();
+      .flat() as AccountListWithServer;
   } else {
-    return [];
+    return [] as AccountListWithServer;
   }
 }

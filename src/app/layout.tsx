@@ -1,6 +1,9 @@
+import { config } from 'dotenv';
 import { Roboto_Flex } from 'next/font/google';
 import { ReactNode } from 'react';
 import Navbar from '../components/Navbar';
+
+config();
 
 interface RootLayoutProps {
   children: ReactNode;
