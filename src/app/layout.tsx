@@ -28,9 +28,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             width: '100%',
           }}
         >
-          <div style={{ maxWidth: 780, margin: 'auto', display: 'block' }}>
-            {children}
-          </div>
+          {children}
         </div>
       </body>
     </html>

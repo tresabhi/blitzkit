@@ -16,10 +16,10 @@ export const tool = style({
   justifyContent: 'flex-end',
   padding: 16,
   gap: 4,
-  boxShadow: 'inset 0 -192px 128px -128px black',
+  boxShadow: `inset 0 -192px 128px -128px ${theme.colors.appBackground1}`,
   transition: `box-shadow ${theme.durations.regular}`,
 
   ':hover': {
-    boxShadow: 'inset 0 -128px 128px -128px black',
+    boxShadow: `inset 0 -128px 128px -128px ${theme.colors.appBackground1}`,
   },
 });

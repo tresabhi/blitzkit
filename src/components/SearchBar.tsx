@@ -13,7 +13,7 @@ export const SearchBar = forwardRef<HTMLInputElement, ComponentProps<'input'>>(
         style={{
           display: 'flex',
           padding: 8,
-          borderRadius: 16,
+          borderRadius: 4,
           border: theme.borderStyles.interactive,
           backgroundColor: theme.colors.componentInteractive,
           color: theme.colors.textLowContrast,

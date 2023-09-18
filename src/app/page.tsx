@@ -4,106 +4,112 @@ import { CaretRightIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { useRef } from 'react';
 import { Search, SearchItem } from 'react-fuzzysort';
+import PageWrapper from '../components/PageWrapper';
 import { SearchBar } from '../components/SearchBar';
 import { theme } from '../stitches.config';
 import * as styles from './page.css';
 
-const TOOLS = [
+export const TOOLS = [
   {
+    id: 'session',
+    title: 'Session tracker',
+    description: 'Track your performance in a session',
+  },
+  {
+    id: 'ratings',
     title: 'Ratings',
     description: 'Current and old season leader boards',
-    banner: '/assets/banners/ratings.png',
-    href: '/tools/ratings',
   },
   {
+    id: 'tankopedia',
     title: 'Tankopedia',
     description: 'Full Blitz tank encyclopedia',
-    banner: '/assets/banners/tank.png',
-    href: '/tools/tankopedia',
   },
   {
+    id: 'inactive',
     title: 'Inactivity tracker',
     description: 'Find inactive members of a clan',
-    banner: '/assets/banners/inactive.png',
-    href: '/tools/inactive',
   },
   {
+    id: 'profile',
     title: 'Player profile',
     description: "A player's basic non-statistical info",
-    banner: '/assets/banners/player.png',
-    href: '/tools/profile',
   },
-  {
-    title: 'More coming soon',
-    description: 'New tools are added often',
-    banner: '/assets/banners/more.png',
-    href: 'https://discord.gg/nDt7AjGJQH',
-  },
+  // {
+  //   title: 'More coming soon',
+  //   description: 'New tools are added often',
+  //   banner: '/assets/banners/more.png',
+  //   id: 'https://discord.gg/nDt7AjGJQH',
+  // },
 ];
 
 export default function Page() {
   const input = useRef<HTMLInputElement>(null);
 
   return (
-    <div
-      style={{
-        width: '100%',
-        padding: 16,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 16,
-        boxSizing: 'border-box',
-      }}
-    >
-      <SearchBar ref={input} />
-
+    <PageWrapper>
       <div
         style={{
+          width: '100%',
+          padding: 16,
           display: 'flex',
+          flexDirection: 'column',
           gap: 16,
-          flexWrap: 'wrap',
+          boxSizing: 'border-box',
         }}
       >
-        <Search
-          input={input}
-          list={TOOLS.map(
-            (tool) =>
-              ({
-                node: (
-                  <Link
-                    href={tool.href}
-                    className={styles.tool}
-                    style={{
-                      backgroundImage: `url(${tool.banner})`,
-                    }}
-                  >
-                    <span
+        <SearchBar ref={input} />
+
+        <div
+          style={{
+            display: 'flex',
+            gap: 16,
+            flexWrap: 'wrap',
+          }}
+        >
+          <Search
+            input={input}
+            list={TOOLS.map(
+              (tool) =>
+                ({
+                  node: (
+                    <Link
+                      href={`/tools/${tool.id}`}
+                      className={styles.tool}
                       style={{
-                        fontSize: 32,
-                        color: theme.colors.textHighContrast,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
+                        backgroundImage: `url(/assets/banners/${tool.id}.png)`,
                       }}
                     >
-                      {tool.title}
-                      <CaretRightIcon style={{ width: '1em', height: '1em' }} />
-                    </span>
-                    <span
-                      style={{
-                        color: theme.colors.textLowContrast,
-                        fontSize: 16,
-                      }}
-                    >
-                      {tool.description}
-                    </span>
-                  </Link>
-                ),
-                query: `${tool.title} ${tool.description}`,
-              }) satisfies SearchItem,
-          )}
-        />
+                      <span
+                        style={{
+                          fontSize: 32,
+                          color: theme.colors.textHighContrast,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {tool.title}
+                        <CaretRightIcon
+                          style={{ width: '1em', height: '1em' }}
+                        />
+                      </span>
+                      <span
+                        style={{
+                          color: theme.colors.textLowContrast,
+                          fontSize: 16,
+                        }}
+                      >
+                        {tool.description}
+                      </span>
+                    </Link>
+                  ),
+                  query: `${tool.title} ${tool.description}`,
+                }) satisfies SearchItem,
+            )}
+          />
+        </div>
       </div>
-    </div>
+    </PageWrapper>
   );
 }
