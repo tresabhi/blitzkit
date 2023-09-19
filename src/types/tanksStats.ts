@@ -14,6 +14,10 @@ export interface IndividualTankStats {
   tank_id: number;
 }
 
-export type TanksStats = {
+export interface TankStats {
   [accountId: number]: IndividualTankStats[];
-};
+}
+
+export interface NormalizedTankStats {
+  [tankId: number]: IndividualTankStats;
+}

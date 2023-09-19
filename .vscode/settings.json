@@ -39,7 +39,8 @@
     "vitepress",
     "wargaming",
     "webp",
-    "winrate"
+    "winrate",
+    "zustand"
   ],
   "deno.enable": false,
   "deno.unstable": false

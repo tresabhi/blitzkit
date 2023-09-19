@@ -9,6 +9,8 @@ import { SearchBar } from '../../../components/SearchBar';
 import { REGION_NAMES } from '../../../constants/regions';
 import { AccountListWithServer } from '../../../core/blitz/listPlayers';
 import { theme } from '../../../stitches.config';
+import { useSession } from '../../../stores/session';
+import { NormalizedTankStats } from '../../../types/tanksStats';
 import * as styles from './page.css';
 
 export default function Page() {
@@ -21,7 +23,7 @@ export default function Page() {
     async (event: ChangeEvent<HTMLInputElement>) => {
       if (event.target.value) {
         const players = await fetch(
-          `/api/list/players?search=${event.target.value}`,
+          `/api/search/players?search=${event.target.value}`,
         ).then((response) => response.json() as Promise<AccountListWithServer>);
 
         setSearchResults(players);
@@ -31,6 +33,7 @@ export default function Page() {
     },
     500,
   );
+  const initialSession = useSession.getState();
 
   return (
     <PageWrapper>
@@ -39,6 +42,9 @@ export default function Page() {
           <SearchBar
             ref={input}
             style={{ width: '100%', boxSizing: 'border-box' }}
+            defaultValue={
+              initialSession.isTracking ? initialSession.nickname : undefined
+            }
             onChange={(event) => {
               if (event.target.value) {
                 setShowSearchResults(true);
@@ -93,13 +99,30 @@ export default function Page() {
                   No results
                 </div>
               ) : (
-                searchResults?.map(({ account_id, nickname, region }) => (
+                searchResults?.map(({ account_id: id, nickname, region }) => (
                   <button
-                    key={account_id}
+                    key={id}
                     className={styles.searchButton}
                     onClick={() => {
                       setShowSearchResults(false);
-                      if (input.current) input.current.value = nickname;
+                      input.current!.value = nickname;
+
+                      fetch(
+                        `/api/stats/normalized/tanks?id=${id}&region=${region}`,
+                      )
+                        .then(
+                          (response) =>
+                            response.json() as Promise<NormalizedTankStats>,
+                        )
+                        .then((tankStats) =>
+                          useSession.setState({
+                            isTracking: true,
+                            id,
+                            region,
+                            nickname,
+                            tankStats,
+                          }),
+                        );
                     }}
                   >
                     <span
@@ -124,7 +147,24 @@ export default function Page() {
         </div>
 
         <div style={{ display: 'flex', gap: 8 }}>
-          <Button className={styles.toolbarButton} color="dangerous">
+          <Button
+            className={styles.toolbarButton}
+            color="dangerous"
+            onClick={async () => {
+              const session = useSession.getState();
+
+              if (!session.isTracking) return;
+
+              const { id, region } = session;
+              const tankStats = await fetch(
+                `/api/stats/normalized/tanks?id=${id}&region=${region}`,
+              ).then(
+                (response) => response.json() as Promise<NormalizedTankStats>,
+              );
+
+              useSession.setState({ tankStats });
+            }}
+          >
             <ReloadIcon /> Reset
           </Button>
           <Button className={styles.toolbarButton}>

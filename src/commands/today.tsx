@@ -1,5 +1,4 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { CYCLIC_API } from '../constants/cyclic';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';

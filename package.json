@@ -48,7 +48,8 @@
     "satori": "^0.10.4",
     "vite-node": "^0.34.4",
     "vitepress": "^1.0.0-rc.12",
-    "vitepress-plugin-auto-sidebar": "^1.1.0"
+    "vitepress-plugin-auto-sidebar": "^1.1.0",
+    "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.5.1",

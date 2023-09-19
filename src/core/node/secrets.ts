@@ -17,7 +17,7 @@ export const secrets = SECRET_KEYS.reduce<Partial<Record<SECRET, string>>>(
     ...accumulator,
 
     get [key](): string {
-      if (!(key in process.env)) throw new Error(`Key ${key} not provided`);
+      if (!(key in process.env)) throw new Error(`Secret ${key} not provided`);
       return process.env[key]!;
     },
   }),
