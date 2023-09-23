@@ -2,15 +2,20 @@
 
 import { CopyIcon, ListBulletIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { debounce } from 'lodash';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import * as Breakdown from '../../../components/Breakdown';
 import { Button } from '../../../components/Button';
 import PageWrapper from '../../../components/PageWrapper';
 import { SearchBar } from '../../../components/SearchBar';
 import { REGION_NAMES } from '../../../constants/regions';
+import { diffNormalizedTankStats } from '../../../core/blitz/diffNormalizedTankStats';
 import { AccountListWithServer } from '../../../core/blitz/listPlayers';
 import { theme } from '../../../stitches.config';
 import { useSession } from '../../../stores/session';
-import { NormalizedTankStats } from '../../../types/tanksStats';
+import {
+  IndividualTankStats,
+  NormalizedTankStats,
+} from '../../../types/tanksStats';
 import * as styles from './page.css';
 
 export default function Page() {
@@ -33,7 +38,21 @@ export default function Page() {
     },
     500,
   );
-  const initialSession = useSession.getState();
+  const session = useSession();
+  const [diff, setDiff] = useState<NormalizedTankStats | undefined>(undefined);
+
+  useEffect(() => {
+    (async () => {
+      if (session.isTracking) {
+        const { id, region } = session;
+        const current = await fetch(
+          `/api/stats/normalized/tanks?id=${id}&region=${region}`,
+        ).then((response) => response.json() as Promise<NormalizedTankStats>);
+
+        setDiff(diffNormalizedTankStats(session.tankStats, current));
+      }
+    })();
+  }, []);
 
   return (
     <PageWrapper>
@@ -42,9 +61,7 @@ export default function Page() {
           <SearchBar
             ref={input}
             style={{ width: '100%', boxSizing: 'border-box' }}
-            defaultValue={
-              initialSession.isTracking ? initialSession.nickname : undefined
-            }
+            defaultValue={session.isTracking ? session.nickname : undefined}
             onChange={(event) => {
               if (event.target.value) {
                 setShowSearchResults(true);
@@ -175,6 +192,13 @@ export default function Page() {
           </Button>
         </div>
       </div>
+
+      <Breakdown.Root>
+        {diff &&
+          (Object.entries(diff) as [string, IndividualTankStats][])
+            .sort(([, a], [, b]) => b.last_battle_time - a.last_battle_time)
+            .map(([id, tankStats]) => <Breakdown.Row key={id} />)}
+      </Breakdown.Root>
     </PageWrapper>
   );
 }

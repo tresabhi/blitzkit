@@ -2,11 +2,7 @@ import { config } from 'dotenv';
 
 config();
 
-export const SECRET_KEYS = [
-  'DISCORD_TOKEN',
-  'WARGAMING_APPLICATION_ID',
-  'GH_TOKEN',
-] as const;
+export const SECRET_KEYS = ['DISCORD_TOKEN', 'GH_TOKEN'] as const;
 
 export type SECRET = typeof SECRET_KEYS extends readonly (infer T)[]
   ? T

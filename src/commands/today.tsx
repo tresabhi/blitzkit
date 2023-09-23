@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
+import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
@@ -7,7 +8,6 @@ import linkButton from '../core/discord/linkButton';
 import primaryButton from '../core/discord/primaryButton';
 import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import today from '../renderers/today';
 import { AccountInfo } from '../types/accountInfo';
@@ -52,7 +52,7 @@ export const todayCommand: CommandRegistry = {
     const showTotal = interaction.options.getBoolean('show-total') ?? undefined;
     const { nickname } = (
       await getWargamingResponse<AccountInfo>(
-        `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
+        `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
       )
     )[player.id];
     const path = interactionToURL(interaction, {

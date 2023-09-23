@@ -1,13 +1,13 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import discord from '../../discord.json' assert { type: 'json' };
+import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import embedNegative from '../core/discord/embedNegative';
 import embedPositive from '../core/discord/embedPositive';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import { AccountInfo } from '../types/accountInfo';
 import { PlayerClanData } from '../types/playerClanData';
@@ -25,10 +25,10 @@ export const verifyCommand: CommandRegistry = {
     const blitzAccount = await resolvePlayerFromCommand(interaction);
     const { id, region: server } = blitzAccount;
     const accountInfo = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
     const clanData = await getWargamingResponse<PlayerClanData>(
-      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
+      `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
     );
     const clan = clanData[id]?.clan;
     const clanTag = clan ? ` [${clan!.tag}]` : '';

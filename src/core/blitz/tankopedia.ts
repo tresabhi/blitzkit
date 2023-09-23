@@ -1,5 +1,5 @@
 import { deburr } from 'lodash';
-import { secrets } from '../node/secrets';
+import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import getWargamingResponse from './getWargamingResponse';
 
 export type TankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
@@ -66,7 +66,7 @@ export interface TankopediaInfo {
 // this is blocking because info is needed for command creation
 console.log('Caching tankopedia info...');
 export const tankopediaInfo = getWargamingResponse<TankopediaInfo>(
-  `https://api.wotblitz.com/wotb/encyclopedia/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}`,
+  `https://api.wotblitz.com/wotb/encyclopedia/info/?application_id=${WARGAMING_APPLICATION_ID}`,
 );
 console.log('Cached tankopedia info');
 

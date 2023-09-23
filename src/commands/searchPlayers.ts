@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { REGION_NAMES, Region } from '../constants/regions';
+import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import { usernamePattern } from '../core/blitz/listPlayers';
 import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import embedInfo from '../core/discord/embedInfo';
-import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import { AccountList } from '../types/accountList';
 
@@ -36,9 +36,9 @@ export const searchPlayersCommand: CommandRegistry = {
     const trimmedSearch = name.trim();
     const players = usernamePattern.test(trimmedSearch)
       ? await getWargamingResponse<AccountList>(
-          `https://api.wotblitz.${server}/wotb/account/list/?application_id=${
-            secrets.WARGAMING_APPLICATION_ID
-          }&search=${encodeURIComponent(trimmedSearch)}&limit=${limit}`,
+          `https://api.wotblitz.${server}/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodeURIComponent(
+            trimmedSearch,
+          )}&limit=${limit}`,
         )
       : [];
 

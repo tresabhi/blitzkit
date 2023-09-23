@@ -34,6 +34,7 @@ export const emptyTankHistoryNode: TankHistoryRaw = {
   all: emptyAllStats,
 };
 
+// BIG TODO: merge this neatly with diffNormalizedTankStats
 export default async function getDiffedTankStats(
   server: Region,
   id: number,
