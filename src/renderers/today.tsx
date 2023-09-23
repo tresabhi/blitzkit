@@ -2,9 +2,11 @@ import * as Breakdown from '../components/Breakdown';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
+import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import calculateWN8 from '../core/blitz/calculateWN8';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
+import getWN8Percentile from '../core/blitz/getWN8Percentile';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankName from '../core/blitz/resolveTankName';
 import sumStats from '../core/blitz/sumStats';
@@ -129,21 +131,60 @@ export default async function today(
       const tankopediaEntry = (await tankopedia)[id];
 
       return (
+        // <Breakdown.Row
+        //   isTank={!showTotal || id !== 0}
+        //   tankType={tankopediaEntry?.type}
+        //   treeType={tankopediaEntry ? await getTreeType(id) : undefined}
+        //   minimized={showTotal ? index > maximized : index + 1 > maximized}
+        //   key={id}
+        //   name={showTotal && id === 0 ? 'Total' : await resolveTankName(id)}
+        //   winrate={tankStats.wins / tankStats.battles}
+        //   careerWinrate={career.wins / career.battles}
+        //   WN8={isNaN(todayWN8s[id]) ? undefined : todayWN8s[id]}
+        //   careerWN8={isNaN(careerWN8s[id]) ? undefined : careerWN8s[id]}
+        //   damage={tankStats.damage_dealt / tankStats.battles}
+        //   careerDamage={career.damage_dealt / career.battles}
+        //   battles={tankStats.battles}
+        //   careerBattles={career.battles}
+        // />
         <Breakdown.Row
-          isTank={!showTotal || id !== 0}
+          key={id}
+          type={!showTotal || id !== 0 ? 'tank' : 'summary'}
           tankType={tankopediaEntry?.type}
           treeType={tankopediaEntry ? await getTreeType(id) : undefined}
+          title={showTotal && id === 0 ? 'Total' : await resolveTankName(id)}
           minimized={showTotal ? index > maximized : index + 1 > maximized}
-          key={id}
-          name={showTotal && id === 0 ? 'Total' : await resolveTankName(id)}
-          winrate={tankStats.wins / tankStats.battles}
-          careerWinrate={career.wins / career.battles}
-          WN8={isNaN(todayWN8s[id]) ? undefined : todayWN8s[id]}
-          careerWN8={isNaN(careerWN8s[id]) ? undefined : careerWN8s[id]}
-          damage={tankStats.damage_dealt / tankStats.battles}
-          careerDamage={career.damage_dealt / career.battles}
-          battles={tankStats.battles}
-          careerBattles={career.battles}
+          rows={[
+            {
+              title: 'Winrate',
+              current: `${(tankStats.wins / tankStats.battles).toFixed(2)}%`,
+              career: `${(career.wins / career.battles).toFixed(2)}%`,
+              delta:
+                tankStats.wins / tankStats.battles -
+                career.wins / career.battles,
+            },
+            {
+              title: 'WN8',
+              current: isNaN(todayWN8s[id]) ? undefined : todayWN8s[id],
+              career: isNaN(careerWN8s[id]) ? undefined : careerWN8s[id],
+              percentile: isNaN(todayWN8s[id])
+                ? undefined
+                : getWN8Percentile(todayWN8s[id]),
+            },
+            {
+              title: 'Damage',
+              current: (tankStats.damage_dealt / tankStats.battles).toFixed(0),
+              career: (career.damage_dealt / career.battles).toFixed(0),
+              delta:
+                tankStats.damage_dealt / tankStats.battles -
+                career.damage_dealt / career.battles,
+            },
+            {
+              title: 'Battles',
+              current: tankStats.battles,
+              career: career.battles,
+            },
+          ]}
         />
       );
     }),

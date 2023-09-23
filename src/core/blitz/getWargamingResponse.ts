@@ -13,17 +13,16 @@ export type WargamingResponse<Data extends object> =
 export default async function getWargamingResponse<Data extends object>(
   url: string,
 ) {
-  let parsed: WargamingResponse<Data>;
+  const data = (await fetch(url).then((response) =>
+    response.json(),
+  )) as WargamingResponse<Data>;
 
-  const response = await fetch(url);
-  parsed = (await response.json()) as WargamingResponse<Data>;
-
-  if (parsed.status === 'ok') {
-    return parsed.data;
+  if (data.status === 'ok') {
+    return data.data;
   } else {
     throw throwError(
-      `Wargaming response error status:"${parsed.status}"`,
-      `Message: "${parsed.error.message}"\nURL: "${url}"`,
+      `Wargaming response error status:"${data.status}"`,
+      `Message: "${data.error.message}"\nURL: "${url}"`,
     );
   }
 }

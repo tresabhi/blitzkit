@@ -4,18 +4,12 @@ import { theme } from '../../../stitches.config';
 import { TREE_TYPE_ICONS, TreeTypeEnum } from '../../Tanks';
 import { RowStat } from './RowStat';
 
-type RowProps = (
-  | {
-      type: 'tank';
-      treeType?: TreeTypeEnum;
-      tankType?: TankType;
-    }
-  | {
-      type: 'summary';
-    }
-) & {
+interface RowProps {
+  type: 'tank' | 'summary';
   title: string;
   minimized?: boolean;
+  treeType?: TreeTypeEnum;
+  tankType?: TankType;
 
   rows: {
     title: string;
@@ -24,7 +18,7 @@ type RowProps = (
     delta?: number;
     percentile?: Percentile;
   }[];
-};
+}
 
 export function Row(props: RowProps) {
   return (

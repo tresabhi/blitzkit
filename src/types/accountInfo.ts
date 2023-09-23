@@ -48,14 +48,16 @@ export interface ClanStats {
 
 export interface AccountInfo {
   [accountId: number]: {
-    clan: ClanStats;
-    all: AllStats;
-    frags: null;
+    account_id: number;
+    created_at: number;
+    updated_at: number;
+    private: null;
+    last_battle_time: number;
+    nickname: string;
+    statistics: {
+      all: AllStats;
+      clan: ClanStats;
+      frags: null | number;
+    };
   };
-  account_id: number;
-  created_at: number;
-  updated_at: number;
-  private: null;
-  last_battle_time: number;
-  nickname: string;
 }
