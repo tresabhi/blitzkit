@@ -14,3 +14,4 @@ test.*
 /docs/.vitepress/cache
 servers.csv
 .next/
+tsconfig.tsbuildinfo

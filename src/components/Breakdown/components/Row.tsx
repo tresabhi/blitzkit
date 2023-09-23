@@ -1,40 +1,32 @@
-import getWN8Percentile from '../../../core/blitz/getWN8Percentile';
+import { Percentile } from '../../../constants/percentiles';
 import { TankType } from '../../../core/blitz/tankopedia';
 import { theme } from '../../../stitches.config';
 import { TREE_TYPE_ICONS, TreeTypeEnum } from '../../Tanks';
 import { RowStat } from './RowStat';
 
-export interface RowProps {
-  name: string;
-  winrate: number;
-  careerWinrate: number;
-  WN8?: number;
-  careerWN8?: number;
-  damage: number;
-  careerDamage: number;
-  battles: number;
-  careerBattles: number;
-  minimized: boolean;
-  isTank: boolean;
-  treeType?: TreeTypeEnum;
-  tankType?: TankType;
-}
+type RowProps = (
+  | {
+      type: 'tank';
+      treeType?: TreeTypeEnum;
+      tankType?: TankType;
+    }
+  | {
+      type: 'summary';
+    }
+) & {
+  title: string;
+  minimized?: boolean;
 
-export function Row({
-  isTank,
-  minimized,
-  name,
-  winrate,
-  careerWinrate,
-  WN8,
-  careerWN8,
-  damage,
-  careerDamage,
-  battles,
-  careerBattles,
-  treeType,
-  tankType,
-}: RowProps) {
+  rows: {
+    title: string;
+    current?: number | string;
+    career?: number | string;
+    delta?: number;
+    percentile?: Percentile;
+  }[];
+};
+
+export function Row(props: RowProps) {
   return (
     <div
       style={{
@@ -55,26 +47,30 @@ export function Row({
           backgroundColor: theme.colors.componentInteractive,
         }}
       >
-        {isTank && treeType !== undefined && tankType !== undefined && (
-          <img
-            src={TREE_TYPE_ICONS[treeType][tankType]}
-            style={{ width: 16, height: 16 }}
-          />
-        )}
+        {props.type === 'tank' &&
+          props.treeType !== undefined &&
+          props.tankType !== undefined && (
+            <img
+              src={TREE_TYPE_ICONS[props.treeType][props.tankType]}
+              style={{ width: 16, height: 16 }}
+            />
+          )}
+
         <span
           style={{
-            color: isTank
-              ? treeType === TreeTypeEnum.Collector
-                ? theme.colors.textLowContrast_blue
-                : treeType === TreeTypeEnum.Premium
-                ? theme.colors.textLowContrast_amber
-                : theme.colors.textHighContrast
-              : theme.colors.textLowContrast,
+            color:
+              props.type === 'tank'
+                ? props.treeType === TreeTypeEnum.Collector
+                  ? theme.colors.textLowContrast_blue
+                  : props.treeType === TreeTypeEnum.Premium
+                  ? theme.colors.textLowContrast_amber
+                  : theme.colors.textHighContrast
+                : theme.colors.textLowContrast,
             fontWeight: 900,
             fontSize: 16,
           }}
         >
-          {name}
+          {props.title}
         </span>
       </div>
 
@@ -85,31 +81,16 @@ export function Row({
           paddingBottom: 8,
         }}
       >
-        <RowStat
-          minimized={minimized}
-          name={`Battles • ${careerBattles.toFixed(0)}`}
-          value={battles.toFixed(0)}
-        />
-        <RowStat
-          minimized={minimized}
-          name={`Winrate • ${(careerWinrate * 100).toFixed(2)}%`}
-          value={`${(winrate * 100).toFixed(2)}%`}
-          delta={winrate - careerWinrate}
-        />
-        <RowStat
-          minimized={minimized}
-          name={`WN8 • ${
-            careerWN8 === undefined ? '--' : careerWN8.toFixed(0)
-          }`}
-          value={WN8 === undefined ? '--' : WN8.toFixed(0)}
-          percentile={WN8 === undefined ? undefined : getWN8Percentile(WN8)}
-        />
-        <RowStat
-          minimized={minimized}
-          name={`Damage • ${careerDamage.toFixed(0)}`}
-          value={damage.toFixed(0)}
-          delta={damage - careerDamage}
-        />
+        {props.rows.map((row, index) => (
+          <RowStat
+            minimized={props.minimized}
+            key={index}
+            name={`${row.title} • ${row.career ?? '--'}`}
+            value={row.current ?? '--'}
+            delta={row.delta}
+            percentile={row.percentile}
+          />
+        ))}
       </div>
     </div>
   );

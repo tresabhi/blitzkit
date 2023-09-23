@@ -4,7 +4,7 @@ import PercentileIndicator from '../../PercentileIndicator';
 
 export interface RowStatProps {
   name: string;
-  value: string | number;
+  value?: string | number;
   delta?: number;
   percentile?: Percentile;
   minimized?: boolean;
