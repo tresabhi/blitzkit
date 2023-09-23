@@ -156,33 +156,43 @@ export default async function today(
           minimized={showTotal ? index > maximized : index + 1 > maximized}
           rows={[
             {
+              title: 'Battles',
+              current: tankStats.battles.toLocaleString(),
+              career: career.battles.toLocaleString(),
+            },
+            {
               title: 'Winrate',
-              current: `${(tankStats.wins / tankStats.battles).toFixed(2)}%`,
-              career: `${(career.wins / career.battles).toFixed(2)}%`,
+              current: `${(100 * (tankStats.wins / tankStats.battles)).toFixed(
+                2,
+              )}%`,
+              career: `${(100 * (career.wins / career.battles)).toFixed(2)}%`,
               delta:
                 tankStats.wins / tankStats.battles -
                 career.wins / career.battles,
             },
             {
               title: 'WN8',
-              current: isNaN(todayWN8s[id]) ? undefined : todayWN8s[id],
-              career: isNaN(careerWN8s[id]) ? undefined : careerWN8s[id],
+              current: isNaN(todayWN8s[id])
+                ? undefined
+                : Math.round(todayWN8s[id]).toLocaleString(),
+              career: isNaN(careerWN8s[id])
+                ? undefined
+                : Math.round(careerWN8s[id]).toLocaleString(),
               percentile: isNaN(todayWN8s[id])
                 ? undefined
                 : getWN8Percentile(todayWN8s[id]),
             },
             {
               title: 'Damage',
-              current: (tankStats.damage_dealt / tankStats.battles).toFixed(0),
-              career: (career.damage_dealt / career.battles).toFixed(0),
+              current: Math.round(
+                tankStats.damage_dealt / tankStats.battles,
+              ).toLocaleString(),
+              career: Math.round(
+                career.damage_dealt / career.battles,
+              ).toLocaleString(),
               delta:
                 tankStats.damage_dealt / tankStats.battles -
                 career.damage_dealt / career.battles,
-            },
-            {
-              title: 'Battles',
-              current: tankStats.battles,
-              career: career.battles,
             },
           ]}
         />
