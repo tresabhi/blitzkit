@@ -14,7 +14,7 @@ import { AccountInfo } from '../types/accountInfo';
 import { ClanInfo } from '../types/clanInfo';
 
 export const clanEventCommand: CommandRegistry = {
-  inProduction: true,
+  inProduction: false,
   inPublic: true,
 
   command: new SlashCommandBuilder()
