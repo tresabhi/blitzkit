@@ -3,6 +3,7 @@ import NoData, { NoDataType } from '../components/NoData';
 import { TreeTypeString } from '../components/Tanks';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
+import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import calculateWN8 from '../core/blitz/calculateWN8';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankName from '../core/blitz/resolveTankName';
