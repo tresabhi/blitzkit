@@ -131,22 +131,6 @@ export default async function today(
       const tankopediaEntry = (await tankopedia)[id];
 
       return (
-        // <Breakdown.Row
-        //   isTank={!showTotal || id !== 0}
-        //   tankType={tankopediaEntry?.type}
-        //   treeType={tankopediaEntry ? await getTreeType(id) : undefined}
-        //   minimized={showTotal ? index > maximized : index + 1 > maximized}
-        //   key={id}
-        //   name={showTotal && id === 0 ? 'Total' : await resolveTankName(id)}
-        //   winrate={tankStats.wins / tankStats.battles}
-        //   careerWinrate={career.wins / career.battles}
-        //   WN8={isNaN(todayWN8s[id]) ? undefined : todayWN8s[id]}
-        //   careerWN8={isNaN(careerWN8s[id]) ? undefined : careerWN8s[id]}
-        //   damage={tankStats.damage_dealt / tankStats.battles}
-        //   careerDamage={career.damage_dealt / career.battles}
-        //   battles={tankStats.battles}
-        //   careerBattles={career.battles}
-        // />
         <Breakdown.Row
           key={id}
           type={!showTotal || id !== 0 ? 'tank' : 'summary'}

@@ -22,8 +22,12 @@ export interface Tankopedia {
 }
 
 console.log('Caching tankopedia...');
-export const tankopedia = fetch('https://www.blitzstars.com/bs-tankopedia.json')
-  .then((response) => response.json())
+export const tankopedia = fetch(
+  typeof window === 'undefined'
+    ? 'https://www.blitzstars.com/bs-tankopedia.json'
+    : '/api/tankopedia',
+)
+  .then(async (response) => response.json())
   .then((wrapperTankopedia) => {
     console.log('Tankopedia cached');
     return (wrapperTankopedia as { data: Tankopedia }).data;

@@ -14,7 +14,7 @@ export interface IndividualTankStats {
   tank_id: number;
 }
 
-export interface TankStats {
+export interface TanksStats {
   [accountId: number]: IndividualTankStats[];
 }
 

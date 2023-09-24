@@ -8,15 +8,23 @@ import { Button } from '../../../components/Button';
 import PageWrapper from '../../../components/PageWrapper';
 import { SearchBar } from '../../../components/SearchBar';
 import { REGION_NAMES } from '../../../constants/regions';
+import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import { diffNormalizedTankStats } from '../../../core/blitz/diffNormalizedTankStats';
-import { AccountListWithServer } from '../../../core/blitz/listPlayers';
+import getWargamingResponse from '../../../core/blitz/getWargamingResponse';
+import listPlayers, {
+  AccountListWithServer,
+} from '../../../core/blitz/listPlayers';
+import { tankopedia } from '../../../core/blitz/tankopedia';
 import { theme } from '../../../stitches.config';
 import { useSession } from '../../../stores/session';
 import {
   IndividualTankStats,
   NormalizedTankStats,
+  TanksStats,
 } from '../../../types/tanksStats';
 import * as styles from './page.css';
+
+(async () => console.log(await tankopedia))();
 
 export default function Page() {
   const input = useRef<HTMLInputElement>(null);
@@ -27,11 +35,7 @@ export default function Page() {
   const handleChange = debounce(
     async (event: ChangeEvent<HTMLInputElement>) => {
       if (event.target.value) {
-        const players = await fetch(
-          `/api/search/players?search=${event.target.value}`,
-        ).then((response) => response.json() as Promise<AccountListWithServer>);
-
-        setSearchResults(players);
+        setSearchResults(await listPlayers(event.target.value));
       } else {
         // TODO
       }
@@ -45,9 +49,18 @@ export default function Page() {
     (async () => {
       if (session.isTracking) {
         const { id, region } = session;
-        const current = await fetch(
-          `/api/stats/normalized/tanks?id=${id}&region=${region}`,
-        ).then((response) => response.json() as Promise<NormalizedTankStats>);
+        const currentRaw = await getWargamingResponse<TanksStats>(
+          `https://api.wotblitz.${region}/wotb/tanks/stats/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
+        );
+        const current = currentRaw[id].reduce<
+          Record<number, IndividualTankStats>
+        >(
+          (accumulator, curr) => ({
+            ...accumulator,
+            [curr.tank_id]: curr,
+          }),
+          {},
+        );
 
         setDiff(diffNormalizedTankStats(session.tankStats, current));
       }
@@ -197,7 +210,7 @@ export default function Page() {
         {diff &&
           (Object.entries(diff) as [string, IndividualTankStats][])
             .sort(([, a], [, b]) => b.last_battle_time - a.last_battle_time)
-            .map(([id, tankStats]) => <Breakdown.Row key={id} />)}
+            .map(([id, tankStats]) => <Breakdown.Row key={id} rows={[]} />)}
       </Breakdown.Root>
     </PageWrapper>
   );
