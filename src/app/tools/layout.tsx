@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import { TOOLS } from '../../constants/tools';
 import { theme } from '../../stitches.config';
@@ -9,7 +10,8 @@ interface ToolsLayoutProps {
 }
 
 export default function ToolsLayout({ children }: ToolsLayoutProps) {
-  const toolId = location.pathname.split('/').at(-1);
+  const router = useRouter();
+  const toolId = router.pathname.split('/').at(-1);
   const tool = TOOLS.find((tool) => tool.id === toolId);
 
   return (
