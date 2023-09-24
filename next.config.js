@@ -5,6 +5,7 @@ const withVanillaExtract = createVanillaExtractPlugin();
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   ...withVanillaExtract(),
+
   distDir: 'dist/website',
 };
 
