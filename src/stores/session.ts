@@ -14,6 +14,7 @@ type Session =
       id: number;
       nickname: string;
       tankStats: NormalizedTankStats;
+      time: number;
     };
 
 export const useSession = create<Session>()(

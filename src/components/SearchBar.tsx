@@ -14,7 +14,6 @@ export const SearchBar = forwardRef<HTMLInputElement, ComponentProps<'input'>>(
           display: 'flex',
           padding: 8,
           borderRadius: 4,
-          border: theme.borderStyles.interactive,
           backgroundColor: theme.colors.componentInteractive,
           color: theme.colors.textLowContrast,
           fontSize: 16,

@@ -138,7 +138,7 @@ export default async function today(
           treeType={tankopediaEntry ? await getTreeType(id) : undefined}
           title={showTotal && id === 0 ? 'Total' : await resolveTankName(id)}
           minimized={showTotal ? index > maximized : index + 1 > maximized}
-          rows={[
+          stats={[
             {
               title: 'Battles',
               current: tankStats.battles.toLocaleString(),

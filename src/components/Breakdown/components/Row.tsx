@@ -5,13 +5,13 @@ import { TREE_TYPE_ICONS, TreeTypeEnum } from '../../Tanks';
 import { RowStat } from './RowStat';
 
 interface RowProps {
-  type: 'tank' | 'summary';
+  type?: 'tank' | 'summary';
   title: string;
   minimized?: boolean;
   treeType?: TreeTypeEnum;
   tankType?: TankType;
 
-  rows: {
+  stats: {
     title: string;
     current?: number | string;
     career?: number | string;
@@ -77,7 +77,7 @@ export function Row(props: RowProps) {
           paddingBottom: 8,
         }}
       >
-        {props.rows.map((row, index) => (
+        {props.stats.map((row, index) => (
           <RowStat
             minimized={props.minimized}
             key={index}

@@ -23,7 +23,7 @@ export function Button({ color, style, ...props }: ButtonProps) {
         backgroundColor:
           theme.colors[`componentInteractive${BUTTON_COLORS[color]}`],
         borderRadius: 4,
-        border: theme.borderStyles[`interactive${BUTTON_COLORS[color]}`],
+        border: 'none',
         cursor: 'pointer',
         padding: 8,
         display: 'flex',
