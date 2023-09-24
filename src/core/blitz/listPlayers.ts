@@ -6,7 +6,7 @@ interface Account {
   nickname: string;
   account_id: number;
 }
-type AccountList = Account[];
+export type AccountList = Account[];
 export type AccountListWithServer = (Account & {
   region: Region;
 })[];
