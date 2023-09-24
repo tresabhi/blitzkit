@@ -39,7 +39,6 @@ export const SearchBar = forwardRef<HTMLInputElement, ComponentProps<'input'>>(
             outline: 'none',
             fontSize: 'inherit',
           }}
-          placeholder="Search tools..."
         />
       </div>
     );

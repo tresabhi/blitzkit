@@ -1,8 +1,8 @@
 'use client';
 
 import { ReactNode } from 'react';
+import { TOOLS } from '../../constants/tools';
 import { theme } from '../../stitches.config';
-import { TOOLS } from '../page';
 
 interface ToolsLayoutProps {
   children: ReactNode;
