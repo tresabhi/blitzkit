@@ -1,5 +1,5 @@
 {
-  "buildCommand": "yarn build",
+  "buildCommand": "yarn build:website",
   "outputDirectory": "dist/website",
   "public": true
 }
