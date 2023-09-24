@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { ReactNode } from 'react';
 import { TOOLS } from '../../constants/tools';
 import { theme } from '../../stitches.config';
