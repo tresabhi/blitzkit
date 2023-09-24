@@ -6,7 +6,7 @@ const withVanillaExtract = createVanillaExtractPlugin();
 const nextConfig = {
   ...withVanillaExtract(),
 
-  distDir: 'dist/website',
+  // distDir: 'dist/website',
 };
 
 export default nextConfig;
