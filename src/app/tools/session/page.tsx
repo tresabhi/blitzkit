@@ -7,14 +7,18 @@ import * as Breakdown from '../../../components/Breakdown';
 import { Button } from '../../../components/Button';
 import PageWrapper from '../../../components/PageWrapper';
 import { SearchBar } from '../../../components/SearchBar';
+import { TreeTypeEnum } from '../../../components/Tanks';
 import { REGION_NAMES } from '../../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
+import calculateWN8 from '../../../core/blitz/calculateWN8';
 import { diffNormalizedTankStats } from '../../../core/blitz/diffNormalizedTankStats';
+import getWN8Percentile from '../../../core/blitz/getWN8Percentile';
 import getWargamingResponse from '../../../core/blitz/getWargamingResponse';
 import listPlayers, {
   AccountListWithServer,
 } from '../../../core/blitz/listPlayers';
-import { tankopedia } from '../../../core/blitz/tankopedia';
+import { TankopediaEntry, tankopedia } from '../../../core/blitz/tankopedia';
+import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import { theme } from '../../../stitches.config';
 import { useSession } from '../../../stores/session';
 import {
@@ -23,8 +27,6 @@ import {
   TanksStats,
 } from '../../../types/tanksStats';
 import * as styles from './page.css';
-
-(async () => console.log(await tankopedia))();
 
 export default function Page() {
   const input = useRef<HTMLInputElement>(null);
@@ -43,16 +45,25 @@ export default function Page() {
     500,
   );
   const session = useSession();
-  const [diff, setDiff] = useState<NormalizedTankStats | undefined>(undefined);
+  const [diff, setDiff] = useState<
+    | {
+        stats: IndividualTankStats;
+        tankopedia?: TankopediaEntry;
+        career: IndividualTankStats;
+        currentWN8?: number;
+        careerWN8?: number;
+      }[]
+    | undefined
+  >(undefined);
 
   useEffect(() => {
     (async () => {
       if (session.isTracking) {
         const { id, region } = session;
-        const currentRaw = await getWargamingResponse<TanksStats>(
+        const careerRaw = await getWargamingResponse<TanksStats>(
           `https://api.wotblitz.${region}/wotb/tanks/stats/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
         );
-        const current = currentRaw[id].reduce<
+        const career = careerRaw[id].reduce<
           Record<number, IndividualTankStats>
         >(
           (accumulator, curr) => ({
@@ -61,8 +72,34 @@ export default function Page() {
           }),
           {},
         );
+        const awaitedTankopedia = await tankopedia;
+        const awaitedTankAverages = await tankAverages;
 
-        setDiff(diffNormalizedTankStats(session.tankStats, current));
+        setDiff(
+          (
+            Object.values(
+              diffNormalizedTankStats(session.tankStats, career),
+            ) as IndividualTankStats[]
+          ).map((stats) => {
+            return {
+              stats,
+              tankopedia: awaitedTankopedia[stats.tank_id],
+              career: career[stats.tank_id],
+              currentWN8: awaitedTankAverages[stats.tank_id]
+                ? calculateWN8(
+                    awaitedTankAverages[stats.tank_id].all,
+                    stats.all,
+                  )
+                : undefined,
+              careerWN8: awaitedTankAverages[stats.tank_id]
+                ? calculateWN8(
+                    awaitedTankAverages[stats.tank_id].all,
+                    career[stats.tank_id].all,
+                  )
+                : undefined,
+            };
+          }),
+        );
       }
     })();
   }, []);
@@ -208,9 +245,68 @@ export default function Page() {
 
       <Breakdown.Root>
         {diff &&
-          (Object.entries(diff) as [string, IndividualTankStats][])
-            .sort(([, a], [, b]) => b.last_battle_time - a.last_battle_time)
-            .map(([id, tankStats]) => <Breakdown.Row key={id} rows={[]} />)}
+          diff
+            .sort((a, b) => b.stats.last_battle_time - a.stats.last_battle_time)
+            .map(({ stats, tankopedia, career, careerWN8, currentWN8 }) => (
+              <Breakdown.Row
+                key={stats.tank_id}
+                title={tankopedia?.name ?? `Unknown tank ${stats.tank_id}`}
+                type="tank"
+                tankType={tankopedia?.type}
+                treeType={(() => {
+                  if (tankopedia?.is_collectible) return TreeTypeEnum.Collector;
+                  if (tankopedia?.is_premium) return TreeTypeEnum.Premium;
+                })()}
+                rows={[
+                  {
+                    title: 'Battles',
+                    current: stats.all.battles.toLocaleString(),
+                    career: career.all.battles.toLocaleString(),
+                  },
+                  {
+                    title: 'Winrate',
+                    current: `${(
+                      100 *
+                      (stats.all.wins / stats.all.battles)
+                    ).toFixed(2)}%`,
+                    career: `${(
+                      100 *
+                      (career.all.wins / career.all.battles)
+                    ).toFixed(2)}%`,
+                    delta:
+                      stats.all.wins / stats.all.battles -
+                      career.all.wins / career.all.battles,
+                  },
+                  {
+                    title: 'WN8',
+                    current:
+                      currentWN8 === undefined
+                        ? undefined
+                        : Math.round(currentWN8).toLocaleString(),
+                    career:
+                      careerWN8 === undefined
+                        ? undefined
+                        : Math.round(careerWN8).toLocaleString(),
+                    percentile:
+                      currentWN8 === undefined
+                        ? undefined
+                        : getWN8Percentile(currentWN8),
+                  },
+                  {
+                    title: 'Damage',
+                    current: Math.round(
+                      stats.all.damage_dealt / stats.all.battles,
+                    ).toLocaleString(),
+                    career: Math.round(
+                      career.all.damage_dealt / career.all.battles,
+                    ).toLocaleString(),
+                    delta:
+                      stats.all.damage_dealt / stats.all.battles -
+                      career.all.damage_dealt / career.all.battles,
+                  },
+                ]}
+              />
+            ))}
       </Breakdown.Root>
     </PageWrapper>
   );

@@ -1,5 +1,6 @@
 import { deburr } from 'lodash';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
+import { context } from '../blitzkrieg/context';
 import getWargamingResponse from './getWargamingResponse';
 
 export type TankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
@@ -23,14 +24,16 @@ export interface Tankopedia {
 
 console.log('Caching tankopedia...');
 export const tankopedia = fetch(
-  typeof window === 'undefined'
+  context === 'bot'
     ? 'https://www.blitzstars.com/bs-tankopedia.json'
     : '/api/tankopedia',
 )
   .then(async (response) => response.json())
   .then((wrapperTankopedia) => {
     console.log('Tankopedia cached');
-    return (wrapperTankopedia as { data: Tankopedia }).data;
+    return context === 'bot'
+      ? (wrapperTankopedia as { data: Tankopedia }).data
+      : (wrapperTankopedia as Tankopedia);
   });
 const entries = new Promise<TankopediaEntry[]>(async (resolve) => {
   resolve(Object.entries(await tankopedia).map(([, entry]) => entry));

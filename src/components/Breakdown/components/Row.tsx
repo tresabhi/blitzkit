@@ -41,14 +41,16 @@ export function Row(props: RowProps) {
           backgroundColor: theme.colors.componentInteractive,
         }}
       >
-        {props.type === 'tank' &&
-          props.treeType !== undefined &&
-          props.tankType !== undefined && (
-            <img
-              src={TREE_TYPE_ICONS[props.treeType][props.tankType]}
-              style={{ width: 16, height: 16 }}
-            />
-          )}
+        {props.type === 'tank' && props.tankType !== undefined && (
+          <img
+            src={
+              TREE_TYPE_ICONS[props.treeType ?? TreeTypeEnum.TechTree][
+                props.tankType
+              ]
+            }
+            style={{ width: 16, height: 16 }}
+          />
+        )}
 
         <span
           style={{
