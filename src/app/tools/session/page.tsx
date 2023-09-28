@@ -68,64 +68,6 @@ export default function Page() {
     | undefined
   >(undefined);
 
-  async function recalculateDiff() {
-    if (session.isTracking) {
-      const { id, region } = session;
-      const careerRaw = await getWargamingResponse<TanksStats>(
-        `https://api.wotblitz.${region}/wotb/tanks/stats/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-      );
-      const career = careerRaw[id].reduce<Record<number, IndividualTankStats>>(
-        (accumulator, curr) => ({
-          ...accumulator,
-          [curr.tank_id]: curr,
-        }),
-        {},
-      );
-      const awaitedTankopedia = await tankopedia;
-      const awaitedTankAverages = await tankAverages;
-      const careerWN8 =
-        careerRaw[id].reduce(
-          (accumulator, { tank_id, all }) =>
-            accumulator +
-            (awaitedTankAverages[tank_id] && all.battles > 0
-              ? all.battles *
-                calculateWN8(awaitedTankAverages[tank_id].all, all)
-              : 0),
-          0,
-        ) /
-        careerRaw[id].reduce(
-          (accumulator, { tank_id, all }) =>
-            accumulator +
-            (awaitedTankAverages[tank_id] && all.battles > 0 ? all.battles : 0),
-          0,
-        );
-
-      setDiff({
-        careerWN8,
-
-        list: (
-          Object.values(
-            diffNormalizedTankStats(session.tankStats, career),
-          ) as IndividualTankStats[]
-        ).map((stats) => {
-          return {
-            stats,
-            tankopedia: awaitedTankopedia[stats.tank_id],
-            career: career[stats.tank_id],
-            currentWN8: awaitedTankAverages[stats.tank_id]
-              ? calculateWN8(awaitedTankAverages[stats.tank_id].all, stats.all)
-              : undefined,
-            careerWN8: awaitedTankAverages[stats.tank_id]
-              ? calculateWN8(
-                  awaitedTankAverages[stats.tank_id].all,
-                  career[stats.tank_id].all,
-                )
-              : undefined,
-          };
-        }),
-      });
-    }
-  }
   async function setSession(region: Region, id: number, nickname: string) {
     input.current!.value = nickname;
 
@@ -148,17 +90,84 @@ export default function Page() {
       region,
       nickname,
       tankStats,
+      time: Date.now(),
     });
-
-    recalculateDiff();
   }
 
   useEffect(() => {
+    async function recalculateDiff() {
+      // const session = useSession.getState();
+
+      if (session.isTracking) {
+        const { id, region } = session;
+        const careerRaw = await getWargamingResponse<TanksStats>(
+          `https://api.wotblitz.${region}/wotb/tanks/stats/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
+        );
+        const career = careerRaw[id].reduce<
+          Record<number, IndividualTankStats>
+        >(
+          (accumulator, curr) => ({
+            ...accumulator,
+            [curr.tank_id]: curr,
+          }),
+          {},
+        );
+        const awaitedTankopedia = await tankopedia;
+        const awaitedTankAverages = await tankAverages;
+        const careerWN8 =
+          careerRaw[id].reduce(
+            (accumulator, { tank_id, all }) =>
+              accumulator +
+              (awaitedTankAverages[tank_id] && all.battles > 0
+                ? all.battles *
+                  calculateWN8(awaitedTankAverages[tank_id].all, all)
+                : 0),
+            0,
+          ) /
+          careerRaw[id].reduce(
+            (accumulator, { tank_id, all }) =>
+              accumulator +
+              (awaitedTankAverages[tank_id] && all.battles > 0
+                ? all.battles
+                : 0),
+            0,
+          );
+
+        setDiff({
+          careerWN8,
+
+          list: (
+            Object.values(
+              diffNormalizedTankStats(session.tankStats, career),
+            ) as IndividualTankStats[]
+          ).map((stats) => {
+            return {
+              stats,
+              tankopedia: awaitedTankopedia[stats.tank_id],
+              career: career[stats.tank_id],
+              currentWN8: awaitedTankAverages[stats.tank_id]
+                ? calculateWN8(
+                    awaitedTankAverages[stats.tank_id].all,
+                    stats.all,
+                  )
+                : undefined,
+              careerWN8: awaitedTankAverages[stats.tank_id]
+                ? calculateWN8(
+                    awaitedTankAverages[stats.tank_id].all,
+                    career[stats.tank_id].all,
+                  )
+                : undefined,
+            };
+          }),
+        });
+      }
+    }
+
     recalculateDiff();
     const interval = setInterval(recalculateDiff, 1000 / REFRESH_RATE);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [session]);
 
   const battles = diff?.list.reduce(
     (accumulator, { stats }) => accumulator + stats.all.battles,
@@ -345,7 +354,9 @@ export default function Page() {
                   current: battlesWithWN8
                     ? Math.round(currentWN8).toLocaleString()
                     : '--',
-                  percentile: getWN8Percentile(currentWN8),
+                  percentile: battlesWithWN8
+                    ? getWN8Percentile(currentWN8)
+                    : undefined,
                   career: Math.round(diff.careerWN8).toLocaleString(),
                 };
               })(),
