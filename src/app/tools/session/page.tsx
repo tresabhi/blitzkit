@@ -160,6 +160,11 @@ export default function Page() {
     return () => clearInterval(interval);
   }, []);
 
+  const battles = diff?.list.reduce(
+    (accumulator, { stats }) => accumulator + stats.all.battles,
+    0,
+  );
+
   return (
     <PageWrapper>
       <div className={styles.toolBar}>
@@ -288,12 +293,7 @@ export default function Page() {
             stats={[
               {
                 title: 'Battles',
-                current: diff.list
-                  .reduce(
-                    (accumulator, { stats }) => accumulator + stats.all.battles,
-                    0,
-                  )
-                  .toLocaleString(),
+                current: battles!.toLocaleString(),
                 career: tankStatsArray
                   .reduce(
                     (accumulator, stats) => accumulator + stats.all.battles,
@@ -303,18 +303,17 @@ export default function Page() {
               },
               {
                 title: 'Winrate',
-                current: `${(
-                  100 *
-                  (diff.list.reduce(
-                    (accumulator, { stats }) => accumulator + stats.all.wins,
-                    0,
-                  ) /
-                    diff.list.reduce(
-                      (accumulator, { stats }) =>
-                        accumulator + stats.all.battles,
-                      0,
-                    ))
-                ).toFixed(2)}%`,
+                current: battles
+                  ? `${(
+                      100 *
+                      (diff.list.reduce(
+                        (accumulator, { stats }) =>
+                          accumulator + stats.all.wins,
+                        0,
+                      ) /
+                        battles)
+                    ).toFixed(2)}%`
+                  : '--',
                 career: `${(
                   100 *
                   (tankStatsArray.reduce(
@@ -328,40 +327,39 @@ export default function Page() {
                 ).toFixed(2)}%`,
               },
               (() => {
+                const battlesWithWN8 = diff.list.reduce(
+                  (accumulator, { currentWN8, stats }) =>
+                    (currentWN8 === undefined ? 0 : stats.all.battles) +
+                    accumulator,
+                  0,
+                );
                 const currentWN8 =
                   diff.list.reduce(
                     (accumulator, { currentWN8, stats }) =>
                       stats.all.battles * (currentWN8 ?? 0) + accumulator,
                     0,
-                  ) /
-                  diff.list.reduce(
-                    (accumulator, { currentWN8, stats }) =>
-                      (currentWN8 === undefined ? 0 : stats.all.battles) +
-                      accumulator,
-                    0,
-                  );
+                  ) / battlesWithWN8;
 
                 return {
                   title: 'WN8',
-                  current: Math.round(currentWN8).toLocaleString(),
+                  current: battlesWithWN8
+                    ? Math.round(currentWN8).toLocaleString()
+                    : '--',
                   percentile: getWN8Percentile(currentWN8),
                   career: Math.round(diff.careerWN8).toLocaleString(),
                 };
               })(),
               {
                 title: 'Damage',
-                current: Math.round(
-                  diff.list.reduce(
-                    (accumulator, { stats }) =>
-                      accumulator + stats.all.damage_dealt,
-                    0,
-                  ) /
-                    diff.list.reduce(
-                      (accumulator, { stats }) =>
-                        accumulator + stats.all.battles,
-                      0,
-                    ),
-                ).toLocaleString(),
+                current: battles
+                  ? Math.round(
+                      diff.list.reduce(
+                        (accumulator, { stats }) =>
+                          accumulator + stats.all.damage_dealt,
+                        0,
+                      ) / battles,
+                    ).toLocaleString()
+                  : '--',
                 career: Math.round(
                   tankStatsArray.reduce(
                     (accumulator, stats) =>
