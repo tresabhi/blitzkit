@@ -316,8 +316,10 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                           id: player.id,
                           score: player.score,
                           position: firstPlayerIndex + index + 1,
-                          clan: clanData[player.id]!.clan?.tag,
-                          nickname: clanData[player.id]!.account_name,
+                          clan: clanData[player.id]?.clan?.tag,
+                          nickname:
+                            clanData[player.id]?.account_name ??
+                            `Unknown Player ${player.id}`,
                         }) satisfies SimplifiedPlayer,
                     );
                   });
