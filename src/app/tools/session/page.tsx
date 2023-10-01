@@ -1,7 +1,7 @@
 'use client';
 
 import { CopyIcon, PersonIcon, ReloadIcon } from '@radix-ui/react-icons';
-import { Button, TextField } from '@radix-ui/themes';
+import { Button, DropdownMenu, TextField } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { ChangeEvent, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
@@ -11,7 +11,6 @@ import getWargamingResponse from '../../../core/blitz/getWargamingResponse';
 import listPlayers, {
   AccountListWithServer,
 } from '../../../core/blitz/listPlayers';
-import { theme } from '../../../stitches.config';
 import { useSession } from '../../../stores/session';
 import { NormalizedTankStats, TanksStats } from '../../../types/tanksStats';
 import SessionPage from '../../embeds/session/page';
@@ -77,6 +76,8 @@ export default function Page() {
               defaultValue={session.isTracking ? session.nickname : undefined}
               ref={input}
               onChange={(event) => {
+                event.stopPropagation();
+
                 if (event.target.value) {
                   setShowSearchResults(true);
                   setSearchResults(undefined);
@@ -86,79 +87,40 @@ export default function Page() {
 
                 handleChange(event);
               }}
-              onBlur={() => setShowSearchResults(false)}
+              onBlur={(event) => {
+                // TODO: remove this hack when https://github.com/radix-ui/primitives/issues/2193 is fixed
+                event.target.value.length === 1 && event.target.focus();
+              }}
               placeholder="Search for a player..."
             />
           </TextField.Root>
 
-          {showSearchResults && (
-            <div
-              style={{
-                display: 'flex',
-                position: 'absolute',
-                width: '100%',
-                top: '100%',
-                marginTop: 8,
-                flexDirection: 'column',
-                backgroundColor: theme.colors.componentNonInteractive,
-                borderRadius: 4,
-                padding: 8,
-                boxSizing: 'border-box',
-              }}
-            >
+          <DropdownMenu.Root open={showSearchResults} modal={false}>
+            <DropdownMenu.Trigger>
+              <div />
+            </DropdownMenu.Trigger>
+
+            <DropdownMenu.Content>
               {searchResults === undefined ? (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignContent: 'center',
-                    justifyContent: 'center',
-                    fontSize: 16,
-                    color: theme.colors.textLowContrast,
-                  }}
-                >
-                  Searching...
-                </div>
+                <DropdownMenu.Item disabled>Searching...</DropdownMenu.Item>
               ) : searchResults.length === 0 ? (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignContent: 'center',
-                    justifyContent: 'center',
-                    fontSize: 16,
-                    color: theme.colors.textLowContrast,
-                  }}
-                >
-                  No results
-                </div>
+                <DropdownMenu.Item disabled>No results</DropdownMenu.Item>
               ) : (
                 searchResults?.map(({ account_id: id, nickname, region }) => (
-                  <button
+                  <DropdownMenu.Item
                     key={id}
-                    className={styles.searchButton}
                     onClick={() => {
                       setShowSearchResults(false);
                       setSession(region, id, nickname);
                     }}
+                    shortcut={REGION_NAMES[region]}
                   >
-                    <span
-                      style={{
-                        color: theme.colors.textHighContrast,
-                      }}
-                    >
-                      {nickname}
-                    </span>
-                    <span
-                      style={{
-                        color: theme.colors.textLowContrast,
-                      }}
-                    >
-                      {REGION_NAMES[region]}
-                    </span>
-                  </button>
+                    {nickname}
+                  </DropdownMenu.Item>
                 ))
               )}
-            </div>
-          )}
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
         </div>
 
         <div style={{ display: 'flex', gap: 8 }}>
