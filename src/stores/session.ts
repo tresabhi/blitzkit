@@ -3,7 +3,7 @@ import { devtools, persist } from 'zustand/middleware';
 import { Region } from '../constants/regions';
 import { NormalizedTankStats } from '../types/tanksStats';
 
-type Session =
+type Session = (
   | {
       isTracking: false;
     }
@@ -15,8 +15,21 @@ type Session =
       nickname: string;
       tankStats: NormalizedTankStats;
       time: number;
-    };
+    }
+) & {
+  promptBeforeReset: boolean;
+};
 
 export const useSession = create<Session>()(
-  devtools(persist((set) => ({ isTracking: false }), { name: 'session' })),
+  devtools(
+    persist(
+      (set) => ({
+        isTracking: false,
+        promptBeforeReset: true,
+      }),
+      {
+        name: 'session',
+      },
+    ),
+  ),
 );

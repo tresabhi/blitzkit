@@ -1,7 +1,15 @@
 'use client';
 
 import { CopyIcon, PersonIcon, ReloadIcon } from '@radix-ui/react-icons';
-import { Button, DropdownMenu, TextField } from '@radix-ui/themes';
+import {
+  AlertDialog,
+  Button,
+  Checkbox,
+  DropdownMenu,
+  Flex,
+  Text,
+  TextField,
+} from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { ChangeEvent, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
@@ -61,6 +69,12 @@ export default function Page() {
       tankStats,
       time: Date.now(),
     });
+  }
+
+  function reset() {
+    const session = useSession.getState();
+    if (!session.isTracking) return;
+    setSession(session.region, session.id, session.nickname);
   }
 
   return (
@@ -132,17 +146,62 @@ export default function Page() {
         </div>
 
         <div style={{ display: 'flex', gap: 8 }}>
-          <Button
-            className={styles.toolbarButton}
-            color="red"
-            onClick={async () => {
-              const session = useSession.getState();
-              if (!session.isTracking) return;
-              setSession(session.region, session.id, session.nickname);
-            }}
-          >
-            <ReloadIcon width="16" height="16" /> Reset
-          </Button>
+          <AlertDialog.Root>
+            <AlertDialog.Trigger>
+              <Button
+                onClick={(event) => {
+                  if (!session.promptBeforeReset) {
+                    event.preventDefault();
+                    reset();
+                  }
+                }}
+                className={styles.toolbarButton}
+                color="red"
+              >
+                <ReloadIcon width="16" height="16" /> Reset
+              </Button>
+            </AlertDialog.Trigger>
+
+            <AlertDialog.Content>
+              <Flex direction="column" gap="4">
+                <Flex direction="column" gap="0">
+                  <AlertDialog.Title>
+                    Are you sure you want to reset?
+                  </AlertDialog.Title>
+                  <AlertDialog.Description>
+                    This'll discard your current session and start tracking from
+                    scratch again.
+                  </AlertDialog.Description>
+                </Flex>
+
+                <Text size="2">
+                  <Checkbox
+                    mr="1"
+                    onCheckedChange={(checked) =>
+                      useSession.setState({
+                        promptBeforeReset: !checked,
+                      })
+                    }
+                  />
+                  Don't ask me again
+                </Text>
+              </Flex>
+
+              <Flex gap="3" mt="4">
+                <AlertDialog.Cancel>
+                  <Button variant="soft" color="gray">
+                    Cancel
+                  </Button>
+                </AlertDialog.Cancel>
+
+                <AlertDialog.Action>
+                  <Button variant="solid" color="red" onClick={reset}>
+                    Reset
+                  </Button>
+                </AlertDialog.Action>
+              </Flex>
+            </AlertDialog.Content>
+          </AlertDialog.Root>
           <Button
             className={styles.toolbarButton}
             onClick={() =>
