@@ -1,7 +1,7 @@
 'use client';
 
 import { CaretRightIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
-import { TextField } from '@radix-ui/themes';
+import { Flex, TextField } from '@radix-ui/themes';
 import Link from 'next/link';
 import { useRef } from 'react';
 import { Search, SearchItem } from 'react-fuzzysort';
@@ -22,13 +22,7 @@ export default function Page() {
         <TextField.Input ref={input} placeholder="Search tools..." />
       </TextField.Root>
 
-      <div
-        style={{
-          display: 'flex',
-          gap: 16,
-          flexWrap: 'wrap',
-        }}
-      >
+      <Flex gap="3" wrap="wrap" align="center" justify="center">
         <Search
           input={input}
           list={TOOLS.map(
@@ -37,9 +31,31 @@ export default function Page() {
                 node: (
                   <Link
                     href={`/tools/${tool.id}`}
-                    className={styles.tool}
+                    className={
+                      tool.disabled ? styles.tool.disabled : styles.tool.enabled
+                    }
                     style={{
                       backgroundImage: `url(/assets/banners/${tool.id}.png)`,
+                      cursor: tool.disabled ? 'default' : 'pointer',
+                      opacity: tool.disabled ? 0.25 : 1,
+                      height: 128,
+                      minWidth: 256,
+                      flex: 1,
+                      borderRadius: 8,
+                      textDecoration: 'none',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      justifyContent: 'flex-end',
+                      padding: 16,
+                      gap: 4,
+                      transition: `box-shadow ${theme.durations.regular}`,
+                    }}
+                    onClick={(event) => {
+                      if (tool.disabled) event.preventDefault();
                     }}
                   >
                     <span
@@ -60,7 +76,7 @@ export default function Page() {
                         fontSize: 16,
                       }}
                     >
-                      {tool.description}
+                      {tool.disabled ? 'Coming soon!' : tool.description}
                     </span>
                   </Link>
                 ),
@@ -68,7 +84,7 @@ export default function Page() {
               }) satisfies SearchItem,
           )}
         />
-      </div>
+      </Flex>
     </PageWrapper>
   );
 }

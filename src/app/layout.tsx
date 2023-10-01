@@ -1,6 +1,6 @@
 'use client';
 
-import { Theme } from '@radix-ui/themes';
+import { Flex, Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
 import { config } from 'dotenv';
 import { Roboto_Flex } from 'next/font/google';
@@ -41,14 +41,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         >
           {!isEmbed && <Navbar />}
 
-          <div
-            style={{
-              flex: 1,
-              width: '100%',
-            }}
-          >
-            {children}
-          </div>
+          <Flex direction="column">{children}</Flex>
         </Theme>
       </body>
     </html>
