@@ -19,7 +19,15 @@ export default function Navbar() {
       {/* <Button>
         <HamburgerMenuIcon />
       </Button> */}
-      <Link href="/" style={{ color: 'inherit' }}>
+      <Link
+        href="/"
+        style={{
+          color: 'inherit',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         <BlitzkriegWormWide />
       </Link>
       {/* <Button>
