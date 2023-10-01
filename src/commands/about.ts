@@ -8,14 +8,14 @@ const RAW_PATH = `https://raw.githubusercontent.com/tresabhi/blitzkrieg/main/doc
 const DOCS = {
   permissions: 'guide/permissions',
   embeds: 'guide/embeds',
-  about: 'guide/about',
+  introduction: 'guide/introduction',
   invite: 'guide/invite',
   timezones: 'guide/timezones',
 };
 const DOC_DESCRIPTIONS: Record<keyof typeof DOCS, string> = {
   permissions: 'The permissions needed for the bot to function',
   embeds: 'How embeds work',
-  about: 'About the bot',
+  introduction: 'About the bot',
   invite: 'How to invite the bot',
   timezones: 'How Blitzkrieg infers and uses your timezone',
 };
@@ -28,14 +28,14 @@ function addDocsSubcommands(option: SlashCommandSubcommandsOnlyBuilder) {
   return option;
 }
 
-export const helpCommand: CommandRegistry = {
+export const aboutCommand: CommandRegistry = {
   inProduction: true,
   inPublic: true,
 
   command: addDocsSubcommands(
     new SlashCommandBuilder()
-      .setName('help')
-      .setDescription('All the help you need about the bot')
+      .setName('about')
+      .setDescription('All the info you need about the bot')
       .addSubcommand((option) =>
         option
           .setName('commands')

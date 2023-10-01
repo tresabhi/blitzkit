@@ -1,4 +1,4 @@
-# About
+# Introduction
 
 Blitzkrieg is a multipurpose bot for anything and everything World of Tanks Blitz.
 
