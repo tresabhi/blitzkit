@@ -133,6 +133,8 @@ export function Item({
                 ? reward.vehicle.image_url
                 : reward.stuff.image_url,
             )}
+            width={16}
+            height={16}
           />
         )}
         {reward && reward.count > 1 && (
