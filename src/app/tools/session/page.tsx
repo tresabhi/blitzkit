@@ -89,7 +89,7 @@ export default function Page() {
               }}
               onBlur={(event) => {
                 // TODO: remove this hack when https://github.com/radix-ui/primitives/issues/2193 is fixed
-                showSearchResults && event.target.focus();
+                if (showSearchResults) event.target.focus();
               }}
               onKeyDown={(event) => {
                 if (event.key === 'Escape') {
