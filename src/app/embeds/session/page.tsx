@@ -32,7 +32,7 @@ export default function SessionPage() {
       }
     | undefined
   >(undefined);
-  const battles = diff?.list.reduce(
+  const sessionBattles = diff?.list.reduce(
     (accumulator, { stats }) => accumulator + stats.all.battles,
     0,
   );
@@ -43,32 +43,28 @@ export default function SessionPage() {
     ? diff.list.reduce(
         (accumulator, { stats }) => accumulator + stats.all.wins,
         0,
-      ) / battles!
+      ) / sessionBattles!
     : 0;
+  const careerBattles = tankStatsArray.reduce(
+    (accumulator, stats) => accumulator + stats.all.battles,
+    0,
+  );
   const careerWinrate =
     tankStatsArray.reduce(
       (accumulator, stats) => accumulator + stats.all.wins,
       0,
-    ) /
-    tankStatsArray.reduce(
-      (accumulator, stats) => accumulator + stats.all.battles,
-      0,
-    );
+    ) / careerBattles;
   const currentDamage = diff
     ? diff.list.reduce(
         (accumulator, { stats }) => accumulator + stats.all.damage_dealt,
         0,
-      ) / battles!
+      ) / sessionBattles!
     : 0;
   const careerDamage =
     tankStatsArray.reduce(
       (accumulator, stats) => accumulator + stats.all.damage_dealt,
       0,
-    ) /
-    tankStatsArray.reduce(
-      (accumulator, stats) => accumulator + stats.all.battles,
-      0,
-    );
+    ) / careerBattles;
 
   useEffect(() => {
     async function recalculateDiff() {
@@ -158,7 +154,7 @@ export default function SessionPage() {
           stats={[
             {
               title: 'Battles',
-              current: battles!.toLocaleString(),
+              current: sessionBattles!.toLocaleString(),
               career: tankStatsArray
                 .reduce(
                   (accumulator, stats) => accumulator + stats.all.battles,
@@ -168,9 +164,11 @@ export default function SessionPage() {
             },
             {
               title: 'Winrate',
-              current: battles ? `${(100 * sessionWinrate).toFixed(2)}%` : '--',
+              current: sessionBattles
+                ? `${(100 * sessionWinrate).toFixed(2)}%`
+                : '--',
               career: `${(100 * careerWinrate).toFixed(2)}%`,
-              delta: sessionWinrate - careerWinrate,
+              delta: sessionBattles === 0 ? 0 : sessionWinrate - careerWinrate,
             },
             (() => {
               const battlesWithWN8 = diff.list.reduce(
@@ -199,8 +197,8 @@ export default function SessionPage() {
             })(),
             {
               title: 'Damage',
-              delta: currentDamage - careerDamage,
-              current: battles
+              delta: sessionBattles === 0 ? 0 : currentDamage - careerDamage,
+              current: sessionBattles
                 ? Math.round(currentDamage).toLocaleString()
                 : '--',
               career: Math.round(careerDamage).toLocaleString(),
