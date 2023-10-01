@@ -1,7 +1,7 @@
 import { RatingsInfo } from '../../commands/ratings';
 import { Region } from '../../constants/regions';
 import { DATABASE_REPO } from '../database/getMidnightLeaderboard';
-import { octokit } from '../express/octokit';
+import { octokit } from '../github/octokit';
 import throwError from '../node/throwError';
 
 export default async function getArchivedRatingsInfo(

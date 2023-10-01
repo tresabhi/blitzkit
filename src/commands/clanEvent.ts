@@ -1,5 +1,6 @@
 import { SlashCommandBuilder, escapeMarkdown } from 'discord.js';
 import markdownEscape from 'markdown-escape';
+import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import { PlayerHistoriesRaw } from '../core/blitzstars/getPlayerHistories';
 import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo';
@@ -7,7 +8,6 @@ import addClanChoices from '../core/discord/addClanChoices';
 import autocompleteClan from '../core/discord/autocompleteClan';
 import embedWarning from '../core/discord/embedWarning';
 import resolveClanFromCommand from '../core/discord/resolveClanFromCommand';
-import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import { AccountAchievements } from '../types/accountAchievements';
 import { AccountInfo } from '../types/accountInfo';
@@ -26,16 +26,16 @@ export const clanEventCommand: CommandRegistry = {
     const { region, id } = await resolveClanFromCommand(interaction);
     const clan = (
       await getWargamingResponse<ClanInfo>(
-        `https://api.wotblitz.${region}/wotb/clans/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&clan_id=${id}`,
+        `https://api.wotblitz.${region}/wotb/clans/info/?application_id=${WARGAMING_APPLICATION_ID}&clan_id=${id}`,
       )
     )[id];
     const memberIds = clan.members_ids.join(',');
     const [players, achievements, previousJointVictories] = await Promise.all([
       getWargamingResponse<AccountInfo>(
-        `https://api.wotblitz.${region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${memberIds}`,
+        `https://api.wotblitz.${region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${memberIds}`,
       ),
       getWargamingResponse<AccountAchievements>(
-        `https://api.wotblitz.${region}/wotb/account/achievements/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${memberIds}`,
+        `https://api.wotblitz.${region}/wotb/account/achievements/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${memberIds}`,
       ),
       Promise.all(
         clan.members_ids.map((id) =>
@@ -88,7 +88,7 @@ export const clanEventCommand: CommandRegistry = {
 
       embedWarning(
         'This is an approximation!',
-        "Wargaming provides very little information about platoons publicly. Caveats:\n- Players in two different clans platooning artificially inflates the total count\n- Game-mode battles aren't counted since Wargaming doesn't publicly share that data\n- This command is also subject to Blitzkrieg's reset times (use `/help timezones` for more info)",
+        "Wargaming provides very little information about platoons publicly. Caveats:\n- Players in two different clans platooning artificially inflates the total count\n- Game-mode battles aren't counted since Wargaming doesn't publicly share that data\n- This command is also subject to Blitzkrieg's reset times (use `/about timezones` for more info)",
       ),
     ];
   },

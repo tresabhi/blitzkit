@@ -1,5 +1,6 @@
 import { deburr } from 'lodash';
-import { secrets } from '../node/secrets';
+import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
+import { context } from '../blitzkrieg/context';
 import getWargamingResponse from './getWargamingResponse';
 
 export type TankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
@@ -22,11 +23,17 @@ export interface Tankopedia {
 }
 
 console.log('Caching tankopedia...');
-export const tankopedia = fetch('https://www.blitzstars.com/bs-tankopedia.json')
-  .then((response) => response.json())
+export const tankopedia = fetch(
+  context === 'bot'
+    ? 'https://www.blitzstars.com/bs-tankopedia.json'
+    : '/api/tankopedia',
+)
+  .then(async (response) => response.json())
   .then((wrapperTankopedia) => {
     console.log('Tankopedia cached');
-    return (wrapperTankopedia as { data: Tankopedia }).data;
+    return context === 'bot'
+      ? (wrapperTankopedia as { data: Tankopedia }).data
+      : (wrapperTankopedia as Tankopedia);
   });
 const entries = new Promise<TankopediaEntry[]>(async (resolve) => {
   resolve(Object.entries(await tankopedia).map(([, entry]) => entry));
@@ -66,7 +73,7 @@ export interface TankopediaInfo {
 // this is blocking because info is needed for command creation
 console.log('Caching tankopedia info...');
 export const tankopediaInfo = getWargamingResponse<TankopediaInfo>(
-  `https://api.wotblitz.com/wotb/encyclopedia/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}`,
+  `https://api.wotblitz.com/wotb/encyclopedia/info/?application_id=${WARGAMING_APPLICATION_ID}`,
 );
 console.log('Cached tankopedia info');
 

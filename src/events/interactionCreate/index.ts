@@ -13,12 +13,12 @@ import {
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
 import discord from '../../../discord.json' assert { type: 'json' };
+import { aboutCommand } from '../../commands/about';
 import { clanEventCommand } from '../../commands/clanEvent';
 import { debugCommand } from '../../commands/debug';
 import { eligibleCommand } from '../../commands/eligible';
 import { evolutionCommand } from '../../commands/evolution';
 import { fullStatsCommand } from '../../commands/fullStats';
-import { helpCommand } from '../../commands/help';
 import { inactiveCommand } from '../../commands/inactive';
 import { ownedTanksCommand } from '../../commands/ownedTanks';
 import { pingCommand } from '../../commands/ping';
@@ -84,7 +84,7 @@ const rest = new REST().setToken(secrets.DISCORD_TOKEN);
 export const COMMANDS_RAW: CommandRegistry[] = [
   debugCommand,
   eligibleCommand,
-  helpCommand,
+  aboutCommand,
   inactiveCommand,
   ownedTanksCommand,
   playerAchievementsCommand,

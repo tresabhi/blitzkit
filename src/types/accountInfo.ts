@@ -46,18 +46,18 @@ export interface ClanStats {
   dropped_capture_points: number;
 }
 
-export type AccountInfo = {
+export interface AccountInfo {
   [accountId: number]: {
-    statistics: {
-      clan: ClanStats;
-      all: AllStats;
-      frags: null;
-    };
     account_id: number;
     created_at: number;
     updated_at: number;
     private: null;
     last_battle_time: number;
     nickname: string;
+    statistics: {
+      all: AllStats;
+      clan: ClanStats;
+      frags: null | number;
+    };
   };
-};
+}

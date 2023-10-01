@@ -3,6 +3,7 @@ import NoData, { NoDataType } from '../components/NoData';
 import TierWeights, { TierWeightsRecord } from '../components/TierWeights';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
+import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import calculateWN8 from '../core/blitz/calculateWN8';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankName from '../core/blitz/resolveTankName';
@@ -12,7 +13,6 @@ import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats';
 import { tankAverages } from '../core/blitzstars/tankAverages';
 import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand';
 import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
-import { secrets } from '../core/node/secrets';
 import {
   AccountInfo,
   AllStats,
@@ -37,7 +37,7 @@ export default async function fullStats<Type extends StatType>(
   if (type === 'player' || type === 'multi-tank') {
     const clan = (
       await getWargamingResponse<PlayerClanData>(
-        `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
+        `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
       )
     )[id]?.clan;
 
@@ -141,7 +141,7 @@ export default async function fullStats<Type extends StatType>(
   }
 
   const accountInfo = await getWargamingResponse<AccountInfo>(
-    `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
+    `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
   );
 
   return (

@@ -14,6 +14,42 @@ export interface IndividualTankStats {
   tank_id: number;
 }
 
-export type TanksStats = {
+export interface TanksStats {
   [accountId: number]: IndividualTankStats[];
+}
+
+export interface NormalizedTankStats {
+  [tankId: number]: IndividualTankStats;
+}
+
+export const emptyIndividualTankStats: IndividualTankStats = {
+  all: {
+    battles: 0,
+    capture_points: 0,
+    damage_dealt: 0,
+    damage_received: 0,
+    dropped_capture_points: 0,
+    frags: 0,
+    frags8p: 0,
+    hits: 0,
+    losses: 0,
+    max_frags: 0,
+    max_xp: 0,
+    shots: 0,
+    spotted: 0,
+    survived_battles: 0,
+    xp: 0,
+    win_and_survived: 0,
+    wins: 0,
+  },
+  last_battle_time: 0,
+  account_id: 0,
+  max_xp: 0,
+  in_garage_updated: 0,
+  max_frags: 0,
+  frags: 0,
+  battle_life_time: 0,
+  in_garage: 0,
+  tank_id: 0,
+  mark_of_mastery: 0,
 };

@@ -1,8 +1,8 @@
-export const SECRET_KEYS = [
-  'DISCORD_TOKEN',
-  'WARGAMING_APPLICATION_ID',
-  'GH_TOKEN',
-] as const;
+import { config } from 'dotenv';
+
+config();
+
+export const SECRET_KEYS = ['DISCORD_TOKEN', 'GH_TOKEN'] as const;
 
 export type SECRET = typeof SECRET_KEYS extends readonly (infer T)[]
   ? T
@@ -13,7 +13,7 @@ export const secrets = SECRET_KEYS.reduce<Partial<Record<SECRET, string>>>(
     ...accumulator,
 
     get [key](): string {
-      if (!(key in process.env)) throw new Error(`Key ${key} not provided`);
+      if (!(key in process.env)) throw new Error(`Secret ${key} not provided`);
       return process.env[key]!;
     },
   }),

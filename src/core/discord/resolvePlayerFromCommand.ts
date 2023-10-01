@@ -39,7 +39,7 @@ export default async function resolvePlayerFromCommand(
 
     if (accounts[0]) {
       return {
-        region: accounts[0].server,
+        region: accounts[0].region,
         id: accounts[0].account_id,
       } satisfies ResolvedPlayer;
     } else {

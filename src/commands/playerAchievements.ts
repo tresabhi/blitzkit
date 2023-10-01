@@ -1,13 +1,13 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { startCase } from 'lodash';
 import markdownEscape from 'markdown-escape';
+import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import embedInfo from '../core/discord/embedInfo';
 import markdownTable, { TableInputEntry } from '../core/discord/markdownTable';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import { AccountAchievements } from '../types/accountAchievements';
 import { AccountInfo } from '../types/accountInfo';
@@ -37,11 +37,11 @@ export const playerAchievementsCommand: CommandRegistry = {
     const account = await resolvePlayerFromCommand(interaction);
     const { id, region: server } = account;
     const accounts = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
     const accountsAchievements =
       await getWargamingResponse<AccountAchievements>(
-        `https://api.wotblitz.${server}/wotb/account/achievements/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
+        `https://api.wotblitz.${server}/wotb/account/achievements/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
       );
     const accountAchievements = accountsAchievements[id];
     const compound = {

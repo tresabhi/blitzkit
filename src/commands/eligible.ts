@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
+import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import calculateWN8 from '../core/blitz/calculateWN8';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import sumStats from '../core/blitz/sumStats';
@@ -12,7 +13,6 @@ import embedNegative from '../core/discord/embedNegative';
 import embedPositive from '../core/discord/embedPositive';
 import markdownTable, { TableInput } from '../core/discord/markdownTable';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { secrets } from '../core/node/secrets';
 import { CommandRegistry } from '../events/interactionCreate';
 import { AccountInfo } from '../types/accountInfo';
 import { PossiblyPromise } from '../types/possiblyPromise';
@@ -50,7 +50,7 @@ export const eligibleCommand: CommandRegistry = {
     const clan = interaction.options.getString('clan') as SkilledClan;
     const { id, region: server } = await resolvePlayerFromCommand(interaction);
     const accountInfo = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
+      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
     );
     const problems: TableInput = [];
     const title = `${accountInfo[id].nickname}'s eligibility for ${SKILLED_CLANS[clan]}`;

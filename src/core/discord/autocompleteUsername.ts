@@ -19,8 +19,8 @@ export default async function autocompleteUsername(
         ? players.map(
             (player) =>
               ({
-                name: `${player.nickname} (${REGION_NAMES[player.server]})`,
-                value: `${player.server}/${player.account_id}`,
+                name: `${player.nickname} (${REGION_NAMES[player.region]})`,
+                value: `${player.region}/${player.account_id}`,
               }) satisfies ApplicationCommandOptionChoiceData<string>,
           )
         : [],

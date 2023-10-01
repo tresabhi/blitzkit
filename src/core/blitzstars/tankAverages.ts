@@ -1,4 +1,5 @@
 import { AllStats } from '../../types/accountInfo';
+import { context } from '../blitzkrieg/context';
 
 export interface SpecialStats {
   winrate: number;
@@ -82,20 +83,24 @@ export type TankAverages = Record<number, IndividualTankAverage>;
 
 console.log('Caching tank averages...');
 export const tankAverages = fetch(
-  'https://www.blitzstars.com/api/tankaverages.json',
+  context === 'bot'
+    ? 'https://www.blitzstars.com/api/tankaverages.json'
+    : '/api/tank-averages',
 )
   .then((response) => response.json())
-  .then((individualTankAverages) => {
-    const partialTankAverages: TankAverages = {};
+  .then((json) => {
+    if (context === 'bot') {
+      const partialTankAverages: TankAverages = {};
 
-    (individualTankAverages as IndividualTankAverage[]).forEach(
-      (individualTankAverage) => {
+      (json as IndividualTankAverage[]).forEach((individualTankAverage) => {
         partialTankAverages[individualTankAverage.tank_id] =
           individualTankAverage;
-      },
-    );
+      });
 
-    console.log('Tank averages cached');
+      console.log('Tank averages cached');
 
-    return partialTankAverages;
+      return partialTankAverages;
+    } else {
+      return json as TankAverages;
+    }
   });

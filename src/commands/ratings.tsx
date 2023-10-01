@@ -9,6 +9,7 @@ import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
 import { REGION_NAMES_SHORT, Region } from '../constants/regions';
+import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import getArchivedRatingsInfo from '../core/blitz/getArchivedRatingsInfo';
 import getRatingsInfo from '../core/blitz/getRatingsInfo';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
@@ -20,8 +21,7 @@ import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { octokit } from '../core/express/octokit';
-import { secrets } from '../core/node/secrets';
+import { octokit } from '../core/github/octokit';
 import throwError from '../core/node/throwError';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 import { AccountInfo } from '../types/accountInfo';
@@ -307,7 +307,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                     );
                     const ids = trimmed.map((player) => player.id).join(',');
                     const clanData = await getWargamingResponse<PlayerClanData>(
-                      `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${ids}&extra=clan`,
+                      `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${ids}&extra=clan`,
                     );
 
                     return trimmed.map(
@@ -316,8 +316,10 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                           id: player.id,
                           score: player.score,
                           position: firstPlayerIndex + index + 1,
-                          clan: clanData[player.id]!.clan?.tag,
-                          nickname: clanData[player.id]!.account_name,
+                          clan: clanData[player.id]?.clan?.tag,
+                          nickname:
+                            clanData[player.id]?.account_name ??
+                            `Unknown Player ${player.id}`,
                         }) satisfies SimplifiedPlayer,
                     );
                   });
@@ -371,11 +373,11 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                     )) as RatingsInfo;
                   });
           const accountInfo = await getWargamingResponse<AccountInfo>(
-            `https://api.wotblitz.${region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
+            `https://api.wotblitz.${region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
           );
           const clan = (
             await getWargamingResponse<PlayerClanData>(
-              `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
+              `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
             )
           )[id]?.clan;
           const regionSubdomain = regionToRegionSubdomain(region);
@@ -438,7 +440,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                     );
                     const ids = trimmed.map((player) => player.id).join(',');
                     const clanData = await getWargamingResponse<PlayerClanData>(
-                      `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${ids}&extra=clan`,
+                      `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${ids}&extra=clan`,
                     );
 
                     return trimmed.map((player, index) => ({

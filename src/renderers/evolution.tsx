@@ -2,6 +2,7 @@ import * as Graph from '../components/Graph';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
+import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankName from '../core/blitz/resolveTankName';
 import { tankopedia } from '../core/blitz/tankopedia';
@@ -9,7 +10,6 @@ import getPlayerHistories from '../core/blitzstars/getPlayerHistories';
 import getTankHistories from '../core/blitzstars/getTankHistories';
 import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand';
 import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
-import { secrets } from '../core/node/secrets';
 import { AccountInfo } from '../types/accountInfo';
 import { Histories } from '../types/histories';
 import { PlayerClanData } from '../types/playerClanData';
@@ -27,7 +27,7 @@ export default async function evolution<Type extends StatType>(
   if (type === 'player') {
     const clan = (
       await getWargamingResponse<PlayerClanData>(
-        `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
+        `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
       )
     )[id]?.clan;
 
@@ -77,7 +77,7 @@ export default async function evolution<Type extends StatType>(
   const minX = Math.min(...xs);
 
   const accountInfo = await getWargamingResponse<AccountInfo>(
-    `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
+    `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
   );
 
   return (

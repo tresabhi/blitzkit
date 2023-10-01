@@ -2,9 +2,11 @@ import * as Breakdown from '../components/Breakdown';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
+import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import calculateWN8 from '../core/blitz/calculateWN8';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
+import getWN8Percentile from '../core/blitz/getWN8Percentile';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankName from '../core/blitz/resolveTankName';
 import sumStats from '../core/blitz/sumStats';
@@ -14,7 +16,6 @@ import getPeriodNow from '../core/blitzstars/getPeriodNow';
 import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo';
 import { tankAverages } from '../core/blitzstars/tankAverages';
 import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
-import { secrets } from '../core/node/secrets';
 import { AccountInfo, AllStats } from '../types/accountInfo';
 import { PlayerClanData } from '../types/playerClanData';
 import { PossiblyPromise } from '../types/possiblyPromise';
@@ -33,10 +34,10 @@ export default async function today(
     getPeriodNow(),
   );
   const accountInfo = await getWargamingResponse<AccountInfo>(
-    `https://api.wotblitz.${server}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}`,
+    `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
   );
   const clanData = await getWargamingResponse<PlayerClanData>(
-    `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
+    `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
   );
   const careerTankStatsRaw = await getTankStats(server, id);
   const careerStats: Record<number, AllStats> = showTotal
@@ -131,20 +132,53 @@ export default async function today(
 
       return (
         <Breakdown.Row
-          isTank={!showTotal || id !== 0}
+          key={id}
+          type={!showTotal || id !== 0 ? 'tank' : 'summary'}
           tankType={tankopediaEntry?.type}
           treeType={tankopediaEntry ? await getTreeType(id) : undefined}
+          title={showTotal && id === 0 ? 'Total' : await resolveTankName(id)}
           minimized={showTotal ? index > maximized : index + 1 > maximized}
-          key={id}
-          name={showTotal && id === 0 ? 'Total' : await resolveTankName(id)}
-          winrate={tankStats.wins / tankStats.battles}
-          careerWinrate={career.wins / career.battles}
-          WN8={isNaN(todayWN8s[id]) ? undefined : todayWN8s[id]}
-          careerWN8={isNaN(careerWN8s[id]) ? undefined : careerWN8s[id]}
-          damage={tankStats.damage_dealt / tankStats.battles}
-          careerDamage={career.damage_dealt / career.battles}
-          battles={tankStats.battles}
-          careerBattles={career.battles}
+          stats={[
+            {
+              title: 'Battles',
+              current: tankStats.battles.toLocaleString(),
+              career: career.battles.toLocaleString(),
+            },
+            {
+              title: 'Winrate',
+              current: `${(100 * (tankStats.wins / tankStats.battles)).toFixed(
+                2,
+              )}%`,
+              career: `${(100 * (career.wins / career.battles)).toFixed(2)}%`,
+              delta:
+                tankStats.wins / tankStats.battles -
+                career.wins / career.battles,
+            },
+            {
+              title: 'WN8',
+              current: isNaN(todayWN8s[id])
+                ? undefined
+                : Math.round(todayWN8s[id]).toLocaleString(),
+              career: isNaN(careerWN8s[id])
+                ? undefined
+                : Math.round(careerWN8s[id]).toLocaleString(),
+              percentile: isNaN(todayWN8s[id])
+                ? undefined
+                : getWN8Percentile(todayWN8s[id]),
+            },
+            {
+              title: 'Damage',
+              current: Math.round(
+                tankStats.damage_dealt / tankStats.battles,
+              ).toLocaleString(),
+              career: Math.round(
+                career.damage_dealt / career.battles,
+              ).toLocaleString(),
+              delta:
+                tankStats.damage_dealt / tankStats.battles -
+                career.damage_dealt / career.battles,
+            },
+          ]}
         />
       );
     }),

@@ -8,6 +8,7 @@ export default defineConfig({
   title: 'blitzkrieg',
   description: '🎉 All-in-one Discord bot for everything World of Tanks Blitz',
   base: '/blitzkrieg/',
+  outDir: '../dist/docs',
 
   themeConfig: {
     nav: [

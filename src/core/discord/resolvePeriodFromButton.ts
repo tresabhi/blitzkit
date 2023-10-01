@@ -1,7 +1,7 @@
 import { ButtonInteraction, CacheType } from 'discord.js';
 import { CYCLIC_API } from '../../constants/cyclic';
 import { Region } from '../../constants/regions';
-import resolvePeriodFromURL from '../express/resolvePeriodFromURL';
+import resolvePeriodFromURL from './resolvePeriodFromURL';
 
 export default function resolvePeriodFromButton(
   server: Region,

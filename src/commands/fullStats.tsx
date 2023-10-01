@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { TreeTypeString } from '../components/Tanks';
 import { CYCLIC_API } from '../constants/cyclic';
+import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankId from '../core/blitz/resolveTankId';
 import addStatTypeSubCommandGroups from '../core/discord/addStatTypeSubCommandGroups';
@@ -13,7 +14,6 @@ import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
 import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand';
 import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { secrets } from '../core/node/secrets';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 import fullStats from '../renderers/fullStats';
 import { MultiTankFilters, StatType } from '../renderers/stats';
@@ -57,7 +57,7 @@ export const fullStatsCommand = new Promise<CommandRegistryRaw>(
         });
         const { nickname } = (
           await getWargamingResponse<AccountInfo>(
-            `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${secrets.WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
+            `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
           )
         )[player.id];
 
