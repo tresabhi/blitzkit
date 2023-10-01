@@ -1,4 +1,4 @@
-name: CI Build
+name: CI Build Bot
 
 on: [push, pull_request]
 
