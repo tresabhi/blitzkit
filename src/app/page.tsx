@@ -1,11 +1,11 @@
 'use client';
 
-import { CaretRightIcon } from '@radix-ui/react-icons';
+import { CaretRightIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { TextField } from '@radix-ui/themes';
 import Link from 'next/link';
 import { useRef } from 'react';
 import { Search, SearchItem } from 'react-fuzzysort';
 import PageWrapper from '../components/PageWrapper';
-import { SearchBar } from '../components/SearchBar';
 import { TOOLS } from '../constants/tools';
 import { theme } from '../stitches.config';
 import * as styles from './page.css';
@@ -15,7 +15,12 @@ export default function Page() {
 
   return (
     <PageWrapper>
-      <SearchBar placeholder="Search tools..." ref={input} />
+      <TextField.Root>
+        <TextField.Slot>
+          <MagnifyingGlassIcon height="16" width="16" />
+        </TextField.Slot>
+        <TextField.Input ref={input} placeholder="Search tools..." />
+      </TextField.Root>
 
       <div
         style={{

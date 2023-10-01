@@ -1,11 +1,10 @@
 'use client';
 
-import { CopyIcon, ReloadIcon } from '@radix-ui/react-icons';
+import { CopyIcon, PersonIcon, ReloadIcon } from '@radix-ui/react-icons';
+import { Button, TextField } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { ChangeEvent, useRef, useState } from 'react';
-import { Button } from '../../../components/Button';
 import PageWrapper from '../../../components/PageWrapper';
-import { SearchBar } from '../../../components/SearchBar';
 import { REGION_NAMES, Region } from '../../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import getWargamingResponse from '../../../core/blitz/getWargamingResponse';
@@ -69,22 +68,26 @@ export default function Page() {
     <PageWrapper>
       <div className={styles.toolBar}>
         <div style={{ flex: 1, boxSizing: 'border-box', position: 'relative' }}>
-          <SearchBar
-            ref={input}
-            style={{ width: '100%', boxSizing: 'border-box' }}
-            defaultValue={session.isTracking ? session.nickname : undefined}
-            onChange={(event) => {
-              if (event.target.value) {
-                setShowSearchResults(true);
-                setSearchResults(undefined);
-              } else {
-                setShowSearchResults(false);
-              }
+          <TextField.Root>
+            <TextField.Slot>
+              <PersonIcon height="16" width="16" />
+            </TextField.Slot>
+            <TextField.Input
+              defaultValue={session.isTracking ? session.nickname : undefined}
+              ref={input}
+              onChange={(event) => {
+                if (event.target.value) {
+                  setShowSearchResults(true);
+                  setSearchResults(undefined);
+                } else {
+                  setShowSearchResults(false);
+                }
 
-              handleChange(event);
-            }}
-            placeholder="Search for a player..."
-          />
+                handleChange(event);
+              }}
+              placeholder="Search for a player..."
+            />
+          </TextField.Root>
 
           {showSearchResults && (
             <div
@@ -159,16 +162,14 @@ export default function Page() {
         <div style={{ display: 'flex', gap: 8 }}>
           <Button
             className={styles.toolbarButton}
-            color="dangerous"
+            color="red"
             onClick={async () => {
               const session = useSession.getState();
-
               if (!session.isTracking) return;
-
               setSession(session.region, session.id, session.nickname);
             }}
           >
-            <ReloadIcon /> Reset
+            <ReloadIcon width="16" height="16" /> Reset
           </Button>
           <Button
             className={styles.toolbarButton}
@@ -176,7 +177,7 @@ export default function Page() {
               navigator.clipboard.writeText(`${location.origin}/embeds/session`)
             }
           >
-            <CopyIcon /> Embed
+            <CopyIcon width="16" height="16" /> Embed
           </Button>
         </div>
       </div>

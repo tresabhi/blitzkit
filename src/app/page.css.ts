@@ -5,7 +5,7 @@ export const tool = style({
   height: 128,
   minWidth: 256,
   flex: 1,
-  borderRadius: 4,
+  borderRadius: 8,
   textDecoration: 'none',
   backgroundSize: 'cover',
   backgroundPosition: 'center',

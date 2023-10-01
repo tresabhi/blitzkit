@@ -1,5 +1,7 @@
 'use client';
 
+import { Theme } from '@radix-ui/themes';
+import '@radix-ui/themes/styles.css';
 import { config } from 'dotenv';
 import { Roboto_Flex } from 'next/font/google';
 import { usePathname } from 'next/navigation';
@@ -31,16 +33,23 @@ export default function RootLayout({ children }: RootLayoutProps) {
             : 'url(https://i.imgur.com/PhS06NJ.png)',
         }}
       >
-        {!isEmbed && <Navbar />}
-
-        <div
-          style={{
-            flex: 1,
-            width: '100%',
-          }}
+        <Theme
+          appearance="dark"
+          panelBackground="translucent"
+          radius="full"
+          accentColor="blue"
         >
-          {children}
-        </div>
+          {!isEmbed && <Navbar />}
+
+          <div
+            style={{
+              flex: 1,
+              width: '100%',
+            }}
+          >
+            {children}
+          </div>
+        </Theme>
       </body>
     </html>
   );
