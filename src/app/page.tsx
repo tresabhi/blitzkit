@@ -35,7 +35,7 @@ export default function Page() {
                       tool.disabled ? styles.tool.disabled : styles.tool.enabled
                     }
                     style={{
-                      backgroundImage: `url(/assets/banners/${tool.id}.png)`,
+                      backgroundImage: `url(/assets/banners/${tool.id}.webp)`,
                       cursor: tool.disabled ? 'default' : 'pointer',
                       opacity: tool.disabled ? 0.25 : 1,
                       height: 128,

@@ -8,7 +8,7 @@ export default function PageWrapper({
     <div
       style={{
         width: '100%',
-        maxWidth: 780,
+        maxWidth: 800,
         margin: 'auto',
         display: 'flex',
         padding: 16,
