@@ -4,6 +4,14 @@ import { theme } from '../../../stitches.config';
 import { TREE_TYPE_ICONS, TreeTypeEnum } from '../../Tanks';
 import { RowStat } from './RowStat';
 
+export interface RowStat {
+  title: string;
+  current?: number | string;
+  career?: number | string;
+  delta?: number;
+  percentile?: Percentile;
+}
+
 interface RowProps {
   type?: 'tank' | 'summary';
   title: string;
@@ -11,13 +19,7 @@ interface RowProps {
   treeType?: TreeTypeEnum;
   tankType?: TankType;
 
-  stats: {
-    title: string;
-    current?: number | string;
-    career?: number | string;
-    delta?: number;
-    percentile?: Percentile;
-  }[];
+  stats: (RowStat | undefined)[];
 }
 
 export function Row(props: RowProps) {
@@ -77,16 +79,19 @@ export function Row(props: RowProps) {
           paddingBottom: 8,
         }}
       >
-        {props.stats.map((row, index) => (
-          <RowStat
-            minimized={props.minimized}
-            key={index}
-            name={`${row.title} • ${row.career ?? '--'}`}
-            value={row.current ?? '--'}
-            delta={row.delta}
-            percentile={row.percentile}
-          />
-        ))}
+        {props.stats.map(
+          (row, index) =>
+            row && (
+              <RowStat
+                minimized={props.minimized}
+                key={index}
+                name={`${row.title} • ${row.career ?? '--'}`}
+                value={row.current ?? '--'}
+                delta={row.delta}
+                percentile={row.percentile}
+              />
+            ),
+        )}
       </div>
     </div>
   );
