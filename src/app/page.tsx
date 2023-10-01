@@ -1,7 +1,7 @@
 'use client';
 
 import { CaretRightIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
-import { Flex, TextField } from '@radix-ui/themes';
+import { Flex, Text, TextField } from '@radix-ui/themes';
 import Link from 'next/link';
 import { useRef } from 'react';
 import { Search, SearchItem } from 'react-fuzzysort';
@@ -85,6 +85,10 @@ export default function Page() {
           )}
         />
       </Flex>
+
+      <Text size="1" color="gray" align="center">
+        Images courtesy of Wargaming Art Department
+      </Text>
     </PageWrapper>
   );
 }
