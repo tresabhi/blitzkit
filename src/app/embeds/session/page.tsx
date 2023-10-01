@@ -39,6 +39,36 @@ export default function SessionPage() {
   const tankStatsArray = session.isTracking
     ? (Object.values(session.tankStats) as IndividualTankStats[])
     : [];
+  const sessionWinrate = diff
+    ? diff.list.reduce(
+        (accumulator, { stats }) => accumulator + stats.all.wins,
+        0,
+      ) / battles!
+    : 0;
+  const careerWinrate =
+    tankStatsArray.reduce(
+      (accumulator, stats) => accumulator + stats.all.wins,
+      0,
+    ) /
+    tankStatsArray.reduce(
+      (accumulator, stats) => accumulator + stats.all.battles,
+      0,
+    );
+  const currentDamage = diff
+    ? diff.list.reduce(
+        (accumulator, { stats }) => accumulator + stats.all.damage_dealt,
+        0,
+      ) / battles!
+    : 0;
+  const careerDamage =
+    tankStatsArray.reduce(
+      (accumulator, stats) => accumulator + stats.all.damage_dealt,
+      0,
+    ) /
+    tankStatsArray.reduce(
+      (accumulator, stats) => accumulator + stats.all.battles,
+      0,
+    );
 
   useEffect(() => {
     async function recalculateDiff() {
@@ -138,27 +168,9 @@ export default function SessionPage() {
             },
             {
               title: 'Winrate',
-              current: battles
-                ? `${(
-                    100 *
-                    (diff.list.reduce(
-                      (accumulator, { stats }) => accumulator + stats.all.wins,
-                      0,
-                    ) /
-                      battles)
-                  ).toFixed(2)}%`
-                : '--',
-              career: `${(
-                100 *
-                (tankStatsArray.reduce(
-                  (accumulator, stats) => accumulator + stats.all.wins,
-                  0,
-                ) /
-                  tankStatsArray.reduce(
-                    (accumulator, stats) => accumulator + stats.all.battles,
-                    0,
-                  ))
-              ).toFixed(2)}%`,
+              current: battles ? `${(100 * sessionWinrate).toFixed(2)}%` : '--',
+              career: `${(100 * careerWinrate).toFixed(2)}%`,
+              delta: sessionWinrate - careerWinrate,
             },
             (() => {
               const battlesWithWN8 = diff.list.reduce(
@@ -187,25 +199,11 @@ export default function SessionPage() {
             })(),
             {
               title: 'Damage',
+              delta: currentDamage - careerDamage,
               current: battles
-                ? Math.round(
-                    diff.list.reduce(
-                      (accumulator, { stats }) =>
-                        accumulator + stats.all.damage_dealt,
-                      0,
-                    ) / battles,
-                  ).toLocaleString()
+                ? Math.round(currentDamage).toLocaleString()
                 : '--',
-              career: Math.round(
-                tankStatsArray.reduce(
-                  (accumulator, stats) => accumulator + stats.all.damage_dealt,
-                  0,
-                ) /
-                  tankStatsArray.reduce(
-                    (accumulator, stats) => accumulator + stats.all.battles,
-                    0,
-                  ),
-              ).toLocaleString(),
+              career: Math.round(careerDamage).toLocaleString(),
             },
           ]}
         />
