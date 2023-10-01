@@ -1,4 +1,4 @@
-name: CI Build
+name: CI Build Website
 
 on: [push, pull_request]
 
