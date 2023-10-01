@@ -72,6 +72,7 @@ export default function Page() {
             <TextField.Slot>
               <PersonIcon height="16" width="16" />
             </TextField.Slot>
+
             <TextField.Input
               defaultValue={session.isTracking ? session.nickname : undefined}
               ref={input}
@@ -85,6 +86,7 @@ export default function Page() {
 
                 handleChange(event);
               }}
+              onBlur={() => setShowSearchResults(false)}
               placeholder="Search for a player..."
             />
           </TextField.Root>
