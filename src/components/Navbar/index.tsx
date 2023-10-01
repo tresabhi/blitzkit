@@ -1,8 +1,6 @@
-import { HamburgerMenuIcon, PersonIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { theme } from '../../stitches.config';
 import { BlitzkriegWormWide } from '../BlitzkriegWormWide';
-import { Button } from './components/Button';
 
 export default function Navbar() {
   return (
@@ -11,21 +9,22 @@ export default function Navbar() {
         width: '100%',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         color: theme.colors.textHighContrast,
         backgroundColor: theme.colors.appBackground2,
         borderBottom: theme.borderStyles.nonInteractive,
+        height: 48, // TODO: remove this when the icons are implemented
       }}
     >
-      <Button>
+      {/* <Button>
         <HamburgerMenuIcon />
-      </Button>
+      </Button> */}
       <Link href="/" style={{ color: 'inherit' }}>
         <BlitzkriegWormWide />
       </Link>
-      <Button>
+      {/* <Button>
         <PersonIcon />
-      </Button>
+      </Button> */}
     </div>
   );
 }
