@@ -9,6 +9,7 @@ import {
   Flex,
   Text,
   TextField,
+  Tooltip,
 } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { ChangeEvent, useRef, useState } from 'react';
@@ -202,14 +203,19 @@ export default function Page() {
               </Flex>
             </AlertDialog.Content>
           </AlertDialog.Root>
-          <Button
-            className={styles.toolbarButton}
-            onClick={() =>
-              navigator.clipboard.writeText(`${location.origin}/embeds/session`)
-            }
-          >
-            <CopyIcon width="16" height="16" /> Embed
-          </Button>
+
+          <Tooltip content="Copy to clipboard">
+            <Button
+              className={styles.toolbarButton}
+              onClick={() =>
+                navigator.clipboard.writeText(
+                  `${location.origin}/embeds/session`,
+                )
+              }
+            >
+              <CopyIcon width="16" height="16" /> Embed
+            </Button>
+          </Tooltip>
         </div>
       </div>
 
