@@ -25,6 +25,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
   return (
     <html lang="en" className={robotoFlex.className}>
+      <head>
+        <title>Blitzkrieg</title>
+        <meta
+          name="description"
+          content="🎉 Tools for everything World of Tanks Blitz"
+        />
+      </head>
+
       <body
         style={{
           margin: 0,
