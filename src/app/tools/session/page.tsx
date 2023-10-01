@@ -89,7 +89,13 @@ export default function Page() {
               }}
               onBlur={(event) => {
                 // TODO: remove this hack when https://github.com/radix-ui/primitives/issues/2193 is fixed
-                event.target.value.length === 1 && event.target.focus();
+                showSearchResults && event.target.focus();
+              }}
+              onKeyDown={(event) => {
+                if (event.key === 'Escape') {
+                  setShowSearchResults(false);
+                  input.current?.blur();
+                }
               }}
               placeholder="Search for a player..."
             />
@@ -106,18 +112,20 @@ export default function Page() {
               ) : searchResults.length === 0 ? (
                 <DropdownMenu.Item disabled>No results</DropdownMenu.Item>
               ) : (
-                searchResults?.map(({ account_id: id, nickname, region }) => (
-                  <DropdownMenu.Item
-                    key={id}
-                    onClick={() => {
-                      setShowSearchResults(false);
-                      setSession(region, id, nickname);
-                    }}
-                    shortcut={REGION_NAMES[region]}
-                  >
-                    {nickname}
-                  </DropdownMenu.Item>
-                ))
+                searchResults?.map(
+                  ({ account_id: id, nickname, region }, index) => (
+                    <DropdownMenu.Item
+                      key={id}
+                      onClick={() => {
+                        setShowSearchResults(false);
+                        setSession(region, id, nickname);
+                      }}
+                      shortcut={REGION_NAMES[region]}
+                    >
+                      {nickname}
+                    </DropdownMenu.Item>
+                  ),
+                )
               )}
             </DropdownMenu.Content>
           </DropdownMenu.Root>
