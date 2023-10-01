@@ -2,11 +2,11 @@ import { Region } from '../../constants/regions';
 import getPeriodNow from '../blitzstars/getPeriodNow';
 import getPeriodStart from '../blitzstars/getPeriodStart';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo';
-import { PeriodSize, PeriodType } from '../discord/addPeriodSubCommands';
+import { PeriodSize, PeriodType } from './addPeriodSubCommands';
 import {
   ResolvedPeriod,
   getPeriodOptionName,
-} from '../discord/resolvePeriodFromCommand';
+} from './resolvePeriodFromCommand';
 
 export default function resolvePeriodFromURL(
   server: Region,

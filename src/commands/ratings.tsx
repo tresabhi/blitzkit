@@ -21,7 +21,7 @@ import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { octokit } from '../core/express/octokit';
+import { octokit } from '../core/github/octokit';
 import throwError from '../core/node/throwError';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 import { AccountInfo } from '../types/accountInfo';
