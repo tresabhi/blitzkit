@@ -14,6 +14,7 @@ files.forEach(async (file) => {
     outfile: `dist/${file}/index.cjs`,
 
     platform: 'node',
+    tsconfig: 'tsconfig.esbuild.json',
     loader: {
       '.node': 'copy',
       '.ttf': 'file',
