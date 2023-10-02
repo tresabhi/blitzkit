@@ -142,7 +142,7 @@ export default function SessionPage() {
 
   const totalRowStats: Record<
     CustomColumnDisplay,
-    Breakdown.RowStat | undefined
+    Breakdown.RowStatItem | undefined
   > = {
     battles: {
       title: 'Battles',
@@ -229,7 +229,7 @@ export default function SessionPage() {
         .map(({ stats, tankopedia, career, careerWN8, currentWN8 }) => {
           const rowStats: Record<
             CustomColumnDisplay,
-            Breakdown.RowStat | undefined
+            Breakdown.RowStatItem | undefined
           > = {
             battles: {
               title: 'Battles',

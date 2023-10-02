@@ -4,7 +4,7 @@ import { theme } from '../../../stitches.config';
 import { TREE_TYPE_ICONS, TreeTypeEnum } from '../../Tanks';
 import { RowStat } from './RowStat';
 
-export interface RowStat {
+export interface RowStatItem {
   title: string;
   current?: number | string;
   career?: number | string;
@@ -19,7 +19,7 @@ interface RowProps {
   treeType?: TreeTypeEnum;
   tankType?: TankType;
 
-  stats: (RowStat | undefined)[];
+  stats: (RowStatItem | undefined)[];
 }
 
 export function Row(props: RowProps) {
