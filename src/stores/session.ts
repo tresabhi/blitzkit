@@ -25,6 +25,7 @@ type Session = (
     showDelta: boolean;
   }[] & { length: 4 };
   showTotal: boolean;
+  showCareer: boolean;
 };
 
 export const useSession = create<Session>()(
@@ -34,6 +35,7 @@ export const useSession = create<Session>()(
         isTracking: false,
         promptBeforeReset: true,
         showTotal: true,
+        showCareer: true,
 
         customColumns: [
           { display: 'battles', showDelta: false },

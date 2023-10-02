@@ -247,6 +247,14 @@ export default function Page() {
               >
                 Show total
               </DropdownMenu.CheckboxItem>
+              <DropdownMenu.CheckboxItem
+                checked={session.showCareer}
+                onCheckedChange={(checked) =>
+                  useSession.setState({ showCareer: checked })
+                }
+              >
+                Show career
+              </DropdownMenu.CheckboxItem>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
         </div>

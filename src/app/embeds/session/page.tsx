@@ -199,6 +199,7 @@ export default function SessionPage() {
         since !== undefined &&
         diff !== undefined && (
           <Breakdown.Row
+            minimized={!session.showCareer}
             title={`Since ${since.toLocaleString(undefined, {
               hour: 'numeric',
               minute: 'numeric',
@@ -280,6 +281,7 @@ export default function SessionPage() {
           return (
             <Breakdown.Row
               key={stats.tank_id}
+              minimized={!session.showCareer}
               title={tankopedia?.name ?? `Unknown tank ${stats.tank_id}`}
               type="tank"
               tankType={tankopedia?.type}
