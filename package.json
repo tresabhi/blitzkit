@@ -1,7 +1,7 @@
 {
   "name": "blitzkrieg",
-  "version": "1.13.0",
-  "description": "🎉 All-in-one Discord bot for everything World of Tanks Blitz",
+  "version": "1.13.1",
+  "description": "🎉 Tools for everything World of Tanks Blitz",
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
@@ -37,6 +37,7 @@
     "esbuild": "^0.19.3",
     "express": "^4.18.2",
     "fuzzysort": "^2.0.4",
+    "immer": "^10.0.2",
     "lodash": "^4.17.21",
     "markdown-escape": "^2.0.0",
     "next": "^13.5.2",

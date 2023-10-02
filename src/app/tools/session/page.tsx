@@ -1,6 +1,11 @@
 'use client';
 
-import { CopyIcon, PersonIcon, ReloadIcon } from '@radix-ui/react-icons';
+import {
+  CaretDownIcon,
+  CopyIcon,
+  PersonIcon,
+  ReloadIcon,
+} from '@radix-ui/react-icons';
 import {
   AlertDialog,
   Button,
@@ -23,9 +28,8 @@ import listPlayers, {
 import { useSession } from '../../../stores/session';
 import { NormalizedTankStats, TanksStats } from '../../../types/tanksStats';
 import SessionPage from '../../embeds/session/page';
+import { CustomColumn } from './components/CustomColumn';
 import * as styles from './page.css';
-
-// 1 once per 5 seconds
 
 export default function Page() {
   const input = useRef<HTMLInputElement>(null);
@@ -150,6 +154,7 @@ export default function Page() {
           <AlertDialog.Root>
             <AlertDialog.Trigger>
               <Button
+                variant="soft"
                 onClick={(event) => {
                   if (!session.promptBeforeReset) {
                     event.preventDefault();
@@ -206,6 +211,7 @@ export default function Page() {
 
           <Tooltip content="Copy to clipboard">
             <Button
+              variant="soft"
               className={styles.toolbarButton}
               onClick={() =>
                 navigator.clipboard.writeText(
@@ -216,6 +222,41 @@ export default function Page() {
               <CopyIcon width="16" height="16" /> Embed
             </Button>
           </Tooltip>
+
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger>
+              <Button variant="soft" className={styles.toolbarButton}>
+                Options
+                <CaretDownIcon />
+              </Button>
+            </DropdownMenu.Trigger>
+
+            <DropdownMenu.Content>
+              <CustomColumn column={0} />
+              <CustomColumn column={1} />
+              <CustomColumn column={2} />
+              <CustomColumn column={3} />
+
+              <DropdownMenu.Separator />
+
+              <DropdownMenu.CheckboxItem
+                checked={session.showTotal}
+                onCheckedChange={(checked) =>
+                  useSession.setState({ showTotal: checked })
+                }
+              >
+                Show total
+              </DropdownMenu.CheckboxItem>
+              <DropdownMenu.CheckboxItem
+                checked={session.showCareer}
+                onCheckedChange={(checked) =>
+                  useSession.setState({ showCareer: checked })
+                }
+              >
+                Show career
+              </DropdownMenu.CheckboxItem>
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
         </div>
       </div>
 

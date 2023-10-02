@@ -55,6 +55,7 @@ export function RowStat({
             color: theme.colors.textHighContrast,
             fontWeight: 'bold',
             fontSize: 16,
+            textAlign: 'center',
           }}
         >
           {value}
@@ -62,7 +63,13 @@ export function RowStat({
       </div>
 
       {!minimized && (
-        <span style={{ color: theme.colors.textLowContrast, fontSize: 12 }}>
+        <span
+          style={{
+            color: theme.colors.textLowContrast,
+            textAlign: 'center',
+            fontSize: 12,
+          }}
+        >
           {name}
         </span>
       )}

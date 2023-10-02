@@ -1,21 +1,42 @@
 # blitzkrieg
 
-A Discord bot for anything and everything related to World of Tanks Blitz.
+Tools for everything World of Tanks Blitz
 
-## Invite the Bot
+## Invite the bot
 
-Join the [Discord server](https://discord.gg/nDt7AjGJQH), click on the bot's profile, and click "Add to Server".
+Go to [application directory for Blitzkrieg](https://discord.com/application-directory/1097673957865443370) and click "Add to Server." Voila! You're ready to go.
 
-## Using
+![Blitzkrieg application directory](https://i.imgur.com/JlEA0J1.png)
 
-### Installing dependencies
+## Visit the website
+
+### https://blitz-krieg.vercel.app/
+
+![Blitzkrieg website](https://i.imgur.com/QOXUP63.png)
+
+## Visit the documentation website
+
+### https://tresabhi.github.io/blitzkrieg/
+
+![Blitzkrieg documentation website](https://i.imgur.com/mCZCZEI.png)
+
+## Run the bot
+
+### Install dependencies
 
 ```bash
 yarn
 ```
 
-### Running
+### Create `.env`
+
+```env
+GH_TOKEN={YOUR_GITHUB_TOKEN_HERE}
+DISCORD_TOKEN={YOUR_DISCORD_TOKE_HERE}
+```
+
+### Run the command
 
 ```bash
-yarn start discord-token=<token> wargaming-application-id=<id>
+yarn dev:bot
 ```
