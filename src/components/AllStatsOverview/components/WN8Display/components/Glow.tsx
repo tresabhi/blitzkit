@@ -1,5 +1,4 @@
 import { Percentile } from '../../../../../constants/percentiles';
-import hslToHex from '../../../../../core/node/hslToHex';
 import { PERCENTILE_COLORS } from '../../../../PercentileIndicator';
 
 export enum GlowSide {
@@ -14,8 +13,8 @@ export interface GlowProps {
 
 export function Glow({ percentile, side }: GlowProps) {
   const color = PERCENTILE_COLORS[percentile];
-  const color1 = hslToHex(color);
-  const color2 = `${color1}00`;
+  const color1 = color;
+  const color2 = `${color}00`;
 
   const background = `linear-gradient(${
     side === GlowSide.Top ? 0 : 180

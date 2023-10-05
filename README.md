@@ -1,4 +1,6 @@
-# blitzkrieg
+# Blitzkrieg
+
+[![built with Codeium](https://codeium.com/badges/main)](https://codeium.com)
 
 Tools for everything World of Tanks Blitz
 
