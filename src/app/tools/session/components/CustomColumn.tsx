@@ -1,4 +1,4 @@
-import { DropdownMenu } from '@radix-ui/themes';
+import { ContextMenu, DropdownMenu } from '@radix-ui/themes';
 import mutateSession, { useSession } from '../../../../stores/session';
 
 export type CustomColumnDisplay =
@@ -11,20 +11,21 @@ export type CustomColumnDisplay =
 const NO_DELTA: CustomColumnDisplay[] = ['battles', 'wn8', 'none'];
 
 interface CustomColumn {
+  Builder: typeof DropdownMenu | typeof ContextMenu;
   column: number;
 }
 
-export function CustomColumn({ column }: CustomColumn) {
+export function CustomColumn({ column, Builder }: CustomColumn) {
   const customColumn = useSession((state) => state.customColumns[column]);
 
   return (
-    <DropdownMenu.Sub>
-      <DropdownMenu.SubTrigger>Column {column + 1}</DropdownMenu.SubTrigger>
+    <Builder.Sub>
+      <Builder.SubTrigger>Column {column + 1}</Builder.SubTrigger>
 
-      <DropdownMenu.SubContent>
-        <DropdownMenu.Label>Display</DropdownMenu.Label>
+      <Builder.SubContent>
+        <Builder.Label>Display</Builder.Label>
 
-        <DropdownMenu.RadioGroup
+        <Builder.RadioGroup
           value={customColumn.display}
           onValueChange={(event) =>
             mutateSession((draft) => {
@@ -33,22 +34,18 @@ export function CustomColumn({ column }: CustomColumn) {
             })
           }
         >
-          <DropdownMenu.RadioItem value="battles">
-            Battles
-          </DropdownMenu.RadioItem>
-          <DropdownMenu.RadioItem value="winrate">
-            Winrate
-          </DropdownMenu.RadioItem>
-          <DropdownMenu.RadioItem value="wn8">WN8</DropdownMenu.RadioItem>
-          <DropdownMenu.RadioItem value="damage">Damage</DropdownMenu.RadioItem>
-          <DropdownMenu.RadioItem value="none">None</DropdownMenu.RadioItem>
-        </DropdownMenu.RadioGroup>
+          <Builder.RadioItem value="battles">Battles</Builder.RadioItem>
+          <Builder.RadioItem value="winrate">Winrate</Builder.RadioItem>
+          <Builder.RadioItem value="wn8">WN8</Builder.RadioItem>
+          <Builder.RadioItem value="damage">Damage</Builder.RadioItem>
+          <Builder.RadioItem value="none">None</Builder.RadioItem>
+        </Builder.RadioGroup>
 
         {!NO_DELTA.includes(customColumn.display) && (
           <>
-            <DropdownMenu.Separator />
+            <Builder.Separator />
 
-            <DropdownMenu.CheckboxItem
+            <Builder.CheckboxItem
               checked={customColumn.showDelta}
               onCheckedChange={(checked) =>
                 mutateSession((draft) => {
@@ -57,10 +54,10 @@ export function CustomColumn({ column }: CustomColumn) {
               }
             >
               Show delta
-            </DropdownMenu.CheckboxItem>
+            </Builder.CheckboxItem>
           </>
         )}
-      </DropdownMenu.SubContent>
-    </DropdownMenu.Sub>
+      </Builder.SubContent>
+    </Builder.Sub>
   );
 }

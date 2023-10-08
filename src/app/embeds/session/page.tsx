@@ -1,5 +1,6 @@
 'use client';
 
+import { ContextMenu } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
 import * as Breakdown from '../../../components/Breakdown';
 import { TreeTypeEnum } from '../../../components/Tanks';
@@ -13,6 +14,7 @@ import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import { useSession } from '../../../stores/session';
 import { IndividualTankStats, TanksStats } from '../../../types/tanksStats';
 import { CustomColumnDisplay } from '../../tools/session/components/CustomColumn';
+import { Menu } from '../../tools/session/components/Menu';
 
 const REFRESH_RATE = 1 / 5;
 
@@ -193,118 +195,133 @@ export default function SessionPage() {
   };
 
   return (
-    <Breakdown.Root>
-      {session.showTotal &&
-        session.isTracking &&
-        since !== undefined &&
-        diff !== undefined && (
-          <Breakdown.Row
-            minimized={!session.showCareer}
-            title={`Since ${since.toLocaleString(undefined, {
-              hour: 'numeric',
-              minute: 'numeric',
-              hour12: true,
-              month: 'short',
-              year: 'numeric',
-              day: 'numeric',
-            })}`}
-            stats={session.customColumns.map((customColumn) => {
-              const rowStat = totalRowStats[customColumn.display];
+    <ContextMenu.Root>
+      <ContextMenu.Trigger>
+        <div>
+          <Breakdown.Root>
+            {session.showTotal &&
+              session.isTracking &&
+              since !== undefined &&
+              diff !== undefined && (
+                <Breakdown.Row
+                  minimized={!session.showCareer}
+                  title={`Since ${since.toLocaleString(undefined, {
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    hour12: true,
+                    month: 'short',
+                    year: 'numeric',
+                    day: 'numeric',
+                  })}`}
+                  stats={session.customColumns.map((customColumn) => {
+                    const rowStat = totalRowStats[customColumn.display];
 
-              if (!rowStat) return undefined;
+                    if (!rowStat) return undefined;
 
-              return {
-                ...rowStat,
-                delta:
-                  customColumn.showDelta && rowStat.percentile === undefined
-                    ? rowStat.delta
-                    : undefined,
-              };
-            })}
-          />
-        )}
+                    return {
+                      ...rowStat,
+                      delta:
+                        customColumn.showDelta &&
+                        rowStat.percentile === undefined
+                          ? rowStat.delta
+                          : undefined,
+                    };
+                  })}
+                />
+              )}
 
-      {diff?.list
-        .sort((a, b) => b.stats.last_battle_time - a.stats.last_battle_time)
-        .map(({ stats, tankopedia, career, careerWN8, currentWN8 }) => {
-          const rowStats: Record<
-            CustomColumnDisplay,
-            Breakdown.RowStatItem | undefined
-          > = {
-            battles: {
-              title: 'Battles',
-              current: stats.all.battles.toLocaleString(),
-              career: career.all.battles.toLocaleString(),
-            },
-            winrate: {
-              title: 'Winrate',
-              current: `${(100 * (stats.all.wins / stats.all.battles)).toFixed(
-                2,
-              )}%`,
-              career: `${(100 * (career.all.wins / career.all.battles)).toFixed(
-                2,
-              )}%`,
-              delta:
-                stats.all.wins / stats.all.battles -
-                career.all.wins / career.all.battles,
-            },
-            wn8: {
-              title: 'WN8',
-              current:
-                currentWN8 === undefined
-                  ? undefined
-                  : Math.round(currentWN8).toLocaleString(),
-              career:
-                careerWN8 === undefined
-                  ? undefined
-                  : Math.round(careerWN8).toLocaleString(),
-              percentile:
-                currentWN8 === undefined
-                  ? undefined
-                  : getWN8Percentile(currentWN8),
-            },
-            damage: {
-              title: 'Damage',
-              current: Math.round(
-                stats.all.damage_dealt / stats.all.battles,
-              ).toLocaleString(),
-              career: Math.round(
-                career.all.damage_dealt / career.all.battles,
-              ).toLocaleString(),
-              delta:
-                stats.all.damage_dealt / stats.all.battles -
-                career.all.damage_dealt / career.all.battles,
-            },
-            none: undefined,
-          };
-
-          return (
-            <Breakdown.Row
-              key={stats.tank_id}
-              minimized={!session.showCareer}
-              title={tankopedia?.name ?? `Unknown tank ${stats.tank_id}`}
-              type="tank"
-              tankType={tankopedia?.type}
-              treeType={(() => {
-                if (tankopedia?.is_collectible) return TreeTypeEnum.Collector;
-                if (tankopedia?.is_premium) return TreeTypeEnum.Premium;
-              })()}
-              stats={session.customColumns.map((customColumn) => {
-                const rowStat = rowStats[customColumn.display];
-
-                if (!rowStat) return undefined;
-
-                return {
-                  ...rowStat,
-                  delta:
-                    customColumn.showDelta && rowStat.percentile === undefined
-                      ? rowStat.delta
-                      : undefined,
+            {diff?.list
+              .sort(
+                (a, b) => b.stats.last_battle_time - a.stats.last_battle_time,
+              )
+              .map(({ stats, tankopedia, career, careerWN8, currentWN8 }) => {
+                const rowStats: Record<
+                  CustomColumnDisplay,
+                  Breakdown.RowStatItem | undefined
+                > = {
+                  battles: {
+                    title: 'Battles',
+                    current: stats.all.battles.toLocaleString(),
+                    career: career.all.battles.toLocaleString(),
+                  },
+                  winrate: {
+                    title: 'Winrate',
+                    current: `${(
+                      100 *
+                      (stats.all.wins / stats.all.battles)
+                    ).toFixed(2)}%`,
+                    career: `${(
+                      100 *
+                      (career.all.wins / career.all.battles)
+                    ).toFixed(2)}%`,
+                    delta:
+                      stats.all.wins / stats.all.battles -
+                      career.all.wins / career.all.battles,
+                  },
+                  wn8: {
+                    title: 'WN8',
+                    current:
+                      currentWN8 === undefined
+                        ? undefined
+                        : Math.round(currentWN8).toLocaleString(),
+                    career:
+                      careerWN8 === undefined
+                        ? undefined
+                        : Math.round(careerWN8).toLocaleString(),
+                    percentile:
+                      currentWN8 === undefined
+                        ? undefined
+                        : getWN8Percentile(currentWN8),
+                  },
+                  damage: {
+                    title: 'Damage',
+                    current: Math.round(
+                      stats.all.damage_dealt / stats.all.battles,
+                    ).toLocaleString(),
+                    career: Math.round(
+                      career.all.damage_dealt / career.all.battles,
+                    ).toLocaleString(),
+                    delta:
+                      stats.all.damage_dealt / stats.all.battles -
+                      career.all.damage_dealt / career.all.battles,
+                  },
+                  none: undefined,
                 };
+
+                return (
+                  <Breakdown.Row
+                    key={stats.tank_id}
+                    minimized={!session.showCareer}
+                    title={tankopedia?.name ?? `Unknown tank ${stats.tank_id}`}
+                    type="tank"
+                    tankType={tankopedia?.type}
+                    treeType={(() => {
+                      if (tankopedia?.is_collectible)
+                        return TreeTypeEnum.Collector;
+                      if (tankopedia?.is_premium) return TreeTypeEnum.Premium;
+                    })()}
+                    stats={session.customColumns.map((customColumn) => {
+                      const rowStat = rowStats[customColumn.display];
+
+                      if (!rowStat) return undefined;
+
+                      return {
+                        ...rowStat,
+                        delta:
+                          customColumn.showDelta &&
+                          rowStat.percentile === undefined
+                            ? rowStat.delta
+                            : undefined,
+                      };
+                    })}
+                  />
+                );
               })}
-            />
-          );
-        })}
-    </Breakdown.Root>
+          </Breakdown.Root>
+        </div>
+      </ContextMenu.Trigger>
+
+      <Menu Builder={ContextMenu} />
+    </ContextMenu.Root>
   );
 }
