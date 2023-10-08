@@ -28,7 +28,7 @@ import listPlayers, {
 import { useSession } from '../../../stores/session';
 import { NormalizedTankStats, TanksStats } from '../../../types/tanksStats';
 import SessionPage from '../../embeds/session/page';
-import { CustomColumn } from './components/CustomColumn';
+import { Menu } from './components/Menu';
 import * as styles from './page.css';
 
 export default function Page() {
@@ -231,31 +231,7 @@ export default function Page() {
               </Button>
             </DropdownMenu.Trigger>
 
-            <DropdownMenu.Content>
-              <CustomColumn column={0} />
-              <CustomColumn column={1} />
-              <CustomColumn column={2} />
-              <CustomColumn column={3} />
-
-              <DropdownMenu.Separator />
-
-              <DropdownMenu.CheckboxItem
-                checked={session.showTotal}
-                onCheckedChange={(checked) =>
-                  useSession.setState({ showTotal: checked })
-                }
-              >
-                Show total
-              </DropdownMenu.CheckboxItem>
-              <DropdownMenu.CheckboxItem
-                checked={session.showCareer}
-                onCheckedChange={(checked) =>
-                  useSession.setState({ showCareer: checked })
-                }
-              >
-                Show career
-              </DropdownMenu.CheckboxItem>
-            </DropdownMenu.Content>
+            <Menu Builder={DropdownMenu} />
           </DropdownMenu.Root>
         </div>
       </div>
