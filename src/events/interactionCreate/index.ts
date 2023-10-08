@@ -134,30 +134,19 @@ commands.then((awaitedCommands) => {
 
   try {
     console.log(`Refreshing ${publicCommands.length} public command(s).`);
-    rest
-      .put(Routes.applicationCommands(getClientId()), { body: publicCommands })
-      .then((publicData) => {
-        console.log(
-          `Successfully refreshed ${
-            (publicData as RESTPostAPIChatInputApplicationCommandsJSONBody[])
-              .length
-          } public command(s).`,
-        );
-      });
+    rest.put(Routes.applicationCommands(getClientId()), {
+      body: publicCommands,
+    });
 
     console.log(`Refreshing ${guildCommands.length} guild command(s).`);
-    rest
-      .put(
-        Routes.applicationGuildCommands(getClientId(), discord.tres_guild_id),
-        { body: guildCommands },
-      )
-      .then((guildData) => {
-        console.log(
-          `Successfully refreshed ${
-            (guildData as unknown[]).length
-          } guild command(s).`,
-        );
-      });
+    (isDev()
+      ? [discord.test_guild_id]
+      : [discord.tres_guild_id, discord.sklld_guild_id]
+    ).forEach((guildId) =>
+      rest.put(Routes.applicationGuildCommands(getClientId(), guildId), {
+        body: guildCommands,
+      }),
+    );
   } catch (error) {
     console.error(error);
   }
