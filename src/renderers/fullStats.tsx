@@ -18,7 +18,7 @@ import {
   AllStats,
   SupplementaryStats,
 } from '../types/accountInfo';
-import { PlayerClanData } from '../types/playerClanData';
+import { PlayerClanInfo } from '../types/playerClanData';
 import { MultiTankFilters, StatType } from './stats';
 
 export default async function fullStats<Type extends StatType>(
@@ -36,7 +36,7 @@ export default async function fullStats<Type extends StatType>(
 
   if (type === 'player' || type === 'multi-tank') {
     const clan = (
-      await getWargamingResponse<PlayerClanData>(
+      await getWargamingResponse<PlayerClanInfo>(
         `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
       )
     )[id]?.clan;

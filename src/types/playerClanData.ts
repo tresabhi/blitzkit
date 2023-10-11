@@ -1,4 +1,4 @@
-export type PlayerClanData = {
+export type PlayerClanInfo = {
   [accountId: number]: {
     account_id: number;
     joined_at: number;

@@ -21,7 +21,7 @@ import autocompleteUsername from '../core/discord/autocompleteUsername';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistry } from '../events/interactionCreate';
 import { AccountInfo } from '../types/accountInfo';
-import { PlayerClanData } from '../types/playerClanData';
+import { PlayerClanInfo } from '../types/playerClanData';
 
 const COMP_TANKS = [
   // light tanks
@@ -70,7 +70,7 @@ export const ownedTanksCommand: CommandRegistry = {
         })),
       )
     ).filter((tank) => tank.tankopedia?.tier === tier);
-    const clanData = await getWargamingResponse<PlayerClanData>(
+    const clanData = await getWargamingResponse<PlayerClanInfo>(
       `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
     );
     const groupedTanks: Record<string, TankopediaEntry[]> = {};

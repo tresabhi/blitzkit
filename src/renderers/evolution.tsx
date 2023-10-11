@@ -12,7 +12,7 @@ import { ResolvedPeriod } from '../core/discord/resolvePeriodFromCommand';
 import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
 import { AccountInfo } from '../types/accountInfo';
 import { Histories } from '../types/histories';
-import { PlayerClanData } from '../types/playerClanData';
+import { PlayerClanInfo } from '../types/playerClanData';
 import { StatType } from './stats';
 
 export default async function evolution<Type extends StatType>(
@@ -26,7 +26,7 @@ export default async function evolution<Type extends StatType>(
 
   if (type === 'player') {
     const clan = (
-      await getWargamingResponse<PlayerClanData>(
+      await getWargamingResponse<PlayerClanInfo>(
         `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
       )
     )[id]?.clan;

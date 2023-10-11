@@ -12,7 +12,7 @@ import embedNegative from '../core/discord/embedNegative';
 import { CommandRegistry } from '../events/interactionCreate';
 import { theme } from '../stitches.config';
 import { AccountInfo } from '../types/accountInfo';
-import { PlayerClanData } from '../types/playerClanData';
+import { PlayerClanInfo } from '../types/playerClanData';
 
 const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
 
@@ -99,7 +99,7 @@ export const verifyCommand: CommandRegistry = {
         getWargamingResponse<AccountInfo>(
           `https://api.wotblitz.${region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
         ),
-        getWargamingResponse<PlayerClanData>(
+        getWargamingResponse<PlayerClanInfo>(
           `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
         ),
       ]);

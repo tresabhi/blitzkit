@@ -26,7 +26,7 @@ import { octokit } from '../core/github/octokit';
 import throwError from '../core/node/throwError';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 import { AccountInfo } from '../types/accountInfo';
-import { PlayerClanData } from '../types/playerClanData';
+import { PlayerClanInfo } from '../types/playerClanData';
 
 export interface RatingsPlayer {
   spa_id: number;
@@ -313,7 +313,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                       lastPlayerIndex + 1,
                     );
                     const ids = trimmed.map((player) => player.id).join(',');
-                    const clanData = await getWargamingResponse<PlayerClanData>(
+                    const clanData = await getWargamingResponse<PlayerClanInfo>(
                       `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${ids}&extra=clan`,
                     );
 
@@ -377,7 +377,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
             `https://api.wotblitz.${region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
           );
           const clan = (
-            await getWargamingResponse<PlayerClanData>(
+            await getWargamingResponse<PlayerClanInfo>(
               `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
             )
           )[id]?.clan;
@@ -437,7 +437,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                       playerIndex + halfRange + 1,
                     );
                     const ids = trimmed.map((player) => player.id).join(',');
-                    const clanData = await getWargamingResponse<PlayerClanData>(
+                    const clanData = await getWargamingResponse<PlayerClanInfo>(
                       `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${ids}&extra=clan`,
                     );
 
