@@ -65,7 +65,7 @@ export const todayCommand: CommandRegistry = {
     return [
       await today(player, cutoff, maximized, showTotal, false),
       primaryButton(path, 'Refresh'),
-      // linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
+      // linkButton(`https://example.com/${path}`, 'Embed'),
       linkButton(
         `https://www.blitzstars.com/player/${player.region}/${nickname}`,
         'BlitzStars',

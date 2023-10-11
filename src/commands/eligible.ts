@@ -58,7 +58,7 @@ export const eligibleCommand: CommandRegistry = {
     let body = '';
 
     if (clan === 'SKLLD') {
-      const { diffed } = await getDiffedTankStats(
+      const { diff: diffed } = await getDiffedTankStats(
         server,
         id,
         getTimeDaysAgo(server, 30),

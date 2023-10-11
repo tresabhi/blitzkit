@@ -27,7 +27,7 @@ export default async function today(
   showTotal = true,
   naked?: boolean,
 ) {
-  const { diffed, order } = await getDiffedTankStats(
+  const { diff: diffed, order } = await getDiffedTankStats(
     server,
     id,
     getTimeDaysAgo(server, 1),

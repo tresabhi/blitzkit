@@ -23,7 +23,7 @@ import { MultiTankFilters, StatType } from './stats';
 
 export default async function fullStats<Type extends StatType>(
   type: Type,
-  { start, end, statsName }: ResolvedPeriod,
+  { start, end, name: statsName }: ResolvedPeriod,
   { region: server, id }: ResolvedPlayer,
   filters: Type extends 'tank'
     ? number
@@ -50,7 +50,12 @@ export default async function fullStats<Type extends StatType>(
     image = (await tankopedia)[filters as number]?.images.normal;
   }
 
-  const { diffed, order } = await getDiffedTankStats(server, id, start, end);
+  const { diff: diffed, order } = await getDiffedTankStats(
+    server,
+    id,
+    start,
+    end,
+  );
   const awaitedTankopedia = await tankopedia;
   let stats: AllStats | undefined;
   let supplementaryStats: SupplementaryStats;

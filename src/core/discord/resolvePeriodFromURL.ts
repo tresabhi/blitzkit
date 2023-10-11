@@ -2,24 +2,22 @@ import { Region } from '../../constants/regions';
 import getPeriodNow from '../blitzstars/getPeriodNow';
 import getPeriodStart from '../blitzstars/getPeriodStart';
 import getTimeDaysAgo from '../blitzstars/getTimeDaysAgo';
-import { PeriodSize, PeriodType } from './addPeriodSubCommands';
+import { PeriodType } from './addPeriodSubCommands';
 import {
   ResolvedPeriod,
   getPeriodOptionName,
 } from './resolvePeriodFromCommand';
 
 export default function resolvePeriodFromURL(
-  server: Region,
+  region: Region,
   urlString: string,
 ) {
-  let statsName: string;
-  let evolutionName: string;
+  let name: string;
   let start: number;
   let end: number;
   const url = new URL(urlString);
-  const path = url.pathname.split('/').filter(Boolean);
-  const periodSubcommand = path[path.length - 1] as PeriodType;
-  const periodOption = url.searchParams.get('period') as PeriodSize;
+  const path = url.pathname.split('/');
+  const periodSubcommand = path[2] as PeriodType;
 
   if (periodSubcommand === 'custom') {
     const startRaw = parseInt(url!.searchParams.get('start')!);
@@ -27,16 +25,18 @@ export default function resolvePeriodFromURL(
     const startDaysAgoMin = Math.min(startRaw, endRaw);
     const endDaysAgoMax = Math.max(startRaw, endRaw);
 
-    statsName = `${startDaysAgoMin} to ${endDaysAgoMax} days' statistics`;
-    evolutionName = `${startDaysAgoMin} to ${endDaysAgoMax} days' evolution`;
-    start = getTimeDaysAgo(server, endDaysAgoMax);
-    end = getTimeDaysAgo(server, startDaysAgoMin);
+    name = `${startDaysAgoMin} - ${endDaysAgoMax} days`;
+    start = getTimeDaysAgo(region, endDaysAgoMax);
+    end = getTimeDaysAgo(region, startDaysAgoMin);
   } else {
-    statsName = `${getPeriodOptionName(periodOption)} Statistics`;
-    evolutionName = `${getPeriodOptionName(periodOption)} Evolution`;
-    start = getPeriodStart(server, periodOption);
+    name = getPeriodOptionName(periodSubcommand);
+    start = getPeriodStart(region, periodSubcommand);
     end = getPeriodNow();
   }
 
-  return { statsName, evolutionName, start, end } satisfies ResolvedPeriod;
+  return {
+    name,
+    start,
+    end,
+  } satisfies ResolvedPeriod;
 }

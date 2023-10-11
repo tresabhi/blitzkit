@@ -34,6 +34,11 @@ export const emptyTankHistoryNode: TankHistoryRaw = {
   all: emptyAllStats,
 };
 
+export interface DiffedTankStats {
+  diff: Record<number, AllStats>;
+  order: number[];
+}
+
 // BIG TODO: merge this neatly with diffNormalizedTankStats
 export default async function getDiffedTankStats(
   server: Region,
@@ -66,7 +71,7 @@ export default async function getDiffedTankStats(
   const playedTanks: number[] = [];
 
   // fetch history node right before "start" and right before "end"
-  const diffed: Record<number, AllStats> = {};
+  const diff: Record<number, AllStats> = {};
   inRangeTanks.forEach((tankId) => {
     const sortedHistory = tankSortedHistory[tankId];
     const previousIndex =
@@ -77,30 +82,30 @@ export default async function getDiffedTankStats(
     const latest =
       sortedHistory[latestIndex] ?? sortedHistory[sortedHistory.length - 1];
 
-    function diff(get: (allStats: AllStats) => number) {
+    function d(get: (allStats: AllStats) => number) {
       return get(latest.all) - get(previous.all);
     }
 
     // check if there was a change in battles as games in ratings do update last_battle_time
-    if (diff((a) => a.battles) > 0) {
-      diffed[tankId] = {
-        battles: diff((a) => a.battles),
-        capture_points: diff((a) => a.capture_points),
-        damage_dealt: diff((a) => a.damage_dealt),
-        damage_received: diff((a) => a.damage_received),
-        dropped_capture_points: diff((a) => a.dropped_capture_points),
-        frags: diff((a) => a.frags),
-        frags8p: diff((a) => a.frags8p),
-        hits: diff((a) => a.hits),
-        losses: diff((a) => a.losses),
+    if (d((a) => a.battles) > 0) {
+      diff[tankId] = {
+        battles: d((a) => a.battles),
+        capture_points: d((a) => a.capture_points),
+        damage_dealt: d((a) => a.damage_dealt),
+        damage_received: d((a) => a.damage_received),
+        dropped_capture_points: d((a) => a.dropped_capture_points),
+        frags: d((a) => a.frags),
+        frags8p: d((a) => a.frags8p),
+        hits: d((a) => a.hits),
+        losses: d((a) => a.losses),
         max_frags: latest.all.max_frags,
         max_xp: latest.all.max_xp,
-        shots: diff((a) => a.shots),
-        spotted: diff((a) => a.spotted),
-        survived_battles: diff((a) => a.survived_battles),
-        win_and_survived: diff((a) => a.win_and_survived),
-        wins: diff((a) => a.wins),
-        xp: diff((a) => a.xp),
+        shots: d((a) => a.shots),
+        spotted: d((a) => a.spotted),
+        survived_battles: d((a) => a.survived_battles),
+        win_and_survived: d((a) => a.win_and_survived),
+        wins: d((a) => a.wins),
+        xp: d((a) => a.xp),
       };
 
       playedTanks.push(tankId);
@@ -116,5 +121,5 @@ export default async function getDiffedTankStats(
     return bLatest.last_battle_time - aLatest.last_battle_time;
   });
 
-  return { diffed, order };
+  return { diff, order } satisfies DiffedTankStats;
 }

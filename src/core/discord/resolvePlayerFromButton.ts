@@ -1,9 +1,8 @@
 import { ButtonInteraction, CacheType } from 'discord.js';
-import { CYCLIC_API } from '../../constants/cyclic';
 import resolvePlayerFromURL from './resolvePlayerFromURL';
 
 export default async function resolvePlayerFromButton(
   interaction: ButtonInteraction<CacheType>,
 ) {
-  return resolvePlayerFromURL(`${CYCLIC_API}/${interaction.customId}`);
+  return resolvePlayerFromURL(`https://exmaple.com/${interaction.customId}`);
 }

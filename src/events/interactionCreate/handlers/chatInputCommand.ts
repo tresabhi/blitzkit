@@ -17,7 +17,6 @@ export default async function handleChatInputCommand(
 ) {
   const registry = (await commands)[interaction.commandName];
 
-  console.log(interaction.toString());
   await interaction.deferReply();
 
   try {

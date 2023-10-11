@@ -44,7 +44,8 @@ export type InteractionRawReturnable =
   | EmbedBuilder
   | ButtonBuilder
   | AttachmentBuilder
-  | JSX.Element;
+  | JSX.Element
+  | null;
 export type InteractionIterableReturnable =
   | InteractionRawReturnable
   | InteractionRawReturnable[];

@@ -1,11 +1,7 @@
-import {
-  CacheType,
-  ChatInputCommandInteraction,
-  CommandInteractionOption,
-} from 'discord.js';
+import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 
 export interface Parameters {
-  [key: string]: CommandInteractionOption['value'] | undefined | null;
+  [key: string]: string | number | boolean | undefined | null;
 }
 
 export default function interactionToURL(

@@ -2,8 +2,7 @@ import { deburr } from 'lodash';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { context } from '../blitzkrieg/context';
 import getWargamingResponse from './getWargamingResponse';
-
-export type TankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
+import { TreeTypeString } from '../../components/Tanks';
 
 export interface TankopediaEntry {
   name: string;
@@ -14,10 +13,10 @@ export interface TankopediaEntry {
   cost: { price_credit: number; price_gold: number };
   images: { preview: string; normal: string };
   tank_id: number;
-  type: TankType;
+  type: string;
   description: string;
 }
-
+type asd = TreeTypeString
 export interface Tankopedia {
   [id: number]: TankopediaEntry | undefined;
 }
@@ -77,21 +76,21 @@ export const tankopediaInfo = getWargamingResponse<TankopediaInfo>(
 );
 console.log('Cached tankopedia info');
 
-export const TANK_ICONS: Record<TankType, string> = {
+export const TANK_ICONS: Record<string, string> = {
   'AT-SPG': 'https://i.imgur.com/BIHSEH0.png',
   lightTank: 'https://i.imgur.com/CSNha5V.png',
   mediumTank: 'https://i.imgur.com/wvf3ltm.png',
   heavyTank: 'https://i.imgur.com/ECeqlZa.png',
 };
 
-export const TANK_ICONS_PREMIUM: Record<TankType, string> = {
+export const TANK_ICONS_PREMIUM: Record<string, string> = {
   'AT-SPG': 'https://i.imgur.com/TCu3EdR.png',
   lightTank: 'https://i.imgur.com/zdkpTRb.png',
   mediumTank: 'https://i.imgur.com/3z7eHX6.png',
   heavyTank: 'https://i.imgur.com/P3vbmyA.png',
 };
 
-export const TANK_ICONS_COLLECTOR: Record<TankType, string> = {
+export const TANK_ICONS_COLLECTOR: Record<string, string> = {
   'AT-SPG': 'https://i.imgur.com/WTjeirB.png',
   lightTank: 'https://i.imgur.com/EwhtKkU.png',
   mediumTank: 'https://i.imgur.com/u8YDMBh.png',

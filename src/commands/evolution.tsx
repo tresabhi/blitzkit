@@ -1,9 +1,9 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { CYCLIC_API } from '../constants/cyclic';
 import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankId from '../core/blitz/resolveTankId';
 import addStatTypeSubCommandGroups from '../core/discord/addStatTypeSubCommandGroups';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import interactionToURL from '../core/discord/interactionToURL';
@@ -24,7 +24,7 @@ export const evolutionCommand = new Promise<CommandRegistryRaw>(
       new SlashCommandBuilder()
         .setName('evolution')
         .setDescription('Evolution of statistics'),
-      false,
+      (option) => option.addStringOption(addUsernameChoices),
     );
 
     resolve({
@@ -59,7 +59,6 @@ export const evolutionCommand = new Promise<CommandRegistryRaw>(
         return [
           await evolution(commandGroup, period, player, tankId),
           primaryButton(path, 'Refresh'),
-          // linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
           linkButton(
             `https://www.blitzstars.com/player/${player.region}/${nickname}${
               commandGroup === 'tank' ? `/tank/${tankId!}` : ''
@@ -75,7 +74,7 @@ export const evolutionCommand = new Promise<CommandRegistryRaw>(
       },
 
       async button(interaction) {
-        const url = new URL(`${CYCLIC_API}/${interaction.customId}`);
+        const url = new URL(`https://example.com/${interaction.customId}`);
         const path = url.pathname.split('/').filter(Boolean);
         const commandGroup = path[1] as StatType;
         const player = await resolvePlayerFromButton(interaction);
