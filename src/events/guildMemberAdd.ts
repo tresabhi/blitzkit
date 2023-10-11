@@ -4,6 +4,7 @@ import {
   GuildMember,
   TextChannel,
 } from 'discord.js';
+import markdownEscape from 'markdown-escape';
 import discord from '../../discord.json' assert { type: 'json' };
 import { ACCENT_COLOR } from '../constants/colors';
 
@@ -18,14 +19,12 @@ export default async function (member: GuildMember) {
       embeds: [
         new EmbedBuilder()
           .setColor(ACCENT_COLOR)
-          .setTitle(`Welcome ${member.user.username}`)
+          .setTitle(`Welcome, ${markdownEscape(member.user.displayName)}`)
           .setDescription(
-            `Welcome to the Skilled server, **${member.user.username}**! To continue, please use the \`/link\` command.`,
+            `Welcome to the Skilled server! To continue, please use the \`/link\` command.`,
           ),
       ],
       files: [new AttachmentBuilder('https://i.imgur.com/2p6GFgC.gif')],
     });
-
-    console.log(`${member.user.tag} joined`);
   }
 }
