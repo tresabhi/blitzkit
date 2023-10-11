@@ -1,4 +1,5 @@
 import {
+  AttachmentBuilder,
   AutocompleteInteraction,
   ButtonBuilder,
   ButtonInteraction,
@@ -20,6 +21,7 @@ import { eligibleCommand } from '../../commands/eligible';
 import { evolutionCommand } from '../../commands/evolution';
 import { fullStatsCommand } from '../../commands/fullStats';
 import { inactiveCommand } from '../../commands/inactive';
+import { verifyCommand } from '../../commands/link';
 import { ownedTanksCommand } from '../../commands/ownedTanks';
 import { pingCommand } from '../../commands/ping';
 import { playerAchievementsCommand } from '../../commands/playerAchievements';
@@ -30,7 +32,6 @@ import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { searchTanksCommand } from '../../commands/searchTanks';
 import { statsCommand } from '../../commands/stats';
 import { todayCommand } from '../../commands/today';
-import { verifyCommand } from '../../commands/link';
 import getClientId from '../../core/node/getClientId';
 import isDev from '../../core/node/isDev';
 import { secrets } from '../../core/node/secrets';
@@ -42,6 +43,7 @@ export type InteractionRawReturnable =
   | string
   | EmbedBuilder
   | ButtonBuilder
+  | AttachmentBuilder
   | JSX.Element;
 export type InteractionIterableReturnable =
   | InteractionRawReturnable

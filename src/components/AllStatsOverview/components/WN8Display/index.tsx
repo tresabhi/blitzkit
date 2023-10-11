@@ -2,7 +2,7 @@ import { Percentile } from '../../../../constants/percentiles';
 import getWN8Percentile from '../../../../core/blitz/getWN8Percentile';
 import { theme } from '../../../../stitches.config';
 import { PERCENTILE_COLORS } from '../../../PercentileIndicator';
-import { Glow, GlowSide } from './components/Glow';
+import { Glow } from './components/Glow';
 
 export interface WN8DisplayProps {
   WN8?: number;
@@ -37,7 +37,7 @@ export function WN8Display({ WN8 }: WN8DisplayProps) {
         gap: -16,
       }}
     >
-      <Glow percentile={percentile} side={GlowSide.Top} />
+      <Glow color={PERCENTILE_COLORS[percentile]} />
 
       <div
         style={{
@@ -71,7 +71,7 @@ export function WN8Display({ WN8 }: WN8DisplayProps) {
         </span>
       </div>
 
-      <Glow percentile={percentile} side={GlowSide.Bottom} />
+      <Glow color={PERCENTILE_COLORS[percentile]} direction="reverse" />
     </div>
   );
 }

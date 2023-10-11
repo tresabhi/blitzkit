@@ -1,5 +1,6 @@
 import {
   ActionRowBuilder,
+  AttachmentBuilder,
   ButtonBuilder,
   EmbedBuilder,
   InteractionEditReplyOptions,
@@ -30,6 +31,9 @@ export default async function normalizeInteractionReturnable(
         (reply.components[0] as ActionRowBuilder<ButtonBuilder>).addComponents(
           item,
         );
+      } else if (item instanceof AttachmentBuilder) {
+        if (!reply.files) reply.files = [];
+        reply.files.push(item);
       } else {
         const image = await jsxToPng(item);
         if (!reply.files) reply.files = [];

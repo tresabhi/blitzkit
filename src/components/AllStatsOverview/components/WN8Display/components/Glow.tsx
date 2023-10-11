@@ -1,31 +1,28 @@
-import { Percentile } from '../../../../../constants/percentiles';
-import { PERCENTILE_COLORS } from '../../../../PercentileIndicator';
-
-export enum GlowSide {
-  Top,
-  Bottom,
-}
-
 export interface GlowProps {
-  percentile: Percentile;
-  side: GlowSide;
+  color: string;
+  direction?: 'default' | 'reverse';
+  rotation?: number;
 }
 
-export function Glow({ percentile, side }: GlowProps) {
-  const color = PERCENTILE_COLORS[percentile];
+export function Glow({
+  color,
+  direction = 'default',
+  rotation = 0,
+}: GlowProps) {
   const color1 = color;
   const color2 = `${color}00`;
 
   const background = `linear-gradient(${
-    side === GlowSide.Top ? 0 : 180
+    direction === 'default' ? 0 : 180
   }deg, ${color1} 0%, ${color2} 100%)`;
 
   return (
     <div
       style={{
         display: 'flex',
-        alignItems: side === GlowSide.Top ? 'flex-end' : 'flex-start',
+        alignItems: direction === 'default' ? 'flex-end' : 'flex-start',
         justifyContent: 'center',
+        transform: `rotate(${rotation}deg)`,
       }}
     >
       <div style={{ height: 54, width: 16, background }} />
