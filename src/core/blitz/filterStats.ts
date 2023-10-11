@@ -75,5 +75,5 @@ export async function filterStats(
       ) / battlesOfTanksWithTankopediaEntry,
   };
 
-  return { stats, supplementary };
+  return { stats, supplementary, filteredOrder };
 }

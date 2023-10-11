@@ -29,7 +29,7 @@ import resolvePlayerFromCommand, {
 } from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 
-export default async function render(
+async function render(
   { region, id }: ResolvedPlayer,
   { start, end, name }: ResolvedPeriod,
   filters: StatFilters,
@@ -39,17 +39,18 @@ export default async function render(
   const clanImage = clan ? getClanLogo(clan.emblem_set_id) : undefined;
   const diffedTankStats = await getDiffedTankStats(region, id, start, end);
   const { stats, supplementary } = await filterStats(diffedTankStats, filters);
+  const filterDescriptions = await filtersToDescription(filters);
 
   return (
     <Wrapper>
       <TitleBar
         name={nickname}
         image={clanImage}
-        description={`${name} • ${await filtersToDescription(filters)}`}
+        description={`${name} • ${filterDescriptions}`}
       />
 
-      {!stats?.battles && <NoData type={NoDataType.BattlesInPeriod} />}
-      {stats?.battles > 0 && (
+      {!stats.battles && <NoData type={NoDataType.BattlesInPeriod} />}
+      {stats.battles > 0 && (
         <AllStatsOverview stats={stats} supplementaryStats={supplementary} />
       )}
     </Wrapper>

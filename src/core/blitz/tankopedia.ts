@@ -9,7 +9,7 @@ export interface TankopediaEntry {
   nation: string;
   is_premium: boolean;
   is_collectible: boolean;
-  tier: number;
+  tier: Tier;
   cost: { price_credit: number; price_gold: number };
   images: { preview: string; normal: string };
   tank_id: number;
