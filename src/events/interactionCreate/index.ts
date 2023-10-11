@@ -30,7 +30,7 @@ import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { searchTanksCommand } from '../../commands/searchTanks';
 import { statsCommand } from '../../commands/stats';
 import { todayCommand } from '../../commands/today';
-import { verifyCommand } from '../../commands/verify';
+import { verifyCommand } from '../../commands/link';
 import getClientId from '../../core/node/getClientId';
 import isDev from '../../core/node/isDev';
 import { secrets } from '../../core/node/secrets';

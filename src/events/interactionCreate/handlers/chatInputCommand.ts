@@ -11,7 +11,6 @@ import embedNegative from '../../../core/discord/embedNegative';
 import embedWarning from '../../../core/discord/embedWarning';
 import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable';
 import { psa } from '../../../core/discord/psa';
-import { handleError } from '../../error';
 
 export default async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
@@ -55,6 +54,8 @@ export default async function handleChatInputCommand(
         .setStyle(ButtonStyle.Link),
     );
 
+    console.error(interaction.commandName, error);
+
     await interaction.editReply({
       embeds: [
         embedNegative(
@@ -64,7 +65,5 @@ export default async function handleChatInputCommand(
       ],
       components: [actionRow],
     });
-
-    handleError(error as Error, interaction.commandName);
   }
 }
