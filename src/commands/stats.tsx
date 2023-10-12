@@ -72,22 +72,19 @@ export const statsCommand = new Promise<CommandRegistryRaw>(async (resolve) => {
     command,
 
     async handler(interaction) {
-      const resolvedPlayer = await resolvePlayerFromCommand(interaction);
-      const resolvedPeriod = resolvePeriodFromCommand(
-        resolvedPlayer.region,
-        interaction,
-      );
+      const player = await resolvePlayerFromCommand(interaction);
+      const period = resolvePeriodFromCommand(player.region, interaction);
       const filters = getFiltersFromCommand(interaction);
       const path = interactionToURL(interaction, {
-        ...resolvedPlayer,
+        ...player,
         ...getCustomPeriodParams(interaction),
         ...filters,
       });
 
       return Promise.all([
-        render(resolvedPlayer, resolvedPeriod, filters),
+        render(player, period, filters),
         refreshButton(interaction, path),
-        getBlitzStarsLinkButton(resolvedPlayer.region, resolvedPlayer.id),
+        getBlitzStarsLinkButton(player.region, player.id),
       ]);
     },
 

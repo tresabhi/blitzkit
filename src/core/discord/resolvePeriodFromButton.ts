@@ -18,7 +18,7 @@ export default function resolvePeriodFromButton(
   let end: number;
   const url = new URL(`https://example.com/${interaction.customId}`);
   const path = url.pathname.split('/');
-  const periodSubcommand = path[2] as PeriodType;
+  const periodSubcommand = path.at(-1) as PeriodType;
 
   if (periodSubcommand === 'custom') {
     const startRaw = parseInt(url!.searchParams.get('start')!);

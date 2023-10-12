@@ -6,20 +6,20 @@ import * as Graph from '../components/Graph';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanLogo } from '../core/blitz/getClanLogo';
 import { getPlayerClanInfo } from '../core/blitz/getPlayerClanInfo';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankId from '../core/blitz/resolveTankId';
+import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import getPlayerHistories from '../core/blitzstars/getPlayerHistories';
 import getTankHistories from '../core/blitzstars/getTankHistories';
 import addPeriodSubCommands from '../core/discord/addPeriodSubCommands';
+import addTankChoices from '../core/discord/addTankChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
+import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
 import interactionToURL from '../core/discord/interactionToURL';
-import linkButton from '../core/discord/linkButton';
 import primaryButton from '../core/discord/primaryButton';
 import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
 import resolvePeriodFromCommand, {
@@ -30,7 +30,6 @@ import resolvePlayerFromCommand, {
   ResolvedPlayer,
 } from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistryRaw } from '../events/interactionCreate';
-import { AccountInfo } from '../types/accountInfo';
 
 type EvolutionStatType = 'player' | 'tank';
 
@@ -40,6 +39,7 @@ async function render(
   type: 'player' | 'tank',
   tankId: number | null,
 ) {
+  const accountInfo = await getAccountInfo(region, id);
   const clan = (await getPlayerClanInfo(region, id))[id]?.clan;
   const logo = clan ? getClanLogo(clan.emblem_set_id) : undefined;
   const histories = await (type === 'player'
@@ -73,10 +73,6 @@ async function render(
   const maxX = Math.max(...xs);
   const minX = Math.min(...xs);
 
-  const accountInfo = await getWargamingResponse<AccountInfo>(
-    `https://api.wotblitz.${region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-  );
-
   return (
     <Wrapper>
       <TitleBar
@@ -85,7 +81,6 @@ async function render(
         description={name}
       />
 
-      {/* goofy ahh bug forces me to call them as functions */}
       {plot.length > 0 && (
         <Graph.Root
           verticalMargin={{
@@ -103,7 +98,6 @@ async function render(
           xMaxLabel={new Date(maxTime * 1000).toDateString()}
         >
           {Graph.Line({
-            // career winrate
             color: Graph.LineColor.Red,
             plot: plot,
             minY,
@@ -142,7 +136,9 @@ export const evolutionCommand = new Promise<CommandRegistryRaw>(
         option.addStringOption(addUsernameChoices),
       ),
       addPeriodSubCommands(tankGroup!, (option) =>
-        option.addStringOption(addUsernameChoices),
+        option
+          .addStringOption(addTankChoices)
+          .addStringOption(addUsernameChoices),
       ),
     ]);
 
@@ -155,34 +151,29 @@ export const evolutionCommand = new Promise<CommandRegistryRaw>(
       async handler(interaction) {
         const commandGroup =
           interaction.options.getSubcommandGroup() as EvolutionStatType;
-        const resolvedPlayer = await resolvePlayerFromCommand(interaction);
-        const resolvedPeriod = resolvePeriodFromCommand(
-          resolvedPlayer.region,
-          interaction,
-        );
+        const player = await resolvePlayerFromCommand(interaction);
+        const period = resolvePeriodFromCommand(player.region, interaction);
         const tankIdRaw = interaction.options.getString('tank')!;
         const tankId =
           commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
-        const start = interaction.options.getInteger('start');
-        const end = interaction.options.getInteger('end');
-        const { nickname } = (
-          await getAccountInfo(resolvedPlayer.region, resolvedPlayer.id)
-        )[resolvedPlayer.id];
+        const { nickname } = (await getAccountInfo(player.region, player.id))[
+          player.id
+        ];
         const path = interactionToURL(interaction, {
-          ...resolvedPlayer,
+          ...player,
+          ...getCustomPeriodParams(interaction),
           tankId,
-          start,
-          end,
         });
 
+        getBlitzStarsLinkButton;
+
         return [
-          await render(resolvedPlayer, resolvedPeriod, commandGroup, tankId),
+          await render(player, period, commandGroup, tankId),
           primaryButton(path, 'Refresh'),
-          linkButton(
-            `https://www.blitzstars.com/player/${
-              resolvedPlayer.region
-            }/${nickname}${commandGroup === 'tank' ? `/tank/${tankId!}` : ''}`,
-            'BlitzStars',
+          await getBlitzStarsLinkButton(
+            player.region,
+            player.id,
+            tankId ?? undefined,
           ),
         ];
       },
@@ -195,7 +186,7 @@ export const evolutionCommand = new Promise<CommandRegistryRaw>(
       async button(interaction) {
         const url = new URL(`https://example.com/${interaction.customId}`);
         const path = url.pathname.split('/');
-        const commandGroup = path[1] as EvolutionStatType;
+        const commandGroup = path[2] as EvolutionStatType;
         const player = await resolvePlayerFromButton(interaction);
         const period = resolvePeriodFromButton(player.region, interaction);
 
