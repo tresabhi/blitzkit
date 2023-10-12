@@ -28,6 +28,4 @@ export default async function autocompleteTanks(
         )
       : [],
   );
-
-  console.log(`Tanks autocomplete for ${focusedOption.value}`);
 }

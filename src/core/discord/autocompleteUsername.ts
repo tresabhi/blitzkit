@@ -25,11 +25,5 @@ export default async function autocompleteUsername(
           )
         : [],
     );
-
-    console.log(`Username autocomplete for ${focusedOption.value}`);
-  } catch (error) {
-    console.warn(
-      `Failed to autocomplete username for ${focusedOption.value} in time`,
-    );
-  }
+  } catch (error) {}
 }

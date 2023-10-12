@@ -25,6 +25,4 @@ export default async function autocompleteClan(
         )
       : [],
   );
-
-  console.log(`Clan autocomplete for ${focusedOption.value}`);
 }
