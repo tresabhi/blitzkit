@@ -34,6 +34,8 @@ export default async function normalizeInteractionReturnable(
       } else if (item instanceof AttachmentBuilder) {
         if (!reply.files) reply.files = [];
         reply.files.push(item);
+      } else if (item === null) {
+        return;
       } else {
         const image = await jsxToPng(item);
         if (!reply.files) reply.files = [];

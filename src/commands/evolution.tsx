@@ -15,7 +15,6 @@ import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 import evolution from '../renderers/evolution';
-import { StatType } from '../renderers/stats';
 import { AccountInfo } from '../types/accountInfo';
 
 export const evolutionCommand = new Promise<CommandRegistryRaw>(

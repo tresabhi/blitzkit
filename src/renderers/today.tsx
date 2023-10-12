@@ -192,15 +192,12 @@ export default async function today(
     <Wrapper>
       <TitleBar
         name={accountInfo[id].nickname}
-        nameDiscriminator={
-          clanData[id]?.clan ? `[${clanData[id]?.clan?.tag}]` : undefined
-        }
         image={
           clanData[id]?.clan
             ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`
             : undefined
         }
-        description={`Today's breakdown • ${new Date().toDateString()}`}
+        description="Today's breakdown"
       />
 
       {rows.length === 0 && <NoData type={NoDataType.BattlesInPeriod} />}

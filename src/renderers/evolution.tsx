@@ -13,11 +13,10 @@ import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
 import { AccountInfo } from '../types/accountInfo';
 import { Histories } from '../types/histories';
 import { PlayerClanInfo } from '../types/playerClanData';
-import { StatType } from './stats';
 
 export default async function evolution<Type extends StatType>(
   type: Type,
-  { start, end, evolutionName }: ResolvedPeriod,
+  { start, end, name }: ResolvedPeriod,
   { region: server, id }: ResolvedPlayer,
   tankId: Type extends 'tank' ? number : null,
 ) {
@@ -84,9 +83,8 @@ export default async function evolution<Type extends StatType>(
     <Wrapper>
       <TitleBar
         name={accountInfo[id].nickname}
-        nameDiscriminator={nameDiscriminator}
         image={image}
-        description={`${evolutionName} • ${new Date().toDateString()}`}
+        description={name}
       />
 
       {/* goofy ahh bug forces me to call them as functions */}

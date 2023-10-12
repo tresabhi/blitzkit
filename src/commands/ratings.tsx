@@ -513,8 +513,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
             <TitleBar
               name={titleName}
               image={titleImage}
-              nameDiscriminator={titleNameDiscriminator}
-              description={`${titleDescription} • ${new Date().toDateString()}`}
+              description={titleDescription}
             />
 
             {items && (
