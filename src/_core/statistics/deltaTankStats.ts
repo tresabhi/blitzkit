@@ -4,10 +4,7 @@ import {
   emptyIndividualTankStats,
 } from '../../types/tanksStats';
 
-export function diffNormalizedTankStats(
-  a: NormalizedTankStats,
-  b: NormalizedTankStats,
-) {
+export function deltaTankStats(a: NormalizedTankStats, b: NormalizedTankStats) {
   const bTanks = Object.keys(b);
   const changedTanks = bTanks.filter((id) => {
     return (

@@ -1,7 +1,10 @@
-import { AllStats } from '../../types/accountInfo';
+import { AllStats } from '../blitz/getAccountInfo';
 
 /**
  * Formula from https://web.archive.org/web/20190105064817/http://wiki.wnefficiency.net/pages/WN8
+ *
+ * @param expected what all players on average perform like
+ * @param average what the player in question performs like
  */
 export default function calculateWN8(expected: AllStats, average: AllStats) {
   const avgDmg = average.damage_dealt / average.battles;

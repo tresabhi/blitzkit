@@ -1,7 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
-import calculateWN8 from '../core/blitz/calculateWN8';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import { getAccountInfo } from '../_core/blitz/getAccountInfo';
+import calculateWN8 from '../_core/statistics/calculateWN8';
 import sumStats from '../core/blitz/sumStats';
 import { tankopedia } from '../core/blitz/tankopedia';
 import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats';
@@ -14,7 +13,6 @@ import embedPositive from '../core/discord/embedPositive';
 import markdownTable, { TableInput } from '../core/discord/markdownTable';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistry } from '../events/interactionCreate';
-import { AccountInfo } from '../types/accountInfo';
 import { PossiblyPromise } from '../types/possiblyPromise';
 
 export type SkilledClan = 'SKLLD' | 'SMRI';
@@ -48,20 +46,18 @@ export const eligibleCommand: CommandRegistry = {
 
   async handler(interaction) {
     const clan = interaction.options.getString('clan') as SkilledClan;
-    const { id, region: server } = await resolvePlayerFromCommand(interaction);
-    const accountInfo = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-    );
+    const { id, region: region } = await resolvePlayerFromCommand(interaction);
+    const accountInfo = await getAccountInfo(region, id);
     const problems: TableInput = [];
-    const title = `${accountInfo[id].nickname}'s eligibility for ${SKILLED_CLANS[clan]}`;
+    const title = `${accountInfo.nickname}'s eligibility for ${SKILLED_CLANS[clan]}`;
     let isEligible = false;
     let body = '';
 
     if (clan === 'SKLLD') {
       const { diff: diffed } = await getDiffedTankStats(
-        server,
+        region,
         id,
-        getTimeDaysAgo(server, 30),
+        getTimeDaysAgo(region, 30),
         getPeriodNow(),
       );
       const entries = Object.entries(diffed);
@@ -171,7 +167,7 @@ export const eligibleCommand: CommandRegistry = {
             problems,
           )}`;
     } else if (clan === 'SMRI') {
-      const stats = accountInfo[id].statistics.all;
+      const stats = accountInfo.statistics.all;
 
       if (stats.battles < 1500) {
         problems.push([

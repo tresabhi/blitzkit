@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
+import { StatFilters } from '../../_core/statistics/filterStats';
 import { TreeTypeString } from '../../components/Tanks';
-import { StatFilters } from '../blitz/filterStats';
 
 export function getFiltersFromCommand(
   interaction: ChatInputCommandInteraction,

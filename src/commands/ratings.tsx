@@ -5,14 +5,14 @@ import {
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
 import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
+import { getAccountInfo } from '../_core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../_core/blitz/getClanAccountInfo';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
 import { REGION_NAMES_SHORT, Region } from '../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import getArchivedRatingsInfo from '../core/blitz/getArchivedRatingsInfo';
 import getRatingsInfo from '../core/blitz/getRatingsInfo';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
 import getMidnightLeaderboard, {
   DATABASE_REPO,
@@ -25,8 +25,6 @@ import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { octokit } from '../core/github/octokit';
 import throwError from '../core/node/throwError';
 import { CommandRegistryRaw } from '../events/interactionCreate';
-import { AccountInfo } from '../types/accountInfo';
-import { PlayerClanInfo } from '../types/playerClanData';
 
 export interface RatingsPlayer {
   spa_id: number;
@@ -312,9 +310,9 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                       firstPlayerIndex,
                       lastPlayerIndex + 1,
                     );
-                    const ids = trimmed.map((player) => player.id).join(',');
-                    const clanData = await getWargamingResponse<PlayerClanInfo>(
-                      `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${ids}&extra=clan`,
+                    const clanData = await getClanAccountInfo(
+                      region,
+                      trimmed.map(({ id }) => id),
                     );
 
                     return trimmed.map(
@@ -373,14 +371,8 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
 
           if (regionRatingsInfo.detail !== undefined) return noOngoingSeason;
 
-          const accountInfo = await getWargamingResponse<AccountInfo>(
-            `https://api.wotblitz.${region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-          );
-          const clan = (
-            await getWargamingResponse<PlayerClanInfo>(
-              `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
-            )
-          )[id]?.clan;
+          const accountInfo = await getAccountInfo(region, id);
+          const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
           const regionSubdomain = regionToRegionSubdomain(region);
           const neighbors =
             subcommandGroup === 'current'
@@ -426,7 +418,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
 
                     if (playerIndex === -1) {
                       throw throwError(
-                        `${accountInfo[id].nickname} didn't player ratings in season ${season}`,
+                        `${accountInfo.nickname} didn't player ratings in season ${season}`,
                         'This player did not participate in this season or did not get past calibration.',
                       );
                     }
@@ -436,9 +428,10 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                       playerIndex - halfRange,
                       playerIndex + halfRange + 1,
                     );
-                    const ids = trimmed.map((player) => player.id).join(',');
-                    const clanData = await getWargamingResponse<PlayerClanInfo>(
-                      `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${ids}&extra=clan`,
+                    const clanData = await getClanAccountInfo(
+                      region,
+                      trimmed.map((player) => player.id),
+                      ['clan'],
                     );
 
                     return trimmed.map((player, index) => ({
@@ -464,7 +457,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
             ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clan.emblem_set_id}.png`
             : undefined;
           titleName = neighbors
-            ? accountInfo[id].nickname
+            ? accountInfo.nickname
             : `No Ongoing Season - ${REGION_NAMES_SHORT[region]}`;
           titleDescription = 'Ratings neighbours';
           playersBefore = neighbors ? neighbors[0].position - 1 : 0;

@@ -2,11 +2,11 @@ import {
   SlashCommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
+import { getAccountInfo } from '../_core/blitz/getAccountInfo';
 import * as Graph from '../components/Graph';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanLogo } from '../core/blitz/getClanLogo';
 import { getPlayerClanInfo } from '../core/blitz/getPlayerClanInfo';
 import resolveTankId from '../core/blitz/resolveTankId';
@@ -75,11 +75,7 @@ async function render(
 
   return (
     <Wrapper>
-      <TitleBar
-        name={accountInfo[id].nickname}
-        image={logo}
-        description={name}
-      />
+      <TitleBar name={accountInfo.nickname} image={logo} description={name} />
 
       {plot.length > 0 && (
         <Graph.Root
@@ -156,9 +152,6 @@ export const evolutionCommand = new Promise<CommandRegistryRaw>(
         const tankIdRaw = interaction.options.getString('tank')!;
         const tankId =
           commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
-        const { nickname } = (await getAccountInfo(player.region, player.id))[
-          player.id
-        ];
         const path = interactionToURL(interaction, {
           ...player,
           ...getCustomPeriodParams(interaction),

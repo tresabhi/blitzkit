@@ -1,18 +1,22 @@
 import { teal } from '@radix-ui/colors';
-import { AttachmentBuilder, SlashCommandBuilder } from 'discord.js';
+import {
+  AttachmentBuilder,
+  GuildMemberRoleManager,
+  SlashCommandBuilder,
+} from 'discord.js';
+import markdownEscape from 'markdown-escape';
+import discord from '../../discord.json' assert { type: 'json' };
+import { getAccountInfo } from '../_core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../_core/blitz/getClanAccountInfo';
 import { Glow } from '../components/AllStatsOverview/components/WN8Display/components/Glow';
 import Wrapper from '../components/Wrapper';
 import { REGION_NAMES_SHORT, Region } from '../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import { linkBlitzAndDiscord } from '../core/cockroackdb/discordBlitz';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import embedNegative from '../core/discord/embedNegative';
 import { CommandRegistry } from '../events/interactionCreate';
 import { theme } from '../stitches.config';
-import { AccountInfo } from '../types/accountInfo';
-import { PlayerClanInfo } from '../types/playerClanData';
 
 const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
 
@@ -26,85 +30,32 @@ export const verifyCommand: CommandRegistry = {
     .addStringOption((option) => addUsernameChoices(option).setRequired(true)),
 
   async handler(interaction) {
-    // const blitzAccount = await resolvePlayerFromCommand(interaction);
-    // const { id, region: server } = blitzAccount;
-    // const accountInfo = await getWargamingResponse<AccountInfo>(
-    //   `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-    // );
-    // const clanData = await getWargamingResponse<PlayerClanData>(
-    //   `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
-    // );
-    // const clan = clanData[id]?.clan;
-    // const clanTag = clan ? ` [${clan!.tag}]` : '';
-    // const member =
-    //   interaction.member &&
-    //   interaction.guild?.members.cache.get(interaction.member?.user.id);
-
-    // if (!interaction.guild?.members.me?.permissions.has('ManageNicknames')) {
-    //   return embedNegative(
-    //     `${markdownEscape(interaction.user.username)} failed to verify`,
-    //     "I don't have the permission to change your nickname.",
-    //   );
-    // }
-    // if (!interaction.member || !member) {
-    //   return embedNegative(
-    //     `${interaction.user.username} is not in this server`,
-    //     "I couldn't find this person in this server. Did they leave?",
-    //   );
-    // }
-
-    // try {
-    //   await member.setNickname(`${accountInfo[id].nickname}${clanTag}`);
-
-    //   if (interaction.guildId === discord.sklld_guild_id) {
-    //     if (!interaction.guild?.members.me?.permissions.has('ManageRoles')) {
-    //       return embedNegative(
-    //         `${markdownEscape(interaction.user.username)} failed to verify`,
-    //         "I don't have the permission to change your manage roles.",
-    //       );
-    //     }
-
-    //     await member.roles.remove(discord.sklld_verify_role);
-    //     await member.roles.add(discord.sklld_peasant_role);
-    //   }
-
-    //   return embedPositive(
-    //     `${interaction.user.username} is verified`,
-    //     `The user is now verified as ${markdownEscape(
-    //       accountInfo[id].nickname,
-    //     )}${markdownEscape(clanTag)}`,
-    //   );
-    // } catch (error) {
-    //   return embedNegative(
-    //     `${interaction.user.username} failed to verify`,
-    //     "I can't change your nickname because you have higher permissions than me. Try setting your nickname to your Blitz username manually.",
-    //   );
-    // }
-
     const username = interaction.options.getString('username', true);
 
     if (serverAndIdPattern.test(username)) {
       const [region, idString] = username.split('/');
       const id = parseInt(idString);
       const discordId = parseInt(interaction.user.id);
-      // const account = (
-      //   await getWargamingResponse<AccountInfo>(
-      //     `https://api.wotblitz.${region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-      //   )
-      // )[id];
-      // const clan = await getWargamingResponse<PlayerClanData>(
-      //   `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
-      // );
-      const [account, clan] = await Promise.all([
-        getWargamingResponse<AccountInfo>(
-          `https://api.wotblitz.${region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-        ),
-        getWargamingResponse<PlayerClanInfo>(
-          `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
-        ),
-      ]);
+      const accountInfo = await getAccountInfo(region as Region, id);
+      const clanAccountInfo = await getClanAccountInfo(region as Region, id);
 
       await linkBlitzAndDiscord(discordId, region as Region, id);
+
+      if (interaction.guildId === discord.sklld_guild_id) {
+        if (!interaction.guild?.members.me?.permissions.has('ManageRoles')) {
+          return embedNegative(
+            `${markdownEscape(interaction.user.username)} failed to verify`,
+            "I don't have the permission to change your manage roles.",
+          );
+        }
+
+        await (interaction.member!.roles as GuildMemberRoleManager).remove(
+          discord.sklld_verify_role,
+        );
+        await (interaction.member!.roles as GuildMemberRoleManager).add(
+          discord.sklld_peasant_role,
+        );
+      }
 
       return (
         <Wrapper fat>
@@ -205,7 +156,7 @@ export const verifyCommand: CommandRegistry = {
                   justifyContent: 'center',
                 }}
               >
-                {clan[id]?.clan ? (
+                {clanAccountInfo?.clan ? (
                   <img
                     style={{
                       width: 64,
@@ -213,7 +164,7 @@ export const verifyCommand: CommandRegistry = {
                       borderRadius: 32,
                       objectFit: 'cover',
                     }}
-                    src={`https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clan[id]?.clan?.emblem_set_id}.png`}
+                    src={`https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanAccountInfo?.clan?.emblem_set_id}.png`}
                   />
                 ) : null}
                 <div
@@ -234,7 +185,7 @@ export const verifyCommand: CommandRegistry = {
                       whiteSpace: 'nowrap',
                     }}
                   >
-                    {account[id].nickname}
+                    {accountInfo.nickname}
                   </span>
                   <span
                     style={{
@@ -242,7 +193,9 @@ export const verifyCommand: CommandRegistry = {
                       color: theme.colors.textLowContrast,
                     }}
                   >
-                    {clan[id]?.clan ? `[${clan[id]?.clan?.tag}] - ` : ''}
+                    {clanAccountInfo?.clan
+                      ? `[${clanAccountInfo?.clan?.tag}] - `
+                      : ''}
                     {REGION_NAMES_SHORT[region as Region]}
                   </span>
                 </div>

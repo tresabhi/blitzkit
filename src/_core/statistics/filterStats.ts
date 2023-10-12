@@ -1,11 +1,9 @@
-// BIG TODO: reorganize code folder
-
 import { TreeTypeString } from '../../components/Tanks';
-import { DiffedTankStats } from '../blitzstars/getDiffedTankStats';
-import { tankAverages } from '../blitzstars/tankAverages';
+import sumStats from '../../core/blitz/sumStats';
+import { tankopedia } from '../../core/blitz/tankopedia';
+import { DiffedTankStats } from '../../core/blitzstars/getDiffedTankStats';
+import { tankAverages } from '../../core/blitzstars/tankAverages';
 import calculateWN8 from './calculateWN8';
-import sumStats from './sumStats';
-import { tankopedia } from './tankopedia';
 
 export interface StatFilters {
   nation?: string;

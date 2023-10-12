@@ -1,10 +1,10 @@
 import { SlashCommandBuilder } from 'discord.js';
+import { getAccountInfo } from '../_core/blitz/getAccountInfo';
+import { StatFilters, filterStats } from '../_core/statistics/filterStats';
 import AllStatsOverview from '../components/AllStatsOverview';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { StatFilters, filterStats } from '../core/blitz/filterStats';
-import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanLogo } from '../core/blitz/getClanLogo';
 import { getPlayerClanInfo } from '../core/blitz/getPlayerClanInfo';
 import { filtersToDescription } from '../core/blitzkrieg/filtersToDescription';

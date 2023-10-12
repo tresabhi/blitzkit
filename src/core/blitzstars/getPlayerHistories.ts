@@ -1,6 +1,6 @@
 import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
-import { AccountInfo, AllStats } from '../../types/accountInfo';
+import { AccountInfo } from '../../types/accountInfo';
 import {
   GetHistoriesOptions,
   Histories,
@@ -9,26 +9,6 @@ import {
 } from '../../types/histories';
 import getWargamingResponse from '../blitz/getWargamingResponse';
 import { emptyAllStats } from './getDiffedTankStats';
-
-export interface PlayerHistoryRaw {
-  clan: { clan_id: number; name: string; tag: string };
-  statistics: {
-    all: AllStats;
-    wn8: number;
-    wn7: number;
-    average_tier: number;
-  };
-  last_battle_time: number;
-  nickname: string;
-  account_id: number;
-  achievements: {
-    account_id: number;
-    [key: string]: number;
-  };
-  region: Region;
-}
-
-export type PlayerHistoriesRaw = PlayerHistoryRaw[];
 
 export default async function getPlayerHistories(
   server: Region,

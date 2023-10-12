@@ -2,11 +2,11 @@
 
 import { ContextMenu } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
+import calculateWN8 from '../../../_core/statistics/calculateWN8';
+import { deltaTankStats } from '../../../_core/statistics/deltaTankStats';
 import * as Breakdown from '../../../components/Breakdown';
 import { TreeTypeEnum } from '../../../components/Tanks';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
-import calculateWN8 from '../../../core/blitz/calculateWN8';
-import { diffNormalizedTankStats } from '../../../core/blitz/diffNormalizedTankStats';
 import getWN8Percentile from '../../../core/blitz/getWN8Percentile';
 import getWargamingResponse from '../../../core/blitz/getWargamingResponse';
 import { TankopediaEntry, tankopedia } from '../../../core/blitz/tankopedia';
@@ -111,7 +111,7 @@ export default function SessionPage() {
 
           list: (
             Object.values(
-              diffNormalizedTankStats(session.tankStats, career),
+              deltaTankStats(session.tankStats, career),
             ) as IndividualTankStats[]
           ).map((stats) => {
             return {

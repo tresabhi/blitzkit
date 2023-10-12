@@ -1,16 +1,14 @@
 import { SlashCommandBuilder } from 'discord.js';
+import { getAccountInfo } from '../_core/blitz/getAccountInfo';
+import { getClanInfo } from '../_core/blitz/getClanInfo';
 import GenericStats from '../components/GenericStats';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import addClanChoices from '../core/discord/addClanChoices';
 import autocompleteClan from '../core/discord/autocompleteClan';
 import resolveClanFromCommand from '../core/discord/resolveClanFromCommand';
 import { CommandRegistry } from '../events/interactionCreate';
-import { AccountInfo } from '../types/accountInfo';
-import { ClanInfo } from '../types/clanInfo';
 
 const DEFAULT_THRESHOLD = 7;
 
@@ -36,24 +34,16 @@ export const inactiveCommand: CommandRegistry = {
     const threshold =
       interaction.options.getNumber('threshold')! ?? DEFAULT_THRESHOLD;
     const time = new Date().getTime() / 1000;
-    const clanData = (
-      await getWargamingResponse<ClanInfo>(
-        `https://api.wotblitz.${region}/wotb/clans/info/?application_id=${WARGAMING_APPLICATION_ID}&clan_id=${id}`,
+    const clanInfo = await getClanInfo(region, id);
+    const accountInfo = await getAccountInfo(region, clanInfo.members_ids);
+    const inactive = accountInfo
+      .map(
+        (account) =>
+          [
+            account.nickname,
+            (time - account.last_battle_time) / 60 / 60 / 24,
+          ] as [string, number],
       )
-    )[id];
-    const memberIds = clanData.members_ids;
-    const accounts = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${memberIds.join(
-        ',',
-      )}`,
-    );
-    const inactive = memberIds
-      .map((memberId) => {
-        const member = accounts[memberId];
-        const inactiveDays = (time - member.last_battle_time) / 60 / 60 / 24;
-
-        return [member.nickname, inactiveDays] as [string, number];
-      })
       .filter(([, inactiveDays]) => inactiveDays >= threshold)
       .sort((a, b) => b[1] - a[1])
       .map(
@@ -64,8 +54,8 @@ export const inactiveCommand: CommandRegistry = {
     return (
       <Wrapper>
         <TitleBar
-          name={clanData.name}
-          image={`https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData.emblem_set_id}.png`}
+          name={clanInfo.name}
+          image={`https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanInfo.emblem_set_id}.png`}
           description={`Inactive for ${threshold}+ Days • ${new Date().toDateString()}`}
         />
 

@@ -1,14 +1,12 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import { getAccountInfo } from '../_core/blitz/getAccountInfo';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import embedInfo from '../core/discord/embedInfo';
 import markdownTable from '../core/discord/markdownTable';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistry } from '../events/interactionCreate';
-import { AccountInfo } from '../types/accountInfo';
 
 export const playerInfoCommand: CommandRegistry = {
   inProduction: true,
@@ -21,11 +19,8 @@ export const playerInfoCommand: CommandRegistry = {
 
   async handler(interaction) {
     const account = await resolvePlayerFromCommand(interaction);
-    const { id, region: server } = account;
-    const accounts = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-    );
-    const accountInfo = accounts[id];
+    const { id, region: region } = account;
+    const accountInfo = await getAccountInfo(region, id);
 
     return embedInfo(
       `${markdownEscape(accountInfo.nickname)}'s information`,
