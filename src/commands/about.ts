@@ -51,6 +51,7 @@ export const aboutCommand: CommandRegistry = {
         await Promise.all(COMMANDS_RAW)
       )
         .filter((registry) => registry.inPublic && registry.inProduction)
+        .sort((a, b) => (a.command.name < b.command.name ? -1 : 1))
         .map(
           (registry) =>
             `- \`/${registry.command.name}\`: ${registry.command.description}`,
