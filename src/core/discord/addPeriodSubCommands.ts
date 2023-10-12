@@ -1,10 +1,14 @@
-import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from 'discord.js';
+import {
+  SlashCommandBuilder,
+  SlashCommandSubcommandBuilder,
+  SlashCommandSubcommandGroupBuilder,
+} from 'discord.js';
 
-export type PeriodType = 'today' | '30' | '60' | '90' | 'custom';
+export type PeriodType = 'today' | '30' | '60' | '90' | 'career' | 'custom';
 export type PeriodSize = 'today' | `${number}` | 'career';
 
 export default function addPeriodSubCommands(
-  option: SlashCommandBuilder,
+  option: SlashCommandBuilder | SlashCommandSubcommandGroupBuilder,
   extra: (
     option: SlashCommandSubcommandBuilder,
   ) => SlashCommandSubcommandBuilder = (option) => option,
@@ -21,6 +25,9 @@ export default function addPeriodSubCommands(
     )
     .addSubcommand((option) =>
       extra(option.setName('90').setDescription('90 days')),
+    )
+    .addSubcommand((option) =>
+      extra(option.setName('career').setDescription('Career')),
     )
     .addSubcommand((option) =>
       extra(

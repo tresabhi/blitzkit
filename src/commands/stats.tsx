@@ -6,11 +6,11 @@ import Wrapper from '../components/Wrapper';
 import { StatFilters, filterStats } from '../core/blitz/filterStats';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanLogo } from '../core/blitz/getClanLogo';
-import { playerClanInfo } from '../core/blitz/playerClanInfo';
+import { getPlayerClanInfo } from '../core/blitz/getPlayerClanInfo';
 import { filtersToDescription } from '../core/blitzkrieg/filtersToDescription';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats';
-import addStatTypeSubCommandGroups from '../core/discord/addStatTypeSubCommandGroups';
+import addStatTypeSubCommands from '../core/discord/addStatTypeSubCommands';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
@@ -35,7 +35,7 @@ async function render(
   filters: StatFilters,
 ) {
   const nickname = (await getAccountInfo(region, id))[id].nickname;
-  const clan = (await playerClanInfo(region, id))[id]?.clan;
+  const clan = (await getPlayerClanInfo(region, id))[id]?.clan;
   const clanImage = clan ? getClanLogo(clan.emblem_set_id) : undefined;
   const diffedTankStats = await getDiffedTankStats(region, id, start, end);
   const { stats, supplementary } = await filterStats(diffedTankStats, filters);
@@ -58,7 +58,7 @@ async function render(
 }
 
 export const statsCommand = new Promise<CommandRegistryRaw>(async (resolve) => {
-  const command = await addStatTypeSubCommandGroups(
+  const command = await addStatTypeSubCommands(
     new SlashCommandBuilder()
       .setName('stats')
       .setDescription('Regular battles statistics'),

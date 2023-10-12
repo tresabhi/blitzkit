@@ -1,16 +1,22 @@
-import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from 'discord.js';
+import {
+  SlashCommandBuilder,
+  SlashCommandSubcommandBuilder,
+  SlashCommandSubcommandGroupBuilder,
+} from 'discord.js';
 import { TREE_TYPE_NAMES, TreeTypeString } from '../../components/Tanks';
 import { tankopediaInfo } from '../blitz/tankopedia';
 import addPeriodSubCommands from './addPeriodSubCommands';
 import addTankChoices from './addTankChoices';
 import addTierChoices from './addTierChoices';
 
-export default async function addStatTypeSubCommandGroups(
-  option: SlashCommandBuilder,
+export default async function addStatTypeSubCommands<
+  OptionType extends SlashCommandBuilder | SlashCommandSubcommandGroupBuilder,
+>(
+  option: OptionType,
   extra: (
     option: SlashCommandSubcommandBuilder,
   ) => SlashCommandSubcommandBuilder = (option) => option,
-) {
+): Promise<OptionType> {
   const awaitedTankopediaInfo = await tankopediaInfo;
 
   addPeriodSubCommands(option, (option) => {
