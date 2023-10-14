@@ -127,17 +127,3 @@ export const ownedTanksCommand: CommandRegistry = {
 
   autocomplete: autocompleteUsername,
 };
-
-// TODO: make this work in the future
-// console.log('Caching tank images...');
-// TANKS.then((tanks) =>
-//   jsxToSvg(
-//     <div style={{ display: 'flex' }}>
-//       {tanks.map(({ images, tank_id }) => {
-//         return (
-//           images.normal && <img key={tank_id} src={images.normal} width={0} />
-//         );
-//       })}
-//     </div>,
-//   ),
-// ).then(() => console.log('Cached tank images'));
