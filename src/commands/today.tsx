@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from 'discord.js';
-import linkButton from '../LEGACY_core/discord/linkButton';
-import primaryButton from '../LEGACY_core/discord/primaryButton';
-import resolvePlayerFromButton from '../LEGACY_core/discord/resolvePlayerFromButton';
-import resolvePlayerFromCommand from '../LEGACY_core/discord/resolvePlayerFromCommand';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
+import buttonLink from '../core/discord/buttonLink';
+import buttonPrimary from '../core/discord/buttonPrimary';
 import commandToURL from '../core/discord/commandToURL';
+import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistry } from '../events/interactionCreate';
 import today from '../renderers/today';
 
@@ -58,9 +58,9 @@ export const todayCommand: CommandRegistry = {
 
     return [
       await today(player, cutoff, maximized, showTotal, false),
-      primaryButton(path, 'Refresh'),
+      buttonPrimary(path, 'Refresh'),
       // linkButton(`https://example.com/${path}`, 'Embed'),
-      linkButton(
+      buttonLink(
         `https://www.blitzstars.com/player/${player.region}/${nickname}`,
         'BlitzStars',
       ),

@@ -1,13 +1,4 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { refreshButton } from '../LEGACY_core/discord/refreshButton';
-import resolvePeriodFromButton from '../LEGACY_core/discord/resolvePeriodFromButton';
-import resolvePeriodFromCommand, {
-  ResolvedPeriod,
-} from '../LEGACY_core/discord/resolvePeriodFromCommand';
-import resolvePlayerFromButton from '../LEGACY_core/discord/resolvePlayerFromButton';
-import resolvePlayerFromCommand, {
-  ResolvedPlayer,
-} from '../LEGACY_core/discord/resolvePlayerFromCommand';
 import GenericAllStats from '../components/GenericAllStats';
 import NoData, { NoDataType } from '../components/NoData';
 import TierWeights from '../components/TierWeights';
@@ -23,10 +14,19 @@ import addFilterOptions from '../core/discord/addFilterOptions';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
+import { buttonRefresh } from '../core/discord/buttonRefresh';
 import commandToURL from '../core/discord/commandToURL';
 import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
 import { getFiltersFromButton } from '../core/discord/getFiltersFromButton';
 import { getFiltersFromCommand } from '../core/discord/getFiltersFromCommand';
+import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
+import resolvePeriodFromCommand, {
+  ResolvedPeriod,
+} from '../core/discord/resolvePeriodFromCommand';
+import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
+import resolvePlayerFromCommand, {
+  ResolvedPlayer,
+} from '../core/discord/resolvePlayerFromCommand';
 import { StatFilters, filterStats } from '../core/statistics/filterStats';
 import { getTierWeights } from '../core/statistics/getTierWeights';
 import { CommandRegistryRaw } from '../events/interactionCreate';
@@ -91,7 +91,7 @@ export const fullStatsCommand = new Promise<CommandRegistryRaw>(
 
         return Promise.all([
           render(player, period, filters),
-          refreshButton(interaction, path),
+          buttonRefresh(interaction, path),
           getBlitzStarsLinkButton(player.region, player.id),
         ]);
       },

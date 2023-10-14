@@ -1,5 +1,4 @@
 import { SlashCommandBuilder } from 'discord.js';
-import resolvePlayerFromCommand from '../LEGACY_core/discord/resolvePlayerFromCommand';
 import NoData, { NoDataType } from '../components/NoData';
 import * as Tanks from '../components/Tanks';
 import TitleBar from '../components/TitleBar';
@@ -20,6 +19,7 @@ import {
 import addTierChoices from '../core/discord/addTierChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistry } from '../events/interactionCreate';
 
 export const ownedTanksCommand: CommandRegistry = {

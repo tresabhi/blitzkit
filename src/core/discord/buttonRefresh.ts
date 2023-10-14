@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import primaryButton from './primaryButton';
+import buttonPrimary from './buttonPrimary';
 
-export function refreshButton(
+export function buttonRefresh(
   interaction: ChatInputCommandInteraction,
   path: string,
 ) {
@@ -9,7 +9,7 @@ export function refreshButton(
     interaction.appPermissions?.has('AttachFiles') &&
     interaction.appPermissions?.has('ViewChannel')
   ) {
-    return primaryButton(path, 'Refresh');
+    return buttonPrimary(path, 'Refresh');
   }
 
   return null;

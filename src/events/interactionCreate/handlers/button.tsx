@@ -1,7 +1,7 @@
 import { ButtonInteraction, CacheType } from 'discord.js';
 import { commands } from '..';
-import normalizeInteractionReturnable from '../../../LEGACY_core/discord/normalizeInteractionReturnable';
 import throwError from '../../../LEGACY_core/node/throwError';
+import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable';
 
 export default async function handleButton(
   interaction: ButtonInteraction<CacheType>,

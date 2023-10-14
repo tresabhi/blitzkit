@@ -1,12 +1,9 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { Region } from '../../constants/regions';
-import getPeriodNow from '../../core/blitzkrieg/getPeriodNow';
-import getPeriodStart from '../../core/blitzkrieg/getPeriodStart';
-import getTimeDaysAgo from '../../core/blitzkrieg/getTimeDaysAgo';
-import {
-  PeriodSize,
-  PeriodType,
-} from '../../core/discord/addPeriodSubCommands';
+import getPeriodNow from '../blitzkrieg/getPeriodNow';
+import getPeriodStart from '../blitzkrieg/getPeriodStart';
+import getTimeDaysAgo from '../blitzkrieg/getTimeDaysAgo';
+import { PeriodSize, PeriodType } from './addPeriodSubCommands';
 
 export function getPeriodOptionName(period: PeriodSize) {
   if (period === 'career') return 'Career';

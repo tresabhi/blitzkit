@@ -14,8 +14,6 @@ import {
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
 import discord from '../../../discord.json' assert { type: 'json' };
-import getClientId from '../../LEGACY_core/node/getClientId';
-import isDev from '../../LEGACY_core/node/isDev';
 import { secrets } from '../../LEGACY_core/node/secrets';
 import { aboutCommand } from '../../commands/about';
 import { debugCommand } from '../../commands/debug';
@@ -34,6 +32,8 @@ import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { searchTanksCommand } from '../../commands/searchTanks';
 import { statsCommand } from '../../commands/stats';
 import { todayCommand } from '../../commands/today';
+import getClientId from '../../core/blitzkrieg/getClientId';
+import isDev from '../../core/blitzkrieg/isDev';
 import handleAutocomplete from './handlers/autocomplete';
 import handleButton from './handlers/button';
 import handleChatInputCommand from './handlers/chatInputCommand';

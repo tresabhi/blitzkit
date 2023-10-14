@@ -1,8 +1,4 @@
 import { SlashCommandBuilder } from 'discord.js';
-import markdownTable, {
-  TableInput,
-} from '../LEGACY_core/discord/markdownTable';
-import resolvePlayerFromCommand from '../LEGACY_core/discord/resolvePlayerFromCommand';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import getPeriodNow from '../core/blitzkrieg/getPeriodNow';
 import getTimeDaysAgo from '../core/blitzkrieg/getTimeDaysAgo';
@@ -12,6 +8,8 @@ import { tankopedia } from '../core/blitzstars/tankopedia';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import embedNegative from '../core/discord/embedNegative';
 import embedPositive from '../core/discord/embedPositive';
+import markdownTable, { TableInput } from '../core/discord/markdownTable';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import calculateWN8 from '../core/statistics/calculateWN8';
 import sumStats from '../core/statistics/sumStats';
 import { CommandRegistry } from '../events/interactionCreate';

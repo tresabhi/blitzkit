@@ -1,6 +1,6 @@
-import linkButton from '../../LEGACY_core/discord/linkButton';
 import { Region } from '../../constants/regions';
 import { getAccountInfo } from '../blitz/getAccountInfo';
+import buttonLink from '../discord/buttonLink';
 
 export async function getBlitzStarsLinkButton(
   region: Region,
@@ -9,7 +9,7 @@ export async function getBlitzStarsLinkButton(
 ) {
   const { nickname } = await getAccountInfo(region, id);
 
-  return linkButton(
+  return buttonLink(
     `https://www.blitzstars.com/player/${region}/${nickname}${
       tankId ? `/tank/${tankId!}` : ''
     }`,

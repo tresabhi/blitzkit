@@ -1,9 +1,9 @@
 import { ButtonInteraction } from 'discord.js';
 import { Region } from '../../constants/regions';
-import getPeriodNow from '../../core/blitzkrieg/getPeriodNow';
-import getPeriodStart from '../../core/blitzkrieg/getPeriodStart';
-import getTimeDaysAgo from '../../core/blitzkrieg/getTimeDaysAgo';
-import { PeriodType } from '../../core/discord/addPeriodSubCommands';
+import getPeriodNow from '../blitzkrieg/getPeriodNow';
+import getPeriodStart from '../blitzkrieg/getPeriodStart';
+import getTimeDaysAgo from '../blitzkrieg/getTimeDaysAgo';
+import { PeriodType } from './addPeriodSubCommands';
 import {
   ResolvedPeriod,
   getPeriodOptionName,

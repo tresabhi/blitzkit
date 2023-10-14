@@ -6,7 +6,7 @@ import {
   InteractionEditReplyOptions,
 } from 'discord.js';
 import { InteractionReturnable } from '../../events/interactionCreate';
-import jsxToPng from '../node/jsxToPng';
+import jsxToPng from '../blitzkrieg/jsxToPng';
 
 export default async function normalizeInteractionReturnable(
   returnable: InteractionReturnable,

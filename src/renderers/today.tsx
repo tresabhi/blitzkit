@@ -1,4 +1,3 @@
-import { ResolvedPlayer } from '../LEGACY_core/discord/resolvePlayerFromCommand';
 import * as Breakdown from '../components/Breakdown';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
@@ -13,6 +12,7 @@ import getTimeDaysAgo from '../core/blitzkrieg/getTimeDaysAgo';
 import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
 import { tankAverages } from '../core/blitzstars/tankAverages';
 import { tankopedia } from '../core/blitzstars/tankopedia';
+import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
 import calculateWN8 from '../core/statistics/calculateWN8';
 import getWN8Percentile from '../core/statistics/getWN8Percentile';
 import sumStats from '../core/statistics/sumStats';

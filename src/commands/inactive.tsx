@@ -1,5 +1,4 @@
 import { SlashCommandBuilder } from 'discord.js';
-import resolveClanFromCommand from '../LEGACY_core/discord/resolveClanFromCommand';
 import GenericStats from '../components/GenericStats';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
@@ -8,6 +7,7 @@ import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanInfo } from '../core/blitz/getClanInfo';
 import addClanChoices from '../core/discord/addClanChoices';
 import autocompleteClan from '../core/discord/autocompleteClan';
+import resolveClanFromCommand from '../core/discord/resolveClanFromCommand';
 import { CommandRegistry } from '../events/interactionCreate';
 
 const DEFAULT_THRESHOLD = 7;

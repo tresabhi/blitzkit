@@ -1,6 +1,6 @@
 import { BlitzkriegRatingsLeaderboard } from '../../../scripts/buildRatingsLeaderboard';
 import { Region } from '../../constants/regions';
-import { octokit } from '../../LEGACY_core/github/octokit';
+import { octokit } from './octokit';
 
 export const DATABASE_REPO = { owner: 'tresabhi', repo: 'blitzkrieg-db' };
 

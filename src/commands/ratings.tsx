@@ -5,8 +5,6 @@ import {
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
 import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
-import resolvePlayerFromCommand from '../LEGACY_core/discord/resolvePlayerFromCommand';
-import { octokit } from '../LEGACY_core/github/octokit';
 import throwError from '../LEGACY_core/node/throwError';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
@@ -20,10 +18,12 @@ import getArchivedRatingsInfo from '../core/blitzkrieg/getArchivedRatingsInfo';
 import getMidnightLeaderboard, {
   DATABASE_REPO,
 } from '../core/blitzkrieg/getMidnightLeaderboard';
+import { octokit } from '../core/blitzkrieg/octokit';
 import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import embedNegative from '../core/discord/embedNegative';
+import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 
 export interface RatingsPlayer {

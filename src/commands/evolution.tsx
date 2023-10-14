@@ -2,15 +2,6 @@ import {
   SlashCommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
-import primaryButton from '../LEGACY_core/discord/primaryButton';
-import resolvePeriodFromButton from '../LEGACY_core/discord/resolvePeriodFromButton';
-import resolvePeriodFromCommand, {
-  ResolvedPeriod,
-} from '../LEGACY_core/discord/resolvePeriodFromCommand';
-import resolvePlayerFromButton from '../LEGACY_core/discord/resolvePlayerFromButton';
-import resolvePlayerFromCommand, {
-  ResolvedPlayer,
-} from '../LEGACY_core/discord/resolvePlayerFromCommand';
 import * as Graph from '../components/Graph';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
@@ -27,8 +18,17 @@ import addTankChoices from '../core/discord/addTankChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
+import buttonPrimary from '../core/discord/buttonPrimary';
 import commandToURL from '../core/discord/commandToURL';
 import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
+import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
+import resolvePeriodFromCommand, {
+  ResolvedPeriod,
+} from '../core/discord/resolvePeriodFromCommand';
+import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
+import resolvePlayerFromCommand, {
+  ResolvedPlayer,
+} from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 
 type EvolutionStatType = 'player' | 'tank';
@@ -162,7 +162,7 @@ export const evolutionCommand = new Promise<CommandRegistryRaw>(
 
         return [
           await render(player, period, commandGroup, tankId),
-          primaryButton(path, 'Refresh'),
+          buttonPrimary(path, 'Refresh'),
           await getBlitzStarsLinkButton(
             player.region,
             player.id,

@@ -1,5 +1,5 @@
 import { Client } from 'discord.js';
-import isDev from '../LEGACY_core/node/isDev';
+import isDev from '../core/blitzkrieg/isDev';
 
 export default function ready(client: Client<true>) {
   console.log(
