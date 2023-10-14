@@ -1,6 +1,6 @@
+import { registerProcesses } from './core/blitzkrieg/processes';
+import { secrets } from './core/blitzkrieg/secrets';
 import { client } from './core/discord/client';
-import { registerProcesses } from './LEGACY_core/node/processes';
-import { secrets } from './LEGACY_core/node/secrets';
 
 registerProcesses();
 client.login(secrets.DISCORD_TOKEN);

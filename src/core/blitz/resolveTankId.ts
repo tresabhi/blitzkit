@@ -1,5 +1,5 @@
 import { go } from 'fuzzysort';
-import throwError from '../../LEGACY_core/node/throwError';
+import throwError from '../blitzkrieg/throwError';
 import { TANKS, tankopedia } from '../blitzstars/tankopedia';
 
 export default async function resolveTankId(tank: string | number) {

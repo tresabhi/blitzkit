@@ -1,8 +1,8 @@
-import throwError from '../../LEGACY_core/node/throwError';
 import { RatingsInfo } from '../../commands/ratings';
 import { Region } from '../../constants/regions';
 import { DATABASE_REPO } from './getMidnightLeaderboard';
 import { octokit } from './octokit';
+import throwError from './throwError';
 
 const ARCHIVED_RATINGS_CACHE: Record<
   Region,

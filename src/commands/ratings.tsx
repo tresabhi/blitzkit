@@ -5,7 +5,6 @@ import {
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
 import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
-import throwError from '../LEGACY_core/node/throwError';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
@@ -19,6 +18,7 @@ import getMidnightLeaderboard, {
   DATABASE_REPO,
 } from '../core/blitzkrieg/getMidnightLeaderboard';
 import { octokit } from '../core/blitzkrieg/octokit';
+import throwError from '../core/blitzkrieg/throwError';
 import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';

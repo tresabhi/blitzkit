@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import throwError from '../../LEGACY_core/node/throwError';
 import { Region } from '../../constants/regions';
 import searchClansAcrossRegions from '../blitz/searchClansAcrossRegions';
+import throwError from '../blitzkrieg/throwError';
 import { serverAndIdPattern } from './resolvePlayerFromCommand';
 
 export default async function resolveClanFromCommand(
