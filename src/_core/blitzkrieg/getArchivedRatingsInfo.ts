@@ -1,13 +1,31 @@
 import { RatingsInfo } from '../../commands/ratings';
 import { Region } from '../../constants/regions';
-import { DATABASE_REPO } from '../database/getMidnightLeaderboard';
-import { octokit } from '../github/octokit';
-import throwError from '../node/throwError';
+import { DATABASE_REPO } from '../../core/database/getMidnightLeaderboard';
+import { octokit } from '../../core/github/octokit';
+import throwError from '../../core/node/throwError';
+
+const ARCHIVED_RATINGS_CACHE: Record<
+  Region,
+  Record<
+    number,
+    RatingsInfo & {
+      detail: undefined;
+    }
+  >
+> = {
+  com: {},
+  eu: {},
+  asia: {},
+};
 
 export default async function getArchivedRatingsInfo(
   season: number,
   region: Region,
 ) {
+  if (ARCHIVED_RATINGS_CACHE[region][season]) {
+    return ARCHIVED_RATINGS_CACHE[region][season];
+  }
+
   const { data } = await octokit.repos.getContent({
     ...DATABASE_REPO,
     path: `${region}/ratings/${season}/info.json`,
@@ -20,6 +38,8 @@ export default async function getArchivedRatingsInfo(
   const jsonContent = JSON.parse(content) as RatingsInfo & {
     detail: undefined;
   };
+
+  ARCHIVED_RATINGS_CACHE[region][season] = jsonContent;
 
   return jsonContent;
 }
