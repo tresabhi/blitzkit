@@ -5,9 +5,6 @@ import {
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
 import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
-import getMidnightLeaderboard, {
-  DATABASE_REPO,
-} from '../LEGACY_core/database/getMidnightLeaderboard';
 import addRegionChoices from '../LEGACY_core/discord/addRegionChoices';
 import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
 import autocompleteUsername from '../LEGACY_core/discord/autocompleteUsername';
@@ -24,6 +21,9 @@ import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../core/blitz/getRatingsInfo';
 import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
 import getArchivedRatingsInfo from '../core/blitzkrieg/getArchivedRatingsInfo';
+import getMidnightLeaderboard, {
+  DATABASE_REPO,
+} from '../core/blitzkrieg/getMidnightLeaderboard';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 
 export interface RatingsPlayer {

@@ -1,4 +1,4 @@
-import { discordBlitzDB } from '../cockroackdb/discordBlitz';
+import { discordBlitzDB } from '../../core/blitzkrieg/discordBlitz';
 import { client } from '../discord/client';
 
 const EXIT_EVENTS = [

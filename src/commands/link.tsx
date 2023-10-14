@@ -6,7 +6,6 @@ import {
 } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import discord from '../../discord.json' assert { type: 'json' };
-import { linkBlitzAndDiscord } from '../LEGACY_core/cockroackdb/discordBlitz';
 import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
 import autocompleteUsername from '../LEGACY_core/discord/autocompleteUsername';
 import embedNegative from '../LEGACY_core/discord/embedNegative';
@@ -15,6 +14,7 @@ import Wrapper from '../components/Wrapper';
 import { REGION_NAMES_SHORT, Region } from '../constants/regions';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
+import { linkBlitzAndDiscord } from '../core/blitzkrieg/discordBlitz';
 import { CommandRegistry } from '../events/interactionCreate';
 import { theme } from '../stitches.config';
 
