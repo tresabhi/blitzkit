@@ -7,12 +7,12 @@ import {
 import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
 import { getAccountInfo } from '../_core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../_core/blitz/getClanAccountInfo';
+import getRatingsInfo from '../_core/blitz/getRatingsInfo';
 import getArchivedRatingsInfo from '../_core/blitzkrieg/getArchivedRatingsInfo';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
 import { REGION_NAMES_SHORT, Region } from '../constants/regions';
-import getRatingsInfo from '../core/blitz/getRatingsInfo';
 import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
 import getMidnightLeaderboard, {
   DATABASE_REPO,

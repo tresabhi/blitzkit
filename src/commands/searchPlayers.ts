@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
+import fetchBlitz from '../_core/blitz/fetchWargaming';
 import { REGION_NAMES, Region } from '../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import { AccountList, usernamePattern } from '../core/blitz/listPlayers';
 import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
@@ -34,7 +34,7 @@ export const searchPlayersCommand: CommandRegistry = {
     const limit = interaction.options.getInteger('limit') ?? 25;
     const trimmedSearch = name.trim();
     const players = usernamePattern.test(trimmedSearch)
-      ? await getWargamingResponse<AccountList>(
+      ? await fetchBlitz<AccountList>(
           `https://api.wotblitz.${server}/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodeURIComponent(
             trimmedSearch,
           )}&limit=${limit}`,

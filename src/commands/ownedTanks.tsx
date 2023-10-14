@@ -1,13 +1,13 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { getAccountInfo } from '../_core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../_core/blitz/getClanAccountInfo';
+import getTankStats from '../_core/blitz/getTankStats';
+import getTreeType from '../_core/blitz/getTreeType';
+import { emblemIdToURL } from '../_core/blitzkrieg/emblemIdToURL';
 import NoData, { NoDataType } from '../components/NoData';
 import * as Tanks from '../components/Tanks';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { getClanLogo } from '../core/blitz/getClanLogo';
-import getTankStats from '../core/blitz/getTankStats';
-import getTreeType from '../core/blitz/getTreeType';
 import resolveTankName from '../core/blitz/resolveTankName';
 import {
   TIER_ROMAN_NUMERALS,
@@ -67,7 +67,7 @@ export const ownedTanksCommand: CommandRegistry = {
           name={accountInfo.nickname}
           image={
             clanAccountInfo?.clan
-              ? getClanLogo(clanAccountInfo.clan.emblem_set_id)
+              ? emblemIdToURL(clanAccountInfo.clan.emblem_set_id)
               : undefined
           }
           description={`Tier ${TIER_ROMAN_NUMERALS[tier as Tier]} tanks`}

@@ -1,8 +1,8 @@
 import { deburr } from 'lodash';
+import fetchBlitz from '../../_core/blitz/fetchWargaming';
+import { TreeTypeString } from '../../components/Tanks';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { context } from '../blitzkrieg/context';
-import getWargamingResponse from './getWargamingResponse';
-import { TreeTypeString } from '../../components/Tanks';
 
 export interface TankopediaEntry {
   name: string;
@@ -16,7 +16,7 @@ export interface TankopediaEntry {
   type: string;
   description: string;
 }
-type asd = TreeTypeString
+type asd = TreeTypeString;
 export interface Tankopedia {
   [id: number]: TankopediaEntry | undefined;
 }
@@ -71,7 +71,7 @@ export interface TankopediaInfo {
 
 // this is blocking because info is needed for command creation
 console.log('Caching tankopedia info...');
-export const tankopediaInfo = getWargamingResponse<TankopediaInfo>(
+export const tankopediaInfo = fetchBlitz<TankopediaInfo>(
   `https://api.wotblitz.com/wotb/encyclopedia/info/?application_id=${WARGAMING_APPLICATION_ID}`,
 );
 console.log('Cached tankopedia info');

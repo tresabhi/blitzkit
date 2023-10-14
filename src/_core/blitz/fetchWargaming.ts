@@ -1,6 +1,6 @@
-import throwError from '../node/throwError';
+import throwError from '../../core/node/throwError';
 
-export type WargamingResponse<Data extends object> =
+export type BlitzResponse<Data extends object> =
   | {
       status: 'error';
       error: { field: string; message: string; code: 402; value: null };
@@ -10,12 +10,10 @@ export type WargamingResponse<Data extends object> =
       data: Data;
     };
 
-export default async function getWargamingResponse<Data extends object>(
-  url: string,
-) {
+export default async function fetchBlitz<Data extends object>(url: string) {
   const data = (await fetch(url).then((response) =>
     response.json(),
-  )) as WargamingResponse<Data>;
+  )) as BlitzResponse<Data>;
 
   if (data.status === 'ok') {
     return data.data;

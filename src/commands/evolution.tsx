@@ -4,11 +4,11 @@ import {
 } from 'discord.js';
 import { getAccountInfo } from '../_core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../_core/blitz/getClanAccountInfo';
+import { emblemIdToURL } from '../_core/blitzkrieg/emblemIdToURL';
 import * as Graph from '../components/Graph';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { getClanLogo } from '../core/blitz/getClanLogo';
 import resolveTankId from '../core/blitz/resolveTankId';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import getPlayerHistories from '../core/blitzstars/getPlayerHistories';
@@ -41,7 +41,7 @@ async function render(
 ) {
   const accountInfo = await getAccountInfo(region, id);
   const clan = (await getClanAccountInfo(region, id))?.clan;
-  const logo = clan ? getClanLogo(clan.emblem_set_id) : undefined;
+  const logo = clan ? emblemIdToURL(clan.emblem_set_id) : undefined;
   const histories = await (type === 'player'
     ? getPlayerHistories(region, id, {
         start,

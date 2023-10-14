@@ -1,6 +1,6 @@
 import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
-import getWargamingResponse from '../../core/blitz/getWargamingResponse';
+import fetchBlitz from './fetchWargaming';
 import { normalizeIds } from './normalizeIds';
 
 export interface IndividualClanInfo {
@@ -40,7 +40,7 @@ export async function getClanInfo<
   Ids extends number | number[],
   ReturnType = Ids extends number ? IndividualClanInfo : IndividualClanInfo[],
 >(region: Region, ids: Ids) {
-  const object = await getWargamingResponse<ClanInfo>(
+  const object = await fetchBlitz<ClanInfo>(
     `https://api.wotblitz.${region}/wotb/clans/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${normalizeIds(
       ids,
     )}`,

@@ -1,6 +1,6 @@
 import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
-import getWargamingResponse from '../../core/blitz/getWargamingResponse';
+import fetchBlitz from './fetchWargaming';
 import { normalizeIds } from './normalizeIds';
 
 export interface AllStats {
@@ -75,7 +75,7 @@ export async function getAccountInfo<
     ? IndividualAccountInfo
     : IndividualAccountInfo[],
 >(region: Region, ids: Ids) {
-  const object = await getWargamingResponse<AccountInfo>(
+  const object = await fetchBlitz<AccountInfo>(
     `https://api.wotblitz.${region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${normalizeIds(
       ids,
     )}`,

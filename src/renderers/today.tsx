@@ -1,12 +1,12 @@
 import { AllStats, getAccountInfo } from '../_core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../_core/blitz/getClanAccountInfo';
+import getTankStats from '../_core/blitz/getTankStats';
+import getTreeType from '../_core/blitz/getTreeType';
 import calculateWN8 from '../_core/statistics/calculateWN8';
 import * as Breakdown from '../components/Breakdown';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import getTankStats from '../core/blitz/getTankStats';
-import getTreeType from '../core/blitz/getTreeType';
 import getWN8Percentile from '../core/blitz/getWN8Percentile';
 import resolveTankName from '../core/blitz/resolveTankName';
 import sumStats from '../core/blitz/sumStats';

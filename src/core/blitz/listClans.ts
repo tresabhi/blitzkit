@@ -1,7 +1,7 @@
+import fetchBlitz from '../../_core/blitz/fetchWargaming';
 import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { Clan, ClanList } from '../../types/clanList';
-import getWargamingResponse from './getWargamingResponse';
 
 export type ClanListWithRegion = (Clan & {
   region: 'com' | 'eu' | 'asia';
@@ -14,7 +14,7 @@ export default async function listClans(search: string, limit = 9) {
 
   return (
     await Promise.all([
-      getWargamingResponse<ClanList>(
+      fetchBlitz<ClanList>(
         `https://api.wotblitz.com/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
       ).then(
         (value) =>
@@ -24,7 +24,7 @@ export default async function listClans(search: string, limit = 9) {
             region: 'com' as Region,
           })),
       ),
-      getWargamingResponse<ClanList>(
+      fetchBlitz<ClanList>(
         `https://api.wotblitz.eu/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
       ).then(
         (value) =>
@@ -34,7 +34,7 @@ export default async function listClans(search: string, limit = 9) {
             region: 'eu' as Region,
           })),
       ),
-      getWargamingResponse<ClanList>(
+      fetchBlitz<ClanList>(
         `https://api.wotblitz.asia/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
       ).then(
         (value) =>

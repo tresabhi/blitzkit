@@ -2,13 +2,13 @@
 
 import { ContextMenu } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
+import fetchBlitz from '../../../_core/blitz/fetchWargaming';
 import calculateWN8 from '../../../_core/statistics/calculateWN8';
 import { deltaTankStats } from '../../../_core/statistics/deltaTankStats';
 import * as Breakdown from '../../../components/Breakdown';
 import { TreeTypeEnum } from '../../../components/Tanks';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import getWN8Percentile from '../../../core/blitz/getWN8Percentile';
-import getWargamingResponse from '../../../core/blitz/getWargamingResponse';
 import { TankopediaEntry, tankopedia } from '../../../core/blitz/tankopedia';
 import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import { useSession } from '../../../stores/session';
@@ -73,7 +73,7 @@ export default function SessionPage() {
     async function recalculateDiff() {
       if (session.isTracking) {
         const { id, region } = session;
-        const careerRaw = await getWargamingResponse<TanksStats>(
+        const careerRaw = await fetchBlitz<TanksStats>(
           `https://api.wotblitz.${region}/wotb/tanks/stats/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
         );
         const career = careerRaw[id].reduce<

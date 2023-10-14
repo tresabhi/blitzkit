@@ -1,3 +1,4 @@
+import getTankStats from '../../_core/blitz/getTankStats';
 import { Region } from '../../constants/regions';
 import {
   GetHistoriesOptions,
@@ -5,7 +6,6 @@ import {
   History,
   getHistoriesDefaultOptions,
 } from '../../types/histories';
-import getTankStats from '../blitz/getTankStats';
 import { emptyAllStats } from './getDiffedTankStats';
 
 export interface TankHistory extends History {

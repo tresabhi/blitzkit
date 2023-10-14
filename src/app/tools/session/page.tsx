@@ -18,10 +18,10 @@ import {
 } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { ChangeEvent, useRef, useState } from 'react';
+import fetchBlitz from '../../../_core/blitz/fetchWargaming';
 import PageWrapper from '../../../components/PageWrapper';
 import { REGION_NAMES, Region } from '../../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
-import getWargamingResponse from '../../../core/blitz/getWargamingResponse';
 import listPlayers, {
   AccountListWithServer,
 } from '../../../core/blitz/listPlayers';
@@ -54,7 +54,7 @@ export default function Page() {
     input.current!.value = nickname;
 
     const rawTankStats = (
-      await getWargamingResponse<TanksStats>(
+      await fetchBlitz<TanksStats>(
         `https://api.wotblitz.${region}/wotb/tanks/stats/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
       )
     )[id];

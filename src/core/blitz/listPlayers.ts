@@ -1,6 +1,6 @@
+import fetchBlitz from '../../_core/blitz/fetchWargaming';
 import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
-import getWargamingResponse from './getWargamingResponse';
 
 interface Account {
   nickname: string;
@@ -22,7 +22,7 @@ export default async function listPlayers(search: string, limit = 9) {
   if (usernamePattern.test(trimmedSearch)) {
     return (
       await Promise.all([
-        getWargamingResponse<AccountList>(
+        fetchBlitz<AccountList>(
           `https://api.wotblitz.com/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=${normalizedLimit}`,
         ).then(
           (value) =>
@@ -32,7 +32,7 @@ export default async function listPlayers(search: string, limit = 9) {
               region: 'com' as Region,
             })),
         ),
-        getWargamingResponse<AccountList>(
+        fetchBlitz<AccountList>(
           `https://api.wotblitz.eu/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=${normalizedLimit}`,
         ).then(
           (value) =>
@@ -42,7 +42,7 @@ export default async function listPlayers(search: string, limit = 9) {
               region: 'eu' as Region,
             })),
         ),
-        getWargamingResponse<AccountList>(
+        fetchBlitz<AccountList>(
           `https://api.wotblitz.asia/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=${normalizedLimit}`,
         ).then(
           (value) =>
