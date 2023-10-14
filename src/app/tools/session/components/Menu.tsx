@@ -4,9 +4,10 @@ import { CustomColumn } from './CustomColumn';
 
 interface ContextMenuProps {
   Builder: typeof DropdownMenu | typeof ContextMenu;
+  reset: () => void;
 }
 
-export function Menu({ Builder }: ContextMenuProps) {
+export function Menu({ Builder, reset }: ContextMenuProps) {
   const session = useSession();
 
   return (
@@ -34,6 +35,12 @@ export function Menu({ Builder }: ContextMenuProps) {
       >
         Show career
       </Builder.CheckboxItem>
+
+      <Builder.Separator />
+
+      <Builder.Item color="red" onClick={reset}>
+        Reset
+      </Builder.Item>
     </Builder.Content>
   );
 }

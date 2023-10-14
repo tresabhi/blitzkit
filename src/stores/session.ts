@@ -20,6 +20,7 @@ type Session = (
     }
 ) & {
   promptBeforeReset: boolean;
+  showEmbedPrompt: boolean;
   customColumns: {
     display: CustomColumnDisplay;
     showDelta: boolean;
@@ -36,6 +37,7 @@ export const useSession = create<Session>()(
         promptBeforeReset: true,
         showTotal: true,
         showCareer: true,
+        showEmbedPrompt: true,
 
         customColumns: [
           { display: 'battles', showDelta: false },

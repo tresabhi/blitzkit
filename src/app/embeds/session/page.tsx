@@ -18,6 +18,7 @@ import { useSession } from '../../../stores/session';
 import { IndividualTankStats, TanksStats } from '../../../types/tanksStats';
 import { CustomColumnDisplay } from '../../tools/session/components/CustomColumn';
 import { Menu } from '../../tools/session/components/Menu';
+import { resetSession } from '../../tools/session/page';
 
 const REFRESH_RATE = 1 / 5;
 
@@ -324,7 +325,7 @@ export default function SessionPage() {
         </div>
       </ContextMenu.Trigger>
 
-      <Menu Builder={ContextMenu} />
+      <Menu reset={resetSession} Builder={ContextMenu} />
     </ContextMenu.Root>
   );
 }
