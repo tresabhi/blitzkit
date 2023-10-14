@@ -1,12 +1,4 @@
 import { SlashCommandBuilder } from 'discord.js';
-import addStatTypeSubCommands from '../LEGACY_core/discord/addStatTypeSubCommands';
-import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
-import autocompleteTanks from '../LEGACY_core/discord/autocompleteTanks';
-import autocompleteUsername from '../LEGACY_core/discord/autocompleteUsername';
-import { getCustomPeriodParams } from '../LEGACY_core/discord/getCustomPeriodParams';
-import { getFiltersFromButton } from '../LEGACY_core/discord/getFiltersFromButton';
-import { getFiltersFromCommand } from '../LEGACY_core/discord/getFiltersFromCommand';
-import interactionToURL from '../LEGACY_core/discord/interactionToURL';
 import { refreshButton } from '../LEGACY_core/discord/refreshButton';
 import resolvePeriodFromButton from '../LEGACY_core/discord/resolvePeriodFromButton';
 import resolvePeriodFromCommand, {
@@ -26,6 +18,14 @@ import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
 import { filtersToDescription } from '../core/blitzkrieg/filtersToDescription';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
+import addFilterOptions from '../core/discord/addFilterOptions';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
+import autocompleteTanks from '../core/discord/autocompleteTanks';
+import autocompleteUsername from '../core/discord/autocompleteUsername';
+import commandToURL from '../core/discord/commandToURL';
+import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
+import { getFiltersFromButton } from '../core/discord/getFiltersFromButton';
+import { getFiltersFromCommand } from '../core/discord/getFiltersFromCommand';
 import { StatFilters, filterStats } from '../core/statistics/filterStats';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 
@@ -58,7 +58,7 @@ async function render(
 }
 
 export const statsCommand = new Promise<CommandRegistryRaw>(async (resolve) => {
-  const command = await addStatTypeSubCommands(
+  const command = await addFilterOptions(
     new SlashCommandBuilder()
       .setName('stats')
       .setDescription('Regular battles statistics'),
@@ -75,7 +75,7 @@ export const statsCommand = new Promise<CommandRegistryRaw>(async (resolve) => {
       const player = await resolvePlayerFromCommand(interaction);
       const period = resolvePeriodFromCommand(player.region, interaction);
       const filters = await getFiltersFromCommand(interaction);
-      const path = interactionToURL(interaction, {
+      const path = commandToURL(interaction, {
         ...player,
         ...getCustomPeriodParams(interaction),
         ...filters,

@@ -3,7 +3,10 @@ import { Region } from '../../constants/regions';
 import getPeriodNow from '../../core/blitzkrieg/getPeriodNow';
 import getPeriodStart from '../../core/blitzkrieg/getPeriodStart';
 import getTimeDaysAgo from '../../core/blitzkrieg/getTimeDaysAgo';
-import { PeriodSize, PeriodType } from '../discord/addPeriodSubCommands';
+import {
+  PeriodSize,
+  PeriodType,
+} from '../../core/discord/addPeriodSubCommands';
 
 export function getPeriodOptionName(period: PeriodSize) {
   if (period === 'career') return 'Career';

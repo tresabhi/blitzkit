@@ -1,12 +1,12 @@
 import { SlashCommandBuilder } from 'discord.js';
-import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
-import autocompleteUsername from '../LEGACY_core/discord/autocompleteUsername';
-import interactionToURL from '../LEGACY_core/discord/interactionToURL';
 import linkButton from '../LEGACY_core/discord/linkButton';
 import primaryButton from '../LEGACY_core/discord/primaryButton';
 import resolvePlayerFromButton from '../LEGACY_core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand from '../LEGACY_core/discord/resolvePlayerFromCommand';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
+import autocompleteUsername from '../core/discord/autocompleteUsername';
+import commandToURL from '../core/discord/commandToURL';
 import { CommandRegistry } from '../events/interactionCreate';
 import today from '../renderers/today';
 
@@ -49,7 +49,7 @@ export const todayCommand: CommandRegistry = {
     const maximized = interaction.options.getInteger('maximized') ?? undefined;
     const showTotal = interaction.options.getBoolean('show-total') ?? undefined;
     const { nickname } = await getAccountInfo(player.region, player.id);
-    const path = interactionToURL(interaction, {
+    const path = commandToURL(interaction, {
       ...player,
       cutoff,
       maximized,

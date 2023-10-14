@@ -1,8 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import addRegionChoices from '../LEGACY_core/discord/addRegionChoices';
-import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
-import embedInfo from '../LEGACY_core/discord/embedInfo';
 import { REGION_NAMES, Region } from '../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import fetchBlitz from '../core/blitz/fetchWargaming';
@@ -10,6 +7,9 @@ import {
   AccountList,
   usernamePattern,
 } from '../core/blitz/searchPlayersAcrossRegions';
+import addRegionChoices from '../core/discord/addRegionChoices';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
+import embedInfo from '../core/discord/embedInfo';
 import { CommandRegistry } from '../events/interactionCreate';
 
 export const searchPlayersCommand: CommandRegistry = {

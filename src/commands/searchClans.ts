@@ -1,11 +1,11 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import addClanChoices from '../LEGACY_core/discord/addClanChoices';
-import addRegionChoices from '../LEGACY_core/discord/addRegionChoices';
-import embedInfo from '../LEGACY_core/discord/embedInfo';
 import { REGION_NAMES, Region } from '../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import fetchBlitz from '../core/blitz/fetchWargaming';
+import addClanChoices from '../core/discord/addClanChoices';
+import addRegionChoices from '../core/discord/addRegionChoices';
+import embedInfo from '../core/discord/embedInfo';
 import { CommandRegistry } from '../events/interactionCreate';
 import { ClanList } from '../types/clanList';
 

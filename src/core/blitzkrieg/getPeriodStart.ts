@@ -1,5 +1,5 @@
-import { PeriodSize } from '../../LEGACY_core/discord/addPeriodSubCommands';
 import { Region } from '../../constants/regions';
+import { PeriodSize } from '../discord/addPeriodSubCommands';
 import getTimeDaysAgo from './getTimeDaysAgo';
 
 export default function getPeriodStart(region: Region, period: PeriodSize) {

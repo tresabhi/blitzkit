@@ -1,11 +1,11 @@
 import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
-import autocompleteUsername from '../LEGACY_core/discord/autocompleteUsername';
-import embedInfo from '../LEGACY_core/discord/embedInfo';
 import markdownTable from '../LEGACY_core/discord/markdownTable';
 import resolvePlayerFromCommand from '../LEGACY_core/discord/resolvePlayerFromCommand';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
+import autocompleteUsername from '../core/discord/autocompleteUsername';
+import embedInfo from '../core/discord/embedInfo';
 import { CommandRegistry } from '../events/interactionCreate';
 
 export const playerInfoCommand: CommandRegistry = {

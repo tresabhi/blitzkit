@@ -7,10 +7,10 @@ import {
 } from 'discord.js';
 import { commands } from '..';
 import discord from '../../../../discord.json' assert { type: 'json' };
-import embedNegative from '../../../LEGACY_core/discord/embedNegative';
-import embedWarning from '../../../LEGACY_core/discord/embedWarning';
 import normalizeInteractionReturnable from '../../../LEGACY_core/discord/normalizeInteractionReturnable';
 import { psa } from '../../../LEGACY_core/discord/psa';
+import embedNegative from '../../../core/discord/embedNegative';
+import embedWarning from '../../../core/discord/embedWarning';
 
 export default async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,

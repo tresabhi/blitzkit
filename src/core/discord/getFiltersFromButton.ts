@@ -1,6 +1,6 @@
 import { ButtonInteraction } from 'discord.js';
 import { TreeTypeString } from '../../components/Tanks';
-import { StatFilters } from '../../core/statistics/filterStats';
+import { StatFilters } from '../statistics/filterStats';
 
 export function getFiltersFromButton(interaction: ButtonInteraction) {
   const url = new URL(`https://example.com/${interaction.customId}`);

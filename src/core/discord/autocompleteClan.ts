@@ -4,7 +4,7 @@ import {
   CacheType,
 } from 'discord.js';
 import { REGION_NAMES } from '../../constants/regions';
-import searchClansAcrossRegions from '../../core/blitz/searchClansAcrossRegions';
+import searchClansAcrossRegions from '../blitz/searchClansAcrossRegions';
 
 export default async function autocompleteClan(
   interaction: AutocompleteInteraction<CacheType>,

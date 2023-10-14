@@ -1,5 +1,5 @@
 import { discordBlitzDB } from '../../core/blitzkrieg/discordBlitz';
-import { client } from '../discord/client';
+import { client } from '../../core/discord/client';
 
 const EXIT_EVENTS = [
   'beforeExit',

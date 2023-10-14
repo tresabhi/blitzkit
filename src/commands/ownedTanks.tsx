@@ -1,7 +1,4 @@
 import { SlashCommandBuilder } from 'discord.js';
-import addTierChoices from '../LEGACY_core/discord/addTierChoices';
-import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
-import autocompleteUsername from '../LEGACY_core/discord/autocompleteUsername';
 import resolvePlayerFromCommand from '../LEGACY_core/discord/resolvePlayerFromCommand';
 import NoData, { NoDataType } from '../components/NoData';
 import * as Tanks from '../components/Tanks';
@@ -20,6 +17,9 @@ import {
   tankopedia,
   tankopediaInfo,
 } from '../core/blitzstars/tankopedia';
+import addTierChoices from '../core/discord/addTierChoices';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
+import autocompleteUsername from '../core/discord/autocompleteUsername';
 import { CommandRegistry } from '../events/interactionCreate';
 
 export const ownedTanksCommand: CommandRegistry = {

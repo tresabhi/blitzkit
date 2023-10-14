@@ -4,7 +4,7 @@ export interface Parameters {
   [key: string]: string | number | boolean | undefined | null;
 }
 
-export default function interactionToURL(
+export default function commandToURL(
   interaction: ChatInputCommandInteraction<CacheType>,
   parameters?: Parameters,
 ) {

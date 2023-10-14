@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import { TreeTypeString } from '../../components/Tanks';
-import resolveTankId from '../../core/blitz/resolveTankId';
-import { StatFilters } from '../../core/statistics/filterStats';
+import resolveTankId from '../blitz/resolveTankId';
+import { StatFilters } from '../statistics/filterStats';
 
 export async function getFiltersFromCommand(
   interaction: ChatInputCommandInteraction,

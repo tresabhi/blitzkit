@@ -2,13 +2,6 @@ import {
   SlashCommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
-import addPeriodSubCommands from '../LEGACY_core/discord/addPeriodSubCommands';
-import addTankChoices from '../LEGACY_core/discord/addTankChoices';
-import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
-import autocompleteTanks from '../LEGACY_core/discord/autocompleteTanks';
-import autocompleteUsername from '../LEGACY_core/discord/autocompleteUsername';
-import { getCustomPeriodParams } from '../LEGACY_core/discord/getCustomPeriodParams';
-import interactionToURL from '../LEGACY_core/discord/interactionToURL';
 import primaryButton from '../LEGACY_core/discord/primaryButton';
 import resolvePeriodFromButton from '../LEGACY_core/discord/resolvePeriodFromButton';
 import resolvePeriodFromCommand, {
@@ -29,6 +22,13 @@ import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
 import getTankHistories from '../core/blitzkrieg/getTankHistories';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import getPlayerHistories from '../core/blitzstars/getPlayerHistories';
+import addPeriodSubCommands from '../core/discord/addPeriodSubCommands';
+import addTankChoices from '../core/discord/addTankChoices';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
+import autocompleteTanks from '../core/discord/autocompleteTanks';
+import autocompleteUsername from '../core/discord/autocompleteUsername';
+import commandToURL from '../core/discord/commandToURL';
+import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 
 type EvolutionStatType = 'player' | 'tank';
@@ -152,7 +152,7 @@ export const evolutionCommand = new Promise<CommandRegistryRaw>(
         const tankIdRaw = interaction.options.getString('tank')!;
         const tankId =
           commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
-        const path = interactionToURL(interaction, {
+        const path = commandToURL(interaction, {
           ...player,
           ...getCustomPeriodParams(interaction),
           tankId,
