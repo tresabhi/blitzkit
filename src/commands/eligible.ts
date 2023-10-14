@@ -1,10 +1,4 @@
 import { SlashCommandBuilder } from 'discord.js';
-import sumStats from '../LEGACY_core/blitz/sumStats';
-import { tankopedia } from '../LEGACY_core/blitz/tankopedia';
-import getDiffedTankStats from '../LEGACY_core/blitzstars/getDiffedTankStats';
-import getPeriodNow from '../LEGACY_core/blitzstars/getPeriodNow';
-import getTimeDaysAgo from '../LEGACY_core/blitzstars/getTimeDaysAgo';
-import { tankAverages } from '../LEGACY_core/blitzstars/tankAverages';
 import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
 import embedNegative from '../LEGACY_core/discord/embedNegative';
 import embedPositive from '../LEGACY_core/discord/embedPositive';
@@ -13,7 +7,13 @@ import markdownTable, {
 } from '../LEGACY_core/discord/markdownTable';
 import resolvePlayerFromCommand from '../LEGACY_core/discord/resolvePlayerFromCommand';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
+import getPeriodNow from '../core/blitzkrieg/getPeriodNow';
+import getTimeDaysAgo from '../core/blitzkrieg/getTimeDaysAgo';
+import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
+import { tankAverages } from '../core/blitzstars/tankAverages';
+import { tankopedia } from '../core/blitzstars/tankopedia';
 import calculateWN8 from '../core/statistics/calculateWN8';
+import sumStats from '../core/statistics/sumStats';
 import { CommandRegistry } from '../events/interactionCreate';
 import { PossiblyPromise } from '../types/possiblyPromise';
 
@@ -56,7 +56,7 @@ export const eligibleCommand: CommandRegistry = {
     let body = '';
 
     if (clan === 'SKLLD') {
-      const { diff: diffed } = await getDiffedTankStats(
+      const { diff: diffed } = await getStatsInPeriod(
         region,
         id,
         getTimeDaysAgo(region, 30),

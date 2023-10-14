@@ -1,13 +1,13 @@
 import { Region } from '../../constants/regions';
-import { getAccountInfo } from '../../core/blitz/getAccountInfo';
-import { PlayerStats } from '../../core/blitzstars/getPlayerStats';
 import {
   GetHistoriesOptions,
   Histories,
   History,
   getHistoriesDefaultOptions,
 } from '../../types/histories';
-import { emptyAllStats } from './getDiffedTankStats';
+import { getAccountInfo } from '../blitz/getAccountInfo';
+import { PlayerStats } from './getPlayerStats';
+import { emptyAllStats } from './getStatsInPeriod';
 
 export default async function getPlayerHistories(
   server: Region,

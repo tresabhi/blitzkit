@@ -1,6 +1,6 @@
 import { go } from 'fuzzysort';
-import throwError from '../node/throwError';
-import { TANKS, tankopedia } from './tankopedia';
+import throwError from '../../LEGACY_core/node/throwError';
+import { TANKS, tankopedia } from '../blitzstars/tankopedia';
 
 export default async function resolveTankId(tank: string | number) {
   const number = typeof tank === 'string' ? parseInt(tank) : tank;

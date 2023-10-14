@@ -1,10 +1,3 @@
-import resolveTankName from '../LEGACY_core/blitz/resolveTankName';
-import sumStats from '../LEGACY_core/blitz/sumStats';
-import { tankopedia } from '../LEGACY_core/blitz/tankopedia';
-import getDiffedTankStats from '../LEGACY_core/blitzstars/getDiffedTankStats';
-import getPeriodNow from '../LEGACY_core/blitzstars/getPeriodNow';
-import getTimeDaysAgo from '../LEGACY_core/blitzstars/getTimeDaysAgo';
-import { tankAverages } from '../LEGACY_core/blitzstars/tankAverages';
 import { ResolvedPlayer } from '../LEGACY_core/discord/resolvePlayerFromCommand';
 import * as Breakdown from '../components/Breakdown';
 import NoData, { NoDataType } from '../components/NoData';
@@ -14,8 +7,15 @@ import { AllStats, getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
+import resolveTankName from '../core/blitz/resolveTankName';
+import getPeriodNow from '../core/blitzkrieg/getPeriodNow';
+import getTimeDaysAgo from '../core/blitzkrieg/getTimeDaysAgo';
+import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
+import { tankAverages } from '../core/blitzstars/tankAverages';
+import { tankopedia } from '../core/blitzstars/tankopedia';
 import calculateWN8 from '../core/statistics/calculateWN8';
 import getWN8Percentile from '../core/statistics/getWN8Percentile';
+import sumStats from '../core/statistics/sumStats';
 import { PossiblyPromise } from '../types/possiblyPromise';
 
 export default async function today(
@@ -25,7 +25,7 @@ export default async function today(
   showTotal = true,
   naked?: boolean,
 ) {
-  const { diff: diffed, order } = await getDiffedTankStats(
+  const { diff: diffed, order } = await getStatsInPeriod(
     server,
     id,
     getTimeDaysAgo(server, 1),

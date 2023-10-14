@@ -2,7 +2,7 @@ import {
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
-} from '../../../LEGACY_core/blitz/tankopedia';
+} from '../../../core/blitzstars/tankopedia';
 import { theme } from '../../../stitches.config';
 
 export enum TreeTypeEnum {

@@ -1,12 +1,4 @@
 import { SlashCommandBuilder } from 'discord.js';
-import resolveTankName from '../LEGACY_core/blitz/resolveTankName';
-import {
-  TIER_ROMAN_NUMERALS,
-  TankopediaEntry,
-  Tier,
-  tankopedia,
-  tankopediaInfo,
-} from '../LEGACY_core/blitz/tankopedia';
 import addTierChoices from '../LEGACY_core/discord/addTierChoices';
 import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
 import autocompleteUsername from '../LEGACY_core/discord/autocompleteUsername';
@@ -19,7 +11,15 @@ import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
+import resolveTankName from '../core/blitz/resolveTankName';
 import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
+import {
+  TIER_ROMAN_NUMERALS,
+  TankopediaEntry,
+  Tier,
+  tankopedia,
+  tankopediaInfo,
+} from '../core/blitzstars/tankopedia';
 import { CommandRegistry } from '../events/interactionCreate';
 
 export const ownedTanksCommand: CommandRegistry = {

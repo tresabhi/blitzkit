@@ -2,15 +2,15 @@
 
 import { ContextMenu } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
-import {
-  TankopediaEntry,
-  tankopedia,
-} from '../../../LEGACY_core/blitz/tankopedia';
-import { tankAverages } from '../../../LEGACY_core/blitzstars/tankAverages';
 import * as Breakdown from '../../../components/Breakdown';
 import { TreeTypeEnum } from '../../../components/Tanks';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import fetchBlitz from '../../../core/blitz/fetchWargaming';
+import { tankAverages } from '../../../core/blitzstars/tankAverages';
+import {
+  TankopediaEntry,
+  tankopedia,
+} from '../../../core/blitzstars/tankopedia';
 import calculateWN8 from '../../../core/statistics/calculateWN8';
 import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
 import getWN8Percentile from '../../../core/statistics/getWN8Percentile';

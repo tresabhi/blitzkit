@@ -1,6 +1,6 @@
 import { TierWeightsRecord } from '../../components/TierWeights';
-import { AllStats } from '../../core/blitz/getAccountInfo';
-import { tankopedia } from '../blitz/tankopedia';
+import { AllStats } from '../blitz/getAccountInfo';
+import { tankopedia } from '../blitzstars/tankopedia';
 
 export async function getTierWeights(
   stats: Record<number, AllStats>,

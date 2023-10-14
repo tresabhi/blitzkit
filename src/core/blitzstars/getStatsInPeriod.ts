@@ -1,9 +1,9 @@
 import { Region } from '../../constants/regions';
-import { AllStats } from '../../core/blitz/getAccountInfo';
+import { AllStats } from '../blitz/getAccountInfo';
 import getTankHistories, {
   TankHistories,
   TankHistoryRaw,
-} from './getTankHistories';
+} from '../blitzkrieg/getTankHistories';
 
 export const emptyAllStats: AllStats = {
   battles: 0,
@@ -40,7 +40,7 @@ export interface DiffedTankStats {
 }
 
 // BIG TODO: merge this neatly with diffNormalizedTankStats
-export default async function getDiffedTankStats(
+export default async function getStatsInPeriod(
   server: Region,
   id: number,
   start: number,

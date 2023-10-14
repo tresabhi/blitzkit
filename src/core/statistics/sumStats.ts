@@ -1,5 +1,5 @@
-import { AllStats } from '../../core/blitz/getAccountInfo';
-import { emptyAllStats } from '../blitzstars/getDiffedTankStats';
+import { AllStats } from '../blitz/getAccountInfo';
+import { emptyAllStats } from '../blitzstars/getStatsInPeriod';
 
 export default function sumStats(allStatsCollection: AllStats[]) {
   return allStatsCollection.reduce((accumulated, current) => {

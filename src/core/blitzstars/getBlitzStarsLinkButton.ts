@@ -1,6 +1,6 @@
+import linkButton from '../../LEGACY_core/discord/linkButton';
 import { Region } from '../../constants/regions';
-import { getAccountInfo } from '../../core/blitz/getAccountInfo';
-import linkButton from '../discord/linkButton';
+import { getAccountInfo } from '../blitz/getAccountInfo';
 
 export async function getBlitzStarsLinkButton(
   region: Region,

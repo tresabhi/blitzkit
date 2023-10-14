@@ -1,9 +1,9 @@
 import { TreeTypeString } from '../../components/Tanks';
-import sumStats from '../../LEGACY_core/blitz/sumStats';
-import { tankopedia } from '../../LEGACY_core/blitz/tankopedia';
-import { DiffedTankStats } from '../../LEGACY_core/blitzstars/getDiffedTankStats';
-import { tankAverages } from '../../LEGACY_core/blitzstars/tankAverages';
+import { DiffedTankStats } from '../blitzstars/getStatsInPeriod';
+import { tankAverages } from '../blitzstars/tankAverages';
+import { tankopedia } from '../blitzstars/tankopedia';
 import calculateWN8 from './calculateWN8';
+import sumStats from './sumStats';
 
 export interface StatFilters {
   nation?: string;

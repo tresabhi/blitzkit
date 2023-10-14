@@ -2,10 +2,6 @@ import {
   SlashCommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
-import resolveTankId from '../LEGACY_core/blitz/resolveTankId';
-import { getBlitzStarsLinkButton } from '../LEGACY_core/blitzstars/getBlitzStarsLinkButton';
-import getPlayerHistories from '../LEGACY_core/blitzstars/getPlayerHistories';
-import getTankHistories from '../LEGACY_core/blitzstars/getTankHistories';
 import addPeriodSubCommands from '../LEGACY_core/discord/addPeriodSubCommands';
 import addTankChoices from '../LEGACY_core/discord/addTankChoices';
 import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
@@ -28,7 +24,11 @@ import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
+import resolveTankId from '../core/blitz/resolveTankId';
 import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
+import getTankHistories from '../core/blitzkrieg/getTankHistories';
+import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
+import getPlayerHistories from '../core/blitzstars/getPlayerHistories';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 
 type EvolutionStatType = 'player' | 'tank';

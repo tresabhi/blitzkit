@@ -1,8 +1,4 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { filtersToDescription } from '../LEGACY_core/blitzkrieg/filtersToDescription';
-import { getTierWeights } from '../LEGACY_core/blitzkrieg/getTierWeights';
-import { getBlitzStarsLinkButton } from '../LEGACY_core/blitzstars/getBlitzStarsLinkButton';
-import getDiffedTankStats from '../LEGACY_core/blitzstars/getDiffedTankStats';
 import addStatTypeSubCommands from '../LEGACY_core/discord/addStatTypeSubCommands';
 import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
 import autocompleteTanks from '../LEGACY_core/discord/autocompleteTanks';
@@ -28,7 +24,11 @@ import Wrapper from '../components/Wrapper';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
+import { filtersToDescription } from '../core/blitzkrieg/filtersToDescription';
+import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
+import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
 import { StatFilters, filterStats } from '../core/statistics/filterStats';
+import { getTierWeights } from '../core/statistics/getTierWeights';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 
 async function render(
@@ -39,7 +39,7 @@ async function render(
   const { nickname } = await getAccountInfo(region, id);
   const clan = (await getClanAccountInfo(region, id))?.clan;
   const clanImage = clan ? emblemIdToURL(clan.emblem_set_id) : undefined;
-  const diffedTankStats = await getDiffedTankStats(region, id, start, end);
+  const diffedTankStats = await getStatsInPeriod(region, id, start, end);
   const { stats, supplementary, filteredOrder } = await filterStats(
     diffedTankStats,
     filters,
