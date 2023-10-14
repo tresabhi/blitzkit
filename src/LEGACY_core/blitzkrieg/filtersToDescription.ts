@@ -1,5 +1,5 @@
-import { StatFilters } from '../../_core/statistics/filterStats';
 import { TREE_TYPE_NAMES } from '../../components/Tanks';
+import { StatFilters } from '../../core/statistics/filterStats';
 import resolveTankName from '../blitz/resolveTankName';
 import { TIER_ROMAN_NUMERALS, Tier, tankopediaInfo } from '../blitz/tankopedia';
 

@@ -1,6 +1,6 @@
-import { getAccountInfo } from '../../_core/blitz/getAccountInfo';
-import { PlayerStats } from '../../_core/blitzstars/getPlayerStats';
 import { Region } from '../../constants/regions';
+import { getAccountInfo } from '../../core/blitz/getAccountInfo';
+import { PlayerStats } from '../../core/blitzstars/getPlayerStats';
 import {
   GetHistoriesOptions,
   Histories,

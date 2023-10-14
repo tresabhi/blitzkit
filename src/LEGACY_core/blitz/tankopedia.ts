@@ -1,7 +1,7 @@
 import { deburr } from 'lodash';
-import fetchBlitz from '../../_core/blitz/fetchWargaming';
 import { TreeTypeString } from '../../components/Tanks';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
+import fetchBlitz from '../../core/blitz/fetchWargaming';
 import { context } from '../blitzkrieg/context';
 
 export interface TankopediaEntry {

@@ -1,8 +1,8 @@
 import { TreeTypeString } from '../../components/Tanks';
-import sumStats from '../../core/blitz/sumStats';
-import { tankopedia } from '../../core/blitz/tankopedia';
-import { DiffedTankStats } from '../../core/blitzstars/getDiffedTankStats';
-import { tankAverages } from '../../core/blitzstars/tankAverages';
+import sumStats from '../../LEGACY_core/blitz/sumStats';
+import { tankopedia } from '../../LEGACY_core/blitz/tankopedia';
+import { DiffedTankStats } from '../../LEGACY_core/blitzstars/getDiffedTankStats';
+import { tankAverages } from '../../LEGACY_core/blitzstars/tankAverages';
 import calculateWN8 from './calculateWN8';
 
 export interface StatFilters {

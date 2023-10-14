@@ -1,6 +1,6 @@
 // a cleaner simplification of Blitz Stars' histories because it's a mess there
 
-import { AllStats } from '../_core/blitz/getAccountInfo';
+import { AllStats } from '../core/blitz/getAccountInfo';
 
 export interface History {
   all: AllStats;

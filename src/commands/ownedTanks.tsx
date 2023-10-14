@@ -1,25 +1,25 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { getAccountInfo } from '../_core/blitz/getAccountInfo';
-import { getClanAccountInfo } from '../_core/blitz/getClanAccountInfo';
-import getTankStats from '../_core/blitz/getTankStats';
-import getTreeType from '../_core/blitz/getTreeType';
-import { emblemIdToURL } from '../_core/blitzkrieg/emblemIdToURL';
-import NoData, { NoDataType } from '../components/NoData';
-import * as Tanks from '../components/Tanks';
-import TitleBar from '../components/TitleBar';
-import Wrapper from '../components/Wrapper';
-import resolveTankName from '../core/blitz/resolveTankName';
+import resolveTankName from '../LEGACY_core/blitz/resolveTankName';
 import {
   TIER_ROMAN_NUMERALS,
   TankopediaEntry,
   Tier,
   tankopedia,
   tankopediaInfo,
-} from '../core/blitz/tankopedia';
-import addTierChoices from '../core/discord/addTierChoices';
-import addUsernameChoices from '../core/discord/addUsernameChoices';
-import autocompleteUsername from '../core/discord/autocompleteUsername';
-import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+} from '../LEGACY_core/blitz/tankopedia';
+import addTierChoices from '../LEGACY_core/discord/addTierChoices';
+import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
+import autocompleteUsername from '../LEGACY_core/discord/autocompleteUsername';
+import resolvePlayerFromCommand from '../LEGACY_core/discord/resolvePlayerFromCommand';
+import NoData, { NoDataType } from '../components/NoData';
+import * as Tanks from '../components/Tanks';
+import TitleBar from '../components/TitleBar';
+import Wrapper from '../components/Wrapper';
+import { getAccountInfo } from '../core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
+import getTankStats from '../core/blitz/getTankStats';
+import getTreeType from '../core/blitz/getTreeType';
+import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
 import { CommandRegistry } from '../events/interactionCreate';
 
 export const ownedTanksCommand: CommandRegistry = {

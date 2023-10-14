@@ -18,13 +18,13 @@ import {
 } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { ChangeEvent, useRef, useState } from 'react';
-import fetchBlitz from '../../../_core/blitz/fetchWargaming';
+import listPlayers, {
+  AccountListWithServer,
+} from '../../../LEGACY_core/blitz/listPlayers';
 import PageWrapper from '../../../components/PageWrapper';
 import { REGION_NAMES, Region } from '../../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
-import listPlayers, {
-  AccountListWithServer,
-} from '../../../core/blitz/listPlayers';
+import fetchBlitz from '../../../core/blitz/fetchWargaming';
 import { useSession } from '../../../stores/session';
 import { NormalizedTankStats, TanksStats } from '../../../types/tanksStats';
 import SessionPage from '../../embeds/session/page';

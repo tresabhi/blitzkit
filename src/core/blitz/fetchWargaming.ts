@@ -1,4 +1,4 @@
-import throwError from '../../core/node/throwError';
+import throwError from '../../LEGACY_core/node/throwError';
 
 export type BlitzResponse<Data extends object> =
   | {

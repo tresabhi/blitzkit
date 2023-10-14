@@ -1,4 +1,4 @@
-import { Tier } from '../core/blitz/tankopedia';
+import { Tier } from '../LEGACY_core/blitz/tankopedia';
 import { theme } from '../stitches.config';
 
 export type TierWeightsRecord = Partial<Record<Tier, number>>;

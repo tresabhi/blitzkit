@@ -1,6 +1,6 @@
-import { AllStats, SupplementaryStats } from '../../_core/blitz/getAccountInfo';
-import getWN8Percentile from '../../core/blitz/getWN8Percentile';
-import isNumber from '../../core/node/isNumber';
+import { AllStats, SupplementaryStats } from '../../core/blitz/getAccountInfo';
+import getWN8Percentile from '../../LEGACY_core/blitz/getWN8Percentile';
+import isNumber from '../../LEGACY_core/node/isNumber';
 import { Card } from './components/Card';
 import { Root } from './components/Root';
 import { Row } from './components/Row';

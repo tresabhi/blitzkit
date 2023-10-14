@@ -1,4 +1,4 @@
-import { AllStats } from '../../_core/blitz/getAccountInfo';
+import { AllStats } from '../../core/blitz/getAccountInfo';
 import { context } from '../blitzkrieg/context';
 
 export interface SpecialStats {

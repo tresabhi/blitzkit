@@ -1,11 +1,11 @@
 import { SlashCommandBuilder } from 'discord.js';
 import packageJSON from '../../package.json' assert { type: 'json' };
-import { tankopedia } from '../core/blitz/tankopedia';
-import { tankAverages } from '../core/blitzstars/tankAverages';
-import { client } from '../core/discord/client';
-import embedInfo from '../core/discord/embedInfo';
-import markdownTable from '../core/discord/markdownTable';
-import getClientId from '../core/node/getClientId';
+import { tankopedia } from '../LEGACY_core/blitz/tankopedia';
+import { tankAverages } from '../LEGACY_core/blitzstars/tankAverages';
+import { client } from '../LEGACY_core/discord/client';
+import embedInfo from '../LEGACY_core/discord/embedInfo';
+import markdownTable from '../LEGACY_core/discord/markdownTable';
+import getClientId from '../LEGACY_core/node/getClientId';
 import { CommandRegistry } from '../events/interactionCreate';
 
 const executionStart = new Date().getTime();

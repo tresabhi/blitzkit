@@ -1,6 +1,6 @@
-import fetchBlitz from '../../_core/blitz/fetchWargaming';
 import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
+import fetchBlitz from '../../core/blitz/fetchWargaming';
 
 interface Account {
   nickname: string;

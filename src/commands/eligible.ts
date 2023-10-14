@@ -1,17 +1,19 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { getAccountInfo } from '../_core/blitz/getAccountInfo';
-import calculateWN8 from '../_core/statistics/calculateWN8';
-import sumStats from '../core/blitz/sumStats';
-import { tankopedia } from '../core/blitz/tankopedia';
-import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats';
-import getPeriodNow from '../core/blitzstars/getPeriodNow';
-import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo';
-import { tankAverages } from '../core/blitzstars/tankAverages';
-import addUsernameChoices from '../core/discord/addUsernameChoices';
-import embedNegative from '../core/discord/embedNegative';
-import embedPositive from '../core/discord/embedPositive';
-import markdownTable, { TableInput } from '../core/discord/markdownTable';
-import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import sumStats from '../LEGACY_core/blitz/sumStats';
+import { tankopedia } from '../LEGACY_core/blitz/tankopedia';
+import getDiffedTankStats from '../LEGACY_core/blitzstars/getDiffedTankStats';
+import getPeriodNow from '../LEGACY_core/blitzstars/getPeriodNow';
+import getTimeDaysAgo from '../LEGACY_core/blitzstars/getTimeDaysAgo';
+import { tankAverages } from '../LEGACY_core/blitzstars/tankAverages';
+import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
+import embedNegative from '../LEGACY_core/discord/embedNegative';
+import embedPositive from '../LEGACY_core/discord/embedPositive';
+import markdownTable, {
+  TableInput,
+} from '../LEGACY_core/discord/markdownTable';
+import resolvePlayerFromCommand from '../LEGACY_core/discord/resolvePlayerFromCommand';
+import { getAccountInfo } from '../core/blitz/getAccountInfo';
+import calculateWN8 from '../core/statistics/calculateWN8';
 import { CommandRegistry } from '../events/interactionCreate';
 import { PossiblyPromise } from '../types/possiblyPromise';
 

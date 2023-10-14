@@ -1,5 +1,5 @@
-import { getAccountInfo } from '../../_core/blitz/getAccountInfo';
 import { Region } from '../../constants/regions';
+import { getAccountInfo } from '../../core/blitz/getAccountInfo';
 import linkButton from '../discord/linkButton';
 
 export async function getBlitzStarsLinkButton(

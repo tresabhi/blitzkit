@@ -2,15 +2,18 @@
 
 import { ContextMenu } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
-import fetchBlitz from '../../../_core/blitz/fetchWargaming';
-import calculateWN8 from '../../../_core/statistics/calculateWN8';
-import { deltaTankStats } from '../../../_core/statistics/deltaTankStats';
+import getWN8Percentile from '../../../LEGACY_core/blitz/getWN8Percentile';
+import {
+  TankopediaEntry,
+  tankopedia,
+} from '../../../LEGACY_core/blitz/tankopedia';
+import { tankAverages } from '../../../LEGACY_core/blitzstars/tankAverages';
 import * as Breakdown from '../../../components/Breakdown';
 import { TreeTypeEnum } from '../../../components/Tanks';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
-import getWN8Percentile from '../../../core/blitz/getWN8Percentile';
-import { TankopediaEntry, tankopedia } from '../../../core/blitz/tankopedia';
-import { tankAverages } from '../../../core/blitzstars/tankAverages';
+import fetchBlitz from '../../../core/blitz/fetchWargaming';
+import calculateWN8 from '../../../core/statistics/calculateWN8';
+import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
 import { useSession } from '../../../stores/session';
 import { IndividualTankStats, TanksStats } from '../../../types/tanksStats';
 import { CustomColumnDisplay } from '../../tools/session/components/CustomColumn';

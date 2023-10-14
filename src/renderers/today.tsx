@@ -1,21 +1,21 @@
-import { AllStats, getAccountInfo } from '../_core/blitz/getAccountInfo';
-import { getClanAccountInfo } from '../_core/blitz/getClanAccountInfo';
-import getTankStats from '../_core/blitz/getTankStats';
-import getTreeType from '../_core/blitz/getTreeType';
-import calculateWN8 from '../_core/statistics/calculateWN8';
+import getWN8Percentile from '../LEGACY_core/blitz/getWN8Percentile';
+import resolveTankName from '../LEGACY_core/blitz/resolveTankName';
+import sumStats from '../LEGACY_core/blitz/sumStats';
+import { tankopedia } from '../LEGACY_core/blitz/tankopedia';
+import getDiffedTankStats from '../LEGACY_core/blitzstars/getDiffedTankStats';
+import getPeriodNow from '../LEGACY_core/blitzstars/getPeriodNow';
+import getTimeDaysAgo from '../LEGACY_core/blitzstars/getTimeDaysAgo';
+import { tankAverages } from '../LEGACY_core/blitzstars/tankAverages';
+import { ResolvedPlayer } from '../LEGACY_core/discord/resolvePlayerFromCommand';
 import * as Breakdown from '../components/Breakdown';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import getWN8Percentile from '../core/blitz/getWN8Percentile';
-import resolveTankName from '../core/blitz/resolveTankName';
-import sumStats from '../core/blitz/sumStats';
-import { tankopedia } from '../core/blitz/tankopedia';
-import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats';
-import getPeriodNow from '../core/blitzstars/getPeriodNow';
-import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo';
-import { tankAverages } from '../core/blitzstars/tankAverages';
-import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
+import { AllStats, getAccountInfo } from '../core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
+import getTankStats from '../core/blitz/getTankStats';
+import getTreeType from '../core/blitz/getTreeType';
+import calculateWN8 from '../core/statistics/calculateWN8';
 import { PossiblyPromise } from '../types/possiblyPromise';
 
 export default async function today(

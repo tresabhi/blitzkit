@@ -5,25 +5,25 @@ import {
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
 import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
-import { getAccountInfo } from '../_core/blitz/getAccountInfo';
-import { getClanAccountInfo } from '../_core/blitz/getClanAccountInfo';
-import getRatingsInfo from '../_core/blitz/getRatingsInfo';
-import getArchivedRatingsInfo from '../_core/blitzkrieg/getArchivedRatingsInfo';
+import regionToRegionSubdomain from '../LEGACY_core/blitz/regionToRegionSubdomain';
+import getMidnightLeaderboard, {
+  DATABASE_REPO,
+} from '../LEGACY_core/database/getMidnightLeaderboard';
+import addRegionChoices from '../LEGACY_core/discord/addRegionChoices';
+import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
+import autocompleteUsername from '../LEGACY_core/discord/autocompleteUsername';
+import embedNegative from '../LEGACY_core/discord/embedNegative';
+import resolvePlayerFromCommand from '../LEGACY_core/discord/resolvePlayerFromCommand';
+import { octokit } from '../LEGACY_core/github/octokit';
+import throwError from '../LEGACY_core/node/throwError';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
 import { REGION_NAMES_SHORT, Region } from '../constants/regions';
-import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
-import getMidnightLeaderboard, {
-  DATABASE_REPO,
-} from '../core/database/getMidnightLeaderboard';
-import addRegionChoices from '../core/discord/addRegionChoices';
-import addUsernameChoices from '../core/discord/addUsernameChoices';
-import autocompleteUsername from '../core/discord/autocompleteUsername';
-import embedNegative from '../core/discord/embedNegative';
-import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { octokit } from '../core/github/octokit';
-import throwError from '../core/node/throwError';
+import { getAccountInfo } from '../core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
+import getRatingsInfo from '../core/blitz/getRatingsInfo';
+import getArchivedRatingsInfo from '../core/blitzkrieg/getArchivedRatingsInfo';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 
 export interface RatingsPlayer {

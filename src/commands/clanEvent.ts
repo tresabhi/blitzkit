@@ -7,15 +7,15 @@
 
 // import { SlashCommandBuilder, escapeMarkdown } from 'discord.js';
 // import markdownEscape from 'markdown-escape';
-// import { getAccountAchievements } from '../_core/blitz/getAccountAchievements';
-// import { getAccountInfo } from '../_core/blitz/getAccountInfo';
-// import { getClanInfo } from '../_core/blitz/getClanInfo';
-// import { PlayerHistoriesRaw } from '../core/blitzstars/getPlayerHistories';
-// import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo';
-// import addClanChoices from '../core/discord/addClanChoices';
-// import autocompleteClan from '../core/discord/autocompleteClan';
-// import embedWarning from '../core/discord/embedWarning';
-// import resolveClanFromCommand from '../core/discord/resolveClanFromCommand';
+// import { getAccountAchievements } from '../core/blitz/getAccountAchievements';
+// import { getAccountInfo } from '../core/blitz/getAccountInfo';
+// import { getClanInfo } from '../core/blitz/getClanInfo';
+// import { PlayerHistoriesRaw } from '../LEGACY_core/blitzstars/getPlayerHistories';
+// import getTimeDaysAgo from '../LEGACY_core/blitzstars/getTimeDaysAgo';
+// import addClanChoices from '../LEGACY_core/discord/addClanChoices';
+// import autocompleteClan from '../LEGACY_core/discord/autocompleteClan';
+// import embedWarning from '../LEGACY_core/discord/embedWarning';
+// import resolveClanFromCommand from '../LEGACY_core/discord/resolveClanFromCommand';
 // import { CommandRegistry } from '../events/interactionCreate';
 
 // export const clanEventCommand: CommandRegistry = {

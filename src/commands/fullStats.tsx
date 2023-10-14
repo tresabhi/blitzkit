@@ -1,34 +1,34 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { getAccountInfo } from '../_core/blitz/getAccountInfo';
-import { getClanAccountInfo } from '../_core/blitz/getClanAccountInfo';
-import { emblemIdToURL } from '../_core/blitzkrieg/emblemIdToURL';
-import { StatFilters, filterStats } from '../_core/statistics/filterStats';
+import { filtersToDescription } from '../LEGACY_core/blitzkrieg/filtersToDescription';
+import { getTierWeights } from '../LEGACY_core/blitzkrieg/getTierWeights';
+import { getBlitzStarsLinkButton } from '../LEGACY_core/blitzstars/getBlitzStarsLinkButton';
+import getDiffedTankStats from '../LEGACY_core/blitzstars/getDiffedTankStats';
+import addStatTypeSubCommands from '../LEGACY_core/discord/addStatTypeSubCommands';
+import addUsernameChoices from '../LEGACY_core/discord/addUsernameChoices';
+import autocompleteTanks from '../LEGACY_core/discord/autocompleteTanks';
+import autocompleteUsername from '../LEGACY_core/discord/autocompleteUsername';
+import { getCustomPeriodParams } from '../LEGACY_core/discord/getCustomPeriodParams';
+import { getFiltersFromButton } from '../LEGACY_core/discord/getFiltersFromButton';
+import { getFiltersFromCommand } from '../LEGACY_core/discord/getFiltersFromCommand';
+import interactionToURL from '../LEGACY_core/discord/interactionToURL';
+import { refreshButton } from '../LEGACY_core/discord/refreshButton';
+import resolvePeriodFromButton from '../LEGACY_core/discord/resolvePeriodFromButton';
+import resolvePeriodFromCommand, {
+  ResolvedPeriod,
+} from '../LEGACY_core/discord/resolvePeriodFromCommand';
+import resolvePlayerFromButton from '../LEGACY_core/discord/resolvePlayerFromButton';
+import resolvePlayerFromCommand, {
+  ResolvedPlayer,
+} from '../LEGACY_core/discord/resolvePlayerFromCommand';
 import GenericAllStats from '../components/GenericAllStats';
 import NoData, { NoDataType } from '../components/NoData';
 import TierWeights from '../components/TierWeights';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { filtersToDescription } from '../core/blitzkrieg/filtersToDescription';
-import { getTierWeights } from '../core/blitzkrieg/getTierWeights';
-import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
-import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats';
-import addStatTypeSubCommands from '../core/discord/addStatTypeSubCommands';
-import addUsernameChoices from '../core/discord/addUsernameChoices';
-import autocompleteTanks from '../core/discord/autocompleteTanks';
-import autocompleteUsername from '../core/discord/autocompleteUsername';
-import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
-import { getFiltersFromButton } from '../core/discord/getFiltersFromButton';
-import { getFiltersFromCommand } from '../core/discord/getFiltersFromCommand';
-import interactionToURL from '../core/discord/interactionToURL';
-import { refreshButton } from '../core/discord/refreshButton';
-import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
-import resolvePeriodFromCommand, {
-  ResolvedPeriod,
-} from '../core/discord/resolvePeriodFromCommand';
-import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
-import resolvePlayerFromCommand, {
-  ResolvedPlayer,
-} from '../core/discord/resolvePlayerFromCommand';
+import { getAccountInfo } from '../core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
+import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
+import { StatFilters, filterStats } from '../core/statistics/filterStats';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 
 async function render(
