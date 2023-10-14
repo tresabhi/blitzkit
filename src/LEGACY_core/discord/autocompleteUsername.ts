@@ -4,14 +4,14 @@ import {
   CacheType,
 } from 'discord.js';
 import { REGION_NAMES } from '../../constants/regions';
-import listPlayers from '../blitz/listPlayers';
+import searchPlayersAcrossRegions from '../../core/blitz/searchPlayersAcrossRegions';
 
 export default async function autocompleteUsername(
   interaction: AutocompleteInteraction<CacheType>,
 ) {
   const focusedOption = interaction.options.getFocused(true);
   if (focusedOption.name !== 'username') return;
-  const players = await listPlayers(focusedOption.value);
+  const players = await searchPlayersAcrossRegions(focusedOption.value);
 
   try {
     await interaction.respond(

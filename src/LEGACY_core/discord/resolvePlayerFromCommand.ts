@@ -1,7 +1,7 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { Region } from '../../constants/regions';
-import listPlayers from '../blitz/listPlayers';
+import searchPlayersAcrossRegions from '../../core/blitz/searchPlayersAcrossRegions';
 import { getBlitzFromDiscord } from '../cockroackdb/discordBlitz';
 import throwError from '../node/throwError';
 
@@ -26,7 +26,7 @@ export default async function resolvePlayerFromCommand(
         id: Number(accountId),
       } satisfies ResolvedPlayer;
     } else {
-      const accounts = await listPlayers(commandUsername);
+      const accounts = await searchPlayersAcrossRegions(commandUsername);
 
       if (accounts[0]) {
         return {

@@ -1,6 +1,6 @@
 import { RatingsInfo } from '../../commands/ratings';
 import { Region } from '../../constants/regions';
-import regionToRegionSubdomain from '../../LEGACY_core/blitz/regionToRegionSubdomain';
+import regionToRegionSubdomain from './regionToRegionSubdomain';
 
 export default async function getRatingsInfo(region: Region) {
   const response = await fetch(

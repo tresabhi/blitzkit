@@ -18,13 +18,13 @@ import {
 } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { ChangeEvent, useRef, useState } from 'react';
-import listPlayers, {
-  AccountListWithServer,
-} from '../../../LEGACY_core/blitz/listPlayers';
 import PageWrapper from '../../../components/PageWrapper';
 import { REGION_NAMES, Region } from '../../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import fetchBlitz from '../../../core/blitz/fetchWargaming';
+import searchPlayersAcrossRegions, {
+  AccountListWithServer,
+} from '../../../core/blitz/searchPlayersAcrossRegions';
 import { useSession } from '../../../stores/session';
 import { NormalizedTankStats, TanksStats } from '../../../types/tanksStats';
 import SessionPage from '../../embeds/session/page';
@@ -40,7 +40,7 @@ export default function Page() {
   const handleChange = debounce(
     async (event: ChangeEvent<HTMLInputElement>) => {
       if (event.target.value) {
-        setSearchResults(await listPlayers(event.target.value));
+        setSearchResults(await searchPlayersAcrossRegions(event.target.value));
       } else {
         setSearchResults(undefined);
         setShowSearchResults(false);

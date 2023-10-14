@@ -5,7 +5,6 @@ import {
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
 import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
-import regionToRegionSubdomain from '../LEGACY_core/blitz/regionToRegionSubdomain';
 import getMidnightLeaderboard, {
   DATABASE_REPO,
 } from '../LEGACY_core/database/getMidnightLeaderboard';
@@ -23,6 +22,7 @@ import { REGION_NAMES_SHORT, Region } from '../constants/regions';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../core/blitz/getRatingsInfo';
+import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
 import getArchivedRatingsInfo from '../core/blitzkrieg/getArchivedRatingsInfo';
 import { CommandRegistryRaw } from '../events/interactionCreate';
 

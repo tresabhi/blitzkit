@@ -4,7 +4,7 @@ import {
   CacheType,
 } from 'discord.js';
 import { REGION_NAMES } from '../../constants/regions';
-import listClans from '../blitz/listClans';
+import searchClansAcrossRegions from '../../core/blitz/searchClansAcrossRegions';
 
 export default async function autocompleteClan(
   interaction: AutocompleteInteraction<CacheType>,
@@ -12,7 +12,7 @@ export default async function autocompleteClan(
   const focusedOption = interaction.options.getFocused(true);
   if (focusedOption.name !== 'clan') return;
   if (focusedOption.value.length < 2) return interaction.respond([]);
-  const players = await listClans(focusedOption.value);
+  const players = await searchClansAcrossRegions(focusedOption.value);
 
   await interaction.respond(
     players

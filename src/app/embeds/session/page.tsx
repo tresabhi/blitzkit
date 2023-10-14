@@ -2,7 +2,6 @@
 
 import { ContextMenu } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
-import getWN8Percentile from '../../../LEGACY_core/blitz/getWN8Percentile';
 import {
   TankopediaEntry,
   tankopedia,
@@ -14,6 +13,7 @@ import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicatio
 import fetchBlitz from '../../../core/blitz/fetchWargaming';
 import calculateWN8 from '../../../core/statistics/calculateWN8';
 import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
+import getWN8Percentile from '../../../core/statistics/getWN8Percentile';
 import { useSession } from '../../../stores/session';
 import { IndividualTankStats, TanksStats } from '../../../types/tanksStats';
 import { CustomColumnDisplay } from '../../tools/session/components/CustomColumn';

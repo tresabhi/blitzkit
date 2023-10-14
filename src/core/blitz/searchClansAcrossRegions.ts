@@ -1,13 +1,16 @@
 import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
-import fetchBlitz from '../../core/blitz/fetchWargaming';
 import { Clan, ClanList } from '../../types/clanList';
+import fetchBlitz from './fetchWargaming';
 
 export type ClanListWithRegion = (Clan & {
   region: 'com' | 'eu' | 'asia';
 })[];
 
-export default async function listClans(search: string, limit = 9) {
+export default async function searchClansAcrossRegions(
+  search: string,
+  limit = 9,
+) {
   const trimmed = search.trim();
   if (trimmed.length < 3 && trimmed.length > 100) return [];
   const normalizedLimit = Math.round(limit / 3);

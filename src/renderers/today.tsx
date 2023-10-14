@@ -1,4 +1,3 @@
-import getWN8Percentile from '../LEGACY_core/blitz/getWN8Percentile';
 import resolveTankName from '../LEGACY_core/blitz/resolveTankName';
 import sumStats from '../LEGACY_core/blitz/sumStats';
 import { tankopedia } from '../LEGACY_core/blitz/tankopedia';
@@ -16,6 +15,7 @@ import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
 import calculateWN8 from '../core/statistics/calculateWN8';
+import getWN8Percentile from '../core/statistics/getWN8Percentile';
 import { PossiblyPromise } from '../types/possiblyPromise';
 
 export default async function today(

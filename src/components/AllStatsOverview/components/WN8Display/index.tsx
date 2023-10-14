@@ -1,5 +1,5 @@
 import { Percentile } from '../../../../constants/percentiles';
-import getWN8Percentile from '../../../../LEGACY_core/blitz/getWN8Percentile';
+import getWN8Percentile from '../../../../core/statistics/getWN8Percentile';
 import { theme } from '../../../../stitches.config';
 import { PERCENTILE_COLORS } from '../../../PercentileIndicator';
 import { Glow } from './components/Glow';

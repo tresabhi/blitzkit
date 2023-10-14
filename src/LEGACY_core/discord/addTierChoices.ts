@@ -1,6 +1,6 @@
 import { SlashCommandStringOption } from 'discord.js';
 import { range } from 'lodash';
-import numberToRomanNumeral from '../blitz/numberToRomanNumeral';
+import numberToRomanNumeral from '../../core/math/numberToRomanNumeral';
 
 export default function addTierChoices(option: SlashCommandStringOption) {
   return option

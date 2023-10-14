@@ -74,7 +74,7 @@ export const statsCommand = new Promise<CommandRegistryRaw>(async (resolve) => {
     async handler(interaction) {
       const player = await resolvePlayerFromCommand(interaction);
       const period = resolvePeriodFromCommand(player.region, interaction);
-      const filters = getFiltersFromCommand(interaction);
+      const filters = await getFiltersFromCommand(interaction);
       const path = interactionToURL(interaction, {
         ...player,
         ...getCustomPeriodParams(interaction),

@@ -1,6 +1,6 @@
 import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
-import fetchBlitz from '../../core/blitz/fetchWargaming';
+import fetchBlitz from './fetchWargaming';
 
 interface Account {
   nickname: string;
@@ -14,7 +14,10 @@ export type AccountListWithServer = (Account & {
 export const usernamePattern = /^[a-zA-Z0-9_]{3,24}$/;
 export const usernamePatternWithoutPosition = /[a-zA-Z0-9_]{3,24}/;
 
-export default async function listPlayers(search: string, limit = 9) {
+export default async function searchPlayersAcrossRegions(
+  search: string,
+  limit = 9,
+) {
   const trimmedSearch = search.trim();
   const normalizedLimit = Math.round(limit / 3);
   const encodedSearch = encodeURIComponent(trimmedSearch);
