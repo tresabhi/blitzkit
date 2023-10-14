@@ -1,13 +1,13 @@
+import { AllStats, getAccountInfo } from '../_core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../_core/blitz/getClanAccountInfo';
+import calculateWN8 from '../_core/statistics/calculateWN8';
 import * as Breakdown from '../components/Breakdown';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
-import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
-import calculateWN8 from '../core/blitz/calculateWN8';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
 import getWN8Percentile from '../core/blitz/getWN8Percentile';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import resolveTankName from '../core/blitz/resolveTankName';
 import sumStats from '../core/blitz/sumStats';
 import { tankopedia } from '../core/blitz/tankopedia';
@@ -16,8 +16,6 @@ import getPeriodNow from '../core/blitzstars/getPeriodNow';
 import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo';
 import { tankAverages } from '../core/blitzstars/tankAverages';
 import { ResolvedPlayer } from '../core/discord/resolvePlayerFromCommand';
-import { AccountInfo, AllStats } from '../types/accountInfo';
-import { PlayerClanInfo } from '../types/playerClanData';
 import { PossiblyPromise } from '../types/possiblyPromise';
 
 export default async function today(
@@ -33,16 +31,12 @@ export default async function today(
     getTimeDaysAgo(server, 1),
     getPeriodNow(),
   );
-  const accountInfo = await getWargamingResponse<AccountInfo>(
-    `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-  );
-  const clanData = await getWargamingResponse<PlayerClanInfo>(
-    `https://api.wotblitz.${server}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
-  );
+  const accountInfo = await getAccountInfo(server, id);
+  const clanData = await getClanAccountInfo(server, id);
   const careerTankStatsRaw = await getTankStats(server, id);
   const careerStats: Record<number, AllStats> = showTotal
     ? {
-        0: accountInfo[id].statistics.all,
+        0: accountInfo.statistics.all,
       }
     : {};
   const allStatsToAccumulate: AllStats[] = [];
@@ -191,10 +185,10 @@ export default async function today(
   ) : (
     <Wrapper>
       <TitleBar
-        name={accountInfo[id].nickname}
+        name={accountInfo.nickname}
         image={
-          clanData[id]?.clan
-            ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData[id]?.clan?.emblem_set_id}.png`
+          clanData?.clan
+            ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData?.clan?.emblem_set_id}.png`
             : undefined
         }
         description="Today's breakdown"

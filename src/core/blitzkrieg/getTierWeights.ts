@@ -1,5 +1,5 @@
+import { AllStats } from '../../_core/blitz/getAccountInfo';
 import { TierWeightsRecord } from '../../components/TierWeights';
-import { AllStats } from '../../types/accountInfo';
 import { tankopedia } from '../blitz/tankopedia';
 
 export async function getTierWeights(

@@ -1,4 +1,4 @@
-import { AllStats } from '../../types/accountInfo';
+import { AllStats } from '../../_core/blitz/getAccountInfo';
 import { emptyAllStats } from '../blitzstars/getDiffedTankStats';
 
 export default function sumStats(allStatsCollection: AllStats[]) {

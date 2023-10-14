@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { getAccountInfo } from '../_core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../_core/blitz/getClanAccountInfo';
 import { StatFilters, filterStats } from '../_core/statistics/filterStats';
 import GenericAllStats from '../components/GenericAllStats';
 import NoData, { NoDataType } from '../components/NoData';
@@ -7,7 +8,6 @@ import TierWeights from '../components/TierWeights';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
 import { getClanLogo } from '../core/blitz/getClanLogo';
-import { getPlayerClanInfo } from '../core/blitz/getPlayerClanInfo';
 import { filtersToDescription } from '../core/blitzkrieg/filtersToDescription';
 import { getTierWeights } from '../core/blitzkrieg/getTierWeights';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
@@ -37,7 +37,7 @@ async function render(
   filters: StatFilters,
 ) {
   const { nickname } = await getAccountInfo(region, id);
-  const clan = (await getPlayerClanInfo(region, id))[id]?.clan;
+  const clan = (await getClanAccountInfo(region, id))?.clan;
   const clanImage = clan ? getClanLogo(clan.emblem_set_id) : undefined;
   const diffedTankStats = await getDiffedTankStats(region, id, start, end);
   const { stats, supplementary, filteredOrder } = await filterStats(

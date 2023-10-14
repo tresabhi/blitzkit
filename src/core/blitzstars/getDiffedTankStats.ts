@@ -1,5 +1,5 @@
+import { AllStats } from '../../_core/blitz/getAccountInfo';
 import { Region } from '../../constants/regions';
-import { AllStats } from '../../types/accountInfo';
 import getTankHistories, {
   TankHistories,
   TankHistoryRaw,

@@ -1,6 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import { getAccountInfo } from '../_core/blitz/getAccountInfo';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import interactionToURL from '../core/discord/interactionToURL';
@@ -10,7 +9,6 @@ import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistry } from '../events/interactionCreate';
 import today from '../renderers/today';
-import { AccountInfo } from '../types/accountInfo';
 
 export const todayCommand: CommandRegistry = {
   inProduction: true,
@@ -50,11 +48,7 @@ export const todayCommand: CommandRegistry = {
     const cutoff = interaction.options.getInteger('cutoff') ?? undefined;
     const maximized = interaction.options.getInteger('maximized') ?? undefined;
     const showTotal = interaction.options.getBoolean('show-total') ?? undefined;
-    const { nickname } = (
-      await getWargamingResponse<AccountInfo>(
-        `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
-      )
-    )[player.id];
+    const { nickname } = await getAccountInfo(player.region, player.id);
     const path = interactionToURL(interaction, {
       ...player,
       cutoff,

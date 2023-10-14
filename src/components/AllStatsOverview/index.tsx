@@ -1,4 +1,4 @@
-import { AllStats, SupplementaryStats } from '../../types/accountInfo';
+import { AllStats, SupplementaryStats } from '../../_core/blitz/getAccountInfo';
 import { WN8Display } from './components/WN8Display';
 import {
   WN8SurroundingStat,

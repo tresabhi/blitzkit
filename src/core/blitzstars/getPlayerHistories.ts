@@ -1,13 +1,12 @@
+import { getAccountInfo } from '../../_core/blitz/getAccountInfo';
+import { PlayerStats } from '../../_core/blitzstars/getPlayerStats';
 import { Region } from '../../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
-import { AccountInfo } from '../../types/accountInfo';
 import {
   GetHistoriesOptions,
   Histories,
   History,
   getHistoriesDefaultOptions,
 } from '../../types/histories';
-import getWargamingResponse from '../blitz/getWargamingResponse';
 import { emptyAllStats } from './getDiffedTankStats';
 
 export default async function getPlayerHistories(
@@ -19,7 +18,7 @@ export default async function getPlayerHistories(
   const response = await fetch(
     `https://www.blitzstars.com/api/playerstats/${id}`,
   );
-  const playerHistories = ((await response.json()) as PlayerHistoriesRaw).map(
+  const playerHistories = ((await response.json()) as PlayerStats).map(
     (history) =>
       ({
         all: history.statistics.all,
@@ -42,16 +41,9 @@ export default async function getPlayerHistories(
   const latestNodes: Histories = [];
 
   if (mergedOptions.includeLatestHistories) {
-    const {
-      last_battle_time,
-      statistics: { all },
-    } = (
-      await getWargamingResponse<AccountInfo>(
-        `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-      )
-    )[id];
+    const { last_battle_time, statistics } = await getAccountInfo(server, id);
 
-    latestNodes.push({ all, last_battle_time });
+    latestNodes.push({ all: statistics.all, last_battle_time });
   }
 
   const previousNodes: Histories = [];
