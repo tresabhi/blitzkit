@@ -21,7 +21,6 @@ export interface Tankopedia {
   [id: number]: TankopediaEntry | undefined;
 }
 
-console.log('Caching tankopedia...');
 export const tankopedia = fetch(
   context === 'bot'
     ? 'https://www.blitzstars.com/bs-tankopedia.json'
