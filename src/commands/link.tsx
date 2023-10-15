@@ -37,7 +37,9 @@ export const verifyCommand: CommandRegistry = {
       const id = parseInt(idString);
       const discordId = parseInt(interaction.user.id);
       const accountInfo = await getAccountInfo(region as Region, id);
-      const clanAccountInfo = await getClanAccountInfo(region as Region, id);
+      const clanAccountInfo = await getClanAccountInfo(region as Region, id, [
+        'clan',
+      ]);
 
       await linkBlitzAndDiscord(discordId, region as Region, id);
 

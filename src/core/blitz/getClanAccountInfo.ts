@@ -32,7 +32,7 @@ export async function getClanAccountInfo<
     : IndividualClanAccountInfo[],
 >(region: Region, ids: Ids, extra?: string[]) {
   const object = await fetchBlitz<ClanAccountInfo>(
-    `https://api.wotblitz.${region}/wotb/clans/info/?application_id=${WARGAMING_APPLICATION_ID}&clan_id=${normalizeIds(
+    `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${normalizeIds(
       ids,
     )}${normalizeExtra(extra)}`,
   );
