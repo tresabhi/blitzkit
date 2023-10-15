@@ -80,7 +80,15 @@ export function Item({ image, tankType, name, treeType }: ItemProps) {
         </span>
       </div>
 
-      {image && <img src={image} style={{ flex: 1 }} />}
+      {/* {image && (
+        // TODO: remove hardcoded dimensions when satori fixes non-width unloadable images
+        <img
+          src={image}
+          width={106}
+          height={32}
+          style={{ objectFit: 'cover' }}
+        />
+      )} */}
     </div>
   );
 }
