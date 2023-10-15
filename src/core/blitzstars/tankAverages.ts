@@ -84,7 +84,6 @@ tankopedia;
 
 export type TankAverages = Record<number, IndividualTankAverage>;
 
-console.log('Caching tank averages...');
 export const tankAverages = fetch(
   context === 'bot'
     ? 'https://www.blitzstars.com/api/tankaverages.json'
@@ -99,8 +98,6 @@ export const tankAverages = fetch(
         partialTankAverages[individualTankAverage.tank_id] =
           individualTankAverage;
       });
-
-      console.log('Tank averages cached');
 
       return partialTankAverages;
     } else {

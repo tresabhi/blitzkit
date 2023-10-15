@@ -27,12 +27,11 @@ export const tankopedia = fetch(
     : '/api/tankopedia',
 )
   .then(async (response) => response.json())
-  .then((wrapperTankopedia) => {
-    console.log('Tankopedia cached');
-    return context === 'bot'
+  .then((wrapperTankopedia) =>
+    context === 'bot'
       ? (wrapperTankopedia as { data: Tankopedia }).data
-      : (wrapperTankopedia as Tankopedia);
-  });
+      : (wrapperTankopedia as Tankopedia),
+  );
 const entries = new Promise<TankopediaEntry[]>(async (resolve) => {
   resolve(Object.entries(await tankopedia).map(([, entry]) => entry));
 });
@@ -69,11 +68,9 @@ export interface TankopediaInfo {
 }
 
 // this is blocking because info is needed for command creation
-console.log('Caching tankopedia info...');
 export const tankopediaInfo = fetchBlitz<TankopediaInfo>(
   `https://api.wotblitz.com/wotb/encyclopedia/info/?application_id=${WARGAMING_APPLICATION_ID}`,
 );
-console.log('Cached tankopedia info');
 
 export const TANK_ICONS: Record<string, string> = {
   'AT-SPG': 'https://i.imgur.com/BIHSEH0.png',

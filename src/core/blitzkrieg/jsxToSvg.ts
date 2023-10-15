@@ -12,7 +12,6 @@ let roboto: Buffer;
 let robotoBold: Buffer;
 let robotoBlack: Buffer;
 
-console.log('Importing fonts...');
 Promise.all(
   FONT_FILES.map(
     (file) =>
@@ -27,7 +26,6 @@ Promise.all(
   ),
 ).then((data) => {
   [roboto, robotoBold, robotoBlack] = data;
-  console.log('Fonts imported');
 });
 
 export default async function jsxToSvg(jsx: JSX.Element) {

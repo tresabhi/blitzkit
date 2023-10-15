@@ -136,12 +136,10 @@ commands.then((awaitedCommands) => {
   });
 
   try {
-    console.log(`Refreshing ${publicCommands.length} public command(s).`);
     rest.put(Routes.applicationCommands(getClientId()), {
       body: publicCommands,
     });
 
-    console.log(`Refreshing ${guildCommands.length} guild command(s).`);
     (isDev()
       ? [discord.test_guild_id]
       : [discord.tres_guild_id, discord.sklld_guild_id]
