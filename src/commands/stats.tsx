@@ -41,8 +41,6 @@ async function render(
   const { stats, supplementary } = await filterStats(diffedTankStats, filters);
   const filterDescriptions = await filtersToDescription(filters);
 
-  console.log(clan);
-
   return (
     <Wrapper>
       <TitleBar

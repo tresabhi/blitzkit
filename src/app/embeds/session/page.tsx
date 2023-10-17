@@ -14,11 +14,10 @@ import {
 import calculateWN8 from '../../../core/statistics/calculateWN8';
 import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
 import getWN8Percentile from '../../../core/statistics/getWN8Percentile';
-import { useSession } from '../../../stores/session';
+import { resetSession, useSession } from '../../../stores/session';
 import { IndividualTankStats, TanksStats } from '../../../types/tanksStats';
 import { CustomColumnDisplay } from '../../tools/session/components/CustomColumn';
 import { Menu } from '../../tools/session/components/Menu';
-import { resetSession } from '../../tools/session/page';
 
 const REFRESH_RATE = 1 / 5;
 

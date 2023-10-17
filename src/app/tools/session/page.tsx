@@ -18,47 +18,14 @@ import {
 import { debounce } from 'lodash';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
-import { REGION_NAMES, Region } from '../../../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
-import fetchBlitz from '../../../core/blitz/fetchWargaming';
+import { REGION_NAMES } from '../../../constants/regions';
 import searchPlayersAcrossRegions, {
   AccountListWithServer,
 } from '../../../core/blitz/searchPlayersAcrossRegions';
-import { useSession } from '../../../stores/session';
-import { NormalizedTankStats, TanksStats } from '../../../types/tanksStats';
+import { resetSession, setSession, useSession } from '../../../stores/session';
 import SessionPage from '../../embeds/session/page';
 import { Menu } from './components/Menu';
 import * as styles from './page.css';
-
-export async function setSession(region: Region, id: number, nickname: string) {
-  const rawTankStats = (
-    await fetchBlitz<TanksStats>(
-      `https://api.wotblitz.${region}/wotb/tanks/stats/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-    )
-  )[id];
-  const tankStats = rawTankStats.reduce<NormalizedTankStats>(
-    (accumulator, tank) => ({
-      ...accumulator,
-      [tank.tank_id]: tank,
-    }),
-    {},
-  );
-
-  useSession.setState({
-    isTracking: true,
-    id,
-    region,
-    nickname,
-    tankStats,
-    time: Date.now(),
-  });
-}
-
-export function resetSession() {
-  const session = useSession.getState();
-  if (!session.isTracking) return;
-  setSession(session.region, session.id, session.nickname);
-}
 
 export default function Page() {
   const input = useRef<HTMLInputElement>(null);
