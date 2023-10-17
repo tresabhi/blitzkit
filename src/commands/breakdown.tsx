@@ -45,7 +45,7 @@ async function render(
   const statsInPeriod = await getStatsInPeriod(region, id, start, end);
   const { filteredOrder } = await filterStats(statsInPeriod, filters);
   const accountInfo = await getAccountInfo(region, id);
-  const clanData = await getClanAccountInfo(region, id);
+  const clanData = await getClanAccountInfo(region, id, ['clan']);
   const tankStats = await getTankStats(region, id);
   const filterDescriptions = await filtersToDescription(filters);
   const orderedCurrentStats: AllStats[] = [];

@@ -35,11 +35,13 @@ async function render(
   filters: StatFilters,
 ) {
   const { nickname } = await getAccountInfo(region, id);
-  const clan = (await getClanAccountInfo(region, id))?.clan;
+  const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
   const clanImage = clan ? emblemIdToURL(clan.emblem_set_id) : undefined;
   const diffedTankStats = await getStatsInPeriod(region, id, start, end);
   const { stats, supplementary } = await filterStats(diffedTankStats, filters);
   const filterDescriptions = await filtersToDescription(filters);
+
+  console.log(clan);
 
   return (
     <Wrapper>

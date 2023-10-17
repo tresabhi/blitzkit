@@ -313,6 +313,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                     const clanData = await getClanAccountInfo(
                       region,
                       trimmed.map(({ id }) => id),
+                      ['clan'],
                     );
 
                     return trimmed.map(

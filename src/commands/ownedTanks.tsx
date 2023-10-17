@@ -46,7 +46,7 @@ export const ownedTanksCommand: CommandRegistry = {
         })),
       )
     ).filter((tank) => tank.tankopedia?.tier === tier);
-    const clanAccountInfo = await getClanAccountInfo(server, id);
+    const clanAccountInfo = await getClanAccountInfo(server, id, ['clan']);
     const groupedTanks: Record<string, TankopediaEntry[]> = {};
     const nations: string[] = [];
 

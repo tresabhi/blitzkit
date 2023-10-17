@@ -40,7 +40,7 @@ async function render(
   tankId: number | null,
 ) {
   const accountInfo = await getAccountInfo(region, id);
-  const clan = (await getClanAccountInfo(region, id))?.clan;
+  const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
   const logo = clan ? emblemIdToURL(clan.emblem_set_id) : undefined;
   const histories = await (type === 'player'
     ? getPlayerHistories(region, id, {
