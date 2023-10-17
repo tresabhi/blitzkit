@@ -6,7 +6,7 @@ import {
   InteractionEditReplyOptions,
 } from 'discord.js';
 import { InteractionReturnable } from '../../events/interactionCreate';
-import jsxToPng from '../blitzkrieg/jsxToPng';
+import jsxToPngThreaded from '../blitzkrieg/jsxToPngThreaded';
 
 export default async function normalizeInteractionReturnable(
   returnable: InteractionReturnable,
@@ -37,7 +37,7 @@ export default async function normalizeInteractionReturnable(
       } else if (item === null) {
         return;
       } else {
-        const image = await jsxToPng(item);
+        const image = await jsxToPngThreaded(item);
         if (!reply.files) reply.files = [];
         reply.files.push(image);
       }

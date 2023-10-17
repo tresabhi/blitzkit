@@ -1,6 +1,14 @@
 import { build } from 'esbuild';
+import { readdir } from 'fs/promises';
 
-const FILES = ['bot', 'index'];
+const FILES = [
+  'bot',
+  'index',
+
+  (await readdir('src/workers')).map(
+    (file) => `workers/${file.replace('.ts', '')}`,
+  ),
+];
 
 await build({
   entryPoints: FILES.map((file) => `src/${file}.ts`),
