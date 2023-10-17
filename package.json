@@ -1,6 +1,6 @@
 {
   "name": "blitzkrieg",
-  "version": "1.13.3",
+  "version": "1.14.0",
   "description": "🎉 Tools for everything World of Tanks Blitz",
   "main": "src/server.ts",
   "type": "module",
@@ -12,7 +12,7 @@
     "dev:bot": "yarn build:bot && yarn start:bot",
     "dev:docs": "vitepress dev docs",
     "dev:website": "next dev",
-    "start:bot": "node --enable-source-maps --trace-warnings dist/bot/index.cjs",
+    "start:bot": "node --enable-source-maps dist/bot/index.cjs",
     "start:website": "next start",
     "host:docs": "vitepress preview docs",
     "publish:ratingsleaderboard": "vite-node --script scripts/buildRatingsLeaderboard --publish",
@@ -26,6 +26,7 @@
   "license": "MIT",
   "dependencies": {
     "@octokit/rest": "^20.0.1",
+    "@prisma/client": "^5.4.1",
     "@radix-ui/colors": "^3.0.0-rc.4",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/themes": "^1.1.2",
@@ -62,6 +63,7 @@
     "compare-versions": "^6.1.0",
     "knip": "^2.27.1",
     "prettier": "^3.0.3",
+    "prisma": "^5.4.1",
     "typescript": "^5.2.2"
   }
 }

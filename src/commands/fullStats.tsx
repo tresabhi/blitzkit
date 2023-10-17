@@ -1,30 +1,76 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { TreeTypeString } from '../components/Tanks';
-import { CYCLIC_API } from '../constants/cyclic';
-import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
-import resolveTankId from '../core/blitz/resolveTankId';
-import addStatTypeSubCommandGroups from '../core/discord/addStatTypeSubCommandGroups';
+import GenericAllStats from '../components/GenericAllStats';
+import NoData, { NoDataType } from '../components/NoData';
+import TierWeights from '../components/TierWeights';
+import TitleBar from '../components/TitleBar';
+import Wrapper from '../components/Wrapper';
+import { getAccountInfo } from '../core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
+import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
+import { filtersToDescription } from '../core/blitzkrieg/filtersToDescription';
+import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
+import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
+import addFilterOptions from '../core/discord/addFilterOptions';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
-import interactionToURL from '../core/discord/interactionToURL';
-import linkButton from '../core/discord/linkButton';
-import primaryButton from '../core/discord/primaryButton';
+import { buttonRefresh } from '../core/discord/buttonRefresh';
+import commandToURL from '../core/discord/commandToURL';
+import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
+import { getFiltersFromButton } from '../core/discord/getFiltersFromButton';
+import { getFiltersFromCommand } from '../core/discord/getFiltersFromCommand';
 import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
-import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand';
+import resolvePeriodFromCommand, {
+  ResolvedPeriod,
+} from '../core/discord/resolvePeriodFromCommand';
 import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
-import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import resolvePlayerFromCommand, {
+  ResolvedPlayer,
+} from '../core/discord/resolvePlayerFromCommand';
+import { StatFilters, filterStats } from '../core/statistics/filterStats';
+import { getTierWeights } from '../core/statistics/getTierWeights';
 import { CommandRegistryRaw } from '../events/interactionCreate';
-import fullStats from '../renderers/fullStats';
-import { MultiTankFilters, StatType } from '../renderers/stats';
-import { AccountInfo } from '../types/accountInfo';
+
+async function render(
+  { region, id }: ResolvedPlayer,
+  { start, end, name }: ResolvedPeriod,
+  filters: StatFilters,
+) {
+  const { nickname } = await getAccountInfo(region, id);
+  const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
+  const clanImage = clan ? emblemIdToURL(clan.emblem_set_id) : undefined;
+  const diffedTankStats = await getStatsInPeriod(region, id, start, end);
+  const { stats, supplementary, filteredOrder } = await filterStats(
+    diffedTankStats,
+    filters,
+  );
+  const filterDescriptions = await filtersToDescription(filters);
+  const tierWeights = await getTierWeights(diffedTankStats.diff, filteredOrder);
+
+  return (
+    <Wrapper>
+      <TitleBar
+        name={nickname}
+        image={clanImage}
+        description={`${name} • ${filterDescriptions}`}
+      />
+
+      {stats.battles === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
+      {stats.battles > 0 && <TierWeights weights={tierWeights!} />}
+      {stats.battles > 0 && (
+        <GenericAllStats stats={stats} supplementaryStats={supplementary} />
+      )}
+    </Wrapper>
+  );
+}
 
 export const fullStatsCommand = new Promise<CommandRegistryRaw>(
   async (resolve) => {
-    const command = await addStatTypeSubCommandGroups(
+    const command = await addFilterOptions(
       new SlashCommandBuilder()
         .setName('full-stats')
         .setDescription('Full in-game statistics'),
+      (option) => option.addStringOption(addUsernameChoices),
     );
 
     resolve({
@@ -34,60 +80,20 @@ export const fullStatsCommand = new Promise<CommandRegistryRaw>(
       command,
 
       async handler(interaction) {
-        const commandGroup = interaction.options.getSubcommandGroup(
-          true,
-        ) as StatType;
         const player = await resolvePlayerFromCommand(interaction);
-        const resolvedPeriod = resolvePeriodFromCommand(
-          player.region,
-          interaction,
-        );
-        const period = interaction.options.getString('period');
-        const tankIdRaw = interaction.options.getString('tank')!;
-        const tankId =
-          commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
-        const start = interaction.options.getInteger('start');
-        const end = interaction.options.getInteger('end');
-        const path = interactionToURL(interaction, {
+        const period = resolvePeriodFromCommand(player.region, interaction);
+        const filters = await getFiltersFromCommand(interaction);
+        const path = commandToURL(interaction, {
           ...player,
-          tankId,
-          start,
-          end,
-          period,
+          ...getCustomPeriodParams(interaction),
+          ...filters,
         });
-        const { nickname } = (
-          await getWargamingResponse<AccountInfo>(
-            `https://api.wotblitz.${player.region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${player.id}`,
-          )
-        )[player.id];
 
-        const tierOption = interaction.options.getString('tier');
-
-        return [
-          await fullStats(
-            commandGroup,
-            resolvedPeriod,
-            player,
-            commandGroup === 'tank'
-              ? tankId
-              : commandGroup === 'multi-tank'
-              ? ({
-                  'tank-type':
-                    interaction.options.getString('tank-type') ?? undefined,
-                  nation: interaction.options.getString('nation') ?? undefined,
-                  tier: tierOption ? parseInt(tierOption) : undefined,
-                  'tree-type': (interaction.options.getString('tree-type') ??
-                    undefined) as TreeTypeString | undefined,
-                } satisfies Partial<MultiTankFilters>)
-              : null,
-          ),
-          primaryButton(path, 'Refresh'),
-          // linkButton(`${CYCLIC_API}/${path}`, 'Embed'),
-          linkButton(
-            `https://www.blitzstars.com/player/${player.region}/${nickname}`,
-            'BlitzStars',
-          ),
-        ];
+        return Promise.all([
+          render(player, period, filters),
+          buttonRefresh(interaction, path),
+          getBlitzStarsLinkButton(player.region, player.id),
+        ]);
       },
 
       autocomplete: (interaction) => {
@@ -96,18 +102,11 @@ export const fullStatsCommand = new Promise<CommandRegistryRaw>(
       },
 
       async button(interaction) {
-        const url = new URL(`${CYCLIC_API}/${interaction.customId}`);
-        const path = url.pathname.split('/').filter(Boolean);
-        const commandGroup = path[1] as StatType;
         const player = await resolvePlayerFromButton(interaction);
         const period = resolvePeriodFromButton(player.region, interaction);
+        const filters = getFiltersFromButton(interaction);
 
-        return await fullStats(
-          commandGroup,
-          period,
-          player,
-          parseInt(url.searchParams.get('tankId')!),
-        );
+        return await render(player, period, filters);
       },
     });
   },

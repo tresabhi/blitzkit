@@ -1,20 +1,18 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
-import calculateWN8 from '../core/blitz/calculateWN8';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
-import sumStats from '../core/blitz/sumStats';
-import { tankopedia } from '../core/blitz/tankopedia';
-import getDiffedTankStats from '../core/blitzstars/getDiffedTankStats';
-import getPeriodNow from '../core/blitzstars/getPeriodNow';
-import getTimeDaysAgo from '../core/blitzstars/getTimeDaysAgo';
+import { getAccountInfo } from '../core/blitz/getAccountInfo';
+import getPeriodNow from '../core/blitzkrieg/getPeriodNow';
+import getTimeDaysAgo from '../core/blitzkrieg/getTimeDaysAgo';
+import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
 import { tankAverages } from '../core/blitzstars/tankAverages';
+import { tankopedia } from '../core/blitzstars/tankopedia';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import embedNegative from '../core/discord/embedNegative';
 import embedPositive from '../core/discord/embedPositive';
 import markdownTable, { TableInput } from '../core/discord/markdownTable';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import calculateWN8 from '../core/statistics/calculateWN8';
+import sumStats from '../core/statistics/sumStats';
 import { CommandRegistry } from '../events/interactionCreate';
-import { AccountInfo } from '../types/accountInfo';
 import { PossiblyPromise } from '../types/possiblyPromise';
 
 export type SkilledClan = 'SKLLD' | 'SMRI';
@@ -48,20 +46,18 @@ export const eligibleCommand: CommandRegistry = {
 
   async handler(interaction) {
     const clan = interaction.options.getString('clan') as SkilledClan;
-    const { id, region: server } = await resolvePlayerFromCommand(interaction);
-    const accountInfo = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-    );
+    const { id, region: region } = await resolvePlayerFromCommand(interaction);
+    const accountInfo = await getAccountInfo(region, id);
     const problems: TableInput = [];
-    const title = `${accountInfo[id].nickname}'s eligibility for ${SKILLED_CLANS[clan]}`;
+    const title = `${accountInfo.nickname}'s eligibility for ${SKILLED_CLANS[clan]}`;
     let isEligible = false;
     let body = '';
 
     if (clan === 'SKLLD') {
-      const { diffed } = await getDiffedTankStats(
-        server,
+      const { diff: diffed } = await getStatsInPeriod(
+        region,
         id,
-        getTimeDaysAgo(server, 30),
+        getTimeDaysAgo(region, 30),
         getPeriodNow(),
       );
       const entries = Object.entries(diffed);
@@ -171,7 +167,7 @@ export const eligibleCommand: CommandRegistry = {
             problems,
           )}`;
     } else if (clan === 'SMRI') {
-      const stats = accountInfo[id].statistics.all;
+      const stats = accountInfo.statistics.all;
 
       if (stats.battles < 1500) {
         problems.push([

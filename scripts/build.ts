@@ -1,10 +1,18 @@
 import { build } from 'esbuild';
+import { readdir } from 'fs/promises';
 
-console.log('Building bot...');
+const FILES = [
+  'bot',
+  'index',
+
+  (await readdir('src/workers')).map(
+    (file) => `workers/${file.replace('.ts', '')}`,
+  ),
+];
 
 await build({
-  entryPoints: ['src/bot.ts'],
-  outfile: 'dist/bot/index.cjs',
+  entryPoints: FILES.map((file) => `src/${file}.ts`),
+  outdir: 'dist/bot',
 
   platform: 'node',
   tsconfig: 'tsconfig.esbuild.json',
@@ -14,6 +22,9 @@ await build({
   },
   format: 'cjs',
   jsx: 'transform',
+  outExtension: {
+    '.js': '.cjs',
+  },
 
   bundle: true,
   sourcemap: true,
@@ -23,5 +34,3 @@ await build({
 
   logLevel: 'info',
 });
-
-console.log('Built bot');

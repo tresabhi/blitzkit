@@ -14,19 +14,15 @@ import {
   Flex,
   Text,
   TextField,
-  Tooltip,
 } from '@radix-ui/themes';
 import { debounce } from 'lodash';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
-import { REGION_NAMES, Region } from '../../../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
-import getWargamingResponse from '../../../core/blitz/getWargamingResponse';
-import listPlayers, {
+import { REGION_NAMES } from '../../../constants/regions';
+import searchPlayersAcrossRegions, {
   AccountListWithServer,
-} from '../../../core/blitz/listPlayers';
-import { useSession } from '../../../stores/session';
-import { NormalizedTankStats, TanksStats } from '../../../types/tanksStats';
+} from '../../../core/blitz/searchPlayersAcrossRegions';
+import { resetSession, setSession, useSession } from '../../../stores/session';
 import SessionPage from '../../embeds/session/page';
 import { Menu } from './components/Menu';
 import * as styles from './page.css';
@@ -40,7 +36,7 @@ export default function Page() {
   const handleChange = debounce(
     async (event: ChangeEvent<HTMLInputElement>) => {
       if (event.target.value) {
-        setSearchResults(await listPlayers(event.target.value));
+        setSearchResults(await searchPlayersAcrossRegions(event.target.value));
       } else {
         setSearchResults(undefined);
         setShowSearchResults(false);
@@ -50,37 +46,9 @@ export default function Page() {
   );
   const session = useSession();
 
-  async function setSession(region: Region, id: number, nickname: string) {
-    input.current!.value = nickname;
-
-    const rawTankStats = (
-      await getWargamingResponse<TanksStats>(
-        `https://api.wotblitz.${region}/wotb/tanks/stats/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-      )
-    )[id];
-    const tankStats = rawTankStats.reduce<NormalizedTankStats>(
-      (accumulator, tank) => ({
-        ...accumulator,
-        [tank.tank_id]: tank,
-      }),
-      {},
-    );
-
-    useSession.setState({
-      isTracking: true,
-      id,
-      region,
-      nickname,
-      tankStats,
-      time: Date.now(),
-    });
-  }
-
-  function reset() {
-    const session = useSession.getState();
-    if (!session.isTracking) return;
-    setSession(session.region, session.id, session.nickname);
-  }
+  useEffect(() => {
+    if (session.isTracking) input.current!.value = session.nickname;
+  }, [session]);
 
   return (
     <PageWrapper>
@@ -158,7 +126,7 @@ export default function Page() {
                 onClick={(event) => {
                   if (!session.promptBeforeReset) {
                     event.preventDefault();
-                    reset();
+                    resetSession();
                   }
                 }}
                 className={styles.toolbarButton}
@@ -201,7 +169,7 @@ export default function Page() {
                 </AlertDialog.Cancel>
 
                 <AlertDialog.Action>
-                  <Button variant="solid" color="red" onClick={reset}>
+                  <Button variant="solid" color="red" onClick={resetSession}>
                     Reset
                   </Button>
                 </AlertDialog.Action>
@@ -209,19 +177,60 @@ export default function Page() {
             </AlertDialog.Content>
           </AlertDialog.Root>
 
-          <Tooltip content="Copy to clipboard">
-            <Button
-              variant="soft"
-              className={styles.toolbarButton}
-              onClick={() =>
-                navigator.clipboard.writeText(
-                  `${location.origin}/embeds/session`,
-                )
-              }
-            >
-              <CopyIcon width="16" height="16" /> Embed
-            </Button>
-          </Tooltip>
+          <AlertDialog.Root>
+            <AlertDialog.Trigger>
+              <Button
+                variant="soft"
+                className={styles.toolbarButton}
+                onClick={(event) => {
+                  if (!session.showEmbedPrompt) {
+                    event.preventDefault();
+                    resetSession();
+                  }
+
+                  navigator.clipboard.writeText(
+                    `${location.origin}/embeds/session`,
+                  );
+                }}
+              >
+                <CopyIcon width="16" height="16" /> Embed
+              </Button>
+            </AlertDialog.Trigger>
+
+            <AlertDialog.Content>
+              <AlertDialog.Title>
+                Copied link to your clipboard
+              </AlertDialog.Title>
+              <AlertDialog.Description>
+                Keep in mind:
+                <ul>
+                  <li>Paste this link into your browser to view the embed</li>
+                  <li>Embeds abide your custom options</li>
+                  <li>
+                    Options do not transfer across websites/streaming softwares
+                  </li>
+                </ul>
+              </AlertDialog.Description>
+
+              <Text size="2">
+                <Checkbox
+                  mr="1"
+                  onCheckedChange={(checked) =>
+                    useSession.setState({
+                      showEmbedPrompt: !checked,
+                    })
+                  }
+                />
+                Don't show this again
+              </Text>
+
+              <Flex gap="3" mt="4">
+                <AlertDialog.Cancel>
+                  <Button variant="soft">Got it!</Button>
+                </AlertDialog.Cancel>
+              </Flex>
+            </AlertDialog.Content>
+          </AlertDialog.Root>
 
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
@@ -231,7 +240,7 @@ export default function Page() {
               </Button>
             </DropdownMenu.Trigger>
 
-            <Menu Builder={DropdownMenu} />
+            <Menu Builder={DropdownMenu} reset={resetSession} />
           </DropdownMenu.Root>
         </div>
       </div>

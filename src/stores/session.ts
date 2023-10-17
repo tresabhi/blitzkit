@@ -3,7 +3,9 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { CustomColumnDisplay } from '../app/tools/session/components/CustomColumn';
 import { Region } from '../constants/regions';
-import { NormalizedTankStats } from '../types/tanksStats';
+import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
+import fetchBlitz from '../core/blitz/fetchWargaming';
+import { NormalizedTankStats, TanksStats } from '../types/tanksStats';
 
 type Session = (
   | {
@@ -20,6 +22,7 @@ type Session = (
     }
 ) & {
   promptBeforeReset: boolean;
+  showEmbedPrompt: boolean;
   customColumns: {
     display: CustomColumnDisplay;
     showDelta: boolean;
@@ -27,6 +30,37 @@ type Session = (
   showTotal: boolean;
   showCareer: boolean;
 };
+
+export async function setSession(region: Region, id: number, nickname: string) {
+  // TODO: generalize this function and also check for more of these kind
+  const rawTankStats = (
+    await fetchBlitz<TanksStats>(
+      `https://api.wotblitz.${region}/wotb/tanks/stats/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
+    )
+  )[id];
+  const tankStats = rawTankStats.reduce<NormalizedTankStats>(
+    (accumulator, tank) => ({
+      ...accumulator,
+      [tank.tank_id]: tank,
+    }),
+    {},
+  );
+
+  useSession.setState({
+    isTracking: true,
+    id,
+    region,
+    nickname,
+    tankStats,
+    time: Date.now(),
+  });
+}
+
+export function resetSession() {
+  const session = useSession.getState();
+  if (!session.isTracking) return;
+  setSession(session.region, session.id, session.nickname);
+}
 
 export const useSession = create<Session>()(
   devtools(
@@ -36,6 +70,7 @@ export const useSession = create<Session>()(
         promptBeforeReset: true,
         showTotal: true,
         showCareer: true,
+        showEmbedPrompt: true,
 
         customColumns: [
           { display: 'battles', showDelta: false },

@@ -5,6 +5,7 @@
     "bepaint",
     "blitzstars",
     "cleandist",
+    "cockroackdb",
     "customperiod",
     "deburr",
     "diacriticless",
@@ -14,6 +15,7 @@
     "kranvagn",
     "Leaderboard",
     "leaderboards",
+    "outdir",
     "outfile",
     "ownedtanks",
     "playerachievements",
@@ -42,6 +44,7 @@
     "wargaming",
     "webp",
     "winrate",
+    "wotblitz",
     "zustand"
   ],
   "deno.enable": false,

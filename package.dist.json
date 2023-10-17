@@ -2,6 +2,6 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node --enable-source-maps --trace-warnings server.cjs"
+    "start": "node --enable-source-maps server.cjs"
   }
 }

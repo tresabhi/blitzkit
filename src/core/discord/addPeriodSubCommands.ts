@@ -1,55 +1,49 @@
 import {
+  SlashCommandBuilder,
   SlashCommandSubcommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
 
-export type PeriodType = 'period' | 'custom';
-export type PeriodSize = `${number}` | 'career';
+export type PeriodType = 'today' | '30' | '60' | '90' | 'career' | 'custom';
+export type PeriodSize = 'today' | `${number}` | 'career';
 
 export default function addPeriodSubCommands(
-  option: SlashCommandSubcommandGroupBuilder,
+  option: SlashCommandBuilder | SlashCommandSubcommandGroupBuilder,
   extra: (
     option: SlashCommandSubcommandBuilder,
   ) => SlashCommandSubcommandBuilder = (option) => option,
 ) {
-  return option
+  option
     .addSubcommand((option) =>
-      extra(
-        option
-          .setName('period' satisfies PeriodType)
-          .setDescription("Preset period's statistics")
-          .addStringOption((option) =>
-            option
-              .setName('period')
-              .setDescription('A preset period')
-              .setChoices(
-                { name: 'Today', value: '1' satisfies PeriodSize },
-                { name: '30 days', value: '30' satisfies PeriodSize },
-                { name: '60 days', value: '60' satisfies PeriodSize },
-                { name: '90 days', value: '90' satisfies PeriodSize },
-                { name: 'Career', value: 'career' satisfies PeriodSize },
-              )
-              .setRequired(true),
-          ),
-      ),
+      extra(option.setName('today').setDescription('Today')),
+    )
+    .addSubcommand((option) =>
+      extra(option.setName('30').setDescription('30 days')),
+    )
+    .addSubcommand((option) =>
+      extra(option.setName('60').setDescription('60 days')),
+    )
+    .addSubcommand((option) =>
+      extra(option.setName('90').setDescription('90 days')),
+    )
+    .addSubcommand((option) =>
+      extra(option.setName('career').setDescription('Career')),
     )
     .addSubcommand((option) =>
       extra(
         option
-          .setName('custom' satisfies PeriodType)
-          .setDescription("Custom period's statistics")
+          .setName('custom')
+          .setDescription('Custom range')
           .addIntegerOption((option) =>
             option
               .setName('start')
-              .setDescription('Days ago from today')
-              .setMinValue(0)
+              .setDescription('Start in number of days ago from today')
               .setRequired(true),
           )
           .addIntegerOption((option) =>
             option
               .setName('end')
-              .setDescription('Days ago from today')
-              .setMinValue(0)
+              .setDescription('End in number of days')
               .setRequired(true),
           ),
       ),

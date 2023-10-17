@@ -1,11 +1,9 @@
-import getWN8Percentile from '../../core/blitz/getWN8Percentile';
-import isNumber from '../../core/node/isNumber';
-import { AllStats, SupplementaryStats } from '../../types/accountInfo';
+import { AllStats, SupplementaryStats } from '../../core/blitz/getAccountInfo';
+import isNumber from '../../core/math/isNumber';
+import getWN8Percentile from '../../core/statistics/getWN8Percentile';
 import { Card } from './components/Card';
 import { Root } from './components/Root';
 import { Row } from './components/Row';
-
-// TODO: remove the .js endings
 
 export interface GenericAllStatsProps {
   stats: AllStats;

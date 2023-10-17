@@ -2,8 +2,7 @@ import {
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
-  TankType,
-} from '../../../core/blitz/tankopedia';
+} from '../../../core/blitzstars/tankopedia';
 import { theme } from '../../../stitches.config';
 
 export enum TreeTypeEnum {
@@ -12,11 +11,17 @@ export enum TreeTypeEnum {
   Collector,
 }
 
-export type TreeTypeString = 'techtree' | 'premium' | 'collector';
+export type TreeTypeString = 'tech-tree' | 'premium' | 'collector';
+
+export const TREE_TYPE_NAMES: Record<TreeTypeString, string> = {
+  'tech-tree': 'Tech tree',
+  premium: 'Premium',
+  collector: 'Collector',
+};
 
 export interface ItemProps {
   image?: string;
-  tankType?: TankType;
+  tankType?: string;
   name: string;
   treeType: TreeTypeEnum;
 }
@@ -75,7 +80,15 @@ export function Item({ image, tankType, name, treeType }: ItemProps) {
         </span>
       </div>
 
-      {image && <img src={image} style={{ flex: 1 }} />}
+      {/* {image && (
+        // TODO: remove hardcoded dimensions when satori fixes non-width unloadable images
+        <img
+          src={image}
+          width={106}
+          height={32}
+          style={{ objectFit: 'cover' }}
+        />
+      )} */}
     </div>
   );
 }

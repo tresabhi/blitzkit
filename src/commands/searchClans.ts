@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { REGION_NAMES, Region } from '../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import fetchBlitz from '../core/blitz/fetchWargaming';
 import addClanChoices from '../core/discord/addClanChoices';
 import addRegionChoices from '../core/discord/addRegionChoices';
 import embedInfo from '../core/discord/embedInfo';
@@ -30,7 +30,7 @@ export const searchClansCommand: CommandRegistry = {
     const server = interaction.options.getString('region') as Region;
     const clan = interaction.options.getString('clan')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
-    const clanList = await getWargamingResponse<ClanList>(
+    const clanList = await fetchBlitz<ClanList>(
       `https://api.wotblitz.${server}/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${clan}&limit=${limit}`,
     );
 

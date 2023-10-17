@@ -4,7 +4,7 @@ import {
   CacheType,
 } from 'discord.js';
 import { go } from 'fuzzysort';
-import { TANK_NAMES_DIACRITICS } from '../blitz/tankopedia';
+import { TANK_NAMES_DIACRITICS } from '../blitzstars/tankopedia';
 
 export default async function autocompleteTanks(
   interaction: AutocompleteInteraction<CacheType>,
@@ -28,6 +28,4 @@ export default async function autocompleteTanks(
         )
       : [],
   );
-
-  console.log(`Tanks autocomplete for ${focusedOption.value}`);
 }

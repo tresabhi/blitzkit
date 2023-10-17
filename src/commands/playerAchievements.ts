@@ -1,16 +1,14 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { startCase } from 'lodash';
 import markdownEscape from 'markdown-escape';
-import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
+import { getAccountAchievements } from '../core/blitz/getAccountAchievements';
+import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import embedInfo from '../core/discord/embedInfo';
 import markdownTable, { TableInputEntry } from '../core/discord/markdownTable';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistry } from '../events/interactionCreate';
-import { AccountAchievements } from '../types/accountAchievements';
-import { AccountInfo } from '../types/accountInfo';
 
 type SortBy = 'name' | 'count';
 
@@ -35,22 +33,17 @@ export const playerAchievementsCommand: CommandRegistry = {
   async handler(interaction) {
     const sortBy = (interaction.options.getString('sort') ?? 'name') as SortBy;
     const account = await resolvePlayerFromCommand(interaction);
-    const { id, region: server } = account;
-    const accounts = await getWargamingResponse<AccountInfo>(
-      `https://api.wotblitz.${server}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-    );
-    const accountsAchievements =
-      await getWargamingResponse<AccountAchievements>(
-        `https://api.wotblitz.${server}/wotb/account/achievements/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-      );
-    const accountAchievements = accountsAchievements[id];
+    const { id, region: region } = account;
+    const accountInfo = await getAccountInfo(region, id);
+    const accountsAchievements = await getAccountAchievements(region, id);
+    const accountAchievements = accountsAchievements;
     const compound = {
       ...accountAchievements.achievements,
       ...accountAchievements.max_series,
     };
 
     return embedInfo(
-      `${markdownEscape(accounts[id].nickname)}'s information`,
+      `${markdownEscape(accountInfo.nickname)}'s information`,
 
       markdownTable(
         Object.keys(compound)

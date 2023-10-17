@@ -44,6 +44,7 @@ export function Card({ items, title }: CardProps) {
       >
         {items.map((item) => (
           <div
+            key={item.label}
             style={{
               display: 'flex',
               gap: 8,

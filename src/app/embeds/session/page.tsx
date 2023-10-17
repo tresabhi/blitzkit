@@ -5,13 +5,16 @@ import { useEffect, useState } from 'react';
 import * as Breakdown from '../../../components/Breakdown';
 import { TreeTypeEnum } from '../../../components/Tanks';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
-import calculateWN8 from '../../../core/blitz/calculateWN8';
-import { diffNormalizedTankStats } from '../../../core/blitz/diffNormalizedTankStats';
-import getWN8Percentile from '../../../core/blitz/getWN8Percentile';
-import getWargamingResponse from '../../../core/blitz/getWargamingResponse';
-import { TankopediaEntry, tankopedia } from '../../../core/blitz/tankopedia';
+import fetchBlitz from '../../../core/blitz/fetchWargaming';
 import { tankAverages } from '../../../core/blitzstars/tankAverages';
-import { useSession } from '../../../stores/session';
+import {
+  TankopediaEntry,
+  tankopedia,
+} from '../../../core/blitzstars/tankopedia';
+import calculateWN8 from '../../../core/statistics/calculateWN8';
+import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
+import getWN8Percentile from '../../../core/statistics/getWN8Percentile';
+import { resetSession, useSession } from '../../../stores/session';
 import { IndividualTankStats, TanksStats } from '../../../types/tanksStats';
 import { CustomColumnDisplay } from '../../tools/session/components/CustomColumn';
 import { Menu } from '../../tools/session/components/Menu';
@@ -73,7 +76,7 @@ export default function SessionPage() {
     async function recalculateDiff() {
       if (session.isTracking) {
         const { id, region } = session;
-        const careerRaw = await getWargamingResponse<TanksStats>(
+        const careerRaw = await fetchBlitz<TanksStats>(
           `https://api.wotblitz.${region}/wotb/tanks/stats/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
         );
         const career = careerRaw[id].reduce<
@@ -111,7 +114,7 @@ export default function SessionPage() {
 
           list: (
             Object.values(
-              diffNormalizedTankStats(session.tankStats, career),
+              deltaTankStats(session.tankStats, career),
             ) as IndividualTankStats[]
           ).map((stats) => {
             return {
@@ -321,7 +324,7 @@ export default function SessionPage() {
         </div>
       </ContextMenu.Trigger>
 
-      <Menu Builder={ContextMenu} />
+      <Menu reset={resetSession} Builder={ContextMenu} />
     </ContextMenu.Root>
   );
 }

@@ -1,5 +1,4 @@
 import { Percentile } from '../../../constants/percentiles';
-import { TankType } from '../../../core/blitz/tankopedia';
 import { theme } from '../../../stitches.config';
 import { TREE_TYPE_ICONS, TreeTypeEnum } from '../../Tanks';
 import { RowStat } from './RowStat';
@@ -17,7 +16,7 @@ interface RowProps {
   title: string;
   minimized?: boolean;
   treeType?: TreeTypeEnum;
-  tankType?: TankType;
+  tankType?: string;
 
   stats: (RowStatItem | undefined)[];
 }

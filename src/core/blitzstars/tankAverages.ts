@@ -1,5 +1,6 @@
-import { AllStats } from '../../types/accountInfo';
+import { AllStats } from '../blitz/getAccountInfo';
 import { context } from '../blitzkrieg/context';
+import { tankopedia } from './tankopedia';
 
 export interface SpecialStats {
   winrate: number;
@@ -79,9 +80,10 @@ export interface IndividualTankAverage {
   last_update: number;
 }
 
+tankopedia;
+
 export type TankAverages = Record<number, IndividualTankAverage>;
 
-console.log('Caching tank averages...');
 export const tankAverages = fetch(
   context === 'bot'
     ? 'https://www.blitzstars.com/api/tankaverages.json'
@@ -96,8 +98,6 @@ export const tankAverages = fetch(
         partialTankAverages[individualTankAverage.tank_id] =
           individualTankAverage;
       });
-
-      console.log('Tank averages cached');
 
       return partialTankAverages;
     } else {

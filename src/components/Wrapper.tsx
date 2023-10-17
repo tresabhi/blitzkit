@@ -4,15 +4,16 @@ import { theme } from '../stitches.config';
 export interface WrapperProps {
   children: ReactNode;
   naked?: boolean;
+  fat?: boolean;
 }
 
-export default function Wrapper({ children, naked }: WrapperProps) {
+export default function Wrapper({ children, naked, fat }: WrapperProps) {
   return (
     <div
       style={{
         display: 'flex',
         flexDirection: 'column',
-        padding: 16,
+        padding: `16px ${fat ? 0 : 16}px`,
         gap: 32,
         width: 480,
         color: theme.colors.textHighContrast,

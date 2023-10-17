@@ -9,23 +9,22 @@ import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
 import { REGION_NAMES_SHORT, Region } from '../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
-import getArchivedRatingsInfo from '../core/blitz/getArchivedRatingsInfo';
+import { getAccountInfo } from '../core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../core/blitz/getRatingsInfo';
-import getWargamingResponse from '../core/blitz/getWargamingResponse';
 import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
+import getArchivedRatingsInfo from '../core/blitzkrieg/getArchivedRatingsInfo';
 import getMidnightLeaderboard, {
   DATABASE_REPO,
-} from '../core/database/getMidnightLeaderboard';
+} from '../core/blitzkrieg/getMidnightLeaderboard';
+import { octokit } from '../core/blitzkrieg/octokit';
+import throwError from '../core/blitzkrieg/throwError';
 import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
+import embedNegative from '../core/discord/embedNegative';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { octokit } from '../core/github/octokit';
-import throwError from '../core/node/throwError';
 import { CommandRegistryRaw } from '../events/interactionCreate';
-import { AccountInfo } from '../types/accountInfo';
-import { PlayerClanData } from '../types/playerClanData';
 
 export interface RatingsPlayer {
   spa_id: number;
@@ -172,6 +171,11 @@ function addSubcommands(
     );
 }
 
+const noOngoingSeason = embedNegative(
+  'No ongoing season',
+  "Wargaming didn't provide any data for this season.",
+);
+
 export const ratingsCommand = new Promise<CommandRegistryRaw>(
   async (resolve) => {
     const seasonChoices = await octokit.repos
@@ -259,27 +263,28 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
           regionRatingsInfo = await (subcommandGroup === 'current'
             ? getRatingsInfo(region)
             : getArchivedRatingsInfo(season!, region));
+
+          if (regionRatingsInfo.detail !== undefined) return noOngoingSeason;
+
           const regionSubdomain = regionToRegionSubdomain(region);
           const result =
             subcommandGroup === 'current'
-              ? regionRatingsInfo.detail === undefined
-                ? await fetch(
-                    `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/league/${leagueIndex}/top/`,
+              ? await fetch(
+                  `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/league/${leagueIndex}/top/`,
+                )
+                  .then((response) => response.json() as Promise<LeagueTop>)
+                  .then(async ({ result }) =>
+                    result.slice(0, limit).map(
+                      (player) =>
+                        ({
+                          id: player.spa_id,
+                          score: player.score,
+                          position: player.number,
+                          clan: player.clan_tag,
+                          nickname: player.nickname,
+                        }) satisfies SimplifiedPlayer,
+                    ),
                   )
-                    .then((response) => response.json() as Promise<LeagueTop>)
-                    .then(async ({ result }) =>
-                      result.slice(0, limit).map(
-                        (player) =>
-                          ({
-                            id: player.spa_id,
-                            score: player.score,
-                            position: player.number,
-                            clan: player.clan_tag,
-                            nickname: player.nickname,
-                          }) satisfies SimplifiedPlayer,
-                      ),
-                    )
-                : undefined
               : await octokit.repos
                   .getContent({
                     ...DATABASE_REPO,
@@ -305,9 +310,10 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                       firstPlayerIndex,
                       lastPlayerIndex + 1,
                     );
-                    const ids = trimmed.map((player) => player.id).join(',');
-                    const clanData = await getWargamingResponse<PlayerClanData>(
-                      `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${ids}&extra=clan`,
+                    const clanData = await getClanAccountInfo(
+                      region,
+                      trimmed.map(({ id }) => id),
+                      ['clan'],
                     );
 
                     return trimmed.map(
@@ -323,34 +329,25 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                         }) satisfies SimplifiedPlayer,
                     );
                   });
-          const leagueInfo =
-            regionRatingsInfo.detail === undefined
-              ? regionRatingsInfo.leagues[leagueIndex]
-              : undefined;
+          const leagueInfo = regionRatingsInfo.leagues[leagueIndex];
           midnightLeaderboard =
             subcommandGroup === 'current'
-              ? regionRatingsInfo.detail === undefined
-                ? await getMidnightLeaderboard(
-                    region,
-                    regionRatingsInfo.current_season,
-                  )
-                : undefined
+              ? await getMidnightLeaderboard(
+                  region,
+                  regionRatingsInfo.current_season,
+                )
               : await getMidnightLeaderboard(region, season!);
 
           players = result;
           playersBefore = result ? result[0].position - 1 : 0;
           playersAfter =
-            regionRatingsInfo.detail === undefined && result !== undefined
-              ? regionRatingsInfo.count - result[result.length - 1].position
-              : 0;
+            regionRatingsInfo.count - result[result.length - 1].position;
           titleName = `${
             leagueInfo ? leagueInfo.title : 'No Ongoing Season'
           } - ${REGION_NAMES_SHORT[region]}`;
-          titleImage = leagueInfo
-            ? leagueInfo.big_icon.startsWith('http')
-              ? leagueInfo.big_icon
-              : `https:${leagueInfo.big_icon}`
-            : undefined;
+          titleImage = leagueInfo.big_icon.startsWith('http')
+            ? leagueInfo.big_icon
+            : `https:${leagueInfo.big_icon}`;
           titleDescription = `Top ${limit} players`;
         } else {
           const { region, id } = await resolvePlayerFromCommand(interaction);
@@ -372,40 +369,34 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                       response.json(),
                     )) as RatingsInfo;
                   });
-          const accountInfo = await getWargamingResponse<AccountInfo>(
-            `https://api.wotblitz.${region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-          );
-          const clan = (
-            await getWargamingResponse<PlayerClanData>(
-              `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}&extra=clan`,
-            )
-          )[id]?.clan;
+
+          if (regionRatingsInfo.detail !== undefined) return noOngoingSeason;
+
+          const accountInfo = await getAccountInfo(region, id);
+          const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
           const regionSubdomain = regionToRegionSubdomain(region);
           const neighbors =
             subcommandGroup === 'current'
-              ? regionRatingsInfo.detail === undefined
-                ? await fetch(
-                    `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/user/${id}/?neighbors=${Math.round(
-                      limit / 2,
-                    )}`,
+              ? await fetch(
+                  `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/user/${id}/?neighbors=${Math.round(
+                    limit / 2,
+                  )}`,
+                )
+                  .then(
+                    (response) => response.json() as Promise<RatingsNeighbors>,
                   )
-                    .then(
-                      (response) =>
-                        response.json() as Promise<RatingsNeighbors>,
-                    )
-                    .then((players) =>
-                      players.neighbors.map(
-                        (player) =>
-                          ({
-                            id: player.spa_id,
-                            position: player.number,
-                            score: player.score,
-                            clan: player.clan_tag,
-                            nickname: player.nickname,
-                          }) satisfies SimplifiedPlayer,
-                      ),
-                    )
-                : undefined
+                  .then((players) =>
+                    players.neighbors.map(
+                      (player) =>
+                        ({
+                          id: player.spa_id,
+                          position: player.number,
+                          score: player.score,
+                          clan: player.clan_tag,
+                          nickname: player.nickname,
+                        }) satisfies SimplifiedPlayer,
+                    ),
+                  )
               : await octokit.repos
                   .getContent({
                     ...DATABASE_REPO,
@@ -428,7 +419,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
 
                     if (playerIndex === -1) {
                       throw throwError(
-                        `${accountInfo[id].nickname} didn't player ratings in season ${season}`,
+                        `${accountInfo.nickname} didn't player ratings in season ${season}`,
                         'This player did not participate in this season or did not get past calibration.',
                       );
                     }
@@ -438,9 +429,10 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                       playerIndex - halfRange,
                       playerIndex + halfRange + 1,
                     );
-                    const ids = trimmed.map((player) => player.id).join(',');
-                    const clanData = await getWargamingResponse<PlayerClanData>(
-                      `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${ids}&extra=clan`,
+                    const clanData = await getClanAccountInfo(
+                      region,
+                      trimmed.map((player) => player.id),
+                      ['clan'],
                     );
 
                     return trimmed.map((player, index) => ({
@@ -453,46 +445,38 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                   });
           midnightLeaderboard =
             subcommandGroup === 'current'
-              ? regionRatingsInfo.detail === undefined
-                ? await getMidnightLeaderboard(
-                    region,
-                    regionRatingsInfo.current_season,
-                  )
-                : undefined
+              ? await getMidnightLeaderboard(
+                  region,
+                  regionRatingsInfo.current_season,
+                )
               : await getMidnightLeaderboard(region, season!);
 
           if (clan && neighbors) titleNameDiscriminator = `[${clan.tag}]`;
 
           players = neighbors;
-          titleImage = neighbors
-            ? clan
-              ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clan.emblem_set_id}.png`
-              : undefined
+          titleImage = clan
+            ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clan.emblem_set_id}.png`
             : undefined;
           titleName = neighbors
-            ? accountInfo[id].nickname
+            ? accountInfo.nickname
             : `No Ongoing Season - ${REGION_NAMES_SHORT[region]}`;
           titleDescription = 'Ratings neighbours';
           playersBefore = neighbors ? neighbors[0].position - 1 : 0;
           playersAfter =
-            regionRatingsInfo.detail === undefined
-              ? neighbors
-                ? regionRatingsInfo.count -
-                  neighbors[neighbors.length - 1].position
-                : 0
-              : 0;
+            regionRatingsInfo.count - neighbors[neighbors.length - 1].position;
           playerId = id;
         }
 
-        const items = players?.map((player) => {
-          const reward =
-            regionRatingsInfo.detail === undefined
-              ? regionRatingsInfo.rewards.find(
-                  (reward) =>
-                    player.position >= reward.from_position &&
-                    player.position <= reward.to_position,
-                )
-              : undefined;
+        const resolvedRegionRatingsInfo: typeof regionRatingsInfo & {
+          detail: undefined;
+        } = regionRatingsInfo;
+
+        const items = players.map((player) => {
+          const reward = resolvedRegionRatingsInfo.rewards.find(
+            (reward) =>
+              player.position >= reward.from_position &&
+              player.position <= reward.to_position,
+          );
           const midnightIndex = midnightLeaderboard?.findIndex(
             (item) => item.id === player.id,
           );
@@ -523,8 +507,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
             <TitleBar
               name={titleName}
               image={titleImage}
-              nameDiscriminator={titleNameDiscriminator}
-              description={`${titleDescription} • ${new Date().toDateString()}`}
+              description={titleDescription}
             />
 
             {items && (

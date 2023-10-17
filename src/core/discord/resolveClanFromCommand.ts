@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import { Region } from '../../constants/regions';
-import listClans from '../blitz/listClans';
-import throwError from '../node/throwError';
+import searchClansAcrossRegions from '../blitz/searchClansAcrossRegions';
+import throwError from '../blitzkrieg/throwError';
 import { serverAndIdPattern } from './resolvePlayerFromCommand';
 
 export default async function resolveClanFromCommand(
@@ -13,7 +13,7 @@ export default async function resolveClanFromCommand(
     const [server, accountId] = clan.split('/');
     return { region: server as Region, id: Number(accountId) };
   } else {
-    const accounts = await listClans(clan);
+    const accounts = await searchClansAcrossRegions(clan);
 
     if (accounts[0]) {
       return { region: accounts[0].region, id: accounts[0].clan_id };

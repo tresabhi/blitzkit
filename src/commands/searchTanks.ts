@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { go } from 'fuzzysort';
 import markdownEscape from 'markdown-escape';
-import { TANK_NAMES_DIACRITICS } from '../core/blitz/tankopedia';
+import { TANK_NAMES_DIACRITICS } from '../core/blitzstars/tankopedia';
 import addTankChoices from '../core/discord/addTankChoices';
 import embedInfo from '../core/discord/embedInfo';
 import { CommandRegistry } from '../events/interactionCreate';

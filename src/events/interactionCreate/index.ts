@@ -1,4 +1,5 @@
 import {
+  AttachmentBuilder,
   AutocompleteInteraction,
   ButtonBuilder,
   ButtonInteraction,
@@ -14,12 +15,13 @@ import {
 } from 'discord.js';
 import discord from '../../../discord.json' assert { type: 'json' };
 import { aboutCommand } from '../../commands/about';
-import { clanEventCommand } from '../../commands/clanEvent';
+import { breakdownCommand } from '../../commands/breakdown';
 import { debugCommand } from '../../commands/debug';
 import { eligibleCommand } from '../../commands/eligible';
 import { evolutionCommand } from '../../commands/evolution';
 import { fullStatsCommand } from '../../commands/fullStats';
 import { inactiveCommand } from '../../commands/inactive';
+import { verifyCommand } from '../../commands/link';
 import { ownedTanksCommand } from '../../commands/ownedTanks';
 import { pingCommand } from '../../commands/ping';
 import { playerAchievementsCommand } from '../../commands/playerAchievements';
@@ -30,10 +32,9 @@ import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { searchTanksCommand } from '../../commands/searchTanks';
 import { statsCommand } from '../../commands/stats';
 import { todayCommand } from '../../commands/today';
-import { verifyCommand } from '../../commands/verify';
-import getClientId from '../../core/node/getClientId';
-import isDev from '../../core/node/isDev';
-import { secrets } from '../../core/node/secrets';
+import getClientId from '../../core/blitzkrieg/getClientId';
+import isDev from '../../core/blitzkrieg/isDev';
+import { secrets } from '../../core/blitzkrieg/secrets';
 import handleAutocomplete from './handlers/autocomplete';
 import handleButton from './handlers/button';
 import handleChatInputCommand from './handlers/chatInputCommand';
@@ -42,7 +43,9 @@ export type InteractionRawReturnable =
   | string
   | EmbedBuilder
   | ButtonBuilder
-  | JSX.Element;
+  | AttachmentBuilder
+  | JSX.Element
+  | null;
 export type InteractionIterableReturnable =
   | InteractionRawReturnable
   | InteractionRawReturnable[];
@@ -93,13 +96,13 @@ export const COMMANDS_RAW: CommandRegistry[] = [
   searchPlayersCommand,
   searchTanksCommand,
   fullStatsCommand,
-  todayCommand,
+  breakdownCommand,
   verifyCommand,
   pingCommand,
   evolutionCommand,
   statsCommand,
   ratingsCommand,
-  clanEventCommand,
+  todayCommand,
 ];
 
 export const commands = Promise.all(COMMANDS_RAW).then((rawCommands) =>
@@ -133,31 +136,18 @@ commands.then((awaitedCommands) => {
   });
 
   try {
-    console.log(`Refreshing ${publicCommands.length} public command(s).`);
-    rest
-      .put(Routes.applicationCommands(getClientId()), { body: publicCommands })
-      .then((publicData) => {
-        console.log(
-          `Successfully refreshed ${
-            (publicData as RESTPostAPIChatInputApplicationCommandsJSONBody[])
-              .length
-          } public command(s).`,
-        );
-      });
+    rest.put(Routes.applicationCommands(getClientId()), {
+      body: publicCommands,
+    });
 
-    console.log(`Refreshing ${guildCommands.length} guild command(s).`);
-    rest
-      .put(
-        Routes.applicationGuildCommands(getClientId(), discord.tres_guild_id),
-        { body: guildCommands },
-      )
-      .then((guildData) => {
-        console.log(
-          `Successfully refreshed ${
-            (guildData as unknown[]).length
-          } guild command(s).`,
-        );
-      });
+    (isDev()
+      ? [discord.test_guild_id]
+      : [discord.tres_guild_id, discord.sklld_guild_id]
+    ).forEach((guildId) =>
+      rest.put(Routes.applicationGuildCommands(getClientId(), guildId), {
+        body: guildCommands,
+      }),
+    );
   } catch (error) {
     console.error(error);
   }

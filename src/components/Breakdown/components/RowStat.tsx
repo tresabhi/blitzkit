@@ -15,7 +15,7 @@ export function RowStat({
   value,
   delta,
   percentile,
-  minimized,
+  minimized = false,
 }: RowStatProps) {
   return (
     <div

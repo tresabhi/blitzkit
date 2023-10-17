@@ -1,4 +1,4 @@
-import { TIER_ROMAN_NUMERALS, Tier } from '../core/blitz/tankopedia';
+import { Tier } from '../core/blitzstars/tankopedia';
 import { theme } from '../stitches.config';
 
 export type TierWeightsRecord = Partial<Record<Tier, number>>;
@@ -26,7 +26,7 @@ export default function TierWeights({ weights }: TierWeightsProps) {
             minWidth: 16,
           }}
         >
-          {TIER_ROMAN_NUMERALS[parseInt(tier) as Tier]}
+          {tier}
         </div>
       ))}
     </div>

@@ -1,4 +1,4 @@
-import { AllStats } from './accountInfo';
+import { AllStats } from '../core/blitz/getAccountInfo';
 
 export interface IndividualTankStats {
   all: AllStats;

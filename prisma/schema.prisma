@@ -1,0 +1,14 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DISCORD_BLITZ_DB")
+}
+
+model discord_blitz {
+  discord BigInt @id
+  region  String
+  blitz   Int
+}
