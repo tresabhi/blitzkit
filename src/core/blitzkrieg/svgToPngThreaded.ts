@@ -1,6 +1,6 @@
 import { Worker } from 'worker_threads';
 
-const MAX_WORKERS = 3;
+const MAX_WORKERS = 2;
 
 const workers = [...Array(MAX_WORKERS)].map(() => {
   const worker = new Worker(`${__dirname}/workers/render.cjs`);
