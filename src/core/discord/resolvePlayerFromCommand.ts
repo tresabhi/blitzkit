@@ -47,10 +47,8 @@ export default async function resolvePlayerFromCommand(
     if (account) {
       return { region: account.region, id: account.blitz };
     } else {
-      // TODO: simplify message
-      throw new UserError("You're not linked", {
-        cause:
-          'Use the `/link` command to link your Discord and Blitz accounts.',
+      throw new UserError('Use the `/link` command', {
+        cause: 'Link your Blitz and Discord accounts to get started.',
       });
     }
   }
