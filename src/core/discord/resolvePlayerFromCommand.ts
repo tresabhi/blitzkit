@@ -3,7 +3,7 @@ import markdownEscape from 'markdown-escape';
 import { Region } from '../../constants/regions';
 import searchPlayersAcrossRegions from '../blitz/searchPlayersAcrossRegions';
 import { getBlitzFromDiscord } from '../blitzkrieg/discordBlitz';
-import throwError from '../blitzkrieg/throwError';
+import { UserError } from '../blitzkrieg/userError';
 
 export const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
 
@@ -34,12 +34,11 @@ export default async function resolvePlayerFromCommand(
           id: accounts[0].account_id,
         } satisfies ResolvedPlayer;
       } else {
-        throw throwError(
-          'Could not find user',
-          `I couldn't find user "${markdownEscape(
+        throw new UserError('Could not find user', {
+          cause: `I couldn't find user "${markdownEscape(
             commandUsername,
           )}". Try picking an user from the search result, typing in a valid username, or using the \`/link\` command.`,
-        );
+        });
       }
     }
   } else {
@@ -48,10 +47,11 @@ export default async function resolvePlayerFromCommand(
     if (account) {
       return { region: account.region, id: account.blitz };
     } else {
-      throw throwError(
-        "You're not linked",
-        'Use the `/link` command to link your Discord and Blitz accounts.',
-      );
+      // TODO: simplify message
+      throw new UserError("You're not linked", {
+        cause:
+          'Use the `/link` command to link your Discord and Blitz accounts.',
+      });
     }
   }
 }

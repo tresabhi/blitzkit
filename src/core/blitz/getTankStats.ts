@@ -1,7 +1,7 @@
 import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { TanksStats } from '../../types/tanksStats';
-import throwError from '../blitzkrieg/throwError';
+import { UserError } from '../blitzkrieg/userError';
 import fetchBlitz from './fetchWargaming';
 
 export default async function getTankStats(region: Region, id: number) {
@@ -10,10 +10,10 @@ export default async function getTankStats(region: Region, id: number) {
   );
 
   if (tankStats[id] === null) {
-    throw throwError(
-      'No tank stats available',
-      "This player doesn't have any stats for tanks available. This may not be the player you are looking for.",
-    );
+    throw new UserError('No tank stats available', {
+      cause:
+        "This player doesn't have any stats for tanks available. This may not be the player you are looking for.",
+    });
   }
 
   return tankStats[id];

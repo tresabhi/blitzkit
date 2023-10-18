@@ -18,7 +18,7 @@ import getMidnightLeaderboard, {
   DATABASE_REPO,
 } from '../core/blitzkrieg/getMidnightLeaderboard';
 import { octokit } from '../core/blitzkrieg/octokit';
-import throwError from '../core/blitzkrieg/throwError';
+import { UserError } from '../core/blitzkrieg/userError';
 import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
@@ -185,7 +185,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
       })
       .then(({ data }) => {
         if (!Array.isArray(data)) {
-          throw throwError('Archived ratings data is malformed');
+          throw new Error('Archived ratings data is malformed');
         }
         return data.map(
           (folder) =>
@@ -292,7 +292,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                   })
                   .then(async ({ data }) => {
                     if (Array.isArray(data) || data.type !== 'file') {
-                      throw throwError('Archived ratings data is malformed');
+                      throw new Error('Archived ratings data is malformed');
                     }
 
                     const players = (await fetch(data.download_url!).then(
@@ -361,7 +361,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                   })
                   .then(async ({ data }) => {
                     if (Array.isArray(data) || data.type !== 'file') {
-                      throw throwError('Archived ratings info is malformed');
+                      throw new Error('Archived ratings info is malformed');
                     }
 
                     const response = fetch(data.download_url!);
@@ -404,7 +404,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                   })
                   .then(async ({ data }) => {
                     if (Array.isArray(data) || data.type !== 'file') {
-                      throw throwError(
+                      throw new Error(
                         'Archived ratings latest data is malformed',
                       );
                     }
@@ -418,9 +418,12 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                     );
 
                     if (playerIndex === -1) {
-                      throw throwError(
+                      throw new UserError(
                         `${accountInfo.nickname} didn't player ratings in season ${season}`,
-                        'This player did not participate in this season or did not get past calibration.',
+                        {
+                          cause:
+                            'This player did not participate in this season or did not get past calibration.',
+                        },
                       );
                     }
 

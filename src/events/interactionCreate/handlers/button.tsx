@@ -1,6 +1,5 @@
 import { ButtonInteraction, CacheType } from 'discord.js';
 import { commands } from '..';
-import throwError from '../../../core/blitzkrieg/throwError';
 import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable';
 
 export default async function handleButton(
@@ -13,8 +12,7 @@ export default async function handleButton(
   const button = (await commands)[commandName]?.button;
 
   if (!button) {
-    throwError(`Button handler not found for "${commandName}"`);
-    return;
+    throw new Error(`Button handler not found for "${commandName}"`);
   }
 
   if (interaction.message.interaction?.user.id !== interaction.user.id) {

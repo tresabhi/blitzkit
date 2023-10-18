@@ -1,5 +1,3 @@
-import throwError from '../blitzkrieg/throwError';
-
 export type BlitzResponse<Data extends object> =
   | {
       status: 'error';
@@ -18,9 +16,8 @@ export default async function fetchBlitz<Data extends object>(url: string) {
   if (data.status === 'ok') {
     return data.data;
   } else {
-    throw throwError(
-      `Wargaming response error status:"${data.status}"`,
-      `Message: "${data.error.message}"\nURL: "${url}"`,
-    );
+    throw new Error(`Wargaming response error status:"${data.status}"`, {
+      cause: `Message: "${data.error.message}"\nURL: "${url}"`,
+    });
   }
 }

@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import { Region } from '../../constants/regions';
 import searchClansAcrossRegions from '../blitz/searchClansAcrossRegions';
-import throwError from '../blitzkrieg/throwError';
+import { UserError } from '../blitzkrieg/userError';
 import { serverAndIdPattern } from './resolvePlayerFromCommand';
 
 export default async function resolveClanFromCommand(
@@ -18,10 +18,9 @@ export default async function resolveClanFromCommand(
     if (accounts[0]) {
       return { region: accounts[0].region, id: accounts[0].clan_id };
     } else {
-      throw throwError(
-        'Could not find clan',
-        `I couldn't find clan \`${clan}\`. Try selecting a username from the search result.`,
-      );
+      throw new UserError('Could not find clan', {
+        cause: `I couldn't find clan \`${clan}\`. Try selecting a username from the search result.`,
+      });
     }
   }
 }
