@@ -41,7 +41,7 @@ export async function getClanInfo<
   ReturnType = Ids extends number ? IndividualClanInfo : IndividualClanInfo[],
 >(region: Region, ids: Ids) {
   const object = await fetchBlitz<ClanInfo>(
-    `https://api.wotblitz.${region}/wotb/clans/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${normalizeIds(
+    `https://api.wotblitz.${region}/wotb/clans/info/?application_id=${WARGAMING_APPLICATION_ID}&clan_id=${normalizeIds(
       ids,
     )}`,
   );
