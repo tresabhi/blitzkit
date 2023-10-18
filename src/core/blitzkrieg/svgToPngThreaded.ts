@@ -19,18 +19,22 @@ function manageQueue() {
 
     function cleanup() {
       workers.push(worker);
+      worker.off('message', handleMessage);
+      worker.off('error', handleError);
       manageQueue();
+    }
+    function handleMessage(png: Uint8Array) {
+      cleanup();
+      resolve(Buffer.from(png));
+    }
+    function handleError(error: Error) {
+      cleanup();
+      throw error;
     }
 
     worker.postMessage(svg);
-    worker.on('message', (png: Uint8Array) => {
-      cleanup();
-      resolve(Buffer.from(png));
-    });
-    worker.on('error', (error) => {
-      cleanup();
-      throw error;
-    });
+    worker.on('message', handleMessage);
+    worker.on('error', handleError);
   }
 }
 
