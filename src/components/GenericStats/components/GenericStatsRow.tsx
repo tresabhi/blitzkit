@@ -15,9 +15,18 @@ export default function GenericStatsRow({ stat }: GenericStatsRowProps) {
         alignItems: 'center',
       }}
     >
-      <span style={{ color: theme.colors.textLowContrast, fontSize: 16 }}>
+      <span
+        style={{
+          color: theme.colors.textLowContrast,
+          fontSize: 16,
+          whiteSpace: 'nowrap',
+          maxWidth: 128,
+          overflow: 'hidden',
+        }}
+      >
         {stat[0]}
       </span>
+
       <span
         style={{
           color: theme.colors.textHighContrast,
