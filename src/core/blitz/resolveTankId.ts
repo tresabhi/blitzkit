@@ -1,5 +1,5 @@
 import { go } from 'fuzzysort';
-import throwError from '../blitzkrieg/throwError';
+import { UserError } from '../blitzkrieg/userError';
 import { TANKS, tankopedia } from '../blitzstars/tankopedia';
 
 export default async function resolveTankId(tank: string | number) {
@@ -12,10 +12,9 @@ export default async function resolveTankId(tank: string | number) {
     });
 
     if (searchResult.length === 0) {
-      throw throwError(
-        'Tank not found',
-        `Could not find tank by the name "${tank}".`,
-      );
+      throw new UserError('Tank not found', {
+        cause: `Could not find tank by the name "${tank}".`,
+      });
     } else {
       return searchResult[0].obj.tank_id;
     }
@@ -23,10 +22,9 @@ export default async function resolveTankId(tank: string | number) {
     if ((await tankopedia)[number]) {
       return number;
     } else {
-      throw throwError(
-        'Tank not found',
-        `Could not find tank by the ID "${number}".`,
-      );
+      throw new UserError('Tank not found', {
+        cause: `Could not find tank by the ID "${number}".`,
+      });
     }
   }
 }

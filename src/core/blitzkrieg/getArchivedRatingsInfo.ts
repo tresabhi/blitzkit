@@ -2,7 +2,6 @@ import { RatingsInfo } from '../../commands/ratings';
 import { Region } from '../../constants/regions';
 import { DATABASE_REPO } from './getMidnightLeaderboard';
 import { octokit } from './octokit';
-import throwError from './throwError';
 
 const ARCHIVED_RATINGS_CACHE: Record<
   Region,
@@ -32,7 +31,7 @@ export default async function getArchivedRatingsInfo(
   });
 
   if (Array.isArray(data) || data.type !== 'file')
-    throw throwError('Archived ratings info is malformed');
+    throw new Error('Archived ratings info is malformed');
 
   const content = Buffer.from(data.content, 'base64').toString();
   const jsonContent = JSON.parse(content) as RatingsInfo & {

@@ -7,10 +7,11 @@ import {
 } from 'discord.js';
 import { commands } from '..';
 import discord from '../../../../discord.json' assert { type: 'json' };
-import { psa } from '../../../core/discord/psa';
+import { UserError } from '../../../core/blitzkrieg/userError';
 import embedNegative from '../../../core/discord/embedNegative';
 import embedWarning from '../../../core/discord/embedWarning';
 import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable';
+import { psa } from '../../../core/discord/psa';
 
 export default async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
@@ -53,7 +54,9 @@ export default async function handleChatInputCommand(
         .setStyle(ButtonStyle.Link),
     );
 
-    console.error(interaction.commandName, error);
+    if (!(error instanceof UserError)) {
+      console.error(interaction.commandName, error);
+    }
 
     await interaction.editReply({
       embeds: [
