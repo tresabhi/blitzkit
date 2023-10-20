@@ -3,7 +3,7 @@ import {
   AutocompleteInteraction,
   CacheType,
 } from 'discord.js';
-import { REGION_NAMES } from '../../constants/regions';
+import { REGION_NAMES_SHORT } from '../../constants/regions';
 import searchPlayersAcrossRegions from '../blitz/searchPlayersAcrossRegions';
 
 export default async function autocompleteUsername(
@@ -19,7 +19,9 @@ export default async function autocompleteUsername(
         ? players.map(
             (player) =>
               ({
-                name: `${player.nickname} (${REGION_NAMES[player.region]})`,
+                name: `${player.nickname} (${
+                  REGION_NAMES_SHORT[player.region]
+                })`,
                 value: `${player.region}/${player.account_id}`,
               }) satisfies ApplicationCommandOptionChoiceData<string>,
           )
