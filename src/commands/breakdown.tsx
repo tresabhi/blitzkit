@@ -266,9 +266,6 @@ async function render(
             />
           )}
 
-          {/* {filteredOrder.length === 0 && (
-        <NoData type={NoDataType.BattlesInPeriod} />
-      )} */}
           <Breakdown.Root>{page}</Breakdown.Root>
         </Wrapper>
       ))
