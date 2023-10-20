@@ -1,5 +1,4 @@
 import { deburr } from 'lodash';
-import { TreeTypeString } from '../../components/Tanks';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import fetchBlitz from '../blitz/fetchBlitz';
 import { context } from '../blitzkrieg/context';
@@ -16,7 +15,6 @@ export interface TankopediaEntry {
   type: string;
   description: string;
 }
-type asd = TreeTypeString;
 export interface Tankopedia {
   [id: number]: TankopediaEntry | undefined;
 }
