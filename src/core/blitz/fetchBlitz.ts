@@ -19,6 +19,7 @@ async function manageQueue() {
 
     setTimeout(() => {
       inProgress--;
+      manageQueue();
     }, 1000);
 
     const { url, resolve } = queue.shift()!;
