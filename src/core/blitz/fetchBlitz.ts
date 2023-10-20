@@ -29,8 +29,6 @@ async function manageQueue() {
       typeof resolve
     >;
 
-    manageQueue();
-
     if (data.status === 'ok') {
       resolve(data.data);
     } else {
