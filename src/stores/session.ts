@@ -4,7 +4,7 @@ import { devtools, persist } from 'zustand/middleware';
 import { CustomColumnDisplay } from '../app/tools/session/components/CustomColumn';
 import { Region } from '../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
-import fetchBlitz from '../core/blitz/fetchWargaming';
+import fetchBlitz from '../core/blitz/fetchBlitz';
 import { NormalizedTankStats, TanksStats } from '../types/tanksStats';
 
 type Session = (

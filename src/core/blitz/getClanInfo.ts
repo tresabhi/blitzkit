@@ -1,6 +1,6 @@
 import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
-import fetchBlitz from './fetchWargaming';
+import fetchBlitz from './fetchBlitz';
 import { normalizeIds } from './normalizeIds';
 
 export interface IndividualClanInfo {
