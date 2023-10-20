@@ -11,6 +11,7 @@ import jsxToPngThreaded from '../blitzkrieg/jsxToPngThreaded';
 export default async function normalizeInteractionReturnable(
   returnable: InteractionReturnable,
 ) {
+  const images: [number, Buffer][] = [];
   const reply: InteractionEditReplyOptions = {};
 
   const awaitedReturnable = await returnable;
@@ -19,7 +20,7 @@ export default async function normalizeInteractionReturnable(
     : [awaitedReturnable];
 
   await Promise.all(
-    normalizedReturnable.map(async (item) => {
+    normalizedReturnable.map(async (item, index) => {
       if (typeof item === 'string') {
         reply.content = item;
       } else if (item instanceof EmbedBuilder) {
@@ -38,11 +39,16 @@ export default async function normalizeInteractionReturnable(
         return;
       } else {
         const image = await jsxToPngThreaded(item);
-        if (!reply.files) reply.files = [];
-        reply.files.push(image);
+        images.push([index, image]);
       }
     }),
   );
+
+  if (images.length > 0) {
+    images.sort(([a], [b]) => b - a);
+    if (!reply.files) reply.files = [];
+    images.forEach(([, image]) => reply.files?.push(image));
+  }
 
   return reply;
 }

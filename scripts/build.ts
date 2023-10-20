@@ -27,7 +27,7 @@ readdir('src/workers').then((workers) => {
 
     bundle: true,
     sourcemap: true,
-    minifyIdentifiers: false, // cause goofy errors
+    minifyIdentifiers: false, // causes goofy errors
     minifySyntax: true,
     minifyWhitespace: true,
 

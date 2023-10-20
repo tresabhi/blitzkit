@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import * as Breakdown from '../../../components/Breakdown';
 import { TreeTypeEnum } from '../../../components/Tanks';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
-import fetchBlitz from '../../../core/blitz/fetchWargaming';
+import fetchBlitz from '../../../core/blitz/fetchBlitz';
 import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import {
   TankopediaEntry,

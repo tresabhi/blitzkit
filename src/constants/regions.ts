@@ -11,7 +11,7 @@ export const REGION_NAMES: Record<Region, string> = {
 export const REGION_NAMES_SHORT: Record<Region, string> = {
   com: 'NA',
   eu: 'EU',
-  asia: 'AS',
+  asia: 'ASIA',
 };
 
 export const REGION_SUBDOMAIN_NAMES: Record<RegionSubdomain, string> = {

@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
+import { chunk } from 'lodash';
 import * as Breakdown from '../components/Breakdown';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
@@ -34,6 +35,9 @@ import calculateWN8 from '../core/statistics/calculateWN8';
 import { StatFilters, filterStats } from '../core/statistics/filterStats';
 import getWN8Percentile from '../core/statistics/getWN8Percentile';
 import { CommandRegistryRaw } from '../events/interactionCreate';
+
+const ROWS_PER_PAGE = 8;
+const MAX_PAGES = 10;
 
 async function render(
   { region, id }: ResolvedPlayer,
@@ -132,38 +136,80 @@ async function render(
       0,
     ) / careerBattles;
 
-  return (
-    <Wrapper>
-      <TitleBar
-        name={accountInfo.nickname}
-        image={
-          clanData?.clan
-            ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData?.clan?.emblem_set_id}.png`
-            : undefined
-        }
-        description={`${name} • ${filterDescriptions}`}
-      />
+  const children: JSX.Element[] = [];
 
-      {filteredOrder.length === 0 && (
-        <NoData type={NoDataType.BattlesInPeriod} />
-      )}
-      {filteredOrder.length > 0 && (
-        <Breakdown.Root>
+  if (filteredOrder.length > 0) {
+    children.push(
+      <Breakdown.Row
+        key={id}
+        type="summary"
+        title="Total"
+        stats={[
+          {
+            title: 'Battles',
+            current: currentBattles,
+            career: careerBattles,
+          },
+          {
+            title: 'Winrate',
+            current: `${(100 * currentWinrate).toFixed(2)}%`,
+            career: `${(100 * careerWinrate).toFixed(2)}%`,
+            delta: currentWinrate - careerWinrate,
+          },
+          {
+            title: 'WN8',
+            current:
+              currentWN8 === undefined
+                ? undefined
+                : Math.round(currentWN8).toLocaleString(),
+            career:
+              careerWN8 === undefined
+                ? undefined
+                : Math.round(careerWN8).toLocaleString(),
+            percentile:
+              currentWN8 === undefined
+                ? undefined
+                : getWN8Percentile(currentWN8),
+          },
+          {
+            title: 'Damage',
+            current: Math.round(currentDamage).toLocaleString(),
+            career: Math.round(careerDamage).toLocaleString(),
+            delta: currentDamage - careerDamage,
+          },
+        ]}
+      />,
+    );
+
+    await Promise.all(
+      filteredOrder.map(async (id, index) => {
+        const tankopediaEntry = awaitedTankopedia[id];
+        const current = orderedCurrentStats[index];
+        const career = orderedCareerStats[index];
+        const currentWN8 = orderedCurrentWN8[index];
+        const careerWN8 = orderedCareerWN8[index];
+
+        children.push(
           <Breakdown.Row
             key={id}
-            type="summary"
-            title="Total"
+            type="tank"
+            tankType={tankopediaEntry?.type}
+            treeType={tankopediaEntry ? await getTreeType(id) : undefined}
+            title={await resolveTankName(id)}
             stats={[
               {
                 title: 'Battles',
-                current: currentBattles,
-                career: careerBattles,
+                current: current.battles.toLocaleString(),
+                career: career.battles.toLocaleString(),
               },
               {
                 title: 'Winrate',
-                current: `${(100 * currentWinrate).toFixed(2)}%`,
-                career: `${(100 * careerWinrate).toFixed(2)}%`,
-                delta: currentWinrate - careerWinrate,
+                current: `${(100 * (current.wins / current.battles)).toFixed(
+                  2,
+                )}%`,
+                career: `${(100 * (career.wins / career.battles)).toFixed(2)}%`,
+                delta:
+                  current.wins / current.battles - career.wins / career.battles,
               },
               {
                 title: 'WN8',
@@ -182,83 +228,67 @@ async function render(
               },
               {
                 title: 'Damage',
-                current: Math.round(currentDamage).toLocaleString(),
-                career: Math.round(careerDamage).toLocaleString(),
-                delta: currentDamage - careerDamage,
+                current: Math.round(
+                  current.damage_dealt / current.battles,
+                ).toLocaleString(),
+                career: Math.round(
+                  career.damage_dealt / career.battles,
+                ).toLocaleString(),
+                delta:
+                  current.damage_dealt / current.battles -
+                  career.damage_dealt / career.battles,
               },
             ]}
-          />
+          />,
+        );
+      }),
+    );
+  }
 
-          {await Promise.all(
-            filteredOrder.map(async (id, index) => {
-              const tankopediaEntry = awaitedTankopedia[id];
-              const current = orderedCurrentStats[index];
-              const career = orderedCareerStats[index];
-              const currentWN8 = orderedCurrentWN8[index];
-              const careerWN8 = orderedCareerWN8[index];
-
-              return (
-                <Breakdown.Row
-                  key={id}
-                  type="tank"
-                  tankType={tankopediaEntry?.type}
-                  treeType={tankopediaEntry ? await getTreeType(id) : undefined}
-                  title={await resolveTankName(id)}
-                  stats={[
-                    {
-                      title: 'Battles',
-                      current: current.battles.toLocaleString(),
-                      career: career.battles.toLocaleString(),
-                    },
-                    {
-                      title: 'Winrate',
-                      current: `${(
-                        100 *
-                        (current.wins / current.battles)
-                      ).toFixed(2)}%`,
-                      career: `${(100 * (career.wins / career.battles)).toFixed(
-                        2,
-                      )}%`,
-                      delta:
-                        current.wins / current.battles -
-                        career.wins / career.battles,
-                    },
-                    {
-                      title: 'WN8',
-                      current:
-                        currentWN8 === undefined
-                          ? undefined
-                          : Math.round(currentWN8).toLocaleString(),
-                      career:
-                        careerWN8 === undefined
-                          ? undefined
-                          : Math.round(careerWN8).toLocaleString(),
-                      percentile:
-                        currentWN8 === undefined
-                          ? undefined
-                          : getWN8Percentile(currentWN8),
-                    },
-                    {
-                      title: 'Damage',
-                      current: Math.round(
-                        current.damage_dealt / current.battles,
-                      ).toLocaleString(),
-                      career: Math.round(
-                        career.damage_dealt / career.battles,
-                      ).toLocaleString(),
-                      delta:
-                        current.damage_dealt / current.battles -
-                        career.damage_dealt / career.battles,
-                    },
-                  ]}
-                />
-              );
-            }),
-          )}
-        </Breakdown.Root>
-      )}
-    </Wrapper>
+  const pages = chunk(
+    children,
+    Math.max(Math.ceil(children.length / MAX_PAGES), ROWS_PER_PAGE),
   );
+
+  if (filteredOrder.length > 0) {
+    return pages
+      .map((page, index) => (
+        <Wrapper>
+          {index === 0 && (
+            <TitleBar
+              name={accountInfo.nickname}
+              image={
+                clanData?.clan
+                  ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData?.clan?.emblem_set_id}.png`
+                  : undefined
+              }
+              description={`${name} • ${filterDescriptions}`}
+            />
+          )}
+
+          <Breakdown.Root>{page}</Breakdown.Root>
+        </Wrapper>
+      ))
+      .reverse();
+  } else {
+    return [
+      <Wrapper>
+        <TitleBar
+          name={accountInfo.nickname}
+          image={
+            clanData?.clan
+              ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData?.clan?.emblem_set_id}.png`
+              : undefined
+          }
+          description={`${name} • ${filterDescriptions}`}
+        />
+
+        {filteredOrder.length === 0 && (
+          <NoData type={NoDataType.BattlesInPeriod} />
+        )}
+      </Wrapper>,
+    ];
+  }
 }
 
 export const breakdownCommand = new Promise<CommandRegistryRaw>(
@@ -286,11 +316,11 @@ export const breakdownCommand = new Promise<CommandRegistryRaw>(
           ...filters,
         });
 
-        return Promise.all([
-          render(player, period, filters),
+        return [
+          ...(await render(player, period, filters)),
           buttonPrimary(path, 'Refresh'),
-          getBlitzStarsLinkButton(player.region, player.id),
-        ]);
+          await getBlitzStarsLinkButton(player.region, player.id),
+        ];
       },
 
       autocomplete: (interaction) => {
