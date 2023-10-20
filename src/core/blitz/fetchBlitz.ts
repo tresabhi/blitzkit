@@ -41,11 +41,11 @@ async function manageQueue() {
 }
 
 export default function fetchBlitz<Data extends object>(url: string) {
-  return new Promise<BlitzResponse<Data>>((resolve) => {
+  return new Promise<Data>((resolve) => {
     queue.push({
       url,
       resolve(data) {
-        resolve(data as BlitzResponse<Data>);
+        resolve(data as Data);
       },
     });
     manageQueue();
