@@ -202,14 +202,17 @@ export default function Page() {
                 Copied link to your clipboard
               </AlertDialog.Title>
               <AlertDialog.Description>
-                Keep in mind:
-                <ul>
-                  <li>Paste this link into your browser to view the embed</li>
-                  <li>Embeds abide your custom options</li>
-                  <li>
-                    Options do not transfer across websites/streaming softwares
-                  </li>
-                </ul>
+                Instructions for streamers:
+                <iframe
+                  style={{
+                    width: '100%',
+                    aspectRatio: '16 / 9',
+                    border: 'none',
+                  }}
+                  src="https://www.youtube-nocookie.com/embed/e--GwjyrJAE?si=ftEiCmpbMI2FUY5N"
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                ></iframe>
               </AlertDialog.Description>
 
               <Text size="2">
