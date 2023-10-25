@@ -21,8 +21,8 @@ type Session = (
       time: number;
     }
 ) & {
-  promptBeforeReset: boolean;
-  showEmbedPrompt: boolean;
+  resetPrompt: boolean;
+  embedPrompt: boolean;
   customColumns: {
     display: CustomColumnDisplay;
     showDelta: boolean;
@@ -67,10 +67,10 @@ export const useSession = create<Session>()(
     persist(
       (set) => ({
         isTracking: false,
-        promptBeforeReset: true,
+        resetPrompt: true,
         showTotal: true,
         showCareer: true,
-        showEmbedPrompt: true,
+        embedPrompt: true,
 
         customColumns: [
           { display: 'battles', showDelta: false },

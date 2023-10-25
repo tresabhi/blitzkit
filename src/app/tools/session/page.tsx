@@ -124,7 +124,7 @@ export default function Page() {
               <Button
                 variant="soft"
                 onClick={(event) => {
-                  if (!session.promptBeforeReset) {
+                  if (!session.resetPrompt) {
                     event.preventDefault();
                     resetSession();
                   }
@@ -153,7 +153,7 @@ export default function Page() {
                     mr="1"
                     onCheckedChange={(checked) =>
                       useSession.setState({
-                        promptBeforeReset: !checked,
+                        resetPrompt: !checked,
                       })
                     }
                   />
@@ -183,7 +183,7 @@ export default function Page() {
                 variant="soft"
                 className={styles.toolbarButton}
                 onClick={(event) => {
-                  if (!session.showEmbedPrompt) {
+                  if (!session.embedPrompt) {
                     event.preventDefault();
                     resetSession();
                   }
@@ -202,14 +202,17 @@ export default function Page() {
                 Copied link to your clipboard
               </AlertDialog.Title>
               <AlertDialog.Description>
-                Keep in mind:
-                <ul>
-                  <li>Paste this link into your browser to view the embed</li>
-                  <li>Embeds abide your custom options</li>
-                  <li>
-                    Options do not transfer across websites/streaming softwares
-                  </li>
-                </ul>
+                Instructions for streamers:
+                <iframe
+                  style={{
+                    width: '100%',
+                    aspectRatio: '16 / 9',
+                    border: 'none',
+                  }}
+                  src="https://www.youtube-nocookie.com/embed/e--GwjyrJAE?si=ftEiCmpbMI2FUY5N"
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                ></iframe>
               </AlertDialog.Description>
 
               <Text size="2">
@@ -217,7 +220,7 @@ export default function Page() {
                   mr="1"
                   onCheckedChange={(checked) =>
                     useSession.setState({
-                      showEmbedPrompt: !checked,
+                      embedPrompt: !checked,
                     })
                   }
                 />
