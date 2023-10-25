@@ -124,7 +124,7 @@ export default function Page() {
               <Button
                 variant="soft"
                 onClick={(event) => {
-                  if (!session.promptBeforeReset) {
+                  if (!session.resetPrompt) {
                     event.preventDefault();
                     resetSession();
                   }
@@ -153,7 +153,7 @@ export default function Page() {
                     mr="1"
                     onCheckedChange={(checked) =>
                       useSession.setState({
-                        promptBeforeReset: !checked,
+                        resetPrompt: !checked,
                       })
                     }
                   />
@@ -183,7 +183,7 @@ export default function Page() {
                 variant="soft"
                 className={styles.toolbarButton}
                 onClick={(event) => {
-                  if (!session.showEmbedPrompt) {
+                  if (!session.embedPrompt) {
                     event.preventDefault();
                     resetSession();
                   }
@@ -220,7 +220,7 @@ export default function Page() {
                   mr="1"
                   onCheckedChange={(checked) =>
                     useSession.setState({
-                      showEmbedPrompt: !checked,
+                      embedPrompt: !checked,
                     })
                   }
                 />
