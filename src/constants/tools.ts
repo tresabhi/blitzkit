@@ -15,7 +15,6 @@ export const TOOLS: Tool[] = [
     id: 'ratings',
     title: 'Ratings',
     description: 'Current and old season leader boards',
-    disabled: true,
   },
   {
     id: 'tankopedia',
