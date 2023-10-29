@@ -8,13 +8,13 @@ import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
 import resolveTankName from '../core/blitz/resolveTankName';
+import { tankopediaInfo } from '../core/blitz/tankopediaInfo';
 import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
 import {
   TIER_ROMAN_NUMERALS,
   TankopediaEntry,
   Tier,
   tankopedia,
-  tankopediaInfo,
 } from '../core/blitzstars/tankopedia';
 import addTierChoices from '../core/discord/addTierChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
