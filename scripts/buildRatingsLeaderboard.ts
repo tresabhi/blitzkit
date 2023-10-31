@@ -13,10 +13,25 @@ import commitMultipleFiles from './commitMultipleFiles.js';
  * Central European Time (UTC+1): use 0 23 * * *.
  * Central Asia Standard Time (UTC+7): use 0 17 * * *.
  *
- * na/ratings/49/info.json: season info like rewards, start & end time, etc.
- * na/ratings/49/latest.json: the absolute latest leaderboard recorded at UTC+0 midnight
- * na/ratings/49/midnight.json: last midnight's leaderboard relative to the region
+ * [region]/ratings/[season]/info.json: season info like rewards, start & end time, etc.
+ * [region]/ratings/[season]/latest.json: the absolute latest leaderboard recorded at UTC+0 midnight
+ * [region]/ratings/[season]/midnight.json: last midnight's leaderboard relative to the region
  */
+
+async function patientFetch(url: string) {
+  let patientResponse: Response;
+
+  while (patientResponse! === undefined) {
+    try {
+      patientResponse = await fetch(url);
+    } catch (error) {
+      console.warn(`Failed to fetch ${url}; retrying in 1 minute...`);
+      await new Promise((resolve) => setTimeout(resolve, 1 * 60 * 1000));
+    }
+  }
+
+  return patientResponse;
+}
 
 export type BlitzkriegRatingsLeaderboard = { id: number; score: number }[];
 
@@ -27,7 +42,7 @@ const server = argv.find((arg) => arg.startsWith('--region='))?.split('=')[1];
 if (!server) throw new Error('Region parameter not specified');
 
 const NEIGHBORS = 1000;
-const PLAYERS = await fetch(
+const PLAYERS = await patientFetch(
   `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,
 )
   .then((response) => response.json() as Promise<RatingsInfo>)
@@ -42,7 +57,7 @@ const leaderboard: BlitzkriegRatingsLeaderboard = [];
 let registered = 0;
 
 async function branchFromPlayer(id: number) {
-  const { neighbors } = await fetch(
+  const { neighbors } = await patientFetch(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/user/${id}/?neighbors=${NEIGHBORS}`,
   ).then((response) => response.json() as Promise<RatingsNeighbors>);
 
@@ -73,7 +88,7 @@ async function branchFromPlayer(id: number) {
 }
 
 async function branchFromLeague(id: number) {
-  const { result } = await fetch(
+  const { result } = await patientFetch(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/league/${id}/top/`,
   ).then((response) => response.json() as Promise<{ result: RatingsPlayer[] }>);
 
@@ -111,7 +126,7 @@ const leaderboardJSON = JSON.stringify(leaderboard);
 if (publish) {
   const octokit = new Octokit({ auth: env.GH_TOKEN });
 
-  const info = await fetch(
+  const info = await patientFetch(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,
   ).then(
     (response) =>
