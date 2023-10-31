@@ -1,14 +1,23 @@
 'use client';
 
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
-import { Button, Flex, Popover, Select, TextField } from '@radix-ui/themes';
+import {
+  Button,
+  Flex,
+  Popover,
+  Select,
+  Text,
+  TextField,
+} from '@radix-ui/themes';
 import { range } from 'lodash';
 import { useState } from 'react';
 import useSWR from 'swr';
+import * as Leaderboard from '../../../components/Leaderboard';
 import PageWrapper from '../../../components/PageWrapper';
 import { REGIONS, REGION_NAMES, Region } from '../../../constants/regions';
 import getRatingsInfo from '../../../core/blitz/getRatingsInfo';
 import getArchivedRatingsInfoAPI from '../../../core/blitzkrieg/getArchivedRatingsInfoAPI';
+import { getArchivedRatingsLeaderboardAPI } from '../../../core/blitzkrieg/getArchivedRatingsLeaderboardAPI';
 import { numberFetcher } from '../../../core/blitzkrieg/numberFetcher';
 import { useRatings } from '../../../stores/ratings';
 
@@ -18,16 +27,26 @@ export default function Page() {
   const ratings = useRatings();
   // null being the latest season
   const [season, setSeason] = useState<null | number>(null);
-  const { data: ratingsInfo } = useSWR(`ratings-info-${season}`, () =>
-    season === null
-      ? getRatingsInfo(ratings.region)
-      : getArchivedRatingsInfoAPI(ratings.region, season),
+  const { data: ratingsInfo } = useSWR(
+    `ratings-info-${ratings.region}-${season}`,
+    () =>
+      season === null
+        ? getRatingsInfo(ratings.region)
+        : getArchivedRatingsInfoAPI(ratings.region, season),
   );
   const [jumpToLeague, setJumpToLeague] = useState(0);
   const { data: latestArchivedSeasonNumber } = useSWR<number>(
     '/api/ratings/latest-archived-season-number',
     numberFetcher,
   );
+  const players = useSWR(`ratings-players-${ratings.region}-${season}`, () => {
+    if (season === null) {
+      // i'll deal with this later
+      return null;
+    } else {
+      return getArchivedRatingsLeaderboardAPI(ratings.region, season);
+    }
+  });
 
   return (
     <PageWrapper>
@@ -144,6 +163,21 @@ export default function Page() {
           </Popover.Content>
         </Popover.Root>
       </Flex>
+
+      {players.data && (
+        <Leaderboard.Root>
+          {players.data.slice(0, 1000).map((player, index) => (
+            <Leaderboard.Item
+              nickname={`${player.id}`}
+              position={index + 1}
+              score={player.score}
+              key={player.id}
+            />
+          ))}
+        </Leaderboard.Root>
+      )}
+
+      {players.isLoading && <Text>Loading...</Text>}
     </PageWrapper>
   );
 }
