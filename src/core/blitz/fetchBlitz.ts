@@ -32,7 +32,7 @@ async function manageQueue() {
     if (data.status === 'ok') {
       resolve(data.data);
     } else {
-      throw new Error(`Wargaming response error status:"${data.status}"`, {
+      throw new Error(`Wargaming response error status: "${data.status}"`, {
         cause: `Message: "${data.error.message}"\nURL: "${url}"`,
       });
     }
