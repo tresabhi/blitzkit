@@ -17,7 +17,7 @@ async function manageQueue() {
   if (queue.length > 0 && inProgress < MAX_CALLS_PER_SECOND) {
     inProgress++;
 
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       inProgress--;
       manageQueue();
     }, 1000);
@@ -32,6 +32,10 @@ async function manageQueue() {
     if (data.status === 'ok') {
       resolve(data.data);
     } else {
+      clearTimeout(timeout);
+      inProgress--;
+      manageQueue();
+
       throw new Error(`Wargaming response error status: "${data.status}"`, {
         cause: `Message: "${data.error.message}"\nURL: "${url}"`,
       });
