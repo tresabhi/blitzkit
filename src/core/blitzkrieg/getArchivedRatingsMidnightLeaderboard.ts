@@ -13,7 +13,7 @@ const MIDNIGHT_LEADERBOARD_CACHE: Record<
   asia: {},
 };
 
-export default async function getMidnightLeaderboard(
+export default async function getArchivedRatingsMidnightLeaderboard(
   region: Region,
   season: number,
 ) {

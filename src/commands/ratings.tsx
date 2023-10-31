@@ -4,6 +4,7 @@ import {
   SlashCommandSubcommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
+import { range } from 'lodash';
 import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
@@ -13,11 +14,11 @@ import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../core/blitz/getRatingsInfo';
 import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
+import { getArchivedLatestSeasonNumber } from '../core/blitzkrieg/getArchivedLatestSeasonNumber';
+import { FIRST_ARCHIVED_RATINGS_SEASON } from '../core/blitzkrieg/getArchivedLatestSeasonNumberAPI';
 import getArchivedRatingsInfo from '../core/blitzkrieg/getArchivedRatingsInfo';
-import getMidnightLeaderboard, {
-  DATABASE_REPO,
-} from '../core/blitzkrieg/getMidnightLeaderboard';
-import { octokit } from '../core/blitzkrieg/octokit';
+import { getArchivedRatingsLeaderboard } from '../core/blitzkrieg/getArchivedRatingsLeaderboard';
+import getArchivedRatingsMidnightLeaderboard from '../core/blitzkrieg/getArchivedRatingsMidnightLeaderboard';
 import { UserError } from '../core/blitzkrieg/userError';
 import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
@@ -178,23 +179,17 @@ const noOngoingSeason = embedNegative(
 
 export const ratingsCommand = new Promise<CommandRegistryRaw>(
   async (resolve) => {
-    const seasonChoices = await octokit.repos
-      .getContent({
-        ...DATABASE_REPO,
-        path: 'com/ratings',
-      })
-      .then(({ data }) => {
-        if (!Array.isArray(data)) {
-          throw new Error('Archived ratings data is malformed');
-        }
-        return data.map(
-          (folder) =>
-            ({
-              name: `Season ${folder.name}`,
-              value: folder.name,
-            }) satisfies APIApplicationCommandOptionChoice<string>,
-        );
-      });
+    const latestArchivedSeasonNumber = await getArchivedLatestSeasonNumber();
+    const seasonChoices = range(
+      FIRST_ARCHIVED_RATINGS_SEASON,
+      latestArchivedSeasonNumber + 1,
+    ).map(
+      (number) =>
+        ({
+          name: `Season ${number}`,
+          value: `${number}`,
+        }) satisfies APIApplicationCommandOptionChoice<string>,
+    );
 
     const command = new SlashCommandBuilder()
       .setName('ratings')
@@ -262,7 +257,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
           const region = interaction.options.getString('region') as Region;
           regionRatingsInfo = await (subcommandGroup === 'current'
             ? getRatingsInfo(region)
-            : getArchivedRatingsInfo(season!, region));
+            : getArchivedRatingsInfo(region, season!));
 
           if (regionRatingsInfo.detail !== undefined) return noOngoingSeason;
 
@@ -285,19 +280,8 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                         }) satisfies SimplifiedPlayer,
                     ),
                   )
-              : await octokit.repos
-                  .getContent({
-                    ...DATABASE_REPO,
-                    path: `${region}/ratings/${season}/latest.json`,
-                  })
-                  .then(async ({ data }) => {
-                    if (Array.isArray(data) || data.type !== 'file') {
-                      throw new Error('Archived ratings data is malformed');
-                    }
-
-                    const players = (await fetch(data.download_url!).then(
-                      (response) => response.json(),
-                    )) as BlitzkriegRatingsLeaderboard;
+              : await getArchivedRatingsLeaderboard(region, season!).then(
+                  async (players) => {
                     const firstPlayerIndex =
                       leagueIndex === 0
                         ? 0
@@ -328,15 +312,16 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                             `Unknown Player ${player.id}`,
                         }) satisfies SimplifiedPlayer,
                     );
-                  });
+                  },
+                );
           const leagueInfo = regionRatingsInfo.leagues[leagueIndex];
           midnightLeaderboard =
             subcommandGroup === 'current'
-              ? await getMidnightLeaderboard(
+              ? await getArchivedRatingsMidnightLeaderboard(
                   region,
                   regionRatingsInfo.current_season,
                 )
-              : await getMidnightLeaderboard(region, season!);
+              : await getArchivedRatingsMidnightLeaderboard(region, season!);
 
           players = result;
           playersBefore = result ? result[0].position - 1 : 0;
@@ -354,21 +339,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
           regionRatingsInfo =
             subcommandGroup === 'current'
               ? await getRatingsInfo(region)
-              : await octokit.repos
-                  .getContent({
-                    ...DATABASE_REPO,
-                    path: `${region}/ratings/${season}/info.json`,
-                  })
-                  .then(async ({ data }) => {
-                    if (Array.isArray(data) || data.type !== 'file') {
-                      throw new Error('Archived ratings info is malformed');
-                    }
-
-                    const response = fetch(data.download_url!);
-                    return (await response.then((response) =>
-                      response.json(),
-                    )) as RatingsInfo;
-                  });
+              : await getArchivedRatingsInfo(region, season!);
 
           if (regionRatingsInfo.detail !== undefined) return noOngoingSeason;
 
@@ -397,22 +368,8 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                         }) satisfies SimplifiedPlayer,
                     ),
                   )
-              : await octokit.repos
-                  .getContent({
-                    ...DATABASE_REPO,
-                    path: `${region}/ratings/${season}/latest.json`,
-                  })
-                  .then(async ({ data }) => {
-                    if (Array.isArray(data) || data.type !== 'file') {
-                      throw new Error(
-                        'Archived ratings latest data is malformed',
-                      );
-                    }
-
-                    const response = fetch(data.download_url!);
-                    const players = (await response.then((response) =>
-                      response.json(),
-                    )) as BlitzkriegRatingsLeaderboard;
+              : await getArchivedRatingsLeaderboard(region, season!).then(
+                  async (players) => {
                     const playerIndex = players.findIndex(
                       (player) => player.id === id,
                     );
@@ -445,14 +402,15 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                       clan: clanData[player.id]!.clan?.tag,
                       nickname: clanData[player.id]!.account_name,
                     }));
-                  });
+                  },
+                );
           midnightLeaderboard =
             subcommandGroup === 'current'
-              ? await getMidnightLeaderboard(
+              ? await getArchivedRatingsMidnightLeaderboard(
                   region,
                   regionRatingsInfo.current_season,
                 )
-              : await getMidnightLeaderboard(region, season!);
+              : await getArchivedRatingsMidnightLeaderboard(region, season!);
 
           if (clan && neighbors) titleNameDiscriminator = `[${clan.tag}]`;
 

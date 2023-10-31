@@ -23,7 +23,7 @@ export const tankopedia = fetch(
 )
   .then(async (response) => response.json())
   .then((wrapperTankopedia) =>
-    context === 'bot'
+    context === 'server'
       ? (wrapperTankopedia as { data: Tankopedia }).data
       : (wrapperTankopedia as Tankopedia),
   );

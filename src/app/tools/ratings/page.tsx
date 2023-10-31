@@ -7,11 +7,11 @@ import { useEffect, useState } from 'react';
 import { RatingsInfo } from '../../../commands/ratings';
 import PageWrapper from '../../../components/PageWrapper';
 import { REGIONS, REGION_NAMES, Region } from '../../../constants/regions';
+import getRatingsInfo from '../../../core/blitz/getRatingsInfo';
 import {
   FIRST_ARCHIVED_RATINGS_SEASON,
-  getLatestArchivedSeasonNumber,
-} from '../../../core/blitz/getLatestArchivedSeasonNumber';
-import getRatingsInfo from '../../../core/blitz/getRatingsInfo';
+  getArchivedLatestSeasonNumberAPI,
+} from '../../../core/blitzkrieg/getArchivedLatestSeasonNumberAPI';
 import { useRatings } from '../../../stores/ratings';
 
 export default function Page() {
@@ -27,8 +27,8 @@ export default function Page() {
   useEffect(() => {
     (async () => {
       const [newRatingsInfo, newLatestArchivedSeasonNumber] = await Promise.all(
-        [getRatingsInfo(ratings.region), getLatestArchivedSeasonNumber()],
-      ); 
+        [getRatingsInfo(ratings.region), getArchivedLatestSeasonNumberAPI()],
+      );
 
       setRatingsInfo(newRatingsInfo);
       setLatestArchivedSeasonNumber(newLatestArchivedSeasonNumber);

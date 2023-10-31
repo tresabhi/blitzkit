@@ -90,7 +90,7 @@ export const tankAverages = fetch(
 )
   .then((response) => response.json())
   .then((json) => {
-    if (context === 'bot') {
+    if (context === 'server') {
       const partialTankAverages: TankAverages = {};
 
       (json as IndividualTankAverage[]).forEach((individualTankAverage) => {

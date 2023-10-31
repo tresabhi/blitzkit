@@ -1,4 +1,4 @@
-type Context = 'website' | 'bot';
+type Context = 'website' | 'server';
 
 export const context: Context =
-  typeof window === 'undefined' ? 'bot' : 'website';
+  typeof window === 'undefined' ? 'server' : 'website';
