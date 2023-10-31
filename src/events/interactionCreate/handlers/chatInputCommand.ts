@@ -47,25 +47,39 @@ export default async function handleChatInputCommand(
 
     await interaction.editReply(reply);
   } catch (error) {
-    const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-      new ButtonBuilder()
-        .setLabel('Get Help on Discord Server')
-        .setURL('https://discord.gg/nDt7AjGJQH')
-        .setStyle(ButtonStyle.Link),
-    );
+    const components = [
+      new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setLabel('Get Help on Discord Server')
+          .setURL('https://discord.gg/nDt7AjGJQH')
+          .setStyle(ButtonStyle.Link),
+      ),
+    ];
 
     if (!(error instanceof UserError)) {
       console.error(interaction.commandName, error);
-    }
 
-    await interaction.editReply({
-      embeds: [
-        embedNegative(
-          (error as Error).message,
-          `${(error as Error).cause ?? 'No further information is available.'}`,
-        ),
-      ],
-      components: [actionRow],
-    });
+      interaction.editReply({
+        embeds: [
+          embedNegative(
+            (error as Error).message,
+            `${
+              (error as Error).cause ?? 'No further information is available.'
+            }`,
+          ),
+        ],
+        components,
+      });
+    } else {
+      interaction.editReply({
+        embeds: [
+          embedNegative(
+            'Blitzkrieg ran into an error!',
+            "We're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help.",
+          ),
+        ],
+        components,
+      });
+    }
   }
 }
