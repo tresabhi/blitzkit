@@ -106,7 +106,7 @@ export default function Page() {
       <Flex gap="2">
         <Select.Root
           defaultValue={region}
-          onValueChange={(value) => setRegion(region)}
+          onValueChange={(value) => setRegion(value as Region)}
         >
           <Select.Trigger style={{ flex: 1 }} />
 
