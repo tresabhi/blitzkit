@@ -18,6 +18,7 @@ import * as Leaderboard from '../../../components/Leaderboard';
 import PageWrapper from '../../../components/PageWrapper';
 import { REGIONS, REGION_NAMES, Region } from '../../../constants/regions';
 import { getAccountInfo } from '../../../core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../../../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../../../core/blitz/getRatingsInfo';
 import getArchivedRatingsInfoAPI from '../../../core/blitzkrieg/getArchivedRatingsInfoAPI';
 import { getArchivedRatingsLeaderboardAPI } from '../../../core/blitzkrieg/getArchivedRatingsLeaderboardAPI';
@@ -32,14 +33,17 @@ const useUsernameCache = create<Record<Region, Record<number, string>>>(() => ({
   com: {},
   eu: {},
 }));
-const clanCache: Record<Region, Record<number, string>> = {
-  com: {},
-  eu: {},
-  asia: {},
-};
+const useClanCache = create<Record<Region, Record<number, string | undefined>>>(
+  () => ({
+    asia: {},
+    com: {},
+    eu: {},
+  }),
+);
 
 export default function Page() {
   const usernameCache = useUsernameCache();
+  const clanCache = useClanCache();
   const [region, setRegion] = useState<Region>('com');
   // null being the latest season
   const [season, setSeason] = useState<null | number>(null);
@@ -86,6 +90,19 @@ export default function Page() {
           useUsernameCache.setState(
             produce((draft) => {
               draft[region][player.account_id] = player.nickname;
+            }),
+          );
+        });
+      });
+
+      getClanAccountInfo(region, ids, ['clan']).then((data) => {
+        data.map((player) => {
+          useClanCache.setState(
+            produce((draft) => {
+              if (player) {
+                draft[region][player.account_id] =
+                  player.clan?.tag ?? undefined;
+              }
             }),
           );
         });
@@ -151,7 +168,7 @@ export default function Page() {
         </Select.Root>
       </Flex>
 
-      <Flex justify="between">
+      <Flex justify="between" wrap="wrap" gap="2">
         <Flex gap="2">
           <Popover.Root>
             <Popover.Trigger>
@@ -278,6 +295,7 @@ export default function Page() {
             }
             position={page * ROWS_PER_PAGE + index + 1}
             score={player.score}
+            clan={clanCache[region][player.id]}
             key={player.id}
           />
         ))}
