@@ -3,41 +3,31 @@
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Popover, Select, TextField } from '@radix-ui/themes';
 import { range } from 'lodash';
-import { useEffect, useState } from 'react';
-import { RatingsInfo } from '../../../commands/ratings';
+import { useState } from 'react';
+import useSWR from 'swr';
 import PageWrapper from '../../../components/PageWrapper';
 import { REGIONS, REGION_NAMES, Region } from '../../../constants/regions';
 import getRatingsInfo from '../../../core/blitz/getRatingsInfo';
-import {
-  FIRST_ARCHIVED_RATINGS_SEASON,
-  getArchivedLatestSeasonNumberAPI,
-} from '../../../core/blitzkrieg/getArchivedLatestSeasonNumberAPI';
 import getArchivedRatingsInfoAPI from '../../../core/blitzkrieg/getArchivedRatingsInfoAPI';
+import { numberFetcher } from '../../../core/blitzkrieg/numberFetcher';
 import { useRatings } from '../../../stores/ratings';
+
+export const FIRST_ARCHIVED_RATINGS_SEASON = 49;
 
 export default function Page() {
   const ratings = useRatings();
-  const [ratingsInfo, setRatingsInfo] = useState<RatingsInfo | null>(null);
-  const [jumpToLeague, setJumpToLeague] = useState(0);
-  const [latestArchivedSeasonNumber, setLatestArchivedSeasonNumber] = useState<
-    number | null
-  >(null);
   // null being the latest season
   const [season, setSeason] = useState<null | number>(null);
-
-  useEffect(() => {
-    getArchivedLatestSeasonNumberAPI().then(setLatestArchivedSeasonNumber);
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      if (season === null) {
-        setRatingsInfo(await getRatingsInfo(ratings.region));
-      } else {
-        setRatingsInfo(await getArchivedRatingsInfoAPI(ratings.region, season));
-      }
-    })();
-  }, [season]);
+  const { data: ratingsInfo } = useSWR(`ratings-info-${season}`, () =>
+    season === null
+      ? getRatingsInfo(ratings.region)
+      : getArchivedRatingsInfoAPI(ratings.region, season),
+  );
+  const [jumpToLeague, setJumpToLeague] = useState(0);
+  const { data: latestArchivedSeasonNumber } = useSWR<number>(
+    '/api/ratings/latest-archived-season-number',
+    numberFetcher,
+  );
 
   return (
     <PageWrapper>

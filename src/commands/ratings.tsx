@@ -6,6 +6,7 @@ import {
 } from 'discord.js';
 import { range } from 'lodash';
 import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
+import { FIRST_ARCHIVED_RATINGS_SEASON } from '../app/tools/ratings/page';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
@@ -15,7 +16,6 @@ import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../core/blitz/getRatingsInfo';
 import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
 import { getArchivedLatestSeasonNumber } from '../core/blitzkrieg/getArchivedLatestSeasonNumber';
-import { FIRST_ARCHIVED_RATINGS_SEASON } from '../core/blitzkrieg/getArchivedLatestSeasonNumberAPI';
 import getArchivedRatingsInfo from '../core/blitzkrieg/getArchivedRatingsInfo';
 import { getArchivedRatingsLeaderboard } from '../core/blitzkrieg/getArchivedRatingsLeaderboard';
 import getArchivedRatingsMidnightLeaderboard from '../core/blitzkrieg/getArchivedRatingsMidnightLeaderboard';

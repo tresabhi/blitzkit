@@ -46,6 +46,7 @@
     "react-dom": "^18.2.0",
     "react-fuzzysort": "^1.0.1",
     "satori": "^0.10.8",
+    "swr": "^2.2.4",
     "vite-node": "^0.34.5",
     "vitepress": "^1.0.0-rc.20",
     "vitepress-plugin-auto-sidebar": "^1.1.0",
