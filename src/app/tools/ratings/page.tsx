@@ -166,7 +166,7 @@ export default function Page() {
 
       {players.data && (
         <Leaderboard.Root>
-          {players.data.slice(0, 1000).map((player, index) => (
+          {players.data.map((player, index) => (
             <Leaderboard.Item
               nickname={`${player.id}`}
               position={index + 1}
