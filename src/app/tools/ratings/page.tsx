@@ -12,6 +12,7 @@ import {
   FIRST_ARCHIVED_RATINGS_SEASON,
   getArchivedLatestSeasonNumberAPI,
 } from '../../../core/blitzkrieg/getArchivedLatestSeasonNumberAPI';
+import getArchivedRatingsInfoAPI from '../../../core/blitzkrieg/getArchivedRatingsInfoAPI';
 import { useRatings } from '../../../stores/ratings';
 
 export default function Page() {
@@ -25,21 +26,18 @@ export default function Page() {
   const [season, setSeason] = useState<null | number>(null);
 
   useEffect(() => {
+    getArchivedLatestSeasonNumberAPI().then(setLatestArchivedSeasonNumber);
+  }, []);
+
+  useEffect(() => {
     (async () => {
-      const [newRatingsInfo, newLatestArchivedSeasonNumber] = await Promise.all(
-        [getRatingsInfo(ratings.region), getArchivedLatestSeasonNumberAPI()],
-      );
-
-      setRatingsInfo(newRatingsInfo);
-      setLatestArchivedSeasonNumber(newLatestArchivedSeasonNumber);
-
-      setSeason(
-        newRatingsInfo.detail == undefined
-          ? null
-          : newLatestArchivedSeasonNumber,
-      );
+      if (season === null) {
+        setRatingsInfo(await getRatingsInfo(ratings.region));
+      } else {
+        setRatingsInfo(await getArchivedRatingsInfoAPI(ratings.region, season));
+      }
     })();
-  }, [ratings.region]);
+  }, [season]);
 
   return (
     <PageWrapper>
