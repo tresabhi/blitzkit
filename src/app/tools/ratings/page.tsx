@@ -28,7 +28,7 @@ export default function Page() {
     (async () => {
       const [newRatingsInfo, newLatestArchivedSeasonNumber] = await Promise.all(
         [getRatingsInfo(ratings.region), getLatestArchivedSeasonNumber()],
-      );
+      ); 
 
       setRatingsInfo(newRatingsInfo);
       setLatestArchivedSeasonNumber(newLatestArchivedSeasonNumber);
