@@ -16,10 +16,10 @@ export const usernamePatternWithoutPosition = /[a-zA-Z0-9_]{3,24}/;
 
 export default async function searchPlayersAcrossRegions(
   search: string,
-  limit = 9,
+  limit = 25,
 ) {
   const trimmedSearch = search.trim();
-  const normalizedLimit = Math.round(limit / 3);
+  const normalizedLimit = Math.floor(limit / 3);
   const encodedSearch = encodeURIComponent(trimmedSearch);
 
   if (usernamePattern.test(trimmedSearch)) {
