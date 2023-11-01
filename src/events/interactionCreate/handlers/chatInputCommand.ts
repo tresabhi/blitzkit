@@ -20,20 +20,20 @@ export default async function handleChatInputCommand(
 
   await interaction.deferReply();
 
+  if (registry.inPreview && interaction.guildId !== discord.tres_guild_id) {
+    interaction.editReply({
+      embeds: [
+        embedWarning(
+          `\`/${registry.command.name}\` is in Public Preview`,
+          '[Join the official Discord server](https://discord.gg/nDt7AjGJQH) to gain early access to this command before it is released to the public.',
+        ),
+      ],
+    });
+
+    return;
+  }
+
   try {
-    if (registry.inPreview && interaction.guildId !== discord.tres_guild_id) {
-      interaction.editReply({
-        embeds: [
-          embedWarning(
-            `\`/${registry.command.name}\` is in Public Preview`,
-            '[Join the official Discord server](https://discord.gg/nDt7AjGJQH) to gain early access to this command before it is released to the public.',
-          ),
-        ],
-      });
-
-      return;
-    }
-
     const returnable = await registry.handler(interaction);
 
     if (registry.handlesInteraction) return;
@@ -56,21 +56,20 @@ export default async function handleChatInputCommand(
       ),
     ];
 
-    if (!(error instanceof UserError)) {
-      console.error(interaction.commandName, error);
-
+    if (error instanceof UserError) {
       interaction.editReply({
         embeds: [
           embedNegative(
-            (error as Error).message,
-            `${
-              (error as Error).cause ?? 'No further information is available.'
-            }`,
+            error.message,
+            (error.cause as string | undefined) ??
+              'No further information is available.',
           ),
         ],
         components,
       });
     } else {
+      console.error(interaction.commandName, error);
+
       interaction.editReply({
         embeds: [
           embedNegative(
