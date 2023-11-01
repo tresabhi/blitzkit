@@ -16,6 +16,7 @@ import useSWR from 'swr';
 import { create } from 'zustand';
 import * as Leaderboard from '../../../components/Leaderboard';
 import PageWrapper from '../../../components/PageWrapper';
+import { FIRST_ARCHIVED_RATINGS_SEASON } from '../../../constants/ratings';
 import { REGIONS, REGION_NAMES, Region } from '../../../constants/regions';
 import { getAccountInfo } from '../../../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../core/blitz/getClanAccountInfo';
@@ -25,7 +26,6 @@ import { getArchivedRatingsLeaderboardAPI } from '../../../core/blitzkrieg/getAr
 import { numberFetcher } from '../../../core/blitzkrieg/numberFetcher';
 import { noArrows } from './page.css';
 
-export const FIRST_ARCHIVED_RATINGS_SEASON = 49;
 const ROWS_PER_PAGE = 64;
 
 const useUsernameCache = create<Record<Region, Record<number, string>>>(() => ({

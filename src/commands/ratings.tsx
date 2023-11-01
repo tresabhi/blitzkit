@@ -6,10 +6,10 @@ import {
 } from 'discord.js';
 import { range } from 'lodash';
 import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
-import { FIRST_ARCHIVED_RATINGS_SEASON } from '../app/tools/ratings/page';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
+import { FIRST_ARCHIVED_RATINGS_SEASON } from '../constants/ratings';
 import { REGION_NAMES_SHORT, Region } from '../constants/regions';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
