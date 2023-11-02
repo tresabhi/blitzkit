@@ -1,6 +1,10 @@
 'use client';
 
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import {
+  CaretLeftIcon,
+  CaretRightIcon,
+  MagnifyingGlassIcon,
+} from '@radix-ui/react-icons';
 import {
   Button,
   Flex,
@@ -26,7 +30,7 @@ import { getArchivedRatingsLeaderboardAPI } from '../../../core/blitzkrieg/getAr
 import { numberFetcher } from '../../../core/blitzkrieg/numberFetcher';
 import { noArrows } from './page.css';
 
-const ROWS_PER_PAGE = 64;
+const ROWS_OPTIONS = [5, 10, 25, 50, 100];
 
 const useUsernameCache = create<Record<Region, Record<number, string>>>(() => ({
   asia: {},
@@ -42,6 +46,7 @@ const useClanCache = create<Record<Region, Record<number, string | undefined>>>(
 );
 
 export default function Page() {
+  const [rowsPerPage, setRowsPerPage] = useState(ROWS_OPTIONS[2]);
   const usernameCache = useUsernameCache();
   const clanCache = useClanCache();
   const [region, setRegion] = useState<Region>('com');
@@ -70,8 +75,8 @@ export default function Page() {
   const [page, setPage] = useState(0);
   const pageInput = useRef<HTMLInputElement>(null);
   const playerSlice = players.data?.slice(
-    page * ROWS_PER_PAGE,
-    page * ROWS_PER_PAGE + ROWS_PER_PAGE,
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage,
   );
 
   cachePage(page - 1);
@@ -80,7 +85,7 @@ export default function Page() {
 
   function cachePage(page: number) {
     const ids = players.data
-      ?.slice(page * ROWS_PER_PAGE, page * ROWS_PER_PAGE + ROWS_PER_PAGE)
+      ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
       .map(({ id }) => id)
       .filter((id) => !(id in usernameCache[region]));
 
@@ -234,14 +239,29 @@ export default function Page() {
             </Popover.Content>
           </Popover.Root>
         </Flex>
+
+        <Select.Root
+          onValueChange={(value) => setRowsPerPage(parseInt(value))}
+          defaultValue={`${rowsPerPage}`}
+        >
+          <Select.Trigger />
+
+          <Select.Content>
+            {ROWS_OPTIONS.map((size) => (
+              <Select.Item value={`${size}`} key={size}>
+                {size} per page
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Root>
+
         <Flex gap="2" align="center">
           <Button
             variant="soft"
             onClick={() => setPage((page) => Math.max(page - 1, 0))}
           >
-            {'<'}
+            <CaretLeftIcon />
           </Button>
-
           <TextField.Root className={noArrows}>
             <TextField.Slot>Page</TextField.Slot>
             <TextField.Input
@@ -254,7 +274,7 @@ export default function Page() {
                   Math.max(
                     0,
                     Math.min(
-                      Math.floor((players.data?.length ?? 0) / ROWS_PER_PAGE),
+                      Math.floor((players.data?.length ?? 0) / rowsPerPage),
                       event.target.valueAsNumber - 1,
                     ),
                   ),
@@ -267,22 +287,21 @@ export default function Page() {
               }}
             />
             <TextField.Slot>
-              out of {Math.ceil((players.data?.length ?? 0) / ROWS_PER_PAGE)}
+              out of {Math.ceil((players.data?.length ?? 0) / rowsPerPage)}
             </TextField.Slot>
           </TextField.Root>
-
           <Button
             variant="soft"
             onClick={() =>
               setPage((page) =>
                 Math.min(
                   page + 1,
-                  Math.floor((players.data?.length ?? 0) / ROWS_PER_PAGE),
+                  Math.floor((players.data?.length ?? 0) / rowsPerPage),
                 ),
               )
             }
           >
-            {'>'}
+            <CaretRightIcon />
           </Button>
         </Flex>
       </Flex>
@@ -291,9 +310,10 @@ export default function Page() {
         {playerSlice?.map((player, index) => (
           <Leaderboard.Item
             nickname={
-              usernameCache[region][player.id] ?? `Unknown player ${player.id}`
+              usernameCache[region][player.id] ??
+              `Loading player ${player.id}...`
             }
-            position={page * ROWS_PER_PAGE + index + 1}
+            position={page * rowsPerPage + index + 1}
             score={player.score}
             clan={clanCache[region][player.id]}
             key={player.id}
