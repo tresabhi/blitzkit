@@ -14,3 +14,4 @@ test.*
 servers.csv
 .next/
 tsconfig.tsbuildinfo
+temp/
