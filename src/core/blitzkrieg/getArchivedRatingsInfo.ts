@@ -1,7 +1,5 @@
 import { RatingsInfo } from '../../commands/ratings';
 import { Region } from '../../constants/regions';
-import { DATABASE_REPO } from './getArchivedRatingsMidnightLeaderboard';
-import { octokit } from './octokit';
 
 const INFO_CACHE: Record<
   Region,
@@ -25,16 +23,10 @@ export default async function getArchivedRatingsInfo(
     return INFO_CACHE[region][season];
   }
 
-  const { data } = await octokit.repos.getContent({
-    ...DATABASE_REPO,
-    path: `${region}/ratings/${season}/info.json`,
-  });
-
-  if (Array.isArray(data) || data.type !== 'file')
-    throw new Error('Archived ratings info is malformed');
-
-  const content = Buffer.from(data.content, 'base64').toString();
-  const jsonContent = JSON.parse(content) as RatingsInfo & {
+  const response = await fetch(
+    `https://raw.githubusercontent.com/tresabhi/blitzkrieg-db/main/${region}/ratings/${season}/info.json`,
+  );
+  const jsonContent = (await response.json()) as RatingsInfo & {
     detail: undefined;
   };
 

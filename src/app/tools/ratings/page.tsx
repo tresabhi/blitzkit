@@ -22,8 +22,8 @@ import { getAccountInfo } from '../../../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../../../core/blitz/getRatingsInfo';
 import { AccountList } from '../../../core/blitz/searchPlayersAcrossRegions';
-import getArchivedRatingsInfoAPI from '../../../core/blitzkrieg/getArchivedRatingsInfoAPI';
-import { getArchivedRatingsLeaderboardAPI } from '../../../core/blitzkrieg/getArchivedRatingsLeaderboardAPI';
+import getArchivedRatingsInfo from '../../../core/blitzkrieg/getArchivedRatingsInfo';
+import { getArchivedRatingsLeaderboard } from '../../../core/blitzkrieg/getArchivedRatingsLeaderboard';
 import { numberFetcher } from '../../../core/blitzkrieg/numberFetcher';
 import { noArrows } from './page.css';
 
@@ -56,7 +56,7 @@ export default function Page() {
     () =>
       season === null
         ? getRatingsInfo(region)
-        : getArchivedRatingsInfoAPI(region, season),
+        : getArchivedRatingsInfo(region, season),
   );
   const [jumpToLeague, setJumpToLeague] = useState(0);
   const { data: latestArchivedSeasonNumber } = useSWR<number>(
@@ -68,7 +68,7 @@ export default function Page() {
       // i'll deal with this later
       return null;
     } else {
-      return getArchivedRatingsLeaderboardAPI(region, season);
+      return getArchivedRatingsLeaderboard(region, season);
     }
   });
   const [page, setPage] = useState(0);

@@ -1,6 +1,5 @@
 import { BlitzkriegRatingsLeaderboard } from '../../../scripts/buildRatingsLeaderboard';
 import { Region } from '../../constants/regions';
-import { octokit } from './octokit';
 
 export const DATABASE_REPO = { owner: 'tresabhi', repo: 'blitzkrieg-db' };
 
@@ -22,19 +21,13 @@ export default async function getArchivedRatingsMidnightLeaderboard(
   }
 
   try {
-    const { data } = await octokit.repos.getContent({
-      ...DATABASE_REPO,
-      path: `${region}/ratings/${season}/midnight.json`,
-    });
+    const response = await fetch(
+      `https://raw.githubusercontent.com/tresabhi/blitzkrieg-db/main/${region}/ratings/${season}/midnight.json`,
+    );
+    const json = (await response.json()) as BlitzkriegRatingsLeaderboard;
+    MIDNIGHT_LEADERBOARD_CACHE[region][season] = json;
 
-    if (!Array.isArray(data) && data.type === 'file') {
-      const response = await fetch(data.download_url!);
-      const json = (await response.json()) as BlitzkriegRatingsLeaderboard;
-
-      MIDNIGHT_LEADERBOARD_CACHE[region][season] = json;
-
-      return json;
-    }
+    return json;
   } catch (error) {
     console.warn(
       `No midnight leaderboard found for season ${season}, region ${region}`,
