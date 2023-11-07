@@ -29,27 +29,26 @@ import { getAccountInfo } from '../../../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../../../core/blitz/getRatingsInfo';
 import { AccountList } from '../../../core/blitz/searchPlayersAcrossRegions';
+import { getArchivedLatestSeasonNumber } from '../../../core/blitzkrieg/getArchivedLatestSeasonNumber';
 import getArchivedRatingsInfo from '../../../core/blitzkrieg/getArchivedRatingsInfo';
 import { getArchivedRatingsLeaderboard } from '../../../core/blitzkrieg/getArchivedRatingsLeaderboard';
-import { numberFetcher } from '../../../core/blitzkrieg/numberFetcher';
 import { noArrows } from './page.css';
 
 const ROWS_OPTIONS = [5, 10, 25, 50, 100];
 
 type UsernameCache = Record<Region, Record<number, string | null>>;
+type ClanCache = Record<Region, Record<number, string | undefined>>;
 
 const useUsernameCache = create<UsernameCache>(() => ({
   asia: {},
   com: {},
   eu: {},
 }));
-const useClanCache = create<Record<Region, Record<number, string | undefined>>>(
-  () => ({
-    asia: {},
-    com: {},
-    eu: {},
-  }),
-);
+const useClanCache = create<ClanCache>(() => ({
+  asia: {},
+  com: {},
+  eu: {},
+}));
 
 export default function Page() {
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_OPTIONS[2]);
@@ -67,8 +66,8 @@ export default function Page() {
   );
   const [jumpToLeague, setJumpToLeague] = useState(0);
   const { data: latestArchivedSeasonNumber } = useSWR<number>(
-    '/api/ratings/latest-archived-season-number',
-    numberFetcher,
+    getArchivedLatestSeasonNumber.name,
+    getArchivedLatestSeasonNumber,
   );
   const players = useSWR(`ratings-players-${region}-${season}`, () => {
     if (season === null) {
@@ -148,12 +147,11 @@ export default function Page() {
       });
 
       getClanAccountInfo(region, ids, ['clan']).then((data) => {
-        data.map((player) => {
+        data.map((player, index) => {
           useClanCache.setState(
-            produce((draft) => {
+            produce((draft: ClanCache) => {
               if (player) {
-                draft[region][player.account_id] =
-                  player.clan?.tag ?? undefined;
+                draft[region][ids[index]] = player.clan?.tag;
               }
             }),
           );
