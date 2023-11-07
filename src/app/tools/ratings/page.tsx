@@ -179,34 +179,56 @@ export default function Page() {
     }, [page]);
 
     return (
-      <TextField.Root className={noArrows}>
-        <TextField.Slot>Page</TextField.Slot>
-        <TextField.Input
-          className={noArrows}
-          type="number"
-          ref={pageInput}
-          style={{ width: 64, textAlign: 'center' }}
-          onBlur={(event) => {
-            setPage(
-              Math.max(
-                0,
-                Math.min(
-                  Math.floor((players.data?.length ?? 0) / rowsPerPage),
-                  event.target.valueAsNumber - 1,
+      <Flex justify="center" wrap="wrap" gap="2">
+        <Button variant="soft" onClick={previousPage}>
+          <CaretLeftIcon />
+        </Button>
+        <TextField.Root className={noArrows}>
+          <TextField.Slot>Page</TextField.Slot>
+          <TextField.Input
+            className={noArrows}
+            type="number"
+            ref={pageInput}
+            style={{ width: 64, textAlign: 'center' }}
+            onBlur={(event) => {
+              setPage(
+                Math.max(
+                  0,
+                  Math.min(
+                    Math.floor((players.data?.length ?? 0) / rowsPerPage),
+                    event.target.valueAsNumber - 1,
+                  ),
                 ),
-              ),
-            );
-          }}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              (event.target as HTMLInputElement).blur();
-            }
-          }}
-        />
-        <TextField.Slot>
-          out of {Math.ceil((players.data?.length ?? 0) / rowsPerPage)}
-        </TextField.Slot>
-      </TextField.Root>
+              );
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                (event.target as HTMLInputElement).blur();
+              }
+            }}
+          />
+          <TextField.Slot>
+            out of {Math.ceil((players.data?.length ?? 0) / rowsPerPage)}
+          </TextField.Slot>
+        </TextField.Root>
+        <Select.Root
+          onValueChange={(value) => setRowsPerPage(parseInt(value))}
+          defaultValue={`${rowsPerPage}`}
+        >
+          <Select.Trigger />
+
+          <Select.Content>
+            {ROWS_OPTIONS.map((size) => (
+              <Select.Item value={`${size}`} key={size}>
+                {size} per page
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Root>
+        <Button variant="soft" onClick={nextPage}>
+          <CaretRightIcon />
+        </Button>
+      </Flex>
     );
   }
 
@@ -258,30 +280,6 @@ export default function Page() {
             </Select.Group>
           </Select.Content>
         </Select.Root>
-      </Flex>
-
-      <Flex justify="center" wrap="wrap" gap="2">
-        <Button variant="soft" onClick={previousPage}>
-          <CaretLeftIcon />
-        </Button>
-        <PageTurner />
-        <Select.Root
-          onValueChange={(value) => setRowsPerPage(parseInt(value))}
-          defaultValue={`${rowsPerPage}`}
-        >
-          <Select.Trigger />
-
-          <Select.Content>
-            {ROWS_OPTIONS.map((size) => (
-              <Select.Item value={`${size}`} key={size}>
-                {size} per page
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Root>
-        <Button variant="soft" onClick={nextPage}>
-          <CaretRightIcon />
-        </Button>
       </Flex>
 
       <Flex gap="2" justify="center">
@@ -410,6 +408,8 @@ export default function Page() {
         </Dialog.Root>
       </Flex>
 
+      <PageTurner />
+
       <Leaderboard.Root>
         {players.isLoading ? (
           <Leaderboard.Gap message="Loading players..." />
@@ -430,15 +430,7 @@ export default function Page() {
         )}
       </Leaderboard.Root>
 
-      <Flex justify="center" gap="2">
-        <Button variant="soft" onClick={previousPage}>
-          <CaretLeftIcon />
-        </Button>
-        <PageTurner />
-        <Button variant="soft" onClick={nextPage}>
-          <CaretRightIcon />
-        </Button>
-      </Flex>
+      <PageTurner />
     </PageWrapper>
   );
 }
