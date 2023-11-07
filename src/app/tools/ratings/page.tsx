@@ -5,7 +5,14 @@ import {
   CaretRightIcon,
   MagnifyingGlassIcon,
 } from '@radix-ui/react-icons';
-import { Button, Dialog, Flex, Select, TextField } from '@radix-ui/themes';
+import {
+  Button,
+  Dialog,
+  Flex,
+  Select,
+  Text,
+  TextField,
+} from '@radix-ui/themes';
 import { produce } from 'immer';
 import { debounce, findLastIndex, range } from 'lodash';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
@@ -304,10 +311,11 @@ export default function Page() {
         </Select.Root>
       </Flex>
 
-      <Flex gap="2" justify="center" wrap="wrap">
+      <Flex gap="3" justify="center" wrap="wrap" align="center">
+        <Text>Jump to:</Text>
         <Dialog.Root open={jumpToScoreOpen} onOpenChange={setJumpToScoreOpen}>
           <Dialog.Trigger>
-            <Button variant="soft">Jump to score</Button>
+            <Button variant="ghost">Score</Button>
           </Dialog.Trigger>
 
           <Dialog.Content>
@@ -342,7 +350,7 @@ export default function Page() {
           onOpenChange={setJumpToPositionOpen}
         >
           <Dialog.Trigger>
-            <Button variant="soft">Jump to position</Button>
+            <Button variant="ghost">Position</Button>
           </Dialog.Trigger>
 
           <Dialog.Content>
@@ -374,11 +382,11 @@ export default function Page() {
 
         <Dialog.Root>
           <Dialog.Trigger>
-            <Button variant="soft">Jump to league</Button>
+            <Button variant="ghost">League</Button>
           </Dialog.Trigger>
 
           <Dialog.Content>
-            <Flex direction="column" gap="2">
+            <Flex gap="2" justify="center">
               <Select.Root
                 value={`${jumpToLeague}`}
                 onValueChange={(value) => setJumpToLeague(parseInt(value))}
@@ -427,7 +435,7 @@ export default function Page() {
 
         <Dialog.Root>
           <Dialog.Trigger>
-            <Button variant="soft">Jump to player</Button>
+            <Button variant="ghost">Player</Button>
           </Dialog.Trigger>
 
           <Dialog.Content>

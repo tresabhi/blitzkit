@@ -20,7 +20,7 @@ export default function PageWrapper({
           display: 'flex',
           padding: 16,
           flexDirection: 'column',
-          gap: 16,
+          gap: 32,
           boxSizing: 'border-box',
 
           ...style,
