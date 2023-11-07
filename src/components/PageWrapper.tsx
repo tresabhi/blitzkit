@@ -1,7 +1,7 @@
-import { Theme } from '@radix-ui/themes';
+import { Flex, Theme } from '@radix-ui/themes';
 import { ComponentProps } from 'react';
 
-interface PageWrapperProps extends ComponentProps<'div'> {
+interface PageWrapperProps extends ComponentProps<typeof Flex> {
   color?: ComponentProps<typeof Theme>['accentColor'];
 }
 
@@ -12,20 +12,19 @@ export default function PageWrapper({
 }: PageWrapperProps) {
   return (
     <Theme accentColor={color}>
-      <div
+      <Flex
+        {...props}
+        direction="column"
+        gap="4"
         style={{
           width: '100%',
           maxWidth: 800,
           margin: 'auto',
-          display: 'flex',
           padding: 16,
-          flexDirection: 'column',
-          gap: 32,
           boxSizing: 'border-box',
 
           ...style,
         }}
-        {...props}
       />
     </Theme>
   );

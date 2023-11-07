@@ -204,21 +204,6 @@ export default function Page() {
 
     return (
       <Flex justify="center" wrap="wrap" gap="2">
-        <Select.Root
-          onValueChange={(value) => setRowsPerPage(parseInt(value))}
-          defaultValue={`${rowsPerPage}`}
-        >
-          <Select.Trigger />
-
-          <Select.Content>
-            {ROWS_OPTIONS.map((size) => (
-              <Select.Item value={`${size}`} key={size}>
-                {size} per page
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Root>
-
         <Flex gap="2">
           <Button variant="soft" onClick={previousPage}>
             <CaretLeftIcon />
@@ -261,232 +246,248 @@ export default function Page() {
 
   return (
     <PageWrapper color="orange">
-      <Flex gap="2">
-        <Select.Root
-          defaultValue={region}
-          onValueChange={(value) => setRegion(value as Region)}
-        >
-          <Select.Trigger style={{ flex: 1 }} />
+      <Flex gap="4" wrap="wrap" justify="center">
+        <Flex gap="2">
+          <Select.Root
+            defaultValue={region}
+            onValueChange={(value) => setRegion(value as Region)}
+          >
+            <Select.Trigger style={{ flex: 1 }} />
 
-          <Select.Content>
-            {REGIONS.map((region) => (
-              <Select.Item key={region} value={region}>
-                {REGION_NAMES[region]}
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Root>
+            <Select.Content>
+              {REGIONS.map((region) => (
+                <Select.Item key={region} value={region}>
+                  {REGION_NAMES[region]}
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Root>
 
-        <Select.Root
-          value={`${season}`}
-          onValueChange={(value) =>
-            setSeason(value === 'null' ? null : parseInt(value))
-          }
-        >
-          <Select.Trigger style={{ flex: 1 }} />
+          <Select.Root
+            value={`${season}`}
+            onValueChange={(value) =>
+              setSeason(value === 'null' ? null : parseInt(value))
+            }
+          >
+            <Select.Trigger style={{ flex: 1 }} />
 
-          <Select.Content>
-            {ratingsInfo?.detail === undefined && (
-              <Select.Item value="null">Current season</Select.Item>
-            )}
+            <Select.Content>
+              {ratingsInfo?.detail === undefined && (
+                <Select.Item value="null">Current season</Select.Item>
+              )}
 
-            <Select.Group>
-              <Select.Label>Archives</Select.Label>
+              <Select.Group>
+                <Select.Label>Archives</Select.Label>
 
-              {latestArchivedSeasonNumber &&
-                range(
-                  FIRST_ARCHIVED_RATINGS_SEASON,
-                  latestArchivedSeasonNumber + 1,
-                )
-                  .map((season) => (
-                    <Select.Item key={season} value={`${season}`}>
-                      Season {season}
-                    </Select.Item>
-                  ))
-                  .reverse()}
-            </Select.Group>
-          </Select.Content>
-        </Select.Root>
-      </Flex>
-
-      <Flex gap="3" justify="center" wrap="wrap" align="center">
-        <Text>Jump to:</Text>
-        <Dialog.Root open={jumpToScoreOpen} onOpenChange={setJumpToScoreOpen}>
-          <Dialog.Trigger>
-            <Button variant="ghost">Score</Button>
-          </Dialog.Trigger>
-
-          <Dialog.Content>
-            <Flex gap="4" justify="center">
-              <TextField.Input
-                ref={scoreInput}
-                onChange={handleSearchPlayerChange}
-                type="number"
-                placeholder="Type a score..."
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    handleJumpToScore();
-                    setJumpToScoreOpen(false);
-                  }
-                }}
-              />
-
-              <Flex gap="2">
-                <Dialog.Close>
-                  <Button color="red">Cancel</Button>
-                </Dialog.Close>
-                <Dialog.Close>
-                  <Button onClick={handleJumpToScore}>Jump</Button>
-                </Dialog.Close>
-              </Flex>
-            </Flex>
-          </Dialog.Content>
-        </Dialog.Root>
-
-        <Dialog.Root
-          open={jumpToPositionOpen}
-          onOpenChange={setJumpToPositionOpen}
-        >
-          <Dialog.Trigger>
-            <Button variant="ghost">Position</Button>
-          </Dialog.Trigger>
-
-          <Dialog.Content>
-            <Flex gap="4" justify="center">
-              <TextField.Input
-                ref={positionInput}
-                onChange={handleSearchPlayerChange}
-                type="number"
-                placeholder="Type a position..."
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    handleJumpToPosition();
-                    setJumpToPositionOpen(false);
-                  }
-                }}
-              />
-
-              <Flex gap="2">
-                <Dialog.Close>
-                  <Button color="red">Cancel</Button>
-                </Dialog.Close>
-                <Dialog.Close>
-                  <Button onClick={handleJumpToPosition}>Jump</Button>
-                </Dialog.Close>
-              </Flex>
-            </Flex>
-          </Dialog.Content>
-        </Dialog.Root>
-
-        <Dialog.Root>
-          <Dialog.Trigger>
-            <Button variant="ghost">League</Button>
-          </Dialog.Trigger>
-
-          <Dialog.Content>
-            <Flex gap="2" justify="center">
-              <Select.Root
-                value={`${jumpToLeague}`}
-                onValueChange={(value) => setJumpToLeague(parseInt(value))}
-              >
-                <Select.Trigger />
-
-                <Select.Content>
-                  {ratingsInfo?.detail === undefined &&
-                    ratingsInfo?.leagues.map(({ index, title }) => (
-                      <Select.Item key={index} value={`${index}`}>
-                        {title}
+                {latestArchivedSeasonNumber &&
+                  range(
+                    FIRST_ARCHIVED_RATINGS_SEASON,
+                    latestArchivedSeasonNumber + 1,
+                  )
+                    .map((season) => (
+                      <Select.Item key={season} value={`${season}`}>
+                        Season {season}
                       </Select.Item>
-                    ))}
-                </Select.Content>
-              </Select.Root>
+                    ))
+                    .reverse()}
+              </Select.Group>
+            </Select.Content>
+          </Select.Root>
 
-              <Flex gap="2">
-                <Dialog.Close>
-                  <Button color="red">Cancel</Button>
-                </Dialog.Close>
-                <Dialog.Close>
-                  <Button
-                    onClick={() => {
-                      if (!ratingsInfo || ratingsInfo.detail || !players.data)
-                        return;
+          <Select.Root
+            onValueChange={(value) => setRowsPerPage(parseInt(value))}
+            defaultValue={`${rowsPerPage}`}
+          >
+            <Select.Trigger />
 
-                      const minScore =
-                        LEAGUES[jumpToLeague - 1]?.minScore ?? Infinity;
-                      const firstPlayerIndex = players.data.findIndex(
-                        (player) => player.score < minScore,
-                      );
+            <Select.Content>
+              {ROWS_OPTIONS.map((size) => (
+                <Select.Item value={`${size}`} key={size}>
+                  {size} per page
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Root>
+        </Flex>
 
-                      if (firstPlayerIndex === -1) return;
+        <Flex gap="3" justify="center" wrap="wrap" align="center">
+          <Text>Jump to:</Text>
+          <Dialog.Root open={jumpToScoreOpen} onOpenChange={setJumpToScoreOpen}>
+            <Dialog.Trigger>
+              <Button variant="ghost">Score</Button>
+            </Dialog.Trigger>
 
-                      setPage(Math.floor(firstPlayerIndex / rowsPerPage));
-                      setHighlightedPlayerId(players.data[firstPlayerIndex].id);
-                    }}
-                  >
-                    Jump
-                  </Button>
-                </Dialog.Close>
-              </Flex>
-            </Flex>
-          </Dialog.Content>
-        </Dialog.Root>
-
-        <Dialog.Root>
-          <Dialog.Trigger>
-            <Button variant="ghost">Player</Button>
-          </Dialog.Trigger>
-
-          <Dialog.Content>
-            <Flex gap="4" direction="column">
-              <TextField.Root>
-                <TextField.Slot>
-                  <MagnifyingGlassIcon height="16" width="16" />
-                </TextField.Slot>
-
+            <Dialog.Content>
+              <Flex gap="4" justify="center">
                 <TextField.Input
+                  ref={scoreInput}
                   onChange={handleSearchPlayerChange}
-                  placeholder="Search for player..."
+                  type="number"
+                  placeholder="Type a score..."
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      handleJumpToScore();
+                      setJumpToScoreOpen(false);
+                    }
+                  }}
                 />
-              </TextField.Root>
 
-              <Flex direction="column" gap="2">
-                {searchResults?.map((player) => (
+                <Flex gap="2">
+                  <Dialog.Close>
+                    <Button color="red">Cancel</Button>
+                  </Dialog.Close>
+                  <Dialog.Close>
+                    <Button onClick={handleJumpToScore}>Jump</Button>
+                  </Dialog.Close>
+                </Flex>
+              </Flex>
+            </Dialog.Content>
+          </Dialog.Root>
+          <Dialog.Root
+            open={jumpToPositionOpen}
+            onOpenChange={setJumpToPositionOpen}
+          >
+            <Dialog.Trigger>
+              <Button variant="ghost">Position</Button>
+            </Dialog.Trigger>
+
+            <Dialog.Content>
+              <Flex gap="4" justify="center">
+                <TextField.Input
+                  ref={positionInput}
+                  onChange={handleSearchPlayerChange}
+                  type="number"
+                  placeholder="Type a position..."
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      handleJumpToPosition();
+                      setJumpToPositionOpen(false);
+                    }
+                  }}
+                />
+
+                <Flex gap="2">
+                  <Dialog.Close>
+                    <Button color="red">Cancel</Button>
+                  </Dialog.Close>
+                  <Dialog.Close>
+                    <Button onClick={handleJumpToPosition}>Jump</Button>
+                  </Dialog.Close>
+                </Flex>
+              </Flex>
+            </Dialog.Content>
+          </Dialog.Root>
+          <Dialog.Root>
+            <Dialog.Trigger>
+              <Button variant="ghost">League</Button>
+            </Dialog.Trigger>
+
+            <Dialog.Content>
+              <Flex gap="2" justify="center">
+                <Select.Root
+                  value={`${jumpToLeague}`}
+                  onValueChange={(value) => setJumpToLeague(parseInt(value))}
+                >
+                  <Select.Trigger />
+
+                  <Select.Content>
+                    {ratingsInfo?.detail === undefined &&
+                      ratingsInfo?.leagues.map(({ index, title }) => (
+                        <Select.Item key={index} value={`${index}`}>
+                          {title}
+                        </Select.Item>
+                      ))}
+                  </Select.Content>
+                </Select.Root>
+
+                <Flex gap="2">
+                  <Dialog.Close>
+                    <Button color="red">Cancel</Button>
+                  </Dialog.Close>
                   <Dialog.Close>
                     <Button
-                      key={player.account_id}
-                      variant="ghost"
                       onClick={() => {
-                        const playerIndex = players.data?.findIndex(
-                          (playerData) => playerData.id === player.account_id,
-                        );
-                        const playerPage = Math.floor(
-                          playerIndex! / rowsPerPage,
+                        if (!ratingsInfo || ratingsInfo.detail || !players.data)
+                          return;
+
+                        const minScore =
+                          LEAGUES[jumpToLeague - 1]?.minScore ?? Infinity;
+                        const firstPlayerIndex = players.data.findIndex(
+                          (player) => player.score < minScore,
                         );
 
-                        setPage(playerPage);
-                        setHighlightedPlayerId(player.account_id);
+                        if (firstPlayerIndex === -1) return;
+
+                        setPage(Math.floor(firstPlayerIndex / rowsPerPage));
+                        setHighlightedPlayerId(
+                          players.data[firstPlayerIndex].id,
+                        );
                       }}
                     >
-                      {player.nickname}
+                      Jump
                     </Button>
                   </Dialog.Close>
-                ))}
-
-                {searchResults?.length === 0 && (
-                  <Button disabled variant="ghost">
-                    No players found in leaderboard
-                  </Button>
-                )}
+                </Flex>
               </Flex>
+            </Dialog.Content>
+          </Dialog.Root>
+          <Dialog.Root>
+            <Dialog.Trigger>
+              <Button variant="ghost">Player</Button>
+            </Dialog.Trigger>
 
-              <Flex gap="2">
-                <Dialog.Close>
-                  <Button color="red">Cancel</Button>
-                </Dialog.Close>
+            <Dialog.Content>
+              <Flex gap="4" direction="column">
+                <TextField.Root>
+                  <TextField.Slot>
+                    <MagnifyingGlassIcon height="16" width="16" />
+                  </TextField.Slot>
+
+                  <TextField.Input
+                    onChange={handleSearchPlayerChange}
+                    placeholder="Search for player..."
+                  />
+                </TextField.Root>
+
+                <Flex direction="column" gap="2">
+                  {searchResults?.map((player) => (
+                    <Dialog.Close>
+                      <Button
+                        key={player.account_id}
+                        variant="ghost"
+                        onClick={() => {
+                          const playerIndex = players.data?.findIndex(
+                            (playerData) => playerData.id === player.account_id,
+                          );
+                          const playerPage = Math.floor(
+                            playerIndex! / rowsPerPage,
+                          );
+
+                          setPage(playerPage);
+                          setHighlightedPlayerId(player.account_id);
+                        }}
+                      >
+                        {player.nickname}
+                      </Button>
+                    </Dialog.Close>
+                  ))}
+
+                  {searchResults?.length === 0 && (
+                    <Button disabled variant="ghost">
+                      No players found in leaderboard
+                    </Button>
+                  )}
+                </Flex>
+
+                <Flex gap="2">
+                  <Dialog.Close>
+                    <Button color="red">Cancel</Button>
+                  </Dialog.Close>
+                </Flex>
               </Flex>
-            </Flex>
-          </Dialog.Content>
-        </Dialog.Root>
+            </Dialog.Content>
+          </Dialog.Root>
+        </Flex>
       </Flex>
 
       <PageTurner />
