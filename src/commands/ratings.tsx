@@ -474,10 +474,12 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
             {items && (
               <Leaderboard.Root>
                 {playersBefore > 0 && (
-                  <Leaderboard.Gap number={playersBefore} />
+                  <Leaderboard.Gap message={`+ ${playersBefore} more`} />
                 )}
                 {items}
-                {playersAfter > 0 && <Leaderboard.Gap number={playersAfter} />}
+                {playersAfter > 0 && (
+                  <Leaderboard.Gap message={`+ ${playersAfter} more`} />
+                )}
               </Leaderboard.Root>
             )}
           </Wrapper>

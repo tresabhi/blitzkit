@@ -5,14 +5,7 @@ import {
   CaretRightIcon,
   MagnifyingGlassIcon,
 } from '@radix-ui/react-icons';
-import {
-  Button,
-  Flex,
-  Popover,
-  Select,
-  Text,
-  TextField,
-} from '@radix-ui/themes';
+import { Button, Flex, Popover, Select, TextField } from '@radix-ui/themes';
 import { produce } from 'immer';
 import { range } from 'lodash';
 import { useEffect, useRef, useState } from 'react';
@@ -73,11 +66,15 @@ export default function Page() {
     }
   });
   const [page, setPage] = useState(0);
-  const pageInput = useRef<HTMLInputElement>(null);
   const playerSlice = players.data?.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage,
   );
+  const previousPage = () => setPage((page) => Math.max(page - 1, 0));
+  const nextPage = () =>
+    setPage((page) =>
+      Math.min(page + 1, Math.floor((players.data?.length ?? 0) / rowsPerPage)),
+    );
 
   cachePage(page - 1);
   cachePage(page);
@@ -116,15 +113,50 @@ export default function Page() {
   }
 
   useEffect(() => {
-    if (pageInput.current) pageInput.current.value = `${page + 1}`;
-  }, [page]);
-
-  useEffect(() => {
     setPage(0);
   }, [season, region]);
 
+  function PageTurner() {
+    const pageInput = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      if (pageInput.current) pageInput.current.value = `${page + 1}`;
+    }, [page]);
+
+    return (
+      <TextField.Root className={noArrows}>
+        <TextField.Slot>Page</TextField.Slot>
+        <TextField.Input
+          className={noArrows}
+          type="number"
+          ref={pageInput}
+          style={{ width: 64, textAlign: 'center' }}
+          onBlur={(event) => {
+            setPage(
+              Math.max(
+                0,
+                Math.min(
+                  Math.floor((players.data?.length ?? 0) / rowsPerPage),
+                  event.target.valueAsNumber - 1,
+                ),
+              ),
+            );
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              (event.target as HTMLInputElement).blur();
+            }
+          }}
+        />
+        <TextField.Slot>
+          out of {Math.ceil((players.data?.length ?? 0) / rowsPerPage)}
+        </TextField.Slot>
+      </TextField.Root>
+    );
+  }
+
   return (
-    <PageWrapper>
+    <PageWrapper color="tomato">
       <Flex gap="2">
         <Select.Root
           defaultValue={region}
@@ -256,72 +288,44 @@ export default function Page() {
         </Select.Root>
 
         <Flex gap="2" align="center">
-          <Button
-            variant="soft"
-            onClick={() => setPage((page) => Math.max(page - 1, 0))}
-          >
+          <Button variant="soft" onClick={previousPage}>
             <CaretLeftIcon />
           </Button>
-          <TextField.Root className={noArrows}>
-            <TextField.Slot>Page</TextField.Slot>
-            <TextField.Input
-              className={noArrows}
-              type="number"
-              ref={pageInput}
-              style={{ width: 64, textAlign: 'center' }}
-              onBlur={(event) => {
-                setPage(
-                  Math.max(
-                    0,
-                    Math.min(
-                      Math.floor((players.data?.length ?? 0) / rowsPerPage),
-                      event.target.valueAsNumber - 1,
-                    ),
-                  ),
-                );
-              }}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  (event.target as HTMLInputElement).blur();
-                }
-              }}
-            />
-            <TextField.Slot>
-              out of {Math.ceil((players.data?.length ?? 0) / rowsPerPage)}
-            </TextField.Slot>
-          </TextField.Root>
-          <Button
-            variant="soft"
-            onClick={() =>
-              setPage((page) =>
-                Math.min(
-                  page + 1,
-                  Math.floor((players.data?.length ?? 0) / rowsPerPage),
-                ),
-              )
-            }
-          >
+          <PageTurner />
+          <Button variant="soft" onClick={nextPage}>
             <CaretRightIcon />
           </Button>
         </Flex>
       </Flex>
 
       <Leaderboard.Root>
-        {playerSlice?.map((player, index) => (
-          <Leaderboard.Item
-            nickname={
-              usernameCache[region][player.id] ??
-              `Loading player ${player.id}...`
-            }
-            position={page * rowsPerPage + index + 1}
-            score={player.score}
-            clan={clanCache[region][player.id]}
-            key={player.id}
-          />
-        ))}
+        {players.isLoading ? (
+          <Leaderboard.Gap message="Loading players..." />
+        ) : (
+          playerSlice?.map((player, index) => (
+            <Leaderboard.Item
+              nickname={
+                usernameCache[region][player.id] ??
+                `Loading player ${player.id}...`
+              }
+              position={page * rowsPerPage + index + 1}
+              score={player.score}
+              clan={clanCache[region][player.id]}
+              key={player.id}
+            />
+          ))
+        )}
       </Leaderboard.Root>
 
-      {players.isLoading && <Text>Loading...</Text>}
+      <Flex justify="center" gap="2">
+        <Button variant="soft" onClick={previousPage}>
+          <CaretLeftIcon />
+        </Button>
+        <PageTurner />
+        <Button variant="soft" onClick={nextPage}>
+          <CaretRightIcon />
+        </Button>
+      </Flex>
     </PageWrapper>
   );
 }
