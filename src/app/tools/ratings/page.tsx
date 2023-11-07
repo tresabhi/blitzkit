@@ -95,7 +95,7 @@ export default function Page() {
       if (trimmedSearch) {
         const encodedSearch = encodeURIComponent(trimmedSearch);
         const accountList = await fetchBlitz<AccountList>(
-          `https://api.wotblitz.com/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=100`,
+          `https://api.wotblitz.${region}/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=100`,
         );
 
         setSearchResults(
