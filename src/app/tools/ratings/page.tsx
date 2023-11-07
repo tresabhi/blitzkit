@@ -5,19 +5,29 @@ import {
   CaretRightIcon,
   MagnifyingGlassIcon,
 } from '@radix-ui/react-icons';
-import { Button, Flex, Popover, Select, TextField } from '@radix-ui/themes';
+import {
+  Button,
+  Dialog,
+  Flex,
+  Popover,
+  Select,
+  TextField,
+} from '@radix-ui/themes';
 import { produce } from 'immer';
-import { range } from 'lodash';
-import { useEffect, useRef, useState } from 'react';
+import { debounce, range } from 'lodash';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
 import { create } from 'zustand';
 import * as Leaderboard from '../../../components/Leaderboard';
 import PageWrapper from '../../../components/PageWrapper';
 import { FIRST_ARCHIVED_RATINGS_SEASON } from '../../../constants/ratings';
 import { REGIONS, REGION_NAMES, Region } from '../../../constants/regions';
+import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
+import fetchBlitz from '../../../core/blitz/fetchBlitz';
 import { getAccountInfo } from '../../../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../../../core/blitz/getRatingsInfo';
+import { AccountList } from '../../../core/blitz/searchPlayersAcrossRegions';
 import getArchivedRatingsInfoAPI from '../../../core/blitzkrieg/getArchivedRatingsInfoAPI';
 import { getArchivedRatingsLeaderboardAPI } from '../../../core/blitzkrieg/getArchivedRatingsLeaderboardAPI';
 import { numberFetcher } from '../../../core/blitzkrieg/numberFetcher';
@@ -66,6 +76,9 @@ export default function Page() {
     }
   });
   const [page, setPage] = useState(0);
+  const [highlightedPlayerId, setHighlightedPlayerId] = useState<number | null>(
+    null,
+  );
   const playerSlice = players.data?.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage,
@@ -75,6 +88,34 @@ export default function Page() {
     setPage((page) =>
       Math.min(page + 1, Math.floor((players.data?.length ?? 0) / rowsPerPage)),
     );
+  const [searchResults, setSearchResults] = useState<AccountList | undefined>(
+    undefined,
+  );
+  const handleSearchPlayerChange = debounce(
+    async (event: ChangeEvent<HTMLInputElement>) => {
+      const trimmedSearch = event.target.value.trim();
+
+      if (trimmedSearch) {
+        const encodedSearch = encodeURIComponent(trimmedSearch);
+        const accountList = await fetchBlitz<AccountList>(
+          `https://api.wotblitz.com/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=100`,
+        );
+
+        setSearchResults(
+          accountList.filter(
+            (searchedPlayer) =>
+              players.data?.some(
+                (leaderboardPlayer) =>
+                  leaderboardPlayer.id === searchedPlayer.account_id,
+              ),
+          ),
+        );
+      } else {
+        setSearchResults(undefined);
+      }
+    },
+    500,
+  );
 
   cachePage(page - 1);
   cachePage(page);
@@ -156,7 +197,7 @@ export default function Page() {
   }
 
   return (
-    <PageWrapper color="tomato">
+    <PageWrapper color="orange">
       <Flex gap="2">
         <Select.Root
           defaultValue={region}
@@ -234,42 +275,67 @@ export default function Page() {
                   <Popover.Close>
                     <Button color="red">Cancel</Button>
                   </Popover.Close>
-
-                  <Popover.Close>
-                    <Button>Jump</Button>
-                  </Popover.Close>
                 </Flex>
               </Flex>
             </Popover.Content>
           </Popover.Root>
 
-          <Popover.Root>
-            <Popover.Trigger>
+          <Dialog.Root>
+            <Dialog.Trigger>
               <Button variant="soft">Jump to player</Button>
-            </Popover.Trigger>
+            </Dialog.Trigger>
 
-            <Popover.Content>
-              <Flex gap="2" direction="column">
+            <Dialog.Content>
+              <Flex gap="4" direction="column">
                 <TextField.Root>
                   <TextField.Slot>
                     <MagnifyingGlassIcon height="16" width="16" />
                   </TextField.Slot>
 
-                  <TextField.Input placeholder="Search for player..." />
+                  <TextField.Input
+                    onChange={handleSearchPlayerChange}
+                    placeholder="Search for player..."
+                  />
                 </TextField.Root>
 
-                <Flex gap="2">
-                  <Popover.Close>
-                    <Button color="red">Cancel</Button>
-                  </Popover.Close>
+                <Flex direction="column" gap="2">
+                  {searchResults?.map((player) => (
+                    <Dialog.Close>
+                      <Button
+                        key={player.account_id}
+                        variant="ghost"
+                        onClick={() => {
+                          const playerIndex = players.data?.findIndex(
+                            (playerData) => playerData.id === player.account_id,
+                          );
+                          const playerPage = Math.floor(
+                            playerIndex! / rowsPerPage,
+                          );
 
-                  <Popover.Close>
-                    <Button>Jump</Button>
-                  </Popover.Close>
+                          setPage(playerPage);
+                          setHighlightedPlayerId(player.account_id);
+                        }}
+                      >
+                        {player.nickname}
+                      </Button>
+                    </Dialog.Close>
+                  ))}
+
+                  {searchResults?.length === 0 && (
+                    <Button disabled variant="ghost">
+                      No players found in leaderboard
+                    </Button>
+                  )}
+                </Flex>
+
+                <Flex gap="2">
+                  <Dialog.Close>
+                    <Button color="red">Cancel</Button>
+                  </Dialog.Close>
                 </Flex>
               </Flex>
-            </Popover.Content>
-          </Popover.Root>
+            </Dialog.Content>
+          </Dialog.Root>
         </Flex>
 
         <Select.Root
@@ -312,6 +378,7 @@ export default function Page() {
               score={player.score}
               clan={clanCache[region][player.id]}
               key={player.id}
+              highlight={highlightedPlayerId === player.id}
             />
           ))
         )}
