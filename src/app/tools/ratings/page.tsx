@@ -7,7 +7,7 @@ import {
 } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, Select, TextField } from '@radix-ui/themes';
 import { produce } from 'immer';
-import { debounce, range } from 'lodash';
+import { debounce, findLastIndex, range } from 'lodash';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
 import { create } from 'zustand';
@@ -80,6 +80,7 @@ export default function Page() {
     page * rowsPerPage + rowsPerPage,
   );
   const positionInput = useRef<HTMLInputElement>(null);
+  const scoreInput = useRef<HTMLInputElement>(null);
   const previousPage = () => setPage((page) => Math.max(page - 1, 0));
   const nextPage = () =>
     setPage((page) =>
@@ -154,6 +155,8 @@ export default function Page() {
     }
   }
   const handleJumpToPosition = () => {
+    if (!players.data) return;
+
     const rawPosition = positionInput.current!.valueAsNumber - 1;
     const position = Math.max(
       0,
@@ -166,6 +169,22 @@ export default function Page() {
     }
   };
   const [jumpToPositionOpen, setJumpToPositionOpen] = useState(false);
+  const handleJumpToScore = () => {
+    if (!players.data) return;
+
+    const playerIndex = findLastIndex(players.data, (player) => {
+      return player.score >= scoreInput.current!.valueAsNumber;
+    });
+
+    if (playerIndex === -1) return;
+
+    setPage(Math.floor(playerIndex / rowsPerPage));
+
+    if (players.data) {
+      setHighlightedPlayerId(players.data[playerIndex].id);
+    }
+  };
+  const [jumpToScoreOpen, setJumpToScoreOpen] = useState(false);
 
   useEffect(() => {
     setPage(0);
@@ -180,37 +199,6 @@ export default function Page() {
 
     return (
       <Flex justify="center" wrap="wrap" gap="2">
-        <Button variant="soft" onClick={previousPage}>
-          <CaretLeftIcon />
-        </Button>
-        <TextField.Root className={noArrows}>
-          <TextField.Slot>Page</TextField.Slot>
-          <TextField.Input
-            className={noArrows}
-            type="number"
-            ref={pageInput}
-            style={{ width: 64, textAlign: 'center' }}
-            onBlur={(event) => {
-              setPage(
-                Math.max(
-                  0,
-                  Math.min(
-                    Math.floor((players.data?.length ?? 0) / rowsPerPage),
-                    event.target.valueAsNumber - 1,
-                  ),
-                ),
-              );
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                (event.target as HTMLInputElement).blur();
-              }
-            }}
-          />
-          <TextField.Slot>
-            out of {Math.ceil((players.data?.length ?? 0) / rowsPerPage)}
-          </TextField.Slot>
-        </TextField.Root>
         <Select.Root
           onValueChange={(value) => setRowsPerPage(parseInt(value))}
           defaultValue={`${rowsPerPage}`}
@@ -225,9 +213,43 @@ export default function Page() {
             ))}
           </Select.Content>
         </Select.Root>
-        <Button variant="soft" onClick={nextPage}>
-          <CaretRightIcon />
-        </Button>
+
+        <Flex gap="2">
+          <Button variant="soft" onClick={previousPage}>
+            <CaretLeftIcon />
+          </Button>
+          <TextField.Root className={noArrows}>
+            <TextField.Slot>Page</TextField.Slot>
+            <TextField.Input
+              className={noArrows}
+              type="number"
+              ref={pageInput}
+              style={{ width: 64, textAlign: 'center' }}
+              onBlur={(event) => {
+                setPage(
+                  Math.max(
+                    0,
+                    Math.min(
+                      Math.floor((players.data?.length ?? 0) / rowsPerPage),
+                      event.target.valueAsNumber - 1,
+                    ),
+                  ),
+                );
+              }}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  (event.target as HTMLInputElement).blur();
+                }
+              }}
+            />
+            <TextField.Slot>
+              out of {Math.ceil((players.data?.length ?? 0) / rowsPerPage)}
+            </TextField.Slot>
+          </TextField.Root>
+          <Button variant="soft" onClick={nextPage}>
+            <CaretRightIcon />
+          </Button>
+        </Flex>
       </Flex>
     );
   }
@@ -282,13 +304,45 @@ export default function Page() {
         </Select.Root>
       </Flex>
 
-      <Flex gap="2" justify="center">
+      <Flex gap="2" justify="center" wrap="wrap">
+        <Dialog.Root open={jumpToScoreOpen} onOpenChange={setJumpToScoreOpen}>
+          <Dialog.Trigger>
+            <Button variant="soft">Jump to score</Button>
+          </Dialog.Trigger>
+
+          <Dialog.Content>
+            <Flex gap="4" justify="center">
+              <TextField.Input
+                ref={scoreInput}
+                onChange={handleSearchPlayerChange}
+                type="number"
+                placeholder="Type a score..."
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    handleJumpToScore();
+                    setJumpToScoreOpen(false);
+                  }
+                }}
+              />
+
+              <Flex gap="2">
+                <Dialog.Close>
+                  <Button color="red">Cancel</Button>
+                </Dialog.Close>
+                <Dialog.Close>
+                  <Button onClick={handleJumpToScore}>Jump</Button>
+                </Dialog.Close>
+              </Flex>
+            </Flex>
+          </Dialog.Content>
+        </Dialog.Root>
+
         <Dialog.Root
           open={jumpToPositionOpen}
           onOpenChange={setJumpToPositionOpen}
         >
           <Dialog.Trigger>
-            <Button variant="soft">Jump to position...</Button>
+            <Button variant="soft">Jump to position</Button>
           </Dialog.Trigger>
 
           <Dialog.Content>
@@ -320,7 +374,7 @@ export default function Page() {
 
         <Dialog.Root>
           <Dialog.Trigger>
-            <Button variant="soft">Jump to league...</Button>
+            <Button variant="soft">Jump to league</Button>
           </Dialog.Trigger>
 
           <Dialog.Content>
@@ -373,7 +427,7 @@ export default function Page() {
 
         <Dialog.Root>
           <Dialog.Trigger>
-            <Button variant="soft">Jump to player...</Button>
+            <Button variant="soft">Jump to player</Button>
           </Dialog.Trigger>
 
           <Dialog.Content>
