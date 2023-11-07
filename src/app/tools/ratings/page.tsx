@@ -29,7 +29,9 @@ import { noArrows } from './page.css';
 
 const ROWS_OPTIONS = [5, 10, 25, 50, 100];
 
-const useUsernameCache = create<Record<Region, Record<number, string>>>(() => ({
+type UsernameCache = Record<Region, Record<number, string | null>>;
+
+const useUsernameCache = create<UsernameCache>(() => ({
   asia: {},
   com: {},
   eu: {},
@@ -124,10 +126,14 @@ export default function Page() {
 
     if (ids && ids.length > 0) {
       getAccountInfo(region, ids).then((data) => {
-        data.map((player) => {
+        data.map((player, index) => {
           useUsernameCache.setState(
-            produce((draft) => {
-              draft[region][player.account_id] = player.nickname;
+            produce((draft: UsernameCache) => {
+              if (player) {
+                draft[region][ids[index]] = player.nickname;
+              } else {
+                draft[region][ids[index]] = null;
+              }
             }),
           );
         });
@@ -432,8 +438,11 @@ export default function Page() {
           playerSlice?.map((player, index) => (
             <Leaderboard.Item
               nickname={
-                usernameCache[region][player.id] ??
-                `Loading player ${player.id}...`
+                usernameCache[region][player.id] === null
+                  ? `Deleted player ${player.id}`
+                  : usernameCache[region][player.id]
+                  ? usernameCache[region][player.id]!
+                  : `Loading player ${player.id}...`
               }
               position={page * rowsPerPage + index + 1}
               score={player.score}

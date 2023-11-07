@@ -1,7 +1,8 @@
+import { ComponentProps } from 'react';
 import { RatingsReward } from '../../../commands/ratings';
 import { theme } from '../../../stitches.config';
 
-export interface ItemProps {
+export interface ItemProps extends ComponentProps<'div'> {
   position: number;
   deltaPosition?: number;
   score: number;
@@ -25,9 +26,11 @@ export function Item({
   nickname,
   clan,
   highlight,
+  ...props
 }: ItemProps) {
   return (
     <div
+      {...props}
       style={{
         display: 'flex',
         padding: 8,
