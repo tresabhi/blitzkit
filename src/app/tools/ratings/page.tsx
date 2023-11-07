@@ -5,14 +5,7 @@ import {
   CaretRightIcon,
   MagnifyingGlassIcon,
 } from '@radix-ui/react-icons';
-import {
-  Button,
-  Dialog,
-  Flex,
-  Popover,
-  Select,
-  TextField,
-} from '@radix-ui/themes';
+import { Button, Dialog, Flex, Select, TextField } from '@radix-ui/themes';
 import { produce } from 'immer';
 import { debounce, range } from 'lodash';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
@@ -20,6 +13,7 @@ import useSWR from 'swr';
 import { create } from 'zustand';
 import * as Leaderboard from '../../../components/Leaderboard';
 import PageWrapper from '../../../components/PageWrapper';
+import { LEAGUES } from '../../../constants/leagues';
 import { FIRST_ARCHIVED_RATINGS_SEASON } from '../../../constants/ratings';
 import { REGIONS, REGION_NAMES, Region } from '../../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
@@ -318,12 +312,12 @@ export default function Page() {
           </Dialog.Content>
         </Dialog.Root>
 
-        <Popover.Root>
-          <Popover.Trigger>
+        <Dialog.Root>
+          <Dialog.Trigger>
             <Button variant="soft">Jump to league...</Button>
-          </Popover.Trigger>
+          </Dialog.Trigger>
 
-          <Popover.Content>
+          <Dialog.Content>
             <Flex direction="column" gap="2">
               <Select.Root
                 value={`${jumpToLeague}`}
@@ -342,13 +336,34 @@ export default function Page() {
               </Select.Root>
 
               <Flex gap="2">
-                <Popover.Close>
+                <Dialog.Close>
                   <Button color="red">Cancel</Button>
-                </Popover.Close>
+                </Dialog.Close>
+                <Dialog.Close>
+                  <Button
+                    onClick={() => {
+                      if (!ratingsInfo || ratingsInfo.detail || !players.data)
+                        return;
+
+                      const minScore =
+                        LEAGUES[jumpToLeague - 1]?.minScore ?? Infinity;
+                      const firstPlayerIndex = players.data.findIndex(
+                        (player) => player.score < minScore,
+                      );
+
+                      if (firstPlayerIndex === -1) return;
+
+                      setPage(Math.floor(firstPlayerIndex / rowsPerPage));
+                      setHighlightedPlayerId(players.data[firstPlayerIndex].id);
+                    }}
+                  >
+                    Jump
+                  </Button>
+                </Dialog.Close>
               </Flex>
             </Flex>
-          </Popover.Content>
-        </Popover.Root>
+          </Dialog.Content>
+        </Dialog.Root>
 
         <Dialog.Root>
           <Dialog.Trigger>

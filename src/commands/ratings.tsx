@@ -9,6 +9,7 @@ import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderbo
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
+import { LEAGUES } from '../constants/leagues';
 import { FIRST_ARCHIVED_RATINGS_SEASON } from '../constants/ratings';
 import { REGION_NAMES_SHORT, Region } from '../constants/regions';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
@@ -113,14 +114,6 @@ export type RatingsInfo =
 export interface RatingsNeighbors {
   neighbors: RatingsPlayer[];
 }
-
-const LEAGUES = [
-  { name: 'Diamond', minScore: 5000 },
-  { name: 'Platinum', minScore: 4000 },
-  { name: 'Gold', minScore: 3000 },
-  { name: 'Silver', minScore: 2000 },
-  { name: 'Bronze', minScore: 0 },
-];
 
 function addSubcommands(
   option: SlashCommandSubcommandGroupBuilder,
