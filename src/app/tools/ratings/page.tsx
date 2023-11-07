@@ -83,6 +83,7 @@ export default function Page() {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage,
   );
+  const positionInput = useRef<HTMLInputElement>(null);
   const previousPage = () => setPage((page) => Math.max(page - 1, 0));
   const nextPage = () =>
     setPage((page) =>
@@ -152,6 +153,19 @@ export default function Page() {
       });
     }
   }
+  const handleJumpToPosition = () => {
+    const rawPosition = positionInput.current!.valueAsNumber - 1;
+    const position = Math.max(
+      0,
+      Math.min(rawPosition, (players.data?.length ?? 0) - 1),
+    );
+    setPage(Math.floor(position / rowsPerPage));
+
+    if (players.data) {
+      setHighlightedPlayerId(players.data[position].id);
+    }
+  };
+  const [jumpToPositionOpen, setJumpToPositionOpen] = useState(false);
 
   useEffect(() => {
     setPage(0);
@@ -246,98 +260,11 @@ export default function Page() {
         </Select.Root>
       </Flex>
 
-      <Flex justify="between" wrap="wrap" gap="2">
-        <Flex gap="2">
-          <Popover.Root>
-            <Popover.Trigger>
-              <Button variant="soft">Jump to league</Button>
-            </Popover.Trigger>
-
-            <Popover.Content>
-              <Flex direction="column" gap="2">
-                <Select.Root
-                  value={`${jumpToLeague}`}
-                  onValueChange={(value) => setJumpToLeague(parseInt(value))}
-                >
-                  <Select.Trigger />
-
-                  <Select.Content>
-                    {ratingsInfo?.detail === undefined &&
-                      ratingsInfo?.leagues.map(({ index, title }) => (
-                        <Select.Item key={index} value={`${index}`}>
-                          {title}
-                        </Select.Item>
-                      ))}
-                  </Select.Content>
-                </Select.Root>
-
-                <Flex gap="2">
-                  <Popover.Close>
-                    <Button color="red">Cancel</Button>
-                  </Popover.Close>
-                </Flex>
-              </Flex>
-            </Popover.Content>
-          </Popover.Root>
-
-          <Dialog.Root>
-            <Dialog.Trigger>
-              <Button variant="soft">Jump to player</Button>
-            </Dialog.Trigger>
-
-            <Dialog.Content>
-              <Flex gap="4" direction="column">
-                <TextField.Root>
-                  <TextField.Slot>
-                    <MagnifyingGlassIcon height="16" width="16" />
-                  </TextField.Slot>
-
-                  <TextField.Input
-                    onChange={handleSearchPlayerChange}
-                    placeholder="Search for player..."
-                  />
-                </TextField.Root>
-
-                <Flex direction="column" gap="2">
-                  {searchResults?.map((player) => (
-                    <Dialog.Close>
-                      <Button
-                        key={player.account_id}
-                        variant="ghost"
-                        onClick={() => {
-                          const playerIndex = players.data?.findIndex(
-                            (playerData) => playerData.id === player.account_id,
-                          );
-                          const playerPage = Math.floor(
-                            playerIndex! / rowsPerPage,
-                          );
-
-                          setPage(playerPage);
-                          setHighlightedPlayerId(player.account_id);
-                        }}
-                      >
-                        {player.nickname}
-                      </Button>
-                    </Dialog.Close>
-                  ))}
-
-                  {searchResults?.length === 0 && (
-                    <Button disabled variant="ghost">
-                      No players found in leaderboard
-                    </Button>
-                  )}
-                </Flex>
-
-                <Flex gap="2">
-                  <Dialog.Close>
-                    <Button color="red">Cancel</Button>
-                  </Dialog.Close>
-                </Flex>
-              </Flex>
-            </Dialog.Content>
-          </Dialog.Root>
-        </Flex>
-
+      <Flex justify="center" wrap="wrap" gap="2">
+        <Button variant="soft" onClick={previousPage}>
+          <CaretLeftIcon />
+        </Button>
+        <PageTurner />
         <Select.Root
           onValueChange={(value) => setRowsPerPage(parseInt(value))}
           defaultValue={`${rowsPerPage}`}
@@ -352,16 +279,135 @@ export default function Page() {
             ))}
           </Select.Content>
         </Select.Root>
+        <Button variant="soft" onClick={nextPage}>
+          <CaretRightIcon />
+        </Button>
+      </Flex>
 
-        <Flex gap="2" align="center">
-          <Button variant="soft" onClick={previousPage}>
-            <CaretLeftIcon />
-          </Button>
-          <PageTurner />
-          <Button variant="soft" onClick={nextPage}>
-            <CaretRightIcon />
-          </Button>
-        </Flex>
+      <Flex gap="2" justify="center">
+        <Dialog.Root
+          open={jumpToPositionOpen}
+          onOpenChange={setJumpToPositionOpen}
+        >
+          <Dialog.Trigger>
+            <Button variant="soft">Jump to position...</Button>
+          </Dialog.Trigger>
+
+          <Dialog.Content>
+            <Flex gap="4" justify="center">
+              <TextField.Input
+                ref={positionInput}
+                onChange={handleSearchPlayerChange}
+                type="number"
+                placeholder="Type a position..."
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    handleJumpToPosition();
+                    setJumpToPositionOpen(false);
+                  }
+                }}
+              />
+
+              <Flex gap="2">
+                <Dialog.Close>
+                  <Button color="red">Cancel</Button>
+                </Dialog.Close>
+                <Dialog.Close>
+                  <Button onClick={handleJumpToPosition}>Jump</Button>
+                </Dialog.Close>
+              </Flex>
+            </Flex>
+          </Dialog.Content>
+        </Dialog.Root>
+
+        <Popover.Root>
+          <Popover.Trigger>
+            <Button variant="soft">Jump to league...</Button>
+          </Popover.Trigger>
+
+          <Popover.Content>
+            <Flex direction="column" gap="2">
+              <Select.Root
+                value={`${jumpToLeague}`}
+                onValueChange={(value) => setJumpToLeague(parseInt(value))}
+              >
+                <Select.Trigger />
+
+                <Select.Content>
+                  {ratingsInfo?.detail === undefined &&
+                    ratingsInfo?.leagues.map(({ index, title }) => (
+                      <Select.Item key={index} value={`${index}`}>
+                        {title}
+                      </Select.Item>
+                    ))}
+                </Select.Content>
+              </Select.Root>
+
+              <Flex gap="2">
+                <Popover.Close>
+                  <Button color="red">Cancel</Button>
+                </Popover.Close>
+              </Flex>
+            </Flex>
+          </Popover.Content>
+        </Popover.Root>
+
+        <Dialog.Root>
+          <Dialog.Trigger>
+            <Button variant="soft">Jump to player...</Button>
+          </Dialog.Trigger>
+
+          <Dialog.Content>
+            <Flex gap="4" direction="column">
+              <TextField.Root>
+                <TextField.Slot>
+                  <MagnifyingGlassIcon height="16" width="16" />
+                </TextField.Slot>
+
+                <TextField.Input
+                  onChange={handleSearchPlayerChange}
+                  placeholder="Search for player..."
+                />
+              </TextField.Root>
+
+              <Flex direction="column" gap="2">
+                {searchResults?.map((player) => (
+                  <Dialog.Close>
+                    <Button
+                      key={player.account_id}
+                      variant="ghost"
+                      onClick={() => {
+                        const playerIndex = players.data?.findIndex(
+                          (playerData) => playerData.id === player.account_id,
+                        );
+                        const playerPage = Math.floor(
+                          playerIndex! / rowsPerPage,
+                        );
+
+                        setPage(playerPage);
+                        setHighlightedPlayerId(player.account_id);
+                      }}
+                    >
+                      {player.nickname}
+                    </Button>
+                  </Dialog.Close>
+                ))}
+
+                {searchResults?.length === 0 && (
+                  <Button disabled variant="ghost">
+                    No players found in leaderboard
+                  </Button>
+                )}
+              </Flex>
+
+              <Flex gap="2">
+                <Dialog.Close>
+                  <Button color="red">Cancel</Button>
+                </Dialog.Close>
+              </Flex>
+            </Flex>
+          </Dialog.Content>
+        </Dialog.Root>
       </Flex>
 
       <Leaderboard.Root>
