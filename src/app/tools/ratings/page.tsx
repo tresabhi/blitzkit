@@ -1,5 +1,6 @@
 'use client';
 
+import { blackA, orangeDark } from '@radix-ui/colors';
 import {
   CaretLeftIcon,
   CaretRightIcon,
@@ -19,6 +20,7 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
 import { create } from 'zustand';
 import { BlitzkriegRatingsLeaderboardEntry } from '../../../../scripts/buildRatingsLeaderboard';
+import { RatingsPlayer } from '../../../commands/ratings';
 import * as Leaderboard from '../../../components/Leaderboard';
 import PageWrapper from '../../../components/PageWrapper';
 import { LEAGUES } from '../../../constants/leagues';
@@ -43,6 +45,7 @@ import { withCORSProxy } from '../../../core/blitzkrieg/withCORSProxy';
 import { noArrows } from './page.css';
 
 const ROWS_OPTIONS = [5, 10, 15, 25, 30];
+const SEEDING_SIZE = 2 ** 7;
 
 type UsernameCache = Record<Region, Record<number, string | null>>;
 type ClanCache = Record<Region, Record<number, string | undefined>>;
@@ -91,6 +94,9 @@ export default function Page() {
   const [searchResults, setSearchResults] = useState<
     (AccountListItem & { number: number })[] | undefined
   >(undefined);
+  const [loadingProgress, setLoadingProgress] = useState<
+    [number, number] | null
+  >(null);
 
   useEffect(() => {
     // league caching
@@ -193,6 +199,8 @@ export default function Page() {
         });
       }),
     );
+
+    return neighbors;
   }
 
   useEffect(() => {
@@ -245,15 +253,85 @@ export default function Page() {
     }
   }, [page]);
 
-  const handleJumpToPosition = () => {
+  const handleJumpToPosition = async () => {
     if (!players || !ratingsInfo || ratingsInfo?.detail) return;
 
     const rawPosition = positionInput.current!.valueAsNumber - 1;
-    const position = Math.max(0, Math.min(rawPosition, ratingsInfo.count - 1));
-    setPage(Math.floor(position / rowsPerPage));
+    const targetPosition = Math.max(
+      0,
+      Math.min(rawPosition, ratingsInfo.count - 1),
+    );
 
-    if (players) {
-      setHighlightedPlayerId(players[position].id);
+    if (season === null) {
+      const playerEntries = Object.entries(players);
+      let closest: BlitzkriegRatingsLeaderboardEntry | null = null;
+      let closestPosition: number | null = null;
+      let closestPositionDistance = Infinity;
+
+      playerEntries.forEach(([positionAsString, player]) => {
+        const position = parseInt(positionAsString);
+        const distance = Math.abs(position - targetPosition);
+
+        if (distance < closestPositionDistance) {
+          closestPositionDistance = distance;
+          closestPosition = position;
+          closest = player;
+        }
+      });
+
+      if (closest === null || closestPosition === null) return;
+
+      if (closestPositionDistance === 0) {
+        setHighlightedPlayerId(
+          (closest as BlitzkriegRatingsLeaderboardEntry).id,
+        );
+        setPage(Math.floor(targetPosition / rowsPerPage));
+
+        return;
+      }
+
+      // 1 going down and -1 going up
+      const loadingDirection = Math.sign(targetPosition - closestPosition);
+      let seedingPlayer = (closest as BlitzkriegRatingsLeaderboardEntry).id;
+      let targetPositionAcquired = false;
+      let neighbors: RatingsPlayer[];
+
+      setLoadingProgress([0, closestPositionDistance]);
+
+      while (!targetPositionAcquired) {
+        console.log('starting');
+        neighbors = await cacheNeighbors(seedingPlayer, SEEDING_SIZE);
+        console.log('done');
+        seedingPlayer = neighbors.at(loadingDirection === -1 ? 0 : -1)!.spa_id;
+
+        if (loadingDirection === 1) {
+          targetPositionAcquired =
+            targetPosition <= neighbors.at(-1)!.number - 1;
+          setLoadingProgress([
+            Math.abs(neighbors.at(-1)!.number - 1 - closestPosition),
+            closestPositionDistance,
+          ]);
+        } else {
+          targetPositionAcquired = targetPosition >= neighbors[0].number - 1;
+          setLoadingProgress([
+            Math.abs(neighbors[0].number - 1 - closestPosition),
+            closestPositionDistance,
+          ]);
+        }
+      }
+
+      setLoadingProgress(null);
+      setPage(Math.floor(targetPosition / rowsPerPage));
+      setHighlightedPlayerId(
+        neighbors!.find((neighbor) => neighbor.number - 1 === targetPosition)!
+          .spa_id,
+      );
+    } else {
+      setPage(Math.floor(targetPosition / rowsPerPage));
+
+      if (players) {
+        setHighlightedPlayerId(players[targetPosition].id);
+      }
     }
   };
   const [jumpToPositionOpen, setJumpToPositionOpen] = useState(false);
@@ -804,6 +882,50 @@ export default function Page() {
       </Leaderboard.Root>
 
       <PageTurner />
+
+      {loadingProgress !== null && (
+        <Flex
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: blackA.blackA10,
+            zIndex: 2,
+          }}
+          gap="4"
+          justify="center"
+          align="center"
+          direction="column"
+        >
+          <Text>
+            Loading {loadingProgress[0]} of {loadingProgress[1]} players...
+          </Text>
+
+          <div
+            style={{
+              height: 16,
+              width: '100%',
+              maxWidth: 256,
+              borderRadius: 8,
+              backgroundColor: orangeDark.orange2,
+            }}
+          >
+            <div
+              style={{
+                height: '100%',
+                transitionDuration: '200ms',
+                width: `${Math.round(
+                  (loadingProgress[0] / loadingProgress[1]) * 100,
+                )}%`,
+                backgroundColor: orangeDark.orange9,
+                borderRadius: 8,
+              }}
+            />
+          </div>
+        </Flex>
+      )}
     </PageWrapper>
   );
 }
