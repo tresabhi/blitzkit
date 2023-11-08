@@ -30,14 +30,14 @@ import { getAccountInfo } from '../../../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../../../core/blitz/getRatingsInfo';
 import { getRatingsLeague } from '../../../core/blitz/getRatingsLeague';
+import { getRatingsNeighbors } from '../../../core/blitz/getRatingsNeighbors';
 import { AccountList } from '../../../core/blitz/searchPlayersAcrossRegions';
 import { getArchivedLatestSeasonNumber } from '../../../core/blitzkrieg/getArchivedLatestSeasonNumber';
 import getArchivedRatingsInfo from '../../../core/blitzkrieg/getArchivedRatingsInfo';
 import { getArchivedRatingsLeaderboard } from '../../../core/blitzkrieg/getArchivedRatingsLeaderboard';
 import { noArrows } from './page.css';
 
-const ROWS_OPTIONS_ARCHIVED = [5, 10, 15, 25, 30, 50, 100];
-const ROWS_OPTIONS_CURRENT = [5, 10, 15, 25, 30];
+const ROWS_OPTIONS = [5, 10, 15, 25, 30];
 
 type UsernameCache = Record<Region, Record<number, string | null>>;
 type ClanCache = Record<Region, Record<number, string | undefined>>;
@@ -72,39 +72,10 @@ export default function Page() {
     getArchivedLatestSeasonNumber.name,
     getArchivedLatestSeasonNumber,
   );
-  const players = useSWR(`ratings-players-${region}-${season}`, async () => {
-    if (season === null) {
-      const players = await getRatingsLeague(region, 0);
-      useUsernameCache.setState(
-        produce((draft: UsernameCache) => {
-          players.result.forEach((player) => {
-            draft[region][player.spa_id] = player.nickname;
-          });
-        }),
-      );
-      useClanCache.setState(
-        produce((draft: ClanCache) => {
-          players.result.forEach((player) => {
-            draft[region][player.spa_id] = player.clan_tag;
-          });
-        }),
-      );
-
-      return {
-        ...players.result.map(
-          (player) =>
-            ({
-              id: player.spa_id,
-              score: player.score,
-            }) satisfies BlitzkriegRatingsLeaderboardEntry,
-        ),
-      };
-    } else {
-      return {
-        ...(await getArchivedRatingsLeaderboard(region, season)),
-      } as Record<number, BlitzkriegRatingsLeaderboardEntry>;
-    }
-  });
+  const [players, setPlayers] = useState<null | Record<
+    number,
+    BlitzkriegRatingsLeaderboardEntry
+  >>(null);
   const [page, setPage] = useState(0);
   const [highlightedPlayerId, setHighlightedPlayerId] = useState<number | null>(
     null,
@@ -126,8 +97,7 @@ export default function Page() {
 
         setSearchResults(
           accountList.filter(
-            (searchedPlayer) =>
-              players.data && searchedPlayer.account_id in players.data,
+            (searchedPlayer) => players && searchedPlayer.account_id in players,
           ),
         );
       } else {
@@ -138,22 +108,112 @@ export default function Page() {
   );
 
   useEffect(() => {
-    // TODO: caches twice on initial load
-    cachePage(page - 1);
-    cachePage(page);
-    cachePage(page + 1);
-  }, [page, players.isLoading]);
-
-  function cachePage(page: number) {
+    // league caching
     if (season === null) {
-    } else {
-      if (players.isLoading || !ratingsInfo || ratingsInfo?.detail) return;
+      Promise.all(
+        range(0, 4).map(async (league: number) => {
+          const leaguePlayers = await getRatingsLeague(region, league);
+          useUsernameCache.setState(
+            produce((draft: UsernameCache) => {
+              leaguePlayers.result.forEach((player) => {
+                draft[region][player.spa_id] = player.nickname;
+              });
+            }),
+          );
+          useClanCache.setState(
+            produce((draft: ClanCache) => {
+              leaguePlayers.result.forEach((player) => {
+                draft[region][player.spa_id] = player.clan_tag;
+              });
+            }),
+          );
 
+          return leaguePlayers.result.reduce<
+            Record<number, BlitzkriegRatingsLeaderboardEntry>
+          >(
+            (accumulator, player) => ({
+              ...accumulator,
+
+              [player.number - 1]: {
+                id: player.spa_id,
+                score: player.score,
+              } satisfies BlitzkriegRatingsLeaderboardEntry,
+            }),
+            {},
+          );
+        }),
+      ).then((results) => {
+        const newPlayers = results.reduce<
+          Record<number, BlitzkriegRatingsLeaderboardEntry>
+        >(
+          (accumulator, result) => ({
+            ...accumulator,
+            ...result,
+          }),
+          {},
+        );
+
+        setPlayers(newPlayers);
+      });
+    } else {
+      getArchivedRatingsLeaderboard(region, season).then((result) =>
+        setPlayers({ ...result }),
+      );
+    }
+  }, []);
+  useEffect(() => {
+    // TODO: caches twice on initial load
+    if (!players || !ratingsInfo || ratingsInfo?.detail) return;
+
+    if (season === null) {
+      const middleIndex = Math.round(page * rowsPerPage + rowsPerPage / 2);
+
+      if (!(middleIndex in players)) return;
+
+      const middleId = players[middleIndex].id;
+
+      getRatingsNeighbors(region, middleId, rowsPerPage * 3).then(
+        ({ neighbors }) => {
+          setPlayers(
+            produce((draft) => {
+              draft = draft ?? {};
+
+              neighbors.forEach((neighbor) => {
+                draft![neighbor.number - 1] = {
+                  id: neighbor.spa_id,
+                  score: neighbor.score,
+                } satisfies BlitzkriegRatingsLeaderboardEntry;
+              });
+            }),
+          );
+
+          useUsernameCache.setState(
+            produce((draft: UsernameCache) => {
+              neighbors.forEach((neighbor) => {
+                if (neighbor.nickname) {
+                  draft[region][neighbor.spa_id] = neighbor.nickname;
+                }
+              });
+            }),
+          );
+
+          useClanCache.setState(
+            produce((draft: ClanCache) => {
+              neighbors.forEach((neighbor) => {
+                if (neighbor.clan_tag) {
+                  draft[region][neighbor.spa_id] = neighbor.clan_tag;
+                }
+              });
+            }),
+          );
+        },
+      );
+    } else {
       const ids = range(
-        Math.max(0, page * rowsPerPage),
-        Math.min(ratingsInfo.count - 1, page * rowsPerPage + rowsPerPage),
+        Math.max(0, (page - 1) * rowsPerPage),
+        Math.min(ratingsInfo.count - 1, (page + 1) * rowsPerPage + rowsPerPage),
       )
-        .map((index) => players.data![index].id)
+        .map((index) => players![index].id)
         .filter((id) => !(id in usernameCache[region]));
 
       if (ids && ids.length > 0) {
@@ -184,26 +244,27 @@ export default function Page() {
         });
       }
     }
-  }
+  }, [page, players]);
+
   const handleJumpToPosition = () => {
-    if (!players.data || !ratingsInfo || ratingsInfo?.detail) return;
+    if (!players || !ratingsInfo || ratingsInfo?.detail) return;
 
     const rawPosition = positionInput.current!.valueAsNumber - 1;
     const position = Math.max(0, Math.min(rawPosition, ratingsInfo.count - 1));
     setPage(Math.floor(position / rowsPerPage));
 
-    if (players.data) {
-      setHighlightedPlayerId(players.data[position].id);
+    if (players) {
+      setHighlightedPlayerId(players[position].id);
     }
   };
   const [jumpToPositionOpen, setJumpToPositionOpen] = useState(false);
   const handleJumpToScore = () => {
-    if (!players.data || !ratingsInfo || ratingsInfo?.detail) return;
+    if (!players || !ratingsInfo || ratingsInfo?.detail) return;
 
     let playerIndex = -1;
 
     for (let index = ratingsInfo.count - 1; index >= 0; index--) {
-      if (players.data[index].score >= scoreInput.current!.valueAsNumber) {
+      if (players[index].score >= scoreInput.current!.valueAsNumber) {
         playerIndex = index;
         break;
       }
@@ -213,8 +274,8 @@ export default function Page() {
 
     setPage(Math.floor(playerIndex / rowsPerPage));
 
-    if (players.data) {
-      setHighlightedPlayerId(players.data[playerIndex].id);
+    if (players) {
+      setHighlightedPlayerId(players[playerIndex].id);
     }
   };
   const [jumpToScoreOpen, setJumpToScoreOpen] = useState(false);
@@ -341,10 +402,7 @@ export default function Page() {
             <Select.Trigger />
 
             <Select.Content>
-              {(season === null
-                ? ROWS_OPTIONS_CURRENT
-                : ROWS_OPTIONS_ARCHIVED
-              ).map((size) => (
+              {ROWS_OPTIONS.map((size) => (
                 <Select.Item value={`${size}`} key={size}>
                   {size} per page
                 </Select.Item>
@@ -480,11 +538,7 @@ export default function Page() {
                               }) satisfies BlitzkriegRatingsLeaderboardEntry,
                           );
                         } else {
-                          if (
-                            !ratingsInfo ||
-                            ratingsInfo.detail ||
-                            !players.data
-                          )
+                          if (!ratingsInfo || ratingsInfo.detail || !players)
                             return;
 
                           const minScore =
@@ -496,7 +550,7 @@ export default function Page() {
                             index < ratingsInfo.count;
                             index++
                           ) {
-                            if (players.data[index].score < minScore) {
+                            if (players[index].score < minScore) {
                               firstPlayerIndex = index;
                               break;
                             }
@@ -505,9 +559,7 @@ export default function Page() {
                           if (firstPlayerIndex === -1) return;
 
                           setPage(Math.floor(firstPlayerIndex / rowsPerPage));
-                          setHighlightedPlayerId(
-                            players.data[firstPlayerIndex].id,
-                          );
+                          setHighlightedPlayerId(players[firstPlayerIndex].id);
                         }
                       }}
                     >
@@ -551,7 +603,7 @@ export default function Page() {
                             index < ratingsInfo.count;
                             index++
                           ) {
-                            if (players.data![index].id === player.account_id) {
+                            if (players![index].id === player.account_id) {
                               playerIndex = index;
                               break;
                             }
@@ -591,7 +643,7 @@ export default function Page() {
       <PageTurner />
 
       <Leaderboard.Root>
-        {players.isLoading ? (
+        {players === null ? (
           <Leaderboard.Gap message="Loading players..." />
         ) : (
           range(
@@ -603,22 +655,22 @@ export default function Page() {
           ).map((index) => (
             <Leaderboard.Item
               nickname={
-                index in players.data!
-                  ? usernameCache[region][players.data![index].id] === null
-                    ? `Deleted player ${players.data![index].id}`
-                    : usernameCache[region][players.data![index].id] ??
+                index in players!
+                  ? usernameCache[region][players![index].id] === null
+                    ? `Deleted player ${players![index].id}`
+                    : usernameCache[region][players![index].id] ??
                       'Loading player...'
                   : `Loading player...`
               }
               position={index + 1}
-              score={players.data![index]?.score ?? 0}
+              score={players![index]?.score ?? 0}
               clan={
-                players.data![index]
-                  ? clanCache[region][players.data![index].id]
+                players![index]
+                  ? clanCache[region][players![index].id]
                   : undefined
               }
               key={index}
-              highlight={highlightedPlayerId === players.data![index]?.id}
+              highlight={highlightedPlayerId === players![index]?.id}
             />
           ))
         )}
