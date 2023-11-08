@@ -6,6 +6,7 @@ import {
   RatingsNeighbors,
   RatingsPlayer,
 } from '../src/commands/ratings';
+import { patientFetch } from '../src/core/blitzkrieg/patientFetch';
 import commitMultipleFiles from './commitMultipleFiles.js';
 
 /*
@@ -18,22 +19,8 @@ import commitMultipleFiles from './commitMultipleFiles.js';
  * [region]/ratings/[season]/midnight.json: last midnight's leaderboard relative to the region
  */
 
-async function patientFetch(url: string) {
-  let patientResponse: Response;
-
-  while (patientResponse! === undefined) {
-    try {
-      patientResponse = await fetch(url);
-    } catch (error) {
-      console.warn(`Failed to fetch ${url}; retrying in 1 minute...`);
-      await new Promise((resolve) => setTimeout(resolve, 1 * 60 * 1000));
-    }
-  }
-
-  return patientResponse;
-}
-
-export type BlitzkriegRatingsLeaderboard = { id: number; score: number }[];
+export type BlitzkriegRatingsLeaderboardEntry = { id: number; score: number };
+export type BlitzkriegRatingsLeaderboard = BlitzkriegRatingsLeaderboardEntry[];
 
 const publish = argv.includes('--publish');
 const latest = argv.includes('--latest');
