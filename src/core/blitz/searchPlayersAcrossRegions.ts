@@ -2,12 +2,12 @@ import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import fetchBlitz from './fetchBlitz';
 
-interface Account {
+export interface AccountListItem {
   nickname: string;
   account_id: number;
 }
-export type AccountList = Account[];
-export type AccountListWithServer = (Account & {
+export type AccountList = AccountListItem[];
+export type AccountListWithServer = (AccountListItem & {
   region: Region;
 })[];
 

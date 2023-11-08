@@ -31,10 +31,15 @@ import { getClanAccountInfo } from '../../../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../../../core/blitz/getRatingsInfo';
 import { getRatingsLeague } from '../../../core/blitz/getRatingsLeague';
 import { getRatingsNeighbors } from '../../../core/blitz/getRatingsNeighbors';
-import { AccountList } from '../../../core/blitz/searchPlayersAcrossRegions';
+import regionToRegionSubdomain from '../../../core/blitz/regionToRegionSubdomain';
+import {
+  AccountList,
+  AccountListItem,
+} from '../../../core/blitz/searchPlayersAcrossRegions';
 import { getArchivedLatestSeasonNumber } from '../../../core/blitzkrieg/getArchivedLatestSeasonNumber';
 import getArchivedRatingsInfo from '../../../core/blitzkrieg/getArchivedRatingsInfo';
 import { getArchivedRatingsLeaderboard } from '../../../core/blitzkrieg/getArchivedRatingsLeaderboard';
+import { withCORSProxy } from '../../../core/blitzkrieg/withCORSProxy';
 import { noArrows } from './page.css';
 
 const ROWS_OPTIONS = [5, 10, 15, 25, 30];
@@ -83,30 +88,9 @@ export default function Page() {
   );
   const positionInput = useRef<HTMLInputElement>(null);
   const scoreInput = useRef<HTMLInputElement>(null);
-  const [searchResults, setSearchResults] = useState<AccountList | undefined>(
-    undefined,
-  );
-  const handleSearchPlayerChange = debounce(
-    async (event: ChangeEvent<HTMLInputElement>) => {
-      const trimmedSearch = event.target.value.trim();
-
-      if (trimmedSearch) {
-        const encodedSearch = encodeURIComponent(trimmedSearch);
-        const accountList = await fetchBlitz<AccountList>(
-          `https://api.wotblitz.${region}/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=100`,
-        );
-
-        setSearchResults(
-          accountList.filter(
-            (searchedPlayer) => players && searchedPlayer.account_id in players,
-          ),
-        );
-      } else {
-        setSearchResults(undefined);
-      }
-    },
-    500,
-  );
+  const [searchResults, setSearchResults] = useState<
+    (AccountListItem & { number: number })[] | undefined
+  >(undefined);
 
   useEffect(() => {
     // league caching
@@ -167,6 +151,12 @@ export default function Page() {
       );
     }
   }, []);
+
+  useEffect(() => {
+    if (players !== null && 0 in players) {
+      cacheNeighbors(players[0].id, rowsPerPage * 3);
+    }
+  }, [players !== null && 0 in players]);
 
   async function cacheNeighbors(id: number, size: number) {
     const { neighbors } = await getRatingsNeighbors(region, id, size);
@@ -292,6 +282,7 @@ export default function Page() {
     (ratingsInfo && ratingsInfo.detail === undefined ? ratingsInfo?.count : 1) /
       rowsPerPage,
   );
+  const [searchLoading, setSearchLoading] = useState(false);
 
   useEffect(() => {
     setPage(0);
@@ -431,7 +422,6 @@ export default function Page() {
               <Flex gap="4" justify="center">
                 <TextField.Input
                   ref={scoreInput}
-                  onChange={handleSearchPlayerChange}
                   type="number"
                   placeholder="Type a score..."
                   onKeyDown={(event) => {
@@ -465,7 +455,6 @@ export default function Page() {
               <Flex gap="4" justify="center">
                 <TextField.Input
                   ref={positionInput}
-                  onChange={handleSearchPlayerChange}
                   type="number"
                   placeholder="Type a position..."
                   onKeyDown={(event) => {
@@ -576,48 +565,193 @@ export default function Page() {
                   </TextField.Slot>
 
                   <TextField.Input
-                    onChange={handleSearchPlayerChange}
+                    onChange={debounce(
+                      async (event: ChangeEvent<HTMLInputElement>) => {
+                        const trimmedSearch = event.target.value.trim();
+                        const encodedSearch = encodeURIComponent(trimmedSearch);
+
+                        if (trimmedSearch) {
+                          if (season === null) {
+                            setSearchLoading(true);
+
+                            const response = await fetch(
+                              withCORSProxy(
+                                `https://${regionToRegionSubdomain(
+                                  region,
+                                )}.wotblitz.com/en/api/rating-leaderboards/search/?prefix=${encodedSearch}`,
+                              ),
+                            );
+                            const accountList =
+                              (await response.json()) as Record<
+                                number,
+                                {
+                                  spa_id: number;
+                                  nickname: string;
+                                  clan_tag: string;
+                                } & (
+                                  | {
+                                      skip: true;
+                                    }
+                                  | {
+                                      skip: false;
+                                      mmr: number;
+                                      season_number: number;
+                                      calibrationBattlesLeft: number;
+                                      number: number;
+                                      updated_at: string;
+                                      neighbors: [];
+                                    }
+                                )
+                              >;
+                            const values = Object.values(accountList).filter(
+                              (searchedPlayer) => !searchedPlayer.skip,
+                            );
+                            const valuesWithTypes =
+                              values as ((typeof values)[number] & {
+                                skip: false;
+                              })[];
+
+                            setPlayers(
+                              produce((draft: typeof players) => {
+                                if (draft) {
+                                  values.map((player) => {
+                                    const playerWithTypes =
+                                      player as typeof player & { skip: false };
+                                    draft[playerWithTypes.number - 1] = {
+                                      id: playerWithTypes.spa_id,
+                                      score: 0,
+                                    };
+                                  });
+                                }
+                              }),
+                            );
+                            useUsernameCache.setState(
+                              produce((draft: typeof usernameCache) => {
+                                valuesWithTypes.forEach((searchedPlayer) => {
+                                  if (searchedPlayer.nickname) {
+                                    draft[region][searchedPlayer.spa_id] =
+                                      searchedPlayer.nickname;
+                                  }
+                                });
+                              }),
+                            );
+                            useClanCache.setState(
+                              produce((draft: typeof clanCache) => {
+                                valuesWithTypes.forEach((searchedPlayer) => {
+                                  if (searchedPlayer.clan_tag) {
+                                    draft[region][searchedPlayer.spa_id] =
+                                      searchedPlayer.clan_tag;
+                                  }
+                                });
+                              }),
+                            );
+                            setSearchResults(
+                              valuesWithTypes.map((searchedPlayer) => ({
+                                account_id: searchedPlayer.spa_id,
+                                nickname: searchedPlayer.nickname,
+                                number: searchedPlayer.number,
+                              })),
+                            );
+                            setSearchLoading(false);
+                          } else {
+                            setSearchLoading(true);
+                            const accountList = await fetchBlitz<AccountList>(
+                              `https://api.wotblitz.${region}/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=100`,
+                            );
+                            const playerKeys = Object.keys(players!);
+
+                            setSearchResults(
+                              accountList
+                                .filter(
+                                  (searchedPlayer) =>
+                                    players &&
+                                    searchedPlayer.account_id in players,
+                                )
+                                .map((searchedPlayer) => ({
+                                  ...searchedPlayer,
+                                  number: parseInt(
+                                    playerKeys.find(
+                                      (index) =>
+                                        players![parseInt(index)].id ===
+                                        searchedPlayer.account_id,
+                                    )!,
+                                  ),
+                                })),
+                            );
+                            setSearchLoading(false);
+                          }
+                        } else {
+                          setSearchResults(undefined);
+                        }
+                      },
+                      500,
+                    )}
                     placeholder="Search for player..."
                   />
                 </TextField.Root>
 
                 <Flex direction="column" gap="2">
-                  {searchResults?.map((player) => (
-                    <Dialog.Close>
-                      <Button
-                        key={player.account_id}
-                        variant="ghost"
-                        onClick={() => {
-                          if (!ratingsInfo || ratingsInfo.detail) return;
-                          let playerIndex = -1;
+                  {!searchLoading &&
+                    searchResults?.map((player) => (
+                      <Dialog.Close>
+                        <Button
+                          key={player.account_id}
+                          variant="ghost"
+                          onClick={() => {
+                            if (season === null) {
+                              setPage(
+                                Math.floor((player.number - 1) / rowsPerPage),
+                              );
+                              cacheNeighbors(
+                                player.account_id,
+                                rowsPerPage * 3,
+                              );
+                              setHighlightedPlayerId(player.account_id);
+                            } else {
+                              if (!ratingsInfo || ratingsInfo.detail) return;
+                              let playerIndex = -1;
 
-                          for (
-                            let index = 0;
-                            index < ratingsInfo.count;
-                            index++
-                          ) {
-                            if (players![index].id === player.account_id) {
-                              playerIndex = index;
-                              break;
+                              for (
+                                let index = 0;
+                                index < ratingsInfo.count;
+                                index++
+                              ) {
+                                if (players![index].id === player.account_id) {
+                                  playerIndex = index;
+                                  break;
+                                }
+                              }
+
+                              const playerPage = Math.floor(
+                                playerIndex! / rowsPerPage,
+                              );
+
+                              setPage(playerPage);
+                              setHighlightedPlayerId(player.account_id);
                             }
-                          }
+                          }}
+                        >
+                          {player.nickname}
+                        </Button>
+                      </Dialog.Close>
+                    ))}
 
-                          const playerPage = Math.floor(
-                            playerIndex! / rowsPerPage,
-                          );
-
-                          setPage(playerPage);
-                          setHighlightedPlayerId(player.account_id);
-                        }}
-                      >
-                        {player.nickname}
-                      </Button>
-                    </Dialog.Close>
-                  ))}
-
-                  {searchResults?.length === 0 && (
+                  {!searchLoading && searchResults?.length === 0 && (
                     <Button disabled variant="ghost">
-                      No players found in leaderboard
+                      No players found in leaderboard (try typing in the whole
+                      name because Wargaming's search engine is finicky)
+                    </Button>
+                  )}
+
+                  {!searchLoading && searchResults === undefined && (
+                    <Button disabled variant="ghost">
+                      Type a username in the text field above
+                    </Button>
+                  )}
+
+                  {searchLoading && (
+                    <Button disabled variant="ghost">
+                      Searching...
                     </Button>
                   )}
                 </Flex>
