@@ -74,30 +74,31 @@ export default function Page() {
   );
   const players = useSWR(`ratings-players-${region}-${season}`, async () => {
     if (season === null) {
-      // const players = await getRatingsLeague(region, 0);
-      // useUsernameCache.setState(
-      //   produce((draft: UsernameCache) => {
-      //     players.result.forEach((player) => {
-      //       draft[region][player.spa_id] = player.nickname;
-      //     });
-      //   }),
-      // );
-      // useClanCache.setState(
-      //   produce((draft: ClanCache) => {
-      //     players.result.forEach((player) => {
-      //       draft[region][player.spa_id] = player.clan_tag;
-      //     });
-      //   }),
-      // );
-      // return players.result.map(
-      //   (player) =>
-      //     ({
-      //       id: player.spa_id,
-      //       score: player.score,
-      //     }) satisfies BlitzkriegRatingsLeaderboardEntry,
-      // );
+      const players = await getRatingsLeague(region, 0);
+      useUsernameCache.setState(
+        produce((draft: UsernameCache) => {
+          players.result.forEach((player) => {
+            draft[region][player.spa_id] = player.nickname;
+          });
+        }),
+      );
+      useClanCache.setState(
+        produce((draft: ClanCache) => {
+          players.result.forEach((player) => {
+            draft[region][player.spa_id] = player.clan_tag;
+          });
+        }),
+      );
 
-      return {};
+      return {
+        ...players.result.map(
+          (player) =>
+            ({
+              id: player.spa_id,
+              score: player.score,
+            }) satisfies BlitzkriegRatingsLeaderboardEntry,
+        ),
+      };
     } else {
       return {
         ...(await getArchivedRatingsLeaderboard(region, season)),
@@ -593,24 +594,33 @@ export default function Page() {
         {players.isLoading ? (
           <Leaderboard.Gap message="Loading players..." />
         ) : (
-          range(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .filter((index) => index in players.data!)
-            .map((index) => (
-              <Leaderboard.Item
-                nickname={
-                  usernameCache[region][players.data![index].id] === null
+          range(
+            page * rowsPerPage,
+            Math.min(
+              page * rowsPerPage + rowsPerPage,
+              ratingsInfo?.detail ? 0 : (ratingsInfo?.count ?? 1) - 1,
+            ),
+          ).map((index) => (
+            <Leaderboard.Item
+              nickname={
+                index in players.data!
+                  ? usernameCache[region][players.data![index].id] === null
                     ? `Deleted player ${players.data![index].id}`
-                    : usernameCache[region][players.data![index].id]
-                    ? usernameCache[region][players.data![index].id]!
-                    : `Loading player ${players.data![index].id}...`
-                }
-                position={page * rowsPerPage + index + 1}
-                score={players.data![index].score}
-                clan={clanCache[region][players.data![index].id]}
-                key={players.data![index].id}
-                highlight={highlightedPlayerId === players.data![index].id}
-              />
-            ))
+                    : usernameCache[region][players.data![index].id] ??
+                      'Loading player...'
+                  : `Loading player...`
+              }
+              position={index + 1}
+              score={players.data![index]?.score ?? 0}
+              clan={
+                players.data![index]
+                  ? clanCache[region][players.data![index].id]
+                  : undefined
+              }
+              key={index}
+              highlight={highlightedPlayerId === players.data![index]?.id}
+            />
+          ))
         )}
       </Leaderboard.Root>
 
