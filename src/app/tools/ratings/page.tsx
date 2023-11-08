@@ -58,6 +58,7 @@ export default function Page() {
   const usernameCache = useUsernameCache();
   const clanCache = useClanCache();
   const [region, setRegion] = useState<Region>('com');
+  const leaguePositionCache = useRef<Record<number, number>>({});
   // null being the latest season
   const [season, setSeason] = useState<null | number>(null);
   const { data: ratingsInfo } = useSWR(
@@ -110,39 +111,36 @@ export default function Page() {
   useEffect(() => {
     // league caching
     if (season === null) {
-      Promise.all(
-        range(0, 4).map(async (league: number) => {
-          const leaguePlayers = await getRatingsLeague(region, league);
-          useUsernameCache.setState(
-            produce((draft: UsernameCache) => {
-              leaguePlayers.result.forEach((player) => {
-                draft[region][player.spa_id] = player.nickname;
-              });
-            }),
-          );
-          useClanCache.setState(
-            produce((draft: ClanCache) => {
-              leaguePlayers.result.forEach((player) => {
-                draft[region][player.spa_id] = player.clan_tag;
-              });
-            }),
-          );
+      (async () => {
+        const newUsernameCache: Record<number, string> = {};
+        const newClanCache: Record<number, string> = {};
+        const results = await Promise.all(
+          range(0, 5).map(async (league: number) => {
+            const leaguePlayers = await getRatingsLeague(region, league);
 
-          return leaguePlayers.result.reduce<
-            Record<number, BlitzkriegRatingsLeaderboardEntry>
-          >(
-            (accumulator, player) => ({
-              ...accumulator,
+            leaguePositionCache.current[league] =
+              leaguePlayers.result[0].number - 1;
 
-              [player.number - 1]: {
-                id: player.spa_id,
-                score: player.score,
-              } satisfies BlitzkriegRatingsLeaderboardEntry,
-            }),
-            {},
-          );
-        }),
-      ).then((results) => {
+            leaguePlayers.result.forEach((player) => {
+              newUsernameCache[player.spa_id] = player.nickname;
+              newClanCache[player.spa_id] = player.clan_tag;
+            });
+
+            return leaguePlayers.result.reduce<
+              Record<number, BlitzkriegRatingsLeaderboardEntry>
+            >(
+              (accumulator, player) => ({
+                ...accumulator,
+
+                [player.number - 1]: {
+                  id: player.spa_id,
+                  score: player.score,
+                } satisfies BlitzkriegRatingsLeaderboardEntry,
+              }),
+              {},
+            );
+          }),
+        );
         const newPlayers = results.reduce<
           Record<number, BlitzkriegRatingsLeaderboardEntry>
         >(
@@ -154,13 +152,59 @@ export default function Page() {
         );
 
         setPlayers(newPlayers);
-      });
+        useUsernameCache.setState((old) => ({
+          ...old,
+          [region]: { ...old[region], ...newUsernameCache },
+        }));
+        useClanCache.setState((old) => ({
+          ...old,
+          [region]: { ...old[region], ...newClanCache },
+        }));
+      })();
     } else {
       getArchivedRatingsLeaderboard(region, season).then((result) =>
         setPlayers({ ...result }),
       );
     }
   }, []);
+
+  async function cacheNeighbors(id: number, size: number) {
+    const { neighbors } = await getRatingsNeighbors(region, id, size);
+
+    setPlayers(
+      produce((draft) => {
+        draft = draft ?? {};
+
+        neighbors.forEach((neighbor) => {
+          draft![neighbor.number - 1] = {
+            id: neighbor.spa_id,
+            score: neighbor.score,
+          } satisfies BlitzkriegRatingsLeaderboardEntry;
+        });
+      }),
+    );
+
+    useUsernameCache.setState(
+      produce((draft: UsernameCache) => {
+        neighbors.forEach((neighbor) => {
+          if (neighbor.nickname) {
+            draft[region][neighbor.spa_id] = neighbor.nickname;
+          }
+        });
+      }),
+    );
+
+    useClanCache.setState(
+      produce((draft: ClanCache) => {
+        neighbors.forEach((neighbor) => {
+          if (neighbor.clan_tag) {
+            draft[region][neighbor.spa_id] = neighbor.clan_tag;
+          }
+        });
+      }),
+    );
+  }
+
   useEffect(() => {
     // TODO: caches twice on initial load
     if (!players || !ratingsInfo || ratingsInfo?.detail) return;
@@ -172,42 +216,7 @@ export default function Page() {
 
       const middleId = players[middleIndex].id;
 
-      getRatingsNeighbors(region, middleId, rowsPerPage * 3).then(
-        ({ neighbors }) => {
-          setPlayers(
-            produce((draft) => {
-              draft = draft ?? {};
-
-              neighbors.forEach((neighbor) => {
-                draft![neighbor.number - 1] = {
-                  id: neighbor.spa_id,
-                  score: neighbor.score,
-                } satisfies BlitzkriegRatingsLeaderboardEntry;
-              });
-            }),
-          );
-
-          useUsernameCache.setState(
-            produce((draft: UsernameCache) => {
-              neighbors.forEach((neighbor) => {
-                if (neighbor.nickname) {
-                  draft[region][neighbor.spa_id] = neighbor.nickname;
-                }
-              });
-            }),
-          );
-
-          useClanCache.setState(
-            produce((draft: ClanCache) => {
-              neighbors.forEach((neighbor) => {
-                if (neighbor.clan_tag) {
-                  draft[region][neighbor.spa_id] = neighbor.clan_tag;
-                }
-              });
-            }),
-          );
-        },
-      );
+      cacheNeighbors(middleId, rowsPerPage * 3);
     } else {
       const ids = range(
         Math.max(0, (page - 1) * rowsPerPage),
@@ -244,7 +253,7 @@ export default function Page() {
         });
       }
     }
-  }, [page, players]);
+  }, [page]);
 
   const handleJumpToPosition = () => {
     if (!players || !ratingsInfo || ratingsInfo?.detail) return;
@@ -509,34 +518,18 @@ export default function Page() {
                     <Button
                       onClick={async () => {
                         if (season === null) {
-                          // that's already done
-                          const leaguePlayers = await getRatingsLeague(
-                            region,
-                            jumpToLeague,
-                          );
+                          const position =
+                            leaguePositionCache.current[jumpToLeague];
+                          const newPage = Math.floor(position / rowsPerPage);
 
-                          useUsernameCache.setState(
-                            produce((draft: UsernameCache) => {
-                              leaguePlayers.result.forEach((player) => {
-                                draft[region][player.spa_id] = player.nickname;
-                              });
-                            }),
-                          );
-                          useClanCache.setState(
-                            produce((draft: ClanCache) => {
-                              leaguePlayers.result.forEach((player) => {
-                                draft[region][player.spa_id] = player.clan_tag;
-                              });
-                            }),
-                          );
-
-                          leaguePlayers.result.map(
-                            (player) =>
-                              ({
-                                id: player.spa_id,
-                                score: player.score,
-                              }) satisfies BlitzkriegRatingsLeaderboardEntry,
-                          );
+                          setPage(newPage);
+                          if (players) {
+                            setHighlightedPlayerId(players[position].id);
+                            cacheNeighbors(
+                              players[position].id,
+                              rowsPerPage * 3,
+                            );
+                          }
                         } else {
                           if (!ratingsInfo || ratingsInfo.detail || !players)
                             return;
@@ -663,7 +656,7 @@ export default function Page() {
                   : `Loading player...`
               }
               position={index + 1}
-              score={players![index]?.score ?? 0}
+              score={players![index]?.score}
               clan={
                 players![index]
                   ? clanCache[region][players![index].id]
