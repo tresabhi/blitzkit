@@ -243,6 +243,7 @@ export default function Page() {
           <Button
             variant="soft"
             onClick={() => setPage((page) => Math.max(page - 1, 0))}
+            disabled={page === 0}
           >
             <CaretLeftIcon />
           </Button>
@@ -274,6 +275,7 @@ export default function Page() {
             onClick={() => {
               setPage((page) => Math.min(page + 1, pages - 1));
             }}
+            disabled={page === pages - 1}
           >
             <CaretRightIcon />
           </Button>
@@ -450,8 +452,6 @@ export default function Page() {
                       onClick={async () => {
                         if (season === null) {
                           // that's already done
-                          if (jumpToLeague === 0) return;
-
                           const leaguePlayers = await getRatingsLeague(
                             region,
                             jumpToLeague,
