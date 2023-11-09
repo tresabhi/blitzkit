@@ -1,11 +1,7 @@
 'use client';
 
 import { blackA, orangeDark } from '@radix-ui/colors';
-import {
-  CaretLeftIcon,
-  CaretRightIcon,
-  MagnifyingGlassIcon,
-} from '@radix-ui/react-icons';
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import {
   Button,
   Dialog,
@@ -42,13 +38,17 @@ import { getArchivedLatestSeasonNumber } from '../../../core/blitzkrieg/getArchi
 import getArchivedRatingsInfo from '../../../core/blitzkrieg/getArchivedRatingsInfo';
 import { getArchivedRatingsLeaderboard } from '../../../core/blitzkrieg/getArchivedRatingsLeaderboard';
 import { withCORSProxy } from '../../../core/blitzkrieg/withCORSProxy';
-import { noArrows } from './page.css';
+import { PageTurner } from './components/PageTurner';
 
 const ROWS_OPTIONS = [5, 10, 15, 25, 30];
 const SEEDING_SIZE = 2 ** 7;
 
 type UsernameCache = Record<Region, Record<number, string | null>>;
 type ClanCache = Record<Region, Record<number, string | undefined>>;
+type PlayersCache = Record<
+  Region,
+  Record<number, Record<number, BlitzkriegRatingsLeaderboardEntry>>
+>;
 
 const useUsernameCache = create<UsernameCache>(() => ({
   asia: {},
@@ -60,57 +60,71 @@ const useClanCache = create<ClanCache>(() => ({
   com: {},
   eu: {},
 }));
+const usePlayersCache = create<PlayersCache>(() => ({
+  asia: { 0: {} },
+  com: { 0: {} },
+  eu: { 0: {} },
+}));
 
 export default function Page() {
-  const [rowsPerPage, setRowsPerPage] = useState(25);
-  const usernameCache = useUsernameCache();
-  const clanCache = useClanCache();
   const [region, setRegion] = useState<Region>('com');
-  const leaguePositionCache = useRef<Record<number, number>>({});
-  // null being the latest season
-  const [season, setSeason] = useState<null | number>(null);
-  const { data: ratingsInfo } = useSWR(
-    `ratings-info-${region}-${season}`,
-    () =>
-      season === null
-        ? getRatingsInfo(region)
-        : getArchivedRatingsInfo(region, season),
-  );
-  const [jumpToLeague, setJumpToLeague] = useState(0);
-  const { data: latestArchivedSeasonNumber } = useSWR<number>(
-    getArchivedLatestSeasonNumber.name,
-    getArchivedLatestSeasonNumber,
-  );
-  const [players, setPlayers] = useState<null | Record<
-    number,
-    BlitzkriegRatingsLeaderboardEntry
-  >>(null);
+  const [season, setSeason] = useState<number>(0);
   const [page, setPage] = useState(0);
-  const [highlightedPlayerId, setHighlightedPlayerId] = useState<number | null>(
-    null,
-  );
-  const positionInput = useRef<HTMLInputElement>(null);
-  const scoreInput = useRef<HTMLInputElement>(null);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [jumpToLeague, setJumpToLeague] = useState(0);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [jumpToScoreOpen, setJumpToScoreOpen] = useState(false);
+  const [jumpToPositionOpen, setJumpToPositionOpen] = useState(false);
   const [searchResults, setSearchResults] = useState<
     (AccountListItem & { number: number })[] | undefined
   >(undefined);
   const [loadingProgress, setLoadingProgress] = useState<
     [number, number] | null
   >(null);
+  const [highlightedPlayerId, setHighlightedPlayerId] = useState<number | null>(
+    null,
+  );
 
+  const { data: ratingsInfo } = useSWR(
+    `ratings-info-${region}-${season}`,
+    () =>
+      season === 0
+        ? getRatingsInfo(region)
+        : getArchivedRatingsInfo(region, season),
+  );
+  const { data: latestArchivedSeasonNumber } = useSWR<number>(
+    getArchivedLatestSeasonNumber.name,
+    getArchivedLatestSeasonNumber,
+  );
+
+  const usernames = useUsernameCache();
+  const clans = useClanCache();
+  const players = usePlayersCache();
+
+  const positionInput = useRef<HTMLInputElement>(null);
+  const scoreInput = useRef<HTMLInputElement>(null);
+  const leaguePositionCache = useRef<Record<number, number>>({});
+
+  const pages = Math.ceil(
+    (ratingsInfo && ratingsInfo.detail === undefined ? ratingsInfo?.count : 1) /
+      rowsPerPage,
+  );
+
+  // page reset on season or region change
   useEffect(() => {
-    // league caching
-    if (season === null) {
+    setPage(0);
+  }, [season, region]);
+  // initial leagues caching for current season
+  useEffect(() => {
+    if (season === 0) {
       (async () => {
         const newUsernameCache: Record<number, string> = {};
         const newClanCache: Record<number, string> = {};
         const results = await Promise.all(
           range(0, 5).map(async (league: number) => {
             const leaguePlayers = await getRatingsLeague(region, league);
-
             leaguePositionCache.current[league] =
               leaguePlayers.result[0].number - 1;
-
             leaguePlayers.result.forEach((player) => {
               newUsernameCache[player.spa_id] = player.nickname;
               newClanCache[player.spa_id] = player.clan_tag;
@@ -141,87 +155,61 @@ export default function Page() {
           {},
         );
 
-        setPlayers(newPlayers);
-        useUsernameCache.setState((old) => ({
-          ...old,
-          [region]: { ...old[region], ...newUsernameCache },
-        }));
-        useClanCache.setState((old) => ({
-          ...old,
-          [region]: { ...old[region], ...newClanCache },
-        }));
+        usePlayersCache.setState(
+          produce((draft: PlayersCache) => {
+            draft[region][season] = {
+              ...draft[region][season],
+              ...newPlayers,
+            };
+          }),
+        );
+        useUsernameCache.setState(
+          produce((draft: UsernameCache) => {
+            draft[region] = { ...draft[region], ...newUsernameCache };
+          }),
+        );
+        useClanCache.setState(
+          produce((draft: ClanCache) => {
+            draft[region] = { ...draft[region], ...newClanCache };
+          }),
+        );
       })();
     } else {
-      getArchivedRatingsLeaderboard(region, season).then((result) =>
-        setPlayers({ ...result }),
-      );
+      getArchivedRatingsLeaderboard(region, season).then((result) => {
+        usePlayersCache.setState(
+          produce((draft: PlayersCache) => {
+            draft[region][season] = {
+              ...draft[region][season],
+              ...result,
+            };
+          }),
+        );
+      });
     }
   }, []);
-
+  // 2nd page caching for current season
   useEffect(() => {
-    if (players !== null && 0 in players) {
-      cacheNeighbors(players[0].id, rowsPerPage * 3);
+    if (players !== null && 0 in players[region][season]) {
+      cacheNeighbors(players[region][season][0].id, rowsPerPage * 3);
     }
-  }, [players !== null && 0 in players]);
-
-  async function cacheNeighbors(id: number, size: number) {
-    const { neighbors } = await getRatingsNeighbors(region, id, size);
-
-    setPlayers(
-      produce((draft) => {
-        draft = draft ?? {};
-
-        neighbors.forEach((neighbor) => {
-          draft![neighbor.number - 1] = {
-            id: neighbor.spa_id,
-            score: neighbor.score,
-          } satisfies BlitzkriegRatingsLeaderboardEntry;
-        });
-      }),
-    );
-
-    useUsernameCache.setState(
-      produce((draft: UsernameCache) => {
-        neighbors.forEach((neighbor) => {
-          if (neighbor.nickname) {
-            draft[region][neighbor.spa_id] = neighbor.nickname;
-          }
-        });
-      }),
-    );
-
-    useClanCache.setState(
-      produce((draft: ClanCache) => {
-        neighbors.forEach((neighbor) => {
-          if (neighbor.clan_tag) {
-            draft[region][neighbor.spa_id] = neighbor.clan_tag;
-          }
-        });
-      }),
-    );
-
-    return neighbors;
-  }
-
+  }, [0 in players[region][season]]);
+  // neighboring page caching for all seasons
   useEffect(() => {
-    // TODO: caches twice on initial load
-    if (!players || !ratingsInfo || ratingsInfo?.detail) return;
+    if (!ratingsInfo || ratingsInfo?.detail) return;
 
-    if (season === null) {
+    if (season === 0) {
       const middleIndex = Math.round(page * rowsPerPage + rowsPerPage / 2);
-
-      if (!(middleIndex in players)) return;
-
-      const middleId = players[middleIndex].id;
-
+      if (!(middleIndex in players[region][season])) return;
+      const middleId = players[region][season][middleIndex].id;
       cacheNeighbors(middleId, rowsPerPage * 3);
     } else {
       const ids = range(
         Math.max(0, (page - 1) * rowsPerPage),
         Math.min(ratingsInfo.count - 1, (page + 1) * rowsPerPage + rowsPerPage),
       )
-        .map((index) => players![index].id)
-        .filter((id) => !(id in usernameCache[region]));
+        .map((index) => players[region][season][index].id)
+        .filter(Boolean)
+        .filter((id) => !(id in usernames[region]));
 
       if (ids && ids.length > 0) {
         getAccountInfo(region, ids).then((data) => {
@@ -253,8 +241,44 @@ export default function Page() {
     }
   }, [page]);
 
-  const handleJumpToPosition = async () => {
-    if (!players || !ratingsInfo || ratingsInfo?.detail) return;
+  async function cacheNeighbors(id: number, size: number) {
+    const { neighbors } = await getRatingsNeighbors(region, id, size);
+
+    usePlayersCache.setState(
+      produce((draft: PlayersCache) => {
+        neighbors.forEach((neighbor) => {
+          draft[region][season][neighbor.number - 1] = {
+            id: neighbor.spa_id,
+            score: neighbor.score,
+          } satisfies BlitzkriegRatingsLeaderboardEntry;
+        });
+      }),
+    );
+
+    useUsernameCache.setState(
+      produce((draft: UsernameCache) => {
+        neighbors.forEach((neighbor) => {
+          if (neighbor.nickname) {
+            draft[region][neighbor.spa_id] = neighbor.nickname;
+          }
+        });
+      }),
+    );
+
+    useClanCache.setState(
+      produce((draft: ClanCache) => {
+        neighbors.forEach((neighbor) => {
+          if (neighbor.clan_tag) {
+            draft[region][neighbor.spa_id] = neighbor.clan_tag;
+          }
+        });
+      }),
+    );
+
+    return neighbors;
+  }
+  async function handleJumpToPosition() {
+    if (!ratingsInfo || ratingsInfo?.detail) return;
 
     const rawPosition = positionInput.current!.valueAsNumber - 1;
     const targetPosition = Math.max(
@@ -262,8 +286,8 @@ export default function Page() {
       Math.min(rawPosition, ratingsInfo.count - 1),
     );
 
-    if (season === null) {
-      const playerEntries = Object.entries(players);
+    if (season === 0) {
+      const playerEntries = Object.entries(players[region][season]);
       let closest: BlitzkriegRatingsLeaderboardEntry | null = null;
       let closestPosition: number | null = null;
       let closestPositionDistance = Infinity;
@@ -299,9 +323,7 @@ export default function Page() {
       setLoadingProgress([0, closestPositionDistance]);
 
       while (!targetPositionAcquired) {
-        console.log('starting');
         neighbors = await cacheNeighbors(seedingPlayer, SEEDING_SIZE);
-        console.log('done');
         seedingPlayer = neighbors.at(loadingDirection === -1 ? 0 : -1)!.spa_id;
 
         if (loadingDirection === 1) {
@@ -330,18 +352,20 @@ export default function Page() {
       setPage(Math.floor(targetPosition / rowsPerPage));
 
       if (players) {
-        setHighlightedPlayerId(players[targetPosition].id);
+        setHighlightedPlayerId(players[region][season][targetPosition].id);
       }
     }
-  };
-  const [jumpToPositionOpen, setJumpToPositionOpen] = useState(false);
-  const handleJumpToScore = () => {
-    if (!players || !ratingsInfo || ratingsInfo?.detail) return;
+  }
+  function handleJumpToScore() {
+    if (!ratingsInfo || ratingsInfo?.detail) return;
 
     let playerIndex = -1;
 
     for (let index = ratingsInfo.count - 1; index >= 0; index--) {
-      if (players[index].score >= scoreInput.current!.valueAsNumber) {
+      if (
+        players[region][season][index].score >=
+        scoreInput.current!.valueAsNumber
+      ) {
         playerIndex = index;
         break;
       }
@@ -352,75 +376,8 @@ export default function Page() {
     setPage(Math.floor(playerIndex / rowsPerPage));
 
     if (players) {
-      setHighlightedPlayerId(players[playerIndex].id);
+      setHighlightedPlayerId(players[region][season][playerIndex].id);
     }
-  };
-  const [jumpToScoreOpen, setJumpToScoreOpen] = useState(false);
-  const pages = Math.ceil(
-    (ratingsInfo && ratingsInfo.detail === undefined ? ratingsInfo?.count : 1) /
-      rowsPerPage,
-  );
-  const [searchLoading, setSearchLoading] = useState(false);
-
-  useEffect(() => {
-    setPage(0);
-  }, [season, region]);
-  useEffect(() => {
-    if (season === null && rowsPerPage > 30) setRowsPerPage(25);
-  }, [season]);
-
-  function PageTurner() {
-    const pageInput = useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-      if (pageInput.current) pageInput.current.value = `${page + 1}`;
-    }, [page]);
-
-    return (
-      <Flex justify="center" wrap="wrap" gap="2">
-        <Flex gap="2">
-          <Button
-            variant="soft"
-            onClick={() => setPage((page) => Math.max(page - 1, 0))}
-            disabled={page === 0}
-          >
-            <CaretLeftIcon />
-          </Button>
-          <TextField.Root className={noArrows}>
-            <TextField.Slot>Page</TextField.Slot>
-            <TextField.Input
-              className={noArrows}
-              type="number"
-              ref={pageInput}
-              style={{ width: 64, textAlign: 'center' }}
-              onBlur={(event) => {
-                setPage(
-                  Math.max(
-                    0,
-                    Math.min(pages - 1, event.target.valueAsNumber - 1),
-                  ),
-                );
-              }}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  (event.target as HTMLInputElement).blur();
-                }
-              }}
-            />
-            <TextField.Slot>out of {pages}</TextField.Slot>
-          </TextField.Root>
-          <Button
-            variant="soft"
-            onClick={() => {
-              setPage((page) => Math.min(page + 1, pages - 1));
-            }}
-            disabled={page === pages - 1}
-          >
-            <CaretRightIcon />
-          </Button>
-        </Flex>
-      </Flex>
-    );
   }
 
   return (
@@ -444,15 +401,13 @@ export default function Page() {
 
           <Select.Root
             value={`${season}`}
-            onValueChange={(value) =>
-              setSeason(value === 'null' ? null : parseInt(value))
-            }
+            onValueChange={(value) => setSeason(parseInt(value))}
           >
             <Select.Trigger style={{ flex: 1 }} />
 
             <Select.Content>
               {ratingsInfo?.detail === undefined && (
-                <Select.Item value="null">Current season</Select.Item>
+                <Select.Item value="0">Current season</Select.Item>
               )}
 
               <Select.Group>
@@ -584,16 +539,18 @@ export default function Page() {
                   <Dialog.Close>
                     <Button
                       onClick={async () => {
-                        if (season === null) {
+                        if (season === 0) {
                           const position =
                             leaguePositionCache.current[jumpToLeague];
                           const newPage = Math.floor(position / rowsPerPage);
 
                           setPage(newPage);
                           if (players) {
-                            setHighlightedPlayerId(players[position].id);
+                            setHighlightedPlayerId(
+                              players[region][season][position].id,
+                            );
                             cacheNeighbors(
-                              players[position].id,
+                              players[region][season][position].id,
                               rowsPerPage * 3,
                             );
                           }
@@ -610,7 +567,9 @@ export default function Page() {
                             index < ratingsInfo.count;
                             index++
                           ) {
-                            if (players[index].score < minScore) {
+                            if (
+                              players[region][season][index].score < minScore
+                            ) {
                               firstPlayerIndex = index;
                               break;
                             }
@@ -619,7 +578,9 @@ export default function Page() {
                           if (firstPlayerIndex === -1) return;
 
                           setPage(Math.floor(firstPlayerIndex / rowsPerPage));
-                          setHighlightedPlayerId(players[firstPlayerIndex].id);
+                          setHighlightedPlayerId(
+                            players[region][season][firstPlayerIndex].id,
+                          );
                         }
                       }}
                     >
@@ -649,7 +610,7 @@ export default function Page() {
                         const encodedSearch = encodeURIComponent(trimmedSearch);
 
                         if (trimmedSearch) {
-                          if (season === null) {
+                          if (season === 0) {
                             setSearchLoading(true);
 
                             const response = await fetch(
@@ -689,13 +650,15 @@ export default function Page() {
                                 skip: false;
                               })[];
 
-                            setPlayers(
-                              produce((draft: typeof players) => {
+                            usePlayersCache.setState(
+                              produce((draft: PlayersCache) => {
                                 if (draft) {
                                   values.map((player) => {
                                     const playerWithTypes =
                                       player as typeof player & { skip: false };
-                                    draft[playerWithTypes.number - 1] = {
+                                    draft[region][season][
+                                      playerWithTypes.number - 1
+                                    ] = {
                                       id: playerWithTypes.spa_id,
                                       score: 0,
                                     };
@@ -704,7 +667,7 @@ export default function Page() {
                               }),
                             );
                             useUsernameCache.setState(
-                              produce((draft: typeof usernameCache) => {
+                              produce((draft: typeof usernames) => {
                                 valuesWithTypes.forEach((searchedPlayer) => {
                                   if (searchedPlayer.nickname) {
                                     draft[region][searchedPlayer.spa_id] =
@@ -714,7 +677,7 @@ export default function Page() {
                               }),
                             );
                             useClanCache.setState(
-                              produce((draft: typeof clanCache) => {
+                              produce((draft: typeof clans) => {
                                 valuesWithTypes.forEach((searchedPlayer) => {
                                   if (searchedPlayer.clan_tag) {
                                     draft[region][searchedPlayer.spa_id] =
@@ -750,8 +713,8 @@ export default function Page() {
                                   number: parseInt(
                                     playerKeys.find(
                                       (index) =>
-                                        players![parseInt(index)].id ===
-                                        searchedPlayer.account_id,
+                                        players[region][season][parseInt(index)]
+                                          .id === searchedPlayer.account_id,
                                     )!,
                                   ),
                                 })),
@@ -771,12 +734,12 @@ export default function Page() {
                 <Flex direction="column" gap="2">
                   {!searchLoading &&
                     searchResults?.map((player) => (
-                      <Dialog.Close>
+                      <Dialog.Close key={player.account_id}>
                         <Button
                           key={player.account_id}
                           variant="ghost"
                           onClick={() => {
-                            if (season === null) {
+                            if (season === 0) {
                               setPage(
                                 Math.floor((player.number - 1) / rowsPerPage),
                               );
@@ -794,7 +757,10 @@ export default function Page() {
                                 index < ratingsInfo.count;
                                 index++
                               ) {
-                                if (players![index].id === player.account_id) {
+                                if (
+                                  players[region][season][index].id ===
+                                  player.account_id
+                                ) {
                                   playerIndex = index;
                                   break;
                                 }
@@ -845,7 +811,7 @@ export default function Page() {
         </Flex>
       </Flex>
 
-      <PageTurner />
+      <PageTurner page={page} pages={pages} setPage={setPage} />
 
       <Leaderboard.Root>
         {players === null ? (
@@ -857,31 +823,34 @@ export default function Page() {
               page * rowsPerPage + rowsPerPage,
               ratingsInfo?.detail ? 0 : (ratingsInfo?.count ?? 1) - 1,
             ),
-          ).map((index) => (
-            <Leaderboard.Item
-              nickname={
-                index in players!
-                  ? usernameCache[region][players![index].id] === null
-                    ? `Deleted player ${players![index].id}`
-                    : usernameCache[region][players![index].id] ??
-                      'Loading player...'
-                  : `Loading player...`
-              }
-              position={index + 1}
-              score={players![index]?.score}
-              clan={
-                players![index]
-                  ? clanCache[region][players![index].id]
-                  : undefined
-              }
-              key={index}
-              highlight={highlightedPlayerId === players![index]?.id}
-            />
-          ))
+          ).map((index) => {
+            const id = players[region][season][index]?.id;
+
+            return (
+              <Leaderboard.Item
+                nickname={
+                  id
+                    ? usernames[region][id] ?? `Deleted player ${id}`
+                    : `Loading player...`
+                }
+                position={index + 1}
+                score={players[region][season][index]?.score}
+                clan={
+                  players[region][season][index]
+                    ? clans[region][players[region][season][index].id]
+                    : undefined
+                }
+                key={index}
+                highlight={
+                  highlightedPlayerId === players[region][season][index]?.id
+                }
+              />
+            );
+          })
         )}
       </Leaderboard.Root>
 
-      <PageTurner />
+      <PageTurner page={page} pages={pages} setPage={setPage} />
 
       {loadingProgress !== null && (
         <Flex
