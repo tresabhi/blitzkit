@@ -862,6 +862,9 @@ export default function Page() {
             height: '100%',
             background: blackA.blackA10,
             zIndex: 2,
+            boxSizing: 'border-box',
+            padding: 32,
+            textAlign: 'center',
           }}
           gap="4"
           justify="center"
@@ -893,6 +896,13 @@ export default function Page() {
               }}
             />
           </div>
+
+          <Flex direction="column">
+            <Text color="gray">Please be patient. Wargaming is slow.</Text>
+            <Text color="gray">
+              Players are loaded in batches of {SEEDING_SIZE}.
+            </Text>
+          </Flex>
         </Flex>
       )}
     </PageWrapper>
