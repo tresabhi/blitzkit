@@ -24,7 +24,6 @@ import { FIRST_ARCHIVED_RATINGS_SEASON } from '../../../constants/ratings';
 import { REGIONS, REGION_NAMES, Region } from '../../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import fetchBlitz from '../../../core/blitz/fetchBlitz';
-import { getAccountInfo } from '../../../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../../../core/blitz/getRatingsInfo';
 import { getRatingsLeague } from '../../../core/blitz/getRatingsLeague';
@@ -43,27 +42,25 @@ import { PageTurner } from './components/PageTurner';
 const ROWS_OPTIONS = [5, 10, 15, 25, 30];
 const SEEDING_SIZE = 2 ** 7;
 
-type UsernameCache = Record<Region, Record<number, string | null>>;
-type ClanCache = Record<Region, Record<number, string | undefined>>;
+interface NameCacheEntry {
+  nickname: string;
+  clan?: string;
+}
+type NameCache = Record<Region, Record<number, NameCacheEntry | null>>;
 type PlayersCache = Record<
   Region,
   Record<number, Record<number, BlitzkriegRatingsLeaderboardEntry>>
 >;
 
-const useUsernameCache = create<UsernameCache>(() => ({
-  asia: {},
-  com: {},
-  eu: {},
-}));
-const useClanCache = create<ClanCache>(() => ({
+const useNameCache = create<NameCache>(() => ({
   asia: {},
   com: {},
   eu: {},
 }));
 const usePlayersCache = create<PlayersCache>(() => ({
-  asia: { 0: {} },
-  com: { 0: {} },
-  eu: { 0: {} },
+  asia: {},
+  com: {},
+  eu: {},
 }));
 
 export default function Page() {
@@ -97,8 +94,7 @@ export default function Page() {
     getArchivedLatestSeasonNumber,
   );
 
-  const usernames = useUsernameCache();
-  const clans = useClanCache();
+  const names = useNameCache();
   const players = usePlayersCache();
 
   const positionInput = useRef<HTMLInputElement>(null);
@@ -116,18 +112,21 @@ export default function Page() {
   }, [season, region]);
   // initial leagues caching for current season
   useEffect(() => {
+    if (season in players[region]) return;
+
     if (season === 0) {
       (async () => {
-        const newUsernameCache: Record<number, string> = {};
-        const newClanCache: Record<number, string> = {};
+        const newNameCache: Record<number, NameCacheEntry> = {};
         const results = await Promise.all(
           range(0, 5).map(async (league: number) => {
             const leaguePlayers = await getRatingsLeague(region, league);
             leaguePositionCache.current[league] =
               leaguePlayers.result[0].number - 1;
             leaguePlayers.result.forEach((player) => {
-              newUsernameCache[player.spa_id] = player.nickname;
-              newClanCache[player.spa_id] = player.clan_tag;
+              newNameCache[player.spa_id] = {
+                nickname: player.nickname,
+                clan: player.clan_tag,
+              };
             });
 
             return leaguePlayers.result.reduce<
@@ -163,14 +162,9 @@ export default function Page() {
             };
           }),
         );
-        useUsernameCache.setState(
-          produce((draft: UsernameCache) => {
-            draft[region] = { ...draft[region], ...newUsernameCache };
-          }),
-        );
-        useClanCache.setState(
-          produce((draft: ClanCache) => {
-            draft[region] = { ...draft[region], ...newClanCache };
+        useNameCache.setState(
+          produce((draft: NameCache) => {
+            draft[region] = { ...draft[region], ...newNameCache };
           }),
         );
       })();
@@ -186,13 +180,18 @@ export default function Page() {
         );
       });
     }
-  }, []);
+  }, [season in players[region]]);
   // 2nd page caching for current season
   useEffect(() => {
-    if (players !== null && 0 in players[region][season]) {
+    if (
+      season === 0 &&
+      players !== null &&
+      players[region][season] &&
+      0 in players[region][season]
+    ) {
       cacheNeighbors(players[region][season][0].id, rowsPerPage * 3);
     }
-  }, [0 in players[region][season]]);
+  }, [players[region]?.[season] && 0 in players[region][season]]);
   // neighboring page caching for all seasons
   useEffect(() => {
     if (!ratingsInfo || ratingsInfo?.detail) return;
@@ -209,40 +208,53 @@ export default function Page() {
       )
         .map((index) => players[region][season][index].id)
         .filter(Boolean)
-        .filter((id) => !(id in usernames[region]));
+        .filter((id) => !(id in names[region]));
 
       if (ids && ids.length > 0) {
-        getAccountInfo(region, ids).then((data) => {
-          data.map((player, index) => {
-            useUsernameCache.setState(
-              produce((draft: UsernameCache) => {
-                if (player) {
-                  draft[region][ids[index]] = player.nickname;
-                } else {
-                  draft[region][ids[index]] = null;
-                }
-              }),
-            );
-          });
-        });
-
         getClanAccountInfo(region, ids, ['clan']).then((data) => {
           data.map((player, index) => {
-            useClanCache.setState(
-              produce((draft: ClanCache) => {
-                if (player) {
-                  draft[region][ids[index]] = player.clan?.tag;
-                }
+            useNameCache.setState(
+              produce((draft: NameCache) => {
+                draft[region][ids[index]] = player
+                  ? {
+                      nickname: player.account_name,
+                      clan: player.clan?.tag,
+                    }
+                  : null;
               }),
             );
           });
         });
       }
     }
-  }, [page]);
+  }, [page, region, season, ratingsInfo?.detail]);
 
-  async function cacheNeighbors(id: number, size: number) {
+  async function cacheNeighbors(
+    id: number,
+    size: number,
+  ): Promise<RatingsPlayer[]> {
     const { neighbors } = await getRatingsNeighbors(region, id, size);
+    const radius = Math.round(size / 2);
+
+    const targetPosition = Object.entries(players[region][season]).find(
+      ([, player]) => id === player.id,
+    )?.[0];
+
+    if (targetPosition !== undefined) {
+      let isMissing = false;
+      const targetPositionAsNumber = parseInt(targetPosition);
+
+      for (
+        let position = Math.max(0, targetPositionAsNumber - radius);
+        position <= targetPositionAsNumber + radius;
+        position++
+      ) {
+        isMissing = !(position in players[region][season]);
+        if (isMissing) break;
+      }
+
+      if (!isMissing) return [];
+    }
 
     usePlayersCache.setState(
       produce((draft: PlayersCache) => {
@@ -255,21 +267,14 @@ export default function Page() {
       }),
     );
 
-    useUsernameCache.setState(
-      produce((draft: UsernameCache) => {
+    useNameCache.setState(
+      produce((draft: NameCache) => {
         neighbors.forEach((neighbor) => {
           if (neighbor.nickname) {
-            draft[region][neighbor.spa_id] = neighbor.nickname;
-          }
-        });
-      }),
-    );
-
-    useClanCache.setState(
-      produce((draft: ClanCache) => {
-        neighbors.forEach((neighbor) => {
-          if (neighbor.clan_tag) {
-            draft[region][neighbor.spa_id] = neighbor.clan_tag;
+            draft[region][neighbor.spa_id] = {
+              nickname: neighbor.nickname,
+              clan: neighbor.clan_tag,
+            };
           }
         });
       }),
@@ -666,22 +671,14 @@ export default function Page() {
                                 }
                               }),
                             );
-                            useUsernameCache.setState(
-                              produce((draft: typeof usernames) => {
+                            useNameCache.setState(
+                              produce((draft: typeof names) => {
                                 valuesWithTypes.forEach((searchedPlayer) => {
                                   if (searchedPlayer.nickname) {
-                                    draft[region][searchedPlayer.spa_id] =
-                                      searchedPlayer.nickname;
-                                  }
-                                });
-                              }),
-                            );
-                            useClanCache.setState(
-                              produce((draft: typeof clans) => {
-                                valuesWithTypes.forEach((searchedPlayer) => {
-                                  if (searchedPlayer.clan_tag) {
-                                    draft[region][searchedPlayer.spa_id] =
-                                      searchedPlayer.clan_tag;
+                                    draft[region][searchedPlayer.spa_id] = {
+                                      nickname: searchedPlayer.nickname,
+                                      clan: searchedPlayer.clan_tag,
+                                    };
                                   }
                                 });
                               }),
@@ -824,26 +821,20 @@ export default function Page() {
               ratingsInfo?.detail ? 0 : (ratingsInfo?.count ?? 1) - 1,
             ),
           ).map((index) => {
-            const id = players[region][season][index]?.id;
+            const id = players[region][season]?.[index]?.id;
 
             return (
               <Leaderboard.Item
                 nickname={
-                  id
-                    ? usernames[region][id] ?? `Deleted player ${id}`
-                    : `Loading player...`
+                  names[region][id] === null
+                    ? `Deleted player ${id}`
+                    : names[region][id]?.nickname ?? `Loading player...`
                 }
                 position={index + 1}
-                score={players[region][season][index]?.score}
-                clan={
-                  players[region][season][index]
-                    ? clans[region][players[region][season][index].id]
-                    : undefined
-                }
+                score={players[region][season]?.[index]?.score}
+                clan={id ? names[region][id]?.clan : undefined}
                 key={index}
-                highlight={
-                  highlightedPlayerId === players[region][season][index]?.id
-                }
+                highlight={highlightedPlayerId === id}
               />
             );
           })

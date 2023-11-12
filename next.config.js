@@ -7,6 +7,7 @@ const nextConfig = {
   ...withVanillaExtract(),
 
   distDir: 'dist/website',
+  reactStrictMode: false,
 };
 
 export default nextConfig;
