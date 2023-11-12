@@ -228,7 +228,13 @@ export default function Page() {
         });
       }
     }
-  }, [page, region, season, ratingsInfo?.detail]);
+  }, [
+    page,
+    region,
+    season,
+    ratingsInfo?.detail,
+    players[region][season] !== undefined && 0 in players[region][season],
+  ]);
 
   async function cacheNeighbors(
     id: number,
@@ -361,32 +367,108 @@ export default function Page() {
       }
     }
   }
-  function handleJumpToScore() {
+  async function handleJumpToScore() {
     if (!ratingsInfo || ratingsInfo?.detail) return;
 
-    let playerIndex = -1;
+    const targetScore = scoreInput.current!.valueAsNumber;
 
-    for (let index = ratingsInfo.count; index >= 0; index--) {
-      if (!(index in players[region][season])) continue;
+    if (season === 0) {
+      const playerEntries = Object.entries(players[region][season]);
+      let closest: BlitzkriegRatingsLeaderboardEntry | null = null;
+      let closestScore: number | null = null;
+      let closestScoreDistance = Infinity;
+      let closesIndex = -1;
 
-      if (
-        players[region][season][index].score >=
-        scoreInput.current!.valueAsNumber
-      ) {
-        playerIndex = index;
-        break;
-      }
-    }
+      playerEntries.forEach(([positionAsString, player]) => {
+        const position = parseInt(positionAsString);
+        const distance = Math.abs(
+          player.score - scoreInput.current!.valueAsNumber,
+        );
 
-    if (playerIndex === -1) return;
-
-    setPage(Math.floor(playerIndex / ROWS_PER_PAGE));
-
-    if (players) {
-      setHighlightedPlayer({
-        type: 'position',
-        position: playerIndex,
+        if (distance < closestScoreDistance) {
+          closestScoreDistance = distance;
+          closestScore = player.score;
+          closest = player;
+          closesIndex = position;
+        }
       });
+
+      if (closest === null || closestScore === null) return;
+
+      if (closestScoreDistance === 0) {
+        setHighlightedPlayer({
+          type: 'id',
+          id: (closest as BlitzkriegRatingsLeaderboardEntry).id,
+        });
+        setPage(Math.floor(closesIndex / ROWS_PER_PAGE));
+
+        return;
+      }
+
+      // 1 going down and -1 going up
+      const loadingDirection = Math.sign(closesIndex - closestScore);
+      let seedingPlayer = (closest as BlitzkriegRatingsLeaderboardEntry).id;
+      let targetScoreAcquired = false;
+      let neighbors: RatingsPlayer[];
+      let targetPlayer: RatingsPlayer | undefined;
+
+      setLoadingProgress([0, closestScoreDistance]);
+
+      while (!targetScoreAcquired) {
+        neighbors = await cacheNeighbors(seedingPlayer, SEEDING_SIZE);
+        seedingPlayer = neighbors.at(loadingDirection === -1 ? 0 : -1)!.spa_id;
+
+        if (loadingDirection === 1) {
+          targetScoreAcquired = targetScore >= neighbors.at(-1)!.score;
+          setLoadingProgress([
+            Math.abs(neighbors.at(-1)!.score - closestScore),
+            closestScoreDistance,
+          ]);
+        } else {
+          targetScoreAcquired = targetScore <= neighbors[0].score;
+          setLoadingProgress([
+            Math.abs(neighbors[0].score - closestScore),
+            closestScoreDistance,
+          ]);
+        }
+
+        if (targetScoreAcquired) {
+          targetPlayer = neighbors.find((player) =>
+            loadingDirection === 1
+              ? player.score <= targetScore
+              : player.score >= targetScore,
+          );
+        }
+      }
+
+      setLoadingProgress(null);
+      setPage(Math.floor((targetPlayer!.number - 1) / ROWS_PER_PAGE));
+      setHighlightedPlayer({
+        type: 'id',
+        id: targetPlayer!.spa_id,
+      });
+    } else {
+      let playerIndex = -1;
+
+      for (let index = ratingsInfo.count; index >= 0; index--) {
+        if (!(index in players[region][season])) continue;
+
+        if (players[region][season][index].score >= targetScore) {
+          playerIndex = index;
+          break;
+        }
+      }
+
+      if (playerIndex === -1) return;
+
+      setPage(Math.floor(playerIndex / ROWS_PER_PAGE));
+
+      if (players) {
+        setHighlightedPlayer({
+          type: 'position',
+          position: playerIndex,
+        });
+      }
     }
   }
 
@@ -845,7 +927,7 @@ export default function Page() {
           direction="column"
         >
           <Text>
-            Loading {loadingProgress[0]} of {loadingProgress[1]} players...
+            Loading {loadingProgress[0]} of {loadingProgress[1]} assets...
           </Text>
 
           <div
@@ -873,7 +955,7 @@ export default function Page() {
           <Flex direction="column">
             <Text color="gray">Please be patient. Wargaming is slow.</Text>
             <Text color="gray">
-              Players are loaded in batches of {SEEDING_SIZE}.
+              Assets are loaded in batches of {SEEDING_SIZE}.
             </Text>
           </Flex>
         </Flex>
