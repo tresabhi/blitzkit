@@ -38,7 +38,7 @@ import getArchivedRatingsInfo from '../../../core/blitzkrieg/getArchivedRatingsI
 import { getArchivedRatingsLeaderboard } from '../../../core/blitzkrieg/getArchivedRatingsLeaderboard';
 import { PageTurner } from './components/PageTurner';
 
-const ROWS_OPTIONS = [5, 10, 15, 25, 30];
+const ROWS_PER_PAGE = 30;
 const SEEDING_SIZE = 2 ** 7;
 
 interface NameCacheEntry {
@@ -66,7 +66,6 @@ export default function Page() {
   const [region, setRegion] = useState<Region>('com');
   const [season, setSeason] = useState<number>(0);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(25);
   const [jumpToLeague, setJumpToLeague] = useState(0);
   const [searchLoading, setSearchLoading] = useState(false);
   const [jumpToScoreOpen, setJumpToScoreOpen] = useState(false);
@@ -102,7 +101,7 @@ export default function Page() {
 
   const pages = Math.ceil(
     (ratingsInfo && ratingsInfo.detail === undefined ? ratingsInfo?.count : 1) /
-      rowsPerPage,
+      ROWS_PER_PAGE,
   );
 
   // page reset on season or region change
@@ -188,7 +187,7 @@ export default function Page() {
       players[region][season] &&
       0 in players[region][season]
     ) {
-      cacheNeighbors(players[region][season][0].id, rowsPerPage * 3);
+      cacheNeighbors(players[region][season][0].id, ROWS_PER_PAGE * 3);
     }
   }, [players[region]?.[season] && 0 in players[region][season]]);
   // neighboring page caching for all seasons
@@ -196,14 +195,17 @@ export default function Page() {
     if (!ratingsInfo || ratingsInfo?.detail) return;
 
     if (season === 0) {
-      const middleIndex = Math.round(page * rowsPerPage + rowsPerPage / 2);
+      const middleIndex = Math.round(page * ROWS_PER_PAGE + ROWS_PER_PAGE / 2);
       if (!(middleIndex in players[region][season])) return;
       const middleId = players[region][season][middleIndex].id;
-      cacheNeighbors(middleId, rowsPerPage * 3);
+      cacheNeighbors(middleId, ROWS_PER_PAGE * 3);
     } else {
       const ids = range(
-        Math.max(0, (page - 1) * rowsPerPage),
-        Math.min(ratingsInfo.count - 1, (page + 1) * rowsPerPage + rowsPerPage),
+        Math.max(0, (page - 1) * ROWS_PER_PAGE),
+        Math.min(
+          ratingsInfo.count - 1,
+          (page + 1) * ROWS_PER_PAGE + ROWS_PER_PAGE,
+        ),
       )
         .map((index) => players[region][season][index].id)
         .filter(Boolean)
@@ -281,6 +283,7 @@ export default function Page() {
 
     return neighbors;
   }
+
   async function handleJumpToPosition() {
     if (!ratingsInfo || ratingsInfo?.detail) return;
 
@@ -311,7 +314,7 @@ export default function Page() {
 
       if (closestPositionDistance === 0) {
         setHighlightedPlayer({ type: 'position', position: targetPosition });
-        setPage(Math.floor(targetPosition / rowsPerPage));
+        setPage(Math.floor(targetPosition / ROWS_PER_PAGE));
 
         return;
       }
@@ -345,10 +348,10 @@ export default function Page() {
       }
 
       setLoadingProgress(null);
-      setPage(Math.floor(targetPosition / rowsPerPage));
+      setPage(Math.floor(targetPosition / ROWS_PER_PAGE));
       setHighlightedPlayer({ type: 'position', position: closestPosition });
     } else {
-      setPage(Math.floor(targetPosition / rowsPerPage));
+      setPage(Math.floor(targetPosition / ROWS_PER_PAGE));
 
       if (players) {
         setHighlightedPlayer({
@@ -375,7 +378,7 @@ export default function Page() {
 
     if (playerIndex === -1) return;
 
-    setPage(Math.floor(playerIndex / rowsPerPage));
+    setPage(Math.floor(playerIndex / ROWS_PER_PAGE));
 
     if (players) {
       setHighlightedPlayer({
@@ -430,21 +433,6 @@ export default function Page() {
                     ))
                     .reverse()}
               </Select.Group>
-            </Select.Content>
-          </Select.Root>
-
-          <Select.Root
-            onValueChange={(value) => setRowsPerPage(parseInt(value))}
-            value={`${rowsPerPage}`}
-          >
-            <Select.Trigger />
-
-            <Select.Content>
-              {ROWS_OPTIONS.map((size) => (
-                <Select.Item value={`${size}`} key={size}>
-                  {size} per page
-                </Select.Item>
-              ))}
             </Select.Content>
           </Select.Root>
         </Flex>
@@ -547,7 +535,7 @@ export default function Page() {
                         if (season === 0) {
                           const position =
                             leaguePositionCache.current[jumpToLeague];
-                          const newPage = Math.floor(position / rowsPerPage);
+                          const newPage = Math.floor(position / ROWS_PER_PAGE);
 
                           setPage(newPage);
                           if (players) {
@@ -557,7 +545,7 @@ export default function Page() {
                             });
                             cacheNeighbors(
                               players[region][season][position].id,
-                              rowsPerPage * 3,
+                              ROWS_PER_PAGE * 3,
                             );
                           }
                         } else {
@@ -583,7 +571,7 @@ export default function Page() {
 
                           if (firstPlayerIndex === -1) return;
 
-                          setPage(Math.floor(firstPlayerIndex / rowsPerPage));
+                          setPage(Math.floor(firstPlayerIndex / ROWS_PER_PAGE));
                           setHighlightedPlayer({
                             type: 'id',
                             id: players[region][season][firstPlayerIndex].id,
@@ -716,11 +704,11 @@ export default function Page() {
                           onClick={() => {
                             if (season === 0) {
                               setPage(
-                                Math.floor((player.number - 1) / rowsPerPage),
+                                Math.floor((player.number - 1) / ROWS_PER_PAGE),
                               );
                               cacheNeighbors(
                                 player.account_id,
-                                rowsPerPage * 3,
+                                ROWS_PER_PAGE * 3,
                               );
                               setHighlightedPlayer({
                                 type: 'id',
@@ -745,7 +733,7 @@ export default function Page() {
                               }
 
                               const playerPage = Math.floor(
-                                playerIndex! / rowsPerPage,
+                                playerIndex! / ROWS_PER_PAGE,
                               );
 
                               setPage(playerPage);
@@ -799,9 +787,9 @@ export default function Page() {
           <Leaderboard.Gap message="Loading players..." />
         ) : (
           range(
-            page * rowsPerPage,
+            page * ROWS_PER_PAGE,
             Math.min(
-              page * rowsPerPage + rowsPerPage,
+              page * ROWS_PER_PAGE + ROWS_PER_PAGE,
               ratingsInfo?.detail ? 0 : (ratingsInfo?.count ?? 1) - 1,
             ),
           ).map((index) => {
