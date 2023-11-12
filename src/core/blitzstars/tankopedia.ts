@@ -1,6 +1,5 @@
 import { deburr } from 'lodash';
 import { context } from '../blitzkrieg/context';
-import { withCORSProxy } from '../blitzkrieg/withCORSProxy';
 
 export interface TankopediaEntry {
   name: string;
@@ -19,7 +18,9 @@ export interface Tankopedia {
 }
 
 export const tankopedia = fetch(
-  withCORSProxy('https://www.blitzstars.com/bs-tankopedia.json'),
+  context === 'website'
+    ? '/api/tankopedia'
+    : 'https://www.blitzstars.com/bs-tankopedia.json',
 )
   .then(async (response) => response.json())
   .then((wrapperTankopedia) =>

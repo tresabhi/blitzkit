@@ -28,7 +28,7 @@ import { getClanAccountInfo } from '../../../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../../../core/blitz/getRatingsInfo';
 import { getRatingsLeague } from '../../../core/blitz/getRatingsLeague';
 import { getRatingsNeighbors } from '../../../core/blitz/getRatingsNeighbors';
-import regionToRegionSubdomain from '../../../core/blitz/regionToRegionSubdomain';
+import { searchCurrentRatingsPlayers } from '../../../core/blitz/searchCurrentRatingsPlayers';
 import {
   AccountList,
   AccountListItem,
@@ -36,7 +36,6 @@ import {
 import { getArchivedLatestSeasonNumber } from '../../../core/blitzkrieg/getArchivedLatestSeasonNumber';
 import getArchivedRatingsInfo from '../../../core/blitzkrieg/getArchivedRatingsInfo';
 import { getArchivedRatingsLeaderboard } from '../../../core/blitzkrieg/getArchivedRatingsLeaderboard';
-import { withCORSProxy } from '../../../core/blitzkrieg/withCORSProxy';
 import { PageTurner } from './components/PageTurner';
 
 const ROWS_OPTIONS = [5, 10, 15, 25, 30];
@@ -621,35 +620,11 @@ export default function Page() {
                           if (season === 0) {
                             setSearchLoading(true);
 
-                            const response = await fetch(
-                              withCORSProxy(
-                                `https://${regionToRegionSubdomain(
-                                  region,
-                                )}.wotblitz.com/en/api/rating-leaderboards/search/?prefix=${encodedSearch}`,
-                              ),
-                            );
                             const accountList =
-                              (await response.json()) as Record<
-                                number,
-                                {
-                                  spa_id: number;
-                                  nickname: string;
-                                  clan_tag: string;
-                                } & (
-                                  | {
-                                      skip: true;
-                                    }
-                                  | {
-                                      skip: false;
-                                      mmr: number;
-                                      season_number: number;
-                                      calibrationBattlesLeft: number;
-                                      number: number;
-                                      updated_at: string;
-                                      neighbors: [];
-                                    }
-                                )
-                              >;
+                              await searchCurrentRatingsPlayers(
+                                region,
+                                trimmedSearch,
+                              );
                             const values = Object.values(accountList).filter(
                               (searchedPlayer) => !searchedPlayer.skip,
                             );

@@ -1,6 +1,5 @@
 import { AllStats } from '../blitz/getAccountInfo';
 import { context } from '../blitzkrieg/context';
-import { withCORSProxy } from '../blitzkrieg/withCORSProxy';
 import { tankopedia } from './tankopedia';
 
 export interface SpecialStats {
@@ -86,7 +85,9 @@ tankopedia;
 export type TankAverages = Record<number, IndividualTankAverage>;
 
 export const tankAverages = fetch(
-  withCORSProxy('https://www.blitzstars.com/api/tankaverages.json'),
+  context === 'website'
+    ? '/api/tank-averages'
+    : 'https://www.blitzstars.com/api/tankaverages.json',
 )
   .then((response) => response.json())
   .then((json) => {
