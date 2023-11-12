@@ -78,9 +78,9 @@ export default function Page() {
   const [loadingProgress, setLoadingProgress] = useState<
     [number, number] | null
   >(null);
-  const [highlightedPlayerId, setHighlightedPlayerId] = useState<number | null>(
-    null,
-  );
+  const [highlightedPlayer, setHighlightedPlayer] = useState<
+    { type: 'id'; id: number } | { type: 'position'; position: number } | null
+  >(null);
 
   const { data: ratingsInfo } = useSWR(
     `ratings-info-${region}-${season}`,
@@ -311,9 +311,7 @@ export default function Page() {
       if (closest === null || closestPosition === null) return;
 
       if (closestPositionDistance === 0) {
-        setHighlightedPlayerId(
-          (closest as BlitzkriegRatingsLeaderboardEntry).id,
-        );
+        setHighlightedPlayer({ type: 'position', position: targetPosition });
         setPage(Math.floor(targetPosition / rowsPerPage));
 
         return;
@@ -349,15 +347,15 @@ export default function Page() {
 
       setLoadingProgress(null);
       setPage(Math.floor(targetPosition / rowsPerPage));
-      setHighlightedPlayerId(
-        neighbors!.find((neighbor) => neighbor.number - 1 === targetPosition)!
-          .spa_id,
-      );
+      setHighlightedPlayer({ type: 'position', position: closestPosition });
     } else {
       setPage(Math.floor(targetPosition / rowsPerPage));
 
       if (players) {
-        setHighlightedPlayerId(players[region][season][targetPosition].id);
+        setHighlightedPlayer({
+          type: 'id',
+          id: players[region][season][targetPosition].id,
+        });
       }
     }
   }
@@ -381,7 +379,10 @@ export default function Page() {
     setPage(Math.floor(playerIndex / rowsPerPage));
 
     if (players) {
-      setHighlightedPlayerId(players[region][season][playerIndex].id);
+      setHighlightedPlayer({
+        type: 'id',
+        id: players[region][season][playerIndex].id,
+      });
     }
   }
 
@@ -551,9 +552,10 @@ export default function Page() {
 
                           setPage(newPage);
                           if (players) {
-                            setHighlightedPlayerId(
-                              players[region][season][position].id,
-                            );
+                            setHighlightedPlayer({
+                              type: 'id',
+                              id: players[region][season][position].id,
+                            });
                             cacheNeighbors(
                               players[region][season][position].id,
                               rowsPerPage * 3,
@@ -583,9 +585,10 @@ export default function Page() {
                           if (firstPlayerIndex === -1) return;
 
                           setPage(Math.floor(firstPlayerIndex / rowsPerPage));
-                          setHighlightedPlayerId(
-                            players[region][season][firstPlayerIndex].id,
-                          );
+                          setHighlightedPlayer({
+                            type: 'id',
+                            id: players[region][season][firstPlayerIndex].id,
+                          });
                         }
                       }}
                     >
@@ -744,7 +747,10 @@ export default function Page() {
                                 player.account_id,
                                 rowsPerPage * 3,
                               );
-                              setHighlightedPlayerId(player.account_id);
+                              setHighlightedPlayer({
+                                type: 'id',
+                                id: player.account_id,
+                              });
                             } else {
                               if (!ratingsInfo || ratingsInfo.detail) return;
                               let playerIndex = -1;
@@ -768,7 +774,10 @@ export default function Page() {
                               );
 
                               setPage(playerPage);
-                              setHighlightedPlayerId(player.account_id);
+                              setHighlightedPlayer({
+                                type: 'id',
+                                id: player.account_id,
+                              });
                             }
                           }}
                         >
@@ -834,7 +843,13 @@ export default function Page() {
                 score={players[region][season]?.[index]?.score}
                 clan={id ? names[region][id]?.clan : undefined}
                 key={index}
-                highlight={highlightedPlayerId === id}
+                highlight={
+                  highlightedPlayer
+                    ? highlightedPlayer.type === 'id'
+                      ? highlightedPlayer.id === id
+                      : highlightedPlayer.position === index
+                    : undefined
+                }
               />
             );
           })
