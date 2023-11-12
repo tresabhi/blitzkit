@@ -660,28 +660,30 @@ export default function Page() {
                           } else {
                             setSearchLoading(true);
                             const accountList = await fetchBlitz<AccountList>(
-                              `https://api.wotblitz.${region}/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}&limit=100`,
+                              `https://api.wotblitz.${region}/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}`,
                             );
-                            const playerKeys = Object.keys(players!);
+                            const playerKeys = Object.keys(
+                              players[region][season],
+                            );
 
                             setSearchResults(
                               accountList
-                                .filter(
-                                  (searchedPlayer) =>
-                                    players &&
-                                    searchedPlayer.account_id in players,
-                                )
                                 .map((searchedPlayer) => ({
                                   ...searchedPlayer,
                                   number: parseInt(
                                     playerKeys.find(
-                                      (index) =>
-                                        players[region][season][parseInt(index)]
-                                          .id === searchedPlayer.account_id,
+                                      (indexAsString) =>
+                                        players[region][season][
+                                          parseInt(indexAsString)
+                                        ].id === searchedPlayer.account_id,
                                     )!,
                                   ),
-                                })),
+                                }))
+                                .filter(
+                                  (player) => !Number.isNaN(player.number),
+                                ),
                             );
+
                             setSearchLoading(false);
                           }
                         } else {
