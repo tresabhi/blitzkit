@@ -355,8 +355,8 @@ export default function Page() {
 
       if (players) {
         setHighlightedPlayer({
-          type: 'id',
-          id: players[region][season][targetPosition].id,
+          type: 'position',
+          position: targetPosition,
         });
       }
     }
@@ -366,7 +366,9 @@ export default function Page() {
 
     let playerIndex = -1;
 
-    for (let index = ratingsInfo.count - 1; index >= 0; index--) {
+    for (let index = ratingsInfo.count; index >= 0; index--) {
+      if (!(index in players[region][season])) continue;
+
       if (
         players[region][season][index].score >=
         scoreInput.current!.valueAsNumber
@@ -382,8 +384,8 @@ export default function Page() {
 
     if (players) {
       setHighlightedPlayer({
-        type: 'id',
-        id: players[region][season][playerIndex].id,
+        type: 'position',
+        position: playerIndex,
       });
     }
   }
