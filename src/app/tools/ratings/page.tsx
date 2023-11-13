@@ -301,7 +301,7 @@ export default function Page() {
 
     if (season === 0) {
       const playerEntries = Object.entries(players[region][season]);
-      let closest: BlitzkriegRatingsLeaderboardEntry | null = null;
+      let closestPlayer: BlitzkriegRatingsLeaderboardEntry | null = null;
       let closestPosition: number | null = null;
       let closestPositionDistance = Infinity;
 
@@ -312,11 +312,11 @@ export default function Page() {
         if (distance < closestPositionDistance) {
           closestPositionDistance = distance;
           closestPosition = position;
-          closest = player;
+          closestPlayer = player;
         }
       });
 
-      if (closest === null || closestPosition === null) return;
+      if (closestPlayer === null || closestPosition === null) return;
 
       if (closestPositionDistance === 0) {
         setHighlightedPlayer({ type: 'position', position: targetPosition });
@@ -327,7 +327,8 @@ export default function Page() {
 
       // 1 going down and -1 going up
       const loadingDirection = Math.sign(targetPosition - closestPosition);
-      let seedingPlayer = (closest as BlitzkriegRatingsLeaderboardEntry).id;
+      let seedingPlayer = (closestPlayer as BlitzkriegRatingsLeaderboardEntry)
+        .id;
       let targetPositionAcquired = false;
       let neighbors: RatingsPlayer[];
 
@@ -355,7 +356,7 @@ export default function Page() {
 
       setLoadingProgress(null);
       setPage(Math.floor(targetPosition / ROWS_PER_PAGE));
-      setHighlightedPlayer({ type: 'position', position: closestPosition });
+      setHighlightedPlayer({ type: 'position', position: targetPosition });
     } else {
       setPage(Math.floor(targetPosition / ROWS_PER_PAGE));
 
@@ -432,12 +433,19 @@ export default function Page() {
           ]);
         }
 
+        console.log(neighbors.map((player) => player.score - targetScore));
+
         if (targetScoreAcquired) {
-          targetPlayer = neighbors.find((player) =>
-            loadingDirection === 1
-              ? player.score <= targetScore
-              : player.score >= targetScore,
-          );
+          neighbors.findLast;
+          if (loadingDirection === 1) {
+            targetPlayer = neighbors.find(
+              (neighbor) => neighbor.score <= targetScore,
+            );
+          } else {
+            targetPlayer = neighbors.findLast(
+              (neighbor) => neighbor.score >= targetScore,
+            );
+          }
         }
       }
 
@@ -954,9 +962,9 @@ export default function Page() {
 
           <Flex direction="column">
             <Text color="gray">Please be patient. Wargaming is slow.</Text>
-            <Text color="gray">
-              Assets are loaded in batches of {SEEDING_SIZE}.
-            </Text>
+            {loadingProgress[0] === 0 && (
+              <Text color="gray">First assets will be fetched shortly.</Text>
+            )}
           </Flex>
         </Flex>
       )}
