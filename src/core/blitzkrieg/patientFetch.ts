@@ -1,4 +1,4 @@
-export async function patientFetch(url: string, timeout = 1 * 60 * 1000) {
+export async function patientFetch(url: string, timeout = 1000) {
   let patientResponse: Response;
 
   while (patientResponse! === undefined) {
