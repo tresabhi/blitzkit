@@ -375,86 +375,66 @@ export default function Page() {
 
     if (season === 0) {
       const playerEntries = Object.entries(players[region][season]);
-      let closest: BlitzkriegRatingsLeaderboardEntry | null = null;
+      let closestPlayer: BlitzkriegRatingsLeaderboardEntry | null = null;
       let closestScore: number | null = null;
       let closestScoreDistance = Infinity;
       let closesIndex = -1;
 
-      playerEntries.forEach(([positionAsString, player]) => {
+      playerEntries.forEach(([positionAsString, player], index) => {
         const position = parseInt(positionAsString);
-        const distance = Math.abs(
-          player.score - scoreInput.current!.valueAsNumber,
-        );
+        const distance = Math.abs(player.score - targetScore);
 
         if (distance < closestScoreDistance) {
           closestScoreDistance = distance;
           closestScore = player.score;
-          closest = player;
+          closestPlayer = player;
           closesIndex = position;
         }
       });
 
-      if (closest === null || closestScore === null) return;
+      if (closestPlayer === null || closestScore === null) return;
 
-      if (closestScoreDistance === 0) {
-        setHighlightedPlayer({
-          type: 'id',
-          id: (closest as BlitzkriegRatingsLeaderboardEntry).id,
-        });
-        setPage(Math.floor(closesIndex / ROWS_PER_PAGE));
-
-        return;
-      }
-
-      // 1 going down and -1 going up
-      const loadingDirection = Math.sign(closesIndex - closestScore);
-      let seedingPlayer = (closest as BlitzkriegRatingsLeaderboardEntry).id;
-      let targetScoreAcquired = false;
-      let neighbors: RatingsPlayer[];
-      let targetPlayer: RatingsPlayer | undefined;
+      const loadingDirection = Math.sign(closestScore - targetScore);
+      let targetPlayer: RatingsPlayer;
+      let scoreAcquired = false;
+      let seedingPlayer = closestPlayer as BlitzkriegRatingsLeaderboardEntry;
 
       setLoadingProgress([0, closestScoreDistance]);
+      while (!scoreAcquired) {
+        const neighbors = await cacheNeighbors(seedingPlayer.id, SEEDING_SIZE);
+        const seedingNeighbor = neighbors.at(loadingDirection === 1 ? -1 : 0)!;
+        seedingPlayer = {
+          id: seedingNeighbor.spa_id,
+          score: seedingNeighbor.score,
+        };
 
-      while (!targetScoreAcquired) {
-        neighbors = await cacheNeighbors(seedingPlayer, SEEDING_SIZE);
-        seedingPlayer = neighbors.at(loadingDirection === -1 ? 0 : -1)!.spa_id;
+        setLoadingProgress([
+          closestScoreDistance - Math.abs(seedingNeighbor.score - targetScore),
+          closestScoreDistance,
+        ]);
 
         if (loadingDirection === 1) {
-          targetScoreAcquired = targetScore >= neighbors.at(-1)!.score;
-          setLoadingProgress([
-            Math.abs(neighbors.at(-1)!.score - closestScore),
-            closestScoreDistance,
-          ]);
+          scoreAcquired = seedingPlayer.score <= targetScore;
         } else {
-          targetScoreAcquired = targetScore <= neighbors[0].score;
-          setLoadingProgress([
-            Math.abs(neighbors[0].score - closestScore),
-            closestScoreDistance,
-          ]);
+          scoreAcquired = seedingPlayer.score >= targetScore;
         }
 
-        console.log(neighbors.map((player) => player.score - targetScore));
-
-        if (targetScoreAcquired) {
-          neighbors.findLast;
+        if (scoreAcquired) {
           if (loadingDirection === 1) {
             targetPlayer = neighbors.find(
-              (neighbor) => neighbor.score <= targetScore,
-            );
+              (player) => player.score <= targetScore,
+            )!;
           } else {
             targetPlayer = neighbors.findLast(
-              (neighbor) => neighbor.score >= targetScore,
-            );
+              (player) => player.score >= targetScore,
+            )!;
           }
         }
       }
 
+      setPage(Math.floor(targetPlayer!.number / ROWS_PER_PAGE));
+      setHighlightedPlayer({ type: 'id', id: targetPlayer!.spa_id });
       setLoadingProgress(null);
-      setPage(Math.floor((targetPlayer!.number - 1) / ROWS_PER_PAGE));
-      setHighlightedPlayer({
-        type: 'id',
-        id: targetPlayer!.spa_id,
-      });
     } else {
       let playerIndex = -1;
 
