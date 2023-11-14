@@ -277,12 +277,18 @@ export default function Page() {
       if (!isMissing) return [];
     }
 
+    const seedingPlayerPosition = parseInt(
+      Object.entries(players[region][season]).find(
+        ([, player]) => id === player.id,
+      )![0],
+    );
     const { neighbors } = await getRatingsNeighbors(region, id, size, true);
 
     usePlayersCache.setState(
       produce((draft: PlayersCache) => {
-        neighbors.forEach((neighbor) => {
-          const position = neighbor.number - 1;
+        neighbors.forEach((neighbor, neighborIndex) => {
+          // const position = neighbor.number - 1;
+          const position = neighborIndex - radius + seedingPlayerPosition;
 
           if (!(position in draft[region][season])) {
             draft[region][season][position] = {
