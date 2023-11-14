@@ -1,13 +1,16 @@
 import {
   ActionRowBuilder,
+  AttachmentBuilder,
   ButtonBuilder,
   ButtonStyle,
   CacheType,
   ChatInputCommandInteraction,
+  InteractionReplyOptions,
 } from 'discord.js';
 import { commands } from '..';
 import discord from '../../../../discord.json' assert { type: 'json' };
 import { UserError } from '../../../core/blitzkrieg/userError';
+import buttonLink from '../../../core/discord/buttonLink';
 import embedNegative from '../../../core/discord/embedNegative';
 import embedWarning from '../../../core/discord/embedWarning';
 import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable';
@@ -40,12 +43,59 @@ export default async function handleChatInputCommand(
 
     const reply = await normalizeInteractionReturnable(returnable!);
 
-    if (psa.data) {
-      if (!reply.embeds) reply.embeds = [];
-      reply.embeds.push(embedWarning(psa.data.title, psa.data.description));
+    if (psa.data && !psa.data.secret) {
+      if (psa.data.type === 'embed') {
+        if (!reply.embeds) reply.embeds = [];
+        reply.embeds.push(embedWarning(psa.data.title, psa.data.description));
+      } else {
+        if (!reply.files) reply.files = [];
+        reply.files.push(new AttachmentBuilder(psa.data.image));
+        reply.content = reply.content ?? psa.data.title;
+      }
+
+      if (psa.data.links) {
+        if (!reply.components?.[0]) {
+          reply.components = [new ActionRowBuilder<ButtonBuilder>()];
+        }
+
+        (reply.components[0] as ActionRowBuilder<ButtonBuilder>).addComponents(
+          psa.data.links.map(({ title, url }) => buttonLink(url, title)),
+        );
+      }
     }
 
     await interaction.editReply(reply);
+
+    if (psa.data && psa.data.secret) {
+      const followUp: InteractionReplyOptions = {
+        ephemeral: true,
+      };
+
+      if (psa.data.type === 'embed') {
+        if (!followUp.embeds) followUp.embeds = [];
+        followUp.embeds.push(
+          embedWarning(psa.data.title, psa.data.description),
+        );
+      } else {
+        if (!followUp.files) followUp.files = [];
+        followUp.files.push(new AttachmentBuilder(psa.data.image));
+        followUp.content = followUp.content ?? psa.data.title;
+      }
+
+      if (psa.data.links) {
+        if (!followUp.components?.[0]) {
+          followUp.components = [new ActionRowBuilder<ButtonBuilder>()];
+        }
+
+        (
+          followUp.components[0] as ActionRowBuilder<ButtonBuilder>
+        ).addComponents(
+          psa.data.links.map(({ title, url }) => buttonLink(url, title)),
+        );
+      }
+
+      interaction.followUp(followUp);
+    }
   } catch (error) {
     const components = [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
