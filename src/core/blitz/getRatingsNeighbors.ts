@@ -10,7 +10,9 @@ export async function getRatingsNeighbors(
   count: number,
   usePatientFetcher = false,
 ) {
-  const fetcher = usePatientFetcher ? patientFetch : fetch;
+  const fetcher = usePatientFetcher
+    ? patientFetch
+    : (url: string) => fetch(url, { cache: 'no-store' });
   const response = await fetcher(
     withCORSProxy(
       `https://${regionToRegionSubdomain(
