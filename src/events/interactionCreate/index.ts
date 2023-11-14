@@ -16,6 +16,7 @@ import {
 import discord from '../../../discord.json' assert { type: 'json' };
 import { aboutCommand } from '../../commands/about';
 import { breakdownCommand } from '../../commands/breakdown';
+import { creditsCommand } from '../../commands/credits';
 import { debugCommand } from '../../commands/debug';
 import { eligibleCommand } from '../../commands/eligible';
 import { evolutionCommand } from '../../commands/evolution';
@@ -103,6 +104,7 @@ export const COMMANDS_RAW: CommandRegistry[] = [
   statsCommand,
   ratingsCommand,
   todayCommand,
+  creditsCommand,
 ];
 
 export const commands = Promise.all(COMMANDS_RAW).then((rawCommands) =>
