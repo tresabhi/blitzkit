@@ -257,27 +257,27 @@ export default function Page() {
     size: number,
   ): Promise<RatingsPlayer[]> {
     const { neighbors } = await getRatingsNeighbors(region, id, size, true);
-    // const radius = Math.round(size / 2);
+    const radius = Math.round(size / 2);
 
-    // const targetPosition = Object.entries(players[region][season]).find(
-    //   ([, player]) => id === player.id,
-    // )?.[0];
+    const targetPosition = Object.entries(players[region][season]).find(
+      ([, player]) => id === player.id,
+    )?.[0];
 
-    // if (targetPosition !== undefined) {
-    //   let isMissing = false;
-    //   const targetPositionAsNumber = parseInt(targetPosition);
+    if (targetPosition !== undefined) {
+      let isMissing = false;
+      const targetPositionAsNumber = parseInt(targetPosition);
 
-    //   for (
-    //     let position = Math.max(0, targetPositionAsNumber - radius);
-    //     position <= targetPositionAsNumber + radius;
-    //     position++
-    //   ) {
-    //     isMissing = !(position in players[region][season]);
-    //     if (isMissing) break;
-    //   }
+      for (
+        let position = Math.max(0, targetPositionAsNumber - radius);
+        position <= targetPositionAsNumber + radius;
+        position++
+      ) {
+        isMissing = !(position in players[region][season]);
+        if (isMissing) break;
+      }
 
-    //   if (!isMissing) return [];
-    // }
+      if (!isMissing) return [];
+    }
 
     usePlayersCache.setState(
       produce((draft: PlayersCache) => {
