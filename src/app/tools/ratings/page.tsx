@@ -13,10 +13,9 @@ import {
 import { produce } from 'immer';
 import { debounce, range } from 'lodash';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import useSWR from 'swr';
 import { create } from 'zustand';
 import { BlitzkriegRatingsLeaderboardEntry } from '../../../../scripts/buildRatingsLeaderboard';
-import { RatingsPlayer } from '../../../commands/ratings';
+import { RatingsInfo, RatingsPlayer } from '../../../commands/ratings';
 import * as Leaderboard from '../../../components/Leaderboard';
 import PageWrapper from '../../../components/PageWrapper';
 import { LEAGUES } from '../../../constants/leagues';
@@ -50,6 +49,7 @@ type PlayersCache = Record<
   Region,
   Record<number, Record<number, BlitzkriegRatingsLeaderboardEntry>>
 >;
+type InfoCache = Record<Region, Record<number, RatingsInfo | undefined>>;
 
 const useNameCache = create<NameCache>(() => ({
   asia: {},
@@ -57,6 +57,11 @@ const useNameCache = create<NameCache>(() => ({
   eu: {},
 }));
 const usePlayersCache = create<PlayersCache>(() => ({
+  asia: {},
+  com: {},
+  eu: {},
+}));
+const useInfoCache = create<InfoCache>(() => ({
   asia: {},
   com: {},
   eu: {},
@@ -80,17 +85,10 @@ export default function Page() {
     { type: 'id'; id: number } | { type: 'position'; position: number } | null
   >(null);
 
-  const { data: ratingsInfo } = useSWR(
-    `ratings-info-${region}-${season}`,
-    () =>
-      season === 0
-        ? getRatingsInfo(region)
-        : getArchivedRatingsInfo(region, season),
-  );
-  const { data: latestArchivedSeasonNumber } = useSWR<number>(
-    getArchivedLatestSeasonNumber.name,
-    getArchivedLatestSeasonNumber,
-  );
+  const ratingsInfo = useInfoCache()[region][season];
+  const [latestArchivedSeasonNumber, setLatestArchivedSeasonNumber] = useState<
+    number | null
+  >(null);
 
   const names = useNameCache();
   const players = usePlayersCache();
@@ -107,6 +105,18 @@ export default function Page() {
   // page reset on season or region change
   useEffect(() => {
     setPage(0);
+
+    (async () => {
+      const newInfo =
+        season === 0
+          ? await getRatingsInfo(region)
+          : await getArchivedRatingsInfo(region, season);
+      useInfoCache.setState(
+        produce((draft: InfoCache) => {
+          draft[region][season] = newInfo;
+        }),
+      );
+    })();
   }, [season, region]);
   // initial leagues caching for current season
   useEffect(() => {
@@ -234,6 +244,12 @@ export default function Page() {
     season,
     ratingsInfo?.detail,
     players[region][season] !== undefined && 0 in players[region][season],
+  ]);
+  // latest archived season number caching
+  useEffect(() => {}, [
+    getArchivedLatestSeasonNumber().then((result) => {
+      setLatestArchivedSeasonNumber(result);
+    }),
   ]);
 
   async function cacheNeighbors(
