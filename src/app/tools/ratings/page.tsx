@@ -240,7 +240,7 @@ export default function Page() {
     id: number,
     size: number,
   ): Promise<RatingsPlayer[]> {
-    const { neighbors } = await getRatingsNeighbors(region, id, size);
+    const { neighbors } = await getRatingsNeighbors(region, id, size, true);
     const radius = Math.round(size / 2);
 
     const targetPosition = Object.entries(players[region][season]).find(
