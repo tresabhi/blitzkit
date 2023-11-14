@@ -10,6 +10,7 @@ export default async function getRatingsInfo(region: Region) {
       : `https://${regionToRegionSubdomain(
           region,
         )}.wotblitz.com/en/api/rating-leaderboards/season/`,
+    { cache: 'no-store' },
   );
 
   return (await response.json()) as Promise<RatingsInfo>;
