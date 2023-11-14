@@ -38,7 +38,7 @@ import { getArchivedRatingsLeaderboard } from '../../../core/blitzkrieg/getArchi
 import { theme } from '../../../stitches.config';
 import { PageTurner } from './components/PageTurner';
 
-const ROWS_PER_PAGE = 30;
+const ROWS_PER_PAGE = Math.floor(100 / 3);
 const SEEDING_SIZE = 2 ** 7;
 
 interface NameCacheEntry {
@@ -906,6 +906,7 @@ export default function Page() {
           <Table.Row>
             <Table.ColumnHeaderCell width="0">Position</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Player</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell width="0">Reward</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell width="0">
               Percentile
             </Table.ColumnHeaderCell>
@@ -922,12 +923,22 @@ export default function Page() {
         ).map((index) => {
           const id = players[region][season]?.[index]?.id;
           const clan = id ? names[region][id]?.clan : undefined;
+          const position = index + 1;
           const highlight = highlightedPlayer
             ? highlightedPlayer.type === 'id'
               ? highlightedPlayer.id === id
               : highlightedPlayer.position === index
             : false;
-          const row = (
+          const reward =
+            !ratingsInfo?.detail && ratingsInfo?.rewards
+              ? ratingsInfo.rewards.find(
+                  (reward) =>
+                    reward.from_position <= position &&
+                    reward.to_position >= position,
+                )
+              : undefined;
+
+          return (
             <Table.Row
               style={{
                 backgroundColor: highlight
@@ -940,16 +951,35 @@ export default function Page() {
                 setHighlightedPlayer({ type: 'position', position: index });
               }}
             >
-              <Table.Cell key={index}>
-                {(index + 1).toLocaleString()}.
-              </Table.Cell>
+              <Table.Cell key={index}>{position.toLocaleString()}.</Table.Cell>
               <Table.Cell key={index}>
                 {names[region][id] === null
                   ? `Deleted player ${id}`
                   : names[region][id]?.nickname ?? `Loading player...`}
                 <Text color="gray">{clan ? ` [${clan}]` : ''}</Text>
               </Table.Cell>
-              <Table.Cell key={index} align="right">
+              <Table.Cell key={index} align="center" justify="center">
+                {reward ? (
+                  <Flex align="center" justify="center" gap="1">
+                    <img
+                      style={{
+                        objectFit: 'contain',
+                      }}
+                      width={32}
+                      height={32}
+                      src={
+                        reward.type === 'stuff'
+                          ? reward.stuff.image_url
+                          : reward.vehicle.image_url
+                      }
+                    />
+                    {reward.count === 1 ? '' : `x${reward.count}`}
+                  </Flex>
+                ) : (
+                  '--'
+                )}
+              </Table.Cell>
+              <Table.Cell key={index} align="right" justify="center">
                 {totalPlayers
                   ? Math.ceil(((index + 1) / totalPlayers) * 100)
                   : '--'}
@@ -960,8 +990,6 @@ export default function Page() {
               </Table.Cell>
             </Table.Row>
           );
-
-          return row;
         })}
       </Table.Root>
 

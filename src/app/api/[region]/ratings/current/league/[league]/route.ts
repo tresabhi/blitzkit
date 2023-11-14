@@ -7,6 +7,6 @@ export async function GET(
   { params }: { params: { region: Region; league: number } },
 ) {
   return NextResponse.json(
-    await getRatingsLeague(params.region, params.league),
+    await getRatingsLeague(params.region, params.league, true),
   );
 }
