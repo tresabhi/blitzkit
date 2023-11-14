@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 interface PageTurnerProps {
   page: number;
   pages: number;
-  onPageChange: (page: number) => void;
+  onPageChange: (page: number, isButtonClick: boolean) => void;
 }
 
 export function PageTurner({ page, onPageChange, pages }: PageTurnerProps) {
@@ -20,7 +20,7 @@ export function PageTurner({ page, onPageChange, pages }: PageTurnerProps) {
       <Flex gap="2">
         <Button
           variant="soft"
-          onClick={() => onPageChange(Math.max(page - 1, 0))}
+          onClick={() => onPageChange(Math.max(page - 1, 0), true)}
           disabled={page === 0}
         >
           <CaretLeftIcon />
@@ -37,6 +37,7 @@ export function PageTurner({ page, onPageChange, pages }: PageTurnerProps) {
                   0,
                   Math.min(pages - 1, event.target.valueAsNumber - 1),
                 ),
+                false,
               );
             }}
             onKeyDown={(event) => {
@@ -50,7 +51,7 @@ export function PageTurner({ page, onPageChange, pages }: PageTurnerProps) {
         <Button
           variant="soft"
           onClick={() => {
-            onPageChange(Math.min(page + 1, pages - 1));
+            onPageChange(Math.min(page + 1, pages - 1), true);
           }}
           disabled={page === pages - 1}
         >

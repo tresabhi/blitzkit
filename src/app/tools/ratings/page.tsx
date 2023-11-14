@@ -289,7 +289,6 @@ export default function Page() {
 
     return neighbors;
   }
-
   async function jumpToPosition(position: number) {
     if (!ratingsInfo || ratingsInfo?.detail) return;
 
@@ -367,7 +366,7 @@ export default function Page() {
       }
     }
   }
-  async function handleJumpToScore() {
+  async function jumpToScore() {
     if (!ratingsInfo || ratingsInfo?.detail) return;
 
     const targetScore = scoreInput.current!.valueAsNumber;
@@ -392,6 +391,11 @@ export default function Page() {
       });
 
       if (closestPlayer === null || closestScore === null) return;
+
+      if (closestScoreDistance === 0) {
+        setHighlightedPlayer({ type: 'id', id: closesIndex });
+        setPage(Math.floor(closesIndex / ROWS_PER_PAGE));
+      }
 
       const loadingDirection = Math.sign(closestScore - targetScore);
       let targetPlayer: RatingsPlayer;
@@ -523,7 +527,7 @@ export default function Page() {
                   placeholder="Type a score..."
                   onKeyDown={(event) => {
                     if (event.key === 'Enter') {
-                      handleJumpToScore();
+                      jumpToScore();
                       setJumpToScoreOpen(false);
                     }
                   }}
@@ -534,7 +538,7 @@ export default function Page() {
                     <Button color="red">Cancel</Button>
                   </Dialog.Close>
                   <Dialog.Close>
-                    <Button onClick={handleJumpToScore}>Jump</Button>
+                    <Button onClick={jumpToScore}>Jump</Button>
                   </Dialog.Close>
                 </Flex>
               </Flex>
@@ -862,7 +866,9 @@ export default function Page() {
       <PageTurner
         page={page}
         pages={pages}
-        onPageChange={(page) => jumpToPosition(page * ROWS_PER_PAGE)}
+        onPageChange={(page, isButtonClick) =>
+          isButtonClick ? setPage(page) : jumpToPosition(page * ROWS_PER_PAGE)
+        }
       />
 
       <Leaderboard.Root>
@@ -905,7 +911,9 @@ export default function Page() {
       <PageTurner
         page={page}
         pages={pages}
-        onPageChange={(page) => jumpToPosition(page * ROWS_PER_PAGE)}
+        onPageChange={(page, isButtonClick) =>
+          isButtonClick ? setPage(page) : jumpToPosition(page * ROWS_PER_PAGE)
+        }
       />
 
       {loadingProgress !== null && (
@@ -938,6 +946,7 @@ export default function Page() {
               maxWidth: 256,
               borderRadius: 8,
               backgroundColor: orangeDark.orange2,
+              overflow: 'hidden',
             }}
           >
             <div
