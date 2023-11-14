@@ -32,7 +32,6 @@ import { searchClansCommand } from '../../commands/searchClans';
 import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { searchTanksCommand } from '../../commands/searchTanks';
 import { statsCommand } from '../../commands/stats';
-import { todayCommand } from '../../commands/today';
 import getClientId from '../../core/blitzkrieg/getClientId';
 import isDev from '../../core/blitzkrieg/isDev';
 import { secrets } from '../../core/blitzkrieg/secrets';
@@ -103,7 +102,6 @@ export const COMMANDS_RAW: CommandRegistry[] = [
   evolutionCommand,
   statsCommand,
   ratingsCommand,
-  todayCommand,
   creditsCommand,
 ];
 
