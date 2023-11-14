@@ -282,10 +282,14 @@ export default function Page() {
     usePlayersCache.setState(
       produce((draft: PlayersCache) => {
         neighbors.forEach((neighbor) => {
-          draft[region][season][neighbor.number - 1] = {
-            id: neighbor.spa_id,
-            score: neighbor.score,
-          } satisfies BlitzkriegRatingsLeaderboardEntry;
+          const position = neighbor.number - 1;
+
+          if (!(position in draft[region][season])) {
+            draft[region][season][position] = {
+              id: neighbor.spa_id,
+              score: neighbor.score,
+            } satisfies BlitzkriegRatingsLeaderboardEntry;
+          }
         });
       }),
     );
@@ -642,7 +646,7 @@ export default function Page() {
                             });
                             cacheNeighbors(
                               players[region][season][position].id,
-                              ROWS_PER_PAGE * 3,
+                              4 * ROWS_PER_PAGE - 2,
                             );
                           }
                         } else {
