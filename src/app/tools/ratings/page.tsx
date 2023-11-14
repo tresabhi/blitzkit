@@ -17,7 +17,6 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
 import { BlitzkriegRatingsLeaderboardEntry } from '../../../../scripts/buildRatingsLeaderboard';
 import { RatingsInfo, RatingsPlayer } from '../../../commands/ratings';
-import * as Leaderboard from '../../../components/Leaderboard';
 import PageWrapper from '../../../components/PageWrapper';
 import { LEAGUES } from '../../../constants/leagues';
 import { FIRST_ARCHIVED_RATINGS_SEASON } from '../../../constants/ratings';
@@ -36,6 +35,7 @@ import {
 import { getArchivedLatestSeasonNumber } from '../../../core/blitzkrieg/getArchivedLatestSeasonNumber';
 import getArchivedRatingsInfo from '../../../core/blitzkrieg/getArchivedRatingsInfo';
 import { getArchivedRatingsLeaderboard } from '../../../core/blitzkrieg/getArchivedRatingsLeaderboard';
+import { theme } from '../../../stitches.config';
 import { PageTurner } from './components/PageTurner';
 
 const ROWS_PER_PAGE = 30;
@@ -490,38 +490,8 @@ export default function Page() {
     }
   }
 
-  const highlightedId = highlightedPlayer
-    ? highlightedPlayer.type === 'id'
-      ? highlightedPlayer.id
-      : players[region][season][highlightedPlayer.position]?.id
-    : undefined;
-  const highlightedUsername =
-    (highlightedPlayer && highlightedId
-      ? names[region][highlightedId]?.nickname
-      : undefined) ?? '--';
-  const highlightedClan =
-    highlightedPlayer && highlightedId
-      ? names[region][highlightedId]?.clan
-      : undefined;
-  const highlightedPosition = highlightedPlayer
-    ? highlightedPlayer.type === 'position'
-      ? highlightedPlayer.position
-      : (() => {
-          const stringId = Object.entries(players[region][season]).find(
-            ([, player]) => player.id === highlightedId,
-          )?.[0];
-          return stringId === undefined ? undefined : parseInt(stringId);
-        })()
-    : undefined;
   const totalPlayers =
     !ratingsInfo?.detail && ratingsInfo?.count ? ratingsInfo.count : undefined;
-  const highlightedPercentile =
-    highlightedPosition && totalPlayers
-      ? Math.ceil((highlightedPosition / totalPlayers) * 100)
-      : undefined;
-  const highlightedScore = highlightedPosition
-    ? players[region][season][highlightedPosition]?.score
-    : undefined;
 
   return (
     <PageWrapper color="orange">
@@ -923,39 +893,6 @@ export default function Page() {
         </Flex>
       </Flex>
 
-      <Table.Root variant="surface">
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeaderCell>Selected player</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Position</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Percentile</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Score</Table.ColumnHeaderCell>
-          </Table.Row>
-        </Table.Header>
-
-        <Table.Body>
-          <Table.Row>
-            <Table.Cell>
-              {highlightedUsername}
-              {highlightedClan ? ` [${highlightedClan}]` : ''}
-            </Table.Cell>
-            <Table.Cell>
-              {highlightedPosition
-                ? (highlightedPosition + 1).toLocaleString()
-                : '--'}
-              {' / '}
-              {totalPlayers?.toLocaleString() ?? '--'}
-            </Table.Cell>
-            <Table.Cell>
-              {highlightedPercentile ? `Top ${highlightedPercentile}%` : '--'}
-            </Table.Cell>
-            <Table.Cell>
-              {highlightedScore?.toLocaleString() ?? '--'}
-            </Table.Cell>
-          </Table.Row>
-        </Table.Body>
-      </Table.Root>
-
       <PageTurner
         page={page}
         pages={pages}
@@ -964,45 +901,69 @@ export default function Page() {
         }
       />
 
-      <Leaderboard.Root>
-        {players === null ? (
-          <Leaderboard.Gap message="Loading players..." />
-        ) : (
-          range(
-            page * ROWS_PER_PAGE,
-            Math.min(
-              page * ROWS_PER_PAGE + ROWS_PER_PAGE,
-              ratingsInfo?.detail ? 0 : (ratingsInfo?.count ?? 1) - 1,
-            ),
-          ).map((index) => {
-            const id = players[region][season]?.[index]?.id;
+      <Table.Root variant="surface">
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeaderCell width="0">Position</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Player</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell width="0">
+              Percentile
+            </Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell width="0">Score</Table.ColumnHeaderCell>
+          </Table.Row>
+        </Table.Header>
 
-            return (
-              <Leaderboard.Item
-                nickname={
-                  names[region][id] === null
-                    ? `Deleted player ${id}`
-                    : names[region][id]?.nickname ?? `Loading player...`
-                }
-                position={index + 1}
-                score={players[region][season]?.[index]?.score}
-                clan={id ? names[region][id]?.clan : undefined}
-                key={index}
-                highlight={
-                  highlightedPlayer
-                    ? highlightedPlayer.type === 'id'
-                      ? highlightedPlayer.id === id
-                      : highlightedPlayer.position === index
-                    : undefined
-                }
-                onClick={() => {
-                  setHighlightedPlayer({ type: 'position', position: index });
-                }}
-              />
-            );
-          })
-        )}
-      </Leaderboard.Root>
+        {range(
+          page * ROWS_PER_PAGE,
+          Math.min(
+            page * ROWS_PER_PAGE + ROWS_PER_PAGE,
+            ratingsInfo?.detail ? 0 : (ratingsInfo?.count ?? 1) - 1,
+          ),
+        ).map((index) => {
+          const id = players[region][season]?.[index]?.id;
+          const clan = id ? names[region][id]?.clan : undefined;
+          const highlight = highlightedPlayer
+            ? highlightedPlayer.type === 'id'
+              ? highlightedPlayer.id === id
+              : highlightedPlayer.position === index
+            : false;
+          const row = (
+            <Table.Row
+              style={{
+                backgroundColor: highlight
+                  ? theme.colors.componentInteractiveActive_orange
+                  : 'unset',
+                cursor: 'pointer',
+              }}
+              key={index}
+              onClick={() => {
+                setHighlightedPlayer({ type: 'position', position: index });
+              }}
+            >
+              <Table.Cell key={index}>
+                {(index + 1).toLocaleString()}.
+              </Table.Cell>
+              <Table.Cell key={index}>
+                {names[region][id] === null
+                  ? `Deleted player ${id}`
+                  : names[region][id]?.nickname ?? `Loading player...`}
+                <Text color="gray">{clan ? ` [${clan}]` : ''}</Text>
+              </Table.Cell>
+              <Table.Cell key={index} align="right">
+                {totalPlayers
+                  ? Math.ceil(((index + 1) / totalPlayers) * 100)
+                  : '--'}
+                %
+              </Table.Cell>
+              <Table.Cell key={index} align="right">
+                {players[region][season]?.[index]?.score.toLocaleString()}
+              </Table.Cell>
+            </Table.Row>
+          );
+
+          return row;
+        })}
+      </Table.Root>
 
       <PageTurner
         page={page}
