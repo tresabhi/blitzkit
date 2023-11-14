@@ -290,13 +290,12 @@ export default function Page() {
     return neighbors;
   }
 
-  async function handleJumpToPosition() {
+  async function jumpToPosition(position: number) {
     if (!ratingsInfo || ratingsInfo?.detail) return;
 
-    const rawPosition = positionInput.current!.valueAsNumber - 1;
     const targetPosition = Math.max(
       0,
-      Math.min(rawPosition, ratingsInfo.count - 1),
+      Math.min(position, ratingsInfo.count - 1),
     );
 
     if (season === 0) {
@@ -557,7 +556,7 @@ export default function Page() {
                   placeholder="Type a position..."
                   onKeyDown={(event) => {
                     if (event.key === 'Enter') {
-                      handleJumpToPosition();
+                      jumpToPosition(positionInput.current!.valueAsNumber - 1);
                       setJumpToPositionOpen(false);
                     }
                   }}
@@ -568,7 +567,13 @@ export default function Page() {
                     <Button color="red">Cancel</Button>
                   </Dialog.Close>
                   <Dialog.Close>
-                    <Button onClick={handleJumpToPosition}>Jump</Button>
+                    <Button
+                      onClick={() =>
+                        jumpToPosition(positionInput.current!.valueAsNumber - 1)
+                      }
+                    >
+                      Jump
+                    </Button>
                   </Dialog.Close>
                 </Flex>
               </Flex>
@@ -854,7 +859,11 @@ export default function Page() {
         </Flex>
       </Flex>
 
-      <PageTurner page={page} pages={pages} setPage={setPage} />
+      <PageTurner
+        page={page}
+        pages={pages}
+        onPageChange={(page) => jumpToPosition(page * ROWS_PER_PAGE)}
+      />
 
       <Leaderboard.Root>
         {players === null ? (
@@ -893,7 +902,11 @@ export default function Page() {
         )}
       </Leaderboard.Root>
 
-      <PageTurner page={page} pages={pages} setPage={setPage} />
+      <PageTurner
+        page={page}
+        pages={pages}
+        onPageChange={(page) => jumpToPosition(page * ROWS_PER_PAGE)}
+      />
 
       {loadingProgress !== null && (
         <Flex
@@ -930,7 +943,7 @@ export default function Page() {
             <div
               style={{
                 height: '100%',
-                transitionDuration: '200ms',
+                transitionDuration: '10s',
                 width: `${Math.round(
                   (loadingProgress[0] / loadingProgress[1]) * 100,
                 )}%`,

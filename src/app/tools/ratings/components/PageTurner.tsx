@@ -5,10 +5,10 @@ import { useEffect, useRef } from 'react';
 interface PageTurnerProps {
   page: number;
   pages: number;
-  setPage: (page: number | ((page: number) => number)) => void;
+  onPageChange: (page: number) => void;
 }
 
-export function PageTurner({ page, setPage, pages }: PageTurnerProps) {
+export function PageTurner({ page, onPageChange, pages }: PageTurnerProps) {
   const pageInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export function PageTurner({ page, setPage, pages }: PageTurnerProps) {
       <Flex gap="2">
         <Button
           variant="soft"
-          onClick={() => setPage((page) => Math.max(page - 1, 0))}
+          onClick={() => onPageChange(Math.max(page - 1, 0))}
           disabled={page === 0}
         >
           <CaretLeftIcon />
@@ -32,7 +32,7 @@ export function PageTurner({ page, setPage, pages }: PageTurnerProps) {
             ref={pageInput}
             style={{ width: 64, textAlign: 'center' }}
             onBlur={(event) => {
-              setPage(
+              onPageChange(
                 Math.max(
                   0,
                   Math.min(pages - 1, event.target.valueAsNumber - 1),
@@ -50,7 +50,7 @@ export function PageTurner({ page, setPage, pages }: PageTurnerProps) {
         <Button
           variant="soft"
           onClick={() => {
-            setPage((page) => Math.min(page + 1, pages - 1));
+            onPageChange(Math.min(page + 1, pages - 1));
           }}
           disabled={page === pages - 1}
         >
