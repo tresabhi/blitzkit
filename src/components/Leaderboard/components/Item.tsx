@@ -32,6 +32,7 @@ export function Item({
     <div
       {...props}
       style={{
+        cursor: 'pointer',
         display: 'flex',
         padding: 8,
         backgroundColor: highlight

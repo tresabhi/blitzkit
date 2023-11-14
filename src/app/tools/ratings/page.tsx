@@ -7,6 +7,7 @@ import {
   Dialog,
   Flex,
   Select,
+  Table,
   Text,
   TextField,
 } from '@radix-ui/themes';
@@ -489,6 +490,39 @@ export default function Page() {
     }
   }
 
+  const highlightedId = highlightedPlayer
+    ? highlightedPlayer.type === 'id'
+      ? highlightedPlayer.id
+      : players[region][season][highlightedPlayer.position]?.id
+    : undefined;
+  const highlightedUsername =
+    (highlightedPlayer && highlightedId
+      ? names[region][highlightedId]?.nickname
+      : undefined) ?? '--';
+  const highlightedClan =
+    highlightedPlayer && highlightedId
+      ? names[region][highlightedId]?.clan
+      : undefined;
+  const highlightedPosition = highlightedPlayer
+    ? highlightedPlayer.type === 'position'
+      ? highlightedPlayer.position
+      : (() => {
+          const stringId = Object.entries(players[region][season]).find(
+            ([, player]) => player.id === highlightedId,
+          )?.[0];
+          return stringId === undefined ? undefined : parseInt(stringId);
+        })()
+    : undefined;
+  const totalPlayers =
+    !ratingsInfo?.detail && ratingsInfo?.count ? ratingsInfo.count : undefined;
+  const highlightedPercentile =
+    highlightedPosition && totalPlayers
+      ? Math.ceil((highlightedPosition / totalPlayers) * 100)
+      : undefined;
+  const highlightedScore = highlightedPosition
+    ? players[region][season][highlightedPosition]?.score
+    : undefined;
+
   return (
     <PageWrapper color="orange">
       <Flex gap="4" wrap="wrap" justify="center">
@@ -889,6 +923,39 @@ export default function Page() {
         </Flex>
       </Flex>
 
+      <Table.Root variant="surface">
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeaderCell>Selected player</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Position</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Percentile</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Score</Table.ColumnHeaderCell>
+          </Table.Row>
+        </Table.Header>
+
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell>
+              {highlightedUsername}
+              {highlightedClan ? ` [${highlightedClan}]` : ''}
+            </Table.Cell>
+            <Table.Cell>
+              {highlightedPosition
+                ? (highlightedPosition + 1).toLocaleString()
+                : '--'}
+              {' / '}
+              {totalPlayers?.toLocaleString() ?? '--'}
+            </Table.Cell>
+            <Table.Cell>
+              {highlightedPercentile ? `Top ${highlightedPercentile}%` : '--'}
+            </Table.Cell>
+            <Table.Cell>
+              {highlightedScore?.toLocaleString() ?? '--'}
+            </Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table.Root>
+
       <PageTurner
         page={page}
         pages={pages}
@@ -928,6 +995,9 @@ export default function Page() {
                       : highlightedPlayer.position === index
                     : undefined
                 }
+                onClick={() => {
+                  setHighlightedPlayer({ type: 'position', position: index });
+                }}
               />
             );
           })
