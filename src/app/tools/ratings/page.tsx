@@ -17,6 +17,7 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
 import { RatingsInfo, RatingsPlayer } from '../../../commands/ratings';
 import PageWrapper from '../../../components/PageWrapper';
+import { Skeleton } from '../../../components/Skeleton';
 import { LEAGUES } from '../../../constants/leagues';
 import { FIRST_ARCHIVED_RATINGS_SEASON } from '../../../constants/ratings';
 import { REGIONS, REGION_NAMES, Region } from '../../../constants/regions';
@@ -42,7 +43,7 @@ const SEEDING_SIZE = 2 ** 7;
 
 interface NameCacheEntry {
   nickname: string;
-  clan?: string;
+  clan: string | null;
 }
 type NameCache = Record<Region, Record<number, NameCacheEntry | null>>;
 type LeaderboardCache = Record<Region, Record<number, Record<number, number>>>;
@@ -99,7 +100,11 @@ export default function Page() {
 
   const positionInput = useRef<HTMLInputElement>(null);
   const scoreInput = useRef<HTMLInputElement>(null);
-  const leaguePositionCache = useRef<Record<number, number>>({});
+  const leaguePositionCache = useRef<Record<Region, Record<number, number>>>({
+    asia: {},
+    com: {},
+    eu: {},
+  });
 
   const pages = Math.ceil(
     (ratingsInfo && ratingsInfo.detail === undefined ? ratingsInfo?.count : 1) /
@@ -122,7 +127,7 @@ export default function Page() {
       );
     })();
   }, [season, region]);
-  // initial leagues caching for current season
+  // initial caching
   useEffect(() => {
     if (season in leaderboard[region]) return;
 
@@ -130,8 +135,12 @@ export default function Page() {
       (async () => {
         const results = (
           await Promise.all(
-            range(0, 5).map((league: number) => {
-              return getRatingsLeague(region, league);
+            range(0, 5).map(async (league: number) => {
+              const data = await getRatingsLeague(region, league);
+              leaguePositionCache.current[region][league] =
+                data.result[0].number - 1;
+
+              return data;
             }),
           )
         )
@@ -242,7 +251,7 @@ export default function Page() {
                 draft[region][ids[index]] = player
                   ? {
                       nickname: player.account_name,
-                      clan: player.clan?.tag,
+                      clan: player.clan?.tag ?? null,
                     }
                   : null;
               }),
@@ -270,8 +279,6 @@ export default function Page() {
     id: number,
     size: number,
   ): Promise<RatingsPlayer[]> {
-    console.log(id, 'working');
-
     const radius = Math.round(size / 2);
     const targetPosition = Object.entries(leaderboard[region][season]).find(
       ([, player]) => id === player,
@@ -291,16 +298,17 @@ export default function Page() {
       }
 
       if (!isMissing) {
-        console.log(id, 'skipping');
         return [];
       }
     }
 
-    const seedingPlayerPosition = parseInt(
-      Object.entries(leaderboard[region][season]).find(
-        ([, player]) => id === player,
-      )![0],
-    );
+    const seedingPlayerNeighborEntry = Object.entries(
+      leaderboard[region][season],
+    ).find(([, player]) => id === player);
+
+    if (seedingPlayerNeighborEntry === undefined) return [];
+
+    const seedingPlayerPosition = parseInt(seedingPlayerNeighborEntry[0]);
     const { neighbors } = await getRatingsNeighbors(region, id, size, true);
 
     useLeaderboardCache.setState(
@@ -316,7 +324,7 @@ export default function Page() {
     );
     useScoreCache.setState(
       produce((draft: ScoreCache) => {
-        neighbors.forEach((neighbor, neighborIndex) => {
+        neighbors.forEach((neighbor) => {
           if (!(neighbor.spa_id in draft[region][season])) {
             draft[region][season][neighbor.spa_id] = neighbor.score;
           }
@@ -335,8 +343,6 @@ export default function Page() {
         });
       }),
     );
-
-    console.log(id, 'cached');
 
     return neighbors;
   }
@@ -667,7 +673,7 @@ export default function Page() {
                       onClick={async () => {
                         if (season === 0) {
                           const position =
-                            leaguePositionCache.current[jumpToLeague];
+                            leaguePositionCache.current[region][jumpToLeague];
                           const newPage = Math.floor(position / ROWS_PER_PAGE);
 
                           setPage(newPage);
@@ -985,10 +991,28 @@ export default function Page() {
             >
               <Table.Cell>{position.toLocaleString()}.</Table.Cell>
               <Table.Cell>
-                {names[region][id] === null
-                  ? `Deleted player ${id}`
-                  : names[region][id]?.nickname ?? `Loading player...`}
-                <Text color="gray">{clan ? ` [${clan}]` : ''}</Text>
+                <Flex gap="2">
+                  {names[region][id] === null
+                    ? `Deleted player ${id}`
+                    : names[region][id]?.nickname ?? (
+                        <Skeleton
+                          style={{
+                            height: 16,
+                            width: Math.random() * 128 + 128,
+                          }}
+                        />
+                      )}
+                  {clan ? (
+                    <Text color="gray">{`[${clan}]`}</Text>
+                  ) : (
+                    clan === undefined &&
+                    names[region][id] !== null && (
+                      <Skeleton
+                        style={{ height: 16, width: Math.random() * 16 + 32 }}
+                      />
+                    )
+                  )}
+                </Flex>
               </Table.Cell>
               {season === 0 && (
                 <Table.Cell align="center" justify="center">
@@ -1019,15 +1043,20 @@ export default function Page() {
                 </Table.Cell>
               )}
               <Table.Cell align="right" justify="center">
-                {totalPlayers
-                  ? Math.ceil(((index + 1) / totalPlayers) * 100)
-                  : '--'}
-                %
+                {totalPlayers ? (
+                  `${Math.ceil(((index + 1) / totalPlayers) * 100)}%`
+                ) : (
+                  <Skeleton style={{ height: 16, width: 24 }} />
+                )}
               </Table.Cell>
               <Table.Cell align="right">
                 {(leaderboard[region][season]?.[index]
                   ? scores[leaderboard[region][season][index]]?.toLocaleString()
-                  : undefined) ?? '--'}
+                  : undefined) ?? (
+                  <Skeleton
+                    style={{ height: 16, width: Math.random() * 4 + 32 }}
+                  />
+                )}
               </Table.Cell>
             </Table.Row>
           );
