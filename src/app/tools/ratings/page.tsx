@@ -906,7 +906,9 @@ export default function Page() {
           <Table.Row>
             <Table.ColumnHeaderCell width="0">Position</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Player</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell width="0">Reward</Table.ColumnHeaderCell>
+            {season === 0 && (
+              <Table.ColumnHeaderCell width="0">Reward</Table.ColumnHeaderCell>
+            )}
             <Table.ColumnHeaderCell width="0">
               Percentile
             </Table.ColumnHeaderCell>
@@ -946,46 +948,55 @@ export default function Page() {
                   : 'unset',
                 cursor: 'pointer',
               }}
-              key={index}
+              key={`${region}${season}${index}`}
               onClick={() => {
                 setHighlightedPlayer({ type: 'position', position: index });
               }}
             >
-              <Table.Cell key={index}>{position.toLocaleString()}.</Table.Cell>
-              <Table.Cell key={index}>
+              <Table.Cell>{position.toLocaleString()}.</Table.Cell>
+              <Table.Cell>
                 {names[region][id] === null
                   ? `Deleted player ${id}`
                   : names[region][id]?.nickname ?? `Loading player...`}
                 <Text color="gray">{clan ? ` [${clan}]` : ''}</Text>
               </Table.Cell>
-              <Table.Cell key={index} align="center" justify="center">
-                {reward ? (
-                  <Flex align="center" justify="center" gap="1">
-                    <img
-                      style={{
-                        objectFit: 'contain',
-                      }}
-                      width={32}
-                      height={32}
-                      src={
-                        reward.type === 'stuff'
-                          ? reward.stuff.image_url
-                          : reward.vehicle.image_url
-                      }
-                    />
-                    {reward.count === 1 ? '' : `x${reward.count}`}
-                  </Flex>
-                ) : (
-                  '--'
-                )}
-              </Table.Cell>
-              <Table.Cell key={index} align="right" justify="center">
+              {season === 0 && (
+                <Table.Cell align="center" justify="center">
+                  {reward ? (
+                    <Flex align="center" justify="center" gap="1">
+                      <img
+                        style={{
+                          objectFit: 'contain',
+                        }}
+                        width={32}
+                        height={32}
+                        src={
+                          reward.type === 'stuff'
+                            ? reward.stuff.image_url
+                            : reward.vehicle.image_url
+                        }
+                        alt={
+                          reward.type === 'stuff'
+                            ? reward.stuff.title
+                            : reward.vehicle.user_string
+                        }
+                      />
+                      <Text style={{ whiteSpace: 'nowrap' }} color="gray">
+                        {reward.count === 1 ? '' : `x ${reward.count}`}
+                      </Text>
+                    </Flex>
+                  ) : (
+                    '--'
+                  )}
+                </Table.Cell>
+              )}
+              <Table.Cell align="right" justify="center">
                 {totalPlayers
                   ? Math.ceil(((index + 1) / totalPlayers) * 100)
                   : '--'}
                 %
               </Table.Cell>
-              <Table.Cell key={index} align="right">
+              <Table.Cell align="right">
                 {players[region][season]?.[index]?.score.toLocaleString()}
               </Table.Cell>
             </Table.Row>
