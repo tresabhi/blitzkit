@@ -206,10 +206,22 @@ export default function Page() {
     if (!ratingsInfo || ratingsInfo?.detail) return;
 
     if (season === 0) {
-      const middleIndex = Math.round(page * ROWS_PER_PAGE + ROWS_PER_PAGE / 2);
-      if (!(middleIndex in leaderboard[region][season])) return;
-      const middleId = leaderboard[region][season][middleIndex];
-      cacheNeighbors(middleId, ROWS_PER_PAGE * 3);
+      const middleIndex = page * ROWS_PER_PAGE + ROWS_PER_PAGE / 2;
+      const best = range(
+        page * ROWS_PER_PAGE,
+        page * ROWS_PER_PAGE + ROWS_PER_PAGE + 1,
+      )
+        .filter((index) => index in leaderboard[region][season])
+        .map((index) => ({ index, distance: Math.abs(index - middleIndex) }))
+        .sort((a, b) => b.distance - a.distance)
+        .at(0);
+
+      if (best === undefined) return;
+
+      cacheNeighbors(
+        leaderboard[region][season][best.index],
+        ROWS_PER_PAGE * 3,
+      );
     } else {
       const ids = range(
         Math.max(0, (page - 1) * ROWS_PER_PAGE),
@@ -258,6 +270,8 @@ export default function Page() {
     id: number,
     size: number,
   ): Promise<RatingsPlayer[]> {
+    console.log(id, 'working');
+
     const radius = Math.round(size / 2);
     const targetPosition = Object.entries(leaderboard[region][season]).find(
       ([, player]) => id === player,
@@ -276,7 +290,10 @@ export default function Page() {
         if (isMissing) break;
       }
 
-      if (!isMissing) return [];
+      if (!isMissing) {
+        console.log(id, 'skipping');
+        return [];
+      }
     }
 
     const seedingPlayerPosition = parseInt(
@@ -318,6 +335,8 @@ export default function Page() {
         });
       }),
     );
+
+    console.log(id, 'cached');
 
     return neighbors;
   }
