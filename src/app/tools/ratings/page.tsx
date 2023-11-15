@@ -15,7 +15,6 @@ import { produce } from 'immer';
 import { debounce, range } from 'lodash';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
-import { BlitzkriegRatingsLeaderboardEntry } from '../../../../scripts/buildRatingsLeaderboard';
 import { RatingsInfo, RatingsPlayer } from '../../../commands/ratings';
 import PageWrapper from '../../../components/PageWrapper';
 import { LEAGUES } from '../../../constants/leagues';
@@ -46,23 +45,26 @@ interface NameCacheEntry {
   clan?: string;
 }
 type NameCache = Record<Region, Record<number, NameCacheEntry | null>>;
-type PlayersCache = Record<
-  Region,
-  Record<number, Record<number, BlitzkriegRatingsLeaderboardEntry>>
->;
+type LeaderboardCache = Record<Region, Record<number, Record<number, number>>>;
 type InfoCache = Record<Region, Record<number, RatingsInfo | undefined>>;
+type ScoreCache = Record<Region, Record<number, Record<number, number>>>;
 
 const useNameCache = create<NameCache>(() => ({
   asia: {},
   com: {},
   eu: {},
 }));
-const usePlayersCache = create<PlayersCache>(() => ({
+const useLeaderboardCache = create<LeaderboardCache>(() => ({
   asia: {},
   com: {},
   eu: {},
 }));
 const useInfoCache = create<InfoCache>(() => ({
+  asia: {},
+  com: {},
+  eu: {},
+}));
+const useScoreCache = create<ScoreCache>(() => ({
   asia: {},
   com: {},
   eu: {},
@@ -90,9 +92,10 @@ export default function Page() {
   const [latestArchivedSeasonNumber, setLatestArchivedSeasonNumber] = useState<
     number | null
   >(null);
+  const scores = useScoreCache()[region][season];
 
   const names = useNameCache();
-  const players = usePlayersCache();
+  const leaderboard = useLeaderboardCache();
 
   const positionInput = useRef<HTMLInputElement>(null);
   const scoreInput = useRef<HTMLInputElement>(null);
@@ -121,94 +124,91 @@ export default function Page() {
   }, [season, region]);
   // initial leagues caching for current season
   useEffect(() => {
-    if (season in players[region]) return;
+    if (season in leaderboard[region]) return;
 
     if (season === 0) {
       (async () => {
-        const newNameCache: Record<number, NameCacheEntry> = {};
-        const results = await Promise.all(
-          range(0, 5).map(async (league: number) => {
-            const leaguePlayers = await getRatingsLeague(region, league);
-            leaguePositionCache.current[league] =
-              leaguePlayers.result[0].number - 1;
-            leaguePlayers.result.forEach((player) => {
-              newNameCache[player.spa_id] = {
-                nickname: player.nickname,
-                clan: player.clan_tag,
-              };
+        const results = (
+          await Promise.all(
+            range(0, 5).map((league: number) => {
+              return getRatingsLeague(region, league);
+            }),
+          )
+        )
+          .map(({ result }) => result)
+          .flat();
+
+        useLeaderboardCache.setState(
+          produce((draft: LeaderboardCache) => {
+            if (!(season in draft[region])) draft[region][season] = {};
+
+            results.forEach((result) => {
+              draft[region][season][result.number - 1] = result.spa_id;
             });
-
-            return leaguePlayers.result.reduce<
-              Record<number, BlitzkriegRatingsLeaderboardEntry>
-            >(
-              (accumulator, player) => ({
-                ...accumulator,
-
-                [player.number - 1]: {
-                  id: player.spa_id,
-                  score: player.score,
-                } satisfies BlitzkriegRatingsLeaderboardEntry,
-              }),
-              {},
-            );
-          }),
-        );
-        const newPlayers = results.reduce<
-          Record<number, BlitzkriegRatingsLeaderboardEntry>
-        >(
-          (accumulator, result) => ({
-            ...accumulator,
-            ...result,
-          }),
-          {},
-        );
-
-        usePlayersCache.setState(
-          produce((draft: PlayersCache) => {
-            draft[region][season] = {
-              ...draft[region][season],
-              ...newPlayers,
-            };
           }),
         );
         useNameCache.setState(
           produce((draft: NameCache) => {
-            draft[region] = { ...draft[region], ...newNameCache };
+            results.forEach((result) => {
+              draft[region][result.spa_id] = {
+                nickname: result.nickname,
+                clan: result.clan_tag,
+              };
+            });
+          }),
+        );
+        useScoreCache.setState(
+          produce((draft: ScoreCache) => {
+            if (!(season in draft[region])) draft[region][season] = {};
+
+            results.forEach((result) => {
+              draft[region][season][result.spa_id] = result.score;
+            });
           }),
         );
       })();
     } else {
-      getArchivedRatingsLeaderboard(region, season).then((result) => {
-        usePlayersCache.setState(
-          produce((draft: PlayersCache) => {
-            draft[region][season] = {
-              ...draft[region][season],
-              ...result,
-            };
+      getArchivedRatingsLeaderboard(region, season).then((results) => {
+        useLeaderboardCache.setState(
+          produce((draft: LeaderboardCache) => {
+            if (!(season in draft[region])) draft[region][season] = {};
+
+            results.forEach((result, index) => {
+              draft[region][season][index] = result.id;
+            });
+          }),
+        );
+        useScoreCache.setState(
+          produce((draft: ScoreCache) => {
+            if (!(season in draft[region])) draft[region][season] = {};
+
+            results.forEach((result) => {
+              draft[region][season][result.id] = result.score;
+            });
           }),
         );
       });
     }
-  }, [season in players[region]]);
+  }, [season in leaderboard[region]]);
   // 2nd page caching for current season
   useEffect(() => {
     if (
       season === 0 &&
-      players !== null &&
-      players[region][season] &&
-      0 in players[region][season]
+      leaderboard !== null &&
+      leaderboard[region][season] &&
+      0 in leaderboard[region][season]
     ) {
-      cacheNeighbors(players[region][season][0].id, ROWS_PER_PAGE * 3);
+      cacheNeighbors(leaderboard[region][season][0], ROWS_PER_PAGE * 3);
     }
-  }, [players[region]?.[season] && 0 in players[region][season]]);
+  }, [leaderboard[region]?.[season] && 0 in leaderboard[region][season]]);
   // neighboring page caching for all seasons
   useEffect(() => {
     if (!ratingsInfo || ratingsInfo?.detail) return;
 
     if (season === 0) {
       const middleIndex = Math.round(page * ROWS_PER_PAGE + ROWS_PER_PAGE / 2);
-      if (!(middleIndex in players[region][season])) return;
-      const middleId = players[region][season][middleIndex].id;
+      if (!(middleIndex in leaderboard[region][season])) return;
+      const middleId = leaderboard[region][season][middleIndex];
       cacheNeighbors(middleId, ROWS_PER_PAGE * 3);
     } else {
       const ids = range(
@@ -218,7 +218,7 @@ export default function Page() {
           (page + 1) * ROWS_PER_PAGE + ROWS_PER_PAGE,
         ),
       )
-        .map((index) => players[region][season][index].id)
+        .map((index) => leaderboard[region][season][index])
         .filter(Boolean)
         .filter((id) => !(id in names[region]));
 
@@ -244,7 +244,8 @@ export default function Page() {
     region,
     season,
     ratingsInfo?.detail,
-    players[region][season] !== undefined && 0 in players[region][season],
+    leaderboard[region][season] !== undefined &&
+      0 in leaderboard[region][season],
   ]);
   // latest archived season number caching
   useEffect(() => {}, [
@@ -258,8 +259,8 @@ export default function Page() {
     size: number,
   ): Promise<RatingsPlayer[]> {
     const radius = Math.round(size / 2);
-    const targetPosition = Object.entries(players[region][season]).find(
-      ([, player]) => id === player.id,
+    const targetPosition = Object.entries(leaderboard[region][season]).find(
+      ([, player]) => id === player,
     )?.[0];
 
     if (targetPosition !== undefined) {
@@ -271,7 +272,7 @@ export default function Page() {
         position <= targetPositionAsNumber + radius;
         position++
       ) {
-        isMissing = !(position in players[region][season]);
+        isMissing = !(position in leaderboard[region][season]);
         if (isMissing) break;
       }
 
@@ -279,28 +280,32 @@ export default function Page() {
     }
 
     const seedingPlayerPosition = parseInt(
-      Object.entries(players[region][season]).find(
-        ([, player]) => id === player.id,
+      Object.entries(leaderboard[region][season]).find(
+        ([, player]) => id === player,
       )![0],
     );
     const { neighbors } = await getRatingsNeighbors(region, id, size, true);
 
-    usePlayersCache.setState(
-      produce((draft: PlayersCache) => {
+    useLeaderboardCache.setState(
+      produce((draft: LeaderboardCache) => {
         neighbors.forEach((neighbor, neighborIndex) => {
-          // const position = neighbor.number - 1;
           const position = neighborIndex - radius + seedingPlayerPosition;
 
           if (!(position in draft[region][season])) {
-            draft[region][season][position] = {
-              id: neighbor.spa_id,
-              score: neighbor.score,
-            } satisfies BlitzkriegRatingsLeaderboardEntry;
+            draft[region][season][position] = neighbor.spa_id;
           }
         });
       }),
     );
-
+    useScoreCache.setState(
+      produce((draft: ScoreCache) => {
+        neighbors.forEach((neighbor, neighborIndex) => {
+          if (!(neighbor.spa_id in draft[region][season])) {
+            draft[region][season][neighbor.spa_id] = neighbor.score;
+          }
+        });
+      }),
+    );
     useNameCache.setState(
       produce((draft: NameCache) => {
         neighbors.forEach((neighbor) => {
@@ -325,8 +330,8 @@ export default function Page() {
     );
 
     if (season === 0) {
-      const playerEntries = Object.entries(players[region][season]);
-      let closestPlayer: BlitzkriegRatingsLeaderboardEntry | null = null;
+      const playerEntries = Object.entries(leaderboard[region][season]);
+      let closestPlayerId: number | null = null;
       let closestPosition: number | null = null;
       let closestPositionDistance = Infinity;
 
@@ -337,11 +342,11 @@ export default function Page() {
         if (distance < closestPositionDistance) {
           closestPositionDistance = distance;
           closestPosition = position;
-          closestPlayer = player;
+          closestPlayerId = player;
         }
       });
 
-      if (closestPlayer === null || closestPosition === null) return;
+      if (closestPlayerId === null || closestPosition === null) return;
 
       if (closestPositionDistance === 0) {
         setHighlightedPlayer({ type: 'position', position: targetPosition });
@@ -352,8 +357,7 @@ export default function Page() {
 
       // 1 going down and -1 going up
       const loadingDirection = Math.sign(targetPosition - closestPosition);
-      let seedingPlayer = (closestPlayer as BlitzkriegRatingsLeaderboardEntry)
-        .id;
+      let seedingPlayer = closestPlayerId as number;
       let targetPositionAcquired = false;
       let neighbors: RatingsPlayer[];
 
@@ -385,7 +389,7 @@ export default function Page() {
     } else {
       setPage(Math.floor(targetPosition / ROWS_PER_PAGE));
 
-      if (players) {
+      if (leaderboard) {
         setHighlightedPlayer({
           type: 'position',
           position: targetPosition,
@@ -399,25 +403,25 @@ export default function Page() {
     const targetScore = scoreInput.current!.valueAsNumber;
 
     if (season === 0) {
-      const playerEntries = Object.entries(players[region][season]);
-      let closestPlayer: BlitzkriegRatingsLeaderboardEntry | null = null;
+      const playerEntries = Object.entries(leaderboard[region][season]);
+      let closestId: number | null = null;
       let closestScore: number | null = null;
       let closestScoreDistance = Infinity;
       let closesIndex = -1;
 
-      playerEntries.forEach(([positionAsString, player], index) => {
+      playerEntries.forEach(([positionAsString, id]) => {
         const position = parseInt(positionAsString);
-        const distance = Math.abs(player.score - targetScore);
+        const distance = Math.abs(scores[id] - targetScore);
 
         if (distance < closestScoreDistance) {
           closestScoreDistance = distance;
-          closestScore = player.score;
-          closestPlayer = player;
+          closestScore = scores[id];
+          closestId = id;
           closesIndex = position;
         }
       });
 
-      if (closestPlayer === null || closestScore === null) return;
+      if (closestId === null || closestScore === null) return;
 
       if (closestScoreDistance === 0) {
         setHighlightedPlayer({ type: 'id', id: closesIndex });
@@ -427,16 +431,15 @@ export default function Page() {
       const loadingDirection = Math.sign(closestScore - targetScore);
       let targetPlayer: RatingsPlayer;
       let scoreAcquired = false;
-      let seedingPlayer = closestPlayer as BlitzkriegRatingsLeaderboardEntry;
+      let seedingId = closestId as number;
+      let seedingScore = scores[seedingId];
 
       setLoadingProgress([0, closestScoreDistance]);
       while (!scoreAcquired) {
-        const neighbors = await cacheNeighbors(seedingPlayer.id, SEEDING_SIZE);
+        const neighbors = await cacheNeighbors(seedingId, SEEDING_SIZE);
         const seedingNeighbor = neighbors.at(loadingDirection === 1 ? -1 : 0)!;
-        seedingPlayer = {
-          id: seedingNeighbor.spa_id,
-          score: seedingNeighbor.score,
-        };
+        seedingId = seedingNeighbor.spa_id;
+        seedingScore = scores[seedingId];
 
         setLoadingProgress([
           closestScoreDistance - Math.abs(seedingNeighbor.score - targetScore),
@@ -444,9 +447,9 @@ export default function Page() {
         ]);
 
         if (loadingDirection === 1) {
-          scoreAcquired = seedingPlayer.score <= targetScore;
+          scoreAcquired = seedingScore <= targetScore;
         } else {
-          scoreAcquired = seedingPlayer.score >= targetScore;
+          scoreAcquired = seedingScore >= targetScore;
         }
 
         if (scoreAcquired) {
@@ -469,9 +472,9 @@ export default function Page() {
       let playerIndex = -1;
 
       for (let index = ratingsInfo.count; index >= 0; index--) {
-        if (!(index in players[region][season])) continue;
+        if (!(index in leaderboard[region][season])) continue;
 
-        if (players[region][season][index].score >= targetScore) {
+        if (scores[leaderboard[region][season][index]] >= targetScore) {
           playerIndex = index;
           break;
         }
@@ -481,7 +484,7 @@ export default function Page() {
 
       setPage(Math.floor(playerIndex / ROWS_PER_PAGE));
 
-      if (players) {
+      if (leaderboard) {
         setHighlightedPlayer({
           type: 'position',
           position: playerIndex,
@@ -649,18 +652,22 @@ export default function Page() {
                           const newPage = Math.floor(position / ROWS_PER_PAGE);
 
                           setPage(newPage);
-                          if (players) {
+                          if (leaderboard) {
                             setHighlightedPlayer({
                               type: 'id',
-                              id: players[region][season][position].id,
+                              id: leaderboard[region][season][position],
                             });
                             cacheNeighbors(
-                              players[region][season][position].id,
+                              leaderboard[region][season][position],
                               4 * ROWS_PER_PAGE - 2,
                             );
                           }
                         } else {
-                          if (!ratingsInfo || ratingsInfo.detail || !players)
+                          if (
+                            !ratingsInfo ||
+                            ratingsInfo.detail ||
+                            !leaderboard
+                          )
                             return;
 
                           const minScore =
@@ -673,7 +680,8 @@ export default function Page() {
                             index++
                           ) {
                             if (
-                              players[region][season][index].score < minScore
+                              scores[leaderboard[region][season][index]] <
+                              minScore
                             ) {
                               firstPlayerIndex = index;
                               break;
@@ -685,7 +693,7 @@ export default function Page() {
                           setPage(Math.floor(firstPlayerIndex / ROWS_PER_PAGE));
                           setHighlightedPlayer({
                             type: 'id',
-                            id: players[region][season][firstPlayerIndex].id,
+                            id: leaderboard[region][season][firstPlayerIndex],
                           });
                         }
                       }}
@@ -732,18 +740,15 @@ export default function Page() {
                                 skip: false;
                               })[];
 
-                            usePlayersCache.setState(
-                              produce((draft: PlayersCache) => {
+                            useLeaderboardCache.setState(
+                              produce((draft: LeaderboardCache) => {
                                 if (draft) {
-                                  values.map((player) => {
+                                  values.forEach((player) => {
                                     const playerWithTypes =
                                       player as typeof player & { skip: false };
                                     draft[region][season][
                                       playerWithTypes.number - 1
-                                    ] = {
-                                      id: playerWithTypes.spa_id,
-                                      score: 0,
-                                    };
+                                    ] = playerWithTypes.spa_id;
                                   });
                                 }
                               }),
@@ -774,7 +779,7 @@ export default function Page() {
                               `https://api.wotblitz.${region}/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}`,
                             );
                             const playerKeys = Object.keys(
-                              players[region][season],
+                              leaderboard[region][season],
                             );
 
                             setSearchResults(
@@ -784,9 +789,9 @@ export default function Page() {
                                   number: parseInt(
                                     playerKeys.find(
                                       (indexAsString) =>
-                                        players[region][season][
+                                        leaderboard[region][season][
                                           parseInt(indexAsString)
-                                        ].id === searchedPlayer.account_id,
+                                        ] === searchedPlayer.account_id,
                                     )!,
                                   ),
                                 }))
@@ -837,7 +842,7 @@ export default function Page() {
                                 index++
                               ) {
                                 if (
-                                  players[region][season][index].id ===
+                                  leaderboard[region][season][index] ===
                                   player.account_id
                                 ) {
                                   playerIndex = index;
@@ -923,7 +928,7 @@ export default function Page() {
             ratingsInfo?.detail ? 0 : (ratingsInfo?.count ?? 1) - 1,
           ),
         ).map((index) => {
-          const id = players[region][season]?.[index]?.id;
+          const id = leaderboard[region][season]?.[index];
           const clan = id ? names[region][id]?.clan : undefined;
           const position = index + 1;
           const highlight = highlightedPlayer
@@ -997,7 +1002,9 @@ export default function Page() {
                 %
               </Table.Cell>
               <Table.Cell align="right">
-                {players[region][season]?.[index]?.score.toLocaleString()}
+                {(leaderboard[region][season]?.[index]
+                  ? scores[leaderboard[region][season][index]]?.toLocaleString()
+                  : undefined) ?? '--'}
               </Table.Cell>
             </Table.Row>
           );
