@@ -1015,9 +1015,7 @@ export default function Page() {
                         {reward.count === 1 ? '' : `x ${reward.count}`}
                       </Text>
                     </Flex>
-                  ) : (
-                    '--'
-                  )}
+                  ) : null}
                 </Table.Cell>
               )}
               <Table.Cell align="right" justify="center">
