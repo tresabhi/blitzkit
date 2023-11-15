@@ -35,6 +35,7 @@ export async function searchCurrentRatingsPlayers(
       : `https://${regionToRegionSubdomain(
           region,
         )}.wotblitz.com/en/api/rating-leaderboards/search/?prefix=${encodedSearch}`,
+    { cache: 'no-store' },
   );
   const accountList = (await response.json()) as CurrentRatingsPlayerSearch;
 

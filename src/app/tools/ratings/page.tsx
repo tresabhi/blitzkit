@@ -746,6 +746,7 @@ export default function Page() {
                                   values.forEach((player) => {
                                     const playerWithTypes =
                                       player as typeof player & { skip: false };
+
                                     draft[region][season][
                                       playerWithTypes.number - 1
                                     ] = playerWithTypes.spa_id;
