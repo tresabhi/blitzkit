@@ -220,7 +220,7 @@ export default function Page() {
 
       cacheNeighbors(
         leaderboard[region][season][best.index],
-        ROWS_PER_PAGE * 3,
+        2 * (Math.floor(ROWS_PER_PAGE / 2) + best.distance + ROWS_PER_PAGE),
       );
     } else {
       const ids = range(
