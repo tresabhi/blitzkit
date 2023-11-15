@@ -1,15 +1,39 @@
-import { CaretLeftIcon, CaretRightIcon } from '@radix-ui/react-icons';
+import {
+  CaretLeftIcon,
+  CaretRightIcon,
+  SymbolIcon,
+} from '@radix-ui/react-icons';
 import { Button, Flex, TextField } from '@radix-ui/themes';
+import { range } from 'lodash';
 import { useEffect, useRef } from 'react';
+import { infiniteSpin } from './index.css';
 
 interface PageTurnerProps {
+  leaderboard: Record<number, number>;
   page: number;
+  rowsPerPage: number;
   pages: number;
   onPageChange: (page: number, isButtonClick: boolean) => void;
+  totalPlayers: number;
 }
 
-export function PageTurner({ page, onPageChange, pages }: PageTurnerProps) {
+export function PageTurner({
+  page,
+  rowsPerPage,
+  onPageChange,
+  pages,
+  leaderboard,
+  totalPlayers,
+}: PageTurnerProps) {
   const pageInput = useRef<HTMLInputElement>(null);
+  const rightLoading = range(
+    page * rowsPerPage,
+    Math.min(totalPlayers - 1, page * rowsPerPage + rowsPerPage + 1),
+  ).some((index) => !(index in leaderboard));
+  const leftLoading = range(
+    Math.max(0, page * rowsPerPage - 1),
+    Math.max(0, page * rowsPerPage - rowsPerPage - 1) + 1,
+  ).some((index) => !(index in leaderboard));
 
   useEffect(() => {
     if (pageInput.current) pageInput.current.value = `${page + 1}`;
@@ -21,9 +45,13 @@ export function PageTurner({ page, onPageChange, pages }: PageTurnerProps) {
         <Button
           variant="soft"
           onClick={() => onPageChange(Math.max(page - 1, 0), true)}
-          disabled={page === 0}
+          disabled={page === 0 || leftLoading}
         >
-          <CaretLeftIcon />
+          {leftLoading ? (
+            <SymbolIcon className={infiniteSpin} />
+          ) : (
+            <CaretLeftIcon />
+          )}
         </Button>
         <TextField.Root>
           <TextField.Slot>Page</TextField.Slot>
@@ -53,9 +81,13 @@ export function PageTurner({ page, onPageChange, pages }: PageTurnerProps) {
           onClick={() => {
             onPageChange(Math.min(page + 1, pages - 1), true);
           }}
-          disabled={page === pages - 1}
+          disabled={page === pages - 1 || rightLoading}
         >
-          <CaretRightIcon />
+          {rightLoading ? (
+            <SymbolIcon className={infiniteSpin} />
+          ) : (
+            <CaretRightIcon />
+          )}
         </Button>
       </Flex>
     </Flex>

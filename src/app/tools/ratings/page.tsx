@@ -919,6 +919,11 @@ export default function Page() {
       </Flex>
 
       <PageTurner
+        totalPlayers={
+          (ratingsInfo?.detail ? undefined : ratingsInfo?.count) ?? 0
+        }
+        leaderboard={leaderboard[region][season] ?? {}}
+        rowsPerPage={ROWS_PER_PAGE}
         page={page}
         pages={pages}
         onPageChange={(page, isButtonClick) =>
@@ -1032,6 +1037,11 @@ export default function Page() {
       </Table.Root>
 
       <PageTurner
+        totalPlayers={
+          (ratingsInfo?.detail ? undefined : ratingsInfo?.count) ?? 0
+        }
+        rowsPerPage={ROWS_PER_PAGE}
+        leaderboard={leaderboard[region][season] ?? {}}
         page={page}
         pages={pages}
         onPageChange={(page, isButtonClick) =>
