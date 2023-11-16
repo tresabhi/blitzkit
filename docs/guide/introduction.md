@@ -1,6 +1,10 @@
 # Introduction
 
-Blitzkrieg is a multipurpose bot for anything and everything World of Tanks Blitz.
+🎉 Services for everything and anything World of Tanks Blitz
+
+## Bot
+
+Blitzkrieg is available as a Discord bot and can be [installed very easily](/guide/invite).
 
 - Track statistics
 - Find inactive players in a clan
@@ -8,3 +12,11 @@ Blitzkrieg is a multipurpose bot for anything and everything World of Tanks Blit
 - Create embeds for streams
 - Track a player/tanks statistical evolution
 - ...and a variety of other similar things
+
+## Website
+
+Provides a bunch of very helpful tools; https://blitz-krieg.vercel.app/
+
+- Session tracker
+- Ratings leaderboard
+- Way more to come

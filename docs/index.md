@@ -12,7 +12,7 @@ hero:
   actions:
     - theme: brand
       text: Add to Discord Server
-      link: /guide/install
+      link: /guide/invite
     - theme: alt
       text: Guide
       link: /guide/introduction
