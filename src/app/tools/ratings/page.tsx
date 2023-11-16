@@ -239,7 +239,7 @@ export default function Page() {
           (page + 1) * ROWS_PER_PAGE + ROWS_PER_PAGE,
         ),
       )
-        .map((index) => leaderboard[region][season][index])
+        .map((index) => leaderboard[region][season]?.[index])
         .filter(Boolean)
         .filter((id) => !(id in names[region]));
 
