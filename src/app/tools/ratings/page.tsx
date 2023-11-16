@@ -278,7 +278,7 @@ export default function Page() {
   async function cacheNeighbors(
     id: number,
     size: number,
-  ): Promise<RatingsPlayer[]> {
+  ): Promise<RatingsPlayer[] | null> {
     const radius = Math.round(size / 2);
     const targetPosition = Object.entries(leaderboard[region][season]).find(
       ([, player]) => id === player,
@@ -298,7 +298,7 @@ export default function Page() {
       }
 
       if (!isMissing) {
-        return [];
+        return null;
       }
     }
 
@@ -306,7 +306,7 @@ export default function Page() {
       leaderboard[region][season],
     ).find(([, player]) => id === player);
 
-    if (seedingPlayerNeighborEntry === undefined) return [];
+    if (seedingPlayerNeighborEntry === undefined) return null;
 
     const seedingPlayerPosition = parseInt(seedingPlayerNeighborEntry[0]);
     const { neighbors } = await getRatingsNeighbors(region, id, size, true);
@@ -384,12 +384,18 @@ export default function Page() {
       const loadingDirection = Math.sign(targetPosition - closestPosition);
       let seedingPlayer = closestPlayerId as number;
       let targetPositionAcquired = false;
-      let neighbors: RatingsPlayer[];
+      let neighbors: RatingsPlayer[] | null;
 
       setLoadingProgress([0, closestPositionDistance]);
 
       while (!targetPositionAcquired) {
         neighbors = await cacheNeighbors(seedingPlayer, SEEDING_SIZE);
+
+        if (neighbors === null) {
+          targetPositionAcquired = true;
+          break;
+        }
+
         seedingPlayer = neighbors.at(loadingDirection === -1 ? 0 : -1)!.spa_id;
 
         if (loadingDirection === 1) {
@@ -454,7 +460,8 @@ export default function Page() {
       }
 
       const loadingDirection = Math.sign(closestScore - targetScore);
-      let targetPlayer: RatingsPlayer;
+      let targetPlayerId: number;
+      let targetPlayerPosition: number;
       let scoreAcquired = false;
       let seedingId = closestId as number;
       let seedingScore = scores[seedingId];
@@ -462,6 +469,25 @@ export default function Page() {
       setLoadingProgress([0, closestScoreDistance]);
       while (!scoreAcquired) {
         const neighbors = await cacheNeighbors(seedingId, SEEDING_SIZE);
+
+        if (neighbors === null) {
+          const closesEntry = Object.entries(scores)
+            .sort(([, a], [, b]) => b - a)
+            .findLast(([, score]) => score >= targetScore);
+
+          if (closesEntry === undefined) return;
+
+          targetPlayerId = parseInt(closesEntry[0]);
+          targetPlayerPosition = parseInt(
+            Object.entries(leaderboard[region][season]).find(
+              ([, id]) => id === targetPlayerId,
+            )![0],
+          );
+          scoreAcquired = true;
+
+          break;
+        }
+
         const seedingNeighbor = neighbors.at(loadingDirection === 1 ? -1 : 0)!;
         seedingId = seedingNeighbor.spa_id;
         seedingScore = scores[seedingId];
@@ -479,19 +505,25 @@ export default function Page() {
 
         if (scoreAcquired) {
           if (loadingDirection === 1) {
-            targetPlayer = neighbors.find(
+            const targetPlayer = neighbors.find(
               (player) => player.score <= targetScore,
             )!;
+
+            targetPlayerId = targetPlayer.spa_id;
+            targetPlayerPosition = targetPlayer.number - 1;
           } else {
-            targetPlayer = neighbors.findLast(
+            const targetPlayer = neighbors.findLast(
               (player) => player.score >= targetScore,
             )!;
+
+            targetPlayerId = targetPlayer.spa_id;
+            targetPlayerPosition = targetPlayer.number - 1;
           }
         }
       }
 
-      setPage(Math.floor(targetPlayer!.number / ROWS_PER_PAGE));
-      setHighlightedPlayer({ type: 'id', id: targetPlayer!.spa_id });
+      setPage(Math.floor(targetPlayerPosition! / ROWS_PER_PAGE));
+      setHighlightedPlayer({ type: 'id', id: targetPlayerId! });
       setLoadingProgress(null);
     } else {
       let playerIndex = -1;
