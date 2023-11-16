@@ -15,6 +15,8 @@ import { REGION_NAMES_SHORT, Region } from '../constants/regions';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../core/blitz/getRatingsInfo';
+import { getRatingsLeague } from '../core/blitz/getRatingsLeague';
+import { getRatingsNeighbors } from '../core/blitz/getRatingsNeighbors';
 import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
 import { getArchivedLatestSeasonNumber } from '../core/blitzkrieg/getArchivedLatestSeasonNumber';
 import getArchivedRatingsInfo from '../core/blitzkrieg/getArchivedRatingsInfo';
@@ -123,14 +125,14 @@ function addSubcommands(
     .addSubcommand((option) =>
       addOptions(
         option
-          .setName('neighbours')
-          .setDescription('Your position and neighbours'),
+          .setName('neighbors')
+          .setDescription('Your position and neighbors'),
       )
         .addStringOption(addUsernameChoices)
         .addIntegerOption((option) =>
           option
             .setName('limit')
-            .setDescription('How many neighbours to display (default: 10)')
+            .setDescription('How many neighbors to display (default: 10)')
             .setRequired(false)
             .setMinValue(5)
             .setMaxValue(30),
@@ -228,7 +230,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
           | 'current';
         const subcommand = interaction.options.getSubcommand(true) as
           | 'league'
-          | 'neighbours';
+          | 'neighbors';
         const limit = interaction.options.getInteger('limit') ?? 10;
         const seasonOption = interaction.options.getString('season');
         const season = seasonOption ? parseInt(seasonOption) : undefined;
@@ -257,11 +259,8 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
           const regionSubdomain = regionToRegionSubdomain(region);
           const result =
             subcommandGroup === 'current'
-              ? await fetch(
-                  `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/league/${leagueIndex}/top/`,
-                )
-                  .then((response) => response.json() as Promise<LeagueTop>)
-                  .then(async ({ result }) =>
+              ? await getRatingsLeague(region, leagueIndex).then(
+                  async (result) =>
                     result.slice(0, limit).map(
                       (player) =>
                         ({
@@ -272,7 +271,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                           nickname: player.nickname,
                         }) satisfies SimplifiedPlayer,
                     ),
-                  )
+                )
               : await getArchivedRatingsLeaderboard(region, season!).then(
                   async (players) => {
                     const firstPlayerIndex =
@@ -338,29 +337,24 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
 
           const accountInfo = await getAccountInfo(region, id);
           const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
-          const regionSubdomain = regionToRegionSubdomain(region);
           const neighbors =
             subcommandGroup === 'current'
-              ? await fetch(
-                  `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/user/${id}/?neighbors=${Math.round(
-                    limit / 2,
-                  )}`,
+              ? await getRatingsNeighbors(
+                  region,
+                  id,
+                  Math.round(limit / 2),
+                ).then((players) =>
+                  players.neighbors.map(
+                    (player) =>
+                      ({
+                        id: player.spa_id,
+                        position: player.number,
+                        score: player.score,
+                        clan: player.clan_tag,
+                        nickname: player.nickname,
+                      }) satisfies SimplifiedPlayer,
+                  ),
                 )
-                  .then(
-                    (response) => response.json() as Promise<RatingsNeighbors>,
-                  )
-                  .then((players) =>
-                    players.neighbors.map(
-                      (player) =>
-                        ({
-                          id: player.spa_id,
-                          position: player.number,
-                          score: player.score,
-                          clan: player.clan_tag,
-                          nickname: player.nickname,
-                        }) satisfies SimplifiedPlayer,
-                    ),
-                  )
               : await getArchivedRatingsLeaderboard(region, season!).then(
                   async (players) => {
                     const playerIndex = players.findIndex(
@@ -414,7 +408,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
           titleName = neighbors
             ? accountInfo.nickname
             : `No Ongoing Season - ${REGION_NAMES_SHORT[region]}`;
-          titleDescription = 'Ratings neighbours';
+          titleDescription = 'Ratings neighbors';
           playersBefore = neighbors ? neighbors[0].position - 1 : 0;
           playersAfter =
             regionRatingsInfo.count - neighbors[neighbors.length - 1].position;

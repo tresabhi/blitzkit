@@ -12,10 +12,10 @@ hero:
   actions:
     - theme: brand
       text: Add to Discord Server
-      link: guide/install
+      link: /guide/invite
     - theme: alt
       text: Guide
-      link: /guide/about
+      link: /guide/introduction
 
 features:
   - title: Clean and Efficient UI

@@ -137,15 +137,12 @@ export default function Page() {
           await Promise.all(
             range(0, 5).map(async (league: number) => {
               const data = await getRatingsLeague(region, league);
-              leaguePositionCache.current[region][league] =
-                data.result[0].number - 1;
+              leaguePositionCache.current[region][league] = data[0].number - 1;
 
               return data;
             }),
           )
-        )
-          .map(({ result }) => result)
-          .flat();
+        ).flat();
 
         useLeaderboardCache.setState(
           produce((draft: LeaderboardCache) => {
@@ -308,13 +305,14 @@ export default function Page() {
 
     if (seedingPlayerNeighborEntry === undefined) return null;
 
-    const seedingPlayerPosition = parseInt(seedingPlayerNeighborEntry[0]);
+    // const seedingPlayerPosition = parseInt(seedingPlayerNeighborEntry[0]);
     const { neighbors } = await getRatingsNeighbors(region, id, size, true);
 
     useLeaderboardCache.setState(
       produce((draft: LeaderboardCache) => {
         neighbors.forEach((neighbor, neighborIndex) => {
-          const position = neighborIndex - radius + seedingPlayerPosition;
+          // const position = neighborIndex - radius + seedingPlayerPosition;
+          const position = neighbor.number - 1;
 
           if (!(position in draft[region][season])) {
             draft[region][season][position] = neighbor.spa_id;

@@ -6,7 +6,7 @@ import {
   RatingsNeighbors,
   RatingsPlayer,
 } from '../src/commands/ratings';
-import { patientFetch } from '../src/core/blitzkrieg/patientFetch';
+import { patientFetchJSON } from '../src/core/blitzkrieg/patientFetchJSON';
 import commitMultipleFiles from './commitMultipleFiles.js';
 
 /*
@@ -29,11 +29,9 @@ const server = argv.find((arg) => arg.startsWith('--region='))?.split('=')[1];
 if (!server) throw new Error('Region parameter not specified');
 
 const NEIGHBORS = 1024;
-const PLAYERS = await patientFetch(
+const PLAYERS = await patientFetchJSON<RatingsInfo>(
   `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,
-)
-  .then((response) => response.json() as Promise<RatingsInfo>)
-  .then((data) => (data.detail === undefined ? data.count : undefined));
+).then((data) => (data.detail === undefined ? data.count : undefined));
 
 if (PLAYERS === undefined) {
   throw new Error('No current ratings season running');
@@ -44,9 +42,9 @@ const leaderboard: BlitzkriegRatingsLeaderboard = [];
 let registered = 0;
 
 async function branchFromPlayer(id: number) {
-  const { neighbors } = await patientFetch(
+  const { neighbors } = await patientFetchJSON<RatingsNeighbors>(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/user/${id}/?neighbors=${NEIGHBORS}`,
-  ).then((response) => response.json() as Promise<RatingsNeighbors>);
+  );
 
   const firstPlayer = neighbors[0];
   const lastPlayer = neighbors[neighbors.length - 1];
@@ -75,9 +73,9 @@ async function branchFromPlayer(id: number) {
 }
 
 async function branchFromLeague(id: number) {
-  const { result } = await patientFetch(
+  const { result } = await patientFetchJSON<{ result: RatingsPlayer[] }>(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/league/${id}/top/`,
-  ).then((response) => response.json() as Promise<{ result: RatingsPlayer[] }>);
+  );
 
   const firstPlayer = result[0];
   const lastPlayer = result[result.length - 1];
@@ -113,11 +111,8 @@ const leaderboardJSON = JSON.stringify(leaderboard);
 if (publish) {
   const octokit = new Octokit({ auth: env.GH_TOKEN });
 
-  const info = await patientFetch(
+  const info = await patientFetchJSON<RatingsInfo & { detail: undefined }>(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,
-  ).then(
-    (response) =>
-      response.json() as Promise<RatingsInfo & { detail: undefined }>,
   );
   const normalizedServer = server === 'na' ? 'com' : server;
 
