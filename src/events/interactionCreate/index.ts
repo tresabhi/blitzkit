@@ -16,6 +16,7 @@ import {
 import discord from '../../../discord.json' assert { type: 'json' };
 import { aboutCommand } from '../../commands/about';
 import { breakdownCommand } from '../../commands/breakdown';
+import { creditsCommand } from '../../commands/credits';
 import { debugCommand } from '../../commands/debug';
 import { eligibleCommand } from '../../commands/eligible';
 import { evolutionCommand } from '../../commands/evolution';
@@ -31,7 +32,6 @@ import { searchClansCommand } from '../../commands/searchClans';
 import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { searchTanksCommand } from '../../commands/searchTanks';
 import { statsCommand } from '../../commands/stats';
-import { todayCommand } from '../../commands/today';
 import getClientId from '../../core/blitzkrieg/getClientId';
 import isDev from '../../core/blitzkrieg/isDev';
 import { secrets } from '../../core/blitzkrieg/secrets';
@@ -102,7 +102,7 @@ export const COMMANDS_RAW: CommandRegistry[] = [
   evolutionCommand,
   statsCommand,
   ratingsCommand,
-  todayCommand,
+  creditsCommand,
 ];
 
 export const commands = Promise.all(COMMANDS_RAW).then((rawCommands) =>

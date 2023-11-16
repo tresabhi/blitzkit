@@ -85,13 +85,13 @@ tankopedia;
 export type TankAverages = Record<number, IndividualTankAverage>;
 
 export const tankAverages = fetch(
-  context === 'bot'
-    ? 'https://www.blitzstars.com/api/tankaverages.json'
-    : '/api/tank-averages',
+  context === 'website'
+    ? '/api/tank-averages'
+    : 'https://www.blitzstars.com/api/tankaverages.json',
 )
   .then((response) => response.json())
   .then((json) => {
-    if (context === 'bot') {
+    if (context === 'server') {
       const partialTankAverages: TankAverages = {};
 
       (json as IndividualTankAverage[]).forEach((individualTankAverage) => {

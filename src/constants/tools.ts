@@ -9,13 +9,12 @@ export const TOOLS: Tool[] = [
   {
     id: 'session',
     title: 'Session tracker',
-    description: 'Track your performance in a session',
+    description: 'Live session performance tracker',
   },
   {
     id: 'ratings',
     title: 'Ratings',
-    description: 'Current and old season leader boards',
-    disabled: true,
+    description: 'Current and archived ratings leaderboards',
   },
   {
     id: 'tankopedia',

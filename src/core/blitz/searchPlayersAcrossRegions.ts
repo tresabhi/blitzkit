@@ -2,12 +2,12 @@ import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import fetchBlitz from './fetchBlitz';
 
-interface Account {
+export interface AccountListItem {
   nickname: string;
   account_id: number;
 }
-export type AccountList = Account[];
-export type AccountListWithServer = (Account & {
+export type AccountList = AccountListItem[];
+export type AccountListWithServer = (AccountListItem & {
   region: Region;
 })[];
 
@@ -16,10 +16,10 @@ export const usernamePatternWithoutPosition = /[a-zA-Z0-9_]{3,24}/;
 
 export default async function searchPlayersAcrossRegions(
   search: string,
-  limit = 9,
+  limit = 25,
 ) {
   const trimmedSearch = search.trim();
-  const normalizedLimit = Math.round(limit / 3);
+  const normalizedLimit = Math.floor(limit / 3);
   const encodedSearch = encodeURIComponent(trimmedSearch);
 
   if (usernamePattern.test(trimmedSearch)) {

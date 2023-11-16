@@ -1,10 +1,10 @@
 import { theme } from '../../../stitches.config';
 
 export interface GapProps {
-  number: number;
+  message: string;
 }
 
-export function Gap({ number }: GapProps) {
+export function Gap({ message: number }: GapProps) {
   return (
     <div
       style={{
@@ -22,7 +22,7 @@ export function Gap({ number }: GapProps) {
           fontSize: 16,
         }}
       >
-        + {number.toLocaleString()} more
+        {number.toLocaleString()}
       </span>
     </div>
   );

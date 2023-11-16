@@ -1,4 +1,6 @@
-export type Region = 'com' | 'eu' | 'asia';
+export const REGIONS = ['com', 'eu', 'asia'] as const;
+
+export type Region = (typeof REGIONS)[number];
 export type RegionSubdomain = 'na' | 'eu' | 'asia';
 
 export const REGION_NAMES: Record<Region, string> = {

@@ -1,10 +1,11 @@
+import { ComponentProps } from 'react';
 import { RatingsReward } from '../../../commands/ratings';
 import { theme } from '../../../stitches.config';
 
-export interface ItemProps {
+export interface ItemProps extends ComponentProps<'div'> {
   position: number;
   deltaPosition?: number;
-  score: number;
+  score?: number;
   deltaScore?: number;
   reward?: RatingsReward;
   nickname: string;
@@ -25,10 +26,13 @@ export function Item({
   nickname,
   clan,
   highlight,
+  ...props
 }: ItemProps) {
   return (
     <div
+      {...props}
       style={{
+        cursor: 'pointer',
         display: 'flex',
         padding: 8,
         backgroundColor: highlight
@@ -185,16 +189,18 @@ export function Item({
             }
           />
         )}
-        <span
-          style={{
-            color: highlight
-              ? theme.colors.textHighContrast_blue
-              : theme.colors.textHighContrast,
-            fontSize: 16,
-          }}
-        >
-          {score.toLocaleString()}
-        </span>
+        {score !== undefined && (
+          <span
+            style={{
+              color: highlight
+                ? theme.colors.textHighContrast_blue
+                : theme.colors.textHighContrast,
+              fontSize: 16,
+            }}
+          >
+            {score.toLocaleString()}
+          </span>
+        )}
       </div>
     </div>
   );

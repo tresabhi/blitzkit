@@ -4,7 +4,7 @@ import {
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
 import { TREE_TYPE_NAMES, TreeTypeString } from '../../components/Tanks';
-import { tankopediaInfo } from '../blitzstars/tankopedia';
+import { tankopediaInfo } from '../blitz/tankopediaInfo';
 import addPeriodSubCommands from './addPeriodSubCommands';
 import addTankChoices from './addTankChoices';
 import addTierChoices from './addTierChoices';

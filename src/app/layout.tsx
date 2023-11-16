@@ -41,12 +41,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             : 'url(https://i.imgur.com/PhS06NJ.png)',
         }}
       >
-        <Theme
-          appearance="dark"
-          panelBackground="translucent"
-          radius="full"
-          accentColor="blue"
-        >
+        <Theme appearance="dark" panelBackground="translucent" radius="full">
           {!isEmbed && <Navbar />}
 
           <Flex direction="column">{children}</Flex>

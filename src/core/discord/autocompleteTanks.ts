@@ -5,6 +5,10 @@ import {
 } from 'discord.js';
 import { go } from 'fuzzysort';
 import { TANK_NAMES_DIACRITICS } from '../blitzstars/tankopedia';
+import {
+  DISCORD_CHOICES_MAX_NAME_SIZE,
+  OVERFLOW_SUFFIX,
+} from './autocompleteClan';
 
 export default async function autocompleteTanks(
   interaction: AutocompleteInteraction<CacheType>,
@@ -18,13 +22,23 @@ export default async function autocompleteTanks(
           go(focusedOption.value, await TANK_NAMES_DIACRITICS, {
             keys: ['combined'],
             limit: 10,
-          }).map(
-            async (item) =>
-              ({
-                name: item.obj.original,
-                value: `${item.obj.id}`,
-              }) satisfies ApplicationCommandOptionChoiceData<string>,
-          ),
+          }).map(async (item) => {
+            let name = item.obj.original;
+
+            if (name.length > DISCORD_CHOICES_MAX_NAME_SIZE) {
+              const overSize = name.length - DISCORD_CHOICES_MAX_NAME_SIZE;
+
+              name = `${item.obj.original.slice(
+                0,
+                item.obj.original.length - overSize - OVERFLOW_SUFFIX.length,
+              )}${OVERFLOW_SUFFIX}`;
+            }
+
+            return {
+              name,
+              value: `${item.obj.id}`,
+            } satisfies ApplicationCommandOptionChoiceData<string>;
+          }),
         )
       : [],
   );

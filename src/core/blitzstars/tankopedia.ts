@@ -1,6 +1,4 @@
 import { deburr } from 'lodash';
-import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
-import fetchBlitz from '../blitz/fetchBlitz';
 import { context } from '../blitzkrieg/context';
 
 export interface TankopediaEntry {
@@ -20,13 +18,13 @@ export interface Tankopedia {
 }
 
 export const tankopedia = fetch(
-  context === 'bot'
-    ? 'https://www.blitzstars.com/bs-tankopedia.json'
-    : '/api/tankopedia',
+  context === 'website'
+    ? '/api/tankopedia'
+    : 'https://www.blitzstars.com/bs-tankopedia.json',
 )
   .then(async (response) => response.json())
   .then((wrapperTankopedia) =>
-    context === 'bot'
+    context === 'server'
       ? (wrapperTankopedia as { data: Tankopedia }).data
       : (wrapperTankopedia as Tankopedia),
   );
@@ -54,20 +52,6 @@ export const TANK_NAMES_DIACRITICS = TANK_NAMES.then((tankNames) =>
       };
     }),
   ),
-);
-
-export interface TankopediaInfo {
-  achievement_sections: Record<string, { name: string; order: number }>;
-  tanks_updated_at: number;
-  languages: Record<string, string>;
-  vehicle_types: Record<string, string>;
-  vehicle_nations: Record<string, string>;
-  game_version: string;
-}
-
-// this is blocking because info is needed for command creation
-export const tankopediaInfo = fetchBlitz<TankopediaInfo>(
-  `https://api.wotblitz.com/wotb/encyclopedia/info/?application_id=${WARGAMING_APPLICATION_ID}`,
 );
 
 export const TANK_ICONS: Record<string, string> = {

@@ -51,7 +51,7 @@ export default function Page() {
   }, [session]);
 
   return (
-    <PageWrapper>
+    <PageWrapper color="blue">
       <div className={styles.toolBar}>
         <div style={{ flex: 1, boxSizing: 'border-box', position: 'relative' }}>
           <TextField.Root>
