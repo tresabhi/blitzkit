@@ -53,6 +53,7 @@
     "vitepress": "^1.0.0-rc.20",
     "vitepress-plugin-auto-sidebar": "^1.1.0",
     "xml-js": "^1.6.11",
+    "yaml": "^2.3.4",
     "zustand": "^4.4.1"
   },
   "devDependencies": {
