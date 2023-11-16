@@ -4,6 +4,7 @@ export type PSAData = {
     title: string;
     url: string;
   }[];
+  commands?: string[];
 } & (
   | {
       type: 'image';

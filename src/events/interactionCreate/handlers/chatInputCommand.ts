@@ -43,7 +43,12 @@ export default async function handleChatInputCommand(
 
     const reply = await normalizeInteractionReturnable(returnable!);
 
-    if (psa.data && !psa.data.secret) {
+    if (
+      psa.data &&
+      !psa.data.secret &&
+      (psa.data.commands === undefined ||
+        psa.data.commands.includes(interaction.commandName))
+    ) {
       if (psa.data.type === 'embed') {
         if (!reply.embeds) reply.embeds = [];
         reply.embeds.push(embedWarning(psa.data.title, psa.data.description));
@@ -66,7 +71,12 @@ export default async function handleChatInputCommand(
 
     await interaction.editReply(reply);
 
-    if (psa.data && psa.data.secret) {
+    if (
+      psa.data &&
+      psa.data.secret &&
+      (psa.data.commands === undefined ||
+        psa.data.commands.includes(interaction.commandName))
+    ) {
       const followUp: InteractionReplyOptions = {
         ephemeral: true,
       };
