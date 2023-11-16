@@ -123,14 +123,14 @@ function addSubcommands(
     .addSubcommand((option) =>
       addOptions(
         option
-          .setName('neighbours')
-          .setDescription('Your position and neighbours'),
+          .setName('neighbors')
+          .setDescription('Your position and neighbors'),
       )
         .addStringOption(addUsernameChoices)
         .addIntegerOption((option) =>
           option
             .setName('limit')
-            .setDescription('How many neighbours to display (default: 10)')
+            .setDescription('How many neighbors to display (default: 10)')
             .setRequired(false)
             .setMinValue(5)
             .setMaxValue(30),
@@ -228,7 +228,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
           | 'current';
         const subcommand = interaction.options.getSubcommand(true) as
           | 'league'
-          | 'neighbours';
+          | 'neighbors';
         const limit = interaction.options.getInteger('limit') ?? 10;
         const seasonOption = interaction.options.getString('season');
         const season = seasonOption ? parseInt(seasonOption) : undefined;
@@ -414,7 +414,7 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
           titleName = neighbors
             ? accountInfo.nickname
             : `No Ongoing Season - ${REGION_NAMES_SHORT[region]}`;
-          titleDescription = 'Ratings neighbours';
+          titleDescription = 'Ratings neighbors';
           playersBefore = neighbors ? neighbors[0].position - 1 : 0;
           playersAfter =
             regionRatingsInfo.count - neighbors[neighbors.length - 1].position;
