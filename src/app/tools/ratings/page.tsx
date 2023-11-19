@@ -299,19 +299,11 @@ export default function Page() {
       }
     }
 
-    const seedingPlayerNeighborEntry = Object.entries(
-      leaderboard[region][season],
-    ).find(([, player]) => id === player);
-
-    if (seedingPlayerNeighborEntry === undefined) return null;
-
-    // const seedingPlayerPosition = parseInt(seedingPlayerNeighborEntry[0]);
     const { neighbors } = await getRatingsNeighbors(region, id, size, true);
 
     useLeaderboardCache.setState(
       produce((draft: LeaderboardCache) => {
         neighbors.forEach((neighbor, neighborIndex) => {
-          // const position = neighborIndex - radius + seedingPlayerPosition;
           const position = neighbor.number - 1;
 
           if (!(position in draft[region][season])) {
@@ -347,9 +339,9 @@ export default function Page() {
   async function jumpToPosition(position: number) {
     if (!ratingsInfo || ratingsInfo?.detail) return;
 
-    const targetPosition = Math.max(
-      0,
-      Math.min(position, ratingsInfo.count - 1),
+    const targetPosition = Math.min(
+      ratingsInfo.count - 1,
+      Math.max(0, Math.min(position, ratingsInfo.count - 1)),
     );
 
     if (season === 0) {
