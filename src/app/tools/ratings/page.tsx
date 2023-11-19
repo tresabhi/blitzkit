@@ -347,9 +347,9 @@ export default function Page() {
   async function jumpToPosition(position: number) {
     if (!ratingsInfo || ratingsInfo?.detail) return;
 
-    const targetPosition = Math.max(
-      0,
-      Math.min(position, ratingsInfo.count - 1),
+    const targetPosition = Math.min(
+      ratingsInfo.count - 1,
+      Math.max(0, Math.min(position, ratingsInfo.count - 1)),
     );
 
     if (season === 0) {
