@@ -28,7 +28,7 @@ const server = argv.find((arg) => arg.startsWith('--region='))?.split('=')[1];
 
 if (!server) throw new Error('Region parameter not specified');
 
-const NEIGHBORS = 1024;
+const NEIGHBORS = 2 ** 8;
 const PLAYERS = await patientFetchJSON<RatingsInfo>(
   `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,
 ).then((data) => (data.detail === undefined ? data.count : undefined));
