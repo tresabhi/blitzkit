@@ -31,4 +31,4 @@ jobs:
         run: yarn
 
       - name: Generate leaderboard
-        run: GH_TOKEN=${{ secrets.GH_TOKEN }} yarn publish:ratingsleaderboard --region=na --latest
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} yarn publish:ratingsleaderboard --region=na --target=latest
