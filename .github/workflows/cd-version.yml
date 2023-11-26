@@ -1,6 +1,6 @@
 name: CD Version
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   host:
