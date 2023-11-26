@@ -11,6 +11,7 @@ const DOCS = {
   introduction: 'guide/introduction',
   invite: 'guide/invite',
   timezones: 'guide/timezones',
+  creators: 'guide/creators',
 };
 const DOC_DESCRIPTIONS: Record<keyof typeof DOCS, string> = {
   permissions: 'The permissions needed for the bot to function',
@@ -18,6 +19,7 @@ const DOC_DESCRIPTIONS: Record<keyof typeof DOCS, string> = {
   introduction: 'About the bot',
   invite: 'How to invite the bot',
   timezones: 'How Blitzkrieg infers and uses your timezone',
+  creators: 'Who created the bot',
 };
 
 function addDocsSubcommands(option: SlashCommandSubcommandsOnlyBuilder) {

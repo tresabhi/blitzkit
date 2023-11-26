@@ -23,9 +23,12 @@ export type BlitzkriegRatingsLeaderboardEntry = { id: number; score: number };
 export type BlitzkriegRatingsLeaderboard = BlitzkriegRatingsLeaderboardEntry[];
 
 const publish = argv.includes('--publish');
-const latest = argv.includes('--latest');
+const target = argv
+  .find((arg) => arg.startsWith('--target='))
+  ?.split('=')[1] as 'midnight' | 'latest' | undefined;
 const server = argv.find((arg) => arg.startsWith('--region='))?.split('=')[1];
 
+if (!target) throw new Error('Target parameter not specified');
 if (!server) throw new Error('Region parameter not specified');
 
 const NEIGHBORS = 2 ** 8;
@@ -117,9 +120,7 @@ if (publish) {
   const normalizedServer = server === 'na' ? 'com' : server;
 
   const infoPath = `${normalizedServer}/ratings/${info.current_season}/info.json`;
-  const leaderboardPath = `${normalizedServer}/ratings/${info.current_season}/${
-    latest ? 'latest' : 'midnight'
-  }.json`;
+  const leaderboardPath = `${normalizedServer}/ratings/${info.current_season}/${target}.json`;
   const infoJSON = JSON.stringify(info);
 
   console.log(`Publishing to season ${info.current_season}...`);

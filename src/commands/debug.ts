@@ -1,11 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import packageJSON from '../../package.json' assert { type: 'json' };
-import getClientId from '../core/blitzkrieg/getClientId';
-import { tankAverages } from '../core/blitzstars/tankAverages';
-import { tankopedia } from '../core/blitzstars/tankopedia';
 import { client } from '../core/discord/client';
-import embedInfo from '../core/discord/embedInfo';
-import markdownTable from '../core/discord/markdownTable';
 import { CommandRegistry } from '../events/interactionCreate';
 
 const executionStart = new Date().getTime();
@@ -21,24 +16,21 @@ export const debugCommand: CommandRegistry = {
   async handler(interaction) {
     const currentTime = new Date().getTime();
     const uptime = currentTime - executionStart;
+    const list = [
+      ['Version', packageJSON.version],
+      ['Shard', client.shard?.ids[0] ?? 'default'],
+      [
+        'Uptime',
+        `${Math.floor((uptime / 1000 / 60 / 60) % 24)}h ${Math.floor(
+          (uptime / 1000 / 60) % 60,
+        )}m ${Math.floor((uptime / 1000) % 60)}s ${Math.floor(
+          uptime % 1000,
+        )}ms`,
+      ],
+    ]
+      .map(([key, value]) => `- ${key}: ${value}`)
+      .join('\n');
 
-    return embedInfo(
-      `${client.user?.username} debug information`,
-      markdownTable([
-        ['Version', packageJSON.version],
-        ['Client ID', getClientId()],
-        ['Tag', interaction.client.user.tag],
-        [
-          'Uptime',
-          `${Math.floor(uptime / 1000 / 60 / 60 / 24)}d ${Math.floor(
-            (uptime / 1000 / 60 / 60) % 24,
-          )}h ${Math.floor((uptime / 1000 / 60) % 60)}m ${Math.floor(
-            (uptime / 1000) % 60,
-          )}s ${Math.floor(uptime % 1000)}ms`,
-        ],
-        ['Tankopedia cached', `${(await tankopedia) !== undefined}`],
-        ['Tank averages cached', `${(await tankAverages) !== undefined}`],
-      ]),
-    );
+    return `# Debug\n\n${list}`;
   },
 };

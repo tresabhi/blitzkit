@@ -1,8 +1,12 @@
-name: CD North America Ratings Leaderboards
+name: CD Asia Ratings
+
+# latest: '0 0 * * *'
+# asia midnight: '0 17 * * *'
 
 on:
   schedule:
-    - cron: '0 5 * * *'
+    - cron: '0 0 * * *'
+    - cron: '0 17 * * *'
 
 jobs:
   host:
@@ -31,4 +35,4 @@ jobs:
         run: yarn
 
       - name: Generate leaderboard
-        run: GH_TOKEN=${{ secrets.GH_TOKEN }} yarn publish:ratingsleaderboard --region=na
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} yarn publish:ratingsleaderboard --region=asia --target=${{ github.event.schedule == '0 0 * * *' && 'latest' || 'midnight' }}
