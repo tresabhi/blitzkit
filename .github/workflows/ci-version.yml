@@ -1,6 +1,6 @@
-name: CD Version
+name: CI Version
 
-on: [push]
+on: push
 
 jobs:
   host:
