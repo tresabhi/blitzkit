@@ -116,14 +116,12 @@ const leaderboardJSON = JSON.stringify(leaderboard);
 
 if (publish) {
   const octokit = new Octokit({ auth: env.GH_TOKEN });
-
   const info = await patientFetchJSON<RatingsInfo & { detail: undefined }>(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,
   );
   const normalizedServer = server === 'na' ? 'com' : server;
-
-  const infoPath = `${normalizedServer}/ratings/${info.current_season}/info.json`;
-  const leaderboardPath = `${normalizedServer}/ratings/${info.current_season}/${target}.json`;
+  const infoPath = `regions/${normalizedServer}/ratings/${info.current_season}/info.json`;
+  const leaderboardPath = `regions/${normalizedServer}/ratings/${info.current_season}/${target}.json`;
   const infoJSON = JSON.stringify(info);
 
   console.log(`Publishing to season ${info.current_season}...`);
