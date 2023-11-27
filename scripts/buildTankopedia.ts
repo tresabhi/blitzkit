@@ -9,38 +9,36 @@ import { TreeTypeString } from '../src/components/Tanks';
 import { NATION_IDS } from '../src/constants/nations';
 import commitMultipleFiles, { FileChange } from './commitMultipleFiles';
 
+const LANGUAGE = 'en';
+const TEMP = 'temp/blitz';
+
 const publish = argv.includes('--publish');
 const apkFile = argv
   .find((argument) => argument.startsWith('--file'))
   ?.split('=')[1];
 const noRewrite = argv.includes('--no-rewrite');
 
-const VEHICLE_DEFS = 'assets/Data/XML/item_defs/vehicles';
-const STRINGS = 'assets/Data/Strings';
-const LANGUAGE = 'en';
-const TANK_PARAMETERS = 'assets/Data/3d/Tanks/Parameters';
-const SMALL_ICONS = 'assets/Data/Gfx/UI/BattleScreenHUD/SmallTankIcons';
-const BIG_ICONS = 'assets/Data/Gfx/UI/BigTankIcons';
-const DIRECTORIES_OF_INTEREST = [
-  VEHICLE_DEFS,
-  STRINGS,
-  TANK_PARAMETERS,
-  SMALL_ICONS,
-  BIG_ICONS,
-];
-
 if (!apkFile) throw new Error('No file specified');
+
+const directoriesOfInterest = {
+  vehicleDefinitions: 'assets/Data/XML/item_defs/vehicles',
+  strings: 'assets/Data/Strings',
+  tankParameters: 'assets/Data/3d/Tanks/Parameters',
+  smallIcons: 'assets/Data/Gfx/UI/BattleScreenHUD/SmallTankIcons',
+  bigIcons: 'assets/Data/Gfx/UI/BigTankIcons',
+};
+const directoriesOfInterestArray = Object.values(directoriesOfInterest);
 
 console.log('Removing old tankopedia files...');
 await rm('dist/tankopedia', { recursive: true, force: true });
 if (!noRewrite) {
   console.log('Removing old temp files...');
-  await rm('temp/blitz', { recursive: true, force: true });
+  await rm(TEMP, { recursive: true, force: true });
 
   console.log('Extracting Blitz files...');
-  await decompress(apkFile, 'temp/blitz', {
+  await decompress(apkFile, TEMP, {
     filter: (file) =>
-      DIRECTORIES_OF_INTEREST.some((dir) => file.path.startsWith(dir)),
+      directoriesOfInterestArray.some((dir) => file.path.startsWith(dir)),
   });
 }
 
@@ -58,20 +56,22 @@ interface BlitzkriegTankopedia {
 }
 
 const strings = await readFile(
-  `temp/blitz/${STRINGS}/${LANGUAGE}.yaml`,
+  `${TEMP}/${directoriesOfInterest.strings}/${LANGUAGE}.yaml`,
   'utf-8',
 ).then((data) => load(data) as Record<string, string>);
 const tankopedia: Record<number, BlitzkriegTankopedia> = {};
 const tankIds: number[] = [];
 const images: Record<number, { big: string; small: string }> = {};
-const nations = await readdir(`temp/blitz/${VEHICLE_DEFS}`);
+const nations = await readdir(
+  `${TEMP}/${directoriesOfInterest.vehicleDefinitions}`,
+);
 
 Promise.all(
   nations
     .filter((nation) => nation !== 'common')
     .map(async (nation) => {
       const listXML = await readFile(
-        `temp/blitz/${VEHICLE_DEFS}/${nation}/list.xml`,
+        `${TEMP}/${directoriesOfInterest.vehicleDefinitions}/${nation}/list.xml`,
         'utf-8',
       );
       const list = xml2js(listXML, { compact: true }) as ElementCompact;
@@ -109,15 +109,15 @@ Promise.all(
             };
 
             // Tank images
-            const parameterPath = `temp/blitz/${TANK_PARAMETERS}/${nation}/${vehicle}.yaml`;
+            const parameterPath = `${TEMP}/${directoriesOfInterest.tankParameters}/${nation}/${vehicle}.yaml`;
             const parameterString = await readFile(parameterPath, 'utf-8');
             const { smallIconPath, bigIconPath } =
               parse(parameterString).resourcesPath;
             images[id] = {
-              small: `temp/blitz/assets/Data/${(smallIconPath as string)
+              small: `${TEMP}/assets/Data/${(smallIconPath as string)
                 .replace(/~res:\//, '')
                 .replace(/\..+/, '')}.packed.webp`,
-              big: `temp/blitz/assets/Data/${(bigIconPath as string)
+              big: `${TEMP}/assets/Data/${(bigIconPath as string)
                 .replace(/~res:\//, '')
                 .replace(/\..+/, '')}.packed.webp`,
             };
@@ -133,48 +133,49 @@ Promise.all(
 ).then(async () => {
   if (publish) {
     const octokit = new Octokit({ auth: env.GH_TOKEN });
+    const tankopediaChange: FileChange = {
+      content: JSON.stringify(tankopedia),
+      path: 'tankopedia.json',
+      encoding: 'utf-8',
+    };
+    const iconsChange = (
+      await Promise.all(
+        tankIds.map(async (id) => {
+          try {
+            const [contentSmall, contentBig] = await Promise.all([
+              readFile(images[id].small, { encoding: 'base64' }),
+              readFile(images[id].big, { encoding: 'base64' }),
+            ]);
 
-    // console.log('Writing tankopedia.json');
-    // commitMultipleFiles(
-    //   octokit,
-    //   'tresabhi',
-    //   'blitzkrieg-assets',
-    //   'main',
-    //   new Date().toString(),
-    //   [
-    //     {
-    //       content: JSON.stringify(tankopedia),
-    //       path: 'tankopedia.json',
-    //       encoding: 'utf-8',
-    //     },
-    //   ],
-    // );
+            return [
+              {
+                content: contentBig,
+                path: `icons/big/${id}.webp`,
+                encoding: 'base64',
+              },
+              {
+                content: contentSmall,
+                path: `icons/small/${id}.webp`,
+                encoding: 'base64',
+              },
+            ];
+          } catch (error) {
+            console.log(error);
+            return undefined;
+          }
+        }),
+      )
+    ).flat() as FileChange[];
 
-    console.log('Writing big icons...');
+    console.log('Writing files...');
     await commitMultipleFiles(
       octokit,
       'tresabhi',
       'blitzkrieg-assets',
       'main',
       new Date().toString(),
-      (await Promise.all(
-        tankIds.map(async (id) => {
-          try {
-            const content = await readFile(images[id].big, {
-              encoding: 'base64',
-            });
-
-            return {
-              content,
-              path: `icons/big/${id}.webp`,
-              encoding: 'base64',
-            };
-          } catch (error) {
-            console.log(error);
-            return undefined;
-          }
-        }),
-      )) as FileChange[],
+      iconsChange,
+      true,
     );
   } else {
     writeFile(

@@ -1,5 +1,7 @@
 import { Octokit } from '@octokit/rest';
 
+const TIME_PER_BLOB = 2 ** 4 * 1000;
+
 export interface FileChange {
   path: string;
   content: string;
@@ -13,41 +15,71 @@ export default async function commitMultipleFiles(
   branch: string,
   message: string,
   changes: FileChange[],
+  logBlobCreation = false,
 ) {
   // Get the latest commit SHA on the specified branch
-  const { data: refData } = await octokit.git.getRef({
-    owner,
-    repo,
-    ref: `heads/${branch}`,
-  });
-  const latestCommitSha = refData.object.sha;
+  const latestCommitSha = (
+    await octokit.git.getRef({
+      owner,
+      repo,
+      ref: `heads/${branch}`,
+    })
+  ).data.object.sha;
 
   // Get the tree SHA for the latest commit
-  const { data: commitData } = await octokit.git.getCommit({
-    owner,
-    repo,
-    commit_sha: latestCommitSha,
-  });
-  const treeSha = commitData.tree.sha;
+  const treeSha = (
+    await octokit.git.getCommit({
+      owner,
+      repo,
+      commit_sha: latestCommitSha,
+    })
+  ).data.tree.sha;
 
-  // Create blobs for each file
-  const blobs = await Promise.all(
-    changes.map(async (change) => {
-      const { data: blobData } = await octokit.git.createBlob({
-        owner,
-        repo,
-        content: change.content,
-        encoding: change.encoding,
-      });
+  const blobs: {
+    sha: string;
+    path: string;
+    mode: '100644';
+    type: 'blob';
+  }[] = [];
 
-      return {
-        sha: blobData.sha,
-        path: change.path,
-        mode: '100644',
-        type: 'blob',
-      } as const;
-    }),
-  );
+  for (const changeIndexString in changes) {
+    const changeIndex = parseInt(changeIndexString);
+    const change = changes[changeIndex];
+    let done = false;
+
+    while (!done) {
+      try {
+        const { sha } = (
+          await octokit.git.createBlob({
+            owner,
+            repo,
+            content: change.content,
+            encoding: change.encoding,
+          })
+        ).data;
+
+        blobs.push({ sha, path: change.path, mode: '100644', type: 'blob' });
+        done = true;
+      } catch (error) {
+        console.warn(
+          `Failed blob ${changeIndex + 1} / ${
+            changes.length
+          }; retrying in ${TIME_PER_BLOB}ms...`,
+        );
+
+        await new Promise((resolve) => setTimeout(resolve, TIME_PER_BLOB));
+      }
+    }
+
+    if (logBlobCreation) {
+      console.log(
+        `Created blob ${changeIndex + 1} / ${changes.length} (${(
+          (100 * (changeIndex + 1)) /
+          changes.length
+        ).toFixed(2)}%)`,
+      );
+    }
+  }
 
   // Create a new tree with the new blobs
   const { data: treeData } = await octokit.git.createTree({
