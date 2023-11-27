@@ -132,8 +132,8 @@ if (publish) {
     'main',
     new Date().toString(),
     [
-      { path: infoPath, content: infoJSON },
-      { path: leaderboardPath, content: leaderboardJSON },
+      { path: infoPath, content: infoJSON, encoding: 'utf-8' },
+      { path: leaderboardPath, content: leaderboardJSON, encoding: 'utf-8' },
     ],
   );
 } else {

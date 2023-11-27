@@ -1,15 +1,21 @@
+import { Octokit } from '@octokit/rest';
+import decompress from 'decompress';
 import { cp, mkdir, readFile, readdir, rm, writeFile } from 'fs/promises';
 import { load } from 'js-yaml';
-import { argv } from 'process';
+import { argv, env } from 'process';
 import { ElementCompact, xml2js } from 'xml-js';
 import { parse } from 'yaml';
 import { TreeTypeString } from '../src/components/Tanks';
 import { NATION_IDS } from '../src/constants/nations';
+import commitMultipleFiles, { FileChange } from './commitMultipleFiles';
 
-const VEHICLE_DEFS = 'assets/Data/XML/item_defs/vehicles';
-const APK_FILE = argv
+const publish = argv.includes('--publish');
+const apkFile = argv
   .find((argument) => argument.startsWith('--file'))
   ?.split('=')[1];
+const noRewrite = argv.includes('--no-rewrite');
+
+const VEHICLE_DEFS = 'assets/Data/XML/item_defs/vehicles';
 const STRINGS = 'assets/Data/Strings';
 const LANGUAGE = 'en';
 const TANK_PARAMETERS = 'assets/Data/3d/Tanks/Parameters';
@@ -23,17 +29,20 @@ const DIRECTORIES_OF_INTEREST = [
   BIG_ICONS,
 ];
 
-if (!APK_FILE) throw new Error('No file specified');
+if (!apkFile) throw new Error('No file specified');
 
-// console.log('Removing old Blitz files...');
-// await rm('temp/blitz', { recursive: true, force: true });
+console.log('Removing old tankopedia files...');
 await rm('dist/tankopedia', { recursive: true, force: true });
+if (!noRewrite) {
+  console.log('Removing old temp files...');
+  await rm('temp/blitz', { recursive: true, force: true });
 
-// console.log('Extracting Blitz files...');
-// await decompress(APK_FILE, 'temp/blitz', {
-//   filter: (file) =>
-//     DIRECTORIES_OF_INTEREST.some((dir) => file.path.startsWith(dir)),
-// });
+  console.log('Extracting Blitz files...');
+  await decompress(apkFile, 'temp/blitz', {
+    filter: (file) =>
+      DIRECTORIES_OF_INTEREST.some((dir) => file.path.startsWith(dir)),
+  });
+}
 
 console.log('Creating new tankopedia folder');
 await mkdir('dist/tankopedia');
@@ -53,6 +62,8 @@ const strings = await readFile(
   'utf-8',
 ).then((data) => load(data) as Record<string, string>);
 const tankopedia: Record<number, BlitzkriegTankopedia> = {};
+const tankIds: number[] = [];
+const images: Record<number, { big: string; small: string }> = {};
 const nations = await readdir(`temp/blitz/${VEHICLE_DEFS}`);
 
 Promise.all(
@@ -82,6 +93,7 @@ Promise.all(
             const tags = vehicleData.tags._text.split(' ');
             const type = tags[0];
 
+            tankIds.push(id);
             tankopedia[id] = {
               id,
               name,
@@ -101,26 +113,73 @@ Promise.all(
             const parameterString = await readFile(parameterPath, 'utf-8');
             const { smallIconPath, bigIconPath } =
               parse(parameterString).resourcesPath;
+            images[id] = {
+              small: `temp/blitz/assets/Data/${(smallIconPath as string)
+                .replace(/~res:\//, '')
+                .replace(/\..+/, '')}.packed.webp`,
+              big: `temp/blitz/assets/Data/${(bigIconPath as string)
+                .replace(/~res:\//, '')
+                .replace(/\..+/, '')}.packed.webp`,
+            };
 
-            cp(
-              `temp/blitz/assets/Data/${(smallIconPath as string)
-                .replace(/~res:\//, '')
-                .replace(/\..+/, '')}.packed.webp`,
-              `dist/tankopedia/icons/small/${id}.webp`,
-            );
-            cp(
-              `temp/blitz/assets/Data/${(bigIconPath as string)
-                .replace(/~res:\//, '')
-                .replace(/\..+/, '')}.packed.webp`,
-              `dist/tankopedia/icons/big/${id}.webp`,
-            );
+            if (!publish) {
+              cp(images[id].small, `dist/tankopedia/icons/small/${id}.webp`);
+              cp(images[id].big, `dist/tankopedia/icons/big/${id}.webp`);
+            }
           },
         ),
       );
     }),
-).then(() =>
-  writeFile(
-    'dist/tankopedia/tankopedia.json',
-    JSON.stringify(tankopedia, null, 2),
-  ),
-);
+).then(async () => {
+  if (publish) {
+    const octokit = new Octokit({ auth: env.GH_TOKEN });
+
+    // console.log('Writing tankopedia.json');
+    // commitMultipleFiles(
+    //   octokit,
+    //   'tresabhi',
+    //   'blitzkrieg-assets',
+    //   'main',
+    //   new Date().toString(),
+    //   [
+    //     {
+    //       content: JSON.stringify(tankopedia),
+    //       path: 'tankopedia.json',
+    //       encoding: 'utf-8',
+    //     },
+    //   ],
+    // );
+
+    console.log('Writing big icons...');
+    await commitMultipleFiles(
+      octokit,
+      'tresabhi',
+      'blitzkrieg-assets',
+      'main',
+      new Date().toString(),
+      (await Promise.all(
+        tankIds.map(async (id) => {
+          try {
+            const content = await readFile(images[id].big, {
+              encoding: 'base64',
+            });
+
+            return {
+              content,
+              path: `icons/big/${id}.webp`,
+              encoding: 'base64',
+            };
+          } catch (error) {
+            console.log(error);
+            return undefined;
+          }
+        }),
+      )) as FileChange[],
+    );
+  } else {
+    writeFile(
+      'dist/tankopedia/tankopedia.json',
+      JSON.stringify(tankopedia, null, 2),
+    );
+  }
+});

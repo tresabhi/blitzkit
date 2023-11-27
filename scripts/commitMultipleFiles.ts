@@ -1,12 +1,18 @@
 import { Octokit } from '@octokit/rest';
 
+export interface FileChange {
+  path: string;
+  content: string;
+  encoding: 'utf-8' | 'base64';
+}
+
 export default async function commitMultipleFiles(
   octokit: Octokit,
   owner: string,
   repo: string,
   branch: string,
   message: string,
-  changes: { path: string; content: string }[],
+  changes: FileChange[],
 ) {
   // Get the latest commit SHA on the specified branch
   const { data: refData } = await octokit.git.getRef({
@@ -31,7 +37,7 @@ export default async function commitMultipleFiles(
         owner,
         repo,
         content: change.content,
-        encoding: 'utf-8',
+        encoding: change.encoding,
       });
 
       return {
