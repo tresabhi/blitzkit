@@ -130,7 +130,7 @@ if (publish) {
   commitMultipleFiles(
     octokit,
     'tresabhi',
-    'blitzkrieg-db',
+    'blitzkrieg-assets',
     'main',
     new Date().toString(),
     [
