@@ -8,7 +8,7 @@ export async function getArchivedLatestSeasonNumber() {
   if (ratingsInfo.detail) {
     const comURL = (
       (await fetch(
-        'https://api.github.com/repos/tresabhi/blitzkrieg-db/git/trees/main',
+        'https://api.github.com/repos/tresabhi/blitzkrieg-assets/git/trees/main',
       ).then((response) => response.json())) as {
         tree: { path: string; url: string }[];
       }

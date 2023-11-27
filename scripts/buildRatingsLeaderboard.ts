@@ -101,7 +101,10 @@ await Promise.all([
 console.log('Converting to an array...');
 for (let index = 0; index < PLAYERS; index++) {
   const listing = players[index + 1];
-  if (!listing) console.warn(`Position ${index + 1} had no player`);
+  if (!listing) {
+    console.warn(`Position ${index + 1} had no player`);
+    continue;
+  }
 
   leaderboard[index] = {
     id: listing.spa_id,
@@ -113,21 +116,19 @@ const leaderboardJSON = JSON.stringify(leaderboard);
 
 if (publish) {
   const octokit = new Octokit({ auth: env.GH_TOKEN });
-
   const info = await patientFetchJSON<RatingsInfo & { detail: undefined }>(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,
   );
   const normalizedServer = server === 'na' ? 'com' : server;
-
-  const infoPath = `${normalizedServer}/ratings/${info.current_season}/info.json`;
-  const leaderboardPath = `${normalizedServer}/ratings/${info.current_season}/${target}.json`;
+  const infoPath = `regions/${normalizedServer}/ratings/${info.current_season}/info.json`;
+  const leaderboardPath = `regions/${normalizedServer}/ratings/${info.current_season}/${target}.json`;
   const infoJSON = JSON.stringify(info);
 
   console.log(`Publishing to season ${info.current_season}...`);
   commitMultipleFiles(
     octokit,
     'tresabhi',
-    'blitzkrieg-db',
+    'blitzkrieg-assets',
     'main',
     new Date().toString(),
     [
