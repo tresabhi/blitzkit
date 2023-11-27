@@ -101,7 +101,10 @@ await Promise.all([
 console.log('Converting to an array...');
 for (let index = 0; index < PLAYERS; index++) {
   const listing = players[index + 1];
-  if (!listing) console.warn(`Position ${index + 1} had no player`);
+  if (!listing) {
+    console.warn(`Position ${index + 1} had no player`);
+    continue;
+  }
 
   leaderboard[index] = {
     id: listing.spa_id,
