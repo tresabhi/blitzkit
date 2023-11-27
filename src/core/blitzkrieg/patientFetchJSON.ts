@@ -7,8 +7,8 @@ export async function patientFetchJSON<Type extends object>(
 
   while (patientJSON! === undefined) {
     try {
-      patientJSON = (await fetch(url, options).then(({ json }) =>
-        json(),
+      patientJSON = (await fetch(url, options).then((response) =>
+        response.json(),
       )) as Type;
     } catch (error) {
       console.warn(

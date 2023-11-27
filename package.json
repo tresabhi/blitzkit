@@ -1,6 +1,6 @@
 {
   "name": "blitzkrieg",
-  "version": "1.15.1",
+  "version": "1.15.5",
   "description": "🎉 Tools for everything World of Tanks Blitz",
   "main": "src/server.ts",
   "type": "module",
@@ -22,6 +22,7 @@
     "lint": "npx tsc",
     "lint:website": "next lint",
     "format": "prettier --write \"**/*.@(json|js|jsx|css|md|ts|tsx|html|xml|yml|gltf)\"",
+    "lint:version": "vite-node --script scripts/checkVersionMissMatch",
     "knip": "knip",
     "update": "yarn upgrade --latest"
   },
