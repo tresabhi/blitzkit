@@ -3,6 +3,7 @@ import { load } from 'js-yaml';
 import { argv } from 'process';
 import { ElementCompact, xml2js } from 'xml-js';
 import { parse } from 'yaml';
+import { TreeTypeString } from '../src/components/Tanks';
 import { NATION_IDS } from '../src/constants/nations';
 
 const VEHICLE_DEFS = 'assets/Data/XML/item_defs/vehicles';
@@ -42,8 +43,7 @@ interface BlitzkriegTankopedia {
   nation: string;
   name: string;
   name_short?: string;
-  is_premium: boolean;
-  is_collector: boolean;
+  tree_type: TreeTypeString;
   tier: number;
   type: string;
 }
@@ -74,8 +74,8 @@ Promise.all(
             // TODO: use userString property instead
             const name = strings[`#${nation}_vehicles:${vehicle}`];
             const name_short = strings[`#${nation}_vehicles:${vehicle}_short`];
-            const is_premium = 'gold' in vehicleData.price;
-            const is_collector = vehicleData.sellPrice
+            const isPremium = 'gold' in vehicleData.price;
+            const isCollector = vehicleData.sellPrice
               ? 'gold' in vehicleData.sellPrice
               : false;
             const tier = parseInt(vehicleData.level._text);
@@ -87,8 +87,11 @@ Promise.all(
               name,
               name_short,
               nation,
-              is_premium,
-              is_collector,
+              tree_type: isCollector
+                ? 'collector'
+                : isPremium
+                ? 'premium'
+                : 'tech-tree',
               tier,
               type,
             };
