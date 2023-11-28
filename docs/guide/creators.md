@@ -1,6 +1,5 @@
 # Creators
 
-- TrèsAbhi `@tresabhi`
-  - Creator & main programmer; _I do it all!_
-- Prince_NA `@prince_na`
-  - Advisor & tester
+- **TrèsAbhi** `@tresabhi`: Creator and main programmer
+- **Prince_NA** `@prince_na`: Game advisor & tester
+- **Vovko**: Technical advisor
