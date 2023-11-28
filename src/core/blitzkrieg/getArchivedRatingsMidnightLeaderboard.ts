@@ -22,7 +22,7 @@ export default async function getArchivedRatingsMidnightLeaderboard(
 
   try {
     const response = await fetch(
-      `https://raw.githubusercontent.com/tresabhi/blitzkrieg-assets/main/${region}/ratings/${season}/midnight.json`,
+      `https://raw.githubusercontent.com/tresabhi/blitzkrieg-assets/main/regions/${region}/ratings/${season}/midnight.json`,
     );
     const json = (await response.json()) as BlitzkriegRatingsLeaderboard;
     MIDNIGHT_LEADERBOARD_CACHE[region][season] = json;

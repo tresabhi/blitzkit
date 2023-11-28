@@ -19,7 +19,7 @@ export async function getArchivedRatingsLeaderboard(
   }
 
   const response = await fetch(
-    `https://raw.githubusercontent.com/tresabhi/blitzkrieg-assets/main/${region}/ratings/${season}/latest.json`,
+    `https://raw.githubusercontent.com/tresabhi/blitzkrieg-assets/main/regions/${region}/ratings/${season}/latest.json`,
   );
   const json = (await response.json()) as BlitzkriegRatingsLeaderboard;
   LEADERBOARD_CACHE[region][season] = json;

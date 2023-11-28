@@ -24,7 +24,7 @@ export default async function getArchivedRatingsInfo(
   }
 
   const response = await fetch(
-    `https://raw.githubusercontent.com/tresabhi/blitzkrieg-assets/main/${region}/ratings/${season}/info.json`,
+    `https://raw.githubusercontent.com/tresabhi/blitzkrieg-assets/main/regions/${region}/ratings/${season}/info.json`,
   );
   const jsonContent = (await response.json()) as RatingsInfo & {
     detail: undefined;
