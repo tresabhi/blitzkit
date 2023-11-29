@@ -1,6 +1,8 @@
 import { tankopedia } from '../blitzkrieg/tankopedia';
 
 export default async function resolveTankName(tankId: number) {
-  const tankopediaName = (await tankopedia)[tankId]?.name;
-  return tankopediaName ? tankopediaName : `Unknown Tank ${tankId}`;
+  const awaitedTankopedia = await tankopedia;
+  const entry = awaitedTankopedia[tankId];
+
+  return entry?.name_short ?? entry?.name ?? `Unknown Tank ${tankId}`;
 }

@@ -295,7 +295,11 @@ export default function SessionPage() {
                   <Breakdown.Row
                     key={stats.tank_id}
                     minimized={!session.showCareer}
-                    title={tankopedia?.name ?? `Unknown tank ${stats.tank_id}`}
+                    title={
+                      tankopedia?.name_short ??
+                      tankopedia?.name ??
+                      `Unknown tank ${stats.tank_id}`
+                    }
                     type="tank"
                     tankType={tankopedia?.type}
                     treeType={(() => {
