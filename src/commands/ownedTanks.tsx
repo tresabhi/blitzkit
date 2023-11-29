@@ -10,12 +10,13 @@ import getTreeType from '../core/blitz/getTreeType';
 import resolveTankName from '../core/blitz/resolveTankName';
 import { tankopediaInfo } from '../core/blitz/tankopediaInfo';
 import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
+import { tankIcon } from '../core/blitzkrieg/tankIcon';
 import {
+  BlitzkriegTankopediaEntry,
   TIER_ROMAN_NUMERALS,
-  TankopediaEntry,
   Tier,
   tankopedia,
-} from '../core/blitzstars/tankopedia';
+} from '../core/blitzkrieg/tankopedia';
 import addTierChoices from '../core/discord/addTierChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
@@ -42,12 +43,12 @@ export const ownedTanksCommand: CommandRegistry = {
       await Promise.all(
         tankStats.map(async (tankData) => ({
           tankopedia: (await tankopedia)[tankData.tank_id]!,
-          tank_id: tankData.tank_id,
+          id: tankData.tank_id,
         })),
       )
     ).filter((tank) => tank.tankopedia?.tier === tier);
     const clanAccountInfo = await getClanAccountInfo(server, id, ['clan']);
-    const groupedTanks: Record<string, TankopediaEntry[]> = {};
+    const groupedTanks: Record<string, BlitzkriegTankopediaEntry[]> = {};
     const nations: string[] = [];
 
     filteredTanks.forEach((tank) => {
@@ -94,11 +95,11 @@ export const ownedTanksCommand: CommandRegistry = {
                       {await Promise.all(
                         leftColumn.map(async (tank) => (
                           <Tanks.Item
-                            key={tank.tank_id}
-                            name={await resolveTankName(tank.tank_id)}
+                            key={tank.id}
+                            name={await resolveTankName(tank.id)}
                             tankType={tank.type}
-                            image={tank.images?.normal}
-                            treeType={await getTreeType(tank.tank_id)}
+                            image={tankIcon(tank.id)}
+                            treeType={await getTreeType(tank.id)}
                           />
                         )),
                       )}
@@ -107,11 +108,11 @@ export const ownedTanksCommand: CommandRegistry = {
                       {await Promise.all(
                         rightColumn.map(async (tank) => (
                           <Tanks.Item
-                            key={tank.tank_id}
-                            name={await resolveTankName(tank.tank_id)}
+                            key={tank.id}
+                            name={await resolveTankName(tank.id)}
                             tankType={tank.type}
-                            image={tank.images?.normal}
-                            treeType={await getTreeType(tank.tank_id)}
+                            image={tankIcon(tank.id)}
+                            treeType={await getTreeType(tank.id)}
                           />
                         )),
                       )}

@@ -1,8 +1,8 @@
 import { TREE_TYPE_NAMES } from '../../components/Tanks';
 import resolveTankName from '../blitz/resolveTankName';
 import { tankopediaInfo } from '../blitz/tankopediaInfo';
-import { TIER_ROMAN_NUMERALS, Tier } from '../blitzstars/tankopedia';
 import { StatFilters } from '../statistics/filterStats';
+import { TIER_ROMAN_NUMERALS, Tier } from './tankopedia';
 
 export async function filtersToDescription({
   nation,

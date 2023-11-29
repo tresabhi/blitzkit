@@ -1,5 +1,6 @@
 import { deburr } from 'lodash';
-import { context } from '../blitzkrieg/context';
+import { TreeTypeString } from '../../components/Tanks';
+import { asset } from './asset';
 
 export interface TankopediaEntry {
   name: string;
@@ -17,30 +18,36 @@ export interface Tankopedia {
   [id: number]: TankopediaEntry | undefined;
 }
 
-export const tankopedia = fetch(
-  context === 'website'
-    ? '/api/tankopedia'
-    : 'https://www.blitzstars.com/bs-tankopedia.json',
-)
-  .then(async (response) => response.json())
-  .then((wrapperTankopedia) =>
-    context === 'server'
-      ? (wrapperTankopedia as { data: Tankopedia }).data
-      : (wrapperTankopedia as Tankopedia),
-  );
-const entries = new Promise<TankopediaEntry[]>(async (resolve) => {
+export interface BlitzkriegTankopediaEntry {
+  id: number;
+  nation: string;
+  name: string;
+  name_short?: string;
+  tree_type: TreeTypeString;
+  tier: Tier;
+  type: string;
+}
+
+export type BlitzkriegTankopedia = Record<number, BlitzkriegTankopediaEntry>;
+
+export const tankopedia = fetch(asset('tankopedia.json')).then(
+  async (response) => response.json() as Promise<BlitzkriegTankopedia>,
+);
+const entries = new Promise<BlitzkriegTankopediaEntry[]>(async (resolve) => {
   resolve(Object.entries(await tankopedia).map(([, entry]) => entry));
 });
-export const TANKS = new Promise<TankopediaEntry[]>(async (resolve) => {
-  resolve((await entries).map((entry) => entry));
-});
+export const TANKS = new Promise<BlitzkriegTankopediaEntry[]>(
+  async (resolve) => {
+    resolve((await entries).map((entry) => entry));
+  },
+);
 export const TANK_NAMES = new Promise<string[]>(async (resolve) => {
   resolve((await entries).map(({ name }) => name));
 });
 export const TANK_NAMES_DIACRITICS = TANK_NAMES.then((tankNames) =>
   Promise.all(
     tankNames.map(async (tankName, index) => {
-      const id = (await TANKS)[index].tank_id;
+      const { id } = (await TANKS)[index];
       const name = tankName ?? `Unknown Tank ${id}`;
       const diacriticless = deburr(name);
 

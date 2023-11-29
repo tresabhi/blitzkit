@@ -6,11 +6,11 @@ import * as Breakdown from '../../../components/Breakdown';
 import { TreeTypeEnum } from '../../../components/Tanks';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import fetchBlitz from '../../../core/blitz/fetchBlitz';
-import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import {
-  TankopediaEntry,
+  BlitzkriegTankopediaEntry,
   tankopedia,
-} from '../../../core/blitzstars/tankopedia';
+} from '../../../core/blitzkrieg/tankopedia';
+import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import calculateWN8 from '../../../core/statistics/calculateWN8';
 import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
 import getWN8Percentile from '../../../core/statistics/getWN8Percentile';
@@ -30,7 +30,7 @@ export default function SessionPage() {
 
         list: {
           stats: IndividualTankStats;
-          tankopedia?: TankopediaEntry;
+          tankopedia?: BlitzkriegTankopediaEntry;
           career: IndividualTankStats;
           currentWN8?: number;
           careerWN8?: number;
@@ -299,9 +299,10 @@ export default function SessionPage() {
                     type="tank"
                     tankType={tankopedia?.type}
                     treeType={(() => {
-                      if (tankopedia?.is_collectible)
+                      if (tankopedia?.tree_type === 'collector')
                         return TreeTypeEnum.Collector;
-                      if (tankopedia?.is_premium) return TreeTypeEnum.Premium;
+                      if (tankopedia?.tree_type === 'premium')
+                        return TreeTypeEnum.Premium;
                     })()}
                     stats={session.customColumns.map((customColumn) => {
                       const rowStat = rowStats[customColumn.display];

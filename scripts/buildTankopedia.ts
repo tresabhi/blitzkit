@@ -5,8 +5,8 @@ import { load } from 'js-yaml';
 import { argv, env } from 'process';
 import { ElementCompact, xml2js } from 'xml-js';
 import { parse } from 'yaml';
-import { TreeTypeString } from '../src/components/Tanks';
 import { NATION_IDS } from '../src/constants/nations';
+import { BlitzkriegTankopedia, Tier } from '../src/core/blitzkrieg/tankopedia';
 import commitMultipleFiles, { FileChange } from './commitMultipleFiles';
 
 const LANGUAGE = 'en';
@@ -45,21 +45,11 @@ if (!noRewrite) {
 console.log('Creating new tankopedia folder');
 await mkdir('dist/tankopedia');
 
-interface BlitzkriegTankopedia {
-  id: number;
-  nation: string;
-  name: string;
-  name_short?: string;
-  tree_type: TreeTypeString;
-  tier: number;
-  type: string;
-}
-
 const strings = await readFile(
   `${TEMP}/${directoriesOfInterest.strings}/${LANGUAGE}.yaml`,
   'utf-8',
 ).then((data) => load(data) as Record<string, string>);
-const tankopedia: Record<number, BlitzkriegTankopedia> = {};
+const tankopedia: BlitzkriegTankopedia = {};
 const tankIds: number[] = [];
 const images: Record<number, { big: string; small: string }> = {};
 const nations = await readdir(
@@ -89,7 +79,7 @@ Promise.all(
             const isCollector = vehicleData.sellPrice
               ? 'gold' in vehicleData.sellPrice
               : false;
-            const tier = parseInt(vehicleData.level._text);
+            const tier = parseInt(vehicleData.level._text) as Tier;
             const tags = vehicleData.tags._text.split(' ');
             const type = tags[0];
 
@@ -174,7 +164,7 @@ Promise.all(
       'blitzkrieg-assets',
       'main',
       new Date().toString(),
-      iconsChange,
+      [tankopediaChange, ...iconsChange],
       true,
     );
   } else {

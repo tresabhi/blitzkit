@@ -1,6 +1,6 @@
 import { go } from 'fuzzysort';
+import { TANKS, tankopedia } from '../blitzkrieg/tankopedia';
 import { UserError } from '../blitzkrieg/userError';
-import { TANKS, tankopedia } from '../blitzstars/tankopedia';
 
 export default async function resolveTankId(tank: string | number) {
   const number = typeof tank === 'string' ? parseInt(tank) : tank;
@@ -16,7 +16,7 @@ export default async function resolveTankId(tank: string | number) {
         cause: `Could not find tank by the name "${tank}".`,
       });
     } else {
-      return searchResult[0].obj.tank_id;
+      return searchResult[0].obj.id;
     }
   } else {
     if ((await tankopedia)[number]) {

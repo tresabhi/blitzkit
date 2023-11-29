@@ -1,7 +1,7 @@
 import { TreeTypeString } from '../../components/Tanks';
+import { tankopedia } from '../blitzkrieg/tankopedia';
 import { DiffedTankStats } from '../blitzstars/getStatsInPeriod';
 import { tankAverages } from '../blitzstars/tankAverages';
-import { tankopedia } from '../blitzstars/tankopedia';
 import calculateWN8 from './calculateWN8';
 import sumStats from './sumStats';
 
@@ -31,14 +31,11 @@ export async function filterStats(
       (filters.tier === undefined || entry.tier === filters.tier) &&
       (filters.tankType === undefined || entry.type === filters.tankType) &&
       (filters.treeType === undefined ||
-        (filters.treeType === 'collector' && entry.is_collectible) ||
-        (filters.treeType === 'premium' &&
-          entry.is_premium &&
-          !entry.is_collectible) ||
+        (filters.treeType === 'collector' && entry.tree_type === 'collector') ||
+        (filters.treeType === 'premium' && entry.tree_type === 'premium') ||
         (filters.treeType === 'tech-tree' &&
-          !entry.is_collectible &&
-          !entry.is_premium)) &&
-      (filters.tank === undefined || entry.tank_id === filters.tank)
+          entry.tree_type === 'tech-tree')) &&
+      (filters.tank === undefined || entry.id === filters.tank)
     );
   });
   const stats = sumStats(filteredOrder.map((id) => diff[id]));

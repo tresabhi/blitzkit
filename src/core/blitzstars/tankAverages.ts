@@ -1,6 +1,6 @@
 import { AllStats } from '../blitz/getAccountInfo';
 import { context } from '../blitzkrieg/context';
-import { tankopedia } from './tankopedia';
+import { tankopedia } from '../blitzkrieg/tankopedia';
 
 export interface SpecialStats {
   winrate: number;
