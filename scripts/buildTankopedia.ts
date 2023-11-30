@@ -1,5 +1,6 @@
 import { Octokit } from '@octokit/rest';
 import decompress from 'decompress';
+import { writeFileSync } from 'fs';
 import { cp, mkdir, readFile, readdir, rm, writeFile } from 'fs/promises';
 import { load } from 'js-yaml';
 import { argv, env } from 'process';
@@ -56,6 +57,8 @@ const nations = await readdir(
   `${TEMP}/${directoriesOfInterest.vehicleDefinitions}`,
 );
 
+writeFileSync('test.json', JSON.stringify(strings, null, 2));
+
 Promise.all(
   nations
     .filter((nation) => nation !== 'common')
@@ -73,7 +76,7 @@ Promise.all(
             const nationVehicleId = parseInt(list.root[vehicle].id._text);
             const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
             const name = strings[vehicleData.userString._text];
-            const name_short = strings[vehicleData.shortUserString._text];
+            const name_short = strings[vehicleData.shortUserString?._text];
             const isPremium = 'gold' in vehicleData.price;
             const isCollector = vehicleData.sellPrice
               ? 'gold' in vehicleData.sellPrice
@@ -82,9 +85,9 @@ Promise.all(
             const tags = vehicleData.tags._text.split(' ');
             const type = tags[0];
 
-            // if ((name ?? name_short) === undefined) {
-            //   console.log(vehicleData);
-            // }
+            if ((name ?? name_short) === undefined) {
+              console.log(vehicleData.userString._text);
+            }
 
             tankIds.push(id);
             tankopedia[id] = {

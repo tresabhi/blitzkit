@@ -22,22 +22,37 @@ export default async function Page() {
           }}
         >
           <Flex justify="between" align="center">
-            <img
-              src={tankIcon(tank.id)}
+            <div
               style={{
-                backgroundColor: 'white',
-                width: 256,
-                height: 128,
-                objectFit: 'contain',
-                objectPosition: 'left center',
+                backgroundImage: 'url(https://i.imgur.com/biJPgpm.png)',
+                // backgroundSize: 'cover',
+                height: 105,
+                width: 153,
+                position: 'relative',
               }}
-            />
+            >
+              <img
+                src={tankIcon(tank.id)}
+                style={{
+                  width: 256,
+                  height: 128,
+                  objectFit: 'contain',
+                  objectPosition: 'left center',
+                }}
+              />
 
-            <Flex direction="column" justify="center" align="end" gap="2">
-              <Text>
+              <Text
+                style={{
+                  position: 'absolute',
+                  bottom: 8,
+                  left: 8,
+                }}
+              >
                 {tank.name_short ?? tank.name ?? `Unknown tank ${tank.id}`}
               </Text>
+            </div>
 
+            <Flex direction="column" justify="center" align="end" gap="2">
               <Flex justify="end" align="center" gap="1">
                 {tank.tree_type !== 'tech-tree' && (
                   <Badge

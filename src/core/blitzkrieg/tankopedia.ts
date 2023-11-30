@@ -30,9 +30,9 @@ export interface BlitzkriegTankopediaEntry {
 
 export type BlitzkriegTankopedia = Record<number, BlitzkriegTankopediaEntry>;
 
-export const tankopedia = fetch(asset('tankopedia.json')).then(
-  async (response) => response.json() as Promise<BlitzkriegTankopedia>,
-);
+export const tankopedia = fetch(asset('tankopedia.json'), {
+  cache: 'no-store',
+}).then(async (response) => response.json() as Promise<BlitzkriegTankopedia>);
 const entries = new Promise<BlitzkriegTankopediaEntry[]>(async (resolve) => {
   resolve(Object.entries(await tankopedia).map(([, entry]) => entry));
 });
