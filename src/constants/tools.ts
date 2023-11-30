@@ -20,7 +20,6 @@ export const TOOLS: Tool[] = [
     id: 'tankopedia',
     title: 'Tankopedia',
     description: 'Full Blitz tank encyclopedia',
-    disabled: true,
   },
   {
     id: 'inactive',

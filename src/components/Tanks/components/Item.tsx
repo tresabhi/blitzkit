@@ -11,6 +11,7 @@ export enum TreeTypeEnum {
   Collector,
 }
 
+export type TankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
 export type TreeTypeString = 'tech-tree' | 'premium' | 'collector';
 
 export const TREE_TYPE_NAMES: Record<TreeTypeString, string> = {

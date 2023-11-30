@@ -1,5 +1,5 @@
 import { deburr } from 'lodash';
-import { TreeTypeString } from '../../components/Tanks';
+import { TankType, TreeTypeString } from '../../components/Tanks';
 import { asset } from './asset';
 
 export interface TankopediaEntry {
@@ -25,7 +25,7 @@ export interface BlitzkriegTankopediaEntry {
   name_short?: string;
   tree_type: TreeTypeString;
   tier: Tier;
-  type: string;
+  type: TankType;
 }
 
 export type BlitzkriegTankopedia = Record<number, BlitzkriegTankopediaEntry>;
@@ -36,18 +36,18 @@ export const tankopedia = fetch(asset('tankopedia.json')).then(
 const entries = new Promise<BlitzkriegTankopediaEntry[]>(async (resolve) => {
   resolve(Object.entries(await tankopedia).map(([, entry]) => entry));
 });
-export const TANKS = new Promise<BlitzkriegTankopediaEntry[]>(
+export const tanks = new Promise<BlitzkriegTankopediaEntry[]>(
   async (resolve) => {
     resolve((await entries).map((entry) => entry));
   },
 );
-export const TANK_NAMES = new Promise<string[]>(async (resolve) => {
+export const tankNames = new Promise<string[]>(async (resolve) => {
   resolve((await entries).map(({ name }) => name));
 });
-export const TANK_NAMES_DIACRITICS = TANK_NAMES.then((tankNames) =>
+export const tankNamesDiacritics = tankNames.then((tankNames) =>
   Promise.all(
     tankNames.map(async (tankName, index) => {
-      const { id } = (await TANKS)[index];
+      const { id } = (await tanks)[index];
       const name = tankName ?? `Unknown Tank ${id}`;
       const diacriticless = deburr(name);
 

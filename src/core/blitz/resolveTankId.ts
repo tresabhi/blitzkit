@@ -1,12 +1,12 @@
 import { go } from 'fuzzysort';
-import { TANKS, tankopedia } from '../blitzkrieg/tankopedia';
+import { tankopedia, tanks } from '../blitzkrieg/tankopedia';
 import { UserError } from '../blitzkrieg/userError';
 
 export default async function resolveTankId(tank: string | number) {
   const number = typeof tank === 'string' ? parseInt(tank) : tank;
 
   if (Number.isNaN(number)) {
-    const searchResult = go(`${tank}`, await TANKS, {
+    const searchResult = go(`${tank}`, await tanks, {
       keys: ['name'],
       limit: 1,
     });
