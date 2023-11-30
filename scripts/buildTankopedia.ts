@@ -72,9 +72,8 @@ Promise.all(
             // Tankopedia
             const nationVehicleId = parseInt(list.root[vehicle].id._text);
             const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
-            // TODO: use userString property instead
-            const name = strings[`#${nation}_vehicles:${vehicle}`];
-            const name_short = strings[`#${nation}_vehicles:${vehicle}_short`];
+            const name = strings[vehicleData.userString._text];
+            const name_short = strings[vehicleData.shortUserString._text];
             const isPremium = 'gold' in vehicleData.price;
             const isCollector = vehicleData.sellPrice
               ? 'gold' in vehicleData.sellPrice
@@ -82,6 +81,10 @@ Promise.all(
             const tier = parseInt(vehicleData.level._text) as Tier;
             const tags = vehicleData.tags._text.split(' ');
             const type = tags[0];
+
+            // if ((name ?? name_short) === undefined) {
+            //   console.log(vehicleData);
+            // }
 
             tankIds.push(id);
             tankopedia[id] = {
