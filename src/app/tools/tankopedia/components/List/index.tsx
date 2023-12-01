@@ -6,7 +6,12 @@ import { Card, Flex, Inset, Text, TextField } from '@radix-ui/themes';
 import { use, useRef } from 'react';
 import { Search } from 'react-fuzzysort';
 import { tankIcon } from '../../../../../core/blitzkrieg/tankIcon';
-import { tanks } from '../../../../../core/blitzkrieg/tankopedia';
+import {
+  TANK_ICONS,
+  TANK_ICONS_COLLECTOR,
+  TANK_ICONS_PREMIUM,
+  tanks,
+} from '../../../../../core/blitzkrieg/tankopedia';
 import { theme } from '../../../../../stitches.config';
 import * as styles from './index.css';
 
@@ -64,31 +69,49 @@ export function List() {
                         }}
                       />
 
-                      <Text
+                      <Flex
+                        align="center"
+                        justify="center"
+                        gap="1"
                         className={styles.listingLabel}
-                        size="4"
-                        color={
-                          tank.tree_type === 'collector'
-                            ? 'cyan'
-                            : tank.tree_type === 'premium'
-                            ? 'amber'
-                            : undefined
-                        }
-                        weight="medium"
                         style={{
-                          color:
-                            tank.tree_type === 'tech-tree'
-                              ? slateDark.slate11
-                              : undefined,
                           position: 'absolute',
                           bottom: 8,
                           left: 12,
                         }}
                       >
-                        {tank.name_short ??
-                          tank.name ??
-                          `Unknown tank ${tank.id}`}
-                      </Text>
+                        <img
+                          src={
+                            (tank.tree_type === 'collector'
+                              ? TANK_ICONS_COLLECTOR
+                              : tank.tree_type === 'premium'
+                              ? TANK_ICONS_PREMIUM
+                              : TANK_ICONS)[tank.type]
+                          }
+                          style={{ width: '1em', height: '1em' }}
+                        />
+                        <Text
+                          size="4"
+                          color={
+                            tank.tree_type === 'collector'
+                              ? 'blue'
+                              : tank.tree_type === 'premium'
+                              ? 'amber'
+                              : undefined
+                          }
+                          weight="medium"
+                          style={{
+                            color:
+                              tank.tree_type === 'tech-tree'
+                                ? slateDark.slate11
+                                : undefined,
+                          }}
+                        >
+                          {tank.name_short ??
+                            tank.name ??
+                            `Unknown tank ${tank.id}`}
+                        </Text>
+                      </Flex>
                     </Inset>
                   </Card>
                 </a>
