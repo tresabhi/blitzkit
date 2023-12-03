@@ -8,7 +8,6 @@ import { ElementCompact, xml2js } from 'xml-js';
 import { parse } from 'yaml';
 import { NATION_IDS } from '../src/constants/nations';
 import { BlitzkriegTankopedia, Tier } from '../src/core/blitzkrieg/tankopedia';
-import commitMultipleFiles, { FileChange } from './commitMultipleFiles';
 
 const LANGUAGE = 'en';
 const TEMP = 'temp/blitz';
@@ -27,6 +26,7 @@ const directoriesOfInterest = {
   tankParameters: 'assets/Data/3d/Tanks/Parameters',
   smallIcons: 'assets/Data/Gfx/UI/BattleScreenHUD/SmallTankIcons',
   bigIcons: 'assets/Data/Gfx/UI/BigTankIcons',
+  flags: 'assets/Data/Gfx/Lobby/flags',
 };
 const directoriesOfInterestArray = Object.values(directoriesOfInterest);
 
@@ -129,50 +129,55 @@ Promise.all(
 ).then(async () => {
   if (publish) {
     const octokit = new Octokit({ auth: env.GH_TOKEN });
-    const tankopediaChange: FileChange = {
-      content: JSON.stringify(tankopedia),
-      path: 'tankopedia.json',
-      encoding: 'utf-8',
-    };
-    const iconsChange = (
-      await Promise.all(
-        tankIds.map(async (id) => {
-          try {
-            const [contentSmall, contentBig] = await Promise.all([
-              readFile(images[id].small, { encoding: 'base64' }),
-              readFile(images[id].big, { encoding: 'base64' }),
-            ]);
+    // const tankopediaChange: FileChange = {
+    //   content: JSON.stringify(tankopedia),
+    //   path: 'tankopedia.json',
+    //   encoding: 'utf-8',
+    // };
+    // const iconsChange = (
+    //   await Promise.all(
+    //     tankIds.map(async (id) => {
+    //       try {
+    //         const [contentSmall, contentBig] = await Promise.all([
+    //           readFile(images[id].small, { encoding: 'base64' }),
+    //           readFile(images[id].big, { encoding: 'base64' }),
+    //         ]);
 
-            return [
-              {
-                content: contentBig,
-                path: `icons/big/${id}.webp`,
-                encoding: 'base64',
-              },
-              {
-                content: contentSmall,
-                path: `icons/small/${id}.webp`,
-                encoding: 'base64',
-              },
-            ];
-          } catch (error) {
-            console.log(error);
-            return undefined;
-          }
-        }),
-      )
-    ).flat() as FileChange[];
+    //         return [
+    //           {
+    //             content: contentBig,
+    //             path: `icons/big/${id}.webp`,
+    //             encoding: 'base64',
+    //           },
+    //           {
+    //             content: contentSmall,
+    //             path: `icons/small/${id}.webp`,
+    //             encoding: 'base64',
+    //           },
+    //         ];
+    //       } catch (error) {
+    //         console.log(error);
+    //         return undefined;
+    //       }
+    //     }),
+    //   )
+    // ).flat() as FileChange[];
+    const flagChanges = await readdir(
+      `${TEMP}/${directoriesOfInterest.flags}`,
+    ).then((flags) => flags.filter((flag) => flag.startsWith('flag_text')));
 
-    console.log('Writing files...');
-    await commitMultipleFiles(
-      octokit,
-      'tresabhi',
-      'blitzkrieg-assets',
-      'main',
-      new Date().toString(),
-      [tankopediaChange, ...iconsChange],
-      true,
-    );
+    console.log(flagChanges);
+
+    // console.log('Writing files...');
+    // await commitMultipleFiles(
+    //   octokit,
+    //   'tresabhi',
+    //   'blitzkrieg-assets',
+    //   'main',
+    //   new Date().toString(),
+    //   [tankopediaChange, ...iconsChange],
+    //   true,
+    // );
   } else {
     writeFile(
       'dist/tankopedia/tankopedia.json',
