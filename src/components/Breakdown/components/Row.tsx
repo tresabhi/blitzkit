@@ -1,5 +1,10 @@
+import { createColors } from 'bepaint';
 import { Percentile } from '../../../constants/percentiles';
-import { theme } from '../../../stitches.config';
+import {
+  AccentColor,
+  GrayColor,
+  PALETTES,
+} from '../../../constants/radixColors';
 import { TREE_TYPE_ICONS, TreeTypeEnum } from '../../Tanks';
 import { RowStat } from './RowStat';
 
@@ -17,18 +22,28 @@ interface RowProps {
   minimized?: boolean;
   treeType?: TreeTypeEnum;
   tankType?: string;
-
+  color?: AccentColor | GrayColor;
   stats: (RowStatItem | undefined)[];
 }
 
-export function Row(props: RowProps) {
+export function Row({
+  color = 'slate',
+  stats,
+  title,
+  minimized,
+  tankType,
+  treeType,
+  type,
+}: RowProps) {
+  const theme = createColors(PALETTES[`${color}Dark`]);
+
   return (
     <div
       style={{
         display: 'flex',
         flexDirection: 'column',
         borderRadius: 4,
-        backgroundColor: theme.colors.appBackground2,
+        backgroundColor: theme.appBackground2,
         overflow: 'hidden',
       }}
     >
@@ -39,16 +54,12 @@ export function Row(props: RowProps) {
           justifyContent: 'center',
           padding: 8,
           gap: 4,
-          backgroundColor: theme.colors.componentInteractive,
+          backgroundColor: theme.componentInteractive,
         }}
       >
-        {props.type === 'tank' && props.tankType !== undefined && (
+        {type === 'tank' && tankType !== undefined && (
           <img
-            src={
-              TREE_TYPE_ICONS[props.treeType ?? TreeTypeEnum.TechTree][
-                props.tankType
-              ]
-            }
+            src={TREE_TYPE_ICONS[treeType ?? TreeTypeEnum.TechTree][tankType]}
             style={{ width: 16, height: 16 }}
           />
         )}
@@ -56,18 +67,18 @@ export function Row(props: RowProps) {
         <span
           style={{
             color:
-              props.type === 'tank'
-                ? props.treeType === TreeTypeEnum.Collector
-                  ? theme.colors.textLowContrast_blue
-                  : props.treeType === TreeTypeEnum.Premium
-                  ? theme.colors.textLowContrast_amber
-                  : theme.colors.textHighContrast
-                : theme.colors.textLowContrast,
+              type === 'tank'
+                ? treeType === TreeTypeEnum.Collector
+                  ? theme.textLowContrast_blue
+                  : treeType === TreeTypeEnum.Premium
+                  ? theme.textLowContrast_amber
+                  : theme.textHighContrast
+                : theme.textLowContrast,
             fontWeight: 900,
             fontSize: 16,
           }}
         >
-          {props.title}
+          {title}
         </span>
       </div>
 
@@ -78,11 +89,11 @@ export function Row(props: RowProps) {
           paddingBottom: 8,
         }}
       >
-        {props.stats.map(
+        {stats.map(
           (row, index) =>
             row && (
               <RowStat
-                minimized={props.minimized}
+                minimized={minimized}
                 key={index}
                 name={`${row.title} • ${row.career ?? '--'}`}
                 value={row.current ?? '--'}

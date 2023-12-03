@@ -17,7 +17,6 @@ import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../core/blitz/getRatingsInfo';
 import { getRatingsLeague } from '../core/blitz/getRatingsLeague';
 import { getRatingsNeighbors } from '../core/blitz/getRatingsNeighbors';
-import regionToRegionSubdomain from '../core/blitz/regionToRegionSubdomain';
 import { getArchivedLatestSeasonNumber } from '../core/blitzkrieg/getArchivedLatestSeasonNumber';
 import getArchivedRatingsInfo from '../core/blitzkrieg/getArchivedRatingsInfo';
 import { getArchivedRatingsLeaderboard } from '../core/blitzkrieg/getArchivedRatingsLeaderboard';
@@ -256,7 +255,6 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
 
           if (regionRatingsInfo.detail !== undefined) return noOngoingSeason;
 
-          const regionSubdomain = regionToRegionSubdomain(region);
           const result =
             subcommandGroup === 'current'
               ? await getRatingsLeague(region, leagueIndex).then(

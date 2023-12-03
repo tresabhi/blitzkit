@@ -23,8 +23,6 @@ export function CustomColumn({ column, Builder }: CustomColumn) {
       <Builder.SubTrigger>Column {column + 1}</Builder.SubTrigger>
 
       <Builder.SubContent>
-        <Builder.Label>Display</Builder.Label>
-
         <Builder.RadioGroup
           value={customColumn.display}
           onValueChange={(event) =>

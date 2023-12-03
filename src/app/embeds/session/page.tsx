@@ -207,6 +207,8 @@ export default function SessionPage() {
               since !== undefined &&
               diff !== undefined && (
                 <Breakdown.Row
+                  color={session.color}
+                  highContrast={session.highContrast}
                   minimized={!session.showCareer}
                   title={`Since ${since.toLocaleString(undefined, {
                     hour: 'numeric',
@@ -293,6 +295,8 @@ export default function SessionPage() {
 
                 return (
                   <Breakdown.Row
+                    color={session.color}
+                    highContrast={session.highContrast}
                     key={stats.tank_id}
                     minimized={!session.showCareer}
                     title={tankopedia?.name ?? `Unknown tank ${stats.tank_id}`}
