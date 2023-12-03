@@ -103,7 +103,7 @@ export function List() {
                           style={{
                             color:
                               tank.tree_type === 'tech-tree'
-                                ? slateDark.slate11
+                                ? slateDark.slate12
                                 : undefined,
                           }}
                         >
