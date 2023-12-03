@@ -39,6 +39,7 @@ export function Row({
 
   return (
     <div
+      className="session-tracker-row"
       style={{
         display: 'flex',
         flexDirection: 'column',

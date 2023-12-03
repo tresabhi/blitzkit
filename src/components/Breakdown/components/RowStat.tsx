@@ -28,6 +28,7 @@ export function RowStat({
 
   return (
     <div
+      className="session-tracker-row-stat"
       style={{
         display: 'flex',
         flexDirection: 'column',
