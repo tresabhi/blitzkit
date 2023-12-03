@@ -2,6 +2,7 @@ import { produce } from 'immer';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { CustomColumnDisplay } from '../app/tools/session/components/CustomColumn';
+import { AccentColor, GrayColor } from '../constants/radixColors';
 import { Region } from '../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import fetchBlitz from '../core/blitz/fetchBlitz';
@@ -29,6 +30,7 @@ type Session = (
   }[] & { length: 4 };
   showTotal: boolean;
   showCareer: boolean;
+  color: AccentColor | GrayColor;
 };
 
 export async function setSession(region: Region, id: number, nickname: string) {
@@ -78,10 +80,9 @@ export const useSession = create<Session>()(
           { display: 'wn8', showDelta: false },
           { display: 'damage', showDelta: true },
         ],
+        color: 'slate',
       }),
-      {
-        name: 'session',
-      },
+      { name: 'session' },
     ),
   ),
 );

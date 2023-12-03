@@ -6,7 +6,10 @@ export interface RootProps {
 
 export function Root({ children }: RootProps) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+    <div
+      className="session-tracker-root"
+      style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
+    >
       {children}
     </div>
   );

@@ -1,5 +1,10 @@
+import { createColors } from 'bepaint';
 import { Percentile } from '../../../constants/percentiles';
-import { theme } from '../../../stitches.config';
+import {
+  AccentColor,
+  GrayColor,
+  PALETTES,
+} from '../../../constants/radixColors';
 import PercentileIndicator from '../../PercentileIndicator';
 
 export interface RowStatProps {
@@ -8,6 +13,7 @@ export interface RowStatProps {
   delta?: number;
   percentile?: Percentile;
   minimized?: boolean;
+  color?: AccentColor | GrayColor;
 }
 
 export function RowStat({
@@ -16,9 +22,13 @@ export function RowStat({
   delta,
   percentile,
   minimized = false,
+  color = 'slate',
 }: RowStatProps) {
+  const theme = createColors(PALETTES[`${color}Dark`]);
+
   return (
     <div
+      className="session-tracker-row-stat"
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -52,7 +62,7 @@ export function RowStat({
 
         <span
           style={{
-            color: theme.colors.textHighContrast,
+            color: theme.textHighContrast,
             fontWeight: 'bold',
             fontSize: 16,
             textAlign: 'center',
@@ -65,7 +75,7 @@ export function RowStat({
       {!minimized && (
         <span
           style={{
-            color: theme.colors.textLowContrast,
+            color: theme.textLowContrast,
             textAlign: 'center',
             fontSize: 12,
           }}
