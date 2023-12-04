@@ -1,21 +1,32 @@
 import { produce } from 'immer';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import { TIERS, Tier } from '../core/blitzkrieg/tankopedia';
 
 export type TankopediaSortBy = 'tier' | 'name';
 export type TankopediaSortDirection = 'ascending' | 'descending';
 
 type Tankopedia = {
-  sortBy: TankopediaSortBy;
-  sortDirection: TankopediaSortDirection;
+  sort: {
+    by: TankopediaSortBy;
+    direction: TankopediaSortDirection;
+  };
+  filters: {
+    tiers: Tier[];
+  };
 };
 
 export const useTankopedia = create<Tankopedia>()(
   devtools(
     persist(
       (set) => ({
-        sortBy: 'tier',
-        sortDirection: 'descending',
+        sort: {
+          by: 'tier',
+          direction: 'descending',
+        },
+        filters: {
+          tiers: [...TIERS],
+        },
       }),
       { name: 'tankopedia' },
     ),

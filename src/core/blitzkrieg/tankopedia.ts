@@ -84,6 +84,8 @@ export const TANK_ICONS_COLLECTOR: Record<TankType, string> = {
 
 export type Tier = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
+export const TIERS: Tier[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
 export const TIER_ROMAN_NUMERALS: Record<Tier, string> = {
   1: 'I',
   2: 'II',

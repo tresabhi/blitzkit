@@ -30,34 +30,36 @@ export default function Page() {
   const tankopediaState = useTankopedia();
   const awaitedTanks = use(tanks);
   const input = useRef<HTMLInputElement>(null);
-  const sortedTanks = useMemo(
+  const searchableTanks = useMemo(
     () =>
-      awaitedTanks.toSorted((a, b) => {
-        let diff = 0;
+      awaitedTanks
+        .filter((tank) => tankopediaState.filters.tiers.includes(tank.tier))
+        .toSorted((a, b) => {
+          let diff = 0;
 
-        if (tankopediaState.sortBy === 'tier') {
-          diff = a.tier - b.tier;
-        }
-        if (tankopediaState.sortBy === 'name') {
-          diff = (
-            a.name_short ??
-            a.name ??
-            `Unknown tank ${a.id}`
-          ).localeCompare(b.name_short ?? b.name ?? `Unknown tank ${b.id}`);
-        }
+          if (tankopediaState.sort.by === 'tier') {
+            diff = a.tier - b.tier;
+          }
+          if (tankopediaState.sort.by === 'name') {
+            diff = (
+              a.name_short ??
+              a.name ??
+              `Unknown tank ${a.id}`
+            ).localeCompare(b.name_short ?? b.name ?? `Unknown tank ${b.id}`);
+          }
 
-        return tankopediaState.sortDirection === 'ascending' ? diff : -diff;
-      }),
-    [tankopediaState.sortBy, tankopediaState.sortDirection],
+          return tankopediaState.sort.direction === 'ascending' ? diff : -diff;
+        }),
+    [tankopediaState.filters, tankopediaState.sort],
   );
-  const [searchedList, setSearchedList] = useState(sortedTanks);
+  const [searchedList, setSearchedList] = useState(searchableTanks);
   const [page, setPage] = useState(0);
   const pageInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setSearchedList(sortedTanks);
+    setSearchedList(searchableTanks);
     if (input.current) input.current.value = '';
-  }, [sortedTanks]);
+  }, [searchableTanks]);
 
   useEffect(() => {
     if (pageInput.current) pageInput.current.value = `${page + 1}`;
@@ -84,10 +86,10 @@ export default function Page() {
               placeholder="Search tanks..."
               onChange={(event) => {
                 if (event.target.value.length === 0) {
-                  setSearchedList(sortedTanks);
+                  setSearchedList(searchableTanks);
                 } else {
                   setSearchedList(
-                    go(event.target.value, sortedTanks, {
+                    go(event.target.value, searchableTanks, {
                       keys: [
                         'name',
                         'name_short',
