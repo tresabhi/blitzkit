@@ -45,6 +45,14 @@ export default function Page() {
   useEffect(() => {
     if (pageInput.current) pageInput.current.value = `${page + 1}`;
   }, [page]);
+  useEffect(() => {
+    setPage(
+      Math.min(
+        Math.max(0, page),
+        Math.ceil(searchedList.length / TANKS_PER_PAGE) - 1,
+      ),
+    );
+  }, [searchedList]);
 
   return (
     <PageWrapper size="wide">
