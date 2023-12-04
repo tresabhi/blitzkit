@@ -32,9 +32,20 @@ export default function Page() {
   const input = useRef<HTMLInputElement>(null);
   const sortedTanks = useMemo(
     () =>
-      awaitedTanks.sort((a, b) => {
+      awaitedTanks.toSorted((a, b) => {
         let diff = 0;
-        if (tankopediaState.sortBy === 'tier') diff = a.tier - b.tier;
+
+        if (tankopediaState.sortBy === 'tier') {
+          diff = a.tier - b.tier;
+        }
+        if (tankopediaState.sortBy === 'name') {
+          diff = (
+            a.name_short ??
+            a.name ??
+            `Unknown tank ${a.id}`
+          ).localeCompare(b.name_short ?? b.name ?? `Unknown tank ${b.id}`);
+        }
+
         return tankopediaState.sortDirection === 'ascending' ? diff : -diff;
       }),
     [tankopediaState.sortBy, tankopediaState.sortDirection],
@@ -42,6 +53,11 @@ export default function Page() {
   const [searchedList, setSearchedList] = useState(sortedTanks);
   const [page, setPage] = useState(0);
   const pageInput = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setSearchedList(sortedTanks);
+    if (input.current) input.current.value = '';
+  }, [sortedTanks]);
 
   useEffect(() => {
     if (pageInput.current) pageInput.current.value = `${page + 1}`;
@@ -56,9 +72,9 @@ export default function Page() {
   }, [searchedList]);
 
   return (
-    <PageWrapper size="wide">
+    <PageWrapper size="wide" color="purple">
       <Suspense fallback={<Text>Loading...</Text>}>
-        <Flex direction="column" gap="2">
+        <Flex direction="column" gap="3">
           <TextField.Root>
             <TextField.Slot>
               <MagnifyingGlassIcon height="16" width="16" />
@@ -150,6 +166,7 @@ export default function Page() {
           {searchedList
             .map((tank) => (
               <a
+                key={tank.id}
                 href={`/tools/tankopedia/${tank.id}`}
                 style={{
                   flex: 1,

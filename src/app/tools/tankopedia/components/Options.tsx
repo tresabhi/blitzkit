@@ -1,3 +1,5 @@
+'use client';
+
 import { CaretDownIcon } from '@radix-ui/react-icons';
 import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
 import {
@@ -10,7 +12,7 @@ export function Options() {
   const tankopediaState = useTankopedia();
 
   return (
-    <Flex gap="2">
+    <Flex gap="1">
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           <Button variant="soft">
@@ -26,6 +28,7 @@ export function Options() {
             }
           >
             <DropdownMenu.RadioItem value="tier">Tier</DropdownMenu.RadioItem>
+            <DropdownMenu.RadioItem value="name">Name</DropdownMenu.RadioItem>
           </DropdownMenu.RadioGroup>
         </DropdownMenu.Content>
       </DropdownMenu.Root>

@@ -2,7 +2,7 @@ import { produce } from 'immer';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-export type TankopediaSortBy = 'tier';
+export type TankopediaSortBy = 'tier' | 'name';
 export type TankopediaSortDirection = 'ascending' | 'descending';
 
 type Tankopedia = {
