@@ -10,6 +10,7 @@ import { Button, Card, Flex, Inset, Text, TextField } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { Suspense, use, useEffect, useMemo, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
+import { asset } from '../../../core/blitzkrieg/asset';
 import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
 import {
   BlitzkriegTankopediaEntry,
@@ -22,12 +23,6 @@ import { theme } from '../../../stitches.config';
 import { useTankopedia } from '../../../stores/tankopedia';
 import { Options } from './components/Options';
 import * as styles from './page.css';
-
-const flags = [
-  'https://i.imgur.com/Iho9ATV.png',
-  'https://i.imgur.com/uKWdnOn.png',
-  'https://i.imgur.com/kf4GwjJ.png',
-];
 
 const TANKS_PER_PAGE = 30;
 
@@ -170,17 +165,18 @@ export default function Page() {
                       display: 'flex',
                     }}
                   >
-                    <img
-                      className={styles.flag}
-                      // pick a random flag
-                      src={flags[Math.floor(Math.random() * flags.length)]}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'contain',
-                        position: 'absolute',
-                      }}
-                    ></img>
+                    {tank.nation !== 'other' && (
+                      <img
+                        className={styles.flag}
+                        src={asset(`flags/${tank.nation}.webp`)}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'contain',
+                          position: 'absolute',
+                        }}
+                      />
+                    )}
 
                     <div
                       style={{

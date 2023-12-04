@@ -1,5 +1,6 @@
 import { Octokit } from '@octokit/rest';
 import decompress from 'decompress';
+import { config } from 'dotenv';
 import { writeFileSync } from 'fs';
 import { cp, mkdir, readFile, readdir, rm, writeFile } from 'fs/promises';
 import { load } from 'js-yaml';
@@ -8,6 +9,9 @@ import { ElementCompact, xml2js } from 'xml-js';
 import { parse } from 'yaml';
 import { NATION_IDS } from '../src/constants/nations';
 import { BlitzkriegTankopedia, Tier } from '../src/core/blitzkrieg/tankopedia';
+import commitMultipleFiles, { FileChange } from './commitMultipleFiles';
+
+config();
 
 const LANGUAGE = 'en';
 const TEMP = 'temp/blitz';
@@ -86,7 +90,7 @@ Promise.all(
             const type = tags[0];
 
             if ((name ?? name_short) === undefined) {
-              console.log(vehicleData.userString._text);
+              console.warn(`Missing name for ${vehicle}`);
             }
 
             tankIds.push(id);
@@ -165,21 +169,37 @@ Promise.all(
     const flagChanges = await readdir(
       `${TEMP}/${directoriesOfInterest.flags}`,
     ).then((flags) =>
-      flags.filter((flag) => flag.startsWith('flag_tutor-tank_')),
+      Promise.all(
+        flags
+          .filter((flag) => flag.startsWith('flag_tutor-tank_'))
+          .map(async (flag) => {
+            const content = await readFile(
+              `${TEMP}/${directoriesOfInterest.flags}/${flag}`,
+              { encoding: 'base64' },
+            );
+            const name = flag.match(/flag_tutor-tank_(.+)\.packed\.webp/)![1];
+
+            return {
+              content,
+              encoding: 'base64',
+              path: `flags/${name}.webp`,
+            } satisfies FileChange;
+          }),
+      ),
     );
 
     console.log(flagChanges);
 
-    // console.log('Writing files...');
-    // await commitMultipleFiles(
-    //   octokit,
-    //   'tresabhi',
-    //   'blitzkrieg-assets',
-    //   'main',
-    //   new Date().toString(),
-    //   [tankopediaChange, ...iconsChange],
-    //   true,
-    // );
+    console.log('Writing files...');
+    await commitMultipleFiles(
+      octokit,
+      'tresabhi',
+      'blitzkrieg-assets',
+      'main',
+      new Date().toString(),
+      flagChanges,
+      true,
+    );
   } else {
     writeFile(
       'dist/tankopedia/tankopedia.json',
