@@ -82,9 +82,9 @@ export const TANK_ICONS_COLLECTOR: Record<TankType, string> = {
   heavyTank: 'https://i.imgur.com/8xRf3nc.png',
 };
 
-export type Tier = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+export const TIERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
 
-export const TIERS: Tier[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+export type Tier = (typeof TIERS)[number];
 
 export const TIER_ROMAN_NUMERALS: Record<Tier, string> = {
   1: 'I',

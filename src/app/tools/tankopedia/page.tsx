@@ -33,7 +33,18 @@ export default function Page() {
   const searchableTanks = useMemo(
     () =>
       awaitedTanks
-        .filter((tank) => tankopediaState.filters.tiers.includes(tank.tier))
+        .filter(
+          (tank) =>
+            (tankopediaState.filters.tiers.length === 0
+              ? true
+              : tankopediaState.filters.tiers.includes(tank.tier)) &&
+            (tankopediaState.filters.types.length === 0
+              ? true
+              : tankopediaState.filters.types.includes(tank.type)) &&
+            (tankopediaState.filters.treeTypes.length === 0
+              ? true
+              : tankopediaState.filters.treeTypes.includes(tank.tree_type)),
+        )
         .toSorted((a, b) => {
           let diff = 0;
 

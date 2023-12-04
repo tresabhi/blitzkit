@@ -11,13 +11,29 @@ export enum TreeTypeEnum {
   Collector,
 }
 
-export type TankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
-export type TreeTypeString = 'tech-tree' | 'premium' | 'collector';
+export const TANK_TYPES = [
+  'AT-SPG',
+  'lightTank',
+  'mediumTank',
+  'heavyTank',
+] as const;
+
+// TODO: remove hyphen for underscore
+export const TREE_TYPES = ['tech-tree', 'premium', 'collector'] as const;
+
+export type TankType = (typeof TANK_TYPES)[number];
+export type TreeTypeString = (typeof TREE_TYPES)[number];
 
 export const TREE_TYPE_NAMES: Record<TreeTypeString, string> = {
   'tech-tree': 'Tech tree',
   premium: 'Premium',
   collector: 'Collector',
+};
+
+export const TREE_TYPE_IMAGES: Record<TreeTypeString, string> = {
+  'tech-tree': 'https://i.imgur.com/pJxO2XY.png',
+  premium: 'https://i.imgur.com/mZzSwOU.png',
+  collector: 'https://i.imgur.com/7A0RsG5.png',
 };
 
 export interface ItemProps {

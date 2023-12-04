@@ -3,6 +3,13 @@
 import { CaretDownIcon } from '@radix-ui/react-icons';
 import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
 import {
+  TANK_TYPES,
+  TREE_TYPES,
+  TREE_TYPE_ICONS,
+  TREE_TYPE_IMAGES,
+  TreeTypeEnum,
+} from '../../../../components/Tanks';
+import {
   TIERS,
   TIER_ROMAN_NUMERALS,
 } from '../../../../core/blitzkrieg/tankopedia';
@@ -16,7 +23,7 @@ export function Options() {
   const tankopediaState = useTankopedia();
 
   return (
-    <Flex justify="between">
+    <Flex justify="center" wrap="wrap" gap="4">
       <Flex gap="1">
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
@@ -67,38 +74,110 @@ export function Options() {
         </DropdownMenu.Root>
       </Flex>
 
-      <Flex gap="1">
-        <Flex>
-          {TIERS.toReversed().map((tier, index) => (
-            <Button
-              variant={
-                tankopediaState.filters.tiers.includes(tier) ? 'solid' : 'soft'
-              }
-              style={{
-                margin: -0.5,
-                borderTopLeftRadius: index === 0 ? undefined : 0,
-                borderBottomLeftRadius: index === 0 ? undefined : 0,
-                borderTopRightRadius:
-                  index === TIERS.length - 1 ? undefined : 0,
-                borderBottomRightRadius:
-                  index === TIERS.length - 1 ? undefined : 0,
-              }}
-              onClick={() =>
-                mutateTankopedia((draft) => {
-                  if (draft.filters.tiers.includes(tier)) {
-                    draft.filters.tiers = draft.filters.tiers.filter(
-                      (preexistingTier) => preexistingTier !== tier,
-                    );
-                  } else {
-                    draft.filters.tiers.push(tier);
-                  }
-                })
-              }
-            >
-              {TIER_ROMAN_NUMERALS[tier]}
-            </Button>
-          ))}
-        </Flex>
+      <Flex>
+        {TIERS.toReversed().map((tier, index) => (
+          <Button
+            key={tier}
+            variant={
+              tankopediaState.filters.tiers.includes(tier) ? 'solid' : 'soft'
+            }
+            style={{
+              margin: -0.5,
+              borderTopLeftRadius: index === 0 ? undefined : 0,
+              borderBottomLeftRadius: index === 0 ? undefined : 0,
+              borderTopRightRadius: index === TIERS.length - 1 ? undefined : 0,
+              borderBottomRightRadius:
+                index === TIERS.length - 1 ? undefined : 0,
+            }}
+            onClick={() =>
+              mutateTankopedia((draft) => {
+                if (draft.filters.tiers.includes(tier)) {
+                  draft.filters.tiers = draft.filters.tiers.filter(
+                    (preexistingTier) => preexistingTier !== tier,
+                  );
+                } else {
+                  draft.filters.tiers.push(tier);
+                }
+              })
+            }
+          >
+            {TIER_ROMAN_NUMERALS[tier]}
+          </Button>
+        ))}
+      </Flex>
+
+      <Flex>
+        {TANK_TYPES.toReversed().map((type, index) => (
+          <Button
+            key={type}
+            variant={
+              tankopediaState.filters.types.includes(type) ? 'solid' : 'soft'
+            }
+            style={{
+              margin: -0.5,
+              borderTopLeftRadius: index === 0 ? undefined : 0,
+              borderBottomLeftRadius: index === 0 ? undefined : 0,
+              borderTopRightRadius:
+                index === TANK_TYPES.length - 1 ? undefined : 0,
+              borderBottomRightRadius:
+                index === TANK_TYPES.length - 1 ? undefined : 0,
+            }}
+            onClick={() =>
+              mutateTankopedia((draft) => {
+                if (draft.filters.types.includes(type)) {
+                  draft.filters.types = draft.filters.types.filter(
+                    (preexistingType) => preexistingType !== type,
+                  );
+                } else {
+                  draft.filters.types.push(type);
+                }
+              })
+            }
+          >
+            <img
+              src={TREE_TYPE_ICONS[TreeTypeEnum.TechTree][type]}
+              style={{ width: '1em', height: '1em' }}
+            />
+          </Button>
+        ))}
+      </Flex>
+
+      <Flex>
+        {TREE_TYPES.map((type, index) => (
+          <Button
+            key={type}
+            variant={
+              tankopediaState.filters.treeTypes.includes(type)
+                ? 'solid'
+                : 'soft'
+            }
+            style={{
+              margin: -0.5,
+              borderTopLeftRadius: index === 0 ? undefined : 0,
+              borderBottomLeftRadius: index === 0 ? undefined : 0,
+              borderTopRightRadius:
+                index === TREE_TYPES.length - 1 ? undefined : 0,
+              borderBottomRightRadius:
+                index === TREE_TYPES.length - 1 ? undefined : 0,
+            }}
+            onClick={() =>
+              mutateTankopedia((draft) => {
+                if (draft.filters.treeTypes.includes(type)) {
+                  draft.filters.treeTypes = draft.filters.treeTypes.filter(
+                    (preexistingType) => preexistingType !== type,
+                  );
+                } else {
+                  draft.filters.treeTypes.push(type);
+                }
+              })
+            }
+          >
+            <img
+              src={TREE_TYPE_IMAGES[type]}
+              style={{ width: '1em', height: '1em' }}
+            />
+          </Button>
+        ))}
       </Flex>
     </Flex>
   );

@@ -1,7 +1,8 @@
 import { produce } from 'immer';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { TIERS, Tier } from '../core/blitzkrieg/tankopedia';
+import { TankType, TreeTypeString } from '../components/Tanks';
+import { Tier } from '../core/blitzkrieg/tankopedia';
 
 export type TankopediaSortBy = 'tier' | 'name';
 export type TankopediaSortDirection = 'ascending' | 'descending';
@@ -13,6 +14,8 @@ type Tankopedia = {
   };
   filters: {
     tiers: Tier[];
+    types: TankType[];
+    treeTypes: TreeTypeString[];
   };
 };
 
@@ -25,7 +28,9 @@ export const useTankopedia = create<Tankopedia>()(
           direction: 'descending',
         },
         filters: {
-          tiers: [...TIERS],
+          tiers: [],
+          types: [],
+          treeTypes: [],
         },
       }),
       { name: 'tankopedia' },
