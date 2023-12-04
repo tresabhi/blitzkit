@@ -1,12 +1,8 @@
 'use client';
 
 import { slateDark } from '@radix-ui/colors';
-import {
-  CaretLeftIcon,
-  CaretRightIcon,
-  MagnifyingGlassIcon,
-} from '@radix-ui/react-icons';
-import { Button, Card, Flex, Inset, Text, TextField } from '@radix-ui/themes';
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { Card, Flex, Inset, Text, TextField } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { Suspense, use, useEffect, useMemo, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
@@ -22,6 +18,7 @@ import {
 import { theme } from '../../../stitches.config';
 import { useTankopedia } from '../../../stores/tankopedia';
 import { Options } from './components/Options';
+import { PageTurner } from './components/PageTurner';
 import * as styles from './page.css';
 
 const TANKS_PER_PAGE = 30;
@@ -65,16 +62,12 @@ export default function Page() {
   );
   const [searchedList, setSearchedList] = useState(searchableTanks);
   const [page, setPage] = useState(0);
-  const pageInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setSearchedList(searchableTanks);
     if (input.current) input.current.value = '';
   }, [searchableTanks]);
 
-  useEffect(() => {
-    if (pageInput.current) pageInput.current.value = `${page + 1}`;
-  }, [page]);
   useEffect(() => {
     setPage(
       Math.min(
@@ -117,63 +110,14 @@ export default function Page() {
           </TextField.Root>
 
           <Options />
-
-          <Flex align="center" justify="center" gap="2">
-            <Button
-              variant="soft"
-              disabled={page === 0}
-              onClick={() => setPage(Math.max(0, page - 1))}
-            >
-              <CaretLeftIcon />
-            </Button>
-            <TextField.Root>
-              <TextField.Slot>Page</TextField.Slot>
-              <TextField.Input
-                defaultValue={1}
-                type="number"
-                ref={pageInput}
-                min={1}
-                max={Math.floor(searchedList.length / TANKS_PER_PAGE) + 1}
-                style={{ width: 64, textAlign: 'center' }}
-                onBlur={(event) => {
-                  setPage(
-                    Math.max(
-                      0,
-                      Math.min(
-                        Math.floor(searchedList.length / TANKS_PER_PAGE),
-                        event.target.valueAsNumber - 1,
-                      ),
-                    ),
-                  );
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    (event.target as HTMLInputElement).blur();
-                  }
-                }}
-              />
-              <TextField.Slot>
-                out of {Math.floor(searchedList.length / TANKS_PER_PAGE) + 1}
-              </TextField.Slot>
-            </TextField.Root>
-            <Button
-              variant="soft"
-              disabled={
-                Math.floor(searchedList.length / TANKS_PER_PAGE) === page
-              }
-              onClick={() =>
-                setPage(
-                  Math.min(
-                    Math.floor(searchedList.length / TANKS_PER_PAGE),
-                    page + 1,
-                  ),
-                )
-              }
-            >
-              <CaretRightIcon />
-            </Button>
-          </Flex>
         </Flex>
+
+        <PageTurner
+          page={page}
+          setPage={setPage}
+          tanksPerPage={TANKS_PER_PAGE}
+          searchedList={searchedList}
+        />
 
         <Flex wrap="wrap" gap="3" justify="center">
           {searchedList
@@ -283,6 +227,13 @@ export default function Page() {
             ))
             .slice(page * TANKS_PER_PAGE, (page + 1) * TANKS_PER_PAGE)}
         </Flex>
+
+        <PageTurner
+          page={page}
+          setPage={setPage}
+          tanksPerPage={TANKS_PER_PAGE}
+          searchedList={searchedList}
+        />
       </Suspense>
     </PageWrapper>
   );
