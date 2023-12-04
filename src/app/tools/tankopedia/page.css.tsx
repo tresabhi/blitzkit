@@ -15,7 +15,7 @@ export const flag = style({
 });
 
 export const listingShadow = style({
-  boxShadow: `inset 0 -128px 128px -128px ${theme.colors.appBackground1}`,
+  boxShadow: `inset 128px -128px 128px -128px ${theme.colors.appBackground1}`,
 
   [`.${listing}:hover &, .${listing}:active &`]: {
     boxShadow: `inset 0 0 0 -128px ${theme.colors.appBackground1}`,
