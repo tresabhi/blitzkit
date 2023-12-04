@@ -41,7 +41,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
             : 'url(https://i.imgur.com/PhS06NJ.png)',
         }}
       >
-        <Theme appearance="dark" panelBackground="translucent" radius="full">
+        <Theme
+          appearance="dark"
+          panelBackground="translucent"
+          radius="full"
+          suppressHydrationWarning
+          suppressContentEditableWarning
+        >
           {!isEmbed && <Navbar />}
 
           <Flex direction="column">{children}</Flex>

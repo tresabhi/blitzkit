@@ -59,6 +59,8 @@ export function PageTurner({
             type="number"
             ref={pageInput}
             style={{ width: 64, textAlign: 'center' }}
+            min={1}
+            max={pages}
             onBlur={(event) => {
               onPageChange(
                 Math.max(
