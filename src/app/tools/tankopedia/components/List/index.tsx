@@ -37,13 +37,18 @@ export function List() {
             input={input}
             list={awaitedTanks.map((tank, index) => ({
               node: (
-                <a href={`/tools/tankopedia/${tank.id}`}>
+                <a
+                  href={`/tools/tankopedia/${tank.id}`}
+                  style={{
+                    flex: 1,
+                  }}
+                >
                   <Card className={styles.listing}>
                     <Inset
                       key={index}
                       style={{
-                        height: 128,
-                        width: 256,
+                        minHeight: 128,
+                        minWidth: 256,
                         position: 'relative',
                         display: 'flex',
                         alignItems: 'center',
@@ -85,8 +90,8 @@ export function List() {
                             (tank.tree_type === 'collector'
                               ? TANK_ICONS_COLLECTOR
                               : tank.tree_type === 'premium'
-                              ? TANK_ICONS_PREMIUM
-                              : TANK_ICONS)[tank.type]
+                                ? TANK_ICONS_PREMIUM
+                                : TANK_ICONS)[tank.type]
                           }
                           style={{ width: '1em', height: '1em' }}
                         />
@@ -96,8 +101,8 @@ export function List() {
                             tank.tree_type === 'collector'
                               ? 'blue'
                               : tank.tree_type === 'premium'
-                              ? 'amber'
-                              : undefined
+                                ? 'amber'
+                                : undefined
                           }
                           weight="medium"
                           style={{

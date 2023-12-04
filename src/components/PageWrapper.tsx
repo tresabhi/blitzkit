@@ -19,7 +19,7 @@ export default function PageWrapper({
         gap="4"
         style={{
           width: '100%',
-          maxWidth: size === 'regular' ? 800 : 880,
+          maxWidth: size === 'regular' ? 800 : 960,
           margin: 'auto',
           padding: 16,
           boxSizing: 'border-box',

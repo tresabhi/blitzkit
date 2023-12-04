@@ -7,7 +7,7 @@ export const listingShadow = style({
   boxShadow: `inset 0 -128px 128px -128px ${theme.colors.appBackground1}`,
 
   [`.${listing}:hover &`]: {
-    boxShadow: `inset 0 0 128px -128px ${theme.colors.appBackground1}`,
+    boxShadow: `inset 0 0 0 -128px ${theme.colors.appBackground1}`,
   },
 });
 
