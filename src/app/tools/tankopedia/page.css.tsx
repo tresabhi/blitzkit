@@ -1,13 +1,16 @@
 import { style } from '@vanilla-extract/css';
 import { theme } from '../../../stitches.config';
 
-export const listing = style({
-  transition: `background-position ${theme.durations.regular}`,
+export const listing = style({});
 
-  backgroundPosition: 'left center',
+export const flag = style({
+  transitionDuration: theme.durations.regular,
+  left: '0',
+  top: '0',
 
-  ':hover': {
-    backgroundPosition: '-256px center',
+  [`.${listing}:hover &, .${listing}:active &`]: {
+    transform: 'translateX(-25%)',
+    filter: 'blur(3rem)',
   },
 });
 

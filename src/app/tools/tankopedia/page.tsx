@@ -23,6 +23,12 @@ import { useTankopedia } from '../../../stores/tankopedia';
 import { Options } from './components/Options';
 import * as styles from './page.css';
 
+const flags = [
+  'https://i.imgur.com/Iho9ATV.png',
+  'https://i.imgur.com/uKWdnOn.png',
+  'https://i.imgur.com/kf4GwjJ.png',
+];
+
 const TANKS_PER_PAGE = 30;
 
 export default function Page() {
@@ -154,14 +160,7 @@ export default function Page() {
                   flex: 1,
                 }}
               >
-                <Card
-                  className={styles.listing}
-                  style={{
-                    backgroundImage: `url(https://i.imgur.com/Iho9ATV.png)`,
-                    backgroundSize: 'contain',
-                    backgroundRepeat: 'no-repeat',
-                  }}
-                >
+                <Card className={styles.listing}>
                   <Inset
                     key={tank.id}
                     style={{
@@ -171,6 +170,18 @@ export default function Page() {
                       display: 'flex',
                     }}
                   >
+                    <img
+                      className={styles.flag}
+                      // pick a random flag
+                      src={flags[Math.floor(Math.random() * flags.length)]}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain',
+                        position: 'absolute',
+                      }}
+                    ></img>
+
                     <div
                       style={{
                         width: 256,

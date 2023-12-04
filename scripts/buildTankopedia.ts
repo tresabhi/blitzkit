@@ -98,8 +98,8 @@ Promise.all(
               tree_type: isCollector
                 ? 'collector'
                 : isPremium
-                ? 'premium'
-                : 'tech-tree',
+                  ? 'premium'
+                  : 'tech-tree',
               tier,
               type,
             };
@@ -164,7 +164,9 @@ Promise.all(
     // ).flat() as FileChange[];
     const flagChanges = await readdir(
       `${TEMP}/${directoriesOfInterest.flags}`,
-    ).then((flags) => flags.filter((flag) => flag.startsWith('flag_text')));
+    ).then((flags) =>
+      flags.filter((flag) => flag.startsWith('flag_tutor-tank_')),
+    );
 
     console.log(flagChanges);
 
