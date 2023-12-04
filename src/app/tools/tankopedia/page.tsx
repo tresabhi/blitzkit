@@ -154,26 +154,38 @@ export default function Page() {
                   flex: 1,
                 }}
               >
-                <Card className={styles.listing}>
+                <Card
+                  className={styles.listing}
+                  style={{
+                    backgroundImage: `url(https://i.imgur.com/Iho9ATV.png)`,
+                    backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat',
+                  }}
+                >
                   <Inset
                     key={tank.id}
                     style={{
-                      minHeight: 128,
                       minWidth: 256,
+                      minHeight: 128,
                       position: 'relative',
                       display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
                     }}
                   >
-                    <img
-                      className={styles.listingImage}
-                      src={tankIcon(tank.id)}
+                    <div
                       style={{
-                        objectFit: 'contain',
-                        objectPosition: 'left center',
+                        width: 256,
+                        height: 128,
                       }}
-                    />
+                      className={styles.listingImage}
+                    >
+                      <img
+                        src={tankIcon(tank.id)}
+                        style={{
+                          objectFit: 'contain',
+                          objectPosition: 'left center',
+                        }}
+                      />
+                    </div>
 
                     <div
                       className={styles.listingShadow}

@@ -1,7 +1,15 @@
 import { style } from '@vanilla-extract/css';
 import { theme } from '../../../stitches.config';
 
-export const listing = style({});
+export const listing = style({
+  transition: `background-position ${theme.durations.regular}`,
+
+  backgroundPosition: 'left center',
+
+  ':hover': {
+    backgroundPosition: '-256px center',
+  },
+});
 
 export const listingShadow = style({
   boxShadow: `inset 0 -128px 128px -128px ${theme.colors.appBackground1}`,
@@ -22,9 +30,10 @@ export const listingLabel = style({
 
 export const listingImage = style({
   transition: `transform ${theme.durations.regular}`,
-  transform: 'translateX(25%) translateY(0)',
+  position: 'absolute',
+  left: '50%',
 
   [`.${listing}:hover &, .${listing}:active &`]: {
-    transform: 'translateX(25%) translateY(10%)',
+    transform: 'translate(-25%, 10%)',
   },
 });
