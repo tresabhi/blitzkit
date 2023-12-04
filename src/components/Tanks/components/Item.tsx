@@ -22,7 +22,7 @@ export const TREE_TYPE_NAMES: Record<TreeTypeString, string> = {
 
 export interface ItemProps {
   image?: string;
-  tankType?: string;
+  tankType?: TankType;
   name: string;
   treeType: TreeTypeEnum;
 }
