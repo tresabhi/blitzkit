@@ -1,13 +1,13 @@
 import { Octokit } from '@octokit/rest';
-import decompress from 'decompress';
 import { config } from 'dotenv';
 import { writeFileSync } from 'fs';
-import { readFile, readdir, rm } from 'fs/promises';
+import { readFile, readdir } from 'fs/promises';
 import { load } from 'js-yaml';
 import { argv, env } from 'process';
 import { ElementCompact, xml2js } from 'xml-js';
 import { parse } from 'yaml';
 import { NATION_IDS } from '../src/constants/nations';
+import { readDVPL } from '../src/core/blitz/readDVPL';
 import {
   TankDefinitions,
   Tier,
@@ -16,39 +16,40 @@ import commitMultipleFiles, { FileChange } from './commitMultipleFiles';
 
 config();
 
+const DATA =
+  'C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz/Data';
 const LANGUAGE = 'en';
-const TEMP = 'temp/blitz';
 
-const publish = argv.includes('--publish');
-const apkFile = argv
-  .find((argument) => argument.startsWith('--file'))
-  ?.split('=')[1];
-const noRewrite = argv.includes('--no-rewrite');
+const targets = argv
+  .find((argument) => argument.startsWith('--target'))
+  ?.split('=')[1]
+  .split(',');
 
-if (!apkFile) throw new Error('No file specified');
+if (!targets) throw new Error('No target(s) specified');
 
 const directoriesOfInterest = {
-  vehicleDefinitions: 'assets/Data/XML/item_defs/vehicles',
-  strings: 'assets/Data/Strings',
-  tankParameters: 'assets/Data/3d/Tanks/Parameters',
-  smallIcons: 'assets/Data/Gfx/UI/BattleScreenHUD/SmallTankIcons',
-  bigIcons: 'assets/Data/Gfx/UI/BigTankIcons',
-  flags: 'assets/Data/Gfx/Lobby/flags',
+  vehicleDefinitions: 'XML/item_defs/vehicles',
+  strings: 'Strings',
+  tankParameters: '3d/Tanks/Parameters',
+  smallIcons: 'Gfx/UI/BattleScreenHUD/SmallTankIcons',
+  bigIcons: 'Gfx/UI/BigTankIcons',
+  flags: 'Gfx/Lobby/flags',
 };
-const directoriesOfInterestArray = Object.values(directoriesOfInterest);
 
-if (!noRewrite) {
-  await rm(TEMP, { recursive: true, force: true });
-  await decompress(apkFile, TEMP, {
-    filter: (file) =>
-      directoriesOfInterestArray.some((dir) => file.path.startsWith(dir)),
-  });
-}
+console.log(
+  (
+    await readDVPL(
+      `${DATA}/${directoriesOfInterest.strings}/${LANGUAGE}.yaml.dvpl`,
+    )
+  ).toString(),
+);
+throw new Error('stop');
 
 const strings = await readFile(
-  `${TEMP}/${directoriesOfInterest.strings}/${LANGUAGE}.yaml`,
+  `${DATA}/${directoriesOfInterest.strings}/${LANGUAGE}.yaml.dvpl`,
   'utf-8',
 ).then((data) => load(data) as Record<string, string>);
+
 const tankDefinitions: TankDefinitions = {};
 const tankIds: number[] = [];
 const images: Record<number, { big: string; small: string }> = {};
