@@ -22,7 +22,7 @@ import { Options } from './components/Options';
 import { PageTurner } from './components/PageTurner';
 import * as styles from './page.css';
 
-const TANKS_PER_PAGE = 30;
+const TANKS_PER_PAGE = 3 * 2 ** 4;
 
 export default function Page() {
   const tankopediaState = useTankopedia();

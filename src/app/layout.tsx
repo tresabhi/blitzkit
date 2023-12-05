@@ -36,6 +36,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         style={{
           margin: 0,
+          marginTop: isEmbed ? 0 : '3.25rem',
           background: isEmbed
             ? 'transparent'
             : 'url(https://i.imgur.com/PhS06NJ.png)',

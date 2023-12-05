@@ -1,16 +1,24 @@
 import { DiscordLogoIcon } from '@radix-ui/react-icons';
-import { Card, Flex, Text, Theme } from '@radix-ui/themes';
+import { Flex, Text, Theme } from '@radix-ui/themes';
 import Link from 'next/link';
+import { theme } from '../../stitches.config';
 import { BlitzkriegWormWide } from '../BlitzkriegWormWide';
 
 export default function Navbar() {
   return (
     <Theme radius="none">
-      <Card
+      <div
         style={{
-          borderLeft: 'none',
-          borderTop: 'none',
-          borderRight: 'none',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          zIndex: 1,
+          padding: '1rem',
+          background: theme.colors.appBackground1_alpha,
+          borderBottom: theme.borderStyles.nonInteractive,
+          backdropFilter: 'blur(4rem)',
+          boxSizing: 'border-box',
         }}
       >
         <Flex justify="center">
@@ -36,6 +44,7 @@ export default function Navbar() {
                 <Link
                   href="https://tresabhi.github.io/"
                   style={{ color: 'inherit', textDecoration: 'none' }}
+                  target="_blank"
                 >
                   by TrèsAbhi
                 </Link>
@@ -57,7 +66,7 @@ export default function Navbar() {
             </Flex>
           </Flex>
         </Flex>
-      </Card>
+      </div>
     </Theme>
   );
 }

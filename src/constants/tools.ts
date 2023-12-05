@@ -14,12 +14,12 @@ export const TOOLS: Tool[] = [
   {
     id: 'ratings',
     title: 'Ratings',
-    description: 'Current and archived ratings leaderboards',
+    description: 'Ratings gamemode leaderboards',
   },
   {
     id: 'tankopedia',
     title: 'Tankopedia',
-    description: 'Full Blitz tank encyclopedia',
+    description: 'Blitz tank encyclopedia',
   },
   {
     id: 'inactive',
