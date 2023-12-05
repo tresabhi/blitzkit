@@ -2,6 +2,7 @@
 
 import { CaretDownIcon } from '@radix-ui/react-icons';
 import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
+import { use } from 'react';
 import {
   TANK_TYPES,
   TREE_TYPES,
@@ -9,7 +10,9 @@ import {
   TREE_TYPE_IMAGES,
   TreeTypeEnum,
 } from '../../../../components/Tanks';
+import { asset } from '../../../../core/blitzkrieg/asset';
 import {
+  NATIONS,
   TIERS,
   TIER_ROMAN_NUMERALS,
 } from '../../../../core/blitzkrieg/tankopedia';
@@ -20,11 +23,12 @@ import mutateTankopedia, {
 } from '../../../../stores/tankopedia';
 
 export function Options() {
+  const nations = use(NATIONS);
   const tankopediaState = useTankopedia();
 
   return (
     <Flex justify="center" wrap="wrap" gap="4">
-      <Flex gap="1">
+      <Flex gap="2">
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Button variant="soft">
@@ -143,6 +147,49 @@ export function Options() {
       </Flex>
 
       <Flex>
+        {nations.map((nation, index) => (
+          <Button
+            key={nation}
+            variant={
+              tankopediaState.filters.nations.includes(nation)
+                ? 'solid'
+                : 'soft'
+            }
+            style={{
+              margin: -0.5,
+              borderTopLeftRadius: index === 0 ? undefined : 0,
+              borderBottomLeftRadius: index === 0 ? undefined : 0,
+              borderTopRightRadius:
+                index === nations.length - 1 ? undefined : 0,
+              borderBottomRightRadius:
+                index === nations.length - 1 ? undefined : 0,
+            }}
+            onClick={() =>
+              mutateTankopedia((draft) => {
+                if (draft.filters.nations.includes(nation)) {
+                  draft.filters.nations = draft.filters.nations.filter(
+                    (preexistingType) => preexistingType !== nation,
+                  );
+                } else {
+                  draft.filters.nations.push(nation);
+                }
+              })
+            }
+          >
+            <img
+              src={asset(`flags/circle/${nation}.webp`)}
+              style={{
+                width: '1em',
+                height: '1em',
+                scale: 2,
+                transform: 'translate(15%, 15%)',
+              }}
+            />
+          </Button>
+        ))}
+      </Flex>
+
+      <Flex>
         {TREE_TYPES.map((type, index) => (
           <Button
             key={type}
@@ -179,6 +226,22 @@ export function Options() {
           </Button>
         ))}
       </Flex>
+
+      <Button
+        color="red"
+        onClick={() =>
+          useTankopedia.setState({
+            filters: {
+              nations: [],
+              tiers: [],
+              treeTypes: [],
+              types: [],
+            },
+          })
+        }
+      >
+        Clear
+      </Button>
     </Flex>
   );
 }

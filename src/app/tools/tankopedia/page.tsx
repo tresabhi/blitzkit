@@ -41,7 +41,10 @@ export default function Page() {
               : tankopediaState.filters.types.includes(tank.type)) &&
             (tankopediaState.filters.treeTypes.length === 0
               ? true
-              : tankopediaState.filters.treeTypes.includes(tank.tree_type)),
+              : tankopediaState.filters.treeTypes.includes(tank.tree_type)) &&
+            (tankopediaState.filters.nations.length === 0
+              ? true
+              : tankopediaState.filters.nations.includes(tank.nation)),
         )
         .sort((a, b) => {
           let diff = 0;
@@ -81,7 +84,7 @@ export default function Page() {
   return (
     <PageWrapper size="wide" color="purple">
       <Suspense fallback={<Text>Loading...</Text>}>
-        <Flex direction="column" gap="3">
+        <Flex direction="column" gap="6">
           <TextField.Root>
             <TextField.Slot>
               <MagnifyingGlassIcon height="16" width="16" />
@@ -108,14 +111,14 @@ export default function Page() {
           </TextField.Root>
 
           <Options />
-        </Flex>
 
-        <PageTurner
-          page={page}
-          setPage={setPage}
-          tanksPerPage={TANKS_PER_PAGE}
-          searchedList={searchedList}
-        />
+          <PageTurner
+            page={page}
+            setPage={setPage}
+            tanksPerPage={TANKS_PER_PAGE}
+            searchedList={searchedList}
+          />
+        </Flex>
 
         <Flex wrap="wrap" gap="3" justify="center">
           {searchedList

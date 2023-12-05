@@ -16,6 +16,7 @@ type Tankopedia = {
     tiers: Tier[];
     types: TankType[];
     treeTypes: TreeTypeString[];
+    nations: string[];
   };
 };
 
@@ -31,6 +32,7 @@ export const useTankopedia = create<Tankopedia>()(
           tiers: [],
           types: [],
           treeTypes: [],
+          nations: [],
         },
       }),
       { name: 'tankopedia' },

@@ -166,29 +166,41 @@ Promise.all(
     //     }),
     //   )
     // ).flat() as FileChange[];
-    const flagChanges = await readdir(
-      `${TEMP}/${directoriesOfInterest.flags}`,
-    ).then((flags) =>
-      Promise.all(
-        flags
-          .filter((flag) => flag.startsWith('flag_tutor-tank_'))
-          .map(async (flag) => {
-            const content = await readFile(
-              `${TEMP}/${directoriesOfInterest.flags}/${flag}`,
-              { encoding: 'base64' },
-            );
-            const name = flag.match(/flag_tutor-tank_(.+)\.packed\.webp/)![1];
+    const flags = await readdir(`${TEMP}/${directoriesOfInterest.flags}`);
+    // const scratchedFlags = await Promise.all(
+    //   flags
+    //     .filter((flag) => flag.startsWith('flag_tutor-tank_'))
+    //     .map(async (flag) => {
+    //       const content = await readFile(
+    //         `${TEMP}/${directoriesOfInterest.flags}/${flag}`,
+    //         { encoding: 'base64' },
+    //       );
+    //       const name = flag.match(/flag_tutor-tank_(.+)\.packed\.webp/)![1];
 
-            return {
-              content,
-              encoding: 'base64',
-              path: `flags/scratched/${name}.webp`,
-            } satisfies FileChange;
-          }),
-      ),
+    //       return {
+    //         content,
+    //         encoding: 'base64',
+    //         path: `flags/scratched/${name}.webp`,
+    //       } satisfies FileChange;
+    //     }),
+    // );
+    const circleFlags = await Promise.all(
+      flags
+        .filter((flag) => flag.startsWith('flag_profile-stat_'))
+        .map(async (flag) => {
+          const content = await readFile(
+            `${TEMP}/${directoriesOfInterest.flags}/${flag}`,
+            { encoding: 'base64' },
+          );
+          const name = flag.match(/flag_profile-stat_(.+)\.packed\.webp/)![1];
+
+          return {
+            content,
+            encoding: 'base64',
+            path: `flags/circle/${name}.webp`,
+          } satisfies FileChange;
+        }),
     );
-
-    console.log(flagChanges);
 
     console.log('Writing files...');
     await commitMultipleFiles(
@@ -197,7 +209,7 @@ Promise.all(
       'blitzkrieg-assets',
       'main',
       new Date().toString(),
-      flagChanges,
+      circleFlags,
       true,
     );
   } else {

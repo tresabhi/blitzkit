@@ -98,3 +98,13 @@ export const TIER_ROMAN_NUMERALS: Record<Tier, string> = {
   9: 'IX',
   10: 'X',
 };
+
+export const NATIONS = tanks.then((tanks) => {
+  const nationsObject: Record<string, true> = {};
+
+  tanks.forEach(({ nation }) => {
+    nationsObject[nation] = true;
+  });
+
+  return Object.keys(nationsObject);
+});
