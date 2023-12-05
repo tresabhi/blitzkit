@@ -55,8 +55,8 @@ export default async function addFilterOptions<
           .setDescription('Tech tree type')
           .addChoices(
             {
-              name: TREE_TYPE_NAMES['tech-tree'],
-              value: 'tech-tree' satisfies TreeTypeString,
+              name: TREE_TYPE_NAMES['researchable'],
+              value: 'researchable' satisfies TreeTypeString,
             },
             {
               name: TREE_TYPE_NAMES.premium,

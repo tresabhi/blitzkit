@@ -33,8 +33,8 @@ export async function filterStats(
       (filters.treeType === undefined ||
         (filters.treeType === 'collector' && entry.tree_type === 'collector') ||
         (filters.treeType === 'premium' && entry.tree_type === 'premium') ||
-        (filters.treeType === 'tech-tree' &&
-          entry.tree_type === 'tech-tree')) &&
+        (filters.treeType === 'researchable' &&
+          entry.tree_type === 'researchable')) &&
       (filters.tank === undefined || entry.id === filters.tank)
     );
   });

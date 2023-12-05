@@ -103,7 +103,7 @@ Promise.all(
                 ? 'collector'
                 : isPremium
                   ? 'premium'
-                  : 'tech-tree',
+                  : 'researchable',
               tier,
               type,
             };
@@ -182,7 +182,7 @@ Promise.all(
             return {
               content,
               encoding: 'base64',
-              path: `flags/${name}.webp`,
+              path: `flags/scratched/${name}.webp`,
             } satisfies FileChange;
           }),
       ),

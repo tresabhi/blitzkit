@@ -142,7 +142,7 @@ export default function Page() {
                     {tank.nation !== 'other' && (
                       <img
                         className={styles.flag}
-                        src={asset(`flags/${tank.nation}.webp`)}
+                        src={asset(`flags/scratched/${tank.nation}.webp`)}
                         style={{
                           width: '100%',
                           height: '100%',
@@ -213,7 +213,7 @@ export default function Page() {
                           weight="medium"
                           style={{
                             color:
-                              tank.tree_type === 'tech-tree'
+                              tank.tree_type === 'researchable'
                                 ? slateDark.slate12
                                 : undefined,
                           }}
