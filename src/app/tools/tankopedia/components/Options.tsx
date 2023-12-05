@@ -75,7 +75,7 @@ export function Options() {
       </Flex>
 
       <Flex>
-        {TIERS.toReversed().map((tier, index) => (
+        {[...TIERS].reverse().map((tier, index) => (
           <Button
             key={tier}
             variant={
@@ -107,7 +107,7 @@ export function Options() {
       </Flex>
 
       <Flex>
-        {TANK_TYPES.toReversed().map((type, index) => (
+        {[...TANK_TYPES].reverse().map((type, index) => (
           <Button
             key={type}
             variant={

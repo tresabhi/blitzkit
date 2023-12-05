@@ -99,9 +99,6 @@ export default function Page() {
                         'name',
                         'name_short',
                         'id',
-                        'nation',
-                        'tree_type',
-                        'type',
                       ] satisfies (keyof BlitzkriegTankopediaEntry)[],
                     }).map(({ obj }) => obj),
                   );
