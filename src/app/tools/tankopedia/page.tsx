@@ -43,7 +43,7 @@ export default function Page() {
               ? true
               : tankopediaState.filters.treeTypes.includes(tank.tree_type)),
         )
-        .toSorted((a, b) => {
+        .sort((a, b) => {
           let diff = 0;
 
           if (tankopediaState.sort.by === 'tier') {
