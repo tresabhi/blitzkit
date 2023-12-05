@@ -9,7 +9,7 @@
     "build:website": "next build",
     "build:docs": "vitepress build docs",
     "build:ratingsleaderboard": "vite-node --script scripts/buildRatingsLeaderboard",
-    "build:tankopedia": "vite-node --script scripts/buildTankopedia",
+    "build:assets": "vite-node --script scripts/buildAssets",
     "build:ratingsplot": "vite-node --script scripts/buildRatingsPlot",
     "dev:bot": "yarn build:bot && yarn start:bot",
     "dev:docs": "vitepress dev docs",

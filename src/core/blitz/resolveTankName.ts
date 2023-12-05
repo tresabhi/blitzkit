@@ -1,8 +1,8 @@
-import { tankopedia } from '../blitzkrieg/tankopedia';
+import { tankDefinitions } from '../blitzkrieg/definitions/tanks';
 
 export default async function resolveTankName(tankId: number) {
-  const awaitedTankopedia = await tankopedia;
-  const entry = awaitedTankopedia[tankId];
+  const awaitedTankDefinitions = await tankDefinitions;
+  const entry = awaitedTankDefinitions[tankId];
 
   return entry?.name_short ?? entry?.name ?? `Unknown Tank ${tankId}`;
 }

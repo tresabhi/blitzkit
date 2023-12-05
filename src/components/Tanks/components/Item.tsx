@@ -2,7 +2,7 @@ import {
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
-} from '../../../core/blitzkrieg/tankopedia';
+} from '../../../core/blitzkrieg/definitions/tanks';
 import { theme } from '../../../stitches.config';
 
 export enum TreeTypeEnum {

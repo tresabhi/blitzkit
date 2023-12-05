@@ -9,8 +9,8 @@ import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
 import resolveTankName from '../core/blitz/resolveTankName';
+import { tankDefinitions } from '../core/blitzkrieg/definitions/tanks';
 import { filtersToDescription } from '../core/blitzkrieg/filtersToDescription';
-import { tankopedia } from '../core/blitzkrieg/tankopedia';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
 import { tankAverages } from '../core/blitzstars/tankAverages';
@@ -44,7 +44,7 @@ async function render(
   { start, end, name }: ResolvedPeriod,
   filters: StatFilters,
 ) {
-  const awaitedTankopedia = await tankopedia;
+  const awaitedTankDefinitions = await tankDefinitions;
   const awaitedTankAverages = await tankAverages;
   const statsInPeriod = await getStatsInPeriod(region, id, start, end);
   const { filteredOrder } = await filterStats(statsInPeriod, filters);
@@ -183,7 +183,7 @@ async function render(
 
     await Promise.all(
       filteredOrder.map(async (id, index) => {
-        const tankopediaEntry = awaitedTankopedia[id];
+        const tankDefinition = awaitedTankDefinitions[id];
         const current = orderedCurrentStats[index];
         const career = orderedCareerStats[index];
         const currentWN8 = orderedCurrentWN8[index];
@@ -193,8 +193,8 @@ async function render(
           <Breakdown.Row
             key={id}
             type="tank"
-            tankType={tankopediaEntry?.type}
-            treeType={tankopediaEntry ? await getTreeType(id) : undefined}
+            tankType={tankDefinition?.type}
+            treeType={tankDefinition ? await getTreeType(id) : undefined}
             title={await resolveTankName(id)}
             stats={[
               {

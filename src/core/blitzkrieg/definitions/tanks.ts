@@ -1,24 +1,8 @@
 import { deburr } from 'lodash';
-import { TankType, TreeTypeString } from '../../components/Tanks';
-import { asset } from './asset';
+import { TankType, TreeTypeString } from '../../../components/Tanks';
+import { asset } from '../asset';
 
-export interface TankopediaEntry {
-  name: string;
-  nation: string;
-  is_premium: boolean;
-  is_collectible: boolean;
-  tier: Tier;
-  cost: { price_credit: number; price_gold: number };
-  images: { preview: string; normal: string };
-  tank_id: number;
-  type: string;
-  description: string;
-}
-export interface Tankopedia {
-  [id: number]: TankopediaEntry | undefined;
-}
-
-export interface BlitzkriegTankopediaEntry {
+export interface TankDefinition {
   id: number;
   nation: string;
   name: string;
@@ -28,15 +12,16 @@ export interface BlitzkriegTankopediaEntry {
   type: TankType;
 }
 
-export type BlitzkriegTankopedia = Record<number, BlitzkriegTankopediaEntry>;
+export type TankDefinitions = Record<number, TankDefinition>;
 
-export const tankopedia = fetch(asset('tankopedia.json'), {
+export const tankDefinitions = fetch(asset('definitions/tanks.json'), {
   cache: 'no-store',
-}).then(async (response) => response.json() as Promise<BlitzkriegTankopedia>);
-const entries = new Promise<BlitzkriegTankopediaEntry[]>(async (resolve) => {
-  resolve(Object.entries(await tankopedia).map(([, entry]) => entry));
+}).then(async (response) => response.json() as Promise<TankDefinitions>);
+
+const entries = new Promise<TankDefinition[]>(async (resolve) => {
+  resolve(Object.entries(await tankDefinitions).map(([, entry]) => entry));
 });
-export const tanks = new Promise<BlitzkriegTankopediaEntry[]>(
+export const tanksDefinitionsArray = new Promise<TankDefinition[]>(
   async (resolve) => {
     resolve((await entries).map((entry) => entry));
   },
@@ -47,7 +32,7 @@ export const tankNames = new Promise<string[]>(async (resolve) => {
 export const tankNamesDiacritics = tankNames.then((tankNames) =>
   Promise.all(
     tankNames.map(async (tankName, index) => {
-      const { id } = (await tanks)[index];
+      const { id } = (await tanksDefinitionsArray)[index];
       const name = tankName ?? `Unknown Tank ${id}`;
       const diacriticless = deburr(name);
 
@@ -99,7 +84,7 @@ export const TIER_ROMAN_NUMERALS: Record<Tier, string> = {
   10: 'X',
 };
 
-export const NATIONS = tanks.then((tanks) => {
+export const NATIONS = tanksDefinitionsArray.then((tanks) => {
   const nationsObject: Record<string, true> = {};
 
   tanks.forEach(({ nation }) => {

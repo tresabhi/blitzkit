@@ -2,13 +2,16 @@ import { Octokit } from '@octokit/rest';
 import decompress from 'decompress';
 import { config } from 'dotenv';
 import { writeFileSync } from 'fs';
-import { cp, mkdir, readFile, readdir, rm, writeFile } from 'fs/promises';
+import { readFile, readdir, rm } from 'fs/promises';
 import { load } from 'js-yaml';
 import { argv, env } from 'process';
 import { ElementCompact, xml2js } from 'xml-js';
 import { parse } from 'yaml';
 import { NATION_IDS } from '../src/constants/nations';
-import { BlitzkriegTankopedia, Tier } from '../src/core/blitzkrieg/tankopedia';
+import {
+  TankDefinitions,
+  Tier,
+} from '../src/core/blitzkrieg/definitions/tanks';
 import commitMultipleFiles, { FileChange } from './commitMultipleFiles';
 
 config();
@@ -34,27 +37,19 @@ const directoriesOfInterest = {
 };
 const directoriesOfInterestArray = Object.values(directoriesOfInterest);
 
-console.log('Removing old tankopedia files...');
-await rm('dist/tankopedia', { recursive: true, force: true });
 if (!noRewrite) {
-  console.log('Removing old temp files...');
   await rm(TEMP, { recursive: true, force: true });
-
-  console.log('Extracting Blitz files...');
   await decompress(apkFile, TEMP, {
     filter: (file) =>
       directoriesOfInterestArray.some((dir) => file.path.startsWith(dir)),
   });
 }
 
-console.log('Creating new tankopedia folder');
-await mkdir('dist/tankopedia');
-
 const strings = await readFile(
   `${TEMP}/${directoriesOfInterest.strings}/${LANGUAGE}.yaml`,
   'utf-8',
 ).then((data) => load(data) as Record<string, string>);
-const tankopedia: BlitzkriegTankopedia = {};
+const tankDefinitions: TankDefinitions = {};
 const tankIds: number[] = [];
 const images: Record<number, { big: string; small: string }> = {};
 const nations = await readdir(
@@ -76,7 +71,6 @@ Promise.all(
       await Promise.all(
         Object.entries<ElementCompact>(list.root).map(
           async ([vehicle, vehicleData]) => {
-            // Tankopedia
             const nationVehicleId = parseInt(list.root[vehicle].id._text);
             const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
             const name = strings[vehicleData.userString._text];
@@ -94,7 +88,7 @@ Promise.all(
             }
 
             tankIds.push(id);
-            tankopedia[id] = {
+            tankDefinitions[id] = {
               id,
               name,
               name_short,
@@ -121,101 +115,91 @@ Promise.all(
                 .replace(/~res:\//, '')
                 .replace(/\..+/, '')}.packed.webp`,
             };
-
-            if (!publish) {
-              cp(images[id].small, `dist/tankopedia/icons/small/${id}.webp`);
-              cp(images[id].big, `dist/tankopedia/icons/big/${id}.webp`);
-            }
           },
         ),
       );
     }),
 ).then(async () => {
-  if (publish) {
-    const octokit = new Octokit({ auth: env.GH_TOKEN });
-    // const tankopediaChange: FileChange = {
-    //   content: JSON.stringify(tankopedia),
-    //   path: 'tankopedia.json',
-    //   encoding: 'utf-8',
-    // };
-    // const iconsChange = (
-    //   await Promise.all(
-    //     tankIds.map(async (id) => {
-    //       try {
-    //         const [contentSmall, contentBig] = await Promise.all([
-    //           readFile(images[id].small, { encoding: 'base64' }),
-    //           readFile(images[id].big, { encoding: 'base64' }),
-    //         ]);
+  if (!publish) return;
 
-    //         return [
-    //           {
-    //             content: contentBig,
-    //             path: `icons/big/${id}.webp`,
-    //             encoding: 'base64',
-    //           },
-    //           {
-    //             content: contentSmall,
-    //             path: `icons/small/${id}.webp`,
-    //             encoding: 'base64',
-    //           },
-    //         ];
-    //       } catch (error) {
-    //         console.log(error);
-    //         return undefined;
-    //       }
-    //     }),
-    //   )
-    // ).flat() as FileChange[];
-    const flags = await readdir(`${TEMP}/${directoriesOfInterest.flags}`);
-    // const scratchedFlags = await Promise.all(
-    //   flags
-    //     .filter((flag) => flag.startsWith('flag_tutor-tank_'))
-    //     .map(async (flag) => {
-    //       const content = await readFile(
-    //         `${TEMP}/${directoriesOfInterest.flags}/${flag}`,
-    //         { encoding: 'base64' },
-    //       );
-    //       const name = flag.match(/flag_tutor-tank_(.+)\.packed\.webp/)![1];
+  const octokit = new Octokit({ auth: env.GH_TOKEN });
+  // const tankDefinitionsChange: FileChange = {
+  //   content: JSON.stringify(tankDefinitions),
+  //   path: 'definitions/tanks.json',
+  //   encoding: 'utf-8',
+  // };
+  // const iconsChange = (
+  //   await Promise.all(
+  //     tankIds.map(async (id) => {
+  //       try {
+  //         const [contentSmall, contentBig] = await Promise.all([
+  //           readFile(images[id].small, { encoding: 'base64' }),
+  //           readFile(images[id].big, { encoding: 'base64' }),
+  //         ]);
 
-    //       return {
-    //         content,
-    //         encoding: 'base64',
-    //         path: `flags/scratched/${name}.webp`,
-    //       } satisfies FileChange;
-    //     }),
-    // );
-    const circleFlags = await Promise.all(
-      flags
-        .filter((flag) => flag.startsWith('flag_profile-stat_'))
-        .map(async (flag) => {
-          const content = await readFile(
-            `${TEMP}/${directoriesOfInterest.flags}/${flag}`,
-            { encoding: 'base64' },
-          );
-          const name = flag.match(/flag_profile-stat_(.+)\.packed\.webp/)![1];
+  //         return [
+  //           {
+  //             content: contentBig,
+  //             path: `icons/big/${id}.webp`,
+  //             encoding: 'base64',
+  //           },
+  //           {
+  //             content: contentSmall,
+  //             path: `icons/small/${id}.webp`,
+  //             encoding: 'base64',
+  //           },
+  //         ];
+  //       } catch (error) {
+  //         console.log(error);
+  //         return undefined;
+  //       }
+  //     }),
+  //   )
+  // ).flat() as FileChange[];
+  const flags = await readdir(`${TEMP}/${directoriesOfInterest.flags}`);
+  // const scratchedFlags = await Promise.all(
+  //   flags
+  //     .filter((flag) => flag.startsWith('flag_tutor-tank_'))
+  //     .map(async (flag) => {
+  //       const content = await readFile(
+  //         `${TEMP}/${directoriesOfInterest.flags}/${flag}`,
+  //         { encoding: 'base64' },
+  //       );
+  //       const name = flag.match(/flag_tutor-tank_(.+)\.packed\.webp/)![1];
 
-          return {
-            content,
-            encoding: 'base64',
-            path: `flags/circle/${name}.webp`,
-          } satisfies FileChange;
-        }),
-    );
+  //       return {
+  //         content,
+  //         encoding: 'base64',
+  //         path: `flags/scratched/${name}.webp`,
+  //       } satisfies FileChange;
+  //     }),
+  // );
+  const circleFlags = await Promise.all(
+    flags
+      .filter((flag) => flag.startsWith('flag_profile-stat_'))
+      .map(async (flag) => {
+        const content = await readFile(
+          `${TEMP}/${directoriesOfInterest.flags}/${flag}`,
+          { encoding: 'base64' },
+        );
+        const name = flag.match(/flag_profile-stat_(.+)\.packed\.webp/)![1];
 
-    console.log('Writing files...');
-    await commitMultipleFiles(
-      octokit,
-      'tresabhi',
-      'blitzkrieg-assets',
-      'main',
-      new Date().toString(),
-      circleFlags,
-      true,
-    );
-  } else {
-    writeFile(
-      'dist/tankopedia/tankopedia.json',
-      JSON.stringify(tankopedia, null, 2),
-    );
-  }
+        return {
+          content,
+          encoding: 'base64',
+          path: `flags/circle/${name}.webp`,
+        } satisfies FileChange;
+      }),
+  );
+
+  console.log('Writing files...');
+  await commitMultipleFiles(
+    octokit,
+    'tresabhi',
+    'blitzkrieg-assets',
+    'main',
+    new Date().toString(),
+    circleFlags,
+    true,
+  );
 });

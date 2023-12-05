@@ -1,5 +1,5 @@
 import { TreeTypeString } from '../../components/Tanks';
-import { tankopedia } from '../blitzkrieg/tankopedia';
+import { tankDefinitions } from '../blitzkrieg/definitions/tanks';
 import { DiffedTankStats } from '../blitzstars/getStatsInPeriod';
 import { tankAverages } from '../blitzstars/tankAverages';
 import calculateWN8 from './calculateWN8';
@@ -20,10 +20,10 @@ export async function filterStats(
   // tank, if provided, takes priority over all other filters
   if (filters.tank) filters = { tank: filters.tank };
 
-  const awaitedTankopedia = await tankopedia;
+  const awaitedTankDefinitions = await tankDefinitions;
   const awaitedTankAverages = await tankAverages;
   const filteredOrder = order.filter((id) => {
-    const entry = awaitedTankopedia[id];
+    const entry = awaitedTankDefinitions[id];
 
     return (
       entry &&
@@ -44,9 +44,9 @@ export async function filterStats(
       awaitedTankAverages[id] ? accumulator + diff[id].battles : accumulator,
     0,
   );
-  const battlesOfTanksWithTankopediaEntry = filteredOrder.reduce<number>(
+  const battlesOfTanksWithTankDefinition = filteredOrder.reduce<number>(
     (accumulator, id) =>
-      awaitedTankopedia[id] ? accumulator + diff[id].battles : accumulator,
+      awaitedTankDefinitions[id] ? accumulator + diff[id].battles : accumulator,
     0,
   );
   const supplementary = {
@@ -63,11 +63,11 @@ export async function filterStats(
     tier:
       filteredOrder.reduce<number>(
         (accumulator, id) =>
-          awaitedTankopedia[id]
-            ? accumulator + awaitedTankopedia[id]!.tier * diff[id].battles
+          awaitedTankDefinitions[id]
+            ? accumulator + awaitedTankDefinitions[id]!.tier * diff[id].battles
             : accumulator,
         0,
-      ) / battlesOfTanksWithTankopediaEntry,
+      ) / battlesOfTanksWithTankDefinition,
   };
 
   return { stats, supplementary, filteredOrder };

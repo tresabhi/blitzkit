@@ -7,15 +7,15 @@ import { go } from 'fuzzysort';
 import { Suspense, use, useEffect, useMemo, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
 import { asset } from '../../../core/blitzkrieg/asset';
-import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
 import {
-  BlitzkriegTankopediaEntry,
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
   TIER_ROMAN_NUMERALS,
-  tanks,
-} from '../../../core/blitzkrieg/tankopedia';
+  TankDefinition,
+  tanksDefinitionsArray,
+} from '../../../core/blitzkrieg/definitions/tanks';
+import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
 import { theme } from '../../../stitches.config';
 import { useTankopedia } from '../../../stores/tankopedia';
 import { Options } from './components/Options';
@@ -26,7 +26,7 @@ const TANKS_PER_PAGE = 3 * 2 ** 4;
 
 export default function Page() {
   const tankopediaState = useTankopedia();
-  const awaitedTanks = use(tanks);
+  const awaitedTanks = use(tanksDefinitionsArray);
   const input = useRef<HTMLInputElement>(null);
   const searchableTanks = useMemo(
     () =>
@@ -102,7 +102,7 @@ export default function Page() {
                         'name',
                         'name_short',
                         'id',
-                      ] satisfies (keyof BlitzkriegTankopediaEntry)[],
+                      ] satisfies (keyof TankDefinition)[],
                     }).map(({ obj }) => obj),
                   );
                 }

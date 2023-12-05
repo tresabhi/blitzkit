@@ -1,6 +1,6 @@
 import { AllStats } from '../blitz/getAccountInfo';
 import { context } from '../blitzkrieg/context';
-import { tankopedia } from '../blitzkrieg/tankopedia';
+import { tankDefinitions } from '../blitzkrieg/definitions/tanks';
 
 export interface SpecialStats {
   winrate: number;
@@ -80,7 +80,7 @@ export interface IndividualTankAverage {
   last_update: number;
 }
 
-tankopedia;
+tankDefinitions;
 
 export type TankAverages = Record<number, IndividualTankAverage>;
 

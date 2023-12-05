@@ -4,7 +4,7 @@ import {
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
 import { TREE_TYPE_NAMES, TreeTypeString } from '../../components/Tanks';
-import { tankopediaInfo } from '../blitz/tankopediaInfo';
+import { encyclopediaInfo } from '../blitz/encyclopediaInfo';
 import addPeriodSubCommands from './addPeriodSubCommands';
 import addTankChoices from './addTankChoices';
 import addTierChoices from './addTierChoices';
@@ -17,7 +17,7 @@ export default async function addFilterOptions<
     option: SlashCommandSubcommandBuilder,
   ) => SlashCommandSubcommandBuilder = (option) => option,
 ): Promise<OptionType> {
-  const awaitedTankopediaInfo = await tankopediaInfo;
+  const awaitedEncyclopediaInfo = await encyclopediaInfo;
 
   addPeriodSubCommands(option, (option) => {
     extra(option);
@@ -28,7 +28,7 @@ export default async function addFilterOptions<
           .setName('nation')
           .setDescription('Nation')
           .addChoices(
-            ...Object.entries(awaitedTankopediaInfo.vehicle_nations).map(
+            ...Object.entries(awaitedEncyclopediaInfo.vehicle_nations).map(
               ([type, name]) => ({ name, value: type }),
             ),
           )
@@ -40,7 +40,7 @@ export default async function addFilterOptions<
           .setName('tank-type')
           .setDescription('Tank type')
           .addChoices(
-            ...Object.entries(awaitedTankopediaInfo.vehicle_types).map(
+            ...Object.entries(awaitedEncyclopediaInfo.vehicle_types).map(
               ([type, name]) => ({
                 name: name.replace(' Tank', ''),
                 value: type,
