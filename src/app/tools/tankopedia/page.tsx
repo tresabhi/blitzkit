@@ -13,6 +13,7 @@ import {
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
+  TIER_ROMAN_NUMERALS,
   tanks,
 } from '../../../core/blitzkrieg/tankopedia';
 import { theme } from '../../../stitches.config';
@@ -127,6 +128,8 @@ export default function Page() {
                 href={`/tools/tankopedia/${tank.id}`}
                 style={{
                   flex: 1,
+                  textDecoration: 'none',
+                  color: 'unset',
                 }}
               >
                 <Card className={styles.listing}>
@@ -180,45 +183,52 @@ export default function Page() {
 
                     <Flex
                       align="center"
-                      justify="center"
-                      gap="1"
+                      justify="between"
                       className={styles.listingLabel}
                       style={{
                         position: 'absolute',
                         bottom: 8,
-                        left: 12,
+                        padding: '0 12px',
+                        width: '100%',
+                        boxSizing: 'border-box',
                       }}
                     >
-                      <img
-                        src={
-                          (tank.tree_type === 'collector'
-                            ? TANK_ICONS_COLLECTOR
-                            : tank.tree_type === 'premium'
-                              ? TANK_ICONS_PREMIUM
-                              : TANK_ICONS)[tank.type]
-                        }
-                        style={{ width: '1em', height: '1em' }}
-                      />
-                      <Text
-                        size="4"
-                        color={
-                          tank.tree_type === 'collector'
-                            ? 'blue'
-                            : tank.tree_type === 'premium'
-                              ? 'amber'
-                              : undefined
-                        }
-                        weight="medium"
-                        style={{
-                          color:
-                            tank.tree_type === 'tech-tree'
-                              ? slateDark.slate12
-                              : undefined,
-                        }}
-                      >
-                        {tank.name_short ??
-                          tank.name ??
-                          `Unknown tank ${tank.id}`}
+                      <Flex align="center" justify="center" gap="1">
+                        <img
+                          src={
+                            (tank.tree_type === 'collector'
+                              ? TANK_ICONS_COLLECTOR
+                              : tank.tree_type === 'premium'
+                                ? TANK_ICONS_PREMIUM
+                                : TANK_ICONS)[tank.type]
+                          }
+                          style={{ width: '1em', height: '1em' }}
+                        />
+                        <Text
+                          size="4"
+                          color={
+                            tank.tree_type === 'collector'
+                              ? 'blue'
+                              : tank.tree_type === 'premium'
+                                ? 'amber'
+                                : undefined
+                          }
+                          weight="medium"
+                          style={{
+                            color:
+                              tank.tree_type === 'tech-tree'
+                                ? slateDark.slate12
+                                : undefined,
+                          }}
+                        >
+                          {tank.name_short ??
+                            tank.name ??
+                            `Unknown tank ${tank.id}`}
+                        </Text>
+                      </Flex>
+
+                      <Text size="4" color="gray" highContrast={false}>
+                        {TIER_ROMAN_NUMERALS[tank.tier]}
                       </Text>
                     </Flex>
                   </Inset>
