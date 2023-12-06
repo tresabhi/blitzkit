@@ -1,8 +1,16 @@
 'use client';
 
 import { slateDark } from '@radix-ui/colors';
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
-import { Card, Flex, Inset, Text, TextField } from '@radix-ui/themes';
+import { CaretDownIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import {
+  Button,
+  Card,
+  DropdownMenu,
+  Flex,
+  Inset,
+  Text,
+  TextField,
+} from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { Suspense, use, useEffect, useMemo, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
@@ -17,7 +25,12 @@ import {
 } from '../../../core/blitzkrieg/definitions/tanks';
 import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
 import { theme } from '../../../stitches.config';
-import { useTankopedia } from '../../../stores/tankopedia';
+import mutateTankopedia, {
+  TankopediaSortBy,
+  TankopediaSortDirection,
+  TankopediaTestTankDisplay,
+  useTankopedia,
+} from '../../../stores/tankopedia';
 import { Options } from './components/Options';
 import { PageTurner } from './components/PageTurner';
 import * as styles from './page.css';
@@ -90,30 +103,79 @@ export default function Page() {
     <PageWrapper size="wide" color="purple">
       <Suspense fallback={<Text>Loading...</Text>}>
         <Flex direction="column" gap="6">
-          <TextField.Root>
-            <TextField.Slot>
-              <MagnifyingGlassIcon height="16" width="16" />
-            </TextField.Slot>
-            <TextField.Input
-              ref={input}
-              placeholder="Search tanks..."
-              onChange={(event) => {
-                if (event.target.value.length === 0) {
-                  setSearchedList(searchableTanks);
-                } else {
-                  setSearchedList(
-                    go(event.target.value, searchableTanks, {
-                      keys: [
-                        'name',
-                        'name_short',
-                        'id',
-                      ] satisfies (keyof TankDefinition)[],
-                    }).map(({ obj }) => obj),
-                  );
-                }
-              }}
-            />
-          </TextField.Root>
+          <Flex gap="2">
+            <TextField.Root style={{ flex: 1 }}>
+              <TextField.Slot>
+                <MagnifyingGlassIcon height="16" width="16" />
+              </TextField.Slot>
+              <TextField.Input
+                ref={input}
+                placeholder="Search tanks..."
+                onChange={(event) => {
+                  if (event.target.value.length === 0) {
+                    setSearchedList(searchableTanks);
+                  } else {
+                    setSearchedList(
+                      go(event.target.value, searchableTanks, {
+                        keys: [
+                          'name',
+                          'name_short',
+                          'id',
+                        ] satisfies (keyof TankDefinition)[],
+                      }).map(({ obj }) => obj),
+                    );
+                  }
+                }}
+              />
+            </TextField.Root>
+
+            <DropdownMenu.Root>
+              <DropdownMenu.Trigger>
+                <Button variant="soft">
+                  Sort
+                  <CaretDownIcon />
+                </Button>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Content>
+                <DropdownMenu.Label>By</DropdownMenu.Label>
+                <DropdownMenu.RadioGroup
+                  value={tankopediaState.sort.by}
+                  onValueChange={(value) =>
+                    mutateTankopedia((draft) => {
+                      draft.sort.by = value as TankopediaSortBy;
+                    })
+                  }
+                >
+                  <DropdownMenu.RadioItem value="tier">
+                    Tier
+                  </DropdownMenu.RadioItem>
+                  <DropdownMenu.RadioItem value="name">
+                    Name
+                  </DropdownMenu.RadioItem>
+                </DropdownMenu.RadioGroup>
+
+                <DropdownMenu.Separator />
+
+                <DropdownMenu.Label>Direction</DropdownMenu.Label>
+                <DropdownMenu.RadioGroup
+                  value={tankopediaState.sort.direction}
+                  onValueChange={(value) =>
+                    mutateTankopedia((draft) => {
+                      draft.sort.direction = value as TankopediaSortDirection;
+                    })
+                  }
+                >
+                  <DropdownMenu.RadioItem value="ascending">
+                    Ascending
+                  </DropdownMenu.RadioItem>
+                  <DropdownMenu.RadioItem value="descending">
+                    Descending
+                  </DropdownMenu.RadioItem>
+                </DropdownMenu.RadioGroup>
+              </DropdownMenu.Content>
+            </DropdownMenu.Root>
+
+          </Flex>
 
           <Options />
 
@@ -222,6 +284,11 @@ export default function Page() {
                               tank.tree_type === 'researchable'
                                 ? slateDark.slate12
                                 : undefined,
+                            whiteSpace: 'nowrap',
+                            maxWidth: 160,
+                            display: 'block',
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
                           }}
                         >
                           {tank.name_short ??

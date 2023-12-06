@@ -1,6 +1,5 @@
 import { produce } from 'immer';
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
 import { TankType, TreeTypeString } from '../components/Tanks';
 import { Tier } from '../core/blitzkrieg/definitions/tanks';
 
@@ -22,26 +21,19 @@ type Tankopedia = {
   };
 };
 
-export const useTankopedia = create<Tankopedia>()(
-  devtools(
-    persist(
-      (set) => ({
-        sort: {
-          by: 'tier',
-          direction: 'descending',
-        },
-        filters: {
-          tiers: [],
-          types: [],
-          treeTypes: [],
-          nations: [],
-          test: 'include',
-        },
-      }),
-      { name: 'tankopedia' },
-    ),
-  ),
-);
+export const useTankopedia = create<Tankopedia>()(() => ({
+  sort: {
+    by: 'tier',
+    direction: 'descending',
+  },
+  filters: {
+    tiers: [],
+    types: [],
+    treeTypes: [],
+    nations: [],
+    test: 'include',
+  },
+}));
 
 export default function mutateTankopedia(recipe: (draft: Tankopedia) => void) {
   useTankopedia.setState(produce(recipe));
