@@ -19,6 +19,7 @@ import {
 import mutateTankopedia, {
   TankopediaSortBy,
   TankopediaSortDirection,
+  TankopediaTestTankDisplay,
   useTankopedia,
 } from '../../../../stores/tankopedia';
 
@@ -27,8 +28,8 @@ export function Options() {
   const tankopediaState = useTankopedia();
 
   return (
-    <Flex justify="center" wrap="wrap" gap="4">
-      <Flex gap="2">
+    <Flex justify="center" wrap="wrap" gap="2">
+      <Flex gap="1">
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Button variant="soft">
@@ -77,6 +78,33 @@ export function Options() {
           </DropdownMenu.Content>
         </DropdownMenu.Root>
       </Flex>
+
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <Button variant="soft">
+            Test tanks
+            <CaretDownIcon />
+          </Button>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.RadioGroup
+            value={tankopediaState.filters.test}
+            onValueChange={(value) =>
+              mutateTankopedia((draft) => {
+                draft.filters.test = value as TankopediaTestTankDisplay;
+              })
+            }
+          >
+            <DropdownMenu.RadioItem value="include">
+              Include
+            </DropdownMenu.RadioItem>
+            <DropdownMenu.RadioItem value="exclude">
+              Exclude
+            </DropdownMenu.RadioItem>
+            <DropdownMenu.RadioItem value="only">Only</DropdownMenu.RadioItem>
+          </DropdownMenu.RadioGroup>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
 
       <Flex>
         {[...TIERS].reverse().map((tier, index) => (
@@ -236,6 +264,7 @@ export function Options() {
               tiers: [],
               treeTypes: [],
               types: [],
+              test: 'include',
             },
           })
         }

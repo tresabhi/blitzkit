@@ -112,6 +112,7 @@ if (allTargets || targets?.includes('tankDefinitions')) {
         }
 
         tankDefinitions[id] = {
+          id,
           name,
           name_short,
           nation,

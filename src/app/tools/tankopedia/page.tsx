@@ -44,7 +44,12 @@ export default function Page() {
               : tankopediaState.filters.treeTypes.includes(tank.tree_type)) &&
             (tankopediaState.filters.nations.length === 0
               ? true
-              : tankopediaState.filters.nations.includes(tank.nation)),
+              : tankopediaState.filters.nations.includes(tank.nation)) &&
+            (tankopediaState.filters.test === 'include'
+              ? true
+              : tankopediaState.filters.test === 'exclude'
+                ? !tank.testing
+                : tank.testing),
         )
         .sort((a, b) => {
           let diff = 0;

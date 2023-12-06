@@ -6,6 +6,7 @@ import { Tier } from '../core/blitzkrieg/definitions/tanks';
 
 export type TankopediaSortBy = 'tier' | 'name';
 export type TankopediaSortDirection = 'ascending' | 'descending';
+export type TankopediaTestTankDisplay = 'include' | 'exclude' | 'only';
 
 type Tankopedia = {
   sort: {
@@ -17,6 +18,7 @@ type Tankopedia = {
     types: TankType[];
     treeTypes: TreeTypeString[];
     nations: string[];
+    test: TankopediaTestTankDisplay;
   };
 };
 
@@ -33,6 +35,7 @@ export const useTankopedia = create<Tankopedia>()(
           types: [],
           treeTypes: [],
           nations: [],
+          test: 'include',
         },
       }),
       { name: 'tankopedia' },

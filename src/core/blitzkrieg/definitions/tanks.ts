@@ -3,6 +3,7 @@ import { TankType, TreeTypeString } from '../../../components/Tanks';
 import { asset } from '../asset';
 
 export interface TankDefinition {
+  id: number;
   nation: string;
   name: string;
   name_short?: string;
@@ -15,7 +16,7 @@ export interface TankDefinition {
 export type TankDefinitions = Record<number, TankDefinition>;
 
 export const tankDefinitions = fetch(asset('definitions/tanks.json'), {
-  cache: 'no-store',
+  cache: 'no-cache',
 }).then(async (response) => response.json() as Promise<TankDefinitions>);
 
 const entries = new Promise<TankDefinition[]>(async (resolve) => {

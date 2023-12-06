@@ -126,7 +126,6 @@ if (publish) {
 
   console.log(`Publishing to season ${info.current_season}...`);
   commitMultipleFiles(
-    octokit,
     'tresabhi',
     'blitzkrieg-assets',
     'main',
