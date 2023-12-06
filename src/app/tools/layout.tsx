@@ -11,7 +11,7 @@ interface ToolsLayoutProps {
 
 export default function ToolsLayout({ children }: ToolsLayoutProps) {
   const pathname = usePathname();
-  const toolId = pathname.split('/').at(-1);
+  const toolId = pathname.split('/').at(2);
   const tool = TOOLS.find((tool) => tool.id === toolId);
 
   return (

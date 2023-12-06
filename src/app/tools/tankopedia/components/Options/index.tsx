@@ -3,6 +3,7 @@
 import { CaretDownIcon } from '@radix-ui/react-icons';
 import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
 import { use } from 'react';
+import { Flag } from '../../../../../components/Flag';
 import {
   TANK_TYPES,
   TREE_TYPES,
@@ -10,7 +11,6 @@ import {
   TREE_TYPE_IMAGES,
   TreeTypeEnum,
 } from '../../../../../components/Tanks';
-import { asset } from '../../../../../core/blitzkrieg/asset';
 import {
   NATIONS,
   TIERS,
@@ -267,15 +267,7 @@ export function Options() {
                   })
                 }
               >
-                <img
-                  src={asset(`flags/circle/${nation}.webp`)}
-                  style={{
-                    width: '1em',
-                    height: '1em',
-                    scale: 2,
-                    transform: 'translate(15%, 15%)',
-                  }}
-                />
+                <Flag nation={nation} />
               </Button>
             ))}
           </Flex>
@@ -314,15 +306,7 @@ export function Options() {
                   })
                 }
               >
-                <img
-                  src={asset(`flags/circle/${nation}.webp`)}
-                  style={{
-                    width: '1em',
-                    height: '1em',
-                    scale: 2,
-                    transform: 'translate(15%, 15%)',
-                  }}
-                />
+                <Flag nation={nation} />
               </Button>
             ))}
           </Flex>
@@ -394,15 +378,7 @@ export function Options() {
                 })
               }
             >
-              <img
-                src={asset(`flags/circle/${nation}.webp`)}
-                style={{
-                  width: '1em',
-                  height: '1em',
-                  scale: 2,
-                  transform: 'translate(15%, 15%)',
-                }}
-              />
+              <Flag nation={nation} />
             </Button>
           ))}
         </Flex>
