@@ -1,7 +1,11 @@
 'use client';
 
 import { slateDark } from '@radix-ui/colors';
-import { CaretDownIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import {
+  CaretDownIcon,
+  CaretUpIcon,
+  MagnifyingGlassIcon,
+} from '@radix-ui/react-icons';
 import {
   Button,
   Card,
@@ -83,6 +87,7 @@ export default function Page() {
   );
   const [searchedList, setSearchedList] = useState(searchableTanks);
   const [page, setPage] = useState(0);
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     setSearchedList(searchableTanks);
@@ -173,9 +178,22 @@ export default function Page() {
                 </DropdownMenu.RadioGroup>
               </DropdownMenu.Content>
             </DropdownMenu.Root>
+
+            <Button
+              variant="soft"
+              onClick={() => setShowFilters((state) => !state)}
+            >
+              Filters {showFilters ? <CaretUpIcon /> : <CaretDownIcon />}
+            </Button>
           </Flex>
 
-          <Options />
+          {showFilters && (
+            <Card>
+              <Suspense fallback={<Text>Loading...</Text>}>
+                <Options />
+              </Suspense>
+            </Card>
+          )}
         </Flex>
 
         <PageTurner
