@@ -3,13 +3,13 @@ import { TankType, TreeTypeString } from '../../../components/Tanks';
 import { asset } from '../asset';
 
 export interface TankDefinition {
-  id: number;
   nation: string;
   name: string;
   name_short?: string;
   tree_type: TreeTypeString;
   tier: Tier;
   type: TankType;
+  testing?: boolean;
 }
 
 export type TankDefinitions = Record<number, TankDefinition>;

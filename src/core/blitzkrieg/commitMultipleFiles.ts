@@ -1,4 +1,4 @@
-import { Octokit } from '@octokit/rest';
+import { octokit } from './octokit';
 
 const TIME_PER_BLOB = 2 ** 4 * 1000;
 
@@ -9,7 +9,6 @@ export interface FileChange {
 }
 
 export default async function commitMultipleFiles(
-  octokit: Octokit,
   owner: string,
   repo: string,
   branch: string,
@@ -61,7 +60,6 @@ export default async function commitMultipleFiles(
           `Failed blob ${changeIndex + 1} / ${
             changes.length
           }; retrying in ${TIME_PER_BLOB}ms...`,
-          error,
         );
 
         await new Promise((resolve) => setTimeout(resolve, TIME_PER_BLOB));

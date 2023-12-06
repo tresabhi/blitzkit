@@ -1,12 +1,14 @@
-import { Octokit } from '@octokit/rest';
 import { config } from 'dotenv';
 import { readdir } from 'fs/promises';
-import { argv, env } from 'process';
+import { argv } from 'process';
 import { TankType } from '../src/components/Tanks';
 import { NATION_IDS } from '../src/constants/nations';
+import { readBase64DVPL } from '../src/core/blitz/readBase64DVPL';
 import { readXMLDVPL } from '../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../src/core/blitz/readYAMLDVPL';
-import commitMultipleFiles from '../src/core/blitzkrieg/commitMultipleFiles';
+import commitMultipleFiles, {
+  FileChange,
+} from '../src/core/blitzkrieg/commitMultipleFiles';
 import {
   TankDefinitions,
   Tier,
@@ -34,6 +36,15 @@ interface Strings {
   [key: string]: string;
 }
 type BlitzTankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
+/**
+ * Warning! This is not exhaustive.
+ */
+interface TankParameters {
+  resourcesPath: {
+    smallIconPath: string;
+    bigIconPath: string;
+  };
+}
 
 const blitzTankTypeToBlitzkrieg: Record<BlitzTankType, TankType> = {
   'AT-SPG': 'tank_destroyer',
@@ -53,7 +64,7 @@ const DOI = {
   flags: 'Gfx/Lobby/flags',
 };
 
-const octokit = new Octokit({ auth: env.GH_TOKEN });
+const allTargets = argv.includes('--all-targets');
 const targets = argv
   .find((argument) => argument.startsWith('--target'))
   ?.split('=')[1]
@@ -61,7 +72,7 @@ const targets = argv
 
 if (!targets) throw new Error('No target(s) specified');
 
-if (targets.includes('tankDefinitions')) {
+if (allTargets || targets.includes('tankDefinitions')) {
   console.log('Building tank definitions...');
 
   const tankDefinitions: TankDefinitions = {};
@@ -82,7 +93,7 @@ if (targets.includes('tankDefinitions')) {
         const tank = tanks[tankIndex];
         const nationVehicleId = tank.id;
         const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
-        const name = strings[tank.userString];
+        const name = strings[tank.userString] ?? tankIndex;
         const name_short = tank.shortUserString
           ? strings[tank.shortUserString] === name
             ? undefined
@@ -94,13 +105,13 @@ if (targets.includes('tankDefinitions')) {
         const tier = tank.level as Tier;
         const tags = tank.tags.split(' ');
         const type = blitzTankTypeToBlitzkrieg[tags[0] as BlitzTankType];
+        const testing = tags.includes('testTank') ? true : undefined;
 
         if ((name ?? name_short) === undefined) {
           console.warn(`Missing name for ${tankIndex}`);
         }
 
         tankDefinitions[id] = {
-          id,
           name,
           name_short,
           nation,
@@ -111,6 +122,7 @@ if (targets.includes('tankDefinitions')) {
               : 'researchable',
           tier,
           type,
+          testing,
         };
       }
     }),
@@ -118,7 +130,6 @@ if (targets.includes('tankDefinitions')) {
 
   console.log('Committing tank definitions...');
   await commitMultipleFiles(
-    octokit,
     'tresabhi',
     'blitzkrieg-assets',
     'main',
@@ -134,170 +145,126 @@ if (targets.includes('tankDefinitions')) {
   );
 }
 
-// console.log(
-//   (
-//     await readDVPL(
-//       `${DATA}/${DOI.strings}/${LANGUAGE}.yaml.dvpl`,
-//     )
-//   ).toString(),
-// );
+if (
+  allTargets ||
+  targets.includes('bigTankIcons') ||
+  targets.includes('smallTankIcons')
+) {
+  console.log('Building tank icons...');
 
-// const strings = await readFile(
-//   `${DATA}/${DOI.strings}/${LANGUAGE}.yaml.dvpl`,
-//   'utf-8',
-// ).then((data) => load(data) as Record<string, string>);
+  const changes: FileChange[] = [];
+  const nations = await readdir(`${DATA}/${DOI.vehicleDefinitions}`).then(
+    (nations) => nations.filter((nation) => nation !== 'common'),
+  );
 
-// const tankDefinitions: TankDefinitions = {};
-// const tankIds: number[] = [];
-// const images: Record<number, { big: string; small: string }> = {};
-// const nations = await readdir(
-//   `${TEMP}/${DOI.vehicleDefinitions}`,
-// );
+  await Promise.all(
+    nations.map(async (nation) => {
+      const tanks = await readXMLDVPL<VehicleDefinitionList>(
+        `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
+      );
 
-// writeFileSync('test.json', JSON.stringify(strings, null, 2));
+      for (const tankIndex in tanks) {
+        const tank = tanks[tankIndex];
+        const nationVehicleId = tank.id;
+        const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
+        const parameters = await readYAMLDVPL<TankParameters>(
+          `${DATA}/${DOI.tankParameters}/${nation}/${tankIndex}.yaml.dvpl`,
+        );
+        const small = `${DATA}/${parameters.resourcesPath.smallIconPath
+          .replace(/~res:\//, '')
+          .replace(/\..+/, '')}.packed.webp.dvpl`;
+        const big = `${DATA}/${parameters.resourcesPath.bigIconPath
+          .replace(/~res:\//, '')
+          .replace(/\..+/, '')}.packed.webp.dvpl`;
 
-// Promise.all(
-//   nations
-//     .filter((nation) => nation !== 'common')
-//     .map(async (nation) => {
-//       const listXML = await readFile(
-//         `${TEMP}/${DOI.vehicleDefinitions}/${nation}/list.xml`,
-//         'utf-8',
-//       );
-//       const list = xml2js(listXML, { compact: true }) as ElementCompact;
+        if (targets.includes('bigTankIcons')) {
+          changes.push({
+            content: await readBase64DVPL(big),
+            encoding: 'base64',
+            path: `icons/big/${id}.webp`,
+          });
+        }
+        if (targets.includes('smallTankIcons')) {
+          changes.push({
+            content: await readBase64DVPL(small),
+            encoding: 'base64',
+            path: `icons/small/${id}.webp`,
+          });
+        }
+      }
+    }),
+  );
 
-//       await Promise.all(
-//         Object.entries<ElementCompact>(list.root).map(
-//           async ([vehicle, vehicleData]) => {
-//             const nationVehicleId = parseInt(list.root[vehicle].id._text);
-//             const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
-//             const name = strings[vehicleData.userString._text];
-//             const name_short = strings[vehicleData.shortUserString?._text];
-//             const isPremium = 'gold' in vehicleData.price;
-//             const isCollector = vehicleData.sellPrice
-//               ? 'gold' in vehicleData.sellPrice
-//               : false;
-//             const tier = parseInt(vehicleData.level._text) as Tier;
-//             const tags = vehicleData.tags._text.split(' ');
-//             const type = tags[0];
+  console.log('Committing tank icons...');
+  await commitMultipleFiles(
+    'tresabhi',
+    'blitzkrieg-assets',
+    'main',
+    'tank icons',
+    changes,
+    true,
+  );
+}
 
-//             if ((name ?? name_short) === undefined) {
-//               console.warn(`Missing name for ${vehicle}`);
-//             }
+if (allTargets || targets.includes('scratchedFlags')) {
+  console.log('Building scratched flags...');
 
-//             tankIds.push(id);
-//             tankDefinitions[id] = {
-//               id,
-//               name,
-//               name_short,
-//               nation,
-//               tree_type: isCollector
-//                 ? 'collector'
-//                 : isPremium
-//                   ? 'premium'
-//                   : 'researchable',
-//               tier,
-//               type,
-//             };
+  const flags = await readdir(`${DATA}/${DOI.flags}`);
 
-//             // Tank images
-//             const parameterPath = `${TEMP}/${DOI.tankParameters}/${nation}/${vehicle}.yaml`;
-//             const parameterString = await readFile(parameterPath, 'utf-8');
-//             const { smallIconPath, bigIconPath } =
-//               parse(parameterString).resourcesPath;
-//             images[id] = {
-//               small: `${TEMP}/assets/Data/${(smallIconPath as string)
-//                 .replace(/~res:\//, '')
-//                 .replace(/\..+/, '')}.packed.webp`,
-//               big: `${TEMP}/assets/Data/${(bigIconPath as string)
-//                 .replace(/~res:\//, '')
-//                 .replace(/\..+/, '')}.packed.webp`,
-//             };
-//           },
-//         ),
-//       );
-//     }),
-// ).then(async () => {
-//   if (!publish) return;
+  console.log('Committing scratched flags...');
+  commitMultipleFiles(
+    'tresabhi',
+    'blitzkrieg-assets',
+    'main',
+    'scratched flags',
+    await Promise.all(
+      flags
+        .filter(
+          (flag) =>
+            flag.startsWith('flag_tutor-tank_') &&
+            !flag.endsWith('@2x.packed.webp.dvpl'),
+        )
+        .map(async (flag) => {
+          const content = await readBase64DVPL(`${DATA}/${DOI.flags}/${flag}`);
+          const name = flag.match(/flag_tutor-tank_(.+)\.packed\.webp/)![1];
 
-//   const octokit = new Octokit({ auth: env.GH_TOKEN });
-//   // const tankDefinitionsChange: FileChange = {
-//   //   content: JSON.stringify(tankDefinitions),
-//   //   path: 'definitions/tanks.json',
-//   //   encoding: 'utf-8',
-//   // };
-//   // const iconsChange = (
-//   //   await Promise.all(
-//   //     tankIds.map(async (id) => {
-//   //       try {
-//   //         const [contentSmall, contentBig] = await Promise.all([
-//   //           readFile(images[id].small, { encoding: 'base64' }),
-//   //           readFile(images[id].big, { encoding: 'base64' }),
-//   //         ]);
+          return {
+            content,
+            encoding: 'base64',
+            path: `flags/scratched/${name}.webp`,
+          } satisfies FileChange;
+        }),
+    ),
+    true,
+  );
+}
 
-//   //         return [
-//   //           {
-//   //             content: contentBig,
-//   //             path: `icons/big/${id}.webp`,
-//   //             encoding: 'base64',
-//   //           },
-//   //           {
-//   //             content: contentSmall,
-//   //             path: `icons/small/${id}.webp`,
-//   //             encoding: 'base64',
-//   //           },
-//   //         ];
-//   //       } catch (error) {
-//   //         console.log(error);
-//   //         return undefined;
-//   //       }
-//   //     }),
-//   //   )
-//   // ).flat() as FileChange[];
-//   const flags = await readdir(`${TEMP}/${DOI.flags}`);
-//   // const scratchedFlags = await Promise.all(
-//   //   flags
-//   //     .filter((flag) => flag.startsWith('flag_tutor-tank_'))
-//   //     .map(async (flag) => {
-//   //       const content = await readFile(
-//   //         `${TEMP}/${DOI.flags}/${flag}`,
-//   //         { encoding: 'base64' },
-//   //       );
-//   //       const name = flag.match(/flag_tutor-tank_(.+)\.packed\.webp/)![1];
+if (allTargets || targets.includes('circleFlags')) {
+  const flags = await readdir(`${DATA}/${DOI.flags}`);
 
-//   //       return {
-//   //         content,
-//   //         encoding: 'base64',
-//   //         path: `flags/scratched/${name}.webp`,
-//   //       } satisfies FileChange;
-//   //     }),
-//   // );
-//   const circleFlags = await Promise.all(
-//     flags
-//       .filter((flag) => flag.startsWith('flag_profile-stat_'))
-//       .map(async (flag) => {
-//         const content = await readFile(
-//           `${TEMP}/${DOI.flags}/${flag}`,
-//           { encoding: 'base64' },
-//         );
-//         const name = flag.match(/flag_profile-stat_(.+)\.packed\.webp/)![1];
+  commitMultipleFiles(
+    'tresabhi',
+    'blitzkrieg-assets',
+    'main',
+    'circle flags',
+    await Promise.all(
+      flags
+        .filter(
+          (flag) =>
+            flag.startsWith('flag_profile-stat_') &&
+            !flag.endsWith('@2x.packed.webp.dvpl'),
+        )
+        .map(async (flag) => {
+          const content = await readBase64DVPL(`${DATA}/${DOI.flags}/${flag}`);
+          const name = flag.match(/flag_profile-stat_(.+)\.packed\.webp/)![1];
 
-//         return {
-//           content,
-//           encoding: 'base64',
-//           path: `flags/circle/${name}.webp`,
-//         } satisfies FileChange;
-//       }),
-//   );
-
-//   console.log('Writing files...');
-//   await commitMultipleFiles(
-//     octokit,
-//     'tresabhi',
-//     'blitzkrieg-assets',
-//     'main',
-//     new Date().toString(),
-//     circleFlags,
-//     true,
-//   );
-// });
+          return {
+            content,
+            encoding: 'base64',
+            path: `flags/circle/${name}.webp`,
+          } satisfies FileChange;
+        }),
+    ),
+    true,
+  );
+}

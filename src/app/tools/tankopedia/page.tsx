@@ -142,18 +142,16 @@ export default function Page() {
                       display: 'flex',
                     }}
                   >
-                    {tank.nation !== 'other' && (
-                      <img
-                        className={styles.flag}
-                        src={asset(`flags/scratched/${tank.nation}.webp`)}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'contain',
-                          position: 'absolute',
-                        }}
-                      />
-                    )}
+                    <img
+                      className={styles.flag}
+                      src={asset(`flags/scratched/${tank.nation}.webp`)}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain',
+                        position: 'absolute',
+                      }}
+                    />
 
                     <div
                       style={{
