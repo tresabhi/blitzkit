@@ -20,6 +20,6 @@
       }
     ]
   },
-  "include": ["src/**/*", ".next/types/**/*.ts", "dist/website/types/**/*.ts"],
+  "include": ["src/**/*", "scripts/**/*"],
   "exclude": ["node_modules", "dist"]
 }

@@ -58,6 +58,8 @@
     "webp",
     "winrate",
     "wotblitz",
+    "XMLDVPL",
+    "YAMLDVPL",
     "zustand"
   ],
   "deno.enable": false,

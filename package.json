@@ -54,7 +54,6 @@
     "vite-node": "^0.34.5",
     "vitepress": "^1.0.0-rc.20",
     "vitepress-plugin-auto-sidebar": "^1.1.0",
-    "xml-js": "^1.6.11",
     "yaml": "^2.3.4",
     "zustand": "^4.4.1"
   },
@@ -72,6 +71,7 @@
     "@vanilla-extract/next-plugin": "^2.3.1",
     "compare-versions": "^6.1.0",
     "crc": "^4.3.2",
+    "fast-xml-parser": "^4.3.2",
     "knip": "^3.4.0",
     "lz4": "^0.6.5",
     "prettier": "^3.0.3",

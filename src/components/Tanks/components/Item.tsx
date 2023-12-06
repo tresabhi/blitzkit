@@ -12,10 +12,10 @@ export enum TreeTypeEnum {
 }
 
 export const TANK_TYPES = [
-  'AT-SPG',
-  'lightTank',
-  'mediumTank',
-  'heavyTank',
+  'tank_destroyer',
+  'light',
+  'medium',
+  'heavy',
 ] as const;
 
 // TODO: remove hyphen for underscore

@@ -15,9 +15,8 @@ export default async function commitMultipleFiles(
   branch: string,
   message: string,
   changes: FileChange[],
-  logBlobCreation = false,
+  verbose = false,
 ) {
-  // Get the latest commit SHA on the specified branch
   const latestCommitSha = (
     await octokit.git.getRef({
       owner,
@@ -25,8 +24,6 @@ export default async function commitMultipleFiles(
       ref: `heads/${branch}`,
     })
   ).data.object.sha;
-
-  // Get the tree SHA for the latest commit
   const treeSha = (
     await octokit.git.getCommit({
       owner,
@@ -34,7 +31,6 @@ export default async function commitMultipleFiles(
       commit_sha: latestCommitSha,
     })
   ).data.tree.sha;
-
   const blobs: {
     sha: string;
     path: string;
@@ -65,13 +61,14 @@ export default async function commitMultipleFiles(
           `Failed blob ${changeIndex + 1} / ${
             changes.length
           }; retrying in ${TIME_PER_BLOB}ms...`,
+          error,
         );
 
         await new Promise((resolve) => setTimeout(resolve, TIME_PER_BLOB));
       }
     }
 
-    if (logBlobCreation) {
+    if (verbose) {
       console.log(
         `Created blob ${changeIndex + 1} / ${changes.length} (${(
           (100 * (changeIndex + 1)) /
@@ -81,15 +78,12 @@ export default async function commitMultipleFiles(
     }
   }
 
-  // Create a new tree with the new blobs
   const { data: treeData } = await octokit.git.createTree({
     owner,
     repo,
     base_tree: treeSha,
     tree: blobs,
   });
-
-  // Create a new commit with the new tree
   const { data: newCommitData } = await octokit.git.createCommit({
     owner,
     repo,
@@ -97,8 +91,6 @@ export default async function commitMultipleFiles(
     tree: treeData.sha,
     parents: [latestCommitSha],
   });
-
-  // Update the branch reference to point to the new commit
   await octokit.git.updateRef({
     owner,
     repo,

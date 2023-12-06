@@ -6,8 +6,8 @@ import {
   RatingsNeighbors,
   RatingsPlayer,
 } from '../src/commands/ratings';
+import commitMultipleFiles from '../src/core/blitzkrieg/commitMultipleFiles.js';
 import { patientFetchJSON } from '../src/core/blitzkrieg/patientFetchJSON';
-import commitMultipleFiles from './commitMultipleFiles.js';
 
 /*
  * Central North American Time (UTC-5): use 0 5 * * *.
