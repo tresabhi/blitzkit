@@ -70,9 +70,9 @@ const targets = argv
   ?.split('=')[1]
   .split(',');
 
-if (!targets) throw new Error('No target(s) specified');
+if (!targets && !allTargets) throw new Error('No target(s) specified');
 
-if (allTargets || targets.includes('tankDefinitions')) {
+if (allTargets || targets?.includes('tankDefinitions')) {
   console.log('Building tank definitions...');
 
   const tankDefinitions: TankDefinitions = {};
@@ -147,8 +147,8 @@ if (allTargets || targets.includes('tankDefinitions')) {
 
 if (
   allTargets ||
-  targets.includes('bigTankIcons') ||
-  targets.includes('smallTankIcons')
+  targets?.includes('bigTankIcons') ||
+  targets?.includes('smallTankIcons')
 ) {
   console.log('Building tank icons...');
 
@@ -177,14 +177,14 @@ if (
           .replace(/~res:\//, '')
           .replace(/\..+/, '')}.packed.webp.dvpl`;
 
-        if (targets.includes('bigTankIcons')) {
+        if (allTargets || targets?.includes('bigTankIcons')) {
           changes.push({
             content: await readBase64DVPL(big),
             encoding: 'base64',
             path: `icons/big/${id}.webp`,
           });
         }
-        if (targets.includes('smallTankIcons')) {
+        if (allTargets || targets?.includes('smallTankIcons')) {
           changes.push({
             content: await readBase64DVPL(small),
             encoding: 'base64',
@@ -206,7 +206,7 @@ if (
   );
 }
 
-if (allTargets || targets.includes('scratchedFlags')) {
+if (allTargets || targets?.includes('scratchedFlags')) {
   console.log('Building scratched flags...');
 
   const flags = await readdir(`${DATA}/${DOI.flags}`);
@@ -239,7 +239,7 @@ if (allTargets || targets.includes('scratchedFlags')) {
   );
 }
 
-if (allTargets || targets.includes('circleFlags')) {
+if (allTargets || targets?.includes('circleFlags')) {
   const flags = await readdir(`${DATA}/${DOI.flags}`);
 
   commitMultipleFiles(
