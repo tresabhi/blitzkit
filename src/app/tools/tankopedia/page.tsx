@@ -28,14 +28,13 @@ import { theme } from '../../../stitches.config';
 import mutateTankopedia, {
   TankopediaSortBy,
   TankopediaSortDirection,
-  TankopediaTestTankDisplay,
   useTankopedia,
 } from '../../../stores/tankopedia';
 import { Options } from './components/Options';
 import { PageTurner } from './components/PageTurner';
 import * as styles from './page.css';
 
-const TANKS_PER_PAGE = 3 * 2 ** 4;
+const TANKS_PER_PAGE = 3 * 2 ** 3;
 
 export default function Page() {
   const tankopediaState = useTankopedia();
@@ -102,7 +101,7 @@ export default function Page() {
   return (
     <PageWrapper size="wide" color="purple">
       <Suspense fallback={<Text>Loading...</Text>}>
-        <Flex direction="column" gap="6">
+        <Flex direction="column" gap="4">
           <Flex gap="2">
             <TextField.Root style={{ flex: 1 }}>
               <TextField.Slot>
@@ -174,18 +173,17 @@ export default function Page() {
                 </DropdownMenu.RadioGroup>
               </DropdownMenu.Content>
             </DropdownMenu.Root>
-
           </Flex>
 
           <Options />
-
-          <PageTurner
-            page={page}
-            setPage={setPage}
-            tanksPerPage={TANKS_PER_PAGE}
-            searchedList={searchedList}
-          />
         </Flex>
+
+        <PageTurner
+          page={page}
+          setPage={setPage}
+          tanksPerPage={TANKS_PER_PAGE}
+          searchedList={searchedList}
+        />
 
         <Flex wrap="wrap" gap="3" justify="center">
           {searchedList
