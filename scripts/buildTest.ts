@@ -233,20 +233,37 @@ class SCPGStream {
       return { vertices, indices };
     });
 
+    // writeFileSync(
+    //   'test.txt',
+    //   polygonGroups
+    //     .map((i) =>
+    //       i.vertices
+    //         .map(
+    //           (e) =>
+    //             `${VertexType[e.type].padEnd(16, ' ')} ${e.value
+    //               .map((j) => j.toString(10).padStart(25, ' '))
+    //               .join(' ')}`,
+    //         )
+    //         .join('\n'),
+    //     )
+    //     .join('\n\n'),
+    // );
+
+    // writeFileSync(
+    //   'test.json',
+
+    // )
+
     writeFileSync(
-      'test.txt',
-      polygonGroups
-        .map((i) =>
-          i.vertices
-            .map(
-              (e) =>
-                `${VertexType[e.type].padEnd(16, ' ')} ${e.value
-                  .map((j) => j.toString(10).padStart(32, ' '))
-                  .join(' ')}`,
-            )
-            .join('\n'),
-        )
-        .join('\n\n'),
+      'test.json',
+      JSON.stringify(
+        polygonGroups.map((group) => ({
+          vertices: group.vertices
+            .filter(({ type }) => type === VertexType.VERTEX)
+            .map(({ value }) => value),
+          indices: group.indices,
+        })),
+      ),
     );
 
     return polygonGroups;
