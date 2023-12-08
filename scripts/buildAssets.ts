@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import { readFile, readdir } from 'fs/promises';
+import { readdir } from 'fs/promises';
 import { argv } from 'process';
 import { TankType } from '../src/components/Tanks';
 import { NATION_IDS } from '../src/constants/nations';
@@ -15,102 +15,6 @@ import {
 } from '../src/core/blitzkrieg/definitions/tanks';
 
 config();
-
-class SCGStream {
-  public index = 0;
-
-  constructor(public buffer: Buffer) {}
-
-  consume(size: number) {
-    const subarray = this.buffer.subarray(this.index, this.index + size);
-    this.index += size;
-
-    return subarray;
-  }
-
-  consumeAscii(size: number) {
-    return this.consume(size).toString('ascii');
-  }
-
-  consumeByteArray(size: number) {
-    return this.consume(size);
-  }
-
-  consumeInt8() {
-    return this.consume(1).readInt8();
-  }
-  consumeInt16() {
-    return this.consume(2).readInt16LE();
-  }
-  consumeInt32() {
-    return this.consume(4).readInt32LE();
-  }
-
-  consumeSCGHeader() {
-    return {
-      name: this.consumeAscii(4),
-      version: this.consumeInt32(),
-      nodeCount: this.consumeInt32(),
-      nodeCount2: this.consumeInt32(),
-    };
-  }
-
-  consumeKAHeader() {
-    return {
-      name: this.consumeAscii(2),
-      version: this.consumeInt16(),
-      count: this.consumeInt32(),
-    };
-  }
-
-  consumeKA() {
-    const type = this.consumeInt8();
-
-    if (type === 2) {
-      // int32
-      return { type, value: this.consumeInt32() };
-    } else if (type === 4) {
-      // string
-      const length = this.consumeInt32();
-      const value = this.consumeAscii(length);
-
-      return { type, length, value };
-    } else if (type === 6) {
-      // byte array
-      const length = this.consumeInt32();
-      const value = this.consumeByteArray(length);
-
-      return { type, length, value };
-    }
-    {
-      throw new TypeError(`Unknown KA type: ${type}`);
-    }
-  }
-
-  consumeRemaining() {
-    return this.consume(Number.POSITIVE_INFINITY);
-  }
-
-  skip(size: number) {
-    this.index += size;
-  }
-}
-
-async function readSCG(file: string) {
-  const stream = new SCGStream(await readFile(file));
-
-  const header = stream.consumeSCGHeader();
-
-  for (let i = 0; i < header.nodeCount; i++) {
-    const ka = stream.consumeKAHeader();
-
-    for (let KAIndex = 0; KAIndex < ka.count; KAIndex++) {
-      console.log(stream.consumeKA());
-    }
-  }
-}
-
-await readSCG('test.scg');
 
 interface VehicleDefinitionList {
   [key: string]: {
