@@ -73,7 +73,7 @@ const VECTOR_SIZES = [
     // vector 3; 3d vector
     VertexType.VERTEX,
     VertexType.NORMAL,
-    VertexType.TANGENT,
+    // VertexType.TANGENT, MOVED TO 4
     VertexType.BINORMAL,
     VertexType.CUBETEXCOORD0,
     VertexType.CUBETEXCOORD1,
@@ -82,6 +82,7 @@ const VECTOR_SIZES = [
   ],
   [
     // vector 4; 4d vector or something more complex
+    VertexType.TANGENT, // UNCONFIRMED
     VertexType.PIVOT4,
     VertexType.JOINTINDEX,
     VertexType.JOINTWEIGHT,
@@ -160,6 +161,10 @@ class SCPGStream {
     const buffer = this.consume(4);
     return { buffer, value: buffer.readUInt32LE() };
   }
+  consumeFloat() {
+    const buffer = this.consume(4);
+    return { buffer, value: buffer.readFloatLE() };
+  }
 
   consumeSCGHeader() {
     return {
@@ -203,16 +208,13 @@ class SCPGStream {
       const vertices: { type: VertexType; value: number[] }[] = [];
 
       for (let index = 0; index < polygonGroupRaw.vertexCount.value; index++) {
-        // skipping 4 everytime stops leaving some garbage
-        verticesStream.skip(4);
-
         vertexFormat.forEach((type) => {
           const resolved = VECTOR_SIZES.some((types, size) => {
             if (types.includes(type)) {
               vertices.push({
                 type,
                 value: range(size + 1).map(
-                  () => verticesStream.consumeUInt32().value,
+                  () => verticesStream.consumeFloat().value,
                 ),
               });
 
@@ -239,7 +241,7 @@ class SCPGStream {
             .map(
               (e) =>
                 `${VertexType[e.type].padEnd(16, ' ')} ${e.value
-                  .map((j) => j.toString(16).padStart(8, '0'))
+                  .map((j) => j.toString(10).padStart(32, ' '))
                   .join(' ')}`,
             )
             .join('\n'),
