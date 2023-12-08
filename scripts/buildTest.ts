@@ -1,6 +1,8 @@
+import { writeFileSync } from 'fs';
 import { readFile } from 'fs/promises';
+import { range } from 'lodash';
 
-enum KATypes {
+enum KAType {
   NONE,
   BOOLEAN,
   INT32,
@@ -30,29 +32,61 @@ enum KATypes {
   ARRAY,
 }
 
-const VERTEX_TYPES = [
-  'VERTEX',
-  'NORMAL',
-  'COLOR',
-  'TEXCOORD0',
-  'TEXCOORD1',
-  'TEXCOORD2',
-  'TEXCOORD3',
-  'TANGENT',
-  'BINORMAL',
-  'HARD_JOINTINDEX',
-  'PIVOT4',
-  'FLEXIBILITY',
-  'ANGLE_SIN_COS',
-  'JOINTINDEX',
-  'JOINTWEIGHT',
-  'CUBETEXCOORD0',
-  'CUBETEXCOORD1',
-  'CUBETEXCOORD2',
-  'CUBETEXCOORD3',
-] as const;
+enum VertexType {
+  VERTEX,
+  NORMAL,
+  COLOR,
+  TEXCOORD0,
+  TEXCOORD1,
+  TEXCOORD2,
+  TEXCOORD3,
+  TANGENT,
+  BINORMAL,
+  HARD_JOINTINDEX,
+  PIVOT4,
+  FLEXIBILITY,
+  ANGLE_SIN_COS,
+  JOINTINDEX,
+  JOINTWEIGHT,
+  CUBETEXCOORD0,
+  CUBETEXCOORD1,
+  CUBETEXCOORD2,
+  CUBETEXCOORD3,
+}
 
-type VertexType = (typeof VERTEX_TYPES)[number];
+const VECTOR_SIZES = [
+  [
+    // vector 1; basically array of 1 number
+    VertexType.COLOR,
+    VertexType.FLEXIBILITY,
+    VertexType.HARD_JOINTINDEX,
+  ],
+  [
+    // vector 2; 2d vector
+    VertexType.TEXCOORD0,
+    VertexType.TEXCOORD1,
+    VertexType.TEXCOORD2,
+    VertexType.TEXCOORD3,
+    VertexType.ANGLE_SIN_COS,
+  ],
+  [
+    // vector 3; 3d vector
+    VertexType.VERTEX,
+    VertexType.NORMAL,
+    VertexType.TANGENT,
+    VertexType.BINORMAL,
+    VertexType.CUBETEXCOORD0,
+    VertexType.CUBETEXCOORD1,
+    VertexType.CUBETEXCOORD2,
+    VertexType.CUBETEXCOORD3,
+  ],
+  [
+    // vector 4; 4d vector or something more complex
+    VertexType.PIVOT4,
+    VertexType.JOINTINDEX,
+    VertexType.JOINTWEIGHT,
+  ],
+];
 
 type KAResolvedValue<Type> = { buffer: Buffer; value: Type };
 
@@ -164,89 +198,54 @@ class SCPGStream {
         .padStart(polygonGroupRaw.vertexFormat.buffer.length * 8, '0')
         .split('')
         .map(parseInt)
-        .map((bit, index) => {
-          if (bit) return VERTEX_TYPES[index];
-        })
-        .filter(Boolean);
+        .map((bit, index) => (bit ? index : null))
+        .filter((index) => index !== null) as VertexType[];
       const vertices: { type: VertexType; value: number[] }[] = [];
 
       for (let index = 0; index < polygonGroupRaw.vertexCount.value; index++) {
+        // skipping 4 everytime stops leaving some garbage
+        verticesStream.skip(4);
+
         vertexFormat.forEach((type) => {
-          if (['COLOR', 'FLEXIBILITY', 'HARD_JOINTINDEX'].includes(type)) {
-            vertices.push({
-              type,
-              value: [verticesStream.consumeUInt32().value],
-            });
-          } else if (
-            [
-              'TEXCOORD0',
-              'TEXCOORD1',
-              'TEXCOORD2',
-              'TEXCOORD3',
-              'ANGLE_SIN_COS',
-            ].includes(type)
-          ) {
-            vertices.push({
-              type,
-              value: [
-                verticesStream.consumeUInt32().value,
-                verticesStream.consumeUInt32().value,
-              ],
-            });
-          } else if (
-            [
-              'VERTEX',
-              'NORMAL',
-              'TANGENT',
-              'BINORMAL',
-              'CUBETEXCOORD0',
-              'CUBETEXCOORD1',
-              'CUBETEXCOORD2',
-              'CUBETEXCOORD3',
-            ].includes(type)
-          ) {
-            vertices.push({
-              type,
-              value: [
-                verticesStream.consumeUInt32().value,
-                verticesStream.consumeUInt32().value,
-                verticesStream.consumeUInt32().value,
-              ],
-            });
-          } else if (['PIVOT4', 'JOINTINDEX', 'JOINTWEIGHT'].includes(type)) {
-            vertices.push({
-              type,
-              value: [
-                verticesStream.consumeUInt32().value,
-                verticesStream.consumeUInt32().value,
-                verticesStream.consumeUInt32().value,
-                verticesStream.consumeUInt32().value,
-              ],
-            });
-          } else {
+          const resolved = VECTOR_SIZES.some((types, size) => {
+            if (types.includes(type)) {
+              vertices.push({
+                type,
+                value: range(size + 1).map(
+                  () => verticesStream.consumeUInt32().value,
+                ),
+              });
+
+              return true;
+            }
+          });
+
+          if (!resolved) {
             throw new TypeError(`Unknown vertex type: ${type}`);
           }
         });
       }
 
+      console.log(verticesStream.consumeRemaining().length);
+
       return { vertices, indices };
     });
 
-    // writeFileSync(
-    //   'test.txt',
-    //   polygonGroups
-    //     .map((i) =>
-    //       i.vertices
-    //         .map(
-    //           (e) =>
-    //             `${e.type.padEnd(16, ' ')} ${e.value
-    //               .map((j) => j.toString(16).padStart(8, '0'))
-    //               .join(' ')}`,
-    //         )
-    //         .join('\n'),
-    //     )
-    //     .join('\n\n'),
-    // );
+    writeFileSync(
+      'test.txt',
+      polygonGroups
+        .map((i) =>
+          i.vertices
+            .map(
+              (e) =>
+                `${VertexType[e.type].padEnd(16, ' ')} ${e.value
+                  .map((j) => j.toString(16).padStart(8, '0'))
+                  .join(' ')}`,
+            )
+            .join('\n'),
+        )
+        .join('\n\n'),
+    );
 
     return polygonGroups;
   }
@@ -262,15 +261,15 @@ class SCPGStream {
     const type = this.consumeUInt8().value;
 
     switch (type) {
-      case KATypes.INT32:
+      case KAType.INT32:
         return this.consumeInt32();
 
-      case KATypes.STRING: {
+      case KAType.STRING: {
         const length = this.consumeUInt32();
         return this.consumeAscii(length.value);
       }
 
-      case KATypes.BYTE_ARRAY: {
+      case KAType.BYTE_ARRAY: {
         const length = this.consumeUInt32();
         return this.consumeByteArray(length.value);
       }
