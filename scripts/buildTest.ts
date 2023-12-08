@@ -1,4 +1,3 @@
-import { writeFileSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { range } from 'lodash';
 
@@ -228,45 +227,36 @@ class SCPGStream {
         });
       }
 
-      console.log(verticesStream.consumeRemaining().length);
-
       return { vertices, indices };
     });
 
-    // writeFileSync(
-    //   'test.txt',
-    //   polygonGroups
-    //     .map((i) =>
-    //       i.vertices
-    //         .map(
-    //           (e) =>
-    //             `${VertexType[e.type].padEnd(16, ' ')} ${e.value
-    //               .map((j) => j.toString(10).padStart(25, ' '))
-    //               .join(' ')}`,
-    //         )
-    //         .join('\n'),
-    //     )
-    //     .join('\n\n'),
-    // );
+    return polygonGroups.map((group) => ({
+      vertices: group.vertices
+        .filter(({ type }) => type === VertexType.VERTEX)
+        .map(({ value }) => value),
+      indices: group.indices,
+    }));
+  }
 
-    // writeFileSync(
-    //   'test.json',
+  consumeSC2Header() {
+    return {
+      name: this.consumeAscii(4).value,
+      version: this.consumeUInt32().value,
+      nodeCount: this.consumeUInt32().value,
+    };
+  }
+  consumeSC2Descriptor() {
+    const size = this.consumeUInt32().value;
+    const fileType = this.consumeUInt32().value;
 
-    // )
+    this.skip(8); // other felids that we don't care about for some reason
 
-    writeFileSync(
-      'test.json',
-      JSON.stringify(
-        polygonGroups.map((group) => ({
-          vertices: group.vertices
-            .filter(({ type }) => type === VertexType.VERTEX)
-            .map(({ value }) => value),
-          indices: group.indices,
-        })),
-      ),
-    );
-
-    return polygonGroups;
+    console.log(this.consumeKA());
+  }
+  consumeSC2() {
+    const header = this.consumeSC2Header();
+    const versionTags = this.consumeKA();
+    const descriptor = this.consumeSC2Descriptor();
   }
 
   consumeKAHeader() {
@@ -297,7 +287,7 @@ class SCPGStream {
         throw new TypeError(`Unknown KA type: ${type}`);
     }
   }
-  consumeKAPair() {
+  consumeKAV1Pair() {
     const name = this.consumeKAValue().value as string;
     const value = this.consumeKAValue();
 
@@ -307,16 +297,25 @@ class SCPGStream {
     const header = this.consumeKAHeader();
     const pairs: Record<string, any> = {};
 
-    for (let index = 0; index < header.count; index++) {
-      const { name, value } = this.consumeKAPair();
-      pairs[name] = value;
-    }
+    if (header.version === 1) {
+      for (let index = 0; index < header.count; index++) {
+        const { name, value } = this.consumeKAV1Pair();
+        pairs[name] = value;
+      }
+    } else if (header.version === 2) {
+      for (let index = 0; index < header.count; index++) {
+        const length = this.consumeUInt16().value;
+        const string = this.consumeAscii(length);
+
+        console.log(string.value);
+      }
+    } else throw new SyntaxError(`Unknown KA version: ${header.version}`);
 
     return pairs as Type;
   }
 }
 
-const stream = new SCPGStream(await readFile('test.scg'));
+const stream = new SCPGStream(await readFile('test.sc2'));
 
-stream.consumeSCG();
+stream.consumeSC2();
 // console.log(stream.consumeSCG());
