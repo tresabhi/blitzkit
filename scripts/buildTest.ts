@@ -119,11 +119,18 @@ class SCPGStream {
   skip(size: number) {
     this.index += size;
   }
+  read(size: number) {
+    return this.buffer.subarray(this.index, this.index + size);
+  }
   consume(size: number) {
-    const subarray = this.buffer.subarray(this.index, this.index + size);
+    const subarray = this.read(size);
     this.index += size;
 
     return subarray;
+  }
+
+  readRemaining() {
+    return this.read(Number.POSITIVE_INFINITY);
   }
   consumeRemaining() {
     return this.consume(Number.POSITIVE_INFINITY);
@@ -154,8 +161,8 @@ class SCPGStream {
     return { buffer, value: buffer.readInt32LE() };
   }
   consumeInt64() {
-    const buffer = this.consume(4);
-    return { buffer, value: buffer.readInt32LE() };
+    const buffer = this.consume(8);
+    return { buffer, value: buffer.readBigInt64LE() };
   }
   consumeUInt8() {
     const buffer = this.consume(1);
@@ -170,12 +177,17 @@ class SCPGStream {
     return { buffer, value: buffer.readUInt32LE() };
   }
   consumeUInt64() {
-    const buffer = this.consume(4);
-    return { buffer, value: buffer.readUInt32LE() };
+    const buffer = this.consume(8);
+    return { buffer, value: buffer.readBigUInt64LE() };
   }
   consumeFloat() {
     const buffer = this.consume(4);
     return { buffer, value: buffer.readFloatLE() };
+  }
+
+  consumeBoolean() {
+    const buffer = this.consume(1);
+    return { buffer, value: buffer.readUInt8() === 1 };
   }
 
   consumeSCGHeader() {
@@ -325,6 +337,12 @@ class SCPGStream {
       case KAType.UINT64:
         return this.consumeUInt64() as KAResolvedValue<Type>;
 
+      case KAType.UINT32:
+        return this.consumeUInt32() as KAResolvedValue<Type>;
+
+      case KAType.BOOLEAN:
+        return this.consumeBoolean() as KAResolvedValue<Type>;
+
       default:
         throw new TypeError(
           `Unknown KA type: ${type} (${KAType[type] ?? 'unknown type'})`,
@@ -389,7 +407,7 @@ class SCPGStream {
           const value = stringTable[valueIndex];
           pairs[key] = value;
         } else {
-          const { value } = this.consumeKAValue(valueType);
+          const { value } = this.consumeKAValue(valueType, stringTable);
           pairs[key] = value;
         }
 
