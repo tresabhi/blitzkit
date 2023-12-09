@@ -89,22 +89,20 @@ const VECTOR_SIZES = [
   ],
 ];
 
-type KAResolvedValue<Type> = { buffer: Buffer; value: Type };
-
 interface PolygonGroupRaw {
-  '##name': KAResolvedValue<'PolygonGroup'>;
-  '#id': KAResolvedValue<Buffer>;
-  cubeTextureCoordCount: KAResolvedValue<number>;
-  indexCount: KAResolvedValue<number>;
-  indexFormat: KAResolvedValue<0 | 1>;
-  indices: KAResolvedValue<Buffer>;
-  packing: KAResolvedValue<0 | 1>;
-  primitiveCount: KAResolvedValue<number>;
-  rhi_primitiveType: KAResolvedValue<1 | 2 | 10>;
-  textureCoordCount: KAResolvedValue<number>;
-  vertexCount: KAResolvedValue<number>;
-  vertexFormat: KAResolvedValue<number>;
-  vertices: KAResolvedValue<Buffer>;
+  '##name': 'PolygonGroup';
+  '#id': Buffer;
+  cubeTextureCoordCount: number;
+  indexCount: number;
+  indexFormat: 0 | 1;
+  indices: Buffer;
+  packing: 0 | 1;
+  primitiveCount: number;
+  rhi_primitiveType: 1 | 2 | 10;
+  textureCoordCount: number;
+  vertexCount: number;
+  vertexFormat: number;
+  vertices: Buffer;
 }
 
 interface PolygonGroup extends Omit<PolygonGroupRaw, 'indices'> {
@@ -137,65 +135,54 @@ class SCPGStream {
   }
 
   consumeByteArray(size: number) {
-    const buffer = this.consume(size);
-    return { buffer, value: buffer };
+    return this.consume(size);
   }
+
   consumeAscii(size: number) {
-    const buffer = this.consume(size);
-    return { buffer, value: buffer.toString('ascii') };
+    return this.consume(size).toString('ascii');
   }
   consumeUtf16(size: number) {
-    const buffer = this.consume(size);
-    return { buffer, value: buffer.toString('utf16le') };
+    return this.consume(size).toString('utf16le');
   }
+
   consumeInt8() {
-    const buffer = this.consume(1);
-    return { buffer, value: buffer.readInt8() };
+    return this.consume(1).readInt8();
   }
   consumeInt16() {
-    const buffer = this.consume(2);
-    return { buffer, value: buffer.readInt16LE() };
+    return this.consume(2).readInt16LE();
   }
   consumeInt32() {
-    const buffer = this.consume(4);
-    return { buffer, value: buffer.readInt32LE() };
+    return this.consume(4).readInt32LE();
   }
   consumeInt64() {
-    const buffer = this.consume(8);
-    return { buffer, value: buffer.readBigInt64LE() };
+    return this.consume(8).readBigInt64LE();
   }
   consumeUInt8() {
-    const buffer = this.consume(1);
-    return { buffer, value: buffer.readUInt8() };
+    return this.consume(1).readUInt8();
   }
   consumeUInt16() {
-    const buffer = this.consume(2);
-    return { buffer, value: buffer.readUInt16LE() };
+    return this.consume(2).readUInt16LE();
   }
   consumeUInt32() {
-    const buffer = this.consume(4);
-    return { buffer, value: buffer.readUInt32LE() };
+    return this.consume(4).readUInt32LE();
   }
   consumeUInt64() {
-    const buffer = this.consume(8);
-    return { buffer, value: buffer.readBigUInt64LE() };
+    return this.consume(8).readBigUInt64LE();
   }
   consumeFloat() {
-    const buffer = this.consume(4);
-    return { buffer, value: buffer.readFloatLE() };
+    return this.consume(4).readFloatLE();
   }
 
   consumeBoolean() {
-    const buffer = this.consume(1);
-    return { buffer, value: buffer.readUInt8() === 1 };
+    return this.consume(1).readUInt8() === 1;
   }
 
   consumeSCGHeader() {
     return {
-      name: this.consumeAscii(4).value,
-      version: this.consumeUInt32().value,
-      nodeCount: this.consumeUInt32().value,
-      nodeCount2: this.consumeUInt32().value,
+      name: this.consumeAscii(4),
+      version: this.consumeUInt32(),
+      nodeCount: this.consumeUInt32(),
+      nodeCount2: this.consumeUInt32(),
     };
   }
   consumeSCG() {
@@ -208,38 +195,33 @@ class SCPGStream {
     }
 
     const polygonGroups = polygonGroupsRaw.map((polygonGroupRaw) => {
-      const indicesStream = new SCPGStream(polygonGroupRaw.indices.value);
+      const indicesStream = new SCPGStream(polygonGroupRaw.indices);
       const indices: number[] = [];
 
-      for (let index = 0; index < polygonGroupRaw.indexCount.value; index++) {
+      for (let index = 0; index < polygonGroupRaw.indexCount; index++) {
         indices.push(
-          polygonGroupRaw.indexFormat.value
-            ? indicesStream.consumeUInt32().value
-            : indicesStream.consumeUInt16().value,
+          polygonGroupRaw.indexFormat
+            ? indicesStream.consumeUInt32()
+            : indicesStream.consumeUInt16(),
         );
       }
 
-      const verticesStream = new SCPGStream(polygonGroupRaw.vertices.buffer);
-      const vertexFormat = BigInt(
-        '0x' + polygonGroupRaw.vertexFormat.buffer.toString('hex'),
-      )
+      const verticesStream = new SCPGStream(polygonGroupRaw.vertices);
+      const vertexFormat = polygonGroupRaw.vertexFormat
         .toString(2)
-        .padStart(polygonGroupRaw.vertexFormat.buffer.length * 8, '0')
         .split('')
         .map(parseInt)
         .map((bit, index) => (bit ? index : null))
         .filter((index) => index !== null) as VertexType[];
       const vertices: { type: VertexType; value: number[] }[] = [];
 
-      for (let index = 0; index < polygonGroupRaw.vertexCount.value; index++) {
+      for (let index = 0; index < polygonGroupRaw.vertexCount; index++) {
         vertexFormat.forEach((type) => {
           const resolved = VECTOR_SIZES.some((types, size) => {
             if (types.includes(type)) {
               vertices.push({
                 type,
-                value: range(size + 1).map(
-                  () => verticesStream.consumeFloat().value,
-                ),
+                value: range(size + 1).map(() => verticesStream.consumeFloat()),
               });
 
               return true;
@@ -265,14 +247,14 @@ class SCPGStream {
 
   consumeSC2Header() {
     return {
-      name: this.consumeAscii(4).value,
-      version: this.consumeUInt32().value,
-      nodeCount: this.consumeUInt32().value,
+      name: this.consumeAscii(4),
+      version: this.consumeUInt32(),
+      nodeCount: this.consumeUInt32(),
     };
   }
   consumeSC2Descriptor() {
-    const size = this.consumeUInt32().value;
-    const fileType = this.consumeUInt32().value;
+    const size = this.consumeUInt32();
+    const fileType = this.consumeUInt32();
 
     this.skip(8); // other felids that we don't care about for some reason
 
@@ -288,41 +270,41 @@ class SCPGStream {
 
   consumeKAHeader() {
     return {
-      name: this.consumeAscii(2).value,
-      version: this.consumeUInt16().value,
-      count: this.consumeUInt32().value,
+      name: this.consumeAscii(2),
+      version: this.consumeUInt16(),
+      count: this.consumeUInt32(),
     };
   }
   consumeKAValue<Type>(
-    type: KAType = this.consumeUInt8().value,
+    type: KAType = this.consumeUInt8(),
     stringTable?: Record<number, string>,
-  ): KAResolvedValue<Type> {
+  ): Type {
     switch (type) {
       case KAType.INT32:
-        return this.consumeInt32() as KAResolvedValue<Type>;
+        return this.consumeInt32() as Type;
 
       case KAType.STRING: {
         const length = this.consumeUInt32();
-        return this.consumeAscii(length.value) as KAResolvedValue<Type>;
+        return this.consumeAscii(length) as Type;
       }
 
       case KAType.BYTE_ARRAY: {
         const length = this.consumeUInt32();
-        return this.consumeByteArray(length.value) as KAResolvedValue<Type>;
+        return this.consumeByteArray(length) as Type;
       }
 
       case KAType.FLOAT:
-        return this.consumeFloat() as KAResolvedValue<Type>;
+        return this.consumeFloat() as Type;
 
       case KAType.ARRAY: {
         const length = this.consumeUInt32();
         const value = [];
 
-        for (let index = 0; index < length.value; index++) {
+        for (let index = 0; index < length; index++) {
           value.push(this.consumeKAValue(undefined, stringTable));
         }
 
-        return { value } as KAResolvedValue<Type>;
+        return value as Type;
       }
 
       case KAType.KEYED_ARCHIVE: {
@@ -331,17 +313,17 @@ class SCPGStream {
 
         const value = this.consumeKA<Type>(stringTable);
 
-        return { value } as KAResolvedValue<Type>;
+        return value;
       }
 
       case KAType.UINT64:
-        return this.consumeUInt64() as KAResolvedValue<Type>;
+        return this.consumeUInt64() as Type;
 
       case KAType.UINT32:
-        return this.consumeUInt32() as KAResolvedValue<Type>;
+        return this.consumeUInt32() as Type;
 
       case KAType.BOOLEAN:
-        return this.consumeBoolean() as KAResolvedValue<Type>;
+        return this.consumeBoolean() as Type;
 
       default:
         throw new TypeError(
@@ -350,8 +332,8 @@ class SCPGStream {
     }
   }
   consumeKAV1Pair(stringTable?: Record<number, string>) {
-    const name = this.consumeKAValue(undefined, stringTable).value as string;
-    const value = this.consumeKAValue(undefined, stringTable).value;
+    const name = this.consumeKAValue<string>(undefined, stringTable);
+    const value = this.consumeKAValue(undefined, stringTable);
 
     return { name, value };
   }
@@ -372,14 +354,14 @@ class SCPGStream {
       const strings: string[] = [];
       const stringTable: Record<number, string> = {};
       for (let index = 0; index < header.count; index++) {
-        const length = this.consumeUInt16().value;
-        const string = this.consumeAscii(length).value;
+        const length = this.consumeUInt16();
+        const string = this.consumeAscii(length);
 
         strings.push(string);
       }
 
       for (let index = 0; index < header.count; index++) {
-        const id = this.consumeUInt32().value;
+        const id = this.consumeUInt32();
         stringTable[id] = strings[index];
 
         console.log(`  kav2 string: ${strings[index]}`, id);
@@ -387,9 +369,9 @@ class SCPGStream {
 
       console.log('\n  NODE TIME BABY');
 
-      const nodeCount = this.consumeUInt32().value;
+      const nodeCount = this.consumeUInt32();
       for (let index = 0; index < nodeCount; index++) {
-        const keyId = this.consumeUInt32().value;
+        const keyId = this.consumeUInt32();
         const value = this.consumeKAValue(undefined, stringTable);
 
         console.log(`    ${keyId}`, value);
@@ -398,16 +380,16 @@ class SCPGStream {
       if (!stringTable) throw new Error('No string table provided');
 
       for (let index = 0; index < header.count; index++) {
-        const keyIndex = this.consumeUInt32().value;
+        const keyIndex = this.consumeUInt32();
         const key = stringTable[keyIndex];
-        const valueType = this.consumeUInt8().value;
+        const valueType = this.consumeUInt8();
 
         if (valueType === KAType.STRING) {
-          const valueIndex = this.consumeUInt32().value;
+          const valueIndex = this.consumeUInt32();
           const value = stringTable[valueIndex];
           pairs[key] = value;
         } else {
-          const { value } = this.consumeKAValue(valueType, stringTable);
+          const value = this.consumeKAValue(valueType, stringTable);
           pairs[key] = value;
         }
 
