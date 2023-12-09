@@ -28,6 +28,7 @@ enum KAType {
   UINT8,
   INT16,
   UINT16,
+  UNKNOWN1,
   ARRAY,
 }
 
@@ -136,6 +137,10 @@ class SCPGStream {
     const buffer = this.consume(size);
     return { buffer, value: buffer.toString('ascii') };
   }
+  consumeUtf16(size: number) {
+    const buffer = this.consume(size);
+    return { buffer, value: buffer.toString('utf16le') };
+  }
   consumeInt8() {
     const buffer = this.consume(1);
     return { buffer, value: buffer.readInt8() };
@@ -148,6 +153,10 @@ class SCPGStream {
     const buffer = this.consume(4);
     return { buffer, value: buffer.readInt32LE() };
   }
+  consumeInt64() {
+    const buffer = this.consume(4);
+    return { buffer, value: buffer.readInt32LE() };
+  }
   consumeUInt8() {
     const buffer = this.consume(1);
     return { buffer, value: buffer.readUInt8() };
@@ -157,6 +166,10 @@ class SCPGStream {
     return { buffer, value: buffer.readUInt16LE() };
   }
   consumeUInt32() {
+    const buffer = this.consume(4);
+    return { buffer, value: buffer.readUInt32LE() };
+  }
+  consumeUInt64() {
     const buffer = this.consume(4);
     return { buffer, value: buffer.readUInt32LE() };
   }
@@ -251,12 +264,14 @@ class SCPGStream {
 
     this.skip(8); // other felids that we don't care about for some reason
 
-    console.log(this.consumeKA());
+    return { size, fileType };
   }
   consumeSC2() {
     const header = this.consumeSC2Header();
     const versionTags = this.consumeKA();
     const descriptor = this.consumeSC2Descriptor();
+
+    this.consumeKA();
   }
 
   consumeKAHeader() {
@@ -266,36 +281,69 @@ class SCPGStream {
       count: this.consumeUInt32().value,
     };
   }
-  consumeKAValue() {
-    const type = this.consumeUInt8().value;
-
+  consumeKAValue<Type>(
+    type: KAType = this.consumeUInt8().value,
+    stringTable?: Record<number, string>,
+  ): KAResolvedValue<Type> {
     switch (type) {
       case KAType.INT32:
-        return this.consumeInt32();
+        return this.consumeInt32() as KAResolvedValue<Type>;
 
       case KAType.STRING: {
         const length = this.consumeUInt32();
-        return this.consumeAscii(length.value);
+        return this.consumeAscii(length.value) as KAResolvedValue<Type>;
       }
 
       case KAType.BYTE_ARRAY: {
         const length = this.consumeUInt32();
-        return this.consumeByteArray(length.value);
+        return this.consumeByteArray(length.value) as KAResolvedValue<Type>;
       }
 
+      case KAType.FLOAT:
+        return this.consumeFloat() as KAResolvedValue<Type>;
+
+      case KAType.ARRAY: {
+        const length = this.consumeUInt32();
+        const value = [];
+
+        for (let index = 0; index < length.value; index++) {
+          value.push(this.consumeKAValue(undefined, stringTable));
+        }
+
+        return { value } as KAResolvedValue<Type>;
+      }
+
+      case KAType.KEYED_ARCHIVE: {
+        // the length
+        this.skip(4);
+
+        const value = this.consumeKA<Type>(stringTable);
+
+        return { value } as KAResolvedValue<Type>;
+      }
+
+      case KAType.UINT64:
+        return this.consumeUInt64() as KAResolvedValue<Type>;
+
       default:
-        throw new TypeError(`Unknown KA type: ${type}`);
+        throw new TypeError(
+          `Unknown KA type: ${type} (${KAType[type] ?? 'unknown type'})`,
+        );
     }
   }
-  consumeKAV1Pair() {
-    const name = this.consumeKAValue().value as string;
-    const value = this.consumeKAValue();
+  consumeKAV1Pair(stringTable?: Record<number, string>) {
+    const name = this.consumeKAValue(undefined, stringTable).value as string;
+    const value = this.consumeKAValue(undefined, stringTable).value;
 
     return { name, value };
   }
-  consumeKA<Type>() {
+  consumeKA<Type>(stringTable?: Record<number, string>) {
     const header = this.consumeKAHeader();
     const pairs: Record<string, any> = {};
+
+    console.log(
+      `starting ka version ${header.version} with ${header.count} pairs`,
+    );
 
     if (header.version === 1) {
       for (let index = 0; index < header.count; index++) {
@@ -303,13 +351,51 @@ class SCPGStream {
         pairs[name] = value;
       }
     } else if (header.version === 2) {
+      const strings: string[] = [];
+      const stringTable: Record<number, string> = {};
       for (let index = 0; index < header.count; index++) {
         const length = this.consumeUInt16().value;
-        const string = this.consumeAscii(length);
+        const string = this.consumeAscii(length).value;
 
-        console.log(string.value);
+        strings.push(string);
       }
-    } else throw new SyntaxError(`Unknown KA version: ${header.version}`);
+
+      for (let index = 0; index < header.count; index++) {
+        const id = this.consumeUInt32().value;
+        stringTable[id] = strings[index];
+
+        console.log(`  kav2 string: ${strings[index]}`, id);
+      }
+
+      console.log('\n  NODE TIME BABY');
+
+      const nodeCount = this.consumeUInt32().value;
+      for (let index = 0; index < nodeCount; index++) {
+        const keyId = this.consumeUInt32().value;
+        const value = this.consumeKAValue(undefined, stringTable);
+
+        console.log(`    ${keyId}`, value);
+      }
+    } else if (header.version === 258) {
+      if (!stringTable) throw new Error('No string table provided');
+
+      for (let index = 0; index < header.count; index++) {
+        const keyIndex = this.consumeUInt32().value;
+        const key = stringTable[keyIndex];
+        const valueType = this.consumeUInt8().value;
+
+        if (valueType === KAType.STRING) {
+          const valueIndex = this.consumeUInt32().value;
+          const value = stringTable[valueIndex];
+          pairs[key] = value;
+        } else {
+          const { value } = this.consumeKAValue(valueType);
+          pairs[key] = value;
+        }
+
+        console.log('      ', keyIndex, key, pairs[key]);
+      }
+    } else throw new SyntaxError(`Unhandled KA version: ${header.version}`);
 
     return pairs as Type;
   }
@@ -318,4 +404,3 @@ class SCPGStream {
 const stream = new SCPGStream(await readFile('test.sc2'));
 
 stream.consumeSC2();
-// console.log(stream.consumeSCG());
