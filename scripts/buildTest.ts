@@ -1,3 +1,4 @@
+import { writeFileSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { range } from 'lodash';
 
@@ -264,8 +265,18 @@ class SCPGStream {
     const header = this.consumeSC2Header();
     const versionTags = this.consumeKA();
     const descriptor = this.consumeSC2Descriptor();
+    const data = this.consumeKA();
 
-    this.consumeKA();
+    writeFileSync(
+      'test.json',
+      JSON.stringify(
+        { header, versionTags, descriptor, data },
+        (key, value) => (typeof value === 'bigint' ? value.toString() : value),
+        2,
+      ),
+    );
+
+    // console.log(data);
   }
 
   consumeKAHeader() {
@@ -308,8 +319,7 @@ class SCPGStream {
       }
 
       case KAType.KEYED_ARCHIVE: {
-        // the length
-        this.skip(4);
+        this.skip(4); // the length
 
         const value = this.consumeKA<Type>(stringTable);
 
@@ -324,6 +334,27 @@ class SCPGStream {
 
       case KAType.BOOLEAN:
         return this.consumeBoolean() as Type;
+
+      case KAType.AABBOX3: {
+        const minimum = range(3).map(() => this.consumeFloat());
+        const maximum = range(3).map(() => this.consumeFloat());
+
+        return { minimum, maximum } as Type;
+      }
+
+      case KAType.VECTOR4:
+        return range(4).map(() => this.consumeFloat()) as Type;
+
+      case KAType.VECTOR3:
+        return range(3).map(() => this.consumeFloat()) as Type;
+
+      case KAType.FASTNAME: {
+        if (!stringTable) throw new Error('No string table provided');
+
+        const index = this.consumeUInt32();
+
+        return stringTable[index] as Type;
+      }
 
       default:
         throw new TypeError(
@@ -340,10 +371,6 @@ class SCPGStream {
   consumeKA<Type>(stringTable?: Record<number, string>) {
     const header = this.consumeKAHeader();
     const pairs: Record<string, any> = {};
-
-    console.log(
-      `starting ka version ${header.version} with ${header.count} pairs`,
-    );
 
     if (header.version === 1) {
       for (let index = 0; index < header.count; index++) {
@@ -363,18 +390,15 @@ class SCPGStream {
       for (let index = 0; index < header.count; index++) {
         const id = this.consumeUInt32();
         stringTable[id] = strings[index];
-
-        console.log(`  kav2 string: ${strings[index]}`, id);
       }
-
-      console.log('\n  NODE TIME BABY');
 
       const nodeCount = this.consumeUInt32();
       for (let index = 0; index < nodeCount; index++) {
         const keyId = this.consumeUInt32();
         const value = this.consumeKAValue(undefined, stringTable);
+        const key = stringTable[keyId];
 
-        console.log(`    ${keyId}`, value);
+        pairs[key] = value;
       }
     } else if (header.version === 258) {
       if (!stringTable) throw new Error('No string table provided');
@@ -392,8 +416,6 @@ class SCPGStream {
           const value = this.consumeKAValue(valueType, stringTable);
           pairs[key] = value;
         }
-
-        console.log('      ', keyIndex, key, pairs[key]);
       }
     } else throw new SyntaxError(`Unhandled KA version: ${header.version}`);
 
