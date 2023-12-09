@@ -1,8 +1,10 @@
 import { config } from 'dotenv';
-import { readdir } from 'fs/promises';
+import { existsSync } from 'fs';
+import { mkdir, readdir, rm } from 'fs/promises';
 import { argv } from 'process';
 import { TankType } from '../src/components/Tanks';
 import { NATION_IDS } from '../src/constants/nations';
+import { SCPGStream } from '../src/core/blitz/SCPGStream';
 import { readBase64DVPL } from '../src/core/blitz/readBase64DVPL';
 import { readXMLDVPL } from '../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../src/core/blitz/readYAMLDVPL';
@@ -43,6 +45,7 @@ interface TankParameters {
   resourcesPath: {
     smallIconPath: string;
     bigIconPath: string;
+    blitzModelPath: string;
   };
 }
 
@@ -62,6 +65,7 @@ const DOI = {
   smallIcons: 'Gfx/UI/BattleScreenHUD/SmallTankIcons',
   bigIcons: 'Gfx/UI/BigTankIcons',
   flags: 'Gfx/Lobby/flags',
+  '3d': '3d',
 };
 
 const allTargets = argv.includes('--all-targets');
@@ -268,4 +272,64 @@ if (allTargets || targets?.includes('circleFlags')) {
     ),
     true,
   );
+}
+
+if (allTargets || targets?.includes('tankModels')) {
+  console.log('Building tank models...');
+
+  if (existsSync('dist/assets/models')) {
+    await rm('dist/assets/models', { recursive: true });
+  }
+  await mkdir('dist/assets/models', { recursive: true });
+
+  const changes: FileChange[] = [];
+  const nations = await readdir(`${DATA}/${DOI.vehicleDefinitions}`).then(
+    (nations) => nations.filter((nation) => nation !== 'common'),
+  );
+
+  await Promise.all(
+    [nations[0]].map(async (nation) => {
+      const tanks = await readXMLDVPL<VehicleDefinitionList>(
+        `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
+      );
+
+      for (const tankIndex in tanks) {
+        const tank = tanks[tankIndex];
+        const nationVehicleId = tank.id;
+        const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
+
+        // if (id !== 817) continue;
+        console.log(`Building model ${id} @ ${nation}/${tankIndex}`);
+
+        const parameters = await readYAMLDVPL<TankParameters>(
+          `${DATA}/${DOI.tankParameters}/${nation}/${tankIndex}.yaml.dvpl`,
+        );
+        const sc2Path = parameters.resourcesPath.blitzModelPath;
+        // const scgPath = parameters.resourcesPath.blitzModelPath.replace(
+        //   /\.sc2$/,
+        //   '.scg',
+        // );
+        const sc2Stream = await SCPGStream.fromDVPLFile(
+          `${DATA}/${DOI['3d']}/${sc2Path}.dvpl`,
+        );
+        // const scgStream = await SCPGStream.fromDVPLFile(
+        //   `${DATA}/${DOI['3d']}/${scgPath}.dvpl`,
+        // );
+        const sc2Data = sc2Stream.consumeSC2();
+        // const scgData = scgStream.consumeSCG();
+
+        // writeFile(`dist/assets/models/${id}.json`, JSON.stringify(scgData));
+      }
+    }),
+  );
+
+  // console.log('Committing tank icons...');
+  // await commitMultipleFiles(
+  //   'tresabhi',
+  //   'blitzkrieg-assets',
+  //   'main',
+  //   'tank icons',
+  //   changes,
+  //   true,
+  // );
 }

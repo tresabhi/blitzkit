@@ -1,5 +1,4 @@
 import { crc32 } from 'crc';
-import { readFile } from 'fs/promises';
 import { decodeBlock } from 'lz4';
 
 /**
@@ -7,8 +6,7 @@ import { decodeBlock } from 'lz4';
  *
  * https://github.com/Maddoxkkm/dvpl_converter/
  */
-export async function readDVPL(file: string) {
-  const buffer = await readFile(file);
+export function readDVPL(buffer: Buffer) {
   const footerBuffer = buffer.subarray(buffer.length - 20, buffer.length);
 
   if (

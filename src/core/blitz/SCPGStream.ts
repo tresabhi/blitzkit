@@ -1,6 +1,6 @@
-import { writeFileSync } from 'fs';
-import { readFile } from 'fs/promises';
 import { range } from 'lodash';
+import { readDVPL } from './readDVPL';
+import { readDVPLFile } from './readDVPLFile';
 
 enum KAType {
   NONE,
@@ -55,6 +55,31 @@ enum VertexType {
   CUBETEXCOORD3,
 }
 
+interface SCPGBuffer {
+  type: 'Buffer';
+  data: number[];
+}
+
+interface PolygonGroupRaw {
+  '##name': 'PolygonGroup';
+  '#id': Buffer;
+  cubeTextureCoordCount: number;
+  indexCount: number;
+  indexFormat: 0 | 1;
+  indices: Buffer;
+  packing: 0 | 1;
+  primitiveCount: number;
+  rhi_primitiveType: 1 | 2 | 10;
+  textureCoordCount: number;
+  vertexCount: number;
+  vertexFormat: number;
+  vertices: Buffer;
+}
+
+interface PolygonGroup extends Omit<PolygonGroupRaw, 'indices'> {
+  indices: number[];
+}
+
 const VECTOR_SIZES = [
   [
     // vector 1; basically array of 1 number
@@ -90,27 +115,7 @@ const VECTOR_SIZES = [
   ],
 ];
 
-interface PolygonGroupRaw {
-  '##name': 'PolygonGroup';
-  '#id': Buffer;
-  cubeTextureCoordCount: number;
-  indexCount: number;
-  indexFormat: 0 | 1;
-  indices: Buffer;
-  packing: 0 | 1;
-  primitiveCount: number;
-  rhi_primitiveType: 1 | 2 | 10;
-  textureCoordCount: number;
-  vertexCount: number;
-  vertexFormat: number;
-  vertices: Buffer;
-}
-
-interface PolygonGroup extends Omit<PolygonGroupRaw, 'indices'> {
-  indices: number[];
-}
-
-class SCPGStream {
+export class SCPGStream {
   public index = 0;
 
   constructor(public buffer: Buffer) {}
@@ -165,7 +170,10 @@ class SCPGStream {
     return this.consume(2).readUInt16LE();
   }
   consumeUInt32() {
-    return this.consume(4).readUInt32LE();
+    const buffer = this.consume(4);
+    const value = buffer.readUInt32LE();
+
+    return value;
   }
   consumeUInt64() {
     return this.consume(8).readBigUInt64LE();
@@ -210,6 +218,7 @@ class SCPGStream {
       const verticesStream = new SCPGStream(polygonGroupRaw.vertices);
       const vertexFormat = polygonGroupRaw.vertexFormat
         .toString(2)
+        .padStart(8 * 8, '0')
         .split('')
         .map(parseInt)
         .map((bit, index) => (bit ? index : null))
@@ -247,36 +256,31 @@ class SCPGStream {
   }
 
   consumeSC2Header() {
-    return {
+    const header = {
       name: this.consumeAscii(4),
       version: this.consumeUInt32(),
       nodeCount: this.consumeUInt32(),
     };
+    const version = this.consumeKA();
+    const descriptor = this.consumeSC2Descriptor(header.version);
+
+    return { header, version, descriptor };
   }
-  consumeSC2Descriptor() {
+  consumeSC2Descriptor(version: number) {
     const size = this.consumeUInt32();
     const fileType = this.consumeUInt32();
 
-    this.skip(8); // other felids that we don't care about for some reason
+    // other felids that we don't care about for some reason lol
+    this.skip(size - 4);
 
     return { size, fileType };
   }
   consumeSC2() {
-    const header = this.consumeSC2Header();
-    const versionTags = this.consumeKA();
-    const descriptor = this.consumeSC2Descriptor();
-    const data = this.consumeKA();
+    console.log(this.consumeSC2Header());
 
-    writeFileSync(
-      'test.json',
-      JSON.stringify(
-        { header, versionTags, descriptor, data },
-        (key, value) => (typeof value === 'bigint' ? value.toString() : value),
-        2,
-      ),
-    );
+    console.log(this.read(32).toString('ascii'));
 
-    // console.log(data);
+    return this.consumeKA();
   }
 
   consumeKAHeader() {
@@ -319,11 +323,9 @@ class SCPGStream {
       }
 
       case KAType.KEYED_ARCHIVE: {
-        this.skip(4); // the length
+        this.skip(4); // UInt32 length of the nested archive in bytes
 
-        const value = this.consumeKA<Type>(stringTable);
-
-        return value;
+        return this.consumeKA<Type>(stringTable);
       }
 
       case KAType.UINT64:
@@ -371,6 +373,8 @@ class SCPGStream {
   consumeKA<Type>(stringTable?: Record<number, string>) {
     const header = this.consumeKAHeader();
     const pairs: Record<string, any> = {};
+
+    console.log(header);
 
     if (header.version === 1) {
       for (let index = 0; index < header.count; index++) {
@@ -421,8 +425,12 @@ class SCPGStream {
 
     return pairs as Type;
   }
+
+  static fromDVPL(buffer: Buffer) {
+    return new SCPGStream(readDVPL(buffer));
+  }
+
+  static async fromDVPLFile(file: string) {
+    return new SCPGStream(await readDVPLFile(file));
+  }
 }
-
-const stream = new SCPGStream(await readFile('test.sc2'));
-
-stream.consumeSC2();
