@@ -3,34 +3,34 @@ import { readDVPL } from './readDVPL';
 import { readDVPLFile } from './readDVPLFile';
 
 enum KAType {
-  NONE,
-  BOOLEAN,
-  INT32,
-  FLOAT,
-  STRING,
-  WIDE_STRING,
-  BYTE_ARRAY,
-  UINT32,
-  KEYED_ARCHIVE,
-  INT64,
-  UINT64,
-  VECTOR2,
-  VECTOR3,
-  VECTOR4,
-  MATRIX2,
-  MATRIX3,
-  MATRIX4,
-  COLOR,
-  FASTNAME,
-  AABBOX3,
-  FILEPATH,
-  FLOAT64,
-  INT8,
-  UINT8,
-  INT16,
-  UINT16,
-  UNKNOWN1,
-  ARRAY,
+  NONE = 0,
+  BOOLEAN = 1,
+  INT32 = 2,
+  FLOAT = 3,
+  STRING = 4,
+  WIDE_STRING = 5,
+  BYTE_ARRAY = 6,
+  UINT32 = 7,
+  KEYED_ARCHIVE = 8,
+  INT64 = 9,
+  UINT64 = 10,
+  VECTOR2 = 11,
+  VECTOR3 = 12,
+  VECTOR4 = 13,
+  MATRIX2 = 14,
+  MATRIX3 = 15,
+  MATRIX4 = 16,
+  COLOR = 17,
+  FASTNAME = 18,
+  AABBOX3 = 19,
+  FILEPATH = 20,
+  FLOAT64 = 21,
+  INT8 = 22,
+  UINT8 = 23,
+  INT16 = 24,
+  UINT16 = 25,
+  ARRAY = 27,
+  TRANSFORM = 29,
 }
 
 enum VertexType {
@@ -186,6 +186,35 @@ export class SCPGStream {
     return this.consume(1).readUInt8() === 1;
   }
 
+  consumeVector2() {
+    return [this.consumeFloat(), this.consumeFloat()];
+  }
+  consumeVector3() {
+    return [...this.consumeVector2(), this.consumeFloat()];
+  }
+  consumeVector4() {
+    return [...this.consumeVector3(), this.consumeFloat()];
+  }
+
+  consumeMatrix2() {
+    return [this.consumeVector2(), this.consumeVector2()];
+  }
+  consumeMatrix3() {
+    return [
+      this.consumeVector3(),
+      this.consumeVector3(),
+      this.consumeVector3(),
+    ];
+  }
+  consumeMatrix4() {
+    return [
+      this.consumeVector4(),
+      this.consumeVector4(),
+      this.consumeVector4(),
+      this.consumeVector4(),
+    ];
+  }
+
   consumeSCGHeader() {
     return {
       name: this.consumeAscii(4),
@@ -199,7 +228,7 @@ export class SCPGStream {
     const polygonGroupsRaw: PolygonGroupRaw[] = [];
 
     for (let index = 0; index < header.nodeCount; index++) {
-      const polygonGroupRaw = this.consumeKA<PolygonGroupRaw>();
+      const polygonGroupRaw = this.consumeKA() as PolygonGroupRaw;
       polygonGroupsRaw.push(polygonGroupRaw);
     }
 
@@ -276,9 +305,8 @@ export class SCPGStream {
     return { size, fileType };
   }
   consumeSC2() {
-    console.log(this.consumeSC2Header());
-
-    console.log(this.read(32).toString('ascii'));
+    // TODO: HANDLE MORE THAN 1 NODE
+    this.consumeSC2Header();
 
     return this.consumeKA();
   }
@@ -290,26 +318,27 @@ export class SCPGStream {
       count: this.consumeUInt32(),
     };
   }
-  consumeKAValue<Type>(
+  // TODO: change return type
+  consumeKAValue(
     type: KAType = this.consumeUInt8(),
     stringTable?: Record<number, string>,
-  ): Type {
+  ): unknown {
     switch (type) {
       case KAType.INT32:
-        return this.consumeInt32() as Type;
+        return this.consumeInt32();
 
-      case KAType.STRING: {
+      case (KAType.STRING, KAType.FILEPATH): {
         const length = this.consumeUInt32();
-        return this.consumeAscii(length) as Type;
+        return this.consumeAscii(length);
       }
 
       case KAType.BYTE_ARRAY: {
         const length = this.consumeUInt32();
-        return this.consumeByteArray(length) as Type;
+        return this.consumeByteArray(length);
       }
 
       case KAType.FLOAT:
-        return this.consumeFloat() as Type;
+        return this.consumeFloat();
 
       case KAType.ARRAY: {
         const length = this.consumeUInt32();
@@ -319,53 +348,86 @@ export class SCPGStream {
           value.push(this.consumeKAValue(undefined, stringTable));
         }
 
-        return value as Type;
+        return value;
       }
 
       case KAType.KEYED_ARCHIVE: {
         this.skip(4); // UInt32 length of the nested archive in bytes
 
-        return this.consumeKA<Type>(stringTable);
+        return this.consumeKA(stringTable);
       }
 
-      case KAType.UINT64:
-        return this.consumeUInt64() as Type;
-
+      case KAType.INT8:
+        return this.consumeInt8();
+      case KAType.INT16:
+        return this.consumeInt16();
+      case KAType.INT32:
+        return this.consumeInt32();
+      case KAType.INT64:
+        return this.consumeInt64();
+      case KAType.UINT8:
+        return this.consumeUInt8();
+      case KAType.UINT16:
+        return this.consumeUInt16();
       case KAType.UINT32:
-        return this.consumeUInt32() as Type;
+        return this.consumeUInt32();
+      case KAType.UINT64:
+        return this.consumeUInt64();
 
       case KAType.BOOLEAN:
-        return this.consumeBoolean() as Type;
+        return this.consumeBoolean();
 
       case KAType.AABBOX3: {
-        const minimum = range(3).map(() => this.consumeFloat());
-        const maximum = range(3).map(() => this.consumeFloat());
+        const minimum = this.consumeVector3();
+        const maximum = this.consumeVector3();
 
-        return { minimum, maximum } as Type;
+        return { minimum, maximum };
       }
 
-      case KAType.VECTOR4:
-        return range(4).map(() => this.consumeFloat()) as Type;
-
+      case KAType.VECTOR2:
+        return this.consumeVector2();
       case KAType.VECTOR3:
-        return range(3).map(() => this.consumeFloat()) as Type;
+        return this.consumeVector3();
+      case KAType.VECTOR4:
+        return this.consumeVector4();
+
+      case KAType.MATRIX2:
+        return this.consumeMatrix2();
+      case KAType.MATRIX3:
+        return this.consumeMatrix3();
+      case KAType.MATRIX4:
+        return this.consumeMatrix4();
 
       case KAType.FASTNAME: {
         if (!stringTable) throw new Error('No string table provided');
 
         const index = this.consumeUInt32();
 
-        return stringTable[index] as Type;
+        return stringTable[index];
       }
+
+      case KAType.TRANSFORM: {
+        if (!stringTable) throw new Error('No string table provided');
+
+        const position = this.consumeVector3();
+        const scale = this.consumeVector3();
+        const rotation = this.consumeVector3();
+        const UNCONFIRMED_inset = this.consumeFloat();
+
+        return { position, scale, rotation, UNCONFIRMED_inset };
+      }
+
+      case KAType.NONE:
+        return undefined;
 
       default:
         throw new TypeError(
-          `Unknown KA type: ${type} (${KAType[type] ?? 'unknown type'})`,
+          `Unhandled KA type: ${type} (${KAType[type] ?? 'unknown type'})`,
         );
     }
   }
   consumeKAV1Pair(stringTable?: Record<number, string>) {
-    const name = this.consumeKAValue<string>(undefined, stringTable);
+    const name = this.consumeKAValue(undefined, stringTable) as string;
     const value = this.consumeKAValue(undefined, stringTable);
 
     return { name, value };
@@ -373,8 +435,6 @@ export class SCPGStream {
   consumeKA<Type>(stringTable?: Record<number, string>) {
     const header = this.consumeKAHeader();
     const pairs: Record<string, any> = {};
-
-    console.log(header);
 
     if (header.version === 1) {
       for (let index = 0; index < header.count; index++) {
@@ -423,7 +483,7 @@ export class SCPGStream {
       }
     } else throw new SyntaxError(`Unhandled KA version: ${header.version}`);
 
-    return pairs as Type;
+    return pairs;
   }
 
   static fromDVPL(buffer: Buffer) {

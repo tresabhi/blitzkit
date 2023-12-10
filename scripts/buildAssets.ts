@@ -318,7 +318,12 @@ if (allTargets || targets?.includes('tankModels')) {
         const sc2Data = sc2Stream.consumeSC2();
         // const scgData = scgStream.consumeSCG();
 
-        // writeFile(`dist/assets/models/${id}.json`, JSON.stringify(scgData));
+        // writeFile(
+        //   `test.json`,
+        //   JSON.stringify(sc2Data, (key, value) =>
+        //     typeof value === 'bigint' ? value.toString() : value,
+        //   ),
+        // );
       }
     }),
   );
