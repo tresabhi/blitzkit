@@ -1,4 +1,4 @@
-import { range } from 'lodash';
+import { times } from 'lodash';
 import { readDVPL } from './readDVPL';
 import { readDVPLFile } from './readDVPLFile';
 
@@ -251,7 +251,7 @@ export class SCPGStream {
             if (types.includes(type)) {
               vertices.push({
                 type,
-                value: range(size + 1).map(() => verticesStream.consumeFloat()),
+                value: times(size + 1).map(() => verticesStream.consumeFloat()),
               });
 
               return true;
@@ -395,8 +395,6 @@ export class SCPGStream {
       }
 
       case KAType.UNCONFIRMED_TRANSFORM: {
-        if (!stringTable) throw new Error('No string table provided');
-
         const position = this.consumeVector3();
         const scale = this.consumeVector3();
         const rotation = this.consumeVector3();
