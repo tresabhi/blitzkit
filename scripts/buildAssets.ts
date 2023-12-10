@@ -315,7 +315,7 @@ if (allTargets || targets?.includes('tankModels')) {
         // const scgStream = await SCPGStream.fromDVPLFile(
         //   `${DATA}/${DOI['3d']}/${scgPath}.dvpl`,
         // );
-        // const sc2Data = sc2Stream.consumeSC2();
+        const sc2Data = sc2Stream.consumeSC2();
         // const scgData = scgStream.consumeSCG();
 
         // writeFile(
@@ -324,14 +324,6 @@ if (allTargets || targets?.includes('tankModels')) {
         //     typeof value === 'bigint' ? value.toString() : value,
         //   ),
         // );
-
-        try {
-          sc2Stream.consumeSC2();
-        } catch (error) {
-          if (!(error as Error).message.startsWith('Unhandled KA version')) {
-            throw error;
-          }
-        }
       }
     }),
   );

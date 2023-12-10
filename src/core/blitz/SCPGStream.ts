@@ -309,20 +309,11 @@ export class SCPGStream {
     return this.consumeKA();
   }
 
-  consumeKAHeader() {
-    return {
-      name: this.consumeAscii(2),
-      version: this.consumeUInt16(),
-      count: this.consumeUInt32(),
-    };
-  }
   // TODO: change return type
   consumeKAValue(
     type: KAType = this.consumeUInt8(),
     stringTable?: Record<number, string>,
   ): unknown {
-    console.log(KAType[type]);
-
     switch (type) {
       case KAType.NONE:
         return undefined;
@@ -439,30 +430,36 @@ export class SCPGStream {
     return { name, value };
   }
   consumeKA(stringTable?: Record<number, string>) {
-    const header = this.consumeKAHeader();
+    this.consumeAscii(2); // "KA"
+    const version = this.consumeUInt16();
     const pairs: Record<string, any> = {};
 
-    if (header.version === 1) {
-      for (let index = 0; index < header.count; index++) {
+    if (version === 0x0001) {
+      const count = this.consumeUInt32();
+
+      for (let index = 0; index < count; index++) {
         const { name, value } = this.consumeKAV1Pair();
         pairs[name] = value;
       }
-    } else if (header.version === 2) {
+    } else if (version === 0x0002) {
+      const count = this.consumeUInt32();
       const strings: string[] = [];
       const stringTable: Record<number, string> = {};
-      for (let index = 0; index < header.count; index++) {
+
+      for (let index = 0; index < count; index++) {
         const length = this.consumeUInt16();
         const string = this.consumeAscii(length);
 
         strings.push(string);
       }
 
-      for (let index = 0; index < header.count; index++) {
+      for (let index = 0; index < count; index++) {
         const id = this.consumeUInt32();
         stringTable[id] = strings[index];
       }
 
       const nodeCount = this.consumeUInt32();
+
       for (let index = 0; index < nodeCount; index++) {
         const keyId = this.consumeUInt32();
         const value = this.consumeKAValue(undefined, stringTable);
@@ -470,10 +467,12 @@ export class SCPGStream {
 
         pairs[key] = value;
       }
-    } else if (header.version === 258) {
+    } else if (version === 0x0102) {
       if (!stringTable) throw new Error('No string table provided');
 
-      for (let index = 0; index < header.count; index++) {
+      const count = this.consumeUInt32();
+
+      for (let index = 0; index < count; index++) {
         const keyIndex = this.consumeUInt32();
         const key = stringTable[keyIndex];
         const valueType = this.consumeUInt8();
@@ -487,7 +486,10 @@ export class SCPGStream {
           pairs[key] = value;
         }
       }
-    } else throw new RangeError(`Unhandled KA version: ${header.version}`);
+    } else if (version === 0xff02) {
+      // same as 0x0102 but empty and with no count
+      return {};
+    } else throw new RangeError(`Unhandled KA version: ${version}`);
 
     return pairs;
   }
