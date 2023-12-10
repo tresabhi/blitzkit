@@ -14,7 +14,7 @@ Go to [application directory for Blitzkrieg](https://discord.com/application-dir
 
 ### https://blitz-krieg.vercel.app/
 
-![Blitzkrieg website](https://i.imgur.com/QOXUP63.png)
+![Blitzkrieg website](https://i.imgur.com/eRIZe5P.png)
 
 ## Visit the documentation website
 
