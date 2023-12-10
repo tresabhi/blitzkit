@@ -30,7 +30,7 @@ enum KAType {
   INT16 = 24,
   UINT16 = 25,
   ARRAY = 27,
-  TRANSFORM = 29,
+  CUSTOMIZATION_TRANSFORM = 29,
 }
 
 enum VertexType {
@@ -305,9 +305,7 @@ export class SCPGStream {
     return { size, fileType };
   }
   consumeSC2() {
-    // TODO: HANDLE MORE THAN 1 NODE
     this.consumeSC2Header();
-
     return this.consumeKA();
   }
 
@@ -323,11 +321,14 @@ export class SCPGStream {
     type: KAType = this.consumeUInt8(),
     stringTable?: Record<number, string>,
   ): unknown {
-    switch (type) {
-      case KAType.INT32:
-        return this.consumeInt32();
+    console.log(KAType[type]);
 
-      case (KAType.STRING, KAType.FILEPATH): {
+    switch (type) {
+      case KAType.NONE:
+        return undefined;
+
+      case KAType.FILEPATH:
+      case KAType.STRING: {
         const length = this.consumeUInt32();
         return this.consumeAscii(length);
       }
@@ -377,13 +378,6 @@ export class SCPGStream {
       case KAType.BOOLEAN:
         return this.consumeBoolean();
 
-      case KAType.AABBOX3: {
-        const minimum = this.consumeVector3();
-        const maximum = this.consumeVector3();
-
-        return { minimum, maximum };
-      }
-
       case KAType.VECTOR2:
         return this.consumeVector2();
       case KAType.VECTOR3:
@@ -391,12 +385,22 @@ export class SCPGStream {
       case KAType.VECTOR4:
         return this.consumeVector4();
 
+      case KAType.COLOR:
+        return this.consumeVector4(); // as RGBA
+
       case KAType.MATRIX2:
         return this.consumeMatrix2();
       case KAType.MATRIX3:
         return this.consumeMatrix3();
       case KAType.MATRIX4:
         return this.consumeMatrix4();
+
+      case KAType.AABBOX3: {
+        const minimum = this.consumeVector3();
+        const maximum = this.consumeVector3();
+
+        return { minimum, maximum };
+      }
 
       case KAType.FASTNAME: {
         if (!stringTable) throw new Error('No string table provided');
@@ -406,7 +410,7 @@ export class SCPGStream {
         return stringTable[index];
       }
 
-      case KAType.TRANSFORM: {
+      case KAType.CUSTOMIZATION_TRANSFORM: {
         if (!stringTable) throw new Error('No string table provided');
 
         const position = this.consumeVector3();
@@ -416,9 +420,6 @@ export class SCPGStream {
 
         return { position, scale, rotation, UNCONFIRMED_inset };
       }
-
-      case KAType.NONE:
-        return undefined;
 
       default:
         throw new TypeError(
@@ -432,7 +433,7 @@ export class SCPGStream {
 
     return { name, value };
   }
-  consumeKA<Type>(stringTable?: Record<number, string>) {
+  consumeKA(stringTable?: Record<number, string>) {
     const header = this.consumeKAHeader();
     const pairs: Record<string, any> = {};
 
@@ -481,7 +482,7 @@ export class SCPGStream {
           pairs[key] = value;
         }
       }
-    } else throw new SyntaxError(`Unhandled KA version: ${header.version}`);
+    } else throw new RangeError(`Unhandled KA version: ${header.version}`);
 
     return pairs;
   }

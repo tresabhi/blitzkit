@@ -288,7 +288,7 @@ if (allTargets || targets?.includes('tankModels')) {
   );
 
   await Promise.all(
-    [nations[0]].map(async (nation) => {
+    nations.map(async (nation) => {
       const tanks = await readXMLDVPL<VehicleDefinitionList>(
         `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
       );
@@ -299,7 +299,7 @@ if (allTargets || targets?.includes('tankModels')) {
         const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
 
         // if (id !== 817) continue;
-        console.log(`Building model ${id} @ ${nation}/${tankIndex}`);
+        // console.log(`Building model ${id} @ ${nation}/${tankIndex}`);
 
         const parameters = await readYAMLDVPL<TankParameters>(
           `${DATA}/${DOI.tankParameters}/${nation}/${tankIndex}.yaml.dvpl`,
@@ -315,7 +315,7 @@ if (allTargets || targets?.includes('tankModels')) {
         // const scgStream = await SCPGStream.fromDVPLFile(
         //   `${DATA}/${DOI['3d']}/${scgPath}.dvpl`,
         // );
-        const sc2Data = sc2Stream.consumeSC2();
+        // const sc2Data = sc2Stream.consumeSC2();
         // const scgData = scgStream.consumeSCG();
 
         // writeFile(
@@ -324,6 +324,14 @@ if (allTargets || targets?.includes('tankModels')) {
         //     typeof value === 'bigint' ? value.toString() : value,
         //   ),
         // );
+
+        try {
+          sc2Stream.consumeSC2();
+        } catch (error) {
+          if (!(error as Error).message.startsWith('Unhandled KA version')) {
+            throw error;
+          }
+        }
       }
     }),
   );
