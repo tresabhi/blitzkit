@@ -30,7 +30,7 @@ enum KAType {
   INT16 = 24,
   UINT16 = 25,
   ARRAY = 27,
-  CUSTOMIZATION_TRANSFORM = 29,
+  UNCONFIRMED_TRANSFORM = 29,
 }
 
 enum VertexType {
@@ -410,15 +410,20 @@ export class SCPGStream {
         return stringTable[index];
       }
 
-      case KAType.CUSTOMIZATION_TRANSFORM: {
+      case KAType.UNCONFIRMED_TRANSFORM: {
         if (!stringTable) throw new Error('No string table provided');
 
         const position = this.consumeVector3();
         const scale = this.consumeVector3();
         const rotation = this.consumeVector3();
-        const UNCONFIRMED_inset = this.consumeFloat();
+        const UNCONFIRMED_scalar = this.consumeFloat();
 
-        return { position, scale, rotation, UNCONFIRMED_inset };
+        return {
+          position,
+          scale,
+          rotation,
+          UNCONFIRMED_scalar,
+        };
       }
 
       default:
