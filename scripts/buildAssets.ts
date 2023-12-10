@@ -314,8 +314,8 @@ if (allTargets || targets?.includes('tankModels')) {
         const scgStream = await SCPGStream.fromDVPLFile(
           `${DATA}/${DOI['3d']}/${scgPath}.dvpl`,
         );
-        const sc2Data = sc2Stream.consumeSC2();
-        const scgData = scgStream.consumeSCG();
+        const sc2 = sc2Stream.consumeSC2();
+        const scg = scgStream.consumeSCG();
       }
     }),
   );

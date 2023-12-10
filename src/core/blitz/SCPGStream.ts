@@ -81,14 +81,8 @@ interface PolygonGroup extends Omit<PolygonGroupRaw, 'indices'> {
 }
 
 const VECTOR_SIZES = [
+  [VertexType.COLOR, VertexType.FLEXIBILITY, VertexType.HARD_JOINTINDEX],
   [
-    // vector 1; basically array of 1 number
-    VertexType.COLOR,
-    VertexType.FLEXIBILITY,
-    VertexType.HARD_JOINTINDEX,
-  ],
-  [
-    // vector 2; 2d vector
     VertexType.TEXCOORD0,
     VertexType.TEXCOORD1,
     VertexType.TEXCOORD2,
@@ -96,10 +90,9 @@ const VECTOR_SIZES = [
     VertexType.ANGLE_SIN_COS,
   ],
   [
-    // vector 3; 3d vector
     VertexType.VERTEX,
     VertexType.NORMAL,
-    // VertexType.TANGENT, MOVED TO 4
+    // VertexType.TANGENT, // moved to 4
     VertexType.BINORMAL,
     VertexType.CUBETEXCOORD0,
     VertexType.CUBETEXCOORD1,
@@ -107,17 +100,15 @@ const VECTOR_SIZES = [
     VertexType.CUBETEXCOORD3,
   ],
   [
-    // vector 4; 4d vector or something more complex
-    VertexType.TANGENT, // UNCONFIRMED
     VertexType.PIVOT4,
     VertexType.JOINTINDEX,
     VertexType.JOINTWEIGHT,
+    VertexType.TANGENT, // moved from 3
   ],
 ];
 
 export class SCPGStream {
   public index = 0;
-
   constructor(public buffer: Buffer) {}
 
   skip(size: number) {
