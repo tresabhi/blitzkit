@@ -123,6 +123,9 @@ export class SCPGStream {
   skip(size: number) {
     this.index += size;
   }
+  back(size: number) {
+    this.skip(-size);
+  }
   read(size: number) {
     return this.buffer.subarray(this.index, this.index + size);
   }
@@ -146,9 +149,6 @@ export class SCPGStream {
 
   consumeAscii(size: number) {
     return this.consume(size).toString('ascii');
-  }
-  consumeUtf16(size: number) {
-    return this.consume(size).toString('utf16le');
   }
 
   consumeInt8() {
@@ -290,12 +290,12 @@ export class SCPGStream {
       version: this.consumeUInt32(),
       nodeCount: this.consumeUInt32(),
     };
-    const version = this.consumeKA();
-    const descriptor = this.consumeSC2Descriptor(header.version);
+    const versionTags = this.consumeKA();
+    const descriptor = this.consumeSC2Descriptor();
 
-    return { header, version, descriptor };
+    return { header, versionTags, descriptor };
   }
-  consumeSC2Descriptor(version: number) {
+  consumeSC2Descriptor() {
     const size = this.consumeUInt32();
     const fileType = this.consumeUInt32();
 
@@ -309,7 +309,6 @@ export class SCPGStream {
     return this.consumeKA();
   }
 
-  // TODO: change return type
   consumeKAValue(
     type: KAType = this.consumeUInt8(),
     stringTable?: Record<number, string>,
@@ -320,8 +319,13 @@ export class SCPGStream {
 
       case KAType.FILEPATH:
       case KAType.STRING: {
-        const length = this.consumeUInt32();
-        return this.consumeAscii(length);
+        if (stringTable) {
+          const id = this.consumeUInt32();
+          return stringTable[id];
+        } else {
+          const length = this.consumeUInt32();
+          return this.consumeAscii(length);
+        }
       }
 
       case KAType.BYTE_ARRAY: {
@@ -395,9 +399,7 @@ export class SCPGStream {
 
       case KAType.FASTNAME: {
         if (!stringTable) throw new Error('No string table provided');
-
         const index = this.consumeUInt32();
-
         return stringTable[index];
       }
 
@@ -423,14 +425,8 @@ export class SCPGStream {
         );
     }
   }
-  consumeKAV1Pair(stringTable?: Record<number, string>) {
-    const name = this.consumeKAValue(undefined, stringTable) as string;
-    const value = this.consumeKAValue(undefined, stringTable);
-
-    return { name, value };
-  }
   consumeKA(stringTable?: Record<number, string>) {
-    this.consumeAscii(2); // "KA"
+    this.skip(2); // "KA"
     const version = this.consumeUInt16();
     const pairs: Record<string, any> = {};
 
@@ -438,7 +434,9 @@ export class SCPGStream {
       const count = this.consumeUInt32();
 
       for (let index = 0; index < count; index++) {
-        const { name, value } = this.consumeKAV1Pair();
+        const name = this.consumeKAValue(undefined, stringTable) as string;
+        const value = this.consumeKAValue(undefined, stringTable);
+
         pairs[name] = value;
       }
     } else if (version === 0x0002) {

@@ -298,43 +298,25 @@ if (allTargets || targets?.includes('tankModels')) {
         const nationVehicleId = tank.id;
         const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
 
-        // if (id !== 817) continue;
-        // console.log(`Building model ${id} @ ${nation}/${tankIndex}`);
+        console.log(`Building model ${id} @ ${nation}/${tankIndex}`);
 
         const parameters = await readYAMLDVPL<TankParameters>(
           `${DATA}/${DOI.tankParameters}/${nation}/${tankIndex}.yaml.dvpl`,
         );
         const sc2Path = parameters.resourcesPath.blitzModelPath;
-        // const scgPath = parameters.resourcesPath.blitzModelPath.replace(
-        //   /\.sc2$/,
-        //   '.scg',
-        // );
+        const scgPath = parameters.resourcesPath.blitzModelPath.replace(
+          /\.sc2$/,
+          '.scg',
+        );
         const sc2Stream = await SCPGStream.fromDVPLFile(
           `${DATA}/${DOI['3d']}/${sc2Path}.dvpl`,
         );
-        // const scgStream = await SCPGStream.fromDVPLFile(
-        //   `${DATA}/${DOI['3d']}/${scgPath}.dvpl`,
-        // );
+        const scgStream = await SCPGStream.fromDVPLFile(
+          `${DATA}/${DOI['3d']}/${scgPath}.dvpl`,
+        );
         const sc2Data = sc2Stream.consumeSC2();
-        // const scgData = scgStream.consumeSCG();
-
-        // writeFile(
-        //   `test.json`,
-        //   JSON.stringify(sc2Data, (key, value) =>
-        //     typeof value === 'bigint' ? value.toString() : value,
-        //   ),
-        // );
+        const scgData = scgStream.consumeSCG();
       }
     }),
   );
-
-  // console.log('Committing tank icons...');
-  // await commitMultipleFiles(
-  //   'tresabhi',
-  //   'blitzkrieg-assets',
-  //   'main',
-  //   'tank icons',
-  //   changes,
-  //   true,
-  // );
 }
