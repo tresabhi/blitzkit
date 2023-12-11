@@ -55,11 +55,6 @@ enum VertexType {
   CUBETEXCOORD3,
 }
 
-interface SCPGBuffer {
-  type: 'Buffer';
-  data: number[];
-}
-
 interface PolygonGroupRaw {
   '##name': 'PolygonGroup';
   '#id': Buffer;
@@ -76,10 +71,6 @@ interface PolygonGroupRaw {
   vertices: Buffer;
 }
 
-interface PolygonGroup extends Omit<PolygonGroupRaw, 'indices'> {
-  indices: number[];
-}
-
 const VECTOR_SIZES = [
   [VertexType.COLOR, VertexType.FLEXIBILITY, VertexType.HARD_JOINTINDEX],
   [
@@ -92,7 +83,7 @@ const VECTOR_SIZES = [
   [
     VertexType.VERTEX,
     VertexType.NORMAL,
-    // VertexType.TANGENT, // moved to 4
+    VertexType.TANGENT,
     VertexType.BINORMAL,
     VertexType.CUBETEXCOORD0,
     VertexType.CUBETEXCOORD1,
@@ -103,7 +94,7 @@ const VECTOR_SIZES = [
     VertexType.PIVOT4,
     VertexType.JOINTINDEX,
     VertexType.JOINTWEIGHT,
-    VertexType.TANGENT, // moved from 3
+    // VertexType.TANGENT,
   ],
 ];
 
@@ -122,7 +113,7 @@ export class SCPGStream {
   }
   consume(size: number) {
     const subarray = this.read(size);
-    this.index += size;
+    this.skip(size);
 
     return subarray;
   }
@@ -161,10 +152,7 @@ export class SCPGStream {
     return this.consume(2).readUInt16LE();
   }
   consumeUInt32() {
-    const buffer = this.consume(4);
-    const value = buffer.readUInt32LE();
-
-    return value;
+    return this.consume(4).readUInt32LE();
   }
   consumeUInt64() {
     return this.consume(8).readBigUInt64LE();
@@ -177,33 +165,30 @@ export class SCPGStream {
     return this.consume(1).readUInt8() === 1;
   }
 
+  consumeVectorN(size: number) {
+    return times(size, () => this.consumeFloat());
+  }
   consumeVector2() {
-    return [this.consumeFloat(), this.consumeFloat()];
+    return this.consumeVectorN(2);
   }
   consumeVector3() {
-    return [...this.consumeVector2(), this.consumeFloat()];
+    return this.consumeVectorN(3);
   }
   consumeVector4() {
-    return [...this.consumeVector3(), this.consumeFloat()];
+    return this.consumeVectorN(4);
   }
 
+  consumeMatrixN(size: number) {
+    return times(size, () => this.consumeVectorN(size));
+  }
   consumeMatrix2() {
-    return [this.consumeVector2(), this.consumeVector2()];
+    return this.consumeMatrixN(2);
   }
   consumeMatrix3() {
-    return [
-      this.consumeVector3(),
-      this.consumeVector3(),
-      this.consumeVector3(),
-    ];
+    return this.consumeMatrixN(3);
   }
   consumeMatrix4() {
-    return [
-      this.consumeVector4(),
-      this.consumeVector4(),
-      this.consumeVector4(),
-      this.consumeVector4(),
-    ];
+    return this.consumeMatrixN(4);
   }
 
   consumeSCGHeader() {
@@ -229,30 +214,29 @@ export class SCPGStream {
 
       for (let index = 0; index < polygonGroupRaw.indexCount; index++) {
         indices.push(
-          polygonGroupRaw.indexFormat
-            ? indicesStream.consumeUInt32()
-            : indicesStream.consumeUInt16(),
+          polygonGroupRaw.indexFormat === 0
+            ? indicesStream.consumeUInt16()
+            : indicesStream.consumeUInt32(),
         );
       }
 
       const verticesStream = new SCPGStream(polygonGroupRaw.vertices);
-      const vertexFormat = polygonGroupRaw.vertexFormat
-        .toString(2)
-        .padStart(8 * 8, '0')
-        .split('')
-        .map(parseInt)
-        .map((bit, index) => (bit ? index : null))
+      const vertexFormat = [
+        ...polygonGroupRaw.vertexFormat.toString(2).padEnd(64, '0'),
+      ]
+        .map((bit, index) => (bit === '1' ? index : null))
         .filter((index) => index !== null) as VertexType[];
-      const vertices: { type: VertexType; value: number[] }[] = [];
+      const vertices: Partial<Record<VertexType, number[]>>[] = [];
 
       for (let index = 0; index < polygonGroupRaw.vertexCount; index++) {
         vertexFormat.forEach((type) => {
           const resolved = VECTOR_SIZES.some((types, size) => {
             if (types.includes(type)) {
-              vertices.push({
-                type,
-                value: times(size + 1).map(() => verticesStream.consumeFloat()),
-              });
+              if (!(index in vertices)) vertices[index] = {};
+
+              vertices[index][type] = times(size + 1).map(() =>
+                verticesStream.consumeFloat(),
+              );
 
               return true;
             }
@@ -267,12 +251,7 @@ export class SCPGStream {
       return { vertices, indices };
     });
 
-    return polygonGroups.map((group) => ({
-      vertices: group.vertices
-        .filter(({ type }) => type === VertexType.VERTEX)
-        .map(({ value }) => value),
-      indices: group.indices,
-    }));
+    return polygonGroups;
   }
 
   consumeSC2Header() {
