@@ -2,27 +2,31 @@ import { deburr } from 'lodash';
 import { TankType, TreeTypeString } from '../../../components/Tanks';
 import { asset } from '../asset';
 
-export interface TankDefinition {
+export interface BlitzkriegTankDefinition {
   id: number;
   nation: string;
   name: string;
-  name_short?: string;
   tree_type: TreeTypeString;
   tier: Tier;
   type: TankType;
   testing?: boolean;
+  turrets: number[];
 }
-
-export type TankDefinitions = Record<number, TankDefinition>;
+export type BlitzkriegTankDefinitions = Record<
+  number,
+  BlitzkriegTankDefinition
+>;
 
 export const tankDefinitions = fetch(asset('definitions/tanks.json'), {
   cache: 'no-cache',
-}).then(async (response) => response.json() as Promise<TankDefinitions>);
+}).then(
+  async (response) => response.json() as Promise<BlitzkriegTankDefinitions>,
+);
 
-const entries = new Promise<TankDefinition[]>(async (resolve) => {
+const entries = new Promise<BlitzkriegTankDefinition[]>(async (resolve) => {
   resolve(Object.entries(await tankDefinitions).map(([, entry]) => entry));
 });
-export const tanksDefinitionsArray = new Promise<TankDefinition[]>(
+export const tanksDefinitionsArray = new Promise<BlitzkriegTankDefinition[]>(
   async (resolve) => {
     resolve((await entries).map((entry) => entry));
   },

@@ -5,5 +5,5 @@ export async function readXMLDVPL<Type>(file: string) {
   const parser = new XMLParser();
   const xml = await readStringDVPL(file);
 
-  return parser.parse(xml).root as Type;
+  return parser.parse(xml) as Type;
 }

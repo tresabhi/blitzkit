@@ -1,12 +1,12 @@
 import { CaretLeftIcon, CaretRightIcon } from '@radix-ui/react-icons';
 import { Button, Flex, TextField } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
-import { TankDefinition } from '../../../../core/blitzkrieg/definitions/tanks';
+import { BlitzkriegTankDefinition } from '../../../../core/blitzkrieg/definitions/tanks';
 
 interface PageTurnerProps {
   page: number;
   setPage: (page: number) => void;
-  searchedList: TankDefinition[];
+  searchedList: BlitzkriegTankDefinition[];
   tanksPerPage: number;
 }
 

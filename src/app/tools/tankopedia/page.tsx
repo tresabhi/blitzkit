@@ -20,11 +20,11 @@ import { Suspense, use, useEffect, useMemo, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
 import { asset } from '../../../core/blitzkrieg/asset';
 import {
+  BlitzkriegTankDefinition,
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
   TIER_ROMAN_NUMERALS,
-  TankDefinition,
   tanksDefinitionsArray,
 } from '../../../core/blitzkrieg/definitions/tanks';
 import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
@@ -125,7 +125,7 @@ export default function Page() {
                           'name',
                           'name_short',
                           'id',
-                        ] satisfies (keyof TankDefinition)[],
+                        ] satisfies (keyof BlitzkriegTankDefinition)[],
                       }).map(({ obj }) => obj),
                     );
                   }

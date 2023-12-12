@@ -8,15 +8,20 @@ import { SCPGStream } from '../src/core/blitz/SCPGStream';
 import { readBase64DVPL } from '../src/core/blitz/readBase64DVPL';
 import { readXMLDVPL } from '../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../src/core/blitz/readYAMLDVPL';
+import { toUniqueId } from '../src/core/blitz/toUniqueId';
 import commitMultipleFiles, {
   FileChange,
 } from '../src/core/blitzkrieg/commitMultipleFiles';
+import { BlitzkriegGunDefinitions } from '../src/core/blitzkrieg/definitions/guns';
 import {
-  TankDefinitions,
+  BlitzkriegTankDefinitions,
   Tier,
 } from '../src/core/blitzkrieg/definitions/tanks';
+import { BlitzkriegTurretDefinitions } from '../src/core/blitzkrieg/definitions/turrets';
 
 config();
+
+// WARNING! MOST OF THESE TYPES ARE NOT EXHAUSTIVE!
 
 interface VehicleDefinitionList {
   [key: string]: {
@@ -34,13 +39,41 @@ interface VehicleDefinitionList {
     configurationModes: string;
   };
 }
+interface TurretDefinitionsList {
+  nextAvailableId: number;
+  ids: Record<string, number>;
+}
+interface GunDefinitionsList {
+  nextAvailableId: number;
+  ids: Record<string, number>;
+  shared: {
+    [key: string]: {
+      userString: string;
+      tags: string;
+      level: number;
+      pitchLimits: string;
+    };
+  };
+}
+interface VehicleDefinitions {
+  turrets0: {
+    [key: string]: {
+      userString: number;
+      level: number;
+      yawLimits: string | string[];
+      guns: {
+        [key: string]: {
+          maxAmmo: number;
+          pitchLimits?: string | string[];
+        };
+      };
+    };
+  };
+}
 interface Strings {
   [key: string]: string;
 }
 type BlitzTankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
-/**
- * Warning! This is not exhaustive.
- */
 interface TankParameters {
   resourcesPath: {
     smallIconPath: string;
@@ -76,10 +109,12 @@ const targets = argv
 
 if (!targets && !allTargets) throw new Error('No target(s) specified');
 
-if (allTargets || targets?.includes('tankDefinitions')) {
+if (allTargets || targets?.includes('definitions')) {
   console.log('Building tank definitions...');
 
-  const tankDefinitions: TankDefinitions = {};
+  const tankDefinitions: BlitzkriegTankDefinitions = {};
+  const turretDefinitions: BlitzkriegTurretDefinitions = {};
+  const gunDefinitions: BlitzkriegGunDefinitions = {};
   const nations = await readdir(`${DATA}/${DOI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
@@ -89,65 +124,120 @@ if (allTargets || targets?.includes('tankDefinitions')) {
 
   await Promise.all(
     nations.map(async (nation) => {
-      const tanks = await readXMLDVPL<VehicleDefinitionList>(
+      const tankList = await readXMLDVPL<{ root: VehicleDefinitionList }>(
         `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
       );
+      const turretList = await readXMLDVPL<{
+        root: TurretDefinitionsList;
+      }>(
+        `${DATA}/${DOI.vehicleDefinitions}/${nation}/components/turrets.xml.dvpl`,
+      );
+      const gunList = await readXMLDVPL<{
+        root: GunDefinitionsList;
+      }>(
+        `${DATA}/${DOI.vehicleDefinitions}/${nation}/components/guns.xml.dvpl`,
+      );
 
-      for (const tankIndex in tanks) {
-        const tank = tanks[tankIndex];
-        const nationVehicleId = tank.id;
-        const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
-        const name = strings[tank.userString] ?? tankIndex;
-        const name_short = tank.shortUserString
-          ? strings[tank.shortUserString] === name
-            ? undefined
-            : strings[tank.shortUserString]
-          : undefined;
-        const isPremium =
-          typeof tank.price === 'number' ? false : 'gold' in tank.price;
-        const isCollector = tank.sellPrice ? 'gold' in tank.sellPrice : false;
-        const tier = tank.level as Tier;
-        const tags = tank.tags.split(' ');
-        const type = blitzTankTypeToBlitzkrieg[tags[0] as BlitzTankType];
-        const testing = tags.includes('testTank') ? true : undefined;
+      for (const tankKey in tankList.root) {
+        const tank = tankList.root[tankKey];
+        const tankDefinition = await readXMLDVPL<{ root: VehicleDefinitions }>(
+          `${DATA}/${DOI.vehicleDefinitions}/${nation}/${tankKey}.xml.dvpl`,
+        );
+        const tankId = toUniqueId(nation, tank.id);
+        const tankTags = tank.tags.split(' ');
+        const tankTurrets = Object.keys(tankDefinition.root.turrets0).map(
+          (turretKey) => {
+            const turret = tankDefinition.root.turrets0[turretKey];
+            const turretId = toUniqueId(nation, turretList.root.ids[turretKey]);
+            const turretGuns = Object.keys(turret.guns).map((gunKey) =>
+              toUniqueId(nation, gunList.root.ids[gunKey]),
+            );
 
-        if ((name ?? name_short) === undefined) {
-          console.warn(`Missing name for ${tankIndex}`);
-        }
+            turretDefinitions[turretId] = {
+              id: turretId,
+              name:
+                strings[turret.userString] ??
+                turretKey
+                  .replaceAll('_', ' ')
+                  .replace(/^(Turret ([0-9] )?)+/, ''),
+              tier: turret.level,
+              yaw: (typeof turret.yawLimits === 'string'
+                ? turret.yawLimits
+                : turret.yawLimits[0]
+              )
+                .split(' ')
+                .map(Number) as [number, number],
+              guns: turretGuns,
+            };
 
-        tankDefinitions[id] = {
-          id,
-          name,
-          name_short,
+            return turretId;
+          },
+        );
+
+        tankDefinitions[tankId] = {
+          id: tankId,
+          name:
+            (tank.shortUserString
+              ? strings[tank.shortUserString]
+              : undefined) ??
+            strings[tank.userString] ??
+            tankKey.replaceAll('_', ' '),
           nation,
-          tree_type: isCollector
+          tree_type: (tank.sellPrice ? 'gold' in tank.sellPrice : false)
             ? 'collector'
-            : isPremium
+            : (typeof tank.price === 'number' ? false : 'gold' in tank.price)
               ? 'premium'
               : 'researchable',
-          tier,
-          type,
-          testing,
+          tier: tank.level as Tier,
+          type: blitzTankTypeToBlitzkrieg[tankTags[0] as BlitzTankType],
+          testing: tankTags.includes('testTank') ? true : undefined,
+          turrets: tankTurrets,
         };
       }
+
+      Object.keys(gunList.root.ids).forEach((gunKey) => {
+        const gun = gunList.root.shared[gunKey];
+        const gunId = toUniqueId(nation, gunList.root.ids[gunKey]);
+
+        gunDefinitions[gunId] = {
+          id: gunId,
+          name: strings[gun.userString] ?? gunKey.replaceAll('_', ' '),
+          tier: gun.level,
+          pitch: gun.pitchLimits.split(' ').map(Number) as [number, number],
+        };
+      });
     }),
   );
 
-  console.log('Committing tank definitions...');
-  await commitMultipleFiles(
-    'tresabhi',
-    'blitzkrieg-assets',
-    'main',
-    'tank definitions',
-    [
-      {
-        content: JSON.stringify(tankDefinitions),
-        encoding: 'utf-8',
-        path: 'definitions/tanks.json',
-      },
-    ],
-    true,
-  );
+  // rmSync('dist/definitions', { force: true, recursive: true });
+  // mkdirSync('dist/definitions', { recursive: true });
+  // writeFile(
+  //   'dist/definitions/tanks.json',
+  //   JSON.stringify(tankDefinitions, null, 2),
+  // );
+  // writeFile(
+  //   'dist/definitions/turrets.json',
+  //   JSON.stringify(turretDefinitions, null, 2),
+  // );
+  // writeFile(
+  //   'dist/definitions/guns.json',
+  //   JSON.stringify(gunDefinitions, null, 2),
+  // );
+  // console.log('Committing tank definitions...');
+  // await commitMultipleFiles(
+  //   'tresabhi',
+  //   'blitzkrieg-assets',
+  //   'main',
+  //   'tank definitions',
+  //   [
+  //     {
+  //       content: JSON.stringify(tankDefinitions),
+  //       encoding: 'utf-8',
+  //       path: 'definitions/tanks.json',
+  //     },
+  //   ],
+  //   true,
+  // );
 }
 
 if (
@@ -164,12 +254,12 @@ if (
 
   await Promise.all(
     nations.map(async (nation) => {
-      const tanks = await readXMLDVPL<VehicleDefinitionList>(
+      const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
         `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
       );
 
-      for (const tankIndex in tanks) {
-        const tank = tanks[tankIndex];
+      for (const tankIndex in tanks.root) {
+        const tank = tanks.root[tankIndex];
         const nationVehicleId = tank.id;
         const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
         const parameters = await readYAMLDVPL<TankParameters>(
@@ -289,12 +379,12 @@ if (allTargets || targets?.includes('tankModels')) {
 
   await Promise.all(
     nations.map(async (nation) => {
-      const tanks = await readXMLDVPL<VehicleDefinitionList>(
+      const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
         `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
       );
 
-      for (const tankIndex in tanks) {
-        const tank = tanks[tankIndex];
+      for (const tankIndex in tanks.root) {
+        const tank = tanks.root[tankIndex];
         const nationVehicleId = tank.id;
         const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
 
