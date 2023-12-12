@@ -52,6 +52,8 @@ interface GunDefinitionsList {
       tags: string;
       level: number;
       pitchLimits: string;
+      burst?: { count: number; rate: number };
+      clip?: { count: number; rate: number };
     };
   };
 }
@@ -149,9 +151,27 @@ if (allTargets || targets?.includes('definitions')) {
           (turretKey) => {
             const turret = tankDefinition.root.turrets0[turretKey];
             const turretId = toUniqueId(nation, turretList.root.ids[turretKey]);
-            const turretGuns = Object.keys(turret.guns).map((gunKey) =>
-              toUniqueId(nation, gunList.root.ids[gunKey]),
-            );
+            const turretGuns = Object.keys(turret.guns).map((gunKey) => {
+              const turretGunEntry = turret.guns[gunKey];
+              const gunId = toUniqueId(nation, gunList.root.ids[gunKey]);
+              const gun = gunList.root.shared[gunKey];
+              const pitchLimitsRaw =
+                turretGunEntry.pitchLimits ?? gun.pitchLimits;
+
+              gunDefinitions[gunId] = {
+                id: gunId,
+                pitch: (typeof pitchLimitsRaw === 'string'
+                  ? pitchLimitsRaw
+                  : pitchLimitsRaw.at(-1)!
+                )
+                  .split(' ')
+                  .map(Number) as [number, number],
+                name: strings[gun.userString] ?? gunKey.replaceAll('_', ' '),
+                tier: gun.level,
+              };
+
+              return gunId;
+            });
 
             turretDefinitions[turretId] = {
               id: turretId,
@@ -163,7 +183,7 @@ if (allTargets || targets?.includes('definitions')) {
               tier: turret.level,
               yaw: (typeof turret.yawLimits === 'string'
                 ? turret.yawLimits
-                : turret.yawLimits[0]
+                : turret.yawLimits.at(-1)!
               )
                 .split(' ')
                 .map(Number) as [number, number],
@@ -194,18 +214,6 @@ if (allTargets || targets?.includes('definitions')) {
           turrets: tankTurrets,
         };
       }
-
-      Object.keys(gunList.root.ids).forEach((gunKey) => {
-        const gun = gunList.root.shared[gunKey];
-        const gunId = toUniqueId(nation, gunList.root.ids[gunKey]);
-
-        gunDefinitions[gunId] = {
-          id: gunId,
-          name: strings[gun.userString] ?? gunKey.replaceAll('_', ' '),
-          tier: gun.level,
-          pitch: gun.pitchLimits.split(' ').map(Number) as [number, number],
-        };
-      });
     }),
   );
 
