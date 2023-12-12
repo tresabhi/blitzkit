@@ -1,9 +1,10 @@
 import { asset } from '../asset';
+import { Tier } from './tanks';
 
 export interface BlitzkriegGunDefinition {
   id: number;
   name: string;
-  tier: number;
+  tier: Tier;
   pitch: [number, number];
   shells: number[];
 }
