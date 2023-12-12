@@ -14,6 +14,10 @@ import commitMultipleFiles, {
 } from '../src/core/blitzkrieg/commitMultipleFiles';
 import { BlitzkriegGunDefinitions } from '../src/core/blitzkrieg/definitions/guns';
 import {
+  BlitzkriegShellDefinitions,
+  ShellType,
+} from '../src/core/blitzkrieg/definitions/shells';
+import {
   BlitzkriegTankDefinitions,
   Tier,
 } from '../src/core/blitzkrieg/definitions/tanks';
@@ -54,9 +58,35 @@ interface GunDefinitionsList {
       pitchLimits: string;
       burst?: { count: number; rate: number };
       clip?: { count: number; rate: number };
+      shots: {
+        [key: string]: {
+          speed: number;
+          piercingPower: string;
+        };
+      };
     };
   };
 }
+type ShellKind =
+  | 'ARMOR_PIERCING'
+  | 'ARMOR_PIERCING_CR'
+  | 'HIGH_EXPLOSIVE'
+  | 'HOLLOW_CHARGE';
+type ShellDefinitionsList = Record<
+  string,
+  {
+    id: number;
+    userString: string;
+    icon: string;
+    kind: ShellKind;
+    caliber: number;
+    damage: { armor: number; devices: number };
+    normalizationAngle: number;
+    ricochetAngle: number;
+  }
+> & {
+  icons: Record<string, string>;
+};
 interface VehicleDefinitions {
   turrets0: {
     [key: string]: {
@@ -90,6 +120,12 @@ const blitzTankTypeToBlitzkrieg: Record<BlitzTankType, TankType> = {
   mediumTank: 'medium',
   heavyTank: 'heavy',
 };
+const blitzShellKindToBLitzkrieg: Record<ShellKind, ShellType> = {
+  ARMOR_PIERCING: 'ap',
+  ARMOR_PIERCING_CR: 'apcr',
+  HIGH_EXPLOSIVE: 'he',
+  HOLLOW_CHARGE: 'heat',
+};
 const DATA =
   'C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz/Data';
 const LANGUAGE = 'en';
@@ -117,6 +153,7 @@ if (allTargets || targets?.includes('definitions')) {
   const tankDefinitions: BlitzkriegTankDefinitions = {};
   const turretDefinitions: BlitzkriegTurretDefinitions = {};
   const gunDefinitions: BlitzkriegGunDefinitions = {};
+  const shellDefinitions: BlitzkriegShellDefinitions = {};
   const nations = await readdir(`${DATA}/${DOI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
@@ -139,6 +176,11 @@ if (allTargets || targets?.includes('definitions')) {
       }>(
         `${DATA}/${DOI.vehicleDefinitions}/${nation}/components/guns.xml.dvpl`,
       );
+      const shellList = await readXMLDVPL<{
+        root: ShellDefinitionsList;
+      }>(
+        `${DATA}/${DOI.vehicleDefinitions}/${nation}/components/shells.xml.dvpl`,
+      );
 
       for (const tankKey in tankList.root) {
         const tank = tankList.root[tankKey];
@@ -157,6 +199,28 @@ if (allTargets || targets?.includes('definitions')) {
               const gun = gunList.root.shared[gunKey];
               const pitchLimitsRaw =
                 turretGunEntry.pitchLimits ?? gun.pitchLimits;
+              const gunShells = Object.keys(gun.shots).map((shellKey) => {
+                const turretShellEntry = gun.shots[shellKey];
+                const shell = shellList.root[shellKey];
+                const shellId = toUniqueId(nation, shell.id);
+
+                shellDefinitions[shellId] = {
+                  id: shellId,
+                  name:
+                    strings[shell.userString] ?? shellKey.replaceAll('_', ' '),
+                  speed: turretShellEntry.speed,
+                  damage: {
+                    armor: shell.damage.armor,
+                    devices: shell.damage.devices,
+                  },
+                  caliber: shell.caliber,
+                  normalization: shell.normalizationAngle,
+                  ricochet: shell.ricochetAngle,
+                  type: blitzShellKindToBLitzkrieg[shell.kind],
+                };
+
+                return shellId;
+              });
 
               gunDefinitions[gunId] = {
                 id: gunId,
@@ -168,6 +232,7 @@ if (allTargets || targets?.includes('definitions')) {
                   .map(Number) as [number, number],
                 name: strings[gun.userString] ?? gunKey.replaceAll('_', ' '),
                 tier: gun.level,
+                shells: gunShells,
               };
 
               return gunId;
@@ -217,35 +282,37 @@ if (allTargets || targets?.includes('definitions')) {
     }),
   );
 
-  // rmSync('dist/definitions', { force: true, recursive: true });
-  // mkdirSync('dist/definitions', { recursive: true });
-  // writeFile(
-  //   'dist/definitions/tanks.json',
-  //   JSON.stringify(tankDefinitions, null, 2),
-  // );
-  // writeFile(
-  //   'dist/definitions/turrets.json',
-  //   JSON.stringify(turretDefinitions, null, 2),
-  // );
-  // writeFile(
-  //   'dist/definitions/guns.json',
-  //   JSON.stringify(gunDefinitions, null, 2),
-  // );
-  // console.log('Committing tank definitions...');
-  // await commitMultipleFiles(
-  //   'tresabhi',
-  //   'blitzkrieg-assets',
-  //   'main',
-  //   'tank definitions',
-  //   [
-  //     {
-  //       content: JSON.stringify(tankDefinitions),
-  //       encoding: 'utf-8',
-  //       path: 'definitions/tanks.json',
-  //     },
-  //   ],
-  //   true,
-  // );
+  console.log('Committing tank definitions...');
+  await commitMultipleFiles(
+    'tresabhi',
+    'blitzkrieg-assets',
+    'main',
+    'definitions',
+    [
+      {
+        content: JSON.stringify(tankDefinitions),
+        encoding: 'utf-8',
+        path: 'definitions/tanks.json',
+      },
+      {
+        content: JSON.stringify(turretDefinitions),
+        encoding: 'utf-8',
+        path: 'definitions/turrets.json',
+      },
+      {
+        content: JSON.stringify(gunDefinitions),
+        encoding: 'utf-8',
+        path: 'definitions/guns.json',
+      },
+      {
+        content: JSON.stringify(shellDefinitions),
+        encoding: 'utf-8',
+        path: 'definitions/shells.json',
+      },
+    ],
+
+    true,
+  );
 }
 
 if (

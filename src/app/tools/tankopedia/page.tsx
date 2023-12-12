@@ -74,11 +74,7 @@ export default function Page() {
             diff = a.tier - b.tier;
           }
           if (tankopediaState.sort.by === 'name') {
-            diff = (
-              a.name_short ??
-              a.name ??
-              `Unknown tank ${a.id}`
-            ).localeCompare(b.name_short ?? b.name ?? `Unknown tank ${b.id}`);
+            diff = a.name.localeCompare(b.name);
           }
 
           return tankopediaState.sort.direction === 'ascending' ? diff : -diff;
@@ -123,7 +119,6 @@ export default function Page() {
                       go(event.target.value, searchableTanks, {
                         keys: [
                           'name',
-                          'name_short',
                           'id',
                         ] satisfies (keyof BlitzkriegTankDefinition)[],
                       }).map(({ obj }) => obj),
@@ -307,9 +302,7 @@ export default function Page() {
                             overflow: 'hidden',
                           }}
                         >
-                          {tank.name_short ??
-                            tank.name ??
-                            `Unknown tank ${tank.id}`}
+                          {tank.name}
                         </Text>
                       </Flex>
 

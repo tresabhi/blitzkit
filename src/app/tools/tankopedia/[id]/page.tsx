@@ -1,107 +1,75 @@
 'use client';
 
-import { Checkbox, Flex, Heading } from '@radix-ui/themes';
-import { OrbitControls } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
-import { use, useState } from 'react';
-import {
-  BufferAttribute,
-  BufferGeometry,
-  Mesh,
-  MeshStandardMaterial,
-  Vector3Tuple,
-} from 'three';
-import model from '../../../../../test.json';
+import { Button, Flex, Heading } from '@radix-ui/themes';
+import { use, useEffect, useState } from 'react';
 import { Flag } from '../../../../components/Flag';
 import PageWrapper from '../../../../components/PageWrapper';
+import { gunDefinitions } from '../../../../core/blitzkrieg/definitions/guns';
+import { shellDefinitions } from '../../../../core/blitzkrieg/definitions/shells';
 import { tankDefinitions } from '../../../../core/blitzkrieg/definitions/tanks';
+import { turretDefinitions } from '../../../../core/blitzkrieg/definitions/turrets';
 
 const SIZE = 0.05;
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = parseInt(params.id);
   const awaitedTankDefinitions = use(tankDefinitions);
-  const definition = awaitedTankDefinitions[id];
-  const [display, setDisplay] = useState<boolean[]>(model.map(() => true));
+  const awaitedTurretDefinitions = use(turretDefinitions);
+  const awaitedGunDefinitions = use(gunDefinitions);
+  const awaitedShellDefinitions = use(shellDefinitions);
+  const tank = awaitedTankDefinitions[id];
+  const [turret, setTurret] = useState(
+    awaitedTurretDefinitions[tank.turrets[0]],
+  );
+  const [gun, setGun] = useState(awaitedGunDefinitions[turret.guns[0]]);
+  const [shell, setShell] = useState(awaitedShellDefinitions[gun.shells[0]]);
+
+  useEffect(() => setGun(awaitedGunDefinitions[turret.guns[0]]), [turret]);
+  useEffect(() => setShell(awaitedShellDefinitions[gun.shells[0]]), [gun]);
 
   return (
     <PageWrapper>
       <Flex gap="2" align="center">
-        <Flag nation={definition.nation} />
-        <Heading>{definition.name}</Heading>
+        <Flag nation={tank.nation} />
+        <Heading>{tank.name}</Heading>
       </Flex>
 
-      <Canvas
-        style={{
-          width: '100%',
-          height: '60vh',
-        }}
-      >
-        <OrbitControls />
+      <Flex gap="2" align="center">
+        <Heading size="5">Turrets</Heading>
 
-        <ambientLight />
-        <directionalLight intensity={1} />
+        {tank.turrets.map((turretId) => (
+          <Button
+            onClick={() => setTurret(awaitedTurretDefinitions[turretId])}
+            variant={turret.id === turretId ? 'solid' : 'soft'}
+          >
+            {awaitedTurretDefinitions[turretId].name}
+          </Button>
+        ))}
+      </Flex>
 
-        <group rotation={[-Math.PI / 2, 0, 0]}>
-          {(model as { vertices: Vector3Tuple[]; indices: number[] }[]).map(
-            ({ vertices, indices }, index) => {
-              const geometry = new BufferGeometry();
-              const verticesArray = new Float32Array(vertices.flat());
-              const positionAttribute = new BufferAttribute(verticesArray, 3);
-              const indexAttribute = new BufferAttribute(
-                new Uint16Array(indices),
-                1,
-              );
-              const material = new MeshStandardMaterial({
-                color: 'white',
-                metalness: 0.75,
-                // roughness: 0.2,
-              });
+      <Flex gap="2" align="center">
+        <Heading size="5">Guns</Heading>
 
-              geometry
-                .setAttribute('position', positionAttribute)
-                .setIndex(indexAttribute)
-                .computeVertexNormals();
+        {turret.guns.map((gunId) => (
+          <Button
+            onClick={() => setGun(awaitedGunDefinitions[gunId])}
+            variant={gun.id === gunId ? 'solid' : 'soft'}
+          >
+            {awaitedTurretDefinitions[gunId]?.name ?? gunId}
+          </Button>
+        ))}
+      </Flex>
 
-              return display[index] ? (
-                <mesh
-                  key={index}
-                  args={[geometry, material]}
-                  onPointerOver={(event) => {
-                    event.stopPropagation();
-                    (
-                      (event.object as Mesh).material as MeshStandardMaterial
-                    ).color.set('red');
-                  }}
-                  onPointerOut={(event) => {
-                    event.stopPropagation();
-                    (
-                      (event.object as Mesh).material as MeshStandardMaterial
-                    ).color.set('white');
-                  }}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    const newDisplay = [...display];
-                    newDisplay[index] = !newDisplay[index];
-                    setDisplay(newDisplay);
-                  }}
-                />
-              ) : null;
-            },
-          )}
-        </group>
-      </Canvas>
+      <Flex gap="2" align="center">
+        <Heading size="5">Shells</Heading>
 
-      <Flex wrap="wrap">
-        {model.map((group, index) => (
-          <Checkbox
-            checked={display[index]}
-            onCheckedChange={(value) => {
-              const newDisplay = [...display];
-              newDisplay[index] = value as boolean;
-              setDisplay(newDisplay);
-            }}
-          />
+        {gun.shells.map((shellId) => (
+          <Button
+            onClick={() => setShell(awaitedShellDefinitions[shellId])}
+            variant={shell.id === shellId ? 'solid' : 'soft'}
+          >
+            {awaitedShellDefinitions[shellId].name}
+          </Button>
         ))}
       </Flex>
     </PageWrapper>
