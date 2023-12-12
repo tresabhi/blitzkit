@@ -298,6 +298,7 @@ if (allTargets || targets?.includes('tankModels')) {
         const nationVehicleId = tank.id;
         const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
 
+        // if (id !== 897) continue;
         console.log(`Building model ${id} @ ${nation}/${tankIndex}`);
 
         const parameters = await readYAMLDVPL<TankParameters>(
@@ -314,6 +315,7 @@ if (allTargets || targets?.includes('tankModels')) {
         const scgStream = await SCPGStream.fromDVPLFile(
           `${DATA}/${DOI['3d']}/${scgPath}.dvpl`,
         );
+
         const sc2 = sc2Stream.consumeSC2();
         const scg = scgStream.consumeSCG();
       }

@@ -90,12 +90,7 @@ const VECTOR_SIZES = [
     VertexType.CUBETEXCOORD2,
     VertexType.CUBETEXCOORD3,
   ],
-  [
-    VertexType.PIVOT4,
-    VertexType.JOINTINDEX,
-    VertexType.JOINTWEIGHT,
-    // VertexType.TANGENT,
-  ],
+  [VertexType.PIVOT4, VertexType.JOINTINDEX, VertexType.JOINTWEIGHT],
 ];
 
 export class SCPGStream {
@@ -221,22 +216,22 @@ export class SCPGStream {
       }
 
       const verticesStream = new SCPGStream(polygonGroupRaw.vertices);
-      const vertexFormat = [
-        ...polygonGroupRaw.vertexFormat.toString(2).padEnd(64, '0'),
-      ]
-        .map((bit, index) => (bit === '1' ? index : null))
-        .filter((index) => index !== null) as VertexType[];
       const vertices: Partial<Record<VertexType, number[]>>[] = [];
+      const vertexFormatBuffer = Buffer.alloc(4);
+      vertexFormatBuffer.writeUInt32LE(polygonGroupRaw.vertexFormat, 0);
+      const vertexFormat = [...vertexFormatBuffer]
+        .map((number) => number.toString(2))
+        .join('')
+        .split('')
+        .map((bitString, index) => (bitString === '1' ? index : null))
+        .filter((type) => type !== null) as VertexType[];
 
       for (let index = 0; index < polygonGroupRaw.vertexCount; index++) {
         vertexFormat.forEach((type) => {
           const resolved = VECTOR_SIZES.some((types, size) => {
             if (types.includes(type)) {
               if (!(index in vertices)) vertices[index] = {};
-
-              vertices[index][type] = times(size + 1).map(() =>
-                verticesStream.consumeFloat(),
-              );
+              vertices[index][type] = verticesStream.consumeVectorN(size + 1);
 
               return true;
             }
