@@ -14,31 +14,10 @@ Go to [application directory for Blitzkrieg](https://discord.com/application-dir
 
 ### https://blitz-krieg.vercel.app/
 
-![Blitzkrieg website](https://i.imgur.com/QOXUP63.png)
+![Blitzkrieg website](https://i.imgur.com/eRIZe5P.png)
 
 ## Visit the documentation website
 
 ### https://tresabhi.github.io/blitzkrieg/
 
 ![Blitzkrieg documentation website](https://i.imgur.com/mCZCZEI.png)
-
-## Run the bot
-
-### Install dependencies
-
-```bash
-yarn
-```
-
-### Create `.env`
-
-```env
-GH_TOKEN={YOUR_GITHUB_TOKEN_HERE}
-DISCORD_TOKEN={YOUR_DISCORD_TOKE_HERE}
-```
-
-### Run the command
-
-```bash
-yarn dev:bot
-```
