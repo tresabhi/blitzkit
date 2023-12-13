@@ -1,12 +1,15 @@
 import { go } from 'fuzzysort';
+import {
+  tankDefinitions,
+  tanksDefinitionsArray,
+} from '../blitzkrieg/definitions/tanks';
 import { UserError } from '../blitzkrieg/userError';
-import { TANKS, tankopedia } from '../blitzstars/tankopedia';
 
 export default async function resolveTankId(tank: string | number) {
   const number = typeof tank === 'string' ? parseInt(tank) : tank;
 
   if (Number.isNaN(number)) {
-    const searchResult = go(`${tank}`, await TANKS, {
+    const searchResult = go(`${tank}`, await tanksDefinitionsArray, {
       keys: ['name'],
       limit: 1,
     });
@@ -16,10 +19,10 @@ export default async function resolveTankId(tank: string | number) {
         cause: `Could not find tank by the name "${tank}".`,
       });
     } else {
-      return searchResult[0].obj.tank_id;
+      return searchResult[0].obj.id;
     }
   } else {
-    if ((await tankopedia)[number]) {
+    if ((await tankDefinitions)[number]) {
       return number;
     } else {
       throw new UserError('Tank not found', {

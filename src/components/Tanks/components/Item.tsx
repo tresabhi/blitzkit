@@ -2,7 +2,7 @@ import {
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
-} from '../../../core/blitzstars/tankopedia';
+} from '../../../core/blitzkrieg/definitions/tanks';
 import { theme } from '../../../stitches.config';
 
 export enum TreeTypeEnum {
@@ -11,17 +11,34 @@ export enum TreeTypeEnum {
   Collector,
 }
 
-export type TreeTypeString = 'tech-tree' | 'premium' | 'collector';
+export const TANK_TYPES = [
+  'tank_destroyer',
+  'light',
+  'medium',
+  'heavy',
+] as const;
+
+// TODO: remove hyphen for underscore
+export const TREE_TYPES = ['researchable', 'premium', 'collector'] as const;
+
+export type TankType = (typeof TANK_TYPES)[number];
+export type TreeTypeString = (typeof TREE_TYPES)[number];
 
 export const TREE_TYPE_NAMES: Record<TreeTypeString, string> = {
-  'tech-tree': 'Tech tree',
+  researchable: 'Tech tree',
   premium: 'Premium',
   collector: 'Collector',
 };
 
+export const TREE_TYPE_IMAGES: Record<TreeTypeString, string> = {
+  researchable: 'https://i.imgur.com/pJxO2XY.png',
+  premium: 'https://i.imgur.com/mZzSwOU.png',
+  collector: 'https://i.imgur.com/7A0RsG5.png',
+};
+
 export interface ItemProps {
   image?: string;
-  tankType?: string;
+  tankType?: TankType;
   name: string;
   treeType: TreeTypeEnum;
 }

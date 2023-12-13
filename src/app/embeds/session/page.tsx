@@ -6,11 +6,11 @@ import * as Breakdown from '../../../components/Breakdown';
 import { TreeTypeEnum } from '../../../components/Tanks';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import fetchBlitz from '../../../core/blitz/fetchBlitz';
-import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import {
-  TankopediaEntry,
-  tankopedia,
-} from '../../../core/blitzstars/tankopedia';
+  BlitzkriegTankDefinition,
+  tankDefinitions,
+} from '../../../core/blitzkrieg/definitions/tanks';
+import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import calculateWN8 from '../../../core/statistics/calculateWN8';
 import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
 import getWN8Percentile from '../../../core/statistics/getWN8Percentile';
@@ -30,7 +30,7 @@ export default function SessionPage() {
 
         list: {
           stats: IndividualTankStats;
-          tankopedia?: TankopediaEntry;
+          tankDefinitions?: BlitzkriegTankDefinition;
           career: IndividualTankStats;
           currentWN8?: number;
           careerWN8?: number;
@@ -88,7 +88,7 @@ export default function SessionPage() {
           }),
           {},
         );
-        const awaitedTankopedia = await tankopedia;
+        const awaitedTankDefinitions = await tankDefinitions;
         const awaitedTankAverages = await tankAverages;
         const careerWN8 =
           careerRaw[id].reduce(
@@ -119,7 +119,7 @@ export default function SessionPage() {
           ).map((stats) => {
             return {
               stats,
-              tankopedia: awaitedTankopedia[stats.tank_id],
+              tankDefinitions: awaitedTankDefinitions[stats.tank_id],
               career: career[stats.tank_id],
               currentWN8: awaitedTankAverages[stats.tank_id]
                 ? calculateWN8(
@@ -231,90 +231,95 @@ export default function SessionPage() {
               .sort(
                 (a, b) => b.stats.last_battle_time - a.stats.last_battle_time,
               )
-              .map(({ stats, tankopedia, career, careerWN8, currentWN8 }) => {
-                const rowStats: Record<
-                  CustomColumnDisplay,
-                  Breakdown.RowStatItem | undefined
-                > = {
-                  battles: {
-                    title: 'Battles',
-                    current: stats.all.battles.toLocaleString(),
-                    career: career.all.battles.toLocaleString(),
-                  },
-                  winrate: {
-                    title: 'Winrate',
-                    current: `${(
-                      100 *
-                      (stats.all.wins / stats.all.battles)
-                    ).toFixed(2)}%`,
-                    career: `${(
-                      100 *
-                      (career.all.wins / career.all.battles)
-                    ).toFixed(2)}%`,
-                    delta:
-                      stats.all.wins / stats.all.battles -
-                      career.all.wins / career.all.battles,
-                  },
-                  wn8: {
-                    title: 'WN8',
-                    current:
-                      currentWN8 === undefined
-                        ? undefined
-                        : Math.round(currentWN8).toLocaleString(),
-                    career:
-                      careerWN8 === undefined
-                        ? undefined
-                        : Math.round(careerWN8).toLocaleString(),
-                    percentile:
-                      currentWN8 === undefined
-                        ? undefined
-                        : getWN8Percentile(currentWN8),
-                  },
-                  damage: {
-                    title: 'Damage',
-                    current: Math.round(
-                      stats.all.damage_dealt / stats.all.battles,
-                    ).toLocaleString(),
-                    career: Math.round(
-                      career.all.damage_dealt / career.all.battles,
-                    ).toLocaleString(),
-                    delta:
-                      stats.all.damage_dealt / stats.all.battles -
-                      career.all.damage_dealt / career.all.battles,
-                  },
-                  none: undefined,
-                };
+              .map(
+                ({ stats, tankDefinitions, career, careerWN8, currentWN8 }) => {
+                  const rowStats: Record<
+                    CustomColumnDisplay,
+                    Breakdown.RowStatItem | undefined
+                  > = {
+                    battles: {
+                      title: 'Battles',
+                      current: stats.all.battles.toLocaleString(),
+                      career: career.all.battles.toLocaleString(),
+                    },
+                    winrate: {
+                      title: 'Winrate',
+                      current: `${(
+                        100 *
+                        (stats.all.wins / stats.all.battles)
+                      ).toFixed(2)}%`,
+                      career: `${(
+                        100 *
+                        (career.all.wins / career.all.battles)
+                      ).toFixed(2)}%`,
+                      delta:
+                        stats.all.wins / stats.all.battles -
+                        career.all.wins / career.all.battles,
+                    },
+                    wn8: {
+                      title: 'WN8',
+                      current:
+                        currentWN8 === undefined
+                          ? undefined
+                          : Math.round(currentWN8).toLocaleString(),
+                      career:
+                        careerWN8 === undefined
+                          ? undefined
+                          : Math.round(careerWN8).toLocaleString(),
+                      percentile:
+                        currentWN8 === undefined
+                          ? undefined
+                          : getWN8Percentile(currentWN8),
+                    },
+                    damage: {
+                      title: 'Damage',
+                      current: Math.round(
+                        stats.all.damage_dealt / stats.all.battles,
+                      ).toLocaleString(),
+                      career: Math.round(
+                        career.all.damage_dealt / career.all.battles,
+                      ).toLocaleString(),
+                      delta:
+                        stats.all.damage_dealt / stats.all.battles -
+                        career.all.damage_dealt / career.all.battles,
+                    },
+                    none: undefined,
+                  };
 
-                return (
-                  <Breakdown.Row
-                    color={session.color}
-                    key={stats.tank_id}
-                    minimized={!session.showCareer}
-                    title={tankopedia?.name ?? `Unknown tank ${stats.tank_id}`}
-                    type="tank"
-                    tankType={tankopedia?.type}
-                    treeType={(() => {
-                      if (tankopedia?.is_collectible)
-                        return TreeTypeEnum.Collector;
-                      if (tankopedia?.is_premium) return TreeTypeEnum.Premium;
-                    })()}
-                    stats={session.customColumns.map((customColumn) => {
-                      const rowStat = rowStats[customColumn.display];
+                  return (
+                    <Breakdown.Row
+                      color={session.color}
+                      key={stats.tank_id}
+                      minimized={!session.showCareer}
+                      title={
+                        tankDefinitions?.name ?? `Unknown tank ${stats.tank_id}`
+                      }
+                      type="tank"
+                      tankType={tankDefinitions?.type}
+                      treeType={(() => {
+                        if (tankDefinitions?.tree_type === 'collector')
+                          return TreeTypeEnum.Collector;
+                        if (tankDefinitions?.tree_type === 'premium')
+                          return TreeTypeEnum.Premium;
+                      })()}
+                      stats={session.customColumns.map((customColumn) => {
+                        const rowStat = rowStats[customColumn.display];
 
-                      if (!rowStat) return undefined;
+                        if (!rowStat) return undefined;
 
-                      return {
-                        ...rowStat,
-                        delta:
-                          customColumn.showDelta &&
-                          rowStat.percentile === undefined
-                            ? rowStat.delta
-                            : undefined,
-                      };
-                    })}
-                  />
-                );
-              })}
+                        return {
+                          ...rowStat,
+                          delta:
+                            customColumn.showDelta &&
+                            rowStat.percentile === undefined
+                              ? rowStat.delta
+                              : undefined,
+                        };
+                      })}
+                    />
+                  );
+                },
+              )}
           </Breakdown.Root>
         </div>
       </ContextMenu.Trigger>

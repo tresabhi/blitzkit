@@ -4,6 +4,7 @@ import {
   orangeDark,
   slate,
   slateDark,
+  slateDarkA,
   tealDark,
 } from '@radix-ui/colors';
 import { createBorderStyles, createColors, createSpaces } from 'bepaint';
@@ -14,6 +15,7 @@ export const theme = {
 
   colors: {
     ...createColors(slateDark),
+    ...createColors(slateDarkA, 'alpha'),
     ...createColors(slate, 'light'),
 
     ...createColors(amberDark, 'amber'),

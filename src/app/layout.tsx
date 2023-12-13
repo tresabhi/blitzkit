@@ -36,12 +36,19 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         style={{
           margin: 0,
+          paddingTop: isEmbed ? 0 : '3.25rem',
           background: isEmbed
             ? 'transparent'
             : 'url(https://i.imgur.com/PhS06NJ.png)',
         }}
       >
-        <Theme appearance="dark" panelBackground="translucent" radius="full">
+        <Theme
+          appearance="dark"
+          panelBackground="translucent"
+          radius="full"
+          suppressHydrationWarning
+          suppressContentEditableWarning
+        >
           {!isEmbed && <Navbar />}
 
           <Flex direction="column">{children}</Flex>

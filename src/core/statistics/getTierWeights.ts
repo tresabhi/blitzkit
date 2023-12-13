@@ -1,16 +1,16 @@
 import { TierWeightsRecord } from '../../components/TierWeights';
 import { AllStats } from '../blitz/getAccountInfo';
-import { tankopedia } from '../blitzstars/tankopedia';
+import { tankDefinitions } from '../blitzkrieg/definitions/tanks';
 
 export async function getTierWeights(
   stats: Record<number, AllStats>,
   order: number[] = Object.keys(stats).map(parseInt),
 ) {
-  const awaitedTankopedia = await tankopedia;
+  const awaitedTankDefinitions = await tankDefinitions;
   const tierWeights: TierWeightsRecord = {};
 
-  order.map((id) => {
-    const entry = awaitedTankopedia[id];
+  order.forEach((id) => {
+    const entry = awaitedTankDefinitions[id];
 
     if (!entry) return;
     if (!tierWeights[entry.tier]) tierWeights[entry.tier] = 0;

@@ -1,11 +1,11 @@
 import { TreeTypeEnum } from '../../components/Tanks';
-import { tankopedia } from '../blitzstars/tankopedia';
+import { tankDefinitions } from '../blitzkrieg/definitions/tanks';
 
 export default async function getTreeType(id: number) {
-  const entry = (await tankopedia)[id];
+  const entry = (await tankDefinitions)[id];
 
-  if (entry?.is_collectible) return TreeTypeEnum.Collector;
-  if (entry?.is_premium) return TreeTypeEnum.Premium;
+  if (entry.tree_type === 'collector') return TreeTypeEnum.Collector;
+  if (entry.tree_type === 'premium') return TreeTypeEnum.Premium;
 
   return TreeTypeEnum.TechTree;
 }

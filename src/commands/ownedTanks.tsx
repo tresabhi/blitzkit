@@ -3,19 +3,19 @@ import NoData, { NoDataType } from '../components/NoData';
 import * as Tanks from '../components/Tanks';
 import TitleBar from '../components/TitleBar';
 import Wrapper from '../components/Wrapper';
+import { encyclopediaInfo } from '../core/blitz/encyclopediaInfo';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
-import resolveTankName from '../core/blitz/resolveTankName';
-import { tankopediaInfo } from '../core/blitz/tankopediaInfo';
-import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
 import {
+  BlitzkriegTankDefinition,
   TIER_ROMAN_NUMERALS,
-  TankopediaEntry,
   Tier,
-  tankopedia,
-} from '../core/blitzstars/tankopedia';
+  tankDefinitions,
+} from '../core/blitzkrieg/definitions/tanks';
+import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
+import { tankIcon } from '../core/blitzkrieg/tankIcon';
 import addTierChoices from '../core/discord/addTierChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
@@ -41,21 +41,21 @@ export const ownedTanksCommand: CommandRegistry = {
     const filteredTanks = (
       await Promise.all(
         tankStats.map(async (tankData) => ({
-          tankopedia: (await tankopedia)[tankData.tank_id]!,
-          tank_id: tankData.tank_id,
+          tankDefinitions: (await tankDefinitions)[tankData.tank_id]!,
+          id: tankData.tank_id,
         })),
       )
-    ).filter((tank) => tank.tankopedia?.tier === tier);
+    ).filter((tank) => tank.tankDefinitions?.tier === tier);
     const clanAccountInfo = await getClanAccountInfo(server, id, ['clan']);
-    const groupedTanks: Record<string, TankopediaEntry[]> = {};
+    const groupedTanks: Record<string, BlitzkriegTankDefinition[]> = {};
     const nations: string[] = [];
 
     filteredTanks.forEach((tank) => {
-      if (groupedTanks[tank.tankopedia.nation] === undefined) {
-        groupedTanks[tank.tankopedia.nation] = [tank.tankopedia];
-        nations.push(tank.tankopedia.nation);
+      if (groupedTanks[tank.tankDefinitions.nation] === undefined) {
+        groupedTanks[tank.tankDefinitions.nation] = [tank.tankDefinitions];
+        nations.push(tank.tankDefinitions.nation);
       } else {
-        groupedTanks[tank.tankopedia.nation].push(tank.tankopedia);
+        groupedTanks[tank.tankDefinitions.nation].push(tank.tankDefinitions);
       }
     });
 
@@ -86,7 +86,7 @@ export const ownedTanksCommand: CommandRegistry = {
               return (
                 <Tanks.Root>
                   <Tanks.Title>
-                    {(await tankopediaInfo).vehicle_nations[nation]}
+                    {(await encyclopediaInfo).vehicle_nations[nation]}
                   </Tanks.Title>
 
                   <Tanks.Row>
@@ -94,11 +94,11 @@ export const ownedTanksCommand: CommandRegistry = {
                       {await Promise.all(
                         leftColumn.map(async (tank) => (
                           <Tanks.Item
-                            key={tank.tank_id}
-                            name={await resolveTankName(tank.tank_id)}
+                            key={tank.id}
+                            name={tank.name}
                             tankType={tank.type}
-                            image={tank.images?.normal}
-                            treeType={await getTreeType(tank.tank_id)}
+                            image={tankIcon(tank.id)}
+                            treeType={await getTreeType(tank.id)}
                           />
                         )),
                       )}
@@ -107,11 +107,11 @@ export const ownedTanksCommand: CommandRegistry = {
                       {await Promise.all(
                         rightColumn.map(async (tank) => (
                           <Tanks.Item
-                            key={tank.tank_id}
-                            name={await resolveTankName(tank.tank_id)}
+                            key={tank.id}
+                            name={tank.name}
                             tankType={tank.type}
-                            image={tank.images?.normal}
-                            treeType={await getTreeType(tank.tank_id)}
+                            image={tankIcon(tank.id)}
+                            treeType={await getTreeType(tank.id)}
                           />
                         )),
                       )}

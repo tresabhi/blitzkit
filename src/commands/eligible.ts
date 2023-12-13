@@ -1,10 +1,10 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
+import { tankDefinitions } from '../core/blitzkrieg/definitions/tanks';
 import getPeriodNow from '../core/blitzkrieg/getPeriodNow';
 import getTimeDaysAgo from '../core/blitzkrieg/getTimeDaysAgo';
 import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
 import { tankAverages } from '../core/blitzstars/tankAverages';
-import { tankopedia } from '../core/blitzstars/tankopedia';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import embedNegative from '../core/discord/embedNegative';
 import embedPositive from '../core/discord/embedPositive';
@@ -66,11 +66,11 @@ export const eligibleCommand: CommandRegistry = {
         (await entries.reduce<PossiblyPromise<number>>(
           async (accumulator, [tankIdString, stats]) => {
             const tankId = parseInt(tankIdString);
-            const tankopediaEntry = (await tankopedia)[tankId];
+            const tankDefinition = (await tankDefinitions)[tankId];
 
-            if (!tankopediaEntry) return accumulator;
+            if (!tankDefinition) return accumulator;
 
-            const tankTier = tankopediaEntry.tier;
+            const tankTier = tankDefinition.tier;
 
             return (await accumulator) + tankTier * stats.battles;
           },
@@ -79,9 +79,9 @@ export const eligibleCommand: CommandRegistry = {
         (await entries.reduce<PossiblyPromise<number>>(
           async (accumulator, [tankIdString, stats]) => {
             const tankId = parseInt(tankIdString);
-            const tankopediaEntry = (await tankopedia)[tankId];
+            const tankDefinition = (await tankDefinitions)[tankId];
 
-            if (!tankopediaEntry) return accumulator;
+            if (!tankDefinition) return accumulator;
 
             return stats.battles;
           },
@@ -110,7 +110,7 @@ export const eligibleCommand: CommandRegistry = {
           async (accumulator, [tankIdString, stats]) => {
             const tankId = parseInt(tankIdString);
 
-            if ((await tankopedia)[tankId]?.tier === 10) {
+            if ((await tankDefinitions)[tankId]?.tier === 10) {
               const tankStats = diffed[tankId];
               return (await accumulator) + tankStats.damage_dealt;
             } else return accumulator;
@@ -121,7 +121,7 @@ export const eligibleCommand: CommandRegistry = {
           async (accumulator, [tankIdString, stats]) => {
             const tankId = parseInt(tankIdString);
 
-            if ((await tankopedia)[tankId]?.tier === 10) {
+            if ((await tankDefinitions)[tankId]?.tier === 10) {
               const tankStats = diffed[tankId];
               return (await accumulator) + tankStats.battles;
             } else return accumulator;

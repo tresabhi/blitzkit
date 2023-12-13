@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 import { CustomColumnDisplay } from '../app/tools/session/components/CustomColumn';
 import { AccentColor, GrayColor } from '../constants/radixColors';
 import { Region } from '../constants/regions';
@@ -66,26 +66,24 @@ export function resetSession() {
 }
 
 export const useSession = create<Session>()(
-  devtools(
-    persist(
-      (set) => ({
-        title: 'Untitled session',
-        isTracking: false,
-        resetPrompt: true,
-        showTotal: true,
-        showCareer: true,
-        embedPrompt: true,
+  persist(
+    (set) => ({
+      title: 'Untitled session',
+      isTracking: false,
+      resetPrompt: true,
+      showTotal: true,
+      showCareer: true,
+      embedPrompt: true,
 
-        customColumns: [
-          { display: 'battles', showDelta: false },
-          { display: 'winrate', showDelta: true },
-          { display: 'wn8', showDelta: false },
-          { display: 'damage', showDelta: true },
-        ],
-        color: 'slate',
-      }),
-      { name: 'session' },
-    ),
+      customColumns: [
+        { display: 'battles', showDelta: false },
+        { display: 'winrate', showDelta: true },
+        { display: 'wn8', showDelta: false },
+        { display: 'damage', showDelta: true },
+      ],
+      color: 'slate',
+    }),
+    { name: 'session' },
   ),
 );
 
