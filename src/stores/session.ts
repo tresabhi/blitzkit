@@ -22,6 +22,7 @@ type Session = (
       time: number;
     }
 ) & {
+  title: string;
   resetPrompt: boolean;
   embedPrompt: boolean;
   customColumns: {
@@ -68,6 +69,7 @@ export const useSession = create<Session>()(
   devtools(
     persist(
       (set) => ({
+        title: 'Untitled session',
         isTracking: false,
         resetPrompt: true,
         showTotal: true,

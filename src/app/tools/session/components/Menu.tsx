@@ -1,9 +1,12 @@
-import { ContextMenu, DropdownMenu } from '@radix-ui/themes';
+import { ContextMenu, DropdownMenu, Flex } from '@radix-ui/themes';
+import { createColors } from 'bepaint';
+import { useState } from 'react';
 import {
   ACCENT_COLORS,
   AccentColor,
   GRAY_COLORS,
   GrayColor,
+  PALETTES,
 } from '../../../../constants/radixColors';
 import { useSession } from '../../../../stores/session';
 import { CustomColumn } from './CustomColumn';
@@ -15,6 +18,7 @@ interface ContextMenuProps {
 
 export function Menu({ Builder, reset }: ContextMenuProps) {
   const session = useSession();
+  const [showTitleEditor, setShowTitleEditor] = useState(false);
 
   return (
     <Builder.Content>
@@ -29,9 +33,20 @@ export function Menu({ Builder, reset }: ContextMenuProps) {
             }
           >
             {[...ACCENT_COLORS, ...GRAY_COLORS].map((color) => (
-              <Builder.RadioItem value={color}>{`${color
-                .charAt(0)
-                .toUpperCase()}${color.slice(1)}`}</Builder.RadioItem>
+              <Builder.RadioItem value={color} key={color}>
+                <Flex gap="2" align="center">
+                  <div
+                    style={{
+                      backgroundColor: createColors(PALETTES[color])
+                        .solidBackground,
+                      width: 16,
+                      height: 16,
+                      borderRadius: '100%',
+                    }}
+                  />
+                  {`${color.charAt(0).toUpperCase()}${color.slice(1)}`}
+                </Flex>
+              </Builder.RadioItem>
             ))}
           </Builder.RadioGroup>
         </Builder.SubContent>
