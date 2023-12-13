@@ -8,7 +8,6 @@ import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
-import resolveTankName from '../core/blitz/resolveTankName';
 import {
   BlitzkriegTankDefinition,
   TIER_ROMAN_NUMERALS,
@@ -96,7 +95,7 @@ export const ownedTanksCommand: CommandRegistry = {
                         leftColumn.map(async (tank) => (
                           <Tanks.Item
                             key={tank.id}
-                            name={await resolveTankName(tank.id)}
+                            name={tank.name}
                             tankType={tank.type}
                             image={tankIcon(tank.id)}
                             treeType={await getTreeType(tank.id)}
@@ -109,7 +108,7 @@ export const ownedTanksCommand: CommandRegistry = {
                         rightColumn.map(async (tank) => (
                           <Tanks.Item
                             key={tank.id}
-                            name={await resolveTankName(tank.id)}
+                            name={tank.name}
                             tankType={tank.type}
                             image={tankIcon(tank.id)}
                             treeType={await getTreeType(tank.id)}

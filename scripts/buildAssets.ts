@@ -231,7 +231,7 @@ if (allTargets || targets?.includes('definitions')) {
                   .split(' ')
                   .map(Number) as [number, number],
                 name: strings[gun.userString] ?? gunKey.replaceAll('_', ' '),
-                tier: gun.level,
+                tier: gun.level as Tier,
                 shells: gunShells,
               };
 
@@ -245,7 +245,7 @@ if (allTargets || targets?.includes('definitions')) {
                 turretKey
                   .replaceAll('_', ' ')
                   .replace(/^(Turret ([0-9] )?)+/, ''),
-              tier: turret.level,
+              tier: turret.level as Tier,
               yaw: (typeof turret.yawLimits === 'string'
                 ? turret.yawLimits
                 : turret.yawLimits.at(-1)!

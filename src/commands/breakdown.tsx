@@ -8,7 +8,6 @@ import { AllStats, getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
-import resolveTankName from '../core/blitz/resolveTankName';
 import { tankDefinitions } from '../core/blitzkrieg/definitions/tanks';
 import { filtersToDescription } from '../core/blitzkrieg/filtersToDescription';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
@@ -195,7 +194,7 @@ async function render(
             type="tank"
             tankType={tankDefinition?.type}
             treeType={tankDefinition ? await getTreeType(id) : undefined}
-            title={await resolveTankName(id)}
+            title={awaitedTankDefinitions[id].name}
             stats={[
               {
                 title: 'Battles',

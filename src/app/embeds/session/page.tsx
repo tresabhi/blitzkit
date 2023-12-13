@@ -299,9 +299,7 @@ export default function SessionPage() {
                       key={stats.tank_id}
                       minimized={!session.showCareer}
                       title={
-                        tankDefinitions?.name_short ??
-                        tankDefinitions?.name ??
-                        `Unknown tank ${stats.tank_id}`
+                        tankDefinitions?.name ?? `Unknown tank ${stats.tank_id}`
                       }
                       type="tank"
                       tankType={tankDefinitions?.type}
