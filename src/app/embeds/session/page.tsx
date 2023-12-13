@@ -209,14 +209,7 @@ export default function SessionPage() {
                 <Breakdown.Row
                   color={session.color}
                   minimized={!session.showCareer}
-                  title={`Since ${since.toLocaleString(undefined, {
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    hour12: true,
-                    month: 'short',
-                    year: 'numeric',
-                    day: 'numeric',
-                  })}`}
+                  title={session.title}
                   stats={session.customColumns.map((customColumn) => {
                     const rowStat = totalRowStats[customColumn.display];
 
