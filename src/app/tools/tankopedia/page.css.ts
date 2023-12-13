@@ -40,3 +40,18 @@ export const listingImage = style({
     transform: 'translate(-25%, 10%)',
   },
 });
+
+export const enhancedArmor = style({
+  '@media': {
+    'screen and (min-width: 400px)': {
+      position: 'absolute',
+      right: 16,
+      top: 16,
+    },
+
+    'screen and (max-width: 399px)': {
+      // left: 16,
+      // bottom: 16,
+    },
+  },
+});

@@ -1,6 +1,6 @@
 import { asset } from '../asset';
 
-export type ShellType = 'ap' | 'apcr' | 'he' | 'heat';
+export type ShellType = 'ap' | 'ap_cr' | 'hc' | 'he';
 
 export interface BlitzkriegShellDefinition {
   id: number;
@@ -11,6 +11,7 @@ export interface BlitzkriegShellDefinition {
   normalization: number;
   ricochet: number;
   type: ShellType;
+  icon: string;
 }
 
 export type BlitzkriegShellDefinitions = Record<

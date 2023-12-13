@@ -2,10 +2,13 @@ import { config } from 'dotenv';
 import { existsSync } from 'fs';
 import { mkdir, readdir, rm } from 'fs/promises';
 import { argv } from 'process';
+import sharp from 'sharp';
 import { TankType } from '../src/components/Tanks';
 import { NATION_IDS } from '../src/constants/nations';
 import { SCPGStream } from '../src/core/blitz/SCPGStream';
 import { readBase64DVPL } from '../src/core/blitz/readBase64DVPL';
+import { readDVPLFile } from '../src/core/blitz/readDVPLFile';
+import { readStringDVPL } from '../src/core/blitz/readStringDVPL';
 import { readXMLDVPL } from '../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../src/core/blitz/toUniqueId';
@@ -122,9 +125,9 @@ const blitzTankTypeToBlitzkrieg: Record<BlitzTankType, TankType> = {
 };
 const blitzShellKindToBLitzkrieg: Record<ShellKind, ShellType> = {
   ARMOR_PIERCING: 'ap',
-  ARMOR_PIERCING_CR: 'apcr',
+  ARMOR_PIERCING_CR: 'ap_cr',
   HIGH_EXPLOSIVE: 'he',
-  HOLLOW_CHARGE: 'heat',
+  HOLLOW_CHARGE: 'hc',
 };
 const DATA =
   'C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz/Data';
@@ -137,6 +140,7 @@ const DOI = {
   bigIcons: 'Gfx/UI/BigTankIcons',
   flags: 'Gfx/Lobby/flags',
   '3d': '3d',
+  bigShellIcons: 'Gfx/Shared/tank-supply/ammunition/big',
 };
 
 const allTargets = argv.includes('--all-targets');
@@ -217,6 +221,7 @@ if (allTargets || targets?.includes('definitions')) {
                   normalization: shell.normalizationAngle,
                   ricochet: shell.ricochetAngle,
                   type: blitzShellKindToBLitzkrieg[shell.kind],
+                  icon: shell.icon,
                 };
 
                 return shellId;
@@ -485,5 +490,55 @@ if (allTargets || targets?.includes('tankModels')) {
         const scg = scgStream.consumeSCG();
       }
     }),
+  );
+}
+
+if (allTargets || targets?.includes('shellIcons')) {
+  console.log('Building shell icons...');
+
+  const image = sharp(
+    await readDVPLFile(
+      `${DATA}/${DOI.bigShellIcons}/texture0.packed.webp.dvpl`,
+    ),
+  );
+
+  const changes = await Promise.all(
+    (await readdir(`${DATA}/${DOI.bigShellIcons}`))
+      .filter((file) => file.endsWith('_l.txt.dvpl'))
+      .map(async (file) => {
+        const name = file.match(/(.+)_l\.txt\.dvpl/)![1];
+        const sizes = (
+          await readStringDVPL(`${DATA}/${DOI.bigShellIcons}/${file}`)
+        )
+          .split('\n')[4]
+          .split(' ')
+          .map(Number);
+
+        return {
+          content: (
+            await image
+              .clone()
+              .extract({
+                left: sizes[0],
+                top: sizes[1],
+                width: sizes[2],
+                height: sizes[3],
+              })
+              .toBuffer()
+          ).toString('base64'),
+          encoding: 'base64',
+          path: `shells/${name}.webp`,
+        } satisfies FileChange;
+      }),
+  );
+
+  console.log('Committing shell icons...');
+  commitMultipleFiles(
+    'tresabhi',
+    'blitzkrieg-assets',
+    'main',
+    'shell icons',
+    changes,
+    true,
   );
 }

@@ -1,16 +1,15 @@
 'use client';
 
-import { ArrowLeftIcon } from '@radix-ui/react-icons';
+import { ArrowLeftIcon, CaretRightIcon } from '@radix-ui/react-icons';
 import {
-  AspectRatio,
   Button,
   Card,
   Checkbox,
+  Dialog,
   Flex,
   Heading,
-  Inset,
-  Select,
   Slider,
+  Tabs,
   Text,
   Theme,
   Tooltip,
@@ -21,19 +20,23 @@ import Link from 'next/link';
 import { use, useEffect, useState } from 'react';
 import { Flag } from '../../../../components/Flag';
 import PageWrapper from '../../../../components/PageWrapper';
+import { asset } from '../../../../core/blitzkrieg/asset';
 import { gunDefinitions } from '../../../../core/blitzkrieg/definitions/guns';
 import { shellDefinitions } from '../../../../core/blitzkrieg/definitions/shells';
 import {
   TIER_ROMAN_NUMERALS,
   tankDefinitions,
+  tanksDefinitionsArray,
 } from '../../../../core/blitzkrieg/definitions/tanks';
 import { turretDefinitions } from '../../../../core/blitzkrieg/definitions/turrets';
+import * as styles from '../page.css';
 
-const SIZE = 0.05;
+type Mode = 'model' | 'armor';
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = parseInt(params.id);
   const awaitedTankDefinitions = use(tankDefinitions);
+  const awaitedTanksDefinitionsArray = use(tanksDefinitionsArray);
   const awaitedTurretDefinitions = use(turretDefinitions);
   const awaitedGunDefinitions = use(gunDefinitions);
   const awaitedShellDefinitions = use(shellDefinitions);
@@ -43,6 +46,12 @@ export default function Page({ params }: { params: { id: string } }) {
   );
   const [gun, setGun] = useState(awaitedGunDefinitions[turret.guns[0]]);
   const [crew, setCrew] = useState(100);
+  const [versusTank, setVersusTank] = useState(
+    awaitedTanksDefinitionsArray[0].id,
+  );
+  const [mode, setMode] = useState<Mode>('model');
+
+  console.log(versusTank);
 
   useEffect(() => setGun(awaitedGunDefinitions[turret.guns[0]]), [turret]);
 
@@ -62,16 +71,24 @@ export default function Page({ params }: { params: { id: string } }) {
             </Link>
 
             <Flex gap="2" align="center">
-              <Heading>{tank.name}</Heading>
               <Flag nation={tank.nation} />
+              <Heading>{tank.name}</Heading>
             </Flex>
           </Flex>
 
-          <AspectRatio ratio={16 / 9}>
-            <Card
-              style={{ width: '100%', height: '100%', position: 'relative' }}
-            >
-              <Inset style={{ height: 'calc(100% + 24px)' }}>
+          <Card style={{ position: 'relative' }}>
+            <Flex direction="column" gap="2">
+              <Tabs.Root
+                value={mode}
+                onValueChange={(value) => setMode(value as Mode)}
+              >
+                <Tabs.List>
+                  <Tabs.Trigger value="model">Model</Tabs.Trigger>
+                  <Tabs.Trigger value="armor">Armor</Tabs.Trigger>
+                </Tabs.List>
+              </Tabs.Root>
+
+              <div style={{ height: '50vh', maxHeight: 576 }}>
                 <Canvas onPointerDown={(event) => event.preventDefault()}>
                   <OrbitControls />
 
@@ -80,58 +97,61 @@ export default function Page({ params }: { params: { id: string } }) {
 
                   <mesh>
                     <torusKnotGeometry args={[undefined, undefined, 128, 16]} />
-                    <meshStandardMaterial color="red" />
+                    <meshStandardMaterial color="cyan" />
                   </mesh>
                 </Canvas>
-              </Inset>
+              </div>
 
-              <Flex
-                gap="2"
-                align="center"
-                style={{
-                  position: 'absolute',
-                  left: 16,
-                  bottom: 16,
-                }}
-              >
-                <Checkbox defaultChecked />
-                <Text>Enhanced armor</Text>
-              </Flex>
-            </Card>
-          </AspectRatio>
-
-          <Card style={{}}>
-            <Flex align="center" justify="between" gap="2">
-              <Flex align="center" gap="4">
-                <Text>Versus</Text>
-
-                <Select.Root value="1">
-                  <Select.Trigger variant="ghost" />
-
-                  <Select.Content>
-                    <Select.Item value="1">XM66F</Select.Item>
-                  </Select.Content>
-                </Select.Root>
-              </Flex>
-
-              <Flex gap="2" align="center">
-                <Checkbox defaultChecked />
-                <Text>Calibrated shells</Text>
-              </Flex>
-
-              <Flex gap="1">
-                <Button variant="solid" radius="small">
-                  <img src="/images/ammo/ap.png" width={24} height={24} />
-                </Button>
-                <Button variant="soft" radius="small" color="gray">
-                  <img src="/images/ammo/hcp.png" width={24} height={24} />
-                </Button>
-                <Button variant="soft" radius="small" color="gray">
-                  <img src="/images/ammo/he.png" width={24} height={24} />
-                </Button>
-              </Flex>
+              {mode === 'armor' && (
+                <Flex gap="2" align="center" className={styles.enhancedArmor}>
+                  <Checkbox defaultChecked />
+                  <Text>Enhanced armor</Text>
+                </Flex>
+              )}
             </Flex>
           </Card>
+
+          {mode === 'armor' && (
+            <Card>
+              <Flex align="center" justify="between" gap="2">
+                <Flex align="center" gap="4">
+                  <Text>Versus</Text>
+
+                  <Dialog.Root>
+                    <Dialog.Trigger>
+                      <Button variant="ghost">
+                        {awaitedTankDefinitions[versusTank].name}
+                        <CaretRightIcon />
+                      </Button>
+                    </Dialog.Trigger>
+
+                    <Dialog.Content>Do something lol</Dialog.Content>
+                  </Dialog.Root>
+                </Flex>
+
+                <Flex gap="2" align="center">
+                  <Checkbox defaultChecked />
+                  <Text>Calibrated shells</Text>
+                </Flex>
+
+                <Flex gap="1">
+                  <Button variant="solid" radius="small">
+                    <img src={asset('shells/ap.webp')} width={24} height={24} />
+                  </Button>
+                  <Button variant="soft" radius="small" color="gray">
+                    <img
+                      src={asset('shells/hc_premium.webp')}
+                      width={24}
+                      height={24}
+                    />
+                  </Button>
+                  <Button variant="soft" radius="small" color="gray">
+                    <img src={asset('shells/he.webp')} width={24} height={24} />
+                  </Button>
+                </Flex>
+              </Flex>
+            </Card>
+          )}
         </Flex>
 
         <Flex gap="6" direction="column">
