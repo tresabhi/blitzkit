@@ -1,6 +1,10 @@
 'use client';
 
-import { ArrowLeftIcon, CaretRightIcon } from '@radix-ui/react-icons';
+import {
+  ArrowLeftIcon,
+  CaretRightIcon,
+  MagnifyingGlassIcon,
+} from '@radix-ui/react-icons';
 import {
   Button,
   Card,
@@ -8,16 +12,20 @@ import {
   Dialog,
   Flex,
   Heading,
+  Separator,
   Slider,
   Tabs,
   Text,
+  TextField,
   Theme,
   Tooltip,
 } from '@radix-ui/themes';
 import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
+import { go } from 'fuzzysort';
+import { debounce } from 'lodash';
 import Link from 'next/link';
-import { use, useEffect, useState } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import { Flag } from '../../../../components/Flag';
 import PageWrapper from '../../../../components/PageWrapper';
 import { asset } from '../../../../core/blitzkrieg/asset';
@@ -26,6 +34,7 @@ import { shellDefinitions } from '../../../../core/blitzkrieg/definitions/shells
 import {
   TIER_ROMAN_NUMERALS,
   tankDefinitions,
+  tankNamesDiacritics,
   tanksDefinitionsArray,
 } from '../../../../core/blitzkrieg/definitions/tanks';
 import { turretDefinitions } from '../../../../core/blitzkrieg/definitions/turrets';
@@ -40,18 +49,25 @@ export default function Page({ params }: { params: { id: string } }) {
   const awaitedTurretDefinitions = use(turretDefinitions);
   const awaitedGunDefinitions = use(gunDefinitions);
   const awaitedShellDefinitions = use(shellDefinitions);
+  const awaitedTankNamesDiacritics = use(tankNamesDiacritics);
   const tank = awaitedTankDefinitions[id];
   const [turret, setTurret] = useState(
     awaitedTurretDefinitions[tank.turrets[0]],
   );
   const [gun, setGun] = useState(awaitedGunDefinitions[turret.guns[0]]);
   const [crew, setCrew] = useState(100);
-  const [versusTank, setVersusTank] = useState(
+  const [versusTankId, setVersusTankId] = useState(
     awaitedTanksDefinitionsArray[0].id,
   );
   const [mode, setMode] = useState<Mode>('model');
-
-  console.log(versusTank);
+  const versusTankSearchInput = useRef<HTMLInputElement>(null);
+  const [versusTankSearchResults, setVersusTankSearchResults] = useState<
+    number[]
+  >([]);
+  const [versusTankTurretId, setVersusTankTurretId] = useState(
+    awaitedTurretDefinitions[tank.turrets[0]].id,
+  );
+  const versusTank = awaitedTankDefinitions[versusTankId];
 
   useEffect(() => setGun(awaitedGunDefinitions[turret.guns[0]]), [turret]);
 
@@ -120,12 +136,87 @@ export default function Page({ params }: { params: { id: string } }) {
                   <Dialog.Root>
                     <Dialog.Trigger>
                       <Button variant="ghost">
-                        {awaitedTankDefinitions[versusTank].name}
+                        {awaitedTankDefinitions[versusTankId].name}
                         <CaretRightIcon />
                       </Button>
                     </Dialog.Trigger>
 
-                    <Dialog.Content>Do something lol</Dialog.Content>
+                    <Dialog.Content>
+                      <Flex direction="column" gap="6">
+                        <Flex direction="column" gap="2">
+                          <Heading size="4">Search tank</Heading>
+
+                          <TextField.Root>
+                            <TextField.Slot>
+                              <MagnifyingGlassIcon />
+                            </TextField.Slot>
+                            <TextField.Input
+                              ref={versusTankSearchInput}
+                              placeholder="Search tank..."
+                              onChange={debounce(() => {
+                                setVersusTankSearchResults(
+                                  go(
+                                    versusTankSearchInput.current!.value,
+                                    awaitedTankNamesDiacritics,
+                                    { key: 'combined', limit: 8 },
+                                  ).map((item) => item.obj.id),
+                                );
+                              }, 500)}
+                            />
+                          </TextField.Root>
+                        </Flex>
+
+                        {(versusTankSearchResults.length > 0 ||
+                          versusTankSearchInput.current?.value) && (
+                          <Flex direction="column" gap="2">
+                            {versusTankSearchResults.map((id) => (
+                              <Button
+                                key={id}
+                                variant="ghost"
+                                onClick={() => {
+                                  setVersusTankId(id);
+                                  setVersusTankSearchResults([]);
+                                  versusTankSearchInput.current!.value = '';
+                                }}
+                              >
+                                {awaitedTankDefinitions[id].name}
+                              </Button>
+                            ))}
+
+                            {versusTankSearchResults.length === 0 &&
+                              (versusTankSearchInput.current
+                                ? versusTankSearchInput.current.value.length > 0
+                                : false) && (
+                                <Button disabled variant="ghost">
+                                  No search results
+                                </Button>
+                              )}
+                          </Flex>
+                        )}
+
+                        <Separator style={{ width: '100%' }} />
+
+                        <Flex direction="column" gap="2">
+                          <Heading size="4">
+                            {awaitedTankDefinitions[versusTankId].name}
+                          </Heading>
+
+                          <Flex>
+                            {versusTank.turrets.map((id) => (
+                              <Button
+                                key={id}
+                                variant="ghost"
+                                onClick={() => setVersusTankTurretId(id)}
+                                radius="small"
+                                color="gray"
+                              >
+                                {awaitedTurretDefinitions[id].name}
+                              </Button>
+                            ))}
+                          </Flex>
+                        </Flex>
+                      </Flex>
+                    </Dialog.Content>
                   </Dialog.Root>
                 </Flex>
 
