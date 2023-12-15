@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 import { create } from 'zustand';
 import { TankType, TreeTypeString } from '../components/Tanks';
-import { Tier } from '../core/blitzkrieg/definitions/tanks';
+import { Tier } from '../core/blitzkrieg/tankDefinitions';
 
 export type TankopediaSortBy = 'tier' | 'name';
 export type TankopediaSortDirection = 'ascending' | 'descending';

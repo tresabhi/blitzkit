@@ -4,7 +4,7 @@ import {
   CacheType,
 } from 'discord.js';
 import { go } from 'fuzzysort';
-import { tankNamesDiacritics } from '../blitzkrieg/definitions/tanks';
+import { tankNamesDiacritics } from '../blitzkrieg/tankDefinitions';
 import {
   DISCORD_CHOICES_MAX_NAME_SIZE,
   OVERFLOW_SUFFIX,

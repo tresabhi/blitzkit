@@ -2,7 +2,7 @@ import { go } from 'fuzzysort';
 import {
   tankDefinitions,
   tanksDefinitionsArray,
-} from '../blitzkrieg/definitions/tanks';
+} from '../blitzkrieg/tankDefinitions';
 import { UserError } from '../blitzkrieg/userError';
 
 export default async function resolveTankId(tank: string | number) {

@@ -8,13 +8,13 @@ import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
 import getTreeType from '../core/blitz/getTreeType';
+import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
 import {
-  BlitzkriegTankDefinition,
   TIER_ROMAN_NUMERALS,
+  TankDefinition,
   Tier,
   tankDefinitions,
-} from '../core/blitzkrieg/definitions/tanks';
-import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
+} from '../core/blitzkrieg/tankDefinitions';
 import { tankIcon } from '../core/blitzkrieg/tankIcon';
 import addTierChoices from '../core/discord/addTierChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
@@ -47,7 +47,7 @@ export const ownedTanksCommand: CommandRegistry = {
       )
     ).filter((tank) => tank.tankDefinitions?.tier === tier);
     const clanAccountInfo = await getClanAccountInfo(server, id, ['clan']);
-    const groupedTanks: Record<string, BlitzkriegTankDefinition[]> = {};
+    const groupedTanks: Record<string, TankDefinition[]> = {};
     const nations: string[] = [];
 
     filteredTanks.forEach((tank) => {

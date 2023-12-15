@@ -1,8 +1,51 @@
 import { deburr } from 'lodash';
-import { TankType, TreeTypeString } from '../../../components/Tanks';
-import { asset } from '../asset';
+import { TankType, TreeTypeString } from '../../components/Tanks';
+import { asset } from './asset';
 
-export interface BlitzkriegTankDefinition {
+export type ShellType = 'ap' | 'ap_cr' | 'hc' | 'he';
+export interface ShellDefinition {
+  id: number;
+  name: string;
+  speed: number;
+  damage: { armor: number; devices: number };
+  caliber: number;
+  normalization: number;
+  ricochet: number;
+  type: ShellType;
+  icon: string;
+}
+export type GunDefinition = {
+  id: number;
+  name: string;
+  tier: Tier;
+  pitch: [number, number];
+  shells: ShellDefinition[];
+} & (
+  | {
+      type: 'regular';
+      reload: number;
+    }
+  | {
+      type: 'auto_loader';
+      reload: number;
+      interClip: number;
+      count: number;
+    }
+  | {
+      type: 'auto_reloader';
+      reload: number[];
+      interClip: number;
+      count: number;
+    }
+);
+export interface TurretDefinition {
+  id: number;
+  name: string;
+  tier: Tier;
+  yaw: [number, number];
+  guns: GunDefinition[];
+}
+export interface TankDefinition {
   id: number;
   nation: string;
   name: string;
@@ -10,23 +53,18 @@ export interface BlitzkriegTankDefinition {
   tier: Tier;
   type: TankType;
   testing?: boolean;
-  turrets: number[];
+  turrets: TurretDefinition[];
 }
-export type BlitzkriegTankDefinitions = Record<
-  number,
-  BlitzkriegTankDefinition
->;
+export type TankDefinitions = Record<number, TankDefinition>;
 
 export const tankDefinitions = fetch(asset('definitions/tanks.json'), {
   cache: 'no-cache',
-}).then(
-  async (response) => response.json() as Promise<BlitzkriegTankDefinitions>,
-);
+}).then(async (response) => response.json() as Promise<TankDefinitions>);
 
-const entries = new Promise<BlitzkriegTankDefinition[]>(async (resolve) => {
+const entries = new Promise<TankDefinition[]>(async (resolve) => {
   resolve(Object.entries(await tankDefinitions).map(([, entry]) => entry));
 });
-export const tanksDefinitionsArray = new Promise<BlitzkriegTankDefinition[]>(
+export const tanksDefinitionsArray = new Promise<TankDefinition[]>(
   async (resolve) => {
     resolve((await entries).map((entry) => entry));
   },

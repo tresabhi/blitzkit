@@ -7,9 +7,9 @@ import { TreeTypeEnum } from '../../../components/Tanks';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import fetchBlitz from '../../../core/blitz/fetchBlitz';
 import {
-  BlitzkriegTankDefinition,
+  TankDefinition,
   tankDefinitions,
-} from '../../../core/blitzkrieg/definitions/tanks';
+} from '../../../core/blitzkrieg/tankDefinitions';
 import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import calculateWN8 from '../../../core/statistics/calculateWN8';
 import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
@@ -30,7 +30,7 @@ export default function SessionPage() {
 
         list: {
           stats: IndividualTankStats;
-          tankDefinitions?: BlitzkriegTankDefinition;
+          tankDefinitions?: TankDefinition;
           career: IndividualTankStats;
           currentWN8?: number;
           careerWN8?: number;

@@ -1,5 +1,5 @@
 import { TreeTypeString } from '../../components/Tanks';
-import { tankDefinitions } from '../blitzkrieg/definitions/tanks';
+import { tankDefinitions } from '../blitzkrieg/tankDefinitions';
 import { DiffedTankStats } from '../blitzstars/getStatsInPeriod';
 import { tankAverages } from '../blitzstars/tankAverages';
 import calculateWN8 from './calculateWN8';

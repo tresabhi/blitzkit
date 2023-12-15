@@ -15,7 +15,7 @@ import {
   NATIONS,
   TIERS,
   TIER_ROMAN_NUMERALS,
-} from '../../../../../core/blitzkrieg/definitions/tanks';
+} from '../../../../../core/blitzkrieg/tankDefinitions';
 import mutateTankopedia, {
   TankopediaTestTankDisplay,
   useTankopedia,

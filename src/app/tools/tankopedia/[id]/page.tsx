@@ -12,7 +12,6 @@ import {
   Dialog,
   Flex,
   Heading,
-  Separator,
   Slider,
   Tabs,
   Text,
@@ -27,52 +26,64 @@ import { debounce } from 'lodash';
 import Link from 'next/link';
 import { use, useEffect, useRef, useState } from 'react';
 import { Flag } from '../../../../components/Flag';
+import { ModuleButtons } from '../../../../components/ModuleButton';
 import PageWrapper from '../../../../components/PageWrapper';
 import { asset } from '../../../../core/blitzkrieg/asset';
 import { gunDefinitions } from '../../../../core/blitzkrieg/definitions/guns';
 import { shellDefinitions } from '../../../../core/blitzkrieg/definitions/shells';
+import { turretDefinitions } from '../../../../core/blitzkrieg/definitions/turrets';
 import {
   TIER_ROMAN_NUMERALS,
   tankDefinitions,
   tankNamesDiacritics,
-  tanksDefinitionsArray,
-} from '../../../../core/blitzkrieg/definitions/tanks';
-import { turretDefinitions } from '../../../../core/blitzkrieg/definitions/turrets';
+} from '../../../../core/blitzkrieg/tankDefinitions';
 import * as styles from '../page.css';
-
-type Mode = 'model' | 'armor';
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = parseInt(params.id);
   const awaitedTankDefinitions = use(tankDefinitions);
-  const awaitedTanksDefinitionsArray = use(tanksDefinitionsArray);
   const awaitedTurretDefinitions = use(turretDefinitions);
   const awaitedGunDefinitions = use(gunDefinitions);
   const awaitedShellDefinitions = use(shellDefinitions);
   const awaitedTankNamesDiacritics = use(tankNamesDiacritics);
   const tank = awaitedTankDefinitions[id];
   const [turret, setTurret] = useState(
-    awaitedTurretDefinitions[tank.turrets[0]],
+    awaitedTurretDefinitions[tank.turrets.at(-1)!],
   );
-  const [gun, setGun] = useState(awaitedGunDefinitions[turret.guns[0]]);
+  const [gun, setGun] = useState(awaitedGunDefinitions[turret.guns.at(-1)!]);
   const [crew, setCrew] = useState(100);
-  const [versusTankId, setVersusTankId] = useState(
-    awaitedTanksDefinitionsArray[0].id,
-  );
-  const [mode, setMode] = useState<Mode>('model');
+  const [mode, setMode] = useState('model');
   const versusTankSearchInput = useRef<HTMLInputElement>(null);
   const [versusTankSearchResults, setVersusTankSearchResults] = useState<
     number[]
   >([]);
-  const [versusTankTurretId, setVersusTankTurretId] = useState(
-    awaitedTurretDefinitions[tank.turrets[0]].id,
+  const [versusTank, setVersusTank] = useState(tank);
+  const [versusTurret, setVersusTurret] = useState(
+    awaitedTurretDefinitions[versusTank.turrets.at(-1)!],
   );
-  const versusTank = awaitedTankDefinitions[versusTankId];
+  const [versusGun, setVersusGun] = useState(
+    awaitedGunDefinitions[versusTurret.guns.at(-1)!],
+  );
+  const [versusTankTab, setVersusTankTab] = useState('search');
 
-  useEffect(() => setGun(awaitedGunDefinitions[turret.guns[0]]), [turret]);
+  useEffect(() => {
+    if (!turret.guns.includes(gun.id)) {
+      setGun(awaitedGunDefinitions[turret.guns.at(-1)!]);
+    }
+  }, [turret]);
+  useEffect(() => {
+    if (!versusTank.turrets.includes(versusTurret.id)) {
+      setVersusTurret(awaitedTurretDefinitions[versusTank.turrets.at(-1)!]);
+    }
+  }, [versusTank]);
+  useEffect(() => {
+    if (!versusTurret.guns.includes(versusGun.id)) {
+      setVersusGun(awaitedGunDefinitions[versusTurret.guns.at(-1)!]);
+    }
+  }, [versusTurret]);
 
   return (
-    <PageWrapper>
+    <PageWrapper color="purple">
       <Flex gap="8" direction="column">
         <Flex gap="4" direction="column">
           <Flex justify="between" align="center">
@@ -94,10 +105,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
           <Card style={{ position: 'relative' }}>
             <Flex direction="column" gap="2">
-              <Tabs.Root
-                value={mode}
-                onValueChange={(value) => setMode(value as Mode)}
-              >
+              <Tabs.Root value={mode} onValueChange={setMode}>
                 <Tabs.List>
                   <Tabs.Trigger value="model">Model</Tabs.Trigger>
                   <Tabs.Trigger value="armor">Armor</Tabs.Trigger>
@@ -136,86 +144,191 @@ export default function Page({ params }: { params: { id: string } }) {
                   <Dialog.Root>
                     <Dialog.Trigger>
                       <Button variant="ghost">
-                        {awaitedTankDefinitions[versusTankId].name}
+                        {versusTank.name}
                         <CaretRightIcon />
                       </Button>
                     </Dialog.Trigger>
 
                     <Dialog.Content>
-                      <Flex direction="column" gap="6">
-                        <Flex direction="column" gap="2">
-                          <Heading size="4">Search tank</Heading>
+                      <Tabs.Root
+                        value={versusTankTab}
+                        onValueChange={setVersusTankTab}
+                      >
+                        <Flex gap="4" direction="column">
+                          <Tabs.List>
+                            <Tabs.Trigger value="search">Search</Tabs.Trigger>
+                            <Tabs.Trigger value="configure">
+                              Configure
+                            </Tabs.Trigger>
+                          </Tabs.List>
 
-                          <TextField.Root>
-                            <TextField.Slot>
-                              <MagnifyingGlassIcon />
-                            </TextField.Slot>
-                            <TextField.Input
-                              ref={versusTankSearchInput}
-                              placeholder="Search tank..."
-                              onChange={debounce(() => {
-                                setVersusTankSearchResults(
-                                  go(
-                                    versusTankSearchInput.current!.value,
-                                    awaitedTankNamesDiacritics,
-                                    { key: 'combined', limit: 8 },
-                                  ).map((item) => item.obj.id),
-                                );
-                              }, 500)}
-                            />
-                          </TextField.Root>
-                        </Flex>
+                          <Tabs.Content value="search">
+                            <Flex
+                              direction="column"
+                              gap="4"
+                              style={{ flex: 1 }}
+                              justify="center"
+                            >
+                              <TextField.Root>
+                                <TextField.Slot>
+                                  <MagnifyingGlassIcon />
+                                </TextField.Slot>
+                                <TextField.Input
+                                  ref={versusTankSearchInput}
+                                  placeholder="Search tank..."
+                                  onChange={debounce(() => {
+                                    setVersusTankSearchResults(
+                                      go(
+                                        versusTankSearchInput.current!.value,
+                                        awaitedTankNamesDiacritics,
+                                        { key: 'combined', limit: 8 },
+                                      ).map((item) => item.obj.id),
+                                    );
+                                  }, 500)}
+                                />
+                              </TextField.Root>
 
-                        {(versusTankSearchResults.length > 0 ||
-                          versusTankSearchInput.current?.value) && (
-                          <Flex direction="column" gap="2">
-                            {versusTankSearchResults.map((id) => (
-                              <Button
-                                key={id}
-                                variant="ghost"
-                                onClick={() => {
-                                  setVersusTankId(id);
-                                  setVersusTankSearchResults([]);
-                                  versusTankSearchInput.current!.value = '';
-                                }}
+                              <Flex direction="column" gap="2">
+                                {(versusTankSearchResults.length > 0 ||
+                                  versusTankSearchInput.current?.value) && (
+                                  <Flex direction="column" gap="2">
+                                    {versusTankSearchResults.map((id) => (
+                                      <Button
+                                        key={id}
+                                        variant="ghost"
+                                        onClick={() => {
+                                          setVersusTank(
+                                            awaitedTankDefinitions[id],
+                                          );
+                                          setVersusTankSearchResults([]);
+                                          versusTankSearchInput.current!.value =
+                                            '';
+                                          setVersusTankTab('configure');
+                                        }}
+                                      >
+                                        {awaitedTankDefinitions[id].name}
+                                      </Button>
+                                    ))}
+
+                                    {versusTankSearchResults.length === 0 &&
+                                      (versusTankSearchInput.current
+                                        ? versusTankSearchInput.current.value
+                                            .length > 0
+                                        : false) && (
+                                        <Button disabled variant="ghost">
+                                          No search results
+                                        </Button>
+                                      )}
+                                  </Flex>
+                                )}
+                              </Flex>
+                            </Flex>
+                          </Tabs.Content>
+
+                          <Tabs.Content value="configure">
+                            <Flex direction="column" gap="4">
+                              <Flex
+                                direction="column"
+                                gap="2"
+                                style={{ flex: 1 }}
                               >
-                                {awaitedTankDefinitions[id].name}
-                              </Button>
-                            ))}
+                                <Heading size="4">Configuration</Heading>
 
-                            {versusTankSearchResults.length === 0 &&
-                              (versusTankSearchInput.current
-                                ? versusTankSearchInput.current.value.length > 0
-                                : false) && (
-                                <Button disabled variant="ghost">
-                                  No search results
-                                </Button>
-                              )}
-                          </Flex>
-                        )}
+                                <Flex gap="2" wrap="wrap">
+                                  <Flex>
+                                    {versusTank.turrets.map((id, index) => (
+                                      <Tooltip
+                                        content={
+                                          awaitedTurretDefinitions[id].name
+                                        }
+                                      >
+                                        <ModuleButtons
+                                          key={id}
+                                          onClick={() =>
+                                            setVersusTurret(
+                                              awaitedTurretDefinitions[id],
+                                            )
+                                          }
+                                          selected={versusTurret.id === id}
+                                          tier={
+                                            awaitedTurretDefinitions[id].tier
+                                          }
+                                          type="turret"
+                                          style={{
+                                            margin: -0.5,
+                                            borderTopLeftRadius:
+                                              index === 0 ? undefined : 0,
+                                            borderBottomLeftRadius:
+                                              index === 0 ? undefined : 0,
+                                            borderTopRightRadius:
+                                              index ===
+                                              versusTank.turrets.length - 1
+                                                ? undefined
+                                                : 0,
+                                            borderBottomRightRadius:
+                                              index ===
+                                              versusTank.turrets.length - 1
+                                                ? undefined
+                                                : 0,
+                                          }}
+                                        />
+                                      </Tooltip>
+                                    ))}
+                                  </Flex>
+                                  <Flex>
+                                    {versusTurret.guns.map((id, index) => (
+                                      <Tooltip
+                                        content={awaitedGunDefinitions[id].name}
+                                      >
+                                        <ModuleButtons
+                                          key={id}
+                                          onClick={() =>
+                                            setVersusGun(
+                                              awaitedGunDefinitions[id],
+                                            )
+                                          }
+                                          selected={versusGun.id === id}
+                                          tier={awaitedGunDefinitions[id].tier}
+                                          type="gun"
+                                          style={{
+                                            margin: -0.5,
+                                            borderTopLeftRadius:
+                                              index === 0 ? undefined : 0,
+                                            borderBottomLeftRadius:
+                                              index === 0 ? undefined : 0,
+                                            borderTopRightRadius:
+                                              index ===
+                                              versusTurret.guns.length - 1
+                                                ? undefined
+                                                : 0,
+                                            borderBottomRightRadius:
+                                              index ===
+                                              versusTurret.guns.length - 1
+                                                ? undefined
+                                                : 0,
+                                          }}
+                                        />
+                                      </Tooltip>
+                                    ))}
+                                  </Flex>
+                                </Flex>
+                              </Flex>
 
-                        <Separator style={{ width: '100%' }} />
-
-                        <Flex direction="column" gap="2">
-                          <Heading size="4">
-                            {awaitedTankDefinitions[versusTankId].name}
-                          </Heading>
-
-                          <Flex>
-                            {versusTank.turrets.map((id) => (
-                              <Button
-                                key={id}
-                                variant="ghost"
-                                onClick={() => setVersusTankTurretId(id)}
-                                radius="small"
-                                color="gray"
+                              <Flex
+                                direction="column"
+                                gap="2"
+                                style={{ flex: 1 }}
                               >
-                                {awaitedTurretDefinitions[id].name}
-                              </Button>
-                            ))}
-                          </Flex>
+                                <Heading size="4">Properties</Heading>
+
+                                <ul>
+                                  <li>Penetration</li>
+                                </ul>
+                              </Flex>
+                            </Flex>
+                          </Tabs.Content>
                         </Flex>
-                      </Flex>
+                      </Tabs.Root>
                     </Dialog.Content>
                   </Dialog.Root>
                 </Flex>
@@ -227,17 +340,25 @@ export default function Page({ params }: { params: { id: string } }) {
 
                 <Flex gap="1">
                   <Button variant="solid" radius="small">
-                    <img src={asset('shells/ap.webp')} width={24} height={24} />
-                  </Button>
-                  <Button variant="soft" radius="small" color="gray">
                     <img
-                      src={asset('shells/hc_premium.webp')}
+                      src={asset('icons/shells/ap.webp')}
                       width={24}
                       height={24}
                     />
                   </Button>
                   <Button variant="soft" radius="small" color="gray">
-                    <img src={asset('shells/he.webp')} width={24} height={24} />
+                    <img
+                      src={asset('icons/shells/hc_premium.webp')}
+                      width={24}
+                      height={24}
+                    />
+                  </Button>
+                  <Button variant="soft" radius="small" color="gray">
+                    <img
+                      src={asset('icons/shells/he.webp')}
+                      width={24}
+                      height={24}
+                    />
                   </Button>
                 </Flex>
               </Flex>

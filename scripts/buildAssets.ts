@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import { existsSync } from 'fs';
+import { existsSync, writeFileSync } from 'fs';
 import { mkdir, readdir, rm } from 'fs/promises';
 import { argv } from 'process';
 import sharp from 'sharp';
@@ -15,16 +15,14 @@ import { toUniqueId } from '../src/core/blitz/toUniqueId';
 import commitMultipleFiles, {
   FileChange,
 } from '../src/core/blitzkrieg/commitMultipleFiles';
-import { BlitzkriegGunDefinitions } from '../src/core/blitzkrieg/definitions/guns';
 import {
-  BlitzkriegShellDefinitions,
+  GunDefinition,
+  ShellDefinition,
   ShellType,
-} from '../src/core/blitzkrieg/definitions/shells';
-import {
-  BlitzkriegTankDefinitions,
+  TankDefinitions,
   Tier,
-} from '../src/core/blitzkrieg/definitions/tanks';
-import { BlitzkriegTurretDefinitions } from '../src/core/blitzkrieg/definitions/turrets';
+  TurretDefinition,
+} from '../src/core/blitzkrieg/tankDefinitions';
 
 config();
 
@@ -98,8 +96,12 @@ interface VehicleDefinitions {
       yawLimits: string | string[];
       guns: {
         [key: string]: {
+          reloadTime: number;
           maxAmmo: number;
           pitchLimits?: string | string[];
+          pumpGunMode?: boolean;
+          pumpGunReloadTimes?: string;
+          clip?: { count: number; rate: number };
         };
       };
     };
@@ -141,6 +143,7 @@ const DOI = {
   flags: 'Gfx/Lobby/flags',
   '3d': '3d',
   bigShellIcons: 'Gfx/Shared/tank-supply/ammunition/big',
+  moduleIcons: 'Gfx/UI/ModulesTechTree',
 };
 
 const allTargets = argv.includes('--all-targets');
@@ -154,10 +157,7 @@ if (!targets && !allTargets) throw new Error('No target(s) specified');
 if (allTargets || targets?.includes('definitions')) {
   console.log('Building tank definitions...');
 
-  const tankDefinitions: BlitzkriegTankDefinitions = {};
-  const turretDefinitions: BlitzkriegTurretDefinitions = {};
-  const gunDefinitions: BlitzkriegGunDefinitions = {};
-  const shellDefinitions: BlitzkriegShellDefinitions = {};
+  const definitions: TankDefinitions = {};
   const nations = await readdir(`${DATA}/${DOI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
@@ -203,15 +203,41 @@ if (allTargets || targets?.includes('definitions')) {
               const gun = gunList.root.shared[gunKey];
               const pitchLimitsRaw =
                 turretGunEntry.pitchLimits ?? gun.pitchLimits;
+              const gunPitch = (
+                typeof pitchLimitsRaw === 'string'
+                  ? pitchLimitsRaw
+                  : pitchLimitsRaw.at(-1)!
+              )
+                .split(' ')
+                .map(Number) as [number, number];
+              const gunName =
+                strings[gun.userString] ?? gunKey.replaceAll('_', ' ');
+              const gunType =
+                'clip' in turretGunEntry
+                  ? turretGunEntry.pumpGunMode
+                    ? 'auto_reloader'
+                    : 'auto_loader'
+                  : 'regular';
+              const gunReload =
+                gunType === 'auto_reloader'
+                  ? turretGunEntry.pumpGunReloadTimes!.split(' ').map(Number)
+                  : turretGunEntry.reloadTime;
+              const gunClipCount =
+                gunType === 'regular' ? undefined : turretGunEntry.clip!.count;
+              const gunInterClip =
+                gunType === 'regular'
+                  ? undefined
+                  : 60 / turretGunEntry.clip!.rate;
               const gunShells = Object.keys(gun.shots).map((shellKey) => {
                 const turretShellEntry = gun.shots[shellKey];
                 const shell = shellList.root[shellKey];
                 const shellId = toUniqueId(nation, shell.id);
+                const shellName =
+                  strings[shell.userString] ?? shellKey.replaceAll('_', ' ');
 
-                shellDefinitions[shellId] = {
+                return {
                   id: shellId,
-                  name:
-                    strings[shell.userString] ?? shellKey.replaceAll('_', ' '),
+                  name: shellName,
                   speed: turretShellEntry.speed,
                   damage: {
                     armor: shell.damage.armor,
@@ -222,28 +248,23 @@ if (allTargets || targets?.includes('definitions')) {
                   ricochet: shell.ricochetAngle,
                   type: blitzShellKindToBLitzkrieg[shell.kind],
                   icon: shell.icon,
-                };
-
-                return shellId;
+                } satisfies ShellDefinition;
               });
 
-              gunDefinitions[gunId] = {
+              return {
                 id: gunId,
-                pitch: (typeof pitchLimitsRaw === 'string'
-                  ? pitchLimitsRaw
-                  : pitchLimitsRaw.at(-1)!
-                )
-                  .split(' ')
-                  .map(Number) as [number, number],
-                name: strings[gun.userString] ?? gunKey.replaceAll('_', ' '),
+                pitch: gunPitch,
+                name: gunName,
                 tier: gun.level as Tier,
                 shells: gunShells,
-              };
-
-              return gunId;
+                type: gunType,
+                reload: gunReload,
+                count: gunClipCount,
+                interClip: gunInterClip,
+              } as GunDefinition;
             });
 
-            turretDefinitions[turretId] = {
+            return {
               id: turretId,
               name:
                 strings[turret.userString] ??
@@ -258,13 +279,11 @@ if (allTargets || targets?.includes('definitions')) {
                 .split(' ')
                 .map(Number) as [number, number],
               guns: turretGuns,
-            };
-
-            return turretId;
+            } satisfies TurretDefinition;
           },
         );
 
-        tankDefinitions[tankId] = {
+        definitions[tankId] = {
           id: tankId,
           name:
             (tank.shortUserString
@@ -288,36 +307,37 @@ if (allTargets || targets?.includes('definitions')) {
   );
 
   console.log('Committing tank definitions...');
-  await commitMultipleFiles(
-    'tresabhi',
-    'blitzkrieg-assets',
-    'main',
-    'definitions',
-    [
-      {
-        content: JSON.stringify(tankDefinitions),
-        encoding: 'utf-8',
-        path: 'definitions/tanks.json',
-      },
-      {
-        content: JSON.stringify(turretDefinitions),
-        encoding: 'utf-8',
-        path: 'definitions/turrets.json',
-      },
-      {
-        content: JSON.stringify(gunDefinitions),
-        encoding: 'utf-8',
-        path: 'definitions/guns.json',
-      },
-      {
-        content: JSON.stringify(shellDefinitions),
-        encoding: 'utf-8',
-        path: 'definitions/shells.json',
-      },
-    ],
+  writeFileSync('test.json', JSON.stringify(definitions, null, 2));
+  // await commitMultipleFiles(
+  //   'tresabhi',
+  //   'blitzkrieg-assets',
+  //   'main',
+  //   'definitions',
+  //   [
+  //     {
+  //       content: JSON.stringify(tankDefinitions),
+  //       encoding: 'utf-8',
+  //       path: 'definitions/tanks.json',
+  //     },
+  //     {
+  //       content: JSON.stringify(turretDefinitions),
+  //       encoding: 'utf-8',
+  //       path: 'definitions/turrets.json',
+  //     },
+  //     {
+  //       content: JSON.stringify(gunDefinitions),
+  //       encoding: 'utf-8',
+  //       path: 'definitions/guns.json',
+  //     },
+  //     {
+  //       content: JSON.stringify(shellDefinitions),
+  //       encoding: 'utf-8',
+  //       path: 'definitions/shells.json',
+  //     },
+  //   ],
 
-    true,
-  );
+  //   true,
+  // );
 }
 
 if (
@@ -356,14 +376,14 @@ if (
           changes.push({
             content: await readBase64DVPL(big),
             encoding: 'base64',
-            path: `icons/big/${id}.webp`,
+            path: `icons/tank/big/${id}.webp`,
           });
         }
         if (allTargets || targets?.includes('smallTankIcons')) {
           changes.push({
             content: await readBase64DVPL(small),
             encoding: 'base64',
-            path: `icons/small/${id}.webp`,
+            path: `icons/tank/small/${id}.webp`,
           });
         }
       }
@@ -527,7 +547,7 @@ if (allTargets || targets?.includes('shellIcons')) {
               .toBuffer()
           ).toString('base64'),
           encoding: 'base64',
-          path: `shells/${name}.webp`,
+          path: `icons/shells/${name}.webp`,
         } satisfies FileChange;
       }),
   );
@@ -538,6 +558,41 @@ if (allTargets || targets?.includes('shellIcons')) {
     'blitzkrieg-assets',
     'main',
     'shell icons',
+    changes,
+    true,
+  );
+}
+
+if (allTargets || targets?.includes('moduleIcons')) {
+  console.log('Building module icons...');
+
+  const changes = await Promise.all(
+    (await readdir(`${DATA}/${DOI.moduleIcons}`))
+      .filter(
+        (file) =>
+          !file.endsWith('@2x.packed.webp.dvpl') && file.startsWith('vehicle'),
+      )
+      .map(async (file) => {
+        const nameRaw = file.match(/vehicle(.+)\.packed\.webp\.dvpl/)![1];
+        const name = nameRaw[0].toLowerCase() + nameRaw.slice(1);
+        const content = await readBase64DVPL(
+          `${DATA}/${DOI.moduleIcons}/${file}`,
+        );
+
+        return {
+          content,
+          path: `icons/modules/${name}.webp`,
+          encoding: 'base64',
+        } satisfies FileChange;
+      }),
+  );
+
+  console.log('Committing module icons...');
+  commitMultipleFiles(
+    'tresabhi',
+    'blitzkrieg-assets',
+    'main',
+    'module icons',
     changes,
     true,
   );

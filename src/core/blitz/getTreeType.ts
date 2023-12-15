@@ -1,5 +1,5 @@
 import { TreeTypeEnum } from '../../components/Tanks';
-import { tankDefinitions } from '../blitzkrieg/definitions/tanks';
+import { tankDefinitions } from '../blitzkrieg/tankDefinitions';
 
 export default async function getTreeType(id: number) {
   const entry = (await tankDefinitions)[id];
