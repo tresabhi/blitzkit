@@ -20,4 +20,4 @@ Go to [application directory for Blitzkrieg](https://discord.com/application-dir
 
 ### https://tresabhi.github.io/blitzkrieg/
 
-![Blitzkrieg documentation website](https://i.imgur.com/mCZCZEI.png)
+![Blitzkrieg documentation website](https://i.imgur.com/TOt5fMx.png)
