@@ -1,4 +1,5 @@
 import { times } from 'lodash';
+import { SC2 } from '../../types/sc2';
 import { readDVPL } from './readDVPL';
 import { readDVPLFile } from './readDVPLFile';
 
@@ -69,6 +70,12 @@ interface PolygonGroupRaw {
   vertexCount: number;
   vertexFormat: number;
   vertices: Buffer;
+}
+type BlitzkriegVertex = { type: VertexType; value: number[] }[];
+interface BlitzkriegPolygonGroup {
+  id: bigint;
+  vertices: BlitzkriegVertex[];
+  indices: number[];
 }
 
 const VECTOR_SIZES = [
@@ -216,7 +223,7 @@ export class SCPGStream {
       }
 
       const verticesStream = new SCPGStream(polygonGroupRaw.vertices);
-      const vertices: Partial<Record<VertexType, number[]>>[] = [];
+      const vertices: BlitzkriegVertex[] = [];
       const vertexFormatBuffer = Buffer.alloc(4);
       vertexFormatBuffer.writeUInt32LE(polygonGroupRaw.vertexFormat, 0);
       const vertexFormat = [...vertexFormatBuffer]
@@ -230,9 +237,11 @@ export class SCPGStream {
         vertexFormat.forEach((type) => {
           const resolved = VECTOR_SIZES.some((types, size) => {
             if (types.includes(type)) {
-              if (!(index in vertices)) vertices[index] = {};
-              vertices[index][type] = verticesStream.consumeVectorN(size + 1);
-
+              if (!(index in vertices)) vertices[index] = [];
+              vertices[index].push({
+                type,
+                value: verticesStream.consumeVectorN(size + 1),
+              });
               return true;
             }
           });
@@ -243,7 +252,11 @@ export class SCPGStream {
         });
       }
 
-      return { vertices, indices };
+      return {
+        id: polygonGroupRaw['#id'].readBigUInt64LE(),
+        vertices,
+        indices,
+      } satisfies BlitzkriegPolygonGroup;
     });
 
     return polygonGroups;
@@ -271,7 +284,7 @@ export class SCPGStream {
   }
   consumeSC2() {
     this.consumeSC2Header();
-    return this.consumeKA();
+    return this.consumeKA() as SC2;
   }
 
   consumeKAValue(

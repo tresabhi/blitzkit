@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
 import { existsSync, writeFileSync } from 'fs';
 import { mkdir, readdir, rm } from 'fs/promises';
+import { times } from 'lodash';
 import { argv } from 'process';
 import sharp from 'sharp';
 import { TankType } from '../src/components/Tanks';
@@ -25,6 +26,9 @@ import {
   TurretDefinition,
 } from '../src/core/blitzkrieg/tankDefinitions';
 
+(BigInt.prototype as any).toJSON = function () {
+  return this.toString();
+};
 config();
 
 // WARNING! MOST OF THESE TYPES ARE NOT EXHAUSTIVE!
@@ -502,7 +506,7 @@ if (allTargets || targets?.includes('tankModels')) {
         const nationVehicleId = tank.id;
         const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
 
-        // if (id !== 897) continue;
+        if (id !== 6753) continue;
         console.log(`Building model ${id} @ ${nation}/${tankIndex}`);
 
         const parameters = await readYAMLDVPL<TankParameters>(
@@ -520,8 +524,35 @@ if (allTargets || targets?.includes('tankModels')) {
           `${DATA}/${DOI['3d']}/${scgPath}.dvpl`,
         );
 
-        const sc2 = sc2Stream.consumeSC2();
         const scg = scgStream.consumeSCG();
+        const sc2 = sc2Stream.consumeSC2();
+
+        sc2['#hierarchy'][0]['#hierarchy']!.forEach((hierarchy) => {
+          times(
+            hierarchy.components.count,
+            (index) => hierarchy.components[index.toString().padStart(4, '0')],
+          ).forEach((component) => {
+            if (component['comp.typename'] !== 'RenderComponent') return;
+
+            hierarchy.name,
+              times(
+                component['rc.renderObj']['ro.batchCount'],
+                (index) =>
+                  component['rc.renderObj']['ro.batches'][
+                    index.toString().padStart(4, '0')
+                  ],
+              ).map((batch) => {
+                const polygonGroup = scg.find(
+                  (group) => group.id === batch['rb.datasource'],
+                );
+
+                console.log(batch['rb.datasource'], polygonGroup !== undefined);
+              });
+          });
+        });
+
+        // writeFile('test.sc2.json', JSON.stringify(sc2, null, 2));
+        // writeFile('test.scg.json', JSON.stringify(scg, null, 2));
       }
     }),
   );

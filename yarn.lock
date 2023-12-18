@@ -826,6 +826,13 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.1.6.tgz#22958c042e10b67463997bd6ea7115fe28cbcaf9"
   integrity sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==
 
+"@gltf-transform/core@^3.9.0":
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/@gltf-transform/core/-/core-3.9.0.tgz#c63d5d0a2cf2d00f2a5f8faa5c5c6c6187db06c2"
+  integrity sha512-sLIUFqPIx8ATPDRwC9G/TXh4C7Q+w9z7DzXVMiNNReSVsAemTmZACqwCYpDW4jkUm3pbmz5/h9I9HXokBHbJ2w==
+  dependencies:
+    property-graph "^1.3.1"
+
 "@img/sharp-darwin-arm64@0.33.1":
   version "0.33.1"
   resolved "https://registry.yarnpkg.com/@img/sharp-darwin-arm64/-/sharp-darwin-arm64-0.33.1.tgz#9d3cb0e4899b10b003608a018877b45b6db02861"
@@ -5108,6 +5115,11 @@ prop-types@^15.6.0:
     loose-envify "^1.4.0"
     object-assign "^4.1.1"
     react-is "^16.13.1"
+
+property-graph@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/property-graph/-/property-graph-1.3.1.tgz#25fb2c8040ba9b15f04cda90a443f3f844505293"
+  integrity sha512-gei3N/bHWJdCItJ4blnlGWd9iauEZI+JZYj/A0D177XSI01+QhiJGAVscYBhe3Yywow3A2QJzVtsO2P+UgrRRQ==
 
 property-information@^6.0.0:
   version "6.4.0"
