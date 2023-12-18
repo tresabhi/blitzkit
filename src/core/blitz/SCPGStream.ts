@@ -34,7 +34,7 @@ enum KAType {
   UNCONFIRMED_TRANSFORM = 29,
 }
 
-enum VertexType {
+export enum VertexType {
   VERTEX,
   NORMAL,
   COLOR,
@@ -90,14 +90,18 @@ const VECTOR_SIZES = [
   [
     VertexType.VERTEX,
     VertexType.NORMAL,
-    VertexType.TANGENT,
     VertexType.BINORMAL,
     VertexType.CUBETEXCOORD0,
     VertexType.CUBETEXCOORD1,
     VertexType.CUBETEXCOORD2,
     VertexType.CUBETEXCOORD3,
   ],
-  [VertexType.PIVOT4, VertexType.JOINTINDEX, VertexType.JOINTWEIGHT],
+  [
+    VertexType.PIVOT4,
+    VertexType.JOINTINDEX,
+    VertexType.JOINTWEIGHT,
+    VertexType.TANGENT,
+  ],
 ];
 
 export class SCPGStream {
@@ -251,6 +255,8 @@ export class SCPGStream {
           }
         });
       }
+
+      console.log(verticesStream.readRemaining().length);
 
       return {
         id: polygonGroupRaw['#id'].readBigUInt64LE(),

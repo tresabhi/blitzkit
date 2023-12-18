@@ -1,12 +1,14 @@
+import { Document, Node, NodeIO, Scene } from '@gltf-transform/core';
 import { config } from 'dotenv';
 import { existsSync, writeFileSync } from 'fs';
 import { mkdir, readdir, rm } from 'fs/promises';
 import { times } from 'lodash';
 import { argv } from 'process';
 import sharp from 'sharp';
+import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
 import { TankType } from '../src/components/Tanks';
 import { NATION_IDS } from '../src/constants/nations';
-import { SCPGStream } from '../src/core/blitz/SCPGStream';
+import { SCPGStream, VertexType } from '../src/core/blitz/SCPGStream';
 import { readBase64DVPL } from '../src/core/blitz/readBase64DVPL';
 import { readDVPLFile } from '../src/core/blitz/readDVPLFile';
 import { readStringDVPL } from '../src/core/blitz/readStringDVPL';
@@ -25,6 +27,7 @@ import {
   Tier,
   TurretDefinition,
 } from '../src/core/blitzkrieg/tankDefinitions';
+import { Hierarchy } from '../src/types/sc2';
 
 (BigInt.prototype as any).toJSON = function () {
   return this.toString();
@@ -512,44 +515,195 @@ if (allTargets || targets?.includes('tankModels')) {
         const parameters = await readYAMLDVPL<TankParameters>(
           `${DATA}/${DOI.tankParameters}/${nation}/${tankIndex}.yaml.dvpl`,
         );
-        const sc2Path = parameters.resourcesPath.blitzModelPath;
-        const scgPath = parameters.resourcesPath.blitzModelPath.replace(
-          /\.sc2$/,
-          '.scg',
-        );
-        const sc2Stream = await SCPGStream.fromDVPLFile(
-          `${DATA}/${DOI['3d']}/${sc2Path}.dvpl`,
-        );
-        const scgStream = await SCPGStream.fromDVPLFile(
-          `${DATA}/${DOI['3d']}/${scgPath}.dvpl`,
-        );
+        const scg = (
+          await SCPGStream.fromDVPLFile(
+            `${DATA}/${
+              DOI['3d']
+            }/${parameters.resourcesPath.blitzModelPath.replace(
+              /\.sc2$/,
+              '.scg',
+            )}.dvpl`,
+          )
+        ).consumeSCG();
+        const sc2 = (
+          await SCPGStream.fromDVPLFile(
+            `${DATA}/${DOI['3d']}/${parameters.resourcesPath.blitzModelPath}.dvpl`,
+          )
+        ).consumeSC2();
+        const document = new Document();
+        const scene = document.createScene();
+        const buffer = document.createBuffer();
 
-        const scg = scgStream.consumeSCG();
-        const sc2 = sc2Stream.consumeSC2();
+        function parseHierarchies(
+          hierarchies: Hierarchy[],
+          parent: Scene | Node,
+        ) {
+          hierarchies.forEach((hierarchy) => {
+            const node = document.createNode(hierarchy.name);
 
-        sc2['#hierarchy'][0]['#hierarchy']!.forEach((hierarchy) => {
-          times(
-            hierarchy.components.count,
-            (index) => hierarchy.components[index.toString().padStart(4, '0')],
-          ).forEach((component) => {
-            if (component['comp.typename'] !== 'RenderComponent') return;
+            times(
+              hierarchy.components.count,
+              (index) =>
+                hierarchy.components[index.toString().padStart(4, '0')],
+            ).forEach((component) => {
+              switch (component['comp.typename']) {
+                case 'TransformComponent': {
+                  const localRotation = new Quaternion().fromArray(
+                    component['tc.localRotation'],
+                  );
+                  const localScale = new Vector3().fromArray(
+                    component['tc.localScale'],
+                  );
+                  const localTranslation = new Vector3().fromArray(
+                    component['tc.localTranslation'],
+                  );
+                  const worldRotation = new Quaternion().fromArray(
+                    component['tc.worldRotation'],
+                  );
+                  const worldScale = new Vector3().fromArray(
+                    component['tc.worldScale'],
+                  );
+                  const worldTranslation = new Vector3().fromArray(
+                    component['tc.worldTranslation'],
+                  );
+                  const localMatrix = new Matrix4().compose(
+                    localTranslation,
+                    localRotation,
+                    localScale,
+                  );
+                  const worldMatrix = new Matrix4().compose(
+                    worldTranslation,
+                    worldRotation,
+                    worldScale,
+                  );
+                  const combinedMatrix = new Matrix4().multiplyMatrices(
+                    worldMatrix,
+                    localMatrix,
+                  );
+                  const combinedRotation = new Quaternion();
+                  const combinedScale = new Vector3();
+                  const combinedTranslation = new Vector3();
 
-            hierarchy.name,
-              times(
-                component['rc.renderObj']['ro.batchCount'],
-                (index) =>
-                  component['rc.renderObj']['ro.batches'][
-                    index.toString().padStart(4, '0')
-                  ],
-              ).map((batch) => {
-                const polygonGroup = scg.find(
-                  (group) => group.id === batch['rb.datasource'],
-                );
+                  combinedMatrix.decompose(
+                    combinedTranslation,
+                    combinedRotation,
+                    combinedScale,
+                  );
 
-                console.log(batch['rb.datasource'], polygonGroup !== undefined);
-              });
+                  node.setRotation(combinedRotation.toArray() as Vector4Tuple);
+                  node.setScale(combinedScale.toArray());
+                  node.setTranslation(combinedTranslation.toArray());
+
+                  break;
+                }
+
+                case 'RenderComponent': {
+                  times(
+                    component['rc.renderObj']['ro.batchCount'],
+                    (index) =>
+                      component['rc.renderObj']['ro.batches'][
+                        index.toString().padStart(4, '0')
+                      ],
+                  ).map((batch) => {
+                    const polygonGroup = scg.find(
+                      (group) => group.id === batch['rb.datasource'],
+                    );
+                    const unpackedVertices: number[] = [];
+
+                    if (!polygonGroup)
+                      throw new Error(
+                        `Missing polygon group ${batch['rb.datasource']}`,
+                      );
+
+                    polygonGroup.vertices.forEach((vertex) => {
+                      vertex.map((vertexItem) => {
+                        switch (vertexItem.type) {
+                          case VertexType.VERTEX: {
+                            unpackedVertices.push(...vertexItem.value);
+                            break;
+                          }
+
+                          // default:
+                          //   throw new TypeError(
+                          //     `Unhandled vertex type: ${
+                          //       VertexType[vertexItem.type]
+                          //     } (${vertexItem.type})`,
+                          //   );
+                        }
+                      });
+                    });
+
+                    const vertexAccessor = document
+                      .createAccessor()
+                      .setType('VEC3')
+                      .setArray(new Float32Array(unpackedVertices))
+                      .setBuffer(buffer);
+                    const indexAccessor = document
+                      .createAccessor()
+                      .setType('SCALAR')
+                      .setArray(new Uint16Array(polygonGroup.indices))
+                      .setBuffer(buffer);
+
+                    const primitive = document
+                      .createPrimitive()
+                      .setIndices(indexAccessor)
+                      .setAttribute('POSITION', vertexAccessor);
+
+                    const mesh = document
+                      .createMesh(batch['##name'])
+                      .addPrimitive(primitive);
+
+                    const polygons = document
+                      .createNode(batch['##name'])
+                      .setMesh(mesh);
+
+                    node.addChild(polygons);
+                  });
+
+                  break;
+                }
+
+                // default:
+                //   throw new TypeError(
+                //     `Unhandled component type: ${component['comp.typename']}`,
+                //   );
+              }
+            });
+
+            if (hierarchy['#hierarchy']) {
+              parseHierarchies(hierarchy['#hierarchy'], node);
+            }
+
+            parent.addChild(node);
           });
-        });
+        }
+
+        parseHierarchies(sc2['#hierarchy'], scene);
+        writeFileSync('test.glb', await new NodeIO().writeBinary(document));
+
+        // sc2['#hierarchy'][0]['#hierarchy']!.forEach((hierarchy) => {
+        //   times(
+        //     hierarchy.components.count,
+        //     (index) => hierarchy.components[index.toString().padStart(4, '0')],
+        //   ).forEach((component) => {
+        //     if (component['comp.typename'] !== 'RenderComponent') return;
+
+        //     hierarchy.name,
+        //       times(
+        //         component['rc.renderObj']['ro.batchCount'],
+        //         (index) =>
+        //           component['rc.renderObj']['ro.batches'][
+        //             index.toString().padStart(4, '0')
+        //           ],
+        //       ).map((batch) => {
+        //         const polygonGroup = scg.find(
+        //           (group) => group.id === batch['rb.datasource'],
+        //         );
+
+        //         console.log(batch['rb.datasource'], polygonGroup !== undefined);
+        //       });
+        //   });
+        // });
 
         // writeFile('test.sc2.json', JSON.stringify(sc2, null, 2));
         // writeFile('test.scg.json', JSON.stringify(scg, null, 2));

@@ -1,3 +1,5 @@
+import { Vector3Tuple, Vector4Tuple } from 'three';
+
 export interface SC2 {
   '#dataNodes': DataNode[];
   '#hierarchy': Hierarchy[];
@@ -67,12 +69,12 @@ interface Textures {
   normalmap: string;
 }
 
-interface Hierarchy {
+export interface Hierarchy {
   '##name': 'Entity';
   '#hierarchy'?: Hierarchy[];
   components: Components;
   flags: number;
-  id: number;
+  id: bigint;
   name: string;
 }
 
@@ -104,12 +106,12 @@ interface RbAabbox {
 type Component =
   | {
       'comp.typename': 'TransformComponent';
-      'tc.localRotation': number[];
-      'tc.localScale': number[];
-      'tc.localTranslation': number[];
-      'tc.worldRotation': number[];
-      'tc.worldScale': number[];
-      'tc.worldTranslation': number[];
+      'tc.localRotation': Vector4Tuple;
+      'tc.localScale': Vector3Tuple;
+      'tc.localTranslation': Vector3Tuple;
+      'tc.worldRotation': Vector4Tuple;
+      'tc.worldScale': Vector3Tuple;
+      'tc.worldTranslation': Vector3Tuple;
     }
   | {
       'comp.typename': 'RenderComponent';
