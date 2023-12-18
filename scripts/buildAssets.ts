@@ -19,6 +19,7 @@ import {
   GunDefinition,
   ShellDefinition,
   ShellType,
+  TankDefinitionPrice,
   TankDefinitions,
   Tier,
   TurretDefinition,
@@ -89,6 +90,7 @@ type ShellDefinitionsList = Record<
   icons: Record<string, string>;
 };
 interface VehicleDefinitions {
+  invisibility: { moving: number; still: number; firePenalty: number };
   turrets0: {
     [key: string]: {
       userString: number;
@@ -188,6 +190,10 @@ if (allTargets || targets?.includes('definitions')) {
 
       for (const tankKey in tankList.root) {
         const tank = tankList.root[tankKey];
+        const tankPrice: TankDefinitionPrice =
+          typeof tank.price === 'number'
+            ? { type: 'credits', value: tank.price }
+            : { type: 'gold', value: tank.price['#text'] };
         const tankDefinition = await readXMLDVPL<{ root: VehicleDefinitions }>(
           `${DATA}/${DOI.vehicleDefinitions}/${nation}/${tankKey}.xml.dvpl`,
         );
@@ -197,6 +203,13 @@ if (allTargets || targets?.includes('definitions')) {
           (turretKey) => {
             const turret = tankDefinition.root.turrets0[turretKey];
             const turretId = toUniqueId(nation, turretList.root.ids[turretKey]);
+            const turretYaw = (
+              typeof turret.yawLimits === 'string'
+                ? turret.yawLimits
+                : turret.yawLimits.at(-1)!
+            )
+              .split(' ')
+              .map(Number) as [number, number];
             const turretGuns = Object.keys(turret.guns).map((gunKey) => {
               const turretGunEntry = turret.guns[gunKey];
               const gunId = toUniqueId(nation, gunList.root.ids[gunKey]);
@@ -272,12 +285,7 @@ if (allTargets || targets?.includes('definitions')) {
                   .replaceAll('_', ' ')
                   .replace(/^(Turret ([0-9] )?)+/, ''),
               tier: turret.level as Tier,
-              yaw: (typeof turret.yawLimits === 'string'
-                ? turret.yawLimits
-                : turret.yawLimits.at(-1)!
-              )
-                .split(' ')
-                .map(Number) as [number, number],
+              yaw: -turretYaw[0] + turretYaw[1] === 360 ? undefined : turretYaw,
               guns: turretGuns,
             } satisfies TurretDefinition;
           },
@@ -301,6 +309,12 @@ if (allTargets || targets?.includes('definitions')) {
           type: blitzTankTypeToBlitzkrieg[tankTags[0] as BlitzTankType],
           testing: tankTags.includes('testTank') ? true : undefined,
           turrets: tankTurrets,
+          price: tankPrice,
+          camouflage: {
+            still: tankDefinition.root.invisibility.still,
+            moving: tankDefinition.root.invisibility.moving,
+            firing: tankDefinition.root.invisibility.firePenalty,
+          },
         };
       }
     }),

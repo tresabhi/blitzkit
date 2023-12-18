@@ -3,6 +3,55 @@ import { TankType, TreeTypeString } from '../../components/Tanks';
 import { asset } from './asset';
 
 export type ShellType = 'ap' | 'ap_cr' | 'hc' | 'he';
+
+export type TankDefinitions = Record<number, TankDefinition>;
+export interface TankDefinition {
+  id: number;
+  nation: string;
+  name: string;
+  tree_type: TreeTypeString;
+  tier: Tier;
+  type: TankType;
+  testing?: boolean;
+  turrets: TurretDefinition[];
+  price: TankDefinitionPrice;
+  camouflage: { still: number; moving: number; firing: number };
+}
+export type TankDefinitionPrice =
+  | { type: 'credits'; value: number }
+  | { type: 'gold'; value: number };
+export interface TurretDefinition {
+  id: number;
+  name: string;
+  tier: Tier;
+  yaw?: [number, number];
+  guns: GunDefinition[];
+}
+export type GunDefinition = GunDefinitionBase &
+  (GunDefinitionRegular | GunDefinitionAutoLoader | GunDefinitionAutoReloader);
+interface GunDefinitionBase {
+  id: number;
+  name: string;
+  tier: Tier;
+  pitch: [number, number];
+  shells: ShellDefinition[];
+}
+interface GunDefinitionRegular {
+  type: 'regular';
+  reload: number;
+}
+interface GunDefinitionAutoLoader {
+  type: 'auto_loader';
+  reload: number;
+  interClip: number;
+  count: number;
+}
+interface GunDefinitionAutoReloader {
+  type: 'auto_reloader';
+  reload: number[];
+  interClip: number;
+  count: number;
+}
 export interface ShellDefinition {
   id: number;
   name: string;
@@ -14,48 +63,6 @@ export interface ShellDefinition {
   type: ShellType;
   icon: string;
 }
-export type GunDefinition = {
-  id: number;
-  name: string;
-  tier: Tier;
-  pitch: [number, number];
-  shells: ShellDefinition[];
-} & (
-  | {
-      type: 'regular';
-      reload: number;
-    }
-  | {
-      type: 'auto_loader';
-      reload: number;
-      interClip: number;
-      count: number;
-    }
-  | {
-      type: 'auto_reloader';
-      reload: number[];
-      interClip: number;
-      count: number;
-    }
-);
-export interface TurretDefinition {
-  id: number;
-  name: string;
-  tier: Tier;
-  yaw: [number, number];
-  guns: GunDefinition[];
-}
-export interface TankDefinition {
-  id: number;
-  nation: string;
-  name: string;
-  tree_type: TreeTypeString;
-  tier: Tier;
-  type: TankType;
-  testing?: boolean;
-  turrets: TurretDefinition[];
-}
-export type TankDefinitions = Record<number, TankDefinition>;
 
 export const tankDefinitions = fetch(asset('definitions/tanks.json'), {
   cache: 'no-cache',

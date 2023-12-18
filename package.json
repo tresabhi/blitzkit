@@ -56,7 +56,7 @@
     "react-dom": "^18.2.0",
     "react-fuzzysort": "^1.0.1",
     "satori": "^0.10.8",
-    "sharp": "^0.33.0",
+    "sharp": "^0.33.1",
     "three": "^0.159.0",
     "vite-node": "^0.34.5",
     "vitepress": "^1.0.0-rc.20",
