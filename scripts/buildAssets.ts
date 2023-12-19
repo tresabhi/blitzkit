@@ -1,14 +1,18 @@
-import { Document, Node, NodeIO, Scene } from '@gltf-transform/core';
+import { Document, Material, Node, NodeIO, Scene } from '@gltf-transform/core';
 import { config } from 'dotenv';
 import { existsSync, writeFileSync } from 'fs';
-import { mkdir, readdir, rm } from 'fs/promises';
-import { times } from 'lodash';
+import { mkdir, readFile, readdir, rm } from 'fs/promises';
+import { range, times } from 'lodash';
 import { argv } from 'process';
 import sharp from 'sharp';
 import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
 import { TankType } from '../src/components/Tanks';
 import { NATION_IDS } from '../src/constants/nations';
-import { SCPGStream, VertexType } from '../src/core/blitz/SCPGStream';
+import {
+  SCPGStream,
+  VertexAttribute,
+  vertexAttributeVectorSizes,
+} from '../src/core/blitz/SCPGStream';
 import { readBase64DVPL } from '../src/core/blitz/readBase64DVPL';
 import { readDVPLFile } from '../src/core/blitz/readDVPLFile';
 import { readStringDVPL } from '../src/core/blitz/readStringDVPL';
@@ -28,6 +32,19 @@ import {
   TurretDefinition,
 } from '../src/core/blitzkrieg/tankDefinitions';
 import { Hierarchy } from '../src/types/sc2';
+
+const vertexTypeGLTFName: Partial<Record<VertexAttribute, string>> = {
+  [VertexAttribute.VERTEX]: 'POSITION',
+  [VertexAttribute.NORMAL]: 'NORMAL',
+  [VertexAttribute.COLOR]: 'COLOR_0',
+  [VertexAttribute.TEXCOORD0]: 'TEXCOORD_0',
+  [VertexAttribute.TEXCOORD1]: 'TEXCOORD_0',
+  [VertexAttribute.TEXCOORD2]: 'TEXCOORD_0',
+  [VertexAttribute.TEXCOORD3]: 'TEXCOORD_0',
+  [VertexAttribute.TANGENT]: 'TANGENT',
+  [VertexAttribute.JOINTINDEX]: 'JOINT_0',
+  [VertexAttribute.JOINTWEIGHT]: 'WEIGHT_0',
+};
 
 (BigInt.prototype as any).toJSON = function () {
   return this.toString();
@@ -533,6 +550,30 @@ if (allTargets || targets?.includes('tankModels')) {
         const document = new Document();
         const scene = document.createScene();
         const buffer = document.createBuffer();
+        const materials: Record<string, Material> = {};
+
+        // writeFileSync(
+        //   'test.txt',
+        //   scg
+        //     .map((group) =>
+        //       group.vertices
+        //         .map((vertex) =>
+        //           vertex
+        //             .map(
+        //               (vertexProperty) =>
+        //                 `${VertexAttribute[vertexProperty.type].padEnd(
+        //                   14,
+        //                   ' ',
+        //                 )} ${vertexProperty.value
+        //                   .map((value) => value.toString().padEnd(25, ' '))
+        //                   .join(' ')}`,
+        //             )
+        //             .join('\n'),
+        //         )
+        //         .join('\n\n'),
+        //     )
+        //     .join('\n\n#######\n\n'),
+        // );
 
         function parseHierarchies(
           hierarchies: Hierarchy[],
@@ -598,67 +639,94 @@ if (allTargets || targets?.includes('tankModels')) {
                 }
 
                 case 'RenderComponent': {
-                  times(
+                  const batchIds = range(
                     component['rc.renderObj']['ro.batchCount'],
-                    (index) =>
-                      component['rc.renderObj']['ro.batches'][
-                        index.toString().padStart(4, '0')
-                      ],
-                  ).map((batch) => {
-                    const polygonGroup = scg.find(
-                      (group) => group.id === batch['rb.datasource'],
-                    );
-                    const unpackedVertices: number[] = [];
+                  );
+                  let minLODIndex = Infinity;
+                  let minLODBatchId = Infinity;
 
-                    if (!polygonGroup)
-                      throw new Error(
-                        `Missing polygon group ${batch['rb.datasource']}`,
-                      );
+                  batchIds.forEach((batchId) => {
+                    const thisLODIndex =
+                      component['rc.renderObj'][`rb${batchId}.lodIndex`];
 
-                    polygonGroup.vertices.forEach((vertex) => {
-                      vertex.map((vertexItem) => {
-                        switch (vertexItem.type) {
-                          case VertexType.VERTEX: {
-                            unpackedVertices.push(...vertexItem.value);
-                            break;
-                          }
-
-                          // default:
-                          //   throw new TypeError(
-                          //     `Unhandled vertex type: ${
-                          //       VertexType[vertexItem.type]
-                          //     } (${vertexItem.type})`,
-                          //   );
-                        }
-                      });
-                    });
-
-                    const vertexAccessor = document
-                      .createAccessor()
-                      .setType('VEC3')
-                      .setArray(new Float32Array(unpackedVertices))
-                      .setBuffer(buffer);
-                    const indexAccessor = document
-                      .createAccessor()
-                      .setType('SCALAR')
-                      .setArray(new Uint16Array(polygonGroup.indices))
-                      .setBuffer(buffer);
-
-                    const primitive = document
-                      .createPrimitive()
-                      .setIndices(indexAccessor)
-                      .setAttribute('POSITION', vertexAccessor);
-
-                    const mesh = document
-                      .createMesh(batch['##name'])
-                      .addPrimitive(primitive);
-
-                    const polygons = document
-                      .createNode(batch['##name'])
-                      .setMesh(mesh);
-
-                    node.addChild(polygons);
+                    if (thisLODIndex <= minLODIndex) {
+                      minLODIndex = thisLODIndex;
+                      minLODBatchId = batchId;
+                    }
                   });
+
+                  const batch =
+                    component['rc.renderObj']['ro.batches'][
+                      minLODBatchId.toString().padStart(4, '0')
+                    ];
+                  const polygonGroup = scg.find(
+                    (group) => group.id === batch['rb.datasource'],
+                  );
+                  const material = materials[batch['rb.nmatname']];
+
+                  if (!polygonGroup) {
+                    throw new Error(
+                      `Missing polygon group ${batch['rb.datasource']}`,
+                    );
+                  }
+
+                  const indexedVertexTypes: VertexAttribute[] = [];
+                  const unpackedVertices: Partial<
+                    Record<VertexAttribute, number[]>
+                  > = {};
+
+                  polygonGroup.vertices.forEach((vertex) => {
+                    vertex.map((vertexItem) => {
+                      if (!(vertexItem.type in unpackedVertices)) {
+                        unpackedVertices[vertexItem.type] = [];
+                        indexedVertexTypes.push(vertexItem.type);
+                      }
+
+                      unpackedVertices[vertexItem.type]!.push(
+                        ...vertexItem.value,
+                      );
+                    });
+                  });
+
+                  const indexAccessor = document
+                    .createAccessor()
+                    .setType('SCALAR')
+                    .setArray(new Uint16Array(polygonGroup.indices))
+                    .setBuffer(buffer);
+                  const primitive = document
+                    .createPrimitive()
+                    .setIndices(indexAccessor)
+                    .setMaterial(material);
+
+                  indexedVertexTypes.forEach((type) => {
+                    if (!(type in vertexTypeGLTFName)) {
+                      return;
+                      // throw new TypeError(
+                      //   `Unhandled vertex type GLTF name: ${VertexType[type]} (${type})`,
+                      // );
+                    }
+
+                    const vertexSize = vertexAttributeVectorSizes[type];
+
+                    if (!primitive.getAttribute(vertexTypeGLTFName[type]!)) {
+                      primitive.setAttribute(
+                        vertexTypeGLTFName[type]!,
+                        document
+                          .createAccessor()
+                          .setType(
+                            vertexSize === 1 ? 'SCALAR' : `VEC${vertexSize}`,
+                          )
+                          .setArray(new Float32Array(unpackedVertices[type]!))
+                          .setBuffer(buffer),
+                      );
+                    }
+                  });
+
+                  const mesh = document
+                    .createMesh(batch['##name'])
+                    .addPrimitive(primitive);
+
+                  node.setMesh(mesh);
 
                   break;
                 }
@@ -678,35 +746,66 @@ if (allTargets || targets?.includes('tankModels')) {
           });
         }
 
+        await Promise.all(
+          sc2['#dataNodes'].map(async (node) => {
+            const material = document.createMaterial(node.materialName);
+
+            // if (typeof node.configCount === 'number') {
+            //   try {
+            //     const config = node.configArchive_0;
+            //     const texturePath = `${DATA}/${DOI['3d']}/${dirname(
+            //       parameters.resourcesPath.blitzModelPath,
+            //     )}/${config.textures.albedo.replace(
+            //       /\.tex$/,
+            //       '.dx11.dds.dvpl',
+            //     )}`;
+            //     console.log(texturePath);
+            //     const dds = await readDVPLFile(texturePath);
+            //     const image = parseDDS(dds).images[0];
+            //     const textureArray = new Uint8Array(
+            //       dds,
+            //       image.offset,
+            //       image.length,
+            //     );
+            //     const png = new PNG({
+            //       width: image.shape[0],
+            //       height: image.shape[1],
+            //     });
+
+            //     for (var index = 0; index < textureArray.length; index += 4) {
+            //       png.data[index] = textureArray[index];
+            //       png.data[index + 1] = textureArray[index + 1];
+            //       png.data[index + 2] = textureArray[index + 2];
+            //       png.data[index + 3] = textureArray[index + 3];
+            //     }
+
+            //     const pngBuffer = PNG.sync.write(png);
+            //     const texture = document
+            //       .createTexture(config.configName)
+            //       .setImage(await readFile('C:/Users/coola/Downloads/33e.jpg'));
+
+            //     material.setBaseColorTexture(texture);
+            //   } catch (error) {
+            //     // console.log(error);
+            //   }
+            // }
+
+            if (node.configCount) {
+              console.log('uhhh');
+              const config = node.configArchive_0;
+              const texturePath = 'C:/Users/coola/Downloads/33e.jpg';
+              const textureBuffer = await readFile(texturePath);
+              const texture = document.createTexture(config?.configName);
+
+              texture.setImage(textureBuffer);
+              material.setBaseColorTexture(texture);
+            }
+
+            materials[node['#id'].readBigUInt64LE().toString()] = material;
+          }),
+        );
         parseHierarchies(sc2['#hierarchy'], scene);
         writeFileSync('test.glb', await new NodeIO().writeBinary(document));
-
-        // sc2['#hierarchy'][0]['#hierarchy']!.forEach((hierarchy) => {
-        //   times(
-        //     hierarchy.components.count,
-        //     (index) => hierarchy.components[index.toString().padStart(4, '0')],
-        //   ).forEach((component) => {
-        //     if (component['comp.typename'] !== 'RenderComponent') return;
-
-        //     hierarchy.name,
-        //       times(
-        //         component['rc.renderObj']['ro.batchCount'],
-        //         (index) =>
-        //           component['rc.renderObj']['ro.batches'][
-        //             index.toString().padStart(4, '0')
-        //           ],
-        //       ).map((batch) => {
-        //         const polygonGroup = scg.find(
-        //           (group) => group.id === batch['rb.datasource'],
-        //         );
-
-        //         console.log(batch['rb.datasource'], polygonGroup !== undefined);
-        //       });
-        //   });
-        // });
-
-        // writeFile('test.sc2.json', JSON.stringify(sc2, null, 2));
-        // writeFile('test.scg.json', JSON.stringify(scg, null, 2));
       }
     }),
   );

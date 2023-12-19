@@ -34,7 +34,7 @@ enum KAType {
   UNCONFIRMED_TRANSFORM = 29,
 }
 
-export enum VertexType {
+export enum VertexAttribute {
   VERTEX,
   NORMAL,
   COLOR,
@@ -46,6 +46,7 @@ export enum VertexType {
   BINORMAL,
   HARD_JOINTINDEX,
   PIVOT4,
+  PIVOT_DEPRECATED,
   FLEXIBILITY,
   ANGLE_SIN_COS,
   JOINTINDEX,
@@ -55,6 +56,29 @@ export enum VertexType {
   CUBETEXCOORD2,
   CUBETEXCOORD3,
 }
+
+export const vertexAttributeVectorSizes = {
+  [VertexAttribute.VERTEX]: 3,
+  [VertexAttribute.NORMAL]: 3,
+  [VertexAttribute.COLOR]: 1,
+  [VertexAttribute.TEXCOORD0]: 2,
+  [VertexAttribute.TEXCOORD1]: 2,
+  [VertexAttribute.TEXCOORD2]: 2,
+  [VertexAttribute.TEXCOORD3]: 2,
+  [VertexAttribute.TANGENT]: 3,
+  [VertexAttribute.BINORMAL]: 3,
+  [VertexAttribute.HARD_JOINTINDEX]: 1,
+  [VertexAttribute.CUBETEXCOORD0]: 3,
+  [VertexAttribute.CUBETEXCOORD1]: 3,
+  [VertexAttribute.CUBETEXCOORD2]: 3,
+  [VertexAttribute.CUBETEXCOORD3]: 3,
+  [VertexAttribute.PIVOT4]: 4,
+  [VertexAttribute.PIVOT_DEPRECATED]: 3,
+  [VertexAttribute.FLEXIBILITY]: 1,
+  [VertexAttribute.ANGLE_SIN_COS]: 2,
+  [VertexAttribute.JOINTINDEX]: 4,
+  [VertexAttribute.JOINTWEIGHT]: 4,
+} as const;
 
 interface PolygonGroupRaw {
   '##name': 'PolygonGroup';
@@ -71,38 +95,12 @@ interface PolygonGroupRaw {
   vertexFormat: number;
   vertices: Buffer;
 }
-type BlitzkriegVertex = { type: VertexType; value: number[] }[];
+type BlitzkriegVertex = { type: VertexAttribute; value: number[] }[];
 interface BlitzkriegPolygonGroup {
   id: bigint;
   vertices: BlitzkriegVertex[];
   indices: number[];
 }
-
-const VECTOR_SIZES = [
-  [VertexType.COLOR, VertexType.FLEXIBILITY, VertexType.HARD_JOINTINDEX],
-  [
-    VertexType.TEXCOORD0,
-    VertexType.TEXCOORD1,
-    VertexType.TEXCOORD2,
-    VertexType.TEXCOORD3,
-    VertexType.ANGLE_SIN_COS,
-  ],
-  [
-    VertexType.VERTEX,
-    VertexType.NORMAL,
-    VertexType.BINORMAL,
-    VertexType.CUBETEXCOORD0,
-    VertexType.CUBETEXCOORD1,
-    VertexType.CUBETEXCOORD2,
-    VertexType.CUBETEXCOORD3,
-  ],
-  [
-    VertexType.PIVOT4,
-    VertexType.JOINTINDEX,
-    VertexType.JOINTWEIGHT,
-    VertexType.TANGENT,
-  ],
-];
 
 export class SCPGStream {
   public index = 0;
@@ -197,6 +195,21 @@ export class SCPGStream {
     return this.consumeMatrixN(4);
   }
 
+  getVertexStride(vertexFormat: number) {
+    const flags = vertexFormat.toString(2);
+
+    return Object.values(VertexAttribute)
+      .filter((value) => typeof value === 'number')
+      .reduce(
+        (accumulator, attribute) =>
+          flags[attribute as VertexAttribute] === '1'
+            ? accumulator +
+              vertexAttributeVectorSizes[attribute as VertexAttribute] * 4
+            : accumulator,
+        0,
+      );
+  }
+
   consumeSCGHeader() {
     return {
       name: this.consumeAscii(4),
@@ -228,35 +241,24 @@ export class SCPGStream {
 
       const verticesStream = new SCPGStream(polygonGroupRaw.vertices);
       const vertices: BlitzkriegVertex[] = [];
-      const vertexFormatBuffer = Buffer.alloc(4);
-      vertexFormatBuffer.writeUInt32LE(polygonGroupRaw.vertexFormat, 0);
-      const vertexFormat = [...vertexFormatBuffer]
-        .map((number) => number.toString(2))
-        .join('')
-        .split('')
-        .map((bitString, index) => (bitString === '1' ? index : null))
-        .filter((type) => type !== null) as VertexType[];
+
+      const vertexFormat = (
+        polygonGroupRaw.vertexFormat
+          .toString(2)
+          .split('')
+          .map((bitString, index) =>
+            bitString === '1' ? index : null,
+          ) as VertexAttribute[]
+      ).filter((type) => type !== null);
 
       for (let index = 0; index < polygonGroupRaw.vertexCount; index++) {
-        vertexFormat.forEach((type) => {
-          const resolved = VECTOR_SIZES.some((types, size) => {
-            if (types.includes(type)) {
-              if (!(index in vertices)) vertices[index] = [];
-              vertices[index].push({
-                type,
-                value: verticesStream.consumeVectorN(size + 1),
-              });
-              return true;
-            }
-          });
-
-          if (!resolved) {
-            throw new TypeError(`Unknown vertex type: ${type}`);
-          }
-        });
+        vertices[index] = vertexFormat.map((type) => ({
+          type,
+          value: verticesStream.consumeVectorN(
+            vertexAttributeVectorSizes[type],
+          ),
+        }));
       }
-
-      console.log(verticesStream.readRemaining().length);
 
       return {
         id: polygonGroupRaw['#id'].readBigUInt64LE(),

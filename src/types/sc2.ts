@@ -11,10 +11,16 @@ type DataNode = {
   '#id': Buffer;
   materialName: string;
   parentMaterialKey?: string;
-  configCount?: number;
   qualityGroup?: string;
   fxName?: string;
-} & Record<`configArchive_${number}`, ConfigArchive>;
+} & (
+  | ({
+      configCount: number;
+    } & Record<`configArchive_${number}`, ConfigArchive>)
+  | {
+      configCount: undefined;
+    }
+);
 
 interface ConfigArchive {
   configName: string;
@@ -103,7 +109,7 @@ interface RbAabbox {
   maximum: number[];
 }
 
-type Component =
+export type Component =
   | {
       'comp.typename': 'TransformComponent';
       'tc.localRotation': Vector4Tuple;

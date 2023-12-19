@@ -2387,6 +2387,18 @@
   resolved "https://registry.yarnpkg.com/@types/offscreencanvas/-/offscreencanvas-2019.7.3.tgz#90267db13f64d6e9ccb5ae3eac92786a7c77a516"
   integrity sha512-ieXiYmgSRXUDeOntE1InxjWyvEelZGP63M+cGuquuRLuIKKT1osnkXjxev9B7d1nXSug5vpunx+gNlbVxMlC9A==
 
+"@types/parse-dds@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@types/parse-dds/-/parse-dds-1.0.3.tgz#a1bb00421906094510d88c64af978564d3c35c9b"
+  integrity sha512-LD9BruIpfP6Z9aAJ488h+PwtSwLzM0NO+Rs1l/zjcPLBTqR31OnIGmAvJYhGiHhbOn7R0YXw1gL5bImNiK6HNw==
+
+"@types/pngjs@^6.0.4":
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/@types/pngjs/-/pngjs-6.0.4.tgz#9a457aebabd944efde1a773a0fa1d74933e8021b"
+  integrity sha512-atAK9xLKOnxiuArxcHovmnOUUGBZOQ3f0vCf43FnoKs6XnqiambT1kkJWmdo71IR+BoXSh+CueeFR0GfH3dTlQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/prop-types@*":
   version "15.7.11"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.11.tgz#2596fb352ee96a1379c657734d4b913a613ad563"
@@ -4907,6 +4919,11 @@ parse-css-color@^0.2.1:
     color-name "^1.1.4"
     hex-rgb "^4.1.0"
 
+parse-dds@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/parse-dds/-/parse-dds-1.2.1.tgz#b16533e00c4db91178b3460271361df4cb328164"
+  integrity sha512-oE88N8mzUi9d26tAaKVc0clxi6AjeTSWpLwgtcEVjXTYY1MW58w8FctmM9gGgvFd6YGu1/eFFYVeDVnlMsKBtA==
+
 parse-json@^5.0.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/parse-json/-/parse-json-5.2.0.tgz#c76fc66dee54231c962b22bcc8a72cf2f99753cd"
@@ -5031,6 +5048,11 @@ pkg-types@^1.0.3:
     jsonc-parser "^3.2.0"
     mlly "^1.2.0"
     pathe "^1.1.0"
+
+pngjs@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/pngjs/-/pngjs-7.0.0.tgz#a8b7446020ebbc6ac739db6c5415a65d17090e26"
+  integrity sha512-LKWqWJRhstyYo9pGvgor/ivk2w94eSjE3RGVuzLGlr3NmD8bf7RcYGze1mNdEHRP6TRP6rMuDHk5t44hnTRyow==
 
 postcss-value-parser@^4.0.2, postcss-value-parser@^4.2.0:
   version "4.2.0"
