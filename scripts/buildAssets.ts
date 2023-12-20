@@ -3,7 +3,7 @@ import { config } from 'dotenv';
 import { existsSync, writeFileSync } from 'fs';
 import { mkdir, readdir, rm, writeFile } from 'fs/promises';
 import { range, times } from 'lodash';
-import { dirname, parse } from 'path';
+import { dirname } from 'path';
 import { argv } from 'process';
 import sharp from 'sharp';
 import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
@@ -23,7 +23,6 @@ import { toUniqueId } from '../src/core/blitz/toUniqueId';
 import commitMultipleFiles, {
   FileChange,
 } from '../src/core/blitzkrieg/commitMultipleFiles';
-import { clearDdsToPng, ddsToPng } from '../src/core/blitzkrieg/ddsToPng';
 import {
   GunDefinition,
   ShellDefinition,
@@ -33,6 +32,7 @@ import {
   Tier,
   TurretDefinition,
 } from '../src/core/blitzkrieg/tankDefinitions';
+import { toPng } from '../src/core/blitzkrieg/toPng';
 import { Hierarchy } from '../src/types/sc2';
 
 const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> = {
@@ -505,8 +505,6 @@ if (allTargets || targets?.includes('circleFlags')) {
 }
 
 if (allTargets || targets?.includes('tankModels')) {
-  await clearDdsToPng();
-
   console.log('Building tank models...');
 
   if (existsSync('dist/assets/models')) {
@@ -530,7 +528,8 @@ if (allTargets || targets?.includes('tankModels')) {
         const nationVehicleId = tank.id;
         const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
 
-        if (id !== 7297) continue;
+        // if (id !== 6225) continue;
+        if (id !== 20257) continue;
         console.log(`Building model ${id} @ ${nation}/${tankIndex}`);
 
         const parameters = await readYAMLDVPL<TankParameters>(
@@ -554,54 +553,73 @@ if (allTargets || targets?.includes('tankModels')) {
         const document = new Document();
         const scene = document.createScene();
         const buffer = document.createBuffer();
-        const materials = new Map<bigint, { material: Material }>();
+        const materials = new Map<bigint, Material | bigint>();
 
         await Promise.all(
           sc2['#dataNodes'].map(async (node) => {
-            const material = document.createMaterial(node.materialName);
+            const id = node['#id'].readBigUInt64LE();
 
-            let albedoTexturePath: string | undefined = undefined;
-            let albedoTextureName: string | undefined = undefined;
-
-            if (node.textures) {
-              albedoTexturePath = `${DATA}/${DOI['3d']}/${dirname(
-                parameters.resourcesPath.blitzModelPath,
-              )}/${node.textures.albedo.replace('.tex', '.dx11.dds.dvpl')}`;
-              albedoTextureName = parse(albedoTexturePath).name;
-            } else if (typeof node.configCount === 'number') {
-              const config = node.configArchive_0;
-              albedoTexturePath = `${DATA}/${DOI['3d']}/${dirname(
-                parameters.resourcesPath.blitzModelPath,
-              )}/${config.textures.albedo.replace('.tex', '.dx11.dds.dvpl')}`;
-              albedoTextureName = config.configName;
+            if (node.parentMaterialKey !== undefined) {
+              materials.set(id, node.parentMaterialKey);
+              return;
             }
 
-            if (albedoTexturePath) {
-              const albedoBuffer = await ddsToPng(
-                await readDVPLFile(albedoTexturePath),
-              );
-              const albedoTexture = document
-                .createTexture(albedoTextureName)
-                .setMimeType('image/png')
-                .setImage(albedoBuffer);
+            const material = document.createMaterial(node.materialName);
+            const albedoTexture = document
+              .createTexture(node.materialName)
+              .setMimeType('image/png');
+            let albedoPathRaw: string | undefined = undefined;
 
+            if (node.textures) {
+              albedoPathRaw = node.textures.albedo;
+            } else if (typeof node.configCount === 'number') {
+              albedoPathRaw = node.configArchive_0.textures.albedo;
+            }
+
+            const albedoTexturePath = albedoPathRaw
+              ? `${DATA}/${DOI['3d']}/${dirname(
+                  parameters.resourcesPath.blitzModelPath,
+                )}/${albedoPathRaw.replace('.tex', '.dx11.dds.dvpl')}`
+              : undefined;
+
+            if (albedoTexturePath) {
+              const isDds = existsSync(albedoTexturePath);
+              const resolvedAlbedoTexturePath = isDds
+                ? albedoTexturePath
+                : albedoTexturePath.replace('.dds', '.pvr');
+              const decompressedAlbedo = await readDVPLFile(
+                resolvedAlbedoTexturePath,
+              );
+              const albedoPng = await toPng(decompressedAlbedo, {
+                format: isDds ? 'dds' : 'pvr',
+                alpha: false,
+              });
+
+              albedoTexture.setImage(albedoPng);
               material.setBaseColorTexture(albedoTexture);
             }
 
-            materials.set(node['#id'].readBigUInt64LE(), { material });
+            materials.set(node['#id'].readBigUInt64LE(), material);
           }),
         );
 
-        sc2['#dataNodes'].forEach((node) => {
-          if (node.parentMaterialKey === undefined) return;
+        // replace children with parents
+        materials.forEach((material, id) => {
+          if (typeof material !== 'bigint') return;
 
-          const parentMaterial = materials.get(node.parentMaterialKey);
+          let resolvedMaterial: Material | bigint = material;
 
-          if (parentMaterial === undefined) return;
+          while (typeof resolvedMaterial === 'bigint') {
+            const linkedParentMaterial = materials.get(resolvedMaterial);
 
-          materials.set(node['#id'].readBigUInt64LE(), {
-            material: parentMaterial.material,
-          });
+            if (linkedParentMaterial === undefined) {
+              throw new Error('Could not resolve material');
+            }
+
+            resolvedMaterial = linkedParentMaterial;
+          }
+
+          materials.set(id, resolvedMaterial);
         });
 
         function parseHierarchies(
@@ -723,14 +741,16 @@ if (allTargets || targets?.includes('tankModels')) {
                     .setBuffer(buffer);
                   const material = materials.get(batch['rb.nmatname']);
 
-                  if (!material) {
-                    throw new Error(`Missing material ${batch['rb.nmatname']}`);
+                  if (!(material instanceof Material)) {
+                    throw new Error(
+                      `Material ${batch['rb.nmatname']} is unresolved`,
+                    );
                   }
 
                   const primitive = document
                     .createPrimitive()
                     .setIndices(indexAccessor)
-                    .setMaterial(material.material);
+                    .setMaterial(material);
 
                   indexedVertexTypes.forEach((type) => {
                     if (!(type in vertexAttributeGLTFName)) {
