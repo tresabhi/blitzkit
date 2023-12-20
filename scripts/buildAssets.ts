@@ -1,8 +1,9 @@
 import { Document, Material, Node, NodeIO, Scene } from '@gltf-transform/core';
 import { config } from 'dotenv';
 import { existsSync, writeFileSync } from 'fs';
-import { mkdir, readFile, readdir, rm } from 'fs/promises';
+import { mkdir, readdir, rm, writeFile } from 'fs/promises';
 import { range, times } from 'lodash';
+import { dirname, parse } from 'path';
 import { argv } from 'process';
 import sharp from 'sharp';
 import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
@@ -22,6 +23,7 @@ import { toUniqueId } from '../src/core/blitz/toUniqueId';
 import commitMultipleFiles, {
   FileChange,
 } from '../src/core/blitzkrieg/commitMultipleFiles';
+import { clearDdsToPng, ddsToPng } from '../src/core/blitzkrieg/ddsToPng';
 import {
   GunDefinition,
   ShellDefinition,
@@ -33,7 +35,7 @@ import {
 } from '../src/core/blitzkrieg/tankDefinitions';
 import { Hierarchy } from '../src/types/sc2';
 
-const vertexTypeGLTFName: Partial<Record<VertexAttribute, string>> = {
+const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> = {
   [VertexAttribute.VERTEX]: 'POSITION',
   [VertexAttribute.NORMAL]: 'NORMAL',
   [VertexAttribute.COLOR]: 'COLOR_0',
@@ -503,6 +505,8 @@ if (allTargets || targets?.includes('circleFlags')) {
 }
 
 if (allTargets || targets?.includes('tankModels')) {
+  await clearDdsToPng();
+
   console.log('Building tank models...');
 
   if (existsSync('dist/assets/models')) {
@@ -526,7 +530,7 @@ if (allTargets || targets?.includes('tankModels')) {
         const nationVehicleId = tank.id;
         const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
 
-        if (id !== 6753) continue;
+        if (id !== 7297) continue;
         console.log(`Building model ${id} @ ${nation}/${tankIndex}`);
 
         const parameters = await readYAMLDVPL<TankParameters>(
@@ -550,30 +554,55 @@ if (allTargets || targets?.includes('tankModels')) {
         const document = new Document();
         const scene = document.createScene();
         const buffer = document.createBuffer();
-        const materials: Record<string, Material> = {};
+        const materials = new Map<bigint, { material: Material }>();
 
-        // writeFileSync(
-        //   'test.txt',
-        //   scg
-        //     .map((group) =>
-        //       group.vertices
-        //         .map((vertex) =>
-        //           vertex
-        //             .map(
-        //               (vertexProperty) =>
-        //                 `${VertexAttribute[vertexProperty.type].padEnd(
-        //                   14,
-        //                   ' ',
-        //                 )} ${vertexProperty.value
-        //                   .map((value) => value.toString().padEnd(25, ' '))
-        //                   .join(' ')}`,
-        //             )
-        //             .join('\n'),
-        //         )
-        //         .join('\n\n'),
-        //     )
-        //     .join('\n\n#######\n\n'),
-        // );
+        await Promise.all(
+          sc2['#dataNodes'].map(async (node) => {
+            const material = document.createMaterial(node.materialName);
+
+            let albedoTexturePath: string | undefined = undefined;
+            let albedoTextureName: string | undefined = undefined;
+
+            if (node.textures) {
+              albedoTexturePath = `${DATA}/${DOI['3d']}/${dirname(
+                parameters.resourcesPath.blitzModelPath,
+              )}/${node.textures.albedo.replace('.tex', '.dx11.dds.dvpl')}`;
+              albedoTextureName = parse(albedoTexturePath).name;
+            } else if (typeof node.configCount === 'number') {
+              const config = node.configArchive_0;
+              albedoTexturePath = `${DATA}/${DOI['3d']}/${dirname(
+                parameters.resourcesPath.blitzModelPath,
+              )}/${config.textures.albedo.replace('.tex', '.dx11.dds.dvpl')}`;
+              albedoTextureName = config.configName;
+            }
+
+            if (albedoTexturePath) {
+              const albedoBuffer = await ddsToPng(
+                await readDVPLFile(albedoTexturePath),
+              );
+              const albedoTexture = document
+                .createTexture(albedoTextureName)
+                .setMimeType('image/png')
+                .setImage(albedoBuffer);
+
+              material.setBaseColorTexture(albedoTexture);
+            }
+
+            materials.set(node['#id'].readBigUInt64LE(), { material });
+          }),
+        );
+
+        sc2['#dataNodes'].forEach((node) => {
+          if (node.parentMaterialKey === undefined) return;
+
+          const parentMaterial = materials.get(node.parentMaterialKey);
+
+          if (parentMaterial === undefined) return;
+
+          materials.set(node['#id'].readBigUInt64LE(), {
+            material: parentMaterial.material,
+          });
+        });
 
         function parseHierarchies(
           hierarchies: Hierarchy[],
@@ -662,7 +691,6 @@ if (allTargets || targets?.includes('tankModels')) {
                   const polygonGroup = scg.find(
                     (group) => group.id === batch['rb.datasource'],
                   );
-                  const material = materials[batch['rb.nmatname']];
 
                   if (!polygonGroup) {
                     throw new Error(
@@ -693,13 +721,19 @@ if (allTargets || targets?.includes('tankModels')) {
                     .setType('SCALAR')
                     .setArray(new Uint16Array(polygonGroup.indices))
                     .setBuffer(buffer);
+                  const material = materials.get(batch['rb.nmatname']);
+
+                  if (!material) {
+                    throw new Error(`Missing material ${batch['rb.nmatname']}`);
+                  }
+
                   const primitive = document
                     .createPrimitive()
                     .setIndices(indexAccessor)
-                    .setMaterial(material);
+                    .setMaterial(material.material);
 
                   indexedVertexTypes.forEach((type) => {
-                    if (!(type in vertexTypeGLTFName)) {
+                    if (!(type in vertexAttributeGLTFName)) {
                       return;
                       // throw new TypeError(
                       //   `Unhandled vertex type GLTF name: ${VertexType[type]} (${type})`,
@@ -708,9 +742,11 @@ if (allTargets || targets?.includes('tankModels')) {
 
                     const vertexSize = vertexAttributeVectorSizes[type];
 
-                    if (!primitive.getAttribute(vertexTypeGLTFName[type]!)) {
+                    if (
+                      !primitive.getAttribute(vertexAttributeGLTFName[type]!)
+                    ) {
                       primitive.setAttribute(
-                        vertexTypeGLTFName[type]!,
+                        vertexAttributeGLTFName[type]!,
                         document
                           .createAccessor()
                           .setType(
@@ -746,66 +782,10 @@ if (allTargets || targets?.includes('tankModels')) {
           });
         }
 
-        await Promise.all(
-          sc2['#dataNodes'].map(async (node) => {
-            const material = document.createMaterial(node.materialName);
-
-            // if (typeof node.configCount === 'number') {
-            //   try {
-            //     const config = node.configArchive_0;
-            //     const texturePath = `${DATA}/${DOI['3d']}/${dirname(
-            //       parameters.resourcesPath.blitzModelPath,
-            //     )}/${config.textures.albedo.replace(
-            //       /\.tex$/,
-            //       '.dx11.dds.dvpl',
-            //     )}`;
-            //     console.log(texturePath);
-            //     const dds = await readDVPLFile(texturePath);
-            //     const image = parseDDS(dds).images[0];
-            //     const textureArray = new Uint8Array(
-            //       dds,
-            //       image.offset,
-            //       image.length,
-            //     );
-            //     const png = new PNG({
-            //       width: image.shape[0],
-            //       height: image.shape[1],
-            //     });
-
-            //     for (var index = 0; index < textureArray.length; index += 4) {
-            //       png.data[index] = textureArray[index];
-            //       png.data[index + 1] = textureArray[index + 1];
-            //       png.data[index + 2] = textureArray[index + 2];
-            //       png.data[index + 3] = textureArray[index + 3];
-            //     }
-
-            //     const pngBuffer = PNG.sync.write(png);
-            //     const texture = document
-            //       .createTexture(config.configName)
-            //       .setImage(await readFile('C:/Users/coola/Downloads/33e.jpg'));
-
-            //     material.setBaseColorTexture(texture);
-            //   } catch (error) {
-            //     // console.log(error);
-            //   }
-            // }
-
-            if (node.configCount) {
-              console.log('uhhh');
-              const config = node.configArchive_0;
-              const texturePath = 'C:/Users/coola/Downloads/33e.jpg';
-              const textureBuffer = await readFile(texturePath);
-              const texture = document.createTexture(config?.configName);
-
-              texture.setImage(textureBuffer);
-              material.setBaseColorTexture(texture);
-            }
-
-            materials[node['#id'].readBigUInt64LE().toString()] = material;
-          }),
-        );
         parseHierarchies(sc2['#hierarchy'], scene);
-        writeFileSync('test.glb', await new NodeIO().writeBinary(document));
+        writeFile('test.model.glb', await new NodeIO().writeBinary(document));
+        writeFile('test.sc2.json', JSON.stringify(sc2, null, 2));
+        writeFile('test.scg.json', JSON.stringify(scg, null, 2));
       }
     }),
   );

@@ -10,9 +10,15 @@ type DataNode = {
   '##name': 'NMaterial';
   '#id': Buffer;
   materialName: string;
-  parentMaterialKey?: string;
+  parentMaterialKey?: bigint;
   qualityGroup?: string;
   fxName?: string;
+
+  textures?: {
+    albedo: string;
+    decalmask: string;
+    normalmap: string;
+  };
 } & (
   | ({
       configCount: number;
@@ -99,7 +105,7 @@ type RoBatches = Record<
     'rb.aabbox': RbAabbox;
     'rb.classname': 'RenderBatch';
     'rb.datasource': bigint;
-    'rb.nmatname': string;
+    'rb.nmatname': bigint;
     'rb.sortingKey': number;
   }
 >;
