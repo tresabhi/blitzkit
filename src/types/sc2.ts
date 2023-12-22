@@ -14,11 +14,7 @@ type DataNode = {
   qualityGroup?: string;
   fxName?: string;
 
-  textures?: {
-    albedo: string;
-    decalmask: string;
-    normalmap: string;
-  };
+  textures?: Textures;
 } & (
   | ({
       configCount: number;
@@ -70,15 +66,15 @@ interface TextureSampleStates {
   normalmap: number;
 }
 
-interface Textures {
+export interface Textures {
   albedo: string;
-  baseColorMap: string;
-  baseNormalMap: string;
-  baseRMMap: string;
+  baseColorMap?: string;
+  baseNormalMap?: string;
+  baseRMMap?: string;
   decalmask?: string;
-  maskMap: string;
-  miscMap: string;
-  normalmap: string;
+  maskMap?: string;
+  miscMap?: string;
+  normalmap?: string;
 }
 
 export interface Hierarchy {

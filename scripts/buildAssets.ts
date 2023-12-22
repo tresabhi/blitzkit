@@ -1,7 +1,7 @@
 import { Document, Material, Node, NodeIO, Scene } from '@gltf-transform/core';
 import { config } from 'dotenv';
-import { existsSync, writeFileSync } from 'fs';
-import { mkdir, readdir, rm, writeFile } from 'fs/promises';
+import { writeFileSync } from 'fs';
+import { mkdir, readdir } from 'fs/promises';
 import { range, times } from 'lodash';
 import { dirname } from 'path';
 import { argv } from 'process';
@@ -23,6 +23,7 @@ import { toUniqueId } from '../src/core/blitz/toUniqueId';
 import commitMultipleFiles, {
   FileChange,
 } from '../src/core/blitzkrieg/commitMultipleFiles';
+import { readTexture } from '../src/core/blitzkrieg/readTexture';
 import {
   GunDefinition,
   ShellDefinition,
@@ -32,8 +33,7 @@ import {
   Tier,
   TurretDefinition,
 } from '../src/core/blitzkrieg/tankDefinitions';
-import { toPng } from '../src/core/blitzkrieg/toPng';
-import { Hierarchy } from '../src/types/sc2';
+import { Hierarchy, Textures } from '../src/types/sc2';
 
 const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> = {
   [VertexAttribute.VERTEX]: 'POSITION',
@@ -507,12 +507,11 @@ if (allTargets || targets?.includes('circleFlags')) {
 if (allTargets || targets?.includes('tankModels')) {
   console.log('Building tank models...');
 
-  if (existsSync('dist/assets/models')) {
-    await rm('dist/assets/models', { recursive: true });
-  }
-  await mkdir('dist/assets/models', { recursive: true });
+  // if (existsSync('dist/assets/models')) {
+  //   await rm('dist/assets/models', { recursive: true });
+  // }
 
-  const changes: FileChange[] = [];
+  const nodeIO = new NodeIO();
   const nations = await readdir(`${DATA}/${DOI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
@@ -528,8 +527,7 @@ if (allTargets || targets?.includes('tankModels')) {
         const nationVehicleId = tank.id;
         const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
 
-        // if (id !== 6225) continue;
-        if (id !== 20257) continue;
+        if (id !== 6753) continue;
         console.log(`Building model ${id} @ ${nation}/${tankIndex}`);
 
         const parameters = await readYAMLDVPL<TankParameters>(
@@ -556,7 +554,7 @@ if (allTargets || targets?.includes('tankModels')) {
         const materials = new Map<bigint, Material | bigint>();
 
         await Promise.all(
-          sc2['#dataNodes'].map(async (node) => {
+          sc2['#dataNodes'].map(async (node, index) => {
             const id = node['#id'].readBigUInt64LE();
 
             if (node.parentMaterialKey !== undefined) {
@@ -565,38 +563,107 @@ if (allTargets || targets?.includes('tankModels')) {
             }
 
             const material = document.createMaterial(node.materialName);
-            const albedoTexture = document
-              .createTexture(node.materialName)
-              .setMimeType('image/png');
-            let albedoPathRaw: string | undefined = undefined;
+            let textures: Textures | undefined = undefined;
 
             if (node.textures) {
-              albedoPathRaw = node.textures.albedo;
+              textures = node.textures;
             } else if (typeof node.configCount === 'number') {
-              albedoPathRaw = node.configArchive_0.textures.albedo;
+              textures = node.configArchive_0.textures;
             }
 
-            const albedoTexturePath = albedoPathRaw
-              ? `${DATA}/${DOI['3d']}/${dirname(
+            console.log(textures);
+
+            if (textures) {
+              const albedoJpg = await readTexture(
+                `${DATA}/${DOI['3d']}/${dirname(
                   parameters.resourcesPath.blitzModelPath,
-                )}/${albedoPathRaw.replace('.tex', '.dx11.dds.dvpl')}`
-              : undefined;
-
-            if (albedoTexturePath) {
-              const isDds = existsSync(albedoTexturePath);
-              const resolvedAlbedoTexturePath = isDds
-                ? albedoTexturePath
-                : albedoTexturePath.replace('.dds', '.pvr');
-              const decompressedAlbedo = await readDVPLFile(
-                resolvedAlbedoTexturePath,
+                )}/${textures.albedo}`,
               );
-              const albedoPng = await toPng(decompressedAlbedo, {
-                format: isDds ? 'dds' : 'pvr',
-                alpha: false,
-              });
-
-              albedoTexture.setImage(albedoPng);
+              const albedoTexture = document
+                .createTexture(node.materialName)
+                .setMimeType('image/jpg')
+                .setImage(albedoJpg);
               material.setBaseColorTexture(albedoTexture);
+
+              if (textures.baseRMMap) {
+                const RMJpg = await sharp(
+                  await readTexture(
+                    `${DATA}/${DOI['3d']}/${dirname(
+                      parameters.resourcesPath.blitzModelPath,
+                    )}/${textures.baseRMMap}`,
+                  ),
+                )
+                  .raw()
+                  .toBuffer({ resolveWithObject: true })
+                  .then(({ data, info }) => {
+                    /**
+                     * RM mods
+                     *
+                     * green channel --> 1 : metallicness --> blue (interpreted as metallicness)
+                     * green channel --> 1 - x : roughness --> green (interpreted as roughness)
+                     * red channel --> 0 : unknown --> red (unknown)
+                     */
+
+                    const newImage = Buffer.from(data);
+
+                    for (let index = 0; index < data.length; index += 3) {
+                      const G = newImage[index + 1];
+
+                      newImage[index] = 0;
+                      newImage[index + 1] = 255 - G;
+                      newImage[index + 2] = G;
+                    }
+
+                    return sharp(newImage, { raw: info }).jpeg().toBuffer();
+                  });
+                const RMTexture = document
+                  .createTexture(node.materialName)
+                  .setMimeType('image/jpg')
+                  .setImage(RMJpg);
+
+                material.setMetallicRoughnessTexture(RMTexture);
+              }
+
+              if (textures.baseNormalMap) {
+                const normalJpg = await sharp(
+                  await readTexture(
+                    `${DATA}/${DOI['3d']}/${dirname(
+                      parameters.resourcesPath.blitzModelPath,
+                    )}/${textures.baseNormalMap}`,
+                  ),
+                )
+                  .raw()
+                  .toBuffer({ resolveWithObject: true })
+                  .then(({ data, info }) => {
+                    /**
+                     * normal mods
+                     *
+                     * red channel --> blue channel
+                     * green channel --> green channel
+                     * blue channel --> red channel
+                     */
+
+                    const newImage = Buffer.from(data);
+
+                    for (let index = 0; index < data.length; index += 3) {
+                      const R = newImage[index];
+                      const G = newImage[index + 1];
+                      const B = newImage[index + 2];
+
+                      newImage[index] = B;
+                      newImage[index + 1] = G;
+                      newImage[index + 2] = R;
+                    }
+
+                    return sharp(newImage, { raw: info }).jpeg().toBuffer();
+                  });
+                const normalTexture = document
+                  .createTexture(node.materialName)
+                  .setMimeType('image/jpg')
+                  .setImage(normalJpg);
+
+                material.setNormalTexture(normalTexture);
+              }
             }
 
             materials.set(node['#id'].readBigUInt64LE(), material);
@@ -802,10 +869,20 @@ if (allTargets || targets?.includes('tankModels')) {
           });
         }
 
-        parseHierarchies(sc2['#hierarchy'], scene);
-        writeFile('test.model.glb', await new NodeIO().writeBinary(document));
-        writeFile('test.sc2.json', JSON.stringify(sc2, null, 2));
-        writeFile('test.scg.json', JSON.stringify(scg, null, 2));
+        // rotate 90 degrees on the x axis
+        const rootNode = document
+          .createNode()
+          .setRotation([Math.cos(Math.PI / 4), 0, 0, -Math.sin(Math.PI / 4)]);
+
+        scene.addChild(rootNode);
+
+        parseHierarchies(sc2['#hierarchy'], rootNode);
+        // writeFile(
+        //   `dist/assets/models/${id}.glb`,
+        //   JSON.stringify((await new NodeIO().writeJSON(document)).json),
+        // );
+        await mkdir(`dist/assets/models/${id}`, { recursive: true });
+        nodeIO.write(`dist/assets/models/${id}/index.gltf`, document);
       }
     }),
   );
