@@ -1,19 +1,12 @@
-import { Document, Material, Node, NodeIO, Scene } from '@gltf-transform/core';
+import { NodeIO } from '@gltf-transform/core';
 import { config } from 'dotenv';
 import { writeFileSync } from 'fs';
 import { mkdir, readdir } from 'fs/promises';
-import { range, times } from 'lodash';
-import { dirname } from 'path';
 import { argv } from 'process';
 import sharp from 'sharp';
-import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
 import { TankType } from '../src/components/Tanks';
 import { NATION_IDS } from '../src/constants/nations';
-import {
-  SCPGStream,
-  VertexAttribute,
-  vertexAttributeVectorSizes,
-} from '../src/core/blitz/SCPGStream';
+import { SCPGStream, VertexAttribute } from '../src/core/blitz/SCPGStream';
 import { readBase64DVPL } from '../src/core/blitz/readBase64DVPL';
 import { readDVPLFile } from '../src/core/blitz/readDVPLFile';
 import { readStringDVPL } from '../src/core/blitz/readStringDVPL';
@@ -23,7 +16,6 @@ import { toUniqueId } from '../src/core/blitz/toUniqueId';
 import commitMultipleFiles, {
   FileChange,
 } from '../src/core/blitzkrieg/commitMultipleFiles';
-import { readTexture } from '../src/core/blitzkrieg/readTexture';
 import {
   GunDefinition,
   ShellDefinition,
@@ -33,7 +25,6 @@ import {
   Tier,
   TurretDefinition,
 } from '../src/core/blitzkrieg/tankDefinitions';
-import { Hierarchy, Textures } from '../src/types/sc2';
 
 const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> = {
   [VertexAttribute.VERTEX]: 'POSITION',
@@ -533,356 +524,13 @@ if (allTargets || targets?.includes('tankModels')) {
         const parameters = await readYAMLDVPL<TankParameters>(
           `${DATA}/${DOI.tankParameters}/${nation}/${tankIndex}.yaml.dvpl`,
         );
-        const scg = (
-          await SCPGStream.fromDVPLFile(
-            `${DATA}/${
-              DOI['3d']
-            }/${parameters.resourcesPath.blitzModelPath.replace(
-              /\.sc2$/,
-              '.scg',
-            )}.dvpl`,
-          )
-        ).consumeSCG();
-        const sc2 = (
-          await SCPGStream.fromDVPLFile(
-            `${DATA}/${DOI['3d']}/${parameters.resourcesPath.blitzModelPath}.dvpl`,
-          )
-        ).consumeSC2();
-        const document = new Document();
-        const scene = document.createScene();
-        const buffer = document.createBuffer();
-        const materials = new Map<bigint, Material | bigint>();
-
-        await Promise.all(
-          sc2['#dataNodes'].map(async (node, index) => {
-            const id = node['#id'].readBigUInt64LE();
-
-            if (node.parentMaterialKey !== undefined) {
-              materials.set(id, node.parentMaterialKey);
-              return;
-            }
-
-            const material = document.createMaterial(node.materialName);
-            let textures: Textures | undefined = undefined;
-
-            if (node.textures) {
-              textures = node.textures;
-            } else if (typeof node.configCount === 'number') {
-              textures = node.configArchive_0.textures;
-            }
-
-            console.log(textures);
-
-            if (textures) {
-              const albedoJpg = await readTexture(
-                `${DATA}/${DOI['3d']}/${dirname(
-                  parameters.resourcesPath.blitzModelPath,
-                )}/${textures.albedo}`,
-              );
-              const albedoTexture = document
-                .createTexture(node.materialName)
-                .setMimeType('image/jpg')
-                .setImage(albedoJpg);
-              material.setBaseColorTexture(albedoTexture);
-
-              if (textures.baseRMMap) {
-                const RMJpg = await sharp(
-                  await readTexture(
-                    `${DATA}/${DOI['3d']}/${dirname(
-                      parameters.resourcesPath.blitzModelPath,
-                    )}/${textures.baseRMMap}`,
-                  ),
-                )
-                  .raw()
-                  .toBuffer({ resolveWithObject: true })
-                  .then(({ data, info }) => {
-                    /**
-                     * RM mods
-                     *
-                     * green channel --> 1 : metallicness --> blue (interpreted as metallicness)
-                     * green channel --> 1 - x : roughness --> green (interpreted as roughness)
-                     * red channel --> 0 : unknown --> red (unknown)
-                     */
-
-                    const newImage = Buffer.from(data);
-
-                    for (let index = 0; index < data.length; index += 3) {
-                      const G = newImage[index + 1];
-
-                      newImage[index] = 0;
-                      newImage[index + 1] = 255 - G;
-                      newImage[index + 2] = G;
-                    }
-
-                    return sharp(newImage, { raw: info }).jpeg().toBuffer();
-                  });
-                const RMTexture = document
-                  .createTexture(node.materialName)
-                  .setMimeType('image/jpg')
-                  .setImage(RMJpg);
-
-                material.setMetallicRoughnessTexture(RMTexture);
-              }
-
-              if (textures.baseNormalMap) {
-                const normalJpg = await sharp(
-                  await readTexture(
-                    `${DATA}/${DOI['3d']}/${dirname(
-                      parameters.resourcesPath.blitzModelPath,
-                    )}/${textures.baseNormalMap}`,
-                  ),
-                )
-                  .raw()
-                  .toBuffer({ resolveWithObject: true })
-                  .then(({ data, info }) => {
-                    /**
-                     * normal mods
-                     *
-                     * red channel --> blue channel
-                     * green channel --> green channel
-                     * blue channel --> red channel
-                     */
-
-                    const newImage = Buffer.from(data);
-
-                    for (let index = 0; index < data.length; index += 3) {
-                      const R = newImage[index];
-                      const G = newImage[index + 1];
-                      const B = newImage[index + 2];
-
-                      newImage[index] = B;
-                      newImage[index + 1] = G;
-                      newImage[index + 2] = R;
-                    }
-
-                    return sharp(newImage, { raw: info }).jpeg().toBuffer();
-                  });
-                const normalTexture = document
-                  .createTexture(node.materialName)
-                  .setMimeType('image/jpg')
-                  .setImage(normalJpg);
-
-                material.setNormalTexture(normalTexture);
-              }
-            }
-
-            materials.set(node['#id'].readBigUInt64LE(), material);
-          }),
+        const model = await SCPGStream.extractModel(
+          DATA,
+          parameters.resourcesPath.blitzModelPath.replace(/\.sc2$/, ''),
         );
 
-        // replace children with parents
-        materials.forEach((material, id) => {
-          if (typeof material !== 'bigint') return;
-
-          let resolvedMaterial: Material | bigint = material;
-
-          while (typeof resolvedMaterial === 'bigint') {
-            const linkedParentMaterial = materials.get(resolvedMaterial);
-
-            if (linkedParentMaterial === undefined) {
-              throw new Error('Could not resolve material');
-            }
-
-            resolvedMaterial = linkedParentMaterial;
-          }
-
-          materials.set(id, resolvedMaterial);
-        });
-
-        function parseHierarchies(
-          hierarchies: Hierarchy[],
-          parent: Scene | Node,
-        ) {
-          hierarchies.forEach((hierarchy) => {
-            const node = document.createNode(hierarchy.name);
-
-            times(
-              hierarchy.components.count,
-              (index) =>
-                hierarchy.components[index.toString().padStart(4, '0')],
-            ).forEach((component) => {
-              switch (component['comp.typename']) {
-                case 'TransformComponent': {
-                  const localRotation = new Quaternion().fromArray(
-                    component['tc.localRotation'],
-                  );
-                  const localScale = new Vector3().fromArray(
-                    component['tc.localScale'],
-                  );
-                  const localTranslation = new Vector3().fromArray(
-                    component['tc.localTranslation'],
-                  );
-                  const worldRotation = new Quaternion().fromArray(
-                    component['tc.worldRotation'],
-                  );
-                  const worldScale = new Vector3().fromArray(
-                    component['tc.worldScale'],
-                  );
-                  const worldTranslation = new Vector3().fromArray(
-                    component['tc.worldTranslation'],
-                  );
-                  const localMatrix = new Matrix4().compose(
-                    localTranslation,
-                    localRotation,
-                    localScale,
-                  );
-                  const worldMatrix = new Matrix4().compose(
-                    worldTranslation,
-                    worldRotation,
-                    worldScale,
-                  );
-                  const combinedMatrix = new Matrix4().multiplyMatrices(
-                    worldMatrix,
-                    localMatrix,
-                  );
-                  const combinedRotation = new Quaternion();
-                  const combinedScale = new Vector3();
-                  const combinedTranslation = new Vector3();
-
-                  combinedMatrix.decompose(
-                    combinedTranslation,
-                    combinedRotation,
-                    combinedScale,
-                  );
-
-                  node.setRotation(combinedRotation.toArray() as Vector4Tuple);
-                  node.setScale(combinedScale.toArray());
-                  node.setTranslation(combinedTranslation.toArray());
-
-                  break;
-                }
-
-                case 'RenderComponent': {
-                  const batchIds = range(
-                    component['rc.renderObj']['ro.batchCount'],
-                  );
-                  let minLODIndex = Infinity;
-                  let minLODBatchId = Infinity;
-
-                  batchIds.forEach((batchId) => {
-                    const thisLODIndex =
-                      component['rc.renderObj'][`rb${batchId}.lodIndex`];
-
-                    if (thisLODIndex <= minLODIndex) {
-                      minLODIndex = thisLODIndex;
-                      minLODBatchId = batchId;
-                    }
-                  });
-
-                  const batch =
-                    component['rc.renderObj']['ro.batches'][
-                      minLODBatchId.toString().padStart(4, '0')
-                    ];
-                  const polygonGroup = scg.find(
-                    (group) => group.id === batch['rb.datasource'],
-                  );
-
-                  if (!polygonGroup) {
-                    throw new Error(
-                      `Missing polygon group ${batch['rb.datasource']}`,
-                    );
-                  }
-
-                  const indexedVertexTypes: VertexAttribute[] = [];
-                  const unpackedVertices: Partial<
-                    Record<VertexAttribute, number[]>
-                  > = {};
-
-                  polygonGroup.vertices.forEach((vertex) => {
-                    vertex.map((vertexItem) => {
-                      if (!(vertexItem.type in unpackedVertices)) {
-                        unpackedVertices[vertexItem.type] = [];
-                        indexedVertexTypes.push(vertexItem.type);
-                      }
-
-                      unpackedVertices[vertexItem.type]!.push(
-                        ...vertexItem.value,
-                      );
-                    });
-                  });
-
-                  const indexAccessor = document
-                    .createAccessor()
-                    .setType('SCALAR')
-                    .setArray(new Uint16Array(polygonGroup.indices))
-                    .setBuffer(buffer);
-                  const material = materials.get(batch['rb.nmatname']);
-
-                  if (!(material instanceof Material)) {
-                    throw new Error(
-                      `Material ${batch['rb.nmatname']} is unresolved`,
-                    );
-                  }
-
-                  const primitive = document
-                    .createPrimitive()
-                    .setIndices(indexAccessor)
-                    .setMaterial(material);
-
-                  indexedVertexTypes.forEach((type) => {
-                    if (!(type in vertexAttributeGLTFName)) {
-                      return;
-                      // throw new TypeError(
-                      //   `Unhandled vertex type GLTF name: ${VertexType[type]} (${type})`,
-                      // );
-                    }
-
-                    const vertexSize = vertexAttributeVectorSizes[type];
-
-                    if (
-                      !primitive.getAttribute(vertexAttributeGLTFName[type]!)
-                    ) {
-                      primitive.setAttribute(
-                        vertexAttributeGLTFName[type]!,
-                        document
-                          .createAccessor()
-                          .setType(
-                            vertexSize === 1 ? 'SCALAR' : `VEC${vertexSize}`,
-                          )
-                          .setArray(new Float32Array(unpackedVertices[type]!))
-                          .setBuffer(buffer),
-                      );
-                    }
-                  });
-
-                  const mesh = document
-                    .createMesh(batch['##name'])
-                    .addPrimitive(primitive);
-
-                  node.setMesh(mesh);
-
-                  break;
-                }
-
-                // default:
-                //   throw new TypeError(
-                //     `Unhandled component type: ${component['comp.typename']}`,
-                //   );
-              }
-            });
-
-            if (hierarchy['#hierarchy']) {
-              parseHierarchies(hierarchy['#hierarchy'], node);
-            }
-
-            parent.addChild(node);
-          });
-        }
-
-        // rotate 90 degrees on the x axis
-        const rootNode = document
-          .createNode()
-          .setRotation([Math.cos(Math.PI / 4), 0, 0, -Math.sin(Math.PI / 4)]);
-
-        scene.addChild(rootNode);
-
-        parseHierarchies(sc2['#hierarchy'], rootNode);
-        // writeFile(
-        //   `dist/assets/models/${id}.glb`,
-        //   JSON.stringify((await new NodeIO().writeJSON(document)).json),
-        // );
         await mkdir(`dist/assets/models/${id}`, { recursive: true });
-        nodeIO.write(`dist/assets/models/${id}/index.gltf`, document);
+        nodeIO.write(`dist/assets/models/${id}/index.gltf`, model);
       }
     }),
   );

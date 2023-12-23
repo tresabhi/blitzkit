@@ -1,5 +1,10 @@
-import { times } from 'lodash';
-import { SC2 } from '../../types/sc2';
+import { Document, Material, Node, Scene } from '@gltf-transform/core';
+import { range, times } from 'lodash';
+import { dirname } from 'path';
+import sharp from 'sharp';
+import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
+import { Hierarchy, SC2, Textures } from '../../types/sc2';
+import { readTexture } from '../blitzkrieg/readTexture';
 import { readDVPL } from './readDVPL';
 import { readDVPLFile } from './readDVPLFile';
 
@@ -79,6 +84,19 @@ export const vertexAttributeVectorSizes = {
   [VertexAttribute.JOINTINDEX]: 4,
   [VertexAttribute.JOINTWEIGHT]: 4,
 } as const;
+
+const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> = {
+  [VertexAttribute.VERTEX]: 'POSITION',
+  [VertexAttribute.NORMAL]: 'NORMAL',
+  [VertexAttribute.COLOR]: 'COLOR_0',
+  [VertexAttribute.TEXCOORD0]: 'TEXCOORD_0',
+  [VertexAttribute.TEXCOORD1]: 'TEXCOORD_0',
+  [VertexAttribute.TEXCOORD2]: 'TEXCOORD_0',
+  [VertexAttribute.TEXCOORD3]: 'TEXCOORD_0',
+  [VertexAttribute.TANGENT]: 'TANGENT',
+  [VertexAttribute.JOINTINDEX]: 'JOINT_0',
+  [VertexAttribute.JOINTWEIGHT]: 'WEIGHT_0',
+};
 
 interface PolygonGroupRaw {
   '##name': 'PolygonGroup';
@@ -479,8 +497,335 @@ export class SCPGStream {
   static fromDVPL(buffer: Buffer) {
     return new SCPGStream(readDVPL(buffer));
   }
-
   static async fromDVPLFile(file: string) {
     return new SCPGStream(await readDVPLFile(file));
+  }
+
+  static async extractModel(data: string, path: string) {
+    const sc2Path = `${data}/3d/${path}.sc2.dvpl`;
+    const scgPath = `${data}/3d/${path}.scg.dvpl`;
+    const sc2 = (await SCPGStream.fromDVPLFile(sc2Path)).consumeSC2();
+    const scg = (await SCPGStream.fromDVPLFile(scgPath)).consumeSCG();
+    const document = new Document();
+    const scene = document.createScene();
+    const buffer = document.createBuffer();
+    const materials = new Map<bigint, Material | bigint>();
+
+    // create materials
+    await Promise.all(
+      sc2['#dataNodes'].map(async (node) => {
+        const id = node['#id'].readBigUInt64LE();
+
+        if (node.parentMaterialKey !== undefined) {
+          /**
+           * material depends on a parent and doesn't seem to have any
+           * properties so we just point it to the parent
+           */
+          materials.set(id, node.parentMaterialKey);
+          return;
+        }
+
+        const material = document.createMaterial(node.materialName);
+        let textures: Textures | undefined = undefined;
+
+        if (node.textures) {
+          textures = node.textures;
+        } else if (typeof node.configCount === 'number') {
+          textures = node.configArchive_0.textures;
+        }
+
+        if (textures) {
+          material.setBaseColorTexture(
+            document
+              .createTexture(node.materialName)
+              .setMimeType('image/jpg')
+              .setImage(
+                await readTexture(
+                  `${data}/3d/${dirname(path)}/${textures.albedo}`,
+                ),
+              ),
+          );
+
+          if (textures.baseRMMap) {
+            material.setMetallicRoughnessTexture(
+              document
+                .createTexture(node.materialName)
+                .setMimeType('image/jpg')
+                .setImage(
+                  await sharp(
+                    await readTexture(
+                      `${data}/3d/${dirname(path)}/${textures.baseRMMap}`,
+                    ),
+                  )
+                    .raw()
+                    .toBuffer({ resolveWithObject: true })
+                    .then(({ data, info }) => {
+                      for (let index = 0; index < data.length; index += 3) {
+                        const R = data[index];
+                        const G = data[index + 1];
+                        const B = data[index + 2];
+
+                        /**
+                         * RM remapping
+                         *
+                         * 0       -> R (unknown)
+                         * 255 - G -> G (roughness)
+                         * G       -> B (metallicness)
+                         */
+
+                        data[index] = 0;
+                        data[index + 1] = 0;
+                        data[index + 2] = 255;
+                      }
+
+                      return sharp(data, { raw: info }).jpeg().toBuffer();
+                    }),
+                ),
+            );
+          }
+
+          if (textures.baseNormalMap) {
+            material.setNormalTexture(
+              document
+                .createTexture(node.materialName)
+                .setMimeType('image/jpg')
+                .setImage(
+                  await sharp(
+                    await readTexture(
+                      `${data}/3d/${dirname(path)}/${textures.baseNormalMap}`,
+                    ),
+                  )
+                    .raw()
+                    .toBuffer({ resolveWithObject: true })
+                    .then(({ data, info }) => {
+                      /**
+                       * normal remapping
+                       *
+                       * B -> R (z)
+                       * G -> G (y)
+                       * R -> B (x)
+                       */
+
+                      for (let index = 0; index < data.length; index += 3) {
+                        const R = data[index];
+                        const G = data[index + 1];
+                        const B = data[index + 2];
+
+                        console.log(R, G, B);
+
+                        data[index] = R;
+                        data[index + 1] = G;
+                        data[index + 2] = B;
+                      }
+
+                      return sharp(data, { raw: info }).jpeg().toBuffer();
+                    }),
+                ),
+            );
+          }
+        }
+
+        materials.set(node['#id'].readBigUInt64LE(), material);
+      }),
+    );
+
+    // replace children materials with parents
+    materials.forEach((material, id) => {
+      if (typeof material !== 'bigint') return;
+
+      let resolvedMaterial: Material | bigint = material;
+
+      while (typeof resolvedMaterial === 'bigint') {
+        const linkedParentMaterial = materials.get(resolvedMaterial);
+
+        if (linkedParentMaterial === undefined) {
+          throw new Error('Could not resolve material');
+        }
+
+        resolvedMaterial = linkedParentMaterial;
+      }
+
+      materials.set(id, resolvedMaterial);
+    });
+
+    function parseHierarchies(hierarchies: Hierarchy[], parent: Scene | Node) {
+      hierarchies.forEach((hierarchy) => {
+        const node = document.createNode(hierarchy.name);
+
+        times(
+          hierarchy.components.count,
+          (index) => hierarchy.components[index.toString().padStart(4, '0')],
+        ).forEach((component) => {
+          switch (component['comp.typename']) {
+            case 'TransformComponent': {
+              const localRotation = new Quaternion().fromArray(
+                component['tc.localRotation'],
+              );
+              const localScale = new Vector3().fromArray(
+                component['tc.localScale'],
+              );
+              const localTranslation = new Vector3().fromArray(
+                component['tc.localTranslation'],
+              );
+              const worldRotation = new Quaternion().fromArray(
+                component['tc.worldRotation'],
+              );
+              const worldScale = new Vector3().fromArray(
+                component['tc.worldScale'],
+              );
+              const worldTranslation = new Vector3().fromArray(
+                component['tc.worldTranslation'],
+              );
+              const localMatrix = new Matrix4().compose(
+                localTranslation,
+                localRotation,
+                localScale,
+              );
+              const worldMatrix = new Matrix4().compose(
+                worldTranslation,
+                worldRotation,
+                worldScale,
+              );
+              const combinedMatrix = new Matrix4().multiplyMatrices(
+                worldMatrix,
+                localMatrix,
+              );
+              const combinedRotation = new Quaternion();
+              const combinedScale = new Vector3();
+              const combinedTranslation = new Vector3();
+
+              combinedMatrix.decompose(
+                combinedTranslation,
+                combinedRotation,
+                combinedScale,
+              );
+
+              node.setRotation(combinedRotation.toArray() as Vector4Tuple);
+              node.setScale(combinedScale.toArray());
+              node.setTranslation(combinedTranslation.toArray());
+
+              break;
+            }
+
+            case 'RenderComponent': {
+              const batchIds = range(
+                component['rc.renderObj']['ro.batchCount'],
+              );
+              let minLODIndex = Infinity;
+              let minLODBatchId = Infinity;
+
+              batchIds.forEach((batchId) => {
+                const thisLODIndex =
+                  component['rc.renderObj'][`rb${batchId}.lodIndex`];
+
+                if (thisLODIndex <= minLODIndex) {
+                  minLODIndex = thisLODIndex;
+                  minLODBatchId = batchId;
+                }
+              });
+
+              const batch =
+                component['rc.renderObj']['ro.batches'][
+                  minLODBatchId.toString().padStart(4, '0')
+                ];
+              const polygonGroup = scg.find(
+                (group) => group.id === batch['rb.datasource'],
+              );
+
+              if (!polygonGroup) {
+                throw new Error(
+                  `Missing polygon group ${batch['rb.datasource']}`,
+                );
+              }
+
+              const indexedVertexTypes: VertexAttribute[] = [];
+              const unpackedVertices: Partial<
+                Record<VertexAttribute, number[]>
+              > = {};
+
+              polygonGroup.vertices.forEach((vertex) => {
+                vertex.map((vertexItem) => {
+                  if (!(vertexItem.type in unpackedVertices)) {
+                    unpackedVertices[vertexItem.type] = [];
+                    indexedVertexTypes.push(vertexItem.type);
+                  }
+
+                  unpackedVertices[vertexItem.type]!.push(...vertexItem.value);
+                });
+              });
+
+              const indexAccessor = document
+                .createAccessor()
+                .setType('SCALAR')
+                .setArray(new Uint16Array(polygonGroup.indices))
+                .setBuffer(buffer);
+              const material = materials.get(batch['rb.nmatname']);
+
+              if (!(material instanceof Material)) {
+                throw new Error(
+                  `Material ${batch['rb.nmatname']} is unresolved`,
+                );
+              }
+
+              const primitive = document
+                .createPrimitive()
+                .setIndices(indexAccessor)
+                .setMaterial(material);
+
+              indexedVertexTypes.forEach((type) => {
+                if (!(type in vertexAttributeGLTFName)) {
+                  return;
+                  // throw new TypeError(
+                  //   `Unhandled vertex type GLTF name: ${VertexType[type]} (${type})`,
+                  // );
+                }
+
+                const vertexSize = vertexAttributeVectorSizes[type];
+
+                if (!primitive.getAttribute(vertexAttributeGLTFName[type]!)) {
+                  primitive.setAttribute(
+                    vertexAttributeGLTFName[type]!,
+                    document
+                      .createAccessor()
+                      .setType(vertexSize === 1 ? 'SCALAR' : `VEC${vertexSize}`)
+                      .setArray(new Float32Array(unpackedVertices[type]!))
+                      .setBuffer(buffer),
+                  );
+                }
+              });
+
+              const mesh = document
+                .createMesh(batch['##name'])
+                .addPrimitive(primitive);
+
+              node.setMesh(mesh);
+
+              break;
+            }
+
+            // default:
+            //   throw new TypeError(
+            //     `Unhandled component type: ${component['comp.typename']}`,
+            //   );
+          }
+        });
+
+        if (hierarchy['#hierarchy']) {
+          parseHierarchies(hierarchy['#hierarchy'], node);
+        }
+
+        parent.addChild(node);
+      });
+    }
+
+    // rotate 90 degrees on the x axis
+    const rootNode = document
+      .createNode()
+      .setRotation([Math.cos(Math.PI / 4), 0, 0, -Math.sin(Math.PI / 4)]);
+
+    scene.addChild(rootNode);
+    parseHierarchies(sc2['#hierarchy'], rootNode);
+
+    return document;
   }
 }
