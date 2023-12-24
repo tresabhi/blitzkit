@@ -560,22 +560,10 @@ export class SCPGStream {
                     .raw()
                     .toBuffer({ resolveWithObject: true })
                     .then(({ data, info }) => {
-                      for (let index = 0; index < data.length; index += 3) {
-                        const R = data[index];
-                        const G = data[index + 1];
-                        const B = data[index + 2];
-
-                        /**
-                         * RM remapping
-                         *
-                         * 0       -> R (unknown)
-                         * 255 - G -> G (roughness)
-                         * G       -> B (metallicness)
-                         */
-
-                        data[index] = 0;
-                        data[index + 1] = 0;
-                        data[index + 2] = 255;
+                      // fake it till you make it
+                      for (let index = 0; index < data.length; index++) {
+                        data[index] =
+                          ((-((data[index] / 255) * 2 - 1) + 1) / 2) * 255;
                       }
 
                       return sharp(data, { raw: info }).jpeg().toBuffer();
@@ -598,24 +586,11 @@ export class SCPGStream {
                     .raw()
                     .toBuffer({ resolveWithObject: true })
                     .then(({ data, info }) => {
-                      /**
-                       * normal remapping
-                       *
-                       * B -> R (z)
-                       * G -> G (y)
-                       * R -> B (x)
-                       */
-
+                      // https://www.youtube.com/watch?v=CGys6CnnYSg
                       for (let index = 0; index < data.length; index += 3) {
-                        const R = data[index];
-                        const G = data[index + 1];
-                        const B = data[index + 2];
-
-                        console.log(R, G, B);
-
-                        data[index] = R;
-                        data[index + 1] = G;
-                        data[index + 2] = B;
+                        data[index] = data[index];
+                        data[index + 1] = data[index + 1];
+                        data[index + 2] = -data[index + 2] + 255;
                       }
 
                       return sharp(data, { raw: info }).jpeg().toBuffer();
@@ -658,51 +633,28 @@ export class SCPGStream {
         ).forEach((component) => {
           switch (component['comp.typename']) {
             case 'TransformComponent': {
-              const localRotation = new Quaternion().fromArray(
-                component['tc.localRotation'],
-              );
-              const localScale = new Vector3().fromArray(
-                component['tc.localScale'],
-              );
-              const localTranslation = new Vector3().fromArray(
-                component['tc.localTranslation'],
-              );
-              const worldRotation = new Quaternion().fromArray(
-                component['tc.worldRotation'],
-              );
-              const worldScale = new Vector3().fromArray(
-                component['tc.worldScale'],
-              );
-              const worldTranslation = new Vector3().fromArray(
-                component['tc.worldTranslation'],
-              );
-              const localMatrix = new Matrix4().compose(
-                localTranslation,
-                localRotation,
-                localScale,
-              );
-              const worldMatrix = new Matrix4().compose(
-                worldTranslation,
-                worldRotation,
-                worldScale,
-              );
-              const combinedMatrix = new Matrix4().multiplyMatrices(
-                worldMatrix,
-                localMatrix,
-              );
-              const combinedRotation = new Quaternion();
-              const combinedScale = new Vector3();
-              const combinedTranslation = new Vector3();
+              const translation = new Vector3();
+              const rotation = new Quaternion();
+              const scale = new Vector3();
 
-              combinedMatrix.decompose(
-                combinedTranslation,
-                combinedRotation,
-                combinedScale,
-              );
+              new Matrix4()
+                .multiplyMatrices(
+                  new Matrix4().compose(
+                    new Vector3().fromArray(component['tc.worldTranslation']),
+                    new Quaternion().fromArray(component['tc.worldRotation']),
+                    new Vector3().fromArray(component['tc.worldScale']),
+                  ),
+                  new Matrix4().compose(
+                    new Vector3().fromArray(component['tc.localTranslation']),
+                    new Quaternion().fromArray(component['tc.localRotation']),
+                    new Vector3().fromArray(component['tc.localScale']),
+                  ),
+                )
+                .decompose(translation, rotation, scale);
 
-              node.setRotation(combinedRotation.toArray() as Vector4Tuple);
-              node.setScale(combinedScale.toArray());
-              node.setTranslation(combinedTranslation.toArray());
+              node.setTranslation(translation.toArray());
+              node.setRotation(rotation.toArray() as Vector4Tuple);
+              node.setScale(scale.toArray());
 
               break;
             }
@@ -774,10 +726,9 @@ export class SCPGStream {
 
               indexedVertexTypes.forEach((type) => {
                 if (!(type in vertexAttributeGLTFName)) {
-                  return;
-                  // throw new TypeError(
-                  //   `Unhandled vertex type GLTF name: ${VertexType[type]} (${type})`,
-                  // );
+                  throw new TypeError(
+                    `Unhandled vertex type GLTF name: ${VertexAttribute[type]} (${type})`,
+                  );
                 }
 
                 const vertexSize = vertexAttributeVectorSizes[type];
