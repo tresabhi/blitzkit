@@ -116,7 +116,7 @@ interface PolygonGroupRaw {
   vertexFormat: number;
   vertices: Buffer;
 }
-type BlitzkriegVertex = { type: VertexAttribute; value: number[] }[];
+type BlitzkriegVertex = { attribute: VertexAttribute; value: number[] }[];
 interface BlitzkriegPolygonGroup {
   id: bigint;
   vertices: BlitzkriegVertex[];
@@ -273,12 +273,20 @@ export class SCPGStream {
       ).filter((type) => type !== null);
 
       for (let index = 0; index < polygonGroupRaw.vertexCount; index++) {
-        vertices[index] = vertexFormat.map((type) => ({
-          type,
-          value: verticesStream.consumeVectorN(
-            vertexAttributeVectorSizes[type],
-          ),
-        }));
+        // TODO: ISSUE
+        vertices[index] = vertexFormat.map((attribute) => {
+          console.log(
+            VertexAttribute[attribute],
+            vertexAttributeVectorSizes[attribute],
+          );
+
+          return {
+            attribute,
+            value: verticesStream.consumeVectorN(
+              vertexAttributeVectorSizes[attribute],
+            ),
+          };
+        });
       }
 
       return {
@@ -549,8 +557,6 @@ export class SCPGStream {
               ),
           );
 
-          console.log(textures);
-
           if (textures.baseRMMap) {
             material.setMetallicRoughnessTexture(
               document
@@ -635,8 +641,13 @@ export class SCPGStream {
           (index) => hierarchy.components[index.toString().padStart(4, '0')],
         );
 
-        components.forEach((component, componentIndex) => {
+        components.forEach((component) => {
           switch (component['comp.typename']) {
+            case 'LodComponent':
+              break;
+            case 'SlotComponent':
+              break;
+
             case 'TransformComponent': {
               const translation = new Vector3();
               const rotation = new Quaternion();
@@ -715,19 +726,21 @@ export class SCPGStream {
                 );
               }
 
-              const indexedVertexTypes: VertexAttribute[] = [];
+              const indexedVertexAttributes: VertexAttribute[] = [];
               const unpackedVertices: Partial<
                 Record<VertexAttribute, number[]>
               > = {};
 
               polygonGroup.vertices.forEach((vertex) => {
                 vertex.map((vertexItem) => {
-                  if (!(vertexItem.type in unpackedVertices)) {
-                    unpackedVertices[vertexItem.type] = [];
-                    indexedVertexTypes.push(vertexItem.type);
+                  if (!(vertexItem.attribute in unpackedVertices)) {
+                    unpackedVertices[vertexItem.attribute] = [];
+                    indexedVertexAttributes.push(vertexItem.attribute);
                   }
 
-                  unpackedVertices[vertexItem.type]!.push(...vertexItem.value);
+                  unpackedVertices[vertexItem.attribute]!.push(
+                    ...vertexItem.value,
+                  );
                 });
               });
 
@@ -749,18 +762,20 @@ export class SCPGStream {
                 .setIndices(indexAccessor)
                 .setMaterial(material);
 
-              indexedVertexTypes.forEach((type) => {
-                if (!(type in vertexAttributeGLTFName)) return;
+              indexedVertexAttributes.forEach((attribute) => {
+                if (!(attribute in vertexAttributeGLTFName)) return;
 
-                const vertexSize = vertexAttributeVectorSizes[type];
+                const vertexSize = vertexAttributeVectorSizes[attribute];
 
-                if (!primitive.getAttribute(vertexAttributeGLTFName[type]!)) {
+                if (
+                  !primitive.getAttribute(vertexAttributeGLTFName[attribute]!)
+                ) {
                   primitive.setAttribute(
-                    vertexAttributeGLTFName[type]!,
+                    vertexAttributeGLTFName[attribute]!,
                     document
                       .createAccessor()
                       .setType(vertexSize === 1 ? 'SCALAR' : `VEC${vertexSize}`)
-                      .setArray(new Float32Array(unpackedVertices[type]!))
+                      .setArray(new Float32Array(unpackedVertices[attribute]!))
                       .setBuffer(buffer),
                   );
                 }
@@ -775,10 +790,10 @@ export class SCPGStream {
               break;
             }
 
-            // default:
-            //   throw new TypeError(
-            //     `Unhandled component type: ${component['comp.typename']}`,
-            //   );
+            default:
+              throw new TypeError(
+                `Unhandled component type: ${component['comp.typename']}`,
+              );
           }
         });
 

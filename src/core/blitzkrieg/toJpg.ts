@@ -39,8 +39,6 @@ export async function toJpg(
     mergedOptions.invert ? `-diff ${input},DIFFINVERT,255` : ''
   } -d ${output}`;
 
-  console.log(command);
-
   await mkdir('temp/toJpg', { recursive: true });
   await writeFile(`temp/toJpg/${id}.${mergedOptions.format}`, inputBuffer);
   await execPromise(command);
