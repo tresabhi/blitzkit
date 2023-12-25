@@ -91,8 +91,6 @@ type Components = {
   count: number;
 } & Record<string, Component>;
 
-type LODDistance = Record<`distance${number}`, number>;
-
 // 0001, 0002, 0003...
 type RoBatches = Record<
   string,
@@ -146,7 +144,29 @@ export type Component =
     }
   | {
       'comp.typename': 'LodComponent';
-      'lc.loddist': LODDistance;
+      'lc.loddist': Record<`distance${number}`, number>;
+    }
+  | {
+      'comp.typename': 'DecorItemComponent';
+      drawOrder: number;
+      shouldApplyCamo: boolean;
+      vanishTargetAlpha: number;
+      vanishWhenArmorShown: boolean;
+    }
+  | {
+      'comp.typename': 'NewSlotComponent';
+      slotItemsCount: number;
+      slots: {
+        [key: string]: {
+          configFilePath: string;
+          name: string;
+          transform: {
+            position: Vector3Tuple;
+            scale: Vector3Tuple;
+            rotation: Vector4Tuple;
+          };
+        };
+      };
     };
 
 interface SceneComponents {

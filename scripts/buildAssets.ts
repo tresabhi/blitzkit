@@ -518,7 +518,9 @@ if (allTargets || targets?.includes('tankModels')) {
         const nationVehicleId = tank.id;
         const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
 
-        if (id !== 15697) continue;
+        // if (id !== 15697) continue; // chieftain TODO: investigate vertices stream over read
+        // if (id !== 4417) continue; // amx m4 mle
+        if (id !== 7297) continue; // 60tp
         console.log(`Building model ${id} @ ${nation}/${tankIndex}`);
 
         const parameters = await readYAMLDVPL<TankParameters>(

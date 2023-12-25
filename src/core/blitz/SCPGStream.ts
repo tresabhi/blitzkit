@@ -43,26 +43,26 @@ enum KAType {
 }
 
 export enum VertexAttribute {
-  VERTEX,
-  NORMAL,
-  COLOR,
-  TEXCOORD0,
-  TEXCOORD1,
-  TEXCOORD2,
-  TEXCOORD3,
-  TANGENT,
-  BINORMAL,
-  HARD_JOINTINDEX,
-  PIVOT4,
-  PIVOT_DEPRECATED,
-  FLEXIBILITY,
-  ANGLE_SIN_COS,
-  JOINTINDEX,
-  JOINTWEIGHT,
-  CUBETEXCOORD0,
-  CUBETEXCOORD1,
-  CUBETEXCOORD2,
-  CUBETEXCOORD3,
+  VERTEX = 0,
+  NORMAL = 1,
+  COLOR = 2,
+  TEXCOORD0 = 3,
+  TEXCOORD1 = 4,
+  TEXCOORD2 = 5,
+  TEXCOORD3 = 6,
+  TANGENT = 7,
+  BINORMAL = 8,
+  HARD_JOINTINDEX = 9,
+  PIVOT4 = 10,
+  PIVOT_DEPRECATED = 11,
+  FLEXIBILITY = 12,
+  ANGLE_SIN_COS = 13,
+  JOINTINDEX = 14,
+  JOINTWEIGHT = 15,
+  CUBETEXCOORD0 = 16,
+  CUBETEXCOORD1 = 17,
+  CUBETEXCOORD2 = 18,
+  CUBETEXCOORD3 = 19,
 }
 
 export const vertexAttributeVectorSizes = {
@@ -118,7 +118,6 @@ interface PolygonGroupRaw {
 }
 type BlitzkriegVertex = { attribute: VertexAttribute; value: number[] }[];
 interface BlitzkriegPolygonGroup {
-  id: bigint;
   vertices: BlitzkriegVertex[];
   indices: number[];
 }
@@ -145,6 +144,9 @@ export class SCPGStream {
 
   readRemaining() {
     return this.read(Number.POSITIVE_INFINITY);
+  }
+  readRemainingLength() {
+    return this.buffer.length - this.index;
   }
   consumeRemaining() {
     return this.consume(Number.POSITIVE_INFINITY);
@@ -216,7 +218,7 @@ export class SCPGStream {
     return this.consumeMatrixN(4);
   }
 
-  getVertexStride(vertexFormat: number) {
+  static getVertexStride(vertexFormat: number) {
     const flags = vertexFormat.toString(2);
 
     return Object.values(VertexAttribute)
@@ -242,13 +244,14 @@ export class SCPGStream {
   consumeSCG() {
     const header = this.consumeSCGHeader();
     const polygonGroupsRaw: PolygonGroupRaw[] = [];
+    const polygonGroups = new Map<bigint, BlitzkriegPolygonGroup>();
 
     for (let index = 0; index < header.nodeCount; index++) {
       const polygonGroupRaw = this.consumeKA() as PolygonGroupRaw;
       polygonGroupsRaw.push(polygonGroupRaw);
     }
 
-    const polygonGroups = polygonGroupsRaw.map((polygonGroupRaw) => {
+    polygonGroupsRaw.forEach((polygonGroupRaw) => {
       const indicesStream = new SCPGStream(polygonGroupRaw.indices);
       const indices: number[] = [];
 
@@ -262,6 +265,17 @@ export class SCPGStream {
 
       const verticesStream = new SCPGStream(polygonGroupRaw.vertices);
       const vertices: BlitzkriegVertex[] = [];
+      const stride =
+        SCPGStream.getVertexStride(polygonGroupRaw.vertexFormat) *
+        polygonGroupRaw.vertexCount;
+
+      if (verticesStream.buffer.length !== stride) {
+        console.warn(
+          `Vertex stride mismatch; expected ${stride}, got ${verticesStream.buffer.length}`,
+        );
+
+        return;
+      }
 
       const vertexFormat = (
         polygonGroupRaw.vertexFormat
@@ -273,13 +287,7 @@ export class SCPGStream {
       ).filter((type) => type !== null);
 
       for (let index = 0; index < polygonGroupRaw.vertexCount; index++) {
-        // TODO: ISSUE
         vertices[index] = vertexFormat.map((attribute) => {
-          console.log(
-            VertexAttribute[attribute],
-            vertexAttributeVectorSizes[attribute],
-          );
-
           return {
             attribute,
             value: verticesStream.consumeVectorN(
@@ -289,11 +297,14 @@ export class SCPGStream {
         });
       }
 
-      return {
-        id: polygonGroupRaw['#id'].readBigUInt64LE(),
+      if (verticesStream.readRemainingLength() !== 0) {
+        throw new RangeError('Vertices stream was not fully consumed');
+      }
+
+      polygonGroups.set(polygonGroupRaw['#id'].readBigUInt64LE(), {
         vertices,
         indices,
-      } satisfies BlitzkriegPolygonGroup;
+      });
     });
 
     return polygonGroups;
@@ -573,7 +584,7 @@ export class SCPGStream {
                     .then(({ data, info }) => {
                       // fake it till you make it
                       for (let index = 0; index < data.length; index++) {
-                        data[index] = -data[index] + 255;
+                        data[index] = 255 - data[index];
                       }
 
                       return sharp(data, { raw: info }).jpeg().toBuffer();
@@ -598,7 +609,7 @@ export class SCPGStream {
                     .then(({ data, info }) => {
                       // https://www.youtube.com/watch?v=CGys6CnnYSg
                       for (let index = 0; index < data.length; index += 3) {
-                        data[index + 2] = -data[index + 2] + 255;
+                        data[index + 2] = 255 - data[index + 2];
                       }
 
                       return sharp(data, { raw: info }).jpeg().toBuffer();
@@ -644,7 +655,8 @@ export class SCPGStream {
         components.forEach((component) => {
           switch (component['comp.typename']) {
             case 'LodComponent':
-              break;
+            case 'DecorItemComponent':
+            case 'NewSlotComponent':
             case 'SlotComponent':
               break;
 
@@ -716,14 +728,14 @@ export class SCPGStream {
                 component['rc.renderObj']['ro.batches'][
                   minLODDistanceBatchId!.toString().padStart(4, '0')
                 ];
-              const polygonGroup = scg.find(
-                (group) => group.id === batch['rb.datasource'],
-              );
+              const polygonGroup = scg.get(batch['rb.datasource']);
 
               if (!polygonGroup) {
-                throw new Error(
-                  `Missing polygon group ${batch['rb.datasource']}`,
+                console.warn(
+                  `Missing polygon group ${batch['rb.datasource']}; skipping...`,
                 );
+
+                break;
               }
 
               const indexedVertexAttributes: VertexAttribute[] = [];
