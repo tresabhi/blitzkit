@@ -1,4 +1,5 @@
 import { Vector3Tuple, Vector4Tuple } from 'three';
+import { ScpgStream } from './scpg';
 
 export interface SC2 {
   '#dataNodes': DataNode[];
@@ -171,4 +172,36 @@ export type Component =
 
 interface SceneComponents {
   count: number;
+}
+
+export class Sc2Stream extends ScpgStream {
+  header() {
+    return {
+      name: this.consumeAscii(4),
+      version: this.uint32(),
+      nodeCount: this.uint32(),
+    };
+  }
+
+  versionTags() {
+    return this.ka();
+  }
+
+  descriptor() {
+    const size = this.uint32();
+    const fileType = this.uint32();
+
+    // other felids that we don't have any info about
+    this.skip(size - 4);
+
+    return { size, fileType };
+  }
+
+  sc2() {
+    this.header();
+    this.versionTags();
+    this.descriptor();
+
+    return this.ka() as SC2;
+  }
 }

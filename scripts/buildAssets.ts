@@ -6,7 +6,7 @@ import { argv } from 'process';
 import sharp from 'sharp';
 import { TankType } from '../src/components/Tanks';
 import { NATION_IDS } from '../src/constants/nations';
-import { SCPGStream, VertexAttribute } from '../src/core/blitz/SCPGStream';
+import { extractModel } from '../src/core/blitz/extractModel';
 import { readBase64DVPL } from '../src/core/blitz/readBase64DVPL';
 import { readDVPLFile } from '../src/core/blitz/readDVPLFile';
 import { readStringDVPL } from '../src/core/blitz/readStringDVPL';
@@ -25,6 +25,7 @@ import {
   Tier,
   TurretDefinition,
 } from '../src/core/blitzkrieg/tankDefinitions';
+import { VertexAttribute } from '../src/core/streams/scpg';
 
 const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> = {
   [VertexAttribute.VERTEX]: 'POSITION',
@@ -526,7 +527,7 @@ if (allTargets || targets?.includes('tankModels')) {
         const parameters = await readYAMLDVPL<TankParameters>(
           `${DATA}/${DOI.tankParameters}/${nation}/${tankIndex}.yaml.dvpl`,
         );
-        const model = await SCPGStream.extractModel(
+        const model = await extractModel(
           DATA,
           parameters.resourcesPath.blitzModelPath.replace(/\.sc2$/, ''),
         );
