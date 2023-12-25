@@ -1,4 +1,5 @@
 import { Document, Material, Node, Scene } from '@gltf-transform/core';
+import { writeFileSync } from 'fs';
 import { range, times } from 'lodash';
 import { dirname } from 'path';
 import sharp from 'sharp';
@@ -7,6 +8,8 @@ import { Hierarchy, SC2, Textures } from '../../types/sc2';
 import { readTexture } from '../blitzkrieg/readTexture';
 import { readDVPL } from './readDVPL';
 import { readDVPLFile } from './readDVPLFile';
+
+const MAX_FLOAT32 = 2 ** 127 * (2 - 2 ** -23);
 
 enum KAType {
   NONE = 0,
@@ -36,7 +39,7 @@ enum KAType {
   INT16 = 24,
   UINT16 = 25,
   ARRAY = 27,
-  UNCONFIRMED_TRANSFORM = 29,
+  TRANSFORM = 29,
 }
 
 export enum VertexAttribute {
@@ -407,17 +410,15 @@ export class SCPGStream {
         return stringTable[index];
       }
 
-      case KAType.UNCONFIRMED_TRANSFORM: {
+      case KAType.TRANSFORM: {
         const position = this.consumeVector3();
         const scale = this.consumeVector3();
-        const rotation = this.consumeVector3();
-        const UNCONFIRMED_scalar = this.consumeFloat();
+        const rotation = this.consumeVector4();
 
         return {
           position,
           scale,
           rotation,
-          UNCONFIRMED_scalar,
         };
       }
 
@@ -511,6 +512,8 @@ export class SCPGStream {
     const buffer = document.createBuffer();
     const materials = new Map<bigint, Material | bigint>();
 
+    writeFileSync('test.sc2.json', JSON.stringify(sc2, null, 2));
+
     // create materials
     await Promise.all(
       sc2['#dataNodes'].map(async (node) => {
@@ -546,6 +549,8 @@ export class SCPGStream {
               ),
           );
 
+          console.log(textures);
+
           if (textures.baseRMMap) {
             material.setMetallicRoughnessTexture(
               document
@@ -562,8 +567,7 @@ export class SCPGStream {
                     .then(({ data, info }) => {
                       // fake it till you make it
                       for (let index = 0; index < data.length; index++) {
-                        data[index] =
-                          ((-((data[index] / 255) * 2 - 1) + 1) / 2) * 255;
+                        data[index] = -data[index] + 255;
                       }
 
                       return sharp(data, { raw: info }).jpeg().toBuffer();
@@ -588,8 +592,6 @@ export class SCPGStream {
                     .then(({ data, info }) => {
                       // https://www.youtube.com/watch?v=CGys6CnnYSg
                       for (let index = 0; index < data.length; index += 3) {
-                        data[index] = data[index];
-                        data[index + 1] = data[index + 1];
                         data[index + 2] = -data[index + 2] + 255;
                       }
 
@@ -623,14 +625,17 @@ export class SCPGStream {
       materials.set(id, resolvedMaterial);
     });
 
+    writeFileSync('test.sc2.json', JSON.stringify(sc2, null, 2));
+
     function parseHierarchies(hierarchies: Hierarchy[], parent: Scene | Node) {
       hierarchies.forEach((hierarchy) => {
         const node = document.createNode(hierarchy.name);
-
-        times(
+        const components = times(
           hierarchy.components.count,
           (index) => hierarchy.components[index.toString().padStart(4, '0')],
-        ).forEach((component) => {
+        );
+
+        components.forEach((component, componentIndex) => {
           switch (component['comp.typename']) {
             case 'TransformComponent': {
               const translation = new Vector3();
@@ -660,25 +665,45 @@ export class SCPGStream {
             }
 
             case 'RenderComponent': {
-              const batchIds = range(
-                component['rc.renderObj']['ro.batchCount'],
-              );
-              let minLODIndex = Infinity;
-              let minLODBatchId = Infinity;
+              let minLODDistanceBatchId: undefined | number = undefined;
 
-              batchIds.forEach((batchId) => {
-                const thisLODIndex =
-                  component['rc.renderObj'][`rb${batchId}.lodIndex`];
+              if (component['rc.renderObj']['rb0.lodIndex'] === -1) {
+                minLODDistanceBatchId = 0;
+              } else {
+                const lodList = components.find(
+                  (component) => component['comp.typename'] === 'LodComponent',
+                );
 
-                if (thisLODIndex <= minLODIndex) {
-                  minLODIndex = thisLODIndex;
-                  minLODBatchId = batchId;
+                if (
+                  lodList === undefined ||
+                  lodList['comp.typename'] !== 'LodComponent' // type annotation hack
+                ) {
+                  throw new SyntaxError('Missing LodComponent');
                 }
-              });
+
+                let minLODDistance = Infinity;
+
+                range(component['rc.renderObj']['ro.batchCount']).forEach(
+                  (id) => {
+                    const lodIndex =
+                      component['rc.renderObj'][`rb${id}.lodIndex`];
+                    const lodDistance =
+                      lodList['lc.loddist'][`distance${lodIndex}`];
+
+                    if (
+                      lodDistance <= minLODDistance ||
+                      lodDistance === MAX_FLOAT32
+                    ) {
+                      minLODDistance = lodDistance;
+                      minLODDistanceBatchId = id;
+                    }
+                  },
+                );
+              }
 
               const batch =
                 component['rc.renderObj']['ro.batches'][
-                  minLODBatchId.toString().padStart(4, '0')
+                  minLODDistanceBatchId!.toString().padStart(4, '0')
                 ];
               const polygonGroup = scg.find(
                 (group) => group.id === batch['rb.datasource'],
@@ -725,11 +750,7 @@ export class SCPGStream {
                 .setMaterial(material);
 
               indexedVertexTypes.forEach((type) => {
-                if (!(type in vertexAttributeGLTFName)) {
-                  throw new TypeError(
-                    `Unhandled vertex type GLTF name: ${VertexAttribute[type]} (${type})`,
-                  );
-                }
+                if (!(type in vertexAttributeGLTFName)) return;
 
                 const vertexSize = vertexAttributeVectorSizes[type];
 
