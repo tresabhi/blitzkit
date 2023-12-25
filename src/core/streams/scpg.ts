@@ -97,13 +97,13 @@ export class ScpgStream extends PrimitiveStream {
           return stringTable[id];
         } else {
           const length = this.uint32();
-          return this.consumeAscii(length);
+          return this.ascii(length);
         }
       }
 
       case KAType.BYTE_ARRAY: {
         const length = this.uint32();
-        return this.consumeByteArray(length);
+        return this.byte(length);
       }
 
       case KAType.FLOAT:
@@ -215,7 +215,7 @@ export class ScpgStream extends PrimitiveStream {
 
       for (let index = 0; index < count; index++) {
         const length = this.uint16();
-        const string = this.consumeAscii(length);
+        const string = this.ascii(length);
 
         strings.push(string);
       }

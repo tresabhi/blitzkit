@@ -25,11 +25,11 @@ export class PrimitiveStream {
     return this.consume(Number.POSITIVE_INFINITY);
   }
 
-  consumeByteArray(size: number) {
+  byte(size: number) {
     return this.consume(size);
   }
 
-  consumeAscii(size: number) {
+  ascii(size: number) {
     return this.consume(size).toString('ascii');
   }
 

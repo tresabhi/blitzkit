@@ -49,7 +49,7 @@ export const vertexAttributeVectorSizes = {
 export class ScgStream extends ScpgStream {
   header() {
     return {
-      name: this.consumeAscii(4),
+      name: this.ascii(4),
       version: this.uint32(),
       nodeCount: this.uint32(),
       nodeCount2: this.uint32(),

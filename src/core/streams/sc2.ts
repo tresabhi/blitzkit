@@ -177,7 +177,7 @@ interface SceneComponents {
 export class Sc2Stream extends ScpgStream {
   header() {
     return {
-      name: this.consumeAscii(4),
+      name: this.ascii(4),
       version: this.uint32(),
       nodeCount: this.uint32(),
     };
