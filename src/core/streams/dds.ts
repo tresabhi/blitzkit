@@ -1,5 +1,8 @@
+import { writeFileSync } from 'fs';
 import { times } from 'lodash';
+import sharp from 'sharp';
 import { readDVPLFile } from '../blitz/readDVPLFile';
+import { Bc1Stream } from './bc1';
 import { WindowsStream } from './windows';
 
 enum DxgiFormat {
@@ -127,7 +130,7 @@ enum DxgiFormat {
   FORCE_UINT = 0xffffffff,
 }
 
-enum D3d10ResourceDimension {
+enum DdsDimension {
   UNKNOWN = 0,
   BUFFER = 1,
   TEXTURE1D = 2,
@@ -172,13 +175,48 @@ enum DdsCaps2 {
 }
 
 export class DdsStream extends WindowsStream {
-  dds() {
-    const magicNumber = this.magicNumber();
+  async dds() {
+    this.magicNumber();
     const header = this.header();
-    const headerDxt10 =
-      header.pf.flags === DdpfFlags.FOURCC && header.pf.fourCC === 0x30315844
-        ? this.headerDxt10()
-        : undefined;
+
+    if (
+      header.pf.flags !== DdpfFlags.FOURCC ||
+      header.pf.fourCC !== 0x30315844 // "DX10"
+    ) {
+      throw new RangeError('No other formats other than DX10 are supported');
+    }
+
+    const headerDxt10 = this.headerDxt10();
+
+    switch (headerDxt10.dxgiFormat) {
+      case DxgiFormat.BC1_UNORM_SRGB: {
+        const image = new Bc1Stream(
+          this.consume((header.width / 4) * (header.height / 4) * 8),
+        ).bc1(header.width, header.height);
+
+        writeFileSync(
+          'test.png',
+          await sharp(image, {
+            raw: {
+              channels: 4,
+              width: header.width,
+              height: header.height,
+            },
+          })
+            .png()
+            .toBuffer(),
+        );
+
+        break;
+      }
+
+      default:
+        throw new TypeError(
+          `Unsupported DXGI format: ${DxgiFormat[headerDxt10.dxgiFormat]} (${
+            headerDxt10.dxgiFormat
+          })`,
+        );
+    }
   }
 
   magicNumber() {
@@ -201,7 +239,6 @@ export class DdsStream extends WindowsStream {
       caps3: this.dword(),
       caps4: this.dword(),
       reserved2: times(1, () => this.dword()),
-      headerDxt10: undefined,
     };
   }
 
@@ -221,7 +258,7 @@ export class DdsStream extends WindowsStream {
   headerDxt10() {
     return {
       dxgiFormat: this.uint() as DxgiFormat,
-      resourceDimension: this.uint() as D3d10ResourceDimension,
+      resourceDimension: this.uint() as DdsDimension,
       miscFlag: this.uint(),
       arraySize: this.uint(),
       miscFlags2: this.uint(),
@@ -231,6 +268,6 @@ export class DdsStream extends WindowsStream {
 
 new DdsStream(
   await readDVPLFile(
-    'C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz/Data/3d/Tanks/German/images_pbr/E_100_BC.dx11.dds.dvpl',
+    'C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz/Data/3d/Tanks/GB/images_pbr/Chieftain_Mk6_BC.dx11.dds.dvpl',
   ),
 ).dds();

@@ -1,12 +1,12 @@
 export class PrimitiveStream {
   public index = 0;
-  constructor(public buffer: Buffer) {}
+  constructor(public stream: Buffer) {}
 
   skip(size: number) {
     this.index += size;
   }
   read(size: number) {
-    return this.buffer.subarray(this.index, this.index + size);
+    return this.stream.subarray(this.index, this.index + size);
   }
   consume(size: number) {
     const subarray = this.read(size);
@@ -19,7 +19,7 @@ export class PrimitiveStream {
     return this.read(Number.POSITIVE_INFINITY);
   }
   readRemainingLength() {
-    return this.buffer.length - this.index;
+    return this.stream.length - this.index;
   }
   consumeRemaining() {
     return this.consume(Number.POSITIVE_INFINITY);
