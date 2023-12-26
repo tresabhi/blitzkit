@@ -1,13 +1,13 @@
 import { times } from 'lodash';
 import { Vector4Tuple } from 'three';
-import { BinaryStream } from './binary';
+import { BitStream } from './bit';
 
 const MAX_UINT5 = 2 ** 5 - 1;
 const MAX_UINT6 = 2 ** 6 - 1;
 
 type InterpolationKey = 0b00 | 0b01 | 0b10 | 0b11;
 
-export class Bc1Stream extends BinaryStream {
+export class Bc1Stream extends BitStream {
   color() {
     const r = this.consume(5) / MAX_UINT5;
     const g = this.consume(6) / MAX_UINT6;
@@ -17,18 +17,27 @@ export class Bc1Stream extends BinaryStream {
   }
 
   interpolation() {
+    const color0Numeric = this.readBytes(2).readUInt16LE();
     const color0 = this.color();
+    const color1Numeric = this.readBytes(2).readUInt16LE();
     const color1 = this.color();
-    const color2 = color0.map(
-      (channel0, index) => (channel0 + color1[index]) / 2,
+    const alpha = color0Numeric > color1Numeric;
+    const color2 = color0.map((channel0, index) =>
+      alpha
+        ? (1 / 2) * channel0 + (1 / 2) * color1[index]
+        : (2 / 3) * channel0 + (1 / 3) * color1[index],
     );
-    const color3 = [...color2.slice(0, -1), 0];
+    const color3 = alpha
+      ? [0, 0, 0, 0]
+      : color0.map(
+          (channel0, index) => (1 / 3) * channel0 + (2 / 3) * color1[index],
+        );
 
     return {
       [0b00]: color0,
-      [0b01]: color1,
-      [0b10]: color2,
-      [0b11]: color3,
+      [0b01]: color0,
+      [0b10]: color0,
+      [0b11]: color0,
     };
   }
 
@@ -53,8 +62,7 @@ export class Bc1Stream extends BinaryStream {
       throw new RangeError('Width and height must be divisible by 4');
     }
 
-    const count = (width / 4) * (height / 4);
-    const blocks = this.blocks(count);
+    const blocks = this.blocks((width / 4) * (height / 4));
     const image = Buffer.alloc(width * height * 4);
     let pixelIndex = 0;
 

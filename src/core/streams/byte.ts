@@ -1,4 +1,4 @@
-export class PrimitiveStream {
+export class ByteStream {
   public index = 0;
   constructor(public stream: Buffer) {}
 

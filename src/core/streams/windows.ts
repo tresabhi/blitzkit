@@ -1,11 +1,7 @@
-import { PrimitiveStream } from './primitive';
+import { ByteStream } from './byte';
 
-export class WindowsStream extends PrimitiveStream {
+export class WindowsStream extends ByteStream {
   dword() {
-    return this.uint32();
-  }
-
-  uint() {
     return this.uint32();
   }
 }

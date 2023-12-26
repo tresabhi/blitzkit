@@ -1,6 +1,8 @@
+import { times } from 'lodash';
+
 type Bit = 0 | 1;
 
-export class BinaryStream {
+export class BitStream {
   public index = 0;
   bits: Bit[] = [];
 
@@ -18,6 +20,10 @@ export class BinaryStream {
     this.index += size;
   }
   read(size: number) {
+    if (size > 32) {
+      throw new RangeError('Cannot read more than 32 bits at a time');
+    }
+
     if (this.index + size > this.bits.length) {
       throw new RangeError('Cannot read beyond end of stream');
     }
@@ -25,6 +31,12 @@ export class BinaryStream {
     return this.bits
       .slice(this.index, this.index + size)
       .reduce((accumulator, bit) => (accumulator << 1) | bit, 0 as number);
+  }
+  readBytes(size: number) {
+    const buffer = Buffer.from(times(size, () => this.consume(8)));
+    this.skip(-8 * size);
+
+    return buffer;
   }
   consume(size: number) {
     const value = this.read(size);

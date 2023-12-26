@@ -177,6 +177,7 @@ enum DdsCaps2 {
 export class DdsStream extends WindowsStream {
   async dds() {
     this.magicNumber();
+
     const header = this.header();
 
     if (
@@ -190,8 +191,11 @@ export class DdsStream extends WindowsStream {
 
     switch (headerDxt10.dxgiFormat) {
       case DxgiFormat.BC1_UNORM_SRGB: {
+        this.skip(1);
+
         const image = new Bc1Stream(
-          this.consume((header.width / 4) * (header.height / 4) * 8),
+          // this.consume((header.width / 4) * (header.height / 4) * 8),
+          this.consumeRemaining(),
         ).bc1(header.width, header.height);
 
         writeFileSync(
@@ -257,11 +261,11 @@ export class DdsStream extends WindowsStream {
 
   headerDxt10() {
     return {
-      dxgiFormat: this.uint() as DxgiFormat,
-      resourceDimension: this.uint() as DdsDimension,
-      miscFlag: this.uint(),
-      arraySize: this.uint(),
-      miscFlags2: this.uint(),
+      dxgiFormat: this.dword() as DxgiFormat,
+      resourceDimension: this.dword() as DdsDimension,
+      miscFlag: this.dword(),
+      arraySize: this.dword(),
+      miscFlags2: this.dword(),
     };
   }
 }
