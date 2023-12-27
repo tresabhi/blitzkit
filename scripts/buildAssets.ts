@@ -1,6 +1,5 @@
 import { NodeIO } from '@gltf-transform/core';
 import { config } from 'dotenv';
-import { writeFileSync } from 'fs';
 import { mkdir, readdir } from 'fs/promises';
 import { argv } from 'process';
 import sharp from 'sharp';
@@ -25,24 +24,7 @@ import {
   Tier,
   TurretDefinition,
 } from '../src/core/blitzkrieg/tankDefinitions';
-import { VertexAttribute } from '../src/core/streams/scpg';
 
-const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> = {
-  [VertexAttribute.VERTEX]: 'POSITION',
-  [VertexAttribute.NORMAL]: 'NORMAL',
-  [VertexAttribute.COLOR]: 'COLOR_0',
-  [VertexAttribute.TEXCOORD0]: 'TEXCOORD_0',
-  [VertexAttribute.TEXCOORD1]: 'TEXCOORD_0',
-  [VertexAttribute.TEXCOORD2]: 'TEXCOORD_0',
-  [VertexAttribute.TEXCOORD3]: 'TEXCOORD_0',
-  [VertexAttribute.TANGENT]: 'TANGENT',
-  [VertexAttribute.JOINTINDEX]: 'JOINT_0',
-  [VertexAttribute.JOINTWEIGHT]: 'WEIGHT_0',
-};
-
-(BigInt.prototype as any).toJSON = function () {
-  return this.toString();
-};
 config();
 
 // WARNING! MOST OF THESE TYPES ARE NOT EXHAUSTIVE!
@@ -339,7 +321,6 @@ if (allTargets || targets?.includes('definitions')) {
   );
 
   console.log('Committing tank definitions...');
-  writeFileSync('test.json', JSON.stringify(definitions, null, 2));
   // await commitMultipleFiles(
   //   'tresabhi',
   //   'blitzkrieg-assets',

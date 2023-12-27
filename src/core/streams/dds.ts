@@ -1,9 +1,8 @@
-import { writeFileSync } from 'fs';
 import { times } from 'lodash';
-import sharp from 'sharp';
 import { readDVPLFile } from '../blitz/readDVPLFile';
-import { Bc1Stream } from './bc1';
 import { WindowsStream } from './windows';
+
+type Bits2 = 0b00 | 0b01 | 0b10 | 0b11;
 
 enum DxgiFormat {
   UNKNOWN = 0,
@@ -180,10 +179,7 @@ export class DdsStream extends WindowsStream {
 
     const header = this.header();
 
-    if (
-      header.pf.flags !== DdpfFlags.FOURCC ||
-      header.pf.fourCC !== 0x30315844 // "DX10"
-    ) {
+    if (header.pf.flags !== DdpfFlags.FOURCC || header.pf.fourCC !== 'DX10') {
       throw new RangeError('No other formats other than DX10 are supported');
     }
 
@@ -191,25 +187,57 @@ export class DdsStream extends WindowsStream {
 
     switch (headerDxt10.dxgiFormat) {
       case DxgiFormat.BC1_UNORM_SRGB: {
-        this.skip(1);
+        if (header.width % 4 !== 0 || header.height % 4 !== 0) {
+          throw new RangeError('Width and height must be divisible by 4');
+        }
 
-        const image = new Bc1Stream(
-          // this.consume((header.width / 4) * (header.height / 4) * 8),
-          this.consumeRemaining(),
-        ).bc1(header.width, header.height);
+        const data = Buffer.alloc(header.width * header.height * 4);
+        const blocksX = header.width / 4;
+        const blocksY = header.height / 4;
 
-        writeFileSync(
-          'test.png',
-          await sharp(image, {
-            raw: {
-              channels: 4,
-              width: header.width,
-              height: header.height,
-            },
-          })
-            .png()
-            .toBuffer(),
-        );
+        times(blocksX * blocksY, (blockIndex) => {
+          const blockPosX = (blockIndex % blocksX) * 4;
+          const blockPosY = Math.floor(blockIndex / blocksX) * 4;
+          const interpolations = this.interpolations();
+          const indices = this.indices();
+
+          indices.forEach((index, indexIndex) => {
+            let pixelPosX = 4 - (indexIndex % 4);
+            let pixelPosY = Math.floor(indexIndex / 4);
+            let x = blockPosX + pixelPosX;
+            let y = blockPosY + pixelPosY;
+
+            const bufferIndex = 4 * (y * header.width + x);
+            const color = interpolations[index].map((standard) =>
+              Math.round(255 * standard),
+            );
+
+            data[bufferIndex] = color[0];
+            data[bufferIndex + 1] = color[1];
+            data[bufferIndex + 2] = color[2];
+            data[bufferIndex + 3] = color[3];
+          });
+        });
+
+        // writeFileSync(
+        //   'dist/assets/models/15697/baseColor_1.jpg',
+        //   await sharp(image, {
+        //     raw: {
+        //       width: header.width,
+        //       height: header.height,
+        //       channels: 4,
+        //     },
+        //   })
+        //     .jpeg()
+        //     .toBuffer(),
+        // );
+
+        return {
+          width: header.width,
+          height: header.height,
+          channels: 4 as const,
+          data,
+        };
 
         break;
       }
@@ -223,8 +251,64 @@ export class DdsStream extends WindowsStream {
     }
   }
 
+  interpolations() {
+    const buffer0 = this.consume(2);
+    const buffer1 = this.consume(2);
+    const int0 = buffer0.readUInt16LE();
+    const int1 = buffer1.readUInt16LE();
+    const alpha = int0 < int1;
+    const color0 = [
+      ((buffer0[1] & 0b11111000) >>> 3) / 0x1f,
+      (((buffer0[1] & 0b111) << 3) + ((buffer0[0] & 0b11100000) >>> 5)) / 0x3f,
+      (buffer0[0] & 0b11111) / 0x1f,
+      1,
+    ];
+    const color1 = [
+      ((buffer1[1] & 0b11111000) >>> 3) / 0x1f,
+      (((buffer1[1] & 0b111) << 3) + ((buffer1[0] & 0b11100000) >>> 5)) / 0x3f,
+      (buffer1[0] & 0b11111) / 0x1f,
+      1,
+    ];
+    const color2 = alpha
+      ? color0.map((channel0, index) => (channel0 + color1[index]) / 2)
+      : color0.map((channel0, index) => (2 * channel0 + color1[index]) / 3);
+    const color3 = alpha
+      ? [0, 0, 0, 0]
+      : color0.map((channel0, index) => (channel0 + 2 * color1[index]) / 3);
+
+    return {
+      [0b00]: color0,
+      [0b01]: color1,
+      [0b10]: color2,
+      [0b11]: color3,
+    };
+  }
+
+  indices() {
+    const indicesBuffer = this.consume(4);
+    const indices = times(16, (index) => {
+      const bufferIndex = Math.floor(index / 4);
+      const maskShift = 2 * (index % 4);
+      const valueShift = 2 * (3 - (index % 4));
+      const buffer = indicesBuffer[bufferIndex];
+      const mask = 0b11000000 >>> maskShift;
+      const masked = buffer & mask;
+      const value = masked >>> valueShift;
+
+      return value as Bits2;
+    });
+
+    return indices;
+  }
+
   magicNumber() {
-    return this.dword();
+    const magic = this.dword();
+
+    if (magic !== 0x20534444) {
+      throw new Error(`Invalid DDS magic number: 0x${magic.toString(16)}`);
+    }
+
+    return magic;
   }
 
   header() {
@@ -250,7 +334,7 @@ export class DdsStream extends WindowsStream {
     return {
       size: this.dword(),
       flags: this.dword() as DdpfFlags,
-      fourCC: this.dword(),
+      fourCC: this.ascii(4),
       rgbBitCount: this.dword(),
       rBitMask: this.dword(),
       gBitMask: this.dword(),

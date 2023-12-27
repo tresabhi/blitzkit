@@ -1,5 +1,5 @@
 import { times } from 'lodash';
-import { ByteStream } from './byte';
+import { BufferStream } from './buffer';
 
 enum KAType {
   NONE = 0,
@@ -55,7 +55,7 @@ export enum VertexAttribute {
   CUBETEXCOORD3 = 19,
 }
 
-export class ScpgStream extends ByteStream {
+export class ScpgStream extends BufferStream {
   vectorN(size: number) {
     return times(size, () => this.float());
   }

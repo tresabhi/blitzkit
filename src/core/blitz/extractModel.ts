@@ -1,8 +1,6 @@
 import { Document, Material, Node, Scene } from '@gltf-transform/core';
-import { writeFileSync } from 'fs';
 import { range, times } from 'lodash';
 import { dirname } from 'path';
-import sharp from 'sharp';
 import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
 import { readTexture } from '../blitzkrieg/readTexture';
 import { Hierarchy, Sc2Stream, Textures } from '../streams/sc2';
@@ -35,8 +33,6 @@ export async function extractModel(data: string, path: string) {
   const buffer = document.createBuffer();
   const materials = new Map<bigint, Material | bigint>();
 
-  writeFileSync('test.sc2.json', JSON.stringify(sc2, null, 2));
-
   // create materials
   await Promise.all(
     sc2['#dataNodes'].map(async (node) => {
@@ -64,7 +60,7 @@ export async function extractModel(data: string, path: string) {
         material.setBaseColorTexture(
           document
             .createTexture(node.materialName)
-            .setMimeType('image/jpg')
+            .setMimeType('image/png')
             .setImage(
               await readTexture(
                 `${data}/3d/${dirname(path)}/${textures.albedo}`,
@@ -76,24 +72,29 @@ export async function extractModel(data: string, path: string) {
           material.setMetallicRoughnessTexture(
             document
               .createTexture(node.materialName)
-              .setMimeType('image/jpg')
+              .setMimeType('image/png')
               .setImage(
-                await sharp(
-                  await readTexture(
-                    `${data}/3d/${dirname(path)}/${textures.baseRMMap}`,
-                  ),
-                )
-                  .raw()
-                  .toBuffer({ resolveWithObject: true })
-                  .then(({ data, info }) => {
-                    // fake it till you make it
-                    for (let index = 0; index < data.length; index++) {
-                      data[index] = 255 - data[index];
-                    }
-
-                    return sharp(data, { raw: info }).jpeg().toBuffer();
-                  }),
+                await readTexture(
+                  `${data}/3d/${dirname(path)}/${textures.baseRMMap}`,
+                ),
               ),
+            // .setImage(
+            //   await sharp(
+            //     await readTexture(
+            //       `${data}/3d/${dirname(path)}/${textures.baseRMMap}`,
+            //     ),
+            //   )
+            //     .raw()
+            //     .toBuffer({ resolveWithObject: true })
+            //     .then(({ data, info }) => {
+            //       // fake it till you make it
+            //       for (let index = 0; index < data.length; index++) {
+            //         data[index] = 255 - data[index];
+            //       }
+
+            //       return sharp(data, { raw: info }).jpeg().toBuffer();
+            //     }),
+            // ),
           );
         }
 
@@ -101,24 +102,29 @@ export async function extractModel(data: string, path: string) {
           material.setNormalTexture(
             document
               .createTexture(node.materialName)
-              .setMimeType('image/jpg')
+              .setMimeType('image/png')
               .setImage(
-                await sharp(
-                  await readTexture(
-                    `${data}/3d/${dirname(path)}/${textures.baseNormalMap}`,
-                  ),
-                )
-                  .raw()
-                  .toBuffer({ resolveWithObject: true })
-                  .then(({ data, info }) => {
-                    // https://www.youtube.com/watch?v=CGys6CnnYSg
-                    for (let index = 0; index < data.length; index += 3) {
-                      data[index + 2] = 255 - data[index + 2];
-                    }
-
-                    return sharp(data, { raw: info }).jpeg().toBuffer();
-                  }),
+                await readTexture(
+                  `${data}/3d/${dirname(path)}/${textures.baseNormalMap}`,
+                ),
               ),
+            // .setImage(
+            //   await sharp(
+            //     await readTexture(
+            //       `${data}/3d/${dirname(path)}/${textures.baseNormalMap}`,
+            //     ),
+            //   )
+            //     .raw()
+            //     .toBuffer({ resolveWithObject: true })
+            //     .then(({ data, info }) => {
+            //       // https://www.youtube.com/watch?v=CGys6CnnYSg
+            //       for (let index = 0; index < data.length; index += 3) {
+            //         data[index + 2] = 255 - data[index + 2];
+            //       }
+
+            //       return sharp(data, { raw: info }).jpeg().toBuffer();
+            //     }),
+            // ),
           );
         }
       }
@@ -145,8 +151,6 @@ export async function extractModel(data: string, path: string) {
 
     materials.set(id, resolvedMaterial);
   });
-
-  writeFileSync('test.sc2.json', JSON.stringify(sc2, null, 2));
 
   function parseHierarchies(hierarchies: Hierarchy[], parent: Scene | Node) {
     hierarchies.forEach((hierarchy) => {
