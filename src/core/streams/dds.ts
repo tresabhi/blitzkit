@@ -172,6 +172,79 @@ enum DdsCaps2 {
 }
 
 export class DdsStream extends WindowsStream {
+  async dds() {
+    this.magicNumber();
+    const header = this.header();
+
+    let dxgiFormat: DxgiFormat;
+
+    switch (header.pf.fourCC) {
+      case 'DXT3': {
+        dxgiFormat = DxgiFormat.BC2_UNORM;
+        break;
+      }
+
+      case 'DXT5': {
+        dxgiFormat = DxgiFormat.BC3_UNORM;
+        break;
+      }
+
+      case 'DX10': {
+        dxgiFormat = this.headerDxt10().dxgiFormat;
+        break;
+      }
+
+      default:
+        throw new TypeError(`Unsupported FourCC: ${header.pf.fourCC}`);
+    }
+
+    switch (dxgiFormat) {
+      case DxgiFormat.BC1_TYPELESS:
+      case DxgiFormat.BC1_UNORM:
+      case DxgiFormat.BC1_UNORM_SRGB: {
+        return this.iterateBlocks(header.width, header.height, () => {
+          const colorInterpolations = this.bc1ColorInterpolations();
+          const colorKeys = this.bc1ColorKeys();
+          return (index) => colorInterpolations[colorKeys[index]];
+        });
+      }
+
+      case DxgiFormat.BC2_TYPELESS:
+      case DxgiFormat.BC2_UNORM:
+      case DxgiFormat.BC2_UNORM_SRGB: {
+        return this.iterateBlocks(header.width, header.height, () => {
+          const alphaInterpolations = this.bc2AlphaInterpolations();
+          const colorInterpolations = this.bc2ColorInterpolations();
+          const colorKeys = this.bc1ColorKeys();
+          return (index) => [
+            ...colorInterpolations[colorKeys[index]],
+            alphaInterpolations[colorKeys[index]],
+          ];
+        });
+      }
+
+      case DxgiFormat.BC3_TYPELESS:
+      case DxgiFormat.BC3_UNORM:
+      case DxgiFormat.BC3_UNORM_SRGB: {
+        return this.iterateBlocks(header.width, header.height, () => {
+          const alphaInterpolations = this.bc3AlphaInterpolations();
+          const alphaKeys = this.bc3AlphaKeys();
+          const colorInterpolations = this.bc2ColorInterpolations();
+          const colorKeys = this.bc1ColorKeys();
+          return (index) => [
+            ...colorInterpolations[colorKeys[index]],
+            alphaInterpolations[alphaKeys[index]],
+          ];
+        });
+      }
+
+      default:
+        throw new TypeError(
+          `Unsupported DXGI format: ${DxgiFormat[dxgiFormat]} (${dxgiFormat})`,
+        );
+    }
+  }
+
   magicNumber() {
     const magic = this.dword();
 
@@ -254,7 +327,7 @@ export class DdsStream extends WindowsStream {
       });
     });
 
-    return { data, width, height, channels: 4 };
+    return { data, width, height, channels: 4 as const };
   }
 
   readR5G6B5Int() {
@@ -281,7 +354,7 @@ export class DdsStream extends WindowsStream {
     const color0 = this.R5G6B5A0();
     const int1 = this.readR5G6B5Int();
     const color1 = this.R5G6B5A0();
-    const alpha = int0 < int1;
+    const alpha = int0 > int1;
     const color2 = alpha
       ? (color0.map(
           (channel0, index) => (channel0 + color1[index]) / 2,
@@ -392,78 +465,5 @@ export class DdsStream extends WindowsStream {
     const i = buffer[3] & 0b111;
 
     return [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p];
-  }
-
-  async dds() {
-    this.magicNumber();
-    const header = this.header();
-
-    let dxgiFormat: DxgiFormat;
-
-    switch (header.pf.fourCC) {
-      case 'DXT3': {
-        dxgiFormat = DxgiFormat.BC2_UNORM;
-        break;
-      }
-
-      case 'DXT5': {
-        dxgiFormat = DxgiFormat.BC3_UNORM;
-        break;
-      }
-
-      case 'DX10': {
-        dxgiFormat = this.headerDxt10().dxgiFormat;
-        break;
-      }
-
-      default:
-        throw new TypeError(`Unsupported FourCC: ${header.pf.fourCC}`);
-    }
-
-    switch (dxgiFormat) {
-      case DxgiFormat.BC1_TYPELESS:
-      case DxgiFormat.BC1_UNORM:
-      case DxgiFormat.BC1_UNORM_SRGB: {
-        return this.iterateBlocks(header.width, header.height, () => {
-          const colorInterpolations = this.bc1ColorInterpolations();
-          const colorKeys = this.bc1ColorKeys();
-          return (index) => colorInterpolations[colorKeys[index]];
-        });
-      }
-
-      case DxgiFormat.BC2_TYPELESS:
-      case DxgiFormat.BC2_UNORM:
-      case DxgiFormat.BC2_UNORM_SRGB: {
-        return this.iterateBlocks(header.width, header.height, () => {
-          const alphaInterpolations = this.bc2AlphaInterpolations();
-          const colorInterpolations = this.bc2ColorInterpolations();
-          const colorKeys = this.bc1ColorKeys();
-          return (index) => [
-            ...colorInterpolations[colorKeys[index]],
-            alphaInterpolations[colorKeys[index]],
-          ];
-        });
-      }
-
-      case DxgiFormat.BC3_TYPELESS:
-      case DxgiFormat.BC3_UNORM:
-      case DxgiFormat.BC3_UNORM_SRGB: {
-        return this.iterateBlocks(header.width, header.height, () => {
-          const alphaInterpolations = this.bc3AlphaInterpolations();
-          const alphaKeys = this.bc3AlphaKeys();
-          const colorInterpolations = this.bc2ColorInterpolations();
-          const colorKeys = this.bc1ColorKeys();
-          return (index) => [
-            ...colorInterpolations[colorKeys[index]],
-            alphaInterpolations[alphaKeys[index]],
-          ];
-        });
-      }
-
-      default:
-        throw new TypeError(
-          `Unsupported DXGI format: ${DxgiFormat[dxgiFormat]} (${dxgiFormat})`,
-        );
-    }
   }
 }

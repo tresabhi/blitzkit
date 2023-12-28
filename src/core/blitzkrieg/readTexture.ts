@@ -3,12 +3,11 @@ import { readDVPLFile } from '../blitz/readDVPLFile';
 import { DdsStream } from '../streams/dds';
 
 export async function readTexture(path: string) {
-  console.log(path);
-
   const ddsTexturePath = path.replace('.tex', '.dx11.dds.dvpl');
   const decompressedDvpl = await readDVPLFile(ddsTexturePath);
   const stream = new DdsStream(decompressedDvpl);
   const ddsRaw = await stream.dds();
+
   const png = await sharp(ddsRaw.data, { raw: ddsRaw }).png().toBuffer();
 
   return png;
