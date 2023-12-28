@@ -86,7 +86,7 @@ export class ScgStream extends ScpgStream {
 
       if (verticesStream.stream.length !== stride) {
         console.warn(
-          `Vertex stride mismatch; expected ${stride}, got ${verticesStream.stream.length}`,
+          `Vertex stride mismatch; expected ${stride}, got ${verticesStream.stream.length}; skipping...`,
         );
 
         return;

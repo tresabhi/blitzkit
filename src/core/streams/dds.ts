@@ -2,8 +2,6 @@ import { times } from 'lodash';
 import { readDVPLFile } from '../blitz/readDVPLFile';
 import { WindowsStream } from './windows';
 
-type Bits2 = 0b00 | 0b01 | 0b10 | 0b11;
-
 enum DxgiFormat {
   UNKNOWN = 0,
   R32G32B32A32_TYPELESS = 1,
@@ -176,21 +174,41 @@ enum DdsCaps2 {
 export class DdsStream extends WindowsStream {
   async dds() {
     this.magicNumber();
-
     const header = this.header();
 
-    if (header.pf.flags !== DdpfFlags.FOURCC || header.pf.fourCC !== 'DX10') {
-      throw new RangeError('No other formats other than DX10 are supported');
+    // if (header.pf.flags !== DdpfFlags.FOURCC) {
+    //   throw new TypeError(
+    //     `fourCC flag must be present, found ${DdsdFlags[header.pf.flags]}`,
+    //   );
+    // }
+
+    let dxgiFormat: DxgiFormat;
+
+    switch (header.pf.fourCC) {
+      case 'DXT3': {
+        dxgiFormat = DxgiFormat.BC2_UNORM;
+        break;
+      }
+
+      case 'DXT5': {
+        dxgiFormat = DxgiFormat.BC3_UNORM;
+        break;
+      }
+
+      case 'DX10': {
+        dxgiFormat = this.headerDxt10().dxgiFormat;
+        break;
+      }
+
+      default:
+        throw new TypeError(`Unsupported FourCC: ${header.pf.fourCC}`);
     }
 
-    const headerDxt10 = this.headerDxt10();
-
-    switch (headerDxt10.dxgiFormat) {
+    switch (dxgiFormat) {
+      case DxgiFormat.BC1_TYPELESS:
+      case DxgiFormat.BC1_UNORM:
       case DxgiFormat.BC1_UNORM_SRGB: {
-        if (header.width % 4 !== 0 || header.height % 4 !== 0) {
-          throw new RangeError('Width and height must be divisible by 4');
-        }
-
+        this.assetFactor4(header.width, header.height);
         const data = Buffer.alloc(header.width * header.height * 4);
         const blocksX = header.width / 4;
         const blocksY = header.height / 4;
@@ -198,11 +216,11 @@ export class DdsStream extends WindowsStream {
         times(blocksX * blocksY, (blockIndex) => {
           const blockPosX = (blockIndex % blocksX) * 4;
           const blockPosY = Math.floor(blockIndex / blocksX) * 4;
-          const interpolations = this.interpolations();
-          const indices = this.indices();
+          const interpolations = this.bc1ColorInterpolations();
+          const indices = this.bc1ColorIndices();
 
           indices.forEach((index, indexIndex) => {
-            let pixelPosX = 4 - (indexIndex % 4);
+            let pixelPosX = indexIndex % 4;
             let pixelPosY = Math.floor(indexIndex / 4);
             let x = blockPosX + pixelPosX;
             let y = blockPosY + pixelPosY;
@@ -219,18 +237,47 @@ export class DdsStream extends WindowsStream {
           });
         });
 
-        // writeFileSync(
-        //   'dist/assets/models/15697/baseColor_1.jpg',
-        //   await sharp(image, {
-        //     raw: {
-        //       width: header.width,
-        //       height: header.height,
-        //       channels: 4,
-        //     },
-        //   })
-        //     .jpeg()
-        //     .toBuffer(),
-        // );
+        return {
+          width: header.width,
+          height: header.height,
+          channels: 4 as const,
+          data,
+        };
+      }
+
+      case DxgiFormat.BC2_TYPELESS:
+      case DxgiFormat.BC2_UNORM:
+      case DxgiFormat.BC2_UNORM_SRGB: {
+        this.assetFactor4(header.width, header.height);
+        const data = Buffer.alloc(header.width * header.height * 4);
+        const blocksX = header.width / 4;
+        const blocksY = header.height / 4;
+
+        times(blocksX * blocksY, (blockIndex) => {
+          const blockPosX = (blockIndex % blocksX) * 4;
+          const blockPosY = Math.floor(blockIndex / blocksX) * 4;
+          const alphas = this.bc2Alphas();
+          const interpolations = this.bc2ColorInterpolations();
+          const indices = this.bc1ColorIndices();
+
+          indices.forEach((index, indexIndex) => {
+            let pixelPosX = indexIndex % 4;
+            let pixelPosY = Math.floor(indexIndex / 4);
+            let x = blockPosX + pixelPosX;
+            let y = blockPosY + pixelPosY;
+
+            const bufferIndex = 4 * (y * header.width + x);
+            const color = interpolations[index].map((standard) =>
+              Math.round(255 * standard),
+            );
+            const alpha = alphas[index] * 255;
+
+            data[bufferIndex] = color[0];
+            data[bufferIndex + 1] = color[1];
+            data[bufferIndex + 2] = color[2];
+            data[bufferIndex + 3] = alpha;
+          });
+        });
 
         return {
           width: header.width,
@@ -238,37 +285,167 @@ export class DdsStream extends WindowsStream {
           channels: 4 as const,
           data,
         };
+      }
 
-        break;
+      case DxgiFormat.BC3_TYPELESS:
+      case DxgiFormat.BC3_UNORM:
+      case DxgiFormat.BC3_UNORM_SRGB: {
+        this.assetFactor4(header.width, header.height);
+        const data = Buffer.alloc(header.width * header.height * 4);
+        const blocksX = header.width / 4;
+        const blocksY = header.height / 4;
+
+        times(blocksX * blocksY, (blockIndex) => {
+          const blockPosX = (blockIndex % blocksX) * 4;
+          const blockPosY = Math.floor(blockIndex / blocksX) * 4;
+          const alphaInterpolations = this.bc3AlphaInterpolations();
+          const alphaIndices = this.bc3AlphaIndices();
+          const colorInterpolations = this.bc2ColorInterpolations();
+          const colorIndices = this.bc1ColorIndices();
+
+          colorIndices.forEach((colorIndex, colorIndexIndex) => {
+            const alphaIndex = alphaIndices[colorIndexIndex];
+            let pixelPosX = colorIndexIndex % 4;
+            let pixelPosY = Math.floor(colorIndexIndex / 4);
+            let x = blockPosX + pixelPosX;
+            let y = blockPosY + pixelPosY;
+
+            const bufferIndex = 4 * (y * header.width + x);
+            const color = colorInterpolations[colorIndex].map((standard) =>
+              Math.round(255 * standard),
+            );
+            const alpha = alphaInterpolations[alphaIndex] * 255;
+
+            data[bufferIndex] = color[0];
+            data[bufferIndex + 1] = color[1];
+            data[bufferIndex + 2] = color[2];
+            data[bufferIndex + 3] = alpha;
+          });
+        });
+
+        return {
+          width: header.width,
+          height: header.height,
+          channels: 4 as const,
+          data,
+        };
       }
 
       default:
         throw new TypeError(
-          `Unsupported DXGI format: ${DxgiFormat[headerDxt10.dxgiFormat]} (${
-            headerDxt10.dxgiFormat
-          })`,
+          `Unsupported DXGI format: ${DxgiFormat[dxgiFormat]} (${dxgiFormat})`,
         );
     }
   }
 
-  interpolations() {
-    const buffer0 = this.consume(2);
-    const buffer1 = this.consume(2);
-    const int0 = buffer0.readUInt16LE();
-    const int1 = buffer1.readUInt16LE();
+  bc3AlphaIndices() {
+    const buffer = this.consume(6);
+    const h = (buffer[0] & 0b11100000) >>> 5;
+    const g = (buffer[0] & 0b11100) >>> 2;
+    const f = ((buffer[0] & 0b11) << 1) | ((buffer[1] & 0b10000000) >>> 7);
+    const e = (buffer[1] & 0b1110000) >>> 4;
+    const d = (buffer[1] & 0b1110) >>> 1;
+    const c = ((buffer[1] & 0b1) << 2) | ((buffer[2] & 0b11000000) >>> 6);
+    const b = (buffer[2] & 0b111000) >>> 3;
+    const a = buffer[2] & 0b111;
+    const p = (buffer[1] & 0b11100000) >>> 5;
+    const o = (buffer[1] & 0b11100) >>> 2;
+    const n = ((buffer[1] & 0b11) << 1) | ((buffer[2] & 0b10000000) >>> 7);
+    const m = (buffer[2] & 0b1110000) >>> 4;
+    const l = (buffer[2] & 0b1110) >>> 1;
+    const k = ((buffer[2] & 0b1) << 2) | ((buffer[3] & 0b11000000) >>> 6);
+    const j = (buffer[3] & 0b111000) >>> 3;
+    const i = buffer[3] & 0b111;
+
+    return [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p];
+  }
+
+  bc3AlphaInterpolations() {
+    const a0 = this.bc3Alpha();
+    const a1 = this.bc3Alpha();
+    const full = a0 > a1;
+    const a2 = full ? (6 * a0 + a1) / 7 : (4 * a0 + a1) / 5;
+    const a3 = full ? (5 * a0 + 2 * a1) / 7 : (3 * a0 + 2 * a1) / 5;
+    const a4 = full ? (4 * a0 + 3 * a1) / 7 : (2 * a0 + 3 * a1) / 5;
+    const a5 = full ? (3 * a0 + 4 * a1) / 7 : (1 * a0 + 4 * a1) / 5;
+    const a6 = full ? (2 * a0 + 5 * a1) / 7 : 0;
+    const a7 = full ? (1 * a0 + 6 * a1) / 7 : 255;
+
+    return {
+      [0b000]: a0,
+      [0b001]: a1,
+      [0b010]: a2,
+      [0b011]: a3,
+      [0b100]: a4,
+      [0b101]: a5,
+      [0b110]: a6,
+      [0b111]: a7,
+    } as Record<number, number>;
+  }
+
+  bc3Alpha() {
+    return this.uint8() / 0xff;
+  }
+
+  bc2Alphas() {
+    const alphaBuffer = this.consume(8);
+
+    return times(16, (index) => {
+      const bufferIndex = Math.floor(index / 2);
+      const buffer = alphaBuffer[bufferIndex];
+      const alpha = index % 2 ? buffer & 0b1111 : (buffer & 0b11110000) >>> 4;
+      return alpha / 0xf;
+    });
+  }
+
+  assetFactor4(width: number, height: number) {
+    if (width % 4 !== 0 || height % 4 !== 0) {
+      throw new RangeError('Width and height must be divisible by 4');
+    }
+  }
+
+  bc2Color() {
+    const buffer = this.consume(2);
+
+    return [
+      ((buffer[1] & 0b11111000) >>> 3) / 0x1f,
+      (((buffer[1] & 0b111) << 3) | ((buffer[0] & 0b11100000) >>> 5)) / 0x3f,
+      (buffer[0] & 0b11111) / 0x1f,
+    ];
+  }
+
+  bc1Color() {
+    return [...this.bc2Color(), 1];
+  }
+
+  bc1ColorInt() {
+    return this.read(2).readUInt16LE();
+  }
+
+  bc2ColorInterpolations() {
+    const color0 = this.bc1Color();
+    const color1 = this.bc1Color();
+    const color2 = color0.map(
+      (channel0, index) => (2 * channel0 + color1[index]) / 3,
+    );
+    const color3 = color0.map(
+      (channel0, index) => (channel0 + 2 * color1[index]) / 3,
+    );
+
+    return {
+      [0b00]: color0,
+      [0b01]: color1,
+      [0b10]: color2,
+      [0b11]: color3,
+    } as Record<number, number[]>;
+  }
+
+  bc1ColorInterpolations() {
+    const int0 = this.bc1ColorInt();
+    const color0 = this.bc1Color();
+    const int1 = this.bc1ColorInt();
+    const color1 = this.bc1Color();
     const alpha = int0 < int1;
-    const color0 = [
-      ((buffer0[1] & 0b11111000) >>> 3) / 0x1f,
-      (((buffer0[1] & 0b111) << 3) + ((buffer0[0] & 0b11100000) >>> 5)) / 0x3f,
-      (buffer0[0] & 0b11111) / 0x1f,
-      1,
-    ];
-    const color1 = [
-      ((buffer1[1] & 0b11111000) >>> 3) / 0x1f,
-      (((buffer1[1] & 0b111) << 3) + ((buffer1[0] & 0b11100000) >>> 5)) / 0x3f,
-      (buffer1[0] & 0b11111) / 0x1f,
-      1,
-    ];
     const color2 = alpha
       ? color0.map((channel0, index) => (channel0 + color1[index]) / 2)
       : color0.map((channel0, index) => (2 * channel0 + color1[index]) / 3);
@@ -281,24 +458,29 @@ export class DdsStream extends WindowsStream {
       [0b01]: color1,
       [0b10]: color2,
       [0b11]: color3,
-    };
+    } as Record<number, number[]>;
   }
 
-  indices() {
-    const indicesBuffer = this.consume(4);
-    const indices = times(16, (index) => {
-      const bufferIndex = Math.floor(index / 4);
-      const maskShift = 2 * (index % 4);
-      const valueShift = 2 * (3 - (index % 4));
-      const buffer = indicesBuffer[bufferIndex];
-      const mask = 0b11000000 >>> maskShift;
-      const masked = buffer & mask;
-      const value = masked >>> valueShift;
+  bc1ColorIndices() {
+    const buffer = this.consume(4);
+    const d = (buffer[0] & 0b11000000) >>> 6;
+    const c = (buffer[0] & 0b110000) >>> 4;
+    const b = (buffer[0] & 0b1100) >>> 2;
+    const a = buffer[0] & 0b11;
+    const h = (buffer[1] & 0b11000000) >>> 6;
+    const g = (buffer[1] & 0b110000) >>> 4;
+    const f = (buffer[1] & 0b1100) >>> 2;
+    const e = buffer[1] & 0b11;
+    const l = (buffer[2] & 0b11000000) >>> 6;
+    const k = (buffer[2] & 0b110000) >>> 4;
+    const j = (buffer[2] & 0b1100) >>> 2;
+    const i = buffer[2] & 0b11;
+    const p = (buffer[3] & 0b11000000) >>> 6;
+    const o = (buffer[3] & 0b110000) >>> 4;
+    const n = (buffer[3] & 0b1100) >>> 2;
+    const m = buffer[3] & 0b11;
 
-      return value as Bits2;
-    });
-
-    return indices;
+    return [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p];
   }
 
   magicNumber() {
