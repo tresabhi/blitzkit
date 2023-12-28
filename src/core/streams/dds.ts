@@ -1,4 +1,5 @@
 import { times } from 'lodash';
+import { Vector3Tuple, Vector4Tuple } from 'three';
 import { WindowsStream } from './windows';
 
 enum DxgiFormat {
@@ -228,11 +229,7 @@ export class DdsStream extends WindowsStream {
   iterateBlocks(
     width: number,
     height: number,
-    iterator: (load: {
-      data: Buffer;
-      blockPosX: number;
-      blockPosY: number;
-    }) => void,
+    blockIterator: () => (index: number) => Vector4Tuple,
   ) {
     this.assetFactor4(width, height);
     const data = Buffer.alloc(width * height * 4);
@@ -242,59 +239,68 @@ export class DdsStream extends WindowsStream {
     times(blocksX * blocksY, (index) => {
       const blockPosX = (index % blocksX) * 4;
       const blockPosY = Math.floor(index / blocksX) * 4;
+      const pixelIterator = blockIterator();
 
-      iterator({ data, blockPosX, blockPosY });
+      times(16, (pixelIndex) => {
+        const pixelPosX = pixelIndex % 4;
+        const pixelPosY = Math.floor(pixelIndex / 4);
+        const x = blockPosX + pixelPosX;
+        const y = blockPosY + pixelPosY;
+        const bufferIndex = 4 * (y * width + x);
+
+        pixelIterator(pixelIndex).forEach((channel, index) => {
+          data[bufferIndex + index] = Math.round(channel * 255);
+        });
+      });
     });
 
-    return {
-      data,
-      width,
-      height,
-      channels: 4,
-    };
-  }
-  iteratePixels(
-    width: number,
-    blockPosX: number,
-    blockPosY: number,
-    iterator: (load: { index: number; bufferIndex: number }) => void,
-  ) {
-    times(16, (index) => {
-      const pixelPosX = index % 4;
-      const pixelPosY = Math.floor(index / 4);
-      const x = blockPosX + pixelPosX;
-      const y = blockPosY + pixelPosY;
-      const bufferIndex = 4 * (y * width + x);
-
-      iterator({ index, bufferIndex });
-    });
+    return { data, width, height, channels: 4 };
   }
 
-  bc1ColorInt() {
+  readR5G6B5Int() {
     return this.read(2).readUInt16LE();
   }
-  bc1Color() {
-    return [...this.bc2Color(), 1];
+  R5G6B5() {
+    const buffer = this.consume(2);
+
+    return [
+      ((buffer[1] & 0b11111000) >>> 3) / 0x1f,
+      (((buffer[1] & 0b111) << 3) | ((buffer[0] & 0b11100000) >>> 5)) / 0x3f,
+      (buffer[0] & 0b11111) / 0x1f,
+    ] as Vector3Tuple;
   }
+  R5G6B5A0() {
+    return [...this.R5G6B5(), 1] as Vector4Tuple;
+  }
+  A8() {
+    return this.uint8() / 0xff;
+  }
+
   bc1ColorInterpolations() {
-    const int0 = this.bc1ColorInt();
-    const color0 = this.bc1Color();
-    const int1 = this.bc1ColorInt();
-    const color1 = this.bc1Color();
+    const int0 = this.readR5G6B5Int();
+    const color0 = this.R5G6B5A0();
+    const int1 = this.readR5G6B5Int();
+    const color1 = this.R5G6B5A0();
     const alpha = int0 < int1;
     const color2 = alpha
-      ? color0.map((channel0, index) => (channel0 + color1[index]) / 2)
-      : color0.map((channel0, index) => (2 * channel0 + color1[index]) / 3);
+      ? (color0.map(
+          (channel0, index) => (channel0 + color1[index]) / 2,
+        ) as Vector4Tuple)
+      : (color0.map(
+          (channel0, index) => (2 * channel0 + color1[index]) / 3,
+        ) as Vector4Tuple);
     const color3 = alpha
-      ? [0, 0, 0, 0]
-      : color0.map((channel0, index) => (channel0 + 2 * color1[index]) / 3);
+      ? ([0, 0, 0, 0] as const)
+      : (color0.map(
+          (channel0, index) => (channel0 + 2 * color1[index]) / 3,
+        ) as Vector4Tuple);
 
     return {
       [0b00]: color0,
       [0b01]: color1,
       [0b10]: color2,
       [0b11]: color3,
-    } as Record<number, number[]>;
+    } as Record<number, Vector4Tuple>;
   }
   bc1ColorKeys() {
     const buffer = this.consume(4);
@@ -317,7 +323,6 @@ export class DdsStream extends WindowsStream {
 
     return [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p];
   }
-
   bc2AlphaInterpolations() {
     const alphaBuffer = this.consume(8);
 
@@ -328,39 +333,26 @@ export class DdsStream extends WindowsStream {
       return alpha / 0xf;
     });
   }
-  bc2Color() {
-    const buffer = this.consume(2);
-
-    return [
-      ((buffer[1] & 0b11111000) >>> 3) / 0x1f,
-      (((buffer[1] & 0b111) << 3) | ((buffer[0] & 0b11100000) >>> 5)) / 0x3f,
-      (buffer[0] & 0b11111) / 0x1f,
-    ];
-  }
   bc2ColorInterpolations() {
-    const color0 = this.bc1Color();
-    const color1 = this.bc1Color();
+    const color0 = this.R5G6B5();
+    const color1 = this.R5G6B5();
     const color2 = color0.map(
       (channel0, index) => (2 * channel0 + color1[index]) / 3,
-    );
+    ) as Vector3Tuple;
     const color3 = color0.map(
       (channel0, index) => (channel0 + 2 * color1[index]) / 3,
-    );
+    ) as Vector3Tuple;
 
     return {
       [0b00]: color0,
       [0b01]: color1,
       [0b10]: color2,
       [0b11]: color3,
-    } as Record<number, number[]>;
-  }
-
-  bc3Alpha() {
-    return this.uint8() / 0xff;
+    } as Record<number, Vector3Tuple>;
   }
   bc3AlphaInterpolations() {
-    const a0 = this.bc3Alpha();
-    const a1 = this.bc3Alpha();
+    const a0 = this.A8();
+    const a1 = this.A8();
     const full = a0 > a1;
     const a2 = full ? (6 * a0 + a1) / 7 : (4 * a0 + a1) / 5;
     const a3 = full ? (5 * a0 + 2 * a1) / 7 : (3 * a0 + 2 * a1) / 5;
@@ -432,97 +424,40 @@ export class DdsStream extends WindowsStream {
       case DxgiFormat.BC1_TYPELESS:
       case DxgiFormat.BC1_UNORM:
       case DxgiFormat.BC1_UNORM_SRGB: {
-        return this.iterateBlocks(
-          header.width,
-          header.height,
-          ({ data, blockPosX, blockPosY }) => {
-            const colorInterpolations = this.bc1ColorInterpolations();
-            const colorKeys = this.bc1ColorKeys();
-
-            this.iteratePixels(
-              header.width,
-              blockPosX,
-              blockPosY,
-              ({ index, bufferIndex }) => {
-                const colorKey = colorKeys[index];
-                const color = colorInterpolations[colorKey].map((standard) =>
-                  Math.round(255 * standard),
-                );
-
-                data[bufferIndex] = color[0];
-                data[bufferIndex + 1] = color[1];
-                data[bufferIndex + 2] = color[2];
-                data[bufferIndex + 3] = color[3];
-              },
-            );
-          },
-        );
+        return this.iterateBlocks(header.width, header.height, () => {
+          const colorInterpolations = this.bc1ColorInterpolations();
+          const colorKeys = this.bc1ColorKeys();
+          return (index) => colorInterpolations[colorKeys[index]];
+        });
       }
 
       case DxgiFormat.BC2_TYPELESS:
       case DxgiFormat.BC2_UNORM:
       case DxgiFormat.BC2_UNORM_SRGB: {
-        return this.iterateBlocks(
-          header.width,
-          header.height,
-          ({ data, blockPosX, blockPosY }) => {
-            const alphaInterpolations = this.bc2AlphaInterpolations();
-            const colorInterpolations = this.bc2ColorInterpolations();
-            const colorKeys = this.bc1ColorKeys();
-
-            this.iteratePixels(
-              header.width,
-              blockPosX,
-              blockPosY,
-              ({ index, bufferIndex }) => {
-                const colorKey = colorKeys[index];
-                const color = colorInterpolations[colorKey].map((standard) =>
-                  Math.round(255 * standard),
-                );
-                const alpha = alphaInterpolations[colorKey] * 255;
-
-                data[bufferIndex] = color[0];
-                data[bufferIndex + 1] = color[1];
-                data[bufferIndex + 2] = color[2];
-                data[bufferIndex + 3] = alpha;
-              },
-            );
-          },
-        );
+        return this.iterateBlocks(header.width, header.height, () => {
+          const alphaInterpolations = this.bc2AlphaInterpolations();
+          const colorInterpolations = this.bc2ColorInterpolations();
+          const colorKeys = this.bc1ColorKeys();
+          return (index) => [
+            ...colorInterpolations[colorKeys[index]],
+            alphaInterpolations[colorKeys[index]],
+          ];
+        });
       }
 
       case DxgiFormat.BC3_TYPELESS:
       case DxgiFormat.BC3_UNORM:
       case DxgiFormat.BC3_UNORM_SRGB: {
-        return this.iterateBlocks(
-          header.width,
-          header.height,
-          ({ data, blockPosX, blockPosY }) => {
-            const alphaInterpolations = this.bc3AlphaInterpolations();
-            const alphaKeys = this.bc3AlphaKeys();
-            const colorInterpolations = this.bc2ColorInterpolations();
-            const colorKeys = this.bc1ColorKeys();
-
-            this.iteratePixels(
-              header.width,
-              blockPosX,
-              blockPosY,
-              ({ index, bufferIndex }) => {
-                const colorKey = colorKeys[index];
-                const alphaKey = alphaKeys[index];
-                const color = colorInterpolations[colorKey].map((standard) =>
-                  Math.round(255 * standard),
-                );
-                const alpha = alphaInterpolations[alphaKey] * 255;
-
-                data[bufferIndex] = color[0];
-                data[bufferIndex + 1] = color[1];
-                data[bufferIndex + 2] = color[2];
-                data[bufferIndex + 3] = alpha;
-              },
-            );
-          },
-        );
+        return this.iterateBlocks(header.width, header.height, () => {
+          const alphaInterpolations = this.bc3AlphaInterpolations();
+          const alphaKeys = this.bc3AlphaKeys();
+          const colorInterpolations = this.bc2ColorInterpolations();
+          const colorKeys = this.bc1ColorKeys();
+          return (index) => [
+            ...colorInterpolations[colorKeys[index]],
+            alphaInterpolations[alphaKeys[index]],
+          ];
+        });
       }
 
       default:
