@@ -1,12 +1,10 @@
 import sharp from 'sharp';
 import { readDVPLFile } from '../blitz/readDVPLFile';
 import { DdsStream } from '../streams/dds';
-import { ToJpgOptions } from './toJpg';
 
-export async function readTexture(
-  path: string,
-  options?: Partial<Omit<ToJpgOptions, 'format'>>,
-) {
+export async function readTexture(path: string) {
+  console.log(path);
+
   const ddsTexturePath = path.replace('.tex', '.dx11.dds.dvpl');
   const decompressedDvpl = await readDVPLFile(ddsTexturePath);
   const stream = new DdsStream(decompressedDvpl);
