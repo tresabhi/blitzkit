@@ -218,7 +218,7 @@ export class DdsStream extends WindowsStream {
           const colorKeys = this.bc1ColorKeys();
           return (index) => [
             ...colorInterpolations[colorKeys[index]],
-            alphaInterpolations[colorKeys[index]],
+            alphaInterpolations[index],
           ];
         });
       }
@@ -335,12 +335,12 @@ export class DdsStream extends WindowsStream {
   }
   R5G6B5() {
     const buffer = this.consume(2);
+    const b = (buffer[0] & 0b11111) / 0x1f;
+    const r = ((buffer[1] & 0b11111000) >>> 3) / 0x1f;
+    const g =
+      (((buffer[1] & 0b111) << 3) | ((buffer[0] & 0b11100000) >>> 5)) / 0x3f;
 
-    return [
-      ((buffer[1] & 0b11111000) >>> 3) / 0x1f,
-      (((buffer[1] & 0b111) << 3) | ((buffer[0] & 0b11100000) >>> 5)) / 0x3f,
-      (buffer[0] & 0b11111) / 0x1f,
-    ] as Vector3Tuple;
+    return [r, g, b] as Vector3Tuple;
   }
   R5G6B5A0() {
     return [...this.R5G6B5(), 1] as Vector4Tuple;
@@ -363,7 +363,7 @@ export class DdsStream extends WindowsStream {
           (channel0, index) => (2 * channel0 + color1[index]) / 3,
         ) as Vector4Tuple);
     const color3 = alpha
-      ? ([0, 0, 0, 0] as const)
+      ? ([0, 0, 0, 0] as Vector4Tuple)
       : (color0.map(
           (channel0, index) => (channel0 + 2 * color1[index]) / 3,
         ) as Vector4Tuple);
@@ -397,14 +397,25 @@ export class DdsStream extends WindowsStream {
     return [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p];
   }
   bc2AlphaInterpolations() {
-    const alphaBuffer = this.consume(8);
+    const buffer = this.consume(8);
+    const d = (buffer[0] & 0b11110000) >>> 4;
+    const c = buffer[0] & 0b1111;
+    const b = (buffer[1] & 0b11110000) >>> 4;
+    const a = buffer[1] & 0b1111;
+    const h = (buffer[2] & 0b11110000) >>> 4;
+    const g = buffer[2] & 0b1111;
+    const f = (buffer[3] & 0b11110000) >>> 4;
+    const e = buffer[3] & 0b1111;
+    const l = (buffer[4] & 0b11110000) >>> 4;
+    const k = buffer[4] & 0b1111;
+    const j = (buffer[5] & 0b11110000) >>> 4;
+    const i = buffer[5] & 0b1111;
+    const p = (buffer[6] & 0b11110000) >>> 4;
+    const o = buffer[6] & 0b1111;
+    const n = (buffer[7] & 0b11110000) >>> 4;
+    const m = buffer[7] & 0b1111;
 
-    return times(16, (index) => {
-      const bufferIndex = Math.floor(index / 2);
-      const buffer = alphaBuffer[bufferIndex];
-      const alpha = index % 2 ? buffer & 0b1111 : (buffer & 0b11110000) >>> 4;
-      return alpha / 0xf;
-    });
+    return [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p];
   }
   bc2ColorInterpolations() {
     const color0 = this.R5G6B5();

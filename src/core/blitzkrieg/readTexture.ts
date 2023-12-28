@@ -8,9 +8,7 @@ export async function readTexture(path: string) {
   const stream = new DdsStream(decompressedDvpl);
   const ddsRaw = await stream.dds();
 
-  const png = await sharp(ddsRaw.data, { raw: ddsRaw }).png().toBuffer();
-
-  return png;
+  return await sharp(ddsRaw.data, { raw: ddsRaw }).png().toBuffer();
 
   // const isDds = existsSync(ddsTexturePath);
   // const resolvedTexturePath = isDds
