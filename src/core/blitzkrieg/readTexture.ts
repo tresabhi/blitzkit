@@ -6,6 +6,7 @@ export async function readTexture(path: string) {
   const ddsTexturePath = path.replace('.tex', '.dx11.dds.dvpl');
   const decompressedDvpl = await readDVPLFile(ddsTexturePath);
   const stream = new DdsStream(decompressedDvpl);
+  console.log('Reading', ddsTexturePath);
   const ddsRaw = await stream.dds();
 
   return await sharp(ddsRaw.data, { raw: ddsRaw }).png().toBuffer();

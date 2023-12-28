@@ -198,6 +198,8 @@ export class DdsStream extends WindowsStream {
         throw new TypeError(`Unsupported FourCC: ${header.pf.fourCC}`);
     }
 
+    console.log(DxgiFormat[dxgiFormat]);
+
     switch (dxgiFormat) {
       case DxgiFormat.BC1_TYPELESS:
       case DxgiFormat.BC1_UNORM:
@@ -398,22 +400,22 @@ export class DdsStream extends WindowsStream {
   }
   bc2AlphaInterpolations() {
     const buffer = this.consume(8);
-    const d = (buffer[0] & 0b11110000) >>> 4;
-    const c = buffer[0] & 0b1111;
-    const b = (buffer[1] & 0b11110000) >>> 4;
-    const a = buffer[1] & 0b1111;
-    const h = (buffer[2] & 0b11110000) >>> 4;
-    const g = buffer[2] & 0b1111;
-    const f = (buffer[3] & 0b11110000) >>> 4;
-    const e = buffer[3] & 0b1111;
-    const l = (buffer[4] & 0b11110000) >>> 4;
-    const k = buffer[4] & 0b1111;
-    const j = (buffer[5] & 0b11110000) >>> 4;
-    const i = buffer[5] & 0b1111;
-    const p = (buffer[6] & 0b11110000) >>> 4;
-    const o = buffer[6] & 0b1111;
-    const n = (buffer[7] & 0b11110000) >>> 4;
-    const m = buffer[7] & 0b1111;
+    const d = (buffer[1] & 0b11110000) >>> 4;
+    const c = buffer[1] & 0b1111;
+    const b = (buffer[0] & 0b11110000) >>> 4;
+    const a = buffer[0] & 0b1111;
+    const h = (buffer[3] & 0b11110000) >>> 4;
+    const g = buffer[3] & 0b1111;
+    const f = (buffer[2] & 0b11110000) >>> 4;
+    const e = buffer[2] & 0b1111;
+    const l = (buffer[5] & 0b11110000) >>> 4;
+    const k = buffer[5] & 0b1111;
+    const j = (buffer[4] & 0b11110000) >>> 4;
+    const i = buffer[4] & 0b1111;
+    const p = (buffer[7] & 0b11110000) >>> 4;
+    const o = buffer[7] & 0b1111;
+    const n = (buffer[6] & 0b11110000) >>> 4;
+    const m = buffer[6] & 0b1111;
 
     return [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p];
   }
@@ -435,43 +437,49 @@ export class DdsStream extends WindowsStream {
     } as Record<number, Vector3Tuple>;
   }
   bc3AlphaInterpolations() {
-    const a0 = this.A8();
-    const a1 = this.A8();
-    const full = a0 > a1;
-    const a2 = full ? (6 * a0 + a1) / 7 : (4 * a0 + a1) / 5;
-    const a3 = full ? (5 * a0 + 2 * a1) / 7 : (3 * a0 + 2 * a1) / 5;
-    const a4 = full ? (4 * a0 + 3 * a1) / 7 : (2 * a0 + 3 * a1) / 5;
-    const a5 = full ? (3 * a0 + 4 * a1) / 7 : (1 * a0 + 4 * a1) / 5;
-    const a6 = full ? (2 * a0 + 5 * a1) / 7 : 0;
-    const a7 = full ? (1 * a0 + 6 * a1) / 7 : 255;
+    const alpha0 = this.A8();
+    const alpha1 = this.A8();
+    const full = alpha0 > alpha1;
 
     return {
-      [0b000]: a0,
-      [0b001]: a1,
-      [0b010]: a2,
-      [0b011]: a3,
-      [0b100]: a4,
-      [0b101]: a5,
-      [0b110]: a6,
-      [0b111]: a7,
+      [0b000]: alpha0,
+      [0b001]: alpha1,
+
+      ...(full
+        ? {
+            [0b010]: (6 * alpha0 + 1 * alpha1) / 7,
+            [0b011]: (5 * alpha0 + 2 * alpha1) / 7,
+            [0b100]: (4 * alpha0 + 3 * alpha1) / 7,
+            [0b101]: (3 * alpha0 + 4 * alpha1) / 7,
+            [0b110]: (2 * alpha0 + 5 * alpha1) / 7,
+            [0b111]: (1 * alpha0 + 6 * alpha1) / 7,
+          }
+        : {
+            [0b010]: (4 * alpha0 + 1 * alpha1) / 5,
+            [0b011]: (3 * alpha0 + 2 * alpha1) / 5,
+            [0b100]: (2 * alpha0 + 3 * alpha1) / 5,
+            [0b101]: (1 * alpha0 + 4 * alpha1) / 5,
+            [0b110]: 0,
+            [0b111]: 255,
+          }),
     } as Record<number, number>;
   }
   bc3AlphaKeys() {
     const buffer = this.consume(6);
-    const h = (buffer[0] & 0b11100000) >>> 5;
-    const g = (buffer[0] & 0b11100) >>> 2;
-    const f = ((buffer[0] & 0b11) << 1) | ((buffer[1] & 0b10000000) >>> 7);
+    const h = (buffer[2] & 0b11100000) >>> 5;
+    const g = (buffer[2] & 0b11100) >>> 2;
+    const f = ((buffer[2] & 0b11) << 1) | ((buffer[1] & 0b10000000) >>> 7);
     const e = (buffer[1] & 0b1110000) >>> 4;
     const d = (buffer[1] & 0b1110) >>> 1;
-    const c = ((buffer[1] & 0b1) << 2) | ((buffer[2] & 0b11000000) >>> 6);
-    const b = (buffer[2] & 0b111000) >>> 3;
-    const a = buffer[2] & 0b111;
-    const p = (buffer[1] & 0b11100000) >>> 5;
-    const o = (buffer[1] & 0b11100) >>> 2;
-    const n = ((buffer[1] & 0b11) << 1) | ((buffer[2] & 0b10000000) >>> 7);
-    const m = (buffer[2] & 0b1110000) >>> 4;
-    const l = (buffer[2] & 0b1110) >>> 1;
-    const k = ((buffer[2] & 0b1) << 2) | ((buffer[3] & 0b11000000) >>> 6);
+    const c = ((buffer[1] & 0b1) << 2) | ((buffer[0] & 0b11000000) >>> 6);
+    const b = (buffer[0] & 0b111000) >>> 3;
+    const a = buffer[0] & 0b111;
+    const p = (buffer[5] & 0b11100000) >>> 5;
+    const o = (buffer[5] & 0b11100) >>> 2;
+    const n = ((buffer[5] & 0b11) << 1) | ((buffer[4] & 0b10000000) >>> 7);
+    const m = (buffer[4] & 0b1110000) >>> 4;
+    const l = (buffer[4] & 0b1110) >>> 1;
+    const k = ((buffer[4] & 0b1) << 2) | ((buffer[3] & 0b11000000) >>> 6);
     const j = (buffer[3] & 0b111000) >>> 3;
     const i = buffer[3] & 0b111;
 
