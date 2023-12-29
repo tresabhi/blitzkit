@@ -168,7 +168,16 @@ export type Component =
           };
         };
       };
-    };
+    }
+  | {
+      'comp.typename': 'ScenarioComponent';
+      'scenario.scriptId': string;
+    }
+  | ({
+      'comp.typename': 'StateSwitcherComponent';
+      'ssc.activeState': number;
+      'ssc.statesCount': number;
+    } & Record<`ssc.state${number}`, string>);
 
 interface SceneComponents {
   count: number;

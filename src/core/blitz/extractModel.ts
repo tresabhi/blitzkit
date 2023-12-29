@@ -141,9 +141,11 @@ export async function extractModel(
 
       components.forEach((component) => {
         switch (component['comp.typename']) {
+          case 'ScenarioComponent':
           case 'LodComponent':
           case 'DecorItemComponent':
           case 'NewSlotComponent':
+          case 'StateSwitcherComponent':
           case 'SlotComponent':
             break;
 

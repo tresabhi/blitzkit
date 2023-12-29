@@ -74,9 +74,9 @@ export async function readTexture(path: string, options?: ReadTextureOptions) {
         const b = dds.data[index + 2] / 255;
         const a = dds.data[index + 3] / 255;
         const invA = 1 - a;
-        const rPrime = invA * options.baseColor[0] + r;
-        const gPrime = invA * options.baseColor[1] + g;
-        const bPrime = invA * options.baseColor[2] + b;
+        const rPrime = r + invA * options.baseColor[0];
+        const gPrime = g + invA * options.baseColor[1];
+        const bPrime = b + invA * options.baseColor[2];
 
         dds.data[index] = Math.round(clamp(rPrime * 255, 0, 255));
         dds.data[index + 1] = Math.round(clamp(gPrime * 255, 0, 255));
