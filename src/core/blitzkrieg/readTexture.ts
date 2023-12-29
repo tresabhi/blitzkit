@@ -1,3 +1,4 @@
+import { clamp } from 'lodash';
 import sharp from 'sharp';
 import { Vector3Tuple } from 'three';
 import { readDVPLFile } from '../blitz/readDVPLFile';
@@ -35,20 +36,15 @@ export async function readTexture(path: string, options?: ReadTextureOptions) {
   switch (options?.mutation) {
     case TextureMutation.Normal: {
       for (let index = 0; index < channels; index += 4) {
-        let x = dds.data[index + 3] / 255;
-        let y = dds.data[index + 1] / 255;
-        let z = Math.sqrt(1 - x ** 2 - y ** 2);
-        const hypot = Math.sqrt(x ** 2 + y ** 2 + z ** 2);
+        // TODO: this math is pretty sus and looks very goofy when rendered
+        let x = dds.data[index + 3] * (2 / 255) - 1;
+        let y = dds.data[index + 1] * (2 / 255) - 1;
+        const underSqrt = 1 - x ** 2 - y ** 2;
+        let z = underSqrt > 0 ? Math.sqrt(underSqrt) : -Math.sqrt(-underSqrt);
 
-        if (isFinite(hypot)) {
-          x /= hypot;
-          y /= hypot;
-          z /= hypot;
-        }
-
-        dds.data[index] = Math.round(x * 255);
-        dds.data[index + 1] = Math.round(y * 255);
-        dds.data[index + 2] = Math.round(z * 255);
+        dds.data[index] = Math.round((x + 1) * (255 / 2));
+        dds.data[index + 1] = Math.round((y + 1) * (255 / 2));
+        dds.data[index + 2] = Math.round((z + 1) * (255 / 2));
         dds.data[index + 3] = 255;
       }
 
@@ -71,18 +67,20 @@ export async function readTexture(path: string, options?: ReadTextureOptions) {
 
     case TextureMutation.BaseColor: {
       for (let index = 0; index < channels; index += 4) {
+        // treating as pre multiplied but I can't fully confirm
+
         const r = dds.data[index] / 255;
         const g = dds.data[index + 1] / 255;
         const b = dds.data[index + 2] / 255;
         const a = dds.data[index + 3] / 255;
-        const inverseA = 1 - a;
-        const mixedR = a * r + inverseA * options.baseColor[0];
-        const mixedG = a * g + inverseA * options.baseColor[1];
-        const mixedB = a * b + inverseA * options.baseColor[2];
+        const invA = 1 - a;
+        const rPrime = invA * options.baseColor[0] + r;
+        const gPrime = invA * options.baseColor[1] + g;
+        const bPrime = invA * options.baseColor[2] + b;
 
-        dds.data[index] = mixedR * 255;
-        dds.data[index + 1] = mixedG * 255;
-        dds.data[index + 2] = mixedB * 255;
+        dds.data[index] = Math.round(clamp(rPrime * 255, 0, 255));
+        dds.data[index + 1] = Math.round(clamp(gPrime * 255, 0, 255));
+        dds.data[index + 2] = Math.round(clamp(bPrime * 255, 0, 255));
         dds.data[index + 3] = 255;
       }
 
