@@ -1,8 +1,14 @@
 import { Document, Material, Node, Scene } from '@gltf-transform/core';
 import { range, times } from 'lodash';
 import { dirname } from 'path';
-import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
-import { readTexture } from '../blitzkrieg/readTexture';
+import {
+  Matrix4,
+  Quaternion,
+  Vector3,
+  Vector3Tuple,
+  Vector4Tuple,
+} from 'three';
+import { TextureMutation, readTexture } from '../blitzkrieg/readTexture';
 import { Hierarchy, Sc2Stream, Textures } from '../streams/sc2';
 import { ScgStream, vertexAttributeVectorSizes } from '../streams/scg';
 import { VertexAttribute } from '../streams/scpg';
@@ -23,7 +29,11 @@ const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> = {
   [VertexAttribute.JOINTWEIGHT]: 'WEIGHT_0',
 };
 
-export async function extractModel(data: string, path: string) {
+export async function extractModel(
+  data: string,
+  path: string,
+  baseColor: Vector3Tuple,
+) {
   const sc2Path = `${data}/3d/${path}.sc2.dvpl`;
   const scgPath = `${data}/3d/${path}.scg.dvpl`;
   const sc2 = new Sc2Stream(await readDVPLFile(sc2Path)).sc2();
@@ -64,6 +74,7 @@ export async function extractModel(data: string, path: string) {
             .setImage(
               await readTexture(
                 `${data}/3d/${dirname(path)}/${textures.albedo}`,
+                { mutation: TextureMutation.BaseColor, baseColor },
               ),
             ),
         );
@@ -76,25 +87,9 @@ export async function extractModel(data: string, path: string) {
               .setImage(
                 await readTexture(
                   `${data}/3d/${dirname(path)}/${textures.baseRMMap}`,
+                  { mutation: TextureMutation.RoughnessMetallicness },
                 ),
               ),
-            // .setImage(
-            //   await sharp(
-            //     await readTexture(
-            //       `${data}/3d/${dirname(path)}/${textures.baseRMMap}`,
-            //     ),
-            //   )
-            //     .raw()
-            //     .toBuffer({ resolveWithObject: true })
-            //     .then(({ data, info }) => {
-            //       // fake it till you make it
-            //       for (let index = 0; index < data.length; index++) {
-            //         data[index] = 255 - data[index];
-            //       }
-
-            //       return sharp(data, { raw: info }).jpeg().toBuffer();
-            //     }),
-            // ),
           );
         }
 
@@ -106,25 +101,9 @@ export async function extractModel(data: string, path: string) {
               .setImage(
                 await readTexture(
                   `${data}/3d/${dirname(path)}/${textures.baseNormalMap}`,
+                  { mutation: TextureMutation.Normal },
                 ),
               ),
-            // .setImage(
-            //   await sharp(
-            //     await readTexture(
-            //       `${data}/3d/${dirname(path)}/${textures.baseNormalMap}`,
-            //     ),
-            //   )
-            //     .raw()
-            //     .toBuffer({ resolveWithObject: true })
-            //     .then(({ data, info }) => {
-            //       // https://www.youtube.com/watch?v=CGys6CnnYSg
-            //       for (let index = 0; index < data.length; index += 3) {
-            //         data[index + 2] = 255 - data[index + 2];
-            //       }
-
-            //       return sharp(data, { raw: info }).jpeg().toBuffer();
-            //     }),
-            // ),
           );
         }
       }

@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import { mkdir, readdir } from 'fs/promises';
 import { argv } from 'process';
 import sharp from 'sharp';
+import { Vector3Tuple } from 'three';
 import { TankType } from '../src/components/Tanks';
 import { NATION_IDS } from '../src/constants/nations';
 import { extractModel } from '../src/core/blitz/extractModel';
@@ -28,6 +29,10 @@ import {
 config();
 
 // WARNING! MOST OF THESE TYPES ARE NOT EXHAUSTIVE!
+
+interface VehicleCustomization {
+  armorColor: string;
+}
 
 interface VehicleDefinitionList {
   [key: string]: {
@@ -494,6 +499,14 @@ if (allTargets || targets?.includes('tankModels')) {
       const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
         `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
       );
+      const customization = await readXMLDVPL<{ root: VehicleCustomization }>(
+        `${DATA}/${DOI.vehicleDefinitions}/${nation}/customization.xml.dvpl`,
+      );
+      const baseColor = customization.root.armorColor
+        .split(' ')
+        .slice(0, 3)
+        .map(Number)
+        .map((channel) => channel / 255) as Vector3Tuple;
 
       for (const tankIndex in tanks.root) {
         const tank = tanks.root[tankIndex];
@@ -511,6 +524,7 @@ if (allTargets || targets?.includes('tankModels')) {
         const model = await extractModel(
           DATA,
           parameters.resourcesPath.blitzModelPath.replace(/\.sc2$/, ''),
+          baseColor,
         );
 
         await mkdir(`dist/assets/models/${id}`, { recursive: true });
