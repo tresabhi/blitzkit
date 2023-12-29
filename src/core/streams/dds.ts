@@ -175,30 +175,7 @@ export class DdsStream extends WindowsStream {
   async dds() {
     this.magicNumber();
     const header = this.header();
-
-    let dxgiFormat: DxgiFormat;
-
-    switch (header.pf.fourCC) {
-      case 'DXT3': {
-        dxgiFormat = DxgiFormat.BC2_UNORM;
-        break;
-      }
-
-      case 'DXT5': {
-        dxgiFormat = DxgiFormat.BC3_UNORM;
-        break;
-      }
-
-      case 'DX10': {
-        dxgiFormat = this.headerDxt10().dxgiFormat;
-        break;
-      }
-
-      default:
-        throw new TypeError(`Unsupported FourCC: ${header.pf.fourCC}`);
-    }
-
-    console.log(DxgiFormat[dxgiFormat]);
+    const dxgiFormat = this.resolveDxgiFormat(header);
 
     switch (dxgiFormat) {
       case DxgiFormat.BC1_TYPELESS:
@@ -218,10 +195,12 @@ export class DdsStream extends WindowsStream {
           const alphaInterpolations = this.bc2AlphaInterpolations();
           const colorInterpolations = this.bc2ColorInterpolations();
           const colorKeys = this.bc1ColorKeys();
-          return (index) => [
-            ...colorInterpolations[colorKeys[index]],
-            alphaInterpolations[index],
-          ];
+          return (index) => {
+            return [
+              ...colorInterpolations[colorKeys[index]],
+              alphaInterpolations[index],
+            ];
+          };
         });
       }
 
@@ -296,6 +275,22 @@ export class DdsStream extends WindowsStream {
     };
   }
 
+  resolveDxgiFormat(header: ReturnType<typeof this.header>) {
+    switch (header.pf.fourCC) {
+      case 'DXT3':
+        return DxgiFormat.BC2_UNORM;
+
+      case 'DXT5':
+        return DxgiFormat.BC3_UNORM;
+
+      case 'DX10':
+        return this.headerDxt10().dxgiFormat;
+
+      default:
+        throw new TypeError(`Unsupported FourCC: ${header.pf.fourCC}`);
+    }
+  }
+
   assetFactor4(width: number, height: number) {
     if (width % 4 !== 0 || height % 4 !== 0) {
       throw new RangeError('Width and height must be divisible by 4');
@@ -337,18 +332,17 @@ export class DdsStream extends WindowsStream {
   }
   R5G6B5() {
     const buffer = this.consume(2);
-    const b = (buffer[0] & 0b11111) / 0x1f;
-    const r = ((buffer[1] & 0b11111000) >>> 3) / 0x1f;
-    const g =
-      (((buffer[1] & 0b111) << 3) | ((buffer[0] & 0b11100000) >>> 5)) / 0x3f;
+    const r = (buffer[1] & 0b11111000) >>> 3;
+    const g = ((buffer[1] & 0b111) << 3) | ((buffer[0] & 0b11100000) >>> 5);
+    const b = buffer[0] & 0b11111;
 
-    return [r, g, b] as Vector3Tuple;
+    return [r / 31, g / 63, b / 31] as Vector3Tuple;
   }
   R5G6B5A0() {
     return [...this.R5G6B5(), 1] as Vector4Tuple;
   }
   A8() {
-    return this.uint8() / 0xff;
+    return this.uint8() / 255;
   }
 
   bc1ColorInterpolations() {
@@ -417,7 +411,9 @@ export class DdsStream extends WindowsStream {
     const n = (buffer[6] & 0b11110000) >>> 4;
     const m = buffer[6] & 0b1111;
 
-    return [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p];
+    return [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p].map(
+      (alpha) => alpha / 15,
+    );
   }
   bc2ColorInterpolations() {
     const color0 = this.R5G6B5();
