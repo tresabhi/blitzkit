@@ -119,10 +119,10 @@ export class PvrStream extends BufferStream {
           times(pixelCount, (index) => {
             const buffer = this.consume(2);
             const bufferIndex = index * 4;
-            const r = ((buffer[0] & 0b11110000) >>> 4) / 15;
-            const g = (buffer[0] & 0b1111) / 15;
-            const b = ((buffer[1] & 0b11110000) >>> 4) / 15;
-            const a = (buffer[1] & 0b1111) / 15;
+            const r = ((buffer[1] & 0b11110000) >>> 4) / 15;
+            const g = (buffer[1] & 0b1111) / 15;
+            const b = ((buffer[0] & 0b11110000) >>> 4) / 15;
+            const a = (buffer[0] & 0b1111) / 15;
 
             data[bufferIndex] = Math.round(clamp(r * 255, 0, 255));
             data[bufferIndex + 1] = Math.round(clamp(g * 255, 0, 255));

@@ -177,8 +177,6 @@ export class DdsStream extends WindowsStream {
     const header = this.header();
     const dxgiFormat = this.resolveDxgiFormat(header);
 
-    console.log(DxgiFormat[dxgiFormat]);
-
     switch (dxgiFormat) {
       case DxgiFormat.BC1_TYPELESS:
       case DxgiFormat.BC1_UNORM:

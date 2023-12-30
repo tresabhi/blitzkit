@@ -533,6 +533,10 @@ if (allTargets || targets?.includes('tankModels')) {
           baseColor,
         );
 
+        // writeFile(
+        //   `dist/assets/models/${id}.glb`,
+        //   await nodeIO.writeBinary(model),
+        // );
         await mkdir(`dist/assets/models/${id}`, { recursive: true });
         nodeIO.write(`dist/assets/models/${id}/index.gltf`, model);
       }

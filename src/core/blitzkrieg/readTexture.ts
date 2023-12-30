@@ -31,6 +31,7 @@ export async function readTexture(path: string, options?: ReadTextureOptions) {
     ? ddsTexturePath
     : ddsTexturePath.replace('.dds', '.pvr');
   const decompressedDvpl = await readDVPLFile(resolvedTexturePath);
+
   const raw = isDds
     ? await new DdsStream(decompressedDvpl).dds()
     : new PvrStream(decompressedDvpl).pvr();
@@ -82,6 +83,9 @@ export async function readTexture(path: string, options?: ReadTextureOptions) {
         const g = raw.data[index + 1] / 255;
         const b = raw.data[index + 2] / 255;
         const a = raw.data[index + 3] / 255;
+
+        if (a === 0) continue;
+
         const invA = 1 - a;
         const rPrime = r + invA * options.baseColor[0];
         const gPrime = g + invA * options.baseColor[1];

@@ -199,6 +199,7 @@ export async function extractModel(
               }
 
               let minLODDistance = Infinity;
+              let isFirstMaxFloat = true;
 
               range(component['rc.renderObj']['ro.batchCount']).forEach(
                 (id) => {
@@ -209,8 +210,10 @@ export async function extractModel(
 
                   if (
                     lodDistance <= minLODDistance ||
+                    // (lodDistance === MAX_FLOAT32 && isFirstMaxFloat)
                     lodDistance === MAX_FLOAT32
                   ) {
+                    if (lodDistance === MAX_FLOAT32) isFirstMaxFloat = false;
                     minLODDistance = lodDistance;
                     minLODDistanceBatchId = id;
                   }
