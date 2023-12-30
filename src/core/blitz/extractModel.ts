@@ -210,8 +210,7 @@ export async function extractModel(
 
                   if (
                     lodDistance <= minLODDistance ||
-                    // (lodDistance === MAX_FLOAT32 && isFirstMaxFloat)
-                    lodDistance === MAX_FLOAT32
+                    (lodDistance === MAX_FLOAT32 && isFirstMaxFloat)
                   ) {
                     if (lodDistance === MAX_FLOAT32) isFirstMaxFloat = false;
                     minLODDistance = lodDistance;
