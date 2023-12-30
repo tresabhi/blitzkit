@@ -29,6 +29,12 @@ const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> = {
   [VertexAttribute.JOINTWEIGHT]: 'WEIGHT_0',
 };
 
+const vertexAttributeGltfVectorSizes = {
+  ...vertexAttributeVectorSizes,
+
+  [VertexAttribute.TANGENT]: 4,
+} as const;
+
 export async function extractModel(
   data: string,
   path: string,
@@ -234,56 +240,52 @@ export async function extractModel(
               break;
             }
 
-            const indexedVertexAttributes: VertexAttribute[] = [];
-            const unpackedVertices: Partial<Record<VertexAttribute, number[]>> =
-              {};
-
-            polygonGroup.vertices.forEach((vertex) => {
-              vertex.map((vertexItem) => {
-                if (!(vertexItem.attribute in unpackedVertices)) {
-                  unpackedVertices[vertexItem.attribute] = [];
-                  indexedVertexAttributes.push(vertexItem.attribute);
-                }
-
-                unpackedVertices[vertexItem.attribute]!.push(
-                  ...vertexItem.value,
-                );
-              });
-            });
-
-            const indexAccessor = document
-              .createAccessor()
-              .setType('SCALAR')
-              .setArray(new Uint16Array(polygonGroup.indices))
-              .setBuffer(buffer);
             const material = materials.get(batch['rb.nmatname']);
 
             if (!(material instanceof Material)) {
               throw new Error(`Material ${batch['rb.nmatname']} is unresolved`);
             }
 
+            const indicesAccessor = document
+              .createAccessor()
+              .setType('SCALAR')
+              .setArray(new Uint16Array(polygonGroup.indices))
+              .setBuffer(buffer);
             const primitive = document
               .createPrimitive()
-              .setIndices(indexAccessor)
+              .setIndices(indicesAccessor)
               .setMaterial(material);
+            const attributes: Partial<Record<VertexAttribute, number[][]>> = {};
+            const indexedAttributes: VertexAttribute[] = [];
 
-            indexedVertexAttributes.forEach((attribute) => {
-              if (!(attribute in vertexAttributeGLTFName)) return;
+            polygonGroup.vertices.forEach((vertex) => {
+              vertex.forEach(({ attribute, value }) => {
+                if (attributes[attribute] === undefined) {
+                  attributes[attribute] = [];
+                  indexedAttributes.push(attribute);
+                }
 
-              const vertexSize = vertexAttributeVectorSizes[attribute];
+                attributes[attribute]!.push(value);
+              });
+            });
 
-              if (
-                !primitive.getAttribute(vertexAttributeGLTFName[attribute]!)
-              ) {
-                primitive.setAttribute(
-                  vertexAttributeGLTFName[attribute]!,
-                  document
-                    .createAccessor()
-                    .setType(vertexSize === 1 ? 'SCALAR' : `VEC${vertexSize}`)
-                    .setArray(new Float32Array(unpackedVertices[attribute]!))
-                    .setBuffer(buffer),
-                );
-              }
+            if (indexedAttributes.includes(VertexAttribute.TANGENT)) {
+              attributes[VertexAttribute.TANGENT] = attributes[
+                VertexAttribute.TANGENT
+              ]!.map((tangent) => [...tangent, 1]);
+            }
+
+            indexedAttributes.forEach((attribute) => {
+              const name = vertexAttributeGLTFName[attribute];
+              if (!name) return; // no equivalent GLTF attribute
+              const vertexSize = vertexAttributeGltfVectorSizes[attribute];
+
+              const attributeAccessor = document
+                .createAccessor(name)
+                .setType(vertexSize === 1 ? 'SCALAR' : `VEC${vertexSize}`)
+                .setArray(new Float32Array(attributes[attribute]!.flat()))
+                .setBuffer(buffer);
+              primitive.setAttribute(name, attributeAccessor);
             });
 
             const mesh = document
