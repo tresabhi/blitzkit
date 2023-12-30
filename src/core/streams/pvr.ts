@@ -96,8 +96,6 @@ export class PvrStream extends BufferStream {
     const header = this.header();
     const metadata = this.metadata();
 
-    console.log(header, metadata);
-
     if (typeof header.pixelFormat === 'number') {
       switch (header.pixelFormat) {
         default:
