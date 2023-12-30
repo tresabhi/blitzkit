@@ -35,6 +35,8 @@ const vertexAttributeGltfVectorSizes = {
   [VertexAttribute.TANGENT]: 4,
 } as const;
 
+const omitNames = ['chassis_chassis_', 'chassis_track_crash_', 'HP_'];
+
 export async function extractModel(
   data: string,
   path: string,
@@ -143,6 +145,8 @@ export async function extractModel(
 
   function parseHierarchies(hierarchies: Hierarchy[], parent: Scene | Node) {
     hierarchies.forEach((hierarchy) => {
+      if (omitNames.some((omit) => hierarchy.name.startsWith(omit))) return;
+
       const node = document.createNode(hierarchy.name);
       const components = times(
         hierarchy.components.count,
@@ -314,7 +318,7 @@ export async function extractModel(
 
   // rotate 90 degrees on the x axis
   const rootNode = document
-    .createNode()
+    .createNode('root')
     .setRotation([Math.cos(Math.PI / 4), 0, 0, -Math.sin(Math.PI / 4)]);
 
   scene.addChild(rootNode);

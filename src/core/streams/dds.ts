@@ -277,6 +277,9 @@ export class DdsStream extends WindowsStream {
 
   resolveDxgiFormat(header: ReturnType<typeof this.header>) {
     switch (header.pf.fourCC) {
+      case 'DXT1':
+        return DxgiFormat.BC1_UNORM;
+
       case 'DXT3':
         return DxgiFormat.BC2_UNORM;
 
