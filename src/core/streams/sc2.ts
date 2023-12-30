@@ -177,7 +177,13 @@ export type Component =
       'comp.typename': 'StateSwitcherComponent';
       'ssc.activeState': number;
       'ssc.statesCount': number;
-    } & Record<`ssc.state${number}`, string>);
+    } & Record<`ssc.state${number}`, string>)
+  | {
+      'comp.typename': 'CustomPropertiesComponent';
+      'cpc.properties.archive': {
+        'editor.donotremove': number;
+      };
+    };
 
 interface SceneComponents {
   count: number;

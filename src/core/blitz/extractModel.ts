@@ -93,15 +93,19 @@ export async function extractModel(
           );
         }
 
-        if (textures.baseNormalMap) {
+        if (textures.baseNormalMap ?? textures.normalmap) {
+          const isBase = textures.baseNormalMap !== undefined;
+
           material.setNormalTexture(
             document
               .createTexture(node.materialName)
               .setMimeType('image/png')
               .setImage(
                 await readTexture(
-                  `${data}/3d/${dirname(path)}/${textures.baseNormalMap}`,
-                  { mutation: TextureMutation.Normal },
+                  `${data}/3d/${dirname(path)}/${
+                    textures.baseNormalMap ?? textures.normalmap
+                  }`,
+                  isBase ? { mutation: TextureMutation.Normal } : undefined,
                 ),
               ),
           );
@@ -146,6 +150,7 @@ export async function extractModel(
           case 'DecorItemComponent':
           case 'NewSlotComponent':
           case 'StateSwitcherComponent':
+          case 'CustomPropertiesComponent':
           case 'SlotComponent':
             break;
 

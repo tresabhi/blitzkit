@@ -513,13 +513,14 @@ if (allTargets || targets?.includes('tankModels')) {
         const nationVehicleId = tank.id;
         const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
 
-        if (id !== 15697) continue; // chieftain TODO: investigate vertices stream over read
+        // if (id !== 15697) continue; // chieftain TODO: investigate vertices stream over read
         // if (id !== 24609) continue; // concept 1b
         // if (id !== 4417) continue; // amx m4 mle
         // if (id !== 7297) continue; // 60tp
         // if (id !== 1) continue; // t-34
         // if (id !== 6753) continue; // type 71
         // if (id !== 5137) continue; // tiger ii
+        if (id !== 6225) continue; // fv215b
 
         console.log(`Building model ${id} @ ${nation}/${tankIndex}`);
 
