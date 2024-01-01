@@ -22,6 +22,7 @@ import {
 } from '@radix-ui/themes';
 import { Environment, OrbitControls } from '@react-three/drei';
 import { Canvas, useLoader } from '@react-three/fiber';
+import { EffectComposer, SSAO } from '@react-three/postprocessing';
 import { go } from 'fuzzysort';
 import { debounce } from 'lodash';
 import Link from 'next/link';
@@ -116,6 +117,18 @@ export default function Page({ params }: { params: { id: string } }) {
 
                   {/* I really like apartment, dawn, and sunset */}
                   <Environment preset="apartment" />
+
+                  <EffectComposer enabled={true}>
+                    <SSAO
+                      worldDistanceFalloff={1.0}
+                      worldDistanceThreshold={Infinity}
+                      worldProximityFalloff={0.5}
+                      worldProximityThreshold={8.0}
+                      samples={10}
+                      radius={0.25}
+                      intensity={10}
+                    />
+                  </EffectComposer>
 
                   <group ref={model}>
                     <primitive object={gltf.scene} />

@@ -1,6 +1,7 @@
 import { NodeIO } from '@gltf-transform/core';
 import { config } from 'dotenv';
 import { readdir, writeFile } from 'fs/promises';
+import { parse } from 'path';
 import { argv } from 'process';
 import sharp from 'sharp';
 import { Vector3Tuple } from 'three';
@@ -107,6 +108,7 @@ interface VehicleDefinitions {
       level: number;
       yawLimits: string | string[];
       gunPosition: string | string[];
+      models: { undamaged: string };
       guns: {
         [key: string]: {
           reloadTime: number;
@@ -216,6 +218,7 @@ if (allTargets || targets?.includes('definitions')) {
         const tankTurrets = Object.keys(tankDefinition.root.turrets0).map(
           (turretKey) => {
             const turret = tankDefinition.root.turrets0[turretKey];
+            console.log(parse(turret.models.undamaged).name);
             const turretId = toUniqueId(nation, turretList.root.ids[turretKey]);
             const turretYaw = (
               typeof turret.yawLimits === 'string'
@@ -344,21 +347,20 @@ if (allTargets || targets?.includes('definitions')) {
   );
 
   console.log('Committing tank definitions...');
-  writeFile('test.json', JSON.stringify(tankDefinitions));
-  await commitMultipleFiles(
-    'tresabhi',
-    'blitzkrieg-assets',
-    'main',
-    'definitions',
-    [
-      {
-        content: JSON.stringify(tankDefinitions),
-        encoding: 'utf-8',
-        path: 'definitions/tanks.json',
-      },
-    ],
-    true,
-  );
+  // await commitMultipleFiles(
+  //   'tresabhi',
+  //   'blitzkrieg-assets',
+  //   'main',
+  //   'definitions',
+  //   [
+  //     {
+  //       content: JSON.stringify(tankDefinitions),
+  //       encoding: 'utf-8',
+  //       path: 'definitions/tanks.json',
+  //     },
+  //   ],
+  //   true,
+  // );
 }
 
 if (
