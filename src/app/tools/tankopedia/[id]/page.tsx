@@ -33,6 +33,7 @@ import { Flag } from '../../../../components/Flag';
 import { ModuleButtons } from '../../../../components/ModuleButton';
 import PageWrapper from '../../../../components/PageWrapper';
 import { asset } from '../../../../core/blitzkrieg/asset';
+import { resolveJsxTree } from '../../../../core/blitzkrieg/resolveJsxTree';
 import {
   TIER_ROMAN_NUMERALS,
   tankDefinitions,
@@ -131,32 +132,32 @@ export default function Page({ params }: { params: { id: string } }) {
                   </EffectComposer>
 
                   <group ref={model} rotation={[-Math.PI / 2, 0, 0]}>
-                    {Object.entries(gltf.nodes).map(([name, node]) => (
+                    {gltf.scene.children[0].children.map((child) => (
                       <mesh
                         visible={
-                          name === 'hull' ||
-                          name.startsWith('chassis_track_') ||
-                          name.startsWith('chassis_wheel_') ||
-                          (name.startsWith('turret_') &&
-                            name ===
+                          child.name === 'hull' ||
+                          child.name.startsWith('chassis_track_') ||
+                          child.name.startsWith('chassis_wheel_') ||
+                          (child.name.startsWith('turret_') &&
+                            child.name ===
                               `turret_${turret.model
                                 .toString()
                                 .padStart(2, '0')}`) ||
-                          (name.startsWith('gun_') &&
-                            name ===
+                          (child.name.startsWith('gun_') &&
+                            child.name ===
                               `gun_${gun.model.toString().padStart(2, '0')}`) ||
-                          name ===
+                          child.name ===
                             `gun_${gun.model.toString().padStart(2, '0')}_mask`
                         }
-                        name={name}
-                        key={node.id}
+                        children={resolveJsxTree(child as Mesh)}
+                        key={child.uuid}
                         castShadow
                         receiveShadow
-                        geometry={(node as Mesh).geometry}
-                        material={(node as Mesh).material}
-                        position={node.position}
-                        rotation={node.rotation}
-                        scale={node.scale}
+                        geometry={(child as Mesh).geometry}
+                        material={(child as Mesh).material}
+                        position={child.position}
+                        rotation={child.rotation}
+                        scale={child.scale}
                       />
                     ))}
                   </group>
@@ -171,6 +172,50 @@ export default function Page({ params }: { params: { id: string } }) {
               )}
             </Flex>
           </Card>
+
+          <Theme radius="small">
+            <Flex gap="4">
+              <Flex gap="1">
+                {tank.turrets.map((thisTurret) => {
+                  return (
+                    <Tooltip content={thisTurret.name}>
+                      <Button
+                        onClick={() => setTurret(thisTurret)}
+                        variant={turret.id === thisTurret.id ? 'solid' : 'soft'}
+                      >
+                        <img
+                          src={asset('icons/modules/turret.webp')}
+                          width={32}
+                          height={32}
+                        />
+                        {TIER_ROMAN_NUMERALS[thisTurret.tier]}
+                      </Button>
+                    </Tooltip>
+                  );
+                })}
+              </Flex>
+
+              <Flex gap="1">
+                {turret.guns.map((thisGun, index) => {
+                  return (
+                    <Tooltip content={thisGun.name}>
+                      <Button
+                        onClick={() => setGun(thisGun)}
+                        variant={gun.id === thisGun.id ? 'solid' : 'soft'}
+                      >
+                        <img
+                          src={asset('icons/modules/gun.webp')}
+                          width={32}
+                          height={32}
+                        />
+                        {TIER_ROMAN_NUMERALS[thisGun.tier]}
+                      </Button>
+                    </Tooltip>
+                  );
+                })}
+              </Flex>
+            </Flex>
+          </Theme>
 
           {mode === 'armor' && (
             <Card>
@@ -396,51 +441,6 @@ export default function Page({ params }: { params: { id: string } }) {
             <Heading size="5" weight="regular">
               Modules
             </Heading>
-            <Theme radius="small">
-              <Flex gap="4">
-                <Flex gap="1">
-                  {tank.turrets.map((thisTurret) => {
-                    return (
-                      <Tooltip content={thisTurret.name}>
-                        <Button
-                          onClick={() => setTurret(thisTurret)}
-                          variant={
-                            turret.id === thisTurret.id ? 'solid' : 'soft'
-                          }
-                        >
-                          <img
-                            src="/images/modules/turret.png"
-                            width={32}
-                            height={32}
-                          />
-                          {TIER_ROMAN_NUMERALS[thisTurret.tier]}
-                        </Button>
-                      </Tooltip>
-                    );
-                  })}
-                </Flex>
-
-                <Flex gap="1">
-                  {turret.guns.map((thisGun, index) => {
-                    return (
-                      <Tooltip content={thisGun.name}>
-                        <Button
-                          onClick={() => setGun(thisGun)}
-                          variant={gun.id === thisGun.id ? 'solid' : 'soft'}
-                        >
-                          <img
-                            src="/images/modules/gun.png"
-                            width={32}
-                            height={32}
-                          />
-                          {TIER_ROMAN_NUMERALS[thisGun.tier]}
-                        </Button>
-                      </Tooltip>
-                    );
-                  })}
-                </Flex>
-              </Flex>
-            </Theme>
           </Flex>
 
           <Flex gap="2" direction="column">
