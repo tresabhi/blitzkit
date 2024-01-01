@@ -5,6 +5,7 @@ import {
   CaretRightIcon,
   MagnifyingGlassIcon,
 } from '@radix-ui/react-icons';
+
 import {
   Button,
   Card,
@@ -19,66 +20,59 @@ import {
   Theme,
   Tooltip,
 } from '@radix-ui/themes';
-import { OrbitControls } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
+import { Environment, OrbitControls } from '@react-three/drei';
+import { Canvas, useLoader } from '@react-three/fiber';
 import { go } from 'fuzzysort';
 import { debounce } from 'lodash';
 import Link from 'next/link';
 import { use, useEffect, useRef, useState } from 'react';
+import { Group } from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Flag } from '../../../../components/Flag';
 import { ModuleButtons } from '../../../../components/ModuleButton';
 import PageWrapper from '../../../../components/PageWrapper';
 import { asset } from '../../../../core/blitzkrieg/asset';
-import { gunDefinitions } from '../../../../core/blitzkrieg/definitions/guns';
-import { shellDefinitions } from '../../../../core/blitzkrieg/definitions/shells';
-import { turretDefinitions } from '../../../../core/blitzkrieg/definitions/turrets';
 import {
   TIER_ROMAN_NUMERALS,
   tankDefinitions,
   tankNamesDiacritics,
 } from '../../../../core/blitzkrieg/tankDefinitions';
 import * as styles from '../page.css';
+import { TankAlignment } from './components/tankAlignment';
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = parseInt(params.id);
   const awaitedTankDefinitions = use(tankDefinitions);
-  const awaitedTurretDefinitions = use(turretDefinitions);
-  const awaitedGunDefinitions = use(gunDefinitions);
-  const awaitedShellDefinitions = use(shellDefinitions);
   const awaitedTankNamesDiacritics = use(tankNamesDiacritics);
   const tank = awaitedTankDefinitions[id];
-  const [turret, setTurret] = useState(
-    awaitedTurretDefinitions[tank.turrets.at(-1)!],
-  );
-  const [gun, setGun] = useState(awaitedGunDefinitions[turret.guns.at(-1)!]);
+  const [turret, setTurret] = useState(tank.turrets.at(-1)!);
+  const [gun, setGun] = useState(turret.guns.at(-1)!);
   const [crew, setCrew] = useState(100);
   const [mode, setMode] = useState('model');
   const versusTankSearchInput = useRef<HTMLInputElement>(null);
+  const model = useRef<Group>(null);
   const [versusTankSearchResults, setVersusTankSearchResults] = useState<
     number[]
   >([]);
   const [versusTank, setVersusTank] = useState(tank);
-  const [versusTurret, setVersusTurret] = useState(
-    awaitedTurretDefinitions[versusTank.turrets.at(-1)!],
-  );
-  const [versusGun, setVersusGun] = useState(
-    awaitedGunDefinitions[versusTurret.guns.at(-1)!],
-  );
+  const [versusTurret, setVersusTurret] = useState(versusTank.turrets.at(-1)!);
+  const [versusGun, setVersusGun] = useState(versusTurret.guns.at(-1)!);
   const [versusTankTab, setVersusTankTab] = useState('search');
+  const gltf = useLoader(GLTFLoader, '/test/5137.glb');
 
   useEffect(() => {
-    if (!turret.guns.includes(gun.id)) {
-      setGun(awaitedGunDefinitions[turret.guns.at(-1)!]);
+    if (!turret.guns.some(({ id }) => gun.id === id)) {
+      setGun(turret.guns.at(-1)!);
     }
   }, [turret]);
   useEffect(() => {
-    if (!versusTank.turrets.includes(versusTurret.id)) {
-      setVersusTurret(awaitedTurretDefinitions[versusTank.turrets.at(-1)!]);
+    if (!versusTank.turrets.some(({ id }) => id === versusTurret.id)) {
+      setVersusTurret(versusTank.turrets.at(-1)!);
     }
   }, [versusTank]);
   useEffect(() => {
-    if (!versusTurret.guns.includes(versusGun.id)) {
-      setVersusGun(awaitedGunDefinitions[versusTurret.guns.at(-1)!]);
+    if (!versusTurret.guns.some(({ id }) => id === versusGun.id)) {
+      setVersusGun(versusTurret.guns.at(-1)!);
     }
   }, [versusTurret]);
 
@@ -113,16 +107,19 @@ export default function Page({ params }: { params: { id: string } }) {
               </Tabs.Root>
 
               <div style={{ height: '50vh', maxHeight: 576 }}>
-                <Canvas onPointerDown={(event) => event.preventDefault()}>
+                <Canvas
+                  onPointerDown={(event) => event.preventDefault()}
+                  camera={{ fov: 20, position: [4, 0, -16] }}
+                >
+                  <TankAlignment model={model} />
                   <OrbitControls />
 
-                  <ambientLight />
-                  <directionalLight />
+                  {/* I really like apartment, dawn, and sunset */}
+                  <Environment preset="apartment" />
 
-                  <mesh>
-                    <torusKnotGeometry args={[undefined, undefined, 128, 16]} />
-                    <meshStandardMaterial color="cyan" />
-                  </mesh>
+                  <group ref={model}>
+                    <primitive object={gltf.scene} />
+                  </group>
                 </Canvas>
               </div>
 
@@ -236,23 +233,15 @@ export default function Page({ params }: { params: { id: string } }) {
 
                                 <Flex gap="2" wrap="wrap">
                                   <Flex>
-                                    {versusTank.turrets.map((id, index) => (
-                                      <Tooltip
-                                        content={
-                                          awaitedTurretDefinitions[id].name
-                                        }
-                                      >
+                                    {versusTank.turrets.map((turret, index) => (
+                                      <Tooltip content={turret.name}>
                                         <ModuleButtons
                                           key={id}
                                           onClick={() =>
-                                            setVersusTurret(
-                                              awaitedTurretDefinitions[id],
-                                            )
+                                            setVersusTurret(turret)
                                           }
                                           selected={versusTurret.id === id}
-                                          tier={
-                                            awaitedTurretDefinitions[id].tier
-                                          }
+                                          tier={turret.tier}
                                           type="turret"
                                           style={{
                                             margin: -0.5,
@@ -276,19 +265,13 @@ export default function Page({ params }: { params: { id: string } }) {
                                     ))}
                                   </Flex>
                                   <Flex>
-                                    {versusTurret.guns.map((id, index) => (
-                                      <Tooltip
-                                        content={awaitedGunDefinitions[id].name}
-                                      >
+                                    {versusTurret.guns.map((gun, index) => (
+                                      <Tooltip content={gun.name}>
                                         <ModuleButtons
                                           key={id}
-                                          onClick={() =>
-                                            setVersusGun(
-                                              awaitedGunDefinitions[id],
-                                            )
-                                          }
+                                          onClick={() => setVersusGun(gun)}
                                           selected={versusGun.id === id}
-                                          tier={awaitedGunDefinitions[id].tier}
+                                          tier={gun.tier}
                                           type="gun"
                                           style={{
                                             margin: -0.5,
@@ -376,9 +359,7 @@ export default function Page({ params }: { params: { id: string } }) {
             <Theme radius="small">
               <Flex gap="4">
                 <Flex gap="1">
-                  {tank.turrets.map((turretId) => {
-                    const thisTurret = awaitedTurretDefinitions[turretId];
-
+                  {tank.turrets.map((thisTurret) => {
                     return (
                       <Tooltip content={thisTurret.name}>
                         <Button
@@ -400,9 +381,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 </Flex>
 
                 <Flex gap="1">
-                  {turret.guns.map((gunId, index) => {
-                    const thisGun = awaitedGunDefinitions[gunId];
-
+                  {turret.guns.map((thisGun, index) => {
                     return (
                       <Tooltip content={thisGun.name}>
                         <Button
@@ -446,15 +425,11 @@ export default function Page({ params }: { params: { id: string } }) {
         <Flex gap="2" direction="column">
           <Heading size="5">Shells</Heading>
 
-          {gun.shells.map((shellId) => {
-            const shell = awaitedShellDefinitions[shellId];
-
-            return (
-              <Text>
-                {shell.name} ({shell.type}): {shell.damage.armor}
-              </Text>
-            );
-          })}
+          {gun.shells.map((shell) => (
+            <Text>
+              {shell.name} ({shell.type}): {shell.damage.armor}
+            </Text>
+          ))}
         </Flex>
       </Flex>
     </PageWrapper>

@@ -520,9 +520,9 @@ if (allTargets || targets?.includes('tankModels')) {
         // if (id !== 24609) continue; // concept 1b
         // if (id !== 4417) continue; // amx m4 mle
         // if (id !== 7297) continue; // 60tp
-        if (id !== 1) continue; // t-34
+        // if (id !== 1) continue; // t-34
         // if (id !== 6753) continue; // type 71
-        // if (id !== 5137) continue; // tiger ii
+        if (id !== 5137) continue; // tiger ii
         // if (id !== 6225) continue; // fv215b
 
         console.log(`Building model ${id} @ ${nation}/${tankIndex}`);
@@ -536,10 +536,7 @@ if (allTargets || targets?.includes('tankModels')) {
           baseColor,
         );
 
-        writeFile(
-          `dist/assets/models/${id}.glb`,
-          await nodeIO.writeBinary(model),
-        );
+        writeFile(`public/test/${id}.glb`, await nodeIO.writeBinary(model));
         // await mkdir(`dist/assets/models/${id}`, { recursive: true });
         // nodeIO.write(`dist/assets/models/${id}/index.gltf`, model);
       }
