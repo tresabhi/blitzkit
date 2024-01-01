@@ -1,6 +1,6 @@
 import { NodeIO } from '@gltf-transform/core';
 import { config } from 'dotenv';
-import { mkdir, readdir } from 'fs/promises';
+import { readdir, writeFile } from 'fs/promises';
 import { argv } from 'process';
 import sharp from 'sharp';
 import { Vector3Tuple } from 'three';
@@ -96,11 +96,17 @@ type ShellDefinitionsList = Record<
 };
 interface VehicleDefinitions {
   invisibility: { moving: number; still: number; firePenalty: number };
+  hull: {
+    turretPositions: {
+      turret: string;
+    };
+  };
   turrets0: {
     [key: string]: {
       userString: number;
       level: number;
       yawLimits: string | string[];
+      gunPosition: string | string[];
       guns: {
         [key: string]: {
           reloadTime: number;
@@ -164,7 +170,7 @@ if (!targets && !allTargets) throw new Error('No target(s) specified');
 if (allTargets || targets?.includes('definitions')) {
   console.log('Building tank definitions...');
 
-  const definitions: TankDefinitions = {};
+  const tankDefinitions: TankDefinitions = {};
   const nations = await readdir(`${DATA}/${DOI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
@@ -202,6 +208,9 @@ if (allTargets || targets?.includes('definitions')) {
         const tankDefinition = await readXMLDVPL<{ root: VehicleDefinitions }>(
           `${DATA}/${DOI.vehicleDefinitions}/${nation}/${tankKey}.xml.dvpl`,
         );
+        const turretOrigin = tankDefinition.root.hull.turretPositions.turret
+          .split(' ')
+          .map(Number) as Vector3Tuple;
         const tankId = toUniqueId(nation, tank.id);
         const tankTags = tank.tags.split(' ');
         const tankTurrets = Object.keys(tankDefinition.root.turrets0).map(
@@ -215,6 +224,13 @@ if (allTargets || targets?.includes('definitions')) {
             )
               .split(' ')
               .map(Number) as [number, number];
+            const gunOrigin = (
+              typeof turret.gunPosition === 'string'
+                ? turret.gunPosition
+                : turret.gunPosition[0]
+            )
+              .split(' ')
+              .map(Number) as Vector3Tuple;
             const turretGuns = Object.keys(turret.guns).map((gunKey) => {
               const turretGunEntry = turret.guns[gunKey];
               const gunId = toUniqueId(nation, gunList.root.ids[gunKey]);
@@ -291,12 +307,13 @@ if (allTargets || targets?.includes('definitions')) {
                   .replace(/^(Turret ([0-9] )?)+/, ''),
               tier: turret.level as Tier,
               yaw: -turretYaw[0] + turretYaw[1] === 360 ? undefined : turretYaw,
+              gunOrigin,
               guns: turretGuns,
             } satisfies TurretDefinition;
           },
         );
 
-        definitions[tankId] = {
+        tankDefinitions[tankId] = {
           id: tankId,
           name:
             (tank.shortUserString
@@ -305,6 +322,7 @@ if (allTargets || targets?.includes('definitions')) {
             strings[tank.userString] ??
             tankKey.replaceAll('_', ' '),
           nation,
+          turretOrigin,
           tree_type: (tank.sellPrice ? 'gold' in tank.sellPrice : false)
             ? 'collector'
             : (typeof tank.price === 'number' ? false : 'gold' in tank.price)
@@ -326,36 +344,21 @@ if (allTargets || targets?.includes('definitions')) {
   );
 
   console.log('Committing tank definitions...');
-  // await commitMultipleFiles(
-  //   'tresabhi',
-  //   'blitzkrieg-assets',
-  //   'main',
-  //   'definitions',
-  //   [
-  //     {
-  //       content: JSON.stringify(tankDefinitions),
-  //       encoding: 'utf-8',
-  //       path: 'definitions/tanks.json',
-  //     },
-  //     {
-  //       content: JSON.stringify(turretDefinitions),
-  //       encoding: 'utf-8',
-  //       path: 'definitions/turrets.json',
-  //     },
-  //     {
-  //       content: JSON.stringify(gunDefinitions),
-  //       encoding: 'utf-8',
-  //       path: 'definitions/guns.json',
-  //     },
-  //     {
-  //       content: JSON.stringify(shellDefinitions),
-  //       encoding: 'utf-8',
-  //       path: 'definitions/shells.json',
-  //     },
-  //   ],
-
-  //   true,
-  // );
+  writeFile('test.json', JSON.stringify(tankDefinitions));
+  await commitMultipleFiles(
+    'tresabhi',
+    'blitzkrieg-assets',
+    'main',
+    'definitions',
+    [
+      {
+        content: JSON.stringify(tankDefinitions),
+        encoding: 'utf-8',
+        path: 'definitions/tanks.json',
+      },
+    ],
+    true,
+  );
 }
 
 if (
@@ -533,12 +536,12 @@ if (allTargets || targets?.includes('tankModels')) {
           baseColor,
         );
 
-        // writeFile(
-        //   `dist/assets/models/${id}.glb`,
-        //   await nodeIO.writeBinary(model),
-        // );
-        await mkdir(`dist/assets/models/${id}`, { recursive: true });
-        nodeIO.write(`dist/assets/models/${id}/index.gltf`, model);
+        writeFile(
+          `dist/assets/models/${id}.glb`,
+          await nodeIO.writeBinary(model),
+        );
+        // await mkdir(`dist/assets/models/${id}`, { recursive: true });
+        // nodeIO.write(`dist/assets/models/${id}/index.gltf`, model);
       }
     }),
   );

@@ -35,7 +35,10 @@ const vertexAttributeGltfVectorSizes = {
   [VertexAttribute.TANGENT]: 4,
 } as const;
 
-const omitNames = ['chassis_chassis_', 'chassis_track_crash_', 'HP_'];
+const omitMeshNames = {
+  start: ['chassis_chassis_', 'chassis_track_crash_', 'HP_'],
+  end: ['_POINT'],
+};
 
 export async function extractModel(
   data: string,
@@ -145,7 +148,11 @@ export async function extractModel(
 
   function parseHierarchies(hierarchies: Hierarchy[], parent: Scene | Node) {
     hierarchies.forEach((hierarchy) => {
-      if (omitNames.some((omit) => hierarchy.name.startsWith(omit))) return;
+      if (
+        omitMeshNames.start.some((omit) => hierarchy.name.startsWith(omit)) ||
+        omitMeshNames.end.some((omit) => hierarchy.name.endsWith(omit))
+      )
+        return;
 
       const node = document.createNode(hierarchy.name);
       const components = times(
