@@ -298,8 +298,8 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                           position: firstPlayerIndex + index + 1,
                           clan: clanData[player.id]?.clan?.tag,
                           nickname:
-                            clanData[player.id]?.account_name ??
-                            `Unknown Player ${player.id}`,
+                            clanData[index]?.account_name ??
+                            `Deleted ${player.id}`,
                         }) satisfies SimplifiedPlayer,
                     );
                   },
