@@ -27,7 +27,7 @@ import { go } from 'fuzzysort';
 import { debounce } from 'lodash';
 import Link from 'next/link';
 import { use, useEffect, useRef, useState } from 'react';
-import { Group } from 'three';
+import { Group, Mesh } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Flag } from '../../../../components/Flag';
 import { ModuleButtons } from '../../../../components/ModuleButton';
@@ -130,8 +130,35 @@ export default function Page({ params }: { params: { id: string } }) {
                     />
                   </EffectComposer>
 
-                  <group ref={model}>
-                    <primitive object={gltf.scene} />
+                  <group ref={model} rotation={[-Math.PI / 2, 0, 0]}>
+                    {Object.entries(gltf.nodes).map(([name, node]) => (
+                      <mesh
+                        visible={
+                          name === 'hull' ||
+                          name.startsWith('chassis_track_') ||
+                          name.startsWith('chassis_wheel_') ||
+                          (name.startsWith('turret_') &&
+                            name ===
+                              `turret_${turret.model
+                                .toString()
+                                .padStart(2, '0')}`) ||
+                          (name.startsWith('gun_') &&
+                            name ===
+                              `gun_${gun.model.toString().padStart(2, '0')}`) ||
+                          name ===
+                            `gun_${gun.model.toString().padStart(2, '0')}_mask`
+                        }
+                        name={name}
+                        key={node.id}
+                        castShadow
+                        receiveShadow
+                        geometry={(node as Mesh).geometry}
+                        material={(node as Mesh).material}
+                        position={node.position}
+                        rotation={node.rotation}
+                        scale={node.scale}
+                      />
+                    ))}
                   </group>
                 </Canvas>
               </div>

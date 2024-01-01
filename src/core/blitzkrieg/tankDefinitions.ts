@@ -27,8 +27,9 @@ export interface TurretDefinition {
   name: string;
   tier: Tier;
   yaw?: [number, number];
-  gunOrigin: Vector3Tuple;
   guns: GunDefinition[];
+  gunOrigin: Vector3Tuple;
+  model: number;
 }
 export type GunDefinition = GunDefinitionBase &
   (GunDefinitionRegular | GunDefinitionAutoLoader | GunDefinitionAutoReloader);
@@ -38,6 +39,7 @@ interface GunDefinitionBase {
   tier: Tier;
   pitch: [number, number];
   shells: ShellDefinition[];
+  model: number;
 }
 interface GunDefinitionRegular {
   type: 'regular';

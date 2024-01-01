@@ -117,6 +117,7 @@ interface VehicleDefinitions {
           pumpGunMode?: boolean;
           pumpGunReloadTimes?: string;
           clip?: { count: number; rate: number };
+          models: { undamaged: string };
         };
       };
     };
@@ -218,7 +219,9 @@ if (allTargets || targets?.includes('definitions')) {
         const tankTurrets = Object.keys(tankDefinition.root.turrets0).map(
           (turretKey) => {
             const turret = tankDefinition.root.turrets0[turretKey];
-            console.log(parse(turret.models.undamaged).name);
+            const turretModel = Number(
+              parse(turret.models.undamaged).name.split('_')[1],
+            );
             const turretId = toUniqueId(nation, turretList.root.ids[turretKey]);
             const turretYaw = (
               typeof turret.yawLimits === 'string'
@@ -247,6 +250,9 @@ if (allTargets || targets?.includes('definitions')) {
               )
                 .split(' ')
                 .map(Number) as [number, number];
+              const gunModel = Number(
+                parse(turretGunEntry.models.undamaged).name.split('_')[1],
+              );
               const gunName =
                 strings[gun.userString] ?? gunKey.replaceAll('_', ' ');
               const gunType =
@@ -298,6 +304,7 @@ if (allTargets || targets?.includes('definitions')) {
                 reload: gunReload,
                 count: gunClipCount,
                 interClip: gunInterClip,
+                model: gunModel,
               } as GunDefinition;
             });
 
@@ -310,8 +317,9 @@ if (allTargets || targets?.includes('definitions')) {
                   .replace(/^(Turret ([0-9] )?)+/, ''),
               tier: turret.level as Tier,
               yaw: -turretYaw[0] + turretYaw[1] === 360 ? undefined : turretYaw,
-              gunOrigin,
               guns: turretGuns,
+              gunOrigin,
+              model: turretModel,
             } satisfies TurretDefinition;
           },
         );
@@ -347,20 +355,20 @@ if (allTargets || targets?.includes('definitions')) {
   );
 
   console.log('Committing tank definitions...');
-  // await commitMultipleFiles(
-  //   'tresabhi',
-  //   'blitzkrieg-assets',
-  //   'main',
-  //   'definitions',
-  //   [
-  //     {
-  //       content: JSON.stringify(tankDefinitions),
-  //       encoding: 'utf-8',
-  //       path: 'definitions/tanks.json',
-  //     },
-  //   ],
-  //   true,
-  // );
+  await commitMultipleFiles(
+    'tresabhi',
+    'blitzkrieg-assets',
+    'main',
+    'definitions',
+    [
+      {
+        content: JSON.stringify(tankDefinitions),
+        encoding: 'utf-8',
+        path: 'definitions/tanks.json',
+      },
+    ],
+    true,
+  );
 }
 
 if (

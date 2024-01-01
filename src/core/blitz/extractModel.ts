@@ -323,13 +323,7 @@ export async function extractModel(
     });
   }
 
-  // rotate 90 degrees on the x axis
-  const rootNode = document
-    .createNode('root')
-    .setRotation([Math.cos(Math.PI / 4), 0, 0, -Math.sin(Math.PI / 4)]);
-
-  scene.addChild(rootNode);
-  parseHierarchies(sc2['#hierarchy'], rootNode);
+  parseHierarchies(sc2['#hierarchy'], scene);
 
   return document;
 }
