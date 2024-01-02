@@ -53,7 +53,8 @@ export default function Page({ params }: { params: { id: string } }) {
   const [crew, setCrew] = useState(100);
   const [mode, setMode] = useState('model');
   const versusTankSearchInput = useRef<HTMLInputElement>(null);
-  const model = useRef<Group>(null);
+  const hullContainer = useRef<Group>(null);
+  const turretContainer = useRef<Group>(null);
   const [versusTankSearchResults, setVersusTankSearchResults] = useState<
     number[]
   >([]);
@@ -73,8 +74,10 @@ export default function Page({ params }: { params: { id: string } }) {
   ).applyAxisAngle(new Vector3(1, 0, 0), Math.PI / 2);
   const gunOrigin = new Vector3(...turret.gunOrigin);
   const [turretRotation, setTurretRotation] = useState(0);
+  const [hullRotation, setHullRotation] = useState(0);
   const [orbitControlsEnabled, setOrbitControlsEnabled] = useState(true);
   const turretRotationInput = useRef<HTMLInputElement>(null);
+  const hullRotationInput = useRef<HTMLInputElement>(null);
   const gunRotationInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -97,6 +100,11 @@ export default function Page({ params }: { params: { id: string } }) {
       turretRotation * (180 / Math.PI),
     )}`;
   }, [turretRotation]);
+  useEffect(() => {
+    hullRotationInput.current!.value = `${Math.round(
+      hullRotation * (180 / Math.PI),
+    )}`;
+  });
 
   return (
     <PageWrapper color="purple">
@@ -134,7 +142,7 @@ export default function Page({ params }: { params: { id: string } }) {
                   onPointerDown={(event) => event.preventDefault()}
                   camera={{ fov: 20, position: [4, 0, -16] }}
                 >
-                  <TankAlignment model={model} />
+                  <TankAlignment model={hullContainer} />
                   <OrbitControls enabled={orbitControlsEnabled} />
                   <gridHelper />
 
@@ -153,57 +161,24 @@ export default function Page({ params }: { params: { id: string } }) {
                     />
                   </EffectComposer>
 
-                  <group ref={model} rotation={[-Math.PI / 2, 0, 0]}>
+                  <group
+                    ref={hullContainer}
+                    rotation={[-Math.PI / 2, 0, hullRotation]}
+                  >
                     {gltf.scene.children[0].children.map((child) => {
                       const isHull = child.name === 'hull';
-                      const isTurret = child.name.startsWith('turret_');
-                      const isMantlet =
-                        child.name.startsWith('gun_') &&
-                        child.name.endsWith('_mask');
-                      const isGun = child.name.startsWith('gun_') && !isMantlet;
-                      const isVisible =
-                        isHull ||
-                        child.name.startsWith('chassis_track_') ||
-                        child.name.startsWith('chassis_wheel_') ||
-                        (child.name.startsWith('turret_') &&
-                          child.name ===
-                            `turret_${turret.model
-                              .toString()
-                              .padStart(2, '0')}`) ||
-                        (child.name.startsWith('gun_') &&
-                          child.name ===
-                            `gun_${gun.model.toString().padStart(2, '0')}`) ||
-                        child.name ===
-                          `gun_${gun.model.toString().padStart(2, '0')}_mask`;
+                      const isWheel = child.name.startsWith('chassis_wheel_');
+                      const isTrack = child.name.startsWith('chassis_track_');
+                      const isVisible = isHull || isWheel || isTrack;
                       let draftTurretRotation = 0;
-                      const position = child.position.clone();
-                      const rotation = new Vector3().setFromEuler(
-                        child.rotation,
-                      );
-
-                      if (!isVisible) return null;
-
-                      if (isTurret || isMantlet) {
-                        position
-                          .sub(turretOrigin)
-                          .applyAxisAngle(new Vector3(0, 0, 1), turretRotation)
-                          .add(turretOrigin);
-                        rotation.add(new Vector3(0, 0, turretRotation));
-                      } else if (isGun) {
-                        position
-                          .sub(turretOrigin)
-                          .applyAxisAngle(new Vector3(0, 0, 1), turretRotation)
-                          .add(turretOrigin);
-                        rotation.add(new Vector3(0, 0, turretRotation));
-                      }
 
                       function handlePointerDown(
                         event: ThreeEvent<PointerEvent>,
                       ) {
-                        if (isTurret) {
+                        if (isHull) {
                           event.stopPropagation();
 
-                          draftTurretRotation = turretRotation;
+                          draftTurretRotation = hullRotation;
 
                           setOrbitControlsEnabled(false);
                           window.addEventListener(
@@ -223,7 +198,125 @@ export default function Page({ params }: { params: { id: string } }) {
                           event.movementX * rotationSpeed;
                         draftTurretRotation += deltaTurretRotation;
 
-                        if (isTurret) {
+                        if (hullContainer.current) {
+                          hullContainer.current.rotation.z =
+                            draftTurretRotation;
+                        }
+                      }
+                      function handlePointerUp(event: PointerEvent) {
+                        setOrbitControlsEnabled(true);
+                        setHullRotation(normalizeAngle180(draftTurretRotation));
+
+                        window.removeEventListener(
+                          'pointermove',
+                          handlePointerMove,
+                        );
+                        window.removeEventListener(
+                          'pointerup',
+                          handlePointerUp,
+                        );
+                      }
+
+                      return (
+                        <mesh
+                          visible={isVisible}
+                          children={resolveJsxTree(child as Mesh)}
+                          key={child.uuid}
+                          castShadow
+                          receiveShadow
+                          geometry={(child as Mesh).geometry}
+                          material={(child as Mesh).material}
+                          position={child.position}
+                          rotation={child.rotation}
+                          scale={child.scale}
+                          onPointerDown={handlePointerDown}
+                        />
+                      );
+                    })}
+
+                    <group
+                      ref={turretContainer}
+                      // rotation={[-Math.PI / 2, 0, 0]}
+                    >
+                      {gltf.scene.children[0].children.map((child) => {
+                        const isTurret = child.name.startsWith('turret_');
+                        const isCurrentTurret =
+                          isTurret &&
+                          child.name ===
+                            `turret_${turret.model
+                              .toString()
+                              .padStart(2, '0')}`;
+                        const isMantlet =
+                          child.name.startsWith('gun_') &&
+                          child.name.endsWith('_mask');
+                        const isCurrentMantlet =
+                          child.name ===
+                          `gun_${gun.model.toString().padStart(2, '0')}_mask`;
+                        const isGun =
+                          child.name.startsWith('gun_') && !isMantlet;
+                        const isCurrentGun =
+                          isGun &&
+                          child.name ===
+                            `gun_${gun.model.toString().padStart(2, '0')}`;
+                        const isVisible =
+                          isCurrentTurret || isCurrentGun || isCurrentMantlet;
+                        let draftTurretRotation = 0;
+                        const position = child.position.clone();
+                        const rotation = new Vector3().setFromEuler(
+                          child.rotation,
+                        );
+
+                        if (!isVisible) return null;
+
+                        if (isTurret || isMantlet) {
+                          position
+                            .sub(turretOrigin)
+                            .applyAxisAngle(
+                              new Vector3(0, 0, 1),
+                              turretRotation,
+                            )
+                            .add(turretOrigin);
+                          rotation.add(new Vector3(0, 0, turretRotation));
+                        } else if (isGun) {
+                          position
+                            .sub(turretOrigin)
+                            .applyAxisAngle(
+                              new Vector3(0, 0, 1),
+                              turretRotation,
+                            )
+                            .add(turretOrigin);
+                          rotation.add(new Vector3(0, 0, turretRotation));
+                        }
+
+                        function handlePointerDown(
+                          event: ThreeEvent<PointerEvent>,
+                        ) {
+                          if (isTurret) {
+                            event.stopPropagation();
+
+                            draftTurretRotation = turretRotation;
+
+                            setOrbitControlsEnabled(false);
+                            window.addEventListener(
+                              'pointermove',
+                              handlePointerMove,
+                            );
+                            window.addEventListener(
+                              'pointerup',
+                              handlePointerUp,
+                            );
+                          }
+                        }
+                        function handlePointerMove(event: PointerEvent) {
+                          event.stopPropagation();
+                          event.preventDefault();
+
+                          const rotationSpeed =
+                            (2 * Math.PI) / canvas.current!.width;
+                          const deltaTurretRotation =
+                            event.movementX * rotationSpeed;
+                          draftTurretRotation += deltaTurretRotation;
+
                           if (turretObject3D.current) {
                             turretObject3D.current.position
                               .sub(turretOrigin)
@@ -260,48 +353,48 @@ export default function Page({ params }: { params: { id: string } }) {
                               draftTurretRotation;
                           }
                         }
-                      }
-                      function handlePointerUp(event: PointerEvent) {
-                        setOrbitControlsEnabled(true);
-                        setTurretRotation(
-                          normalizeAngle180(draftTurretRotation),
-                        );
+                        function handlePointerUp(event: PointerEvent) {
+                          setOrbitControlsEnabled(true);
+                          setTurretRotation(
+                            normalizeAngle180(draftTurretRotation),
+                          );
 
-                        window.removeEventListener(
-                          'pointermove',
-                          handlePointerMove,
-                        );
-                        window.removeEventListener(
-                          'pointerup',
-                          handlePointerUp,
-                        );
-                      }
+                          window.removeEventListener(
+                            'pointermove',
+                            handlePointerMove,
+                          );
+                          window.removeEventListener(
+                            'pointerup',
+                            handlePointerUp,
+                          );
+                        }
 
-                      return (
-                        <mesh
-                          visible={isVisible}
-                          onPointerDown={handlePointerDown}
-                          children={resolveJsxTree(child as Mesh)}
-                          key={child.uuid}
-                          castShadow
-                          receiveShadow
-                          geometry={(child as Mesh).geometry}
-                          material={(child as Mesh).material}
-                          position={position}
-                          rotation={rotation.toArray()}
-                          scale={child.scale}
-                          ref={
-                            isTurret
-                              ? turretObject3D
-                              : isGun
-                                ? gunObject3D
-                                : isMantlet
-                                  ? mantletObject3D
-                                  : undefined
-                          }
-                        />
-                      );
-                    })}
+                        return (
+                          <mesh
+                            visible={isVisible}
+                            onPointerDown={handlePointerDown}
+                            children={resolveJsxTree(child as Mesh)}
+                            key={child.uuid}
+                            castShadow
+                            receiveShadow
+                            geometry={(child as Mesh).geometry}
+                            material={(child as Mesh).material}
+                            position={position}
+                            rotation={rotation.toArray()}
+                            scale={child.scale}
+                            ref={
+                              isTurret
+                                ? turretObject3D
+                                : isGun
+                                  ? gunObject3D
+                                  : isMantlet
+                                    ? mantletObject3D
+                                    : undefined
+                            }
+                          />
+                        );
+                      })}
+                    </group>
                   </group>
                 </Canvas>
               </div>
@@ -322,6 +415,33 @@ export default function Page({ params }: { params: { id: string } }) {
                   bottom: 16,
                 }}
               >
+                <TextField.Root
+                  variant="surface"
+                  style={{
+                    width: 115,
+                  }}
+                >
+                  <TextField.Slot>Hull</TextField.Slot>
+                  <TextField.Input
+                    onBlur={() => {
+                      setHullRotation(
+                        normalizeAngle180(
+                          Number(hullRotationInput.current?.value) *
+                            (Math.PI / 180),
+                        ),
+                      );
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        hullRotationInput.current?.blur();
+                      }
+                    }}
+                    ref={hullRotationInput}
+                    style={{ textAlign: 'right' }}
+                  />
+                  <TextField.Slot>°</TextField.Slot>
+                </TextField.Root>
+
                 <TextField.Root
                   variant="surface"
                   style={{
