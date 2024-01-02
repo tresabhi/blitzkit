@@ -33,7 +33,7 @@ export interface TurretDefinition {
 }
 export type GunDefinition = GunDefinitionBase &
   (GunDefinitionRegular | GunDefinitionAutoLoader | GunDefinitionAutoReloader);
-interface GunDefinitionBase {
+interface GunDefinitionBase  {
   id: number;
   name: string;
   tier: Tier;

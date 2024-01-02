@@ -14,8 +14,7 @@ export function TankAlignment({ model }: TankAlignmentProps) {
     const diameter = Math.max(box.max.x - box.min.x, box.max.z - box.min.z);
     const radius = diameter / 2;
 
-    model.current?.position.set(0, -(box.min.y + box.max.y) / 2, 0);
-    // camera.position.set(radius * -0.25, radius * 0.1, radius * -1.5);
+    camera.position.set(0, (box.min.y + box.max.y) / 2, -10);
   }, []);
 
   return null;
