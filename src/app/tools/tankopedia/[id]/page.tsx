@@ -5,7 +5,6 @@ import {
   CaretRightIcon,
   MagnifyingGlassIcon,
 } from '@radix-ui/react-icons';
-
 import {
   Button,
   Card,
@@ -20,7 +19,6 @@ import {
   Theme,
   Tooltip,
 } from '@radix-ui/themes';
-import { OrbitControls } from '@react-three/drei';
 import { Canvas, ThreeEvent, useLoader } from '@react-three/fiber';
 import { go } from 'fuzzysort';
 import { debounce } from 'lodash';
@@ -140,19 +138,19 @@ export default function Page({ params }: { params: { id: string } }) {
                   onPointerDown={(event) => event.preventDefault()}
                   camera={{ fov: 20 }}
                 >
-                  <TankAlignment model={hullContainer} />
-                  <OrbitControls enabled={orbitControlsEnabled} />
+                  <TankAlignment
+                    model={hullContainer}
+                    orbit={orbitControlsEnabled}
+                  />
+
                   <InfiniteGridHelper
-                    position={[0, 0, 0]}
-                    axes="xzy"
                     size1={1 / 5}
                     size2={1}
                     distance={20}
                     color={new Color('#ffffff')}
                   />
                   <InfiniteGridHelper
-                    position={[0, 0, 0]}
-                    axes="xzy"
+                    position={[0, 1e-4, 0]}
                     size1={0}
                     size2={100}
                     distance={25}
