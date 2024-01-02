@@ -14,6 +14,10 @@ import { ScgStream, vertexAttributeVectorSizes } from '../streams/scg';
 import { VertexAttribute } from '../streams/scpg';
 import { readDVPLFile } from './readDVPLFile';
 
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};
+
 const MAX_FLOAT32 = 2 ** 127 * (2 - 2 ** -23);
 
 const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> = {
@@ -168,8 +172,13 @@ export async function extractModel(
           case 'NewSlotComponent':
           case 'StateSwitcherComponent':
           case 'CustomPropertiesComponent':
+          case 'ActionComponent':
+          case 'ParticleEffectComponent':
           case 'SlotComponent':
+          case 'TankElementComponent':
             break;
+
+          // console.log(JSON.stringify(component, null, 2));
 
           case 'TransformComponent': {
             const translation = new Vector3();

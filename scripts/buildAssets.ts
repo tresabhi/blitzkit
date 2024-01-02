@@ -532,7 +532,8 @@ if (allTargets || targets?.includes('tankModels')) {
         // if (id !== 7297) continue; // 60tp
         // if (id !== 1) continue; // t-34
         // if (id !== 6753) continue; // type 71
-        if (id !== 5137) continue; // tiger ii
+        // if (id !== 5137) continue; // tiger ii
+        if (id !== 11633) continue; // tiger ii
         // if (id !== 6225) continue; // fv215b
 
         console.log(`Building model ${id} @ ${nation}/${tankIndex}`);

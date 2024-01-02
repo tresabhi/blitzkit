@@ -183,6 +183,55 @@ export type Component =
       'cpc.properties.archive': {
         'editor.donotremove': number;
       };
+    }
+  | ({
+      'comp.typename': 'ActionComponent';
+      'ac.actionCount': number;
+    } & Record<
+      string, // 0000, 0001, ...
+      {
+        'act.delay': number;
+        'act.delayVariation': number;
+        'act.entityName': string;
+        'act.event': number;
+        'act.eventToTrigger': string;
+        'act.motionFrameTime': number;
+        'act.motionSpeed': number;
+        'act.stateActivated': number;
+        'act.stopAfterNRepeats': number;
+        'act.stopWhenEmpty': boolean;
+        'act.switchIndex': number;
+        'act.type': number;
+        'act.userEventId': string;
+      }
+    >)
+  | {
+      'comp.typename': 'ParticleEffectComponent';
+      'pe.clearOnRestart': boolean;
+      'pe.effectDuration': number;
+      'pe.emitters': {
+        '##name': string;
+        'emitter.data': {
+          'emitter.id': `${number}`;
+          'emitter.quality': string;
+        }[];
+        'emitter.position': Vector3Tuple;
+        'emitter.rotation': Vector4Tuple;
+        'emitter.scale': Vector3Tuple;
+      }[];
+      'pe.inheritScale': boolean;
+      'pe.nestedEmitters': boolean;
+      'pe.repeatsCount': number;
+      'pe.startFromTime': number;
+      'pe.stopWhenEmpty': boolean;
+      'pe.version': number;
+      'ro.flags': number;
+    }
+  | {
+      'comp.typename': 'TankElementComponent';
+      isDestructible: boolean;
+      shouldCastShadow: boolean;
+      shouldGenerateSilhouette: boolean;
     };
 
 interface SceneComponents {

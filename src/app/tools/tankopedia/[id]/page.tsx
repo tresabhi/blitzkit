@@ -20,16 +20,16 @@ import {
   Theme,
   Tooltip,
 } from '@radix-ui/themes';
-import { Environment, OrbitControls } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import { Canvas, ThreeEvent, useLoader } from '@react-three/fiber';
-import { EffectComposer, SSAO } from '@react-three/postprocessing';
 import { go } from 'fuzzysort';
 import { debounce } from 'lodash';
 import Link from 'next/link';
 import { use, useEffect, useRef, useState } from 'react';
-import { Group, Mesh, Vector3 } from 'three';
+import { Color, Group, Mesh, Vector3 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Flag } from '../../../../components/Flag';
+import InfiniteGridHelper from '../../../../components/InfiniteGridHelper';
 import { ModuleButtons } from '../../../../components/ModuleButton';
 import PageWrapper from '../../../../components/PageWrapper';
 import { asset } from '../../../../core/blitzkrieg/asset';
@@ -63,7 +63,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [versusGun, setVersusGun] = useState(versusTurret.guns.at(-1)!);
   const [versusTankTab, setVersusTankTab] = useState('search');
   const canvas = useRef<HTMLCanvasElement>(null);
-  const gltf = useLoader(GLTFLoader, '/test/5137.glb');
+  const gltf = useLoader(GLTFLoader, `/test/${id}.glb`);
   const turretOrigin = new Vector3(
     tank.turretOrigin[0],
     tank.turretOrigin[1],
@@ -135,32 +135,46 @@ export default function Page({ params }: { params: { id: string } }) {
 
               <div style={{ height: '50vh', maxHeight: 576 }}>
                 <Canvas
+                  shadows
                   ref={canvas}
                   onPointerDown={(event) => event.preventDefault()}
-                  camera={{ fov: 20, position: [4, 0, -16] }}
+                  camera={{ fov: 20 }}
                 >
                   <TankAlignment model={hullContainer} />
                   <OrbitControls enabled={orbitControlsEnabled} />
-                  <gridHelper />
+                  <InfiniteGridHelper
+                    position={[0, 0, 0]}
+                    axes="xzy"
+                    size1={1 / 5}
+                    size2={1}
+                    distance={20}
+                    color={new Color('#ffffff')}
+                  />
+                  <InfiniteGridHelper
+                    position={[0, 0, 0]}
+                    axes="xzy"
+                    size1={0}
+                    size2={100}
+                    distance={25}
+                    color={new Color('red')}
+                  />
 
                   {/* I really like apartment, dawn, and sunset */}
-                  <Environment preset="apartment" />
-
-                  <EffectComposer enabled={true}>
-                    <SSAO
-                      worldDistanceFalloff={1.0}
-                      worldDistanceThreshold={Infinity}
-                      worldProximityFalloff={0.5}
-                      worldProximityThreshold={8.0}
-                      samples={10}
-                      radius={0.25}
-                      intensity={10}
-                    />
-                  </EffectComposer>
+                  <directionalLight
+                    position={[1, 1, -1]}
+                    intensity={1}
+                    castShadow
+                  />
+                  <directionalLight
+                    position={[-1, 1, 1]}
+                    intensity={2}
+                    castShadow
+                  />
+                  <ambientLight intensity={0.25} />
 
                   <group
                     ref={hullContainer}
-                    rotation={[0 /*-Math.PI / 2*/, 0, hullRotation]}
+                    rotation={[-Math.PI / 2, 0, hullRotation]}
                   >
                     {gltf.scene.children[0].children.map((child) => {
                       const isHull = child.name === 'hull';
