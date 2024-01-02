@@ -39,6 +39,7 @@ import {
   tankDefinitions,
   tankNamesDiacritics,
 } from '../../../../core/blitzkrieg/tankDefinitions';
+import { normalizeAngle180 } from '../../../../core/math/normalizeAngle180';
 import * as styles from '../page.css';
 import { TankAlignment } from './components/tankAlignment';
 
@@ -73,6 +74,8 @@ export default function Page({ params }: { params: { id: string } }) {
   const gunOrigin = new Vector3(...turret.gunOrigin);
   const [turretRotation, setTurretRotation] = useState(0);
   const [orbitControlsEnabled, setOrbitControlsEnabled] = useState(true);
+  const turretRotationInput = useRef<HTMLInputElement>(null);
+  const gunRotationInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!turret.guns.some(({ id }) => gun.id === id)) {
@@ -89,6 +92,11 @@ export default function Page({ params }: { params: { id: string } }) {
       setVersusGun(versusTurret.guns.at(-1)!);
     }
   }, [versusTurret]);
+  useEffect(() => {
+    turretRotationInput.current!.value = `${Math.round(
+      turretRotation * (180 / Math.PI),
+    )}`;
+  }, [turretRotation]);
 
   return (
     <PageWrapper color="purple">
@@ -255,7 +263,9 @@ export default function Page({ params }: { params: { id: string } }) {
                       }
                       function handlePointerUp(event: PointerEvent) {
                         setOrbitControlsEnabled(true);
-                        setTurretRotation(draftTurretRotation);
+                        setTurretRotation(
+                          normalizeAngle180(draftTurretRotation),
+                        );
 
                         window.removeEventListener(
                           'pointermove',
@@ -302,6 +312,58 @@ export default function Page({ params }: { params: { id: string } }) {
                   <Text>Enhanced armor</Text>
                 </Flex>
               )}
+
+              <Flex
+                gap="2"
+                align="center"
+                style={{
+                  position: 'absolute',
+                  left: 16,
+                  bottom: 16,
+                }}
+              >
+                <TextField.Root
+                  variant="surface"
+                  style={{
+                    width: 115,
+                  }}
+                >
+                  <TextField.Slot>Turret</TextField.Slot>
+                  <TextField.Input
+                    onBlur={() => {
+                      setTurretRotation(
+                        normalizeAngle180(
+                          Number(turretRotationInput.current?.value) *
+                            (Math.PI / 180),
+                        ),
+                      );
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        turretRotationInput.current?.blur();
+                      }
+                    }}
+                    ref={turretRotationInput}
+                    style={{ textAlign: 'right' }}
+                  />
+                  <TextField.Slot>°</TextField.Slot>
+                </TextField.Root>
+
+                <TextField.Root
+                  variant="surface"
+                  style={{
+                    width: 115,
+                  }}
+                >
+                  <TextField.Slot>Gun</TextField.Slot>
+                  <TextField.Input
+                    ref={gunRotationInput}
+                    value={0}
+                    style={{ textAlign: 'right' }}
+                  />
+                  <TextField.Slot>°</TextField.Slot>
+                </TextField.Root>
+              </Flex>
             </Flex>
           </Card>
 
