@@ -62,9 +62,6 @@ export default function Page({ params }: { params: { id: string } }) {
   const [versusTurret, setVersusTurret] = useState(versusTank.turrets.at(-1)!);
   const [versusGun, setVersusGun] = useState(versusTurret.guns.at(-1)!);
   const [versusTankTab, setVersusTankTab] = useState('search');
-  const turretObject3D = useRef<Mesh>(null);
-  const mantletObject3D = useRef<Mesh>(null);
-  const gunObject3D = useRef<Mesh>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const gltf = useLoader(GLTFLoader, '/test/5137.glb');
   const turretOrigin = new Vector3(
@@ -163,7 +160,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
                   <group
                     ref={hullContainer}
-                    rotation={[-Math.PI / 2, 0, hullRotation]}
+                    rotation={[0 /*-Math.PI / 2*/, 0, hullRotation]}
                   >
                     {gltf.scene.children[0].children.map((child) => {
                       const isHull = child.name === 'hull';
@@ -235,8 +232,12 @@ export default function Page({ params }: { params: { id: string } }) {
                     })}
 
                     <group
+                      position={new Vector3()
+                        .sub(turretOrigin)
+                        .applyAxisAngle(new Vector3(0, 0, 1), turretRotation)
+                        .add(turretOrigin)}
+                      rotation={[0, 0, turretRotation]}
                       ref={turretContainer}
-                      // rotation={[-Math.PI / 2, 0, 0]}
                     >
                       {gltf.scene.children[0].children.map((child) => {
                         const isTurret = child.name.startsWith('turret_');
@@ -261,32 +262,8 @@ export default function Page({ params }: { params: { id: string } }) {
                         const isVisible =
                           isCurrentTurret || isCurrentGun || isCurrentMantlet;
                         let draftTurretRotation = 0;
-                        const position = child.position.clone();
-                        const rotation = new Vector3().setFromEuler(
-                          child.rotation,
-                        );
 
                         if (!isVisible) return null;
-
-                        if (isTurret || isMantlet) {
-                          position
-                            .sub(turretOrigin)
-                            .applyAxisAngle(
-                              new Vector3(0, 0, 1),
-                              turretRotation,
-                            )
-                            .add(turretOrigin);
-                          rotation.add(new Vector3(0, 0, turretRotation));
-                        } else if (isGun) {
-                          position
-                            .sub(turretOrigin)
-                            .applyAxisAngle(
-                              new Vector3(0, 0, 1),
-                              turretRotation,
-                            )
-                            .add(turretOrigin);
-                          rotation.add(new Vector3(0, 0, turretRotation));
-                        }
 
                         function handlePointerDown(
                           event: ThreeEvent<PointerEvent>,
@@ -317,39 +294,15 @@ export default function Page({ params }: { params: { id: string } }) {
                             event.movementX * rotationSpeed;
                           draftTurretRotation += deltaTurretRotation;
 
-                          if (turretObject3D.current) {
-                            turretObject3D.current.position
+                          if (turretContainer.current) {
+                            turretContainer.current.position
                               .sub(turretOrigin)
                               .applyAxisAngle(
                                 new Vector3(0, 0, 1),
                                 deltaTurretRotation,
                               )
                               .add(turretOrigin);
-                            turretObject3D.current.rotation.z =
-                              draftTurretRotation;
-                          }
-
-                          if (mantletObject3D.current) {
-                            mantletObject3D.current.position
-                              .sub(turretOrigin)
-                              .applyAxisAngle(
-                                new Vector3(0, 0, 1),
-                                deltaTurretRotation,
-                              )
-                              .add(turretOrigin);
-                            mantletObject3D.current.rotation.z =
-                              draftTurretRotation;
-                          }
-
-                          if (gunObject3D.current) {
-                            gunObject3D.current.position
-                              .sub(turretOrigin)
-                              .applyAxisAngle(
-                                new Vector3(0, 0, 1),
-                                deltaTurretRotation,
-                              )
-                              .add(turretOrigin);
-                            gunObject3D.current.rotation.z =
+                            turretContainer.current.rotation.z =
                               draftTurretRotation;
                           }
                         }
@@ -379,18 +332,9 @@ export default function Page({ params }: { params: { id: string } }) {
                             receiveShadow
                             geometry={(child as Mesh).geometry}
                             material={(child as Mesh).material}
-                            position={position}
-                            rotation={rotation.toArray()}
+                            position={child.position}
+                            rotation={child.rotation}
                             scale={child.scale}
-                            ref={
-                              isTurret
-                                ? turretObject3D
-                                : isGun
-                                  ? gunObject3D
-                                  : isMantlet
-                                    ? mantletObject3D
-                                    : undefined
-                            }
                           />
                         );
                       })}
