@@ -74,6 +74,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const turretRotationInput = useRef<HTMLInputElement>(null);
   const hullRotationInput = useRef<HTMLInputElement>(null);
   const gunRotationInput = useRef<HTMLInputElement>(null);
+  const mantletContainer = useRef<Group>(null);
 
   useEffect(() => {
     if (!turret.guns.some(({ id }) => gun.id === id)) {
@@ -203,9 +204,8 @@ export default function Page({ params }: { params: { id: string } }) {
 
                         const rotationSpeed =
                           (2 * Math.PI) / canvas.current!.width;
-                        const deltaTurretRotation =
-                          event.movementX * rotationSpeed;
-                        draftTurretRotation += deltaTurretRotation;
+                        const delta = event.movementX * rotationSpeed;
+                        draftTurretRotation += delta;
 
                         if (hullContainer.current) {
                           hullContainer.current.rotation.z =
@@ -259,20 +259,7 @@ export default function Page({ params }: { params: { id: string } }) {
                             `turret_${turret.model
                               .toString()
                               .padStart(2, '0')}`;
-                        const isMantlet =
-                          child.name.startsWith('gun_') &&
-                          child.name.endsWith('_mask');
-                        const isCurrentMantlet =
-                          child.name ===
-                          `gun_${gun.model.toString().padStart(2, '0')}_mask`;
-                        const isGun =
-                          child.name.startsWith('gun_') && !isMantlet;
-                        const isCurrentGun =
-                          isGun &&
-                          child.name ===
-                            `gun_${gun.model.toString().padStart(2, '0')}`;
-                        const isVisible =
-                          isCurrentTurret || isCurrentGun || isCurrentMantlet;
+                        const isVisible = isCurrentTurret;
                         let draftTurretRotation = 0;
 
                         if (!isVisible) return null;
@@ -302,17 +289,13 @@ export default function Page({ params }: { params: { id: string } }) {
 
                           const rotationSpeed =
                             (2 * Math.PI) / canvas.current!.width;
-                          const deltaTurretRotation =
-                            event.movementX * rotationSpeed;
-                          draftTurretRotation += deltaTurretRotation;
+                          const delta = event.movementX * rotationSpeed;
+                          draftTurretRotation += delta;
 
                           if (turretContainer.current) {
                             turretContainer.current.position
                               .sub(turretOrigin)
-                              .applyAxisAngle(
-                                new Vector3(0, 0, 1),
-                                deltaTurretRotation,
-                              )
+                              .applyAxisAngle(new Vector3(0, 0, 1), delta)
                               .add(turretOrigin);
                             turretContainer.current.rotation.z =
                               draftTurretRotation;
@@ -350,6 +333,101 @@ export default function Page({ params }: { params: { id: string } }) {
                           />
                         );
                       })}
+
+                      <group
+                        // position={new Vector3()
+                        //   .sub(turretOrigin)
+                        //   .applyAxisAngle(new Vector3(0, 0, 1), turretRotation)
+                        //   .add(turretOrigin)}
+                        // rotation={[0, 0, turretRotation]}
+                        ref={mantletContainer}
+                      >
+                        {gltf.scene.children[0].children.map((child) => {
+                          const isMantlet =
+                            child.name.startsWith('gun_') &&
+                            child.name.endsWith('_mask');
+                          const isCurrentMantlet =
+                            child.name ===
+                            `gun_${gun.model.toString().padStart(2, '0')}_mask`;
+                          const isGun =
+                            child.name.startsWith('gun_') && !isMantlet;
+                          const isCurrentGun =
+                            isGun &&
+                            child.name ===
+                              `gun_${gun.model.toString().padStart(2, '0')}`;
+                          const isVisible = isCurrentGun || isCurrentMantlet;
+                          let draftMantletPitch = 0;
+
+                          if (!isVisible) return null;
+
+                          function handlePointerDown(
+                            event: ThreeEvent<PointerEvent>,
+                          ) {
+                            event.stopPropagation();
+
+                            draftMantletPitch = turretRotation;
+
+                            setOrbitControlsEnabled(false);
+                            window.addEventListener(
+                              'pointermove',
+                              handlePointerMove,
+                            );
+                            window.addEventListener(
+                              'pointerup',
+                              handlePointerUp,
+                            );
+                          }
+                          function handlePointerMove(event: PointerEvent) {
+                            event.stopPropagation();
+                            event.preventDefault();
+
+                            const rotationSpeed =
+                              (2 * Math.PI) / canvas.current!.width;
+                            const delta = -event.movementY * rotationSpeed;
+                            draftMantletPitch += delta;
+
+                            if (mantletContainer.current) {
+                              mantletContainer.current.position
+                                .sub(gunOrigin)
+                                .applyAxisAngle(new Vector3(1, 0, 0), delta)
+                                .add(gunOrigin);
+                              mantletContainer.current.rotation.x =
+                                draftMantletPitch;
+                            }
+                          }
+                          function handlePointerUp(event: PointerEvent) {
+                            setOrbitControlsEnabled(true);
+                            setTurretRotation(
+                              normalizeAngle180(draftMantletPitch),
+                            );
+
+                            window.removeEventListener(
+                              'pointermove',
+                              handlePointerMove,
+                            );
+                            window.removeEventListener(
+                              'pointerup',
+                              handlePointerUp,
+                            );
+                          }
+
+                          return (
+                            <mesh
+                              visible={isVisible}
+                              onPointerDown={handlePointerDown}
+                              children={resolveJsxTree(child as Mesh)}
+                              key={child.uuid}
+                              castShadow
+                              receiveShadow
+                              geometry={(child as Mesh).geometry}
+                              material={(child as Mesh).material}
+                              position={child.position}
+                              rotation={child.rotation}
+                              scale={child.scale}
+                            />
+                          );
+                        })}
+                      </group>
                     </group>
                   </group>
                 </Canvas>
