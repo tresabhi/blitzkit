@@ -21,7 +21,7 @@ import {
 } from '@radix-ui/themes';
 import { Canvas, ThreeEvent, useLoader } from '@react-three/fiber';
 import { go } from 'fuzzysort';
-import { debounce } from 'lodash';
+import { clamp, debounce } from 'lodash';
 import Link from 'next/link';
 import { use, useEffect, useRef, useState } from 'react';
 import { Color, Group, Mesh, Vector3 } from 'three';
@@ -67,9 +67,14 @@ export default function Page({ params }: { params: { id: string } }) {
     tank.turretOrigin[1],
     -tank.turretOrigin[2],
   ).applyAxisAngle(new Vector3(1, 0, 0), Math.PI / 2);
-  const gunOrigin = new Vector3(...turret.gunOrigin);
-  const [turretRotation, setTurretRotation] = useState(0);
-  const [hullRotation, setHullRotation] = useState(0);
+  const gunOrigin = new Vector3(
+    turret.gunOrigin[0],
+    turret.gunOrigin[1],
+    -turret.gunOrigin[2],
+  ).applyAxisAngle(new Vector3(1, 0, 0), Math.PI / 2);
+  const [turretYaw, setTurretYaw] = useState(0);
+  const [hullYaw, setHullYaw] = useState(0);
+  const [mantletPitch, setMantletPitch] = useState(0);
   const [orbitControlsEnabled, setOrbitControlsEnabled] = useState(true);
   const turretRotationInput = useRef<HTMLInputElement>(null);
   const hullRotationInput = useRef<HTMLInputElement>(null);
@@ -93,14 +98,19 @@ export default function Page({ params }: { params: { id: string } }) {
   }, [versusTurret]);
   useEffect(() => {
     turretRotationInput.current!.value = `${Math.round(
-      turretRotation * (180 / Math.PI),
+      turretYaw * (180 / Math.PI),
     )}`;
-  }, [turretRotation]);
+  }, [turretYaw]);
   useEffect(() => {
     hullRotationInput.current!.value = `${Math.round(
-      hullRotation * (180 / Math.PI),
+      hullYaw * (180 / Math.PI),
     )}`;
-  });
+  }, [hullYaw]);
+  useEffect(() => {
+    gunRotationInput.current!.value = `${Math.round(
+      mantletPitch * (180 / Math.PI),
+    )}`;
+  }, [mantletPitch]);
 
   return (
     <PageWrapper color="purple">
@@ -173,7 +183,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
                   <group
                     ref={hullContainer}
-                    rotation={[-Math.PI / 2, 0, hullRotation]}
+                    rotation={[-Math.PI / 2, 0, hullYaw]}
                   >
                     {gltf.scene.children[0].children.map((child) => {
                       const isHull = child.name === 'hull';
@@ -188,7 +198,7 @@ export default function Page({ params }: { params: { id: string } }) {
                         if (isHull) {
                           event.stopPropagation();
 
-                          draftTurretRotation = hullRotation;
+                          draftTurretRotation = hullYaw;
 
                           setOrbitControlsEnabled(false);
                           window.addEventListener(
@@ -214,7 +224,7 @@ export default function Page({ params }: { params: { id: string } }) {
                       }
                       function handlePointerUp(event: PointerEvent) {
                         setOrbitControlsEnabled(true);
-                        setHullRotation(normalizeAngle180(draftTurretRotation));
+                        setHullYaw(normalizeAngle180(draftTurretRotation));
 
                         window.removeEventListener(
                           'pointermove',
@@ -246,9 +256,9 @@ export default function Page({ params }: { params: { id: string } }) {
                     <group
                       position={new Vector3()
                         .sub(turretOrigin)
-                        .applyAxisAngle(new Vector3(0, 0, 1), turretRotation)
+                        .applyAxisAngle(new Vector3(0, 0, 1), turretYaw)
                         .add(turretOrigin)}
-                      rotation={[0, 0, turretRotation]}
+                      rotation={[0, 0, turretYaw]}
                       ref={turretContainer}
                     >
                       {gltf.scene.children[0].children.map((child) => {
@@ -270,7 +280,7 @@ export default function Page({ params }: { params: { id: string } }) {
                           if (isTurret) {
                             event.stopPropagation();
 
-                            draftTurretRotation = turretRotation;
+                            draftTurretRotation = turretYaw;
 
                             setOrbitControlsEnabled(false);
                             window.addEventListener(
@@ -303,9 +313,7 @@ export default function Page({ params }: { params: { id: string } }) {
                         }
                         function handlePointerUp(event: PointerEvent) {
                           setOrbitControlsEnabled(true);
-                          setTurretRotation(
-                            normalizeAngle180(draftTurretRotation),
-                          );
+                          setTurretYaw(normalizeAngle180(draftTurretRotation));
 
                           window.removeEventListener(
                             'pointermove',
@@ -335,11 +343,13 @@ export default function Page({ params }: { params: { id: string } }) {
                       })}
 
                       <group
-                        // position={new Vector3()
-                        //   .sub(turretOrigin)
-                        //   .applyAxisAngle(new Vector3(0, 0, 1), turretRotation)
-                        //   .add(turretOrigin)}
-                        // rotation={[0, 0, turretRotation]}
+                        position={new Vector3()
+                          .sub(turretOrigin)
+                          .sub(gunOrigin)
+                          .applyAxisAngle(new Vector3(1, 0, 0), mantletPitch)
+                          .add(turretOrigin)
+                          .add(gunOrigin)}
+                        rotation={[mantletPitch, 0, 0]}
                         ref={mantletContainer}
                       >
                         {gltf.scene.children[0].children.map((child) => {
@@ -365,7 +375,7 @@ export default function Page({ params }: { params: { id: string } }) {
                           ) {
                             event.stopPropagation();
 
-                            draftMantletPitch = turretRotation;
+                            draftMantletPitch = mantletPitch;
 
                             setOrbitControlsEnabled(false);
                             window.addEventListener(
@@ -385,11 +395,22 @@ export default function Page({ params }: { params: { id: string } }) {
                               (2 * Math.PI) / canvas.current!.width;
                             const delta = -event.movementY * rotationSpeed;
                             draftMantletPitch += delta;
+                            draftMantletPitch = clamp(
+                              draftMantletPitch,
+                              -gun.pitch[1] * (Math.PI / 180),
+                              -gun.pitch[0] * (Math.PI / 180),
+                            );
 
                             if (mantletContainer.current) {
                               mantletContainer.current.position
+                                .set(0, 0, 0)
+                                .sub(turretOrigin)
                                 .sub(gunOrigin)
-                                .applyAxisAngle(new Vector3(1, 0, 0), delta)
+                                .applyAxisAngle(
+                                  new Vector3(1, 0, 0),
+                                  draftMantletPitch,
+                                )
+                                .add(turretOrigin)
                                 .add(gunOrigin);
                               mantletContainer.current.rotation.x =
                                 draftMantletPitch;
@@ -397,7 +418,7 @@ export default function Page({ params }: { params: { id: string } }) {
                           }
                           function handlePointerUp(event: PointerEvent) {
                             setOrbitControlsEnabled(true);
-                            setTurretRotation(
+                            setMantletPitch(
                               normalizeAngle180(draftMantletPitch),
                             );
 
@@ -458,7 +479,7 @@ export default function Page({ params }: { params: { id: string } }) {
                   <TextField.Slot>Hull</TextField.Slot>
                   <TextField.Input
                     onBlur={() => {
-                      setHullRotation(
+                      setHullYaw(
                         normalizeAngle180(
                           Number(hullRotationInput.current?.value) *
                             (Math.PI / 180),
@@ -485,7 +506,7 @@ export default function Page({ params }: { params: { id: string } }) {
                   <TextField.Slot>Turret</TextField.Slot>
                   <TextField.Input
                     onBlur={() => {
-                      setTurretRotation(
+                      setTurretYaw(
                         normalizeAngle180(
                           Number(turretRotationInput.current?.value) *
                             (Math.PI / 180),
@@ -511,8 +532,24 @@ export default function Page({ params }: { params: { id: string } }) {
                 >
                   <TextField.Slot>Gun</TextField.Slot>
                   <TextField.Input
+                    onBlur={() => {
+                      setMantletPitch(
+                        clamp(
+                          normalizeAngle180(
+                            Number(gunRotationInput.current?.value) *
+                              (Math.PI / 180),
+                          ),
+                          -gun.pitch[1] * (Math.PI / 180),
+                          -gun.pitch[0] * (Math.PI / 180),
+                        ),
+                      );
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        gunRotationInput.current?.blur();
+                      }
+                    }}
                     ref={gunRotationInput}
-                    value={0}
                     style={{ textAlign: 'right' }}
                   />
                   <TextField.Slot>°</TextField.Slot>

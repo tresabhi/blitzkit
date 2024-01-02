@@ -14,9 +14,9 @@ import { ScgStream, vertexAttributeVectorSizes } from '../streams/scg';
 import { VertexAttribute } from '../streams/scpg';
 import { readDVPLFile } from './readDVPLFile';
 
-BigInt.prototype.toJSON = function () {
-  return this.toString();
-};
+// BigInt.prototype.toJSON = function () {
+//   return this.toString();
+// };
 
 const MAX_FLOAT32 = 2 ** 127 * (2 - 2 ** -23);
 
@@ -175,10 +175,10 @@ export async function extractModel(
           case 'ActionComponent':
           case 'ParticleEffectComponent':
           case 'SlotComponent':
+          case 'MotionComponent':
           case 'TankElementComponent':
+          case 'SkeletonComponent':
             break;
-
-          // console.log(JSON.stringify(component, null, 2));
 
           case 'TransformComponent': {
             const translation = new Vector3();

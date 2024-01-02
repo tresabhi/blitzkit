@@ -232,6 +232,38 @@ export type Component =
       isDestructible: boolean;
       shouldCastShadow: boolean;
       shouldGenerateSilhouette: boolean;
+    }
+  | {
+      'comp.typename': 'MotionComponent';
+      'motion.filepath': string;
+      'motion.playbackRate': number;
+      'simpleMotion.repeatsCount': number;
+    }
+  | {
+      'comp.typename': 'SkeletonComponent';
+      joints: Record<
+        string, // 0000, 0001, ...
+        {
+          'joint.bbox.max': Vector3Tuple;
+          'joint.bbox.min': Vector3Tuple;
+          'joint.bindPose': [
+            Vector4Tuple,
+            Vector4Tuple,
+            Vector4Tuple,
+            Vector4Tuple,
+          ];
+          'joint.invBindPose': [
+            Vector4Tuple,
+            Vector4Tuple,
+            Vector4Tuple,
+            Vector4Tuple,
+          ];
+          'joint.name': string;
+          'joint.parentIndex': number;
+          'joint.uid': string;
+        }
+      >;
+      jointsCount: number;
     };
 
 interface SceneComponents {
