@@ -146,6 +146,8 @@ export default function Page({ params }: { params: { id: string } }) {
                       setControlsEnabled(true);
                       setHullYaw(yaw);
                     }}
+                    onTrackStart={() => setControlsEnabled(false)}
+                    onTrackEnd={() => setControlsEnabled(true)}
                   >
                     <TurretContainer
                       gunOrigin={gunOrigin}
