@@ -91,21 +91,6 @@ export default function Page({ params }: { params: { id: string } }) {
   const gunContainer = useRef<Group>(null);
 
   useEffect(() => {
-    if (!turret.guns.some(({ id }) => gun.id === id)) {
-      setGun(turret.guns.at(-1)!);
-    }
-  }, [turret]);
-  useEffect(() => {
-    if (!versusTank.turrets.some(({ id }) => id === versusTurret.id)) {
-      setVersusTurret(versusTank.turrets.at(-1)!);
-    }
-  }, [versusTank]);
-  useEffect(() => {
-    if (!versusTurret.guns.some(({ id }) => id === versusGun.id)) {
-      setVersusGun(versusTurret.guns.at(-1)!);
-    }
-  }, [versusTurret]);
-  useEffect(() => {
     hullYawInput.current!.value = `${-Math.round(hullYaw * (180 / Math.PI))}`;
   }, [hullYaw]);
   useEffect(() => {
@@ -318,7 +303,10 @@ export default function Page({ params }: { params: { id: string } }) {
                   return (
                     <Tooltip content={thisTurret.name}>
                       <Button
-                        onClick={() => setTurret(thisTurret)}
+                        onClick={() => {
+                          setTurret(thisTurret);
+                          setGun(thisTurret.guns.at(-1)!);
+                        }}
                         variant={turret.id === thisTurret.id ? 'solid' : 'soft'}
                       >
                         <img
@@ -417,8 +405,17 @@ export default function Page({ params }: { params: { id: string } }) {
                                         key={id}
                                         variant="ghost"
                                         onClick={() => {
-                                          setVersusTank(
-                                            awaitedTankDefinitions[id],
+                                          const thisTank =
+                                            awaitedTankDefinitions[id];
+
+                                          setVersusTank(thisTank);
+                                          setVersusTurret(
+                                            thisTank.turrets.at(-1)!,
+                                          );
+                                          setVersusGun(
+                                            thisTank.turrets
+                                              .at(-1)!
+                                              .guns.at(-1)!,
                                           );
                                           setVersusTankSearchResults([]);
                                           versusTankSearchInput.current!.value =
@@ -460,9 +457,10 @@ export default function Page({ params }: { params: { id: string } }) {
                                       <Tooltip content={turret.name}>
                                         <ModuleButtons
                                           key={id}
-                                          onClick={() =>
-                                            setVersusTurret(turret)
-                                          }
+                                          onClick={() => {
+                                            setVersusTurret(turret);
+                                            setVersusGun(turret.guns.at(-1)!);
+                                          }}
                                           selected={versusTurret.id === id}
                                           tier={turret.tier}
                                           type="turret"
