@@ -40,7 +40,6 @@ import {
 } from '../../../../core/blitzkrieg/tankDefinitions';
 import { normalizeAnglePI } from '../../../../core/math/normalizeAngle180';
 import * as styles from '../page.css';
-import { TankAlignment } from './components/TankAlignment';
 
 const X_AXIS = new Vector3(1, 0, 0);
 
@@ -82,7 +81,6 @@ export default function Page({ params }: { params: { id: string } }) {
   const [turretYaw, setTurretYaw] = useState(0);
   const [hullYaw, setHullYaw] = useState(0);
   const [gunPitch, setGunPitch] = useState(0);
-  const [orbitControlsEnabled, setOrbitControlsEnabled] = useState(true);
   const turretYawInput = useRef<HTMLInputElement>(null);
   const hullYawInput = useRef<HTMLInputElement>(null);
   const gunPitchInput = useRef<HTMLInputElement>(null);
@@ -146,17 +144,7 @@ export default function Page({ params }: { params: { id: string } }) {
               </Tabs.Root>
 
               <div style={{ height: '50vh', maxHeight: 576 }}>
-                <Canvas
-                  shadows
-                  ref={canvas}
-                  onPointerDown={(event) => event.preventDefault()}
-                  camera={{ fov: 20 }}
-                >
-                  <TankAlignment
-                    model={hullContainer}
-                    orbit={orbitControlsEnabled}
-                  />
-
+                <Canvas shadows ref={canvas} camera={{ fov: 20 }}>
                   <InfiniteGridHelper
                     size1={1 / 5}
                     size2={1}
@@ -200,7 +188,6 @@ export default function Page({ params }: { params: { id: string } }) {
                       ) {
                         event.stopPropagation();
                         draftHullYaw = hullYaw;
-                        setOrbitControlsEnabled(false);
                         window.addEventListener(
                           'pointermove',
                           handlePointerMove,
@@ -217,7 +204,6 @@ export default function Page({ params }: { params: { id: string } }) {
                         }
                       }
                       function handlePointerUp() {
-                        setOrbitControlsEnabled(true);
                         setHullYaw(normalizeAnglePI(draftHullYaw));
                         window.removeEventListener(
                           'pointermove',
@@ -270,7 +256,6 @@ export default function Page({ params }: { params: { id: string } }) {
                           event.stopPropagation();
                           if (isTurret) {
                             draftTurretYaw = turretYaw;
-                            setOrbitControlsEnabled(false);
                             window.addEventListener(
                               'pointermove',
                               handlePointerMove,
@@ -299,7 +284,6 @@ export default function Page({ params }: { params: { id: string } }) {
                           }
                         }
                         function handlePointerUp() {
-                          setOrbitControlsEnabled(true);
                           setTurretYaw(normalizeAnglePI(draftTurretYaw));
                           window.removeEventListener(
                             'pointermove',
@@ -340,21 +324,26 @@ export default function Page({ params }: { params: { id: string } }) {
                         ref={gunContainer}
                       >
                         {gltf.scene.children[0].children.map((child) => {
-                          const isGun =
-                            child.name.startsWith('gun_') &&
-                            !child.name.endsWith('_mask');
-                          const isMantlet =
-                            child.name.startsWith('gun_') &&
-                            child.name.endsWith('_mask');
-                          const isVisible = isGun || isMantlet;
+                          const isCurrentMantlet =
+                            child.name ===
+                            `gun_${gunModelDefinition.model
+                              .toString()
+                              .padStart(2, '0')}_mask`;
+                          const isCurrentGun =
+                            child.name ===
+                            `gun_${gunModelDefinition.model
+                              .toString()
+                              .padStart(2, '0')}`;
+                          const isVisible = isCurrentGun || isCurrentMantlet;
                           let draftMantletPitch = 0;
+                          let draftTurretYaw = 0;
 
                           function handlePointerDown(
                             event: ThreeEvent<PointerEvent>,
                           ) {
                             event.stopPropagation();
                             draftMantletPitch = gunPitch;
-                            setOrbitControlsEnabled(false);
+                            draftTurretYaw = turretYaw;
                             window.addEventListener(
                               'pointermove',
                               handlePointerMove,
@@ -365,6 +354,21 @@ export default function Page({ params }: { params: { id: string } }) {
                             );
                           }
                           function handlePointerMove(event: PointerEvent) {
+                            if (turretModelDefinition.yaw) {
+                              draftTurretYaw = clamp(
+                                draftTurretYaw +
+                                  event.movementX *
+                                    (Math.PI / canvas.current!.width),
+                                -turretModelDefinition.yaw.max *
+                                  (Math.PI / 180),
+                                -turretModelDefinition.yaw.min *
+                                  (Math.PI / 180),
+                              );
+                            } else {
+                              draftTurretYaw +=
+                                event.movementX *
+                                ((2 * Math.PI) / canvas.current!.width);
+                            }
                             draftMantletPitch = clamp(
                               draftMantletPitch -
                                 event.movementY *
@@ -387,10 +391,23 @@ export default function Page({ params }: { params: { id: string } }) {
                               gunContainer.current.rotation.x =
                                 draftMantletPitch;
                             }
+
+                            if (turretContainer.current) {
+                              turretContainer.current.position
+                                .set(0, 0, 0)
+                                .sub(turretOrigin)
+                                .applyAxisAngle(
+                                  new Vector3(0, 0, 1),
+                                  draftTurretYaw,
+                                )
+                                .add(turretOrigin);
+                              turretContainer.current.rotation.z =
+                                draftTurretYaw;
+                            }
                           }
                           function handlePointerUp() {
-                            setOrbitControlsEnabled(true);
                             setGunPitch(normalizeAnglePI(draftMantletPitch));
+                            setTurretYaw(normalizeAnglePI(draftTurretYaw));
                             window.removeEventListener(
                               'pointermove',
                               handlePointerMove,
