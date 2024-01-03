@@ -163,22 +163,29 @@ export default function Page({ params }: { params: { id: string } }) {
                     }}
                   >
                     <TurretContainer
+                      gunOrigin={gunOrigin}
                       ref={turretContainer}
                       objects={gltf.scene.children[0].children}
                       model={turretModelDefinition.model}
                       onYawStart={() => setControlsEnabled(false)}
-                      onYawEnd={(yaw) => {
+                      yawLimits={turretModelDefinition.yaw}
+                      pitchLimits={gunModelDefinition.pitch}
+                      pitch={gunPitch}
+                      onYawEnd={(pitch, yaw) => {
                         setControlsEnabled(true);
+                        setGunPitch(pitch);
                         setTurretYaw(yaw);
                       }}
-                      origin={turretOrigin}
+                      gunContainer={gunContainer}
+                      turretOrigin={turretOrigin}
                       yaw={turretYaw}
                     >
                       <GunContainer
+                        ref={gunContainer}
                         onPitchStart={() => setControlsEnabled(false)}
                         pitchLimits={gunModelDefinition.pitch}
                         turretContainer={turretContainer}
-                        turretYaw={turretYaw}
+                        yaw={turretYaw}
                         onPitchEnd={(pitch, yaw) => {
                           setControlsEnabled(true);
                           setGunPitch(pitch);
@@ -186,7 +193,7 @@ export default function Page({ params }: { params: { id: string } }) {
                         }}
                         yawLimits={turretModelDefinition.yaw}
                         gunOrigin={gunOrigin}
-                        gunPitch={gunPitch}
+                        pitch={gunPitch}
                         model={gunModelDefinition.model}
                         objects={gltf.scene.children[0].children}
                         turretOrigin={turretOrigin}
