@@ -38,6 +38,8 @@ export const HullContainer = forwardRef<Group, HullContainerProps>(
             window.addEventListener('pointerup', handlePointerUp);
           }
           function handlePointerMove(event: PointerEvent) {
+            event.preventDefault();
+
             draftHullYaw += event.movementX * ((2 * Math.PI) / canvas.width);
 
             if (hullContainer.current) {
