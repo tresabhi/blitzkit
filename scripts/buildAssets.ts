@@ -17,14 +17,13 @@ import { toUniqueId } from '../src/core/blitz/toUniqueId';
 import commitMultipleFiles, {
   FileChange,
 } from '../src/core/blitzkrieg/commitMultipleFiles';
+import { ModelDefinitions } from '../src/core/blitzkrieg/modelDefinitions';
 import {
   GunDefinition,
-  ShellDefinition,
   ShellType,
   TankDefinitionPrice,
   TankDefinitions,
   Tier,
-  TurretDefinition,
 } from '../src/core/blitzkrieg/tankDefinitions';
 
 config();
@@ -113,6 +112,11 @@ interface VehicleDefinitions {
         [key: string]: {
           reloadTime: number;
           maxAmmo: number;
+          extraPitchLimits?: {
+            front?: string;
+            back?: string;
+            transition?: number | number[];
+          };
           pitchLimits?: string | string[];
           pumpGunMode?: boolean;
           pumpGunReloadTimes?: string;
@@ -174,6 +178,7 @@ if (allTargets || targets?.includes('definitions')) {
   console.log('Building tank definitions...');
 
   const tankDefinitions: TankDefinitions = {};
+  const modelDefinitions: ModelDefinitions = {};
   const nations = await readdir(`${DATA}/${DOI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
@@ -216,8 +221,40 @@ if (allTargets || targets?.includes('definitions')) {
           .map(Number) as Vector3Tuple;
         const tankId = toUniqueId(nation, tank.id);
         const tankTags = tank.tags.split(' ');
-        const tankTurrets = Object.keys(tankDefinition.root.turrets0).map(
-          (turretKey) => {
+
+        tankDefinitions[tankId] = {
+          id: tankId,
+          name:
+            (tank.shortUserString
+              ? strings[tank.shortUserString]
+              : undefined) ??
+            strings[tank.userString] ??
+            tankKey.replaceAll('_', ' '),
+          nation,
+          tree_type: (tank.sellPrice ? 'gold' in tank.sellPrice : false)
+            ? 'collector'
+            : (typeof tank.price === 'number' ? false : 'gold' in tank.price)
+              ? 'premium'
+              : 'researchable',
+          tier: tank.level as Tier,
+          type: blitzTankTypeToBlitzkrieg[tankTags[0] as BlitzTankType],
+          testing: tankTags.includes('testTank') ? true : undefined,
+          price: tankPrice,
+          camouflage: {
+            still: tankDefinition.root.invisibility.still,
+            moving: tankDefinition.root.invisibility.moving,
+            firing: tankDefinition.root.invisibility.firePenalty,
+          },
+          turrets: [],
+        };
+
+        modelDefinitions[tankId] = {
+          turretOrigin,
+          turrets: {},
+        };
+
+        Object.keys(tankDefinition.root.turrets0).forEach(
+          (turretKey, turretIndex) => {
             const turret = tankDefinition.root.turrets0[turretKey];
             const turretModel = Number(
               parse(turret.models.undamaged).name.split('_')[1],
@@ -237,7 +274,29 @@ if (allTargets || targets?.includes('definitions')) {
             )
               .split(' ')
               .map(Number) as Vector3Tuple;
-            const turretGuns = Object.keys(turret.guns).map((gunKey) => {
+
+            tankDefinitions[tankId].turrets.push({
+              id: turretId,
+              name:
+                strings[turret.userString] ??
+                turretKey
+                  .replaceAll('_', ' ')
+                  .replace(/^(Turret ([0-9] )?)+/, ''),
+              tier: turret.level as Tier,
+              guns: [],
+            });
+
+            modelDefinitions[tankId].turrets[turretId] = {
+              gunOrigin,
+              model: turretModel,
+              yaw:
+                -turretYaw[0] + turretYaw[1] === 360
+                  ? undefined
+                  : { min: turretYaw[0], max: turretYaw[1] },
+              guns: {},
+            };
+
+            Object.keys(turret.guns).forEach((gunKey, gunIndex) => {
               const turretGunEntry = turret.guns[gunKey];
               const gunId = toUniqueId(nation, gunList.root.ids[gunKey]);
               const gun = gunList.root.shared[gunKey];
@@ -271,14 +330,63 @@ if (allTargets || targets?.includes('definitions')) {
                 gunType === 'regular'
                   ? undefined
                   : 60 / turretGunEntry.clip!.rate;
-              const gunShells = Object.keys(gun.shots).map((shellKey) => {
+              const front = turretGunEntry.extraPitchLimits?.front
+                ? turretGunEntry.extraPitchLimits.front.split(' ').map(Number)
+                : undefined;
+              const back = turretGunEntry.extraPitchLimits?.back
+                ? turretGunEntry.extraPitchLimits.back.split(' ').map(Number)
+                : undefined;
+              const transition = turretGunEntry.extraPitchLimits?.transition
+                ? typeof turretGunEntry.extraPitchLimits.transition === 'number'
+                  ? turretGunEntry.extraPitchLimits.transition
+                  : turretGunEntry.extraPitchLimits.transition.at(-1)!
+                : undefined;
+
+              tankDefinitions[tankId].turrets[turretIndex].guns.push({
+                id: gunId,
+                name: gunName,
+                tier: gun.level as Tier,
+                shells: [],
+                type: gunType,
+                reload: gunReload,
+                count: gunClipCount,
+                interClip: gunInterClip,
+              } as GunDefinition);
+
+              modelDefinitions[tankId].turrets[turretId].guns[gunId] = {
+                model: gunModel,
+                pitch: {
+                  min: gunPitch[0],
+                  max: gunPitch[1],
+
+                  front: front
+                    ? {
+                        min: front[0],
+                        max: front[1],
+                        range: front[2],
+                      }
+                    : undefined,
+                  back: back
+                    ? {
+                        min: back[0],
+                        max: back[1],
+                        range: back[2],
+                      }
+                    : undefined,
+                  transition,
+                },
+              };
+
+              Object.keys(gun.shots).forEach((shellKey) => {
                 const turretShellEntry = gun.shots[shellKey];
                 const shell = shellList.root[shellKey];
                 const shellId = toUniqueId(nation, shell.id);
                 const shellName =
                   strings[shell.userString] ?? shellKey.replaceAll('_', ' ');
 
-                return {
+                tankDefinitions[tankId].turrets[turretIndex].guns[
+                  gunIndex
+                ].shells.push({
                   id: shellId,
                   name: shellName,
                   speed: turretShellEntry.speed,
@@ -291,65 +399,11 @@ if (allTargets || targets?.includes('definitions')) {
                   ricochet: shell.ricochetAngle,
                   type: blitzShellKindToBLitzkrieg[shell.kind],
                   icon: shell.icon,
-                } satisfies ShellDefinition;
+                });
               });
-
-              return {
-                id: gunId,
-                pitch: gunPitch,
-                name: gunName,
-                tier: gun.level as Tier,
-                shells: gunShells,
-                type: gunType,
-                reload: gunReload,
-                count: gunClipCount,
-                interClip: gunInterClip,
-                model: gunModel,
-              } as GunDefinition;
             });
-
-            return {
-              id: turretId,
-              name:
-                strings[turret.userString] ??
-                turretKey
-                  .replaceAll('_', ' ')
-                  .replace(/^(Turret ([0-9] )?)+/, ''),
-              tier: turret.level as Tier,
-              yaw: -turretYaw[0] + turretYaw[1] === 360 ? undefined : turretYaw,
-              guns: turretGuns,
-              gunOrigin,
-              model: turretModel,
-            } satisfies TurretDefinition;
           },
         );
-
-        tankDefinitions[tankId] = {
-          id: tankId,
-          name:
-            (tank.shortUserString
-              ? strings[tank.shortUserString]
-              : undefined) ??
-            strings[tank.userString] ??
-            tankKey.replaceAll('_', ' '),
-          nation,
-          turretOrigin,
-          tree_type: (tank.sellPrice ? 'gold' in tank.sellPrice : false)
-            ? 'collector'
-            : (typeof tank.price === 'number' ? false : 'gold' in tank.price)
-              ? 'premium'
-              : 'researchable',
-          tier: tank.level as Tier,
-          type: blitzTankTypeToBlitzkrieg[tankTags[0] as BlitzTankType],
-          testing: tankTags.includes('testTank') ? true : undefined,
-          turrets: tankTurrets,
-          price: tankPrice,
-          camouflage: {
-            still: tankDefinition.root.invisibility.still,
-            moving: tankDefinition.root.invisibility.moving,
-            firing: tankDefinition.root.invisibility.firePenalty,
-          },
-        };
       }
     }),
   );
@@ -365,6 +419,11 @@ if (allTargets || targets?.includes('definitions')) {
         content: JSON.stringify(tankDefinitions),
         encoding: 'utf-8',
         path: 'definitions/tanks.json',
+      },
+      {
+        content: JSON.stringify(modelDefinitions),
+        encoding: 'utf-8',
+        path: 'definitions/models.json',
       },
     ],
     true,
@@ -527,13 +586,13 @@ if (allTargets || targets?.includes('tankModels')) {
         const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
 
         // if (id !== 15697) continue; // chieftain TODO: investigate vertices stream over read
-        // if (id !== 24609) continue; // concept 1b
+        if (id !== 24609) continue; // concept 1b
         // if (id !== 4417) continue; // amx m4 mle
         // if (id !== 7297) continue; // 60tp
         // if (id !== 1) continue; // t-34
         // if (id !== 6753) continue; // type 71
         // if (id !== 5137) continue; // tiger ii
-        if (id !== 11633) continue; // forest witch
+        // if (id !== 11633) continue; // forest witch
         // if (id !== 6225) continue; // fv215b
 
         console.log(`Building model ${id} @ ${nation}/${tankIndex}`);

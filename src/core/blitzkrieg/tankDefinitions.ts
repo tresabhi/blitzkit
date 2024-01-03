@@ -1,5 +1,4 @@
 import { deburr } from 'lodash';
-import { Vector3Tuple } from 'three';
 import { TankType, TreeTypeString } from '../../components/Tanks';
 import { asset } from './asset';
 
@@ -10,7 +9,6 @@ export interface TankDefinition {
   id: number;
   nation: string;
   name: string;
-  turretOrigin: Vector3Tuple;
   tree_type: TreeTypeString;
   tier: Tier;
   type: TankType;
@@ -26,20 +24,15 @@ export interface TurretDefinition {
   id: number;
   name: string;
   tier: Tier;
-  yaw?: [number, number];
   guns: GunDefinition[];
-  gunOrigin: Vector3Tuple;
-  model: number;
 }
 export type GunDefinition = GunDefinitionBase &
   (GunDefinitionRegular | GunDefinitionAutoLoader | GunDefinitionAutoReloader);
-interface GunDefinitionBase  {
+interface GunDefinitionBase {
   id: number;
   name: string;
   tier: Tier;
-  pitch: [number, number];
   shells: ShellDefinition[];
-  model: number;
 }
 interface GunDefinitionRegular {
   type: 'regular';

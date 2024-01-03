@@ -31,6 +31,7 @@ import InfiniteGridHelper from '../../../../components/InfiniteGridHelper';
 import { ModuleButtons } from '../../../../components/ModuleButton';
 import PageWrapper from '../../../../components/PageWrapper';
 import { asset } from '../../../../core/blitzkrieg/asset';
+import { modelDefinitions } from '../../../../core/blitzkrieg/modelDefinitions';
 import { resolveJsxTree } from '../../../../core/blitzkrieg/resolveJsxTree';
 import {
   TIER_ROMAN_NUMERALS,
@@ -41,13 +42,19 @@ import { normalizeAngle180 } from '../../../../core/math/normalizeAngle180';
 import * as styles from '../page.css';
 import { TankAlignment } from './components/tankAlignment';
 
+const X_AXIS = new Vector3(1, 0, 0);
+
 export default function Page({ params }: { params: { id: string } }) {
   const id = parseInt(params.id);
   const awaitedTankDefinitions = use(tankDefinitions);
+  const awaitedModelDefinitions = use(modelDefinitions);
   const awaitedTankNamesDiacritics = use(tankNamesDiacritics);
   const tank = awaitedTankDefinitions[id];
+  const tankModelDefinition = awaitedModelDefinitions[id];
   const [turret, setTurret] = useState(tank.turrets.at(-1)!);
+  const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const [gun, setGun] = useState(turret.guns.at(-1)!);
+  const gunModelDefinition = turretModelDefinition.guns[gun.id];
   const [crew, setCrew] = useState(100);
   const [mode, setMode] = useState('model');
   const versusTankSearchInput = useRef<HTMLInputElement>(null);
@@ -63,15 +70,15 @@ export default function Page({ params }: { params: { id: string } }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const gltf = useLoader(GLTFLoader, `/test/${id}.glb`);
   const turretOrigin = new Vector3(
-    tank.turretOrigin[0],
-    tank.turretOrigin[1],
-    -tank.turretOrigin[2],
-  ).applyAxisAngle(new Vector3(1, 0, 0), Math.PI / 2);
+    tankModelDefinition.turretOrigin[0],
+    tankModelDefinition.turretOrigin[1],
+    -tankModelDefinition.turretOrigin[2],
+  ).applyAxisAngle(X_AXIS, Math.PI / 2);
   const gunOrigin = new Vector3(
-    turret.gunOrigin[0],
-    turret.gunOrigin[1],
-    -turret.gunOrigin[2],
-  ).applyAxisAngle(new Vector3(1, 0, 0), Math.PI / 2);
+    turretModelDefinition.gunOrigin[0],
+    turretModelDefinition.gunOrigin[1],
+    -turretModelDefinition.gunOrigin[2],
+  ).applyAxisAngle(X_AXIS, Math.PI / 2);
   const [turretYaw, setTurretYaw] = useState(0);
   const [hullYaw, setHullYaw] = useState(0);
   const [mantletPitch, setMantletPitch] = useState(0);
@@ -266,7 +273,7 @@ export default function Page({ params }: { params: { id: string } }) {
                         const isCurrentTurret =
                           isTurret &&
                           child.name ===
-                            `turret_${turret.model
+                            `turret_${turretModelDefinition.model
                               .toString()
                               .padStart(2, '0')}`;
                         const isVisible = isCurrentTurret;
@@ -358,13 +365,17 @@ export default function Page({ params }: { params: { id: string } }) {
                             child.name.endsWith('_mask');
                           const isCurrentMantlet =
                             child.name ===
-                            `gun_${gun.model.toString().padStart(2, '0')}_mask`;
+                            `gun_${gunModelDefinition.model
+                              .toString()
+                              .padStart(2, '0')}_mask`;
                           const isGun =
                             child.name.startsWith('gun_') && !isMantlet;
                           const isCurrentGun =
                             isGun &&
                             child.name ===
-                              `gun_${gun.model.toString().padStart(2, '0')}`;
+                              `gun_${gunModelDefinition.model
+                                .toString()
+                                .padStart(2, '0')}`;
                           const isVisible = isCurrentGun || isCurrentMantlet;
                           let draftMantletPitch = 0;
 
@@ -397,8 +408,8 @@ export default function Page({ params }: { params: { id: string } }) {
                             draftMantletPitch += delta;
                             draftMantletPitch = clamp(
                               draftMantletPitch,
-                              -gun.pitch[1] * (Math.PI / 180),
-                              -gun.pitch[0] * (Math.PI / 180),
+                              -gunModelDefinition.pitch.max * (Math.PI / 180),
+                              -gunModelDefinition.pitch.min * (Math.PI / 180),
                             );
 
                             if (mantletContainer.current) {
@@ -539,8 +550,8 @@ export default function Page({ params }: { params: { id: string } }) {
                             Number(gunRotationInput.current?.value) *
                               (Math.PI / 180),
                           ),
-                          -gun.pitch[1] * (Math.PI / 180),
-                          -gun.pitch[0] * (Math.PI / 180),
+                          -gunModelDefinition.pitch.min * (Math.PI / 180),
+                          -gunModelDefinition.pitch.max * (Math.PI / 180),
                         ),
                       );
                     }}
