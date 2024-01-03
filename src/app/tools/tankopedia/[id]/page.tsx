@@ -40,6 +40,7 @@ import {
 } from '../../../../core/blitzkrieg/tankDefinitions';
 import { normalizeAnglePI } from '../../../../core/math/normalizeAngle180';
 import * as styles from '../page.css';
+import { Controls } from './components/Control';
 
 const X_AXIS = new Vector3(1, 0, 0);
 
@@ -81,6 +82,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [turretYaw, setTurretYaw] = useState(0);
   const [hullYaw, setHullYaw] = useState(0);
   const [gunPitch, setGunPitch] = useState(0);
+  const [controlsEnabled, setControlsEnabled] = useState(true);
   const turretYawInput = useRef<HTMLInputElement>(null);
   const hullYawInput = useRef<HTMLInputElement>(null);
   const gunPitchInput = useRef<HTMLInputElement>(null);
@@ -158,6 +160,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     distance={25}
                     color={new Color('red')}
                   />
+                  <Controls enabled={controlsEnabled} fit={hullContainer} />
 
                   {/* I really like apartment, dawn, and sunset */}
                   <directionalLight
@@ -188,6 +191,7 @@ export default function Page({ params }: { params: { id: string } }) {
                       ) {
                         event.stopPropagation();
                         draftHullYaw = hullYaw;
+                        setControlsEnabled(false);
                         window.addEventListener(
                           'pointermove',
                           handlePointerMove,
@@ -204,6 +208,7 @@ export default function Page({ params }: { params: { id: string } }) {
                         }
                       }
                       function handlePointerUp() {
+                        setControlsEnabled(true);
                         setHullYaw(normalizeAnglePI(draftHullYaw));
                         window.removeEventListener(
                           'pointermove',
@@ -254,7 +259,9 @@ export default function Page({ params }: { params: { id: string } }) {
                           event: ThreeEvent<PointerEvent>,
                         ) {
                           event.stopPropagation();
+
                           if (isTurret) {
+                            setControlsEnabled(false);
                             draftTurretYaw = turretYaw;
                             window.addEventListener(
                               'pointermove',
@@ -285,6 +292,7 @@ export default function Page({ params }: { params: { id: string } }) {
                         }
                         function handlePointerUp() {
                           setTurretYaw(normalizeAnglePI(draftTurretYaw));
+                          setControlsEnabled(true);
                           window.removeEventListener(
                             'pointermove',
                             handlePointerMove,
@@ -342,6 +350,8 @@ export default function Page({ params }: { params: { id: string } }) {
                             event: ThreeEvent<PointerEvent>,
                           ) {
                             event.stopPropagation();
+
+                            setControlsEnabled(false);
                             draftMantletPitch = gunPitch;
                             draftTurretYaw = turretYaw;
                             window.addEventListener(
@@ -406,6 +416,7 @@ export default function Page({ params }: { params: { id: string } }) {
                             }
                           }
                           function handlePointerUp() {
+                            setControlsEnabled(true);
                             setGunPitch(normalizeAnglePI(draftMantletPitch));
                             setTurretYaw(normalizeAnglePI(draftTurretYaw));
                             window.removeEventListener(
