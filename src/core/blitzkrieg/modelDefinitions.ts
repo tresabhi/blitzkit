@@ -10,18 +10,23 @@ interface TurretModelDefinition {
   model: number;
   gunOrigin: Vector3Tuple;
   guns: Record<number, GunModelDefinition>;
-  yaw?: { min: number; max: number };
+  yaw?: YawLimits;
+}
+export interface YawLimits {
+  min: number;
+  max: number;
 }
 interface GunModelDefinition {
   model: number;
-  pitch: {
-    min: number;
-    max: number;
+  pitch: PitchLimits;
+}
+export interface PitchLimits {
+  min: number;
+  max: number;
 
-    front?: { min: number; max: number; range: number };
-    back?: { min: number; max: number; range: number };
-    transition?: number;
-  };
+  front?: { min: number; max: number; range: number };
+  back?: { min: number; max: number; range: number };
+  transition?: number;
 }
 
 export const modelDefinitions = fetch(asset('definitions/models.json'), {

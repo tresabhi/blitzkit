@@ -19,20 +19,18 @@ import {
   Theme,
   Tooltip,
 } from '@radix-ui/themes';
-import { Canvas, ThreeEvent, useLoader } from '@react-three/fiber';
+import { Canvas, useLoader } from '@react-three/fiber';
 import { go } from 'fuzzysort';
 import { clamp, debounce } from 'lodash';
 import Link from 'next/link';
 import { use, useEffect, useRef, useState } from 'react';
-import { Color, Group, Mesh, Vector3 } from 'three';
+import { Group, Vector3 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Flag } from '../../../../components/Flag';
-import InfiniteGridHelper from '../../../../components/InfiniteGridHelper';
 import { ModuleButtons } from '../../../../components/ModuleButton';
 import PageWrapper from '../../../../components/PageWrapper';
 import { asset } from '../../../../core/blitzkrieg/asset';
 import { modelDefinitions } from '../../../../core/blitzkrieg/modelDefinitions';
-import { resolveJsxTree } from '../../../../core/blitzkrieg/resolveJsxTree';
 import {
   TIER_ROMAN_NUMERALS,
   tankDefinitions,
@@ -41,6 +39,10 @@ import {
 import { normalizeAnglePI } from '../../../../core/math/normalizeAngle180';
 import * as styles from '../page.css';
 import { Controls } from './components/Control';
+import { GunContainer } from './components/GunContainer';
+import { HullContainer } from './components/HullContainer';
+import { SceneProps } from './components/SceneProps';
+import { TurretContainer } from './components/TurretContainer';
 
 const X_AXIS = new Vector3(1, 0, 0);
 
@@ -147,308 +149,50 @@ export default function Page({ params }: { params: { id: string } }) {
 
               <div style={{ height: '50vh', maxHeight: 576 }}>
                 <Canvas shadows ref={canvas} camera={{ fov: 20 }}>
-                  <InfiniteGridHelper
-                    size1={1 / 5}
-                    size2={1}
-                    distance={20}
-                    color={new Color('#ffffff')}
-                  />
-                  <InfiniteGridHelper
-                    position={[0, 1e-4, 0]}
-                    size1={0}
-                    size2={100}
-                    distance={25}
-                    color={new Color('red')}
-                  />
                   <Controls enabled={controlsEnabled} fit={hullContainer} />
+                  <SceneProps />
 
-                  {/* I really like apartment, dawn, and sunset */}
-                  <directionalLight
-                    position={[1, 1, -1]}
-                    intensity={1}
-                    castShadow
-                  />
-                  <directionalLight
-                    position={[-1, 1, 1]}
-                    intensity={2}
-                    castShadow
-                  />
-                  <ambientLight intensity={0.25} />
-
-                  <group
+                  <HullContainer
+                    objects={gltf.scene.children[0].children}
+                    yaw={hullYaw}
                     ref={hullContainer}
-                    rotation={[-Math.PI / 2, 0, hullYaw]}
+                    onYawStart={() => setControlsEnabled(false)}
+                    onYawEnd={(yaw) => {
+                      setControlsEnabled(true);
+                      setHullYaw(yaw);
+                    }}
                   >
-                    {gltf.scene.children[0].children.map((child) => {
-                      const isHull = child.name === 'hull';
-                      const isWheel = child.name.startsWith('chassis_wheel_');
-                      const isTrack = child.name.startsWith('chassis_track_');
-                      const isVisible = isHull || isWheel || isTrack;
-                      let draftHullYaw = 0;
-
-                      function handlePointerDown(
-                        event: ThreeEvent<PointerEvent>,
-                      ) {
-                        event.stopPropagation();
-                        draftHullYaw = hullYaw;
-                        setControlsEnabled(false);
-                        window.addEventListener(
-                          'pointermove',
-                          handlePointerMove,
-                        );
-                        window.addEventListener('pointerup', handlePointerUp);
-                      }
-                      function handlePointerMove(event: PointerEvent) {
-                        draftHullYaw +=
-                          event.movementX *
-                          ((2 * Math.PI) / canvas.current!.width);
-
-                        if (hullContainer.current) {
-                          hullContainer.current.rotation.z = draftHullYaw;
-                        }
-                      }
-                      function handlePointerUp() {
-                        setControlsEnabled(true);
-                        setHullYaw(normalizeAnglePI(draftHullYaw));
-                        window.removeEventListener(
-                          'pointermove',
-                          handlePointerMove,
-                        );
-                        window.removeEventListener(
-                          'pointerup',
-                          handlePointerUp,
-                        );
-                      }
-
-                      if (!isVisible) return null;
-                      return (
-                        <mesh
-                          children={resolveJsxTree(child as Mesh)}
-                          key={child.uuid}
-                          castShadow
-                          receiveShadow
-                          geometry={(child as Mesh).geometry}
-                          material={(child as Mesh).material}
-                          position={child.position}
-                          rotation={child.rotation}
-                          scale={child.scale}
-                          onPointerDown={handlePointerDown}
-                        />
-                      );
-                    })}
-
-                    <group
-                      position={new Vector3()
-                        .sub(turretOrigin)
-                        .applyAxisAngle(new Vector3(0, 0, 1), turretYaw)
-                        .add(turretOrigin)}
-                      rotation={[0, 0, turretYaw]}
+                    <TurretContainer
                       ref={turretContainer}
+                      objects={gltf.scene.children[0].children}
+                      model={turretModelDefinition.model}
+                      onYawStart={() => setControlsEnabled(false)}
+                      onYawEnd={(yaw) => {
+                        setControlsEnabled(true);
+                        setTurretYaw(yaw);
+                      }}
+                      origin={turretOrigin}
+                      yaw={turretYaw}
                     >
-                      {gltf.scene.children[0].children.map((child) => {
-                        const isTurret = child.name.startsWith('turret_');
-                        const isCurrentTurret =
-                          child.name ===
-                          `turret_${turretModelDefinition.model
-                            .toString()
-                            .padStart(2, '0')}`;
-                        const isVisible = isCurrentTurret;
-                        let draftTurretYaw = 0;
-
-                        function handlePointerDown(
-                          event: ThreeEvent<PointerEvent>,
-                        ) {
-                          event.stopPropagation();
-
-                          if (isTurret) {
-                            setControlsEnabled(false);
-                            draftTurretYaw = turretYaw;
-                            window.addEventListener(
-                              'pointermove',
-                              handlePointerMove,
-                            );
-                            window.addEventListener(
-                              'pointerup',
-                              handlePointerUp,
-                            );
-                          }
-                        }
-                        function handlePointerMove(event: PointerEvent) {
-                          draftTurretYaw +=
-                            event.movementX *
-                            ((2 * Math.PI) / canvas.current!.width);
-
-                          if (turretContainer.current) {
-                            turretContainer.current.position
-                              .set(0, 0, 0)
-                              .sub(turretOrigin)
-                              .applyAxisAngle(
-                                new Vector3(0, 0, 1),
-                                draftTurretYaw,
-                              )
-                              .add(turretOrigin);
-                            turretContainer.current.rotation.z = draftTurretYaw;
-                          }
-                        }
-                        function handlePointerUp() {
-                          setTurretYaw(normalizeAnglePI(draftTurretYaw));
+                      <GunContainer
+                        onPitchStart={() => setControlsEnabled(false)}
+                        pitchLimits={gunModelDefinition.pitch}
+                        turretContainer={turretContainer}
+                        turretYaw={turretYaw}
+                        onPitchEnd={(pitch, yaw) => {
                           setControlsEnabled(true);
-                          window.removeEventListener(
-                            'pointermove',
-                            handlePointerMove,
-                          );
-                          window.removeEventListener(
-                            'pointerup',
-                            handlePointerUp,
-                          );
-                        }
-
-                        if (!isVisible) return null;
-                        return (
-                          <mesh
-                            visible={isVisible}
-                            onPointerDown={handlePointerDown}
-                            children={resolveJsxTree(child as Mesh)}
-                            key={child.uuid}
-                            castShadow
-                            receiveShadow
-                            geometry={(child as Mesh).geometry}
-                            material={(child as Mesh).material}
-                            position={child.position}
-                            rotation={child.rotation}
-                            scale={child.scale}
-                          />
-                        );
-                      })}
-
-                      <group
-                        position={new Vector3()
-                          .sub(turretOrigin)
-                          .sub(gunOrigin)
-                          .applyAxisAngle(new Vector3(1, 0, 0), gunPitch)
-                          .add(turretOrigin)
-                          .add(gunOrigin)}
-                        rotation={[gunPitch, 0, 0]}
-                        ref={gunContainer}
-                      >
-                        {gltf.scene.children[0].children.map((child) => {
-                          const isCurrentMantlet =
-                            child.name ===
-                            `gun_${gunModelDefinition.model
-                              .toString()
-                              .padStart(2, '0')}_mask`;
-                          const isCurrentGun =
-                            child.name ===
-                            `gun_${gunModelDefinition.model
-                              .toString()
-                              .padStart(2, '0')}`;
-                          const isVisible = isCurrentGun || isCurrentMantlet;
-                          let draftMantletPitch = 0;
-                          let draftTurretYaw = 0;
-
-                          function handlePointerDown(
-                            event: ThreeEvent<PointerEvent>,
-                          ) {
-                            event.stopPropagation();
-
-                            setControlsEnabled(false);
-                            draftMantletPitch = gunPitch;
-                            draftTurretYaw = turretYaw;
-                            window.addEventListener(
-                              'pointermove',
-                              handlePointerMove,
-                            );
-                            window.addEventListener(
-                              'pointerup',
-                              handlePointerUp,
-                            );
-                          }
-                          function handlePointerMove(event: PointerEvent) {
-                            if (turretModelDefinition.yaw) {
-                              draftTurretYaw = clamp(
-                                draftTurretYaw +
-                                  event.movementX *
-                                    (Math.PI / canvas.current!.width),
-                                -turretModelDefinition.yaw.max *
-                                  (Math.PI / 180),
-                                -turretModelDefinition.yaw.min *
-                                  (Math.PI / 180),
-                              );
-                            } else {
-                              draftTurretYaw +=
-                                event.movementX *
-                                ((2 * Math.PI) / canvas.current!.width);
-                            }
-                            draftMantletPitch = clamp(
-                              draftMantletPitch -
-                                event.movementY *
-                                  (Math.PI / canvas.current!.height),
-                              -gunModelDefinition.pitch.max * (Math.PI / 180),
-                              -gunModelDefinition.pitch.min * (Math.PI / 180),
-                            );
-
-                            if (gunContainer.current) {
-                              gunContainer.current.position
-                                .set(0, 0, 0)
-                                .sub(turretOrigin)
-                                .sub(gunOrigin)
-                                .applyAxisAngle(
-                                  new Vector3(1, 0, 0),
-                                  draftMantletPitch,
-                                )
-                                .add(turretOrigin)
-                                .add(gunOrigin);
-                              gunContainer.current.rotation.x =
-                                draftMantletPitch;
-                            }
-
-                            if (turretContainer.current) {
-                              turretContainer.current.position
-                                .set(0, 0, 0)
-                                .sub(turretOrigin)
-                                .applyAxisAngle(
-                                  new Vector3(0, 0, 1),
-                                  draftTurretYaw,
-                                )
-                                .add(turretOrigin);
-                              turretContainer.current.rotation.z =
-                                draftTurretYaw;
-                            }
-                          }
-                          function handlePointerUp() {
-                            setControlsEnabled(true);
-                            setGunPitch(normalizeAnglePI(draftMantletPitch));
-                            setTurretYaw(normalizeAnglePI(draftTurretYaw));
-                            window.removeEventListener(
-                              'pointermove',
-                              handlePointerMove,
-                            );
-                            window.removeEventListener(
-                              'pointerup',
-                              handlePointerUp,
-                            );
-                          }
-
-                          if (!isVisible) return null;
-                          return (
-                            <mesh
-                              visible={isVisible}
-                              onPointerDown={handlePointerDown}
-                              children={resolveJsxTree(child as Mesh)}
-                              key={child.uuid}
-                              castShadow
-                              receiveShadow
-                              geometry={(child as Mesh).geometry}
-                              material={(child as Mesh).material}
-                              position={child.position}
-                              rotation={child.rotation}
-                              scale={child.scale}
-                            />
-                          );
-                        })}
-                      </group>
-                    </group>
-                  </group>
+                          setGunPitch(pitch);
+                          setTurretYaw(yaw);
+                        }}
+                        yawLimits={turretModelDefinition.yaw}
+                        gunOrigin={gunOrigin}
+                        gunPitch={gunPitch}
+                        model={gunModelDefinition.model}
+                        objects={gltf.scene.children[0].children}
+                        turretOrigin={turretOrigin}
+                      />
+                    </TurretContainer>
+                  </HullContainer>
                 </Canvas>
               </div>
 

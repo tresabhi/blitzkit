@@ -587,7 +587,8 @@ if (allTargets || targets?.includes('tankModels')) {
 
         // if (id !== 15697) continue; // chieftain TODO: investigate vertices stream over read
         // if (id !== 24609) continue; // concept 1b
-        if (id !== 7425) continue; // isu 152
+        // if (id !== 7425) continue; // isu 152
+        if (id !== 10369) continue; // mino
         // if (id !== 4417) continue; // amx m4 mle
         // if (id !== 7297) continue; // 60tp
         // if (id !== 1) continue; // t-34
