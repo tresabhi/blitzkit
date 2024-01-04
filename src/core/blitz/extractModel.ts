@@ -1,4 +1,5 @@
 import { Document, Material, Node, Scene } from '@gltf-transform/core';
+import { writeFile } from 'fs/promises';
 import { range, times } from 'lodash';
 import { dirname } from 'path';
 import {
@@ -14,9 +15,9 @@ import { ScgStream, vertexAttributeVectorSizes } from '../streams/scg';
 import { VertexAttribute } from '../streams/scpg';
 import { readDVPLFile } from './readDVPLFile';
 
-// BigInt.prototype.toJSON = function () {
-//   return this.toString();
-// };
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};
 
 const MAX_FLOAT32 = 2 ** 127 * (2 - 2 ** -23);
 
@@ -57,6 +58,8 @@ export async function extractModel(
   const scene = document.createScene();
   const buffer = document.createBuffer();
   const materials = new Map<bigint, Material | bigint>();
+
+  writeFile('test.sc2.json', JSON.stringify(sc2, null, 2));
 
   // create materials
   await Promise.all(
@@ -208,7 +211,7 @@ export async function extractModel(
           }
 
           case 'RenderComponent': {
-            let minLODDistanceBatchId: undefined | number = undefined;
+            let minLODDistanceBatchId: undefined | number;
 
             if (component['rc.renderObj']['rb0.lodIndex'] === -1) {
               minLODDistanceBatchId = 0;
@@ -226,6 +229,8 @@ export async function extractModel(
 
               let minLODDistance = Infinity;
               let isFirstMaxFloat = true;
+              let lodIndexStreak = 0;
+              let lodIndexStreakIndex: undefined | number = undefined;
 
               range(component['rc.renderObj']['ro.batchCount']).forEach(
                 (id) => {
@@ -234,8 +239,16 @@ export async function extractModel(
                   const lodDistance =
                     lodList['lc.loddist'][`distance${lodIndex}`];
 
+                  if (lodIndexStreakIndex === lodIndex) {
+                    lodIndexStreak++;
+                  } else {
+                    lodIndexStreak = 0;
+                    lodIndexStreakIndex = lodIndex;
+                  }
+
                   if (
-                    lodDistance <= minLODDistance ||
+                    lodDistance < minLODDistance ||
+                    (lodDistance === minLODDistance && lodIndexStreak > 0) ||
                     (lodDistance === MAX_FLOAT32 && isFirstMaxFloat)
                   ) {
                     if (lodDistance === MAX_FLOAT32) isFirstMaxFloat = false;
@@ -244,6 +257,10 @@ export async function extractModel(
                   }
                 },
               );
+            }
+
+            if (hierarchy.name === 'chassis_track_L') {
+              console.log(minLODDistanceBatchId);
             }
 
             const batch =
