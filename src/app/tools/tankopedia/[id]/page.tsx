@@ -19,18 +19,16 @@ import {
   Theme,
   Tooltip,
 } from '@radix-ui/themes';
-import { Canvas, useLoader } from '@react-three/fiber';
+import { Canvas } from '@react-three/fiber';
 import { go } from 'fuzzysort';
 import { debounce } from 'lodash';
 import Link from 'next/link';
-import { use, useRef, useState } from 'react';
+import { Suspense, use, useRef, useState } from 'react';
 import { Group, Vector3 } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Flag } from '../../../../components/Flag';
 import { ModuleButtons } from '../../../../components/ModuleButton';
 import PageWrapper from '../../../../components/PageWrapper';
 import { asset } from '../../../../core/blitzkrieg/asset';
-import { modelDefinitions } from '../../../../core/blitzkrieg/modelDefinitions';
 import {
   TIER_ROMAN_NUMERALS,
   tankDefinitions,
@@ -38,30 +36,24 @@ import {
 } from '../../../../core/blitzkrieg/tankDefinitions';
 import * as styles from '../page.css';
 import { Controls } from './components/Control';
-import { GunContainer } from './components/GunContainer';
-import { HullContainer } from './components/HullContainer';
+import { Loader } from './components/Loader';
 import { RotationInputs } from './components/RotationInputs';
 import { SceneProps } from './components/SceneProps';
-import { TurretContainer } from './components/TurretContainer';
+import { TankModel } from './components/TankModel';
 
 const X_AXIS = new Vector3(1, 0, 0);
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = parseInt(params.id);
   const awaitedTankDefinitions = use(tankDefinitions);
-  const awaitedModelDefinitions = use(modelDefinitions);
   const awaitedTankNamesDiacritics = use(tankNamesDiacritics);
   const tank = awaitedTankDefinitions[id];
-  const tankModelDefinition = awaitedModelDefinitions[id];
   const [turret, setTurret] = useState(tank.turrets.at(-1)!);
-  const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const [gun, setGun] = useState(turret.guns.at(-1)!);
-  const gunModelDefinition = turretModelDefinition.guns[gun.id];
   const [crew, setCrew] = useState(100);
   const [mode, setMode] = useState('model');
   const versusTankSearchInput = useRef<HTMLInputElement>(null);
   const hullContainer = useRef<Group>(null);
-  const turretContainer = useRef<Group>(null);
   const [versusTankSearchResults, setVersusTankSearchResults] = useState<
     number[]
   >([]);
@@ -70,22 +62,6 @@ export default function Page({ params }: { params: { id: string } }) {
   const [versusGun, setVersusGun] = useState(versusTurret.guns.at(-1)!);
   const [versusTankTab, setVersusTankTab] = useState('search');
   const canvas = useRef<HTMLCanvasElement>(null);
-  const gltf = useLoader(GLTFLoader, `/test/${id}.glb`);
-  const turretOrigin = new Vector3(
-    tankModelDefinition.turretOrigin[0],
-    tankModelDefinition.turretOrigin[1],
-    -tankModelDefinition.turretOrigin[2],
-  ).applyAxisAngle(X_AXIS, Math.PI / 2);
-  const gunOrigin = new Vector3(
-    turretModelDefinition.gunOrigin[0],
-    turretModelDefinition.gunOrigin[1],
-    -turretModelDefinition.gunOrigin[2],
-  ).applyAxisAngle(X_AXIS, Math.PI / 2);
-  const [turretYaw, setTurretYaw] = useState(0);
-  const [hullYaw, setHullYaw] = useState(0);
-  const [gunPitch, setGunPitch] = useState(0);
-  const [controlsEnabled, setControlsEnabled] = useState(true);
-  const gunContainer = useRef<Group>(null);
 
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);
@@ -138,63 +114,17 @@ export default function Page({ params }: { params: { id: string } }) {
                   camera={{ fov: 20 }}
                   onPointerDown={handlePointerDown}
                 >
-                  <Controls fit={hullContainer} />
-                  <SceneProps />
+                  <Controls />
 
-                  <HullContainer
-                    objects={gltf.scene.children[0].children}
-                    yaw={hullYaw}
-                    ref={hullContainer}
-                    onYawStart={() => setControlsEnabled(false)}
-                    onYawEnd={(yaw) => {
-                      setControlsEnabled(true);
-                      setHullYaw(yaw);
-                    }}
-                    onTrackStart={() => setControlsEnabled(false)}
-                    onTrackEnd={() => setControlsEnabled(true)}
-                  >
-                    <TurretContainer
-                      initialTurretRotation={tankModelDefinition.turretRotation}
-                      gunOrigin={gunOrigin}
-                      ref={turretContainer}
-                      objects={gltf.scene.children[0].children}
-                      model={turretModelDefinition.model}
-                      onYawStart={() => setControlsEnabled(false)}
-                      yawLimits={turretModelDefinition.yaw}
-                      pitchLimits={gunModelDefinition.pitch}
-                      pitch={gunPitch}
-                      onYawEnd={(pitch, yaw) => {
-                        setControlsEnabled(true);
-                        setGunPitch(pitch);
-                        setTurretYaw(yaw);
-                      }}
-                      gunContainer={gunContainer}
-                      turretOrigin={turretOrigin}
-                      yaw={turretYaw}
-                    >
-                      <GunContainer
-                        ref={gunContainer}
-                        initialTurretRotation={
-                          tankModelDefinition.turretRotation
-                        }
-                        onPitchStart={() => setControlsEnabled(false)}
-                        pitchLimits={gunModelDefinition.pitch}
-                        turretContainer={turretContainer}
-                        yaw={turretYaw}
-                        onPitchEnd={(pitch, yaw) => {
-                          setControlsEnabled(true);
-                          setGunPitch(pitch);
-                          setTurretYaw(yaw);
-                        }}
-                        yawLimits={turretModelDefinition.yaw}
-                        gunOrigin={gunOrigin}
-                        pitch={gunPitch}
-                        model={gunModelDefinition.model}
-                        objects={gltf.scene.children[0].children}
-                        turretOrigin={turretOrigin}
-                      />
-                    </TurretContainer>
-                  </HullContainer>
+                  <Suspense fallback={<Loader />}>
+                    <SceneProps />
+                    <TankModel
+                      gunId={gun.id}
+                      tankId={tank.id}
+                      turretId={turret.id}
+                      ref={hullContainer}
+                    />
+                  </Suspense>
                 </Canvas>
               </div>
 
@@ -218,7 +148,7 @@ export default function Page({ params }: { params: { id: string } }) {
               <Flex gap="1">
                 {tank.turrets.map((thisTurret) => {
                   return (
-                    <Tooltip content={thisTurret.name}>
+                    <Tooltip content={thisTurret.name} key={thisTurret.id}>
                       <Button
                         onClick={() => {
                           setTurret(thisTurret);
@@ -239,9 +169,9 @@ export default function Page({ params }: { params: { id: string } }) {
               </Flex>
 
               <Flex gap="1">
-                {turret.guns.map((thisGun, index) => {
+                {turret.guns.map((thisGun) => {
                   return (
-                    <Tooltip content={thisGun.name}>
+                    <Tooltip content={thisGun.name} key={thisGun.id}>
                       <Button
                         onClick={() => setGun(thisGun)}
                         variant={gun.id === thisGun.id ? 'solid' : 'soft'}
@@ -371,7 +301,10 @@ export default function Page({ params }: { params: { id: string } }) {
                                 <Flex gap="2" wrap="wrap">
                                   <Flex>
                                     {versusTank.turrets.map((turret, index) => (
-                                      <Tooltip content={turret.name}>
+                                      <Tooltip
+                                        content={turret.name}
+                                        key={turret.id}
+                                      >
                                         <ModuleButtons
                                           key={id}
                                           onClick={() => {
@@ -404,7 +337,7 @@ export default function Page({ params }: { params: { id: string } }) {
                                   </Flex>
                                   <Flex>
                                     {versusTurret.guns.map((gun, index) => (
-                                      <Tooltip content={gun.name}>
+                                      <Tooltip content={gun.name} key={gun.id}>
                                         <ModuleButtons
                                           key={id}
                                           onClick={() => setVersusGun(gun)}
@@ -519,7 +452,7 @@ export default function Page({ params }: { params: { id: string } }) {
           <Heading size="5">Shells</Heading>
 
           {gun.shells.map((shell) => (
-            <Text>
+            <Text key={shell.id}>
               {shell.name} ({shell.type}): {shell.damage.armor}
             </Text>
           ))}

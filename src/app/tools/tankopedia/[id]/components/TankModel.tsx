@@ -1,9 +1,18 @@
 import { useLoader } from '@react-three/fiber';
-import { forwardRef, use, useImperativeHandle, useRef } from 'react';
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { Group, Vector3 } from 'three';
 import { GLTFLoader } from 'three-stdlib';
 import { X_AXIS } from '../../../../../constants/axis';
-import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
+import {
+  ModelDefinitions,
+  modelDefinitions,
+} from '../../../../../core/blitzkrieg/modelDefinitions';
 import mutateTankopedia, {
   useTankopedia,
 } from '../../../../../stores/tankopedia';
@@ -11,22 +20,33 @@ import { GunContainer } from './GunContainer';
 import { HullContainer } from './HullContainer';
 import { TurretContainer } from './TurretContainer';
 
-interface ModelProps {
+interface TankModelProps {
   tankId: number;
-  gunId: number;
   turretId: number;
+  gunId: number;
 }
 
-export const Model = forwardRef<Group, ModelProps>(
-  ({ gunId, tankId, turretId }, ref) => {
-    const awaitedModelDefinitions = use(modelDefinitions);
-    const model = useTankopedia((state) => state.model);
+export const TankModel = forwardRef<Group, TankModelProps>(
+  ({ tankId, turretId, gunId }, ref) => {
+    // "TypeError: dispatcher.use is not a function"
+    // const awaitedModelDefinitions = use(modelDefinitions);
+    const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
+      ModelDefinitions | undefined
+    >(undefined);
     const gltf = useLoader(GLTFLoader, `/test/${tankId}.glb`);
-    const gunContainer = useRef<Group>(null);
+    const model = useTankopedia((state) => state.model);
     const hullContainer = useRef<Group>(null);
     const turretContainer = useRef<Group>(null);
+    const gunContainer = useRef<Group>(null);
 
     useImperativeHandle(ref, () => hullContainer.current!);
+    useEffect(() => {
+      (async () => {
+        setAwaitedModelDefinitions(await modelDefinitions);
+      })();
+    }, []);
+
+    if (!awaitedModelDefinitions) return null;
 
     const tankModelDefinition = awaitedModelDefinitions[tankId];
     const turretModelDefinition = tankModelDefinition.turrets[turretId];
@@ -48,24 +68,24 @@ export const Model = forwardRef<Group, ModelProps>(
         yaw={model.hullYaw}
         ref={hullContainer}
         onYawStart={() =>
-          mutateTankopedia((state) => {
-            state.model.controlsEnabled = false;
+          mutateTankopedia((draft) => {
+            draft.model.controlsEnabled = false;
           })
         }
         onYawEnd={(yaw) => {
-          mutateTankopedia((state) => {
-            state.model.controlsEnabled = true;
-            state.model.hullYaw = yaw;
+          mutateTankopedia((draft) => {
+            draft.model.controlsEnabled = true;
+            draft.model.hullYaw = yaw;
           });
         }}
         onTrackStart={() => {
-          mutateTankopedia((state) => {
-            state.model.controlsEnabled = false;
+          mutateTankopedia((draft) => {
+            draft.model.controlsEnabled = false;
           });
         }}
         onTrackEnd={() => {
-          mutateTankopedia((state) => {
-            state.model.controlsEnabled = true;
+          mutateTankopedia((draft) => {
+            draft.model.controlsEnabled = true;
           });
         }}
       >

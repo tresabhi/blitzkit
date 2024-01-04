@@ -2,6 +2,7 @@ import {
   amberDark,
   blueDark,
   orangeDark,
+  purpleDark,
   slate,
   slateDark,
   slateDarkA,
@@ -20,6 +21,7 @@ export const theme = {
 
     ...createColors(amberDark, 'amber'),
     ...createColors(orangeDark, 'orange'),
+    ...createColors(purpleDark, 'purple'),
     ...createColors(blueDark, 'blue'),
     ...createColors(tealDark, 'teal'),
   },
