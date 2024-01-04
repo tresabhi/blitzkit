@@ -1,5 +1,4 @@
 import { Document, Material, Node, Scene } from '@gltf-transform/core';
-import { writeFile } from 'fs/promises';
 import { range, times } from 'lodash';
 import { dirname } from 'path';
 import {
@@ -14,10 +13,6 @@ import { Hierarchy, Sc2Stream, Textures } from '../streams/sc2';
 import { ScgStream, vertexAttributeVectorSizes } from '../streams/scg';
 import { VertexAttribute } from '../streams/scpg';
 import { readDVPLFile } from './readDVPLFile';
-
-BigInt.prototype.toJSON = function () {
-  return this.toString();
-};
 
 const MAX_FLOAT32 = 2 ** 127 * (2 - 2 ** -23);
 
@@ -58,8 +53,6 @@ export async function extractModel(
   const scene = document.createScene();
   const buffer = document.createBuffer();
   const materials = new Map<bigint, Material | bigint>();
-
-  writeFile('test.sc2.json', JSON.stringify(sc2, null, 2));
 
   // create materials
   await Promise.all(
@@ -259,10 +252,6 @@ export async function extractModel(
               );
             }
 
-            if (hierarchy.name === 'chassis_track_L') {
-              console.log(minLODDistanceBatchId);
-            }
-
             const batch =
               component['rc.renderObj']['ro.batches'][
                 minLODDistanceBatchId!.toString().padStart(4, '0')
@@ -314,7 +303,7 @@ export async function extractModel(
 
             indexedAttributes.forEach((attribute) => {
               const name = vertexAttributeGLTFName[attribute];
-              if (!name) return; // no equivalent GLTF attribute
+              if (!name || primitive.getAttribute(name)) return;
               const vertexSize = vertexAttributeGltfVectorSizes[attribute];
 
               const attributeAccessor = document
