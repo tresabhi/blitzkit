@@ -109,7 +109,9 @@ export default function Page({ params }: { params: { id: string } }) {
   function handlePointerMove(event: PointerEvent) {
     event.preventDefault();
   }
-  function handlePointerUp() {
+  function handlePointerUp(event: PointerEvent) {
+    event.preventDefault();
+
     window.removeEventListener('pointermove', handlePointerMove);
     window.removeEventListener('pointerup', handlePointerUp);
   }
@@ -167,6 +169,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     onTrackEnd={() => setControlsEnabled(true)}
                   >
                     <TurretContainer
+                      initialTurretRotation={tankModelDefinition.turretRotation}
                       gunOrigin={gunOrigin}
                       ref={turretContainer}
                       objects={gltf.scene.children[0].children}
@@ -186,6 +189,9 @@ export default function Page({ params }: { params: { id: string } }) {
                     >
                       <GunContainer
                         ref={gunContainer}
+                        initialTurretRotation={
+                          tankModelDefinition.turretRotation
+                        }
                         onPitchStart={() => setControlsEnabled(false)}
                         pitchLimits={gunModelDefinition.pitch}
                         turretContainer={turretContainer}

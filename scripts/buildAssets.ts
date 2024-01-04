@@ -97,9 +97,8 @@ type ShellDefinitionsList = Record<
 interface VehicleDefinitions {
   invisibility: { moving: number; still: number; firePenalty: number };
   hull: {
-    turretPositions: {
-      turret: string;
-    };
+    turretPositions: { turret: string };
+    turretInitialRotation?: { yaw: 0; pitch: 6.5; roll: 0 };
   };
   turrets0: {
     [key: string]: {
@@ -250,6 +249,13 @@ if (allTargets || targets?.includes('definitions')) {
 
         modelDefinitions[tankId] = {
           turretOrigin,
+          turretRotation: tankDefinition.root.hull.turretInitialRotation
+            ? {
+                yaw: tankDefinition.root.hull.turretInitialRotation.yaw,
+                pitch: tankDefinition.root.hull.turretInitialRotation.pitch,
+                roll: tankDefinition.root.hull.turretInitialRotation.roll,
+              }
+            : undefined,
           turrets: {},
         };
 
@@ -409,25 +415,25 @@ if (allTargets || targets?.includes('definitions')) {
   );
 
   console.log('Committing definitions...');
-  // await commitMultipleFiles(
-  //   'tresabhi',
-  //   'blitzkrieg-assets',
-  //   'main',
-  //   'definitions',
-  //   [
-  //     {
-  //       content: JSON.stringify(tankDefinitions),
-  //       encoding: 'utf-8',
-  //       path: 'definitions/tanks.json',
-  //     },
-  //     {
-  //       content: JSON.stringify(modelDefinitions),
-  //       encoding: 'utf-8',
-  //       path: 'definitions/models.json',
-  //     },
-  //   ],
-  //   true,
-  // );
+  await commitMultipleFiles(
+    'tresabhi',
+    'blitzkrieg-assets',
+    'main',
+    'definitions',
+    [
+      {
+        content: JSON.stringify(tankDefinitions),
+        encoding: 'utf-8',
+        path: 'definitions/tanks.json',
+      },
+      {
+        content: JSON.stringify(modelDefinitions),
+        encoding: 'utf-8',
+        path: 'definitions/models.json',
+      },
+    ],
+    true,
+  );
 }
 
 if (

@@ -7,8 +7,9 @@ import {
   useImperativeHandle,
   useRef,
 } from 'react';
-import { Group, Mesh, Object3D, Vector3 } from 'three';
+import { Euler, Group, Mesh, Object3D, Vector3 } from 'three';
 import {
+  InitialTurretRotation,
   PitchLimits,
   YawLimits,
 } from '../../../../../core/blitzkrieg/modelDefinitions';
@@ -28,6 +29,7 @@ interface TurretContainerProps {
   onYawStart: () => void;
   onYawEnd: (pitch: number, yaw: number) => void;
   gunContainer: RefObject<Group>;
+  initialTurretRotation?: InitialTurretRotation;
 }
 
 export const TurretContainer = forwardRef(
@@ -45,23 +47,37 @@ export const TurretContainer = forwardRef(
       gunOrigin,
       pitchLimits,
       onYawStart,
+      initialTurretRotation,
     }: TurretContainerProps,
     ref,
   ) => {
     const canvas = useThree((state) => state.gl.domElement);
     const turretContainer = useRef<Group>(null);
+    const position = new Vector3()
+      .sub(turretOrigin)
+      .applyAxisAngle(new Vector3(0, 0, 1), yaw);
+    const rotation = new Euler(0, 0, yaw);
+
+    if (initialTurretRotation) {
+      const pitch = -initialTurretRotation.pitch * (Math.PI / 180);
+      const yaw = -initialTurretRotation.yaw * (Math.PI / 180);
+      const roll = -initialTurretRotation.roll * (Math.PI / 180);
+
+      position
+        .applyAxisAngle(new Vector3(1, 0, 0), pitch)
+        .applyAxisAngle(new Vector3(0, 1, 0), roll)
+        .applyAxisAngle(new Vector3(0, 0, 1), yaw);
+      rotation.x += pitch;
+      rotation.y += roll;
+      rotation.z += yaw;
+    }
+
+    position.add(turretOrigin);
 
     useImperativeHandle(ref, () => turretContainer.current!);
 
     return (
-      <group
-        position={new Vector3()
-          .sub(turretOrigin)
-          .applyAxisAngle(new Vector3(0, 0, 1), yaw)
-          .add(turretOrigin)}
-        rotation={[0, 0, yaw]}
-        ref={turretContainer}
-      >
+      <group position={position} rotation={rotation} ref={turretContainer}>
         {objects.map((object) => {
           const isTurret = object.name.startsWith('turret_');
           const isCurrentTurret =
@@ -167,9 +183,21 @@ export const TurretContainer = forwardRef(
               turretContainer.current.position
                 .set(0, 0, 0)
                 .sub(turretOrigin)
-                .applyAxisAngle(new Vector3(0, 0, 1), draftYaw)
-                .add(turretOrigin);
+                .applyAxisAngle(new Vector3(0, 0, 1), draftYaw);
               turretContainer.current.rotation.z = draftYaw;
+
+              if (initialTurretRotation) {
+                const pitch = -initialTurretRotation.pitch * (Math.PI / 180);
+                const yaw = -initialTurretRotation.yaw * (Math.PI / 180);
+                const roll = -initialTurretRotation.roll * (Math.PI / 180);
+
+                turretContainer.current.position
+                  .applyAxisAngle(new Vector3(1, 0, 0), pitch)
+                  .applyAxisAngle(new Vector3(0, 1, 0), roll)
+                  .applyAxisAngle(new Vector3(0, 0, 1), yaw);
+              }
+
+              turretContainer.current.position.add(turretOrigin);
             }
           }
           function handlePointerUp() {

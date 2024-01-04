@@ -4,7 +4,13 @@ import { asset } from './asset';
 export type ModelDefinitions = Record<number, ModelDefinition>;
 interface ModelDefinition {
   turretOrigin: Vector3Tuple;
+  turretRotation?: InitialTurretRotation;
   turrets: Record<number, TurretModelDefinition>;
+}
+export interface InitialTurretRotation {
+  yaw: number;
+  pitch: number;
+  roll: number;
 }
 interface TurretModelDefinition {
   model: number;

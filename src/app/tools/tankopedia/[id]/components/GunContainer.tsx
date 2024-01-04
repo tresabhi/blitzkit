@@ -3,6 +3,7 @@ import { clamp } from 'lodash';
 import { RefObject, forwardRef, useImperativeHandle, useRef } from 'react';
 import { Group, Mesh, Object3D, Vector3 } from 'three';
 import {
+  InitialTurretRotation,
   PitchLimits,
   YawLimits,
 } from '../../../../../core/blitzkrieg/modelDefinitions';
@@ -20,6 +21,7 @@ interface GunContainerProps {
   pitchLimits: PitchLimits;
   onPitchStart: () => void;
   onPitchEnd: (pitch: number, yaw: number) => void;
+  initialTurretRotation?: InitialTurretRotation;
   turretContainer: RefObject<Group>;
 }
 
@@ -29,6 +31,7 @@ export const GunContainer = forwardRef<Group, GunContainerProps>(
       gunOrigin,
       turretOrigin,
       pitch,
+      initialTurretRotation,
       yaw,
       objects,
       yawLimits,
@@ -163,9 +166,21 @@ export const GunContainer = forwardRef<Group, GunContainerProps>(
               turretContainer.current.position
                 .set(0, 0, 0)
                 .sub(turretOrigin)
-                .applyAxisAngle(new Vector3(0, 0, 1), draftYaw)
-                .add(turretOrigin);
+                .applyAxisAngle(new Vector3(0, 0, 1), draftYaw);
               turretContainer.current.rotation.z = draftYaw;
+
+              if (initialTurretRotation) {
+                const pitch = -initialTurretRotation.pitch * (Math.PI / 180);
+                const yaw = -initialTurretRotation.yaw * (Math.PI / 180);
+                const roll = -initialTurretRotation.roll * (Math.PI / 180);
+
+                turretContainer.current.position
+                  .applyAxisAngle(new Vector3(1, 0, 0), pitch)
+                  .applyAxisAngle(new Vector3(0, 1, 0), roll)
+                  .applyAxisAngle(new Vector3(0, 0, 1), yaw);
+              }
+
+              turretContainer.current.position.add(turretOrigin);
             }
           }
           function handlePointerUp() {
