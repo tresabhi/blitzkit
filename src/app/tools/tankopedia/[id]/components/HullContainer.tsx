@@ -49,8 +49,6 @@ export const HullContainer = forwardRef<Group, HullContainerProps>(
             }
           }
           function handlePointerMoveHull(event: PointerEvent) {
-            event.preventDefault();
-
             draftHullYaw += event.movementX * ((2 * Math.PI) / canvas.width);
 
             if (hullContainer.current) {
@@ -63,13 +61,11 @@ export const HullContainer = forwardRef<Group, HullContainerProps>(
             window.removeEventListener('pointerup', handlePointerUpHull);
           }
           function handlePointerMoveTrack(event: PointerEvent) {
-            event.preventDefault();
-
             const mesh = object as Mesh;
             const material = mesh.material as MeshStandardMaterial;
             const offset = new Vector2(
               0,
-              -event.movementY * (6 / canvas.height) +
+              event.movementY * (6 / canvas.height) +
                 event.movementX * (6 / canvas.width),
             );
 

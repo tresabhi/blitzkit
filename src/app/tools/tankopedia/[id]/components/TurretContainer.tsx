@@ -83,8 +83,6 @@ export const TurretContainer = forwardRef(
             }
           }
           function handlePointerMove(event: PointerEvent) {
-            event.preventDefault();
-
             if (yawLimits) {
               draftYaw = clamp(
                 draftYaw + event.movementX * (Math.PI / canvas.width),

@@ -102,6 +102,18 @@ export default function Page({ params }: { params: { id: string } }) {
     gunPitchInput.current!.value = `${-Math.round(gunPitch * (180 / Math.PI))}`;
   }, [gunPitch]);
 
+  function handlePointerDown() {
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+  }
+  function handlePointerMove(event: PointerEvent) {
+    event.preventDefault();
+  }
+  function handlePointerUp() {
+    window.removeEventListener('pointermove', handlePointerMove);
+    window.removeEventListener('pointerup', handlePointerUp);
+  }
+
   return (
     <PageWrapper color="purple">
       <Flex gap="8" direction="column">
@@ -133,7 +145,12 @@ export default function Page({ params }: { params: { id: string } }) {
               </Tabs.Root>
 
               <div style={{ height: '50vh', maxHeight: 576 }}>
-                <Canvas shadows ref={canvas} camera={{ fov: 20 }}>
+                <Canvas
+                  shadows
+                  ref={canvas}
+                  camera={{ fov: 20 }}
+                  onPointerDown={handlePointerDown}
+                >
                   <Controls enabled={controlsEnabled} fit={hullContainer} />
                   <SceneProps />
 

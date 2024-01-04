@@ -75,8 +75,6 @@ export const GunContainer = forwardRef<Group, GunContainerProps>(
             window.addEventListener('pointerup', handlePointerUp);
           }
           function handlePointerMove(event: PointerEvent) {
-            event.preventDefault();
-
             if (yawLimits) {
               draftYaw = clamp(
                 draftYaw + event.movementX * (Math.PI / canvas.width),
