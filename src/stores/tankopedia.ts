@@ -19,6 +19,12 @@ type Tankopedia = {
     nations: string[];
     test: TankopediaTestTankDisplay;
   };
+  model: {
+    hullYaw: number;
+    turretYaw: number;
+    gunPitch: number;
+    controlsEnabled: boolean;
+  };
 };
 
 export const useTankopedia = create<Tankopedia>()(() => ({
@@ -32,6 +38,12 @@ export const useTankopedia = create<Tankopedia>()(() => ({
     treeTypes: [],
     nations: [],
     test: 'include',
+  },
+  model: {
+    gunPitch: 0,
+    hullYaw: 0,
+    turretYaw: 0,
+    controlsEnabled: true,
   },
 }));
 

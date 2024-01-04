@@ -21,9 +21,9 @@ import {
 } from '@radix-ui/themes';
 import { Canvas, useLoader } from '@react-three/fiber';
 import { go } from 'fuzzysort';
-import { clamp, debounce } from 'lodash';
+import { debounce } from 'lodash';
 import Link from 'next/link';
-import { use, useEffect, useRef, useState } from 'react';
+import { use, useRef, useState } from 'react';
 import { Group, Vector3 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Flag } from '../../../../components/Flag';
@@ -36,11 +36,11 @@ import {
   tankDefinitions,
   tankNamesDiacritics,
 } from '../../../../core/blitzkrieg/tankDefinitions';
-import { normalizeAnglePI } from '../../../../core/math/normalizeAngle180';
 import * as styles from '../page.css';
 import { Controls } from './components/Control';
 import { GunContainer } from './components/GunContainer';
 import { HullContainer } from './components/HullContainer';
+import { RotationInputs } from './components/RotationInputs';
 import { SceneProps } from './components/SceneProps';
 import { TurretContainer } from './components/TurretContainer';
 
@@ -85,22 +85,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [hullYaw, setHullYaw] = useState(0);
   const [gunPitch, setGunPitch] = useState(0);
   const [controlsEnabled, setControlsEnabled] = useState(true);
-  const turretYawInput = useRef<HTMLInputElement>(null);
-  const hullYawInput = useRef<HTMLInputElement>(null);
-  const gunPitchInput = useRef<HTMLInputElement>(null);
   const gunContainer = useRef<Group>(null);
-
-  useEffect(() => {
-    hullYawInput.current!.value = `${-Math.round(hullYaw * (180 / Math.PI))}`;
-  }, [hullYaw]);
-  useEffect(() => {
-    turretYawInput.current!.value = `${-Math.round(
-      turretYaw * (180 / Math.PI),
-    )}`;
-  }, [turretYaw]);
-  useEffect(() => {
-    gunPitchInput.current!.value = `${-Math.round(gunPitch * (180 / Math.PI))}`;
-  }, [gunPitch]);
 
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);
@@ -153,7 +138,7 @@ export default function Page({ params }: { params: { id: string } }) {
                   camera={{ fov: 20 }}
                   onPointerDown={handlePointerDown}
                 >
-                  <Controls enabled={controlsEnabled} fit={hullContainer} />
+                  <Controls fit={hullContainer} />
                   <SceneProps />
 
                   <HullContainer
@@ -220,104 +205,11 @@ export default function Page({ params }: { params: { id: string } }) {
                 </Flex>
               )}
 
-              <Flex
-                gap="2"
-                align="center"
-                style={{
-                  position: 'absolute',
-                  left: 16,
-                  bottom: 16,
-                }}
-              >
-                <TextField.Root
-                  variant="surface"
-                  style={{
-                    width: 115,
-                  }}
-                >
-                  <TextField.Slot>Hull</TextField.Slot>
-                  <TextField.Input
-                    defaultValue={Math.round(hullYaw * (180 / Math.PI))}
-                    onBlur={() => {
-                      const normalized = normalizeAnglePI(
-                        -Number(hullYawInput.current?.value) * (Math.PI / 180),
-                      );
-                      setHullYaw(normalized);
-                      hullYawInput.current!.value = `${Math.round(normalized)}`;
-                    }}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter') {
-                        hullYawInput.current?.blur();
-                      }
-                    }}
-                    onFocus={() => hullYawInput.current?.focus()}
-                    ref={hullYawInput}
-                    style={{ textAlign: 'right' }}
-                  />
-                  <TextField.Slot>°</TextField.Slot>
-                </TextField.Root>
-
-                <TextField.Root
-                  variant="surface"
-                  style={{
-                    width: 115,
-                  }}
-                >
-                  <TextField.Slot>Turret</TextField.Slot>
-                  <TextField.Input
-                    defaultValue={Math.round(turretYaw * (180 / Math.PI))}
-                    onBlur={() => {
-                      const normalized = normalizeAnglePI(
-                        -Number(turretYawInput.current?.value) *
-                          (Math.PI / 180),
-                      );
-                      setTurretYaw(normalized);
-                      turretYawInput.current!.value = `${Math.round(
-                        normalized,
-                      )}`;
-                    }}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter') {
-                        turretYawInput.current?.blur();
-                      }
-                    }}
-                    onFocus={() => turretYawInput.current?.focus()}
-                    ref={turretYawInput}
-                    style={{ textAlign: 'right' }}
-                  />
-                  <TextField.Slot>°</TextField.Slot>
-                </TextField.Root>
-
-                <TextField.Root
-                  variant="surface"
-                  style={{
-                    width: 115,
-                  }}
-                >
-                  <TextField.Slot>Gun</TextField.Slot>
-                  <TextField.Input
-                    defaultValue={-Math.round(gunPitch * (180 / Math.PI))}
-                    onBlur={() => {
-                      const clamped = clamp(
-                        Number(gunPitchInput.current?.value),
-                        gunModelDefinition.pitch.min,
-                        gunModelDefinition.pitch.max,
-                      );
-                      setGunPitch(-clamped * (Math.PI / 180));
-                      gunPitchInput.current!.value = `${Math.round(clamped)}`;
-                    }}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter') {
-                        gunPitchInput.current?.blur();
-                      }
-                    }}
-                    onFocus={() => gunPitchInput.current?.focus()}
-                    ref={gunPitchInput}
-                    style={{ textAlign: 'right' }}
-                  />
-                  <TextField.Slot>°</TextField.Slot>
-                </TextField.Root>
-              </Flex>
+              <RotationInputs
+                gunId={gun.id}
+                tankId={tank.id}
+                turretId={turret.id}
+              />
             </Flex>
           </Card>
 
