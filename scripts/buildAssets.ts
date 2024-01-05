@@ -603,7 +603,10 @@ if (allTargets || targets?.includes('tankModels')) {
         // if (id !== 5137) continue; // tiger ii
         // if (id !== 11633) continue; // forest witch
         // if (id !== 6225) continue; // fv215b
-        if (id !== 4481) continue; // kran
+        // if (id !== 4481) continue; // kran
+        // if (id !== 9489) continue; // e100
+        // if (id !== 12049) continue; // jg e100
+        if (id !== 13569) continue; // jg e100
 
         console.log(`Building model ${id} @ ${nation}/${tankIndex}`);
 
