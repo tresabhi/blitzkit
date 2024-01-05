@@ -19,6 +19,7 @@ import {
   Theme,
   Tooltip,
 } from '@radix-ui/themes';
+import { Html } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { go } from 'fuzzysort';
 import { debounce } from 'lodash';
@@ -34,9 +35,10 @@ import {
   tankDefinitions,
   tankNamesDiacritics,
 } from '../../../../core/blitzkrieg/tankDefinitions';
+import { theme } from '../../../../stitches.config';
+import { Loader } from '../../components/Loader';
 import * as styles from '../page.css';
 import { Controls } from './components/Control';
-import { Loader } from './components/Loader';
 import { RotationInputs } from './components/RotationInputs';
 import { SceneProps } from './components/SceneProps';
 import { TankModel } from './components/TankModel';
@@ -115,9 +117,18 @@ export default function Page({ params }: { params: { id: string } }) {
                   onPointerDown={handlePointerDown}
                 >
                   <Controls />
+                  <SceneProps />
 
-                  <Suspense fallback={<Loader />}>
-                    <SceneProps />
+                  <Suspense
+                    fallback={
+                      <Html center position={[0, 1.5, 0]}>
+                        <Loader
+                          naked
+                          color={theme.colors.textHighContrast_purple}
+                        />
+                      </Html>
+                    }
+                  >
                     <TankModel
                       gunId={gun.id}
                       tankId={tank.id}

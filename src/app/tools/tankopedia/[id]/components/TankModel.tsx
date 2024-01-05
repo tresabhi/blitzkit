@@ -64,7 +64,7 @@ export const TankModel = forwardRef<Group, TankModelProps>(
 
     return (
       <HullContainer
-        objects={gltf.scene.children[0].children}
+        objects={Object.values(gltf.nodes)}
         yaw={model.hullYaw}
         ref={hullContainer}
         onYawStart={() =>
@@ -93,7 +93,7 @@ export const TankModel = forwardRef<Group, TankModelProps>(
           initialTurretRotation={tankModelDefinition.turretRotation}
           gunOrigin={gunOrigin}
           ref={turretContainer}
-          objects={gltf.scene.children[0].children}
+          objects={Object.values(gltf.nodes)}
           model={turretModelDefinition.model}
           onYawStart={() =>
             mutateTankopedia((state) => {
@@ -136,7 +136,7 @@ export const TankModel = forwardRef<Group, TankModelProps>(
             gunOrigin={gunOrigin}
             pitch={model.gunPitch}
             model={gunModelDefinition.model}
-            objects={gltf.scene.children[0].children}
+            objects={Object.values(gltf.nodes)}
             turretOrigin={turretOrigin}
           />
         </TurretContainer>

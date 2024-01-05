@@ -1,9 +1,10 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { TOOLS } from '../../constants/tools';
 import { theme } from '../../stitches.config';
+import { Loader } from './components/Loader';
 
 interface ToolsLayoutProps {
   children: ReactNode;
@@ -63,7 +64,7 @@ export default function ToolsLayout({ children }: ToolsLayoutProps) {
         </span>
       </div>
 
-      {children}
+      <Suspense fallback={<Loader />}>{children}</Suspense>
     </>
   );
 }
