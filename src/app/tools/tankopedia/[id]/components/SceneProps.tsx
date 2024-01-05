@@ -18,8 +18,8 @@ export function SceneProps() {
         color={new Color('red')}
       />
 
-      <directionalLight position={[1, 1, -1]} intensity={1} castShadow />
-      <directionalLight position={[-1, 1, 1]} intensity={2} castShadow />
+      <directionalLight position={[1, 1, -1]} intensity={2} castShadow />
+      <directionalLight position={[-1, 1, 1]} intensity={1} castShadow />
       <ambientLight intensity={0.25} />
     </>
   );
