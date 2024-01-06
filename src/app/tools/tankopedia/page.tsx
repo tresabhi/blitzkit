@@ -16,6 +16,7 @@ import {
   TextField,
 } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
+import Link from 'next/link';
 import { Suspense, use, useEffect, useMemo, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
 import { asset } from '../../../core/blitzkrieg/asset';
@@ -198,7 +199,7 @@ export default function Page() {
         <Flex wrap="wrap" gap="3" justify="center">
           {searchedList
             .map((tank) => (
-              <a
+              <Link
                 key={tank.id}
                 href={`/tools/tankopedia/${tank.id}`}
                 style={{
@@ -309,7 +310,7 @@ export default function Page() {
                     </Flex>
                   </Inset>
                 </Card>
-              </a>
+              </Link>
             ))
             .slice(page * TANKS_PER_PAGE, (page + 1) * TANKS_PER_PAGE)}
         </Flex>

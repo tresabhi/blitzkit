@@ -3,6 +3,8 @@
 import {
   ArrowLeftIcon,
   CaretRightIcon,
+  EnterFullScreenIcon,
+  ExitFullScreenIcon,
   MagnifyingGlassIcon,
 } from '@radix-ui/react-icons';
 import {
@@ -24,7 +26,7 @@ import { Canvas } from '@react-three/fiber';
 import { go } from 'fuzzysort';
 import { debounce } from 'lodash';
 import Link from 'next/link';
-import { Suspense, use, useRef, useState } from 'react';
+import { Suspense, use, useEffect, useRef, useState } from 'react';
 import { Group, Vector3 } from 'three';
 import { Flag } from '../../../../components/Flag';
 import { ModuleButtons } from '../../../../components/ModuleButton';
@@ -37,7 +39,6 @@ import {
 } from '../../../../core/blitzkrieg/tankDefinitions';
 import { theme } from '../../../../stitches.config';
 import { Loader } from '../../components/Loader';
-import * as styles from '../page.css';
 import { Controls } from './components/Control';
 import { RotationInputs } from './components/RotationInputs';
 import { SceneProps } from './components/SceneProps';
@@ -64,6 +65,8 @@ export default function Page({ params }: { params: { id: string } }) {
   const [versusGun, setVersusGun] = useState(versusTurret.guns.at(-1)!);
   const [versusTankTab, setVersusTankTab] = useState('search');
   const canvas = useRef<HTMLCanvasElement>(null);
+  const canvasWrapper = useRef<HTMLDivElement>(null);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);
@@ -79,6 +82,18 @@ export default function Page({ params }: { params: { id: string } }) {
     window.removeEventListener('pointerup', handlePointerUp);
   }
 
+  useEffect(() => {
+    function handleFullScreenChange() {
+      setIsFullScreen(document.fullscreenElement !== null);
+    }
+
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+    };
+  });
+
   return (
     <PageWrapper color="purple">
       <Flex gap="8" direction="column">
@@ -90,7 +105,7 @@ export default function Page({ params }: { params: { id: string } }) {
             >
               <Flex gap="1" align="center">
                 <ArrowLeftIcon />
-                <Text>Back to tankopedia</Text>
+                <Text>Back</Text>
               </Flex>
             </Link>
 
@@ -100,59 +115,91 @@ export default function Page({ params }: { params: { id: string } }) {
             </Flex>
           </Flex>
 
-          <Card style={{ position: 'relative' }}>
-            <Flex direction="column" gap="2">
-              <Tabs.Root value={mode} onValueChange={setMode}>
-                <Tabs.List>
-                  <Tabs.Trigger value="model">Model</Tabs.Trigger>
-                  <Tabs.Trigger value="armor">Armor</Tabs.Trigger>
-                </Tabs.List>
-              </Tabs.Root>
-
-              <div style={{ height: '50vh', maxHeight: 576 }}>
-                <Canvas
-                  shadows
-                  ref={canvas}
-                  camera={{ fov: 20 }}
-                  onPointerDown={handlePointerDown}
+          <Theme radius={isFullScreen ? 'none' : undefined}>
+            <Card
+              style={{
+                position: 'relative',
+                border: isFullScreen ? 'none' : 'unset',
+              }}
+              ref={canvasWrapper}
+            >
+              <Theme radius="full" style={{ height: '100%' }}>
+                <Flex
+                  style={{
+                    height: isFullScreen ? '100%' : '75vh',
+                    maxHeight: isFullScreen ? 'unset' : 576,
+                  }}
+                  direction="column"
+                  gap="2"
                 >
-                  <Controls />
-                  <SceneProps />
+                  <Tabs.Root value={mode} onValueChange={setMode}>
+                    <Tabs.List>
+                      <Tabs.Trigger value="model">Model</Tabs.Trigger>
+                      <Tabs.Trigger value="armor">Armor</Tabs.Trigger>
+                    </Tabs.List>
+                  </Tabs.Root>
 
-                  <Suspense
-                    fallback={
-                      <Html center position={[0, 1.5, 0]}>
-                        <Loader
-                          naked
-                          color={theme.colors.textHighContrast_purple}
+                  <div style={{ height: '100%' }}>
+                    <Canvas
+                      shadows
+                      ref={canvas}
+                      camera={{ fov: 20 }}
+                      onPointerDown={handlePointerDown}
+                    >
+                      <Controls />
+                      <SceneProps />
+
+                      <Suspense
+                        fallback={
+                          <Html center position={[0, 1.5, 0]}>
+                            <Loader
+                              naked
+                              color={theme.colors.textHighContrast_purple}
+                            />
+                          </Html>
+                        }
+                      >
+                        <TankModel
+                          gunId={gun.id}
+                          tankId={tank.id}
+                          turretId={turret.id}
+                          ref={hullContainer}
                         />
-                      </Html>
-                    }
+                      </Suspense>
+                    </Canvas>
+                  </div>
+
+                  <Button
+                    variant="ghost"
+                    style={{
+                      position: 'absolute',
+                      top: 18,
+                      right: 18,
+                    }}
+                    onClick={() => {
+                      if (isFullScreen) {
+                        document.exitFullscreen();
+                      } else {
+                        canvasWrapper.current?.requestFullscreen();
+                      }
+                    }}
                   >
-                    <TankModel
-                      gunId={gun.id}
-                      tankId={tank.id}
-                      turretId={turret.id}
-                      ref={hullContainer}
-                    />
-                  </Suspense>
-                </Canvas>
-              </div>
+                    {isFullScreen ? (
+                      <ExitFullScreenIcon />
+                    ) : (
+                      <EnterFullScreenIcon />
+                    )}
+                  </Button>
 
-              {mode === 'armor' && (
-                <Flex gap="2" align="center" className={styles.enhancedArmor}>
-                  <Checkbox defaultChecked />
-                  <Text>Enhanced armor</Text>
+                  <RotationInputs
+                    gunId={gun.id}
+                    tankId={tank.id}
+                    turretId={turret.id}
+                  />
                 </Flex>
-              )}
-
-              <RotationInputs
-                gunId={gun.id}
-                tankId={tank.id}
-                turretId={turret.id}
-              />
-            </Flex>
-          </Card>
+              </Theme>
+            </Card>
+          </Theme>
 
           <Theme radius="small">
             <Flex gap="4">

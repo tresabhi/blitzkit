@@ -41,7 +41,7 @@ export const listingImage = style({
   },
 });
 
-export const enhancedArmor = style({
+export const alignTopRight = style({
   '@media': {
     'screen and (min-width: 400px)': {
       position: 'absolute',

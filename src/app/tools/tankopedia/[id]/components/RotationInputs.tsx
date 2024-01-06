@@ -46,115 +46,120 @@ export function RotationInputs({
 
   return (
     <Flex
-      gap="2"
+      justify="center"
       align="center"
       style={{
+        width: 'calc(100% - 16px)',
         position: 'absolute',
-        left: 16,
-        bottom: 16,
+        left: 8,
+        bottom: 8,
       }}
     >
-      <TextField.Root
-        variant="surface"
+      <Flex
+        gap="2"
         style={{
-          width: 115,
+          width: 352,
         }}
       >
-        <TextField.Slot>Hull</TextField.Slot>
-        <TextField.Input
-          defaultValue={Math.round(model.hullYaw * (180 / Math.PI))}
-          onBlur={() => {
-            const normalized = normalizeAnglePI(
-              -Number(hullYawInput.current?.value) * (Math.PI / 180),
-            );
-            mutateTankopedia((state) => {
-              state.model.hullYaw = normalized;
-            });
-            hullYawInput.current!.value = `${Math.round(normalized)}`;
+        <TextField.Root
+          style={{
+            flex: 1,
           }}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              hullYawInput.current?.blur();
-            }
-          }}
-          onFocus={() => hullYawInput.current?.focus()}
-          ref={hullYawInput}
-          style={{ textAlign: 'right' }}
-        />
-        <TextField.Slot>°</TextField.Slot>
-      </TextField.Root>
+        >
+          <TextField.Slot>Hull</TextField.Slot>
+          <TextField.Input
+            defaultValue={Math.round(model.hullYaw * (180 / Math.PI))}
+            onBlur={() => {
+              const normalized = normalizeAnglePI(
+                -Number(hullYawInput.current?.value) * (Math.PI / 180),
+              );
+              mutateTankopedia((state) => {
+                state.model.hullYaw = normalized;
+              });
+              hullYawInput.current!.value = `${Math.round(normalized)}`;
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                hullYawInput.current?.blur();
+              }
+            }}
+            onFocus={() => hullYawInput.current?.focus()}
+            ref={hullYawInput}
+            style={{ textAlign: 'right' }}
+          />
+          <TextField.Slot>°</TextField.Slot>
+        </TextField.Root>
 
-      <TextField.Root
-        variant="surface"
-        style={{
-          width: 115,
-        }}
-      >
-        <TextField.Slot>Turret</TextField.Slot>
-        <TextField.Input
-          defaultValue={Math.round(model.turretYaw * (180 / Math.PI))}
-          onBlur={() => {
-            const [pitch, yaw] = applyPitchYawLimits(
-              model.gunPitch,
-              -Number(turretYawInput.current?.value) * (Math.PI / 180),
-              gunModelDefinition.pitch,
-              turretModelDefinition.yaw,
-            );
-            mutateTankopedia((state) => {
-              state.model.gunPitch = pitch;
-              state.model.turretYaw = yaw;
-            });
-            turretYawInput.current!.value = `${Math.round(
-              yaw * (180 / Math.PI),
-            )}`;
+        <TextField.Root
+          style={{
+            flex: 1,
           }}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              turretYawInput.current?.blur();
-            }
-          }}
-          onFocus={() => turretYawInput.current?.focus()}
-          ref={turretYawInput}
-          style={{ textAlign: 'right' }}
-        />
-        <TextField.Slot>°</TextField.Slot>
-      </TextField.Root>
+        >
+          <TextField.Slot>Turret</TextField.Slot>
+          <TextField.Input
+            defaultValue={Math.round(model.turretYaw * (180 / Math.PI))}
+            onBlur={() => {
+              const [pitch, yaw] = applyPitchYawLimits(
+                model.gunPitch,
+                -Number(turretYawInput.current?.value) * (Math.PI / 180),
+                gunModelDefinition.pitch,
+                turretModelDefinition.yaw,
+              );
+              mutateTankopedia((state) => {
+                state.model.gunPitch = pitch;
+                state.model.turretYaw = yaw;
+              });
+              turretYawInput.current!.value = `${Math.round(
+                yaw * (180 / Math.PI),
+              )}`;
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                turretYawInput.current?.blur();
+              }
+            }}
+            onFocus={() => turretYawInput.current?.focus()}
+            ref={turretYawInput}
+            style={{ textAlign: 'right' }}
+          />
+          <TextField.Slot>°</TextField.Slot>
+        </TextField.Root>
 
-      <TextField.Root
-        variant="surface"
-        style={{
-          width: 115,
-        }}
-      >
-        <TextField.Slot>Gun</TextField.Slot>
-        <TextField.Input
-          defaultValue={-Math.round(model.gunPitch * (180 / Math.PI))}
-          onBlur={() => {
-            const [pitch, yaw] = applyPitchYawLimits(
-              -Number(gunPitchInput.current?.value) * (Math.PI / 180),
-              model.turretYaw,
-              gunModelDefinition.pitch,
-              turretModelDefinition.yaw,
-            );
-            mutateTankopedia((state) => {
-              state.model.gunPitch = pitch;
-              state.model.turretYaw = yaw;
-            });
-            gunPitchInput.current!.value = `${Math.round(
-              pitch * (180 / Math.PI),
-            )}`;
+        <TextField.Root
+          style={{
+            flex: 1,
           }}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              gunPitchInput.current?.blur();
-            }
-          }}
-          onFocus={() => gunPitchInput.current?.focus()}
-          ref={gunPitchInput}
-          style={{ textAlign: 'right' }}
-        />
-        <TextField.Slot>°</TextField.Slot>
-      </TextField.Root>
+        >
+          <TextField.Slot>Gun</TextField.Slot>
+          <TextField.Input
+            defaultValue={-Math.round(model.gunPitch * (180 / Math.PI))}
+            onBlur={() => {
+              const [pitch, yaw] = applyPitchYawLimits(
+                -Number(gunPitchInput.current?.value) * (Math.PI / 180),
+                model.turretYaw,
+                gunModelDefinition.pitch,
+                turretModelDefinition.yaw,
+              );
+              mutateTankopedia((state) => {
+                state.model.gunPitch = pitch;
+                state.model.turretYaw = yaw;
+              });
+              gunPitchInput.current!.value = `${Math.round(
+                pitch * (180 / Math.PI),
+              )}`;
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                gunPitchInput.current?.blur();
+              }
+            }}
+            onFocus={() => gunPitchInput.current?.focus()}
+            ref={gunPitchInput}
+            style={{ textAlign: 'right' }}
+          />
+          <TextField.Slot>°</TextField.Slot>
+        </TextField.Root>
+      </Flex>
     </Flex>
   );
 }
