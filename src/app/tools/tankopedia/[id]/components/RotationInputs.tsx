@@ -1,6 +1,6 @@
 import { Flex, TextField } from '@radix-ui/themes';
-import { clamp } from 'lodash';
 import { use, useEffect, useRef } from 'react';
+import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
 import { normalizeAnglePI } from '../../../../../core/math/normalizeAngle180';
 import mutateTankopedia, {
@@ -94,13 +94,19 @@ export function RotationInputs({
         <TextField.Input
           defaultValue={Math.round(model.turretYaw * (180 / Math.PI))}
           onBlur={() => {
-            const normalized = normalizeAnglePI(
+            const [pitch, yaw] = applyPitchYawLimits(
+              model.gunPitch,
               -Number(turretYawInput.current?.value) * (Math.PI / 180),
+              gunModelDefinition.pitch,
+              turretModelDefinition.yaw,
             );
             mutateTankopedia((state) => {
-              state.model.turretYaw = normalized;
+              state.model.gunPitch = pitch;
+              state.model.turretYaw = yaw;
             });
-            turretYawInput.current!.value = `${Math.round(normalized)}`;
+            turretYawInput.current!.value = `${Math.round(
+              yaw * (180 / Math.PI),
+            )}`;
           }}
           onKeyDown={(event) => {
             if (event.key === 'Enter') {
@@ -124,15 +130,19 @@ export function RotationInputs({
         <TextField.Input
           defaultValue={-Math.round(model.gunPitch * (180 / Math.PI))}
           onBlur={() => {
-            const clamped = clamp(
-              Number(gunPitchInput.current?.value),
-              gunModelDefinition.pitch.min,
-              gunModelDefinition.pitch.max,
+            const [pitch, yaw] = applyPitchYawLimits(
+              -Number(gunPitchInput.current?.value) * (Math.PI / 180),
+              model.turretYaw,
+              gunModelDefinition.pitch,
+              turretModelDefinition.yaw,
             );
             mutateTankopedia((state) => {
-              state.model.gunPitch = -clamped * (Math.PI / 180);
+              state.model.gunPitch = pitch;
+              state.model.turretYaw = yaw;
             });
-            gunPitchInput.current!.value = `${Math.round(clamped)}`;
+            gunPitchInput.current!.value = `${Math.round(
+              pitch * (180 / Math.PI),
+            )}`;
           }}
           onKeyDown={(event) => {
             if (event.key === 'Enter') {
