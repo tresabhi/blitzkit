@@ -25,6 +25,7 @@ type Tankopedia = {
     gunPitch: number;
     controlsEnabled: boolean;
   };
+  showSettings: boolean;
 };
 
 export const useTankopedia = create<Tankopedia>()(() => ({
@@ -45,6 +46,7 @@ export const useTankopedia = create<Tankopedia>()(() => ({
     turretYaw: 0,
     controlsEnabled: true,
   },
+  showSettings: false,
 }));
 
 export default function mutateTankopedia(recipe: (draft: Tankopedia) => void) {

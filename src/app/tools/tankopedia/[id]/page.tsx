@@ -5,6 +5,7 @@ import {
   CaretRightIcon,
   EnterFullScreenIcon,
   ExitFullScreenIcon,
+  GearIcon,
   MagnifyingGlassIcon,
 } from '@radix-ui/react-icons';
 import {
@@ -38,6 +39,7 @@ import {
   tankNamesDiacritics,
 } from '../../../../core/blitzkrieg/tankDefinitions';
 import { theme } from '../../../../stitches.config';
+import mutateTankopedia from '../../../../stores/tankopedia';
 import { Loader } from '../../components/Loader';
 import { Controls } from './components/Control';
 import { RotationInputs } from './components/RotationInputs';
@@ -169,27 +171,42 @@ export default function Page({ params }: { params: { id: string } }) {
                     </Canvas>
                   </div>
 
-                  <Button
-                    variant="ghost"
+                  <Flex
+                    gap="4"
                     style={{
                       position: 'absolute',
                       top: 18,
                       right: 18,
                     }}
-                    onClick={() => {
-                      if (isFullScreen) {
-                        document.exitFullscreen();
-                      } else {
-                        canvasWrapper.current?.requestFullscreen();
-                      }
-                    }}
                   >
-                    {isFullScreen ? (
-                      <ExitFullScreenIcon />
-                    ) : (
-                      <EnterFullScreenIcon />
-                    )}
-                  </Button>
+                    <Button
+                      variant="ghost"
+                      onClick={() => {
+                        mutateTankopedia((draft) => {
+                          draft.showSettings = true;
+                        });
+                      }}
+                    >
+                      <GearIcon />
+                    </Button>
+
+                    <Button
+                      variant="ghost"
+                      onClick={() => {
+                        if (isFullScreen) {
+                          document.exitFullscreen();
+                        } else {
+                          canvasWrapper.current?.requestFullscreen();
+                        }
+                      }}
+                    >
+                      {isFullScreen ? (
+                        <ExitFullScreenIcon />
+                      ) : (
+                        <EnterFullScreenIcon />
+                      )}
+                    </Button>
+                  </Flex>
 
                   <RotationInputs
                     gunId={gun.id}
