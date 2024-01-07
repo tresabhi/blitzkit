@@ -8,17 +8,17 @@ import {
 } from 'react';
 import { Group, Vector3 } from 'three';
 import { GLTFLoader } from 'three-stdlib';
-import { X_AXIS } from '../../../../../constants/axis';
+import { X_AXIS } from '../../../../../../../constants/axis';
 import {
   ModelDefinitions,
   modelDefinitions,
-} from '../../../../../core/blitzkrieg/modelDefinitions';
+} from '../../../../../../../core/blitzkrieg/modelDefinitions';
 import mutateTankopedia, {
   useTankopedia,
-} from '../../../../../stores/tankopedia';
-import { GunContainer } from './GunContainer';
-import { HullContainer } from './HullContainer';
-import { TurretContainer } from './TurretContainer';
+} from '../../../../../../../stores/tankopedia';
+import { GunContainer } from '../../GunContainer';
+import { HullContainer } from '../../HullContainer';
+import { TurretContainer } from '../../TurretContainer';
 
 interface TankModelProps {
   tankId: number;

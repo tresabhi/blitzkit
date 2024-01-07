@@ -3,9 +3,6 @@
 import {
   ArrowLeftIcon,
   CaretRightIcon,
-  EnterFullScreenIcon,
-  ExitFullScreenIcon,
-  GearIcon,
   MagnifyingGlassIcon,
 } from '@radix-ui/react-icons';
 import {
@@ -15,20 +12,17 @@ import {
   Dialog,
   Flex,
   Heading,
-  Slider,
   Tabs,
   Text,
   TextField,
   Theme,
   Tooltip,
 } from '@radix-ui/themes';
-import { Html } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
 import { go } from 'fuzzysort';
 import { debounce } from 'lodash';
 import Link from 'next/link';
-import { Suspense, use, useEffect, useRef, useState } from 'react';
-import { Group, Vector3 } from 'three';
+import { use, useRef, useState } from 'react';
+import { Vector3 } from 'three';
 import { Flag } from '../../../../components/Flag';
 import { ModuleButtons } from '../../../../components/ModuleButton';
 import PageWrapper from '../../../../components/PageWrapper';
@@ -38,13 +32,8 @@ import {
   tankDefinitions,
   tankNamesDiacritics,
 } from '../../../../core/blitzkrieg/tankDefinitions';
-import { theme } from '../../../../stitches.config';
-import mutateTankopedia from '../../../../stores/tankopedia';
-import { Loader } from '../../components/Loader';
-import { Controls } from './components/Control';
-import { RotationInputs } from './components/RotationInputs';
-import { SceneProps } from './components/SceneProps';
-import { TankModel } from './components/TankModel';
+import { useTankopedia } from '../../../../stores/tankopedia';
+import { TankDisplay } from './components/Model/TankDisplay';
 
 const X_AXIS = new Vector3(1, 0, 0);
 
@@ -56,9 +45,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [turret, setTurret] = useState(tank.turrets.at(-1)!);
   const [gun, setGun] = useState(turret.guns.at(-1)!);
   const [crew, setCrew] = useState(100);
-  const [mode, setMode] = useState('model');
   const versusTankSearchInput = useRef<HTMLInputElement>(null);
-  const hullContainer = useRef<Group>(null);
   const [versusTankSearchResults, setVersusTankSearchResults] = useState<
     number[]
   >([]);
@@ -66,35 +53,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [versusTurret, setVersusTurret] = useState(versusTank.turrets.at(-1)!);
   const [versusGun, setVersusGun] = useState(versusTurret.guns.at(-1)!);
   const [versusTankTab, setVersusTankTab] = useState('search');
-  const canvas = useRef<HTMLCanvasElement>(null);
-  const canvasWrapper = useRef<HTMLDivElement>(null);
-  const [isFullScreen, setIsFullScreen] = useState(false);
-
-  function handlePointerDown() {
-    window.addEventListener('pointermove', handlePointerMove);
-    window.addEventListener('pointerup', handlePointerUp);
-  }
-  function handlePointerMove(event: PointerEvent) {
-    event.preventDefault();
-  }
-  function handlePointerUp(event: PointerEvent) {
-    event.preventDefault();
-
-    window.removeEventListener('pointermove', handlePointerMove);
-    window.removeEventListener('pointerup', handlePointerUp);
-  }
-
-  useEffect(() => {
-    function handleFullScreenChange() {
-      setIsFullScreen(document.fullscreenElement !== null);
-    }
-
-    document.addEventListener('fullscreenchange', handleFullScreenChange);
-
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullScreenChange);
-    };
-  });
+  const mode = useTankopedia((state) => state.mode);
 
   return (
     <PageWrapper color="purple">
@@ -117,153 +76,7 @@ export default function Page({ params }: { params: { id: string } }) {
             </Flex>
           </Flex>
 
-          <Theme radius={isFullScreen ? 'none' : undefined}>
-            <Card
-              style={{
-                position: 'relative',
-                border: isFullScreen ? 'none' : 'unset',
-              }}
-              ref={canvasWrapper}
-            >
-              <Theme radius="full" style={{ height: '100%' }}>
-                <Flex
-                  style={{
-                    height: isFullScreen ? '100%' : '75vh',
-                    maxHeight: isFullScreen ? 'unset' : 576,
-                  }}
-                  direction="column"
-                  gap="2"
-                >
-                  <Tabs.Root value={mode} onValueChange={setMode}>
-                    <Tabs.List>
-                      <Tabs.Trigger value="model">Model</Tabs.Trigger>
-                      <Tabs.Trigger value="armor">Armor</Tabs.Trigger>
-                    </Tabs.List>
-                  </Tabs.Root>
-
-                  <div style={{ height: '100%' }}>
-                    <Canvas
-                      shadows
-                      ref={canvas}
-                      camera={{ fov: 20 }}
-                      onPointerDown={handlePointerDown}
-                    >
-                      <Controls />
-                      <SceneProps />
-
-                      <Suspense
-                        fallback={
-                          <Html center position={[0, 1.5, 0]}>
-                            <Loader
-                              naked
-                              color={theme.colors.textHighContrast_purple}
-                            />
-                          </Html>
-                        }
-                      >
-                        <TankModel
-                          gunId={gun.id}
-                          tankId={tank.id}
-                          turretId={turret.id}
-                          ref={hullContainer}
-                        />
-                      </Suspense>
-                    </Canvas>
-                  </div>
-
-                  <Flex
-                    gap="4"
-                    style={{
-                      position: 'absolute',
-                      top: 18,
-                      right: 18,
-                    }}
-                  >
-                    <Button
-                      variant="ghost"
-                      onClick={() => {
-                        mutateTankopedia((draft) => {
-                          draft.showSettings = true;
-                        });
-                      }}
-                    >
-                      <GearIcon />
-                    </Button>
-
-                    <Button
-                      variant="ghost"
-                      onClick={() => {
-                        if (isFullScreen) {
-                          document.exitFullscreen();
-                        } else {
-                          canvasWrapper.current?.requestFullscreen();
-                        }
-                      }}
-                    >
-                      {isFullScreen ? (
-                        <ExitFullScreenIcon />
-                      ) : (
-                        <EnterFullScreenIcon />
-                      )}
-                    </Button>
-                  </Flex>
-
-                  <RotationInputs
-                    gunId={gun.id}
-                    tankId={tank.id}
-                    turretId={turret.id}
-                  />
-                </Flex>
-              </Theme>
-            </Card>
-          </Theme>
-
-          <Theme radius="small">
-            <Flex gap="4">
-              <Flex gap="1">
-                {tank.turrets.map((thisTurret) => {
-                  return (
-                    <Tooltip content={thisTurret.name} key={thisTurret.id}>
-                      <Button
-                        onClick={() => {
-                          setTurret(thisTurret);
-                          setGun(thisTurret.guns.at(-1)!);
-                        }}
-                        variant={turret.id === thisTurret.id ? 'solid' : 'soft'}
-                      >
-                        <img
-                          src={asset('icons/modules/turret.webp')}
-                          width={32}
-                          height={32}
-                        />
-                        {TIER_ROMAN_NUMERALS[thisTurret.tier]}
-                      </Button>
-                    </Tooltip>
-                  );
-                })}
-              </Flex>
-
-              <Flex gap="1">
-                {turret.guns.map((thisGun) => {
-                  return (
-                    <Tooltip content={thisGun.name} key={thisGun.id}>
-                      <Button
-                        onClick={() => setGun(thisGun)}
-                        variant={gun.id === thisGun.id ? 'solid' : 'soft'}
-                      >
-                        <img
-                          src={asset('icons/modules/gun.webp')}
-                          width={32}
-                          height={32}
-                        />
-                        {TIER_ROMAN_NUMERALS[thisGun.tier]}
-                      </Button>
-                    </Tooltip>
-                  );
-                })}
-              </Flex>
-            </Flex>
-          </Theme>
+          <TankDisplay gunId={gun.id} tankId={tank.id} turretId={turret.id} />
 
           {mode === 'armor' && (
             <Card>
@@ -464,7 +277,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
                 <Flex gap="2" align="center">
                   <Checkbox defaultChecked />
-                  <Text>Calibrated shells</Text>
+                  <Text>Calibrated</Text>
                 </Flex>
 
                 <Flex gap="1">
@@ -493,44 +306,53 @@ export default function Page({ params }: { params: { id: string } }) {
               </Flex>
             </Card>
           )}
-        </Flex>
 
-        <Flex gap="6" direction="column">
-          <Heading>Build</Heading>
+          <Theme radius="small">
+            <Flex gap="4">
+              <Flex gap="1">
+                {tank.turrets.map((thisTurret) => {
+                  return (
+                    <Tooltip content={thisTurret.name} key={thisTurret.id}>
+                      <Button
+                        onClick={() => {
+                          setTurret(thisTurret);
+                          setGun(thisTurret.guns.at(-1)!);
+                        }}
+                        variant={turret.id === thisTurret.id ? 'solid' : 'soft'}
+                      >
+                        <img
+                          src={asset('icons/modules/turret.webp')}
+                          width={32}
+                          height={32}
+                        />
+                        {TIER_ROMAN_NUMERALS[thisTurret.tier]}
+                      </Button>
+                    </Tooltip>
+                  );
+                })}
+              </Flex>
 
-          <Flex gap="2" direction="column">
-            <Heading size="5" weight="regular">
-              Modules
-            </Heading>
-          </Flex>
-
-          <Flex gap="2" direction="column">
-            <Heading size="5" weight="regular">
-              Crew
-            </Heading>
-
-            <Flex gap="4" align="center">
-              <Text>{crew}%</Text>
-
-              <Slider
-                style={{ flex: 1 }}
-                value={[crew]}
-                min={50}
-                max={100}
-                onValueChange={([crew]) => setCrew(crew)}
-              />
+              <Flex gap="1">
+                {turret.guns.map((thisGun) => {
+                  return (
+                    <Tooltip content={thisGun.name} key={thisGun.id}>
+                      <Button
+                        onClick={() => setGun(thisGun)}
+                        variant={gun.id === thisGun.id ? 'solid' : 'soft'}
+                      >
+                        <img
+                          src={asset('icons/modules/gun.webp')}
+                          width={32}
+                          height={32}
+                        />
+                        {TIER_ROMAN_NUMERALS[thisGun.tier]}
+                      </Button>
+                    </Tooltip>
+                  );
+                })}
+              </Flex>
             </Flex>
-          </Flex>
-        </Flex>
-
-        <Flex gap="2" direction="column">
-          <Heading size="5">Shells</Heading>
-
-          {gun.shells.map((shell) => (
-            <Text key={shell.id}>
-              {shell.name} ({shell.type}): {shell.damage.armor}
-            </Text>
-          ))}
+          </Theme>
         </Flex>
       </Flex>
     </PageWrapper>

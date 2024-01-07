@@ -6,6 +6,7 @@ import { Tier } from '../core/blitzkrieg/tankDefinitions';
 export type TankopediaSortBy = 'tier' | 'name';
 export type TankopediaSortDirection = 'ascending' | 'descending';
 export type TankopediaTestTankDisplay = 'include' | 'exclude' | 'only';
+export type TankopediaMode = 'model' | 'armor';
 
 type Tankopedia = {
   sort: {
@@ -24,8 +25,9 @@ type Tankopedia = {
     turretYaw: number;
     gunPitch: number;
     controlsEnabled: boolean;
+    showGrid: boolean;
   };
-  showSettings: boolean;
+  mode: TankopediaMode;
 };
 
 export const useTankopedia = create<Tankopedia>()(() => ({
@@ -45,8 +47,9 @@ export const useTankopedia = create<Tankopedia>()(() => ({
     hullYaw: 0,
     turretYaw: 0,
     controlsEnabled: true,
+    showGrid: true,
   },
-  showSettings: false,
+  mode: 'model',
 }));
 
 export default function mutateTankopedia(recipe: (draft: Tankopedia) => void) {

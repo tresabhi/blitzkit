@@ -14,5 +14,7 @@ export function Controls() {
     orbitControls.current?.target.set(0, 1.5, 0);
   }, []);
 
-  return <OrbitControls ref={orbitControls} enabled={enabled} />;
+  return (
+    <OrbitControls ref={orbitControls} enabled={enabled} rotateSpeed={0.75} />
+  );
 }
