@@ -6,8 +6,10 @@ import {
 import { Button, Card, Flex, Tabs, Theme } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, use, useEffect, useRef, useState } from 'react';
 import { Group } from 'three';
+import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
+import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { theme } from '../../../../../../stitches.config';
 import mutateTankopedia, {
   TankopediaMode,
@@ -19,19 +21,20 @@ import { RotationInputs } from '../RotationInputs';
 import { SceneProps } from '../SceneProps';
 import { TankModel } from './components/TankModel';
 
-interface TankDisplayProps {
-  tankId: number;
-  turretId: number;
-  gunId: number;
-}
-
-export function TankDisplay({ tankId, turretId, gunId }: TankDisplayProps) {
+export function TankDisplay() {
   const canvas = useRef<HTMLCanvasElement>(null);
+  const awaitedModelDefinitions = use(modelDefinitions);
   const canvasWrapper = useRef<HTMLDivElement>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const mode = useTankopedia((state) => state.mode);
   const hullContainer = useRef<Group>(null);
   const showGrid = useTankopedia((state) => state.model.showGrid);
+  const protagonist = useTankopedia((state) => {
+    if (!state.areTanksAssigned) return;
+    return state.protagonist;
+  });
+
+  if (!protagonist) return null;
 
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);
@@ -58,6 +61,22 @@ export function TankDisplay({ tankId, turretId, gunId }: TankDisplayProps) {
       document.removeEventListener('fullscreenchange', handleFullScreenChange);
     };
   });
+
+  useEffect(() => {
+    const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
+    const turretModelDefinition =
+      tankModelDefinition.turrets[protagonist.turret.id];
+    const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
+
+    mutateTankopedia((draft) => {
+      [draft.model.gunPitch, draft.model.turretYaw] = applyPitchYawLimits(
+        draft.model.gunPitch,
+        draft.model.turretYaw,
+        gunModelDefinition.pitch,
+        turretModelDefinition.yaw,
+      );
+    });
+  }, [protagonist.gun, protagonist.turret]);
 
   return (
     <Theme radius={isFullScreen ? 'none' : undefined}>
@@ -111,12 +130,7 @@ export function TankDisplay({ tankId, turretId, gunId }: TankDisplayProps) {
                     </Html>
                   }
                 >
-                  <TankModel
-                    gunId={gunId}
-                    tankId={tankId}
-                    turretId={turretId}
-                    ref={hullContainer}
-                  />
+                  <TankModel ref={hullContainer} />
                 </Suspense>
               </Canvas>
             </div>
@@ -159,7 +173,7 @@ export function TankDisplay({ tankId, turretId, gunId }: TankDisplayProps) {
               </Button>
             </Flex>
 
-            <RotationInputs gunId={gunId} tankId={tankId} turretId={turretId} />
+            <RotationInputs />
           </Flex>
         </Theme>
       </Card>

@@ -7,26 +7,23 @@ import mutateTankopedia, {
   useTankopedia,
 } from '../../../../../stores/tankopedia';
 
-interface RotationInputsProps {
-  tankId: number;
-  gunId: number;
-  turretId: number;
-}
-
-export function RotationInputs({
-  tankId,
-  gunId,
-  turretId,
-}: RotationInputsProps) {
+export function RotationInputs() {
   const model = useTankopedia((state) => state.model);
   const awaitedModelDefinitions = use(modelDefinitions);
   const turretYawInput = useRef<HTMLInputElement>(null);
   const hullYawInput = useRef<HTMLInputElement>(null);
   const gunPitchInput = useRef<HTMLInputElement>(null);
+  const protagonist = useTankopedia((state) => {
+    if (!state.areTanksAssigned) return;
+    return state.protagonist;
+  });
 
-  const tankModelDefinition = awaitedModelDefinitions[tankId];
-  const turretModelDefinition = tankModelDefinition.turrets[turretId];
-  const gunModelDefinition = turretModelDefinition.guns[gunId];
+  if (!protagonist) return null;
+
+  const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
+  const turretModelDefinition =
+    tankModelDefinition.turrets[protagonist.turret.id];
+  const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
 
   useEffect(() => {
     hullYawInput.current!.value = `${-Math.round(

@@ -1,7 +1,12 @@
 import { produce } from 'immer';
 import { create } from 'zustand';
 import { TankType, TreeTypeString } from '../components/Tanks';
-import { Tier } from '../core/blitzkrieg/tankDefinitions';
+import {
+  GunDefinition,
+  TankDefinition,
+  Tier,
+  TurretDefinition,
+} from '../core/blitzkrieg/tankDefinitions';
 
 export type TankopediaSortBy = 'tier' | 'name';
 export type TankopediaSortDirection = 'ascending' | 'descending';
@@ -28,7 +33,22 @@ type Tankopedia = {
     showGrid: boolean;
   };
   mode: TankopediaMode;
-};
+} & (
+  | {
+      areTanksAssigned: true;
+      protagonist: {
+        tank: TankDefinition;
+        turret: TurretDefinition;
+        gun: GunDefinition;
+      };
+      antagonist: {
+        tank: TankDefinition;
+        turret: TurretDefinition;
+        gun: GunDefinition;
+      };
+    }
+  | { areTanksAssigned: false }
+);
 
 export const useTankopedia = create<Tankopedia>()(() => ({
   sort: {
@@ -49,6 +69,7 @@ export const useTankopedia = create<Tankopedia>()(() => ({
     controlsEnabled: true,
     showGrid: true,
   },
+  areTanksAssigned: false,
   mode: 'model',
 }));
 
