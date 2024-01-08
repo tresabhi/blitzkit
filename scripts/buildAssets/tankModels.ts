@@ -1,0 +1,77 @@
+import { NodeIO } from '@gltf-transform/core';
+import { readdir, writeFile } from 'fs/promises';
+import { Vector3Tuple } from 'three';
+import { DATA, DOI } from '.';
+import { NATION_IDS } from '../../src/constants/nations';
+import { extractModel } from '../../src/core/blitz/extractModel';
+import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
+import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
+import { VehicleDefinitionList } from './definitions';
+import { TankParameters } from './tankIcons';
+
+interface VehicleCustomization {
+  armorColor: string;
+}
+
+export async function buildTankModels() {
+  console.log('Building tank models...');
+
+  const nodeIO = new NodeIO();
+  const nations = await readdir(`${DATA}/${DOI.vehicleDefinitions}`).then(
+    (nations) => nations.filter((nation) => nation !== 'common'),
+  );
+
+  await Promise.all(
+    nations.map(async (nation) => {
+      const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
+        `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
+      );
+      const customization = await readXMLDVPL<{ root: VehicleCustomization }>(
+        `${DATA}/${DOI.vehicleDefinitions}/${nation}/customization.xml.dvpl`,
+      );
+      const baseColor = customization.root.armorColor
+        .split(' ')
+        .slice(0, 3)
+        .map(Number)
+        .map((channel) => channel / 255) as Vector3Tuple;
+
+      for (const tankKey in tanks.root) {
+        const tank = tanks.root[tankKey];
+        const nationVehicleId = tank.id;
+        const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
+
+        // if (id !== 15697) continue; // chieftain
+        // if (id !== 24609) continue; // concept 1b
+        // if (id !== 16401) continue; // waffle
+        // if (id !== 7425) continue; // isu 152
+        // if (id !== 10369) continue; // mino
+        // if (id !== 4417) continue; // amx m4 mle
+        // if (id !== 7297) continue; // 60tp
+        // if (id !== 1) continue; // t-34
+        // if (id !== 6753) continue; // type 71
+        // if (id !== 5137) continue; // tiger ii
+        // if (id !== 11633) continue; // forest witch
+        // if (id !== 6225) continue; // fv215b
+        // if (id !== 4481) continue; // kran
+        // if (id !== 9489) continue; // e100
+        // if (id !== 12049) continue; // jg e100
+        if (id !== 13569) continue; // jg e100
+
+        console.log(`Building model ${id} @ ${nation}/${tankKey}`);
+
+        const parameters = await readYAMLDVPL<TankParameters>(
+          `${DATA}/${DOI.tankParameters}/${nation}/${tankKey}.yaml.dvpl`,
+        );
+        const model = await extractModel(
+          DATA,
+          parameters.resourcesPath.blitzModelPath.replace(/\.sc2$/, ''),
+          baseColor,
+        );
+
+        writeFile(`public/test/${id}.glb`, await nodeIO.writeBinary(model));
+        // await mkdir(`dist/assets/models/${id}`, { recursive: true });
+        // nodeIO.write(`dist/assets/models/${id}/index.gltf`, model);
+      }
+    }),
+  );
+}

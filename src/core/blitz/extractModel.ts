@@ -43,7 +43,7 @@ const omitMeshNames = {
 export async function extractModel(
   data: string,
   path: string,
-  baseColor: Vector3Tuple,
+  baseColor?: Vector3Tuple,
 ) {
   const sc2Path = `${data}/3d/${path}.sc2.dvpl`;
   const scgPath = `${data}/3d/${path}.scg.dvpl`;
@@ -85,7 +85,9 @@ export async function extractModel(
             .setImage(
               await readTexture(
                 `${data}/3d/${dirname(path)}/${textures.albedo}`,
-                { mutation: TextureMutation.BaseColor, baseColor },
+                baseColor
+                  ? { mutation: TextureMutation.BaseColor, baseColor }
+                  : undefined,
               ),
             ),
         );
