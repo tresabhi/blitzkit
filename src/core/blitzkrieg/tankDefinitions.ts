@@ -4,6 +4,13 @@ import { asset } from './asset';
 
 export type ShellType = 'ap' | 'ap_cr' | 'hc' | 'he';
 
+export const SHELL_NAMES: Record<ShellType, string> = {
+  ap: 'AP',
+  ap_cr: 'APCR',
+  hc: 'HEAT',
+  he: 'HE',
+};
+
 export type TankDefinitions = Record<number, TankDefinition>;
 export interface TankDefinition {
   id: number;

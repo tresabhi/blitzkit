@@ -1,4 +1,8 @@
-import { CaretRightIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import {
+  CaretRightIcon,
+  Cross1Icon,
+  MagnifyingGlassIcon,
+} from '@radix-ui/react-icons';
 import {
   Button,
   Card,
@@ -17,6 +21,7 @@ import { use, useRef, useState } from 'react';
 import { ModuleButtons } from '../../../../../components/ModuleButton';
 import { asset } from '../../../../../core/blitzkrieg/asset';
 import {
+  SHELL_NAMES,
   tankDefinitions,
   tankNamesDiacritics,
 } from '../../../../../core/blitzkrieg/tankDefinitions';
@@ -31,7 +36,6 @@ export function VersusBar() {
   const [versusTankTab, setVersusTankTab] = useState('search');
   const versusTankSearchInput = useRef<HTMLInputElement>(null);
   const antagonist = useTankopedia((state) => {
-    // goofy ahh typescript discriminator hack
     if (!state.areTanksAssigned) return;
     return state.antagonist;
   });
@@ -56,7 +60,20 @@ export function VersusBar() {
             </Dialog.Trigger>
 
             <Dialog.Content>
-              <Tabs.Root value={versusTankTab} onValueChange={setVersusTankTab}>
+              <Tabs.Root
+                value={versusTankTab}
+                onValueChange={setVersusTankTab}
+                style={{ position: 'relative' }}
+              >
+                <Dialog.Close>
+                  <Button
+                    variant="ghost"
+                    style={{ position: 'absolute', right: 0, top: 8 }}
+                  >
+                    <Cross1Icon />
+                  </Button>
+                </Dialog.Close>
+
                 <Flex gap="4" direction="column">
                   <Tabs.List>
                     <Tabs.Trigger value="search">Search</Tabs.Trigger>
@@ -93,30 +110,37 @@ export function VersusBar() {
                         {(versusTankSearchResults.length > 0 ||
                           versusTankSearchInput.current?.value) && (
                           <Flex direction="column" gap="2">
-                            {versusTankSearchResults.map((id) => (
-                              <Button
-                                key={id}
-                                variant="ghost"
-                                onClick={() => {
-                                  const thisTank = awaitedTankDefinitions[id];
+                            {versusTankSearchResults
+                              .map((id) => awaitedTankDefinitions[id])
+                              .map((tank) => (
+                                <Button
+                                  color={
+                                    tank.tree_type === 'researchable'
+                                      ? 'gray'
+                                      : tank.tree_type === 'premium'
+                                        ? 'amber'
+                                        : 'blue'
+                                  }
+                                  key={tank.id}
+                                  variant="ghost"
+                                  onClick={() => {
+                                    mutateTankopedia((draft) => {
+                                      if (!draft.areTanksAssigned) return;
 
-                                  mutateTankopedia((draft) => {
-                                    if (!draft.areTanksAssigned) return;
-
-                                    draft.antagonist.tank = thisTank;
-                                    draft.antagonist.turret =
-                                      thisTank.turrets.at(-1)!;
-                                    draft.antagonist.gun =
-                                      draft.antagonist.turret.guns.at(-1)!;
-                                  });
-                                  setVersusTankSearchResults([]);
-                                  versusTankSearchInput.current!.value = '';
-                                  setVersusTankTab('configure');
-                                }}
-                              >
-                                {awaitedTankDefinitions[id].name}
-                              </Button>
-                            ))}
+                                      draft.antagonist.tank = tank;
+                                      draft.antagonist.turret =
+                                        tank.turrets.at(-1)!;
+                                      draft.antagonist.gun =
+                                        draft.antagonist.turret.guns.at(-1)!;
+                                    });
+                                    setVersusTankSearchResults([]);
+                                    versusTankSearchInput.current!.value = '';
+                                    setVersusTankTab('configure');
+                                  }}
+                                >
+                                  {tank.name}
+                                </Button>
+                              ))}
 
                             {versusTankSearchResults.length === 0 &&
                               (versusTankSearchInput.current
@@ -135,7 +159,9 @@ export function VersusBar() {
                   <Tabs.Content value="configure">
                     <Flex direction="column" gap="4">
                       <Flex direction="column" gap="2" style={{ flex: 1 }}>
-                        <Heading size="4">Configuration</Heading>
+                        <Heading size="4">
+                          {antagonist.tank.name} modules
+                        </Heading>
 
                         <Flex gap="2" wrap="wrap">
                           <Flex>
@@ -213,11 +239,25 @@ export function VersusBar() {
                         </Flex>
                       </Flex>
 
-                      <Flex direction="column" gap="2" style={{ flex: 1 }}>
+                      <Flex direction="column" style={{ flex: 1 }}>
                         <Heading size="4">Properties</Heading>
 
                         <ul>
-                          <li>Penetration</li>
+                          <li>
+                            Turret: <b>{antagonist.turret.name}</b>
+                          </li>
+                          <li>
+                            Gun: <b>{antagonist.gun.name}</b>
+                          </li>
+                          <li>Shells:</li>
+                          <ul>
+                            {antagonist.gun.shells.map((shell) => (
+                              <li key={shell.id}>
+                                {SHELL_NAMES[shell.type]}:{' '}
+                                <b>{shell.damage.armor} HP</b>
+                              </li>
+                            ))}
+                          </ul>
                         </ul>
                       </Flex>
                     </Flex>
