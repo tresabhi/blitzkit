@@ -1,6 +1,5 @@
 import { Accessor, Document, Node, Scene } from '@gltf-transform/core';
 import { times } from 'lodash';
-import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
 import { Hierarchy, Sc2Stream } from '../streams/sc2';
 import { ScgStream } from '../streams/scg';
 import { VertexAttribute } from '../streams/scpg';
@@ -25,7 +24,6 @@ export async function extractArmor(data: string, fileName: string) {
 
   function parseHierarchies(hierarchies: Hierarchy[], parent: Scene | Node) {
     hierarchies.forEach((hierarchy) => {
-      const node = document.createNode(hierarchy.name);
       const components = times(
         hierarchy.components.count,
         (index) => hierarchy.components[index.toString().padStart(4, '0')],
@@ -33,32 +31,8 @@ export async function extractArmor(data: string, fileName: string) {
 
       components.forEach((component) => {
         switch (component['comp.typename']) {
-          case 'TransformComponent': {
-            const translation = new Vector3();
-            const rotation = new Quaternion();
-            const scale = new Vector3();
-
-            new Matrix4()
-              .multiplyMatrices(
-                new Matrix4().compose(
-                  new Vector3().fromArray(component['tc.worldTranslation']),
-                  new Quaternion().fromArray(component['tc.worldRotation']),
-                  new Vector3().fromArray(component['tc.worldScale']),
-                ),
-                new Matrix4().compose(
-                  new Vector3().fromArray(component['tc.localTranslation']),
-                  new Quaternion().fromArray(component['tc.localRotation']),
-                  new Vector3().fromArray(component['tc.localScale']),
-                ),
-              )
-              .decompose(translation, rotation, scale);
-
-            node.setTranslation(translation.toArray());
-            node.setRotation(rotation.toArray() as Vector4Tuple);
-            node.setScale(scale.toArray());
-
+          case 'TransformComponent':
             break;
-          }
 
           case 'RenderComponent': {
             const batch = component['rc.renderObj']['ro.batches']['0000'];
@@ -116,8 +90,8 @@ export async function extractArmor(data: string, fileName: string) {
             });
 
             hardJointIndices.forEach((hardJointIndex) => {
-              const hardJointNode = document.createNode(
-                `armor_${hardJointIndex}`,
+              const node = document.createNode(
+                `${hierarchy.name}_armor_${hardJointIndex}`,
               );
               const mesh = document.createMesh(batch['##name']);
               const indicesAccessor = document
@@ -148,8 +122,8 @@ export async function extractArmor(data: string, fileName: string) {
               });
 
               mesh.addPrimitive(primitive);
-              hardJointNode.setMesh(mesh);
-              node.addChild(hardJointNode);
+              node.setMesh(mesh);
+              parent.addChild(node);
             });
 
             break;
@@ -163,10 +137,8 @@ export async function extractArmor(data: string, fileName: string) {
       });
 
       if (hierarchy['#hierarchy']) {
-        parseHierarchies(hierarchy['#hierarchy'], node);
+        parseHierarchies(hierarchy['#hierarchy'], parent);
       }
-
-      parent.addChild(node);
     });
   }
 

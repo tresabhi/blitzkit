@@ -9,6 +9,7 @@ import {
 import { Group, Vector3 } from 'three';
 import { GLTFLoader } from 'three-stdlib';
 import { X_AXIS } from '../../../../../../../constants/axis';
+import { asset } from '../../../../../../../core/blitzkrieg/asset';
 import {
   ModelDefinitions,
   modelDefinitions,
@@ -33,7 +34,10 @@ export const TankModel = forwardRef<Group>((_props, ref) => {
 
   if (!protagonist) return null;
 
-  const gltf = useLoader(GLTFLoader, `/test/${protagonist.tank.id}.glb`);
+  const gltf = useLoader(
+    GLTFLoader,
+    asset(`3d/tanks/models/${protagonist.tank.id}.glb`),
+  );
   const model = useTankopedia((state) => state.model);
   const hullContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
