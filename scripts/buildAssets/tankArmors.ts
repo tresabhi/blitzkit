@@ -1,5 +1,5 @@
 import { NodeIO } from '@gltf-transform/core';
-import { readdir } from 'fs/promises';
+import { readdir, writeFile } from 'fs/promises';
 import { extractArmor } from '../../src/core/blitz/extractArmor';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
@@ -28,15 +28,15 @@ export async function buildTankArmors() {
         const tank = tanks.root[tankKey];
         const id = toUniqueId(nation, tank.id);
 
-        // if (id !== 7297) continue; // 60tp
-        if (id !== 5137) continue; // tiger ii
+        if (id !== 7297) continue; // 60tp
+        // if (id !== 5137) continue; // tiger ii
         // if (id !== 24609) continue; // concept 1b
 
         console.log(`Building armor ${id} @ ${nation}/${tankKey}`);
 
-        const armor = await extractArmor(DATA, `${nation}-${tankKey}`);
+        const model = await extractArmor(DATA, `${nation}-${tankKey}`);
 
-        await nodeIO.write('temp/armor/index.gltf', armor);
+        writeFile(`temp/armor/${id}.glb`, await nodeIO.writeBinary(model));
 
         // writeFile('test.sc2.json', JSON.stringify(sc2, null, 2));
       }

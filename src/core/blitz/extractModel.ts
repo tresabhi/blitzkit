@@ -16,28 +16,28 @@ import { readDVPLFile } from './readDVPLFile';
 
 const MAX_FLOAT32 = 2 ** 127 * (2 - 2 ** -23);
 
-const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> = {
-  [VertexAttribute.VERTEX]: 'POSITION',
-  [VertexAttribute.NORMAL]: 'NORMAL',
-  [VertexAttribute.COLOR]: 'COLOR_0',
-  [VertexAttribute.TEXCOORD0]: 'TEXCOORD_0',
-  [VertexAttribute.TEXCOORD1]: 'TEXCOORD_0',
-  [VertexAttribute.TEXCOORD2]: 'TEXCOORD_0',
-  [VertexAttribute.TEXCOORD3]: 'TEXCOORD_0',
-  [VertexAttribute.TANGENT]: 'TANGENT',
-  [VertexAttribute.JOINTINDEX]: 'JOINT_0',
-  [VertexAttribute.JOINTWEIGHT]: 'WEIGHT_0',
-};
+export const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> =
+  {
+    [VertexAttribute.VERTEX]: 'POSITION',
+    [VertexAttribute.NORMAL]: 'NORMAL',
+    [VertexAttribute.TEXCOORD0]: 'TEXCOORD_0',
+    [VertexAttribute.TEXCOORD1]: 'TEXCOORD_0',
+    [VertexAttribute.TEXCOORD2]: 'TEXCOORD_0',
+    [VertexAttribute.TEXCOORD3]: 'TEXCOORD_0',
+    [VertexAttribute.TANGENT]: 'TANGENT',
+    [VertexAttribute.JOINTINDEX]: 'JOINT_0',
+    [VertexAttribute.JOINTWEIGHT]: 'WEIGHT_0',
+  };
 
-const vertexAttributeGltfVectorSizes = {
+export const vertexAttributeGltfVectorSizes = {
   ...vertexAttributeVectorSizes,
 
   [VertexAttribute.TANGENT]: 4,
 } as const;
 
 const omitMeshNames = {
-  start: [], //['chassis_chassis_', 'chassis_track_crash_', 'HP_'],
-  end: [], //['_POINT'],
+  start: ['chassis_chassis_', 'chassis_track_crash_', 'HP_'],
+  end: ['_POINT'],
 };
 
 export async function extractModel(
@@ -283,27 +283,28 @@ export async function extractModel(
               .createPrimitive()
               .setIndices(indicesAccessor)
               .setMaterial(material);
-            const attributes: Partial<Record<VertexAttribute, number[][]>> = {};
-            const indexedAttributes: VertexAttribute[] = [];
+            const attributes = new Map<VertexAttribute, number[][]>();
 
             polygonGroup.vertices.forEach((vertex) => {
               vertex.forEach(({ attribute, value }) => {
-                if (attributes[attribute] === undefined) {
-                  attributes[attribute] = [];
-                  indexedAttributes.push(attribute);
+                if (!attributes.has(attribute)) {
+                  attributes.set(attribute, []);
                 }
 
-                attributes[attribute]!.push(value);
+                attributes.get(attribute)!.push(value);
               });
             });
 
-            if (indexedAttributes.includes(VertexAttribute.TANGENT)) {
-              attributes[VertexAttribute.TANGENT] = attributes[
-                VertexAttribute.TANGENT
-              ]!.map((tangent) => [...tangent, 1]);
+            if (attributes.has(VertexAttribute.TANGENT)) {
+              attributes.set(
+                VertexAttribute.TANGENT,
+                attributes
+                  .get(VertexAttribute.TANGENT)!
+                  .map((tangent) => [...tangent, 1]),
+              );
             }
 
-            indexedAttributes.forEach((attribute) => {
+            attributes.forEach((value, attribute) => {
               const name = vertexAttributeGLTFName[attribute];
               if (!name || primitive.getAttribute(name)) return;
               const vertexSize = vertexAttributeGltfVectorSizes[attribute];
@@ -311,7 +312,7 @@ export async function extractModel(
               const attributeAccessor = document
                 .createAccessor(name)
                 .setType(vertexSize === 1 ? 'SCALAR' : `VEC${vertexSize}`)
-                .setArray(new Float32Array(attributes[attribute]!.flat()))
+                .setArray(new Float32Array(value.flat()))
                 .setBuffer(buffer);
               primitive.setAttribute(name, attributeAccessor);
             });

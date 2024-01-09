@@ -23,6 +23,10 @@ interface BlitzkriegPolygonGroup {
   indices: number[];
 }
 
+const vertexAttributesArray = Object.values(VertexAttribute).filter(
+  (value) => typeof value === 'number',
+);
+
 export const vertexAttributeVectorSizes = {
   [VertexAttribute.VERTEX]: 3,
   [VertexAttribute.NORMAL]: 3,
@@ -66,24 +70,6 @@ export class ScgStream extends ScpgStream {
       polygonGroupsRaw.push(polygonGroupRaw);
     }
 
-    // writeFile(
-    //   'test.scg.txt',
-    //   polygonGroupsRaw
-    //     .map((polygonGroupRaw) => {
-    //       const floats: number[] = [];
-    //       const stream = new BufferStream(polygonGroupRaw.vertices);
-
-    //       while (stream.readRemainingLength()) {
-    //         floats.push(stream.float());
-    //       }
-
-    //       return `format: ${polygonGroupRaw.vertexFormat.toString(
-    //         2,
-    //       )}\n\n${floats.join('\n')}`;
-    //     })
-    //     .join('\n\n#####\n\n'),
-    // );
-
     polygonGroupsRaw.forEach((polygonGroupRaw) => {
       const indicesStream = new ScpgStream(polygonGroupRaw.indices);
       const indices: number[] = [];
@@ -112,14 +98,10 @@ export class ScgStream extends ScpgStream {
       }
 
       for (let index = 0; index < polygonGroupRaw.vertexCount; index++) {
-        vertices[index] = format.map((attribute) => {
-          return {
-            attribute,
-            value: verticesStream.vectorN(
-              vertexAttributeVectorSizes[attribute],
-            ),
-          };
-        });
+        vertices[index] = format.map((attribute) => ({
+          attribute,
+          value: verticesStream.vectorN(vertexAttributeVectorSizes[attribute]),
+        }));
       }
 
       if (verticesStream.readRemainingLength() !== 0) {
@@ -139,17 +121,15 @@ export class ScgStream extends ScpgStream {
     const format: VertexAttribute[] = [];
     let stride = 0;
 
-    Object.values(VertexAttribute)
-      .filter((value) => typeof value === 'number')
-      .forEach((attributeUntyped) => {
-        const attribute = attributeUntyped as VertexAttribute;
-        const mask = 1 << attribute;
+    vertexAttributesArray.forEach((attributeUntyped) => {
+      const attribute = attributeUntyped as VertexAttribute;
+      const mask = 1 << attribute;
 
-        if (formatInt & mask) {
-          format.push(attribute);
-          stride += vertexAttributeVectorSizes[attribute] * 4;
-        }
-      });
+      if (formatInt & mask) {
+        format.push(attribute);
+        stride += vertexAttributeVectorSizes[attribute] * 4;
+      }
+    });
 
     return { format, stride };
   }

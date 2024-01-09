@@ -1,47 +1,20 @@
-import { Document, Node, Scene } from '@gltf-transform/core';
-import { range, times } from 'lodash';
-import {
-  Matrix4,
-  Quaternion,
-  Vector3,
-  Vector3Tuple,
-  Vector4Tuple,
-} from 'three';
+import { Accessor, Document, Node, Scene } from '@gltf-transform/core';
+import { times } from 'lodash';
+import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
 import { Hierarchy, Sc2Stream } from '../streams/sc2';
-import { ScgStream, vertexAttributeVectorSizes } from '../streams/scg';
+import { ScgStream } from '../streams/scg';
 import { VertexAttribute } from '../streams/scpg';
+import {
+  vertexAttributeGLTFName,
+  vertexAttributeGltfVectorSizes,
+} from './extractModel';
 import { readDVPLFile } from './readDVPLFile';
 
 Buffer.prototype.toJSON = function () {
   return [...(this as Buffer)].map((int) => int.toString(16)).join('');
 };
 
-const MAX_FLOAT32 = 2 ** 127 * (2 - 2 ** -23);
-
-const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> = {
-  [VertexAttribute.VERTEX]: 'POSITION',
-  [VertexAttribute.NORMAL]: 'NORMAL',
-  [VertexAttribute.COLOR]: 'COLOR_0',
-  [VertexAttribute.TEXCOORD0]: 'TEXCOORD_0',
-  [VertexAttribute.TEXCOORD1]: 'TEXCOORD_0',
-  [VertexAttribute.TEXCOORD2]: 'TEXCOORD_0',
-  [VertexAttribute.TEXCOORD3]: 'TEXCOORD_0',
-  [VertexAttribute.TANGENT]: 'TANGENT',
-  [VertexAttribute.JOINTINDEX]: 'JOINT_0',
-  [VertexAttribute.JOINTWEIGHT]: 'WEIGHT_0',
-};
-
-const vertexAttributeGltfVectorSizes = {
-  ...vertexAttributeVectorSizes,
-
-  [VertexAttribute.TANGENT]: 4,
-} as const;
-
-export async function extractArmor(
-  data: string,
-  fileName: string,
-  baseColor?: Vector3Tuple,
-) {
+export async function extractArmor(data: string, fileName: string) {
   const sc2Path = `${data}/3d/Tanks/CollisionMeshes/${fileName}.sc2.dvpl`;
   const scgPath = `${data}/3d/Tanks/CollisionMeshes/${fileName}.scg.dvpl`;
   const sc2 = new Sc2Stream(await readDVPLFile(sc2Path)).sc2();
@@ -88,58 +61,7 @@ export async function extractArmor(
           }
 
           case 'RenderComponent': {
-            let minLODDistanceBatchId: undefined | number;
-
-            if (component['rc.renderObj']['rb0.lodIndex'] === -1) {
-              minLODDistanceBatchId = 0;
-            } else {
-              const lodList = components.find(
-                (component) => component['comp.typename'] === 'LodComponent',
-              );
-
-              if (
-                lodList === undefined ||
-                lodList['comp.typename'] !== 'LodComponent' // type annotation hack
-              ) {
-                throw new SyntaxError('Missing LodComponent');
-              }
-
-              let minLODDistance = Infinity;
-              let isFirstMaxFloat = true;
-              let lodIndexStreak = 0;
-              let lodIndexStreakIndex: undefined | number = undefined;
-
-              range(component['rc.renderObj']['ro.batchCount']).forEach(
-                (id) => {
-                  const lodIndex =
-                    component['rc.renderObj'][`rb${id}.lodIndex`];
-                  const lodDistance =
-                    lodList['lc.loddist'][`distance${lodIndex}`];
-
-                  if (lodIndexStreakIndex === lodIndex) {
-                    lodIndexStreak++;
-                  } else {
-                    lodIndexStreak = 0;
-                    lodIndexStreakIndex = lodIndex;
-                  }
-
-                  if (
-                    lodDistance < minLODDistance ||
-                    (lodDistance === minLODDistance && lodIndexStreak > 0) ||
-                    (lodDistance === MAX_FLOAT32 && isFirstMaxFloat)
-                  ) {
-                    if (lodDistance === MAX_FLOAT32) isFirstMaxFloat = false;
-                    minLODDistance = lodDistance;
-                    minLODDistanceBatchId = id;
-                  }
-                },
-              );
-            }
-
-            const batch =
-              component['rc.renderObj']['ro.batches'][
-                minLODDistanceBatchId!.toString().padStart(4, '0')
-              ];
+            const batch = component['rc.renderObj']['ro.batches']['0000'];
             const polygonGroup = scg.get(batch['rb.datasource']);
 
             if (!polygonGroup) {
@@ -150,52 +72,85 @@ export async function extractArmor(
               break;
             }
 
-            const indicesAccessor = document
-              .createAccessor()
-              .setType('SCALAR')
-              .setArray(new Uint16Array(polygonGroup.indices))
-              .setBuffer(buffer);
-            const primitive = document
-              .createPrimitive()
-              .setIndices(indicesAccessor);
-            const attributes: Partial<Record<VertexAttribute, number[][]>> = {};
-            const indexedAttributes: VertexAttribute[] = [];
+            const hardJointIndices = new Set<number>();
+            const vertexHardJointIndices = new Map<number, number>();
+            const attributes = new Map<VertexAttribute, number[][]>();
 
-            polygonGroup.vertices.forEach((vertex) => {
+            polygonGroup.vertices.forEach((vertex, index) => {
               vertex.forEach(({ attribute, value }) => {
-                if (attributes[attribute] === undefined) {
-                  attributes[attribute] = [];
-                  indexedAttributes.push(attribute);
+                if (!attributes.has(attribute)) {
+                  attributes.set(attribute, []);
                 }
 
-                attributes[attribute]!.push(value);
+                attributes.get(attribute)!.push(value);
+
+                if (attribute === VertexAttribute.HARD_JOINTINDEX) {
+                  hardJointIndices.add(value[0]);
+                  vertexHardJointIndices.set(index, value[0]);
+                }
               });
             });
 
-            if (indexedAttributes.includes(VertexAttribute.TANGENT)) {
-              attributes[VertexAttribute.TANGENT] = attributes[
-                VertexAttribute.TANGENT
-              ]!.map((tangent) => [...tangent, 1]);
+            if (attributes.has(VertexAttribute.TANGENT)) {
+              attributes.set(
+                VertexAttribute.TANGENT,
+                attributes
+                  .get(VertexAttribute.TANGENT)!
+                  .map((tangent) => [...tangent, 1]),
+              );
             }
 
-            indexedAttributes.forEach((attribute) => {
-              const name = vertexAttributeGLTFName[attribute];
-              if (!name || primitive.getAttribute(name)) return;
-              const vertexSize = vertexAttributeGltfVectorSizes[attribute];
+            const accessors = new Map<string, Accessor>();
 
-              const attributeAccessor = document
+            attributes.forEach((value, attribute) => {
+              const name = vertexAttributeGLTFName[attribute];
+              if (!name || accessors.has(name)) return;
+              const vertexSize = vertexAttributeGltfVectorSizes[attribute];
+              const accessor = document
                 .createAccessor(name)
                 .setType(vertexSize === 1 ? 'SCALAR' : `VEC${vertexSize}`)
-                .setArray(new Float32Array(attributes[attribute]!.flat()))
+                .setArray(new Float32Array(value.flat()))
                 .setBuffer(buffer);
-              primitive.setAttribute(name, attributeAccessor);
+
+              accessors.set(name, accessor);
             });
 
-            const mesh = document
-              .createMesh(batch['##name'])
-              .addPrimitive(primitive);
+            hardJointIndices.forEach((hardJointIndex) => {
+              const hardJointNode = document.createNode(
+                `armor_${hardJointIndex}`,
+              );
+              const mesh = document.createMesh(batch['##name']);
+              const indicesAccessor = document
+                .createAccessor()
+                .setType('SCALAR')
+                .setArray(
+                  new Uint16Array(
+                    polygonGroup.indices.filter((index) => {
+                      if (!vertexHardJointIndices.has(index)) {
+                        throw new Error(
+                          `Missing vertex hard joint index for index ${index}`,
+                        );
+                      }
 
-            node.setMesh(mesh);
+                      return (
+                        vertexHardJointIndices.get(index)! === hardJointIndex
+                      );
+                    }),
+                  ),
+                )
+                .setBuffer(buffer);
+              const primitive = document
+                .createPrimitive()
+                .setIndices(indicesAccessor);
+
+              accessors.forEach((accessor, name) => {
+                primitive.setAttribute(name, accessor);
+              });
+
+              mesh.addPrimitive(primitive);
+              hardJointNode.setMesh(mesh);
+              node.addChild(hardJointNode);
+            });
 
             break;
           }
