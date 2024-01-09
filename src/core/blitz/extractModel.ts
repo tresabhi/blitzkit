@@ -36,8 +36,8 @@ const vertexAttributeGltfVectorSizes = {
 } as const;
 
 const omitMeshNames = {
-  start: ['chassis_chassis_', 'chassis_track_crash_', 'HP_'],
-  end: ['_POINT'],
+  start: [], //['chassis_chassis_', 'chassis_track_crash_', 'HP_'],
+  end: [], //['_POINT'],
 };
 
 export async function extractModel(
@@ -262,7 +262,7 @@ export async function extractModel(
 
             if (!polygonGroup) {
               console.warn(
-                `Missing polygon group ${batch['rb.datasource']}; skipping...`,
+                `Missing polygon group ${batch['rb.datasource']} (${hierarchy.name}); skipping...`,
               );
 
               break;

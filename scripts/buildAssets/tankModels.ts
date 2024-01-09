@@ -1,11 +1,11 @@
 import { NodeIO } from '@gltf-transform/core';
 import { readdir, writeFile } from 'fs/promises';
 import { Vector3Tuple } from 'three';
-import { DATA, DOI } from '.';
-import { NATION_IDS } from '../../src/constants/nations';
 import { extractModel } from '../../src/core/blitz/extractModel';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
+import { toUniqueId } from '../../src/core/blitz/toUniqueId';
+import { DATA, DOI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 import { TankParameters } from './tankIcons';
 
@@ -37,8 +37,7 @@ export async function buildTankModels() {
 
       for (const tankKey in tanks.root) {
         const tank = tanks.root[tankKey];
-        const nationVehicleId = tank.id;
-        const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
+        const id = toUniqueId(nation, tank.id);
 
         // if (id !== 15697) continue; // chieftain
         // if (id !== 24609) continue; // concept 1b
@@ -49,13 +48,13 @@ export async function buildTankModels() {
         // if (id !== 7297) continue; // 60tp
         // if (id !== 1) continue; // t-34
         // if (id !== 6753) continue; // type 71
-        // if (id !== 5137) continue; // tiger ii
+        if (id !== 5137) continue; // tiger ii
         // if (id !== 11633) continue; // forest witch
         // if (id !== 6225) continue; // fv215b
         // if (id !== 4481) continue; // kran
         // if (id !== 9489) continue; // e100
         // if (id !== 12049) continue; // jg e100
-        if (id !== 13569) continue; // jg e100
+        // if (id !== 13569) continue; // obj 268
 
         console.log(`Building model ${id} @ ${nation}/${tankKey}`);
 
@@ -69,8 +68,6 @@ export async function buildTankModels() {
         );
 
         writeFile(`public/test/${id}.glb`, await nodeIO.writeBinary(model));
-        // await mkdir(`dist/assets/models/${id}`, { recursive: true });
-        // nodeIO.write(`dist/assets/models/${id}/index.gltf`, model);
       }
     }),
   );

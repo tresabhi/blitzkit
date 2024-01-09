@@ -42,6 +42,7 @@ interface EnabledPresets {
 
 interface Flags {
   AMBIENT_ATTENUATION_BOX: number;
+  BLENDING: number;
 }
 
 interface Properties {

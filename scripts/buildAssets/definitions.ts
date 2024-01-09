@@ -1,7 +1,6 @@
 import { readdir } from 'fs/promises';
 import { parse } from 'path';
 import { Vector3Tuple } from 'three';
-import { DATA, DOI } from '.';
 import { TankType } from '../../src/components/Tanks';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
@@ -15,6 +14,7 @@ import {
   TankDefinitions,
   Tier,
 } from '../../src/core/blitzkrieg/tankDefinitions';
+import { DATA, DOI } from './constants';
 
 type BlitzTankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
 interface Strings {

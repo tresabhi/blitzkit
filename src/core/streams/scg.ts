@@ -1,3 +1,4 @@
+import { writeFile } from 'fs/promises';
 import { ScpgStream, VertexAttribute } from './scpg';
 
 interface PolygonGroupRaw {
@@ -65,6 +66,8 @@ export class ScgStream extends ScpgStream {
       const polygonGroupRaw = this.ka() as PolygonGroupRaw;
       polygonGroupsRaw.push(polygonGroupRaw);
     }
+
+    writeFile('test.scg.json', JSON.stringify({ polygonGroupsRaw }, null, 2));
 
     polygonGroupsRaw.forEach((polygonGroupRaw) => {
       const indicesStream = new ScpgStream(polygonGroupRaw.indices);

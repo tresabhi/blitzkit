@@ -1,5 +1,4 @@
 import { readdir } from 'fs/promises';
-import { DATA, DOI } from '.';
 import { NATION_IDS } from '../../src/constants/nations';
 import { readBase64DVPL } from '../../src/core/blitz/readBase64DVPL';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
@@ -7,6 +6,7 @@ import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import commitMultipleFiles, {
   FileChange,
 } from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { DATA, DOI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 
 export interface TankParameters {

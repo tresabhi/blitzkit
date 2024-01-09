@@ -1,11 +1,11 @@
 import { readdir } from 'fs/promises';
 import sharp from 'sharp';
-import { DATA, DOI } from '.';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
 import commitMultipleFiles, {
   FileChange,
 } from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { DATA, DOI } from './constants';
 
 export async function buildShellIcons() {
   console.log('Building shell icons...');

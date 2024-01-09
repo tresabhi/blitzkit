@@ -1,9 +1,9 @@
 import { readdir } from 'fs/promises';
-import { DATA, DOI } from '.';
 import { readBase64DVPL } from '../../src/core/blitz/readBase64DVPL';
 import commitMultipleFiles, {
   FileChange,
 } from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { DATA, DOI } from './constants';
 
 export async function buildModuleIcons() {
   console.log('Building module icons...');
