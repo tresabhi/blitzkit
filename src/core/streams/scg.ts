@@ -1,4 +1,3 @@
-import { writeFile } from 'fs/promises';
 import { ScpgStream, VertexAttribute } from './scpg';
 
 interface PolygonGroupRaw {
@@ -67,7 +66,23 @@ export class ScgStream extends ScpgStream {
       polygonGroupsRaw.push(polygonGroupRaw);
     }
 
-    writeFile('test.scg.json', JSON.stringify({ polygonGroupsRaw }, null, 2));
+    // writeFile(
+    //   'test.scg.txt',
+    //   polygonGroupsRaw
+    //     .map((polygonGroupRaw) => {
+    //       const floats: number[] = [];
+    //       const stream = new BufferStream(polygonGroupRaw.vertices);
+
+    //       while (stream.readRemainingLength()) {
+    //         floats.push(stream.float());
+    //       }
+
+    //       return `format: ${polygonGroupRaw.vertexFormat.toString(
+    //         2,
+    //       )}\n\n${floats.join('\n')}`;
+    //     })
+    //     .join('\n\n#####\n\n'),
+    // );
 
     polygonGroupsRaw.forEach((polygonGroupRaw) => {
       const indicesStream = new ScpgStream(polygonGroupRaw.indices);
@@ -83,29 +98,21 @@ export class ScgStream extends ScpgStream {
 
       const verticesStream = new ScpgStream(polygonGroupRaw.vertices);
       const vertices: BlitzkriegVertex[] = [];
-      const stride =
-        ScgStream.vertexStride(polygonGroupRaw.vertexFormat) *
-        polygonGroupRaw.vertexCount;
+      const { format, stride } = ScgStream.parseVertexFormat(
+        polygonGroupRaw.vertexFormat,
+      );
+      const strideBasedSize = stride * polygonGroupRaw.vertexCount;
 
-      if (verticesStream.stream.length !== stride) {
+      if (verticesStream.stream.length !== strideBasedSize) {
         console.warn(
-          `Vertex stride mismatch; expected ${stride}, got ${verticesStream.stream.length}; skipping...`,
+          `Vertex stride mismatch; expected ${strideBasedSize}, got ${verticesStream.stream.length}; skipping...`,
         );
 
         return;
       }
 
-      const vertexFormat = (
-        polygonGroupRaw.vertexFormat
-          .toString(2)
-          .split('')
-          .map((bitString, index) =>
-            bitString === '1' ? index : null,
-          ) as VertexAttribute[]
-      ).filter((type) => type !== null);
-
       for (let index = 0; index < polygonGroupRaw.vertexCount; index++) {
-        vertices[index] = vertexFormat.map((attribute) => {
+        vertices[index] = format.map((attribute) => {
           return {
             attribute,
             value: verticesStream.vectorN(
@@ -128,18 +135,22 @@ export class ScgStream extends ScpgStream {
     return polygonGroups;
   }
 
-  static vertexStride(vertexFormat: number) {
-    const flags = vertexFormat.toString(2);
+  static parseVertexFormat(formatInt: number) {
+    const format: VertexAttribute[] = [];
+    let stride = 0;
 
-    return Object.values(VertexAttribute)
+    Object.values(VertexAttribute)
       .filter((value) => typeof value === 'number')
-      .reduce(
-        (accumulator, attribute) =>
-          flags[attribute as VertexAttribute] === '1'
-            ? accumulator +
-              vertexAttributeVectorSizes[attribute as VertexAttribute] * 4
-            : accumulator,
-        0,
-      );
+      .forEach((attributeUntyped) => {
+        const attribute = attributeUntyped as VertexAttribute;
+        const mask = 1 << attribute;
+
+        if (formatInt & mask) {
+          format.push(attribute);
+          stride += vertexAttributeVectorSizes[attribute] * 4;
+        }
+      });
+
+    return { format, stride };
   }
 }

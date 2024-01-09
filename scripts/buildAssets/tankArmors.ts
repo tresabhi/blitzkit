@@ -36,7 +36,7 @@ export async function buildTankArmors() {
 
         const armor = await extractArmor(DATA, `${nation}-${tankKey}`);
 
-        // await nodeIO.write('temp/armor/index.gltf', armor);
+        await nodeIO.write('temp/armor/index.gltf', armor);
 
         // writeFile('test.sc2.json', JSON.stringify(sc2, null, 2));
       }

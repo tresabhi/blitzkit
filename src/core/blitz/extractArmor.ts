@@ -1,5 +1,4 @@
 import { Document, Node, Scene } from '@gltf-transform/core';
-import { writeFile } from 'fs/promises';
 import { range, times } from 'lodash';
 import {
   Matrix4,
@@ -51,12 +50,8 @@ export async function extractArmor(
   const scene = document.createScene();
   const buffer = document.createBuffer();
 
-  writeFile('test.sc2.json', JSON.stringify(sc2, null, 2));
-
   function parseHierarchies(hierarchies: Hierarchy[], parent: Scene | Node) {
     hierarchies.forEach((hierarchy) => {
-      console.log(`hierarchy: ${hierarchy.name}`);
-
       const node = document.createNode(hierarchy.name);
       const components = times(
         hierarchy.components.count,
