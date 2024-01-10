@@ -94,7 +94,7 @@ export function TankArmor() {
               key={node.uuid}
               geometry={(node as Mesh).geometry}
               thickness={thickness}
-              penetration={225}
+              penetration={252}
               ricochet={antagonist.shell.ricochet}
               caliber={antagonist.shell.caliber}
               normalization={antagonist.shell.normalization}
@@ -121,7 +121,7 @@ export function TankArmor() {
                 position={turretOrigin}
                 geometry={(node as Mesh).geometry}
                 thickness={thickness}
-                penetration={225}
+                penetration={252}
                 ricochet={antagonist.shell.ricochet}
                 caliber={antagonist.shell.caliber}
                 normalization={antagonist.shell.normalization}
@@ -155,7 +155,7 @@ export function TankArmor() {
                   position={turretOrigin.clone().add(gunOrigin)}
                   geometry={(node as Mesh).geometry}
                   thickness={thickness}
-                  penetration={225}
+                  penetration={252}
                   ricochet={antagonist.shell.ricochet}
                   caliber={antagonist.shell.caliber}
                   normalization={antagonist.shell.normalization}

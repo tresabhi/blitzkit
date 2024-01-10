@@ -370,33 +370,6 @@ export function TankModel() {
             );
           })}
         </group>
-
-        {/* <GunContainer
-          ref={gunContainer}
-          armorObjects={Object.values(armorGltf.nodes)}
-          initialTurretRotation={tankModelDefinition.turretRotation}
-          onPitchStart={() => {
-            mutateTankopedia((state) => {
-              state.model.controlsEnabled = false;
-            });
-          }}
-          pitchLimits={gunModelDefinition.pitch}
-          turretContainer={turretContainer}
-          yaw={model.turretYaw}
-          onPitchEnd={(pitch, yaw) => {
-            mutateTankopedia((state) => {
-              state.model.controlsEnabled = true;
-              state.model.gunPitch = pitch;
-              state.model.turretYaw = yaw;
-            });
-          }}
-          yawLimits={turretModelDefinition.yaw}
-          gunOrigin={gunOrigin}
-          pitch={model.gunPitch}
-          model={gunModelDefinition.model}
-          modelObjects={Object.values(modelGltf.nodes)}
-          turretOrigin={turretOrigin}
-        /> */}
       </group>
     </group>
   );
