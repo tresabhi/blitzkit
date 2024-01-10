@@ -1,4 +1,5 @@
 import { deburr } from 'lodash';
+import { Vector2Tuple } from 'three';
 import { TankType, TreeTypeString } from '../../components/Tanks';
 import { asset } from './asset';
 
@@ -67,6 +68,7 @@ export interface ShellDefinition {
   ricochet: number;
   type: ShellType;
   icon: string;
+  penetration: number | Vector2Tuple;
 }
 
 export const tankDefinitions = fetch(asset('definitions/tanks.json'), {

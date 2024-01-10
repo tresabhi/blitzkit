@@ -315,9 +315,9 @@ export async function buildDefinitions() {
             Object.keys(turret.guns).forEach((gunKey, gunIndex) => {
               const turretGunEntry = turret.guns[gunKey];
               const gunId = toUniqueId(nation, gunList.root.ids[gunKey]);
-              const gun = gunList.root.shared[gunKey];
+              const gunListEntry = gunList.root.shared[gunKey];
               const pitchLimitsRaw =
-                turretGunEntry.pitchLimits ?? gun.pitchLimits;
+                turretGunEntry.pitchLimits ?? gunListEntry.pitchLimits;
               const gunPitch = (
                 typeof pitchLimitsRaw === 'string'
                   ? pitchLimitsRaw
@@ -329,7 +329,7 @@ export async function buildDefinitions() {
                 parse(turretGunEntry.models.undamaged).name.split('_')[1],
               );
               const gunName =
-                strings[gun.userString] ?? gunKey.replaceAll('_', ' ');
+                strings[gunListEntry.userString] ?? gunKey.replaceAll('_', ' ');
               const gunType =
                 'clip' in turretGunEntry
                   ? turretGunEntry.pumpGunMode
@@ -380,7 +380,7 @@ export async function buildDefinitions() {
               tankDefinitions[tankId].turrets[turretIndex].guns.push({
                 id: gunId,
                 name: gunName,
-                tier: gun.level as Tier,
+                tier: gunListEntry.level as Tier,
                 shells: [],
                 type: gunType,
                 reload: gunReload,
@@ -413,19 +413,23 @@ export async function buildDefinitions() {
                 },
               };
 
-              Object.keys(gun.shots).forEach((shellKey) => {
-                const turretShellEntry = gun.shots[shellKey];
+              Object.keys(gunListEntry.shots).forEach((shellKey) => {
+                const gunShellEntry = gunListEntry.shots[shellKey];
                 const shell = shellList.root[shellKey];
                 const shellId = toUniqueId(nation, shell.id);
                 const shellName =
                   strings[shell.userString] ?? shellKey.replaceAll('_', ' ');
+                const penetrationRaw = gunShellEntry.piercingPower
+                  .split(' ')
+                  .filter((penetrationString) => penetrationString !== '')
+                  .map(Number);
 
                 tankDefinitions[tankId].turrets[turretIndex].guns[
                   gunIndex
                 ].shells.push({
                   id: shellId,
                   name: shellName,
-                  speed: turretShellEntry.speed,
+                  speed: gunShellEntry.speed,
                   damage: {
                     armor: shell.damage.armor,
                     devices: shell.damage.devices,
@@ -435,6 +439,10 @@ export async function buildDefinitions() {
                   ricochet: shell.ricochetAngle,
                   type: blitzShellKindToBLitzkrieg[shell.kind],
                   icon: shell.icon,
+                  penetration:
+                    penetrationRaw[0] === penetrationRaw[1]
+                      ? penetrationRaw[0]
+                      : [penetrationRaw[0], penetrationRaw[1]],
                 });
               });
             });
