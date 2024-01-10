@@ -11,6 +11,7 @@ import {
   modelDefinitions,
 } from '../../../../../../../core/blitzkrieg/modelDefinitions';
 import { useTankopedia } from '../../../../../../../stores/tankopedia';
+import { Lighting } from '../../Lighting';
 
 interface TankArmorProps extends GroupProps {}
 
@@ -81,6 +82,8 @@ export function TankArmor(props: TankArmorProps) {
 
   return (
     <HeadsUpDisplay>
+      <Lighting />
+
       <group {...props} rotation={[-Math.PI / 2, 0, model.hullYaw]}>
         {nodes.map((node) => {
           const isHull = node.name.startsWith('hull_');

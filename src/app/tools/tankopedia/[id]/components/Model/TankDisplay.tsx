@@ -1,9 +1,16 @@
 import {
   EnterFullScreenIcon,
   ExitFullScreenIcon,
-  FrameIcon,
+  GearIcon,
 } from '@radix-ui/react-icons';
-import { Button, Card, Flex, Tabs, Theme } from '@radix-ui/themes';
+import {
+  Button,
+  Card,
+  DropdownMenu,
+  Flex,
+  Tabs,
+  Theme,
+} from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
@@ -29,6 +36,7 @@ export function TankDisplay() {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const mode = useTankopedia((state) => state.mode);
   const showGrid = useTankopedia((state) => state.model.showGrid);
+  const opaqueArmor = useTankopedia((state) => state.model.opaqueArmor);
   const protagonist = useTankopedia((state) => {
     if (!state.areTanksAssigned) return;
     return state.protagonist;
@@ -147,17 +155,37 @@ export function TankDisplay() {
                 right: 18,
               }}
             >
-              <Button
-                color={showGrid ? 'purple' : 'gray'}
-                variant="ghost"
-                onClick={() => {
-                  mutateTankopedia((draft) => {
-                    draft.model.showGrid = !draft.model.showGrid;
-                  });
-                }}
-              >
-                <FrameIcon />
-              </Button>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <Button color={showGrid ? 'purple' : 'gray'} variant="ghost">
+                    <GearIcon />
+                  </Button>
+                </DropdownMenu.Trigger>
+
+                <DropdownMenu.Content>
+                  <DropdownMenu.CheckboxItem
+                    checked={showGrid}
+                    onCheckedChange={(checked) => {
+                      mutateTankopedia((draft) => {
+                        draft.model.showGrid = checked;
+                      });
+                    }}
+                  >
+                    Show grid
+                  </DropdownMenu.CheckboxItem>
+
+                  <DropdownMenu.CheckboxItem
+                    checked={opaqueArmor}
+                    onCheckedChange={(checked) => {
+                      mutateTankopedia((draft) => {
+                        draft.model.opaqueArmor = checked;
+                      });
+                    }}
+                  >
+                    Opaque armor
+                  </DropdownMenu.CheckboxItem>
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
 
               <Button
                 variant="ghost"

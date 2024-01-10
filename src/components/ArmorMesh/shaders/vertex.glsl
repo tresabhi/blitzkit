@@ -1,8 +1,6 @@
-varying vec3 vNormal;
-varying vec3 vViewPosition;
+varying vec3 vCSMViewPosition;
 
 void main() {
   vec4 vViewPosition4 = modelViewMatrix * vec4(position, 1.0);
-  vViewPosition = vViewPosition4.xyz;
-  vNormal = normalMatrix * normal;
+  vCSMViewPosition = vViewPosition4.xyz;
 }

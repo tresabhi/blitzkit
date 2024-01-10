@@ -32,6 +32,7 @@ type Tankopedia = {
     gunPitch: number;
     controlsEnabled: boolean;
     showGrid: boolean;
+    opaqueArmor: boolean;
   };
   mode: TankopediaMode;
 } & (
@@ -70,6 +71,7 @@ export const useTankopedia = create<Tankopedia>()(() => ({
     turretYaw: 0,
     controlsEnabled: true,
     showGrid: true,
+    opaqueArmor: false,
   },
   areTanksAssigned: false,
   mode: 'model',

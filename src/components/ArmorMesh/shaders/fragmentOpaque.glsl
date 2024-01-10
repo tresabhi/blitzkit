@@ -41,5 +41,12 @@ void main() {
     }
   }
 
-  csm_FragColor = vec4(1.0, 0.0, 0.0, (1.0 - penetrationChance) * 0.5);
+  float h = penetrationChance / PI;
+  float s = 1.0;
+  float v = 1.0;
+  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+  vec3 p = abs(fract(h + K.xyz) * 6.0 - K.www);
+  vec3 rgb = v * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), s);
+
+  csm_DiffuseColor = vec4(rgb, 1.0);
 }

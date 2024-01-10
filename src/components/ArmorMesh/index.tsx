@@ -1,7 +1,9 @@
 import { MeshProps } from '@react-three/fiber';
-import { MeshBasicMaterial } from 'three';
+import { MeshStandardMaterial } from 'three';
 import CustomShaderMaterial from 'three-custom-shader-material';
+import { useTankopedia } from '../../stores/tankopedia';
 import fragment from './shaders/fragment.glsl';
+import fragmentOpaque from './shaders/fragmentOpaque.glsl';
 import vertex from './shaders/vertex.glsl';
 
 interface ArmorMeshProps extends MeshProps {
@@ -20,6 +22,8 @@ export function ArmorMesh({
   normalization,
   ...props
 }: ArmorMeshProps) {
+  const opaqueArmor = useTankopedia((state) => state.model.opaqueArmor);
+
   return (
     <>
       <mesh {...props}>
@@ -28,10 +32,10 @@ export function ArmorMesh({
 
       <mesh {...props} renderOrder={1}>
         <CustomShaderMaterial
-          baseMaterial={MeshBasicMaterial}
+          baseMaterial={MeshStandardMaterial}
           transparent
           silent
-          depthWrite={false}
+          // depthWrite={false}
           uniforms={{
             thickness: { value: thickness },
             penetration: { value: penetration },
@@ -40,7 +44,8 @@ export function ArmorMesh({
             normalization: { value: normalization * (Math.PI / 180) },
           }}
           vertexShader={vertex}
-          fragmentShader={fragment}
+          // split shaders due to https://github.com/FarazzShaikh/THREE-CustomShaderMaterial/issues/48
+          fragmentShader={opaqueArmor ? fragmentOpaque : fragment}
         />
       </mesh>
     </>
