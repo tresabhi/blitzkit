@@ -7,6 +7,7 @@ import {
   useRef,
 } from 'react';
 import { Euler, Group, Mesh, Object3D, Vector3 } from 'three';
+import { ArmorHighlightMaterial } from '../../../../../../../../../components/ArmorHighlightMaterial';
 import { applyPitchYawLimits } from '../../../../../../../../../core/blitz/applyPitchYawLimits';
 import {
   InitialTurretRotation,
@@ -19,7 +20,8 @@ import { normalizeAnglePI } from '../../../../../../../../../core/math/normalize
 interface TurretContainerProps {
   turretOrigin: Vector3;
   gunOrigin: Vector3;
-  objects: Object3D[];
+  modelObjects: Object3D[];
+  armorObjects: Object3D[];
   children: ReactNode;
   yaw: number;
   pitch: number;
@@ -39,12 +41,13 @@ export const TurretContainer = forwardRef(
       turretOrigin,
       yaw,
       children,
-      objects,
+      modelObjects,
       yawLimits,
       model,
       onYawEnd,
       pitch,
       gunOrigin,
+      armorObjects,
       pitchLimits,
       onYawStart,
       initialTurretRotation,
@@ -78,7 +81,7 @@ export const TurretContainer = forwardRef(
 
     return (
       <group position={position} rotation={rotation} ref={turretContainer}>
-        {objects.map((object) => {
+        {modelObjects.map((object) => {
           const isTurret = object.name.startsWith('turret_');
           const isCurrentTurret =
             object.name === `turret_${model.toString().padStart(2, '0')}`;
@@ -159,6 +162,25 @@ export const TurretContainer = forwardRef(
               rotation={object.rotation}
               scale={object.scale}
             />
+          );
+        })}
+
+        {armorObjects.map((object) => {
+          const isCurrentTurret = object.name.startsWith(
+            `turret_${model.toString().padStart(2, '0')}`,
+          );
+          const isVisible = isCurrentTurret;
+
+          if (!isVisible) return null;
+
+          return (
+            <mesh
+              position={turretOrigin}
+              key={object.uuid}
+              geometry={(object as Mesh).geometry}
+            >
+              <ArmorHighlightMaterial />
+            </mesh>
           );
         })}
 

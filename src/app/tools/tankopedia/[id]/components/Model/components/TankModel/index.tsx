@@ -34,9 +34,13 @@ export const TankModel = forwardRef<Group>((_props, ref) => {
 
   if (!protagonist) return null;
 
-  const gltf = useLoader(
+  const modelGltf = useLoader(
     GLTFLoader,
     asset(`3d/tanks/models/${protagonist.tank.id}.glb`),
+  );
+  const armorGltf = useLoader(
+    GLTFLoader,
+    asset(`3d/tanks/armor/${protagonist.tank.id}.glb`),
   );
   const model = useTankopedia((state) => state.model);
   const hullContainer = useRef<Group>(null);
@@ -69,7 +73,8 @@ export const TankModel = forwardRef<Group>((_props, ref) => {
 
   return (
     <HullContainer
-      objects={Object.values(gltf.nodes)}
+      modelObjects={Object.values(modelGltf.nodes)}
+      armorObjects={Object.values(armorGltf.nodes)}
       yaw={model.hullYaw}
       ref={hullContainer}
       onYawStart={() =>
@@ -95,10 +100,11 @@ export const TankModel = forwardRef<Group>((_props, ref) => {
       }}
     >
       <TurretContainer
+        armorObjects={Object.values(armorGltf.nodes)}
         initialTurretRotation={tankModelDefinition.turretRotation}
         gunOrigin={gunOrigin}
         ref={turretContainer}
-        objects={Object.values(gltf.nodes)}
+        modelObjects={Object.values(modelGltf.nodes)}
         model={turretModelDefinition.model}
         onYawStart={() =>
           mutateTankopedia((state) => {
@@ -121,6 +127,7 @@ export const TankModel = forwardRef<Group>((_props, ref) => {
       >
         <GunContainer
           ref={gunContainer}
+          armorObjects={Object.values(armorGltf.nodes)}
           initialTurretRotation={tankModelDefinition.turretRotation}
           onPitchStart={() => {
             mutateTankopedia((state) => {
@@ -141,7 +148,7 @@ export const TankModel = forwardRef<Group>((_props, ref) => {
           gunOrigin={gunOrigin}
           pitch={model.gunPitch}
           model={gunModelDefinition.model}
-          objects={Object.values(gltf.nodes)}
+          modelObjects={Object.values(modelGltf.nodes)}
           turretOrigin={turretOrigin}
         />
       </TurretContainer>

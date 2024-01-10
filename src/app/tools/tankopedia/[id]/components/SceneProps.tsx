@@ -5,39 +5,23 @@ import { useTankopedia } from '../../../../../stores/tankopedia';
 export function SceneProps() {
   const showGrid = useTankopedia((state) => state.model.showGrid);
 
+  if (!showGrid) return null;
+
   return (
     <>
-      {showGrid && (
-        <>
-          <InfiniteGridHelper
-            size1={1 / 5}
-            size2={1}
-            distance={20}
-            color={new Color('#ffffff')}
-          />
-          <InfiniteGridHelper
-            position={[0, 1e-4, 0]}
-            size1={0}
-            size2={100}
-            distance={25}
-            color={new Color('red')}
-          />
-        </>
-      )}
-
-      <directionalLight
-        position={[1, 1, -1]}
-        intensity={2}
-        castShadow
-        color={'rgb(225, 225, 255)'}
+      <InfiniteGridHelper
+        size1={1 / 5}
+        size2={1}
+        distance={20}
+        color={new Color('#ffffff')}
       />
-      <directionalLight
-        position={[-1, 1, 1]}
-        intensity={1}
-        castShadow
-        color={'rgb(225, 225, 255)'}
+      <InfiniteGridHelper
+        position={[0, 1e-4, 0]}
+        size1={0}
+        size2={100}
+        distance={25}
+        color={new Color('red')}
       />
-      <ambientLight intensity={0.25} />
     </>
   );
 }

@@ -68,6 +68,7 @@ export const TankArmor = forwardRef<Group>((_props, ref) => {
 
         return (
           <mesh
+            scale={1 + 1e-3}
             key={node.uuid}
             geometry={(node as Mesh).geometry}
             position={position}

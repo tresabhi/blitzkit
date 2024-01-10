@@ -1,6 +1,7 @@
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { RefObject, forwardRef, useImperativeHandle, useRef } from 'react';
 import { Group, Mesh, Object3D, Vector3 } from 'three';
+import { ArmorHighlightMaterial } from '../../../../../../../../../components/ArmorHighlightMaterial';
 import { applyPitchYawLimits } from '../../../../../../../../../core/blitz/applyPitchYawLimits';
 import {
   InitialTurretRotation,
@@ -15,7 +16,8 @@ interface GunContainerProps {
   gunOrigin: Vector3;
   pitch: number;
   yaw: number;
-  objects: Object3D[];
+  modelObjects: Object3D[];
+  armorObjects: Object3D[];
   model: number;
   yawLimits?: YawLimits;
   pitchLimits: PitchLimits;
@@ -33,10 +35,11 @@ export const GunContainer = forwardRef<Group, GunContainerProps>(
       pitch,
       initialTurretRotation,
       yaw,
-      objects,
+      modelObjects,
       yawLimits,
       onPitchStart,
       turretContainer,
+      armorObjects,
       pitchLimits,
       model,
       onPitchEnd,
@@ -59,7 +62,7 @@ export const GunContainer = forwardRef<Group, GunContainerProps>(
         rotation={[pitch, 0, 0]}
         ref={gunContainer}
       >
-        {objects.map((object) => {
+        {modelObjects.map((object) => {
           const isCurrentMantlet =
             object.name === `gun_${model.toString().padStart(2, '0')}_mask`;
           const isCurrentGun =
@@ -141,6 +144,25 @@ export const GunContainer = forwardRef<Group, GunContainerProps>(
               rotation={object.rotation}
               scale={object.scale}
             />
+          );
+        })}
+
+        {armorObjects.map((object) => {
+          const isCurrentGun = object.name.startsWith(
+            `gun_${model.toString().padStart(2, '0')}`,
+          );
+          const isVisible = isCurrentGun;
+
+          if (!isVisible) return null;
+
+          return (
+            <mesh
+              position={turretOrigin.clone().add(gunOrigin)}
+              key={object.uuid}
+              geometry={(object as Mesh).geometry}
+            >
+              <ArmorHighlightMaterial />
+            </mesh>
           );
         })}
       </group>

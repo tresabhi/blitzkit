@@ -17,9 +17,9 @@ import mutateTankopedia, {
 } from '../../../../../../stores/tankopedia';
 import { Loader } from '../../../../components/Loader';
 import { Controls } from '../Control';
+import { Lighting } from '../Lighting';
 import { RotationInputs } from '../RotationInputs';
 import { SceneProps } from '../SceneProps';
-import { TankArmor } from './components/TankArmor';
 import { TankModel } from './components/TankModel';
 
 export function TankDisplay() {
@@ -117,9 +117,11 @@ export function TankDisplay() {
                 ref={canvas}
                 camera={{ fov: 20 }}
                 onPointerDown={handlePointerDown}
+                gl={{ logarithmicDepthBuffer: true }}
               >
                 <Controls />
                 <SceneProps />
+                <Lighting />
 
                 <Suspense
                   fallback={
@@ -132,7 +134,6 @@ export function TankDisplay() {
                   }
                 >
                   <TankModel ref={hullContainer} />
-                  {mode === 'armor' && <TankArmor />}
                 </Suspense>
               </Canvas>
             </div>

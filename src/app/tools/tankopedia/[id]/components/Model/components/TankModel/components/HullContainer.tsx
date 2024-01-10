@@ -1,13 +1,22 @@
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { ReactNode, forwardRef, useImperativeHandle, useRef } from 'react';
-import { Group, Mesh, MeshStandardMaterial, Object3D, Vector2 } from 'three';
+import {
+  Euler,
+  Group,
+  Mesh,
+  MeshStandardMaterial,
+  Object3D,
+  Vector2,
+} from 'three';
+import { ArmorHighlightMaterial } from '../../../../../../../../../components/ArmorHighlightMaterial';
 import { resolveJsxTree } from '../../../../../../../../../core/blitzkrieg/resolveJsxTree';
 import { normalizeAnglePI } from '../../../../../../../../../core/math/normalizeAngle180';
 
 interface HullContainerProps {
   children: ReactNode;
   yaw: number;
-  objects: Object3D[];
+  modelObjects: Object3D[];
+  armorObjects: Object3D[];
   onYawStart: () => void;
   onYawEnd: (yaw: number) => void;
   onTrackStart: () => void;
@@ -16,17 +25,27 @@ interface HullContainerProps {
 
 export const HullContainer = forwardRef<Group, HullContainerProps>(
   (
-    { children, yaw, objects, onYawStart, onYawEnd, onTrackEnd, onTrackStart },
+    {
+      children,
+      yaw,
+      armorObjects,
+      modelObjects,
+      onYawStart,
+      onYawEnd,
+      onTrackEnd,
+      onTrackStart,
+    },
     ref,
   ) => {
     const canvas = useThree((state) => state.gl.domElement);
     const hullContainer = useRef<Group>(null);
+    const rotation = [-Math.PI / 2, 0, yaw] as unknown as Euler;
 
     useImperativeHandle(ref, () => hullContainer.current!);
 
     return (
-      <group ref={hullContainer} rotation={[-Math.PI / 2, 0, yaw]}>
-        {objects.map((object) => {
+      <group ref={hullContainer} rotation={rotation}>
+        {modelObjects.map((object) => {
           const isHull = object.name === 'hull';
           const isWheel = object.name.startsWith('chassis_wheel_');
           const isTrack = object.name.startsWith('chassis_track_');
@@ -93,6 +112,19 @@ export const HullContainer = forwardRef<Group, HullContainerProps>(
               scale={object.scale}
               onPointerDown={handlePointerDown}
             />
+          );
+        })}
+
+        {armorObjects.map((object) => {
+          const isHull = object.name.startsWith('hull_');
+          const isVisible = isHull;
+
+          if (!isVisible) return null;
+
+          return (
+            <mesh key={object.uuid} geometry={(object as Mesh).geometry}>
+              <ArmorHighlightMaterial />
+            </mesh>
           );
         })}
 
