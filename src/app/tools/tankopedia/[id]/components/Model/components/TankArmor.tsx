@@ -86,9 +86,9 @@ export function TankArmor() {
           const isHull = node.name.startsWith('hull_');
           const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
           const isVisible = isHull;
-          const thickness = tankModelDefinition.armor.thickness[armorId] ?? 0;
+          const thickness = tankModelDefinition.armor.thickness[armorId];
 
-          if (!isVisible) return null;
+          if (!isVisible || thickness === undefined) return null;
           return (
             <ArmorMesh
               key={node.uuid}
@@ -111,10 +111,9 @@ export function TankArmor() {
             );
             const isVisible = isCurrentTurret;
             const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
-            const thickness =
-              turretModelDefinition.armor.thickness[armorId] ?? 0;
+            const thickness = turretModelDefinition.armor.thickness[armorId];
 
-            if (!isVisible) return null;
+            if (!isVisible || thickness === undefined) return null;
             return (
               <ArmorMesh
                 key={node.uuid}
@@ -144,11 +143,9 @@ export function TankArmor() {
               );
               const isVisible = isCurrentGun;
               const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
-              const thickness =
-                gunModelDefinition.armor.thickness[armorId] ?? 0;
+              const thickness = gunModelDefinition.armor.thickness[armorId];
 
-              if (!isVisible) return null;
-
+              if (!isVisible || thickness === undefined) return null;
               return (
                 <ArmorMesh
                   key={node.uuid}
