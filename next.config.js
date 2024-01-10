@@ -4,18 +4,18 @@ const withVanillaExtract = createVanillaExtractPlugin({ tests: /\.css$/ });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  ...withVanillaExtract(),
+  ...withVanillaExtract({
+    webpack: (config) => {
+      config.module.rules.push({
+        test: /\.glsl$/,
+        type: 'asset/source',
+      });
+      return config;
+    },
+  }),
 
   distDir: 'dist/website',
   reactStrictMode: false,
-
-  webpack: (config) => {
-    config.module.rules.push({
-      test: /\.glsl$/,
-      type: 'asset/source',
-    });
-    return config;
-  },
 };
 
 export default nextConfig;
