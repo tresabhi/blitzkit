@@ -1,8 +1,8 @@
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { ReactNode, forwardRef, useImperativeHandle, useRef } from 'react';
 import { Group, Mesh, MeshStandardMaterial, Object3D, Vector2 } from 'three';
-import { resolveJsxTree } from '../../../../../core/blitzkrieg/resolveJsxTree';
-import { normalizeAnglePI } from '../../../../../core/math/normalizeAngle180';
+import { resolveJsxTree } from '../../../../../../../../../core/blitzkrieg/resolveJsxTree';
+import { normalizeAnglePI } from '../../../../../../../../../core/math/normalizeAngle180';
 
 interface HullContainerProps {
   children: ReactNode;

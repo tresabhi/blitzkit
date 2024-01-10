@@ -1,85 +1,106 @@
 import { ThreeEvent, useThree } from '@react-three/fiber';
-import { RefObject, forwardRef, useImperativeHandle, useRef } from 'react';
-import { Group, Mesh, Object3D, Vector3 } from 'three';
-import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
+import {
+  ReactNode,
+  RefObject,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+} from 'react';
+import { Euler, Group, Mesh, Object3D, Vector3 } from 'three';
+import { applyPitchYawLimits } from '../../../../../../../../../core/blitz/applyPitchYawLimits';
 import {
   InitialTurretRotation,
   PitchLimits,
   YawLimits,
-} from '../../../../../core/blitzkrieg/modelDefinitions';
-import { resolveJsxTree } from '../../../../../core/blitzkrieg/resolveJsxTree';
-import { normalizeAnglePI } from '../../../../../core/math/normalizeAngle180';
+} from '../../../../../../../../../core/blitzkrieg/modelDefinitions';
+import { resolveJsxTree } from '../../../../../../../../../core/blitzkrieg/resolveJsxTree';
+import { normalizeAnglePI } from '../../../../../../../../../core/math/normalizeAngle180';
 
-interface GunContainerProps {
+interface TurretContainerProps {
   turretOrigin: Vector3;
   gunOrigin: Vector3;
-  pitch: number;
-  yaw: number;
   objects: Object3D[];
+  children: ReactNode;
+  yaw: number;
+  pitch: number;
   model: number;
   yawLimits?: YawLimits;
   pitchLimits: PitchLimits;
-  onPitchStart: () => void;
-  onPitchEnd: (pitch: number, yaw: number) => void;
+  onYawStart: () => void;
+  onYawEnd: (pitch: number, yaw: number) => void;
+  gunContainer: RefObject<Group>;
   initialTurretRotation?: InitialTurretRotation;
-  turretContainer: RefObject<Group>;
 }
 
-export const GunContainer = forwardRef<Group, GunContainerProps>(
+export const TurretContainer = forwardRef(
   (
     {
-      gunOrigin,
+      gunContainer,
       turretOrigin,
-      pitch,
-      initialTurretRotation,
       yaw,
+      children,
       objects,
       yawLimits,
-      onPitchStart,
-      turretContainer,
-      pitchLimits,
       model,
-      onPitchEnd,
-    }: GunContainerProps,
+      onYawEnd,
+      pitch,
+      gunOrigin,
+      pitchLimits,
+      onYawStart,
+      initialTurretRotation,
+    }: TurretContainerProps,
     ref,
   ) => {
     const canvas = useThree((state) => state.gl.domElement);
-    const gunContainer = useRef<Group>(null);
+    const turretContainer = useRef<Group>(null);
+    const position = new Vector3()
+      .sub(turretOrigin)
+      .applyAxisAngle(new Vector3(0, 0, 1), yaw);
+    const rotation = new Euler(0, 0, yaw);
 
-    useImperativeHandle(ref, () => gunContainer.current!);
+    if (initialTurretRotation) {
+      const pitch = -initialTurretRotation.pitch * (Math.PI / 180);
+      const yaw = -initialTurretRotation.yaw * (Math.PI / 180);
+      const roll = -initialTurretRotation.roll * (Math.PI / 180);
+
+      position
+        .applyAxisAngle(new Vector3(1, 0, 0), pitch)
+        .applyAxisAngle(new Vector3(0, 1, 0), roll)
+        .applyAxisAngle(new Vector3(0, 0, 1), yaw);
+      rotation.x += pitch;
+      rotation.y += roll;
+      rotation.z += yaw;
+    }
+
+    position.add(turretOrigin);
+
+    useImperativeHandle(ref, () => turretContainer.current!);
 
     return (
-      <group
-        position={new Vector3()
-          .sub(turretOrigin)
-          .sub(gunOrigin)
-          .applyAxisAngle(new Vector3(1, 0, 0), pitch)
-          .add(turretOrigin)
-          .add(gunOrigin)}
-        rotation={[pitch, 0, 0]}
-        ref={gunContainer}
-      >
+      <group position={position} rotation={rotation} ref={turretContainer}>
         {objects.map((object) => {
-          const isCurrentMantlet =
-            object.name === `gun_${model.toString().padStart(2, '0')}_mask`;
-          const isCurrentGun =
-            object.name === `gun_${model.toString().padStart(2, '0')}`;
-          const isVisible = isCurrentGun || isCurrentMantlet;
+          const isTurret = object.name.startsWith('turret_');
+          const isCurrentTurret =
+            object.name === `turret_${model.toString().padStart(2, '0')}`;
+          const isVisible = isCurrentTurret;
           let draftPitch = 0;
           let draftYaw = 0;
 
           function handlePointerDown(event: ThreeEvent<PointerEvent>) {
             event.stopPropagation();
 
-            onPitchStart();
-            draftPitch = pitch;
-            draftYaw = yaw;
-            window.addEventListener('pointermove', handlePointerMove);
-            window.addEventListener('pointerup', handlePointerUp);
+            if (isTurret) {
+              draftYaw = yaw;
+              draftPitch = pitch;
+
+              onYawStart();
+              window.addEventListener('pointermove', handlePointerMove);
+              window.addEventListener('pointerup', handlePointerUp);
+            }
           }
           function handlePointerMove(event: PointerEvent) {
             [draftPitch, draftYaw] = applyPitchYawLimits(
-              draftPitch - event.movementY * (Math.PI / canvas.height),
+              draftPitch,
               draftYaw + event.movementX * (Math.PI / canvas.width),
               pitchLimits,
               yawLimits,
@@ -118,10 +139,7 @@ export const GunContainer = forwardRef<Group, GunContainerProps>(
             }
           }
           function handlePointerUp() {
-            onPitchEnd(
-              normalizeAnglePI(draftPitch),
-              normalizeAnglePI(draftYaw),
-            );
+            onYawEnd(normalizeAnglePI(draftPitch), normalizeAnglePI(draftYaw));
             window.removeEventListener('pointermove', handlePointerMove);
             window.removeEventListener('pointerup', handlePointerUp);
           }
@@ -143,6 +161,8 @@ export const GunContainer = forwardRef<Group, GunContainerProps>(
             />
           );
         })}
+
+        {children}
       </group>
     );
   },

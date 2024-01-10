@@ -6,7 +6,10 @@ import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import commitMultipleFiles from '../../src/core/blitzkrieg/commitMultipleFiles';
-import { ModelDefinitions } from '../../src/core/blitzkrieg/modelDefinitions';
+import {
+  ModelArmor,
+  ModelDefinitions,
+} from '../../src/core/blitzkrieg/modelDefinitions';
 import {
   GunDefinition,
   ShellType,
@@ -40,14 +43,20 @@ type ShellDefinitionsList = Record<
 > & {
   icons: Record<string, string>;
 };
+type VehicleDefinitionArmor = Record<
+  string,
+  number | { vehicleDamageFactor: 0; '#text': number }
+>;
 interface VehicleDefinitions {
   invisibility: { moving: number; still: number; firePenalty: number };
   hull: {
+    armor: VehicleDefinitionArmor;
     turretPositions: { turret: string };
     turretInitialRotation?: { yaw: 0; pitch: 6.5; roll: 0 };
   };
   turrets0: {
     [key: string]: {
+      armor: VehicleDefinitionArmor;
       userString: number;
       level: number;
       yawLimits: string | string[];
@@ -55,6 +64,7 @@ interface VehicleDefinitions {
       models: { undamaged: string };
       guns: {
         [key: string]: {
+          armor: VehicleDefinitionArmor;
           reloadTime: number;
           maxAmmo: number;
           extraPitchLimits?: {
@@ -174,6 +184,28 @@ export async function buildDefinitions() {
           .map(Number) as Vector3Tuple;
         const tankId = toUniqueId(nation, tank.id);
         const tankTags = tank.tags.split(' ');
+        const hullArmor: ModelArmor = { thickness: {} };
+
+        Object.keys(tankDefinition.root.hull.armor)
+          .filter((name) => name.startsWith('armor_'))
+          .forEach((name) => {
+            const armorIdString = name.match(/armor_(\d+)/)?.[1];
+
+            if (armorIdString === undefined) {
+              throw new SyntaxError(`Invalid armor id: ${name}`);
+            }
+
+            const armorId = parseInt(armorIdString);
+            const armorRaw = tankDefinition.root.hull.armor[name];
+
+            if (typeof armorRaw === 'number') {
+              hullArmor.thickness[armorId] = armorRaw;
+            } else {
+              if (!hullArmor.spaced) hullArmor.spaced = [];
+              hullArmor.thickness[armorId] = armorRaw['#text'];
+              hullArmor.spaced.push(armorId);
+            }
+          });
 
         tankDefinitions[tankId] = {
           id: tankId,
@@ -202,6 +234,7 @@ export async function buildDefinitions() {
         };
 
         modelDefinitions[tankId] = {
+          armor: hullArmor,
           turretOrigin,
           turretRotation: tankDefinition.root.hull.turretInitialRotation
             ? {
@@ -234,6 +267,28 @@ export async function buildDefinitions() {
             )
               .split(' ')
               .map(Number) as Vector3Tuple;
+            const turretArmor: ModelArmor = { thickness: {} };
+
+            Object.keys(turret.armor)
+              .filter((name) => name.startsWith('armor_'))
+              .forEach((name) => {
+                const armorIdString = name.match(/armor_(\d+)/)?.[1];
+
+                if (armorIdString === undefined) {
+                  throw new SyntaxError(`Invalid armor id: ${name}`);
+                }
+
+                const armorId = parseInt(armorIdString);
+                const armorRaw = turret.armor[name];
+
+                if (typeof armorRaw === 'number') {
+                  turretArmor.thickness[armorId] = armorRaw;
+                } else {
+                  if (!turretArmor.spaced) turretArmor.spaced = [];
+                  turretArmor.thickness[armorId] = armorRaw['#text'];
+                  turretArmor.spaced.push(armorId);
+                }
+              });
 
             tankDefinitions[tankId].turrets.push({
               id: turretId,
@@ -247,6 +302,7 @@ export async function buildDefinitions() {
             });
 
             modelDefinitions[tankId].turrets[turretId] = {
+              armor: turretArmor,
               gunOrigin,
               model: turretModel,
               yaw:
@@ -301,6 +357,25 @@ export async function buildDefinitions() {
                   ? turretGunEntry.extraPitchLimits.transition
                   : turretGunEntry.extraPitchLimits.transition.at(-1)!
                 : undefined;
+              const gunArmor: ModelArmor = { thickness: {} };
+
+              Object.keys(turretGunEntry.armor)
+                .filter((name) => name.startsWith('armor_'))
+                .forEach((name) => {
+                  const armorIdString = name.match(/armor_(\d+)/)?.[1];
+                  if (armorIdString === undefined) {
+                    throw new SyntaxError(`Invalid armor id: ${name}`);
+                  }
+                  const armorId = parseInt(armorIdString);
+                  const armorRaw = turretGunEntry.armor[name];
+                  if (typeof armorRaw === 'number') {
+                    gunArmor.thickness[armorId] = armorRaw;
+                  } else {
+                    if (!gunArmor.spaced) gunArmor.spaced = [];
+                    gunArmor.thickness[armorId] = armorRaw['#text'];
+                    gunArmor.spaced.push(armorId);
+                  }
+                });
 
               tankDefinitions[tankId].turrets[turretIndex].guns.push({
                 id: gunId,
@@ -314,6 +389,7 @@ export async function buildDefinitions() {
               } as GunDefinition);
 
               modelDefinitions[tankId].turrets[turretId].guns[gunId] = {
+                armor: gunArmor,
                 model: gunModel,
                 pitch: {
                   min: gunPitch[0],
