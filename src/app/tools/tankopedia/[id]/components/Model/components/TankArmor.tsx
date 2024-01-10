@@ -1,4 +1,4 @@
-import { useLoader } from '@react-three/fiber';
+import { GroupProps, useLoader } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
 import { Euler, Mesh, Vector3 } from 'three';
 import { GLTFLoader } from 'three-stdlib';
@@ -12,9 +12,9 @@ import {
 } from '../../../../../../../core/blitzkrieg/modelDefinitions';
 import { useTankopedia } from '../../../../../../../stores/tankopedia';
 
-interface TankArmorProps {}
+interface TankArmorProps extends GroupProps {}
 
-export function TankArmor() {
+export function TankArmor(props: TankArmorProps) {
   const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
     ModelDefinitions | undefined
   >(undefined);
@@ -81,7 +81,7 @@ export function TankArmor() {
 
   return (
     <HeadsUpDisplay>
-      <group rotation={[-Math.PI / 2, 0, model.hullYaw]}>
+      <group {...props} rotation={[-Math.PI / 2, 0, model.hullYaw]}>
         {nodes.map((node) => {
           const isHull = node.name.startsWith('hull_');
           const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
