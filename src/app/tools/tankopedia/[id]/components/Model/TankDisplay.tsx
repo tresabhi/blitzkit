@@ -20,6 +20,7 @@ import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
 import { RotationInputs } from '../RotationInputs';
 import { SceneProps } from '../SceneProps';
+import { TankArmor } from './components/TankArmor';
 import { TankModel } from './components/TankModel';
 
 export function TankDisplay() {
@@ -134,6 +135,7 @@ export function TankDisplay() {
                   }
                 >
                   <TankModel ref={hullContainer} />
+                  <TankArmor />
                 </Suspense>
               </Canvas>
             </div>

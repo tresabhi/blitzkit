@@ -1,82 +1,65 @@
-import { useLoader } from '@react-three/fiber';
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
-import { Group, Mesh, Vector3 } from 'three';
-import { GLTFLoader } from 'three-stdlib';
-import { X_AXIS } from '../../../../../../../constants/axis';
-import { asset } from '../../../../../../../core/blitzkrieg/asset';
-import {
-  ModelDefinitions,
-  modelDefinitions,
-} from '../../../../../../../core/blitzkrieg/modelDefinitions';
-import { useTankopedia } from '../../../../../../../stores/tankopedia';
+import { forwardRef } from 'react';
+import { Group } from 'three';
+import { HeadsUpDisplay } from '../../../../../../../components/HeadsUpDisplay';
 
-export const TankArmor = forwardRef<Group>((_props, ref) => {
-  const hullContainer = useRef<Group>(null);
-  const protagonist = useTankopedia((state) => {
-    if (!state.areTanksAssigned) return;
-    return state.protagonist;
-  });
-  const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
-    ModelDefinitions | undefined
-  >(undefined);
+interface TankArmorProps {}
 
-  useEffect(() => {
-    (async () => {
-      setAwaitedModelDefinitions(await modelDefinitions);
-    })();
-  }, []);
-
-  useImperativeHandle(ref, () => hullContainer.current!);
-
-  if (!awaitedModelDefinitions) return null;
-  if (!protagonist) return null;
-
-  const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
-  const turretModelDefinition =
-    tankModelDefinition.turrets[protagonist.turret.id];
-  const turretOrigin = new Vector3(
-    tankModelDefinition.turretOrigin[0],
-    tankModelDefinition.turretOrigin[1],
-    -tankModelDefinition.turretOrigin[2],
-  ).applyAxisAngle(X_AXIS, Math.PI / 2);
-  const gunOrigin = new Vector3(
-    turretModelDefinition.gunOrigin[0],
-    turretModelDefinition.gunOrigin[1],
-    -turretModelDefinition.gunOrigin[2],
-  ).applyAxisAngle(X_AXIS, Math.PI / 2);
-  const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
-  const gltf = useLoader(
-    GLTFLoader,
-    asset(`3d/tanks/armor/${protagonist.tank.id}.glb`),
-  );
-
+export const TankArmor = forwardRef<Group, TankArmorProps>((_props, ref) => {
   return (
-    <group ref={hullContainer} rotation={[-Math.PI / 2, 0, 0]}>
-      {Object.values(gltf.nodes).map((node) => {
-        const armor = Number(node.name.match(/.+_armor_(\d+)/)?.[1]);
-        const position = new Vector3();
+    <HeadsUpDisplay>
+      <mesh>
+        <boxGeometry />
+        <meshBasicMaterial color="red" />
+      </mesh>
 
-        if (node.name.startsWith('turret_')) position.add(turretOrigin);
-        if (node.name.startsWith('gun_'))
-          position.add(turretOrigin).add(gunOrigin);
+      {/* {armorObjects.map((object) => {
+        const isHull = object.name.startsWith('hull_');
+        const isVisible = isHull;
+
+        if (!isVisible) return null;
 
         return (
-          <mesh
-            scale={1 + 1e-3}
-            key={node.uuid}
-            geometry={(node as Mesh).geometry}
-            position={position}
-          >
-            <meshBasicMaterial color="red" transparent opacity={0.5} />
-          </mesh>
+          <ArmorMesh key={object.uuid} geometry={(object as Mesh).geometry} />
         );
-      })}
-    </group>
+      })} */}
+
+      {/* {armorObjects.map((object) => {
+          const isCurrentTurret = object.name.startsWith(
+            `turret_${model.toString().padStart(2, '0')}`,
+          );
+          const isVisible = isCurrentTurret;
+
+          if (!isVisible) return null;
+
+          return (
+            <mesh
+              position={turretOrigin}
+              key={object.uuid}
+              geometry={(object as Mesh).geometry}
+            >
+              <ArmorMesh />
+            </mesh>
+          );
+        })} */}
+
+      {/* {armorObjects.map((object) => {
+          const isCurrentGun = object.name.startsWith(
+            `gun_${model.toString().padStart(2, '0')}`,
+          );
+          const isVisible = isCurrentGun;
+
+          if (!isVisible) return null;
+
+          return (
+            <mesh
+              position={turretOrigin.clone().add(gunOrigin)}
+              key={object.uuid}
+              geometry={(object as Mesh).geometry}
+            >
+              <ArmorHighlightMaterial />
+            </mesh>
+          );
+        })} */}
+    </HeadsUpDisplay>
   );
 });
