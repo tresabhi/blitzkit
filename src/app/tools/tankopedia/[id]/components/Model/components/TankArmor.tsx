@@ -94,15 +94,15 @@ export function TankArmor() {
               key={node.uuid}
               geometry={(node as Mesh).geometry}
               thickness={thickness}
-              penetration={100}
-              ricochet={antagonist.shell.ricochet * (Math.PI / 180)}
+              penetration={225}
+              ricochet={antagonist.shell.ricochet}
               caliber={antagonist.shell.caliber}
               normalization={antagonist.shell.normalization}
             />
           );
         })}
 
-        {/* <group position={turretPosition} rotation={turretRotation}>
+        <group position={turretPosition} rotation={turretRotation}>
           {nodes.map((node) => {
             const isCurrentTurret = node.name.startsWith(
               `turret_${turretModelDefinition.model
@@ -110,6 +110,9 @@ export function TankArmor() {
                 .padStart(2, '0')}`,
             );
             const isVisible = isCurrentTurret;
+            const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
+            const thickness =
+              turretModelDefinition.armor.thickness[armorId] ?? 0;
 
             if (!isVisible) return null;
             return (
@@ -117,6 +120,11 @@ export function TankArmor() {
                 key={node.uuid}
                 position={turretOrigin}
                 geometry={(node as Mesh).geometry}
+                thickness={thickness}
+                penetration={225}
+                ricochet={antagonist.shell.ricochet}
+                caliber={antagonist.shell.caliber}
+                normalization={antagonist.shell.normalization}
               />
             );
           })}
@@ -135,6 +143,9 @@ export function TankArmor() {
                 `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
               );
               const isVisible = isCurrentGun;
+              const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
+              const thickness =
+                gunModelDefinition.armor.thickness[armorId] ?? 0;
 
               if (!isVisible) return null;
 
@@ -143,11 +154,16 @@ export function TankArmor() {
                   key={node.uuid}
                   position={turretOrigin.clone().add(gunOrigin)}
                   geometry={(node as Mesh).geometry}
+                  thickness={thickness}
+                  penetration={225}
+                  ricochet={antagonist.shell.ricochet}
+                  caliber={antagonist.shell.caliber}
+                  normalization={antagonist.shell.normalization}
                 />
               );
             })}
           </group>
-        </group> */}
+        </group>
       </group>
     </HeadsUpDisplay>
   );

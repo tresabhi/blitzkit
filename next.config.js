@@ -8,6 +8,14 @@ const nextConfig = {
 
   distDir: 'dist/website',
   reactStrictMode: false,
+
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.glsl$/,
+      type: 'asset/source',
+    });
+    return config;
+  },
 };
 
 export default nextConfig;
