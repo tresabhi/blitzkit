@@ -1,20 +1,35 @@
 import { Button, Text } from '@radix-ui/themes';
 import { ComponentProps } from 'react';
 import { asset } from '../core/blitzkrieg/asset';
-import { TIER_ROMAN_NUMERALS, Tier } from '../core/blitzkrieg/tankDefinitions';
+import {
+  ShellType,
+  TIER_ROMAN_NUMERALS,
+  Tier,
+} from '../core/blitzkrieg/tankDefinitions';
 
-interface ModuleButtonProps
-  extends Omit<ComponentProps<typeof Button>, 'type'> {
-  type: string;
-  tier: Tier;
+type ModuleButtonProps = Omit<ComponentProps<typeof Button>, 'type'> & {
   selected?: boolean;
-}
+  first?: boolean;
+  last?: boolean;
+  rowChild?: boolean;
+} & (
+    | {
+        type: 'module';
+        module: string;
+        tier: Tier;
+      }
+    | {
+        type: 'shell';
+        shell: ShellType;
+      }
+  );
 
-export function ModuleButtons({
-  type,
-  tier,
+export function ModuleButton({
   selected,
   style,
+  first = true,
+  last = true,
+  rowChild,
   ...props
 }: ModuleButtonProps) {
   return (
@@ -27,34 +42,51 @@ export function ModuleButtons({
         width: 48,
         height: 40,
         position: 'relative',
+        borderTopLeftRadius: first ? undefined : 0,
+        borderTopRightRadius: last ? undefined : 0,
+        borderBottomLeftRadius: first ? undefined : 0,
+        borderBottomRightRadius: last ? undefined : 0,
+        margin: rowChild ? -0.5 : 'unset',
         ...style,
       }}
-      {...props}
+      {...(props as unknown as ComponentProps<typeof Button>)}
     >
       <img
-        src={asset(`icons/modules/${type}.webp`)}
+        src={asset(
+          props.type === 'module'
+            ? `icons/modules/${props.module}.webp`
+            : `icons/shells/${props.shell}.webp`,
+        )}
         style={{
           width: 32,
           height: 32,
           position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(calc(-50% + 2px), calc(-50% + 2px))',
+          ...(props.type === 'module'
+            ? {
+                top: '50%',
+                left: '50%',
+                transform: 'translate(calc(-50% + 2px), calc(-50% + 2px))',
+              }
+            : {
+                transform: 'scale(0.75)',
+              }),
         }}
       />
-      <Text
-        size="1"
-        weight="bold"
-        style={{
-          zIndex: 1,
-          position: 'absolute',
-          top: '50%',
-          right: 8,
-          textAlign: 'right',
-        }}
-      >
-        {TIER_ROMAN_NUMERALS[tier]}
-      </Text>
+      {props.type === 'module' && (
+        <Text
+          size="1"
+          weight="bold"
+          style={{
+            zIndex: 1,
+            position: 'absolute',
+            top: '50%',
+            right: 8,
+            textAlign: 'right',
+          }}
+        >
+          {TIER_ROMAN_NUMERALS[props.tier]}
+        </Text>
+      )}
     </Button>
   );
 }

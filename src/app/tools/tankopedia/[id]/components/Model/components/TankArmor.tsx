@@ -5,6 +5,7 @@ import { GLTFLoader } from 'three-stdlib';
 import { ArmorMesh } from '../../../../../../../components/ArmorMesh';
 import { HeadsUpDisplay } from '../../../../../../../components/HeadsUpDisplay';
 import { X_AXIS } from '../../../../../../../constants/axis';
+import { numericPenetration } from '../../../../../../../core/blitz/numericPenetration';
 import { asset } from '../../../../../../../core/blitzkrieg/asset';
 import {
   ModelDefinitions,
@@ -97,7 +98,7 @@ export function TankArmor(props: TankArmorProps) {
               key={node.uuid}
               geometry={(node as Mesh).geometry}
               thickness={thickness}
-              penetration={252}
+              penetration={numericPenetration(antagonist.shell.penetration)}
               ricochet={antagonist.shell.ricochet}
               caliber={antagonist.shell.caliber}
               normalization={antagonist.shell.normalization}
@@ -123,7 +124,7 @@ export function TankArmor(props: TankArmorProps) {
                 position={turretOrigin}
                 geometry={(node as Mesh).geometry}
                 thickness={thickness}
-                penetration={252}
+                penetration={numericPenetration(antagonist.shell.penetration)}
                 ricochet={antagonist.shell.ricochet}
                 caliber={antagonist.shell.caliber}
                 normalization={antagonist.shell.normalization}
@@ -155,7 +156,7 @@ export function TankArmor(props: TankArmorProps) {
                   position={turretOrigin.clone().add(gunOrigin)}
                   geometry={(node as Mesh).geometry}
                   thickness={thickness}
-                  penetration={252}
+                  penetration={numericPenetration(antagonist.shell.penetration)}
                   ricochet={antagonist.shell.ricochet}
                   caliber={antagonist.shell.caliber}
                   normalization={antagonist.shell.normalization}

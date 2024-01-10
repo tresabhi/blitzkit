@@ -18,8 +18,7 @@ import {
 import { go } from 'fuzzysort';
 import { debounce } from 'lodash';
 import { use, useRef, useState } from 'react';
-import { ModuleButtons } from '../../../../../components/ModuleButton';
-import { asset } from '../../../../../core/blitzkrieg/asset';
+import { ModuleButton } from '../../../../../components/ModuleButton';
 import {
   SHELL_NAMES,
   tankDefinitions,
@@ -169,7 +168,12 @@ export function VersusBar() {
                           <Flex>
                             {antagonist.tank.turrets.map((turret, index) => (
                               <Tooltip content={turret.name} key={turret.id}>
-                                <ModuleButtons
+                                <ModuleButton
+                                  rowChild
+                                  first={index === 0}
+                                  last={
+                                    index === antagonist.tank.turrets.length - 1
+                                  }
                                   key={turret.id}
                                   onClick={() => {
                                     mutateTankopedia((draft) => {
@@ -184,24 +188,8 @@ export function VersusBar() {
                                   }}
                                   selected={antagonist.turret.id === turret.id}
                                   tier={turret.tier}
-                                  type="turret"
-                                  style={{
-                                    margin: -0.5,
-                                    borderTopLeftRadius:
-                                      index === 0 ? undefined : 0,
-                                    borderBottomLeftRadius:
-                                      index === 0 ? undefined : 0,
-                                    borderTopRightRadius:
-                                      index ===
-                                      antagonist.tank.turrets.length - 1
-                                        ? undefined
-                                        : 0,
-                                    borderBottomRightRadius:
-                                      index ===
-                                      antagonist.tank.turrets.length - 1
-                                        ? undefined
-                                        : 0,
-                                  }}
+                                  type="module"
+                                  module="turret"
                                 />
                               </Tooltip>
                             ))}
@@ -209,7 +197,12 @@ export function VersusBar() {
                           <Flex>
                             {antagonist.turret.guns.map((gun, index) => (
                               <Tooltip content={gun.name} key={gun.id}>
-                                <ModuleButtons
+                                <ModuleButton
+                                  rowChild
+                                  first={index === 0}
+                                  last={
+                                    index === antagonist.turret.guns.length - 1
+                                  }
                                   onClick={() => {
                                     mutateTankopedia((draft) => {
                                       if (!draft.areTanksAssigned) return;
@@ -219,24 +212,8 @@ export function VersusBar() {
                                   }}
                                   selected={antagonist.gun.id === gun.id}
                                   tier={gun.tier}
-                                  type="gun"
-                                  style={{
-                                    margin: -0.5,
-                                    borderTopLeftRadius:
-                                      index === 0 ? undefined : 0,
-                                    borderBottomLeftRadius:
-                                      index === 0 ? undefined : 0,
-                                    borderTopRightRadius:
-                                      index ===
-                                      antagonist.turret.guns.length - 1
-                                        ? undefined
-                                        : 0,
-                                    borderBottomRightRadius:
-                                      index ===
-                                      antagonist.turret.guns.length - 1
-                                        ? undefined
-                                        : 0,
-                                  }}
+                                  type="module"
+                                  module="gun"
                                 />
                               </Tooltip>
                             ))}
@@ -278,8 +255,27 @@ export function VersusBar() {
           <Text>Calibrated</Text>
         </Flex>
 
-        <Flex gap="1">
-          <Button variant="solid" radius="small">
+        <Flex>
+          {antagonist.gun.shells.map((shell, index) => {
+            return (
+              <ModuleButton
+                selected={antagonist.shell.id === shell.id}
+                type="shell"
+                shell={shell.type}
+                rowChild
+                first={index === 0}
+                key={shell.id}
+                last={index === antagonist.gun.shells.length - 1}
+                onClick={() => {
+                  mutateTankopedia((draft) => {
+                    if (!draft.areTanksAssigned) return;
+                    draft.antagonist.shell = shell;
+                  });
+                }}
+              />
+            );
+          })}
+          {/* <Button variant="solid" radius="small">
             <img src={asset('icons/shells/ap.webp')} width={24} height={24} />
           </Button>
           <Button variant="soft" radius="small" color="gray">
@@ -291,7 +287,7 @@ export function VersusBar() {
           </Button>
           <Button variant="soft" radius="small" color="gray">
             <img src={asset('icons/shells/he.webp')} width={24} height={24} />
-          </Button>
+          </Button> */}
         </Flex>
       </Flex>
     </Card>
