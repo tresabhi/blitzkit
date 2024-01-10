@@ -7,7 +7,6 @@ import { Button, Card, Flex, Tabs, Theme } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
-import { Group } from 'three';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { theme } from '../../../../../../stitches.config';
@@ -29,7 +28,6 @@ export function TankDisplay() {
   const canvasWrapper = useRef<HTMLDivElement>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const mode = useTankopedia((state) => state.mode);
-  const hullContainer = useRef<Group>(null);
   const showGrid = useTankopedia((state) => state.model.showGrid);
   const protagonist = useTankopedia((state) => {
     if (!state.areTanksAssigned) return;
@@ -134,8 +132,8 @@ export function TankDisplay() {
                     </Html>
                   }
                 >
-                  <TankModel ref={hullContainer} />
-                  <TankArmor />
+                  <TankModel />
+                  {mode === 'armor' && <TankArmor />}
                 </Suspense>
               </Canvas>
             </div>

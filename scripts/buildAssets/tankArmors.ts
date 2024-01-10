@@ -28,8 +28,8 @@ export async function buildTankArmors() {
         const tank = tanks.root[tankKey];
         const id = toUniqueId(nation, tank.id);
 
-        if (id !== 7297) continue; // 60tp
-        // if (id !== 5137) continue; // tiger ii
+        // if (id !== 7297) continue; // 60tp
+        if (id !== 5137) continue; // tiger ii
         // if (id !== 24609) continue; // concept 1b
 
         console.log(`Building armor ${id} @ ${nation}/${tankKey}`);

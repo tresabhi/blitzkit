@@ -24,7 +24,7 @@ export default function Page({ params }: { params: { id: string } }) {
       draft.model.hullYaw = 0;
       draft.model.turretYaw = 0;
       draft.model.gunPitch = 0;
-      draft.mode = 'model';
+      draft.mode = 'armor';
       draft.areTanksAssigned = true;
 
       if (!draft.areTanksAssigned) return;

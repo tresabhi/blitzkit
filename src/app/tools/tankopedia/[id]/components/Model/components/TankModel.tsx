@@ -1,11 +1,5 @@
 import { ThreeEvent, useLoader, useThree } from '@react-three/fiber';
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Euler,
   Group,
@@ -28,35 +22,30 @@ import mutateTankopedia, {
   useTankopedia,
 } from '../../../../../../../stores/tankopedia';
 
-export const TankModel = forwardRef<Group>((_props, ref) => {
+export function TankModel() {
   // "TypeError: dispatcher.use is not a function"
   // const awaitedModelDefinitions = use(modelDefinitions);
   const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
     ModelDefinitions | undefined
   >(undefined);
+  const canvas = useThree((state) => state.gl.domElement);
   const protagonist = useTankopedia((state) => {
     if (!state.areTanksAssigned) return;
     return state.protagonist;
   });
-  const canvas = useThree((state) => state.gl.domElement);
 
   if (!protagonist) return null;
 
-  const modelGltf = useLoader(
+  const gltf = useLoader(
     GLTFLoader,
     asset(`3d/tanks/models/${protagonist.tank.id}.glb`),
-  );
-  const armorGltf = useLoader(
-    GLTFLoader,
-    asset(`3d/tanks/armor/${protagonist.tank.id}.glb`),
   );
   const model = useTankopedia((state) => state.model);
   const hullContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
-  const nodes = Object.values(modelGltf.nodes);
+  const nodes = Object.values(gltf.nodes);
 
-  useImperativeHandle(ref, () => hullContainer.current!);
   useEffect(() => {
     (async () => {
       setAwaitedModelDefinitions(await modelDefinitions);
@@ -411,4 +400,4 @@ export const TankModel = forwardRef<Group>((_props, ref) => {
       </group>
     </group>
   );
-});
+}
