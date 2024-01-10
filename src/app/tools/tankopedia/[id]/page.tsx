@@ -33,7 +33,10 @@ export default function Page({ params }: { params: { id: string } }) {
       draft.protagonist.tank = awaitedTankDefinitions[id];
       draft.protagonist.turret = draft.protagonist.tank.turrets.at(-1)!;
       draft.protagonist.gun = draft.protagonist.turret.guns.at(-1)!;
-      draft.antagonist = draft.protagonist;
+      draft.antagonist = {
+        ...draft.protagonist,
+        shell: draft.protagonist.gun.shells[0],
+      };
     });
 
     return () => {

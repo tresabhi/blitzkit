@@ -132,6 +132,8 @@ export function VersusBar() {
                                         tank.turrets.at(-1)!;
                                       draft.antagonist.gun =
                                         draft.antagonist.turret.guns.at(-1)!;
+                                      draft.antagonist.shell =
+                                        draft.antagonist.gun.shells[0];
                                     });
                                     setVersusTankSearchResults([]);
                                     versusTankSearchInput.current!.value = '';
@@ -176,6 +178,8 @@ export function VersusBar() {
                                       draft.antagonist.turret = turret;
                                       draft.antagonist.gun =
                                         turret.guns.at(-1)!;
+                                      draft.antagonist.shell =
+                                        draft.antagonist.gun.shells[0];
                                     });
                                   }}
                                   selected={antagonist.turret.id === turret.id}
@@ -210,6 +214,7 @@ export function VersusBar() {
                                     mutateTankopedia((draft) => {
                                       if (!draft.areTanksAssigned) return;
                                       draft.antagonist.gun = gun;
+                                      draft.antagonist.shell = gun.shells[0];
                                     });
                                   }}
                                   selected={antagonist.gun.id === gun.id}

@@ -22,8 +22,12 @@ export function TankArmor() {
     if (!state.areTanksAssigned) return;
     return state.protagonist;
   });
+  const antagonist = useTankopedia((state) => {
+    if (!state.areTanksAssigned) return;
+    return state.antagonist;
+  });
 
-  if (!protagonist) return null;
+  if (!protagonist || !antagonist) return null;
 
   const gltf = useLoader(
     GLTFLoader,
@@ -80,15 +84,25 @@ export function TankArmor() {
       <group rotation={[-Math.PI / 2, 0, model.hullYaw]}>
         {nodes.map((node) => {
           const isHull = node.name.startsWith('hull_');
+          const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
           const isVisible = isHull;
+          const thickness = tankModelDefinition.armor.thickness[armorId] ?? 0;
 
           if (!isVisible) return null;
           return (
-            <ArmorMesh key={node.uuid} geometry={(node as Mesh).geometry} />
+            <ArmorMesh
+              key={node.uuid}
+              geometry={(node as Mesh).geometry}
+              thickness={thickness}
+              penetration={100}
+              ricochet={antagonist.shell.ricochet * (Math.PI / 180)}
+              caliber={antagonist.shell.caliber}
+              normalization={antagonist.shell.normalization}
+            />
           );
         })}
 
-        <group position={turretPosition} rotation={turretRotation}>
+        {/* <group position={turretPosition} rotation={turretRotation}>
           {nodes.map((node) => {
             const isCurrentTurret = node.name.startsWith(
               `turret_${turretModelDefinition.model
@@ -133,7 +147,7 @@ export function TankArmor() {
               );
             })}
           </group>
-        </group>
+        </group> */}
       </group>
     </HeadsUpDisplay>
   );

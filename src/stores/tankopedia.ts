@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { TankType, TreeTypeString } from '../components/Tanks';
 import {
   GunDefinition,
+  ShellDefinition,
   TankDefinition,
   Tier,
   TurretDefinition,
@@ -45,6 +46,7 @@ type Tankopedia = {
         tank: TankDefinition;
         turret: TurretDefinition;
         gun: GunDefinition;
+        shell: ShellDefinition;
       };
     }
   | { areTanksAssigned: false }
