@@ -9,6 +9,7 @@ uniform float normalization;
 uniform bool spaced;
 uniform bool canRichochet;
 uniform bool canSplash;
+uniform bool isAffectedBySpaced;
 
 void main() {
   vec3 normalizedNormal = normalize(vNormal);
@@ -45,14 +46,22 @@ void main() {
 
   if (canSplash) {
     if (spaced) {
-      csm_FragColor = vec4(1.0, 0.0, 0.0, alpha);
+      if (isAffectedBySpaced) {
+        csm_FragColor = vec4(1.0, 0.0, 0.0, 0.5);
+      } else {
+        csm_FragColor = vec4(1.0, 0.0, 0.0, alpha);
+      }
     } else {
       // color taken directly from the game
       csm_FragColor = vec4(1.0, 0.392, 0.0, alpha);
     }
   } else {
     if (spaced) {
-      csm_FragColor = vec4(0.0, 0.0, 1.0, alpha);
+      if (isAffectedBySpaced) {
+        csm_FragColor = vec4(0.0, 0.0, 1.0, 0.5);
+      } else {
+        csm_FragColor = vec4(0.0, 0.0, 1.0, alpha);
+      }
     } else {
       csm_FragColor = vec4(1.0, 0.0, 0.0, alpha);
     }

@@ -15,6 +15,7 @@ interface ArmorMeshProps extends MeshProps {
   canSplash: boolean;
   ricochet?: number;
   normalization?: number;
+  isAffectedBySpaced: boolean;
 }
 
 // shader split: https://github.com/FarazzShaikh/THREE-CustomShaderMaterial/issues/48
@@ -26,6 +27,7 @@ export function ArmorMesh({
   canRicochet,
   ricochet,
   canSplash,
+  isAffectedBySpaced,
   normalization,
   spaced = false,
   ...props
@@ -62,6 +64,7 @@ export function ArmorMesh({
             spaced: { value: spaced ?? false },
             canRicochet: { value: canRicochet },
             canSplash: { value: canSplash },
+            isAffectedBySpaced: { value: isAffectedBySpaced },
           }}
           vertexShader={vertex}
           fragmentShader={opaqueArmor && !spaced ? fragmentOpaque : fragment}

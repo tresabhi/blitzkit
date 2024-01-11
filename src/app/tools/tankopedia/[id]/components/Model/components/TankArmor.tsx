@@ -7,6 +7,7 @@ import { HeadsUpDisplay } from '../../../../../../../components/HeadsUpDisplay';
 import { X_AXIS } from '../../../../../../../constants/axis';
 import { canRicochet } from '../../../../../../../core/blitz/canRicochet';
 import { canSplash } from '../../../../../../../core/blitz/canSplash';
+import { isAffectedBySpaced } from '../../../../../../../core/blitz/isAffectedBySpaced';
 import { numericPenetration } from '../../../../../../../core/blitz/numericPenetration';
 import { asset } from '../../../../../../../core/blitzkrieg/asset';
 import {
@@ -36,9 +37,13 @@ export function TankArmor({ ...props }: TankArmorProps) {
 
   if (!protagonist || !antagonist) return null;
 
-  const gltf = useLoader(
+  const armorGltf = useLoader(
     GLTFLoader,
     asset(`3d/tanks/armor/${protagonist.tank.id}.glb`),
+  );
+  const modelGltf = useLoader(
+    GLTFLoader,
+    asset(`3d/tanks/models/${protagonist.tank.id}.glb`),
   );
   const model = useTankopedia((state) => state.model);
 
@@ -50,7 +55,8 @@ export function TankArmor({ ...props }: TankArmorProps) {
 
   if (!awaitedModelDefinitions) return null;
 
-  const nodes = Object.values(gltf.nodes);
+  const armorNodes = Object.values(armorGltf.nodes);
+  const modelNodes = Object.values(modelGltf.nodes);
   const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
@@ -71,6 +77,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
   const turretRotation = new Euler(0, 0, model.turretYaw);
   const ricochetCapable = canRicochet(antagonist.shell.type);
   const splashCapable = canSplash(antagonist.shell.type);
+  const affectedBySpacedCapable = isAffectedBySpaced(antagonist.shell.type);
 
   if (tankModelDefinition.turretRotation) {
     const pitch = -tankModelDefinition.turretRotation.pitch * (Math.PI / 180);
@@ -97,7 +104,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
         rotation={[-Math.PI / 2, 0, model.hullYaw]}
         visible={controlsEnabled}
       >
-        {nodes.map((node) => {
+        {armorNodes.map((node) => {
           const isHull = node.name.startsWith('hull_');
           const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
           const isVisible = isHull;
@@ -113,6 +120,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
 
           return (
             <ArmorMesh
+              isAffectedBySpaced={affectedBySpacedCapable}
               canSplash={splashCapable}
               spaced={isSpaced}
               key={node.uuid}
@@ -135,8 +143,41 @@ export function TankArmor({ ...props }: TankArmorProps) {
           );
         })}
 
+        {modelNodes.map((node) => {
+          const isWheel = node.name.startsWith('chassis_wheel_');
+          const isTrack = node.name.startsWith('chassis_track_');
+          const isVisible = isWheel || isTrack;
+          const thickness = 50;
+
+          if (!isVisible || !showSpacedArmor) return null;
+
+          return (
+            <ArmorMesh
+              isAffectedBySpaced={affectedBySpacedCapable}
+              canSplash={splashCapable}
+              spaced
+              key={node.uuid}
+              geometry={(node as Mesh).geometry}
+              thickness={thickness}
+              penetration={numericPenetration(antagonist.shell.penetration)}
+              canRicochet={ricochetCapable}
+              ricochet={
+                ricochetCapable
+                  ? (antagonist.shell as RicochetCapableShell).ricochet
+                  : undefined
+              }
+              normalization={
+                ricochetCapable
+                  ? (antagonist.shell as RicochetCapableShell).normalization
+                  : undefined
+              }
+              caliber={antagonist.shell.caliber}
+            />
+          );
+        })}
+
         <group position={turretPosition} rotation={turretRotation}>
-          {nodes.map((node) => {
+          {armorNodes.map((node) => {
             const isCurrentTurret = node.name.startsWith(
               `turret_${turretModelDefinition.model
                 .toString()
@@ -157,6 +198,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
 
             return (
               <ArmorMesh
+                isAffectedBySpaced={affectedBySpacedCapable}
                 canSplash={splashCapable}
                 spaced={isSpaced}
                 key={node.uuid}
@@ -189,7 +231,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
               .add(gunOrigin)}
             rotation={[model.gunPitch, 0, 0]}
           >
-            {nodes.map((node) => {
+            {armorNodes.map((node) => {
               const isCurrentGun = node.name.startsWith(
                 `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
               );
@@ -207,6 +249,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
                 return null;
               return (
                 <ArmorMesh
+                  isAffectedBySpaced={affectedBySpacedCapable}
                   canSplash={splashCapable}
                   spaced={isSpaced}
                   key={node.uuid}
@@ -226,6 +269,40 @@ export function TankArmor({ ...props }: TankArmorProps) {
                       ? (antagonist.shell as RicochetCapableShell).normalization
                       : undefined
                   }
+                />
+              );
+            })}
+
+            {modelNodes.map((node) => {
+              const isCurrentGun =
+                node.name ===
+                `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`;
+              const isVisible = isCurrentGun;
+              const thickness = 50;
+
+              if (!isVisible || !showSpacedArmor) return null;
+
+              return (
+                <ArmorMesh
+                  isAffectedBySpaced={affectedBySpacedCapable}
+                  canSplash={splashCapable}
+                  spaced
+                  key={node.uuid}
+                  geometry={(node as Mesh).geometry}
+                  thickness={thickness}
+                  penetration={numericPenetration(antagonist.shell.penetration)}
+                  canRicochet={ricochetCapable}
+                  ricochet={
+                    ricochetCapable
+                      ? (antagonist.shell as RicochetCapableShell).ricochet
+                      : undefined
+                  }
+                  normalization={
+                    ricochetCapable
+                      ? (antagonist.shell as RicochetCapableShell).normalization
+                      : undefined
+                  }
+                  caliber={antagonist.shell.caliber}
                 />
               );
             })}
