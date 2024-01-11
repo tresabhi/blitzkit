@@ -9,10 +9,11 @@ import vertex from './shaders/vertex.glsl';
 interface ArmorMeshProps extends MeshProps {
   thickness: number;
   penetration: number;
-  ricochet: number;
   caliber: number;
-  normalization: number;
   spaced?: boolean;
+  canRicochet: boolean;
+  ricochet?: number;
+  normalization?: number;
 }
 
 // shader split: https://github.com/FarazzShaikh/THREE-CustomShaderMaterial/issues/48
@@ -21,6 +22,7 @@ export function ArmorMesh({
   thickness,
   penetration,
   caliber,
+  canRicochet,
   ricochet,
   normalization,
   spaced = false,
@@ -45,10 +47,18 @@ export function ArmorMesh({
           uniforms={{
             thickness: { value: thickness },
             penetration: { value: penetration },
-            ricochet: { value: ricochet * (Math.PI / 180) },
+            ricochet: {
+              value: ricochet === undefined ? 0 : ricochet * (Math.PI / 180),
+            },
+            normalization: {
+              value:
+                normalization === undefined
+                  ? 0
+                  : normalization * (Math.PI / 180),
+            },
             caliber: { value: caliber },
-            normalization: { value: normalization * (Math.PI / 180) },
-            spaced: { value: spaced },
+            spaced: { value: spaced ?? false },
+            canRicochet: { value: canRicochet },
           }}
           vertexShader={vertex}
           fragmentShader={opaqueArmor && !spaced ? fragmentOpaque : fragment}

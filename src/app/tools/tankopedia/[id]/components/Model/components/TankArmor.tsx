@@ -5,12 +5,14 @@ import { GLTFLoader } from 'three-stdlib';
 import { ArmorMesh } from '../../../../../../../components/ArmorMesh';
 import { HeadsUpDisplay } from '../../../../../../../components/HeadsUpDisplay';
 import { X_AXIS } from '../../../../../../../constants/axis';
+import { canRicochet } from '../../../../../../../core/blitz/canRicochet';
 import { numericPenetration } from '../../../../../../../core/blitz/numericPenetration';
 import { asset } from '../../../../../../../core/blitzkrieg/asset';
 import {
   ModelDefinitions,
   modelDefinitions,
 } from '../../../../../../../core/blitzkrieg/modelDefinitions';
+import { RicochetCapableShell } from '../../../../../../../core/blitzkrieg/tankDefinitions';
 import { useTankopedia } from '../../../../../../../stores/tankopedia';
 import { Lighting } from '../../Lighting';
 
@@ -66,6 +68,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
     .sub(turretOrigin)
     .applyAxisAngle(new Vector3(0, 0, 1), model.turretYaw);
   const turretRotation = new Euler(0, 0, model.turretYaw);
+  const ricochetCapable = canRicochet(antagonist.shell.type);
 
   if (tankModelDefinition.turretRotation) {
     const pitch = -tankModelDefinition.turretRotation.pitch * (Math.PI / 180);
@@ -105,6 +108,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
             (isSpaced && !showSpacedArmor)
           )
             return null;
+
           return (
             <ArmorMesh
               spaced={isSpaced}
@@ -112,9 +116,18 @@ export function TankArmor({ ...props }: TankArmorProps) {
               geometry={(node as Mesh).geometry}
               thickness={thickness}
               penetration={numericPenetration(antagonist.shell.penetration)}
-              ricochet={antagonist.shell.ricochet}
+              canRicochet={ricochetCapable}
+              ricochet={
+                ricochetCapable
+                  ? (antagonist.shell as RicochetCapableShell).ricochet
+                  : undefined
+              }
+              normalization={
+                ricochetCapable
+                  ? (antagonist.shell as RicochetCapableShell).normalization
+                  : undefined
+              }
               caliber={antagonist.shell.caliber}
-              normalization={antagonist.shell.normalization}
             />
           );
         })}
@@ -138,6 +151,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
               (isSpaced && !showSpacedArmor)
             )
               return null;
+
             return (
               <ArmorMesh
                 spaced={isSpaced}
@@ -146,9 +160,18 @@ export function TankArmor({ ...props }: TankArmorProps) {
                 geometry={(node as Mesh).geometry}
                 thickness={thickness}
                 penetration={numericPenetration(antagonist.shell.penetration)}
-                ricochet={antagonist.shell.ricochet}
                 caliber={antagonist.shell.caliber}
-                normalization={antagonist.shell.normalization}
+                canRicochet={ricochetCapable}
+                ricochet={
+                  ricochetCapable
+                    ? (antagonist.shell as RicochetCapableShell).ricochet
+                    : undefined
+                }
+                normalization={
+                  ricochetCapable
+                    ? (antagonist.shell as RicochetCapableShell).normalization
+                    : undefined
+                }
               />
             );
           })}
@@ -186,9 +209,18 @@ export function TankArmor({ ...props }: TankArmorProps) {
                   geometry={(node as Mesh).geometry}
                   thickness={thickness}
                   penetration={numericPenetration(antagonist.shell.penetration)}
-                  ricochet={antagonist.shell.ricochet}
                   caliber={antagonist.shell.caliber}
-                  normalization={antagonist.shell.normalization}
+                  canRicochet={ricochetCapable}
+                  ricochet={
+                    ricochetCapable
+                      ? (antagonist.shell as RicochetCapableShell).ricochet
+                      : undefined
+                  }
+                  normalization={
+                    ricochetCapable
+                      ? (antagonist.shell as RicochetCapableShell).normalization
+                      : undefined
+                  }
                 />
               );
             })}
