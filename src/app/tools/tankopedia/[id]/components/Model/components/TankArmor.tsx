@@ -28,6 +28,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
     if (!state.areTanksAssigned) return;
     return state.antagonist;
   });
+  const showSpacedArmor = useTankopedia((state) => state.model.showSpacedArmor);
 
   if (!protagonist || !antagonist) return null;
 
@@ -93,7 +94,12 @@ export function TankArmor({ ...props }: TankArmorProps) {
           const thickness = tankModelDefinition.armor.thickness[armorId];
           const isSpaced = tankModelDefinition.armor.spaced?.includes(armorId);
 
-          if (!isVisible || thickness === undefined) return null;
+          if (
+            !isVisible ||
+            thickness === undefined ||
+            (isSpaced && !showSpacedArmor)
+          )
+            return null;
           return (
             <ArmorMesh
               spaced={isSpaced}
@@ -121,7 +127,12 @@ export function TankArmor({ ...props }: TankArmorProps) {
             const isSpaced =
               turretModelDefinition.armor.spaced?.includes(armorId);
 
-            if (!isVisible || thickness === undefined) return null;
+            if (
+              !isVisible ||
+              thickness === undefined ||
+              (isSpaced && !showSpacedArmor)
+            )
+              return null;
             return (
               <ArmorMesh
                 spaced={isSpaced}
@@ -156,7 +167,12 @@ export function TankArmor({ ...props }: TankArmorProps) {
               const isSpaced =
                 gunModelDefinition.armor.spaced?.includes(armorId);
 
-              if (!isVisible || thickness === undefined) return null;
+              if (
+                !isVisible ||
+                thickness === undefined ||
+                (isSpaced && !showSpacedArmor)
+              )
+                return null;
               return (
                 <ArmorMesh
                   spaced={isSpaced}

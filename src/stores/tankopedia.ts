@@ -33,6 +33,7 @@ type Tankopedia = {
     controlsEnabled: boolean;
     showGrid: boolean;
     opaqueArmor: boolean;
+    showSpacedArmor: boolean;
   };
   mode: TankopediaMode;
 } & (
@@ -72,6 +73,7 @@ export const useTankopedia = create<Tankopedia>()(() => ({
     controlsEnabled: true,
     showGrid: true,
     opaqueArmor: false,
+    showSpacedArmor: true,
   },
   areTanksAssigned: false,
   mode: 'model',
