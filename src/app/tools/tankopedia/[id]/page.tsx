@@ -39,10 +39,35 @@ export default function Page({ params }: { params: { id: string } }) {
       };
     });
 
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === '1') {
+        mutateTankopedia((draft) => {
+          if (!draft.areTanksAssigned) return;
+          draft.antagonist.shell = draft.antagonist.gun.shells[0];
+        });
+      } else if (event.key === '2') {
+        mutateTankopedia((draft) => {
+          if (!draft.areTanksAssigned) return;
+          if (draft.antagonist.gun.shells[1])
+            draft.antagonist.shell = draft.antagonist.gun.shells[1];
+        });
+      } else if (event.key === '3') {
+        mutateTankopedia((draft) => {
+          if (!draft.areTanksAssigned) return;
+          if (draft.antagonist.gun.shells[2])
+            draft.antagonist.shell = draft.antagonist.gun.shells[2];
+        });
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
       mutateTankopedia((draft) => {
         draft.areTanksAssigned = false;
       });
+
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [id]);
 
