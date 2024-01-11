@@ -41,7 +41,7 @@ export function ArmorMesh({
           baseMaterial={MeshStandardMaterial}
           transparent
           silent
-          // depthWrite={false}
+          depthWrite={false}
           uniforms={{
             thickness: { value: thickness },
             penetration: { value: penetration },

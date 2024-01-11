@@ -20,7 +20,7 @@ export async function buildTankArmors() {
 
   await Promise.all(
     nations.map(async (nation) => {
-      if (nation !== 'france') return;
+      if (nation !== 'china') return;
 
       const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
         `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
