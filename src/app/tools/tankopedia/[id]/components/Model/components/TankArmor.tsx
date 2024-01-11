@@ -16,7 +16,7 @@ import { Lighting } from '../../Lighting';
 
 interface TankArmorProps extends GroupProps {}
 
-export function TankArmor(props: TankArmorProps) {
+export function TankArmor({ ...props }: TankArmorProps) {
   const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
     ModelDefinitions | undefined
   >(undefined);
@@ -91,10 +91,12 @@ export function TankArmor(props: TankArmorProps) {
           const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
           const isVisible = isHull;
           const thickness = tankModelDefinition.armor.thickness[armorId];
+          const isSpaced = tankModelDefinition.armor.spaced?.includes(armorId);
 
           if (!isVisible || thickness === undefined) return null;
           return (
             <ArmorMesh
+              spaced={isSpaced}
               key={node.uuid}
               geometry={(node as Mesh).geometry}
               thickness={thickness}
@@ -116,10 +118,13 @@ export function TankArmor(props: TankArmorProps) {
             const isVisible = isCurrentTurret;
             const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
             const thickness = turretModelDefinition.armor.thickness[armorId];
+            const isSpaced =
+              turretModelDefinition.armor.spaced?.includes(armorId);
 
             if (!isVisible || thickness === undefined) return null;
             return (
               <ArmorMesh
+                spaced={isSpaced}
                 key={node.uuid}
                 position={turretOrigin}
                 geometry={(node as Mesh).geometry}
@@ -148,10 +153,13 @@ export function TankArmor(props: TankArmorProps) {
               const isVisible = isCurrentGun;
               const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
               const thickness = gunModelDefinition.armor.thickness[armorId];
+              const isSpaced =
+                gunModelDefinition.armor.spaced?.includes(armorId);
 
               if (!isVisible || thickness === undefined) return null;
               return (
                 <ArmorMesh
+                  spaced={isSpaced}
                   key={node.uuid}
                   position={turretOrigin.clone().add(gunOrigin)}
                   geometry={(node as Mesh).geometry}

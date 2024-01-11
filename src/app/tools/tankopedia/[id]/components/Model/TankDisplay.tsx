@@ -142,7 +142,11 @@ export function TankDisplay() {
                   }
                 >
                   <TankModel />
-                  {mode === 'armor' && <TankArmor visible={controlsEnabled} />}
+                  {mode === 'armor' && (
+                    <group visible={controlsEnabled}>
+                      <TankArmor />
+                    </group>
+                  )}
                 </Suspense>
               </Canvas>
             </div>

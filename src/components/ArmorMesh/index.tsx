@@ -12,7 +12,10 @@ interface ArmorMeshProps extends MeshProps {
   ricochet: number;
   caliber: number;
   normalization: number;
+  spaced?: boolean;
 }
+
+// shader split: https://github.com/FarazzShaikh/THREE-CustomShaderMaterial/issues/48
 
 export function ArmorMesh({
   thickness,
@@ -20,17 +23,20 @@ export function ArmorMesh({
   caliber,
   ricochet,
   normalization,
+  spaced = false,
   ...props
 }: ArmorMeshProps) {
   const opaqueArmor = useTankopedia((state) => state.model.opaqueArmor);
 
   return (
     <>
-      <mesh {...props}>
-        <meshBasicMaterial colorWrite={false} />
-      </mesh>
+      {!spaced && (
+        <mesh {...props}>
+          <meshBasicMaterial colorWrite={false} />
+        </mesh>
+      )}
 
-      <mesh {...props} renderOrder={1}>
+      <mesh {...props} renderOrder={spaced ? 3 : 1}>
         <CustomShaderMaterial
           baseMaterial={MeshStandardMaterial}
           transparent
@@ -42,10 +48,10 @@ export function ArmorMesh({
             ricochet: { value: ricochet * (Math.PI / 180) },
             caliber: { value: caliber },
             normalization: { value: normalization * (Math.PI / 180) },
+            spaced: { value: spaced },
           }}
           vertexShader={vertex}
-          // split shaders due to https://github.com/FarazzShaikh/THREE-CustomShaderMaterial/issues/48
-          fragmentShader={opaqueArmor ? fragmentOpaque : fragment}
+          fragmentShader={opaqueArmor && !spaced ? fragmentOpaque : fragment}
         />
       </mesh>
     </>
