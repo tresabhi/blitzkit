@@ -45,7 +45,7 @@ void main() {
   float alpha = (1.0 - penetrationChance) * 0.5;
 
   if (spaced) {
-    csm_FragColor = vec4(0.0, 0.0, 1.0, alpha);
+    csm_FragColor = vec4(0.5, 0.0, 1.0, alpha);
   } else {
     csm_FragColor = vec4(1.0, 0.0, 0.0, alpha);
   }
