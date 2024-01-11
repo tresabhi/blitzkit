@@ -1,11 +1,7 @@
 import { Button, Text } from '@radix-ui/themes';
 import { ComponentProps } from 'react';
 import { asset } from '../core/blitzkrieg/asset';
-import {
-  ShellType,
-  TIER_ROMAN_NUMERALS,
-  Tier,
-} from '../core/blitzkrieg/tankDefinitions';
+import { TIER_ROMAN_NUMERALS, Tier } from '../core/blitzkrieg/tankDefinitions';
 
 type ModuleButtonProps = Omit<ComponentProps<typeof Button>, 'type'> & {
   selected?: boolean;
@@ -20,7 +16,7 @@ type ModuleButtonProps = Omit<ComponentProps<typeof Button>, 'type'> & {
       }
     | {
         type: 'shell';
-        shell: ShellType;
+        shell: string;
       }
   );
 

@@ -261,7 +261,7 @@ export function VersusBar() {
               <ModuleButton
                 selected={antagonist.shell.id === shell.id}
                 type="shell"
-                shell={shell.type}
+                shell={shell.icon}
                 rowChild
                 first={index === 0}
                 key={shell.id}

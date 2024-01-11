@@ -7,6 +7,7 @@ uniform float ricochet;
 uniform float caliber;
 uniform float normalization;
 uniform bool canRichochet;
+uniform bool canSplash;
 
 void main() {
   vec3 normalizedNormal = normalize(vNormal);
@@ -39,12 +40,23 @@ void main() {
     }
   }
 
-  float h = penetrationChance / PI;
-  float s = 1.0;
-  float v = 1.0;
-  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-  vec3 p = abs(fract(h + K.xyz) * 6.0 - K.www);
-  vec3 rgb = v * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), s);
+  if (canSplash) {
+    float h = mix(20.0 / 360.0, 1.0 / PI, penetrationChance);
+    float s = 1.0;
+    float v = 1.0;
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(h + K.xyz) * 6.0 - K.www);
+    vec3 rgb = v * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), s);
 
-  csm_DiffuseColor = vec4(rgb, 1.0);
+    csm_DiffuseColor = vec4(rgb, 1.0);
+  } else {
+    float h = mix(0.0, 1.0 / PI, penetrationChance);
+    float s = 1.0;
+    float v = 1.0;
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(h + K.xyz) * 6.0 - K.www);
+    vec3 rgb = v * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), s);
+
+    csm_DiffuseColor = vec4(rgb, 1.0);
+  }
 }
