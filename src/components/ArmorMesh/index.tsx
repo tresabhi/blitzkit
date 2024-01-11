@@ -12,6 +12,7 @@ interface ArmorMeshProps extends MeshProps {
   caliber: number;
   spaced?: boolean;
   canRicochet: boolean;
+  canSplash: boolean;
   ricochet?: number;
   normalization?: number;
 }
@@ -24,6 +25,7 @@ export function ArmorMesh({
   caliber,
   canRicochet,
   ricochet,
+  canSplash,
   normalization,
   spaced = false,
   ...props
@@ -59,6 +61,7 @@ export function ArmorMesh({
             caliber: { value: caliber },
             spaced: { value: spaced ?? false },
             canRicochet: { value: canRicochet },
+            canSplash: { value: canSplash },
           }}
           vertexShader={vertex}
           fragmentShader={opaqueArmor && !spaced ? fragmentOpaque : fragment}

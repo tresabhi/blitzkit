@@ -6,6 +6,7 @@ uniform float penetration;
 uniform float ricochet;
 uniform float caliber;
 uniform float normalization;
+uniform bool canRichochet;
 
 void main() {
   vec3 normalizedNormal = normalize(vNormal);
@@ -16,7 +17,7 @@ void main() {
   float penetrationChance = -1.0;
   bool threeCaliberRule = caliber > 3.0 * thickness;
 
-  if (!threeCaliberRule && angle >= ricochet) {
+  if (canRichochet && !threeCaliberRule && angle >= ricochet) {
     // auto ricochet angle and three caliber rule not met
     penetrationChance = 0.0;
   } else {

@@ -6,6 +6,7 @@ import { ArmorMesh } from '../../../../../../../components/ArmorMesh';
 import { HeadsUpDisplay } from '../../../../../../../components/HeadsUpDisplay';
 import { X_AXIS } from '../../../../../../../constants/axis';
 import { canRicochet } from '../../../../../../../core/blitz/canRicochet';
+import { canSplash } from '../../../../../../../core/blitz/canSplash';
 import { numericPenetration } from '../../../../../../../core/blitz/numericPenetration';
 import { asset } from '../../../../../../../core/blitzkrieg/asset';
 import {
@@ -69,6 +70,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
     .applyAxisAngle(new Vector3(0, 0, 1), model.turretYaw);
   const turretRotation = new Euler(0, 0, model.turretYaw);
   const ricochetCapable = canRicochet(antagonist.shell.type);
+  const splashCapable = canSplash(antagonist.shell.type);
 
   if (tankModelDefinition.turretRotation) {
     const pitch = -tankModelDefinition.turretRotation.pitch * (Math.PI / 180);
@@ -111,6 +113,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
 
           return (
             <ArmorMesh
+              canSplash={splashCapable}
               spaced={isSpaced}
               key={node.uuid}
               geometry={(node as Mesh).geometry}
@@ -154,6 +157,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
 
             return (
               <ArmorMesh
+                canSplash={splashCapable}
                 spaced={isSpaced}
                 key={node.uuid}
                 position={turretOrigin}
@@ -203,6 +207,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
                 return null;
               return (
                 <ArmorMesh
+                  canSplash={splashCapable}
                   spaced={isSpaced}
                   key={node.uuid}
                   position={turretOrigin.clone().add(gunOrigin)}
