@@ -42,7 +42,6 @@ export function TankDisplay() {
     if (!state.areTanksAssigned) return;
     return state.protagonist;
   });
-  const controlsEnabled = useTankopedia((state) => state.model.controlsEnabled);
 
   if (!protagonist) return null;
 
@@ -143,11 +142,7 @@ export function TankDisplay() {
                   }
                 >
                   <TankModel />
-                  {mode === 'armor' && (
-                    <group visible={controlsEnabled}>
-                      <TankArmor />
-                    </group>
-                  )}
+                  {mode === 'armor' && <TankArmor />}
                 </Suspense>
               </Canvas>
             </div>

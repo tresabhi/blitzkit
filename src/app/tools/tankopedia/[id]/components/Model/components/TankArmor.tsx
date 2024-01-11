@@ -17,6 +17,7 @@ import { Lighting } from '../../Lighting';
 interface TankArmorProps extends GroupProps {}
 
 export function TankArmor({ ...props }: TankArmorProps) {
+  const controlsEnabled = useTankopedia((state) => state.model.controlsEnabled);
   const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
     ModelDefinitions | undefined
   >(undefined);
@@ -86,7 +87,11 @@ export function TankArmor({ ...props }: TankArmorProps) {
     <HeadsUpDisplay>
       <Lighting />
 
-      <group {...props} rotation={[-Math.PI / 2, 0, model.hullYaw]}>
+      <group
+        {...props}
+        rotation={[-Math.PI / 2, 0, model.hullYaw]}
+        visible={controlsEnabled}
+      >
         {nodes.map((node) => {
           const isHull = node.name.startsWith('hull_');
           const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
