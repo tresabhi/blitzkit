@@ -58,15 +58,7 @@ interface GunDefinitionAutoReloader {
   interClip: number;
   count: number;
 }
-export interface RicochetCapableShell {
-  type: 'ap' | 'ap_cr';
-  normalization: number;
-  ricochet: number;
-}
-export interface RicochetIncapableShell {
-  type: 'hc' | 'he';
-}
-export type ShellDefinition = {
+export interface ShellDefinition {
   id: number;
   name: string;
   speed: number;
@@ -74,7 +66,10 @@ export type ShellDefinition = {
   caliber: number;
   icon: string;
   penetration: number | Vector2Tuple;
-} & (RicochetCapableShell | RicochetIncapableShell);
+  type: ShellType;
+  normalization?: number;
+  ricochet?: number;
+}
 
 export const tankDefinitions = fetch(asset('definitions/tanks.json'), {
   cache: 'no-cache',

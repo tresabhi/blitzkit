@@ -5,16 +5,14 @@ import { GLTFLoader } from 'three-stdlib';
 import { ArmorMesh } from '../../../../../../../components/ArmorMesh';
 import { HeadsUpDisplay } from '../../../../../../../components/HeadsUpDisplay';
 import { X_AXIS } from '../../../../../../../constants/axis';
-import { canRicochet } from '../../../../../../../core/blitz/canRicochet';
 import { canSplash } from '../../../../../../../core/blitz/canSplash';
-import { isAffectedBySpaced } from '../../../../../../../core/blitz/isAffectedBySpaced';
+import { isExplosive } from '../../../../../../../core/blitz/isExplosive';
 import { numericPenetration } from '../../../../../../../core/blitz/numericPenetration';
 import { asset } from '../../../../../../../core/blitzkrieg/asset';
 import {
   ModelDefinitions,
   modelDefinitions,
 } from '../../../../../../../core/blitzkrieg/modelDefinitions';
-import { RicochetCapableShell } from '../../../../../../../core/blitzkrieg/tankDefinitions';
 import { useTankopedia } from '../../../../../../../stores/tankopedia';
 import { Lighting } from '../../Lighting';
 
@@ -77,9 +75,11 @@ export function TankArmor({ ...props }: TankArmorProps) {
     .sub(turretOrigin)
     .applyAxisAngle(new Vector3(0, 0, 1), model.turretYaw);
   const turretRotation = new Euler(0, 0, model.turretYaw);
-  const ricochetCapable = canRicochet(antagonist.shell.type);
   const splashCapable = canSplash(antagonist.shell.type);
-  const affectedBySpacedCapable = isAffectedBySpaced(antagonist.shell.type);
+  const explosiveCapable = isExplosive(antagonist.shell.type);
+  const penetration = numericPenetration(antagonist.shell.penetration);
+  const ricochet = antagonist.shell.ricochet ?? Math.PI / 2;
+  const normalization = antagonist.shell.normalization ?? 0;
 
   if (tankModelDefinition.turretRotation) {
     const pitch = -tankModelDefinition.turretRotation.pitch * (Math.PI / 180);
@@ -122,25 +122,17 @@ export function TankArmor({ ...props }: TankArmorProps) {
 
           return (
             <ArmorMesh
-              isAffectedBySpaced={affectedBySpacedCapable}
-              canSplash={splashCapable}
-              spaced={isSpaced}
               key={node.uuid}
               geometry={(node as Mesh).geometry}
-              thickness={thickness}
-              penetration={numericPenetration(antagonist.shell.penetration)}
-              canRicochet={ricochetCapable}
-              ricochet={
-                ricochetCapable
-                  ? (antagonist.shell as RicochetCapableShell).ricochet
-                  : undefined
-              }
-              normalization={
-                ricochetCapable
-                  ? (antagonist.shell as RicochetCapableShell).normalization
-                  : undefined
-              }
               caliber={antagonist.shell.caliber}
+              canSplash={splashCapable}
+              isExplosive={explosiveCapable}
+              isSpaced={isSpaced ?? false}
+              normalization={normalization}
+              penetration={penetration}
+              thickness={thickness}
+              ricochet={ricochet}
+              isArmor
             />
           );
         })}
@@ -155,25 +147,17 @@ export function TankArmor({ ...props }: TankArmorProps) {
 
           return (
             <ArmorMesh
-              isAffectedBySpaced={affectedBySpacedCapable}
-              canSplash={splashCapable}
-              spaced
               key={node.uuid}
               geometry={(node as Mesh).geometry}
-              thickness={thickness}
-              penetration={numericPenetration(antagonist.shell.penetration)}
-              canRicochet={ricochetCapable}
-              ricochet={
-                ricochetCapable
-                  ? (antagonist.shell as RicochetCapableShell).ricochet
-                  : undefined
-              }
-              normalization={
-                ricochetCapable
-                  ? (antagonist.shell as RicochetCapableShell).normalization
-                  : undefined
-              }
               caliber={antagonist.shell.caliber}
+              canSplash={splashCapable}
+              isExplosive={explosiveCapable}
+              isSpaced
+              normalization={normalization}
+              penetration={penetration}
+              thickness={thickness}
+              ricochet={ricochet}
+              isArmor={false}
             />
           );
         })}
@@ -200,26 +184,18 @@ export function TankArmor({ ...props }: TankArmorProps) {
 
             return (
               <ArmorMesh
-                isAffectedBySpaced={affectedBySpacedCapable}
-                canSplash={splashCapable}
-                spaced={isSpaced}
                 key={node.uuid}
-                position={turretOrigin}
                 geometry={(node as Mesh).geometry}
-                thickness={thickness}
-                penetration={numericPenetration(antagonist.shell.penetration)}
+                position={turretOrigin}
                 caliber={antagonist.shell.caliber}
-                canRicochet={ricochetCapable}
-                ricochet={
-                  ricochetCapable
-                    ? (antagonist.shell as RicochetCapableShell).ricochet
-                    : undefined
-                }
-                normalization={
-                  ricochetCapable
-                    ? (antagonist.shell as RicochetCapableShell).normalization
-                    : undefined
-                }
+                canSplash={splashCapable}
+                isExplosive={explosiveCapable}
+                isSpaced={isSpaced ?? false}
+                normalization={normalization}
+                penetration={penetration}
+                thickness={thickness}
+                ricochet={ricochet}
+                isArmor
               />
             );
           })}
@@ -252,26 +228,18 @@ export function TankArmor({ ...props }: TankArmorProps) {
 
               return (
                 <ArmorMesh
-                  isAffectedBySpaced={affectedBySpacedCapable}
-                  canSplash={splashCapable}
-                  spaced={isSpaced}
                   key={node.uuid}
-                  position={turretOrigin.clone().add(gunOrigin)}
                   geometry={(node as Mesh).geometry}
-                  thickness={thickness}
-                  penetration={numericPenetration(antagonist.shell.penetration)}
+                  position={turretOrigin.clone().add(gunOrigin)}
                   caliber={antagonist.shell.caliber}
-                  canRicochet={ricochetCapable}
-                  ricochet={
-                    ricochetCapable
-                      ? (antagonist.shell as RicochetCapableShell).ricochet
-                      : undefined
-                  }
-                  normalization={
-                    ricochetCapable
-                      ? (antagonist.shell as RicochetCapableShell).normalization
-                      : undefined
-                  }
+                  canSplash={splashCapable}
+                  isExplosive={explosiveCapable}
+                  isSpaced={isSpaced ?? false}
+                  normalization={normalization}
+                  penetration={penetration}
+                  thickness={thickness}
+                  ricochet={ricochet}
+                  isArmor
                 />
               );
             })}
@@ -287,25 +255,17 @@ export function TankArmor({ ...props }: TankArmorProps) {
 
               return (
                 <ArmorMesh
-                  isAffectedBySpaced={affectedBySpacedCapable}
-                  canSplash={splashCapable}
-                  spaced
                   key={node.uuid}
                   geometry={(node as Mesh).geometry}
-                  thickness={thickness}
-                  penetration={numericPenetration(antagonist.shell.penetration)}
-                  canRicochet={ricochetCapable}
-                  ricochet={
-                    ricochetCapable
-                      ? (antagonist.shell as RicochetCapableShell).ricochet
-                      : undefined
-                  }
-                  normalization={
-                    ricochetCapable
-                      ? (antagonist.shell as RicochetCapableShell).normalization
-                      : undefined
-                  }
                   caliber={antagonist.shell.caliber}
+                  canSplash={splashCapable}
+                  isExplosive={explosiveCapable}
+                  isSpaced
+                  normalization={normalization}
+                  penetration={penetration}
+                  thickness={thickness}
+                  ricochet={ricochet}
+                  isArmor={false}
                 />
               );
             })}

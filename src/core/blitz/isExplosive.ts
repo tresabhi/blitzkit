@@ -1,7 +1,7 @@
 import { ShellDefinition } from '../blitzkrieg/tankDefinitions';
 
-export function canRicochet(
+export function isExplosive(
   type: ShellDefinition['type'],
-): type is 'ap' | 'ap_cr' {
-  return type === 'ap' || type === 'ap_cr';
+): type is 'he' | 'hc' {
+  return type === 'he' || type === 'hc';
 }
