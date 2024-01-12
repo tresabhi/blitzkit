@@ -1,3 +1,6 @@
+// split shaders due to https://github.com/FarazzShaikh/THREE-CustomShaderMaterial/issues/48
+
+varying vec3 vCSMViewPosition;
 uniform bool isExplosive;
 uniform bool canSplash;
 uniform bool isSpaced;
@@ -8,11 +11,11 @@ uniform float caliber;
 uniform float ricochet;
 uniform float normalization;
 
-vec3 zPositive = vec3(0.0, 0.0, 1.0);
-
 void main() {
-  float cosAngle = dot(zPositive, vNormal);
-  float angle = acos(cosAngle);
+  vec3 normalizedNormal = normalize(vNormal);
+  vec3 normalizedViewPosition = normalize(vCSMViewPosition);
+  float dotProduct = dot(normalizedNormal, -normalizedViewPosition);
+  float angle = acos(dotProduct);
 
   float penetrationChance = -1.0;
   float splashChance = -1.0;
@@ -25,26 +28,30 @@ void main() {
     bool twoCalibersRule = caliber > 2.0 * thickness;
     float finalNormalization = twoCalibersRule ? (normalization * 1.4 * caliber) / (2.0 * thickness) : normalization;
     float finalThickness = thickness / cos(angle - finalNormalization);
+    float delta = finalThickness - penetration;
+    float randomRadius = penetration * 0.05;
+
+    if (delta > randomRadius) {
+      penetrationChance = 0.0;
+    } else if (delta < -randomRadius) {
+      penetrationChance = 1.0;
+    } else {
+      penetrationChance = 1.0 - (delta + randomRadius) / (2.0 * randomRadius);
+    }
 
     if (canSplash) {
-      if (finalThickness * (5.0 / 11.0) > penetration) {
-        penetrationChance = 0.0;
+      float reducedFinalThickness = finalThickness * (5.0 / 11.0);
+      float splashDelta = reducedFinalThickness - penetration;
+
+      if (splashDelta > randomRadius) {
         splashChance = 0.0;
-      } else if (finalThickness > penetration) {
-        penetrationChance = 0.0;
+      } else if (splashDelta < -randomRadius) {
         splashChance = 1.0;
       } else {
-        penetrationChance = 1.0;
-        splashChance = 1.0;
+        splashChance = 1.0 - (splashDelta + randomRadius) / (2.0 * randomRadius);
       }
     } else {
-      if (finalThickness > penetration) {
-        penetrationChance = 0.0;
-        splashChance = 0.0;
-      } else {
-        penetrationChance = 1.0;
-        splashChance = 0.0;
-      }
+      splashChance = 0.0;
     }
   }
 

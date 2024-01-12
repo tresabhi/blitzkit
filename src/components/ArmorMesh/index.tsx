@@ -2,6 +2,7 @@ import { MeshProps } from '@react-three/fiber';
 import { MeshStandardMaterial } from 'three';
 import CustomShaderMaterial from 'three-custom-shader-material';
 import fragmentShader from './shaders/fragment.glsl';
+import vertexShader from './shaders/vertex.glsl';
 
 interface ArmorMeshProps extends MeshProps {
   isExplosive: boolean;
@@ -42,6 +43,7 @@ export function ArmorMesh({
           transparent
           depthWrite={false}
           fragmentShader={fragmentShader}
+          vertexShader={vertexShader}
           uniforms={{
             isExplosive: { value: isExplosive },
             canSplash: { value: canSplash },
