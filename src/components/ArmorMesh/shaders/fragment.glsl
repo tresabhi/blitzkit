@@ -45,24 +45,23 @@ void main() {
   float alpha = (1.0 - penetrationChance) * 0.5;
 
   if (canSplash) {
+    // he
     if (spaced) {
-      if (isAffectedBySpaced) {
-        csm_FragColor = vec4(1.0, 0.0, 0.0, 0.5);
-      } else {
-        csm_FragColor = vec4(1.0, 0.0, 0.0, alpha);
-      }
+      csm_FragColor = vec4(1.0, 0.0, 1.0, 0.5);
     } else {
-      // color taken directly from the game
       csm_FragColor = vec4(1.0, 0.392, 0.0, alpha);
     }
   } else {
     if (spaced) {
       if (isAffectedBySpaced) {
-        csm_FragColor = vec4(0.0, 0.0, 1.0, 0.5);
+        // hc
+        csm_FragColor = vec4(1.0, 0.0, 1.0, 0.5);
       } else {
-        csm_FragColor = vec4(0.0, 0.0, 1.0, alpha);
+        // ap, ap_cr
+        csm_FragColor = vec4(1.0, 0.0, 1.0, alpha);
       }
     } else {
+      // ap, ap_cr, hc
       csm_FragColor = vec4(1.0, 0.0, 0.0, alpha);
     }
   }
