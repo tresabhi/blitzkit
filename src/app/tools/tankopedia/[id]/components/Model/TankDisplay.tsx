@@ -42,8 +42,6 @@ export function TankDisplay() {
     return state.protagonist;
   });
 
-  if (!protagonist) return null;
-
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', handlePointerUp);
@@ -71,6 +69,8 @@ export function TankDisplay() {
   });
 
   useEffect(() => {
+    if (!protagonist) return void 0;
+
     const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
     const turretModelDefinition =
       tankModelDefinition.turrets[protagonist.turret.id];
@@ -84,7 +84,9 @@ export function TankDisplay() {
         turretModelDefinition.yaw,
       );
     });
-  }, [protagonist.gun, protagonist.turret]);
+  }, [protagonist?.gun, protagonist?.turret]);
+
+  if (!protagonist) return null;
 
   return (
     <Theme radius={isFullScreen ? 'none' : undefined}>

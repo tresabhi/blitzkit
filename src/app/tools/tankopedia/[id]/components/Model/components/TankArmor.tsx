@@ -34,7 +34,16 @@ export function TankArmor({ ...props }: TankArmorProps) {
     return state.antagonist;
   });
   const showSpacedArmor = useTankopedia((state) => state.model.showSpacedArmor);
+  const model = useTankopedia((state) => state.model);
 
+  useEffect(() => {
+    (async () => {
+      setAwaitedModelDefinitions(await modelDefinitions);
+    })();
+  }, []);
+
+  // it's ok to have hooks after this early termination because this will never be true
+  // it's more for typescript to stop throwing a fit
   if (!protagonist || !antagonist) return null;
 
   const armorGltf = useLoader(
@@ -45,13 +54,6 @@ export function TankArmor({ ...props }: TankArmorProps) {
     GLTFLoader,
     asset(`3d/tanks/models/${protagonist.tank.id}.glb`),
   );
-  const model = useTankopedia((state) => state.model);
-
-  useEffect(() => {
-    (async () => {
-      setAwaitedModelDefinitions(await modelDefinitions);
-    })();
-  }, []);
 
   if (!awaitedModelDefinitions) return null;
 
@@ -247,6 +249,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
                 (isSpaced && !showSpacedArmor)
               )
                 return null;
+
               return (
                 <ArmorMesh
                   isAffectedBySpaced={affectedBySpacedCapable}

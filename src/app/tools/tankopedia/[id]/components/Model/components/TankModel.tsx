@@ -33,6 +33,16 @@ export function TankModel() {
     if (!state.areTanksAssigned) return;
     return state.protagonist;
   });
+  const model = useTankopedia((state) => state.model);
+  const hullContainer = useRef<Group>(null);
+  const turretContainer = useRef<Group>(null);
+  const gunContainer = useRef<Group>(null);
+
+  useEffect(() => {
+    (async () => {
+      setAwaitedModelDefinitions(await modelDefinitions);
+    })();
+  }, []);
 
   if (!protagonist) return null;
 
@@ -40,17 +50,7 @@ export function TankModel() {
     GLTFLoader,
     asset(`3d/tanks/models/${protagonist.tank.id}.glb`),
   );
-  const model = useTankopedia((state) => state.model);
-  const hullContainer = useRef<Group>(null);
-  const turretContainer = useRef<Group>(null);
-  const gunContainer = useRef<Group>(null);
   const nodes = Object.values(gltf.nodes);
-
-  useEffect(() => {
-    (async () => {
-      setAwaitedModelDefinitions(await modelDefinitions);
-    })();
-  }, []);
 
   if (!awaitedModelDefinitions) return null;
 
@@ -150,6 +150,7 @@ export function TankModel() {
         }
 
         if (!isVisible) return null;
+
         return (
           <mesh
             children={resolveJsxTree(node)}
@@ -248,6 +249,7 @@ export function TankModel() {
           }
 
           if (!isVisible) return null;
+
           return (
             <mesh
               visible={isVisible}
@@ -353,6 +355,7 @@ export function TankModel() {
             }
 
             if (!isVisible) return null;
+
             return (
               <mesh
                 visible={isVisible}

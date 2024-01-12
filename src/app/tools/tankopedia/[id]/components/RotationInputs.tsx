@@ -18,13 +18,6 @@ export function RotationInputs() {
     return state.protagonist;
   });
 
-  if (!protagonist) return null;
-
-  const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
-  const turretModelDefinition =
-    tankModelDefinition.turrets[protagonist.turret.id];
-  const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
-
   useEffect(() => {
     hullYawInput.current!.value = `${-Math.round(
       model.hullYaw * (180 / Math.PI),
@@ -40,6 +33,13 @@ export function RotationInputs() {
       model.gunPitch * (180 / Math.PI),
     )}`;
   }, [model.gunPitch]);
+
+  if (!protagonist) return null;
+
+  const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
+  const turretModelDefinition =
+    tankModelDefinition.turrets[protagonist.turret.id];
+  const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
 
   return (
     <Flex
