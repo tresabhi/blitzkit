@@ -1,9 +1,7 @@
 import { MeshProps } from '@react-three/fiber';
 import { MeshStandardMaterial } from 'three';
 import CustomShaderMaterial from 'three-custom-shader-material';
-import { useTankopedia } from '../../stores/tankopedia';
 import fragment from './shaders/fragment.glsl';
-import fragmentOpaque from './shaders/fragmentOpaque.glsl';
 import vertex from './shaders/vertex.glsl';
 
 interface ArmorMeshProps extends MeshProps {
@@ -32,8 +30,6 @@ export function ArmorMesh({
   spaced = false,
   ...props
 }: ArmorMeshProps) {
-  const opaqueArmor = useTankopedia((state) => state.model.opaqueArmor);
-
   return (
     <>
       {!spaced && (
@@ -67,7 +63,7 @@ export function ArmorMesh({
             isAffectedBySpaced: { value: isAffectedBySpaced },
           }}
           vertexShader={vertex}
-          fragmentShader={opaqueArmor && !spaced ? fragmentOpaque : fragment}
+          fragmentShader={fragment}
         />
       </mesh>
     </>

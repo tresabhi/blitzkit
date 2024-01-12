@@ -49,7 +49,14 @@ void main() {
     if (spaced) {
       csm_FragColor = vec4(1.0, 0.0, 1.0, 0.5);
     } else {
-      csm_FragColor = vec4(1.0, 0.392, 0.0, alpha);
+      float angledThickness = thickness / cos(angle);
+
+      if (angledThickness * (5.0 / 11.0) > penetration) {
+        csm_FragColor = vec4(1.0, 0.0, 0.0, alpha);
+      } else {
+        csm_FragColor = vec4(1.0, 0.392, 0.0, alpha);
+      }
+
     }
   } else {
     if (spaced) {

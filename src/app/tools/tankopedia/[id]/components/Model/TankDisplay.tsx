@@ -36,7 +36,6 @@ export function TankDisplay() {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const mode = useTankopedia((state) => state.mode);
   const showGrid = useTankopedia((state) => state.model.showGrid);
-  const opaqueArmor = useTankopedia((state) => state.model.opaqueArmor);
   const showSpacedArmor = useTankopedia((state) => state.model.showSpacedArmor);
   const protagonist = useTankopedia((state) => {
     if (!state.areTanksAssigned) return;
@@ -172,17 +171,6 @@ export function TankDisplay() {
                     }}
                   >
                     Show grid
-                  </DropdownMenu.CheckboxItem>
-
-                  <DropdownMenu.CheckboxItem
-                    checked={opaqueArmor}
-                    onCheckedChange={(checked) => {
-                      mutateTankopedia((draft) => {
-                        draft.model.opaqueArmor = checked;
-                      });
-                    }}
-                  >
-                    Opaque armor
                   </DropdownMenu.CheckboxItem>
 
                   <DropdownMenu.CheckboxItem
