@@ -1,13 +1,10 @@
 import { GroupProps, useLoader } from '@react-three/fiber';
-import { useEffect, useState } from 'react';
-import { Euler, Mesh, Vector3 } from 'three';
+import { useEffect, useRef, useState } from 'react';
+import { Euler, Group, Mesh, Vector3 } from 'three';
 import { GLTFLoader } from 'three-stdlib';
 import { ArmorMesh } from '../../../../../../../components/ArmorMesh';
 import { HeadsUpDisplay } from '../../../../../../../components/HeadsUpDisplay';
 import { X_AXIS } from '../../../../../../../constants/axis';
-import { canSplash } from '../../../../../../../core/blitz/canSplash';
-import { isExplosive } from '../../../../../../../core/blitz/isExplosive';
-import { numericPenetration } from '../../../../../../../core/blitz/numericPenetration';
 import { asset } from '../../../../../../../core/blitzkrieg/asset';
 import {
   ModelDefinitions,
@@ -21,17 +18,13 @@ import { Lighting } from '../../Lighting';
 interface TankArmorProps extends GroupProps {}
 
 export function TankArmor({ ...props }: TankArmorProps) {
-  const controlsEnabled = useTankopedia((state) => state.model.controlsEnabled);
+  const wrapper = useRef<Group>(null);
   const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
     ModelDefinitions | undefined
   >(undefined);
   const protagonist = useTankopedia((state) => {
     if (!state.areTanksAssigned) return;
     return state.protagonist;
-  });
-  const antagonist = useTankopedia((state) => {
-    if (!state.areTanksAssigned) return;
-    return state.antagonist;
   });
   const showSpacedArmor = useTankopedia((state) => state.model.showSpacedArmor);
   const model = useTankopedia((state) => state.model);
@@ -42,9 +35,20 @@ export function TankArmor({ ...props }: TankArmorProps) {
     })();
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = useTankopedia.subscribe(
+      (state) => state.model.controlsEnabled,
+      (controlsEnabled) => {
+        if (wrapper.current) wrapper.current.visible = controlsEnabled;
+      },
+    );
+
+    return unsubscribe;
+  });
+
   // it's ok to have hooks after this early termination because this will never be true
   // it's more for typescript to stop throwing a fit
-  if (!protagonist || !antagonist) return null;
+  if (!protagonist) return null;
 
   const armorGltf = useLoader(
     GLTFLoader,
@@ -77,11 +81,6 @@ export function TankArmor({ ...props }: TankArmorProps) {
     .sub(turretOrigin)
     .applyAxisAngle(new Vector3(0, 0, 1), model.turretYaw);
   const turretRotation = new Euler(0, 0, model.turretYaw);
-  const splashCapable = canSplash(antagonist.shell.type);
-  const explosiveCapable = isExplosive(antagonist.shell.type);
-  const penetration = numericPenetration(antagonist.shell.penetration);
-  const ricochet = antagonist.shell.ricochet ?? Math.PI / 2;
-  const normalization = antagonist.shell.normalization ?? 0;
 
   if (tankModelDefinition.turretRotation) {
     const pitch = -tankModelDefinition.turretRotation.pitch * (Math.PI / 180);
@@ -99,25 +98,14 @@ export function TankArmor({ ...props }: TankArmorProps) {
 
   turretPosition.add(turretOrigin);
 
-  // const tracksGeometry = mergeBufferGeometries(
-  //   modelNodes
-  //     .map((node) => {
-  //       const isWheel = node.name.startsWith('chassis_wheel_');
-  //       const isTrack = node.name.startsWith('chassis_track_');
-  //       const isVisible = isWheel || isTrack;
-  //       if (isVisible) return (node as Mesh).geometry;
-  //     })
-  //     .filter(Boolean),
-  // );
-
   return (
     <HeadsUpDisplay>
       <Lighting />
 
       <group
         {...props}
+        ref={wrapper}
         rotation={[-Math.PI / 2, 0, model.hullYaw]}
-        visible={controlsEnabled}
       >
         {armorNodes.map((node) => {
           const isHull = node.name.startsWith('hull_');
@@ -139,30 +127,11 @@ export function TankArmor({ ...props }: TankArmorProps) {
             <ArmorMesh
               key={node.uuid}
               geometry={(node as Mesh).geometry}
-              caliber={antagonist.shell.caliber}
-              canSplash={splashCapable}
-              isExplosive={explosiveCapable}
               isSpaced={spaced ?? false}
-              normalization={normalization}
-              penetration={penetration}
               thickness={thickness}
-              ricochet={ricochet}
             />
           );
         })}
-
-        {/* <ArmorMesh
-          geometry={tracksGeometry!}
-          caliber={antagonist.shell.caliber}
-          canSplash={splashCapable}
-          isExplosive={explosiveCapable}
-          isSpaced
-          normalization={normalization}
-          penetration={penetration}
-          thickness={50}
-          ricochet={ricochet}
-          isExternalModule
-        /> */}
 
         {modelNodes.map((node) => {
           const isWheel = node.name.startsWith('chassis_wheel_');
@@ -176,14 +145,8 @@ export function TankArmor({ ...props }: TankArmorProps) {
             <ArmorMesh
               key={node.uuid}
               geometry={(node as Mesh).geometry}
-              caliber={antagonist.shell.caliber}
-              canSplash={splashCapable}
-              isExplosive={explosiveCapable}
               isSpaced
-              normalization={normalization}
-              penetration={penetration}
               thickness={thickness}
-              ricochet={ricochet}
               isExternalModule
             />
           );
@@ -215,14 +178,8 @@ export function TankArmor({ ...props }: TankArmorProps) {
                 key={node.uuid}
                 geometry={(node as Mesh).geometry}
                 position={turretOrigin}
-                caliber={antagonist.shell.caliber}
-                canSplash={splashCapable}
-                isExplosive={explosiveCapable}
                 isSpaced={spaced ?? false}
-                normalization={normalization}
-                penetration={penetration}
                 thickness={thickness}
-                ricochet={ricochet}
               />
             );
           })}
@@ -258,14 +215,8 @@ export function TankArmor({ ...props }: TankArmorProps) {
                   key={node.uuid}
                   geometry={(node as Mesh).geometry}
                   position={turretOrigin.clone().add(gunOrigin)}
-                  caliber={antagonist.shell.caliber}
-                  canSplash={splashCapable}
-                  isExplosive={explosiveCapable}
                   isSpaced={spaced ?? false}
-                  normalization={normalization}
-                  penetration={penetration}
                   thickness={thickness}
-                  ricochet={ricochet}
                 />
               );
             })}
@@ -283,14 +234,8 @@ export function TankArmor({ ...props }: TankArmorProps) {
                 <ArmorMesh
                   key={node.uuid}
                   geometry={(node as Mesh).geometry}
-                  caliber={antagonist.shell.caliber}
-                  canSplash={splashCapable}
-                  isExplosive={explosiveCapable}
                   isSpaced
-                  normalization={normalization}
-                  penetration={penetration}
                   thickness={thickness}
-                  ricochet={ricochet}
                   isExternalModule
                 />
               );

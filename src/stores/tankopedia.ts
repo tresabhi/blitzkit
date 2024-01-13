@@ -1,5 +1,6 @@
 import { produce } from 'immer';
 import { create } from 'zustand';
+import { subscribeWithSelector } from 'zustand/middleware';
 import { TankType, TreeTypeString } from '../components/Tanks';
 import {
   GunDefinition,
@@ -54,29 +55,31 @@ type Tankopedia = {
   | { areTanksAssigned: false }
 );
 
-export const useTankopedia = create<Tankopedia>()(() => ({
-  sort: {
-    by: 'tier',
-    direction: 'descending',
-  },
-  filters: {
-    tiers: [],
-    types: [],
-    treeTypes: [],
-    nations: [],
-    test: 'include',
-  },
-  model: {
-    gunPitch: 0,
-    hullYaw: 0,
-    turretYaw: 0,
-    controlsEnabled: true,
-    showGrid: true,
-    showSpacedArmor: true,
-  },
-  areTanksAssigned: false,
-  mode: 'model',
-}));
+export const useTankopedia = create<Tankopedia>()(
+  subscribeWithSelector<Tankopedia>(() => ({
+    sort: {
+      by: 'tier',
+      direction: 'descending',
+    },
+    filters: {
+      tiers: [],
+      types: [],
+      treeTypes: [],
+      nations: [],
+      test: 'include',
+    },
+    model: {
+      gunPitch: 0,
+      hullYaw: 0,
+      turretYaw: 0,
+      controlsEnabled: true,
+      showGrid: true,
+      showSpacedArmor: true,
+    },
+    areTanksAssigned: false,
+    mode: 'model',
+  })),
+);
 
 export default function mutateTankopedia(recipe: (draft: Tankopedia) => void) {
   useTankopedia.setState(produce(recipe));

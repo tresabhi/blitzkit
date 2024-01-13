@@ -1,16 +1,4 @@
-import {
-  EnterFullScreenIcon,
-  ExitFullScreenIcon,
-  GearIcon,
-} from '@radix-ui/react-icons';
-import {
-  Button,
-  Card,
-  DropdownMenu,
-  Flex,
-  Tabs,
-  Theme,
-} from '@radix-ui/themes';
+import { Card, Flex, Tabs, Theme } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
@@ -26,6 +14,7 @@ import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
 import { RotationInputs } from '../RotationInputs';
 import { SceneProps } from '../SceneProps';
+import { Options } from './components/Options';
 import { TankArmor } from './components/TankArmor';
 import { TankModel } from './components/TankModel';
 
@@ -35,8 +24,6 @@ export function TankDisplay() {
   const canvasWrapper = useRef<HTMLDivElement>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const mode = useTankopedia((state) => state.mode);
-  const showGrid = useTankopedia((state) => state.model.showGrid);
-  const showSpacedArmor = useTankopedia((state) => state.model.showSpacedArmor);
   const protagonist = useTankopedia((state) => {
     if (!state.areTanksAssigned) return;
     return state.protagonist;
@@ -143,68 +130,12 @@ export function TankDisplay() {
                   }
                 >
                   <TankModel />
-                  {mode === 'armor' && <TankArmor />}
+                  <TankArmor />
                 </Suspense>
               </Canvas>
             </div>
 
-            <Flex
-              gap="4"
-              style={{
-                position: 'absolute',
-                top: 18,
-                right: 18,
-              }}
-            >
-              <DropdownMenu.Root>
-                <DropdownMenu.Trigger>
-                  <Button color={showGrid ? 'purple' : 'gray'} variant="ghost">
-                    <GearIcon />
-                  </Button>
-                </DropdownMenu.Trigger>
-
-                <DropdownMenu.Content>
-                  <DropdownMenu.CheckboxItem
-                    checked={showGrid}
-                    onCheckedChange={(checked) => {
-                      mutateTankopedia((draft) => {
-                        draft.model.showGrid = checked;
-                      });
-                    }}
-                  >
-                    Show grid
-                  </DropdownMenu.CheckboxItem>
-
-                  <DropdownMenu.CheckboxItem
-                    checked={showSpacedArmor}
-                    onCheckedChange={(checked) => {
-                      mutateTankopedia((draft) => {
-                        draft.model.showSpacedArmor = checked;
-                      });
-                    }}
-                  >
-                    Spaced armor
-                  </DropdownMenu.CheckboxItem>
-                </DropdownMenu.Content>
-              </DropdownMenu.Root>
-
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  if (isFullScreen) {
-                    document.exitFullscreen();
-                  } else {
-                    canvasWrapper.current?.requestFullscreen();
-                  }
-                }}
-              >
-                {isFullScreen ? (
-                  <ExitFullScreenIcon />
-                ) : (
-                  <EnterFullScreenIcon />
-                )}
-              </Button>
-            </Flex>
+            <Options canvas={canvasWrapper} isFullScreen={isFullScreen} />
 
             <RotationInputs />
           </Flex>
