@@ -1,16 +1,13 @@
 'use client';
 
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
-import { Button, Flex, Heading, Text, Theme, Tooltip } from '@radix-ui/themes';
+import { Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { use, useEffect } from 'react';
 import { Flag } from '../../../../components/Flag';
+import { ModuleButton } from '../../../../components/ModuleButton';
 import PageWrapper from '../../../../components/PageWrapper';
-import { asset } from '../../../../core/blitzkrieg/asset';
-import {
-  TIER_ROMAN_NUMERALS,
-  tankDefinitions,
-} from '../../../../core/blitzkrieg/tankDefinitions';
+import { tankDefinitions } from '../../../../core/blitzkrieg/tankDefinitions';
 import mutateTankopedia, { useTankopedia } from '../../../../stores/tankopedia';
 import { AntagonistBar } from './components/AntagonistBar';
 import { TankDisplay } from './components/Model/TankDisplay';
@@ -101,66 +98,81 @@ export default function Page({ params }: { params: { id: string } }) {
           <TankDisplay />
           <AntagonistBar />
 
-          <Theme radius="small">
-            <Flex gap="4">
-              <Flex gap="1">
-                {protagonist.tank.turrets.map((thisTurret) => {
-                  return (
-                    <Tooltip content={thisTurret.name} key={thisTurret.id}>
-                      <Button
-                        onClick={() => {
-                          mutateTankopedia((draft) => {
-                            if (!draft.areTanksAssigned) return;
-                            draft.protagonist.turret = thisTurret;
-                            draft.protagonist.gun = thisTurret.guns.at(-1)!;
-                          });
-                        }}
-                        variant={
-                          protagonist.turret.id === thisTurret.id
-                            ? 'solid'
-                            : 'soft'
-                        }
-                      >
-                        <img
-                          src={asset('icons/modules/turret.webp')}
-                          width={32}
-                          height={32}
-                        />
-                        {TIER_ROMAN_NUMERALS[thisTurret.tier]}
-                      </Button>
-                    </Tooltip>
-                  );
-                })}
-              </Flex>
+          <Flex gap="2">
+            <Flex>
+              {protagonist.tank.turrets.map((thisTurret, index) => {
+                return (
+                  <ModuleButton
+                    key={thisTurret.id}
+                    selected={protagonist.turret.id === thisTurret.id}
+                    type="module"
+                    module="turret"
+                    tier={thisTurret.tier}
+                    first={index === 0}
+                    last={index === protagonist.tank.turrets.length - 1}
+                    rowChild
+                    onClick={() => {
+                      mutateTankopedia((draft) => {
+                        if (!draft.areTanksAssigned) return;
 
-              <Flex gap="1">
-                {protagonist.turret.guns.map((thisGun) => {
-                  return (
-                    <Tooltip content={thisGun.name} key={thisGun.id}>
-                      <Button
-                        onClick={() => {
-                          mutateTankopedia((draft) => {
-                            if (!draft.areTanksAssigned) return;
-                            draft.protagonist.gun = thisGun;
-                          });
-                        }}
-                        variant={
-                          protagonist.gun.id === thisGun.id ? 'solid' : 'soft'
-                        }
-                      >
-                        <img
-                          src={asset('icons/modules/gun.webp')}
-                          width={32}
-                          height={32}
-                        />
-                        {TIER_ROMAN_NUMERALS[thisGun.tier]}
-                      </Button>
-                    </Tooltip>
-                  );
-                })}
-              </Flex>
+                        draft.protagonist.turret = thisTurret;
+                        draft.protagonist.gun = thisTurret.guns.at(-1)!;
+                        draft.protagonist.shell =
+                          draft.protagonist.gun.shells[0];
+                      });
+                    }}
+                  />
+                );
+              })}
             </Flex>
-          </Theme>
+
+            <Flex>
+              {protagonist.turret.guns.map((thisGun, index) => {
+                return (
+                  <ModuleButton
+                    type="module"
+                    module="gun"
+                    tier={thisGun.tier}
+                    selected={protagonist.gun.id === thisGun.id}
+                    first={index === 0}
+                    last={index === protagonist.turret.guns.length - 1}
+                    rowChild
+                    onClick={() => {
+                      mutateTankopedia((draft) => {
+                        if (!draft.areTanksAssigned) return;
+
+                        draft.protagonist.gun = thisGun;
+                        draft.protagonist.shell = thisGun.shells[0];
+                      });
+                    }}
+                  />
+                );
+
+                // return (
+                //   <Tooltip content={thisGun.name} key={thisGun.id}>
+                //     <Button
+                //       onClick={() => {
+                //         mutateTankopedia((draft) => {
+                //           if (!draft.areTanksAssigned) return;
+                //           draft.protagonist.gun = thisGun;
+                //         });
+                //       }}
+                //       variant={
+                //         protagonist.gun.id === thisGun.id ? 'solid' : 'soft'
+                //       }
+                //     >
+                //       <img
+                //         src={asset('icons/modules/gun.webp')}
+                //         width={32}
+                //         height={32}
+                //       />
+                //       {TIER_ROMAN_NUMERALS[thisGun.tier]}
+                //     </Button>
+                //   </Tooltip>
+                // );
+              })}
+            </Flex>
+          </Flex>
         </Flex>
       </Flex>
     </PageWrapper>
