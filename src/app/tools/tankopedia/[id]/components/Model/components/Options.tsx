@@ -15,8 +15,10 @@ interface OptionsProps {
 }
 
 export function Options({ isFullScreen, canvas }: OptionsProps) {
-  const showGrid = useTankopedia((state) => state.model.showGrid);
-  const showSpacedArmor = useTankopedia((state) => state.model.showSpacedArmor);
+  const showGrid = useTankopedia((state) => state.model.visual.showGrid);
+  const showSpacedArmor = useTankopedia(
+    (state) => state.model.visual.showSpacedArmor,
+  );
 
   return (
     <Flex
@@ -39,7 +41,7 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
             checked={showGrid}
             onCheckedChange={(checked) => {
               mutateTankopedia((draft) => {
-                draft.model.showGrid = checked;
+                draft.model.visual.showGrid = checked;
               });
             }}
           >
@@ -50,7 +52,7 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
             checked={showSpacedArmor}
             onCheckedChange={(checked) => {
               mutateTankopedia((draft) => {
-                draft.model.showSpacedArmor = checked;
+                draft.model.visual.showSpacedArmor = checked;
               });
             }}
           >

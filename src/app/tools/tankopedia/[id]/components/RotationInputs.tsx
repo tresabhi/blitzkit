@@ -8,7 +8,7 @@ import mutateTankopedia, {
 } from '../../../../../stores/tankopedia';
 
 export function RotationInputs() {
-  const model = useTankopedia((state) => state.model);
+  const physical = useTankopedia((state) => state.model.physical);
   const awaitedModelDefinitions = use(modelDefinitions);
   const turretYawInput = useRef<HTMLInputElement>(null);
   const hullYawInput = useRef<HTMLInputElement>(null);
@@ -20,19 +20,19 @@ export function RotationInputs() {
 
   useEffect(() => {
     hullYawInput.current!.value = `${-Math.round(
-      model.hullYaw * (180 / Math.PI),
+      physical.hullYaw * (180 / Math.PI),
     )}`;
-  }, [model.hullYaw]);
+  }, [physical.hullYaw]);
   useEffect(() => {
     turretYawInput.current!.value = `${-Math.round(
-      model.turretYaw * (180 / Math.PI),
+      physical.turretYaw * (180 / Math.PI),
     )}`;
-  }, [model.turretYaw]);
+  }, [physical.turretYaw]);
   useEffect(() => {
     gunPitchInput.current!.value = `${-Math.round(
-      model.gunPitch * (180 / Math.PI),
+      physical.gunPitch * (180 / Math.PI),
     )}`;
-  }, [model.gunPitch]);
+  }, [physical.gunPitch]);
 
   if (!protagonist) return null;
 
@@ -65,13 +65,13 @@ export function RotationInputs() {
         >
           <TextField.Slot>Hull</TextField.Slot>
           <TextField.Input
-            defaultValue={Math.round(model.hullYaw * (180 / Math.PI))}
+            defaultValue={Math.round(physical.hullYaw * (180 / Math.PI))}
             onBlur={() => {
               const normalized = normalizeAnglePI(
                 -Number(hullYawInput.current?.value) * (Math.PI / 180),
               );
               mutateTankopedia((state) => {
-                state.model.hullYaw = normalized;
+                state.model.physical.hullYaw = normalized;
               });
               hullYawInput.current!.value = `${Math.round(normalized)}`;
             }}
@@ -94,17 +94,17 @@ export function RotationInputs() {
         >
           <TextField.Slot>Turret</TextField.Slot>
           <TextField.Input
-            defaultValue={Math.round(model.turretYaw * (180 / Math.PI))}
+            defaultValue={Math.round(physical.turretYaw * (180 / Math.PI))}
             onBlur={() => {
               const [pitch, yaw] = applyPitchYawLimits(
-                model.gunPitch,
+                physical.gunPitch,
                 -Number(turretYawInput.current?.value) * (Math.PI / 180),
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
               );
               mutateTankopedia((state) => {
-                state.model.gunPitch = pitch;
-                state.model.turretYaw = yaw;
+                state.model.physical.gunPitch = pitch;
+                state.model.physical.turretYaw = yaw;
               });
               turretYawInput.current!.value = `${Math.round(
                 yaw * (180 / Math.PI),
@@ -129,17 +129,17 @@ export function RotationInputs() {
         >
           <TextField.Slot>Gun</TextField.Slot>
           <TextField.Input
-            defaultValue={-Math.round(model.gunPitch * (180 / Math.PI))}
+            defaultValue={-Math.round(physical.gunPitch * (180 / Math.PI))}
             onBlur={() => {
               const [pitch, yaw] = applyPitchYawLimits(
                 -Number(gunPitchInput.current?.value) * (Math.PI / 180),
-                model.turretYaw,
+                physical.turretYaw,
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
               );
               mutateTankopedia((state) => {
-                state.model.gunPitch = pitch;
-                state.model.turretYaw = yaw;
+                state.model.physical.gunPitch = pitch;
+                state.model.physical.turretYaw = yaw;
               });
               gunPitchInput.current!.value = `${Math.round(
                 pitch * (180 / Math.PI),

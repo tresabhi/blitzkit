@@ -1,5 +1,3 @@
-// split shaders due to https://github.com/FarazzShaikh/THREE-CustomShaderMaterial/issues/48
-
 varying vec3 vCSMViewPosition;
 uniform bool isExplosive;
 uniform bool canSplash;

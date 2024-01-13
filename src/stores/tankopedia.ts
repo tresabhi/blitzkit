@@ -28,12 +28,16 @@ type Tankopedia = {
     test: TankopediaTestTankDisplay;
   };
   model: {
-    hullYaw: number;
-    turretYaw: number;
-    gunPitch: number;
-    controlsEnabled: boolean;
-    showGrid: boolean;
-    showSpacedArmor: boolean;
+    physical: {
+      hullYaw: number;
+      turretYaw: number;
+      gunPitch: number;
+    };
+    visual: {
+      controlsEnabled: boolean;
+      showGrid: boolean;
+      showSpacedArmor: boolean;
+    };
   };
   mode: TankopediaMode;
 } & (
@@ -69,12 +73,16 @@ export const useTankopedia = create<Tankopedia>()(
       test: 'include',
     },
     model: {
-      gunPitch: 0,
-      hullYaw: 0,
-      turretYaw: 0,
-      controlsEnabled: true,
-      showGrid: true,
-      showSpacedArmor: true,
+      physical: {
+        gunPitch: 0,
+        hullYaw: 0,
+        turretYaw: 0,
+      },
+      visual: {
+        controlsEnabled: true,
+        showGrid: true,
+        showSpacedArmor: true,
+      },
     },
     areTanksAssigned: false,
     mode: 'model',

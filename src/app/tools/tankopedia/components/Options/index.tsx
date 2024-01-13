@@ -24,7 +24,7 @@ import * as styles from './index.css';
 
 export function Options() {
   const nations = use(NATIONS);
-  const tankopediaState = useTankopedia();
+  const filters = useTankopedia((state) => state.filters);
 
   return (
     <Flex justify="center" direction="column" gap="2">
@@ -54,7 +54,7 @@ export function Options() {
           </DropdownMenu.Trigger>
           <DropdownMenu.Content>
             <DropdownMenu.RadioGroup
-              value={tankopediaState.filters.test}
+              value={filters.test}
               onValueChange={(value) =>
                 mutateTankopedia((draft) => {
                   draft.filters.test = value as TankopediaTestTankDisplay;
@@ -75,11 +75,7 @@ export function Options() {
           {TREE_TYPES.map((type, index) => (
             <Button
               key={type}
-              variant={
-                tankopediaState.filters.treeTypes.includes(type)
-                  ? 'solid'
-                  : 'soft'
-              }
+              variant={filters.treeTypes.includes(type) ? 'solid' : 'soft'}
               style={{
                 flex: 1,
                 margin: -0.5,
@@ -113,9 +109,7 @@ export function Options() {
           {[...TANK_TYPES].reverse().map((type, index) => (
             <Button
               key={type}
-              variant={
-                tankopediaState.filters.types.includes(type) ? 'solid' : 'soft'
-              }
+              variant={filters.types.includes(type) ? 'solid' : 'soft'}
               style={{
                 flex: 1,
                 margin: -0.5,
@@ -157,11 +151,7 @@ export function Options() {
               .map((tier, index) => (
                 <Button
                   key={tier}
-                  variant={
-                    tankopediaState.filters.tiers.includes(tier)
-                      ? 'solid'
-                      : 'soft'
-                  }
+                  variant={filters.tiers.includes(tier) ? 'solid' : 'soft'}
                   style={{
                     flex: 1,
                     margin: -0.5,
@@ -196,11 +186,7 @@ export function Options() {
               .map((tier, index) => (
                 <Button
                   key={tier}
-                  variant={
-                    tankopediaState.filters.tiers.includes(tier)
-                      ? 'solid'
-                      : 'soft'
-                  }
+                  variant={filters.tiers.includes(tier) ? 'solid' : 'soft'}
                   style={{
                     flex: 1,
                     margin: -0.5,
@@ -238,11 +224,7 @@ export function Options() {
             {nations.slice(0, 5).map((nation, index) => (
               <Button
                 key={nation}
-                variant={
-                  tankopediaState.filters.nations.includes(nation)
-                    ? 'solid'
-                    : 'soft'
-                }
+                variant={filters.nations.includes(nation) ? 'solid' : 'soft'}
                 style={{
                   flex: 1,
                   margin: -0.5,
@@ -276,11 +258,7 @@ export function Options() {
             {nations.slice(5, 10).map((nation, index) => (
               <Button
                 key={nation}
-                variant={
-                  tankopediaState.filters.nations.includes(nation)
-                    ? 'solid'
-                    : 'soft'
-                }
+                variant={filters.nations.includes(nation) ? 'solid' : 'soft'}
                 style={{
                   flex: 1,
                   margin: -0.5,
@@ -318,9 +296,7 @@ export function Options() {
           {[...TIERS].reverse().map((tier, index) => (
             <Button
               key={tier}
-              variant={
-                tankopediaState.filters.tiers.includes(tier) ? 'solid' : 'soft'
-              }
+              variant={filters.tiers.includes(tier) ? 'solid' : 'soft'}
               style={{
                 flex: 1,
                 margin: -0.5,
@@ -351,11 +327,7 @@ export function Options() {
           {nations.map((nation, index) => (
             <Button
               key={nation}
-              variant={
-                tankopediaState.filters.nations.includes(nation)
-                  ? 'solid'
-                  : 'soft'
-              }
+              variant={filters.nations.includes(nation) ? 'solid' : 'soft'}
               style={{
                 flex: 1,
                 margin: -0.5,

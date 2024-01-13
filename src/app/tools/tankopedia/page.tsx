@@ -42,7 +42,8 @@ import * as styles from './page.css';
 const TANKS_PER_PAGE = 3 * 2 ** 3;
 
 export default function Page() {
-  const tankopediaState = useTankopedia();
+  const filters = useTankopedia((state) => state.filters);
+  const sort = useTankopedia((state) => state.sort);
   const awaitedTanks = use(tanksDefinitionsArray);
   const input = useRef<HTMLInputElement>(null);
   const searchableTanks = useMemo(
@@ -50,37 +51,37 @@ export default function Page() {
       awaitedTanks
         .filter(
           (tank) =>
-            (tankopediaState.filters.tiers.length === 0
+            (filters.tiers.length === 0
               ? true
-              : tankopediaState.filters.tiers.includes(tank.tier)) &&
-            (tankopediaState.filters.types.length === 0
+              : filters.tiers.includes(tank.tier)) &&
+            (filters.types.length === 0
               ? true
-              : tankopediaState.filters.types.includes(tank.type)) &&
-            (tankopediaState.filters.treeTypes.length === 0
+              : filters.types.includes(tank.type)) &&
+            (filters.treeTypes.length === 0
               ? true
-              : tankopediaState.filters.treeTypes.includes(tank.tree_type)) &&
-            (tankopediaState.filters.nations.length === 0
+              : filters.treeTypes.includes(tank.tree_type)) &&
+            (filters.nations.length === 0
               ? true
-              : tankopediaState.filters.nations.includes(tank.nation)) &&
-            (tankopediaState.filters.test === 'include'
+              : filters.nations.includes(tank.nation)) &&
+            (filters.test === 'include'
               ? true
-              : tankopediaState.filters.test === 'exclude'
+              : filters.test === 'exclude'
                 ? !tank.testing
                 : tank.testing),
         )
         .sort((a, b) => {
           let diff = 0;
 
-          if (tankopediaState.sort.by === 'tier') {
+          if (sort.by === 'tier') {
             diff = a.tier - b.tier;
           }
-          if (tankopediaState.sort.by === 'name') {
+          if (sort.by === 'name') {
             diff = a.name.localeCompare(b.name);
           }
 
-          return tankopediaState.sort.direction === 'ascending' ? diff : -diff;
+          return sort.direction === 'ascending' ? diff : -diff;
         }),
-    [tankopediaState.filters, tankopediaState.sort],
+    [filters, sort],
   );
   const [searchedList, setSearchedList] = useState(searchableTanks);
   const [page, setPage] = useState(0);
@@ -136,7 +137,7 @@ export default function Page() {
               <DropdownMenu.Content>
                 <DropdownMenu.Label>By</DropdownMenu.Label>
                 <DropdownMenu.RadioGroup
-                  value={tankopediaState.sort.by}
+                  value={sort.by}
                   onValueChange={(value) =>
                     mutateTankopedia((draft) => {
                       draft.sort.by = value as TankopediaSortBy;
@@ -155,7 +156,7 @@ export default function Page() {
 
                 <DropdownMenu.Label>Direction</DropdownMenu.Label>
                 <DropdownMenu.RadioGroup
-                  value={tankopediaState.sort.direction}
+                  value={sort.direction}
                   onValueChange={(value) =>
                     mutateTankopedia((draft) => {
                       draft.sort.direction = value as TankopediaSortDirection;

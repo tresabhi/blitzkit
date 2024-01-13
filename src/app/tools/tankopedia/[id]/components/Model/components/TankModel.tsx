@@ -33,7 +33,7 @@ export function TankModel() {
     if (!state.areTanksAssigned) return;
     return state.protagonist;
   });
-  const model = useTankopedia((state) => state.model);
+  const physical = useTankopedia((state) => state.model.physical);
   const hullContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
@@ -70,8 +70,8 @@ export function TankModel() {
   ).applyAxisAngle(X_AXIS, Math.PI / 2);
   const turretPosition = new Vector3()
     .sub(turretOrigin)
-    .applyAxisAngle(new Vector3(0, 0, 1), model.turretYaw);
-  const turretRotation = new Euler(0, 0, model.turretYaw);
+    .applyAxisAngle(new Vector3(0, 0, 1), physical.turretYaw);
+  const turretRotation = new Euler(0, 0, physical.turretYaw);
 
   if (tankModelDefinition.turretRotation) {
     const pitch = -tankModelDefinition.turretRotation.pitch * (Math.PI / 180);
@@ -90,7 +90,7 @@ export function TankModel() {
   turretPosition.add(turretOrigin);
 
   return (
-    <group ref={hullContainer} rotation={[-Math.PI / 2, 0, model.hullYaw]}>
+    <group ref={hullContainer} rotation={[-Math.PI / 2, 0, physical.hullYaw]}>
       {nodes.map((node) => {
         const isHull = node.name === 'hull';
         const isWheel = node.name.startsWith('chassis_wheel_');
@@ -101,11 +101,11 @@ export function TankModel() {
         function handlePointerDown(event: ThreeEvent<PointerEvent>) {
           event.stopPropagation();
           mutateTankopedia((draft) => {
-            draft.model.controlsEnabled = false;
+            draft.model.visual.controlsEnabled = false;
           });
 
           if (isHull) {
-            draftHullYaw = model.hullYaw;
+            draftHullYaw = physical.hullYaw;
 
             window.addEventListener('pointermove', handlePointerMoveHull);
             window.addEventListener('pointerup', handlePointerUpHull);
@@ -122,8 +122,8 @@ export function TankModel() {
         }
         function handlePointerUpHull() {
           mutateTankopedia((draft) => {
-            draft.model.controlsEnabled = true;
-            draft.model.hullYaw = normalizeAnglePI(draftHullYaw);
+            draft.model.visual.controlsEnabled = true;
+            draft.model.physical.hullYaw = normalizeAnglePI(draftHullYaw);
           });
           window.removeEventListener('pointermove', handlePointerMoveHull);
           window.removeEventListener('pointerup', handlePointerUpHull);
@@ -143,7 +143,7 @@ export function TankModel() {
         }
         function handlePointerUpTrack() {
           mutateTankopedia((draft) => {
-            draft.model.controlsEnabled = true;
+            draft.model.visual.controlsEnabled = true;
           });
           window.removeEventListener('pointermove', handlePointerMoveTrack);
           window.removeEventListener('pointerup', handlePointerUpTrack);
@@ -185,11 +185,11 @@ export function TankModel() {
             event.stopPropagation();
 
             if (isTurret) {
-              draftYaw = model.turretYaw;
-              draftPitch = model.gunPitch;
+              draftYaw = physical.turretYaw;
+              draftPitch = physical.gunPitch;
 
               mutateTankopedia((draft) => {
-                draft.model.controlsEnabled = false;
+                draft.model.visual.controlsEnabled = false;
               });
               window.addEventListener('pointermove', handlePointerMove);
               window.addEventListener('pointerup', handlePointerUp);
@@ -240,9 +240,9 @@ export function TankModel() {
           }
           function handlePointerUp() {
             mutateTankopedia((state) => {
-              state.model.controlsEnabled = true;
-              state.model.gunPitch = normalizeAnglePI(draftPitch);
-              state.model.turretYaw = normalizeAnglePI(draftYaw);
+              state.model.visual.controlsEnabled = true;
+              state.model.physical.gunPitch = normalizeAnglePI(draftPitch);
+              state.model.physical.turretYaw = normalizeAnglePI(draftYaw);
             });
             window.removeEventListener('pointermove', handlePointerMove);
             window.removeEventListener('pointerup', handlePointerUp);
@@ -271,10 +271,10 @@ export function TankModel() {
           position={new Vector3()
             .sub(turretOrigin)
             .sub(gunOrigin)
-            .applyAxisAngle(new Vector3(1, 0, 0), model.gunPitch)
+            .applyAxisAngle(new Vector3(1, 0, 0), physical.gunPitch)
             .add(turretOrigin)
             .add(gunOrigin)}
-          rotation={[model.gunPitch, 0, 0]}
+          rotation={[physical.gunPitch, 0, 0]}
           ref={gunContainer}
         >
           {nodes.map((node) => {
@@ -294,10 +294,10 @@ export function TankModel() {
               event.stopPropagation();
 
               mutateTankopedia((draft) => {
-                draft.model.controlsEnabled = false;
+                draft.model.visual.controlsEnabled = false;
               });
-              draftPitch = model.gunPitch;
-              draftYaw = model.turretYaw;
+              draftPitch = physical.gunPitch;
+              draftYaw = physical.turretYaw;
               window.addEventListener('pointermove', handlePointerMove);
               window.addEventListener('pointerup', handlePointerUp);
             }
@@ -346,9 +346,9 @@ export function TankModel() {
             }
             function handlePointerUp() {
               mutateTankopedia((state) => {
-                state.model.controlsEnabled = true;
-                state.model.gunPitch = normalizeAnglePI(draftPitch);
-                state.model.turretYaw = normalizeAnglePI(draftYaw);
+                state.model.visual.controlsEnabled = true;
+                state.model.physical.gunPitch = normalizeAnglePI(draftPitch);
+                state.model.physical.turretYaw = normalizeAnglePI(draftYaw);
               });
               window.removeEventListener('pointermove', handlePointerMove);
               window.removeEventListener('pointerup', handlePointerUp);

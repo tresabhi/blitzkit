@@ -3,7 +3,7 @@ import InfiniteGridHelper from '../../../../../components/InfiniteGridHelper';
 import { useTankopedia } from '../../../../../stores/tankopedia';
 
 export function SceneProps() {
-  const showGrid = useTankopedia((state) => state.model.showGrid);
+  const showGrid = useTankopedia((state) => state.model.visual.showGrid);
 
   if (!showGrid) return null;
 

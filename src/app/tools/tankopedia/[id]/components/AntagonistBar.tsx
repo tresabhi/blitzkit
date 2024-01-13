@@ -17,7 +17,6 @@ import {
 } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { debounce } from 'lodash';
-import { useRouter } from 'next/navigation';
 import { use, useRef, useState } from 'react';
 import { ModuleButton } from '../../../../../components/ModuleButton';
 import { SmallTankIcon } from '../../../../../components/SmallTankIcon';
@@ -31,7 +30,6 @@ import mutateTankopedia, {
 } from '../../../../../stores/tankopedia';
 
 export function AntagonistBar() {
-  const router = useRouter();
   const awaitedTankDefinitions = use(tankDefinitions);
   const mode = useTankopedia((state) => state.mode);
   const awaitedTankNamesDiacritics = use(tankNamesDiacritics);

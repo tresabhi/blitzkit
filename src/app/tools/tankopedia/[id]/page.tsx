@@ -18,9 +18,9 @@ export default function Page({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     mutateTankopedia((draft) => {
-      draft.model.hullYaw = 0;
-      draft.model.turretYaw = 0;
-      draft.model.gunPitch = 0;
+      draft.model.physical.hullYaw = 0;
+      draft.model.physical.turretYaw = 0;
+      draft.model.physical.gunPitch = 0;
       draft.mode = 'model';
       draft.areTanksAssigned = true;
 
@@ -67,7 +67,6 @@ export default function Page({ params }: { params: { id: string } }) {
   }, [id]);
 
   const protagonist = useTankopedia((state) => {
-    // goofy ahh typescript discriminator hack
     if (!state.areTanksAssigned) return;
     return state.protagonist;
   });

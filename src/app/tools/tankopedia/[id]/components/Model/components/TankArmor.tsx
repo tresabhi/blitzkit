@@ -13,11 +13,11 @@ import {
 import { nameToArmorId } from '../../../../../../../core/blitzkrieg/nameToArmorId';
 import { resolveArmor } from '../../../../../../../core/blitzkrieg/resolveThickness';
 import { useTankopedia } from '../../../../../../../stores/tankopedia';
-import { Lighting } from '../../Lighting';
 
 interface TankArmorProps extends GroupProps {}
 
 export function TankArmor({ ...props }: TankArmorProps) {
+  const mode = useTankopedia((state) => state.mode);
   const wrapper = useRef<Group>(null);
   const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
     ModelDefinitions | undefined
@@ -26,25 +26,16 @@ export function TankArmor({ ...props }: TankArmorProps) {
     if (!state.areTanksAssigned) return;
     return state.protagonist;
   });
-  const showSpacedArmor = useTankopedia((state) => state.model.showSpacedArmor);
-  const model = useTankopedia((state) => state.model);
+  const showSpacedArmor = useTankopedia(
+    (state) => state.model.visual.showSpacedArmor,
+  );
+  const physical = useTankopedia((state) => state.model.physical);
 
   useEffect(() => {
     (async () => {
       setAwaitedModelDefinitions(await modelDefinitions);
     })();
   }, []);
-
-  useEffect(() => {
-    const unsubscribe = useTankopedia.subscribe(
-      (state) => state.model.controlsEnabled,
-      (controlsEnabled) => {
-        if (wrapper.current) wrapper.current.visible = controlsEnabled;
-      },
-    );
-
-    return unsubscribe;
-  });
 
   // it's ok to have hooks after this early termination because this will never be true
   // it's more for typescript to stop throwing a fit
@@ -79,8 +70,8 @@ export function TankArmor({ ...props }: TankArmorProps) {
   ).applyAxisAngle(X_AXIS, Math.PI / 2);
   const turretPosition = new Vector3()
     .sub(turretOrigin)
-    .applyAxisAngle(new Vector3(0, 0, 1), model.turretYaw);
-  const turretRotation = new Euler(0, 0, model.turretYaw);
+    .applyAxisAngle(new Vector3(0, 0, 1), physical.turretYaw);
+  const turretRotation = new Euler(0, 0, physical.turretYaw);
 
   if (tankModelDefinition.turretRotation) {
     const pitch = -tankModelDefinition.turretRotation.pitch * (Math.PI / 180);
@@ -100,12 +91,11 @@ export function TankArmor({ ...props }: TankArmorProps) {
 
   return (
     <HeadsUpDisplay>
-      <Lighting />
-
       <group
         {...props}
+        visible={mode === 'armor'}
         ref={wrapper}
-        rotation={[-Math.PI / 2, 0, model.hullYaw]}
+        rotation={[-Math.PI / 2, 0, physical.hullYaw]}
       >
         {armorNodes.map((node) => {
           const isHull = node.name.startsWith('hull_');
@@ -187,10 +177,10 @@ export function TankArmor({ ...props }: TankArmorProps) {
             position={new Vector3()
               .sub(turretOrigin)
               .sub(gunOrigin)
-              .applyAxisAngle(new Vector3(1, 0, 0), model.gunPitch)
+              .applyAxisAngle(new Vector3(1, 0, 0), physical.gunPitch)
               .add(turretOrigin)
               .add(gunOrigin)}
-            rotation={[model.gunPitch, 0, 0]}
+            rotation={[physical.gunPitch, 0, 0]}
           >
             {armorNodes.map((node) => {
               const isCurrentGun = node.name.startsWith(
