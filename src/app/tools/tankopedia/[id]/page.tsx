@@ -12,8 +12,8 @@ import {
   tankDefinitions,
 } from '../../../../core/blitzkrieg/tankDefinitions';
 import mutateTankopedia, { useTankopedia } from '../../../../stores/tankopedia';
+import { AntagonistBar } from './components/AntagonistBar';
 import { TankDisplay } from './components/Model/TankDisplay';
-import { VersusBar } from './components/VersusBar';
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = parseInt(params.id);
@@ -33,10 +33,8 @@ export default function Page({ params }: { params: { id: string } }) {
       draft.protagonist.tank = awaitedTankDefinitions[id];
       draft.protagonist.turret = draft.protagonist.tank.turrets.at(-1)!;
       draft.protagonist.gun = draft.protagonist.turret.guns.at(-1)!;
-      draft.antagonist = {
-        ...draft.protagonist,
-        shell: draft.protagonist.gun.shells[0],
-      };
+      draft.protagonist.shell = draft.protagonist.gun.shells[0];
+      draft.antagonist = draft.protagonist;
     });
 
     function handleKeyDown(event: KeyboardEvent) {
@@ -101,7 +99,7 @@ export default function Page({ params }: { params: { id: string } }) {
           </Flex>
 
           <TankDisplay />
-          <VersusBar />
+          <AntagonistBar />
 
           <Theme radius="small">
             <Flex gap="4">

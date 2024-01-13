@@ -42,6 +42,7 @@ type Tankopedia = {
         tank: TankDefinition;
         turret: TurretDefinition;
         gun: GunDefinition;
+        shell: ShellDefinition;
       };
       antagonist: {
         tank: TankDefinition;

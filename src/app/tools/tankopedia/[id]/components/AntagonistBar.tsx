@@ -2,6 +2,7 @@ import {
   CaretRightIcon,
   Cross1Icon,
   MagnifyingGlassIcon,
+  ShuffleIcon,
 } from '@radix-ui/react-icons';
 import {
   Button,
@@ -16,6 +17,7 @@ import {
 } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { debounce } from 'lodash';
+import { useRouter } from 'next/navigation';
 import { use, useRef, useState } from 'react';
 import { ModuleButton } from '../../../../../components/ModuleButton';
 import { SmallTankIcon } from '../../../../../components/SmallTankIcon';
@@ -28,25 +30,46 @@ import mutateTankopedia, {
   useTankopedia,
 } from '../../../../../stores/tankopedia';
 
-export function VersusBar() {
+export function AntagonistBar() {
+  const router = useRouter();
   const awaitedTankDefinitions = use(tankDefinitions);
   const mode = useTankopedia((state) => state.mode);
   const awaitedTankNamesDiacritics = use(tankNamesDiacritics);
-  const [versusTankTab, setVersusTankTab] = useState('search');
-  const versusTankSearchInput = useRef<HTMLInputElement>(null);
+  const [tab, setTab] = useState('search');
+  const searchInput = useRef<HTMLInputElement>(null);
   const antagonist = useTankopedia((state) => {
     if (!state.areTanksAssigned) return;
     return state.antagonist;
   });
-  const [versusTankSearchResults, setVersusTankSearchResults] = useState<
-    number[]
-  >([]);
+  const [searchResults, setSearchResults] = useState<number[]>([]);
 
   if (!antagonist || mode !== 'armor') return null;
 
   return (
     <Card>
       <Flex align="center" justify="between" gap="2">
+        <Flex>
+          {antagonist.gun.shells.map((shell, index) => {
+            return (
+              <ModuleButton
+                selected={antagonist.shell.id === shell.id}
+                type="shell"
+                shell={shell.icon}
+                rowChild
+                first={index === 0}
+                key={shell.id}
+                last={index === antagonist.gun.shells.length - 1}
+                onClick={() => {
+                  mutateTankopedia((draft) => {
+                    if (!draft.areTanksAssigned) return;
+                    draft.antagonist.shell = shell;
+                  });
+                }}
+              />
+            );
+          })}
+        </Flex>
+
         <Flex align="center" gap="4">
           <Text>Versus</Text>
 
@@ -63,8 +86,8 @@ export function VersusBar() {
 
             <Dialog.Content>
               <Tabs.Root
-                value={versusTankTab}
-                onValueChange={setVersusTankTab}
+                value={tab}
+                onValueChange={setTab}
                 style={{ position: 'relative' }}
               >
                 <Dialog.Close>
@@ -94,12 +117,12 @@ export function VersusBar() {
                           <MagnifyingGlassIcon />
                         </TextField.Slot>
                         <TextField.Input
-                          ref={versusTankSearchInput}
+                          ref={searchInput}
                           placeholder="Search tank..."
                           onChange={debounce(() => {
-                            setVersusTankSearchResults(
+                            setSearchResults(
                               go(
-                                versusTankSearchInput.current!.value,
+                                searchInput.current!.value,
                                 awaitedTankNamesDiacritics,
                                 { key: 'combined', limit: 8 },
                               ).map((item) => item.obj.id),
@@ -109,10 +132,10 @@ export function VersusBar() {
                       </TextField.Root>
 
                       <Flex direction="column" gap="2">
-                        {(versusTankSearchResults.length > 0 ||
-                          versusTankSearchInput.current?.value) && (
+                        {(searchResults.length > 0 ||
+                          searchInput.current?.value) && (
                           <Flex direction="column" gap="2">
-                            {versusTankSearchResults
+                            {searchResults
                               .map((id) => awaitedTankDefinitions[id])
                               .map((tank) => (
                                 <Button
@@ -137,18 +160,18 @@ export function VersusBar() {
                                       draft.antagonist.shell =
                                         draft.antagonist.gun.shells[0];
                                     });
-                                    setVersusTankSearchResults([]);
-                                    versusTankSearchInput.current!.value = '';
-                                    setVersusTankTab('configure');
+                                    setSearchResults([]);
+                                    searchInput.current!.value = '';
+                                    setTab('configure');
                                   }}
                                 >
                                   {tank.name}
                                 </Button>
                               ))}
 
-                            {versusTankSearchResults.length === 0 &&
-                              (versusTankSearchInput.current
-                                ? versusTankSearchInput.current.value.length > 0
+                            {searchResults.length === 0 &&
+                              (searchInput.current
+                                ? searchInput.current.value.length > 0
                                 : false) && (
                                 <Button disabled variant="ghost">
                                   No search results
@@ -253,40 +276,21 @@ export function VersusBar() {
           </Dialog.Root>
         </Flex>
 
-        <Flex>
-          {antagonist.gun.shells.map((shell, index) => {
-            return (
-              <ModuleButton
-                selected={antagonist.shell.id === shell.id}
-                type="shell"
-                shell={shell.icon}
-                rowChild
-                first={index === 0}
-                key={shell.id}
-                last={index === antagonist.gun.shells.length - 1}
-                onClick={() => {
-                  mutateTankopedia((draft) => {
-                    if (!draft.areTanksAssigned) return;
-                    draft.antagonist.shell = shell;
-                  });
-                }}
-              />
-            );
-          })}
-          {/* <Button variant="solid" radius="small">
-            <img src={asset('icons/shells/ap.webp')} width={24} height={24} />
-          </Button>
-          <Button variant="soft" radius="small" color="gray">
-            <img
-              src={asset('icons/shells/hc_premium.webp')}
-              width={24}
-              height={24}
-            />
-          </Button>
-          <Button variant="soft" radius="small" color="gray">
-            <img src={asset('icons/shells/he.webp')} width={24} height={24} />
-          </Button> */}
-        </Flex>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            mutateTankopedia((draft) => {
+              if (!draft.areTanksAssigned) return;
+
+              [draft.antagonist, draft.protagonist] = [
+                draft.protagonist,
+                draft.antagonist,
+              ];
+            });
+          }}
+        >
+          <ShuffleIcon /> Swap tanks
+        </Button>
       </Flex>
     </Card>
   );
