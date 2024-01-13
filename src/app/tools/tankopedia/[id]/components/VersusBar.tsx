@@ -6,7 +6,6 @@ import {
 import {
   Button,
   Card,
-  Checkbox,
   Dialog,
   Flex,
   Heading,
@@ -19,6 +18,7 @@ import { go } from 'fuzzysort';
 import { debounce } from 'lodash';
 import { use, useRef, useState } from 'react';
 import { ModuleButton } from '../../../../../components/ModuleButton';
+import { SmallTankIcon } from '../../../../../components/SmallTankIcon';
 import {
   SHELL_NAMES,
   tankDefinitions,
@@ -53,8 +53,11 @@ export function VersusBar() {
           <Dialog.Root>
             <Dialog.Trigger>
               <Button variant="ghost">
-                {antagonist.tank.name}
-                <CaretRightIcon />
+                <Flex gap="2" align="center">
+                  {antagonist.tank.name}
+                  <SmallTankIcon id={antagonist.tank.id} size={16} />
+                  <CaretRightIcon />
+                </Flex>
               </Button>
             </Dialog.Trigger>
 
@@ -248,11 +251,6 @@ export function VersusBar() {
               </Tabs.Root>
             </Dialog.Content>
           </Dialog.Root>
-        </Flex>
-
-        <Flex gap="2" align="center">
-          <Checkbox defaultChecked />
-          <Text>Calibrated</Text>
         </Flex>
 
         <Flex>
