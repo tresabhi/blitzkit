@@ -58,10 +58,7 @@ export async function extractArmor(data: string, fileName: string) {
 
                 attributes.get(attribute)!.push(value);
 
-                if (
-                  attribute === VertexAttribute.HARD_JOINTINDEX &&
-                  value[0] !== -1
-                ) {
+                if (attribute === VertexAttribute.HARD_JOINTINDEX) {
                   hardJointIndices.add(value[0]);
                   vertexHardJointIndices.set(index, value[0]);
                 }

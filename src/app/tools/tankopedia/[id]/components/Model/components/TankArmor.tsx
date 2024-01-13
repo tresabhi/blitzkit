@@ -14,6 +14,7 @@ import {
   modelDefinitions,
 } from '../../../../../../../core/blitzkrieg/modelDefinitions';
 import { nameToArmorId } from '../../../../../../../core/blitzkrieg/nameToArmorId';
+import { resolveArmor } from '../../../../../../../core/blitzkrieg/resolveThickness';
 import { useTankopedia } from '../../../../../../../stores/tankopedia';
 import { Lighting } from '../../Lighting';
 
@@ -109,15 +110,17 @@ export function TankArmor({ ...props }: TankArmorProps) {
       >
         {armorNodes.map((node) => {
           const isHull = node.name.startsWith('hull_');
-          const armorId = nameToArmorId(node.name);
           const isVisible = isHull;
-          const thickness = tankModelDefinition.armor.thickness[armorId];
-          const isSpaced = tankModelDefinition.armor.spaced?.includes(armorId);
+          const armorId = nameToArmorId(node.name);
+          const { spaced, thickness } = resolveArmor(
+            tankModelDefinition.armor,
+            armorId,
+          );
 
           if (
             !isVisible ||
             thickness === undefined ||
-            (isSpaced && !showSpacedArmor)
+            (spaced && !showSpacedArmor)
           )
             return null;
 
@@ -128,7 +131,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
               caliber={antagonist.shell.caliber}
               canSplash={splashCapable}
               isExplosive={explosiveCapable}
-              isSpaced={isSpaced ?? false}
+              isSpaced={spaced ?? false}
               normalization={normalization}
               penetration={penetration}
               thickness={thickness}
@@ -172,14 +175,15 @@ export function TankArmor({ ...props }: TankArmorProps) {
             );
             const isVisible = isCurrentTurret;
             const armorId = nameToArmorId(node.name);
-            const thickness = turretModelDefinition.armor.thickness[armorId];
-            const isSpaced =
-              turretModelDefinition.armor.spaced?.includes(armorId);
+            const { spaced, thickness } = resolveArmor(
+              turretModelDefinition.armor,
+              armorId,
+            );
 
             if (
               !isVisible ||
               thickness === undefined ||
-              (isSpaced && !showSpacedArmor)
+              (spaced && !showSpacedArmor)
             )
               return null;
 
@@ -191,7 +195,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
                 caliber={antagonist.shell.caliber}
                 canSplash={splashCapable}
                 isExplosive={explosiveCapable}
-                isSpaced={isSpaced ?? false}
+                isSpaced={spaced ?? false}
                 normalization={normalization}
                 penetration={penetration}
                 thickness={thickness}
@@ -216,14 +220,15 @@ export function TankArmor({ ...props }: TankArmorProps) {
               );
               const isVisible = isCurrentGun;
               const armorId = nameToArmorId(node.name);
-              const thickness = gunModelDefinition.armor.thickness[armorId];
-              const isSpaced =
-                gunModelDefinition.armor.spaced?.includes(armorId);
+              const { spaced, thickness } = resolveArmor(
+                gunModelDefinition.armor,
+                armorId,
+              );
 
               if (
                 !isVisible ||
                 thickness === undefined ||
-                (isSpaced && !showSpacedArmor)
+                (spaced && !showSpacedArmor)
               )
                 return null;
 
@@ -235,7 +240,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
                   caliber={antagonist.shell.caliber}
                   canSplash={splashCapable}
                   isExplosive={explosiveCapable}
-                  isSpaced={isSpaced ?? false}
+                  isSpaced={spaced ?? false}
                   normalization={normalization}
                   penetration={penetration}
                   thickness={thickness}
