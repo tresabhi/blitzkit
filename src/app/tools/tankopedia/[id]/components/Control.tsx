@@ -15,6 +15,11 @@ export function Controls() {
   }, []);
 
   return (
-    <OrbitControls ref={orbitControls} enabled={enabled} rotateSpeed={0.75} />
+    <OrbitControls
+      ref={orbitControls}
+      enabled={enabled}
+      rotateSpeed={0.25}
+      enableDamping={false}
+    />
   );
 }
