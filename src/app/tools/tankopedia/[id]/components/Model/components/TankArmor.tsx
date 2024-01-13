@@ -99,6 +99,17 @@ export function TankArmor({ ...props }: TankArmorProps) {
 
   turretPosition.add(turretOrigin);
 
+  // const tracksGeometry = mergeBufferGeometries(
+  //   modelNodes
+  //     .map((node) => {
+  //       const isWheel = node.name.startsWith('chassis_wheel_');
+  //       const isTrack = node.name.startsWith('chassis_track_');
+  //       const isVisible = isWheel || isTrack;
+  //       if (isVisible) return (node as Mesh).geometry;
+  //     })
+  //     .filter(Boolean),
+  // );
+
   return (
     <HeadsUpDisplay>
       <Lighting />
@@ -136,10 +147,22 @@ export function TankArmor({ ...props }: TankArmorProps) {
               penetration={penetration}
               thickness={thickness}
               ricochet={ricochet}
-              isArmor
             />
           );
         })}
+
+        {/* <ArmorMesh
+          geometry={tracksGeometry!}
+          caliber={antagonist.shell.caliber}
+          canSplash={splashCapable}
+          isExplosive={explosiveCapable}
+          isSpaced
+          normalization={normalization}
+          penetration={penetration}
+          thickness={50}
+          ricochet={ricochet}
+          isExternalModule
+        /> */}
 
         {modelNodes.map((node) => {
           const isWheel = node.name.startsWith('chassis_wheel_');
@@ -161,7 +184,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
               penetration={penetration}
               thickness={thickness}
               ricochet={ricochet}
-              isArmor={false}
+              isExternalModule
             />
           );
         })}
@@ -200,11 +223,9 @@ export function TankArmor({ ...props }: TankArmorProps) {
                 penetration={penetration}
                 thickness={thickness}
                 ricochet={ricochet}
-                isArmor
               />
             );
           })}
-
           <group
             position={new Vector3()
               .sub(turretOrigin)
@@ -245,7 +266,6 @@ export function TankArmor({ ...props }: TankArmorProps) {
                   penetration={penetration}
                   thickness={thickness}
                   ricochet={ricochet}
-                  isArmor
                 />
               );
             })}
@@ -271,7 +291,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
                   penetration={penetration}
                   thickness={thickness}
                   ricochet={ricochet}
-                  isArmor={false}
+                  isExternalModule
                 />
               );
             })}

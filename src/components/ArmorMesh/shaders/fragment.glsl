@@ -4,7 +4,7 @@ varying vec3 vCSMViewPosition;
 uniform bool isExplosive;
 uniform bool canSplash;
 uniform bool isSpaced;
-uniform bool isArmor;
+uniform bool isExternalModule;
 uniform float thickness;
 uniform float penetration;
 uniform float caliber;
@@ -21,7 +21,7 @@ void main() {
   float splashChance = -1.0;
   bool threeCalibersRule = caliber > 3.0 * thickness;
 
-  if (isArmor && !isExplosive && !threeCalibersRule && angle >= ricochet) {
+  if (!isExternalModule && !isExplosive && !threeCalibersRule && angle >= ricochet) {
     penetrationChance = 0.0;
     splashChance = 0.0;
   } else {
@@ -56,14 +56,14 @@ void main() {
   }
 
   if (isSpaced) {
-    if (isArmor) {
+    if (isExternalModule) {
+      csm_FragColor = vec4(0.5, 0.0, 1.0, 0.5);
+    } else {
       if (isExplosive) {
         csm_FragColor = vec4(1.0, 0.0, 1.0, 0.5);
       } else {
         csm_FragColor = vec4(1.0, 0.0, 1.0, (1.0 - penetrationChance) * 0.5);
       }
-    } else {
-      csm_FragColor = vec4(0.5, 0.0, 1.0, 0.5);
     }
   } else {
     csm_FragColor = vec4(1.0, splashChance * 0.392, 0.0, (1.0 - penetrationChance) * 0.5);

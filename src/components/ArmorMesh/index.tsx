@@ -8,7 +8,7 @@ interface ArmorMeshProps extends MeshProps {
   isExplosive: boolean;
   canSplash: boolean;
   isSpaced: boolean;
-  isArmor: boolean;
+  isExternalModule?: boolean;
   thickness: number;
   penetration: number;
   caliber: number;
@@ -20,7 +20,7 @@ export function ArmorMesh({
   isExplosive,
   canSplash,
   isSpaced,
-  isArmor,
+  isExternalModule = false,
   thickness,
   penetration,
   caliber,
@@ -36,7 +36,7 @@ export function ArmorMesh({
         </mesh>
       )}
 
-      <mesh {...props} renderOrder={1}>
+      <mesh {...props}>
         <CustomShaderMaterial
           silent
           baseMaterial={MeshStandardMaterial}
@@ -48,7 +48,7 @@ export function ArmorMesh({
             isExplosive: { value: isExplosive },
             canSplash: { value: canSplash },
             isSpaced: { value: isSpaced },
-            isArmor: { value: isArmor },
+            isExternalModule: { value: isExternalModule },
             thickness: { value: thickness },
             penetration: { value: penetration },
             caliber: { value: caliber },
