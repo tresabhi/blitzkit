@@ -58,7 +58,10 @@ export async function extractArmor(data: string, fileName: string) {
 
                 attributes.get(attribute)!.push(value);
 
-                if (attribute === VertexAttribute.HARD_JOINTINDEX) {
+                if (
+                  attribute === VertexAttribute.HARD_JOINTINDEX &&
+                  value[0] !== -1
+                ) {
                   hardJointIndices.add(value[0]);
                   vertexHardJointIndices.set(index, value[0]);
                 }
@@ -99,17 +102,10 @@ export async function extractArmor(data: string, fileName: string) {
                 .setType('SCALAR')
                 .setArray(
                   new Uint16Array(
-                    polygonGroup.indices.filter((index) => {
-                      if (!vertexHardJointIndices.has(index)) {
-                        throw new Error(
-                          `Missing vertex hard joint index for index ${index}`,
-                        );
-                      }
-
-                      return (
-                        vertexHardJointIndices.get(index)! === hardJointIndex
-                      );
-                    }),
+                    polygonGroup.indices.filter(
+                      (index) =>
+                        vertexHardJointIndices.get(index) === hardJointIndex,
+                    ),
                   ),
                 )
                 .setBuffer(buffer);

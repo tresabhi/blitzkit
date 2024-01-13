@@ -20,8 +20,6 @@ export async function buildTankArmors() {
 
   await Promise.all(
     nations.map(async (nation) => {
-      if (nation !== 'france') return;
-
       const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
         `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
       );
@@ -33,6 +31,7 @@ export async function buildTankArmors() {
         // if (id !== 7297) continue; // 60tp
         // if (id !== 5137) continue; // tiger ii
         // if (id !== 24609) continue; // concept 1b
+        if (id !== 5681) continue; // 121b
 
         console.log(`Building armor ${id} @ ${nation}/${tankKey}`);
 

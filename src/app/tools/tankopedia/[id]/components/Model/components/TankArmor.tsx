@@ -13,6 +13,7 @@ import {
   ModelDefinitions,
   modelDefinitions,
 } from '../../../../../../../core/blitzkrieg/modelDefinitions';
+import { nameToArmorId } from '../../../../../../../core/blitzkrieg/nameToArmorId';
 import { useTankopedia } from '../../../../../../../stores/tankopedia';
 import { Lighting } from '../../Lighting';
 
@@ -108,7 +109,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
       >
         {armorNodes.map((node) => {
           const isHull = node.name.startsWith('hull_');
-          const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
+          const armorId = nameToArmorId(node.name);
           const isVisible = isHull;
           const thickness = tankModelDefinition.armor.thickness[armorId];
           const isSpaced = tankModelDefinition.armor.spaced?.includes(armorId);
@@ -170,7 +171,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
                 .padStart(2, '0')}`,
             );
             const isVisible = isCurrentTurret;
-            const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
+            const armorId = nameToArmorId(node.name);
             const thickness = turretModelDefinition.armor.thickness[armorId];
             const isSpaced =
               turretModelDefinition.armor.spaced?.includes(armorId);
@@ -214,7 +215,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
                 `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
               );
               const isVisible = isCurrentGun;
-              const armorId = parseInt(node.name.match(/.+_armor_(\d+)/)![1]);
+              const armorId = nameToArmorId(node.name);
               const thickness = gunModelDefinition.armor.thickness[armorId];
               const isSpaced =
                 gunModelDefinition.armor.spaced?.includes(armorId);
