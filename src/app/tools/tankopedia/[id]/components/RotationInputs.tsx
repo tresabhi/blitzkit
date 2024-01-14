@@ -2,6 +2,7 @@ import { Flex, TextField } from '@radix-ui/themes';
 import { use, useEffect, useRef } from 'react';
 import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
+import { modelTransformEvent } from '../../../../../core/blitzkrieg/modelTransform';
 import mutateTankopedia, {
   useTankopedia,
 } from '../../../../../stores/tankopedia';
@@ -66,6 +67,7 @@ export function RotationInputs() {
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
               );
+              modelTransformEvent.emit({ pitch, yaw });
               mutateTankopedia((state) => {
                 state.model.physical.pitch = pitch;
                 state.model.physical.yaw = yaw;
@@ -101,6 +103,7 @@ export function RotationInputs() {
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
               );
+              modelTransformEvent.emit({ pitch, yaw });
               mutateTankopedia((state) => {
                 state.model.physical.pitch = pitch;
                 state.model.physical.yaw = yaw;
