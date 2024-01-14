@@ -29,9 +29,8 @@ type Tankopedia = {
   };
   model: {
     physical: {
-      hullYaw: number;
-      turretYaw: number;
-      gunPitch: number;
+      yaw: number;
+      pitch: number;
     };
     visual: {
       controlsEnabled: boolean;
@@ -74,9 +73,8 @@ export const useTankopedia = create<Tankopedia>()(
     },
     model: {
       physical: {
-        gunPitch: 0,
-        hullYaw: 0,
-        turretYaw: 0,
+        yaw: 0,
+        pitch: 0,
       },
       visual: {
         controlsEnabled: true,

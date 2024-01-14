@@ -2,14 +2,19 @@ import { GroupProps, useLoader } from '@react-three/fiber';
 import { useEffect, useRef, useState } from 'react';
 import { Euler, Group, Mesh, Vector3 } from 'three';
 import { GLTFLoader } from 'three-stdlib';
+import { degToRad } from 'three/src/math/MathUtils';
 import { ArmorMesh } from '../../../../../../../components/ArmorMesh';
 import { HeadsUpDisplay } from '../../../../../../../components/HeadsUpDisplay';
-import { X_AXIS } from '../../../../../../../constants/axis';
+import { X_AXIS, Y_AXIS, Z_AXIS } from '../../../../../../../constants/axis';
 import { asset } from '../../../../../../../core/blitzkrieg/asset';
 import {
   ModelDefinitions,
   modelDefinitions,
 } from '../../../../../../../core/blitzkrieg/modelDefinitions';
+import {
+  ModelTransformEventData,
+  modelTransformEvent,
+} from '../../../../../../../core/blitzkrieg/modelTransform';
 import { nameToArmorId } from '../../../../../../../core/blitzkrieg/nameToArmorId';
 import { resolveArmor } from '../../../../../../../core/blitzkrieg/resolveThickness';
 import { useTankopedia } from '../../../../../../../stores/tankopedia';
@@ -17,7 +22,6 @@ import { useTankopedia } from '../../../../../../../stores/tankopedia';
 interface TankArmorProps extends GroupProps {}
 
 export function TankArmor({ ...props }: TankArmorProps) {
-  const mode = useTankopedia((state) => state.mode);
   const wrapper = useRef<Group>(null);
   const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
     ModelDefinitions | undefined
@@ -29,7 +33,9 @@ export function TankArmor({ ...props }: TankArmorProps) {
   const showSpacedArmor = useTankopedia(
     (state) => state.model.visual.showSpacedArmor,
   );
-  const physical = useTankopedia((state) => state.model.physical);
+  const turretContainer = useRef<Group>(null);
+  const gunContainer = useRef<Group>(null);
+  const initialTankopediaState = useTankopedia.getState();
 
   useEffect(() => {
     (async () => {
@@ -37,8 +43,83 @@ export function TankArmor({ ...props }: TankArmorProps) {
     })();
   }, []);
 
-  // it's ok to have hooks after this early termination because this will never be true
-  // it's more for typescript to stop throwing a fit
+  useEffect(() => {
+    if (!awaitedModelDefinitions) return;
+
+    const turretOrigin = new Vector3(
+      tankModelDefinition.turretOrigin[0],
+      tankModelDefinition.turretOrigin[1],
+      -tankModelDefinition.turretOrigin[2],
+    ).applyAxisAngle(X_AXIS, Math.PI / 2);
+    const gunOrigin = new Vector3(
+      turretModelDefinition.gunOrigin[0],
+      turretModelDefinition.gunOrigin[1],
+      -turretModelDefinition.gunOrigin[2],
+    ).applyAxisAngle(X_AXIS, Math.PI / 2);
+    const turretPosition = new Vector3();
+    const turretRotation = new Euler();
+    const gunPosition = new Vector3();
+    const gunRotation = new Euler();
+
+    function handleModelTransform({ yaw, pitch }: ModelTransformEventData) {
+      gunPosition
+        .set(0, 0, 0)
+        .sub(turretOrigin)
+        .sub(gunOrigin)
+        .applyAxisAngle(X_AXIS, pitch)
+        .add(gunOrigin)
+        .add(turretOrigin);
+      gunRotation.set(pitch, 0, 0);
+      gunContainer.current?.position.copy(gunPosition);
+      gunContainer.current?.rotation.copy(gunRotation);
+
+      if (yaw === undefined) return;
+
+      turretPosition
+        .set(0, 0, 0)
+        .sub(turretOrigin)
+        .applyAxisAngle(new Vector3(0, 0, 1), yaw);
+      turretRotation.set(0, 0, yaw);
+
+      if (tankModelDefinition.turretRotation) {
+        const initialPitch = -degToRad(
+          tankModelDefinition.turretRotation.pitch,
+        );
+        const initialYaw = -degToRad(tankModelDefinition.turretRotation.yaw);
+        const initialRoll = -degToRad(tankModelDefinition.turretRotation.roll);
+
+        turretPosition
+          .applyAxisAngle(X_AXIS, initialPitch)
+          .applyAxisAngle(Y_AXIS, initialRoll)
+          .applyAxisAngle(Z_AXIS, initialYaw);
+        turretRotation.x += initialPitch;
+        turretRotation.y += initialRoll;
+        turretRotation.z += initialYaw;
+      }
+
+      turretPosition.add(turretOrigin);
+      turretContainer.current?.position.copy(turretPosition);
+      turretContainer.current?.rotation.copy(turretRotation);
+    }
+
+    modelTransformEvent.on(handleModelTransform);
+
+    return () => {
+      modelTransformEvent.off(handleModelTransform);
+    };
+  }, [awaitedModelDefinitions]);
+
+  useEffect(() => {
+    const unsubscribe = useTankopedia.subscribe(
+      (state) => state.mode,
+      (mode) => {
+        if (wrapper.current) wrapper.current.visible = mode === 'armor';
+      },
+    );
+
+    return unsubscribe;
+  });
+
   if (!protagonist) return null;
 
   const armorGltf = useLoader(
@@ -68,34 +149,14 @@ export function TankArmor({ ...props }: TankArmorProps) {
     turretModelDefinition.gunOrigin[1],
     -turretModelDefinition.gunOrigin[2],
   ).applyAxisAngle(X_AXIS, Math.PI / 2);
-  const turretPosition = new Vector3()
-    .sub(turretOrigin)
-    .applyAxisAngle(new Vector3(0, 0, 1), physical.turretYaw);
-  const turretRotation = new Euler(0, 0, physical.turretYaw);
-
-  if (tankModelDefinition.turretRotation) {
-    const pitch = -tankModelDefinition.turretRotation.pitch * (Math.PI / 180);
-    const yaw = -tankModelDefinition.turretRotation.yaw * (Math.PI / 180);
-    const roll = -tankModelDefinition.turretRotation.roll * (Math.PI / 180);
-
-    turretPosition
-      .applyAxisAngle(new Vector3(1, 0, 0), pitch)
-      .applyAxisAngle(new Vector3(0, 1, 0), roll)
-      .applyAxisAngle(new Vector3(0, 0, 1), yaw);
-    turretRotation.x += pitch;
-    turretRotation.y += roll;
-    turretRotation.z += yaw;
-  }
-
-  turretPosition.add(turretOrigin);
 
   return (
     <HeadsUpDisplay>
       <group
         {...props}
-        visible={mode === 'armor'}
         ref={wrapper}
-        rotation={[-Math.PI / 2, 0, physical.hullYaw]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        visible={initialTankopediaState.mode === 'armor'}
       >
         {armorNodes.map((node) => {
           const isHull = node.name.startsWith('hull_');
@@ -142,7 +203,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
           );
         })}
 
-        <group position={turretPosition} rotation={turretRotation}>
+        <group ref={turretContainer}>
           {armorNodes.map((node) => {
             const isCurrentTurret = node.name.startsWith(
               `turret_${turretModelDefinition.model
@@ -173,15 +234,7 @@ export function TankArmor({ ...props }: TankArmorProps) {
               />
             );
           })}
-          <group
-            position={new Vector3()
-              .sub(turretOrigin)
-              .sub(gunOrigin)
-              .applyAxisAngle(new Vector3(1, 0, 0), physical.gunPitch)
-              .add(turretOrigin)
-              .add(gunOrigin)}
-            rotation={[physical.gunPitch, 0, 0]}
-          >
+          <group ref={gunContainer}>
             {armorNodes.map((node) => {
               const isCurrentGun = node.name.startsWith(
                 `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,

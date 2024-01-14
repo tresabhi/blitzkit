@@ -1,7 +1,6 @@
 import { Card, Flex, Tabs, Theme } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { useRouter } from 'next/navigation';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
@@ -20,7 +19,6 @@ import { TankArmor } from './components/TankArmor';
 import { TankModel } from './components/TankModel';
 
 export function TankDisplay() {
-  const router = useRouter();
   const canvas = useRef<HTMLCanvasElement>(null);
   const awaitedModelDefinitions = use(modelDefinitions);
   const canvasWrapper = useRef<HTMLDivElement>(null);
@@ -66,23 +64,15 @@ export function TankDisplay() {
     const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
 
     mutateTankopedia((draft) => {
-      [draft.model.physical.gunPitch, draft.model.physical.turretYaw] =
+      [draft.model.physical.pitch, draft.model.physical.yaw] =
         applyPitchYawLimits(
-          draft.model.physical.gunPitch,
-          draft.model.physical.turretYaw,
+          draft.model.physical.pitch,
+          draft.model.physical.yaw,
           gunModelDefinition.pitch,
           turretModelDefinition.yaw,
         );
     });
   }, [protagonist?.gun, protagonist?.turret]);
-
-  useEffect(() => {
-    if (location.hash.startsWith('#')) {
-      mutateTankopedia((draft) => {
-        draft.mode = location.hash.match(/#(.+)/)![1] as TankopediaMode;
-      });
-    }
-  }, []);
 
   if (!protagonist) return null;
 
@@ -107,8 +97,6 @@ export function TankDisplay() {
             <Tabs.Root
               value={mode}
               onValueChange={(mode) => {
-                router.push(`#${mode}`);
-
                 mutateTankopedia((draft) => {
                   draft.mode = mode as TankopediaMode;
                 });

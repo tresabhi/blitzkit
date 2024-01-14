@@ -2,7 +2,6 @@ import { Flex, TextField } from '@radix-ui/themes';
 import { use, useEffect, useRef } from 'react';
 import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
-import { normalizeAnglePI } from '../../../../../core/math/normalizeAngle180';
 import mutateTankopedia, {
   useTankopedia,
 } from '../../../../../stores/tankopedia';
@@ -11,7 +10,6 @@ export function RotationInputs() {
   const physical = useTankopedia((state) => state.model.physical);
   const awaitedModelDefinitions = use(modelDefinitions);
   const turretYawInput = useRef<HTMLInputElement>(null);
-  const hullYawInput = useRef<HTMLInputElement>(null);
   const gunPitchInput = useRef<HTMLInputElement>(null);
   const protagonist = useTankopedia((state) => {
     if (!state.areTanksAssigned) return;
@@ -19,20 +17,15 @@ export function RotationInputs() {
   });
 
   useEffect(() => {
-    hullYawInput.current!.value = `${-Math.round(
-      physical.hullYaw * (180 / Math.PI),
-    )}`;
-  }, [physical.hullYaw]);
-  useEffect(() => {
     turretYawInput.current!.value = `${-Math.round(
-      physical.turretYaw * (180 / Math.PI),
+      physical.yaw * (180 / Math.PI),
     )}`;
-  }, [physical.turretYaw]);
+  }, [physical.yaw]);
   useEffect(() => {
     gunPitchInput.current!.value = `${-Math.round(
-      physical.gunPitch * (180 / Math.PI),
+      physical.pitch * (180 / Math.PI),
     )}`;
-  }, [physical.gunPitch]);
+  }, [physical.pitch]);
 
   if (!protagonist) return null;
 
@@ -55,7 +48,7 @@ export function RotationInputs() {
       <Flex
         gap="2"
         style={{
-          width: 352,
+          width: 256,
         }}
       >
         <TextField.Root
@@ -63,48 +56,19 @@ export function RotationInputs() {
             flex: 1,
           }}
         >
-          <TextField.Slot>Hull</TextField.Slot>
-          <TextField.Input
-            defaultValue={Math.round(physical.hullYaw * (180 / Math.PI))}
-            onBlur={() => {
-              const normalized = normalizeAnglePI(
-                -Number(hullYawInput.current?.value) * (Math.PI / 180),
-              );
-              mutateTankopedia((state) => {
-                state.model.physical.hullYaw = normalized;
-              });
-              hullYawInput.current!.value = `${Math.round(normalized)}`;
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                hullYawInput.current?.blur();
-              }
-            }}
-            onFocus={() => hullYawInput.current?.focus()}
-            ref={hullYawInput}
-            style={{ textAlign: 'right' }}
-          />
-          <TextField.Slot>°</TextField.Slot>
-        </TextField.Root>
-
-        <TextField.Root
-          style={{
-            flex: 1,
-          }}
-        >
           <TextField.Slot>Turret</TextField.Slot>
           <TextField.Input
-            defaultValue={Math.round(physical.turretYaw * (180 / Math.PI))}
+            defaultValue={Math.round(physical.yaw * (180 / Math.PI))}
             onBlur={() => {
               const [pitch, yaw] = applyPitchYawLimits(
-                physical.gunPitch,
+                physical.pitch,
                 -Number(turretYawInput.current?.value) * (Math.PI / 180),
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
               );
               mutateTankopedia((state) => {
-                state.model.physical.gunPitch = pitch;
-                state.model.physical.turretYaw = yaw;
+                state.model.physical.pitch = pitch;
+                state.model.physical.yaw = yaw;
               });
               turretYawInput.current!.value = `${Math.round(
                 yaw * (180 / Math.PI),
@@ -129,17 +93,17 @@ export function RotationInputs() {
         >
           <TextField.Slot>Gun</TextField.Slot>
           <TextField.Input
-            defaultValue={-Math.round(physical.gunPitch * (180 / Math.PI))}
+            defaultValue={-Math.round(physical.pitch * (180 / Math.PI))}
             onBlur={() => {
               const [pitch, yaw] = applyPitchYawLimits(
                 -Number(gunPitchInput.current?.value) * (Math.PI / 180),
-                physical.turretYaw,
+                physical.yaw,
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
               );
               mutateTankopedia((state) => {
-                state.model.physical.gunPitch = pitch;
-                state.model.physical.turretYaw = yaw;
+                state.model.physical.pitch = pitch;
+                state.model.physical.yaw = yaw;
               });
               gunPitchInput.current!.value = `${Math.round(
                 pitch * (180 / Math.PI),

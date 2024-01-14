@@ -18,9 +18,8 @@ export default function Page({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     mutateTankopedia((draft) => {
-      draft.model.physical.hullYaw = 0;
-      draft.model.physical.turretYaw = 0;
-      draft.model.physical.gunPitch = 0;
+      draft.model.physical.yaw = 0;
+      draft.model.physical.pitch = 0;
       draft.mode = 'model';
       draft.areTanksAssigned = true;
 
@@ -129,6 +128,7 @@ export default function Page({ params }: { params: { id: string } }) {
               {protagonist.turret.guns.map((thisGun, index) => {
                 return (
                   <ModuleButton
+                    key={thisGun.id}
                     type="module"
                     module="gun"
                     tier={thisGun.tier}
@@ -146,29 +146,6 @@ export default function Page({ params }: { params: { id: string } }) {
                     }}
                   />
                 );
-
-                // return (
-                //   <Tooltip content={thisGun.name} key={thisGun.id}>
-                //     <Button
-                //       onClick={() => {
-                //         mutateTankopedia((draft) => {
-                //           if (!draft.areTanksAssigned) return;
-                //           draft.protagonist.gun = thisGun;
-                //         });
-                //       }}
-                //       variant={
-                //         protagonist.gun.id === thisGun.id ? 'solid' : 'soft'
-                //       }
-                //     >
-                //       <img
-                //         src={asset('icons/modules/gun.webp')}
-                //         width={32}
-                //         height={32}
-                //       />
-                //       {TIER_ROMAN_NUMERALS[thisGun.tier]}
-                //     </Button>
-                //   </Tooltip>
-                // );
               })}
             </Flex>
           </Flex>
