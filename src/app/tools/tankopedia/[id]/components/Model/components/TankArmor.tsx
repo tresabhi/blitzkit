@@ -1,5 +1,5 @@
-import { GroupProps, useLoader } from '@react-three/fiber';
-import { useEffect, useRef, useState } from 'react';
+import { useLoader } from '@react-three/fiber';
+import { memo, useEffect, useRef, useState } from 'react';
 import { Euler, Group, Mesh, Vector3 } from 'three';
 import { GLTFLoader } from 'three-stdlib';
 import { degToRad } from 'three/src/math/MathUtils';
@@ -19,9 +19,7 @@ import { nameToArmorId } from '../../../../../../../core/blitzkrieg/nameToArmorI
 import { resolveArmor } from '../../../../../../../core/blitzkrieg/resolveThickness';
 import { useTankopedia } from '../../../../../../../stores/tankopedia';
 
-interface TankArmorProps extends GroupProps {}
-
-export function TankArmor({ ...props }: TankArmorProps) {
+export const TankArmor = memo(() => {
   const wrapper = useRef<Group>(null);
   const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
     ModelDefinitions | undefined
@@ -153,7 +151,6 @@ export function TankArmor({ ...props }: TankArmorProps) {
   return (
     <HeadsUpDisplay>
       <group
-        {...props}
         ref={wrapper}
         rotation={[-Math.PI / 2, 0, 0]}
         visible={initialTankopediaState.mode === 'armor'}
@@ -288,4 +285,4 @@ export function TankArmor({ ...props }: TankArmorProps) {
       </group>
     </HeadsUpDisplay>
   );
-}
+});

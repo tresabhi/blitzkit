@@ -1,5 +1,5 @@
 import { ThreeEvent, useLoader, useThree } from '@react-three/fiber';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import {
   Euler,
   Group,
@@ -27,9 +27,7 @@ import mutateTankopedia, {
   useTankopedia,
 } from '../../../../../../../stores/tankopedia';
 
-export function TankModel() {
-  // "TypeError: dispatcher.use is not a function"
-  // const awaitedModelDefinitions = use(modelDefinitions);
+export const TankModel = memo(() => {
   const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
     ModelDefinitions | undefined
   >(undefined);
@@ -116,7 +114,7 @@ export function TankModel() {
     return () => {
       modelTransformEvent.off(handleModelTransform);
     };
-  }, [awaitedModelDefinitions]);
+  });
 
   if (!awaitedModelDefinitions) return;
 
@@ -317,4 +315,4 @@ export function TankModel() {
       </group>
     </group>
   );
-}
+});
