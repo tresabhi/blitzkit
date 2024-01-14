@@ -20,31 +20,29 @@ export async function buildTankArmors() {
 
   await Promise.all(
     nations.map(async (nation) => {
+      if (nation !== 'european') return;
+
       const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
         `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
       );
 
-      for (const tankKey in tanks.root) {
-        const tank = tanks.root[tankKey];
-        const id = toUniqueId(nation, tank.id);
+      await Promise.all(
+        Object.entries(tanks.root).map(async ([tankKey, tank]) => {
+          const id = toUniqueId(nation, tank.id);
 
-        // if (id !== 7297) continue; // 60tp
-        // if (id !== 5137) continue; // tiger ii
-        // if (id !== 24609) continue; // concept 1b
-        if (id !== 5681) continue; // 121b
+          console.log(`Building armor ${id} @ ${nation}/${tankKey}`);
 
-        console.log(`Building armor ${id} @ ${nation}/${tankKey}`);
+          const model = await extractArmor(DATA, `${nation}-${tankKey}`);
 
-        const model = await extractArmor(DATA, `${nation}-${tankKey}`);
-
-        changes.push({
-          path: `3d/tanks/armor/${id}.glb`,
-          encoding: 'base64',
-          content: Buffer.from(await nodeIO.writeBinary(model)).toString(
-            'base64',
-          ),
-        });
-      }
+          changes.push({
+            path: `3d/tanks/armor/${id}.glb`,
+            encoding: 'base64',
+            content: Buffer.from(await nodeIO.writeBinary(model)).toString(
+              'base64',
+            ),
+          });
+        }),
+      );
     }),
   );
 
