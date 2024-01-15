@@ -10,6 +10,7 @@ import mutateTankopedia, {
   useTankopedia,
 } from '../../../../../../stores/tankopedia';
 import { Loader } from '../../../../components/Loader';
+import { Duel } from '../../page';
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
 import { RotationInputs } from '../RotationInputs';
@@ -18,16 +19,16 @@ import { Options } from './components/Options';
 import { TankArmor } from './components/TankArmor';
 import { TankModel } from './components/TankModel';
 
-export function TankDisplay() {
+interface TankDisplayProps {
+  duel: Duel;
+}
+
+export function TankDisplay({ duel }: TankDisplayProps) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const awaitedModelDefinitions = use(modelDefinitions);
   const canvasWrapper = useRef<HTMLDivElement>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const mode = useTankopedia((state) => state.mode);
-  const protagonist = useTankopedia((state) => {
-    if (!state.areTanksAssigned) return;
-    return state.protagonist;
-  });
 
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);
@@ -56,12 +57,14 @@ export function TankDisplay() {
   });
 
   useEffect(() => {
-    if (!protagonist) return void 0;
+    if (!duel.protagonist) return void 0;
 
-    const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
+    const tankModelDefinition =
+      awaitedModelDefinitions[duel.protagonist.tank.id];
     const turretModelDefinition =
-      tankModelDefinition.turrets[protagonist.turret.id];
-    const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
+      tankModelDefinition.turrets[duel.protagonist.turret.id];
+    const gunModelDefinition =
+      turretModelDefinition.guns[duel.protagonist.gun.id];
 
     mutateTankopedia((draft) => {
       [draft.model.physical.pitch, draft.model.physical.yaw] =
@@ -72,9 +75,7 @@ export function TankDisplay() {
           turretModelDefinition.yaw,
         );
     });
-  }, [protagonist?.gun, protagonist?.turret]);
-
-  if (!protagonist) return null;
+  }, [duel.protagonist.gun, duel.protagonist.turret]);
 
   return (
     <Theme radius={isFullScreen ? 'none' : undefined}>
@@ -130,15 +131,15 @@ export function TankDisplay() {
                     </Html>
                   }
                 >
-                  <TankModel />
-                  <TankArmor />
+                  <TankModel duel={duel} />
+                  <TankArmor duel={duel} />
                 </Suspense>
               </Canvas>
             </div>
 
             <Options canvas={canvasWrapper} isFullScreen={isFullScreen} />
 
-            <RotationInputs />
+            <RotationInputs duel={duel} />
           </Flex>
         </Theme>
       </Card>

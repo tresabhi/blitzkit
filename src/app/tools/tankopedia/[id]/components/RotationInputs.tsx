@@ -6,16 +6,17 @@ import { modelTransformEvent } from '../../../../../core/blitzkrieg/modelTransfo
 import mutateTankopedia, {
   useTankopedia,
 } from '../../../../../stores/tankopedia';
+import { Duel } from '../page';
 
-export function RotationInputs() {
+interface RotationInputsProps {
+  duel: Duel;
+}
+
+export function RotationInputs({ duel: { protagonist } }: RotationInputsProps) {
   const physical = useTankopedia((state) => state.model.physical);
   const awaitedModelDefinitions = use(modelDefinitions);
   const turretYawInput = useRef<HTMLInputElement>(null);
   const gunPitchInput = useRef<HTMLInputElement>(null);
-  const protagonist = useTankopedia((state) => {
-    if (!state.areTanksAssigned) return;
-    return state.protagonist;
-  });
 
   useEffect(() => {
     turretYawInput.current!.value = `${-Math.round(
@@ -27,8 +28,6 @@ export function RotationInputs() {
       physical.pitch * (180 / Math.PI),
     )}`;
   }, [physical.pitch]);
-
-  if (!protagonist) return null;
 
   const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
   const turretModelDefinition =

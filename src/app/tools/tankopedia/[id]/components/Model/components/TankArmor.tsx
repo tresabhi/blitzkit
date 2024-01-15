@@ -1,5 +1,5 @@
 import { useLoader } from '@react-three/fiber';
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { Euler, Group, Mesh, Vector3 } from 'three';
 import { GLTFLoader } from 'three-stdlib';
 import { degToRad } from 'three/src/math/MathUtils';
@@ -8,38 +8,28 @@ import { HeadsUpDisplay } from '../../../../../../../components/HeadsUpDisplay';
 import { X_AXIS, Y_AXIS, Z_AXIS } from '../../../../../../../constants/axis';
 import { asset } from '../../../../../../../core/blitzkrieg/asset';
 import {
-  ModelDefinitions,
-  modelDefinitions,
-} from '../../../../../../../core/blitzkrieg/modelDefinitions';
-import {
   ModelTransformEventData,
   modelTransformEvent,
 } from '../../../../../../../core/blitzkrieg/modelTransform';
 import { nameToArmorId } from '../../../../../../../core/blitzkrieg/nameToArmorId';
 import { resolveArmor } from '../../../../../../../core/blitzkrieg/resolveThickness';
+import { useModelDefinitions } from '../../../../../../../core/hooks/useModelDefinitions';
 import { useTankopedia } from '../../../../../../../stores/tankopedia';
+import { Duel } from '../../../page';
 
-export const TankArmor = memo(() => {
+interface TankArmorProps {
+  duel: Duel;
+}
+
+export const TankArmor = memo<TankArmorProps>(({ duel }) => {
   const wrapper = useRef<Group>(null);
-  const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
-    ModelDefinitions | undefined
-  >(undefined);
-  const protagonist = useTankopedia((state) => {
-    if (!state.areTanksAssigned) return;
-    return state.protagonist;
-  });
+  const awaitedModelDefinitions = useModelDefinitions();
   const showSpacedArmor = useTankopedia(
     (state) => state.model.visual.showSpacedArmor,
   );
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
   const initialTankopediaState = useTankopedia.getState();
-
-  useEffect(() => {
-    (async () => {
-      setAwaitedModelDefinitions(await modelDefinitions);
-    })();
-  }, []);
 
   useEffect(() => {
     if (!awaitedModelDefinitions) return;
@@ -118,25 +108,22 @@ export const TankArmor = memo(() => {
     return unsubscribe;
   });
 
-  if (!protagonist) return null;
-
   const armorGltf = useLoader(
     GLTFLoader,
-    asset(`3d/tanks/armor/${protagonist.tank.id}.glb`),
+    asset(`3d/tanks/armor/${duel.protagonist.tank.id}.glb`),
   );
   const modelGltf = useLoader(
     GLTFLoader,
-    asset(`3d/tanks/models/${protagonist.tank.id}.glb`),
+    asset(`3d/tanks/models/${duel.protagonist.tank.id}.glb`),
   );
-
-  if (!awaitedModelDefinitions) return null;
 
   const armorNodes = Object.values(armorGltf.nodes);
   const modelNodes = Object.values(modelGltf.nodes);
-  const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
+  const tankModelDefinition = awaitedModelDefinitions[duel.protagonist.tank.id];
   const turretModelDefinition =
-    tankModelDefinition.turrets[protagonist.turret.id];
-  const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
+    tankModelDefinition.turrets[duel.protagonist.turret.id];
+  const gunModelDefinition =
+    turretModelDefinition.guns[duel.protagonist.gun.id];
   const turretOrigin = new Vector3(
     tankModelDefinition.turretOrigin[0],
     tankModelDefinition.turretOrigin[1],
@@ -173,6 +160,7 @@ export const TankArmor = memo(() => {
 
           return (
             <ArmorMesh
+              duel={duel}
               key={node.uuid}
               geometry={(node as Mesh).geometry}
               isSpaced={spaced ?? false}
@@ -191,6 +179,7 @@ export const TankArmor = memo(() => {
 
           return (
             <ArmorMesh
+              duel={duel}
               key={node.uuid}
               geometry={(node as Mesh).geometry}
               isSpaced
@@ -223,6 +212,7 @@ export const TankArmor = memo(() => {
 
             return (
               <ArmorMesh
+                duel={duel}
                 key={node.uuid}
                 geometry={(node as Mesh).geometry}
                 position={turretOrigin}
@@ -252,6 +242,7 @@ export const TankArmor = memo(() => {
 
               return (
                 <ArmorMesh
+                  duel={duel}
                   key={node.uuid}
                   geometry={(node as Mesh).geometry}
                   position={turretOrigin.clone().add(gunOrigin)}
@@ -272,6 +263,7 @@ export const TankArmor = memo(() => {
 
               return (
                 <ArmorMesh
+                  duel={duel}
                   key={node.uuid}
                   geometry={(node as Mesh).geometry}
                   isSpaced

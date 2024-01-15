@@ -14,8 +14,13 @@ export type TankopediaSortBy = 'tier' | 'name';
 export type TankopediaSortDirection = 'ascending' | 'descending';
 export type TankopediaTestTankDisplay = 'include' | 'exclude' | 'only';
 export type TankopediaMode = 'model' | 'armor';
-
-type Tankopedia = {
+export interface DuelMember {
+  tank: TankDefinition;
+  turret: TurretDefinition;
+  gun: GunDefinition;
+  shell: ShellDefinition;
+}
+interface Tankopedia {
   sort: {
     by: TankopediaSortBy;
     direction: TankopediaSortDirection;
@@ -39,24 +44,7 @@ type Tankopedia = {
     };
   };
   mode: TankopediaMode;
-} & (
-  | {
-      areTanksAssigned: true;
-      protagonist: {
-        tank: TankDefinition;
-        turret: TurretDefinition;
-        gun: GunDefinition;
-        shell: ShellDefinition;
-      };
-      antagonist: {
-        tank: TankDefinition;
-        turret: TurretDefinition;
-        gun: GunDefinition;
-        shell: ShellDefinition;
-      };
-    }
-  | { areTanksAssigned: false }
-);
+}
 
 export const useTankopedia = create<Tankopedia>()(
   subscribeWithSelector<Tankopedia>(() => ({

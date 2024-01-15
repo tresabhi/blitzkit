@@ -16,8 +16,9 @@ import {
   Tooltip,
 } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
+import { produce } from 'immer';
 import { debounce } from 'lodash';
-import { use, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, use, useRef, useState } from 'react';
 import { ModuleButton } from '../../../../../components/ModuleButton';
 import { SmallTankIcon } from '../../../../../components/SmallTankIcon';
 import {
@@ -25,23 +26,26 @@ import {
   tankDefinitions,
   tankNamesDiacritics,
 } from '../../../../../core/blitzkrieg/tankDefinitions';
-import mutateTankopedia, {
-  useTankopedia,
-} from '../../../../../stores/tankopedia';
+import { useTankopedia } from '../../../../../stores/tankopedia';
+import { Duel } from '../page';
 
-export function AntagonistBar() {
+interface AntagonistBarProps {
+  duel: Duel;
+  setDuel: Dispatch<SetStateAction<Duel>>;
+}
+
+export function AntagonistBar({
+  duel: { antagonist },
+  setDuel,
+}: AntagonistBarProps) {
   const awaitedTankDefinitions = use(tankDefinitions);
   const mode = useTankopedia((state) => state.mode);
   const awaitedTankNamesDiacritics = use(tankNamesDiacritics);
   const [tab, setTab] = useState('search');
   const searchInput = useRef<HTMLInputElement>(null);
-  const antagonist = useTankopedia((state) => {
-    if (!state.areTanksAssigned) return;
-    return state.antagonist;
-  });
   const [searchResults, setSearchResults] = useState<number[]>([]);
 
-  if (!antagonist || mode !== 'armor') return null;
+  if (mode !== 'armor') return null;
 
   return (
     <Card>
@@ -58,10 +62,11 @@ export function AntagonistBar() {
                 key={shell.id}
                 last={index === antagonist.gun.shells.length - 1}
                 onClick={() => {
-                  mutateTankopedia((draft) => {
-                    if (!draft.areTanksAssigned) return;
-                    draft.antagonist.shell = shell;
-                  });
+                  setDuel(
+                    produce<Duel>((draft) => {
+                      draft.antagonist.shell = shell;
+                    }),
+                  );
                 }}
               />
             );
@@ -147,17 +152,17 @@ export function AntagonistBar() {
                                   key={tank.id}
                                   variant="ghost"
                                   onClick={() => {
-                                    mutateTankopedia((draft) => {
-                                      if (!draft.areTanksAssigned) return;
-
-                                      draft.antagonist.tank = tank;
-                                      draft.antagonist.turret =
-                                        tank.turrets.at(-1)!;
-                                      draft.antagonist.gun =
-                                        draft.antagonist.turret.guns.at(-1)!;
-                                      draft.antagonist.shell =
-                                        draft.antagonist.gun.shells[0];
-                                    });
+                                    setDuel(
+                                      produce<Duel>((draft) => {
+                                        draft.antagonist.tank = tank;
+                                        draft.antagonist.turret =
+                                          tank.turrets.at(-1)!;
+                                        draft.antagonist.gun =
+                                          draft.antagonist.turret.guns.at(-1)!;
+                                        draft.antagonist.shell =
+                                          draft.antagonist.gun.shells[0];
+                                      }),
+                                    );
                                     setSearchResults([]);
                                     searchInput.current!.value = '';
                                     setTab('configure');
@@ -200,15 +205,15 @@ export function AntagonistBar() {
                                   }
                                   key={turret.id}
                                   onClick={() => {
-                                    mutateTankopedia((draft) => {
-                                      if (!draft.areTanksAssigned) return;
-
-                                      draft.antagonist.turret = turret;
-                                      draft.antagonist.gun =
-                                        turret.guns.at(-1)!;
-                                      draft.antagonist.shell =
-                                        draft.antagonist.gun.shells[0];
-                                    });
+                                    setDuel(
+                                      produce<Duel>((draft) => {
+                                        draft.antagonist.turret = turret;
+                                        draft.antagonist.gun =
+                                          turret.guns.at(-1)!;
+                                        draft.antagonist.shell =
+                                          draft.antagonist.gun.shells[0];
+                                      }),
+                                    );
                                   }}
                                   selected={antagonist.turret.id === turret.id}
                                   tier={turret.tier}
@@ -228,11 +233,12 @@ export function AntagonistBar() {
                                     index === antagonist.turret.guns.length - 1
                                   }
                                   onClick={() => {
-                                    mutateTankopedia((draft) => {
-                                      if (!draft.areTanksAssigned) return;
-                                      draft.antagonist.gun = gun;
-                                      draft.antagonist.shell = gun.shells[0];
-                                    });
+                                    setDuel(
+                                      produce<Duel>((draft) => {
+                                        draft.antagonist.gun = gun;
+                                        draft.antagonist.shell = gun.shells[0];
+                                      }),
+                                    );
                                   }}
                                   selected={antagonist.gun.id === gun.id}
                                   tier={gun.tier}
@@ -277,14 +283,14 @@ export function AntagonistBar() {
         <Button
           variant="ghost"
           onClick={() => {
-            mutateTankopedia((draft) => {
-              if (!draft.areTanksAssigned) return;
-
-              [draft.antagonist, draft.protagonist] = [
-                draft.protagonist,
-                draft.antagonist,
-              ];
-            });
+            setDuel(
+              produce<Duel>((draft) => {
+                [draft.protagonist, draft.antagonist] = [
+                  draft.antagonist,
+                  draft.protagonist,
+                ];
+              }),
+            );
           }}
         >
           <ShuffleIcon /> Swap tanks

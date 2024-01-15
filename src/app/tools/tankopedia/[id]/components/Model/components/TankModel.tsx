@@ -26,17 +26,16 @@ import { normalizeAnglePI } from '../../../../../../../core/math/normalizeAngle1
 import mutateTankopedia, {
   useTankopedia,
 } from '../../../../../../../stores/tankopedia';
+import { Duel } from '../../../page';
 
-export const TankModel = memo(() => {
+interface TankModelProps {
+  duel: Duel;
+}
+
+export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
   const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
     ModelDefinitions | undefined
   >(undefined);
-  const protagonist = useTankopedia((state) => {
-    if (!state.areTanksAssigned) return;
-    return state.protagonist;
-  });
-
-  if (!protagonist) return null;
 
   const canvas = useThree((state) => state.gl.domElement);
   const physical = useTankopedia((state) => state.model.physical);
