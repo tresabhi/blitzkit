@@ -3,25 +3,37 @@ import { WebGLRenderTarget } from 'three';
 
 export const externalModuleMaskRenderTarget = new WebGLRenderTarget();
 
-interface ArmorMeshExternalModuleMaskProps extends MeshProps {
-  exclude?: boolean;
-}
+type ArmorMeshExternalModuleMaskProps = MeshProps &
+  (
+    | {
+        exclude?: false;
+        maxThickness: number;
+        thickness: number;
+      }
+    | {
+        exclude: true;
+      }
+  );
 
-export function ArmorMeshExternalModuleMask({
-  exclude = false,
-  ...props
-}: ArmorMeshExternalModuleMaskProps) {
+export function ArmorMeshExternalModuleMask(
+  props: ArmorMeshExternalModuleMaskProps,
+) {
   return (
     <>
-      {exclude && (
+      {props.exclude && (
         <mesh {...props} renderOrder={0}>
           <meshBasicMaterial colorWrite={false} />
         </mesh>
       )}
 
-      {!exclude && (
+      {!props.exclude && (
         <mesh {...props} renderOrder={1}>
-          <meshBasicMaterial color="#ff0000" depthWrite={false} />
+          <meshBasicMaterial
+            color={`rgb(255, ${
+              (props.thickness / props.maxThickness) * 255
+            }, 0)`}
+            depthWrite={false}
+          />
         </mesh>
       )}
     </>

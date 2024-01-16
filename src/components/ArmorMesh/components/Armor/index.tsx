@@ -17,12 +17,14 @@ interface ArmorMeshProps extends MeshProps {
   isSpaced: boolean;
   isExternalModule?: boolean;
   thickness: number;
+  maxExternalModuleThickness: number;
 }
 
 export function ArmorMesh({
   isSpaced,
   isExternalModule = false,
   thickness,
+  maxExternalModuleThickness,
   duel,
   ...props
 }: ArmorMeshProps) {
@@ -68,6 +70,7 @@ export function ArmorMesh({
             projectionMatrixInverse: { value: null },
             zNear: { value: camera.near },
             zFar: { value: camera.far },
+            maxExternalModuleThickness: { value: maxExternalModuleThickness },
             isSpaced: { value: isSpaced },
             isExplosive: { value: isExplosive(shell.type) },
             canSplash: { value: canSplash(shell.type) },

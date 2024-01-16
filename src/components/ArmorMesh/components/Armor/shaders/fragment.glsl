@@ -12,6 +12,7 @@ uniform sampler2D externalModuleMask;
 uniform sampler2D spacedArmorDepth;
 uniform vec2 resolution;
 varying mat4 vProjectionMatrix;
+uniform float maxExternalModuleThickness;
 
 float depthToDistance(float depth) {
   mat4 projectionMatrixInverse = inverse(vProjectionMatrix);
@@ -46,10 +47,11 @@ void main() {
   } else {
     float piercedPenetration = penetration;
 
-    // if (isUnderExternalModule) {
-    //   // TODO: ADD 
-    //   piercedPenetration -= 50.0;
-    // }
+    if (isUnderExternalModule) {
+      float normalizedExternalModuleThickness = externalModuleMaskColor.g;
+      float externalModuleThickness = normalizedExternalModuleThickness * maxExternalModuleThickness;
+      piercedPenetration -= externalModuleThickness;
+    }
 
     if (isExplosive) {
       // 50% loss of remaining penetration per meter

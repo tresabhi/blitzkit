@@ -115,13 +115,8 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
     GLTFLoader,
     asset(`3d/tanks/armor/${duel.protagonist.tank.id}.glb`),
   );
-  const modelGltf = useLoader(
-    GLTFLoader,
-    asset(`3d/tanks/models/${duel.protagonist.tank.id}.glb`),
-  );
 
   const armorNodes = Object.values(armorGltf.nodes);
-  const modelNodes = Object.values(modelGltf.nodes);
   const tankModelDefinition = awaitedModelDefinitions[duel.protagonist.tank.id];
   const turretModelDefinition =
     tankModelDefinition.turrets[duel.protagonist.turret.id];
@@ -137,6 +132,10 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
     turretModelDefinition.gunOrigin[1],
     -turretModelDefinition.gunOrigin[2],
   ).applyAxisAngle(X_AXIS, Math.PI / 2);
+  const maxExternalModuleThickness = Math.max(
+    tankModelDefinition.trackThickness,
+    gunModelDefinition.barrelThickness,
+  );
 
   return (
     <group
@@ -162,6 +161,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
 
         return (
           <ArmorMesh
+            maxExternalModuleThickness={maxExternalModuleThickness}
             duel={duel}
             key={node.uuid}
             geometry={(node as Mesh).geometry}
@@ -192,6 +192,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
 
           return (
             <ArmorMesh
+              maxExternalModuleThickness={maxExternalModuleThickness}
               duel={duel}
               key={node.uuid}
               geometry={(node as Mesh).geometry}
@@ -222,6 +223,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
 
             return (
               <ArmorMesh
+                maxExternalModuleThickness={maxExternalModuleThickness}
                 duel={duel}
                 key={node.uuid}
                 geometry={(node as Mesh).geometry}

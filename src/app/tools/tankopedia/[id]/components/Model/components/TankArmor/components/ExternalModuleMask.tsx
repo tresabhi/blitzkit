@@ -24,6 +24,13 @@ interface ExternalModuleMaskProps {
   duel: Duel;
 }
 
+/**
+ * When rendered, generates a mask and thickness buffer for external modules.
+ * - R: 0 means not external module
+ * - G: normalized thickness; multiply with max thickness to get nominal thickness
+ * - B: no data
+ * - A: 1 means is armor; 0 is background
+ */
 export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
   const wrapper = useRef<Group>(null);
   const awaitedModelDefinitions = useModelDefinitions();
@@ -127,6 +134,10 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
     tankModelDefinition.turrets[duel.protagonist.turret.id];
   const gunModelDefinition =
     turretModelDefinition.guns[duel.protagonist.gun.id];
+  const maxThickness = Math.max(
+    tankModelDefinition.trackThickness,
+    gunModelDefinition.barrelThickness,
+  );
   const turretOrigin = new Vector3(
     tankModelDefinition.turretOrigin[0],
     tankModelDefinition.turretOrigin[1],
@@ -178,6 +189,8 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
 
         return (
           <ArmorMeshExternalModuleMask
+            maxThickness={maxThickness}
+            thickness={tankModelDefinition.trackThickness}
             key={node.uuid}
             geometry={(node as Mesh).geometry}
           />
@@ -251,6 +264,8 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
 
             return (
               <ArmorMeshExternalModuleMask
+                maxThickness={maxThickness}
+                thickness={gunModelDefinition.barrelThickness}
                 key={node.uuid}
                 geometry={(node as Mesh).geometry}
               />
