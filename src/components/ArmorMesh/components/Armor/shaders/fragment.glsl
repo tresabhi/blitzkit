@@ -8,8 +8,12 @@ uniform float penetration;
 uniform float caliber;
 uniform float ricochet;
 uniform float normalization;
+uniform sampler2D externalModuleMask;
+uniform vec2 resolution;
 
 void main() {
+  vec4 externalModuleMaskColor = texture2D(externalModuleMask, gl_FragCoord.xy / resolution);
+  bool isUnderExternalModule = externalModuleMaskColor.r == 1.0;
   vec3 normalizedNormal = normalize(vNormal);
   vec3 normalizedViewPosition = normalize(vCSMViewPosition);
   float dotProduct = dot(normalizedNormal, -normalizedViewPosition);
@@ -19,7 +23,7 @@ void main() {
   float splashChance = -1.0;
   bool threeCalibersRule = caliber > 3.0 * thickness;
 
-  if (!isExternalModule && !isExplosive && !threeCalibersRule && angle >= ricochet) {
+  if (!isUnderExternalModule && !isExternalModule && !isExplosive && !threeCalibersRule && angle >= ricochet) {
     penetrationChance = 0.0;
     splashChance = 0.0;
   } else {

@@ -1,27 +1,30 @@
 import { useLoader } from '@react-three/fiber';
-import { memo, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Euler, Group, Mesh, Vector3 } from 'three';
 import { GLTFLoader } from 'three-stdlib';
 import { degToRad } from 'three/src/math/MathUtils';
-import { ArmorMesh } from '../../../../../../../components/ArmorMesh';
-import { HeadsUpDisplay } from '../../../../../../../components/HeadsUpDisplay';
-import { X_AXIS, Y_AXIS, Z_AXIS } from '../../../../../../../constants/axis';
-import { asset } from '../../../../../../../core/blitzkrieg/asset';
+import { ArmorMesh } from '../../../../../../../../../components/ArmorMesh';
+import {
+  X_AXIS,
+  Y_AXIS,
+  Z_AXIS,
+} from '../../../../../../../../../constants/axis';
+import { asset } from '../../../../../../../../../core/blitzkrieg/asset';
 import {
   ModelTransformEventData,
   modelTransformEvent,
-} from '../../../../../../../core/blitzkrieg/modelTransform';
-import { nameToArmorId } from '../../../../../../../core/blitzkrieg/nameToArmorId';
-import { resolveArmor } from '../../../../../../../core/blitzkrieg/resolveThickness';
-import { useModelDefinitions } from '../../../../../../../core/hooks/useModelDefinitions';
-import { useTankopedia } from '../../../../../../../stores/tankopedia';
-import { Duel } from '../../../page';
+} from '../../../../../../../../../core/blitzkrieg/modelTransform';
+import { nameToArmorId } from '../../../../../../../../../core/blitzkrieg/nameToArmorId';
+import { resolveArmor } from '../../../../../../../../../core/blitzkrieg/resolveThickness';
+import { useModelDefinitions } from '../../../../../../../../../core/hooks/useModelDefinitions';
+import { useTankopedia } from '../../../../../../../../../stores/tankopedia';
+import { Duel } from '../../../../../page';
 
-interface TankArmorProps {
+interface ArmorHighlightingProps {
   duel: Duel;
 }
 
-export const TankArmor = memo<TankArmorProps>(({ duel }) => {
+export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
   const wrapper = useRef<Group>(null);
   const awaitedModelDefinitions = useModelDefinitions();
   const showSpacedArmor = useTankopedia(
@@ -136,18 +139,47 @@ export const TankArmor = memo<TankArmorProps>(({ duel }) => {
   ).applyAxisAngle(X_AXIS, Math.PI / 2);
 
   return (
-    <HeadsUpDisplay>
-      <group
-        ref={wrapper}
-        rotation={[-Math.PI / 2, 0, 0]}
-        visible={initialTankopediaState.mode === 'armor'}
-      >
+    <group
+      ref={wrapper}
+      rotation={[-Math.PI / 2, 0, 0]}
+      visible={initialTankopediaState.mode === 'armor'}
+    >
+      {armorNodes.map((node) => {
+        const isHull = node.name.startsWith('hull_');
+        const isVisible = isHull;
+        const armorId = nameToArmorId(node.name);
+        const { spaced, thickness } = resolveArmor(
+          tankModelDefinition.armor,
+          armorId,
+        );
+
+        if (
+          !isVisible ||
+          thickness === undefined ||
+          (spaced && !showSpacedArmor)
+        )
+          return null;
+
+        return (
+          <ArmorMesh
+            duel={duel}
+            key={node.uuid}
+            geometry={(node as Mesh).geometry}
+            isSpaced={spaced ?? false}
+            thickness={thickness}
+          />
+        );
+      })}
+
+      <group ref={turretContainer}>
         {armorNodes.map((node) => {
-          const isHull = node.name.startsWith('hull_');
-          const isVisible = isHull;
+          const isCurrentTurret = node.name.startsWith(
+            `turret_${turretModelDefinition.model.toString().padStart(2, '0')}`,
+          );
+          const isVisible = isCurrentTurret;
           const armorId = nameToArmorId(node.name);
           const { spaced, thickness } = resolveArmor(
-            tankModelDefinition.armor,
+            turretModelDefinition.armor,
             armorId,
           );
 
@@ -163,43 +195,21 @@ export const TankArmor = memo<TankArmorProps>(({ duel }) => {
               duel={duel}
               key={node.uuid}
               geometry={(node as Mesh).geometry}
+              position={turretOrigin}
               isSpaced={spaced ?? false}
               thickness={thickness}
             />
           );
         })}
-
-        {modelNodes.map((node) => {
-          const isWheel = node.name.startsWith('chassis_wheel_');
-          const isTrack = node.name.startsWith('chassis_track_');
-          const isVisible = isWheel || isTrack;
-          const thickness = 50;
-
-          if (!isVisible || !showSpacedArmor) return null;
-
-          return (
-            <ArmorMesh
-              duel={duel}
-              key={node.uuid}
-              geometry={(node as Mesh).geometry}
-              isSpaced
-              thickness={thickness}
-              isExternalModule
-            />
-          );
-        })}
-
-        <group ref={turretContainer}>
+        <group ref={gunContainer}>
           {armorNodes.map((node) => {
-            const isCurrentTurret = node.name.startsWith(
-              `turret_${turretModelDefinition.model
-                .toString()
-                .padStart(2, '0')}`,
+            const isCurrentGun = node.name.startsWith(
+              `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
             );
-            const isVisible = isCurrentTurret;
+            const isVisible = isCurrentGun;
             const armorId = nameToArmorId(node.name);
             const { spaced, thickness } = resolveArmor(
-              turretModelDefinition.armor,
+              gunModelDefinition.armor,
               armorId,
             );
 
@@ -215,66 +225,14 @@ export const TankArmor = memo<TankArmorProps>(({ duel }) => {
                 duel={duel}
                 key={node.uuid}
                 geometry={(node as Mesh).geometry}
-                position={turretOrigin}
+                position={turretOrigin.clone().add(gunOrigin)}
                 isSpaced={spaced ?? false}
                 thickness={thickness}
               />
             );
           })}
-          <group ref={gunContainer}>
-            {armorNodes.map((node) => {
-              const isCurrentGun = node.name.startsWith(
-                `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
-              );
-              const isVisible = isCurrentGun;
-              const armorId = nameToArmorId(node.name);
-              const { spaced, thickness } = resolveArmor(
-                gunModelDefinition.armor,
-                armorId,
-              );
-
-              if (
-                !isVisible ||
-                thickness === undefined ||
-                (spaced && !showSpacedArmor)
-              )
-                return null;
-
-              return (
-                <ArmorMesh
-                  duel={duel}
-                  key={node.uuid}
-                  geometry={(node as Mesh).geometry}
-                  position={turretOrigin.clone().add(gunOrigin)}
-                  isSpaced={spaced ?? false}
-                  thickness={thickness}
-                />
-              );
-            })}
-
-            {modelNodes.map((node) => {
-              const isCurrentGun =
-                node.name ===
-                `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`;
-              const isVisible = isCurrentGun;
-              const thickness = 50;
-
-              if (!isVisible || !showSpacedArmor) return null;
-
-              return (
-                <ArmorMesh
-                  duel={duel}
-                  key={node.uuid}
-                  geometry={(node as Mesh).geometry}
-                  isSpaced
-                  thickness={thickness}
-                  isExternalModule
-                />
-              );
-            })}
-          </group>
         </group>
       </group>
-    </HeadsUpDisplay>
+    </group>
   );
-});
+}
