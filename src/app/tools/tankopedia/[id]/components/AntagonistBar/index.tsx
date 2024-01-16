@@ -143,9 +143,9 @@ export function AntagonistBar({
                           justifyContent: 'space-around',
                         }}
                       >
-                        <SearchResults ids={firstChunk} />
+                        <SearchResults ids={firstChunk} setDuel={setDuel} />
                         {secondChunk.length > 0 && (
-                          <SearchResults ids={secondChunk} />
+                          <SearchResults ids={secondChunk} setDuel={setDuel} />
                         )}
                       </div>
                     </Flex>
