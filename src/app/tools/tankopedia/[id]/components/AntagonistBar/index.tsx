@@ -19,15 +19,15 @@ import { go } from 'fuzzysort';
 import { produce } from 'immer';
 import { debounce } from 'lodash';
 import { Dispatch, SetStateAction, use, useRef, useState } from 'react';
-import { ModuleButton } from '../../../../../components/ModuleButton';
-import { SmallTankIcon } from '../../../../../components/SmallTankIcon';
+import { ModuleButton } from '../../../../../../components/ModuleButton';
+import { SmallTankIcon } from '../../../../../../components/SmallTankIcon';
 import {
   SHELL_NAMES,
-  tankDefinitions,
   tankNamesDiacritics,
-} from '../../../../../core/blitzkrieg/tankDefinitions';
-import { useTankopedia } from '../../../../../stores/tankopedia';
-import { Duel } from '../page';
+} from '../../../../../../core/blitzkrieg/tankDefinitions';
+import { useTankopedia } from '../../../../../../stores/tankopedia';
+import { Duel } from '../../page';
+import { SearchResults } from './components/SearchResults';
 
 interface AntagonistBarProps {
   duel: Duel;
@@ -38,12 +38,14 @@ export function AntagonistBar({
   duel: { antagonist },
   setDuel,
 }: AntagonistBarProps) {
-  const awaitedTankDefinitions = use(tankDefinitions);
   const mode = useTankopedia((state) => state.mode);
   const awaitedTankNamesDiacritics = use(tankNamesDiacritics);
   const [tab, setTab] = useState('search');
   const searchInput = useRef<HTMLInputElement>(null);
   const [searchResults, setSearchResults] = useState<number[]>([]);
+  const chunkSize = window.innerWidth > 512 ? 8 : Infinity;
+  const firstChunk = searchResults.slice(0, chunkSize);
+  const secondChunk = searchResults.slice(chunkSize);
 
   if (mode !== 'armor') return null;
 
@@ -127,62 +129,25 @@ export function AntagonistBar({
                               go(
                                 searchInput.current!.value,
                                 awaitedTankNamesDiacritics,
-                                { key: 'combined', limit: 8 },
+                                { key: 'combined', limit: 16 },
                               ).map((item) => item.obj.id),
                             );
                           }, 500)}
                         />
                       </TextField.Root>
 
-                      <Flex direction="column" gap="2">
-                        {(searchResults.length > 0 ||
-                          searchInput.current?.value) && (
-                          <Flex direction="column" gap="2">
-                            {searchResults
-                              .map((id) => awaitedTankDefinitions[id])
-                              .map((tank) => (
-                                <Button
-                                  color={
-                                    tank.tree_type === 'researchable'
-                                      ? 'gray'
-                                      : tank.tree_type === 'premium'
-                                        ? 'amber'
-                                        : 'blue'
-                                  }
-                                  key={tank.id}
-                                  variant="ghost"
-                                  onClick={() => {
-                                    setDuel(
-                                      produce<Duel>((draft) => {
-                                        draft.antagonist.tank = tank;
-                                        draft.antagonist.turret =
-                                          tank.turrets.at(-1)!;
-                                        draft.antagonist.gun =
-                                          draft.antagonist.turret.guns.at(-1)!;
-                                        draft.antagonist.shell =
-                                          draft.antagonist.gun.shells[0];
-                                      }),
-                                    );
-                                    setSearchResults([]);
-                                    searchInput.current!.value = '';
-                                    setTab('configure');
-                                  }}
-                                >
-                                  {tank.name}
-                                </Button>
-                              ))}
-
-                            {searchResults.length === 0 &&
-                              (searchInput.current
-                                ? searchInput.current.value.length > 0
-                                : false) && (
-                                <Button disabled variant="ghost">
-                                  No search results
-                                </Button>
-                              )}
-                          </Flex>
+                      <div
+                        style={{
+                          display: 'flex',
+                          width: '100%',
+                          justifyContent: 'space-around',
+                        }}
+                      >
+                        <SearchResults ids={firstChunk} />
+                        {secondChunk.length > 0 && (
+                          <SearchResults ids={secondChunk} />
                         )}
-                      </Flex>
+                      </div>
                     </Flex>
                   </Tabs.Content>
 
@@ -265,7 +230,7 @@ export function AntagonistBar({
                           <ul>
                             {antagonist.gun.shells.map((shell) => (
                               <li key={shell.id}>
-                                {SHELL_NAMES[shell.type]}:{' '}
+                                {SHELL_NAMES[shell.type]}:
                                 <b>{shell.damage.armor} HP</b>
                               </li>
                             ))}
