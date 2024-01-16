@@ -50,9 +50,11 @@ export function ArmorMesh({
 
   return (
     <>
-      <mesh {...props} renderOrder={0}>
-        <meshBasicMaterial colorWrite={false} />
-      </mesh>
+      {!isSpaced && (
+        <mesh {...props} renderOrder={0}>
+          <meshBasicMaterial colorWrite={false} />
+        </mesh>
+      )}
 
       <mesh {...props} renderOrder={1}>
         <ThreeCustomShaderMaterial

@@ -13,7 +13,7 @@ export function ArmorMeshSpacedArmorDepth({
 }: ArmorMeshSpacedArmorDepthProps) {
   return (
     <mesh {...props}>
-      <meshBasicMaterial />
+      <meshBasicMaterial colorWrite={false} />
     </mesh>
   );
 }

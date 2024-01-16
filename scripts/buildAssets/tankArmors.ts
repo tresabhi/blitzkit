@@ -20,8 +20,6 @@ export async function buildTankArmors() {
 
   await Promise.all(
     nations.map(async (nation) => {
-      if (nation !== 'european') return;
-
       const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
         `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
       );
@@ -29,6 +27,8 @@ export async function buildTankArmors() {
       await Promise.all(
         Object.entries(tanks.root).map(async ([tankKey, tank]) => {
           const id = toUniqueId(nation, tank.id);
+
+          if (id !== 9489) return;
 
           console.log(`Building armor ${id} @ ${nation}/${tankKey}`);
 
