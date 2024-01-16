@@ -2,11 +2,15 @@ import { asset } from './asset';
 
 type EquipmentOptions = [number, number];
 
-type EquipmentRow = [EquipmentOptions, EquipmentOptions, EquipmentOptions];
+export type EquipmentRow = [
+  EquipmentOptions,
+  EquipmentOptions,
+  EquipmentOptions,
+];
 
-type EquipmentRows = [EquipmentRow, EquipmentRow, EquipmentRow];
+export type EquipmentRows = [EquipmentRow, EquipmentRow, EquipmentRow];
 
-interface EquipmentDefinitions {
+export interface EquipmentDefinitions {
   presets: {
     [key: string]: EquipmentRows;
   };

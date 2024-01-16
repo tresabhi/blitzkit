@@ -7,6 +7,11 @@ import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import commitMultipleFiles from '../../src/core/blitzkrieg/commitMultipleFiles';
 import {
+  EquipmentDefinitions,
+  EquipmentRow,
+  EquipmentRows,
+} from '../../src/core/blitzkrieg/equipmentDefinitions';
+import {
   ModelArmor,
   ModelDefinitions,
 } from '../../src/core/blitzkrieg/modelDefinitions';
@@ -174,18 +179,7 @@ interface OptionalDeviceSlots {
 }
 
 interface OptionalDeviceSlotRow {
-  attack: {
-    device0: string;
-    device1: string;
-  };
-  defence: {
-    device0: string;
-    device1: string;
-  };
-  support: {
-    device0: string;
-    device1: string;
-  };
+  [key: string]: { device0: string; device1: string };
 }
 
 const blitzTankTypeToBlitzkrieg: Record<BlitzTankType, TankType> = {
@@ -207,6 +201,10 @@ export async function buildDefinitions() {
 
   const tankDefinitions: TankDefinitions = {};
   const modelDefinitions: ModelDefinitions = {};
+  const equipmentDefinitions: EquipmentDefinitions = {
+    presets: {},
+    equipments: {},
+  };
   const nations = await readdir(`${DATA}/${POI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
@@ -214,11 +212,11 @@ export async function buildDefinitions() {
     `${DATA}/${POI.strings}/${LANGUAGE}.yaml.dvpl`,
   );
   const optionalDevices = await readXMLDVPL<{ root: OptionalDevices }>(
-    `${DATA}/${POI.optionalDevices}`,
+    `${DATA}/${POI.optionalDevices}.dvpl`,
   );
   const optionalDeviceSlots = await readXMLDVPL<{
     root: OptionalDeviceSlots;
-  }>(`${DATA}/${POI.optionalDeviceSlots}`);
+  }>(`${DATA}/${POI.optionalDeviceSlots}.dvpl`);
 
   await Promise.all(
     nations.map(async (nation) => {
@@ -537,7 +535,34 @@ export async function buildDefinitions() {
     }),
   );
 
-  return;
+  Object.entries(optionalDevices.root).forEach(
+    ([optionalDeviceKey, optionalDeviceEntry]) => {
+      if (optionalDeviceKey === 'nextAvailableId') return;
+
+      equipmentDefinitions.equipments[optionalDeviceEntry.id] = {
+        name: strings[optionalDeviceEntry.userString],
+      };
+    },
+  );
+
+  Object.entries(optionalDeviceSlots.root.presets).forEach(
+    ([optionalDeviceSlotKey, optionalDeviceSlotEntry]) => {
+      if (optionalDeviceSlotKey === 'emptyPreset') return;
+
+      equipmentDefinitions.presets[optionalDeviceSlotKey] = Object.values(
+        optionalDeviceSlotEntry,
+      ).map(
+        (level) =>
+          Object.values(level).map((options) => {
+            return [
+              optionalDevices.root[options.device0].id,
+              optionalDevices.root[options.device1].id,
+            ];
+          }) as EquipmentRow,
+      ) as EquipmentRows;
+    },
+  );
+
   console.log('Committing definitions...');
   await commitMultipleFiles(
     'tresabhi',
@@ -554,6 +579,11 @@ export async function buildDefinitions() {
         content: JSON.stringify(modelDefinitions),
         encoding: 'utf-8',
         path: 'definitions/models.json',
+      },
+      {
+        content: JSON.stringify(equipmentDefinitions),
+        encoding: 'utf-8',
+        path: 'definitions/equipment.json',
       },
     ],
     true,
