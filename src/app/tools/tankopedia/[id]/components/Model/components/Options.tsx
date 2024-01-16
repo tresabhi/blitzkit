@@ -16,6 +16,9 @@ interface OptionsProps {
 
 export function Options({ isFullScreen, canvas }: OptionsProps) {
   const showGrid = useTankopedia((state) => state.model.visual.showGrid);
+  const greenPenetration = useTankopedia(
+    (state) => state.model.visual.greenPenetration,
+  );
 
   return (
     <Flex
@@ -43,6 +46,17 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
             }}
           >
             Show grid
+          </DropdownMenu.CheckboxItem>
+
+          <DropdownMenu.CheckboxItem
+            checked={greenPenetration}
+            onCheckedChange={(checked) => {
+              mutateTankopedia((draft) => {
+                draft.model.visual.greenPenetration = checked;
+              });
+            }}
+          >
+            Greene penetration
           </DropdownMenu.CheckboxItem>
         </DropdownMenu.Content>
       </DropdownMenu.Root>

@@ -14,6 +14,7 @@ uniform vec2 resolution;
 varying mat4 vProjectionMatrix;
 uniform float maxExternalModuleThickness;
 uniform float maxSpacedArmorThickness;
+uniform bool greenPenetration;
 
 float depthToDistance(float depth) {
   mat4 projectionMatrixInverse = inverse(vProjectionMatrix);
@@ -101,5 +102,10 @@ void main() {
     }
   }
 
-  csm_FragColor = vec4(1.0, splashChance * 0.392, 0.0, (1.0 - penetrationChance) * 0.5);
+  vec3 color = vec3(1.0, splashChance * 0.392, 0.0);
+  if (greenPenetration) {
+    csm_FragColor = vec4(mix(color, vec3(0.0, 1.0, 0.0), penetrationChance), 0.5);
+  } else {
+    csm_FragColor = vec4(color, (1.0 - penetrationChance) * 0.5);
+  }
 }

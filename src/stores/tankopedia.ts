@@ -40,6 +40,7 @@ interface Tankopedia {
     visual: {
       controlsEnabled: boolean;
       showGrid: boolean;
+      greenPenetration: boolean;
     };
   };
   mode: TankopediaMode;
@@ -66,6 +67,7 @@ export const useTankopedia = create<Tankopedia>()(
       visual: {
         controlsEnabled: true,
         showGrid: true,
+        greenPenetration: false,
       },
     },
     areTanksAssigned: false,
