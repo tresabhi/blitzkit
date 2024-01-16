@@ -5,6 +5,8 @@ const withVanillaExtract = createVanillaExtractPlugin({ tests: /\.css$/ });
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   ...withVanillaExtract({
+    // TODO: this is deprecated but the only way to fix build call stack overflow
+    outputFileTracing: false,
     webpack: (config) => {
       config.module.rules.push({
         test: /\.glsl$/,
