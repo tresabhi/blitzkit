@@ -26,14 +26,12 @@ interface ArmorHighlightingProps {
 
 export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
   const wrapper = useRef<Group>(null);
-  const awaitedModelDefinitions = useModelDefinitions();
+  const modelDefinitions = useModelDefinitions();
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
   const initialTankopediaState = useTankopedia.getState();
 
   useEffect(() => {
-    if (!awaitedModelDefinitions) return;
-
     const turretOrigin = new Vector3(
       tankModelDefinition.turretOrigin[0],
       tankModelDefinition.turretOrigin[1],
@@ -90,12 +88,13 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
       turretContainer.current?.rotation.copy(turretRotation);
     }
 
+    handleModelTransform(useTankopedia.getState().model.physical);
     modelTransformEvent.on(handleModelTransform);
 
     return () => {
       modelTransformEvent.off(handleModelTransform);
     };
-  }, [awaitedModelDefinitions]);
+  });
 
   useEffect(() => {
     const unsubscribe = useTankopedia.subscribe(
@@ -114,7 +113,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
   );
 
   const armorNodes = Object.values(armorGltf.nodes);
-  const tankModelDefinition = awaitedModelDefinitions[duel.protagonist.tank.id];
+  const tankModelDefinition = modelDefinitions[duel.protagonist.tank.id];
   const turretModelDefinition =
     tankModelDefinition.turrets[duel.protagonist.turret.id];
   const gunModelDefinition =

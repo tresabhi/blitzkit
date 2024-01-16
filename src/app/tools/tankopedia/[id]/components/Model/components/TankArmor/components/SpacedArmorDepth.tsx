@@ -37,13 +37,13 @@ interface SpacedArmorDepthProps {
  */
 export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
   const wrapper = useRef<Group>(null);
-  const awaitedModelDefinitions = useModelDefinitions();
+  const modelDefinitions = useModelDefinitions();
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
   const initialTankopediaState = useTankopedia.getState();
 
   useEffect(() => {
-    if (!awaitedModelDefinitions) return;
+    if (!modelDefinitions) return;
 
     const turretOrigin = new Vector3(
       tankModelDefinition.turretOrigin[0],
@@ -101,12 +101,13 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
       turretContainer.current?.rotation.copy(turretRotation);
     }
 
+    handleModelTransform(useTankopedia.getState().model.physical);
     modelTransformEvent.on(handleModelTransform);
 
     return () => {
       modelTransformEvent.off(handleModelTransform);
     };
-  }, [awaitedModelDefinitions]);
+  });
 
   useEffect(() => {
     const unsubscribe = useTankopedia.subscribe(
@@ -130,7 +131,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
 
   const armorNodes = Object.values(armorGltf.nodes);
   const modelNodes = Object.values(modelGltf.nodes);
-  const tankModelDefinition = awaitedModelDefinitions[duel.protagonist.tank.id];
+  const tankModelDefinition = modelDefinitions[duel.protagonist.tank.id];
   const turretModelDefinition =
     tankModelDefinition.turrets[duel.protagonist.turret.id];
   const gunModelDefinition =

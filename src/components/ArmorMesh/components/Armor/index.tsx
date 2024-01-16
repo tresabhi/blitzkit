@@ -29,11 +29,11 @@ export function ArmorMesh({
   duel,
   ...props
 }: ArmorMeshProps) {
+  const camera = useThree((state) => state.camera);
+  const { shell } = duel.antagonist;
   const greenPenetration = useTankopedia(
     (state) => state.model.visual.greenPenetration,
   );
-  const camera = useThree((state) => state.camera);
-  const { shell } = duel.antagonist;
   const material = useRef<ShaderMaterial>(null);
   const resolution = new Vector2();
 
