@@ -115,7 +115,6 @@ export function TankDisplay({ duel }: TankDisplayProps) {
                 ref={canvas}
                 camera={{ fov: 20 }}
                 onPointerDown={handlePointerDown}
-                gl={{ logarithmicDepthBuffer: true }}
               >
                 <Controls />
                 <SceneProps />
