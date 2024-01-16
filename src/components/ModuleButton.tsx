@@ -18,13 +18,17 @@ type ModuleButtonProps = Omit<ComponentProps<typeof Button>, 'type'> & {
         type: 'shell';
         shell: string;
       }
+    | {
+        type: 'equipment';
+        equipment: number;
+      }
   );
 
 export function ModuleButton({
   selected,
   style,
-  first = true,
-  last = true,
+  first = false,
+  last = false,
   rowChild,
   ...props
 }: ModuleButtonProps) {
@@ -51,7 +55,9 @@ export function ModuleButton({
         src={asset(
           props.type === 'module'
             ? `icons/modules/${props.module}.webp`
-            : `icons/shells/${props.shell}.webp`,
+            : props.type === 'shell'
+              ? `icons/shells/${props.shell}.webp`
+              : `icons/equipment/${props.equipment}.webp`,
         )}
         style={{
           width: 32,

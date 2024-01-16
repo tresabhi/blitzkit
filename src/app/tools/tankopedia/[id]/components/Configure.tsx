@@ -1,7 +1,8 @@
 import { Flex, Heading } from '@radix-ui/themes';
 import { produce } from 'immer';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, use } from 'react';
 import { ModuleButton } from '../../../../../components/ModuleButton';
+import { equipmentDefinitions } from '../../../../../core/blitzkrieg/equipmentDefinitions';
 import { Duel } from '../page';
 
 interface ConfigureProps {
@@ -10,6 +11,10 @@ interface ConfigureProps {
 }
 
 export function Configure({ duel, setDuel }: ConfigureProps) {
+  const awaitedEquipmentDefinitions = use(equipmentDefinitions);
+  const equipmentRows =
+    awaitedEquipmentDefinitions.presets[duel.protagonist.tank.equipment];
+
   return (
     <Flex gap="6" direction="column">
       <Heading>Configure</Heading>
@@ -85,6 +90,29 @@ export function Configure({ duel, setDuel }: ConfigureProps) {
 
       <Flex gap="4" direction="column">
         <Heading size="5">Equipment</Heading>
+
+        <Flex direction="column" gap="2">
+          {equipmentRows.map((equipmentRow) => (
+            <Flex gap="2">
+              {equipmentRow.map((equipment) => (
+                <Flex>
+                  <ModuleButton
+                    type="equipment"
+                    equipment={equipment[0]}
+                    first
+                    rowChild
+                  />
+                  <ModuleButton
+                    type="equipment"
+                    equipment={equipment[1]}
+                    last
+                    rowChild
+                  />
+                </Flex>
+              ))}
+            </Flex>
+          ))}
+        </Flex>
       </Flex>
     </Flex>
   );
