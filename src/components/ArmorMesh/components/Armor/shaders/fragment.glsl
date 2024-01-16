@@ -39,12 +39,13 @@ void main() {
   vec3 normalizedViewPosition = normalize(vCSMViewPosition);
   float dotProduct = dot(normalizedNormal, -normalizedViewPosition);
   float angle = acos(dotProduct);
+  float spacedArmorAngle = spacedArmorMaskColor.r * PI;
 
   float penetrationChance = -1.0;
   float splashChance = -1.0;
   bool threeCalibersRule = caliber > 3.0 * thickness;
 
-  if (!isUnderExternalModule && !isExternalModule && !isExplosive && !threeCalibersRule && angle >= ricochet) {
+  if ((!isUnderExternalModule && !isExternalModule && !isExplosive && !threeCalibersRule && angle >= ricochet) || (isUnderSpacedArmor && spacedArmorAngle >= ricochet)) {
     penetrationChance = 0.0;
     splashChance = 0.0;
   } else {
@@ -57,7 +58,6 @@ void main() {
     }
 
     if (isUnderSpacedArmor) {
-      float spacedArmorAngle = spacedArmorMaskColor.r * PI;
       float normalizedSpacedArmorThickness = spacedArmorMaskColor.g;
       float spacedArmorNominalThickness = normalizedSpacedArmorThickness * maxSpacedArmorThickness;
       float spacedArmorThickness = spacedArmorNominalThickness / cos(spacedArmorAngle);
