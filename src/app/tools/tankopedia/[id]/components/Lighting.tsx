@@ -11,7 +11,7 @@ export function Lighting() {
         position={[-1, 1, 1]}
         intensity={2}
         castShadow
-        color={'rgb(225, 225, 255)'}
+        color={'rgb(240, 255, 240)'}
       />
       <ambientLight intensity={0.25} />
     </>
