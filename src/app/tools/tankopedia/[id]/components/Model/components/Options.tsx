@@ -16,9 +16,6 @@ interface OptionsProps {
 
 export function Options({ isFullScreen, canvas }: OptionsProps) {
   const showGrid = useTankopedia((state) => state.model.visual.showGrid);
-  const showSpacedArmor = useTankopedia(
-    (state) => state.model.visual.showSpacedArmor,
-  );
 
   return (
     <Flex
@@ -46,17 +43,6 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
             }}
           >
             Show grid
-          </DropdownMenu.CheckboxItem>
-
-          <DropdownMenu.CheckboxItem
-            checked={showSpacedArmor}
-            onCheckedChange={(checked) => {
-              mutateTankopedia((draft) => {
-                draft.model.visual.showSpacedArmor = checked;
-              });
-            }}
-          >
-            Spaced armor
           </DropdownMenu.CheckboxItem>
         </DropdownMenu.Content>
       </DropdownMenu.Root>

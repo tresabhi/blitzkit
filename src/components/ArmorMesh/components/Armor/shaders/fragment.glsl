@@ -1,7 +1,6 @@
 varying vec3 vCSMViewPosition;
 uniform bool isExplosive;
 uniform bool canSplash;
-uniform bool isSpaced;
 uniform bool isExternalModule;
 uniform float thickness;
 uniform float penetration;
@@ -102,9 +101,5 @@ void main() {
     }
   }
 
-  if (isSpaced) {
-    csm_FragColor = vec4(1.0, 0.0, 1.0, (1.0 - penetrationChance) * 0.5);
-  } else {
-    csm_FragColor = vec4(1.0, splashChance * 0.392, 0.0, (1.0 - penetrationChance) * 0.5);
-  }
+  csm_FragColor = vec4(1.0, splashChance * 0.392, 0.0, (1.0 - penetrationChance) * 0.5);
 }

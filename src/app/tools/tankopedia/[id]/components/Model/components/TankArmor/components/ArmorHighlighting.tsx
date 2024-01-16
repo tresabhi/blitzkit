@@ -27,9 +27,6 @@ interface ArmorHighlightingProps {
 export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
   const wrapper = useRef<Group>(null);
   const awaitedModelDefinitions = useModelDefinitions();
-  const showSpacedArmor = useTankopedia(
-    (state) => state.model.visual.showSpacedArmor,
-  );
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
   const initialTankopediaState = useTankopedia.getState();
@@ -165,12 +162,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
           armorId,
         );
 
-        if (
-          !isVisible ||
-          thickness === undefined ||
-          (spaced && !showSpacedArmor)
-        )
-          return null;
+        if (!isVisible || thickness === undefined || spaced) return null;
 
         return (
           <ArmorMesh
@@ -179,7 +171,6 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
             duel={duel}
             key={node.uuid}
             geometry={(node as Mesh).geometry}
-            isSpaced={spaced ?? false}
             thickness={thickness}
           />
         );
@@ -197,12 +188,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
             armorId,
           );
 
-          if (
-            !isVisible ||
-            thickness === undefined ||
-            (spaced && !showSpacedArmor)
-          )
-            return null;
+          if (!isVisible || thickness === undefined || spaced) return null;
 
           return (
             <ArmorMesh
@@ -212,7 +198,6 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
               key={node.uuid}
               geometry={(node as Mesh).geometry}
               position={turretOrigin}
-              isSpaced={spaced ?? false}
               thickness={thickness}
             />
           );
@@ -229,12 +214,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
               armorId,
             );
 
-            if (
-              !isVisible ||
-              thickness === undefined ||
-              (spaced && !showSpacedArmor)
-            )
-              return null;
+            if (!isVisible || thickness === undefined || spaced) return null;
 
             return (
               <ArmorMesh
@@ -244,7 +224,6 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
                 key={node.uuid}
                 geometry={(node as Mesh).geometry}
                 position={turretOrigin.clone().add(gunOrigin)}
-                isSpaced={spaced ?? false}
                 thickness={thickness}
               />
             );

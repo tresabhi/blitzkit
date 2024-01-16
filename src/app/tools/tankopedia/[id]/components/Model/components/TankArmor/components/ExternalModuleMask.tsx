@@ -34,9 +34,6 @@ interface ExternalModuleMaskProps {
 export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
   const wrapper = useRef<Group>(null);
   const awaitedModelDefinitions = useModelDefinitions();
-  const showSpacedArmor = useTankopedia(
-    (state) => state.model.visual.showSpacedArmor,
-  );
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
   const initialTankopediaState = useTankopedia.getState();
@@ -164,12 +161,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
           armorId,
         );
 
-        if (
-          !isVisible ||
-          thickness === undefined ||
-          (spaced && !showSpacedArmor)
-        )
-          return null;
+        if (!isVisible || thickness === undefined) return null;
 
         return (
           <ArmorMeshExternalModuleMask
@@ -185,7 +177,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
         const isTrack = node.name.startsWith('chassis_track_');
         const isVisible = isWheel || isTrack;
 
-        if (!isVisible || !showSpacedArmor) return null;
+        if (!isVisible) return null;
 
         return (
           <ArmorMeshExternalModuleMask
@@ -209,12 +201,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
             armorId,
           );
 
-          if (
-            !isVisible ||
-            thickness === undefined ||
-            (spaced && !showSpacedArmor)
-          )
-            return null;
+          if (!isVisible || thickness === undefined) return null;
 
           return (
             <ArmorMeshExternalModuleMask
@@ -237,12 +224,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
               armorId,
             );
 
-            if (
-              !isVisible ||
-              thickness === undefined ||
-              (spaced && !showSpacedArmor)
-            )
-              return null;
+            if (!isVisible || thickness === undefined) return null;
 
             return (
               <ArmorMeshExternalModuleMask
@@ -260,7 +242,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
               `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`;
             const isVisible = isCurrentGun;
 
-            if (!isVisible || !showSpacedArmor) return null;
+            if (!isVisible) return null;
 
             return (
               <ArmorMeshExternalModuleMask

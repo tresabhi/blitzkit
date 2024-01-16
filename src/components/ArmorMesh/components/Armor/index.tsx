@@ -14,7 +14,6 @@ import vertexShader from './shaders/vertex.glsl';
 
 interface ArmorMeshProps extends MeshProps {
   duel: Duel;
-  isSpaced: boolean;
   isExternalModule?: boolean;
   thickness: number;
   maxExternalModuleThickness: number;
@@ -22,7 +21,6 @@ interface ArmorMeshProps extends MeshProps {
 }
 
 export function ArmorMesh({
-  isSpaced,
   isExternalModule = false,
   thickness,
   maxExternalModuleThickness,
@@ -54,11 +52,9 @@ export function ArmorMesh({
 
   return (
     <>
-      {!isSpaced && (
-        <mesh {...props} renderOrder={0}>
-          <meshBasicMaterial colorWrite={false} />
-        </mesh>
-      )}
+      <mesh {...props} renderOrder={0}>
+        <meshBasicMaterial colorWrite={false} />
+      </mesh>
 
       <mesh {...props} renderOrder={1}>
         <ThreeCustomShaderMaterial
@@ -79,7 +75,6 @@ export function ArmorMesh({
             zFar: { value: camera.far },
             maxExternalModuleThickness: { value: maxExternalModuleThickness },
             maxSpacedArmorThickness: { value: maxSpacedArmorThickness },
-            isSpaced: { value: isSpaced },
             isExplosive: { value: isExplosive(shell.type) },
             canSplash: { value: canSplash(shell.type) },
             isExternalModule: { value: isExternalModule },
