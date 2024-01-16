@@ -156,10 +156,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
         const isHull = node.name.startsWith('hull_');
         const isVisible = isHull;
         const armorId = nameToArmorId(node.name);
-        const { spaced, thickness } = resolveArmor(
-          tankModelDefinition.armor,
-          armorId,
-        );
+        const { thickness } = resolveArmor(tankModelDefinition.armor, armorId);
 
         if (!isVisible || thickness === undefined) return null;
 
@@ -196,7 +193,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
           );
           const isVisible = isCurrentTurret;
           const armorId = nameToArmorId(node.name);
-          const { spaced, thickness } = resolveArmor(
+          const { thickness } = resolveArmor(
             turretModelDefinition.armor,
             armorId,
           );
@@ -219,7 +216,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
             );
             const isVisible = isCurrentGun;
             const armorId = nameToArmorId(node.name);
-            const { spaced, thickness } = resolveArmor(
+            const { thickness } = resolveArmor(
               gunModelDefinition.armor,
               armorId,
             );
