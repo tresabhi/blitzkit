@@ -43,6 +43,7 @@ interface Tankopedia {
       greenPenetration: boolean;
     };
   };
+  equipmentMatrix: (0 | 1)[][];
   mode: TankopediaMode;
 }
 
@@ -70,7 +71,11 @@ export const useTankopedia = create<Tankopedia>()(
         greenPenetration: false,
       },
     },
-    areTanksAssigned: false,
+    equipmentMatrix: [
+      [1, 0, 0],
+      [0, 1, 1],
+      [0, 1, 0],
+    ],
     mode: 'model',
   })),
 );
