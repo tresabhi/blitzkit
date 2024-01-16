@@ -54,6 +54,26 @@ interface VehicleDefinitions {
     turretPositions: { turret: string };
     turretInitialRotation?: { yaw: 0; pitch: 6.5; roll: 0 };
   };
+  chassis: {
+    [key: string]: {
+      armor: {
+        leftTrack:
+          | number
+          | {
+              chanceToHitByProjectile: number;
+              chanceToHitByExplosion: number;
+              '#text': number;
+            };
+        rightTrack:
+          | number
+          | {
+              chanceToHitByProjectile: number;
+              chanceToHitByExplosion: number;
+              '#text': number;
+            };
+      };
+    };
+  };
   turrets0: {
     [key: string]: {
       armor: VehicleDefinitionArmor;
@@ -64,7 +84,15 @@ interface VehicleDefinitions {
       models: { undamaged: string };
       guns: {
         [key: string]: {
-          armor: VehicleDefinitionArmor;
+          armor: VehicleDefinitionArmor & {
+            gun?:
+              | number
+              | {
+                  chanceToHitByProjectile: number;
+                  chanceToHitByExplosion: number;
+                  '#text': number;
+                };
+          };
           reloadTime: number;
           maxAmmo: number;
           extraPitchLimits?: {
@@ -185,6 +213,8 @@ export async function buildDefinitions() {
         const tankId = toUniqueId(nation, tank.id);
         const tankTags = tank.tags.split(' ');
         const hullArmor: ModelArmor = { thickness: {} };
+        const trackArmorRaw = Object.values(tankDefinition.root.chassis).at(-1)!
+          .armor.leftTrack;
 
         Object.keys(tankDefinition.root.hull.armor)
           .filter((name) => name.startsWith('armor_'))
@@ -235,6 +265,10 @@ export async function buildDefinitions() {
 
         modelDefinitions[tankId] = {
           armor: hullArmor,
+          trackThickness:
+            typeof trackArmorRaw === 'number'
+              ? trackArmorRaw
+              : trackArmorRaw['#text'],
           turretOrigin,
           turretRotation: tankDefinition.root.hull.turretInitialRotation
             ? {
@@ -391,6 +425,12 @@ export async function buildDefinitions() {
               modelDefinitions[tankId].turrets[turretId].guns[gunId] = {
                 armor: gunArmor,
                 model: gunModel,
+                barrelThickness:
+                  turretGunEntry.armor.gun === undefined
+                    ? 0
+                    : typeof turretGunEntry.armor.gun === 'number'
+                      ? turretGunEntry.armor.gun
+                      : turretGunEntry.armor.gun['#text'],
                 pitch: {
                   min: gunPitch[0],
                   max: gunPitch[1],

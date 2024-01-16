@@ -10,6 +10,7 @@ export interface ModelArmor {
 
 interface ModelDefinition {
   armor: ModelArmor;
+  trackThickness: number;
   turretOrigin: Vector3Tuple;
   turretRotation?: InitialTurretRotation;
   turrets: Record<number, TurretModelDefinition>;
@@ -32,6 +33,7 @@ export interface YawLimits {
 }
 interface GunModelDefinition {
   armor: ModelArmor;
+  barrelThickness: number;
   model: number;
   pitch: PitchLimits;
 }
