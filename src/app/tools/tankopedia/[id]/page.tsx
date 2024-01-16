@@ -42,6 +42,8 @@ export default function Page({ params }: { params: { id: string } }) {
     });
 
     function handleKeyDown(event: KeyboardEvent) {
+      if (document.activeElement instanceof HTMLInputElement) return;
+
       if (event.key === '1') {
         setDuel(
           produce<Duel>((draft) => {
