@@ -19,6 +19,7 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
   const greenPenetration = useTankopedia(
     (state) => state.model.visual.greenPenetration,
   );
+  const fullScreenAvailable = document.fullscreenEnabled;
 
   return (
     <Flex
@@ -61,18 +62,20 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
         </DropdownMenu.Content>
       </DropdownMenu.Root>
 
-      <Button
-        variant="ghost"
-        onClick={() => {
-          if (isFullScreen) {
-            document.exitFullscreen();
-          } else {
-            canvas.current?.requestFullscreen();
-          }
-        }}
-      >
-        {isFullScreen ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
-      </Button>
+      {fullScreenAvailable && (
+        <Button
+          variant="ghost"
+          onClick={() => {
+            if (isFullScreen) {
+              document.exitFullscreen();
+            } else {
+              canvas.current?.requestFullscreen();
+            }
+          }}
+        >
+          {isFullScreen ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
+        </Button>
+      )}
     </Flex>
   );
 }
