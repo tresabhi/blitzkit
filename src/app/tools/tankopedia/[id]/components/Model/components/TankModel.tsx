@@ -1,4 +1,4 @@
-import { ThreeEvent, useLoader, useThree } from '@react-three/fiber';
+import { ThreeEvent, useThree } from '@react-three/fiber';
 import { memo, useEffect, useRef, useState } from 'react';
 import {
   Euler,
@@ -8,11 +8,9 @@ import {
   Vector2,
   Vector3,
 } from 'three';
-import { GLTFLoader } from 'three-stdlib';
 import { degToRad } from 'three/src/math/MathUtils';
 import { X_AXIS, Y_AXIS, Z_AXIS } from '../../../../../../../constants/axis';
 import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
-import { asset } from '../../../../../../../core/blitzkrieg/asset';
 import {
   ModelDefinitions,
   modelDefinitions,
@@ -23,6 +21,7 @@ import {
 } from '../../../../../../../core/blitzkrieg/modelTransform';
 import { resolveJsxTree } from '../../../../../../../core/blitzkrieg/resolveJsxTree';
 import { normalizeAnglePI } from '../../../../../../../core/math/normalizeAngle180';
+import { useModel } from '../../../../../../../hooks/useModel';
 import mutateTankopedia, {
   useTankopedia,
 } from '../../../../../../../stores/tankopedia';
@@ -122,10 +121,7 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
 
-  const gltf = useLoader(
-    GLTFLoader,
-    asset(`3d/tanks/models/${protagonist.tank.id}.glb`),
-  );
+  const gltf = useModel(protagonist.tank.id);
   const nodes = Object.values(gltf.nodes);
 
   return (

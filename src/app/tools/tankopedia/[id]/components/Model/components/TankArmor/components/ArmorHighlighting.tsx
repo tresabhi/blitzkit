@@ -1,7 +1,5 @@
-import { useLoader } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import { Euler, Group, Mesh, Vector3 } from 'three';
-import { GLTFLoader } from 'three-stdlib';
 import { degToRad } from 'three/src/math/MathUtils';
 import { ArmorMesh } from '../../../../../../../../../components/ArmorMesh';
 import {
@@ -9,13 +7,13 @@ import {
   Y_AXIS,
   Z_AXIS,
 } from '../../../../../../../../../constants/axis';
-import { asset } from '../../../../../../../../../core/blitzkrieg/asset';
 import {
   ModelTransformEventData,
   modelTransformEvent,
 } from '../../../../../../../../../core/blitzkrieg/modelTransform';
 import { nameToArmorId } from '../../../../../../../../../core/blitzkrieg/nameToArmorId';
 import { resolveArmor } from '../../../../../../../../../core/blitzkrieg/resolveThickness';
+import { useArmor } from '../../../../../../../../../hooks/useArmor';
 import { useModelDefinitions } from '../../../../../../../../../hooks/useModelDefinitions';
 import { useTankopedia } from '../../../../../../../../../stores/tankopedia';
 import { Duel } from '../../../../../page';
@@ -107,10 +105,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
     return unsubscribe;
   });
 
-  const armorGltf = useLoader(
-    GLTFLoader,
-    asset(`3d/tanks/armor/${duel.protagonist.tank.id}.glb`),
-  );
+  const armorGltf = useArmor(duel.protagonist.tank.id);
 
   const armorNodes = Object.values(armorGltf.nodes);
   const tankModelDefinition = modelDefinitions[duel.protagonist.tank.id];
