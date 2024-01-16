@@ -24,6 +24,7 @@ export interface TankDefinition {
   turrets: TurretDefinition[];
   price: TankDefinitionPrice;
   camouflage: { still: number; moving: number; firing: number };
+  equipment: string;
 }
 export type TankDefinitionPrice =
   | { type: 'credits'; value: number }

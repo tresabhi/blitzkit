@@ -6,7 +6,7 @@ import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import commitMultipleFiles, {
   FileChange,
 } from '../../src/core/blitzkrieg/commitMultipleFiles';
-import { DATA, DOI } from './constants';
+import { DATA, POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 
 export interface TankParameters {
@@ -21,14 +21,14 @@ export async function buildTankIcons(big?: boolean, small?: boolean) {
   console.log('Building tank icons...');
 
   const changes: FileChange[] = [];
-  const nations = await readdir(`${DATA}/${DOI.vehicleDefinitions}`).then(
+  const nations = await readdir(`${DATA}/${POI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
 
   await Promise.all(
     nations.map(async (nation) => {
       const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
-        `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
+        `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
       );
 
       for (const tankIndex in tanks.root) {
@@ -36,7 +36,7 @@ export async function buildTankIcons(big?: boolean, small?: boolean) {
         const nationVehicleId = tank.id;
         const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
         const parameters = await readYAMLDVPL<TankParameters>(
-          `${DATA}/${DOI.tankParameters}/${nation}/${tankIndex}.yaml.dvpl`,
+          `${DATA}/${POI.tankParameters}/${nation}/${tankIndex}.yaml.dvpl`,
         );
         const small = `${DATA}/${parameters.resourcesPath.smallIconPath
           .replace(/~res:\//, '')

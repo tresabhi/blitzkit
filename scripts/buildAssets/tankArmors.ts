@@ -6,7 +6,7 @@ import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import commitMultipleFiles, {
   FileChange,
 } from '../../src/core/blitzkrieg/commitMultipleFiles';
-import { DATA, DOI } from './constants';
+import { DATA, POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 
 export async function buildTankArmors() {
@@ -14,14 +14,14 @@ export async function buildTankArmors() {
 
   const changes: FileChange[] = [];
   const nodeIO = new NodeIO();
-  const nations = await readdir(`${DATA}/${DOI.vehicleDefinitions}`).then(
+  const nations = await readdir(`${DATA}/${POI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
 
   await Promise.all(
     nations.map(async (nation) => {
       const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
-        `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
+        `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
       );
 
       await Promise.all(

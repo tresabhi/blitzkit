@@ -8,7 +8,7 @@ import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import commitMultipleFiles, {
   FileChange,
 } from '../../src/core/blitzkrieg/commitMultipleFiles';
-import { DATA, DOI } from './constants';
+import { DATA, POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 import { TankParameters } from './tankIcons';
 
@@ -21,17 +21,17 @@ export async function buildTankModels() {
 
   const changes: FileChange[] = [];
   const nodeIO = new NodeIO();
-  const nations = await readdir(`${DATA}/${DOI.vehicleDefinitions}`).then(
+  const nations = await readdir(`${DATA}/${POI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
 
   await Promise.all(
     nations.map(async (nation) => {
       const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
-        `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
+        `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
       );
       const customization = await readXMLDVPL<{ root: VehicleCustomization }>(
-        `${DATA}/${DOI.vehicleDefinitions}/${nation}/customization.xml.dvpl`,
+        `${DATA}/${POI.vehicleDefinitions}/${nation}/customization.xml.dvpl`,
       );
       const baseColor = customization.root.armorColor
         .split(' ')
@@ -48,7 +48,7 @@ export async function buildTankModels() {
           console.log(`Building model ${id} @ ${nation}/${tankKey}`);
 
           const parameters = await readYAMLDVPL<TankParameters>(
-            `${DATA}/${DOI.tankParameters}/${nation}/${tankKey}.yaml.dvpl`,
+            `${DATA}/${POI.tankParameters}/${nation}/${tankKey}.yaml.dvpl`,
           );
           const model = await extractModel(
             DATA,

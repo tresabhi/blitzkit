@@ -10,5 +10,5 @@
 - Maddox: game file decompression
 - Pyogenics: tank model decompression
 - aeson000: game files layout
-- ChickenMan7777: 3-caliber rule edge cases
-- \_34, HisRoyalFatness, Synx, xkdkw: embed experience
+- minitelrose, ChickenMan7777: 3-caliber rule edge cases
+- \_34, HisRoyalFatness, Synx, xkdkw: embed UX

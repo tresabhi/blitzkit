@@ -7,8 +7,8 @@ import PageWrapper from '../../../../components/PageWrapper';
 import { tankDefinitions } from '../../../../core/blitzkrieg/tankDefinitions';
 import mutateTankopedia, { DuelMember } from '../../../../stores/tankopedia';
 import { AntagonistBar } from './components/AntagonistBar';
+import { Configure } from './components/Configure';
 import { TankDisplay } from './components/Model/TankDisplay';
-import { Modules } from './components/Modules';
 import { Title } from './components/Title';
 
 export interface Duel {
@@ -83,8 +83,9 @@ export default function Page({ params }: { params: { id: string } }) {
           <Title duel={duel} />
           <TankDisplay duel={duel} />
           <AntagonistBar duel={duel} setDuel={setDuel} />
-          <Modules duel={duel} setDuel={setDuel} />
         </Flex>
+
+        <Configure duel={duel} setDuel={setDuel} />
       </Flex>
     </PageWrapper>
   );

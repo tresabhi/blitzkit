@@ -5,24 +5,24 @@ import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
 import commitMultipleFiles, {
   FileChange,
 } from '../../src/core/blitzkrieg/commitMultipleFiles';
-import { DATA, DOI } from './constants';
+import { DATA, POI } from './constants';
 
 export async function buildShellIcons() {
   console.log('Building shell icons...');
 
   const image = sharp(
     await readDVPLFile(
-      `${DATA}/${DOI.bigShellIcons}/texture0.packed.webp.dvpl`,
+      `${DATA}/${POI.bigShellIcons}/texture0.packed.webp.dvpl`,
     ),
   );
 
   const changes = await Promise.all(
-    (await readdir(`${DATA}/${DOI.bigShellIcons}`))
+    (await readdir(`${DATA}/${POI.bigShellIcons}`))
       .filter((file) => file.endsWith('_l.txt.dvpl'))
       .map(async (file) => {
         const name = file.match(/(.+)_l\.txt\.dvpl/)![1];
         const sizes = (
-          await readStringDVPL(`${DATA}/${DOI.bigShellIcons}/${file}`)
+          await readStringDVPL(`${DATA}/${POI.bigShellIcons}/${file}`)
         )
           .split('\n')[4]
           .split(' ')

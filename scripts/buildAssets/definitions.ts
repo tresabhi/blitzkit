@@ -17,7 +17,7 @@ import {
   TankDefinitions,
   Tier,
 } from '../../src/core/blitzkrieg/tankDefinitions';
-import { DATA, DOI } from './constants';
+import { DATA, POI } from './constants';
 
 type BlitzTankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
 interface Strings {
@@ -49,6 +49,7 @@ type VehicleDefinitionArmor = Record<
 >;
 interface VehicleDefinitions {
   invisibility: { moving: number; still: number; firePenalty: number };
+  optDevicePreset: string;
   hull: {
     armor: VehicleDefinitionArmor;
     turretPositions: { turret: string };
@@ -151,6 +152,42 @@ interface GunDefinitionsList {
   };
 }
 
+export interface OptionalDevices {
+  [key: string]: {
+    id: number;
+    userString: string;
+    description: string;
+    icon: string;
+    script: unknown;
+    display_params: unknown;
+  };
+}
+
+interface OptionalDeviceSlots {
+  presets: {
+    [key: string]: {
+      level0: OptionalDeviceSlotRow;
+      level1: OptionalDeviceSlotRow;
+      level2: OptionalDeviceSlotRow;
+    };
+  };
+}
+
+interface OptionalDeviceSlotRow {
+  attack: {
+    device0: string;
+    device1: string;
+  };
+  defence: {
+    device0: string;
+    device1: string;
+  };
+  support: {
+    device0: string;
+    device1: string;
+  };
+}
+
 const blitzTankTypeToBlitzkrieg: Record<BlitzTankType, TankType> = {
   'AT-SPG': 'tank_destroyer',
   lightTank: 'light',
@@ -170,32 +207,38 @@ export async function buildDefinitions() {
 
   const tankDefinitions: TankDefinitions = {};
   const modelDefinitions: ModelDefinitions = {};
-  const nations = await readdir(`${DATA}/${DOI.vehicleDefinitions}`).then(
+  const nations = await readdir(`${DATA}/${POI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
   const strings = await readYAMLDVPL<Strings>(
-    `${DATA}/${DOI.strings}/${LANGUAGE}.yaml.dvpl`,
+    `${DATA}/${POI.strings}/${LANGUAGE}.yaml.dvpl`,
   );
+  const optionalDevices = await readXMLDVPL<{ root: OptionalDevices }>(
+    `${DATA}/${POI.optionalDevices}`,
+  );
+  const optionalDeviceSlots = await readXMLDVPL<{
+    root: OptionalDeviceSlots;
+  }>(`${DATA}/${POI.optionalDeviceSlots}`);
 
   await Promise.all(
     nations.map(async (nation) => {
       const tankList = await readXMLDVPL<{ root: VehicleDefinitionList }>(
-        `${DATA}/${DOI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
+        `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
       );
       const turretList = await readXMLDVPL<{
         root: TurretDefinitionsList;
       }>(
-        `${DATA}/${DOI.vehicleDefinitions}/${nation}/components/turrets.xml.dvpl`,
+        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/turrets.xml.dvpl`,
       );
       const gunList = await readXMLDVPL<{
         root: GunDefinitionsList;
       }>(
-        `${DATA}/${DOI.vehicleDefinitions}/${nation}/components/guns.xml.dvpl`,
+        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/guns.xml.dvpl`,
       );
       const shellList = await readXMLDVPL<{
         root: ShellDefinitionsList;
       }>(
-        `${DATA}/${DOI.vehicleDefinitions}/${nation}/components/shells.xml.dvpl`,
+        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/shells.xml.dvpl`,
       );
 
       for (const tankKey in tankList.root) {
@@ -205,7 +248,7 @@ export async function buildDefinitions() {
             ? { type: 'credits', value: tank.price }
             : { type: 'gold', value: tank.price['#text'] };
         const tankDefinition = await readXMLDVPL<{ root: VehicleDefinitions }>(
-          `${DATA}/${DOI.vehicleDefinitions}/${nation}/${tankKey}.xml.dvpl`,
+          `${DATA}/${POI.vehicleDefinitions}/${nation}/${tankKey}.xml.dvpl`,
         );
         const turretOrigin = tankDefinition.root.hull.turretPositions.turret
           .split(' ')
@@ -215,6 +258,7 @@ export async function buildDefinitions() {
         const hullArmor: ModelArmor = { thickness: {} };
         const trackArmorRaw = Object.values(tankDefinition.root.chassis).at(-1)!
           .armor.leftTrack;
+        const equipment = tankDefinition.root.optDevicePreset;
 
         Object.keys(tankDefinition.root.hull.armor)
           .filter((name) => name.startsWith('armor_'))
@@ -239,6 +283,7 @@ export async function buildDefinitions() {
 
         tankDefinitions[tankId] = {
           id: tankId,
+          equipment,
           name:
             (tank.shortUserString
               ? strings[tank.shortUserString]
@@ -492,6 +537,7 @@ export async function buildDefinitions() {
     }),
   );
 
+  return;
   console.log('Committing definitions...');
   await commitMultipleFiles(
     'tresabhi',

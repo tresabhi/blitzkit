@@ -3,12 +3,12 @@ import { readBase64DVPL } from '../../src/core/blitz/readBase64DVPL';
 import commitMultipleFiles, {
   FileChange,
 } from '../../src/core/blitzkrieg/commitMultipleFiles';
-import { DATA, DOI } from './constants';
+import { DATA, POI } from './constants';
 
 export async function buildScratchedFlags() {
   console.log('Building scratched flags...');
 
-  const flags = await readdir(`${DATA}/${DOI.flags}`);
+  const flags = await readdir(`${DATA}/${POI.flags}`);
 
   console.log('Committing scratched flags...');
   commitMultipleFiles(
@@ -24,7 +24,7 @@ export async function buildScratchedFlags() {
             !flag.endsWith('@2x.packed.webp.dvpl'),
         )
         .map(async (flag) => {
-          const content = await readBase64DVPL(`${DATA}/${DOI.flags}/${flag}`);
+          const content = await readBase64DVPL(`${DATA}/${POI.flags}/${flag}`);
           const name = flag.match(/flag_tutor-tank_(.+)\.packed\.webp/)![1];
 
           return {
