@@ -22,20 +22,28 @@ export function ArmorMeshSpacedArmorDepth(
   props: ArmorMeshSpacedArmorDepthProps,
 ) {
   return (
-    <mesh {...props}>
-      {!props.include && <meshBasicMaterial colorWrite={false} />}
-      {props.include && (
-        <ThreeCustomShaderMaterial
-          silent
-          baseMaterial={MeshStandardMaterial}
-          fragmentShader={fragmentShader}
-          vertexShader={vertexShader}
-          uniforms={{
-            thickness: { value: props.thickness },
-            maxThickness: { value: props.maxThickness },
-          }}
-        />
+    <>
+      {!props.include && (
+        <mesh {...props} renderOrder={0}>
+          <meshBasicMaterial colorWrite={false} />
+        </mesh>
       )}
-    </mesh>
+
+      {props.include && (
+        <mesh {...props} renderOrder={1}>
+          <ThreeCustomShaderMaterial
+            silent
+            depthWrite={false}
+            baseMaterial={MeshStandardMaterial}
+            fragmentShader={fragmentShader}
+            vertexShader={vertexShader}
+            uniforms={{
+              thickness: { value: props.thickness },
+              maxThickness: { value: props.maxThickness },
+            }}
+          />
+        </mesh>
+      )}
+    </>
   );
 }

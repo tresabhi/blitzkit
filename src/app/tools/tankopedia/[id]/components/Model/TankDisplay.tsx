@@ -132,7 +132,6 @@ export function TankDisplay({ duel }: TankDisplayProps) {
                 >
                   <TankModel duel={duel} />
                   <TankArmor duel={duel} />
-                  {/* <SpacedArmorDepth duel={duel} /> */}
                 </Suspense>
               </Canvas>
             </div>
