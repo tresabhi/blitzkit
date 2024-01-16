@@ -134,11 +134,12 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
 
         function handlePointerDown(event: ThreeEvent<PointerEvent>) {
           event.stopPropagation();
-          mutateTankopedia((draft) => {
-            draft.model.visual.controlsEnabled = false;
-          });
 
           if (isTrack) {
+            mutateTankopedia((draft) => {
+              draft.model.visual.controlsEnabled = false;
+            });
+
             window.addEventListener('pointermove', handlePointerMove);
             window.addEventListener('pointerup', handlePointerUp);
           }
