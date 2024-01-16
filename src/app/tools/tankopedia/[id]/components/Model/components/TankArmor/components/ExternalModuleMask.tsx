@@ -16,7 +16,7 @@ import {
 } from '../../../../../../../../../core/blitzkrieg/modelTransform';
 import { nameToArmorId } from '../../../../../../../../../core/blitzkrieg/nameToArmorId';
 import { resolveArmor } from '../../../../../../../../../core/blitzkrieg/resolveThickness';
-import { useModelDefinitions } from '../../../../../../../../../core/hooks/useModelDefinitions';
+import { useModelDefinitions } from '../../../../../../../../../hooks/useModelDefinitions';
 import { useTankopedia } from '../../../../../../../../../stores/tankopedia';
 import { Duel } from '../../../../../page';
 
