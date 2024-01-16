@@ -24,6 +24,17 @@ interface SpacedArmorDepthProps {
   duel: Duel;
 }
 
+/**
+ * When rendered, this component provides the depth buffer for the armor which
+ * when compared to the depth of the core armor will give you the distance
+ * between the first point of contact and the core armor. The color channels
+ * hold information about the thickness of the spaced armor (external modules
+ * not included).
+ * - R: angle of the armor where 0 is 0 and 1 is 90
+ * - G: normalized thickness; multiply with max thickness to get nominal thickness
+ * - B: no data
+ * - A: 1 means is armor; 0 is background
+ */
 export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
   const wrapper = useRef<Group>(null);
   const awaitedModelDefinitions = useModelDefinitions();
@@ -127,6 +138,19 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
     tankModelDefinition.turrets[duel.protagonist.turret.id];
   const gunModelDefinition =
     turretModelDefinition.guns[duel.protagonist.gun.id];
+  const maxThickness = Math.max(
+    ...armorNodes
+      .map((node) => {
+        const armorId = nameToArmorId(node.name);
+        const { spaced, thickness } = resolveArmor(
+          tankModelDefinition.armor,
+          armorId,
+        );
+
+        return spaced ? thickness : null;
+      })
+      .filter(Boolean),
+  );
   const turretOrigin = new Vector3(
     tankModelDefinition.turretOrigin[0],
     tankModelDefinition.turretOrigin[1],
@@ -162,7 +186,9 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
 
         return (
           <ArmorMeshSpacedArmorDepth
-            exclude
+            include={spaced}
+            thickness={thickness}
+            maxThickness={maxThickness}
             key={node.uuid}
             geometry={(node as Mesh).geometry}
           />
@@ -205,7 +231,9 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
 
           return (
             <ArmorMeshSpacedArmorDepth
-              exclude
+              include={spaced}
+              thickness={thickness}
+              maxThickness={maxThickness}
               key={node.uuid}
               geometry={(node as Mesh).geometry}
               position={turretOrigin}
@@ -233,7 +261,9 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
 
             return (
               <ArmorMeshSpacedArmorDepth
-                exclude
+                include={spaced}
+                thickness={thickness}
+                maxThickness={maxThickness}
                 key={node.uuid}
                 geometry={(node as Mesh).geometry}
                 position={turretOrigin.clone().add(gunOrigin)}

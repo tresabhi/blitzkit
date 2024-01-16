@@ -10,9 +10,11 @@ uniform float ricochet;
 uniform float normalization;
 uniform sampler2D externalModuleMask;
 uniform sampler2D spacedArmorDepth;
+uniform sampler2D spacedArmorMask;
 uniform vec2 resolution;
 varying mat4 vProjectionMatrix;
 uniform float maxExternalModuleThickness;
+uniform float maxSpacedArmorThickness;
 
 float depthToDistance(float depth) {
   mat4 projectionMatrixInverse = inverse(vProjectionMatrix);
@@ -26,12 +28,14 @@ float depthToDistance(float depth) {
 
 void main() {
   vec2 screenCoordinates = gl_FragCoord.xy / resolution;
-  float spacedArmorDepthValue = texture2D(spacedArmorDepth, screenCoordinates).r;
+  float spacedArmorDepth = texture2D(spacedArmorDepth, screenCoordinates).r;
   float currentDistance = depthToDistance(gl_FragCoord.z);
-  float spacedArmorDistance = depthToDistance(spacedArmorDepthValue);
+  float spacedArmorDistance = depthToDistance(spacedArmorDepth);
   float distanceFromSpacedArmor = currentDistance - spacedArmorDistance;
   vec4 externalModuleMaskColor = texture2D(externalModuleMask, screenCoordinates);
+  vec4 spacedArmorMaskColor = texture2D(spacedArmorMask, screenCoordinates);
   bool isUnderExternalModule = externalModuleMaskColor.r == 1.0;
+  bool isUnderSpacedArmor = spacedArmorMaskColor.a == 1.0;
   vec3 normalizedNormal = normalize(vNormal);
   vec3 normalizedViewPosition = normalize(vCSMViewPosition);
   float dotProduct = dot(normalizedNormal, -normalizedViewPosition);
@@ -51,6 +55,14 @@ void main() {
       float normalizedExternalModuleThickness = externalModuleMaskColor.g;
       float externalModuleThickness = normalizedExternalModuleThickness * maxExternalModuleThickness;
       piercedPenetration -= externalModuleThickness;
+    }
+
+    if (isUnderSpacedArmor) {
+      float spacedArmorAngle = spacedArmorMaskColor.r * PI;
+      float normalizedSpacedArmorThickness = spacedArmorMaskColor.g;
+      float spacedArmorNominalThickness = normalizedSpacedArmorThickness * maxSpacedArmorThickness;
+      float spacedArmorThickness = spacedArmorNominalThickness / cos(spacedArmorAngle);
+      piercedPenetration -= spacedArmorThickness;
     }
 
     if (isExplosive) {

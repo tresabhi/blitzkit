@@ -18,6 +18,7 @@ interface ArmorMeshProps extends MeshProps {
   isExternalModule?: boolean;
   thickness: number;
   maxExternalModuleThickness: number;
+  maxSpacedArmorThickness: number;
 }
 
 export function ArmorMesh({
@@ -25,6 +26,7 @@ export function ArmorMesh({
   isExternalModule = false,
   thickness,
   maxExternalModuleThickness,
+  maxSpacedArmorThickness,
   duel,
   ...props
 }: ArmorMeshProps) {
@@ -43,6 +45,8 @@ export function ArmorMesh({
         externalModuleMaskRenderTarget.texture;
       material.current.uniforms.spacedArmorDepth.value =
         spacedArmorDepthRenderTarget.depthTexture;
+      material.current.uniforms.spacedArmorMask.value =
+        spacedArmorDepthRenderTarget.texture;
       material.current.uniforms.projectionMatrixInverse.value =
         camera.projectionMatrixInverse;
     }
@@ -69,10 +73,12 @@ export function ArmorMesh({
             resolution: { value: null },
             externalModuleMask: { value: null },
             spacedArmorDepth: { value: null },
+            spacedArmorMask: { value: null },
             projectionMatrixInverse: { value: null },
             zNear: { value: camera.near },
             zFar: { value: camera.far },
             maxExternalModuleThickness: { value: maxExternalModuleThickness },
+            maxSpacedArmorThickness: { value: maxSpacedArmorThickness },
             isSpaced: { value: isSpaced },
             isExplosive: { value: isExplosive(shell.type) },
             canSplash: { value: canSplash(shell.type) },

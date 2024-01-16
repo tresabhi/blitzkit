@@ -136,6 +136,19 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
     tankModelDefinition.trackThickness,
     gunModelDefinition.barrelThickness,
   );
+  const maxSpacedArmorThickness = Math.max(
+    ...armorNodes
+      .map((node) => {
+        const armorId = nameToArmorId(node.name);
+        const { spaced, thickness } = resolveArmor(
+          tankModelDefinition.armor,
+          armorId,
+        );
+
+        return spaced ? thickness : null;
+      })
+      .filter(Boolean),
+  );
 
   return (
     <group
@@ -162,6 +175,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
         return (
           <ArmorMesh
             maxExternalModuleThickness={maxExternalModuleThickness}
+            maxSpacedArmorThickness={maxSpacedArmorThickness}
             duel={duel}
             key={node.uuid}
             geometry={(node as Mesh).geometry}
@@ -193,6 +207,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
           return (
             <ArmorMesh
               maxExternalModuleThickness={maxExternalModuleThickness}
+              maxSpacedArmorThickness={maxSpacedArmorThickness}
               duel={duel}
               key={node.uuid}
               geometry={(node as Mesh).geometry}
@@ -224,6 +239,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
             return (
               <ArmorMesh
                 maxExternalModuleThickness={maxExternalModuleThickness}
+                maxSpacedArmorThickness={maxSpacedArmorThickness}
                 duel={duel}
                 key={node.uuid}
                 geometry={(node as Mesh).geometry}
