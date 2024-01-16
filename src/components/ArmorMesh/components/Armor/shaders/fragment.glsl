@@ -89,17 +89,7 @@ void main() {
   }
 
   if (isSpaced) {
-    // if (isExternalModule) {
-    //   csm_FragColor = vec4(0.5, 0.0, 1.0, 0.5);
-    // } else {
-    //   if (isExplosive) {
-    //     csm_FragColor = vec4(1.0, 0.0, 1.0, 0.5);
-    //   } else {
-    //     csm_FragColor = vec4(1.0, 0.0, 1.0, (1.0 - penetrationChance) * 0.5);
-    //   }
-    // }
-
-    csm_FragColor = vec4(0.0);
+    csm_FragColor = vec4(1.0, 0.0, 1.0, (1.0 - penetrationChance) * 0.5);
   } else {
     csm_FragColor = vec4(1.0, splashChance * 0.392, 0.0, (1.0 - penetrationChance) * 0.5);
   }
