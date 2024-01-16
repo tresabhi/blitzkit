@@ -56,7 +56,7 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
               });
             }}
           >
-            Greene penetration
+            Green penetration
           </DropdownMenu.CheckboxItem>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
