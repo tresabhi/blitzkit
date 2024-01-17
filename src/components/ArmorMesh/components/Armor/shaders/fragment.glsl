@@ -45,8 +45,13 @@ void main() {
   float penetrationChance = -1.0;
   float splashChance = -1.0;
   bool threeCalibersRule = caliber > 3.0 * thickness;
+  float normalizedSpacedArmorThickness = spacedArmorMaskColor.g;
+  float spacedArmorNominalThickness = normalizedSpacedArmorThickness * maxSpacedArmorThickness;
+  bool spadedArmorThreeCalibersRule = isUnderSpacedArmor && caliber > 3.0 * spacedArmorNominalThickness;
+  bool ricochetSpacedArmor = isUnderSpacedArmor && !spadedArmorThreeCalibersRule && spacedArmorAngle >= ricochet;
+  bool ricochetCoreArmor = !ricochetSpacedArmor && !isUnderExternalModule && !isExternalModule && !isExplosive && !threeCalibersRule && angle >= ricochet;
 
-  if ((!isUnderExternalModule && !isExternalModule && !isExplosive && !threeCalibersRule && angle >= ricochet) || (isUnderSpacedArmor && spacedArmorAngle >= ricochet)) {
+  if (ricochetCoreArmor || ricochetSpacedArmor) {
     penetrationChance = 0.0;
     splashChance = 0.0;
   } else {
@@ -59,8 +64,6 @@ void main() {
     }
 
     if (isUnderSpacedArmor) {
-      float normalizedSpacedArmorThickness = spacedArmorMaskColor.g;
-      float spacedArmorNominalThickness = normalizedSpacedArmorThickness * maxSpacedArmorThickness;
       float spacedArmorThickness = spacedArmorNominalThickness / cos(spacedArmorAngle);
       piercedPenetration -= spacedArmorThickness;
     }
