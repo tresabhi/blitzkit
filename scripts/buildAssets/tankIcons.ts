@@ -49,14 +49,14 @@ export async function buildTankIcons() {
             changes.push({
               content: await readBase64DVPL(big),
               encoding: 'base64',
-              path: `icons/tank/big/${id}.webp`,
+              path: `icons/tanks/big/${id}.webp`,
             });
           }
           if (small) {
             changes.push({
               content: await readBase64DVPL(small),
               encoding: 'base64',
-              path: `icons/tank/small/${id}.webp`,
+              path: `icons/tanks/small/${id}.webp`,
             });
           }
         }),
