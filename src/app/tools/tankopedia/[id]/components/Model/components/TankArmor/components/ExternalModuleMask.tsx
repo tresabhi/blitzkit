@@ -25,7 +25,7 @@ interface ExternalModuleMaskProps {
 
 /**
  * When rendered, generates a mask and thickness buffer for external modules.
- * - R: 0 means not external module
+ * - R: 1 means external module
  * - G: normalized thickness; multiply with max thickness to get nominal thickness
  * - B: no data
  * - A: 1 means is armor; 0 is background
@@ -126,6 +126,12 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
   const maxThickness = Math.max(
     tankModelDefinition.trackThickness,
     gunModelDefinition.barrelThickness,
+    ...armorNodes
+      .map((node) => {
+        const armorId = nameToArmorId(node.name);
+        return resolveArmor(tankModelDefinition.armor, armorId).thickness;
+      })
+      .filter(Boolean),
   );
   const turretOrigin = new Vector3(
     tankModelDefinition.turretOrigin[0],

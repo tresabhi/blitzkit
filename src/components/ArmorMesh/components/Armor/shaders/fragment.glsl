@@ -12,8 +12,7 @@ uniform sampler2D spacedArmorDepth;
 uniform sampler2D spacedArmorMask;
 uniform vec2 resolution;
 varying mat4 vProjectionMatrix;
-uniform float maxExternalModuleThickness;
-uniform float maxSpacedArmorThickness;
+uniform float maxThickness;
 uniform bool greenPenetration;
 
 float depthToDistance(float depth) {
@@ -46,7 +45,7 @@ void main() {
   float splashChance = -1.0;
   bool threeCalibersRule = caliber > 3.0 * thickness;
   float normalizedSpacedArmorThickness = spacedArmorMaskColor.g;
-  float spacedArmorNominalThickness = normalizedSpacedArmorThickness * maxSpacedArmorThickness;
+  float spacedArmorNominalThickness = normalizedSpacedArmorThickness * maxThickness;
   bool spadedArmorThreeCalibersRule = isUnderSpacedArmor && caliber > 3.0 * spacedArmorNominalThickness;
   bool ricochetSpacedArmor = isUnderSpacedArmor && !spadedArmorThreeCalibersRule && spacedArmorAngle >= ricochet;
   bool ricochetCoreArmor = !ricochetSpacedArmor && !isUnderExternalModule && !isExternalModule && !isExplosive && !threeCalibersRule && angle >= ricochet;
@@ -59,7 +58,7 @@ void main() {
 
     if (isUnderExternalModule) {
       float normalizedExternalModuleThickness = externalModuleMaskColor.g;
-      float externalModuleThickness = normalizedExternalModuleThickness * maxExternalModuleThickness;
+      float externalModuleThickness = normalizedExternalModuleThickness * maxThickness;
       piercedPenetration -= externalModuleThickness;
     }
 

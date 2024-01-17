@@ -17,15 +17,13 @@ interface ArmorMeshProps extends MeshProps {
   duel: Duel;
   isExternalModule?: boolean;
   thickness: number;
-  maxExternalModuleThickness: number;
-  maxSpacedArmorThickness: number;
+  maxThickness: number;
 }
 
 export function ArmorMesh({
   isExternalModule = false,
   thickness,
-  maxExternalModuleThickness,
-  maxSpacedArmorThickness,
+  maxThickness,
   duel,
   ...props
 }: ArmorMeshProps) {
@@ -78,8 +76,7 @@ export function ArmorMesh({
             zNear: { value: camera.near },
             zFar: { value: camera.far },
             greenPenetration: { value: greenPenetration },
-            maxExternalModuleThickness: { value: maxExternalModuleThickness },
-            maxSpacedArmorThickness: { value: maxSpacedArmorThickness },
+            maxThickness: { value: maxThickness },
             isExplosive: { value: isExplosive(shell.type) },
             canSplash: { value: canSplash(shell.type) },
             isExternalModule: { value: isExternalModule },

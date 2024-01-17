@@ -130,15 +130,12 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
   const gunModelDefinition =
     turretModelDefinition.guns[duel.protagonist.gun.id];
   const maxThickness = Math.max(
+    tankModelDefinition.trackThickness,
+    gunModelDefinition.barrelThickness,
     ...armorNodes
       .map((node) => {
         const armorId = nameToArmorId(node.name);
-        const { spaced, thickness } = resolveArmor(
-          tankModelDefinition.armor,
-          armorId,
-        );
-
-        return spaced ? thickness : null;
+        return resolveArmor(tankModelDefinition.armor, armorId).thickness;
       })
       .filter(Boolean),
   );

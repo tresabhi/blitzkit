@@ -123,20 +123,13 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
     turretModelDefinition.gunOrigin[1],
     -turretModelDefinition.gunOrigin[2],
   ).applyAxisAngle(X_AXIS, Math.PI / 2);
-  const maxExternalModuleThickness = Math.max(
+  const maxThickness = Math.max(
     tankModelDefinition.trackThickness,
     gunModelDefinition.barrelThickness,
-  );
-  const maxSpacedArmorThickness = Math.max(
     ...armorNodes
       .map((node) => {
         const armorId = nameToArmorId(node.name);
-        const { spaced, thickness } = resolveArmor(
-          tankModelDefinition.armor,
-          armorId,
-        );
-
-        return spaced ? thickness : null;
+        return resolveArmor(tankModelDefinition.armor, armorId).thickness;
       })
       .filter(Boolean),
   );
@@ -160,8 +153,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
 
         return (
           <ArmorMesh
-            maxExternalModuleThickness={maxExternalModuleThickness}
-            maxSpacedArmorThickness={maxSpacedArmorThickness}
+            maxThickness={maxThickness}
             duel={duel}
             key={node.uuid}
             geometry={(node as Mesh).geometry}
@@ -186,8 +178,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
 
           return (
             <ArmorMesh
-              maxExternalModuleThickness={maxExternalModuleThickness}
-              maxSpacedArmorThickness={maxSpacedArmorThickness}
+              maxThickness={maxThickness}
               duel={duel}
               key={node.uuid}
               geometry={(node as Mesh).geometry}
@@ -212,8 +203,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
 
             return (
               <ArmorMesh
-                maxExternalModuleThickness={maxExternalModuleThickness}
-                maxSpacedArmorThickness={maxSpacedArmorThickness}
+                maxThickness={maxThickness}
                 duel={duel}
                 key={node.uuid}
                 geometry={(node as Mesh).geometry}

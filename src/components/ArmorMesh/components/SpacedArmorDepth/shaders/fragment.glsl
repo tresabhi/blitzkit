@@ -8,5 +8,5 @@ void main() {
   float dotProduct = dot(normalizedNormal, -normalizedViewPosition);
   float angle = acos(dotProduct);
 
-  csm_FragColor = vec4(angle / PI, thickness / maxThickness, 0.0, 1.0);
+  csm_FragColor = vec4(angle / (PI / 2.0), thickness / maxThickness, 0.0, 1.0);
 }
