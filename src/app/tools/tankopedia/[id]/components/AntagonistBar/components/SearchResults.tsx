@@ -23,9 +23,8 @@ export function SearchResults({ ids, setDuel }: SearchResultsProps) {
           const tank = awaitedTankDefinitions[id];
 
           return (
-            <Dialog.Close>
+            <Dialog.Close key={id}>
               <Button
-                key={id}
                 variant="ghost"
                 style={{ width: '100%' }}
                 onClick={() => {

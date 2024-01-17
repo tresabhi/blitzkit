@@ -37,7 +37,6 @@ export function ModuleButton({
       radius="medium"
       color={selected ? undefined : 'gray'}
       variant={selected ? 'surface' : 'soft'}
-      // variant="soft"
       style={{
         padding: 0,
         width: 48,

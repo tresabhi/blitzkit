@@ -47,7 +47,7 @@ export function Options() {
         </Button>
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
-            <Button variant="soft">
+            <Button variant="soft" color="gray">
               Test tanks
               <CaretDownIcon />
             </Button>
@@ -75,7 +75,8 @@ export function Options() {
           {TREE_TYPES.map((type, index) => (
             <Button
               key={type}
-              variant={filters.treeTypes.includes(type) ? 'solid' : 'soft'}
+              color={filters.treeTypes.includes(type) ? undefined : 'gray'}
+              variant={filters.treeTypes.includes(type) ? 'surface' : 'soft'}
               style={{
                 flex: 1,
                 margin: -0.5,
@@ -109,7 +110,8 @@ export function Options() {
           {[...TANK_TYPES].reverse().map((type, index) => (
             <Button
               key={type}
-              variant={filters.types.includes(type) ? 'solid' : 'soft'}
+              color={filters.types.includes(type) ? undefined : 'gray'}
+              variant={filters.types.includes(type) ? 'surface' : 'soft'}
               style={{
                 flex: 1,
                 margin: -0.5,
@@ -151,15 +153,16 @@ export function Options() {
               .map((tier, index) => (
                 <Button
                   key={tier}
-                  variant={filters.tiers.includes(tier) ? 'solid' : 'soft'}
+                  color={filters.tiers.includes(tier) ? undefined : 'gray'}
+                  variant={filters.tiers.includes(tier) ? 'surface' : 'soft'}
                   style={{
                     flex: 1,
                     margin: -0.5,
-                    borderTopLeftRadius: index === 0 ? undefined : 0,
+                    borderTopLeftRadius: index === 0 ? 16 : 0,
                     borderBottomLeftRadius: 0,
                     borderTopRightRadius:
                       index === TIERS.length - Math.round(TIERS.length / 2) - 1
-                        ? undefined
+                        ? 16
                         : 0,
                     borderBottomRightRadius: 0,
                   }}
@@ -182,20 +185,21 @@ export function Options() {
           <Flex>
             {[...TIERS]
               .reverse()
-              .slice(5, 10)
+              .slice(5)
               .map((tier, index) => (
                 <Button
                   key={tier}
-                  variant={filters.tiers.includes(tier) ? 'solid' : 'soft'}
+                  color={filters.tiers.includes(tier) ? undefined : 'gray'}
+                  variant={filters.tiers.includes(tier) ? 'surface' : 'soft'}
                   style={{
                     flex: 1,
                     margin: -0.5,
                     borderTopLeftRadius: 0,
-                    borderBottomLeftRadius: index === 0 ? undefined : 0,
+                    borderBottomLeftRadius: index === 0 ? 16 : 0,
                     borderTopRightRadius: 0,
                     borderBottomRightRadius:
                       index === TIERS.length - Math.round(TIERS.length / 2) - 1
-                        ? undefined
+                        ? 16
                         : 0,
                   }}
                   onClick={() =>
@@ -224,15 +228,16 @@ export function Options() {
             {nations.slice(0, 5).map((nation, index) => (
               <Button
                 key={nation}
-                variant={filters.nations.includes(nation) ? 'solid' : 'soft'}
+                color={filters.nations.includes(nation) ? undefined : 'gray'}
+                variant={filters.nations.includes(nation) ? 'surface' : 'soft'}
                 style={{
                   flex: 1,
                   margin: -0.5,
-                  borderTopLeftRadius: index === 0 ? undefined : 0,
+                  borderTopLeftRadius: index === 0 ? 16 : 0,
                   borderBottomLeftRadius: 0,
                   borderTopRightRadius:
                     index === nations.length - Math.round(nations.length / 2)
-                      ? undefined
+                      ? 16
                       : 0,
                   borderBottomRightRadius:
                     index === nations.length - 1 ? undefined : 0,
@@ -255,21 +260,22 @@ export function Options() {
           </Flex>
 
           <Flex>
-            {nations.slice(5, 10).map((nation, index) => (
+            {nations.slice(5).map((nation, index) => (
               <Button
                 key={nation}
-                variant={filters.nations.includes(nation) ? 'solid' : 'soft'}
+                color={filters.nations.includes(nation) ? undefined : 'gray'}
+                variant={filters.nations.includes(nation) ? 'surface' : 'soft'}
                 style={{
                   flex: 1,
                   margin: -0.5,
                   borderTopLeftRadius: 0,
-                  borderBottomLeftRadius: index === 0 ? undefined : 0,
+                  borderBottomLeftRadius: index === 0 ? 16 : 0,
                   borderTopRightRadius:
                     index === nations.length - 1 ? undefined : 0,
                   borderBottomRightRadius:
                     index ===
                     nations.length - Math.round(nations.length / 2) - 1
-                      ? undefined
+                      ? 16
                       : 0,
                 }}
                 onClick={() =>
@@ -296,7 +302,8 @@ export function Options() {
           {[...TIERS].reverse().map((tier, index) => (
             <Button
               key={tier}
-              variant={filters.tiers.includes(tier) ? 'solid' : 'soft'}
+              color={filters.tiers.includes(tier) ? undefined : 'gray'}
+              variant={filters.tiers.includes(tier) ? 'surface' : 'soft'}
               style={{
                 flex: 1,
                 margin: -0.5,
@@ -327,7 +334,8 @@ export function Options() {
           {nations.map((nation, index) => (
             <Button
               key={nation}
-              variant={filters.nations.includes(nation) ? 'solid' : 'soft'}
+              color={filters.nations.includes(nation) ? undefined : 'gray'}
+              variant={filters.nations.includes(nation) ? 'surface' : 'soft'}
               style={{
                 flex: 1,
                 margin: -0.5,
