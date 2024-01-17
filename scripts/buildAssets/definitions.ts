@@ -183,7 +183,7 @@ interface OptionalDeviceSlotRow {
   [key: string]: { device0: string; device1: string };
 }
 
-interface Consumables {
+export interface ConsumablesCommon {
   [key: string]: {
     id: number;
     userString: string;
@@ -259,8 +259,8 @@ export async function buildDefinitions() {
   const optionalDeviceSlots = await readXMLDVPL<{
     root: OptionalDeviceSlots;
   }>(`${DATA}/${POI.optionalDeviceSlots}.dvpl`);
-  const consumables = await readXMLDVPL<{ root: Consumables }>(
-    `${DATA}/${POI.consumables}.dvpl`,
+  const consumables = await readXMLDVPL<{ root: ConsumablesCommon }>(
+    `${DATA}/${POI.consumablesCommon}.dvpl`,
   );
 
   await Promise.all(

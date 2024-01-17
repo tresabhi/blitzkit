@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
 import { argv } from 'process';
 import { circleFlags } from './circleFlags';
+import { buildConsumableIcons } from './consumableIcons';
 import { buildDefinitions } from './definitions';
 import { equipmentIcons } from './equipmentIcons';
 import { buildModuleIcons } from './moduleIcons';
@@ -61,4 +62,8 @@ if (allTargets || targets?.includes('tankArmor')) {
 
 if (allTargets || targets?.includes('equipmentIcons')) {
   await equipmentIcons();
+}
+
+if (allTargets || targets?.includes('consumableIcons')) {
+  await buildConsumableIcons();
 }
