@@ -19,4 +19,5 @@ export const POI = {
     'UI/Screens3/Lobby/Inventory/OptionalDevices/OptionalDevicesItemImage.style.yaml',
   optionalDevicesImage:
     'Gfx/UI/InventoryIcons/Big/OptionalDevices/texture0.packed.webp',
+  consumables: 'XML/item_defs/vehicles/common/consumables/common.xml',
 } as const;

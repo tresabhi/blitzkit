@@ -6,6 +6,7 @@ import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import commitMultipleFiles from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { ConsumableDefinitions } from '../../src/core/blitzkrieg/consumablesDefinitions';
 import {
   EquipmentDefinitions,
   EquipmentRow,
@@ -182,6 +183,41 @@ interface OptionalDeviceSlotRow {
   [key: string]: { device0: string; device1: string };
 }
 
+interface Consumables {
+  [key: string]: {
+    id: number;
+    userString: string;
+    description: string;
+    icon: string;
+    category: string;
+    tags: string;
+    vehicleFilter: {
+      include: { vehicle: ConsumablesFilter };
+      exclude?: { vehicle: ConsumablesFilter };
+    };
+    script: {
+      '#text': string;
+      automatic?: boolean;
+      duration?: number;
+      cooldown?: number;
+      shotEffect?: string;
+      bonusValues?: { [key: string]: number };
+    } & Record<string, string>;
+  };
+}
+
+type ConsumablesFilter =
+  | { minLevel: number; maxLevel: number }
+  | { name: string }
+  | { extendedTags: string };
+
+const consumableEffectSuffixes = [
+  'Increase',
+  'Factor',
+  'Bias',
+  'Coef',
+  'Percent',
+];
 const blitzTankTypeToBlitzkrieg: Record<BlitzTankType, TankType> = {
   'AT-SPG': 'tank_destroyer',
   lightTank: 'light',
@@ -196,6 +232,10 @@ const blitzShellKindToBLitzkrieg: Record<ShellKind, ShellType> = {
 };
 const LANGUAGE = 'en';
 
+const missingStrings: Record<string, string> = {
+  '#artefacts:tungstentip/name': 'Tungsten Shells',
+};
+
 export async function buildDefinitions() {
   console.log('Building tank definitions...');
 
@@ -205,9 +245,11 @@ export async function buildDefinitions() {
     presets: {},
     equipments: {},
   };
+  const consumableDefinitions: ConsumableDefinitions = {};
   const nations = await readdir(`${DATA}/${POI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
+  const tankStringIdMap: Record<string, number> = {};
   const strings = await readYAMLDVPL<Strings>(
     `${DATA}/${POI.strings}/${LANGUAGE}.yaml.dvpl`,
   );
@@ -217,6 +259,9 @@ export async function buildDefinitions() {
   const optionalDeviceSlots = await readXMLDVPL<{
     root: OptionalDeviceSlots;
   }>(`${DATA}/${POI.optionalDeviceSlots}.dvpl`);
+  const consumables = await readXMLDVPL<{ root: Consumables }>(
+    `${DATA}/${POI.consumables}.dvpl`,
+  );
 
   await Promise.all(
     nations.map(async (nation) => {
@@ -257,6 +302,7 @@ export async function buildDefinitions() {
         const trackArmorRaw = Object.values(tankDefinition.root.chassis).at(-1)!
           .armor.leftTrack;
         const equipment = tankDefinition.root.optDevicePreset;
+        tankStringIdMap[`${nation}:${tankKey}`] = tankId;
 
         Object.keys(tankDefinition.root.hull.armor)
           .filter((name) => name.startsWith('armor_'))
@@ -563,6 +609,67 @@ export async function buildDefinitions() {
     },
   );
 
+  Object.values(consumables.root).forEach((consumable) => {
+    consumableDefinitions[consumable.id] = {
+      id: consumable.id,
+      name:
+        strings[consumable.userString] ??
+        missingStrings[consumable.userString] ??
+        `Unknown ${consumable.id}`,
+      include: [],
+    };
+
+    const includeRaw = consumable.vehicleFilter.include.vehicle;
+    const excludeRaw = consumable.vehicleFilter.exclude?.vehicle;
+
+    if ('minLevel' in includeRaw) {
+      consumableDefinitions[consumable.id].include.push({
+        type: 'tier',
+        min: includeRaw.minLevel,
+        max: includeRaw.maxLevel,
+      });
+    } else if ('name' in includeRaw) {
+      consumableDefinitions[consumable.id].include.push({
+        type: 'ids',
+        ids: includeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
+      });
+    } else throw new SyntaxError('Unhandled include type');
+
+    if (excludeRaw) {
+      consumableDefinitions[consumable.id].exclude = [];
+
+      if ('name' in excludeRaw) {
+        consumableDefinitions[consumable.id].exclude!.push({
+          type: 'ids',
+          ids: excludeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
+        });
+      } else if ('extendedTags' in excludeRaw) {
+        consumableDefinitions[consumable.id].exclude!.push({
+          type: 'category',
+          categories: excludeRaw.extendedTags.split(' '),
+        });
+      } else throw new SyntaxError('Unhandled exclude type');
+    }
+
+    Object.entries({
+      ...consumable.script,
+      ...consumable.script.bonusValues,
+    }).forEach(([effectName, effect]) => {
+      if (
+        !consumableEffectSuffixes.some((suffix) => effectName.endsWith(suffix))
+      ) {
+        return;
+      }
+
+      if (!consumableDefinitions[consumable.id].effects) {
+        consumableDefinitions[consumable.id].effects = {};
+      }
+
+      consumableDefinitions[consumable.id].effects![effectName] =
+        effect as number;
+    });
+  });
+
   console.log('Committing definitions...');
   await commitMultipleFiles(
     'tresabhi',
@@ -584,6 +691,11 @@ export async function buildDefinitions() {
         content: JSON.stringify(equipmentDefinitions),
         encoding: 'utf-8',
         path: 'definitions/equipment.json',
+      },
+      {
+        content: JSON.stringify(consumableDefinitions),
+        encoding: 'utf-8',
+        path: 'definitions/consumables.json',
       },
     ],
     true,
