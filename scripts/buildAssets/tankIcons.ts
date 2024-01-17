@@ -17,7 +17,7 @@ export interface TankParameters {
   };
 }
 
-export async function buildTankIcons(big?: boolean, small?: boolean) {
+export async function buildTankIcons() {
   console.log('Building tank icons...');
 
   const changes: FileChange[] = [];
@@ -31,35 +31,36 @@ export async function buildTankIcons(big?: boolean, small?: boolean) {
         `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
       );
 
-      for (const tankIndex in tanks.root) {
-        const tank = tanks.root[tankIndex];
-        const nationVehicleId = tank.id;
-        const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
-        const parameters = await readYAMLDVPL<TankParameters>(
-          `${DATA}/${POI.tankParameters}/${nation}/${tankIndex}.yaml.dvpl`,
-        );
-        const small = `${DATA}/${parameters.resourcesPath.smallIconPath
-          .replace(/~res:\//, '')
-          .replace(/\..+/, '')}.packed.webp.dvpl`;
-        const big = `${DATA}/${parameters.resourcesPath.bigIconPath
-          .replace(/~res:\//, '')
-          .replace(/\..+/, '')}.packed.webp.dvpl`;
+      await Promise.all(
+        Object.entries(tanks.root).map(async ([tankIndex, tank]) => {
+          const nationVehicleId = tank.id;
+          const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
+          const parameters = await readYAMLDVPL<TankParameters>(
+            `${DATA}/${POI.tankParameters}/${nation}/${tankIndex}.yaml.dvpl`,
+          );
+          const small = `${DATA}/${parameters.resourcesPath.smallIconPath
+            .replace(/~res:\//, '')
+            .replace(/\..+/, '')}.packed.webp.dvpl`;
+          const big = `${DATA}/${parameters.resourcesPath.bigIconPath
+            .replace(/~res:\//, '')
+            .replace(/\..+/, '')}.packed.webp.dvpl`;
 
-        if (big) {
-          changes.push({
-            content: await readBase64DVPL(big),
-            encoding: 'base64',
-            path: `icons/tank/big/${id}.webp`,
-          });
-        }
-        if (small) {
-          changes.push({
-            content: await readBase64DVPL(small),
-            encoding: 'base64',
-            path: `icons/tank/small/${id}.webp`,
-          });
-        }
-      }
+          if (big) {
+            changes.push({
+              content: await readBase64DVPL(big),
+              encoding: 'base64',
+              path: `icons/tank/big/${id}.webp`,
+            });
+          }
+          if (small) {
+            changes.push({
+              content: await readBase64DVPL(small),
+              encoding: 'base64',
+              path: `icons/tank/small/${id}.webp`,
+            });
+          }
+        }),
+      );
     }),
   );
 

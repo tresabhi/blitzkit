@@ -25,15 +25,8 @@ if (allTargets || targets?.includes('definitions')) {
   await buildDefinitions();
 }
 
-if (
-  allTargets ||
-  targets?.includes('bigTankIcons') ||
-  targets?.includes('smallTankIcons')
-) {
-  await buildTankIcons(
-    allTargets || targets?.includes('bigTankIcons'),
-    allTargets || targets?.includes('smallTankIcons'),
-  );
+if (allTargets || targets?.includes('tankIcons')) {
+  await buildTankIcons();
 }
 
 if (allTargets || targets?.includes('scratchedFlags')) {
