@@ -34,11 +34,12 @@ export default async function resolvePlayerFromCommand(
           id: accounts[0].account_id,
         } satisfies ResolvedPlayer;
       } else {
-        throw new UserError('Could not find user', {
-          cause: `I couldn't find user "${markdownEscape(
+        throw new UserError(
+          'Could not find user',
+          `I couldn't find user "${markdownEscape(
             commandUsername,
           )}". Try picking an user from the search result, typing in a valid username, or using the \`/link\` command.`,
-        });
+        );
       }
     }
   } else {
@@ -47,9 +48,10 @@ export default async function resolvePlayerFromCommand(
     if (account) {
       return { region: account.region, id: account.blitz };
     } else {
-      throw new UserError('Use the `/link` command', {
-        cause: 'Link your Blitz and Discord accounts to get started.',
-      });
+      throw new UserError(
+        "You're account isn't linked with Blitzkrieg yet",
+        'Use the `/link` command to get started.', // TODO: add shortcut button too
+      );
     }
   }
 }

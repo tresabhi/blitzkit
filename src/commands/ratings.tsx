@@ -337,11 +337,8 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
 
                   if (playerIndex === -1) {
                     throw new UserError(
-                      `${accountInfo.nickname} didn't player ratings in season ${season}`,
-                      {
-                        cause:
-                          'This player did not participate in this season or did not get past calibration.',
-                      },
+                      `${accountInfo.nickname} didn't play ratings in season ${season}`,
+                      'This player did not participate in this season or did not get past calibration.',
                     );
                   }
 
