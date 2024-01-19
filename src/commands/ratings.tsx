@@ -384,8 +384,10 @@ export const ratingsCommand = new Promise<CommandRegistryRaw>(
                       id: player.id,
                       score: player.score,
                       position: playerIndex + index + 1,
-                      clan: clanData[player.id]!.clan?.tag,
-                      nickname: clanData[player.id]!.account_name,
+                      clan: clanData[index]?.clan?.tag,
+                      nickname: clanData[index]
+                        ? clanData[index]!.account_name
+                        : `Deleted ${player.id}`,
                     }));
                   },
                 );
