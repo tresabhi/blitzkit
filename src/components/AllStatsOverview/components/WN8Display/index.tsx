@@ -37,7 +37,7 @@ export function WN8Display({ WN8 }: WN8DisplayProps) {
         gap: -16,
       }}
     >
-      <Glow color={PERCENTILE_COLORS[percentile]} />
+      <Glow color={color} />
 
       <div
         style={{
@@ -71,7 +71,7 @@ export function WN8Display({ WN8 }: WN8DisplayProps) {
         </span>
       </div>
 
-      <Glow color={PERCENTILE_COLORS[percentile]} direction="reverse" />
+      <Glow color={color} direction="reverse" />
     </div>
   );
 }
