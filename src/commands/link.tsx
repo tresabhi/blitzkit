@@ -4,7 +4,7 @@ import markdownEscape from 'markdown-escape';
 import discord from '../../discord.json' assert { type: 'json' };
 import { Glow } from '../components/AllStatsOverview/components/WN8Display/components/Glow';
 import Wrapper from '../components/Wrapper';
-import { REGION_NAMES_SHORT } from '../constants/regions';
+import { REGION_NAMES } from '../constants/regions';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import { linkBlitzAndDiscord } from '../core/blitzkrieg/discordBlitz';
@@ -188,7 +188,7 @@ export const verifyCommand: CommandRegistry = {
                   {clanAccountInfo?.clan
                     ? `[${clanAccountInfo?.clan?.tag}] - `
                     : ''}
-                  {REGION_NAMES_SHORT[region]}
+                  {REGION_NAMES[region]}
                 </span>
               </div>
             </div>
