@@ -60,12 +60,14 @@ void main() {
       float externalModuleThickness = externalModuleMaskColor.g * maxThickness;
       remainingPenetration -= externalModuleThickness;
     }
+    remainingPenetration = max(remainingPenetration, 0.0);
 
     if (isUnderSpacedArmor) {
       // spaced armor on the other hand, does care about angle
       float spacedArmorThickness = spacedArmorNominalThickness / cos(spacedArmorAngle);
       remainingPenetration -= spacedArmorThickness;
     }
+    remainingPenetration = max(remainingPenetration, 0.0);
 
     float spacedArmorDepth = texture2D(spacedArmorDepth, screenCoordinates).r;
     float spacedArmorDistance = depthToDistance(spacedArmorDepth);
@@ -75,8 +77,6 @@ void main() {
       // there is a 50% penetration loss per meter for HE based shells
       remainingPenetration -= 0.5 * remainingPenetration * distanceFromSpacedArmor;
     }
-
-    // clamp to 0 because negative penetration causes guaranteed penetrations for some reason
     remainingPenetration = max(remainingPenetration, 0.0);
 
     bool coreArmorTwoCalibersRule = caliber > 2.0 * thickness;
