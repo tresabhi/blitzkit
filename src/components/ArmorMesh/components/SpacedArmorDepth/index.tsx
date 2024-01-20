@@ -23,14 +23,8 @@ export function ArmorMeshSpacedArmorDepth(
 ) {
   return (
     <>
-      {!props.include && (
-        <mesh {...props} renderOrder={0}>
-          <meshBasicMaterial colorWrite={false} />
-        </mesh>
-      )}
-
       {props.include && (
-        <mesh {...props} renderOrder={1}>
+        <mesh {...props} renderOrder={0}>
           <ThreeCustomShaderMaterial
             silent
             depthWrite={false}
@@ -42,6 +36,12 @@ export function ArmorMeshSpacedArmorDepth(
               maxThickness: { value: props.maxThickness },
             }}
           />
+        </mesh>
+      )}
+
+      {!props.include && (
+        <mesh {...props} renderOrder={1}>
+          <meshBasicMaterial colorWrite={false} />
         </mesh>
       )}
     </>
