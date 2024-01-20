@@ -18,7 +18,6 @@ export const TANK_TYPES = [
   'heavy',
 ] as const;
 
-// TODO: remove hyphen for underscore
 export const TREE_TYPES = ['researchable', 'premium', 'collector'] as const;
 
 export type TankType = (typeof TANK_TYPES)[number];

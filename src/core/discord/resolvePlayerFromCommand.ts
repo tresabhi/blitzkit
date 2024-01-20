@@ -50,7 +50,7 @@ export default async function resolvePlayerFromCommand(
     } else {
       throw new UserError(
         "You're account isn't linked with Blitzkrieg yet",
-        'Use the `/link` command to get started.', // TODO: add shortcut button too
+        'Use the `/link` command to get started.',
       );
     }
   }
