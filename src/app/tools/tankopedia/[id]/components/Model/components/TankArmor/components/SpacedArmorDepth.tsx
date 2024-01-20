@@ -170,6 +170,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
         return (
           <ArmorMeshSpacedArmorDepth
             include={spaced}
+            isExternalModule={false}
             thickness={thickness}
             maxThickness={maxThickness}
             key={node.uuid}
@@ -186,6 +187,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
 
         return (
           <ArmorMeshSpacedArmorDepth
+            isExternalModule
             key={node.uuid}
             geometry={(node as Mesh).geometry}
           />
@@ -209,6 +211,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
           return (
             <ArmorMeshSpacedArmorDepth
               include={spaced}
+              isExternalModule={false}
               thickness={thickness}
               maxThickness={maxThickness}
               key={node.uuid}
@@ -234,6 +237,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
             return (
               <ArmorMeshSpacedArmorDepth
                 include={spaced}
+                isExternalModule={false}
                 thickness={thickness}
                 maxThickness={maxThickness}
                 key={node.uuid}
@@ -252,6 +256,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
 
             return (
               <ArmorMeshSpacedArmorDepth
+                isExternalModule
                 key={node.uuid}
                 geometry={(node as Mesh).geometry}
               />
