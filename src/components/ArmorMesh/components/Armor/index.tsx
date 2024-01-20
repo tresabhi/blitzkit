@@ -15,13 +15,11 @@ import vertexShader from './shaders/vertex.glsl';
 
 interface ArmorMeshProps extends MeshProps {
   duel: Duel;
-  isExternalModule?: boolean;
   thickness: number;
   maxThickness: number;
 }
 
 export function ArmorMesh({
-  isExternalModule = false,
   thickness,
   maxThickness,
   duel,
@@ -52,6 +50,8 @@ export function ArmorMesh({
     }
   });
 
+  console.log(resolveNearPenetration(shell.penetration));
+
   return (
     <>
       <mesh {...props} renderOrder={0}>
@@ -79,16 +79,18 @@ export function ArmorMesh({
             maxThickness: { value: maxThickness },
             isExplosive: { value: isExplosive(shell.type) },
             canSplash: { value: canSplash(shell.type) },
-            isExternalModule: { value: isExternalModule },
             thickness: { value: thickness },
             penetration: {
-              value: resolveNearPenetration(shell.penetration),
+              // value: resolveNearPenetration(shell.penetration),
+              value: 0,
             },
             caliber: { value: shell.caliber },
-            ricochet: { value: degToRad(shell.ricochet ?? 90) },
+            ricochetAngle: { value: degToRad(shell.ricochet ?? 90) },
             normalization: {
               value: degToRad(shell.normalization ?? 0),
             },
+            damage: { value: shell.damage.armor },
+            explosionRadius: { value: shell.explosionRadius ?? 0 },
           }}
         />
       </mesh>

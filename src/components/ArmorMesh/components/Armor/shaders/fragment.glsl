@@ -1,11 +1,10 @@
 varying vec3 vCSMViewPosition;
 uniform bool isExplosive;
 uniform bool canSplash;
-uniform bool isExternalModule;
 uniform float thickness;
 uniform float penetration;
 uniform float caliber;
-uniform float ricochet;
+uniform float ricochetAngle;
 uniform float normalization;
 uniform sampler2D externalModuleMask;
 uniform sampler2D spacedArmorDepth;
@@ -14,6 +13,8 @@ uniform vec2 resolution;
 varying mat4 vProjectionMatrix;
 uniform float maxThickness;
 uniform bool greenPenetration;
+uniform float damage;
+uniform float explosionRadius;
 
 float depthToDistance(float depth) {
   mat4 projectionMatrixInverse = inverse(vProjectionMatrix);
@@ -26,78 +27,79 @@ float depthToDistance(float depth) {
 }
 
 void main() {
+  float penetrationChance = -1.0;
+  float splashChance = -1.0;
+
+  vec3 normalizedViewPosition = normalize(vCSMViewPosition);
+  float dotProduct = dot(vNormal, -normalizedViewPosition);
+  float coreArmorangle = acos(dotProduct);
+
   vec2 screenCoordinates = gl_FragCoord.xy / resolution;
-  float spacedArmorDepth = texture2D(spacedArmorDepth, screenCoordinates).r;
-  float currentDistance = depthToDistance(gl_FragCoord.z);
-  float spacedArmorDistance = depthToDistance(spacedArmorDepth);
-  float distanceFromSpacedArmor = currentDistance - spacedArmorDistance;
   vec4 externalModuleMaskColor = texture2D(externalModuleMask, screenCoordinates);
   vec4 spacedArmorMaskColor = texture2D(spacedArmorMask, screenCoordinates);
   bool isUnderExternalModule = externalModuleMaskColor.r == 1.0;
   bool isUnderSpacedArmor = spacedArmorMaskColor.a == 1.0;
-  vec3 normalizedNormal = normalize(vNormal);
-  vec3 normalizedViewPosition = normalize(vCSMViewPosition);
-  float dotProduct = dot(normalizedNormal, -normalizedViewPosition);
-  float angle = acos(dotProduct);
   float spacedArmorAngle = spacedArmorMaskColor.r * PI;
-  float penetrationChance = -1.0;
-  float splashChance = -1.0;
-  bool threeCalibersRule = caliber > 3.0 * thickness;
-  float normalizedSpacedArmorThickness = spacedArmorMaskColor.g;
-  float spacedArmorNominalThickness = normalizedSpacedArmorThickness * maxThickness;
-  bool spadedArmorThreeCalibersRule = isUnderSpacedArmor && caliber > 3.0 * spacedArmorNominalThickness;
-  bool ricochetSpacedArmor = isUnderSpacedArmor && !spadedArmorThreeCalibersRule && spacedArmorAngle >= ricochet;
-  bool ricochetCoreArmor = !ricochetSpacedArmor && !isUnderExternalModule && !isExternalModule && !isExplosive && !threeCalibersRule && angle >= ricochet;
 
-  if (ricochetCoreArmor || ricochetSpacedArmor) {
+  bool coreArmorThreeCalibersRule = caliber > 3.0 * thickness;
+  float spacedArmorNominalThickness = spacedArmorMaskColor.g * maxThickness;
+  bool spacedArmorThreeCalibersRule = isUnderSpacedArmor && caliber > 3.0 * spacedArmorNominalThickness;
+  bool hasRicochetedSpacedArmor = !isExplosive && isUnderSpacedArmor && !spacedArmorThreeCalibersRule && spacedArmorAngle >= ricochetAngle;
+  bool isUnderAnything = isUnderExternalModule || isUnderSpacedArmor;
+  bool hasRicochetedCoreArmor = !isExplosive && !isUnderAnything && !coreArmorThreeCalibersRule && coreArmorangle >= ricochetAngle;
+
+  if (hasRicochetedCoreArmor || hasRicochetedSpacedArmor) {
     penetrationChance = 0.0;
     splashChance = 0.0;
   } else {
-    float piercedPenetration = penetration;
+    // time to chip away at the penetration, one case at a time
+    float remainingPenetration = penetration;
 
     if (isUnderExternalModule) {
-      float normalizedExternalModuleThickness = externalModuleMaskColor.g;
-      float externalModuleThickness = normalizedExternalModuleThickness * maxThickness;
-      piercedPenetration -= externalModuleThickness;
+      // external modules don't care about angle, they'll reduce penetration by their thickness
+      float externalModuleThickness = externalModuleMaskColor.g * maxThickness;
+      remainingPenetration -= externalModuleThickness;
     }
 
     if (isUnderSpacedArmor) {
+      // spaced armor on the other hand, does care about angle
       float spacedArmorThickness = spacedArmorNominalThickness / cos(spacedArmorAngle);
-      piercedPenetration -= spacedArmorThickness;
+      remainingPenetration -= spacedArmorThickness;
     }
 
+    float spacedArmorDepth = texture2D(spacedArmorDepth, screenCoordinates).r;
+    float spacedArmorDistance = depthToDistance(spacedArmorDepth);
+    float coreArmorDistance = depthToDistance(gl_FragCoord.z);
+    float distanceFromSpacedArmor = abs(coreArmorDistance - spacedArmorDistance);
     if (isExplosive) {
-      // 50% loss of remaining penetration per meter
-      piercedPenetration -= 0.5 * piercedPenetration * distanceFromSpacedArmor;
+      // there is a 50% penetration loss per meter for HE based shells
+      remainingPenetration -= 0.5 * remainingPenetration * distanceFromSpacedArmor;
     }
 
-    piercedPenetration = max(piercedPenetration, 0.0);
+    // clamp to 0 because negative penetration causes guaranteed penetrations for some reason
+    remainingPenetration = max(remainingPenetration, 0.0);
 
-    bool twoCalibersRule = caliber > 2.0 * thickness;
-    float finalNormalization = twoCalibersRule ? (normalization * 1.4 * caliber) / (2.0 * thickness) : normalization;
-    float finalThickness = thickness / cos(angle - finalNormalization);
-    float delta = finalThickness - piercedPenetration;
-    float randomRadius = piercedPenetration * 0.05;
+    bool coreArmorTwoCalibersRule = caliber > 2.0 * thickness;
+    float finalNormalization = coreArmorTwoCalibersRule ? (normalization * 1.4 * caliber) / (2.0 * thickness) : normalization;
+    float finalCoreArmorThickness = thickness / cos(coreArmorangle - finalNormalization);
+    float deltaPenetration = finalCoreArmorThickness - remainingPenetration;
+    float randomRadius = remainingPenetration * 0.05;
 
-    if (delta > randomRadius) {
+    if (deltaPenetration > randomRadius) {
+      // even with a 5% buff to the penetration, can't penetrate
       penetrationChance = 0.0;
-    } else if (delta < -randomRadius) {
+    } else if (deltaPenetration < -randomRadius) {
+      // even with a 5% nerf, can penetrate
       penetrationChance = 1.0;
     } else {
-      penetrationChance = max(1.0 - (delta + randomRadius) / (2.0 * randomRadius), 0.0);
+      // transition area
+      penetrationChance = max(1.0 - (deltaPenetration + randomRadius) / (2.0 * randomRadius), 0.0);
     }
 
     if (canSplash) {
-      float reducedFinalThickness = finalThickness * (1.0 / 10.0);
-      float splashDelta = reducedFinalThickness - piercedPenetration;
-
-      if (splashDelta > randomRadius) {
-        splashChance = 0.0;
-      } else if (splashDelta < -randomRadius) {
-        splashChance = 1.0;
-      } else {
-        splashChance = 1.0 - (splashDelta + randomRadius) / (2.0 * randomRadius);
-      }
+      // only allow splasing if the damage equation deals more than 0 damage
+      float finalDamage = 0.5 * damage * (1.0 - distanceFromSpacedArmor / explosionRadius) - 1.1 * finalCoreArmorThickness;
+      splashChance = finalDamage > 0.0 ? 1.0 : 0.0;
     } else {
       splashChance = 0.0;
     }
