@@ -1,10 +1,12 @@
 import {
   EnterFullScreenIcon,
   ExitFullScreenIcon,
+  EyeOpenIcon,
   GearIcon,
 } from '@radix-ui/react-icons';
 import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
 import { RefObject } from 'react';
+import { Pose, poseEvent } from '../../../../../../../core/blitzkrieg/pose';
 import mutateTankopedia, {
   useTankopedia,
 } from '../../../../../../../stores/tankopedia';
@@ -30,6 +32,25 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
         right: 18,
       }}
     >
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <Button color={showGrid ? 'purple' : 'gray'} variant="ghost">
+            <EyeOpenIcon />
+          </Button>
+        </DropdownMenu.Trigger>
+
+        <DropdownMenu.Content>
+          <DropdownMenu.Item
+            onClick={() => {
+              console.log('called?');
+              poseEvent.emit(Pose.HullDown);
+            }}
+          >
+            Hull down
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           <Button color={showGrid ? 'purple' : 'gray'} variant="ghost">

@@ -4,6 +4,8 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
+import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
+import { Pose, poseEvent } from '../../../../../../core/blitzkrieg/pose';
 import { theme } from '../../../../../../stitches.config';
 import mutateTankopedia, {
   TankopediaMode,
@@ -29,6 +31,11 @@ export function TankDisplay({ duel }: TankDisplayProps) {
   const canvasWrapper = useRef<HTMLDivElement>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const mode = useTankopedia((state) => state.mode);
+  const tankModelDefinition = awaitedModelDefinitions[duel.protagonist.tank.id];
+  const turretModelDefinition =
+    tankModelDefinition.turrets[duel.protagonist.turret.id];
+  const gunModelDefinition =
+    turretModelDefinition.guns[duel.protagonist.gun.id];
 
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);
@@ -49,22 +56,36 @@ export function TankDisplay({ duel }: TankDisplayProps) {
       setIsFullScreen(document.fullscreenElement !== null);
     }
 
+    function handlePoseEvent(pose: Pose) {
+      switch (pose) {
+        case Pose.HullDown: {
+          mutateTankopedia((draft) => {
+            const [pitch, yaw] = applyPitchYawLimits(
+              -Infinity,
+              0,
+              gunModelDefinition.pitch,
+              turretModelDefinition.yaw,
+            );
+
+            modelTransformEvent.emit({ pitch, yaw });
+            draft.model.physical.pitch = pitch;
+            draft.model.physical.yaw = yaw;
+          });
+        }
+      }
+    }
+
+    poseEvent.on(handlePoseEvent);
     document.addEventListener('fullscreenchange', handleFullScreenChange);
 
     return () => {
       document.removeEventListener('fullscreenchange', handleFullScreenChange);
+      poseEvent.off(handlePoseEvent);
     };
   });
 
   useEffect(() => {
     if (!duel.protagonist) return void 0;
-
-    const tankModelDefinition =
-      awaitedModelDefinitions[duel.protagonist.tank.id];
-    const turretModelDefinition =
-      tankModelDefinition.turrets[duel.protagonist.turret.id];
-    const gunModelDefinition =
-      turretModelDefinition.guns[duel.protagonist.gun.id];
 
     mutateTankopedia((draft) => {
       [draft.model.physical.pitch, draft.model.physical.yaw] =
@@ -116,7 +137,7 @@ export function TankDisplay({ duel }: TankDisplayProps) {
                 camera={{ fov: 20 }}
                 onPointerDown={handlePointerDown}
               >
-                <Controls />
+                <Controls duel={duel} />
                 <SceneProps />
                 <Lighting />
 
