@@ -20,11 +20,14 @@ export interface ResolvedPeriod {
 export default function resolvePeriodFromCommand(
   region: Region,
   interaction: ChatInputCommandInteraction<CacheType>,
+  forcedPeriod?: PeriodType,
 ) {
   let name: string;
   let start: number;
   let end: number;
-  const periodSubcommand = interaction.options.getSubcommand() as PeriodType;
+  const periodSubcommand = forcedPeriod
+    ? forcedPeriod
+    : (interaction.options.getSubcommand() as PeriodType);
 
   if (periodSubcommand === 'custom') {
     const startOption = interaction.options.getInteger('start', true);

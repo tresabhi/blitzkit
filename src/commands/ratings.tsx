@@ -26,7 +26,7 @@ import addRegionChoices from '../core/discord/addRegionChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import embedNegative from '../core/discord/embedNegative';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { CommandRegistryRaw } from '../events/interactionCreate';
+import { CommandRegistryPromisable } from '../events/interactionCreate';
 
 export interface RatingsPlayer {
   spa_id: number;
@@ -120,7 +120,7 @@ const noOngoingSeason = embedNegative(
   "Wargaming didn't provide any data for this season.",
 );
 
-export const ratingsCommand = new Promise<CommandRegistryRaw>(
+export const ratingsCommand = new Promise<CommandRegistryPromisable>(
   async (resolve) => {
     const latestArchivedSeasonNumber = await getArchivedLatestSeasonNumber();
     const onGoingSeason = await isOnGoingRatingsSeason();

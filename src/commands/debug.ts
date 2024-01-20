@@ -13,7 +13,7 @@ export const debugCommand: CommandRegistry = {
     .setName('debug')
     .setDescription('Debug information about the bot'),
 
-  async handler(interaction) {
+  async handler() {
     const currentTime = new Date().getTime();
     const uptime = currentTime - executionStart;
     const list = [
