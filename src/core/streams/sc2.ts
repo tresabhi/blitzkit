@@ -265,6 +265,12 @@ export type Component =
         }
       >;
       jointsCount: number;
+    }
+  | {
+      'comp.typename': 'AnimationComponent';
+      animation: bigint;
+      animationTimeScale: number;
+      repeatsCount: number;
     };
 
 interface SceneComponents {

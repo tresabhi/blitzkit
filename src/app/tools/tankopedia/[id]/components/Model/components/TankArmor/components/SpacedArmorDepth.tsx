@@ -14,7 +14,6 @@ import {
 import { nameToArmorId } from '../../../../../../../../../core/blitzkrieg/nameToArmorId';
 import { resolveArmor } from '../../../../../../../../../core/blitzkrieg/resolveThickness';
 import { useArmor } from '../../../../../../../../../hooks/useArmor';
-import { useModel } from '../../../../../../../../../hooks/useModel';
 import { useModelDefinitions } from '../../../../../../../../../hooks/useModelDefinitions';
 import { useTankopedia } from '../../../../../../../../../stores/tankopedia';
 import { Duel } from '../../../../../page';
@@ -120,10 +119,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
   });
 
   const armorGltf = useArmor(duel.protagonist.tank.id);
-  const modelGltf = useModel(duel.protagonist.tank.id);
-
   const armorNodes = Object.values(armorGltf.nodes);
-  const modelNodes = Object.values(modelGltf.nodes);
   const tankModelDefinition = modelDefinitions[duel.protagonist.tank.id];
   const turretModelDefinition =
     tankModelDefinition.turrets[duel.protagonist.turret.id];
@@ -178,21 +174,6 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
         );
       })}
 
-      {modelNodes.map((node) => {
-        const isWheel = node.name.startsWith('chassis_wheel_');
-        const isTrack = node.name.startsWith('chassis_track_');
-        const isVisible = isWheel || isTrack;
-
-        if (!isVisible) return null;
-
-        return (
-          <ArmorMeshSpacedArmorDepth
-            key={node.uuid}
-            geometry={(node as Mesh).geometry}
-          />
-        );
-      })}
-
       <group ref={turretContainer}>
         {armorNodes.map((node) => {
           const isCurrentTurret = node.name.startsWith(
@@ -240,22 +221,6 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
                 key={node.uuid}
                 geometry={(node as Mesh).geometry}
                 position={turretOrigin.clone().add(gunOrigin)}
-              />
-            );
-          })}
-
-          {modelNodes.map((node) => {
-            const isCurrentGun =
-              node.name ===
-              `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`;
-            const isVisible = isCurrentGun;
-
-            if (!isVisible) return null;
-
-            return (
-              <ArmorMeshSpacedArmorDepth
-                key={node.uuid}
-                geometry={(node as Mesh).geometry}
               />
             );
           })}

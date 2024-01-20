@@ -176,12 +176,22 @@ export async function extractModel(
           case 'MotionComponent':
           case 'TankElementComponent':
           case 'SkeletonComponent':
+          case 'AnimationComponent':
             break;
 
           case 'TransformComponent': {
             const translation = new Vector3();
             const rotation = new Quaternion();
             const scale = new Vector3();
+
+            if (
+              !component['tc.worldTranslation'] ||
+              !component['tc.worldScale'] ||
+              !component['tc.localTranslation'] ||
+              !component['tc.localScale']
+            ) {
+              console.log(component);
+            }
 
             new Matrix4()
               .multiplyMatrices(

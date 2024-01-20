@@ -40,7 +40,6 @@ void main() {
   float dotProduct = dot(normalizedNormal, -normalizedViewPosition);
   float angle = acos(dotProduct);
   float spacedArmorAngle = spacedArmorMaskColor.r * PI;
-
   float penetrationChance = -1.0;
   float splashChance = -1.0;
   bool threeCalibersRule = caliber > 3.0 * thickness;
@@ -85,7 +84,7 @@ void main() {
     } else if (delta < -randomRadius) {
       penetrationChance = 1.0;
     } else {
-      penetrationChance = 1.0 - (delta + randomRadius) / (2.0 * randomRadius);
+      penetrationChance = max(1.0 - (delta + randomRadius) / (2.0 * randomRadius), 0.0);
     }
 
     if (canSplash) {

@@ -106,7 +106,6 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
   });
 
   const armorGltf = useArmor(duel.protagonist.tank.id);
-
   const armorNodes = Object.values(armorGltf.nodes);
   const tankModelDefinition = modelDefinitions[duel.protagonist.tank.id];
   const turretModelDefinition =
