@@ -18,9 +18,10 @@ export default async function resolveClanFromCommand(
     if (accounts[0]) {
       return { region: accounts[0].region, id: accounts[0].clan_id };
     } else {
-      throw new UserError('Could not find clan', {
-        cause: `I couldn't find clan \`${clan}\`. Try selecting a username from the search result.`,
-      });
+      throw new UserError(
+        'Could not find clan',
+        `\`${clan}\` was not found. Try selecting a clan from the search result.`,
+      );
     }
   }
 }

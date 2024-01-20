@@ -10,7 +10,7 @@ import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
 import { filtersToDescription } from '../core/blitzkrieg/filtersToDescription';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
-import addFilterOptions from '../core/discord/addFilterOptions';
+import addPeriodicFilterOptions from '../core/discord/addPeriodicFilterOptions';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
@@ -29,7 +29,7 @@ import resolvePlayerFromCommand, {
 } from '../core/discord/resolvePlayerFromCommand';
 import { StatFilters, filterStats } from '../core/statistics/filterStats';
 import { getTierWeights } from '../core/statistics/getTierWeights';
-import { CommandRegistryRaw } from '../events/interactionCreate';
+import { CommandRegistryPromisable } from '../events/interactionCreate';
 
 async function render(
   { region, id }: ResolvedPlayer,
@@ -64,9 +64,9 @@ async function render(
   );
 }
 
-export const fullStatsCommand = new Promise<CommandRegistryRaw>(
+export const fullStatsCommand = new Promise<CommandRegistryPromisable>(
   async (resolve) => {
-    const command = await addFilterOptions(
+    const command = await addPeriodicFilterOptions(
       new SlashCommandBuilder()
         .setName('full-stats')
         .setDescription('Full in-game statistics'),

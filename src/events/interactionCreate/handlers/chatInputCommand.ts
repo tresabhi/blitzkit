@@ -19,7 +19,8 @@ import { psa } from '../../../core/discord/psa';
 export default async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
-  const registry = (await commands)[interaction.commandName];
+  const awaitedCommands = await commands;
+  const registry = awaitedCommands[interaction.commandName];
 
   await interaction.deferReply();
 

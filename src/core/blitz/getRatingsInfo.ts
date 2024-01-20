@@ -4,7 +4,11 @@ import { context } from '../blitzkrieg/context';
 import { patientFetch } from '../blitzkrieg/patientFetch';
 import regionToRegionSubdomain from './regionToRegionSubdomain';
 
+const ratingsInfoCache: Partial<Record<Region, RatingsInfo>> = {};
+
 export default async function getRatingsInfo(region: Region) {
+  if (ratingsInfoCache[region]) return ratingsInfoCache[region]!;
+
   const response = await patientFetch(
     context === 'website'
       ? `/api/${region}/ratings/current/info`
@@ -14,6 +18,9 @@ export default async function getRatingsInfo(region: Region) {
     undefined,
     { cache: 'no-store' },
   );
+  const data = (await response.json()) as RatingsInfo;
 
-  return (await response.json()) as Promise<RatingsInfo>;
+  ratingsInfoCache[region] = data;
+
+  return data;
 }

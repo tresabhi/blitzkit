@@ -31,6 +31,7 @@ import { searchClansCommand } from '../../commands/searchClans';
 import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { searchTanksCommand } from '../../commands/searchTanks';
 import { statsCommand } from '../../commands/stats';
+import { todayCommand } from '../../commands/today';
 import getClientId from '../../core/blitzkrieg/getClientId';
 import isDev from '../../core/blitzkrieg/isDev';
 import { secrets } from '../../core/blitzkrieg/secrets';
@@ -52,34 +53,39 @@ export type InteractionReturnable =
   | InteractionIterableReturnable
   | Promise<InteractionIterableReturnable>;
 
-export interface Registry {
-  inProduction: boolean;
-}
-
-export type CommandRegistryRaw = Registry & {
-  inPublic: boolean;
-  inPreview?: boolean;
-
+type CommandRegistryBase = {
   command:
     | SlashCommandBuilder
     | SlashCommandSubcommandsOnlyBuilder
     | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
+};
+type CommandRegistryDefinitionBase = {
+  inProduction: boolean;
+  inPublic: boolean;
+  inPreview?: boolean;
 
   autocomplete?: (interaction: AutocompleteInteraction<CacheType>) => void;
   button?: (interaction: ButtonInteraction<CacheType>) => InteractionReturnable;
-} & (
-    | {
-        handlesInteraction: true;
-        handler: (interaction: ChatInputCommandInteraction<CacheType>) => void;
-      }
-    | {
-        handlesInteraction?: false;
-        handler: (
-          interaction: ChatInputCommandInteraction<CacheType>,
-        ) => InteractionReturnable;
-      }
-  );
-export type CommandRegistry = CommandRegistryRaw | Promise<CommandRegistryRaw>;
+};
+type CommandRegistryDefinitionHandlesInteraction = {
+  handlesInteraction: true;
+  handler: (interaction: ChatInputCommandInteraction<CacheType>) => void;
+};
+type CommandRegistryDefinitionDoesHandleInteraction = {
+  handlesInteraction?: false;
+  handler: (
+    interaction: ChatInputCommandInteraction<CacheType>,
+  ) => InteractionReturnable;
+};
+export type CommandRegistryPromisable = CommandRegistryBase &
+  (CommandRegistryDefinitionBase &
+    (
+      | CommandRegistryDefinitionHandlesInteraction
+      | CommandRegistryDefinitionDoesHandleInteraction
+    ));
+export type CommandRegistry =
+  | CommandRegistryPromisable
+  | Promise<CommandRegistryPromisable>;
 
 const rest = new REST().setToken(secrets.DISCORD_TOKEN);
 
@@ -101,10 +107,11 @@ export const COMMANDS_RAW: CommandRegistry[] = [
   evolutionCommand,
   statsCommand,
   ratingsCommand,
+  todayCommand,
 ];
 
 export const commands = Promise.all(COMMANDS_RAW).then((rawCommands) =>
-  rawCommands.reduce<Record<string, CommandRegistryRaw>>(
+  rawCommands.reduce<Record<string, CommandRegistryPromisable>>(
     (accumulator, registry) => {
       if (isDev()) registry.command.setDefaultMemberPermissions(0);
 
@@ -123,7 +130,7 @@ export const publicCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
   [];
 
 commands.then((awaitedCommands) => {
-  Object.entries(awaitedCommands).forEach(([, registry]) => {
+  Object.values(awaitedCommands).forEach((registry) => {
     const json = registry.command.toJSON();
 
     if (registry.inPublic) {
