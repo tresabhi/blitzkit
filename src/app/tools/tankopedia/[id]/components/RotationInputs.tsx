@@ -56,7 +56,7 @@ export function RotationInputs({ duel: { protagonist } }: RotationInputsProps) {
             flex: 1,
           }}
         >
-          <TextField.Slot>Turret</TextField.Slot>
+          <TextField.Slot>Yaw</TextField.Slot>
           <TextField.Input
             defaultValue={Math.round(physical.yaw * (180 / Math.PI))}
             onBlur={() => {
@@ -92,7 +92,7 @@ export function RotationInputs({ duel: { protagonist } }: RotationInputsProps) {
             flex: 1,
           }}
         >
-          <TextField.Slot>Gun</TextField.Slot>
+          <TextField.Slot>Pitch</TextField.Slot>
           <TextField.Input
             defaultValue={-Math.round(physical.pitch * (180 / Math.PI))}
             onBlur={() => {

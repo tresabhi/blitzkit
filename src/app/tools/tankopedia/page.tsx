@@ -169,7 +169,7 @@ export default function Page() {
             </DropdownMenu.Root>
           </Flex>
 
-          <Card variant="ghost">
+          <Card>
             <Suspense fallback={<Text>Loading...</Text>}>
               <Options />
             </Suspense>
