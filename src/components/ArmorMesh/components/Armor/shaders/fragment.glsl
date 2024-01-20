@@ -44,9 +44,8 @@ void main() {
   bool coreArmorThreeCalibersRule = caliber > 3.0 * thickness;
   float spacedArmorNominalThickness = spacedArmorMaskColor.g * maxThickness;
   bool spacedArmorThreeCalibersRule = isUnderSpacedArmor && caliber > 3.0 * spacedArmorNominalThickness;
-  bool hasRicochetedSpacedArmor = !isExplosive && isUnderSpacedArmor && !spacedArmorThreeCalibersRule && spacedArmorAngle >= ricochetAngle;
-  bool isUnderAnything = isUnderExternalModule || isUnderSpacedArmor;
-  bool hasRicochetedCoreArmor = !isExplosive && !isUnderAnything && !coreArmorThreeCalibersRule && coreArmorangle >= ricochetAngle;
+  bool hasRicochetedSpacedArmor = isUnderSpacedArmor && !spacedArmorThreeCalibersRule && spacedArmorAngle >= ricochetAngle;
+  bool hasRicochetedCoreArmor = !hasRicochetedSpacedArmor && !isUnderExternalModule && !isExplosive && !coreArmorThreeCalibersRule && coreArmorangle >= ricochetAngle;
 
   if (hasRicochetedCoreArmor || hasRicochetedSpacedArmor) {
     penetrationChance = 0.0;
@@ -57,10 +56,9 @@ void main() {
 
     if (isUnderExternalModule) {
       // external modules don't care about angle, they'll reduce penetration by their thickness
-      float externalModuleThickness = externalModuleMaskColor.g * maxThickness;
+      float externalModuleThickness = externalModuleMaskColor.r * maxThickness;
       remainingPenetration -= externalModuleThickness;
     }
-    remainingPenetration = max(remainingPenetration, 0.0);
 
     if (isUnderSpacedArmor) {
       // spaced armor on the other hand, does care about angle
@@ -77,7 +75,6 @@ void main() {
       // there is a 50% penetration loss per meter for HE based shells
       remainingPenetration -= 0.5 * remainingPenetration * distanceFromSpacedArmor;
     }
-    remainingPenetration = max(remainingPenetration, 0.0);
 
     bool coreArmorTwoCalibersRule = caliber > 2.0 * thickness;
     float finalNormalization = coreArmorTwoCalibersRule ? (normalization * 1.4 * caliber) / (2.0 * thickness) : normalization;
@@ -98,7 +95,8 @@ void main() {
 
     if (canSplash) {
       // only allow splasing if the damage equation deals more than 0 damage
-      float finalDamage = 0.5 * damage * (1.0 - distanceFromSpacedArmor / explosionRadius) - 1.1 * finalCoreArmorThickness;
+      float nominalArmorThickness = finalCoreArmorThickness - remainingPenetration;
+      float finalDamage = 0.5 * damage * (1.0 - distanceFromSpacedArmor / explosionRadius) - 1.1 * nominalArmorThickness;
       splashChance = finalDamage > 0.0 ? 1.0 : 0.0;
     } else {
       splashChance = 0.0;

@@ -34,7 +34,6 @@ export function ArmorMeshSpacedArmorDepth(
         <mesh {...props} renderOrder={1}>
           <ThreeCustomShaderMaterial
             silent
-            depthWrite={false}
             baseMaterial={MeshStandardMaterial}
             fragmentShader={fragmentShader}
             vertexShader={vertexShader}

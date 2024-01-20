@@ -570,7 +570,10 @@ export async function buildDefinitions() {
                   normalization: shell.normalizationAngle,
                   ricochet: shell.ricochetAngle,
                   type: blitzShellKindToBLitzkrieg[shell.kind],
-                  explosionRadius: shell.explosionRadius,
+                  explosionRadius:
+                    shell.kind === 'HIGH_EXPLOSIVE'
+                      ? shell.explosionRadius ?? 0
+                      : undefined,
                   icon: shell.icon,
                   penetration:
                     penetrationRaw[0] === penetrationRaw[1]
