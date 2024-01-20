@@ -50,8 +50,6 @@ export function ArmorMesh({
     }
   });
 
-  console.log(resolveNearPenetration(shell.penetration));
-
   return (
     <>
       <mesh {...props} renderOrder={0}>
@@ -81,8 +79,7 @@ export function ArmorMesh({
             canSplash: { value: canSplash(shell.type) },
             thickness: { value: thickness },
             penetration: {
-              // value: resolveNearPenetration(shell.penetration),
-              value: 0,
+              value: resolveNearPenetration(shell.penetration),
             },
             caliber: { value: shell.caliber },
             ricochetAngle: { value: degToRad(shell.ricochet ?? 90) },
