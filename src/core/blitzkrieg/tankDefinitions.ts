@@ -59,7 +59,7 @@ interface GunDefinitionAutoReloader {
   interClip: number;
   count: number;
 }
-export interface ShellDefinition {
+export type ShellDefinition = {
   id: number;
   name: string;
   speed: number;
@@ -70,7 +70,8 @@ export interface ShellDefinition {
   type: ShellType;
   normalization?: number;
   ricochet?: number;
-}
+  explosionRadius?: number;
+};
 
 export const tankDefinitions = fetch(asset('definitions/tanks.json'), {
   cache: 'no-cache',

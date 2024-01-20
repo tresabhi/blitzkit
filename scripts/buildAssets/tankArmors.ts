@@ -28,6 +28,8 @@ export async function buildTankArmors() {
 
       await Promise.all(
         Object.entries(tanks.root).map(async ([tankKey, tank]) => {
+          if (tankKey.includes('tutorial_bot')) return;
+
           const id = toUniqueId(nation, tank.id);
 
           console.log(`Building armor ${id} @ ${nation}/${tankKey}`);

@@ -32,11 +32,13 @@ export async function buildTankIcons() {
       );
 
       await Promise.all(
-        Object.entries(tanks.root).map(async ([tankIndex, tank]) => {
+        Object.entries(tanks.root).map(async ([tankKey, tank]) => {
+          if (tankKey.includes('tutorial_bot')) return;
+
           const nationVehicleId = tank.id;
           const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
           const parameters = await readYAMLDVPL<TankParameters>(
-            `${DATA}/${POI.tankParameters}/${nation}/${tankIndex}.yaml.dvpl`,
+            `${DATA}/${POI.tankParameters}/${nation}/${tankKey}.yaml.dvpl`,
           );
           const small = `${DATA}/${parameters.resourcesPath.smallIconPath
             .replace(/~res:\//, '')

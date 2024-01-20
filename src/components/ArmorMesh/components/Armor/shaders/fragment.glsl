@@ -88,7 +88,7 @@ void main() {
     }
 
     if (canSplash) {
-      float reducedFinalThickness = finalThickness * (5.0 / 11.0);
+      float reducedFinalThickness = finalThickness * (1.0 / 10.0);
       float splashDelta = reducedFinalThickness - piercedPenetration;
 
       if (splashDelta > randomRadius) {

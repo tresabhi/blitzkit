@@ -43,6 +43,8 @@ export async function buildTankModels() {
 
       await Promise.all(
         Object.entries(tanks.root).map(async ([tankKey, tank]) => {
+          if (tankKey.includes('tutorial_bot')) return;
+
           const id = toUniqueId(nation, tank.id);
 
           console.log(`Building model ${id} @ ${nation}/${tankKey}`);

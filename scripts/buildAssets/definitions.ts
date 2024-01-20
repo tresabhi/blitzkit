@@ -45,6 +45,7 @@ type ShellDefinitionsList = Record<
     damage: { armor: number; devices: number };
     normalizationAngle: number;
     ricochetAngle: number;
+    explosionRadius?: number;
   }
 > & {
   icons: Record<string, string>;
@@ -285,6 +286,8 @@ export async function buildDefinitions() {
       );
 
       for (const tankKey in tankList.root) {
+        if (tankKey.includes('tutorial_bot')) return;
+
         const tank = tankList.root[tankKey];
         const tankPrice: TankDefinitionPrice =
           typeof tank.price === 'number'
@@ -567,6 +570,7 @@ export async function buildDefinitions() {
                   normalization: shell.normalizationAngle,
                   ricochet: shell.ricochetAngle,
                   type: blitzShellKindToBLitzkrieg[shell.kind],
+                  explosionRadius: shell.explosionRadius,
                   icon: shell.icon,
                   penetration:
                     penetrationRaw[0] === penetrationRaw[1]
