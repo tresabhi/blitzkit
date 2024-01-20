@@ -10,7 +10,11 @@ import { Pose, poseEvent } from '../../../../../core/blitzkrieg/pose';
 import { useTankopedia } from '../../../../../stores/tankopedia';
 import { Duel } from '../page';
 
-const DISTANCE = 15;
+const poseDistances: Record<Pose, number> = {
+  [Pose.HullDown]: 15,
+  [Pose.FaceHug]: 5,
+  [Pose.Default]: -1,
+};
 
 interface ControlsProps {
   duel: Duel;
@@ -23,25 +27,33 @@ export function Controls({ duel }: ControlsProps) {
     async () => await modelDefinitions,
     [],
   );
-  const tankModelDefinition = awaitedModelDefinitions[duel.protagonist.tank.id];
-  const turretModelDefinition =
-    tankModelDefinition.turrets[duel.protagonist.turret.id];
-  const gunModelDefinition =
-    turretModelDefinition.guns[duel.protagonist.gun.id];
-  const turretOrigin = new Vector3(
-    tankModelDefinition.turretOrigin[0],
-    tankModelDefinition.turretOrigin[1],
-    -tankModelDefinition.turretOrigin[2],
+  const protagonistModelDefinition =
+    awaitedModelDefinitions[duel.protagonist.tank.id];
+  const antagonistModelDefinition =
+    awaitedModelDefinitions[duel.antagonist.tank.id];
+  const protagonistTurretModelDefinition =
+    protagonistModelDefinition.turrets[duel.protagonist.turret.id];
+  const antagonistTurretModelDefinition =
+    antagonistModelDefinition.turrets[duel.antagonist.turret.id];
+  const protagonistGunModelDefinition =
+    protagonistTurretModelDefinition.guns[duel.protagonist.gun.id];
+  const protagonistTurretOrigin = new Vector3(
+    protagonistModelDefinition.turretOrigin[0],
+    protagonistModelDefinition.turretOrigin[1],
+    -protagonistModelDefinition.turretOrigin[2],
   );
-  const gunOrigin = new Vector3(
-    turretModelDefinition.gunOrigin[0],
-    turretModelDefinition.gunOrigin[1],
-    -turretModelDefinition.gunOrigin[2],
+  const protagonistGunOrigin = new Vector3(
+    protagonistTurretModelDefinition.gunOrigin[0],
+    protagonistTurretModelDefinition.gunOrigin[1],
+    -protagonistTurretModelDefinition.gunOrigin[2],
   );
+  const antagonistGunHeight =
+    antagonistModelDefinition.turretOrigin[1] +
+    antagonistTurretModelDefinition.gunOrigin[1];
 
   useEffect(() => {
-    camera.position.set(-5, 4, -20);
-    orbitControls.current?.target.set(0, 1.5, 0);
+    camera.position.set(-4, 4, -16);
+    orbitControls.current?.target.set(0, antagonistGunHeight / 2, 0);
 
     const unsubscribeTankopedia = useTankopedia.subscribe(
       (state) => state.model.visual.controlsEnabled,
@@ -51,27 +63,72 @@ export function Controls({ duel }: ControlsProps) {
     );
 
     function handlePoseEvent(event: Pose) {
-      const [pitch] = applyPitchYawLimits(
-        -Infinity,
-        0,
-        gunModelDefinition.pitch,
-        turretModelDefinition.yaw,
-      );
       switch (event) {
         case Pose.HullDown: {
+          const [pitch] = applyPitchYawLimits(
+            -Infinity,
+            0,
+            protagonistGunModelDefinition.pitch,
+            protagonistTurretModelDefinition.yaw,
+          );
+
           camera.position
             .set(0, 0, 0)
-            .add(turretOrigin)
-            .add(gunOrigin)
+            .add(protagonistTurretOrigin)
+            .add(protagonistGunOrigin)
             .add(
               new Vector3(
                 0,
-                DISTANCE * Math.sin(pitch),
-                DISTANCE * -Math.cos(pitch),
+                poseDistances[event] * Math.sin(pitch),
+                poseDistances[event] * -Math.cos(pitch),
               ),
             );
-          camera.lookAt(turretOrigin.clone().add(gunOrigin));
-          orbitControls.current?.target.set(0, 1.5, 0);
+          camera.lookAt(
+            protagonistTurretOrigin.clone().add(protagonistGunOrigin),
+          );
+          orbitControls.current?.target.set(0, antagonistGunHeight, 0);
+
+          break;
+        }
+
+        case Pose.FaceHug: {
+          const [pitch] = applyPitchYawLimits(
+            0,
+            0,
+            protagonistGunModelDefinition.pitch,
+            protagonistTurretModelDefinition.yaw,
+          );
+
+          camera.position
+            .set(0, 0, 0)
+            .add(protagonistTurretOrigin)
+            .add(protagonistGunOrigin)
+            .add(
+              new Vector3(
+                0,
+                poseDistances[event] * Math.sin(pitch),
+                poseDistances[event] * -Math.cos(pitch),
+              ),
+            );
+          orbitControls.current?.target
+            .set(0, 0, 0)
+            .add(protagonistTurretOrigin)
+            .add(protagonistGunOrigin)
+            .add(
+              new Vector3(
+                0,
+                0.5 * poseDistances[event] * Math.sin(pitch),
+                0.5 * poseDistances[event] * -Math.cos(pitch),
+              ),
+            );
+
+          break;
+        }
+
+        case Pose.Default: {
+          camera.position.set(-4, 4, -16);
+          orbitControls.current?.target.set(0, antagonistGunHeight / 2, 0);
+          break;
         }
       }
     }
@@ -82,7 +139,7 @@ export function Controls({ duel }: ControlsProps) {
       unsubscribeTankopedia();
       poseEvent.off(handlePoseEvent);
     };
-  }, [camera]);
+  }, [camera, duel.protagonist.tank.id, duel.antagonist.tank.id]);
 
   return (
     <OrbitControls

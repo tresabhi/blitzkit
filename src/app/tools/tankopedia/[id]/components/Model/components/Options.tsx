@@ -40,13 +40,16 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
         </DropdownMenu.Trigger>
 
         <DropdownMenu.Content>
-          <DropdownMenu.Item
-            onClick={() => {
-              console.log('called?');
-              poseEvent.emit(Pose.HullDown);
-            }}
-          >
+          <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.HullDown)}>
             Hull down
+          </DropdownMenu.Item>
+
+          <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.FaceHug)}>
+            Face hug
+          </DropdownMenu.Item>
+
+          <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.Default)}>
+            Default
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Root>

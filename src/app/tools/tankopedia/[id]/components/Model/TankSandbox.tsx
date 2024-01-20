@@ -71,7 +71,29 @@ export function TankSandbox({ duel }: TankSandboxProps) {
             draft.model.physical.pitch = pitch;
             draft.model.physical.yaw = yaw;
           });
+
+          break;
         }
+
+        case Pose.FaceHug: {
+          mutateTankopedia((draft) => {
+            const [pitch, yaw] = applyPitchYawLimits(
+              0,
+              0,
+              gunModelDefinition.pitch,
+              turretModelDefinition.yaw,
+            );
+
+            modelTransformEvent.emit({ pitch, yaw });
+            draft.model.physical.pitch = pitch;
+            draft.model.physical.yaw = yaw;
+          });
+
+          break;
+        }
+
+        case Pose.Default:
+          break;
       }
     }
 
@@ -134,7 +156,7 @@ export function TankSandbox({ duel }: TankSandboxProps) {
               <Canvas
                 shadows
                 ref={canvas}
-                camera={{ fov: 20 }}
+                camera={{ fov: 25 }}
                 onPointerDown={handlePointerDown}
               >
                 <Controls duel={duel} />
