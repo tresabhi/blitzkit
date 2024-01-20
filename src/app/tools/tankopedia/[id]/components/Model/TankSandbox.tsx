@@ -21,11 +21,11 @@ import { Options } from './components/Options';
 import { TankArmor } from './components/TankArmor';
 import { TankModel } from './components/TankModel';
 
-interface TankDisplayProps {
+interface TankSandboxProps {
   duel: Duel;
 }
 
-export function TankDisplay({ duel }: TankDisplayProps) {
+export function TankSandbox({ duel }: TankSandboxProps) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const awaitedModelDefinitions = use(modelDefinitions);
   const canvasWrapper = useRef<HTMLDivElement>(null);

@@ -8,7 +8,7 @@ import { tankDefinitions } from '../../../../core/blitzkrieg/tankDefinitions';
 import mutateTankopedia, { DuelMember } from '../../../../stores/tankopedia';
 import { AntagonistBar } from './components/AntagonistBar';
 import { Configure } from './components/Configure';
-import { TankDisplay } from './components/Model/TankDisplay';
+import { TankSandbox } from './components/Model/TankSandbox';
 import { Title } from './components/Title';
 
 export interface Duel {
@@ -81,7 +81,7 @@ export default function Page({ params }: { params: { id: string } }) {
       <Flex gap="8" direction="column">
         <Flex gap="4" direction="column">
           <Title duel={duel} />
-          <TankDisplay duel={duel} />
+          <TankSandbox duel={duel} />
           <AntagonistBar duel={duel} setDuel={setDuel} />
         </Flex>
 

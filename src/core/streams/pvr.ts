@@ -1,5 +1,4 @@
 import { clamp, isEqual, times } from 'lodash';
-import { Vector4Tuple } from 'three';
 import { BufferStream } from './buffer';
 
 export enum PvrFlags {
@@ -89,12 +88,13 @@ enum PvrChannelType {
 
 enum ResolvedBitRatePixelFormat {
   R4G4B4A4,
+  R5G6B5A0,
 }
 
 export class PvrStream extends BufferStream {
   pvr() {
     const header = this.header();
-    const metadata = this.metadata();
+    this.metadata();
 
     if (typeof header.pixelFormat === 'number') {
       switch (header.pixelFormat) {
@@ -114,7 +114,6 @@ export class PvrStream extends BufferStream {
       switch (resolvedPixelFormat) {
         case ResolvedBitRatePixelFormat.R4G4B4A4: {
           const data = Buffer.alloc(pixelCount * 4);
-          let lastPixel: Vector4Tuple;
 
           times(pixelCount, (index) => {
             const buffer = this.consume(2);
@@ -135,6 +134,31 @@ export class PvrStream extends BufferStream {
             width: header.width,
             height: header.height,
             channels: 4 as const,
+          };
+        }
+
+        case ResolvedBitRatePixelFormat.R5G6B5A0: {
+          const data = Buffer.alloc(pixelCount * 3);
+
+          times(pixelCount, (index) => {
+            const buffer = this.consume(2);
+            const bufferIndex = index * 4;
+            const r = ((buffer[1] & 0b11111000) >>> 3) / 31;
+            const g =
+              ((buffer[1] & 0b111) << 3) |
+              (((buffer[0] & 0b11100000) >>> 5) / 31);
+            const b = buffer[0] & 0b11111;
+
+            data[bufferIndex] = Math.round(clamp(r * 255, 0, 255));
+            data[bufferIndex + 1] = Math.round(clamp(g * 255, 0, 255));
+            data[bufferIndex + 2] = Math.round(clamp(b * 255, 0, 255));
+          });
+
+          return {
+            data,
+            width: header.width,
+            height: header.height,
+            channels: 3 as const,
           };
         }
 
@@ -188,7 +212,16 @@ export class PvrStream extends BufferStream {
         throw new TypeError(
           `Unhandled rgba bit rate ${pixelFormat.bitRates.join(', ')}`,
         );
-    } else throw new TypeError(`Unhandled pixel order ${pixelFormat.order}`);
+    } else if (pixelFormat.order === 'rgb\0') {
+      if (isEqual(pixelFormat.bitRates, [5, 6, 5, 0])) {
+        return ResolvedBitRatePixelFormat.R5G6B5A0;
+      } else
+        throw new TypeError(
+          `Unhandled rgb bit rate ${pixelFormat.bitRates.join(', ')}`,
+        );
+    } else {
+      throw new TypeError(`Unhandled pixel order ${pixelFormat.order}`);
+    }
   }
   metadata() {
     const fourCC = this.ascii(4);
