@@ -19,8 +19,6 @@ export async function buildTankArmors(production: boolean) {
 
   await Promise.all(
     nations.map(async (nation) => {
-      if (nation !== 'germany') return;
-
       const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
         `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
       );
@@ -47,5 +45,5 @@ export async function buildTankArmors(production: boolean) {
     }),
   );
 
-  await commitAssets('tank armor', changes, production);
+  commitAssets('tank armor', changes, production);
 }

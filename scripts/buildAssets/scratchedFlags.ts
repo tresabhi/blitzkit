@@ -27,5 +27,5 @@ export async function buildScratchedFlags(production: boolean) {
       }),
   );
 
-  await commitAssets('scratched flags', changes, production);
+  commitAssets('scratched flags', changes, production);
 }

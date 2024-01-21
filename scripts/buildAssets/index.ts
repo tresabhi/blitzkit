@@ -22,42 +22,42 @@ const production = argv.includes('--production');
 
 if (!targets && !allTargets) throw new Error('No target(s) specified');
 
-if (allTargets || targets?.includes('definitions')) {
-  await buildDefinitions(production);
-}
-
-if (allTargets || targets?.includes('tankIcons')) {
-  await buildTankIcons(production);
-}
-
-if (allTargets || targets?.includes('scratchedFlags')) {
-  await buildScratchedFlags(production);
-}
-
-if (allTargets || targets?.includes('circleFlags')) {
-  await circleFlags(production);
-}
-
 if (allTargets || targets?.includes('tankModels')) {
   await buildTankModels(production);
 }
 
+// no need to await the rest... I have enough ram
+if (allTargets || targets?.includes('tankArmor')) {
+  buildTankArmors(production);
+}
+
+if (allTargets || targets?.includes('definitions')) {
+  buildDefinitions(production);
+}
+
+if (allTargets || targets?.includes('tankIcons')) {
+  buildTankIcons(production);
+}
+
+if (allTargets || targets?.includes('scratchedFlags')) {
+  buildScratchedFlags(production);
+}
+
+if (allTargets || targets?.includes('circleFlags')) {
+  circleFlags(production);
+}
+
 if (allTargets || targets?.includes('shellIcons')) {
-  await buildShellIcons(production);
+  buildShellIcons(production);
 }
 
 if (allTargets || targets?.includes('moduleIcons')) {
-  await buildModuleIcons(production);
+  buildModuleIcons(production);
 }
-
-if (allTargets || targets?.includes('tankArmor')) {
-  await buildTankArmors(production);
-}
-
 if (allTargets || targets?.includes('equipmentIcons')) {
-  await equipmentIcons(production);
+  equipmentIcons(production);
 }
 
 if (allTargets || targets?.includes('consumableIcons')) {
-  await buildConsumableIcons(production);
+  buildConsumableIcons(production);
 }

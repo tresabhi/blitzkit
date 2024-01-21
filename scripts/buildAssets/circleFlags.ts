@@ -25,5 +25,5 @@ export async function circleFlags(production: boolean) {
       }),
   );
 
-  await commitAssets('circle flags', changes, production);
+  commitAssets('circle flags', changes, production);
 }

@@ -88,5 +88,5 @@ export async function equipmentIcons(production: boolean) {
     ),
   );
 
-  await commitAssets('equipment icons', changes, production);
+  commitAssets('equipment icons', changes, production);
 }

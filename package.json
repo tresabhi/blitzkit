@@ -9,7 +9,7 @@
     "build:website": "next build",
     "build:docs": "vitepress build docs",
     "build:ratingsleaderboard": "vite-node --script scripts/buildRatingsLeaderboard",
-    "build:assets": "vite-node --script scripts/buildAssets/index",
+    "build:assets": "vite-node --max_old_space_size=16384 --script scripts/buildAssets/index",
     "build:test": "vite-node --script scripts/buildTest",
     "build:ratingsplot": "vite-node --script scripts/buildRatingsPlot",
     "dev:bot": "yarn build:bot && yarn start:bot",

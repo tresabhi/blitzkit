@@ -28,5 +28,5 @@ export async function buildModuleIcons(production: boolean) {
       }),
   );
 
-  await commitAssets('module icons', changes, production);
+  commitAssets('module icons', changes, production);
 }
