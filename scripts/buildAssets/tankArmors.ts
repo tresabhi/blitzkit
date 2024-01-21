@@ -45,5 +45,5 @@ export async function buildTankArmors(production: boolean) {
     }),
   );
 
-  commitAssets('tank armor', changes, production);
+  await commitAssets('tank armor', changes, production);
 }

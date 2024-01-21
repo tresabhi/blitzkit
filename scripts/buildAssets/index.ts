@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
 import { argv } from 'process';
-import { circleFlags } from './circleFlags';
+import { buildCircleFlags } from './circleFlags';
 import { buildConsumableIcons } from './consumableIcons';
 import { buildDefinitions } from './definitions';
 import { equipmentIcons } from './equipmentIcons';
@@ -26,38 +26,37 @@ if (allTargets || targets?.includes('tankModels')) {
   await buildTankModels(production);
 }
 
-// no need to await the rest... I have enough ram
 if (allTargets || targets?.includes('tankArmor')) {
-  buildTankArmors(production);
+  await buildTankArmors(production);
 }
 
 if (allTargets || targets?.includes('definitions')) {
-  buildDefinitions(production);
+  await buildDefinitions(production);
 }
 
 if (allTargets || targets?.includes('tankIcons')) {
-  buildTankIcons(production);
+  await buildTankIcons(production);
 }
 
 if (allTargets || targets?.includes('scratchedFlags')) {
-  buildScratchedFlags(production);
+  await buildScratchedFlags(production);
 }
 
 if (allTargets || targets?.includes('circleFlags')) {
-  circleFlags(production);
+  await buildCircleFlags(production);
 }
 
 if (allTargets || targets?.includes('shellIcons')) {
-  buildShellIcons(production);
+  await buildShellIcons(production);
 }
 
 if (allTargets || targets?.includes('moduleIcons')) {
-  buildModuleIcons(production);
+  await buildModuleIcons(production);
 }
 if (allTargets || targets?.includes('equipmentIcons')) {
   equipmentIcons(production);
 }
 
 if (allTargets || targets?.includes('consumableIcons')) {
-  buildConsumableIcons(production);
+  await buildConsumableIcons(production);
 }

@@ -26,11 +26,6 @@ export async function buildTankModels(production: boolean) {
   for (const nationIndex in nations) {
     const changes: FileChange[] = [];
     const nation = nations[nationIndex];
-
-    if (['china', 'european', 'france', 'germany', 'japan'].includes(nation)) {
-      continue;
-    }
-
     const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
       `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
     );

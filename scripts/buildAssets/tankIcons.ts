@@ -65,5 +65,5 @@ export async function buildTankIcons(production: boolean) {
     }),
   );
 
-  commitAssets('tank icons', changes, production);
+  await commitAssets('tank icons', changes, production);
 }

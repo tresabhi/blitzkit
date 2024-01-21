@@ -45,5 +45,5 @@ export async function buildShellIcons(production: boolean) {
       }),
   );
 
-  commitAssets('shell icons', changes, production);
+  await commitAssets('shell icons', changes, production);
 }

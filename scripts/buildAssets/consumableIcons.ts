@@ -89,5 +89,5 @@ export async function buildConsumableIcons(production: boolean) {
     }),
   );
 
-  commitAssets('consumable icons', changes, production);
+  await commitAssets('consumable icons', changes, production);
 }

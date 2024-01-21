@@ -675,7 +675,7 @@ export async function buildDefinitions(production: boolean) {
     });
   });
 
-  commitAssets(
+  await commitAssets(
     'definitions',
     [
       {
