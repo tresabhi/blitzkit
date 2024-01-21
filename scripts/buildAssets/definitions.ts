@@ -334,7 +334,9 @@ export async function buildDefinitions(production: boolean) {
               ? strings[tank.shortUserString]
               : undefined) ??
             strings[tank.userString] ??
-            tankKey.replaceAll('_', ' '),
+            tankKey
+              .replaceAll('_', ' ')
+              .replace(/^[A-Z]+([a-z]+)?([0-9]+)? /, ''),
           nation,
           tree_type: (tank.sellPrice ? 'gold' in tank.sellPrice : false)
             ? 'collector'
@@ -352,6 +354,10 @@ export async function buildDefinitions(production: boolean) {
           },
           turrets: [],
         };
+
+        if (strings[tank.userString] !== tankDefinitions[tankId].name) {
+          tankDefinitions[tankId].name_full = strings[tank.userString];
+        }
 
         modelDefinitions[tankId] = {
           armor: hullArmor,

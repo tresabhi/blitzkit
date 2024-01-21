@@ -17,6 +17,7 @@ export interface TankDefinition {
   id: number;
   nation: string;
   name: string;
+  name_full?: string;
   tree_type: TreeTypeString;
   tier: Tier;
   type: TankType;
