@@ -21,6 +21,7 @@ import { debounce } from 'lodash';
 import { Dispatch, SetStateAction, use, useRef, useState } from 'react';
 import { ModuleButton } from '../../../../../../components/ModuleButton';
 import { SmallTankIcon } from '../../../../../../components/SmallTankIcon';
+import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import {
   SHELL_NAMES,
   tankNamesDiacritics,
@@ -230,8 +231,12 @@ export function AntagonistBar({
                           <ul>
                             {antagonist.gun.shells.map((shell) => (
                               <li key={shell.id}>
-                                {SHELL_NAMES[shell.type]}:
-                                <b>{shell.damage.armor} HP</b>
+                                {SHELL_NAMES[shell.type]}:{' '}
+                                <b>
+                                  {resolveNearPenetration(shell.penetration)}
+                                  mm
+                                </b>
+                                , {shell.damage.armor}HP
                               </li>
                             ))}
                           </ul>
