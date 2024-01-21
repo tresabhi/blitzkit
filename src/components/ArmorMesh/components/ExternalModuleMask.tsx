@@ -1,5 +1,5 @@
 import { MeshProps } from '@react-three/fiber';
-import { WebGLRenderTarget } from 'three';
+import { Color, WebGLRenderTarget } from 'three';
 
 export const externalModuleMaskRenderTarget = new WebGLRenderTarget();
 
@@ -29,9 +29,7 @@ export function ArmorMeshExternalModuleMask(
       {!props.exclude && (
         <mesh {...props} renderOrder={1}>
           <meshBasicMaterial
-            color={`rgb(255, ${
-              (props.thickness / props.maxThickness) * 255
-            }, 0)`}
+            color={new Color(1, props.thickness / props.maxThickness, 0)}
             depthWrite={false}
           />
         </mesh>

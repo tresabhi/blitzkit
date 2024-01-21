@@ -56,7 +56,7 @@ void main() {
 
     if (isUnderExternalModule) {
       // external modules don't care about angle, they'll reduce penetration by their thickness
-      float externalModuleThickness = externalModuleMaskColor.r * maxThickness;
+      float externalModuleThickness = externalModuleMaskColor.g * maxThickness;
       remainingPenetration -= externalModuleThickness;
     }
 
