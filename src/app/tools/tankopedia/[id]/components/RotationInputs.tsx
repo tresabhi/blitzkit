@@ -3,8 +3,9 @@ import { use, useEffect, useRef } from 'react';
 import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
 import { modelTransformEvent } from '../../../../../core/blitzkrieg/modelTransform';
-import mutateTankopedia, {
-  useTankopedia,
+import {
+  mutateTankopediaTemporary,
+  useTankopediaTemporary,
 } from '../../../../../stores/tankopedia';
 import { Duel } from '../page';
 
@@ -13,7 +14,7 @@ interface RotationInputsProps {
 }
 
 export function RotationInputs({ duel: { protagonist } }: RotationInputsProps) {
-  const physical = useTankopedia((state) => state.model.physical);
+  const physical = useTankopediaTemporary((state) => state.model.physical);
   const awaitedModelDefinitions = use(modelDefinitions);
   const turretYawInput = useRef<HTMLInputElement>(null);
   const gunPitchInput = useRef<HTMLInputElement>(null);
@@ -67,7 +68,7 @@ export function RotationInputs({ duel: { protagonist } }: RotationInputsProps) {
                 turretModelDefinition.yaw,
               );
               modelTransformEvent.emit({ pitch, yaw });
-              mutateTankopedia((state) => {
+              mutateTankopediaTemporary((state) => {
                 state.model.physical.pitch = pitch;
                 state.model.physical.yaw = yaw;
               });
@@ -103,7 +104,7 @@ export function RotationInputs({ duel: { protagonist } }: RotationInputsProps) {
                 turretModelDefinition.yaw,
               );
               modelTransformEvent.emit({ pitch, yaw });
-              mutateTankopedia((state) => {
+              mutateTankopediaTemporary((state) => {
                 state.model.physical.pitch = pitch;
                 state.model.physical.yaw = yaw;
               });

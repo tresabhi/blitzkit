@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 import { create } from 'zustand';
-import { subscribeWithSelector } from 'zustand/middleware';
+import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { TankType, TreeTypeString } from '../components/Tanks';
 import {
   GunDefinition,
@@ -20,7 +20,7 @@ export interface DuelMember {
   gun: GunDefinition;
   shell: ShellDefinition;
 }
-interface Tankopedia {
+interface TankopediaPersistent {
   sort: {
     by: TankopediaSortBy;
     direction: TankopediaSortDirection;
@@ -31,7 +31,11 @@ interface Tankopedia {
     treeTypes: TreeTypeString[];
     nations: string[];
     test: TankopediaTestTankDisplay;
+    page: number;
   };
+}
+
+interface TankopediaTemporary {
   model: {
     physical: {
       yaw: number;
@@ -47,19 +51,28 @@ interface Tankopedia {
   mode: TankopediaMode;
 }
 
-export const useTankopedia = create<Tankopedia>()(
-  subscribeWithSelector<Tankopedia>(() => ({
-    sort: {
-      by: 'tier',
-      direction: 'descending',
-    },
-    filters: {
-      tiers: [],
-      types: [],
-      treeTypes: [],
-      nations: [],
-      test: 'include',
-    },
+export const useTankopediaPersistent = create<TankopediaPersistent>()(
+  persist(
+    subscribeWithSelector<TankopediaPersistent>(() => ({
+      sort: {
+        by: 'tier',
+        direction: 'descending',
+      },
+      filters: {
+        tiers: [],
+        types: [],
+        treeTypes: [],
+        nations: [],
+        test: 'include',
+        page: 0,
+      },
+    })),
+    { name: 'tankopedia' },
+  ),
+);
+
+export const useTankopediaTemporary = create<TankopediaTemporary>()(
+  subscribeWithSelector<TankopediaTemporary>(() => ({
     model: {
       physical: {
         yaw: 0,
@@ -80,6 +93,14 @@ export const useTankopedia = create<Tankopedia>()(
   })),
 );
 
-export default function mutateTankopedia(recipe: (draft: Tankopedia) => void) {
-  useTankopedia.setState(produce(recipe));
+export default function mutateTankopediaPersistent(
+  recipe: (draft: TankopediaPersistent) => void,
+) {
+  useTankopediaPersistent.setState(produce(recipe));
+}
+
+export function mutateTankopediaTemporary(
+  recipe: (draft: TankopediaTemporary) => void,
+) {
+  useTankopediaTemporary.setState(produce(recipe));
 }

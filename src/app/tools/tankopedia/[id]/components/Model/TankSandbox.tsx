@@ -7,9 +7,10 @@ import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinit
 import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkrieg/pose';
 import { theme } from '../../../../../../stitches.config';
-import mutateTankopedia, {
+import {
   TankopediaMode,
-  useTankopedia,
+  mutateTankopediaTemporary,
+  useTankopediaTemporary,
 } from '../../../../../../stores/tankopedia';
 import { Loader } from '../../../../components/Loader';
 import { Duel } from '../../page';
@@ -30,7 +31,7 @@ export function TankSandbox({ duel }: TankSandboxProps) {
   const awaitedModelDefinitions = use(modelDefinitions);
   const canvasWrapper = useRef<HTMLDivElement>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const mode = useTankopedia((state) => state.mode);
+  const mode = useTankopediaTemporary((state) => state.mode);
   const tankModelDefinition = awaitedModelDefinitions[duel.protagonist.tank.id];
   const turretModelDefinition =
     tankModelDefinition.turrets[duel.protagonist.turret.id];
@@ -59,7 +60,7 @@ export function TankSandbox({ duel }: TankSandboxProps) {
     function handlePoseEvent(pose: Pose) {
       switch (pose) {
         case Pose.HullDown: {
-          mutateTankopedia((draft) => {
+          mutateTankopediaTemporary((draft) => {
             const [pitch, yaw] = applyPitchYawLimits(
               -Infinity,
               0,
@@ -76,7 +77,7 @@ export function TankSandbox({ duel }: TankSandboxProps) {
         }
 
         case Pose.FaceHug: {
-          mutateTankopedia((draft) => {
+          mutateTankopediaTemporary((draft) => {
             const [pitch, yaw] = applyPitchYawLimits(
               Infinity,
               0,
@@ -109,7 +110,7 @@ export function TankSandbox({ duel }: TankSandboxProps) {
   useEffect(() => {
     if (!duel.protagonist) return void 0;
 
-    mutateTankopedia((draft) => {
+    mutateTankopediaTemporary((draft) => {
       [draft.model.physical.pitch, draft.model.physical.yaw] =
         applyPitchYawLimits(
           draft.model.physical.pitch,
@@ -141,7 +142,7 @@ export function TankSandbox({ duel }: TankSandboxProps) {
             <Tabs.Root
               value={mode}
               onValueChange={(mode) => {
-                mutateTankopedia((draft) => {
+                mutateTankopediaTemporary((draft) => {
                   draft.mode = mode as TankopediaMode;
                 });
               }}

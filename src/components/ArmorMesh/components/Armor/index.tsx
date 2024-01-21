@@ -7,7 +7,7 @@ import { Duel } from '../../../../app/tools/tankopedia/[id]/page';
 import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
-import { useTankopedia } from '../../../../stores/tankopedia';
+import { useTankopediaTemporary } from '../../../../stores/tankopedia';
 import { externalModuleMaskRenderTarget } from '../ExternalModuleMask';
 import { spacedArmorDepthRenderTarget } from '../SpacedArmorDepth';
 import fragmentShader from './shaders/fragment.glsl';
@@ -27,7 +27,7 @@ export function ArmorMesh({
 }: ArmorMeshProps) {
   const camera = useThree((state) => state.camera);
   const { shell } = duel.antagonist;
-  const greenPenetration = useTankopedia(
+  const greenPenetration = useTankopediaTemporary(
     (state) => state.model.visual.greenPenetration,
   );
   const material = useRef<ShaderMaterial>(null);

@@ -7,7 +7,7 @@ import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
 import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
 import { Pose, poseEvent } from '../../../../../core/blitzkrieg/pose';
-import { useTankopedia } from '../../../../../stores/tankopedia';
+import { useTankopediaTemporary } from '../../../../../stores/tankopedia';
 import { Duel } from '../page';
 
 const poseDistances: Record<Pose, number> = {
@@ -55,7 +55,7 @@ export function Controls({ duel }: ControlsProps) {
     camera.position.set(-4, 4, -16);
     orbitControls.current?.target.set(0, antagonistGunHeight / 2, 0);
 
-    const unsubscribeTankopedia = useTankopedia.subscribe(
+    const unsubscribeTankopedia = useTankopediaTemporary.subscribe(
       (state) => state.model.visual.controlsEnabled,
       (enabled) => {
         if (orbitControls.current) orbitControls.current.enabled = enabled;
@@ -144,7 +144,7 @@ export function Controls({ duel }: ControlsProps) {
   return (
     <OrbitControls
       ref={orbitControls}
-      enabled={useTankopedia.getState().model.visual.controlsEnabled}
+      enabled={useTankopediaTemporary.getState().model.visual.controlsEnabled}
       rotateSpeed={0.25}
       enableDamping={false}
     />

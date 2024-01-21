@@ -15,7 +15,7 @@ import { nameToArmorId } from '../../../../../../../../../core/blitzkrieg/nameTo
 import { resolveArmor } from '../../../../../../../../../core/blitzkrieg/resolveThickness';
 import { useArmor } from '../../../../../../../../../hooks/useArmor';
 import { useModelDefinitions } from '../../../../../../../../../hooks/useModelDefinitions';
-import { useTankopedia } from '../../../../../../../../../stores/tankopedia';
+import { useTankopediaTemporary } from '../../../../../../../../../stores/tankopedia';
 import { Duel } from '../../../../../page';
 
 interface ArmorHighlightingProps {
@@ -27,7 +27,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
   const modelDefinitions = useModelDefinitions();
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
-  const initialTankopediaState = useTankopedia.getState();
+  const initialTankopediaState = useTankopediaTemporary.getState();
 
   useEffect(() => {
     const turretOrigin = new Vector3(
@@ -86,7 +86,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
       turretContainer.current?.rotation.copy(turretRotation);
     }
 
-    handleModelTransform(useTankopedia.getState().model.physical);
+    handleModelTransform(useTankopediaTemporary.getState().model.physical);
     modelTransformEvent.on(handleModelTransform);
 
     return () => {
@@ -95,7 +95,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
   });
 
   useEffect(() => {
-    const unsubscribe = useTankopedia.subscribe(
+    const unsubscribe = useTankopediaTemporary.subscribe(
       (state) => state.mode,
       (mode) => {
         if (wrapper.current) wrapper.current.visible = mode === 'armor';

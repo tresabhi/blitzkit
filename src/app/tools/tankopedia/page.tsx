@@ -26,10 +26,10 @@ import {
 } from '../../../core/blitzkrieg/tankDefinitions';
 import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
 import { theme } from '../../../stitches.config';
-import mutateTankopedia, {
+import mutateTankopediaPersistent, {
   TankopediaSortBy,
   TankopediaSortDirection,
-  useTankopedia,
+  useTankopediaPersistent,
 } from '../../../stores/tankopedia';
 import { Options } from './components/Options';
 import { PageTurner } from './components/PageTurner';
@@ -38,8 +38,8 @@ import * as styles from './page.css';
 const TANKS_PER_PAGE = 3 * 2 ** 3;
 
 export default function Page() {
-  const filters = useTankopedia((state) => state.filters);
-  const sort = useTankopedia((state) => state.sort);
+  const filters = useTankopediaPersistent((state) => state.filters);
+  const sort = useTankopediaPersistent((state) => state.sort);
   const awaitedTanks = use(tanksDefinitionsArray);
   const input = useRef<HTMLInputElement>(null);
   const searchableTanks = useMemo(
@@ -80,7 +80,7 @@ export default function Page() {
     [filters, sort],
   );
   const [searchedList, setSearchedList] = useState(searchableTanks);
-  const [page, setPage] = useState(0);
+  const page = useTankopediaPersistent((state) => state.filters.page);
 
   useEffect(() => {
     setSearchedList(searchableTanks);
@@ -88,12 +88,12 @@ export default function Page() {
   }, [searchableTanks]);
 
   useEffect(() => {
-    setPage(
-      Math.min(
+    mutateTankopediaPersistent((draft) => {
+      draft.filters.page = Math.min(
         Math.max(0, page),
         Math.ceil(searchedList.length / TANKS_PER_PAGE) - 1,
-      ),
-    );
+      );
+    });
   }, [searchedList]);
 
   return (
@@ -134,7 +134,7 @@ export default function Page() {
                 <DropdownMenu.RadioGroup
                   value={sort.by}
                   onValueChange={(value) =>
-                    mutateTankopedia((draft) => {
+                    mutateTankopediaPersistent((draft) => {
                       draft.sort.by = value as TankopediaSortBy;
                     })
                   }
@@ -153,7 +153,7 @@ export default function Page() {
                 <DropdownMenu.RadioGroup
                   value={sort.direction}
                   onValueChange={(value) =>
-                    mutateTankopedia((draft) => {
+                    mutateTankopediaPersistent((draft) => {
                       draft.sort.direction = value as TankopediaSortDirection;
                     })
                   }
@@ -176,12 +176,7 @@ export default function Page() {
           </Card>
         </Flex>
 
-        <PageTurner
-          page={page}
-          setPage={setPage}
-          tanksPerPage={TANKS_PER_PAGE}
-          searchedList={searchedList}
-        />
+        <PageTurner tanksPerPage={TANKS_PER_PAGE} searchedList={searchedList} />
 
         <Flex wrap="wrap" gap="3" justify="center">
           {searchedList
@@ -302,12 +297,7 @@ export default function Page() {
             .slice(page * TANKS_PER_PAGE, (page + 1) * TANKS_PER_PAGE)}
         </Flex>
 
-        <PageTurner
-          page={page}
-          setPage={setPage}
-          tanksPerPage={TANKS_PER_PAGE}
-          searchedList={searchedList}
-        />
+        <PageTurner tanksPerPage={TANKS_PER_PAGE} searchedList={searchedList} />
       </Suspense>
     </PageWrapper>
   );

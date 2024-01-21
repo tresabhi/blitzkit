@@ -16,15 +16,15 @@ import {
   TIERS,
   TIER_ROMAN_NUMERALS,
 } from '../../../../../core/blitzkrieg/tankDefinitions';
-import mutateTankopedia, {
+import mutateTankopediaPersistent, {
   TankopediaTestTankDisplay,
-  useTankopedia,
+  useTankopediaPersistent,
 } from '../../../../../stores/tankopedia';
 import * as styles from './index.css';
 
 export function Options() {
   const nations = use(NATIONS);
-  const filters = useTankopedia((state) => state.filters);
+  const filters = useTankopediaPersistent((state) => state.filters);
 
   return (
     <Flex justify="center" direction="column" gap="2">
@@ -32,13 +32,14 @@ export function Options() {
         <Button
           color="red"
           onClick={() =>
-            useTankopedia.setState({
+            useTankopediaPersistent.setState({
               filters: {
                 nations: [],
                 tiers: [],
                 treeTypes: [],
                 types: [],
                 test: 'include',
+                page: 0,
               },
             })
           }
@@ -56,7 +57,7 @@ export function Options() {
             <DropdownMenu.RadioGroup
               value={filters.test}
               onValueChange={(value) =>
-                mutateTankopedia((draft) => {
+                mutateTankopediaPersistent((draft) => {
                   draft.filters.test = value as TankopediaTestTankDisplay;
                 })
               }
@@ -88,7 +89,7 @@ export function Options() {
                   index === TREE_TYPES.length - 1 ? undefined : 0,
               }}
               onClick={() =>
-                mutateTankopedia((draft) => {
+                mutateTankopediaPersistent((draft) => {
                   if (draft.filters.treeTypes.includes(type)) {
                     draft.filters.treeTypes = draft.filters.treeTypes.filter(
                       (preexistingType) => preexistingType !== type,
@@ -123,7 +124,7 @@ export function Options() {
                   index === TANK_TYPES.length - 1 ? undefined : 0,
               }}
               onClick={() =>
-                mutateTankopedia((draft) => {
+                mutateTankopediaPersistent((draft) => {
                   if (draft.filters.types.includes(type)) {
                     draft.filters.types = draft.filters.types.filter(
                       (preexistingType) => preexistingType !== type,
@@ -167,7 +168,7 @@ export function Options() {
                     borderBottomRightRadius: 0,
                   }}
                   onClick={() =>
-                    mutateTankopedia((draft) => {
+                    mutateTankopediaPersistent((draft) => {
                       if (draft.filters.tiers.includes(tier)) {
                         draft.filters.tiers = draft.filters.tiers.filter(
                           (preexistingTier) => preexistingTier !== tier,
@@ -203,7 +204,7 @@ export function Options() {
                         : 0,
                   }}
                   onClick={() =>
-                    mutateTankopedia((draft) => {
+                    mutateTankopediaPersistent((draft) => {
                       if (draft.filters.tiers.includes(tier)) {
                         draft.filters.tiers = draft.filters.tiers.filter(
                           (preexistingTier) => preexistingTier !== tier,
@@ -243,7 +244,7 @@ export function Options() {
                     index === nations.length - 1 ? undefined : 0,
                 }}
                 onClick={() =>
-                  mutateTankopedia((draft) => {
+                  mutateTankopediaPersistent((draft) => {
                     if (draft.filters.nations.includes(nation)) {
                       draft.filters.nations = draft.filters.nations.filter(
                         (preexistingType) => preexistingType !== nation,
@@ -279,7 +280,7 @@ export function Options() {
                       : 0,
                 }}
                 onClick={() =>
-                  mutateTankopedia((draft) => {
+                  mutateTankopediaPersistent((draft) => {
                     if (draft.filters.nations.includes(nation)) {
                       draft.filters.nations = draft.filters.nations.filter(
                         (preexistingType) => preexistingType !== nation,
@@ -315,7 +316,7 @@ export function Options() {
                   index === TIERS.length - 1 ? undefined : 0,
               }}
               onClick={() =>
-                mutateTankopedia((draft) => {
+                mutateTankopediaPersistent((draft) => {
                   if (draft.filters.tiers.includes(tier)) {
                     draft.filters.tiers = draft.filters.tiers.filter(
                       (preexistingTier) => preexistingTier !== tier,
@@ -347,7 +348,7 @@ export function Options() {
                   index === nations.length - 1 ? undefined : 0,
               }}
               onClick={() =>
-                mutateTankopedia((draft) => {
+                mutateTankopediaPersistent((draft) => {
                   if (draft.filters.nations.includes(nation)) {
                     draft.filters.nations = draft.filters.nations.filter(
                       (preexistingType) => preexistingType !== nation,

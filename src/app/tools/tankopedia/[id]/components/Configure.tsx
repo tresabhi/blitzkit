@@ -3,8 +3,9 @@ import { produce } from 'immer';
 import { Dispatch, SetStateAction, use } from 'react';
 import { ModuleButton } from '../../../../../components/ModuleButton';
 import { equipmentDefinitions } from '../../../../../core/blitzkrieg/equipmentDefinitions';
-import mutateTankopedia, {
-  useTankopedia,
+import {
+  mutateTankopediaTemporary,
+  useTankopediaTemporary,
 } from '../../../../../stores/tankopedia';
 import { Duel } from '../page';
 
@@ -17,7 +18,9 @@ export function Configure({ duel, setDuel }: ConfigureProps) {
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const equipmentRows =
     awaitedEquipmentDefinitions.presets[duel.protagonist.tank.equipment];
-  const equipmentMatrix = useTankopedia((state) => state.equipmentMatrix);
+  const equipmentMatrix = useTankopediaTemporary(
+    (state) => state.equipmentMatrix,
+  );
 
   return (
     <Flex gap="4" direction="column">
@@ -97,7 +100,7 @@ export function Configure({ duel, setDuel }: ConfigureProps) {
                       rowChild
                       selected={equipmentMatrix[rowIndex][columnIndex] === 0}
                       onClick={() => {
-                        mutateTankopedia((draft) => {
+                        mutateTankopediaTemporary((draft) => {
                           draft.equipmentMatrix[rowIndex][columnIndex] = 0;
                         });
                       }}
@@ -109,7 +112,7 @@ export function Configure({ duel, setDuel }: ConfigureProps) {
                       rowChild
                       selected={equipmentMatrix[rowIndex][columnIndex] === 1}
                       onClick={() => {
-                        mutateTankopedia((draft) => {
+                        mutateTankopediaTemporary((draft) => {
                           draft.equipmentMatrix[rowIndex][columnIndex] = 1;
                         });
                       }}

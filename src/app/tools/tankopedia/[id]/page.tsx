@@ -5,7 +5,10 @@ import { produce } from 'immer';
 import { use, useEffect, useState } from 'react';
 import PageWrapper from '../../../../components/PageWrapper';
 import { tankDefinitions } from '../../../../core/blitzkrieg/tankDefinitions';
-import mutateTankopedia, { DuelMember } from '../../../../stores/tankopedia';
+import {
+  DuelMember,
+  mutateTankopediaTemporary,
+} from '../../../../stores/tankopedia';
 import { AntagonistBar } from './components/AntagonistBar';
 import { Configure } from './components/Configure';
 import { TankSandbox } from './components/Model/TankSandbox';
@@ -35,7 +38,7 @@ export default function Page({ params }: { params: { id: string } }) {
   });
 
   useEffect(() => {
-    mutateTankopedia((draft) => {
+    mutateTankopediaTemporary((draft) => {
       draft.model.physical.yaw = 0;
       draft.model.physical.pitch = 0;
       draft.mode = 'model';

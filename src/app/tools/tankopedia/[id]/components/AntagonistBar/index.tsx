@@ -25,7 +25,7 @@ import {
   SHELL_NAMES,
   tankNamesDiacritics,
 } from '../../../../../../core/blitzkrieg/tankDefinitions';
-import { useTankopedia } from '../../../../../../stores/tankopedia';
+import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
 import { Duel } from '../../page';
 import { SearchResults } from './components/SearchResults';
 
@@ -38,7 +38,7 @@ export function AntagonistBar({
   duel: { antagonist },
   setDuel,
 }: AntagonistBarProps) {
-  const mode = useTankopedia((state) => state.mode);
+  const mode = useTankopediaTemporary((state) => state.mode);
   const awaitedTankNamesDiacritics = use(tankNamesDiacritics);
   const [tab, setTab] = useState('search');
   const searchInput = useRef<HTMLInputElement>(null);

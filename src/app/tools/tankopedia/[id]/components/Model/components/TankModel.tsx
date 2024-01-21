@@ -22,8 +22,9 @@ import {
 import { resolveJsxTree } from '../../../../../../../core/blitzkrieg/resolveJsxTree';
 import { normalizeAnglePI } from '../../../../../../../core/math/normalizeAngle180';
 import { useModel } from '../../../../../../../hooks/useModel';
-import mutateTankopedia, {
-  useTankopedia,
+import {
+  mutateTankopediaTemporary,
+  useTankopediaTemporary,
 } from '../../../../../../../stores/tankopedia';
 import { Duel } from '../../../page';
 
@@ -37,7 +38,7 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
   >(undefined);
 
   const canvas = useThree((state) => state.gl.domElement);
-  const physical = useTankopedia((state) => state.model.physical);
+  const physical = useTankopediaTemporary((state) => state.model.physical);
   const hullContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
@@ -136,7 +137,7 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
           event.stopPropagation();
 
           if (isTrack) {
-            mutateTankopedia((draft) => {
+            mutateTankopediaTemporary((draft) => {
               draft.model.visual.controlsEnabled = false;
             });
 
@@ -158,7 +159,7 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
           material.normalMap?.offset.add(offset);
         }
         function handlePointerUp() {
-          mutateTankopedia((draft) => {
+          mutateTankopediaTemporary((draft) => {
             draft.model.visual.controlsEnabled = true;
           });
           window.removeEventListener('pointermove', handlePointerMove);
@@ -200,7 +201,7 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
               yaw = physical.yaw;
               pitch = physical.pitch;
 
-              mutateTankopedia((draft) => {
+              mutateTankopediaTemporary((draft) => {
                 draft.model.visual.controlsEnabled = false;
               });
               window.addEventListener('pointermove', handlePointerMove);
@@ -217,7 +218,7 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
             modelTransformEvent.emit({ pitch, yaw });
           }
           function handlePointerUp() {
-            mutateTankopedia((state) => {
+            mutateTankopediaTemporary((state) => {
               state.model.visual.controlsEnabled = true;
               state.model.physical.pitch = normalizeAnglePI(pitch);
               state.model.physical.yaw = normalizeAnglePI(yaw);
@@ -262,7 +263,7 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
             function handlePointerDown(event: ThreeEvent<PointerEvent>) {
               event.stopPropagation();
 
-              mutateTankopedia((draft) => {
+              mutateTankopediaTemporary((draft) => {
                 draft.model.visual.controlsEnabled = false;
               });
               pitch = physical.pitch;
@@ -280,7 +281,7 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
               modelTransformEvent.emit({ pitch, yaw });
             }
             function handlePointerUp() {
-              mutateTankopedia((state) => {
+              mutateTankopediaTemporary((state) => {
                 state.model.visual.controlsEnabled = true;
                 state.model.physical.pitch = normalizeAnglePI(pitch);
                 state.model.physical.yaw = normalizeAnglePI(yaw);

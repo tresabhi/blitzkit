@@ -2,20 +2,17 @@ import { CaretLeftIcon, CaretRightIcon } from '@radix-ui/react-icons';
 import { Button, Flex, TextField } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
 import { TankDefinition } from '../../../../core/blitzkrieg/tankDefinitions';
+import mutateTankopediaPersistent, {
+  useTankopediaPersistent,
+} from '../../../../stores/tankopedia';
 
 interface PageTurnerProps {
-  page: number;
-  setPage: (page: number) => void;
   searchedList: TankDefinition[];
   tanksPerPage: number;
 }
 
-export function PageTurner({
-  page,
-  setPage,
-  searchedList,
-  tanksPerPage,
-}: PageTurnerProps) {
+export function PageTurner({ searchedList, tanksPerPage }: PageTurnerProps) {
+  const page = useTankopediaPersistent((state) => state.filters.page);
   const pageInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -27,7 +24,11 @@ export function PageTurner({
       <Button
         variant="soft"
         disabled={page === 0}
-        onClick={() => setPage(Math.max(0, page - 1))}
+        onClick={() => {
+          mutateTankopediaPersistent((draft) => {
+            draft.filters.page = Math.max(0, page - 1);
+          });
+        }}
       >
         <CaretLeftIcon />
       </Button>
@@ -41,15 +42,15 @@ export function PageTurner({
           max={Math.floor(searchedList.length / tanksPerPage) + 1}
           style={{ width: 64, textAlign: 'center' }}
           onBlur={(event) => {
-            setPage(
-              Math.max(
+            mutateTankopediaPersistent((draft) => {
+              draft.filters.page = Math.max(
                 0,
                 Math.min(
                   Math.floor(searchedList.length / tanksPerPage),
                   event.target.valueAsNumber - 1,
                 ),
-              ),
-            );
+              );
+            });
           }}
           onKeyDown={(event) => {
             if (event.key === 'Enter') {
@@ -64,11 +65,14 @@ export function PageTurner({
       <Button
         variant="soft"
         disabled={Math.floor(searchedList.length / tanksPerPage) === page}
-        onClick={() =>
-          setPage(
-            Math.min(Math.floor(searchedList.length / tanksPerPage), page + 1),
-          )
-        }
+        onClick={() => {
+          mutateTankopediaPersistent((draft) => {
+            draft.filters.page = Math.min(
+              Math.floor(searchedList.length / tanksPerPage),
+              page + 1,
+            );
+          });
+        }}
       >
         <CaretRightIcon />
       </Button>

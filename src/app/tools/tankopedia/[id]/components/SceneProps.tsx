@@ -1,9 +1,11 @@
 import { Color } from 'three';
 import InfiniteGridHelper from '../../../../../components/InfiniteGridHelper';
-import { useTankopedia } from '../../../../../stores/tankopedia';
+import { useTankopediaTemporary } from '../../../../../stores/tankopedia';
 
 export function SceneProps() {
-  const showGrid = useTankopedia((state) => state.model.visual.showGrid);
+  const showGrid = useTankopediaTemporary(
+    (state) => state.model.visual.showGrid,
+  );
 
   if (!showGrid) return null;
 
