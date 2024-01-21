@@ -4,6 +4,8 @@ export const DATA =
 export const POI = {
   vehicleDefinitions: 'XML/item_defs/vehicles',
   strings: 'Strings',
+  cachedStrings:
+    'C:/Users/coola/Documents/DAVAProject/cache/localizations/en.yaml',
   tankParameters: '3d/Tanks/Parameters',
   smallIcons: 'Gfx/UI/BattleScreenHUD/SmallTankIcons',
   bigIcons: 'Gfx/UI/BigTankIcons',

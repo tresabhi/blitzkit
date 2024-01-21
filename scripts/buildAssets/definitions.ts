@@ -3,6 +3,7 @@ import { parse } from 'path';
 import { Vector3Tuple } from 'three';
 import { TankType } from '../../src/components/Tanks';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
+import { readYAML } from '../../src/core/blitz/readYAML';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
@@ -231,8 +232,6 @@ const blitzShellKindToBLitzkrieg: Record<ShellKind, ShellType> = {
   HIGH_EXPLOSIVE: 'he',
   HOLLOW_CHARGE: 'hc',
 };
-const LANGUAGE = 'en';
-
 const missingStrings: Record<string, string> = {
   '#artefacts:tungstentip/name': 'Tungsten Shells',
 };
@@ -252,8 +251,9 @@ export async function buildDefinitions(production: boolean) {
   );
   const tankStringIdMap: Record<string, number> = {};
   const strings = await readYAMLDVPL<Strings>(
-    `${DATA}/${POI.strings}/${LANGUAGE}.yaml.dvpl`,
+    `${DATA}/${POI.strings}/en.yaml.dvpl`,
   );
+  const stringsCache = await readYAML<Strings>(POI.cachedStrings);
   const optionalDevices = await readXMLDVPL<{ root: OptionalDevices }>(
     `${DATA}/${POI.optionalDevices}.dvpl`,
   );
@@ -331,12 +331,12 @@ export async function buildDefinitions(production: boolean) {
           equipment,
           name:
             (tank.shortUserString
-              ? strings[tank.shortUserString]
+              ? strings[tank.shortUserString] ??
+                stringsCache[tank.shortUserString]
               : undefined) ??
             strings[tank.userString] ??
-            tankKey
-              .replaceAll('_', ' ')
-              .replace(/^[A-Z]+([a-z]+)?([0-9]+)? /, ''),
+            stringsCache[tank.userString],
+          name_full: strings[tank.userString] ?? stringsCache[tank.userString],
           nation,
           tree_type: (tank.sellPrice ? 'gold' in tank.sellPrice : false)
             ? 'collector'
@@ -355,8 +355,10 @@ export async function buildDefinitions(production: boolean) {
           turrets: [],
         };
 
-        if (strings[tank.userString] !== tankDefinitions[tankId].name) {
-          tankDefinitions[tankId].name_full = strings[tank.userString];
+        if (
+          tankDefinitions[tankId].name === tankDefinitions[tankId].name_full
+        ) {
+          delete tankDefinitions[tankId].name_full;
         }
 
         modelDefinitions[tankId] = {
