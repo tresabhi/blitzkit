@@ -165,6 +165,11 @@ export async function extractModel(
 
       components.forEach((component) => {
         switch (component['comp.typename']) {
+          case 'LodComponent':
+            // found and used later by transform component
+            // TODO: lod component always shows up before transform component; cache it before parsing transform
+            break;
+
           case 'TransformComponent': {
             const translation = new Vector3();
             const rotation = new Quaternion();
@@ -323,12 +328,10 @@ export async function extractModel(
           }
 
           default: {
-            const message = `Unhandled component type: ${component['comp.typename']}`;
-
             if (ERROR_ON_UNKNOWN_COMPONENT) {
-              throw new Error(message);
-            } else {
-              console.warn(`${message}; skipping...`);
+              throw new Error(
+                `Unhandled component type: ${component['comp.typename']}`,
+              );
             }
           }
         }
