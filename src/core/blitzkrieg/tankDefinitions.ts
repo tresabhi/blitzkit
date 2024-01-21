@@ -86,21 +86,15 @@ export const tanksDefinitionsArray = new Promise<TankDefinition[]>(
     resolve((await entries).map((entry) => entry));
   },
 );
-export const tankNames = new Promise<string[]>(async (resolve) => {
-  resolve((await entries).map(({ name }) => name));
-});
-export const tankNamesDiacritics = tankNames.then((tankNames) =>
+export const tankNames = tanksDefinitionsArray.then((tanks) =>
   Promise.all(
-    tankNames.map(async (tankName, index) => {
+    tanks.map(async (tank, index) => {
       const { id } = (await tanksDefinitionsArray)[index];
-      const name = tankName ?? `Unknown Tank ${id}`;
-      const diacriticless = deburr(name);
 
       return {
-        original: name,
-        diacriticless,
-        combined: `${name}${diacriticless}`,
         id,
+        original: tank.name,
+        combined: `${tank.name}${deburr(tank.name)}${tank.name_full ? `${tank.name_full}${deburr(tank.name_full)}` : ''}`,
       };
     }),
   ),

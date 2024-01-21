@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { go } from 'fuzzysort';
 import markdownEscape from 'markdown-escape';
-import { tankNamesDiacritics } from '../core/blitzkrieg/tankDefinitions';
+import { tankNames } from '../core/blitzkrieg/tankDefinitions';
 import addTankChoices from '../core/discord/addTankChoices';
 import embedInfo from '../core/discord/embedInfo';
 import { CommandRegistry } from '../events/interactionCreate';
@@ -25,7 +25,7 @@ export const searchTanksCommand: CommandRegistry = {
   async handler(interaction) {
     const tank = interaction.options.getString('tank')!;
     const limit = interaction.options.getInteger('limit') ?? 25;
-    const results = go(tank, await tankNamesDiacritics, {
+    const results = go(tank, await tankNames, {
       limit,
       keys: ['combined'],
     }).map((result) => result.obj.original);

@@ -120,7 +120,11 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
                 } else {
                   setSearchedList(
                     go(event.target.value, searchableTanks, {
-                      keys: ['name', 'id'] satisfies (keyof TankDefinition)[],
+                      keys: [
+                        'name',
+                        'name_full',
+                        'id',
+                      ] satisfies (keyof TankDefinition)[],
                     }).map(({ obj }) => obj),
                   );
                 }
