@@ -2,12 +2,11 @@ import { readdir } from 'fs/promises';
 import sharp from 'sharp';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
-import commitMultipleFiles, {
-  FileChange,
-} from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
+import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
 import { DATA, POI } from './constants';
 
-export async function buildShellIcons() {
+export async function buildShellIcons(production: boolean) {
   console.log('Building shell icons...');
 
   const image = sharp(
@@ -46,13 +45,5 @@ export async function buildShellIcons() {
       }),
   );
 
-  console.log('Committing shell icons...');
-  commitMultipleFiles(
-    'tresabhi',
-    'blitzkrieg-assets',
-    'main',
-    'shell icons',
-    changes,
-    true,
-  );
+  await commitAssets('shell icons', changes, production);
 }

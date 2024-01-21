@@ -1,11 +1,10 @@
 import { readdir } from 'fs/promises';
 import { readBase64DVPL } from '../../src/core/blitz/readBase64DVPL';
-import commitMultipleFiles, {
-  FileChange,
-} from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
+import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
 import { DATA, POI } from './constants';
 
-export async function buildModuleIcons() {
+export async function buildModuleIcons(production: boolean) {
   console.log('Building module icons...');
 
   const changes = await Promise.all(
@@ -29,13 +28,5 @@ export async function buildModuleIcons() {
       }),
   );
 
-  console.log('Committing module icons...');
-  commitMultipleFiles(
-    'tresabhi',
-    'blitzkrieg-assets',
-    'main',
-    'module icons',
-    changes,
-    true,
-  );
+  await commitAssets('module icons', changes, production);
 }

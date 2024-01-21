@@ -3,9 +3,8 @@ import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
-import commitMultipleFiles, {
-  FileChange,
-} from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
+import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
 import { DATA, POI } from './constants';
 import { OptionalDevices } from './definitions';
 
@@ -18,7 +17,7 @@ interface Mappings {
   }[];
 }
 
-export async function equipmentIcons() {
+export async function equipmentIcons(production: boolean) {
   console.log('Building equipment icons...');
 
   const changes: FileChange[] = [];
@@ -89,13 +88,5 @@ export async function equipmentIcons() {
     ),
   );
 
-  console.log('Committing equipment icons...');
-  commitMultipleFiles(
-    'tresabhi',
-    'blitzkrieg-assets',
-    'main',
-    'equipment icons',
-    changes,
-    true,
-  );
+  await commitAssets('equipment icons', changes, production);
 }

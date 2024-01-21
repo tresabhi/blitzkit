@@ -3,13 +3,12 @@ import { readdir } from 'fs/promises';
 import { extractArmor } from '../../src/core/blitz/extractArmor';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
-import commitMultipleFiles, {
-  FileChange,
-} from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
+import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
 import { DATA, POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 
-export async function buildTankArmors() {
+export async function buildTankArmors(production: boolean) {
   console.log('Building tank armors...');
 
   const changes: FileChange[] = [];
@@ -48,12 +47,5 @@ export async function buildTankArmors() {
     }),
   );
 
-  await commitMultipleFiles(
-    'tresabhi',
-    'blitzkrieg-assets',
-    'main',
-    'tank armor',
-    changes,
-    true,
-  );
+  await commitAssets('tank armor', changes, production);
 }

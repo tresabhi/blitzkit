@@ -5,7 +5,7 @@ import { TankType } from '../../src/components/Tanks';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
-import commitMultipleFiles from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import { ConsumableDefinitions } from '../../src/core/blitzkrieg/consumablesDefinitions';
 import {
   EquipmentDefinitions,
@@ -237,7 +237,7 @@ const missingStrings: Record<string, string> = {
   '#artefacts:tungstentip/name': 'Tungsten Shells',
 };
 
-export async function buildDefinitions() {
+export async function buildDefinitions(production: boolean) {
   console.log('Building tank definitions...');
 
   const tankDefinitions: TankDefinitions = {};
@@ -286,8 +286,6 @@ export async function buildDefinitions() {
       );
 
       for (const tankKey in tankList.root) {
-        if (tankKey.includes('tutorial_bot')) return;
-
         const tank = tankList.root[tankKey];
         const tankPrice: TankDefinitionPrice =
           typeof tank.price === 'number'
@@ -677,11 +675,7 @@ export async function buildDefinitions() {
     });
   });
 
-  console.log('Committing definitions...');
-  await commitMultipleFiles(
-    'tresabhi',
-    'blitzkrieg-assets',
-    'main',
+  await commitAssets(
     'definitions',
     [
       {
@@ -705,6 +699,6 @@ export async function buildDefinitions() {
         path: 'definitions/consumables.json',
       },
     ],
-    true,
+    production,
   );
 }

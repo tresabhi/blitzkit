@@ -18,45 +18,46 @@ const targets = argv
   .find((argument) => argument.startsWith('--target'))
   ?.split('=')[1]
   .split(',');
+const production = argv.includes('--production');
 
 if (!targets && !allTargets) throw new Error('No target(s) specified');
 
 if (allTargets || targets?.includes('definitions')) {
-  await buildDefinitions();
+  await buildDefinitions(production);
 }
 
 if (allTargets || targets?.includes('tankIcons')) {
-  await buildTankIcons();
+  await buildTankIcons(production);
 }
 
 if (allTargets || targets?.includes('scratchedFlags')) {
-  await buildScratchedFlags();
+  await buildScratchedFlags(production);
 }
 
 if (allTargets || targets?.includes('circleFlags')) {
-  await circleFlags();
+  await circleFlags(production);
 }
 
 if (allTargets || targets?.includes('tankModels')) {
-  await buildTankModels();
+  await buildTankModels(production);
 }
 
 if (allTargets || targets?.includes('shellIcons')) {
-  await buildShellIcons();
+  await buildShellIcons(production);
 }
 
 if (allTargets || targets?.includes('moduleIcons')) {
-  await buildModuleIcons();
+  await buildModuleIcons(production);
 }
 
 if (allTargets || targets?.includes('tankArmor')) {
-  await buildTankArmors();
+  await buildTankArmors(production);
 }
 
 if (allTargets || targets?.includes('equipmentIcons')) {
-  await equipmentIcons();
+  await equipmentIcons(production);
 }
 
 if (allTargets || targets?.includes('consumableIcons')) {
-  await buildConsumableIcons();
+  await buildConsumableIcons(production);
 }

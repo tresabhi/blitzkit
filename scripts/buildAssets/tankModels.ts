@@ -5,9 +5,8 @@ import { extractModel } from '../../src/core/blitz/extractModel';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
-import commitMultipleFiles, {
-  FileChange,
-} from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
+import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
 import { DATA, POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 import { TankParameters } from './tankIcons';
@@ -16,7 +15,7 @@ interface VehicleCustomization {
   armorColor: string;
 }
 
-export async function buildTankModels() {
+export async function buildTankModels(production: boolean) {
   console.log('Building tank models...');
 
   const changes: FileChange[] = [];
@@ -70,12 +69,5 @@ export async function buildTankModels() {
     }),
   );
 
-  await commitMultipleFiles(
-    'tresabhi',
-    'blitzkrieg-assets',
-    'main',
-    'tank models',
-    changes,
-    true,
-  );
+  await commitAssets('tank models', changes, production);
 }

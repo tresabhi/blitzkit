@@ -3,9 +3,8 @@ import { NATION_IDS } from '../../src/constants/nations';
 import { readBase64DVPL } from '../../src/core/blitz/readBase64DVPL';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
-import commitMultipleFiles, {
-  FileChange,
-} from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
+import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
 import { DATA, POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 
@@ -17,7 +16,7 @@ export interface TankParameters {
   };
 }
 
-export async function buildTankIcons() {
+export async function buildTankIcons(production: boolean) {
   console.log('Building tank icons...');
 
   const changes: FileChange[] = [];
@@ -66,13 +65,5 @@ export async function buildTankIcons() {
     }),
   );
 
-  console.log('Committing tank icons...');
-  await commitMultipleFiles(
-    'tresabhi',
-    'blitzkrieg-assets',
-    'main',
-    'tank icons',
-    changes,
-    true,
-  );
+  await commitAssets('tank icons', changes, production);
 }
