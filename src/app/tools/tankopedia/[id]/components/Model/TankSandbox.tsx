@@ -78,7 +78,7 @@ export function TankSandbox({ duel }: TankSandboxProps) {
         case Pose.FaceHug: {
           mutateTankopedia((draft) => {
             const [pitch, yaw] = applyPitchYawLimits(
-              0,
+              Infinity,
               0,
               gunModelDefinition.pitch,
               turretModelDefinition.yaw,
