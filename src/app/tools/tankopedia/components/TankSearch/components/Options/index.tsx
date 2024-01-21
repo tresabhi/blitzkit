@@ -3,23 +3,23 @@
 import { CaretDownIcon } from '@radix-ui/react-icons';
 import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
 import { use } from 'react';
-import { Flag } from '../../../../../components/Flag';
+import { Flag } from '../../../../../../../components/Flag';
 import {
   TANK_TYPES,
   TREE_TYPES,
   TREE_TYPE_ICONS,
   TREE_TYPE_IMAGES,
   TreeTypeEnum,
-} from '../../../../../components/Tanks';
+} from '../../../../../../../components/Tanks';
 import {
   NATIONS,
   TIERS,
   TIER_ROMAN_NUMERALS,
-} from '../../../../../core/blitzkrieg/tankDefinitions';
+} from '../../../../../../../core/blitzkrieg/tankDefinitions';
 import mutateTankopediaPersistent, {
   TankopediaTestTankDisplay,
   useTankopediaPersistent,
-} from '../../../../../stores/tankopedia';
+} from '../../../../../../../stores/tankopedia';
 import * as styles from './index.css';
 
 export function Options() {

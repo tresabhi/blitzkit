@@ -1,9 +1,4 @@
-import {
-  CaretRightIcon,
-  Cross1Icon,
-  MagnifyingGlassIcon,
-  ShuffleIcon,
-} from '@radix-ui/react-icons';
+import { CaretRightIcon, Cross1Icon, ShuffleIcon } from '@radix-ui/react-icons';
 import {
   Button,
   Card,
@@ -12,23 +7,17 @@ import {
   Heading,
   Tabs,
   Text,
-  TextField,
   Tooltip,
 } from '@radix-ui/themes';
-import { go } from 'fuzzysort';
 import { produce } from 'immer';
-import { debounce } from 'lodash';
-import { Dispatch, SetStateAction, use, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { ModuleButton } from '../../../../../../components/ModuleButton';
 import { SmallTankIcon } from '../../../../../../components/SmallTankIcon';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
-import {
-  SHELL_NAMES,
-  tankNamesDiacritics,
-} from '../../../../../../core/blitzkrieg/tankDefinitions';
+import { SHELL_NAMES } from '../../../../../../core/blitzkrieg/tankDefinitions';
 import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
+import { TankSearch } from '../../../components/TankSearch';
 import { Duel } from '../../page';
-import { SearchResults } from './components/SearchResults';
 
 interface AntagonistBarProps {
   duel: Duel;
@@ -40,13 +29,9 @@ export function AntagonistBar({
   setDuel,
 }: AntagonistBarProps) {
   const mode = useTankopediaTemporary((state) => state.mode);
-  const awaitedTankNamesDiacritics = use(tankNamesDiacritics);
   const [tab, setTab] = useState('search');
-  const searchInput = useRef<HTMLInputElement>(null);
-  const [searchResults, setSearchResults] = useState<number[]>([]);
-  const chunkSize = window.innerWidth > 512 ? 8 : Infinity;
-  const firstChunk = searchResults.slice(0, chunkSize);
-  const secondChunk = searchResults.slice(chunkSize);
+  const [antagonistSelectorOpen, setAntagonistSelectorVisible] =
+    useState(false);
 
   if (mode !== 'armor') return null;
 
@@ -79,7 +64,10 @@ export function AntagonistBar({
         <Flex align="center" gap="4">
           <Text>Versus</Text>
 
-          <Dialog.Root>
+          <Dialog.Root
+            open={antagonistSelectorOpen}
+            onOpenChange={setAntagonistSelectorVisible}
+          >
             <Dialog.Trigger>
               <Button variant="ghost">
                 <Flex gap="2" align="center">
@@ -118,37 +106,22 @@ export function AntagonistBar({
                       style={{ flex: 1 }}
                       justify="center"
                     >
-                      <TextField.Root>
-                        <TextField.Slot>
-                          <MagnifyingGlassIcon />
-                        </TextField.Slot>
-                        <TextField.Input
-                          ref={searchInput}
-                          placeholder="Search tank..."
-                          onChange={debounce(() => {
-                            setSearchResults(
-                              go(
-                                searchInput.current!.value,
-                                awaitedTankNamesDiacritics,
-                                { key: 'combined', limit: 16 },
-                              ).map((item) => item.obj.id),
-                            );
-                          }, 500)}
-                        />
-                      </TextField.Root>
-
-                      <div
-                        style={{
-                          display: 'flex',
-                          width: '100%',
-                          justifyContent: 'space-around',
+                      <TankSearch
+                        compact
+                        onSelect={(tank) => {
+                          setDuel(
+                            produce<Duel>((draft) => {
+                              draft.antagonist.tank = tank;
+                              draft.antagonist.turret = tank.turrets.at(-1)!;
+                              draft.antagonist.gun =
+                                draft.antagonist.turret.guns.at(-1)!;
+                              draft.antagonist.shell =
+                                draft.antagonist.gun.shells[0];
+                            }),
+                          );
+                          setAntagonistSelectorVisible(false);
                         }}
-                      >
-                        <SearchResults ids={firstChunk} setDuel={setDuel} />
-                        {secondChunk.length > 0 && (
-                          <SearchResults ids={secondChunk} setDuel={setDuel} />
-                        )}
-                      </div>
+                      />
                     </Flex>
                   </Tabs.Content>
 
