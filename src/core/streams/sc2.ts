@@ -271,6 +271,17 @@ export type Component =
       animation: bigint;
       animationTimeScale: number;
       repeatsCount: number;
+    }
+  | {
+      'comp.typename': 'SkeletonJointBindingComponent';
+      count: number;
+      map: Record<
+        string, // 0000, 0001, ...
+        {
+          Uid: string;
+          jointUid: string;
+        }
+      >;
     };
 
 interface SceneComponents {

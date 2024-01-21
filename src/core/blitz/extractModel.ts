@@ -14,6 +14,7 @@ import { ScgStream, vertexAttributeVectorSizes } from '../streams/scg';
 import { VertexAttribute } from '../streams/scpg';
 import { readDVPLFile } from './readDVPLFile';
 
+const ERROR_ON_UNKNOWN_COMPONENT = false;
 const MAX_FLOAT32 = 2 ** 127 * (2 - 2 ** -23);
 
 export const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> =
@@ -164,21 +165,6 @@ export async function extractModel(
 
       components.forEach((component) => {
         switch (component['comp.typename']) {
-          case 'ScenarioComponent':
-          case 'LodComponent':
-          case 'DecorItemComponent':
-          case 'NewSlotComponent':
-          case 'StateSwitcherComponent':
-          case 'CustomPropertiesComponent':
-          case 'ActionComponent':
-          case 'ParticleEffectComponent':
-          case 'SlotComponent':
-          case 'MotionComponent':
-          case 'TankElementComponent':
-          case 'SkeletonComponent':
-          case 'AnimationComponent':
-            break;
-
           case 'TransformComponent': {
             const translation = new Vector3();
             const rotation = new Quaternion();
@@ -336,10 +322,15 @@ export async function extractModel(
             break;
           }
 
-          default:
-            throw new TypeError(
-              `Unhandled component type: ${component['comp.typename']}`,
-            );
+          default: {
+            const message = `Unhandled component type: ${component['comp.typename']}`;
+
+            if (ERROR_ON_UNKNOWN_COMPONENT) {
+              throw new Error(message);
+            } else {
+              console.warn(`${message}; skipping...`);
+            }
+          }
         }
       });
 
