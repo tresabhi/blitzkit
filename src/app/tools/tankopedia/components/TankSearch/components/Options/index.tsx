@@ -44,7 +44,7 @@ export function Options() {
             })
           }
         >
-          Clear
+          Reset
         </Button>
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>

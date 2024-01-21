@@ -175,7 +175,7 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
           </DropdownMenu.Root>
         </Flex>
 
-        <Card>
+        <Card variant={compact ? 'ghost' : 'surface'}>
           <Suspense fallback={<Text>Loading...</Text>}>
             <Options />
           </Suspense>
