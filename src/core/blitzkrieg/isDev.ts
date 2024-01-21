@@ -1,6 +1,7 @@
 export default function isDev() {
   return (
     process.env.NODE_ENV === 'development' ||
-    window?.location.host.startsWith('blitzkrieg-git')
+    (typeof window !== 'undefined' &&
+      window.location.host.startsWith('blitzkrieg-git'))
   );
 }
