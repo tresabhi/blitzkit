@@ -2,44 +2,34 @@ name: Build Assets
 
 on:
   push:
-    branches:
-      - 1.16.0
+    branches: 1.16.0
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v3
+      - name: Use node
+        uses: actions/setup-node@v3
         with:
-          dotnet-version: '6.0'
+          node-version: 18
+          cache: 'npm'
 
-      - name: Get latest release info
-        id: release
-        run: |
-          $RELEASE_JSON = Invoke-RestMethod -Uri https://api.github.com/repos/SteamRE/DepotDownloader/releases/latest
-          $DOWNLOAD_URL = $RELEASE_JSON.assets[0].browser_download_url
-          Write-Output "##vso[task.setvariable variable=tag_name;isOutput=true]$($RELEASE_JSON.tag_name)"
-          Write-Output "##vso[task.setvariable variable=download_url;isOutput=true]$DOWNLOAD_URL"
+      - name: Install Yarn
+        run: npm install --location=global yarn
 
-      - name: Download file as depotdownload.zip
-        run: |
-          $DOWNLOAD_URL = $env:download_url
-          if (-not $DOWNLOAD_URL) {
-            Write-Error "Download URL is null or empty. Check GitHub API response."
-            exit 1
-          }
-          Invoke-WebRequest -Uri $DOWNLOAD_URL -OutFile depotdownload.zip
+      - name: Use node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Extract zip file
-        run: Expand-Archive -Path depotdownload.zip -DestinationPath .
+      - name: Install dependencies
+        run: yarn
 
-      - name: Run DepotDownloader.dll
-        run: |
-          $DLL_PATH = ".\DepotDownloader.dll"
-          dotnet $DLL_PATH
+      - name: Setup DepotDownloader
+        run: yarn setup:depotdownloader
