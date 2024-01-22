@@ -82,7 +82,10 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
   );
   const [searchResults, setSearchedList] = useState(searchableTanks);
   const page = useTankopediaPersistent((state) => state.filters.page);
-  const chunkSize = window.innerWidth > 512 ? tanksPerPage / 2 : Infinity;
+  const chunkSize =
+    typeof window !== 'undefined' && window.innerWidth > 512
+      ? tanksPerPage / 2
+      : Infinity;
   const searchResultsPageSlice = searchResults.slice(
     page * tanksPerPage,
     (page + 1) * tanksPerPage,
