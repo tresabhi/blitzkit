@@ -6,7 +6,6 @@ import { COMMANDS_RAW, CommandRegistry } from '../events/interactionCreate';
 
 const RAW_PATH = `https://raw.githubusercontent.com/tresabhi/blitzkrieg/main/docs/`;
 const DOCS = {
-  permissions: 'guide/permissions',
   embeds: 'guide/embeds',
   introduction: 'guide/introduction',
   invite: 'guide/invite',
@@ -14,7 +13,6 @@ const DOCS = {
   creators: 'guide/creators',
 };
 const DOC_DESCRIPTIONS: Record<keyof typeof DOCS, string> = {
-  permissions: 'The permissions needed for the bot to function',
   embeds: 'How embeds work',
   introduction: 'About the bot',
   invite: 'How to invite the bot',
