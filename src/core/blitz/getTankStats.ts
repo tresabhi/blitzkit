@@ -11,8 +11,7 @@ export default async function getTankStats(region: Region, id: number) {
 
   if (tankStats[id] === null) {
     throw new UserError(
-      'No tank stats available',
-      "This player doesn't have any stats available. This may not be the player you are looking for.",
+      "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
     );
   }
 

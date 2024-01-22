@@ -4,6 +4,7 @@ import {
   SlashCommandSubcommandBuilder,
 } from 'discord.js';
 import { range } from 'lodash';
+import markdownEscape from 'markdown-escape';
 import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
@@ -337,8 +338,7 @@ export const ratingsCommand = new Promise<CommandRegistryPromisable>(
 
                   if (playerIndex === -1) {
                     throw new UserError(
-                      `${accountInfo.nickname} didn't play ratings in season ${season}`,
-                      'This player did not participate in this season or did not get past calibration.',
+                      `# ${markdownEscape(accountInfo.nickname)} didn't play ratings in season ${season}\nThis player did not participate in this season or did not get past calibration.`,
                     );
                   }
 

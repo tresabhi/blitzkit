@@ -35,8 +35,7 @@ export default async function resolvePlayerFromCommand(
         } satisfies ResolvedPlayer;
       } else {
         throw new UserError(
-          'Could not find user',
-          `I couldn't find user "${markdownEscape(
+          `# Could not find user\nI couldn't find user "${markdownEscape(
             commandUsername,
           )}". Try picking an user from the search result, typing in a valid username, or using the \`/link\` command.`,
         );
@@ -49,8 +48,7 @@ export default async function resolvePlayerFromCommand(
       return { region: account.region, id: account.blitz };
     } else {
       throw new UserError(
-        "You're account isn't linked with Blitzkrieg yet",
-        'Use the `/link` command to get started.',
+        "# I don't know who you are\nUse the `/link` command to get started.",
       );
     }
   }
