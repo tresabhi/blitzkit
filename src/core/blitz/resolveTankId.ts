@@ -17,7 +17,7 @@ export default async function resolveTankId(tank: string | number) {
 
     if (searchResult.length === 0) {
       throw new UserError(
-        `# Tank not found\nCould not find tank by the name "${markdownEscape(tank)}".`,
+        `# Tank not found\nCould not find tank by the name "${markdownEscape(`${tank}`)}".`,
       );
     } else {
       return searchResult[0].obj.id;
