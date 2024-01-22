@@ -23,6 +23,7 @@ import { fullStatsCommand } from '../../commands/fullStats';
 import { inactiveCommand } from '../../commands/inactive';
 import { verifyCommand } from '../../commands/link';
 import { ownedTanksCommand } from '../../commands/ownedTanks';
+import { permissionsCommand } from '../../commands/permissions';
 import { pingCommand } from '../../commands/ping';
 import { playerAchievementsCommand } from '../../commands/playerAchievements';
 import { playerInfoCommand } from '../../commands/playerInfo';
@@ -90,6 +91,7 @@ export type CommandRegistry =
 const rest = new REST().setToken(secrets.DISCORD_TOKEN);
 
 export const COMMANDS_RAW: CommandRegistry[] = [
+  permissionsCommand,
   debugCommand,
   eligibleCommand,
   aboutCommand,

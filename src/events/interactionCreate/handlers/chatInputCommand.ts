@@ -11,7 +11,6 @@ import { commands } from '..';
 import discord from '../../../../discord.json' assert { type: 'json' };
 import { UserError } from '../../../core/blitzkrieg/userError';
 import buttonLink from '../../../core/discord/buttonLink';
-import embedNegative from '../../../core/discord/embedNegative';
 import embedWarning from '../../../core/discord/embedWarning';
 import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable';
 import { psa } from '../../../core/discord/psa';
@@ -119,25 +118,15 @@ export default async function handleChatInputCommand(
 
     if (error instanceof UserError) {
       interaction.editReply({
-        embeds: [
-          embedNegative(
-            error.message,
-            (error.cause as string | undefined) ??
-              'No further information is available.',
-          ),
-        ],
+        content: error.message,
         components,
       });
     } else {
       console.error(interaction.commandName, error);
 
       interaction.editReply({
-        embeds: [
-          embedNegative(
-            'Blitzkrieg ran into an error!',
-            "We're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help.",
-          ),
-        ],
+        content:
+          "# Blitzkrieg ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help.",
         components,
       });
     }
