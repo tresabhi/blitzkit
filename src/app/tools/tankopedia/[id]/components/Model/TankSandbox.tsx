@@ -1,24 +1,22 @@
 import { Card, Flex, Tabs, Theme } from '@radix-ui/themes';
-import { Html } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkrieg/pose';
-import { theme } from '../../../../../../stitches.config';
 import {
   TankopediaMode,
   mutateTankopediaTemporary,
   useTankopediaTemporary,
 } from '../../../../../../stores/tankopedia';
-import { Loader } from '../../../../components/Loader';
 import { Duel } from '../../page';
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
 import { QuickEquipments } from '../QuickEquipments';
 import { RotationInputs } from '../RotationInputs';
 import { SceneProps } from '../SceneProps';
+import { ModelLoader } from './components/ModelLoader';
 import { Options } from './components/Options';
 import { TankArmor } from './components/TankArmor';
 import { TankModel } from './components/TankModel';
@@ -164,16 +162,7 @@ export function TankSandbox({ duel }: TankSandboxProps) {
                 <SceneProps />
                 <Lighting duel={duel} />
 
-                <Suspense
-                  fallback={
-                    <Html center position={[0, 1.5, 0]}>
-                      <Loader
-                        naked
-                        color={theme.colors.textHighContrast_purple}
-                      />
-                    </Html>
-                  }
-                >
+                <Suspense fallback={<ModelLoader />}>
                   <TankModel duel={duel} />
                   <TankArmor duel={duel} />
                 </Suspense>
