@@ -2,7 +2,8 @@ name: Build Assets
 
 on:
   push:
-    branches: 1.16.0
+    branches:
+      - 1.16.0
   workflow_dispatch:
 
 jobs:
@@ -22,12 +23,17 @@ jobs:
         id: release
         run: |
           $RELEASE_JSON = Invoke-RestMethod -Uri https://api.github.com/repos/SteamRE/DepotDownloader/releases/latest
+          $DOWNLOAD_URL = $RELEASE_JSON.assets[0].browser_download_url
           Write-Output "##vso[task.setvariable variable=tag_name;isOutput=true]$($RELEASE_JSON.tag_name)"
-          Write-Output "##vso[task.setvariable variable=download_url;isOutput=true]$($RELEASE_JSON.assets[0].browser_download_url)"
+          Write-Output "##vso[task.setvariable variable=download_url;isOutput=true]$DOWNLOAD_URL"
 
       - name: Download file as depotdownload.zip
         run: |
           $DOWNLOAD_URL = $env:download_url
+          if (-not $DOWNLOAD_URL) {
+            Write-Error "Download URL is null or empty. Check GitHub API response."
+            exit 1
+          }
           Invoke-WebRequest -Uri $DOWNLOAD_URL -OutFile depotdownload.zip
 
       - name: Extract zip file
