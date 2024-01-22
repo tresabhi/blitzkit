@@ -162,7 +162,7 @@ export function TankSandbox({ duel }: TankSandboxProps) {
               >
                 <Controls duel={duel} />
                 <SceneProps />
-                <Lighting />
+                <Lighting duel={duel} />
 
                 <Suspense
                   fallback={

@@ -120,7 +120,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
   });
 
   const armorGltf = useArmor(duel.protagonist.tank.id);
-  const modelGltf = useModel(duel.protagonist.tank.id);
+  const { gltf: modelGltf } = useModel(duel.protagonist.tank.id);
 
   const armorNodes = Object.values(armorGltf.nodes);
   const modelNodes = Object.values(modelGltf.nodes);

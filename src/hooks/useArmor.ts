@@ -1,7 +1,11 @@
-import { useLoader } from '@react-three/fiber';
-import { GLTFLoader } from 'three-stdlib';
+import { ObjectMap, useLoader } from '@react-three/fiber';
+import { GLTF, GLTFLoader } from 'three-stdlib';
 import { asset } from '../core/blitzkrieg/asset';
 
+const cache: Record<number, GLTF & ObjectMap> = {};
+
 export function useArmor(id: number) {
-  return useLoader(GLTFLoader, asset(`3d/tanks/armor/${id}.glb`));
+  const gltf = useLoader(GLTFLoader, asset(`3d/tanks/armor/${id}.glb`));
+  if (!cache[id]) cache[id] = gltf;
+  return cache[id];
 }
