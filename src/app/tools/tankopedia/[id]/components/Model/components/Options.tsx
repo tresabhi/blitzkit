@@ -24,7 +24,8 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
   const greenPenetration = useTankopediaTemporary(
     (state) => state.model.visual.greenPenetration,
   );
-  const fullScreenAvailable = document.fullscreenEnabled;
+  const fullScreenAvailable =
+    typeof document !== 'undefined' && document.fullscreenEnabled;
 
   return (
     <Flex
