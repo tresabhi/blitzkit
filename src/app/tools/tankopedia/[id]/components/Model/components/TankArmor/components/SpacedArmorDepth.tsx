@@ -100,7 +100,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
       turretContainer.current?.rotation.copy(turretRotation);
     }
 
-    handleModelTransform(useTankopediaTemporary.getState().model.physical);
+    handleModelTransform(useTankopediaTemporary.getState().model.pose);
     modelTransformEvent.on(handleModelTransform);
 
     return () => {

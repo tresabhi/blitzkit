@@ -35,11 +35,17 @@ interface TankopediaPersistent {
   };
 }
 
+export type EquipmentMatrix = (0 | 1)[][];
+
 interface TankopediaTemporary {
   model: {
-    physical: {
+    pose: {
       yaw: number;
       pitch: number;
+    };
+    equipment: {
+      enhancedArmor: boolean;
+      calibratedShells: boolean;
     };
     visual: {
       controlsEnabled: boolean;
@@ -47,7 +53,7 @@ interface TankopediaTemporary {
       greenPenetration: boolean;
     };
   };
-  equipmentMatrix: (0 | 1)[][];
+  equipmentMatrix: EquipmentMatrix;
   mode: TankopediaMode;
 }
 
@@ -74,9 +80,13 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
 export const useTankopediaTemporary = create<TankopediaTemporary>()(
   subscribeWithSelector<TankopediaTemporary>(() => ({
     model: {
-      physical: {
+      pose: {
         yaw: 0,
         pitch: 0,
+      },
+      equipment: {
+        enhancedArmor: false,
+        calibratedShells: false,
       },
       visual: {
         controlsEnabled: true,

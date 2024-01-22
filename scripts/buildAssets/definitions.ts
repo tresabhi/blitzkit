@@ -10,8 +10,8 @@ import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import { ConsumableDefinitions } from '../../src/core/blitzkrieg/consumablesDefinitions';
 import {
   EquipmentDefinitions,
+  EquipmentPreset,
   EquipmentRow,
-  EquipmentRows,
 } from '../../src/core/blitzkrieg/equipmentDefinitions';
 import {
   ModelArmor,
@@ -618,7 +618,7 @@ export async function buildDefinitions(production: boolean) {
               optionalDevices.root[options.device1].id,
             ];
           }) as EquipmentRow,
-      ) as EquipmentRows;
+      ) as EquipmentPreset;
     },
   );
 

@@ -1,12 +1,12 @@
 import { OrbitControls } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
-import usePromise from 'react-promise-suspense';
 import { Vector3 } from 'three';
 import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
 import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
 import { Pose, poseEvent } from '../../../../../core/blitzkrieg/pose';
+import { useAwait } from '../../../../../hooks/useAwait';
 import { useTankopediaTemporary } from '../../../../../stores/tankopedia';
 import { Duel } from '../page';
 
@@ -23,10 +23,7 @@ interface ControlsProps {
 export function Controls({ duel }: ControlsProps) {
   const camera = useThree((state) => state.camera);
   const orbitControls = useRef<OrbitControlsClass>(null);
-  const awaitedModelDefinitions = usePromise(
-    async () => await modelDefinitions,
-    [],
-  );
+  const awaitedModelDefinitions = useAwait(modelDefinitions);
   const protagonistModelDefinition =
     awaitedModelDefinitions[duel.protagonist.tank.id];
   const antagonistModelDefinition =

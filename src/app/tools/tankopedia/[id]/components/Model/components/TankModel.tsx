@@ -38,7 +38,7 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
   >(undefined);
 
   const canvas = useThree((state) => state.gl.domElement);
-  const physical = useTankopediaTemporary((state) => state.model.physical);
+  const physical = useTankopediaTemporary((state) => state.model.pose);
   const hullContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
@@ -220,8 +220,8 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
           function handlePointerUp() {
             mutateTankopediaTemporary((state) => {
               state.model.visual.controlsEnabled = true;
-              state.model.physical.pitch = normalizeAnglePI(pitch);
-              state.model.physical.yaw = normalizeAnglePI(yaw);
+              state.model.pose.pitch = normalizeAnglePI(pitch);
+              state.model.pose.yaw = normalizeAnglePI(yaw);
             });
             window.removeEventListener('pointermove', handlePointerMove);
             window.removeEventListener('pointerup', handlePointerUp);
@@ -283,8 +283,8 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
             function handlePointerUp() {
               mutateTankopediaTemporary((state) => {
                 state.model.visual.controlsEnabled = true;
-                state.model.physical.pitch = normalizeAnglePI(pitch);
-                state.model.physical.yaw = normalizeAnglePI(yaw);
+                state.model.pose.pitch = normalizeAnglePI(pitch);
+                state.model.pose.yaw = normalizeAnglePI(yaw);
               });
               window.removeEventListener('pointermove', handlePointerMove);
               window.removeEventListener('pointerup', handlePointerUp);

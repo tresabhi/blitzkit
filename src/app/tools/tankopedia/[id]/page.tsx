@@ -39,8 +39,8 @@ export default function Page({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     mutateTankopediaTemporary((draft) => {
-      draft.model.physical.yaw = 0;
-      draft.model.physical.pitch = 0;
+      draft.model.pose.yaw = 0;
+      draft.model.pose.pitch = 0;
       draft.mode = 'model';
     });
 

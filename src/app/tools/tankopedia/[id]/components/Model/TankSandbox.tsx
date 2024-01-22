@@ -16,6 +16,7 @@ import { Loader } from '../../../../components/Loader';
 import { Duel } from '../../page';
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
+import { QuickEquipments } from '../QuickEquipments';
 import { RotationInputs } from '../RotationInputs';
 import { SceneProps } from '../SceneProps';
 import { Options } from './components/Options';
@@ -69,8 +70,8 @@ export function TankSandbox({ duel }: TankSandboxProps) {
             );
 
             modelTransformEvent.emit({ pitch, yaw });
-            draft.model.physical.pitch = pitch;
-            draft.model.physical.yaw = yaw;
+            draft.model.pose.pitch = pitch;
+            draft.model.pose.yaw = yaw;
           });
 
           break;
@@ -86,8 +87,8 @@ export function TankSandbox({ duel }: TankSandboxProps) {
             );
 
             modelTransformEvent.emit({ pitch, yaw });
-            draft.model.physical.pitch = pitch;
-            draft.model.physical.yaw = yaw;
+            draft.model.pose.pitch = pitch;
+            draft.model.pose.yaw = yaw;
           });
 
           break;
@@ -111,13 +112,12 @@ export function TankSandbox({ duel }: TankSandboxProps) {
     if (!duel.protagonist) return void 0;
 
     mutateTankopediaTemporary((draft) => {
-      [draft.model.physical.pitch, draft.model.physical.yaw] =
-        applyPitchYawLimits(
-          draft.model.physical.pitch,
-          draft.model.physical.yaw,
-          gunModelDefinition.pitch,
-          turretModelDefinition.yaw,
-        );
+      [draft.model.pose.pitch, draft.model.pose.yaw] = applyPitchYawLimits(
+        draft.model.pose.pitch,
+        draft.model.pose.yaw,
+        gunModelDefinition.pitch,
+        turretModelDefinition.yaw,
+      );
     });
   }, [duel.protagonist.gun, duel.protagonist.turret]);
 
@@ -183,6 +183,7 @@ export function TankSandbox({ duel }: TankSandboxProps) {
             <Options canvas={canvasWrapper} isFullScreen={isFullScreen} />
 
             <RotationInputs duel={duel} />
+            <QuickEquipments />
           </Flex>
         </Theme>
       </Card>

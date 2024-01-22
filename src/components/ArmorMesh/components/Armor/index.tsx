@@ -25,6 +25,7 @@ export function ArmorMesh({
   duel,
   ...props
 }: ArmorMeshProps) {
+  const equipment = useTankopediaTemporary((draft) => draft.model.equipment);
   const camera = useThree((state) => state.camera);
   const { shell } = duel.antagonist;
   const greenPenetration = useTankopediaTemporary(
@@ -32,6 +33,12 @@ export function ArmorMesh({
   );
   const material = useRef<ShaderMaterial>(null);
   const resolution = new Vector2();
+  const explosionCapable = isExplosive(shell.type);
+  let mutatedThickness = thickness;
+  let penetration = resolveNearPenetration(shell.penetration);
+
+  if (equipment.calibratedShells) penetration *= explosionCapable ? 1.1 : 1.05;
+  if (equipment.enhancedArmor) mutatedThickness *= 1.04;
 
   useFrame(({ gl, camera }) => {
     if (material.current) {
@@ -75,11 +82,11 @@ export function ArmorMesh({
             zFar: { value: camera.far },
             greenPenetration: { value: greenPenetration },
             maxThickness: { value: maxThickness },
-            isExplosive: { value: isExplosive(shell.type) },
+            isExplosive: { value: explosionCapable },
             canSplash: { value: canSplash(shell.type) },
-            thickness: { value: thickness },
+            thickness: { value: mutatedThickness },
             penetration: {
-              value: resolveNearPenetration(shell.penetration),
+              value: penetration,
             },
             caliber: { value: shell.caliber },
             ricochetAngle: { value: degToRad(shell.ricochet ?? 90) },

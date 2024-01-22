@@ -94,7 +94,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(({ duel }) => {
       turretContainer.current?.rotation.copy(turretRotation);
     }
 
-    handleModelTransform(useTankopediaTemporary.getState().model.physical);
+    handleModelTransform(useTankopediaTemporary.getState().model.pose);
     modelTransformEvent.on(handleModelTransform);
 
     return () => {

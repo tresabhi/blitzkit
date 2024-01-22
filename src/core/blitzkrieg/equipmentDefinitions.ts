@@ -8,11 +8,11 @@ export type EquipmentRow = [
   EquipmentOptions,
 ];
 
-export type EquipmentRows = [EquipmentRow, EquipmentRow, EquipmentRow];
+export type EquipmentPreset = [EquipmentRow, EquipmentRow, EquipmentRow];
 
 export interface EquipmentDefinitions {
   presets: {
-    [key: string]: EquipmentRows;
+    [key: string]: EquipmentPreset;
   };
   equipments: {
     [key: number]: {

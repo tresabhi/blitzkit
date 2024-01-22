@@ -14,7 +14,7 @@ interface RotationInputsProps {
 }
 
 export function RotationInputs({ duel: { protagonist } }: RotationInputsProps) {
-  const physical = useTankopediaTemporary((state) => state.model.physical);
+  const physical = useTankopediaTemporary((state) => state.model.pose);
   const awaitedModelDefinitions = use(modelDefinitions);
   const turretYawInput = useRef<HTMLInputElement>(null);
   const gunPitchInput = useRef<HTMLInputElement>(null);
@@ -69,8 +69,8 @@ export function RotationInputs({ duel: { protagonist } }: RotationInputsProps) {
               );
               modelTransformEvent.emit({ pitch, yaw });
               mutateTankopediaTemporary((state) => {
-                state.model.physical.pitch = pitch;
-                state.model.physical.yaw = yaw;
+                state.model.pose.pitch = pitch;
+                state.model.pose.yaw = yaw;
               });
               turretYawInput.current!.value = `${Math.round(
                 yaw * (180 / Math.PI),
@@ -105,8 +105,8 @@ export function RotationInputs({ duel: { protagonist } }: RotationInputsProps) {
               );
               modelTransformEvent.emit({ pitch, yaw });
               mutateTankopediaTemporary((state) => {
-                state.model.physical.pitch = pitch;
-                state.model.physical.yaw = yaw;
+                state.model.pose.pitch = pitch;
+                state.model.pose.yaw = yaw;
               });
               gunPitchInput.current!.value = `${Math.round(
                 pitch * (180 / Math.PI),
