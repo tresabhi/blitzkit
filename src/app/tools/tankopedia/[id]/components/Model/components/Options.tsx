@@ -7,9 +7,9 @@ import {
 import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
 import { RefObject } from 'react';
 import { Pose, poseEvent } from '../../../../../../../core/blitzkrieg/pose';
-import {
+import mutateTankopediaPersistent, {
   mutateTankopediaTemporary,
-  useTankopediaTemporary,
+  useTankopediaPersistent,
 } from '../../../../../../../stores/tankopedia';
 
 interface OptionsProps {
@@ -18,10 +18,10 @@ interface OptionsProps {
 }
 
 export function Options({ isFullScreen, canvas }: OptionsProps) {
-  const showGrid = useTankopediaTemporary(
+  const showGrid = useTankopediaPersistent(
     (state) => state.model.visual.showGrid,
   );
-  const greenPenetration = useTankopediaTemporary(
+  const greenPenetration = useTankopediaPersistent(
     (state) => state.model.visual.greenPenetration,
   );
   const fullScreenAvailable =
@@ -69,7 +69,7 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
           <DropdownMenu.CheckboxItem
             checked={showGrid}
             onCheckedChange={(checked) => {
-              mutateTankopediaTemporary((draft) => {
+              mutateTankopediaPersistent((draft) => {
                 draft.model.visual.showGrid = checked;
               });
             }}
@@ -80,7 +80,7 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
           <DropdownMenu.CheckboxItem
             checked={greenPenetration}
             onCheckedChange={(checked) => {
-              mutateTankopediaTemporary((draft) => {
+              mutateTankopediaPersistent((draft) => {
                 draft.model.visual.greenPenetration = checked;
               });
             }}

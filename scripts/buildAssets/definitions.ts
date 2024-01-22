@@ -65,6 +65,7 @@ interface VehicleDefinitions {
   };
   chassis: {
     [key: string]: {
+      hullPosition: string;
       armor: {
         leftTrack:
           | number
@@ -294,14 +295,19 @@ export async function buildDefinitions(production: boolean) {
         const tankDefinition = await readXMLDVPL<{ root: VehicleDefinitions }>(
           `${DATA}/${POI.vehicleDefinitions}/${nation}/${tankKey}.xml.dvpl`,
         );
+        const defaultChassis = Object.values(tankDefinition.root.chassis).at(
+          -1,
+        )!;
         const turretOrigin = tankDefinition.root.hull.turretPositions.turret
+          .split(' ')
+          .map(Number) as Vector3Tuple;
+        const hullOrigin = defaultChassis.hullPosition
           .split(' ')
           .map(Number) as Vector3Tuple;
         const tankId = toUniqueId(nation, tank.id);
         const tankTags = tank.tags.split(' ');
         const hullArmor: ModelArmor = { thickness: {} };
-        const trackArmorRaw = Object.values(tankDefinition.root.chassis).at(-1)!
-          .armor.leftTrack;
+        const trackArmorRaw = defaultChassis.armor.leftTrack;
         const equipment = tankDefinition.root.optDevicePreset;
         tankStringIdMap[`${nation}:${tankKey}`] = tankId;
 
@@ -368,6 +374,7 @@ export async function buildDefinitions(production: boolean) {
               ? trackArmorRaw
               : trackArmorRaw['#text'],
           turretOrigin,
+          hullOrigin,
           turretRotation: tankDefinition.root.hull.turretInitialRotation
             ? {
                 yaw: tankDefinition.root.hull.turretInitialRotation.yaw,

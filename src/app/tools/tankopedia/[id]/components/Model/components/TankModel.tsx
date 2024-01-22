@@ -9,7 +9,7 @@ import {
   Vector3,
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
-import { X_AXIS, Y_AXIS, Z_AXIS } from '../../../../../../../constants/axis';
+import { I_HAT, J_HAT, K_HAT } from '../../../../../../../constants/axis';
 import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
 import {
   ModelDefinitions,
@@ -22,7 +22,7 @@ import {
 import { resolveJsxTree } from '../../../../../../../core/blitzkrieg/resolveJsxTree';
 import { normalizeAnglePI } from '../../../../../../../core/math/normalizeAngle180';
 import { useModel } from '../../../../../../../hooks/useModel';
-import {
+import mutateTankopediaPersistent, {
   mutateTankopediaTemporary,
   useTankopediaTemporary,
 } from '../../../../../../../stores/tankopedia';
@@ -52,16 +52,21 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
   useEffect(() => {
     if (!awaitedModelDefinitions) return;
 
+    const hullOrigin = new Vector3(
+      tankModelDefinition.hullOrigin[0],
+      tankModelDefinition.hullOrigin[1],
+      -tankModelDefinition.hullOrigin[2],
+    ).applyAxisAngle(I_HAT, Math.PI / 2);
     const turretOrigin = new Vector3(
       tankModelDefinition.turretOrigin[0],
       tankModelDefinition.turretOrigin[1],
       -tankModelDefinition.turretOrigin[2],
-    ).applyAxisAngle(X_AXIS, Math.PI / 2);
+    ).applyAxisAngle(I_HAT, Math.PI / 2);
     const gunOrigin = new Vector3(
       turretModelDefinition.gunOrigin[0],
       turretModelDefinition.gunOrigin[1],
       -turretModelDefinition.gunOrigin[2],
-    ).applyAxisAngle(X_AXIS, Math.PI / 2);
+    ).applyAxisAngle(I_HAT, Math.PI / 2);
     const turretPosition = new Vector3();
     const turretRotation = new Euler();
     const gunPosition = new Vector3();
@@ -70,11 +75,13 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
     function handleModelTransform({ yaw, pitch }: ModelTransformEventData) {
       gunPosition
         .set(0, 0, 0)
+        .sub(hullOrigin)
         .sub(turretOrigin)
         .sub(gunOrigin)
-        .applyAxisAngle(X_AXIS, pitch)
+        .applyAxisAngle(I_HAT, pitch)
         .add(gunOrigin)
-        .add(turretOrigin);
+        .add(turretOrigin)
+        .add(hullOrigin);
       gunRotation.set(pitch, 0, 0);
       gunContainer.current?.position.copy(gunPosition);
       gunContainer.current?.rotation.copy(gunRotation);
@@ -83,6 +90,7 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
 
       turretPosition
         .set(0, 0, 0)
+        .sub(hullOrigin)
         .sub(turretOrigin)
         .applyAxisAngle(new Vector3(0, 0, 1), yaw);
       turretRotation.set(0, 0, yaw);
@@ -95,15 +103,15 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
         const initialRoll = -degToRad(tankModelDefinition.turretRotation.roll);
 
         turretPosition
-          .applyAxisAngle(X_AXIS, initialPitch)
-          .applyAxisAngle(Y_AXIS, initialRoll)
-          .applyAxisAngle(Z_AXIS, initialYaw);
+          .applyAxisAngle(I_HAT, initialPitch)
+          .applyAxisAngle(J_HAT, initialRoll)
+          .applyAxisAngle(K_HAT, initialYaw);
         turretRotation.x += initialPitch;
         turretRotation.y += initialRoll;
         turretRotation.z += initialYaw;
       }
 
-      turretPosition.add(turretOrigin);
+      turretPosition.add(turretOrigin).add(hullOrigin);
       turretContainer.current?.position.copy(turretPosition);
       turretContainer.current?.rotation.copy(turretRotation);
     }
@@ -137,7 +145,7 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
           event.stopPropagation();
 
           if (isTrack) {
-            mutateTankopediaTemporary((draft) => {
+            mutateTankopediaPersistent((draft) => {
               draft.model.visual.controlsEnabled = false;
             });
 
@@ -159,7 +167,7 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
           material.normalMap?.offset.add(offset);
         }
         function handlePointerUp() {
-          mutateTankopediaTemporary((draft) => {
+          mutateTankopediaPersistent((draft) => {
             draft.model.visual.controlsEnabled = true;
           });
           window.removeEventListener('pointermove', handlePointerMove);
@@ -201,7 +209,7 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
               yaw = physical.yaw;
               pitch = physical.pitch;
 
-              mutateTankopediaTemporary((draft) => {
+              mutateTankopediaPersistent((draft) => {
                 draft.model.visual.controlsEnabled = false;
               });
               window.addEventListener('pointermove', handlePointerMove);
@@ -218,10 +226,12 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
             modelTransformEvent.emit({ pitch, yaw });
           }
           function handlePointerUp() {
-            mutateTankopediaTemporary((state) => {
-              state.model.visual.controlsEnabled = true;
-              state.model.pose.pitch = normalizeAnglePI(pitch);
-              state.model.pose.yaw = normalizeAnglePI(yaw);
+            mutateTankopediaTemporary((draft) => {
+              draft.model.pose.pitch = normalizeAnglePI(pitch);
+              draft.model.pose.yaw = normalizeAnglePI(yaw);
+            });
+            mutateTankopediaPersistent((draft) => {
+              draft.model.visual.controlsEnabled = true;
             });
             window.removeEventListener('pointermove', handlePointerMove);
             window.removeEventListener('pointerup', handlePointerUp);
@@ -263,7 +273,7 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
             function handlePointerDown(event: ThreeEvent<PointerEvent>) {
               event.stopPropagation();
 
-              mutateTankopediaTemporary((draft) => {
+              mutateTankopediaPersistent((draft) => {
                 draft.model.visual.controlsEnabled = false;
               });
               pitch = physical.pitch;
@@ -281,10 +291,12 @@ export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
               modelTransformEvent.emit({ pitch, yaw });
             }
             function handlePointerUp() {
-              mutateTankopediaTemporary((state) => {
-                state.model.visual.controlsEnabled = true;
-                state.model.pose.pitch = normalizeAnglePI(pitch);
-                state.model.pose.yaw = normalizeAnglePI(yaw);
+              mutateTankopediaPersistent((draft) => {
+                draft.model.visual.controlsEnabled = true;
+              });
+              mutateTankopediaTemporary((draft) => {
+                draft.model.pose.pitch = normalizeAnglePI(pitch);
+                draft.model.pose.yaw = normalizeAnglePI(yaw);
               });
               window.removeEventListener('pointermove', handlePointerMove);
               window.removeEventListener('pointerup', handlePointerUp);

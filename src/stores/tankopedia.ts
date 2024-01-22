@@ -21,6 +21,17 @@ export interface DuelMember {
   shell: ShellDefinition;
 }
 interface TankopediaPersistent {
+  model: {
+    equipment: {
+      enhancedArmor: boolean;
+      calibratedShells: boolean;
+    };
+    visual: {
+      controlsEnabled: boolean;
+      showGrid: boolean;
+      greenPenetration: boolean;
+    };
+  };
   sort: {
     by: TankopediaSortBy;
     direction: TankopediaSortDirection;
@@ -43,15 +54,6 @@ interface TankopediaTemporary {
       yaw: number;
       pitch: number;
     };
-    equipment: {
-      enhancedArmor: boolean;
-      calibratedShells: boolean;
-    };
-    visual: {
-      controlsEnabled: boolean;
-      showGrid: boolean;
-      greenPenetration: boolean;
-    };
   };
   equipmentMatrix: EquipmentMatrix;
   mode: TankopediaMode;
@@ -60,6 +62,17 @@ interface TankopediaTemporary {
 export const useTankopediaPersistent = create<TankopediaPersistent>()(
   persist(
     subscribeWithSelector<TankopediaPersistent>(() => ({
+      model: {
+        equipment: {
+          enhancedArmor: false,
+          calibratedShells: false,
+        },
+        visual: {
+          controlsEnabled: true,
+          showGrid: true,
+          greenPenetration: false,
+        },
+      },
       sort: {
         by: 'tier',
         direction: 'descending',
@@ -83,15 +96,6 @@ export const useTankopediaTemporary = create<TankopediaTemporary>()(
       pose: {
         yaw: 0,
         pitch: 0,
-      },
-      equipment: {
-        enhancedArmor: false,
-        calibratedShells: false,
-      },
-      visual: {
-        controlsEnabled: true,
-        showGrid: true,
-        greenPenetration: false,
       },
     },
     equipmentMatrix: [

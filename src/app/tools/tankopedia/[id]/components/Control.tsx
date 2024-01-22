@@ -7,7 +7,7 @@ import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimi
 import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
 import { Pose, poseEvent } from '../../../../../core/blitzkrieg/pose';
 import { useAwait } from '../../../../../hooks/useAwait';
-import { useTankopediaTemporary } from '../../../../../stores/tankopedia';
+import { useTankopediaPersistent } from '../../../../../stores/tankopedia';
 import { Duel } from '../page';
 
 const poseDistances: Record<Pose, number> = {
@@ -34,6 +34,11 @@ export function Controls({ duel }: ControlsProps) {
     antagonistModelDefinition.turrets[duel.antagonist.turret.id];
   const protagonistGunModelDefinition =
     protagonistTurretModelDefinition.guns[duel.protagonist.gun.id];
+  const protagonistHullOrigin = new Vector3(
+    protagonistModelDefinition.hullOrigin[0],
+    protagonistModelDefinition.hullOrigin[1],
+    -protagonistModelDefinition.hullOrigin[2],
+  );
   const protagonistTurretOrigin = new Vector3(
     protagonistModelDefinition.turretOrigin[0],
     protagonistModelDefinition.turretOrigin[1],
@@ -45,6 +50,7 @@ export function Controls({ duel }: ControlsProps) {
     -protagonistTurretModelDefinition.gunOrigin[2],
   );
   const antagonistGunHeight =
+    antagonistModelDefinition.hullOrigin[1] +
     antagonistModelDefinition.turretOrigin[1] +
     antagonistTurretModelDefinition.gunOrigin[1];
 
@@ -52,7 +58,7 @@ export function Controls({ duel }: ControlsProps) {
     camera.position.set(-4, 4, -16);
     orbitControls.current?.target.set(0, antagonistGunHeight / 2, 0);
 
-    const unsubscribeTankopedia = useTankopediaTemporary.subscribe(
+    const unsubscribeTankopedia = useTankopediaPersistent.subscribe(
       (state) => state.model.visual.controlsEnabled,
       (enabled) => {
         if (orbitControls.current) orbitControls.current.enabled = enabled;
@@ -71,6 +77,7 @@ export function Controls({ duel }: ControlsProps) {
 
           camera.position
             .set(0, 0, 0)
+            .add(protagonistHullOrigin)
             .add(protagonistTurretOrigin)
             .add(protagonistGunOrigin)
             .add(
@@ -81,7 +88,10 @@ export function Controls({ duel }: ControlsProps) {
               ),
             );
           camera.lookAt(
-            protagonistTurretOrigin.clone().add(protagonistGunOrigin),
+            protagonistHullOrigin
+              .clone()
+              .add(protagonistTurretOrigin)
+              .add(protagonistGunOrigin),
           );
           orbitControls.current?.target.set(0, antagonistGunHeight, 0);
 
@@ -98,6 +108,7 @@ export function Controls({ duel }: ControlsProps) {
 
           camera.position
             .set(0, 0, 0)
+            .add(protagonistHullOrigin)
             .add(protagonistTurretOrigin)
             .add(protagonistGunOrigin)
             .add(
@@ -109,6 +120,7 @@ export function Controls({ duel }: ControlsProps) {
             );
           orbitControls.current?.target
             .set(0, 0, 0)
+            .add(protagonistHullOrigin)
             .add(protagonistTurretOrigin)
             .add(protagonistGunOrigin)
             .add(
@@ -141,7 +153,7 @@ export function Controls({ duel }: ControlsProps) {
   return (
     <OrbitControls
       ref={orbitControls}
-      enabled={useTankopediaTemporary.getState().model.visual.controlsEnabled}
+      enabled={useTankopediaPersistent.getState().model.visual.controlsEnabled}
       rotateSpeed={0.25}
       enableDamping={false}
     />

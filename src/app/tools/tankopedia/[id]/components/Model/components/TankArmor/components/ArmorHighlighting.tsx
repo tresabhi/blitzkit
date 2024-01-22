@@ -2,11 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Euler, Group, Mesh, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { ArmorMesh } from '../../../../../../../../../components/ArmorMesh';
-import {
-  X_AXIS,
-  Y_AXIS,
-  Z_AXIS,
-} from '../../../../../../../../../constants/axis';
+import { I_HAT, J_HAT, K_HAT } from '../../../../../../../../../constants/axis';
 import {
   ModelTransformEventData,
   modelTransformEvent,
@@ -26,41 +22,28 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
   const wrapper = useRef<Group>(null);
   const modelDefinitions = useModelDefinitions();
   const turretContainer = useRef<Group>(null);
-  const gunContainer = useRef<Group>(null);
   const initialTankopediaState = useTankopediaTemporary.getState();
 
   useEffect(() => {
+    const hullOrigin = new Vector3(
+      tankModelDefinition.hullOrigin[0],
+      tankModelDefinition.hullOrigin[1],
+      -tankModelDefinition.hullOrigin[2],
+    ).applyAxisAngle(I_HAT, Math.PI / 2);
     const turretOrigin = new Vector3(
       tankModelDefinition.turretOrigin[0],
       tankModelDefinition.turretOrigin[1],
       -tankModelDefinition.turretOrigin[2],
-    ).applyAxisAngle(X_AXIS, Math.PI / 2);
-    const gunOrigin = new Vector3(
-      turretModelDefinition.gunOrigin[0],
-      turretModelDefinition.gunOrigin[1],
-      -turretModelDefinition.gunOrigin[2],
-    ).applyAxisAngle(X_AXIS, Math.PI / 2);
+    ).applyAxisAngle(I_HAT, Math.PI / 2);
     const turretPosition = new Vector3();
     const turretRotation = new Euler();
-    const gunPosition = new Vector3();
-    const gunRotation = new Euler();
 
-    function handleModelTransform({ yaw, pitch }: ModelTransformEventData) {
-      gunPosition
-        .set(0, 0, 0)
-        .sub(turretOrigin)
-        .sub(gunOrigin)
-        .applyAxisAngle(X_AXIS, pitch)
-        .add(gunOrigin)
-        .add(turretOrigin);
-      gunRotation.set(pitch, 0, 0);
-      gunContainer.current?.position.copy(gunPosition);
-      gunContainer.current?.rotation.copy(gunRotation);
-
+    function handleModelTransform({ yaw }: ModelTransformEventData) {
       if (yaw === undefined) return;
 
       turretPosition
         .set(0, 0, 0)
+        .sub(hullOrigin)
         .sub(turretOrigin)
         .applyAxisAngle(new Vector3(0, 0, 1), yaw);
       turretRotation.set(0, 0, yaw);
@@ -73,15 +56,15 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
         const initialRoll = -degToRad(tankModelDefinition.turretRotation.roll);
 
         turretPosition
-          .applyAxisAngle(X_AXIS, initialPitch)
-          .applyAxisAngle(Y_AXIS, initialRoll)
-          .applyAxisAngle(Z_AXIS, initialYaw);
+          .applyAxisAngle(I_HAT, initialPitch)
+          .applyAxisAngle(J_HAT, initialRoll)
+          .applyAxisAngle(K_HAT, initialYaw);
         turretRotation.x += initialPitch;
         turretRotation.y += initialRoll;
         turretRotation.z += initialYaw;
       }
 
-      turretPosition.add(turretOrigin);
+      turretPosition.add(turretOrigin).add(hullOrigin);
       turretContainer.current?.position.copy(turretPosition);
       turretContainer.current?.rotation.copy(turretRotation);
     }
@@ -112,16 +95,16 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
     tankModelDefinition.turrets[duel.protagonist.turret.id];
   const gunModelDefinition =
     turretModelDefinition.guns[duel.protagonist.gun.id];
+  const hullOrigin = new Vector3(
+    tankModelDefinition.hullOrigin[0],
+    tankModelDefinition.hullOrigin[1],
+    -tankModelDefinition.hullOrigin[2],
+  );
   const turretOrigin = new Vector3(
     tankModelDefinition.turretOrigin[0],
     tankModelDefinition.turretOrigin[1],
     -tankModelDefinition.turretOrigin[2],
-  ).applyAxisAngle(X_AXIS, Math.PI / 2);
-  const gunOrigin = new Vector3(
-    turretModelDefinition.gunOrigin[0],
-    turretModelDefinition.gunOrigin[1],
-    -turretModelDefinition.gunOrigin[2],
-  ).applyAxisAngle(X_AXIS, Math.PI / 2);
+  ).applyAxisAngle(I_HAT, Math.PI / 2);
   const maxThickness = Math.max(
     tankModelDefinition.trackThickness,
     gunModelDefinition.barrelThickness,
@@ -138,6 +121,7 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
       ref={wrapper}
       rotation={[-Math.PI / 2, 0, 0]}
       visible={initialTankopediaState.mode === 'armor'}
+      position={hullOrigin}
     >
       {armorNodes.map((node) => {
         const isHull = node.name.startsWith('hull_');
@@ -186,32 +170,6 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
             />
           );
         })}
-        <group ref={gunContainer}>
-          {armorNodes.map((node) => {
-            const isCurrentGun = node.name.startsWith(
-              `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
-            );
-            const isVisible = isCurrentGun;
-            const armorId = nameToArmorId(node.name);
-            const { spaced, thickness } = resolveArmor(
-              gunModelDefinition.armor,
-              armorId,
-            );
-
-            if (!isVisible || thickness === undefined || spaced) return null;
-
-            return (
-              <ArmorMesh
-                maxThickness={maxThickness}
-                duel={duel}
-                key={node.uuid}
-                geometry={(node as Mesh).geometry}
-                position={turretOrigin.clone().add(gunOrigin)}
-                thickness={thickness}
-              />
-            );
-          })}
-        </group>
       </group>
     </group>
   );

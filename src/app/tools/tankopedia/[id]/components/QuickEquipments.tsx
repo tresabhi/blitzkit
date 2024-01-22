@@ -1,12 +1,11 @@
 import { Flex } from '@radix-ui/themes';
 import { ModuleButton } from '../../../../../components/ModuleButton';
-import {
-  mutateTankopediaTemporary,
-  useTankopediaTemporary,
+import mutateTankopediaPersistent, {
+  useTankopediaPersistent,
 } from '../../../../../stores/tankopedia';
 
 export function QuickEquipments() {
-  const equipment = useTankopediaTemporary((state) => state.model.equipment);
+  const equipment = useTankopediaPersistent((state) => state.model.equipment);
 
   return (
     <Flex
@@ -26,7 +25,7 @@ export function QuickEquipments() {
         rowChild
         equipment={103}
         onClick={() => {
-          mutateTankopediaTemporary((draft) => {
+          mutateTankopediaPersistent((draft) => {
             draft.model.equipment.calibratedShells =
               !draft.model.equipment.calibratedShells;
           });
@@ -39,7 +38,7 @@ export function QuickEquipments() {
         rowChild
         equipment={110}
         onClick={() => {
-          mutateTankopediaTemporary((draft) => {
+          mutateTankopediaPersistent((draft) => {
             draft.model.equipment.enhancedArmor =
               !draft.model.equipment.enhancedArmor;
           });

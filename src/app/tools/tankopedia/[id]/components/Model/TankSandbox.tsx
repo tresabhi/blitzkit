@@ -165,6 +165,7 @@ export function TankSandbox({ duel }: TankSandboxProps) {
                   <Lighting duel={duel} />
                   <TankModel duel={duel} />
                   <TankArmor duel={duel} />
+                  {/* <SpacedArmorDepth duel={duel} /> */}
                 </Suspense>
               </Canvas>
             </div>

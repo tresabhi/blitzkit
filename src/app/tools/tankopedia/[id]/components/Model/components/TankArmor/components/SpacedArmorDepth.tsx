@@ -2,11 +2,7 @@ import { memo, useEffect, useRef } from 'react';
 import { Euler, Group, Mesh, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { ArmorMeshSpacedArmorDepth } from '../../../../../../../../../components/ArmorMesh/components/SpacedArmorDepth';
-import {
-  X_AXIS,
-  Y_AXIS,
-  Z_AXIS,
-} from '../../../../../../../../../constants/axis';
+import { I_HAT, J_HAT, K_HAT } from '../../../../../../../../../constants/axis';
 import {
   ModelTransformEventData,
   modelTransformEvent,
@@ -44,16 +40,21 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
   useEffect(() => {
     if (!modelDefinitions) return;
 
+    const hullOrigin = new Vector3(
+      tankModelDefinition.hullOrigin[0],
+      tankModelDefinition.hullOrigin[1],
+      -tankModelDefinition.hullOrigin[2],
+    ).applyAxisAngle(I_HAT, Math.PI / 2);
     const turretOrigin = new Vector3(
       tankModelDefinition.turretOrigin[0],
       tankModelDefinition.turretOrigin[1],
       -tankModelDefinition.turretOrigin[2],
-    ).applyAxisAngle(X_AXIS, Math.PI / 2);
+    ).applyAxisAngle(I_HAT, Math.PI / 2);
     const gunOrigin = new Vector3(
       turretModelDefinition.gunOrigin[0],
       turretModelDefinition.gunOrigin[1],
       -turretModelDefinition.gunOrigin[2],
-    ).applyAxisAngle(X_AXIS, Math.PI / 2);
+    ).applyAxisAngle(I_HAT, Math.PI / 2);
     const turretPosition = new Vector3();
     const turretRotation = new Euler();
     const gunPosition = new Vector3();
@@ -62,11 +63,13 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
     function handleModelTransform({ yaw, pitch }: ModelTransformEventData) {
       gunPosition
         .set(0, 0, 0)
+        .sub(hullOrigin)
         .sub(turretOrigin)
         .sub(gunOrigin)
-        .applyAxisAngle(X_AXIS, pitch)
+        .applyAxisAngle(I_HAT, pitch)
         .add(gunOrigin)
-        .add(turretOrigin);
+        .add(turretOrigin)
+        .add(hullOrigin);
       gunRotation.set(pitch, 0, 0);
       gunContainer.current?.position.copy(gunPosition);
       gunContainer.current?.rotation.copy(gunRotation);
@@ -75,6 +78,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
 
       turretPosition
         .set(0, 0, 0)
+        .sub(hullOrigin)
         .sub(turretOrigin)
         .applyAxisAngle(new Vector3(0, 0, 1), yaw);
       turretRotation.set(0, 0, yaw);
@@ -87,15 +91,15 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
         const initialRoll = -degToRad(tankModelDefinition.turretRotation.roll);
 
         turretPosition
-          .applyAxisAngle(X_AXIS, initialPitch)
-          .applyAxisAngle(Y_AXIS, initialRoll)
-          .applyAxisAngle(Z_AXIS, initialYaw);
+          .applyAxisAngle(I_HAT, initialPitch)
+          .applyAxisAngle(J_HAT, initialRoll)
+          .applyAxisAngle(K_HAT, initialYaw);
         turretRotation.x += initialPitch;
         turretRotation.y += initialRoll;
         turretRotation.z += initialYaw;
       }
 
-      turretPosition.add(turretOrigin);
+      turretPosition.add(turretOrigin).add(hullOrigin);
       turretContainer.current?.position.copy(turretPosition);
       turretContainer.current?.rotation.copy(turretRotation);
     }
@@ -139,16 +143,16 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
       })
       .filter(Boolean),
   );
+  const hullOrigin = new Vector3(
+    tankModelDefinition.hullOrigin[0],
+    tankModelDefinition.hullOrigin[1],
+    -tankModelDefinition.hullOrigin[2],
+  ).applyAxisAngle(I_HAT, Math.PI / 2);
   const turretOrigin = new Vector3(
     tankModelDefinition.turretOrigin[0],
     tankModelDefinition.turretOrigin[1],
     -tankModelDefinition.turretOrigin[2],
-  ).applyAxisAngle(X_AXIS, Math.PI / 2);
-  const gunOrigin = new Vector3(
-    turretModelDefinition.gunOrigin[0],
-    turretModelDefinition.gunOrigin[1],
-    -turretModelDefinition.gunOrigin[2],
-  ).applyAxisAngle(X_AXIS, Math.PI / 2);
+  ).applyAxisAngle(I_HAT, Math.PI / 2);
 
   return (
     <group
@@ -156,28 +160,30 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
       rotation={[-Math.PI / 2, 0, 0]}
       visible={initialTankopediaState.mode === 'armor'}
     >
-      {armorNodes.map((node) => {
-        const isHull = node.name.startsWith('hull_');
-        const isVisible = isHull;
-        const armorId = nameToArmorId(node.name);
-        const { spaced, thickness } = resolveArmor(
-          tankModelDefinition.armor,
-          armorId,
-        );
+      <group position={hullOrigin}>
+        {armorNodes.map((node) => {
+          const isHull = node.name.startsWith('hull_');
+          const isVisible = isHull;
+          const armorId = nameToArmorId(node.name);
+          const { spaced, thickness } = resolveArmor(
+            tankModelDefinition.armor,
+            armorId,
+          );
 
-        if (!isVisible || thickness === undefined) return null;
+          if (!isVisible || thickness === undefined) return null;
 
-        return (
-          <ArmorMeshSpacedArmorDepth
-            include={spaced}
-            isExternalModule={false}
-            thickness={thickness}
-            maxThickness={maxThickness}
-            key={node.uuid}
-            geometry={(node as Mesh).geometry}
-          />
-        );
-      })}
+          return (
+            <ArmorMeshSpacedArmorDepth
+              include={spaced}
+              isExternalModule={false}
+              thickness={thickness}
+              maxThickness={maxThickness}
+              key={node.uuid}
+              geometry={(node as Mesh).geometry}
+            />
+          );
+        })}
+      </group>
       {modelNodes.map((node) => {
         const isWheel = node.name.startsWith('chassis_wheel_');
         const isTrack = node.name.startsWith('chassis_track_');
@@ -195,40 +201,15 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
       })}
 
       <group ref={turretContainer}>
-        {armorNodes.map((node) => {
-          const isCurrentTurret = node.name.startsWith(
-            `turret_${turretModelDefinition.model.toString().padStart(2, '0')}`,
-          );
-          const isVisible = isCurrentTurret;
-          const armorId = nameToArmorId(node.name);
-          const { spaced, thickness } = resolveArmor(
-            turretModelDefinition.armor,
-            armorId,
-          );
-
-          if (!isVisible || thickness === undefined) return null;
-
-          return (
-            <ArmorMeshSpacedArmorDepth
-              include={spaced}
-              isExternalModule={false}
-              thickness={thickness}
-              maxThickness={maxThickness}
-              key={node.uuid}
-              geometry={(node as Mesh).geometry}
-              position={turretOrigin}
-            />
-          );
-        })}
-        <group ref={gunContainer}>
+        <group position={hullOrigin}>
           {armorNodes.map((node) => {
-            const isCurrentGun = node.name.startsWith(
-              `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
+            const isCurrentTurret = node.name.startsWith(
+              `turret_${turretModelDefinition.model.toString().padStart(2, '0')}`,
             );
-            const isVisible = isCurrentGun;
+            const isVisible = isCurrentTurret;
             const armorId = nameToArmorId(node.name);
             const { spaced, thickness } = resolveArmor(
-              gunModelDefinition.armor,
+              turretModelDefinition.armor,
               armorId,
             );
 
@@ -242,10 +223,12 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
                 maxThickness={maxThickness}
                 key={node.uuid}
                 geometry={(node as Mesh).geometry}
-                position={turretOrigin.clone().add(gunOrigin)}
+                position={turretOrigin}
               />
             );
           })}
+        </group>
+        <group ref={gunContainer}>
           {modelNodes.map((node) => {
             const isCurrentGun =
               node.name ===
