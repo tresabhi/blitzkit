@@ -93,6 +93,19 @@ export function TankSandbox({ duel }: TankSandboxProps) {
         }
 
         case Pose.Default:
+          mutateTankopediaTemporary((draft) => {
+            const [pitch, yaw] = applyPitchYawLimits(
+              0,
+              0,
+              gunModelDefinition.pitch,
+              turretModelDefinition.yaw,
+            );
+
+            modelTransformEvent.emit({ pitch, yaw });
+            draft.model.pose.pitch = pitch;
+            draft.model.pose.yaw = yaw;
+          });
+
           break;
       }
     }
