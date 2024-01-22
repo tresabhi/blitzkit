@@ -37,7 +37,7 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
     >
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <Button color={showGrid ? 'purple' : 'gray'} variant="ghost">
+          <Button variant="ghost">
             <EyeOpenIcon />
           </Button>
         </DropdownMenu.Trigger>
@@ -59,7 +59,7 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
 
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <Button color={showGrid ? 'purple' : 'gray'} variant="ghost">
+          <Button variant="ghost">
             <GearIcon />
           </Button>
         </DropdownMenu.Trigger>
