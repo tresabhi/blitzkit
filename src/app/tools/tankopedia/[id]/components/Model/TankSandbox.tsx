@@ -13,8 +13,7 @@ import {
 import { Duel } from '../../page';
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
-import { QuickEquipments } from '../QuickEquipments';
-import { RotationInputs } from '../RotationInputs';
+import { RotationInputs } from '../QuickInputs';
 import { SceneProps } from '../SceneProps';
 import { ModelLoader } from './components/ModelLoader';
 import { Options } from './components/Options';
@@ -186,7 +185,6 @@ export function TankSandbox({ duel }: TankSandboxProps) {
             <Options canvas={canvasWrapper} isFullScreen={isFullScreen} />
 
             <RotationInputs duel={duel} />
-            <QuickEquipments />
           </Flex>
         </Theme>
       </Card>

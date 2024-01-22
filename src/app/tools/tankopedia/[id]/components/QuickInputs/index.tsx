@@ -1,13 +1,15 @@
 import { Flex, TextField } from '@radix-ui/themes';
 import { use, useEffect, useRef } from 'react';
-import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
-import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
-import { modelTransformEvent } from '../../../../../core/blitzkrieg/modelTransform';
-import {
+import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
+import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
+import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
+import mutateTankopediaPersistent, {
   mutateTankopediaTemporary,
+  useTankopediaPersistent,
   useTankopediaTemporary,
-} from '../../../../../stores/tankopedia';
-import { Duel } from '../page';
+} from '../../../../../../stores/tankopedia';
+import { Duel } from '../../page';
+import { QuickEquipmentButton } from './components/QuickEquipmentButton';
 
 interface RotationInputsProps {
   duel: Duel;
@@ -18,6 +20,8 @@ export function RotationInputs({ duel: { protagonist } }: RotationInputsProps) {
   const awaitedModelDefinitions = use(modelDefinitions);
   const turretYawInput = useRef<HTMLInputElement>(null);
   const gunPitchInput = useRef<HTMLInputElement>(null);
+  const equipment = useTankopediaPersistent((state) => state.model.equipment);
+  const mode = useTankopediaTemporary((state) => state.mode);
 
   useEffect(() => {
     turretYawInput.current!.value = `${-Math.round(
@@ -45,6 +49,7 @@ export function RotationInputs({ duel: { protagonist } }: RotationInputsProps) {
         left: 8,
         bottom: 8,
       }}
+      gap="4"
     >
       <Flex
         gap="2"
@@ -124,6 +129,31 @@ export function RotationInputs({ duel: { protagonist } }: RotationInputsProps) {
           <TextField.Slot>°</TextField.Slot>
         </TextField.Root>
       </Flex>
+
+      {mode === 'armor' && (
+        <Flex gap="4">
+          <QuickEquipmentButton
+            equipment={103}
+            active={equipment.calibratedShells}
+            onClick={() => {
+              mutateTankopediaPersistent((draft) => {
+                draft.model.equipment.calibratedShells =
+                  !draft.model.equipment.calibratedShells;
+              });
+            }}
+          />
+          <QuickEquipmentButton
+            equipment={110}
+            active={equipment.enhancedArmor}
+            onClick={() => {
+              mutateTankopediaPersistent((draft) => {
+                draft.model.equipment.enhancedArmor =
+                  !draft.model.equipment.enhancedArmor;
+              });
+            }}
+          />
+        </Flex>
+      )}
     </Flex>
   );
 }
