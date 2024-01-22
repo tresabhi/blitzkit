@@ -20,7 +20,7 @@ export function Loader({ naked, color, progress }: LoaderProps) {
             position: 'absolute',
             left: '50%',
             top: '50%',
-            transform: 'translate(calc(-50% + 4px), calc(-50% + 4px))',
+            transform: 'translate(calc(-50% + 5px), calc(-50% + 5px))',
           }}
         >
           {Math.round(progress * 100)}%
