@@ -3,29 +3,24 @@ import { memo } from 'react';
 import { DepthTexture, Scene } from 'three';
 import { externalModuleMaskRenderTarget } from '../../../../../../../../components/ArmorMesh';
 import { spacedArmorDepthRenderTarget } from '../../../../../../../../components/ArmorMesh/components/SpacedArmorDepth';
-import { Duel } from '../../../../page';
 import { ArmorHighlighting } from './components/ArmorHighlighting';
 import { ExternalModuleMask } from './components/ExternalModuleMask';
 import { SpacedArmorDepth } from './components/SpacedArmorDepth';
 
-interface TankArmorProps {
-  duel: Duel;
-}
-
-export const TankArmor = memo<TankArmorProps>(({ duel }) => {
+export const TankArmor = memo(() => {
   const externalModuleMaskScene = new Scene();
   const spacedArmorDepthScene = new Scene();
   const armorHighlightingScene = new Scene();
   const externalModuleMaskPortal = createPortal(
-    <ExternalModuleMask duel={duel} />,
+    <ExternalModuleMask />,
     externalModuleMaskScene,
   );
   const spacedArmorDepthPortal = createPortal(
-    <SpacedArmorDepth duel={duel} />,
+    <SpacedArmorDepth />,
     spacedArmorDepthScene,
   );
   const armorHighlightingPortal = createPortal(
-    <ArmorHighlighting duel={duel} />,
+    <ArmorHighlighting />,
     armorHighlightingScene,
   );
 

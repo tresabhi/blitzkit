@@ -1,12 +1,9 @@
 import { useModel } from '../../../../../hooks/useModel';
-import { Duel } from '../page';
+import { useDuel } from '../../../../../stores/duel';
 
-interface LightingProps {
-  duel: Duel;
-}
-
-export function Lighting({ duel }: LightingProps) {
-  const { hasPbr } = useModel(duel.protagonist.tank.id);
+export function Lighting() {
+  const protagonist = useDuel((state) => state.protagonist!);
+  const { hasPbr } = useModel(protagonist.tank.id);
 
   return (
     <>

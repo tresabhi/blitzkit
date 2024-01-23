@@ -3,19 +3,16 @@ import { use, useEffect, useRef } from 'react';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
+import { useDuel } from '../../../../../../stores/duel';
 import mutateTankopediaPersistent, {
   mutateTankopediaTemporary,
   useTankopediaPersistent,
   useTankopediaTemporary,
 } from '../../../../../../stores/tankopedia';
-import { Duel } from '../../page';
 import { QuickEquipmentButton } from './components/QuickEquipmentButton';
 
-interface RotationInputsProps {
-  duel: Duel;
-}
-
-export function RotationInputs({ duel: { protagonist } }: RotationInputsProps) {
+export function RotationInputs() {
+  const protagonist = useDuel((state) => state.protagonist!);
   const physical = useTankopediaTemporary((state) => state.model.pose);
   const awaitedModelDefinitions = use(modelDefinitions);
   const turretYawInput = useRef<HTMLInputElement>(null);

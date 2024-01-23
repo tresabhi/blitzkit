@@ -7,8 +7,8 @@ import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimi
 import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
 import { Pose, poseEvent } from '../../../../../core/blitzkrieg/pose';
 import { useAwait } from '../../../../../hooks/useAwait';
+import { useDuel } from '../../../../../stores/duel';
 import { useTankopediaPersistent } from '../../../../../stores/tankopedia';
-import { Duel } from '../page';
 
 const poseDistances: Record<Pose, number> = {
   [Pose.HullDown]: 15,
@@ -16,24 +16,21 @@ const poseDistances: Record<Pose, number> = {
   [Pose.Default]: -1,
 };
 
-interface ControlsProps {
-  duel: Duel;
-}
-
-export function Controls({ duel }: ControlsProps) {
+export function Controls() {
   const camera = useThree((state) => state.camera);
   const orbitControls = useRef<OrbitControlsClass>(null);
   const awaitedModelDefinitions = useAwait(modelDefinitions);
+  const protagonist = useDuel((state) => state.protagonist!);
+  const antagonist = useDuel((state) => state.antagonist!);
   const protagonistModelDefinition =
-    awaitedModelDefinitions[duel.protagonist.tank.id];
-  const antagonistModelDefinition =
-    awaitedModelDefinitions[duel.antagonist.tank.id];
+    awaitedModelDefinitions[protagonist.tank.id];
+  const antagonistModelDefinition = awaitedModelDefinitions[antagonist.tank.id];
   const protagonistTurretModelDefinition =
-    protagonistModelDefinition.turrets[duel.protagonist.turret.id];
+    protagonistModelDefinition.turrets[protagonist.turret.id];
   const antagonistTurretModelDefinition =
-    antagonistModelDefinition.turrets[duel.antagonist.turret.id];
+    antagonistModelDefinition.turrets[antagonist.turret.id];
   const protagonistGunModelDefinition =
-    protagonistTurretModelDefinition.guns[duel.protagonist.gun.id];
+    protagonistTurretModelDefinition.guns[protagonist.gun.id];
   const protagonistHullOrigin = new Vector3(
     protagonistModelDefinition.hullOrigin[0],
     protagonistModelDefinition.hullOrigin[1],
@@ -148,7 +145,7 @@ export function Controls({ duel }: ControlsProps) {
       unsubscribeTankopedia();
       poseEvent.off(handlePoseEvent);
     };
-  }, [camera, duel.protagonist.tank.id, duel.antagonist.tank.id]);
+  }, [camera, protagonist.tank.id, antagonist.tank.id]);
 
   return (
     <OrbitControls

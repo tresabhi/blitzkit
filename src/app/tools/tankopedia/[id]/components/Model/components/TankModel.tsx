@@ -22,21 +22,17 @@ import {
 import { resolveJsxTree } from '../../../../../../../core/blitzkrieg/resolveJsxTree';
 import { normalizeAnglePI } from '../../../../../../../core/math/normalizeAngle180';
 import { useModel } from '../../../../../../../hooks/useModel';
+import { useDuel } from '../../../../../../../stores/duel';
 import mutateTankopediaPersistent, {
   mutateTankopediaTemporary,
   useTankopediaTemporary,
 } from '../../../../../../../stores/tankopedia';
-import { Duel } from '../../../page';
 
-interface TankModelProps {
-  duel: Duel;
-}
-
-export const TankModel = memo(({ duel: { protagonist } }: TankModelProps) => {
+export const TankModel = memo(() => {
   const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
     ModelDefinitions | undefined
   >(undefined);
-
+  const protagonist = useDuel((draft) => draft.protagonist!);
   const canvas = useThree((state) => state.gl.domElement);
   const physical = useTankopediaTemporary((state) => state.model.pose);
   const hullContainer = useRef<Group>(null);

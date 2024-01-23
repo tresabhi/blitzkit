@@ -12,12 +12,8 @@ import { resolveArmor } from '../../../../../../../../../core/blitzkrieg/resolve
 import { useArmor } from '../../../../../../../../../hooks/useArmor';
 import { useModel } from '../../../../../../../../../hooks/useModel';
 import { useModelDefinitions } from '../../../../../../../../../hooks/useModelDefinitions';
+import { useDuel } from '../../../../../../../../../stores/duel';
 import { useTankopediaTemporary } from '../../../../../../../../../stores/tankopedia';
-import { Duel } from '../../../../../page';
-
-interface SpacedArmorDepthProps {
-  duel: Duel;
-}
 
 /**
  * When rendered, this component provides the depth buffer for the armor which
@@ -30,7 +26,8 @@ interface SpacedArmorDepthProps {
  * - B: no data
  * - A: 1 means is armor; 0 is background
  */
-export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
+export const SpacedArmorDepth = memo(() => {
+  const protagonist = useDuel((state) => state.protagonist!);
   const wrapper = useRef<Group>(null);
   const modelDefinitions = useModelDefinitions();
   const turretContainer = useRef<Group>(null);
@@ -123,16 +120,15 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(({ duel }) => {
     return unsubscribe;
   });
 
-  const armorGltf = useArmor(duel.protagonist.tank.id);
-  const { gltf: modelGltf } = useModel(duel.protagonist.tank.id);
+  const armorGltf = useArmor(protagonist.tank.id);
+  const { gltf: modelGltf } = useModel(protagonist.tank.id);
 
   const armorNodes = Object.values(armorGltf.nodes);
   const modelNodes = Object.values(modelGltf.nodes);
-  const tankModelDefinition = modelDefinitions[duel.protagonist.tank.id];
+  const tankModelDefinition = modelDefinitions[protagonist.tank.id];
   const turretModelDefinition =
-    tankModelDefinition.turrets[duel.protagonist.turret.id];
-  const gunModelDefinition =
-    turretModelDefinition.guns[duel.protagonist.gun.id];
+    tankModelDefinition.turrets[protagonist.turret.id];
+  const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
   const maxThickness = Math.max(
     tankModelDefinition.trackThickness,
     gunModelDefinition.barrelThickness,

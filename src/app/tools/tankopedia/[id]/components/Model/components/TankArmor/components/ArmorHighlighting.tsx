@@ -11,14 +11,11 @@ import { nameToArmorId } from '../../../../../../../../../core/blitzkrieg/nameTo
 import { resolveArmor } from '../../../../../../../../../core/blitzkrieg/resolveThickness';
 import { useArmor } from '../../../../../../../../../hooks/useArmor';
 import { useModelDefinitions } from '../../../../../../../../../hooks/useModelDefinitions';
+import { useDuel } from '../../../../../../../../../stores/duel';
 import { useTankopediaTemporary } from '../../../../../../../../../stores/tankopedia';
-import { Duel } from '../../../../../page';
 
-interface ArmorHighlightingProps {
-  duel: Duel;
-}
-
-export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
+export function ArmorHighlighting() {
+  const protagonist = useDuel((state) => state.protagonist!);
   const wrapper = useRef<Group>(null);
   const modelDefinitions = useModelDefinitions();
   const turretContainer = useRef<Group>(null);
@@ -88,13 +85,12 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
     return unsubscribe;
   });
 
-  const armorGltf = useArmor(duel.protagonist.tank.id);
+  const armorGltf = useArmor(protagonist.tank.id);
   const armorNodes = Object.values(armorGltf.nodes);
-  const tankModelDefinition = modelDefinitions[duel.protagonist.tank.id];
+  const tankModelDefinition = modelDefinitions[protagonist.tank.id];
   const turretModelDefinition =
-    tankModelDefinition.turrets[duel.protagonist.turret.id];
-  const gunModelDefinition =
-    turretModelDefinition.guns[duel.protagonist.gun.id];
+    tankModelDefinition.turrets[protagonist.turret.id];
+  const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
   const hullOrigin = new Vector3(
     tankModelDefinition.hullOrigin[0],
     tankModelDefinition.hullOrigin[1],
@@ -137,7 +133,6 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
         return (
           <ArmorMesh
             maxThickness={maxThickness}
-            duel={duel}
             key={node.uuid}
             geometry={(node as Mesh).geometry}
             thickness={thickness}
@@ -162,7 +157,6 @@ export function ArmorHighlighting({ duel }: ArmorHighlightingProps) {
           return (
             <ArmorMesh
               maxThickness={maxThickness}
-              duel={duel}
               key={node.uuid}
               geometry={(node as Mesh).geometry}
               position={turretOrigin}

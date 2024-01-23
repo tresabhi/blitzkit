@@ -5,12 +5,12 @@ import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawL
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkrieg/pose';
+import { useDuel } from '../../../../../../stores/duel';
 import {
   TankopediaMode,
   mutateTankopediaTemporary,
   useTankopediaTemporary,
 } from '../../../../../../stores/tankopedia';
-import { Duel } from '../../page';
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
 import { RotationInputs } from '../QuickInputs';
@@ -20,21 +20,17 @@ import { Options } from './components/Options';
 import { TankArmor } from './components/TankArmor';
 import { TankModel } from './components/TankModel';
 
-interface TankSandboxProps {
-  duel: Duel;
-}
-
-export function TankSandbox({ duel }: TankSandboxProps) {
+export function TankSandbox() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const awaitedModelDefinitions = use(modelDefinitions);
   const canvasWrapper = useRef<HTMLDivElement>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const mode = useTankopediaTemporary((state) => state.mode);
-  const tankModelDefinition = awaitedModelDefinitions[duel.protagonist.tank.id];
+  const protagonist = useDuel((state) => state.protagonist!);
+  const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
   const turretModelDefinition =
-    tankModelDefinition.turrets[duel.protagonist.turret.id];
-  const gunModelDefinition =
-    turretModelDefinition.guns[duel.protagonist.gun.id];
+    tankModelDefinition.turrets[protagonist.turret.id];
+  const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
 
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);
@@ -119,8 +115,6 @@ export function TankSandbox({ duel }: TankSandboxProps) {
   });
 
   useEffect(() => {
-    if (!duel.protagonist) return void 0;
-
     mutateTankopediaTemporary((draft) => {
       [draft.model.pose.pitch, draft.model.pose.yaw] = applyPitchYawLimits(
         draft.model.pose.pitch,
@@ -129,7 +123,7 @@ export function TankSandbox({ duel }: TankSandboxProps) {
         turretModelDefinition.yaw,
       );
     });
-  }, [duel.protagonist.gun, duel.protagonist.turret]);
+  }, [protagonist.gun, protagonist.turret]);
 
   return (
     <Theme radius={isFullScreen ? 'none' : undefined}>
@@ -170,21 +164,20 @@ export function TankSandbox({ duel }: TankSandboxProps) {
                 camera={{ fov: 25 }}
                 onPointerDown={handlePointerDown}
               >
-                <Controls duel={duel} />
+                <Controls />
                 <SceneProps />
 
                 <Suspense fallback={<ModelLoader />}>
-                  <Lighting duel={duel} />
-                  <TankModel duel={duel} />
-                  <TankArmor duel={duel} />
-                  {/* <SpacedArmorDepth duel={duel} /> */}
+                  <Lighting />
+                  <TankModel />
+                  <TankArmor />
                 </Suspense>
               </Canvas>
             </div>
 
             <Options canvas={canvasWrapper} isFullScreen={isFullScreen} />
 
-            <RotationInputs duel={duel} />
+            <RotationInputs />
           </Flex>
         </Theme>
       </Card>

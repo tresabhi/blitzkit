@@ -1,13 +1,11 @@
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, Link, Text } from '@radix-ui/themes';
 import { Flag } from '../../../../../components/Flag';
-import { Duel } from '../page';
+import { useDuel } from '../../../../../stores/duel';
 
-interface TitleProps {
-  duel: Duel;
-}
+export function Title() {
+  const protagonist = useDuel((state) => state.protagonist!);
 
-export function Title({ duel }: TitleProps) {
   return (
     <Flex justify="between" align="center">
       <Link
@@ -21,8 +19,8 @@ export function Title({ duel }: TitleProps) {
       </Link>
 
       <Flex gap="2" align="center">
-        <Flag nation={duel.protagonist.tank.nation} />
-        <Heading>{duel.protagonist.tank.name}</Heading>
+        <Flag nation={protagonist.tank.nation} />
+        <Heading>{protagonist.tank.name}</Heading>
       </Flex>
     </Flex>
   );

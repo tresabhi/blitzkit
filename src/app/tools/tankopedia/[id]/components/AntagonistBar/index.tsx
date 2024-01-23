@@ -9,25 +9,17 @@ import {
   Text,
   Tooltip,
 } from '@radix-ui/themes';
-import { produce } from 'immer';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { ModuleButton } from '../../../../../../components/ModuleButton';
 import { SmallTankIcon } from '../../../../../../components/SmallTankIcon';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { SHELL_NAMES } from '../../../../../../core/blitzkrieg/tankDefinitions';
+import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
 import { TankSearch } from '../../../components/TankSearch';
-import { Duel } from '../../page';
 
-interface AntagonistBarProps {
-  duel: Duel;
-  setDuel: Dispatch<SetStateAction<Duel>>;
-}
-
-export function AntagonistBar({
-  duel: { antagonist },
-  setDuel,
-}: AntagonistBarProps) {
+export function AntagonistBar() {
+  const antagonist = useDuel((state) => state.antagonist!);
   const mode = useTankopediaTemporary((state) => state.mode);
   const [tab, setTab] = useState('search');
   const [antagonistSelectorOpen, setAntagonistSelectorVisible] =
@@ -50,11 +42,9 @@ export function AntagonistBar({
                 key={shell.id}
                 last={index === antagonist.gun.shells.length - 1}
                 onClick={() => {
-                  setDuel(
-                    produce<Duel>((draft) => {
-                      draft.antagonist.shell = shell;
-                    }),
-                  );
+                  mutateDuel((draft) => {
+                    draft.antagonist!.shell = shell;
+                  });
                 }}
               />
             );
@@ -109,16 +99,14 @@ export function AntagonistBar({
                       <TankSearch
                         compact
                         onSelect={(tank) => {
-                          setDuel(
-                            produce<Duel>((draft) => {
-                              draft.antagonist.tank = tank;
-                              draft.antagonist.turret = tank.turrets.at(-1)!;
-                              draft.antagonist.gun =
-                                draft.antagonist.turret.guns.at(-1)!;
-                              draft.antagonist.shell =
-                                draft.antagonist.gun.shells[0];
-                            }),
-                          );
+                          mutateDuel((draft) => {
+                            draft.antagonist!.tank = tank;
+                            draft.antagonist!.turret = tank.turrets.at(-1)!;
+                            draft.antagonist!.gun =
+                              draft.antagonist!.turret.guns.at(-1)!;
+                            draft.antagonist!.shell =
+                              draft.antagonist!.gun.shells[0];
+                          });
                           setAntagonistSelectorVisible(false);
                         }}
                       />
@@ -144,15 +132,13 @@ export function AntagonistBar({
                                   }
                                   key={turret.id}
                                   onClick={() => {
-                                    setDuel(
-                                      produce<Duel>((draft) => {
-                                        draft.antagonist.turret = turret;
-                                        draft.antagonist.gun =
-                                          turret.guns.at(-1)!;
-                                        draft.antagonist.shell =
-                                          draft.antagonist.gun.shells[0];
-                                      }),
-                                    );
+                                    mutateDuel((draft) => {
+                                      draft.antagonist!.turret = turret;
+                                      draft.antagonist!.gun =
+                                        turret.guns.at(-1)!;
+                                      draft.antagonist!.shell =
+                                        draft.antagonist!.gun.shells[0];
+                                    });
                                   }}
                                   selected={antagonist.turret.id === turret.id}
                                   tier={turret.tier}
@@ -172,12 +158,10 @@ export function AntagonistBar({
                                     index === antagonist.turret.guns.length - 1
                                   }
                                   onClick={() => {
-                                    setDuel(
-                                      produce<Duel>((draft) => {
-                                        draft.antagonist.gun = gun;
-                                        draft.antagonist.shell = gun.shells[0];
-                                      }),
-                                    );
+                                    mutateDuel((draft) => {
+                                      draft.antagonist!.gun = gun;
+                                      draft.antagonist!.shell = gun.shells[0];
+                                    });
                                   }}
                                   selected={antagonist.gun.id === gun.id}
                                   tier={gun.tier}
@@ -226,14 +210,12 @@ export function AntagonistBar({
         <Button
           variant="ghost"
           onClick={() => {
-            setDuel(
-              produce<Duel>((draft) => {
-                [draft.protagonist, draft.antagonist] = [
-                  draft.antagonist,
-                  draft.protagonist,
-                ];
-              }),
-            );
+            mutateDuel((draft) => {
+              [draft.protagonist, draft.antagonist] = [
+                draft.antagonist,
+                draft.protagonist,
+              ];
+            });
           }}
         >
           <ShuffleIcon /> Swap tanks

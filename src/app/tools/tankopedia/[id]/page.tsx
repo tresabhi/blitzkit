@@ -1,43 +1,40 @@
 'use client';
 
 import { Flex } from '@radix-ui/themes';
-import { produce } from 'immer';
-import { use, useEffect, useState } from 'react';
+import { use, useEffect } from 'react';
 import PageWrapper from '../../../../components/PageWrapper';
 import { tankDefinitions } from '../../../../core/blitzkrieg/tankDefinitions';
-import {
-  DuelMember,
-  mutateTankopediaTemporary,
-} from '../../../../stores/tankopedia';
+import { mutateDuel, useDuel } from '../../../../stores/duel';
+import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
 import { AntagonistBar } from './components/AntagonistBar';
 import { Configure } from './components/Configure';
 import { TankSandbox } from './components/Model/TankSandbox';
 import { Title } from './components/Title';
 
-export interface Duel {
-  protagonist: DuelMember;
-  antagonist: DuelMember;
-}
-
 export default function Page({ params }: { params: { id: string } }) {
   const id = parseInt(params.id);
   const awaitedTankDefinitions = use(tankDefinitions);
-  const [duel, setDuel] = useState<Duel>({
-    protagonist: {
-      tank: awaitedTankDefinitions[id],
-      turret: awaitedTankDefinitions[id].turrets.at(-1)!,
-      gun: awaitedTankDefinitions[id].turrets.at(-1)!.guns.at(-1)!,
-      shell: awaitedTankDefinitions[id].turrets.at(-1)!.guns.at(-1)!.shells[0],
-    },
-    antagonist: {
-      tank: awaitedTankDefinitions[id],
-      turret: awaitedTankDefinitions[id].turrets.at(-1)!,
-      gun: awaitedTankDefinitions[id].turrets.at(-1)!.guns.at(-1)!,
-      shell: awaitedTankDefinitions[id].turrets.at(-1)!.guns.at(-1)!.shells[0],
-    },
-  });
+  const assigned = useDuel((state) => state.assigned);
 
   useEffect(() => {
+    mutateDuel((draft) => {
+      draft.assigned = true;
+      draft.protagonist = {
+        tank: awaitedTankDefinitions[id],
+        turret: awaitedTankDefinitions[id].turrets.at(-1)!,
+        gun: awaitedTankDefinitions[id].turrets.at(-1)!.guns.at(-1)!,
+        shell: awaitedTankDefinitions[id].turrets.at(-1)!.guns.at(-1)!
+          .shells[0],
+      };
+      draft.antagonist = {
+        tank: awaitedTankDefinitions[id],
+        turret: awaitedTankDefinitions[id].turrets.at(-1)!,
+        gun: awaitedTankDefinitions[id].turrets.at(-1)!.guns.at(-1)!,
+        shell: awaitedTankDefinitions[id].turrets.at(-1)!.guns.at(-1)!
+          .shells[0],
+      };
+    });
+
     mutateTankopediaTemporary((draft) => {
       draft.model.pose.yaw = 0;
       draft.model.pose.pitch = 0;
@@ -48,27 +45,21 @@ export default function Page({ params }: { params: { id: string } }) {
       if (document.activeElement instanceof HTMLInputElement) return;
 
       if (event.key === '1') {
-        setDuel(
-          produce<Duel>((draft) => {
-            draft.antagonist.shell = draft.antagonist.gun.shells[0];
-          }),
-        );
+        mutateDuel((draft) => {
+          draft.antagonist!.shell = draft.antagonist!.gun.shells[0];
+        });
       } else if (event.key === '2') {
-        setDuel(
-          produce<Duel>((draft) => {
-            if (draft.antagonist.gun.shells[1]) {
-              draft.antagonist.shell = draft.antagonist.gun.shells[1];
-            }
-          }),
-        );
+        mutateDuel((draft) => {
+          if (draft.antagonist!.gun.shells[1]) {
+            draft.antagonist!.shell = draft.antagonist!.gun.shells[1];
+          }
+        });
       } else if (event.key === '3') {
-        setDuel(
-          produce<Duel>((draft) => {
-            if (draft.antagonist.gun.shells[2]) {
-              draft.antagonist.shell = draft.antagonist.gun.shells[2];
-            }
-          }),
-        );
+        mutateDuel((draft) => {
+          if (draft.antagonist!.gun.shells[2]) {
+            draft.antagonist!.shell = draft.antagonist!.gun.shells[2];
+          }
+        });
       }
     }
 
@@ -81,15 +72,17 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <PageWrapper color="purple">
-      <Flex gap="8" direction="column">
-        <Flex gap="4" direction="column">
-          <Title duel={duel} />
-          <TankSandbox duel={duel} />
-          <AntagonistBar duel={duel} setDuel={setDuel} />
-        </Flex>
+      {assigned && (
+        <Flex gap="8" direction="column">
+          <Flex gap="4" direction="column">
+            <Title />
+            <TankSandbox />
+            <AntagonistBar />
+          </Flex>
 
-        <Configure duel={duel} setDuel={setDuel} />
-      </Flex>
+          <Configure />
+        </Flex>
+      )}
     </PageWrapper>
   );
 }
