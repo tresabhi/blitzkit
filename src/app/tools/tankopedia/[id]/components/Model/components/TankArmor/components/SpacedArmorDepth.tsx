@@ -149,6 +149,11 @@ export const SpacedArmorDepth = memo(() => {
     tankModelDefinition.turretOrigin[1],
     -tankModelDefinition.turretOrigin[2],
   ).applyAxisAngle(I_HAT, Math.PI / 2);
+  const gunOrigin = new Vector3(
+    turretModelDefinition.gunOrigin[0],
+    turretModelDefinition.gunOrigin[1],
+    -turretModelDefinition.gunOrigin[2],
+  ).applyAxisAngle(I_HAT, Math.PI / 2);
 
   return (
     <group
@@ -225,6 +230,34 @@ export const SpacedArmorDepth = memo(() => {
           })}
         </group>
         <group ref={gunContainer}>
+          <group position={hullOrigin}>
+            {armorNodes.map((node) => {
+              const isCurrentGun = node.name.startsWith(
+                `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
+              );
+              const isVisible = isCurrentGun;
+              const armorId = nameToArmorId(node.name);
+              const { spaced, thickness } = resolveArmor(
+                gunModelDefinition.armor,
+                armorId,
+              );
+
+              if (!isVisible || thickness === undefined) return null;
+
+              return (
+                <ArmorMeshSpacedArmorDepth
+                  include={spaced}
+                  isExternalModule={false}
+                  thickness={thickness}
+                  maxThickness={maxThickness}
+                  key={node.uuid}
+                  geometry={(node as Mesh).geometry}
+                  position={turretOrigin.clone().add(gunOrigin)}
+                />
+              );
+            })}
+          </group>
+
           {modelNodes.map((node) => {
             const isCurrentGun =
               node.name ===

@@ -18,6 +18,7 @@ export function ArmorHighlighting() {
   const protagonist = useDuel((state) => state.protagonist!);
   const wrapper = useRef<Group>(null);
   const modelDefinitions = useModelDefinitions();
+  const gunContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
   const initialTankopediaState = useTankopediaTemporary.getState();
 
@@ -34,10 +35,24 @@ export function ArmorHighlighting() {
     ).applyAxisAngle(I_HAT, Math.PI / 2);
     const turretPosition = new Vector3();
     const turretRotation = new Euler();
+    const gunPosition = new Vector3();
+    const gunRotation = new Euler();
 
-    function handleModelTransform({ yaw }: ModelTransformEventData) {
+    function handleModelTransform({ pitch, yaw }: ModelTransformEventData) {
       if (yaw === undefined) return;
 
+      gunPosition
+        .set(0, 0, 0)
+        .sub(hullOrigin)
+        .sub(turretOrigin)
+        .sub(gunOrigin)
+        .applyAxisAngle(I_HAT, pitch)
+        .add(gunOrigin)
+        .add(turretOrigin)
+        .add(hullOrigin);
+      gunRotation.set(pitch, 0, 0);
+      gunContainer.current?.position.copy(gunPosition);
+      gunContainer.current?.rotation.copy(gunRotation);
       turretPosition
         .set(0, 0, 0)
         .sub(hullOrigin)
@@ -100,6 +115,11 @@ export function ArmorHighlighting() {
     tankModelDefinition.turretOrigin[0],
     tankModelDefinition.turretOrigin[1],
     -tankModelDefinition.turretOrigin[2],
+  ).applyAxisAngle(I_HAT, Math.PI / 2);
+  const gunOrigin = new Vector3(
+    turretModelDefinition.gunOrigin[0],
+    turretModelDefinition.gunOrigin[1],
+    -turretModelDefinition.gunOrigin[2],
   ).applyAxisAngle(I_HAT, Math.PI / 2);
   const maxThickness = Math.max(
     tankModelDefinition.trackThickness,
@@ -164,6 +184,32 @@ export function ArmorHighlighting() {
             />
           );
         })}
+
+        <group ref={gunContainer}>
+          {armorNodes.map((node) => {
+            const isCurrentGun = node.name.startsWith(
+              `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
+            );
+            const isVisible = isCurrentGun;
+            const armorId = nameToArmorId(node.name);
+            const { spaced, thickness } = resolveArmor(
+              gunModelDefinition.armor,
+              armorId,
+            );
+
+            if (!isVisible || thickness === undefined || spaced) return null;
+
+            return (
+              <ArmorMesh
+                maxThickness={maxThickness}
+                key={node.uuid}
+                geometry={(node as Mesh).geometry}
+                position={turretOrigin.clone().add(gunOrigin)}
+                thickness={thickness}
+              />
+            );
+          })}
+        </group>
       </group>
     </group>
   );
