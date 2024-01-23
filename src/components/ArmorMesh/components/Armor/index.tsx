@@ -25,17 +25,18 @@ export function ArmorMesh({
 }: ArmorMeshProps) {
   const initialEquipment = useTankopediaPersistent.getState().model.equipment;
   const camera = useThree((state) => state.camera);
-  const shell = useDuel((state) => state.antagonist!.shell);
+  const initialShell = useDuel.getState().antagonist!.shell;
   const greenPenetration = useTankopediaPersistent(
     (state) => state.model.visual.greenPenetration,
   );
   const material = useRef<ShaderMaterial>(null);
   const resolution = new Vector2();
-  const explosionCapable = isExplosive(shell.type);
+  const explosionCapable = isExplosive(initialShell.type);
 
   useEffect(() => {
     function updateQuickEquipments() {
       const equipment = useTankopediaPersistent.getState().model.equipment;
+      const shell = useDuel.getState().antagonist!.shell;
       const nearPenetration = resolveNearPenetration(shell.penetration);
 
       if (material.current) {
@@ -47,10 +48,31 @@ export function ArmorMesh({
       }
     }
 
+    function updateShellProperties() {
+      const shell = useDuel.getState().antagonist!.shell;
+      if (material.current) {
+        material.current.uniforms.isExplosive.value = isExplosive(shell.type);
+        material.current.uniforms.canSplash.value = canSplash(shell.type);
+        material.current.uniforms.caliber.value = shell.caliber;
+        material.current.uniforms.ricochetAngle.value = degToRad(
+          shell.ricochet ?? 90,
+        );
+        material.current.uniforms.damage.value = shell.damage.armor;
+        material.current.uniforms.explosionRadius.value =
+          shell.explosionRadius ?? 0;
+      }
+
+      updateQuickEquipments();
+    }
+
     const unsubscribes = [
       useTankopediaPersistent.subscribe(
         (state) => state.model.equipment,
         updateQuickEquipments,
+      ),
+      useDuel.subscribe(
+        (state) => state.antagonist!.shell,
+        updateShellProperties,
       ),
     ];
 
@@ -102,26 +124,26 @@ export function ArmorMesh({
             greenPenetration: { value: greenPenetration },
             maxThickness: { value: maxThickness },
             isExplosive: { value: explosionCapable },
-            canSplash: { value: canSplash(shell.type) },
+            canSplash: { value: canSplash(initialShell.type) },
             thickness: {
               value: thickness * (initialEquipment.enhancedArmor ? 1.04 : 1),
             },
             penetration: {
               value:
-                resolveNearPenetration(shell.penetration) *
+                resolveNearPenetration(initialShell.penetration) *
                 (initialEquipment.calibratedShells
                   ? explosionCapable
                     ? 1.1
                     : 1.05
                   : 1),
             },
-            caliber: { value: shell.caliber },
-            ricochetAngle: { value: degToRad(shell.ricochet ?? 90) },
+            caliber: { value: initialShell.caliber },
+            ricochetAngle: { value: degToRad(initialShell.ricochet ?? 90) },
             normalization: {
-              value: degToRad(shell.normalization ?? 0),
+              value: degToRad(initialShell.normalization ?? 0),
             },
-            damage: { value: shell.damage.armor },
-            explosionRadius: { value: shell.explosionRadius ?? 0 },
+            damage: { value: initialShell.damage.armor },
+            explosionRadius: { value: initialShell.explosionRadius ?? 0 },
           }}
         />
       </mesh>
