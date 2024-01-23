@@ -143,11 +143,11 @@ export function ArmorMesh({
             explosionRadius: { value: initialShell.explosionRadius ?? 0 },
           }}
         />
-        <meshBasicMaterial
+        {/* <meshBasicMaterial
           transparent
           color="#ff0000"
           opacity={Math.random()}
-        />
+        /> */}
       </mesh>
     </>
   );
