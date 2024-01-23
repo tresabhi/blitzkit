@@ -22,12 +22,9 @@ export function ArmorMesh({
   maxThickness,
   ...props
 }: ArmorMeshProps) {
-  const initialEquipment = useTankopediaPersistent.getState().model.equipment;
   const camera = useThree((state) => state.camera);
   const initialShell = useDuel.getState().antagonist!.shell;
-  const greenPenetration = useTankopediaPersistent(
-    (state) => state.model.visual.greenPenetration,
-  );
+  const initialTankopedia = useTankopediaPersistent.getState();
   const material = useRef<ShaderMaterial>(null);
   const resolution = new Vector2();
   const explosionCapable = isExplosive(initialShell.type);
@@ -72,6 +69,14 @@ export function ArmorMesh({
       useDuel.subscribe(
         (state) => state.antagonist!.shell,
         updateShellProperties,
+      ),
+      useTankopediaPersistent.subscribe(
+        (state) => state.model.visual.greenPenetration,
+        (greenPenetration) => {
+          if (material.current) {
+            material.current.uniforms.greenPenetration.value = greenPenetration;
+          }
+        },
       ),
     ];
 
@@ -118,17 +123,21 @@ export function ArmorMesh({
             projectionMatrixInverse: { value: null },
             zNear: { value: camera.near },
             zFar: { value: camera.far },
-            greenPenetration: { value: greenPenetration },
+            greenPenetration: {
+              value: initialTankopedia.model.visual.greenPenetration,
+            },
             maxThickness: { value: maxThickness },
             isExplosive: { value: explosionCapable },
             canSplash: { value: canSplash(initialShell.type) },
             thickness: {
-              value: thickness * (initialEquipment.enhancedArmor ? 1.04 : 1),
+              value:
+                thickness *
+                (initialTankopedia.model.equipment.enhancedArmor ? 1.04 : 1),
             },
             penetration: {
               value:
                 resolveNearPenetration(initialShell.penetration) *
-                (initialEquipment.calibratedShells
+                (initialTankopedia.model.equipment.calibratedShells
                   ? explosionCapable
                     ? 1.1
                     : 1.05
@@ -143,11 +152,6 @@ export function ArmorMesh({
             explosionRadius: { value: initialShell.explosionRadius ?? 0 },
           }}
         />
-        {/* <meshBasicMaterial
-          transparent
-          color="#ff0000"
-          opacity={Math.random()}
-        /> */}
       </mesh>
     </>
   );
