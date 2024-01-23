@@ -1,7 +1,6 @@
 import { MeshProps, useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
-import { MeshStandardMaterial, ShaderMaterial, Vector2 } from 'three';
-import ThreeCustomShaderMaterial from 'three-custom-shader-material';
+import { ShaderMaterial, Vector2 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
@@ -105,14 +104,12 @@ export function ArmorMesh({
       </mesh>
 
       <mesh {...props} renderOrder={1}>
-        <ThreeCustomShaderMaterial
+        <shaderMaterial
           ref={material}
-          silent
-          baseMaterial={MeshStandardMaterial}
-          transparent
-          depthWrite={false}
           fragmentShader={fragmentShader}
           vertexShader={vertexShader}
+          transparent
+          depthWrite={false}
           uniforms={{
             resolution: { value: null },
             externalModuleMask: { value: null },
@@ -145,6 +142,11 @@ export function ArmorMesh({
             damage: { value: initialShell.damage.armor },
             explosionRadius: { value: initialShell.explosionRadius ?? 0 },
           }}
+        />
+        <meshBasicMaterial
+          transparent
+          color="#ff0000"
+          opacity={Math.random()}
         />
       </mesh>
     </>

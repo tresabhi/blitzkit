@@ -1,6 +1,5 @@
 import { MeshProps } from '@react-three/fiber';
-import { MeshStandardMaterial, WebGLRenderTarget } from 'three';
-import ThreeCustomShaderMaterial from 'three-custom-shader-material';
+import { WebGLRenderTarget } from 'three';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
 
@@ -32,9 +31,7 @@ export function ArmorMeshSpacedArmorDepth(
 
       {props.include && (
         <mesh {...props} renderOrder={1}>
-          <ThreeCustomShaderMaterial
-            silent
-            baseMaterial={MeshStandardMaterial}
+          <shaderMaterial
             fragmentShader={fragmentShader}
             vertexShader={vertexShader}
             uniforms={{

@@ -1,4 +1,7 @@
-varying vec3 vCSMViewPosition;
+#define PI 3.1415926535897932384626433832795
+
+varying vec3 vViewPosition;
+varying vec3 vNormal;
 uniform bool isExplosive;
 uniform bool canSplash;
 uniform float thickness;
@@ -30,7 +33,7 @@ void main() {
   float penetrationChance = -1.0;
   float splashChance = -1.0;
 
-  vec3 normalizedViewPosition = normalize(vCSMViewPosition);
+  vec3 normalizedViewPosition = normalize(vViewPosition);
   float dotProduct = dot(vNormal, -normalizedViewPosition);
   float coreArmorangle = acos(dotProduct);
 
@@ -105,8 +108,8 @@ void main() {
 
   vec3 color = vec3(1.0, splashChance * 0.392, 0.0);
   if (greenPenetration) {
-    csm_FragColor = vec4(mix(color, vec3(0.0, 1.0, 0.0), penetrationChance), 0.5);
+    gl_FragColor = vec4(mix(color, vec3(0.0, 1.0, 0.0), penetrationChance), 0.5);
   } else {
-    csm_FragColor = vec4(color, (1.0 - penetrationChance) * 0.5);
+    gl_FragColor = vec4(color, (1.0 - penetrationChance) * 0.5);
   }
 }
