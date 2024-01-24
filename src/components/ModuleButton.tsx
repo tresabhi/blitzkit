@@ -1,18 +1,17 @@
 import { Button, Text } from '@radix-ui/themes';
 import { ComponentProps } from 'react';
 import { asset } from '../core/blitzkrieg/asset';
-import { TIER_ROMAN_NUMERALS, Tier } from '../core/blitzkrieg/tankDefinitions';
 
 type ModuleButtonProps = Omit<ComponentProps<typeof Button>, 'type'> & {
   selected?: boolean;
   first?: boolean;
   last?: boolean;
   rowChild?: boolean;
+  discriminator?: string;
 } & (
     | {
         type: 'module';
         module: string;
-        tier: Tier;
       }
     | {
         type: 'shell';
@@ -30,6 +29,7 @@ export function ModuleButton({
   first = false,
   last = false,
   rowChild,
+  discriminator,
   ...props
 }: ModuleButtonProps) {
   return (
@@ -74,7 +74,7 @@ export function ModuleButton({
               }),
         }}
       />
-      {props.type === 'module' && (
+      {discriminator !== undefined && (
         <Text
           size="1"
           weight="bold"
@@ -86,7 +86,7 @@ export function ModuleButton({
             textAlign: 'right',
           }}
         >
-          {TIER_ROMAN_NUMERALS[props.tier]}
+          {discriminator}
         </Text>
       )}
     </Button>

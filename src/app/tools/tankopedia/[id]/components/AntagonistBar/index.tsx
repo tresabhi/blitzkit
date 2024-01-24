@@ -13,7 +13,10 @@ import { useState } from 'react';
 import { ModuleButton } from '../../../../../../components/ModuleButton';
 import { SmallTankIcon } from '../../../../../../components/SmallTankIcon';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
-import { SHELL_NAMES } from '../../../../../../core/blitzkrieg/tankDefinitions';
+import {
+  SHELL_NAMES,
+  TIER_ROMAN_NUMERALS,
+} from '../../../../../../core/blitzkrieg/tankDefinitions';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
 import { TankSearch } from '../../../components/TankSearch';
@@ -39,6 +42,7 @@ export function AntagonistBar() {
                 shell={shell.icon}
                 rowChild
                 first={index === 0}
+                discriminator={`${index + 1}`}
                 key={shell.id}
                 last={index === antagonist.gun.shells.length - 1}
                 onClick={() => {
@@ -141,7 +145,9 @@ export function AntagonistBar() {
                                     });
                                   }}
                                   selected={antagonist.turret.id === turret.id}
-                                  tier={turret.tier}
+                                  discriminator={
+                                    TIER_ROMAN_NUMERALS[turret.tier]
+                                  }
                                   type="module"
                                   module="turret"
                                 />
@@ -164,7 +170,7 @@ export function AntagonistBar() {
                                     });
                                   }}
                                   selected={antagonist.gun.id === gun.id}
-                                  tier={gun.tier}
+                                  discriminator={TIER_ROMAN_NUMERALS[gun.tier]}
                                   type="module"
                                   module="gun"
                                 />

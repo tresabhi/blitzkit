@@ -2,6 +2,7 @@ import { Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
 import { ModuleButton } from '../../../../../components/ModuleButton';
 import { equipmentDefinitions } from '../../../../../core/blitzkrieg/equipmentDefinitions';
+import { TIER_ROMAN_NUMERALS } from '../../../../../core/blitzkrieg/tankDefinitions';
 import { mutateDuel, useDuel } from '../../../../../stores/duel';
 import {
   mutateTankopediaTemporary,
@@ -34,7 +35,7 @@ export function Configure() {
                     selected={protagonist.turret.id === thisTurret.id}
                     type="module"
                     module="turret"
-                    tier={thisTurret.tier}
+                    discriminator={TIER_ROMAN_NUMERALS[thisTurret.tier]}
                     first={index === 0}
                     last={index === protagonist.tank.turrets.length - 1}
                     rowChild
@@ -58,7 +59,7 @@ export function Configure() {
                     key={thisGun.id}
                     type="module"
                     module="gun"
-                    tier={thisGun.tier}
+                    discriminator={TIER_ROMAN_NUMERALS[thisGun.tier]}
                     selected={protagonist.gun.id === thisGun.id}
                     first={index === 0}
                     last={index === protagonist.turret.guns.length - 1}
