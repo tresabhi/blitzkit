@@ -160,12 +160,12 @@ export const ExternalModuleMask = memo(() => {
           const isHull = node.name.startsWith('hull_');
           const isVisible = isHull;
           const armorId = nameToArmorId(node.name);
-          const { thickness } = resolveArmor(
+          const { thickness, spaced } = resolveArmor(
             tankModelDefinition.armor,
             armorId,
           );
 
-          if (!isVisible || thickness === undefined) return null;
+          if (!isVisible || thickness === undefined || spaced) return null;
 
           return (
             <ArmorMeshExternalModuleMask
@@ -202,12 +202,12 @@ export const ExternalModuleMask = memo(() => {
             );
             const isVisible = isCurrentTurret;
             const armorId = nameToArmorId(node.name);
-            const { thickness } = resolveArmor(
+            const { thickness, spaced } = resolveArmor(
               turretModelDefinition.armor,
               armorId,
             );
 
-            if (!isVisible || thickness === undefined) return null;
+            if (!isVisible || thickness === undefined || spaced) return null;
 
             return (
               <ArmorMeshExternalModuleMask
@@ -227,12 +227,12 @@ export const ExternalModuleMask = memo(() => {
             );
             const isVisible = isCurrentGun;
             const armorId = nameToArmorId(node.name);
-            const { thickness } = resolveArmor(
+            const { thickness, spaced } = resolveArmor(
               gunModelDefinition.armor,
               armorId,
             );
 
-            if (!isVisible || thickness === undefined) return null;
+            if (!isVisible || thickness === undefined || spaced) return null;
 
             return (
               <ArmorMeshExternalModuleMask
