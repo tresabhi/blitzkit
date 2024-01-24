@@ -1,6 +1,6 @@
 import { MeshProps, useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
-import { ShaderMaterial, Vector2 } from 'three';
+import { IUniform, ShaderMaterial, Vector2 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
@@ -26,7 +26,6 @@ export function ArmorMesh({
   const initialShell = useDuel.getState().antagonist!.shell;
   const initialTankopedia = useTankopediaPersistent.getState();
   const material = useRef<ShaderMaterial>(null);
-  const resolution = new Vector2();
   const explosionCapable = isExplosive(initialShell.type);
 
   useEffect(() => {
@@ -87,10 +86,12 @@ export function ArmorMesh({
 
   useFrame(({ gl, camera }) => {
     if (material.current) {
-      material.current.uniforms.resolution.value = resolution.set(
-        gl.domElement.width,
-        gl.domElement.height,
-      );
+      gl.getSize(material.current.uniforms.resolution.value);
+
+      (
+        material.current.uniforms.resolution as IUniform<Vector2>
+      ).value.multiplyScalar(gl.getPixelRatio());
+
       material.current.uniforms.externalModuleMask.value =
         externalModuleMaskRenderTarget.texture;
       material.current.uniforms.spacedArmorDepth.value =
@@ -116,7 +117,7 @@ export function ArmorMesh({
           transparent
           depthWrite={false}
           uniforms={{
-            resolution: { value: null },
+            resolution: { value: new Vector2() },
             externalModuleMask: { value: null },
             spacedArmorDepth: { value: null },
             spacedArmorMask: { value: null },

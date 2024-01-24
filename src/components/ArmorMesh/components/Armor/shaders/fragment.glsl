@@ -112,4 +112,6 @@ void main() {
   } else {
     gl_FragColor = vec4(color, (1.0 - penetrationChance) * 0.5);
   }
+
+  // gl_FragColor = externalModuleMaskColor;
 }

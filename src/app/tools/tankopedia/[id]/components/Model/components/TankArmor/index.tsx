@@ -1,6 +1,6 @@
 import { createPortal, useFrame } from '@react-three/fiber';
 import { memo } from 'react';
-import { DepthTexture, Scene } from 'three';
+import { DepthTexture, Scene, Vector2 } from 'three';
 import { externalModuleMaskRenderTarget } from '../../../../../../../../components/ArmorMesh';
 import { spacedArmorDepthRenderTarget } from '../../../../../../../../components/ArmorMesh/components/SpacedArmorDepth';
 import { ArmorHighlighting } from './components/ArmorHighlighting';
@@ -23,28 +23,28 @@ export const TankArmor = memo(() => {
     <ArmorHighlighting />,
     armorHighlightingScene,
   );
+  const renderSize = new Vector2();
+  const newRenderSize = new Vector2();
 
   useFrame(({ gl, scene, camera }) => {
+    const pixelRatio = gl.getPixelRatio();
     gl.autoClear = true;
 
-    externalModuleMaskRenderTarget.setSize(
-      gl.domElement.width,
-      gl.domElement.height,
-    );
+    gl.getSize(newRenderSize).multiplyScalar(pixelRatio);
+    if (!newRenderSize.equals(renderSize)) {
+      renderSize.copy(newRenderSize);
+      spacedArmorDepthRenderTarget.depthTexture = new DepthTexture(
+        renderSize.x,
+        renderSize.y,
+      );
+    }
+
+    externalModuleMaskRenderTarget.setSize(renderSize.x, renderSize.y);
     gl.setRenderTarget(externalModuleMaskRenderTarget);
     gl.render(externalModuleMaskScene, camera);
 
     gl.clearDepth();
-    spacedArmorDepthRenderTarget.setSize(
-      gl.domElement.width,
-      gl.domElement.height,
-    );
-    if (!spacedArmorDepthRenderTarget.depthTexture) {
-      spacedArmorDepthRenderTarget.depthTexture = new DepthTexture(
-        gl.domElement.width,
-        gl.domElement.height,
-      );
-    }
+    spacedArmorDepthRenderTarget.setSize(renderSize.x, renderSize.y * 0.5);
     gl.setRenderTarget(spacedArmorDepthRenderTarget);
     gl.render(spacedArmorDepthScene, camera);
 
