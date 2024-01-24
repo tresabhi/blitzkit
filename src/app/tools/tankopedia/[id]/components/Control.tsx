@@ -149,6 +149,8 @@ export function Controls() {
 
   return (
     <OrbitControls
+      maxDistance={20}
+      minDistance={5}
       ref={orbitControls}
       enabled={useTankopediaPersistent.getState().model.visual.controlsEnabled}
       rotateSpeed={0.25}
