@@ -1,4 +1,5 @@
 import { Card, Flex, Tabs, Theme } from '@radix-ui/themes';
+import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
@@ -158,12 +159,8 @@ export function TankSandbox() {
             </Tabs.Root>
 
             <div style={{ height: '100%' }}>
-              <Canvas
-                shadows
-                ref={canvas}
-                camera={{ fov: 25 }}
-                onPointerDown={handlePointerDown}
-              >
+              <Canvas shadows ref={canvas} onPointerDown={handlePointerDown}>
+                <PerspectiveCamera makeDefault fov={25} far={32} />
                 <Controls />
                 <SceneProps />
 
@@ -176,7 +173,6 @@ export function TankSandbox() {
             </div>
 
             <Options canvas={canvasWrapper} isFullScreen={isFullScreen} />
-
             <RotationInputs />
           </Flex>
         </Theme>

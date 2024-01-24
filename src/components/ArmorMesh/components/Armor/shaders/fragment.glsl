@@ -10,7 +10,7 @@ uniform float caliber;
 uniform float ricochetAngle;
 uniform float normalization;
 uniform sampler2D externalModuleMask;
-uniform sampler2D spacedArmorDepth;
+uniform highp sampler2D spacedArmorDepth;
 uniform sampler2D spacedArmorMask;
 uniform vec2 resolution;
 varying mat4 vProjectionMatrix;
@@ -112,8 +112,4 @@ void main() {
   } else {
     gl_FragColor = vec4(color, (1.0 - penetrationChance) * 0.5);
   }
-
-  // if (isUnderExternalModule) {
-  //   gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
-  // }
 }
