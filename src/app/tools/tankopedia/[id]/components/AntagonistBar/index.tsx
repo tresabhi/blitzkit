@@ -42,7 +42,6 @@ export function AntagonistBar() {
                 shell={shell.icon}
                 rowChild
                 first={index === 0}
-                discriminator={`${index + 1}`}
                 key={shell.id}
                 last={index === antagonist.gun.shells.length - 1}
                 onClick={() => {
