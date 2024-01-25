@@ -72,6 +72,7 @@ export function ModuleButton({
       {...(props as unknown as ComponentProps<typeof Button>)}
     >
       <img
+        draggable={false}
         src={asset(
           props.type === 'module'
             ? `icons/modules/${props.module}.webp`

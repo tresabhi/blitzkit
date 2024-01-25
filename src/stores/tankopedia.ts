@@ -46,7 +46,7 @@ interface TankopediaPersistent {
   };
 }
 
-export type EquipmentMatrix = (0 | 1)[][];
+export type EquipmentMatrix = (-1 | 0 | 1)[][];
 
 interface TankopediaTemporary {
   model: {
@@ -100,9 +100,9 @@ export const useTankopediaTemporary = create<TankopediaTemporary>()(
       },
     },
     equipmentMatrix: [
-      [1, 0, 0],
-      [0, 1, 1],
-      [0, 1, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
     ],
     mode: 'model',
     consumables: [],

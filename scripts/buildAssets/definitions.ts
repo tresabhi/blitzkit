@@ -1,9 +1,9 @@
 import { readdir } from 'fs/promises';
-import { parse } from 'path';
+import { parse as parsePath } from 'path';
 import { Vector3Tuple } from 'three';
+import { parse as parseYaml } from 'yaml';
 import { TankType } from '../../src/components/Tanks';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
-import { readYAML } from '../../src/core/blitz/readYAML';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
@@ -60,6 +60,7 @@ type VehicleDefinitionArmor = Record<
 >;
 interface VehicleDefinitions {
   invisibility: { moving: number; still: number; firePenalty: number };
+  consumableSlots: number;
   optDevicePreset: string;
   hull: {
     armor: VehicleDefinitionArmor;
@@ -257,7 +258,9 @@ export async function buildDefinitions(production: boolean) {
   const strings = await readYAMLDVPL<Strings>(
     `${DATA}/${POI.strings}/en.yaml.dvpl`,
   );
-  const stringsCache = await readYAML<Strings>(POI.cachedStrings);
+  const stringsCache = await fetch(POI.cachedStrings)
+    .then((response) => response.text())
+    .then((string) => parseYaml(string) as Strings);
   const optionalDevices = await readXMLDVPL<{ root: OptionalDevices }>(
     `${DATA}/${POI.optionalDevices}.dvpl`,
   );
@@ -338,6 +341,7 @@ export async function buildDefinitions(production: boolean) {
         tankDefinitions[tankId] = {
           id: tankId,
           equipment,
+          consumables: tankDefinition.root.consumableSlots,
           name:
             (tank.shortUserString
               ? strings[tank.shortUserString] ??
@@ -392,7 +396,7 @@ export async function buildDefinitions(production: boolean) {
           (turretKey, turretIndex) => {
             const turret = tankDefinition.root.turrets0[turretKey];
             const turretModel = Number(
-              parse(turret.models.undamaged).name.split('_')[1],
+              parsePath(turret.models.undamaged).name.split('_')[1],
             );
             const turretId = toUniqueId(nation, turretList.root.ids[turretKey]);
             const turretYaw = (
@@ -468,7 +472,7 @@ export async function buildDefinitions(production: boolean) {
                 .split(' ')
                 .map(Number) as [number, number];
               const gunModel = Number(
-                parse(turretGunEntry.models.undamaged).name.split('_')[1],
+                parsePath(turretGunEntry.models.undamaged).name.split('_')[1],
               );
               const gunName =
                 strings[gunListEntry.userString] ?? gunKey.replaceAll('_', ' ');
