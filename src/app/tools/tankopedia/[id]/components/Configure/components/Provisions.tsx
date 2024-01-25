@@ -30,6 +30,7 @@ export function Provisions() {
 
       <Flex>
         {provisionsList.map((provision, index) => {
+          if (provision.id === 113) return null; // goofy useless provision
           const selected = provisions.includes(provision.id);
 
           return (
