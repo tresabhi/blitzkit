@@ -2,21 +2,21 @@ import { Flex, Heading, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import { ModuleButton } from '../../../../../../../components/ModuleButton';
 import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkrieg/checkConsumableInclusivity';
-import { consumableDefinitions } from '../../../../../../../core/blitzkrieg/consumableDefinitions';
+import { provisionDefinitions } from '../../../../../../../core/blitzkrieg/provisionDefinitions';
 import { useDuel } from '../../../../../../../stores/duel';
 import {
   mutateTankopediaTemporary,
   useTankopediaTemporary,
 } from '../../../../../../../stores/tankopedia';
 
-export function Consumables() {
+export function Provisions() {
   const protagonist = useDuel((state) => state.protagonist!);
-  const awaitedConsumableDefinitions = use(consumableDefinitions);
-  const consumables = useTankopediaTemporary((state) => state.consumables);
-  const consumablesList = Object.values(awaitedConsumableDefinitions).filter(
-    (consumable) =>
+  const awaitedProvisionDefinitions = use(provisionDefinitions);
+  const provisions = useTankopediaTemporary((state) => state.provisions);
+  const provisionsList = Object.values(awaitedProvisionDefinitions).filter(
+    (provision) =>
       checkConsumableProvisionInclusivity(
-        consumable,
+        provision,
         protagonist.tank,
         protagonist.gun,
       ),
@@ -25,33 +25,32 @@ export function Consumables() {
   return (
     <Flex gap="2" direction="column">
       <Heading size="4">
-        Consumables{' '}
-        <Text color="gray">(max {protagonist.tank.consumables})</Text>
+        Provisions <Text color="gray">(max {protagonist.tank.provisions})</Text>
       </Heading>
 
       <Flex>
-        {consumablesList.map((consumable, index) => {
-          const selected = consumables.includes(consumable.id);
+        {provisionsList.map((provision, index) => {
+          const selected = provisions.includes(provision.id);
 
           return (
             <ModuleButton
               first={index === 0}
-              last={index === consumablesList.length - 1}
+              last={index === provisionsList.length - 1}
               rowChild
-              type="consumable"
+              type="provision"
               disabled={
-                protagonist.tank.consumables === consumables.length && !selected
+                protagonist.tank.provisions === provisions.length && !selected
               }
-              consumable={consumable.id}
+              provision={provision.id}
               selected={selected}
               onClick={() => {
                 mutateTankopediaTemporary((draft) => {
                   if (selected) {
-                    draft.consumables = draft.consumables.filter(
-                      (id) => id !== consumable.id,
+                    draft.provisions = draft.provisions.filter(
+                      (id) => id !== provision.id,
                     );
                   } else {
-                    draft.consumables.push(consumable.id);
+                    draft.provisions.push(provision.id);
                   }
                 });
               }}

@@ -8,9 +8,9 @@ import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import {
-  ConsumableDefinitionFilterCategory,
   ConsumableDefinitions,
-} from '../../src/core/blitzkrieg/consumablesDefinitions';
+  TankFilterDefinitionCategory,
+} from '../../src/core/blitzkrieg/consumableDefinitions';
 import {
   EquipmentDefinitions,
   EquipmentPreset,
@@ -20,6 +20,7 @@ import {
   ModelArmor,
   ModelDefinitions,
 } from '../../src/core/blitzkrieg/modelDefinitions';
+import { ProvisionDefinitions } from '../../src/core/blitzkrieg/provisionDefinitions';
 import {
   GunDefinition,
   ShellType,
@@ -61,6 +62,7 @@ type VehicleDefinitionArmor = Record<
 interface VehicleDefinitions {
   invisibility: { moving: number; still: number; firePenalty: number };
   consumableSlots: number;
+  provisionSlots: number;
   optDevicePreset: string;
   hull: {
     armor: VehicleDefinitionArmor;
@@ -190,7 +192,7 @@ interface OptionalDeviceSlotRow {
   [key: string]: { device0: string; device1: string };
 }
 
-export interface ConsumablesCommon {
+export interface ConsumablesProvisionsCommon {
   [key: string]: {
     id: number;
     userString: string;
@@ -198,7 +200,7 @@ export interface ConsumablesCommon {
     icon: string;
     category: string;
     tags: string;
-    vehicleFilter: {
+    vehicleFilter?: {
       include: { vehicle: ConsumablesFilter };
       exclude?: { vehicle: ConsumablesFilter };
     };
@@ -218,7 +220,7 @@ type ConsumablesFilter =
   | { name: string }
   | { extendedTags: string };
 
-const consumableEffectSuffixes = [
+const consumableProvisionEffectSuffixes = [
   'Increase',
   'Factor',
   'Bias',
@@ -241,7 +243,7 @@ const missingStrings: Record<string, string> = {
   '#artefacts:tungstentip/name': 'Tungsten Shells',
 };
 
-export async function buildDefinitions(production: boolean) {
+export async function definitions(production: boolean) {
   console.log('Building tank definitions...');
 
   const tankDefinitions: TankDefinitions = {};
@@ -251,6 +253,7 @@ export async function buildDefinitions(production: boolean) {
     equipments: {},
   };
   const consumableDefinitions: ConsumableDefinitions = {};
+  const provisionDefinitions: ProvisionDefinitions = {};
   const nations = await readdir(`${DATA}/${POI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
@@ -267,8 +270,11 @@ export async function buildDefinitions(production: boolean) {
   const optionalDeviceSlots = await readXMLDVPL<{
     root: OptionalDeviceSlots;
   }>(`${DATA}/${POI.optionalDeviceSlots}.dvpl`);
-  const consumables = await readXMLDVPL<{ root: ConsumablesCommon }>(
+  const consumables = await readXMLDVPL<{ root: ConsumablesProvisionsCommon }>(
     `${DATA}/${POI.consumablesCommon}.dvpl`,
+  );
+  const provisions = await readXMLDVPL<{ root: ConsumablesProvisionsCommon }>(
+    `${DATA}/${POI.provisionsCommon}.dvpl`,
   );
 
   await Promise.all(
@@ -342,6 +348,7 @@ export async function buildDefinitions(production: boolean) {
           id: tankId,
           equipment,
           consumables: tankDefinition.root.consumableSlots,
+          provisions: tankDefinition.root.provisionSlots,
           name:
             (tank.shortUserString
               ? strings[tank.shortUserString] ??
@@ -646,21 +653,23 @@ export async function buildDefinitions(production: boolean) {
       include: [],
     };
 
-    const includeRaw = consumable.vehicleFilter.include.vehicle;
-    const excludeRaw = consumable.vehicleFilter.exclude?.vehicle;
+    const includeRaw = consumable.vehicleFilter?.include.vehicle;
+    const excludeRaw = consumable.vehicleFilter?.exclude?.vehicle;
 
-    if ('minLevel' in includeRaw) {
-      consumableDefinitions[consumable.id].include.push({
-        type: 'tier',
-        min: includeRaw.minLevel,
-        max: includeRaw.maxLevel,
-      });
-    } else if ('name' in includeRaw) {
-      consumableDefinitions[consumable.id].include.push({
-        type: 'ids',
-        ids: includeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
-      });
-    } else throw new SyntaxError('Unhandled include type');
+    if (includeRaw) {
+      if ('minLevel' in includeRaw) {
+        consumableDefinitions[consumable.id].include.push({
+          type: 'tier',
+          min: includeRaw.minLevel,
+          max: includeRaw.maxLevel,
+        });
+      } else if ('name' in includeRaw) {
+        consumableDefinitions[consumable.id].include.push({
+          type: 'ids',
+          ids: includeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
+        });
+      } else throw new SyntaxError('Unhandled include type');
+    }
 
     if (excludeRaw) {
       consumableDefinitions[consumable.id].exclude = [];
@@ -675,7 +684,7 @@ export async function buildDefinitions(production: boolean) {
           type: 'category',
           categories: excludeRaw.extendedTags.split(
             ' ',
-          ) as ConsumableDefinitionFilterCategory[],
+          ) as TankFilterDefinitionCategory[],
         });
       } else throw new SyntaxError('Unhandled exclude type');
     }
@@ -685,7 +694,9 @@ export async function buildDefinitions(production: boolean) {
       ...consumable.script.bonusValues,
     }).forEach(([effectName, effect]) => {
       if (
-        !consumableEffectSuffixes.some((suffix) => effectName.endsWith(suffix))
+        !consumableProvisionEffectSuffixes.some((suffix) =>
+          effectName.endsWith(suffix),
+        )
       ) {
         return;
       }
@@ -695,6 +706,73 @@ export async function buildDefinitions(production: boolean) {
       }
 
       consumableDefinitions[consumable.id].effects![effectName] =
+        effect as number;
+    });
+  });
+
+  Object.values(provisions.root).forEach((provision) => {
+    provisionDefinitions[provision.id] = {
+      id: provision.id,
+      name:
+        strings[provision.userString] ??
+        missingStrings[provision.userString] ??
+        `Unknown ${provision.id}`,
+      include: [],
+    };
+
+    const includeRaw = provision.vehicleFilter?.include.vehicle;
+    const excludeRaw = provision.vehicleFilter?.exclude?.vehicle;
+
+    if (includeRaw) {
+      if ('minLevel' in includeRaw) {
+        provisionDefinitions[provision.id].include.push({
+          type: 'tier',
+          min: includeRaw.minLevel,
+          max: includeRaw.maxLevel,
+        });
+      } else if ('name' in includeRaw) {
+        provisionDefinitions[provision.id].include.push({
+          type: 'ids',
+          ids: includeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
+        });
+      } else throw new SyntaxError('Unhandled include type');
+    }
+
+    if (excludeRaw) {
+      provisionDefinitions[provision.id].exclude = [];
+
+      if ('name' in excludeRaw) {
+        provisionDefinitions[provision.id].exclude!.push({
+          type: 'ids',
+          ids: excludeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
+        });
+      } else if ('extendedTags' in excludeRaw) {
+        provisionDefinitions[provision.id].exclude!.push({
+          type: 'category',
+          categories: excludeRaw.extendedTags.split(
+            ' ',
+          ) as TankFilterDefinitionCategory[],
+        });
+      } else throw new SyntaxError('Unhandled exclude type');
+    }
+
+    Object.entries({
+      ...provision.script,
+      ...provision.script.bonusValues,
+    }).forEach(([effectName, effect]) => {
+      if (
+        !consumableProvisionEffectSuffixes.some((suffix) =>
+          effectName.endsWith(suffix),
+        )
+      ) {
+        return;
+      }
+
+      if (!provisionDefinitions[provision.id].effects) {
+        provisionDefinitions[provision.id].effects = {};
+      }
+
+      provisionDefinitions[provision.id].effects![effectName] =
         effect as number;
     });
   });
@@ -721,6 +799,11 @@ export async function buildDefinitions(production: boolean) {
         content: JSON.stringify(consumableDefinitions),
         encoding: 'utf-8',
         path: 'definitions/consumables.json',
+      },
+      {
+        content: JSON.stringify(provisionDefinitions),
+        encoding: 'utf-8',
+        path: 'definitions/provisions.json',
       },
     ],
     production,

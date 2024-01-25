@@ -4,7 +4,7 @@ import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
 import { DATA, POI } from './constants';
 
-export async function buildCircleFlags(production: boolean) {
+export async function circleFlags(production: boolean) {
   const flags = await readdir(`${DATA}/${POI.flags}`);
   const changes = await Promise.all(
     flags

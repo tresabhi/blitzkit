@@ -1,8 +1,8 @@
 import { asset } from './asset';
 
-export type ConsumableDefinitionFilterCategory = 'clip';
+export type TankFilterDefinitionCategory = 'clip';
 
-type ConsumableDefinitionFilter =
+export type TankFilterDefinition =
   | {
       type: 'tier';
       min: number;
@@ -14,15 +14,15 @@ type ConsumableDefinitionFilter =
     }
   | {
       type: 'category';
-      categories: ConsumableDefinitionFilterCategory[];
+      categories: TankFilterDefinitionCategory[];
     };
 
 export interface ConsumableEntry {
   id: number;
   name: string;
   effects?: Record<string, number>;
-  include: ConsumableDefinitionFilter[];
-  exclude?: ConsumableDefinitionFilter[];
+  include: TankFilterDefinition[];
+  exclude?: TankFilterDefinition[];
 }
 
 export interface ConsumableDefinitions {

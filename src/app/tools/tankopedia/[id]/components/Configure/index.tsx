@@ -3,6 +3,7 @@ import { Camouflage } from './components/Camouflage';
 import { Consumables } from './components/Consumables';
 import { Equipments } from './components/Equipments';
 import { Modules } from './components/Modules';
+import { Provisions } from './components/Provisions';
 
 export function Configure() {
   return (
@@ -14,13 +15,10 @@ export function Configure() {
         <Equipments />
         <Consumables />
         <Camouflage />
+        <Provisions />
       </Flex>
 
       {/*
-      <Flex gap="4" direction="column">
-        <Heading size="5">Camouflage</Heading>
-      </Flex>
-
       <Flex gap="4" direction="column">
         <Heading size="5">Provisions</Heading>
       </Flex> */}

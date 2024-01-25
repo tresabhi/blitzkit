@@ -1,12 +1,13 @@
-import { ConsumableEntry } from './consumablesDefinitions';
+import { ConsumableEntry } from './consumableDefinitions';
+import { ProvisionEntry } from './provisionDefinitions';
 import { GunDefinition, TankDefinition } from './tankDefinitions';
 
-export function checkConsumableInclusivity(
-  consumable: ConsumableEntry,
+export function checkConsumableProvisionInclusivity(
+  consumableProvision: ConsumableEntry | ProvisionEntry,
   tank: TankDefinition,
   gun: GunDefinition,
 ) {
-  const included = consumable.include.every((rule) => {
+  const included = consumableProvision.include.every((rule) => {
     switch (rule.type) {
       case 'tier':
         return rule.min <= tank.tier && tank.tier <= rule.max;
@@ -18,7 +19,7 @@ export function checkConsumableInclusivity(
         throw new SyntaxError('Category filtering found in include rule');
     }
   });
-  const excluded = consumable.exclude?.some((rule) => {
+  const excluded = consumableProvision.exclude?.some((rule) => {
     switch (rule.type) {
       case 'tier':
         return rule.min <= tank.tier && tank.tier <= rule.max;

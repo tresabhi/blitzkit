@@ -26,6 +26,10 @@ type ModuleButtonProps = Omit<ComponentProps<typeof Button>, 'type'> & {
         consumable: number;
       }
     | {
+        type: 'provision';
+        provision: number;
+      }
+    | {
         type: 'camouflage';
       }
   );
@@ -89,7 +93,9 @@ export function ModuleButton({
                 ? `icons/consumables/${props.consumable}.webp`
                 : props.type === 'camouflage'
                   ? `icons/camo.webp`
-                  : `icons/equipment/${props.equipment}.webp`,
+                  : props.type === 'provision'
+                    ? `icons/provisions/${props.provision}.webp`
+                    : `icons/equipment/${props.equipment}.webp`,
         )}
         style={imageStyles}
       />

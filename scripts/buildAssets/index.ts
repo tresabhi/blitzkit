@@ -1,9 +1,9 @@
 import { config } from 'dotenv';
 import { argv } from 'process';
 import { camouflageIcons } from './camouflageIcons';
-import { buildCircleFlags } from './circleFlags';
-import { buildConsumableIcons } from './consumableIcons';
-import { buildDefinitions } from './definitions';
+import { circleFlags } from './circleFlags';
+import { consumableIcons } from './consumableIcons';
+import { definitions } from './definitions';
 import { equipmentIcons } from './equipmentIcons';
 import { buildModuleIcons } from './moduleIcons';
 import { buildScratchedFlags } from './scratchedFlags';
@@ -26,14 +26,14 @@ if (!targets && !allTargets) throw new Error('No target(s) specified');
 const methods = [
   buildTankModels,
   buildTankArmors,
-  buildDefinitions,
+  definitions,
   buildTankIcons,
   buildScratchedFlags,
-  buildCircleFlags,
+  circleFlags,
   buildShellIcons,
   buildModuleIcons,
   equipmentIcons,
-  buildConsumableIcons,
+  consumableIcons,
   camouflageIcons,
 ];
 

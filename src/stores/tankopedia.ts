@@ -58,6 +58,7 @@ interface TankopediaTemporary {
   equipmentMatrix: EquipmentMatrix;
   mode: TankopediaMode;
   consumables: number[];
+  provisions: number[];
   camouflage: boolean;
 }
 
@@ -107,6 +108,7 @@ export const useTankopediaTemporary = create<TankopediaTemporary>()(
     ],
     mode: 'model',
     consumables: [],
+    provisions: [],
     camouflage: false,
   })),
 );

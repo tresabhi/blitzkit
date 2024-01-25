@@ -20,6 +20,7 @@ export interface TankDefinition {
   name_full?: string;
   tree_type: TreeTypeString;
   consumables: number;
+  provisions: number;
   tier: Tier;
   type: TankType;
   testing?: boolean;
