@@ -24,4 +24,5 @@ export const POI = {
   consumableIcons: 'Gfx/UI/InventoryIcons/Big/Consumables',
   equipmentItemImageMappings:
     'UI/Screens3/Lobby/Inventory/Equipment/EquipmentItemImage.style.yaml',
+  defaultCamoIcon: 'Gfx/UI/Hangar/IconCamouflage.webp',
 } as const;

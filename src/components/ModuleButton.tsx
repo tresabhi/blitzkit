@@ -25,6 +25,9 @@ type ModuleButtonProps = Omit<ComponentProps<typeof Button>, 'type'> & {
         type: 'consumable';
         consumable: number;
       }
+    | {
+        type: 'camouflage';
+      }
   );
 
 export function ModuleButton({
@@ -49,6 +52,10 @@ export function ModuleButton({
     imageStyles.top = '50%';
     imageStyles.left = '50%';
     imageStyles.transform = 'translate(calc(-50% + 2px), calc(-50% + 2px))';
+  } else if (props.type === 'camouflage') {
+    imageStyles.top = '50%';
+    imageStyles.left = '50%';
+    imageStyles.transform = 'translate(calc(-50% + 4px), calc(-50% + 4px))';
   }
 
   return (
@@ -80,7 +87,9 @@ export function ModuleButton({
               ? `icons/shells/${props.shell}.webp`
               : props.type === 'consumable'
                 ? `icons/consumables/${props.consumable}.webp`
-                : `icons/equipment/${props.equipment}.webp`,
+                : props.type === 'camouflage'
+                  ? `icons/camo.webp`
+                  : `icons/equipment/${props.equipment}.webp`,
         )}
         style={imageStyles}
       />

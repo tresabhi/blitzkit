@@ -1,5 +1,6 @@
 import { config } from 'dotenv';
 import { argv } from 'process';
+import { camouflageIcons } from './camouflageIcons';
 import { buildCircleFlags } from './circleFlags';
 import { buildConsumableIcons } from './consumableIcons';
 import { buildDefinitions } from './definitions';
@@ -22,41 +23,22 @@ const production = argv.includes('--production');
 
 if (!targets && !allTargets) throw new Error('No target(s) specified');
 
-if (allTargets || targets?.includes('tankModels')) {
-  await buildTankModels(production);
-}
+const methods = [
+  buildTankModels,
+  buildTankArmors,
+  buildDefinitions,
+  buildTankIcons,
+  buildScratchedFlags,
+  buildCircleFlags,
+  buildShellIcons,
+  buildModuleIcons,
+  equipmentIcons,
+  buildConsumableIcons,
+  camouflageIcons,
+];
 
-if (allTargets || targets?.includes('tankArmor')) {
-  await buildTankArmors(production);
-}
-
-if (allTargets || targets?.includes('definitions')) {
-  await buildDefinitions(production);
-}
-
-if (allTargets || targets?.includes('tankIcons')) {
-  await buildTankIcons(production);
-}
-
-if (allTargets || targets?.includes('scratchedFlags')) {
-  await buildScratchedFlags(production);
-}
-
-if (allTargets || targets?.includes('circleFlags')) {
-  await buildCircleFlags(production);
-}
-
-if (allTargets || targets?.includes('shellIcons')) {
-  await buildShellIcons(production);
-}
-
-if (allTargets || targets?.includes('moduleIcons')) {
-  await buildModuleIcons(production);
-}
-if (allTargets || targets?.includes('equipmentIcons')) {
-  equipmentIcons(production);
-}
-
-if (allTargets || targets?.includes('consumableIcons')) {
-  await buildConsumableIcons(production);
+for (const method of methods) {
+  if (allTargets || targets?.includes(method.name)) {
+    await method(production);
+  }
 }

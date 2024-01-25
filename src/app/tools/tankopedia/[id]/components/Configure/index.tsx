@@ -1,4 +1,5 @@
 import { Flex, Heading } from '@radix-ui/themes';
+import { Camouflage } from './components/Camouflage';
 import { Consumables } from './components/Consumables';
 import { Equipments } from './components/Equipments';
 import { Modules } from './components/Modules';
@@ -12,15 +13,12 @@ export function Configure() {
         <Modules />
         <Equipments />
         <Consumables />
+        <Camouflage />
       </Flex>
 
       {/*
       <Flex gap="4" direction="column">
         <Heading size="5">Camouflage</Heading>
-      </Flex>
-
-      <Flex gap="4" direction="column">
-        <Heading size="5">Consumables</Heading>
       </Flex>
 
       <Flex gap="4" direction="column">
