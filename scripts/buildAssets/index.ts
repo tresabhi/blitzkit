@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import { argv } from 'process';
 import { camouflageIcons } from './camouflageIcons';
 import { circleFlags } from './circleFlags';
-import { consumableIcons } from './consumableIcons';
+import { consumableProvisionIcons } from './consumableProvisionIcons';
 import { definitions } from './definitions';
 import { equipmentIcons } from './equipmentIcons';
 import { buildModuleIcons } from './moduleIcons';
@@ -33,7 +33,7 @@ const methods = [
   buildShellIcons,
   buildModuleIcons,
   equipmentIcons,
-  consumableIcons,
+  consumableProvisionIcons,
   camouflageIcons,
 ];
 

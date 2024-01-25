@@ -15,6 +15,10 @@ export type TankFilterDefinition =
   | {
       type: 'category';
       categories: TankFilterDefinitionCategory[];
+    }
+  | {
+      type: 'nation';
+      nations: string[];
     };
 
 export interface ConsumableEntry {

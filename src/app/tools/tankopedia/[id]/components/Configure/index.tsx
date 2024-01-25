@@ -17,11 +17,6 @@ export function Configure() {
         <Camouflage />
         <Provisions />
       </Flex>
-
-      {/*
-      <Flex gap="4" direction="column">
-        <Heading size="5">Provisions</Heading>
-      </Flex> */}
     </Flex>
   );
 }

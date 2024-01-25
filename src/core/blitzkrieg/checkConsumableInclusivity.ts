@@ -15,6 +15,9 @@ export function checkConsumableProvisionInclusivity(
       case 'ids':
         return rule.ids.includes(tank.id);
 
+      case 'nation':
+        return rule.nations.includes(tank.nation);
+
       case 'category':
         throw new SyntaxError('Category filtering found in include rule');
     }
@@ -26,6 +29,9 @@ export function checkConsumableProvisionInclusivity(
 
       case 'ids':
         return rule.ids.includes(tank.id);
+
+      case 'nation':
+        return rule.nations.includes(tank.nation);
 
       case 'category':
         return rule.categories.some((category) => {

@@ -201,8 +201,8 @@ export interface ConsumablesProvisionsCommon {
     category: string;
     tags: string;
     vehicleFilter?: {
-      include: { vehicle: ConsumablesFilter };
-      exclude?: { vehicle: ConsumablesFilter };
+      include: { vehicle: ConsumablesVehicleFilter; nations?: string };
+      exclude?: { vehicle: ConsumablesVehicleFilter; nations?: string };
     };
     script: {
       '#text': string;
@@ -215,7 +215,7 @@ export interface ConsumablesProvisionsCommon {
   };
 }
 
-type ConsumablesFilter =
+type ConsumablesVehicleFilter =
   | { minLevel: number; maxLevel: number }
   | { name: string }
   | { extendedTags: string };
@@ -669,6 +669,13 @@ export async function definitions(production: boolean) {
           ids: includeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
         });
       } else throw new SyntaxError('Unhandled include type');
+
+      if (consumable.vehicleFilter?.include.nations) {
+        consumableDefinitions[consumable.id].include.push({
+          type: 'nation',
+          nations: consumable.vehicleFilter.include.nations.split(' '),
+        });
+      }
     }
 
     if (excludeRaw) {
@@ -687,6 +694,13 @@ export async function definitions(production: boolean) {
           ) as TankFilterDefinitionCategory[],
         });
       } else throw new SyntaxError('Unhandled exclude type');
+
+      if (consumable.vehicleFilter?.exclude?.nations) {
+        consumableDefinitions[consumable.id].exclude!.push({
+          type: 'nation',
+          nations: consumable.vehicleFilter.exclude.nations.split(' '),
+        });
+      }
     }
 
     Object.entries({
@@ -736,6 +750,13 @@ export async function definitions(production: boolean) {
           ids: includeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
         });
       } else throw new SyntaxError('Unhandled include type');
+
+      if (provision.vehicleFilter?.include.nations) {
+        provisionDefinitions[provision.id].include.push({
+          type: 'nation',
+          nations: provision.vehicleFilter.include.nations.split(' '),
+        });
+      }
     }
 
     if (excludeRaw) {
@@ -754,6 +775,13 @@ export async function definitions(production: boolean) {
           ) as TankFilterDefinitionCategory[],
         });
       } else throw new SyntaxError('Unhandled exclude type');
+
+      if (provision.vehicleFilter?.exclude?.nations) {
+        provisionDefinitions[provision.id].exclude!.push({
+          type: 'nation',
+          nations: provision.vehicleFilter.exclude.nations.split(' '),
+        });
+      }
     }
 
     Object.entries({
