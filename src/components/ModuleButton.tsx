@@ -1,5 +1,5 @@
 import { Button, Text } from '@radix-ui/themes';
-import { ComponentProps } from 'react';
+import { CSSProperties, ComponentProps } from 'react';
 import { asset } from '../core/blitzkrieg/asset';
 
 type ModuleButtonProps = Omit<ComponentProps<typeof Button>, 'type'> & {
@@ -21,6 +21,10 @@ type ModuleButtonProps = Omit<ComponentProps<typeof Button>, 'type'> & {
         type: 'equipment';
         equipment: number;
       }
+    | {
+        type: 'consumable';
+        consumable: number;
+      }
   );
 
 export function ModuleButton({
@@ -30,10 +34,26 @@ export function ModuleButton({
   last = false,
   rowChild,
   discriminator,
+  disabled,
   ...props
 }: ModuleButtonProps) {
+  const imageStyles: CSSProperties = {
+    width: 32,
+    height: 32,
+    position: 'absolute',
+    opacity: disabled ? 0.5 : 1,
+    transform: 'scale(0.75)',
+  };
+
+  if (props.type === 'module') {
+    imageStyles.top = '50%';
+    imageStyles.left = '50%';
+    imageStyles.transform = 'translate(calc(-50% + 2px), calc(-50% + 2px))';
+  }
+
   return (
     <Button
+      disabled={disabled}
       radius="medium"
       color={selected ? undefined : 'gray'}
       variant={selected ? 'surface' : 'soft'}
@@ -57,22 +77,11 @@ export function ModuleButton({
             ? `icons/modules/${props.module}.webp`
             : props.type === 'shell'
               ? `icons/shells/${props.shell}.webp`
-              : `icons/equipment/${props.equipment}.webp`,
+              : props.type === 'consumable'
+                ? `icons/consumables/${props.consumable}.webp`
+                : `icons/equipment/${props.equipment}.webp`,
         )}
-        style={{
-          width: 32,
-          height: 32,
-          position: 'absolute',
-          ...(props.type === 'module'
-            ? {
-                top: '50%',
-                left: '50%',
-                transform: 'translate(calc(-50% + 2px), calc(-50% + 2px))',
-              }
-            : {
-                transform: 'scale(0.75)',
-              }),
-        }}
+        style={imageStyles}
       />
       {discriminator !== undefined && (
         <Text

@@ -7,7 +7,10 @@ import { readYAML } from '../../src/core/blitz/readYAML';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
-import { ConsumableDefinitions } from '../../src/core/blitzkrieg/consumablesDefinitions';
+import {
+  ConsumableDefinitionFilterCategory,
+  ConsumableDefinitions,
+} from '../../src/core/blitzkrieg/consumablesDefinitions';
 import {
   EquipmentDefinitions,
   EquipmentPreset,
@@ -666,7 +669,9 @@ export async function buildDefinitions(production: boolean) {
       } else if ('extendedTags' in excludeRaw) {
         consumableDefinitions[consumable.id].exclude!.push({
           type: 'category',
-          categories: excludeRaw.extendedTags.split(' '),
+          categories: excludeRaw.extendedTags.split(
+            ' ',
+          ) as ConsumableDefinitionFilterCategory[],
         });
       } else throw new SyntaxError('Unhandled exclude type');
     }

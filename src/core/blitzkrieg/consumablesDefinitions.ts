@@ -1,5 +1,7 @@
 import { asset } from './asset';
 
+export type ConsumableDefinitionFilterCategory = 'clip';
+
 type ConsumableDefinitionFilter =
   | {
       type: 'tier';
@@ -12,17 +14,19 @@ type ConsumableDefinitionFilter =
     }
   | {
       type: 'category';
-      categories: string[];
+      categories: ConsumableDefinitionFilterCategory[];
     };
 
+export interface ConsumableEntry {
+  id: number;
+  name: string;
+  effects?: Record<string, number>;
+  include: ConsumableDefinitionFilter[];
+  exclude?: ConsumableDefinitionFilter[];
+}
+
 export interface ConsumableDefinitions {
-  [key: string]: {
-    id: number;
-    name: string;
-    effects?: Record<string, number>;
-    include: ConsumableDefinitionFilter[];
-    exclude?: ConsumableDefinitionFilter[];
-  };
+  [key: string]: ConsumableEntry;
 }
 
 export const consumableDefinitions = fetch(

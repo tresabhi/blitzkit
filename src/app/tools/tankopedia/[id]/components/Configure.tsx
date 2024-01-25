@@ -1,6 +1,8 @@
 import { Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
 import { ModuleButton } from '../../../../../components/ModuleButton';
+import { checkConsumableInclusivity } from '../../../../../core/blitzkrieg/checkConsumableInclusivity';
+import { consumableDefinitions } from '../../../../../core/blitzkrieg/consumablesDefinitions';
 import { equipmentDefinitions } from '../../../../../core/blitzkrieg/equipmentDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../../core/blitzkrieg/tankDefinitions';
 import { mutateDuel, useDuel } from '../../../../../stores/duel';
@@ -12,11 +14,13 @@ import {
 export function Configure() {
   const protagonist = useDuel((state) => state.protagonist!);
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
+  const awaitedConsumableDefinitions = use(consumableDefinitions);
   const equipmentRows =
     awaitedEquipmentDefinitions.presets[protagonist.tank.equipment];
   const equipmentMatrix = useTankopediaTemporary(
     (state) => state.equipmentMatrix,
   );
+  const consumables = useTankopediaTemporary((state) => state.consumables);
 
   return (
     <Flex gap="4" direction="column">
@@ -118,6 +122,35 @@ export function Configure() {
 
         <Flex gap="2" direction="column">
           <Heading size="4">Consumables</Heading>
+
+          {Object.values(awaitedConsumableDefinitions)
+            .filter((consumable) =>
+              checkConsumableInclusivity(
+                consumable,
+                protagonist.tank,
+                protagonist.gun,
+              ),
+            )
+            .map((consumable) => (
+              <ModuleButton
+                first
+                last
+                type="consumable"
+                consumable={consumable.id}
+                selected={consumables.includes(consumable.id)}
+                onClick={() => {
+                  mutateTankopediaTemporary((draft) => {
+                    if (draft.consumables.includes(consumable.id)) {
+                      draft.consumables = draft.consumables.filter(
+                        (id) => id !== consumable.id,
+                      );
+                    } else {
+                      draft.consumables.push(consumable.id);
+                    }
+                  });
+                }}
+              />
+            ))}
         </Flex>
       </Flex>
 
