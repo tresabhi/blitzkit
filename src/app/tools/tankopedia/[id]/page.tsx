@@ -38,7 +38,15 @@ export default function Page({ params }: { params: { id: string } }) {
     mutateTankopediaTemporary((draft) => {
       draft.model.pose.yaw = 0;
       draft.model.pose.pitch = 0;
-      draft.mode = 'armor';
+      draft.mode = 'model';
+      draft.consumables = [];
+      draft.provisions = [];
+      draft.camouflage = false;
+      draft.equipmentMatrix = [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+      ];
     });
 
     function handleKeyDown(event: KeyboardEvent) {

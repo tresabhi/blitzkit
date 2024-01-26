@@ -43,5 +43,5 @@ export function checkConsumableProvisionInclusivity(
     }
   });
 
-  return included && !excluded;
+  return consumableProvision.include.length > 0 && included && !excluded;
 }
