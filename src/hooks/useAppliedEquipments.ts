@@ -6,5 +6,5 @@ export function useAppliedEquipments(
   preset: EquipmentPreset,
 ) {
   const flatMatrix = matrix.flat();
-  return preset.flat().map((options, index) => options[flatMatrix[index]]);
+  return preset.flat().map((options, index) => options[flatMatrix[index]] == 1 ? 1 : 0);
 }
