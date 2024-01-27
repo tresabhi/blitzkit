@@ -34,7 +34,7 @@ export function TankSandbox() {
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
-  const [loadModel, setLoadModel] = useState(false);
+  const [loadModel, setLoadModel] = useState(true); // set to false someday?
   const duel = useDuel();
 
   function handlePointerDown() {
