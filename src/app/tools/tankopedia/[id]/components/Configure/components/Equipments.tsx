@@ -7,6 +7,7 @@ import {
   mutateTankopediaTemporary,
   useTankopediaTemporary,
 } from '../../../../../../../stores/tankopedia';
+import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Equipments() {
   const protagonist = useDuel((state) => state.protagonist!);
@@ -18,7 +19,7 @@ export function Equipments() {
   );
 
   return (
-    <Flex gap="2" direction="column">
+    <ConfigurationChildWrapper>
       <Heading size="4">Equipments</Heading>
 
       <Flex direction="column" gap="2">
@@ -63,6 +64,6 @@ export function Equipments() {
           </Flex>
         ))}
       </Flex>
-    </Flex>
+    </ConfigurationChildWrapper>
   );
 }

@@ -2,12 +2,13 @@ import { Flex, Heading } from '@radix-ui/themes';
 import { ModuleButton } from '../../../../../../../components/ModuleButton';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../../core/blitzkrieg/tankDefinitions';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
+import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Modules() {
   const protagonist = useDuel((state) => state.protagonist!);
 
   return (
-    <Flex gap="2" direction="column">
+    <ConfigurationChildWrapper>
       <Heading size="4">Modules</Heading>
 
       <Flex gap="2">
@@ -59,6 +60,6 @@ export function Modules() {
           })}
         </Flex>
       </Flex>
-    </Flex>
+    </ConfigurationChildWrapper>
   );
 }

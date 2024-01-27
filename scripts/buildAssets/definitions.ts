@@ -358,7 +358,7 @@ export async function definitions(production: boolean) {
             stringsCache[tank.userString],
           name_full: strings[tank.userString] ?? stringsCache[tank.userString],
           nation,
-          tree_type: (tank.sellPrice ? 'gold' in tank.sellPrice : false)
+          tree_type: tankTags.includes('collectible')
             ? 'collector'
             : (typeof tank.price === 'number' ? false : 'gold' in tank.price)
               ? 'premium'

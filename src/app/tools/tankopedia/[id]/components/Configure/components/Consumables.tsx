@@ -8,6 +8,7 @@ import {
   mutateTankopediaTemporary,
   useTankopediaTemporary,
 } from '../../../../../../../stores/tankopedia';
+import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Consumables() {
   const protagonist = useDuel((state) => state.protagonist!);
@@ -23,7 +24,7 @@ export function Consumables() {
   );
 
   return (
-    <Flex gap="2" direction="column">
+    <ConfigurationChildWrapper>
       <Heading size="4">
         Consumables{' '}
         <Text color="gray">(max {protagonist.tank.consumables})</Text>
@@ -59,6 +60,6 @@ export function Consumables() {
           );
         })}
       </Flex>
-    </Flex>
+    </ConfigurationChildWrapper>
   );
 }

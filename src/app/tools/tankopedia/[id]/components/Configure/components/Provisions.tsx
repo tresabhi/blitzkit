@@ -8,6 +8,7 @@ import {
   mutateTankopediaTemporary,
   useTankopediaTemporary,
 } from '../../../../../../../stores/tankopedia';
+import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Provisions() {
   const protagonist = useDuel((state) => state.protagonist!);
@@ -23,7 +24,7 @@ export function Provisions() {
   );
 
   return (
-    <Flex gap="2" direction="column">
+    <ConfigurationChildWrapper>
       <Heading size="4">
         Provisions <Text color="gray">(max {protagonist.tank.provisions})</Text>
       </Heading>
@@ -58,6 +59,6 @@ export function Provisions() {
           );
         })}
       </Flex>
-    </Flex>
+    </ConfigurationChildWrapper>
   );
 }

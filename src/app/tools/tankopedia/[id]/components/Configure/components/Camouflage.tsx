@@ -1,15 +1,16 @@
-import { Flex, Heading } from '@radix-ui/themes';
+import { Heading } from '@radix-ui/themes';
 import { ModuleButton } from '../../../../../../../components/ModuleButton';
 import {
   mutateTankopediaTemporary,
   useTankopediaTemporary,
 } from '../../../../../../../stores/tankopedia';
+import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Camouflage() {
   const camouflage = useTankopediaTemporary((state) => state.camouflage);
 
   return (
-    <Flex gap="2" direction="column">
+    <ConfigurationChildWrapper>
       <Heading size="4">Camouflage</Heading>
 
       <ModuleButton
@@ -23,6 +24,6 @@ export function Camouflage() {
           });
         }}
       />
-    </Flex>
+    </ConfigurationChildWrapper>
   );
 }

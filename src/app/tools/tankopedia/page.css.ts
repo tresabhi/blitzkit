@@ -55,3 +55,20 @@ export const alignTopRight = style({
     },
   },
 });
+
+export const configure = style({
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: 16,
+});
+
+export const configureRight = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 8,
+});
+export const configureLeft = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 8,
+});
