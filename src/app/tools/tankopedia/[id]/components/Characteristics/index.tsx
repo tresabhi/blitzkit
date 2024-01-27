@@ -1,7 +1,6 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 import { Flex, Heading } from '@radix-ui/themes';
 import { useState } from 'react';
-import * as styles from '../../../page.css';
 import { Camouflage } from './components/Camouflage';
 import { Consumables } from './components/Consumables';
 import { Crew } from './components/Crew';
@@ -15,30 +14,8 @@ export function Characteristics() {
   const [statsVisible, setStatsVisible] = useState(true);
 
   return (
-    <Flex className={styles.characteristics}>
-      <div className={styles.configuration}>
-        <Heading
-          onClick={() => setConfigureVisible((state) => !state)}
-          style={{
-            cursor: 'pointer',
-          }}
-        >
-          Configure {configureVisible ? <ChevronDownIcon /> : <ChevronUpIcon />}
-        </Heading>
-
-        {configureVisible && (
-          <Flex direction="column" gap="4">
-            <Modules />
-            <Equipments />
-            <Crew />
-            <Consumables />
-            <Provisions />
-            <Camouflage />
-          </Flex>
-        )}
-      </div>
-
-      <Flex style={{ flex: 1 }} wrap="wrap" direction="column" gap="4">
+    <Flex gap="8" wrap="wrap">
+      <Flex style={{ flex: 1, minWidth: 320 }} direction="column" gap="4">
         <Heading
           onClick={() => setStatsVisible((state) => !state)}
           style={{
@@ -127,6 +104,28 @@ export function Characteristics() {
                 unit="%"
               />
             </Flex>
+          </Flex>
+        )}
+      </Flex>
+
+      <Flex style={{ flex: 1, minWidth: 320 }} direction="column" gap="4">
+        <Heading
+          onClick={() => setConfigureVisible((state) => !state)}
+          style={{
+            cursor: 'pointer',
+          }}
+        >
+          Configure {configureVisible ? <ChevronDownIcon /> : <ChevronUpIcon />}
+        </Heading>
+
+        {configureVisible && (
+          <Flex direction="column" gap="4">
+            <Modules />
+            <Equipments />
+            <Crew />
+            <Consumables />
+            <Provisions />
+            <Camouflage />
           </Flex>
         )}
       </Flex>
