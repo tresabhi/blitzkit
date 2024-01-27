@@ -7,7 +7,7 @@ import { tankDefinitions } from '../../../../core/blitzkrieg/tankDefinitions';
 import { mutateDuel, useDuel } from '../../../../stores/duel';
 import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
 import { AntagonistBar } from './components/AntagonistBar';
-import { Configure } from './components/Configure';
+import { Characteristics } from './components/Characteristics';
 import { TankSandbox } from './components/Model/TankSandbox';
 import { Title } from './components/Title';
 
@@ -88,7 +88,7 @@ export default function Page({ params }: { params: { id: string } }) {
             <AntagonistBar />
           </Flex>
 
-          <Configure />
+          <Characteristics />
         </Flex>
       )}
     </PageWrapper>

@@ -9,7 +9,7 @@ export function ConfigurationChildWrapper({
   children,
 }: ConfigurationChildWrapperProps) {
   return (
-    <Flex direction="column" gap="2">
+    <Flex direction="column" gap="2" align="end" style={{ width: '100%' }}>
       {children}
     </Flex>
   );

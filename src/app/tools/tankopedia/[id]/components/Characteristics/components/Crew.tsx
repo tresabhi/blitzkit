@@ -12,17 +12,18 @@ export function Crew() {
         style={{
           width: '100%',
         }}
+        justify="end"
       >
-        <TextField.Root style={{ width: 64 }}>
-          <TextField.Input defaultValue={100} />
-          <TextField.Slot>%</TextField.Slot>
-        </TextField.Root>
         <Slider
           min={50}
           max={100}
           defaultValue={[100]}
           style={{ flex: 1, maxWidth: 208 }}
         />
+        <TextField.Root style={{ width: 64 }}>
+          <TextField.Input defaultValue={100} />
+          <TextField.Slot>%</TextField.Slot>
+        </TextField.Root>
       </Flex>
     </ConfigurationChildWrapper>
   );
