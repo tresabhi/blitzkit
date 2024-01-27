@@ -56,19 +56,38 @@ export const alignTopRight = style({
   },
 });
 
-export const configure = style({
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
-  gap: 16,
+export const characteristics = style({
+  display: 'flex',
+  gap: 32,
+
+  '@media': {
+    'screen and (max-width: 800px)': {
+      flexDirection: 'column',
+    },
+  },
 });
 
-export const configureRight = style({
+export const configurationChild = style({
   display: 'flex',
-  flexDirection: 'column',
   gap: 8,
+  flexDirection: 'column',
+
+  '@media': {
+    'screen and (min-width: 801px)': {
+      alignItems: 'end',
+    },
+  },
 });
-export const configureLeft = style({
+
+export const configuration = style({
   display: 'flex',
   flexDirection: 'column',
-  gap: 8,
+  gap: 16,
+  flex: 1,
+
+  '@media': {
+    'screen and (min-width: 801px)': {
+      alignItems: 'end',
+    },
+  },
 });
