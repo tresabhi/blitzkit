@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactNode, Suspense } from 'react';
 import { TOOLS } from '../../constants/tools';
@@ -24,7 +25,6 @@ export default function ToolsLayout({ children }: ToolsLayoutProps) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 4,
           flexDirection: 'column',
           position: 'relative',
           overflow: 'hidden',
@@ -46,14 +46,18 @@ export default function ToolsLayout({ children }: ToolsLayoutProps) {
           }}
         />
 
-        <span
+        <Link
+          href={`/tools/${toolId}`}
           style={{
+            textDecoration: 'none',
+            fontWeight: 900,
             color: theme.colors.textHighContrast,
             fontSize: 32,
+            letterSpacing: -1,
           }}
         >
           {tool?.title}
-        </span>
+        </Link>
         <span
           style={{
             color: theme.colors.textLowContrast,
