@@ -1,6 +1,6 @@
 import { deburr } from 'lodash';
 import { Vector2Tuple } from 'three';
-import { TankType, TreeTypeString } from '../../components/Tanks';
+import { TankType, TreeType } from '../../components/Tanks';
 import { asset } from './asset';
 
 export type ShellType = 'ap' | 'ap_cr' | 'hc' | 'he';
@@ -18,7 +18,7 @@ export interface TankDefinition {
   nation: string;
   name: string;
   name_full?: string;
-  tree_type: TreeTypeString;
+  tree_type: TreeType;
   consumables: number;
   provisions: number;
   tier: Tier;

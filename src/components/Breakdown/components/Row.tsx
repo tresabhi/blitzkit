@@ -5,7 +5,7 @@ import {
   GrayColor,
   PALETTES,
 } from '../../../constants/radixColors';
-import { TREE_TYPE_ICONS, TankType, TreeTypeEnum } from '../../Tanks';
+import { TREE_TYPE_ICONS, TankType, TreeType } from '../../Tanks';
 import { RowStat } from './RowStat';
 
 export interface RowStatItem {
@@ -20,7 +20,7 @@ interface RowProps {
   type?: 'tank' | 'summary';
   title: string;
   minimized?: boolean;
-  treeType?: TreeTypeEnum;
+  treeType?: TreeType;
   tankType?: TankType;
   color?: AccentColor | GrayColor;
   stats: (RowStatItem | undefined)[];
@@ -60,7 +60,7 @@ export function Row({
       >
         {type === 'tank' && tankType !== undefined && (
           <img
-            src={TREE_TYPE_ICONS[treeType ?? TreeTypeEnum.TechTree][tankType]}
+            src={TREE_TYPE_ICONS[treeType ?? 'researchable'][tankType]}
             style={{ width: 16, height: 16 }}
           />
         )}
@@ -69,9 +69,9 @@ export function Row({
           style={{
             color:
               type === 'tank'
-                ? treeType === TreeTypeEnum.Collector
+                ? treeType === 'collector'
                   ? theme.textLowContrast_blue
-                  : treeType === TreeTypeEnum.Premium
+                  : treeType === 'premium'
                     ? theme.textLowContrast_amber
                     : theme.textHighContrast
                 : theme.textLowContrast,

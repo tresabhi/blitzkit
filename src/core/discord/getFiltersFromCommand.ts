@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import { TreeTypeString } from '../../components/Tanks';
+import { TreeType } from '../../components/Tanks';
 import resolveTankId from '../blitz/resolveTankId';
 import { StatFilters } from '../statistics/filterStats';
 
@@ -13,9 +13,8 @@ export async function getFiltersFromCommand(
     tier: parseInt(interaction.options.getString('tier') ?? '0') || undefined,
     tankType: interaction.options.getString('tank-type') ?? undefined,
     treeType:
-      (interaction.options.getString('tree-type') as
-        | TreeTypeString
-        | undefined) ?? undefined,
+      (interaction.options.getString('tree-type') as TreeType | undefined) ??
+      undefined,
     tank: tankRaw === null ? undefined : await resolveTankId(tankRaw),
   } satisfies StatFilters;
 }

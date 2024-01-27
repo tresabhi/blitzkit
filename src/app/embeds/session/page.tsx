@@ -3,7 +3,6 @@
 import { ContextMenu } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
 import * as Breakdown from '../../../components/Breakdown';
-import { TreeTypeEnum } from '../../../components/Tanks';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import fetchBlitz from '../../../core/blitz/fetchBlitz';
 import {
@@ -296,12 +295,7 @@ export default function SessionPage() {
                       }
                       type="tank"
                       tankType={tankDefinitions?.type}
-                      treeType={(() => {
-                        if (tankDefinitions?.tree_type === 'collector')
-                          return TreeTypeEnum.Collector;
-                        if (tankDefinitions?.tree_type === 'premium')
-                          return TreeTypeEnum.Premium;
-                      })()}
+                      treeType={tankDefinitions?.tree_type}
                       stats={session.customColumns.map((customColumn) => {
                         const rowStat = rowStats[customColumn.display];
 

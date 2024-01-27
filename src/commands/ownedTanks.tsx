@@ -7,7 +7,6 @@ import { encyclopediaInfo } from '../core/blitz/encyclopediaInfo';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
-import getTreeType from '../core/blitz/getTreeType';
 import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
 import {
   TIER_ROMAN_NUMERALS,
@@ -98,7 +97,7 @@ export const ownedTanksCommand: CommandRegistry = {
                             name={tank.name}
                             tankType={tank.type}
                             image={tankIcon(tank.id)}
-                            treeType={await getTreeType(tank.id)}
+                            treeType={tank.tree_type}
                           />
                         )),
                       )}
@@ -111,7 +110,7 @@ export const ownedTanksCommand: CommandRegistry = {
                             name={tank.name}
                             tankType={tank.type}
                             image={tankIcon(tank.id)}
-                            treeType={await getTreeType(tank.id)}
+                            treeType={tank.tree_type}
                           />
                         )),
                       )}

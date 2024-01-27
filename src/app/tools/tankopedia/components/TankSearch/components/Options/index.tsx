@@ -9,7 +9,6 @@ import {
   TREE_TYPES,
   TREE_TYPE_ICONS,
   TREE_TYPE_IMAGES,
-  TreeTypeEnum,
 } from '../../../../../../../components/Tanks';
 import {
   NATIONS,
@@ -136,7 +135,7 @@ export function Options() {
               }
             >
               <img
-                src={TREE_TYPE_ICONS[TreeTypeEnum.TechTree][type]}
+                src={TREE_TYPE_ICONS.researchable[type]}
                 style={{ width: '1em', height: '1em' }}
               />
             </Button>

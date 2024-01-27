@@ -3,7 +3,7 @@ import {
   SlashCommandSubcommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
-import { TREE_TYPE_NAMES, TreeTypeString } from '../../components/Tanks';
+import { TREE_TYPE_NAMES, TreeType } from '../../components/Tanks';
 import { encyclopediaInfo } from '../blitz/encyclopediaInfo';
 import addPeriodSubCommands from './addPeriodSubCommands';
 import addTankChoices from './addTankChoices';
@@ -56,15 +56,15 @@ export default async function addFilterOptions<
           .addChoices(
             {
               name: TREE_TYPE_NAMES['researchable'],
-              value: 'researchable' satisfies TreeTypeString,
+              value: 'researchable' satisfies TreeType,
             },
             {
               name: TREE_TYPE_NAMES.premium,
-              value: 'premium' satisfies TreeTypeString,
+              value: 'premium' satisfies TreeType,
             },
             {
               name: TREE_TYPE_NAMES.collector,
-              value: 'collector' satisfies TreeTypeString,
+              value: 'collector' satisfies TreeType,
             },
           )
           .setRequired(false),

@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
-import { TankType, TreeTypeString } from '../components/Tanks';
+import { TankType, TreeType } from '../components/Tanks';
 import {
   GunDefinition,
   ShellDefinition,
@@ -39,7 +39,7 @@ interface TankopediaPersistent {
   filters: {
     tiers: Tier[];
     types: TankType[];
-    treeTypes: TreeTypeString[];
+    treeTypes: TreeType[];
     nations: string[];
     test: TankopediaTestTankDisplay;
     page: number;

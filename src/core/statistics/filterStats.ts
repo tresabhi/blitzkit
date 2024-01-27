@@ -1,4 +1,4 @@
-import { TreeTypeString } from '../../components/Tanks';
+import { TreeType } from '../../components/Tanks';
 import { tankDefinitions } from '../blitzkrieg/tankDefinitions';
 import { DiffedTankStats } from '../blitzstars/getStatsInPeriod';
 import { tankAverages } from '../blitzstars/tankAverages';
@@ -9,7 +9,7 @@ export interface StatFilters {
   nation?: string;
   tier?: number;
   tankType?: string;
-  treeType?: TreeTypeString;
+  treeType?: TreeType;
   tank?: number;
 }
 
