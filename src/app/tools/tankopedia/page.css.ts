@@ -71,12 +71,6 @@ export const configurationChild = style({
   display: 'flex',
   gap: 8,
   flexDirection: 'column',
-
-  '@media': {
-    'screen and (min-width: 801px)': {
-      alignItems: 'end',
-    },
-  },
 });
 
 export const configuration = style({
@@ -84,10 +78,4 @@ export const configuration = style({
   flexDirection: 'column',
   gap: 16,
   flex: 1,
-
-  '@media': {
-    'screen and (min-width: 801px)': {
-      alignItems: 'end',
-    },
-  },
 });
