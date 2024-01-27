@@ -1,10 +1,13 @@
 import { UpdateIcon } from '@radix-ui/react-icons';
-import { Button, Flex, Heading } from '@radix-ui/themes';
+import { Button, Dialog, Flex, Heading } from '@radix-ui/themes';
 import { TREE_TYPE_ICONS } from '../../../../../components/Tanks';
-import { useDuel } from '../../../../../stores/duel';
+import { mutateDuel, useDuel } from '../../../../../stores/duel';
+import { TankSearch } from '../../components/TankSearch';
+import { useState } from 'react';
 
 export function Title() {
   const protagonist = useDuel((state) => state.protagonist!);
+  const [changeTankDialogOpen, setChangeTankDialogOpen] = useState(false);
 
   return (
     <Flex gap="6" justify="center" align="center" style={{ padding: 16 }}>
@@ -35,9 +38,41 @@ export function Title() {
         </Heading>
       </Flex>
 
-      <Button variant="ghost">
-        Change <UpdateIcon />
-      </Button>
+      <Dialog.Root
+        open={changeTankDialogOpen}
+        onOpenChange={setChangeTankDialogOpen}
+      >
+        <Dialog.Trigger>
+          <Button variant="ghost">
+            Change <UpdateIcon />
+          </Button>
+        </Dialog.Trigger>
+
+        <Dialog.Content>
+          <Flex gap="4" direction="column">
+            <Flex
+              direction="column"
+              gap="4"
+              style={{ flex: 1 }}
+              justify="center"
+            >
+              <TankSearch
+                compact
+                onSelect={(tank) => {
+                  mutateDuel((draft) => {
+                    draft.protagonist!.tank = tank;
+                    draft.protagonist!.turret = tank.turrets.at(-1)!;
+                    draft.protagonist!.gun =
+                      draft.protagonist!.turret.guns.at(-1)!;
+                    draft.protagonist!.shell = draft.protagonist!.gun.shells[0];
+                  });
+                  setChangeTankDialogOpen(false);
+                }}
+              />
+            </Flex>
+          </Flex>
+        </Dialog.Content>
+      </Dialog.Root>
     </Flex>
   );
 }

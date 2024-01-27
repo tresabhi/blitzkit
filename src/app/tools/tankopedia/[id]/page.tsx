@@ -91,8 +91,6 @@ export default function Page({ params }: { params: { id: string } }) {
             align="start"
             justify="center"
           >
-            <Characteristics />
-
             <Flex
               gap="4"
               direction="column"
@@ -105,6 +103,8 @@ export default function Page({ params }: { params: { id: string } }) {
               <TankSandbox />
               <AntagonistBar />
             </Flex>
+
+            <Characteristics />
           </Flex>
         </>
       )}
