@@ -3,7 +3,7 @@ import { ComponentProps } from 'react';
 
 interface PageWrapperProps extends ComponentProps<typeof Flex> {
   color?: ComponentProps<typeof Theme>['accentColor'];
-  size?: 'regular' | 'wide' | 'full';
+  size?: 'regular' | 'wide' | 'double';
 }
 
 export default function PageWrapper({
@@ -19,7 +19,7 @@ export default function PageWrapper({
         gap="4"
         style={{
           width: '100%',
-          maxWidth: size === 'regular' ? 800 : size === 'full' ? '100%' : 960,
+          maxWidth: size === 'regular' ? 800 : size === 'double' ? 1200 : 960,
           margin: 'auto',
           padding: 16,
           boxSizing: 'border-box',

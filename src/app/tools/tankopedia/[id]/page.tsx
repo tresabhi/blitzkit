@@ -79,39 +79,34 @@ export default function Page({ params }: { params: { id: string } }) {
   }, [id, assigned]);
 
   return (
-    <PageWrapper color="purple" size="full">
+    <PageWrapper color="purple" size="double">
       {assigned && (
-        <Flex style={{ width: '100%' }} justify="center">
+        <>
+          <Title />
+
           <Flex
+            style={{ width: '100%' }}
             gap="8"
             direction="row"
             align="start"
             justify="center"
-            style={{
-              width: '100%',
-              // maxWidth: 1024,
-            }}
           >
-            <Characteristics config />
+            <Characteristics />
 
             <Flex
               gap="4"
               direction="column"
               style={{
                 flex: 1,
-                maxWidth: 640,
                 position: 'sticky',
                 top: 64,
               }}
             >
-              <Title />
               <TankSandbox />
               <AntagonistBar />
             </Flex>
-
-            <Characteristics />
           </Flex>
-        </Flex>
+        </>
       )}
     </PageWrapper>
   );
