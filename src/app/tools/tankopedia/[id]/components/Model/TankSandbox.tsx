@@ -1,4 +1,5 @@
-import { Card, Flex, Tabs, Theme } from '@radix-ui/themes';
+import { LightningBoltIcon } from '@radix-ui/react-icons';
+import { Button, Card, Flex, Tabs, Theme } from '@radix-ui/themes';
 import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
@@ -6,6 +7,7 @@ import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawL
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkrieg/pose';
+import { tankIcon } from '../../../../../../core/blitzkrieg/tankIcon';
 import { useDuel } from '../../../../../../stores/duel';
 import {
   TankopediaMode,
@@ -32,6 +34,8 @@ export function TankSandbox() {
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
+  const [loadModel, setLoadModel] = useState(false);
+  const duel = useDuel();
 
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);
@@ -159,21 +163,58 @@ export function TankSandbox() {
             </Tabs.Root>
 
             <div style={{ height: '100%' }}>
-              <Canvas shadows ref={canvas} onPointerDown={handlePointerDown}>
-                <PerspectiveCamera makeDefault fov={25} far={32} />
-                <Controls />
-                <SceneProps />
+              {loadModel ? (
+                <Canvas shadows ref={canvas} onPointerDown={handlePointerDown}>
+                  <PerspectiveCamera makeDefault fov={25} far={32} />
+                  <Controls />
+                  <SceneProps />
 
-                <Suspense fallback={<ModelLoader />}>
-                  <Lighting />
-                  <TankModel />
-                  <TankArmor />
-                </Suspense>
-              </Canvas>
+                  <Suspense fallback={<ModelLoader />}>
+                    <Lighting />
+                    <TankModel />
+                    <TankArmor />
+                  </Suspense>
+                </Canvas>
+              ) : (
+                <Flex
+                  align="center"
+                  justify="center"
+                  style={{ height: '100%', position: 'relative' }}
+                >
+                  <Button
+                    variant="soft"
+                    style={{
+                      zIndex: 1,
+                    }}
+                    onClick={() => {
+                      setLoadModel(true);
+                    }}
+                  >
+                    <LightningBoltIcon /> Load model
+                  </Button>
+
+                  <div
+                    style={{
+                      filter: 'blur(16px)',
+                      width: 256,
+                      height: 128,
+                      display: 'flex',
+                      justifyContent: 'end',
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(25%, -25%) scale(300%)',
+                    }}
+                  >
+                    <img src={tankIcon(duel.antagonist!.tank.id, 'big')} />
+                  </div>
+                </Flex>
+              )}
             </div>
 
             <Options canvas={canvasWrapper} isFullScreen={isFullScreen} />
-            <RotationInputs />
+
+            {loadModel && <RotationInputs />}
           </Flex>
         </Theme>
       </Card>
