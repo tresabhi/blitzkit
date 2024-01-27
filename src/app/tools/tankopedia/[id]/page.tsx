@@ -76,19 +76,41 @@ export default function Page({ params }: { params: { id: string } }) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [id]);
+  }, [id, assigned]);
 
   return (
-    <PageWrapper color="purple">
+    <PageWrapper color="purple" size="full">
       {assigned && (
-        <Flex gap="8" direction="column">
-          <Flex gap="4" direction="column">
-            <Title />
-            <TankSandbox />
-            <AntagonistBar />
-          </Flex>
+        <Flex style={{ width: '100%' }} justify="center">
+          <Flex
+            gap="8"
+            direction="row"
+            align="start"
+            justify="center"
+            style={{
+              width: '100%',
+              // maxWidth: 1024,
+            }}
+          >
+            <Characteristics config />
 
-          <Characteristics />
+            <Flex
+              gap="4"
+              direction="column"
+              style={{
+                flex: 1,
+                maxWidth: 640,
+                position: 'sticky',
+                top: 64,
+              }}
+            >
+              <Title />
+              <TankSandbox />
+              <AntagonistBar />
+            </Flex>
+
+            <Characteristics />
+          </Flex>
         </Flex>
       )}
     </PageWrapper>
