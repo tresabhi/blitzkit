@@ -9,7 +9,7 @@ import { Provisions } from './components/Provisions';
 
 export function Characteristics() {
   return (
-    <Tabs.Root defaultValue="configure">
+    <Tabs.Root defaultValue="configure" style={{ width: '100%' }}>
       <Flex gap="4" direction="column">
         <Tabs.List>
           <Tabs.Trigger value="configure">Configure</Tabs.Trigger>
@@ -60,11 +60,7 @@ export function Characteristics() {
               <Info name="Weight" value="45" unit="mt" />
               <Info name="Speed forwards" value="55" unit="km/s" />
               <Info indent name="Backward" value="20" unit="km/s" />
-              <Info
-                name="Effective power on hard terrain"
-                value="36.86"
-                unit="hp/kg"
-              />
+              <Info name="Power on hard terrain" value="36.86" unit="hp/kg" />
               <Info
                 indent
                 name="On medium terrain"

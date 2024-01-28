@@ -15,6 +15,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const id = parseInt(params.id);
   const awaitedTankDefinitions = use(tankDefinitions);
   const assigned = useDuel((state) => state.assigned);
+  const wideFormat = typeof window !== 'undefined' && window.innerWidth > 880;
 
   useEffect(() => {
     mutateDuel((draft) => {
@@ -87,7 +88,7 @@ export default function Page({ params }: { params: { id: string } }) {
           <Flex
             style={{ width: '100%' }}
             gap="8"
-            direction="row"
+            direction={wideFormat ? 'row' : 'column'}
             align="start"
             justify="center"
           >
@@ -96,7 +97,8 @@ export default function Page({ params }: { params: { id: string } }) {
               direction="column"
               style={{
                 flex: 1,
-                position: 'sticky',
+                position: wideFormat ? 'sticky' : undefined,
+                width: '100%',
                 top: 64,
               }}
             >
@@ -104,7 +106,9 @@ export default function Page({ params }: { params: { id: string } }) {
               <AntagonistBar />
             </Flex>
 
-            <Characteristics />
+            <Flex style={{ width: wideFormat ? 320 : '100%' }}>
+              <Characteristics />
+            </Flex>
           </Flex>
         </>
       )}
