@@ -15,6 +15,7 @@ export const SHELL_NAMES: Record<ShellType, string> = {
 export type TankDefinitions = Record<number, TankDefinition>;
 export interface TankDefinition {
   id: number;
+  health: number;
   nation: string;
   name: string;
   name_full?: string;
@@ -33,6 +34,7 @@ export type TankDefinitionPrice =
   | { type: 'credits'; value: number }
   | { type: 'gold'; value: number };
 export interface TurretDefinition {
+  health: number;
   id: number;
   name: string;
   tier: Tier;
@@ -66,7 +68,7 @@ export type ShellDefinition = {
   id: number;
   name: string;
   speed: number;
-  damage: { armor: number; devices: number };
+  damage: { armor: number; module: number };
   caliber: number;
   icon: string;
   penetration: number | Vector2Tuple;

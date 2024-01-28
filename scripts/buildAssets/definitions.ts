@@ -68,6 +68,7 @@ interface VehicleDefinitions {
     armor: VehicleDefinitionArmor;
     turretPositions: { turret: string };
     turretInitialRotation?: { yaw: 0; pitch: 6.5; roll: 0 };
+    maxHealth: number;
   };
   chassis: {
     [key: string]: {
@@ -92,6 +93,7 @@ interface VehicleDefinitions {
   };
   turrets0: {
     [key: string]: {
+      maxHealth: number;
       armor: VehicleDefinitionArmor;
       userString: number;
       level: number;
@@ -345,6 +347,7 @@ export async function definitions(production: boolean) {
           });
 
         tankDefinitions[tankId] = {
+          health: tankDefinition.root.hull.maxHealth,
           id: tankId,
           equipment,
           consumables: tankDefinition.root.consumableSlots,
@@ -452,6 +455,7 @@ export async function definitions(production: boolean) {
                   .replace(/^(Turret ([0-9] )?)+/, ''),
               tier: turret.level as Tier,
               guns: [],
+              health: turret.maxHealth,
             });
 
             modelDefinitions[tankId].turrets[turretId] = {
@@ -591,7 +595,7 @@ export async function definitions(production: boolean) {
                   speed: gunShellEntry.speed,
                   damage: {
                     armor: shell.damage.armor,
-                    devices: shell.damage.devices,
+                    module: shell.damage.devices,
                   },
                   caliber: shell.caliber,
                   normalization: shell.normalizationAngle,

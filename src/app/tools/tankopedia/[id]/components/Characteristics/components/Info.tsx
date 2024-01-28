@@ -1,21 +1,29 @@
 import { Flex, Text } from '@radix-ui/themes';
+import { ReactNode } from 'react';
 import { theme } from '../../../../../../../stitches.config';
 
 interface InfoProps {
   name: string;
-  value: string;
+  children: ReactNode;
   unit: string;
   indent?: boolean;
+  highlight?: boolean;
 }
 
-export function Info({ name, value, unit, indent = false }: InfoProps) {
+export function Info({
+  name,
+  children,
+  unit,
+  indent = false,
+  highlight,
+}: InfoProps) {
   return (
     <Flex
       align="center"
       style={{ width: '100%', paddingLeft: indent ? 24 : 0 }}
       gap="4"
     >
-      <Text>
+      <Text color={highlight ? 'amber' : undefined}>
         {name}{' '}
         <Text color="gray" size="1">
           {unit}
@@ -26,11 +34,13 @@ export function Info({ name, value, unit, indent = false }: InfoProps) {
         style={{
           flex: 1,
           height: 1,
-          backgroundColor: theme.colors.componentCallToActionInteractive_alpha,
+          backgroundColor: highlight
+            ? theme.colors.componentCallToActionInteractive_amberAlpha
+            : theme.colors.componentCallToActionInteractive_alpha,
         }}
       />
 
-      <Text>{value}</Text>
+      <Text color={highlight ? 'amber' : undefined}>{children}</Text>
     </Flex>
   );
 }
