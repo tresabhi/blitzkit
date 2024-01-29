@@ -28,7 +28,11 @@ export interface TankDefinition {
   turrets: TurretDefinition[];
   engines: EngineDefinition[];
   price: TankDefinitionPrice;
-  camouflage: { still: number; moving: number; firing: number };
+  camouflage: {
+    still: number;
+    moving: number;
+    onFire: number;
+  };
   equipment: string;
 }
 export interface EngineDefinition {
@@ -42,6 +46,7 @@ export type TankDefinitionPrice =
   | { type: 'gold'; value: number };
 export interface TurretDefinition {
   health: number;
+  view_range: number;
   id: number;
   name: string;
   tier: Tier;
@@ -54,6 +59,7 @@ interface GunDefinitionBase {
   name: string;
   tier: Tier;
   shells: ShellDefinition[];
+  camouflageLoss: number;
 }
 interface GunDefinitionRegular {
   type: 'regular';

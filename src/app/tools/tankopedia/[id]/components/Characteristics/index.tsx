@@ -65,10 +65,10 @@ export function Characteristics() {
               <Info indent name="Moving" unit="%">
                 TODO
               </Info>
-              <Info indent name="Shooting" unit="%">
+              <Info indent name="Shooting still" unit="%">
                 TODO
               </Info>
-              <Info indent name="Shooting and moving" unit="%">
+              <Info indent name="Shooting on move" unit="%">
                 TODO
               </Info>
               <Info indent name="On fire" unit="%">

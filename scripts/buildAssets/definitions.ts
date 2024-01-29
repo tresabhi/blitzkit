@@ -71,7 +71,11 @@ type VehicleDefinitionArmor = Record<
   number | { vehicleDamageFactor: 0; '#text': number }
 >;
 interface VehicleDefinitions {
-  invisibility: { moving: number; still: number; firePenalty: number };
+  invisibility: {
+    moving: number;
+    still: number;
+    firePenalty: number;
+  };
   consumableSlots: number;
   provisionSlots: number;
   optDevicePreset: string;
@@ -107,6 +111,7 @@ interface VehicleDefinitions {
   };
   turrets0: {
     [key: string]: {
+      circularVisionRadius: number;
       maxHealth: number;
       armor: VehicleDefinitionArmor;
       userString: number;
@@ -125,6 +130,7 @@ interface VehicleDefinitions {
                   '#text': number;
                 };
           };
+          invisibilityFactorAtShot: number | number[];
           reloadTime: number;
           maxAmmo: number;
           extraPitchLimits?: {
@@ -393,7 +399,7 @@ export async function definitions(production: boolean) {
           camouflage: {
             still: tankDefinition.root.invisibility.still,
             moving: tankDefinition.root.invisibility.moving,
-            firing: tankDefinition.root.invisibility.firePenalty,
+            onFire: tankDefinition.root.invisibility.firePenalty,
           },
           turrets: [],
           engines: [],
@@ -489,6 +495,7 @@ export async function definitions(production: boolean) {
               tier: turret.level as Tier,
               guns: [],
               health: turret.maxHealth,
+              view_range: turret.circularVisionRadius,
             });
 
             modelDefinitions[tankId].turrets[turretId] = {
@@ -576,6 +583,10 @@ export async function definitions(production: boolean) {
                 reload: gunReload,
                 count: gunClipCount,
                 interClip: gunInterClip,
+                camouflageLoss:
+                  typeof turretGunEntry.invisibilityFactorAtShot === 'number'
+                    ? turretGunEntry.invisibilityFactorAtShot
+                    : turretGunEntry.invisibilityFactorAtShot.at(-1)!,
               } as GunDefinition);
 
               modelDefinitions[tankId].turrets[turretId].guns[gunId] = {
@@ -842,6 +853,7 @@ export async function definitions(production: boolean) {
     });
   });
 
+  return;
   await commitAssets(
     'definitions',
     [
