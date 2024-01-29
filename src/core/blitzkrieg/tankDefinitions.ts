@@ -26,9 +26,16 @@ export interface TankDefinition {
   type: TankType;
   testing?: boolean;
   turrets: TurretDefinition[];
+  engines: EngineDefinition[];
   price: TankDefinitionPrice;
   camouflage: { still: number; moving: number; firing: number };
   equipment: string;
+}
+export interface EngineDefinition {
+  id: number;
+  name: string;
+  tier: Tier;
+  fire_chance: number;
 }
 export type TankDefinitionPrice =
   | { type: 'credits'; value: number }

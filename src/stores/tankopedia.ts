@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { TankType, TreeType } from '../components/Tanks';
 import {
+  EngineDefinition,
   GunDefinition,
   ShellDefinition,
   TankDefinition,
@@ -16,6 +17,7 @@ export type TankopediaTestTankDisplay = 'include' | 'exclude' | 'only';
 export type TankopediaMode = 'model' | 'armor';
 export interface DuelMember {
   tank: TankDefinition;
+  engine: EngineDefinition;
   turret: TurretDefinition;
   gun: GunDefinition;
   shell: ShellDefinition;

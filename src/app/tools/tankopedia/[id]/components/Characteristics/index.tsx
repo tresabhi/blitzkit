@@ -14,7 +14,9 @@ import { Provisions } from './components/Provisions';
 
 export function Characteristics() {
   const awaitedModelDefinitions = use(modelDefinitions);
-  const { tank, turret, gun, shell } = useDuel((state) => state.protagonist!);
+  const { tank, turret, gun, shell, engine } = useDuel(
+    (state) => state.protagonist!,
+  );
   const tankModelDefinition = awaitedModelDefinitions[tank.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];
@@ -52,7 +54,7 @@ export function Characteristics() {
                 {tank.health + turret.health}
               </Info>
               <Info name="Fire chance" unit="%">
-                TODO
+                {Math.round(engine.fire_chance * 100)}
               </Info>
               <Info name="View range" unit="m">
                 TODO

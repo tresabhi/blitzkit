@@ -1,9 +1,9 @@
 import { UpdateIcon } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, Heading } from '@radix-ui/themes';
+import { useState } from 'react';
 import { TREE_TYPE_ICONS } from '../../../../../components/Tanks';
 import { mutateDuel, useDuel } from '../../../../../stores/duel';
 import { TankSearch } from '../../components/TankSearch';
-import { useState } from 'react';
 
 export function Title() {
   const protagonist = useDuel((state) => state.protagonist!);
@@ -61,6 +61,7 @@ export function Title() {
                 onSelect={(tank) => {
                   mutateDuel((draft) => {
                     draft.protagonist!.tank = tank;
+                    draft.protagonist!.engine = tank.engines.at(-1)!;
                     draft.protagonist!.turret = tank.turrets.at(-1)!;
                     draft.protagonist!.gun =
                       draft.protagonist!.turret.guns.at(-1)!;

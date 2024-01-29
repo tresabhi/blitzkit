@@ -22,18 +22,13 @@ export default function Page({ params }: { params: { id: string } }) {
       draft.assigned = true;
       draft.protagonist = {
         tank: awaitedTankDefinitions[id],
+        engine: awaitedTankDefinitions[id].engines.at(-1)!,
         turret: awaitedTankDefinitions[id].turrets.at(-1)!,
         gun: awaitedTankDefinitions[id].turrets.at(-1)!.guns.at(-1)!,
         shell: awaitedTankDefinitions[id].turrets.at(-1)!.guns.at(-1)!
           .shells[0],
       };
-      draft.antagonist = {
-        tank: awaitedTankDefinitions[id],
-        turret: awaitedTankDefinitions[id].turrets.at(-1)!,
-        gun: awaitedTankDefinitions[id].turrets.at(-1)!.guns.at(-1)!,
-        shell: awaitedTankDefinitions[id].turrets.at(-1)!.guns.at(-1)!
-          .shells[0],
-      };
+      draft.antagonist = { ...draft.protagonist };
     });
 
     mutateTankopediaTemporary((draft) => {

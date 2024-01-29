@@ -55,6 +55,17 @@ type ShellDefinitionsList = Record<
 > & {
   icons: Record<string, string>;
 };
+interface EngineDefinitionsList {
+  nextAvailableId: number;
+  ids: Record<string, number>;
+  shared: {
+    [key: string]: {
+      userString: string;
+      level: number;
+      fireStartingChance: number;
+    };
+  };
+}
 type VehicleDefinitionArmor = Record<
   string,
   number | { vehicleDamageFactor: 0; '#text': number }
@@ -90,6 +101,9 @@ interface VehicleDefinitions {
             };
       };
     };
+  };
+  engines: {
+    [key: string]: unknown;
   };
   turrets0: {
     [key: string]: {
@@ -260,7 +274,7 @@ export async function definitions(production: boolean) {
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
   const tankStringIdMap: Record<string, number> = {};
-  const strings = await readYAMLDVPL<Strings>(
+  const stringsPreInstalled = await readYAMLDVPL<Strings>(
     `${DATA}/${POI.strings}/en.yaml.dvpl`,
   );
   const stringsCache = await fetch(POI.cachedStrings)
@@ -269,6 +283,10 @@ export async function definitions(production: boolean) {
   const optionalDevices = await readXMLDVPL<{ root: OptionalDevices }>(
     `${DATA}/${POI.optionalDevices}.dvpl`,
   );
+  const strings = {
+    ...stringsPreInstalled,
+    ...stringsCache,
+  };
   const optionalDeviceSlots = await readXMLDVPL<{
     root: OptionalDeviceSlots;
   }>(`${DATA}/${POI.optionalDeviceSlots}.dvpl`);
@@ -298,6 +316,11 @@ export async function definitions(production: boolean) {
         root: ShellDefinitionsList;
       }>(
         `${DATA}/${POI.vehicleDefinitions}/${nation}/components/shells.xml.dvpl`,
+      );
+      const enginesList = await readXMLDVPL<{
+        root: EngineDefinitionsList;
+      }>(
+        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/engines.xml.dvpl`,
       );
 
       for (const tankKey in tankList.root) {
@@ -354,12 +377,9 @@ export async function definitions(production: boolean) {
           provisions: tankDefinition.root.provisionSlots,
           name:
             (tank.shortUserString
-              ? strings[tank.shortUserString] ??
-                stringsCache[tank.shortUserString]
-              : undefined) ??
-            strings[tank.userString] ??
-            stringsCache[tank.userString],
-          name_full: strings[tank.userString] ?? stringsCache[tank.userString],
+              ? strings[tank.shortUserString]
+              : undefined) ?? strings[tank.userString],
+          name_full: strings[tank.userString],
           nation,
           tree_type: tankTags.includes('collectible')
             ? 'collector'
@@ -376,6 +396,7 @@ export async function definitions(production: boolean) {
             firing: tankDefinition.root.invisibility.firePenalty,
           },
           turrets: [],
+          engines: [],
         };
 
         if (
@@ -401,6 +422,18 @@ export async function definitions(production: boolean) {
             : undefined,
           turrets: {},
         };
+
+        Object.keys(tankDefinition.root.engines).forEach((engineKey) => {
+          const engine = enginesList.root.shared[engineKey];
+          const engineId = toUniqueId(nation, enginesList.root.ids[engineKey]);
+
+          tankDefinitions[tankId].engines.push({
+            id: engineId,
+            name: strings[engine.userString],
+            fire_chance: engine.fireStartingChance,
+            tier: engine.level as Tier,
+          });
+        });
 
         Object.keys(tankDefinition.root.turrets0).forEach(
           (turretKey, turretIndex) => {
