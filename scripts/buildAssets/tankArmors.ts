@@ -8,7 +8,7 @@ import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
 import { DATA, POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 
-export async function buildTankArmors(production: boolean) {
+export async function tankArmors(production: boolean) {
   console.log('Building tank armors...');
 
   const changes: FileChange[] = [];

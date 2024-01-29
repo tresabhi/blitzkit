@@ -5,11 +5,11 @@ import { circleFlags } from './circleFlags';
 import { consumableProvisionIcons } from './consumableProvisionIcons';
 import { definitions } from './definitions';
 import { equipmentIcons } from './equipmentIcons';
-import { buildModuleIcons } from './moduleIcons';
-import { buildScratchedFlags } from './scratchedFlags';
-import { buildShellIcons } from './shellIcons';
-import { buildTankArmors } from './tankArmors';
-import { buildTankIcons } from './tankIcons';
+import { moduleIcons } from './moduleIcons';
+import { scratchedFlags } from './scratchedFlags';
+import { shellIcons } from './shellIcons';
+import { tankArmors } from './tankArmors';
+import { tankIcons } from './tankIcons';
 import { tankModels } from './tankModels';
 
 config();
@@ -25,13 +25,13 @@ if (!targets && !allTargets) throw new Error('No target(s) specified');
 
 const methods = [
   tankModels,
-  buildTankArmors,
+  tankArmors,
   definitions,
-  buildTankIcons,
-  buildScratchedFlags,
+  tankIcons,
+  scratchedFlags,
   circleFlags,
-  buildShellIcons,
-  buildModuleIcons,
+  shellIcons,
+  moduleIcons,
   equipmentIcons,
   consumableProvisionIcons,
   camouflageIcons,

@@ -27,7 +27,7 @@ export interface TankParameters {
   };
 }
 
-export async function buildTankIcons(production: boolean) {
+export async function tankIcons(production: boolean) {
   console.log('Building tank icons...');
 
   const changes: FileChange[] = [];

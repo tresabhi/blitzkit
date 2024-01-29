@@ -4,7 +4,7 @@ import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
 import { DATA, POI } from './constants';
 
-export async function buildScratchedFlags(production: boolean) {
+export async function scratchedFlags(production: boolean) {
   console.log('Building scratched flags...');
 
   const flags = await readdir(`${DATA}/${POI.flags}`);

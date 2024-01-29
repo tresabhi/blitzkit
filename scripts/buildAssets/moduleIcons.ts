@@ -4,7 +4,7 @@ import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
 import { DATA, POI } from './constants';
 
-export async function buildModuleIcons(production: boolean) {
+export async function moduleIcons(production: boolean) {
   console.log('Building module icons...');
 
   const changes = await Promise.all(

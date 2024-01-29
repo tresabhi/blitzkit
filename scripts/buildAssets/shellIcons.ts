@@ -6,7 +6,7 @@ import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
 import { DATA, POI } from './constants';
 
-export async function buildShellIcons(production: boolean) {
+export async function shellIcons(production: boolean) {
   console.log('Building shell icons...');
 
   const image = sharp(
