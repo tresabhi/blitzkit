@@ -26,6 +26,9 @@ export async function tankModels(production: boolean) {
   for (const nationIndex in nations) {
     const changes: FileChange[] = [];
     const nation = nations[nationIndex];
+
+    if (nation !== 'other') continue;
+
     const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
       `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
     );
