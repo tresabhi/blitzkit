@@ -8,7 +8,7 @@ export interface ModelArmor {
   spaced?: number[];
 }
 
-interface BoundingBox {
+export interface BoundingBox {
   min: Vector3Tuple;
   max: Vector3Tuple;
 }

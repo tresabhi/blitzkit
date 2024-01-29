@@ -2,7 +2,9 @@ import { Flex, Heading, Tabs } from '@radix-ui/themes';
 import { use } from 'react';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
+import { normalizeBoundingBox } from '../../../../../../core/blitzkrieg/normalizeBoundingBox';
 import { SHELL_NAMES } from '../../../../../../core/blitzkrieg/tankDefinitions';
+import { unionBoundingBox } from '../../../../../../core/blitzkrieg/unionBoundingBox';
 import { useDuel } from '../../../../../../stores/duel';
 import { Camouflage } from './components/Camouflage';
 import { Consumables } from './components/Consumables';
@@ -20,6 +22,12 @@ export function Characteristics() {
   const tankModelDefinition = awaitedModelDefinitions[tank.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];
+  const size = normalizeBoundingBox(
+    unionBoundingBox(
+      tankModelDefinition.boundingBox,
+      turretModelDefinition.boundingBox,
+    ),
+  );
 
   let dpm: number;
 
@@ -75,7 +83,7 @@ export function Characteristics() {
                 {(tank.camouflage.onFire * 100).toFixed(2)}
               </Info>
               <Info indent name="Size" unit="m">
-                TODO
+                {size.map((component) => component.toFixed(2)).join(' x ')}
               </Info>
             </Flex>
 

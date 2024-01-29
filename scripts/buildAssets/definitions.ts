@@ -865,7 +865,6 @@ export async function definitions(production: boolean) {
     });
   });
 
-  return;
   await commitAssets(
     'definitions',
     [
