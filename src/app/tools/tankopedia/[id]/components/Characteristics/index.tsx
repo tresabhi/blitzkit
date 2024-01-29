@@ -57,22 +57,22 @@ export function Characteristics() {
                 {Math.round(engine.fire_chance * 100)}
               </Info>
               <Info name="View range" unit="m">
-                TODO
+                {turret.view_range}
               </Info>
               <Info name="Camouflage when still" unit="%">
-                TODO
+                {(tank.camouflage.still * 100).toFixed(2)}
               </Info>
               <Info indent name="Moving" unit="%">
-                TODO
+                {(tank.camouflage.moving * 100).toFixed(2)}
               </Info>
               <Info indent name="Shooting still" unit="%">
-                TODO
+                {(tank.camouflage.still * gun.camouflageLoss * 100).toFixed(2)}
               </Info>
               <Info indent name="Shooting on move" unit="%">
-                TODO
+                {(tank.camouflage.moving * gun.camouflageLoss * 100).toFixed(2)}
               </Info>
-              <Info indent name="On fire" unit="%">
-                TODO
+              <Info indent name="On fire penalty" unit="%">
+                {(tank.camouflage.onFire * 100).toFixed(2)}
               </Info>
               <Info indent name="Size" unit="m">
                 TODO

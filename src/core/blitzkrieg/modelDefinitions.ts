@@ -8,6 +8,10 @@ export interface ModelArmor {
   spaced?: number[];
 }
 
+interface BoundingBox {
+  min: Vector3Tuple;
+  max: Vector3Tuple;
+}
 interface ModelDefinition {
   armor: ModelArmor;
   trackThickness: number;
@@ -15,6 +19,7 @@ interface ModelDefinition {
   hullOrigin: Vector3Tuple;
   turretRotation?: InitialTurretRotation;
   turrets: Record<number, TurretModelDefinition>;
+  boundingBox: BoundingBox;
 }
 export interface InitialTurretRotation {
   yaw: number;
@@ -22,6 +27,7 @@ export interface InitialTurretRotation {
   roll: number;
 }
 interface TurretModelDefinition {
+  boundingBox: BoundingBox;
   armor: ModelArmor;
   model: number;
   gunOrigin: Vector3Tuple;

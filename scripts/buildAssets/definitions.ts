@@ -29,6 +29,7 @@ import {
   Tier,
 } from '../../src/core/blitzkrieg/tankDefinitions';
 import { DATA, POI } from './constants';
+import { TankParameters } from './tankIcons';
 
 type BlitzTankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
 interface Strings {
@@ -119,6 +120,9 @@ interface VehicleDefinitions {
       yawLimits: string | string[];
       gunPosition: string | string[];
       models: { undamaged: string };
+      hitTester: {
+        collisionModel: string;
+      };
       guns: {
         [key: string]: {
           armor: VehicleDefinitionArmor & {
@@ -338,6 +342,9 @@ export async function definitions(production: boolean) {
         const tankDefinition = await readXMLDVPL<{ root: VehicleDefinitions }>(
           `${DATA}/${POI.vehicleDefinitions}/${nation}/${tankKey}.xml.dvpl`,
         );
+        const tankParameters = await readYAMLDVPL<TankParameters>(
+          `${DATA}/${POI.tankParameters}/${nation}/${tankKey}.yaml.dvpl`,
+        );
         const defaultChassis = Object.values(tankDefinition.root.chassis).at(
           -1,
         )!;
@@ -426,6 +433,7 @@ export async function definitions(production: boolean) {
                 roll: tankDefinition.root.hull.turretInitialRotation.roll,
               }
             : undefined,
+          boundingBox: tankParameters.collision.hull.bbox,
           turrets: {},
         };
 
@@ -507,6 +515,10 @@ export async function definitions(production: boolean) {
                   ? undefined
                   : { min: turretYaw[0], max: turretYaw[1] },
               guns: {},
+              boundingBox:
+                tankParameters.collision[
+                  parsePath(turret.hitTester.collisionModel).name.toLowerCase()
+                ].bbox,
             };
 
             Object.keys(turret.guns).forEach((gunKey, gunIndex) => {
