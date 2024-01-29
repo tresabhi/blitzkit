@@ -15,7 +15,7 @@ interface VehicleCustomization {
   armorColor: string;
 }
 
-export async function buildTankModels(production: boolean) {
+export async function tankModels(production: boolean) {
   console.log('Building tank models...');
 
   const nodeIO = new NodeIO();

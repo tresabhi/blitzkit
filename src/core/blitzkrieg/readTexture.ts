@@ -1,5 +1,4 @@
 import { existsSync } from 'fs';
-import { clamp } from 'lodash';
 import sharp from 'sharp';
 import { Vector3Tuple } from 'three';
 import { readDVPLFile } from '../blitz/readDVPLFile';
@@ -10,11 +9,15 @@ export enum TextureMutation {
   Normal,
   RoughnessMetallicness,
   BaseColor,
+  Miscellaneous,
 }
 
 type ReadTextureOptions =
   | {
-      mutation: TextureMutation.Normal | TextureMutation.RoughnessMetallicness;
+      mutation:
+        | TextureMutation.Normal
+        | TextureMutation.RoughnessMetallicness
+        | TextureMutation.Miscellaneous;
     }
   | {
       mutation: TextureMutation.BaseColor;
@@ -75,25 +78,27 @@ export async function readTexture(path: string, options?: ReadTextureOptions) {
       break;
     }
 
+    case TextureMutation.RoughnessMetallicness: {
+      for (let index = 0; index < channels; index += 4) {
+        /**
+         * Green is ambient occlusion and alpha is emissive. But very few tanks
+         * use emissive so I am ignoring it for now.
+         */
+        const occlusion = raw.data[index + 1];
+        // const emissive = raw.data[index + 3];
+
+        raw.data[index] = occlusion;
+        raw.data[index + 1] = 0;
+        raw.data[index + 2] = 0;
+        raw.data[index + 3] = 255;
+      }
+
+      break;
+    }
+
     case TextureMutation.BaseColor: {
       for (let index = 0; index < channels; index += 4) {
-        // treating as pre multiplied but I can't fully confirm
-
-        const r = raw.data[index] / 255;
-        const g = raw.data[index + 1] / 255;
-        const b = raw.data[index + 2] / 255;
-        const a = raw.data[index + 3] / 255;
-
-        if (a === 0) continue;
-
-        const invA = 1 - a;
-        const rPrime = r + invA * options.baseColor[0];
-        const gPrime = g + invA * options.baseColor[1];
-        const bPrime = b + invA * options.baseColor[2];
-
-        raw.data[index] = Math.round(clamp(rPrime * 255, 0, 255));
-        raw.data[index + 1] = Math.round(clamp(gPrime * 255, 0, 255));
-        raw.data[index + 2] = Math.round(clamp(bPrime * 255, 0, 255));
+        // alpha map is specularity but I am ignoring it for now
         raw.data[index + 3] = 255;
       }
 

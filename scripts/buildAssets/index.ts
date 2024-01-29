@@ -10,7 +10,7 @@ import { buildScratchedFlags } from './scratchedFlags';
 import { buildShellIcons } from './shellIcons';
 import { buildTankArmors } from './tankArmors';
 import { buildTankIcons } from './tankIcons';
-import { buildTankModels } from './tankModels';
+import { tankModels } from './tankModels';
 
 config();
 
@@ -24,7 +24,7 @@ const production = argv.includes('--production');
 if (!targets && !allTargets) throw new Error('No target(s) specified');
 
 const methods = [
-  buildTankModels,
+  tankModels,
   buildTankArmors,
   definitions,
   buildTankIcons,

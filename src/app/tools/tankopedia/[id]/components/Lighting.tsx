@@ -1,3 +1,4 @@
+import { Environment } from '@react-three/drei';
 import { useModel } from '../../../../../hooks/useModel';
 import { useDuel } from '../../../../../stores/duel';
 
@@ -7,7 +8,8 @@ export function Lighting() {
 
   return (
     <>
-      <directionalLight
+      <Environment preset="dawn" />
+      {/* <directionalLight
         position={[1, 1, -1]}
         intensity={hasPbr ? 3 : 5}
         castShadow
@@ -18,8 +20,7 @@ export function Lighting() {
         intensity={hasPbr ? 2 : 4}
         castShadow
         color={'rgb(240, 255, 240)'}
-      />
-      <ambientLight intensity={0.25} />
+      /> */}
     </>
   );
 }

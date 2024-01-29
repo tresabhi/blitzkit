@@ -124,6 +124,20 @@ export async function extractModel(
               ),
           );
         }
+
+        if (textures.miscMap) {
+          material.setOcclusionTexture(
+            document
+              .createTexture(node.materialName)
+              .setMimeType('image/png')
+              .setImage(
+                await readTexture(
+                  `${data}/3d/${dirname(path)}/${textures.miscMap}`,
+                  { mutation: TextureMutation.Miscellaneous },
+                ),
+              ),
+          );
+        }
       }
 
       materials.set(node['#id'].readBigUInt64LE(), material);
