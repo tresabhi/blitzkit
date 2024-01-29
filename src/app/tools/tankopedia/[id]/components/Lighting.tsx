@@ -8,7 +8,7 @@ export function Lighting() {
 
   return (
     <>
-      <Environment preset="dawn" />
+      <Environment preset="warehouse" />
       {/* <directionalLight
         position={[1, 1, -1]}
         intensity={hasPbr ? 3 : 5}

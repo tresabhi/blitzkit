@@ -89,9 +89,9 @@ export class ScgStream extends ScpgStream {
       );
       const strideBasedSize = stride * polygonGroupRaw.vertexCount;
 
-      if (verticesStream.stream.length !== strideBasedSize) {
+      if (verticesStream.buffer.length !== strideBasedSize) {
         console.warn(
-          `Vertex stride mismatch; expected ${strideBasedSize}, got ${verticesStream.stream.length}; skipping...`,
+          `Vertex stride mismatch; expected ${strideBasedSize}, got ${verticesStream.buffer.length}; skipping...`,
         );
 
         return;

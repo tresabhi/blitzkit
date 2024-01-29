@@ -1,12 +1,12 @@
 export class BufferStream {
   public index = 0;
-  constructor(public stream: Buffer) {}
+  constructor(public buffer: Buffer) {}
 
   skip(size: number) {
     this.index += size;
   }
   read(size: number) {
-    return this.stream.subarray(this.index, this.index + size);
+    return this.buffer.subarray(this.index, this.index + size);
   }
   consume(size: number) {
     const subarray = this.read(size);
@@ -14,12 +14,15 @@ export class BufferStream {
 
     return subarray;
   }
+  increment(size: number) {
+    return (this.index += size) - size;
+  }
 
   readRemaining() {
     return this.read(Number.POSITIVE_INFINITY);
   }
   readRemainingLength() {
-    return this.stream.length - this.index;
+    return this.buffer.length - this.index;
   }
   consumeRemaining() {
     return this.consume(Number.POSITIVE_INFINITY);
@@ -30,38 +33,38 @@ export class BufferStream {
   }
 
   ascii(size: number) {
-    return this.consume(size).toString('ascii');
+    return this.buffer.toString('ascii', this.increment(size), this.index);
   }
 
   int8() {
-    return this.consume(1).readInt8();
+    return this.buffer.readInt8(this.increment(1));
   }
   int16() {
-    return this.consume(2).readInt16LE();
+    return this.buffer.readInt16LE(this.increment(2));
   }
   int32() {
-    return this.consume(4).readInt32LE();
+    return this.buffer.readInt32LE(this.increment(4));
   }
   int64() {
-    return this.consume(8).readBigInt64LE();
+    return this.buffer.readBigInt64LE(this.increment(8));
   }
   uint8() {
-    return this.consume(1).readUInt8();
+    return this.buffer.readUInt8(this.increment(1));
   }
   uint16() {
-    return this.consume(2).readUInt16LE();
+    return this.buffer.readUInt16LE(this.increment(2));
   }
   uint32() {
-    return this.consume(4).readUInt32LE();
+    return this.buffer.readUInt32LE(this.increment(4));
   }
   uint64() {
-    return this.consume(8).readBigUInt64LE();
+    return this.buffer.readBigUInt64LE(this.increment(8));
   }
   float() {
-    return this.consume(4).readFloatLE();
+    return this.buffer.readFloatLE(this.increment(4));
   }
 
   boolean() {
-    return this.consume(1).readUInt8() === 1;
+    return this.buffer.readUInt8(this.increment(1)) === 1;
   }
 }
