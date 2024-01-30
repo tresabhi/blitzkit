@@ -20,7 +20,7 @@ export function Lighting() {
         castShadow
         color={'rgb(240, 255, 240)'}
       />
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={1} />
     </>
   );
 }
