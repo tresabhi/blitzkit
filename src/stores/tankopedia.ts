@@ -32,6 +32,7 @@ interface TankopediaPersistent {
       controlsEnabled: boolean;
       showGrid: boolean;
       greenPenetration: boolean;
+      showEnvironment: boolean;
     };
   };
   sort: {
@@ -76,6 +77,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
           controlsEnabled: true,
           showGrid: true,
           greenPenetration: false,
+          showEnvironment: false,
         },
       },
       sort: {

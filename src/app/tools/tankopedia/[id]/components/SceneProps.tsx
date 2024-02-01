@@ -6,8 +6,11 @@ export function SceneProps() {
   const showGrid = useTankopediaPersistent(
     (state) => state.model.visual.showGrid,
   );
+  const showEnvironment = useTankopediaPersistent(
+    (state) => state.model.visual.showEnvironment,
+  );
 
-  if (!showGrid) return null;
+  if (!showGrid || showEnvironment) return null;
 
   return (
     <>
