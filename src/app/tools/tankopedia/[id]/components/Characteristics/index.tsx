@@ -108,6 +108,9 @@ export function Characteristics() {
                     shell.damage.armor * gun.reload.slice(1).length
                   ).toFixed(0)}
             </Info>
+            <Info indent name="Optimal shell index">
+              {gun.reload.at(-1)! < gun.reload.at(-2)! ? gun.reload.length : 1}
+            </Info>
           </>
         )}
         {gun.type === 'auto_reloader' ? (
