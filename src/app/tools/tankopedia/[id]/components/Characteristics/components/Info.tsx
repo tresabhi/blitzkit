@@ -5,7 +5,7 @@ import { theme } from '../../../../../../../stitches.config';
 interface InfoProps {
   name: string;
   children: ReactNode;
-  unit: string;
+  unit?: string;
   indent?: boolean;
   highlight?: boolean;
 }
@@ -24,10 +24,15 @@ export function Info({
       gap="4"
     >
       <Text color={highlight ? 'amber' : undefined}>
-        {name}{' '}
-        <Text color="gray" size="1">
-          {unit}
-        </Text>
+        {name}
+        {unit != undefined && (
+          <>
+            {' '}
+            <Text color="gray" size="1">
+              {unit}
+            </Text>
+          </>
+        )}
       </Text>
 
       <div

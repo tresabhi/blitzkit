@@ -5,7 +5,7 @@ export class EventManager<Type> {
     this.callbacks.add(callback);
   }
   off(callback: (data: Type) => void) {
-    this.callbacks.delete(callback);
+    return this.callbacks.delete(callback);
   }
 
   emit(data: Type) {

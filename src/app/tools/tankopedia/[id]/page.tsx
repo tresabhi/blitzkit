@@ -8,6 +8,12 @@ import { mutateDuel, useDuel } from '../../../../stores/duel';
 import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
 import { AntagonistBar } from './components/AntagonistBar';
 import { Characteristics } from './components/Characteristics';
+import { Camouflage } from './components/Characteristics/components/Camouflage';
+import { Consumables } from './components/Characteristics/components/Consumables';
+import { Crew } from './components/Characteristics/components/Crew';
+import { Equipments } from './components/Characteristics/components/Equipments';
+import { Modules } from './components/Characteristics/components/Modules';
+import { Provisions } from './components/Characteristics/components/Provisions';
 import { TankSandbox } from './components/Model/TankSandbox';
 import { Title } from './components/Title';
 
@@ -92,13 +98,21 @@ export default function Page({ params }: { params: { id: string } }) {
               direction="column"
               style={{
                 flex: 1,
-                position: wideFormat ? 'sticky' : undefined,
                 width: '100%',
                 top: 64,
               }}
             >
               <TankSandbox />
               <AntagonistBar />
+
+              <Flex direction="column" gap="4">
+                <Modules />
+                <Equipments />
+                <Crew />
+                <Consumables />
+                <Provisions />
+                <Camouflage />
+              </Flex>
             </Flex>
 
             <Flex style={{ width: wideFormat ? 320 : '100%' }}>

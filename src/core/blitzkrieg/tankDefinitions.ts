@@ -91,6 +91,12 @@ export type ShellDefinition = {
   explosionRadius?: number;
 };
 
+export const GUN_TYPE_NAMES: Record<GunDefinition['type'], string> = {
+  regular: 'Regular',
+  auto_loader: 'Auto loader',
+  auto_reloader: 'Auto reloader',
+};
+
 export const tankDefinitions = fetch(asset('definitions/tanks.json'), {
   cache: 'no-cache',
 }).then(async (response) => response.json() as Promise<TankDefinitions>);
