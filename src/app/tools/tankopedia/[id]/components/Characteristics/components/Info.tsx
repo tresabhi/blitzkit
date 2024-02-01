@@ -4,7 +4,7 @@ import { theme } from '../../../../../../../stitches.config';
 
 interface InfoProps {
   name: string;
-  children: ReactNode;
+  children?: ReactNode;
   unit?: string;
   indent?: boolean;
   highlight?: boolean;
@@ -35,17 +35,21 @@ export function Info({
         )}
       </Text>
 
-      <div
-        style={{
-          flex: 1,
-          height: 1,
-          backgroundColor: highlight
-            ? theme.colors.componentCallToActionInteractive_amberAlpha
-            : theme.colors.componentCallToActionInteractive_alpha,
-        }}
-      />
+      {children !== undefined && (
+        <div
+          style={{
+            flex: 1,
+            height: 1,
+            backgroundColor: highlight
+              ? theme.colors.componentCallToActionInteractive_amberAlpha
+              : theme.colors.componentCallToActionInteractive_alpha,
+          }}
+        />
+      )}
 
-      <Text color={highlight ? 'amber' : undefined}>{children}</Text>
+      {children !== undefined && (
+        <Text color={highlight ? 'amber' : undefined}>{children}</Text>
+      )}
     </Flex>
   );
 }
