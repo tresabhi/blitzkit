@@ -13,9 +13,8 @@ import { Info } from './components/Info';
 
 export function Characteristics() {
   const awaitedModelDefinitions = use(modelDefinitions);
-  const { tank, turret, gun, shell, engine } = useDuel(
-    (state) => state.protagonist!,
-  );
+  const { tank, turret, gun, engine } = useDuel((state) => state.protagonist!);
+  const shell = gun.shells[0];
   const tankModelDefinition = awaitedModelDefinitions[tank.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];
@@ -80,13 +79,34 @@ export function Characteristics() {
       <Flex direction="column" gap="2">
         <Heading size="5">Fire</Heading>
         <Info name="Gun type">{GUN_TYPE_NAMES[gun.type]}</Info>
+        <Info name="Damage per minute" unit="hp / min">
+          {dpm.toFixed(0)}
+        </Info>
         {gun.type === 'auto_reloader' && (
           <>
             <Info indent name="Maximum" unit="hp / min">
-              TODO
+              {gun.reload.at(-1)! < gun.reload.at(-2)!
+                ? (
+                    (shell.damage.armor /
+                      (gun.reload.at(-1)! + gun.interClip)) *
+                    60
+                  ).toFixed(0)
+                : ((shell.damage.armor / gun.reload[0]) * 60).toFixed(0)}
             </Info>
-            <Info indent name="Effective" unit="hp / min">
-              TODO
+            <Info indent name="Effective at 60s" unit="hp / min">
+              {gun.reload.at(-1)! < gun.reload.at(-2)!
+                ? (
+                    (shell.damage.armor /
+                      (gun.reload.at(-1)! + gun.interClip)) *
+                      (60 -
+                        (gun.reload.slice(0, -1).length - 1) * gun.interClip) +
+                    shell.damage.armor * gun.reload.slice(0, -1).length
+                  ).toFixed(0)
+                : (
+                    (shell.damage.armor / (gun.reload[0] + gun.interClip)) *
+                      (60 - (gun.reload.slice(1).length - 1) * gun.interClip) +
+                    shell.damage.armor * gun.reload.slice(1).length
+                  ).toFixed(0)}
             </Info>
           </>
         )}
@@ -105,9 +125,6 @@ export function Characteristics() {
             {gun.reload.toFixed(2)}
           </Info>
         )}
-        <Info name="Damage per minute" unit="hp / min">
-          {dpm.toFixed(0)}
-        </Info>
         <Info name="Caliber" unit="mm">
           {shell.caliber}
         </Info>
