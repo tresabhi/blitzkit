@@ -3,6 +3,7 @@ import { Button, Card, Flex, Tabs, Theme } from '@radix-ui/themes';
 import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
+import { ShotDisplay } from '../../../../../../components/ShotDisplay';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
@@ -166,12 +167,22 @@ export function TankSandbox() {
 
             <div style={{ height: '100%' }}>
               {loadModel ? (
-                <Canvas shadows ref={canvas} onPointerDown={handlePointerDown}>
+                <Canvas
+                  shadows
+                  ref={canvas}
+                  onPointerDown={handlePointerDown}
+                  onPointerMissed={() => {
+                    mutateTankopediaTemporary((draft) => {
+                      draft.shot = undefined;
+                    });
+                  }}
+                >
                   <PerspectiveCamera makeDefault fov={25} far={32} />
                   <Controls />
                   <SceneProps />
 
                   <Suspense fallback={<ModelLoader />}>
+                    <ShotDisplay />
                     <Lighting />
                     <TankModel />
                     <TankArmor />

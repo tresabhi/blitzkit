@@ -1,14 +1,16 @@
 import { MeshProps, useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
-import { IUniform, ShaderMaterial, Vector2 } from 'three';
+import { IUniform, Mesh, ShaderMaterial, Vector2, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
+import { I_HAT } from '../../../../constants/axis';
 import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { useDuel } from '../../../../stores/duel';
 import {
+  ArmorPiercingLayer,
+  mutateTankopediaTemporary,
   useTankopediaPersistent,
-  useTankopediaTemporary,
 } from '../../../../stores/tankopedia';
 import { externalModuleMaskRenderTarget } from '../ExternalModuleMask';
 import { spacedArmorDepthRenderTarget } from '../SpacedArmorDepth';
@@ -35,6 +37,10 @@ export function ArmorMesh({
   const initialTankopedia = useTankopediaPersistent.getState();
   const material = useRef<ShaderMaterial>(null);
   const explosionCapable = isExplosive(initialShell.type);
+  const cameraNormal = new Vector3();
+  const shellNormal = new Vector3();
+  const surfaceNormal = new Vector3();
+  const mesh = useRef<Mesh>(null);
 
   useEffect(() => {
     function updateQuickEquipments() {
@@ -126,15 +132,106 @@ export function ArmorMesh({
             thickness,
           } satisfies ArmorMeshUserData
         }
+        ref={mesh}
         onClick={(event) => {
-          if (useTankopediaTemporary.getState().mode !== 'armor') return;
+          // if (useTankopediaTemporary.getState().mode !== 'armor') return;
 
-          event.intersections
+          shellNormal.copy(
+            cameraNormal.copy(camera.position).sub(event.point).normalize(),
+          );
+          surfaceNormal.copy(event.normal!).applyAxisAngle(I_HAT, -Math.PI / 2);
+          const shell = useDuel.getState().antagonist!.shell;
+          const intersections = event.intersections
             .filter(({ object }) => Boolean(object.userData.type))
-            .map(({ object }) => {
-              const data = object.userData as ArmorMeshUserData;
-              console.log(data.type, data.thickness);
-            });
+            .map(
+              (event) =>
+                event as typeof event & {
+                  object: (typeof event)['object'] & {
+                    userData: ArmorMeshUserData;
+                  };
+                },
+            );
+          const intersectionsTillFirstCoreArmor = intersections.slice(
+            0,
+            intersections.findIndex(
+              ({ object }) => object.userData.type === 'coreArmor',
+            ) + 1,
+          );
+          const coreArmorMesh = intersectionsTillFirstCoreArmor.at(-1)!.object;
+
+          if (mesh.current !== (coreArmorMesh as unknown as Mesh)) return;
+
+          const armorPiercingLayers = intersectionsTillFirstCoreArmor.map(
+            (event, index) => {
+              switch (event.object.userData.type) {
+                case 'spacedArmor': {
+                  return {
+                    nominal: event.object.userData.thickness,
+                    angled: event.object.userData.thickness,
+                    ricochet: false,
+                  } satisfies ArmorPiercingLayer;
+                }
+
+                case 'externalModule':
+                case 'coreArmor': {
+                  const angle = Math.acos(surfaceNormal.dot(shellNormal));
+                  const threeCalibersRule =
+                    shell.caliber > 3 * event.object.userData.thickness;
+                  let hasRicochet = false;
+
+                  if (
+                    index === 0 &&
+                    !isExplosive(shell.type) &&
+                    !threeCalibersRule &&
+                    angle >= degToRad(shell.ricochet!)
+                  ) {
+                    hasRicochet = true;
+                  }
+
+                  const twoCalibersRule =
+                    shell.caliber > 2 * event.object.userData.thickness;
+                  const normalization = twoCalibersRule
+                    ? ((shell.normalization ?? 0) * 1.4 * shell.caliber) /
+                      (2.0 * thickness)
+                    : shell.normalization ?? 0;
+                  const angledThickness =
+                    thickness / Math.cos(angle - normalization);
+
+                  return {
+                    nominal: event.object.userData.thickness,
+                    angled: angledThickness,
+                    ricochet: hasRicochet,
+                  } satisfies ArmorPiercingLayer;
+                }
+              }
+            },
+          );
+
+          const hasRicochet = armorPiercingLayers.some(
+            ({ ricochet }) => ricochet,
+          );
+          const accumulatedThickness = armorPiercingLayers.reduce(
+            (sum, { angled }) => sum + angled,
+            0,
+          );
+          const hasPenetrated =
+            resolveNearPenetration(shell.penetration) >= accumulatedThickness;
+
+          mutateTankopediaTemporary((draft) => {
+            draft.shot = {
+              type: hasRicochet
+                ? 'ricochet'
+                : hasPenetrated
+                  ? 'penetration'
+                  : 'block',
+              point: event.point.toArray(),
+              thicknesses: armorPiercingLayers,
+              shellNormal: shellNormal.toArray(),
+              surfaceNormal: surfaceNormal.toArray(),
+            };
+
+            console.log(draft.shot);
+          });
         }}
       >
         <shaderMaterial

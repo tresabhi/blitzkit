@@ -1,4 +1,5 @@
 import { produce } from 'immer';
+import { Vector3Tuple } from 'three';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { TankType, TreeType } from '../components/Tanks';
@@ -63,6 +64,27 @@ interface TankopediaTemporary {
   consumables: number[];
   provisions: number[];
   camouflage: boolean;
+  shot?: Shot;
+}
+
+type Shot = {
+  point: Vector3Tuple;
+  surfaceNormal: Vector3Tuple;
+  shellNormal: Vector3Tuple;
+  thicknesses: ArmorPiercingLayer[];
+  type: 'ricochet' | 'penetration' | 'block';
+};
+
+export const SHOT_NAMES: Record<Shot['type'], string> = {
+  ricochet: 'Ricochet',
+  penetration: 'Penetration',
+  block: 'Blocked',
+};
+
+export interface ArmorPiercingLayer {
+  nominal: number;
+  angled: number;
+  ricochet: boolean;
 }
 
 export const useTankopediaPersistent = create<TankopediaPersistent>()(

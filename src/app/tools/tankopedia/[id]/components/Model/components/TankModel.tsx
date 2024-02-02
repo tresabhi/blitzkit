@@ -144,6 +144,9 @@ export const TankModel = memo(() => {
             mutateTankopediaPersistent((draft) => {
               draft.model.visual.controlsEnabled = false;
             });
+            mutateTankopediaTemporary((draft) => {
+              draft.shot = undefined;
+            });
 
             window.addEventListener('pointermove', handlePointerMove);
             window.addEventListener('pointerup', handlePointerUp);
@@ -208,6 +211,9 @@ export const TankModel = memo(() => {
               mutateTankopediaPersistent((draft) => {
                 draft.model.visual.controlsEnabled = false;
               });
+              mutateTankopediaTemporary((draft) => {
+                draft.shot = undefined;
+              });
               window.addEventListener('pointermove', handlePointerMove);
               window.addEventListener('pointerup', handlePointerUp);
             }
@@ -271,6 +277,9 @@ export const TankModel = memo(() => {
 
               mutateTankopediaPersistent((draft) => {
                 draft.model.visual.controlsEnabled = false;
+              });
+              mutateTankopediaTemporary((draft) => {
+                draft.shot = undefined;
               });
               pitch = physical.pitch;
               yaw = physical.yaw;
