@@ -1,9 +1,9 @@
-import { existsSync } from 'fs';
-import sharp from 'sharp';
-import { Vector3Tuple } from 'three';
-import { readDVPLFile } from '../blitz/readDVPLFile';
-import { DdsStream } from '../streams/dds';
-import { PvrStream } from '../streams/pvr';
+import { existsSync } from "fs";
+import sharp from "sharp";
+import { Vector3Tuple } from "three";
+import { readDVPLFile } from "../blitz/readDVPLFile";
+import { DdsStream } from "../streams/dds";
+import { PvrStream } from "../streams/pvr";
 
 export enum TextureMutation {
   Normal,
@@ -28,11 +28,11 @@ type ReadTextureOptions =
     };
 
 export async function readTexture(path: string, options?: ReadTextureOptions) {
-  const ddsTexturePath = path.replace('.tex', '.dx11.dds.dvpl');
+  const ddsTexturePath = path.replace(".tex", ".dx11.dds.dvpl");
   const isDds = existsSync(ddsTexturePath);
   const resolvedTexturePath = isDds
     ? ddsTexturePath
-    : ddsTexturePath.replace('.dds', '.pvr');
+    : ddsTexturePath.replace(".dds", ".pvr");
   const decompressedDvpl = await readDVPLFile(resolvedTexturePath);
 
   const raw = isDds
@@ -78,7 +78,7 @@ export async function readTexture(path: string, options?: ReadTextureOptions) {
       break;
     }
 
-    case TextureMutation.RoughnessMetallicness: {
+    case TextureMutation.Miscellaneous: {
       for (let index = 0; index < channels; index += 4) {
         /**
          * Green is ambient occlusion and alpha is emissive. But very few tanks
