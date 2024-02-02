@@ -73,10 +73,12 @@ export function ShotDisplay() {
                     <NominalPenetration width={24} height={24} />
                     <Text>{nominal}mm</Text>
                   </Flex>
-                  <Flex gap="1">
-                    <AngledPenetration width={24} height={24} />
-                    <Text>{Math.round(angled)}mm</Text>
-                  </Flex>
+                  {type !== 'external' && (
+                    <Flex gap="1">
+                      <AngledPenetration width={24} height={24} />
+                      <Text>{Math.round(angled)}mm</Text>
+                    </Flex>
+                  )}
                 </Flex>
               ))}
             </Flex>
