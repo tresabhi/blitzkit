@@ -81,7 +81,12 @@ export function ShotDisplay() {
       </mesh>
 
       <group ref={entryWrapper}>
-        <Html position={[0, 0, LENGTH]}>
+        <Html
+          position={[0, 0, LENGTH]}
+          style={{
+            paddingLeft: 16,
+          }}
+        >
           <Card
             style={{
               width: 300,
@@ -131,7 +136,11 @@ export function ShotDisplay() {
           ref={entryLine}
         >
           <cylinderGeometry args={[THICKNESS / 2, THICKNESS / 2, LENGTH, 8]} />
-          <meshBasicMaterial color="white" depthTest={false} />
+          <meshBasicMaterial color="#ffff80" depthTest={false} />
+        </mesh>
+        <mesh position={[0, 0, LENGTH / 2]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[THICKNESS / 4, THICKNESS / 4, LENGTH, 8]} />
+          <meshBasicMaterial color="#ffffff" depthTest={false} />
         </mesh>
       </group>
 
@@ -145,7 +154,13 @@ export function ShotDisplay() {
             <cylinderGeometry
               args={[THICKNESS / 2, THICKNESS / 2, LENGTH, 8]}
             />
-            <meshBasicMaterial color="white" depthTest={false} />
+            <meshBasicMaterial color="#ff8080" depthTest={false} />
+          </mesh>
+          <mesh position={[0, 0, LENGTH / 2]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry
+              args={[THICKNESS / 4, THICKNESS / 4, LENGTH, 8]}
+            />
+            <meshBasicMaterial color="#ffffff" depthTest={false} />
           </mesh>
         </group>
       )}
