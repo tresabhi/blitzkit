@@ -22,7 +22,7 @@ export const SHOT_ICONS: Record<Shot['type'], ReactNode> = {
   penetration: <NominalPenetration width={24} height={24} />,
 };
 
-const THICKNESS = 0.025;
+const THICKNESS = 0.05;
 const LENGTH = 2;
 
 export function ShotDisplay() {
@@ -131,6 +131,7 @@ export function ShotDisplay() {
         </Html>
 
         <mesh
+          renderOrder={1}
           position={[0, 0, LENGTH / 2]}
           rotation={[Math.PI / 2, 0, 0]}
           ref={entryLine}
@@ -147,6 +148,7 @@ export function ShotDisplay() {
       {shot.type === 'ricochet' && (
         <group ref={exitWrapper}>
           <mesh
+            renderOrder={1}
             position={[0, 0, LENGTH / 2]}
             rotation={[Math.PI / 2, 0, 0]}
             ref={exitLine}
