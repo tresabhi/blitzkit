@@ -6,7 +6,10 @@ import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { useDuel } from '../../../../stores/duel';
-import { useTankopediaPersistent } from '../../../../stores/tankopedia';
+import {
+  useTankopediaPersistent,
+  useTankopediaTemporary,
+} from '../../../../stores/tankopedia';
 import { externalModuleMaskRenderTarget } from '../ExternalModuleMask';
 import { spacedArmorDepthRenderTarget } from '../SpacedArmorDepth';
 import fragmentShader from './shaders/fragment.glsl';
@@ -16,6 +19,11 @@ interface ArmorMeshProps extends MeshProps {
   thickness: number;
   maxThickness: number;
 }
+
+export type ArmorMeshUserData = {
+  type: 'coreArmor' | 'spacedArmor' | 'externalModule';
+  thickness: number;
+};
 
 export function ArmorMesh({
   thickness,
@@ -109,7 +117,26 @@ export function ArmorMesh({
         <meshBasicMaterial colorWrite={false} />
       </mesh>
 
-      <mesh {...props} renderOrder={1}>
+      <mesh
+        {...props}
+        renderOrder={1}
+        userData={
+          {
+            type: 'coreArmor',
+            thickness,
+          } satisfies ArmorMeshUserData
+        }
+        onClick={(event) => {
+          if (useTankopediaTemporary.getState().mode !== 'armor') return;
+
+          event.intersections
+            .filter(({ object }) => Boolean(object.userData.type))
+            .map(({ object }) => {
+              const data = object.userData as ArmorMeshUserData;
+              console.log(data.type, data.thickness);
+            });
+        }}
+      >
         <shaderMaterial
           ref={material}
           fragmentShader={fragmentShader}

@@ -21,6 +21,8 @@ import { SceneProps } from '../SceneProps';
 import { ModelLoader } from './components/ModelLoader';
 import { Options } from './components/Options';
 import { TankArmor } from './components/TankArmor';
+import { ExternalModuleMask } from './components/TankArmor/components/ExternalModuleMask';
+import { SpacedArmorDepth } from './components/TankArmor/components/SpacedArmorDepth';
 import { TankModel } from './components/TankModel';
 
 export function TankSandbox() {
@@ -173,6 +175,8 @@ export function TankSandbox() {
                     <Lighting />
                     <TankModel />
                     <TankArmor />
+                    <ExternalModuleMask ornamental />
+                    <SpacedArmorDepth ornamental />
                   </Suspense>
                 </Canvas>
               ) : (
