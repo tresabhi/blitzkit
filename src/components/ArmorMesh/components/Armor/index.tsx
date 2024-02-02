@@ -140,6 +140,7 @@ export function ArmorMesh({
             cameraNormal.copy(camera.position).sub(event.point).normalize(),
           );
           surfaceNormal.copy(event.normal!).applyAxisAngle(I_HAT, -Math.PI / 2);
+          const angle = Math.acos(surfaceNormal.dot(shellNormal));
           const shell = useDuel.getState().antagonist!.shell;
           const intersections = event.intersections
             .filter(({ object }) => Boolean(object.userData.type))
@@ -161,23 +162,29 @@ export function ArmorMesh({
 
           if (mesh.current !== (coreArmorMesh as unknown as Mesh)) return;
 
+          let accumulatedThickness = 0;
           const armorPiercingLayers = intersectionsTillFirstCoreArmor.map(
             (event, index) => {
               switch (event.object.userData.type) {
                 case 'spacedArmor': {
+                  accumulatedThickness += event.object.userData.thickness;
+
                   return {
                     nominal: event.object.userData.thickness,
                     angled: event.object.userData.thickness,
                     ricochet: false,
+                    block:
+                      accumulatedThickness >
+                      resolveNearPenetration(shell.penetration),
+                    type: 'external',
                   } satisfies ArmorPiercingLayer;
                 }
 
                 case 'externalModule':
                 case 'coreArmor': {
-                  const angle = Math.acos(surfaceNormal.dot(shellNormal));
                   const threeCalibersRule =
                     shell.caliber > 3 * event.object.userData.thickness;
-                  let hasRicochet = false;
+                  let ricochet = false;
 
                   if (
                     index === 0 &&
@@ -185,22 +192,30 @@ export function ArmorMesh({
                     !threeCalibersRule &&
                     angle >= degToRad(shell.ricochet!)
                   ) {
-                    hasRicochet = true;
+                    ricochet = true;
                   }
 
                   const twoCalibersRule =
                     shell.caliber > 2 * event.object.userData.thickness;
                   const normalization = twoCalibersRule
                     ? ((shell.normalization ?? 0) * 1.4 * shell.caliber) /
-                      (2.0 * thickness)
+                      (2 * thickness)
                     : shell.normalization ?? 0;
-                  const angledThickness =
-                    thickness / Math.cos(angle - normalization);
+                  const angled =
+                    thickness / Math.cos(angle - degToRad(normalization));
+                  accumulatedThickness += angled;
 
                   return {
                     nominal: event.object.userData.thickness,
-                    angled: angledThickness,
-                    ricochet: hasRicochet,
+                    angled,
+                    ricochet,
+                    block:
+                      accumulatedThickness >
+                      resolveNearPenetration(shell.penetration),
+                    type:
+                      event.object.userData.type === 'coreArmor'
+                        ? 'core'
+                        : 'spaced',
                   } satisfies ArmorPiercingLayer;
                 }
               }
@@ -209,10 +224,6 @@ export function ArmorMesh({
 
           const hasRicochet = armorPiercingLayers.some(
             ({ ricochet }) => ricochet,
-          );
-          const accumulatedThickness = armorPiercingLayers.reduce(
-            (sum, { angled }) => sum + angled,
-            0,
           );
           const hasPenetrated =
             resolveNearPenetration(shell.penetration) >= accumulatedThickness;
@@ -228,9 +239,8 @@ export function ArmorMesh({
               thicknesses: armorPiercingLayers,
               shellNormal: shellNormal.toArray(),
               surfaceNormal: surfaceNormal.toArray(),
+              angle,
             };
-
-            console.log(draft.shot);
           });
         }}
       >

@@ -1,4 +1,6 @@
-export function BlitzkriegWormWide() {
+import { ComponentProps } from 'react';
+
+export function BlitzkriegWormWide(props: ComponentProps<'svg'>) {
   return (
     <svg
       width="74"
@@ -6,6 +8,7 @@ export function BlitzkriegWormWide() {
       viewBox="0 0 74 17"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       <path
         d="M33.945 12.9858V0H36.875V7.50095L39.4608 4.63967H42.7879L36.875 10.7408V12.9858H33.945ZM39.7873 12.9858L37.0515 9.04164L38.8695 7.04314L43.2292 12.9858H39.7873Z"

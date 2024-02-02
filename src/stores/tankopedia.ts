@@ -67,24 +67,21 @@ interface TankopediaTemporary {
   shot?: Shot;
 }
 
-type Shot = {
+export type Shot = {
   point: Vector3Tuple;
   surfaceNormal: Vector3Tuple;
   shellNormal: Vector3Tuple;
   thicknesses: ArmorPiercingLayer[];
   type: 'ricochet' | 'penetration' | 'block';
-};
-
-export const SHOT_NAMES: Record<Shot['type'], string> = {
-  ricochet: 'Ricochet',
-  penetration: 'Penetration',
-  block: 'Blocked',
+  angle: number;
 };
 
 export interface ArmorPiercingLayer {
   nominal: number;
   angled: number;
   ricochet: boolean;
+  block: boolean;
+  type: 'core' | 'spaced' | 'external';
 }
 
 export const useTankopediaPersistent = create<TankopediaPersistent>()(
