@@ -137,7 +137,7 @@ export function ShotDisplay() {
           ref={entryLine}
         >
           <cylinderGeometry args={[THICKNESS / 2, THICKNESS / 2, LENGTH, 8]} />
-          <meshBasicMaterial color="#ffff80" depthTest={false} />
+          <meshBasicMaterial color="#ffff80" />
         </mesh>
         <mesh position={[0, 0, LENGTH / 2]} rotation={[Math.PI / 2, 0, 0]}>
           <cylinderGeometry args={[THICKNESS / 4, THICKNESS / 4, LENGTH, 8]} />
@@ -156,7 +156,7 @@ export function ShotDisplay() {
             <cylinderGeometry
               args={[THICKNESS / 2, THICKNESS / 2, LENGTH, 8]}
             />
-            <meshBasicMaterial color="#ff8080" depthTest={false} />
+            <meshBasicMaterial color="#ff8080" />
           </mesh>
           <mesh position={[0, 0, LENGTH / 2]} rotation={[Math.PI / 2, 0, 0]}>
             <cylinderGeometry
