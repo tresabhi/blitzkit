@@ -102,7 +102,6 @@ export function ModuleButton({
       {discriminator !== undefined && (
         <Text
           size="1"
-          weight="bold"
           style={{
             zIndex: 1,
             position: 'absolute',
