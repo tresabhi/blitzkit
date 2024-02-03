@@ -1,8 +1,14 @@
 import { MeshProps, useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
-import { IUniform, Mesh, ShaderMaterial, Vector2, Vector3 } from 'three';
+import {
+  IUniform,
+  Mesh,
+  Quaternion,
+  ShaderMaterial,
+  Vector2,
+  Vector3,
+} from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
-import { I_HAT } from '../../../../constants/axis';
 import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
@@ -139,7 +145,9 @@ export function ArmorMesh({
           shellNormal.copy(
             cameraNormal.copy(camera.position).sub(event.point).normalize(),
           );
-          surfaceNormal.copy(event.normal!).applyAxisAngle(I_HAT, -Math.PI / 2);
+          surfaceNormal
+            .copy(event.normal!)
+            .applyQuaternion(event.object.getWorldQuaternion(new Quaternion()));
           const angle = Math.acos(surfaceNormal.dot(shellNormal));
           const shell = useDuel.getState().antagonist!.shell;
           const intersections = event.intersections
