@@ -106,23 +106,32 @@ export function ShotDisplay() {
                   paddingLeft: shot.thicknesses.length > 1 ? 8 : undefined,
                 }}
               >
-                {shot.thicknesses.map(({ nominal, angled, type }, index) => (
+                {shot.thicknesses.map((layer, index) => (
                   <Flex gap="2">
                     {shot.thicknesses.length > 1 && (
                       <Text>
-                        {index + 1}. {type[0].toUpperCase()}
-                        {type.slice(1)}
+                        {index + 1}. {layer.type[0].toUpperCase()}
+                        {layer.type.slice(1)}
                       </Text>
                     )}
 
                     <Flex gap="1">
-                      <NominalPenetration width={24} height={24} />
-                      <Text>{nominal}mm</Text>
+                      {layer.type !== 'gap' && (
+                        <NominalPenetration width={24} height={24} />
+                      )}
+                      <Text>
+                        {Math.round(
+                          layer.type === 'gap'
+                            ? layer.gap * 1000
+                            : layer.nominal,
+                        )}
+                        mm
+                      </Text>
                     </Flex>
-                    {type !== 'external' && (
+                    {layer.type !== 'external' && layer.type !== 'gap' && (
                       <Flex gap="1">
                         <AngledPenetration width={24} height={24} />
-                        <Text>{Math.round(angled)}mm</Text>
+                        <Text>{Math.round(layer.angled)}mm</Text>
                       </Flex>
                     )}
                   </Flex>

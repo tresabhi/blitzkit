@@ -186,22 +186,18 @@ export function ArmorMesh({
 
           if (mesh.current !== (coreArmorMesh as unknown as Mesh)) return;
 
-          let accumulatedThickness = 0;
-          const armorPiercingLayers = intersectionsTillFirstCoreArmor.map(
+          const armorPiercingLayersRaw = intersectionsTillFirstCoreArmor.map(
             (event, index) => {
               switch (event.object.userData.type) {
                 case 'externalModule': {
-                  accumulatedThickness +=
-                    event.object.userData.thickness * thicknessCoefficient;
-
                   return {
                     nominal:
                       event.object.userData.thickness * thicknessCoefficient,
                     angled:
                       event.object.userData.thickness * thicknessCoefficient,
                     ricochet: false,
-                    block: accumulatedThickness > resolvedPenetration,
                     type: 'external',
+                    distance: event.distance,
                   } satisfies ArmorPiercingLayer;
                 }
 
@@ -235,28 +231,62 @@ export function ArmorMesh({
                   const angled =
                     (event.object.userData.thickness * thicknessCoefficient) /
                     Math.cos(angle - degToRad(normalization));
-                  accumulatedThickness += angled;
 
                   return {
                     nominal:
                       event.object.userData.thickness * thicknessCoefficient,
                     angled,
                     ricochet,
-                    block: accumulatedThickness > resolvedPenetration,
                     type:
                       event.object.userData.type === 'coreArmor'
                         ? 'core'
                         : 'spaced',
+                    distance: event.distance,
                   } satisfies ArmorPiercingLayer;
                 }
               }
             },
           );
+          const gaps = armorPiercingLayersRaw.map((layerA, aIndex) => {
+            if (aIndex === armorPiercingLayersRaw.length - 1) return null;
+            const layerB = armorPiercingLayersRaw[aIndex + 1];
+
+            return {
+              type: 'gap',
+              gap: Math.abs(layerB.distance - layerA.distance),
+            } satisfies ArmorPiercingLayer;
+          });
+          const armorPiercingLayers: ArmorPiercingLayer[] = [];
+
+          armorPiercingLayersRaw.forEach((layer, index) => {
+            const gap = gaps[index];
+
+            armorPiercingLayers.push(layer);
+            if (gap) armorPiercingLayers.push(gap);
+          });
+
+          console.log(armorPiercingLayers);
+
+          let remainingPenetration = resolvedPenetration;
+          let accumulatedThickness = 0;
+          const explosiveCapable = isExplosive(shell.type);
+
+          armorPiercingLayers.forEach((layer) => {
+            if (layer.type !== 'gap') {
+              remainingPenetration -= layer.angled;
+              accumulatedThickness += layer.angled;
+            } else if (explosiveCapable) {
+              // there is a 50% penetration loss per meter for HE based shells
+              remainingPenetration -= 0.5 * remainingPenetration * layer.gap;
+            }
+
+            remainingPenetration = Math.max(0, remainingPenetration);
+          });
 
           const hasRicochet = armorPiercingLayers.some(
-            ({ ricochet }) => ricochet,
+            (layer) => layer.type !== 'gap' && layer.ricochet,
           );
-          const hasPenetrated = resolvedPenetration >= accumulatedThickness;
+          const hasPenetrated = remainingPenetration >= accumulatedThickness;
 
           mutateTankopediaTemporary((draft) => {
             draft.shot = {

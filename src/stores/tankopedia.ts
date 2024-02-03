@@ -76,13 +76,18 @@ export type Shot = {
   angle: number;
 };
 
-export interface ArmorPiercingLayer {
-  nominal: number;
-  angled: number;
-  ricochet: boolean;
-  block: boolean;
-  type: 'core' | 'spaced' | 'external';
-}
+export type ArmorPiercingLayer =
+  | {
+      distance: number;
+      nominal: number;
+      angled: number;
+      ricochet: boolean;
+      type: 'core' | 'spaced' | 'external';
+    }
+  | {
+      type: 'gap';
+      gap: number;
+    };
 
 export const useTankopediaPersistent = create<TankopediaPersistent>()(
   persist(
