@@ -150,6 +150,7 @@ export function ArmorMesh({
             .applyQuaternion(event.object.getWorldQuaternion(new Quaternion()));
           const angle = Math.acos(surfaceNormal.dot(shellNormal));
           const shell = useDuel.getState().antagonist!.shell;
+          const indexedObjects = new Set<ArmorMeshUserData['type']>();
           const intersections = event.intersections
             .filter(({ object }) => Boolean(object.userData.type))
             .map(
@@ -159,7 +160,12 @@ export function ArmorMesh({
                     userData: ArmorMeshUserData;
                   };
                 },
-            );
+            )
+            .filter(({ object }) => {
+              if (indexedObjects.has(object.userData.type)) return false;
+              indexedObjects.add(object.userData.type);
+              return true;
+            });
           const intersectionsTillFirstCoreArmor = intersections.slice(
             0,
             intersections.findIndex(
