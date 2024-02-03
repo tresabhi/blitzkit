@@ -9,6 +9,7 @@ import {
   Vector3,
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
+import { canRicochet } from '../../../../core/blitz/canRicochet';
 import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
@@ -43,6 +44,7 @@ export function ArmorMesh({
   const initialTankopedia = useTankopediaPersistent.getState();
   const material = useRef<ShaderMaterial>(null);
   const explosionCapable = isExplosive(initialShell.type);
+  const ricochetCapable = canRicochet(initialShell.type);
   const cameraNormal = new Vector3();
   const shellNormal = new Vector3();
   const surfaceNormal = new Vector3();
@@ -66,6 +68,7 @@ export function ArmorMesh({
     function updateShellProperties() {
       const shell = useDuel.getState().antagonist!.shell;
       if (material.current) {
+        material.current.uniforms.canRicochet.value = canRicochet(shell.type);
         material.current.uniforms.isExplosive.value = isExplosive(shell.type);
         material.current.uniforms.canSplash.value = canSplash(shell.type);
         material.current.uniforms.caliber.value = shell.caliber;
@@ -211,7 +214,7 @@ export function ArmorMesh({
 
                   if (
                     index === 0 &&
-                    !isExplosive(shell.type) &&
+                    canRicochet(shell.type) &&
                     !threeCalibersRule &&
                     angle >= degToRad(shell.ricochet!)
                   ) {
@@ -319,6 +322,7 @@ export function ArmorMesh({
             },
             maxThickness: { value: maxThickness },
             isExplosive: { value: explosionCapable },
+            canRicochet: { value: ricochetCapable },
             canSplash: { value: canSplash(initialShell.type) },
             thickness: {
               value:

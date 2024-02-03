@@ -3,6 +3,7 @@
 varying vec3 vViewPosition;
 varying vec3 vNormal;
 uniform bool isExplosive;
+uniform bool canRicochet;
 uniform bool canSplash;
 uniform float thickness;
 uniform float penetration;
@@ -45,7 +46,7 @@ void main() {
   float spacedArmorNominalThickness = spacedArmorMaskColor.g * maxThickness;
   bool spacedArmorThreeCalibersRule = isUnderSpacedArmor && caliber > 3.0 * spacedArmorNominalThickness;
   bool hasRicochetedSpacedArmor = isUnderSpacedArmor && !spacedArmorThreeCalibersRule && spacedArmorAngle >= ricochetAngle;
-  bool hasRicochetedCoreArmor = !hasRicochetedSpacedArmor && !isUnderExternalModule && !isExplosive && !coreArmorThreeCalibersRule && coreArmorangle >= ricochetAngle;
+  bool hasRicochetedCoreArmor = !hasRicochetedSpacedArmor && !isUnderExternalModule && canRicochet && !coreArmorThreeCalibersRule && coreArmorangle >= ricochetAngle;
 
   if (hasRicochetedCoreArmor || hasRicochetedSpacedArmor) {
     penetrationChance = 0.0;
