@@ -148,19 +148,28 @@ export function ArmorMesh({
           surfaceNormal
             .copy(event.normal!)
             .applyQuaternion(event.object.getWorldQuaternion(new Quaternion()));
+          const equipment = useTankopediaPersistent.getState().model.equipment;
           const angle = Math.acos(surfaceNormal.dot(shellNormal));
           const shell = useDuel.getState().antagonist!.shell;
+          const resolvedPenetration =
+            resolveNearPenetration(shell.penetration) *
+            (equipment.calibratedShells
+              ? isExplosive(shell.type)
+                ? 1.1
+                : 1.05
+              : 1);
           const indexedObjects = new Set<ArmorMeshUserData['type']>();
           const intersections = event.intersections
             .filter(({ object }) => Boolean(object.userData.type))
-            .map(
-              (event) =>
-                event as typeof event & {
-                  object: (typeof event)['object'] & {
-                    userData: ArmorMeshUserData;
-                  };
-                },
-            )
+            .map((event) => {
+              const typedEvent = event as typeof event & {
+                object: (typeof event)['object'] & {
+                  userData: ArmorMeshUserData;
+                };
+              };
+
+              return typedEvent;
+            })
             .filter(({ object }) => {
               if (indexedObjects.has(object.userData.type)) return false;
               indexedObjects.add(object.userData.type);
@@ -173,6 +182,7 @@ export function ArmorMesh({
             ) + 1,
           );
           const coreArmorMesh = intersectionsTillFirstCoreArmor.at(-1)!.object;
+          const thicknessCoefficient = equipment.enhancedArmor ? 1.04 : 1;
 
           if (mesh.current !== (coreArmorMesh as unknown as Mesh)) return;
 
@@ -181,15 +191,16 @@ export function ArmorMesh({
             (event, index) => {
               switch (event.object.userData.type) {
                 case 'externalModule': {
-                  accumulatedThickness += event.object.userData.thickness;
+                  accumulatedThickness +=
+                    event.object.userData.thickness * thicknessCoefficient;
 
                   return {
-                    nominal: event.object.userData.thickness,
-                    angled: event.object.userData.thickness,
+                    nominal:
+                      event.object.userData.thickness * thicknessCoefficient,
+                    angled:
+                      event.object.userData.thickness * thicknessCoefficient,
                     ricochet: false,
-                    block:
-                      accumulatedThickness >
-                      resolveNearPenetration(shell.penetration),
+                    block: accumulatedThickness > resolvedPenetration,
                     type: 'external',
                   } satisfies ArmorPiercingLayer;
                 }
@@ -197,7 +208,9 @@ export function ArmorMesh({
                 case 'spacedArmor':
                 case 'coreArmor': {
                   const threeCalibersRule =
-                    shell.caliber > 3 * event.object.userData.thickness;
+                    shell.caliber >
+                    3 *
+                      (event.object.userData.thickness * thicknessCoefficient);
                   let ricochet = false;
 
                   if (
@@ -210,22 +223,26 @@ export function ArmorMesh({
                   }
 
                   const twoCalibersRule =
-                    shell.caliber > 2 * event.object.userData.thickness;
+                    shell.caliber >
+                    2 *
+                      (event.object.userData.thickness * thicknessCoefficient);
                   const normalization = twoCalibersRule
                     ? ((shell.normalization ?? 0) * 1.4 * shell.caliber) /
-                      (2 * thickness)
+                      (2 *
+                        event.object.userData.thickness *
+                        thicknessCoefficient)
                     : shell.normalization ?? 0;
                   const angled =
-                    thickness / Math.cos(angle - degToRad(normalization));
+                    (event.object.userData.thickness * thicknessCoefficient) /
+                    Math.cos(angle - degToRad(normalization));
                   accumulatedThickness += angled;
 
                   return {
-                    nominal: event.object.userData.thickness,
+                    nominal:
+                      event.object.userData.thickness * thicknessCoefficient,
                     angled,
                     ricochet,
-                    block:
-                      accumulatedThickness >
-                      resolveNearPenetration(shell.penetration),
+                    block: accumulatedThickness > resolvedPenetration,
                     type:
                       event.object.userData.type === 'coreArmor'
                         ? 'core'
@@ -239,8 +256,7 @@ export function ArmorMesh({
           const hasRicochet = armorPiercingLayers.some(
             ({ ricochet }) => ricochet,
           );
-          const hasPenetrated =
-            resolveNearPenetration(shell.penetration) >= accumulatedThickness;
+          const hasPenetrated = resolvedPenetration >= accumulatedThickness;
 
           mutateTankopediaTemporary((draft) => {
             draft.shot = {
