@@ -43,7 +43,7 @@ export function Characteristics() {
   }
 
   return (
-    <Flex direction="column" gap="4">
+    <Flex direction="column" gap="4" style={{ width: '100%' }}>
       <Flex direction="column" gap="2">
         <Heading size="5">Survivability</Heading>
         <Info name="Health" unit="hp">

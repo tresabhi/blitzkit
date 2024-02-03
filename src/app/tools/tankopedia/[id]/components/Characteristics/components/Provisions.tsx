@@ -29,7 +29,7 @@ export function Provisions() {
         Provisions <Text color="gray">(max {protagonist.tank.provisions})</Text>
       </Heading>
 
-      <Flex>
+      <Flex wrap="wrap">
         {provisionsList.map((provision, index) => {
           const selected = provisions.includes(provision.id);
 

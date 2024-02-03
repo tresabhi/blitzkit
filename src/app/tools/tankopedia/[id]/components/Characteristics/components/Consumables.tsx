@@ -30,7 +30,7 @@ export function Consumables() {
         <Text color="gray">(max {protagonist.tank.consumables})</Text>
       </Heading>
 
-      <Flex>
+      <Flex wrap="wrap">
         {consumablesList.map((consumable, index) => {
           const selected = consumables.includes(consumable.id);
 
