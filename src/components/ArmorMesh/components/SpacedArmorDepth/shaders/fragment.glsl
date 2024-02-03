@@ -6,10 +6,6 @@ uniform float thickness;
 uniform float maxThickness;
 
 void main() {
-  vec3 normalizedNormal = normalize(vNormal);
-  vec3 normalizedViewPosition = normalize(vViewPosition);
-  float dotProduct = dot(normalizedNormal, -normalizedViewPosition);
-  float angle = acos(dotProduct);
-
+  float angle = acos(dot(vNormal, -normalize(vViewPosition)));
   gl_FragColor = vec4(angle / (PI / 2.0), thickness / maxThickness, 0.0, 1.0);
 }

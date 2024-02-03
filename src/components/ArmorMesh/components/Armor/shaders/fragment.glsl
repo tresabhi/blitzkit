@@ -33,17 +33,14 @@ void main() {
   float penetrationChance = -1.0;
   float splashChance = -1.0;
 
-  vec3 normalizedViewPosition = normalize(vViewPosition);
-  float dotProduct = dot(vNormal, -normalizedViewPosition);
-  float coreArmorangle = acos(dotProduct);
-
   vec2 screenCoordinates = gl_FragCoord.xy / resolution;
   vec4 externalModuleMaskColor = texture2D(externalModuleMask, screenCoordinates);
   vec4 spacedArmorMaskColor = texture2D(spacedArmorMask, screenCoordinates);
   bool isUnderExternalModule = externalModuleMaskColor.r == 1.0;
   bool isUnderSpacedArmor = spacedArmorMaskColor.a == 1.0;
-  float spacedArmorAngle = spacedArmorMaskColor.r * PI;
+  float spacedArmorAngle = spacedArmorMaskColor.r * (PI / 2.0);
 
+  float coreArmorangle = acos(dot(vNormal, -normalize(vViewPosition)));
   bool coreArmorThreeCalibersRule = caliber > 3.0 * thickness;
   float spacedArmorNominalThickness = spacedArmorMaskColor.g * maxThickness;
   bool spacedArmorThreeCalibersRule = isUnderSpacedArmor && caliber > 3.0 * spacedArmorNominalThickness;
