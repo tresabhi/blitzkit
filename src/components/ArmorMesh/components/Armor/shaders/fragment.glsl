@@ -65,8 +65,10 @@ void main() {
 
     if (isUnderSpacedArmor) {
       // spaced armor on the other hand, does care about angle
-      float spacedArmorThickness = spacedArmorNominalThickness / cos(spacedArmorAngle);
-      remainingPenetration -= spacedArmorThickness;
+      bool spacedArmorTwoCalibersRule = caliber > 2.0 * spacedArmorNominalThickness;
+      float finalSpacedArmorNormalization = spacedArmorTwoCalibersRule ? (normalization * 1.4 * caliber) / (2.0 * spacedArmorNominalThickness) : normalization;
+      float finalSpacedArmorThickness = spacedArmorNominalThickness / cos(spacedArmorAngle - finalSpacedArmorNormalization);
+      remainingPenetration -= finalSpacedArmorThickness;
     }
     remainingPenetration = max(remainingPenetration, 0.0);
 
