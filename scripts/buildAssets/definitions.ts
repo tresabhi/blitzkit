@@ -88,6 +88,11 @@ interface VehicleDefinitions {
   };
   chassis: {
     [key: string]: {
+      rotationSpeed: number;
+      shotDispersionFactors: {
+        vehicleMovement: number;
+        vehicleRotation: number;
+      };
       hullPosition: string;
       armor: {
         leftTrack:
@@ -112,6 +117,7 @@ interface VehicleDefinitions {
   };
   turrets0: {
     [key: string]: {
+      rotationSpeed: number;
       circularVisionRadius: number;
       maxHealth: number;
       armor: VehicleDefinitionArmor;
@@ -136,6 +142,13 @@ interface VehicleDefinitions {
           };
           invisibilityFactorAtShot: number | number[];
           reloadTime: number;
+          aimingTime?: number;
+          shotDispersionRadius: number;
+          shotDispersionFactors?: {
+            turretRotation: number;
+            afterShot: number;
+            whileGunDamaged: number;
+          };
           maxAmmo: number;
           extraPitchLimits?: {
             front?: string;
@@ -177,6 +190,12 @@ interface GunDefinitionsList {
   ids: Record<string, number>;
   shared: {
     [key: string]: {
+      shotDispersionFactors: {
+        turretRotation: number;
+        afterShot: number;
+        whileGunDamaged: number;
+      };
+      aimingTime: number;
       userString: string;
       tags: string;
       level: number;
@@ -254,7 +273,7 @@ const consumableProvisionEffectSuffixes = [
   'Percent',
 ];
 const blitzTankTypeToBlitzkrieg: Record<BlitzTankType, TankType> = {
-  'AT-SPG': 'tank_destroyer',
+  'AT-SPG': 'tankDestroyer',
   lightTank: 'light',
   mediumTank: 'medium',
   heavyTank: 'heavy',
@@ -392,9 +411,9 @@ export async function definitions(production: boolean) {
             (tank.shortUserString
               ? strings[tank.shortUserString]
               : undefined) ?? strings[tank.userString],
-          name_full: strings[tank.userString],
+          nameFull: strings[tank.userString],
           nation,
-          tree_type: tankTags.includes('collectible')
+          treeType: tankTags.includes('collectible')
             ? 'collector'
             : (typeof tank.price === 'number' ? false : 'gold' in tank.price)
               ? 'premium'
@@ -410,12 +429,15 @@ export async function definitions(production: boolean) {
           },
           turrets: [],
           engines: [],
+          dispersion: {
+            move: defaultChassis.shotDispersionFactors.vehicleMovement,
+            traverse: defaultChassis.shotDispersionFactors.vehicleRotation,
+          },
+          traverseSpeed: defaultChassis.rotationSpeed,
         };
 
-        if (
-          tankDefinitions[tankId].name === tankDefinitions[tankId].name_full
-        ) {
-          delete tankDefinitions[tankId].name_full;
+        if (tankDefinitions[tankId].name === tankDefinitions[tankId].nameFull) {
+          delete tankDefinitions[tankId].nameFull;
         }
 
         modelDefinitions[tankId] = {
@@ -494,6 +516,7 @@ export async function definitions(production: boolean) {
               });
 
             tankDefinitions[tankId].turrets.push({
+              traverseSpeed: turret.rotationSpeed,
               id: turretId,
               name:
                 strings[turret.userString] ??
@@ -503,7 +526,7 @@ export async function definitions(production: boolean) {
               tier: turret.level as Tier,
               guns: [],
               health: turret.maxHealth,
-              view_range: turret.circularVisionRadius,
+              viewRange: turret.circularVisionRadius,
             });
 
             modelDefinitions[tankId].turrets[turretId] = {
@@ -567,6 +590,9 @@ export async function definitions(production: boolean) {
                   : turretGunEntry.extraPitchLimits.transition.at(-1)!
                 : undefined;
               const gunArmor: ModelArmor = { thickness: {} };
+              const shotDispersionFactors =
+                turretGunEntry.shotDispersionFactors ??
+                gunListEntry.shotDispersionFactors;
 
               Object.keys(turretGunEntry.armor)
                 .filter((name) => name.startsWith('armor_'))
@@ -599,6 +625,13 @@ export async function definitions(production: boolean) {
                   typeof turretGunEntry.invisibilityFactorAtShot === 'number'
                     ? turretGunEntry.invisibilityFactorAtShot
                     : turretGunEntry.invisibilityFactorAtShot.at(-1)!,
+                aimTime: turretGunEntry.aimingTime ?? gunListEntry.aimingTime,
+                dispersion: {
+                  base: turretGunEntry.shotDispersionRadius,
+                  damaged: shotDispersionFactors.whileGunDamaged,
+                  shot: shotDispersionFactors.afterShot,
+                  traverse: shotDispersionFactors.turretRotation,
+                },
               } as GunDefinition);
 
               modelDefinitions[tankId].turrets[turretId].guns[gunId] = {

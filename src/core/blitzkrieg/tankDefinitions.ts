@@ -18,8 +18,8 @@ export interface TankDefinition {
   health: number;
   nation: string;
   name: string;
-  name_full?: string;
-  tree_type: TreeType;
+  nameFull?: string;
+  treeType: TreeType;
   consumables: number;
   provisions: number;
   tier: Tier;
@@ -32,6 +32,11 @@ export interface TankDefinition {
     still: number;
     moving: number;
     onFire: number;
+  };
+  traverseSpeed: number;
+  dispersion: {
+    move: number;
+    traverse: number;
   };
   equipment: string;
 }
@@ -46,33 +51,43 @@ export type TankDefinitionPrice =
   | { type: 'gold'; value: number };
 export interface TurretDefinition {
   health: number;
-  view_range: number;
+  viewRange: number;
+  traverseSpeed: number;
   id: number;
   name: string;
   tier: Tier;
   guns: GunDefinition[];
 }
-export type GunDefinition = GunDefinitionBase &
-  (GunDefinitionRegular | GunDefinitionAutoLoader | GunDefinitionAutoReloader);
+export type GunDefinition =
+  | GunDefinitionRegular
+  | GunDefinitionAutoLoader
+  | GunDefinitionAutoReloader;
 interface GunDefinitionBase {
   id: number;
   name: string;
   tier: Tier;
   shells: ShellDefinition[];
   camouflageLoss: number;
+  aimTime: number;
+  dispersion: {
+    base: number;
+    traverse: number;
+    shot: number;
+    damaged: number;
+  };
 }
-interface GunDefinitionRegular {
+interface GunDefinitionRegular extends GunDefinitionBase {
   type: 'regular';
   reload: number;
 }
-interface GunDefinitionAutoLoader {
-  type: 'auto_loader';
+interface GunDefinitionAutoLoader extends GunDefinitionBase {
+  type: 'autoLoader';
   reload: number;
   interClip: number;
   count: number;
 }
-interface GunDefinitionAutoReloader {
-  type: 'auto_reloader';
+interface GunDefinitionAutoReloader extends GunDefinitionBase {
+  type: 'autoReloader';
   reload: number[];
   interClip: number;
   count: number;
@@ -93,8 +108,8 @@ export type ShellDefinition = {
 
 export const GUN_TYPE_NAMES: Record<GunDefinition['type'], string> = {
   regular: 'Regular',
-  auto_loader: 'Auto loader',
-  auto_reloader: 'Auto reloader',
+  autoLoader: 'Auto loader',
+  autoReloader: 'Auto reloader',
 };
 
 export const tankDefinitions = fetch(asset('definitions/tanks.json'), {
@@ -117,28 +132,28 @@ export const tankNames = tanksDefinitionsArray.then((tanks) =>
       return {
         id,
         original: tank.name,
-        combined: `${tank.name}${deburr(tank.name)}${tank.name_full ? `${tank.name_full}${deburr(tank.name_full)}` : ''}`,
+        combined: `${tank.name}${deburr(tank.name)}${tank.nameFull ? `${tank.nameFull}${deburr(tank.nameFull)}` : ''}`,
       };
     }),
   ),
 );
 
 export const TANK_ICONS: Record<TankType, string> = {
-  tank_destroyer: 'https://i.imgur.com/BIHSEH0.png',
+  tankDestroyer: 'https://i.imgur.com/BIHSEH0.png',
   light: 'https://i.imgur.com/CSNha5V.png',
   medium: 'https://i.imgur.com/wvf3ltm.png',
   heavy: 'https://i.imgur.com/ECeqlZa.png',
 };
 
 export const TANK_ICONS_PREMIUM: Record<TankType, string> = {
-  tank_destroyer: 'https://i.imgur.com/TCu3EdR.png',
+  tankDestroyer: 'https://i.imgur.com/TCu3EdR.png',
   light: 'https://i.imgur.com/zdkpTRb.png',
   medium: 'https://i.imgur.com/3z7eHX6.png',
   heavy: 'https://i.imgur.com/P3vbmyA.png',
 };
 
 export const TANK_ICONS_COLLECTOR: Record<TankType, string> = {
-  tank_destroyer: 'https://i.imgur.com/WTjeirB.png',
+  tankDestroyer: 'https://i.imgur.com/WTjeirB.png',
   light: 'https://i.imgur.com/EwhtKkU.png',
   medium: 'https://i.imgur.com/u8YDMBh.png',
   heavy: 'https://i.imgur.com/8xRf3nc.png',

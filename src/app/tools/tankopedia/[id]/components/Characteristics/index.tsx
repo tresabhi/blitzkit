@@ -53,7 +53,7 @@ export function Characteristics() {
           {Math.round(engine.fire_chance * 100)}
         </Info>
         <Info name="View range" unit="m">
-          {turret.view_range}
+          {turret.viewRange}
         </Info>
         <Info name="Camouflage" unit="%" />
         <Info indent name="Still">

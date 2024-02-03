@@ -6,7 +6,7 @@ import {
 import { theme } from '../../../stitches.config';
 
 export const TANK_TYPES = [
-  'tank_destroyer',
+  'tankDestroyer',
   'light',
   'medium',
   'heavy',

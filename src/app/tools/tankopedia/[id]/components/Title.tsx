@@ -14,9 +14,9 @@ export function Title() {
       <Flex gap="2" align="center">
         <Heading
           color={
-            protagonist.tank.tree_type === 'premium'
+            protagonist.tank.treeType === 'premium'
               ? 'amber'
-              : protagonist.tank.tree_type === 'collector'
+              : protagonist.tank.treeType === 'collector'
                 ? 'blue'
                 : undefined
           }
@@ -24,7 +24,7 @@ export function Title() {
           <Flex align="center" gap="2">
             <img
               src={
-                TREE_TYPE_ICONS[protagonist.tank.tree_type][
+                TREE_TYPE_ICONS[protagonist.tank.treeType][
                   protagonist.tank.type
                 ]
               }

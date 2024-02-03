@@ -56,7 +56,7 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
               : filters.types.includes(tank.type)) &&
             (filters.treeTypes.length === 0
               ? true
-              : filters.treeTypes.includes(tank.tree_type)) &&
+              : filters.treeTypes.includes(tank.treeType)) &&
             (filters.nations.length === 0
               ? true
               : filters.nations.includes(tank.nation)) &&
@@ -266,9 +266,9 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
                   <Flex align="center" justify="center" gap="1">
                     <img
                       src={
-                        (tank.tree_type === 'collector'
+                        (tank.treeType === 'collector'
                           ? TANK_ICONS_COLLECTOR
-                          : tank.tree_type === 'premium'
+                          : tank.treeType === 'premium'
                             ? TANK_ICONS_PREMIUM
                             : TANK_ICONS)[tank.type]
                       }
@@ -277,16 +277,16 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
                     <Text
                       size="4"
                       color={
-                        tank.tree_type === 'collector'
+                        tank.treeType === 'collector'
                           ? 'blue'
-                          : tank.tree_type === 'premium'
+                          : tank.treeType === 'premium'
                             ? 'amber'
                             : undefined
                       }
                       weight="medium"
                       style={{
                         color:
-                          tank.tree_type === 'researchable'
+                          tank.treeType === 'researchable'
                             ? slateDark.slate12
                             : undefined,
                         whiteSpace: 'nowrap',

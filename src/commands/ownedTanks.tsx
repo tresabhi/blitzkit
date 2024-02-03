@@ -97,7 +97,7 @@ export const ownedTanksCommand: CommandRegistry = {
                             name={tank.name}
                             tankType={tank.type}
                             image={tankIcon(tank.id)}
-                            treeType={tank.tree_type}
+                            treeType={tank.treeType}
                           />
                         )),
                       )}
@@ -110,7 +110,7 @@ export const ownedTanksCommand: CommandRegistry = {
                             name={tank.name}
                             tankType={tank.type}
                             image={tankIcon(tank.id)}
-                            treeType={tank.tree_type}
+                            treeType={tank.treeType}
                           />
                         )),
                       )}

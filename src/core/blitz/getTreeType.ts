@@ -4,8 +4,8 @@ import { tankDefinitions } from '../blitzkrieg/tankDefinitions';
 export default async function getTreeType(id: number): Promise<TreeType> {
   const entry = (await tankDefinitions)[id];
 
-  if (entry.tree_type === 'collector') return 'collector';
-  if (entry.tree_type === 'premium') return 'premium';
+  if (entry.treeType === 'collector') return 'collector';
+  if (entry.treeType === 'premium') return 'premium';
 
   return 'researchable';
 }

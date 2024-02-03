@@ -29,7 +29,7 @@ export function CompactSearchResultRow({
                 {TIER_ROMAN_NUMERALS[tank.tier]}
               </Text>
 
-              <Text color={tank.tree_type === 'collector' ? 'blue' : 'amber'}>
+              <Text color={tank.treeType === 'collector' ? 'blue' : 'amber'}>
                 <Flex gap="2" align="center">
                   <SmallTankIcon id={tank.id} size={16} />
 
@@ -37,7 +37,7 @@ export function CompactSearchResultRow({
                     style={{
                       display: 'block',
                       color:
-                        tank.tree_type === 'researchable' ? 'white' : undefined,
+                        tank.treeType === 'researchable' ? 'white' : undefined,
                     }}
                   >
                     {tank.name}

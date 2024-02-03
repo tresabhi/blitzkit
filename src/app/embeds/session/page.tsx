@@ -295,7 +295,7 @@ export default function SessionPage() {
                       }
                       type="tank"
                       tankType={tankDefinitions?.type}
-                      treeType={tankDefinitions?.tree_type}
+                      treeType={tankDefinitions?.treeType}
                       stats={session.customColumns.map((customColumn) => {
                         const rowStat = rowStats[customColumn.display];
 
