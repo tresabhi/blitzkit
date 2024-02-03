@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { theme } from '../../../../../../../stitches.config';
 
 interface InfoProps {
-  name: string;
+  name: ReactNode;
   children?: ReactNode;
   unit?: string;
   indent?: boolean;

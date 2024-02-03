@@ -108,6 +108,17 @@ export function Characteristics() {
                     shell.damage.armor * gun.reload.slice(1).length
                   ).toFixed(0)}
             </Info>
+            <Info
+              indent
+              name={
+                <a
+                  target="_blank"
+                  href="https://tresabhi.github.io/blitzkrieg/guide/dpm.html"
+                >
+                  What's the difference?
+                </a>
+              }
+            />
             <Info indent name="Optimal shell index">
               {gun.reload.at(-1)! < gun.reload.at(-2)! ? gun.reload.length : 1}
             </Info>
