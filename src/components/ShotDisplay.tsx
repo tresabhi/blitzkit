@@ -89,7 +89,7 @@ export function ShotDisplay() {
         >
           <Card
             style={{
-              width: 300,
+              width: shot.thicknesses.length > 1 ? 300 : 200,
             }}
           >
             <Flex direction="column" gap="1">
@@ -103,15 +103,17 @@ export function ShotDisplay() {
               <Flex
                 direction="column"
                 style={{
-                  paddingLeft: 8,
+                  paddingLeft: shot.thicknesses.length > 1 ? 8 : undefined,
                 }}
               >
                 {shot.thicknesses.map(({ nominal, angled, type }, index) => (
                   <Flex gap="2">
-                    <Text>
-                      {index + 1}. {type[0].toUpperCase()}
-                      {type.slice(1)}
-                    </Text>
+                    {shot.thicknesses.length > 1 && (
+                      <Text>
+                        {index + 1}. {type[0].toUpperCase()}
+                        {type.slice(1)}
+                      </Text>
+                    )}
 
                     <Flex gap="1">
                       <NominalPenetration width={24} height={24} />
