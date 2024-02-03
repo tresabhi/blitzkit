@@ -265,16 +265,12 @@ export function ArmorMesh({
             if (gap) armorPiercingLayers.push(gap);
           });
 
-          console.log(armorPiercingLayers);
-
           let remainingPenetration = resolvedPenetration;
-          let accumulatedThickness = 0;
           const explosiveCapable = isExplosive(shell.type);
 
           armorPiercingLayers.forEach((layer) => {
             if (layer.type !== 'gap') {
               remainingPenetration -= layer.angled;
-              accumulatedThickness += layer.angled;
             } else if (explosiveCapable) {
               // there is a 50% penetration loss per meter for HE based shells
               remainingPenetration -= 0.5 * remainingPenetration * layer.gap;
@@ -286,7 +282,7 @@ export function ArmorMesh({
           const hasRicochet = armorPiercingLayers.some(
             (layer) => layer.type !== 'gap' && layer.ricochet,
           );
-          const hasPenetrated = remainingPenetration >= accumulatedThickness;
+          const hasPenetrated = remainingPenetration > 0;
 
           mutateTankopediaTemporary((draft) => {
             draft.shot = {

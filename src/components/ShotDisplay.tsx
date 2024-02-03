@@ -23,7 +23,7 @@ export const SHOT_ICONS: Record<Shot['type'], ReactNode> = {
 };
 
 const THICKNESS = 0.05;
-const LENGTH = 2;
+const LENGTH = 4;
 
 export function ShotDisplay() {
   const shot = useTankopediaTemporary((state) => state.shot);
