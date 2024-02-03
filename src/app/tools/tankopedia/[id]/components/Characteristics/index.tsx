@@ -29,7 +29,7 @@ export function Characteristics() {
 
   if (gun.type === 'regular') {
     dpm = (shell.damage.armor / gun.reload) * 60;
-  } else if (gun.type === 'auto_loader') {
+  } else if (gun.type === 'autoLoader') {
     dpm =
       ((shell.damage.armor * gun.count) /
         (gun.reload + (gun.count - 1) * gun.interClip)) *
@@ -82,7 +82,7 @@ export function Characteristics() {
         <Info name="Damage per minute" unit="hp / min">
           {dpm.toFixed(0)}
         </Info>
-        {gun.type === 'auto_reloader' && (
+        {gun.type === 'autoReloader' && (
           <>
             <Info indent name="Maximum" unit="hp / min">
               {gun.reload.at(-1)! < gun.reload.at(-2)!
@@ -124,7 +124,7 @@ export function Characteristics() {
             </Info>
           </>
         )}
-        {gun.type === 'auto_reloader' ? (
+        {gun.type === 'autoReloader' ? (
           gun.reload.map((reload, index) => (
             <Info
               indent={index > 0}
