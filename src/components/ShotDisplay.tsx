@@ -90,6 +90,7 @@ export function ShotDisplay() {
           <Card
             style={{
               width: shot.thicknesses.length > 1 ? 300 : 200,
+              userSelect: 'none',
             }}
           >
             <Flex direction="column" gap="1">

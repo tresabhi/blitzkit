@@ -59,7 +59,13 @@ export function RotationInputs() {
             flex: 1,
           }}
         >
-          <TextField.Slot>Yaw</TextField.Slot>
+          <TextField.Slot
+            style={{
+              userSelect: 'none',
+            }}
+          >
+            Yaw
+          </TextField.Slot>
           <TextField.Input
             defaultValue={Math.round(physical.yaw * (180 / Math.PI))}
             onBlur={() => {
@@ -87,7 +93,13 @@ export function RotationInputs() {
             ref={turretYawInput}
             style={{ textAlign: 'right' }}
           />
-          <TextField.Slot>°</TextField.Slot>
+          <TextField.Slot
+            style={{
+              userSelect: 'none',
+            }}
+          >
+            °
+          </TextField.Slot>
         </TextField.Root>
 
         <TextField.Root
@@ -95,7 +107,13 @@ export function RotationInputs() {
             flex: 1,
           }}
         >
-          <TextField.Slot>Pitch</TextField.Slot>
+          <TextField.Slot
+            style={{
+              userSelect: 'none',
+            }}
+          >
+            Pitch
+          </TextField.Slot>
           <TextField.Input
             defaultValue={-Math.round(physical.pitch * (180 / Math.PI))}
             onBlur={() => {
@@ -123,7 +141,13 @@ export function RotationInputs() {
             ref={gunPitchInput}
             style={{ textAlign: 'right' }}
           />
-          <TextField.Slot>°</TextField.Slot>
+          <TextField.Slot
+            style={{
+              userSelect: 'none',
+            }}
+          >
+            °
+          </TextField.Slot>
         </TextField.Root>
       </Flex>
 
