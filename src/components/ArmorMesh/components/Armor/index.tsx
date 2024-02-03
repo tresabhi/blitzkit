@@ -174,7 +174,7 @@ export function ArmorMesh({
           const armorPiercingLayers = intersectionsTillFirstCoreArmor.map(
             (event, index) => {
               switch (event.object.userData.type) {
-                case 'spacedArmor': {
+                case 'externalModule': {
                   accumulatedThickness += event.object.userData.thickness;
 
                   return {
@@ -188,7 +188,7 @@ export function ArmorMesh({
                   } satisfies ArmorPiercingLayer;
                 }
 
-                case 'externalModule':
+                case 'spacedArmor':
                 case 'coreArmor': {
                   const threeCalibersRule =
                     shell.caliber > 3 * event.object.userData.thickness;

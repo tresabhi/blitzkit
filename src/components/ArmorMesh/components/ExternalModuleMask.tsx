@@ -23,7 +23,7 @@ export function ArmorMeshExternalModuleMask({
 }: ArmorMeshExternalModuleMaskProps) {
   return (
     <>
-      {(props.exclude || ornamental) && (
+      {props.exclude && !ornamental && (
         <mesh {...props} renderOrder={0}>
           <meshBasicMaterial colorWrite={false} />
         </mesh>
