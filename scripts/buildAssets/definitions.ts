@@ -190,6 +190,7 @@ interface GunDefinitionsList {
   ids: Record<string, number>;
   shared: {
     [key: string]: {
+      rotationSpeed: number;
       shotDispersionFactors: {
         turretRotation: number;
         afterShot: number;
@@ -614,6 +615,7 @@ export async function definitions(production: boolean) {
 
               tankDefinitions[tankId].turrets[turretIndex].guns.push({
                 id: gunId,
+                rotationSpeed: gunListEntry.rotationSpeed,
                 name: gunName,
                 tier: gunListEntry.level as Tier,
                 shells: [],

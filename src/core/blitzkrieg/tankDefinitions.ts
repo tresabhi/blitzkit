@@ -63,6 +63,7 @@ export type GunDefinition =
   | GunDefinitionAutoLoader
   | GunDefinitionAutoReloader;
 interface GunDefinitionBase {
+  rotationSpeed: number;
   id: number;
   name: string;
   tier: Tier;
