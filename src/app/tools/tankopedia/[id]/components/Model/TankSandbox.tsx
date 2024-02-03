@@ -1,5 +1,5 @@
 import { LightningBoltIcon } from '@radix-ui/react-icons';
-import { Button, Card, Flex, Tabs, Theme } from '@radix-ui/themes';
+import { Badge, Button, Card, Flex, Tabs, Theme } from '@radix-ui/themes';
 import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
@@ -9,6 +9,7 @@ import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinit
 import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkrieg/pose';
 import { tankIcon } from '../../../../../../core/blitzkrieg/tankIcon';
+import { useModel } from '../../../../../../hooks/useModel';
 import { useDuel } from '../../../../../../stores/duel';
 import {
   TankopediaMode,
@@ -39,6 +40,7 @@ export function TankSandbox() {
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
   const [loadModel, setLoadModel] = useState(true); // set to false someday?
   const duel = useDuel();
+  const { hasPbr } = useModel(protagonist.tank.id);
 
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);
@@ -160,7 +162,12 @@ export function TankSandbox() {
               }}
             >
               <Tabs.List>
-                <Tabs.Trigger value="model">Model</Tabs.Trigger>
+                <Tabs.Trigger value="model">
+                  <Flex gap="2" align="center">
+                    Model
+                    {hasPbr ? <Badge>PBR</Badge> : null}
+                  </Flex>
+                </Tabs.Trigger>
                 <Tabs.Trigger value="armor">Armor</Tabs.Trigger>
               </Tabs.List>
             </Tabs.Root>
