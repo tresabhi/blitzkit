@@ -49,6 +49,7 @@ export default function Page({ params }: { params: { id: string } }) {
         [0, 0, 0],
         [0, 0, 0],
       ];
+      draft.shot = undefined;
     });
 
     function handleKeyDown(event: KeyboardEvent) {
