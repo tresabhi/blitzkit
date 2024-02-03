@@ -6,10 +6,10 @@ import {
 import { theme } from '../../../stitches.config';
 
 export const TANK_TYPES = [
-  'tankDestroyer',
   'light',
   'medium',
   'heavy',
+  'tankDestroyer',
 ] as const;
 
 // TODO: remove hyphen for underscore

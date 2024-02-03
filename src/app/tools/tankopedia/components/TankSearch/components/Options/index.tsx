@@ -107,7 +107,7 @@ export function Options() {
           ))}
         </Flex>
         <Flex style={{ flex: 1 }}>
-          {[...TANK_TYPES].reverse().map((type, index) => (
+          {[...TANK_TYPES].map((type, index) => (
             <Button
               key={type}
               color={filters.types.includes(type) ? undefined : 'gray'}
@@ -147,76 +147,70 @@ export function Options() {
           style={{ width: '100%' }}
         >
           <Flex>
-            {[...TIERS]
-              .reverse()
-              .slice(0, 5)
-              .map((tier, index) => (
-                <Button
-                  key={tier}
-                  color={filters.tiers.includes(tier) ? undefined : 'gray'}
-                  variant={filters.tiers.includes(tier) ? 'surface' : 'soft'}
-                  style={{
-                    flex: 1,
-                    margin: -0.5,
-                    borderTopLeftRadius: index === 0 ? 16 : 0,
-                    borderBottomLeftRadius: 0,
-                    borderTopRightRadius:
-                      index === TIERS.length - Math.round(TIERS.length / 2) - 1
-                        ? 16
-                        : 0,
-                    borderBottomRightRadius: 0,
-                  }}
-                  onClick={() =>
-                    mutateTankopediaPersistent((draft) => {
-                      if (draft.filters.tiers.includes(tier)) {
-                        draft.filters.tiers = draft.filters.tiers.filter(
-                          (preexistingTier) => preexistingTier !== tier,
-                        );
-                      } else {
-                        draft.filters.tiers.push(tier);
-                      }
-                    })
-                  }
-                >
-                  {TIER_ROMAN_NUMERALS[tier]}
-                </Button>
-              ))}
+            {[...TIERS].slice(0, 5).map((tier, index) => (
+              <Button
+                key={tier}
+                color={filters.tiers.includes(tier) ? undefined : 'gray'}
+                variant={filters.tiers.includes(tier) ? 'surface' : 'soft'}
+                style={{
+                  flex: 1,
+                  margin: -0.5,
+                  borderTopLeftRadius: index === 0 ? 16 : 0,
+                  borderBottomLeftRadius: 0,
+                  borderTopRightRadius:
+                    index === TIERS.length - Math.round(TIERS.length / 2) - 1
+                      ? 16
+                      : 0,
+                  borderBottomRightRadius: 0,
+                }}
+                onClick={() =>
+                  mutateTankopediaPersistent((draft) => {
+                    if (draft.filters.tiers.includes(tier)) {
+                      draft.filters.tiers = draft.filters.tiers.filter(
+                        (preexistingTier) => preexistingTier !== tier,
+                      );
+                    } else {
+                      draft.filters.tiers.push(tier);
+                    }
+                  })
+                }
+              >
+                {TIER_ROMAN_NUMERALS[tier]}
+              </Button>
+            ))}
           </Flex>
           <Flex>
-            {[...TIERS]
-              .reverse()
-              .slice(5)
-              .map((tier, index) => (
-                <Button
-                  key={tier}
-                  color={filters.tiers.includes(tier) ? undefined : 'gray'}
-                  variant={filters.tiers.includes(tier) ? 'surface' : 'soft'}
-                  style={{
-                    flex: 1,
-                    margin: -0.5,
-                    borderTopLeftRadius: 0,
-                    borderBottomLeftRadius: index === 0 ? 16 : 0,
-                    borderTopRightRadius: 0,
-                    borderBottomRightRadius:
-                      index === TIERS.length - Math.round(TIERS.length / 2) - 1
-                        ? 16
-                        : 0,
-                  }}
-                  onClick={() =>
-                    mutateTankopediaPersistent((draft) => {
-                      if (draft.filters.tiers.includes(tier)) {
-                        draft.filters.tiers = draft.filters.tiers.filter(
-                          (preexistingTier) => preexistingTier !== tier,
-                        );
-                      } else {
-                        draft.filters.tiers.push(tier);
-                      }
-                    })
-                  }
-                >
-                  {TIER_ROMAN_NUMERALS[tier]}
-                </Button>
-              ))}
+            {[...TIERS].slice(5).map((tier, index) => (
+              <Button
+                key={tier}
+                color={filters.tiers.includes(tier) ? undefined : 'gray'}
+                variant={filters.tiers.includes(tier) ? 'surface' : 'soft'}
+                style={{
+                  flex: 1,
+                  margin: -0.5,
+                  borderTopLeftRadius: 0,
+                  borderBottomLeftRadius: index === 0 ? 16 : 0,
+                  borderTopRightRadius: 0,
+                  borderBottomRightRadius:
+                    index === TIERS.length - Math.round(TIERS.length / 2) - 1
+                      ? 16
+                      : 0,
+                }}
+                onClick={() =>
+                  mutateTankopediaPersistent((draft) => {
+                    if (draft.filters.tiers.includes(tier)) {
+                      draft.filters.tiers = draft.filters.tiers.filter(
+                        (preexistingTier) => preexistingTier !== tier,
+                      );
+                    } else {
+                      draft.filters.tiers.push(tier);
+                    }
+                  })
+                }
+              >
+                {TIER_ROMAN_NUMERALS[tier]}
+              </Button>
+            ))}
           </Flex>
         </Flex>
         <Flex
@@ -299,7 +293,7 @@ export function Options() {
 
       <Flex gap="2" style={{ flex: 1 }} wrap="wrap">
         <Flex className={styles.oneLineFilters} style={{ flex: 1 }}>
-          {[...TIERS].reverse().map((tier, index) => (
+          {[...TIERS].map((tier, index) => (
             <Button
               key={tier}
               color={filters.tiers.includes(tier) ? undefined : 'gray'}
