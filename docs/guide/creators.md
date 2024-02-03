@@ -9,6 +9,7 @@
 - Vovko: discord bot rendering pipeline
 - Maddox: game file decompression
 - Pyogenics: tank model decompression
-- aeson000: game files layout
+- Aeson: game files layout
 - minitelrose, ChickenMan7777: 3-caliber rule edge cases
 - \_34, HisRoyalFatness, Synx, xkdkw: embed UX
+- [OPTML], Aeson, \_34, Droodles: beta testing tankopedia
