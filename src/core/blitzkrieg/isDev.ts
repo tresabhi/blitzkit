@@ -1,4 +1,4 @@
-const devHostStartNames = ['blitzkrieg-git', 'localhost'];
+const devHostStartNames = ['blitzkrieg-', 'localhost'];
 
 export default function isDev() {
   return (
