@@ -82,7 +82,7 @@ export function ShotDisplay() {
 
       <group ref={entryWrapper}>
         <Html
-          position={[0, 0, LENGTH]}
+          position={[0, 0, 0]}
           style={{
             paddingLeft: 16,
           }}
