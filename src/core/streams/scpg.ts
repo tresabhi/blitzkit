@@ -57,7 +57,7 @@ export enum VertexAttribute {
 
 export class ScpgStream extends BufferStream {
   vectorN(size: number) {
-    return times(size, () => this.float());
+    return times(size, () => this.float32());
   }
   vector2() {
     return this.vectorN(2);
@@ -107,7 +107,7 @@ export class ScpgStream extends BufferStream {
       }
 
       case KAType.FLOAT:
-        return this.float();
+        return this.float32();
 
       case KAType.ARRAY: {
         const length = this.uint32();

@@ -60,8 +60,11 @@ export class BufferStream {
   uint64() {
     return this.buffer.readBigUInt64LE(this.increment(8));
   }
-  float() {
+  float32() {
     return this.buffer.readFloatLE(this.increment(4));
+  }
+  float64() {
+    return this.buffer.readDoubleLE(this.increment(8));
   }
 
   boolean() {
