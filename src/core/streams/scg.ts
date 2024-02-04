@@ -1,4 +1,4 @@
-import { ScpgStream, VertexAttribute } from './scpg';
+import { ScpgReadStream, VertexAttribute } from './scpg';
 
 interface PolygonGroupRaw {
   '##name': 'PolygonGroup';
@@ -50,7 +50,7 @@ export const vertexAttributeVectorSizes = {
   [VertexAttribute.JOINTWEIGHT]: 4,
 } as const;
 
-export class ScgStream extends ScpgStream {
+export class ScgReadStream extends ScpgReadStream {
   header() {
     return {
       name: this.ascii(4),
@@ -71,7 +71,7 @@ export class ScgStream extends ScpgStream {
     }
 
     polygonGroupsRaw.forEach((polygonGroupRaw) => {
-      const indicesStream = new ScpgStream(polygonGroupRaw.indices);
+      const indicesStream = new ScpgReadStream(polygonGroupRaw.indices);
       const indices: number[] = [];
 
       for (let index = 0; index < polygonGroupRaw.indexCount; index++) {
@@ -82,9 +82,9 @@ export class ScgStream extends ScpgStream {
         );
       }
 
-      const verticesStream = new ScpgStream(polygonGroupRaw.vertices);
+      const verticesStream = new ScpgReadStream(polygonGroupRaw.vertices);
       const vertices: BlitzkriegVertex[] = [];
-      const { format, stride } = ScgStream.parseVertexFormat(
+      const { format, stride } = ScgReadStream.parseVertexFormat(
         polygonGroupRaw.vertexFormat,
       );
       const strideBasedSize = stride * polygonGroupRaw.vertexCount;

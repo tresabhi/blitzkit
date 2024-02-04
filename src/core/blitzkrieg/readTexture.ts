@@ -1,9 +1,9 @@
-import { existsSync } from "fs";
-import sharp from "sharp";
-import { Vector3Tuple } from "three";
-import { readDVPLFile } from "../blitz/readDVPLFile";
-import { DdsStream } from "../streams/dds";
-import { PvrStream } from "../streams/pvr";
+import { existsSync } from 'fs';
+import sharp from 'sharp';
+import { Vector3Tuple } from 'three';
+import { readDVPLFile } from '../blitz/readDVPLFile';
+import { DdsReadStream } from '../streams/dds';
+import { PvrReadStream } from '../streams/pvr';
 
 export enum TextureMutation {
   Normal,
@@ -28,16 +28,16 @@ type ReadTextureOptions =
     };
 
 export async function readTexture(path: string, options?: ReadTextureOptions) {
-  const ddsTexturePath = path.replace(".tex", ".dx11.dds.dvpl");
+  const ddsTexturePath = path.replace('.tex', '.dx11.dds.dvpl');
   const isDds = existsSync(ddsTexturePath);
   const resolvedTexturePath = isDds
     ? ddsTexturePath
-    : ddsTexturePath.replace(".dds", ".pvr");
+    : ddsTexturePath.replace('.dds', '.pvr');
   const decompressedDvpl = await readDVPLFile(resolvedTexturePath);
 
   const raw = isDds
-    ? await new DdsStream(decompressedDvpl).dds()
-    : new PvrStream(decompressedDvpl).pvr();
+    ? await new DdsReadStream(decompressedDvpl).dds()
+    : new PvrReadStream(decompressedDvpl).pvr();
   const channels = 4 * raw.width * raw.height;
 
   switch (options?.mutation) {

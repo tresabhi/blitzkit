@@ -1,6 +1,6 @@
 import { times } from 'lodash';
 import { Vector3Tuple, Vector4Tuple } from 'three';
-import { WindowsStream } from './windows';
+import { WindowsReadStream } from './windows';
 
 enum DxgiFormat {
   UNKNOWN = 0,
@@ -171,7 +171,7 @@ enum DdsCaps2 {
   VOLUME = 0x200000,
 }
 
-export class DdsStream extends WindowsStream {
+export class DdsReadStream extends WindowsReadStream {
   async dds() {
     this.magicNumber();
     const header = this.header();

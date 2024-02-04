@@ -1,5 +1,5 @@
 import { times } from 'lodash';
-import { BufferStream } from './buffer';
+import { ReadStream } from './buffer';
 
 enum ValueType {
   Null,
@@ -29,7 +29,7 @@ type Value =
   | Value[]
   | { [key: string]: Value };
 
-export class BkonStream extends BufferStream {
+export class BkonReadStream extends ReadStream {
   bkon() {
     this.magic();
     const header = this.header();

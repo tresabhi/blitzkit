@@ -1,5 +1,5 @@
 import { clamp, isEqual, times } from 'lodash';
-import { BufferStream } from './buffer';
+import { ReadStream } from './buffer';
 
 export enum PvrFlags {
   NoFlag = 0,
@@ -91,7 +91,7 @@ enum ResolvedBitRatePixelFormat {
   R5G6B5A0,
 }
 
-export class PvrStream extends BufferStream {
+export class PvrReadStream extends ReadStream {
   pvr() {
     const header = this.header();
     this.metadata();

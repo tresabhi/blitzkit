@@ -1,6 +1,6 @@
-import { BufferStream } from './buffer';
+import { ReadStream } from './buffer';
 
-export class WindowsStream extends BufferStream {
+export class WindowsReadStream extends ReadStream {
   dword() {
     return this.uint32();
   }

@@ -9,8 +9,8 @@ import {
   Vector4Tuple,
 } from 'three';
 import { TextureMutation, readTexture } from '../blitzkrieg/readTexture';
-import { Hierarchy, Sc2Stream, Textures } from '../streams/sc2';
-import { ScgStream, vertexAttributeVectorSizes } from '../streams/scg';
+import { Hierarchy, Sc2ReadStream, Textures } from '../streams/sc2';
+import { ScgReadStream, vertexAttributeVectorSizes } from '../streams/scg';
 import { VertexAttribute } from '../streams/scpg';
 import { readDVPLFile } from './readDVPLFile';
 
@@ -48,8 +48,8 @@ export async function extractModel(
 ) {
   const sc2Path = `${data}/3d/${path}.sc2.dvpl`;
   const scgPath = `${data}/3d/${path}.scg.dvpl`;
-  const sc2 = new Sc2Stream(await readDVPLFile(sc2Path)).sc2();
-  const scg = new ScgStream(await readDVPLFile(scgPath)).scg();
+  const sc2 = new Sc2ReadStream(await readDVPLFile(sc2Path)).sc2();
+  const scg = new ScgReadStream(await readDVPLFile(scgPath)).scg();
   const document = new Document();
   const scene = document.createScene();
   const buffer = document.createBuffer();

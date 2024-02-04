@@ -1,7 +1,7 @@
 import { Accessor, Document, Node, Scene } from '@gltf-transform/core';
 import { times } from 'lodash';
-import { Hierarchy, Sc2Stream } from '../streams/sc2';
-import { ScgStream } from '../streams/scg';
+import { Hierarchy, Sc2ReadStream } from '../streams/sc2';
+import { ScgReadStream } from '../streams/scg';
 import { VertexAttribute } from '../streams/scpg';
 import {
   vertexAttributeGLTFName,
@@ -16,8 +16,8 @@ Buffer.prototype.toJSON = function () {
 export async function extractArmor(data: string, fileName: string) {
   const sc2Path = `${data}/3d/Tanks/CollisionMeshes/${fileName}.sc2.dvpl`;
   const scgPath = `${data}/3d/Tanks/CollisionMeshes/${fileName}.scg.dvpl`;
-  const sc2 = new Sc2Stream(await readDVPLFile(sc2Path)).sc2();
-  const scg = new ScgStream(await readDVPLFile(scgPath)).scg();
+  const sc2 = new Sc2ReadStream(await readDVPLFile(sc2Path)).sc2();
+  const scg = new ScgReadStream(await readDVPLFile(scgPath)).scg();
   const document = new Document();
   const scene = document.createScene();
   const buffer = document.createBuffer();

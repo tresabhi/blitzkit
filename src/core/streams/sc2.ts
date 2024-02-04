@@ -1,5 +1,5 @@
 import { Vector3Tuple, Vector4Tuple } from 'three';
-import { ScpgStream } from './scpg';
+import { ScpgReadStream } from './scpg';
 
 export interface SC2 {
   '#dataNodes': DataNode[];
@@ -288,7 +288,7 @@ interface SceneComponents {
   count: number;
 }
 
-export class Sc2Stream extends ScpgStream {
+export class Sc2ReadStream extends ScpgReadStream {
   header() {
     return {
       name: this.ascii(4),
