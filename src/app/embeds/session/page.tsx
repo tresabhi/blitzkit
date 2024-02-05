@@ -14,14 +14,21 @@ import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import calculateWN8 from '../../../core/statistics/calculateWN8';
 import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
 import getWN8Percentile from '../../../core/statistics/getWN8Percentile';
-import { resetSession, useSession } from '../../../stores/session';
+import mutateSession, {
+  resetSession,
+  useSession,
+} from '../../../stores/session';
 import { IndividualTankStats, TanksStats } from '../../../types/tanksStats';
 import { CustomColumnDisplay } from '../../tools/session/components/CustomColumn';
 import { Menu } from '../../tools/session/components/Menu';
 
 const REFRESH_RATE = 1 / 5;
 
-export default function SessionPage() {
+interface SessionPageProps {
+  naked?: boolean;
+}
+
+export default function SessionPage({ naked = true }: SessionPageProps) {
   const session = useSession();
   const since = session.isTracking ? new Date(session.time) : undefined;
   const [diff, setDiff] = useState<
@@ -71,6 +78,14 @@ export default function SessionPage() {
       (accumulator, stats) => accumulator + stats.all.damage_dealt,
       0,
     ) / careerBattles;
+
+  useEffect(() => {
+    if (session.title === 'Untitled session') {
+      mutateSession((draft) => {
+        if (draft.isTracking) draft.title = draft.nickname;
+      });
+    }
+  }, [session.title]);
 
   useEffect(() => {
     async function recalculateDiff() {
@@ -207,6 +222,7 @@ export default function SessionPage() {
               since !== undefined &&
               diff !== undefined && (
                 <Breakdown.Row
+                  naked={naked}
                   color={session.color}
                   minimized={!session.showCareer}
                   title={session.title}
@@ -288,6 +304,7 @@ export default function SessionPage() {
 
                   return (
                     <Breakdown.Row
+                      naked={naked}
                       color={session.color}
                       key={stats.tank_id}
                       minimized={!session.showCareer}

@@ -248,7 +248,7 @@ export default function Page() {
         </div>
       </div>
 
-      <SessionPage />
+      <SessionPage naked={false} />
     </PageWrapper>
   );
 }
