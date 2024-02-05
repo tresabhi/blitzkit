@@ -1,4 +1,6 @@
+import { writeFile } from 'fs/promises';
 import { times } from 'lodash';
+import { decode, encode } from 'lz4';
 import { ReadStream, WriteStream } from './buffer';
 
 enum ValueType {
@@ -279,3 +281,23 @@ export class BkonWriteStream extends WriteStream {
     this.ascii('BKON');
   }
 }
+
+const write = new BkonWriteStream();
+const data = (await fetch(
+  'https://raw.githubusercontent.com/tresabhi/blitzkrieg-assets/dev/definitions/tanks.json',
+).then((response) => response.json())) as Value;
+write.bkon(data);
+const buffer = write.buffer;
+const read = new BkonReadStream(buffer);
+read.bkon();
+const lz4 = encode(buffer);
+
+writeFile('test.bkon', buffer);
+writeFile('test.json', JSON.stringify(data));
+writeFile('test.bkon.lz4', lz4);
+
+// now we attempt to read it
+writeFile(
+  'test.read.json',
+  JSON.stringify(new BkonReadStream(decode(lz4)).bkon()),
+);

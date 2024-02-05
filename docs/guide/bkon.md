@@ -5,7 +5,7 @@ A compact binary representation similar to JSON objects. This documentation uses
 1. JSON compressed as BKON, written directly to disk (a direct 50% reduction).
 2. BKON further compressed with LZ4 (a clean 90% reduction).
 3. The raw JSON file as fetched from a random data source.
-4. BKON decompressed once again to JSON. Note that this file is a little larger than the original JSON file as it contains a lot more decimal places due to float conversion precision.
+4. BKON decompressed once again to JSON. Note that this file is a little larger than the original JSON file as it contains a lot more decimal places due to float precision.
 
 ![an image of file sizes](https://i.imgur.com/9rBnOuS.png)
 
