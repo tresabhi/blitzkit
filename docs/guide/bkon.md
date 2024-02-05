@@ -161,4 +161,4 @@ struct ValueObject {
 
 ## Writing
 
-It's pretty obvious how to write. Remember that a `FastString` should only be applied to the string table if the string is greater than 4 characters and shows up more than once in the body. Otherwise, there's no point and `String` should be used.
+It's pretty obvious how to write. Remember that a `FastString` should only be applied to the string table if the string shows up more than once in the body. Otherwise, there's no point and `String` should be used.
