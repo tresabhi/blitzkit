@@ -28,6 +28,10 @@ export interface TankDefinition {
   turrets: TurretDefinition[];
   engines: EngineDefinition[];
   price: TankDefinitionPrice;
+  speed: {
+    forwards: number;
+    backwards: number;
+  };
   camouflage: {
     still: number;
     moving: number;

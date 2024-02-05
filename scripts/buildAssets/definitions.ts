@@ -77,6 +77,10 @@ interface VehicleDefinitions {
     still: number;
     firePenalty: number;
   };
+  speedLimits: {
+    forward: number;
+    backward: number;
+  };
   consumableSlots: number;
   provisionSlots: number;
   optDevicePreset: string;
@@ -404,6 +408,10 @@ export async function definitions(production: boolean) {
 
         tankDefinitions[tankId] = {
           health: tankDefinition.root.hull.maxHealth,
+          speed: {
+            forwards: tankDefinition.root.speedLimits.forward,
+            backwards: tankDefinition.root.speedLimits.backward,
+          },
           id: tankId,
           equipment,
           consumables: tankDefinition.root.consumableSlots,
