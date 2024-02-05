@@ -22,6 +22,7 @@ struct String {
 
 - Everything is little endian
 - Magic is always `"BKON"`
+- The index of fast strings must be read as mentioned by the fast string format
 
 ```cpp
 struct BlitzkriegObjectNotation {
@@ -38,11 +39,19 @@ struct BlitzkriegObjectNotation {
 ```cpp
 struct Header {
   uint16 version;
+  FastStringFormat fastStringFormat;
   StringTable stringTable;
 }
 
+// read as uint8
+enum FastStringFormat {
+  Format8,
+  Format16,
+  Format32,
+}
+
 struct StringTable {
-  uint16 count;
+  (uint8 | uint16 | uint32) count;
   String[count] strings;
 }
 ```
@@ -142,7 +151,7 @@ struct ValueString {
 
 struct ValueFastString {
   ValueType.FastString type;
-  uint16 index;
+  (uint8 | uint16 | uint32) index;
 }
 
 struct ValueArray {

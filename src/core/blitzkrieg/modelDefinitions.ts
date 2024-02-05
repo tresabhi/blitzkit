@@ -1,5 +1,6 @@
 import { Vector3Tuple } from 'three';
 import { asset } from './asset';
+import { fetchBkonLz4 } from './fetchBkonLz4';
 
 export type ModelDefinitions = Record<number, ModelDefinition>;
 
@@ -53,6 +54,6 @@ export interface PitchLimits {
   transition?: number;
 }
 
-export const modelDefinitions = fetch(asset('definitions/models.json'), {
-  cache: 'no-cache',
-}).then(async (response) => response.json() as Promise<ModelDefinitions>);
+export const modelDefinitions = fetchBkonLz4<ModelDefinitions>(
+  asset('definitions/models.bkon.lz4'),
+);

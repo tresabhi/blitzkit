@@ -1,4 +1,5 @@
 import { asset } from './asset';
+import { fetchBkonLz4 } from './fetchBkonLz4';
 
 type EquipmentOptions = [number, number];
 
@@ -21,6 +22,6 @@ export interface EquipmentDefinitions {
   };
 }
 
-export const equipmentDefinitions = fetch(asset('definitions/equipment.json'), {
-  cache: 'no-cache',
-}).then(async (response) => response.json() as Promise<EquipmentDefinitions>);
+export const equipmentDefinitions = fetchBkonLz4<EquipmentDefinitions>(
+  asset('definitions/equipment.bkon.lz4'),
+);

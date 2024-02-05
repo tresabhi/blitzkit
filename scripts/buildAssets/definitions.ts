@@ -21,6 +21,7 @@ import {
   ModelDefinitions,
 } from '../../src/core/blitzkrieg/modelDefinitions';
 import { ProvisionDefinitions } from '../../src/core/blitzkrieg/provisionDefinitions';
+import { superCompress } from '../../src/core/blitzkrieg/superCompress';
 import {
   GunDefinition,
   ShellType,
@@ -912,29 +913,29 @@ export async function definitions(production: boolean) {
     'definitions',
     [
       {
-        content: JSON.stringify(tankDefinitions),
-        encoding: 'utf-8',
-        path: 'definitions/tanks.json',
+        content: superCompress(tankDefinitions),
+        encoding: 'base64',
+        path: 'definitions/tanks.bkon.lz4',
       },
       {
-        content: JSON.stringify(modelDefinitions),
-        encoding: 'utf-8',
-        path: 'definitions/models.json',
+        content: superCompress(modelDefinitions),
+        encoding: 'base64',
+        path: 'definitions/models.bkon.lz4',
       },
       {
-        content: JSON.stringify(equipmentDefinitions),
-        encoding: 'utf-8',
-        path: 'definitions/equipment.json',
+        content: superCompress(equipmentDefinitions),
+        encoding: 'base64',
+        path: 'definitions/equipment.bkon.lz4',
       },
       {
-        content: JSON.stringify(consumableDefinitions),
-        encoding: 'utf-8',
-        path: 'definitions/consumables.json',
+        content: superCompress(consumableDefinitions),
+        encoding: 'base64',
+        path: 'definitions/consumables.bkon.lz4',
       },
       {
-        content: JSON.stringify(provisionDefinitions),
-        encoding: 'utf-8',
-        path: 'definitions/provisions.json',
+        content: superCompress(provisionDefinitions),
+        encoding: 'base64',
+        path: 'definitions/provisions.bkon.lz4',
       },
     ],
     production,

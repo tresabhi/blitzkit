@@ -2,6 +2,7 @@ import { deburr } from 'lodash';
 import { Vector2Tuple } from 'three';
 import { TankType, TreeType } from '../../components/Tanks';
 import { asset } from './asset';
+import { fetchBkonLz4 } from './fetchBkonLz4';
 
 export type ShellType = 'ap' | 'ap_cr' | 'hc' | 'he';
 
@@ -117,9 +118,9 @@ export const GUN_TYPE_NAMES: Record<GunDefinition['type'], string> = {
   autoReloader: 'Auto reloader',
 };
 
-export const tankDefinitions = fetch(asset('definitions/tanks.json'), {
-  cache: 'no-cache',
-}).then(async (response) => response.json() as Promise<TankDefinitions>);
+export const tankDefinitions = fetchBkonLz4<TankDefinitions>(
+  asset('definitions/tanks.bkon.lz4'),
+);
 
 const entries = new Promise<TankDefinition[]>(async (resolve) => {
   resolve(Object.entries(await tankDefinitions).map(([, entry]) => entry));

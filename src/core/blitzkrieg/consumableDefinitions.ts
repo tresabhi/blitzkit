@@ -1,4 +1,5 @@
 import { asset } from './asset';
+import { fetchBkonLz4 } from './fetchBkonLz4';
 
 export type TankFilterDefinitionCategory = 'clip';
 
@@ -33,9 +34,6 @@ export interface ConsumableDefinitions {
   [key: string]: ConsumableEntry;
 }
 
-export const consumableDefinitions = fetch(
-  asset('definitions/consumables.json'),
-  {
-    cache: 'no-cache',
-  },
-).then(async (response) => response.json() as Promise<ConsumableDefinitions>);
+export const consumableDefinitions = fetchBkonLz4<ConsumableDefinitions>(
+  asset('definitions/consumables.bkon.lz4'),
+);
