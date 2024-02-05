@@ -1,8 +1,6 @@
 import { GithubChangeBlob, createBlob } from './createBlob';
 import { octokit } from './octokit';
 
-const TIME_PER_BLOB = 2 ** 4 * 1000;
-
 export interface FileChange {
   path: string;
   content: string;

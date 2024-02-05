@@ -40,21 +40,25 @@ export class BkonReadStream extends ReadStream {
     this.magic();
     const header = this.header();
     const body = this.body(header.fastStringFormat, header.stringTable);
-
     return body;
   }
 
   magic() {
-    if (this.ascii(4) !== 'BKON') {
-      throw new Error('Invalid BKON magic number');
+    const magic = this.ascii(4);
+
+    if (magic !== 'BKON') {
+      throw new Error(`Invalid Bkon magic number: "${magic}"`);
     }
   }
 
   header() {
+    const version = this.uint16();
+    const fastStringFormat = this.uint8() as FastStringFormat;
+
     return {
-      version: this.uint16(),
-      fastStringFormat: this.uint8() as FastStringFormat,
-      stringTable: this.stringTable(),
+      version,
+      fastStringFormat,
+      stringTable: this.stringTable(fastStringFormat),
     };
   }
 
@@ -65,8 +69,23 @@ export class BkonReadStream extends ReadStream {
     return this.value(fastStringFormat, stringTable);
   }
 
-  stringTable() {
-    const count = this.uint16();
+  stringTable(fastStringFormat: FastStringFormat) {
+    let count: number;
+
+    switch (fastStringFormat) {
+      case FastStringFormat.Format8:
+        count = this.uint8();
+        break;
+
+      case FastStringFormat.Format16:
+        count = this.uint16();
+        break;
+
+      case FastStringFormat.Format32:
+        count = this.uint32();
+        break;
+    }
+
     const strings: string[] = [];
 
     for (let index = 0; index < count; index++) {
