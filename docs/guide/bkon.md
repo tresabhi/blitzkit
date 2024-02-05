@@ -1,6 +1,6 @@
 # Blitzkrieg Object Notation
 
-A compact binary representation of JSON objects. This documentation uses a frankenstein version of C++ structs that I came up with. Deal with it.
+A compact binary representation similar to JSON objects. This documentation uses some funky (yet concise) syntax I developed (don't worry, my C++ isn't that bad!).
 
 ## Primitives
 
@@ -70,10 +70,7 @@ enum ValueType {
   Object,
 }
 
-struct Value {
-  uint8 type;
-  // what comes next depends on type
-}
+struct Value = `Value${ValueType}`
 
 struct ValueNull {
   ValueType.Null type;
