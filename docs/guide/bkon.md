@@ -35,8 +35,7 @@ struct Header {
 }
 
 struct StringTable {
-  uint32 count;
-  uint32[count] ids;
+  uint16 count;
   String[count] strings;
 }
 ```
@@ -44,13 +43,11 @@ struct StringTable {
 ### Body
 
 ```cpp
-// identical to ValueObject except with no type
 struct Body {
-  uint32 count;
-  (ValueString | ValueFastString)[count] keys;
-  Value[count] values;
+  Value object;
 }
 
+// read as uint8
 enum ValueType {
   Null,
   Boolean,
@@ -138,7 +135,7 @@ struct ValueString {
 
 struct ValueFastString {
   ValueType.FastString type;
-  uint32 id;
+  uint16 index;
 }
 
 struct ValueArray {
