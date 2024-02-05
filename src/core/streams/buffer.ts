@@ -143,4 +143,14 @@ export class WriteStream {
     }
     return this;
   }
+  float32(value: number) {
+    const array = new Float32Array([value]);
+    this.array.push(...new Uint8Array(array.buffer));
+    return this;
+  }
+  float64(value: number) {
+    const array = new Float64Array([value]);
+    this.array.push(...new Uint8Array(array.buffer));
+    return this;
+  }
 }

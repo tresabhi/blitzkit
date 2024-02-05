@@ -190,9 +190,13 @@ export class BkonWriteStream extends WriteStream {
           }
         }
       } else {
-        // floats... ignore for now
-        this.uint8(ValueType.Uint32);
-        this.uint32(0);
+        if (object < -0x80000000 || object > 0x7fffffff) {
+          this.uint8(ValueType.Float64);
+          this.float64(object);
+        } else {
+          this.uint8(ValueType.Float32);
+          this.float32(object);
+        }
       }
     } else if (typeof object === 'bigint') {
       if (object < 0) {
@@ -275,15 +279,3 @@ export class BkonWriteStream extends WriteStream {
     this.ascii('BKON');
   }
 }
-
-// const write = new BkonWriteStream();
-// const data = (await fetch(
-//   'https://raw.githubusercontent.com/tresabhi/blitzkrieg-assets/dev/definitions/tanks.json',
-// ).then((response) => response.json())) as Value;
-// write.bkon(data);
-// const buffer = write.buffer;
-// const read = new BkonReadStream(buffer);
-// read.bkon();
-
-// writeFile('test.bkon', buffer);
-// writeFile('test.json', JSON.stringify(data));
