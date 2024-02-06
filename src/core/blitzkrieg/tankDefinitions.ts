@@ -183,11 +183,12 @@ export const TIER_ROMAN_NUMERALS: Record<Tier, string> = {
 };
 
 export const NATIONS = tanksDefinitionsArray.then((tanks) => {
-  const nationsObject: Record<string, true> = {};
+  const nations = Array.from(
+    new Set<string>(Object.values(tanks).map((tank) => tank.nation)),
+  );
 
-  tanks.forEach(({ nation }) => {
-    nationsObject[nation] = true;
-  });
+  nations.splice(nations.indexOf('other'), 1);
+  nations.push('other');
 
-  return Object.keys(nationsObject);
+  return nations;
 });
