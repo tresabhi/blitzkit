@@ -14,7 +14,7 @@ A compact binary representation similar to JSON objects. This documentation uses
 ```cpp
 struct String {
   uint32 length;
-  ascii[length] value;
+  utf8[length] value;
 }
 ```
 

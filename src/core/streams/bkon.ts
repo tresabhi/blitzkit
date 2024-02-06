@@ -44,7 +44,7 @@ export class BkonReadStream extends ReadStream {
   }
 
   magic() {
-    const magic = this.ascii(4);
+    const magic = this.utf8(4);
 
     if (magic !== 'BKON') {
       throw new Error(`Invalid Bkon magic number: "${magic}"`);
@@ -100,7 +100,7 @@ export class BkonReadStream extends ReadStream {
 
   string() {
     const length = this.uint32();
-    const string = this.ascii(length);
+    const string = this.utf8(length);
     return string;
   }
 
@@ -332,11 +332,11 @@ export class BkonWriteStream extends WriteStream {
   }
 
   string(value: string) {
-    this.uint32(value.length);
-    this.ascii(value);
+    this.uint32(Buffer.byteLength(value));
+    this.utf8(value);
   }
 
   magic() {
-    this.ascii('BKON');
+    this.utf8('BKON');
   }
 }

@@ -35,6 +35,9 @@ export class ReadStream {
   ascii(size: number) {
     return this.buffer.toString('ascii', this.increment(size), this.index);
   }
+  utf8(size: number) {
+    return this.buffer.toString('utf8', this.increment(size), this.index);
+  }
 
   int8() {
     return this.buffer.readInt8(this.increment(1));
@@ -92,6 +95,16 @@ export class WriteStream {
     for (let index = 0; index < value.length; index++) {
       this.array.push(value.charCodeAt(index));
     }
+    return this;
+  }
+  utf8(value: string) {
+    const buffer = Buffer.alloc(Buffer.byteLength(value));
+
+    buffer.write(value, 'utf8');
+    buffer.forEach((value) => {
+      this.array.push(value);
+    });
+
     return this;
   }
 
