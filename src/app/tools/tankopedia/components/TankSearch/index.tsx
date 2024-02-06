@@ -1,5 +1,9 @@
 import { slateDark } from '@radix-ui/colors';
-import { CaretDownIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import {
+  CaretDownIcon,
+  MagnifyingGlassIcon,
+  TrashIcon,
+} from '@radix-ui/react-icons';
 import {
   Button,
   Card,
@@ -10,7 +14,7 @@ import {
   TextField,
 } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
-import { Suspense, use, useEffect, useMemo, useRef, useState } from 'react';
+import { use, useEffect, useMemo, useRef, useState } from 'react';
 import { TankType, TreeType } from '../../../../../components/Tanks';
 import { asset } from '../../../../../core/blitzkrieg/asset';
 import {
@@ -202,13 +206,28 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
               </DropdownMenu.RadioGroup>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
+
+          <Button
+            color="red"
+            variant="soft"
+            onClick={() =>
+              useTankopediaPersistent.setState({
+                filters: {
+                  nations: [],
+                  tiers: [],
+                  treeTypes: [],
+                  types: [],
+                  test: 'include',
+                  page: 0,
+                },
+              })
+            }
+          >
+            <TrashIcon />
+          </Button>
         </Flex>
 
-        <Card variant={compact ? 'ghost' : 'surface'}>
-          <Suspense fallback={<Text>Loading...</Text>}>
-            <Options />
-          </Suspense>
-        </Card>
+        <Options />
       </Flex>
 
       {!compact && (
