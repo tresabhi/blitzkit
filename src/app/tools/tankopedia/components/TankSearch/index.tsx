@@ -43,7 +43,7 @@ const tankTypeOrder: TankType[] = ['light', 'medium', 'heavy', 'tankDestroyer'];
 const treeTypeOrder: TreeType[] = ['researchable', 'premium', 'collector'];
 
 export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
-  const tanksPerPage = compact ? 16 : 24;
+  const tanksPerPage = compact ? 64 : 96;
   const nations = use(NATIONS);
   const filters = useTankopediaPersistent((state) => state.filters);
   const sort = useTankopediaPersistent((state) => state.sort);
@@ -213,7 +213,7 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
         <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />
       )}
 
-      <Flex wrap="wrap" gap="3" justify={compact ? 'between' : 'center'}>
+      <Flex wrap="wrap" gap="2" justify={compact ? 'between' : 'center'}>
         {!compact &&
           searchResultsPageSlice.map((tank) => (
             <Card
@@ -223,13 +223,14 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
               style={{
                 flex: 1,
                 cursor: 'pointer',
+                height: 64,
               }}
             >
               <Inset
                 key={tank.id}
                 style={{
                   minWidth: 256,
-                  minHeight: 128,
+                  minHeight: 64,
                   position: 'relative',
                   display: 'flex',
                 }}
