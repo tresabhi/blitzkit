@@ -88,6 +88,38 @@ export function Options() {
           </Button>
         ))}
       </Flex>
+      <Flex className={styles.oneLineFilters}>
+        {nations.map((nation, index) => (
+          <Button
+            key={nation}
+            color={filters.nations.includes(nation) ? undefined : 'gray'}
+            variant={filters.nations.includes(nation) ? 'surface' : 'soft'}
+            style={{
+              flex: 1,
+              margin: -0.5,
+              borderTopLeftRadius: index === 0 ? undefined : 0,
+              borderBottomLeftRadius: index === 0 ? undefined : 0,
+              borderTopRightRadius:
+                index === nations.length - 1 ? undefined : 0,
+              borderBottomRightRadius:
+                index === nations.length - 1 ? undefined : 0,
+            }}
+            onClick={() =>
+              mutateTankopediaPersistent((draft) => {
+                if (draft.filters.nations.includes(nation)) {
+                  draft.filters.nations = draft.filters.nations.filter(
+                    (preexistingType) => preexistingType !== nation,
+                  );
+                } else {
+                  draft.filters.nations.push(nation);
+                }
+              })
+            }
+          >
+            <Flag nation={nation} />
+          </Button>
+        ))}
+      </Flex>
       <Flex>
         {[...TANK_TYPES].map((type, index) => (
           <Button
@@ -123,6 +155,37 @@ export function Options() {
           </Button>
         ))}
       </Flex>
+      <Flex className={styles.oneLineFilters}>
+        {[...TIERS].map((tier, index) => (
+          <Button
+            key={tier}
+            color={filters.tiers.includes(tier) ? undefined : 'gray'}
+            variant={filters.tiers.includes(tier) ? 'surface' : 'soft'}
+            style={{
+              flex: 1,
+              margin: -0.5,
+              borderTopLeftRadius: index === 0 ? undefined : 0,
+              borderBottomLeftRadius: index === 0 ? undefined : 0,
+              borderTopRightRadius: index === TIERS.length - 1 ? undefined : 0,
+              borderBottomRightRadius:
+                index === TIERS.length - 1 ? undefined : 0,
+            }}
+            onClick={() =>
+              mutateTankopediaPersistent((draft) => {
+                if (draft.filters.tiers.includes(tier)) {
+                  draft.filters.tiers = draft.filters.tiers.filter(
+                    (preexistingTier) => preexistingTier !== tier,
+                  );
+                } else {
+                  draft.filters.tiers.push(tier);
+                }
+              })
+            }
+          >
+            {TIER_ROMAN_NUMERALS[tier]}
+          </Button>
+        ))}
+      </Flex>{' '}
       <Flex
         direction="column"
         className={styles.splitFilters}
@@ -269,69 +332,6 @@ export function Options() {
             </Button>
           ))}
         </Flex>
-      </Flex>
-      <Flex className={styles.oneLineFilters}>
-        {nations.map((nation, index) => (
-          <Button
-            key={nation}
-            color={filters.nations.includes(nation) ? undefined : 'gray'}
-            variant={filters.nations.includes(nation) ? 'surface' : 'soft'}
-            style={{
-              flex: 1,
-              margin: -0.5,
-              borderTopLeftRadius: index === 0 ? undefined : 0,
-              borderBottomLeftRadius: index === 0 ? undefined : 0,
-              borderTopRightRadius:
-                index === nations.length - 1 ? undefined : 0,
-              borderBottomRightRadius:
-                index === nations.length - 1 ? undefined : 0,
-            }}
-            onClick={() =>
-              mutateTankopediaPersistent((draft) => {
-                if (draft.filters.nations.includes(nation)) {
-                  draft.filters.nations = draft.filters.nations.filter(
-                    (preexistingType) => preexistingType !== nation,
-                  );
-                } else {
-                  draft.filters.nations.push(nation);
-                }
-              })
-            }
-          >
-            <Flag nation={nation} />
-          </Button>
-        ))}
-      </Flex>
-      <Flex className={styles.oneLineFilters}>
-        {[...TIERS].map((tier, index) => (
-          <Button
-            key={tier}
-            color={filters.tiers.includes(tier) ? undefined : 'gray'}
-            variant={filters.tiers.includes(tier) ? 'surface' : 'soft'}
-            style={{
-              flex: 1,
-              margin: -0.5,
-              borderTopLeftRadius: index === 0 ? undefined : 0,
-              borderBottomLeftRadius: index === 0 ? undefined : 0,
-              borderTopRightRadius: index === TIERS.length - 1 ? undefined : 0,
-              borderBottomRightRadius:
-                index === TIERS.length - 1 ? undefined : 0,
-            }}
-            onClick={() =>
-              mutateTankopediaPersistent((draft) => {
-                if (draft.filters.tiers.includes(tier)) {
-                  draft.filters.tiers = draft.filters.tiers.filter(
-                    (preexistingTier) => preexistingTier !== tier,
-                  );
-                } else {
-                  draft.filters.tiers.push(tier);
-                }
-              })
-            }
-          >
-            {TIER_ROMAN_NUMERALS[tier]}
-          </Button>
-        ))}
       </Flex>
     </Flex>
   );

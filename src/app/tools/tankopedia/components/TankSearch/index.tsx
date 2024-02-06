@@ -163,7 +163,7 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
 
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
-              <Button variant="soft">
+              <Button variant="soft" color="gray">
                 Sort
                 <CaretDownIcon />
               </Button>
