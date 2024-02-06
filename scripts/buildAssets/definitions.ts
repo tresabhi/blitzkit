@@ -575,11 +575,11 @@ export async function definitions(production: boolean) {
               const gunType =
                 'clip' in turretGunEntry
                   ? turretGunEntry.pumpGunMode
-                    ? 'auto_reloader'
-                    : 'auto_loader'
+                    ? 'autoReloader'
+                    : 'autoLoader'
                   : 'regular';
               const gunReload =
-                gunType === 'auto_reloader'
+                gunType === 'autoReloader'
                   ? turretGunEntry.pumpGunReloadTimes!.split(' ').map(Number)
                   : turretGunEntry.reloadTime;
               const gunClipCount =
