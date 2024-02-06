@@ -4,10 +4,12 @@ import { useFrame } from '@react-three/fiber';
 import { ReactNode, useEffect, useRef } from 'react';
 import { Group, Mesh, Vector3 } from 'three';
 import { radToDeg } from 'three/src/math/MathUtils';
+import { isExplosive } from '../core/blitz/isExplosive';
 import { AngledPenetration } from '../icons/AngledPenetration';
 import { Block } from '../icons/Block';
 import { NominalPenetration } from '../icons/NominalPenetration';
 import { Ricochet } from '../icons/Ricochet';
+import { useDuel } from '../stores/duel';
 import { Shot, useTankopediaTemporary } from '../stores/tankopedia';
 
 export const SHOT_NAMES: Record<Shot['type'], string> = {
@@ -30,8 +32,12 @@ export function ShotDisplay() {
   const entryWrapper = useRef<Group>(null);
   const entryLine = useRef<Mesh>(null);
   const circle = useRef<Mesh>(null);
+  const ricochetCircle = useRef<Mesh>(null);
   const exitWrapper = useRef<Group>(null);
   const exitLine = useRef<Mesh>(null);
+  const secondLineLength = shot?.ricochet ? shot?.ricochet.distance : LENGTH;
+  const number = shot && (shot.thicknesses.length > 1 || shot.ricochet);
+  const shell = useDuel((state) => state.antagonist!.shell);
 
   useFrame(({ clock }) => {
     const t1 = clock.elapsedTime % 1;
@@ -39,7 +45,7 @@ export function ShotDisplay() {
 
     entryLine.current?.position.set(0, 0, LENGTH - t1 * LENGTH);
     entryLine.current?.scale.set(1, -2 * Math.abs(t1 - 0.5) + 1, 1);
-    exitLine.current?.position.set(0, 0, t2 * LENGTH);
+    exitLine.current?.position.set(0, 0, t2 * secondLineLength);
     exitLine.current?.scale.set(1, -2 * Math.abs(t2 - 0.5) + 1, 1);
   });
 
@@ -47,21 +53,21 @@ export function ShotDisplay() {
     if (!shot) return;
 
     const point = new Vector3(...shot.point);
-    const shotNormal = new Vector3(...shot.shellNormal);
+    const shellNormal = new Vector3(...shot.shellNormal);
     const surfaceNormal = new Vector3(...shot.surfaceNormal);
-    const bounceNormal = shotNormal
+    const bounceNormal = shellNormal
       .clone()
       .multiplyScalar(-1)
       .sub(
         surfaceNormal
           .clone()
           .multiplyScalar(
-            2 * surfaceNormal.dot(shotNormal.clone().multiplyScalar(-1)),
+            2 * surfaceNormal.dot(shellNormal.clone().multiplyScalar(-1)),
           ),
       );
 
     entryWrapper.current?.position.set(...shot.point);
-    entryWrapper.current?.lookAt(point.clone().add(shotNormal));
+    entryWrapper.current?.lookAt(point.clone().add(shellNormal));
     exitWrapper.current?.position.set(...shot.point);
     exitWrapper.current?.lookAt(point.clone().add(bounceNormal));
     circle.current?.position.set(...shot.point);
@@ -89,7 +95,7 @@ export function ShotDisplay() {
         >
           <Card
             style={{
-              width: shot.thicknesses.length > 1 ? 300 : 200,
+              width: number ? 300 : 200,
               userSelect: 'none',
             }}
           >
@@ -104,12 +110,12 @@ export function ShotDisplay() {
               <Flex
                 direction="column"
                 style={{
-                  paddingLeft: shot.thicknesses.length > 1 ? 8 : undefined,
+                  paddingLeft: number ? 8 : undefined,
                 }}
               >
                 {shot.thicknesses.map((layer, index) => (
-                  <Flex gap="2">
-                    {shot.thicknesses.length > 1 && (
+                  <Flex gap="2" key={index}>
+                    {number && (
                       <Text>
                         {index + 1}. {layer.type[0].toUpperCase()}
                         {layer.type.slice(1)}
@@ -127,6 +133,9 @@ export function ShotDisplay() {
                             : layer.nominal,
                         )}
                         mm
+                        {layer.type === 'gap' && isExplosive(shell.type)
+                          ? ` (${Math.round(Math.min(100, 0.5 * layer.gap * 100))}% pen. loss)`
+                          : ''}
                       </Text>
                     </Flex>
                     {layer.type !== 'external' && layer.type !== 'gap' && (
@@ -137,6 +146,26 @@ export function ShotDisplay() {
                     )}
                   </Flex>
                 ))}
+
+                {shot.ricochet && (
+                  <>
+                    <Flex gap="1">
+                      <Text>{shot.thicknesses.length + 1}. Ricochet</Text>
+                      <Ricochet width={24} height={24} />
+                    </Flex>
+                    {shot.ricochet.penetration ? (
+                      <Flex gap="1">
+                        <Text>{shot.thicknesses.length + 2}. Penetration</Text>
+                        <NominalPenetration width={24} height={24} />
+                      </Flex>
+                    ) : (
+                      <Flex gap="1">
+                        <Text>{shot.thicknesses.length + 2}. Blocked</Text>
+                        <Block width={24} height={24} />
+                      </Flex>
+                    )}
+                  </>
+                )}
               </Flex>
             </Flex>
           </Card>
@@ -161,21 +190,34 @@ export function ShotDisplay() {
         <group ref={exitWrapper}>
           <mesh
             renderOrder={1}
-            position={[0, 0, LENGTH / 2]}
+            position={[0, 0, secondLineLength / 2]}
             rotation={[Math.PI / 2, 0, 0]}
             ref={exitLine}
           >
             <cylinderGeometry
-              args={[THICKNESS / 2, THICKNESS / 2, LENGTH, 8]}
+              args={[THICKNESS / 2, THICKNESS / 2, secondLineLength, 8]}
             />
             <meshBasicMaterial color="#ff8080" />
           </mesh>
-          <mesh position={[0, 0, LENGTH / 2]} rotation={[Math.PI / 2, 0, 0]}>
+          <mesh
+            position={[0, 0, secondLineLength / 2]}
+            rotation={[Math.PI / 2, 0, 0]}
+          >
             <cylinderGeometry
-              args={[THICKNESS / 4, THICKNESS / 4, LENGTH, 8]}
+              args={[THICKNESS / 4, THICKNESS / 4, secondLineLength, 8]}
             />
             <meshBasicMaterial color="#ffffff" depthTest={false} />
           </mesh>
+
+          {shot.ricochet && (
+            <mesh ref={ricochetCircle} position={[0, 0, secondLineLength]}>
+              <torusGeometry args={[0.05, 0.0125, 4, 16]} />
+              <meshBasicMaterial
+                color={shot.ricochet.penetration ? 'green' : 'red'}
+                depthTest={false}
+              />
+            </mesh>
+          )}
         </group>
       )}
     </>

@@ -35,6 +35,7 @@ export function Provisions() {
 
           return (
             <ModuleButton
+              key={provision.id}
               first={index === 0}
               last={index === provisionsList.length - 1}
               rowChild

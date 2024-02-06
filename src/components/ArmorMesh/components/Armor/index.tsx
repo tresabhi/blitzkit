@@ -4,6 +4,7 @@ import {
   IUniform,
   Mesh,
   Quaternion,
+  Raycaster,
   ShaderMaterial,
   Vector2,
   Vector3,
@@ -16,6 +17,7 @@ import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetr
 import { useDuel } from '../../../../stores/duel';
 import {
   ArmorPiercingLayer,
+  Shot,
   mutateTankopediaTemporary,
   useTankopediaPersistent,
 } from '../../../../stores/tankopedia';
@@ -49,6 +51,7 @@ export function ArmorMesh({
   const shellNormal = new Vector3();
   const surfaceNormal = new Vector3();
   const mesh = useRef<Mesh>(null);
+  const scene = useThree((state) => state.scene);
 
   useEffect(() => {
     function updateQuickEquipments() {
@@ -189,8 +192,11 @@ export function ArmorMesh({
 
           if (mesh.current !== (coreArmorMesh as unknown as Mesh)) return;
 
-          const armorPiercingLayersRaw = intersectionsTillFirstCoreArmor.map(
-            (event, index) => {
+          let hasRicochet = false;
+          const armorPiercingLayersRaw = intersectionsTillFirstCoreArmor
+            .map((event, index) => {
+              if (hasRicochet) return null;
+
               switch (event.object.userData.type) {
                 case 'externalModule': {
                   return {
@@ -198,9 +204,9 @@ export function ArmorMesh({
                       event.object.userData.thickness * thicknessCoefficient,
                     angled:
                       event.object.userData.thickness * thicknessCoefficient,
-                    ricochet: false,
                     type: 'external',
                     distance: event.distance,
+                    ricochet: false,
                   } satisfies ArmorPiercingLayer;
                 }
 
@@ -210,7 +216,6 @@ export function ArmorMesh({
                     shell.caliber >
                     3 *
                       (event.object.userData.thickness * thicknessCoefficient);
-                  let ricochet = false;
 
                   if (
                     index === 0 &&
@@ -218,7 +223,7 @@ export function ArmorMesh({
                     !threeCalibersRule &&
                     angle >= degToRad(shell.ricochet!)
                   ) {
-                    ricochet = true;
+                    hasRicochet = true;
                   }
 
                   const twoCalibersRule =
@@ -236,10 +241,10 @@ export function ArmorMesh({
                     Math.cos(angle - degToRad(normalization));
 
                   return {
+                    ricochet: hasRicochet,
                     nominal:
                       event.object.userData.thickness * thicknessCoefficient,
                     angled,
-                    ricochet,
                     type:
                       event.object.userData.type === 'coreArmor'
                         ? 'core'
@@ -248,8 +253,8 @@ export function ArmorMesh({
                   } satisfies ArmorPiercingLayer;
                 }
               }
-            },
-          );
+            })
+            .filter(Boolean);
           const gaps = armorPiercingLayersRaw.map((layerA, aIndex) => {
             if (aIndex === armorPiercingLayersRaw.length - 1) return null;
             const layerB = armorPiercingLayersRaw[aIndex + 1];
@@ -273,7 +278,11 @@ export function ArmorMesh({
 
           armorPiercingLayers.forEach((layer) => {
             if (layer.type !== 'gap') {
-              remainingPenetration -= layer.angled;
+              if (layer.ricochet) {
+                remainingPenetration *= 0.75;
+              } else {
+                remainingPenetration -= layer.angled;
+              }
             } else if (explosiveCapable) {
               // there is a 50% penetration loss per meter for HE based shells
               remainingPenetration -= 0.5 * remainingPenetration * layer.gap;
@@ -282,10 +291,79 @@ export function ArmorMesh({
             remainingPenetration = Math.max(0, remainingPenetration);
           });
 
-          const hasRicochet = armorPiercingLayers.some(
-            (layer) => layer.type !== 'gap' && layer.ricochet,
-          );
           const hasPenetrated = remainingPenetration > 0;
+          let ricochet: Shot['ricochet'] = undefined;
+
+          if (hasRicochet) {
+            const raycaster = new Raycaster();
+            const bounceNormal = shellNormal
+              .clone()
+              .multiplyScalar(-1)
+              .sub(
+                surfaceNormal
+                  .clone()
+                  .multiplyScalar(
+                    2 *
+                      surfaceNormal.dot(shellNormal.clone().multiplyScalar(-1)),
+                  ),
+              );
+            raycaster.set(event.point, bounceNormal);
+            const intersections = raycaster
+              .intersectObjects(scene.children, true)
+              .filter(
+                (intersection) =>
+                  typeof intersection.object.userData?.type === 'string',
+              );
+            const indexOfCoreArmor = intersections.findIndex(
+              ({ object }) => object.userData.type === 'coreArmor',
+            );
+            const intersectionsTillFirstCoreArmor = intersections.slice(
+              0,
+              indexOfCoreArmor + 1,
+            );
+
+            if (intersectionsTillFirstCoreArmor.length > 0) {
+              intersectionsTillFirstCoreArmor.forEach((intersection) => {
+                switch (intersection.object.userData.type) {
+                  case 'externalModule': {
+                    remainingPenetration -=
+                      intersection.object.userData.thickness;
+                    break;
+                  }
+
+                  case 'spacedArmor':
+                  case 'coreArmor': {
+                    const angle = bounceNormal.angleTo(
+                      intersection.object.position.clone().sub(event.point),
+                    );
+                    const twoCalibersRule =
+                      shell.caliber >
+                      2 *
+                        (intersection.object.userData.thickness *
+                          thicknessCoefficient);
+                    const normalization = twoCalibersRule
+                      ? ((shell.normalization ?? 0) * 1.4 * shell.caliber) /
+                        (2 *
+                          intersection.object.userData.thickness *
+                          thicknessCoefficient)
+                      : shell.normalization ?? 0;
+                    const angled =
+                      (intersection.object.userData.thickness *
+                        thicknessCoefficient) /
+                      Math.cos(angle - degToRad(normalization));
+
+                    remainingPenetration -= angled;
+                  }
+                }
+              });
+
+              ricochet = {
+                point: intersectionsTillFirstCoreArmor.at(-1)!.point.toArray(),
+                distance: intersectionsTillFirstCoreArmor.at(-1)!.distance,
+                penetration: remainingPenetration > 0,
+              };
+            }
+          }
 
           mutateTankopediaTemporary((draft) => {
             draft.shot = {
@@ -299,6 +377,7 @@ export function ArmorMesh({
               shellNormal: shellNormal.toArray(),
               surfaceNormal: surfaceNormal.toArray(),
               angle,
+              ricochet,
             };
           });
         }}

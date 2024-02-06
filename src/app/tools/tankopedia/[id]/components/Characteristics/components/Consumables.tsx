@@ -36,6 +36,7 @@ export function Consumables() {
 
           return (
             <ModuleButton
+              key={consumable.id}
               first={index === 0}
               last={index === consumablesList.length - 1}
               rowChild

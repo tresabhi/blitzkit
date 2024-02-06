@@ -15,8 +15,8 @@ export function AngledPenetration(props: ComponentProps<'svg'>) {
         fill="currentColor"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M28 8H12L22 28H38L28 8ZM42 36H26L36 56H52L42 36Z"
         fill="currentColor"
       />

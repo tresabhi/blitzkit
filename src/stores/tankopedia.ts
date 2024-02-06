@@ -69,14 +69,19 @@ interface TankopediaTemporary {
   shot?: Shot;
 }
 
-export type Shot = {
+export interface Shot {
   point: Vector3Tuple;
   surfaceNormal: Vector3Tuple;
   shellNormal: Vector3Tuple;
   thicknesses: ArmorPiercingLayer[];
   type: 'ricochet' | 'penetration' | 'block';
   angle: number;
-};
+  ricochet?: {
+    distance: number;
+    point: Vector3Tuple;
+    penetration: boolean;
+  };
+}
 
 export type ArmorPiercingLayer =
   | {

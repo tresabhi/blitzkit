@@ -127,6 +127,7 @@ export function Characteristics() {
         {gun.type === 'autoReloader' ? (
           gun.reload.map((reload, index) => (
             <Info
+              key={index}
               indent={index > 0}
               name={index > 0 ? `Shell ${index + 1}` : 'Reload on shell 1'}
               unit="s"
@@ -144,25 +145,25 @@ export function Characteristics() {
         </Info>
         <Info name="Penetration" unit="mm" />
         {gun.shells.map((shell) => (
-          <Info indent name={SHELL_NAMES[shell.type]}>
+          <Info key={shell.type} indent name={SHELL_NAMES[shell.type]}>
             {resolveNearPenetration(shell.penetration)}
           </Info>
         ))}
         <Info name="Damage" unit="hp" />
         {gun.shells.map((shell) => (
-          <Info indent name={SHELL_NAMES[shell.type]}>
+          <Info key={shell.type} indent name={SHELL_NAMES[shell.type]}>
             {shell.damage.armor}
           </Info>
         ))}
         <Info name="Module damage" unit="hp" />
         {gun.shells.map((shell, index) => (
-          <Info indent name={SHELL_NAMES[shell.type]}>
+          <Info key={shell.type} indent name={SHELL_NAMES[shell.type]}>
             {shell.damage.module}
           </Info>
         ))}
         <Info name="Shell velocity" unit="m/s" />
         {gun.shells.map((shell, index) => (
-          <Info indent name={SHELL_NAMES[shell.type]}>
+          <Info key={shell.type} indent name={SHELL_NAMES[shell.type]}>
             {shell.speed}
           </Info>
         ))}
