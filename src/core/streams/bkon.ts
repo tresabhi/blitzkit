@@ -108,7 +108,7 @@ export class BkonReadStream extends ReadStream {
     fastStringFormat: FastStringFormat,
     stringTable: Record<number, string>,
   ): BkonValue {
-    const type = this.uint8();
+    const type = this.uint8() as ValueType;
 
     switch (type) {
       case ValueType.Null:
@@ -193,17 +193,25 @@ export class BkonReadStream extends ReadStream {
 export class BkonWriteStream extends WriteStream {
   bkon(object: BkonValue) {
     this.magic();
-    const stringTable = this.header(object);
-    this.body(object, stringTable);
+    const header = this.header(object);
+    this.body(header.fastStringFormat, object, header.stringTable);
     return this;
   }
 
-  body(object: BkonValue, stringTable: Map<string, number>) {
-    this.value(object, stringTable);
+  body(
+    fastStringFormat: FastStringFormat,
+    object: BkonValue,
+    stringTable: Map<string, number>,
+  ) {
+    this.value(fastStringFormat, object, stringTable);
     return this;
   }
 
-  value(object: BkonValue, stringTable: Map<string, number>) {
+  value(
+    fastStringFormat: FastStringFormat,
+    object: BkonValue,
+    stringTable: Map<string, number>,
+  ) {
     if (object === null || object === undefined) {
       this.uint8(ValueType.Null);
     } else if (typeof object === 'boolean') {
@@ -258,7 +266,19 @@ export class BkonWriteStream extends WriteStream {
     } else if (typeof object === 'string') {
       if (stringTable.has(object)) {
         this.uint8(ValueType.FastString);
-        this.uint16(stringTable.get(object)!);
+        const id = stringTable.get(object)!;
+        switch (fastStringFormat) {
+          case FastStringFormat.Format8:
+            this.uint8(id);
+            break;
+
+          case FastStringFormat.Format16:
+            this.uint16(id);
+            break;
+
+          case FastStringFormat.Format32:
+            this.uint32(id);
+        }
       } else {
         this.uint8(ValueType.String);
         this.string(object);
@@ -266,14 +286,20 @@ export class BkonWriteStream extends WriteStream {
     } else if (Array.isArray(object)) {
       this.uint8(ValueType.Array);
       this.uint32(object.length);
-      object.forEach((value) => this.value(value, stringTable));
+      object.forEach((value) =>
+        this.value(fastStringFormat, value, stringTable),
+      );
     } else {
       const entries = Object.entries(object);
 
       this.uint8(ValueType.Object);
       this.uint32(entries.length);
-      entries.forEach(([key]) => this.value(key, stringTable));
-      entries.forEach(([, value]) => this.value(value, stringTable));
+      entries.forEach(([key]) =>
+        this.value(fastStringFormat, key, stringTable),
+      );
+      entries.forEach(([, value]) =>
+        this.value(fastStringFormat, value, stringTable),
+      );
     }
   }
 
@@ -286,21 +312,25 @@ export class BkonWriteStream extends WriteStream {
     const stringTable = this.buildStringTable(
       this.collectStringCounts(object, new Map()),
     );
+    let fastStringFormat: FastStringFormat;
 
     if (stringTable.size <= 0xff) {
+      fastStringFormat = FastStringFormat.Format8;
       this.uint8(FastStringFormat.Format8);
       this.uint8(stringTable.size);
     } else if (stringTable.size <= 0xffff) {
+      fastStringFormat = FastStringFormat.Format16;
       this.uint8(FastStringFormat.Format16);
       this.uint16(stringTable.size);
     } else {
+      fastStringFormat = FastStringFormat.Format32;
       this.uint8(FastStringFormat.Format32);
       this.uint32(stringTable.size);
     }
 
     stringTable.forEach((_index, string) => this.string(string));
 
-    return stringTable;
+    return { fastStringFormat, stringTable };
   }
 
   buildStringTable(stringCounts: Map<string, number>) {
