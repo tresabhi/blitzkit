@@ -11,8 +11,10 @@ import {
 } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { Suspense, use, useEffect, useMemo, useRef, useState } from 'react';
+import { TankType, TreeType } from '../../../../../components/Tanks';
 import { asset } from '../../../../../core/blitzkrieg/asset';
 import {
+  NATIONS,
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
@@ -37,11 +39,29 @@ interface TankSearchProps {
   onSelect?: (tank: TankDefinition) => void;
 }
 
+const tankTypeOrder: TankType[] = ['light', 'medium', 'heavy', 'tankDestroyer'];
+const treeTypeOrder: TreeType[] = ['researchable', 'premium', 'collector'];
+
 export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
   const tanksPerPage = compact ? 16 : 24;
+  const nations = use(NATIONS);
   const filters = useTankopediaPersistent((state) => state.filters);
   const sort = useTankopediaPersistent((state) => state.sort);
-  const awaitedTanks = use(tanksDefinitionsArray);
+  const awaitedTanks = use(
+    tanksDefinitionsArray.then((tanks) =>
+      tanks
+        .sort(
+          (a, b) =>
+            treeTypeOrder.indexOf(a.treeType) -
+            treeTypeOrder.indexOf(b.treeType),
+        )
+        .sort(
+          (a, b) =>
+            tankTypeOrder.indexOf(a.type) - tankTypeOrder.indexOf(b.type),
+        )
+        .sort((a, b) => nations.indexOf(a.nation) - nations.indexOf(b.nation)),
+    ),
+  );
   const input = useRef<HTMLInputElement>(null);
   const searchableTanks = useMemo(
     () =>
