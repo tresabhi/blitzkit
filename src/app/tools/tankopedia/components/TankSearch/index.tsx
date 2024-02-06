@@ -47,9 +47,10 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
   const nations = use(NATIONS);
   const filters = useTankopediaPersistent((state) => state.filters);
   const sort = useTankopediaPersistent((state) => state.sort);
-  const awaitedTanks = use(
-    tanksDefinitionsArray.then((tanks) =>
-      tanks
+  const awaitedTanks = use(tanksDefinitionsArray);
+  const defaultSortedTanks = useMemo(
+    () =>
+      awaitedTanks
         .sort(
           (a, b) =>
             treeTypeOrder.indexOf(a.treeType) -
@@ -60,12 +61,12 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
             tankTypeOrder.indexOf(a.type) - tankTypeOrder.indexOf(b.type),
         )
         .sort((a, b) => nations.indexOf(a.nation) - nations.indexOf(b.nation)),
-    ),
+    [],
   );
   const input = useRef<HTMLInputElement>(null);
   const searchableTanks = useMemo(
     () =>
-      awaitedTanks
+      defaultSortedTanks
         .filter(
           (tank) =>
             (filters.tiers.length === 0
@@ -134,6 +135,7 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
             <TextField.Slot>
               <MagnifyingGlassIcon height="16" width="16" />
             </TextField.Slot>
+
             <TextField.Input
               ref={input}
               placeholder="Search tanks..."
