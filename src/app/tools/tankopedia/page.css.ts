@@ -8,10 +8,10 @@ export const flag = style({
   left: '0',
   top: '0',
 
-  [`.${listing}:hover &, .${listing}:active &`]: {
-    transform: 'translateX(-25%)',
-    filter: 'blur(3rem)',
-  },
+  // [`.${listing}:hover &, .${listing}:active &`]: {
+  //   transform: 'translateX(-25%)',
+  //   filter: 'blur(3rem)',
+  // },
 });
 
 export const listingShadow = style({
@@ -26,9 +26,9 @@ export const listingLabel = style({
   transition: `transform ${theme.durations.regular}`,
   transform: 'translateY(0)',
 
-  [`.${listing}:hover &, .${listing}:active &`]: {
-    transform: 'translateY(200%)',
-  },
+  // [`.${listing}:hover &, .${listing}:active &`]: {
+  //   transform: 'translateY(200%)',
+  // },
 });
 
 export const listingImage = style({
@@ -36,9 +36,9 @@ export const listingImage = style({
   position: 'absolute',
   left: '50%',
 
-  [`.${listing}:hover &, .${listing}:active &`]: {
-    transform: 'translate(-25%, 10%)',
-  },
+  // [`.${listing}:hover &, .${listing}:active &`]: {
+  //   transform: 'translate(-25%, 10%)',
+  // },
 });
 
 export const alignTopRight = style({
