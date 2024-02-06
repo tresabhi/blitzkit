@@ -2,6 +2,7 @@ import { produce } from 'immer';
 import { Vector3Tuple } from 'three';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
+import { ENVIRONMENTS } from '../app/tools/tankopedia/[id]/components/Lighting';
 import { TankType, TreeType } from '../components/Tanks';
 import {
   EngineDefinition,
@@ -30,6 +31,7 @@ interface TankopediaPersistent {
       calibratedShells: boolean;
     };
     visual: {
+      environment: (typeof ENVIRONMENTS)[number];
       controlsEnabled: boolean;
       showGrid: boolean;
       greenPenetration: boolean;
@@ -98,6 +100,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
           calibratedShells: false,
         },
         visual: {
+          environment: 'warehouse',
           controlsEnabled: true,
           showGrid: true,
           greenPenetration: false,

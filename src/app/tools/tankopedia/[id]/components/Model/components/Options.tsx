@@ -10,6 +10,7 @@ import { Pose, poseEvent } from '../../../../../../../core/blitzkrieg/pose';
 import mutateTankopediaPersistent, {
   useTankopediaPersistent,
 } from '../../../../../../../stores/tankopedia';
+import { ENVIRONMENTS } from '../../Lighting';
 
 interface OptionsProps {
   isFullScreen: boolean;
@@ -28,6 +29,9 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
   );
   const fullScreenAvailable =
     typeof document !== 'undefined' && document.fullscreenEnabled;
+  const environment = useTankopediaPersistent(
+    (state) => state.model.visual.environment,
+  );
 
   return (
     <Flex
@@ -89,16 +93,40 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
           >
             Green penetration
           </DropdownMenu.CheckboxItem>
-          <DropdownMenu.CheckboxItem
-            checked={showEnvironment}
-            onCheckedChange={(checked) => {
-              mutateTankopediaPersistent((draft) => {
-                draft.model.visual.showEnvironment = checked;
-              });
-            }}
-          >
-            Show environment
-          </DropdownMenu.CheckboxItem>
+          <DropdownMenu.Sub>
+            <DropdownMenu.SubTrigger>Environment</DropdownMenu.SubTrigger>
+
+            <DropdownMenu.SubContent>
+              <DropdownMenu.Label>Style</DropdownMenu.Label>
+              <DropdownMenu.RadioGroup value={environment}>
+                {ENVIRONMENTS.map((environment) => (
+                  <DropdownMenu.RadioItem
+                    key={environment}
+                    value={environment}
+                    onClick={() => {
+                      mutateTankopediaPersistent((draft) => {
+                        draft.model.visual.environment = environment;
+                      });
+                    }}
+                  >
+                    {environment[0].toUpperCase() + environment.slice(1)}
+                  </DropdownMenu.RadioItem>
+                ))}
+              </DropdownMenu.RadioGroup>
+
+              <DropdownMenu.Label>Configuration</DropdownMenu.Label>
+              <DropdownMenu.CheckboxItem
+                checked={showEnvironment}
+                onCheckedChange={(checked) => {
+                  mutateTankopediaPersistent((draft) => {
+                    draft.model.visual.showEnvironment = checked;
+                  });
+                }}
+              >
+                Display
+              </DropdownMenu.CheckboxItem>
+            </DropdownMenu.SubContent>
+          </DropdownMenu.Sub>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
 

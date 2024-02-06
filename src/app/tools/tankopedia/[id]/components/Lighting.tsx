@@ -3,16 +3,21 @@ import { useModel } from '../../../../../hooks/useModel';
 import { useDuel } from '../../../../../stores/duel';
 import { useTankopediaPersistent } from '../../../../../stores/tankopedia';
 
+export const ENVIRONMENTS = ['warehouse', 'dawn', 'sunset'] as const;
+
 export function Lighting() {
   const protagonist = useDuel((state) => state.protagonist!);
   const { hasPbr } = useModel(protagonist.tank.id);
   const showEnvironment = useTankopediaPersistent(
     (state) => state.model.visual.showEnvironment,
   );
+  const environment = useTankopediaPersistent(
+    (state) => state.model.visual.environment,
+  );
 
   return (
     <>
-      <Environment preset="warehouse" background={showEnvironment} blur={0} />
+      <Environment preset={environment} background={showEnvironment} blur={0} />
       <directionalLight
         position={[1, 1, -1]}
         intensity={hasPbr ? 1 : 5}
