@@ -1,5 +1,5 @@
 import { asset } from './asset';
-import { fetchBkonLz4 } from './fetchBkonLz4';
+import { fetchCdonLz4 } from './fetchCdonLz4';
 
 type EquipmentOptions = [number, number];
 
@@ -22,6 +22,6 @@ export interface EquipmentDefinitions {
   };
 }
 
-export const equipmentDefinitions = fetchBkonLz4<EquipmentDefinitions>(
-  asset('definitions/equipment.bkon.lz4'),
+export const equipmentDefinitions = fetchCdonLz4<EquipmentDefinitions>(
+  asset('definitions/equipment.cdon.lz4'),
 );

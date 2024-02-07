@@ -1,8 +1,8 @@
 import { decompress } from 'lz4js';
-import { BkonReadStream } from '../streams/bkon';
+import { CdonReadStream } from '../streams/cdon';
 
 export function superDecompress<Type>(buffer: Buffer) {
   const decompressed = Buffer.from(decompress(buffer));
-  const read = new BkonReadStream(decompressed);
-  return read.bkon() as Type;
+  const read = new CdonReadStream(decompressed);
+  return read.cdon() as Type;
 }

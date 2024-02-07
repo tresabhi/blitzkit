@@ -1,6 +1,6 @@
 import { asset } from './asset';
 import { TankFilterDefinition } from './consumableDefinitions';
-import { fetchBkonLz4 } from './fetchBkonLz4';
+import { fetchCdonLz4 } from './fetchCdonLz4';
 
 export interface ProvisionEntry {
   id: number;
@@ -14,6 +14,6 @@ export interface ProvisionDefinitions {
   [key: string]: ProvisionEntry;
 }
 
-export const provisionDefinitions = fetchBkonLz4<ProvisionDefinitions>(
-  asset('definitions/provisions.bkon.lz4'),
+export const provisionDefinitions = fetchCdonLz4<ProvisionDefinitions>(
+  asset('definitions/provisions.cdon.lz4'),
 );

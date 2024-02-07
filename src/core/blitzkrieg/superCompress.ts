@@ -1,8 +1,8 @@
 import { compress } from 'lz4js';
-import { BkonWriteStream } from '../streams/bkon';
+import { CdonWriteStream } from '../streams/cdon';
 
 export function superCompress(object: any) {
-  const write = new BkonWriteStream().bkon(object);
+  const write = new CdonWriteStream().cdon(object);
   const compressed = compress(write.buffer);
   return Buffer.from(compressed).toString('base64');
 }

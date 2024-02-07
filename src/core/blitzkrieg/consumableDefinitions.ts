@@ -1,5 +1,5 @@
 import { asset } from './asset';
-import { fetchBkonLz4 } from './fetchBkonLz4';
+import { fetchCdonLz4 } from './fetchCdonLz4';
 
 export type TankFilterDefinitionCategory = 'clip';
 
@@ -34,6 +34,6 @@ export interface ConsumableDefinitions {
   [key: string]: ConsumableEntry;
 }
 
-export const consumableDefinitions = fetchBkonLz4<ConsumableDefinitions>(
-  asset('definitions/consumables.bkon.lz4'),
+export const consumableDefinitions = fetchCdonLz4<ConsumableDefinitions>(
+  asset('definitions/consumables.cdon.lz4'),
 );

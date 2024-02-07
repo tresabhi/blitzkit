@@ -915,27 +915,27 @@ export async function definitions(production: boolean) {
       {
         content: superCompress(tankDefinitions),
         encoding: 'base64',
-        path: 'definitions/tanks.bkon.lz4',
+        path: 'definitions/tanks.cdon.lz4',
       },
       {
         content: superCompress(modelDefinitions),
         encoding: 'base64',
-        path: 'definitions/models.bkon.lz4',
+        path: 'definitions/models.cdon.lz4',
       },
       {
         content: superCompress(equipmentDefinitions),
         encoding: 'base64',
-        path: 'definitions/equipment.bkon.lz4',
+        path: 'definitions/equipment.cdon.lz4',
       },
       {
         content: superCompress(consumableDefinitions),
         encoding: 'base64',
-        path: 'definitions/consumables.bkon.lz4',
+        path: 'definitions/consumables.cdon.lz4',
       },
       {
         content: superCompress(provisionDefinitions),
         encoding: 'base64',
-        path: 'definitions/provisions.bkon.lz4',
+        path: 'definitions/provisions.cdon.lz4',
       },
     ],
     production,

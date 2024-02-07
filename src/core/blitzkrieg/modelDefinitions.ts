@@ -1,6 +1,6 @@
 import { Vector3Tuple } from 'three';
 import { asset } from './asset';
-import { fetchBkonLz4 } from './fetchBkonLz4';
+import { fetchCdonLz4 } from './fetchCdonLz4';
 
 export type ModelDefinitions = Record<number, ModelDefinition>;
 
@@ -54,6 +54,6 @@ export interface PitchLimits {
   transition?: number;
 }
 
-export const modelDefinitions = fetchBkonLz4<ModelDefinitions>(
-  asset('definitions/models.bkon.lz4'),
+export const modelDefinitions = fetchCdonLz4<ModelDefinitions>(
+  asset('definitions/models.cdon.lz4'),
 );

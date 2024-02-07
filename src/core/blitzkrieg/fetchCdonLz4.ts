@@ -1,6 +1,6 @@
 import { superDecompress } from './superDecompress';
 
-export async function fetchBkonLz4<Type>(url: string) {
+export async function fetchCdonLz4<Type>(url: string) {
   return await fetch(url, {
     cache: 'no-cache',
   }).then(async (response) => {

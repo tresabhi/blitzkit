@@ -1,11 +1,11 @@
-# Blitzkrieg Object Notation
+# Cedilla Object Notation
 
 A compact binary representation similar to JSON objects. This documentation uses some funky (yet concise) syntax I developed (don't worry, my C++ isn't that bad!).
 
-1. JSON compressed as BKON, written directly to disk (a direct 50% reduction).
-2. BKON further compressed with LZ4 (a clean 90% reduction).
+1. JSON compressed as CDON, written directly to disk (a direct 50% reduction).
+2. CDON further compressed with LZ4 (a clean 90% reduction).
 3. The raw JSON file as fetched from a random data source.
-4. BKON decompressed once again to JSON. Note that this file is a little larger than the original JSON file as it contains a lot more decimal places due to float precision (this shouldn't affect the size in memory).
+4. CDON decompressed once again to JSON. Note that this file is a little larger than the original JSON file as it contains a lot more decimal places due to float precision (this shouldn't affect the size in memory).
 
 ![an image of file sizes](https://i.imgur.com/AHJiFpq.png)
 
@@ -21,7 +21,7 @@ struct String {
 ## Reading
 
 - Everything is little endian
-- Magic is always `"BKON"`
+- Magic is always `"CDON"`
 - The index of fast strings must be read as mentioned by the fast string format
 
 ```cpp

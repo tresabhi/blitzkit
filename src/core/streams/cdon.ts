@@ -26,17 +26,17 @@ enum FastStringFormat {
   Format32,
 }
 
-export type BkonValue =
+export type CdonValue =
   | null
   | boolean
   | number
   | bigint
   | string
-  | BkonValue[]
-  | { [key: string]: BkonValue };
+  | CdonValue[]
+  | { [key: string]: CdonValue };
 
-export class BkonReadStream extends ReadStream {
-  bkon() {
+export class CdonReadStream extends ReadStream {
+  cdon() {
     this.magic();
     const header = this.header();
     const body = this.body(header.fastStringFormat, header.stringTable);
@@ -46,8 +46,8 @@ export class BkonReadStream extends ReadStream {
   magic() {
     const magic = this.utf8(4);
 
-    if (magic !== 'BKON') {
-      throw new Error(`Invalid Bkon magic number: "${magic}"`);
+    if (magic !== 'CDON') {
+      throw new Error(`Invalid Cdon magic number: "${magic}"`);
     }
   }
 
@@ -107,7 +107,7 @@ export class BkonReadStream extends ReadStream {
   value(
     fastStringFormat: FastStringFormat,
     stringTable: Record<number, string>,
-  ): BkonValue {
+  ): CdonValue {
     const type = this.uint8() as ValueType;
 
     switch (type) {
@@ -177,7 +177,7 @@ export class BkonReadStream extends ReadStream {
         const values = times(count, () =>
           this.value(fastStringFormat, stringTable),
         );
-        const object: Record<string, BkonValue> = {};
+        const object: Record<string, CdonValue> = {};
 
         keys.forEach((string, index) => (object[string] = values[index]));
 
@@ -190,8 +190,8 @@ export class BkonReadStream extends ReadStream {
   }
 }
 
-export class BkonWriteStream extends WriteStream {
-  bkon(object: BkonValue) {
+export class CdonWriteStream extends WriteStream {
+  cdon(object: CdonValue) {
     this.magic();
     const header = this.header(object);
     this.body(header.fastStringFormat, object, header.stringTable);
@@ -200,7 +200,7 @@ export class BkonWriteStream extends WriteStream {
 
   body(
     fastStringFormat: FastStringFormat,
-    object: BkonValue,
+    object: CdonValue,
     stringTable: Map<string, number>,
   ) {
     this.value(fastStringFormat, object, stringTable);
@@ -209,7 +209,7 @@ export class BkonWriteStream extends WriteStream {
 
   value(
     fastStringFormat: FastStringFormat,
-    object: BkonValue,
+    object: CdonValue,
     stringTable: Map<string, number>,
   ) {
     if (object === null || object === undefined) {
@@ -303,12 +303,12 @@ export class BkonWriteStream extends WriteStream {
     }
   }
 
-  header(object: BkonValue) {
+  header(object: CdonValue) {
     this.uint16(1);
     return this.stringTable(object);
   }
 
-  stringTable(object: BkonValue) {
+  stringTable(object: CdonValue) {
     const stringTable = this.buildStringTable(
       this.collectStringCounts(object, new Map()),
     );
@@ -343,7 +343,7 @@ export class BkonWriteStream extends WriteStream {
     return stringTable;
   }
 
-  collectStringCounts(object: BkonValue, stringCounts: Map<string, number>) {
+  collectStringCounts(object: CdonValue, stringCounts: Map<string, number>) {
     if (typeof object === 'string') {
       if (stringCounts.has(object)) {
         stringCounts.set(object, stringCounts.get(object)! + 1);
@@ -367,6 +367,6 @@ export class BkonWriteStream extends WriteStream {
   }
 
   magic() {
-    this.utf8('BKON');
+    this.utf8('CDON');
   }
 }
