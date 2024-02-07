@@ -306,7 +306,7 @@ export class Sc2ReadStream extends ScpgReadStream {
     const fileType = this.uint32();
 
     // other felids that we don't have any info about
-    this.skip(size - 4);
+    this.seek(size - 4);
 
     return { size, fileType };
   }

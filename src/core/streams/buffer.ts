@@ -1,18 +1,26 @@
 export class ReadStream {
   public index = 0;
-  constructor(public buffer: Buffer) {}
+  private dataView: DataView;
+  private textDecoderAscii = new TextDecoder('ascii');
+  private textDecoderUtf8 = new TextDecoder('utf8');
 
-  skip(size: number) {
+  constructor(public buffer: ArrayBuffer) {
+    this.dataView = new DataView(buffer);
+  }
+
+  seek(size: number) {
     this.index += size;
   }
   read(size: number) {
-    return this.buffer.subarray(this.index, this.index + size);
+    return this.buffer.slice(this.index, this.index + size);
   }
   consume(size: number) {
     const subarray = this.read(size);
-    this.skip(size);
-
+    this.seek(size);
     return subarray;
+  }
+  consumeUint8Array(size: number) {
+    return new Uint8Array(this.consume(size));
   }
   increment(size: number) {
     return (this.index += size) - size;
@@ -20,9 +28,6 @@ export class ReadStream {
 
   readRemaining() {
     return this.read(Number.POSITIVE_INFINITY);
-  }
-  readRemainingLength() {
-    return this.buffer.length - this.index;
   }
   consumeRemaining() {
     return this.consume(Number.POSITIVE_INFINITY);
@@ -33,57 +38,54 @@ export class ReadStream {
   }
 
   ascii(size: number) {
-    return this.buffer.toString('ascii', this.increment(size), this.index);
+    return this.textDecoderAscii.decode(this.consume(size));
   }
   utf8(size: number) {
-    return this.buffer.toString('utf8', this.increment(size), this.index);
+    return this.textDecoderUtf8.decode(this.consume(size));
   }
 
   int8() {
-    return this.buffer.readInt8(this.increment(1));
+    return this.dataView.getInt8(this.increment(1));
   }
   int16() {
-    return this.buffer.readInt16LE(this.increment(2));
+    return this.dataView.getInt16(this.increment(2), true);
   }
   int32() {
-    return this.buffer.readInt32LE(this.increment(4));
+    return this.dataView.getInt32(this.increment(4), true);
   }
   int64() {
-    return this.buffer.readBigInt64LE(this.increment(8));
+    return this.dataView.getBigInt64(this.increment(8), true);
   }
   uint8() {
-    return this.buffer.readUInt8(this.increment(1));
+    return this.dataView.getUint8(this.increment(1));
   }
   uint16() {
-    return this.buffer.readUInt16LE(this.increment(2));
+    return this.dataView.getUint16(this.increment(2), true);
   }
   uint32() {
-    return this.buffer.readUInt32LE(this.increment(4));
+    return this.dataView.getUint32(this.increment(4), true);
   }
   uint64() {
-    return this.buffer.readBigUInt64LE(this.increment(8));
+    return this.dataView.getBigUint64(this.increment(8), true);
   }
   float32() {
-    return this.buffer.readFloatLE(this.increment(4));
+    return this.dataView.getFloat32(this.increment(4), true);
   }
   float64() {
-    return this.buffer.readDoubleLE(this.increment(8));
+    return this.dataView.getFloat64(this.increment(8), true);
   }
 
   boolean() {
-    return this.buffer.readUInt8(this.increment(1)) === 1;
+    return this.dataView.getUint8(this.increment(1)) === 1;
   }
 }
 
 export class WriteStream {
   private array: number[] = [];
+  private textEncoder = new TextEncoder();
 
-  get buffer() {
-    return Buffer.from(this.array);
-  }
-
-  constructor(buffer?: Buffer) {
-    if (buffer) this.array = Array.from(buffer);
+  get uint8Array() {
+    return new Uint8Array(this.array);
   }
 
   byte(value: Uint8Array) {
@@ -98,13 +100,7 @@ export class WriteStream {
     return this;
   }
   utf8(value: string) {
-    const buffer = Buffer.alloc(Buffer.byteLength(value));
-
-    buffer.write(value, 'utf8');
-    buffer.forEach((value) => {
-      this.array.push(value);
-    });
-
+    this.array.push(...this.textEncoder.encode(value));
     return this;
   }
 

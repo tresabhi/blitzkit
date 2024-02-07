@@ -331,10 +331,10 @@ export class DdsReadStream extends WindowsReadStream {
   }
 
   readR5G6B5Int() {
-    return this.read(2).readUInt16LE();
+    return new DataView(this.read(2)).getUint16(0, true);
   }
   R5G6B5() {
-    const buffer = this.consume(2);
+    const buffer = this.consumeUint8Array(2);
     const r = (buffer[1] & 0b11111000) >>> 3;
     const g = ((buffer[1] & 0b111) << 3) | ((buffer[0] & 0b11100000) >>> 5);
     const b = buffer[0] & 0b11111;
@@ -375,7 +375,7 @@ export class DdsReadStream extends WindowsReadStream {
     } as Record<number, Vector4Tuple>;
   }
   bc1ColorKeys() {
-    const buffer = this.consume(4);
+    const buffer = this.consumeUint8Array(4);
     const d = (buffer[0] & 0b11000000) >>> 6;
     const c = (buffer[0] & 0b110000) >>> 4;
     const b = (buffer[0] & 0b1100) >>> 2;
@@ -396,7 +396,7 @@ export class DdsReadStream extends WindowsReadStream {
     return [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p];
   }
   bc2AlphaInterpolations() {
-    const buffer = this.consume(8);
+    const buffer = this.consumeUint8Array(8);
     const d = (buffer[1] & 0b11110000) >>> 4;
     const c = buffer[1] & 0b1111;
     const b = (buffer[0] & 0b11110000) >>> 4;
@@ -464,7 +464,7 @@ export class DdsReadStream extends WindowsReadStream {
     } as Record<number, number>;
   }
   bc3AlphaKeys() {
-    const buffer = this.consume(6);
+    const buffer = this.consumeUint8Array(6);
     const h = (buffer[2] & 0b11100000) >>> 5;
     const g = (buffer[2] & 0b11100) >>> 2;
     const f = ((buffer[2] & 0b11) << 1) | ((buffer[1] & 0b10000000) >>> 7);

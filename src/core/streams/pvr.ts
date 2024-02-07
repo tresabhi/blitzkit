@@ -116,7 +116,7 @@ export class PvrReadStream extends ReadStream {
           const data = Buffer.alloc(pixelCount * 4);
 
           times(pixelCount, (index) => {
-            const buffer = this.consume(2);
+            const buffer = this.consumeUint8Array(2);
             const bufferIndex = index * 4;
             const r = ((buffer[1] & 0b11110000) >>> 4) / 15;
             const g = (buffer[1] & 0b1111) / 15;
@@ -141,7 +141,7 @@ export class PvrReadStream extends ReadStream {
           const data = Buffer.alloc(pixelCount * 3);
 
           times(pixelCount, (index) => {
-            const buffer = this.consume(2);
+            const buffer = this.consumeUint8Array(2);
             const bufferIndex = index * 4;
             const r = ((buffer[1] & 0b11111000) >>> 3) / 31;
             const g =
@@ -191,9 +191,9 @@ export class PvrReadStream extends ReadStream {
     return header;
   }
   pixelFormat() {
-    this.skip(4);
+    this.seek(4);
     const usesPresetFormat = this.uint32() === 0;
-    this.skip(-8);
+    this.seek(-8);
 
     return usesPresetFormat
       ? (Number(this.uint64()) as PvrPixelFormat)

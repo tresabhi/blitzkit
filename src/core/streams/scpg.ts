@@ -121,7 +121,7 @@ export class ScpgReadStream extends ReadStream {
       }
 
       case KAType.KEYED_ARCHIVE: {
-        this.skip(4); // UInt32 length of the nested archive in bytes
+        this.seek(4); // UInt32 length of the nested archive in bytes
 
         return this.ka(stringTable);
       }
@@ -195,7 +195,7 @@ export class ScpgReadStream extends ReadStream {
     }
   }
   ka(stringTable?: Record<number, string>) {
-    this.skip(2); // "KA"
+    this.seek(2); // "KA"
     const version = this.uint16();
     const pairs: Record<string, any> = {};
 

@@ -89,9 +89,9 @@ export class ScgReadStream extends ScpgReadStream {
       );
       const strideBasedSize = stride * polygonGroupRaw.vertexCount;
 
-      if (verticesStream.buffer.length !== strideBasedSize) {
+      if (verticesStream.buffer.byteLength !== strideBasedSize) {
         console.warn(
-          `Vertex stride mismatch; expected ${strideBasedSize}, got ${verticesStream.buffer.length}; skipping...`,
+          `Vertex stride mismatch; expected ${strideBasedSize}, got ${verticesStream.buffer.byteLength}; skipping...`,
         );
 
         return;
@@ -102,10 +102,6 @@ export class ScgReadStream extends ScpgReadStream {
           attribute,
           value: verticesStream.vectorN(vertexAttributeVectorSizes[attribute]),
         }));
-      }
-
-      if (verticesStream.readRemainingLength() !== 0) {
-        throw new RangeError('Vertices stream was not fully consumed');
       }
 
       polygonGroups.set(polygonGroupRaw['#id'].readBigUInt64LE(), {
