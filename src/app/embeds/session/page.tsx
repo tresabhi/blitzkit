@@ -245,7 +245,7 @@ export default function SessionPage({ naked = true }: SessionPageProps) {
 
             {diff?.list
               .sort(
-                (a, b) => b.stats.last_battle_time - a.stats.last_battle_time,
+                (a, b) => a.stats.last_battle_time - b.stats.last_battle_time,
               )
               .map(
                 ({ stats, tankDefinitions, career, careerWN8, currentWN8 }) => {
