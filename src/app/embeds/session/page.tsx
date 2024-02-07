@@ -129,7 +129,7 @@ export default function SessionPage({ naked = true }: SessionPageProps) {
 
           list: (
             Object.values(
-              deltaTankStats(session.tankStats, career),
+              deltaTankStats(session.tankStats, career, session.time / 1000),
             ) as IndividualTankStats[]
           ).map((stats) => {
             return {

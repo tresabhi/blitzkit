@@ -4,13 +4,17 @@ import {
   emptyIndividualTankStats,
 } from '../../types/tanksStats';
 
-export function deltaTankStats(a: NormalizedTankStats, b: NormalizedTankStats) {
+export function deltaTankStats(
+  a: NormalizedTankStats,
+  b: NormalizedTankStats,
+  time?: number,
+) {
   const bTanks = Object.keys(b);
   const changedTanks = bTanks.filter((id) => {
-    return (
-      a[id as unknown as number]?.all.battles !==
-      b[id as unknown as number].all.battles
-    );
+    return time === undefined
+      ? a[id as unknown as number]?.all.battles !==
+          b[id as unknown as number].all.battles
+      : b[id as unknown as number].last_battle_time > time;
   });
   const diff = changedTanks.map((id) => {
     const aTank = a[id as unknown as number] ?? emptyIndividualTankStats;

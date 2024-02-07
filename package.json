@@ -1,6 +1,6 @@
 {
   "name": "blitzkrieg",
-  "version": "1.15.11",
+  "version": "1.15.13",
   "description": "🎉 Tools for everything World of Tanks Blitz",
   "main": "src/server.ts",
   "type": "module",
