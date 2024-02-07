@@ -1,4 +1,5 @@
 import { produce } from 'immer';
+import { merge } from 'lodash';
 import { Vector3Tuple } from 'three';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
@@ -125,7 +126,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
         page: 0,
       },
     })),
-    { name: 'tankopedia' },
+    { name: 'tankopedia', merge },
   ),
 );
 
