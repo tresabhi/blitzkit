@@ -31,7 +31,10 @@ export function deltaTankStats(
       in_garage: bTank.in_garage,
       max_xp: Math.max(aTank.max_xp, bTank.max_xp),
       in_garage_updated: bTank.in_garage_updated,
-      last_battle_time: bTank.last_battle_time - aTank.last_battle_time,
+      last_battle_time: Math.max(
+        bTank.last_battle_time,
+        aTank.last_battle_time,
+      ),
       mark_of_mastery: bTank.mark_of_mastery,
       tank_id: bTank.tank_id,
 
