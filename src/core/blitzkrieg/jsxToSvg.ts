@@ -1,40 +1,26 @@
-import { readFile } from 'fs';
-import { join } from 'path';
+import { readFile } from 'fs/promises';
 import satori from 'satori';
-import robotoBlackFile from '../../assets/fonts/Roboto-Black.ttf';
-import robotoBoldFile from '../../assets/fonts/Roboto-Bold.ttf';
-import robotoFile from '../../assets/fonts/Roboto.ttf';
 
 const FONT_NAME = 'Roboto';
-const FONT_FILES = [robotoFile, robotoBoldFile, robotoBlackFile];
+const FONT_FILES = [
+  { weight: 400 as const, path: 'src/assets/fonts/Roboto.ttf' },
+  { weight: 700 as const, path: 'src/assets/fonts/Roboto-Bold.ttf' },
+  { weight: 900 as const, path: 'src/assets/fonts/Roboto-Black.ttf' },
+];
 
-let roboto: Buffer;
-let robotoBold: Buffer;
-let robotoBlack: Buffer;
-
-Promise.all(
-  FONT_FILES.map(
-    (file) =>
-      new Promise<Buffer>((resolve, reject) => {
-        const path = join(__dirname, file);
-
-        readFile(path, (error, data) => {
-          if (error) reject(error);
-          resolve(data);
-        });
-      }),
+const fonts = Promise.all(
+  FONT_FILES.map(({ path, weight }) =>
+    readFile(path).then((data) => ({
+      data: Buffer.from(data.buffer),
+      name: FONT_NAME,
+      weight,
+    })),
   ),
-).then((data) => {
-  [roboto, robotoBold, robotoBlack] = data;
-});
+);
 
 export default async function jsxToSvg(jsx: JSX.Element) {
   return await satori(jsx, {
     width: 480,
-    fonts: [
-      { data: roboto, name: FONT_NAME, weight: 400 },
-      { data: robotoBold, name: FONT_NAME, weight: 700 },
-      { data: robotoBlack, name: FONT_NAME, weight: 900 },
-    ],
+    fonts: await fonts,
   });
 }
