@@ -168,23 +168,26 @@ export function Characteristics() {
           </Info>
         ))}
         <Info name="Aim time" unit="s">
-          TODO
+          {gun.aimTime.toFixed(2)}
         </Info>
-        <Info name="Dispersion at 100m" unit="m" />
-        <Info indent name="Still">
-          TODO
+        <Info name="Dispersion at 100m" />
+        <Info indent name="Still" unit="m">
+          {gun.dispersion.base.toFixed(3)}
         </Info>
-        <Info indent name="Moving">
-          TODO
+        <Info indent name="Moving" unit="s">
+          + {tank.dispersion.move.toFixed(3)}
         </Info>
-        <Info indent name="Hull traversing">
-          TODO
+        <Info indent name="Hull traversing" unit="s">
+          + {tank.dispersion.traverse.toFixed(3)}
         </Info>
-        <Info indent name="Turret traversing">
-          TODO
+        <Info indent name="Turret traversing" unit="s">
+          + {gun.dispersion.traverse.toFixed(3)}
         </Info>
-        <Info indent name="After shooting">
-          TODO
+        <Info indent name="After shooting" unit="m">
+          + {gun.dispersion.shot.toFixed(3)}
+        </Info>
+        <Info indent name="Gun damaged" unit="scalar">
+          x {gun.dispersion.damaged.toFixed(3)}
         </Info>
         <Info name="Gun flexibility" unit="°" />
         <Info indent name="Depression">
