@@ -16,6 +16,10 @@ export function Characteristics() {
   const { tank, turret, gun, engine, track } = useDuel(
     (state) => state.protagonist!,
   );
+  const stockEngine = tank.engines[0];
+  const stockTrack = tank.tracks[0];
+  const stockTurret = tank.turrets[0];
+  const stockGun = stockTurret.guns[0];
   const shell = gun.shells[0];
   const tankModelDefinition = awaitedModelDefinitions[tank.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
@@ -28,6 +32,13 @@ export function Characteristics() {
   );
   const weight =
     tank.weight + engine.weight + track.weight + turret.weight + gun.weight;
+  const weightMt = weight / 1000;
+  const stockWeight =
+    tank.weight +
+    stockEngine.weight +
+    stockTrack.weight +
+    stockTurret.weight +
+    stockGun.weight;
 
   let dpm: number;
 
@@ -236,28 +247,43 @@ export function Characteristics() {
         <Info indent name="Average">
           {tank.speed.backwards}
         </Info>
-        <Info name="Power to weight ratio" unit="hp/kg" />
+        <Info name="Power to weight ratio" unit="hp/mt" />
         <Info indent name="On hard terrain">
-          TODO
+          {(engine.power / weightMt / track.resistance.hard).toFixed(1)}
         </Info>
         <Info indent name="On medium terrain">
-          TODO
+          {(engine.power / weightMt / track.resistance.medium).toFixed(1)}
         </Info>
         <Info indent name="On soft terrain">
-          TODO
+          {(engine.power / weightMt / track.resistance.soft).toFixed(1)}
         </Info>
         <Info name="Weight" unit="mt">
-          {(weight / 1000).toFixed(1)}
+          {weightMt.toFixed(1)}
         </Info>
-        <Info name="Traverse speed" unit="°/s" />
+        <Info name="Effective traverse speed" unit="°/s" />
         <Info indent name="On hard terrain">
-          TODO
+          {(
+            (engine.power / stockEngine.power) *
+            track.traverseSpeed *
+            (track.resistance.hard / track.resistance.hard) *
+            (stockWeight / weight)
+          ).toFixed(1)}
         </Info>
         <Info indent name="On medium terrain">
-          TODO
+          {(
+            (engine.power / stockEngine.power) *
+            track.traverseSpeed *
+            (track.resistance.hard / track.resistance.medium) *
+            (stockWeight / weight)
+          ).toFixed(1)}
         </Info>
         <Info indent name="On soft terrain">
-          TODO
+          {(
+            (engine.power / stockEngine.power) *
+            track.traverseSpeed *
+            (track.resistance.hard / track.resistance.soft) *
+            (stockWeight / weight)
+          ).toFixed(1)}
         </Info>
       </Flex>
     </Flex>
