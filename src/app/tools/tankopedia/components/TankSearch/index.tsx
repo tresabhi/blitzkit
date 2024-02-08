@@ -119,10 +119,6 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
   const secondChunk = searchResultsPageSlice.slice(chunkSize);
 
   useEffect(() => {
-    setSearchedList(searchableTanks);
-    if (input.current) input.current.value = '';
-  }, [searchableTanks]);
-  useEffect(() => {
     mutateTankopediaPersistent((draft) => {
       draft.filters.page = Math.min(
         Math.max(0, page),
