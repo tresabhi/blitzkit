@@ -18,7 +18,10 @@ import {
   TIER_ROMAN_NUMERALS,
 } from '../../../../../../core/blitzkrieg/tankDefinitions';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
-import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
+import {
+  mutateTankopediaTemporary,
+  useTankopediaTemporary,
+} from '../../../../../../stores/tankopedia';
 import { TankSearch } from '../../../components/TankSearch';
 
 export function AntagonistBar() {
@@ -47,6 +50,9 @@ export function AntagonistBar() {
                 onClick={() => {
                   mutateDuel((draft) => {
                     draft.antagonist!.shell = shell;
+                    mutateTankopediaTemporary((draft) => {
+                      draft.shot = undefined;
+                    });
                   });
                 }}
               />

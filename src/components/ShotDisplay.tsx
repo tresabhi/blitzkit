@@ -134,7 +134,7 @@ export function ShotDisplay() {
                         )}
                         mm
                         {layer.type === 'gap' && isExplosive(shell.type)
-                          ? ` (${Math.round(Math.min(100, 0.5 * layer.gap * 100))}% pen. loss)`
+                          ? ` (-${Math.round(Math.min(100, 0.5 * layer.gap * 100))}% penetration)`
                           : ''}
                       </Text>
                     </Flex>
