@@ -33,6 +33,7 @@ export default function Page({ params }: { params: { id: string } }) {
         gun: awaitedTankDefinitions[id].turrets.at(-1)!.guns.at(-1)!,
         shell: awaitedTankDefinitions[id].turrets.at(-1)!.guns.at(-1)!
           .shells[0],
+        track: awaitedTankDefinitions[id].tracks.at(-1)!,
       };
       draft.antagonist = { ...draft.protagonist };
     });

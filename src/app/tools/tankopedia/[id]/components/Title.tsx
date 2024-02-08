@@ -62,6 +62,7 @@ export function Title() {
                   mutateDuel((draft) => {
                     draft.protagonist!.tank = tank;
                     draft.protagonist!.engine = tank.engines.at(-1)!;
+                    draft.protagonist!.track = tank.tracks.at(-1)!;
                     draft.protagonist!.turret = tank.turrets.at(-1)!;
                     draft.protagonist!.gun =
                       draft.protagonist!.turret.guns.at(-1)!;

@@ -44,6 +44,7 @@ export interface TankDefinition {
 }
 export interface TrackDefinition {
   id: number;
+  tier: Tier;
   weight: number;
   traverseSpeed: number;
   dispersion: {

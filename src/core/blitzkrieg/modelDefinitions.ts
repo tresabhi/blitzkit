@@ -44,7 +44,7 @@ export interface YawLimits {
 }
 interface GunModelDefinition {
   armor: ModelArmor;
-  barrelThickness: number;
+  thickness: number;
   model: number;
   pitch: PitchLimits;
 }

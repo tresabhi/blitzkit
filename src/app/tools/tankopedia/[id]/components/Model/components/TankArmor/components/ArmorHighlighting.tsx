@@ -24,9 +24,9 @@ export function ArmorHighlighting() {
 
   useEffect(() => {
     const hullOrigin = new Vector3(
-      tankModelDefinition.hullOrigin[0],
-      tankModelDefinition.hullOrigin[1],
-      -tankModelDefinition.hullOrigin[2],
+      trackModelDefinition.origin[0],
+      trackModelDefinition.origin[1],
+      -trackModelDefinition.origin[2],
     ).applyAxisAngle(I_HAT, Math.PI / 2);
     const turretOrigin = new Vector3(
       tankModelDefinition.turretOrigin[0],
@@ -103,13 +103,14 @@ export function ArmorHighlighting() {
   const armorGltf = useArmor(protagonist.tank.id);
   const armorNodes = Object.values(armorGltf.nodes);
   const tankModelDefinition = modelDefinitions[protagonist.tank.id];
+  const trackModelDefinition = tankModelDefinition.tracks[protagonist.track.id];
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
   const hullOrigin = new Vector3(
-    tankModelDefinition.hullOrigin[0],
-    tankModelDefinition.hullOrigin[1],
-    -tankModelDefinition.hullOrigin[2],
+    trackModelDefinition.origin[0],
+    trackModelDefinition.origin[1],
+    -trackModelDefinition.origin[2],
   );
   const turretOrigin = new Vector3(
     tankModelDefinition.turretOrigin[0],
@@ -122,8 +123,8 @@ export function ArmorHighlighting() {
     -turretModelDefinition.gunOrigin[2],
   ).applyAxisAngle(I_HAT, Math.PI / 2);
   const maxThickness = Math.max(
-    tankModelDefinition.trackThickness,
-    gunModelDefinition.barrelThickness,
+    trackModelDefinition.thickness,
+    gunModelDefinition.thickness,
     ...armorNodes
       .map((node) => {
         const armorId = nameToArmorId(node.name);

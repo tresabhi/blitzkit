@@ -689,7 +689,7 @@ export async function definitions(production: boolean) {
               modelDefinitions[tankId].turrets[turretId].guns[gunId] = {
                 armor: gunArmor,
                 model: gunModel,
-                barrelThickness:
+                thickness:
                   turretGunEntry.armor.gun === undefined
                     ? 0
                     : typeof turretGunEntry.armor.gun === 'number'

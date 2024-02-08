@@ -24,6 +24,8 @@ export function Controls() {
   const antagonist = useDuel((state) => state.antagonist!);
   const protagonistModelDefinition =
     awaitedModelDefinitions[protagonist.tank.id];
+  const protagonistTrackModelDefinition =
+    awaitedModelDefinitions[protagonist.tank.id].tracks[protagonist.track.id];
   const antagonistModelDefinition = awaitedModelDefinitions[antagonist.tank.id];
   const protagonistTurretModelDefinition =
     protagonistModelDefinition.turrets[protagonist.turret.id];
@@ -32,9 +34,9 @@ export function Controls() {
   const protagonistGunModelDefinition =
     protagonistTurretModelDefinition.guns[protagonist.gun.id];
   const protagonistHullOrigin = new Vector3(
-    protagonistModelDefinition.hullOrigin[0],
-    protagonistModelDefinition.hullOrigin[1],
-    -protagonistModelDefinition.hullOrigin[2],
+    protagonistTrackModelDefinition.origin[0],
+    protagonistTrackModelDefinition.origin[1],
+    -protagonistTrackModelDefinition.origin[2],
   );
   const protagonistTurretOrigin = new Vector3(
     protagonistModelDefinition.turretOrigin[0],
@@ -47,7 +49,7 @@ export function Controls() {
     -protagonistTurretModelDefinition.gunOrigin[2],
   );
   const antagonistGunHeight =
-    antagonistModelDefinition.hullOrigin[1] +
+    protagonistTrackModelDefinition.origin[1] +
     antagonistModelDefinition.turretOrigin[1] +
     antagonistTurretModelDefinition.gunOrigin[1];
 

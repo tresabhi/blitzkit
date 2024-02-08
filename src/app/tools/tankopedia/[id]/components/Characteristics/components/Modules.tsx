@@ -80,6 +80,28 @@ export function Modules() {
             );
           })}
         </Flex>
+
+        <Flex>
+          {protagonist.tank.tracks.map((track, index) => {
+            return (
+              <ModuleButton
+                key={track.id}
+                type="module"
+                module="chassis"
+                discriminator={TIER_ROMAN_NUMERALS[track.tier]}
+                selected={protagonist.engine.id === track.id}
+                first={index === 0}
+                last={index === protagonist.tank.engines.length - 1}
+                rowChild
+                onClick={() => {
+                  mutateDuel((draft) => {
+                    draft.protagonist!.track = track;
+                  });
+                }}
+              />
+            );
+          })}
+        </Flex>
       </Flex>
     </ConfigurationChildWrapper>
   );

@@ -49,9 +49,9 @@ export const TankModel = memo(() => {
     if (!awaitedModelDefinitions) return;
 
     const hullOrigin = new Vector3(
-      tankModelDefinition.hullOrigin[0],
-      tankModelDefinition.hullOrigin[1],
-      -tankModelDefinition.hullOrigin[2],
+      trackModelDefinition.origin[0],
+      trackModelDefinition.origin[1],
+      -trackModelDefinition.origin[2],
     ).applyAxisAngle(I_HAT, Math.PI / 2);
     const turretOrigin = new Vector3(
       tankModelDefinition.turretOrigin[0],
@@ -122,6 +122,7 @@ export const TankModel = memo(() => {
   if (!awaitedModelDefinitions) return;
 
   const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
+  const trackModelDefinition = tankModelDefinition.tracks[protagonist.track.id];
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];

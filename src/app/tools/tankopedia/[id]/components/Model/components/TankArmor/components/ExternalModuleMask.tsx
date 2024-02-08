@@ -37,9 +37,9 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
 
     useEffect(() => {
       const hullOrigin = new Vector3(
-        tankModelDefinition.hullOrigin[0],
-        tankModelDefinition.hullOrigin[1],
-        -tankModelDefinition.hullOrigin[2],
+        trackModelDefinition.origin[0],
+        trackModelDefinition.origin[1],
+        -trackModelDefinition.origin[2],
       ).applyAxisAngle(I_HAT, Math.PI / 2);
       const turretOrigin = new Vector3(
         tankModelDefinition.turretOrigin[0],
@@ -127,12 +127,14 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
     const armorNodes = Object.values(armorGltf.nodes);
     const modelNodes = Object.values(modelGltf.nodes);
     const tankModelDefinition = modelDefinitions[protagonist.tank.id];
+    const trackModelDefinition =
+      tankModelDefinition.tracks[protagonist.track.id];
     const turretModelDefinition =
       tankModelDefinition.turrets[protagonist.turret.id];
     const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
     const maxThickness = Math.max(
-      tankModelDefinition.trackThickness,
-      gunModelDefinition.barrelThickness,
+      trackModelDefinition.thickness,
+      gunModelDefinition.thickness,
       ...armorNodes
         .map((node) => {
           const armorId = nameToArmorId(node.name);
@@ -141,9 +143,9 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
         .filter(Boolean),
     );
     const hullOrigin = new Vector3(
-      tankModelDefinition.hullOrigin[0],
-      tankModelDefinition.hullOrigin[1],
-      -tankModelDefinition.hullOrigin[2],
+      trackModelDefinition.origin[0],
+      trackModelDefinition.origin[1],
+      -trackModelDefinition.origin[2],
     ).applyAxisAngle(I_HAT, Math.PI / 2);
     const turretOrigin = new Vector3(
       tankModelDefinition.turretOrigin[0],
@@ -196,7 +198,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
             <ArmorMeshExternalModuleMask
               ornamental={ornamental}
               maxThickness={maxThickness}
-              thickness={tankModelDefinition.trackThickness}
+              thickness={trackModelDefinition.thickness}
               key={node.uuid}
               geometry={(node as Mesh).geometry}
             />
@@ -267,7 +269,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
                 <ArmorMeshExternalModuleMask
                   ornamental={ornamental}
                   maxThickness={maxThickness}
-                  thickness={gunModelDefinition.barrelThickness}
+                  thickness={gunModelDefinition.thickness}
                   key={node.uuid}
                   geometry={(node as Mesh).geometry}
                 />

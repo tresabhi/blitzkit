@@ -105,6 +105,7 @@ export function AntagonistBar() {
                           mutateDuel((draft) => {
                             draft.antagonist!.tank = tank;
                             draft.antagonist!.engine = tank.engines.at(-1)!;
+                            draft.antagonist!.track = tank.tracks.at(-1)!;
                             draft.antagonist!.turret = tank.turrets.at(-1)!;
                             draft.antagonist!.gun =
                               draft.antagonist!.turret.guns.at(-1)!;
