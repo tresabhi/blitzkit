@@ -65,8 +65,14 @@ interface EngineDefinitionsList {
       userString: string;
       level: number;
       fireStartingChance: number;
+      weight: number;
+      power: number;
     };
   };
+}
+export interface ChassisDefinitionsList {
+  nextAvailableId: number;
+  ids: Record<string, number>;
 }
 type VehicleDefinitionArmor = Record<
   string,
@@ -90,9 +96,12 @@ interface VehicleDefinitions {
     turretPositions: { turret: string };
     turretInitialRotation?: { yaw: 0; pitch: 6.5; roll: 0 };
     maxHealth: number;
+    weight: number;
   };
   chassis: {
     [key: string]: {
+      weight: number;
+      terrainResistance: string;
       rotationSpeed: number;
       shotDispersionFactors: {
         vehicleMovement: number;
@@ -123,6 +132,7 @@ interface VehicleDefinitions {
   turrets0: {
     [key: string]: {
       rotationSpeed: number;
+      weight: number;
       circularVisionRadius: number;
       maxHealth: number;
       armor: VehicleDefinitionArmor;
@@ -196,6 +206,7 @@ interface GunDefinitionsList {
   shared: {
     [key: string]: {
       rotationSpeed: number;
+      weight: number;
       shotDispersionFactors: {
         turretRotation: number;
         afterShot: number;
@@ -357,6 +368,11 @@ export async function definitions(production: boolean) {
       }>(
         `${DATA}/${POI.vehicleDefinitions}/${nation}/components/engines.xml.dvpl`,
       );
+      const chassisList = await readXMLDVPL<{
+        root: ChassisDefinitionsList;
+      }>(
+        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/chassis.xml.dvpl`,
+      );
 
       for (const tankKey in tankList.root) {
         const tank = tankList.root[tankKey];
@@ -370,19 +386,12 @@ export async function definitions(production: boolean) {
         const tankParameters = await readYAMLDVPL<TankParameters>(
           `${DATA}/${POI.tankParameters}/${nation}/${tankKey}.yaml.dvpl`,
         );
-        const defaultChassis = Object.values(tankDefinition.root.chassis).at(
-          -1,
-        )!;
         const turretOrigin = tankDefinition.root.hull.turretPositions.turret
-          .split(' ')
-          .map(Number) as Vector3Tuple;
-        const hullOrigin = defaultChassis.hullPosition
           .split(' ')
           .map(Number) as Vector3Tuple;
         const tankId = toUniqueId(nation, tank.id);
         const tankTags = tank.tags.split(' ');
         const hullArmor: ModelArmor = { thickness: {} };
-        const trackArmorRaw = defaultChassis.armor.leftTrack;
         const equipment = tankDefinition.root.optDevicePreset;
         tankStringIdMap[`${nation}:${tankKey}`] = tankId;
 
@@ -408,12 +417,13 @@ export async function definitions(production: boolean) {
           });
 
         tankDefinitions[tankId] = {
+          id: tankId,
+          weight: tankDefinition.root.hull.weight,
           health: tankDefinition.root.hull.maxHealth,
           speed: {
             forwards: tankDefinition.root.speedLimits.forward,
             backwards: tankDefinition.root.speedLimits.backward,
           },
-          id: tankId,
           equipment,
           consumables: tankDefinition.root.consumableSlots,
           provisions: tankDefinition.root.provisionSlots,
@@ -439,11 +449,7 @@ export async function definitions(production: boolean) {
           },
           turrets: [],
           engines: [],
-          dispersion: {
-            move: defaultChassis.shotDispersionFactors.vehicleMovement,
-            traverse: defaultChassis.shotDispersionFactors.vehicleRotation,
-          },
-          traverseSpeed: defaultChassis.rotationSpeed,
+          tracks: [],
         };
 
         if (tankDefinitions[tankId].name === tankDefinitions[tankId].nameFull) {
@@ -452,12 +458,7 @@ export async function definitions(production: boolean) {
 
         modelDefinitions[tankId] = {
           armor: hullArmor,
-          trackThickness:
-            typeof trackArmorRaw === 'number'
-              ? trackArmorRaw
-              : trackArmorRaw['#text'],
           turretOrigin,
-          hullOrigin,
           turretRotation: tankDefinition.root.hull.turretInitialRotation
             ? {
                 yaw: tankDefinition.root.hull.turretInitialRotation.yaw,
@@ -467,7 +468,43 @@ export async function definitions(production: boolean) {
             : undefined,
           boundingBox: tankParameters.collision.hull.bbox,
           turrets: {},
+          tracks: {},
         };
+
+        Object.keys(tankDefinition.root.chassis).forEach((key) => {
+          const track = tankDefinition.root.chassis[key];
+          const trackId = toUniqueId(nation, chassisList.root.ids[key]);
+          const terrainResistances = track.terrainResistance
+            .split(' ')
+            .map(Number);
+          const trackArmorRaw = track.armor.leftTrack;
+          const hullOrigin = track.hullPosition
+            .split(' ')
+            .map(Number) as Vector3Tuple;
+
+          tankDefinitions[tankId].tracks.push({
+            id: trackId,
+            weight: track.weight,
+            traverseSpeed: track.rotationSpeed,
+            dispersion: {
+              move: track.shotDispersionFactors.vehicleMovement,
+              traverse: track.shotDispersionFactors.vehicleRotation,
+            },
+            resistance: {
+              hard: terrainResistances[0],
+              medium: terrainResistances[1],
+              soft: terrainResistances[2],
+            },
+          });
+
+          modelDefinitions[tankId].tracks[trackId] = {
+            thickness:
+              typeof trackArmorRaw === 'number'
+                ? trackArmorRaw
+                : trackArmorRaw['#text'],
+            origin: hullOrigin,
+          };
+        });
 
         Object.keys(tankDefinition.root.engines).forEach((engineKey) => {
           const engine = enginesList.root.shared[engineKey];
@@ -476,8 +513,10 @@ export async function definitions(production: boolean) {
           tankDefinitions[tankId].engines.push({
             id: engineId,
             name: strings[engine.userString],
-            fire_chance: engine.fireStartingChance,
+            fireChance: engine.fireStartingChance,
             tier: engine.level as Tier,
+            weight: engine.weight,
+            power: engine.power,
           });
         });
 
@@ -526,8 +565,8 @@ export async function definitions(production: boolean) {
               });
 
             tankDefinitions[tankId].turrets.push({
-              traverseSpeed: turret.rotationSpeed,
               id: turretId,
+              traverseSpeed: turret.rotationSpeed,
               name:
                 strings[turret.userString] ??
                 turretKey
@@ -537,6 +576,7 @@ export async function definitions(production: boolean) {
               guns: [],
               health: turret.maxHealth,
               viewRange: turret.circularVisionRadius,
+              weight: turret.weight,
             });
 
             modelDefinitions[tankId].turrets[turretId] = {
@@ -624,6 +664,7 @@ export async function definitions(production: boolean) {
 
               tankDefinitions[tankId].turrets[turretIndex].guns.push({
                 id: gunId,
+                weight: gunListEntry.weight,
                 rotationSpeed: gunListEntry.rotationSpeed,
                 name: gunName,
                 tier: gunListEntry.level as Tier,

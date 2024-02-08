@@ -28,6 +28,7 @@ export interface TankDefinition {
   testing?: boolean;
   turrets: TurretDefinition[];
   engines: EngineDefinition[];
+  tracks: TrackDefinition[];
   price: TankDefinitionPrice;
   speed: {
     forwards: number;
@@ -38,18 +39,30 @@ export interface TankDefinition {
     moving: number;
     onFire: number;
   };
+  equipment: string;
+  weight: number;
+}
+export interface TrackDefinition {
+  id: number;
+  weight: number;
   traverseSpeed: number;
   dispersion: {
     move: number;
     traverse: number;
   };
-  equipment: string;
+  resistance: {
+    hard: number;
+    medium: number;
+    soft: number;
+  };
 }
 export interface EngineDefinition {
   id: number;
   name: string;
   tier: Tier;
-  fire_chance: number;
+  fireChance: number;
+  power: number;
+  weight: number;
 }
 export type TankDefinitionPrice =
   | { type: 'credits'; value: number }
@@ -62,6 +75,7 @@ export interface TurretDefinition {
   name: string;
   tier: Tier;
   guns: GunDefinition[];
+  weight: number;
 }
 export type GunDefinition =
   | GunDefinitionRegular
@@ -69,6 +83,7 @@ export type GunDefinition =
   | GunDefinitionAutoReloader;
 interface GunDefinitionBase {
   rotationSpeed: number;
+  weight: number;
   id: number;
   name: string;
   tier: Tier;

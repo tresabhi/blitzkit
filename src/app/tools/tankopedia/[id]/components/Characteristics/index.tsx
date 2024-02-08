@@ -13,7 +13,9 @@ import { Info } from './components/Info';
 
 export function Characteristics() {
   const awaitedModelDefinitions = use(modelDefinitions);
-  const { tank, turret, gun, engine } = useDuel((state) => state.protagonist!);
+  const { tank, turret, gun, engine, track } = useDuel(
+    (state) => state.protagonist!,
+  );
   const shell = gun.shells[0];
   const tankModelDefinition = awaitedModelDefinitions[tank.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
@@ -24,6 +26,8 @@ export function Characteristics() {
       turretModelDefinition.boundingBox,
     ),
   );
+  const weight =
+    tank.weight + engine.weight + track.weight + turret.weight + gun.weight;
 
   let dpm: number;
 
@@ -50,7 +54,7 @@ export function Characteristics() {
           {tank.health + turret.health}
         </Info>
         <Info name="Fire chance" unit="%">
-          {Math.round(engine.fire_chance * 100)}
+          {Math.round(engine.fireChance * 100)}
         </Info>
         <Info name="View range" unit="m">
           {turret.viewRange}
@@ -175,12 +179,12 @@ export function Characteristics() {
           {gun.dispersion.base.toFixed(3)}
         </Info>
         <Info indent name="Moving" unit="s">
-          + {tank.dispersion.move.toFixed(3)}
+          + {track.dispersion.move.toFixed(3)}
         </Info>
-        <Info indent name="Hull traversing" unit="s">
-          + {tank.dispersion.traverse.toFixed(3)}
+        <Info indent name="Hull traversing" unit="°">
+          + {track.dispersion.traverse.toFixed(3)}
         </Info>
-        <Info indent name="Turret traversing" unit="s">
+        <Info indent name="Turret traversing" unit="°">
           + {gun.dispersion.traverse.toFixed(3)}
         </Info>
         <Info indent name="After shooting" unit="m">
@@ -243,7 +247,7 @@ export function Characteristics() {
           TODO
         </Info>
         <Info name="Weight" unit="mt">
-          TODO
+          {(weight / 1000).toFixed(1)}
         </Info>
         <Info name="Traverse speed" unit="°/s" />
         <Info indent name="On hard terrain">

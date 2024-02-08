@@ -15,12 +15,15 @@ export interface BoundingBox {
 }
 interface ModelDefinition {
   armor: ModelArmor;
-  trackThickness: number;
   turretOrigin: Vector3Tuple;
-  hullOrigin: Vector3Tuple;
   turretRotation?: InitialTurretRotation;
   turrets: Record<number, TurretModelDefinition>;
+  tracks: Record<number, TrackDefinition>;
   boundingBox: BoundingBox;
+}
+interface TrackDefinition {
+  thickness: number;
+  origin: Vector3Tuple;
 }
 export interface InitialTurretRotation {
   yaw: number;

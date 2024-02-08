@@ -11,6 +11,7 @@ import {
   ShellDefinition,
   TankDefinition,
   Tier,
+  TrackDefinition,
   TurretDefinition,
 } from '../core/blitzkrieg/tankDefinitions';
 
@@ -24,6 +25,7 @@ export interface DuelMember {
   turret: TurretDefinition;
   gun: GunDefinition;
   shell: ShellDefinition;
+  track: TrackDefinition;
 }
 interface TankopediaPersistent {
   model: {
