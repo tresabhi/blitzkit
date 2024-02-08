@@ -225,15 +225,12 @@ export function Characteristics() {
 
       <Flex direction="column" gap="2">
         <Heading size="5">Maneuverability</Heading>
-        <Info name="Speed" unit="km/s" />
+        <Info name="Speed" unit="km/hr" />
         <Info indent name="Forwards">
-          TODO
+          {tank.speed.forwards}
         </Info>
         <Info indent name="Average">
-          TODO
-        </Info>
-        <Info indent name="Backwards">
-          TODO
+          {tank.speed.backwards}
         </Info>
         <Info name="Power to weight ratio" unit="hp/kg" />
         <Info indent name="On hard terrain">
