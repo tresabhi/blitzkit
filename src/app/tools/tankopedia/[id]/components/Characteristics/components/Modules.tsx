@@ -89,9 +89,9 @@ export function Modules() {
                 type="module"
                 module="chassis"
                 discriminator={TIER_ROMAN_NUMERALS[track.tier]}
-                selected={protagonist.engine.id === track.id}
+                selected={protagonist.track.id === track.id}
                 first={index === 0}
-                last={index === protagonist.tank.engines.length - 1}
+                last={index === protagonist.tank.tracks.length - 1}
                 rowChild
                 onClick={() => {
                   mutateDuel((draft) => {
