@@ -107,6 +107,7 @@ interface VehicleDefinitions {
         vehicleMovement: number;
         vehicleRotation: number;
       };
+      level: number;
       hullPosition: string;
       armor: {
         leftTrack:
@@ -495,6 +496,7 @@ export async function definitions(production: boolean) {
               medium: terrainResistances[1],
               soft: terrainResistances[2],
             },
+            tier: track.level as Tier,
           });
 
           modelDefinitions[tankId].tracks[trackId] = {
