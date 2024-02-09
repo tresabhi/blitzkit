@@ -97,19 +97,6 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
     );
     let sorted: TankDefinition[] = [];
 
-    // .sort((a, b) => {
-    //   let diff = 0;
-
-    //   if (sort.by === 'meta.tier') {
-    //     diff = a.tier - b.tier;
-    //   }
-    //   if (sort.by === 'meta.name') {
-    //     diff = a.name?.localeCompare(b.name);
-    //   }
-
-    //   return sort.direction === 'ascending' ? diff : -diff;
-    // });
-
     switch (sort.by) {
       case 'meta.tier':
         sorted = filtered.sort((a, b) => a.tier - b.tier);
@@ -748,6 +735,10 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
                   types: [],
                   test: 'include',
                   page: 0,
+                },
+                sort: {
+                  by: 'meta.tier',
+                  direction: 'descending',
                 },
               })
             }
