@@ -15,7 +15,33 @@ import {
   TurretDefinition,
 } from '../core/blitzkrieg/tankDefinitions';
 
-export type TankopediaSortBy = 'tier' | 'name';
+export type TankopediaSortBy =
+  | 'meta.tier'
+  | 'meta.name'
+  | 'survivability.health'
+  | 'survivability.viewRange'
+  | 'survivability.camouflageStill'
+  | 'survivability.camouflageMoving'
+  | 'survivability.camouflageShooting'
+  | 'survivability.size'
+  | 'fire.dpm'
+  | 'fire.reload'
+  | 'fire.caliber'
+  | 'fire.standardPenetration'
+  | 'fire.premiumPenetration'
+  | 'fire.damage'
+  | 'fire.shellVelocity'
+  | 'fire.aimTime'
+  | 'fire.dispersionStill'
+  | 'fire.dispersionMoving'
+  | 'fire.gunDepression'
+  | 'fire.gunElevation'
+  | 'maneuverability.forwardsSpeed'
+  | 'maneuverability.backwardsSpeed'
+  | 'maneuverability.power'
+  | 'maneuverability.powerToWeight'
+  | 'maneuverability.weight'
+  | 'maneuverability.traverseSpeed';
 export type TankopediaSortDirection = 'ascending' | 'descending';
 export type TankopediaTestTankDisplay = 'include' | 'exclude' | 'only';
 export type TankopediaMode = 'model' | 'armor';
@@ -116,7 +142,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
         },
       },
       sort: {
-        by: 'tier',
+        by: 'meta.tier',
         direction: 'descending',
       },
       filters: {

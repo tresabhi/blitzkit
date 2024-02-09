@@ -3,6 +3,7 @@ import { use } from 'react';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { normalizeBoundingBox } from '../../../../../../core/blitzkrieg/normalizeBoundingBox';
+import { resolveDpm } from '../../../../../../core/blitzkrieg/resolveDpm';
 import {
   GUN_TYPE_NAMES,
   SHELL_NAMES,
@@ -39,23 +40,6 @@ export function Characteristics() {
     stockTrack.weight +
     stockTurret.weight +
     stockGun.weight;
-
-  let dpm: number;
-
-  if (gun.type === 'regular') {
-    dpm = (shell.damage.armor / gun.reload) * 60;
-  } else if (gun.type === 'autoLoader') {
-    dpm =
-      ((shell.damage.armor * gun.count) /
-        (gun.reload + (gun.count - 1) * gun.interClip)) *
-      60;
-  } else {
-    dpm =
-      ((shell.damage.armor * gun.count) /
-        (gun.reload.reduce((a, b) => a + b, 0) +
-          (gun.count - 1) * gun.interClip)) *
-      60;
-  }
 
   return (
     <Flex direction="column" gap="4" style={{ width: '100%' }}>
@@ -95,7 +79,7 @@ export function Characteristics() {
         <Heading size="5">Fire</Heading>
         <Info name="Gun type">{GUN_TYPE_NAMES[gun.type]}</Info>
         <Info name="Damage per minute" unit="hp / min">
-          {dpm.toFixed(0)}
+          {resolveDpm(gun, shell).toFixed(0)}
         </Info>
         {gun.type === 'autoReloader' && (
           <>
@@ -206,10 +190,10 @@ export function Characteristics() {
         </Info>
         <Info name="Gun flexibility" unit="°" />
         <Info indent name="Depression">
-          {gunModelDefinition.pitch.max}
+          {gunModelDefinition.pitch.max.toFixed(1)}
         </Info>
         <Info indent name="Elevation">
-          {-gunModelDefinition.pitch.min}
+          {(-gunModelDefinition.pitch.min).toFixed(1)}
         </Info>
         {gunModelDefinition.pitch.front && (
           <>
@@ -242,10 +226,13 @@ export function Characteristics() {
         <Heading size="5">Maneuverability</Heading>
         <Info name="Speed" unit="km/hr" />
         <Info indent name="Forwards">
-          {tank.speed.forwards}
+          {tank.speed.forwards.toFixed(0)}
         </Info>
-        <Info indent name="Average">
-          {tank.speed.backwards}
+        <Info indent name="Backwards">
+          {tank.speed.backwards.toFixed(0)}
+        </Info>
+        <Info name="Power" unit="hp">
+          {engine.power}
         </Info>
         <Info name="Power to weight ratio" unit="hp/mt" />
         <Info indent name="On hard terrain">
