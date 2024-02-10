@@ -63,14 +63,20 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
       awaitedTanks
         .sort(
           (a, b) =>
-            treeTypeOrder.indexOf(a.treeType) -
-            treeTypeOrder.indexOf(b.treeType),
+            (treeTypeOrder.indexOf(a.treeType) -
+              treeTypeOrder.indexOf(b.treeType)) *
+            (sort.direction === 'descending' ? -1 : 1),
         )
         .sort(
           (a, b) =>
-            tankTypeOrder.indexOf(a.type) - tankTypeOrder.indexOf(b.type),
+            (tankTypeOrder.indexOf(a.type) - tankTypeOrder.indexOf(b.type)) *
+            (sort.direction === 'descending' ? -1 : 1),
         )
-        .sort((a, b) => nations.indexOf(a.nation) - nations.indexOf(b.nation)),
+        .sort(
+          (a, b) =>
+            (nations.indexOf(a.nation) - nations.indexOf(b.nation)) *
+            (sort.direction === 'descending' ? -1 : 1),
+        ),
     [],
   );
   const input = useRef<HTMLInputElement>(null);
