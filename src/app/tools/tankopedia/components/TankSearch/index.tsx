@@ -794,6 +794,16 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
                 />
 
                 <div
+                  className={styles.listingShadow}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
+                    transition: `box-shadow ${theme.durations.regular}`,
+                  }}
+                />
+
+                <div
                   style={{
                     width: 256,
                     height: 128,
@@ -808,16 +818,6 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
                     }}
                   />
                 </div>
-
-                <div
-                  className={styles.listingShadow}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'absolute',
-                    transition: `box-shadow ${theme.durations.regular}`,
-                  }}
-                />
 
                 <Flex
                   align="center"
