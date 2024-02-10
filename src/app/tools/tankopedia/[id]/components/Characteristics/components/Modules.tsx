@@ -102,6 +102,27 @@ export function Modules() {
             );
           })}
         </Flex>
+
+        <Flex>
+          {protagonist.gun.shells.map((shell, index) => {
+            return (
+              <ModuleButton
+                key={shell.id}
+                type="shell"
+                shell={shell.icon}
+                selected={protagonist.shell.id === shell.id}
+                first={index === 0}
+                last={index === protagonist.gun.shells.length - 1}
+                rowChild
+                onClick={() => {
+                  mutateDuel((draft) => {
+                    draft.protagonist!.shell = shell;
+                  });
+                }}
+              />
+            );
+          })}
+        </Flex>
       </Flex>
     </ConfigurationChildWrapper>
   );

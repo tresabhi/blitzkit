@@ -1,14 +1,12 @@
-import { Flex, Heading } from '@radix-ui/themes';
-import { use } from 'react';
-import { isExplosive } from '../../../../../../core/blitz/isExplosive';
+import { Flex, Heading, Slider, Text, TextField } from '@radix-ui/themes';
+import { debounce } from 'lodash';
+import { use, useEffect, useRef, useState } from 'react';
+import { lerp } from 'three/src/math/MathUtils';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { normalizeBoundingBox } from '../../../../../../core/blitzkrieg/normalizeBoundingBox';
 import { resolveDpm } from '../../../../../../core/blitzkrieg/resolveDpm';
-import {
-  GUN_TYPE_NAMES,
-  SHELL_NAMES,
-} from '../../../../../../core/blitzkrieg/tankDefinitions';
+import { GUN_TYPE_NAMES } from '../../../../../../core/blitzkrieg/tankDefinitions';
 import { unionBoundingBox } from '../../../../../../core/blitzkrieg/unionBoundingBox';
 import { useEquipment } from '../../../../../../core/blitzkrieg/useEquipmentEquipped';
 import { useDuel } from '../../../../../../stores/duel';
@@ -43,6 +41,7 @@ export function Characteristics() {
     stockTrack.weight +
     stockTurret.weight +
     stockGun.weight;
+  const [penetrationDistance, setPenetrationDistance] = useState(0);
   const hasRammer = useEquipment(100);
   const hasCalibratedShells = useEquipment(103);
   const hasEnhancedGunLayingDrive = useEquipment(104);
@@ -56,11 +55,18 @@ export function Characteristics() {
   const hasCamouflageNet = useEquipment(115);
   const hasImprovedVerticalStabilizer = useEquipment(122);
   const hasImprovedSuspension = useEquipment(123);
+  const penetrationDistanceInput = useRef<HTMLInputElement>(null);
 
   /**
    * TODO:
    * - Improved Ventilation
    */
+
+  useEffect(() => {
+    if (penetrationDistanceInput.current) {
+      penetrationDistanceInput.current.value = `${penetrationDistance}`;
+    }
+  }, [penetrationDistance]);
 
   return (
     <Flex direction="column" gap="4" style={{ width: '100%' }}>
@@ -209,75 +215,82 @@ export function Characteristics() {
         <InfoWithDelta name="Caliber" decimals={0} unit="mm">
           {shell.caliber}
         </InfoWithDelta>
-        <Info name="Penetration" unit="mm" />
-        {gun.shells.map((shell) => (
+        {typeof shell.penetration !== 'number' && (
+          <Info name="Penetration" unit="mm" />
+        )}
+        {typeof shell.penetration === 'number' && (
+          <InfoWithDelta
+            indent={typeof shell.penetration !== 'number'}
+            decimals={0}
+            name="Penetration"
+          >
+            {resolveNearPenetration(shell.penetration)}
+          </InfoWithDelta>
+        )}
+        {typeof shell.penetration !== 'number' && (
           <>
-            <InfoWithDelta
-              decimals={0}
-              key={shell.type}
+            <Flex align="center" gap="2" style={{ paddingLeft: 24 }}>
+              <Text>Distance</Text>
+              <Slider
+                key={penetrationDistance}
+                min={0}
+                max={500}
+                style={{ flex: 1 }}
+                defaultValue={[penetrationDistance]}
+                onValueChange={debounce(([value]) => {
+                  setPenetrationDistance(value);
+                }, 500)}
+              />
+              <TextField.Root style={{ width: 64 }}>
+                <TextField.Input
+                  ref={penetrationDistanceInput}
+                  defaultValue={penetrationDistance}
+                  onBlur={() => {
+                    setPenetrationDistance(
+                      Math.min(
+                        parseInt(penetrationDistanceInput.current!.value),
+                        500,
+                      ),
+                    );
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.currentTarget.blur();
+                    }
+                  }}
+                />
+                <TextField.Slot>m</TextField.Slot>
+              </TextField.Root>
+            </Flex>
+            <Info
+              delta={
+                lerp(
+                  shell.penetration[0],
+                  shell.penetration[1],
+                  penetrationDistance / 500,
+                ) - shell.penetration[0]
+              }
               indent
-              name={SHELL_NAMES[shell.type]}
+              decimals={0}
+              name={`At ${penetrationDistance}m`}
             >
-              {resolveNearPenetration(shell.penetration) *
-                (hasCalibratedShells
-                  ? isExplosive(shell.type)
-                    ? 1.1
-                    : 1.05
-                  : 1)}
-            </InfoWithDelta>
-            {typeof shell.penetration !== 'number' && (
-              <InfoWithDelta
-                decimals={0}
-                key={shell.type}
-                indent
-                name={`${SHELL_NAMES[shell.type]} at 500m`}
-              >
-                {(hasSupercharger
-                  ? shell.penetration[1] +
-                    0.5 * (shell.penetration[0] - shell.penetration[1])
-                  : shell.penetration[1]) *
-                  (hasCalibratedShells
-                    ? isExplosive(shell.type)
-                      ? 1.1
-                      : 1.05
-                    : 1)}
-              </InfoWithDelta>
-            )}
+              {lerp(
+                shell.penetration[0],
+                shell.penetration[1],
+                penetrationDistance / 500,
+              )}
+            </Info>
           </>
-        ))}
-        <Info name="Damage" unit="hp" />
-        {gun.shells.map((shell) => (
-          <InfoWithDelta
-            decimals={0}
-            key={shell.type}
-            indent
-            name={SHELL_NAMES[shell.type]}
-          >
-            {shell.damage.armor}
-          </InfoWithDelta>
-        ))}
-        <Info name="Module damage" unit="hp" />
-        {gun.shells.map((shell, index) => (
-          <InfoWithDelta
-            decimals={0}
-            key={shell.type}
-            indent
-            name={SHELL_NAMES[shell.type]}
-          >
-            {shell.damage.module}
-          </InfoWithDelta>
-        ))}
-        <Info name="Shell velocity" unit="m/s" />
-        {gun.shells.map((shell) => (
-          <InfoWithDelta
-            decimals={0}
-            key={shell.type}
-            indent
-            name={SHELL_NAMES[shell.type]}
-          >
-            {shell.speed * (hasSupercharger ? 1.3 : 1)}
-          </InfoWithDelta>
-        ))}
+        )}
+        <InfoWithDelta name="Damage" unit="hp">
+          {shell.damage.armor}
+        </InfoWithDelta>
+        <InfoWithDelta name="Module damage" unit="hp">
+          {shell.damage.module}
+        </InfoWithDelta>
+        <InfoWithDelta name="Shell velocity" unit="m/s">
+          {shell.speed * (hasSupercharger ? 1.3 : 1)}
+        </InfoWithDelta>
         <InfoWithDelta
           decimals={2}
           name="Aim time"
