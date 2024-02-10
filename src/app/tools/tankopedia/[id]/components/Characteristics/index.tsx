@@ -15,14 +15,13 @@ import { InfoWithDelta } from './components/InfoWithDelta';
 
 export function Characteristics() {
   const awaitedModelDefinitions = use(modelDefinitions);
-  const { tank, turret, gun, engine, track } = useDuel(
+  const { tank, turret, gun, engine, track, shell } = useDuel(
     (state) => state.protagonist!,
   );
   const stockEngine = tank.engines[0];
   const stockTrack = tank.tracks[0];
   const stockTurret = tank.turrets[0];
   const stockGun = stockTurret.guns[0];
-  const shell = gun.shells[0];
   const tankModelDefinition = awaitedModelDefinitions[tank.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];
