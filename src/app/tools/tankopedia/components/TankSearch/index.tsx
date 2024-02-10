@@ -35,6 +35,7 @@ import { tankIcon } from '../../../../../core/blitzkrieg/tankIcon';
 import { unionBoundingBox } from '../../../../../core/blitzkrieg/unionBoundingBox';
 import { theme } from '../../../../../stitches.config';
 import mutateTankopediaPersistent, {
+  SORT_NAMES,
   TankopediaSortDirection,
   useTankopediaPersistent,
 } from '../../../../../stores/tankopedia';
@@ -756,10 +757,15 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
         <Options />
       </Flex>
 
+      <Flex justify="center">
+        <Text color="gray">
+          Sorting: {SORT_NAMES[sort.by]}, {sort.direction}
+        </Text>
+      </Flex>
+
       {!compact && (
         <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />
       )}
-
       <Flex wrap="wrap" gap="2" justify={compact ? 'between' : 'center'}>
         {!compact &&
           searchResultsPageSlice.map((tank) => (
@@ -884,7 +890,6 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
           <CompactSearchResultRow tanks={secondChunk} onSelect={onSelect} />
         )}
       </Flex>
-
       <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />
     </>
   );

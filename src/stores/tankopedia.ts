@@ -15,33 +15,7 @@ import {
   TurretDefinition,
 } from '../core/blitzkrieg/tankDefinitions';
 
-export type TankopediaSortBy =
-  | 'meta.tier'
-  | 'meta.name'
-  | 'survivability.health'
-  | 'survivability.viewRange'
-  | 'survivability.camouflageStill'
-  | 'survivability.camouflageMoving'
-  | 'survivability.camouflageShooting'
-  | 'survivability.size'
-  | 'fire.dpm'
-  | 'fire.reload'
-  | 'fire.caliber'
-  | 'fire.standardPenetration'
-  | 'fire.premiumPenetration'
-  | 'fire.damage'
-  | 'fire.shellVelocity'
-  | 'fire.aimTime'
-  | 'fire.dispersionStill'
-  | 'fire.dispersionMoving'
-  | 'fire.gunDepression'
-  | 'fire.gunElevation'
-  | 'maneuverability.forwardsSpeed'
-  | 'maneuverability.backwardsSpeed'
-  | 'maneuverability.power'
-  | 'maneuverability.powerToWeight'
-  | 'maneuverability.weight'
-  | 'maneuverability.traverseSpeed';
+export type TankopediaSortBy = keyof typeof SORT_NAMES;
 export type TankopediaSortDirection = 'ascending' | 'descending';
 export type TankopediaTestTankDisplay = 'include' | 'exclude' | 'only';
 export type TankopediaMode = 'model' | 'armor';
@@ -124,6 +98,35 @@ export type ArmorPiercingLayer =
       type: 'gap';
       gap: number;
     };
+
+export const SORT_NAMES = {
+  'meta.tier': 'tier',
+  'meta.name': 'name',
+  'survivability.health': 'health',
+  'survivability.viewRange': 'view range',
+  'survivability.camouflageStill': 'camouflage still',
+  'survivability.camouflageMoving': 'camouflage moving',
+  'survivability.camouflageShooting': 'camouflage shooting',
+  'survivability.size': 'size',
+  'fire.dpm': 'DPM',
+  'fire.reload': 'reload',
+  'fire.caliber': 'caliber',
+  'fire.standardPenetration': 'standard penetration',
+  'fire.premiumPenetration': 'premium penetration',
+  'fire.damage': 'damage',
+  'fire.shellVelocity': 'shell velocity',
+  'fire.aimTime': 'aim time',
+  'fire.dispersionStill': 'dispersion still',
+  'fire.dispersionMoving': 'dispersion moving',
+  'fire.gunDepression': 'gun depression',
+  'fire.gunElevation': 'gun elevation',
+  'maneuverability.forwardsSpeed': 'forwards speed',
+  'maneuverability.backwardsSpeed': 'backwards speed',
+  'maneuverability.power': 'power',
+  'maneuverability.powerToWeight': 'power to weight',
+  'maneuverability.weight': 'weight',
+  'maneuverability.traverseSpeed': 'traverse speed',
+} as const;
 
 export const useTankopediaPersistent = create<TankopediaPersistent>()(
   persist(
