@@ -111,6 +111,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 flex: 1,
                 width: '100%',
                 top: 64,
+                position: wideFormat ? 'sticky' : undefined,
               }}
             >
               <TankSandbox />
