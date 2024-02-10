@@ -70,78 +70,6 @@ export function Characteristics() {
   return (
     <Flex direction="column" gap="4" style={{ width: '100%' }}>
       <Flex direction="column" gap="2">
-        <Heading size="5">Survivability</Heading>
-        <InfoWithDelta name="Health" unit="hp">
-          {(tank.health + turret.health) * (hasImprovedAssembly ? 1.06 : 1)}
-        </InfoWithDelta>
-        <InfoWithDelta name="Fire chance" unit="%" deltaType="lowerIsBetter">
-          {Math.round(engine.fireChance * 100)}
-        </InfoWithDelta>
-        <InfoWithDelta name="View range" unit="m">
-          {turret.viewRange *
-            (hasImprovedOptics
-              ? tank.type === 'tankDestroyer'
-                ? 1.05
-                : tank.type === 'heavy'
-                  ? 1.07
-                  : 1.1
-              : 1)}
-        </InfoWithDelta>
-        <Info name="Camouflage" unit="%" />
-        <InfoWithDelta
-          indent
-          name="Still"
-          decimals={2}
-          deltaType="lowerIsBetter"
-        >
-          {tank.camouflage.still *
-            100 *
-            (hasCamouflageNet
-              ? tank.type === 'heavy'
-                ? 1.03
-                : tank.type === 'tankDestroyer'
-                  ? 1.07
-                  : 1.05
-              : 1)}
-        </InfoWithDelta>
-        <InfoWithDelta
-          indent
-          name="Moving"
-          decimals={2}
-          deltaType="lowerIsBetter"
-        >
-          {tank.camouflage.moving * 100}
-        </InfoWithDelta>
-        <InfoWithDelta
-          indent
-          name="Shooting still"
-          decimals={2}
-          deltaType="lowerIsBetter"
-        >
-          {tank.camouflage.still * gun.camouflageLoss * 100}
-        </InfoWithDelta>
-        <InfoWithDelta
-          indent
-          name="Shooting on move"
-          decimals={2}
-          deltaType="lowerIsBetter"
-        >
-          {tank.camouflage.moving * gun.camouflageLoss * 100}
-        </InfoWithDelta>
-        <InfoWithDelta
-          indent
-          name="On fire"
-          decimals={2}
-          deltaType="lowerIsBetter"
-        >
-          {tank.camouflage.onFire * tank.camouflage.still * 100}
-        </InfoWithDelta>
-        <Info name="Size" unit="m">
-          {size[0].toFixed(2)} x {size[2].toFixed(2)} x {size[1].toFixed(2)}
-        </Info>
-      </Flex>
-
-      <Flex direction="column" gap="2">
         <Heading size="5">Fire</Heading>
         <Info name="Gun type">{GUN_TYPE_NAMES[gun.type]}</Info>
         <InfoWithDelta name="DPM" decimals={0} unit="hp / min">
@@ -480,6 +408,78 @@ export function Characteristics() {
             (stockWeight / weight) *
             (hasImprovedControl ? 1.1 : 1)}
         </InfoWithDelta>
+      </Flex>
+
+      <Flex direction="column" gap="2">
+        <Heading size="5">Survivability</Heading>
+        <InfoWithDelta name="Health" unit="hp">
+          {(tank.health + turret.health) * (hasImprovedAssembly ? 1.06 : 1)}
+        </InfoWithDelta>
+        <InfoWithDelta name="Fire chance" unit="%" deltaType="lowerIsBetter">
+          {Math.round(engine.fireChance * 100)}
+        </InfoWithDelta>
+        <InfoWithDelta name="View range" unit="m">
+          {turret.viewRange *
+            (hasImprovedOptics
+              ? tank.type === 'tankDestroyer'
+                ? 1.05
+                : tank.type === 'heavy'
+                  ? 1.07
+                  : 1.1
+              : 1)}
+        </InfoWithDelta>
+        <Info name="Camouflage" unit="%" />
+        <InfoWithDelta
+          indent
+          name="Still"
+          decimals={2}
+          deltaType="lowerIsBetter"
+        >
+          {tank.camouflage.still *
+            100 *
+            (hasCamouflageNet
+              ? tank.type === 'heavy'
+                ? 1.03
+                : tank.type === 'tankDestroyer'
+                  ? 1.07
+                  : 1.05
+              : 1)}
+        </InfoWithDelta>
+        <InfoWithDelta
+          indent
+          name="Moving"
+          decimals={2}
+          deltaType="lowerIsBetter"
+        >
+          {tank.camouflage.moving * 100}
+        </InfoWithDelta>
+        <InfoWithDelta
+          indent
+          name="Shooting still"
+          decimals={2}
+          deltaType="lowerIsBetter"
+        >
+          {tank.camouflage.still * gun.camouflageLoss * 100}
+        </InfoWithDelta>
+        <InfoWithDelta
+          indent
+          name="Shooting on move"
+          decimals={2}
+          deltaType="lowerIsBetter"
+        >
+          {tank.camouflage.moving * gun.camouflageLoss * 100}
+        </InfoWithDelta>
+        <InfoWithDelta
+          indent
+          name="On fire"
+          decimals={2}
+          deltaType="lowerIsBetter"
+        >
+          {tank.camouflage.onFire * tank.camouflage.still * 100}
+        </InfoWithDelta>
+        <Info name="Size" unit="m">
+          {size[0].toFixed(2)} x {size[2].toFixed(2)} x {size[1].toFixed(2)}
+        </Info>
       </Flex>
     </Flex>
   );

@@ -449,72 +449,6 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
               </DropdownMenu.Sub>
 
               <DropdownMenu.Sub>
-                <DropdownMenu.SubTrigger>Survivability</DropdownMenu.SubTrigger>
-                <DropdownMenu.SubContent>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'survivability.health'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'survivability.health';
-                      });
-                    }}
-                  >
-                    Health
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'survivability.viewRange'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'survivability.viewRange';
-                      });
-                    }}
-                  >
-                    View range
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'survivability.camouflageStill'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'survivability.camouflageStill';
-                      });
-                    }}
-                  >
-                    Camouflage
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'survivability.camouflageMoving'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'survivability.camouflageMoving';
-                      });
-                    }}
-                  >
-                    Camouflage moving
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'survivability.camouflageShooting'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'survivability.camouflageShooting';
-                      });
-                    }}
-                  >
-                    Camouflage shooting
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'survivability.size'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'survivability.size';
-                      });
-                    }}
-                  >
-                    Size
-                  </DropdownMenu.CheckboxItem>
-                </DropdownMenu.SubContent>
-              </DropdownMenu.Sub>
-
-              <DropdownMenu.Sub>
                 <DropdownMenu.SubTrigger>Fire</DropdownMenu.SubTrigger>
                 <DropdownMenu.SubContent>
                   <DropdownMenu.CheckboxItem
@@ -704,6 +638,72 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
                     }}
                   >
                     Traverse speed
+                  </DropdownMenu.CheckboxItem>
+                </DropdownMenu.SubContent>
+              </DropdownMenu.Sub>
+
+              <DropdownMenu.Sub>
+                <DropdownMenu.SubTrigger>Survivability</DropdownMenu.SubTrigger>
+                <DropdownMenu.SubContent>
+                  <DropdownMenu.CheckboxItem
+                    checked={sort.by === 'survivability.health'}
+                    onClick={() => {
+                      mutateTankopediaPersistent((draft) => {
+                        draft.sort.by = 'survivability.health';
+                      });
+                    }}
+                  >
+                    Health
+                  </DropdownMenu.CheckboxItem>
+                  <DropdownMenu.CheckboxItem
+                    checked={sort.by === 'survivability.viewRange'}
+                    onClick={() => {
+                      mutateTankopediaPersistent((draft) => {
+                        draft.sort.by = 'survivability.viewRange';
+                      });
+                    }}
+                  >
+                    View range
+                  </DropdownMenu.CheckboxItem>
+                  <DropdownMenu.CheckboxItem
+                    checked={sort.by === 'survivability.camouflageStill'}
+                    onClick={() => {
+                      mutateTankopediaPersistent((draft) => {
+                        draft.sort.by = 'survivability.camouflageStill';
+                      });
+                    }}
+                  >
+                    Camouflage
+                  </DropdownMenu.CheckboxItem>
+                  <DropdownMenu.CheckboxItem
+                    checked={sort.by === 'survivability.camouflageMoving'}
+                    onClick={() => {
+                      mutateTankopediaPersistent((draft) => {
+                        draft.sort.by = 'survivability.camouflageMoving';
+                      });
+                    }}
+                  >
+                    Camouflage moving
+                  </DropdownMenu.CheckboxItem>
+                  <DropdownMenu.CheckboxItem
+                    checked={sort.by === 'survivability.camouflageShooting'}
+                    onClick={() => {
+                      mutateTankopediaPersistent((draft) => {
+                        draft.sort.by = 'survivability.camouflageShooting';
+                      });
+                    }}
+                  >
+                    Camouflage shooting
+                  </DropdownMenu.CheckboxItem>
+                  <DropdownMenu.CheckboxItem
+                    checked={sort.by === 'survivability.size'}
+                    onClick={() => {
+                      mutateTankopediaPersistent((draft) => {
+                        draft.sort.by = 'survivability.size';
+                      });
+                    }}
+                  >
+                    Size
                   </DropdownMenu.CheckboxItem>
                 </DropdownMenu.SubContent>
               </DropdownMenu.Sub>
