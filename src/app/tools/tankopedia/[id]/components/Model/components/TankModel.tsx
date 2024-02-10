@@ -158,7 +158,7 @@ export const TankModel = memo(() => {
           const material = mesh.material as MeshStandardMaterial;
           const offset = new Vector2(
             0,
-            event.movementY * (6 / canvas.height) +
+            -event.movementY * (6 / canvas.height) -
               event.movementX * (6 / canvas.width),
           );
 
