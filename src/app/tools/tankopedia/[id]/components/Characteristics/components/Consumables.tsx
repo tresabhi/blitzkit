@@ -1,4 +1,4 @@
-import { Flex, Heading, Text } from '@radix-ui/themes';
+import { Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
 import { ModuleButton } from '../../../../../../../components/ModuleButton';
 import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
@@ -25,10 +25,7 @@ export function Consumables() {
 
   return (
     <ConfigurationChildWrapper>
-      <Heading size="4">
-        Consumables{' '}
-        <Text color="gray">(max {protagonist.tank.consumables})</Text>
-      </Heading>
+      <Heading size="4">Consumables</Heading>
 
       <Flex wrap="wrap">
         {consumablesList.map((consumable, index) => {
