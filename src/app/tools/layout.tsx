@@ -18,6 +18,8 @@ export default function ToolsLayout({ children }: ToolsLayoutProps) {
 
   return (
     <>
+      {tool && <title>{tool.title}</title>}
+
       <div
         style={{
           height: 128,
