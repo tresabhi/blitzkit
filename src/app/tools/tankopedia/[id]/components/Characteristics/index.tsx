@@ -1,5 +1,6 @@
 import { Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
+import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { normalizeBoundingBox } from '../../../../../../core/blitzkrieg/normalizeBoundingBox';
@@ -43,34 +44,91 @@ export function Characteristics() {
     stockTurret.weight +
     stockGun.weight;
   const hasRammer = useEquipment(100);
+  const hasCalibratedShells = useEquipment(103);
+  const hasEnhancedGunLayingDrive = useEquipment(104);
+  const hasSupercharger = useEquipment(107);
+  const hasVerticalStabilizer = useEquipment(105);
+  const hasRefinedGun = useEquipment(106);
+  const hasImprovedAssembly = useEquipment(111);
+  const hasImprovedOptics = useEquipment(114);
+  const hasImprovedControl = useEquipment(116);
+  const hasEngineAccelerator = useEquipment(117);
+  const hasCamouflageNet = useEquipment(115);
+  const hasImprovedVerticalStabilizer = useEquipment(122);
+  const hasImprovedSuspension = useEquipment(123);
+
+  /**
+   * TODO:
+   * - Improved Ventilation
+   */
 
   return (
     <Flex direction="column" gap="4" style={{ width: '100%' }}>
       <Flex direction="column" gap="2">
         <Heading size="5">Survivability</Heading>
         <InfoWithDelta name="Health" unit="hp">
-          {tank.health + turret.health}
+          {(tank.health + turret.health) * (hasImprovedAssembly ? 1.06 : 1)}
         </InfoWithDelta>
-        <InfoWithDelta name="Fire chance" unit="%">
+        <InfoWithDelta name="Fire chance" unit="%" deltaType="lowerIsBetter">
           {Math.round(engine.fireChance * 100)}
         </InfoWithDelta>
         <InfoWithDelta name="View range" unit="m">
-          {turret.viewRange}
+          {turret.viewRange *
+            (hasImprovedOptics
+              ? tank.type === 'tankDestroyer'
+                ? 1.05
+                : tank.type === 'heavy'
+                  ? 1.07
+                  : 1.1
+              : 1)}
         </InfoWithDelta>
         <Info name="Camouflage" unit="%" />
-        <InfoWithDelta indent name="Still" decimals={2}>
-          {tank.camouflage.still * 100}
+        <InfoWithDelta
+          indent
+          name="Still"
+          decimals={2}
+          deltaType="lowerIsBetter"
+        >
+          {tank.camouflage.still *
+            100 *
+            (hasCamouflageNet
+              ? tank.type === 'heavy'
+                ? 1.03
+                : tank.type === 'tankDestroyer'
+                  ? 1.07
+                  : 1.05
+              : 1)}
         </InfoWithDelta>
-        <InfoWithDelta indent name="Moving" decimals={2}>
+        <InfoWithDelta
+          indent
+          name="Moving"
+          decimals={2}
+          deltaType="lowerIsBetter"
+        >
           {tank.camouflage.moving * 100}
         </InfoWithDelta>
-        <InfoWithDelta indent name="Shooting still" decimals={2}>
+        <InfoWithDelta
+          indent
+          name="Shooting still"
+          decimals={2}
+          deltaType="lowerIsBetter"
+        >
           {tank.camouflage.still * gun.camouflageLoss * 100}
         </InfoWithDelta>
-        <InfoWithDelta indent name="Shooting on move" decimals={2}>
+        <InfoWithDelta
+          indent
+          name="Shooting on move"
+          decimals={2}
+          deltaType="lowerIsBetter"
+        >
           {tank.camouflage.moving * gun.camouflageLoss * 100}
         </InfoWithDelta>
-        <InfoWithDelta indent name="On fire" decimals={2}>
+        <InfoWithDelta
+          indent
+          name="On fire"
+          decimals={2}
+          deltaType="lowerIsBetter"
+        >
           {tank.camouflage.onFire * tank.camouflage.still * 100}
         </InfoWithDelta>
         <Info name="Size" unit="m">
@@ -124,19 +182,27 @@ export function Characteristics() {
           </>
         )}
         {gun.type === 'autoReloader' ? (
-          gun.reload.map((reload, index) => (
-            <InfoWithDelta
-              key={index}
-              indent={index > 0}
-              name={index > 0 ? `Shell ${index + 1}` : 'Reload on shell 1'}
-              unit="s"
-              decimals={2}
-            >
-              {reload}
-            </InfoWithDelta>
-          ))
+          <>
+            <Info name="Reload" unit="s" />
+            {gun.reload.map((reload, index) => (
+              <InfoWithDelta
+                key={index}
+                indent
+                name={`Shell ${index + 1}`}
+                decimals={2}
+                deltaType="lowerIsBetter"
+              >
+                {reload}
+              </InfoWithDelta>
+            ))}
+          </>
         ) : (
-          <InfoWithDelta decimals={2} name="Reload" unit="s">
+          <InfoWithDelta
+            decimals={2}
+            name="Reload"
+            unit="s"
+            deltaType="lowerIsBetter"
+          >
             {gun.reload * (hasRammer ? 0.93 : 1)}
           </InfoWithDelta>
         )}
@@ -145,14 +211,39 @@ export function Characteristics() {
         </InfoWithDelta>
         <Info name="Penetration" unit="mm" />
         {gun.shells.map((shell) => (
-          <InfoWithDelta
-            decimals={0}
-            key={shell.type}
-            indent
-            name={SHELL_NAMES[shell.type]}
-          >
-            {resolveNearPenetration(shell.penetration)}
-          </InfoWithDelta>
+          <>
+            <InfoWithDelta
+              decimals={0}
+              key={shell.type}
+              indent
+              name={SHELL_NAMES[shell.type]}
+            >
+              {resolveNearPenetration(shell.penetration) *
+                (hasCalibratedShells
+                  ? isExplosive(shell.type)
+                    ? 1.1
+                    : 1.05
+                  : 1)}
+            </InfoWithDelta>
+            {typeof shell.penetration !== 'number' && (
+              <InfoWithDelta
+                decimals={0}
+                key={shell.type}
+                indent
+                name={`${SHELL_NAMES[shell.type]} at 500m`}
+              >
+                {(hasSupercharger
+                  ? shell.penetration[1] +
+                    0.5 * (shell.penetration[0] - shell.penetration[1])
+                  : shell.penetration[1]) *
+                  (hasCalibratedShells
+                    ? isExplosive(shell.type)
+                      ? 1.1
+                      : 1.05
+                    : 1)}
+              </InfoWithDelta>
+            )}
+          </>
         ))}
         <Info name="Damage" unit="hp" />
         {gun.shells.map((shell) => (
@@ -184,18 +275,36 @@ export function Characteristics() {
             indent
             name={SHELL_NAMES[shell.type]}
           >
-            {shell.speed}
+            {shell.speed * (hasSupercharger ? 1.3 : 1)}
           </InfoWithDelta>
         ))}
-        <InfoWithDelta decimals={2} name="Aim time" unit="s">
-          {gun.aimTime}
+        <InfoWithDelta
+          decimals={2}
+          name="Aim time"
+          unit="s"
+          deltaType="lowerIsBetter"
+        >
+          {gun.aimTime * (hasEnhancedGunLayingDrive ? 0.9 : 1)}
         </InfoWithDelta>
         <Info name="Dispersion at 100m" />
-        <InfoWithDelta decimals={3} indent name="Still" unit="m">
-          {gun.dispersion.base}
+        <InfoWithDelta
+          decimals={3}
+          indent
+          name="Still"
+          unit="m"
+          deltaType="lowerIsBetter"
+        >
+          {gun.dispersion.base * (hasRefinedGun ? 0.9 : 1)}
         </InfoWithDelta>
-        <InfoWithDelta prefix="+ " decimals={3} indent name="Moving" unit="s">
-          {track.dispersion.move}
+        <InfoWithDelta
+          prefix="+ "
+          decimals={3}
+          indent
+          name="Moving"
+          unit="s"
+          deltaType="lowerIsBetter"
+        >
+          {track.dispersion.move * (hasVerticalStabilizer ? 0.85 : 1)}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={3}
@@ -203,8 +312,9 @@ export function Characteristics() {
           indent
           name="Hull traversing"
           unit="°"
+          deltaType="lowerIsBetter"
         >
-          {track.dispersion.traverse}
+          {track.dispersion.traverse * (hasVerticalStabilizer ? 0.85 : 1)}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={0}
@@ -212,8 +322,9 @@ export function Characteristics() {
           indent
           name="Turret traversing"
           unit="°"
+          deltaType="lowerIsBetter"
         >
-          {gun.dispersion.traverse}
+          {gun.dispersion.traverse * (hasVerticalStabilizer ? 0.85 : 1)}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={3}
@@ -221,6 +332,7 @@ export function Characteristics() {
           indent
           name="After shooting"
           unit="m"
+          deltaType="lowerIsBetter"
         >
           {gun.dispersion.shot}
         </InfoWithDelta>
@@ -230,15 +342,18 @@ export function Characteristics() {
           indent
           name="Gun damaged"
           unit="scalar"
+          deltaType="lowerIsBetter"
         >
           {gun.dispersion.damaged}
         </InfoWithDelta>
         <Info name="Gun flexibility" unit="°" />
         <InfoWithDelta decimals={1} indent name="Depression">
-          {gunModelDefinition.pitch.max}
+          {gunModelDefinition.pitch.max +
+            (hasImprovedVerticalStabilizer ? 3 : 0)}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="Elevation">
-          {-gunModelDefinition.pitch.min}
+          {-gunModelDefinition.pitch.min +
+            (hasImprovedVerticalStabilizer ? 3 : 0)}
         </InfoWithDelta>
         {gunModelDefinition.pitch.front && (
           <>
@@ -286,15 +401,41 @@ export function Characteristics() {
         </InfoWithDelta>
         <Info name="Power to weight ratio" unit="hp/mt" />
         <InfoWithDelta decimals={1} indent name="On hard terrain">
-          {engine.power / weightMt / track.resistance.hard}
+          {(engine.power /
+            weightMt /
+            (track.resistance.hard * (hasImprovedSuspension ? 0.75 : 1))) *
+            (hasEngineAccelerator
+              ? tank.type === 'light' || tank.type === 'medium'
+                ? 1.05
+                : 1.07
+              : 1)}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On medium terrain">
-          {engine.power / weightMt / track.resistance.medium}
+          {(engine.power /
+            weightMt /
+            (track.resistance.medium * (hasImprovedSuspension ? 0.75 : 1))) *
+            (hasEngineAccelerator
+              ? tank.type === 'light' || tank.type === 'medium'
+                ? 1.05
+                : 1.07
+              : 1)}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On soft terrain">
-          {engine.power / weightMt / track.resistance.soft}
+          {(engine.power /
+            weightMt /
+            (track.resistance.soft * (hasImprovedSuspension ? 0.75 : 1))) *
+            (hasEngineAccelerator
+              ? tank.type === 'light' || tank.type === 'medium'
+                ? 1.05
+                : 1.07
+              : 1)}
         </InfoWithDelta>
-        <InfoWithDelta decimals={1} name="Weight" unit="mt">
+        <InfoWithDelta
+          decimals={1}
+          name="Weight"
+          unit="mt"
+          deltaType="lowerIsBetter"
+        >
           {weightMt}
         </InfoWithDelta>
         <Info name="Effective traverse speed" unit="°/s" />
@@ -302,19 +443,22 @@ export function Characteristics() {
           {(engine.power / stockEngine.power) *
             track.traverseSpeed *
             (track.resistance.hard / track.resistance.hard) *
-            (stockWeight / weight)}
+            (stockWeight / weight) *
+            (hasImprovedControl ? 1.1 : 1)}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On medium terrain">
           {(engine.power / stockEngine.power) *
             track.traverseSpeed *
             (track.resistance.hard / track.resistance.medium) *
-            (stockWeight / weight)}
+            (stockWeight / weight) *
+            (hasImprovedControl ? 1.1 : 1)}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On soft terrain">
           {(engine.power / stockEngine.power) *
             track.traverseSpeed *
             (track.resistance.hard / track.resistance.soft) *
-            (stockWeight / weight)}
+            (stockWeight / weight) *
+            (hasImprovedControl ? 1.1 : 1)}
         </InfoWithDelta>
       </Flex>
     </Flex>

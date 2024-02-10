@@ -12,6 +12,7 @@ export interface InfoProps {
   delta?: number;
   decimals?: number;
   prefix?: string;
+  deltaType?: 'higherIsBetter' | 'lowerIsBetter';
 }
 
 export function Info({
@@ -23,6 +24,7 @@ export function Info({
   delta,
   decimals,
   prefix,
+  deltaType = 'higherIsBetter',
 }: InfoProps) {
   return (
     <Flex
@@ -58,12 +60,24 @@ export function Info({
         <Flex align="center" gap="1">
           {delta !== undefined && delta !== 0 && (
             <>
-              <Text color={delta > 0 ? 'green' : 'tomato'}>
+              <Text
+                color={
+                  delta * (deltaType === 'lowerIsBetter' ? -1 : 1) > 0
+                    ? 'green'
+                    : 'tomato'
+                }
+              >
                 {decimals !== undefined
                   ? Math.abs(delta).toFixed(decimals)
                   : Math.abs(delta)}
               </Text>
-              <Text color={delta > 0 ? 'green' : 'tomato'}>
+              <Text
+                color={
+                  delta * (deltaType === 'lowerIsBetter' ? -1 : 1) > 0
+                    ? 'green'
+                    : 'tomato'
+                }
+              >
                 {delta > 0 ? <CaretUpIcon /> : <CaretDownIcon />}
               </Text>
             </>
