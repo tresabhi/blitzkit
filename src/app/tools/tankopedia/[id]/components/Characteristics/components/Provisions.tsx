@@ -1,7 +1,7 @@
 import { Flex, Heading, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import { ModuleButton } from '../../../../../../../components/ModuleButton';
-import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkrieg/checkConsumableInclusivity';
+import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
 import { provisionDefinitions } from '../../../../../../../core/blitzkrieg/provisionDefinitions';
 import { useDuel } from '../../../../../../../stores/duel';
 import {

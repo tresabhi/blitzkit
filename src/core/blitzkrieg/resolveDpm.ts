@@ -1,8 +1,12 @@
 import { GunDefinition, ShellDefinition } from './tankDefinitions';
 
-export function resolveDpm(gun: GunDefinition, shell: ShellDefinition) {
+export function resolveDpm(
+  gun: GunDefinition,
+  shell: ShellDefinition,
+  hasRammer = false,
+) {
   if (gun.type === 'regular') {
-    return (shell.damage.armor / gun.reload) * 60;
+    return (shell.damage.armor / ((hasRammer ? 0.93 : 1) * gun.reload)) * 60;
   } else if (gun.type === 'autoLoader') {
     return (
       ((shell.damage.armor * gun.count) /

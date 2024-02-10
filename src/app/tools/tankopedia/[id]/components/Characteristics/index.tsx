@@ -9,6 +9,7 @@ import {
   SHELL_NAMES,
 } from '../../../../../../core/blitzkrieg/tankDefinitions';
 import { unionBoundingBox } from '../../../../../../core/blitzkrieg/unionBoundingBox';
+import { useEquipment } from '../../../../../../core/blitzkrieg/useEquipmentEquipped';
 import { useDuel } from '../../../../../../stores/duel';
 import { Info } from './components/Info';
 
@@ -40,6 +41,7 @@ export function Characteristics() {
     stockTrack.weight +
     stockTurret.weight +
     stockGun.weight;
+  const hasRammer = useEquipment(100);
 
   return (
     <Flex direction="column" gap="4" style={{ width: '100%' }}>
@@ -79,7 +81,7 @@ export function Characteristics() {
         <Heading size="5">Fire</Heading>
         <Info name="Gun type">{GUN_TYPE_NAMES[gun.type]}</Info>
         <Info name="Damage per minute" unit="hp / min">
-          {resolveDpm(gun, shell).toFixed(0)}
+          {resolveDpm(gun, shell, hasRammer).toFixed(0)}
         </Info>
         {gun.type === 'autoReloader' && (
           <>
@@ -136,7 +138,7 @@ export function Characteristics() {
           ))
         ) : (
           <Info name="Reload" unit="s">
-            {gun.reload.toFixed(2)}
+            {(gun.reload * (hasRammer ? 0.93 : 1)).toFixed(2)}
           </Info>
         )}
         <Info name="Caliber" unit="mm">
