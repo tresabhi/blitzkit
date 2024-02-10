@@ -228,6 +228,24 @@ export function Characteristics() {
         )}
         {typeof shell.penetration !== 'number' && (
           <>
+            <Info
+              delta={
+                lerp(
+                  shell.penetration[0],
+                  shell.penetration[1],
+                  penetrationDistance / 500,
+                ) - shell.penetration[0]
+              }
+              indent
+              decimals={0}
+              name={`At ${penetrationDistance}m`}
+            >
+              {lerp(
+                shell.penetration[0],
+                shell.penetration[1],
+                penetrationDistance / 500,
+              )}
+            </Info>
             <Flex align="center" gap="2" style={{ paddingLeft: 24 }}>
               <Text>Distance</Text>
               <Slider
@@ -261,24 +279,6 @@ export function Characteristics() {
                 <TextField.Slot>m</TextField.Slot>
               </TextField.Root>
             </Flex>
-            <Info
-              delta={
-                lerp(
-                  shell.penetration[0],
-                  shell.penetration[1],
-                  penetrationDistance / 500,
-                ) - shell.penetration[0]
-              }
-              indent
-              decimals={0}
-              name={`At ${penetrationDistance}m`}
-            >
-              {lerp(
-                shell.penetration[0],
-                shell.penetration[1],
-                penetrationDistance / 500,
-              )}
-            </Info>
           </>
         )}
         <InfoWithDelta name="Damage" unit="hp">
