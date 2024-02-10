@@ -8,7 +8,7 @@ export const flag = style({
   left: '0',
   top: '0',
   scale: 1.5,
-  opacity: 0.5,
+  opacity: 0.75,
 
   [`.${listing}:hover &, .${listing}:active &`]: {
     opacity: 1,
