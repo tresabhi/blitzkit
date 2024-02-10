@@ -144,7 +144,7 @@ export function Characteristics() {
       <Flex direction="column" gap="2">
         <Heading size="5">Fire</Heading>
         <Info name="Gun type">{GUN_TYPE_NAMES[gun.type]}</Info>
-        <InfoWithDelta name="Damage per minute" decimals={0} unit="hp / min">
+        <InfoWithDelta name="DPM" decimals={0} unit="hp / min">
           {resolveDpm(gun, shell, hasRammer)}
         </InfoWithDelta>
         {gun.type === 'autoReloader' && (
