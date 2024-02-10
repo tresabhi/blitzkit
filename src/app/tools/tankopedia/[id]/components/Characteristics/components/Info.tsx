@@ -1,13 +1,17 @@
+import { CaretDownIcon, CaretUpIcon } from '@radix-ui/react-icons';
 import { Flex, Text } from '@radix-ui/themes';
 import { ReactNode } from 'react';
 import { theme } from '../../../../../../../stitches.config';
 
-interface InfoProps {
+export interface InfoProps {
   name: ReactNode;
   children?: ReactNode;
   unit?: string;
   indent?: boolean;
   highlight?: boolean;
+  delta?: number;
+  decimals?: number;
+  prefix?: string;
 }
 
 export function Info({
@@ -16,6 +20,9 @@ export function Info({
   unit,
   indent = false,
   highlight,
+  delta,
+  decimals,
+  prefix,
 }: InfoProps) {
   return (
     <Flex
@@ -48,7 +55,26 @@ export function Info({
       )}
 
       {children !== undefined && (
-        <Text color={highlight ? 'amber' : undefined}>{children}</Text>
+        <Flex align="center" gap="1">
+          {delta !== undefined && delta !== 0 && (
+            <>
+              <Text color={delta > 0 ? 'green' : 'tomato'}>
+                {decimals !== undefined
+                  ? Math.abs(delta).toFixed(decimals)
+                  : Math.abs(delta)}
+              </Text>
+              <Text color={delta > 0 ? 'green' : 'tomato'}>
+                {delta > 0 ? <CaretUpIcon /> : <CaretDownIcon />}
+              </Text>
+            </>
+          )}
+          <Text color={highlight ? 'amber' : undefined}>
+            {prefix}
+            {decimals !== undefined && typeof children === 'number'
+              ? children.toFixed(decimals)
+              : children}
+          </Text>
+        </Flex>
       )}
     </Flex>
   );
