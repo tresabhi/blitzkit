@@ -40,7 +40,7 @@ export function Characteristics() {
     stockTrack.weight +
     stockTurret.weight +
     stockGun.weight;
-  const [penetrationDistance, setPenetrationDistance] = useState(0);
+  const [penetrationDistance, setPenetrationDistance] = useState(250);
   const hasRammer = useEquipment(100);
   const hasCalibratedShells = useEquipment(103);
   const hasEnhancedGunLayingDrive = useEquipment(104);
@@ -228,6 +228,14 @@ export function Characteristics() {
         )}
         {typeof shell.penetration !== 'number' && (
           <>
+            <InfoWithDelta
+              delta={shell.penetration[0]}
+              indent
+              decimals={0}
+              name="At 0m"
+            >
+              {shell.penetration[0]}
+            </InfoWithDelta>
             <Info
               delta={
                 lerp(
