@@ -52,7 +52,7 @@ const tankTypeOrder: TankType[] = ['light', 'medium', 'heavy', 'tankDestroyer'];
 const treeTypeOrder: TreeType[] = ['researchable', 'premium', 'collector'];
 
 export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
-  const tanksPerPage = compact ? 64 : 96;
+  const tanksPerPage = compact ? 16 : 96;
   const nations = use(NATIONS);
   const filters = useTankopediaPersistent((state) => state.filters);
   const sort = useTankopediaPersistent((state) => state.sort);
