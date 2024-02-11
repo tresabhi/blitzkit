@@ -2,6 +2,7 @@ import { Flex, Heading, Slider, Text, TextField } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
+import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { normalizeBoundingBox } from '../../../../../../core/blitzkrieg/normalizeBoundingBox';
@@ -33,7 +34,7 @@ export function Characteristics() {
   );
   const weight =
     tank.weight + engine.weight + track.weight + turret.weight + gun.weight;
-  const weightMt = weight / 1000;
+  const weightTons = weight / 1000;
   const stockWeight =
     tank.weight +
     stockEngine.weight +
@@ -61,6 +62,11 @@ export function Characteristics() {
       : tank.type === 'tankDestroyer'
         ? 1.07
         : 1.05
+    : 1;
+  const hasCalibratedShellsBonus = hasCalibratedShells
+    ? isExplosive(shell.type)
+      ? 1.1
+      : 1.05
     : 1;
 
   /**
@@ -158,7 +164,8 @@ export function Characteristics() {
             decimals={0}
             name="Penetration"
           >
-            {resolveNearPenetration(shell.penetration)}
+            {resolveNearPenetration(shell.penetration) *
+              hasCalibratedShellsBonus}
           </InfoWithDelta>
         )}
         {typeof shell.penetration !== 'number' && (
@@ -169,15 +176,17 @@ export function Characteristics() {
               decimals={0}
               name="At 0m"
             >
-              {shell.penetration[0]}
+              {shell.penetration[0] * hasCalibratedShellsBonus}
             </InfoWithDelta>
             <Info
               delta={
-                lerp(
+                (lerp(
                   shell.penetration[0],
                   shell.penetration[1],
                   penetrationDistance / 500,
-                ) - shell.penetration[0]
+                ) -
+                  shell.penetration[0]) *
+                hasCalibratedShellsBonus
               }
               indent
               decimals={0}
@@ -187,7 +196,7 @@ export function Characteristics() {
                 shell.penetration[0],
                 shell.penetration[1],
                 penetrationDistance / 500,
-              )}
+              ) * hasCalibratedShellsBonus}
             </Info>
             <Flex align="center" gap="2" style={{ paddingLeft: 24 }}>
               <Text>Distance</Text>
@@ -357,7 +366,7 @@ export function Characteristics() {
         <Info name="Power to weight ratio" unit="hp/mt" />
         <InfoWithDelta decimals={1} indent name="On hard terrain">
           {(engine.power /
-            weightMt /
+            weightTons /
             (track.resistance.hard * (hasImprovedSuspension ? 0.75 : 1))) *
             (hasEngineAccelerator
               ? tank.type === 'light' || tank.type === 'medium'
@@ -367,7 +376,7 @@ export function Characteristics() {
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On medium terrain">
           {(engine.power /
-            weightMt /
+            weightTons /
             (track.resistance.medium * (hasImprovedSuspension ? 0.75 : 1))) *
             (hasEngineAccelerator
               ? tank.type === 'light' || tank.type === 'medium'
@@ -377,7 +386,7 @@ export function Characteristics() {
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On soft terrain">
           {(engine.power /
-            weightMt /
+            weightTons /
             (track.resistance.soft * (hasImprovedSuspension ? 0.75 : 1))) *
             (hasEngineAccelerator
               ? tank.type === 'light' || tank.type === 'medium'
@@ -391,7 +400,7 @@ export function Characteristics() {
           unit="mt"
           deltaType="lowerIsBetter"
         >
-          {weightMt}
+          {weightTons}
         </InfoWithDelta>
         <Info name="Effective traverse speed" unit="°/s" />
         <InfoWithDelta decimals={1} indent name="On hard terrain">
