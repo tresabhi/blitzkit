@@ -54,14 +54,15 @@ export async function equipmentIcons(production: boolean) {
 
         if (configPath.startsWith('Gfx/Lobby')) {
           const configPathWebp = configPath.replace('.txt', '');
-          const buffer = await readDVPLFile(
-            `${DATA}/${configPathWebp}.packed.webp.dvpl`,
+          const image = sharp(
+            await readDVPLFile(`${DATA}/${configPathWebp}.packed.webp.dvpl`),
           );
+          const content = (await image.trim().toBuffer()).toString('base64');
 
           changes.push({
             path: `icons/equipment/${optionalDevice.id}.webp`,
             encoding: 'base64',
-            content: buffer.toString('base64'),
+            content,
           });
         } else {
           const config = await readStringDVPL(`${DATA}/${configPath}.dvpl`);

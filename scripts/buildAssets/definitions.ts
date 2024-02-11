@@ -307,7 +307,7 @@ const missingStrings: Record<string, string> = {
 };
 
 export async function definitions(production: boolean) {
-  console.log('Building tank definitions...');
+  console.log('Building definitions...');
 
   const tankDefinitions: TankDefinitions = {};
   const modelDefinitions: ModelDefinitions = {};

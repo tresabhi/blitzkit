@@ -1,6 +1,5 @@
-import { Octokit } from '@octokit/rest';
 import { rm, writeFile } from 'fs/promises';
-import { argv, env } from 'process';
+import { argv } from 'process';
 import {
   RatingsInfo,
   RatingsNeighbors,
@@ -115,7 +114,6 @@ for (let index = 0; index < PLAYERS; index++) {
 const leaderboardJSON = JSON.stringify(leaderboard);
 
 if (publish) {
-  const octokit = new Octokit({ auth: env.GH_TOKEN });
   const info = await patientFetchJSON<RatingsInfo & { detail: undefined }>(
     `https://${server}.wotblitz.com/en/api/rating-leaderboards/season/`,
   );
