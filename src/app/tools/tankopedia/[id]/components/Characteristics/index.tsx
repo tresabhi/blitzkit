@@ -363,7 +363,7 @@ export function Characteristics() {
         <InfoWithDelta decimals={0} name="Power" unit="hp">
           {engine.power}
         </InfoWithDelta>
-        <Info name="Power to weight ratio" unit="hp/mt" />
+        <Info name="Power to weight ratio" unit="hp/tn" />
         <InfoWithDelta decimals={1} indent name="On hard terrain">
           {(engine.power /
             weightTons /
@@ -397,7 +397,7 @@ export function Characteristics() {
         <InfoWithDelta
           decimals={1}
           name="Weight"
-          unit="mt"
+          unit="tn"
           deltaType="lowerIsBetter"
         >
           {weightTons}
