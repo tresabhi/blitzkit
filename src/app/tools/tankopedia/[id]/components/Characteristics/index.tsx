@@ -55,6 +55,13 @@ export function Characteristics() {
   const hasImprovedVerticalStabilizer = useEquipment(122);
   const hasImprovedSuspension = useEquipment(123);
   const penetrationDistanceInput = useRef<HTMLInputElement>(null);
+  const camouflageNetBonus = hasCamouflageNet
+    ? tank.type === 'heavy'
+      ? 1.03
+      : tank.type === 'tankDestroyer'
+        ? 1.07
+        : 1.05
+    : 1;
 
   /**
    * TODO:
@@ -429,53 +436,29 @@ export function Characteristics() {
               : 1)}
         </InfoWithDelta>
         <Info name="Camouflage" unit="%" />
-        <InfoWithDelta
-          indent
-          name="Still"
-          decimals={2}
-          deltaType="lowerIsBetter"
-        >
+        <InfoWithDelta indent name="Still" decimals={2}>
+          {tank.camouflage.still * camouflageNetBonus * 100}
+        </InfoWithDelta>
+        <InfoWithDelta indent name="Moving" decimals={2}>
+          {tank.camouflage.moving * camouflageNetBonus * 100}
+        </InfoWithDelta>
+        <InfoWithDelta indent name="Shooting still" decimals={2}>
           {tank.camouflage.still *
-            100 *
-            (hasCamouflageNet
-              ? tank.type === 'heavy'
-                ? 1.03
-                : tank.type === 'tankDestroyer'
-                  ? 1.07
-                  : 1.05
-              : 1)}
+            gun.camouflageLoss *
+            camouflageNetBonus *
+            100}
         </InfoWithDelta>
-        <InfoWithDelta
-          indent
-          name="Moving"
-          decimals={2}
-          deltaType="lowerIsBetter"
-        >
-          {tank.camouflage.moving * 100}
+        <InfoWithDelta indent name="Shooting on move" decimals={2}>
+          {tank.camouflage.moving *
+            gun.camouflageLoss *
+            camouflageNetBonus *
+            100}
         </InfoWithDelta>
-        <InfoWithDelta
-          indent
-          name="Shooting still"
-          decimals={2}
-          deltaType="lowerIsBetter"
-        >
-          {tank.camouflage.still * gun.camouflageLoss * 100}
-        </InfoWithDelta>
-        <InfoWithDelta
-          indent
-          name="Shooting on move"
-          decimals={2}
-          deltaType="lowerIsBetter"
-        >
-          {tank.camouflage.moving * gun.camouflageLoss * 100}
-        </InfoWithDelta>
-        <InfoWithDelta
-          indent
-          name="On fire"
-          decimals={2}
-          deltaType="lowerIsBetter"
-        >
-          {tank.camouflage.onFire * tank.camouflage.still * 100}
+        <InfoWithDelta indent name="On fire" decimals={2}>
+          {tank.camouflage.onFire *
+            tank.camouflage.still *
+            camouflageNetBonus *
+            100}
         </InfoWithDelta>
         <Info name="Size" unit="m">
           {size[0].toFixed(2)} x {size[2].toFixed(2)} x {size[1].toFixed(2)}
