@@ -9,7 +9,8 @@ import { normalizeBoundingBox } from '../../../../../../core/blitzkrieg/normaliz
 import { resolveDpm } from '../../../../../../core/blitzkrieg/resolveDpm';
 import { GUN_TYPE_NAMES } from '../../../../../../core/blitzkrieg/tankDefinitions';
 import { unionBoundingBox } from '../../../../../../core/blitzkrieg/unionBoundingBox';
-import { useEquipment } from '../../../../../../core/blitzkrieg/useEquipmentEquipped';
+import { useConsumable } from '../../../../../../core/blitzkrieg/useConsumable';
+import { useEquipment } from '../../../../../../core/blitzkrieg/useEquipment';
 import { useDuel } from '../../../../../../stores/duel';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
@@ -56,6 +57,16 @@ export function Characteristics() {
   const hasImprovedVerticalStabilizer = useEquipment(122);
   const hasImprovedSuspension = useEquipment(123);
   const penetrationDistanceInput = useRef<HTMLInputElement>(null);
+  const hasEnginePowerBoost = useConsumable(14);
+  const hasImprovedEnginePowerBoost = useConsumable(27);
+  const hasAdrenaline = useConsumable(18);
+  const hasTungsten = useConsumable(45);
+  const hasReticleCalibration = useConsumable(28);
+  const hasShellReloadBoost = useConsumable(29);
+  const shellReloadBoostBonus = hasShellReloadBoost ? 0.7 : 1;
+  const adrenalineBonus = hasAdrenaline && gun.type === 'regular' ? 0.8 : 1;
+  const enginePowerBoostBonus =
+    (hasEnginePowerBoost ? 1.2 : 1) * (hasImprovedEnginePowerBoost ? 1.4 : 1);
   const camouflageNetBonus = hasCamouflageNet
     ? tank.type === 'heavy'
       ? 1.03
@@ -73,11 +84,12 @@ export function Characteristics() {
       ? 1.05
       : 1.07
     : 1;
-
-  /**
-   * TODO:
-   * - Improved Ventilation
-   */
+  const resolvedEnginePower =
+    engine.power * engineAcceleratorBonus * enginePowerBoostBonus;
+  const reticleCalibrationBonus = hasReticleCalibration ? 0.6 : 1;
+  const improvedEnginePowerBoostTraverseBonus = hasImprovedEnginePowerBoost
+    ? 1.05
+    : 1;
 
   useEffect(() => {
     if (penetrationDistanceInput.current) {
@@ -91,7 +103,7 @@ export function Characteristics() {
         <Heading size="5">Fire</Heading>
         <Info name="Gun type">{GUN_TYPE_NAMES[gun.type]}</Info>
         <InfoWithDelta name="DPM" decimals={0} unit="hp / min">
-          {resolveDpm(gun, shell, hasRammer)}
+          {resolveDpm(gun, shell, hasRammer, hasShellReloadBoost)}
         </InfoWithDelta>
         {gun.type === 'autoReloader' && (
           <>
@@ -154,7 +166,18 @@ export function Characteristics() {
             unit="s"
             deltaType="lowerIsBetter"
           >
-            {gun.reload * (hasRammer ? 0.93 : 1)}
+            {gun.reload * (hasRammer ? 0.93 : 1) * adrenalineBonus}
+          </InfoWithDelta>
+        )}
+        {gun.type === 'autoLoader' && (
+          <InfoWithDelta
+            indent
+            decimals={2}
+            name="Inter-clip reload"
+            unit="s"
+            deltaType="lowerIsBetter"
+          >
+            {gun.interClip * shellReloadBoostBonus}
           </InfoWithDelta>
         )}
         <InfoWithDelta name="Caliber" decimals={0} unit="mm">
@@ -237,8 +260,8 @@ export function Characteristics() {
             </Flex>
           </>
         )}
-        <InfoWithDelta name="Damage" unit="hp">
-          {shell.damage.armor}
+        <InfoWithDelta name="Damage" unit="hp" decimals={0}>
+          {shell.damage.armor * (hasTungsten ? 1.15 : 1)}
         </InfoWithDelta>
         <InfoWithDelta name="Module damage" unit="hp">
           {shell.damage.module}
@@ -252,7 +275,9 @@ export function Characteristics() {
           unit="s"
           deltaType="lowerIsBetter"
         >
-          {gun.aimTime * (hasEnhancedGunLayingDrive ? 0.9 : 1)}
+          {gun.aimTime *
+            (hasEnhancedGunLayingDrive ? 0.9 : 1) *
+            reticleCalibrationBonus}
         </InfoWithDelta>
         <Info name="Dispersion at 100m" />
         <InfoWithDelta
@@ -262,7 +287,9 @@ export function Characteristics() {
           unit="m"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.base * (hasRefinedGun ? 0.9 : 1)}
+          {gun.dispersion.base *
+            (hasRefinedGun ? 0.9 : 1) *
+            reticleCalibrationBonus}
         </InfoWithDelta>
         <InfoWithDelta
           prefix="+ "
@@ -272,7 +299,9 @@ export function Characteristics() {
           unit="s"
           deltaType="lowerIsBetter"
         >
-          {track.dispersion.move * (hasVerticalStabilizer ? 0.85 : 1)}
+          {track.dispersion.move *
+            (hasVerticalStabilizer ? 0.85 : 1) *
+            reticleCalibrationBonus}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={3}
@@ -282,7 +311,9 @@ export function Characteristics() {
           unit="°"
           deltaType="lowerIsBetter"
         >
-          {track.dispersion.traverse * (hasVerticalStabilizer ? 0.85 : 1)}
+          {track.dispersion.traverse *
+            (hasVerticalStabilizer ? 0.85 : 1) *
+            reticleCalibrationBonus}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={0}
@@ -292,7 +323,9 @@ export function Characteristics() {
           unit="°"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.traverse * (hasVerticalStabilizer ? 0.85 : 1)}
+          {gun.dispersion.traverse *
+            (hasVerticalStabilizer ? 0.85 : 1) *
+            reticleCalibrationBonus}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={3}
@@ -302,7 +335,7 @@ export function Characteristics() {
           unit="m"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.shot}
+          {gun.dispersion.shot * reticleCalibrationBonus}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={3}
@@ -312,7 +345,7 @@ export function Characteristics() {
           unit="scalar"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.damaged}
+          {gun.dispersion.damaged * reticleCalibrationBonus}
         </InfoWithDelta>
         <Info name="Gun flexibility" unit="°" />
         <InfoWithDelta decimals={1} indent name="Depression">
@@ -359,28 +392,28 @@ export function Characteristics() {
         <Heading size="5">Maneuverability</Heading>
         <Info name="Speed" unit="km/hr" />
         <InfoWithDelta decimals={0} indent name="Forwards">
-          {tank.speed.forwards}
+          {tank.speed.forwards + (hasImprovedEnginePowerBoost ? 5 : 0)}
         </InfoWithDelta>
         <InfoWithDelta decimals={0} indent name="Backwards">
-          {tank.speed.backwards}
+          {tank.speed.backwards + (hasImprovedEnginePowerBoost ? 10 : 0)}
         </InfoWithDelta>
         <InfoWithDelta decimals={0} name="Power" unit="hp">
-          {engine.power * engineAcceleratorBonus}
+          {resolvedEnginePower}
         </InfoWithDelta>
         <Info name="Power to weight ratio" unit="hp/tn" />
         <InfoWithDelta decimals={1} indent name="On hard terrain">
-          {(engine.power * engineAcceleratorBonus) /
+          {resolvedEnginePower /
             weightTons /
             (track.resistance.hard * (hasImprovedSuspension ? 0.75 : 1))}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On medium terrain">
-          {((engine.power * engineAcceleratorBonus) /
+          {(resolvedEnginePower /
             weightTons /
             (track.resistance.medium * (hasImprovedSuspension ? 0.75 : 1))) *
             engineAcceleratorBonus}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On soft terrain">
-          {((engine.power * engineAcceleratorBonus) /
+          {(resolvedEnginePower /
             weightTons /
             (track.resistance.soft * (hasImprovedSuspension ? 0.75 : 1))) *
             engineAcceleratorBonus}
@@ -395,28 +428,28 @@ export function Characteristics() {
         </InfoWithDelta>
         <Info name="Effective traverse speed" unit="°/s" />
         <InfoWithDelta decimals={1} indent name="On hard terrain">
-          {(engine.power / stockEngine.power) *
-            engineAcceleratorBonus *
+          {(resolvedEnginePower / stockEngine.power) *
             track.traverseSpeed *
             (track.resistance.hard / track.resistance.hard) *
             (stockWeight / weight) *
-            (hasImprovedControl ? 1.1 : 1)}
+            (hasImprovedControl ? 1.1 : 1) *
+            improvedEnginePowerBoostTraverseBonus}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On medium terrain">
-          {(engine.power / stockEngine.power) *
-            engineAcceleratorBonus *
+          {(resolvedEnginePower / stockEngine.power) *
             track.traverseSpeed *
             (track.resistance.hard / track.resistance.medium) *
             (stockWeight / weight) *
-            (hasImprovedControl ? 1.1 : 1)}
+            (hasImprovedControl ? 1.1 : 1) *
+            improvedEnginePowerBoostTraverseBonus}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On soft terrain">
-          {(engine.power / stockEngine.power) *
-            engineAcceleratorBonus *
+          {(resolvedEnginePower / stockEngine.power) *
             track.traverseSpeed *
             (track.resistance.hard / track.resistance.soft) *
             (stockWeight / weight) *
-            (hasImprovedControl ? 1.1 : 1)}
+            (hasImprovedControl ? 1.1 : 1) *
+            improvedEnginePowerBoostTraverseBonus}
         </InfoWithDelta>
       </Flex>
 

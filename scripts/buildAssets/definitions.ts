@@ -849,26 +849,6 @@ export async function definitions(production: boolean) {
         });
       }
     }
-
-    Object.entries({
-      ...consumable.script,
-      ...consumable.script.bonusValues,
-    }).forEach(([effectName, effect]) => {
-      if (
-        !consumableProvisionEffectSuffixes.some((suffix) =>
-          effectName.endsWith(suffix),
-        )
-      ) {
-        return;
-      }
-
-      if (!consumableDefinitions[consumable.id].effects) {
-        consumableDefinitions[consumable.id].effects = {};
-      }
-
-      consumableDefinitions[consumable.id].effects![effectName] =
-        effect as number;
-    });
   });
 
   Object.values(provisions.root).forEach((provision) => {

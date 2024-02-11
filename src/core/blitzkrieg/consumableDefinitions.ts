@@ -25,7 +25,6 @@ export type TankFilterDefinition =
 export interface ConsumableEntry {
   id: number;
   name: string;
-  effects?: Record<string, number>;
   include: TankFilterDefinition[];
   exclude?: TankFilterDefinition[];
 }
@@ -37,3 +36,5 @@ export interface ConsumableDefinitions {
 export const consumableDefinitions = fetchCdonLz4<ConsumableDefinitions>(
   asset('definitions/consumables.cdon.lz4'),
 );
+
+consumableDefinitions.then(console.log);

@@ -4,13 +4,15 @@ export function resolveDpm(
   gun: GunDefinition,
   shell: ShellDefinition,
   hasRammer = false,
+  hasShellReloadBoost = false,
 ) {
   if (gun.type === 'regular') {
     return (shell.damage.armor / ((hasRammer ? 0.93 : 1) * gun.reload)) * 60;
   } else if (gun.type === 'autoLoader') {
     return (
       ((shell.damage.armor * gun.count) /
-        (gun.reload + (gun.count - 1) * gun.interClip)) *
+        (gun.reload +
+          (gun.count - 1) * gun.interClip * (hasShellReloadBoost ? 0.7 : 1))) *
       60
     );
   } else {
