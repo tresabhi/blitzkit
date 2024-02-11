@@ -63,10 +63,15 @@ export function Characteristics() {
         ? 1.07
         : 1.05
     : 1;
-  const hasCalibratedShellsBonus = hasCalibratedShells
+  const calibratedShellsBonus = hasCalibratedShells
     ? isExplosive(shell.type)
       ? 1.1
       : 1.05
+    : 1;
+  const engineAcceleratorBonus = hasEngineAccelerator
+    ? tank.type === 'light' || tank.type === 'medium'
+      ? 1.05
+      : 1.07
     : 1;
 
   /**
@@ -164,8 +169,7 @@ export function Characteristics() {
             decimals={0}
             name="Penetration"
           >
-            {resolveNearPenetration(shell.penetration) *
-              hasCalibratedShellsBonus}
+            {resolveNearPenetration(shell.penetration) * calibratedShellsBonus}
           </InfoWithDelta>
         )}
         {typeof shell.penetration !== 'number' && (
@@ -176,7 +180,7 @@ export function Characteristics() {
               decimals={0}
               name="At 0m"
             >
-              {shell.penetration[0] * hasCalibratedShellsBonus}
+              {shell.penetration[0] * calibratedShellsBonus}
             </InfoWithDelta>
             <Info
               delta={
@@ -186,7 +190,7 @@ export function Characteristics() {
                   penetrationDistance / 500,
                 ) -
                   shell.penetration[0]) *
-                hasCalibratedShellsBonus
+                calibratedShellsBonus
               }
               indent
               decimals={0}
@@ -196,7 +200,7 @@ export function Characteristics() {
                 shell.penetration[0],
                 shell.penetration[1],
                 penetrationDistance / 500,
-              ) * hasCalibratedShellsBonus}
+              ) * calibratedShellsBonus}
             </Info>
             <Flex align="center" gap="2" style={{ paddingLeft: 24 }}>
               <Text>Distance</Text>
@@ -361,38 +365,25 @@ export function Characteristics() {
           {tank.speed.backwards}
         </InfoWithDelta>
         <InfoWithDelta decimals={0} name="Power" unit="hp">
-          {engine.power}
+          {engine.power * engineAcceleratorBonus}
         </InfoWithDelta>
         <Info name="Power to weight ratio" unit="hp/tn" />
         <InfoWithDelta decimals={1} indent name="On hard terrain">
-          {(engine.power /
+          {(engine.power * engineAcceleratorBonus) /
             weightTons /
-            (track.resistance.hard * (hasImprovedSuspension ? 0.75 : 1))) *
-            (hasEngineAccelerator
-              ? tank.type === 'light' || tank.type === 'medium'
-                ? 1.05
-                : 1.07
-              : 1)}
+            (track.resistance.hard * (hasImprovedSuspension ? 0.75 : 1))}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On medium terrain">
-          {(engine.power /
+          {((engine.power * engineAcceleratorBonus) /
             weightTons /
             (track.resistance.medium * (hasImprovedSuspension ? 0.75 : 1))) *
-            (hasEngineAccelerator
-              ? tank.type === 'light' || tank.type === 'medium'
-                ? 1.05
-                : 1.07
-              : 1)}
+            engineAcceleratorBonus}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On soft terrain">
-          {(engine.power /
+          {((engine.power * engineAcceleratorBonus) /
             weightTons /
             (track.resistance.soft * (hasImprovedSuspension ? 0.75 : 1))) *
-            (hasEngineAccelerator
-              ? tank.type === 'light' || tank.type === 'medium'
-                ? 1.05
-                : 1.07
-              : 1)}
+            engineAcceleratorBonus}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={1}
@@ -405,6 +396,7 @@ export function Characteristics() {
         <Info name="Effective traverse speed" unit="°/s" />
         <InfoWithDelta decimals={1} indent name="On hard terrain">
           {(engine.power / stockEngine.power) *
+            engineAcceleratorBonus *
             track.traverseSpeed *
             (track.resistance.hard / track.resistance.hard) *
             (stockWeight / weight) *
@@ -412,6 +404,7 @@ export function Characteristics() {
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On medium terrain">
           {(engine.power / stockEngine.power) *
+            engineAcceleratorBonus *
             track.traverseSpeed *
             (track.resistance.hard / track.resistance.medium) *
             (stockWeight / weight) *
@@ -419,6 +412,7 @@ export function Characteristics() {
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On soft terrain">
           {(engine.power / stockEngine.power) *
+            engineAcceleratorBonus *
             track.traverseSpeed *
             (track.resistance.hard / track.resistance.soft) *
             (stockWeight / weight) *
