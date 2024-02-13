@@ -183,28 +183,11 @@ export function Characteristics() {
         <InfoWithDelta name="Caliber" decimals={0} unit="mm">
           {shell.caliber}
         </InfoWithDelta>
-        {typeof shell.penetration !== 'number' && (
-          <Info name="Penetration" unit="mm" />
-        )}
-        {typeof shell.penetration === 'number' && (
-          <InfoWithDelta
-            indent={typeof shell.penetration !== 'number'}
-            decimals={0}
-            name="Penetration"
-          >
-            {resolveNearPenetration(shell.penetration) * calibratedShellsBonus}
-          </InfoWithDelta>
-        )}
+        <InfoWithDelta decimals={0} name="Penetration" unit="mm">
+          {resolveNearPenetration(shell.penetration) * calibratedShellsBonus}
+        </InfoWithDelta>
         {typeof shell.penetration !== 'number' && (
           <>
-            <InfoWithDelta
-              delta={shell.penetration[0]}
-              indent
-              decimals={0}
-              name="At 0m"
-            >
-              {shell.penetration[0] * calibratedShellsBonus}
-            </InfoWithDelta>
             <Info
               delta={
                 (lerp(
