@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useDelta } from '../../../../../../../hooks/useDelta';
 import { Info, InfoProps } from './Info';
 
 interface InfoWithDeltaProps extends InfoProps {
@@ -6,14 +6,10 @@ interface InfoWithDeltaProps extends InfoProps {
 }
 
 export function InfoWithDelta({ children, ...props }: InfoWithDeltaProps) {
-  const lastValue = useRef(children);
-
-  useEffect(() => {
-    lastValue.current = children;
-  });
+  const delta = useDelta(children);
 
   return (
-    <Info {...props} delta={children - lastValue.current}>
+    <Info {...props} delta={delta}>
       {children}
     </Info>
   );

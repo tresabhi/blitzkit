@@ -25,6 +25,8 @@ export type TankFilterDefinition =
 export interface ConsumableEntry {
   id: number;
   name: string;
+  cooldown: number;
+  duration?: number;
   include: TankFilterDefinition[];
   exclude?: TankFilterDefinition[];
 }

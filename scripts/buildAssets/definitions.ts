@@ -254,8 +254,7 @@ interface OptionalDeviceSlots {
 interface OptionalDeviceSlotRow {
   [key: string]: { device0: string; device1: string };
 }
-
-export interface ConsumablesProvisionsCommon {
+export interface ConsumablesCommon {
   [key: string]: {
     id: number;
     userString: string;
@@ -270,8 +269,28 @@ export interface ConsumablesProvisionsCommon {
     script: {
       '#text': string;
       automatic?: boolean;
+      cooldown: number;
       duration?: number;
-      cooldown?: number;
+      shotEffect?: string;
+      bonusValues?: { [key: string]: number };
+    } & Record<string, string>;
+  };
+}
+export interface ProvisionsCommon {
+  [key: string]: {
+    id: number;
+    userString: string;
+    description: string;
+    icon: string;
+    category: string;
+    tags: string;
+    vehicleFilter?: {
+      include: { vehicle: ConsumablesVehicleFilter; nations?: string };
+      exclude?: { vehicle: ConsumablesVehicleFilter; nations?: string };
+    };
+    script: {
+      '#text': string;
+      automatic?: boolean;
       shotEffect?: string;
       bonusValues?: { [key: string]: number };
     } & Record<string, string>;
@@ -337,10 +356,10 @@ export async function definitions(production: boolean) {
   const optionalDeviceSlots = await readXMLDVPL<{
     root: OptionalDeviceSlots;
   }>(`${DATA}/${POI.optionalDeviceSlots}.dvpl`);
-  const consumables = await readXMLDVPL<{ root: ConsumablesProvisionsCommon }>(
+  const consumables = await readXMLDVPL<{ root: ConsumablesCommon }>(
     `${DATA}/${POI.consumablesCommon}.dvpl`,
   );
-  const provisions = await readXMLDVPL<{ root: ConsumablesProvisionsCommon }>(
+  const provisions = await readXMLDVPL<{ root: ProvisionsCommon }>(
     `${DATA}/${POI.provisionsCommon}.dvpl`,
   );
 
@@ -793,6 +812,8 @@ export async function definitions(production: boolean) {
   Object.values(consumables.root).forEach((consumable) => {
     consumableDefinitions[consumable.id] = {
       id: consumable.id,
+      cooldown: consumable.script.cooldown,
+      duration: consumable.script.duration,
       name:
         strings[consumable.userString] ??
         missingStrings[consumable.userString] ??

@@ -18,19 +18,17 @@ export function TankComponentButton({
   last = false,
   rowChild,
   discriminator,
-  disabled,
   children,
   ...props
 }: TankComponentButtonProps) {
   return (
     <Button
-      disabled={disabled}
       radius="medium"
       color={selected ? undefined : 'gray'}
       variant={selected ? 'surface' : 'soft'}
       style={{
         padding: 0,
-        width: 48,
+        minWidth: 48,
         height: 40,
         position: 'relative',
         borderTopLeftRadius: first ? undefined : 0,
@@ -39,10 +37,8 @@ export function TankComponentButton({
         borderBottomRightRadius: last ? undefined : 0,
         margin: rowChild ? -0.5 : 'unset',
       }}
-      {...(props as unknown as ComponentProps<typeof Button>)}
+      {...props}
     >
-      {children}
-
       {discriminator !== undefined && (
         <Text
           size="1"
@@ -59,6 +55,8 @@ export function TankComponentButton({
           {discriminator}
         </Text>
       )}
+
+      {children}
     </Button>
   );
 }

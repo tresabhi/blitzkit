@@ -3,6 +3,7 @@ import { use } from 'react';
 import { ConsumableButton } from '../../../../../../../components/ModuleButtons/ConsumableButton';
 import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
 import { consumableDefinitions } from '../../../../../../../core/blitzkrieg/consumableDefinitions';
+import { useEquipment } from '../../../../../../../core/blitzkrieg/useEquipment';
 import { useDuel } from '../../../../../../../stores/duel';
 import {
   mutateTankopediaTemporary,
@@ -22,6 +23,8 @@ export function Consumables() {
         protagonist.gun,
       ),
   );
+  const hasConsumableDeliverySystem = useEquipment(118);
+  const hasHighEndConsumables = useEquipment(101);
 
   return (
     <ConfigurationChildWrapper>
@@ -33,6 +36,14 @@ export function Consumables() {
 
           return (
             <ConsumableButton
+              duration={
+                typeof consumable.duration === 'number'
+                  ? consumable.duration * (hasHighEndConsumables ? 0.7 : 1)
+                  : undefined
+              }
+              cooldown={
+                consumable.cooldown * (hasConsumableDeliverySystem ? 0.85 : 1)
+              }
               key={consumable.id}
               first={index === 0}
               last={index === consumablesList.length - 1}
