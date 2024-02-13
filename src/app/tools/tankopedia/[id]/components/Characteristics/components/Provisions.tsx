@@ -1,6 +1,6 @@
 import { Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
-import { ModuleButton } from '../../../../../../../components/ModuleButton';
+import { ProvisionButton } from '../../../../../../../components/ModuleButtons/ProvisionButton';
 import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
 import { provisionDefinitions } from '../../../../../../../core/blitzkrieg/provisionDefinitions';
 import { useDuel } from '../../../../../../../stores/duel';
@@ -32,12 +32,11 @@ export function Provisions() {
           const selected = provisions.includes(provision.id);
 
           return (
-            <ModuleButton
+            <ProvisionButton
               key={provision.id}
               first={index === 0}
               last={index === provisionsList.length - 1}
               rowChild
-              type="provision"
               disabled={
                 protagonist.tank.provisions === provisions.length && !selected
               }

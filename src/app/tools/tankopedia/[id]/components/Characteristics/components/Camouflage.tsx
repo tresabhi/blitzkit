@@ -1,5 +1,5 @@
 import { Heading } from '@radix-ui/themes';
-import { ModuleButton } from '../../../../../../../components/ModuleButton';
+import { CamouflageButton } from '../../../../../../../components/ModuleButtons/CamouflageButton';
 import {
   mutateTankopediaTemporary,
   useTankopediaTemporary,
@@ -13,11 +13,10 @@ export function Camouflage() {
     <ConfigurationChildWrapper>
       <Heading size="4">Camouflage</Heading>
 
-      <ModuleButton
+      <CamouflageButton
         selected={camouflage}
         first
         last
-        type="camouflage"
         onClick={() => {
           mutateTankopediaTemporary((draft) => {
             draft.camouflage = !camouflage;

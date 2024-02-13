@@ -1,6 +1,6 @@
 import { Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
-import { ModuleButton } from '../../../../../../../components/ModuleButton';
+import { EquipmentButton } from '../../../../../../../components/ModuleButtons/EquipmentButton';
 import { equipmentDefinitions } from '../../../../../../../core/blitzkrieg/equipmentDefinitions';
 import { useDuel } from '../../../../../../../stores/duel';
 import {
@@ -27,8 +27,7 @@ export function Equipments() {
           <Flex gap="2" key={rowIndex}>
             {equipmentRow.map((equipment, columnIndex) => (
               <Flex key={columnIndex}>
-                <ModuleButton
-                  type="equipment"
+                <EquipmentButton
                   equipment={equipment[0]}
                   first
                   rowChild
@@ -43,8 +42,7 @@ export function Equipments() {
                     });
                   }}
                 />
-                <ModuleButton
-                  type="equipment"
+                <EquipmentButton
                   equipment={equipment[1]}
                   last
                   rowChild

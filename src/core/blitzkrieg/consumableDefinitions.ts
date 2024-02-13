@@ -36,5 +36,3 @@ export interface ConsumableDefinitions {
 export const consumableDefinitions = fetchCdonLz4<ConsumableDefinitions>(
   asset('definitions/consumables.cdon.lz4'),
 );
-
-consumableDefinitions.then(console.log);

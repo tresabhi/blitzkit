@@ -10,7 +10,8 @@ import {
   Tooltip,
 } from '@radix-ui/themes';
 import { useState } from 'react';
-import { ModuleButton } from '../../../../../../components/ModuleButton';
+import { ModuleButton } from '../../../../../../components/ModuleButtons/ModuleButton';
+import { ShellButton } from '../../../../../../components/ModuleButtons/ShellButton';
 import { SmallTankIcon } from '../../../../../../components/SmallTankIcon';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import {
@@ -39,9 +40,8 @@ export function AntagonistBar() {
         <Flex>
           {antagonist.gun.shells.map((shell, index) => {
             return (
-              <ModuleButton
+              <ShellButton
                 selected={antagonist.shell.id === shell.id}
-                type="shell"
                 shell={shell.icon}
                 rowChild
                 first={index === 0}
@@ -155,7 +155,6 @@ export function AntagonistBar() {
                                   discriminator={
                                     TIER_ROMAN_NUMERALS[turret.tier]
                                   }
-                                  type="module"
                                   module="turret"
                                 />
                               </Tooltip>
@@ -178,7 +177,6 @@ export function AntagonistBar() {
                                   }}
                                   selected={antagonist.gun.id === gun.id}
                                   discriminator={TIER_ROMAN_NUMERALS[gun.tier]}
-                                  type="module"
                                   module="gun"
                                 />
                               </Tooltip>

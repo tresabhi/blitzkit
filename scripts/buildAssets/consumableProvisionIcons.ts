@@ -63,9 +63,10 @@ export async function consumableProvisionIcons(production: boolean) {
         .replace('.txt', '');
 
       if (configPath.startsWith('Gfx/Shared')) {
-        const content = (
-          await readDVPLFile(`${DATA}/${configPath}.packed.webp.dvpl`)
-        ).toString('base64');
+        const image = sharp(
+          await readDVPLFile(`${DATA}/${configPath}.packed.webp.dvpl`),
+        );
+        const content = (await image.trim().toBuffer()).toString('base64');
 
         changes.push({
           path: `icons/consumables/${consumable.id}.webp`,
@@ -119,9 +120,10 @@ export async function consumableProvisionIcons(production: boolean) {
         .replace('.txt', '');
 
       if (configPath.startsWith('Gfx/Shared')) {
-        const content = (
-          await readDVPLFile(`${DATA}/${configPath}.packed.webp.dvpl`)
-        ).toString('base64');
+        const image = sharp(
+          await readDVPLFile(`${DATA}/${configPath}.packed.webp.dvpl`),
+        );
+        const content = (await image.trim().toBuffer()).toString('base64');
 
         changes.push({
           path: `icons/provisions/${provision.id}.webp`,

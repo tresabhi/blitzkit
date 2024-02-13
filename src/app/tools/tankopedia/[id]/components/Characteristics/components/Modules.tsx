@@ -1,6 +1,10 @@
 import { Flex, Heading } from '@radix-ui/themes';
-import { ModuleButton } from '../../../../../../../components/ModuleButton';
-import { TIER_ROMAN_NUMERALS } from '../../../../../../../core/blitzkrieg/tankDefinitions';
+import { ModuleButton } from '../../../../../../../components/ModuleButtons/ModuleButton';
+import { ShellButton } from '../../../../../../../components/ModuleButtons/ShellButton';
+import {
+  SHELL_NAMES,
+  TIER_ROMAN_NUMERALS,
+} from '../../../../../../../core/blitzkrieg/tankDefinitions';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
@@ -18,7 +22,6 @@ export function Modules() {
               <ModuleButton
                 key={turret.id}
                 selected={protagonist.turret.id === turret.id}
-                type="module"
                 module="turret"
                 discriminator={TIER_ROMAN_NUMERALS[turret.tier]}
                 first={index === 0}
@@ -41,7 +44,6 @@ export function Modules() {
             return (
               <ModuleButton
                 key={gun.id}
-                type="module"
                 module="gun"
                 discriminator={TIER_ROMAN_NUMERALS[gun.tier]}
                 selected={protagonist.gun.id === gun.id}
@@ -64,7 +66,6 @@ export function Modules() {
             return (
               <ModuleButton
                 key={engine.id}
-                type="module"
                 module="engine"
                 discriminator={TIER_ROMAN_NUMERALS[engine.tier]}
                 selected={protagonist.engine.id === engine.id}
@@ -86,7 +87,6 @@ export function Modules() {
             return (
               <ModuleButton
                 key={track.id}
-                type="module"
                 module="chassis"
                 discriminator={TIER_ROMAN_NUMERALS[track.tier]}
                 selected={protagonist.track.id === track.id}
@@ -106,10 +106,10 @@ export function Modules() {
         <Flex>
           {protagonist.gun.shells.map((shell, index) => {
             return (
-              <ModuleButton
+              <ShellButton
                 key={shell.id}
-                type="shell"
                 shell={shell.icon}
+                discriminator={SHELL_NAMES[shell.type]}
                 selected={protagonist.shell.id === shell.id}
                 first={index === 0}
                 last={index === protagonist.gun.shells.length - 1}

@@ -1,6 +1,6 @@
 import { Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
-import { ModuleButton } from '../../../../../../../components/ModuleButton';
+import { ConsumableButton } from '../../../../../../../components/ModuleButtons/ConsumableButton';
 import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
 import { consumableDefinitions } from '../../../../../../../core/blitzkrieg/consumableDefinitions';
 import { useDuel } from '../../../../../../../stores/duel';
@@ -32,12 +32,11 @@ export function Consumables() {
           const selected = consumables.includes(consumable.id);
 
           return (
-            <ModuleButton
+            <ConsumableButton
               key={consumable.id}
               first={index === 0}
               last={index === consumablesList.length - 1}
               rowChild
-              type="consumable"
               disabled={
                 protagonist.tank.consumables === consumables.length && !selected
               }
