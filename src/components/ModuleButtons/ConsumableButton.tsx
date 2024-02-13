@@ -37,7 +37,7 @@ export function ConsumableButton({
             }
           >
             <Flex align="center" gap="1" style={{ marginBottom: -4 }}>
-              <ClockIcon />
+              <ClockIcon width={12} height={12} />
               {Math.round(duration)}s
             </Flex>
           </Text>
@@ -52,7 +52,7 @@ export function ConsumableButton({
           }
         >
           <Flex align="center" gap="1">
-            <ReloadIcon />
+            <ReloadIcon width={12} height={12} />
             {Math.round(cooldown)}s
           </Flex>
         </Text>
