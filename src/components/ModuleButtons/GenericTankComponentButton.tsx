@@ -28,6 +28,7 @@ export function GenericTankComponentButton({
           draggable={false}
           src={icon}
           style={{
+            objectFit: 'contain',
             width: 32,
             height: 32,
             position: 'absolute',

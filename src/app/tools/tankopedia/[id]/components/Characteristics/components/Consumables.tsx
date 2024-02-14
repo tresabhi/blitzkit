@@ -23,6 +23,9 @@ export function Consumables() {
         protagonist.gun,
       ),
   );
+  const cooldownBooster = useTankopediaTemporary(
+    (state) => state.cooldownBooster,
+  );
   const hasConsumableDeliverySystem = useEquipment(118);
   const hasHighEndConsumables = useEquipment(101);
 
@@ -42,7 +45,9 @@ export function Consumables() {
                   : undefined
               }
               cooldown={
-                consumable.cooldown * (hasConsumableDeliverySystem ? 0.85 : 1)
+                consumable.cooldown *
+                (hasConsumableDeliverySystem ? 0.85 : 1) *
+                (1 - cooldownBooster * 0.1)
               }
               key={consumable.id}
               first={index === 0}

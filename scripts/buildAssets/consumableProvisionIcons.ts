@@ -6,7 +6,7 @@ import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
 import { DATA, POI } from './constants';
-import { ConsumablesProvisionsCommon } from './definitions';
+import { ConsumablesCommon, ProvisionsCommon } from './definitions';
 
 interface Mappings {
   Header: { version: number };
@@ -35,10 +35,10 @@ export async function consumableProvisionIcons(production: boolean) {
     `${DATA}/${POI.equipmentItemImageMappings}.dvpl`,
   );
   const consumablesCommon = await readXMLDVPL<{
-    root: ConsumablesProvisionsCommon;
+    root: ConsumablesCommon;
   }>(`${DATA}/${POI.consumablesCommon}.dvpl`);
   const provisionsCommon = await readXMLDVPL<{
-    root: ConsumablesProvisionsCommon;
+    root: ProvisionsCommon;
   }>(`${DATA}/${POI.provisionsCommon}.dvpl`);
   const styleSheets = Object.values(equipmentItemImageMappings.StyleSheets);
 

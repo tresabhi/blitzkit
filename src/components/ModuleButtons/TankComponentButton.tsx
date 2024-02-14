@@ -10,6 +10,7 @@ export interface TankComponentButtonProps
   children?: ReactNode;
   discriminator?: ReactNode;
   disabled?: boolean;
+  banner?: string;
 }
 
 export function TankComponentButton({
@@ -19,6 +20,7 @@ export function TankComponentButton({
   rowChild,
   discriminator,
   children,
+  banner,
   ...props
 }: TankComponentButtonProps) {
   return (
@@ -36,9 +38,24 @@ export function TankComponentButton({
         borderBottomLeftRadius: first ? undefined : 0,
         borderBottomRightRadius: last ? undefined : 0,
         margin: rowChild ? -0.5 : 'unset',
+        overflow: 'hidden',
       }}
       {...props}
     >
+      {banner !== undefined && (
+        <div
+          style={{
+            position: 'absolute',
+            width: '200%',
+            height: 12,
+            backgroundColor: banner,
+            top: '50%',
+            left: '-50%',
+            transform: 'translateY(-50%) rotate(-22.5deg)',
+          }}
+        />
+      )}
+
       {discriminator !== undefined && (
         <Text
           size="1"

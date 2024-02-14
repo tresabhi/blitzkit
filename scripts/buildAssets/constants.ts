@@ -27,4 +27,5 @@ export const POI = {
     'UI/Screens3/Lobby/Inventory/Equipment/EquipmentItemImage.style.yaml',
   provisionsCommon: 'XML/item_defs/vehicles/common/provisions/common.xml',
   defaultCamoIcon: 'Gfx/UI/Hangar/IconCamouflage.webp',
+  boosterIcons: 'Gfx/Shared/boosters',
 } as const;

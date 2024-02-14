@@ -1,6 +1,6 @@
 # Cedilla Object Notation
 
-A compact binary representation similar to JSON objects. This documentation uses some funky (yet concise) syntax I developed (don't worry, my C++ isn't that bad!).
+This documentation uses an experimental binary notation syntax called "Buffer Up".
 
 1. JSON compressed as CDON, written directly to disk (a direct 50% reduction).
 2. CDON further compressed with LZ4 (a clean 90% reduction).
@@ -9,62 +9,43 @@ A compact binary representation similar to JSON objects. This documentation uses
 
 ![an image of file sizes](https://i.imgur.com/AHJiFpq.png)
 
-## Primitives
+FS stands for "Fast String".
 
 ```cpp
-struct String {
-  uint32 length;
-  utf8[length] value;
-}
-```
-
-## Reading
-
-- Everything is little endian
-- Magic is always `"CDON"`
-- The index of fast strings must be read as mentioned by the fast string format
-
-```cpp
-struct BlitzkriegObjectNotation {
-  ascii[4] magic;
+primary CedillaObjectNotation {
+  utf8"CDON" magic;
   Header header;
-  Body body;
+  primary Body<header.fsFormat> body;
 }
-```
 
-### Header
-
-- Version is always `1`
-
-```cpp
-struct Header {
+Header {
   uint16 version;
-  FastStringFormat fastStringFormat;
-  StringTable stringTable;
+  FSFormat fsFormat;
+  StringTable<fsFormat> stringTable;
 }
 
-// read as uint8
-enum FastStringFormat {
+FSFormat enum<uint8> {
   Format8,
   Format16,
   Format32,
 }
 
-struct StringTable {
-  (uint8 | uint16 | uint32) count;
+FSPrimitive<FSFormat fsFormat> match(fsFormat) {
+  Format8: uint8;
+  Format16: uint16;
+  Format32: uint32;
+}
+
+StringTable<FSFormat fsFormat> {
+  FSPrimitive<fsFormat> count;
   String[count] strings;
 }
-```
 
-### Body
-
-```cpp
-struct Body {
-  Value object;
+Body<FSFormat fsFormat> {
+  primary Value<fsFormat> object;
 }
 
-// read as uint8
-enum ValueType {
+ValueType enum<uint8> {
   Null,
   Boolean,
   Uint8,
@@ -78,96 +59,43 @@ enum ValueType {
   Float32,
   Float64,
   String,
-  FastString,
+  FS,
   Array,
   Object,
 }
 
-struct Value = `Value${ValueType}`
-
-struct ValueNull {
-  ValueType.Null type;
+String {
+  uint32 length;
+  primary utf8<length> value;
 }
 
-struct ValueBoolean {
-  ValueType.Boolean type;
-  uint8 value;
-}
+StringValue Value & { (ValueType.String | ValueType.FS) type }
 
-struct ValueUint8 {
-  ValueType.Uint8 type;
-  uint8 value;
-}
-
-struct ValueUint16 {
-  ValueType.Uint16 type;
-  uint16 value;
-}
-
-struct ValueUint32 {
-  ValueType.Uint32 type;
-  uint32 value;
-}
-
-struct ValueUint64 {
-  ValueType.Uint64 type;
-  uint64 value;
-}
-
-struct ValueInt8 {
-  ValueType.Int8 type;
-  int8 value;
-}
-
-struct ValueInt16 {
-  ValueType.Int16 type;
-  int16 value;
-}
-
-struct ValueInt32 {
-  ValueType.Int32 type;
-  int32 value;
-}
-
-struct ValueInt64 {
-  ValueType.Int64 type;
-  int64 value;
-}
-
-struct ValueFloat32 {
-  ValueType.Float32 type;
-  float32 value;
-}
-
-struct ValueFloat64 {
-  ValueType.Float64 type;
-  float64 value;
-}
-
-struct ValueString {
-  ValueType.String type;
-  String value;
-}
-
-struct ValueFastString {
-  ValueType.FastString type;
-  (uint8 | uint16 | uint32) index;
-}
-
-struct ValueArray {
-  ValueType.Array type;
-  uint32 count;
-  Value[count] values;
-}
-
-struct ValueObject {
-  ValueType.Object type;
-  uint32 count;
-  (ValueString | ValueFastString)[count] keys;
-  Value[count] values;
+Value<FSFormat fsFormat> {
+  ValueType type;
+  match<type> {
+    Boolean: { uint8 value; }
+    Uint8: { uint8 value; }
+    Uint16: { uint16 value; }
+    Uint32: { uint32 value; }
+    Uint64: { uint64 value; }
+    Int8: { int8 value; }
+    Int16: { int16 value; }
+    Int32: { int32 value; }
+    Int64: { int64 value; }
+    Float32: { float32 value; }
+    Float64: { float64 value; }
+    String: { String value; }
+    FS: { FSPrimitive<fsFormat> index; }
+    Array: {
+      uint32 count;
+      Value[count] values;
+    }
+    Object: {
+      uint32 count;
+      StringValue[count] keys;
+      Value[count] values;
+    }
+  }
 }
 ```
-
-## Writing
-
-It's pretty obvious how to write. Remember that a `FastString` should only be applied to the string table if the string shows up more than once in the body. Otherwise, there's no point and `String` should be used.

@@ -1,5 +1,6 @@
 import { config } from 'dotenv';
 import { argv } from 'process';
+import { boosterIcons } from './boosterIcons';
 import { camouflageIcons } from './camouflageIcons';
 import { circleFlags } from './circleFlags';
 import { consumableProvisionIcons } from './consumableProvisionIcons';
@@ -35,10 +36,9 @@ const methods = [
   equipmentIcons,
   consumableProvisionIcons,
   camouflageIcons,
+  boosterIcons,
 ];
 
 for (const method of methods) {
-  if (allTargets || targets?.includes(method.name)) {
-    await method(production);
-  }
+  if (allTargets || targets?.includes(method.name)) method(production);
 }

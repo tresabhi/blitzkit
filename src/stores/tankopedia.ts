@@ -69,6 +69,7 @@ interface TankopediaTemporary {
   consumables: number[];
   provisions: number[];
   camouflage: boolean;
+  cooldownBooster: number;
   shot?: Shot;
 }
 
@@ -178,6 +179,7 @@ export const useTankopediaTemporary = create<TankopediaTemporary>()(
     consumables: [],
     provisions: [],
     camouflage: false,
+    cooldownBooster: 0,
   })),
 );
 

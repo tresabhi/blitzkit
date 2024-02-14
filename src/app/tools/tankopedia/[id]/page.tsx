@@ -119,9 +119,9 @@ export default function Page({ params }: { params: { id: string } }) {
 
               <Flex direction="column" gap="4">
                 <Modules />
-                <Crew />
                 <Equipments />
                 <Consumables />
+                <Crew />
                 <Provisions />
                 <Miscellaneous />
               </Flex>
