@@ -12,6 +12,7 @@ import { unionBoundingBox } from '../../../../../../core/blitzkrieg/unionBoundin
 import { useConsumable } from '../../../../../../core/blitzkrieg/useConsumable';
 import { useEquipment } from '../../../../../../core/blitzkrieg/useEquipment';
 import { useDuel } from '../../../../../../stores/duel';
+import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
 
@@ -63,17 +64,25 @@ export function Characteristics() {
   const hasTungsten = useConsumable(45);
   const hasReticleCalibration = useConsumable(28);
   const hasShellReloadBoost = useConsumable(29);
+  const camouflage = useTankopediaTemporary((state) => state.camouflage);
+  const camouflageBonus = camouflage
+    ? tank.type === 'tankDestroyer'
+      ? 0.04
+      : tank.type === 'heavy'
+        ? 0.03
+        : 0.02
+    : 0;
   const shellReloadBoostBonus = hasShellReloadBoost ? 0.7 : 1;
   const adrenalineBonus = hasAdrenaline && gun.type === 'regular' ? 0.8 : 1;
   const enginePowerBoostBonus =
     (hasEnginePowerBoost ? 1.2 : 1) * (hasImprovedEnginePowerBoost ? 1.4 : 1);
   const camouflageNetBonus = hasCamouflageNet
     ? tank.type === 'heavy'
-      ? 1.03
+      ? 0.03
       : tank.type === 'tankDestroyer'
-        ? 1.07
-        : 1.05
-    : 1;
+        ? 0.07
+        : 0.05
+    : 0;
   const calibratedShellsBonus = hasCalibratedShells
     ? isExplosive(shell.type)
       ? 1.1
@@ -456,27 +465,25 @@ export function Characteristics() {
         </InfoWithDelta>
         <Info name="Camouflage" unit="%" />
         <InfoWithDelta indent name="Still" decimals={2}>
-          {tank.camouflage.still * camouflageNetBonus * 100}
+          {(tank.camouflage.still + camouflageNetBonus + camouflageBonus) * 100}
         </InfoWithDelta>
         <InfoWithDelta indent name="Moving" decimals={2}>
-          {tank.camouflage.moving * camouflageNetBonus * 100}
+          {(tank.camouflage.moving + camouflageNetBonus + camouflageBonus) *
+            100}
         </InfoWithDelta>
         <InfoWithDelta indent name="Shooting still" decimals={2}>
-          {tank.camouflage.still *
+          {(tank.camouflage.still + camouflageNetBonus + camouflageBonus) *
             gun.camouflageLoss *
-            camouflageNetBonus *
             100}
         </InfoWithDelta>
         <InfoWithDelta indent name="Shooting on move" decimals={2}>
-          {tank.camouflage.moving *
+          {(tank.camouflage.moving + camouflageNetBonus + camouflageBonus) *
             gun.camouflageLoss *
-            camouflageNetBonus *
             100}
         </InfoWithDelta>
         <InfoWithDelta indent name="On fire" decimals={2}>
-          {tank.camouflage.onFire *
+          {(tank.camouflage.onFire + camouflageNetBonus + camouflageBonus) *
             tank.camouflage.still *
-            camouflageNetBonus *
             100}
         </InfoWithDelta>
         <Info name="Size" unit="m">
