@@ -23,8 +23,10 @@ import {
 import { ProvisionDefinitions } from '../../src/core/blitzkrieg/provisionDefinitions';
 import { superCompress } from '../../src/core/blitzkrieg/superCompress';
 import {
+  CrewMember,
   GunDefinition,
   ShellType,
+  TankDefinition,
   TankDefinitionPrice,
   TankDefinitions,
   Tier,
@@ -84,6 +86,7 @@ interface VehicleDefinitions {
     still: number;
     firePenalty: number;
   };
+  crew: Record<CrewMember, string | string[]>;
   speedLimits: {
     forward: number;
     backward: number;
@@ -436,9 +439,21 @@ export async function definitions(production: boolean) {
               hullArmor.spaced.push(armorId);
             }
           });
+        const crew: TankDefinition['crew'] = {};
+
+        Object.entries(tankDefinition.root.crew).forEach(([key, value]) => {
+          if (!(key in crew)) crew[key as CrewMember] = 0;
+
+          if (typeof value === 'string') {
+            crew[key as CrewMember]!++;
+          } else {
+            crew[key as CrewMember]! += value.length;
+          }
+        });
 
         tankDefinitions[tankId] = {
           id: tankId,
+          crew,
           weight: tankDefinition.root.hull.weight,
           health: tankDefinition.root.hull.maxHealth,
           speed: {

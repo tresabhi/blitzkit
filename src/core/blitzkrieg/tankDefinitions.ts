@@ -13,9 +13,16 @@ export const SHELL_NAMES: Record<ShellType, string> = {
   he: 'HE',
 };
 
+export type CrewMember =
+  | 'commander'
+  | 'radioman'
+  | 'gunner'
+  | 'driver'
+  | 'loader';
 export type TankDefinitions = Record<number, TankDefinition>;
 export interface TankDefinition {
   id: number;
+  crew: { [crew in CrewMember]?: number };
   health: number;
   nation: string;
   name: string;
