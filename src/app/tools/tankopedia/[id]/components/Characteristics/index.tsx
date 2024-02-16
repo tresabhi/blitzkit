@@ -488,7 +488,7 @@ export function Characteristics() {
             gun.camouflageLoss *
             100}
         </InfoWithDelta>
-        <InfoWithDelta indent name="On fire" decimals={2}>
+        <InfoWithDelta indent name="Caught on fire" decimals={2}>
           {(tank.camouflage.onFire + camouflageNetBonus + camouflageBonus) *
             tank.camouflage.still *
             100}
