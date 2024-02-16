@@ -308,7 +308,7 @@ export function Characteristics() {
             reticleCalibrationBonus}
         </InfoWithDelta>
         <InfoWithDelta
-          decimals={0}
+          decimals={3}
           prefix="+ "
           indent
           name="Turret traversing"
