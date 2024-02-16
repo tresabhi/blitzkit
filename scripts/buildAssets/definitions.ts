@@ -214,6 +214,7 @@ interface GunDefinitionsList {
         whileGunDamaged: number;
       };
       aimingTime: number;
+      shotDispersionRadius: number;
       userString: string;
       tags: string;
       level: number;
@@ -700,7 +701,9 @@ export async function definitions(production: boolean) {
                     : turretGunEntry.invisibilityFactorAtShot.at(-1)!,
                 aimTime: turretGunEntry.aimingTime ?? gunListEntry.aimingTime,
                 dispersion: {
-                  base: turretGunEntry.shotDispersionRadius,
+                  base:
+                    turretGunEntry.shotDispersionRadius ??
+                    gunListEntry.shotDispersionRadius,
                   damaged: shotDispersionFactors.whileGunDamaged,
                   shot: shotDispersionFactors.afterShot,
                   traverse: shotDispersionFactors.turretRotation,
