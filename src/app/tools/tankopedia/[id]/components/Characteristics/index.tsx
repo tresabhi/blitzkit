@@ -112,7 +112,14 @@ export function Characteristics() {
         <Heading size="5">Fire</Heading>
         <Info name="Gun type">{GUN_TYPE_NAMES[gun.type]}</Info>
         <InfoWithDelta name="DPM" decimals={0} unit="hp / min">
-          {resolveDpm(gun, shell, hasRammer, hasShellReloadBoost)}
+          {resolveDpm(
+            gun,
+            shell,
+            hasRammer,
+            hasShellReloadBoost,
+            hasAdrenaline,
+            hasTungsten,
+          )}
         </InfoWithDelta>
         {gun.type === 'autoReloader' && (
           <>
