@@ -230,12 +230,13 @@ export function ArmorMesh({
                     shell.caliber >
                     2 *
                       (event.object.userData.thickness * thicknessCoefficient);
-                  const normalization = twoCalibersRule
-                    ? ((shell.normalization ?? 0) * 1.4 * shell.caliber) /
-                      (2 *
-                        event.object.userData.thickness *
-                        thicknessCoefficient)
-                    : shell.normalization ?? 0;
+                  const normalization =
+                    twoCalibersRule && event.object.userData.thickness > 0
+                      ? ((shell.normalization ?? 0) * 1.4 * shell.caliber) /
+                        (2 *
+                          event.object.userData.thickness *
+                          thicknessCoefficient)
+                      : shell.normalization ?? 0;
                   const angled =
                     (event.object.userData.thickness * thicknessCoefficient) /
                     Math.cos(angle - degToRad(normalization));
