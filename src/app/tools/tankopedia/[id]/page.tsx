@@ -4,12 +4,12 @@ import { Flex } from '@radix-ui/themes';
 import { use, useEffect } from 'react';
 import PageWrapper from '../../../../components/PageWrapper';
 import { tankDefinitions } from '../../../../core/blitzkrieg/tankDefinitions';
+import { useWideFormat } from '../../../../hooks/useWideFormat';
 import { mutateDuel, useDuel } from '../../../../stores/duel';
 import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
 import { AntagonistBar } from './components/AntagonistBar';
 import { Characteristics } from './components/Characteristics';
 import { Consumables } from './components/Characteristics/components/Consumables';
-import { Crew } from './components/Characteristics/components/Crew';
 import { Equipments } from './components/Characteristics/components/Equipments';
 import { Miscellaneous } from './components/Characteristics/components/Miscellaneous';
 import { Modules } from './components/Characteristics/components/Modules';
@@ -21,7 +21,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const id = parseInt(params.id);
   const awaitedTankDefinitions = use(tankDefinitions);
   const assigned = useDuel((state) => state.assigned);
-  const wideFormat = typeof window !== 'undefined' && window.innerWidth > 880;
+  const wideFormat = useWideFormat();
 
   useEffect(() => {
     mutateDuel((draft) => {
@@ -121,7 +121,6 @@ export default function Page({ params }: { params: { id: string } }) {
                 <Modules />
                 <Equipments />
                 <Consumables />
-                <Crew />
                 <Provisions />
                 <Miscellaneous />
               </Flex>

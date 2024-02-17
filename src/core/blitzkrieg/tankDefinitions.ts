@@ -20,9 +20,28 @@ export type CrewMember =
   | 'driver'
   | 'loader';
 export type TankDefinitions = Record<number, TankDefinition>;
+export const CREW_MEMBER_NAMES: Record<CrewMember, string> = {
+  commander: 'Commander',
+  radioman: 'Radioman',
+  gunner: 'Gunner',
+  driver: 'Driver',
+  loader: 'Loader',
+};
+export const CREW_MEMBER_NAMES_PLURAL: Record<CrewMember, string> = {
+  commander: 'Commanders',
+  radioman: 'Radiomen',
+  gunner: 'Gunners',
+  driver: 'Drivers',
+  loader: 'Loaders',
+};
+export interface Crew {
+  type: CrewMember;
+  count?: number;
+  substitute?: CrewMember[];
+}
 export interface TankDefinition {
   id: number;
-  crew: { [crew in CrewMember]?: number };
+  crew: Crew[];
   health: number;
   nation: string;
   name: string;

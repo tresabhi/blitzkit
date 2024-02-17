@@ -58,6 +58,7 @@
     "parse-dds": "^1.2.1",
     "postprocessing": "^6.34.1",
     "react": "^18.2.0",
+    "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
     "react-fuzzysort": "^1.0.1",
     "react-promise-suspense": "^0.3.4",

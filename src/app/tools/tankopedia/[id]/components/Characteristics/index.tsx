@@ -7,7 +7,11 @@ import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNear
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { normalizeBoundingBox } from '../../../../../../core/blitzkrieg/normalizeBoundingBox';
 import { resolveDpm } from '../../../../../../core/blitzkrieg/resolveDpm';
-import { GUN_TYPE_NAMES } from '../../../../../../core/blitzkrieg/tankDefinitions';
+import {
+  CREW_MEMBER_NAMES,
+  CREW_MEMBER_NAMES_PLURAL,
+  GUN_TYPE_NAMES,
+} from '../../../../../../core/blitzkrieg/tankDefinitions';
 import { unionBoundingBox } from '../../../../../../core/blitzkrieg/unionBoundingBox';
 import { useConsumable } from '../../../../../../core/blitzkrieg/useConsumable';
 import { useEquipment } from '../../../../../../core/blitzkrieg/useEquipment';
@@ -21,6 +25,7 @@ export function Characteristics() {
   const { tank, turret, gun, engine, track, shell } = useDuel(
     (state) => state.protagonist!,
   );
+  const crew = useTankopediaTemporary((state) => state.crew);
   const stockEngine = tank.engines[0];
   const stockTrack = tank.tracks[0];
   const stockTurret = tank.turrets[0];
@@ -496,6 +501,34 @@ export function Characteristics() {
         <Info name="Size" unit="m">
           {size[0].toFixed(2)} x {size[2].toFixed(2)} x {size[1].toFixed(2)}
         </Info>
+      </Flex>
+
+      <Flex direction="column" gap="2">
+        <Heading size="5">Crew</Heading>
+
+        {tank.crew.map((member) => {
+          const count = member.count ?? 1;
+
+          return (
+            <>
+              <InfoWithDelta
+                name={`${count > 1 ? `${member.count} ` : ''}${
+                  (count > 1 ? CREW_MEMBER_NAMES_PLURAL : CREW_MEMBER_NAMES)[
+                    member.type
+                  ]
+                }`}
+                unit="%"
+                decimals={0}
+              >
+                {crew * (member.type === 'commander' ? 1 : 1.1) * 100}
+              </InfoWithDelta>
+              {member.substitute &&
+                member.substitute.map((substitute) => (
+                  <Info indent name={`Substitutes ${substitute}`} />
+                ))}
+            </>
+          );
+        })}
       </Flex>
     </Flex>
   );

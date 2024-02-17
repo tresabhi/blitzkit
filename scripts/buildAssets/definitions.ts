@@ -23,10 +23,10 @@ import {
 import { ProvisionDefinitions } from '../../src/core/blitzkrieg/provisionDefinitions';
 import { superCompress } from '../../src/core/blitzkrieg/superCompress';
 import {
+  Crew,
   CrewMember,
   GunDefinition,
   ShellType,
-  TankDefinition,
   TankDefinitionPrice,
   TankDefinitions,
   Tier,
@@ -439,15 +439,40 @@ export async function definitions(production: boolean) {
               hullArmor.spaced.push(armorId);
             }
           });
-        const crew: TankDefinition['crew'] = {};
+        const crew: Crew[] = [];
 
         Object.entries(tankDefinition.root.crew).forEach(([key, value]) => {
-          if (!(key in crew)) crew[key as CrewMember] = 0;
+          let entry: Crew;
+          const index = crew.findIndex(({ type }) => type === key);
+          if (index === -1) {
+            entry = { type: key as CrewMember };
+            crew.push(entry);
+          } else {
+            entry = crew[index];
+          }
 
           if (typeof value === 'string') {
-            crew[key as CrewMember]!++;
+            if (entry.count === undefined) {
+              entry.count = 1;
+            } else {
+              entry.count++;
+            }
+
+            if (value !== '') {
+              entry.substitute = value
+                .split('\n')
+                .map((member) => member.trim()) as CrewMember[];
+            }
           } else {
-            crew[key as CrewMember]! += value.length;
+            if (entry.count === undefined) {
+              entry.count = value.length;
+            } else {
+              entry.count += value.length;
+            }
+          }
+
+          if (entry.count === 1) {
+            delete entry.count;
           }
         });
 

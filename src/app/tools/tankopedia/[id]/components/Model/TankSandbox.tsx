@@ -3,6 +3,7 @@ import { Badge, Button, Card, Flex, Tabs, Theme } from '@radix-ui/themes';
 import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
+import { isMobile } from 'react-device-detect';
 import { ShotDisplay } from '../../../../../../components/ShotDisplay';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
@@ -10,6 +11,7 @@ import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTran
 import { Pose, poseEvent } from '../../../../../../core/blitzkrieg/pose';
 import { tankIcon } from '../../../../../../core/blitzkrieg/tankIcon';
 import { useModel } from '../../../../../../hooks/useModel';
+import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import { useDuel } from '../../../../../../stores/duel';
 import {
   TankopediaMode,
@@ -38,7 +40,8 @@ export function TankSandbox() {
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
-  const [loadModel, setLoadModel] = useState(true); // set to false someday?
+  const wideFormat = useWideFormat();
+  const [loadModel, setLoadModel] = useState(wideFormat || !isMobile);
   const duel = useDuel();
   const { hasPbr } = useModel(protagonist.tank.id);
 
@@ -204,7 +207,6 @@ export function TankSandbox() {
                   style={{ height: '100%', position: 'relative' }}
                 >
                   <Button
-                    variant="soft"
                     style={{
                       zIndex: 1,
                     }}
@@ -215,21 +217,21 @@ export function TankSandbox() {
                     <LightningBoltIcon /> Load model
                   </Button>
 
-                  <div
+                  <Flex
                     style={{
                       filter: 'blur(16px)',
                       width: 256,
                       height: 128,
                       display: 'flex',
-                      justifyContent: 'end',
                       position: 'absolute',
                       top: '50%',
                       left: '50%',
+                      transformOrigin: 'center center',
                       transform: 'translate(25%, -25%) scale(300%)',
                     }}
                   >
                     <img src={tankIcon(duel.antagonist!.tank.id, 'big')} />
-                  </div>
+                  </Flex>
                 </Flex>
               )}
             </div>
