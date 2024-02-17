@@ -66,7 +66,9 @@ export async function consumableProvisionIcons(production: boolean) {
         const image = sharp(
           await readDVPLFile(`${DATA}/${configPath}.packed.webp.dvpl`),
         );
-        const content = (await image.trim().toBuffer()).toString('base64');
+        const content = (
+          await image.trim({ threshold: 100 }).toBuffer()
+        ).toString('base64');
 
         changes.push({
           path: `icons/consumables/${consumable.id}.webp`,
@@ -123,7 +125,9 @@ export async function consumableProvisionIcons(production: boolean) {
         const image = sharp(
           await readDVPLFile(`${DATA}/${configPath}.packed.webp.dvpl`),
         );
-        const content = (await image.trim().toBuffer()).toString('base64');
+        const content = (
+          await image.trim({ threshold: 100 }).toBuffer()
+        ).toString('base64');
 
         changes.push({
           path: `icons/provisions/${provision.id}.webp`,
