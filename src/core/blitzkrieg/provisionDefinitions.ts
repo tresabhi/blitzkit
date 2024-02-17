@@ -5,9 +5,9 @@ import { fetchCdonLz4 } from './fetchCdonLz4';
 export interface ProvisionEntry {
   id: number;
   name: string;
-  effects?: Record<string, number>;
   include: TankFilterDefinition[];
   exclude?: TankFilterDefinition[];
+  crew?: number;
 }
 
 export interface ProvisionDefinitions {
@@ -17,3 +17,5 @@ export interface ProvisionDefinitions {
 export const provisionDefinitions = fetchCdonLz4<ProvisionDefinitions>(
   asset('definitions/provisions.cdon.lz4'),
 );
+
+provisionDefinitions.then(console.log);

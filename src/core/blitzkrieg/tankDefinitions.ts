@@ -27,13 +27,6 @@ export const CREW_MEMBER_NAMES: Record<CrewMember, string> = {
   driver: 'Driver',
   loader: 'Loader',
 };
-export const CREW_MEMBER_NAMES_PLURAL: Record<CrewMember, string> = {
-  commander: 'Commanders',
-  radioman: 'Radiomen',
-  gunner: 'Gunners',
-  driver: 'Drivers',
-  loader: 'Loaders',
-};
 export interface Crew {
   type: CrewMember;
   count?: number;

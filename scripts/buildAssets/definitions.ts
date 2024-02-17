@@ -975,25 +975,10 @@ export async function definitions(production: boolean) {
       }
     }
 
-    Object.entries({
-      ...provision.script,
-      ...provision.script.bonusValues,
-    }).forEach(([effectName, effect]) => {
-      if (
-        !consumableProvisionEffectSuffixes.some((suffix) =>
-          effectName.endsWith(suffix),
-        )
-      ) {
-        return;
-      }
-
-      if (!provisionDefinitions[provision.id].effects) {
-        provisionDefinitions[provision.id].effects = {};
-      }
-
-      provisionDefinitions[provision.id].effects![effectName] =
-        effect as number;
-    });
+    if (provision.script.bonusValues?.crewLevelIncrease !== undefined) {
+      provisionDefinitions[provision.id].crew =
+        provision.script.bonusValues?.crewLevelIncrease;
+    }
   });
 
   await commitAssets(
