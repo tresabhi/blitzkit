@@ -3,7 +3,7 @@ import { use } from 'react';
 import { ConsumableButton } from '../../../../../../../components/ModuleButtons/ConsumableButton';
 import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
 import { consumableDefinitions } from '../../../../../../../core/blitzkrieg/consumableDefinitions';
-import { useEquipment } from '../../../../../../../core/blitzkrieg/useEquipment';
+import { useEquipment } from '../../../../../../../hooks/useEquipment';
 import { useDuel } from '../../../../../../../stores/duel';
 import {
   mutateTankopediaTemporary,

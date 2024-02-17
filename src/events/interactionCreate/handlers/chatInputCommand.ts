@@ -9,12 +9,12 @@ import {
 } from 'discord.js';
 import { commands } from '..';
 import discord from '../../../../discord.json' assert { type: 'json' };
-import { UserError } from '../../../core/blitzkrieg/userError';
 import buttonLink from '../../../core/discord/buttonLink';
 import embedNegative from '../../../core/discord/embedNegative';
 import embedWarning from '../../../core/discord/embedWarning';
 import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable';
 import { psa } from '../../../core/discord/psa';
+import { UserError } from '../../../hooks/userError';
 
 export default async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,

@@ -21,13 +21,13 @@ import { getArchivedLatestSeasonNumber } from '../core/blitzkrieg/getArchivedLat
 import getArchivedRatingsInfo from '../core/blitzkrieg/getArchivedRatingsInfo';
 import { getArchivedRatingsLeaderboard } from '../core/blitzkrieg/getArchivedRatingsLeaderboard';
 import getArchivedRatingsMidnightLeaderboard from '../core/blitzkrieg/getArchivedRatingsMidnightLeaderboard';
-import { UserError } from '../core/blitzkrieg/userError';
 import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import embedNegative from '../core/discord/embedNegative';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistryRaw } from '../events/interactionCreate';
+import { UserError } from '../hooks/userError';
 
 export interface RatingsPlayer {
   spa_id: number;

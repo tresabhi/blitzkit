@@ -14,12 +14,15 @@ import { canRicochet } from '../../../../core/blitz/canRicochet';
 import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
+import { hasEquipment } from '../../../../core/blitzkrieg/hasEquipment';
+import { useAwait } from '../../../../hooks/useAwait';
 import { useDuel } from '../../../../stores/duel';
 import {
   ArmorPiercingLayer,
   Shot,
   mutateTankopediaTemporary,
   useTankopediaPersistent,
+  useTankopediaTemporary,
 } from '../../../../stores/tankopedia';
 import { externalModuleMaskRenderTarget } from '../ExternalModuleMask';
 import { spacedArmorDepthRenderTarget } from '../SpacedArmorDepth';
@@ -52,19 +55,22 @@ export function ArmorMesh({
   const surfaceNormal = new Vector3();
   const mesh = useRef<Mesh>(null);
   const scene = useThree((state) => state.scene);
+  const hasCalibratedShells = useAwait(hasEquipment(103));
+  const hasEnhancedArmor = useAwait(hasEquipment(110));
 
   useEffect(() => {
-    function updateQuickEquipments() {
-      const equipment = useTankopediaPersistent.getState().model.equipment;
+    async function updateQuickEquipments() {
       const shell = useDuel.getState().antagonist!.shell;
       const nearPenetration = resolveNearPenetration(shell.penetration);
+      const hasCalibratedShells = await hasEquipment(103);
+      const hasEnhancedArmor = await hasEquipment(110);
 
       if (material.current) {
         material.current.uniforms.thickness.value =
-          thickness * (equipment.enhancedArmor ? 1.04 : 1);
+          thickness * (hasEnhancedArmor ? 1.04 : 1);
         material.current.uniforms.penetration.value =
           nearPenetration *
-          (equipment.calibratedShells ? (explosionCapable ? 1.1 : 1.05) : 1);
+          (hasCalibratedShells ? (isExplosive(shell.type) ? 1.1 : 1.05) : 1);
       }
     }
 
@@ -87,8 +93,8 @@ export function ArmorMesh({
     }
 
     const unsubscribes = [
-      useTankopediaPersistent.subscribe(
-        (state) => state.model.equipment,
+      useTankopediaTemporary.subscribe(
+        (state) => state.equipmentMatrix,
         updateQuickEquipments,
       ),
       useDuel.subscribe(
@@ -145,7 +151,7 @@ export function ArmorMesh({
           } satisfies ArmorMeshUserData
         }
         ref={mesh}
-        onClick={(event) => {
+        onClick={async (event) => {
           // if (useTankopediaTemporary.getState().mode !== 'armor') return;
 
           shellNormal.copy(
@@ -154,16 +160,12 @@ export function ArmorMesh({
           surfaceNormal
             .copy(event.normal!)
             .applyQuaternion(event.object.getWorldQuaternion(new Quaternion()));
-          const equipment = useTankopediaPersistent.getState().model.equipment;
           const angle = Math.acos(surfaceNormal.dot(shellNormal));
           const shell = useDuel.getState().antagonist!.shell;
+          const hasCalibratedShells = await hasEquipment(103);
           const resolvedPenetration =
             resolveNearPenetration(shell.penetration) *
-            (equipment.calibratedShells
-              ? isExplosive(shell.type)
-                ? 1.1
-                : 1.05
-              : 1);
+            (hasCalibratedShells ? (isExplosive(shell.type) ? 1.1 : 1.05) : 1);
           const indexedObjects = new Set<ArmorMeshUserData['type']>();
           const intersections = event.intersections
             .filter(({ object }) => Boolean(object.userData.type))
@@ -188,7 +190,8 @@ export function ArmorMesh({
             ) + 1,
           );
           const coreArmorMesh = intersectionsTillFirstCoreArmor.at(-1)!.object;
-          const thicknessCoefficient = equipment.enhancedArmor ? 1.04 : 1;
+          const hasEnhancedArmor = await hasEquipment(110);
+          const thicknessCoefficient = hasEnhancedArmor ? 1.04 : 1;
 
           if (mesh.current !== (coreArmorMesh as unknown as Mesh)) return;
 
@@ -405,18 +408,12 @@ export function ArmorMesh({
             canRicochet: { value: ricochetCapable },
             canSplash: { value: canSplash(initialShell.type) },
             thickness: {
-              value:
-                thickness *
-                (initialTankopedia.model.equipment.enhancedArmor ? 1.04 : 1),
+              value: thickness * (hasEnhancedArmor ? 1.04 : 1),
             },
             penetration: {
               value:
                 resolveNearPenetration(initialShell.penetration) *
-                (initialTankopedia.model.equipment.calibratedShells
-                  ? explosionCapable
-                    ? 1.1
-                    : 1.05
-                  : 1),
+                (hasCalibratedShells ? (explosionCapable ? 1.1 : 1.05) : 1),
             },
             caliber: { value: initialShell.caliber },
             ricochetAngle: { value: degToRad(initialShell.ricochet ?? 90) },

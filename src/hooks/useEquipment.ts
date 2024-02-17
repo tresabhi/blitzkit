@@ -1,7 +1,7 @@
 import { use, useMemo } from 'react';
-import { useDuel } from '../../stores/duel';
-import { useTankopediaTemporary } from '../../stores/tankopedia';
-import { equipmentDefinitions } from './equipmentDefinitions';
+import { equipmentDefinitions } from '../core/blitzkrieg/equipmentDefinitions';
+import { useDuel } from '../stores/duel';
+import { useTankopediaTemporary } from '../stores/tankopedia';
 
 export function useEquipment(id: number) {
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);

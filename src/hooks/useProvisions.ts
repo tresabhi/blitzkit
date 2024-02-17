@@ -1,6 +1,6 @@
 import { use } from 'react';
-import { useTankopediaTemporary } from '../../stores/tankopedia';
-import { provisionDefinitions } from './provisionDefinitions';
+import { provisionDefinitions } from '../core/blitzkrieg/provisionDefinitions';
+import { useTankopediaTemporary } from '../stores/tankopedia';
 
 export function useProvisions() {
   const provisions = useTankopediaTemporary((state) => state.provisions);

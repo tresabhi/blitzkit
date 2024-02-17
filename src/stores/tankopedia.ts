@@ -29,10 +29,6 @@ export interface DuelMember {
 }
 interface TankopediaPersistent {
   model: {
-    equipment: {
-      enhancedArmor: boolean;
-      calibratedShells: boolean;
-    };
     visual: {
       environment: (typeof ENVIRONMENTS)[number];
       controlsEnabled: boolean;
@@ -134,10 +130,6 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
   persist(
     subscribeWithSelector<TankopediaPersistent>(() => ({
       model: {
-        equipment: {
-          enhancedArmor: false,
-          calibratedShells: false,
-        },
         visual: {
           environment: 'warehouse',
           controlsEnabled: true,

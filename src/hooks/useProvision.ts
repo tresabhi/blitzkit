@@ -1,4 +1,4 @@
-import { useTankopediaTemporary } from '../../stores/tankopedia';
+import { useTankopediaTemporary } from '../stores/tankopedia';
 
 export function useProvision(id: number) {
   const provisions = useTankopediaTemporary((state) => state.provisions);

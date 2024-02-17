@@ -17,10 +17,10 @@ import {
   GUN_TYPE_NAMES,
 } from '../../../../../../core/blitzkrieg/tankDefinitions';
 import { unionBoundingBox } from '../../../../../../core/blitzkrieg/unionBoundingBox';
-import { useConsumable } from '../../../../../../core/blitzkrieg/useConsumable';
-import { useEquipment } from '../../../../../../core/blitzkrieg/useEquipment';
-import { useProvision } from '../../../../../../core/blitzkrieg/useProvision';
-import { useProvisions } from '../../../../../../core/blitzkrieg/useProvisions';
+import { useConsumable } from '../../../../../../hooks/useConsumable';
+import { useEquipment } from '../../../../../../hooks/useEquipment';
+import { useProvision } from '../../../../../../hooks/useProvision';
+import { useProvisions } from '../../../../../../hooks/useProvisions';
 import { useDuel } from '../../../../../../stores/duel';
 import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
 import { Info } from './components/Info';

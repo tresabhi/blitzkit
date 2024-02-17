@@ -3,10 +3,10 @@ import { use, useEffect, useRef } from 'react';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
+import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useDuel } from '../../../../../../stores/duel';
-import mutateTankopediaPersistent, {
+import {
   mutateTankopediaTemporary,
-  useTankopediaPersistent,
   useTankopediaTemporary,
 } from '../../../../../../stores/tankopedia';
 import { QuickEquipmentButton } from './components/QuickEquipmentButton';
@@ -17,8 +17,9 @@ export function RotationInputs() {
   const awaitedModelDefinitions = use(modelDefinitions);
   const turretYawInput = useRef<HTMLInputElement>(null);
   const gunPitchInput = useRef<HTMLInputElement>(null);
-  const equipment = useTankopediaPersistent((state) => state.model.equipment);
   const mode = useTankopediaTemporary((state) => state.mode);
+  const hasCalibratedShells = useEquipment(103);
+  const hasEnhancedArmor = useEquipment(110);
 
   useEffect(() => {
     turretYawInput.current!.value = `${-Math.round(
@@ -155,21 +156,19 @@ export function RotationInputs() {
         <Flex gap="4">
           <QuickEquipmentButton
             equipment={103}
-            active={equipment.calibratedShells}
+            active={hasCalibratedShells}
             onClick={() => {
-              mutateTankopediaPersistent((draft) => {
-                draft.model.equipment.calibratedShells =
-                  !draft.model.equipment.calibratedShells;
+              mutateTankopediaTemporary((draft) => {
+                draft.equipmentMatrix[0][0] = hasCalibratedShells ? 0 : 1;
               });
             }}
           />
           <QuickEquipmentButton
             equipment={110}
-            active={equipment.enhancedArmor}
+            active={hasEnhancedArmor}
             onClick={() => {
-              mutateTankopediaPersistent((draft) => {
-                draft.model.equipment.enhancedArmor =
-                  !draft.model.equipment.enhancedArmor;
+              mutateTankopediaTemporary((draft) => {
+                draft.equipmentMatrix[1][1] = hasEnhancedArmor ? 0 : -1;
               });
             }}
           />

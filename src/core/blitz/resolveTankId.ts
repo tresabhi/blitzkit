@@ -1,9 +1,9 @@
 import { go } from 'fuzzysort';
+import { UserError } from '../../hooks/userError';
 import {
   tankDefinitions,
   tanksDefinitionsArray,
 } from '../blitzkrieg/tankDefinitions';
-import { UserError } from '../blitzkrieg/userError';
 
 export default async function resolveTankId(tank: string | number) {
   const number = typeof tank === 'string' ? parseInt(tank) : tank;

@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import { Region } from '../../constants/regions';
+import { UserError } from '../../hooks/userError';
 import searchClansAcrossRegions from '../blitz/searchClansAcrossRegions';
-import { UserError } from '../blitzkrieg/userError';
 import { serverAndIdPattern } from './resolvePlayerFromCommand';
 
 export default async function resolveClanFromCommand(
