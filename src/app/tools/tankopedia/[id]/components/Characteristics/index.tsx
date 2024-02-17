@@ -6,8 +6,10 @@ import { lerp } from 'three/src/math/MathUtils';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { coefficient } from '../../../../../../core/blitzkrieg/coefficient';
+import { degressiveStat } from '../../../../../../core/blitzkrieg/degressiveStat';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { normalizeBoundingBox } from '../../../../../../core/blitzkrieg/normalizeBoundingBox';
+import { progressiveStat } from '../../../../../../core/blitzkrieg/progressiveStat';
 import { resolveDpm } from '../../../../../../core/blitzkrieg/resolveDpm';
 import { sum } from '../../../../../../core/blitzkrieg/sum';
 import {
@@ -29,7 +31,15 @@ export function Characteristics() {
   const { tank, turret, gun, engine, track, shell } = useDuel(
     (state) => state.protagonist!,
   );
-  const crew = useTankopediaTemporary((state) => state.crew);
+  const provisions = useProvisions();
+  const crewMastery = useTankopediaTemporary((state) => state.crewMastery);
+  const provisionCrewBonus = provisions.reduce(
+    (total, provision) =>
+      provision.crew ? total + provision.crew / 100 : total,
+    0,
+  );
+  const commanderMastery = crewMastery + provisionCrewBonus;
+  const crewMemberMastery = commanderMastery * 1.1;
   const stockEngine = tank.engines[0];
   const stockTrack = tank.tracks[0];
   const stockTurret = tank.turrets[0];
@@ -53,7 +63,6 @@ export function Characteristics() {
     stockTurret.weight +
     stockGun.weight;
   const [penetrationDistance, setPenetrationDistance] = useState(250);
-  const provisions = useProvisions();
   const camouflage = useTankopediaTemporary((state) => state.camouflage);
   const hasRammer = useEquipment(100);
   const hasCalibratedShells = useEquipment(103);
@@ -89,10 +98,10 @@ export function Characteristics() {
     [hasEnhancedSandbagArmor, 0.06],
     [hasImprovedAssembly, 0.06],
   );
-  const reloadCoefficient = coefficient(
-    [hasRammer, -0.07],
-    [hasAdrenaline && gun.type === 'regular', -0.2],
-  );
+  const reloadCoefficient =
+    (coefficient([hasRammer, -0.07]) *
+      coefficient([true, degressiveStat(crewMemberMastery)])) /
+    coefficient([hasAdrenaline && gun.type === 'regular', 0.2]);
   const penetrationCoefficient = coefficient([
     hasCalibratedShells,
     isExplosive(shell.type) ? 0.1 : 0.05,
@@ -110,15 +119,18 @@ export function Characteristics() {
     hasSupercharger,
     -0.5,
   ]);
-  const aimTimeCoefficient = coefficient(
-    [hasEnhancedGunLayingDrive, -0.1],
-    [hasReticleCalibration, -0.4],
-    [hasVerticalStabilizer, -0.15],
-  );
-  const dispersionCoefficient = coefficient(
-    [hasRefinedGun, -0.1],
-    [hasReticleCalibration, -0.4],
-  );
+  const aimTimeCoefficient =
+    coefficient(
+      [hasEnhancedGunLayingDrive, -0.1],
+      [hasReticleCalibration, -0.4],
+    ) * coefficient([true, degressiveStat(crewMemberMastery)]);
+  const dispersionStillCoefficient =
+    coefficient([hasRefinedGun, -0.1], [hasReticleCalibration, -0.4]) *
+    coefficient([true, degressiveStat(crewMemberMastery)]);
+  const dispersionMovingCoefficient = coefficient([
+    hasVerticalStabilizer,
+    -0.15,
+  ]);
   const enginePowerCoefficient = coefficient(
     [
       hasEngineAccelerator && (tank.type === 'light' || tank.type === 'medium'),
@@ -136,19 +148,20 @@ export function Characteristics() {
     [hasGearOil, 0.03],
     [hasImprovedGearOil, 0.06],
   );
-  const turretTraverseCoefficient = coefficient(
-    [hasStandardFuel, 0.03],
-    [hasImprovedFuel, 0.1],
-  );
-  const hullTraverseCoefficient = coefficient(
-    [hasImprovedControl, 0.1],
-    [hasImprovedEnginePowerBoost, 0.05],
-  );
+  const turretTraverseCoefficient =
+    coefficient([hasStandardFuel, 0.03], [hasImprovedFuel, 0.1]) *
+    coefficient([true, progressiveStat(crewMemberMastery)]);
+  const hullTraverseCoefficient =
+    coefficient(
+      [hasImprovedControl, 0.1],
+      [hasImprovedEnginePowerBoost, 0.05],
+    ) * coefficient([true, progressiveStat(crewMemberMastery)]);
   const resistanceCoefficient = coefficient([hasImprovedSuspension, -0.25]);
-  const viewRangeCoefficient = coefficient([
-    hasImprovedOptics,
-    tank.type === 'tankDestroyer' ? 0.05 : tank.type === 'heavy' ? 0.07 : 0.1,
-  ]);
+  const viewRangeCoefficient =
+    coefficient([
+      hasImprovedOptics,
+      tank.type === 'tankDestroyer' ? 0.05 : tank.type === 'heavy' ? 0.07 : 0.1,
+    ]) * coefficient([true, progressiveStat(commanderMastery)]);
   const fireChanceCoefficient = coefficient([hasProtectiveKit, -0.2]);
 
   const speedForwardsSum = sum(
@@ -199,11 +212,6 @@ export function Characteristics() {
     ],
   );
 
-  const provisionCrewBonus = provisions.reduce(
-    (total, provision) =>
-      provision.crew ? total + provision.crew / 100 : total,
-    0,
-  );
   const resolvedEnginePower = engine.power * enginePowerCoefficient;
   const dpm = resolveDpm(
     gun,
@@ -363,7 +371,7 @@ export function Characteristics() {
         <InfoWithDelta name="Module damage" unit="hp" decimals={0}>
           {shell.damage.module * damageCoefficient}
         </InfoWithDelta>
-        <InfoWithDelta name="Shell velocity" unit="m/s">
+        <InfoWithDelta name="Shell velocity" unit="m/s" decimals={0}>
           {shell.speed * shellVelocityCoefficient}
         </InfoWithDelta>
         <InfoWithDelta
@@ -382,7 +390,7 @@ export function Characteristics() {
           unit="m"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.base * dispersionCoefficient}
+          {gun.dispersion.base * dispersionStillCoefficient}
         </InfoWithDelta>
         <InfoWithDelta
           prefix="+ "
@@ -392,7 +400,7 @@ export function Characteristics() {
           unit="s"
           deltaType="lowerIsBetter"
         >
-          {track.dispersion.move * dispersionCoefficient}
+          {track.dispersion.move * dispersionMovingCoefficient}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={3}
@@ -402,7 +410,7 @@ export function Characteristics() {
           unit="°"
           deltaType="lowerIsBetter"
         >
-          {track.dispersion.traverse * dispersionCoefficient}
+          {track.dispersion.traverse * dispersionMovingCoefficient}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={3}
@@ -412,7 +420,7 @@ export function Characteristics() {
           unit="°"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.traverse * dispersionCoefficient}
+          {gun.dispersion.traverse * dispersionMovingCoefficient}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={3}
@@ -422,17 +430,17 @@ export function Characteristics() {
           unit="m"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.shot * dispersionCoefficient}
+          {gun.dispersion.shot * dispersionMovingCoefficient}
         </InfoWithDelta>
         <InfoWithDelta
-          decimals={3}
+          decimals={1}
           prefix="x "
           indent
           name="Gun damaged"
           unit="scalar"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.damaged * dispersionCoefficient}
+          {gun.dispersion.damaged * dispersionMovingCoefficient}
         </InfoWithDelta>
         <Info name="Gun flexibility" unit="°" />
         <InfoWithDelta decimals={1} indent name="Depression">
@@ -549,7 +557,7 @@ export function Characteristics() {
         <InfoWithDelta name="Fire chance" unit="%" deltaType="lowerIsBetter">
           {Math.round(engine.fireChance * fireChanceCoefficient * 100)}
         </InfoWithDelta>
-        <InfoWithDelta name="View range" unit="m">
+        <InfoWithDelta name="View range" unit="m" decimals={0}>
           {turret.viewRange * viewRangeCoefficient}
         </InfoWithDelta>
         <Info name="Camouflage" unit="%" />
@@ -590,9 +598,9 @@ export function Characteristics() {
                 unit="%"
                 decimals={0}
               >
-                {(crew + provisionCrewBonus) *
-                  (member.type === 'commander' ? 1 : 1.1) *
-                  100}
+                {(member.type === 'commander'
+                  ? commanderMastery
+                  : crewMemberMastery) * 100}
               </InfoWithDelta>
               {member.substitute && (
                 <Info

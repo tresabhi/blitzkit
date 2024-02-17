@@ -14,25 +14,25 @@ export function Miscellaneous() {
   const cooldownBooster = useTankopediaTemporary(
     (state) => state.cooldownBooster,
   );
-  const crew = useTankopediaTemporary((state) => state.crew);
+  const crewMastery = useTankopediaTemporary((state) => state.crewMastery);
   const crewInput = useRef<HTMLInputElement>(null);
-  const [crewDraft, setCrewDraft] = useState(crew);
+  const [crewMasteryDraft, setCrewMasteryDraft] = useState(crewMastery);
 
   const debouncedApplyDraft = useMemo(
     () =>
       debounce((value) => {
         mutateTankopediaTemporary((draft) => {
-          draft.crew = value;
+          draft.crewMastery = value;
         });
       }, 500),
     [],
   );
 
   useEffect(() => {
-    setCrewDraft(crew);
+    setCrewMasteryDraft(crewMastery);
     if (!crewInput.current) return;
-    crewInput.current.value = `${Math.round(crew * 100)}`;
-  }, [crew]);
+    crewInput.current.value = `${Math.round(crewMastery * 100)}`;
+  }, [crewMastery]);
 
   return (
     <ConfigurationChildWrapper>
@@ -91,18 +91,18 @@ export function Miscellaneous() {
             <TextField.Slot>Crew</TextField.Slot>
             <TextField.Input
               ref={crewInput}
-              defaultValue={Math.round(crew * 100)}
+              defaultValue={Math.round(crewMastery * 100)}
               style={{ textAlign: 'right' }}
               onBlur={() => {
                 const newValue = Number(crewInput.current!.value) / 100;
 
                 if (isNaN(newValue)) {
-                  crewInput.current!.value = `${Math.round(crew * 100)}`;
+                  crewInput.current!.value = `${Math.round(crewMastery * 100)}`;
                   return;
                 }
 
                 mutateTankopediaTemporary((draft) => {
-                  draft.crew = clamp(newValue / 100, 0.5, 1);
+                  draft.crewMastery = clamp(newValue / 100, 0.5, 1);
                 });
               }}
               onKeyUp={(event) => {
@@ -117,10 +117,10 @@ export function Miscellaneous() {
           <Slider
             min={50}
             max={100}
-            value={[crewDraft * 100]}
+            value={[crewMasteryDraft * 100]}
             style={{ width: '100%' }}
             onValueChange={([value]) => {
-              setCrewDraft(value / 100);
+              setCrewMasteryDraft(value / 100);
               debouncedApplyDraft(value / 100);
             }}
           />

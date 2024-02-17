@@ -67,7 +67,7 @@ interface TankopediaTemporary {
   equipmentMatrix: EquipmentMatrix;
   mode: TankopediaMode;
   consumables: number[];
-  crew: number;
+  crewMastery: number;
   provisions: number[];
   camouflage: boolean;
   cooldownBooster: number;
@@ -176,7 +176,7 @@ export const useTankopediaTemporary = create<TankopediaTemporary>()(
       [0, 0, 0],
       [0, 0, 0],
     ],
-    crew: 0.75,
+    crewMastery: 0.75,
     mode: 'model',
     consumables: [],
     provisions: [],
