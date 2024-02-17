@@ -176,11 +176,11 @@ export const useTankopediaTemporary = create<TankopediaTemporary>()(
       [0, 0, 0],
       [0, 0, 0],
     ],
-    crewMastery: 0.75,
+    crewMastery: 1,
     mode: 'model',
     consumables: [],
     provisions: [],
-    camouflage: false,
+    camouflage: true,
     cooldownBooster: 0,
   })),
 );

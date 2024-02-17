@@ -397,7 +397,6 @@ export function Characteristics() {
           decimals={3}
           indent
           name="Moving"
-          unit="s"
           deltaType="lowerIsBetter"
         >
           {track.dispersion.move * dispersionMovingCoefficient}
@@ -407,7 +406,6 @@ export function Characteristics() {
           prefix="+ "
           indent
           name="Hull traversing"
-          unit="°"
           deltaType="lowerIsBetter"
         >
           {track.dispersion.traverse * dispersionMovingCoefficient}
@@ -417,7 +415,6 @@ export function Characteristics() {
           prefix="+ "
           indent
           name="Turret traversing"
-          unit="°"
           deltaType="lowerIsBetter"
         >
           {gun.dispersion.traverse * dispersionMovingCoefficient}
@@ -427,7 +424,6 @@ export function Characteristics() {
           prefix="+ "
           indent
           name="After shooting"
-          unit="m"
           deltaType="lowerIsBetter"
         >
           {gun.dispersion.shot * dispersionMovingCoefficient}

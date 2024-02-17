@@ -41,15 +41,8 @@ export default function Page({ params }: { params: { id: string } }) {
     mutateTankopediaTemporary((draft) => {
       draft.model.pose.yaw = 0;
       draft.model.pose.pitch = 0;
-      draft.mode = 'model';
       draft.consumables = [];
       draft.provisions = [];
-      draft.camouflage = false;
-      draft.equipmentMatrix = [
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0],
-      ];
       draft.shot = undefined;
     });
 
@@ -119,10 +112,10 @@ export default function Page({ params }: { params: { id: string } }) {
 
               <Flex direction="column" gap="4">
                 <Modules />
-                <Equipments />
-                <Consumables />
                 <Provisions />
+                <Equipments />
                 <Miscellaneous />
+                <Consumables />
               </Flex>
             </Flex>
 
