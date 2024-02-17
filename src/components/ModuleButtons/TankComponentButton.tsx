@@ -60,7 +60,6 @@ export function TankComponentButton({
         <Text
           size="1"
           style={{
-            color: 'white',
             textShadow: '0 0 4px black',
             zIndex: 1,
             position: 'absolute',
