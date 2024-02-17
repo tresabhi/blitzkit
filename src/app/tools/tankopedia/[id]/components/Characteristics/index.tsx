@@ -81,6 +81,8 @@ export function Characteristics() {
   const hasSandbagArmor = useProvision(28);
   const hasEnhancedSandbagArmor = useProvision(29);
   const hasImprovedGunPowder = useProvision(46);
+  const hasGearOil = useProvision(44);
+  const hasImprovedGearOil = useProvision(45);
 
   const healthCoefficient = coefficient(
     [hasSandbagArmor, 0.03],
@@ -131,6 +133,8 @@ export function Characteristics() {
     [hasImprovedEnginePowerBoost, 0.4],
     [hasStandardFuel, 0.03],
     [hasImprovedFuel, 0.1],
+    [hasGearOil, 0.03],
+    [hasImprovedGearOil, 0.06],
   );
   const turretTraverseCoefficient = coefficient(
     [hasStandardFuel, 0.03],
@@ -147,8 +151,16 @@ export function Characteristics() {
   ]);
   const fireChanceCoefficient = coefficient([hasProtectiveKit, -0.2]);
 
-  const speedForwardsSum = sum([hasImprovedEnginePowerBoost, 5]);
-  const speedBackwardsSum = sum([hasImprovedEnginePowerBoost, 10]);
+  const speedForwardsSum = sum(
+    [hasImprovedEnginePowerBoost, 5],
+    [hasGearOil, 2],
+    [hasImprovedGearOil, 4],
+  );
+  const speedBackwardsSum = sum(
+    [hasImprovedEnginePowerBoost, 10],
+    [hasGearOil, 2],
+    [hasImprovedGearOil, 4],
+  );
   const camouflageSumMoving = sum(
     [
       hasCamouflageNet,
