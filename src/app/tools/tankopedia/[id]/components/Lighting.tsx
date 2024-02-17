@@ -3,7 +3,14 @@ import { useModel } from '../../../../../hooks/useModel';
 import { useDuel } from '../../../../../stores/duel';
 import { useTankopediaPersistent } from '../../../../../stores/tankopedia';
 
-export const ENVIRONMENTS = ['warehouse', 'dawn', 'sunset'] as const;
+export const ENVIRONMENTS = [
+  'lobby',
+  'apartment',
+  'warehouse',
+  'dawn',
+  'sunset',
+  'night',
+] as const;
 
 export function Lighting() {
   const protagonist = useDuel((state) => state.protagonist!);

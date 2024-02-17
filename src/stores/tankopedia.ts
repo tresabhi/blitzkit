@@ -131,7 +131,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
     subscribeWithSelector<TankopediaPersistent>(() => ({
       model: {
         visual: {
-          environment: 'warehouse',
+          environment: ENVIRONMENTS[0],
           controlsEnabled: true,
           showGrid: true,
           greenPenetration: false,
