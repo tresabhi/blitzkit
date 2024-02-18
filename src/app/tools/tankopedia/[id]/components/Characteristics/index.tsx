@@ -582,7 +582,7 @@ export function Characteristics() {
       </Flex>
 
       <Flex direction="column" gap="2">
-        <Heading size="5">Crew</Heading>
+        <Heading size="5">Crew training</Heading>
 
         {tank.crew.map((member) => {
           const count = member.count ?? 1;

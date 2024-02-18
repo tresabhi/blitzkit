@@ -3,6 +3,7 @@ import { clamp, debounce } from 'lodash';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GenericTankComponentButton } from '../../../../../../../components/ModuleButtons/GenericTankComponentButton';
 import { asset } from '../../../../../../../core/blitzkrieg/asset';
+import { useDuel } from '../../../../../../../stores/duel';
 import {
   mutateTankopediaTemporary,
   useTankopediaTemporary,
@@ -17,6 +18,7 @@ export function Miscellaneous() {
   const crewMastery = useTankopediaTemporary((state) => state.crewMastery);
   const crewInput = useRef<HTMLInputElement>(null);
   const [crewMasteryDraft, setCrewMasteryDraft] = useState(crewMastery);
+  const { tank } = useDuel((state) => state.protagonist!);
 
   const debouncedApplyDraft = useMemo(
     () =>
@@ -80,51 +82,53 @@ export function Miscellaneous() {
           }}
         />
 
-        <Flex
-          align="center"
-          direction="column"
-          gap="1"
-          justify="end"
-          style={{ width: 180 }}
-        >
-          <TextField.Root>
-            <TextField.Slot>Crew</TextField.Slot>
-            <TextField.Input
-              ref={crewInput}
-              defaultValue={Math.round(crewMastery * 100)}
-              style={{ textAlign: 'right' }}
-              onBlur={() => {
-                const newValue = Number(crewInput.current!.value) / 100;
+        {tank.treeType === 'researchable' && (
+          <Flex
+            align="center"
+            direction="column"
+            gap="1"
+            justify="end"
+            style={{ width: 180 }}
+          >
+            <TextField.Root>
+              <TextField.Slot>Crew</TextField.Slot>
+              <TextField.Input
+                ref={crewInput}
+                defaultValue={Math.round(crewMastery * 100)}
+                style={{ textAlign: 'right' }}
+                onBlur={() => {
+                  const newValue = Number(crewInput.current!.value) / 100;
 
-                if (isNaN(newValue)) {
-                  crewInput.current!.value = `${Math.round(crewMastery * 100)}`;
-                  return;
-                }
+                  if (isNaN(newValue)) {
+                    crewInput.current!.value = `${Math.round(crewMastery * 100)}`;
+                    return;
+                  }
 
-                mutateTankopediaTemporary((draft) => {
-                  draft.crewMastery = clamp(newValue / 100, 0.5, 1);
-                });
-              }}
-              onKeyUp={(event) => {
-                if (event.key === 'Enter') {
-                  crewInput.current?.blur();
-                }
+                  mutateTankopediaTemporary((draft) => {
+                    draft.crewMastery = clamp(newValue / 100, 0.5, 1);
+                  });
+                }}
+                onKeyUp={(event) => {
+                  if (event.key === 'Enter') {
+                    crewInput.current?.blur();
+                  }
+                }}
+              />
+              <TextField.Slot>%</TextField.Slot>
+            </TextField.Root>
+
+            <Slider
+              min={50}
+              max={100}
+              value={[crewMasteryDraft * 100]}
+              style={{ width: '100%' }}
+              onValueChange={([value]) => {
+                setCrewMasteryDraft(value / 100);
+                debouncedApplyDraft(value / 100);
               }}
             />
-            <TextField.Slot>%</TextField.Slot>
-          </TextField.Root>
-
-          <Slider
-            min={50}
-            max={100}
-            value={[crewMasteryDraft * 100]}
-            style={{ width: '100%' }}
-            onValueChange={([value]) => {
-              setCrewMasteryDraft(value / 100);
-              debouncedApplyDraft(value / 100);
-            }}
-          />
-        </Flex>
+          </Flex>
+        )}
       </Flex>
     </ConfigurationChildWrapper>
   );
