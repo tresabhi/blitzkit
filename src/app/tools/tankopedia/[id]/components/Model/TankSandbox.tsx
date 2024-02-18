@@ -1,5 +1,5 @@
 import { LightningBoltIcon } from '@radix-ui/react-icons';
-import { Badge, Button, Card, Flex, Tabs, Theme } from '@radix-ui/themes';
+import { Button, Card, Flex, Tabs, Theme } from '@radix-ui/themes';
 import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
@@ -10,7 +10,6 @@ import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinit
 import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkrieg/pose';
 import { tankIcon } from '../../../../../../core/blitzkrieg/tankIcon';
-import { useModel } from '../../../../../../hooks/useModel';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import { useDuel } from '../../../../../../stores/duel';
 import {
@@ -43,7 +42,6 @@ export function TankSandbox() {
   const wideFormat = useWideFormat();
   const [loadModel, setLoadModel] = useState(wideFormat || !isMobile);
   const duel = useDuel();
-  const { hasPbr } = useModel(protagonist.tank.id);
 
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);
@@ -168,7 +166,6 @@ export function TankSandbox() {
                 <Tabs.Trigger value="model">
                   <Flex gap="2" align="center">
                     Model
-                    {hasPbr ? <Badge>PBR</Badge> : null}
                   </Flex>
                 </Tabs.Trigger>
                 <Tabs.Trigger value="armor">Armor</Tabs.Trigger>
