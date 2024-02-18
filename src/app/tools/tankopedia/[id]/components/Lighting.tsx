@@ -9,7 +9,6 @@ export const ENVIRONMENTS = [
   'warehouse',
   'dawn',
   'sunset',
-  'night',
 ] as const;
 
 export function Lighting() {

@@ -73,17 +73,6 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
 
         <DropdownMenu.Content>
           <DropdownMenu.CheckboxItem
-            checked={showGrid}
-            onCheckedChange={(checked) => {
-              mutateTankopediaPersistent((draft) => {
-                draft.model.visual.showGrid = checked;
-              });
-            }}
-          >
-            Show grid
-          </DropdownMenu.CheckboxItem>
-
-          <DropdownMenu.CheckboxItem
             checked={greenPenetration}
             onCheckedChange={(checked) => {
               mutateTankopediaPersistent((draft) => {
@@ -92,6 +81,17 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
             }}
           >
             Green penetration
+          </DropdownMenu.CheckboxItem>
+
+          <DropdownMenu.CheckboxItem
+            checked={showGrid}
+            onCheckedChange={(checked) => {
+              mutateTankopediaPersistent((draft) => {
+                draft.model.visual.showGrid = checked;
+              });
+            }}
+          >
+            Show grid
           </DropdownMenu.CheckboxItem>
 
           <DropdownMenu.CheckboxItem
@@ -109,7 +109,6 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
             <DropdownMenu.SubTrigger>Lighting</DropdownMenu.SubTrigger>
 
             <DropdownMenu.SubContent>
-              <DropdownMenu.Label>Preset</DropdownMenu.Label>
               <DropdownMenu.RadioGroup value={environment}>
                 {ENVIRONMENTS.map((environment) => (
                   <DropdownMenu.RadioItem
