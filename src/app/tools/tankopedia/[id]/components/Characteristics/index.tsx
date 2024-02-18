@@ -31,13 +31,15 @@ export function Characteristics() {
   const { tank, turret, gun, engine, track, shell } = useDuel(
     (state) => state.protagonist!,
   );
+  const hasImprovedVentilation = useEquipment(102);
   const provisions = useProvisions();
   const crewMastery = useTankopediaTemporary((state) => state.crewMastery);
-  const provisionCrewBonus = provisions.reduce(
-    (total, provision) =>
-      provision.crew ? total + provision.crew / 100 : total,
-    0,
-  );
+  const provisionCrewBonus =
+    provisions.reduce(
+      (total, provision) =>
+        provision.crew ? total + provision.crew / 100 : total,
+      0,
+    ) + (hasImprovedVentilation ? 0.05 : 0);
   const commanderMastery = crewMastery + provisionCrewBonus;
   const crewMemberMastery = commanderMastery * 1.1;
   const stockEngine = tank.engines[0];

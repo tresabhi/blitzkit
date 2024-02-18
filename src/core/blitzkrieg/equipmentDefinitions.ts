@@ -25,3 +25,5 @@ export interface EquipmentDefinitions {
 export const equipmentDefinitions = fetchCdonLz4<EquipmentDefinitions>(
   asset('definitions/equipment.cdon.lz4'),
 );
+
+equipmentDefinitions.then(console.log);
