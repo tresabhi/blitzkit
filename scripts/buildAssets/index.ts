@@ -40,5 +40,5 @@ const methods = [
 ];
 
 for (const method of methods) {
-  if (allTargets || targets?.includes(method.name)) method(production);
+  if (allTargets || targets?.includes(method.name)) await method(production);
 }

@@ -9,7 +9,7 @@ export interface SC2 {
 
 type DataNode = {
   '##name': 'NMaterial';
-  '#id': Buffer;
+  '#id': ArrayBuffer;
   materialName: string;
   parentMaterialKey?: bigint;
   qualityGroup?: string;
@@ -46,15 +46,15 @@ interface Flags {
 }
 
 interface Properties {
-  alphatestThreshold: Buffer;
-  attenuationBoxHalfSize: Buffer;
-  attenuationBoxSmoothness: Buffer;
-  baseColorFactor?: Buffer;
-  decalTileCoordScale?: Buffer;
-  inGlossiness: Buffer;
-  inSpecularity: Buffer;
-  metalFresnelReflectance: Buffer;
-  metallicRoughnessFactor?: Buffer;
+  alphatestThreshold: ArrayBuffer;
+  attenuationBoxHalfSize: ArrayBuffer;
+  attenuationBoxSmoothness: ArrayBuffer;
+  baseColorFactor?: ArrayBuffer;
+  decalTileCoordScale?: ArrayBuffer;
+  inGlossiness: ArrayBuffer;
+  inSpecularity: ArrayBuffer;
+  metalFresnelReflectance: ArrayBuffer;
+  metallicRoughnessFactor?: ArrayBuffer;
 }
 
 interface TextureSampleStates {

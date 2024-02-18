@@ -48,8 +48,8 @@ export async function extractModel(
 ) {
   const sc2Path = `${data}/3d/${path}.sc2.dvpl`;
   const scgPath = `${data}/3d/${path}.scg.dvpl`;
-  const sc2 = new Sc2ReadStream(await readDVPLFile(sc2Path)).sc2();
-  const scg = new ScgReadStream(await readDVPLFile(scgPath)).scg();
+  const sc2 = new Sc2ReadStream((await readDVPLFile(sc2Path)).buffer).sc2();
+  const scg = new ScgReadStream((await readDVPLFile(scgPath)).buffer).scg();
   const document = new Document();
   const scene = document.createScene();
   const buffer = document.createBuffer();
@@ -58,7 +58,7 @@ export async function extractModel(
   // create materials
   await Promise.all(
     sc2['#dataNodes'].map(async (node) => {
-      const id = node['#id'].readBigUInt64LE();
+      const id = new DataView(node['#id']).getBigUint64(0, true);
 
       if (node.parentMaterialKey !== undefined) {
         /**
@@ -140,7 +140,7 @@ export async function extractModel(
         }
       }
 
-      materials.set(node['#id'].readBigUInt64LE(), material);
+      materials.set(new DataView(node['#id']).getBigUint64(0, true), material);
     }),
   );
 

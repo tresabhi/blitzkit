@@ -5342,7 +5342,7 @@ three-mesh-bvh@^0.7.0:
   resolved "https://registry.yarnpkg.com/three-mesh-bvh/-/three-mesh-bvh-0.7.1.tgz#c11461b73e71c143717f95e0a8e6c9721ad0de77"
   integrity sha512-63xvjnmK3FpA41klHfVvTMi2JRFdKeu3b4STBcLvGyDMYRpkBIyJ2d77CnNvKBZl9bed4sdEyrqE3AOsGorjUA==
 
-three-stdlib@^2.29.1, three-stdlib@^2.29.4:
+three-stdlib@^2.29.4:
   version "2.29.4"
   resolved "https://registry.yarnpkg.com/three-stdlib/-/three-stdlib-2.29.4.tgz#6e8741f6a2d435d15ed73f3a14dd149660d4ce51"
   integrity sha512-XNzGCrz/uAk9XoLwd35eN7dQyI4ggXZTeqjcN034YdYBpBlNO9kmLHehl/0Nw9jCelblB7jla+unHAOIyLyV6Q==
@@ -5354,10 +5354,10 @@ three-stdlib@^2.29.1, three-stdlib@^2.29.4:
     fflate "^0.6.9"
     potpack "^1.0.1"
 
-three@0.159.0:
-  version "0.159.0"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.159.0.tgz#6576b1210805b14f0765bac41fd0e4ec18e43b2e"
-  integrity sha512-eCmhlLGbBgucuo4VEA9IO3Qpc7dh8Bd4VKzr7WfW4+8hMcIfoAVi1ev0pJYN9PTTsCslbcKgBwr2wNZ1EvLInA==
+three@^0.161.0:
+  version "0.161.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.161.0.tgz#38aafaa82fe5467fde2e33933515d1b6beb17d91"
+  integrity sha512-LC28VFtjbOyEu5b93K0bNRLw1rQlMJ85lilKsYj6dgTu+7i17W+JCCEbvrpmNHF1F3NAUqDSWq50UD7w9H2xQw==
 
 through2@^4.0.0:
   version "4.0.2"

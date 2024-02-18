@@ -36,8 +36,8 @@ export async function readTexture(path: string, options?: ReadTextureOptions) {
   const decompressedDvpl = await readDVPLFile(resolvedTexturePath);
 
   const raw = isDds
-    ? await new DdsReadStream(decompressedDvpl).dds()
-    : new PvrReadStream(decompressedDvpl).pvr();
+    ? await new DdsReadStream(decompressedDvpl.buffer).dds()
+    : new PvrReadStream(decompressedDvpl.buffer).pvr();
   const channels = 4 * raw.width * raw.height;
 
   switch (options?.mutation) {
@@ -81,11 +81,11 @@ export async function readTexture(path: string, options?: ReadTextureOptions) {
     case TextureMutation.Miscellaneous: {
       for (let index = 0; index < channels; index += 4) {
         /**
-         * Green is ambient occlusion and alpha is emissive. But very few tanks
+         * Alpha is ambient occlusion and green is emissive. But very few tanks
          * use emissive so I am ignoring it for now.
          */
-        const occlusion = raw.data[index + 1];
-        // const emissive = raw.data[index + 3];
+        // const emissive = raw.data[index + 1];
+        const occlusion = raw.data[index + 3];
 
         raw.data[index] = occlusion;
         raw.data[index + 1] = 0;

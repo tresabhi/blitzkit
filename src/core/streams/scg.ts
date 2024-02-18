@@ -2,18 +2,18 @@ import { ScpgReadStream, VertexAttribute } from './scpg';
 
 interface PolygonGroupRaw {
   '##name': 'PolygonGroup';
-  '#id': Buffer;
+  '#id': ArrayBuffer;
   cubeTextureCoordCount: number;
   indexCount: number;
   indexFormat: 0 | 1;
-  indices: Buffer;
+  indices: ArrayBuffer;
   packing: 0 | 1;
   primitiveCount: number;
   rhi_primitiveType: 1 | 2 | 10;
   textureCoordCount: number;
   vertexCount: number;
   vertexFormat: number;
-  vertices: Buffer;
+  vertices: ArrayBuffer;
 }
 
 type BlitzkriegVertex = { attribute: VertexAttribute; value: number[] }[];
@@ -104,10 +104,13 @@ export class ScgReadStream extends ScpgReadStream {
         }));
       }
 
-      polygonGroups.set(polygonGroupRaw['#id'].readBigUInt64LE(), {
-        vertices,
-        indices,
-      });
+      polygonGroups.set(
+        new DataView(polygonGroupRaw['#id']).getBigUint64(0, true),
+        {
+          vertices,
+          indices,
+        },
+      );
     });
 
     return polygonGroups;
