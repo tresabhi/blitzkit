@@ -19,6 +19,7 @@ uniform float maxThickness;
 uniform bool greenPenetration;
 uniform float damage;
 uniform float explosionRadius;
+uniform bool wireframe;
 
 float depthToDistance(float depth) {
   mat4 projectionMatrixInverse = inverse(vProjectionMatrix);
@@ -107,8 +108,8 @@ void main() {
   }
 
   vec3 color = vec3(1.0, splashChance * 0.392, 0.0);
-  if (greenPenetration) {
-    gl_FragColor = vec4(mix(color, vec3(0.0, 1.0, 0.0), penetrationChance), 0.5);
+  if (greenPenetration || wireframe) {
+    gl_FragColor = vec4(mix(color, vec3(0.0, 1.0, 0.0), penetrationChance), wireframe ? 1.0 : 0.5);
   } else {
     gl_FragColor = vec4(color, (1.0 - penetrationChance) * 0.5);
   }

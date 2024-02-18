@@ -30,6 +30,7 @@ export interface DuelMember {
 interface TankopediaPersistent {
   model: {
     visual: {
+      wireframe: boolean;
       environment: (typeof ENVIRONMENTS)[number];
       controlsEnabled: boolean;
       showGrid: boolean;
@@ -131,6 +132,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
     subscribeWithSelector<TankopediaPersistent>(() => ({
       model: {
         visual: {
+          wireframe: false,
           environment: ENVIRONMENTS[0],
           controlsEnabled: true,
           showGrid: true,

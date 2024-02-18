@@ -27,6 +27,9 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
   const greenPenetration = useTankopediaPersistent(
     (state) => state.model.visual.greenPenetration,
   );
+  const wireframe = useTankopediaPersistent(
+    (state) => state.model.visual.wireframe,
+  );
   const fullScreenAvailable =
     typeof document !== 'undefined' && document.fullscreenEnabled;
   const environment = useTankopediaPersistent(
@@ -126,6 +129,17 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
               </DropdownMenu.RadioGroup>
             </DropdownMenu.SubContent>
           </DropdownMenu.Sub>
+
+          <DropdownMenu.CheckboxItem
+            checked={wireframe}
+            onCheckedChange={(checked) => {
+              mutateTankopediaPersistent((draft) => {
+                draft.model.visual.wireframe = checked;
+              });
+            }}
+          >
+            Wireframe
+          </DropdownMenu.CheckboxItem>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
 

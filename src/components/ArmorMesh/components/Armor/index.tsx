@@ -57,6 +57,7 @@ export function ArmorMesh({
   const scene = useThree((state) => state.scene);
   const hasCalibratedShells = useAwait(hasEquipment(103));
   const hasEnhancedArmor = useAwait(hasEquipment(110));
+  const wireframe = initialTankopedia.model.visual.wireframe;
 
   useEffect(() => {
     async function updateQuickEquipments() {
@@ -106,6 +107,15 @@ export function ArmorMesh({
         (greenPenetration) => {
           if (material.current) {
             material.current.uniforms.greenPenetration.value = greenPenetration;
+          }
+        },
+      ),
+      useTankopediaPersistent.subscribe(
+        (state) => state.model.visual.wireframe,
+        (wireframe) => {
+          if (material.current) {
+            material.current.wireframe = wireframe;
+            material.current.uniforms.wireframe.value = wireframe;
           }
         },
       ),
@@ -386,44 +396,48 @@ export function ArmorMesh({
           });
         }}
       >
-        <shaderMaterial
-          ref={material}
-          fragmentShader={fragmentShader}
-          vertexShader={vertexShader}
-          transparent
-          depthWrite={false}
-          uniforms={{
-            resolution: { value: new Vector2() },
-            externalModuleMask: { value: null },
-            spacedArmorDepth: { value: null },
-            spacedArmorMask: { value: null },
-            projectionMatrixInverse: { value: null },
-            zNear: { value: camera.near },
-            zFar: { value: camera.far },
-            greenPenetration: {
-              value: initialTankopedia.model.visual.greenPenetration,
-            },
-            maxThickness: { value: maxThickness },
-            isExplosive: { value: explosionCapable },
-            canRicochet: { value: ricochetCapable },
-            canSplash: { value: canSplash(initialShell.type) },
-            thickness: {
-              value: thickness * (hasEnhancedArmor ? 1.04 : 1),
-            },
-            penetration: {
-              value:
-                resolveNearPenetration(initialShell.penetration) *
-                (hasCalibratedShells ? (explosionCapable ? 1.1 : 1.05) : 1),
-            },
-            caliber: { value: initialShell.caliber },
-            ricochetAngle: { value: degToRad(initialShell.ricochet ?? 90) },
-            normalization: {
-              value: degToRad(initialShell.normalization ?? 0),
-            },
-            damage: { value: initialShell.damage.armor },
-            explosionRadius: { value: initialShell.explosionRadius ?? 0 },
-          }}
-        />
+        {true && (
+          <shaderMaterial
+            wireframe={wireframe}
+            ref={material}
+            fragmentShader={fragmentShader}
+            vertexShader={vertexShader}
+            transparent
+            depthWrite={false}
+            uniforms={{
+              resolution: { value: new Vector2() },
+              externalModuleMask: { value: null },
+              spacedArmorDepth: { value: null },
+              spacedArmorMask: { value: null },
+              projectionMatrixInverse: { value: null },
+              zNear: { value: camera.near },
+              zFar: { value: camera.far },
+              greenPenetration: {
+                value: initialTankopedia.model.visual.greenPenetration,
+              },
+              maxThickness: { value: maxThickness },
+              isExplosive: { value: explosionCapable },
+              canRicochet: { value: ricochetCapable },
+              canSplash: { value: canSplash(initialShell.type) },
+              thickness: {
+                value: thickness * (hasEnhancedArmor ? 1.04 : 1),
+              },
+              penetration: {
+                value:
+                  resolveNearPenetration(initialShell.penetration) *
+                  (hasCalibratedShells ? (explosionCapable ? 1.1 : 1.05) : 1),
+              },
+              caliber: { value: initialShell.caliber },
+              ricochetAngle: { value: degToRad(initialShell.ricochet ?? 90) },
+              normalization: {
+                value: degToRad(initialShell.normalization ?? 0),
+              },
+              damage: { value: initialShell.damage.armor },
+              explosionRadius: { value: initialShell.explosionRadius ?? 0 },
+              wireframe: { value: wireframe },
+            }}
+          />
+        )}
       </mesh>
     </>
   );
