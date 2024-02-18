@@ -93,11 +93,23 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
           >
             Green penetration
           </DropdownMenu.CheckboxItem>
+
+          <DropdownMenu.CheckboxItem
+            checked={showEnvironment}
+            onCheckedChange={(checked) => {
+              mutateTankopediaPersistent((draft) => {
+                draft.model.visual.showEnvironment = checked;
+              });
+            }}
+          >
+            View environment
+          </DropdownMenu.CheckboxItem>
+
           <DropdownMenu.Sub>
-            <DropdownMenu.SubTrigger>Environment</DropdownMenu.SubTrigger>
+            <DropdownMenu.SubTrigger>Lighting</DropdownMenu.SubTrigger>
 
             <DropdownMenu.SubContent>
-              <DropdownMenu.Label>Style</DropdownMenu.Label>
+              <DropdownMenu.Label>Preset</DropdownMenu.Label>
               <DropdownMenu.RadioGroup value={environment}>
                 {ENVIRONMENTS.map((environment) => (
                   <DropdownMenu.RadioItem
@@ -113,18 +125,6 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
                   </DropdownMenu.RadioItem>
                 ))}
               </DropdownMenu.RadioGroup>
-
-              <DropdownMenu.Label>Configuration</DropdownMenu.Label>
-              <DropdownMenu.CheckboxItem
-                checked={showEnvironment}
-                onCheckedChange={(checked) => {
-                  mutateTankopediaPersistent((draft) => {
-                    draft.model.visual.showEnvironment = checked;
-                  });
-                }}
-              >
-                Display
-              </DropdownMenu.CheckboxItem>
             </DropdownMenu.SubContent>
           </DropdownMenu.Sub>
         </DropdownMenu.Content>
