@@ -5,8 +5,7 @@ import { extractModel } from '../../src/core/blitz/extractModel';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
-import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
-import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { AssetCommit } from '../../src/core/github/assetCommit';
 import { DATA, POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 import { TankParameters } from './tankIcons';
@@ -24,8 +23,8 @@ export async function tankModels(production: boolean) {
   );
 
   for (const nationIndex in nations) {
-    const changes: FileChange[] = [];
     const nation = nations[nationIndex];
+    const assetCommit = new AssetCommit(`tank models ${nation}`, production);
     const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
       `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
     );
@@ -37,6 +36,8 @@ export async function tankModels(production: boolean) {
       .slice(0, 3)
       .map(Number)
       .map((channel) => channel / 255) as Vector3Tuple;
+
+    if (nation !== 'other') continue;
 
     await Promise.all(
       Object.entries(tanks.root).map(async ([tankKey, tank]) => {
@@ -55,16 +56,14 @@ export async function tankModels(production: boolean) {
           baseColor,
         );
 
-        changes.push({
-          path: `3d/tanks/models/${id}.glb`,
-          encoding: 'base64',
-          content: Buffer.from(await nodeIO.writeBinary(model)).toString(
-            'base64',
-          ),
-        });
+        assetCommit.add(
+          `3d/tanks/models/${id}.glb`,
+          Buffer.from(await nodeIO.writeBinary(model)).toString('base64'),
+          'base64',
+        );
       }),
     );
 
-    await commitAssets(`tank models ${nation}`, changes, production);
+    assetCommit.push();
   }
 }
