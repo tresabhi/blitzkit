@@ -18,7 +18,7 @@ await fetch(
       }>,
   )
   .then(({ assets }) => {
-    const asset = assets.find(({ name }) => name.includes('linux-x64'));
+    const asset = assets.find(({ name }) => name.includes('windows-x64'));
     if (!asset) throw new Error('No asset found');
     return fetch(asset.browser_download_url);
   })
