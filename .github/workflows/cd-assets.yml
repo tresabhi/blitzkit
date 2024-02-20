@@ -41,4 +41,4 @@ jobs:
         run: ./temp/depotDownloader/DepotDownloader.exe -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
 
       - name: Build assets
-        run: $env:GH_TOKEN = "${{ secrets.GITHUB_TOKEN }}"; $env:DISCORD_TOKEN = "${{ secrets.DISCORD_TOKEN }}"; yarn build:assets --all-targets --depot
+        run: $env:GH_TOKEN = "${{ secrets.GH_TOKEN }}"; $env:DISCORD_TOKEN = "${{ secrets.DISCORD_TOKEN }}"; yarn build:assets --all-targets --depot
