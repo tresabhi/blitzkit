@@ -1,12 +1,13 @@
 import { readdir } from 'fs/promises';
 import { Vector3Tuple } from 'three';
+import { DATA } from '.';
 import { NATION_IDS } from '../../src/constants/nations';
 import { readBase64DVPL } from '../../src/core/blitz/readBase64DVPL';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
-import { DATA, POI } from './constants';
+import { POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 
 export interface TankParameters {

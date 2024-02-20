@@ -1,11 +1,12 @@
 import sharp from 'sharp';
+import { DATA } from '.';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
-import { DATA, POI } from './constants';
+import { POI } from './constants';
 import { ConsumablesCommon, ProvisionsCommon } from './definitions';
 
 interface Mappings {

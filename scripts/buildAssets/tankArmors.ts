@@ -1,11 +1,12 @@
 import { NodeIO } from '@gltf-transform/core';
 import { readdir } from 'fs/promises';
+import { DATA } from '.';
 import { extractArmor } from '../../src/core/blitz/extractArmor';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
-import { DATA, POI } from './constants';
+import { POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 
 export async function tankArmors(production: boolean) {

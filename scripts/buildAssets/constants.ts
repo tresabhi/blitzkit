@@ -1,6 +1,3 @@
-export const DATA =
-  'C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz/Data';
-
 export const POI = {
   vehicleDefinitions: 'XML/item_defs/vehicles',
   strings: 'Strings',

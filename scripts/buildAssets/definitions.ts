@@ -2,6 +2,7 @@ import { readdir } from 'fs/promises';
 import { parse as parsePath } from 'path';
 import { Vector3Tuple } from 'three';
 import { parse as parseYaml } from 'yaml';
+import { DATA } from '.';
 import { TankType } from '../../src/components/Tanks';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
@@ -31,7 +32,7 @@ import {
   TankDefinitions,
   Tier,
 } from '../../src/core/blitzkrieg/tankDefinitions';
-import { DATA, POI } from './constants';
+import { POI } from './constants';
 import { TankParameters } from './tankIcons';
 
 type BlitzTankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';

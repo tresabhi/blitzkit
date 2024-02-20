@@ -37,5 +37,5 @@ jobs:
       - name: Run DepotDownloader
         run: ./temp/depotDownloader/DepotDownloader.exe -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
 
-      - name: Snitch
-        run: cd depots; ls; cd 444200; ls
+      - name: Build assets
+        run: GH_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn build:assets --all-targets --depot
