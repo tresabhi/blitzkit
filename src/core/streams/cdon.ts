@@ -212,7 +212,7 @@ export class CdonWriteStream extends WriteStream {
     object: CdonValue,
     stringTable: Map<string, number>,
   ) {
-    if (object === null || object === undefined) {
+    if (object === null) {
       this.uint8(ValueType.Null);
     } else if (typeof object === 'boolean') {
       this.uint8(ValueType.Boolean);
@@ -289,7 +289,7 @@ export class CdonWriteStream extends WriteStream {
       object.forEach((value) =>
         this.value(fastStringFormat, value, stringTable),
       );
-    } else {
+    } else if (object !== undefined) {
       const entries = Object.entries(object);
 
       this.uint8(ValueType.Object);

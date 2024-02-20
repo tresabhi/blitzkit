@@ -7,6 +7,8 @@ export async function commitAssets(
 ) {
   console.log(`Committing ${message}...`);
 
+  if (changes.length === 0) return;
+
   await commitMultipleFiles(
     'tresabhi',
     'blitzkrieg-assets',

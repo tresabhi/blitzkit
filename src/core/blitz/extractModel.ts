@@ -1,5 +1,5 @@
 import { Document, Material, Node, Scene } from '@gltf-transform/core';
-import { range, times } from 'lodash';
+import { times } from 'lodash';
 import { dirname } from 'path';
 import {
   Matrix4,
@@ -221,59 +221,77 @@ export async function extractModel(
           }
 
           case 'RenderComponent': {
-            let minLODDistanceBatchId: undefined | number;
+            // let minLODDistanceBatchId: undefined | number;
 
-            if (component['rc.renderObj']['rb0.lodIndex'] === -1) {
-              minLODDistanceBatchId = 0;
-            } else {
-              const lodList = components.find(
-                (component) => component['comp.typename'] === 'LodComponent',
-              );
+            // if (component['rc.renderObj']['rb0.lodIndex'] === -1) {
+            //   minLODDistanceBatchId = 0;
+            // } else {
+            //   const lodList = components.find(
+            //     (component) => component['comp.typename'] === 'LodComponent',
+            //   );
 
-              if (
-                lodList === undefined ||
-                lodList['comp.typename'] !== 'LodComponent' // type annotation hack
-              ) {
-                throw new SyntaxError('Missing LodComponent');
-              }
+            //   if (
+            //     lodList === undefined ||
+            //     lodList['comp.typename'] !== 'LodComponent' // type annotation hack
+            //   ) {
+            //     throw new SyntaxError('Missing LodComponent');
+            //   }
 
-              let minLODDistance = Infinity;
-              let isFirstMaxFloat = true;
-              let lodIndexStreak = 0;
-              let lodIndexStreakIndex: undefined | number = undefined;
+            //   let minLODDistance = Infinity;
+            //   let isFirstMaxFloat = true;
+            //   let lodIndexStreak = 0;
+            //   let lodIndexStreakIndex: undefined | number = undefined;
 
-              range(component['rc.renderObj']['ro.batchCount']).forEach(
-                (id) => {
-                  const lodIndex =
-                    component['rc.renderObj'][`rb${id}.lodIndex`];
-                  const lodDistance =
-                    lodList['lc.loddist'][`distance${lodIndex}`];
+            //   range(component['rc.renderObj']['ro.batchCount']).forEach(
+            //     (id) => {
+            //       const lodIndex =
+            //         component['rc.renderObj'][`rb${id}.lodIndex`];
+            //       const lodDistance =
+            //         lodList['lc.loddist'][`distance${lodIndex}`];
 
-                  if (lodIndexStreakIndex === lodIndex) {
-                    lodIndexStreak++;
-                  } else {
-                    lodIndexStreak = 0;
-                    lodIndexStreakIndex = lodIndex;
-                  }
+            //       if (lodIndexStreakIndex === lodIndex) {
+            //         lodIndexStreak++;
+            //       } else {
+            //         lodIndexStreak = 0;
+            //         lodIndexStreakIndex = lodIndex;
+            //       }
 
-                  if (
-                    lodDistance < minLODDistance ||
-                    (lodDistance === minLODDistance && lodIndexStreak > 0) ||
-                    (lodDistance === MAX_FLOAT32 && isFirstMaxFloat)
-                  ) {
-                    if (lodDistance === MAX_FLOAT32) isFirstMaxFloat = false;
-                    minLODDistance = lodDistance;
-                    minLODDistanceBatchId = id;
-                  }
-                },
-              );
-            }
+            //       if (
+            //         lodDistance < minLODDistance ||
+            //         (lodDistance === minLODDistance && lodIndexStreak > 0) ||
+            //         (lodDistance === MAX_FLOAT32 && isFirstMaxFloat)
+            //       ) {
+            //         if (lodDistance === MAX_FLOAT32) isFirstMaxFloat = false;
+            //         minLODDistance = lodDistance;
+            //         minLODDistanceBatchId = id;
+            //       }
+            //     },
+            //   );
+            // }
 
-            const batch =
-              component['rc.renderObj']['ro.batches'][
-                minLODDistanceBatchId!.toString().padStart(4, '0')
-              ];
-            const polygonGroup = scg.get(batch['rb.datasource']);
+            let batch = component['rc.renderObj']['ro.batches']['0000'];
+            let polygonGroup = scg.get(batch['rb.datasource'])!;
+
+            Object.values(component['rc.renderObj']['ro.batches']).forEach(
+              (thisBatch) => {
+                const thisPolygonGroup = scg.get(thisBatch['rb.datasource']);
+
+                if (
+                  thisPolygonGroup &&
+                  thisPolygonGroup.vertices.length >
+                    polygonGroup.vertices.length
+                ) {
+                  batch = thisBatch;
+                  polygonGroup = thisPolygonGroup;
+                }
+              },
+            );
+
+            // const batch =
+            //   component['rc.renderObj']['ro.batches'][
+            //     minLODDistanceBatchId!.toString().padStart(4, '0')
+            //   ];
+            // const polygonGroup = scg.get(batch['rb.datasource']);
 
             if (!polygonGroup) {
               console.warn(

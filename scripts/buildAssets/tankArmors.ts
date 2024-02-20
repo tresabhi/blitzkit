@@ -29,6 +29,8 @@ export async function tankArmors(production: boolean) {
 
           const id = toUniqueId(nation, tank.id);
 
+          if (id !== 12913) return;
+
           console.log(`Building armor ${id} @ ${nation}/${tankKey}`);
 
           const model = await extractArmor(DATA, `${nation}-${tankKey}`);
