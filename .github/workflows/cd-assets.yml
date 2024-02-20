@@ -31,8 +31,8 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      # - name: Setup DepotDownloader
-      #   run: yarn setup:depotdownloader
+      - name: Setup DepotDownloader
+        run: yarn setup:depotdownloader
 
-      # - name: Run DepotDownloader
-      #   run: ./temp/depotDownloader/DepotDownloader.exe -app 444200 -username {{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "{{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
+      - name: Run DepotDownloader
+        run: ./temp/depotDownloader/DepotDownloader.exe -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
