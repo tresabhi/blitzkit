@@ -30,4 +30,4 @@ await fetch(
 console.log('Unzipping...');
 await decompress('temp/depotDownloader.zip', 'temp/depotDownloader');
 
-console.log(await readdir('temp/depotDownloader'));
+console.log('Download complete; files:', await readdir('temp/depotDownloader'));

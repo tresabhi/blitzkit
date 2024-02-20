@@ -33,3 +33,6 @@ jobs:
 
       - name: Setup DepotDownloader
         run: yarn setup:depotdownloader
+
+      - name: Run DepotDownloader
+        run: temp/depotDownloader/DepotDownloader
