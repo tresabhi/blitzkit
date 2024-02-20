@@ -35,4 +35,4 @@ jobs:
         run: yarn setup:depotdownloader
 
       - name: Run DepotDownloader
-        run: git update-index --chmod=+x temp/depotDownloader/DepotDownloader
+        run: git update-index --chmod=+x ./temp/depotDownloader/DepotDownloader
