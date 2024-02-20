@@ -53,7 +53,7 @@ export async function extractModel(
   const document = new Document();
   const scene = document.createScene();
   const buffer = document.createBuffer();
-  const materials = new Map<bigint, Material | bigint>();
+  const materials = new Map<bigint, Material | bigint | undefined>();
 
   // create materials
   await Promise.all(
@@ -138,9 +138,12 @@ export async function extractModel(
               ),
           );
         }
-      }
 
-      materials.set(new DataView(node['#id']).getBigUint64(0, true), material);
+        materials.set(
+          new DataView(node['#id']).getBigUint64(0, true),
+          material,
+        );
+      }
     }),
   );
 
@@ -148,14 +151,10 @@ export async function extractModel(
   materials.forEach((material, id) => {
     if (typeof material !== 'bigint') return;
 
-    let resolvedMaterial: Material | bigint = material;
+    let resolvedMaterial: Material | bigint | undefined = material;
 
     while (typeof resolvedMaterial === 'bigint') {
       const linkedParentMaterial = materials.get(resolvedMaterial);
-
-      if (linkedParentMaterial === undefined) {
-        throw new Error('Could not resolve material');
-      }
 
       resolvedMaterial = linkedParentMaterial;
     }
@@ -221,140 +220,78 @@ export async function extractModel(
           }
 
           case 'RenderComponent': {
-            // let minLODDistanceBatchId: undefined | number;
+            const renderObject = component['rc.renderObj'];
 
-            // if (component['rc.renderObj']['rb0.lodIndex'] === -1) {
-            //   minLODDistanceBatchId = 0;
-            // } else {
-            //   const lodList = components.find(
-            //     (component) => component['comp.typename'] === 'LodComponent',
-            //   );
+            times(renderObject['ro.batchCount'], (batchIndex): void => {
+              const lodIndex = renderObject[`rb${batchIndex}.lodIndex`];
 
-            //   if (
-            //     lodList === undefined ||
-            //     lodList['comp.typename'] !== 'LodComponent' // type annotation hack
-            //   ) {
-            //     throw new SyntaxError('Missing LodComponent');
-            //   }
+              if (lodIndex !== 0) return;
 
-            //   let minLODDistance = Infinity;
-            //   let isFirstMaxFloat = true;
-            //   let lodIndexStreak = 0;
-            //   let lodIndexStreakIndex: undefined | number = undefined;
+              const batchKey = batchIndex.toString().padStart(4, '0');
+              const batch = renderObject['ro.batches'][batchKey];
+              const material = materials.get(batch['rb.nmatname']);
+              const polygonGroup = scg.get(batch['rb.datasource']);
 
-            //   range(component['rc.renderObj']['ro.batchCount']).forEach(
-            //     (id) => {
-            //       const lodIndex =
-            //         component['rc.renderObj'][`rb${id}.lodIndex`];
-            //       const lodDistance =
-            //         lodList['lc.loddist'][`distance${lodIndex}`];
+              if (!(material instanceof Material)) {
+                // probably shadow material
+                return;
+              }
+              if (polygonGroup === undefined) {
+                throw new Error(
+                  `Missing polygon group ${batch['rb.datasource']}`,
+                );
+              }
 
-            //       if (lodIndexStreakIndex === lodIndex) {
-            //         lodIndexStreak++;
-            //       } else {
-            //         lodIndexStreak = 0;
-            //         lodIndexStreakIndex = lodIndex;
-            //       }
-
-            //       if (
-            //         lodDistance < minLODDistance ||
-            //         (lodDistance === minLODDistance && lodIndexStreak > 0) ||
-            //         (lodDistance === MAX_FLOAT32 && isFirstMaxFloat)
-            //       ) {
-            //         if (lodDistance === MAX_FLOAT32) isFirstMaxFloat = false;
-            //         minLODDistance = lodDistance;
-            //         minLODDistanceBatchId = id;
-            //       }
-            //     },
-            //   );
-            // }
-
-            let batch = component['rc.renderObj']['ro.batches']['0000'];
-            let polygonGroup = scg.get(batch['rb.datasource'])!;
-
-            Object.values(component['rc.renderObj']['ro.batches']).forEach(
-              (thisBatch) => {
-                const thisPolygonGroup = scg.get(thisBatch['rb.datasource']);
-
-                if (
-                  thisPolygonGroup &&
-                  thisPolygonGroup.vertices.length >
-                    polygonGroup.vertices.length
-                ) {
-                  batch = thisBatch;
-                  polygonGroup = thisPolygonGroup;
-                }
-              },
-            );
-
-            // const batch =
-            //   component['rc.renderObj']['ro.batches'][
-            //     minLODDistanceBatchId!.toString().padStart(4, '0')
-            //   ];
-            // const polygonGroup = scg.get(batch['rb.datasource']);
-
-            if (!polygonGroup) {
-              console.warn(
-                `Missing polygon group ${batch['rb.datasource']} (${hierarchy.name}); skipping...`,
-              );
-
-              break;
-            }
-
-            const material = materials.get(batch['rb.nmatname']);
-
-            if (!(material instanceof Material)) {
-              throw new Error(`Material ${batch['rb.nmatname']} is unresolved`);
-            }
-
-            const indicesAccessor = document
-              .createAccessor()
-              .setType('SCALAR')
-              .setArray(new Uint16Array(polygonGroup.indices))
-              .setBuffer(buffer);
-            const primitive = document
-              .createPrimitive()
-              .setIndices(indicesAccessor)
-              .setMaterial(material);
-            const attributes = new Map<VertexAttribute, number[][]>();
-
-            polygonGroup.vertices.forEach((vertex) => {
-              vertex.forEach(({ attribute, value }) => {
-                if (!attributes.has(attribute)) {
-                  attributes.set(attribute, []);
-                }
-
-                attributes.get(attribute)!.push(value);
-              });
-            });
-
-            if (attributes.has(VertexAttribute.TANGENT)) {
-              attributes.set(
-                VertexAttribute.TANGENT,
-                attributes
-                  .get(VertexAttribute.TANGENT)!
-                  .map((tangent) => [...tangent, 1]),
-              );
-            }
-
-            attributes.forEach((value, attribute) => {
-              const name = vertexAttributeGLTFName[attribute];
-              if (!name || primitive.getAttribute(name)) return;
-              const vertexSize = vertexAttributeGltfVectorSizes[attribute];
-
-              const attributeAccessor = document
-                .createAccessor(name)
-                .setType(vertexSize === 1 ? 'SCALAR' : `VEC${vertexSize}`)
-                .setArray(new Float32Array(value.flat()))
+              const lodNode = document.createNode(batchKey);
+              const indicesAccessor = document
+                .createAccessor()
+                .setType('SCALAR')
+                .setArray(new Uint16Array(polygonGroup.indices))
                 .setBuffer(buffer);
-              primitive.setAttribute(name, attributeAccessor);
+              const primitive = document
+                .createPrimitive()
+                .setIndices(indicesAccessor)
+                .setMaterial(material);
+              const attributes = new Map<VertexAttribute, number[][]>();
+
+              polygonGroup.vertices.forEach((vertex) => {
+                vertex.forEach(({ attribute, value }) => {
+                  if (!attributes.has(attribute)) {
+                    attributes.set(attribute, []);
+                  }
+
+                  attributes.get(attribute)!.push(value);
+                });
+              });
+
+              if (attributes.has(VertexAttribute.TANGENT)) {
+                attributes.set(
+                  VertexAttribute.TANGENT,
+                  attributes
+                    .get(VertexAttribute.TANGENT)!
+                    .map((tangent) => [...tangent, 1]),
+                );
+              }
+
+              attributes.forEach((value, attribute) => {
+                const name = vertexAttributeGLTFName[attribute];
+                if (!name || primitive.getAttribute(name)) return;
+                const vertexSize = vertexAttributeGltfVectorSizes[attribute];
+
+                const attributeAccessor = document
+                  .createAccessor(name)
+                  .setType(vertexSize === 1 ? 'SCALAR' : `VEC${vertexSize}`)
+                  .setArray(new Float32Array(value.flat()))
+                  .setBuffer(buffer);
+                primitive.setAttribute(name, attributeAccessor);
+              });
+
+              const mesh = document
+                .createMesh(batch['##name'])
+                .addPrimitive(primitive);
+              lodNode.setMesh(mesh);
+              node.addChild(lodNode);
             });
-
-            const mesh = document
-              .createMesh(batch['##name'])
-              .addPrimitive(primitive);
-
-            node.setMesh(mesh);
 
             break;
           }

@@ -1,11 +1,10 @@
 import { readdir } from 'fs/promises';
 import sharp from 'sharp';
-import { DATA } from '.';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
 import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
-import { POI } from './constants';
+import { DATA, POI } from './constants';
 
 export async function boosterIcons(production: boolean) {
   const boosterFiles = (await readdir(`${DATA}/${POI.boosterIcons}`)).filter(

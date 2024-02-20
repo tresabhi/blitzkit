@@ -1,14 +1,13 @@
 import { NodeIO } from '@gltf-transform/core';
 import { readdir } from 'fs/promises';
 import { Vector3Tuple } from 'three';
-import { DATA } from '.';
 import { extractModel } from '../../src/core/blitz/extractModel';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
-import { POI } from './constants';
+import { DATA, POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 import { TankParameters } from './tankIcons';
 
@@ -40,7 +39,7 @@ export async function tankModels(production: boolean) {
       .map(Number)
       .map((channel) => channel / 255) as Vector3Tuple;
 
-    if (nation !== 'other') continue;
+    console.log(`Building models for ${nation}`);
 
     await Promise.all(
       Object.entries(tanks.root).map(async ([tankKey, tank]) => {
@@ -58,6 +57,8 @@ export async function tankModels(production: boolean) {
           parameters.resourcesPath.blitzModelPath.replace(/\.sc2$/, ''),
           baseColor,
         );
+
+        // writeFile(`test.${tankKey}.glb`, await nodeIO.writeBinary(model));
 
         changes.push({
           path: `3d/tanks/models/${id}.glb`,

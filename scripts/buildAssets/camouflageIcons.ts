@@ -1,8 +1,7 @@
-import { DATA } from '.';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
-import { POI } from './constants';
+import { DATA, POI } from './constants';
 
 export async function camouflageIcons(production: boolean) {
   console.log('Building camouflage icons...');
