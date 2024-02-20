@@ -29,7 +29,10 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
-        run: yarn --ignore-engines
+        run: yarn
+
+      - name: Add fixed sharp
+        run: yarn add sharp@0.33.1 --ignore-engines
 
       - name: Setup DepotDownloader
         run: yarn setup:depotdownloader
