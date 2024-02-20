@@ -21,6 +21,8 @@ export class AssetCommit {
   }
 
   async push() {
+    if (this.blobs.length === 0) return;
+
     const latestCommitSha = (
       await octokit.git.getRef({
         owner: 'tresabhi',

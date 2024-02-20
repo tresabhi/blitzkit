@@ -1,6 +1,6 @@
 import decompress from 'decompress';
 import { existsSync } from 'fs';
-import { mkdir, writeFile } from 'fs/promises';
+import { mkdir, readdir, writeFile } from 'fs/promises';
 
 if (!existsSync('temp')) {
   console.log('Creating temp directory...');
@@ -25,3 +25,5 @@ await fetch(
 
 console.log('Unzipping...');
 decompress('temp/depotDownloader.zip', 'temp/depotDownloader');
+
+console.log(await readdir('temp/depotDownloader'));

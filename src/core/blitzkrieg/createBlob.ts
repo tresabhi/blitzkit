@@ -40,6 +40,6 @@ export const createBlob = throttle(
       }
     }
   },
-  (5000 / (60 * 60 * 1000)) * 0.95, // 5% less than max rate
+  (5000 / (60 * 60 * 1000)) * 0.9,
   { trailing: true },
 );

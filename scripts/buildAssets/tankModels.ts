@@ -5,8 +5,8 @@ import { extractModel } from '../../src/core/blitz/extractModel';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
+import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
 import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
-import { AssetCommit } from '../../src/core/github/assetCommit';
 import { DATA, POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 import { TankParameters } from './tankIcons';
@@ -26,7 +26,7 @@ export async function tankModels(production: boolean) {
   for (const nationIndex in nations) {
     const nation = nations[nationIndex];
     const changes: FileChange[] = [];
-    const assetCommit = new AssetCommit(`tank models ${nation}`, production);
+    // const assetCommit = new AssetCommit(`tank models ${nation}`, production);
     const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
       `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
     );
@@ -68,7 +68,7 @@ export async function tankModels(production: boolean) {
       }),
     );
 
-    assetCommit.push();
-    // await commitAssets(`tank models ${nation}`, changes, production);
+    // assetCommit.push();
+    await commitAssets(`tank models ${nation}`, changes, production);
   }
 }
