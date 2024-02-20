@@ -14,10 +14,14 @@ await fetch(
   .then(
     (response) =>
       response.json() as Promise<{
-        assets: { browser_download_url: string }[];
+        assets: { browser_download_url: string; name: string }[];
       }>,
   )
-  .then(({ assets }) => fetch(assets[0].browser_download_url))
+  .then(({ assets }) => {
+    const asset = assets.find(({ name }) => name.includes('linux-x64'));
+    if (!asset) throw new Error('No asset found');
+    return fetch(asset.browser_download_url);
+  })
   .then((response) => response.arrayBuffer())
   .then((arrayBuffer) =>
     writeFile('temp/depotDownloader.zip', Buffer.from(arrayBuffer)),
