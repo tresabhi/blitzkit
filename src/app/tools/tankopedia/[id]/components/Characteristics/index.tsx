@@ -3,6 +3,7 @@ import { Flex, Heading, Slider, Text, TextField } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
+import { ShellButton } from '../../../../../../components/ModuleButtons/ShellButton';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { coefficient } from '../../../../../../core/blitzkrieg/coefficient';
@@ -15,13 +16,14 @@ import { sum } from '../../../../../../core/blitzkrieg/sum';
 import {
   CREW_MEMBER_NAMES,
   GUN_TYPE_NAMES,
+  SHELL_NAMES,
 } from '../../../../../../core/blitzkrieg/tankDefinitions';
 import { unionBoundingBox } from '../../../../../../core/blitzkrieg/unionBoundingBox';
 import { useConsumable } from '../../../../../../hooks/useConsumable';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useProvision } from '../../../../../../hooks/useProvision';
 import { useProvisions } from '../../../../../../hooks/useProvisions';
-import { useDuel } from '../../../../../../stores/duel';
+import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
@@ -230,9 +232,33 @@ export function Characteristics() {
   }, [penetrationDistance]);
 
   return (
-    <Flex direction="column" gap="4" style={{ width: '100%' }}>
+    <Flex direction="column" gap="8" style={{ width: '100%' }}>
       <Flex direction="column" gap="2">
-        <Heading size="5">Fire</Heading>
+        <Flex align="center" gap="4">
+          <Heading size="5">Fire</Heading>
+
+          <Flex>
+            {gun.shells.map((thisShell, index) => {
+              return (
+                <ShellButton
+                  key={thisShell.id}
+                  shell={thisShell.icon}
+                  discriminator={SHELL_NAMES[thisShell.type]}
+                  selected={thisShell.id === shell.id}
+                  first={index === 0}
+                  last={index === gun.shells.length - 1}
+                  rowChild
+                  onClick={() => {
+                    mutateDuel((draft) => {
+                      draft.protagonist!.shell = thisShell;
+                    });
+                  }}
+                />
+              );
+            })}
+          </Flex>
+        </Flex>
+
         <Info name="Gun type">{GUN_TYPE_NAMES[gun.type]}</Info>
         <InfoWithDelta name="DPM" decimals={0} unit="hp / min">
           {dpm}

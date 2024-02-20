@@ -1,10 +1,6 @@
 import { Flex, Heading } from '@radix-ui/themes';
 import { ModuleButton } from '../../../../../../../components/ModuleButtons/ModuleButton';
-import { ShellButton } from '../../../../../../../components/ModuleButtons/ShellButton';
-import {
-  SHELL_NAMES,
-  TIER_ROMAN_NUMERALS,
-} from '../../../../../../../core/blitzkrieg/tankDefinitions';
+import { TIER_ROMAN_NUMERALS } from '../../../../../../../core/blitzkrieg/tankDefinitions';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
@@ -96,27 +92,6 @@ export function Modules() {
                 onClick={() => {
                   mutateDuel((draft) => {
                     draft.protagonist!.track = track;
-                  });
-                }}
-              />
-            );
-          })}
-        </Flex>
-
-        <Flex>
-          {protagonist.gun.shells.map((shell, index) => {
-            return (
-              <ShellButton
-                key={shell.id}
-                shell={shell.icon}
-                discriminator={SHELL_NAMES[shell.type]}
-                selected={protagonist.shell.id === shell.id}
-                first={index === 0}
-                last={index === protagonist.gun.shells.length - 1}
-                rowChild
-                onClick={() => {
-                  mutateDuel((draft) => {
-                    draft.protagonist!.shell = shell;
                   });
                 }}
               />
