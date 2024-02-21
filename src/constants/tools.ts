@@ -3,6 +3,7 @@ interface Tool {
   title: string;
   description: string;
   disabled?: boolean;
+  href?: string;
 }
 
 export const TOOLS: Tool[] = [
@@ -12,31 +13,37 @@ export const TOOLS: Tool[] = [
     description: 'Live session performance tracker',
   },
   {
-    id: 'ratings',
-    title: 'Ratings',
-    description: 'Ratings gamemode leaderboards',
-  },
-  {
     id: 'tankopedia',
     title: 'Tankopedia',
     description: 'Blitz tank encyclopedia',
   },
   {
-    id: 'inactive',
-    title: 'Inactivity tracker',
-    description: 'Find inactive members of a clan',
-    disabled: true,
+    id: 'ratings',
+    title: 'Ratings',
+    description: 'Ratings gamemode leaderboards',
   },
   {
-    id: 'profile',
-    title: 'Player profile',
-    description: "A player's basic non-statistical info",
-    disabled: true,
+    id: 'discord',
+    title: 'Discord bot',
+    description: 'Stats and tools right in Discord',
+    href: 'https://discord.com/application-directory/1097673957865443370',
   },
   // {
-  //   title: 'More coming soon',
-  //   description: 'New tools are added often',
-  //   banner: '/assets/banners/more.png',
-  //   id: 'https://discord.gg/nDt7AjGJQH',
+  //   id: 'inactive',
+  //   title: 'Inactivity tracker',
+  //   description: 'Find inactive members of a clan',
+  //   disabled: true,
   // },
+  // {
+  //   id: 'profile',
+  //   title: 'Player profile',
+  //   description: "A player's basic non-statistical info",
+  //   disabled: true,
+  // },
+  {
+    id: 'more',
+    title: 'More coming soon',
+    description: 'This site is being actively developed',
+    href: 'https://discord.gg/nDt7AjGJQH',
+  },
 ];
