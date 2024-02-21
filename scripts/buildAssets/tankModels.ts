@@ -6,11 +6,11 @@ import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 // import { AssetCommit } from '../../src/core/github/assetCommit';
+import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
+import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
 import { DATA, POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 import { TankParameters } from './tankIcons';
-import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
-import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
 
 interface VehicleCustomization {
   armorColor: string;
