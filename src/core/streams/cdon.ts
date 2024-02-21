@@ -27,6 +27,7 @@ enum FastStringFormat {
 }
 
 export type CdonValue =
+  | undefined
   | null
   | boolean
   | number
@@ -212,7 +213,7 @@ export class CdonWriteStream extends WriteStream {
     object: CdonValue,
     stringTable: Map<string, number>,
   ) {
-    if (object === null) {
+    if (object === null || object === undefined) {
       this.uint8(ValueType.Null);
     } else if (typeof object === 'boolean') {
       this.uint8(ValueType.Boolean);
@@ -289,7 +290,7 @@ export class CdonWriteStream extends WriteStream {
       object.forEach((value) =>
         this.value(fastStringFormat, value, stringTable),
       );
-    } else if (object !== undefined) {
+    } else {
       const entries = Object.entries(object).filter(
         ([, value]) => value !== undefined,
       );
