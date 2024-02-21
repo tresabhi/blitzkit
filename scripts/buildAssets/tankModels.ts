@@ -27,8 +27,8 @@ export async function tankModels(production: boolean) {
   for (const nationIndex in nations) {
     const nation = nations[nationIndex];
     const changes: FileChange[] = [];
-    const assetCommit = new AssetCommit(`tank models ${nation}`, production);
-    // const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
+    // const assetCommit = new AssetCommit(`tank models ${nation}`, production);
+    const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
       `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
     );
     const customization = await readXMLDVPL<{ root: VehicleCustomization }>(
