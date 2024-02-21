@@ -290,7 +290,9 @@ export class CdonWriteStream extends WriteStream {
         this.value(fastStringFormat, value, stringTable),
       );
     } else if (object !== undefined) {
-      const entries = Object.entries(object);
+      const entries = Object.entries(object).filter(
+        ([, value]) => value !== undefined,
+      );
 
       this.uint8(ValueType.Object);
       this.uint32(entries.length);

@@ -39,6 +39,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
           paddingTop: isEmbed ? 0 : '3.25rem',
         }}
       >
+        {/* <AlertDialog.Root open>
+          <AlertDialog.Content>
+            <AlertDialog.Title>Peepee</AlertDialog.Title>
+          </AlertDialog.Content>
+        </AlertDialog.Root> */}
+
         <Theme
           appearance="dark"
           panelBackground="translucent"
