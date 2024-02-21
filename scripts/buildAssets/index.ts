@@ -26,8 +26,6 @@ import { tankModels } from './tankModels';
 if (!targets && !allTargets) throw new Error('No target(s) specified');
 
 const methods = [
-  tankModels,
-  tankArmors,
   definitions,
   tankIcons,
   scratchedFlags,
@@ -38,6 +36,8 @@ const methods = [
   consumableProvisionIcons,
   camouflageIcons,
   boosterIcons,
+  tankArmors,
+  tankModels,
 ];
 
 for (const method of methods) {
