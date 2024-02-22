@@ -173,7 +173,12 @@ export function TankSandbox() {
             </Tabs.Root>
 
             <div
-              style={{ height: '100%', position: 'absolute', width: '100%' }}
+              style={{
+                height: 'calc(100% - 64px)',
+                position: 'absolute',
+                width: '100%',
+                bottom: 0,
+              }}
             >
               {loadModel ? (
                 <div style={{ width: '100%', height: '100%' }}>
