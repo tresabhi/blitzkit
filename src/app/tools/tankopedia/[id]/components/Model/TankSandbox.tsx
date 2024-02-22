@@ -172,31 +172,35 @@ export function TankSandbox() {
               </Tabs.List>
             </Tabs.Root>
 
-            <div style={{ height: '100%' }}>
+            <div
+              style={{ height: '100%', position: 'absolute', width: '100%' }}
+            >
               {loadModel ? (
-                <Canvas
-                  shadows
-                  ref={canvas}
-                  onPointerDown={handlePointerDown}
-                  onPointerMissed={() => {
-                    mutateTankopediaTemporary((draft) => {
-                      draft.shot = undefined;
-                    });
-                  }}
-                >
-                  <PerspectiveCamera makeDefault fov={25} far={32} />
-                  <Controls />
-                  <SceneProps />
+                <div style={{ width: '100%', height: '100%' }}>
+                  <Canvas
+                    shadows
+                    ref={canvas}
+                    onPointerDown={handlePointerDown}
+                    onPointerMissed={() => {
+                      mutateTankopediaTemporary((draft) => {
+                        draft.shot = undefined;
+                      });
+                    }}
+                  >
+                    <PerspectiveCamera makeDefault fov={25} far={32} />
+                    <Controls />
+                    <SceneProps />
 
-                  <Suspense fallback={<ModelLoader />}>
-                    <ShotDisplay />
-                    <Lighting />
-                    <TankModel />
-                    <TankArmor />
-                    <ExternalModuleMask ornamental />
-                    <SpacedArmorDepth ornamental />
-                  </Suspense>
-                </Canvas>
+                    <Suspense fallback={<ModelLoader />}>
+                      <ShotDisplay />
+                      <Lighting />
+                      <TankModel />
+                      <TankArmor />
+                      <ExternalModuleMask ornamental />
+                      <SpacedArmorDepth ornamental />
+                    </Suspense>
+                  </Canvas>
+                </div>
               ) : (
                 <Flex
                   align="center"
