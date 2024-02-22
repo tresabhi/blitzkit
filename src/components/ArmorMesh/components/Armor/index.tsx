@@ -59,7 +59,7 @@ export const ArmorMesh = memo<ArmorMeshProps>(
       async function updateQuickEquipments() {
         const shell = useDuel.getState().antagonist!.shell;
         const nearPenetration = resolveNearPenetration(shell.penetration);
-        const hasCalibratedShells = await hasEquipment(103);
+        const hasCalibratedShells = await hasEquipment(103, true);
         const hasEnhancedArmor = await hasEquipment(110);
 
         if (material.current) {
@@ -93,6 +93,10 @@ export const ArmorMesh = memo<ArmorMeshProps>(
       const unsubscribes = [
         useDuel.subscribe(
           (state) => state.protagonist!.equipment,
+          updateQuickEquipments,
+        ),
+        useDuel.subscribe(
+          (state) => state.antagonist!.equipment,
           updateQuickEquipments,
         ),
         useDuel.subscribe(
@@ -172,7 +176,7 @@ export const ArmorMesh = memo<ArmorMeshProps>(
               );
             const angle = Math.acos(surfaceNormal.dot(shellNormal));
             const shell = useDuel.getState().antagonist!.shell;
-            const hasCalibratedShells = await hasEquipment(103);
+            const hasCalibratedShells = await hasEquipment(103, true);
             const resolvedPenetration =
               resolveNearPenetration(shell.penetration) *
               (hasCalibratedShells
