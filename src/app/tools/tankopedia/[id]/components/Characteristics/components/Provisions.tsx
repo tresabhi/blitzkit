@@ -1,8 +1,7 @@
 import { Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
 import { ProvisionButton } from '../../../../../../../components/ModuleButtons/ProvisionButton';
-import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
-import { provisionDefinitions } from '../../../../../../../core/blitzkrieg/provisionDefinitions';
+import { availableProvisions } from '../../../../../../../core/blitzkrieg/availableProvisions';
 import { useDuel } from '../../../../../../../stores/duel';
 import {
   mutateTankopediaTemporary,
@@ -11,17 +10,9 @@ import {
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Provisions() {
-  const protagonist = useDuel((state) => state.protagonist!);
-  const awaitedProvisionDefinitions = use(provisionDefinitions);
+  const { tank, gun } = useDuel((state) => state.protagonist!);
   const provisions = useTankopediaTemporary((state) => state.provisions);
-  const provisionsList = Object.values(awaitedProvisionDefinitions).filter(
-    (provision) =>
-      checkConsumableProvisionInclusivity(
-        provision,
-        protagonist.tank,
-        protagonist.gun,
-      ),
-  );
+  const provisionsList = use(availableProvisions(tank, gun));
 
   return (
     <ConfigurationChildWrapper>
@@ -37,9 +28,7 @@ export function Provisions() {
               first={index === 0}
               last={index === provisionsList.length - 1}
               rowChild
-              disabled={
-                protagonist.tank.provisions === provisions.length && !selected
-              }
+              disabled={tank.provisions === provisions.length && !selected}
               provision={provision.id}
               selected={selected}
               onClick={() => {
