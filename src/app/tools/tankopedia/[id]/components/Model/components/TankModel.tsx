@@ -1,16 +1,10 @@
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { memo, useEffect, useRef, useState } from 'react';
-import {
-  Euler,
-  Group,
-  Mesh,
-  MeshStandardMaterial,
-  Vector2,
-  Vector3,
-} from 'three';
+import { Euler, Group, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { I_HAT, J_HAT, K_HAT } from '../../../../../../../constants/axis';
 import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
+import { jsxTree } from '../../../../../../../core/blitzkrieg/jsxTree';
 import {
   ModelDefinitions,
   modelDefinitions,
@@ -19,7 +13,6 @@ import {
   ModelTransformEventData,
   modelTransformEvent,
 } from '../../../../../../../core/blitzkrieg/modelTransform';
-import { resolveJsxTree } from '../../../../../../../core/blitzkrieg/resolveJsxTree';
 import { normalizeAnglePI } from '../../../../../../../core/math/normalizeAngle180';
 import { useModel } from '../../../../../../../hooks/useModel';
 import { useDuel } from '../../../../../../../stores/duel';
@@ -138,58 +131,12 @@ export const TankModel = memo(() => {
         const isTrack = node.name.startsWith('chassis_track_');
         const isVisible = isHull || isWheel || isTrack;
 
-        function handlePointerDown(event: ThreeEvent<PointerEvent>) {
-          event.stopPropagation();
-
-          if (isTrack) {
-            mutateTankopediaPersistent((draft) => {
-              draft.model.visual.controlsEnabled = false;
-            });
-            mutateTankopediaTemporary((draft) => {
-              draft.shot = undefined;
-            });
-
-            window.addEventListener('pointermove', handlePointerMove);
-            window.addEventListener('pointerup', handlePointerUp);
-          }
-        }
-        function handlePointerMove(event: PointerEvent) {
-          const mesh = node as Mesh;
-          const material = mesh.material as MeshStandardMaterial;
-          const offset = new Vector2(
-            0,
-            -event.movementY * (6 / canvas.height) -
-              event.movementX * (6 / canvas.width),
-          );
-
-          material.map?.offset.add(offset);
-          material.roughnessMap?.offset.add(offset);
-          material.normalMap?.offset.add(offset);
-        }
-        function handlePointerUp() {
-          mutateTankopediaPersistent((draft) => {
-            draft.model.visual.controlsEnabled = true;
-          });
-          window.removeEventListener('pointermove', handlePointerMove);
-          window.removeEventListener('pointerup', handlePointerUp);
-        }
-
         if (!isVisible) return null;
 
-        return (
-          <mesh
-            children={resolveJsxTree(node)}
-            key={node.uuid}
-            castShadow
-            receiveShadow
-            geometry={(node as Mesh).geometry}
-            material={(node as Mesh).material}
-            position={node.position}
-            rotation={node.rotation}
-            scale={node.scale}
-            onPointerDown={handlePointerDown}
-          />
-        );
+        return jsxTree(node, {
+          castShadow: true,
+          receiveShadow: true,
+        });
       })}
 
       <group ref={turretContainer}>
@@ -199,10 +146,13 @@ export const TankModel = memo(() => {
             node.name ===
             `turret_${turretModelDefinition.model.toString().padStart(2, '0')}`;
           const isVisible = isCurrentTurret;
+
+          if (!isVisible) return null;
+
           let pitch = 0;
           let yaw = 0;
 
-          function handlePointerDown(event: ThreeEvent<PointerEvent>) {
+          function onPointerDown(event: ThreeEvent<PointerEvent>) {
             event.stopPropagation();
 
             if (isTurret) {
@@ -240,23 +190,11 @@ export const TankModel = memo(() => {
             window.removeEventListener('pointerup', handlePointerUp);
           }
 
-          if (!isVisible) return null;
-
-          return (
-            <mesh
-              visible={isVisible}
-              onPointerDown={handlePointerDown}
-              children={resolveJsxTree(node)}
-              key={node.uuid}
-              castShadow
-              receiveShadow
-              geometry={(node as Mesh).geometry}
-              material={(node as Mesh).material}
-              position={node.position}
-              rotation={node.rotation}
-              scale={node.scale}
-            />
-          );
+          return jsxTree(node, {
+            castShadow: true,
+            receiveShadow: true,
+            onPointerDown,
+          });
         })}
 
         <group ref={gunContainer}>
@@ -270,10 +208,13 @@ export const TankModel = memo(() => {
               node.name ===
               `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`;
             const isVisible = isCurrentGun || isCurrentMantlet;
+
+            if (!isVisible) return null;
+
             let pitch = 0;
             let yaw = 0;
 
-            function handlePointerDown(event: ThreeEvent<PointerEvent>) {
+            function onPointerDown(event: ThreeEvent<PointerEvent>) {
               event.stopPropagation();
 
               mutateTankopediaPersistent((draft) => {
@@ -308,23 +249,11 @@ export const TankModel = memo(() => {
               window.removeEventListener('pointerup', handlePointerUp);
             }
 
-            if (!isVisible) return null;
-
-            return (
-              <mesh
-                visible={isVisible}
-                onPointerDown={handlePointerDown}
-                children={resolveJsxTree(node)}
-                key={node.uuid}
-                castShadow
-                receiveShadow
-                geometry={(node as Mesh).geometry}
-                material={(node as Mesh).material}
-                position={node.position}
-                rotation={node.rotation}
-                scale={node.scale}
-              />
-            );
+            return jsxTree(node, {
+              castShadow: true,
+              receiveShadow: true,
+              onPointerDown,
+            });
           })}
         </group>
       </group>

@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef } from 'react';
-import { Euler, Group, Mesh, Vector3 } from 'three';
+import { Euler, Group, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { ArmorMeshExternalModuleMask } from '../../../../../../../../../components/ArmorMesh';
 import { I_HAT, J_HAT, K_HAT } from '../../../../../../../../../constants/axis';
@@ -181,7 +181,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
                 ornamental={ornamental}
                 exclude
                 key={node.uuid}
-                geometry={(node as Mesh).geometry}
+                node={node}
               />
             );
           })}
@@ -200,7 +200,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
               maxThickness={maxThickness}
               thickness={trackModelDefinition.thickness}
               key={node.uuid}
-              geometry={(node as Mesh).geometry}
+              node={node}
             />
           );
         })}
@@ -221,13 +221,14 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
               if (!isVisible || thickness === undefined || spaced) return null;
 
               return (
-                <ArmorMeshExternalModuleMask
-                  ornamental={ornamental}
-                  exclude
-                  key={node.uuid}
-                  geometry={(node as Mesh).geometry}
-                  position={turretOrigin}
-                />
+                <group position={turretOrigin}>
+                  <ArmorMeshExternalModuleMask
+                    ornamental={ornamental}
+                    exclude
+                    key={node.uuid}
+                    node={node}
+                  />
+                </group>
               );
             })}
           </group>
@@ -247,13 +248,14 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
               if (!isVisible || thickness === undefined || spaced) return null;
 
               return (
-                <ArmorMeshExternalModuleMask
-                  ornamental={ornamental}
-                  exclude
-                  key={node.uuid}
-                  geometry={(node as Mesh).geometry}
-                  position={turretOrigin.clone().add(gunOrigin)}
-                />
+                <group position={turretOrigin.clone().add(gunOrigin)}>
+                  <ArmorMeshExternalModuleMask
+                    ornamental={ornamental}
+                    exclude
+                    key={node.uuid}
+                    node={node}
+                  />
+                </group>
               );
             })}
 
@@ -271,7 +273,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
                   maxThickness={maxThickness}
                   thickness={gunModelDefinition.thickness}
                   key={node.uuid}
-                  geometry={(node as Mesh).geometry}
+                  node={node}
                 />
               );
             })}
