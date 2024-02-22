@@ -4,6 +4,7 @@ import { Flex } from '@radix-ui/themes';
 import { use, useEffect } from 'react';
 import PageWrapper from '../../../../components/PageWrapper';
 import { availableProvisions } from '../../../../core/blitzkrieg/availableProvisions';
+import { provisionDefinitions } from '../../../../core/blitzkrieg/provisionDefinitions';
 import { tankDefinitions } from '../../../../core/blitzkrieg/tankDefinitions';
 import { useWideFormat } from '../../../../hooks/useWideFormat';
 import { mutateDuel, useDuel } from '../../../../stores/duel';
@@ -23,7 +24,6 @@ export default function Page({ params }: { params: { id: string } }) {
   const awaitedTankDefinitions = use(tankDefinitions);
   const tank = awaitedTankDefinitions[id];
   const gun = tank.turrets.at(-1)!.guns.at(-1)!;
-  const provisionsList = use(availableProvisions(tank, gun));
   const assigned = useDuel((state) => state.assigned);
   const wideFormat = useWideFormat();
 
@@ -39,21 +39,6 @@ export default function Page({ params }: { params: { id: string } }) {
         track: tank.tracks.at(-1)!,
       };
       draft.antagonist = { ...draft.protagonist };
-    });
-
-    mutateTankopediaTemporary((draft) => {
-      draft.model.pose.yaw = 0;
-      draft.model.pose.pitch = 0;
-      draft.consumables = [];
-      draft.provisions = provisionsList
-        .filter((provision) => provision.crew !== undefined)
-        .map((provision) => provision.id);
-      draft.shot = undefined;
-      draft.equipmentMatrix = [
-        [1, -1, -1],
-        [0, 0, 0],
-        [0, 0, 0],
-      ];
     });
 
     function handleKeyDown(event: KeyboardEvent) {
@@ -86,6 +71,28 @@ export default function Page({ params }: { params: { id: string } }) {
         });
       }
     }
+
+    (async () => {
+      const provisionsList = availableProvisions(
+        tank,
+        gun,
+        await provisionDefinitions,
+      );
+      mutateTankopediaTemporary((draft) => {
+        draft.model.pose.yaw = 0;
+        draft.model.pose.pitch = 0;
+        draft.consumables = [];
+        draft.provisions = provisionsList
+          .filter((provision) => provision.crew !== undefined)
+          .map((provision) => provision.id);
+        draft.shot = undefined;
+        draft.equipmentMatrix = [
+          [1, -1, -1],
+          [0, 0, 0],
+          [0, 0, 0],
+        ];
+      });
+    })();
 
     window.addEventListener('keydown', handleKeyDown);
 

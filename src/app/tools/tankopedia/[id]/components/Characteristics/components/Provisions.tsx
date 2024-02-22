@@ -2,6 +2,7 @@ import { Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
 import { ProvisionButton } from '../../../../../../../components/ModuleButtons/ProvisionButton';
 import { availableProvisions } from '../../../../../../../core/blitzkrieg/availableProvisions';
+import { provisionDefinitions } from '../../../../../../../core/blitzkrieg/provisionDefinitions';
 import { useDuel } from '../../../../../../../stores/duel';
 import {
   mutateTankopediaTemporary,
@@ -12,7 +13,12 @@ import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 export function Provisions() {
   const { tank, gun } = useDuel((state) => state.protagonist!);
   const provisions = useTankopediaTemporary((state) => state.provisions);
-  const provisionsList = use(availableProvisions(tank, gun));
+  const awaitedProvisionDefinitions = use(provisionDefinitions);
+  const provisionsList = availableProvisions(
+    tank,
+    gun,
+    awaitedProvisionDefinitions,
+  );
 
   return (
     <ConfigurationChildWrapper>

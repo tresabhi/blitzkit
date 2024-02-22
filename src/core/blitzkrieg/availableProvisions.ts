@@ -1,12 +1,13 @@
 import { checkConsumableProvisionInclusivity } from './checkConsumableProvisionInclusivity';
-import { provisionDefinitions } from './provisionDefinitions';
+import { ProvisionDefinitions } from './provisionDefinitions';
 import { GunDefinition, TankDefinition } from './tankDefinitions';
 
-export async function availableProvisions(
+export function availableProvisions(
   tank: TankDefinition,
   gun: GunDefinition,
+  provisionDefinitions: ProvisionDefinitions,
 ) {
-  return Object.values(await provisionDefinitions).filter((provision) =>
+  return Object.values(provisionDefinitions).filter((provision) =>
     checkConsumableProvisionInclusivity(provision, tank, gun),
   );
 }
