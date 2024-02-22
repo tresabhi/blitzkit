@@ -212,7 +212,7 @@ export function ShotDisplay() {
 
           {shot.ricochet && (
             <mesh ref={ricochetCircle} position={[0, 0, secondLineLength]}>
-              <torusGeometry args={[0.05, 0.0125, 4, 16]} />
+              <icosahedronGeometry args={[0.05, 1]} />
               <meshBasicMaterial
                 color={shot.ricochet.penetration ? 'green' : 'red'}
                 depthTest={false}
