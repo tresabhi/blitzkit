@@ -152,6 +152,7 @@ export function ShotDisplay() {
                     <Flex gap="1">
                       <Text>{shot.thicknesses.length + 1}. Ricochet</Text>
                       <Ricochet width={24} height={24} />
+                      <Text>(-25% penetration)</Text>
                     </Flex>
                     {shot.ricochet.penetration ? (
                       <Flex gap="1">
