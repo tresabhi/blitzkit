@@ -221,11 +221,10 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
               if (!isVisible || thickness === undefined || spaced) return null;
 
               return (
-                <group position={turretOrigin}>
+                <group key={node.uuid} position={turretOrigin}>
                   <ArmorMeshExternalModuleMask
                     ornamental={ornamental}
                     exclude
-                    key={node.uuid}
                     node={node}
                   />
                 </group>
@@ -248,11 +247,13 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
               if (!isVisible || thickness === undefined || spaced) return null;
 
               return (
-                <group position={turretOrigin.clone().add(gunOrigin)}>
+                <group
+                  key={node.uuid}
+                  position={turretOrigin.clone().add(gunOrigin)}
+                >
                   <ArmorMeshExternalModuleMask
                     ornamental={ornamental}
                     exclude
-                    key={node.uuid}
                     node={node}
                   />
                 </group>

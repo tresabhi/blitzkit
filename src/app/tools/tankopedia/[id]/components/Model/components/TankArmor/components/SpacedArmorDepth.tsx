@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef } from 'react';
-import { Euler, Group, Mesh, Vector3 } from 'three';
+import { Euler, Group, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { ArmorMeshSpacedArmorDepth } from '../../../../../../../../../components/ArmorMesh/components/SpacedArmorDepth';
 import { I_HAT, J_HAT, K_HAT } from '../../../../../../../../../constants/axis';
@@ -190,7 +190,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(
                 thickness={thickness}
                 maxThickness={maxThickness}
                 key={node.uuid}
-                geometry={(node as Mesh).geometry}
+                node={node}
               />
             );
           })}
@@ -207,7 +207,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(
               ornamental={ornamental}
               isExternalModule
               key={node.uuid}
-              geometry={(node as Mesh).geometry}
+              node={node}
             />
           );
         })}
@@ -228,16 +228,16 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(
               if (!isVisible || thickness === undefined) return null;
 
               return (
-                <ArmorMeshSpacedArmorDepth
-                  ornamental={ornamental}
-                  include={spaced}
-                  isExternalModule={false}
-                  thickness={thickness}
-                  maxThickness={maxThickness}
-                  key={node.uuid}
-                  geometry={(node as Mesh).geometry}
-                  position={turretOrigin}
-                />
+                <group key={node.uuid} position={turretOrigin}>
+                  <ArmorMeshSpacedArmorDepth
+                    ornamental={ornamental}
+                    include={spaced}
+                    isExternalModule={false}
+                    thickness={thickness}
+                    maxThickness={maxThickness}
+                    node={node}
+                  />
+                </group>
               );
             })}
           </group>
@@ -257,16 +257,19 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(
                 if (!isVisible || thickness === undefined) return null;
 
                 return (
-                  <ArmorMeshSpacedArmorDepth
-                    ornamental={ornamental}
-                    include={spaced}
-                    isExternalModule={false}
-                    thickness={thickness}
-                    maxThickness={maxThickness}
+                  <group
                     key={node.uuid}
-                    geometry={(node as Mesh).geometry}
                     position={turretOrigin.clone().add(gunOrigin)}
-                  />
+                  >
+                    <ArmorMeshSpacedArmorDepth
+                      ornamental={ornamental}
+                      include={spaced}
+                      isExternalModule={false}
+                      thickness={thickness}
+                      maxThickness={maxThickness}
+                      node={node}
+                    />
+                  </group>
                 );
               })}
             </group>
@@ -284,7 +287,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(
                   ornamental={ornamental}
                   isExternalModule
                   key={node.uuid}
-                  geometry={(node as Mesh).geometry}
+                  node={node}
                 />
               );
             })}
