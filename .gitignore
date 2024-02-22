@@ -16,3 +16,4 @@ servers.csv
 tsconfig.tsbuildinfo
 temp/
 /.yarn
+/.VSCodeCounter

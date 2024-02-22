@@ -80,16 +80,6 @@ export function ArmorHighlighting() {
       turretContainer.current?.position.copy(turretPosition);
       turretContainer.current?.rotation.copy(turretRotation);
     }
-
-    handleModelTransform(useTankopediaTemporary.getState().model.pose);
-    modelTransformEvent.on(handleModelTransform);
-
-    return () => {
-      modelTransformEvent.off(handleModelTransform);
-    };
-  });
-
-  useEffect(() => {
     const unsubscribe = useTankopediaTemporary.subscribe(
       (state) => state.mode,
       (mode) => {
@@ -97,8 +87,14 @@ export function ArmorHighlighting() {
       },
     );
 
-    return unsubscribe;
-  });
+    handleModelTransform(useTankopediaTemporary.getState().model.pose);
+    modelTransformEvent.on(handleModelTransform);
+
+    return () => {
+      modelTransformEvent.off(handleModelTransform);
+      unsubscribe();
+    };
+  }, []);
 
   const armorGltf = useArmor(protagonist.tank.id);
   const armorNodes = Object.values(armorGltf.nodes);
