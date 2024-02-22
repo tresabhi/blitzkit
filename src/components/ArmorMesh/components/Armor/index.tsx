@@ -22,7 +22,6 @@ import {
   Shot,
   mutateTankopediaTemporary,
   useTankopediaPersistent,
-  useTankopediaTemporary,
 } from '../../../../stores/tankopedia';
 import { externalModuleMaskRenderTarget } from '../ExternalModuleMask';
 import { spacedArmorDepthRenderTarget } from '../SpacedArmorDepth';
@@ -52,7 +51,7 @@ export const ArmorMesh = memo<ArmorMeshProps>(
     const surfaceNormal = new Vector3();
     const mesh = useRef<Mesh>(null);
     const scene = useThree((state) => state.scene);
-    const hasCalibratedShells = useAwait(hasEquipment(103));
+    const hasCalibratedShells = useAwait(hasEquipment(103, true));
     const hasEnhancedArmor = useAwait(hasEquipment(110));
     const wireframe = initialTankopedia.model.visual.wireframe;
 
@@ -92,8 +91,8 @@ export const ArmorMesh = memo<ArmorMeshProps>(
       }
 
       const unsubscribes = [
-        useTankopediaTemporary.subscribe(
-          (state) => state.equipmentMatrix,
+        useDuel.subscribe(
+          (state) => state.protagonist!.equipment,
           updateQuickEquipments,
         ),
         useDuel.subscribe(

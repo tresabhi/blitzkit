@@ -5,28 +5,13 @@ import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { ENVIRONMENTS } from '../app/tools/tankopedia/[id]/components/Lighting';
 import { TankType, TreeType } from '../components/Tanks';
-import {
-  EngineDefinition,
-  GunDefinition,
-  ShellDefinition,
-  TankDefinition,
-  Tier,
-  TrackDefinition,
-  TurretDefinition,
-} from '../core/blitzkrieg/tankDefinitions';
+import { Tier } from '../core/blitzkrieg/tankDefinitions';
 
 export type TankopediaSortBy = keyof typeof SORT_NAMES;
 export type TankopediaSortDirection = 'ascending' | 'descending';
 export type TankopediaTestTankDisplay = 'include' | 'exclude' | 'only';
 export type TankopediaMode = 'model' | 'armor';
-export interface DuelMember {
-  tank: TankDefinition;
-  engine: EngineDefinition;
-  turret: TurretDefinition;
-  gun: GunDefinition;
-  shell: ShellDefinition;
-  track: TrackDefinition;
-}
+
 interface TankopediaPersistent {
   model: {
     visual: {
@@ -50,24 +35,10 @@ interface TankopediaPersistent {
     test: TankopediaTestTankDisplay;
     page: number;
   };
+  mode: TankopediaMode;
 }
 
-export type EquipmentMatrix = (-1 | 0 | 1)[][];
-
 interface TankopediaTemporary {
-  model: {
-    pose: {
-      yaw: number;
-      pitch: number;
-    };
-  };
-  equipmentMatrix: EquipmentMatrix;
-  mode: TankopediaMode;
-  consumables: number[];
-  crewMastery: number;
-  provisions: number[];
-  camouflage: boolean;
-  cooldownBooster: number;
   shot?: Shot;
 }
 
@@ -152,31 +123,14 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
         test: 'include',
         page: 0,
       },
+      mode: 'model',
     })),
     { name: 'tankopedia', merge },
   ),
 );
 
 export const useTankopediaTemporary = create<TankopediaTemporary>()(
-  subscribeWithSelector<TankopediaTemporary>(() => ({
-    model: {
-      pose: {
-        yaw: 0,
-        pitch: 0,
-      },
-    },
-    equipmentMatrix: [
-      [0, 0, 0],
-      [0, 0, 0],
-      [0, 0, 0],
-    ],
-    crewMastery: 1,
-    mode: 'model',
-    consumables: [],
-    provisions: [],
-    camouflage: true,
-    cooldownBooster: 0,
-  })),
+  subscribeWithSelector<TankopediaTemporary>(() => ({})),
 );
 
 export default function mutateTankopediaPersistent(

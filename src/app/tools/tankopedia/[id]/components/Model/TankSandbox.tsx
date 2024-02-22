@@ -11,11 +11,11 @@ import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTran
 import { Pose, poseEvent } from '../../../../../../core/blitzkrieg/pose';
 import { tankIcon } from '../../../../../../core/blitzkrieg/tankIcon';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
-import { useDuel } from '../../../../../../stores/duel';
-import {
+import { mutateDuel, useDuel } from '../../../../../../stores/duel';
+import mutateTankopediaPersistent, {
   TankopediaMode,
   mutateTankopediaTemporary,
-  useTankopediaTemporary,
+  useTankopediaPersistent,
 } from '../../../../../../stores/tankopedia';
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
@@ -33,7 +33,7 @@ export function TankSandbox() {
   const awaitedModelDefinitions = use(modelDefinitions);
   const canvasWrapper = useRef<HTMLDivElement>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const mode = useTankopediaTemporary((state) => state.mode);
+  const mode = useTankopediaPersistent((state) => state.mode);
   const protagonist = useDuel((state) => state.protagonist!);
   const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
   const turretModelDefinition =
@@ -65,7 +65,7 @@ export function TankSandbox() {
     function handlePoseEvent(pose: Pose) {
       switch (pose) {
         case Pose.HullDown: {
-          mutateTankopediaTemporary((draft) => {
+          mutateDuel((draft) => {
             const [pitch, yaw] = applyPitchYawLimits(
               -Infinity,
               0,
@@ -74,15 +74,15 @@ export function TankSandbox() {
             );
 
             modelTransformEvent.emit({ pitch, yaw });
-            draft.model.pose.pitch = pitch;
-            draft.model.pose.yaw = yaw;
+            draft.protagonist!.pitch = pitch;
+            draft.protagonist!.yaw = yaw;
           });
 
           break;
         }
 
         case Pose.FaceHug: {
-          mutateTankopediaTemporary((draft) => {
+          mutateDuel((draft) => {
             const [pitch, yaw] = applyPitchYawLimits(
               Infinity,
               0,
@@ -91,15 +91,15 @@ export function TankSandbox() {
             );
 
             modelTransformEvent.emit({ pitch, yaw });
-            draft.model.pose.pitch = pitch;
-            draft.model.pose.yaw = yaw;
+            draft.protagonist!.pitch = pitch;
+            draft.protagonist!.yaw = yaw;
           });
 
           break;
         }
 
         case Pose.Default:
-          mutateTankopediaTemporary((draft) => {
+          mutateDuel((draft) => {
             const [pitch, yaw] = applyPitchYawLimits(
               0,
               0,
@@ -108,8 +108,8 @@ export function TankSandbox() {
             );
 
             modelTransformEvent.emit({ pitch, yaw });
-            draft.model.pose.pitch = pitch;
-            draft.model.pose.yaw = yaw;
+            draft.protagonist!.pitch = pitch;
+            draft.protagonist!.yaw = yaw;
           });
 
           break;
@@ -126,10 +126,10 @@ export function TankSandbox() {
   });
 
   useEffect(() => {
-    mutateTankopediaTemporary((draft) => {
-      [draft.model.pose.pitch, draft.model.pose.yaw] = applyPitchYawLimits(
-        draft.model.pose.pitch,
-        draft.model.pose.yaw,
+    mutateDuel((draft) => {
+      [draft.protagonist!.pitch, draft.protagonist!.yaw] = applyPitchYawLimits(
+        draft.protagonist!.pitch,
+        draft.protagonist!.yaw,
         gunModelDefinition.pitch,
         turretModelDefinition.yaw,
       );
@@ -157,7 +157,7 @@ export function TankSandbox() {
             <Tabs.Root
               value={mode}
               onValueChange={(mode) => {
-                mutateTankopediaTemporary((draft) => {
+                mutateTankopediaPersistent((draft) => {
                   draft.mode = mode as TankopediaMode;
                 });
               }}

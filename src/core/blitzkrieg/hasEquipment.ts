@@ -1,13 +1,13 @@
 import { useDuel } from '../../stores/duel';
-import { useTankopediaTemporary } from '../../stores/tankopedia';
 import { equipmentDefinitions } from './equipmentDefinitions';
 
-export async function hasEquipment(id: number) {
+export async function hasEquipment(id: number, antagonist = false) {
   const awaitedEquipmentDefinitions = await equipmentDefinitions;
-  const protagonist = useDuel.getState().protagonist!;
+  const member = useDuel.getState()[antagonist ? 'antagonist' : 'protagonist']!;
   const equipmentRows =
-    awaitedEquipmentDefinitions.presets[protagonist.tank.equipment];
-  const equipmentMatrix = useTankopediaTemporary.getState().equipmentMatrix;
+    awaitedEquipmentDefinitions.presets[member.tank.equipment];
+  const equipmentMatrix =
+    useDuel.getState()[antagonist ? 'antagonist' : 'protagonist']!.equipment;
 
   return equipmentRows.some((equipmentRow, rowIndex) => {
     return equipmentRow.some((equipment, columnIndex) => {

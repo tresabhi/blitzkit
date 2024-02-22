@@ -4,17 +4,13 @@ import { ConsumableButton } from '../../../../../../../components/ModuleButtons/
 import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
 import { consumableDefinitions } from '../../../../../../../core/blitzkrieg/consumableDefinitions';
 import { useEquipment } from '../../../../../../../hooks/useEquipment';
-import { useDuel } from '../../../../../../../stores/duel';
-import {
-  mutateTankopediaTemporary,
-  useTankopediaTemporary,
-} from '../../../../../../../stores/tankopedia';
+import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Consumables() {
   const protagonist = useDuel((state) => state.protagonist!);
   const awaitedConsumableDefinitions = use(consumableDefinitions);
-  const consumables = useTankopediaTemporary((state) => state.consumables);
+  const consumables = useDuel((state) => state.protagonist!.consumables);
   const consumablesList = Object.values(awaitedConsumableDefinitions).filter(
     (consumable) =>
       checkConsumableProvisionInclusivity(
@@ -23,8 +19,8 @@ export function Consumables() {
         protagonist.gun,
       ),
   );
-  const cooldownBooster = useTankopediaTemporary(
-    (state) => state.cooldownBooster,
+  const cooldownBooster = useDuel(
+    (state) => state.protagonist!.cooldownBooster,
   );
   const hasConsumableDeliverySystem = useEquipment(118);
   const hasHighEndConsumables = useEquipment(101);
@@ -59,13 +55,14 @@ export function Consumables() {
               consumable={consumable.id}
               selected={selected}
               onClick={() => {
-                mutateTankopediaTemporary((draft) => {
+                mutateDuel((draft) => {
                   if (selected) {
-                    draft.consumables = draft.consumables.filter(
-                      (id) => id !== consumable.id,
-                    );
+                    draft.protagonist!.consumables =
+                      draft.protagonist!.consumables.filter(
+                        (id) => id !== consumable.id,
+                      );
                   } else {
-                    draft.consumables.push(consumable.id);
+                    draft.protagonist!.consumables.push(consumable.id);
                   }
                 });
               }}

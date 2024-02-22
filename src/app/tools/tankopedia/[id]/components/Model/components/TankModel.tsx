@@ -15,10 +15,9 @@ import {
 } from '../../../../../../../core/blitzkrieg/modelTransform';
 import { normalizeAnglePI } from '../../../../../../../core/math/normalizeAngle180';
 import { useModel } from '../../../../../../../hooks/useModel';
-import { useDuel } from '../../../../../../../stores/duel';
+import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import mutateTankopediaPersistent, {
   mutateTankopediaTemporary,
-  useTankopediaTemporary,
 } from '../../../../../../../stores/tankopedia';
 
 export const TankModel = memo(() => {
@@ -27,7 +26,6 @@ export const TankModel = memo(() => {
   >(undefined);
   const protagonist = useDuel((draft) => draft.protagonist!);
   const canvas = useThree((state) => state.gl.domElement);
-  const physical = useTankopediaTemporary((state) => state.model.pose);
   const hullContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
@@ -156,8 +154,8 @@ export const TankModel = memo(() => {
             event.stopPropagation();
 
             if (isTurret) {
-              yaw = physical.yaw;
-              pitch = physical.pitch;
+              yaw = protagonist.yaw;
+              pitch = protagonist.pitch;
 
               mutateTankopediaPersistent((draft) => {
                 draft.model.visual.controlsEnabled = false;
@@ -179,9 +177,9 @@ export const TankModel = memo(() => {
             modelTransformEvent.emit({ pitch, yaw });
           }
           function handlePointerUp() {
-            mutateTankopediaTemporary((draft) => {
-              draft.model.pose.pitch = normalizeAnglePI(pitch);
-              draft.model.pose.yaw = normalizeAnglePI(yaw);
+            mutateDuel((draft) => {
+              draft.protagonist!.pitch = normalizeAnglePI(pitch);
+              draft.protagonist!.yaw = normalizeAnglePI(yaw);
             });
             mutateTankopediaPersistent((draft) => {
               draft.model.visual.controlsEnabled = true;
@@ -223,8 +221,8 @@ export const TankModel = memo(() => {
               mutateTankopediaTemporary((draft) => {
                 draft.shot = undefined;
               });
-              pitch = physical.pitch;
-              yaw = physical.yaw;
+              pitch = protagonist.pitch;
+              yaw = protagonist.yaw;
               window.addEventListener('pointermove', handlePointerMove);
               window.addEventListener('pointerup', handlePointerUp);
             }
@@ -241,9 +239,9 @@ export const TankModel = memo(() => {
               mutateTankopediaPersistent((draft) => {
                 draft.model.visual.controlsEnabled = true;
               });
-              mutateTankopediaTemporary((draft) => {
-                draft.model.pose.pitch = normalizeAnglePI(pitch);
-                draft.model.pose.yaw = normalizeAnglePI(yaw);
+              mutateDuel((draft) => {
+                draft.protagonist!.pitch = normalizeAnglePI(pitch);
+                draft.protagonist!.yaw = normalizeAnglePI(yaw);
               });
               window.removeEventListener('pointermove', handlePointerMove);
               window.removeEventListener('pointerup', handlePointerUp);

@@ -12,7 +12,7 @@ import { resolveArmor } from '../../../../../../../../../core/blitzkrieg/resolve
 import { useArmor } from '../../../../../../../../../hooks/useArmor';
 import { useModelDefinitions } from '../../../../../../../../../hooks/useModelDefinitions';
 import { useDuel } from '../../../../../../../../../stores/duel';
-import { useTankopediaTemporary } from '../../../../../../../../../stores/tankopedia';
+import { useTankopediaPersistent } from '../../../../../../../../../stores/tankopedia';
 
 export function ArmorHighlighting() {
   const protagonist = useDuel((state) => state.protagonist!);
@@ -20,7 +20,7 @@ export function ArmorHighlighting() {
   const modelDefinitions = useModelDefinitions();
   const gunContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
-  const initialTankopediaState = useTankopediaTemporary.getState();
+  const initialTankopediaState = useTankopediaPersistent.getState();
 
   useEffect(() => {
     const hullOrigin = new Vector3(
@@ -80,14 +80,14 @@ export function ArmorHighlighting() {
       turretContainer.current?.position.copy(turretPosition);
       turretContainer.current?.rotation.copy(turretRotation);
     }
-    const unsubscribe = useTankopediaTemporary.subscribe(
+    const unsubscribe = useTankopediaPersistent.subscribe(
       (state) => state.mode,
       (mode) => {
         if (wrapper.current) wrapper.current.visible = mode === 'armor';
       },
     );
 
-    handleModelTransform(useTankopediaTemporary.getState().model.pose);
+    handleModelTransform(useDuel.getState().protagonist!);
     modelTransformEvent.on(handleModelTransform);
 
     return () => {

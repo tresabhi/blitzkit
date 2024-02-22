@@ -3,16 +3,12 @@ import { use } from 'react';
 import { ProvisionButton } from '../../../../../../../components/ModuleButtons/ProvisionButton';
 import { availableProvisions } from '../../../../../../../core/blitzkrieg/availableProvisions';
 import { provisionDefinitions } from '../../../../../../../core/blitzkrieg/provisionDefinitions';
-import { useDuel } from '../../../../../../../stores/duel';
-import {
-  mutateTankopediaTemporary,
-  useTankopediaTemporary,
-} from '../../../../../../../stores/tankopedia';
+import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Provisions() {
   const { tank, gun } = useDuel((state) => state.protagonist!);
-  const provisions = useTankopediaTemporary((state) => state.provisions);
+  const provisions = useDuel((state) => state.protagonist!.provisions);
   const awaitedProvisionDefinitions = use(provisionDefinitions);
   const provisionsList = availableProvisions(
     tank,
@@ -38,13 +34,14 @@ export function Provisions() {
               provision={provision.id}
               selected={selected}
               onClick={() => {
-                mutateTankopediaTemporary((draft) => {
+                mutateDuel((draft) => {
                   if (selected) {
-                    draft.provisions = draft.provisions.filter(
-                      (id) => id !== provision.id,
-                    );
+                    draft.protagonist!.provisions =
+                      draft.protagonist!.provisions.filter(
+                        (id) => id !== provision.id,
+                      );
                   } else {
-                    draft.provisions.push(provision.id);
+                    draft.protagonist!.provisions.push(provision.id);
                   }
                 });
               }}

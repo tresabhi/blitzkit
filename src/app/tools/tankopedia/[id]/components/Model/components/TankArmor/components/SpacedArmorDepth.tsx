@@ -13,7 +13,7 @@ import { useArmor } from '../../../../../../../../../hooks/useArmor';
 import { useModel } from '../../../../../../../../../hooks/useModel';
 import { useModelDefinitions } from '../../../../../../../../../hooks/useModelDefinitions';
 import { useDuel } from '../../../../../../../../../stores/duel';
-import { useTankopediaTemporary } from '../../../../../../../../../stores/tankopedia';
+import { useTankopediaPersistent } from '../../../../../../../../../stores/tankopedia';
 
 interface SpacedArmorDepthProps {
   ornamental?: boolean;
@@ -37,7 +37,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(
     const modelDefinitions = useModelDefinitions();
     const turretContainer = useRef<Group>(null);
     const gunContainer = useRef<Group>(null);
-    const initialTankopediaState = useTankopediaTemporary.getState();
+    const initialTankopediaState = useTankopediaPersistent.getState();
 
     useEffect(() => {
       if (!modelDefinitions) return;
@@ -108,7 +108,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(
         turretContainer.current?.rotation.copy(turretRotation);
       }
 
-      handleModelTransform(useTankopediaTemporary.getState().model.pose);
+      handleModelTransform(useDuel.getState().protagonist!);
       modelTransformEvent.on(handleModelTransform);
 
       return () => {
@@ -117,7 +117,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(
     });
 
     useEffect(() => {
-      const unsubscribe = useTankopediaTemporary.subscribe(
+      const unsubscribe = useTankopediaPersistent.subscribe(
         (state) => state.mode,
         (mode) => {
           if (wrapper.current) wrapper.current.visible = mode === 'armor';

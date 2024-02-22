@@ -21,13 +21,13 @@ import {
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import {
   mutateTankopediaTemporary,
-  useTankopediaTemporary,
+  useTankopediaPersistent,
 } from '../../../../../../stores/tankopedia';
 import { TankSearch } from '../../../components/TankSearch';
 
 export function AntagonistBar() {
   const antagonist = useDuel((state) => state.antagonist!);
-  const mode = useTankopediaTemporary((state) => state.mode);
+  const mode = useTankopediaPersistent((state) => state.mode);
   const [tab, setTab] = useState('search');
   const [antagonistSelectorOpen, setAntagonistSelectorVisible] =
     useState(false);

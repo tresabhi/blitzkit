@@ -1,6 +1,6 @@
-import { useTankopediaTemporary } from '../stores/tankopedia';
+import { useDuel } from '../stores/duel';
 
 export function useConsumable(id: number) {
-  const consumables = useTankopediaTemporary((state) => state.consumables);
+  const consumables = useDuel((state) => state.protagonist!.consumables);
   return consumables.includes(id);
 }

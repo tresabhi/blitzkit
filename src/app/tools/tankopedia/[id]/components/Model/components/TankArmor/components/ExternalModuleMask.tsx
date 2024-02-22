@@ -13,7 +13,7 @@ import { useArmor } from '../../../../../../../../../hooks/useArmor';
 import { useModel } from '../../../../../../../../../hooks/useModel';
 import { useModelDefinitions } from '../../../../../../../../../hooks/useModelDefinitions';
 import { useDuel } from '../../../../../../../../../stores/duel';
-import { useTankopediaTemporary } from '../../../../../../../../../stores/tankopedia';
+import { useTankopediaPersistent } from '../../../../../../../../../stores/tankopedia';
 
 interface ExternalModuleMaskProps {
   ornamental?: boolean;
@@ -33,7 +33,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
     const modelDefinitions = useModelDefinitions();
     const turretContainer = useRef<Group>(null);
     const gunContainer = useRef<Group>(null);
-    const initialTankopediaState = useTankopediaTemporary.getState();
+    const initialTankopediaState = useTankopediaPersistent.getState();
 
     useEffect(() => {
       const hullOrigin = new Vector3(
@@ -102,7 +102,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
         turretContainer.current?.rotation.copy(turretRotation);
       }
 
-      handleModelTransform(useTankopediaTemporary.getState().model.pose);
+      handleModelTransform(useDuel.getState().protagonist!);
       modelTransformEvent.on(handleModelTransform);
 
       return () => {
@@ -111,7 +111,7 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
     });
 
     useEffect(() => {
-      const unsubscribe = useTankopediaTemporary.subscribe(
+      const unsubscribe = useTankopediaPersistent.subscribe(
         (state) => state.mode,
         (mode) => {
           if (wrapper.current) wrapper.current.visible = mode === 'armor';

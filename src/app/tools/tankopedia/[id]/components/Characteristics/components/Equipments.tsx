@@ -2,11 +2,7 @@ import { Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
 import { EquipmentButton } from '../../../../../../../components/ModuleButtons/EquipmentButton';
 import { equipmentDefinitions } from '../../../../../../../core/blitzkrieg/equipmentDefinitions';
-import { useDuel } from '../../../../../../../stores/duel';
-import {
-  mutateTankopediaTemporary,
-  useTankopediaTemporary,
-} from '../../../../../../../stores/tankopedia';
+import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Equipments() {
@@ -14,9 +10,7 @@ export function Equipments() {
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const equipmentRows =
     awaitedEquipmentDefinitions.presets[protagonist.tank.equipment];
-  const equipmentMatrix = useTankopediaTemporary(
-    (state) => state.equipmentMatrix,
-  );
+  const equipmentMatrix = useDuel((state) => state.protagonist!.equipment);
 
   return (
     <ConfigurationChildWrapper>
@@ -33,11 +27,12 @@ export function Equipments() {
                   rowChild
                   selected={equipmentMatrix[rowIndex][columnIndex] === -1}
                   onClick={() => {
-                    mutateTankopediaTemporary((draft) => {
+                    mutateDuel((draft) => {
                       if (equipmentMatrix[rowIndex][columnIndex] === -1) {
-                        draft.equipmentMatrix[rowIndex][columnIndex] = 0;
+                        draft.protagonist!.equipment[rowIndex][columnIndex] = 0;
                       } else {
-                        draft.equipmentMatrix[rowIndex][columnIndex] = -1;
+                        draft.protagonist!.equipment[rowIndex][columnIndex] =
+                          -1;
                       }
                     });
                   }}
@@ -48,11 +43,11 @@ export function Equipments() {
                   rowChild
                   selected={equipmentMatrix[rowIndex][columnIndex] === 1}
                   onClick={() => {
-                    mutateTankopediaTemporary((draft) => {
+                    mutateDuel((draft) => {
                       if (equipmentMatrix[rowIndex][columnIndex] === 1) {
-                        draft.equipmentMatrix[rowIndex][columnIndex] = 0;
+                        draft.protagonist!.equipment[rowIndex][columnIndex] = 0;
                       } else {
-                        draft.equipmentMatrix[rowIndex][columnIndex] = 1;
+                        draft.protagonist!.equipment[rowIndex][columnIndex] = 1;
                       }
                     });
                   }}

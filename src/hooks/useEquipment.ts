@@ -1,15 +1,16 @@
 import { use, useMemo } from 'react';
 import { equipmentDefinitions } from '../core/blitzkrieg/equipmentDefinitions';
 import { useDuel } from '../stores/duel';
-import { useTankopediaTemporary } from '../stores/tankopedia';
 
-export function useEquipment(id: number) {
+export function useEquipment(id: number, antagonist = false) {
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
-  const protagonist = useDuel((state) => state.protagonist!);
+  const member = useDuel(
+    (state) => state[antagonist ? 'antagonist' : 'protagonist']!,
+  );
   const equipmentRows =
-    awaitedEquipmentDefinitions.presets[protagonist.tank.equipment];
-  const equipmentMatrix = useTankopediaTemporary(
-    (state) => state.equipmentMatrix,
+    awaitedEquipmentDefinitions.presets[member.tank.equipment];
+  const equipmentMatrix = useDuel(
+    (state) => state[antagonist ? 'antagonist' : 'protagonist']!.equipment,
   );
   const value = useMemo(
     () =>
@@ -21,7 +22,7 @@ export function useEquipment(id: number) {
           return equipped === id;
         });
       }),
-    [equipmentMatrix, protagonist.tank],
+    [equipmentMatrix, member.tank],
   );
 
   return value;

@@ -24,7 +24,6 @@ import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useProvision } from '../../../../../../hooks/useProvision';
 import { useProvisions } from '../../../../../../hooks/useProvisions';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
-import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
 
@@ -35,7 +34,7 @@ export function Characteristics() {
   );
   const hasImprovedVentilation = useEquipment(102);
   const provisions = useProvisions();
-  const crewMastery = useTankopediaTemporary((state) => state.crewMastery);
+  const crewMastery = useDuel((state) => state.protagonist!.crewMastery);
   const provisionCrewBonus =
     provisions.reduce(
       (total, provision) =>
@@ -67,7 +66,7 @@ export function Characteristics() {
     stockTurret.weight +
     stockGun.weight;
   const [penetrationDistance, setPenetrationDistance] = useState(250);
-  const camouflage = useTankopediaTemporary((state) => state.camouflage);
+  const camouflage = useDuel((state) => state.protagonist!.camouflage);
   const hasRammer = useEquipment(100);
   const hasCalibratedShells = useEquipment(103);
   const hasEnhancedGunLayingDrive = useEquipment(104);

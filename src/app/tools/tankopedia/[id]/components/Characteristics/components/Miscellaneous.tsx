@@ -3,19 +3,15 @@ import { clamp, debounce } from 'lodash';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GenericTankComponentButton } from '../../../../../../../components/ModuleButtons/GenericTankComponentButton';
 import { asset } from '../../../../../../../core/blitzkrieg/asset';
-import { useDuel } from '../../../../../../../stores/duel';
-import {
-  mutateTankopediaTemporary,
-  useTankopediaTemporary,
-} from '../../../../../../../stores/tankopedia';
+import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Miscellaneous() {
-  const camouflage = useTankopediaTemporary((state) => state.camouflage);
-  const cooldownBooster = useTankopediaTemporary(
-    (state) => state.cooldownBooster,
+  const camouflage = useDuel((state) => state.protagonist!.camouflage);
+  const cooldownBooster = useDuel(
+    (state) => state.protagonist!.cooldownBooster,
   );
-  const crewMastery = useTankopediaTemporary((state) => state.crewMastery);
+  const crewMastery = useDuel((state) => state.protagonist!.crewMastery);
   const crewInput = useRef<HTMLInputElement>(null);
   const [crewMasteryDraft, setCrewMasteryDraft] = useState(crewMastery);
   const { tank } = useDuel((state) => state.protagonist!);
@@ -23,8 +19,8 @@ export function Miscellaneous() {
   const debouncedApplyDraft = useMemo(
     () =>
       debounce((value) => {
-        mutateTankopediaTemporary((draft) => {
-          draft.crewMastery = value;
+        mutateDuel((draft) => {
+          draft.protagonist!.crewMastery = value;
         });
       }, 500),
     [],
@@ -53,8 +49,8 @@ export function Miscellaneous() {
             first
             last
             onClick={() => {
-              mutateTankopediaTemporary((draft) => {
-                draft.camouflage = !camouflage;
+              mutateDuel((draft) => {
+                draft.protagonist!.camouflage = !camouflage;
               });
             }}
           />
@@ -77,9 +73,10 @@ export function Miscellaneous() {
             transform: 'translate(-50%, -50%) scale(0.8)',
           }}
           onClick={() => {
-            mutateTankopediaTemporary((draft) => {
-              draft.cooldownBooster++;
-              if (draft.cooldownBooster === 4) draft.cooldownBooster = 0;
+            mutateDuel((draft) => {
+              draft.protagonist!.cooldownBooster++;
+              if (draft.protagonist!.cooldownBooster === 4)
+                draft.protagonist!.cooldownBooster = 0;
             });
           }}
         />
@@ -106,8 +103,12 @@ export function Miscellaneous() {
                     return;
                   }
 
-                  mutateTankopediaTemporary((draft) => {
-                    draft.crewMastery = clamp(newValue / 100, 0.5, 1);
+                  mutateDuel((draft) => {
+                    draft.protagonist!.crewMastery = clamp(
+                      newValue / 100,
+                      0.5,
+                      1,
+                    );
                   });
                 }}
                 onKeyUp={(event) => {

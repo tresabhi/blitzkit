@@ -1,11 +1,9 @@
 'use client';
 
 import { Flex } from '@radix-ui/themes';
-import { use, useEffect } from 'react';
+import { useEffect } from 'react';
 import PageWrapper from '../../../../components/PageWrapper';
-import { availableProvisions } from '../../../../core/blitzkrieg/availableProvisions';
-import { provisionDefinitions } from '../../../../core/blitzkrieg/provisionDefinitions';
-import { tankDefinitions } from '../../../../core/blitzkrieg/tankDefinitions';
+import { assignDuelMember } from '../../../../core/blitzkrieg/assignDuelMember';
 import { useWideFormat } from '../../../../hooks/useWideFormat';
 import { mutateDuel, useDuel } from '../../../../stores/duel';
 import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
@@ -20,26 +18,12 @@ import { TankSandbox } from './components/Model/TankSandbox';
 import { Title } from './components/Title';
 
 export default function Page({ params }: { params: { id: string } }) {
-  const id = parseInt(params.id);
-  const awaitedTankDefinitions = use(tankDefinitions);
-  const tank = awaitedTankDefinitions[id];
-  const gun = tank.turrets.at(-1)!.guns.at(-1)!;
+  const initialId = parseInt(params.id);
   const assigned = useDuel((state) => state.assigned);
   const wideFormat = useWideFormat();
 
   useEffect(() => {
-    mutateDuel((draft) => {
-      draft.assigned = true;
-      draft.protagonist = {
-        tank,
-        engine: tank.engines.at(-1)!,
-        turret: tank.turrets.at(-1)!,
-        gun,
-        shell: tank.turrets.at(-1)!.guns.at(-1)!.shells[0],
-        track: tank.tracks.at(-1)!,
-      };
-      draft.antagonist = { ...draft.protagonist };
-    });
+    assignDuelMember('both', initialId);
 
     function handleKeyDown(event: KeyboardEvent) {
       if (document.activeElement instanceof HTMLInputElement) return;
@@ -72,34 +56,12 @@ export default function Page({ params }: { params: { id: string } }) {
       }
     }
 
-    (async () => {
-      const provisionsList = availableProvisions(
-        tank,
-        gun,
-        await provisionDefinitions,
-      );
-      mutateTankopediaTemporary((draft) => {
-        draft.model.pose.yaw = 0;
-        draft.model.pose.pitch = 0;
-        draft.consumables = [];
-        draft.provisions = provisionsList
-          .filter((provision) => provision.crew !== undefined)
-          .map((provision) => provision.id);
-        draft.shot = undefined;
-        draft.equipmentMatrix = [
-          [1, -1, -1],
-          [0, 0, 0],
-          [0, 0, 0],
-        ];
-      });
-    })();
-
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [id, assigned]);
+  }, [initialId, assigned]);
 
   return (
     <PageWrapper color="purple" size="double">

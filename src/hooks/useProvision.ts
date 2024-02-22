@@ -1,6 +1,6 @@
-import { useTankopediaTemporary } from '../stores/tankopedia';
+import { useDuel } from '../stores/duel';
 
 export function useProvision(id: number) {
-  const provisions = useTankopediaTemporary((state) => state.provisions);
+  const provisions = useDuel((state) => state.protagonist!.provisions);
   return provisions.includes(id);
 }
