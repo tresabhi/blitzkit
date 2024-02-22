@@ -2,6 +2,7 @@ import { Flex, Heading } from '@radix-ui/themes';
 import { ModuleButton } from '../../../../../../../components/ModuleButtons/ModuleButton';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../../core/blitzkrieg/tankDefinitions';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
+import { mutateTankopediaTemporary } from '../../../../../../../stores/tankopedia';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Modules() {
@@ -28,6 +29,9 @@ export function Modules() {
                     draft.protagonist!.turret = turret;
                     draft.protagonist!.gun = turret.guns.at(-1)!;
                     draft.protagonist!.shell = turret.guns.at(-1)!.shells[0];
+                  });
+                  mutateTankopediaTemporary((draft) => {
+                    draft.shot = undefined;
                   });
                 }}
               />

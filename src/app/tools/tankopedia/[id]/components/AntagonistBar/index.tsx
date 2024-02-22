@@ -150,6 +150,9 @@ export function AntagonistBar() {
                                       draft.antagonist!.shell =
                                         draft.antagonist!.gun.shells[0];
                                     });
+                                    mutateTankopediaTemporary((draft) => {
+                                      draft.shot = undefined;
+                                    });
                                   }}
                                   selected={antagonist.turret.id === turret.id}
                                   discriminator={
