@@ -34,6 +34,7 @@ export interface Crew {
 }
 export interface TankDefinition {
   id: number;
+  fixedCamouflage?: boolean;
   crew: Crew[];
   health: number;
   nation: string;

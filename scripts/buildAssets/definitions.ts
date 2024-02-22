@@ -440,6 +440,7 @@ export async function definitions(production: boolean) {
             }
           });
         const crew: Crew[] = [];
+        const fixedCamouflage = tankTags.includes('eventCamouflage_user');
 
         Object.entries(tankDefinition.root.crew).forEach(([key, value]) => {
           let entry: Crew;
@@ -478,6 +479,7 @@ export async function definitions(production: boolean) {
 
         tankDefinitions[tankId] = {
           id: tankId,
+          fixedCamouflage: fixedCamouflage ? true : undefined,
           crew,
           weight: tankDefinition.root.hull.weight,
           health: tankDefinition.root.hull.maxHealth,
