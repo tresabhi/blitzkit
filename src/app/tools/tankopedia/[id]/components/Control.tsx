@@ -52,11 +52,14 @@ export function Controls() {
     protagonistTrackModelDefinition.origin[1] +
     antagonistModelDefinition.turretOrigin[1] +
     antagonistTurretModelDefinition.gunOrigin[1];
+  // const hasSetInitialPose = useRef(false);
 
   useEffect(() => {
     camera.position.set(-4, 4, -16);
     orbitControls.current?.target.set(0, 1.25, 0);
+  }, [camera]);
 
+  useEffect(() => {
     const unsubscribeTankopedia = useTankopediaPersistent.subscribe(
       (state) => state.model.visual.controlsEnabled,
       (enabled) => {
