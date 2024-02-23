@@ -18,6 +18,7 @@ export interface RowStatItem {
 
 interface RowProps {
   type?: 'tank' | 'summary';
+  naked?: boolean;
   title: string;
   minimized?: boolean;
   treeType?: TreeType;
@@ -33,18 +34,23 @@ export function Row({
   minimized,
   tankType,
   treeType,
+  naked = false,
   type,
 }: RowProps) {
-  const theme = createColors(PALETTES[`${color}Dark`]);
+  const palette = PALETTES[`${color}Dark`];
+  const theme = createColors(palette);
 
   return (
     <div
       className="session-tracker-row"
       style={{
+        maxWidth: naked ? 600 : undefined,
         display: 'flex',
         flexDirection: 'column',
         borderRadius: 4,
-        backgroundColor: theme.appBackground2,
+        backgroundColor: naked
+          ? `${theme.appBackground2}c0`
+          : theme.appBackground2,
         overflow: 'hidden',
       }}
     >
@@ -55,7 +61,9 @@ export function Row({
           justifyContent: 'center',
           padding: 8,
           gap: 4,
-          backgroundColor: theme.componentInteractive,
+          backgroundColor: naked
+            ? `${theme.componentInteractive}c0`
+            : theme.componentInteractive,
         }}
       >
         {type === 'tank' && tankType !== undefined && (

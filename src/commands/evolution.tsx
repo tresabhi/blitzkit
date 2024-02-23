@@ -29,7 +29,7 @@ import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand, {
   ResolvedPlayer,
 } from '../core/discord/resolvePlayerFromCommand';
-import { CommandRegistryRaw } from '../events/interactionCreate';
+import { CommandRegistryPromisable } from '../events/interactionCreate';
 
 type EvolutionStatType = 'player' | 'tank';
 
@@ -107,7 +107,7 @@ async function render(
   );
 }
 
-export const evolutionCommand = new Promise<CommandRegistryRaw>(
+export const evolutionCommand = new Promise<CommandRegistryPromisable>(
   async (resolve) => {
     let playerGroup: SlashCommandSubcommandGroupBuilder;
     let tankGroup: SlashCommandSubcommandGroupBuilder;

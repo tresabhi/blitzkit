@@ -9,7 +9,7 @@ import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
 import { filtersToDescription } from '../core/blitzkrieg/filtersToDescription';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
-import addFilterOptions from '../core/discord/addFilterOptions';
+import addPeriodicFilterOptions from '../core/discord/addPeriodicFilterOptions';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
@@ -27,7 +27,7 @@ import resolvePlayerFromCommand, {
   ResolvedPlayer,
 } from '../core/discord/resolvePlayerFromCommand';
 import { StatFilters, filterStats } from '../core/statistics/filterStats';
-import { CommandRegistryRaw } from '../events/interactionCreate';
+import { CommandRegistryPromisable } from '../events/interactionCreate';
 
 async function render(
   { region, id }: ResolvedPlayer,
@@ -57,48 +57,50 @@ async function render(
   );
 }
 
-export const statsCommand = new Promise<CommandRegistryRaw>(async (resolve) => {
-  const command = await addFilterOptions(
-    new SlashCommandBuilder()
-      .setName('stats')
-      .setDescription('Regular battles statistics'),
-    (option) => option.addStringOption(addUsernameChoices),
-  );
+export const statsCommand = new Promise<CommandRegistryPromisable>(
+  async (resolve) => {
+    const command = await addPeriodicFilterOptions(
+      new SlashCommandBuilder()
+        .setName('stats')
+        .setDescription('Regular battles statistics'),
+      (option) => option.addStringOption(addUsernameChoices),
+    );
 
-  resolve({
-    inProduction: true,
-    inPublic: true,
+    resolve({
+      inProduction: true,
+      inPublic: true,
 
-    command,
+      command,
 
-    async handler(interaction) {
-      const player = await resolvePlayerFromCommand(interaction);
-      const period = resolvePeriodFromCommand(player.region, interaction);
-      const filters = await getFiltersFromCommand(interaction);
-      const path = commandToURL(interaction, {
-        ...player,
-        ...getCustomPeriodParams(interaction),
-        ...filters,
-      });
+      async handler(interaction) {
+        const player = await resolvePlayerFromCommand(interaction);
+        const period = resolvePeriodFromCommand(player.region, interaction);
+        const filters = await getFiltersFromCommand(interaction);
+        const path = commandToURL(interaction, {
+          ...player,
+          ...getCustomPeriodParams(interaction),
+          ...filters,
+        });
 
-      return Promise.all([
-        render(player, period, filters),
-        buttonRefresh(interaction, path),
-        getBlitzStarsLinkButton(player.region, player.id),
-      ]);
-    },
+        return Promise.all([
+          render(player, period, filters),
+          buttonRefresh(interaction, path),
+          getBlitzStarsLinkButton(player.region, player.id),
+        ]);
+      },
 
-    autocomplete: (interaction) => {
-      autocompleteUsername(interaction);
-      autocompleteTanks(interaction);
-    },
+      autocomplete: (interaction) => {
+        autocompleteUsername(interaction);
+        autocompleteTanks(interaction);
+      },
 
-    async button(interaction) {
-      const player = await resolvePlayerFromButton(interaction);
-      const period = resolvePeriodFromButton(player.region, interaction);
-      const filters = getFiltersFromButton(interaction);
+      async button(interaction) {
+        const player = await resolvePlayerFromButton(interaction);
+        const period = resolvePeriodFromButton(player.region, interaction);
+        const filters = getFiltersFromButton(interaction);
 
-      return await render(player, period, filters);
-    },
-  });
-});
+        return await render(player, period, filters);
+      },
+    });
+  },
+);

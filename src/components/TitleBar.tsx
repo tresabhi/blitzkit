@@ -36,6 +36,8 @@ export default function TitleBar({ name, image, description }: TitleBarProps) {
             style={{
               display: 'flex',
               gap: 4,
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             <span
@@ -51,9 +53,21 @@ export default function TitleBar({ name, image, description }: TitleBarProps) {
             </span>
           </div>
 
-          <span style={{ color: theme.colors.textLowContrast, fontSize: 16 }}>
-            {description}
-          </span>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: image ? 'flex-start' : 'center',
+            }}
+          >
+            <span
+              style={{
+                color: theme.colors.textLowContrast,
+                fontSize: 16,
+              }}
+            >
+              {description}
+            </span>
+          </div>
         </div>
       </div>
     </div>

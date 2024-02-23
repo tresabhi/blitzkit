@@ -16,6 +16,7 @@ export const TOOLS: Tool[] = [
     id: 'tankopedia',
     title: 'Tankopedia',
     description: 'Blitz tank encyclopedia',
+    disabled: true,
   },
   {
     id: 'ratings',

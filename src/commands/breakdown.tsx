@@ -13,7 +13,7 @@ import { tankDefinitions } from '../core/blitzkrieg/tankDefinitions';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
 import { tankAverages } from '../core/blitzstars/tankAverages';
-import addFilterOptions from '../core/discord/addFilterOptions';
+import addPeriodicFilterOptions from '../core/discord/addPeriodicFilterOptions';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
@@ -33,12 +33,12 @@ import resolvePlayerFromCommand, {
 import calculateWN8 from '../core/statistics/calculateWN8';
 import { StatFilters, filterStats } from '../core/statistics/filterStats';
 import getWN8Percentile from '../core/statistics/getWN8Percentile';
-import { CommandRegistryRaw } from '../events/interactionCreate';
+import { CommandRegistryPromisable } from '../events/interactionCreate';
 
 const ROWS_PER_PAGE = 8;
 const MAX_PAGES = 10;
 
-async function render(
+export async function renderBreakdown(
   { region, id }: ResolvedPlayer,
   { start, end, name }: ResolvedPeriod,
   filters: StatFilters,
@@ -290,9 +290,9 @@ async function render(
   }
 }
 
-export const breakdownCommand = new Promise<CommandRegistryRaw>(
+export const breakdownCommand = new Promise<CommandRegistryPromisable>(
   async (resolve) => {
-    const command = await addFilterOptions(
+    const command = await addPeriodicFilterOptions(
       new SlashCommandBuilder()
         .setName('breakdown')
         .setDescription("A period's breakdown by tanks played"),
@@ -316,7 +316,7 @@ export const breakdownCommand = new Promise<CommandRegistryRaw>(
         });
 
         return [
-          ...(await render(player, period, filters)),
+          ...(await renderBreakdown(player, period, filters)),
           buttonPrimary(path, 'Refresh'),
           await getBlitzStarsLinkButton(player.region, player.id),
         ];
@@ -332,7 +332,7 @@ export const breakdownCommand = new Promise<CommandRegistryRaw>(
         const period = resolvePeriodFromButton(player.region, interaction);
         const filters = getFiltersFromButton(interaction);
 
-        return await render(player, period, filters);
+        return await renderBreakdown(player, period, filters);
       },
     });
   },
