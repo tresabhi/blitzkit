@@ -8,7 +8,11 @@ import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import { useTankopediaPersistent } from '../../../../../../stores/tankopedia';
 import { QuickEquipmentButton } from './components/QuickEquipmentButton';
 
-export function RotationInputs() {
+interface RotationInputsProps {
+  isFullScreen?: boolean;
+}
+
+export function RotationInputs({ isFullScreen }: RotationInputsProps) {
   const protagonist = useDuel((state) => state.protagonist!);
   const awaitedModelDefinitions = use(modelDefinitions);
   const turretYawInput = useRef<HTMLInputElement>(null);
@@ -41,7 +45,7 @@ export function RotationInputs() {
         width: 'calc(100% - 16px)',
         position: 'absolute',
         left: 8,
-        bottom: 8,
+        bottom: isFullScreen ? 80 : 8,
       }}
       gap="4"
     >

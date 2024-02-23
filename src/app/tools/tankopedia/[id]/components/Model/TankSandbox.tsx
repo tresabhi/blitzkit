@@ -17,6 +17,7 @@ import mutateTankopediaPersistent, {
   mutateTankopediaTemporary,
   useTankopediaPersistent,
 } from '../../../../../../stores/tankopedia';
+import { AntagonistBar } from '../AntagonistBar';
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
 import { RotationInputs } from '../QuickInputs';
@@ -242,9 +243,14 @@ export function TankSandbox() {
               )}
             </div>
 
-            <Options canvas={canvasWrapper} isFullScreen={isFullScreen} />
+            <Options
+              canvasWrapper={canvasWrapper}
+              isFullScreen={isFullScreen}
+            />
 
-            {loadModel && <RotationInputs />}
+            {isFullScreen && <AntagonistBar floating />}
+
+            {loadModel && <RotationInputs isFullScreen={isFullScreen} />}
           </Flex>
         </Theme>
       </Card>

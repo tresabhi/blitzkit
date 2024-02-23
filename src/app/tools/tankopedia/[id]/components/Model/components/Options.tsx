@@ -14,10 +14,10 @@ import { ENVIRONMENTS } from '../../Lighting';
 
 interface OptionsProps {
   isFullScreen: boolean;
-  canvas: RefObject<HTMLElement>;
+  canvasWrapper: RefObject<HTMLElement>;
 }
 
-export function Options({ isFullScreen, canvas }: OptionsProps) {
+export function Options({ isFullScreen, canvasWrapper }: OptionsProps) {
   const showGrid = useTankopediaPersistent(
     (state) => state.model.visual.showGrid,
   );
@@ -45,103 +45,107 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
         right: 18,
       }}
     >
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          <Button variant="ghost">
-            <EyeOpenIcon />
-          </Button>
-        </DropdownMenu.Trigger>
+      {!isFullScreen && (
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Button variant="ghost">
+              <EyeOpenIcon />
+            </Button>
+          </DropdownMenu.Trigger>
 
-        <DropdownMenu.Content>
-          <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.HullDown)}>
-            Hull down
-          </DropdownMenu.Item>
+          <DropdownMenu.Content>
+            <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.HullDown)}>
+              Hull down
+            </DropdownMenu.Item>
 
-          <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.FaceHug)}>
-            Face hug
-          </DropdownMenu.Item>
+            <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.FaceHug)}>
+              Face hug
+            </DropdownMenu.Item>
 
-          <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.Default)}>
-            Default
-          </DropdownMenu.Item>
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
+            <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.Default)}>
+              Default
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      )}
 
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          <Button variant="ghost">
-            <GearIcon />
-          </Button>
-        </DropdownMenu.Trigger>
+      {!isFullScreen && (
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Button variant="ghost">
+              <GearIcon />
+            </Button>
+          </DropdownMenu.Trigger>
 
-        <DropdownMenu.Content>
-          <DropdownMenu.CheckboxItem
-            checked={greenPenetration}
-            onCheckedChange={(checked) => {
-              mutateTankopediaPersistent((draft) => {
-                draft.model.visual.greenPenetration = checked;
-              });
-            }}
-          >
-            Green penetration
-          </DropdownMenu.CheckboxItem>
+          <DropdownMenu.Content>
+            <DropdownMenu.CheckboxItem
+              checked={greenPenetration}
+              onCheckedChange={(checked) => {
+                mutateTankopediaPersistent((draft) => {
+                  draft.model.visual.greenPenetration = checked;
+                });
+              }}
+            >
+              Green penetration
+            </DropdownMenu.CheckboxItem>
 
-          <DropdownMenu.CheckboxItem
-            checked={showGrid}
-            onCheckedChange={(checked) => {
-              mutateTankopediaPersistent((draft) => {
-                draft.model.visual.showGrid = checked;
-              });
-            }}
-          >
-            Show grid
-          </DropdownMenu.CheckboxItem>
+            <DropdownMenu.CheckboxItem
+              checked={showGrid}
+              onCheckedChange={(checked) => {
+                mutateTankopediaPersistent((draft) => {
+                  draft.model.visual.showGrid = checked;
+                });
+              }}
+            >
+              Show grid
+            </DropdownMenu.CheckboxItem>
 
-          <DropdownMenu.CheckboxItem
-            checked={showEnvironment}
-            onCheckedChange={(checked) => {
-              mutateTankopediaPersistent((draft) => {
-                draft.model.visual.showEnvironment = checked;
-              });
-            }}
-          >
-            View environment
-          </DropdownMenu.CheckboxItem>
+            <DropdownMenu.CheckboxItem
+              checked={showEnvironment}
+              onCheckedChange={(checked) => {
+                mutateTankopediaPersistent((draft) => {
+                  draft.model.visual.showEnvironment = checked;
+                });
+              }}
+            >
+              View environment
+            </DropdownMenu.CheckboxItem>
 
-          <DropdownMenu.Sub>
-            <DropdownMenu.SubTrigger>Lighting</DropdownMenu.SubTrigger>
+            <DropdownMenu.Sub>
+              <DropdownMenu.SubTrigger>Lighting</DropdownMenu.SubTrigger>
 
-            <DropdownMenu.SubContent>
-              <DropdownMenu.RadioGroup value={environment}>
-                {ENVIRONMENTS.map((environment) => (
-                  <DropdownMenu.RadioItem
-                    key={environment}
-                    value={environment}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.model.visual.environment = environment;
-                      });
-                    }}
-                  >
-                    {environment[0].toUpperCase() + environment.slice(1)}
-                  </DropdownMenu.RadioItem>
-                ))}
-              </DropdownMenu.RadioGroup>
-            </DropdownMenu.SubContent>
-          </DropdownMenu.Sub>
+              <DropdownMenu.SubContent>
+                <DropdownMenu.RadioGroup value={environment}>
+                  {ENVIRONMENTS.map((environment) => (
+                    <DropdownMenu.RadioItem
+                      key={environment}
+                      value={environment}
+                      onClick={() => {
+                        mutateTankopediaPersistent((draft) => {
+                          draft.model.visual.environment = environment;
+                        });
+                      }}
+                    >
+                      {environment[0].toUpperCase() + environment.slice(1)}
+                    </DropdownMenu.RadioItem>
+                  ))}
+                </DropdownMenu.RadioGroup>
+              </DropdownMenu.SubContent>
+            </DropdownMenu.Sub>
 
-          <DropdownMenu.CheckboxItem
-            checked={wireframe}
-            onCheckedChange={(checked) => {
-              mutateTankopediaPersistent((draft) => {
-                draft.model.visual.wireframe = checked;
-              });
-            }}
-          >
-            Wireframe
-          </DropdownMenu.CheckboxItem>
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
+            <DropdownMenu.CheckboxItem
+              checked={wireframe}
+              onCheckedChange={(checked) => {
+                mutateTankopediaPersistent((draft) => {
+                  draft.model.visual.wireframe = checked;
+                });
+              }}
+            >
+              Wireframe
+            </DropdownMenu.CheckboxItem>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      )}
 
       {fullScreenAvailable && (
         <Button
@@ -149,9 +153,7 @@ export function Options({ isFullScreen, canvas }: OptionsProps) {
           onClick={() => {
             if (isFullScreen) {
               document.exitFullscreen();
-            } else {
-              canvas.current?.requestFullscreen();
-            }
+            } else canvasWrapper.current?.requestFullscreen();
           }}
         >
           {isFullScreen ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
