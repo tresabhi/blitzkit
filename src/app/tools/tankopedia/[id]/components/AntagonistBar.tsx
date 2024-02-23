@@ -15,11 +15,11 @@ import { ModuleButton } from '../../../../../components/ModuleButtons/ModuleButt
 import { ShellButton } from '../../../../../components/ModuleButtons/ShellButton';
 import { SmallTankIcon } from '../../../../../components/SmallTankIcon';
 import { resolveNearPenetration } from '../../../../../core/blitz/resolveNearPenetration';
+import { pushTankopediaPath } from '../../../../../core/blitzkrieg/pushTankopediaPath';
 import {
   SHELL_NAMES,
   TIER_ROMAN_NUMERALS,
 } from '../../../../../core/blitzkrieg/tankDefinitions';
-import { updateTankopediaUrl } from '../../../../../core/blitzkrieg/updateTankopediaURL';
 import { mutateDuel, useDuel } from '../../../../../stores/duel';
 import {
   mutateTankopediaTemporary,
@@ -262,7 +262,7 @@ export function AntagonistBar({ floating }: AntagonistBarProps) {
                 draft.antagonist,
                 draft.protagonist,
               ];
-              updateTankopediaUrl(draft.antagonist!.tank.id);
+              pushTankopediaPath(draft.antagonist!.tank.id);
             });
           }}
         >

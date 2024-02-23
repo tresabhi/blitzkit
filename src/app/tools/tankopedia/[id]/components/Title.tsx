@@ -3,7 +3,7 @@ import { Button, Dialog, Flex, Heading } from '@radix-ui/themes';
 import { useState } from 'react';
 import { TREE_TYPE_ICONS } from '../../../../../components/Tanks';
 import { assignDuelMember } from '../../../../../core/blitzkrieg/assignDuelMember';
-import { updateTankopediaUrl } from '../../../../../core/blitzkrieg/updateTankopediaURL';
+import { pushTankopediaPath } from '../../../../../core/blitzkrieg/pushTankopediaPath';
 import { useDuel } from '../../../../../stores/duel';
 import { TankSearch } from '../../components/TankSearch';
 
@@ -66,7 +66,7 @@ export function Title() {
                   onSelect={(tank) => {
                     assignDuelMember('protagonist', tank.id);
                     setChangeTankDialogOpen(false);
-                    updateTankopediaUrl(tank.id);
+                    pushTankopediaPath(tank.id);
                   }}
                 />
               </Flex>
