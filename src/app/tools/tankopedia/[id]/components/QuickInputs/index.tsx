@@ -73,7 +73,7 @@ export function RotationInputs() {
                 turretModelDefinition.yaw,
               );
               modelTransformEvent.emit({ pitch, yaw });
-              useDuel((state) => {
+              mutateDuel((state) => {
                 state.protagonist!.pitch = pitch;
                 state.protagonist!.yaw = yaw;
               });
