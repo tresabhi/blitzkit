@@ -31,6 +31,10 @@ float depthToDistance(float depth) {
   return worldDistance;
 }
 
+float angleTo(vec3 a, vec3 b) {
+  return acos(dot(a, b) / (length(a) * length(b)));
+}
+
 void main() {
   float penetrationChance = -1.0;
   float splashChance = -1.0;
@@ -42,12 +46,12 @@ void main() {
   bool isUnderSpacedArmor = spacedArmorMaskColor.a == 1.0;
   float spacedArmorAngle = spacedArmorMaskColor.r * (PI / 2.0);
 
-  float coreArmorangle = acos(dot(vNormal, -normalize(vViewPosition)));
+  float coreArmorAngle = angleTo(vNormal, -vViewPosition);
   bool coreArmorThreeCalibersRule = caliber > 3.0 * thickness;
   float spacedArmorNominalThickness = spacedArmorMaskColor.g * maxThickness;
   bool spacedArmorThreeCalibersRule = isUnderSpacedArmor && caliber > 3.0 * spacedArmorNominalThickness;
   bool hasRicochetedSpacedArmor = isUnderSpacedArmor && !spacedArmorThreeCalibersRule && spacedArmorAngle >= ricochetAngle;
-  bool hasRicochetedCoreArmor = !hasRicochetedSpacedArmor && !isUnderExternalModule && canRicochet && !coreArmorThreeCalibersRule && coreArmorangle >= ricochetAngle;
+  bool hasRicochetedCoreArmor = !hasRicochetedSpacedArmor && !isUnderExternalModule && canRicochet && !coreArmorThreeCalibersRule && coreArmorAngle >= ricochetAngle;
 
   if (hasRicochetedCoreArmor || hasRicochetedSpacedArmor) {
     penetrationChance = 0.0;
@@ -82,7 +86,7 @@ void main() {
 
     bool coreArmorTwoCalibersRule = caliber > 2.0 * thickness && thickness > 0.0;
     float finalNormalization = coreArmorTwoCalibersRule ? (normalization * 1.4 * caliber) / (2.0 * thickness) : normalization;
-    float finalCoreArmorThickness = thickness / cos(coreArmorangle - finalNormalization);
+    float finalCoreArmorThickness = thickness / cos(coreArmorAngle - finalNormalization);
     float deltaPenetration = finalCoreArmorThickness - remainingPenetration;
     float randomRadius = remainingPenetration * 0.05;
 
