@@ -13,6 +13,8 @@ import { useApp } from '../stores/app';
 
 config();
 
+const DEV_BUILD_AGREEMENT_COOLDOWN = 8 * 24 * 60 * 60 * 1000;
+
 interface RootLayoutProps {
   children: ReactNode;
 }
@@ -29,7 +31,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
   useEffect(() => {
     setShowDevBuildAlert(
-      isDev() && !isLocalhost() && !useApp.getState().bypassDevBuildAlert,
+      isDev() &&
+        !isLocalhost() &&
+        Date.now() - useApp.getState().devBuildAgreementTime >=
+          DEV_BUILD_AGREEMENT_COOLDOWN,
     );
   }, []);
 
@@ -68,9 +73,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 </a>
                 . Also consider using{' '}
                 <a href="https://blitz-krieg.vercel.app/">
-                  the more stable version
+                  the more stable release version
                 </a>
-                .
+                . You will be asked again in 8 days.
               </AlertDialog.Description>
 
               <Flex justify="end">
@@ -78,7 +83,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                   variant="solid"
                   onClick={() => {
                     setShowDevBuildAlert(false);
-                    useApp.setState({ bypassDevBuildAlert: true });
+                    useApp.setState({ devBuildAgreementTime: Date.now() });
                   }}
                 >
                   Continue

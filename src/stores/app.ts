@@ -2,13 +2,13 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export interface App {
-  bypassDevBuildAlert: boolean;
+  devBuildAgreementTime: number;
 }
 
 export const useApp = create<App>()(
   persist(
     (set) => ({
-      bypassDevBuildAlert: false,
+      devBuildAgreementTime: 0,
     }),
     { name: 'app' },
   ),
