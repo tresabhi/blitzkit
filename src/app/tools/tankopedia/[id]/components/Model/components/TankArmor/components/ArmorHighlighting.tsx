@@ -87,14 +87,14 @@ export function ArmorHighlighting() {
       },
     );
 
-    handleModelTransform(useDuel.getState().protagonist!);
+    handleModelTransform(protagonist);
     modelTransformEvent.on(handleModelTransform);
 
     return () => {
       modelTransformEvent.off(handleModelTransform);
       unsubscribe();
     };
-  }, []);
+  });
 
   const armorGltf = useArmor(protagonist.tank.id);
   const armorNodes = Object.values(armorGltf.nodes);

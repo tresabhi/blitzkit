@@ -617,6 +617,7 @@ export function Characteristics() {
           return (
             <>
               <InfoWithDelta
+                key={`${member.type}-root`}
                 name={`${CREW_MEMBER_NAMES[member.type]}${count > 1 ? ` x ${count}` : ''}`}
                 unit="%"
                 decimals={0}
@@ -627,6 +628,7 @@ export function Characteristics() {
               </InfoWithDelta>
               {member.substitute && (
                 <Info
+                  key={`${member.type}-substitute`}
                   indent
                   name={
                     <>

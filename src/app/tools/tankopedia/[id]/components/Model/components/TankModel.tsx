@@ -1,19 +1,17 @@
 import { ThreeEvent, useThree } from '@react-three/fiber';
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { Euler, Group, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { I_HAT, J_HAT, K_HAT } from '../../../../../../../constants/axis';
 import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
 import { jsxTree } from '../../../../../../../core/blitzkrieg/jsxTree';
-import {
-  ModelDefinitions,
-  modelDefinitions,
-} from '../../../../../../../core/blitzkrieg/modelDefinitions';
+import { modelDefinitions } from '../../../../../../../core/blitzkrieg/modelDefinitions';
 import {
   ModelTransformEventData,
   modelTransformEvent,
 } from '../../../../../../../core/blitzkrieg/modelTransform';
 import { normalizeAnglePI } from '../../../../../../../core/math/normalizeAngle180';
+import { useAwait } from '../../../../../../../hooks/useAwait';
 import { useModel } from '../../../../../../../hooks/useModel';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import mutateTankopediaPersistent, {
@@ -21,9 +19,7 @@ import mutateTankopediaPersistent, {
 } from '../../../../../../../stores/tankopedia';
 
 export const TankModel = memo(() => {
-  const [awaitedModelDefinitions, setAwaitedModelDefinitions] = useState<
-    ModelDefinitions | undefined
-  >(undefined);
+  const awaitedModelDefinitions = useAwait(modelDefinitions);
   const protagonist = useDuel((draft) => draft.protagonist!);
   const canvas = useThree((state) => state.gl.domElement);
   const hullContainer = useRef<Group>(null);
@@ -31,14 +27,6 @@ export const TankModel = memo(() => {
   const gunContainer = useRef<Group>(null);
 
   useEffect(() => {
-    (async () => {
-      setAwaitedModelDefinitions(await modelDefinitions);
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (!awaitedModelDefinitions) return;
-
     const hullOrigin = new Vector3(
       trackModelDefinition.origin[0],
       trackModelDefinition.origin[1],
@@ -103,6 +91,7 @@ export const TankModel = memo(() => {
       turretContainer.current?.rotation.copy(turretRotation);
     }
 
+    handleModelTransform(protagonist);
     modelTransformEvent.on(handleModelTransform);
 
     return () => {

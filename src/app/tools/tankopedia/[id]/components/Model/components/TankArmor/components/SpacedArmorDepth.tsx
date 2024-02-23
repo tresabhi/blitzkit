@@ -108,7 +108,7 @@ export const SpacedArmorDepth = memo<SpacedArmorDepthProps>(
         turretContainer.current?.rotation.copy(turretRotation);
       }
 
-      handleModelTransform(useDuel.getState().protagonist!);
+      handleModelTransform(protagonist);
       modelTransformEvent.on(handleModelTransform);
 
       return () => {

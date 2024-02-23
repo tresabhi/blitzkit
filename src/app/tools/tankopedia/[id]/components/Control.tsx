@@ -55,7 +55,7 @@ export function Controls() {
 
   useEffect(() => {
     camera.position.set(-4, 4, -16);
-    orbitControls.current?.target.set(0, antagonistGunHeight / 2, 0);
+    orbitControls.current?.target.set(0, 1.25, 0);
 
     const unsubscribeTankopedia = useTankopediaPersistent.subscribe(
       (state) => state.model.visual.controlsEnabled,
@@ -135,7 +135,7 @@ export function Controls() {
 
         case Pose.Default: {
           camera.position.set(-4, 4, -16);
-          orbitControls.current?.target.set(0, antagonistGunHeight / 2, 0);
+          orbitControls.current?.target.set(0, 1.25, 0);
           break;
         }
       }
