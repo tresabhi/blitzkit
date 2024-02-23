@@ -357,13 +357,16 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
     }
 
     return sort.direction === 'ascending' ? sorted : sorted.reverse();
-  }, [filters, sort]);
+  }, [
+    sort,
+    ...Object.entries(filters)
+      .filter(([name]) => name !== 'page')
+      .map(([, value]) => value),
+  ]);
   const [searchResults, setSearchedList] = useState(searchableTanks);
   const page = useTankopediaPersistent((state) => state.filters.page);
-  const chunkSize =
-    typeof window !== 'undefined' && window.innerWidth > 512
-      ? tanksPerPage / 2
-      : Infinity;
+  const wideFormat = typeof window !== 'undefined' && window.innerWidth > 512;
+  const chunkSize = wideFormat ? tanksPerPage / 2 : Infinity;
   const searchResultsPageSlice = searchResults.slice(
     page * tanksPerPage,
     (page + 1) * tanksPerPage,
@@ -396,19 +399,16 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
               ref={input}
               placeholder="Search tanks..."
               onChange={(event) => {
-                if (event.target.value.length === 0) {
-                  setSearchedList(searchableTanks);
-                } else {
-                  setSearchedList(
-                    go(event.target.value, searchableTanks, {
-                      keys: [
-                        'name',
-                        'nameFull',
-                        'id',
-                      ] satisfies (keyof TankDefinition)[],
-                    }).map(({ obj }) => obj),
-                  );
-                }
+                const results = go(event.target.value, searchableTanks, {
+                  keys: [
+                    'name',
+                    'nameFull',
+                    'id',
+                  ] satisfies (keyof TankDefinition)[],
+                  all: true,
+                }).map(({ obj }) => obj);
+
+                setSearchedList(results);
               }}
             />
           </TextField.Root>
