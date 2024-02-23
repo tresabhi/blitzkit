@@ -44,7 +44,7 @@ export function Row({
     <div
       className="session-tracker-row"
       style={{
-        maxWidth: naked ? 600 : undefined,
+        maxWidth: naked ? 600 : Infinity,
         display: 'flex',
         flexDirection: 'column',
         borderRadius: 4,
