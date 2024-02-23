@@ -23,6 +23,7 @@ import getArchivedRatingsInfo from '../core/blitzkrieg/getArchivedRatingsInfo';
 import { getArchivedRatingsLeaderboard } from '../core/blitzkrieg/getArchivedRatingsLeaderboard';
 import getArchivedRatingsMidnightLeaderboard from '../core/blitzkrieg/getArchivedRatingsMidnightLeaderboard';
 import addRegionChoices from '../core/discord/addRegionChoices';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import embedNegative from '../core/discord/embedNegative';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
@@ -132,6 +133,7 @@ export const ratingsCommand = new Promise<CommandRegistryPromisable>(
 
     function addSubcommands(option: SlashCommandSubcommandBuilder) {
       return option
+        .addStringOption(addUsernameChoices)
         .addIntegerOption((option) =>
           option
             .setName('limit')
