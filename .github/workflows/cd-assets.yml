@@ -2,7 +2,7 @@ name: CD Build Assets
 
 on:
   push:
-    branches: [main, dev]
+    branches: dev
   workflow_dispatch:
 
 concurrency:
