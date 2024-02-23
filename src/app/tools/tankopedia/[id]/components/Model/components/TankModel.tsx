@@ -120,9 +120,14 @@ export const TankModel = memo(() => {
 
         if (!isVisible) return null;
 
+        function onPointerDown(event: ThreeEvent<PointerEvent>) {
+          event.stopPropagation();
+        }
+
         return jsxTree(node, {
           castShadow: true,
           receiveShadow: true,
+          onPointerDown,
         });
       })}
 
