@@ -2,7 +2,9 @@ import { UpdateIcon } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, Heading } from '@radix-ui/themes';
 import { useState } from 'react';
 import { TREE_TYPE_ICONS } from '../../../../../components/Tanks';
-import { mutateDuel, useDuel } from '../../../../../stores/duel';
+import { assignDuelMember } from '../../../../../core/blitzkrieg/assignDuelMember';
+import { updateTankopediaUrl } from '../../../../../core/blitzkrieg/updateTankopediaURL';
+import { useDuel } from '../../../../../stores/duel';
 import { TankSearch } from '../../components/TankSearch';
 
 export function Title() {
@@ -62,17 +64,9 @@ export function Title() {
                 <TankSearch
                   compact
                   onSelect={(tank) => {
-                    mutateDuel((draft) => {
-                      draft.protagonist!.tank = tank;
-                      draft.protagonist!.engine = tank.engines.at(-1)!;
-                      draft.protagonist!.track = tank.tracks.at(-1)!;
-                      draft.protagonist!.turret = tank.turrets.at(-1)!;
-                      draft.protagonist!.gun =
-                        draft.protagonist!.turret.guns.at(-1)!;
-                      draft.protagonist!.shell =
-                        draft.protagonist!.gun.shells[0];
-                    });
+                    assignDuelMember('protagonist', tank.id);
                     setChangeTankDialogOpen(false);
+                    updateTankopediaUrl(tank.id);
                   }}
                 />
               </Flex>

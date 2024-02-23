@@ -9,6 +9,7 @@ import {
   Text,
   Tooltip,
 } from '@radix-ui/themes';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { ModuleButton } from '../../../../../components/ModuleButtons/ModuleButton';
 import { ShellButton } from '../../../../../components/ModuleButtons/ShellButton';
@@ -18,6 +19,7 @@ import {
   SHELL_NAMES,
   TIER_ROMAN_NUMERALS,
 } from '../../../../../core/blitzkrieg/tankDefinitions';
+import { updateTankopediaUrl } from '../../../../../core/blitzkrieg/updateTankopediaURL';
 import { mutateDuel, useDuel } from '../../../../../stores/duel';
 import {
   mutateTankopediaTemporary,
@@ -35,6 +37,7 @@ export function AntagonistBar({ floating }: AntagonistBarProps) {
   const [tab, setTab] = useState('search');
   const [antagonistSelectorOpen, setAntagonistSelectorVisible] =
     useState(false);
+  const router = useRouter();
 
   if (mode !== 'armor') return null;
 
@@ -259,10 +262,11 @@ export function AntagonistBar({ floating }: AntagonistBarProps) {
                 draft.antagonist,
                 draft.protagonist,
               ];
+              updateTankopediaUrl(draft.antagonist!.tank.id);
             });
           }}
         >
-          <ShuffleIcon /> Swap tanks
+          <ShuffleIcon /> Swap
         </Button>
       </Flex>
     </Card>
