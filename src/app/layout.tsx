@@ -2,6 +2,7 @@
 
 import { AlertDialog, Button, Flex, Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
+import { Analytics } from '@vercel/analytics/react';
 import { config } from 'dotenv';
 import { Roboto_Flex } from 'next/font/google';
 import { usePathname } from 'next/navigation';
@@ -54,6 +55,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
           paddingTop: isEmbed ? 0 : '3.25rem',
         }}
       >
+        <Analytics />
+
         <Theme
           appearance="dark"
           panelBackground="translucent"
