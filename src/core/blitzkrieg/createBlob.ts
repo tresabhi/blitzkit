@@ -34,7 +34,7 @@ export const createBlob = throttle(
       } catch (error) {
         console.warn(
           `Failed blob ${change.path}; retrying in ${TIME_PER_BLOB}ms...`,
-          error,
+          // error,
         );
 
         await new Promise((resolve) => setTimeout(resolve, TIME_PER_BLOB));
