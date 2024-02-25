@@ -1,0 +1,53 @@
+name: CD Build Assets
+
+on:
+  push:
+    branches: dev
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install Yarn
+        run: npm install --location=global yarn
+
+      - name: Use node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Add fixed sharp
+        run: yarn add sharp@0.33.1 --ignore-engines
+
+      - name: Setup DepotDownloader
+        run: yarn setup:depotdownloader
+
+      - name: Run DepotDownloader
+        run: ./temp/depotDownloader/DepotDownloader.exe -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
+
+      - name: Build assets
+        run: |
+          $env:GH_TOKEN = "${{ secrets.GH_TOKEN }}"
+          $env:DISCORD_TOKEN = "${{ secrets.DISCORD_TOKEN }}"
+          yarn build:assets --all-targets --depot ${{ github.ref == 'refs/heads/main' && '--production' || '' }}

@@ -4,7 +4,7 @@ import {
   CacheType,
 } from 'discord.js';
 import { go } from 'fuzzysort';
-import { tankNamesDiacritics } from '../blitzkrieg/definitions/tanks';
+import { tankNames } from '../blitzkrieg/tankDefinitions';
 import {
   DISCORD_CHOICES_MAX_NAME_SIZE,
   OVERFLOW_SUFFIX,
@@ -19,7 +19,7 @@ export default async function autocompleteTanks(
   await interaction.respond(
     focusedOption.value
       ? await Promise.all(
-          go(focusedOption.value, await tankNamesDiacritics, {
+          go(focusedOption.value, await tankNames, {
             keys: ['combined'],
             limit: 10,
           }).map(async (item) => {

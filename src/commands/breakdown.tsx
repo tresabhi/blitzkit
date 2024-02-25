@@ -7,9 +7,11 @@ import Wrapper from '../components/Wrapper';
 import { AllStats, getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
-import getTreeType from '../core/blitz/getTreeType';
-import { tankDefinitions } from '../core/blitzkrieg/definitions/tanks';
 import { filtersToDescription } from '../core/blitzkrieg/filtersToDescription';
+import {
+  TankDefinition,
+  tankDefinitions,
+} from '../core/blitzkrieg/tankDefinitions';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
 import { tankAverages } from '../core/blitzstars/tankAverages';
@@ -36,7 +38,7 @@ import getWN8Percentile from '../core/statistics/getWN8Percentile';
 import { CommandRegistryPromisable } from '../events/interactionCreate';
 
 const ROWS_PER_PAGE = 8;
-const MAX_PAGES = 10;
+const MAX_PAGES = 9;
 
 export async function renderBreakdown(
   { region, id }: ResolvedPlayer,
@@ -180,68 +182,68 @@ export async function renderBreakdown(
       />,
     );
 
-    await Promise.all(
-      filteredOrder.map(async (id, index) => {
-        const tankDefinition = awaitedTankDefinitions[id];
-        const current = orderedCurrentStats[index];
-        const career = orderedCareerStats[index];
-        const currentWN8 = orderedCurrentWN8[index];
-        const careerWN8 = orderedCareerWN8[index];
+    filteredOrder.forEach((id, index) => {
+      const tankDefinition = awaitedTankDefinitions[id] as
+        | TankDefinition
+        | undefined;
+      const current = orderedCurrentStats[index];
+      const career = orderedCareerStats[index];
+      const currentWN8 = orderedCurrentWN8[index];
+      const careerWN8 = orderedCareerWN8[index];
 
-        children.push(
-          <Breakdown.Row
-            key={id}
-            type="tank"
-            tankType={tankDefinition?.type}
-            treeType={tankDefinition ? await getTreeType(id) : undefined}
-            title={awaitedTankDefinitions[id].name}
-            stats={[
-              {
-                title: 'Battles',
-                current: current.battles.toLocaleString(),
-                career: career.battles.toLocaleString(),
-              },
-              {
-                title: 'Winrate',
-                current: `${(100 * (current.wins / current.battles)).toFixed(
-                  2,
-                )}%`,
-                career: `${(100 * (career.wins / career.battles)).toFixed(2)}%`,
-                delta:
-                  current.wins / current.battles - career.wins / career.battles,
-              },
-              {
-                title: 'WN8',
-                current:
-                  currentWN8 === undefined
-                    ? undefined
-                    : Math.round(currentWN8).toLocaleString(),
-                career:
-                  careerWN8 === undefined
-                    ? undefined
-                    : Math.round(careerWN8).toLocaleString(),
-                percentile:
-                  currentWN8 === undefined
-                    ? undefined
-                    : getWN8Percentile(currentWN8),
-              },
-              {
-                title: 'Damage',
-                current: Math.round(
-                  current.damage_dealt / current.battles,
-                ).toLocaleString(),
-                career: Math.round(
-                  career.damage_dealt / career.battles,
-                ).toLocaleString(),
-                delta:
-                  current.damage_dealt / current.battles -
-                  career.damage_dealt / career.battles,
-              },
-            ]}
-          />,
-        );
-      }),
-    );
+      children.push(
+        <Breakdown.Row
+          key={id}
+          type="tank"
+          tankType={tankDefinition?.type}
+          treeType={tankDefinition?.treeType}
+          title={tankDefinition?.name ?? `Unknown tank ${id}`}
+          stats={[
+            {
+              title: 'Battles',
+              current: current.battles.toLocaleString(),
+              career: career.battles.toLocaleString(),
+            },
+            {
+              title: 'Winrate',
+              current: `${(100 * (current.wins / current.battles)).toFixed(
+                2,
+              )}%`,
+              career: `${(100 * (career.wins / career.battles)).toFixed(2)}%`,
+              delta:
+                current.wins / current.battles - career.wins / career.battles,
+            },
+            {
+              title: 'WN8',
+              current:
+                currentWN8 === undefined
+                  ? undefined
+                  : Math.round(currentWN8).toLocaleString(),
+              career:
+                careerWN8 === undefined
+                  ? undefined
+                  : Math.round(careerWN8).toLocaleString(),
+              percentile:
+                currentWN8 === undefined
+                  ? undefined
+                  : getWN8Percentile(currentWN8),
+            },
+            {
+              title: 'Damage',
+              current: Math.round(
+                current.damage_dealt / current.battles,
+              ).toLocaleString(),
+              career: Math.round(
+                career.damage_dealt / career.battles,
+              ).toLocaleString(),
+              delta:
+                current.damage_dealt / current.battles -
+                career.damage_dealt / career.battles,
+            },
+          ]}
+        />,
+      );
+    });
   }
 
   const pages = chunk(
@@ -282,9 +284,7 @@ export async function renderBreakdown(
           description={`${name} • ${filterDescriptions}`}
         />
 
-        {filteredOrder.length === 0 && (
-          <NoData type={NoDataType.BattlesInPeriod} />
-        )}
+        <NoData type={NoDataType.BattlesInPeriod} />
       </Wrapper>,
     ];
   }

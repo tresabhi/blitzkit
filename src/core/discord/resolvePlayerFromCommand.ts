@@ -1,9 +1,9 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { Region } from '../../constants/regions';
+import { UserError } from '../../hooks/userError';
 import searchPlayersAcrossRegions from '../blitz/searchPlayersAcrossRegions';
 import { getBlitzFromDiscord } from '../blitzkrieg/discordBlitz';
-import { UserError } from '../blitzkrieg/userError';
 
 export const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
 

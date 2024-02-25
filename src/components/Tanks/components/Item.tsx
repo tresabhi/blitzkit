@@ -2,34 +2,28 @@ import {
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
-} from '../../../core/blitzkrieg/definitions/tanks';
+} from '../../../core/blitzkrieg/tankDefinitions';
 import { theme } from '../../../stitches.config';
 
-export enum TreeTypeEnum {
-  TechTree,
-  Premium,
-  Collector,
-}
-
 export const TANK_TYPES = [
-  'tank_destroyer',
   'light',
   'medium',
   'heavy',
+  'tankDestroyer',
 ] as const;
 
 export const TREE_TYPES = ['researchable', 'premium', 'collector'] as const;
 
 export type TankType = (typeof TANK_TYPES)[number];
-export type TreeTypeString = (typeof TREE_TYPES)[number];
+export type TreeType = (typeof TREE_TYPES)[number];
 
-export const TREE_TYPE_NAMES: Record<TreeTypeString, string> = {
+export const TREE_TYPE_NAMES: Record<TreeType, string> = {
   researchable: 'Tech tree',
   premium: 'Premium',
   collector: 'Collector',
 };
 
-export const TREE_TYPE_IMAGES: Record<TreeTypeString, string> = {
+export const TREE_TYPE_IMAGES: Record<TreeType, string> = {
   researchable: 'https://i.imgur.com/pJxO2XY.png',
   premium: 'https://i.imgur.com/mZzSwOU.png',
   collector: 'https://i.imgur.com/7A0RsG5.png',
@@ -39,19 +33,19 @@ export interface ItemProps {
   image?: string;
   tankType?: TankType;
   name: string;
-  treeType: TreeTypeEnum;
+  treeType: TreeType;
 }
 
 const TREE_TYPE_COLOR = {
-  [TreeTypeEnum.TechTree]: '',
-  [TreeTypeEnum.Premium]: '_amber',
-  [TreeTypeEnum.Collector]: '_blue',
+  researchable: '',
+  premium: '_amber',
+  collector: '_blue',
 } as const;
 
-export const TREE_TYPE_ICONS = {
-  [TreeTypeEnum.TechTree]: TANK_ICONS,
-  [TreeTypeEnum.Premium]: TANK_ICONS_PREMIUM,
-  [TreeTypeEnum.Collector]: TANK_ICONS_COLLECTOR,
+export const TREE_TYPE_ICONS: Record<TreeType, Record<TankType, string>> = {
+  researchable: TANK_ICONS,
+  premium: TANK_ICONS_PREMIUM,
+  collector: TANK_ICONS_COLLECTOR,
 };
 
 export function Item({ image, tankType, name, treeType }: ItemProps) {

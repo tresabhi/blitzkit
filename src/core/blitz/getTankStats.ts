@@ -1,7 +1,7 @@
 import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
+import { UserError } from '../../hooks/userError';
 import { TanksStats } from '../../types/tanksStats';
-import { UserError } from '../blitzkrieg/userError';
 import fetchBlitz from './fetchBlitz';
 
 export default async function getTankStats(region: Region, id: number) {

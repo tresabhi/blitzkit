@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
-import { tankDefinitions } from '../core/blitzkrieg/definitions/tanks';
 import getPeriodNow from '../core/blitzkrieg/getPeriodNow';
 import getTimeDaysAgo from '../core/blitzkrieg/getTimeDaysAgo';
+import { tankDefinitions } from '../core/blitzkrieg/tankDefinitions';
 import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
 import { tankAverages } from '../core/blitzstars/tankAverages';
 import addUsernameChoices from '../core/discord/addUsernameChoices';

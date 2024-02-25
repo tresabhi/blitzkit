@@ -1,5 +1,5 @@
 import { ButtonInteraction } from 'discord.js';
-import { TreeTypeString } from '../../components/Tanks';
+import { TreeType } from '../../components/Tanks';
 import { StatFilters } from '../statistics/filterStats';
 
 export function getFiltersFromButton(interaction: ButtonInteraction) {
@@ -10,8 +10,7 @@ export function getFiltersFromButton(interaction: ButtonInteraction) {
     tank: parseInt(url.searchParams.get('tank') ?? '0') || undefined,
     tankType: url.searchParams.get('tank-type') ?? undefined,
     treeType:
-      (url.searchParams.get('tree-type') as TreeTypeString | undefined) ??
-      undefined,
+      (url.searchParams.get('tree-type') as TreeType | undefined) ?? undefined,
     tier: parseInt(url.searchParams.get('tier') ?? '0') || undefined,
   } satisfies StatFilters;
 }

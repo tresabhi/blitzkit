@@ -3,6 +3,7 @@ import { Worker } from 'worker_threads';
 const MAX_WORKERS = 2;
 
 const workers = [...Array(MAX_WORKERS)].map(() => {
+  // const worker = new Worker('src/workers/render.ts');
   const worker = new Worker(`${__dirname}/workers/render.cjs`);
   console.log(`🟡 Launching render worker ${worker.threadId}`);
   return worker;

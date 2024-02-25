@@ -1,11 +1,7 @@
 import { TREE_TYPE_NAMES } from '../../components/Tanks';
 import { encyclopediaInfo } from '../blitz/encyclopediaInfo';
 import { StatFilters } from '../statistics/filterStats';
-import {
-  TIER_ROMAN_NUMERALS,
-  Tier,
-  tankDefinitions,
-} from './definitions/tanks';
+import { TIER_ROMAN_NUMERALS, Tier, tankDefinitions } from './tankDefinitions';
 
 export async function filtersToDescription({
   nation,

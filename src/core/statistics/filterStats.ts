@@ -1,5 +1,5 @@
-import { TreeTypeString } from '../../components/Tanks';
-import { tankDefinitions } from '../blitzkrieg/definitions/tanks';
+import { TreeType } from '../../components/Tanks';
+import { tankDefinitions } from '../blitzkrieg/tankDefinitions';
 import { DiffedTankStats } from '../blitzstars/getStatsInPeriod';
 import { tankAverages } from '../blitzstars/tankAverages';
 import calculateWN8 from './calculateWN8';
@@ -9,7 +9,7 @@ export interface StatFilters {
   nation?: string;
   tier?: number;
   tankType?: string;
-  treeType?: TreeTypeString;
+  treeType?: TreeType;
   tank?: number;
 }
 
@@ -31,10 +31,10 @@ export async function filterStats(
       (filters.tier === undefined || entry.tier === filters.tier) &&
       (filters.tankType === undefined || entry.type === filters.tankType) &&
       (filters.treeType === undefined ||
-        (filters.treeType === 'collector' && entry.tree_type === 'collector') ||
-        (filters.treeType === 'premium' && entry.tree_type === 'premium') ||
+        (filters.treeType === 'collector' && entry.treeType === 'collector') ||
+        (filters.treeType === 'premium' && entry.treeType === 'premium') ||
         (filters.treeType === 'researchable' &&
-          entry.tree_type === 'researchable')) &&
+          entry.treeType === 'researchable')) &&
       (filters.tank === undefined || entry.id === filters.tank)
     );
   });

@@ -1,10 +1,10 @@
 import { go } from 'fuzzysort';
+import { UserError } from '../../hooks/userError';
 import markdownEscape from 'markdown-escape';
 import {
   tankDefinitions,
   tanksDefinitionsArray,
-} from '../blitzkrieg/definitions/tanks';
-import { UserError } from '../blitzkrieg/userError';
+} from '../blitzkrieg/tankDefinitions';
 
 export default async function resolveTankId(tank: string | number) {
   const number = typeof tank === 'string' ? parseInt(tank) : tank;

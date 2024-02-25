@@ -1,6 +1,5 @@
+import { GithubChangeBlob, createBlob } from './createBlob';
 import { octokit } from './octokit';
-
-const TIME_PER_BLOB = 2 ** 4 * 1000;
 
 export interface FileChange {
   path: string;
@@ -30,41 +29,13 @@ export default async function commitMultipleFiles(
       commit_sha: latestCommitSha,
     })
   ).data.tree.sha;
-  const blobs: {
-    sha: string;
-    path: string;
-    mode: '100644';
-    type: 'blob';
-  }[] = [];
+  const blobs: GithubChangeBlob[] = [];
 
   for (const changeIndexString in changes) {
     const changeIndex = parseInt(changeIndexString);
     const change = changes[changeIndex];
-    let done = false;
-
-    while (!done) {
-      try {
-        const { sha } = (
-          await octokit.git.createBlob({
-            owner,
-            repo,
-            content: change.content,
-            encoding: change.encoding,
-          })
-        ).data;
-
-        blobs.push({ sha, path: change.path, mode: '100644', type: 'blob' });
-        done = true;
-      } catch (error) {
-        console.warn(
-          `Failed blob ${changeIndex + 1} / ${
-            changes.length
-          }; retrying in ${TIME_PER_BLOB}ms...`,
-        );
-
-        await new Promise((resolve) => setTimeout(resolve, TIME_PER_BLOB));
-      }
-    }
+    const createdBlob = await createBlob(owner, repo, change);
+    blobs.push(createdBlob!);
 
     if (verbose) {
       console.log(

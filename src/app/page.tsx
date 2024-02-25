@@ -30,7 +30,8 @@ export default function Page() {
               ({
                 node: (
                   <Link
-                    href={`/tools/${tool.id}`}
+                    href={tool.href ?? `/tools/${tool.id}`}
+                    target={tool.href ? '_blank' : undefined}
                     className={
                       tool.disabled ? styles.tool.disabled : styles.tool.enabled
                     }
