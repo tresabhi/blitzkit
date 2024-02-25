@@ -47,7 +47,6 @@ export async function tankIcons(production: boolean) {
 
           const nationVehicleId = tank.id;
           const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
-          if (12913 !== id) return;
           const parameters = await readYAMLDVPL<TankParameters>(
             `${DATA}/${POI.tankParameters}/${nation}/${tankKey}.yaml.dvpl`,
           );
