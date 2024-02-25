@@ -1,16 +1,20 @@
 'use client';
 
-import { AlertDialog, Button, Flex, Theme } from '@radix-ui/themes';
+import { CaretRightIcon } from '@radix-ui/react-icons';
+import { AlertDialog, Button, Flex, Text, Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
 import { Analytics } from '@vercel/analytics/react';
 import { config } from 'dotenv';
 import { Roboto_Flex } from 'next/font/google';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useEffect, useState } from 'react';
+import { SkyLine } from '../assets/art/SkyLine';
 import Navbar from '../components/Navbar';
+import PageWrapper from '../components/PageWrapper';
 import isDev from '../core/blitzkrieg/isDev';
 import { isLocalhost } from '../core/blitzkrieg/isLocalhost';
 import { useApp } from '../stores/app';
+import { mintTheme } from '../themes/mint';
 
 config();
 
@@ -65,7 +69,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
           suppressContentEditableWarning
         >
           {!isEmbed && <Navbar />}
-
           <AlertDialog.Root open={showDevBuildAlert}>
             <AlertDialog.Content>
               <AlertDialog.Title>Experimental version!</AlertDialog.Title>
@@ -96,6 +99,60 @@ export default function RootLayout({ children }: RootLayoutProps) {
           </AlertDialog.Root>
 
           <Flex direction="column">{children}</Flex>
+
+          <PageWrapper>
+            <a
+              target="_blank"
+              href="https://ko-fi.com/tresabhi"
+              style={{ textDecoration: 'none' }}
+            >
+              <Flex
+                align="center"
+                style={{
+                  padding: 16,
+                  borderRadius: 8,
+                  backgroundColor: mintTheme.colors.componentInteractive,
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+              >
+                <Flex
+                  direction="column"
+                  gap="1"
+                  style={{
+                    flex: 1,
+                    zIndex: 1,
+                  }}
+                >
+                  <Text size="4" color="mint">
+                    Blitzkrieg. Free forever. For everyone.
+                  </Text>
+                  <Text color="mint">
+                    <b>Consider supporting today 🍀</b>
+                  </Text>
+                </Flex>
+
+                <Text
+                  color="mint"
+                  style={{
+                    zIndex: 1,
+                  }}
+                >
+                  <Flex>
+                    <CaretRightIcon width={32} height={32} />
+                  </Flex>
+                </Text>
+
+                <SkyLine
+                  style={{
+                    position: 'absolute',
+                    right: 'min(8vw, 15%)',
+                    top: '5%',
+                  }}
+                />
+              </Flex>
+            </a>
+          </PageWrapper>
         </Theme>
       </body>
     </html>
