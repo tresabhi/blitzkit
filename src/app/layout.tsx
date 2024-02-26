@@ -100,7 +100,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
           <Flex direction="column">{children}</Flex>
 
-          <PageWrapper>
+          {!isEmbed && <PageWrapper>
             <a
               target="_blank"
               href="https://ko-fi.com/tresabhi"
@@ -152,7 +152,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 />
               </Flex>
             </a>
-          </PageWrapper>
+          </PageWrapper>}
         </Theme>
       </body>
     </html>
