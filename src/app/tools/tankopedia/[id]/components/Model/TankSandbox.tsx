@@ -4,7 +4,6 @@ import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
-import { ShotDisplay } from '../../../../../../components/ShotDisplay';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
@@ -19,15 +18,10 @@ import mutateTankopediaPersistent, {
 } from '../../../../../../stores/tankopedia';
 import { AntagonistBar } from '../AntagonistBar';
 import { Controls } from '../Control';
-import { Lighting } from '../Lighting';
 import { RotationInputs } from '../QuickInputs';
-import { SceneProps } from '../SceneProps';
 import { ModelLoader } from './components/ModelLoader';
 import { Options } from './components/Options';
-import { TankArmor } from './components/TankArmor';
-import { ExternalModuleMask } from './components/TankArmor/components/ExternalModuleMask';
-import { SpacedArmorDepth } from './components/TankArmor/components/SpacedArmorDepth';
-import { TankModel } from './components/TankModel';
+import { SpacedArmorScene } from './components/TankArmor/components/Spaced';
 
 export function TankSandbox() {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -195,15 +189,13 @@ export function TankSandbox() {
                   >
                     <PerspectiveCamera makeDefault fov={25} far={32} />
                     <Controls />
-                    <SceneProps />
+                    {/* <SceneProps /> */}
 
                     <Suspense fallback={<ModelLoader />}>
-                      <ShotDisplay />
+                      {/* <ShotDisplay />
                       <Lighting />
-                      <TankModel />
-                      <TankArmor />
-                      <ExternalModuleMask ornamental />
-                      <SpacedArmorDepth ornamental />
+                      <TankModel /> */}
+                      <SpacedArmorScene />
                     </Suspense>
                   </Canvas>
                 </div>

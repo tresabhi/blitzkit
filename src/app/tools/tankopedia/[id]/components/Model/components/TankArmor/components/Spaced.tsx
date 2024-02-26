@@ -1,8 +1,9 @@
 import { memo, useEffect, useRef } from 'react';
 import { Euler, Group, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
-import { ArmorMeshExternalModuleMask } from '../../../../../../../../../components/ArmorMesh';
+import { SpacedArmor } from '../../../../../../../../../components/Armor/components/SpacedArmor';
 import { I_HAT, J_HAT, K_HAT } from '../../../../../../../../../constants/axis';
+import { resolveNearPenetration } from '../../../../../../../../../core/blitz/resolveNearPenetration';
 import {
   ModelTransformEventData,
   modelTransformEvent,
@@ -15,18 +16,17 @@ import { useModelDefinitions } from '../../../../../../../../../hooks/useModelDe
 import { useDuel } from '../../../../../../../../../stores/duel';
 import { useTankopediaPersistent } from '../../../../../../../../../stores/tankopedia';
 
-interface ExternalModuleMaskProps {
+export enum ArmorType {
+  Core,
+  Spaced,
+  External,
+}
+
+interface SpacedArmorSceneProps {
   ornamental?: boolean;
 }
 
-/**
- * When rendered, generates a mask and thickness buffer for external modules.
- * - R: 1 means external module
- * - G: normalized thickness; multiply with max thickness to get nominal thickness
- * - B: no data
- * - A: 1 means is armor; 0 is background
- */
-export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
+export const SpacedArmorScene = memo<SpacedArmorSceneProps>(
   ({ ornamental = false }) => {
     const protagonist = useDuel((state) => state.protagonist!);
     const wrapper = useRef<Group>(null);
@@ -36,6 +36,8 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
     const initialTankopediaState = useTankopediaPersistent.getState();
 
     useEffect(() => {
+      if (!modelDefinitions) return;
+
       const hullOrigin = new Vector3(
         trackModelDefinition.origin[0],
         trackModelDefinition.origin[1],
@@ -74,8 +76,8 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
 
         turretPosition
           .set(0, 0, 0)
-          .sub(turretOrigin)
           .sub(hullOrigin)
+          .sub(turretOrigin)
           .applyAxisAngle(new Vector3(0, 0, 1), yaw);
         turretRotation.set(0, 0, yaw);
 
@@ -132,16 +134,6 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
     const turretModelDefinition =
       tankModelDefinition.turrets[protagonist.turret.id];
     const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
-    const maxThickness = Math.max(
-      trackModelDefinition.thickness,
-      gunModelDefinition.thickness,
-      ...armorNodes
-        .map((node) => {
-          const armorId = nameToArmorId(node.name);
-          return resolveArmor(tankModelDefinition.armor, armorId).thickness;
-        })
-        .filter(Boolean),
-    );
     const hullOrigin = new Vector3(
       trackModelDefinition.origin[0],
       trackModelDefinition.origin[1],
@@ -158,6 +150,17 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
       -turretModelDefinition.gunOrigin[2],
     ).applyAxisAngle(I_HAT, Math.PI / 2);
 
+    console.log(
+      'test',
+      gunModelDefinition.thickness,
+      resolveNearPenetration(useDuel.getState().antagonist!.shell.penetration),
+      (gunModelDefinition.thickness /
+        resolveNearPenetration(
+          useDuel.getState().antagonist!.shell.penetration,
+        )) *
+        255,
+    );
+
     return (
       <group
         ref={wrapper}
@@ -169,24 +172,24 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
             const isHull = node.name.startsWith('hull_');
             const isVisible = isHull;
             const armorId = nameToArmorId(node.name);
-            const { thickness, spaced } = resolveArmor(
+            const { spaced, thickness } = resolveArmor(
               tankModelDefinition.armor,
               armorId,
             );
 
-            if (!isVisible || thickness === undefined || spaced) return null;
+            if (!isVisible || thickness === undefined) return null;
 
             return (
-              <ArmorMeshExternalModuleMask
-                ornamental={ornamental}
-                exclude
+              <SpacedArmor
                 key={node.uuid}
+                ornamental={ornamental}
+                type={spaced ? ArmorType.Spaced : ArmorType.Core}
+                thickness={thickness}
                 node={node}
               />
             );
           })}
         </group>
-
         {modelNodes.map((node) => {
           const isWheel = node.name.startsWith('chassis_wheel_');
           const isTrack = node.name.startsWith('chassis_track_');
@@ -195,11 +198,11 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
           if (!isVisible) return null;
 
           return (
-            <ArmorMeshExternalModuleMask
-              ornamental={ornamental}
-              maxThickness={maxThickness}
-              thickness={trackModelDefinition.thickness}
+            <SpacedArmor
               key={node.uuid}
+              ornamental={ornamental}
+              type={ArmorType.External}
+              thickness={trackModelDefinition.thickness}
               node={node}
             />
           );
@@ -213,67 +216,71 @@ export const ExternalModuleMask = memo<ExternalModuleMaskProps>(
               );
               const isVisible = isCurrentTurret;
               const armorId = nameToArmorId(node.name);
-              const { thickness, spaced } = resolveArmor(
+              const { spaced, thickness } = resolveArmor(
                 turretModelDefinition.armor,
                 armorId,
               );
 
-              if (!isVisible || thickness === undefined || spaced) return null;
+              if (!isVisible || thickness === undefined) return null;
 
               return (
                 <group key={node.uuid} position={turretOrigin}>
-                  <ArmorMeshExternalModuleMask
+                  <SpacedArmor
+                    key={node.uuid}
                     ornamental={ornamental}
-                    exclude
+                    type={spaced ? ArmorType.Spaced : ArmorType.Core}
+                    thickness={thickness}
                     node={node}
                   />
                 </group>
               );
             })}
           </group>
-
           <group ref={gunContainer}>
-            {armorNodes.map((node) => {
+            <group position={hullOrigin}>
+              {armorNodes.map((node) => {
+                const isCurrentGun = node.name.startsWith(
+                  `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
+                );
+                const isVisible = isCurrentGun;
+                const armorId = nameToArmorId(node.name);
+                const { spaced, thickness } = resolveArmor(
+                  gunModelDefinition.armor,
+                  armorId,
+                );
+
+                if (!isVisible || thickness === undefined) return null;
+
+                return (
+                  <group
+                    key={node.uuid}
+                    position={turretOrigin.clone().add(gunOrigin)}
+                  >
+                    <SpacedArmor
+                      ornamental={ornamental}
+                      type={spaced ? ArmorType.Spaced : ArmorType.Core}
+                      thickness={thickness}
+                      node={node}
+                    />
+                  </group>
+                );
+              })}
+            </group>
+
+            {modelNodes.map((node) => {
               const isCurrentGun = node.name.startsWith(
                 `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
               );
-              const isVisible = isCurrentGun;
-              const armorId = nameToArmorId(node.name);
-              const { thickness, spaced } = resolveArmor(
-                gunModelDefinition.armor,
-                armorId,
-              );
-
-              if (!isVisible || thickness === undefined || spaced) return null;
-
-              return (
-                <group
-                  key={node.uuid}
-                  position={turretOrigin.clone().add(gunOrigin)}
-                >
-                  <ArmorMeshExternalModuleMask
-                    ornamental={ornamental}
-                    exclude
-                    node={node}
-                  />
-                </group>
-              );
-            })}
-
-            {modelNodes.map((node) => {
-              const isCurrentGun =
-                node.name ===
-                `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`;
               const isVisible = isCurrentGun;
 
               if (!isVisible) return null;
 
               return (
-                <ArmorMeshExternalModuleMask
-                  ornamental={ornamental}
-                  maxThickness={maxThickness}
-                  thickness={gunModelDefinition.thickness}
+                <SpacedArmor
                   key={node.uuid}
+                  ornamental={ornamental}
+                  type={ArmorType.External}
+                  thickness={gunModelDefinition.thickness}
                   node={node}
                 />
               );

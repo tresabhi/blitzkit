@@ -5,6 +5,7 @@ import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { ENVIRONMENTS } from '../app/tools/tankopedia/[id]/components/Lighting';
 import { TankType, TreeType } from '../components/Tanks';
+import isDev from '../core/blitzkrieg/isDev';
 import { Tier } from '../core/blitzkrieg/tankDefinitions';
 
 export type TankopediaSortBy = keyof typeof SORT_NAMES;
@@ -123,7 +124,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
         test: 'include',
         page: 0,
       },
-      mode: 'model',
+      mode: isDev() ? 'armor' : 'model',
     })),
     { name: 'tankopedia', merge },
   ),
