@@ -3,8 +3,8 @@ import { ArmorType } from '../../../../app/tools/tankopedia/[id]/components/Mode
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { jsxTree } from '../../../../core/blitzkrieg/jsxTree';
 import { useDuel } from '../../../../stores/duel';
-import { externalModuleMaterial } from './materials/externalModule';
-import { spacedMaterial } from './materials/spaced';
+import { SpacedArmorSubExternal } from './components/SpacedArmorSubExternal';
+import { SpacedArmorSubSpaced } from './components/SpacedArmorSubSpaced';
 // import fragmentShader from './shaders/fragment.glsl';
 // import vertexShader from './shaders/vertex.glsl';
 
@@ -42,29 +42,11 @@ export function SpacedArmor({ node, type, thickness }: SpacedArmorProps) {
         })}
 
       {type === ArmorType.Spaced && (
-        <>
-          {jsxTree(node, {
-            renderOrder: 2,
-            material: spacedMaterial(thickness, penetration),
-          })}
-        </>
+        <SpacedArmorSubSpaced node={node} thickness={thickness} />
       )}
 
       {type === ArmorType.External && (
-        <>
-          {jsxTree(node, {
-            renderOrder: 4,
-            material: externalModuleMaterial(thickness, penetration),
-          })}
-          {jsxTree(node, {
-            renderOrder: 3,
-            material: new MeshBasicMaterial({
-              colorWrite: false,
-              depthTest: true,
-              depthWrite: true,
-            }),
-          })}
-        </>
+        <SpacedArmorSubExternal node={node} thickness={thickness} />
       )}
     </>
   );

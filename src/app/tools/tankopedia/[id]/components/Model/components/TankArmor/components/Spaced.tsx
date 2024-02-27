@@ -3,7 +3,6 @@ import { Euler, Group, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { SpacedArmor } from '../../../../../../../../../components/Armor/components/SpacedArmor';
 import { I_HAT, J_HAT, K_HAT } from '../../../../../../../../../constants/axis';
-import { resolveNearPenetration } from '../../../../../../../../../core/blitz/resolveNearPenetration';
 import {
   ModelTransformEventData,
   modelTransformEvent,
@@ -149,17 +148,6 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(
       turretModelDefinition.gunOrigin[1],
       -turretModelDefinition.gunOrigin[2],
     ).applyAxisAngle(I_HAT, Math.PI / 2);
-
-    console.log(
-      'test',
-      gunModelDefinition.thickness,
-      resolveNearPenetration(useDuel.getState().antagonist!.shell.penetration),
-      (gunModelDefinition.thickness /
-        resolveNearPenetration(
-          useDuel.getState().antagonist!.shell.penetration,
-        )) *
-        255,
-    );
 
     return (
       <group
