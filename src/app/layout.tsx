@@ -101,59 +101,61 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
           <Flex direction="column">{children}</Flex>
 
-          {!isEmbed && <PageWrapper>
-            <a
-              target="_blank"
-              href="https://ko-fi.com/tresabhi"
-              style={{ textDecoration: 'none' }}
-            >
-              <Flex
-                align="center"
-                style={{
-                  padding: 16,
-                  borderRadius: 8,
-                  backgroundColor: mintTheme.colors.componentInteractive,
-                  position: 'relative',
-                  overflow: 'hidden',
-                }}
+          {!isEmbed && (
+            <PageWrapper>
+              <a
+                target="_blank"
+                href="https://ko-fi.com/tresabhi"
+                style={{ textDecoration: 'none' }}
               >
                 <Flex
-                  direction="column"
-                  gap="1"
+                  align="center"
                   style={{
-                    flex: 1,
-                    zIndex: 1,
+                    padding: 16,
+                    borderRadius: 8,
+                    backgroundColor: mintTheme.colors.componentInteractive,
+                    position: 'relative',
+                    overflow: 'hidden',
                   }}
                 >
-                  <Text size="4" color="mint">
-                    Blitzkrieg. Free forever. For everyone.
-                  </Text>
-                  <Text color="mint">
-                    <b>Consider supporting today 🍀</b>
-                  </Text>
-                </Flex>
-
-                <Text
-                  color="mint"
-                  style={{
-                    zIndex: 1,
-                  }}
-                >
-                  <Flex>
-                    <CaretRightIcon width={32} height={32} />
+                  <Flex
+                    direction="column"
+                    gap="1"
+                    style={{
+                      flex: 1,
+                      zIndex: 1,
+                    }}
+                  >
+                    <Text size="4" color="mint">
+                      Blitzkrieg. Free forever. For everyone.
+                    </Text>
+                    <Text color="mint">
+                      <b>Consider supporting today 🍀</b>
+                    </Text>
                   </Flex>
-                </Text>
 
-                <SkyLine
-                  style={{
-                    position: 'absolute',
-                    right: 'min(8vw, 15%)',
-                    top: '5%',
-                  }}
-                />
-              </Flex>
-            </a>
-          </PageWrapper>}
+                  <Text
+                    color="mint"
+                    style={{
+                      zIndex: 1,
+                    }}
+                  >
+                    <Flex>
+                      <CaretRightIcon width={32} height={32} />
+                    </Flex>
+                  </Text>
+
+                  <SkyLine
+                    style={{
+                      position: 'absolute',
+                      right: 'min(8vw, 15%)',
+                      top: '5%',
+                    }}
+                  />
+                </Flex>
+              </a>
+            </PageWrapper>
+          )}
         </Theme>
       </body>
     </html>
