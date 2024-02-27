@@ -9,6 +9,9 @@ uniform float ricochet;
 uniform float normalization;
 uniform vec2 resolution;
 uniform bool isExplosive;
+uniform bool canSplash;
+uniform float damage;
+uniform float explosionRadius;
 
 uniform highp sampler2D spacedArmorBuffer;
 uniform highp sampler2D spacedArmorDepth;
@@ -38,17 +41,17 @@ void main() {
     float finalThickness = thickness / cos(angle - finalNormalization);
     float remainingPenetration = penetration;
 
+    // world space is in meters
+    vec4 spacedArmorDepthFragment = texture2D(spacedArmorDepth, screenCoordinates);
+    float spacedArmorDistance = depthToDistance(spacedArmorDepthFragment.r);
+    float coreArmorDistance = depthToDistance(gl_FragCoord.z);
+    float distanceFromSpacedArmor = coreArmorDistance - spacedArmorDistance;
+
     if (isUnderSpacedArmor) {
       float spacedArmorThickness = spacedArmorBufferFragment.r * penetration;
       remainingPenetration -= spacedArmorThickness;
 
       if (isExplosive && remainingPenetration > 0.0) {
-        // world space is in meters
-        vec4 spacedArmorDepthFragment = texture2D(spacedArmorDepth, screenCoordinates);
-        float spacedArmorDistance = depthToDistance(spacedArmorDepthFragment.r);
-        float coreArmorDistance = depthToDistance(gl_FragCoord.z);
-        float distanceFromSpacedArmor = coreArmorDistance - spacedArmorDistance;
-
         // there is a 50% penetration loss per meter for HE based shells
         remainingPenetration -= 0.5 * remainingPenetration * distanceFromSpacedArmor;
       }
@@ -58,6 +61,15 @@ void main() {
     float delta = finalThickness - remainingPenetration;
     float randomization = remainingPenetration * 0.05;
     penetrationChance = clamp(1.0 - (delta + randomization) / (2.0 * randomization), 0.0, 1.0);
+
+    if (canSplash) {
+      // only allow splashing if the damage equation deals more than 0 damage
+      float nominalArmorThickness = finalThickness - remainingPenetration;
+      float finalDamage = 0.5 * damage * (1.0 - distanceFromSpacedArmor / explosionRadius) - 1.1 * nominalArmorThickness;
+      splashChance = finalDamage > 0.0 ? 1.0 : 0.0;
+    } else {
+      splashChance = 0.0;
+    }
   }
 
   vec3 color = vec3(1.0, splashChance * 0.392, 0.0);

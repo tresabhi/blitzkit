@@ -8,6 +8,7 @@ import {
   WebGLRenderTarget,
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
+import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { jsxTree } from '../../../../core/blitzkrieg/jsxTree';
@@ -41,6 +42,9 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
       ricochet: { value: null },
       normalization: { value: null },
       isExplosive: { value: null },
+      canSplash: { value: null },
+      damage: { value: null },
+      explosionRadius: { value: null },
 
       resolution: { value: new Vector2() },
       spacedArmorBuffer: { value: null },
@@ -59,6 +63,9 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
         shell.normalization ?? 0,
       );
       material.uniforms.isExplosive.value = isExplosive(shell.type);
+      material.uniforms.canSplash.value = canSplash(shell.type);
+      material.uniforms.damage.value = shell.damage.armor;
+      material.uniforms.explosionRadius.value = shell.explosionRadius;
     }
 
     handleChange(useDuel.getState().antagonist!.shell);
