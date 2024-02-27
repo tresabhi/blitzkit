@@ -3,8 +3,8 @@ import { degToRad } from 'three/src/math/MathUtils';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { jsxTree } from '../../../../../../core/blitzkrieg/jsxTree';
 import { useDuel } from '../../../../../../stores/duel';
-import fragmentShader from './fragment.glsl';
-import vertexShader from './vertex.glsl';
+import fragmentShader from './shaders/fragment.glsl';
+import vertexShader from './shaders/vertex.glsl';
 
 interface SpacedArmorSubSpacedProps {
   node: Object3D;
@@ -17,8 +17,6 @@ export function SpacedArmorSubSpaced({
 }: SpacedArmorSubSpacedProps) {
   const { shell } = useDuel.getState().antagonist!;
   const penetration = resolveNearPenetration(shell.penetration);
-
-  console.log(shell.ricochet);
 
   return jsxTree(node, {
     renderOrder: 2,

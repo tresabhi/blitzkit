@@ -1,13 +1,10 @@
 import { MeshBasicMaterial, Object3D } from 'three';
-import { ArmorType } from '../../../../app/tools/tankopedia/[id]/components/Model/components/TankArmor/components/Spaced';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { jsxTree } from '../../../../core/blitzkrieg/jsxTree';
 import { useDuel } from '../../../../stores/duel';
+import { ArmorType } from '../SpacedArmorScene';
 import { SpacedArmorSubExternal } from './components/SpacedArmorSubExternal';
 import { SpacedArmorSubSpaced } from './components/SpacedArmorSubSpaced';
-// import fragmentShader from './shaders/fragment.glsl';
-// import vertexShader from './shaders/vertex.glsl';
-
 interface SpacedArmorProps {
   node: Object3D;
   ornamental?: boolean;

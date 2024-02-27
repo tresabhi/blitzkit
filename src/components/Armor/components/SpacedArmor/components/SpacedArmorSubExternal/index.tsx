@@ -7,8 +7,8 @@ import {
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { jsxTree } from '../../../../../../core/blitzkrieg/jsxTree';
 import { useDuel } from '../../../../../../stores/duel';
-import fragmentShader from './fragment.glsl';
-import vertexShader from './vertex.glsl';
+import fragmentShader from './shaders/fragment.glsl';
+import vertexShader from './shaders/vertex.glsl';
 
 interface SpacedArmorSubExternalProps {
   node: Object3D;

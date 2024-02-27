@@ -1,19 +1,19 @@
 import { memo, useEffect, useRef } from 'react';
 import { Euler, Group, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
-import { SpacedArmor } from '../../../../../../../../../components/Armor/components/SpacedArmor';
-import { I_HAT, J_HAT, K_HAT } from '../../../../../../../../../constants/axis';
+import { I_HAT, J_HAT, K_HAT } from '../../../constants/axis';
 import {
   ModelTransformEventData,
   modelTransformEvent,
-} from '../../../../../../../../../core/blitzkrieg/modelTransform';
-import { nameToArmorId } from '../../../../../../../../../core/blitzkrieg/nameToArmorId';
-import { resolveArmor } from '../../../../../../../../../core/blitzkrieg/resolveThickness';
-import { useArmor } from '../../../../../../../../../hooks/useArmor';
-import { useModel } from '../../../../../../../../../hooks/useModel';
-import { useModelDefinitions } from '../../../../../../../../../hooks/useModelDefinitions';
-import { useDuel } from '../../../../../../../../../stores/duel';
-import { useTankopediaPersistent } from '../../../../../../../../../stores/tankopedia';
+} from '../../../core/blitzkrieg/modelTransform';
+import { nameToArmorId } from '../../../core/blitzkrieg/nameToArmorId';
+import { resolveArmor } from '../../../core/blitzkrieg/resolveThickness';
+import { useArmor } from '../../../hooks/useArmor';
+import { useModel } from '../../../hooks/useModel';
+import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
+import { useDuel } from '../../../stores/duel';
+import { useTankopediaPersistent } from '../../../stores/tankopedia';
+import { SpacedArmor } from './SpacedArmor';
 
 export enum ArmorType {
   Core,
