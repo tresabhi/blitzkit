@@ -20,7 +20,6 @@ interface CoreArmorSceneProps {
 
 export const CoreArmorScene = memo<CoreArmorSceneProps>(
   ({ ornamental = false }) => {
-    const protagonist = useDuel((state) => state.protagonist!);
     const wrapper = useRef<Group>(null);
     const modelDefinitions = useModelDefinitions();
     const turretContainer = useRef<Group>(null);
@@ -96,7 +95,7 @@ export const CoreArmorScene = memo<CoreArmorSceneProps>(
         turretContainer.current?.rotation.copy(turretRotation);
       }
 
-      handleModelTransform(protagonist);
+      handleModelTransform(useDuel.getState().protagonist!);
       modelTransformEvent.on(handleModelTransform);
 
       return () => {
@@ -115,15 +114,16 @@ export const CoreArmorScene = memo<CoreArmorSceneProps>(
       return unsubscribe;
     });
 
-    const armorGltf = useArmor(protagonist.tank.id);
-
+    const tank = useDuel((state) => state.protagonist!.tank);
+    const track = useDuel((state) => state.protagonist!.track);
+    const turret = useDuel((state) => state.protagonist!.turret);
+    const gun = useDuel((state) => state.protagonist!.gun);
+    const armorGltf = useArmor(tank.id);
     const armorNodes = Object.values(armorGltf.nodes);
-    const tankModelDefinition = modelDefinitions[protagonist.tank.id];
-    const trackModelDefinition =
-      tankModelDefinition.tracks[protagonist.track.id];
-    const turretModelDefinition =
-      tankModelDefinition.turrets[protagonist.turret.id];
-    const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
+    const tankModelDefinition = modelDefinitions[tank.id];
+    const trackModelDefinition = tankModelDefinition.tracks[track.id];
+    const turretModelDefinition = tankModelDefinition.turrets[turret.id];
+    const gunModelDefinition = turretModelDefinition.guns[gun.id];
     const hullOrigin = new Vector3(
       trackModelDefinition.origin[0],
       trackModelDefinition.origin[1],

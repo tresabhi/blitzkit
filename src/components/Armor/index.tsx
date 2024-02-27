@@ -1,10 +1,11 @@
 import { createPortal, useFrame } from '@react-three/fiber';
+import { memo } from 'react';
 import { DepthTexture, Scene, Vector2 } from 'three';
 import { spacedArmorRenderTarget } from './components/CoreArmor';
 import { CoreArmorScene } from './components/CoreArmorScene';
 import { SpacedArmorScene } from './components/SpacedArmorScene';
 
-export function Armor() {
+export const Armor = memo(() => {
   const spacedArmorScene = new Scene();
   const coreArmorScene = new Scene();
   const spacedArmorPortal = createPortal(
@@ -48,4 +49,4 @@ export function Armor() {
       {coreArmorPortal}
     </>
   );
-}
+});

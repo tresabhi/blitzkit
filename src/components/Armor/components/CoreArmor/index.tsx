@@ -1,4 +1,5 @@
 import { useFrame } from '@react-three/fiber';
+import { useEffect } from 'react';
 import {
   MeshBasicMaterial,
   Object3D,
@@ -7,8 +8,10 @@ import {
   WebGLRenderTarget,
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
+import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { jsxTree } from '../../../../core/blitzkrieg/jsxTree';
+import { ShellDefinition } from '../../../../core/blitzkrieg/tankDefinitions';
 import { useDuel } from '../../../../stores/duel';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
@@ -25,8 +28,6 @@ const excludeMaterial = new MeshBasicMaterial({
 });
 
 export function CoreArmor({ node, thickness }: CoreArmorProps) {
-  const { shell } = useDuel.getState().antagonist!;
-  const penetration = resolveNearPenetration(shell.penetration);
   const material = new ShaderMaterial({
     fragmentShader,
     vertexShader,
@@ -35,16 +36,34 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
 
     uniforms: {
       thickness: { value: thickness },
-      penetration: { value: penetration },
-      caliber: { value: shell.caliber },
-      ricochet: { value: degToRad(shell.ricochet ?? 90) },
-      normalization: { value: degToRad(shell.normalization ?? 0) },
+      penetration: { value: null },
+      caliber: { value: null },
+      ricochet: { value: null },
+      normalization: { value: null },
+      isExplosive: { value: null },
 
       resolution: { value: new Vector2() },
       spacedArmorBuffer: { value: null },
       spacedArmorDepth: { value: null },
     },
   });
+
+  useEffect(() => {
+    function handleChange(shell: ShellDefinition) {
+      material.uniforms.penetration.value = resolveNearPenetration(
+        shell.penetration,
+      );
+      material.uniforms.caliber.value = shell.caliber;
+      material.uniforms.ricochet.value = degToRad(shell.ricochet ?? 90);
+      material.uniforms.normalization.value = degToRad(
+        shell.normalization ?? 0,
+      );
+      material.uniforms.isExplosive.value = isExplosive(shell.type);
+    }
+
+    handleChange(useDuel.getState().antagonist!.shell);
+    return useDuel.subscribe((state) => state.antagonist!.shell, handleChange);
+  }, []);
 
   useFrame(({ gl }) => {
     gl.getSize(material.uniforms.resolution.value).multiplyScalar(
@@ -61,7 +80,6 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
         renderOrder: 0,
         material: excludeMaterial,
       })}
-
       {jsxTree(node, {
         renderOrder: 1,
         material,

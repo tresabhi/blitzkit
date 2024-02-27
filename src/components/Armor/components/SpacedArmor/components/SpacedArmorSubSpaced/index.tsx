@@ -5,6 +5,7 @@ import {
   Object3D,
   ShaderMaterial,
 } from 'three';
+import { degToRad } from 'three/src/math/MathUtils';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { jsxTree } from '../../../../../../core/blitzkrieg/jsxTree';
 import { ShellDefinition } from '../../../../../../core/blitzkrieg/tankDefinitions';
@@ -12,15 +13,20 @@ import { useDuel } from '../../../../../../stores/duel';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
 
-interface SpacedArmorSubExternalProps {
+interface SpacedArmorSubSpacedProps {
   node: Object3D;
   thickness: number;
 }
 
-export function SpacedArmorSubExternal({
+const depthWriteMaterial = new MeshBasicMaterial({
+  depthWrite: true,
+  colorWrite: false,
+});
+
+export function SpacedArmorSubSpaced({
   node,
   thickness,
-}: SpacedArmorSubExternalProps) {
+}: SpacedArmorSubSpacedProps) {
   const material = new ShaderMaterial({
     fragmentShader,
     vertexShader,
@@ -32,6 +38,9 @@ export function SpacedArmorSubExternal({
     uniforms: {
       thickness: { value: thickness },
       penetration: { value: null },
+      caliber: { value: null },
+      ricochet: { value: null },
+      normalization: { value: null },
     },
   });
 
@@ -39,6 +48,11 @@ export function SpacedArmorSubExternal({
     function handleChange(shell: ShellDefinition) {
       material.uniforms.penetration.value = resolveNearPenetration(
         shell.penetration,
+      );
+      material.uniforms.caliber.value = shell.caliber;
+      material.uniforms.ricochet.value = degToRad(shell.ricochet ?? 90);
+      material.uniforms.normalization.value = degToRad(
+        shell.normalization ?? 0,
       );
     }
 
@@ -49,16 +63,12 @@ export function SpacedArmorSubExternal({
   return (
     <>
       {jsxTree(node, {
-        renderOrder: 3,
-        material: new MeshBasicMaterial({
-          colorWrite: false,
-          depthTest: true,
-          depthWrite: true,
-        }),
+        renderOrder: 2,
+        material,
       })}
       {jsxTree(node, {
-        renderOrder: 4,
-        material,
+        renderOrder: 5,
+        material: depthWriteMaterial,
       })}
     </>
   );
