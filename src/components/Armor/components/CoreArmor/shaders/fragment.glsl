@@ -25,22 +25,22 @@ void main() {
   if (!threeCalibersRule && !isUnderSpacedArmor && angle >= ricochet) {
     penetrationChance = 0.0;
   } else {
-
     bool twoCalibersRule = caliber > thickness * 2.0 && thickness > 0.0;
     float finalNormalization = twoCalibersRule ? ((1.4 * normalization * caliber) / (2.0 * thickness)) : normalization;
     float finalThickness = thickness / cos(angle - finalNormalization);
-
     float remainingPenetration = penetration;
+
     if (isUnderSpacedArmor) {
-      float spacedArmorThickness = spacedArmorBufferFragment.r * penetration;
-      remainingPenetration -= spacedArmorThickness + finalThickness;
-    } else {
-      remainingPenetration -= finalThickness;
+      remainingPenetration -= spacedArmorBufferFragment.r * penetration;
     }
 
-    penetrationChance = remainingPenetration < 0.0 ? 0.0 : 1.0;
+    float delta = finalThickness - remainingPenetration;
+    float randomization = remainingPenetration * 0.05;
+
+    penetrationChance = clamp(1.0 - (delta + randomization) / (2.0 * randomization), 0.0, 1.0);
   }
 
   vec3 color = vec3(1.0, splashChance * 0.392, 0.0);
+  gl_FragColor = vec4(0.0, penetrationChance, 0.0, 1.0);
   gl_FragColor = vec4(color, (1.0 - penetrationChance) * 0.5);
 }
