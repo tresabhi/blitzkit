@@ -19,16 +19,31 @@ export function SpacedArmor({ node, type, thickness }: SpacedArmorProps) {
   );
   const penetration = resolveNearPenetration(penetrationRaw);
 
-  return jsxTree(node, {
-    material: new MeshBasicMaterial({
-      color:
-        type === ArmorType.Core
-          ? omitColor
-          : type === ArmorType.Spaced
-            ? new Color(0, 0, 0)
-            : new Color(thickness / penetration, 0, 0),
-      depthWrite: type === ArmorType.Core,
-      blending: type === ArmorType.Core ? undefined : AdditiveBlending,
-    }),
-  });
+  return (
+    <>
+      {type === ArmorType.External &&
+        jsxTree(node, {
+          renderOrder: 0,
+
+          material: new MeshBasicMaterial({
+            colorWrite: false,
+          }),
+        })}
+
+      {jsxTree(node, {
+        renderOrder: 1,
+
+        material: new MeshBasicMaterial({
+          color:
+            type === ArmorType.Core
+              ? omitColor
+              : type === ArmorType.Spaced
+                ? new Color(0, 0, 0)
+                : new Color(thickness / penetration, 0, 0),
+          depthWrite: type === ArmorType.Core,
+          blending: type === ArmorType.Core ? undefined : AdditiveBlending,
+        }),
+      })}
+    </>
+  );
 }
