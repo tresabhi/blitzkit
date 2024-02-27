@@ -13,7 +13,7 @@ export type TankopediaSortDirection = 'ascending' | 'descending';
 export type TankopediaTestTankDisplay = 'include' | 'exclude' | 'only';
 export type TankopediaMode = 'model' | 'armor';
 
-interface TankopediaPersistent {
+export interface TankopediaPersistent {
   model: {
     visual: {
       wireframe: boolean;

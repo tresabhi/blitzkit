@@ -14,7 +14,10 @@ import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetr
 import { jsxTree } from '../../../../core/blitzkrieg/jsxTree';
 import { ShellDefinition } from '../../../../core/blitzkrieg/tankDefinitions';
 import { useDuel } from '../../../../stores/duel';
-import { useTankopediaPersistent } from '../../../../stores/tankopedia';
+import {
+  TankopediaPersistent,
+  useTankopediaPersistent,
+} from '../../../../stores/tankopedia';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
 
@@ -47,6 +50,7 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
       damage: { value: null },
       explosionRadius: { value: null },
       greenPenetration: { value: null },
+      wireframe: { value: null },
 
       resolution: { value: new Vector2() },
       spacedArmorBuffer: { value: null },
@@ -69,20 +73,22 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
       material.uniforms.damage.value = shell.damage.armor;
       material.uniforms.explosionRadius.value = shell.explosionRadius;
     }
-    function handleGreenPenetrationChange(greenPenetration: boolean) {
-      material.uniforms.greenPenetration.value = greenPenetration;
+    function handleVisualChange(
+      visual: TankopediaPersistent['model']['visual'],
+    ) {
+      material.uniforms.greenPenetration.value = visual.greenPenetration;
+      material.uniforms.wireframe.value = visual.wireframe;
+      material.wireframe = visual.wireframe;
     }
 
     handleShellChange(useDuel.getState().antagonist!.shell);
-    handleGreenPenetrationChange(
-      useTankopediaPersistent.getState().model.visual.greenPenetration,
-    );
+    handleVisualChange(useTankopediaPersistent.getState().model.visual);
 
     const unsubscribes = [
       useDuel.subscribe((state) => state.antagonist!.shell, handleShellChange),
       useTankopediaPersistent.subscribe(
-        (state) => state.model.visual.greenPenetration,
-        handleGreenPenetrationChange,
+        (state) => state.model.visual,
+        handleVisualChange,
       ),
     ];
 
