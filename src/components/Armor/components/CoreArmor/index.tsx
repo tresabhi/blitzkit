@@ -14,6 +14,7 @@ import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetr
 import { jsxTree } from '../../../../core/blitzkrieg/jsxTree';
 import { ShellDefinition } from '../../../../core/blitzkrieg/tankDefinitions';
 import { useDuel } from '../../../../stores/duel';
+import { useTankopediaPersistent } from '../../../../stores/tankopedia';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
 
@@ -45,6 +46,7 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
       canSplash: { value: null },
       damage: { value: null },
       explosionRadius: { value: null },
+      greenPenetration: { value: null },
 
       resolution: { value: new Vector2() },
       spacedArmorBuffer: { value: null },
@@ -53,7 +55,7 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
   });
 
   useEffect(() => {
-    function handleChange(shell: ShellDefinition) {
+    function handleShellChange(shell: ShellDefinition) {
       material.uniforms.penetration.value = resolveNearPenetration(
         shell.penetration,
       );
@@ -67,9 +69,26 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
       material.uniforms.damage.value = shell.damage.armor;
       material.uniforms.explosionRadius.value = shell.explosionRadius;
     }
+    function handleGreenPenetrationChange(greenPenetration: boolean) {
+      material.uniforms.greenPenetration.value = greenPenetration;
+    }
 
-    handleChange(useDuel.getState().antagonist!.shell);
-    return useDuel.subscribe((state) => state.antagonist!.shell, handleChange);
+    handleShellChange(useDuel.getState().antagonist!.shell);
+    handleGreenPenetrationChange(
+      useTankopediaPersistent.getState().model.visual.greenPenetration,
+    );
+
+    const unsubscribes = [
+      useDuel.subscribe((state) => state.antagonist!.shell, handleShellChange),
+      useTankopediaPersistent.subscribe(
+        (state) => state.model.visual.greenPenetration,
+        handleGreenPenetrationChange,
+      ),
+    ];
+
+    return () => {
+      unsubscribes.forEach((unsubscribe) => unsubscribe());
+    };
   }, []);
 
   useFrame(({ gl }) => {
