@@ -15,7 +15,7 @@ export function SpacedArmorSubSpaced({
   node,
   thickness,
 }: SpacedArmorSubSpacedProps) {
-  const { shell } = useDuel.getState().antagonist!;
+  const shell = useDuel((state) => state.antagonist!.shell);
   const penetration = resolveNearPenetration(shell.penetration);
 
   return jsxTree(node, {

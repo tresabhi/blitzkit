@@ -195,9 +195,7 @@ export function TankSandbox() {
                     <SceneProps />
 
                     <Suspense fallback={<ModelLoader />}>
-                      {/* <ShotDisplay />
-                      
-                      */}
+                      {/* <ShotDisplay /> */}
                       {/* <SpacedArmorScene /> */}
                       <Lighting />
                       <TankModel />

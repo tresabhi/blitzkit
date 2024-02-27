@@ -9,7 +9,6 @@ import {
 import { nameToArmorId } from '../../../core/blitzkrieg/nameToArmorId';
 import { resolveArmor } from '../../../core/blitzkrieg/resolveThickness';
 import { useArmor } from '../../../hooks/useArmor';
-import { useModel } from '../../../hooks/useModel';
 import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
 import { useDuel } from '../../../stores/duel';
 import { useTankopediaPersistent } from '../../../stores/tankopedia';
@@ -117,7 +116,6 @@ export const CoreArmorScene = memo<CoreArmorSceneProps>(
     });
 
     const armorGltf = useArmor(protagonist.tank.id);
-    const { gltf: modelGltf } = useModel(protagonist.tank.id);
 
     const armorNodes = Object.values(armorGltf.nodes);
     const tankModelDefinition = modelDefinitions[protagonist.tank.id];

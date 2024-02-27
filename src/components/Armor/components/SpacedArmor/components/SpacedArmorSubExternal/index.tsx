@@ -19,12 +19,19 @@ export function SpacedArmorSubExternal({
   node,
   thickness,
 }: SpacedArmorSubExternalProps) {
-  const penetration = resolveNearPenetration(
-    useDuel.getState().antagonist!.shell.penetration,
-  );
+  const shell = useDuel((state) => state.antagonist!.shell);
+  const penetration = resolveNearPenetration(shell.penetration);
 
   return (
     <>
+      {jsxTree(node, {
+        renderOrder: 3,
+        material: new MeshBasicMaterial({
+          colorWrite: false,
+          depthTest: true,
+          depthWrite: true,
+        }),
+      })}
       {jsxTree(node, {
         renderOrder: 4,
         material: new ShaderMaterial({
@@ -39,14 +46,6 @@ export function SpacedArmorSubExternal({
             thickness: { value: thickness },
             penetration: { value: penetration },
           },
-        }),
-      })}
-      {jsxTree(node, {
-        renderOrder: 3,
-        material: new MeshBasicMaterial({
-          colorWrite: false,
-          depthTest: true,
-          depthWrite: true,
         }),
       })}
     </>

@@ -1,7 +1,5 @@
 import { MeshBasicMaterial, Object3D } from 'three';
-import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { jsxTree } from '../../../../core/blitzkrieg/jsxTree';
-import { useDuel } from '../../../../stores/duel';
 import { ArmorType } from '../SpacedArmorScene';
 import { SpacedArmorSubExternal } from './components/SpacedArmorSubExternal';
 import { SpacedArmorSubSpaced } from './components/SpacedArmorSubSpaced';
@@ -18,11 +16,6 @@ const omitMaterial = new MeshBasicMaterial({
 });
 
 export function SpacedArmor({ node, type, thickness }: SpacedArmorProps) {
-  const penetrationRaw = useDuel(
-    (state) => state.antagonist!.shell.penetration,
-  );
-  const penetration = resolveNearPenetration(penetrationRaw);
-
   /**
    * Render orders allocations:
    * - 0  : core omission
