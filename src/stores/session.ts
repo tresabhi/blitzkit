@@ -1,4 +1,5 @@
 import { produce } from 'immer';
+import { merge } from 'lodash';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { CustomColumnDisplay } from '../app/tools/session/components/CustomColumn';
@@ -83,7 +84,7 @@ export const useSession = create<Session>()(
       ],
       color: 'slate',
     }),
-    { name: 'session' },
+    { name: 'session', merge: (a, b) => merge(b, a) },
   ),
 );
 

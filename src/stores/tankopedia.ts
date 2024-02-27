@@ -128,7 +128,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
       },
       mode: isDev() ? 'armor' : 'model',
     })),
-    { name: 'tankopedia', merge },
+    { name: 'tankopedia', merge: (a, b) => merge(b, a) },
   ),
 );
 
