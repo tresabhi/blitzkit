@@ -57,6 +57,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         style={{
           margin: 0,
           paddingTop: isEmbed ? 0 : '3.25rem',
+          backgroundColor: isEmbed ? 'transparent' : undefined,
         }}
       >
         <Analytics />
