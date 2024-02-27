@@ -14,6 +14,7 @@ uniform float damage;
 uniform float explosionRadius;
 uniform bool greenPenetration;
 uniform bool wireframe;
+uniform bool opaque;
 
 uniform highp sampler2D spacedArmorBuffer;
 uniform highp sampler2D spacedArmorDepth;
@@ -74,7 +75,7 @@ void main() {
     }
   }
 
-  float alpha = wireframe ? 1.0 : 0.5;
+  float alpha = opaque ? 1.0 : 0.5;
   vec3 color = vec3(1.0, splashChance * 0.392, 0.0);
   if (greenPenetration) {
     // non-trigonometric red-green mixing: https://www.desmos.com/calculator/ceo1oq7l67
@@ -84,5 +85,4 @@ void main() {
   } else {
     gl_FragColor = vec4(color, (1.0 - penetrationChance) * alpha);
   }
-
 }

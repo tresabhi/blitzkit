@@ -17,6 +17,7 @@ export interface TankopediaPersistent {
   model: {
     visual: {
       wireframe: boolean;
+      opaque: boolean;
       environment: (typeof ENVIRONMENTS)[number];
       controlsEnabled: boolean;
       showGrid: boolean;
@@ -105,6 +106,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
       model: {
         visual: {
           wireframe: false,
+          opaque: false,
           environment: ENVIRONMENTS[0],
           controlsEnabled: true,
           showGrid: true,

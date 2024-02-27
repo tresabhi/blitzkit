@@ -30,6 +30,7 @@ export function Options({ isFullScreen, canvasWrapper }: OptionsProps) {
   const wireframe = useTankopediaPersistent(
     (state) => state.model.visual.wireframe,
   );
+  const opaque = useTankopediaPersistent((state) => state.model.visual.opaque);
   const fullScreenAvailable =
     typeof document !== 'undefined' && document.fullscreenEnabled;
   const environment = useTankopediaPersistent(
@@ -78,6 +79,8 @@ export function Options({ isFullScreen, canvasWrapper }: OptionsProps) {
           </DropdownMenu.Trigger>
 
           <DropdownMenu.Content>
+            <DropdownMenu.Label>Armor</DropdownMenu.Label>
+
             <DropdownMenu.CheckboxItem
               checked={greenPenetration}
               onCheckedChange={(checked) => {
@@ -88,6 +91,30 @@ export function Options({ isFullScreen, canvasWrapper }: OptionsProps) {
             >
               Green penetration
             </DropdownMenu.CheckboxItem>
+
+            <DropdownMenu.CheckboxItem
+              checked={wireframe}
+              onCheckedChange={(checked) => {
+                mutateTankopediaPersistent((draft) => {
+                  draft.model.visual.wireframe = checked;
+                });
+              }}
+            >
+              Wireframe
+            </DropdownMenu.CheckboxItem>
+
+            <DropdownMenu.CheckboxItem
+              checked={opaque}
+              onCheckedChange={(checked) => {
+                mutateTankopediaPersistent((draft) => {
+                  draft.model.visual.opaque = checked;
+                });
+              }}
+            >
+              Opaque
+            </DropdownMenu.CheckboxItem>
+
+            <DropdownMenu.Label>Environment</DropdownMenu.Label>
 
             <DropdownMenu.CheckboxItem
               checked={showGrid}
@@ -132,17 +159,6 @@ export function Options({ isFullScreen, canvasWrapper }: OptionsProps) {
                 </DropdownMenu.RadioGroup>
               </DropdownMenu.SubContent>
             </DropdownMenu.Sub>
-
-            <DropdownMenu.CheckboxItem
-              checked={wireframe}
-              onCheckedChange={(checked) => {
-                mutateTankopediaPersistent((draft) => {
-                  draft.model.visual.wireframe = checked;
-                });
-              }}
-            >
-              Wireframe
-            </DropdownMenu.CheckboxItem>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
       )}

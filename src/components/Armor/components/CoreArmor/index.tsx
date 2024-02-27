@@ -51,6 +51,7 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
       explosionRadius: { value: null },
       greenPenetration: { value: null },
       wireframe: { value: null },
+      opaque: { value: null },
 
       resolution: { value: new Vector2() },
       spacedArmorBuffer: { value: null },
@@ -78,6 +79,7 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
     ) {
       material.uniforms.greenPenetration.value = visual.greenPenetration;
       material.uniforms.wireframe.value = visual.wireframe;
+      material.uniforms.opaque.value = visual.opaque || visual.wireframe;
       material.wireframe = visual.wireframe;
     }
 
