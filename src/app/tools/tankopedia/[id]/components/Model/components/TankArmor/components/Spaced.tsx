@@ -268,9 +268,9 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(
             </group>
 
             {modelNodes.map((node) => {
-              const isCurrentGun = node.name.startsWith(
-                `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
-              );
+              const isCurrentGun =
+                node.name ===
+                `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`;
               const isVisible = isCurrentGun;
 
               if (!isVisible) return null;
