@@ -83,16 +83,27 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
       material.uniforms.opaque.value = visual.opaque || visual.wireframe;
       material.wireframe = visual.wireframe;
     }
-    async function handleEquipmentChange(equipment: EquipmentMatrix) {
+    async function handleProtagonistEquipmentChange(
+      equipment: EquipmentMatrix,
+    ) {
       const hasEnhancedArmor = await hasEquipment(110, false, equipment);
       material.uniforms.thickness.value = hasEnhancedArmor
         ? thickness * 1.04
         : thickness;
     }
+    async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
+      const shell = useDuel.getState().antagonist!.shell;
+      const penetration = resolveNearPenetration(shell.penetration);
+      const hasCalibratedShells = await hasEquipment(103, true, equipment);
+      material.uniforms.penetration.value = hasCalibratedShells
+        ? penetration * (isExplosive(shell.type) ? 1.1 : 1.05)
+        : penetration;
+    }
 
     handleShellChange(useDuel.getState().antagonist!.shell);
     handleVisualChange(useTankopediaPersistent.getState().model.visual);
-    handleEquipmentChange(useDuel.getState().protagonist!.equipment);
+    handleProtagonistEquipmentChange(useDuel.getState().protagonist!.equipment);
+    handleAntagonistEquipmentChange(useDuel.getState().antagonist!.equipment);
 
     const unsubscribes = [
       useDuel.subscribe((state) => state.antagonist!.shell, handleShellChange),
@@ -102,7 +113,11 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
       ),
       useDuel.subscribe(
         (state) => state.protagonist!.equipment,
-        handleEquipmentChange,
+        handleProtagonistEquipmentChange,
+      ),
+      useDuel.subscribe(
+        (state) => state.antagonist!.equipment,
+        handleAntagonistEquipmentChange,
       ),
     ];
 

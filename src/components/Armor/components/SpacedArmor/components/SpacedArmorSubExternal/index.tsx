@@ -5,6 +5,7 @@ import {
   Object3D,
   ShaderMaterial,
 } from 'three';
+import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { hasEquipment } from '../../../../../../core/blitzkrieg/hasEquipment';
 import { jsxTree } from '../../../../../../core/blitzkrieg/jsxTree';
@@ -42,21 +43,36 @@ export function SpacedArmorSubExternal({
         shell.penetration,
       );
     }
-    async function handleEquipmentChange(equipment: EquipmentMatrix) {
+    async function handleProtagonistEquipmentChange(
+      equipment: EquipmentMatrix,
+    ) {
       const hasEnhancedArmor = await hasEquipment(110, false, equipment);
       material.uniforms.thickness.value = hasEnhancedArmor
         ? thickness * 1.04
         : thickness;
     }
+    async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
+      const shell = useDuel.getState().antagonist!.shell;
+      const penetration = resolveNearPenetration(shell.penetration);
+      const hasCalibratedShells = await hasEquipment(103, true, equipment);
+      material.uniforms.penetration.value = hasCalibratedShells
+        ? penetration * (isExplosive(shell.type) ? 1.1 : 1.05)
+        : penetration;
+    }
 
     handleShellChange(useDuel.getState().antagonist!.shell);
-    handleEquipmentChange(useDuel.getState().protagonist!.equipment);
+    handleProtagonistEquipmentChange(useDuel.getState().protagonist!.equipment);
+    handleAntagonistEquipmentChange(useDuel.getState().antagonist!.equipment);
 
     const unsubscribes = [
       useDuel.subscribe((state) => state.antagonist!.shell, handleShellChange),
       useDuel.subscribe(
         (state) => state.protagonist!.equipment,
-        handleEquipmentChange,
+        handleProtagonistEquipmentChange,
+      ),
+      useDuel.subscribe(
+        (state) => state.antagonist!.equipment,
+        handleAntagonistEquipmentChange,
       ),
     ];
 
