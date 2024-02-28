@@ -11,9 +11,10 @@ import { degToRad } from 'three/src/math/MathUtils';
 import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
+import { hasEquipment } from '../../../../core/blitzkrieg/hasEquipment';
 import { jsxTree } from '../../../../core/blitzkrieg/jsxTree';
 import { ShellDefinition } from '../../../../core/blitzkrieg/tankDefinitions';
-import { useDuel } from '../../../../stores/duel';
+import { EquipmentMatrix, useDuel } from '../../../../stores/duel';
 import {
   TankopediaPersistent,
   useTankopediaPersistent,
@@ -40,7 +41,7 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
     transparent: true,
 
     uniforms: {
-      thickness: { value: thickness },
+      thickness: { value: null },
       penetration: { value: null },
       caliber: { value: null },
       ricochet: { value: null },
@@ -82,15 +83,26 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
       material.uniforms.opaque.value = visual.opaque || visual.wireframe;
       material.wireframe = visual.wireframe;
     }
+    async function handleEquipmentChange(equipment: EquipmentMatrix) {
+      const hasEnhancedArmor = await hasEquipment(110, false, equipment);
+      material.uniforms.thickness.value = hasEnhancedArmor
+        ? thickness * 1.04
+        : thickness;
+    }
 
     handleShellChange(useDuel.getState().antagonist!.shell);
     handleVisualChange(useTankopediaPersistent.getState().model.visual);
+    handleEquipmentChange(useDuel.getState().protagonist!.equipment);
 
     const unsubscribes = [
       useDuel.subscribe((state) => state.antagonist!.shell, handleShellChange),
       useTankopediaPersistent.subscribe(
         (state) => state.model.visual,
         handleVisualChange,
+      ),
+      useDuel.subscribe(
+        (state) => state.protagonist!.equipment,
+        handleEquipmentChange,
       ),
     ];
 

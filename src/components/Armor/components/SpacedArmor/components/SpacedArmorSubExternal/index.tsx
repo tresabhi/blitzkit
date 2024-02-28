@@ -6,9 +6,10 @@ import {
   ShaderMaterial,
 } from 'three';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
+import { hasEquipment } from '../../../../../../core/blitzkrieg/hasEquipment';
 import { jsxTree } from '../../../../../../core/blitzkrieg/jsxTree';
 import { ShellDefinition } from '../../../../../../core/blitzkrieg/tankDefinitions';
-import { useDuel } from '../../../../../../stores/duel';
+import { EquipmentMatrix, useDuel } from '../../../../../../stores/duel';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
 
@@ -30,20 +31,38 @@ export function SpacedArmorSubExternal({
     blending: AdditiveBlending,
 
     uniforms: {
-      thickness: { value: thickness },
+      thickness: { value: null },
       penetration: { value: null },
     },
   });
 
   useEffect(() => {
-    function handleChange(shell: ShellDefinition) {
+    function handleShellChange(shell: ShellDefinition) {
       material.uniforms.penetration.value = resolveNearPenetration(
         shell.penetration,
       );
     }
+    async function handleEquipmentChange(equipment: EquipmentMatrix) {
+      const hasEnhancedArmor = await hasEquipment(110, false, equipment);
+      material.uniforms.thickness.value = hasEnhancedArmor
+        ? thickness * 1.04
+        : thickness;
+    }
 
-    handleChange(useDuel.getState().antagonist!.shell);
-    return useDuel.subscribe((state) => state.antagonist!.shell, handleChange);
+    handleShellChange(useDuel.getState().antagonist!.shell);
+    handleEquipmentChange(useDuel.getState().protagonist!.equipment);
+
+    const unsubscribes = [
+      useDuel.subscribe((state) => state.antagonist!.shell, handleShellChange),
+      useDuel.subscribe(
+        (state) => state.protagonist!.equipment,
+        handleEquipmentChange,
+      ),
+    ];
+
+    return () => {
+      unsubscribes.forEach((unsubscribe) => unsubscribe());
+    };
   }, []);
 
   return (
