@@ -13,7 +13,6 @@ uniform bool canSplash;
 uniform float damage;
 uniform float explosionRadius;
 uniform bool greenPenetration;
-uniform bool wireframe;
 uniform bool opaque;
 
 uniform highp sampler2D spacedArmorBuffer;
@@ -35,8 +34,8 @@ void main() {
   vec4 spacedArmorBufferFragment = texture2D(spacedArmorBuffer, screenCoordinates);
   bool isUnderSpacedArmor = spacedArmorBufferFragment.a != 0.0;
 
-  bool threeCalibersRule = caliber > thickness * 3.0;
-  if (!threeCalibersRule && !isUnderSpacedArmor && angle >= ricochet) {
+  bool threeCalibersRule = caliber > thickness * 3.0 || isUnderSpacedArmor;
+  if (!threeCalibersRule && angle >= ricochet) {
     penetrationChance = 0.0;
   } else {
     bool twoCalibersRule = caliber > thickness * 2.0 && thickness > 0.0;

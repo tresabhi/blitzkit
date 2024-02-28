@@ -1,44 +1,42 @@
-import { useFrame } from '@react-three/fiber';
 import { useEffect } from 'react';
 import {
+  AdditiveBlending,
   MeshBasicMaterial,
   Object3D,
   ShaderMaterial,
-  Vector2,
-  WebGLRenderTarget,
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
-import { canSplash } from '../../../../core/blitz/canSplash';
-import { isExplosive } from '../../../../core/blitz/isExplosive';
-import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
-import { hasEquipment } from '../../../../core/blitzkrieg/hasEquipment';
-import { jsxTree } from '../../../../core/blitzkrieg/jsxTree';
-import { ShellDefinition } from '../../../../core/blitzkrieg/tankDefinitions';
-import { EquipmentMatrix, useDuel } from '../../../../stores/duel';
-import {
-  TankopediaPersistent,
-  useTankopediaPersistent,
-} from '../../../../stores/tankopedia';
+import { ArmorUserData } from '../..';
+import { isExplosive } from '../../../../../../core/blitz/isExplosive';
+import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
+import { hasEquipment } from '../../../../../../core/blitzkrieg/hasEquipment';
+import { jsxTree } from '../../../../../../core/blitzkrieg/jsxTree';
+import { ShellDefinition } from '../../../../../../core/blitzkrieg/tankDefinitions';
+import { EquipmentMatrix, useDuel } from '../../../../../../stores/duel';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
 
-export const spacedArmorRenderTarget = new WebGLRenderTarget();
-
-interface CoreArmorProps {
-  thickness: number;
+interface SpacedArmorSubSpacedProps {
   node: Object3D;
+  thickness: number;
 }
 
-const excludeMaterial = new MeshBasicMaterial({
+const depthWriteMaterial = new MeshBasicMaterial({
+  depthWrite: true,
   colorWrite: false,
 });
 
-export function CoreArmor({ node, thickness }: CoreArmorProps) {
+export function SpacedArmorSubSpaced({
+  node,
+  thickness,
+}: SpacedArmorSubSpacedProps) {
   const material = new ShaderMaterial({
     fragmentShader,
     vertexShader,
 
-    transparent: true,
+    depthTest: true,
+    depthWrite: false,
+    blending: AdditiveBlending,
 
     uniforms: {
       thickness: { value: null },
@@ -46,17 +44,6 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
       caliber: { value: null },
       ricochet: { value: null },
       normalization: { value: null },
-      isExplosive: { value: null },
-      canSplash: { value: null },
-      damage: { value: null },
-      explosionRadius: { value: null },
-      greenPenetration: { value: null },
-      wireframe: { value: null },
-      opaque: { value: null },
-
-      resolution: { value: new Vector2() },
-      spacedArmorBuffer: { value: null },
-      spacedArmorDepth: { value: null },
     },
   });
 
@@ -70,18 +57,6 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
       material.uniforms.normalization.value = degToRad(
         shell.normalization ?? 0,
       );
-      material.uniforms.isExplosive.value = isExplosive(shell.type);
-      material.uniforms.canSplash.value = canSplash(shell.type);
-      material.uniforms.damage.value = shell.damage.armor;
-      material.uniforms.explosionRadius.value = shell.explosionRadius;
-    }
-    function handleVisualChange(
-      visual: TankopediaPersistent['model']['visual'],
-    ) {
-      material.uniforms.greenPenetration.value = visual.greenPenetration;
-      material.uniforms.wireframe.value = visual.wireframe;
-      material.uniforms.opaque.value = visual.opaque || visual.wireframe;
-      material.wireframe = visual.wireframe;
     }
     async function handleProtagonistEquipmentChange(
       equipment: EquipmentMatrix,
@@ -101,16 +76,11 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
     }
 
     handleShellChange(useDuel.getState().antagonist!.shell);
-    handleVisualChange(useTankopediaPersistent.getState().model.visual);
     handleProtagonistEquipmentChange(useDuel.getState().protagonist!.equipment);
     handleAntagonistEquipmentChange(useDuel.getState().antagonist!.equipment);
 
     const unsubscribes = [
       useDuel.subscribe((state) => state.antagonist!.shell, handleShellChange),
-      useTankopediaPersistent.subscribe(
-        (state) => state.model.visual,
-        handleVisualChange,
-      ),
       useDuel.subscribe(
         (state) => state.protagonist!.equipment,
         handleProtagonistEquipmentChange,
@@ -126,24 +96,20 @@ export function CoreArmor({ node, thickness }: CoreArmorProps) {
     };
   }, []);
 
-  useFrame(({ gl }) => {
-    gl.getSize(material.uniforms.resolution.value).multiplyScalar(
-      gl.getPixelRatio(),
-    );
-    material.uniforms.spacedArmorBuffer.value = spacedArmorRenderTarget.texture;
-    material.uniforms.spacedArmorDepth.value =
-      spacedArmorRenderTarget.depthTexture;
-  });
-
   return (
     <>
       {jsxTree(node, {
-        renderOrder: 0,
-        material: excludeMaterial,
+        renderOrder: 2,
+        material,
+        onClick() {},
+        userData: {
+          type: 'spaced',
+          thickness,
+        } satisfies ArmorUserData,
       })}
       {jsxTree(node, {
-        renderOrder: 1,
-        material,
+        renderOrder: 5,
+        material: depthWriteMaterial,
       })}
     </>
   );

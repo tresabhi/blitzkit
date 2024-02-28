@@ -5,7 +5,7 @@ import {
   Object3D,
   ShaderMaterial,
 } from 'three';
-import { degToRad } from 'three/src/math/MathUtils';
+import { ArmorUserData, ExternalModuleVariant } from '../..';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { hasEquipment } from '../../../../../../core/blitzkrieg/hasEquipment';
@@ -15,20 +15,17 @@ import { EquipmentMatrix, useDuel } from '../../../../../../stores/duel';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
 
-interface SpacedArmorSubSpacedProps {
+interface SpacedArmorSubExternalProps {
   node: Object3D;
   thickness: number;
+  variant: ExternalModuleVariant;
 }
 
-const depthWriteMaterial = new MeshBasicMaterial({
-  depthWrite: true,
-  colorWrite: false,
-});
-
-export function SpacedArmorSubSpaced({
+export function SpacedArmorSubExternal({
   node,
   thickness,
-}: SpacedArmorSubSpacedProps) {
+  variant,
+}: SpacedArmorSubExternalProps) {
   const material = new ShaderMaterial({
     fragmentShader,
     vertexShader,
@@ -40,9 +37,6 @@ export function SpacedArmorSubSpaced({
     uniforms: {
       thickness: { value: null },
       penetration: { value: null },
-      caliber: { value: null },
-      ricochet: { value: null },
-      normalization: { value: null },
     },
   });
 
@@ -50,11 +44,6 @@ export function SpacedArmorSubSpaced({
     function handleShellChange(shell: ShellDefinition) {
       material.uniforms.penetration.value = resolveNearPenetration(
         shell.penetration,
-      );
-      material.uniforms.caliber.value = shell.caliber;
-      material.uniforms.ricochet.value = degToRad(shell.ricochet ?? 90);
-      material.uniforms.normalization.value = degToRad(
-        shell.normalization ?? 0,
       );
     }
     async function handleProtagonistEquipmentChange(
@@ -98,12 +87,22 @@ export function SpacedArmorSubSpaced({
   return (
     <>
       {jsxTree(node, {
-        renderOrder: 2,
-        material,
+        renderOrder: 3,
+        material: new MeshBasicMaterial({
+          colorWrite: false,
+          depthTest: true,
+          depthWrite: true,
+        }),
+        onClick() {},
+        userData: {
+          type: 'external',
+          thickness,
+          variant,
+        } satisfies ArmorUserData,
       })}
       {jsxTree(node, {
-        renderOrder: 5,
-        material: depthWriteMaterial,
+        renderOrder: 4,
+        material,
       })}
     </>
   );
