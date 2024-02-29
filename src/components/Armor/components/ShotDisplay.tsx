@@ -1,7 +1,7 @@
 import { Card, Flex, Inset, Text } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Mesh } from 'three';
 import { radToDeg } from 'three/src/math/MathUtils';
 import { isExplosive } from '../../../core/blitz/isExplosive';
@@ -17,6 +17,7 @@ import {
   ShotLayerBase,
   ShotLayerGap,
   ShotLayerNonExternal,
+  mutateTankopediaTemporary,
   useTankopediaTemporary,
 } from '../../../stores/tankopedia';
 import { ArmorType } from './SpacedArmorScene';
@@ -83,6 +84,23 @@ export function ShotDisplay() {
 
     postMidPointTracer.current.position.set(0, t2 * postMidPointGap!, 0);
     postMidPointTracer.current.scale.set(1, 1 - 2 * Math.abs(t2 - 0.5), 1);
+  });
+
+  useEffect(() => {
+    function resetShot() {
+      mutateTankopediaTemporary((draft) => {
+        draft.shot = undefined;
+      });
+    }
+
+    const unsubscribes = [
+      useDuel.subscribe((state) => state.protagonist?.tank, resetShot),
+      useDuel.subscribe((state) => state.antagonist?.tank, resetShot),
+    ];
+
+    return () => {
+      unsubscribes.forEach((unsubscribe) => unsubscribe());
+    };
   });
 
   if (!shot) return null;
