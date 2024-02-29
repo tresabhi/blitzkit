@@ -9,6 +9,7 @@ import {
   Vector3,
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
+import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { hasEquipment } from '../../../../core/blitzkrieg/hasEquipment';
@@ -93,6 +94,7 @@ export function SpacedArmorSceneComponent({
             const thicknessCoefficient = hasEnhancedArmor ? 1.04 : 1;
             const shell = useDuel.getState().antagonist!.shell;
             const explosive = isExplosive(shell.type);
+            const splashing = canSplash(shell.type);
             const penetration =
               resolveNearPenetration(shell.penetration) *
               (hasCalibratedShells
@@ -171,17 +173,17 @@ export function SpacedArmorSceneComponent({
                 const distance = (
                   shot.layers.at(-1) as ShotLayerBase
                 ).point.distanceTo(intersections[0].point);
-                if (explosive)
+                if (explosive && !splashing)
                   remainingPenetration -= 0.5 * remainingPenetration * distance;
-                const wasted = remainingPenetration < 0;
+                const blocked = remainingPenetration < 0;
 
                 shot.layers.push({
                   type: null,
-                  status: wasted ? 'blocked' : 'penetration',
+                  status: blocked ? 'blocked' : 'penetration',
                   distance,
                 });
 
-                if (wasted) return;
+                if (blocked) return;
               }
 
               for (const intersection of intersections) {
@@ -197,7 +199,7 @@ export function SpacedArmorSceneComponent({
                   const previousIntersection = intersections[layerIndex - 1];
                   const distance =
                     intersection.distance - previousIntersection.distance;
-                  if (explosive)
+                  if (explosive && !splashing)
                     remainingPenetration -=
                       0.5 * remainingPenetration * distance;
                   const wasted = remainingPenetration < 0;

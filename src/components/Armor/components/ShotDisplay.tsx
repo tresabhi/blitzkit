@@ -4,13 +4,17 @@ import { Euler, Quaternion, Vector3 } from 'three';
 import { radToDeg } from 'three/src/math/MathUtils';
 import { J_HAT } from '../../../constants/axis';
 import { isExplosive } from '../../../core/blitz/isExplosive';
+import { NaNFallback } from '../../../core/math/NaNFallback';
 import { AngledPenetration } from '../../../icons/AngledPenetration';
 import { Block } from '../../../icons/Block';
 import { NominalPenetration } from '../../../icons/NominalPenetration';
 import { Ricochet } from '../../../icons/Ricochet';
 import { useDuel } from '../../../stores/duel';
 import {
+  ShotLayer,
+  ShotLayerBase,
   ShotLayerGap,
+  ShotLayerNonExternal,
   useTankopediaTemporary,
 } from '../../../stores/tankopedia';
 import { ArmorType } from './SpacedArmorScene';
@@ -79,10 +83,10 @@ export function ShotDisplay() {
                   style={{
                     backgroundColor:
                       trueStatus === 'penetration'
-                        ? '#00ff0080'
+                        ? '#00ff00c0'
                         : trueStatus === 'blocked'
-                          ? '#ff000080'
-                          : '#ffff0080',
+                          ? '#ff0000c0'
+                          : '#ffff00c0',
                     border: 'none',
                   }}
                 >
@@ -93,9 +97,11 @@ export function ShotDisplay() {
                           width: '100%',
                           display: 'block',
                           textAlign: 'center',
+                          color:
+                            trueStatus === 'ricochet' ? 'black' : undefined,
                         }}
                       >
-                        {layer.index + 1}
+                        <b>{layer.index + 1}</b>
                       </Text>
                     )}
                   </Inset>
@@ -155,25 +161,54 @@ export function ShotDisplay() {
 
       {shot &&
         (() => {
+          const firstLayer = shot.layers[0] as Exclude<ShotLayer, ShotLayerGap>;
           const lastLayer = shot.layers.at(-1)!;
-          const lastStatus = lastLayer.status;
+          const midPointLayer = (shot.layers.findLast(
+            (layer) => layer.type !== null && layer.status === 'ricochet',
+          ) ??
+            shot.layers.findLast(
+              (layer) => layer.type !== null,
+            )) as ShotLayerBase;
+          const distanceFromSpacedArmor = firstLayer.point.distanceTo(
+            shot.point,
+          );
+
+          console.log(distanceFromSpacedArmor);
 
           return (
             <Html
-              position={shot.point}
+              position={midPointLayer.point}
               style={{
                 transform: 'translateY(-50%)',
-                marginLeft: 16,
+                marginLeft: 32,
                 pointerEvents: 'none',
               }}
             >
               <Card style={{ width: 256 + 32 }}>
                 <Flex direction="column">
                   <Text>
-                    {lastStatus[0].toUpperCase()}
-                    {lastStatus.slice(1)}
-                    {lastStatus === 'penetration' &&
-                      `: ${shell.damage.module}hp`}
+                    {lastLayer.status[0].toUpperCase()}
+                    {lastLayer.status.slice(1)}
+                    {lastLayer.status === 'penetration' &&
+                      `: ${Math.round(shell.damage.armor)}hp`}
+                    {lastLayer.status === 'blocked' &&
+                      shell.type === 'he' &&
+                      `: ${NaNFallback(
+                        Math.max(
+                          0,
+                          Math.round(
+                            0.5 *
+                              shell.damage.armor *
+                              (1 -
+                                distanceFromSpacedArmor /
+                                  shell.explosionRadius!) -
+                              1.1 *
+                                (midPointLayer as ShotLayerNonExternal)
+                                  .thicknessAngled,
+                          ),
+                        ),
+                        0,
+                      )}hp`}
                   </Text>
 
                   {shot.layers.map((layer) => {
@@ -223,6 +258,7 @@ export function ShotDisplay() {
 
                         {layer.type === null && (
                           <Text size="2">
+                            {/* why is it x50? i can't pretend to understand this shit */}
                             {Math.round(layer.distance * 1000)}mm (-
                             {Math.round(Math.min(100, layer.distance * 50))}%
                             penetration)

@@ -57,7 +57,7 @@ interface ShotLayerExternal extends ShotLayerBase {
   type: ArmorType.External;
 }
 
-interface ShotLayerNonExternal extends ShotLayerBase {
+export interface ShotLayerNonExternal extends ShotLayerBase {
   type: Exclude<ArmorType, ArmorType.External>;
   angle: number;
   thicknessAngled: number;

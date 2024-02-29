@@ -53,8 +53,8 @@ void main() {
       float spacedArmorThickness = spacedArmorBufferFragment.r * penetration;
       remainingPenetration -= spacedArmorThickness;
 
-      if (isExplosive && remainingPenetration > 0.0) {
-        // there is a 50% penetration loss per meter for HE based shells
+      if (isExplosive && !canSplash && remainingPenetration > 0.0) {
+        // there is a 50% penetration loss per meter for HEAT shells
         remainingPenetration -= 0.5 * remainingPenetration * distanceFromSpacedArmor;
       }
     }
@@ -68,7 +68,7 @@ void main() {
       // only allow splashing if the damage equation deals more than 0 damage
       float nominalArmorThickness = finalThickness - remainingPenetration;
       float finalDamage = 0.5 * damage * (1.0 - distanceFromSpacedArmor / explosionRadius) - 1.1 * nominalArmorThickness;
-      splashChance = finalDamage > 0.0 ? 1.0 : 0.0;
+      splashChance = finalDamage > 0.0 ? 1.0 : 0.0; // TODO: add randomization here?
     } else {
       splashChance = 0.0;
     }
