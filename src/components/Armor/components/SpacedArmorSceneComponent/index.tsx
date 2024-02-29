@@ -73,7 +73,6 @@ export function SpacedArmorSceneComponent({
   ...props
 }: SpacedArmorSceneComponentProps) {
   const camera = useThree((state) => state.camera);
-  // const cameraNormal = new Vector3();
 
   return (
     <>
@@ -107,8 +106,6 @@ export function SpacedArmorSceneComponent({
               point: event.point,
             }; // TODO: type this
             let remainingPenetration = penetration;
-            let penetrationChance = -1;
-            let splashChance = -1;
 
             const shellNormal = camera.position
               .clone()
@@ -242,7 +239,8 @@ export function SpacedArmorSceneComponent({
                   const finalThickness =
                     thickness === 0
                       ? 0
-                      : thickness / Math.cos(angle - finalNormalization);
+                      : thickness /
+                        Math.cos(Math.max(0, angle - finalNormalization));
 
                   if (!threeCalibersRule && angle >= ricochet) {
                     shot.layers.push({

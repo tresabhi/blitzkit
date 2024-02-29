@@ -40,7 +40,7 @@ void main() {
   } else {
     bool twoCalibersRule = caliber > thickness * 2.0 && thickness > 0.0;
     float finalNormalization = twoCalibersRule ? ((1.4 * normalization * caliber) / (2.0 * thickness)) : normalization;
-    float finalThickness = thickness / cos(angle - finalNormalization);
+    float finalThickness = thickness / cos(max(0.0, angle - finalNormalization));
     float remainingPenetration = penetration;
 
     // world space is in meters
