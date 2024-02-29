@@ -230,11 +230,11 @@ export function ShotDisplay() {
                 )}hp`}
             </Text>
 
-            {shot.layers.map((layer) => {
+            {shot.layers.map((layer, index) => {
               if (layer.type === null && !explosive) return null;
 
               return (
-                <Flex align="center" gap="2">
+                <Flex key={index} align="center" gap="2">
                   <Flex>
                     {hasMultipleLayers && (
                       <Text size="2" style={{ width: 16 }}>

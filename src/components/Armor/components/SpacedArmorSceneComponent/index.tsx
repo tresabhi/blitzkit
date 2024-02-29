@@ -300,8 +300,6 @@ export function SpacedArmorSceneComponent({
               }
             }
 
-            console.log(shot);
-
             useTankopediaTemporary.setState({ shot });
           },
         })}
