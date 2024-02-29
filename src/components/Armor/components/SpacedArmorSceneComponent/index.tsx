@@ -243,7 +243,6 @@ export function SpacedArmorSceneComponent({
                     thickness === 0
                       ? 0
                       : thickness / Math.cos(angle - finalNormalization);
-                  remainingPenetration -= finalThickness;
 
                   if (!threeCalibersRule && angle >= ricochet) {
                     shot.layers.push({
@@ -279,7 +278,9 @@ export function SpacedArmorSceneComponent({
 
                     break;
                   } else {
+                    remainingPenetration -= finalThickness;
                     const blocked = remainingPenetration < 0;
+
                     shot.layers.push({
                       type,
                       index: layerIndex,
@@ -298,6 +299,8 @@ export function SpacedArmorSceneComponent({
                 loopIndex++;
               }
             }
+
+            console.log(shot);
 
             useTankopediaTemporary.setState({ shot });
           },

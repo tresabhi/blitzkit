@@ -29,8 +29,8 @@ const layerTypeNames: Record<ArmorType | 'null', string> = {
 };
 
 const LENGTH_INFINITY = 4;
-const TRACER_THIN = 1 / 128;
 const TRACER_THICK = 1 / 64;
+const TRACER_THIN = TRACER_THICK / 2;
 
 export function ShotDisplay() {
   const shot = useTankopediaTemporary((state) => state.shot);
@@ -53,11 +53,21 @@ export function ShotDisplay() {
     0,
     shot.layers.indexOf(midPointLayer as ShotLayer),
   );
+  const postMidPointLayers = shot?.layers.slice(
+    shot.layers.indexOf(midPointLayer as ShotLayer),
+    shot.layers.length,
+  );
   const preMidPointGap = shot
     ? preMidPointLayers!.reduce((accumulator, layer) => {
         if (layer.type === null) return accumulator + layer.distance;
         return accumulator;
       }, 0) + LENGTH_INFINITY
+    : undefined;
+  const postMidPointGap = shot
+    ? postMidPointLayers!.reduce((accumulator, layer) => {
+        if (layer.type === null) return accumulator + layer.distance;
+        return accumulator;
+      }, 0) || LENGTH_INFINITY
     : undefined;
 
   useFrame(({ clock }) => {
@@ -71,7 +81,7 @@ export function ShotDisplay() {
 
     if (!postMidPointTracer.current) return;
 
-    postMidPointTracer.current.position.set(0, t2 * preMidPointGap!, 0);
+    postMidPointTracer.current.position.set(0, t2 * postMidPointGap!, 0);
     postMidPointTracer.current.scale.set(1, 1 - 2 * Math.abs(t2 - 0.5), 1);
   });
 
@@ -114,15 +124,18 @@ export function ShotDisplay() {
               .multiplyScalar(-1),
           )}
         >
-          <mesh position={[0, preMidPointGap! / 2, 0]}>
+          <mesh position={[0, postMidPointGap! / 2, 0]}>
             <cylinderGeometry
-              args={[TRACER_THIN, TRACER_THIN, preMidPointGap]}
+              args={[TRACER_THIN, TRACER_THIN, postMidPointGap]}
             />
           </mesh>
 
-          <mesh position={[0, preMidPointGap! / 2, 0]} ref={postMidPointTracer}>
+          <mesh
+            position={[0, postMidPointGap! / 2, 0]}
+            ref={postMidPointTracer}
+          >
             <cylinderGeometry
-              args={[TRACER_THICK, TRACER_THICK, preMidPointGap]}
+              args={[TRACER_THICK, TRACER_THICK, postMidPointGap]}
             />
             <meshBasicMaterial color={0xffff00} />
           </mesh>
