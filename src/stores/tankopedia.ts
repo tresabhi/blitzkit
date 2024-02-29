@@ -65,13 +65,16 @@ interface ShotLayerNonExternal extends ShotLayerBase {
 
 export interface ShotLayerGap {
   type: null;
-  status: 'nominal' | 'wasted';
+  status: 'penetration' | 'blocked';
   distance: number;
 }
 
-type ShotLayer = ShotLayerExternal | ShotLayerNonExternal | ShotLayerGap;
+export type ShotLayer = ShotLayerExternal | ShotLayerNonExternal | ShotLayerGap;
 
-export type Shot = ShotLayer[];
+export type Shot = {
+  point: Vector3;
+  layers: ShotLayer[];
+};
 
 export type ArmorPiercingLayer =
   | {

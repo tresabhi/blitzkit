@@ -100,7 +100,10 @@ export function SpacedArmorSceneComponent({
                   ? 1.1
                   : 1.05
                 : 1);
-            const shot: Shot = []; // TODO: type this
+            const shot: Shot = {
+              layers: [],
+              point: event.point,
+            }; // TODO: type this
             let remainingPenetration = penetration;
             let penetrationChance = -1;
             let splashChance = -1;
@@ -109,14 +112,8 @@ export function SpacedArmorSceneComponent({
               .clone()
               .sub(event.point)
               .normalize();
-            const cameraNormal = shellNormal.clone().multiplyScalar(-1);
 
-            pushLogs(
-              shellNormal,
-              cameraNormal,
-              filterIntersections(event.intersections),
-              0,
-            );
+            pushLogs(shellNormal, filterIntersections(event.intersections), 0);
 
             function filterIntersections(intersectionsRaw: Intersection[]) {
               const intersectionsAll = intersectionsRaw.filter(
@@ -164,7 +161,6 @@ export function SpacedArmorSceneComponent({
 
             function pushLogs(
               shellNormal: Vector3,
-              cameraNormal: Vector3,
               intersections: ArmorMeshIntersection[],
               startingIndex: number,
             ) {
@@ -173,15 +169,15 @@ export function SpacedArmorSceneComponent({
 
               if (layerIndex !== 0 && intersections.length > 0) {
                 const distance = (
-                  shot.at(-1) as ShotLayerBase
+                  shot.layers.at(-1) as ShotLayerBase
                 ).point.distanceTo(intersections[0].point);
                 if (explosive)
                   remainingPenetration -= 0.5 * remainingPenetration * distance;
                 const wasted = remainingPenetration < 0;
 
-                shot.push({
+                shot.layers.push({
                   type: null,
-                  status: wasted ? 'wasted' : 'nominal',
+                  status: wasted ? 'blocked' : 'penetration',
                   distance,
                 });
 
@@ -206,9 +202,9 @@ export function SpacedArmorSceneComponent({
                       0.5 * remainingPenetration * distance;
                   const wasted = remainingPenetration < 0;
 
-                  shot.push({
+                  shot.layers.push({
                     type: null,
-                    status: wasted ? 'wasted' : 'nominal',
+                    status: wasted ? 'blocked' : 'penetration',
                     distance,
                   });
 
@@ -219,7 +215,7 @@ export function SpacedArmorSceneComponent({
                   remainingPenetration -= thickness;
                   const blocked = remainingPenetration < 0;
 
-                  shot.push({
+                  shot.layers.push({
                     type: ArmorType.External,
                     index: layerIndex,
                     shellNormal,
@@ -242,11 +238,13 @@ export function SpacedArmorSceneComponent({
                     ? (1.4 * normalization * shell.caliber) / (2.0 * thickness)
                     : normalization;
                   const finalThickness =
-                    thickness / Math.cos(angle - finalNormalization);
+                    thickness === 0
+                      ? 0
+                      : thickness / Math.cos(angle - finalNormalization);
                   remainingPenetration -= finalThickness;
 
                   if (!threeCalibersRule && angle >= ricochet) {
-                    shot.push({
+                    shot.layers.push({
                       type,
                       index: layerIndex,
                       shellNormal,
@@ -271,7 +269,6 @@ export function SpacedArmorSceneComponent({
                     raycaster.set(intersection.point, newCameraNormal);
                     pushLogs(
                       newShellNormal,
-                      newCameraNormal,
                       filterIntersections(
                         raycaster.intersectObjects(scene.children, true),
                       ),
@@ -281,7 +278,7 @@ export function SpacedArmorSceneComponent({
                     break;
                   } else {
                     const blocked = remainingPenetration < 0;
-                    shot.push({
+                    shot.layers.push({
                       type,
                       index: layerIndex,
                       shellNormal,
@@ -299,8 +296,6 @@ export function SpacedArmorSceneComponent({
                 loopIndex++;
               }
             }
-
-            console.log('setting', shot);
 
             useTankopediaTemporary.setState({ shot });
           },
