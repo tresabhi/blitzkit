@@ -8,13 +8,17 @@ import {
   Scene,
   Vector3,
 } from 'three';
-import { degToRad, radToDeg } from 'three/src/math/MathUtils';
+import { degToRad } from 'three/src/math/MathUtils';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { hasEquipment } from '../../../../core/blitzkrieg/hasEquipment';
 import { jsxTree } from '../../../../core/blitzkrieg/jsxTree';
 import { useDuel } from '../../../../stores/duel';
-import { Shot, useTankopediaTemporary } from '../../../../stores/tankopedia';
+import {
+  Shot,
+  ShotLayerBase,
+  useTankopediaTemporary,
+} from '../../../../stores/tankopedia';
 import { ArmorType } from '../SpacedArmorScene';
 import { SpacedArmorSubExternal } from './components/SpacedArmorSubExternal';
 import { SpacedArmorSubSpaced } from './components/SpacedArmorSubSpaced';
@@ -68,7 +72,7 @@ export function SpacedArmorSceneComponent({
   ...props
 }: SpacedArmorSceneComponentProps) {
   const camera = useThree((state) => state.camera);
-  const cameraNormal = new Vector3();
+  // const cameraNormal = new Vector3();
 
   return (
     <>
@@ -104,26 +108,26 @@ export function SpacedArmorSceneComponent({
               .clone()
               .sub(event.point)
               .normalize();
-            shellNormal
-              .copy(camera.getWorldDirection(cameraNormal))
-              .multiplyScalar(-1);
+            const cameraNormal = shellNormal.clone().multiplyScalar(-1);
+
             pushLogs(
               shellNormal,
+              cameraNormal,
               filterIntersections(event.intersections),
-              true,
+              0,
             );
 
-            console.clear();
-            console.log(
-              JSON.stringify(
-                shot.map((i) => ({
-                  ...i,
-                  ...(i.angle ? { angle: radToDeg(i.angle) } : {}),
-                })),
-                null,
-                2,
-              ),
-            );
+            // console.clear();
+            // console.log(
+            //   JSON.stringify(
+            //     shot.map((i) => ({
+            //       ...i,
+            //       ...(i.angle ? { angle: radToDeg(i.angle) } : {}),
+            //     })),
+            //     null,
+            //     2,
+            //   ),
+            // );
 
             function filterIntersections(intersectionsRaw: Intersection[]) {
               const intersectionsAll = intersectionsRaw.filter(
@@ -166,15 +170,35 @@ export function SpacedArmorSceneComponent({
                 });
               }
 
+              console.log(
+                JSON.stringify(
+                  intersections.map((i) => i.object.userData),
+                  null,
+                  2,
+                ),
+              );
+
               return intersections;
             }
 
             function pushLogs(
               shellNormal: Vector3,
+              cameraNormal: Vector3,
               intersections: ArmorMeshIntersection[],
-              allowRicochets: boolean,
+              startingIndex: number,
             ) {
-              let index = 0;
+              let layerIndex = startingIndex;
+              let loopIndex = 0;
+
+              if (layerIndex !== 0) {
+                shot.push({
+                  type: null,
+                  distance: (shot.at(-1) as ShotLayerBase).point.distanceTo(
+                    intersections[0].point,
+                  ),
+                });
+              }
+
               for (const intersection of intersections) {
                 const surfaceNormal = intersection
                   .normal!.clone()
@@ -184,8 +208,8 @@ export function SpacedArmorSceneComponent({
                 const thickness =
                   thicknessCoefficient * intersection.object.userData.thickness;
 
-                if (index !== 0) {
-                  const previousIntersection = intersections[index - 1];
+                if (layerIndex !== 0 && startingIndex === 0) {
+                  const previousIntersection = intersections[layerIndex - 1];
                   shot.push({
                     type: null,
                     distance:
@@ -199,7 +223,7 @@ export function SpacedArmorSceneComponent({
 
                   shot.push({
                     type: ArmorType.External,
-                    index,
+                    index: layerIndex,
                     shellNormal,
                     surfaceNormal,
                     point: intersection.point,
@@ -210,19 +234,11 @@ export function SpacedArmorSceneComponent({
                   if (blocked) break;
                 } else {
                   const type = intersection.object.userData.type;
-                  shellNormal.copy(
-                    cameraNormal
-                      .copy(camera.position)
-                      .sub(event.point)
-                      .normalize(),
-                  );
                   const angle = surfaceNormal.angleTo(shellNormal);
                   const ricochet = degToRad(shell.ricochet ?? 90);
                   const normalization = degToRad(shell.normalization ?? 0);
                   const threeCalibersRule =
-                    shell.caliber > thickness * 3 ||
-                    index > 0 ||
-                    !allowRicochets;
+                    shell.caliber > thickness * 3 || layerIndex > 0;
                   const twoCalibersRule = shell.caliber > thickness * 2;
                   const finalNormalization = twoCalibersRule
                     ? (1.4 * normalization * shell.caliber) / (2.0 * thickness)
@@ -234,7 +250,7 @@ export function SpacedArmorSceneComponent({
                   if (!threeCalibersRule && angle >= ricochet) {
                     shot.push({
                       type,
-                      index,
+                      index: layerIndex,
                       shellNormal,
                       surfaceNormal,
                       point: intersection.point,
@@ -245,15 +261,21 @@ export function SpacedArmorSceneComponent({
                     });
 
                     const raycaster = new Raycaster();
-                    const newShellNormal = cameraNormal
+                    const newShellNormal = shellNormal
                       .clone()
                       .reflect(surfaceNormal);
+                    const newCameraNormal = newShellNormal
+                      .clone()
+                      .multiplyScalar(-1);
 
-                    raycaster.set(intersection.point, newShellNormal);
+                    raycaster.set(intersection.point, newCameraNormal);
                     pushLogs(
                       newShellNormal,
-                      raycaster.intersectObjects(scene.children, true),
-                      false,
+                      newCameraNormal,
+                      filterIntersections(
+                        raycaster.intersectObjects(scene.children, true),
+                      ),
+                      layerIndex + 1,
                     );
 
                     break;
@@ -261,7 +283,7 @@ export function SpacedArmorSceneComponent({
                     const blocked = remainingPenetration < 0;
                     shot.push({
                       type,
-                      index,
+                      index: layerIndex,
                       shellNormal,
                       surfaceNormal,
                       point: intersection.point,
@@ -273,7 +295,8 @@ export function SpacedArmorSceneComponent({
                   }
                 }
 
-                index++;
+                layerIndex++;
+                loopIndex++;
               }
             }
 

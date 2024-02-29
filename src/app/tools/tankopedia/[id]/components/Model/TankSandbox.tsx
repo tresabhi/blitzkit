@@ -5,7 +5,7 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import { Armor } from '../../../../../../components/Armor';
-import { ShotScene } from '../../../../../../components/Armor/components/ShotScene';
+import { ShotDisplay } from '../../../../../../components/Armor/components/ShotDisplay';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
@@ -201,6 +201,7 @@ export function TankSandbox() {
                       <Lighting />
                       <TankModel />
                       <Armor />
+                      <ShotDisplay />
                     </Suspense>
                   </Canvas>
                 </div>
