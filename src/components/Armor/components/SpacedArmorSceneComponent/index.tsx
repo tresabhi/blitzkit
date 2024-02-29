@@ -92,6 +92,7 @@ export function SpacedArmorSceneComponent({
             const hasEnhancedArmor = await hasEquipment(110);
             const thicknessCoefficient = hasEnhancedArmor ? 1.04 : 1;
             const shell = useDuel.getState().antagonist!.shell;
+            const explosive = isExplosive(shell.type);
             const penetration =
               resolveNearPenetration(shell.penetration) *
               (hasCalibratedShells
@@ -116,18 +117,6 @@ export function SpacedArmorSceneComponent({
               filterIntersections(event.intersections),
               0,
             );
-
-            // console.clear();
-            // console.log(
-            //   JSON.stringify(
-            //     shot.map((i) => ({
-            //       ...i,
-            //       ...(i.angle ? { angle: radToDeg(i.angle) } : {}),
-            //     })),
-            //     null,
-            //     2,
-            //   ),
-            // );
 
             function filterIntersections(intersectionsRaw: Intersection[]) {
               const intersectionsAll = intersectionsRaw.filter(
@@ -183,12 +172,20 @@ export function SpacedArmorSceneComponent({
               let loopIndex = 0;
 
               if (layerIndex !== 0 && intersections.length > 0) {
+                const distance = (
+                  shot.at(-1) as ShotLayerBase
+                ).point.distanceTo(intersections[0].point);
+                if (explosive)
+                  remainingPenetration -= 0.5 * remainingPenetration * distance;
+                const wasted = remainingPenetration < 0;
+
                 shot.push({
                   type: null,
-                  distance: (shot.at(-1) as ShotLayerBase).point.distanceTo(
-                    intersections[0].point,
-                  ),
+                  status: wasted ? 'wasted' : 'nominal',
+                  distance,
                 });
+
+                if (wasted) return;
               }
 
               for (const intersection of intersections) {
@@ -202,11 +199,20 @@ export function SpacedArmorSceneComponent({
 
                 if (layerIndex !== 0 && startingIndex === 0) {
                   const previousIntersection = intersections[layerIndex - 1];
+                  const distance =
+                    intersection.distance - previousIntersection.distance;
+                  if (explosive)
+                    remainingPenetration -=
+                      0.5 * remainingPenetration * distance;
+                  const wasted = remainingPenetration < 0;
+
                   shot.push({
                     type: null,
-                    distance:
-                      intersection.distance - previousIntersection.distance,
+                    status: wasted ? 'wasted' : 'nominal',
+                    distance,
                   });
+
+                  if (wasted) return;
                 }
 
                 if (intersection.object.userData.type === ArmorType.External) {

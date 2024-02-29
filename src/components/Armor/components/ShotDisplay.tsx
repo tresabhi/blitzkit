@@ -26,6 +26,9 @@ const LENGTH_INFINITY = 4;
 
 export function ShotDisplay() {
   const shot = useTankopediaTemporary((state) => state.shot);
+  const hasMultipleLayers = shot?.some(
+    (layer, index) => index !== 0 && layer.type !== null,
+  );
 
   console.log(shot);
 
@@ -40,6 +43,9 @@ export function ShotDisplay() {
             J_HAT.angleTo(layer.shellNormal),
           ),
         );
+        const nextLayer = shot[index + 1] as ShotLayerGap | undefined;
+        const trueStatus =
+          nextLayer?.status === 'wasted' ? 'blocked' : layer.status;
 
         return (
           <>
@@ -52,16 +58,16 @@ export function ShotDisplay() {
                 <Card
                   style={{
                     backgroundColor:
-                      layer.status === 'penetration'
+                      trueStatus === 'penetration'
                         ? '#00ff0080'
-                        : layer.status === 'blocked'
+                        : trueStatus === 'blocked'
                           ? '#ff000080'
                           : '#ffff0080',
                     border: 'none',
                   }}
                 >
                   <Inset>
-                    {shot.length > 1 && (
+                    {hasMultipleLayers && (
                       <Text
                         style={{
                           width: '100%',

@@ -65,6 +65,7 @@ interface ShotLayerNonExternal extends ShotLayerBase {
 
 export interface ShotLayerGap {
   type: null;
+  status: 'nominal' | 'wasted';
   distance: number;
 }
 
