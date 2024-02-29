@@ -54,6 +54,7 @@
     "glsl",
     "GLTF",
     "haha",
+    "highp",
     "iife",
     "immer",
     "Inclusivity",
@@ -145,5 +146,6 @@
     "zustand"
   ],
   "deno.enable": false,
-  "deno.unstable": false
+  "deno.unstable": false,
+  "cSpell.enableFiletypes": ["glsl"]
 }

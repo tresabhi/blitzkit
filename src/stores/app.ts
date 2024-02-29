@@ -1,3 +1,4 @@
+import { merge } from 'lodash';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -10,6 +11,6 @@ export const useApp = create<App>()(
     (set) => ({
       devBuildAgreementTime: 0,
     }),
-    { name: 'app' },
+    { name: 'app', merge: (a, b) => merge(b, a) },
   ),
 );

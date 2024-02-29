@@ -4,7 +4,8 @@ import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
-import { ShotDisplay } from '../../../../../../components/ShotDisplay';
+import { Armor } from '../../../../../../components/Armor';
+import { ShotDisplay } from '../../../../../../components/Armor/components/ShotDisplay';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
@@ -24,9 +25,6 @@ import { RotationInputs } from '../QuickInputs';
 import { SceneProps } from '../SceneProps';
 import { ModelLoader } from './components/ModelLoader';
 import { Options } from './components/Options';
-import { TankArmor } from './components/TankArmor';
-import { ExternalModuleMask } from './components/TankArmor/components/ExternalModuleMask';
-import { SpacedArmorDepth } from './components/TankArmor/components/SpacedArmorDepth';
 import { TankModel } from './components/TankModel';
 
 export function TankSandbox() {
@@ -198,12 +196,11 @@ export function TankSandbox() {
                     <SceneProps />
 
                     <Suspense fallback={<ModelLoader />}>
-                      <ShotDisplay />
+                      {/* TODO: add rotation cube to the top right */}
                       <Lighting />
                       <TankModel />
-                      <TankArmor />
-                      <ExternalModuleMask ornamental />
-                      <SpacedArmorDepth ornamental />
+                      <Armor />
+                      <ShotDisplay />
                     </Suspense>
                   </Canvas>
                 </div>

@@ -1,9 +1,10 @@
 import { produce } from 'immer';
 import { merge } from 'lodash';
-import { Vector3Tuple } from 'three';
+import { Vector3 } from 'three';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { ENVIRONMENTS } from '../app/tools/tankopedia/[id]/components/Lighting';
+import { ArmorType } from '../components/Armor/components/SpacedArmorScene';
 import { TankType, TreeType } from '../components/Tanks';
 import { Tier } from '../core/blitzkrieg/tankDefinitions';
 
@@ -12,10 +13,11 @@ export type TankopediaSortDirection = 'ascending' | 'descending';
 export type TankopediaTestTankDisplay = 'include' | 'exclude' | 'only';
 export type TankopediaMode = 'model' | 'armor';
 
-interface TankopediaPersistent {
+export interface TankopediaPersistent {
   model: {
     visual: {
       wireframe: boolean;
+      opaque: boolean;
       environment: (typeof ENVIRONMENTS)[number];
       controlsEnabled: boolean;
       showGrid: boolean;
@@ -42,19 +44,37 @@ interface TankopediaTemporary {
   shot?: Shot;
 }
 
-export interface Shot {
-  point: Vector3Tuple;
-  surfaceNormal: Vector3Tuple;
-  shellNormal: Vector3Tuple;
-  thicknesses: ArmorPiercingLayer[];
-  type: 'ricochet' | 'penetration' | 'block';
-  angle: number;
-  ricochet?: {
-    distance: number;
-    point: Vector3Tuple;
-    penetration: boolean;
-  };
+export interface ShotLayerBase {
+  index: number;
+  thickness: number;
+  point: Vector3;
+  shellNormal: Vector3;
+  surfaceNormal: Vector3;
+  status: 'blocked' | 'penetration' | 'ricochet';
 }
+
+interface ShotLayerExternal extends ShotLayerBase {
+  type: ArmorType.External;
+}
+
+export interface ShotLayerNonExternal extends ShotLayerBase {
+  type: Exclude<ArmorType, ArmorType.External>;
+  angle: number;
+  thicknessAngled: number;
+}
+
+export interface ShotLayerGap {
+  type: null;
+  status: 'penetration' | 'blocked';
+  distance: number;
+}
+
+export type ShotLayer = ShotLayerExternal | ShotLayerNonExternal | ShotLayerGap;
+
+export type Shot = {
+  point: Vector3;
+  layers: ShotLayer[];
+};
 
 export type ArmorPiercingLayer =
   | {
@@ -104,6 +124,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
       model: {
         visual: {
           wireframe: false,
+          opaque: false,
           environment: ENVIRONMENTS[0],
           controlsEnabled: true,
           showGrid: true,
@@ -125,7 +146,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
       },
       mode: 'model',
     })),
-    { name: 'tankopedia', merge },
+    { name: 'tankopedia', merge: (a, b) => merge(b, a) },
   ),
 );
 
