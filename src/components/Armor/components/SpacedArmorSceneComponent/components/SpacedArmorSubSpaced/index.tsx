@@ -13,6 +13,7 @@ import { hasEquipment } from '../../../../../../core/blitzkrieg/hasEquipment';
 import { jsxTree } from '../../../../../../core/blitzkrieg/jsxTree';
 import { ShellDefinition } from '../../../../../../core/blitzkrieg/tankDefinitions';
 import { EquipmentMatrix, useDuel } from '../../../../../../stores/duel';
+import { ArmorType } from '../../../SpacedArmorScene';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
 
@@ -103,7 +104,7 @@ export function SpacedArmorSubSpaced({
         material,
         onClick() {},
         userData: {
-          type: 'spaced',
+          type: ArmorType.Spaced,
           thickness,
         } satisfies ArmorUserData,
       })}

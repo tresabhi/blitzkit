@@ -1,9 +1,10 @@
 import { produce } from 'immer';
 import { merge } from 'lodash';
-import { Vector3Tuple } from 'three';
+import { Vector3 } from 'three';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { ENVIRONMENTS } from '../app/tools/tankopedia/[id]/components/Lighting';
+import { ArmorType } from '../components/Armor/components/SpacedArmorScene';
 import { TankType, TreeType } from '../components/Tanks';
 import { Tier } from '../core/blitzkrieg/tankDefinitions';
 
@@ -43,19 +44,33 @@ interface TankopediaTemporary {
   shot?: Shot;
 }
 
-export interface Shot {
-  point: Vector3Tuple;
-  surfaceNormal: Vector3Tuple;
-  shellNormal: Vector3Tuple;
-  thicknesses: ArmorPiercingLayer[];
-  type: 'ricochet' | 'penetration' | 'block';
-  angle: number;
-  ricochet?: {
-    distance: number;
-    point: Vector3Tuple;
-    penetration: boolean;
-  };
+export interface ShotLayerBase {
+  index: number;
+  thickness: number;
+  point: Vector3;
+  shellNormal: Vector3;
+  surfaceNormal: Vector3;
+  status: 'blocked' | 'penetration' | 'ricochet';
 }
+
+interface ShotLayerExternal extends ShotLayerBase {
+  type: ArmorType.External;
+}
+
+interface ShotLayerNonExternal extends ShotLayerBase {
+  type: Exclude<ArmorType, ArmorType.External>;
+  angle: number;
+  thicknessAngled: number;
+}
+
+export interface ShotLayerGap {
+  type: null;
+  distance: number;
+}
+
+type ShotLayer = ShotLayerExternal | ShotLayerNonExternal | ShotLayerGap;
+
+export type Shot = ShotLayer[];
 
 export type ArmorPiercingLayer =
   | {

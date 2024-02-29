@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef } from 'react';
-import { Euler, Group, Vector3 } from 'three';
+import { Euler, Group, Scene, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { I_HAT, J_HAT, K_HAT } from '../../../constants/axis';
 import {
@@ -21,7 +21,11 @@ export enum ArmorType {
   External,
 }
 
-export const SpacedArmorScene = memo(() => {
+interface SpacedArmorSceneProps {
+  scene: Scene;
+}
+
+export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
   const wrapper = useRef<Group>(null);
   const modelDefinitions = useModelDefinitions();
   const turretContainer = useRef<Group>(null);
@@ -162,6 +166,7 @@ export const SpacedArmorScene = memo(() => {
 
           return (
             <SpacedArmorSceneComponent
+              scene={scene}
               key={node.uuid}
               type={spaced ? ArmorType.Spaced : ArmorType.Core}
               thickness={thickness}
@@ -179,6 +184,7 @@ export const SpacedArmorScene = memo(() => {
 
         return (
           <SpacedArmorSceneComponent
+            scene={scene}
             key={node.uuid}
             type={ArmorType.External}
             thickness={trackModelDefinition.thickness}
@@ -206,6 +212,7 @@ export const SpacedArmorScene = memo(() => {
             return (
               <group key={node.uuid} position={turretOrigin}>
                 <SpacedArmorSceneComponent
+                  scene={scene}
                   key={node.uuid}
                   type={spaced ? ArmorType.Spaced : ArmorType.Core}
                   thickness={thickness}
@@ -236,6 +243,7 @@ export const SpacedArmorScene = memo(() => {
                   position={turretOrigin.clone().add(gunOrigin)}
                 >
                   <SpacedArmorSceneComponent
+                    scene={scene}
                     type={spaced ? ArmorType.Spaced : ArmorType.Core}
                     thickness={thickness}
                     node={node}
@@ -255,6 +263,7 @@ export const SpacedArmorScene = memo(() => {
 
             return (
               <SpacedArmorSceneComponent
+                scene={scene}
                 key={node.uuid}
                 type={ArmorType.External}
                 thickness={gunModelDefinition.thickness}

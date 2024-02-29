@@ -1,12 +1,20 @@
 import { useThree } from '@react-three/fiber';
-import { Intersection, MeshBasicMaterial, Object3D, Vector3 } from 'three';
-import { degToRad } from 'three/src/math/MathUtils';
-import { I_HAT } from '../../../../constants/axis';
+import {
+  Intersection,
+  MeshBasicMaterial,
+  Object3D,
+  Quaternion,
+  Raycaster,
+  Scene,
+  Vector3,
+} from 'three';
+import { degToRad, radToDeg } from 'three/src/math/MathUtils';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { hasEquipment } from '../../../../core/blitzkrieg/hasEquipment';
 import { jsxTree } from '../../../../core/blitzkrieg/jsxTree';
 import { useDuel } from '../../../../stores/duel';
+import { Shot, useTankopediaTemporary } from '../../../../stores/tankopedia';
 import { ArmorType } from '../SpacedArmorScene';
 import { SpacedArmorSubExternal } from './components/SpacedArmorSubExternal';
 import { SpacedArmorSubSpaced } from './components/SpacedArmorSubSpaced';
@@ -14,6 +22,7 @@ import { SpacedArmorSubSpaced } from './components/SpacedArmorSubSpaced';
 type SpacedArmorSceneComponentProps = {
   node: Object3D;
   thickness: number;
+  scene: Scene;
 } & (
   | {
       type: Exclude<ArmorType, ArmorType.External>;
@@ -29,15 +38,14 @@ export type ArmorUserData = {
   thickness: number;
 } & (
   | {
-      type: 'core' | 'spaced';
+      type: Exclude<ArmorType, ArmorType.External>;
     }
   | {
-      type: 'external';
+      type: ArmorType.External;
       variant: ExternalModuleVariant;
     }
 );
 type ArmorMeshIntersection = Intersection & {
-  eventObject: Object3D;
   object: Object3D & { userData: ArmorUserData };
 };
 
@@ -56,6 +64,7 @@ const omitMaterial = new MeshBasicMaterial({
 export function SpacedArmorSceneComponent({
   node,
   thickness,
+  scene,
   ...props
 }: SpacedArmorSceneComponentProps) {
   const camera = useThree((state) => state.camera);
@@ -68,52 +77,12 @@ export function SpacedArmorSceneComponent({
           renderOrder: 0,
           material: omitMaterial,
           userData: {
-            type: 'core',
+            type: ArmorType.Core,
             thickness,
           } satisfies ArmorUserData,
 
           async onClick(event) {
             event.stopPropagation();
-
-            const intersectionsAll = event.intersections.filter(
-              ({ object }) => object.userData.type !== undefined,
-            ) as ArmorMeshIntersection[];
-            const intersectionsWithDuplicates = intersectionsAll.slice(
-              0,
-              intersectionsAll.findIndex(
-                ({ object }) => object.userData.type === 'core',
-              ),
-            );
-            const firstGunIntersectionIndex =
-              intersectionsWithDuplicates.findIndex(
-                ({ object }) =>
-                  object.userData.type === 'external' &&
-                  object.userData.variant === 'gun',
-              );
-            const firstTrackIntersectionIndex =
-              intersectionsWithDuplicates.findIndex(
-                ({ object }) =>
-                  object.userData.type === 'external' &&
-                  object.userData.variant === 'track',
-              );
-            let intersections = intersectionsWithDuplicates;
-
-            if (firstGunIntersectionIndex !== -1) {
-              intersections = intersections.filter(({ object }, index) => {
-                return object.userData.type === 'external' &&
-                  object.userData.variant === 'gun'
-                  ? index === firstGunIntersectionIndex
-                  : true;
-              });
-            }
-            if (firstTrackIntersectionIndex !== -1) {
-              intersections = intersections.filter(({ object }, index) => {
-                return object.userData.type === 'external' &&
-                  object.userData.variant === 'track'
-                  ? index === firstTrackIntersectionIndex
-                  : true;
-              });
-            }
 
             const hasCalibratedShells = await hasEquipment(103, true);
             const hasEnhancedArmor = await hasEquipment(110);
@@ -126,73 +95,189 @@ export function SpacedArmorSceneComponent({
                   ? 1.1
                   : 1.05
                 : 1);
-            const shotLog: ({
-              thickness: number;
-              status: 'blocked' | 'penetration' | 'ricochet';
-            } & (
-              | {
-                  type: ArmorType.External;
-                }
-              | {
-                  type: Exclude<ArmorType, ArmorType.External>;
-                  thicknessAngled: number;
-                }
-            ))[] = []; // TODO: type this
+            const shot: Shot = []; // TODO: type this
             let remainingPenetration = penetration;
             let penetrationChance = -1;
             let splashChance = -1;
 
-            camera.getWorldDirection(cameraNormal).multiplyScalar(-1);
+            const shellNormal = camera.position
+              .clone()
+              .sub(event.point)
+              .normalize();
+            shellNormal
+              .copy(camera.getWorldDirection(cameraNormal))
+              .multiplyScalar(-1);
+            pushLogs(
+              shellNormal,
+              filterIntersections(event.intersections),
+              true,
+            );
 
-            let index = 0;
-            for (const intersection of intersections) {
-              const thickness =
-                thicknessCoefficient * intersection.object.userData.thickness;
+            console.clear();
+            console.log(
+              JSON.stringify(
+                shot.map((i) => ({
+                  ...i,
+                  ...(i.angle ? { angle: radToDeg(i.angle) } : {}),
+                })),
+                null,
+                2,
+              ),
+            );
 
-              if (intersection.object.userData.type === 'external') {
-                remainingPenetration -= thickness;
-                const blocked = remainingPenetration < 0;
-
-                shotLog.push({
-                  type: ArmorType.External,
-                  thickness: intersection.object.userData.thickness,
-                  status: blocked ? 'blocked' : 'penetration',
-                });
-
-                if (blocked) break;
-              } else if (intersection.object.userData.type === 'spaced') {
-                const normal = intersection.normal!.applyAxisAngle(
-                  I_HAT,
-                  -Math.PI / 2,
+            function filterIntersections(intersectionsRaw: Intersection[]) {
+              const intersectionsAll = intersectionsRaw.filter(
+                ({ object }) => object.userData.type !== undefined,
+              ) as ArmorMeshIntersection[];
+              const intersectionsWithDuplicates = intersectionsAll.slice(
+                0,
+                intersectionsAll.findIndex(
+                  ({ object }) => object.userData.type === ArmorType.Core,
+                ) + 1,
+              );
+              const firstGunIntersectionIndex =
+                intersectionsWithDuplicates.findIndex(
+                  ({ object }) =>
+                    object.userData.type === ArmorType.External &&
+                    object.userData.variant === 'gun',
                 );
-                const angle = normal.angleTo(cameraNormal);
-                const ricochet = degToRad(shell.ricochet ?? 90);
-                const normalization = degToRad(shell.normalization ?? 0);
-                const threeCalibersRule =
-                  shell.caliber > thickness || index > 0;
-                const twoCalibersRule = shell.caliber > thickness * 2;
-                const finalNormalization = twoCalibersRule
-                  ? (1.4 * normalization * shell.caliber) / (2.0 * thickness)
-                  : normalization;
-                const finalThickness =
-                  thickness / Math.cos(angle - finalNormalization);
-                remainingPenetration -= finalThickness;
+              const firstTrackIntersectionIndex =
+                intersectionsWithDuplicates.findIndex(
+                  ({ object }) =>
+                    object.userData.type === ArmorType.External &&
+                    object.userData.variant === 'track',
+                );
+              let intersections = intersectionsWithDuplicates;
 
-                if (!threeCalibersRule && angle >= ricochet) {
-                  shotLog.push({
-                    type: ArmorType.Spaced,
-                    thickness,
-                    thicknessAngled: finalThickness,
-                    status: 'ricochet',
-                  });
-                  continue;
-                }
-              } else throw new Error('Core should be omitted');
+              if (firstGunIntersectionIndex !== -1) {
+                intersections = intersections.filter(({ object }, index) => {
+                  return object.userData.type === ArmorType.External &&
+                    object.userData.variant === 'gun'
+                    ? index === firstGunIntersectionIndex
+                    : true;
+                });
+              }
+              if (firstTrackIntersectionIndex !== -1) {
+                intersections = intersections.filter(({ object }, index) => {
+                  return object.userData.type === ArmorType.External &&
+                    object.userData.variant === 'track'
+                    ? index === firstTrackIntersectionIndex
+                    : true;
+                });
+              }
 
-              index++;
+              return intersections;
             }
 
-            console.log(JSON.stringify(shotLog, null, 2));
+            function pushLogs(
+              shellNormal: Vector3,
+              intersections: ArmorMeshIntersection[],
+              allowRicochets: boolean,
+            ) {
+              let index = 0;
+              for (const intersection of intersections) {
+                const surfaceNormal = intersection
+                  .normal!.clone()
+                  .applyQuaternion(
+                    event.object.getWorldQuaternion(new Quaternion()),
+                  );
+                const thickness =
+                  thicknessCoefficient * intersection.object.userData.thickness;
+
+                if (index !== 0) {
+                  const previousIntersection = intersections[index - 1];
+                  shot.push({
+                    type: null,
+                    distance:
+                      intersection.distance - previousIntersection.distance,
+                  });
+                }
+
+                if (intersection.object.userData.type === ArmorType.External) {
+                  remainingPenetration -= thickness;
+                  const blocked = remainingPenetration < 0;
+
+                  shot.push({
+                    type: ArmorType.External,
+                    index,
+                    shellNormal,
+                    surfaceNormal,
+                    point: intersection.point,
+                    thickness: intersection.object.userData.thickness,
+                    status: blocked ? 'blocked' : 'penetration',
+                  });
+
+                  if (blocked) break;
+                } else {
+                  const type = intersection.object.userData.type;
+                  shellNormal.copy(
+                    cameraNormal
+                      .copy(camera.position)
+                      .sub(event.point)
+                      .normalize(),
+                  );
+                  const angle = surfaceNormal.angleTo(shellNormal);
+                  const ricochet = degToRad(shell.ricochet ?? 90);
+                  const normalization = degToRad(shell.normalization ?? 0);
+                  const threeCalibersRule =
+                    shell.caliber > thickness * 3 ||
+                    index > 0 ||
+                    !allowRicochets;
+                  const twoCalibersRule = shell.caliber > thickness * 2;
+                  const finalNormalization = twoCalibersRule
+                    ? (1.4 * normalization * shell.caliber) / (2.0 * thickness)
+                    : normalization;
+                  const finalThickness =
+                    thickness / Math.cos(angle - finalNormalization);
+                  remainingPenetration -= finalThickness;
+
+                  if (!threeCalibersRule && angle >= ricochet) {
+                    shot.push({
+                      type,
+                      index,
+                      shellNormal,
+                      surfaceNormal,
+                      point: intersection.point,
+                      thickness,
+                      thicknessAngled: finalThickness,
+                      angle,
+                      status: 'ricochet',
+                    });
+
+                    const raycaster = new Raycaster();
+                    const newShellNormal = cameraNormal
+                      .clone()
+                      .reflect(surfaceNormal);
+
+                    raycaster.set(intersection.point, newShellNormal);
+                    pushLogs(
+                      newShellNormal,
+                      raycaster.intersectObjects(scene.children, true),
+                      false,
+                    );
+
+                    break;
+                  } else {
+                    const blocked = remainingPenetration < 0;
+                    shot.push({
+                      type,
+                      index,
+                      shellNormal,
+                      surfaceNormal,
+                      point: intersection.point,
+                      thickness,
+                      thicknessAngled: finalThickness,
+                      angle,
+                      status: blocked ? 'blocked' : 'penetration',
+                    });
+                  }
+                }
+
+                index++;
+              }
+            }
+
+            useTankopediaTemporary.setState({ shot });
           },
         })}
 
