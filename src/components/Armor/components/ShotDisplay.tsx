@@ -167,11 +167,13 @@ export function ShotDisplay() {
                 pointerEvents: 'none',
               }}
             >
-              <Card style={{ width: 256 }}>
+              <Card style={{ width: 256 + 32 }}>
                 <Flex direction="column">
                   <Text>
                     {lastStatus[0].toUpperCase()}
                     {lastStatus.slice(1)}
+                    {lastStatus === 'penetration' &&
+                      `: ${shell.damage.module}hp`}
                   </Text>
 
                   {shot.layers.map((layer) => {
