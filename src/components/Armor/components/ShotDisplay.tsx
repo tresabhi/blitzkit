@@ -95,7 +95,7 @@ export function ShotDisplay() {
       >
         <mesh position={[0, preMidPointGap! / 2, 0]}>
           <cylinderGeometry args={[TRACER_THIN, TRACER_THIN, preMidPointGap]} />
-          <meshBasicMaterial />
+          <meshBasicMaterial depthTest={false} />
         </mesh>
 
         <mesh position={[0, preMidPointGap! / 2, 0]} ref={preMidPointTracer}>
@@ -128,6 +128,7 @@ export function ShotDisplay() {
             <cylinderGeometry
               args={[TRACER_THIN, TRACER_THIN, postMidPointGap]}
             />
+            <meshBasicMaterial depthTest={false} />
           </mesh>
 
           <mesh
