@@ -170,14 +170,6 @@ export function SpacedArmorSceneComponent({
                 });
               }
 
-              console.log(
-                JSON.stringify(
-                  intersections.map((i) => i.object.userData),
-                  null,
-                  2,
-                ),
-              );
-
               return intersections;
             }
 
@@ -190,7 +182,7 @@ export function SpacedArmorSceneComponent({
               let layerIndex = startingIndex;
               let loopIndex = 0;
 
-              if (layerIndex !== 0) {
+              if (layerIndex !== 0 && intersections.length > 0) {
                 shot.push({
                   type: null,
                   distance: (shot.at(-1) as ShotLayerBase).point.distanceTo(
@@ -260,6 +252,8 @@ export function SpacedArmorSceneComponent({
                       status: 'ricochet',
                     });
 
+                    remainingPenetration *= 0.75;
+
                     const raycaster = new Raycaster();
                     const newShellNormal = shellNormal
                       .clone()
@@ -299,6 +293,8 @@ export function SpacedArmorSceneComponent({
                 loopIndex++;
               }
             }
+
+            console.log('setting', shot);
 
             useTankopediaTemporary.setState({ shot });
           },

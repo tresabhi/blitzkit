@@ -1,4 +1,4 @@
-import { Text } from '@radix-ui/themes';
+import { Card, Inset, Text } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { Euler, Quaternion, Vector3 } from 'three';
 import { J_HAT } from '../../../constants/axis';
@@ -22,8 +22,12 @@ import {
 // const THICKNESS = 0.05;
 // const LENGTH = 4;
 
+const LENGTH_INFINITY = 4;
+
 export function ShotDisplay() {
   const shot = useTankopediaTemporary((state) => state.shot);
+
+  console.log(shot);
 
   return (
     <>
@@ -44,39 +48,36 @@ export function ShotDisplay() {
               position={layer.point}
               rotation={shellRotation}
             >
-              {shot.length > 1 && (
-                <Html center>
-                  <div
-                    style={{
-                      width: 12,
-                      height: 12,
-                      borderRadius: '100%',
-                      position: 'relative',
-                      backgroundColor:
-                        layer.status === 'penetration'
-                          ? '#00ff00'
-                          : layer.status === 'blocked'
-                            ? '#ff0000'
-                            : '#ffff00',
-                    }}
-                  >
-                    <Text
-                      style={{
-                        position: 'absolute',
-                        left: '100%',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        marginLeft: 8,
-                      }}
-                    >
-                      {layer.index + 1}
-                    </Text>
-                  </div>
-                </Html>
-              )}
+              <Html center>
+                <Card
+                  style={{
+                    backgroundColor:
+                      layer.status === 'penetration'
+                        ? '#00ff0080'
+                        : layer.status === 'blocked'
+                          ? '#ff000080'
+                          : '#ffff0080',
+                    border: 'none',
+                  }}
+                >
+                  <Inset>
+                    {shot.length > 1 && (
+                      <Text
+                        style={{
+                          width: '100%',
+                          display: 'block',
+                          textAlign: 'center',
+                        }}
+                      >
+                        {layer.index + 1}
+                      </Text>
+                    )}
+                  </Inset>
+                </Card>
+              </Html>
 
               {(() => {
-                let length = 4;
+                let length = LENGTH_INFINITY;
 
                 if (layer.index !== 0) {
                   const gap = shot[index - 1] as ShotLayerGap;
@@ -91,6 +92,34 @@ export function ShotDisplay() {
                 );
               })()}
             </group>
+
+            {(() => {
+              if (layer.status !== 'ricochet' || index !== shot.length - 1)
+                return null;
+              const ricochetShellNormal = layer.shellNormal
+                .clone()
+                .reflect(layer.surfaceNormal)
+                .multiplyScalar(-1);
+              const ricochetShellRotation = new Euler().setFromQuaternion(
+                new Quaternion().setFromAxisAngle(
+                  new Vector3()
+                    .crossVectors(J_HAT, ricochetShellNormal)
+                    .normalize(),
+                  J_HAT.angleTo(ricochetShellNormal),
+                ),
+              );
+
+              return (
+                <group position={layer.point} rotation={ricochetShellRotation}>
+                  <mesh position={[0, LENGTH_INFINITY / 2, 0]}>
+                    <cylinderGeometry
+                      args={[1 / 64, 1 / 64, LENGTH_INFINITY]}
+                    />
+                    <meshBasicMaterial color={0xffffff} depthTest={false} />
+                  </mesh>
+                </group>
+              );
+            })()}
           </>
         );
       })}
