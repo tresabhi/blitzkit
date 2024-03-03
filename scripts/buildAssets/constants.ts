@@ -1,12 +1,13 @@
-import { readdir } from 'fs/promises';
 import { argv } from 'process';
 
 const isDepot = argv.includes('--depot');
+export const WOTB_WIN32_DEPOT = 444202;
 export const DATA = isDepot
-  ? await (async () => {
-      const [installationVersion] = await readdir('depots/444202');
-      return `depots/444202/${installationVersion}/Data`;
-    })()
+  ? // ? await (async () => {
+    //     const [installationVersion] = await readdir(`depots/${WOTB_WIN32_DEPOT}`);
+    //     return `depots/${WOTB_WIN32_DEPOT}/${installationVersion}/Data`;
+    //   })()
+    `depots/${WOTB_WIN32_DEPOT}/Data`
   : 'C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz/Data';
 
 export const POI = {

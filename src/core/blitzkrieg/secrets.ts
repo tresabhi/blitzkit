@@ -6,6 +6,7 @@ export const SECRET_KEYS = [
   'DISCORD_TOKEN',
   'GH_TOKEN',
   'DISCORD_BLITZ_DB',
+  'WOTB_DLC_CDN',
 ] as const;
 
 export type SECRET = typeof SECRET_KEYS extends readonly (infer T)[]
