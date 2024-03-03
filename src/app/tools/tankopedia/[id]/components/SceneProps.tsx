@@ -1,32 +1,20 @@
-import { Color } from 'three';
-import InfiniteGridHelper from '../../../../../components/InfiniteGridHelper';
+import { useLoader } from '@react-three/fiber';
+import { TextureLoader } from 'three';
 import { useTankopediaPersistent } from '../../../../../stores/tankopedia';
 
 export function SceneProps() {
-  const showGrid = useTankopediaPersistent(
-    (state) => state.model.visual.showGrid,
+  const show = useTankopediaPersistent(
+    (state) =>
+      state.model.visual.showGrid && !state.model.visual.showEnvironment,
   );
-  const showEnvironment = useTankopediaPersistent(
-    (state) => state.model.visual.showEnvironment,
-  );
+  const texture = useLoader(TextureLoader, 'https://i.imgur.com/6QjSn1e.png');
 
-  if (!showGrid || showEnvironment) return null;
+  if (!show) return null;
 
   return (
-    <>
-      <InfiniteGridHelper
-        size1={1 / 5}
-        size2={1}
-        distance={20}
-        color={new Color('#ffffff')}
-      />
-      <InfiniteGridHelper
-        position={[0, 1e-4, 0]}
-        size1={0}
-        size2={100}
-        distance={25}
-        color={new Color('red')}
-      />
-    </>
+    <mesh rotation={[-Math.PI / 2, 0, 0]}>
+      <planeGeometry args={[10, 10]} />
+      <meshBasicMaterial map={texture} transparent />
+    </mesh>
   );
 }
