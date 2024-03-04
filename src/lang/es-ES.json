@@ -39,7 +39,7 @@
           },
           "timezones": {
             "$": "zonas horarias",
-            "description": "How Blitzkrieg infers and uses your timezone"
+            "description": "Cómo Blitzkrieg infiere y usa tu zona horaria"
           },
           "creators": {
             "$": "creadores",
@@ -48,8 +48,8 @@
         }
       },
       "breakdown": {
-        "$": "breakdown",
-        "description": "A period's breakdown by tanks played",
+        "$": "desglose",
+        "description": "Desglose de un período por tanques jugados",
         "body": {
           "total": "Total",
           "battles": "Batallas",
