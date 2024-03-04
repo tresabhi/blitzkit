@@ -3,47 +3,47 @@
     "common": {
       "wn8": {
         "$": "WN8",
-        "very_bad": "Very bad",
-        "bad": "Bad",
-        "below_average": "Below average",
-        "average": "Average",
-        "above_average": "Above average",
-        "good": "Good",
-        "very_good": "Very good",
-        "great": "Great",
-        "unicum": "Unicum",
-        "super_unicum": "Super unicum"
+        "very_bad": "Muy malo",
+        "bad": "Malo",
+        "below_average": "Inferior a la media",
+        "average": "Promedio",
+        "above_average": "Superior a la media",
+        "good": "Bueno",
+        "very_good": "Muy bueno",
+        "great": "Estupendo",
+        "unicum": "Jugador único",
+        "super_unicum": "Superjugador único"
       }
     },
     "commands": {
       "about": {
-        "$": "about",
-        "description": "All the info you need about the bot",
+        "$": "acerca de",
+        "description": "Toda la información que necesitas acerca del bot",
         "subcommands": {
           "commands": {
-            "$": "commands",
-            "description": "List of all commands and their descriptions",
-            "body": "# Commands\n\nBlitzkrieg offers the following commands:"
+            "$": "comandos",
+            "description": "Lista de todos los comandos y sus descripciones",
+            "body": "# Comandos\n\nBlitzkrieg ofrece los siguientes comandos:"
           },
           "embeds": {
             "$": "embeds",
-            "description": "How embeds work"
+            "description": "Cómo funcionan los embeds"
           },
           "introduction": {
-            "$": "introduction",
-            "description": "About the bot"
+            "$": "introducción",
+            "description": "Acerca del bot"
           },
           "invite": {
-            "$": "invite",
-            "description": "How to invite the bot"
+            "$": "invitar",
+            "description": "Cómo invitar el bot"
           },
           "timezones": {
-            "$": "timezones",
+            "$": "zonas horarias",
             "description": "How Blitzkrieg infers and uses your timezone"
           },
           "creators": {
-            "$": "creators",
-            "description": "People who have worked on the bot"
+            "$": "creadores",
+            "description": "Las personas que han trabajado en el bot"
           }
         }
       },
@@ -52,12 +52,12 @@
         "description": "A period's breakdown by tanks played",
         "body": {
           "total": "Total",
-          "battles": "Battles",
-          "winrate": "Winrate",
-          "damage": "Damage"
+          "battles": "Batallas",
+          "winrate": "Ratio de victorias",
+          "damage": "Daño"
         },
         "buttons": {
-          "refresh": "Refresh"
+          "refresh": "Actualizar"
         }
       }
     }
