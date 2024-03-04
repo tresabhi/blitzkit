@@ -1,6 +1,7 @@
-const LANGUAGES = ['en-US', 'es-ES', 'ja-JP'] as const;
+import { Locale } from 'discord.js';
 
-export type Language = (typeof LANGUAGES)[number];
+const LOCALES: Locale[number][] = ['en-US', 'es-ES'];
+
 export type TranslationFragmentTree = {
   [key: string]: TranslationFragment;
 } & {
@@ -8,10 +9,18 @@ export type TranslationFragmentTree = {
 };
 export type TranslationFragment = string | TranslationFragmentTree;
 
-export const translations = LANGUAGES.reduce(
-  (table, language) => ({
-    ...table,
-    [language]: import(`../../lang/${language}.json`),
-  }),
-  {},
-) as Record<Language, Promise<TranslationFragment>>;
+export const translations = Promise.all(
+  LOCALES.map(async (locale) => ({
+    locale,
+    translations: await import(`../../lang/${locale}.json`),
+  })),
+).then(
+  (translations) =>
+    translations.reduce(
+      (table, { locale, translations }) => ({
+        ...table,
+        [locale]: translations,
+      }),
+      {},
+    ) as Record<Locale[number], TranslationFragment>,
+);

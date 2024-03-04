@@ -1,13 +1,14 @@
-import { Language, translations } from './strings';
+import { Locale } from 'discord.js';
+import { translations } from './strings';
 
-export async function translator(language: Language) {
-  const strings = await translations[language];
+export async function translator(locale: Locale) {
+  const strings = (await translations)[locale];
 
-  function translate(key: string) {
-    const path = key.split('.');
+  function translate(path: string) {
+    const pathArray = path.split('.');
     let fragment = strings;
 
-    for (const pathItem in path) {
+    for (const pathItem of pathArray) {
       if (typeof fragment === 'string') {
         throw new SyntaxError(
           `Attempted to access sub-string ("${pathItem}" in "${path}") from a string instead of a tree`,
@@ -17,7 +18,7 @@ export async function translator(language: Language) {
 
         if (typeof fragment === 'undefined') {
           throw new Error(
-            `Undefined translation for key "${key}" (in "${path}") in language "${language}"`,
+            `Undefined translation for key "${path}" (in "${path}") in language "${locale}"`,
           );
         }
       }
@@ -29,13 +30,19 @@ export async function translator(language: Language) {
       return fragment.$!;
     } else {
       throw new Error(
-        `Unresolved tree ending for path "${path}" in language "${language}"`,
+        `Unresolved tree ending for "${path}" in language "${locale}"`,
       );
     }
   }
 
-  function t(strings: TemplateStringsArray) {
-    return translate(strings[0]);
+  function t(paths: TemplateStringsArray, ...embeds: string[]) {
+    return paths
+      .map((path, index) =>
+        path.length === 0
+          ? ''
+          : `${translate(path)}${index === embeds.length ? '' : embeds[index]}`,
+      )
+      .join('');
   }
 
   return { translate, t };

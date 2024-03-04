@@ -24,7 +24,7 @@
           "commands": {
             "$": "commands",
             "description": "List of all commands and their descriptions",
-            "body": "# Commands\n\nBlitzkrieg offers the following commands:"
+            "body": "# Commands\n\nBlitzkrieg offers the following commands:\n\n"
           },
           "embeds": {
             "$": "embeds",

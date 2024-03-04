@@ -23,7 +23,7 @@
           "commands": {
             "$": "comandos",
             "description": "Lista de todos los comandos y sus descripciones",
-            "body": "# Comandos\n\nBlitzkrieg ofrece los siguientes comandos:"
+            "body": "# Comandos\n\nBlitzkrieg ofrece los siguientes comandos:\n\n"
           },
           "embeds": {
             "$": "embeds",

@@ -2,6 +2,7 @@ import {
   SlashCommandBuilder,
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
+import { translator } from '../core/localization/translator';
 import { COMMANDS_RAW, CommandRegistry } from '../events/interactionCreate';
 
 const RAW_PATH = `https://raw.githubusercontent.com/tresabhi/blitzkrieg/main/docs/`;
@@ -28,40 +29,46 @@ function addDocsSubcommands(option: SlashCommandSubcommandsOnlyBuilder) {
   return option;
 }
 
-export const aboutCommand: CommandRegistry = {
-  inProduction: true,
-  inPublic: true,
+export const aboutCommand = new Promise<CommandRegistry>(async (resolve) => {
+  resolve({
+    inProduction: true,
+    inPublic: true,
 
-  command: addDocsSubcommands(
-    new SlashCommandBuilder()
-      .setName('about')
-      .setDescription('All the info you need about the bot')
-      .addSubcommand((option) =>
-        option
-          .setName('commands')
-          .setDescription('List of all commands and their descriptions'),
-      ),
-  ),
+    command: addDocsSubcommands(
+      new SlashCommandBuilder()
+        .setName('about')
+        .setNameLocalizations({
+          // "es-ES":
+        })
+        .setDescription('All the info you need about the bot')
+        .addSubcommand((option) =>
+          option
+            .setName('commands')
+            .setDescription('List of all commands and their descriptions'),
+        ),
+    ),
 
-  async handler(interaction) {
-    const subcommand = interaction.options.getSubcommand();
+    async handler(interaction) {
+      const subcommand = interaction.options.getSubcommand();
+      const { t } = await translator(interaction.locale);
 
-    if (subcommand === 'commands') {
-      return `# Commands\n\nBlitzkrieg offers the following commands:\n\n${(
-        await Promise.all(COMMANDS_RAW)
-      )
-        .filter((registry) => registry.inPublic && registry.inProduction)
-        .sort((a, b) => (a.command.name < b.command.name ? -1 : 1))
-        .map(
-          (registry) =>
-            `- \`/${registry.command.name}\`: ${registry.command.description}`,
+      if (subcommand === 'commands') {
+        return t`bot.commands.about.subcommands.commands.body${(
+          await Promise.all(COMMANDS_RAW)
         )
-        .join('\n')}`;
-    }
+          .filter((registry) => registry.inPublic && registry.inProduction)
+          .sort((a, b) => (a.command.name < b.command.name ? -1 : 1))
+          .map(
+            (registry) =>
+              `- \`/${registry.command.name}\`: ${registry.command.description}`,
+          )
+          .join('\n')}`;
+      }
 
-    const url = `${RAW_PATH}${DOCS[subcommand as keyof typeof DOCS]}.md`;
-    const content = fetch(url).then((response) => response.text());
+      const url = `${RAW_PATH}${DOCS[subcommand as keyof typeof DOCS]}.md`;
+      const content = fetch(url).then((response) => response.text());
 
-    return content;
-  },
-};
+      return content;
+    },
+  });
+});
