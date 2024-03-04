@@ -112,19 +112,16 @@ export const COMMANDS_RAW: CommandRegistry[] = [
   todayCommand,
 ];
 
-export const commands = Promise.all(COMMANDS_RAW).then((rawCommands) =>
-  rawCommands.reduce<Record<string, CommandRegistryPromisable>>(
-    (accumulator, registry) => {
-      if (isDev()) registry.command.setDefaultMemberPermissions(0);
-
-      return {
-        ...accumulator,
-        [registry.command.name]: registry,
-      };
+export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {
+  return rawCommands.reduce<Record<string, CommandRegistryPromisable>>(
+    (commands, registry) => {
+      if (registry.status === 'rejected') return commands;
+      if (isDev()) registry.value.command.setDefaultMemberPermissions(0);
+      return { ...commands, [registry.value.command.name]: registry.value };
     },
     {},
-  ),
-);
+  );
+});
 
 export const guildCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
   [];
