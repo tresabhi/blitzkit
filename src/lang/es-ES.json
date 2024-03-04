@@ -1,0 +1,66 @@
+{
+  "bot": {
+    "common": {
+      "wn8": {
+        "$": "WN8",
+        "very_bad": "Very bad",
+        "bad": "Bad",
+        "below_average": "Below average",
+        "average": "Average",
+        "above_average": "Above average",
+        "good": "Good",
+        "very_good": "Very good",
+        "great": "Great",
+        "unicum": "Unicum",
+        "super_unicum": "Super unicum"
+      }
+    },
+    "commands": {
+      "about": {
+        "$": "about",
+        "description": "All the info you need about the bot",
+        "subcommands": {
+          "commands": {
+            "$": "commands",
+            "description": "List of all commands and their descriptions",
+            "body": "# Commands\n\nBlitzkrieg offers the following commands:"
+          },
+          "embeds": {
+            "$": "embeds",
+            "description": "How embeds work"
+          },
+          "introduction": {
+            "$": "introduction",
+            "description": "About the bot"
+          },
+          "invite": {
+            "$": "invite",
+            "description": "How to invite the bot"
+          },
+          "timezones": {
+            "$": "timezones",
+            "description": "How Blitzkrieg infers and uses your timezone"
+          },
+          "creators": {
+            "$": "creators",
+            "description": "People who have worked on the bot"
+          }
+        }
+      },
+      "breakdown": {
+        "$": "breakdown",
+        "description": "A period's breakdown by tanks played",
+        "body": {
+          "total": "Total",
+          "battles": "Battles",
+          "winrate": "Winrate",
+          "damage": "Damage"
+        },
+        "buttons": {
+          "refresh": "Refresh"
+        }
+      }
+    }
+  },
+  "website": {}
+}
