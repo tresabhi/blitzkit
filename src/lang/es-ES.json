@@ -17,7 +17,7 @@
     },
     "commands": {
       "about": {
-        "$": "acerca de",
+        "$": "acerca",
         "description": "Toda la información que necesitas acerca del bot",
         "subcommands": {
           "commands": {
