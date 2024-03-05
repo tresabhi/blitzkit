@@ -5,20 +5,56 @@
         "$": "WN8",
         "very_bad": "Muy malo",
         "bad": "Malo",
-        "below_average": "Inferior a la media",
+        "below_average": "Inferior al promedio",
         "average": "Promedio",
-        "above_average": "Superior a la media",
+        "above_average": "Superior al promedio",
         "good": "Bueno",
         "very_good": "Muy bueno",
-        "great": "Estupendo",
-        "unicum": "Jugador único",
-        "super_unicum": "Superjugador único"
+        "great": "Genial",
+        "unicum": "Unicum",
+        "super_unicum": "Super unicum"
+      },
+      "subcommands": {
+        "today": {
+          "$": "today",
+          "description": "Today"
+        },
+        "30": {
+          "$": "30",
+          "description": "30 days"
+        },
+        "60": {
+          "$": "60",
+          "description": "60 days"
+        },
+        "90": {
+          "$": "90",
+          "description": "90 days"
+        },
+        "career": {
+          "$": "career",
+          "description": "Career"
+        },
+        "custom": {
+          "$": "custom",
+          "description": "Custom range",
+          "options": {
+            "start": {
+              "$": "start",
+              "description": "Start in number of days ago from today"
+            },
+            "end": {
+              "$": "end",
+              "description": "End in number of days ago from today"
+            }
+          }
+        }
       }
     },
     "commands": {
       "about": {
-        "$": "acerca-de",
-        "description": "Toda la información que necesitas acerca del bot",
+        "$": "sobre",
+        "description": "Toda la información que necesitas sobre el bot",
         "subcommands": {
           "commands": {
             "$": "comandos",
@@ -31,33 +67,30 @@
           },
           "introduction": {
             "$": "introducción",
-            "description": "Acerca del bot"
+            "description": "Sobre el bot"
           },
           "invite": {
             "$": "invitar",
-            "description": "Cómo invitar el bot"
+            "description": "Cómo invitar al bot"
           },
           "timezones": {
             "$": "zonas-horarias",
-            "description": "Cómo Blitzkrieg infiere y usa tu zona horaria"
+            "description": "Cómo Blitzkrieg infiere y utiliza tu zona horaria"
           },
           "creators": {
             "$": "creadores",
-            "description": "Las personas que han trabajado en el bot"
+            "description": "Personas que han trabajado en el bot"
           }
         }
       },
       "breakdown": {
-        "$": "desglose",
-        "description": "Desglose de un período por tanques jugados",
+        "$": "resumen",
+        "description": "Resumen de un período por tanques jugados",
         "body": {
           "total": "Total",
           "battles": "Batallas",
-          "winrate": "Ratio de victorias",
+          "winrate": "Tasa de victorias",
           "damage": "Daño"
-        },
-        "buttons": {
-          "refresh": "Actualizar"
         }
       }
     }
