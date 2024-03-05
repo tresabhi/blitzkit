@@ -1,6 +1,6 @@
 import { Locale } from 'discord.js';
 
-const LOCALES: Locale[number][] = ['en-US', 'es-ES'];
+export const locales: Locale[] = [Locale.EnglishUS, Locale.SpanishES];
 
 export type TranslationFragmentTree = {
   [key: string]: TranslationFragment;
@@ -10,7 +10,7 @@ export type TranslationFragmentTree = {
 export type TranslationFragment = string | TranslationFragmentTree;
 
 export const translations = Promise.all(
-  LOCALES.map(async (locale) => ({
+  locales.map(async (locale) => ({
     locale,
     translations: await import(`../../lang/${locale}.json`),
   })),
@@ -22,5 +22,5 @@ export const translations = Promise.all(
         [locale]: translations,
       }),
       {},
-    ) as Record<Locale[number], TranslationFragment>,
+    ) as Record<Locale, TranslationFragment>,
 );

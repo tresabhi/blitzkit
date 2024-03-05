@@ -1,7 +1,8 @@
 import { Locale } from 'discord.js';
-import { translations } from './strings';
+import { locales, translations } from './strings';
 
-export async function translator(locale: Locale) {
+export async function translator(localeRaw: Locale) {
+  const locale = locales.includes(localeRaw) ? localeRaw : Locale.EnglishUS;
   const strings = (await translations)[locale];
 
   function translate(path: string) {
@@ -45,5 +46,5 @@ export async function translator(locale: Locale) {
       .join('');
   }
 
-  return { translate, t };
+  return { locale, translate, t };
 }
