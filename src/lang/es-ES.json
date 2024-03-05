@@ -38,7 +38,7 @@
             "description": "Cómo invitar el bot"
           },
           "timezones": {
-            "$": "zonashorarias",
+            "$": "zonas-horarias",
             "description": "Cómo Blitzkrieg infiere y usa tu zona horaria"
           },
           "creators": {
