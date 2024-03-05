@@ -17,7 +17,7 @@
     },
     "commands": {
       "about": {
-        "$": "acerca",
+        "$": "acerca-de",
         "description": "Toda la información que necesitas acerca del bot",
         "subcommands": {
           "commands": {
@@ -38,7 +38,7 @@
             "description": "Cómo invitar el bot"
           },
           "timezones": {
-            "$": "zonas horarias",
+            "$": "zonas-horarias",
             "description": "Cómo Blitzkrieg infiere y usa tu zona horaria"
           },
           "creators": {
