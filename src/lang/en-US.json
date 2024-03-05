@@ -13,6 +13,44 @@
         "great": "Great",
         "unicum": "Unicum",
         "super_unicum": "Super unicum"
+      },
+
+      "subcommands": {
+        "today": {
+          "$": "today",
+          "description": "Today"
+        },
+        "30": {
+          "$": "30",
+          "description": "30 days"
+        },
+        "60": {
+          "$": "60",
+          "description": "60 days"
+        },
+        "90": {
+          "$": "90",
+          "description": "90 days"
+        },
+        "career": {
+          "$": "career",
+          "description": "Career"
+        },
+        "custom": {
+          "$": "custom",
+          "description": "Custom range",
+
+          "options": {
+            "start": {
+              "$": "start",
+              "description": "Start in number of days ago from today"
+            },
+            "end": {
+              "$": "end",
+              "description": "End in number of days ago from today"
+            }
+          }
+        }
       }
     },
 
@@ -58,10 +96,6 @@
           "battles": "Battles",
           "winrate": "Winrate",
           "damage": "Damage"
-        },
-
-        "buttons": {
-          "refresh": "Refresh"
         }
       }
     }

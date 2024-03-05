@@ -6,42 +6,40 @@ interface CreateLocalizedCommandSubcommand {
   subcommand: string;
 }
 
-export async function createLocalizedCommand(
+export function createLocalizedCommand(
   command: string,
   subcommands?: CreateLocalizedCommandSubcommand[],
 ) {
-  const { translate } = await translator(Locale.EnglishUS);
+  const { translate } = translator(Locale.EnglishUS);
   const slashCommand = new SlashCommandBuilder()
     .setName(command)
-    .setNameLocalizations(await localizationObject(`bot.commands.${command}`))
+    .setNameLocalizations(localizationObject(`bot.commands.${command}`))
     .setDescription(translate(`bot.commands.${command}.description`))
     .setDescriptionLocalizations(
-      await localizationObject(`bot.commands.${command}.description`),
+      localizationObject(`bot.commands.${command}.description`),
     );
 
   if (subcommands) {
-    await Promise.all(
-      subcommands.map(async ({ subcommand }) => {
-        const subcommandNameLocalizations = await localizationObject(
-          `bot.commands.${command}.subcommands.${subcommand}`,
-        );
-        const subcommandDescriptionLocalizations = await localizationObject(
-          `bot.commands.${command}.subcommands.${subcommand}.description`,
-        );
+    subcommands.map(({ subcommand }) => {
+      const subcommandNameLocalizations = localizationObject(
+        `bot.commands.${command}.subcommands.${subcommand}`,
+      );
+      const subcommandDescriptionLocalizations = localizationObject(
+        `bot.commands.${command}.subcommands.${subcommand}.description`,
+      );
 
-        slashCommand.addSubcommand((option) =>
-          option
-            .setName(subcommand)
-            .setNameLocalizations(subcommandNameLocalizations)
-            .setDescription(
-              translate(
-                `bot.commands.${command}.subcommands.${subcommand}.description`,
-              ),
-            )
-            .setDescriptionLocalizations(subcommandDescriptionLocalizations),
-        );
-      }),
-    );
+      slashCommand.addSubcommand((option) =>
+        option
+          .setName(subcommand)
+          .setNameLocalizations(subcommandNameLocalizations)
+          .setDescription(
+            translate(
+              `bot.commands.${command}.subcommands.${subcommand}.description`,
+            ),
+          )
+          .setDescriptionLocalizations(subcommandDescriptionLocalizations),
+      );
+    });
   }
 
   return slashCommand;

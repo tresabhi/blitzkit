@@ -9,18 +9,15 @@ export type TranslationFragmentTree = {
 };
 export type TranslationFragment = string | TranslationFragmentTree;
 
-export const translations = Promise.all(
-  locales.map(async (locale) => ({
+export const translations = locales
+  .map((locale) => ({
     locale,
-    translations: await import(`../../lang/${locale}.json`),
-  })),
-).then(
-  (translations) =>
-    translations.reduce(
-      (table, { locale, translations }) => ({
-        ...table,
-        [locale]: translations,
-      }),
-      {},
-    ) as Record<Locale, TranslationFragment>,
-);
+    translations: require(`../../lang/${locale}.json`),
+  }))
+  .reduce(
+    (table, { locale, translations }) => ({
+      ...table,
+      [locale]: translations,
+    }),
+    {},
+  ) as Record<Locale, TranslationFragment>;

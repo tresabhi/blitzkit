@@ -24,14 +24,14 @@ export const aboutCommand = new Promise<CommandRegistry>(async (resolve) => {
     inProduction: true,
     inPublic: true,
 
-    command: await createLocalizedCommand('about', [
+    command: createLocalizedCommand('about', [
       { subcommand: 'commands' },
       ...subcommands.map((subcommand) => ({ subcommand })),
     ]),
 
     async handler(interaction) {
       const subcommand = interaction.options.getSubcommand();
-      const { t } = await translator(interaction.locale);
+      const { t } = translator(interaction.locale);
 
       if (subcommand === 'commands') {
         return t`bot.commands.about.subcommands.commands.body${(

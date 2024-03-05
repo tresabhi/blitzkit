@@ -13,7 +13,7 @@ import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
 import getTankHistories from '../core/blitzkrieg/getTankHistories';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import getPlayerHistories from '../core/blitzstars/getPlayerHistories';
-import addPeriodSubCommands from '../core/discord/addPeriodSubCommands';
+import { addPeriodSubCommands } from '../core/discord/addPeriodSubCommands';
 import addTankChoices from '../core/discord/addTankChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
@@ -127,16 +127,14 @@ export const evolutionCommand = new Promise<CommandRegistryPromisable>(
         return tankGroup;
       });
 
-    await Promise.all([
-      addPeriodSubCommands(playerGroup!, (option) =>
-        option.addStringOption(addUsernameChoices),
-      ),
-      addPeriodSubCommands(tankGroup!, (option) =>
-        option
-          .addStringOption(addTankChoices)
-          .addStringOption(addUsernameChoices),
-      ),
-    ]);
+    addPeriodSubCommands(playerGroup!, (option) =>
+      option.addStringOption(addUsernameChoices),
+    );
+    addPeriodSubCommands(tankGroup!, (option) =>
+      option
+        .addStringOption(addTankChoices)
+        .addStringOption(addUsernameChoices),
+    );
 
     resolve({
       inProduction: true,

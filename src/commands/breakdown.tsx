@@ -1,4 +1,3 @@
-import { SlashCommandBuilder } from 'discord.js';
 import { chunk } from 'lodash';
 import * as Breakdown from '../components/Breakdown';
 import NoData, { NoDataType } from '../components/NoData';
@@ -21,6 +20,7 @@ import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import buttonPrimary from '../core/discord/buttonPrimary';
 import commandToURL from '../core/discord/commandToURL';
+import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
 import { getFiltersFromButton } from '../core/discord/getFiltersFromButton';
 import { getFiltersFromCommand } from '../core/discord/getFiltersFromCommand';
@@ -292,18 +292,14 @@ export async function renderBreakdown(
 
 export const breakdownCommand = new Promise<CommandRegistryPromisable>(
   async (resolve) => {
-    const command = await addPeriodicFilterOptions(
-      new SlashCommandBuilder()
-        .setName('breakdown')
-        .setDescription("A period's breakdown by tanks played"),
-      (option) => option.addStringOption(addUsernameChoices),
-    );
-
     resolve({
       inProduction: true,
       inPublic: true,
 
-      command,
+      command: await addPeriodicFilterOptions(
+        createLocalizedCommand('breakdown'),
+        (option) => option.addStringOption(addUsernameChoices),
+      ),
 
       async handler(interaction) {
         const player = await resolvePlayerFromCommand(interaction);
