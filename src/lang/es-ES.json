@@ -16,36 +16,36 @@
       },
       "subcommands": {
         "today": {
-          "$": "today",
-          "description": "Today"
+          "$": "hoy",
+          "description": "Hoy"
         },
         "30": {
           "$": "30",
-          "description": "30 days"
+          "description": "30 días"
         },
         "60": {
           "$": "60",
-          "description": "60 days"
+          "description": "60 días"
         },
         "90": {
           "$": "90",
-          "description": "90 days"
+          "description": "90 días"
         },
         "career": {
-          "$": "career",
-          "description": "Career"
+          "$": "carrera",
+          "description": "Carrera"
         },
         "custom": {
-          "$": "custom",
-          "description": "Custom range",
+          "$": "personalizado",
+          "description": "Rango personalizado",
           "options": {
             "start": {
-              "$": "start",
-              "description": "Start in number of days ago from today"
+              "$": "comienzo",
+              "description": "Comenzar en cantidad de días pasados desde hoy"
             },
             "end": {
-              "$": "end",
-              "description": "End in number of days ago from today"
+              "$": "fin",
+              "description": "Terminar en cantidad de días pasados desde hoy"
             }
           }
         }
@@ -94,13 +94,16 @@
         }
       },
       "debug": {
-        "$": "debug",
-        "description": "Debug information about the bot",
+        "$": "depurar",
+        "description": "Muestra más información sobre el bot",
         "body": {
-          "title": "# Debug\n\n",
-          "version": "Version",
-          "shard": "Shard",
-          "uptime": "Uptime"
+          "title": "# Depuración\n\n",
+          "version": "Versión",
+          "shard": {
+            "$": "Partición",
+            "default": "predeterminado"
+          },
+          "uptime": "Tiempo en línea"
         }
       }
     }
