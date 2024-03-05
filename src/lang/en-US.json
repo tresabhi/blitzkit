@@ -106,7 +106,10 @@
         "body": {
           "title": "# Debug\n\n",
           "version": "Version",
-          "shard": "Shard",
+          "shard": {
+            "$": "Shard",
+            "default": "default"
+          },
           "uptime": "Uptime"
         }
       }

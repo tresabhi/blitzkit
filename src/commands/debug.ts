@@ -18,7 +18,10 @@ export const debugCommand: CommandRegistry = {
     const uptime = currentTime - executionStart;
     const list = [
       [t`bot.commands.debug.body.version`, packageJSON.version],
-      [t`bot.commands.debug.body.shard`, client.shard?.ids[0] ?? 'default'],
+      [
+        t`bot.commands.debug.body.shard`,
+        client.shard?.ids[0] ?? t`bot.commands.debug.body.shard.default`,
+      ],
       [
         t`bot.commands.debug.body.uptime`,
         `${Math.floor((uptime / 1000 / 60 / 60) % 24)}h ${Math.floor(
