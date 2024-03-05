@@ -92,6 +92,16 @@
           "winrate": "Tasa de victorias",
           "damage": "Daño"
         }
+      },
+      "debug": {
+        "$": "debug",
+        "description": "Debug information about the bot",
+        "body": {
+          "title": "# Debug\n\n",
+          "version": "Version",
+          "shard": "Shard",
+          "uptime": "Uptime"
+        }
       }
     }
   },
