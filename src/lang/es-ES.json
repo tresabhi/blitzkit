@@ -23,7 +23,7 @@
           "commands": {
             "$": "comandos",
             "description": "Lista de todos los comandos y sus descripciones",
-            "body": "# Commands\n\nBlitzkrieg offers the following commands:\n\n"
+            "body": "# Comandos\n\nBlitzkrieg ofrece los siguientes comandos:\n\n"
           },
           "embeds": {
             "$": "embeds",
@@ -38,7 +38,7 @@
             "description": "Cómo invitar el bot"
           },
           "timezones": {
-            "$": "zonas horarias",
+            "$": "zonashorarias",
             "description": "Cómo Blitzkrieg infiere y usa tu zona horaria"
           },
           "creators": {
