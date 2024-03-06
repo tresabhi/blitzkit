@@ -186,7 +186,7 @@ export const verifyCommand: CommandRegistry = {
                   }}
                 >
                   {clanAccountInfo?.clan
-                    ? `[${clanAccountInfo?.clan?.tag}] - `
+                    ? `[${clanAccountInfo?.clan?.tag}] • `
                     : ''}
                   {REGION_NAMES[region]}
                 </span>
