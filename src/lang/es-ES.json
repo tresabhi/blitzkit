@@ -1,4 +1,28 @@
 {
+  "common": {
+    "nations": {
+      "ussr": "URSS",
+      "germany": "Alemania",
+      "usa": "EUA",
+      "china": "China",
+      "uk": "Reino Unido",
+      "france": "Francia",
+      "japan": "Japón",
+      "european": "Europa",
+      "other": "Híbrido"
+    },
+    "tank_type_short": {
+      "lightTank": "Ligero",
+      "mediumTank": "Medio",
+      "heavyTank": "Pesado",
+      "AT-SPG": "DT"
+    },
+    "tree_type": {
+      "researchable": "Árbol tecnológico",
+      "premium": "Prémium",
+      "collector": "Coleccionable"
+    }
+  },
   "bot": {
     "common": {
       "wn8": {
@@ -49,6 +73,27 @@
             }
           }
         }
+      },
+      "options": {
+        "clan": {
+          "$": "clan",
+          "description": "El nombre del clan o etiqueta"
+        }
+      },
+      "periods": {
+        "career": "Carrera",
+        "today": "Hoy",
+        "days": "%s días",
+        "custom": "%s - %s días"
+      },
+      "filters": {
+        "none": "Sin filtros",
+        "tier": "Rango %s"
+      },
+      "no_data": {
+        "battles_in_period": "No hay batallas jugadas en este período",
+        "players_in_period": "No hay jugadores en este período",
+        "tanks_found": "No se encontraron tanques"
       }
     },
     "commands": {
@@ -104,6 +149,68 @@
             "default": "predeterminado"
           },
           "uptime": "Tiempo en línea"
+        }
+      },
+      "evolution": {
+        "$": "evolución",
+        "description": "Evolución de las estadísticas",
+        "groups": {
+          "player": {
+            "$": "jugador",
+            "description": "Estadísticas del jugador"
+          },
+          "tank": {
+            "$": "tanque",
+            "description": "Estadísticas del tanque"
+          }
+        }
+      },
+      "inactive": {
+        "$": "inactivo",
+        "description": "Lista todos los jugadores inactivos en un clan por encima de un umbral",
+        "options": {
+          "threshold": {
+            "$": "umbral",
+            "description": "El número de días inactivo ( predeterminado: %s días)"
+          }
+        },
+        "body": {
+          "subtitle": "Inactivo por %s+ días",
+          "listing": "%s días"
+        }
+      },
+      "full_stats": {
+        "$": "full-stats",
+        "description": "Full in-game statistics",
+        "body": {
+          "cards": {
+            "games": {
+              "$": "Games",
+              "winrate": "Winrate",
+              "battles": "Battles",
+              "wins_losses": "Wins / losses"
+            },
+            "efficiency": {
+              "$": "Efficiency",
+              "wn8": "WN8",
+              "survival": "Survival",
+              "accuracy": "Accuracy"
+            },
+            "lethality": {
+              "$": "Lethality",
+              "average_damage": "Average damage",
+              "damage_per_tier": "Damage per tier",
+              "damage_ratio": "Damage ratio",
+              "average_kills": "Average kills"
+            },
+            "miscellaneous": {
+              "$": "Miscellaneous",
+              "average_tier": "Average tier",
+              "average_spots": "Average spots",
+              "average_xp": "Average XP",
+              "kills_to_death_ratio": "Kills to death ratio"
+            }
+          }
         }
       }
     }
