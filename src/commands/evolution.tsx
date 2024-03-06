@@ -1,7 +1,7 @@
-import { SlashCommandSubcommandGroupBuilder } from 'discord.js';
+import { Locale, SlashCommandSubcommandGroupBuilder } from 'discord.js';
 import CommandWrapper from '../components/CommandWrapper';
 import * as Graph from '../components/Graph';
-import NoData, { NoDataType } from '../components/NoData';
+import NoData from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
@@ -36,6 +36,7 @@ async function render(
   { start, end, name }: ResolvedPeriod,
   type: 'player' | 'tank',
   tankId: number | null,
+  locale: Locale,
 ) {
   const accountInfo = await getAccountInfo(region, id);
   const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
@@ -100,7 +101,7 @@ async function render(
         </Graph.Root>
       )}
 
-      {plot.length === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
+      {plot.length === 0 && <NoData type="battles_in_period" locale={locale} />}
     </CommandWrapper>
   );
 }
@@ -147,7 +148,13 @@ export const evolutionCommand = new Promise<CommandRegistry>(
         });
 
         return [
-          await render(player, period, commandGroup, tankId),
+          await render(
+            player,
+            period,
+            commandGroup,
+            tankId,
+            interaction.locale,
+          ),
           buttonRefresh(interaction, path),
           await getBlitzStarsLinkButton(
             player.region,
@@ -174,6 +181,7 @@ export const evolutionCommand = new Promise<CommandRegistry>(
           period,
           commandGroup,
           parseInt(url.searchParams.get('tankId') ?? '0') || null,
+          interaction.locale,
         );
       },
     });

@@ -1,3 +1,5 @@
+import { Locale } from 'discord.js';
+import { translator } from '../core/localization/translator';
 import { theme } from '../stitches.config';
 
 export enum NoDataType {
@@ -7,16 +9,13 @@ export enum NoDataType {
 }
 
 export interface NoDataProps {
-  type: NoDataType;
+  type: 'battles_in_period' | 'players_in_period' | 'tanks_found';
+  locale: Locale;
 }
 
-const NO_DATA_MESSAGES: Record<NoDataType, string> = {
-  [NoDataType.BattlesInPeriod]: 'No battles played in this period',
-  [NoDataType.PlayersInPeriod]: 'No players in this period',
-  [NoDataType.TanksFound]: 'No tanks found',
-};
+export default function NoData({ type, locale }: NoDataProps) {
+  const { translate } = translator(locale);
 
-export default function NoData({ type }: NoDataProps) {
   return (
     <div
       style={{
@@ -26,7 +25,7 @@ export default function NoData({ type }: NoDataProps) {
       }}
     >
       <span style={{ fontSize: 16, color: theme.colors.textLowContrast }}>
-        {NO_DATA_MESSAGES[type]}
+        {translate(`bot.common.no_data.${type}`)}
       </span>
     </div>
   );

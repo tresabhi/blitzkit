@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import CommandWrapper from '../components/CommandWrapper';
 import GenericStats from '../components/GenericStats';
-import NoData, { NoDataType } from '../components/NoData';
+import NoData from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanInfo } from '../core/blitz/getClanInfo';
@@ -61,7 +61,9 @@ export const inactiveCommand = new Promise<CommandRegistry>((resolve) => {
             description={`Inactive for ${threshold}+ Days • ${new Date().toDateString()}`}
           />
 
-          {!hasInactiveMembers && <NoData type={NoDataType.PlayersInPeriod} />}
+          {!hasInactiveMembers && (
+            <NoData type="players_in_period" locale={interaction.locale} />
+          )}
           {hasInactiveMembers && <GenericStats stats={inactive} />}
         </CommandWrapper>
       );

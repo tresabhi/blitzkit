@@ -1,7 +1,7 @@
 import { Locale, SlashCommandBuilder } from 'discord.js';
 import AllStatsOverview from '../components/AllStatsOverview';
 import CommandWrapper from '../components/CommandWrapper';
-import NoData, { NoDataType } from '../components/NoData';
+import NoData from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
@@ -50,7 +50,7 @@ async function render(
         description={`${name} • ${filterDescriptions}`}
       />
 
-      {!stats.battles && <NoData type={NoDataType.BattlesInPeriod} />}
+      {!stats.battles && <NoData type="battles_in_period" locale={locale} />}
       {stats.battles > 0 && (
         <AllStatsOverview stats={stats} supplementaryStats={supplementary} />
       )}

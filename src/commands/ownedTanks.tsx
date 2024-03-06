@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import CommandWrapper from '../components/CommandWrapper';
-import NoData, { NoDataType } from '../components/NoData';
+import NoData from '../components/NoData';
 import * as Tanks from '../components/Tanks';
 import TitleBar from '../components/TitleBar';
 import { encyclopediaInfo } from '../core/blitz/encyclopediaInfo';
@@ -74,7 +74,7 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
           />
 
           {filteredTanks.length === 0 && (
-            <NoData type={NoDataType.TanksFound} />
+            <NoData type="tanks_found" locale={interaction.locale} />
           )}
 
           {filteredTanks.length > 0 &&

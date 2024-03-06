@@ -2,7 +2,7 @@ import { Locale } from 'discord.js';
 import { chunk } from 'lodash';
 import * as Breakdown from '../components/Breakdown';
 import CommandWrapper from '../components/CommandWrapper';
-import NoData, { NoDataType } from '../components/NoData';
+import NoData from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import { AllStats, getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
@@ -286,7 +286,7 @@ export async function renderBreakdown(
           description={`${name} • ${filterDescriptions}`}
         />
 
-        <NoData type={NoDataType.BattlesInPeriod} />
+        <NoData type="battles_in_period" locale={locale} />
       </CommandWrapper>,
     ];
   }
