@@ -53,38 +53,30 @@ export type InteractionReturnable =
   | InteractionIterableReturnable
   | Promise<InteractionIterableReturnable>;
 
-type CommandRegistryBase = {
-  command:
-    | SlashCommandBuilder
-    | SlashCommandSubcommandsOnlyBuilder
-    | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
-};
-type CommandRegistryDefinitionBase = {
+interface CommandRegistryBase {
   inProduction: boolean;
   inPublic: boolean;
   inPreview?: boolean;
 
+  command:
+    | SlashCommandBuilder
+    | SlashCommandSubcommandsOnlyBuilder
+    | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
+
   autocomplete?: (interaction: AutocompleteInteraction<CacheType>) => void;
   button?: (interaction: ButtonInteraction<CacheType>) => InteractionReturnable;
-};
-type CommandRegistryDefinitionHandlesInteraction = {
+}
+interface CommandRegistryImplicit extends CommandRegistryBase {
   handlesInteraction: true;
   handler: (interaction: ChatInputCommandInteraction<CacheType>) => void;
-};
-type CommandRegistryDefinitionDoesHandleInteraction = {
+}
+interface CommandRegistryExplicit extends CommandRegistryBase {
   handlesInteraction?: false;
   handler: (
     interaction: ChatInputCommandInteraction<CacheType>,
   ) => InteractionReturnable;
-};
-export type CommandRegistry = CommandRegistryBase &
-  (CommandRegistryDefinitionBase &
-    (
-      | CommandRegistryDefinitionHandlesInteraction
-      | CommandRegistryDefinitionDoesHandleInteraction
-    ));
-
-const rest = new REST().setToken(secrets.DISCORD_TOKEN);
+}
+export type CommandRegistry = CommandRegistryImplicit | CommandRegistryExplicit;
 
 export const COMMANDS_RAW: Promise<CommandRegistry>[] = [
   permissionsCommand,
@@ -118,6 +110,7 @@ export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {
   );
 });
 
+const rest = new REST().setToken(secrets.DISCORD_TOKEN);
 export const guildCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
   [];
 export const publicCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
