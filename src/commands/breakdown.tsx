@@ -1,8 +1,8 @@
 import { chunk } from 'lodash';
 import * as Breakdown from '../components/Breakdown';
+import CommandWrapper from '../components/CommandWrapper';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
-import Wrapper from '../components/Wrapper';
 import { AllStats, getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
@@ -254,10 +254,10 @@ export async function renderBreakdown(
   if (filteredOrder.length > 0) {
     return pages
       .map((page, index) => (
-        <Wrapper>
+        <CommandWrapper>
           {index === 0 && (
             <TitleBar
-              name={accountInfo.nickname}
+              title={accountInfo.nickname}
               image={
                 clanData?.clan
                   ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData?.clan?.emblem_set_id}.png`
@@ -268,14 +268,14 @@ export async function renderBreakdown(
           )}
 
           <Breakdown.Root>{page}</Breakdown.Root>
-        </Wrapper>
+        </CommandWrapper>
       ))
       .reverse();
   } else {
     return [
-      <Wrapper>
+      <CommandWrapper>
         <TitleBar
-          name={accountInfo.nickname}
+          title={accountInfo.nickname}
           image={
             clanData?.clan
               ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData?.clan?.emblem_set_id}.png`
@@ -285,7 +285,7 @@ export async function renderBreakdown(
         />
 
         <NoData type={NoDataType.BattlesInPeriod} />
-      </Wrapper>,
+      </CommandWrapper>,
     ];
   }
 }

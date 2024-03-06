@@ -1,75 +1,52 @@
 import { theme } from '../stitches.config';
 
 export interface TitleBarProps {
-  name: string;
+  title: string;
   image?: string;
   description?: string;
 }
 
-export default function TitleBar({ name, image, description }: TitleBarProps) {
+export default function TitleBar({ title, image, description }: TitleBarProps) {
   return (
     <div
       style={{
+        gap: 4,
         display: 'flex',
-        alignItems: 'center',
+        flexDirection: 'column',
         justifyContent: 'center',
-        overflow: 'hidden',
+        alignItems: 'center',
       }}
     >
-      <div style={{ display: 'flex', gap: 8 }}>
+      <div
+        style={{
+          gap: 4,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         {image && (
           <img
-            style={{ width: 64, height: 64, objectFit: 'contain' }}
+            style={{ width: 32, height: 32, objectFit: 'contain' }}
             src={image}
           />
         )}
 
-        <div
+        <span
           style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            gap: 4,
+            fontSize: 32,
+            fontWeight: 900,
+            background: `linear-gradient(180deg, ${theme.colors.textHighContrast} 0%, ${theme.colors.textLowContrast} 100%)`,
+            backgroundClip: 'text',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              gap: 4,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <span
-              style={{
-                fontSize: 32,
-                color: theme.colors.textHighContrast,
-                fontWeight: 900,
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-              }}
-            >
-              {name}
-            </span>
-          </div>
-
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: image ? 'flex-start' : 'center',
-            }}
-          >
-            <span
-              style={{
-                color: theme.colors.textLowContrast,
-                fontSize: 16,
-              }}
-            >
-              {description}
-            </span>
-          </div>
-        </div>
+          {title}
+        </span>
       </div>
+
+      <span style={{ color: theme.colors.textLowContrast, fontSize: 16 }}>
+        {description}
+      </span>
     </div>
   );
 }

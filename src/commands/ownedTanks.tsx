@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from 'discord.js';
+import CommandWrapper from '../components/CommandWrapper';
 import NoData, { NoDataType } from '../components/NoData';
 import * as Tanks from '../components/Tanks';
 import TitleBar from '../components/TitleBar';
-import Wrapper from '../components/Wrapper';
 import { encyclopediaInfo } from '../core/blitz/encyclopediaInfo';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
@@ -61,9 +61,9 @@ export const ownedTanksCommand: CommandRegistry = {
     nations.sort();
 
     return (
-      <Wrapper>
+      <CommandWrapper>
         <TitleBar
-          name={accountInfo.nickname}
+          title={accountInfo.nickname}
           image={
             clanAccountInfo?.clan
               ? emblemIdToURL(clanAccountInfo.clan.emblem_set_id)
@@ -120,7 +120,7 @@ export const ownedTanksCommand: CommandRegistry = {
               );
             }),
           ))}
-      </Wrapper>
+      </CommandWrapper>
     );
   },
 

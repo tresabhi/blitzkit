@@ -2,10 +2,10 @@ import {
   SlashCommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
+import CommandWrapper from '../components/CommandWrapper';
 import * as Graph from '../components/Graph';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
-import Wrapper from '../components/Wrapper';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import resolveTankId from '../core/blitz/resolveTankId';
@@ -74,8 +74,8 @@ async function render(
   const minX = Math.min(...xs);
 
   return (
-    <Wrapper>
-      <TitleBar name={accountInfo.nickname} image={logo} description={name} />
+    <CommandWrapper>
+      <TitleBar title={accountInfo.nickname} image={logo} description={name} />
 
       {plot.length > 0 && (
         <Graph.Root
@@ -103,7 +103,7 @@ async function render(
       )}
 
       {plot.length === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
-    </Wrapper>
+    </CommandWrapper>
   );
 }
 

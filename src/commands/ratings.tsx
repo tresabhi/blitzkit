@@ -6,9 +6,9 @@ import {
 import { range } from 'lodash';
 import markdownEscape from 'markdown-escape';
 import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
+import CommandWrapper from '../components/CommandWrapper';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
-import Wrapper from '../components/Wrapper';
 import { LEAGUES } from '../constants/leagues';
 import { FIRST_ARCHIVED_RATINGS_SEASON } from '../constants/ratings';
 import { REGION_NAMES_SHORT, Region } from '../constants/regions';
@@ -423,9 +423,9 @@ export const ratingsCommand = new Promise<CommandRegistryPromisable>(
         });
 
         return (
-          <Wrapper>
+          <CommandWrapper>
             <TitleBar
-              name={titleName}
+              title={titleName}
               image={titleImage}
               description={titleDescription}
             />
@@ -445,7 +445,7 @@ export const ratingsCommand = new Promise<CommandRegistryPromisable>(
                 )}
               </Leaderboard.Root>
             )}
-          </Wrapper>
+          </CommandWrapper>
         );
       },
 

@@ -3,7 +3,7 @@ import { GuildMemberRoleManager, SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import discord from '../../discord.json' assert { type: 'json' };
 import { Glow } from '../components/AllStatsOverview/components/WN8Display/components/Glow';
-import Wrapper from '../components/Wrapper';
+import CommandWrapper from '../components/CommandWrapper';
 import { REGION_NAMES } from '../constants/regions';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
@@ -50,7 +50,7 @@ export const verifyCommand: CommandRegistry = {
     }
 
     return [
-      <Wrapper fat>
+      <CommandWrapper fat>
         <div
           style={{
             display: 'flex',
@@ -196,7 +196,7 @@ export const verifyCommand: CommandRegistry = {
 
           <Glow color={teal.teal9} rotation={-90} />
         </div>
-      </Wrapper>,
+      </CommandWrapper>,
 
       embedInfo(
         'Incorrect account?',

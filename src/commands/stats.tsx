@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from 'discord.js';
 import AllStatsOverview from '../components/AllStatsOverview';
+import CommandWrapper from '../components/CommandWrapper';
 import NoData, { NoDataType } from '../components/NoData';
 import TitleBar from '../components/TitleBar';
-import Wrapper from '../components/Wrapper';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
@@ -42,9 +42,9 @@ async function render(
   const filterDescriptions = await filtersToDescription(filters);
 
   return (
-    <Wrapper>
+    <CommandWrapper>
       <TitleBar
-        name={nickname}
+        title={nickname}
         image={clanImage}
         description={`${name} • ${filterDescriptions}`}
       />
@@ -53,7 +53,7 @@ async function render(
       {stats.battles > 0 && (
         <AllStatsOverview stats={stats} supplementaryStats={supplementary} />
       )}
-    </Wrapper>
+    </CommandWrapper>
   );
 }
 

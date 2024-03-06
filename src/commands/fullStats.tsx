@@ -1,9 +1,9 @@
 import { SlashCommandBuilder } from 'discord.js';
+import CommandWrapper from '../components/CommandWrapper';
 import GenericAllStats from '../components/GenericAllStats';
 import NoData, { NoDataType } from '../components/NoData';
 import TierWeights from '../components/TierWeights';
 import TitleBar from '../components/TitleBar';
-import Wrapper from '../components/Wrapper';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
@@ -48,9 +48,9 @@ async function render(
   const tierWeights = await getTierWeights(diffedTankStats.diff, filteredOrder);
 
   return (
-    <Wrapper>
+    <CommandWrapper>
       <TitleBar
-        name={nickname}
+        title={nickname}
         image={clanImage}
         description={`${name} • ${filterDescriptions}`}
       />
@@ -60,7 +60,7 @@ async function render(
       {stats.battles > 0 && (
         <GenericAllStats stats={stats} supplementaryStats={supplementary} />
       )}
-    </Wrapper>
+    </CommandWrapper>
   );
 }
 
