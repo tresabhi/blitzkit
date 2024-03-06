@@ -35,7 +35,7 @@ import resolvePlayerFromCommand, {
 import calculateWN8 from '../core/statistics/calculateWN8';
 import { StatFilters, filterStats } from '../core/statistics/filterStats';
 import getWN8Percentile from '../core/statistics/getWN8Percentile';
-import { CommandRegistryPromisable } from '../events/interactionCreate';
+import { CommandRegistry } from '../events/interactionCreate';
 
 const ROWS_PER_PAGE = 8;
 const MAX_PAGES = 9;
@@ -290,7 +290,7 @@ export async function renderBreakdown(
   }
 }
 
-export const breakdownCommand = new Promise<CommandRegistryPromisable>(
+export const breakdownCommand = new Promise<CommandRegistry>(
   async (resolve) => {
     resolve({
       inProduction: true,

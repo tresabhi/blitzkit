@@ -30,7 +30,7 @@ export default function resolvePeriodFromButton(
     start = getTimeDaysAgo(region, endDaysAgoMax);
     end = getTimeDaysAgo(region, startDaysAgoMin);
   } else {
-    name = getPeriodOptionName(periodSubcommand);
+    name = getPeriodOptionName(periodSubcommand, interaction.locale);
     start = getPeriodStart(region, periodSubcommand);
     end = getPeriodNow();
   }

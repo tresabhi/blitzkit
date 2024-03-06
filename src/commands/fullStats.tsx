@@ -29,7 +29,7 @@ import resolvePlayerFromCommand, {
 } from '../core/discord/resolvePlayerFromCommand';
 import { StatFilters, filterStats } from '../core/statistics/filterStats';
 import { getTierWeights } from '../core/statistics/getTierWeights';
-import { CommandRegistryPromisable } from '../events/interactionCreate';
+import { CommandRegistry } from '../events/interactionCreate';
 
 async function render(
   { region, id }: ResolvedPlayer,
@@ -64,7 +64,7 @@ async function render(
   );
 }
 
-export const fullStatsCommand = new Promise<CommandRegistryPromisable>(
+export const fullStatsCommand = new Promise<CommandRegistry>(
   async (resolve) => {
     const command = await addPeriodicFilterOptions(
       new SlashCommandBuilder()

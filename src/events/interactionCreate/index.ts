@@ -17,7 +17,6 @@ import discord from '../../../discord.json' assert { type: 'json' };
 import { aboutCommand } from '../../commands/about';
 import { breakdownCommand } from '../../commands/breakdown';
 import { debugCommand } from '../../commands/debug';
-import { eligibleCommand } from '../../commands/eligible';
 import { evolutionCommand } from '../../commands/evolution';
 import { fullStatsCommand } from '../../commands/fullStats';
 import { inactiveCommand } from '../../commands/inactive';
@@ -78,22 +77,18 @@ type CommandRegistryDefinitionDoesHandleInteraction = {
     interaction: ChatInputCommandInteraction<CacheType>,
   ) => InteractionReturnable;
 };
-export type CommandRegistryPromisable = CommandRegistryBase &
+export type CommandRegistry = CommandRegistryBase &
   (CommandRegistryDefinitionBase &
     (
       | CommandRegistryDefinitionHandlesInteraction
       | CommandRegistryDefinitionDoesHandleInteraction
     ));
-export type CommandRegistry =
-  | CommandRegistryPromisable
-  | Promise<CommandRegistryPromisable>;
 
 const rest = new REST().setToken(secrets.DISCORD_TOKEN);
 
-export const COMMANDS_RAW: CommandRegistry[] = [
+export const COMMANDS_RAW: Promise<CommandRegistry>[] = [
   permissionsCommand,
   debugCommand,
-  eligibleCommand,
   aboutCommand,
   inactiveCommand,
   ownedTanksCommand,
@@ -113,7 +108,7 @@ export const COMMANDS_RAW: CommandRegistry[] = [
 ];
 
 export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {
-  return rawCommands.reduce<Record<string, CommandRegistryPromisable>>(
+  return rawCommands.reduce<Record<string, CommandRegistry>>(
     (commands, registry) => {
       if (registry.status === 'rejected') return commands;
       if (isDev()) registry.value.command.setDefaultMemberPermissions(0);

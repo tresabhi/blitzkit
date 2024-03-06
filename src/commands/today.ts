@@ -14,58 +14,56 @@ import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
 import resolvePeriodFromCommand from '../core/discord/resolvePeriodFromCommand';
 import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
-import { CommandRegistryPromisable } from '../events/interactionCreate';
+import { CommandRegistry } from '../events/interactionCreate';
 import { renderBreakdown } from './breakdown';
 
-export const todayCommand = new Promise<CommandRegistryPromisable>(
-  async (resolve) => {
-    const awaitedEncyclopediaInfo = await encyclopediaInfo;
-    const command = addFilterOptions(
-      new SlashCommandBuilder()
-        .setName('today')
-        .setDescription("Today's played tanks and statistics"),
-      awaitedEncyclopediaInfo,
-    ).addStringOption(addUsernameChoices);
+export const todayCommand = new Promise<CommandRegistry>(async (resolve) => {
+  const awaitedEncyclopediaInfo = await encyclopediaInfo;
+  const command = addFilterOptions(
+    new SlashCommandBuilder()
+      .setName('today')
+      .setDescription("Today's played tanks and statistics"),
+    awaitedEncyclopediaInfo,
+  ).addStringOption(addUsernameChoices);
 
-    resolve({
-      inProduction: true,
-      inPublic: true,
+  resolve({
+    inProduction: true,
+    inPublic: true,
 
-      command,
+    command,
 
-      async handler(interaction) {
-        const player = await resolvePlayerFromCommand(interaction);
-        const period = resolvePeriodFromCommand(
-          player.region,
-          interaction,
-          'today',
-        );
-        const filters = await getFiltersFromCommand(interaction);
-        const path = commandToURL(interaction, {
-          ...player,
-          ...getCustomPeriodParams(interaction, true),
-          ...filters,
-        });
+    async handler(interaction) {
+      const player = await resolvePlayerFromCommand(interaction);
+      const period = resolvePeriodFromCommand(
+        player.region,
+        interaction,
+        'today',
+      );
+      const filters = await getFiltersFromCommand(interaction);
+      const path = commandToURL(interaction, {
+        ...player,
+        ...getCustomPeriodParams(interaction, true),
+        ...filters,
+      });
 
-        return [
-          ...(await renderBreakdown(player, period, filters)),
-          buttonPrimary(path, 'Refresh'),
-          await getBlitzStarsLinkButton(player.region, player.id),
-        ];
-      },
+      return [
+        ...(await renderBreakdown(player, period, filters)),
+        buttonPrimary(path, 'Refresh'),
+        await getBlitzStarsLinkButton(player.region, player.id),
+      ];
+    },
 
-      autocomplete: (interaction) => {
-        autocompleteUsername(interaction);
-        autocompleteTanks(interaction);
-      },
+    autocomplete: (interaction) => {
+      autocompleteUsername(interaction);
+      autocompleteTanks(interaction);
+    },
 
-      async button(interaction) {
-        const player = await resolvePlayerFromButton(interaction);
-        const period = resolvePeriodFromButton(player.region, interaction);
-        const filters = getFiltersFromButton(interaction);
+    async button(interaction) {
+      const player = await resolvePlayerFromButton(interaction);
+      const period = resolvePeriodFromButton(player.region, interaction);
+      const filters = getFiltersFromButton(interaction);
 
-        return await renderBreakdown(player, period, filters);
-      },
-    });
-  },
-);
+      return await renderBreakdown(player, period, filters);
+    },
+  });
+});

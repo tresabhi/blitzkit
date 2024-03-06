@@ -5,9 +5,10 @@ export function translator(localeRaw: Locale) {
   const locale = locales.includes(localeRaw) ? localeRaw : Locale.EnglishUS;
   const strings = translations[locale];
 
-  function translate(path: string): string {
+  function translate(path: string, literals?: string[]): string {
     const pathArray = path.split('.');
     let fragment = strings;
+    let resolvedString: string;
 
     for (const pathItem of pathArray) {
       if (typeof fragment === 'string') {
@@ -33,14 +34,26 @@ export function translator(localeRaw: Locale) {
     }
 
     if (typeof fragment === 'string') {
-      return fragment;
+      resolvedString = fragment;
     } else if (fragment.$) {
-      return fragment.$!;
+      resolvedString = fragment.$!;
     } else {
       throw new Error(
         `Unresolved tree ending for "${path}" in locale "${locale}"`,
       );
     }
+
+    if (literals) {
+      const chunks = resolvedString.split('%s');
+      let embeddedString = '';
+
+      chunks.forEach((chunk, index) => {
+        if (index !== 0) embeddedString += literals[index - 1];
+        embeddedString += chunk;
+      });
+    }
+
+    return resolvedString;
   }
 
   function t(paths: TemplateStringsArray, ...embeds: string[]) {

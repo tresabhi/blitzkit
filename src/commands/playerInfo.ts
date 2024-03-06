@@ -8,47 +8,49 @@ import markdownTable from '../core/discord/markdownTable';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistry } from '../events/interactionCreate';
 
-export const playerInfoCommand: CommandRegistry = {
-  inProduction: true,
-  inPublic: true,
+export const playerInfoCommand = new Promise<CommandRegistry>((resolve) => {
+  resolve({
+    inProduction: true,
+    inPublic: true,
 
-  command: new SlashCommandBuilder()
-    .setName('player-info')
-    .setDescription('Basic information about a player')
-    .addStringOption(addUsernameChoices),
+    command: new SlashCommandBuilder()
+      .setName('player-info')
+      .setDescription('Basic information about a player')
+      .addStringOption(addUsernameChoices),
 
-  async handler(interaction) {
-    const account = await resolvePlayerFromCommand(interaction);
-    const { id, region: region } = account;
-    const accountInfo = await getAccountInfo(region, id);
+    async handler(interaction) {
+      const account = await resolvePlayerFromCommand(interaction);
+      const { id, region: region } = account;
+      const accountInfo = await getAccountInfo(region, id);
 
-    return embedInfo(
-      `${markdownEscape(accountInfo.nickname)}'s information`,
+      return embedInfo(
+        `${markdownEscape(accountInfo.nickname)}'s information`,
 
-      markdownTable([
-        ['Nickname', `${accountInfo.nickname}`],
-        ['Battles', `${accountInfo.statistics.all.battles}`],
-        [
-          'Winrate',
-          `${(
-            100 *
-            (accountInfo.statistics.all.wins /
-              accountInfo.statistics.all.battles)
-          ).toFixed(2)}%`,
-        ],
-        [],
-        ['Account ID', `${accountInfo.account_id}`],
-        [
-          'Created',
-          `${new Date(accountInfo.created_at * 1000).toDateString()}`,
-        ],
-        [
-          'Last battle',
-          `${new Date(accountInfo.last_battle_time * 1000).toDateString()}`,
-        ],
-      ]),
-    );
-  },
+        markdownTable([
+          ['Nickname', `${accountInfo.nickname}`],
+          ['Battles', `${accountInfo.statistics.all.battles}`],
+          [
+            'Winrate',
+            `${(
+              100 *
+              (accountInfo.statistics.all.wins /
+                accountInfo.statistics.all.battles)
+            ).toFixed(2)}%`,
+          ],
+          [],
+          ['Account ID', `${accountInfo.account_id}`],
+          [
+            'Created',
+            `${new Date(accountInfo.created_at * 1000).toDateString()}`,
+          ],
+          [
+            'Last battle',
+            `${new Date(accountInfo.last_battle_time * 1000).toDateString()}`,
+          ],
+        ]),
+      );
+    },
 
-  autocomplete: autocompleteUsername,
-};
+    autocomplete: autocompleteUsername,
+  });
+});

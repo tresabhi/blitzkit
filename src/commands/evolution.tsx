@@ -1,7 +1,4 @@
-import {
-  SlashCommandBuilder,
-  SlashCommandSubcommandGroupBuilder,
-} from 'discord.js';
+import { SlashCommandSubcommandGroupBuilder } from 'discord.js';
 import CommandWrapper from '../components/CommandWrapper';
 import * as Graph from '../components/Graph';
 import NoData, { NoDataType } from '../components/NoData';
@@ -20,6 +17,7 @@ import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import buttonPrimary from '../core/discord/buttonPrimary';
 import commandToURL from '../core/discord/commandToURL';
+import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
 import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
 import resolvePeriodFromCommand, {
@@ -29,7 +27,7 @@ import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand, {
   ResolvedPlayer,
 } from '../core/discord/resolvePlayerFromCommand';
-import { CommandRegistryPromisable } from '../events/interactionCreate';
+import { CommandRegistry } from '../events/interactionCreate';
 
 type EvolutionStatType = 'player' | 'tank';
 
@@ -107,40 +105,32 @@ async function render(
   );
 }
 
-export const evolutionCommand = new Promise<CommandRegistryPromisable>(
+export const evolutionCommand = new Promise<CommandRegistry>(
   async (resolve) => {
-    let playerGroup: SlashCommandSubcommandGroupBuilder;
-    let tankGroup: SlashCommandSubcommandGroupBuilder;
-    const command = new SlashCommandBuilder()
-      .setName('evolution')
-      .setDescription('Evolution of statistics')
-      .addSubcommandGroup((option) => {
-        playerGroup = option
-          .setName('player')
-          .setDescription('Player statistics');
-
-        return playerGroup;
-      })
-      .addSubcommandGroup((option) => {
-        tankGroup = option.setName('tank').setDescription('Tank statistics');
-
-        return tankGroup;
-      });
-
-    addPeriodSubCommands(playerGroup!, (option) =>
-      option.addStringOption(addUsernameChoices),
-    );
-    addPeriodSubCommands(tankGroup!, (option) =>
-      option
-        .addStringOption(addTankChoices)
-        .addStringOption(addUsernameChoices),
-    );
-
     resolve({
       inProduction: true,
       inPublic: true,
 
-      command,
+      command: createLocalizedCommand('evolution', [
+        {
+          group: 'player',
+          modify(option: SlashCommandSubcommandGroupBuilder) {
+            addPeriodSubCommands(option, (option) =>
+              option.addStringOption(addUsernameChoices),
+            );
+          },
+        },
+        {
+          group: 'tank',
+          modify(option: SlashCommandSubcommandGroupBuilder) {
+            addPeriodSubCommands(option, (option) =>
+              option
+                .addStringOption(addTankChoices)
+                .addStringOption(addUsernameChoices),
+            );
+          },
+        },
+      ]),
 
       async handler(interaction) {
         const commandGroup =
@@ -155,8 +145,6 @@ export const evolutionCommand = new Promise<CommandRegistryPromisable>(
           ...getCustomPeriodParams(interaction),
           tankId,
         });
-
-        getBlitzStarsLinkButton;
 
         return [
           await render(player, period, commandGroup, tankId),
