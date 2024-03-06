@@ -198,6 +198,42 @@
           "subtitle": "Inactive for %s+ days",
           "listing": "%s days"
         }
+      },
+
+      "full_stats": {
+        "$": "full-stats",
+        "description": "Full in-game statistics",
+
+        "body": {
+          "cards": {
+            "games": {
+              "$": "Games",
+              "winrate": "Winrate",
+              "battles": "Battles",
+              "wins_losses": "Wins / losses"
+            },
+            "efficiency": {
+              "$": "Efficiency",
+              "wn8": "WN8",
+              "survival": "Survival",
+              "accuracy": "Accuracy"
+            },
+            "lethality": {
+              "$": "Lethality",
+              "average_damage": "Average damage",
+              "damage_per_tier": "Damage per tier",
+              "damage_ratio": "Damage ratio",
+              "average_kills": "Average kills"
+            },
+            "miscellaneous": {
+              "$": "Miscellaneous",
+              "average_tier": "Average tier",
+              "average_spots": "Average spots",
+              "average_xp": "Average XP",
+              "kills_to_death_ratio": "Kills to death ratio"
+            }
+          }
+        }
       }
     }
   },

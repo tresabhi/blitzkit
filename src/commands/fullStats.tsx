@@ -61,7 +61,11 @@ async function render(
       )}
       {stats.battles > 0 && <TierWeights weights={tierWeights!} />}
       {stats.battles > 0 && (
-        <GenericAllStats stats={stats} supplementaryStats={supplementary} />
+        <GenericAllStats
+          stats={stats}
+          supplementaryStats={supplementary}
+          locale={locale}
+        />
       )}
     </CommandWrapper>
   );
