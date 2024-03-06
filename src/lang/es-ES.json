@@ -1,26 +1,26 @@
 {
   "common": {
     "nations": {
-      "ussr": "USSR",
-      "germany": "Germany",
-      "usa": "USA",
+      "ussr": "URSS",
+      "germany": "Alemania",
+      "usa": "EUA",
       "china": "China",
-      "uk": "Britain",
-      "france": "France",
-      "japan": "Japan",
-      "european": "Europe",
-      "other": "Hybrid"
+      "uk": "Reino Unido",
+      "france": "Francia",
+      "japan": "Japón",
+      "european": "Europa",
+      "other": "Híbrido"
     },
     "tank_type_short": {
-      "lightTank": "Light",
-      "mediumTank": "Medium",
-      "heavyTank": "Heavy",
-      "AT-SPG": "TD"
+      "lightTank": "Ligero",
+      "mediumTank": "Medio",
+      "heavyTank": "Pesado",
+      "AT-SPG": "DT"
     },
     "tree_type": {
-      "researchable": "Tech tree",
-      "premium": "Premium",
-      "collector": "Collector"
+      "researchable": "Árbol tecnológico",
+      "premium": "Prémium",
+      "collector": "Coleccionable"
     }
   },
   "bot": {
@@ -77,23 +77,23 @@
       "options": {
         "clan": {
           "$": "clan",
-          "description": "The clan name or tag"
+          "description": "El nombre del clan o etiqueta"
         }
       },
       "periods": {
-        "career": "Career",
-        "today": "Today",
-        "days": "%s days",
-        "custom": "%s - %s days"
+        "career": "Carrera",
+        "today": "Hoy",
+        "days": "%s días",
+        "custom": "%s - %s días"
       },
       "filters": {
-        "none": "No filters",
-        "tier": "Tier %s"
+        "none": "Sin filtros",
+        "tier": "Rango %s"
       },
       "no_data": {
-        "battles_in_period": "No battles played in this period",
-        "players_in_period": "No players in this period",
-        "tanks_found": "No tanks found"
+        "battles_in_period": "No hay batallas jugadas en este período",
+        "players_in_period": "No hay jugadores en este período",
+        "tanks_found": "No se encontraron tanques"
       }
     },
     "commands": {
@@ -152,31 +152,31 @@
         }
       },
       "evolution": {
-        "$": "evolution",
-        "description": "Evolution of statistics",
+        "$": "evolución",
+        "description": "Evolución de las estadísticas",
         "groups": {
           "player": {
-            "$": "player",
-            "description": "Player statistics"
+            "$": "jugador",
+            "description": "Estadísticas del jugador"
           },
           "tank": {
-            "$": "tank",
-            "description": "Tank statistics"
+            "$": "tanque",
+            "description": "Estadísticas del tanque"
           }
         }
       },
       "inactive": {
-        "$": "inactive",
-        "description": "Lists all inactive players in a clan above a threshold",
+        "$": "inactivo",
+        "description": "Lista todos los jugadores inactivos en un clan por encima de un umbral",
         "options": {
           "threshold": {
-            "$": "threshold",
-            "description": "The number of days inactive (default: %s days)"
+            "$": "umbral",
+            "description": "El número de días inactivo ( predeterminado: %s días)"
           }
         },
         "body": {
-          "subtitle": "Inactive for %s+ days",
-          "listing": "%s days"
+          "subtitle": "Inactivo por %s+ días",
+          "listing": "%s días"
         }
       }
     }
