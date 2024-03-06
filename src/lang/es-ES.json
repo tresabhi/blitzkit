@@ -1,4 +1,28 @@
 {
+  "common": {
+    "nations": {
+      "ussr": "USSR",
+      "germany": "Germany",
+      "usa": "USA",
+      "china": "China",
+      "uk": "Britain",
+      "france": "France",
+      "japan": "Japan",
+      "european": "Europe",
+      "other": "Hybrid"
+    },
+    "tank_type_short": {
+      "lightTank": "Light",
+      "mediumTank": "Medium",
+      "heavyTank": "Heavy",
+      "AT-SPG": "TD"
+    },
+    "tree_type": {
+      "researchable": "Tech tree",
+      "premium": "Premium",
+      "collector": "Collector"
+    }
+  },
   "bot": {
     "common": {
       "wn8": {
@@ -55,6 +79,10 @@
         "today": "Today",
         "days": "%s days",
         "custom": "%s - %s days"
+      },
+      "filters": {
+        "none": "No filters",
+        "tier": "Tier %s"
       }
     },
     "commands": {
