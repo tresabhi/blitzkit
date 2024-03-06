@@ -15,7 +15,7 @@ import addTankChoices from '../core/discord/addTankChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
-import buttonPrimary from '../core/discord/buttonPrimary';
+import { buttonRefresh } from '../core/discord/buttonRefresh';
 import commandToURL from '../core/discord/commandToURL';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
@@ -148,7 +148,7 @@ export const evolutionCommand = new Promise<CommandRegistry>(
 
         return [
           await render(player, period, commandGroup, tankId),
-          buttonPrimary(path, 'Refresh'),
+          buttonRefresh(interaction, path),
           await getBlitzStarsLinkButton(
             player.region,
             player.id,

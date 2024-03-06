@@ -1,3 +1,4 @@
+import { Locale } from 'discord.js';
 import { chunk } from 'lodash';
 import * as Breakdown from '../components/Breakdown';
 import CommandWrapper from '../components/CommandWrapper';
@@ -18,7 +19,7 @@ import addPeriodicFilterOptions from '../core/discord/addPeriodicFilterOptions';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
-import buttonPrimary from '../core/discord/buttonPrimary';
+import { buttonRefresh } from '../core/discord/buttonRefresh';
 import commandToURL from '../core/discord/commandToURL';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
@@ -44,6 +45,7 @@ export async function renderBreakdown(
   { region, id }: ResolvedPlayer,
   { start, end, name }: ResolvedPeriod,
   filters: StatFilters,
+  locale: Locale,
 ) {
   const awaitedTankDefinitions = await tankDefinitions;
   const awaitedTankAverages = await tankAverages;
@@ -52,7 +54,7 @@ export async function renderBreakdown(
   const accountInfo = await getAccountInfo(region, id);
   const clanData = await getClanAccountInfo(region, id, ['clan']);
   const tankStats = await getTankStats(region, id);
-  const filterDescriptions = await filtersToDescription(filters);
+  const filterDescriptions = await filtersToDescription(filters, locale);
   const orderedCurrentStats: AllStats[] = [];
   const orderedCareerStats: AllStats[] = [];
   const orderedCurrentWN8: (number | undefined)[] = [];
@@ -312,8 +314,13 @@ export const breakdownCommand = new Promise<CommandRegistry>(
         });
 
         return [
-          ...(await renderBreakdown(player, period, filters)),
-          buttonPrimary(path, 'Refresh'),
+          ...(await renderBreakdown(
+            player,
+            period,
+            filters,
+            interaction.locale,
+          )),
+          buttonRefresh(interaction, path),
           await getBlitzStarsLinkButton(player.region, player.id),
         ];
       },
@@ -328,7 +335,12 @@ export const breakdownCommand = new Promise<CommandRegistry>(
         const period = resolvePeriodFromButton(player.region, interaction);
         const filters = getFiltersFromButton(interaction);
 
-        return await renderBreakdown(player, period, filters);
+        return await renderBreakdown(
+          player,
+          period,
+          filters,
+          interaction.locale,
+        );
       },
     });
   },

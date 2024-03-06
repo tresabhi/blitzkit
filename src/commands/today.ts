@@ -5,7 +5,7 @@ import { addFilterOptions } from '../core/discord/addFilterOptions';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
-import buttonPrimary from '../core/discord/buttonPrimary';
+import { buttonRefresh } from '../core/discord/buttonRefresh';
 import commandToURL from '../core/discord/commandToURL';
 import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
 import { getFiltersFromButton } from '../core/discord/getFiltersFromButton';
@@ -47,8 +47,8 @@ export const todayCommand = new Promise<CommandRegistry>(async (resolve) => {
       });
 
       return [
-        ...(await renderBreakdown(player, period, filters)),
-        buttonPrimary(path, 'Refresh'),
+        ...(await renderBreakdown(player, period, filters, interaction.locale)),
+        buttonRefresh(interaction, path),
         await getBlitzStarsLinkButton(player.region, player.id),
       ];
     },
@@ -63,7 +63,7 @@ export const todayCommand = new Promise<CommandRegistry>(async (resolve) => {
       const period = resolvePeriodFromButton(player.region, interaction);
       const filters = getFiltersFromButton(interaction);
 
-      return await renderBreakdown(player, period, filters);
+      return await renderBreakdown(player, period, filters, interaction.locale);
     },
   });
 });

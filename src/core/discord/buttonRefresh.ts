@@ -6,10 +6,10 @@ export function buttonRefresh(
   path: string,
 ) {
   if (
-    interaction.appPermissions?.has('AttachFiles') &&
+    interaction.appPermissions?.has('ReadMessageHistory') &&
     interaction.appPermissions?.has('ViewChannel')
   ) {
-    return buttonPrimary(path, 'Refresh');
+    return buttonPrimary(path, 'Refresh', '🔄️');
   }
 
   return null;
