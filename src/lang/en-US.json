@@ -80,6 +80,13 @@
         }
       },
 
+      "options": {
+        "clan": {
+          "$": "clan",
+          "description": "The clan name or tag"
+        }
+      },
+
       "periods": {
         "career": "Career",
         "today": "Today",
@@ -173,6 +180,23 @@
             "$": "tank",
             "description": "Tank statistics"
           }
+        }
+      },
+
+      "inactive": {
+        "$": "inactive",
+        "description": "Lists all inactive players in a clan above a threshold",
+
+        "options": {
+          "threshold": {
+            "$": "threshold",
+            "description": "The number of days inactive (default: %s days)"
+          }
+        },
+
+        "body": {
+          "subtitle": "Inactive for %s+ days",
+          "listing": "%s days"
         }
       }
     }

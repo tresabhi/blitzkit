@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { Locale } from 'discord.js';
 import CommandWrapper from '../components/CommandWrapper';
 import GenericStats from '../components/GenericStats';
 import NoData from '../components/NoData';
@@ -7,7 +7,10 @@ import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanInfo } from '../core/blitz/getClanInfo';
 import addClanChoices from '../core/discord/addClanChoices';
 import autocompleteClan from '../core/discord/autocompleteClan';
+import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
+import { localizationObject } from '../core/discord/localizationObject';
 import resolveClanFromCommand from '../core/discord/resolveClanFromCommand';
+import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
 
 const DEFAULT_THRESHOLD = 7;
@@ -17,20 +20,29 @@ export const inactiveCommand = new Promise<CommandRegistry>((resolve) => {
     inProduction: true,
     inPublic: true,
 
-    command: new SlashCommandBuilder()
-      .setName('inactive')
-      .setDescription('Lists all inactive players')
+    command: createLocalizedCommand('inactive')
       .addStringOption(addClanChoices)
-      .addNumberOption((option) =>
-        option
+      .addNumberOption((option) => {
+        const { translate } = translator(Locale.EnglishUS);
+
+        return option
           .setName('threshold')
-          .setDescription(
-            `The number of days inactive (default: ${DEFAULT_THRESHOLD})`,
+          .setNameLocalizations(
+            localizationObject('bot.commands.inactive.options.threshold'),
           )
-          .setMinValue(0),
-      ),
+          .setDescription(
+            translate('bot.commands.inactive.options.threshold.description'),
+          )
+          .setDescriptionLocalizations(
+            localizationObject(
+              'bot.commands.inactive.options.threshold.description',
+            ),
+          )
+          .setMinValue(0);
+      }),
 
     async handler(interaction) {
+      const { translate } = translator(interaction.locale);
       const { region, id } = await resolveClanFromCommand(interaction);
       const threshold =
         interaction.options.getNumber('threshold')! ?? DEFAULT_THRESHOLD;
@@ -49,7 +61,10 @@ export const inactiveCommand = new Promise<CommandRegistry>((resolve) => {
         .sort((a, b) => b[1] - a[1])
         .map(
           ([name, days]) =>
-            [name, `${days.toFixed(0)} days`] as [string, string],
+            [
+              name,
+              translate('bot.commands.inactive.body.listing', [`${days}`]),
+            ] as [string, string],
         );
       const hasInactiveMembers = inactive.length > 0;
 
@@ -58,7 +73,7 @@ export const inactiveCommand = new Promise<CommandRegistry>((resolve) => {
           <TitleBar
             title={clanInfo.name}
             image={`https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanInfo.emblem_set_id}.png`}
-            description={`Inactive for ${threshold}+ Days • ${new Date().toDateString()}`}
+            description={`${translate('bot.commands.inactive.body.subtitle', [`${threshold}`])} • ${new Date().toLocaleDateString(interaction.locale)}`}
           />
 
           {!hasInactiveMembers && (
