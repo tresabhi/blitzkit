@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { Locale, SlashCommandBuilder } from 'discord.js';
 import AllStatsOverview from '../components/AllStatsOverview';
 import CommandWrapper from '../components/CommandWrapper';
 import NoData, { NoDataType } from '../components/NoData';
@@ -33,13 +33,14 @@ async function render(
   { region, id }: ResolvedPlayer,
   { start, end, name }: ResolvedPeriod,
   filters: StatFilters,
+  locale: Locale,
 ) {
   const { nickname } = await getAccountInfo(region, id);
   const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
   const clanImage = clan ? emblemIdToURL(clan.emblem_set_id) : undefined;
   const diffedTankStats = await getStatsInPeriod(region, id, start, end);
   const { stats, supplementary } = await filterStats(diffedTankStats, filters);
-  const filterDescriptions = await filtersToDescription(filters);
+  const filterDescriptions = await filtersToDescription(filters, locale);
 
   return (
     <CommandWrapper>
@@ -82,7 +83,7 @@ export const statsCommand = new Promise<CommandRegistry>(async (resolve) => {
       });
 
       return Promise.all([
-        render(player, period, filters),
+        render(player, period, filters, interaction.locale),
         buttonRefresh(interaction, path),
         getBlitzStarsLinkButton(player.region, player.id),
       ]);
@@ -98,7 +99,7 @@ export const statsCommand = new Promise<CommandRegistry>(async (resolve) => {
       const period = resolvePeriodFromButton(player.region, interaction);
       const filters = getFiltersFromButton(interaction);
 
-      return await render(player, period, filters);
+      return await render(player, period, filters, interaction.locale);
     },
   });
 });

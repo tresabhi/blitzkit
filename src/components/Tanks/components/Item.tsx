@@ -17,6 +17,7 @@ export const TREE_TYPES = ['researchable', 'premium', 'collector'] as const;
 export type TankType = (typeof TANK_TYPES)[number];
 export type TreeType = (typeof TREE_TYPES)[number];
 
+// BIG TODO: REMOVE THIS AFTER LOCALIZATION
 export const TREE_TYPE_NAMES: Record<TreeType, string> = {
   researchable: 'Tech tree',
   premium: 'Premium',

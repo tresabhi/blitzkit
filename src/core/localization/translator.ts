@@ -27,7 +27,7 @@ export function translator(localeRaw: Locale) {
             console.warn(
               `Undefined translation at "${pathItem}" in "${path}" for locale "${locale}"; falling back to en-US`,
             );
-            return translator(Locale.EnglishUS).translate(path);
+            return translator(Locale.EnglishUS).translate(path, literals);
           }
         }
       }
@@ -51,6 +51,8 @@ export function translator(localeRaw: Locale) {
         if (index !== 0) embeddedString += literals[index - 1];
         embeddedString += chunk;
       });
+
+      return embeddedString;
     }
 
     return resolvedString;
