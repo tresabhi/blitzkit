@@ -49,6 +49,12 @@
             }
           }
         }
+      },
+      "periods": {
+        "career": "Career",
+        "today": "Today",
+        "days": "%s days",
+        "custom": "%s - %s days"
       }
     },
     "commands": {
@@ -104,6 +110,20 @@
             "default": "predeterminado"
           },
           "uptime": "Tiempo en línea"
+        }
+      },
+      "evolution": {
+        "$": "evolution",
+        "description": "Evolution of statistics",
+        "groups": {
+          "player": {
+            "$": "player",
+            "description": "Player statistics"
+          },
+          "tank": {
+            "$": "tank",
+            "description": "Tank statistics"
+          }
         }
       }
     }
