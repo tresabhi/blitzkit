@@ -83,6 +83,11 @@
       "filters": {
         "none": "No filters",
         "tier": "Tier %s"
+      },
+      "no_data": {
+        "battles_in_period": "No battles played in this period",
+        "players_in_period": "No players in this period",
+        "tanks_found": "No tanks found"
       }
     },
     "commands": {
