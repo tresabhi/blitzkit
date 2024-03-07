@@ -78,6 +78,24 @@
         "clan": {
           "$": "clan",
           "description": "El nombre o etiqueta del clan"
+        },
+        "tank": {
+          "$": "tank",
+          "description": "The tank to get stats for"
+        },
+        "filters": {
+          "nation": {
+            "$": "nation",
+            "description": "Nation"
+          },
+          "tank_type": {
+            "$": "tank-type",
+            "description": "Tank type"
+          },
+          "tree_type": {
+            "$": "tree-type",
+            "description": "Tree type"
+          }
         }
       },
       "periods": {
