@@ -80,17 +80,17 @@
           "description": "El nombre o etiqueta del clan"
         },
         "tank": {
-          "$": "tank",
+          "$": "tanque",
           "description": "The tank to get stats for"
         },
         "filters": {
           "nation": {
-            "$": "nation",
-            "description": "Nation"
+            "$": "nación",
+            "description": "Nación"
           },
           "tank_type": {
-            "$": "tank-type",
-            "description": "Tank type"
+            "$": "tipo-tanque",
+            "description": "Tipo de tanque"
           },
           "tree_type": {
             "$": "tree-type",
