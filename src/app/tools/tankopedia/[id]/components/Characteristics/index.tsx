@@ -136,12 +136,12 @@ export function Characteristics() {
   ]);
   const enginePowerCoefficient = coefficient(
     [
-      hasEngineAccelerator && (tank.type === 'light' || tank.type === 'medium'),
+      hasEngineAccelerator && (tank.type === 'lightTank' || tank.type === 'mediumTank'),
       0.05,
     ],
     [
       hasEngineAccelerator &&
-        (tank.type === 'heavy' || tank.type === 'tankDestroyer'),
+        (tank.type === 'heavyTank' || tank.type === 'AT-SPG'),
       0.07,
     ],
     [hasEnginePowerBoost, 0.2],
@@ -163,7 +163,7 @@ export function Characteristics() {
   const viewRangeCoefficient =
     coefficient([
       hasImprovedOptics,
-      tank.type === 'tankDestroyer' ? 0.05 : tank.type === 'heavy' ? 0.07 : 0.1,
+      tank.type === 'AT-SPG' ? 0.05 : tank.type === 'heavyTank' ? 0.07 : 0.1,
     ]) * coefficient([true, progressiveStat(commanderMastery)]);
   const fireChanceCoefficient = coefficient([hasProtectiveKit, -0.2]);
 
@@ -180,17 +180,17 @@ export function Characteristics() {
   const camouflageSumMoving = sum(
     [
       hasCamouflageNet,
-      tank.type === 'heavy'
+      tank.type === 'heavyTank'
         ? 0.03
-        : tank.type === 'tankDestroyer'
+        : tank.type === 'AT-SPG'
           ? 0.07
           : 0.05,
     ],
     [
       camouflage,
-      tank.type === 'tankDestroyer'
+      tank.type === 'AT-SPG'
         ? 0.04
-        : tank.type === 'heavy'
+        : tank.type === 'heavyTank'
           ? 0.03
           : 0.02,
     ],
@@ -199,17 +199,17 @@ export function Characteristics() {
     [
       hasCamouflageNet,
       2 *
-        (tank.type === 'heavy'
+        (tank.type === 'heavyTank'
           ? 0.03
-          : tank.type === 'tankDestroyer'
+          : tank.type === 'AT-SPG'
             ? 0.07
             : 0.05),
     ],
     [
       camouflage,
-      tank.type === 'tankDestroyer'
+      tank.type === 'AT-SPG'
         ? 0.04
-        : tank.type === 'heavy'
+        : tank.type === 'heavyTank'
           ? 0.03
           : 0.02,
     ],

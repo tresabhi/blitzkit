@@ -6,10 +6,10 @@ import {
 import { theme } from '../../../stitches.config';
 
 export const TANK_TYPES = [
-  'light',
-  'medium',
-  'heavy',
-  'tankDestroyer',
+  'lightTank',
+  'mediumTank',
+  'heavyTank',
+  'AT-SPG',
 ] as const;
 
 export const TREE_TYPES = ['researchable', 'premium', 'collector'] as const;

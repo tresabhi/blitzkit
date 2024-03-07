@@ -15,7 +15,7 @@ import {
 } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
-import { TankType, TreeType } from '../../../../../components/Tanks';
+import { TANK_TYPES, TreeType } from '../../../../../components/Tanks';
 import { resolveNearPenetration } from '../../../../../core/blitz/resolveNearPenetration';
 import { asset } from '../../../../../core/blitzkrieg/asset';
 import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
@@ -49,7 +49,6 @@ interface TankSearchProps {
   onSelect?: (tank: TankDefinition) => void;
 }
 
-const tankTypeOrder: TankType[] = ['light', 'medium', 'heavy', 'tankDestroyer'];
 const treeTypeOrder: TreeType[] = ['researchable', 'premium', 'collector'];
 
 export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
@@ -70,7 +69,7 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
         )
         .sort(
           (a, b) =>
-            (tankTypeOrder.indexOf(a.type) - tankTypeOrder.indexOf(b.type)) *
+            (TANK_TYPES.indexOf(a.type) - TANK_TYPES.indexOf(b.type)) *
             (sort.direction === 'descending' ? -1 : 1),
         )
         .sort(

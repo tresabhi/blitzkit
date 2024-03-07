@@ -23,23 +23,24 @@ export function createLocalizedCommand(
     | CreateLocalizedCommandSubcommand[]
     | CreateLocalizedCommandSubcommandGroup[],
 ) {
+  const commandPathItem = command.replaceAll('-', '_');
   const { translate } = translator(Locale.EnglishUS);
   const slashCommand = new SlashCommandBuilder()
     .setName(command)
-    .setNameLocalizations(localizationObject(`bot.commands.${command}`))
-    .setDescription(translate(`bot.commands.${command}.description`))
+    .setNameLocalizations(localizationObject(`bot.commands.${commandPathItem}`))
+    .setDescription(translate(`bot.commands.${commandPathItem}.description`))
     .setDescriptionLocalizations(
-      localizationObject(`bot.commands.${command}.description`),
+      localizationObject(`bot.commands.${commandPathItem}.description`),
     );
 
   if (sub) {
     sub.map((subItem) => {
       if ('subcommand' in subItem) {
         const subcommandNameLocalizations = localizationObject(
-          `bot.commands.${command}.subcommands.${subItem.subcommand}`,
+          `bot.commands.${commandPathItem}.subcommands.${subItem.subcommand}`,
         );
         const subcommandDescriptionLocalizations = localizationObject(
-          `bot.commands.${command}.subcommands.${subItem.subcommand}.description`,
+          `bot.commands.${commandPathItem}.subcommands.${subItem.subcommand}.description`,
         );
 
         slashCommand.addSubcommand((option) => {
@@ -50,17 +51,17 @@ export function createLocalizedCommand(
             .setNameLocalizations(subcommandNameLocalizations)
             .setDescription(
               translate(
-                `bot.commands.${command}.subcommands.${subItem.subcommand}.description`,
+                `bot.commands.${commandPathItem}.subcommands.${subItem.subcommand}.description`,
               ),
             )
             .setDescriptionLocalizations(subcommandDescriptionLocalizations);
         });
       } else {
         const subcommandNameLocalizations = localizationObject(
-          `bot.commands.${command}.groups.${subItem.group}`,
+          `bot.commands.${commandPathItem}.groups.${subItem.group}`,
         );
         const subcommandDescriptionLocalizations = localizationObject(
-          `bot.commands.${command}.groups.${subItem.group}.description`,
+          `bot.commands.${commandPathItem}.groups.${subItem.group}.description`,
         );
 
         slashCommand.addSubcommandGroup((option) => {
@@ -71,7 +72,7 @@ export function createLocalizedCommand(
             .setNameLocalizations(subcommandNameLocalizations)
             .setDescription(
               translate(
-                `bot.commands.${command}.groups.${subItem.group}.description`,
+                `bot.commands.${commandPathItem}.groups.${subItem.group}.description`,
               ),
             )
             .setDescriptionLocalizations(subcommandDescriptionLocalizations);

@@ -181,24 +181,24 @@ export const tankNames = tanksDefinitionsArray.then((tanks) =>
 );
 
 export const TANK_ICONS: Record<TankType, string> = {
-  tankDestroyer: 'https://i.imgur.com/BIHSEH0.png',
-  light: 'https://i.imgur.com/CSNha5V.png',
-  medium: 'https://i.imgur.com/wvf3ltm.png',
-  heavy: 'https://i.imgur.com/ECeqlZa.png',
+  'AT-SPG': 'https://i.imgur.com/BIHSEH0.png',
+  lightTank: 'https://i.imgur.com/CSNha5V.png',
+  mediumTank: 'https://i.imgur.com/wvf3ltm.png',
+  heavyTank: 'https://i.imgur.com/ECeqlZa.png',
 };
 
 export const TANK_ICONS_PREMIUM: Record<TankType, string> = {
-  tankDestroyer: 'https://i.imgur.com/TCu3EdR.png',
-  light: 'https://i.imgur.com/zdkpTRb.png',
-  medium: 'https://i.imgur.com/3z7eHX6.png',
-  heavy: 'https://i.imgur.com/P3vbmyA.png',
+  'AT-SPG': 'https://i.imgur.com/TCu3EdR.png',
+  lightTank: 'https://i.imgur.com/zdkpTRb.png',
+  mediumTank: 'https://i.imgur.com/3z7eHX6.png',
+  heavyTank: 'https://i.imgur.com/P3vbmyA.png',
 };
 
 export const TANK_ICONS_COLLECTOR: Record<TankType, string> = {
-  tankDestroyer: 'https://i.imgur.com/WTjeirB.png',
-  light: 'https://i.imgur.com/EwhtKkU.png',
-  medium: 'https://i.imgur.com/u8YDMBh.png',
-  heavy: 'https://i.imgur.com/8xRf3nc.png',
+  'AT-SPG': 'https://i.imgur.com/WTjeirB.png',
+  lightTank: 'https://i.imgur.com/EwhtKkU.png',
+  mediumTank: 'https://i.imgur.com/u8YDMBh.png',
+  heavyTank: 'https://i.imgur.com/8xRf3nc.png',
 };
 
 export const TIERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;

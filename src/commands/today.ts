@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { encyclopediaInfo } from '../core/blitz/encyclopediaInfo';
+import { NATIONS } from '../core/blitzkrieg/tankDefinitions';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import { addFilterOptions } from '../core/discord/addFilterOptions';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
@@ -18,12 +18,12 @@ import { CommandRegistry } from '../events/interactionCreate';
 import { renderBreakdown } from './breakdown';
 
 export const todayCommand = new Promise<CommandRegistry>(async (resolve) => {
-  const awaitedEncyclopediaInfo = await encyclopediaInfo;
+  const nations = await NATIONS;
   const command = addFilterOptions(
     new SlashCommandBuilder()
       .setName('today')
       .setDescription("Today's played tanks and statistics"),
-    awaitedEncyclopediaInfo,
+    nations,
   ).addStringOption(addUsernameChoices);
 
   resolve({

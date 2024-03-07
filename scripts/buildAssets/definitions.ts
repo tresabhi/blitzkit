@@ -34,7 +34,6 @@ import {
 import { DATA, POI } from './constants';
 import { TankParameters } from './tankIcons';
 
-type BlitzTankType = 'AT-SPG' | 'lightTank' | 'mediumTank' | 'heavyTank';
 interface Strings {
   [key: string]: string;
 }
@@ -306,19 +305,6 @@ type ConsumablesVehicleFilter =
   | { name: string }
   | { extendedTags: string };
 
-const consumableProvisionEffectSuffixes = [
-  'Increase',
-  'Factor',
-  'Bias',
-  'Coef',
-  'Percent',
-];
-const blitzTankTypeToBlitzkrieg: Record<BlitzTankType, TankType> = {
-  'AT-SPG': 'tankDestroyer',
-  lightTank: 'light',
-  mediumTank: 'medium',
-  heavyTank: 'heavy',
-};
 const blitzShellKindToBLitzkrieg: Record<ShellKind, ShellType> = {
   ARMOR_PIERCING: 'ap',
   ARMOR_PIERCING_CR: 'ap_cr',
@@ -502,7 +488,7 @@ export async function definitions(production: boolean) {
               ? 'premium'
               : 'researchable',
           tier: tank.level as Tier,
-          type: blitzTankTypeToBlitzkrieg[tankTags[0] as BlitzTankType],
+          type: tankTags[0] as TankType,
           testing: tankTags.includes('testTank') ? true : undefined,
           price: tankPrice,
           camouflage: {
