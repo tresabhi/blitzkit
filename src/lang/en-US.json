@@ -91,6 +91,11 @@
           "description": "The tank to get stats for"
         },
 
+        "username": {
+          "$": "username",
+          "description": "The Blitz username of the player"
+        },
+
         "filters": {
           "nation": {
             "$": "nation",
@@ -166,8 +171,10 @@
         "body": {
           "total": "Total",
           "battles": "Battles",
+          "wn8": "WN8",
           "winrate": "Winrate",
-          "damage": "Damage"
+          "damage": "Damage",
+          "unknown_tank": "Unknown tank %s"
         }
       },
 

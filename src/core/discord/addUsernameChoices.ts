@@ -1,8 +1,16 @@
-import { SlashCommandStringOption } from 'discord.js';
+import { Locale, SlashCommandStringOption } from 'discord.js';
+import { translator } from '../localization/translator';
+import { localizationObject } from './localizationObject';
 
 export default function addUsernameChoices(option: SlashCommandStringOption) {
+  const { t } = translator(Locale.EnglishUS);
+
   return option
-    .setName('username')
-    .setDescription('The username you use in Blitz')
+    .setName(t`bot.common.options.username`)
+    .setNameLocalizations(localizationObject('bot.common.options.username'))
+    .setDescription(t`bot.common.options.username.description`)
+    .setDescriptionLocalizations(
+      localizationObject('bot.common.options.username.description'),
+    )
     .setAutocomplete(true);
 }

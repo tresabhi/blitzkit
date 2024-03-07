@@ -9,7 +9,7 @@ export function buttonRefresh(
     interaction.appPermissions?.has('ReadMessageHistory') &&
     interaction.appPermissions?.has('ViewChannel')
   ) {
-    return buttonPrimary(path, 'Refresh', '🔄️');
+    return buttonPrimary(path, 'Refresh');
   }
 
   return null;

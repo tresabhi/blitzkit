@@ -33,6 +33,7 @@ import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand, {
   ResolvedPlayer,
 } from '../core/discord/resolvePlayerFromCommand';
+import { translator } from '../core/localization/translator';
 import calculateWN8 from '../core/statistics/calculateWN8';
 import { StatFilters, filterStats } from '../core/statistics/filterStats';
 import getWN8Percentile from '../core/statistics/getWN8Percentile';
@@ -47,6 +48,7 @@ export async function renderBreakdown(
   filters: StatFilters,
   locale: Locale,
 ) {
+  const { t, translate } = translator(locale);
   const awaitedTankDefinitions = await tankDefinitions;
   const awaitedTankAverages = await tankAverages;
   const statsInPeriod = await getStatsInPeriod(region, id, start, end);
@@ -146,21 +148,21 @@ export async function renderBreakdown(
       <Breakdown.Row
         key={id}
         type="summary"
-        title="Total"
+        title={t`bot.commands.breakdown.body.total`}
         stats={[
           {
-            title: 'Battles',
+            title: t`bot.commands.breakdown.body.battles`,
             current: currentBattles,
             career: careerBattles,
           },
           {
-            title: 'Winrate',
+            title: t`bot.commands.breakdown.body.winrate`,
             current: `${(100 * currentWinrate).toFixed(2)}%`,
             career: `${(100 * careerWinrate).toFixed(2)}%`,
             delta: currentWinrate - careerWinrate,
           },
           {
-            title: 'WN8',
+            title: t`bot.commands.breakdown.body.wn8`,
             current:
               currentWN8 === undefined
                 ? undefined
@@ -175,7 +177,7 @@ export async function renderBreakdown(
                 : getWN8Percentile(currentWN8),
           },
           {
-            title: 'Damage',
+            title: t`bot.commands.breakdown.body.damage`,
             current: Math.round(currentDamage).toLocaleString(),
             career: Math.round(careerDamage).toLocaleString(),
             delta: currentDamage - careerDamage,
@@ -199,15 +201,18 @@ export async function renderBreakdown(
           type="tank"
           tankType={tankDefinition?.type}
           treeType={tankDefinition?.treeType}
-          title={tankDefinition?.name ?? `Unknown tank ${id}`}
+          title={
+            tankDefinition?.name ??
+            translate('bot.commands.breakdown.body.unknown_tank', [`${id}`])
+          }
           stats={[
             {
-              title: 'Battles',
+              title: t`bot.commands.breakdown.body.battles`,
               current: current.battles.toLocaleString(),
               career: career.battles.toLocaleString(),
             },
             {
-              title: 'Winrate',
+              title: t`bot.commands.breakdown.body.winrate`,
               current: `${(100 * (current.wins / current.battles)).toFixed(
                 2,
               )}%`,
@@ -216,7 +221,7 @@ export async function renderBreakdown(
                 current.wins / current.battles - career.wins / career.battles,
             },
             {
-              title: 'WN8',
+              title: t`bot.commands.breakdown.body.wn8`,
               current:
                 currentWN8 === undefined
                   ? undefined
@@ -231,7 +236,7 @@ export async function renderBreakdown(
                   : getWN8Percentile(currentWN8),
             },
             {
-              title: 'Damage',
+              title: t`bot.commands.breakdown.body.damage`,
               current: Math.round(
                 current.damage_dealt / current.battles,
               ).toLocaleString(),
