@@ -1,19 +1,19 @@
 {
   "common": {
     "nations": {
-      "ussr": "URSS",
+      "ussr": "U.S.S.R.",
       "germany": "Alemania",
-      "usa": "EUA",
+      "usa": "U.S.A.",
       "china": "China",
-      "uk": "R. U.",
+      "uk": "U.K.",
       "france": "Francia",
       "japan": "Japón",
-      "european": "Europa",
-      "other": "Híbrido"
+      "european": "European nation",
+      "other": "Hybrid nation"
     },
     "tank_type_short": {
       "lightTank": "Ligero",
-      "mediumTank": "Medio",
+      "mediumTank": "Mediano",
       "heavyTank": "Pesado",
       "AT-SPG": "DT"
     },
@@ -153,7 +153,7 @@
       },
       "evolution": {
         "$": "evolución",
-        "description": "Evolución de las estadísticas",
+        "description": "Evolución de estadísticas",
         "groups": {
           "player": {
             "$": "jugador",
@@ -167,11 +167,11 @@
       },
       "inactive": {
         "$": "inactivo",
-        "description": "Lista todos los jugadores inactivos en un clan por encima de un umbral",
+        "description": "Enumera a todos los jugadores inactivos en un clan por encima de un umbral",
         "options": {
           "threshold": {
             "$": "umbral",
-            "description": "El número de días inactivo ( predeterminado: %s días)"
+            "description": "El número de días inactivo (predeterminado: %s días)"
           }
         },
         "body": {
@@ -180,35 +180,35 @@
         }
       },
       "full_stats": {
-        "$": "full-stats",
-        "description": "Full in-game statistics",
+        "$": "estadísticas-completas",
+        "description": "Estadísticas completas del juego",
         "body": {
           "cards": {
             "games": {
-              "$": "Games",
-              "winrate": "Winrate",
-              "battles": "Battles",
-              "wins_losses": "Wins / losses"
+              "$": "Partidas",
+              "winrate": "Tasa de victorias",
+              "battles": "Batallas",
+              "wins_losses": "Victorias / derrotas"
             },
             "efficiency": {
-              "$": "Efficiency",
+              "$": "Eficiencia",
               "wn8": "WN8",
-              "survival": "Survival",
-              "accuracy": "Accuracy"
+              "survival": "Supervivencia",
+              "accuracy": "Precisión"
             },
             "lethality": {
-              "$": "Lethality",
-              "average_damage": "Average damage",
-              "damage_per_tier": "Damage per tier",
-              "damage_ratio": "Damage ratio",
-              "average_kills": "Average kills"
+              "$": "Letalidad",
+              "average_damage": "Daño promedio",
+              "damage_per_tier": "Daño por tier",
+              "damage_ratio": "Relación de daño",
+              "average_kills": "Promedio de bajas"
             },
             "miscellaneous": {
-              "$": "Miscellaneous",
-              "average_tier": "Average tier",
-              "average_spots": "Average spots",
-              "average_xp": "Average XP",
-              "kills_to_death_ratio": "Kills to death ratio"
+              "$": "Misceláneo",
+              "average_tier": "Tier promedio",
+              "average_spots": "Promedio de detecciones",
+              "average_xp": "Promedio de XP",
+              "kills_to_death_ratio": "Relación bajas-muertes"
             }
           }
         }
