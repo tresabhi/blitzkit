@@ -1,15 +1,15 @@
 {
   "common": {
     "nations": {
-      "ussr": "USSR",
+      "ussr": "U.S.S.R.",
       "germany": "Germany",
-      "usa": "USA",
+      "usa": "U.S.A.",
       "china": "China",
-      "uk": "Britain",
+      "uk": "U.K.",
       "france": "France",
       "japan": "Japan",
-      "european": "Europe",
-      "other": "Hybrid"
+      "european": "European nation",
+      "other": "Hybrid nation"
     },
 
     "tank_type_short": {
