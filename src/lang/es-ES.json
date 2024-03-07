@@ -1,26 +1,26 @@
 {
   "common": {
     "nations": {
-      "ussr": "U.S.S.R.",
+      "ussr": "URSS",
       "germany": "Alemania",
-      "usa": "U.S.A.",
+      "usa": "EE. UU.",
       "china": "China",
-      "uk": "U.K.",
+      "uk": "Reino Unido",
       "france": "Francia",
       "japan": "Japón",
-      "european": "European nation",
-      "other": "Hybrid nation"
+      "european": "Nación europea",
+      "other": "Nación híbrida"
     },
     "tank_type_short": {
       "lightTank": "Ligero",
       "mediumTank": "Mediano",
       "heavyTank": "Pesado",
-      "AT-SPG": "DT"
+      "AT-SPG": "Cazacarro"
     },
     "tree_type": {
       "researchable": "Árbol tecnológico",
       "premium": "Prémium",
-      "collector": "Coleccionable"
+      "collector": "Coleccionista"
     }
   },
   "bot": {
@@ -77,7 +77,7 @@
       "options": {
         "clan": {
           "$": "clan",
-          "description": "El nombre del clan o etiqueta"
+          "description": "El nombre o etiqueta del clan"
         }
       },
       "periods": {
@@ -88,7 +88,7 @@
       },
       "filters": {
         "none": "Sin filtros",
-        "tier": "Rango %s"
+        "tier": "Tier %s"
       },
       "no_data": {
         "battles_in_period": "No hay batallas jugadas en este período",
