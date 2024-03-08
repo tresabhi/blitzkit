@@ -297,7 +297,7 @@
           "accounts_linked": "Accounts linked",
           "no_role_permissions": {
             "$": "%s failed to verify",
-            "description": "I don't have the permission to change your manage roles."
+            "description": "I don't have the permission to manage roles."
           }
         },
 
