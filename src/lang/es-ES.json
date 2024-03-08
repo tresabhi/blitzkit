@@ -11,7 +11,7 @@
       "european": "Nación europea",
       "other": "Nación híbrida"
     },
-    "tank_type_short": {
+    "tank_class_short": {
       "lightTank": "Ligero",
       "mediumTank": "Mediano",
       "heavyTank": "Pesado",
@@ -21,6 +21,25 @@
       "researchable": "Árbol tecnológico",
       "premium": "Prémium",
       "collector": "Coleccionista"
+    },
+    "regions": {
+      "normal": {
+        "com": "Norteamérica",
+        "eu": "Europa",
+        "asia": "Asia"
+      },
+      "short": {
+        "com": "NA",
+        "eu": "Europa",
+        "asia": "Asia"
+      }
+    },
+    "leagues": {
+      "diamond": "Diamante",
+      "platinum": "Platino",
+      "gold": "Oro",
+      "silver": "Plata",
+      "bronze": "Bronce"
     }
   },
   "bot": {
@@ -80,22 +99,30 @@
           "description": "El nombre o etiqueta del clan"
         },
         "tank": {
-          "$": "tank",
-          "description": "The tank to get stats for"
+          "$": "tanque",
+          "description": "El tanque al cual conseguirle estadísticas"
+        },
+        "username": {
+          "$": "usuario",
+          "description": "El nombre de usuario de Blitz"
         },
         "filters": {
           "nation": {
-            "$": "nation",
-            "description": "Nation"
+            "$": "nación",
+            "description": "Nación"
           },
-          "tank_type": {
-            "$": "tank-type",
-            "description": "Tank type"
+          "tank_class": {
+            "$": "clase-de-tanque",
+            "description": "Clase de tanque"
           },
           "tree_type": {
-            "$": "tree-type",
-            "description": "Tree type"
+            "$": "tipo-de-árbol",
+            "description": "Tipo de árbol"
           }
+        },
+        "region": {
+          "$": "región",
+          "description": "Región"
         }
       },
       "periods": {
@@ -152,8 +179,10 @@
         "body": {
           "total": "Total",
           "battles": "Batallas",
+          "wn8": "WN8",
           "winrate": "Tasa de victorias",
-          "damage": "Daño"
+          "damage": "Daño",
+          "unknown_tank": "Tanque desconocido %s"
         }
       },
       "debug": {
@@ -229,6 +258,88 @@
               "kills_to_death_ratio": "Relación bajas-muertes"
             }
           }
+        }
+      },
+      "link": {
+        "$": "link",
+        "description": "Vincula tu cuenta de Blitz y Discord",
+        "body": {
+          "accounts_linked": "Cuentas vinculadas",
+          "no_role_permissions": {
+            "$": "%s no se pudo verificar",
+            "description": "No tengo los permisos para cambiar tus roles de administración."
+          }
+        },
+        "embed": {
+          "title": "¿Cuenta incorrecta?",
+          "description": "Usa el comando de nuevo y seleccione un usuario de los resultados de búsqueda."
+        }
+      },
+      "search_clans": {
+        "$": "buscar-clanes",
+        "description": "Buscar clanes",
+        "options": {
+          "limit": {
+            "$": "límite",
+            "description": "El número máximo de resultados de clanes (predeterminado: %s)"
+          }
+        },
+        "body": {
+          "title": "Búsqueda del clan %s en la región %s",
+          "no_results": "No se encontraron clanes"
+        }
+      },
+      "search_players": {
+        "$": "buscar-jugadores",
+        "description": "Buscar jugadores",
+        "options": {
+          "limit": {
+            "$": "límite",
+            "description": "El número máximo para resultados de jugador (predeterminado: %s)"
+          }
+        },
+        "body": {
+          "title": "Búsqueda del jugador %s en la región %s",
+          "no_results": "No se encontraron jugadores"
+        }
+      },
+      "ratings": {
+        "$": "clasificación",
+        "description": "Estadísticas de batallas en Clasificación",
+        "subcommands": {
+          "neighbors": {
+            "$": "vecinos",
+            "description": "Jugadores vecinos en la tabla de posiciones"
+          },
+          "league": {
+            "$": "liga",
+            "description": "Mejores jugadores de una liga"
+          }
+        },
+        "options": {
+          "limit": {
+            "$": "límite",
+            "description": "Cuántos vecinos mostrar (predeterminado: %s)"
+          },
+          "season": {
+            "$": "temporada",
+            "description": "Número de temporada (predeterminado: actual)",
+            "choices": {
+              "current": "%s (actual)"
+            }
+          },
+          "league": {
+            "$": "liga",
+            "description": "La liga a mostrar"
+          }
+        },
+        "body": {
+          "top_players": "Top %s jugadores",
+          "no_participation": "# %s no jugó Clasificación en la temporada %s\n\nEl jugador no participó en esta temporada o no completó su calibración.",
+          "no_ongoing_season": "# No hay temporada en curso\n\nActualmente no hay ninguna temporada de Clasificación.",
+          "deleted_player": "Eliminado %s",
+          "neighbors": "Vecinos de Clasificación",
+          "more": "+%s more"
         }
       }
     }
