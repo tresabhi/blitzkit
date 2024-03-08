@@ -1,6 +1,6 @@
 import {
   APIApplicationCommandOptionChoice,
-  SlashCommandBuilder,
+  Locale,
   SlashCommandSubcommandBuilder,
 } from 'discord.js';
 import { range } from 'lodash';
@@ -11,7 +11,7 @@ import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import { LEAGUES } from '../constants/leagues';
 import { FIRST_ARCHIVED_RATINGS_SEASON } from '../constants/ratings';
-import { REGION_NAMES_SHORT, Region } from '../constants/regions';
+import { Region } from '../constants/regions';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getRatingsInfo from '../core/blitz/getRatingsInfo';
@@ -25,8 +25,10 @@ import getArchivedRatingsMidnightLeaderboard from '../core/blitzkrieg/getArchive
 import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
-import embedNegative from '../core/discord/embedNegative';
+import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
+import { localizationObject } from '../core/discord/localizationObject';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
 import { UserError } from '../hooks/userError';
 
@@ -117,10 +119,15 @@ export interface RatingsNeighbors {
   neighbors: RatingsPlayer[];
 }
 
-const noOngoingSeason = embedNegative(
-  'No ongoing season',
-  "Wargaming didn't provide any data for this season.",
-);
+interface SimplifiedPlayer {
+  id: number;
+  score: number;
+  position: number;
+  clan: string | undefined;
+  nickname: string;
+}
+
+const DEFAULT_LIMIT = 10;
 
 export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
   const latestArchivedSeasonNumber = await getArchivedLatestSeasonNumber();
@@ -130,89 +137,131 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
     latestArchivedSeasonNumber + (onGoingSeason ? 1 : 0) + 1,
   );
 
-  function addSubcommands(option: SlashCommandSubcommandBuilder) {
+  function addOptions(option: SlashCommandSubcommandBuilder) {
+    const { t, translate } = translator(Locale.EnglishUS);
+
     return option
-      .addStringOption(addUsernameChoices)
       .addIntegerOption((option) =>
         option
-          .setName('limit')
-          .setDescription('How many neighbors to display (default: 10)')
+          .setName(t`bot.commands.ratings.options.limit`)
+          .setNameLocalizations(
+            localizationObject('bot.commands.ratings.options.limit'),
+          )
+          .setDescription(
+            translate('bot.commands.ratings.options.limit.description', [
+              `${DEFAULT_LIMIT}`,
+            ]),
+          )
+          .setDescriptionLocalizations(
+            localizationObject(
+              'bot.commands.ratings.options.limit.description',
+              [`${DEFAULT_LIMIT}`],
+            ),
+          )
           .setRequired(false)
           .setMinValue(5)
           .setMaxValue(30),
       )
       .addStringOption((option) =>
         option
-          .setName('season')
-          .setDescription('Season number')
+          .setName(t`bot.commands.ratings.options.season`)
+          .setNameLocalizations(
+            localizationObject('bot.commands.ratings.options.season'),
+          )
+          .setDescription(
+            translate('bot.commands.ratings.options.season.description'),
+          )
+          .setDescriptionLocalizations(
+            localizationObject(
+              'bot.commands.ratings.options.season.description',
+            ),
+          )
           .setRequired(false)
           .addChoices(
             ...seasonNumbers
-              .map(
-                (number, index) =>
-                  ({
-                    name: `${number}${index === seasonNumbers.length - 1 && onGoingSeason ? ' (current)' : ''}`,
-                    value: `${number}`,
-                  }) satisfies APIApplicationCommandOptionChoice<string>,
-              )
+              .map((number, index) => {
+                const current =
+                  index === seasonNumbers.length - 1 && onGoingSeason;
+
+                return {
+                  name: current
+                    ? translate(
+                        'bot.commands.ratings.options.season.choices.current',
+                        [`${number}`],
+                      )
+                    : `${number}`,
+                  value: `${number}`,
+                  name_localizations: current
+                    ? localizationObject(
+                        'bot.commands.ratings.options.season.choices.current',
+                        [`${number}`],
+                      )
+                    : undefined,
+                } satisfies APIApplicationCommandOptionChoice<string>;
+              })
               .reverse(),
           ),
       );
   }
 
-  const command = new SlashCommandBuilder()
-    .setName('ratings')
-    .setDescription('Ratings battles statistics')
-    .addSubcommand((option) =>
-      addSubcommands(
-        option
-          .setName('neighbors')
-          .setDescription('Shows neighboring players on the leaderboard'),
-      ),
-    )
-    .addSubcommand((option) =>
-      addSubcommands(
-        option
-          .setName('league')
-          .setDescription('Shows top players from a league')
-          .addStringOption(addRegionChoices)
-          .addStringOption((option) =>
-            option
-              .setName('league')
-              .setDescription('The league to display')
-              .addChoices(
-                ...LEAGUES.map(
-                  ({ name }, value) =>
-                    ({
-                      name,
-                      value: `${value}`,
-                    }) satisfies APIApplicationCommandOptionChoice<string>,
-                ),
-              )
-              .setRequired(true),
-          ),
-      ),
-    );
-
   resolve({
     inProduction: true,
     inPublic: true,
 
-    command,
+    command: createLocalizedCommand('ratings', [
+      {
+        subcommand: 'neighbors',
+        modify(option: SlashCommandSubcommandBuilder) {
+          option.addStringOption(addUsernameChoices);
+          addOptions(option);
+        },
+      },
+      {
+        subcommand: 'league',
+        modify(option: SlashCommandSubcommandBuilder) {
+          option
+            .addStringOption((option) => {
+              const { t, translate } = translator(Locale.EnglishUS);
+
+              return option
+                .setName(t`bot.commands.ratings.options.league`)
+                .setNameLocalizations(
+                  localizationObject('bot.commands.ratings.options.league'),
+                )
+                .setDescription(
+                  translate('bot.commands.ratings.options.league.description'),
+                )
+                .setDescriptionLocalizations(
+                  localizationObject(
+                    'bot.commands.ratings.options.league.description',
+                  ),
+                )
+                .addChoices(
+                  ...LEAGUES.map(
+                    ({ name }, value) =>
+                      ({
+                        name: translate(`common.leagues.${name}`),
+                        value: `${value}`,
+                        name_localizations: localizationObject(
+                          `common.leagues.${name}`,
+                        ),
+                      }) satisfies APIApplicationCommandOptionChoice<string>,
+                  ),
+                )
+                .setRequired(true);
+            })
+            .addStringOption(addRegionChoices);
+          addOptions(option);
+        },
+      },
+    ]),
 
     async handler(interaction) {
-      interface SimplifiedPlayer {
-        id: number;
-        score: number;
-        position: number;
-        clan: string | undefined;
-        nickname: string;
-      }
-
+      const { t, translate } = translator(interaction.locale);
       const subcommand = interaction.options.getSubcommand(true) as
         | 'league'
         | 'neighbors';
-      const limit = interaction.options.getInteger('limit') ?? 10;
+      const limit = interaction.options.getInteger('limit') ?? DEFAULT_LIMIT;
       const seasonOption = interaction.options.getString('season');
       const season = seasonOption
         ? parseInt(seasonOption)
@@ -223,7 +272,6 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
       let titleName: string;
       let titleImage: string | undefined;
       let titleDescription: string;
-      let playersBefore: number;
       let playersAfter: number;
       let players: SimplifiedPlayer[] | undefined;
       let midnightLeaderboard: BlitzkriegRatingsLeaderboard | undefined;
@@ -237,7 +285,8 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
           ? getRatingsInfo(region)
           : getArchivedRatingsInfo(region, season!));
 
-        if (regionRatingsInfo.detail !== undefined) return noOngoingSeason;
+        if (regionRatingsInfo.detail !== undefined)
+          return t`bot.commands.ratings.body.no_ongoing_season`;
 
         const result = isCurrentSeason
           ? await getRatingsLeague(region, leagueIndex).then(async (result) =>
@@ -280,7 +329,10 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
                       position: firstPlayerIndex + index + 1,
                       clan: clanData[player.id]?.clan?.tag,
                       nickname:
-                        clanData[index]?.account_name ?? `Deleted ${player.id}`,
+                        clanData[index]?.account_name ??
+                        translate('bot.commands.ratings.body.deleted_player', [
+                          `${player.id}`,
+                        ]),
                     }) satisfies SimplifiedPlayer,
                 );
               },
@@ -294,23 +346,25 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
           : await getArchivedRatingsMidnightLeaderboard(region, season!);
 
         players = result;
-        playersBefore = result ? result[0].position - 1 : 0;
         playersAfter =
           regionRatingsInfo.count - result[result.length - 1].position;
         titleName = `${
-          leagueInfo ? leagueInfo.title : 'No Ongoing Season'
-        } - ${REGION_NAMES_SHORT[region]}`;
+          leagueInfo ? leagueInfo.title : ''
+        } - ${translate(`common.regions.short.${region}`)}`;
         titleImage = leagueInfo.big_icon.startsWith('http')
           ? leagueInfo.big_icon
           : `https:${leagueInfo.big_icon}`;
-        titleDescription = `Top ${limit} players`;
+        titleDescription = translate('bot.commands.ratings.body.top_players', [
+          `${limit}`,
+        ]);
       } else {
         const { region, id } = await resolvePlayerFromCommand(interaction);
         regionRatingsInfo = isCurrentSeason
           ? await getRatingsInfo(region)
           : await getArchivedRatingsInfo(region, season!);
 
-        if (regionRatingsInfo.detail !== undefined) return noOngoingSeason;
+        if (regionRatingsInfo.detail !== undefined)
+          return t`bot.commands.ratings.body.no_ongoing_season`;
 
         const accountInfo = await getAccountInfo(region, id);
         const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
@@ -336,7 +390,10 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
 
                 if (playerIndex === -1) {
                   throw new UserError(
-                    `# ${markdownEscape(accountInfo.nickname)} didn't play ratings in season ${season}\nThis player did not participate in this season or did not get past calibration.`,
+                    translate('bot.commands.ratings.body.no_participation', [
+                      markdownEscape(accountInfo.nickname),
+                      `${season}`,
+                    ]),
                   );
                 }
 
@@ -373,11 +430,8 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
         titleImage = clan
           ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clan.emblem_set_id}.png`
           : undefined;
-        titleName = neighbors
-          ? accountInfo.nickname
-          : `No Ongoing Season - ${REGION_NAMES_SHORT[region]}`;
-        titleDescription = 'Ratings neighbors';
-        playersBefore = neighbors ? neighbors[0].position - 1 : 0;
+        titleName = neighbors ? accountInfo.nickname : '';
+        titleDescription = t`bot.commands.ratings.body.neighbors`;
         playersAfter =
           regionRatingsInfo.count - neighbors[neighbors.length - 1].position;
         playerId = id;
@@ -428,15 +482,12 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
 
           {items && (
             <Leaderboard.Root>
-              {playersBefore > 0 && (
-                <Leaderboard.Gap
-                  message={`+ ${playersBefore.toLocaleString()} more`}
-                />
-              )}
               {items}
               {playersAfter > 0 && (
                 <Leaderboard.Gap
-                  message={`+ ${playersAfter.toLocaleString()} more`}
+                  message={translate('bot.commands.ratings.body.more', [
+                    `${playersAfter.toLocaleString(interaction.locale)}`,
+                  ])}
                 />
               )}
             </Leaderboard.Root>

@@ -63,7 +63,9 @@ export const inactiveCommand = new Promise<CommandRegistry>((resolve) => {
           ([name, days]) =>
             [
               name,
-              translate('bot.commands.inactive.body.listing', [`${days}`]),
+              translate('bot.commands.inactive.body.listing', [
+                days.toFixed(0),
+              ]),
             ] as [string, string],
         );
       const hasInactiveMembers = inactive.length > 0;

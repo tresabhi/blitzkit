@@ -1,18 +1,19 @@
 import { teal } from '@radix-ui/colors';
-import { GuildMemberRoleManager, SlashCommandBuilder } from 'discord.js';
+import { GuildMemberRoleManager } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import discord from '../../discord.json' assert { type: 'json' };
 import { Glow } from '../components/AllStatsOverview/components/WN8Display/components/Glow';
 import CommandWrapper from '../components/CommandWrapper';
-import { REGION_NAMES } from '../constants/regions';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import { linkBlitzAndDiscord } from '../core/blitzkrieg/discordBlitz';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
+import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import embedInfo from '../core/discord/embedInfo';
 import embedNegative from '../core/discord/embedNegative';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
 import { theme } from '../stitches.config';
 
@@ -21,14 +22,12 @@ export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
     inProduction: true,
     inPublic: true,
 
-    command: new SlashCommandBuilder()
-      .setName('link')
-      .setDescription('Links your Blitz and Discord account')
-      .addStringOption((option) =>
-        addUsernameChoices(option).setRequired(true),
-      ),
+    command: createLocalizedCommand('link').addStringOption((option) =>
+      addUsernameChoices(option).setRequired(true),
+    ),
 
     async handler(interaction) {
+      const { t, translate } = translator(interaction.locale);
       const { id, region } = await resolvePlayerFromCommand(interaction);
       const discordId = parseInt(interaction.user.id);
       const accountInfo = await getAccountInfo(region, id);
@@ -39,8 +38,14 @@ export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
       if (interaction.guildId === discord.sklld_guild_id) {
         if (!interaction.guild?.members.me?.permissions.has('ManageRoles')) {
           return embedNegative(
-            `${markdownEscape(interaction.user.username)} failed to verify`,
-            "I don't have the permission to change your manage roles.",
+            translate(translate('bot.commands.link.body.no_role_permissions'), [
+              markdownEscape(interaction.user.username),
+            ]),
+            translate(
+              translate(
+                'bot.commands.link.body.no_role_permissions.description',
+              ),
+            ),
           );
         }
 
@@ -140,7 +145,9 @@ export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
                     height: 16,
                   }}
                 />
-                <span style={{ fontSize: 16 }}>Accounts linked</span>
+                <span
+                  style={{ fontSize: 16 }}
+                >{t`bot.commands.link.body.accounts_linked`}</span>
               </div>
 
               <div
@@ -191,7 +198,7 @@ export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
                     {clanAccountInfo?.clan
                       ? `[${clanAccountInfo?.clan?.tag}] • `
                       : ''}
-                    {REGION_NAMES[region]}
+                    {translate(`common.regions.normal.${region}`)}
                   </span>
                 </div>
               </div>
@@ -202,8 +209,8 @@ export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
         </CommandWrapper>,
 
         embedInfo(
-          'Incorrect account?',
-          'Use the command again and select a username from the search results.',
+          t`bot.commands.link.embed.title`,
+          t`bot.commands.link.embed.description`,
         ),
       ];
     },

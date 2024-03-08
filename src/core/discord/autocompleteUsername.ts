@@ -3,8 +3,8 @@ import {
   AutocompleteInteraction,
   CacheType,
 } from 'discord.js';
-import { REGION_NAMES_SHORT } from '../../constants/regions';
 import searchPlayersAcrossRegions from '../blitz/searchPlayersAcrossRegions';
+import { translator } from '../localization/translator';
 import {
   DISCORD_CHOICES_MAX_NAME_SIZE,
   OVERFLOW_SUFFIX,
@@ -13,6 +13,7 @@ import {
 export default async function autocompleteUsername(
   interaction: AutocompleteInteraction<CacheType>,
 ) {
+  const { translate } = translator(interaction.locale);
   const focusedOption = interaction.options.getFocused(true);
   if (focusedOption.name !== 'username') return;
   const players = await searchPlayersAcrossRegions(focusedOption.value);
@@ -21,9 +22,9 @@ export default async function autocompleteUsername(
     await interaction.respond(
       players
         ? players.map((player) => {
-            let name = `${player.nickname} (${
-              REGION_NAMES_SHORT[player.region]
-            })`;
+            let name = `${player.nickname} (${translate(
+              `common.regions.short.${player.region}`,
+            )})`;
 
             if (name.length > DISCORD_CHOICES_MAX_NAME_SIZE) {
               const overSize = name.length - DISCORD_CHOICES_MAX_NAME_SIZE;
@@ -31,7 +32,9 @@ export default async function autocompleteUsername(
               name = `${player.nickname.slice(
                 0,
                 player.nickname.length - overSize - OVERFLOW_SUFFIX.length,
-              )}${OVERFLOW_SUFFIX} (${REGION_NAMES_SHORT[player.region]})`;
+              )}${OVERFLOW_SUFFIX} (${translate(
+                `common.regions.short.${player.region}`,
+              )})`;
             }
 
             return {

@@ -1,6 +1,6 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { Locale } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { REGION_NAMES, Region } from '../constants/regions';
+import { Region } from '../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import fetchBlitz from '../core/blitz/fetchBlitz';
 import {
@@ -9,25 +9,43 @@ import {
 } from '../core/blitz/searchPlayersAcrossRegions';
 import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
+import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import embedInfo from '../core/discord/embedInfo';
+import { localizationObject } from '../core/discord/localizationObject';
+import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
 
+const DEFAULT_LIMIT = 25;
+
 export const searchPlayersCommand = new Promise<CommandRegistry>((resolve) => {
+  const { t, translate } = translator(Locale.EnglishUS);
+
   resolve({
     inProduction: true,
     inPublic: true,
 
-    command: new SlashCommandBuilder()
-      .setName('search-players')
-      .setDescription('Search players in a Blitz server')
+    command: createLocalizedCommand('search-players')
       .addStringOption(addRegionChoices)
       .addStringOption((option) =>
         addUsernameChoices(option).setAutocomplete(false).setRequired(true),
       )
       .addIntegerOption((option) =>
         option
-          .setName('limit')
-          .setDescription('The size of the search result (default: 25)')
+          .setName(t`bot.commands.search_players.options.limit`)
+          .setNameLocalizations(
+            localizationObject('bot.commands.search_players.options.limit'),
+          )
+          .setDescription(
+            translate('bot.commands.search_players.options.limit.description', [
+              `${DEFAULT_LIMIT}`,
+            ]),
+          )
+          .setDescriptionLocalizations(
+            localizationObject(
+              'bot.commands.search_players.options.limit.description',
+              [`${DEFAULT_LIMIT}`],
+            ),
+          )
           .setMinValue(1)
           .setMaxValue(100),
       ),
@@ -46,10 +64,13 @@ export const searchPlayersCommand = new Promise<CommandRegistry>((resolve) => {
         : [];
 
       return embedInfo(
-        `Player search for "${markdownEscape(name)}" in ${REGION_NAMES[server]}`,
+        translate('bot.commands.search_players.body.title', [
+          markdownEscape(trimmedSearch),
+          translate(`common.regions.normal.${server}`),
+        ]),
         `\`\`\`${
           players.length === 0
-            ? 'No players found.'
+            ? translate('bot.commands.search_players.body.no_results')
             : players.map((player) => player.nickname).join('\n')
         }\`\`\``,
       );

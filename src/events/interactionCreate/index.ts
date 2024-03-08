@@ -101,8 +101,15 @@ export const COMMANDS_RAW: Promise<CommandRegistry>[] = [
 
 export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {
   return rawCommands.reduce<Record<string, CommandRegistry>>(
-    (commands, registry) => {
-      if (registry.status === 'rejected') return commands;
+    (commands, registry, index) => {
+      if (registry.status === 'rejected') {
+        console.warn(
+          `Command ${index} failed to load; skipping...`,
+          registry.reason,
+        );
+
+        return commands;
+      }
       if (isDev()) registry.value.command.setDefaultMemberPermissions(0);
       return { ...commands, [registry.value.command.name]: registry.value };
     },

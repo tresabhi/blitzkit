@@ -23,6 +23,27 @@
       "researchable": "Tech tree",
       "premium": "Premium",
       "collector": "Collector"
+    },
+
+    "regions": {
+      "normal": {
+        "com": "North America",
+        "eu": "Europe",
+        "asia": "Asia"
+      },
+      "short": {
+        "com": "NA",
+        "eu": "EU",
+        "asia": "ASIA"
+      }
+    },
+
+    "leagues": {
+      "diamond": "Diamond",
+      "platinum": "Platinum",
+      "gold": "Gold",
+      "silver": "Silver",
+      "bronze": "Bronze"
     }
   },
 
@@ -109,6 +130,11 @@
             "$": "tree-type",
             "description": "Tree type"
           }
+        },
+
+        "region": {
+          "$": "region",
+          "description": "Region"
         }
       },
 
@@ -260,6 +286,105 @@
               "kills_to_death_ratio": "Kills to death ratio"
             }
           }
+        }
+      },
+
+      "link": {
+        "$": "link",
+        "description": "Links your Blitz and Discord account",
+
+        "body": {
+          "accounts_linked": "Accounts linked",
+          "no_role_permissions": {
+            "$": "%s failed to verify",
+            "description": "I don't have the permission to change your manage roles."
+          }
+        },
+
+        "embed": {
+          "title": "Incorrect account?",
+          "description": "Use the command again and select a username from the search results."
+        }
+      },
+
+      "search_clans": {
+        "$": "search-clans",
+        "description": "Search clans",
+
+        "options": {
+          "limit": {
+            "$": "limit",
+            "description": "The max number of clan results (default: %s)"
+          }
+        },
+
+        "body": {
+          "title": "Clan search for %s in region %s",
+          "no_results": "No clans found"
+        }
+      },
+
+      "search_players": {
+        "$": "search-players",
+        "description": "Search players",
+
+        "options": {
+          "limit": {
+            "$": "limit",
+            "description": "The max number of player results (default: %s)"
+          }
+        },
+
+        "body": {
+          "title": "Player search for %s in region %s",
+          "no_results": "No players found"
+        }
+      },
+
+      "ratings": {
+        "$": "ratings",
+        "description": "Ratings battles statistics",
+
+        "subcommands": {
+          "neighbors": {
+            "$": "neighbors",
+            "description": "Neighboring players on the leaderboard"
+          },
+
+          "league": {
+            "$": "league",
+            "description": "Top players of a league"
+          }
+        },
+
+        "options": {
+          "limit": {
+            "$": "limit",
+            "description": "How many neighbors to display (default: %s)"
+          },
+
+          "season": {
+            "$": "season",
+            "description": "Season number (default: current)",
+
+            "choices": {
+              "current": "%s (current)"
+            }
+          },
+
+          "league": {
+            "$": "league",
+            "description": "The league to display"
+          }
+        },
+
+        "body": {
+          "top_players": "Top %s players",
+          "no_participation": "# %s didn't play ratings in season %s\n\nThis player did not participate in this season or did not get past calibration.",
+          "no_ongoing_season": "# No ongoing season\n\nThere isn't a currently running ratings season.",
+          "deleted_player": "Deleted %s",
+          "neighbors": "Ratings neighbors",
+          "more": "+%s more"
         }
       }
     }

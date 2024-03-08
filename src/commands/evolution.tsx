@@ -89,8 +89,8 @@ async function render(
             max: maxX,
             precision: 0,
           }}
-          xMinLabel={new Date(minTime * 1000).toDateString()}
-          xMaxLabel={new Date(maxTime * 1000).toDateString()}
+          xMinLabel={new Date(minTime * 1000).toLocaleDateString(locale)}
+          xMaxLabel={new Date(maxTime * 1000).toLocaleDateString(locale)}
         >
           {Graph.Line({
             color: Graph.LineColor.Red,
