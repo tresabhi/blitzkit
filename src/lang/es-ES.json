@@ -12,10 +12,10 @@
       "other": "Nación híbrida"
     },
     "tank_class_short": {
-      "lightTank": "Light",
-      "mediumTank": "Medium",
-      "heavyTank": "Heavy",
-      "AT-SPG": "TD"
+      "lightTank": "Ligero",
+      "mediumTank": "Mediano",
+      "heavyTank": "Pesado",
+      "AT-SPG": "Cazacarro"
     },
     "tree_type": {
       "researchable": "Árbol tecnológico",
@@ -24,22 +24,22 @@
     },
     "regions": {
       "normal": {
-        "com": "North America",
-        "eu": "Europe",
+        "com": "Norteamérica",
+        "eu": "Europa",
         "asia": "Asia"
       },
       "short": {
         "com": "NA",
-        "eu": "EU",
-        "asia": "ASIA"
+        "eu": "Europa",
+        "asia": "Asia"
       }
     },
     "leagues": {
-      "diamond": "Diamond",
-      "platinum": "Platinum",
-      "gold": "Gold",
-      "silver": "Silver",
-      "bronze": "Bronze"
+      "diamond": "Diamante",
+      "platinum": "Platino",
+      "gold": "Oro",
+      "silver": "Plata",
+      "bronze": "Bronce"
     }
   },
   "bot": {
@@ -100,11 +100,11 @@
         },
         "tank": {
           "$": "tanque",
-          "description": "The tank to get stats for"
+          "description": "El tanque al cual conseguirle estadísticas"
         },
         "username": {
-          "$": "username",
-          "description": "The Blitz username of the player"
+          "$": "usuario",
+          "description": "El nombre de usuario de Blitz"
         },
         "filters": {
           "nation": {
@@ -112,17 +112,17 @@
             "description": "Nación"
           },
           "tank_class": {
-            "$": "tank-class",
-            "description": "Tank class"
+            "$": "clase-de-tanque",
+            "description": "Clase de tanque"
           },
           "tree_type": {
-            "$": "tree-type",
-            "description": "Tree type"
+            "$": "tipo-de-árbol",
+            "description": "Tipo de árbol"
           }
         },
         "region": {
-          "$": "region",
-          "description": "Region"
+          "$": "región",
+          "description": "Región"
         }
       },
       "periods": {
@@ -182,7 +182,7 @@
           "wn8": "WN8",
           "winrate": "Tasa de victorias",
           "damage": "Daño",
-          "unknown_tank": "Unknown tank %s"
+          "unknown_tank": "Tanque desconocido %s"
         }
       },
       "debug": {
@@ -262,83 +262,83 @@
       },
       "link": {
         "$": "link",
-        "description": "Links your Blitz and Discord account",
+        "description": "Vincula tu cuenta de Blitz y Discord",
         "body": {
-          "accounts_linked": "Accounts linked",
+          "accounts_linked": "Cuentas vinculadas",
           "no_role_permissions": {
-            "$": "%s failed to verify",
-            "description": "I don't have the permission to change your manage roles."
+            "$": "%s no se pudo verificar",
+            "description": "No tengo los permisos para cambiar tus roles de administración."
           }
         },
         "embed": {
-          "title": "Incorrect account?",
-          "description": "Use the command again and select a username from the search results."
+          "title": "¿Cuenta incorrecta?",
+          "description": "Usa el comando de nuevo y seleccione un usuario de los resultados de búsqueda."
         }
       },
       "search_clans": {
-        "$": "search-clans",
-        "description": "Search clans",
+        "$": "buscar-clanes",
+        "description": "Buscar clanes",
         "options": {
           "limit": {
-            "$": "limit",
-            "description": "The max number of clan results (default: %s)"
+            "$": "límite",
+            "description": "El número máximo de resultados de clanes (predeterminado: %s)"
           }
         },
         "body": {
-          "title": "Clan search for %s in region %s",
-          "no_results": "No clans found"
+          "title": "Búsqueda del clan %s en la región %s",
+          "no_results": "No se encontraron clanes"
         }
       },
       "search_players": {
-        "$": "search-players",
-        "description": "Search players",
+        "$": "buscar-jugadores",
+        "description": "Buscar jugadores",
         "options": {
           "limit": {
-            "$": "limit",
-            "description": "The max number of player results (default: %s)"
+            "$": "límite",
+            "description": "El número máximo para resultados de jugador (predeterminado: %s)"
           }
         },
         "body": {
-          "title": "Player search for %s in region %s",
-          "no_results": "No players found"
+          "title": "Búsqueda del jugador %s en la región %s",
+          "no_results": "No se encontraron jugadores"
         }
       },
       "ratings": {
-        "$": "ratings",
-        "description": "Ratings battles statistics",
+        "$": "clasificación",
+        "description": "Estadísticas de batallas en Clasificación",
         "subcommands": {
           "neighbors": {
-            "$": "neighbors",
-            "description": "Neighboring players on the leaderboard"
+            "$": "vecinos",
+            "description": "Jugadores vecinos en la tabla de posiciones"
           },
           "league": {
-            "$": "league",
-            "description": "Top players of a league"
+            "$": "liga",
+            "description": "Mejores jugadores de una liga"
           }
         },
         "options": {
           "limit": {
-            "$": "limit",
-            "description": "How many neighbors to display (default: %s)"
+            "$": "límite",
+            "description": "Cuántos vecinos mostrar (predeterminado: %s)"
           },
           "season": {
-            "$": "season",
-            "description": "Season number (default: current)",
+            "$": "temporada",
+            "description": "Número de temporada (predeterminado: actual)",
             "choices": {
-              "current": "%s (current)"
+              "current": "%s (actual)"
             }
           },
           "league": {
-            "$": "league",
-            "description": "The league to display"
+            "$": "liga",
+            "description": "La liga a mostrar"
           }
         },
         "body": {
-          "top_players": "Top %s players",
-          "no_participation": "# %s didn't play ratings in season %s\n\nThis player did not participate in this season or did not get past calibration.",
-          "no_ongoing_season": "# No ongoing season\n\nThere isn't a currently running ratings season.",
-          "deleted_player": "Deleted %s",
-          "neighbors": "Ratings neighbors",
+          "top_players": "Top %s jugadores",
+          "no_participation": "# %s no jugó Clasificación en la temporada %s\n\nEl jugador no participó en esta temporada o no completó su calibración.",
+          "no_ongoing_season": "# No hay temporada en curso\n\nActualmente no hay ninguna temporada de Clasificación.",
+          "deleted_player": "Eliminado %s",
+          "neighbors": "Vecinos de Clasificación",
           "more": "+%s more"
         }
       }
