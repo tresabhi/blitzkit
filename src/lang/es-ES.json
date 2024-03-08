@@ -26,12 +26,12 @@
       "normal": {
         "com": "Norteamérica",
         "eu": "Europa",
-        "asia": "Asia"
+        "asia": "Asia=Pacifc"
       },
       "short": {
         "com": "NA",
         "eu": "Europa",
-        "asia": "ASIA"
+        "asia": "APAC"
       }
     },
     "leagues": {
