@@ -29,12 +29,12 @@
       "normal": {
         "com": "North America",
         "eu": "Europe",
-        "asia": "Asia"
+        "asia": "Asia=Pacifc"
       },
       "short": {
         "com": "NA",
         "eu": "EU",
-        "asia": "ASIA"
+        "asia": "APAC"
       }
     },
 
