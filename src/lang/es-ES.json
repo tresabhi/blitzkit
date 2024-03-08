@@ -267,7 +267,7 @@
           "accounts_linked": "Cuentas vinculadas",
           "no_role_permissions": {
             "$": "%s no se pudo verificar",
-            "description": "No tengo los permisos para cambiar tus roles de administración."
+            "description": "I don't have the permission to manage roles."
           }
         },
         "embed": {
