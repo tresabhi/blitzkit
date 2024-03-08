@@ -12,7 +12,7 @@
       "other": "Hybrid nation"
     },
 
-    "tank_type_short": {
+    "tank_class_short": {
       "lightTank": "Light",
       "mediumTank": "Medium",
       "heavyTank": "Heavy",
@@ -122,9 +122,9 @@
             "$": "nation",
             "description": "Nation"
           },
-          "tank_type": {
-            "$": "tank-type",
-            "description": "Tank type"
+          "tank_class": {
+            "$": "tank-class",
+            "description": "Tank class"
           },
           "tree_type": {
             "$": "tree-type",

@@ -2,7 +2,7 @@ import { readdir } from 'fs/promises';
 import { parse as parsePath } from 'path';
 import { Vector3Tuple } from 'three';
 import { parse as parseYaml } from 'yaml';
-import { TankType } from '../../src/components/Tanks';
+import { TankClass } from '../../src/components/Tanks';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
@@ -488,7 +488,7 @@ export async function definitions(production: boolean) {
               ? 'premium'
               : 'researchable',
           tier: tank.level as Tier,
-          type: tankTags[0] as TankType,
+          class: tankTags[0] as TankClass,
           testing: tankTags.includes('testTank') ? true : undefined,
           price: tankPrice,
           camouflage: {

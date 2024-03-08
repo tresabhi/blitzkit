@@ -98,7 +98,7 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
                             <Tanks.Item
                               key={tank.id}
                               name={tank.name}
-                              tankType={tank.type}
+                              tankType={tank.class}
                               image={tankIcon(tank.id)}
                               treeType={tank.treeType}
                             />
@@ -111,7 +111,7 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
                             <Tanks.Item
                               key={tank.id}
                               name={tank.name}
-                              tankType={tank.type}
+                              tankType={tank.class}
                               image={tankIcon(tank.id)}
                               treeType={tank.treeType}
                             />

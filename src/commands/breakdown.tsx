@@ -199,7 +199,7 @@ export async function renderBreakdown(
         <Breakdown.Row
           key={id}
           type="tank"
-          tankType={tankDefinition?.type}
+          tankType={tankDefinition?.class}
           treeType={tankDefinition?.treeType}
           title={
             tankDefinition?.name ??

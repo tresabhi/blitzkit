@@ -19,7 +19,7 @@ export async function filtersToDescription(
       translate('bot.common.filters.tier', [TIER_ROMAN_NUMERALS[tier as Tier]]),
     );
   }
-  if (tankType) info.push(translate(`common.tank_type_short.${tankType}`));
+  if (tankType) info.push(translate(`common.tank_class_short.${tankType}`));
   if (treeType) info.push(translate(`common.tree_type.${treeType}`));
 
   return info.length === 0

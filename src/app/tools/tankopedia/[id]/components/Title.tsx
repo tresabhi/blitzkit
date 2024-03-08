@@ -30,7 +30,7 @@ export function Title() {
               <img
                 src={
                   TREE_TYPE_ICONS[protagonist.tank.treeType][
-                    protagonist.tank.type
+                    protagonist.tank.class
                   ]
                 }
                 style={{

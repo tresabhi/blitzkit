@@ -4,7 +4,7 @@ import {
   SlashCommandBuilder,
   SlashCommandSubcommandBuilder,
 } from 'discord.js';
-import { TANK_TYPES, TREE_TYPES } from '../../components/Tanks';
+import { TANK_CLASSES, TREE_TYPES } from '../../components/Tanks';
 import { translator } from '../localization/translator';
 import addTankChoices from './addTankChoices';
 import addTierChoices from './addTierChoices';
@@ -46,26 +46,26 @@ export function addFilterOptions<
       .addStringOption((option) => addTierChoices(option).setRequired(false))
       .addStringOption((option) =>
         option
-          .setName(translate('bot.common.options.filters.tank_type'))
+          .setName(translate('bot.common.options.filters.tank_class'))
           .setNameLocalizations(
-            localizationObject('bot.common.options.filters.tank_type'),
+            localizationObject('bot.common.options.filters.tank_class'),
           )
           .setDescription(
-            translate('bot.common.options.filters.tank_type.description'),
+            translate('bot.common.options.filters.tank_class.description'),
           )
           .setDescriptionLocalizations(
             localizationObject(
-              'bot.common.options.filters.tank_type.description',
+              'bot.common.options.filters.tank_class.description',
             ),
           )
           .addChoices(
-            ...TANK_TYPES.map(
+            ...TANK_CLASSES.map(
               (tankType) =>
                 ({
                   value: tankType,
-                  name: translate(`common.tank_type_short.${tankType}`),
+                  name: translate(`common.tank_class_short.${tankType}`),
                   name_localizations: localizationObject(
-                    `common.tank_type_short.${tankType}`,
+                    `common.tank_class_short.${tankType}`,
                   ),
                 }) satisfies APIApplicationCommandOptionChoice,
             ),

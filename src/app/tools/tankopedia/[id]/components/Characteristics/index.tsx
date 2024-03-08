@@ -136,12 +136,13 @@ export function Characteristics() {
   ]);
   const enginePowerCoefficient = coefficient(
     [
-      hasEngineAccelerator && (tank.type === 'lightTank' || tank.type === 'mediumTank'),
+      hasEngineAccelerator &&
+        (tank.class === 'lightTank' || tank.class === 'mediumTank'),
       0.05,
     ],
     [
       hasEngineAccelerator &&
-        (tank.type === 'heavyTank' || tank.type === 'AT-SPG'),
+        (tank.class === 'heavyTank' || tank.class === 'AT-SPG'),
       0.07,
     ],
     [hasEnginePowerBoost, 0.2],
@@ -163,7 +164,7 @@ export function Characteristics() {
   const viewRangeCoefficient =
     coefficient([
       hasImprovedOptics,
-      tank.type === 'AT-SPG' ? 0.05 : tank.type === 'heavyTank' ? 0.07 : 0.1,
+      tank.class === 'AT-SPG' ? 0.05 : tank.class === 'heavyTank' ? 0.07 : 0.1,
     ]) * coefficient([true, progressiveStat(commanderMastery)]);
   const fireChanceCoefficient = coefficient([hasProtectiveKit, -0.2]);
 
@@ -180,38 +181,26 @@ export function Characteristics() {
   const camouflageSumMoving = sum(
     [
       hasCamouflageNet,
-      tank.type === 'heavyTank'
-        ? 0.03
-        : tank.type === 'AT-SPG'
-          ? 0.07
-          : 0.05,
+      tank.class === 'heavyTank' ? 0.03 : tank.class === 'AT-SPG' ? 0.07 : 0.05,
     ],
     [
       camouflage,
-      tank.type === 'AT-SPG'
-        ? 0.04
-        : tank.type === 'heavyTank'
-          ? 0.03
-          : 0.02,
+      tank.class === 'AT-SPG' ? 0.04 : tank.class === 'heavyTank' ? 0.03 : 0.02,
     ],
   );
   const camouflageSumStill = sum(
     [
       hasCamouflageNet,
       2 *
-        (tank.type === 'heavyTank'
+        (tank.class === 'heavyTank'
           ? 0.03
-          : tank.type === 'AT-SPG'
+          : tank.class === 'AT-SPG'
             ? 0.07
             : 0.05),
     ],
     [
       camouflage,
-      tank.type === 'AT-SPG'
-        ? 0.04
-        : tank.type === 'heavyTank'
-          ? 0.03
-          : 0.02,
+      tank.class === 'AT-SPG' ? 0.04 : tank.class === 'heavyTank' ? 0.03 : 0.02,
     ],
   );
 

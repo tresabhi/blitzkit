@@ -311,7 +311,7 @@ export default function SessionPage({ naked = true }: SessionPageProps) {
                         tankDefinitions?.name ?? `Unknown tank ${stats.tank_id}`
                       }
                       type="tank"
-                      tankType={tankDefinitions?.type}
+                      tankType={tankDefinitions?.class}
                       treeType={tankDefinitions?.treeType}
                       stats={session.customColumns.map((customColumn) => {
                         const rowStat = rowStats[customColumn.display];

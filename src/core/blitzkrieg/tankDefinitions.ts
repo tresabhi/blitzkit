@@ -1,6 +1,6 @@
 import { deburr } from 'lodash';
 import { Vector2Tuple } from 'three';
-import { TankType, TreeType } from '../../components/Tanks';
+import { TankClass, TreeType } from '../../components/Tanks';
 import { asset } from './asset';
 import { fetchCdonLz4 } from './fetchCdonLz4';
 
@@ -44,7 +44,7 @@ export interface TankDefinition {
   consumables: number;
   provisions: number;
   tier: Tier;
-  type: TankType;
+  class: TankClass;
   testing?: boolean;
   turrets: TurretDefinition[];
   engines: EngineDefinition[];
@@ -180,21 +180,21 @@ export const tankNames = tanksDefinitionsArray.then((tanks) =>
   ),
 );
 
-export const TANK_ICONS: Record<TankType, string> = {
+export const TANK_ICONS: Record<TankClass, string> = {
   'AT-SPG': 'https://i.imgur.com/BIHSEH0.png',
   lightTank: 'https://i.imgur.com/CSNha5V.png',
   mediumTank: 'https://i.imgur.com/wvf3ltm.png',
   heavyTank: 'https://i.imgur.com/ECeqlZa.png',
 };
 
-export const TANK_ICONS_PREMIUM: Record<TankType, string> = {
+export const TANK_ICONS_PREMIUM: Record<TankClass, string> = {
   'AT-SPG': 'https://i.imgur.com/TCu3EdR.png',
   lightTank: 'https://i.imgur.com/zdkpTRb.png',
   mediumTank: 'https://i.imgur.com/3z7eHX6.png',
   heavyTank: 'https://i.imgur.com/P3vbmyA.png',
 };
 
-export const TANK_ICONS_COLLECTOR: Record<TankType, string> = {
+export const TANK_ICONS_COLLECTOR: Record<TankClass, string> = {
   'AT-SPG': 'https://i.imgur.com/WTjeirB.png',
   lightTank: 'https://i.imgur.com/EwhtKkU.png',
   mediumTank: 'https://i.imgur.com/u8YDMBh.png',
