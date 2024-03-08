@@ -1,6 +1,6 @@
 import { Locale } from 'discord.js';
 
-export const locales: Locale[] = [Locale.EnglishUS, Locale.SpanishES];
+export const SUPPORTED_LOCALES: Locale[] = [Locale.EnglishUS, Locale.SpanishES];
 
 export type TranslationFragmentTree = {
   [key: string]: TranslationFragment;
@@ -9,15 +9,13 @@ export type TranslationFragmentTree = {
 };
 export type TranslationFragment = string | TranslationFragmentTree;
 
-export const translations = locales
-  .map((locale) => ({
-    locale,
-    translations: require(`../../lang/${locale}.json`),
-  }))
-  .reduce(
-    (table, { locale, translations }) => ({
-      ...table,
-      [locale]: translations,
-    }),
-    {},
-  ) as Record<Locale, TranslationFragment>;
+export const translations = SUPPORTED_LOCALES.map((locale) => ({
+  locale,
+  translations: require(`../../lang/${locale}.json`),
+})).reduce(
+  (table, { locale, translations }) => ({
+    ...table,
+    [locale]: translations,
+  }),
+  {},
+) as Record<Locale, TranslationFragment>;

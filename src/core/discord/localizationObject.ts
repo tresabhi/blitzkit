@@ -1,9 +1,9 @@
 import { Locale } from 'discord.js';
-import { locales } from '../localization/strings';
+import { SUPPORTED_LOCALES } from '../localization/strings';
 import { translator } from '../localization/translator';
 
 export function localizationObject(path: string, literals?: string[]) {
-  return locales.reduce<Partial<Record<Locale, string>>>(
+  return SUPPORTED_LOCALES.reduce<Partial<Record<Locale, string>>>(
     (localizations, locale) => {
       const { translate } = translator(locale);
       return {
