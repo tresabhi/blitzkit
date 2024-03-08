@@ -11,11 +11,11 @@
       "european": "Nación europea",
       "other": "Nación híbrida"
     },
-    "tank_type_short": {
-      "lightTank": "Ligero",
-      "mediumTank": "Mediano",
-      "heavyTank": "Pesado",
-      "AT-SPG": "Cazacarro"
+    "tank_class_short": {
+      "lightTank": "Light",
+      "mediumTank": "Medium",
+      "heavyTank": "Heavy",
+      "AT-SPG": "TD"
     },
     "tree_type": {
       "researchable": "Árbol tecnológico",
@@ -111,9 +111,9 @@
             "$": "nación",
             "description": "Nación"
           },
-          "tank_type": {
-            "$": "tipo-tanque",
-            "description": "Tipo de tanque"
+          "tank_class": {
+            "$": "tank-class",
+            "description": "Tank class"
           },
           "tree_type": {
             "$": "tree-type",
