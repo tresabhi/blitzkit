@@ -31,7 +31,7 @@
       "short": {
         "com": "NA",
         "eu": "Europa",
-        "asia": "Asia"
+        "asia": "ASIA"
       }
     },
     "leagues": {
@@ -261,7 +261,7 @@
         }
       },
       "link": {
-        "$": "link",
+        "$": "vincular",
         "description": "Vincula tu cuenta de Blitz y Discord",
         "body": {
           "accounts_linked": "Cuentas vinculadas",
@@ -272,7 +272,7 @@
         },
         "embed": {
           "title": "¿Cuenta incorrecta?",
-          "description": "Usa el comando de nuevo y seleccione un usuario de los resultados de búsqueda."
+          "description": "Usa el comando de nuevo y selecciona un usuario de los resultados de búsqueda."
         }
       },
       "search_clans": {
@@ -337,9 +337,9 @@
           "top_players": "Top %s jugadores",
           "no_participation": "# %s no jugó Clasificación en la temporada %s\n\nEl jugador no participó en esta temporada o no completó su calibración.",
           "no_ongoing_season": "# No hay temporada en curso\n\nActualmente no hay ninguna temporada de Clasificación.",
-          "deleted_player": "Eliminado %s",
+          "deleted_player": "%s eliminado",
           "neighbors": "Vecinos de Clasificación",
-          "more": "+%s more"
+          "more": "+%s más"
         }
       }
     }
