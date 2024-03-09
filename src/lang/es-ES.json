@@ -137,10 +137,10 @@
           "description": "Región"
         },
         "tier": {
-          "$": "nivel",
-          "description": "Nivel",
+          "$": "tier",
+          "description": "Tier",
           "choices": {
-            "tier": "Nivel %s - %s"
+            "tier": "Tier %s - %s"
           }
         }
       },
@@ -286,7 +286,7 @@
           "accounts_linked": "Cuentas vinculadas",
           "no_role_permissions": {
             "$": "%s no se pudo verificar",
-            "description": "No tengo los permisos para administrar los roles."
+            "description": "No tengo permiso para administrar roles."
           }
         },
         "embed": {
@@ -366,14 +366,14 @@
         "description": "Tanques jugados hoy y estadísticas"
       },
       "stats": {
-        "$": "estad",
+        "$": "estadísticas",
         "description": "Estadísticas rápidas para un período",
         "body": {
           "battles": "Batallas",
           "winrate": "Tasa de victorias",
           "damage": "Daño",
           "damage_ratio": "Relación de daño",
-          "tier": "Nivel",
+          "tier": "Tier",
           "survival": "Supervivencia",
           "accuracy": "Precisión",
           "kill_ratio": "Relación de bajas"
@@ -381,9 +381,9 @@
       },
       "owned_tanks": {
         "$": "tanques-propios",
-        "description": "Muestra todos los tanques propios de un nivel",
+        "description": "Muestra todos los tanques propios en un tier",
         "body": {
-          "subtitle": "Tanques de nivel %s"
+          "subtitle": "Tanques de tier %s"
         }
       },
       "permissions": {
@@ -391,8 +391,8 @@
         "description": "Comprueba si el bot tiene los permisos requeridos para funcionar",
         "body": {
           "title": "# Permisos\n\n%s",
-          "view_channels": "Ver canales: necesario para que funcione el botón \"actualizar\"",
-          "read_message_history": "Leer el historial de mensajes: necesario para que el botón \"actualizar\" pueda encontrar el mensaje a actualizar",
+          "view_channels": "Ver canales: necesario para que funcione el botón de actualizar",
+          "read_message_history": "Leer el historial de mensajes: necesario para que el botón de actualizar pueda encontrar el mensaje a actualizar",
           "attach_files": "Adjuntar archivos: necesario para que funcionen los comandos basados en imágenes"
         }
       },
@@ -406,16 +406,16 @@
         "subcommands": {
           "blitzkrieg": {
             "$": "blitzkrieg",
-            "description": "Hacer ping a Blitzkrieg"
+            "description": "Hacerle un ping a Blitzkrieg"
           },
           "wotb": {
             "$": "wotb",
-            "description": "Ping World of Tanks Blitz"
+            "description": "Hacerle un ping a World of Tanks Blitz"
           }
         }
       },
       "player_info": {
-        "$": "inf-jugador",
+        "$": "info-jugador",
         "description": "Información básica sobre un jugador",
         "body": {
           "title": "Información de %s",
