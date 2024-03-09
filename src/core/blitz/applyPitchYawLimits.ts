@@ -1,6 +1,6 @@
 import { clamp } from 'lodash';
 import { PitchLimits, YawLimits } from '../blitzkrieg/modelDefinitions';
-import { normalizeAnglePI } from '../math/normalizeAngle180';
+import { normalizeAngleRad } from '../math/normalizeAngleRad';
 
 export function applyPitchYawLimits(
   pitch: number, // rad
@@ -12,7 +12,7 @@ export function applyPitchYawLimits(
   let newYaw = yaw;
 
   if (yawLimits) {
-    newYaw = normalizeAnglePI(
+    newYaw = normalizeAngleRad(
       clamp(
         newYaw,
         -yawLimits.max * (Math.PI / 180),
@@ -27,7 +27,7 @@ export function applyPitchYawLimits(
 
   if (pitchLimits.back) {
     const range = pitchLimits.back.range * (Math.PI / 180);
-    const yawRotatedAbs = Math.abs(normalizeAnglePI(newYaw - Math.PI));
+    const yawRotatedAbs = Math.abs(normalizeAngleRad(newYaw - Math.PI));
 
     if (yawRotatedAbs <= range + transition) {
       if (yawRotatedAbs <= range) {
@@ -52,7 +52,7 @@ export function applyPitchYawLimits(
 
   if (pitchLimits.front) {
     const range = pitchLimits.front.range * (Math.PI / 180);
-    const yawAbs = Math.abs(normalizeAnglePI(newYaw));
+    const yawAbs = Math.abs(normalizeAngleRad(newYaw));
 
     if (yawAbs <= range + transition) {
       if (yawAbs <= range) {

@@ -1,11 +1,12 @@
-import { SlashCommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
+import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import embedInfo from '../core/discord/embedInfo';
 import markdownTable from '../core/discord/markdownTable';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
 
 export const playerInfoCommand = new Promise<CommandRegistry>((resolve) => {
@@ -13,24 +14,28 @@ export const playerInfoCommand = new Promise<CommandRegistry>((resolve) => {
     inProduction: true,
     inPublic: true,
 
-    command: new SlashCommandBuilder()
-      .setName('player-info')
-      .setDescription('Basic information about a player')
-      .addStringOption(addUsernameChoices),
+    command:
+      createLocalizedCommand('player-info').addStringOption(addUsernameChoices),
 
     async handler(interaction) {
+      const { t, translate } = translator(interaction.locale);
       const account = await resolvePlayerFromCommand(interaction);
       const { id, region: region } = account;
       const accountInfo = await getAccountInfo(region, id);
 
       return embedInfo(
-        `${markdownEscape(accountInfo.nickname)}'s information`,
+        translate('bot.command.player_info.body.title', [
+          markdownEscape(accountInfo.nickname),
+        ]),
 
         markdownTable([
-          ['Nickname', `${accountInfo.nickname}`],
-          ['Battles', `${accountInfo.statistics.all.battles}`],
+          [t`bot.command.player_info.body.nickname`, `${accountInfo.nickname}`],
           [
-            'Winrate',
+            t`bot.command.player_info.body.battles`,
+            `${accountInfo.statistics.all.battles}`,
+          ],
+          [
+            t`bot.command.player_info.body.winrate`,
             `${(
               100 *
               (accountInfo.statistics.all.wins /
@@ -38,14 +43,21 @@ export const playerInfoCommand = new Promise<CommandRegistry>((resolve) => {
             ).toFixed(2)}%`,
           ],
           [],
-          ['Account ID', `${accountInfo.account_id}`],
           [
-            'Created',
-            `${new Date(accountInfo.created_at * 1000).toDateString()}`,
+            t`bot.command.player_info.body.account_id`,
+            `${accountInfo.account_id}`,
           ],
           [
-            'Last battle',
-            `${new Date(accountInfo.last_battle_time * 1000).toDateString()}`,
+            t`bot.command.player_info.body.created`,
+            new Date(accountInfo.created_at * 1000).toLocaleDateString(
+              interaction.locale,
+            ),
+          ],
+          [
+            t`bot.command.player_info.body.last_battle`,
+            new Date(accountInfo.last_battle_time * 1000).toLocaleDateString(
+              interaction.locale,
+            ),
           ],
         ]),
       );

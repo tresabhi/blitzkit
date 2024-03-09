@@ -351,7 +351,9 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
         playersAfter =
           regionRatingsInfo.count - result[result.length - 1].position;
         titleName = `${
-          leagueInfo ? leagueInfo.title : ''
+          leagueInfo
+            ? translate(`common.leagues.${LEAGUES[leagueInfo.index].name}`)
+            : ''
         } - ${translate(`common.regions.short.${region}`)}`;
         titleImage = leagueInfo.big_icon.startsWith('http')
           ? leagueInfo.big_icon

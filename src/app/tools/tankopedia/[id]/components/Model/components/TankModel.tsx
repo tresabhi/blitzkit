@@ -10,7 +10,7 @@ import {
   ModelTransformEventData,
   modelTransformEvent,
 } from '../../../../../../../core/blitzkrieg/modelTransform';
-import { normalizeAnglePI } from '../../../../../../../core/math/normalizeAngle180';
+import { normalizeAngleRad } from '../../../../../../../core/math/normalizeAngleRad';
 import { useAwait } from '../../../../../../../hooks/useAwait';
 import { useModel } from '../../../../../../../hooks/useModel';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
@@ -172,8 +172,8 @@ export const TankModel = memo(() => {
           }
           function handlePointerUp() {
             mutateDuel((draft) => {
-              draft.protagonist!.pitch = normalizeAnglePI(pitch);
-              draft.protagonist!.yaw = normalizeAnglePI(yaw);
+              draft.protagonist!.pitch = normalizeAngleRad(pitch);
+              draft.protagonist!.yaw = normalizeAngleRad(yaw);
             });
             mutateTankopediaPersistent((draft) => {
               draft.model.visual.controlsEnabled = true;
@@ -234,8 +234,8 @@ export const TankModel = memo(() => {
                 draft.model.visual.controlsEnabled = true;
               });
               mutateDuel((draft) => {
-                draft.protagonist!.pitch = normalizeAnglePI(pitch);
-                draft.protagonist!.yaw = normalizeAnglePI(yaw);
+                draft.protagonist!.pitch = normalizeAngleRad(pitch);
+                draft.protagonist!.yaw = normalizeAngleRad(yaw);
               });
               window.removeEventListener('pointermove', handlePointerMove);
               window.removeEventListener('pointerup', handlePointerUp);

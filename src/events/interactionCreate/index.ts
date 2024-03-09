@@ -24,12 +24,10 @@ import { verifyCommand } from '../../commands/link';
 import { ownedTanksCommand } from '../../commands/ownedTanks';
 import { permissionsCommand } from '../../commands/permissions';
 import { pingCommand } from '../../commands/ping';
-import { playerAchievementsCommand } from '../../commands/playerAchievements';
 import { playerInfoCommand } from '../../commands/playerInfo';
 import { ratingsCommand } from '../../commands/ratings';
 import { searchClansCommand } from '../../commands/searchClans';
 import { searchPlayersCommand } from '../../commands/searchPlayers';
-import { searchTanksCommand } from '../../commands/searchTanks';
 import { statsCommand } from '../../commands/stats';
 import { todayCommand } from '../../commands/today';
 import getClientId from '../../core/blitzkrieg/getClientId';
@@ -84,11 +82,9 @@ export const COMMANDS_RAW: Promise<CommandRegistry>[] = [
   aboutCommand,
   inactiveCommand,
   ownedTanksCommand,
-  playerAchievementsCommand,
   playerInfoCommand,
   searchClansCommand,
   searchPlayersCommand,
-  searchTanksCommand,
   fullStatsCommand,
   breakdownCommand,
   verifyCommand,

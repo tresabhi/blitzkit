@@ -471,6 +471,21 @@
             "description": "Ping World of Tanks Blitz"
           }
         }
+      },
+
+      "player_info": {
+        "$": "player-info",
+        "description": "Basic information about a player",
+
+        "body": {
+          "title": "%'s information",
+          "nickname": "Nickname",
+          "battles": "Battles",
+          "winrate": "Winrate",
+          "account_id": "Account ID",
+          "created": "Created",
+          "last_battle": "Last battle"
+        }
       }
     }
   },
