@@ -178,6 +178,10 @@
         "tanks_found": "No tanks found"
       },
 
+      "buttons": {
+        "refresh": "Refresh"
+      },
+
       "errors": {
         "clan_not_found": "# Could not find clan\nCouldn't find \"%s\". Try selecting a clan from the search result.",
         "player_not_found": "# Could not find user\nI couldn't find user \"%s\". Try picking an user from the search result, typing in a valid username, or using the `/link` command.",
