@@ -418,7 +418,7 @@
         "$": "inf-jugador",
         "description": "Información básica sobre un jugador",
         "body": {
-          "title": "%'s information",
+          "title": "Información de %s",
           "nickname": "Apodo",
           "battles": "Batallas",
           "winrate": "Tasa de victorias",
