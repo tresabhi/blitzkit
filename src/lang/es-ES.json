@@ -1,5 +1,17 @@
 {
   "common": {
+    "wn8_percentile": {
+      "0": "Muy malo",
+      "1": "Malo",
+      "2": "Inferior al promedio",
+      "3": "Promedio",
+      "4": "Superior al promedio",
+      "5": "Bueno",
+      "6": "Muy bueno",
+      "7": "Genial",
+      "8": "Unicum",
+      "9": "Super unicum"
+    },
     "nations": {
       "ussr": "URSS",
       "germany": "Alemania",
@@ -26,12 +38,12 @@
       "normal": {
         "com": "Norteamérica",
         "eu": "Europa",
-        "asia": "Asia"
+        "asia": "Asia-Pacífico"
       },
       "short": {
         "com": "NA",
         "eu": "Europa",
-        "asia": "Asia"
+        "asia": "APAC"
       }
     },
     "leagues": {
@@ -123,6 +135,13 @@
         "region": {
           "$": "región",
           "description": "Región"
+        },
+        "tier": {
+          "$": "tier",
+          "description": "Tier",
+          "choices": {
+            "tier": "Tier %s - %s"
+          }
         }
       },
       "periods": {
@@ -261,18 +280,18 @@
         }
       },
       "link": {
-        "$": "link",
+        "$": "vincular",
         "description": "Vincula tu cuenta de Blitz y Discord",
         "body": {
           "accounts_linked": "Cuentas vinculadas",
           "no_role_permissions": {
             "$": "%s no se pudo verificar",
-            "description": "No tengo los permisos para cambiar tus roles de administración."
+            "description": "No tengo permiso para administrar roles."
           }
         },
         "embed": {
           "title": "¿Cuenta incorrecta?",
-          "description": "Usa el comando de nuevo y seleccione un usuario de los resultados de búsqueda."
+          "description": "Usa el comando de nuevo y selecciona un usuario de los resultados de búsqueda."
         }
       },
       "search_clans": {
@@ -337,9 +356,75 @@
           "top_players": "Top %s jugadores",
           "no_participation": "# %s no jugó Clasificación en la temporada %s\n\nEl jugador no participó en esta temporada o no completó su calibración.",
           "no_ongoing_season": "# No hay temporada en curso\n\nActualmente no hay ninguna temporada de Clasificación.",
-          "deleted_player": "Eliminado %s",
+          "deleted_player": "%s eliminado",
           "neighbors": "Vecinos de Clasificación",
-          "more": "+%s more"
+          "more": "+%s más"
+        }
+      },
+      "today": {
+        "$": "hoy",
+        "description": "Tanques jugados hoy y estadísticas"
+      },
+      "stats": {
+        "$": "estadísticas",
+        "description": "Estadísticas rápidas para un período",
+        "body": {
+          "battles": "Batallas",
+          "winrate": "Tasa de victorias",
+          "damage": "Daño",
+          "damage_ratio": "Relación de daño",
+          "tier": "Tier",
+          "survival": "Supervivencia",
+          "accuracy": "Precisión",
+          "kill_ratio": "Relación de bajas"
+        }
+      },
+      "owned_tanks": {
+        "$": "tanques-propios",
+        "description": "Muestra todos los tanques propios en un tier",
+        "body": {
+          "subtitle": "Tanques de tier %s"
+        }
+      },
+      "permissions": {
+        "$": "permisos",
+        "description": "Comprueba si el bot tiene los permisos requeridos para funcionar",
+        "body": {
+          "title": "# Permisos\n\n%s",
+          "view_channels": "Ver canales: necesario para que funcione el botón de actualizar",
+          "read_message_history": "Leer el historial de mensajes: necesario para que el botón de actualizar pueda encontrar el mensaje a actualizar",
+          "attach_files": "Adjuntar archivos: necesario para que funcionen los comandos basados en imágenes"
+        }
+      },
+      "ping": {
+        "$": "ping",
+        "description": "Comprueba si el bot está vivo.",
+        "body": {
+          "pong": "Pong 🏓",
+          "pong_with_time": "Pong 🏓 - %sms"
+        },
+        "subcommands": {
+          "blitzkrieg": {
+            "$": "blitzkrieg",
+            "description": "Hacerle un ping a Blitzkrieg"
+          },
+          "wotb": {
+            "$": "wotb",
+            "description": "Hacerle un ping a World of Tanks Blitz"
+          }
+        }
+      },
+      "player_info": {
+        "$": "info-jugador",
+        "description": "Información básica sobre un jugador",
+        "body": {
+          "title": "Información de %s",
+          "nickname": "Apodo",
+          "battles": "Batallas",
+          "winrate": "Tasa de victorias",
+          "account_id": "ID de cuenta",
+          "created": "Creado",
+          "last_battle": "Última batalla"
         }
       }
     }
