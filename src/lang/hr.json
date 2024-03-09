@@ -1,44 +1,44 @@
 {
   "common": {
     "wn8_percentile": {
-      "0": "Very bad",
-      "1": "Bad",
-      "2": "Below average",
-      "3": "Average",
-      "4": "Above average",
-      "5": "Good",
-      "6": "Very good",
-      "7": "Great",
-      "8": "Unicum",
-      "9": "Super unicum"
+      "0": "Jako loše",
+      "1": "Loše",
+      "2": "Ispod prosečnog",
+      "3": "Prosečno",
+      "4": "Nad prosečno",
+      "5": "Dobro",
+      "6": "Jako dobro",
+      "7": "Super",
+      "8": "Legendarno",
+      "9": "Super Legendarno"
     },
     "nations": {
-      "ussr": "U.S.S.R.",
-      "germany": "Germany",
-      "usa": "U.S.A.",
-      "china": "China",
-      "uk": "U.K.",
-      "france": "France",
+      "ussr": "S.S.S.R.",
+      "germany": "Nemačka",
+      "usa": "S.A.D.",
+      "china": "Kina",
+      "uk": "Vel. Brit.",
+      "france": "Francuska",
       "japan": "Japan",
-      "european": "European nation",
-      "other": "Hybrid nation"
+      "european": "Evropska Unija",
+      "other": "Hibridna nacija"
     },
     "tank_class_short": {
-      "lightTank": "Light",
-      "mediumTank": "Medium",
-      "heavyTank": "Heavy",
+      "lightTank": "Svetlo",
+      "mediumTank": "Prosečno",
+      "heavyTank": "Teško",
       "AT-SPG": "TD"
     },
     "tree_type": {
-      "researchable": "Tech tree",
-      "premium": "Premium",
-      "collector": "Collector"
+      "researchable": "Razvojna tabla",
+      "premium": "Premijum",
+      "collector": "Kolektor"
     },
     "regions": {
       "normal": {
-        "com": "North America",
-        "eu": "Europe",
-        "asia": "Asia-Pacific"
+        "com": "Severna Amerika",
+        "eu": "Evropa",
+        "asia": "Azija-Pasifik"
       },
       "short": {
         "com": "NA",
@@ -47,32 +47,32 @@
       }
     },
     "leagues": {
-      "diamond": "Diamond",
-      "platinum": "Platinum",
-      "gold": "Gold",
-      "silver": "Silver",
-      "bronze": "Bronze"
+      "diamond": "Dijamant",
+      "platinum": "Platina",
+      "gold": "Zlato",
+      "silver": "Srebro",
+      "bronze": "Bronza"
     }
   },
   "bot": {
     "common": {
       "wn8": {
         "$": "WN8",
-        "very_bad": "Very bad",
-        "bad": "Bad",
-        "below_average": "Below average",
-        "average": "Average",
-        "above_average": "Above average",
-        "good": "Good",
-        "very_good": "Very good",
-        "great": "Great",
-        "unicum": "Unicum",
-        "super_unicum": "Super unicum"
+        "very_bad": "Jako loše",
+        "bad": "Loše",
+        "below_average": "Ispod prosečnog",
+        "average": "Prosečno",
+        "above_average": "Nad prosečno",
+        "good": "Dobro",
+        "very_good": "Jako dobro",
+        "great": "Super",
+        "unicum": "Legendarno",
+        "super_unicum": "Super Legendarno"
       },
       "subcommands": {
         "today": {
-          "$": "today",
-          "description": "Today"
+          "$": "danas",
+          "description": "Danas"
         },
         "30": {
           "$": "30",
@@ -172,40 +172,40 @@
           },
           "embeds": {
             "$": "embeds",
-            "description": "How embeds work"
+            "description": "Kako embed radi"
           },
           "introduction": {
-            "$": "introduction",
-            "description": "About the bot"
+            "$": "uvod",
+            "description": "O bot-u"
           },
           "invite": {
-            "$": "invite",
-            "description": "How to invite the bot"
+            "$": "pozovi",
+            "description": "Kako pozvati robota"
           },
           "timezones": {
-            "$": "timezones",
-            "description": "How Blitzkrieg infers and uses your timezone"
+            "$": "vremenske zone",
+            "description": "Kako \"Blitzkrieg\" koristi podatke o tvojoj vremenskoj zoni"
           },
           "creators": {
-            "$": "creators",
-            "description": "People who have worked on the bot"
+            "$": "stvarači",
+            "description": "Ljudi koji su radili na robotu"
           }
         }
       },
       "breakdown": {
-        "$": "breakdown",
+        "$": "analiza",
         "description": "A period's breakdown by tanks played",
         "body": {
           "total": "Total",
-          "battles": "Battles",
+          "battles": "Borbe",
           "wn8": "WN8",
-          "winrate": "Winrate",
-          "damage": "Damage",
-          "unknown_tank": "Unknown tank %s"
+          "winrate": "Procenat pobede",
+          "damage": "Šteta",
+          "unknown_tank": "Ne poznat tenk %s"
         }
       },
       "debug": {
-        "$": "debug",
+        "$": "odklanjanje grešaka",
         "description": "Debug information about the bot",
         "body": {
           "title": "# Debug\n\n",
