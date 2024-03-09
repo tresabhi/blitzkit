@@ -76,30 +76,30 @@
         },
         "30": {
           "$": "30",
-          "description": "30 days"
+          "description": "30 dana"
         },
         "60": {
           "$": "60",
-          "description": "60 days"
+          "description": "60 dana"
         },
         "90": {
           "$": "90",
-          "description": "90 days"
+          "description": "90 dana"
         },
         "career": {
-          "$": "career",
-          "description": "Career"
+          "$": "karijera",
+          "description": "Karijera"
         },
         "custom": {
-          "$": "custom",
-          "description": "Custom range",
+          "$": "proizvoljno",
+          "description": "Proizvoljna daljina",
           "options": {
             "start": {
-              "$": "start",
+              "$": "kreni",
               "description": "Start in number of days ago from today"
             },
             "end": {
-              "$": "end",
+              "$": "kraj",
               "description": "End in number of days ago from today"
             }
           }
@@ -107,7 +107,7 @@
       },
       "options": {
         "clan": {
-          "$": "clan",
+          "$": "klan",
           "description": "The clan name or tag"
         },
         "tank": {
