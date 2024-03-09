@@ -256,6 +256,8 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
       },
     ]),
 
+    // BIG TODO: title seems to be in english
+
     async handler(interaction) {
       const { t, translate } = translator(interaction.locale);
       const subcommand = interaction.options.getSubcommand(true) as

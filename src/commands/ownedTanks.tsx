@@ -1,4 +1,3 @@
-import { SlashCommandBuilder } from 'discord.js';
 import CommandWrapper from '../components/CommandWrapper';
 import NoData from '../components/NoData';
 import * as Tanks from '../components/Tanks';
@@ -18,7 +17,9 @@ import { tankIcon } from '../core/blitzkrieg/tankIcon';
 import addTierChoices from '../core/discord/addTierChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
+import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
 
 export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
@@ -26,13 +27,12 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
     inProduction: true,
     inPublic: true,
 
-    command: new SlashCommandBuilder()
-      .setName('owned-tanks')
-      .setDescription("Shows a player's owned tanks")
+    command: createLocalizedCommand('owned-tanks')
       .addStringOption(addTierChoices)
       .addStringOption(addUsernameChoices),
 
     async handler(interaction) {
+      const { translate } = translator(interaction.locale);
       const tier = Number(interaction.options.getString('tier'));
       const account = await resolvePlayerFromCommand(interaction);
       const { id, region: server } = account;
@@ -70,7 +70,9 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
                 ? emblemIdToURL(clanAccountInfo.clan.emblem_set_id)
                 : undefined
             }
-            description={`Tier ${TIER_ROMAN_NUMERALS[tier as Tier]} tanks`}
+            description={translate('bot.commands.owned_tanks.body.subtitle', [
+              TIER_ROMAN_NUMERALS[tier as Tier],
+            ])}
           />
 
           {filteredTanks.length === 0 && (

@@ -1,4 +1,3 @@
-import { SlashCommandBuilder } from 'discord.js';
 import { NATIONS } from '../core/blitzkrieg/tankDefinitions';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import { addFilterOptions } from '../core/discord/addFilterOptions';
@@ -7,6 +6,7 @@ import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import { buttonRefresh } from '../core/discord/buttonRefresh';
 import commandToURL from '../core/discord/commandToURL';
+import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
 import { getFiltersFromButton } from '../core/discord/getFiltersFromButton';
 import { getFiltersFromCommand } from '../core/discord/getFiltersFromCommand';
@@ -19,18 +19,14 @@ import { renderBreakdown } from './breakdown';
 
 export const todayCommand = new Promise<CommandRegistry>(async (resolve) => {
   const nations = await NATIONS;
-  const command = addFilterOptions(
-    new SlashCommandBuilder()
-      .setName('today')
-      .setDescription("Today's played tanks and statistics"),
-    nations,
-  ).addStringOption(addUsernameChoices);
-
   resolve({
     inProduction: true,
     inPublic: true,
 
-    command,
+    command: addFilterOptions(
+      createLocalizedCommand('today'),
+      nations,
+    ).addStringOption(addUsernameChoices),
 
     async handler(interaction) {
       const player = await resolvePlayerFromCommand(interaction);

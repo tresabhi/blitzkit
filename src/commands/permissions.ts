@@ -1,4 +1,5 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
+import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
 
 export const permissionsCommand = new Promise<CommandRegistry>((resolve) => {
@@ -6,26 +7,25 @@ export const permissionsCommand = new Promise<CommandRegistry>((resolve) => {
     inProduction: true,
     inPublic: true,
 
-    command: new SlashCommandBuilder()
-      .setName('permissions')
-      .setDescription('Checks wether the bot has the required permissions'),
+    command: createLocalizedCommand('permissions'),
 
     async handler(interaction) {
+      const { t, translate } = translator(interaction.locale);
       // friday the 13th permissions easter egg
       const isFridayThe13th =
         new Date().getDay() === 5 && new Date().getDate() === 13;
       const permissions = [
         [
           interaction.appPermissions?.has('ViewChannel'),
-          'View channels: needed for the refresh button to work',
+          t`bot.commands.permissions.body.view_channel`,
         ],
         [
           interaction.appPermissions?.has('ReadMessageHistory'),
-          'Read message history: also needed for the refresh button to work',
+          t`bot.commands.permissions.body.read_message_history`,
         ],
         [
           interaction.appPermissions?.has('AttachFiles'),
-          'Attach files: needed for image-based commands to work',
+          t`bot.commands.permissions.body.attach_files`,
         ],
       ];
       const body = permissions
@@ -38,7 +38,7 @@ export const permissionsCommand = new Promise<CommandRegistry>((resolve) => {
         })
         .join('\n');
 
-      return `# Permissions\n${body}`;
+      return translate('bot.commands.permissions.body.title', [body]);
     },
   });
 });

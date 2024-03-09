@@ -1,30 +1,21 @@
+import { Locale } from 'discord.js';
 import { Percentile } from '../../../../constants/percentiles';
+import { translator } from '../../../../core/localization/translator';
 import getWN8Percentile from '../../../../core/statistics/getWN8Percentile';
 import { theme } from '../../../../stitches.config';
 import { PERCENTILE_COLORS } from '../../../PercentileIndicator';
 import { Glow } from './components/Glow';
 
 export interface WN8DisplayProps {
-  WN8?: number;
+  wn8?: number;
+  locale: Locale;
 }
 
-export const PERCENTILE_NAMES = {
-  [Percentile.VeryBad]: 'Very Bad',
-  [Percentile.Bad]: 'Bad',
-  [Percentile.BelowAverage]: 'Below Average',
-  [Percentile.Average]: 'Average',
-  [Percentile.AboveAverage]: 'Above Average',
-  [Percentile.Good]: 'Good',
-  [Percentile.VeryGood]: 'Very Good',
-  [Percentile.Great]: 'Great',
-  [Percentile.Unicum]: 'Unicum',
-  [Percentile.SuperUnicum]: 'Super Unicum',
-};
-
-export function WN8Display({ WN8 }: WN8DisplayProps) {
+export function WN8Display({ wn8, locale }: WN8DisplayProps) {
   const percentile =
-    WN8 === undefined ? Percentile.VeryBad : getWN8Percentile(WN8);
+    wn8 === undefined ? Percentile.VeryBad : getWN8Percentile(wn8);
   const color = PERCENTILE_COLORS[percentile];
+  const { translate } = translator(locale);
 
   return (
     <div
@@ -59,7 +50,7 @@ export function WN8Display({ WN8 }: WN8DisplayProps) {
             color: theme.colors.textHighContrast,
           }}
         >
-          {WN8 === undefined ? '--' : WN8.toFixed(0)}
+          {wn8 === undefined ? '--' : wn8.toFixed(0)}
         </span>
         <span
           style={{
@@ -67,7 +58,7 @@ export function WN8Display({ WN8 }: WN8DisplayProps) {
             color: theme.colors.textHighContrast,
           }}
         >
-          {PERCENTILE_NAMES[percentile]}
+          {translate(`common.wn8_percentile.${percentile}`)}
         </span>
       </div>
 

@@ -51,6 +51,7 @@ export const searchPlayersCommand = new Promise<CommandRegistry>((resolve) => {
       ),
 
     async handler(interaction) {
+      const { translate } = translator(interaction.locale);
       const server = interaction.options.getString('region') as Region;
       const name = interaction.options.getString('username')!;
       const limit = interaction.options.getInteger('limit') ?? 25;

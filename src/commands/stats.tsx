@@ -1,4 +1,4 @@
-import { Locale, SlashCommandBuilder } from 'discord.js';
+import { Locale } from 'discord.js';
 import AllStatsOverview from '../components/AllStatsOverview';
 import CommandWrapper from '../components/CommandWrapper';
 import NoData from '../components/NoData';
@@ -15,6 +15,7 @@ import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import { buttonRefresh } from '../core/discord/buttonRefresh';
 import commandToURL from '../core/discord/commandToURL';
+import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
 import { getFiltersFromButton } from '../core/discord/getFiltersFromButton';
 import { getFiltersFromCommand } from '../core/discord/getFiltersFromCommand';
@@ -52,25 +53,25 @@ async function render(
 
       {!stats.battles && <NoData type="battles_in_period" locale={locale} />}
       {stats.battles > 0 && (
-        <AllStatsOverview stats={stats} supplementaryStats={supplementary} />
+        <AllStatsOverview
+          locale={locale}
+          stats={stats}
+          supplementaryStats={supplementary}
+        />
       )}
     </CommandWrapper>
   );
 }
 
 export const statsCommand = new Promise<CommandRegistry>(async (resolve) => {
-  const command = await addPeriodicFilterOptions(
-    new SlashCommandBuilder()
-      .setName('stats')
-      .setDescription('Regular battles statistics'),
-    (option) => option.addStringOption(addUsernameChoices),
-  );
-
   resolve({
     inProduction: true,
     inPublic: true,
 
-    command,
+    command: await addPeriodicFilterOptions(
+      createLocalizedCommand('stats'),
+      (option) => option.addStringOption(addUsernameChoices),
+    ),
 
     async handler(interaction) {
       const player = await resolvePlayerFromCommand(interaction);
