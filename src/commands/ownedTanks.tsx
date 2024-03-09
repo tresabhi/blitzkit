@@ -2,7 +2,6 @@ import CommandWrapper from '../components/CommandWrapper';
 import NoData from '../components/NoData';
 import * as Tanks from '../components/Tanks';
 import TitleBar from '../components/TitleBar';
-import { encyclopediaInfo } from '../core/blitz/encyclopediaInfo';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
@@ -88,9 +87,9 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
                 const rightColumn = tanks.slice(leftColumnSize);
 
                 return (
-                  <Tanks.Root>
+                  <Tanks.Root key={nation}>
                     <Tanks.Title>
-                      {(await encyclopediaInfo).vehicle_nations[nation]}
+                      {translate(`common.nations.${nation}`)}
                     </Tanks.Title>
 
                     <Tanks.Row>
