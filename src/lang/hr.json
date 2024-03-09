@@ -158,6 +158,19 @@
         "battles_in_period": "No battles played in this period",
         "players_in_period": "No players in this period",
         "tanks_found": "No tanks found"
+      },
+      "buttons": {
+        "refresh": "Refresh"
+      },
+      "errors": {
+        "clan_not_found": "# Could not find clan\nCouldn't find \"%s\". Try selecting a clan from the search result.",
+        "player_not_found": "# Could not find user\nI couldn't find user \"%s\". Try picking an user from the search result, typing in a valid username, or using the `/link` command.",
+        "player_not_linked": "# I don't know who you are\nUse the `/link` command to get started.",
+        "tank_name_not_found": "# Tank not found\nCould not find tank by the name \"%s\".",
+        "tank_id_not_found": "# Tank not found\nCould not find tank by the ID \"%s\". Try typing the name of the tank instead of a number.",
+        "no_tank_stats": "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
+        "get_help": "Help Discord server",
+        "uncaught_error": "# Blitzkrieg ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help."
       }
     },
     "commands": {
@@ -418,7 +431,7 @@
         "$": "player-info",
         "description": "Basic information about a player",
         "body": {
-          "title": "%'s information",
+          "title": "%s's information",
           "nickname": "Nickname",
           "battles": "Battles",
           "winrate": "Winrate",
