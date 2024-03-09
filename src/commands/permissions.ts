@@ -17,7 +17,7 @@ export const permissionsCommand = new Promise<CommandRegistry>((resolve) => {
       const permissions = [
         [
           interaction.appPermissions?.has('ViewChannel'),
-          t`bot.commands.permissions.body.view_channel`,
+          t`bot.commands.permissions.body.view_channels`,
         ],
         [
           interaction.appPermissions?.has('ReadMessageHistory'),

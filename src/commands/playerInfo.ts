@@ -24,18 +24,21 @@ export const playerInfoCommand = new Promise<CommandRegistry>((resolve) => {
       const accountInfo = await getAccountInfo(region, id);
 
       return embedInfo(
-        translate('bot.command.player_info.body.title', [
+        translate('bot.commands.player_info.body.title', [
           markdownEscape(accountInfo.nickname),
         ]),
 
         markdownTable([
-          [t`bot.command.player_info.body.nickname`, `${accountInfo.nickname}`],
           [
-            t`bot.command.player_info.body.battles`,
+            t`bot.commands.player_info.body.nickname`,
+            `${accountInfo.nickname}`,
+          ],
+          [
+            t`bot.commands.player_info.body.battles`,
             `${accountInfo.statistics.all.battles}`,
           ],
           [
-            t`bot.command.player_info.body.winrate`,
+            t`bot.commands.player_info.body.winrate`,
             `${(
               100 *
               (accountInfo.statistics.all.wins /
@@ -44,17 +47,17 @@ export const playerInfoCommand = new Promise<CommandRegistry>((resolve) => {
           ],
           [],
           [
-            t`bot.command.player_info.body.account_id`,
+            t`bot.commands.player_info.body.account_id`,
             `${accountInfo.account_id}`,
           ],
           [
-            t`bot.command.player_info.body.created`,
+            t`bot.commands.player_info.body.created`,
             new Date(accountInfo.created_at * 1000).toLocaleDateString(
               interaction.locale,
             ),
           ],
           [
-            t`bot.command.player_info.body.last_battle`,
+            t`bot.commands.player_info.body.last_battle`,
             new Date(accountInfo.last_battle_time * 1000).toLocaleDateString(
               interaction.locale,
             ),
