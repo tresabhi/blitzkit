@@ -13,7 +13,7 @@ export default async function resolveTankId(
   locale: Locale,
 ) {
   const { translate } = translator(locale);
-  const number = typeof tank === 'string' ? parseInt(tank) : tank;
+  const number = typeof tank === 'string' ? Number(tank) : tank;
 
   if (Number.isNaN(number)) {
     const searchResult = go(`${tank}`, await tanksDefinitionsArray, {
