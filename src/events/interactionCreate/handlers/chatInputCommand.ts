@@ -8,7 +8,6 @@ import {
   InteractionReplyOptions,
 } from 'discord.js';
 import { commands } from '..';
-import discord from '../../../../discord.json' assert { type: 'json' };
 import buttonLink from '../../../core/discord/buttonLink';
 import embedWarning from '../../../core/discord/embedWarning';
 import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable';
@@ -23,19 +22,6 @@ export default async function handleChatInputCommand(
   const registry = awaitedCommands[interaction.commandName];
 
   await interaction.deferReply();
-
-  if (registry.inPreview && interaction.guildId !== discord.tres_guild_id) {
-    interaction.editReply({
-      embeds: [
-        embedWarning(
-          `\`/${registry.command.name}\` is in Public Preview`,
-          '[Join the official Discord server](https://discord.gg/nDt7AjGJQH) to gain early access to this command before it is released to the public.',
-        ),
-      ],
-    });
-
-    return;
-  }
 
   try {
     const returnable = await registry.handler(interaction);
