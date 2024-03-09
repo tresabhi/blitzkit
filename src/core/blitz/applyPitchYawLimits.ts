@@ -1,6 +1,6 @@
 import { clamp } from 'lodash';
 import { PitchLimits, YawLimits } from '../blitzkrieg/modelDefinitions';
-import { normalizeAngleRad } from '../math/normalizeAngleRad';
+import { normalizeAngleRad } from '../math/normalizeAngleRAD';
 
 export function applyPitchYawLimits(
   pitch: number, // rad
