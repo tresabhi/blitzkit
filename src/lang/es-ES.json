@@ -337,7 +337,7 @@
       },
       "ratings": {
         "$": "clasificación",
-        "description": "Estadísticas de batallas en Clasificación",
+        "description": "Estadísticas de batallas en clasificación",
         "subcommands": {
           "neighbors": {
             "$": "vecinos",
@@ -367,10 +367,10 @@
         },
         "body": {
           "top_players": "Top %s jugadores",
-          "no_participation": "# %s no jugó Clasificación en la temporada %s\n\nEl jugador no participó en esta temporada o no completó su calibración.",
-          "no_ongoing_season": "# No hay temporada en curso\n\nActualmente no hay ninguna temporada de Clasificación.",
+          "no_participation": "# %s no jugó clasificación en la temporada %s\n\nEl jugador no participó en esta temporada o no completó su calibración.",
+          "no_ongoing_season": "# No hay temporada en curso\n\nActualmente no hay ninguna temporada de clasificación.",
           "deleted_player": "%s eliminado",
-          "neighbors": "Vecinos de Clasificación",
+          "neighbors": "Vecinos de clasificación",
           "more": "+%s más"
         }
       },
