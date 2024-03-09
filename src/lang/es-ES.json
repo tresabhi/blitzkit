@@ -160,17 +160,17 @@
         "tanks_found": "No se encontraron tanques"
       },
       "buttons": {
-        "refresh": "Refresh"
+        "refresh": "Actualizar"
       },
       "errors": {
-        "clan_not_found": "# Could not find clan\nCouldn't find \"%s\". Try selecting a clan from the search result.",
-        "player_not_found": "# Could not find user\nI couldn't find user \"%s\". Try picking an user from the search result, typing in a valid username, or using the `/link` command.",
-        "player_not_linked": "# I don't know who you are\nUse the `/link` command to get started.",
-        "tank_name_not_found": "# Tank not found\nCould not find tank by the name \"%s\".",
-        "tank_id_not_found": "# Tank not found\nCould not find tank by the ID \"%s\". Try typing the name of the tank instead of a number.",
-        "no_tank_stats": "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
-        "get_help": "Help Discord server",
-        "uncaught_error": "# Blitzkrieg ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help."
+        "clan_not_found": "# No se pudo encontrar el clan\nNo se pudo encontrar \"%s\". Prueba seleccionando un clan de los resultados de búsqueda.",
+        "player_not_found": "# No se pudo encontrar el usuario\nNo pude encontrar al usuario \"%s\". Prueba eligiendo un usuario de los resultados de búsqueda, escribiendo un nombre de usuario aceptable o usando el comando `/vincular`.",
+        "player_not_linked": "# No sé quién eres\nUsa el comando `/vincular` para comenzar.",
+        "tank_name_not_found": "# No se pudo encontrar el tanque\nNo se pudo encontrar el tanque con el nombre \"%s\".",
+        "tank_id_not_found": "# Tanque no encontrado\nNo se pudo encontrar al tanque del ID \"%s\". Prueba escribiendo el nombre del tanque en vez de un número.",
+        "no_tank_stats": "# No hay estadísticas de tanque disponibles\nEste jugador no tiene estadísticas disponibles. Este podría no ser el jugador que estás buscando.",
+        "get_help": "Servidor de ayuda de Discord",
+        "uncaught_error": "# ¡Blitzkrieg sufrió un error!\nLo sentimos mucho. Siéntete libre de [unirte al servidor oficial de Discord](https://discord.gg/nDt7AjGJQH) para obtener ayuda."
       }
     },
     "commands": {
@@ -431,7 +431,7 @@
         "$": "info-jugador",
         "description": "Información básica sobre un jugador",
         "body": {
-          "title": "%s's information",
+          "title": "Información de %s",
           "nickname": "Apodo",
           "battles": "Batallas",
           "winrate": "Tasa de victorias",
