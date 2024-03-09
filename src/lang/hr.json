@@ -1,5 +1,17 @@
 {
   "common": {
+    "wn8_percentile": {
+      "0": "Very bad",
+      "1": "Bad",
+      "2": "Below average",
+      "3": "Average",
+      "4": "Above average",
+      "5": "Good",
+      "6": "Very good",
+      "7": "Great",
+      "8": "Unicum",
+      "9": "Super unicum"
+    },
     "nations": {
       "ussr": "U.S.S.R.",
       "germany": "Germany",
@@ -123,6 +135,13 @@
         "region": {
           "$": "region",
           "description": "Region"
+        },
+        "tier": {
+          "$": "tier",
+          "description": "Tier",
+          "choices": {
+            "tier": "Tier %s - %s"
+          }
         }
       },
       "periods": {
@@ -340,6 +359,59 @@
           "deleted_player": "Deleted %s",
           "neighbors": "Ratings neighbors",
           "more": "+%s more"
+        }
+      },
+      "today": {
+        "$": "today",
+        "description": "Today's played tanks and statistics"
+      },
+      "stats": {
+        "$": "stats",
+        "description": "Quick statistics for a period",
+        "body": {
+          "battles": "Battles",
+          "winrate": "Winrate",
+          "damage": "Damage",
+          "damage_ratio": "Damage ratio",
+          "tier": "Tier",
+          "survival": "Survival",
+          "accuracy": "Accuracy",
+          "kill_ratio": "Kill ratio"
+        }
+      },
+      "owned_tanks": {
+        "$": "owned-tanks",
+        "description": "Shows all own tanks in a tier",
+        "body": {
+          "subtitle": "Tier %s tanks"
+        }
+      },
+      "permissions": {
+        "$": "permissions",
+        "description": "Checks wether the bot has the required permissions to function",
+        "body": {
+          "title": "# Permissions\n\n%s",
+          "view_channels": "View channels: needed for the refresh button to work",
+          "read_message_history": "Read message history: needed for the refresh button to find the message to refresh",
+          "attach_files": "Attach files: needed for image-based commands to work"
+        }
+      },
+      "ping": {
+        "$": "ping",
+        "description": "Check wether the bot is alive.",
+        "body": {
+          "pong": "Pong 🏓",
+          "pong_with_time": "Pong 🏓 - %sms"
+        },
+        "subcommands": {
+          "blitzkrieg": {
+            "$": "blitzkrieg",
+            "description": "Ping Blitzkrieg"
+          },
+          "wotb": {
+            "$": "wotb",
+            "description": "Ping World of Tanks Blitz"
+          }
         }
       }
     }
