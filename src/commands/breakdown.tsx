@@ -51,11 +51,11 @@ export async function renderBreakdown(
   const { t, translate } = translator(locale);
   const awaitedTankDefinitions = await tankDefinitions;
   const awaitedTankAverages = await tankAverages;
-  const statsInPeriod = await getStatsInPeriod(region, id, start, end);
+  const statsInPeriod = await getStatsInPeriod(region, id, start, end, locale);
   const { filteredOrder } = await filterStats(statsInPeriod, filters);
   const accountInfo = await getAccountInfo(region, id);
   const clanData = await getClanAccountInfo(region, id, ['clan']);
-  const tankStats = await getTankStats(region, id);
+  const tankStats = await getTankStats(region, id, locale);
   const filterDescriptions = await filtersToDescription(filters, locale);
   const orderedCurrentStats: AllStats[] = [];
   const orderedCareerStats: AllStats[] = [];

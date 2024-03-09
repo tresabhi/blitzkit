@@ -48,7 +48,7 @@ async function render(
         includeLatestHistories: true,
         includePreviousHistories: true,
       })
-    : getTankHistories(region, id, {
+    : getTankHistories(region, id, locale, {
         tankId: tankId!,
         start,
         end,
@@ -140,7 +140,9 @@ export const evolutionCommand = new Promise<CommandRegistry>(
         const period = resolvePeriodFromCommand(player.region, interaction);
         const tankIdRaw = interaction.options.getString('tank')!;
         const tankId =
-          commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
+          commandGroup === 'tank'
+            ? await resolveTankId(tankIdRaw, interaction.locale)
+            : null;
         const path = commandToURL(interaction, {
           ...player,
           ...getCustomPeriodParams(interaction),

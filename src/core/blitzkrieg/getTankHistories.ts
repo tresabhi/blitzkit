@@ -1,3 +1,4 @@
+import { Locale } from 'discord.js';
 import { Region } from '../../constants/regions';
 import {
   GetHistoriesOptions,
@@ -34,6 +35,7 @@ export const getTankHistoriesDefaultOptions: GetTankHistoriesOptions = {
 export default async function getTankHistories(
   server: Region,
   id: number,
+  locale: Locale,
   options?: Partial<GetTankHistoriesOptions>,
 ) {
   const mergedOptions = { ...getTankHistoriesDefaultOptions, ...options };
@@ -76,7 +78,7 @@ export default async function getTankHistories(
   const latestNodes: TankHistories = [];
 
   if (mergedOptions.includeLatestHistories) {
-    (await getTankStats(server, id)).forEach((tankHistory) => {
+    (await getTankStats(server, id, locale)).forEach((tankHistory) => {
       if (
         tankHistory.all.battles > (lastBattles[tankHistory.tank_id] ?? 0) &&
         (mergedOptions.tankId === undefined ||

@@ -37,7 +37,7 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
       const account = await resolvePlayerFromCommand(interaction);
       const { id, region: server } = account;
       const accountInfo = await getAccountInfo(server, id);
-      const tankStats = await getTankStats(server, id);
+      const tankStats = await getTankStats(server, id, interaction.locale);
       const filteredTanks = (
         await Promise.all(
           tankStats.map(async (tankData) => ({

@@ -15,6 +15,9 @@ export async function getFiltersFromCommand(
     treeType:
       (interaction.options.getString('tree-type') as TreeType | undefined) ??
       undefined,
-    tank: tankRaw === null ? undefined : await resolveTankId(tankRaw),
+    tank:
+      tankRaw === null
+        ? undefined
+        : await resolveTankId(tankRaw, interaction.locale),
   } satisfies StatFilters;
 }

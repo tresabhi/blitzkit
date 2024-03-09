@@ -1,3 +1,4 @@
+import { Locale } from 'discord.js';
 import { Region } from '../../constants/regions';
 import { AllStats } from '../blitz/getAccountInfo';
 import getTankHistories, {
@@ -45,8 +46,9 @@ export default async function getStatsInPeriod(
   id: number,
   start: number,
   end: number,
+  locale: Locale,
 ) {
-  const history = await getTankHistories(server, id, {
+  const history = await getTankHistories(server, id, locale, {
     includeLatestHistories: true,
   });
 

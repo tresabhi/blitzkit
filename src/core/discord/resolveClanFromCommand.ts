@@ -3,11 +3,13 @@ import markdownEscape from 'markdown-escape';
 import { Region } from '../../constants/regions';
 import { UserError } from '../../hooks/userError';
 import searchClansAcrossRegions from '../blitz/searchClansAcrossRegions';
+import { translator } from '../localization/translator';
 import { serverAndIdPattern } from './resolvePlayerFromCommand';
 
 export default async function resolveClanFromCommand(
   interaction: ChatInputCommandInteraction,
 ) {
+  const { translate } = translator(interaction.locale);
   const clan = interaction.options.getString('clan', true);
 
   if (serverAndIdPattern.test(clan)) {
@@ -20,7 +22,7 @@ export default async function resolveClanFromCommand(
       return { region: accounts[0].region, id: accounts[0].clan_id };
     } else {
       throw new UserError(
-        `# Could not find clan\nCouldn't find "${markdownEscape(clan)}". Try selecting a clan from the search result.`,
+        translate('bot.common.errors.clan_not_found', [markdownEscape(clan)]),
       );
     }
   }
