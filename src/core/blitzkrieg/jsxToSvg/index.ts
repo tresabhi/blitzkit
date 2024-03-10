@@ -1,18 +1,19 @@
+import { readFileSync } from 'fs';
 import satori from 'satori';
 
 const fonts = [
   {
-    data: require('./Roboto.ttf'),
+    data: readFileSync(require('./Roboto.ttf')),
     weight: 400 as const,
     name: 'Roboto',
   },
   {
-    data: require('./Roboto-Bold.ttf'),
+    data: readFileSync(require('./Roboto-Bold.ttf')),
     weight: 700 as const,
     name: 'Roboto-Bold',
   },
   {
-    data: require('./Roboto-Black.ttf'),
+    data: readFileSync(require('./Roboto-Black.ttf')),
     weight: 900 as const,
     name: 'Roboto-Black',
   },
