@@ -5,18 +5,19 @@ import {
 } from '../../../core/blitzkrieg/tankDefinitions';
 import { theme } from '../../../stitches.config';
 
-export const TANK_TYPES = [
-  'light',
-  'medium',
-  'heavy',
-  'tankDestroyer',
+export const TANK_CLASSES = [
+  'lightTank',
+  'mediumTank',
+  'heavyTank',
+  'AT-SPG',
 ] as const;
 
 export const TREE_TYPES = ['researchable', 'premium', 'collector'] as const;
 
-export type TankType = (typeof TANK_TYPES)[number];
+export type TankClass = (typeof TANK_CLASSES)[number];
 export type TreeType = (typeof TREE_TYPES)[number];
 
+// BIG TODO: REMOVE THIS AFTER LOCALIZATION
 export const TREE_TYPE_NAMES: Record<TreeType, string> = {
   researchable: 'Tech tree',
   premium: 'Premium',
@@ -31,7 +32,7 @@ export const TREE_TYPE_IMAGES: Record<TreeType, string> = {
 
 export interface ItemProps {
   image?: string;
-  tankType?: TankType;
+  tankType?: TankClass;
   name: string;
   treeType: TreeType;
 }
@@ -42,7 +43,7 @@ const TREE_TYPE_COLOR = {
   collector: '_blue',
 } as const;
 
-export const TREE_TYPE_ICONS: Record<TreeType, Record<TankType, string>> = {
+export const TREE_TYPE_ICONS: Record<TreeType, Record<TankClass, string>> = {
   researchable: TANK_ICONS,
   premium: TANK_ICONS_PREMIUM,
   collector: TANK_ICONS_COLLECTOR,

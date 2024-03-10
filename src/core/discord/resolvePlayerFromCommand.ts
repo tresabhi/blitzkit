@@ -4,6 +4,7 @@ import { Region } from '../../constants/regions';
 import { UserError } from '../../hooks/userError';
 import searchPlayersAcrossRegions from '../blitz/searchPlayersAcrossRegions';
 import { getBlitzFromDiscord } from '../blitzkrieg/discordBlitz';
+import { translator } from '../localization/translator';
 
 export const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
 
@@ -15,6 +16,7 @@ export interface ResolvedPlayer {
 export default async function resolvePlayerFromCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
+  const { t, translate } = translator(interaction.locale);
   const commandUsername = interaction.options.getString('username');
 
   if (commandUsername) {
@@ -35,9 +37,9 @@ export default async function resolvePlayerFromCommand(
         } satisfies ResolvedPlayer;
       } else {
         throw new UserError(
-          `# Could not find user\nI couldn't find user "${markdownEscape(
-            commandUsername,
-          )}". Try picking an user from the search result, typing in a valid username, or using the \`/link\` command.`,
+          translate('bot.common.errors.player_not_found', [
+            markdownEscape(commandUsername),
+          ]),
         );
       }
     }
@@ -47,9 +49,7 @@ export default async function resolvePlayerFromCommand(
     if (account) {
       return { region: account.region, id: account.blitz };
     } else {
-      throw new UserError(
-        "# I don't know who you are\nUse the `/link` command to get started.",
-      );
+      throw new UserError(t`bot.common.errors.player_not_linked`);
     }
   }
 }

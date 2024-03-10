@@ -1,11 +1,8 @@
-import {
-  SlashCommandBuilder,
-  SlashCommandSubcommandGroupBuilder,
-} from 'discord.js';
+import { Locale, SlashCommandSubcommandGroupBuilder } from 'discord.js';
+import CommandWrapper from '../components/CommandWrapper';
 import * as Graph from '../components/Graph';
-import NoData, { NoDataType } from '../components/NoData';
+import NoData from '../components/NoData';
 import TitleBar from '../components/TitleBar';
-import Wrapper from '../components/Wrapper';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import resolveTankId from '../core/blitz/resolveTankId';
@@ -13,13 +10,14 @@ import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
 import getTankHistories from '../core/blitzkrieg/getTankHistories';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import getPlayerHistories from '../core/blitzstars/getPlayerHistories';
-import addPeriodSubCommands from '../core/discord/addPeriodSubCommands';
+import { addPeriodSubCommands } from '../core/discord/addPeriodSubCommands';
 import addTankChoices from '../core/discord/addTankChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
-import buttonPrimary from '../core/discord/buttonPrimary';
+import { buttonRefresh } from '../core/discord/buttonRefresh';
 import commandToURL from '../core/discord/commandToURL';
+import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
 import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
 import resolvePeriodFromCommand, {
@@ -29,7 +27,7 @@ import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand, {
   ResolvedPlayer,
 } from '../core/discord/resolvePlayerFromCommand';
-import { CommandRegistryPromisable } from '../events/interactionCreate';
+import { CommandRegistry } from '../events/interactionCreate';
 
 type EvolutionStatType = 'player' | 'tank';
 
@@ -38,6 +36,7 @@ async function render(
   { start, end, name }: ResolvedPeriod,
   type: 'player' | 'tank',
   tankId: number | null,
+  locale: Locale,
 ) {
   const accountInfo = await getAccountInfo(region, id);
   const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
@@ -49,7 +48,7 @@ async function render(
         includeLatestHistories: true,
         includePreviousHistories: true,
       })
-    : getTankHistories(region, id, {
+    : getTankHistories(region, id, locale, {
         tankId: tankId!,
         start,
         end,
@@ -74,8 +73,8 @@ async function render(
   const minX = Math.min(...xs);
 
   return (
-    <Wrapper>
-      <TitleBar name={accountInfo.nickname} image={logo} description={name} />
+    <CommandWrapper>
+      <TitleBar title={accountInfo.nickname} image={logo} description={name} />
 
       {plot.length > 0 && (
         <Graph.Root
@@ -90,8 +89,8 @@ async function render(
             max: maxX,
             precision: 0,
           }}
-          xMinLabel={new Date(minTime * 1000).toDateString()}
-          xMaxLabel={new Date(maxTime * 1000).toDateString()}
+          xMinLabel={new Date(minTime * 1000).toLocaleDateString(locale)}
+          xMaxLabel={new Date(maxTime * 1000).toLocaleDateString(locale)}
         >
           {Graph.Line({
             color: Graph.LineColor.Red,
@@ -102,47 +101,37 @@ async function render(
         </Graph.Root>
       )}
 
-      {plot.length === 0 && <NoData type={NoDataType.BattlesInPeriod} />}
-    </Wrapper>
+      {plot.length === 0 && <NoData type="battles_in_period" locale={locale} />}
+    </CommandWrapper>
   );
 }
 
-export const evolutionCommand = new Promise<CommandRegistryPromisable>(
+export const evolutionCommand = new Promise<CommandRegistry>(
   async (resolve) => {
-    let playerGroup: SlashCommandSubcommandGroupBuilder;
-    let tankGroup: SlashCommandSubcommandGroupBuilder;
-    const command = new SlashCommandBuilder()
-      .setName('evolution')
-      .setDescription('Evolution of statistics')
-      .addSubcommandGroup((option) => {
-        playerGroup = option
-          .setName('player')
-          .setDescription('Player statistics');
-
-        return playerGroup;
-      })
-      .addSubcommandGroup((option) => {
-        tankGroup = option.setName('tank').setDescription('Tank statistics');
-
-        return tankGroup;
-      });
-
-    await Promise.all([
-      addPeriodSubCommands(playerGroup!, (option) =>
-        option.addStringOption(addUsernameChoices),
-      ),
-      addPeriodSubCommands(tankGroup!, (option) =>
-        option
-          .addStringOption(addTankChoices)
-          .addStringOption(addUsernameChoices),
-      ),
-    ]);
-
     resolve({
       inProduction: true,
       inPublic: true,
 
-      command,
+      command: createLocalizedCommand('evolution', [
+        {
+          group: 'player',
+          modify(option: SlashCommandSubcommandGroupBuilder) {
+            addPeriodSubCommands(option, (option) =>
+              option.addStringOption(addUsernameChoices),
+            );
+          },
+        },
+        {
+          group: 'tank',
+          modify(option: SlashCommandSubcommandGroupBuilder) {
+            addPeriodSubCommands(option, (option) =>
+              option
+                .addStringOption(addTankChoices)
+                .addStringOption(addUsernameChoices),
+            );
+          },
+        },
+      ]),
 
       async handler(interaction) {
         const commandGroup =
@@ -151,18 +140,24 @@ export const evolutionCommand = new Promise<CommandRegistryPromisable>(
         const period = resolvePeriodFromCommand(player.region, interaction);
         const tankIdRaw = interaction.options.getString('tank')!;
         const tankId =
-          commandGroup === 'tank' ? await resolveTankId(tankIdRaw) : null;
+          commandGroup === 'tank'
+            ? await resolveTankId(tankIdRaw, interaction.locale)
+            : null;
         const path = commandToURL(interaction, {
           ...player,
           ...getCustomPeriodParams(interaction),
           tankId,
         });
 
-        getBlitzStarsLinkButton;
-
         return [
-          await render(player, period, commandGroup, tankId),
-          buttonPrimary(path, 'Refresh'),
+          await render(
+            player,
+            period,
+            commandGroup,
+            tankId,
+            interaction.locale,
+          ),
+          buttonRefresh(interaction, path),
           await getBlitzStarsLinkButton(
             player.region,
             player.id,
@@ -188,6 +183,7 @@ export const evolutionCommand = new Promise<CommandRegistryPromisable>(
           period,
           commandGroup,
           parseInt(url.searchParams.get('tankId') ?? '0') || null,
+          interaction.locale,
         );
       },
     });

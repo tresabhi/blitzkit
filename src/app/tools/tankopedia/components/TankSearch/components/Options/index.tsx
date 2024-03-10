@@ -5,7 +5,7 @@ import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
 import { use } from 'react';
 import { Flag } from '../../../../../../../components/Flag';
 import {
-  TANK_TYPES,
+  TANK_CLASSES,
   TREE_TYPES,
   TREE_TYPE_ICONS,
   TREE_TYPE_IMAGES,
@@ -121,7 +121,7 @@ export function Options() {
         ))}
       </Flex>
       <Flex>
-        {[...TANK_TYPES].map((type, index) => (
+        {[...TANK_CLASSES].map((type, index) => (
           <Button
             key={type}
             color={filters.types.includes(type) ? undefined : 'gray'}
@@ -132,9 +132,9 @@ export function Options() {
               borderTopLeftRadius: index === 0 ? undefined : 0,
               borderBottomLeftRadius: index === 0 ? undefined : 0,
               borderTopRightRadius:
-                index === TANK_TYPES.length - 1 ? undefined : 0,
+                index === TANK_CLASSES.length - 1 ? undefined : 0,
               borderBottomRightRadius:
-                index === TANK_TYPES.length - 1 ? undefined : 0,
+                index === TANK_CLASSES.length - 1 ? undefined : 0,
             }}
             onClick={() =>
               mutateTankopediaPersistent((draft) => {

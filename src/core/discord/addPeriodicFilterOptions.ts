@@ -3,9 +3,9 @@ import {
   SlashCommandSubcommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
-import { encyclopediaInfo } from '../blitz/encyclopediaInfo';
+import { NATIONS } from '../blitzkrieg/tankDefinitions';
 import { addFilterOptions } from './addFilterOptions';
-import addPeriodSubCommands from './addPeriodSubCommands';
+import { addPeriodSubCommands } from './addPeriodSubCommands';
 
 export default async function addPeriodicFilterOptions<
   OptionType extends SlashCommandBuilder | SlashCommandSubcommandGroupBuilder,
@@ -15,11 +15,10 @@ export default async function addPeriodicFilterOptions<
     option: SlashCommandSubcommandBuilder,
   ) => SlashCommandSubcommandBuilder = (option) => option,
 ): Promise<OptionType> {
-  const awaitedEncyclopediaInfo = await encyclopediaInfo;
-
-  addPeriodSubCommands(option, (option) => {
-    return addFilterOptions(extra(option), awaitedEncyclopediaInfo);
-  });
+  const nations = await NATIONS;
+  addPeriodSubCommands(option, (option) =>
+    addFilterOptions(extra(option), nations),
+  );
 
   return option;
 }

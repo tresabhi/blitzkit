@@ -1,6 +1,6 @@
 {
   "name": "blitzkrieg",
-  "version": "1.16.0",
+  "version": "1.16.2",
   "description": "🎉 Tools for everything World of Tanks Blitz",
   "main": "src/server.ts",
   "type": "module",
@@ -25,7 +25,8 @@
     "lint:version": "vite-node --script scripts/checkVersionMissMatch",
     "knip": "knip",
     "update": "yarn upgrade --latest",
-    "setup:depotdownloader": "vite-node --script scripts/setupDepotDownloader"
+    "setup:depotdownloader": "vite-node --script scripts/setupDepotDownloader",
+    "tunnel": "cloudflared tunnel --url http://localhost:3000"
   },
   "license": "MIT",
   "dependencies": {

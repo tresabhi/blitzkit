@@ -11,10 +11,13 @@ export async function getFiltersFromCommand(
   return {
     nation: interaction.options.getString('nation') ?? undefined,
     tier: parseInt(interaction.options.getString('tier') ?? '0') || undefined,
-    tankType: interaction.options.getString('tank-type') ?? undefined,
+    tankType: interaction.options.getString('tank-class') ?? undefined,
     treeType:
       (interaction.options.getString('tree-type') as TreeType | undefined) ??
       undefined,
-    tank: tankRaw === null ? undefined : await resolveTankId(tankRaw),
+    tank:
+      tankRaw === null
+        ? undefined
+        : await resolveTankId(tankRaw, interaction.locale),
   } satisfies StatFilters;
 }

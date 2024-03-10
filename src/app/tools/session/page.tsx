@@ -18,7 +18,7 @@ import {
 import { debounce } from 'lodash';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
-import { REGION_NAMES } from '../../../constants/regions';
+import { UNLOCALIZED_REGION_NAMES } from '../../../constants/regions';
 import searchPlayersAcrossRegions, {
   AccountListWithServer,
 } from '../../../core/blitz/searchPlayersAcrossRegions';
@@ -107,7 +107,7 @@ export default function Page() {
                         setShowSearchResults(false);
                         setSession(region, id, nickname);
                       }}
-                      shortcut={REGION_NAMES[region]}
+                      shortcut={UNLOCALIZED_REGION_NAMES[region]}
                     >
                       {nickname}
                     </DropdownMenu.Item>

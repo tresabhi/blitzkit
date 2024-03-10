@@ -5,7 +5,7 @@ import {
   GrayColor,
   PALETTES,
 } from '../../../constants/radixColors';
-import { TREE_TYPE_ICONS, TankType, TreeType } from '../../Tanks';
+import { TREE_TYPE_ICONS, TankClass, TreeType } from '../../Tanks';
 import { RowStat } from './RowStat';
 
 export interface RowStatItem {
@@ -22,7 +22,7 @@ interface RowProps {
   title: string;
   minimized?: boolean;
   treeType?: TreeType;
-  tankType?: TankType;
+  tankType?: TankClass;
   color?: AccentColor | GrayColor;
   stats: (RowStatItem | undefined)[];
 }

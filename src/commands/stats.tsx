@@ -1,8 +1,8 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { Locale } from 'discord.js';
 import AllStatsOverview from '../components/AllStatsOverview';
-import NoData, { NoDataType } from '../components/NoData';
+import CommandWrapper from '../components/CommandWrapper';
+import NoData from '../components/NoData';
 import TitleBar from '../components/TitleBar';
-import Wrapper from '../components/Wrapper';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
@@ -15,6 +15,7 @@ import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import { buttonRefresh } from '../core/discord/buttonRefresh';
 import commandToURL from '../core/discord/commandToURL';
+import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
 import { getFiltersFromButton } from '../core/discord/getFiltersFromButton';
 import { getFiltersFromCommand } from '../core/discord/getFiltersFromCommand';
@@ -27,80 +28,85 @@ import resolvePlayerFromCommand, {
   ResolvedPlayer,
 } from '../core/discord/resolvePlayerFromCommand';
 import { StatFilters, filterStats } from '../core/statistics/filterStats';
-import { CommandRegistryPromisable } from '../events/interactionCreate';
+import { CommandRegistry } from '../events/interactionCreate';
 
 async function render(
   { region, id }: ResolvedPlayer,
   { start, end, name }: ResolvedPeriod,
   filters: StatFilters,
+  locale: Locale,
 ) {
   const { nickname } = await getAccountInfo(region, id);
   const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
   const clanImage = clan ? emblemIdToURL(clan.emblem_set_id) : undefined;
-  const diffedTankStats = await getStatsInPeriod(region, id, start, end);
+  const diffedTankStats = await getStatsInPeriod(
+    region,
+    id,
+    start,
+    end,
+    locale,
+  );
   const { stats, supplementary } = await filterStats(diffedTankStats, filters);
-  const filterDescriptions = await filtersToDescription(filters);
+  const filterDescriptions = await filtersToDescription(filters, locale);
 
   return (
-    <Wrapper>
+    <CommandWrapper>
       <TitleBar
-        name={nickname}
+        title={nickname}
         image={clanImage}
         description={`${name} • ${filterDescriptions}`}
       />
 
-      {!stats.battles && <NoData type={NoDataType.BattlesInPeriod} />}
+      {!stats.battles && <NoData type="battles_in_period" locale={locale} />}
       {stats.battles > 0 && (
-        <AllStatsOverview stats={stats} supplementaryStats={supplementary} />
+        <AllStatsOverview
+          locale={locale}
+          stats={stats}
+          supplementaryStats={supplementary}
+        />
       )}
-    </Wrapper>
+    </CommandWrapper>
   );
 }
 
-export const statsCommand = new Promise<CommandRegistryPromisable>(
-  async (resolve) => {
-    const command = await addPeriodicFilterOptions(
-      new SlashCommandBuilder()
-        .setName('stats')
-        .setDescription('Regular battles statistics'),
+export const statsCommand = new Promise<CommandRegistry>(async (resolve) => {
+  resolve({
+    inProduction: true,
+    inPublic: true,
+
+    command: await addPeriodicFilterOptions(
+      createLocalizedCommand('stats'),
       (option) => option.addStringOption(addUsernameChoices),
-    );
+    ),
 
-    resolve({
-      inProduction: true,
-      inPublic: true,
+    async handler(interaction) {
+      const player = await resolvePlayerFromCommand(interaction);
+      const period = resolvePeriodFromCommand(player.region, interaction);
+      const filters = await getFiltersFromCommand(interaction);
+      const path = commandToURL(interaction, {
+        ...player,
+        ...getCustomPeriodParams(interaction),
+        ...filters,
+      });
 
-      command,
+      return Promise.all([
+        render(player, period, filters, interaction.locale),
+        buttonRefresh(interaction, path),
+        getBlitzStarsLinkButton(player.region, player.id),
+      ]);
+    },
 
-      async handler(interaction) {
-        const player = await resolvePlayerFromCommand(interaction);
-        const period = resolvePeriodFromCommand(player.region, interaction);
-        const filters = await getFiltersFromCommand(interaction);
-        const path = commandToURL(interaction, {
-          ...player,
-          ...getCustomPeriodParams(interaction),
-          ...filters,
-        });
+    autocomplete: (interaction) => {
+      autocompleteUsername(interaction);
+      autocompleteTanks(interaction);
+    },
 
-        return Promise.all([
-          render(player, period, filters),
-          buttonRefresh(interaction, path),
-          getBlitzStarsLinkButton(player.region, player.id),
-        ]);
-      },
+    async button(interaction) {
+      const player = await resolvePlayerFromButton(interaction);
+      const period = resolvePeriodFromButton(player.region, interaction);
+      const filters = getFiltersFromButton(interaction);
 
-      autocomplete: (interaction) => {
-        autocompleteUsername(interaction);
-        autocompleteTanks(interaction);
-      },
-
-      async button(interaction) {
-        const player = await resolvePlayerFromButton(interaction);
-        const period = resolvePeriodFromButton(player.region, interaction);
-        const filters = getFiltersFromButton(interaction);
-
-        return await render(player, period, filters);
-      },
-    });
-  },
-);
+      return await render(player, period, filters, interaction.locale);
+    },
+  });
+});

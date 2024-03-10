@@ -15,7 +15,7 @@ import {
 } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
-import { TankType, TreeType } from '../../../../../components/Tanks';
+import { TANK_CLASSES, TreeType } from '../../../../../components/Tanks';
 import { resolveNearPenetration } from '../../../../../core/blitz/resolveNearPenetration';
 import { asset } from '../../../../../core/blitzkrieg/asset';
 import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
@@ -49,7 +49,6 @@ interface TankSearchProps {
   onSelect?: (tank: TankDefinition) => void;
 }
 
-const tankTypeOrder: TankType[] = ['light', 'medium', 'heavy', 'tankDestroyer'];
 const treeTypeOrder: TreeType[] = ['researchable', 'premium', 'collector'];
 
 export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
@@ -70,7 +69,7 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
         )
         .sort(
           (a, b) =>
-            (tankTypeOrder.indexOf(a.type) - tankTypeOrder.indexOf(b.type)) *
+            (TANK_CLASSES.indexOf(a.class) - TANK_CLASSES.indexOf(b.class)) *
             (sort.direction === 'descending' ? -1 : 1),
         )
         .sort(
@@ -89,7 +88,7 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
           : filters.tiers.includes(tank.tier)) &&
         (filters.types.length === 0
           ? true
-          : filters.types.includes(tank.type)) &&
+          : filters.types.includes(tank.class)) &&
         (filters.treeTypes.length === 0
           ? true
           : filters.treeTypes.includes(tank.treeType)) &&
@@ -844,7 +843,7 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
                           ? TANK_ICONS_COLLECTOR
                           : tank.treeType === 'premium'
                             ? TANK_ICONS_PREMIUM
-                            : TANK_ICONS)[tank.type]
+                            : TANK_ICONS)[tank.class]
                       }
                       style={{ width: '1em', height: '1em' }}
                     />

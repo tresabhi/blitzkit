@@ -5,7 +5,7 @@ import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { ENVIRONMENTS } from '../app/tools/tankopedia/[id]/components/Lighting';
 import { ArmorType } from '../components/Armor/components/SpacedArmorScene';
-import { TankType, TreeType } from '../components/Tanks';
+import { TankClass, TreeType } from '../components/Tanks';
 import { Tier } from '../core/blitzkrieg/tankDefinitions';
 
 export type TankopediaSortBy = keyof typeof SORT_NAMES;
@@ -31,7 +31,7 @@ export interface TankopediaPersistent {
   };
   filters: {
     tiers: Tier[];
-    types: TankType[];
+    types: TankClass[];
     treeTypes: TreeType[];
     nations: string[];
     test: TankopediaTestTankDisplay;

@@ -29,7 +29,7 @@ export async function filterStats(
       entry &&
       (filters.nation === undefined || entry.nation === filters.nation) &&
       (filters.tier === undefined || entry.tier === filters.tier) &&
-      (filters.tankType === undefined || entry.type === filters.tankType) &&
+      (filters.tankType === undefined || entry.class === filters.tankType) &&
       (filters.treeType === undefined ||
         (filters.treeType === 'collector' && entry.treeType === 'collector') ||
         (filters.treeType === 'premium' && entry.treeType === 'premium') ||

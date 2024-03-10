@@ -1,9 +1,9 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { Locale } from 'discord.js';
 import { chunk } from 'lodash';
 import * as Breakdown from '../components/Breakdown';
-import NoData, { NoDataType } from '../components/NoData';
+import CommandWrapper from '../components/CommandWrapper';
+import NoData from '../components/NoData';
 import TitleBar from '../components/TitleBar';
-import Wrapper from '../components/Wrapper';
 import { AllStats, getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
@@ -19,8 +19,9 @@ import addPeriodicFilterOptions from '../core/discord/addPeriodicFilterOptions';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
-import buttonPrimary from '../core/discord/buttonPrimary';
+import { buttonRefresh } from '../core/discord/buttonRefresh';
 import commandToURL from '../core/discord/commandToURL';
+import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
 import { getFiltersFromButton } from '../core/discord/getFiltersFromButton';
 import { getFiltersFromCommand } from '../core/discord/getFiltersFromCommand';
@@ -32,10 +33,11 @@ import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand, {
   ResolvedPlayer,
 } from '../core/discord/resolvePlayerFromCommand';
+import { translator } from '../core/localization/translator';
 import calculateWN8 from '../core/statistics/calculateWN8';
 import { StatFilters, filterStats } from '../core/statistics/filterStats';
 import getWN8Percentile from '../core/statistics/getWN8Percentile';
-import { CommandRegistryPromisable } from '../events/interactionCreate';
+import { CommandRegistry } from '../events/interactionCreate';
 
 const ROWS_PER_PAGE = 8;
 const MAX_PAGES = 9;
@@ -44,15 +46,17 @@ export async function renderBreakdown(
   { region, id }: ResolvedPlayer,
   { start, end, name }: ResolvedPeriod,
   filters: StatFilters,
+  locale: Locale,
 ) {
+  const { t, translate } = translator(locale);
   const awaitedTankDefinitions = await tankDefinitions;
   const awaitedTankAverages = await tankAverages;
-  const statsInPeriod = await getStatsInPeriod(region, id, start, end);
+  const statsInPeriod = await getStatsInPeriod(region, id, start, end, locale);
   const { filteredOrder } = await filterStats(statsInPeriod, filters);
   const accountInfo = await getAccountInfo(region, id);
   const clanData = await getClanAccountInfo(region, id, ['clan']);
-  const tankStats = await getTankStats(region, id);
-  const filterDescriptions = await filtersToDescription(filters);
+  const tankStats = await getTankStats(region, id, locale);
+  const filterDescriptions = await filtersToDescription(filters, locale);
   const orderedCurrentStats: AllStats[] = [];
   const orderedCareerStats: AllStats[] = [];
   const orderedCurrentWN8: (number | undefined)[] = [];
@@ -144,21 +148,21 @@ export async function renderBreakdown(
       <Breakdown.Row
         key={id}
         type="summary"
-        title="Total"
+        title={t`bot.commands.breakdown.body.total`}
         stats={[
           {
-            title: 'Battles',
+            title: t`bot.commands.breakdown.body.battles`,
             current: currentBattles,
             career: careerBattles,
           },
           {
-            title: 'Winrate',
+            title: t`bot.commands.breakdown.body.winrate`,
             current: `${(100 * currentWinrate).toFixed(2)}%`,
             career: `${(100 * careerWinrate).toFixed(2)}%`,
             delta: currentWinrate - careerWinrate,
           },
           {
-            title: 'WN8',
+            title: t`bot.commands.breakdown.body.wn8`,
             current:
               currentWN8 === undefined
                 ? undefined
@@ -173,7 +177,7 @@ export async function renderBreakdown(
                 : getWN8Percentile(currentWN8),
           },
           {
-            title: 'Damage',
+            title: t`bot.commands.breakdown.body.damage`,
             current: Math.round(currentDamage).toLocaleString(),
             career: Math.round(careerDamage).toLocaleString(),
             delta: currentDamage - careerDamage,
@@ -195,17 +199,20 @@ export async function renderBreakdown(
         <Breakdown.Row
           key={id}
           type="tank"
-          tankType={tankDefinition?.type}
+          tankType={tankDefinition?.class}
           treeType={tankDefinition?.treeType}
-          title={tankDefinition?.name ?? `Unknown tank ${id}`}
+          title={
+            tankDefinition?.name ??
+            translate('bot.commands.breakdown.body.unknown_tank', [`${id}`])
+          }
           stats={[
             {
-              title: 'Battles',
+              title: t`bot.commands.breakdown.body.battles`,
               current: current.battles.toLocaleString(),
               career: career.battles.toLocaleString(),
             },
             {
-              title: 'Winrate',
+              title: t`bot.commands.breakdown.body.winrate`,
               current: `${(100 * (current.wins / current.battles)).toFixed(
                 2,
               )}%`,
@@ -214,7 +221,7 @@ export async function renderBreakdown(
                 current.wins / current.battles - career.wins / career.battles,
             },
             {
-              title: 'WN8',
+              title: t`bot.commands.breakdown.body.wn8`,
               current:
                 currentWN8 === undefined
                   ? undefined
@@ -229,7 +236,7 @@ export async function renderBreakdown(
                   : getWN8Percentile(currentWN8),
             },
             {
-              title: 'Damage',
+              title: t`bot.commands.breakdown.body.damage`,
               current: Math.round(
                 current.damage_dealt / current.battles,
               ).toLocaleString(),
@@ -254,10 +261,10 @@ export async function renderBreakdown(
   if (filteredOrder.length > 0) {
     return pages
       .map((page, index) => (
-        <Wrapper>
+        <CommandWrapper>
           {index === 0 && (
             <TitleBar
-              name={accountInfo.nickname}
+              title={accountInfo.nickname}
               image={
                 clanData?.clan
                   ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData?.clan?.emblem_set_id}.png`
@@ -268,14 +275,14 @@ export async function renderBreakdown(
           )}
 
           <Breakdown.Root>{page}</Breakdown.Root>
-        </Wrapper>
+        </CommandWrapper>
       ))
       .reverse();
   } else {
     return [
-      <Wrapper>
+      <CommandWrapper>
         <TitleBar
-          name={accountInfo.nickname}
+          title={accountInfo.nickname}
           image={
             clanData?.clan
               ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanData?.clan?.emblem_set_id}.png`
@@ -284,26 +291,22 @@ export async function renderBreakdown(
           description={`${name} • ${filterDescriptions}`}
         />
 
-        <NoData type={NoDataType.BattlesInPeriod} />
-      </Wrapper>,
+        <NoData type="battles_in_period" locale={locale} />
+      </CommandWrapper>,
     ];
   }
 }
 
-export const breakdownCommand = new Promise<CommandRegistryPromisable>(
+export const breakdownCommand = new Promise<CommandRegistry>(
   async (resolve) => {
-    const command = await addPeriodicFilterOptions(
-      new SlashCommandBuilder()
-        .setName('breakdown')
-        .setDescription("A period's breakdown by tanks played"),
-      (option) => option.addStringOption(addUsernameChoices),
-    );
-
     resolve({
       inProduction: true,
       inPublic: true,
 
-      command,
+      command: await addPeriodicFilterOptions(
+        createLocalizedCommand('breakdown'),
+        (option) => option.addStringOption(addUsernameChoices),
+      ),
 
       async handler(interaction) {
         const player = await resolvePlayerFromCommand(interaction);
@@ -316,8 +319,13 @@ export const breakdownCommand = new Promise<CommandRegistryPromisable>(
         });
 
         return [
-          ...(await renderBreakdown(player, period, filters)),
-          buttonPrimary(path, 'Refresh'),
+          ...(await renderBreakdown(
+            player,
+            period,
+            filters,
+            interaction.locale,
+          )),
+          buttonRefresh(interaction, path),
           await getBlitzStarsLinkButton(player.region, player.id),
         ];
       },
@@ -332,7 +340,12 @@ export const breakdownCommand = new Promise<CommandRegistryPromisable>(
         const period = resolvePeriodFromButton(player.region, interaction);
         const filters = getFiltersFromButton(interaction);
 
-        return await renderBreakdown(player, period, filters);
+        return await renderBreakdown(
+          player,
+          period,
+          filters,
+          interaction.locale,
+        );
       },
     });
   },

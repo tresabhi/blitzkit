@@ -1,14 +1,16 @@
-import { CacheType, ChatInputCommandInteraction } from 'discord.js';
+import { CacheType, ChatInputCommandInteraction, Locale } from 'discord.js';
 import { Region } from '../../constants/regions';
 import getPeriodNow from '../blitzkrieg/getPeriodNow';
 import getPeriodStart from '../blitzkrieg/getPeriodStart';
 import getTimeDaysAgo from '../blitzkrieg/getTimeDaysAgo';
+import { translator } from '../localization/translator';
 import { PeriodSize, PeriodType } from './addPeriodSubCommands';
 
-export function getPeriodOptionName(period: PeriodSize) {
-  if (period === 'career') return 'Career';
-  if (period === 'today') return 'Today';
-  return `${period} days`;
+export function getPeriodOptionName(period: PeriodSize, locale: Locale) {
+  const { translate } = translator(locale);
+  if (period === 'career') return translate('bot.common.periods.career');
+  if (period === 'today') return translate('bot.common.periods.today');
+  return translate('bot.common.periods.days', [period]);
 }
 
 export interface ResolvedPeriod {
@@ -22,6 +24,7 @@ export default function resolvePeriodFromCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
   forcedPeriod?: PeriodType,
 ) {
+  const { translate } = translator(interaction.locale);
   let name: string;
   let start: number;
   let end: number;
@@ -35,11 +38,14 @@ export default function resolvePeriodFromCommand(
     const startDaysAgoMin = Math.min(startOption, endOption);
     const endDaysAgoMax = Math.max(startOption, endOption);
 
-    name = `${startDaysAgoMin} - ${endDaysAgoMax} days`;
+    name = translate('bot.common.periods.custom', [
+      `${startDaysAgoMin}`,
+      `${endDaysAgoMax}`,
+    ]);
     start = getTimeDaysAgo(region, endDaysAgoMax);
     end = getTimeDaysAgo(region, startDaysAgoMin);
   } else {
-    name = getPeriodOptionName(periodSubcommand);
+    name = getPeriodOptionName(periodSubcommand, interaction.locale);
     start = getPeriodStart(region, periodSubcommand);
     end = getPeriodNow();
   }

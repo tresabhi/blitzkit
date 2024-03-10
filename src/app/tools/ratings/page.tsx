@@ -20,7 +20,11 @@ import PageWrapper from '../../../components/PageWrapper';
 import { Skeleton } from '../../../components/Skeleton';
 import { LEAGUES } from '../../../constants/leagues';
 import { FIRST_ARCHIVED_RATINGS_SEASON } from '../../../constants/ratings';
-import { REGIONS, REGION_NAMES, Region } from '../../../constants/regions';
+import {
+  REGIONS,
+  Region,
+  UNLOCALIZED_REGION_NAMES,
+} from '../../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import fetchBlitz from '../../../core/blitz/fetchBlitz';
 import { getClanAccountInfo } from '../../../core/blitz/getClanAccountInfo';
@@ -556,7 +560,7 @@ export default function Page() {
             <Select.Content>
               {REGIONS.map((region) => (
                 <Select.Item key={region} value={region}>
-                  {REGION_NAMES[region]}
+                  {UNLOCALIZED_REGION_NAMES[region]}
                 </Select.Item>
               ))}
             </Select.Content>

@@ -1,0 +1,3 @@
+[submodule "submodules/closedkrieg"]
+	path = submodules/closedkrieg
+	url = https://github.com/tresabhi/closedkrieg
