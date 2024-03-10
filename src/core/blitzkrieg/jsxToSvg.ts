@@ -3,9 +3,12 @@ import satori from 'satori';
 
 const FONT_NAME = 'Roboto';
 const FONT_FILES = [
-  { weight: 400 as const, path: 'src/assets/fonts/Roboto.ttf' },
-  { weight: 700 as const, path: 'src/assets/fonts/Roboto-Bold.ttf' },
-  { weight: 900 as const, path: 'src/assets/fonts/Roboto-Black.ttf' },
+  { weight: 400 as const, path: require('../../assets/fonts/Roboto.ttf') },
+  { weight: 700 as const, path: require('../../assets/fonts/Roboto-Bold.ttf') },
+  {
+    weight: 900 as const,
+    path: require('../../assets/fonts/Roboto-Black.ttf'),
+  },
 ];
 
 const fonts = Promise.all(
