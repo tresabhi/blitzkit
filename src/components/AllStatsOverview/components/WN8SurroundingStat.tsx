@@ -34,7 +34,7 @@ export function WN8SurroundingStat({
         style={{
           color: theme.colors.textHighContrast,
           fontSize: 24,
-          fontWeight: 'bold',
+          fontWeight: 700,
         }}
       >
         {value}

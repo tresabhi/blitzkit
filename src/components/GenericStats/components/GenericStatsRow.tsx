@@ -30,7 +30,7 @@ export default function GenericStatsRow({ stat }: GenericStatsRowProps) {
       <span
         style={{
           color: theme.colors.textHighContrast,
-          fontWeight: 'bold',
+          fontWeight: 700,
           fontSize: 16,
           display: 'flex',
           alignItems: 'center',

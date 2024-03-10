@@ -63,7 +63,7 @@ export function RowStat({
         <span
           style={{
             color: theme.textHighContrast,
-            fontWeight: 'bold',
+            fontWeight: 700,
             fontSize: 16,
             textAlign: 'center',
           }}
