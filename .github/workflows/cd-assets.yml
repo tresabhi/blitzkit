@@ -2,10 +2,10 @@ name: CD Build Assets
 
 on:
   push:
-    branches: dev
+    branches: [dev, main]
   workflow_dispatch:
-  # schedule:
-  #   - cron: '0 0 * * *'
+  schedule:
+    - cron: '0 0 * * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -50,4 +50,5 @@ jobs:
         run: |
           $env:GH_TOKEN = "${{ secrets.GH_TOKEN }}"
           $env:DISCORD_TOKEN = "${{ secrets.DISCORD_TOKEN }}"
+          $env:DISCORD_BLITZ_DB = "${{ secrets.DISCORD_BLITZ_DB }}"
           yarn build:assets --all-targets --depot ${{ github.ref == 'refs/heads/main' && '--production' || '' }}
