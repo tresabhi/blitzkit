@@ -158,6 +158,19 @@
         "battles_in_period": "No hay batallas jugadas en este período",
         "players_in_period": "No hay jugadores en este período",
         "tanks_found": "No se encontraron tanques"
+      },
+      "buttons": {
+        "refresh": "Actualizar"
+      },
+      "errors": {
+        "clan_not_found": "# No se pudo encontrar el clan\nNo se pudo encontrar \"%s\". Prueba seleccionando un clan de los resultados de búsqueda.",
+        "player_not_found": "# No se pudo encontrar el usuario\nNo pude encontrar al usuario \"%s\". Prueba eligiendo un usuario de los resultados de búsqueda, escribiendo un nombre de usuario aceptable o usando el comando `/vincular`.",
+        "player_not_linked": "# No sé quién eres\nUsa el comando `/vincular` para comenzar.",
+        "tank_name_not_found": "# No se pudo encontrar el tanque\nNo se pudo encontrar el tanque con el nombre \"%s\".",
+        "tank_id_not_found": "# Tanque no encontrado\nNo se pudo encontrar al tanque del ID \"%s\". Prueba escribiendo el nombre del tanque en vez de un número.",
+        "no_tank_stats": "# No hay estadísticas de tanque disponibles\nEste jugador no tiene estadísticas disponibles. Este podría no ser el jugador que estás buscando.",
+        "get_help": "Servidor de ayuda de Discord",
+        "uncaught_error": "# ¡Blitzkrieg sufrió un error!\nLo sentimos mucho. Siéntete libre de [unirte al servidor oficial de Discord](https://discord.gg/nDt7AjGJQH) para obtener ayuda."
       }
     },
     "commands": {
@@ -324,7 +337,7 @@
       },
       "ratings": {
         "$": "clasificación",
-        "description": "Estadísticas de batallas en Clasificación",
+        "description": "Estadísticas de batallas en clasificación",
         "subcommands": {
           "neighbors": {
             "$": "vecinos",
@@ -354,10 +367,10 @@
         },
         "body": {
           "top_players": "Top %s jugadores",
-          "no_participation": "# %s no jugó Clasificación en la temporada %s\n\nEl jugador no participó en esta temporada o no completó su calibración.",
-          "no_ongoing_season": "# No hay temporada en curso\n\nActualmente no hay ninguna temporada de Clasificación.",
+          "no_participation": "# %s no jugó clasificación en la temporada %s\n\nEl jugador no participó en esta temporada o no completó su calibración.",
+          "no_ongoing_season": "# No hay temporada en curso\n\nActualmente no hay ninguna temporada de clasificación.",
           "deleted_player": "%s eliminado",
-          "neighbors": "Vecinos de Clasificación",
+          "neighbors": "Vecinos de clasificación",
           "more": "+%s más"
         }
       },
