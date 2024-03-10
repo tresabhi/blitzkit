@@ -10,7 +10,7 @@ import {
   ModelTransformEventData,
   modelTransformEvent,
 } from '../../../../../../../core/blitzkrieg/modelTransform';
-import { normalizeAngleRad } from '../../../../../../../core/math/normalizeAngleRAD';
+import { normalizeAngleRad } from '../../../../../../../core/math/normalizeAngleRad';
 import { useAwait } from '../../../../../../../hooks/useAwait';
 import { useModel } from '../../../../../../../hooks/useModel';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';

@@ -1,7 +1,6 @@
 import { useFrame } from '@react-three/fiber';
 import { useEffect } from 'react';
 import {
-  GLSL3,
   MeshBasicMaterial,
   Object3D,
   ShaderMaterial,
@@ -39,7 +38,6 @@ export function CoreArmorSceneComponent({
   thickness,
 }: CoreArmorSceneComponentProps) {
   const material = new ShaderMaterial({
-    glslVersion: GLSL3,
     fragmentShader,
     vertexShader,
 
