@@ -44,7 +44,7 @@ jobs:
         run: yarn setup:depotdownloader
 
       - name: Run DepotDownloader
-        run: ./temp/depotDownloader/DepotDownloader.exe -app 444202 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
+        run: ./temp/depotDownloader/DepotDownloader.exe -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
 
       - name: Build assets
         run: |
