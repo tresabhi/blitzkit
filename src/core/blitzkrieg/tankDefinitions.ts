@@ -125,13 +125,13 @@ interface GunDefinitionRegular extends GunDefinitionBase {
 interface GunDefinitionAutoLoader extends GunDefinitionBase {
   type: 'autoLoader';
   reload: number;
-  interClip: number;
+  intraClip: number;
   count: number;
 }
 interface GunDefinitionAutoReloader extends GunDefinitionBase {
   type: 'autoReloader';
   reload: number[];
-  interClip: number;
+  intraClip: number;
   count: number;
 }
 export type ShellDefinition = {

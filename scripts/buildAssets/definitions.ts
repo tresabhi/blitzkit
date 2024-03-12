@@ -674,7 +674,7 @@ export async function definitions(production: boolean) {
                   : turretGunEntry.reloadTime;
               const gunClipCount =
                 gunType === 'regular' ? undefined : turretGunEntry.clip!.count;
-              const gunInterClip =
+              const gunIntraClip =
                 gunType === 'regular'
                   ? undefined
                   : 60 / turretGunEntry.clip!.rate;
@@ -722,7 +722,7 @@ export async function definitions(production: boolean) {
                 type: gunType,
                 reload: gunReload,
                 count: gunClipCount,
-                interClip: gunInterClip,
+                intraClip: gunIntraClip,
                 camouflageLoss:
                   typeof turretGunEntry.invisibilityFactorAtShot === 'number'
                     ? turretGunEntry.invisibilityFactorAtShot

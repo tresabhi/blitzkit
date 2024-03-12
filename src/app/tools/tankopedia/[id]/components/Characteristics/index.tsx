@@ -113,7 +113,7 @@ export function Characteristics() {
     // TODO: add max rolls
     [hasTungsten, 0.15],
   );
-  const interClipCoefficient = coefficient([hasShellReloadBoost, -0.3]);
+  const intraClipCoefficient = coefficient([hasShellReloadBoost, -0.3]);
   const shellVelocityCoefficient = coefficient(
     [hasSupercharger, 0.3],
     [hasImprovedGunPowder, 0.3],
@@ -210,7 +210,7 @@ export function Characteristics() {
     shell,
     damageCoefficient,
     reloadCoefficient,
-    interClipCoefficient,
+    intraClipCoefficient,
   );
 
   useEffect(() => {
@@ -255,7 +255,7 @@ export function Characteristics() {
           <>
             <InfoWithDelta decimals={0} indent name="Maximum" unit="hp / min">
               {gun.reload.at(-1)! < gun.reload.at(-2)!
-                ? (shell.damage.armor / (gun.reload.at(-1)! + gun.interClip)) *
+                ? (shell.damage.armor / (gun.reload.at(-1)! + gun.intraClip)) *
                   60
                 : (shell.damage.armor / gun.reload[0]) * 60}
             </InfoWithDelta>
@@ -266,12 +266,12 @@ export function Characteristics() {
               unit="hp / min"
             >
               {gun.reload.at(-1)! < gun.reload.at(-2)!
-                ? (shell.damage.armor / (gun.reload.at(-1)! + gun.interClip)) *
+                ? (shell.damage.armor / (gun.reload.at(-1)! + gun.intraClip)) *
                     (60 -
-                      (gun.reload.slice(0, -1).length - 1) * gun.interClip) +
+                      (gun.reload.slice(0, -1).length - 1) * gun.intraClip) +
                   shell.damage.armor * gun.reload.slice(0, -1).length
-                : (shell.damage.armor / (gun.reload[0] + gun.interClip)) *
-                    (60 - (gun.reload.slice(1).length - 1) * gun.interClip) +
+                : (shell.damage.armor / (gun.reload[0] + gun.intraClip)) *
+                    (60 - (gun.reload.slice(1).length - 1) * gun.intraClip) +
                   shell.damage.armor * gun.reload.slice(1).length}
             </InfoWithDelta>
             <Info
@@ -285,14 +285,15 @@ export function Characteristics() {
                 </a>
               }
             />
-            <Info indent name="Optimal shell index">
-              {gun.reload.at(-1)! < gun.reload.at(-2)! ? gun.reload.length : 1}
-            </Info>
           </>
         )}
         {gun.type === 'autoReloader' ? (
           <>
-            <Info name="Reload" unit="s" />
+            <InfoWithDelta name="Shells">{gun.reload.length}</InfoWithDelta>
+            <Info indent name="Most optimal">
+              {gun.reload.at(-1)! < gun.reload.at(-2)! ? gun.reload.length : 1}
+            </Info>
+            <Info name="Shell reloads" unit="s" />
             {gun.reload.map((reload, index) => (
               <InfoWithDelta
                 key={index}
@@ -301,7 +302,7 @@ export function Characteristics() {
                 decimals={2}
                 deltaType="lowerIsBetter"
               >
-                {reload}
+                {reload * reloadCoefficient}
               </InfoWithDelta>
             ))}
           </>
@@ -315,17 +316,18 @@ export function Characteristics() {
             {gun.reload * reloadCoefficient}
           </InfoWithDelta>
         )}
-        {gun.type === 'autoLoader' && (
-          <InfoWithDelta
-            indent
-            decimals={2}
-            name="Intra-clip"
-            unit="s"
-            deltaType="lowerIsBetter"
-          >
-            {gun.interClip * interClipCoefficient}
-          </InfoWithDelta>
-        )}
+        {gun.type === 'autoLoader' ||
+          (gun.type === 'autoReloader' && (
+            <InfoWithDelta
+              indent
+              decimals={2}
+              name="Intra-clip"
+              unit="s"
+              deltaType="lowerIsBetter"
+            >
+              {gun.intraClip * intraClipCoefficient}
+            </InfoWithDelta>
+          ))}
         <InfoWithDelta name="Caliber" decimals={0} unit="mm">
           {shell.caliber}
         </InfoWithDelta>

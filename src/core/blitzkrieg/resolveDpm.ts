@@ -5,7 +5,7 @@ export function resolveDpm(
   shell: ShellDefinition,
   damageCoefficient = 1,
   reloadCoefficient = 1,
-  interClipCoefficient = 1,
+  intraClipCoefficient = 1,
 ) {
   const alpha = shell.damage.armor * damageCoefficient;
 
@@ -14,14 +14,14 @@ export function resolveDpm(
   } else if (gun.type === 'autoLoader') {
     return (
       ((alpha * gun.count) /
-        (gun.reload + (gun.count - 1) * gun.interClip * interClipCoefficient)) *
+        (gun.reload + (gun.count - 1) * gun.intraClip * intraClipCoefficient)) *
       60
     );
   } else {
     return (
       ((alpha * gun.count) /
         (gun.reload.reduce((a, b) => a + b, 0) +
-          (gun.count - 1) * gun.interClip)) *
+          (gun.count - 1) * gun.intraClip)) *
       60
     );
   }
