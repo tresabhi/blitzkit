@@ -319,7 +319,7 @@ export function Characteristics() {
           <InfoWithDelta
             indent
             decimals={2}
-            name="Inter-clip reload"
+            name="Intra-clip"
             unit="s"
             deltaType="lowerIsBetter"
           >
