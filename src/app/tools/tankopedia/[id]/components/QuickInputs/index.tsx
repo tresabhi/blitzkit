@@ -28,12 +28,12 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
   const initialGunPitch = tankModelDefinition.turretRotation?.pitch ?? 0;
 
   useEffect(() => {
-    turretYawInput.current!.value = radToDeg(protagonist.yaw).toFixed(0);
+    turretYawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
   }, [protagonist.yaw]);
   useEffect(() => {
     gunPitchInput.current!.value = (
       -radToDeg(protagonist.pitch) + initialGunPitch
-    ).toFixed(0);
+    ).toFixed(1);
   }, [protagonist.pitch]);
 
   return (
@@ -80,7 +80,7 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
                 state.protagonist!.yaw = yaw;
               });
               turretYawInput.current!.value = radToDeg(protagonist.yaw).toFixed(
-                0,
+                1,
               );
             }}
             onKeyDown={(event) => {
@@ -130,7 +130,7 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
               });
               gunPitchInput.current!.value = (
                 -radToDeg(protagonist.pitch) + initialGunPitch
-              ).toFixed(0);
+              ).toFixed(1);
             }}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
