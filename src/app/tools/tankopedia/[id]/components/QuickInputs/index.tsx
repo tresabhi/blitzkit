@@ -1,5 +1,6 @@
 import { Flex, TextField } from '@radix-ui/themes';
 import { use, useEffect, useRef } from 'react';
+import { degToRad, radToDeg } from 'three/src/math/MathUtils';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
@@ -20,22 +21,20 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
   const mode = useTankopediaPersistent((state) => state.mode);
   const hasCalibratedShells = useEquipment(103, true);
   const hasEnhancedArmor = useEquipment(110);
-
-  useEffect(() => {
-    turretYawInput.current!.value = `${-Math.round(
-      protagonist.yaw * (180 / Math.PI),
-    )}`;
-  }, [protagonist.yaw]);
-  useEffect(() => {
-    gunPitchInput.current!.value = `${-Math.round(
-      protagonist.pitch * (180 / Math.PI),
-    )}`;
-  }, [protagonist.pitch]);
-
   const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
+  const initialGunPitch = tankModelDefinition.turretRotation?.pitch ?? 0;
+
+  useEffect(() => {
+    turretYawInput.current!.value = radToDeg(protagonist.yaw).toFixed(0);
+  }, [protagonist.yaw]);
+  useEffect(() => {
+    gunPitchInput.current!.value = (
+      -radToDeg(protagonist.pitch) + initialGunPitch
+    ).toFixed(0);
+  }, [protagonist.pitch]);
 
   return (
     <Flex
@@ -68,11 +67,10 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
             Yaw
           </TextField.Slot>
           <TextField.Input
-            defaultValue={Math.round(protagonist.yaw * (180 / Math.PI))}
             onBlur={() => {
               const [pitch, yaw] = applyPitchYawLimits(
                 protagonist.pitch,
-                -Number(turretYawInput.current?.value) * (Math.PI / 180),
+                degToRad(Number(turretYawInput.current!.value)),
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
               );
@@ -81,9 +79,9 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
                 state.protagonist!.pitch = pitch;
                 state.protagonist!.yaw = yaw;
               });
-              turretYawInput.current!.value = `${Math.round(
-                yaw * (180 / Math.PI),
-              )}`;
+              turretYawInput.current!.value = radToDeg(protagonist.yaw).toFixed(
+                0,
+              );
             }}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
@@ -116,10 +114,11 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
             Pitch
           </TextField.Slot>
           <TextField.Input
-            defaultValue={-Math.round(protagonist.pitch * (180 / Math.PI))}
             onBlur={() => {
               const [pitch, yaw] = applyPitchYawLimits(
-                -Number(gunPitchInput.current?.value) * (Math.PI / 180),
+                degToRad(
+                  -Number(gunPitchInput.current!.value) + initialGunPitch,
+                ),
                 protagonist.yaw,
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
@@ -129,9 +128,9 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
                 state.protagonist!.pitch = pitch;
                 state.protagonist!.yaw = yaw;
               });
-              gunPitchInput.current!.value = `${Math.round(
-                pitch * (180 / Math.PI),
-              )}`;
+              gunPitchInput.current!.value = (
+                -radToDeg(protagonist.pitch) + initialGunPitch
+              ).toFixed(0);
             }}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {

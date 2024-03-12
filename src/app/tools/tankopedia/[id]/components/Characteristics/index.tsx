@@ -56,6 +56,7 @@ export function Characteristics() {
       turretModelDefinition.boundingBox,
     ),
   );
+  const gunDefaultPitch = tankModelDefinition.turretRotation?.pitch ?? 0;
   const weight =
     tank.weight + engine.weight + track.weight + turret.weight + gun.weight;
   const weightTons = weight / 1000;
@@ -459,10 +460,12 @@ export function Characteristics() {
         <Info name="Gun flexibility" unit="°" />
         <InfoWithDelta decimals={1} indent name="Depression">
           {gunModelDefinition.pitch.max +
+            gunDefaultPitch +
             (hasImprovedVerticalStabilizer ? 3 : 0)}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="Elevation">
-          {-gunModelDefinition.pitch.min +
+          {-gunModelDefinition.pitch.min -
+            gunDefaultPitch +
             (hasImprovedVerticalStabilizer ? 3 : 0)}
         </InfoWithDelta>
         {gunModelDefinition.pitch.front && (
