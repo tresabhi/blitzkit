@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { Vector3 } from 'three';
 import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
 import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
+import { hasEquipment } from '../../../../../core/blitzkrieg/hasEquipment';
 import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
 import { Pose, poseEvent } from '../../../../../core/blitzkrieg/pose';
 import { useAwait } from '../../../../../hooks/useAwait';
@@ -67,7 +68,9 @@ export function Controls() {
       },
     );
 
-    function handlePoseEvent(event: Pose) {
+    async function handlePoseEvent(event: Pose) {
+      const hasImprovedVerticalStabilizer = await hasEquipment(122);
+
       switch (event) {
         case Pose.HullDown: {
           const [pitch] = applyPitchYawLimits(
@@ -75,6 +78,7 @@ export function Controls() {
             0,
             protagonistGunModelDefinition.pitch,
             protagonistTurretModelDefinition.yaw,
+            hasImprovedVerticalStabilizer,
           );
 
           camera.position
@@ -106,6 +110,7 @@ export function Controls() {
             0,
             protagonistGunModelDefinition.pitch,
             protagonistTurretModelDefinition.yaw,
+            hasImprovedVerticalStabilizer,
           );
 
           camera.position

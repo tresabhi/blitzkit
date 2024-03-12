@@ -26,6 +26,7 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
   const initialGunPitch = tankModelDefinition.turretRotation?.pitch ?? 0;
+  const hasImprovedVerticalStabilizer = useEquipment(122);
 
   useEffect(() => {
     turretYawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
@@ -73,6 +74,7 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
                 degToRad(Number(turretYawInput.current!.value)),
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
+                hasImprovedVerticalStabilizer,
               );
               modelTransformEvent.emit({ pitch, yaw });
               mutateDuel((state) => {
@@ -122,6 +124,7 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
                 protagonist.yaw,
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
+                hasImprovedVerticalStabilizer,
               );
               modelTransformEvent.emit({ pitch, yaw });
               mutateDuel((state) => {

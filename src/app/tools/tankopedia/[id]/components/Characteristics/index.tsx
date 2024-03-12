@@ -4,6 +4,7 @@ import { debounce } from 'lodash';
 import { use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
 import { ShellButton } from '../../../../../../components/ModuleButtons/ShellButton';
+import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { coefficient } from '../../../../../../core/blitzkrieg/coefficient';
@@ -219,6 +220,17 @@ export function Characteristics() {
       penetrationDistanceInput.current.value = `${penetrationDistance}`;
     }
   }, [penetrationDistance]);
+  useEffect(() => {
+    mutateDuel((draft) => {
+      [draft.protagonist!.pitch, draft.protagonist!.yaw] = applyPitchYawLimits(
+        draft.protagonist!.pitch,
+        draft.protagonist!.yaw,
+        gunModelDefinition.pitch,
+        turretModelDefinition.yaw,
+        hasImprovedVerticalStabilizer,
+      );
+    });
+  }, [hasImprovedVerticalStabilizer]);
 
   return (
     <Flex direction="column" gap="8" style={{ width: '100%' }}>
