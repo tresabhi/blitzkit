@@ -11,6 +11,7 @@ import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinit
 import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkrieg/pose';
 import { tankIcon } from '../../../../../../core/blitzkrieg/tankIcon';
+import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import mutateTankopediaPersistent, {
@@ -29,6 +30,7 @@ import { TankModel } from './components/TankModel';
 
 export function TankSandbox() {
   const canvas = useRef<HTMLCanvasElement>(null);
+  const hasImprovedVerticalStabilizer = useEquipment(122);
   const awaitedModelDefinitions = use(modelDefinitions);
   const canvasWrapper = useRef<HTMLDivElement>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -70,6 +72,7 @@ export function TankSandbox() {
               0,
               gunModelDefinition.pitch,
               turretModelDefinition.yaw,
+              hasImprovedVerticalStabilizer,
             );
 
             modelTransformEvent.emit({ pitch, yaw });
@@ -87,6 +90,7 @@ export function TankSandbox() {
               0,
               gunModelDefinition.pitch,
               turretModelDefinition.yaw,
+              hasImprovedVerticalStabilizer,
             );
 
             modelTransformEvent.emit({ pitch, yaw });
@@ -104,6 +108,7 @@ export function TankSandbox() {
               0,
               gunModelDefinition.pitch,
               turretModelDefinition.yaw,
+              hasImprovedVerticalStabilizer,
             );
 
             modelTransformEvent.emit({ pitch, yaw });
@@ -131,6 +136,7 @@ export function TankSandbox() {
         draft.protagonist!.yaw,
         gunModelDefinition.pitch,
         turretModelDefinition.yaw,
+        hasImprovedVerticalStabilizer,
       );
     });
   }, [protagonist.gun, protagonist.turret]);

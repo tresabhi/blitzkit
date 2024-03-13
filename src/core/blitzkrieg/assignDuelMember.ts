@@ -1,9 +1,11 @@
+import { degToRad } from 'three/src/math/MathUtils';
 import {
   DuelMember,
   genericDefaultEquipmentMatrix,
   mutateDuel,
 } from '../../stores/duel';
 import { availableProvisions } from './availableProvisions';
+import { modelDefinitions } from './modelDefinitions';
 import { provisionDefinitions } from './provisionDefinitions';
 import { tankDefinitions } from './tankDefinitions';
 
@@ -13,6 +15,8 @@ export async function assignDuelMember(
 ) {
   const awaitedTankDefinitions = await tankDefinitions;
   const awaitedProvisionDefinitions = await provisionDefinitions;
+  const awaitedModelDefinitions = await modelDefinitions;
+  const tankModelDefinition = awaitedModelDefinitions[id];
   const tank = awaitedTankDefinitions[id];
   const turret = tank.turrets.at(-1)!;
   const gun = turret.guns.at(-1)!;
@@ -32,7 +36,7 @@ export async function assignDuelMember(
     shell,
     track,
     equipment: genericDefaultEquipmentMatrix,
-    pitch: 0,
+    pitch: degToRad(tankModelDefinition.turretRotation?.pitch ?? 0),
     yaw: 0,
     camouflage: true,
     consumables: [],

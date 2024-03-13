@@ -4,6 +4,7 @@ import { Euler, Group, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { I_HAT, J_HAT, K_HAT } from '../../../../../../../constants/axis';
 import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
+import { hasEquipment } from '../../../../../../../core/blitzkrieg/hasEquipment';
 import { jsxTree } from '../../../../../../../core/blitzkrieg/jsxTree';
 import { modelDefinitions } from '../../../../../../../core/blitzkrieg/modelDefinitions';
 import {
@@ -106,7 +107,6 @@ export const TankModel = memo(() => {
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
-
   const { gltf } = useModel(protagonist.tank.id);
   const nodes = Object.values(gltf.nodes);
 
@@ -161,12 +161,14 @@ export const TankModel = memo(() => {
               window.addEventListener('pointerup', handlePointerUp);
             }
           }
-          function handlePointerMove(event: PointerEvent) {
+          async function handlePointerMove(event: PointerEvent) {
+            const hasImprovedVerticalStabilizer = await hasEquipment(122);
             [pitch, yaw] = applyPitchYawLimits(
               pitch,
               yaw + event.movementX * (Math.PI / canvas.width),
               gunModelDefinition.pitch,
               turretModelDefinition.yaw,
+              hasImprovedVerticalStabilizer,
             );
             modelTransformEvent.emit({ pitch, yaw });
           }
@@ -220,12 +222,14 @@ export const TankModel = memo(() => {
               window.addEventListener('pointermove', handlePointerMove);
               window.addEventListener('pointerup', handlePointerUp);
             }
-            function handlePointerMove(event: PointerEvent) {
+            async function handlePointerMove(event: PointerEvent) {
+              const hasImprovedVerticalStabilizer = await hasEquipment(122);
               [pitch, yaw] = applyPitchYawLimits(
                 pitch - event.movementY * (Math.PI / canvas.height),
                 yaw + event.movementX * (Math.PI / canvas.width),
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
+                hasImprovedVerticalStabilizer,
               );
               modelTransformEvent.emit({ pitch, yaw });
             }

@@ -1,4 +1,5 @@
 import { clamp } from 'lodash';
+import { degToRad } from 'three/src/math/MathUtils';
 import { PitchLimits, YawLimits } from '../blitzkrieg/modelDefinitions';
 import { normalizeAngleRad } from '../math/normalizeAngleRad';
 
@@ -7,33 +8,31 @@ export function applyPitchYawLimits(
   yaw: number, // rad
   pitchLimits: PitchLimits, // deg
   yawLimits?: YawLimits, // deg
+  verticalStabilizer = false,
 ) {
   let newPitch = pitch;
   let newYaw = yaw;
 
   if (yawLimits) {
     newYaw = normalizeAngleRad(
-      clamp(
-        newYaw,
-        -yawLimits.max * (Math.PI / 180),
-        -yawLimits.min * (Math.PI / 180),
-      ),
+      clamp(newYaw, -degToRad(yawLimits.max), -degToRad(yawLimits.min)),
     );
   }
 
-  let lowerPitch = -pitchLimits.max * (Math.PI / 180);
-  let upperPitch = -pitchLimits.min * (Math.PI / 180);
-  const transition = (pitchLimits.transition ?? 10) * (Math.PI / 180);
+  const pitchBuff = verticalStabilizer ? degToRad(3) : 0;
+  let lowerPitch = -degToRad(pitchLimits.max) - pitchBuff;
+  let upperPitch = -degToRad(pitchLimits.min) + pitchBuff;
+  const transition = degToRad(pitchLimits.transition ?? 10);
 
   if (pitchLimits.back) {
-    const range = pitchLimits.back.range * (Math.PI / 180);
+    const range = degToRad(pitchLimits.back.range);
     const yawRotatedAbs = Math.abs(normalizeAngleRad(newYaw - Math.PI));
 
     if (yawRotatedAbs <= range + transition) {
       if (yawRotatedAbs <= range) {
         // inside range
-        lowerPitch = -pitchLimits.back.max * (Math.PI / 180);
-        upperPitch = -pitchLimits.back.min * (Math.PI / 180);
+        lowerPitch = -degToRad(pitchLimits.back.max);
+        upperPitch = -degToRad(pitchLimits.back.min);
       } else {
         // inside transition
         const transitionProgress = (yawRotatedAbs - range) / transition;
@@ -44,21 +43,21 @@ export function applyPitchYawLimits(
           (1 - transitionProgress) * pitchLimits.back.min +
           transitionProgress * pitchLimits.min;
 
-        lowerPitch = -maxInterpolatedPitch * (Math.PI / 180);
-        upperPitch = -minInterpolatedPitch * (Math.PI / 180);
+        lowerPitch = -degToRad(maxInterpolatedPitch);
+        upperPitch = -degToRad(minInterpolatedPitch);
       }
     }
   }
 
   if (pitchLimits.front) {
-    const range = pitchLimits.front.range * (Math.PI / 180);
+    const range = degToRad(pitchLimits.front.range);
     const yawAbs = Math.abs(normalizeAngleRad(newYaw));
 
     if (yawAbs <= range + transition) {
       if (yawAbs <= range) {
         // inside range
-        lowerPitch = -pitchLimits.front.max * (Math.PI / 180);
-        upperPitch = -pitchLimits.front.min * (Math.PI / 180);
+        lowerPitch = -degToRad(pitchLimits.front.max);
+        upperPitch = -degToRad(pitchLimits.front.min);
       } else {
         // inside transition
         const transitionProgress = (yawAbs - range) / transition;
@@ -69,8 +68,8 @@ export function applyPitchYawLimits(
           (1 - transitionProgress) * pitchLimits.front.min +
           transitionProgress * pitchLimits.min;
 
-        lowerPitch = -maxInterpolatedPitch * (Math.PI / 180);
-        upperPitch = -minInterpolatedPitch * (Math.PI / 180);
+        lowerPitch = -degToRad(maxInterpolatedPitch);
+        upperPitch = -degToRad(minInterpolatedPitch);
       }
     }
   }
