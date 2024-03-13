@@ -2,7 +2,6 @@ name: CD Build Assets
 
 on:
   push:
-    branches: [dev, main]
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * *'
