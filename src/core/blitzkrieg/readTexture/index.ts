@@ -1,27 +1,11 @@
 import { existsSync } from 'fs';
 import sharp from 'sharp';
-import { Vector3Tuple } from 'three';
 import { readDVPLFile } from '../../blitz/readDVPLFile';
 import { DdsReadStream } from '../../streams/dds';
 import { PvrReadStream } from '../../streams/pvr';
 import { TextureMutation } from './constants';
 
-type ReadTextureOptions =
-  | {
-      mutation:
-        | TextureMutation.Normal
-        | TextureMutation.RoughnessMetallicness
-        | TextureMutation.Miscellaneous;
-    }
-  | {
-      mutation: TextureMutation.BaseColor;
-      /**
-       * Normalized between 0 and 1
-       */
-      baseColor: Vector3Tuple;
-    };
-
-export async function readTexture(path: string, options?: ReadTextureOptions) {
+export async function readTexture(path: string, mutation?: TextureMutation) {
   const ddsTexturePath = path.replace('.tex', '.dx11.dds.dvpl');
   const isDds = existsSync(ddsTexturePath);
   const resolvedTexturePath = isDds
@@ -32,11 +16,11 @@ export async function readTexture(path: string, options?: ReadTextureOptions) {
   const raw = isDds
     ? await new DdsReadStream(decompressedDvpl.buffer).dds()
     : new PvrReadStream(decompressedDvpl.buffer).pvr();
-  const channels = 4 * raw.width * raw.height;
 
-  switch (options?.mutation) {
+  switch (mutation) {
     case TextureMutation.Normal: {
-      for (let index = 0; index < channels; index += 4) {
+      const bytes = 4 * raw.width * raw.height;
+      for (let index = 0; index < bytes; index += 4) {
         /**
          * Red is always 255 and blue is always 0. Only alpha and green contain any
          * sort of information.
@@ -52,53 +36,44 @@ export async function readTexture(path: string, options?: ReadTextureOptions) {
         raw.data[index + 3] = 255;
       }
 
-      break;
+      return await sharp(raw.data, { raw }).png().toBuffer();
     }
 
     case TextureMutation.RoughnessMetallicness: {
-      for (let index = 0; index < channels; index += 4) {
-        /**
-         * Same channel situation as normal maps.
-         */
-        const metallicness = raw.data[index + 1];
-        const roughness = raw.data[index + 3];
+      const newImage = sharp(Buffer.alloc(raw.width * raw.height), {
+        raw: { ...raw, channels: 1 },
+      });
+      const metallicness = sharp(raw.data, { raw })
+        .extractChannel('green')
+        .png()
+        .toBuffer();
+      const roughness = sharp(raw.data, { raw })
+        .extractChannel('alpha')
+        .png()
+        .toBuffer();
 
-        raw.data[index] = 0;
-        raw.data[index + 1] = roughness;
-        raw.data[index + 2] = metallicness;
-        raw.data[index + 3] = 255;
-      }
-
-      break;
+      return await newImage
+        .joinChannel(await Promise.all([roughness, metallicness]))
+        .png()
+        .toBuffer();
     }
 
     case TextureMutation.Miscellaneous: {
-      for (let index = 0; index < channels; index += 4) {
-        /**
-         * Alpha is ambient occlusion and green is emissive. But very few tanks
-         * use emissive so I am ignoring it for now.
-         */
-        // const emissive = raw.data[index + 1];
-        const occlusion = raw.data[index + 3];
-
-        raw.data[index] = occlusion;
-        raw.data[index + 1] = 0;
-        raw.data[index + 2] = 0;
-        raw.data[index + 3] = 255;
-      }
-
-      break;
+      /**
+       * Alpha is ambient occlusion and green is emissive. But very few tanks
+       * use emissive so I am ignoring it for now.
+       */
+      return await sharp(raw.data, { raw })
+        .extractChannel('alpha')
+        .png()
+        .toBuffer();
     }
 
-    case TextureMutation.BaseColor: {
-      for (let index = 0; index < channels; index += 4) {
-        // alpha map is specularity but I am ignoring it for now
-        raw.data[index + 3] = 255;
-      }
-
-      break;
+    case TextureMutation.Albedo: {
+      return await sharp(raw.data, { raw }).removeAlpha().png().toBuffer();
     }
+
+    default:
+      return await sharp(raw.data, { raw }).png().toBuffer();
   }
-
-  return await sharp(raw.data, { raw: raw }).png().toBuffer();
 }

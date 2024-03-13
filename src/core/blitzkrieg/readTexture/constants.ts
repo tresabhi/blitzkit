@@ -1,6 +1,6 @@
 export enum TextureMutation {
   Normal,
   RoughnessMetallicness,
-  BaseColor,
+  Albedo,
   Miscellaneous,
 }

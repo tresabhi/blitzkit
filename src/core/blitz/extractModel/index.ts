@@ -1,13 +1,7 @@
 import { Document, Material, Node, Scene } from '@gltf-transform/core';
 import { times } from 'lodash';
 import { dirname } from 'path';
-import {
-  Matrix4,
-  Quaternion,
-  Vector3,
-  Vector3Tuple,
-  Vector4Tuple,
-} from 'three';
+import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
 import { readTexture } from '../../blitzkrieg/readTexture';
 import { TextureMutation } from '../../blitzkrieg/readTexture/constants';
 import { Hierarchy, Sc2ReadStream, Textures } from '../../streams/sc2';
@@ -26,11 +20,7 @@ const omitMeshNames = {
   end: ['_POINT'],
 };
 
-export async function extractModel(
-  data: string,
-  path: string,
-  baseColor?: Vector3Tuple,
-) {
+export async function extractModel(data: string, path: string) {
   const sc2Path = `${data}/3d/${path}.sc2.dvpl`;
   const scgPath = `${data}/3d/${path}.scg.dvpl`;
   const sc2 = new Sc2ReadStream((await readDVPLFile(sc2Path)).buffer).sc2();
@@ -71,9 +61,7 @@ export async function extractModel(
             .setImage(
               await readTexture(
                 `${data}/3d/${dirname(path)}/${textures.albedo}`,
-                baseColor
-                  ? { mutation: TextureMutation.BaseColor, baseColor }
-                  : undefined,
+                TextureMutation.Albedo,
               ),
             ),
         );
@@ -86,7 +74,7 @@ export async function extractModel(
               .setImage(
                 await readTexture(
                   `${data}/3d/${dirname(path)}/${textures.baseRMMap}`,
-                  { mutation: TextureMutation.RoughnessMetallicness },
+                  TextureMutation.RoughnessMetallicness,
                 ),
               ),
           );
@@ -104,7 +92,7 @@ export async function extractModel(
                   `${data}/3d/${dirname(path)}/${
                     textures.baseNormalMap ?? textures.normalmap
                   }`,
-                  isBase ? { mutation: TextureMutation.Normal } : undefined,
+                  isBase ? TextureMutation.Normal : undefined,
                 ),
               ),
           );
@@ -118,7 +106,7 @@ export async function extractModel(
               .setImage(
                 await readTexture(
                   `${data}/3d/${dirname(path)}/${textures.miscMap}`,
-                  { mutation: TextureMutation.Miscellaneous },
+                  TextureMutation.Miscellaneous,
                 ),
               ),
           );
