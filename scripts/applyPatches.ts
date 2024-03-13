@@ -14,6 +14,8 @@ const currentVersion = versionTextFile
   .slice(0, 3)
   .join('.');
 
+console.log(`Installing patches for ${currentVersion}...`);
+
 let patchIndex = 1;
 while (true) {
   const response = await fetch(
@@ -21,6 +23,8 @@ while (true) {
   );
 
   if (response.status === 200) {
+    console.log(`Applying patch ${patchIndex}...`);
+
     const data = parseYaml(await response.text());
     const dvpm = await fetch(`${secrets.WOTB_DLC_CDN}/dlc/${data.dx11}`).then(
       (response) => response.arrayBuffer(),

@@ -19,7 +19,7 @@
     "start:website": "next start",
     "host:docs": "vitepress preview docs",
     "publish:ratingsleaderboard": "vite-node --script scripts/buildRatingsLeaderboard --publish",
-    "applypatches": "vite-node --script scripts/applyPatches",
+    "setup:patches": "vite-node --script scripts/applyPatches",
     "lint": "npx tsc",
     "lint:website": "next lint",
     "format": "prettier --write \"**/*.@(json|js|jsx|css|md|ts|tsx|html|xml|yml|gltf)\"",
