@@ -92,7 +92,7 @@ interface VehicleDefinitions {
   };
   consumableSlots: number;
   provisionSlots: number;
-  optDevicePreset: string;
+  optDevicePreset: string | string[];
   hull: {
     armor: VehicleDefinitionArmor;
     turretPositions: { turret: string };
@@ -473,7 +473,8 @@ export async function definitions(production: boolean) {
             forwards: tankDefinition.root.speedLimits.forward,
             backwards: tankDefinition.root.speedLimits.backward,
           },
-          equipment,
+          equipment:
+            typeof equipment === 'string' ? equipment : equipment.at(-1)!,
           consumables: tankDefinition.root.consumableSlots,
           provisions: tankDefinition.root.provisionSlots,
           name:
