@@ -18,7 +18,7 @@ import {
   CREW_MEMBER_NAMES,
   GUN_TYPE_NAMES,
   SHELL_NAMES,
-} from '../../../../../../core/blitzkrieg/tankDefinitions';
+} from '../../../../../../core/blitzkrieg/tankDefinitions/constants';
 import { unionBoundingBox } from '../../../../../../core/blitzkrieg/unionBoundingBox';
 import { useConsumable } from '../../../../../../hooks/useConsumable';
 import { useEquipment } from '../../../../../../hooks/useEquipment';

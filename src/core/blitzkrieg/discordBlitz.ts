@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import { Region } from '../../constants/regions';
-
-export const discordBlitzDB = new PrismaClient();
+import { discordBlitzDB } from './discordBlitzDB';
 
 export function linkBlitzAndDiscord(
   discord: number,

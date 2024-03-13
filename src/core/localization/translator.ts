@@ -1,5 +1,6 @@
 import { Locale } from 'discord.js';
-import { SUPPORTED_LOCALES, translations } from './strings';
+import { translations } from './strings';
+import { SUPPORTED_LOCALES } from './strings/constants';
 
 export function translator(localeRaw: Locale) {
   const locale = SUPPORTED_LOCALES.includes(localeRaw)

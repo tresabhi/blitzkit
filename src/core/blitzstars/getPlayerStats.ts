@@ -1,7 +1,7 @@
 import { Region } from '../../constants/regions';
 import { AllStats } from '../blitz/getAccountInfo';
 
-export interface IndividualPlayerStats {
+interface IndividualPlayerStats {
   clan: { clan_id: number; name: string; tag: string };
   statistics: {
     all: AllStats;

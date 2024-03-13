@@ -1,12 +1,6 @@
 import { useFrame } from '@react-three/fiber';
 import { useEffect } from 'react';
-import {
-  MeshBasicMaterial,
-  Object3D,
-  ShaderMaterial,
-  Vector2,
-  WebGLRenderTarget,
-} from 'three';
+import { MeshBasicMaterial, Object3D, ShaderMaterial, Vector2 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
@@ -21,8 +15,7 @@ import {
 } from '../../../../stores/tankopedia';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
-
-export const spacedArmorRenderTarget = new WebGLRenderTarget();
+import { spacedArmorRenderTarget } from './target';
 
 interface CoreArmorSceneComponentProps {
   thickness: number;

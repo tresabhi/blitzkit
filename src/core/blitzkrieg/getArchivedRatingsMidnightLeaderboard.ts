@@ -1,8 +1,6 @@
 import { BlitzkriegRatingsLeaderboard } from '../../../scripts/buildRatingsLeaderboard';
 import { Region } from '../../constants/regions';
 
-export const DATABASE_REPO = { owner: 'tresabhi', repo: 'blitzkrieg-assets' };
-
 const MIDNIGHT_LEADERBOARD_CACHE: Record<
   Region,
   Record<number, BlitzkriegRatingsLeaderboard>

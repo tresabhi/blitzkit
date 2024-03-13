@@ -1,12 +1,11 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { Region } from '../../constants/regions';
-import { UserError } from '../../hooks/userError';
-import searchPlayersAcrossRegions from '../blitz/searchPlayersAcrossRegions';
-import { getBlitzFromDiscord } from '../blitzkrieg/discordBlitz';
-import { translator } from '../localization/translator';
-
-export const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
+import { Region } from '../../../constants/regions';
+import { UserError } from '../../../hooks/userError';
+import searchPlayersAcrossRegions from '../../blitz/searchPlayersAcrossRegions';
+import { getBlitzFromDiscord } from '../../blitzkrieg/discordBlitz';
+import { translator } from '../../localization/translator';
+import { serverAndIdPattern } from './constants';
 
 export interface ResolvedPlayer {
   region: Region;

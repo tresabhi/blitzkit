@@ -15,7 +15,8 @@ import {
 } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
-import { TANK_CLASSES, TreeType } from '../../../../../components/Tanks';
+import { TreeType } from '../../../../../components/Tanks';
+import { TANK_CLASSES } from '../../../../../components/Tanks/components/Item/constants';
 import { resolveNearPenetration } from '../../../../../core/blitz/resolveNearPenetration';
 import { asset } from '../../../../../core/blitzkrieg/asset';
 import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
@@ -24,13 +25,15 @@ import { resolveDpm } from '../../../../../core/blitzkrieg/resolveDpm';
 import { resolveReload } from '../../../../../core/blitzkrieg/resolveReload';
 import {
   NATIONS,
+  TankDefinition,
+  tanksDefinitionsArray,
+} from '../../../../../core/blitzkrieg/tankDefinitions';
+import {
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
   TIER_ROMAN_NUMERALS,
-  TankDefinition,
-  tanksDefinitionsArray,
-} from '../../../../../core/blitzkrieg/tankDefinitions';
+} from '../../../../../core/blitzkrieg/tankDefinitions/constants';
 import { tankIcon } from '../../../../../core/blitzkrieg/tankIcon';
 import { unionBoundingBox } from '../../../../../core/blitzkrieg/unionBoundingBox';
 import { theme } from '../../../../../stitches.config';

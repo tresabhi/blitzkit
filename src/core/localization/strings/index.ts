@@ -1,6 +1,5 @@
 import { Locale } from 'discord.js';
-
-export const SUPPORTED_LOCALES: Locale[] = [Locale.EnglishUS, Locale.SpanishES];
+import { SUPPORTED_LOCALES } from './constants';
 
 export type TranslationFragmentTree = {
   [key: string]: TranslationFragment;

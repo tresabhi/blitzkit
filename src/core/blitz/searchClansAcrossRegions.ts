@@ -1,11 +1,7 @@
 import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
-import { Clan, ClanList } from '../../types/clanList';
+import { ClanList } from '../../types/clanList';
 import fetchBlitz from './fetchBlitz';
-
-export type ClanListWithRegion = (Clan & {
-  region: 'com' | 'eu' | 'asia';
-})[];
 
 export default async function searchClansAcrossRegions(
   search: string,

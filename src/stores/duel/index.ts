@@ -8,7 +8,7 @@ import {
   TankDefinition,
   TrackDefinition,
   TurretDefinition,
-} from '../core/blitzkrieg/tankDefinitions';
+} from '../../core/blitzkrieg/tankDefinitions';
 
 type EquipmentMatrixItem = -1 | 0 | 1;
 type EquipmentMatrixRow = [
@@ -54,9 +54,3 @@ export const useDuel = create<Duel>()(
 export function mutateDuel(recipe: (draft: Duel) => void) {
   useDuel.setState(produce(recipe));
 }
-
-export const genericDefaultEquipmentMatrix: EquipmentMatrix = [
-  [-1, 1, -1],
-  [0, 0, 0],
-  [0, 0, 0],
-];

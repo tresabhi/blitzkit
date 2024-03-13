@@ -1,12 +1,6 @@
 import { blue, green, red, slateDark } from '@radix-ui/colors';
-import { GRAPH_HEIGHT, GRAPH_WIDTH } from './Root';
-
-export enum LineColor {
-  Red,
-  Green,
-  Blue,
-  White,
-}
+import { GRAPH_HEIGHT, GRAPH_WIDTH } from '../Root/constants';
+import { LineColor, LineStyle } from './constants';
 
 const LINE_COLORS = {
   [LineColor.Red]: red.red9,
@@ -15,12 +9,6 @@ const LINE_COLORS = {
   [LineColor.White]: slateDark.slate11,
 };
 
-export enum LineStyle {
-  Solid,
-  Dashes,
-  DashesAndDots,
-}
-
 const LINE_STYLES = {
   [LineStyle.Solid]: undefined,
   [LineStyle.Dashes]: '8, 8',
@@ -28,9 +16,9 @@ const LINE_STYLES = {
 };
 
 export type PlotItem = [number, number];
-export type Plot = PlotItem[];
+type Plot = PlotItem[];
 
-export interface LineProps {
+interface LineProps {
   plot: Plot;
   minY?: number;
   maxY?: number;

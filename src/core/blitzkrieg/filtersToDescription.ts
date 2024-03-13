@@ -1,7 +1,8 @@
 import { Locale } from 'discord.js';
 import { translator } from '../localization/translator';
 import { StatFilters } from '../statistics/filterStats';
-import { TIER_ROMAN_NUMERALS, Tier, tankDefinitions } from './tankDefinitions';
+import { Tier, tankDefinitions } from './tankDefinitions';
+import { TIER_ROMAN_NUMERALS } from './tankDefinitions/constants';
 
 export async function filtersToDescription(
   { nation, tier, tankType, treeType, tank }: StatFilters,

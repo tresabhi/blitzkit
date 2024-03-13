@@ -3,7 +3,7 @@ import { theme } from '../stitches.config';
 
 export type TierWeightsRecord = Partial<Record<Tier, number>>;
 
-export interface TierWeightsProps {
+interface TierWeightsProps {
   weights: TierWeightsRecord;
 }
 

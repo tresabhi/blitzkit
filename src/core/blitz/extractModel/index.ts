@@ -8,33 +8,18 @@ import {
   Vector3Tuple,
   Vector4Tuple,
 } from 'three';
-import { TextureMutation, readTexture } from '../blitzkrieg/readTexture';
-import { Hierarchy, Sc2ReadStream, Textures } from '../streams/sc2';
-import { ScgReadStream, vertexAttributeVectorSizes } from '../streams/scg';
-import { VertexAttribute } from '../streams/scpg';
-import { readDVPLFile } from './readDVPLFile';
+import { readTexture } from '../../blitzkrieg/readTexture';
+import { TextureMutation } from '../../blitzkrieg/readTexture/constants';
+import { Hierarchy, Sc2ReadStream, Textures } from '../../streams/sc2';
+import { ScgReadStream } from '../../streams/scg';
+import { VertexAttribute } from '../../streams/scpg';
+import { readDVPLFile } from '../readDVPLFile';
+import {
+  vertexAttributeGLTFName,
+  vertexAttributeGltfVectorSizes,
+} from './constants';
 
 const ERROR_ON_UNKNOWN_COMPONENT = false;
-const MAX_FLOAT32 = 2 ** 127 * (2 - 2 ** -23);
-
-export const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> =
-  {
-    [VertexAttribute.VERTEX]: 'POSITION',
-    [VertexAttribute.NORMAL]: 'NORMAL',
-    [VertexAttribute.TEXCOORD0]: 'TEXCOORD_0',
-    [VertexAttribute.TEXCOORD1]: 'TEXCOORD_0',
-    [VertexAttribute.TEXCOORD2]: 'TEXCOORD_0',
-    [VertexAttribute.TEXCOORD3]: 'TEXCOORD_0',
-    [VertexAttribute.TANGENT]: 'TANGENT',
-    [VertexAttribute.JOINTINDEX]: 'JOINT_0',
-    [VertexAttribute.JOINTWEIGHT]: 'WEIGHT_0',
-  };
-
-export const vertexAttributeGltfVectorSizes = {
-  ...vertexAttributeVectorSizes,
-
-  [VertexAttribute.TANGENT]: 4,
-} as const;
 
 const omitMeshNames = {
   start: ['chassis_chassis_', 'chassis_track_crash_', 'HP_'],

@@ -1,4 +1,4 @@
-export type BlitzResponse<Data extends object> =
+type BlitzResponse<Data extends object> =
   | {
       status: 'error';
       error: { field: string; message: string; code: 402; value: null };

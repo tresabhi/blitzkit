@@ -1,9 +1,9 @@
-import { Stat } from '..';
+import { GenericStat } from '..';
 import { theme } from '../../../stitches.config';
 import PercentileIndicator from '../../PercentileIndicator';
 
-export interface GenericStatsRowProps {
-  stat: Stat;
+interface GenericStatsRowProps {
+  stat: GenericStat;
 }
 
 export default function GenericStatsRow({ stat }: GenericStatsRowProps) {

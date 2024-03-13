@@ -2,7 +2,7 @@ import { AllStats } from '../blitz/getAccountInfo';
 import { context } from '../blitzkrieg/context';
 import { tankDefinitions } from '../blitzkrieg/tankDefinitions';
 
-export interface SpecialStats {
+interface SpecialStats {
   winrate: number;
   damageRatio: number;
   kdr: number;

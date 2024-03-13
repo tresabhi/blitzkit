@@ -1,6 +1,6 @@
 import { theme } from '../stitches.config';
 
-export interface TitleBarProps {
+interface TitleBarProps {
   title: string;
   image?: string;
   description?: string;

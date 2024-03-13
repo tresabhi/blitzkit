@@ -1,14 +1,8 @@
 import { Locale } from 'discord.js';
-import { translator } from '../core/localization/translator';
-import { theme } from '../stitches.config';
+import { translator } from '../../core/localization/translator';
+import { theme } from '../../stitches.config';
 
-export enum NoDataType {
-  BattlesInPeriod,
-  PlayersInPeriod,
-  TanksFound,
-}
-
-export interface NoDataProps {
+interface NoDataProps {
   type: 'battles_in_period' | 'players_in_period' | 'tanks_found';
   locale: Locale;
 }

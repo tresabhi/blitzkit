@@ -1,6 +1,6 @@
 import { Region } from '../../constants/regions';
 
-export const TIME_ZONE_MAPPINGS: Record<Region, number> = {
+const TIME_ZONE_MAPPINGS: Record<Region, number> = {
   com: -5, // Central North American Time
   eu: +1, // Central European Time
   asia: +7, // Central Asia Standard Time

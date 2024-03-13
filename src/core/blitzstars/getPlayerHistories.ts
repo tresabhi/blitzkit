@@ -7,7 +7,7 @@ import {
 } from '../../types/histories';
 import { getAccountInfo } from '../blitz/getAccountInfo';
 import { PlayerStats } from './getPlayerStats';
-import { emptyAllStats } from './getStatsInPeriod';
+import { emptyAllStats } from './getStatsInPeriod/constants';
 
 export default async function getPlayerHistories(
   server: Region,

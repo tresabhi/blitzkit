@@ -3,7 +3,7 @@ import { Percentile } from '../../../../constants/percentiles';
 import { translator } from '../../../../core/localization/translator';
 import getWN8Percentile from '../../../../core/statistics/getWN8Percentile';
 import { theme } from '../../../../stitches.config';
-import { PERCENTILE_COLORS } from '../../../PercentileIndicator';
+import { PERCENTILE_COLORS } from '../../../PercentileIndicator/constants';
 import { Glow } from './components/Glow';
 
 export interface WN8DisplayProps {

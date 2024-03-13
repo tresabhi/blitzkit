@@ -1,6 +1,6 @@
 import { theme } from '../../../stitches.config';
 
-export interface GapProps {
+interface GapProps {
   message: string;
 }
 

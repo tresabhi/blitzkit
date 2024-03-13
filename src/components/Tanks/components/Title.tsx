@@ -1,6 +1,6 @@
 import { theme } from '../../../stitches.config';
 
-export interface TitleProps {
+interface TitleProps {
   children: string;
 }
 

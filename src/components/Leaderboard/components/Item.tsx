@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 import { RatingsReward } from '../../../commands/ratings';
 import { theme } from '../../../stitches.config';
 
-export interface ItemProps extends ComponentProps<'div'> {
+interface ItemProps extends ComponentProps<'div'> {
   position: number;
   deltaPosition?: number;
   score?: number;

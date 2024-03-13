@@ -3,11 +3,9 @@ import {
   AutocompleteInteraction,
   CacheType,
 } from 'discord.js';
-import searchClansAcrossRegions from '../blitz/searchClansAcrossRegions';
-import { translator } from '../localization/translator';
-
-export const DISCORD_CHOICES_MAX_NAME_SIZE = 25;
-export const OVERFLOW_SUFFIX = '…';
+import searchClansAcrossRegions from '../../blitz/searchClansAcrossRegions';
+import { translator } from '../../localization/translator';
+import { DISCORD_CHOICES_MAX_NAME_SIZE, OVERFLOW_SUFFIX } from './constants';
 
 export default async function autocompleteClan(
   interaction: AutocompleteInteraction<CacheType>,

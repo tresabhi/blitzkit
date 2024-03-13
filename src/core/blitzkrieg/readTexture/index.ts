@@ -1,16 +1,10 @@
 import { existsSync } from 'fs';
 import sharp from 'sharp';
 import { Vector3Tuple } from 'three';
-import { readDVPLFile } from '../blitz/readDVPLFile';
-import { DdsReadStream } from '../streams/dds';
-import { PvrReadStream } from '../streams/pvr';
-
-export enum TextureMutation {
-  Normal,
-  RoughnessMetallicness,
-  BaseColor,
-  Miscellaneous,
-}
+import { readDVPLFile } from '../../blitz/readDVPLFile';
+import { DdsReadStream } from '../../streams/dds';
+import { PvrReadStream } from '../../streams/pvr';
+import { TextureMutation } from './constants';
 
 type ReadTextureOptions =
   | {

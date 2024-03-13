@@ -1,7 +1,7 @@
 import { AttachmentBuilder, GuildMember, TextChannel } from 'discord.js';
 import discord from '../../discord.json' assert { type: 'json' };
 
-export default async function (member: GuildMember) {
+export default async function guildMemberAdd(member: GuildMember) {
   if (member.guild.id === discord.sklld_guild_id) {
     await (
       member.guild.channels.cache.get(

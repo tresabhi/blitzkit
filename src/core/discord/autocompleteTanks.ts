@@ -8,7 +8,7 @@ import { tankNames } from '../blitzkrieg/tankDefinitions';
 import {
   DISCORD_CHOICES_MAX_NAME_SIZE,
   OVERFLOW_SUFFIX,
-} from './autocompleteClan';
+} from './autocompleteClan/constants';
 
 export default async function autocompleteTanks(
   interaction: AutocompleteInteraction<CacheType>,

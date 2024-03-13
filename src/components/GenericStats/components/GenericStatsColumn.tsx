@@ -1,8 +1,8 @@
-import { Stat } from '..';
+import { GenericStat } from '..';
 import GenericStatsRow from './GenericStatsRow';
 
-export interface GenericStatsColumnProps {
-  stats: Stat[];
+interface GenericStatsColumnProps {
+  stats: GenericStat[];
 }
 
 export default function GenericStatsColumn({ stats }: GenericStatsColumnProps) {
