@@ -1,4 +1,4 @@
-import { Card, Flex, Inset, Text } from '@radix-ui/themes';
+import { Card, Flex, Text } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
@@ -182,33 +182,38 @@ export function ShotDisplay() {
                   pointerEvents: 'none',
                 }}
               >
-                <Card
+                <div
                   style={{
                     backgroundColor:
                       trueStatus === 'penetration'
-                        ? '#00ff00c0'
+                        ? '#00ff0080'
                         : trueStatus === 'blocked'
-                          ? '#ff0000c0'
-                          : '#ffff00c0',
+                          ? '#ff000080'
+                          : '#ffff0080',
+                    borderRadius: 8,
                     border: 'none',
+                    padding: 4,
+                    width: hasMultipleLayers ? undefined : 8,
+                    height: hasMultipleLayers ? undefined : 8,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
-                  <Inset>
-                    {hasMultipleLayers && (
-                      <Text
-                        style={{
-                          width: '100%',
-                          display: 'block',
-                          textAlign: 'center',
-                          color:
-                            trueStatus === 'ricochet' ? 'black' : undefined,
-                        }}
-                      >
-                        <b>{layer.index + 1}</b>
-                      </Text>
-                    )}
-                  </Inset>
-                </Card>
+                  {hasMultipleLayers && (
+                    <Text
+                      size="2"
+                      style={{
+                        width: '100%',
+                        display: 'block',
+                        textAlign: 'center',
+                        color: trueStatus === 'ricochet' ? 'black' : undefined,
+                      }}
+                    >
+                      <b>{layer.index + 1}</b>
+                    </Text>
+                  )}
+                </div>
               </Html>
             </group>
           </>
