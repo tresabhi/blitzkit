@@ -4,10 +4,8 @@ import getPeriodNow from '../blitzkrieg/getPeriodNow';
 import getPeriodStart from '../blitzkrieg/getPeriodStart';
 import getTimeDaysAgo from '../blitzkrieg/getTimeDaysAgo';
 import { PeriodType } from './addPeriodSubCommands';
-import {
-  ResolvedPeriod,
-  getPeriodOptionName,
-} from './resolvePeriodFromCommand';
+import { getPeriodOptionName } from './getPeriodOptionName';
+import { ResolvedPeriod } from './resolvePeriodFromCommand';
 
 export default function resolvePeriodFromButton(
   region: Region,

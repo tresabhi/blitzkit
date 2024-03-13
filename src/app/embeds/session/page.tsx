@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import * as Breakdown from '../../../components/Breakdown';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import fetchBlitz from '../../../core/blitz/fetchBlitz';
+import { resetSession } from '../../../core/blitzkrieg/resetSession';
 import {
   TankDefinition,
   tankDefinitions,
@@ -13,10 +14,7 @@ import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import calculateWN8 from '../../../core/statistics/calculateWN8';
 import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
 import getWN8Percentile from '../../../core/statistics/getWN8Percentile';
-import mutateSession, {
-  resetSession,
-  useSession,
-} from '../../../stores/session';
+import mutateSession, { useSession } from '../../../stores/session';
 import { IndividualTankStats, TanksStats } from '../../../types/tanksStats';
 import { CustomColumnDisplay } from '../../tools/session/components/CustomColumn';
 import { Menu } from '../../tools/session/components/Menu';

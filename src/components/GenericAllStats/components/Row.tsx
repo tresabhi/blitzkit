@@ -1,4 +1,4 @@
-export interface RowProps {
+interface RowProps {
   children: React.ReactNode;
 }
 

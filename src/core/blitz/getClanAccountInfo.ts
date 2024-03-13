@@ -4,7 +4,7 @@ import fetchBlitz from './fetchBlitz';
 import { normalizeExtra } from './normalizeExtra';
 import { normalizeIds } from './normalizeIds';
 
-export type IndividualClanAccountInfo = {
+type IndividualClanAccountInfo = {
   account_id: number;
   joined_at: number;
   clan_id: number;
@@ -21,7 +21,7 @@ export type IndividualClanAccountInfo = {
   };
 } | null;
 
-export interface ClanAccountInfo {
+interface ClanAccountInfo {
   [accountId: number]: IndividualClanAccountInfo;
 }
 

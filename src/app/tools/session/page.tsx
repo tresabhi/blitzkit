@@ -22,7 +22,9 @@ import { UNLOCALIZED_REGION_NAMES } from '../../../constants/regions';
 import searchPlayersAcrossRegions, {
   AccountListWithServer,
 } from '../../../core/blitz/searchPlayersAcrossRegions';
-import { resetSession, setSession, useSession } from '../../../stores/session';
+import { resetSession } from '../../../core/blitzkrieg/resetSession';
+import { setSession } from '../../../core/blitzkrieg/setSession';
+import { useSession } from '../../../stores/session';
 import SessionPage from '../../embeds/session/page';
 import { Menu } from './components/Menu';
 import * as styles from './page.css';

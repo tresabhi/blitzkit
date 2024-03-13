@@ -1,4 +1,4 @@
-export interface RootProps {
+interface RootProps {
   children: React.ReactNode;
 }
 

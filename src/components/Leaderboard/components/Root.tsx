@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-export interface RootProps {
+interface RootProps {
   children: ReactNode;
 }
 

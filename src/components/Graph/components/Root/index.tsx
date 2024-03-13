@@ -1,10 +1,9 @@
 import { times } from 'lodash';
 import { ReactNode } from 'react';
-import { theme } from '../../../stitches.config';
-import { Margin, MarginOrientation } from './Margin';
-
-export const GRAPH_WIDTH = 384;
-export const GRAPH_HEIGHT = 320;
+import { theme } from '../../../../stitches.config';
+import { Margin } from '../Margin';
+import { MarginOrientation } from '../Margin/constants';
+import { GRAPH_HEIGHT, GRAPH_WIDTH } from './constants';
 
 export interface MarginInputProps {
   min: number;
@@ -13,7 +12,7 @@ export interface MarginInputProps {
   precision?: number;
 }
 
-export interface RootProps {
+interface RootProps {
   children: ReactNode;
   verticalMargin?: MarginInputProps;
   horizontalMargin?: MarginInputProps;

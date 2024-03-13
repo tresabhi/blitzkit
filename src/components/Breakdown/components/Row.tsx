@@ -5,7 +5,8 @@ import {
   GrayColor,
   PALETTES,
 } from '../../../constants/radixColors';
-import { TREE_TYPE_ICONS, TankClass, TreeType } from '../../Tanks';
+import { TankClass, TreeType } from '../../Tanks';
+import { TREE_TYPE_ICONS } from '../../Tanks/components/Item/constants';
 import { RowStat } from './RowStat';
 
 export interface RowStatItem {

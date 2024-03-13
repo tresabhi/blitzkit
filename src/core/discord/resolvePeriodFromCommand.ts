@@ -1,17 +1,11 @@
-import { CacheType, ChatInputCommandInteraction, Locale } from 'discord.js';
+import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { Region } from '../../constants/regions';
 import getPeriodNow from '../blitzkrieg/getPeriodNow';
 import getPeriodStart from '../blitzkrieg/getPeriodStart';
 import getTimeDaysAgo from '../blitzkrieg/getTimeDaysAgo';
 import { translator } from '../localization/translator';
-import { PeriodSize, PeriodType } from './addPeriodSubCommands';
-
-export function getPeriodOptionName(period: PeriodSize, locale: Locale) {
-  const { translate } = translator(locale);
-  if (period === 'career') return translate('bot.common.periods.career');
-  if (period === 'today') return translate('bot.common.periods.today');
-  return translate('bot.common.periods.days', [period]);
-}
+import { PeriodType } from './addPeriodSubCommands';
+import { getPeriodOptionName } from './getPeriodOptionName';
 
 export interface ResolvedPeriod {
   name: string;

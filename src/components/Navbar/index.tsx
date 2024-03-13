@@ -1,8 +1,8 @@
 import { DiscordLogoIcon } from '@radix-ui/react-icons';
 import { Flex, Text, Theme } from '@radix-ui/themes';
 import Link from 'next/link';
-import { theme } from '../../stitches.config';
 import { BlitzkriegWormWide } from '../../icons/BlitzkriegWormWide';
+import { theme } from '../../stitches.config';
 
 export default function Navbar() {
   return (

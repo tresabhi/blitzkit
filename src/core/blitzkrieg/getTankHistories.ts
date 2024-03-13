@@ -7,7 +7,7 @@ import {
   getHistoriesDefaultOptions,
 } from '../../types/histories';
 import getTankStats from '../blitz/getTankStats';
-import { emptyAllStats } from '../blitzstars/getStatsInPeriod';
+import { emptyAllStats } from '../blitzstars/getStatsInPeriod/constants';
 
 export interface TankHistory extends History {
   tank_id: number;
@@ -27,7 +27,7 @@ export interface GetTankHistoriesOptions extends GetHistoriesOptions {
   tankId?: number;
 }
 
-export const getTankHistoriesDefaultOptions: GetTankHistoriesOptions = {
+const getTankHistoriesDefaultOptions: GetTankHistoriesOptions = {
   ...getHistoriesDefaultOptions,
   tankId: undefined,
 };

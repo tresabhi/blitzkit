@@ -18,7 +18,7 @@ import {
   CREW_MEMBER_NAMES,
   GUN_TYPE_NAMES,
   SHELL_NAMES,
-} from '../../../../../../core/blitzkrieg/tankDefinitions';
+} from '../../../../../../core/blitzkrieg/tankDefinitions/constants';
 import { unionBoundingBox } from '../../../../../../core/blitzkrieg/unionBoundingBox';
 import { useConsumable } from '../../../../../../hooks/useConsumable';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
@@ -268,9 +268,13 @@ export function Characteristics() {
           <>
             <InfoWithDelta decimals={0} indent name="Maximum" unit="hp / min">
               {gun.reload.at(-1)! < gun.reload.at(-2)!
-                ? (shell.damage.armor / (gun.reload.at(-1)! + gun.intraClip)) *
+                ? ((damageCoefficient * shell.damage.armor) /
+                    (gun.reload.at(-1)! * reloadCoefficient +
+                      gun.intraClip * intraClipCoefficient)) *
                   60
-                : (shell.damage.armor / gun.reload[0]) * 60}
+                : ((damageCoefficient * shell.damage.armor) /
+                    (gun.reload[0] * reloadCoefficient)) *
+                  60}
             </InfoWithDelta>
             <InfoWithDelta
               decimals={0}
@@ -279,13 +283,26 @@ export function Characteristics() {
               unit="hp / min"
             >
               {gun.reload.at(-1)! < gun.reload.at(-2)!
-                ? (shell.damage.armor / (gun.reload.at(-1)! + gun.intraClip)) *
+                ? ((damageCoefficient * shell.damage.armor) /
+                    (gun.reload.at(-1)! * reloadCoefficient +
+                      gun.intraClip * intraClipCoefficient)) *
                     (60 -
-                      (gun.reload.slice(0, -1).length - 1) * gun.intraClip) +
-                  shell.damage.armor * gun.reload.slice(0, -1).length
-                : (shell.damage.armor / (gun.reload[0] + gun.intraClip)) *
-                    (60 - (gun.reload.slice(1).length - 1) * gun.intraClip) +
-                  shell.damage.armor * gun.reload.slice(1).length}
+                      (gun.reload.slice(0, -1).length - 1) *
+                        gun.intraClip *
+                        intraClipCoefficient) +
+                  damageCoefficient *
+                    shell.damage.armor *
+                    gun.reload.slice(0, -1).length
+                : ((damageCoefficient * shell.damage.armor) /
+                    (gun.reload[0] * reloadCoefficient +
+                      gun.intraClip * intraClipCoefficient)) *
+                    (60 -
+                      (gun.reload.slice(1).length - 1) *
+                        gun.intraClip *
+                        intraClipCoefficient) +
+                  damageCoefficient *
+                    shell.damage.armor *
+                    gun.reload.slice(1).length}
             </InfoWithDelta>
             <Info
               indent

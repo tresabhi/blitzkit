@@ -20,8 +20,8 @@ export function resolveDpm(
   } else {
     return (
       ((alpha * gun.count) /
-        (gun.reload.reduce((a, b) => a + b, 0) +
-          (gun.count - 1) * gun.intraClip)) *
+        (reloadCoefficient * gun.reload.reduce((a, b) => a + b, 0) +
+          (gun.count - 1) * gun.intraClip * intraClipCoefficient)) *
       60
     );
   }

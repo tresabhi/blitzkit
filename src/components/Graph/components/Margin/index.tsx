@@ -1,13 +1,9 @@
 import { times } from 'lodash';
-import { theme } from '../../../stitches.config';
-import { MarginInputProps } from './Root';
+import { theme } from '../../../../stitches.config';
+import { MarginInputProps } from '../Root';
+import { MarginOrientation } from './constants';
 
-export enum MarginOrientation {
-  Vertical,
-  Horizontal,
-}
-
-export interface MarginProps extends MarginInputProps {
+interface MarginProps extends MarginInputProps {
   verticalSeparations: number;
   orientation?: MarginOrientation;
 }

@@ -1,9 +1,6 @@
 import { degToRad } from 'three/src/math/MathUtils';
-import {
-  DuelMember,
-  genericDefaultEquipmentMatrix,
-  mutateDuel,
-} from '../../stores/duel';
+import { DuelMember, mutateDuel } from '../../stores/duel';
+import { genericDefaultEquipmentMatrix } from '../../stores/duel/constants';
 import { availableProvisions } from './availableProvisions';
 import { modelDefinitions } from './modelDefinitions';
 import { provisionDefinitions } from './provisionDefinitions';

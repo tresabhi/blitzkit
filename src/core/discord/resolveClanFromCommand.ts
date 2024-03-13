@@ -4,7 +4,7 @@ import { Region } from '../../constants/regions';
 import { UserError } from '../../hooks/userError';
 import searchClansAcrossRegions from '../blitz/searchClansAcrossRegions';
 import { translator } from '../localization/translator';
-import { serverAndIdPattern } from './resolvePlayerFromCommand';
+import { serverAndIdPattern } from './resolvePlayerFromCommand/constants';
 
 export default async function resolveClanFromCommand(
   interaction: ChatInputCommandInteraction,

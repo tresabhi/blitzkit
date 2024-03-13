@@ -7,7 +7,7 @@ import {
 } from '../../../constants/radixColors';
 import PercentileIndicator from '../../PercentileIndicator';
 
-export interface RowStatProps {
+interface RowStatProps {
   name: string;
   value?: string | number;
   delta?: number;

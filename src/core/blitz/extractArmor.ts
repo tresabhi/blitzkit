@@ -6,12 +6,8 @@ import { VertexAttribute } from '../streams/scpg';
 import {
   vertexAttributeGLTFName,
   vertexAttributeGltfVectorSizes,
-} from './extractModel';
+} from './extractModel/constants';
 import { readDVPLFile } from './readDVPLFile';
-
-Buffer.prototype.toJSON = function () {
-  return [...(this as Buffer)].map((int) => int.toString(16)).join('');
-};
 
 export async function extractArmor(data: string, fileName: string) {
   const sc2Path = `${data}/3d/Tanks/CollisionMeshes/${fileName}.sc2.dvpl`;

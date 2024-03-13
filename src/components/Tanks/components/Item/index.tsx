@@ -1,37 +1,10 @@
-import {
-  TANK_ICONS,
-  TANK_ICONS_COLLECTOR,
-  TANK_ICONS_PREMIUM,
-} from '../../../core/blitzkrieg/tankDefinitions';
-import { theme } from '../../../stitches.config';
-
-export const TANK_CLASSES = [
-  'lightTank',
-  'mediumTank',
-  'heavyTank',
-  'AT-SPG',
-] as const;
-
-export const TREE_TYPES = ['researchable', 'premium', 'collector'] as const;
+import { theme } from '../../../../stitches.config';
+import { TANK_CLASSES, TREE_TYPES, TREE_TYPE_ICONS } from './constants';
 
 export type TankClass = (typeof TANK_CLASSES)[number];
 export type TreeType = (typeof TREE_TYPES)[number];
 
-// BIG TODO: REMOVE THIS AFTER LOCALIZATION
-export const TREE_TYPE_NAMES: Record<TreeType, string> = {
-  researchable: 'Tech tree',
-  premium: 'Premium',
-  collector: 'Collector',
-};
-
-export const TREE_TYPE_IMAGES: Record<TreeType, string> = {
-  researchable: 'https://i.imgur.com/pJxO2XY.png',
-  premium: 'https://i.imgur.com/mZzSwOU.png',
-  collector: 'https://i.imgur.com/7A0RsG5.png',
-};
-
 export interface ItemProps {
-  image?: string;
   tankType?: TankClass;
   name: string;
   treeType: TreeType;
@@ -43,13 +16,7 @@ const TREE_TYPE_COLOR = {
   collector: '_blue',
 } as const;
 
-export const TREE_TYPE_ICONS: Record<TreeType, Record<TankClass, string>> = {
-  researchable: TANK_ICONS,
-  premium: TANK_ICONS_PREMIUM,
-  collector: TANK_ICONS_COLLECTOR,
-};
-
-export function Item({ image, tankType, name, treeType }: ItemProps) {
+export function Item({ tankType, name, treeType }: ItemProps) {
   return (
     <div
       style={{

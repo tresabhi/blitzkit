@@ -170,7 +170,7 @@ export function SpacedArmorSceneComponent({
                 const distance = (
                   shot.layers.at(-1) as ShotLayerBase
                 ).point.distanceTo(intersections[0].point);
-                if (explosive && !splashing)
+                if (explosive)
                   remainingPenetration -= 0.5 * remainingPenetration * distance;
                 const blocked = remainingPenetration < 0;
 
@@ -196,7 +196,7 @@ export function SpacedArmorSceneComponent({
                   const previousIntersection = intersections[layerIndex - 1];
                   const distance =
                     intersection.distance - previousIntersection.distance;
-                  if (explosive && !splashing)
+                  if (explosive)
                     remainingPenetration -=
                       0.5 * remainingPenetration * distance;
                   const wasted = remainingPenetration < 0;

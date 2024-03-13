@@ -3,10 +3,8 @@ import markdownEscape from 'markdown-escape';
 import { Region } from '../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import fetchBlitz from '../core/blitz/fetchBlitz';
-import {
-  AccountList,
-  usernamePattern,
-} from '../core/blitz/searchPlayersAcrossRegions';
+import { AccountList } from '../core/blitz/searchPlayersAcrossRegions';
+import { usernamePattern } from '../core/blitz/searchPlayersAcrossRegions/constants';
 import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';

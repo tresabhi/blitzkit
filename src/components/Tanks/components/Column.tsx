@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-export interface ColumnProps {
+interface ColumnProps {
   children: ReactNode;
 }
 

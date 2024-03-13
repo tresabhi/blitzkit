@@ -7,7 +7,7 @@ import { Card } from './components/Card';
 import { Root } from './components/Root';
 import { Row } from './components/Row';
 
-export interface GenericAllStatsProps {
+interface GenericAllStatsProps {
   stats: AllStats;
   supplementaryStats?: SupplementaryStats;
   locale: Locale;

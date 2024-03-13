@@ -1,7 +1,7 @@
 import { UpdateIcon } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, Heading } from '@radix-ui/themes';
 import { useState } from 'react';
-import { TREE_TYPE_ICONS } from '../../../../../components/Tanks';
+import { TREE_TYPE_ICONS } from '../../../../../components/Tanks/components/Item/constants';
 import { assignDuelMember } from '../../../../../core/blitzkrieg/assignDuelMember';
 import { pushTankopediaPath } from '../../../../../core/blitzkrieg/pushTankopediaPath';
 import { useDuel } from '../../../../../stores/duel';

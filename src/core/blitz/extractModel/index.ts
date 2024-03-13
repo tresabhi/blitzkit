@@ -1,51 +1,26 @@
 import { Document, Material, Node, Scene } from '@gltf-transform/core';
 import { times } from 'lodash';
 import { dirname } from 'path';
+import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
+import { readTexture } from '../../blitzkrieg/readTexture';
+import { TextureMutation } from '../../blitzkrieg/readTexture/constants';
+import { Hierarchy, Sc2ReadStream, Textures } from '../../streams/sc2';
+import { ScgReadStream } from '../../streams/scg';
+import { VertexAttribute } from '../../streams/scpg';
+import { readDVPLFile } from '../readDVPLFile';
 import {
-  Matrix4,
-  Quaternion,
-  Vector3,
-  Vector3Tuple,
-  Vector4Tuple,
-} from 'three';
-import { TextureMutation, readTexture } from '../blitzkrieg/readTexture';
-import { Hierarchy, Sc2ReadStream, Textures } from '../streams/sc2';
-import { ScgReadStream, vertexAttributeVectorSizes } from '../streams/scg';
-import { VertexAttribute } from '../streams/scpg';
-import { readDVPLFile } from './readDVPLFile';
+  vertexAttributeGLTFName,
+  vertexAttributeGltfVectorSizes,
+} from './constants';
 
 const ERROR_ON_UNKNOWN_COMPONENT = false;
-const MAX_FLOAT32 = 2 ** 127 * (2 - 2 ** -23);
-
-export const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> =
-  {
-    [VertexAttribute.VERTEX]: 'POSITION',
-    [VertexAttribute.NORMAL]: 'NORMAL',
-    [VertexAttribute.TEXCOORD0]: 'TEXCOORD_0',
-    [VertexAttribute.TEXCOORD1]: 'TEXCOORD_0',
-    [VertexAttribute.TEXCOORD2]: 'TEXCOORD_0',
-    [VertexAttribute.TEXCOORD3]: 'TEXCOORD_0',
-    [VertexAttribute.TANGENT]: 'TANGENT',
-    [VertexAttribute.JOINTINDEX]: 'JOINT_0',
-    [VertexAttribute.JOINTWEIGHT]: 'WEIGHT_0',
-  };
-
-export const vertexAttributeGltfVectorSizes = {
-  ...vertexAttributeVectorSizes,
-
-  [VertexAttribute.TANGENT]: 4,
-} as const;
 
 const omitMeshNames = {
   start: ['chassis_chassis_', 'chassis_track_crash_', 'HP_'],
   end: ['_POINT'],
 };
 
-export async function extractModel(
-  data: string,
-  path: string,
-  baseColor?: Vector3Tuple,
-) {
+export async function extractModel(data: string, path: string) {
   const sc2Path = `${data}/3d/${path}.sc2.dvpl`;
   const scgPath = `${data}/3d/${path}.scg.dvpl`;
   const sc2 = new Sc2ReadStream((await readDVPLFile(sc2Path)).buffer).sc2();
@@ -86,9 +61,7 @@ export async function extractModel(
             .setImage(
               await readTexture(
                 `${data}/3d/${dirname(path)}/${textures.albedo}`,
-                baseColor
-                  ? { mutation: TextureMutation.BaseColor, baseColor }
-                  : undefined,
+                TextureMutation.Albedo,
               ),
             ),
         );
@@ -101,7 +74,7 @@ export async function extractModel(
               .setImage(
                 await readTexture(
                   `${data}/3d/${dirname(path)}/${textures.baseRMMap}`,
-                  { mutation: TextureMutation.RoughnessMetallicness },
+                  TextureMutation.RoughnessMetallicness,
                 ),
               ),
           );
@@ -119,7 +92,7 @@ export async function extractModel(
                   `${data}/3d/${dirname(path)}/${
                     textures.baseNormalMap ?? textures.normalmap
                   }`,
-                  isBase ? { mutation: TextureMutation.Normal } : undefined,
+                  isBase ? TextureMutation.Normal : undefined,
                 ),
               ),
           );
@@ -133,7 +106,7 @@ export async function extractModel(
               .setImage(
                 await readTexture(
                   `${data}/3d/${dirname(path)}/${textures.miscMap}`,
-                  { mutation: TextureMutation.Miscellaneous },
+                  TextureMutation.Miscellaneous,
                 ),
               ),
           );

@@ -1,11 +1,13 @@
 import { Locale } from 'discord.js';
-import { SUPPORTED_LOCALES, translations } from './strings';
+import { translations } from './strings';
+import { SUPPORTED_LOCALES } from './strings/constants';
 
 export function translator(localeRaw: Locale) {
-  const locale = SUPPORTED_LOCALES.includes(localeRaw)
-    ? localeRaw
-    : Locale.EnglishUS;
-  const strings = translations[locale];
+  const locale =
+    localeRaw !== Locale.EnglishUS && SUPPORTED_LOCALES.includes(localeRaw)
+      ? localeRaw
+      : Locale.EnglishUS;
+  const strings = translations[locale]!;
 
   function translate(path: string, literals?: string[]): string {
     const pathArray = path.split('.');

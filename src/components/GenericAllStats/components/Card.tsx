@@ -2,13 +2,13 @@ import { Percentile } from '../../../constants/percentiles';
 import { theme } from '../../../stitches.config';
 import PercentileIndicator from '../../PercentileIndicator';
 
-export interface CardItem {
+interface CardItem {
   label: string;
   value: string | number | undefined;
   percentile?: Percentile;
 }
 
-export interface CardProps {
+interface CardProps {
   items: CardItem[];
   title: string;
 }

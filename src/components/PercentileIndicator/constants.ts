@@ -10,11 +10,7 @@ import {
   slate,
   teal,
 } from '@radix-ui/colors';
-import { Percentile } from '../constants/percentiles';
-
-export interface PercentileIndicatorProps {
-  percentile: Percentile;
-}
+import { Percentile } from '../../constants/percentiles';
 
 export const PERCENTILE_COLORS = {
   [Percentile.VeryBad]: slate.slate9,
@@ -28,18 +24,3 @@ export const PERCENTILE_COLORS = {
   [Percentile.Unicum]: pink.pink9,
   [Percentile.SuperUnicum]: purple.purple9,
 };
-
-export default function PercentileIndicator({
-  percentile,
-}: PercentileIndicatorProps) {
-  return (
-    <div
-      style={{
-        width: 8,
-        height: 8,
-        borderRadius: 4,
-        backgroundColor: PERCENTILE_COLORS[percentile],
-      }}
-    />
-  );
-}

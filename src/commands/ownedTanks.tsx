@@ -7,12 +7,11 @@ import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
 import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
 import {
-  TIER_ROMAN_NUMERALS,
   TankDefinition,
   Tier,
   tankDefinitions,
 } from '../core/blitzkrieg/tankDefinitions';
-import { tankIcon } from '../core/blitzkrieg/tankIcon';
+import { TIER_ROMAN_NUMERALS } from '../core/blitzkrieg/tankDefinitions/constants';
 import addTierChoices from '../core/discord/addTierChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
@@ -100,7 +99,6 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
                               key={tank.id}
                               name={tank.name}
                               tankType={tank.class}
-                              image={tankIcon(tank.id)}
                               treeType={tank.treeType}
                             />
                           )),
@@ -113,7 +111,6 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
                               key={tank.id}
                               name={tank.name}
                               tankType={tank.class}
-                              image={tankIcon(tank.id)}
                               treeType={tank.treeType}
                             />
                           )),

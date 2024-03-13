@@ -1,6 +1,7 @@
-import { Region } from '../../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
-import fetchBlitz from './fetchBlitz';
+import { Region } from '../../../constants/regions';
+import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
+import fetchBlitz from '../fetchBlitz';
+import { usernamePattern } from './constants';
 
 export interface AccountListItem {
   nickname: string;
@@ -10,9 +11,6 @@ export type AccountList = AccountListItem[];
 export type AccountListWithServer = (AccountListItem & {
   region: Region;
 })[];
-
-export const usernamePattern = /^[a-zA-Z0-9_]{3,24}$/;
-export const usernamePatternWithoutPosition = /[a-zA-Z0-9_]{3,24}/;
 
 export default async function searchPlayersAcrossRegions(
   search: string,

@@ -3,7 +3,7 @@ import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID
 import fetchBlitz from './fetchBlitz';
 import { normalizeIds } from './normalizeIds';
 
-export interface IndividualClanInfo {
+interface IndividualClanInfo {
   recruiting_options: {
     vehicles_level: number;
     wins_ratio: number;
@@ -32,7 +32,7 @@ export interface IndividualClanInfo {
   description: string;
 }
 
-export interface ClanInfo {
+interface ClanInfo {
   [clanId: number]: IndividualClanInfo;
 }
 

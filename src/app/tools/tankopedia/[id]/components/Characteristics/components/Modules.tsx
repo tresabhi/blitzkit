@@ -1,6 +1,6 @@
 import { Flex, Heading } from '@radix-ui/themes';
 import { ModuleButton } from '../../../../../../../components/ModuleButtons/ModuleButton';
-import { TIER_ROMAN_NUMERALS } from '../../../../../../../core/blitzkrieg/tankDefinitions';
+import { TIER_ROMAN_NUMERALS } from '../../../../../../../core/blitzkrieg/tankDefinitions/constants';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import { mutateTankopediaTemporary } from '../../../../../../../stores/tankopedia';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';

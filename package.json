@@ -1,6 +1,6 @@
 {
   "name": "blitzkrieg",
-  "version": "1.16.2",
+  "version": "1.16.4",
   "description": "🎉 Tools for everything World of Tanks Blitz",
   "main": "src/server.ts",
   "type": "module",
@@ -19,6 +19,7 @@
     "start:website": "next start",
     "host:docs": "vitepress preview docs",
     "publish:ratingsleaderboard": "vite-node --script scripts/buildRatingsLeaderboard --publish",
+    "setup:patches": "vite-node --script scripts/applyPatches",
     "lint": "npx tsc",
     "lint:website": "next lint",
     "format": "prettier --write \"**/*.@(json|js|jsx|css|md|ts|tsx|html|xml|yml|gltf)\"",

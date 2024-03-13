@@ -19,7 +19,7 @@ import { pushTankopediaPath } from '../../../../../core/blitzkrieg/pushTankopedi
 import {
   SHELL_NAMES,
   TIER_ROMAN_NUMERALS,
-} from '../../../../../core/blitzkrieg/tankDefinitions';
+} from '../../../../../core/blitzkrieg/tankDefinitions/constants';
 import { mutateDuel, useDuel } from '../../../../../stores/duel';
 import {
   mutateTankopediaTemporary,

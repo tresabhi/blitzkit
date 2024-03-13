@@ -2,7 +2,6 @@ name: CD Build Assets
 
 on:
   push:
-    branches: [dev, main]
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * *'
@@ -18,6 +17,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Use node
         uses: actions/setup-node@v4
@@ -45,6 +47,14 @@ jobs:
 
       - name: Run DepotDownloader
         run: ./temp/depotDownloader/DepotDownloader.exe -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
+
+      - name: Apply patches
+        run: |
+          $env:GH_TOKEN = "${{ secrets.GH_TOKEN }}"
+          $env:DISCORD_TOKEN = "${{ secrets.DISCORD_TOKEN }}"
+          $env:DISCORD_BLITZ_DB = "${{ secrets.DISCORD_BLITZ_DB }}"
+          $env:WOTB_DLC_CDN = "${{ secrets.WOTB_DLC_CDN }}"
+          yarn setup:patches --depot
 
       - name: Build assets
         run: |

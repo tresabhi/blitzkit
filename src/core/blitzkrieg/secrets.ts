@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 
 config();
 
-export const SECRET_KEYS = [
+const SECRET_KEYS = [
   'DISCORD_TOKEN',
   'GH_TOKEN',
   'DISCORD_BLITZ_DB',

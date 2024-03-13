@@ -1,6 +1,7 @@
 import { Locale, SlashCommandSubcommandGroupBuilder } from 'discord.js';
 import CommandWrapper from '../components/CommandWrapper';
 import * as Graph from '../components/Graph';
+import { LineColor } from '../components/Graph/components/Line/constants';
 import NoData from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
@@ -93,7 +94,7 @@ async function render(
           xMaxLabel={new Date(maxTime * 1000).toLocaleDateString(locale)}
         >
           {Graph.Line({
-            color: Graph.LineColor.Red,
+            color: LineColor.Red,
             plot: plot,
             minY,
             maxY,
