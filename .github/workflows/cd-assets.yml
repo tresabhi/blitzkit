@@ -53,6 +53,7 @@ jobs:
           $env:GH_TOKEN = "${{ secrets.GH_TOKEN }}"
           $env:DISCORD_TOKEN = "${{ secrets.DISCORD_TOKEN }}"
           $env:DISCORD_BLITZ_DB = "${{ secrets.DISCORD_BLITZ_DB }}"
+          $env:WOTB_DLC_CDN = "${{ secrets.WOTB_DLC_CDN }}"
           yarn setup:patches --depot
 
       - name: Build assets
