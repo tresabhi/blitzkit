@@ -53,7 +53,7 @@ void main() {
       float spacedArmorThickness = spacedArmorBufferFragment.r * penetration;
       remainingPenetration -= spacedArmorThickness;
 
-      if (isExplosive && !canSplash && remainingPenetration > 0.0) {
+      if (isExplosive && remainingPenetration > 0.0) {
         // there is a 50% penetration loss per meter for HEAT shells
         remainingPenetration -= 0.5 * remainingPenetration * distanceFromSpacedArmor;
       }
