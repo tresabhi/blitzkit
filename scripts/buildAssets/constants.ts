@@ -24,7 +24,7 @@ export const POI = {
   collisionMeshes: '3d/Tanks/CollisionMeshes',
   optionalDevices: 'XML/item_defs/vehicles/common/optional_devices.xml',
   optionalDeviceSlots:
-    'XML/item_defs/vehicles/common/optional_device_slots.xml',
+    'XML/item_defs/vehicles/common/optional_device_slots.xml',  
   optionalDeviceImageMappings:
     'UI/Screens3/Lobby/Inventory/OptionalDevices/OptionalDevicesItemImage.style.yaml',
   optionalDevicesImage:
