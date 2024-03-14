@@ -32,10 +32,9 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
     async handler(interaction) {
       const { translate } = translator(interaction.locale);
       const tier = Number(interaction.options.getString('tier'));
-      const account = await resolvePlayerFromCommand(interaction);
-      const { id, region: server } = account;
-      const accountInfo = await getAccountInfo(server, id);
-      const tankStats = await getTankStats(server, id, interaction.locale);
+      const { id, region } = await resolvePlayerFromCommand(interaction);
+      const accountInfo = await getAccountInfo(region, id);
+      const tankStats = await getTankStats(region, id, interaction.locale);
       const filteredTanks = (
         await Promise.all(
           tankStats.map(async (tankData) => ({
@@ -44,7 +43,7 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
           })),
         )
       ).filter((tank) => tank.tankDefinitions?.tier === tier);
-      const clanAccountInfo = await getClanAccountInfo(server, id, ['clan']);
+      const clanAccountInfo = await getClanAccountInfo(region, id, ['clan']);
       const groupedTanks: Record<string, TankDefinition[]> = {};
       const nations: string[] = [];
 

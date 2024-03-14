@@ -1022,7 +1022,6 @@ export async function definitions(production: boolean) {
 
   writeFile('test.json', JSON.stringify(tankDefinitions, null, 2));
 
-  return;
   await commitAssets(
     'definitions',
     [

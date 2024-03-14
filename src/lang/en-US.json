@@ -195,6 +195,11 @@
     },
 
     "commands": {
+      "research": {
+        "$": "research",
+        "description": "Lists the expenses in researching a line"
+      },
+
       "about": {
         "$": "about",
         "description": "All the info you need about the bot",
