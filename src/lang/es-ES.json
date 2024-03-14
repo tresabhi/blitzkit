@@ -371,7 +371,7 @@
           "no_ongoing_season": "# No hay temporada en curso\n\nActualmente no hay ninguna temporada de clasificación.",
           "deleted_player": "%s eliminado",
           "neighbors": "Vecinos de clasificación",
-          "more": "+%s más"
+          "more": "+ %s más"
         }
       },
       "today": {
