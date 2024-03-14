@@ -22,6 +22,8 @@ export interface Crew {
 export interface TankDefinition {
   id: number;
   fixedCamouflage?: boolean;
+  ancestors?: number[];
+  successors?: number[];
   crew: Crew[];
   health: number;
   nation: string;
