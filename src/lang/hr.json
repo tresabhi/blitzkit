@@ -371,7 +371,7 @@
           "no_ongoing_season": "# No ongoing season\n\nThere isn't a currently running ratings season.",
           "deleted_player": "Deleted %s",
           "neighbors": "Ratings neighbors",
-          "more": "+%s more"
+          "more": "+ %s more"
         }
       },
       "today": {
