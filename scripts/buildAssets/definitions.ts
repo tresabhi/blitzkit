@@ -1,4 +1,4 @@
-import { readdir, writeFile } from 'fs/promises';
+import { readdir } from 'fs/promises';
 import { parse as parsePath } from 'path';
 import { Vector3Tuple } from 'three';
 import { parse as parseYaml } from 'yaml';
@@ -367,6 +367,12 @@ export async function definitions(production: boolean) {
   const provisions = await readXMLDVPL<{ root: ProvisionsCommon }>(
     `${DATA}/${POI.provisionsCommon}.dvpl`,
   );
+
+  const tankXps = new Map<number, number>();
+  const gunXps = new Map<number, number>();
+  const turretXps = new Map<number, number>();
+  const engineXps = new Map<number, number>();
+  const trackXps = new Map<number, number>();
 
   await Promise.all(
     nations.map(async (nation) => {
@@ -830,19 +836,57 @@ export async function definitions(production: boolean) {
 
         totalUnlocks.forEach((unlocks) => {
           if (unlocks === undefined) return;
+
           Object.entries(unlocks).forEach(([key, value]) => {
-            if ((key as keyof Unlocks) !== 'vehicle') return;
-
             (Array.isArray(value) ? value : [value]).forEach((vehicle) => {
-              const tankListEntry = tankList.root[vehicle['#text']];
-              const successorId = toUniqueId(nation, tankListEntry.id);
+              switch (key as keyof Unlocks) {
+                case 'vehicle': {
+                  const tankListEntry = tankList.root[vehicle['#text']];
+                  const currentTank = tankDefinitions[tankId];
+                  const successorId = toUniqueId(nation, tankListEntry.id);
 
-              if (tankDefinitions[tankId].successors === undefined) {
-                tankDefinitions[tankId].successors = [];
-              }
+                  tankXps.set(successorId, vehicle.cost);
 
-              if (!tankDefinitions[tankId].successors!.includes(successorId)) {
-                tankDefinitions[tankId].successors!.push(successorId);
+                  if (currentTank.successors === undefined) {
+                    currentTank.successors = [];
+                  }
+                  if (!currentTank.successors!.includes(successorId)) {
+                    currentTank.successors!.push(successorId);
+                  }
+                  break;
+                }
+
+                case 'gun': {
+                  gunXps.set(
+                    toUniqueId(nation, gunList.root.ids[vehicle['#text']]),
+                    vehicle.cost,
+                  );
+                  break;
+                }
+
+                case 'turret': {
+                  turretXps.set(
+                    toUniqueId(nation, turretList.root.ids[vehicle['#text']]),
+                    vehicle.cost,
+                  );
+                  break;
+                }
+
+                case 'engine': {
+                  engineXps.set(
+                    toUniqueId(nation, enginesList.root.ids[vehicle['#text']]),
+                    vehicle.cost,
+                  );
+                  break;
+                }
+
+                case 'chassis': {
+                  trackXps.set(
+                    toUniqueId(nation, chassisList.root.ids[vehicle['#text']]),
+                    vehicle.cost,
+                  );
+                  break;
+                }
               }
             });
           });
@@ -850,6 +894,26 @@ export async function definitions(production: boolean) {
       }
     }),
   );
+
+  Object.values(tankDefinitions).forEach((tank) => {
+    tank.xp = tankXps.get(tank.id);
+
+    Object.values(tank.turrets).forEach((turret) => {
+      turret.xp = turretXps.get(turret.id);
+
+      Object.values(turret.guns).forEach((gun) => {
+        gun.xp = gunXps.get(gun.id);
+      });
+    });
+
+    Object.values(tank.engines).forEach((engine) => {
+      engine.xp = engineXps.get(engine.id);
+    });
+
+    Object.values(tank.tracks).forEach((track) => {
+      track.xp = trackXps.get(track.id);
+    });
+  });
 
   Object.values(tankDefinitions).forEach((tank) => {
     tank.successors?.forEach((predecessorId) => {
@@ -1019,8 +1083,6 @@ export async function definitions(production: boolean) {
         provision.script.bonusValues?.crewLevelIncrease;
     }
   });
-
-  writeFile('test.json', JSON.stringify(tankDefinitions, null, 2));
 
   await commitAssets(
     'definitions',
