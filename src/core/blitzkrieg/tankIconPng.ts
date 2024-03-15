@@ -1,9 +1,6 @@
-import sharp from 'sharp';
+import { iconPng } from './iconPng';
 import { tankIcon } from './tankIcon';
 
-export async function tankIconPng(id: number) {
-  const imageResponse = await fetch(tankIcon(id));
-  const imageBufferWEBP = await imageResponse.arrayBuffer();
-  const imageBufferPNG = await sharp(imageBufferWEBP).png().toBuffer();
-  return `data:image/png;base64,${imageBufferPNG.toString('base64')}`;
+export function tankIconPng(id: number) {
+  return iconPng(tankIcon(id));
 }
