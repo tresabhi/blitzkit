@@ -31,6 +31,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
     inProduction: true,
     inPublic: true,
+    inPreview: true,
 
     command: createLocalizedCommand('research')
       .addStringOption((option) =>

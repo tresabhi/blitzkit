@@ -55,6 +55,7 @@ export type InteractionReturnable =
 interface CommandRegistryBase {
   inProduction: boolean;
   inPublic: boolean;
+  inPreview?: boolean;
 
   command:
     | SlashCommandBuilder
