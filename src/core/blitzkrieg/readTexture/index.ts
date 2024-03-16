@@ -36,7 +36,7 @@ export async function readTexture(path: string, mutation?: TextureMutation) {
         raw.data[index + 3] = 255;
       }
 
-      return await sharp(raw.data, { raw }).png().toBuffer();
+      return await sharp(raw.data, { raw }).jpeg().toBuffer();
     }
 
     case TextureMutation.RoughnessMetallicness: {
@@ -45,16 +45,16 @@ export async function readTexture(path: string, mutation?: TextureMutation) {
       });
       const metallicness = sharp(raw.data, { raw })
         .extractChannel('green')
-        .png()
+        .jpeg()
         .toBuffer();
       const roughness = sharp(raw.data, { raw })
         .extractChannel('alpha')
-        .png()
+        .jpeg()
         .toBuffer();
 
       return await newImage
         .joinChannel(await Promise.all([roughness, metallicness]))
-        .png()
+        .jpeg()
         .toBuffer();
     }
 
@@ -65,15 +65,15 @@ export async function readTexture(path: string, mutation?: TextureMutation) {
        */
       return await sharp(raw.data, { raw })
         .extractChannel('alpha')
-        .png()
+        .jpeg()
         .toBuffer();
     }
 
     case TextureMutation.Albedo: {
-      return await sharp(raw.data, { raw }).removeAlpha().png().toBuffer();
+      return await sharp(raw.data, { raw }).removeAlpha().jpeg().toBuffer();
     }
 
     default:
-      return await sharp(raw.data, { raw }).png().toBuffer();
+      return await sharp(raw.data, { raw }).jpeg().toBuffer();
   }
 }

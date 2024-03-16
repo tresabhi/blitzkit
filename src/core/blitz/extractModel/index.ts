@@ -57,7 +57,7 @@ export async function extractModel(data: string, path: string) {
         material.setBaseColorTexture(
           document
             .createTexture(node.materialName)
-            .setMimeType('image/png')
+            .setMimeType('image/jpeg')
             .setImage(
               await readTexture(
                 `${data}/3d/${dirname(path)}/${textures.albedo}`,
@@ -70,7 +70,7 @@ export async function extractModel(data: string, path: string) {
           material.setMetallicRoughnessTexture(
             document
               .createTexture(node.materialName)
-              .setMimeType('image/png')
+              .setMimeType('image/jpeg')
               .setImage(
                 await readTexture(
                   `${data}/3d/${dirname(path)}/${textures.baseRMMap}`,
@@ -86,7 +86,7 @@ export async function extractModel(data: string, path: string) {
           material.setNormalTexture(
             document
               .createTexture(node.materialName)
-              .setMimeType('image/png')
+              .setMimeType('image/jpeg')
               .setImage(
                 await readTexture(
                   `${data}/3d/${dirname(path)}/${
@@ -102,7 +102,7 @@ export async function extractModel(data: string, path: string) {
           material.setOcclusionTexture(
             document
               .createTexture(node.materialName)
-              .setMimeType('image/png')
+              .setMimeType('image/jpeg')
               .setImage(
                 await readTexture(
                   `${data}/3d/${dirname(path)}/${textures.miscMap}`,
