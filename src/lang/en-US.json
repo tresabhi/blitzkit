@@ -500,7 +500,7 @@
           "view_channels": "View channels: needed to find the message the refresh button was used on",
           "read_message_history": "Read message history: needed to find the message to refresh",
           "attach_files": "Attach files: needed to add images to image-based commands",
-          "external_emojis": "External emojis: needed add national flags and tank class emojis"
+          "external_emojis": "External emojis: needed to add national flags and tank class emojis"
         }
       },
 
