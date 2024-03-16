@@ -170,7 +170,8 @@
         "tank_id_not_found": "# Tanque no encontrado\nNo se pudo encontrar al tanque del ID \"%s\". Prueba escribiendo el nombre del tanque en vez de un número.",
         "no_tank_stats": "# No hay estadísticas de tanque disponibles\nEste jugador no tiene estadísticas disponibles. Este podría no ser el jugador que estás buscando.",
         "get_help": "Servidor de ayuda de Discord",
-        "uncaught_error": "# ¡Blitzkrieg sufrió un error!\nLo sentimos mucho. Siéntete libre de [unirte al servidor oficial de Discord](https://discord.gg/nDt7AjGJQH) para obtener ayuda."
+        "uncaught_error": "# ¡Blitzkrieg sufrió un error!\nLo sentimos mucho. Siéntete libre de [unirte al servidor oficial de Discord](https://discord.gg/nDt7AjGJQH) para obtener ayuda.",
+        "preview": "# This command is in preview\n\nYou can only access this command in [the official Discord server](https://discord.gg/nDt7AjGJQH). The command will be generally available soon."
       }
     },
     "commands": {
