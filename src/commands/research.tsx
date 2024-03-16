@@ -1,4 +1,4 @@
-import { escapeMarkdown } from 'discord.js';
+import { Locale, escapeMarkdown } from 'discord.js';
 import CommandWrapper from '../components/CommandWrapper';
 import TitleBar from '../components/TitleBar';
 import { equipmentPriceMatrix } from '../constants/equipmentPrice';
@@ -17,62 +17,207 @@ import {
   TIER_ROMAN_NUMERALS,
 } from '../core/blitzkrieg/tankDefinitions/constants';
 import { tankIconPng } from '../core/blitzkrieg/tankIconPng';
-import addTankChoices from '../core/discord/addTankChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
+import { localizationObject } from '../core/discord/localizationObject';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
+import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
 import { theme } from '../stitches.config';
 
 export const researchCommand = new Promise<CommandRegistry>((resolve) => {
+  const { t } = translator(Locale.EnglishUS);
+
   resolve({
     inProduction: true,
     inPublic: true,
 
-    command: createLocalizedCommand('research').addStringOption(addTankChoices),
+    command: createLocalizedCommand('research')
+      .addStringOption((option) =>
+        option
+          .setName(t`bot.commands.research.options.target_tank`)
+          .setNameLocalizations(
+            localizationObject('bot.commands.research.options.target_tank'),
+          )
+          .setDescription(
+            t`bot.commands.research.options.target_tank.description`,
+          )
+          .setDescriptionLocalizations(
+            localizationObject(
+              'bot.commands.research.options.target_tank.description',
+            ),
+          )
+          .setAutocomplete(true)
+          .setRequired(true),
+      )
+      .addStringOption((option) =>
+        option
+          .setName(t`bot.commands.research.options.starting_tank`)
+          .setNameLocalizations(
+            localizationObject('bot.commands.research.options.starting_tank'),
+          )
+          .setDescription(
+            t`bot.commands.research.options.starting_tank.description`,
+          )
+          .setDescriptionLocalizations(
+            localizationObject(
+              'bot.commands.research.options.starting_tank.description',
+            ),
+          )
+          .setAutocomplete(true)
+          .setRequired(false),
+      ),
 
     async handler(interaction) {
+      const { t, translate } = translator(interaction.locale);
       const awaitedTankDefinitions = await tankDefinitions;
-      const tankId = await resolveTankId(
-        interaction.options.getString('tank', true),
+      const targetTankId = await resolveTankId(
+        interaction.options.getString('target-tank', true),
         interaction.locale,
+        true,
       );
-      const tank = awaitedTankDefinitions[tankId];
-
-      if (tank.treeType !== 'researchable') {
-        return `# ${escapeMarkdown(tank.name)} is not researchable\n\nThis tank is not on the tech tree.`;
-      }
-
-      if (tank.tier === 1) {
-        return `# ${escapeMarkdown(tank.name)} is not researchable\n\nThis tank is a tier I and is always unlocked.`;
-      }
-
+      const startingTankRaw = interaction.options.getString('starting-tank');
+      const targetTank = awaitedTankDefinitions[targetTankId];
       const { id, region } = await resolvePlayerFromCommand(interaction);
-      const tankStats = await getTankStats(region, id, interaction.locale);
-      const ancestry = await resolveAncestry(tankId);
-      const firstOwnedTechTree = ancestry.find(
-        (id) =>
-          awaitedTankDefinitions[id].tier === 1 ||
-          tankStats.some(({ tank_id }) => tank_id === id),
-      );
+      let startingTankId: number;
+      const targetTankAncestry = await resolveAncestry(targetTankId);
 
-      if (firstOwnedTechTree === undefined) {
-        throw new Error('No first owned tech tree found.');
+      if (startingTankRaw) {
+        startingTankId = await resolveTankId(
+          startingTankRaw,
+          interaction.locale,
+          true,
+        );
+
+        if (targetTankId === startingTankId) {
+          return translate('bot.commands.research.errors.start_end_equal', [
+            escapeMarkdown(targetTank.name),
+          ]);
+        }
+
+        const startingTank = awaitedTankDefinitions[startingTankId];
+
+        if (startingTank.tier > targetTank.tier) {
+          return translate('bot.commands.research.errors.unordered', [
+            escapeMarkdown(startingTank.name),
+            escapeMarkdown(targetTank.name),
+            escapeMarkdown(targetTank.name),
+          ]);
+        }
+
+        if (!targetTankAncestry.includes(startingTankId)) {
+          return translate('bot.commands.research.errors.tanks_not_on_line', [
+            escapeMarkdown(targetTank.name),
+            escapeMarkdown(startingTank.name),
+          ]);
+        }
+      } else {
+        if (targetTank.treeType !== 'researchable') {
+          return translate('bot.commands.research.errors.non_tech_tree', [
+            escapeMarkdown(targetTank.name),
+          ]);
+        }
+
+        if (targetTank.tier === 1) {
+          return translate('bot.commands.research.errors.tier_1', [
+            escapeMarkdown(targetTank.name),
+          ]);
+        }
+
+        const tankStats = await getTankStats(region, id, interaction.locale);
+
+        if (tankStats.some(({ tank_id }) => tank_id === targetTankId)) {
+          return translate('bot.commands.research.errors.already_researched', [
+            escapeMarkdown(targetTank.name),
+          ]);
+        }
+
+        const foundAncestor = targetTankAncestry.find(
+          (id) =>
+            awaitedTankDefinitions[id].tier === 1 ||
+            tankStats.some(({ tank_id }) => tank_id === id),
+        );
+
+        if (foundAncestor === undefined) {
+          throw new Error('No first owned tech tree found.');
+        }
+
+        startingTankId = foundAncestor;
       }
 
-      const line = (
-        await buildTechTreeLine(firstOwnedTechTree, tankId)
-      ).reverse();
+      const techTreeLine = await buildTechTreeLine(
+        startingTankId,
+        targetTankId,
+      );
+
+      const line = [...techTreeLine, startingTankId].reverse();
       const { nickname } = await getAccountInfo(region, id);
       const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
       const clanImage = clan ? emblemIdToURL(clan.emblem_set_id) : undefined;
+      const costs = await Promise.all(
+        line.map(async (id) => {
+          const tank = awaitedTankDefinitions[id];
+          const turretXps = new Map<number, number>();
+          const gunXps = new Map<number, number>();
+          const engineXps = new Map<number, number>();
+          const trackXps = new Map<number, number>();
 
-      return (
+          tank.turrets.forEach((turret) => {
+            if (turret.xp !== undefined) {
+              turretXps.set(turret.id, turret.xp);
+            }
+
+            turret.guns.forEach((gun) => {
+              if (gun.xp !== undefined) {
+                gunXps.set(gun.id, gun.xp);
+              }
+            });
+          });
+
+          tank.engines.forEach((engine) => {
+            if (engine.xp !== undefined) {
+              engineXps.set(engine.id, engine.xp);
+            }
+          });
+
+          tank.tracks.forEach((track) => {
+            if (track.xp !== undefined) {
+              trackXps.set(track.id, track.xp);
+            }
+          });
+
+          let moduleXp = 0;
+          turretXps.forEach((value) => {
+            moduleXp += value;
+          });
+          gunXps.forEach((value) => {
+            moduleXp += value;
+          });
+          engineXps.forEach((value) => {
+            moduleXp += value;
+          });
+          trackXps.forEach((value) => {
+            moduleXp += value;
+          });
+
+          return {
+            research: tank.xp,
+            upgrades: moduleXp,
+            purchase: tank.price.value,
+            equipment: equipmentPriceMatrix[tank.tier].reduce(
+              (a, b) => a + 3 * b,
+              0,
+            ),
+          };
+        }),
+      );
+
+      const image = (
         <CommandWrapper>
           <TitleBar
             title={nickname}
             image={clanImage}
-            description={`Research • ${tank.name}`}
+            description={`${t`bot.commands.research.body.subtitle`} • ${targetTank.name}`}
           />
 
           <div
@@ -82,51 +227,98 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
               gap: 8,
             }}
           >
+            <div
+              style={{
+                display: 'flex',
+                borderRadius: 4,
+                backgroundColor: theme.colors.appBackground2,
+                border: theme.borderStyles.subtle,
+              }}
+            >
+              <div style={{ width: 48 }}></div>
+
+              <div
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative',
+                  right: 24,
+                }}
+              >
+                <span
+                  style={{
+                    color: theme.colors.textHighContrast,
+                  }}
+                >
+                  {t`bot.commands.research.body.total`}
+                </span>
+              </div>
+
+              <div
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  gap: 8,
+                  padding: '16px 0',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: 4,
+                    alignItems: 'center',
+                  }}
+                >
+                  <img
+                    src={await iconPng(asset('icons/currencies/xp.webp'))}
+                    width={16}
+                    height={16}
+                  />
+                  <span
+                    style={{
+                      fontSize: 16,
+                      color: theme.colors.textHighContrast,
+                    }}
+                  >
+                    {costs
+                      .reduce((a, b) => a + b.purchase + b.equipment, 0)
+                      .toLocaleString(interaction.locale)}
+                  </span>
+                </div>
+
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: 4,
+                    alignItems: 'center',
+                  }}
+                >
+                  <img
+                    src={await iconPng(asset('icons/currencies/silver.webp'))}
+                    width={16}
+                    height={16}
+                  />
+                  <span
+                    style={{
+                      fontSize: 16,
+                      color: theme.colors.textHighContrast,
+                    }}
+                  >
+                    {costs
+                      .reduce((a, b) => a + (b.research ?? 0) + b.upgrades, 0)
+                      .toLocaleString(interaction.locale)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
             {await Promise.all(
-              line.map(async (id) => {
+              line.map(async (id, index) => {
                 const tank = awaitedTankDefinitions[id];
-                const turretXps = new Map<number, number>();
-                const gunXps = new Map<number, number>();
-                const engineXps = new Map<number, number>();
-                const trackXps = new Map<number, number>();
-
-                tank.turrets.forEach((turret) => {
-                  if (turret.xp !== undefined) {
-                    turretXps.set(turret.id, turret.xp);
-                  }
-
-                  turret.guns.forEach((gun) => {
-                    if (gun.xp !== undefined) {
-                      gunXps.set(gun.id, gun.xp);
-                    }
-                  });
-                });
-
-                tank.engines.forEach((engine) => {
-                  if (engine.xp !== undefined) {
-                    engineXps.set(engine.id, engine.xp);
-                  }
-                });
-
-                tank.tracks.forEach((track) => {
-                  if (track.xp !== undefined) {
-                    trackXps.set(track.id, track.xp);
-                  }
-                });
-
-                let moduleXp = 0;
-                turretXps.forEach((value) => {
-                  moduleXp += value;
-                });
-                gunXps.forEach((value) => {
-                  moduleXp += value;
-                });
-                engineXps.forEach((value) => {
-                  moduleXp += value;
-                });
-                trackXps.forEach((value) => {
-                  moduleXp += value;
-                });
 
                 return (
                   <div
@@ -135,7 +327,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                       display: 'flex',
                       borderRadius: 4,
                       backgroundColor: theme.colors.appBackground2,
-                      border: `1px solid ${theme.colors.componentInteractive}`,
+                      border: theme.borderStyles.subtle,
                     }}
                   >
                     <div
@@ -241,12 +433,15 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                             color: theme.colors.textHighContrast,
                           }}
                         >
-                          Research:{' '}
-                          {tank.xp?.toLocaleString(interaction.locale)}
+                          {translate('bot.commands.research.body.research', [
+                            `${costs[index].research?.toLocaleString(
+                              interaction.locale,
+                            )}`,
+                          ])}
                         </span>
                       </div>
 
-                      {moduleXp > 0 && (
+                      {costs[index].upgrades > 0 && (
                         <div
                           style={{
                             display: 'flex',
@@ -267,7 +462,9 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                               color: theme.colors.textHighContrast,
                             }}
                           >
-                            Upgrades: {moduleXp.toLocaleString()}
+                            {translate('bot.commands.research.body.upgrades', [
+                              costs[index].upgrades.toLocaleString(),
+                            ])}
                           </span>
                         </div>
                       )}
@@ -292,8 +489,11 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                             color: theme.colors.textHighContrast,
                           }}
                         >
-                          Purchase:{' '}
-                          {tank.price.value.toLocaleString(interaction.locale)}
+                          {translate('bot.commands.research.body.purchase', [
+                            costs[index].purchase.toLocaleString(
+                              interaction.locale,
+                            ),
+                          ])}
                         </span>
                       </div>
 
@@ -317,10 +517,11 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                             color: theme.colors.textHighContrast,
                           }}
                         >
-                          Equipment:{' '}
-                          {equipmentPriceMatrix[tank.tier]
-                            .reduce((a, b) => a + 3 * b, 0)
-                            .toLocaleString(interaction.locale)}
+                          {translate('bot.commands.research.body.equipment', [
+                            costs[index].equipment.toLocaleString(
+                              interaction.locale,
+                            ),
+                          ])}
                         </span>
                       </div>
                     </div>
@@ -331,10 +532,14 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
           </div>
         </CommandWrapper>
       );
+
+      return startingTankRaw
+        ? image
+        : [t`bot.commands.research.body.estimation`, image];
     },
 
     autocomplete(interaction) {
-      autocompleteTanks(interaction, true);
+      autocompleteTanks(interaction, true, ['target-tank', 'starting-tank']);
     },
   });
 });

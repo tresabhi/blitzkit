@@ -10,16 +10,17 @@ import {
   OVERFLOW_SUFFIX,
 } from './autocompleteClan/constants';
 
-const tankNamesTechTreeOnly = tankNames.then((names) =>
+export const tankNamesTechTreeOnly = tankNames.then((names) =>
   names.filter((tank) => tank.treeType === 'researchable'),
 );
 
 export default async function autocompleteTanks(
   interaction: AutocompleteInteraction<CacheType>,
   techTreeOnly = false,
+  fields = ['tank'],
 ) {
   const focusedOption = interaction.options.getFocused(true);
-  if (focusedOption.name !== 'tank') return;
+  if (!fields.includes(focusedOption.name)) return;
 
   await interaction.respond(
     focusedOption.value

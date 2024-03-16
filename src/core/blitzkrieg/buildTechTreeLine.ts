@@ -10,7 +10,8 @@ export async function buildTechTreeLine(start: number, end: number) {
   if (start === end) return line;
   for (const ancestorId of endTank.ancestors) {
     if ((await resolveAncestry(ancestorId)).includes(start)) {
-      line.push(...(await buildTechTreeLine(start, ancestorId)));
+      const ancestorTree = await buildTechTreeLine(start, ancestorId);
+      line.push(...ancestorTree);
       break;
     }
   }

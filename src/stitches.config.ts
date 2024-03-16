@@ -29,6 +29,7 @@ export const theme = {
   },
 
   borderStyles: {
+    subtle: `1px solid ${slateDark.slate2}`,
     ...createBorderStyles(slateDark),
     ...createBorderStyles(blueDark, undefined, 'blue'),
   },
