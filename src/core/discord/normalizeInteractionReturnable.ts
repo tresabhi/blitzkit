@@ -4,6 +4,7 @@ import {
   ButtonBuilder,
   EmbedBuilder,
   InteractionEditReplyOptions,
+  InteractionReplyOptions,
 } from 'discord.js';
 import { InteractionReturnable } from '../../events/interactionCreate';
 import jsxToPngThreaded from '../blitzkrieg/jsxToPngThreaded';
@@ -12,7 +13,7 @@ export default async function normalizeInteractionReturnable(
   returnable: InteractionReturnable,
 ) {
   const images: [number, Buffer][] = [];
-  const reply: InteractionEditReplyOptions = {};
+  const reply: InteractionEditReplyOptions & InteractionReplyOptions = {};
 
   const awaitedReturnable = await returnable;
   const normalizedReturnable = Array.isArray(awaitedReturnable)

@@ -27,6 +27,10 @@ export const permissionsCommand = new Promise<CommandRegistry>((resolve) => {
           interaction.appPermissions?.has('AttachFiles'),
           t`bot.commands.permissions.body.attach_files`,
         ],
+        [
+          interaction.appPermissions?.has('UseExternalEmojis'),
+          t`bot.commands.permissions.body.external_emojis`,
+        ],
       ];
       const body = permissions
         .map(([hasPermission, description]) => {

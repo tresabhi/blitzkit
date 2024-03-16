@@ -486,7 +486,7 @@
         "description": "Shows all own tanks in a tier",
 
         "body": {
-          "subtitle": "Tier %s tanks"
+          "title": "# %s's owned tier %s tanks\n\n"
         }
       },
 
@@ -496,9 +496,10 @@
 
         "body": {
           "title": "# Permissions\n\n%s",
-          "view_channels": "View channels: needed for the refresh button to work",
-          "read_message_history": "Read message history: needed for the refresh button to find the message to refresh",
-          "attach_files": "Attach files: needed for image-based commands to work"
+          "view_channels": "View channels: needed to find the message the refresh button was used on",
+          "read_message_history": "Read message history: needed to find the message to refresh",
+          "attach_files": "Attach files: needed to add images to image-based commands",
+          "external_emojis": "External emojis: needed to fill add national flags and tank class emojis"
         }
       },
 

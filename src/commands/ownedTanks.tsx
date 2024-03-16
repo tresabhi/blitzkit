@@ -1,14 +1,13 @@
-import CommandWrapper from '../components/CommandWrapper';
-import NoData from '../components/NoData';
-import * as Tanks from '../components/Tanks';
-import TitleBar from '../components/TitleBar';
+import { chunk } from 'lodash';
+import markdownEscape from 'markdown-escape';
+import { TANK_CLASSES } from '../components/Tanks/components/Item/constants';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
-import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
-import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
 import {
+  NATIONS,
   TankDefinition,
   Tier,
+  flags,
   tankDefinitions,
 } from '../core/blitzkrieg/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../core/blitzkrieg/tankDefinitions/constants';
@@ -19,6 +18,8 @@ import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
+
+const TANKS_PER_MESSAGE = 64;
 
 export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
@@ -43,7 +44,6 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
           })),
         )
       ).filter((tank) => tank.tankDefinitions?.tier === tier);
-      const clanAccountInfo = await getClanAccountInfo(region, id, ['clan']);
       const groupedTanks: Record<string, TankDefinition[]> = {};
       const nations: string[] = [];
 
@@ -56,71 +56,28 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
         }
       });
 
-      nations.sort();
+      const awaitedTankDefinitions = await tankDefinitions;
+      const awaitedNations = await NATIONS;
+      const lines = tankStats
+        .map(({ tank_id }) => awaitedTankDefinitions[tank_id])
+        .filter((tank) => tank.tier === tier)
+        .sort(
+          (a, b) =>
+            TANK_CLASSES.indexOf(a.class) - TANK_CLASSES.indexOf(b.class),
+        )
+        .sort(
+          (a, b) =>
+            awaitedNations.indexOf(a.nation) - awaitedNations.indexOf(b.nation),
+        )
+        .map((tank) => `${flags[tank.nation]} ${markdownEscape(tank.name)}`);
 
-      return (
-        <CommandWrapper>
-          <TitleBar
-            title={accountInfo.nickname}
-            image={
-              clanAccountInfo?.clan
-                ? emblemIdToURL(clanAccountInfo.clan.emblem_set_id)
-                : undefined
-            }
-            description={translate('bot.commands.owned_tanks.body.subtitle', [
+      return chunk(lines, TANKS_PER_MESSAGE).map((lines, index) =>
+        index === 0
+          ? `${translate('bot.commands.owned_tanks.body.title', [
+              markdownEscape(accountInfo.nickname),
               TIER_ROMAN_NUMERALS[tier as Tier],
-            ])}
-          />
-
-          {filteredTanks.length === 0 && (
-            <NoData type="tanks_found" locale={interaction.locale} />
-          )}
-
-          {filteredTanks.length > 0 &&
-            (await Promise.all(
-              nations.map(async (nation) => {
-                const tanks = groupedTanks[nation];
-                const leftColumnSize = Math.ceil(tanks.length / 2);
-                const leftColumn = tanks.slice(0, leftColumnSize);
-                const rightColumn = tanks.slice(leftColumnSize);
-
-                return (
-                  <Tanks.Root key={nation}>
-                    <Tanks.Title>
-                      {translate(`common.nations.${nation}`)}
-                    </Tanks.Title>
-
-                    <Tanks.Row>
-                      <Tanks.Column>
-                        {await Promise.all(
-                          leftColumn.map(async (tank) => (
-                            <Tanks.Item
-                              key={tank.id}
-                              name={tank.name}
-                              tankType={tank.class}
-                              treeType={tank.treeType}
-                            />
-                          )),
-                        )}
-                      </Tanks.Column>
-                      <Tanks.Column>
-                        {await Promise.all(
-                          rightColumn.map(async (tank) => (
-                            <Tanks.Item
-                              key={tank.id}
-                              name={tank.name}
-                              tankType={tank.class}
-                              treeType={tank.treeType}
-                            />
-                          )),
-                        )}
-                      </Tanks.Column>
-                    </Tanks.Row>
-                  </Tanks.Root>
-                );
-              }),
-            ))}
-        </CommandWrapper>
+            ])}${lines.join('\n')}`
+          : lines.join('\n'),
       );
     },
 
