@@ -221,8 +221,8 @@
         },
 
         "errors": {
-          "non_tech_tree": "# %s is not researchable\n\nThis tank is not on the tech tree.",
-          "tier_1": "# %s is not researchable\n\nThis tank is a tier I and is always unlocked.",
+          "non_tech_tree": "# %s is not on the tech tree\n\nYou cannot research a premium/collector tank.",
+          "tier_1": "# %s is a tier I\n\nTier I tanks are always unlocked for free for all players.",
           "already_researched": "# %s is already researched\n\nTry providing a `starting-tank` when using the command to view the totals for a line you have already researched.",
           "start_end_equal": "# %s was provided twice\n\nMake sure `starting-tank` and `target-tank` are different.",
           "tanks_not_on_line": "# %s and %s are not on the same line\n\nMake sure `starting-tank` and `target-tank` are on the same tech-tree line.",
@@ -499,7 +499,7 @@
           "view_channels": "View channels: needed to find the message the refresh button was used on",
           "read_message_history": "Read message history: needed to find the message to refresh",
           "attach_files": "Attach files: needed to add images to image-based commands",
-          "external_emojis": "External emojis: needed to fill add national flags and tank class emojis"
+          "external_emojis": "External emojis: needed add national flags and tank class emojis"
         }
       },
 
