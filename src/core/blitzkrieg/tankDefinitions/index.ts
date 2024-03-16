@@ -1,8 +1,8 @@
-import { readFile } from 'fs/promises';
 import { deburr } from 'lodash';
 import { Vector2Tuple } from 'three';
 import { TankClass, TreeType } from '../../../components/Tanks';
-import { superDecompress } from '../superDecompress';
+import { asset } from '../asset';
+import { fetchCdonLz4 } from '../fetchCdonLz4';
 import { TIERS } from './constants';
 
 export type ShellType = 'ap' | 'ap_cr' | 'hc' | 'he';
@@ -142,13 +142,13 @@ export type ShellDefinition = {
   explosionRadius?: number;
 };
 
-// export const tankDefinitions = fetchCdonLz4<TankDefinitions>(
-//   asset('definitions/tanks.cdon.lz4'),
-// );
-
-export const tankDefinitions = readFile('test.tanks.cdon.lz4').then((data) =>
-  superDecompress<TankDefinitions>(data.buffer),
+export const tankDefinitions = fetchCdonLz4<TankDefinitions>(
+  asset('definitions/tanks.cdon.lz4'),
 );
+
+// export const tankDefinitions = readFile('test.tanks.cdon.lz4').then((data) =>
+//   superDecompress<TankDefinitions>(data.buffer),
+// );
 
 const entries = new Promise<TankDefinition[]>(async (resolve) => {
   resolve(Object.entries(await tankDefinitions).map(([, entry]) => entry));
