@@ -176,7 +176,34 @@
     "commands": {
       "research": {
         "$": "research",
-        "description": "Lists the expenses in researching a line"
+        "description": "Lists the expenses in researching a line",
+        "options": {
+          "target_tank": {
+            "$": "target-tank",
+            "description": "The final tank to research in the line"
+          },
+          "starting_tank": {
+            "$": "starting-tank",
+            "description": "The starting tank in the line (inferred automatically if not provided)"
+          }
+        },
+        "body": {
+          "subtitle": "Research",
+          "total": "Total",
+          "research": "Research: %s",
+          "upgrades": "Upgrades: %s",
+          "purchase": "Purchase: %s",
+          "equipment": "Equipment: %s",
+          "estimation": "# This is an estimation!\n\nThis list may include already researched tanks because of the inaccurate information Wargaming provides. Try providing a `starting-tank` from the line when using the command if you can."
+        },
+        "errors": {
+          "non_tech_tree": "# %s is not researchable\n\nThis tank is not on the tech tree.",
+          "tier_1": "# %s is not researchable\n\nThis tank is a tier I and is always unlocked.",
+          "already_researched": "# %s is already researched\n\nTry providing a `starting-tank` when using the command to view the totals for a line you have already researched.",
+          "start_end_equal": "# %s was provided twice\n\nMake sure `starting-tank` and `target-tank` are different.",
+          "tanks_not_on_line": "# %s and %s are not on the same line\n\nMake sure `starting-tank` and `target-tank` are on the same tech-tree line.",
+          "unordered": "# %s higher tiered to %s\n\nMake sure to provide %s as the `starting-tank` instead as it is the lower tiered tank."
+        }
       },
       "about": {
         "$": "sobre",
