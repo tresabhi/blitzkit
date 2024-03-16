@@ -427,7 +427,7 @@
         "$": "tanques-propios",
         "description": "Muestra todos los tanques propios en un tier",
         "body": {
-          "subtitle": "Tanques de tier %s"
+          "title": "# %s's owned tier %s tanks\n\n"
         }
       },
       "permissions": {
@@ -435,9 +435,10 @@
         "description": "Comprueba si el bot tiene los permisos requeridos para funcionar",
         "body": {
           "title": "# Permisos\n\n%s",
-          "view_channels": "Ver canales: necesario para que funcione el botón de actualizar",
-          "read_message_history": "Leer el historial de mensajes: necesario para que el botón de actualizar pueda encontrar el mensaje a actualizar",
-          "attach_files": "Adjuntar archivos: necesario para que funcionen los comandos basados en imágenes"
+          "view_channels": "View channels: needed to find the message the refresh button was used on",
+          "read_message_history": "Read message history: needed to find the message to refresh",
+          "attach_files": "Attach files: needed to add images to image-based commands",
+          "external_emojis": "External emojis: needed to fill add national flags and tank class emojis"
         }
       },
       "ping": {
