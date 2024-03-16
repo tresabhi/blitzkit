@@ -23,6 +23,12 @@ jobs:
         with:
           node-version: 18
 
+      - name: Install Yarn
+        run: npm install --location=global yarn
+
+      - name: Add fixed sharp
+        run: yarn add sharp@0.33.1 --ignore-engines
+
       - name: Download release assets
         run: |
           DOWNLOAD_URL=$(curl -s https://api.github.com/repos/tresabhi/blitzkrieg/releases/latest \
