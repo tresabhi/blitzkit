@@ -1,4 +1,4 @@
-import { readdir } from 'fs/promises';
+import { readdir, writeFile } from 'fs/promises';
 import { parse as parsePath } from 'path';
 import { Vector3Tuple } from 'three';
 import { parse as parseYaml } from 'yaml';
@@ -79,6 +79,16 @@ type VehicleDefinitionArmor = Record<
   string,
   number | { vehicleDamageFactor: 0; '#text': number }
 >;
+interface UnlocksInner {
+  cost: number;
+  '#text': number;
+}
+type Unlocks = {
+  [key in 'vehicle' | 'engine' | 'chassis' | 'turret' | 'gun']:
+    | UnlocksInner
+    | UnlocksInner[];
+};
+type UnlocksListing = Unlocks | undefined;
 interface VehicleDefinitions {
   invisibility: {
     moving: number;
@@ -102,6 +112,7 @@ interface VehicleDefinitions {
   };
   chassis: {
     [key: string]: {
+      unlocks: UnlocksListing;
       weight: number;
       terrainResistance: string;
       rotationSpeed: number;
@@ -130,10 +141,13 @@ interface VehicleDefinitions {
     };
   };
   engines: {
-    [key: string]: unknown;
+    [key: string]: {
+      unlocks: UnlocksListing;
+    };
   };
   turrets0: {
     [key: string]: {
+      unlocks: UnlocksListing;
       rotationSpeed: number;
       weight: number;
       circularVisionRadius: number;
@@ -149,6 +163,7 @@ interface VehicleDefinitions {
       };
       guns: {
         [key: string]: {
+          unlocks: UnlocksListing;
           armor: VehicleDefinitionArmor & {
             gun?:
               | number
@@ -353,6 +368,8 @@ export async function definitions(production: boolean) {
     `${DATA}/${POI.provisionsCommon}.dvpl`,
   );
 
+  const tankXps = new Map<number, number>();
+
   await Promise.all(
     nations.map(async (nation) => {
       const tankList = await readXMLDVPL<{ root: VehicleDefinitionList }>(
@@ -385,6 +402,10 @@ export async function definitions(production: boolean) {
       );
 
       for (const tankKey in tankList.root) {
+        const gunXps = new Map<number, number>();
+        const turretXps = new Map<number, number>();
+        const engineXps = new Map<number, number>();
+        const trackXps = new Map<number, number>();
         const tank = tankList.root[tankKey];
         const tankPrice: TankDefinitionPrice =
           typeof tank.price === 'number'
@@ -427,6 +448,7 @@ export async function definitions(production: boolean) {
           });
         const crew: Crew[] = [];
         const fixedCamouflage = tankTags.includes('eventCamouflage_user');
+        const totalUnlocks: UnlocksListing[] = [];
 
         Object.entries(tankDefinition.root.crew).forEach(([key, value]) => {
           let entry: Crew;
@@ -532,6 +554,7 @@ export async function definitions(production: boolean) {
             .split(' ')
             .map(Number) as Vector3Tuple;
 
+          totalUnlocks.push(track.unlocks);
           tankDefinitions[tankId].tracks.push({
             id: trackId,
             weight: track.weight,
@@ -558,16 +581,18 @@ export async function definitions(production: boolean) {
         });
 
         Object.keys(tankDefinition.root.engines).forEach((engineKey) => {
-          const engine = enginesList.root.shared[engineKey];
+          const engine = tankDefinition.root.engines[engineKey];
+          const engineListEntry = enginesList.root.shared[engineKey];
           const engineId = toUniqueId(nation, enginesList.root.ids[engineKey]);
 
+          totalUnlocks.push(engine.unlocks);
           tankDefinitions[tankId].engines.push({
             id: engineId,
-            name: strings[engine.userString],
-            fireChance: engine.fireStartingChance,
-            tier: engine.level as Tier,
-            weight: engine.weight,
-            power: engine.power,
+            name: strings[engineListEntry.userString],
+            fireChance: engineListEntry.fireStartingChance,
+            tier: engineListEntry.level as Tier,
+            weight: engineListEntry.weight,
+            power: engineListEntry.power,
           });
         });
 
@@ -594,6 +619,7 @@ export async function definitions(production: boolean) {
               .map(Number) as Vector3Tuple;
             const turretArmor: ModelArmor = { thickness: {} };
 
+            totalUnlocks.push(turret.unlocks);
             Object.keys(turret.armor)
               .filter((name) => name.startsWith('armor_'))
               .forEach((name) => {
@@ -646,11 +672,11 @@ export async function definitions(production: boolean) {
             };
 
             Object.keys(turret.guns).forEach((gunKey, gunIndex) => {
-              const turretGunEntry = turret.guns[gunKey];
+              const gun = turret.guns[gunKey];
               const gunId = toUniqueId(nation, gunList.root.ids[gunKey]);
               const gunListEntry = gunList.root.shared[gunKey];
               const pitchLimitsRaw =
-                turretGunEntry.pitchLimits ?? gunListEntry.pitchLimits;
+                gun.pitchLimits ?? gunListEntry.pitchLimits;
               const gunPitch = (
                 typeof pitchLimitsRaw === 'string'
                   ? pitchLimitsRaw
@@ -659,43 +685,41 @@ export async function definitions(production: boolean) {
                 .split(' ')
                 .map(Number) as [number, number];
               const gunModel = Number(
-                parsePath(turretGunEntry.models.undamaged).name.split('_')[1],
+                parsePath(gun.models.undamaged).name.split('_')[1],
               );
               const gunName =
                 strings[gunListEntry.userString] ?? gunKey.replaceAll('_', ' ');
               const gunType =
-                'clip' in turretGunEntry
-                  ? turretGunEntry.pumpGunMode
+                'clip' in gun
+                  ? gun.pumpGunMode
                     ? 'autoReloader'
                     : 'autoLoader'
                   : 'regular';
               const gunReload =
                 gunType === 'autoReloader'
-                  ? turretGunEntry.pumpGunReloadTimes!.split(' ').map(Number)
-                  : turretGunEntry.reloadTime;
+                  ? gun.pumpGunReloadTimes!.split(' ').map(Number)
+                  : gun.reloadTime;
               const gunClipCount =
-                gunType === 'regular' ? undefined : turretGunEntry.clip!.count;
+                gunType === 'regular' ? undefined : gun.clip!.count;
               const gunIntraClip =
-                gunType === 'regular'
-                  ? undefined
-                  : 60 / turretGunEntry.clip!.rate;
-              const front = turretGunEntry.extraPitchLimits?.front
-                ? turretGunEntry.extraPitchLimits.front.split(' ').map(Number)
+                gunType === 'regular' ? undefined : 60 / gun.clip!.rate;
+              const front = gun.extraPitchLimits?.front
+                ? gun.extraPitchLimits.front.split(' ').map(Number)
                 : undefined;
-              const back = turretGunEntry.extraPitchLimits?.back
-                ? turretGunEntry.extraPitchLimits.back.split(' ').map(Number)
+              const back = gun.extraPitchLimits?.back
+                ? gun.extraPitchLimits.back.split(' ').map(Number)
                 : undefined;
-              const transition = turretGunEntry.extraPitchLimits?.transition
-                ? typeof turretGunEntry.extraPitchLimits.transition === 'number'
-                  ? turretGunEntry.extraPitchLimits.transition
-                  : turretGunEntry.extraPitchLimits.transition.at(-1)!
+              const transition = gun.extraPitchLimits?.transition
+                ? typeof gun.extraPitchLimits.transition === 'number'
+                  ? gun.extraPitchLimits.transition
+                  : gun.extraPitchLimits.transition.at(-1)!
                 : undefined;
               const gunArmor: ModelArmor = { thickness: {} };
               const shotDispersionFactors =
-                turretGunEntry.shotDispersionFactors ??
-                gunListEntry.shotDispersionFactors;
+                gun.shotDispersionFactors ?? gunListEntry.shotDispersionFactors;
 
-              Object.keys(turretGunEntry.armor)
+              totalUnlocks.push(gun.unlocks);
+              Object.keys(gun.armor)
                 .filter((name) => name.startsWith('armor_'))
                 .forEach((name) => {
                   const armorIdString = name.match(/armor_(\d+)/)?.[1];
@@ -703,7 +727,7 @@ export async function definitions(production: boolean) {
                     throw new SyntaxError(`Invalid armor id: ${name}`);
                   }
                   const armorId = parseInt(armorIdString);
-                  const armorRaw = turretGunEntry.armor[name];
+                  const armorRaw = gun.armor[name];
                   if (typeof armorRaw === 'number') {
                     gunArmor.thickness[armorId] = armorRaw;
                   } else {
@@ -725,13 +749,13 @@ export async function definitions(production: boolean) {
                 count: gunClipCount,
                 intraClip: gunIntraClip,
                 camouflageLoss:
-                  typeof turretGunEntry.invisibilityFactorAtShot === 'number'
-                    ? turretGunEntry.invisibilityFactorAtShot
-                    : turretGunEntry.invisibilityFactorAtShot.at(-1)!,
-                aimTime: turretGunEntry.aimingTime ?? gunListEntry.aimingTime,
+                  typeof gun.invisibilityFactorAtShot === 'number'
+                    ? gun.invisibilityFactorAtShot
+                    : gun.invisibilityFactorAtShot.at(-1)!,
+                aimTime: gun.aimingTime ?? gunListEntry.aimingTime,
                 dispersion: {
                   base:
-                    turretGunEntry.shotDispersionRadius ??
+                    gun.shotDispersionRadius ??
                     gunListEntry.shotDispersionRadius,
                   damaged: shotDispersionFactors.whileGunDamaged,
                   shot: shotDispersionFactors.afterShot,
@@ -743,11 +767,11 @@ export async function definitions(production: boolean) {
                 armor: gunArmor,
                 model: gunModel,
                 thickness:
-                  turretGunEntry.armor.gun === undefined
+                  gun.armor.gun === undefined
                     ? 0
-                    : typeof turretGunEntry.armor.gun === 'number'
-                      ? turretGunEntry.armor.gun
-                      : turretGunEntry.armor.gun['#text'],
+                    : typeof gun.armor.gun === 'number'
+                      ? gun.armor.gun
+                      : gun.armor.gun['#text'],
                 pitch: {
                   min: gunPitch[0],
                   max: gunPitch[1],
@@ -809,9 +833,99 @@ export async function definitions(production: boolean) {
             });
           },
         );
+
+        totalUnlocks.forEach((unlocks) => {
+          if (unlocks === undefined) return;
+
+          Object.entries(unlocks).forEach(([key, value]) => {
+            (Array.isArray(value) ? value : [value]).forEach((vehicle) => {
+              switch (key as keyof Unlocks) {
+                case 'vehicle': {
+                  const tankListEntry = tankList.root[vehicle['#text']];
+                  const currentTank = tankDefinitions[tankId];
+                  const successorId = toUniqueId(nation, tankListEntry.id);
+
+                  tankXps.set(successorId, vehicle.cost);
+
+                  if (currentTank.successors === undefined) {
+                    currentTank.successors = [];
+                  }
+                  if (!currentTank.successors!.includes(successorId)) {
+                    currentTank.successors!.push(successorId);
+                  }
+                  break;
+                }
+
+                case 'gun': {
+                  gunXps.set(
+                    toUniqueId(nation, gunList.root.ids[vehicle['#text']]),
+                    vehicle.cost,
+                  );
+                  break;
+                }
+
+                case 'turret': {
+                  turretXps.set(
+                    toUniqueId(nation, turretList.root.ids[vehicle['#text']]),
+                    vehicle.cost,
+                  );
+                  break;
+                }
+
+                case 'engine': {
+                  engineXps.set(
+                    toUniqueId(nation, enginesList.root.ids[vehicle['#text']]),
+                    vehicle.cost,
+                  );
+                  break;
+                }
+
+                case 'chassis': {
+                  trackXps.set(
+                    toUniqueId(nation, chassisList.root.ids[vehicle['#text']]),
+                    vehicle.cost,
+                  );
+                  break;
+                }
+              }
+            });
+          });
+        });
+
+        Object.values(tankDefinitions[tankId].turrets).forEach((turret) => {
+          turret.xp = turretXps.get(turret.id);
+
+          Object.values(turret.guns).forEach((gun) => {
+            gun.xp = gunXps.get(gun.id);
+          });
+        });
+
+        Object.values(tankDefinitions[tankId].engines).forEach((engine) => {
+          engine.xp = engineXps.get(engine.id);
+        });
+
+        Object.values(tankDefinitions[tankId].tracks).forEach((track) => {
+          track.xp = trackXps.get(track.id);
+        });
       }
     }),
   );
+
+  Object.values(tankDefinitions).forEach((tank) => {
+    tank.xp = tankXps.get(tank.id);
+  });
+
+  Object.values(tankDefinitions).forEach((tank) => {
+    tank.successors?.forEach((predecessorId) => {
+      if (tankDefinitions[predecessorId].ancestors === undefined) {
+        tankDefinitions[predecessorId].ancestors = [];
+      }
+
+      if (!tankDefinitions[predecessorId].ancestors?.includes(tank.id)) {
+        tankDefinitions[predecessorId].ancestors?.push(tank.id);
+      }
+    });
+  });
 
   Object.entries(optionalDevices.root).forEach(
     ([optionalDeviceKey, optionalDeviceEntry]) => {
@@ -970,6 +1084,10 @@ export async function definitions(production: boolean) {
     }
   });
 
+  writeFile(
+    'test.tanks.cdon.lz4',
+    Buffer.from(superCompress(tankDefinitions), 'base64'),
+  );
   await commitAssets(
     'definitions',
     [

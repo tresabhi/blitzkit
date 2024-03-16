@@ -7,13 +7,18 @@ import {
   ChatInputCommandInteraction,
   InteractionReplyOptions,
 } from 'discord.js';
-import { commands } from '..';
+import { InteractionRawReturnable, commands } from '..';
 import buttonLink from '../../../core/discord/buttonLink';
 import embedWarning from '../../../core/discord/embedWarning';
 import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable';
 import { psa } from '../../../core/discord/psa';
 import { translator } from '../../../core/localization/translator';
 import { UserError } from '../../../hooks/userError';
+
+const previewServers = [
+  '734786591205359697', // abhi
+  '460165161156870161', // optml
+];
 
 export default async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
@@ -24,74 +29,105 @@ export default async function handleChatInputCommand(
   await interaction.deferReply();
 
   try {
+    if (
+      registry.inPreview &&
+      !previewServers.includes(`${interaction.guildId}`)
+    ) {
+      const { t } = translator(interaction.locale);
+      interaction.editReply(t`bot.common.errors.preview`);
+
+      return;
+    }
+
     const returnable = await registry.handler(interaction);
 
     if (registry.handlesInteraction) return;
 
-    const reply = await normalizeInteractionReturnable(returnable!);
+    const chunks: InteractionRawReturnable[][] = [[]];
 
-    if (
-      psa.data &&
-      !psa.data.secret &&
-      (psa.data.commands === undefined ||
-        psa.data.commands.includes(interaction.commandName))
-    ) {
-      if (psa.data.type === 'embed') {
-        if (!reply.embeds) reply.embeds = [];
-        reply.embeds.push(embedWarning(psa.data.title, psa.data.description));
-      } else {
-        if (!reply.files) reply.files = [];
-        reply.files.push(new AttachmentBuilder(psa.data.image));
-        reply.content = reply.content ?? psa.data.title;
-      }
+    (Array.isArray(returnable) ? returnable : [returnable]).forEach(
+      (object) => {
+        if (typeof object === 'string') {
+          chunks.push([object]);
+        } else chunks.at(-1)?.push(object!);
+      },
+    );
 
-      if (psa.data.links) {
-        if (!reply.components?.[0]) {
-          reply.components = [new ActionRowBuilder<ButtonBuilder>()];
+    let index = 0;
+    for (const chunk of chunks.filter((chunk) => chunk.length > 0)) {
+      const reply = await normalizeInteractionReturnable(chunk);
+
+      if (
+        psa.data &&
+        !psa.data.secret &&
+        (psa.data.commands === undefined ||
+          psa.data.commands.includes(interaction.commandName))
+      ) {
+        if (psa.data.type === 'embed') {
+          if (!reply.embeds) reply.embeds = [];
+          reply.embeds.push(embedWarning(psa.data.title, psa.data.description));
+        } else {
+          if (!reply.files) reply.files = [];
+          reply.files.push(new AttachmentBuilder(psa.data.image));
+          reply.content = reply.content ?? psa.data.title;
         }
 
-        (reply.components[0] as ActionRowBuilder<ButtonBuilder>).addComponents(
-          psa.data.links.map(({ title, url }) => buttonLink(url, title)),
-        );
+        if (psa.data.links) {
+          if (!reply.components?.[0]) {
+            reply.components = [new ActionRowBuilder<ButtonBuilder>()];
+          }
+
+          (
+            reply.components[0] as ActionRowBuilder<ButtonBuilder>
+          ).addComponents(
+            psa.data.links.map(({ title, url }) => buttonLink(url, title)),
+          );
+        }
       }
-    }
 
-    await interaction.editReply(reply);
-
-    if (
-      psa.data &&
-      psa.data.secret &&
-      (psa.data.commands === undefined ||
-        psa.data.commands.includes(interaction.commandName))
-    ) {
-      const followUp: InteractionReplyOptions = {
-        ephemeral: true,
-      };
-
-      if (psa.data.type === 'embed') {
-        if (!followUp.embeds) followUp.embeds = [];
-        followUp.embeds.push(
-          embedWarning(psa.data.title, psa.data.description),
-        );
+      if (index === 0) {
+        await interaction.editReply(reply);
       } else {
-        if (!followUp.files) followUp.files = [];
-        followUp.files.push(new AttachmentBuilder(psa.data.image));
-        followUp.content = followUp.content ?? psa.data.title;
+        await interaction.followUp(reply);
       }
 
-      if (psa.data.links) {
-        if (!followUp.components?.[0]) {
-          followUp.components = [new ActionRowBuilder<ButtonBuilder>()];
+      if (
+        psa.data &&
+        psa.data.secret &&
+        (psa.data.commands === undefined ||
+          psa.data.commands.includes(interaction.commandName))
+      ) {
+        const followUp: InteractionReplyOptions = {
+          ephemeral: true,
+        };
+
+        if (psa.data.type === 'embed') {
+          if (!followUp.embeds) followUp.embeds = [];
+          followUp.embeds.push(
+            embedWarning(psa.data.title, psa.data.description),
+          );
+        } else {
+          if (!followUp.files) followUp.files = [];
+          followUp.files.push(new AttachmentBuilder(psa.data.image));
+          followUp.content = followUp.content ?? psa.data.title;
         }
 
-        (
-          followUp.components[0] as ActionRowBuilder<ButtonBuilder>
-        ).addComponents(
-          psa.data.links.map(({ title, url }) => buttonLink(url, title)),
-        );
+        if (psa.data.links) {
+          if (!followUp.components?.[0]) {
+            followUp.components = [new ActionRowBuilder<ButtonBuilder>()];
+          }
+
+          (
+            followUp.components[0] as ActionRowBuilder<ButtonBuilder>
+          ).addComponents(
+            psa.data.links.map(({ title, url }) => buttonLink(url, title)),
+          );
+        }
+
+        interaction.followUp(followUp);
       }
 
-      interaction.followUp(followUp);
+      index++;
     }
   } catch (error) {
     const { t } = translator(interaction.locale);

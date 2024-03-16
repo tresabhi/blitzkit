@@ -190,11 +190,47 @@
         "tank_id_not_found": "# Tank not found\nCould not find tank by the ID \"%s\". Try typing the name of the tank instead of a number.",
         "no_tank_stats": "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
         "get_help": "Help Discord server",
-        "uncaught_error": "# Blitzkrieg ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help."
+        "uncaught_error": "# Blitzkrieg ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help.",
+        "preview": "# This command is in preview\n\nYou can only access this command in [the official Discord server](https://discord.gg/nDt7AjGJQH). The command will be generally available soon."
       }
     },
 
     "commands": {
+      "research": {
+        "$": "research",
+        "description": "Lists the expenses in researching a line",
+
+        "options": {
+          "target_tank": {
+            "$": "target-tank",
+            "description": "The final tank to research in the line"
+          },
+          "starting_tank": {
+            "$": "starting-tank",
+            "description": "The starting tank in the line (inferred automatically if not provided)"
+          }
+        },
+
+        "body": {
+          "subtitle": "Research",
+          "total": "Total",
+          "research": "Research: %s",
+          "upgrades": "Upgrades: %s",
+          "purchase": "Purchase: %s",
+          "equipment": "Equipment: %s",
+          "estimation": "# This is an estimation!\n\nThis list may include already researched tanks because of the inaccurate information Wargaming provides. Try providing a `starting-tank` from the line when using the command if you can."
+        },
+
+        "errors": {
+          "non_tech_tree": "# %s is not on the tech tree\n\nYou cannot research a premium/collector tank.",
+          "tier_1": "# %s is a tier I\n\nTier I tanks are always unlocked for free for all players.",
+          "already_researched": "# %s is already researched\n\nTry providing a `starting-tank` when using the command to view the totals for a line you have already researched.",
+          "start_end_equal": "# %s was provided twice\n\nMake sure `starting-tank` and `target-tank` are different.",
+          "tanks_not_on_line": "# %s and %s are not on the same line\n\nMake sure `starting-tank` and `target-tank` are on the same tech-tree line.",
+          "unordered": "# %s higher tiered to %s\n\nMake sure to provide %s as the `starting-tank` instead as it is the lower tiered tank."
+        }
+      },
+
       "about": {
         "$": "about",
         "description": "All the info you need about the bot",
@@ -451,7 +487,7 @@
         "description": "Shows all own tanks in a tier",
 
         "body": {
-          "subtitle": "Tier %s tanks"
+          "title": "# %s's owned tier %s tanks\n\n"
         }
       },
 
@@ -461,9 +497,10 @@
 
         "body": {
           "title": "# Permissions\n\n%s",
-          "view_channels": "View channels: needed for the refresh button to work",
-          "read_message_history": "Read message history: needed for the refresh button to find the message to refresh",
-          "attach_files": "Attach files: needed for image-based commands to work"
+          "view_channels": "View channels: needed to find the message the refresh button was used on",
+          "read_message_history": "Read message history: needed to find the message to refresh",
+          "attach_files": "Attach files: needed to add images to image-based commands",
+          "external_emojis": "External emojis: needed add national flags and tank class emojis"
         }
       },
 

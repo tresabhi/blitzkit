@@ -22,6 +22,8 @@ export interface Crew {
 export interface TankDefinition {
   id: number;
   fixedCamouflage?: boolean;
+  ancestors?: number[];
+  successors?: number[];
   crew: Crew[];
   health: number;
   nation: string;
@@ -37,6 +39,7 @@ export interface TankDefinition {
   engines: EngineDefinition[];
   tracks: TrackDefinition[];
   price: TankDefinitionPrice;
+  xp?: number;
   speed: {
     forwards: number;
     backwards: number;
@@ -54,6 +57,7 @@ export interface TrackDefinition {
   tier: Tier;
   weight: number;
   traverseSpeed: number;
+  xp?: number;
   dispersion: {
     move: number;
     traverse: number;
@@ -67,6 +71,7 @@ export interface TrackDefinition {
 export interface EngineDefinition {
   id: number;
   name: string;
+  xp?: number;
   tier: Tier;
   fireChance: number;
   power: number;
@@ -79,6 +84,7 @@ export interface TurretDefinition {
   health: number;
   viewRange: number;
   traverseSpeed: number;
+  xp?: number;
   id: number;
   name: string;
   tier: Tier;
@@ -91,6 +97,7 @@ export type GunDefinition =
   | GunDefinitionAutoReloader;
 interface GunDefinitionBase {
   rotationSpeed: number;
+  xp?: number;
   weight: number;
   id: number;
   name: string;
@@ -139,6 +146,10 @@ export const tankDefinitions = fetchCdonLz4<TankDefinitions>(
   asset('definitions/tanks.cdon.lz4'),
 );
 
+// export const tankDefinitions = readFile('test.tanks.cdon.lz4').then((data) =>
+//   superDecompress<TankDefinitions>(data.buffer),
+// );
+
 const entries = new Promise<TankDefinition[]>(async (resolve) => {
   resolve(Object.entries(await tankDefinitions).map(([, entry]) => entry));
 });
@@ -156,6 +167,7 @@ export const tankNames = tanksDefinitionsArray.then((tanks) =>
         id,
         original: tank.name,
         combined: `${tank.name}${deburr(tank.name)}${tank.nameFull ? `${tank.nameFull}${deburr(tank.nameFull)}` : ''}`,
+        treeType: tank.treeType,
       };
     }),
   ),
@@ -173,3 +185,15 @@ export const NATIONS = tanksDefinitionsArray.then((tanks) => {
 
   return nations;
 });
+
+export const flags: Record<string, string> = {
+  ussr: '<:ussr:1218421042033197197>',
+  germany: '🇩🇪',
+  usa: '🇺🇸',
+  china: '🇨🇳',
+  uk: '🇬🇧',
+  france: '🇫🇷',
+  japan: '🇯🇵',
+  european: '🇪🇺',
+  other: '<:other:1218421572243558482>',
+};

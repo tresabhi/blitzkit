@@ -26,6 +26,7 @@ import { permissionsCommand } from '../../commands/permissions';
 import { pingCommand } from '../../commands/ping';
 import { playerInfoCommand } from '../../commands/playerInfo';
 import { ratingsCommand } from '../../commands/ratings';
+import { researchCommand } from '../../commands/research';
 import { searchClansCommand } from '../../commands/searchClans';
 import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { statsCommand } from '../../commands/stats';
@@ -54,6 +55,7 @@ export type InteractionReturnable =
 interface CommandRegistryBase {
   inProduction: boolean;
   inPublic: boolean;
+  inPreview?: boolean;
 
   command:
     | SlashCommandBuilder
@@ -92,6 +94,7 @@ export const COMMANDS_RAW: Promise<CommandRegistry>[] = [
   statsCommand,
   ratingsCommand,
   todayCommand,
+  researchCommand,
 ];
 
 export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {

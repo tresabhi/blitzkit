@@ -14,6 +14,7 @@ import { boosterIcons } from './boosterIcons';
 import { camouflageIcons } from './camouflageIcons';
 import { circleFlags } from './circleFlags';
 import { consumableProvisionIcons } from './consumableProvisionIcons';
+import { currencies } from './currencies';
 import { definitions } from './definitions';
 import { equipmentIcons } from './equipmentIcons';
 import { moduleIcons } from './moduleIcons';
@@ -38,6 +39,7 @@ const methods = [
   boosterIcons,
   tankArmors,
   tankModels,
+  currencies,
 ];
 
 for (const method of methods) {
