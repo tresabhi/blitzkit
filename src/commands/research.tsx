@@ -285,8 +285,9 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                       color: theme.colors.textHighContrast,
                     }}
                   >
+                    Experience:{' '}
                     {costs
-                      .reduce((a, b) => a + b.purchase + b.equipment, 0)
+                      .reduce((a, b) => a + (b.research ?? 0) + b.upgrades, 0)
                       .toLocaleString(interaction.locale)}
                   </span>
                 </div>
@@ -309,8 +310,34 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                       color: theme.colors.textHighContrast,
                     }}
                   >
+                    Purchase:{' '}
                     {costs
-                      .reduce((a, b) => a + (b.research ?? 0) + b.upgrades, 0)
+                      .reduce((a, b) => a + b.purchase, 0)
+                      .toLocaleString(interaction.locale)}
+                  </span>
+                </div>
+
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: 4,
+                    alignItems: 'center',
+                  }}
+                >
+                  <img
+                    src={await iconPng(asset('icons/currencies/silver.webp'))}
+                    width={16}
+                    height={16}
+                  />
+                  <span
+                    style={{
+                      fontSize: 16,
+                      color: theme.colors.textHighContrast,
+                    }}
+                  >
+                    Equipment:{' '}
+                    {costs
+                      .reduce((a, b) => a + b.equipment, 0)
                       .toLocaleString(interaction.locale)}
                   </span>
                 </div>
