@@ -1,0 +1,43 @@
+name: CD Ratings North America
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  host:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install Yarn
+        run: npm install --location=global yarn
+
+      - name: Use node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Generate NA leaderboard
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingsleaderboard --region=na --target=latest
+        if: always()
+
+      - name: Generate EU leaderboard
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingsleaderboard --region=eu --target=latest
+        if: always()
+
+      - name: Generate Asia leaderboard
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingsleaderboard --region=asia --target=latest
+        if: always()

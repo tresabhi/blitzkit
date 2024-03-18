@@ -1,11 +1,7 @@
 name: CD Ratings North America
 
-# latest: '0 0 * * *'
-# na midnight: '0 5 * * *'
-
 on:
   schedule:
-    - cron: '0 0 * * *'
     - cron: '0 5 * * *'
 
 jobs:
@@ -35,4 +31,4 @@ jobs:
         run: yarn
 
       - name: Generate leaderboard
-        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingsleaderboard --region=na --target=${{ github.event.schedule == '0 0 * * *' && 'latest' || 'midnight' }}
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingsleaderboard --region=na --target=midnight
