@@ -3,12 +3,12 @@
 import { CaretRightIcon } from '@radix-ui/react-icons';
 import { AlertDialog, Button, Flex, Text, Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
-import { Analytics } from '@vercel/analytics/react';
 import { config } from 'dotenv';
 import { Roboto_Flex } from 'next/font/google';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useEffect, useState } from 'react';
 import { SkyLine } from '../assets/art/SkyLine';
+import { Analytics } from '../components/Analytics';
 import Navbar from '../components/Navbar';
 import PageWrapper from '../components/PageWrapper';
 import isDev from '../core/blitzkrieg/isDev';
@@ -53,6 +53,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
         />
       </head>
 
+      <Analytics />
+
       <body
         style={{
           margin: 0,
@@ -60,8 +62,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
           backgroundColor: isEmbed ? 'transparent' : undefined,
         }}
       >
-        <Analytics />
-
         <Theme
           appearance="dark"
           panelBackground="translucent"
