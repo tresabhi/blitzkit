@@ -8,6 +8,7 @@ import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
 import { RefObject } from 'react';
 import { Pose, poseEvent } from '../../../../../../../core/blitzkrieg/pose';
 import mutateTankopediaPersistent, {
+  mutateTankopediaTemporary,
   useTankopediaPersistent,
 } from '../../../../../../../stores/tankopedia';
 import { ENVIRONMENTS } from '../../Lighting';
@@ -29,6 +30,9 @@ export function Options({ isFullScreen, canvasWrapper }: OptionsProps) {
   );
   const wireframe = useTankopediaPersistent(
     (state) => state.model.visual.wireframe,
+  );
+  const showSpacedArmor = useTankopediaPersistent(
+    (state) => state.model.visual.showSpacedArmor,
   );
   const opaque = useTankopediaPersistent((state) => state.model.visual.opaque);
   const fullScreenAvailable =
@@ -80,6 +84,20 @@ export function Options({ isFullScreen, canvasWrapper }: OptionsProps) {
 
           <DropdownMenu.Content>
             <DropdownMenu.Label>Armor</DropdownMenu.Label>
+
+            <DropdownMenu.CheckboxItem
+              checked={showSpacedArmor}
+              onCheckedChange={(checked) => {
+                mutateTankopediaPersistent((draft) => {
+                  draft.model.visual.showSpacedArmor = checked;
+                });
+                mutateTankopediaTemporary((draft) => {
+                  draft.shot = undefined;
+                });
+              }}
+            >
+              Spaced armor
+            </DropdownMenu.CheckboxItem>
 
             <DropdownMenu.CheckboxItem
               checked={greenPenetration}

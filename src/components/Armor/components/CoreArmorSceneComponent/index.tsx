@@ -48,6 +48,7 @@ export function CoreArmorSceneComponent({
       explosionRadius: { value: null },
       greenPenetration: { value: null },
       opaque: { value: null },
+      useSpacedArmor: { value: null },
 
       resolution: { value: new Vector2() },
       spacedArmorBuffer: { value: null },
@@ -75,6 +76,7 @@ export function CoreArmorSceneComponent({
     ) {
       material.uniforms.greenPenetration.value = visual.greenPenetration;
       material.uniforms.opaque.value = visual.opaque || visual.wireframe;
+      material.uniforms.useSpacedArmor.value = visual.showSpacedArmor;
       material.wireframe = visual.wireframe;
     }
     async function handleProtagonistEquipmentChange(

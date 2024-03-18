@@ -18,6 +18,7 @@ import { useDuel } from '../../../../stores/duel';
 import {
   Shot,
   ShotLayerBase,
+  useTankopediaPersistent,
   useTankopediaTemporary,
 } from '../../../../stores/tankopedia';
 import { ArmorType } from '../SpacedArmorScene';
@@ -115,12 +116,20 @@ export function SpacedArmorSceneComponent({
             pushLogs(shellNormal, filterIntersections(event.intersections), 0);
 
             function filterIntersections(intersectionsRaw: Intersection[]) {
-              const intersectionsAll = intersectionsRaw.filter(
+              const showSpacedArmor =
+                useTankopediaPersistent.getState().model.visual.showSpacedArmor;
+              const intersectionsTyped = intersectionsRaw.filter(
                 ({ object }) => object.userData.type !== undefined,
               ) as ArmorMeshIntersection[];
-              const intersectionsWithDuplicates = intersectionsAll.slice(
+              const intersectionsFiltered = intersectionsTyped.filter(
+                ({ object }) =>
+                  showSpacedArmor
+                    ? true
+                    : object.userData.type === ArmorType.Core,
+              );
+              const intersectionsWithDuplicates = intersectionsFiltered.slice(
                 0,
-                intersectionsAll.findIndex(
+                intersectionsFiltered.findIndex(
                   ({ object }) => object.userData.type === ArmorType.Core,
                 ) + 1,
               );

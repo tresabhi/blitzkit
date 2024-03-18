@@ -23,6 +23,7 @@ export interface TankopediaPersistent {
       showGrid: boolean;
       greenPenetration: boolean;
       showEnvironment: boolean;
+      showSpacedArmor: boolean;
     };
   };
   sort: {
@@ -123,6 +124,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
     subscribeWithSelector<TankopediaPersistent>(() => ({
       model: {
         visual: {
+          showSpacedArmor: true,
           wireframe: false,
           opaque: false,
           environment: ENVIRONMENTS[0],

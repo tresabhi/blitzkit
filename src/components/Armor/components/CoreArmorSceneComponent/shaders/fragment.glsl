@@ -14,6 +14,7 @@ uniform float damage;
 uniform float explosionRadius;
 uniform bool greenPenetration;
 uniform bool opaque;
+uniform bool useSpacedArmor;
 
 uniform highp sampler2D spacedArmorBuffer;
 uniform highp sampler2D spacedArmorDepth;
@@ -49,7 +50,7 @@ void main() {
     float coreArmorDistance = depthToDistance(gl_FragCoord.z);
     float distanceFromSpacedArmor = coreArmorDistance - spacedArmorDistance;
 
-    if (isUnderSpacedArmor) {
+    if (useSpacedArmor && isUnderSpacedArmor) {
       float spacedArmorThickness = spacedArmorBufferFragment.r * penetration;
       remainingPenetration -= spacedArmorThickness;
 
