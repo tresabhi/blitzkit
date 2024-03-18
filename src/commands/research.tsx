@@ -17,6 +17,7 @@ import {
   TIER_ROMAN_NUMERALS,
 } from '../core/blitzkrieg/tankDefinitions/constants';
 import { tankIconPng } from '../core/blitzkrieg/tankIconPng';
+import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { localizationObject } from '../core/discord/localizationObject';
@@ -31,7 +32,6 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
     inProduction: true,
     inPublic: true,
-    inPreview: true,
 
     command: createLocalizedCommand('research')
       .addStringOption((option) =>
@@ -67,7 +67,8 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
           )
           .setAutocomplete(true)
           .setRequired(false),
-      ),
+      )
+      .addStringOption(addUsernameChoices),
 
     async handler(interaction) {
       const { t, translate } = translator(interaction.locale);
