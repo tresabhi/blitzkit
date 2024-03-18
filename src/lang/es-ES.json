@@ -137,10 +137,10 @@
           "description": "Región"
         },
         "tier": {
-          "$": "tier",
-          "description": "Tier",
+          "$": "nivel",
+          "description": "Nivel",
           "choices": {
-            "tier": "Tier %s - %s"
+            "tier": "Nivel %s - %s"
           }
         }
       },
@@ -152,7 +152,7 @@
       },
       "filters": {
         "none": "Sin filtros",
-        "tier": "Tier %s"
+        "tier": "Nivel %s"
       },
       "no_data": {
         "battles_in_period": "No hay batallas jugadas en este período",
@@ -170,10 +170,42 @@
         "tank_id_not_found": "# Tanque no encontrado\nNo se pudo encontrar al tanque del ID \"%s\". Prueba escribiendo el nombre del tanque en vez de un número.",
         "no_tank_stats": "# No hay estadísticas de tanque disponibles\nEste jugador no tiene estadísticas disponibles. Este podría no ser el jugador que estás buscando.",
         "get_help": "Servidor de ayuda de Discord",
-        "uncaught_error": "# ¡Blitzkrieg sufrió un error!\nLo sentimos mucho. Siéntete libre de [unirte al servidor oficial de Discord](https://discord.gg/nDt7AjGJQH) para obtener ayuda."
+        "uncaught_error": "# ¡Blitzkrieg sufrió un error!\nLo sentimos mucho. Siéntete libre de [unirte al servidor oficial de Discord](https://discord.gg/nDt7AjGJQH) para obtener ayuda.",
+        "preview": "# Este comando es una vista previa\n\nSolo puedes acceder a este comando en [el servidor oficial de Discord](https://discord.gg/nDt7AjGJQH). Generalmente este comando estará disponible pronto."
       }
     },
     "commands": {
+      "research": {
+        "$": "investigar",
+        "description": "Enumera los gastos por investigar una línea",
+        "options": {
+          "target_tank": {
+            "$": "tanque-objetivo",
+            "description": "El último tanque a investigar en la línea"
+          },
+          "starting_tank": {
+            "$": "tanque-inicial",
+            "description": "El tanque inicial en la línea (se deduce automáticamente si no se proporciona)"
+          }
+        },
+        "body": {
+          "subtitle": "Investigar",
+          "total": "Total",
+          "research": "Investigar: %s",
+          "upgrades": "Mejoras: %s",
+          "purchase": "Purchase: %s",
+          "equipment": "Equipamiento: %s",
+          "estimation": "# ¡Esto es una estimación!\n\nEsta lista podría incluir tanques ya investigados debido a la información errónea que proporciona Wargaming. Si puedes, prueba proporcionando un `tanque-inicial` de la línea al usar el comando."
+        },
+        "errors": {
+          "non_tech_tree": "# %s no está en el árbol tecnológico\n\nNo puedes investigar un tanque prémium o coleccionista.",
+          "tier_1": "# %s es un nivel I\n\nLos tanque de nivel I están siempre desbloqueados gratuitamente para todos los jugadores.",
+          "already_researched": "# %s ya está investigado\n\nPrueba proporcionando un `tanque-inicial` al usar el comando para ver los totales para una línea que ya has investigado.",
+          "start_end_equal": "# %s fue proporcionado dos veces\n\nAsegúrate de que `tanque-inicial` y `tanque-objetivo` son diferentes.",
+          "tanks_not_on_line": "# %s y %s no están en la misma línea\n\nAsegúrate de que `tanque-inicial` y `tanque-objetivo` están en la misma línea del árbol tecnológico.",
+          "unordered": "# %s higher tiered to %s\n\nMake sure to provide %s as the `starting-tank` instead as it is the lower tiered tank."
+        }
+      },
       "about": {
         "$": "sobre",
         "description": "Toda la información que necesitas sobre el bot",
@@ -278,13 +310,13 @@
             "lethality": {
               "$": "Letalidad",
               "average_damage": "Daño promedio",
-              "damage_per_tier": "Daño por tier",
+              "damage_per_tier": "Daño por nivel",
               "damage_ratio": "Relación de daño",
               "average_kills": "Promedio de bajas"
             },
             "miscellaneous": {
               "$": "Misceláneo",
-              "average_tier": "Tier promedio",
+              "average_tier": "Nivel promedio",
               "average_spots": "Promedio de detecciones",
               "average_xp": "Promedio de XP",
               "kills_to_death_ratio": "Relación bajas-muertes"
@@ -386,7 +418,7 @@
           "winrate": "Tasa de victorias",
           "damage": "Daño",
           "damage_ratio": "Relación de daño",
-          "tier": "Tier",
+          "tier": "Nivel",
           "survival": "Supervivencia",
           "accuracy": "Precisión",
           "kill_ratio": "Relación de bajas"
@@ -394,9 +426,9 @@
       },
       "owned_tanks": {
         "$": "tanques-propios",
-        "description": "Muestra todos los tanques propios en un tier",
+        "description": "Muestra todos los tanques propios en un nivel",
         "body": {
-          "subtitle": "Tanques de tier %s"
+          "title": "# Tanques de %s de nivel %s\n\n"
         }
       },
       "permissions": {
@@ -404,9 +436,10 @@
         "description": "Comprueba si el bot tiene los permisos requeridos para funcionar",
         "body": {
           "title": "# Permisos\n\n%s",
-          "view_channels": "Ver canales: necesario para que funcione el botón de actualizar",
-          "read_message_history": "Leer el historial de mensajes: necesario para que el botón de actualizar pueda encontrar el mensaje a actualizar",
-          "attach_files": "Adjuntar archivos: necesario para que funcionen los comandos basados en imágenes"
+          "view_channels": "Ver canales: necesario para encontrar el mensaje en el cual el botón \"actualizar\" fue usado",
+          "read_message_history": "Leer historial de mensajes: necesario para encontrar el mensaje a actualizar",
+          "attach_files": "Adjuntar archivos: necesario para añadir imágenes a los comandos basados en estas",
+          "external_emojis": "Emoticonos externos: necesario para añadir emoticonos de banderas nacionales y clases de tanque"
         }
       },
       "ping": {
