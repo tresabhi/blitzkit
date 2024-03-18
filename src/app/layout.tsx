@@ -51,9 +51,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
           name="description"
           content="🎉 Tools for everything World of Tanks Blitz"
         />
+        <Analytics />
       </head>
-
-      <Analytics />
 
       <body
         style={{
