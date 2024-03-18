@@ -1,7 +1,5 @@
 # Cedilla Object Notation
 
-This documentation uses an experimental binary notation syntax called "Buffer Up".
-
 1. JSON compressed as CDON, written directly to disk (a direct 50% reduction).
 2. CDON further compressed with LZ4 (a clean 90% reduction).
 3. The raw JSON file as fetched from a random data source.
@@ -19,7 +17,7 @@ primary CedillaObjectNotation {
 }
 
 Header {
-  uint16 version;
+  uint16 version; // always 1
   FSFormat fsFormat;
   StringTable<fsFormat> stringTable;
 }

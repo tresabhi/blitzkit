@@ -48,7 +48,7 @@ export class CdonReadStream extends ReadStream {
     const magic = this.utf8(4);
 
     if (magic !== 'CDON') {
-      throw new Error(`Invalid Cdon magic number: "${magic}"`);
+      throw new Error(`Invalid CDON magic number: "${magic}"`);
     }
   }
 
