@@ -193,7 +193,7 @@
           "total": "Total",
           "research": "Investigar: %s",
           "upgrades": "Mejoras: %s",
-          "purchase": "Purchase: %s",
+          "purchase": "Comprar: %s",
           "equipment": "Equipamiento: %s",
           "estimation": "# ¡Esto es una estimación!\n\nEsta lista podría incluir tanques ya investigados debido a la información errónea que proporciona Wargaming. Si puedes, prueba proporcionando un `tanque-inicial` de la línea al usar el comando."
         },
@@ -203,7 +203,7 @@
           "already_researched": "# %s ya está investigado\n\nPrueba proporcionando un `tanque-inicial` al usar el comando para ver los totales para una línea que ya has investigado.",
           "start_end_equal": "# %s fue proporcionado dos veces\n\nAsegúrate de que `tanque-inicial` y `tanque-objetivo` son diferentes.",
           "tanks_not_on_line": "# %s y %s no están en la misma línea\n\nAsegúrate de que `tanque-inicial` y `tanque-objetivo` están en la misma línea del árbol tecnológico.",
-          "unordered": "# %s higher tiered to %s\n\nMake sure to provide %s as the `starting-tank` instead as it is the lower tiered tank."
+          "unordered": "# %s de nivel superior a %s\n\nAsegúrate de proporcionar %s como el `tanque-inicial` en su lugar ya que es el tanque de nivel inferior."
         }
       },
       "about": {
@@ -403,7 +403,7 @@
           "no_ongoing_season": "# No hay temporada en curso\n\nActualmente no hay ninguna temporada de clasificación.",
           "deleted_player": "%s eliminado",
           "neighbors": "Vecinos de clasificación",
-          "more": "+ %s más"
+          "more": "+%s más"
         }
       },
       "today": {
