@@ -46,8 +46,3 @@ readdir('node_modules/prisma').then((files) =>
     .filter((file) => file.endsWith('.node'))
     .map((file) => cp(`node_modules/prisma/${file}`, `dist/bot/${file}`)),
 );
-
-// copy sharp as is
-if (!isDev) {
-  cp('node_modules/sharp', 'dist/bot/node_modules/sharp', { recursive: true });
-}
