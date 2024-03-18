@@ -12,7 +12,7 @@
     "build:assets": "vite-node --max_old_space_size=16384 --script scripts/buildAssets/index",
     "build:test": "vite-node --script scripts/buildTest",
     "build:ratingsplot": "vite-node --script scripts/buildRatingsPlot",
-    "dev:bot": "yarn build:bot && yarn start:bot",
+    "dev:bot": "yarn build:bot --dev && yarn start:bot",
     "dev:docs": "vitepress dev docs",
     "dev:website": "next dev",
     "start:bot": "node --enable-source-maps dist/bot/index.cjs",

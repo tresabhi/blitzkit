@@ -1,5 +1,8 @@
 import { build } from 'esbuild';
 import { cp, readdir } from 'fs/promises';
+import { argv } from 'process';
+
+const isDev = argv.includes('--dev');
 
 readdir('src/workers').then((workers) => {
   const files = [
@@ -25,6 +28,7 @@ readdir('src/workers').then((workers) => {
       '.js': '.cjs',
     },
 
+    external: ['sharp'],
     bundle: true,
     sourcemap: true,
     minifyIdentifiers: false, // causes goofy errors
@@ -42,3 +46,8 @@ readdir('node_modules/prisma').then((files) =>
     .filter((file) => file.endsWith('.node'))
     .map((file) => cp(`node_modules/prisma/${file}`, `dist/bot/${file}`)),
 );
+
+// copy sharp as is
+if (!isDev) {
+  cp('node_modules/sharp', 'dist/bot/node_modules/sharp', { recursive: true });
+}
