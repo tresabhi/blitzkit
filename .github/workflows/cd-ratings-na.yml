@@ -31,4 +31,4 @@ jobs:
         run: yarn
 
       - name: Generate leaderboard
-        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingsleaderboard --region=na --target=midnight
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingsleaderboard --region=na --target=midnight --production

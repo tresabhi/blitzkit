@@ -1,3 +1,5 @@
+import { patientFetch } from '../blitzkrieg/patientFetch';
+
 type BlitzResponse<Data extends object> =
   | {
       status: 'error';
@@ -23,7 +25,7 @@ async function manageQueue() {
     }, 1000);
 
     const { url, resolve } = queue.shift()!;
-    const data = (await fetch(url)
+    const data = (await patientFetch(url)
       .then((response) => response.json())
       .catch((error) => ({ status: 'error', error }))) as BlitzResponse<
       typeof resolve

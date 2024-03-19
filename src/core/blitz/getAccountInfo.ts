@@ -51,6 +51,28 @@ export interface ClanStats {
   dropped_capture_points: number;
 }
 
+interface RatingStats {
+  spotted: number;
+  calibration_battles_left: number;
+  hits: number;
+  frags: number;
+  recalibration_start_time: number;
+  mm_rating: number;
+  wins: number;
+  losses: number;
+  is_recalibration: boolean;
+  capture_points: number;
+  battles: number;
+  damage_dealt: number;
+  damage_received: number;
+  shots: number;
+  frags8p: number;
+  xp: number;
+  win_and_survived: number;
+  survived_battles: number;
+  dropped_capture_points: number;
+}
+
 interface IndividualAccountInfo {
   account_id: number;
   created_at: number;
@@ -61,6 +83,7 @@ interface IndividualAccountInfo {
   statistics: {
     all: AllStats;
     clan: ClanStats;
+    rating?: RatingStats;
     frags: null | number;
   };
 }
@@ -74,11 +97,11 @@ export async function getAccountInfo<
   ReturnType = Ids extends number
     ? IndividualAccountInfo
     : IndividualAccountInfo[],
->(region: Region, ids: Ids) {
+>(region: Region, ids: Ids, extra: string[] = []) {
   const object = await fetchBlitz<AccountInfo>(
     `https://api.wotblitz.${region}/wotb/account/info/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${normalizeIds(
       ids,
-    )}`,
+    )}${extra.length === 0 ? '' : `&extra=${extra.join(',')}`}`,
   );
 
   if (typeof ids === 'number') {

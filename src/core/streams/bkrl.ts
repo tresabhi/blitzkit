@@ -1,17 +1,17 @@
 import { times } from 'lodash';
 import { ReadStream, WriteStream } from './buffer';
 
-enum Format {
+export enum BkrlFormat {
   Minimal,
   Comprehensive1,
 }
 
-interface BkrlMinimalEntry {
+export interface BkrlMinimalEntry {
   id: number;
   score: number;
 }
 
-interface BkrlComprehensive1Entry {
+export interface BkrlComprehensive1Entry {
   id: number;
   score: number;
 
@@ -30,11 +30,11 @@ interface BkrlComprehensive1Entry {
 
 type DiscriminatedEntries =
   | {
-      format: Format.Minimal;
+      format: BkrlFormat.Minimal;
       entries: BkrlMinimalEntry[];
     }
   | {
-      format: Format.Comprehensive1;
+      format: BkrlFormat.Comprehensive1;
       entries: BkrlComprehensive1Entry[];
     };
 
@@ -47,9 +47,9 @@ export class BkrlReadStream extends ReadStream {
 
   body(header: ReturnType<typeof this.header>): DiscriminatedEntries {
     switch (header.format) {
-      case Format.Minimal: {
+      case BkrlFormat.Minimal: {
         return {
-          format: Format.Minimal,
+          format: BkrlFormat.Minimal,
           entries: times(
             header.count,
             () =>
@@ -61,9 +61,9 @@ export class BkrlReadStream extends ReadStream {
         };
       }
 
-      case Format.Comprehensive1: {
+      case BkrlFormat.Comprehensive1: {
         return {
-          format: Format.Comprehensive1,
+          format: BkrlFormat.Comprehensive1,
           entries: times(
             header.count,
             () =>
@@ -92,7 +92,7 @@ export class BkrlReadStream extends ReadStream {
   header() {
     return {
       version: this.uint16(),
-      format: this.uint8() as Format,
+      format: this.uint8() as BkrlFormat,
       count: this.uint32(),
     };
   }
@@ -115,7 +115,7 @@ export class BkrlWriteStream extends WriteStream {
 
   body(discriminatedEntries: DiscriminatedEntries) {
     switch (discriminatedEntries.format) {
-      case Format.Minimal: {
+      case BkrlFormat.Minimal: {
         discriminatedEntries.entries.forEach((entry) => {
           this.uint32(entry.id);
           this.uint16(entry.score);
@@ -123,7 +123,7 @@ export class BkrlWriteStream extends WriteStream {
         break;
       }
 
-      case Format.Comprehensive1: {
+      case BkrlFormat.Comprehensive1: {
         discriminatedEntries.entries.forEach((entry) => {
           this.uint32(entry.id);
           this.uint16(entry.score);

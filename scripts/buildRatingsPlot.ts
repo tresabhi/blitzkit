@@ -1,3 +1,5 @@
+// what the hell is this script???
+
 import { writeFile } from 'fs/promises';
 import { Region } from '../src/constants/regions';
 import { getRatingsNeighbors } from '../src/core/blitz/getRatingsNeighbors';
