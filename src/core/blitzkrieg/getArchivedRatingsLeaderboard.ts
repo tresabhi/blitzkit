@@ -1,10 +1,8 @@
-import { BlitzkriegRatingsLeaderboard } from '../../../scripts/buildRatingsLeaderboard';
 import { Region } from '../../constants/regions';
+import { BkrlDiscriminatedEntries, BkrlReadStream } from '../streams/bkrl';
+import { asset } from './asset';
 
-const LEADERBOARD_CACHE: Record<
-  Region,
-  Record<number, BlitzkriegRatingsLeaderboard>
-> = {
+const cache: Record<Region, Record<number, BkrlDiscriminatedEntries>> = {
   asia: {},
   eu: {},
   com: {},
@@ -14,15 +12,14 @@ export async function getArchivedRatingsLeaderboard(
   region: Region,
   season: number,
 ) {
-  if (LEADERBOARD_CACHE[region][season]) {
-    return LEADERBOARD_CACHE[region][season];
+  if (!cache[region][season]) {
+    const info = await fetch(
+      asset(`regions/${region}/ratings/${season}/latest.bkrl`),
+    )
+      .then((response) => response.arrayBuffer())
+      .then((buffer) => new BkrlReadStream(buffer).bkrl());
+    cache[region][season] = info;
   }
 
-  const response = await fetch(
-    `https://raw.githubusercontent.com/tresabhi/blitzkrieg-assets/main/regions/${region}/ratings/${season}/latest.json`,
-  );
-  const json = (await response.json()) as BlitzkriegRatingsLeaderboard;
-  LEADERBOARD_CACHE[region][season] = json;
-
-  return json;
+  return cache[region][season];
 }

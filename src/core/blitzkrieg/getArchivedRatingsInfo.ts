@@ -1,7 +1,9 @@
 import { RatingsInfo } from '../../commands/ratings';
 import { Region } from '../../constants/regions';
+import { asset } from './asset';
+import { superDecompress } from './superDecompress';
 
-const INFO_CACHE: Record<
+const cache: Record<
   Region,
   Record<
     number,
@@ -19,18 +21,18 @@ export default async function getArchivedRatingsInfo(
   region: Region,
   season: number,
 ) {
-  if (INFO_CACHE[region][season]) {
-    return INFO_CACHE[region][season];
+  if (!cache[region][season]) {
+    const info = await fetch(
+      asset(`regions/${region}/ratings/${season}/info.cdon.lz4`),
+    )
+      .then((response) => response.arrayBuffer())
+      .then((buffer) =>
+        superDecompress<RatingsInfo & { detail: undefined }>(
+          new Uint8Array(buffer),
+        ),
+      );
+    cache[region][season] = info;
   }
 
-  const response = await fetch(
-    `https://raw.githubusercontent.com/tresabhi/blitzkrieg-assets/main/regions/${region}/ratings/${season}/info.json`,
-  );
-  const jsonContent = (await response.json()) as RatingsInfo & {
-    detail: undefined;
-  };
-
-  INFO_CACHE[region][season] = jsonContent;
-
-  return jsonContent;
+  return cache[region][season];
 }

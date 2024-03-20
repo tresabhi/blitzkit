@@ -51,7 +51,7 @@ export interface ClanStats {
   dropped_capture_points: number;
 }
 
-interface RatingStats {
+export interface RatingStats {
   spotted: number;
   calibration_battles_left: number;
   hits: number;

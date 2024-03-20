@@ -1,10 +1,8 @@
-import { BlitzkriegRatingsLeaderboard } from '../../../scripts/buildRatingsLeaderboard';
 import { Region } from '../../constants/regions';
+import { BkrlDiscriminatedEntries, BkrlReadStream } from '../streams/bkrl';
+import { asset } from './asset';
 
-const MIDNIGHT_LEADERBOARD_CACHE: Record<
-  Region,
-  Record<number, BlitzkriegRatingsLeaderboard>
-> = {
+const cache: Record<Region, Record<number, BkrlDiscriminatedEntries | null>> = {
   com: {},
   eu: {},
   asia: {},
@@ -14,21 +12,18 @@ export default async function getArchivedRatingsMidnightLeaderboard(
   region: Region,
   season: number,
 ) {
-  if (MIDNIGHT_LEADERBOARD_CACHE[region][season]) {
-    return MIDNIGHT_LEADERBOARD_CACHE[region][season];
+  if (!cache[region][season]) {
+    const info = await fetch(
+      asset(`regions/${region}/ratings/${season}/midnight.bkrl`),
+    )
+      .then((response) =>
+        response.status === 404 ? null : response.arrayBuffer(),
+      )
+      .then((buffer) =>
+        buffer === null ? null : new BkrlReadStream(buffer).bkrl(),
+      );
+    cache[region][season] = info;
   }
 
-  try {
-    const response = await fetch(
-      `https://raw.githubusercontent.com/tresabhi/blitzkrieg-assets/main/regions/${region}/ratings/${season}/midnight.json`,
-    );
-    const json = (await response.json()) as BlitzkriegRatingsLeaderboard;
-    MIDNIGHT_LEADERBOARD_CACHE[region][season] = json;
-
-    return json;
-  } catch (error) {
-    console.warn(
-      `No midnight leaderboard found for season ${season}, region ${region}`,
-    );
-  }
+  return cache[region][season];
 }

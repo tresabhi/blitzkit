@@ -5,60 +5,55 @@ import {
 } from '../../types/tanksStats';
 
 export function deltaTankStats(
-  a: NormalizedTankStats,
-  b: NormalizedTankStats,
+  aRaw: NormalizedTankStats,
+  bRaw: NormalizedTankStats,
   time?: number,
 ) {
-  const bTanks = Object.keys(b);
+  const bTanks = Object.keys(bRaw);
   const changedTanks = bTanks.filter((id) => {
     return (
-      a[id as unknown as number]?.all.battles !==
-        b[id as unknown as number].all.battles &&
+      aRaw[id as unknown as number]?.all.battles !==
+        bRaw[id as unknown as number].all.battles &&
       (time === undefined
         ? true
-        : b[id as unknown as number].last_battle_time > time)
+        : bRaw[id as unknown as number].last_battle_time > time)
     );
   });
   const diff = changedTanks.map((id) => {
-    const aTank = a[id as unknown as number] ?? emptyIndividualTankStats;
-    const bTank = b[id as unknown as number];
+    const a = aRaw[id as unknown as number] ?? emptyIndividualTankStats;
+    const b = bRaw[id as unknown as number];
 
     const tankDiff = {
-      account_id: bTank.account_id,
-      battle_life_time: bTank.battle_life_time,
-      frags: (bTank.frags ?? aTank.frags ?? 0) - (aTank.frags ?? 0),
-      max_frags: Math.max(aTank.max_frags, bTank.max_frags),
-      in_garage: bTank.in_garage,
-      max_xp: Math.max(aTank.max_xp, bTank.max_xp),
-      in_garage_updated: bTank.in_garage_updated,
-      last_battle_time: Math.max(
-        bTank.last_battle_time,
-        aTank.last_battle_time,
-      ),
-      mark_of_mastery: bTank.mark_of_mastery,
-      tank_id: bTank.tank_id,
+      account_id: b.account_id,
+      battle_life_time: b.battle_life_time,
+      frags: (b.frags ?? a.frags ?? 0) - (a.frags ?? 0),
+      max_frags: Math.max(a.max_frags, b.max_frags),
+      in_garage: b.in_garage,
+      max_xp: Math.max(a.max_xp, b.max_xp),
+      in_garage_updated: b.in_garage_updated,
+      last_battle_time: Math.max(b.last_battle_time, a.last_battle_time),
+      mark_of_mastery: b.mark_of_mastery,
+      tank_id: b.tank_id,
 
       all: {
-        battles: bTank.all.battles - aTank.all.battles,
-        wins: bTank.all.wins - aTank.all.wins,
-        capture_points: bTank.all.capture_points - aTank.all.capture_points,
-        damage_dealt: bTank.all.damage_dealt - aTank.all.damage_dealt,
-        damage_received: bTank.all.damage_received - aTank.all.damage_received,
+        battles: b.all.battles - a.all.battles,
+        wins: b.all.wins - a.all.wins,
+        capture_points: b.all.capture_points - a.all.capture_points,
+        damage_dealt: b.all.damage_dealt - a.all.damage_dealt,
+        damage_received: b.all.damage_received - a.all.damage_received,
         dropped_capture_points:
-          bTank.all.dropped_capture_points - aTank.all.dropped_capture_points,
-        frags: bTank.all.frags - aTank.all.frags,
-        frags8p: bTank.all.frags8p - aTank.all.frags8p,
-        hits: bTank.all.hits - aTank.all.hits,
-        losses: bTank.all.losses - aTank.all.losses,
-        max_frags: Math.max(aTank.max_frags, bTank.max_frags),
-        max_xp: Math.max(aTank.max_xp, bTank.max_xp),
-        shots: bTank.all.shots - aTank.all.shots,
-        spotted: bTank.all.spotted - aTank.all.spotted,
-        survived_battles:
-          bTank.all.survived_battles - aTank.all.survived_battles,
-        win_and_survived:
-          bTank.all.win_and_survived - aTank.all.win_and_survived,
-        xp: bTank.all.xp - aTank.all.xp,
+          b.all.dropped_capture_points - a.all.dropped_capture_points,
+        frags: b.all.frags - a.all.frags,
+        frags8p: b.all.frags8p - a.all.frags8p,
+        hits: b.all.hits - a.all.hits,
+        losses: b.all.losses - a.all.losses,
+        max_frags: Math.max(a.max_frags, b.max_frags),
+        max_xp: Math.max(a.max_xp, b.max_xp),
+        shots: b.all.shots - a.all.shots,
+        spotted: b.all.spotted - a.all.spotted,
+        survived_battles: b.all.survived_battles - a.all.survived_battles,
+        win_and_survived: b.all.win_and_survived - a.all.win_and_survived,
+        xp: b.all.xp - a.all.xp,
       },
     } satisfies IndividualTankStats;
 

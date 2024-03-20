@@ -156,7 +156,7 @@ for (const leaderboardChunk of chunk(leaderboard, 100)) {
             hits: stat.statistics.rating!.hits,
             kills: stat.statistics.rating!.frags,
             shots: stat.statistics.rating!.shots,
-            survived: stat.statistics.rating!.win_and_survived,
+            survived: stat.statistics.rating!.survived_battles,
             wins: stat.statistics.rating!.wins,
           };
   });

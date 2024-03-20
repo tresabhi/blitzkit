@@ -28,7 +28,7 @@ export interface BkrlComprehensive1Entry {
   kills: number;
 }
 
-type DiscriminatedEntries =
+export type BkrlDiscriminatedEntries =
   | {
       format: BkrlFormat.Minimal;
       entries: BkrlMinimalEntry[];
@@ -45,7 +45,7 @@ export class BkrlReadStream extends ReadStream {
     return this.body(header);
   }
 
-  body(header: ReturnType<typeof this.header>): DiscriminatedEntries {
+  body(header: ReturnType<typeof this.header>): BkrlDiscriminatedEntries {
     switch (header.format) {
       case BkrlFormat.Minimal: {
         return {
@@ -107,13 +107,13 @@ export class BkrlReadStream extends ReadStream {
 }
 
 export class BkrlWriteStream extends WriteStream {
-  bkrl(discriminatedEntries: DiscriminatedEntries) {
+  bkrl(discriminatedEntries: BkrlDiscriminatedEntries) {
     this.magic();
     this.header(discriminatedEntries);
     this.body(discriminatedEntries);
   }
 
-  body(discriminatedEntries: DiscriminatedEntries) {
+  body(discriminatedEntries: BkrlDiscriminatedEntries) {
     switch (discriminatedEntries.format) {
       case BkrlFormat.Minimal: {
         discriminatedEntries.entries.forEach((entry) => {
@@ -145,7 +145,7 @@ export class BkrlWriteStream extends WriteStream {
     }
   }
 
-  header(discriminatedEntries: DiscriminatedEntries) {
+  header(discriminatedEntries: BkrlDiscriminatedEntries) {
     this.uint16(1);
     this.uint8(discriminatedEntries.format);
     this.uint32(discriminatedEntries.entries.length);
