@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import { Region } from '../../../../../../../constants/regions';
-import { searchCurrentRatingsPlayers } from '../../../../../../../core/blitz/searchCurrentRatingsPlayers';
+import { searchCurrentRatingPlayers } from '../../../../../../../core/blitz/searchCurrentRatingPlayers';
 
 export async function GET(
   request: Request,
   { params }: { params: { region: Region; username: string } },
 ) {
   return NextResponse.json(
-    await searchCurrentRatingsPlayers(params.region, params.username),
+    await searchCurrentRatingPlayers(params.region, params.username),
   );
 }

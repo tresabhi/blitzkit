@@ -1,8 +1,8 @@
-name: CD Ratings North America
+name: CD Rating Europe
 
 on:
   schedule:
-    - cron: '0 5 * * *'
+    - cron: '0 23 * * *'
 
 jobs:
   host:
@@ -31,4 +31,4 @@ jobs:
         run: yarn
 
       - name: Generate leaderboard
-        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingsleaderboard --region=na --target=midnight --production
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingleaderboard --region=eu --target=midnight --production

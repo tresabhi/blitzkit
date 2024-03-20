@@ -8,13 +8,13 @@ const cache: Record<Region, Record<number, BkrlDiscriminatedEntries>> = {
   com: {},
 };
 
-export async function getArchivedRatingsLeaderboard(
+export async function getArchivedRatingLeaderboard(
   region: Region,
   season: number,
 ) {
   if (!cache[region][season]) {
     const info = await fetch(
-      asset(`regions/${region}/ratings/${season}/latest.bkrl`),
+      asset(`regions/${region}/rating/${season}/latest.bkrl`),
     )
       .then((response) => response.arrayBuffer())
       .then((buffer) => new BkrlReadStream(buffer).bkrl());

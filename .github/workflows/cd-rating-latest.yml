@@ -1,4 +1,4 @@
-name: CD Ratings North America
+name: CD Rating North America
 
 on:
   schedule:
@@ -31,13 +31,13 @@ jobs:
         run: yarn
 
       - name: Generate NA leaderboard
-        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingsleaderboard --region=na --target=latest --production
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingleaderboard --region=na --target=latest --production
         if: always()
 
       - name: Generate EU leaderboard
-        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingsleaderboard --region=eu --target=latest --production
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingleaderboard --region=eu --target=latest --production
         if: always()
 
       - name: Generate Asia leaderboard
-        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingsleaderboard --region=asia --target=latest --production
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} yarn publish:ratingleaderboard --region=asia --target=latest --production
         if: always()

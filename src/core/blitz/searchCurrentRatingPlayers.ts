@@ -2,7 +2,7 @@ import { Region } from '../../constants/regions';
 import { context } from '../blitzkrieg/context';
 import regionToRegionSubdomain from './regionToRegionSubdomain';
 
-type CurrentRatingsPlayerSearch = Record<
+type CurrentRatingPlayerSearch = Record<
   number,
   {
     spa_id: number;
@@ -24,20 +24,17 @@ type CurrentRatingsPlayerSearch = Record<
   )
 >;
 
-export async function searchCurrentRatingsPlayers(
-  region: Region,
-  name: string,
-) {
+export async function searchCurrentRatingPlayers(region: Region, name: string) {
   const encodedSearch = encodeURIComponent(name);
   const response = await fetch(
     context === 'website'
-      ? `/api/${region}/ratings/current/search/${encodedSearch}`
+      ? `/api/${region}/rating/current/search/${encodedSearch}`
       : `https://${regionToRegionSubdomain(
           region,
         )}.wotblitz.com/en/api/rating-leaderboards/search/?prefix=${encodedSearch}`,
     { cache: 'no-store' },
   );
-  const accountList = (await response.json()) as CurrentRatingsPlayerSearch;
+  const accountList = (await response.json()) as CurrentRatingPlayerSearch;
 
   return accountList;
 }

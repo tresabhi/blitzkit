@@ -1,9 +1,9 @@
-# Blitzkrieg Ratings Leaderboard
+# Blitzkrieg Rating Leaderboard
 
-A straightforward way of storing the entire World of Tanks Blitz ratings leaderboard to disk.
+A straightforward way of storing the entire World of Tanks Blitz rating leaderboard to disk.
 
 ```cpp
-primary BlitzkriegRatingsLeaderboard {
+primary BlitzkriegRatingLeaderboard {
   utf8"BKRL" magic;
   Header header;
   primary Body<header> body;

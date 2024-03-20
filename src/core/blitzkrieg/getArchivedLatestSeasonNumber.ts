@@ -1,4 +1,4 @@
-import getRatingsInfo from '../blitz/getRatingsInfo';
+import getRatingInfo from '../blitz/getRatingInfo';
 
 interface GitHubTrees {
   tree: { path: string; url: string }[];
@@ -11,9 +11,9 @@ export async function getArchivedLatestSeasonNumber() {
     return cachedLatestArchivedSeasonNumber;
   }
 
-  const ratingsInfo = await getRatingsInfo('com');
+  const ratingInfo = await getRatingInfo('com');
 
-  if (ratingsInfo.detail) {
+  if (ratingInfo.detail) {
     const regionsURL = (
       (await fetch(
         'https://api.github.com/repos/tresabhi/blitzkrieg-assets/git/trees/main',
@@ -24,14 +24,14 @@ export async function getArchivedLatestSeasonNumber() {
         response.json(),
       )) as GitHubTrees
     ).tree.find(({ path }) => path === 'com')!.url;
-    const ratingsURL = (
+    const ratingURL = (
       (await fetch(comURL).then((response) => response.json())) as {
         tree: [{ url: string }];
       }
     ).tree[0].url;
     const latestSeason = Math.max(
       ...(
-        (await fetch(ratingsURL).then((response) => response.json())) as {
+        (await fetch(ratingURL).then((response) => response.json())) as {
           tree: { path: string }[];
         }
       ).tree.map(({ path }) => Number(path)),
@@ -39,7 +39,7 @@ export async function getArchivedLatestSeasonNumber() {
 
     cachedLatestArchivedSeasonNumber = latestSeason;
   } else {
-    cachedLatestArchivedSeasonNumber = ratingsInfo.current_season - 1;
+    cachedLatestArchivedSeasonNumber = ratingInfo.current_season - 1;
   }
 
   return cachedLatestArchivedSeasonNumber;

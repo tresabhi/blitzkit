@@ -154,6 +154,7 @@ export function Item({
             }
           />
         )}
+
         {score !== undefined && (
           <span
             style={{

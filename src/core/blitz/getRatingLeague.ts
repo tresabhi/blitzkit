@@ -1,10 +1,10 @@
-import { LeagueTop, RatingsPlayer } from '../../commands/ratings';
+import { LeagueTop, RatingPlayer } from '../../commands/ratingLeaderboard';
 import { Region } from '../../constants/regions';
 import { context } from '../blitzkrieg/context';
 import { patientFetch } from '../blitzkrieg/patientFetch';
 import regionToRegionSubdomain from './regionToRegionSubdomain';
 
-export async function getRatingsLeague(
+export async function getRatingLeague(
   region: Region,
   league: number,
   usePatientFetcher = false,
@@ -15,7 +15,7 @@ export async function getRatingsLeague(
       : fetch(url, { cache: 'no-store' });
   const response = await fetcher(
     context === 'website'
-      ? `/api/${region}/ratings/current/league/${league}`
+      ? `/api/${region}/rating/current/league/${league}`
       : `https://${regionToRegionSubdomain(
           region,
         )}.wotblitz.com/en/api/rating-leaderboards/league/${league}/top/`,
@@ -23,6 +23,6 @@ export async function getRatingsLeague(
   const json = await response.json();
 
   return context === 'website'
-    ? (json as RatingsPlayer[])
+    ? (json as RatingPlayer[])
     : (json as LeagueTop).result;
 }

@@ -1,4 +1,4 @@
-import { RatingsInfo } from '../../commands/ratings';
+import { RatingInfo } from '../../commands/ratingLeaderboard';
 import { Region } from '../../constants/regions';
 import { asset } from './asset';
 import { superDecompress } from './superDecompress';
@@ -7,7 +7,7 @@ const cache: Record<
   Region,
   Record<
     number,
-    RatingsInfo & {
+    RatingInfo & {
       detail: undefined;
     }
   >
@@ -17,17 +17,17 @@ const cache: Record<
   asia: {},
 };
 
-export default async function getArchivedRatingsInfo(
+export default async function getArchivedRatingInfo(
   region: Region,
   season: number,
 ) {
   if (!cache[region][season]) {
     const info = await fetch(
-      asset(`regions/${region}/ratings/${season}/info.cdon.lz4`),
+      asset(`regions/${region}/rating/${season}/info.cdon.lz4`),
     )
       .then((response) => response.arrayBuffer())
       .then((buffer) =>
-        superDecompress<RatingsInfo & { detail: undefined }>(
+        superDecompress<RatingInfo & { detail: undefined }>(
           new Uint8Array(buffer),
         ),
       );

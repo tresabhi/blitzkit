@@ -1,10 +1,10 @@
 import { chunk } from 'lodash';
 import { argv } from 'process';
 import {
-  RatingsInfo,
-  RatingsNeighbors,
-  RatingsPlayer,
-} from '../src/commands/ratings';
+  RatingInfo,
+  RatingNeighbors,
+  RatingPlayer,
+} from '../src/commands/ratingLeaderboard';
 import { RegionSubdomain } from '../src/constants/regions';
 import { getAccountInfo } from '../src/core/blitz/getAccountInfo';
 import regionSubdomainToRegion from '../src/core/blitz/regionSubdomainToRegion';
@@ -40,20 +40,20 @@ if (!regionSubdomain) throw new Error('Region parameter not specified');
 const region = regionSubdomainToRegion(regionSubdomain);
 
 const NEIGHBORS = 2 ** 8;
-const PLAYERS = await patientFetchJSON<RatingsInfo>(
+const PLAYERS = await patientFetchJSON<RatingInfo>(
   `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/season/`,
 ).then((data) => (data.detail === undefined ? data.count : undefined));
 
 if (PLAYERS === undefined) {
-  throw new Error('No current ratings season running');
+  throw new Error('No current rating season running');
 }
 
-const players: Record<number, RatingsPlayer> = {};
+const players: Record<number, RatingPlayer> = {};
 const leaderboard: BkrlMinimalEntry[] = [];
 let registered = 0;
 
 async function branchFromPlayer(id: number) {
-  const { neighbors } = await patientFetchJSON<RatingsNeighbors>(
+  const { neighbors } = await patientFetchJSON<RatingNeighbors>(
     `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/user/${id}/?neighbors=${NEIGHBORS}`,
   );
 
@@ -84,7 +84,7 @@ async function branchFromPlayer(id: number) {
 }
 
 async function branchFromLeague(id: number) {
-  const { result } = await patientFetchJSON<{ result: RatingsPlayer[] }>(
+  const { result } = await patientFetchJSON<{ result: RatingPlayer[] }>(
     `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/league/${id}/top/`,
   );
 
@@ -164,7 +164,7 @@ for (const leaderboardChunk of chunk(leaderboard, 100)) {
   chunkIndex++;
 }
 
-const info = await patientFetchJSON<RatingsInfo & { detail: undefined }>(
+const info = await patientFetchJSON<RatingInfo & { detail: undefined }>(
   `https://${regionSubdomain}.wotblitz.com/en/api/rating-leaderboards/season/`,
 );
 const normalizedServer = regionSubdomain === 'na' ? 'com' : regionSubdomain;
@@ -180,19 +180,19 @@ leaderboardWriteStream.bkrl({
 
 const changes: FileChange[] = [
   {
-    path: `regions/${normalizedServer}/ratings/${info.current_season}/info.cdon.lz4`,
+    path: `regions/${normalizedServer}/rating/${info.current_season}/info.cdon.lz4`,
     content: superCompress(infoContent),
     encoding: 'base64',
   },
   {
-    path: `regions/${normalizedServer}/ratings/${info.current_season}/${target}.bkrl`,
+    path: `regions/${normalizedServer}/rating/${info.current_season}/${target}.bkrl`,
     content: Buffer.from(leaderboardWriteStream.uint8Array).toString('base64'),
     encoding: 'base64',
   },
 ];
 
 commitAssets(
-  `ratings leaderboard ${regionSubdomain} ${target}`,
+  `rating leaderboard ${regionSubdomain} ${target}`,
   changes,
   production,
 );

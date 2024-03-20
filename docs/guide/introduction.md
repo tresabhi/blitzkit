@@ -18,5 +18,5 @@ Blitzkrieg is available as a Discord bot and can be [installed very easily](/gui
 Provides a bunch of very helpful tools; https://blitz-krieg.vercel.app/
 
 - Session tracker
-- Ratings leaderboard
+- Rating leaderboard
 - Way more to come

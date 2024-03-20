@@ -8,13 +8,13 @@ const cache: Record<Region, Record<number, BkrlDiscriminatedEntries | null>> = {
   asia: {},
 };
 
-export default async function getArchivedRatingsMidnightLeaderboard(
+export default async function getArchivedRatingMidnightLeaderboard(
   region: Region,
   season: number,
 ) {
   if (!cache[region][season]) {
     const info = await fetch(
-      asset(`regions/${region}/ratings/${season}/midnight.bkrl`),
+      asset(`regions/${region}/rating/${season}/midnight.bkrl`),
     )
       .then((response) =>
         response.status === 404 ? null : response.arrayBuffer(),

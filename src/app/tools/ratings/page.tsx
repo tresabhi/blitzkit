@@ -15,11 +15,11 @@ import { produce } from 'immer';
 import { debounce, range } from 'lodash';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
-import { RatingsInfo, RatingsPlayer } from '../../../commands/ratings';
+import { RatingInfo, RatingPlayer } from '../../../commands/ratingLeaderboard';
 import PageWrapper from '../../../components/PageWrapper';
 import { Skeleton } from '../../../components/Skeleton';
 import { LEAGUES } from '../../../constants/leagues';
-import { FIRST_ARCHIVED_RATINGS_SEASON } from '../../../constants/ratings';
+import { FIRST_ARCHIVED_RATING_SEASON } from '../../../constants/rating';
 import {
   REGIONS,
   Region,
@@ -28,17 +28,17 @@ import {
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import fetchBlitz from '../../../core/blitz/fetchBlitz';
 import { getClanAccountInfo } from '../../../core/blitz/getClanAccountInfo';
-import getRatingsInfo from '../../../core/blitz/getRatingsInfo';
-import { getRatingsLeague } from '../../../core/blitz/getRatingsLeague';
-import { getRatingsNeighbors } from '../../../core/blitz/getRatingsNeighbors';
-import { searchCurrentRatingsPlayers } from '../../../core/blitz/searchCurrentRatingsPlayers';
+import getRatingInfo from '../../../core/blitz/getRatingInfo';
+import { getRatingLeague } from '../../../core/blitz/getRatingLeague';
+import { getRatingNeighbors } from '../../../core/blitz/getRatingNeighbors';
+import { searchCurrentRatingPlayers } from '../../../core/blitz/searchCurrentRatingPlayers';
 import {
   AccountList,
   AccountListItem,
 } from '../../../core/blitz/searchPlayersAcrossRegions';
 import { getArchivedLatestSeasonNumber } from '../../../core/blitzkrieg/getArchivedLatestSeasonNumber';
-import getArchivedRatingsInfo from '../../../core/blitzkrieg/getArchivedRatingsInfo';
-import { getArchivedRatingsLeaderboard } from '../../../core/blitzkrieg/getArchivedRatingsLeaderboard';
+import getArchivedRatingInfo from '../../../core/blitzkrieg/getArchivedRatingInfo';
+import { getArchivedRatingLeaderboard } from '../../../core/blitzkrieg/getArchivedRatingLeaderboard';
 import { theme } from '../../../stitches.config';
 import { PageTurner } from './components/PageTurner';
 
@@ -51,7 +51,7 @@ interface NameCacheEntry {
 }
 type NameCache = Record<Region, Record<number, NameCacheEntry | null>>;
 type LeaderboardCache = Record<Region, Record<number, Record<number, number>>>;
-type InfoCache = Record<Region, Record<number, RatingsInfo | undefined>>;
+type InfoCache = Record<Region, Record<number, RatingInfo | undefined>>;
 type ScoreCache = Record<Region, Record<number, Record<number, number>>>;
 
 const useNameCache = create<NameCache>(() => ({
@@ -93,7 +93,7 @@ export default function Page() {
     { type: 'id'; id: number } | { type: 'position'; position: number } | null
   >(null);
 
-  const ratingsInfo = useInfoCache()[region][season];
+  const ratingInfo = useInfoCache()[region][season];
   const [latestArchivedSeasonNumber, setLatestArchivedSeasonNumber] = useState<
     number | null
   >(null);
@@ -111,7 +111,7 @@ export default function Page() {
   });
 
   const pages = Math.ceil(
-    (ratingsInfo && ratingsInfo.detail === undefined ? ratingsInfo?.count : 1) /
+    (ratingInfo && ratingInfo.detail === undefined ? ratingInfo?.count : 1) /
       ROWS_PER_PAGE,
   );
 
@@ -122,8 +122,8 @@ export default function Page() {
     (async () => {
       const newInfo =
         season === 0
-          ? await getRatingsInfo(region)
-          : await getArchivedRatingsInfo(region, season);
+          ? await getRatingInfo(region)
+          : await getArchivedRatingInfo(region, season);
       useInfoCache.setState(
         produce((draft: InfoCache) => {
           draft[region][season] = newInfo;
@@ -140,7 +140,7 @@ export default function Page() {
         const results = (
           await Promise.all(
             range(0, 5).map(async (league: number) => {
-              const data = await getRatingsLeague(region, league);
+              const data = await getRatingLeague(region, league);
               leaguePositionCache.current[region][league] = data[0].number - 1;
 
               return data;
@@ -178,12 +178,12 @@ export default function Page() {
         );
       })();
     } else {
-      getArchivedRatingsLeaderboard(region, season).then((results) => {
+      getArchivedRatingLeaderboard(region, season).then((results) => {
         useLeaderboardCache.setState(
           produce((draft: LeaderboardCache) => {
             if (!(season in draft[region])) draft[region][season] = {};
 
-            results.forEach((result, index) => {
+            results.entries.forEach((result, index) => {
               draft[region][season][index] = result.id;
             });
           }),
@@ -192,7 +192,7 @@ export default function Page() {
           produce((draft: ScoreCache) => {
             if (!(season in draft[region])) draft[region][season] = {};
 
-            results.forEach((result) => {
+            results.entries.forEach((result) => {
               draft[region][season][result.id] = result.score;
             });
           }),
@@ -213,7 +213,7 @@ export default function Page() {
   }, [leaderboard[region]?.[season] && 0 in leaderboard[region][season]]);
   // neighboring page caching for all seasons
   useEffect(() => {
-    if (!ratingsInfo || ratingsInfo?.detail) return;
+    if (!ratingInfo || ratingInfo?.detail) return;
 
     if (season === 0) {
       const middleIndex = page * ROWS_PER_PAGE + ROWS_PER_PAGE / 2;
@@ -236,7 +236,7 @@ export default function Page() {
       const ids = range(
         Math.max(0, (page - 1) * ROWS_PER_PAGE),
         Math.min(
-          ratingsInfo.count - 1,
+          ratingInfo.count - 1,
           (page + 1) * ROWS_PER_PAGE + ROWS_PER_PAGE,
         ),
       )
@@ -265,7 +265,7 @@ export default function Page() {
     page,
     region,
     season,
-    ratingsInfo?.detail,
+    ratingInfo?.detail,
     leaderboard[region][season] !== undefined &&
       0 in leaderboard[region][season],
   ]);
@@ -279,7 +279,7 @@ export default function Page() {
   async function cacheNeighbors(
     id: number,
     size: number,
-  ): Promise<RatingsPlayer[] | null> {
+  ): Promise<RatingPlayer[] | null> {
     const radius = Math.round(size / 2);
     const targetPosition = Object.entries(leaderboard[region][season]).find(
       ([, player]) => id === player,
@@ -303,7 +303,7 @@ export default function Page() {
       }
     }
 
-    const { neighbors } = await getRatingsNeighbors(region, id, size, true);
+    const { neighbors } = await getRatingNeighbors(region, id, size, true);
 
     useLeaderboardCache.setState(
       produce((draft: LeaderboardCache) => {
@@ -341,11 +341,11 @@ export default function Page() {
     return neighbors;
   }
   async function jumpToPosition(position: number) {
-    if (!ratingsInfo || ratingsInfo?.detail) return;
+    if (!ratingInfo || ratingInfo?.detail) return;
 
     const targetPosition = Math.min(
-      ratingsInfo.count - 1,
-      Math.max(0, Math.min(position, ratingsInfo.count - 1)),
+      ratingInfo.count - 1,
+      Math.max(0, Math.min(position, ratingInfo.count - 1)),
     );
 
     if (season === 0) {
@@ -378,7 +378,7 @@ export default function Page() {
       const loadingDirection = Math.sign(targetPosition - closestPosition);
       let seedingPlayer = closestPlayerId as number;
       let targetPositionAcquired = false;
-      let neighbors: RatingsPlayer[] | null;
+      let neighbors: RatingPlayer[] | null;
 
       setLoadingProgress([0, closestPositionDistance]);
 
@@ -423,7 +423,7 @@ export default function Page() {
     }
   }
   async function jumpToScore() {
-    if (!ratingsInfo || ratingsInfo?.detail) return;
+    if (!ratingInfo || ratingInfo?.detail) return;
 
     const targetScore = scoreInput.current!.valueAsNumber;
 
@@ -522,7 +522,7 @@ export default function Page() {
     } else {
       let playerIndex = -1;
 
-      for (let index = ratingsInfo.count; index >= 0; index--) {
+      for (let index = ratingInfo.count; index >= 0; index--) {
         if (!(index in leaderboard[region][season])) continue;
 
         if (scores[leaderboard[region][season][index]] >= targetScore) {
@@ -545,7 +545,7 @@ export default function Page() {
   }
 
   const totalPlayers =
-    !ratingsInfo?.detail && ratingsInfo?.count ? ratingsInfo.count : undefined;
+    !ratingInfo?.detail && ratingInfo?.count ? ratingInfo.count : undefined;
 
   return (
     <PageWrapper color="orange">
@@ -573,7 +573,7 @@ export default function Page() {
             <Select.Trigger style={{ flex: 1 }} />
 
             <Select.Content>
-              {ratingsInfo?.detail === undefined && (
+              {ratingInfo?.detail === undefined && (
                 <Select.Item value="0">Current season</Select.Item>
               )}
 
@@ -582,7 +582,7 @@ export default function Page() {
 
                 {latestArchivedSeasonNumber &&
                   range(
-                    FIRST_ARCHIVED_RATINGS_SEASON,
+                    FIRST_ARCHIVED_RATING_SEASON,
                     latestArchivedSeasonNumber + 1,
                   )
                     .map((season) => (
@@ -681,8 +681,8 @@ export default function Page() {
                   <Select.Trigger />
 
                   <Select.Content>
-                    {ratingsInfo?.detail === undefined &&
-                      ratingsInfo?.leagues.map(({ index, title }) => (
+                    {ratingInfo?.detail === undefined &&
+                      ratingInfo?.leagues.map(({ index, title }) => (
                         <Select.Item key={index} value={`${index}`}>
                           {title}
                         </Select.Item>
@@ -715,8 +715,8 @@ export default function Page() {
                           }
                         } else {
                           if (
-                            !ratingsInfo ||
-                            ratingsInfo.detail ||
+                            !ratingInfo ||
+                            ratingInfo.detail ||
                             !leaderboard
                           )
                             return;
@@ -727,7 +727,7 @@ export default function Page() {
 
                           for (
                             let index = 0;
-                            index < ratingsInfo.count;
+                            index < ratingInfo.count;
                             index++
                           ) {
                             if (
@@ -779,7 +779,7 @@ export default function Page() {
                             setSearchLoading(true);
 
                             const accountList =
-                              await searchCurrentRatingsPlayers(
+                              await searchCurrentRatingPlayers(
                                 region,
                                 trimmedSearch,
                               );
@@ -885,12 +885,12 @@ export default function Page() {
                                 id: player.account_id,
                               });
                             } else {
-                              if (!ratingsInfo || ratingsInfo.detail) return;
+                              if (!ratingInfo || ratingInfo.detail) return;
                               let playerIndex = -1;
 
                               for (
                                 let index = 0;
-                                index < ratingsInfo.count;
+                                index < ratingInfo.count;
                                 index++
                               ) {
                                 if (
@@ -952,7 +952,7 @@ export default function Page() {
 
       <PageTurner
         totalPlayers={
-          (ratingsInfo?.detail ? undefined : ratingsInfo?.count) ?? 0
+          (ratingInfo?.detail ? undefined : ratingInfo?.count) ?? 0
         }
         leaderboard={leaderboard[region][season] ?? {}}
         rowsPerPage={ROWS_PER_PAGE}
@@ -982,7 +982,7 @@ export default function Page() {
           page * ROWS_PER_PAGE,
           Math.min(
             page * ROWS_PER_PAGE + ROWS_PER_PAGE,
-            ratingsInfo?.detail ? 0 : (ratingsInfo?.count ?? 1) - 1,
+            ratingInfo?.detail ? 0 : (ratingInfo?.count ?? 1) - 1,
           ),
         ).map((index) => {
           const id = leaderboard[region][season]?.[index];
@@ -994,8 +994,8 @@ export default function Page() {
               : highlightedPlayer.position === index
             : false;
           const reward =
-            !ratingsInfo?.detail && ratingsInfo?.rewards
-              ? ratingsInfo.rewards.find(
+            !ratingInfo?.detail && ratingInfo?.rewards
+              ? ratingInfo.rewards.find(
                   (reward) =>
                     reward.from_position <= position &&
                     reward.to_position >= position,
@@ -1091,7 +1091,7 @@ export default function Page() {
 
       <PageTurner
         totalPlayers={
-          (ratingsInfo?.detail ? undefined : ratingsInfo?.count) ?? 0
+          (ratingInfo?.detail ? undefined : ratingInfo?.count) ?? 0
         }
         rowsPerPage={ROWS_PER_PAGE}
         leaderboard={leaderboard[region][season] ?? {}}

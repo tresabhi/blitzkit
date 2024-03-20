@@ -69,7 +69,7 @@ export default async function getStatsInPeriod(
       return get(latest.all) - get(previous.all);
     }
 
-    // check if there was a change in battles as games in ratings do update last_battle_time
+    // check if there was a change in battles as games in rating do update last_battle_time
     if (d((a) => a.battles) > 0) {
       diff[tankId] = {
         battles: d((a) => a.battles),

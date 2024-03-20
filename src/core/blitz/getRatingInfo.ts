@@ -1,26 +1,26 @@
-import { RatingsInfo } from '../../commands/ratings';
+import { RatingInfo } from '../../commands/ratingLeaderboard';
 import { Region } from '../../constants/regions';
 import { context } from '../blitzkrieg/context';
 import { patientFetch } from '../blitzkrieg/patientFetch';
 import regionToRegionSubdomain from './regionToRegionSubdomain';
 
-const ratingsInfoCache: Partial<Record<Region, RatingsInfo>> = {};
+const cache: Partial<Record<Region, RatingInfo>> = {};
 
-export default async function getRatingsInfo(region: Region) {
-  if (ratingsInfoCache[region]) return ratingsInfoCache[region]!;
+export default async function getRatingInfo(region: Region) {
+  if (cache[region]) return cache[region]!;
 
   const response = await patientFetch(
     context === 'website'
-      ? `/api/${region}/ratings/current/info`
+      ? `/api/${region}/rating/current/info`
       : `https://${regionToRegionSubdomain(
           region,
         )}.wotblitz.com/en/api/rating-leaderboards/season/`,
     undefined,
     { cache: 'no-store' },
   );
-  const data = (await response.json()) as RatingsInfo;
+  const data = (await response.json()) as RatingInfo;
 
-  ratingsInfoCache[region] = data;
+  cache[region] = data;
 
   return data;
 }

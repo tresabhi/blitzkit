@@ -1,10 +1,10 @@
-import { RatingsNeighbors } from '../../commands/ratings';
+import { RatingNeighbors } from '../../commands/ratingLeaderboard';
 import { Region } from '../../constants/regions';
 import { patientFetch } from '../blitzkrieg/patientFetch';
 import { withCORSProxy } from '../blitzkrieg/withCORSProxy';
 import regionToRegionSubdomain from './regionToRegionSubdomain';
 
-export async function getRatingsNeighbors(
+export async function getRatingNeighbors(
   region: Region,
   id: number,
   count: number,
@@ -21,7 +21,7 @@ export async function getRatingsNeighbors(
       )}.wotblitz.com/en/api/rating-leaderboards/user/${id}/?neighbors=${count}`,
     ),
   );
-  const json = (await response.json()) as RatingsNeighbors;
+  const json = (await response.json()) as RatingNeighbors;
 
   return json;
 }

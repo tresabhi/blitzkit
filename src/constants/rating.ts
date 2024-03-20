@@ -1,0 +1,1 @@
+export const FIRST_ARCHIVED_RATING_SEASON = 49;
