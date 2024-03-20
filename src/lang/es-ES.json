@@ -156,6 +156,7 @@
       },
       "no_data": {
         "battles_in_period": "No hay batallas jugadas en este período",
+        "battles_in_season": "No battles played in this season",
         "players_in_period": "No hay jugadores en este período",
         "tanks_found": "No se encontraron tanques"
       },
@@ -367,43 +368,43 @@
           "no_results": "No se encontraron jugadores"
         }
       },
-      "ratings": {
-        "$": "clasificación",
-        "description": "Estadísticas de batallas en clasificación",
+      "rating_leaderboard": {
+        "$": "rating-leaderboard",
+        "description": "Rating battles statistics",
         "subcommands": {
           "neighbors": {
-            "$": "vecinos",
-            "description": "Jugadores vecinos en la tabla de posiciones"
+            "$": "neighbors",
+            "description": "Neighboring players on the leaderboard"
           },
           "league": {
-            "$": "liga",
-            "description": "Mejores jugadores de una liga"
+            "$": "league",
+            "description": "Top players of a league"
           }
         },
         "options": {
           "limit": {
-            "$": "límite",
-            "description": "Cuántos vecinos mostrar (predeterminado: %s)"
+            "$": "limit",
+            "description": "How many neighbors to display (default: %s)"
           },
           "season": {
-            "$": "temporada",
-            "description": "Número de temporada (predeterminado: actual)",
+            "$": "season",
+            "description": "Season number (default: current)",
             "choices": {
-              "current": "%s (actual)"
+              "current": "%s (current)"
             }
           },
           "league": {
-            "$": "liga",
-            "description": "La liga a mostrar"
+            "$": "league",
+            "description": "The league to display"
           }
         },
         "body": {
-          "top_players": "Top %s jugadores",
-          "no_participation": "# %s no jugó clasificación en la temporada %s\n\nEl jugador no participó en esta temporada o no completó su calibración.",
-          "no_ongoing_season": "# No hay temporada en curso\n\nActualmente no hay ninguna temporada de clasificación.",
-          "deleted_player": "%s eliminado",
-          "neighbors": "Vecinos de clasificación",
-          "more": "+%s más"
+          "top_players": "Top %s players",
+          "no_participation": "# %s didn't play rating in season %s\n\nThis player did not participate in this season or did not get past calibration.",
+          "no_ongoing_season": "# No ongoing season\n\nThere isn't a currently running rating season.",
+          "deleted_player": "Deleted %s",
+          "neighbors": "Rating neighbors",
+          "more": "+ %s more"
         }
       },
       "today": {
@@ -471,6 +472,17 @@
           "account_id": "ID de cuenta",
           "created": "Creado",
           "last_battle": "Última batalla"
+        }
+      },
+      "rating_stats": {
+        "$": "rating-stats",
+        "description": "Rating player's statistics",
+        "body": {
+          "subtitle": "Today's rating statistics"
+        },
+        "errors": {
+          "no_participation": "# %s hasn't played rating\n\nThis player hasn't participated in the rating gamemode this season.",
+          "unrecorded_stats": "# Statistics unavailable\n\nRatings statistics are currently unavailable. If there is an on-going season, statistics should be available withing 24 hours."
         }
       }
     }
