@@ -156,6 +156,7 @@
       },
       "no_data": {
         "battles_in_period": "No battles played in this period",
+        "battles_in_season": "No battles played in this season",
         "players_in_period": "No players in this period",
         "tanks_found": "No tanks found"
       },
@@ -367,9 +368,9 @@
           "no_results": "No players found"
         }
       },
-      "ratings": {
-        "$": "ratings",
-        "description": "Ratings battles statistics",
+      "rating_leaderboard": {
+        "$": "rating-leaderboard",
+        "description": "Rating battles statistics",
         "subcommands": {
           "neighbors": {
             "$": "neighbors",
@@ -399,10 +400,10 @@
         },
         "body": {
           "top_players": "Top %s players",
-          "no_participation": "# %s didn't play ratings in season %s\n\nThis player did not participate in this season or did not get past calibration.",
-          "no_ongoing_season": "# No ongoing season\n\nThere isn't a currently running ratings season.",
+          "no_participation": "# %s didn't play rating in season %s\n\nThis player did not participate in this season or did not get past calibration.",
+          "no_ongoing_season": "# No ongoing season\n\nThere isn't a currently running rating season.",
           "deleted_player": "Deleted %s",
-          "neighbors": "Ratings neighbors",
+          "neighbors": "Rating neighbors",
           "more": "+ %s more"
         }
       },
@@ -471,6 +472,17 @@
           "account_id": "Account ID",
           "created": "Created",
           "last_battle": "Last battle"
+        }
+      },
+      "rating_stats": {
+        "$": "rating-stats",
+        "description": "Rating player's statistics",
+        "body": {
+          "subtitle": "Today's rating statistics"
+        },
+        "errors": {
+          "no_participation": "# %s hasn't played rating\n\nThis player hasn't participated in the rating gamemode this season.",
+          "unrecorded_stats": "# Statistics unavailable\n\nRatings statistics are currently unavailable. If there is an on-going season, statistics should be available withing 24 hours."
         }
       }
     }
