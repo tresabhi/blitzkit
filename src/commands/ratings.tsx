@@ -5,7 +5,6 @@ import {
 } from 'discord.js';
 import { range } from 'lodash';
 import markdownEscape from 'markdown-escape';
-import { BlitzkriegRatingsLeaderboard } from '../../scripts/buildRatingsLeaderboard';
 import CommandWrapper from '../components/CommandWrapper';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
@@ -29,6 +28,7 @@ import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { localizationObject } from '../core/discord/localizationObject';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { translator } from '../core/localization/translator';
+import { BkrlDiscriminatedEntries } from '../core/streams/bkrl';
 import { CommandRegistry } from '../events/interactionCreate';
 import { UserError } from '../hooks/userError';
 
@@ -276,7 +276,7 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
       let titleDescription: string;
       let playersAfter: number;
       let players: SimplifiedPlayer[] | undefined;
-      let midnightLeaderboard: BlitzkriegRatingsLeaderboard | undefined;
+      let midnightLeaderboard: BkrlDiscriminatedEntries | null;
       let playerId: number | undefined;
       let regionRatingsInfo: RatingsInfo;
 
@@ -308,12 +308,12 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
                 const firstPlayerIndex =
                   leagueIndex === 0
                     ? 0
-                    : players.findIndex(
+                    : players.entries.findIndex(
                         (player) =>
                           player.score < LEAGUES[leagueIndex - 1].minScore,
                       );
                 const lastPlayerIndex = firstPlayerIndex + limit - 1;
-                const trimmed = players.slice(
+                const trimmed = players.entries.slice(
                   firstPlayerIndex,
                   lastPlayerIndex + 1,
                 );
@@ -388,7 +388,7 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
             )
           : await getArchivedRatingsLeaderboard(region, season!).then(
               async (players) => {
-                const playerIndex = players.findIndex(
+                const playerIndex = players.entries.findIndex(
                   (player) => player.id === id,
                 );
 
@@ -402,7 +402,7 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
                 }
 
                 const halfRange = Math.round(limit / 2);
-                const trimmed = players.slice(
+                const trimmed = players.entries.slice(
                   playerIndex - halfRange,
                   playerIndex + halfRange + 1,
                 );
@@ -441,23 +441,14 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
         playerId = id;
       }
 
-      const resolvedRegionRatingsInfo: typeof regionRatingsInfo & {
-        detail: undefined;
-      } = regionRatingsInfo;
-
       const items = players.map((player) => {
-        const reward = resolvedRegionRatingsInfo.rewards.find(
-          (reward) =>
-            player.position >= reward.from_position &&
-            player.position <= reward.to_position,
-        );
-        const midnightIndex = midnightLeaderboard?.findIndex(
+        const midnightIndex = midnightLeaderboard?.entries.findIndex(
           (item) => item.id === player.id,
         );
         const midnightScore =
           midnightIndex === undefined
             ? player.score
-            : midnightLeaderboard![midnightIndex].score;
+            : midnightLeaderboard!.entries[midnightIndex].score;
         const midnightPosition =
           midnightIndex === undefined ? player.position : midnightIndex + 1;
 
@@ -467,7 +458,6 @@ export const ratingsCommand = new Promise<CommandRegistry>(async (resolve) => {
             score={player.score}
             position={player.position}
             clan={player.clan}
-            reward={reward}
             deltaScore={player.score - midnightScore}
             deltaPosition={midnightPosition - player.position}
             key={player.id}

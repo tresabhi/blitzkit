@@ -1,5 +1,4 @@
 import { ComponentProps } from 'react';
-import { RatingsReward } from '../../../commands/ratings';
 import { theme } from '../../../stitches.config';
 
 interface ItemProps extends ComponentProps<'div'> {
@@ -7,7 +6,6 @@ interface ItemProps extends ComponentProps<'div'> {
   deltaPosition?: number;
   score?: number;
   deltaScore?: number;
-  reward?: RatingsReward;
   nickname: string;
   clan?: string;
   highlight?: boolean;
@@ -22,7 +20,6 @@ export function Item({
   deltaPosition,
   score,
   deltaScore,
-  reward,
   nickname,
   clan,
   highlight,
@@ -120,40 +117,8 @@ export function Item({
         </div>
       )}
 
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          gap: 4,
-        }}
-      >
-        {reward && (
-          <img
-            style={{ width: 16, height: 16, objectFit: 'cover' }}
-            src={normalizeImage(
-              reward.type === 'vehicle'
-                ? reward.vehicle.image_url
-                : reward.stuff.image_url,
-            )}
-            width={16}
-            height={16}
-          />
-        )}
-        {reward && reward.count > 1 && (
-          <span
-            style={{
-              color: highlight
-                ? theme.colors.textLowContrast_blue
-                : theme.colors.textLowContrast,
-              fontSize: 16,
-            }}
-          >
-            x {reward.count.toLocaleString()}
-          </span>
-        )}
-      </div>
+      {/* TODO: lol remove this spacer div for a better solution */}
+      <div style={{ flex: 1 }} />
 
       <div
         style={{
