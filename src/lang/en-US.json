@@ -174,6 +174,7 @@
 
       "no_data": {
         "battles_in_period": "No battles played in this period",
+        "battles_in_season": "No battles played in this season",
         "players_in_period": "No players in this period",
         "tanks_found": "No tanks found"
       },
@@ -537,6 +538,20 @@
           "account_id": "Account ID",
           "created": "Created",
           "last_battle": "Last battle"
+        }
+      },
+
+      "rating_stats": {
+        "$": "rating-stats",
+        "description": "Rating player's statistics",
+
+        "body": {
+          "subtitle": "Today's rating statistics"
+        },
+
+        "errors": {
+          "no_participation": "# %s hasn't played rating\n\nThis player hasn't participated in the rating gamemode this season.",
+          "unrecorded_stats": "# Statistics unavailable\n\nRatings statistics are currently unavailable. If there is an on-going season, statistics should be available withing 24 hours."
         }
       }
     }

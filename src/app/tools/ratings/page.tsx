@@ -19,7 +19,7 @@ import { RatingInfo, RatingPlayer } from '../../../commands/ratingLeaderboard';
 import PageWrapper from '../../../components/PageWrapper';
 import { Skeleton } from '../../../components/Skeleton';
 import { LEAGUES } from '../../../constants/leagues';
-import { FIRST_ARCHIVED_RATING_SEASON } from '../../../constants/rating';
+import { FIRST_MINIMAL_ARCHIVED_RATING_SEASON } from '../../../constants/rating';
 import {
   REGIONS,
   Region,
@@ -582,7 +582,7 @@ export default function Page() {
 
                 {latestArchivedSeasonNumber &&
                   range(
-                    FIRST_ARCHIVED_RATING_SEASON,
+                    FIRST_MINIMAL_ARCHIVED_RATING_SEASON,
                     latestArchivedSeasonNumber + 1,
                   )
                     .map((season) => (
@@ -714,11 +714,7 @@ export default function Page() {
                             );
                           }
                         } else {
-                          if (
-                            !ratingInfo ||
-                            ratingInfo.detail ||
-                            !leaderboard
-                          )
+                          if (!ratingInfo || ratingInfo.detail || !leaderboard)
                             return;
 
                           const minScore =
@@ -951,9 +947,7 @@ export default function Page() {
       </Flex>
 
       <PageTurner
-        totalPlayers={
-          (ratingInfo?.detail ? undefined : ratingInfo?.count) ?? 0
-        }
+        totalPlayers={(ratingInfo?.detail ? undefined : ratingInfo?.count) ?? 0}
         leaderboard={leaderboard[region][season] ?? {}}
         rowsPerPage={ROWS_PER_PAGE}
         page={page}
@@ -1090,9 +1084,7 @@ export default function Page() {
       </Table.Root>
 
       <PageTurner
-        totalPlayers={
-          (ratingInfo?.detail ? undefined : ratingInfo?.count) ?? 0
-        }
+        totalPlayers={(ratingInfo?.detail ? undefined : ratingInfo?.count) ?? 0}
         rowsPerPage={ROWS_PER_PAGE}
         leaderboard={leaderboard[region][season] ?? {}}
         page={page}

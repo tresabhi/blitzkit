@@ -9,7 +9,7 @@ import CommandWrapper from '../components/CommandWrapper';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
 import { LEAGUES } from '../constants/leagues';
-import { FIRST_ARCHIVED_RATING_SEASON } from '../constants/rating';
+import { FIRST_MINIMAL_ARCHIVED_RATING_SEASON } from '../constants/rating';
 import { Region } from '../constants/regions';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
@@ -134,7 +134,7 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
     const latestArchivedSeasonNumber = await getArchivedLatestSeasonNumber();
     const onGoingSeason = await isOnGoingRatingSeason();
     const seasonNumbers = range(
-      FIRST_ARCHIVED_RATING_SEASON,
+      FIRST_MINIMAL_ARCHIVED_RATING_SEASON,
       latestArchivedSeasonNumber + (onGoingSeason ? 1 : 0) + 1,
     );
 

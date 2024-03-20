@@ -3,7 +3,11 @@ import { translator } from '../../core/localization/translator';
 import { theme } from '../../stitches.config';
 
 interface NoDataProps {
-  type: 'battles_in_period' | 'players_in_period' | 'tanks_found';
+  type:
+    | 'battles_in_period'
+    | 'players_in_period'
+    | 'tanks_found'
+    | 'battles_in_season';
   locale: Locale;
 }
 

@@ -1,5 +1,5 @@
 import { Locale } from 'discord.js';
-import { AllStats, SupplementaryStats } from '../../core/blitz/getAccountInfo';
+import { SupplementaryStats } from '../../core/blitz/getAccountInfo';
 import { translator } from '../../core/localization/translator';
 import { WN8Display } from './components/WN8Display';
 import {
@@ -8,7 +8,16 @@ import {
 } from './components/WN8SurroundingStat';
 
 export interface AllStatsOverviewProps {
-  stats: AllStats;
+  stats: {
+    battles: number;
+    wins: number;
+    damage_dealt: number;
+    damage_received: number;
+    survived_battles: number;
+    hits: number;
+    shots: number;
+    frags: number;
+  };
   supplementaryStats: SupplementaryStats;
   locale: Locale;
 }

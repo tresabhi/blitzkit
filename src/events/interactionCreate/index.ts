@@ -26,11 +26,11 @@ import { permissionsCommand } from '../../commands/permissions';
 import { pingCommand } from '../../commands/ping';
 import { playerInfoCommand } from '../../commands/playerInfo';
 import { ratingLeaderboardCommand } from '../../commands/ratingLeaderboard';
+import { ratingStatsCommand } from '../../commands/ratingStats';
 import { researchCommand } from '../../commands/research';
 import { searchClansCommand } from '../../commands/searchClans';
 import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { statsCommand } from '../../commands/stats';
-import { testCommand } from '../../commands/test';
 import { todayCommand } from '../../commands/today';
 import getClientId from '../../core/blitzkrieg/getClientId';
 import isDev from '../../core/blitzkrieg/isDev';
@@ -96,7 +96,7 @@ export const COMMANDS_RAW: Promise<CommandRegistry>[] = [
   ratingLeaderboardCommand,
   todayCommand,
   researchCommand,
-  testCommand,
+  ratingStatsCommand,
 ];
 
 export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {
