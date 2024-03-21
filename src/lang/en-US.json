@@ -193,6 +193,17 @@
         "get_help": "Help Discord server",
         "uncaught_error": "# Blitzkrieg ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help.",
         "preview": "# This command is in preview\n\nYou can only access this command in [the official Discord server](https://discord.gg/nDt7AjGJQH). The command will be generally available soon."
+      },
+
+      "hero_stats": {
+        "battles": "Battles",
+        "winrate": "Winrate",
+        "damage": "Damage",
+        "damage_ratio": "Damage ratio",
+        "tier": "Tier",
+        "survival": "Survival",
+        "accuracy": "Accuracy",
+        "kills": "Kills"
       }
     },
 
@@ -469,18 +480,7 @@
 
       "stats": {
         "$": "stats",
-        "description": "Quick statistics for a period",
-
-        "body": {
-          "battles": "Battles",
-          "winrate": "Winrate",
-          "damage": "Damage",
-          "damage_ratio": "Damage ratio",
-          "tier": "Tier",
-          "survival": "Survival",
-          "accuracy": "Accuracy",
-          "kill_ratio": "Kill ratio"
-        }
+        "description": "Quick statistics for a period"
       },
 
       "owned_tanks": {

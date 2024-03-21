@@ -1,7 +1,7 @@
 import { Locale } from 'discord.js';
 import { SupplementaryStats } from '../../core/blitz/getAccountInfo';
 import { translator } from '../../core/localization/translator';
-import { WN8Display } from './components/WN8Display';
+import { HeroStat } from './components/HeroStat';
 import {
   WN8SurroundingStat,
   WN8SurroundingStatAlign,
@@ -47,18 +47,18 @@ export default function AllStatsOverview({
         }}
       >
         <WN8SurroundingStat
-          label={t`bot.commands.stats.body.battles`}
+          label={t`bot.common.hero_stats.battles`}
           value={stats.battles.toLocaleString()}
           align={WN8SurroundingStatAlign.Right}
         />
         <WN8SurroundingStat
-          label={t`bot.commands.stats.body.winrate`}
+          label={t`bot.common.hero_stats.winrate`}
           value={`${(100 * (stats.wins / stats.battles)).toFixed(2)}%`}
           align={WN8SurroundingStatAlign.Right}
           padded
         />
         <WN8SurroundingStat
-          label={t`bot.commands.stats.body.damage`}
+          label={t`bot.common.hero_stats.damage`}
           value={Math.round(
             stats.damage_dealt / stats.battles,
           ).toLocaleString()}
@@ -66,13 +66,13 @@ export default function AllStatsOverview({
           padded
         />
         <WN8SurroundingStat
-          label={t`bot.commands.stats.body.damage_ratio`}
+          label={t`bot.common.hero_stats.damage_ratio`}
           value={(stats.damage_dealt / stats.damage_received).toFixed(2)}
           align={WN8SurroundingStatAlign.Right}
         />
       </div>
 
-      <WN8Display locale={locale} wn8={supplementaryStats.WN8} />
+      <HeroStat locale={locale} stats={supplementaryStats} />
 
       <div
         style={{
@@ -82,30 +82,37 @@ export default function AllStatsOverview({
           flex: 1,
         }}
       >
+        {supplementaryStats.type === 'random' && (
+          <WN8SurroundingStat
+            label={t`bot.common.hero_stats.tier`}
+            value={
+              supplementaryStats.tier
+                ? supplementaryStats.tier.toFixed(2)
+                : '--'
+            }
+          />
+        )}
+        {supplementaryStats.type === 'rating' && (
+          <WN8SurroundingStat
+            label={t`bot.common.hero_stats.tier`}
+            value="idk lol"
+          />
+        )}
         <WN8SurroundingStat
-          label={t`bot.commands.stats.body.tier`}
-          value={
-            supplementaryStats.tier ? supplementaryStats.tier.toFixed(2) : '--'
-          }
-        />
-        <WN8SurroundingStat
-          label={t`bot.commands.stats.body.survival`}
+          label={t`bot.common.hero_stats.survival`}
           value={`${(100 * (stats.survived_battles / stats.battles)).toFixed(
             2,
           )}%`}
           padded
         />
         <WN8SurroundingStat
-          label={t`bot.commands.stats.body.accuracy`}
+          label={t`bot.common.hero_stats.accuracy`}
           value={`${(100 * (stats.hits / stats.shots)).toFixed(2)}%`}
           padded
         />
         <WN8SurroundingStat
-          label={t`bot.commands.stats.body.kill_ratio`}
-          value={(
-            stats.frags /
-            (stats.battles - stats.survived_battles)
-          ).toFixed(2)}
+          label={t`bot.common.hero_stats.kills`}
+          value={(stats.frags / stats.battles).toFixed(2)}
         />
       </div>
     </div>

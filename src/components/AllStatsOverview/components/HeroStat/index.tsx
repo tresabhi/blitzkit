@@ -1,21 +1,40 @@
 import { Locale } from 'discord.js';
 import { Percentile } from '../../../../constants/percentiles';
+import { SupplementaryStats } from '../../../../core/blitz/getAccountInfo';
+import { getLeagueFromScore } from '../../../../core/blitz/getLeagueFromScore';
 import { translator } from '../../../../core/localization/translator';
 import getWN8Percentile from '../../../../core/statistics/getWN8Percentile';
 import { theme } from '../../../../stitches.config';
 import { PERCENTILE_COLORS } from '../../../PercentileIndicator/constants';
 import { Glow } from './components/Glow';
+import { LEAGUE_COLORS } from './constants';
 
 export interface WN8DisplayProps {
-  wn8?: number;
+  stats: SupplementaryStats;
   locale: Locale;
 }
 
-export function WN8Display({ wn8, locale }: WN8DisplayProps) {
-  const percentile =
-    wn8 === undefined ? Percentile.VeryBad : getWN8Percentile(wn8);
-  const color = PERCENTILE_COLORS[percentile];
+export function HeroStat({ stats, locale }: WN8DisplayProps) {
   const { translate } = translator(locale);
+  let color: string;
+  let heroStat: string | number;
+  let subtitle: string | number | undefined;
+  let subtitleImage: string | undefined;
+
+  if (stats.type === 'random') {
+    const percentile =
+      stats.WN8 === undefined
+        ? Percentile.VeryBad
+        : getWN8Percentile(stats.WN8);
+    color = PERCENTILE_COLORS[percentile];
+    heroStat = stats.WN8 === undefined ? '--' : stats.WN8.toFixed(0);
+    subtitle = translate(`common.wn8_percentile.${percentile}`);
+  } else {
+    heroStat = stats.score;
+    const league = getLeagueFromScore(stats.score);
+    color = LEAGUE_COLORS[league.index];
+    subtitle = translate(`common.leagues.${league.name}`);
+  }
 
   return (
     <div
@@ -50,7 +69,7 @@ export function WN8Display({ wn8, locale }: WN8DisplayProps) {
             color: theme.colors.textHighContrast,
           }}
         >
-          {wn8 === undefined ? '--' : wn8.toFixed(0)}
+          {heroStat}
         </span>
         <span
           style={{
@@ -58,7 +77,7 @@ export function WN8Display({ wn8, locale }: WN8DisplayProps) {
             color: theme.colors.textHighContrast,
           }}
         >
-          {translate(`common.wn8_percentile.${percentile}`)}
+          {subtitle}
         </span>
       </div>
 

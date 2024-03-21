@@ -52,7 +52,6 @@ export const ratingStatsCommand = new Promise<CommandRegistry>((resolve) => {
       }
 
       const delta = deltaBkrlBlitzStats(statsA, accountInfo.statistics.rating!);
-      const scoreDiff = statsB2.score - statsA.score;
 
       return (
         <CommandWrapper>
@@ -78,35 +77,15 @@ export const ratingStatsCommand = new Promise<CommandRegistry>((resolve) => {
                 survived_battles: delta.survived,
                 wins: delta.wins,
               }}
-              supplementaryStats={{ WN8: 3000, tier: 10 }}
+              supplementaryStats={{
+                type: 'rating',
+                score: statsB2.score,
+                delta: statsB2.score - statsA.score,
+              }}
             />
           )}
         </CommandWrapper>
       );
-
-      // return `# ${markdownEscape(accountInfo.nickname)}\n\n${markdownTable([
-      //   [
-      //     'score',
-      //     `${statsB2.score}${scoreDiff === 0 ? '' : ` (${scoreDiff > 0 ? '+' : ''}${scoreDiff})`}`,
-      //   ],
-      //   ['winrate', `${(100 * (delta.wins / delta.battles)).toFixed(0)}%`],
-      //   ['battles', delta.battles],
-      //   ['wins / losses', `${delta.wins} / ${delta.battles - delta.wins}`],
-      //   ['wn8', 'impossible'],
-      //   ['survival', `${(100 * (delta.survived / delta.battles)).toFixed(0)}%`],
-      //   ['accuracy', `${(100 * (delta.hits / delta.shots)).toFixed(0)}%`],
-      //   ['average damage', (delta.damageDealt / delta.battles).toFixed(0)],
-      //   ['damager per tier', 'impossible'],
-      //   ['damage ratio', (delta.damageDealt / delta.damageReceived).toFixed(2)],
-      //   ['average kills', (delta.kills / delta.battles).toFixed(2)],
-      //   ['average tier', 'impossible'],
-      //   ['average spots', 'possible'],
-      //   ['average xp', 'possible'],
-      //   [
-      //     'kills to death ratio',
-      //     (delta.kills / (delta.wins - delta.survived)).toFixed(2),
-      //   ],
-      // ])}`;
     },
   });
 });

@@ -23,10 +23,21 @@ export interface AllStats {
   dropped_capture_points: number;
 }
 
-export interface SupplementaryStats {
+export interface SupplementaryStatsRandom {
+  type: 'random';
   WN8?: number;
   tier?: number;
 }
+
+export interface SupplementaryStatsRating {
+  type: 'rating';
+  score: number;
+  delta: number;
+}
+
+export type SupplementaryStats =
+  | SupplementaryStatsRandom
+  | SupplementaryStatsRating;
 
 export interface ClanStats {
   spotted: number;

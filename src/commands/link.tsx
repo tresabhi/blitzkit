@@ -2,7 +2,7 @@ import { teal } from '@radix-ui/colors';
 import { GuildMemberRoleManager } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import discord from '../../discord.json' assert { type: 'json' };
-import { Glow } from '../components/AllStatsOverview/components/WN8Display/components/Glow';
+import { Glow } from '../components/AllStatsOverview/components/HeroStat/components/Glow';
 import CommandWrapper from '../components/CommandWrapper';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';

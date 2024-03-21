@@ -1,4 +1,5 @@
 import { TreeType } from '../../components/Tanks';
+import { SupplementaryStatsRandom } from '../blitz/getAccountInfo';
 import { tankDefinitions } from '../blitzkrieg/tankDefinitions';
 import { DiffedTankStats } from '../blitzstars/getStatsInPeriod';
 import { tankAverages } from '../blitzstars/tankAverages';
@@ -50,6 +51,7 @@ export async function filterStats(
     0,
   );
   const supplementary = {
+    type: 'random',
     WN8:
       filteredOrder.reduce<number>(
         (accumulator, id) =>
@@ -68,7 +70,7 @@ export async function filterStats(
             : accumulator,
         0,
       ) / battlesOfTanksWithTankDefinition,
-  };
+  } satisfies SupplementaryStatsRandom;
 
   return { stats, supplementary, filteredOrder };
 }
