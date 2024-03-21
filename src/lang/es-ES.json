@@ -156,6 +156,7 @@
       },
       "no_data": {
         "battles_in_period": "No hay batallas jugadas en este período",
+        "battles_in_season": "No hay batallas jugadas en esta temporada",
         "players_in_period": "No hay jugadores en este período",
         "tanks_found": "No se encontraron tanques"
       },
@@ -172,6 +173,16 @@
         "get_help": "Servidor de ayuda de Discord",
         "uncaught_error": "# ¡Blitzkrieg sufrió un error!\nLo sentimos mucho. Siéntete libre de [unirte al servidor oficial de Discord](https://discord.gg/nDt7AjGJQH) para obtener ayuda.",
         "preview": "# Este comando es una vista previa\n\nSolo puedes acceder a este comando en [el servidor oficial de Discord](https://discord.gg/nDt7AjGJQH). Generalmente este comando estará disponible pronto."
+      },
+      "hero_stats": {
+        "battles": "Batallas",
+        "winrate": "Tasa de victorias",
+        "damage": "Daño",
+        "damage_ratio": "Relación de daño",
+        "tier": "Nivel",
+        "survival": "Supervivencia",
+        "accuracy": "Precisión",
+        "kills": "Bajas"
       }
     },
     "commands": {
@@ -367,13 +378,13 @@
           "no_results": "No se encontraron jugadores"
         }
       },
-      "ratings": {
-        "$": "clasificación",
-        "description": "Estadísticas de batallas en clasificación",
+      "rating_leaderboard": {
+        "$": "rating-leaderboard",
+        "description": "Rating battles statistics",
         "subcommands": {
           "neighbors": {
             "$": "vecinos",
-            "description": "Jugadores vecinos en la tabla de posiciones"
+            "description": "Neighboring players on the leaderboard"
           },
           "league": {
             "$": "liga",
@@ -383,7 +394,7 @@
         "options": {
           "limit": {
             "$": "límite",
-            "description": "Cuántos vecinos mostrar (predeterminado: %s)"
+            "description": "Cuántos vecinos a mostrar (predeterminado: %s)"
           },
           "season": {
             "$": "temporada",
@@ -398,12 +409,12 @@
           }
         },
         "body": {
-          "top_players": "Top %s jugadores",
-          "no_participation": "# %s no jugó clasificación en la temporada %s\n\nEl jugador no participó en esta temporada o no completó su calibración.",
-          "no_ongoing_season": "# No hay temporada en curso\n\nActualmente no hay ninguna temporada de clasificación.",
+          "top_players": "Mejores %s jugadores",
+          "no_participation": "# %s didn't play rating in season %s\n\nThis player did not participate in this season or did not get past calibration.",
+          "no_ongoing_season": "# No ongoing season\n\nThere isn't a currently running rating season.",
           "deleted_player": "%s eliminado",
-          "neighbors": "Vecinos de clasificación",
-          "more": "+%s más"
+          "neighbors": "Rating neighbors",
+          "more": "+ %s more"
         }
       },
       "today": {
@@ -412,17 +423,7 @@
       },
       "stats": {
         "$": "estadísticas",
-        "description": "Estadísticas rápidas para un período",
-        "body": {
-          "battles": "Batallas",
-          "winrate": "Tasa de victorias",
-          "damage": "Daño",
-          "damage_ratio": "Relación de daño",
-          "tier": "Nivel",
-          "survival": "Supervivencia",
-          "accuracy": "Precisión",
-          "kill_ratio": "Relación de bajas"
-        }
+        "description": "Estadísticas rápidas para un período"
       },
       "owned_tanks": {
         "$": "tanques-propios",
@@ -471,6 +472,17 @@
           "account_id": "ID de cuenta",
           "created": "Creado",
           "last_battle": "Última batalla"
+        }
+      },
+      "rating_stats": {
+        "$": "rating-stats",
+        "description": "Rating player's statistics",
+        "body": {
+          "subtitle": "Today's rating statistics"
+        },
+        "errors": {
+          "no_participation": "# %s hasn't played rating\n\nThis player hasn't participated in the rating gamemode this season.",
+          "unrecorded_stats": "# Statistics unavailable\n\nRatings statistics are currently unavailable. If there is an on-going season, statistics should be available withing 24 hours."
         }
       }
     }
