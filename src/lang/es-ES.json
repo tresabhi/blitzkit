@@ -156,7 +156,7 @@
       },
       "no_data": {
         "battles_in_period": "No hay batallas jugadas en este período",
-        "battles_in_season": "No battles played in this season",
+        "battles_in_season": "No hay batallas jugadas en esta temporada",
         "players_in_period": "No hay jugadores en este período",
         "tanks_found": "No se encontraron tanques"
       },
@@ -175,14 +175,14 @@
         "preview": "# Este comando es una vista previa\n\nSolo puedes acceder a este comando en [el servidor oficial de Discord](https://discord.gg/nDt7AjGJQH). Generalmente este comando estará disponible pronto."
       },
       "hero_stats": {
-        "battles": "Battles",
-        "winrate": "Winrate",
-        "damage": "Damage",
-        "damage_ratio": "Damage ratio",
-        "tier": "Tier",
-        "survival": "Survival",
-        "accuracy": "Accuracy",
-        "kills": "Kills"
+        "battles": "Batallas",
+        "winrate": "Tasa de victorias",
+        "damage": "Daño",
+        "damage_ratio": "Relación de daño",
+        "tier": "Nivel",
+        "survival": "Supervivencia",
+        "accuracy": "Precisión",
+        "kills": "Bajas"
       }
     },
     "commands": {
@@ -383,36 +383,36 @@
         "description": "Rating battles statistics",
         "subcommands": {
           "neighbors": {
-            "$": "neighbors",
+            "$": "vecinos",
             "description": "Neighboring players on the leaderboard"
           },
           "league": {
-            "$": "league",
-            "description": "Top players of a league"
+            "$": "liga",
+            "description": "Mejores jugadores de una liga"
           }
         },
         "options": {
           "limit": {
-            "$": "limit",
-            "description": "How many neighbors to display (default: %s)"
+            "$": "límite",
+            "description": "Cuántos vecinos a mostrar (predeterminado: %s)"
           },
           "season": {
-            "$": "season",
-            "description": "Season number (default: current)",
+            "$": "temporada",
+            "description": "Número de temporada (predeterminado: actual)",
             "choices": {
-              "current": "%s (current)"
+              "current": "%s (actual)"
             }
           },
           "league": {
-            "$": "league",
-            "description": "The league to display"
+            "$": "liga",
+            "description": "La liga a mostrar"
           }
         },
         "body": {
-          "top_players": "Top %s players",
+          "top_players": "Mejores %s jugadores",
           "no_participation": "# %s didn't play rating in season %s\n\nThis player did not participate in this season or did not get past calibration.",
           "no_ongoing_season": "# No ongoing season\n\nThere isn't a currently running rating season.",
-          "deleted_player": "Deleted %s",
+          "deleted_player": "%s eliminado",
           "neighbors": "Rating neighbors",
           "more": "+ %s more"
         }
