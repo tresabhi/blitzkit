@@ -339,6 +339,11 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
+"@corex/deepmerge@^4.0.43":
+  version "4.0.43"
+  resolved "https://registry.yarnpkg.com/@corex/deepmerge/-/deepmerge-4.0.43.tgz#9bd42559ebb41cc5a7fb7cfeea5f231c20977dca"
+  integrity sha512-N8uEMrMPL0cu/bdboEWpQYb/0i2K5Qn8eCsxzOmxSggJbbQte7ljMRoXm917AbntqTGOzdTu+vP3KOOzoC70HQ==
+
 "@discordjs/builders@^1.7.0":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@discordjs/builders/-/builders-1.7.0.tgz#e2478c7e55b0f4c40837edb8f102bce977323a37"
@@ -784,6 +789,11 @@
   version "14.1.0"
   resolved "https://registry.yarnpkg.com/@next/env/-/env-14.1.0.tgz#43d92ebb53bc0ae43dcc64fb4d418f8f17d7a341"
   integrity sha512-Py8zIo+02ht82brwwhTg36iogzFqGLPXlRGKQw5s+qP/kMNc4MAyDeEwBKDijk6zTIbegEgu8Qy7C1LboslQAw==
+
+"@next/env@^13.4.3":
+  version "13.5.6"
+  resolved "https://registry.yarnpkg.com/@next/env/-/env-13.5.6.tgz#c1148e2e1aa166614f05161ee8f77ded467062bc"
+  integrity sha512-Yac/bV5sBGkkEXmAX5FWPS9Mmo2rthrOPRQQNfycJPkjUAUclomCPH7QFVCDQ4Mp2k2K1SSM6m0zrxYrOwtFQw==
 
 "@next/swc-darwin-arm64@14.1.0":
   version "14.1.0"
@@ -3406,7 +3416,7 @@ fast-deep-equal@^2.0.1:
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-2.0.1.tgz#7b05218ddf9667bf7f370bf7fdb2cb15fdd0aa49"
   integrity sha512-bCK/2Z4zLidyB4ReuIsvALH6w31YfAQDmXMqMx6FyfHqvBxtjC0eRumeSu4Bs3XtXwpyIywtSTrVT99BxY1f9w==
 
-fast-glob@3.3.2, fast-glob@^3.3.2:
+fast-glob@3.3.2, fast-glob@^3.2.12, fast-glob@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.3.2.tgz#a904501e57cfdd2ffcded45e99a54fef55e46129"
   integrity sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==
@@ -4231,7 +4241,7 @@ minimatch@^9.0.0, minimatch@^9.0.1:
   dependencies:
     brace-expansion "^2.0.1"
 
-minimist@1.2.8, minimist@^1.2.5:
+minimist@1.2.8, minimist@^1.2.5, minimist@^1.2.8:
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
@@ -4306,6 +4316,16 @@ negotiator@0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
+
+next-sitemap@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/next-sitemap/-/next-sitemap-4.2.3.tgz#5db3f650351a51e84b9fd6b58c5af2f9257b5058"
+  integrity sha512-vjdCxeDuWDzldhCnyFCQipw5bfpl4HmZA7uoo3GAaYGjGgfL4Cxb1CiztPuWGmS+auYs7/8OekRS8C2cjdAsjQ==
+  dependencies:
+    "@corex/deepmerge" "^4.0.43"
+    "@next/env" "^13.4.3"
+    fast-glob "^3.2.12"
+    minimist "^1.2.8"
 
 next@^14.1.0:
   version "14.1.0"

@@ -18,3 +18,5 @@ temp/
 /.VSCodeCounter
 /.yarn
 depots
+public/sitemap*.xml
+public/robots.txt
