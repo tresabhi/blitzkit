@@ -18,7 +18,7 @@ export const TOOLS: Tool[] = [
     description: 'Blitz tank encyclopedia',
   },
   {
-    id: 'rating-leaderboard',
+    id: 'rating',
     title: 'Rating leaderboard',
     description: 'Full rating gamemode leaderboard',
   },
