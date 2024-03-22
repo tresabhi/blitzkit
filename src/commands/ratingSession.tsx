@@ -17,7 +17,7 @@ import { CommandRegistry } from '../events/interactionCreate';
 export const ratingStatsCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
     command:
-      createLocalizedCommand('rating-stats').addStringOption(
+      createLocalizedCommand('rating-session').addStringOption(
         addUsernameChoices,
       ),
 
@@ -43,12 +43,13 @@ export const ratingStatsCommand = new Promise<CommandRegistry>((resolve) => {
       const [statsB2] = (await getRatingNeighbors(region, id, 0)).neighbors;
 
       if (!statsA) {
-        return t`bot.commands.rating_stats.errors.unrecorded_stats`;
+        return t`bot.commands.rating_session.errors.unrecorded_stats`;
       }
       if (!statsB1) {
-        return translate('bot.commands.rating_stats.errors.no_participation', [
-          markdownEscape(accountInfo.nickname),
-        ]);
+        return translate(
+          'bot.commands.rating_session.errors.no_participation',
+          [markdownEscape(accountInfo.nickname)],
+        );
       }
 
       const delta = deltaBkrlBlitzStats(statsA, accountInfo.statistics.rating!);
@@ -58,7 +59,7 @@ export const ratingStatsCommand = new Promise<CommandRegistry>((resolve) => {
           <TitleBar
             title={accountInfo.nickname}
             // image={clanImage} // TODO: add league icon here
-            description={t`bot.commands.rating_stats.body.subtitle`}
+            description={t`bot.commands.rating_session.body.subtitle`}
           />
 
           {delta.battles === 0 && (

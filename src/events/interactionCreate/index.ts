@@ -26,7 +26,7 @@ import { permissionsCommand } from '../../commands/permissions';
 import { pingCommand } from '../../commands/ping';
 import { playerInfoCommand } from '../../commands/playerInfo';
 import { ratingLeaderboardCommand } from '../../commands/ratingLeaderboard';
-import { ratingStatsCommand } from '../../commands/ratingStats';
+import { ratingStatsCommand } from '../../commands/ratingSession';
 import { researchCommand } from '../../commands/research';
 import { searchClansCommand } from '../../commands/searchClans';
 import { searchPlayersCommand } from '../../commands/searchPlayers';

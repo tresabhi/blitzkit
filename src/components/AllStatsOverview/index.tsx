@@ -33,6 +33,7 @@ export default function AllStatsOverview({
     <div
       style={{
         display: 'flex',
+        alignItems: 'center',
         gap: -64,
         width: '100%',
       }}

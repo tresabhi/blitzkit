@@ -19,7 +19,6 @@ export function HeroStat({ stats, locale }: WN8DisplayProps) {
   let color: string;
   let heroStat: string | number;
   let subtitle: string | number | undefined;
-  let subtitleImage: string | undefined;
 
   if (stats.type === 'random') {
     const percentile =
@@ -44,41 +43,52 @@ export function HeroStat({ stats, locale }: WN8DisplayProps) {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: -16,
+        gap: stats.type === 'rating' ? -20 : -16,
       }}
     >
       <Glow color={color} />
 
       <div
         style={{
-          width: 128,
-          height: 80,
+          width: stats.type === 'rating' ? 112 : 128,
+          height: stats.type === 'rating' ? 112 : 80,
           backgroundColor: color,
-          borderRadius: 40,
+          borderRadius: stats.type === 'rating' ? 8 : 40,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           gap: -4,
+          transform: stats.type === 'rating' ? 'rotate(45deg)' : '',
         }}
       >
-        <span
+        <div
           style={{
-            fontWeight: 900,
-            fontSize: 32,
-            color: theme.colors.textHighContrast,
+            transform: stats.type === 'rating' ? 'rotate(-45deg)' : '',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-          {heroStat}
-        </span>
-        <span
-          style={{
-            fontSize: 16,
-            color: theme.colors.textHighContrast,
-          }}
-        >
-          {subtitle}
-        </span>
+          <span
+            style={{
+              fontWeight: 900,
+              fontSize: 32,
+              color: theme.colors.textHighContrast,
+            }}
+          >
+            {heroStat}
+          </span>
+          <span
+            style={{
+              fontSize: 16,
+              color: theme.colors.textHighContrast,
+            }}
+          >
+            {subtitle}
+          </span>
+        </div>
       </div>
 
       <Glow color={color} direction="reverse" />
