@@ -474,8 +474,8 @@
           "last_battle": "Última batalla"
         }
       },
-      "rating_stats": {
-        "$": "rating-stats",
+      "rating_session": {
+        "$": "rating-session",
         "description": "Rating player's statistics",
         "body": {
           "subtitle": "Today's rating statistics"
