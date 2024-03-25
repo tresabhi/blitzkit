@@ -17,7 +17,7 @@ export default function CommandWrapper({ children, fat }: CommandWrapperProps) {
         width: 480,
         color: theme.colors.textHighContrast,
         position: 'relative',
-        background: 'url(https://i.imgur.com/zjwyGv1.png)',
+        background: `linear-gradient(${theme.colors.appBackground2}, ${theme.colors.appBackground1})`,
       }}
     >
       {children}
