@@ -83,22 +83,12 @@ export default function AllStatsOverview({
           flex: 1,
         }}
       >
-        {supplementaryStats.type === 'random' && (
-          <WN8SurroundingStat
-            label={t`bot.common.hero_stats.tier`}
-            value={
-              supplementaryStats.tier
-                ? supplementaryStats.tier.toFixed(2)
-                : '--'
-            }
-          />
-        )}
-        {supplementaryStats.type === 'rating' && (
-          <WN8SurroundingStat
-            label={t`bot.common.hero_stats.tier`}
-            value="idk lol"
-          />
-        )}
+        <WN8SurroundingStat
+          label={t`bot.common.hero_stats.tier`}
+          value={
+            supplementaryStats.tier ? supplementaryStats.tier.toFixed(2) : '--'
+          }
+        />
         <WN8SurroundingStat
           label={t`bot.common.hero_stats.survival`}
           value={`${(100 * (stats.survived_battles / stats.battles)).toFixed(

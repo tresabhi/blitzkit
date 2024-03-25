@@ -23,12 +23,6 @@ export default function GenericAllStats({
   const killsToDeathRatio =
     stats.frags / (stats.battles - stats.survived_battles);
 
-  if (supplementaryStats && supplementaryStats.type !== 'random') {
-    throw new Error(
-      'Generic all stats does not support random supplementary stats',
-    );
-  }
-
   return (
     <Root>
       <Row>

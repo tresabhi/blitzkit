@@ -7,7 +7,7 @@ import TitleBar from '../components/TitleBar';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import resolveTankId from '../core/blitz/resolveTankId';
-import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
+import { emblemURL } from '../core/blitzkrieg/emblemURL';
 import getTankHistories from '../core/blitzkrieg/getTankHistories';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import getPlayerHistories from '../core/blitzstars/getPlayerHistories';
@@ -41,7 +41,7 @@ async function render(
 ) {
   const accountInfo = await getAccountInfo(region, id);
   const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
-  const logo = clan ? emblemIdToURL(clan.emblem_set_id) : undefined;
+  const logo = clan ? emblemURL(clan.emblem_set_id) : undefined;
   const histories = await (type === 'player'
     ? getPlayerHistories(region, id, {
         start,

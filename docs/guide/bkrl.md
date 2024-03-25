@@ -17,7 +17,7 @@ Header {
 
 Format enum<uint8> {
   Minimal,
-  Comprehensive1,
+  Superset1,
 }
 
 Body<Header header> match<header.format> {
@@ -28,7 +28,7 @@ Body<Header header> match<header.format> {
     }[header.count] entries;
   };
 
-  Comprehensive1 {
+  Superset1 {
     primary {
       uint32 id;
       uint16 score;

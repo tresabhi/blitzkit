@@ -8,7 +8,7 @@ import getTankStats from '../core/blitz/getTankStats';
 import resolveTankId from '../core/blitz/resolveTankId';
 import { asset } from '../core/blitzkrieg/asset';
 import { buildTechTreeLine } from '../core/blitzkrieg/buildTechTreeLine';
-import { emblemIdToURL } from '../core/blitzkrieg/emblemIdToURL';
+import { emblemURL } from '../core/blitzkrieg/emblemURL';
 import { iconPng } from '../core/blitzkrieg/iconPng';
 import { resolveAncestry } from '../core/blitzkrieg/resolveAncestry';
 import { tankDefinitions } from '../core/blitzkrieg/tankDefinitions';
@@ -155,7 +155,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
       const line = [...techTreeLine, startingTankId].reverse();
       const { nickname } = await getAccountInfo(region, id);
       const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
-      const clanImage = clan ? emblemIdToURL(clan.emblem_set_id) : undefined;
+      const clanImage = clan ? emblemURL(clan.emblem_set_id) : undefined;
       const costs = await Promise.all(
         line.map(async (id) => {
           const tank = awaitedTankDefinitions[id];

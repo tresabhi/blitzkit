@@ -15,6 +15,7 @@ export default function TitleBar({ title, image, description }: TitleBarProps) {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: '8px 0px',
       }}
     >
       <div

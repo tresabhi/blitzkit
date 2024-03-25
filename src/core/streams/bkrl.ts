@@ -3,7 +3,7 @@ import { ReadStream, WriteStream } from './buffer';
 
 export enum BkrlFormat {
   Minimal,
-  Comprehensive1,
+  Superset1,
 }
 
 export interface BkrlMinimalEntry {
@@ -11,7 +11,7 @@ export interface BkrlMinimalEntry {
   score: number;
 }
 
-export interface BkrlComprehensive1Entry {
+export interface BkrlSuperset1Entry {
   id: number;
   score: number;
 
@@ -34,8 +34,8 @@ export type BkrlDiscriminatedEntries =
       entries: BkrlMinimalEntry[];
     }
   | {
-      format: BkrlFormat.Comprehensive1;
-      entries: BkrlComprehensive1Entry[];
+      format: BkrlFormat.Superset1;
+      entries: BkrlSuperset1Entry[];
     };
 
 export class BkrlReadStream extends ReadStream {
@@ -61,9 +61,9 @@ export class BkrlReadStream extends ReadStream {
         };
       }
 
-      case BkrlFormat.Comprehensive1: {
+      case BkrlFormat.Superset1: {
         return {
-          format: BkrlFormat.Comprehensive1,
+          format: BkrlFormat.Superset1,
           entries: times(
             header.count,
             () =>
@@ -82,7 +82,7 @@ export class BkrlReadStream extends ReadStream {
                 hits: this.uint32(),
 
                 kills: this.uint32(),
-              }) satisfies BkrlComprehensive1Entry,
+              }) satisfies BkrlSuperset1Entry,
           ),
         };
       }
@@ -123,7 +123,7 @@ export class BkrlWriteStream extends WriteStream {
         break;
       }
 
-      case BkrlFormat.Comprehensive1: {
+      case BkrlFormat.Superset1: {
         discriminatedEntries.entries.forEach((entry) => {
           this.uint32(entry.id);
           this.uint16(entry.score);

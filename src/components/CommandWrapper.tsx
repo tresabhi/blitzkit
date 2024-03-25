@@ -16,7 +16,8 @@ export default function CommandWrapper({ children, fat }: CommandWrapperProps) {
         gap: 16,
         width: 480,
         color: theme.colors.textHighContrast,
-        background: theme.colors.appBackground1,
+        position: 'relative',
+        background: 'url(https://i.imgur.com/zjwyGv1.png)',
       }}
     >
       {children}

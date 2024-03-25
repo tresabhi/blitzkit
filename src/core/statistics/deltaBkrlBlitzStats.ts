@@ -1,18 +1,21 @@
+import { RatingPlayer } from '../../commands/ratingLeaderboard';
 import { RatingStats } from '../blitz/getAccountInfo';
-import { BkrlComprehensive1Entry, BkrlMinimalEntry } from '../streams/bkrl';
+import { BkrlSuperset1Entry } from '../streams/bkrl';
 
 export function deltaBkrlBlitzStats(
-  a: BkrlComprehensive1Entry,
-  b: RatingStats,
+  a: BkrlSuperset1Entry,
+  b1: RatingStats,
+  b2: RatingPlayer,
 ) {
   return {
-    battles: b.battles - a.battles,
-    damageDealt: b.damage_dealt - a.damageDealt,
-    damageReceived: b.damage_received - a.damageReceived,
-    hits: b.hits - a.hits,
-    kills: b.frags - a.kills,
-    shots: b.shots - a.shots,
-    survived: b.survived_battles - a.survived,
-    wins: b.wins - a.wins,
-  } satisfies Omit<BkrlComprehensive1Entry, keyof BkrlMinimalEntry>;
+    battles: b1.battles - a.battles,
+    damageDealt: b1.damage_dealt - a.damageDealt,
+    damageReceived: b1.damage_received - a.damageReceived,
+    hits: b1.hits - a.hits,
+    kills: b1.frags - a.kills,
+    shots: b1.shots - a.shots,
+    survived: b1.survived_battles - a.survived,
+    wins: b1.wins - a.wins,
+    score: b2.score - a.score,
+  } satisfies Omit<BkrlSuperset1Entry, 'id'>;
 }

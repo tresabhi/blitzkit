@@ -1,13 +1,11 @@
 import { Locale } from 'discord.js';
 import { Percentile } from '../../../../constants/percentiles';
 import { SupplementaryStats } from '../../../../core/blitz/getAccountInfo';
-import { getLeagueFromScore } from '../../../../core/blitz/getLeagueFromScore';
 import { translator } from '../../../../core/localization/translator';
 import getWN8Percentile from '../../../../core/statistics/getWN8Percentile';
 import { theme } from '../../../../stitches.config';
 import { PERCENTILE_COLORS } from '../../../PercentileIndicator/constants';
 import { Glow } from './components/Glow';
-import { LEAGUE_COLORS } from './constants';
 
 export interface WN8DisplayProps {
   stats: SupplementaryStats;
@@ -16,24 +14,12 @@ export interface WN8DisplayProps {
 
 export function HeroStat({ stats, locale }: WN8DisplayProps) {
   const { translate } = translator(locale);
-  let color: string;
-  let heroStat: string | number;
-  let subtitle: string | number | undefined;
 
-  if (stats.type === 'random') {
-    const percentile =
-      stats.WN8 === undefined
-        ? Percentile.VeryBad
-        : getWN8Percentile(stats.WN8);
-    color = PERCENTILE_COLORS[percentile];
-    heroStat = stats.WN8 === undefined ? '--' : stats.WN8.toFixed(0);
-    subtitle = translate(`common.wn8_percentile.${percentile}`);
-  } else {
-    heroStat = stats.score;
-    const league = getLeagueFromScore(stats.score);
-    color = LEAGUE_COLORS[league.index];
-    subtitle = translate(`common.leagues.${league.name}`);
-  }
+  const percentile =
+    stats.WN8 === undefined ? Percentile.VeryBad : getWN8Percentile(stats.WN8);
+  const color = PERCENTILE_COLORS[percentile];
+  const heroStat = stats.WN8 === undefined ? '--' : stats.WN8.toFixed(0);
+  const subtitle = translate(`common.wn8_percentile.${percentile}`);
 
   return (
     <div
@@ -43,28 +29,26 @@ export function HeroStat({ stats, locale }: WN8DisplayProps) {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: stats.type === 'rating' ? -20 : -16,
+        gap: -16,
       }}
     >
       <Glow color={color} />
 
       <div
         style={{
-          width: stats.type === 'rating' ? 112 : 128,
-          height: stats.type === 'rating' ? 112 : 80,
+          width: 128,
+          height: 80,
           backgroundColor: color,
-          borderRadius: stats.type === 'rating' ? 8 : 40,
+          borderRadius: 40,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           gap: -4,
-          transform: stats.type === 'rating' ? 'rotate(45deg)' : '',
         }}
       >
         <div
           style={{
-            transform: stats.type === 'rating' ? 'rotate(-45deg)' : '',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
