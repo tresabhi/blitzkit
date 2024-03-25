@@ -30,12 +30,10 @@ const LEAGUE_ACCENT = [
   '_brown',
 ] as const;
 
-export const ratingStatsCommand = new Promise<CommandRegistry>((resolve) => {
+export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
     command:
-      createLocalizedCommand('rating-session').addStringOption(
-        addUsernameChoices,
-      ),
+      createLocalizedCommand('rating').addStringOption(addUsernameChoices),
 
     inProduction: true,
     inPublic: true,
@@ -70,13 +68,12 @@ export const ratingStatsCommand = new Promise<CommandRegistry>((resolve) => {
         throw new Error(`Rating info not available for ${region}`);
       }
       if (!statsA) {
-        return t`bot.commands.rating_session.errors.unrecorded_stats`;
+        return t`bot.commands.rating.errors.unrecorded_stats`;
       }
       if (!statsB1) {
-        return translate(
-          'bot.commands.rating_session.errors.no_participation',
-          [markdownEscape(accountInfo.nickname)],
-        );
+        return translate('bot.commands.rating.errors.no_participation', [
+          markdownEscape(accountInfo.nickname),
+        ]);
       }
 
       const reward = ratingInfo.rewards.find(
@@ -97,7 +94,7 @@ export const ratingStatsCommand = new Promise<CommandRegistry>((resolve) => {
           <TitleBar
             title={accountInfo.nickname}
             image={clanImage}
-            description={`${t`bot.commands.rating_session.body.subtitle`} • ${new Date().toLocaleDateString(
+            description={`${t`bot.commands.rating.body.subtitle`} • ${new Date().toLocaleDateString(
               interaction.locale,
             )}`}
           />

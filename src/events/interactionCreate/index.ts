@@ -25,8 +25,8 @@ import { ownedTanksCommand } from '../../commands/ownedTanks';
 import { permissionsCommand } from '../../commands/permissions';
 import { pingCommand } from '../../commands/ping';
 import { playerInfoCommand } from '../../commands/playerInfo';
+import { ratingCommand } from '../../commands/rating';
 import { ratingLeaderboardCommand } from '../../commands/ratingLeaderboard';
-import { ratingStatsCommand } from '../../commands/ratingSession';
 import { researchCommand } from '../../commands/research';
 import { searchClansCommand } from '../../commands/searchClans';
 import { searchPlayersCommand } from '../../commands/searchPlayers';
@@ -96,7 +96,7 @@ export const COMMANDS_RAW: Promise<CommandRegistry>[] = [
   ratingLeaderboardCommand,
   todayCommand,
   researchCommand,
-  ratingStatsCommand,
+  ratingCommand,
 ];
 
 export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {

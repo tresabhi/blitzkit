@@ -11,10 +11,6 @@ interface ItemProps extends ComponentProps<'div'> {
   highlight?: boolean;
 }
 
-function normalizeImage(url: string) {
-  return url.endsWith('.webp') ? 'https://i.imgur.com/ZniCzbO.png' : url;
-}
-
 export function Item({
   position,
   deltaPosition,

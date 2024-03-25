@@ -541,12 +541,12 @@
         }
       },
 
-      "rating_session": {
+      "rating": {
         "$": "rating-session",
         "description": "Rating player's statistics",
 
         "body": {
-          "subtitle": "Rating session"
+          "subtitle": "Today's rating statistics"
         },
 
         "errors": {
