@@ -9,11 +9,8 @@ export function deltaBkrlBlitzStats(
 ) {
   return {
     battles: b1.battles - a.battles,
-    damageDealt: b1.damage_dealt - a.damageDealt,
-    damageReceived: b1.damage_received - a.damageReceived,
-    hits: b1.hits - a.hits,
+    damage: b1.damage_dealt - a.damage,
     kills: b1.frags - a.kills,
-    shots: b1.shots - a.shots,
     survived: b1.survived_battles - a.survived,
     wins: b1.wins - a.wins,
     score: b2.score - a.score,

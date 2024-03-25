@@ -45,7 +45,7 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
       const clanImage = clan ? emblemURL(clan.emblem_set_id) : undefined;
       const leaderboard = await getArchivedRatingLeaderboard(region, 53);
 
-      if (leaderboard.format === BkrlFormat.Minimal) {
+      if (leaderboard.format === BkrlFormat.Base) {
         throw new Error(
           'Encountered bkrl minimal format in latest season. Wait till next cron?',
         );
@@ -412,7 +412,7 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
                     fontWeight: 'bold',
                   }}
                 >
-                  {Math.round(delta.damageDealt / delta.battles).toLocaleString(
+                  {Math.round(delta.damage / delta.battles).toLocaleString(
                     interaction.locale,
                   )}
                 </span>

@@ -13,9 +13,9 @@ import { FileChange } from '../src/core/blitzkrieg/commitMultipleFiles.js';
 import { patientFetchJSON } from '../src/core/blitzkrieg/patientFetchJSON';
 import { superCompress } from '../src/core/blitzkrieg/superCompress';
 import {
-  BkrlComprehensive1Entry,
+  BkrlBaseEntry,
   BkrlFormat,
-  BkrlMinimalEntry,
+  BkrlSuperset1Entry,
   BkrlWriteStream,
 } from '../src/core/streams/bkrl';
 import { CdonValue, CdonWriteStream } from '../src/core/streams/cdon';
@@ -49,7 +49,7 @@ if (PLAYERS === undefined) {
 }
 
 const players: Record<number, RatingPlayer> = {};
-const leaderboard: BkrlMinimalEntry[] = [];
+const leaderboard: BkrlBaseEntry[] = [];
 let registered = 0;
 
 async function branchFromPlayer(id: number) {
@@ -118,7 +118,7 @@ for (let index = 0; index < PLAYERS; index++) {
 }
 
 console.log('Requesting further stats...');
-const comprehensiveLeaderboard: BkrlComprehensive1Entry[] = [];
+const comprehensiveLeaderboard: BkrlSuperset1Entry[] = [];
 let chunkIndex = 0;
 for (const leaderboardChunk of chunk(leaderboard, 100)) {
   console.log(
@@ -137,13 +137,10 @@ for (const leaderboardChunk of chunk(leaderboard, 100)) {
       leaderboardChunk[index].id === 0
         ? {
             battles: 0,
-            damageDealt: 0,
-            damageReceived: 0,
-            hits: 0,
+            damage: 0,
             id: 0,
             kills: 0,
             score: 0,
-            shots: 0,
             survived: 0,
             wins: 0,
           }
@@ -151,11 +148,8 @@ for (const leaderboardChunk of chunk(leaderboard, 100)) {
             id: leaderboardChunk[index].id,
             score: leaderboardChunk[index].score,
             battles: stat.statistics.rating!.battles,
-            damageDealt: stat.statistics.rating!.damage_dealt,
-            damageReceived: stat.statistics.rating!.damage_received,
-            hits: stat.statistics.rating!.hits,
+            damage: stat.statistics.rating!.damage_dealt,
             kills: stat.statistics.rating!.frags,
-            shots: stat.statistics.rating!.shots,
             survived: stat.statistics.rating!.survived_battles,
             wins: stat.statistics.rating!.wins,
           };
@@ -174,7 +168,7 @@ const infoContent = new CdonWriteStream().cdon(
 const leaderboardWriteStream = new BkrlWriteStream();
 
 leaderboardWriteStream.bkrl({
-  format: BkrlFormat.Comprehensive1,
+  format: BkrlFormat.Superset1,
   entries: comprehensiveLeaderboard,
 });
 

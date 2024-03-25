@@ -2,11 +2,11 @@ import { times } from 'lodash';
 import { ReadStream, WriteStream } from './buffer';
 
 export enum BkrlFormat {
-  Minimal,
+  Base,
   Superset1,
 }
 
-export interface BkrlMinimalEntry {
+export interface BkrlBaseEntry {
   id: number;
   score: number;
 }
@@ -19,19 +19,14 @@ export interface BkrlSuperset1Entry {
   wins: number;
   survived: number;
 
-  damageDealt: number;
-  damageReceived: number;
-
-  shots: number;
-  hits: number;
-
+  damage: number;
   kills: number;
 }
 
 export type BkrlDiscriminatedEntries =
   | {
-      format: BkrlFormat.Minimal;
-      entries: BkrlMinimalEntry[];
+      format: BkrlFormat.Base;
+      entries: BkrlBaseEntry[];
     }
   | {
       format: BkrlFormat.Superset1;
@@ -47,16 +42,16 @@ export class BkrlReadStream extends ReadStream {
 
   body(header: ReturnType<typeof this.header>): BkrlDiscriminatedEntries {
     switch (header.format) {
-      case BkrlFormat.Minimal: {
+      case BkrlFormat.Base: {
         return {
-          format: BkrlFormat.Minimal,
+          format: BkrlFormat.Base,
           entries: times(
             header.count,
             () =>
               ({
                 id: this.uint32(),
                 score: this.uint16(),
-              }) satisfies BkrlMinimalEntry,
+              }) satisfies BkrlBaseEntry,
           ),
         };
       }
@@ -75,12 +70,7 @@ export class BkrlReadStream extends ReadStream {
                 wins: this.uint32(),
                 survived: this.uint32(),
 
-                damageDealt: this.uint32(),
-                damageReceived: this.uint32(),
-
-                shots: this.uint32(),
-                hits: this.uint32(),
-
+                damage: this.uint32(),
                 kills: this.uint32(),
               }) satisfies BkrlSuperset1Entry,
           ),
@@ -115,7 +105,7 @@ export class BkrlWriteStream extends WriteStream {
 
   body(discriminatedEntries: BkrlDiscriminatedEntries) {
     switch (discriminatedEntries.format) {
-      case BkrlFormat.Minimal: {
+      case BkrlFormat.Base: {
         discriminatedEntries.entries.forEach((entry) => {
           this.uint32(entry.id);
           this.uint16(entry.score);
@@ -132,12 +122,7 @@ export class BkrlWriteStream extends WriteStream {
           this.uint32(entry.wins);
           this.uint32(entry.survived);
 
-          this.uint32(entry.damageDealt);
-          this.uint32(entry.damageReceived);
-
-          this.uint32(entry.shots);
-          this.uint32(entry.hits);
-
+          this.uint32(entry.damage);
           this.uint32(entry.kills);
         });
         break;

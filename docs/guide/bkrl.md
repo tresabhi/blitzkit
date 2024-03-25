@@ -16,12 +16,12 @@ Header {
 }
 
 Format enum<uint8> {
-  Minimal,
+  Base,
   Superset1,
 }
 
 Body<Header header> match<header.format> {
-  Minimal {
+  Base {
     primary {
       uint32 id;
       uint16 score;
@@ -37,12 +37,7 @@ Body<Header header> match<header.format> {
       uint32 wins;
       uint32 survived;
 
-      uint32 damageDealt;
-      uint32 damageReceived;
-
-      uint32 shots;
-      uint32 hits;
-
+      uint32 damage;
       uint32 kills;
     }[header.count] entries;
   };
