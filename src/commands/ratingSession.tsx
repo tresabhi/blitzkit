@@ -1,4 +1,5 @@
 import markdownEscape from 'markdown-escape';
+import { Glow } from '../components/AllStatsOverview/components/HeroStat/components/Glow';
 import CommandWrapper from '../components/CommandWrapper';
 import { DeltaCaret } from '../components/DeltaCaret';
 import NoData from '../components/NoData';
@@ -11,6 +12,7 @@ import { getRatingNeighbors } from '../core/blitz/getRatingNeighbors';
 import { normalizeLeagueIcon } from '../core/blitz/normalizeLeagueIcon';
 import { emblemURL } from '../core/blitzkrieg/emblemURL';
 import { getArchivedRatingLeaderboard } from '../core/blitzkrieg/getArchivedRatingLeaderboard';
+import { webpToPng } from '../core/blitzkrieg/iconPng';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
@@ -19,6 +21,14 @@ import { deltaBkrlBlitzStats } from '../core/statistics/deltaBkrlBlitzStats';
 import { BkrlFormat } from '../core/streams/bkrl';
 import { CommandRegistry } from '../events/interactionCreate';
 import { theme } from '../stitches.config';
+
+const LEAGUE_ACCENT = [
+  '_purple',
+  '_sand',
+  '_amber',
+  '_mauve',
+  '_brown',
+] as const;
 
 export const ratingStatsCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
@@ -47,7 +57,11 @@ export const ratingStatsCommand = new Promise<CommandRegistry>((resolve) => {
       const accountInfo = await getAccountInfo(region, id, [
         'statistics.rating',
       ]);
-      const statsA = leaderboard.entries.find((entry) => entry.id === id);
+      const statsIndex = leaderboard.entries.findIndex(
+        (entry) => entry.id === id,
+      );
+      const statsA = leaderboard.entries[statsIndex];
+      const numberA = statsIndex + 1;
       const statsB1 = accountInfo.statistics.rating!;
       const [statsB2] = (await getRatingNeighbors(region, id, 0)).neighbors;
       const league = getLeagueFromScore(statsB2.score);
@@ -65,33 +79,59 @@ export const ratingStatsCommand = new Promise<CommandRegistry>((resolve) => {
         );
       }
 
+      const reward = ratingInfo.rewards.find(
+        (reward) =>
+          statsB2.number >= reward.from_position &&
+          statsB2.number <= reward.to_position,
+      );
+      const positionDelta = statsB2.number - numberA;
       const delta = deltaBkrlBlitzStats(
         statsA,
         accountInfo.statistics.rating!,
         statsB2,
       );
+      const leagueTheme = LEAGUE_ACCENT[league.index];
 
       return (
         <CommandWrapper>
           <TitleBar
             title={accountInfo.nickname}
             image={clanImage}
-            description={t`bot.commands.rating_session.body.subtitle`}
+            description={`${t`bot.commands.rating_session.body.subtitle`} • ${new Date().toLocaleDateString(
+              interaction.locale,
+            )}`}
           />
 
-          {delta.battles === 0 && (
-            <NoData type="battles_in_season" locale={interaction.locale} />
-          )}
-          {delta.battles > 0 && (
+          <div
+            style={{
+              position: 'relative',
+              display: 'flex',
+              overflow: 'hidden',
+            }}
+          >
             <div
               style={{
+                position: 'relative',
                 padding: 16,
-                backgroundColor: theme.colors.appBackground2_purple,
+                backgroundColor: theme.colors[`appBackground2${leagueTheme}`],
                 borderRadius: 4,
-                border: `1px solid ${theme.colors.componentInteractive_purple}`,
+                border: `1px solid ${theme.colors[`componentInteractive${leagueTheme}`]}`,
                 display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '100%',
               }}
             >
+              {reward === undefined && (
+                <Glow
+                  endOpacity={3 / 4}
+                  color={theme.colors[`solidBackground${leagueTheme}`]}
+                  style={{
+                    transform: 'translateX(-16px) rotate(90deg)',
+                  }}
+                />
+              )}
+
               <div
                 style={{
                   display: 'flex',
@@ -121,12 +161,12 @@ export const ratingStatsCommand = new Promise<CommandRegistry>((resolve) => {
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
+                      justifyContent: 'flex-start',
                     }}
                   >
                     <span
                       style={{
-                        color: theme.colors.textHighContrast_purple,
+                        color: theme.colors[`textHighContrast${leagueTheme}`],
                         fontSize: 24,
                         fontWeight: 900,
                       }}
@@ -150,17 +190,154 @@ export const ratingStatsCommand = new Promise<CommandRegistry>((resolve) => {
                       </>
                     )}
                   </div>
-                  <span
+
+                  <div
                     style={{
-                      color: theme.colors.textLowContrast_purple,
-                      fontSize: 16,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'flex-start',
                     }}
                   >
-                    #{statsB2.number.toLocaleString(interaction.locale)}
-                  </span>
+                    <span
+                      style={{
+                        color: theme.colors[`textLowContrast${leagueTheme}`],
+                        fontSize: 16,
+                      }}
+                    >
+                      #{statsB2.number.toLocaleString(interaction.locale)}
+                    </span>
+                    {positionDelta !== 0 && (
+                      <>
+                        <DeltaCaret delta={positionDelta} />
+                        <span
+                          style={{
+                            color:
+                              positionDelta > 0
+                                ? theme.colors.textLowContrast_green
+                                : theme.colors.textLowContrast_red,
+                            fontSize: 16,
+                          }}
+                        >
+                          {positionDelta.toLocaleString(interaction.locale)}
+                        </span>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
+
+              {reward && (
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: 8,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                      }}
+                    >
+                      <span
+                        style={{
+                          color: theme.colors[`textHighContrast${leagueTheme}`],
+                          fontSize: 16,
+                          maxWidth: 136,
+                          textAlign: 'right',
+                          whiteSpace: 'nowrap',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {reward.type === 'vehicle'
+                          ? reward.vehicle.user_string
+                          : reward.stuff.title}
+                      </span>
+                    </div>
+
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                      }}
+                    >
+                      <span
+                        style={{
+                          color: theme.colors[`textLowContrast${leagueTheme}`],
+                          fontSize: 16,
+                        }}
+                      >
+                        Reward
+                        {reward.type === 'stuff' ? ` x${reward.count}` : ''}
+                      </span>
+                    </div>
+                  </div>
+
+                  <img
+                    style={{
+                      width: 64,
+                      height: 64,
+                      objectFit: 'cover',
+                    }}
+                    src={await webpToPng(
+                      reward.type === 'vehicle'
+                        ? reward.vehicle.preview_image_url
+                        : reward.stuff.image_url,
+                    )}
+                  />
+                </div>
+              )}
+
+              {reward === undefined && (
+                <Glow
+                  endOpacity={3 / 4}
+                  color={theme.colors[`solidBackground${leagueTheme}`]}
+                  style={{
+                    transform: 'translateX(16px) rotate(-90deg)',
+                  }}
+                />
+              )}
             </div>
+
+            {/* separated because fragment middle man invalidates relative parent: https://github.com/vercel/satori/issues/605 */}
+            {reward && (
+              <Glow
+                direction="reverse"
+                color={theme.colors[`solidBackground${leagueTheme}`]}
+                style={{
+                  position: 'absolute',
+                  top: -40,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                }}
+              />
+            )}
+            {reward && (
+              <Glow
+                color={theme.colors[`solidBackground${leagueTheme}`]}
+                style={{
+                  position: 'absolute',
+                  bottom: -40,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                }}
+              />
+            )}
+          </div>
+
+          {delta.battles === 0 && (
+            <NoData type="battles_in_period" locale={interaction.locale} />
           )}
         </CommandWrapper>
       );

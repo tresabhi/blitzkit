@@ -9,7 +9,7 @@ import resolveTankId from '../core/blitz/resolveTankId';
 import { asset } from '../core/blitzkrieg/asset';
 import { buildTechTreeLine } from '../core/blitzkrieg/buildTechTreeLine';
 import { emblemURL } from '../core/blitzkrieg/emblemURL';
-import { iconPng } from '../core/blitzkrieg/iconPng';
+import { webpToPng } from '../core/blitzkrieg/iconPng';
 import { resolveAncestry } from '../core/blitzkrieg/resolveAncestry';
 import { tankDefinitions } from '../core/blitzkrieg/tankDefinitions';
 import {
@@ -276,7 +276,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                   }}
                 >
                   <img
-                    src={await iconPng(asset('icons/currencies/xp.webp'))}
+                    src={await webpToPng(asset('icons/currencies/xp.webp'))}
                     width={16}
                     height={16}
                   />
@@ -301,7 +301,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                   }}
                 >
                   <img
-                    src={await iconPng(asset('icons/currencies/silver.webp'))}
+                    src={await webpToPng(asset('icons/currencies/silver.webp'))}
                     width={16}
                     height={16}
                   />
@@ -326,7 +326,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                   }}
                 >
                   <img
-                    src={await iconPng(asset('icons/currencies/silver.webp'))}
+                    src={await webpToPng(asset('icons/currencies/silver.webp'))}
                     width={16}
                     height={16}
                   />
@@ -452,7 +452,9 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                         }}
                       >
                         <img
-                          src={await iconPng(asset('icons/currencies/xp.webp'))}
+                          src={await webpToPng(
+                            asset('icons/currencies/xp.webp'),
+                          )}
                           width={16}
                           height={16}
                         />
@@ -479,7 +481,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                           }}
                         >
                           <img
-                            src={await iconPng(
+                            src={await webpToPng(
                               asset('icons/currencies/free-xp.webp'),
                             )}
                             width={16}
@@ -506,7 +508,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                         }}
                       >
                         <img
-                          src={await iconPng(
+                          src={await webpToPng(
                             asset('icons/currencies/silver.webp'),
                           )}
                           width={16}
@@ -534,7 +536,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                         }}
                       >
                         <img
-                          src={await iconPng(
+                          src={await webpToPng(
                             asset('icons/currencies/silver.webp'),
                           )}
                           width={16}

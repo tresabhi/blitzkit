@@ -1,6 +1,6 @@
-import { iconPng } from './iconPng';
+import { webpToPng } from './iconPng';
 import { tankIcon } from './tankIcon';
 
 export function tankIconPng(id: number) {
-  return iconPng(tankIcon(id));
+  return webpToPng(tankIcon(id));
 }
