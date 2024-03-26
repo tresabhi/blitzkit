@@ -474,11 +474,11 @@
           "last_battle": "Last battle"
         }
       },
-      "rating_session": {
+      "rating": {
         "$": "rating-session",
         "description": "Rating player's statistics",
         "body": {
-          "subtitle": "Rating session"
+          "subtitle": "Today's rating statistics"
         },
         "errors": {
           "no_participation": "# %s hasn't played rating\n\nThis player hasn't participated in the rating gamemode this season.",
