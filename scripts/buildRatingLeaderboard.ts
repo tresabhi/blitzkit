@@ -134,7 +134,7 @@ for (const leaderboardChunk of chunk(leaderboard, 100)) {
   stats.forEach((stat, index) => {
     const trueIndex = chunkIndex * 100 + index;
     comprehensiveLeaderboard[trueIndex] =
-      leaderboardChunk[index].id === 0 || stat.statistics.rating === undefined
+      leaderboardChunk[index].id === 0 || stat?.statistics.rating === undefined
         ? {
             battles: 0,
             damage: 0,
