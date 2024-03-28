@@ -181,7 +181,9 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
                             fontSize: 16,
                           }}
                         >
-                          {delta.score.toLocaleString(interaction.locale)}
+                          {Math.abs(delta.score).toLocaleString(
+                            interaction.locale,
+                          )}
                         </span>
                       </>
                     )}
@@ -214,7 +216,9 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
                             fontSize: 16,
                           }}
                         >
-                          {positionDelta.toLocaleString(interaction.locale)}
+                          {Math.abs(positionDelta).toLocaleString(
+                            interaction.locale,
+                          )}
                         </span>
                       </>
                     )}
