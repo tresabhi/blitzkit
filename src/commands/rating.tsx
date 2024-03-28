@@ -2,7 +2,6 @@ import markdownEscape from 'markdown-escape';
 import { Glow } from '../components/AllStatsOverview/components/HeroStat/components/Glow';
 import CommandWrapper from '../components/CommandWrapper';
 import { DeltaCaret } from '../components/DeltaCaret';
-import NoData from '../components/NoData';
 import TitleBar from '../components/TitleBar';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
@@ -333,156 +332,150 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
             )}
           </div>
 
-          {delta.battles === 0 && (
-            <NoData type="battles_in_period" locale={interaction.locale} />
-          )}
-
-          {delta.battles > 0 && (
-            <div style={{ padding: '8px 0', display: 'flex' }}>
-              <div
+          <div style={{ padding: '8px 0', display: 'flex' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 4,
+                flex: 1,
+                flexDirection: 'column',
+              }}
+            >
+              <span
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 4,
-                  flex: 1,
-                  flexDirection: 'column',
+                  fontSize: 24,
+                  color: theme.colors.textHighContrast,
+                  fontWeight: 'bold',
                 }}
               >
-                <span
-                  style={{
-                    fontSize: 24,
-                    color: theme.colors.textHighContrast,
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {delta.battles.toLocaleString(interaction.locale)}
-                </span>
-                <span
-                  style={{
-                    fontSize: 16,
-                    color: theme.colors.textLowContrast,
-                  }}
-                >
-                  Battles
-                </span>
-              </div>
-              <div
+                {delta.battles.toLocaleString(interaction.locale)}
+              </span>
+              <span
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 4,
-                  flex: 1,
-                  flexDirection: 'column',
+                  fontSize: 16,
+                  color: theme.colors.textLowContrast,
                 }}
               >
-                <span
-                  style={{
-                    fontSize: 24,
-                    color: theme.colors.textHighContrast,
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {(100 * (delta.wins / delta.battles)).toFixed(0)}%
-                </span>
-                <span
-                  style={{
-                    fontSize: 16,
-                    color: theme.colors.textLowContrast,
-                  }}
-                >
-                  Winrate
-                </span>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 4,
-                  flex: 1,
-                  flexDirection: 'column',
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 24,
-                    color: theme.colors.textHighContrast,
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {Math.round(delta.damage / delta.battles).toLocaleString(
-                    interaction.locale,
-                  )}
-                </span>
-                <span
-                  style={{
-                    fontSize: 16,
-                    color: theme.colors.textLowContrast,
-                  }}
-                >
-                  Damage
-                </span>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 4,
-                  flex: 1,
-                  flexDirection: 'column',
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 24,
-                    color: theme.colors.textHighContrast,
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {(100 * (delta.survived / delta.battles)).toFixed(0)}%
-                </span>
-                <span
-                  style={{
-                    fontSize: 16,
-                    color: theme.colors.textLowContrast,
-                  }}
-                >
-                  Survival
-                </span>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 4,
-                  flex: 1,
-                  flexDirection: 'column',
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 24,
-                    color: theme.colors.textHighContrast,
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {(delta.kills / delta.battles).toFixed(2)}
-                </span>
-                <span
-                  style={{
-                    fontSize: 16,
-                    color: theme.colors.textLowContrast,
-                  }}
-                >
-                  Kills
-                </span>
-              </div>
+                Battles
+              </span>
             </div>
-          )}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 4,
+                flex: 1,
+                flexDirection: 'column',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 24,
+                  color: theme.colors.textHighContrast,
+                  fontWeight: 'bold',
+                }}
+              >
+                {(100 * (delta.wins / delta.battles)).toFixed(0)}%
+              </span>
+              <span
+                style={{
+                  fontSize: 16,
+                  color: theme.colors.textLowContrast,
+                }}
+              >
+                Winrate
+              </span>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 4,
+                flex: 1,
+                flexDirection: 'column',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 24,
+                  color: theme.colors.textHighContrast,
+                  fontWeight: 'bold',
+                }}
+              >
+                {Math.round(delta.damage / delta.battles).toLocaleString(
+                  interaction.locale,
+                )}
+              </span>
+              <span
+                style={{
+                  fontSize: 16,
+                  color: theme.colors.textLowContrast,
+                }}
+              >
+                Damage
+              </span>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 4,
+                flex: 1,
+                flexDirection: 'column',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 24,
+                  color: theme.colors.textHighContrast,
+                  fontWeight: 'bold',
+                }}
+              >
+                {(100 * (delta.survived / delta.battles)).toFixed(0)}%
+              </span>
+              <span
+                style={{
+                  fontSize: 16,
+                  color: theme.colors.textLowContrast,
+                }}
+              >
+                Survival
+              </span>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 4,
+                flex: 1,
+                flexDirection: 'column',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 24,
+                  color: theme.colors.textHighContrast,
+                  fontWeight: 'bold',
+                }}
+              >
+                {(delta.kills / delta.battles).toFixed(2)}
+              </span>
+              <span
+                style={{
+                  fontSize: 16,
+                  color: theme.colors.textLowContrast,
+                }}
+              >
+                Kills
+              </span>
+            </div>
+          </div>
         </CommandWrapper>
       );
     },
