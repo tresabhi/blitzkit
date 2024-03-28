@@ -414,7 +414,7 @@
           "no_ongoing_season": "# No ongoing season\n\nThere isn't a currently running rating season.",
           "deleted_player": "%s eliminado",
           "neighbors": "Rating neighbors",
-          "more": "+ %s more"
+          "more": "+ %s más"
         }
       },
       "today": {
@@ -474,7 +474,7 @@
           "last_battle": "Última batalla"
         }
       },
-      "rating_session": {
+      "rating": {
         "$": "rating-session",
         "description": "Rating player's statistics",
         "body": {
@@ -482,7 +482,7 @@
         },
         "errors": {
           "no_participation": "# %s hasn't played rating\n\nThis player hasn't participated in the rating gamemode this season.",
-          "unrecorded_stats": "# Statistics unavailable\n\nRatings statistics are currently unavailable. If there is an on-going season, statistics should be available withing 24 hours."
+          "unrecorded_stats": "# Estadísticas no disponibles actualmente\n\nWargaming podría estar sufriendo una caída del servidor. Si hay alguna temporada en curso, las estadísticas deberían estar disponibles en 24 horas."
         }
       }
     }

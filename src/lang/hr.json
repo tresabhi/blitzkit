@@ -474,7 +474,7 @@
           "last_battle": "Last battle"
         }
       },
-      "rating_session": {
+      "rating": {
         "$": "rating-session",
         "description": "Rating player's statistics",
         "body": {
@@ -482,7 +482,7 @@
         },
         "errors": {
           "no_participation": "# %s hasn't played rating\n\nThis player hasn't participated in the rating gamemode this season.",
-          "unrecorded_stats": "# Statistics unavailable\n\nRatings statistics are currently unavailable. If there is an on-going season, statistics should be available withing 24 hours."
+          "unrecorded_stats": "# Statistics currently unavailable\n\nWargaming may be currently be facing server downtime. If there is an on-going season, statistics should be available withing 24 hours."
         }
       }
     }
