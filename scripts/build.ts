@@ -2,10 +2,12 @@ import { exec } from 'child_process';
 import { build } from 'esbuild';
 import { cp, readdir } from 'fs/promises';
 import { argv } from 'process';
+import { promisify } from 'util';
 
+const execPromise = promisify(exec);
 const isProduction = argv.includes('--production');
 
-readdir('src/workers').then((workers) => {
+await readdir('src/workers').then((workers) => {
   const files = [
     'bot',
     'index',
@@ -41,8 +43,8 @@ readdir('src/workers').then((workers) => {
 });
 
 // copy schema.prisma
-cp('prisma/schema.prisma', 'dist/bot/schema.prisma');
-readdir('node_modules/prisma').then((files) =>
+await cp('prisma/schema.prisma', 'dist/bot/schema.prisma');
+await readdir('node_modules/prisma').then((files) =>
   files
     .filter((file) => file.endsWith('.node'))
     .map((file) => cp(`node_modules/prisma/${file}`, `dist/bot/${file}`)),
@@ -51,7 +53,7 @@ readdir('node_modules/prisma').then((files) =>
 if (isProduction) {
   // install fixed sharp
   console.log('Installing fixed sharp...');
-  exec('yarn init -y && yarn add sharp@0.33.1 --ignore-engines', {
+  await execPromise('yarn init -y && yarn add sharp@0.33.1 --ignore-engines', {
     cwd: 'dist/bot',
   });
 }
