@@ -33,9 +33,6 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Add fixed sharp
-        run: yarn add sharp@0.33.1 --ignore-engines
-
       - name: Build
         run: yarn build:bot --production
 
