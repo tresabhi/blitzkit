@@ -1,8 +1,9 @@
+import { exec } from 'child_process';
 import { build } from 'esbuild';
 import { cp, readdir } from 'fs/promises';
 import { argv } from 'process';
 
-const isDev = argv.includes('--dev');
+const isProduction = argv.includes('--production');
 
 readdir('src/workers').then((workers) => {
   const files = [
@@ -46,3 +47,11 @@ readdir('node_modules/prisma').then((files) =>
     .filter((file) => file.endsWith('.node'))
     .map((file) => cp(`node_modules/prisma/${file}`, `dist/bot/${file}`)),
 );
+
+if (isProduction) {
+  // install fixed sharp
+  console.log('Installing fixed sharp...');
+  exec('yarn init -y && yarn add sharp@0.33.1 --ignore-engines', {
+    cwd: 'dist/bot',
+  });
+}
