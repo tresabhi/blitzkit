@@ -55,3 +55,5 @@ if (isProduction) {
     cwd: 'dist/bot',
   });
 }
+
+console.log('Generated:', await readdir('dist/bot'));
