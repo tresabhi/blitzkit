@@ -37,7 +37,7 @@ jobs:
         run: yarn add sharp@0.33.1 --ignore-engines
 
       - name: Build
-        run: yarn build:bot
+        run: yarn build:bot --production
 
       - name: Archive build
         uses: actions/upload-artifact@v4

@@ -5,7 +5,7 @@
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
-    "build:bot": "vite-node --script scripts/build --production",
+    "build:bot": "vite-node --script scripts/build",
     "build:website": "next build && next-sitemap --config next-sitemap.config.cjs",
     "build:docs": "vitepress build docs",
     "build:ratingleaderboard": "vite-node --script scripts/buildRatingLeaderboard",
