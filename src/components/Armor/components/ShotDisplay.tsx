@@ -4,6 +4,7 @@ import { useFrame } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import { Mesh } from 'three';
 import { radToDeg } from 'three/src/math/MathUtils';
+import { canSplash } from '../../../core/blitz/canSplash';
 import { isExplosive } from '../../../core/blitz/isExplosive';
 import { NaNFallback } from '../../../core/math/NaNFallback';
 import { normalToEuler } from '../../../core/math/normalToEuler';
@@ -42,6 +43,7 @@ export function ShotDisplay() {
   );
   const { shell } = useDuel.getState().antagonist!;
   const explosive = isExplosive(shell.type);
+  const splashing = canSplash(shell.type);
   const midPointLayer = (shot?.layers.findLast(
     (layer) => layer.type !== null && layer.status === 'ricochet',
   ) ?? shot?.layers.findLast((layer) => layer.type !== null)) as ShotLayerBase;
@@ -63,6 +65,18 @@ export function ShotDisplay() {
         if (layer.type === null) return accumulator + layer.distance;
         return accumulator;
       }, 0) + LENGTH_INFINITY
+    : undefined;
+  const preMidPointThickness = shot
+    ? preMidPointLayers!.reduce(
+        (accumulator, layer) =>
+          accumulator +
+          (layer.type === null
+            ? 0
+            : layer.type === ArmorType.External
+              ? layer.thickness
+              : layer.thicknessAngled),
+        0,
+      )
     : undefined;
   const postMidPointGap = shot
     ? postMidPointLayers!.reduce((accumulator, layer) => {
@@ -246,8 +260,9 @@ export function ShotDisplay() {
                         (1 -
                           distanceFromSpacedArmor! / shell.explosionRadius!) -
                         1.1 *
-                          (midPointLayer as ShotLayerNonExternal)
-                            .thicknessAngled,
+                          ((midPointLayer as ShotLayerNonExternal)
+                            .thicknessAngled +
+                            preMidPointThickness!),
                     ),
                   ),
                   0,
@@ -255,7 +270,7 @@ export function ShotDisplay() {
             </Text>
 
             {shot.layers.map((layer, index) => {
-              if (layer.type === null && !explosive) return null;
+              if (layer.type === null && (!explosive || splashing)) return null;
 
               return (
                 <Flex key={index} align="center" gap="2">

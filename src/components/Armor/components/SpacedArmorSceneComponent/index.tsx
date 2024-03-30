@@ -179,7 +179,7 @@ export function SpacedArmorSceneComponent({
                 const distance = (
                   shot.layers.at(-1) as ShotLayerBase
                 ).point.distanceTo(intersections[0].point);
-                if (explosive)
+                if (explosive && !splashing)
                   remainingPenetration -= 0.5 * remainingPenetration * distance;
                 const blocked = remainingPenetration < 0;
 
@@ -205,7 +205,7 @@ export function SpacedArmorSceneComponent({
                   const previousIntersection = intersections[layerIndex - 1];
                   const distance =
                     intersection.distance - previousIntersection.distance;
-                  if (explosive)
+                  if (explosive && !splashing)
                     remainingPenetration -=
                       0.5 * remainingPenetration * distance;
                   const wasted = remainingPenetration < 0;
@@ -216,7 +216,7 @@ export function SpacedArmorSceneComponent({
                     distance,
                   });
 
-                  if (wasted) return;
+                  if (wasted && !splashing) return;
                 }
 
                 if (intersection.object.userData.type === ArmorType.External) {
@@ -233,7 +233,11 @@ export function SpacedArmorSceneComponent({
                     status: blocked ? 'blocked' : 'penetration',
                   });
 
-                  if (blocked) break;
+                  if (splashing) {
+                    remainingPenetration = Math.max(0, remainingPenetration);
+                  } else if (blocked) {
+                    break;
+                  }
                 } else {
                   const type = intersection.object.userData.type;
                   const angle = surfaceNormal.angleTo(shellNormal);
