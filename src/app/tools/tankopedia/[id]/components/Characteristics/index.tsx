@@ -419,6 +419,11 @@ export function Characteristics() {
         <InfoWithDelta name="Module damage" unit="hp" decimals={0}>
           {shell.damage.module * damageCoefficient}
         </InfoWithDelta>
+        {isExplosive(shell.type) && (
+          <InfoWithDelta name="Splash radius" unit="m" decimals={0}>
+            {shell.explosionRadius!}
+          </InfoWithDelta>
+        )}
         <InfoWithDelta name="Shell velocity" unit="m/s" decimals={0}>
           {shell.speed * shellVelocityCoefficient}
         </InfoWithDelta>
