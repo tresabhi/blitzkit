@@ -57,7 +57,7 @@ export function CoreArmorSceneComponent({
   });
 
   useEffect(() => {
-    function handleShellChange(shell: ShellDefinition) {
+    async function handleShellChange(shell: ShellDefinition) {
       material.uniforms.caliber.value = shell.caliber;
       material.uniforms.ricochet.value = degToRad(shell.ricochet ?? 90);
       material.uniforms.normalization.value = degToRad(
@@ -68,10 +68,9 @@ export function CoreArmorSceneComponent({
       material.uniforms.damage.value = shell.damage.armor;
       material.uniforms.explosionRadius.value = shell.explosionRadius;
 
-      handleProtagonistEquipmentChange(
-        useDuel.getState().protagonist!.equipment,
-      );
-      handleAntagonistEquipmentChange(useDuel.getState().antagonist!.equipment);
+      const duel = useDuel.getState();
+      await handleProtagonistEquipmentChange(duel.protagonist!.equipment);
+      await handleAntagonistEquipmentChange(duel.antagonist!.equipment);
     }
     function handleVisualChange(
       visual: TankopediaPersistent['model']['visual'],
@@ -93,6 +92,7 @@ export function CoreArmorSceneComponent({
       const shell = useDuel.getState().antagonist!.shell;
       const penetration = resolveNearPenetration(shell.penetration);
       const hasCalibratedShells = await hasEquipment(103, true, equipment);
+
       material.uniforms.penetration.value = hasCalibratedShells
         ? penetration * (isExplosive(shell.type) ? 1.1 : 1.05)
         : penetration;
