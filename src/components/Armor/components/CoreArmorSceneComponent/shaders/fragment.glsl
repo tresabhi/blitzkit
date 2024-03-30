@@ -51,7 +51,7 @@ void main() {
 
     if (canSplash && useSpacedArmor && isUnderSpacedArmor) {
       float spacedArmorThickness = spacedArmorBufferFragment.r * penetration;
-      float finalDamage = 0.5 * damage * (1.0 - distanceFromSpacedArmor / explosionRadius) - 1.1 * (thickness + spacedArmorThickness);
+      float finalDamage = 0.5 * damage * (1.0 - distanceFromSpacedArmor / explosionRadius) - 1.1 * (finalThickness + spacedArmorThickness);
 
       penetrationChance = 0.0;
       splashChance = finalDamage > 0.0 ? 1.0 : 0.0;
