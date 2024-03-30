@@ -50,6 +50,7 @@ export function CoreArmorSceneComponent({
       opaque: { value: null },
       useSpacedArmor: { value: null },
 
+      inverseProjectionMatrix: { value: null },
       resolution: { value: new Vector2() },
       spacedArmorBuffer: { value: null },
       spacedArmorDepth: { value: null },
@@ -124,13 +125,15 @@ export function CoreArmorSceneComponent({
     };
   }, []);
 
-  useFrame(({ gl }) => {
+  useFrame(({ gl, camera }) => {
     gl.getSize(material.uniforms.resolution.value).multiplyScalar(
       gl.getPixelRatio(),
     );
     material.uniforms.spacedArmorBuffer.value = spacedArmorRenderTarget.texture;
     material.uniforms.spacedArmorDepth.value =
       spacedArmorRenderTarget.depthTexture;
+    material.uniforms.inverseProjectionMatrix.value =
+      camera.projectionMatrixInverse;
   });
 
   return (
