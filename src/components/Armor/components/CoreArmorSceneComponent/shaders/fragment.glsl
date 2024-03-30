@@ -15,13 +15,14 @@ uniform float explosionRadius;
 uniform bool greenPenetration;
 uniform bool opaque;
 uniform bool useSpacedArmor;
+uniform mat4 inverseViewProjectionMatrix;
 
 uniform highp sampler2D spacedArmorBuffer;
 uniform highp sampler2D spacedArmorDepth;
 
 float depthToDistance(float depth) {
   vec4 clipPosition = vec4(gl_FragCoord.xy / resolution * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
-  vec4 eyePosition = inverse(vProjectionMatrix) * clipPosition;
+  vec4 eyePosition = inverseViewProjectionMatrix * clipPosition;
   return length(eyePosition.xyz / eyePosition.w);
 }
 
