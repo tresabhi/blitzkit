@@ -58,9 +58,6 @@ export function CoreArmorSceneComponent({
 
   useEffect(() => {
     function handleShellChange(shell: ShellDefinition) {
-      material.uniforms.penetration.value = resolveNearPenetration(
-        shell.penetration,
-      );
       material.uniforms.caliber.value = shell.caliber;
       material.uniforms.ricochet.value = degToRad(shell.ricochet ?? 90);
       material.uniforms.normalization.value = degToRad(
@@ -70,6 +67,11 @@ export function CoreArmorSceneComponent({
       material.uniforms.canSplash.value = canSplash(shell.type);
       material.uniforms.damage.value = shell.damage.armor;
       material.uniforms.explosionRadius.value = shell.explosionRadius;
+
+      handleProtagonistEquipmentChange(
+        useDuel.getState().protagonist!.equipment,
+      );
+      handleAntagonistEquipmentChange(useDuel.getState().antagonist!.equipment);
     }
     function handleVisualChange(
       visual: TankopediaPersistent['model']['visual'],
