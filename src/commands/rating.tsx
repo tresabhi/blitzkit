@@ -10,7 +10,7 @@ import getRatingInfo from '../core/blitz/getRatingInfo';
 import { getRatingNeighbors } from '../core/blitz/getRatingNeighbors';
 import { normalizeLeagueIcon } from '../core/blitz/normalizeLeagueIcon';
 import { emblemURL } from '../core/blitzkrieg/emblemURL';
-import { getArchivedRatingLeaderboard } from '../core/blitzkrieg/getArchivedRatingLeaderboard';
+import getArchivedRatingMidnightLeaderboard from '../core/blitzkrieg/getArchivedRatingMidnightLeaderboard';
 import { webpToPng } from '../core/blitzkrieg/iconPng';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
@@ -42,9 +42,12 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
       const { id, region } = await resolvePlayerFromCommand(interaction);
       const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
       const clanImage = clan ? emblemURL(clan.emblem_set_id) : undefined;
-      const leaderboard = await getArchivedRatingLeaderboard(region, 53);
+      const leaderboard = await getArchivedRatingMidnightLeaderboard(
+        region,
+        53,
+      );
 
-      if (leaderboard.format === BkrlFormat.Base) {
+      if (leaderboard?.format === BkrlFormat.Base) {
         throw new Error(
           'Encountered bkrl minimal format in latest season. Wait till next cron?',
         );
@@ -54,11 +57,11 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
       const accountInfo = await getAccountInfo(region, id, [
         'statistics.rating',
       ]);
-      const statsIndex = leaderboard.entries.findIndex(
+      const statsIndex = leaderboard?.entries.findIndex(
         (entry) => entry.id === id,
       );
-      const statsA = leaderboard.entries[statsIndex];
-      const numberA = statsIndex + 1;
+      const statsA = leaderboard ? leaderboard.entries[statsIndex!] : null;
+      const positionA = leaderboard ? statsIndex! + 1 : undefined;
       const statsB1 = accountInfo.statistics.rating!;
       const [statsB2] = (await getRatingNeighbors(region, id, 0)).neighbors;
       const league = getLeagueFromScore(statsB2.score);
@@ -80,7 +83,9 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
           statsB2.number >= reward.from_position &&
           statsB2.number <= reward.to_position,
       );
-      const positionDelta = statsB2.number - numberA;
+      const positionDelta = leaderboard
+        ? statsB2.number - positionA!
+        : undefined;
       const delta = deltaBkrlBlitzStats(
         statsA,
         accountInfo.statistics.rating!,
@@ -204,7 +209,7 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
                     >
                       #{statsB2.number.toLocaleString(interaction.locale)}
                     </span>
-                    {positionDelta !== 0 && (
+                    {positionDelta !== undefined && positionDelta !== 0 && (
                       <>
                         <DeltaCaret delta={positionDelta} />
                         <span
