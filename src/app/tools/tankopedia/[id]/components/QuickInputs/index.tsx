@@ -46,15 +46,11 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
         position: 'absolute',
         left: 8,
         bottom: isFullScreen ? 80 : 8,
+        pointerEvents: 'none',
       }}
       gap="4"
     >
-      <Flex
-        gap="2"
-        style={{
-          width: 256,
-        }}
-      >
+      <Flex gap="2" style={{ width: 256, pointerEvents: 'none' }}>
         <TextField.Root
           style={{
             flex: 1,
@@ -94,13 +90,7 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
             ref={turretYawInput}
             style={{ textAlign: 'right' }}
           />
-          <TextField.Slot
-            style={{
-              userSelect: 'none',
-            }}
-          >
-            °
-          </TextField.Slot>
+          <TextField.Slot style={{ userSelect: 'none' }}>°</TextField.Slot>
         </TextField.Root>
 
         <TextField.Root
