@@ -38,6 +38,7 @@ export interface TankopediaPersistent {
     test: TankopediaTestTankDisplay;
     page: number;
   };
+  skills: Record<string, number>;
   mode: TankopediaMode;
 }
 
@@ -146,6 +147,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
         test: 'include',
         page: 0,
       },
+      skills: {},
       mode: 'model',
     })),
     { name: 'tankopedia', merge: (a, b) => merge(b, a) },

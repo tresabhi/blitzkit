@@ -5,7 +5,7 @@ import { equipmentDefinitions } from '../../../../../../../core/blitzkrieg/equip
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
-export function Equipments() {
+export function Equipment() {
   const protagonist = useDuel((state) => state.protagonist!);
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const equipmentRows =
@@ -14,7 +14,7 @@ export function Equipments() {
 
   return (
     <ConfigurationChildWrapper>
-      <Heading size="4">Equipments</Heading>
+      <Heading size="4">Equipment</Heading>
 
       <Flex direction="column" gap="2">
         {equipmentRows.map((equipmentRow, rowIndex) => (

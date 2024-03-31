@@ -7,5 +7,5 @@ export interface SkillDefinitions {
 }
 
 export const skillDefinitions = fetchCdonLz4<SkillDefinitions>(
-  asset('definitions/equipment.cdon.lz4'),
+  asset('definitions/skills.cdon.lz4'),
 );

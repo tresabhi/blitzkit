@@ -10,10 +10,11 @@ import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
 import { AntagonistBar } from './components/AntagonistBar';
 import { Characteristics } from './components/Characteristics';
 import { Consumables } from './components/Characteristics/components/Consumables';
-import { Equipments } from './components/Characteristics/components/Equipments';
+import { Equipment } from './components/Characteristics/components/Equipment';
 import { Miscellaneous } from './components/Characteristics/components/Miscellaneous';
 import { Modules } from './components/Characteristics/components/Modules';
 import { Provisions } from './components/Characteristics/components/Provisions';
+import { Skills } from './components/Characteristics/components/Skills';
 import { TankSandbox } from './components/Model/TankSandbox';
 import { Title } from './components/Title';
 
@@ -63,8 +64,6 @@ export default function Page({ params }: { params: { id: string } }) {
     };
   }, [initialId, assigned]);
 
-
-
   return (
     <PageWrapper color="purple" size="double">
       {assigned && (
@@ -94,9 +93,10 @@ export default function Page({ params }: { params: { id: string } }) {
               <Flex direction="column" gap="4">
                 <Modules />
                 <Provisions />
-                <Equipments />
+                <Equipment />
                 <Miscellaneous />
                 <Consumables />
+                <Skills />
               </Flex>
             </Flex>
 
