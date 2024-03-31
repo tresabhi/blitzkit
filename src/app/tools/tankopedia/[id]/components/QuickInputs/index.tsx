@@ -50,7 +50,7 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
       }}
       gap="4"
     >
-      <Flex gap="2" style={{ width: 256, pointerEvents: 'none' }}>
+      <Flex gap="2" style={{ width: 256, pointerEvents: 'auto' }}>
         <TextField.Root
           style={{
             flex: 1,
@@ -145,7 +145,7 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
       </Flex>
 
       {mode === 'armor' && (
-        <Flex gap="4">
+        <Flex gap="4" style={{ pointerEvents: 'auto' }}>
           <QuickEquipmentButton
             equipment={103}
             active={hasCalibratedShells}
