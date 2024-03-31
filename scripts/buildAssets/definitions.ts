@@ -1,4 +1,4 @@
-import { readdir, writeFile } from 'fs/promises';
+import { readdir } from 'fs/promises';
 import { parse as parsePath } from 'path';
 import { Vector3Tuple } from 'three';
 import { parse as parseYaml } from 'yaml';
@@ -21,6 +21,7 @@ import {
   ModelDefinitions,
 } from '../../src/core/blitzkrieg/modelDefinitions';
 import { ProvisionDefinitions } from '../../src/core/blitzkrieg/provisionDefinitions';
+import { SkillDefinitions } from '../../src/core/blitzkrieg/skillDefinitions';
 import { superCompress } from '../../src/core/blitzkrieg/superCompress';
 import {
   Crew,
@@ -32,6 +33,7 @@ import {
   Tier,
 } from '../../src/core/blitzkrieg/tankDefinitions';
 import { DATA, POI } from './constants';
+import { Avatar } from './skillIcons';
 import { TankParameters } from './tankIcons';
 
 interface Strings {
@@ -341,6 +343,9 @@ export async function definitions(production: boolean) {
   };
   const consumableDefinitions: ConsumableDefinitions = {};
   const provisionDefinitions: ProvisionDefinitions = {};
+  const skillDefinitions: SkillDefinitions = {
+    classes: { lightTank: [], mediumTank: [], heavyTank: [], 'AT-SPG': [] },
+  };
   const nations = await readdir(`${DATA}/${POI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
@@ -366,6 +371,9 @@ export async function definitions(production: boolean) {
   );
   const provisions = await readXMLDVPL<{ root: ProvisionsCommon }>(
     `${DATA}/${POI.provisionsCommon}.dvpl`,
+  );
+  const avatar = await readXMLDVPL<{ root: Avatar }>(
+    `${DATA}/XML/item_defs/tankmen/avatar.xml.dvpl`,
   );
 
   const tankXps = new Map<number, number>();
@@ -1084,10 +1092,10 @@ export async function definitions(production: boolean) {
     }
   });
 
-  writeFile(
-    'test.tanks.cdon.lz4',
-    Buffer.from(superCompress(tankDefinitions), 'base64'),
-  );
+  Object.entries(avatar.root.skillsByClasses).forEach(([tankClass, skills]) => {
+    skillDefinitions.classes[tankClass as TankClass] = skills.split(' ');
+  });
+
   await commitAssets(
     'definitions',
     [
@@ -1115,6 +1123,11 @@ export async function definitions(production: boolean) {
         content: superCompress(provisionDefinitions),
         encoding: 'base64',
         path: 'definitions/provisions.cdon.lz4',
+      },
+      {
+        content: superCompress(skillDefinitions),
+        encoding: 'base64',
+        path: 'definitions/skills.cdon.lz4',
       },
     ],
     production,

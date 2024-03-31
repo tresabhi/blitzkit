@@ -11,22 +11,22 @@ interface SkillIcon {
   state: number;
 }
 
-interface Avatar {
+export interface Avatar {
   roles: unknown;
   skillsByClasses: Record<TankClass, string>;
   skills: {
     [name: string]: {
-      userString: '#crew_skills:surrounded_by_enemy/name';
-      effectDescription: '#crew_skills:surrounded_by_enemy/effect';
-      tipDescription: '#crew_skills:surrounded_by_enemy/tip';
+      userString: string;
+      effectDescription: string;
+      tipDescription: string;
       icon: SkillIcon | SkillIcon[];
       type: 'continuous' | 'trigger';
     };
   };
 }
 
-export async function crewSkillIcons(production: boolean) {
-  console.log('Building crew skill icons...');
+export async function skillIcons(production: boolean) {
+  console.log('Building skill icons...');
 
   const avatar = await readXMLDVPL<{ root: Avatar }>(
     `${DATA}/XML/item_defs/tankmen/avatar.xml.dvpl`,
@@ -47,5 +47,5 @@ export async function crewSkillIcons(production: boolean) {
     }),
   );
 
-  commitAssets('crew skill icons', changes, production);
+  commitAssets('skill icons', changes, production);
 }

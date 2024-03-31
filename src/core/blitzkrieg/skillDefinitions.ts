@@ -2,10 +2,10 @@ import { TankClass } from '../../components/Tanks';
 import { asset } from './asset';
 import { fetchCdonLz4 } from './fetchCdonLz4';
 
-export interface CrewSkillDefinitions {
-  classes: Record<TankClass, [string, string, string, string]>;
+export interface SkillDefinitions {
+  classes: Record<TankClass, string[]>;
 }
 
-export const crewSkillDefinitions = fetchCdonLz4<CrewSkillDefinitions>(
+export const skillDefinitions = fetchCdonLz4<SkillDefinitions>(
   asset('definitions/equipment.cdon.lz4'),
 );

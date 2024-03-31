@@ -14,13 +14,13 @@ import { boosterIcons } from './boosterIcons';
 import { camouflageIcons } from './camouflageIcons';
 import { circleFlags } from './circleFlags';
 import { consumableProvisionIcons } from './consumableProvisionIcons';
-import { crewSkillIcons } from './crewSkillIcons';
 import { currencies } from './currencies';
 import { definitions } from './definitions';
 import { equipmentIcons } from './equipmentIcons';
 import { moduleIcons } from './moduleIcons';
 import { scratchedFlags } from './scratchedFlags';
 import { shellIcons } from './shellIcons';
+import { skillIcons } from './skillIcons';
 import { tankArmors } from './tankArmors';
 import { tankIcons } from './tankIcons';
 import { tankModels } from './tankModels';
@@ -41,7 +41,7 @@ const methods = [
   tankArmors,
   tankModels,
   currencies,
-  crewSkillIcons,
+  skillIcons,
 ];
 
 for (const method of methods) {
