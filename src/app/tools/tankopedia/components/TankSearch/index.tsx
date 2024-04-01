@@ -392,27 +392,26 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
     <>
       <Flex direction="column" gap="4">
         <Flex gap="2">
-          <TextField.Root style={{ flex: 1 }}>
+          <TextField.Root
+            style={{ flex: 1 }}
+            ref={input}
+            placeholder="Search tanks..."
+            onChange={(event) => {
+              const results = go(event.target.value, searchableTanks, {
+                keys: [
+                  'name',
+                  'nameFull',
+                  'id',
+                ] satisfies (keyof TankDefinition)[],
+                all: true,
+              }).map(({ obj }) => obj);
+
+              setSearchedList(results);
+            }}
+          >
             <TextField.Slot>
               <MagnifyingGlassIcon height="16" width="16" />
             </TextField.Slot>
-
-            <TextField.Input
-              ref={input}
-              placeholder="Search tanks..."
-              onChange={(event) => {
-                const results = go(event.target.value, searchableTanks, {
-                  keys: [
-                    'name',
-                    'nameFull',
-                    'id',
-                  ] satisfies (keyof TankDefinition)[],
-                  all: true,
-                }).map(({ obj }) => obj);
-
-                setSearchedList(results);
-              }}
-            />
           </TextField.Root>
 
           <DropdownMenu.Root>
@@ -779,12 +778,12 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
                 flex: 1,
                 cursor: 'pointer',
                 height: 64,
+                minWidth: 256,
               }}
             >
               <Inset
                 key={tank.id}
                 style={{
-                  minWidth: 256,
                   minHeight: 64,
                   position: 'relative',
                   display: 'flex',

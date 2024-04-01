@@ -15,11 +15,10 @@ export default function Page() {
 
   return (
     <PageWrapper>
-      <TextField.Root>
+      <TextField.Root placeholder="Search tools...">
         <TextField.Slot>
           <MagnifyingGlassIcon height="16" width="16" />
         </TextField.Slot>
-        <TextField.Input ref={input} placeholder="Search tools..." />
       </TextField.Root>
 
       <Flex gap="3" wrap="wrap" align="center" justify="center">

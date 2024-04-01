@@ -418,25 +418,25 @@ export function Characteristics() {
                   setPenetrationDistance(value);
                 }, 500)}
               />
-              <TextField.Root style={{ width: 64 }}>
-                <TextField.Input
-                  ref={penetrationDistanceInput}
-                  defaultValue={penetrationDistance}
-                  onBlur={() => {
-                    setPenetrationDistance(
-                      Math.min(
-                        parseInt(penetrationDistanceInput.current!.value),
-                        500,
-                      ),
-                    );
-                  }}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter') {
-                      event.currentTarget.blur();
-                    }
-                  }}
-                />
-                <TextField.Slot>m</TextField.Slot>
+              <TextField.Root
+                style={{ width: 64 }}
+                ref={penetrationDistanceInput}
+                defaultValue={penetrationDistance}
+                onBlur={() => {
+                  setPenetrationDistance(
+                    Math.min(
+                      parseInt(penetrationDistanceInput.current!.value),
+                      500,
+                    ),
+                  );
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    event.currentTarget.blur();
+                  }
+                }}
+              >
+                <TextField.Slot side="right">m</TextField.Slot>
               </TextField.Root>
             </Flex>
           </>

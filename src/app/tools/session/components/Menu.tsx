@@ -37,19 +37,18 @@ export function Menu({ Builder, reset }: ContextMenuProps) {
             <Heading size="4">Edit title</Heading>
 
             <Flex gap="2" style={{ width: '100%' }}>
-              <TextField.Root style={{ flex: 1 }}>
-                <TextField.Input
-                  ref={titleInput}
-                  defaultValue={session.title}
-                  placeholder="Enter title..."
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter' && titleInput.current) {
-                      setShowTitleEditor(false);
-                      useSession.setState({ title: titleInput.current!.value });
-                    }
-                  }}
-                />
-              </TextField.Root>
+              <TextField.Root
+                style={{ flex: 1 }}
+                ref={titleInput}
+                defaultValue={session.title}
+                placeholder="Enter title..."
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' && titleInput.current) {
+                    setShowTitleEditor(false);
+                    useSession.setState({ title: titleInput.current!.value });
+                  }
+                }}
+              />
 
               <Dialog.Close>
                 <Button

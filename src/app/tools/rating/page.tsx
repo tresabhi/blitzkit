@@ -605,7 +605,7 @@ export default function Page() {
 
             <Dialog.Content>
               <Flex gap="4" justify="center">
-                <TextField.Input
+                <TextField.Root
                   ref={scoreInput}
                   type="number"
                   placeholder="Type a score..."
@@ -638,7 +638,7 @@ export default function Page() {
 
             <Dialog.Content>
               <Flex gap="4" justify="center">
-                <TextField.Input
+                <TextField.Root
                   ref={positionInput}
                   type="number"
                   placeholder="Type a position..."
@@ -759,105 +759,100 @@ export default function Page() {
 
             <Dialog.Content>
               <Flex gap="4" direction="column">
-                <TextField.Root>
+                <TextField.Root
+                  onChange={debounce(
+                    async (event: ChangeEvent<HTMLInputElement>) => {
+                      const trimmedSearch = event.target.value.trim();
+                      const encodedSearch = encodeURIComponent(trimmedSearch);
+
+                      if (trimmedSearch) {
+                        if (season === 0) {
+                          setSearchLoading(true);
+
+                          const accountList = await searchCurrentRatingPlayers(
+                            region,
+                            trimmedSearch,
+                          );
+                          const values = Object.values(accountList).filter(
+                            (searchedPlayer) => !searchedPlayer.skip,
+                          );
+                          const valuesWithTypes =
+                            values as ((typeof values)[number] & {
+                              skip: false;
+                            })[];
+
+                          useLeaderboardCache.setState(
+                            produce((draft: LeaderboardCache) => {
+                              if (draft) {
+                                values.forEach((player) => {
+                                  const playerWithTypes =
+                                    player as typeof player & { skip: false };
+
+                                  draft[region][season][
+                                    playerWithTypes.number - 1
+                                  ] = playerWithTypes.spa_id;
+                                });
+                              }
+                            }),
+                          );
+                          useNameCache.setState(
+                            produce((draft: typeof names) => {
+                              valuesWithTypes.forEach((searchedPlayer) => {
+                                if (searchedPlayer.nickname) {
+                                  draft[region][searchedPlayer.spa_id] = {
+                                    nickname: searchedPlayer.nickname,
+                                    clan: searchedPlayer.clan_tag,
+                                  };
+                                }
+                              });
+                            }),
+                          );
+                          setSearchResults(
+                            valuesWithTypes.map((searchedPlayer) => ({
+                              account_id: searchedPlayer.spa_id,
+                              nickname: searchedPlayer.nickname,
+                              number: searchedPlayer.number,
+                            })),
+                          );
+                          setSearchLoading(false);
+                        } else {
+                          setSearchLoading(true);
+                          const accountList = await fetchBlitz<AccountList>(
+                            `https://api.wotblitz.${region}/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}`,
+                          );
+                          const playerKeys = Object.keys(
+                            leaderboard[region][season],
+                          );
+
+                          setSearchResults(
+                            accountList
+                              .map((searchedPlayer) => ({
+                                ...searchedPlayer,
+                                number: parseInt(
+                                  playerKeys.find(
+                                    (indexAsString) =>
+                                      leaderboard[region][season][
+                                        parseInt(indexAsString)
+                                      ] === searchedPlayer.account_id,
+                                  )!,
+                                ),
+                              }))
+                              .filter((player) => !Number.isNaN(player.number)),
+                          );
+
+                          setSearchLoading(false);
+                        }
+                      } else {
+                        setSearchResults(undefined);
+                      }
+                    },
+                    500,
+                  )}
+                  placeholder="Search for player..."
+                >
                   <TextField.Slot>
                     <MagnifyingGlassIcon height="16" width="16" />
                   </TextField.Slot>
-
-                  <TextField.Input
-                    onChange={debounce(
-                      async (event: ChangeEvent<HTMLInputElement>) => {
-                        const trimmedSearch = event.target.value.trim();
-                        const encodedSearch = encodeURIComponent(trimmedSearch);
-
-                        if (trimmedSearch) {
-                          if (season === 0) {
-                            setSearchLoading(true);
-
-                            const accountList =
-                              await searchCurrentRatingPlayers(
-                                region,
-                                trimmedSearch,
-                              );
-                            const values = Object.values(accountList).filter(
-                              (searchedPlayer) => !searchedPlayer.skip,
-                            );
-                            const valuesWithTypes =
-                              values as ((typeof values)[number] & {
-                                skip: false;
-                              })[];
-
-                            useLeaderboardCache.setState(
-                              produce((draft: LeaderboardCache) => {
-                                if (draft) {
-                                  values.forEach((player) => {
-                                    const playerWithTypes =
-                                      player as typeof player & { skip: false };
-
-                                    draft[region][season][
-                                      playerWithTypes.number - 1
-                                    ] = playerWithTypes.spa_id;
-                                  });
-                                }
-                              }),
-                            );
-                            useNameCache.setState(
-                              produce((draft: typeof names) => {
-                                valuesWithTypes.forEach((searchedPlayer) => {
-                                  if (searchedPlayer.nickname) {
-                                    draft[region][searchedPlayer.spa_id] = {
-                                      nickname: searchedPlayer.nickname,
-                                      clan: searchedPlayer.clan_tag,
-                                    };
-                                  }
-                                });
-                              }),
-                            );
-                            setSearchResults(
-                              valuesWithTypes.map((searchedPlayer) => ({
-                                account_id: searchedPlayer.spa_id,
-                                nickname: searchedPlayer.nickname,
-                                number: searchedPlayer.number,
-                              })),
-                            );
-                            setSearchLoading(false);
-                          } else {
-                            setSearchLoading(true);
-                            const accountList = await fetchBlitz<AccountList>(
-                              `https://api.wotblitz.${region}/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}`,
-                            );
-                            const playerKeys = Object.keys(
-                              leaderboard[region][season],
-                            );
-
-                            setSearchResults(
-                              accountList
-                                .map((searchedPlayer) => ({
-                                  ...searchedPlayer,
-                                  number: parseInt(
-                                    playerKeys.find(
-                                      (indexAsString) =>
-                                        leaderboard[region][season][
-                                          parseInt(indexAsString)
-                                        ] === searchedPlayer.account_id,
-                                    )!,
-                                  ),
-                                }))
-                                .filter(
-                                  (player) => !Number.isNaN(player.number),
-                                ),
-                            );
-
-                            setSearchLoading(false);
-                          }
-                        } else {
-                          setSearchResults(undefined);
-                        }
-                      },
-                      500,
-                    )}
-                    placeholder="Search for player..."
-                  />
                 </TextField.Root>
 
                 <Flex direction="column" gap="2">

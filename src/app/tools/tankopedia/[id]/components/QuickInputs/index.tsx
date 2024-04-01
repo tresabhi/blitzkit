@@ -54,7 +54,32 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
         <TextField.Root
           style={{
             flex: 1,
+            textAlign: 'right',
           }}
+          onBlur={() => {
+            const [pitch, yaw] = applyPitchYawLimits(
+              protagonist.pitch,
+              degToRad(Number(turretYawInput.current!.value)),
+              gunModelDefinition.pitch,
+              turretModelDefinition.yaw,
+              hasImprovedVerticalStabilizer,
+            );
+            modelTransformEvent.emit({ pitch, yaw });
+            mutateDuel((state) => {
+              state.protagonist!.pitch = pitch;
+              state.protagonist!.yaw = yaw;
+            });
+            turretYawInput.current!.value = radToDeg(protagonist.yaw).toFixed(
+              1,
+            );
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              turretYawInput.current?.blur();
+            }
+          }}
+          onFocus={() => turretYawInput.current?.focus()}
+          ref={turretYawInput}
         >
           <TextField.Slot
             style={{
@@ -63,40 +88,38 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
           >
             Yaw
           </TextField.Slot>
-          <TextField.Input
-            onBlur={() => {
-              const [pitch, yaw] = applyPitchYawLimits(
-                protagonist.pitch,
-                degToRad(Number(turretYawInput.current!.value)),
-                gunModelDefinition.pitch,
-                turretModelDefinition.yaw,
-                hasImprovedVerticalStabilizer,
-              );
-              modelTransformEvent.emit({ pitch, yaw });
-              mutateDuel((state) => {
-                state.protagonist!.pitch = pitch;
-                state.protagonist!.yaw = yaw;
-              });
-              turretYawInput.current!.value = radToDeg(protagonist.yaw).toFixed(
-                1,
-              );
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                turretYawInput.current?.blur();
-              }
-            }}
-            onFocus={() => turretYawInput.current?.focus()}
-            ref={turretYawInput}
-            style={{ textAlign: 'right' }}
-          />
           <TextField.Slot style={{ userSelect: 'none' }}>°</TextField.Slot>
         </TextField.Root>
 
         <TextField.Root
           style={{
             flex: 1,
+            textAlign: 'right',
           }}
+          onBlur={() => {
+            const [pitch, yaw] = applyPitchYawLimits(
+              degToRad(-Number(gunPitchInput.current!.value) + initialGunPitch),
+              protagonist.yaw,
+              gunModelDefinition.pitch,
+              turretModelDefinition.yaw,
+              hasImprovedVerticalStabilizer,
+            );
+            modelTransformEvent.emit({ pitch, yaw });
+            mutateDuel((state) => {
+              state.protagonist!.pitch = pitch;
+              state.protagonist!.yaw = yaw;
+            });
+            gunPitchInput.current!.value = (
+              -radToDeg(protagonist.pitch) + initialGunPitch
+            ).toFixed(1);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              gunPitchInput.current?.blur();
+            }
+          }}
+          onFocus={() => gunPitchInput.current?.focus()}
+          ref={gunPitchInput}
         >
           <TextField.Slot
             style={{
@@ -105,35 +128,6 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
           >
             Pitch
           </TextField.Slot>
-          <TextField.Input
-            onBlur={() => {
-              const [pitch, yaw] = applyPitchYawLimits(
-                degToRad(
-                  -Number(gunPitchInput.current!.value) + initialGunPitch,
-                ),
-                protagonist.yaw,
-                gunModelDefinition.pitch,
-                turretModelDefinition.yaw,
-                hasImprovedVerticalStabilizer,
-              );
-              modelTransformEvent.emit({ pitch, yaw });
-              mutateDuel((state) => {
-                state.protagonist!.pitch = pitch;
-                state.protagonist!.yaw = yaw;
-              });
-              gunPitchInput.current!.value = (
-                -radToDeg(protagonist.pitch) + initialGunPitch
-              ).toFixed(1);
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                gunPitchInput.current?.blur();
-              }
-            }}
-            onFocus={() => gunPitchInput.current?.focus()}
-            ref={gunPitchInput}
-            style={{ textAlign: 'right' }}
-          />
           <TextField.Slot
             style={{
               userSelect: 'none',

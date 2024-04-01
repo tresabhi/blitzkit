@@ -89,34 +89,33 @@ export function Miscellaneous() {
             justify="end"
             style={{ width: 180 }}
           >
-            <TextField.Root>
+            <TextField.Root
+              ref={crewInput}
+              defaultValue={Math.round(crewMastery * 100)}
+              style={{ textAlign: 'right' }}
+              onBlur={() => {
+                const newValue = Number(crewInput.current!.value) / 100;
+
+                if (isNaN(newValue)) {
+                  crewInput.current!.value = `${Math.round(crewMastery * 100)}`;
+                  return;
+                }
+
+                mutateDuel((draft) => {
+                  draft.protagonist!.crewMastery = clamp(
+                    newValue / 100,
+                    0.5,
+                    1,
+                  );
+                });
+              }}
+              onKeyUp={(event) => {
+                if (event.key === 'Enter') {
+                  crewInput.current?.blur();
+                }
+              }}
+            >
               <TextField.Slot>Crew</TextField.Slot>
-              <TextField.Input
-                ref={crewInput}
-                defaultValue={Math.round(crewMastery * 100)}
-                style={{ textAlign: 'right' }}
-                onBlur={() => {
-                  const newValue = Number(crewInput.current!.value) / 100;
-
-                  if (isNaN(newValue)) {
-                    crewInput.current!.value = `${Math.round(crewMastery * 100)}`;
-                    return;
-                  }
-
-                  mutateDuel((draft) => {
-                    draft.protagonist!.crewMastery = clamp(
-                      newValue / 100,
-                      0.5,
-                      1,
-                    );
-                  });
-                }}
-                onKeyUp={(event) => {
-                  if (event.key === 'Enter') {
-                    crewInput.current?.blur();
-                  }
-                }}
-              />
               <TextField.Slot>%</TextField.Slot>
             </TextField.Root>
 

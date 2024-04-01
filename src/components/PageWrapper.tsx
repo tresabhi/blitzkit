@@ -1,10 +1,10 @@
-import { Flex, Theme } from '@radix-ui/themes';
+import { Flex, FlexProps, Theme } from '@radix-ui/themes';
 import { ComponentProps } from 'react';
 
-interface PageWrapperProps extends ComponentProps<typeof Flex> {
+type PageWrapperProps = FlexProps & {
   color?: ComponentProps<typeof Theme>['accentColor'];
   size?: number;
-}
+};
 
 export default function PageWrapper({
   style,

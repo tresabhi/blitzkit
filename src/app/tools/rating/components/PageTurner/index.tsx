@@ -53,29 +53,26 @@ export function PageTurner({
             <CaretLeftIcon />
           )}
         </Button>
-        <TextField.Root>
+
+        <TextField.Root
+          type="number"
+          ref={pageInput}
+          style={{ textAlign: 'center' }}
+          min={1}
+          max={pages}
+          onBlur={(event) => {
+            onPageChange(
+              Math.max(0, Math.min(pages - 1, event.target.valueAsNumber - 1)),
+              false,
+            );
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              (event.target as HTMLInputElement).blur();
+            }
+          }}
+        >
           <TextField.Slot>Page</TextField.Slot>
-          <TextField.Input
-            type="number"
-            ref={pageInput}
-            style={{ width: 64, textAlign: 'center' }}
-            min={1}
-            max={pages}
-            onBlur={(event) => {
-              onPageChange(
-                Math.max(
-                  0,
-                  Math.min(pages - 1, event.target.valueAsNumber - 1),
-                ),
-                false,
-              );
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                (event.target as HTMLInputElement).blur();
-              }
-            }}
-          />
           <TextField.Slot>out of {pages}</TextField.Slot>
         </TextField.Root>
         <Button

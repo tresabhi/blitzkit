@@ -56,38 +56,36 @@ export default function Page() {
     <PageWrapper color="blue">
       <div className={styles.toolBar}>
         <div style={{ flex: 1, boxSizing: 'border-box', position: 'relative' }}>
-          <TextField.Root>
+          <TextField.Root
+            defaultValue={session.isTracking ? session.nickname : undefined}
+            ref={input}
+            onChange={(event) => {
+              event.stopPropagation();
+
+              if (event.target.value) {
+                setShowSearchResults(true);
+                setSearchResults(undefined);
+              } else {
+                setShowSearchResults(false);
+              }
+
+              handleChange(event);
+            }}
+            onBlur={(event) => {
+              // TODO: remove this hack when https://github.com/radix-ui/primitives/issues/2193 (https://github.com/radix-ui/primitives/issues/1969) is fixed
+              if (showSearchResults) event.target.focus();
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Escape') {
+                setShowSearchResults(false);
+                input.current?.blur();
+              }
+            }}
+            placeholder="Search for a player..."
+          >
             <TextField.Slot>
               <PersonIcon height="16" width="16" />
             </TextField.Slot>
-
-            <TextField.Input
-              defaultValue={session.isTracking ? session.nickname : undefined}
-              ref={input}
-              onChange={(event) => {
-                event.stopPropagation();
-
-                if (event.target.value) {
-                  setShowSearchResults(true);
-                  setSearchResults(undefined);
-                } else {
-                  setShowSearchResults(false);
-                }
-
-                handleChange(event);
-              }}
-              onBlur={(event) => {
-                // TODO: remove this hack when https://github.com/radix-ui/primitives/issues/2193 is fixed
-                if (showSearchResults) event.target.focus();
-              }}
-              onKeyDown={(event) => {
-                if (event.key === 'Escape') {
-                  setShowSearchResults(false);
-                  input.current?.blur();
-                }
-              }}
-              placeholder="Search for a player..."
-            />
           </TextField.Root>
 
           <DropdownMenu.Root open={showSearchResults} modal={false}>

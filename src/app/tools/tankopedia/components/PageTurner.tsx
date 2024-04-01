@@ -32,32 +32,31 @@ export function PageTurner({ searchedList, tanksPerPage }: PageTurnerProps) {
       >
         <CaretLeftIcon />
       </Button>
-      <TextField.Root>
+      <TextField.Root
+        defaultValue={1}
+        type="number"
+        ref={pageInput}
+        min={1}
+        max={Math.floor(searchedList.length / tanksPerPage) + 1}
+        style={{ textAlign: 'center' }}
+        onBlur={(event) => {
+          mutateTankopediaPersistent((draft) => {
+            draft.filters.page = Math.max(
+              0,
+              Math.min(
+                Math.floor(searchedList.length / tanksPerPage),
+                event.target.valueAsNumber - 1,
+              ),
+            );
+          });
+        }}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            (event.target as HTMLInputElement).blur();
+          }
+        }}
+      >
         <TextField.Slot>Page</TextField.Slot>
-        <TextField.Input
-          defaultValue={1}
-          type="number"
-          ref={pageInput}
-          min={1}
-          max={Math.floor(searchedList.length / tanksPerPage) + 1}
-          style={{ width: 64, textAlign: 'center' }}
-          onBlur={(event) => {
-            mutateTankopediaPersistent((draft) => {
-              draft.filters.page = Math.max(
-                0,
-                Math.min(
-                  Math.floor(searchedList.length / tanksPerPage),
-                  event.target.valueAsNumber - 1,
-                ),
-              );
-            });
-          }}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              (event.target as HTMLInputElement).blur();
-            }
-          }}
-        />
         <TextField.Slot>
           out of {Math.floor(searchedList.length / tanksPerPage) + 1}
         </TextField.Slot>
