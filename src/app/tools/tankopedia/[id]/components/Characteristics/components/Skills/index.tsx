@@ -1,5 +1,13 @@
 import { InfoCircledIcon } from '@radix-ui/react-icons';
-import { Button, Flex, Heading, Text } from '@radix-ui/themes';
+import {
+  Button,
+  Flex,
+  Heading,
+  IconButton,
+  Kbd,
+  Popover,
+  Text,
+} from '@radix-ui/themes';
 import { use } from 'react';
 import { GenericTankComponentButton } from '../../../../../../../../components/ModuleButtons/GenericTankComponentButton';
 import { asset } from '../../../../../../../../core/blitzkrieg/asset';
@@ -32,7 +40,31 @@ export function Skills() {
   return (
     <ConfigurationChildWrapper>
       <Flex gap="4" align="center">
-        <Heading size="4">Crew skills</Heading>
+        <Flex gap="2" align="center">
+          <Popover.Root>
+            <Popover.Trigger>
+              <IconButton variant="ghost">
+                <InfoCircledIcon />
+              </IconButton>
+            </Popover.Trigger>
+
+            <Popover.Content>
+              <Flex direction="column" gap="2">
+                <Text>
+                  <Text color="amber">Yellow skills</Text> apply under special
+                  circumstances.
+                </Text>
+
+                <Text>
+                  Hold <Kbd>Shift</Kbd> to quickly toggle between level 0 and 7.
+                </Text>
+              </Flex>
+            </Popover.Content>
+          </Popover.Root>
+
+          <Heading size="4">Crew skills</Heading>
+        </Flex>
+
         <Button
           variant="ghost"
           color="red"
@@ -56,22 +88,9 @@ export function Skills() {
             });
           }}
         >
-          Maximize all
+          Maximize
         </Button>
       </Flex>
-
-      <Text
-        style={{
-          display: 'block',
-          width: '100%',
-          textWrap: 'wrap',
-        }}
-      >
-        <Text color="amber">
-          <InfoCircledIcon /> Yellow
-        </Text>{' '}
-        skills apply under special circumstances.
-      </Text>
 
       <Flex direction="column" gap="2">
         {Object.entries(awaitedSkillDefinitions.classes).map(
