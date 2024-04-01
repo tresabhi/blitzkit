@@ -93,12 +93,14 @@ export default function Page({ params }: { params: { id: string } }) {
               <Flex gap="5" wrap="wrap">
                 <Modules />
                 <Provisions />
-                <Miscellaneous />
                 <Consumables />
+
                 <Flex gap="5" wrap="wrap">
-                  <Equipment />
                   <Skills />
+                  <Equipment />
                 </Flex>
+
+                <Miscellaneous />
               </Flex>
             </Flex>
 

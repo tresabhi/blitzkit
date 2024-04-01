@@ -60,7 +60,13 @@ export function Skills() {
         </Button>
       </Flex>
 
-      <Text>
+      <Text
+        style={{
+          display: 'block',
+          width: '100%',
+          textWrap: 'wrap',
+        }}
+      >
         <Text color="amber">
           <InfoCircledIcon /> Yellow
         </Text>{' '}
