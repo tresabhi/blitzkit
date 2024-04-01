@@ -11,6 +11,7 @@ export interface TankComponentButtonProps
   discriminator?: ReactNode;
   disabled?: boolean;
   banner?: string;
+  special?: boolean;
 }
 
 export function TankComponentButton({
@@ -19,6 +20,7 @@ export function TankComponentButton({
   last = false,
   rowChild,
   discriminator,
+  special,
   children,
   banner,
   ...props
@@ -26,7 +28,7 @@ export function TankComponentButton({
   return (
     <Button
       radius="medium"
-      color={selected ? undefined : 'gray'}
+      color={selected ? (special ? 'amber' : undefined) : 'gray'}
       variant={selected ? 'surface' : 'soft'}
       style={{
         padding: 0,

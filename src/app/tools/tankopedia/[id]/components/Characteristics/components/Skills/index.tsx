@@ -1,24 +1,17 @@
-import { Flex, Heading } from '@radix-ui/themes';
+import { InfoCircledIcon } from '@radix-ui/react-icons';
+import { Flex, Heading, Text } from '@radix-ui/themes';
 import { use } from 'react';
-import { GenericTankComponentButton } from '../../../../../../../components/ModuleButtons/GenericTankComponentButton';
-import { asset } from '../../../../../../../core/blitzkrieg/asset';
-import { skillDefinitions } from '../../../../../../../core/blitzkrieg/skillDefinitions';
-import { Tier } from '../../../../../../../core/blitzkrieg/tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from '../../../../../../../core/blitzkrieg/tankDefinitions/constants';
+import { GenericTankComponentButton } from '../../../../../../../../components/ModuleButtons/GenericTankComponentButton';
+import { asset } from '../../../../../../../../core/blitzkrieg/asset';
+import { skillDefinitions } from '../../../../../../../../core/blitzkrieg/skillDefinitions';
+import { Tier } from '../../../../../../../../core/blitzkrieg/tankDefinitions';
+import { TIER_ROMAN_NUMERALS } from '../../../../../../../../core/blitzkrieg/tankDefinitions/constants';
 import {
   mutateTankopediaTemporary,
   useTankopediaTemporary,
-} from '../../../../../../../stores/tankopedia';
-import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
-
-const usefulSkills = [
-  'smooth_turn',
-  'soft_recoil',
-  'smooth_driving',
-  'smooth_turret',
-  'virtuoso',
-  'camouflage',
-];
+} from '../../../../../../../../stores/tankopedia';
+import { ConfigurationChildWrapper } from '../ConfigurationChildWrapper';
+import { permanentSkills } from './constants';
 
 export function Skills() {
   const awaitedSkillDefinitions = use(skillDefinitions);
@@ -28,7 +21,7 @@ export function Skills() {
     mutateTankopediaTemporary((draft) => {
       Object.values(awaitedSkillDefinitions.classes).forEach((skills) => {
         skills.forEach((skill) => {
-          draft.skills[skill] = usefulSkills.includes(skill) ? 7 : 0;
+          draft.skills[skill] = permanentSkills.includes(skill) ? 7 : 0;
         });
       });
     });
@@ -40,6 +33,11 @@ export function Skills() {
     <ConfigurationChildWrapper>
       <Heading size="4">Crew skills</Heading>
 
+      <Text>
+        <InfoCircledIcon /> Skills in yellow only apply under special
+        circumstances.
+      </Text>
+
       <Flex direction="column" gap="2">
         {Object.entries(awaitedSkillDefinitions.classes).map(
           ([tankClass, skills]) => (
@@ -49,6 +47,7 @@ export function Skills() {
 
                 return (
                   <GenericTankComponentButton
+                    special={!permanentSkills.includes(skill)}
                     first
                     last
                     selected={level > 0}
