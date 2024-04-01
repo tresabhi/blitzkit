@@ -1,4 +1,12 @@
-import { Button, Flex, Heading } from '@radix-ui/themes';
+import { InfoCircledIcon } from '@radix-ui/react-icons';
+import {
+  Button,
+  Flex,
+  Heading,
+  IconButton,
+  Popover,
+  Text,
+} from '@radix-ui/themes';
 import { use } from 'react';
 import { ConsumableButton } from '../../../../../../../components/ModuleButtons/ConsumableButton';
 import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
@@ -28,7 +36,27 @@ export function Consumables() {
   return (
     <ConfigurationChildWrapper>
       <Flex gap="4" align="center">
-        <Heading size="4">Consumables</Heading>
+        <Flex gap="2" align="center">
+          <Popover.Root>
+            <Popover.Trigger>
+              <IconButton variant="ghost">
+                <InfoCircledIcon />
+              </IconButton>
+            </Popover.Trigger>
+
+            <Popover.Content>
+              <Flex direction="column" gap="2">
+                <Text>
+                  <Text color="amber">Yellow consumables</Text> do not affect
+                  the statistics.
+                </Text>
+              </Flex>
+            </Popover.Content>
+          </Popover.Root>
+
+          <Heading size="4">Consumables</Heading>
+        </Flex>
+
         <Button
           variant="ghost"
           color="red"
@@ -48,10 +76,11 @@ export function Consumables() {
 
           return (
             <ConsumableButton
+              special={consumable.duration === undefined}
               duration={
-                typeof consumable.duration === 'number'
-                  ? consumable.duration * (hasHighEndConsumables ? 0.7 : 1)
-                  : undefined
+                consumable.duration === undefined
+                  ? undefined
+                  : consumable.duration * (hasHighEndConsumables ? 0.7 : 1)
               }
               cooldown={
                 consumable.cooldown *
