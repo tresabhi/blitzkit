@@ -25,11 +25,13 @@ import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useProvision } from '../../../../../../hooks/useProvision';
 import { useProvisions } from '../../../../../../hooks/useProvisions';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
+import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
 
 export function Characteristics() {
   const awaitedModelDefinitions = use(modelDefinitions);
+  const crewSkills = useTankopediaTemporary((state) => state.skills);
   const { tank, turret, gun, engine, track, shell } = useDuel(
     (state) => state.protagonist!,
   );
@@ -132,10 +134,26 @@ export function Characteristics() {
   const dispersionStillCoefficient =
     coefficient([hasRefinedGun, -0.1], [hasReticleCalibration, -0.4]) *
     coefficient([true, degressiveStat(crewMemberMastery)]);
-  const dispersionMovingCoefficient = coefficient([
+  const dispersionDamagedCoefficient = coefficient([
     hasVerticalStabilizer,
     -0.15,
   ]);
+  const dispersionHullTraverseCoefficient = coefficient(
+    [hasVerticalStabilizer, -0.15],
+    [true, -crewSkills.smooth_turn / 100],
+  );
+  const dispersionAfterShotCoefficient = coefficient(
+    [hasVerticalStabilizer, -0.15],
+    [true, -crewSkills.soft_recoil / 100],
+  );
+  const dispersionMovingCoefficient = coefficient(
+    [hasVerticalStabilizer, -0.15],
+    [true, -crewSkills.smooth_driving / 100],
+  );
+  const dispersionTurretTraverseCoefficient = coefficient(
+    [hasVerticalStabilizer, -0.15],
+    [true, -crewSkills.smooth_turret * (2 / 100)],
+  );
   const enginePowerCoefficient = coefficient(
     [
       hasEngineAccelerator &&
@@ -161,6 +179,7 @@ export function Characteristics() {
     coefficient(
       [hasImprovedControl, 0.1],
       [hasImprovedEnginePowerBoost, 0.05],
+      [true, crewSkills.virtuoso / 100],
     ) * coefficient([true, progressiveStat(crewMemberMastery)]);
   const resistanceCoefficient = coefficient([hasImprovedSuspension, -0.25]);
   const viewRangeCoefficient =
@@ -204,6 +223,7 @@ export function Characteristics() {
       camouflage,
       tank.class === 'AT-SPG' ? 0.04 : tank.class === 'heavyTank' ? 0.03 : 0.02,
     ],
+    [true, crewSkills.camouflage * (3 / 100)],
   );
 
   const resolvedEnginePower = engine.power * enginePowerCoefficient;
@@ -461,7 +481,7 @@ export function Characteristics() {
           name="Hull traversing"
           deltaType="lowerIsBetter"
         >
-          {track.dispersion.traverse * dispersionMovingCoefficient}
+          {track.dispersion.traverse * dispersionHullTraverseCoefficient}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={3}
@@ -470,7 +490,7 @@ export function Characteristics() {
           name="Turret traversing"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.traverse * dispersionMovingCoefficient}
+          {gun.dispersion.traverse * dispersionTurretTraverseCoefficient}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={3}
@@ -479,7 +499,7 @@ export function Characteristics() {
           name="After shooting"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.shot * dispersionMovingCoefficient}
+          {gun.dispersion.shot * dispersionAfterShotCoefficient}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={1}
@@ -489,7 +509,7 @@ export function Characteristics() {
           unit="scalar"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.damaged * dispersionMovingCoefficient}
+          {gun.dispersion.damaged * dispersionDamagedCoefficient}
         </InfoWithDelta>
         <Info name="Gun flexibility" unit="°" />
         <InfoWithDelta decimals={1} indent name="Depression">

@@ -38,12 +38,12 @@ export interface TankopediaPersistent {
     test: TankopediaTestTankDisplay;
     page: number;
   };
-  skills: Record<string, number>;
   mode: TankopediaMode;
 }
 
 interface TankopediaTemporary {
   shot?: Shot;
+  skills: Record<string, number>;
 }
 
 export interface ShotLayerBase {
@@ -147,7 +147,6 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
         test: 'include',
         page: 0,
       },
-      skills: {},
       mode: 'model',
     })),
     { name: 'tankopedia', merge: (a, b) => merge(b, a) },
@@ -155,7 +154,9 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
 );
 
 export const useTankopediaTemporary = create<TankopediaTemporary>()(
-  subscribeWithSelector<TankopediaTemporary>(() => ({})),
+  subscribeWithSelector<TankopediaTemporary>(() => ({
+    skills: {},
+  })),
 );
 
 export default function mutateTankopediaPersistent(
