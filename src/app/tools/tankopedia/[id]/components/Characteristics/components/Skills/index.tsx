@@ -1,5 +1,5 @@
 import { InfoCircledIcon } from '@radix-ui/react-icons';
-import { Flex, Heading, Text } from '@radix-ui/themes';
+import { Button, Flex, Heading, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import { GenericTankComponentButton } from '../../../../../../../../components/ModuleButtons/GenericTankComponentButton';
 import { asset } from '../../../../../../../../core/blitzkrieg/asset';
@@ -31,7 +31,34 @@ export function Skills() {
 
   return (
     <ConfigurationChildWrapper>
-      <Heading size="4">Crew skills</Heading>
+      <Flex gap="4" align="center">
+        <Heading size="4">Crew skills</Heading>
+        <Button
+          variant="ghost"
+          color="red"
+          onClick={() => {
+            mutateTankopediaTemporary((draft) => {
+              Object.keys(draft.skills).forEach((skill) => {
+                draft.skills[skill] = 0;
+              });
+            });
+          }}
+        >
+          Clear
+        </Button>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            mutateTankopediaTemporary((draft) => {
+              Object.keys(draft.skills).forEach((skill) => {
+                draft.skills[skill] = 7;
+              });
+            });
+          }}
+        >
+          Maximize all
+        </Button>
+      </Flex>
 
       <Text>
         <InfoCircledIcon /> Skills in yellow only apply under special

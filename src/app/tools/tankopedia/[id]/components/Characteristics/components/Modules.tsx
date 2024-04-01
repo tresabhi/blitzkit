@@ -1,4 +1,4 @@
-import { Flex, Heading } from '@radix-ui/themes';
+import { Button, Flex, Heading } from '@radix-ui/themes';
 import { ModuleButton } from '../../../../../../../components/ModuleButtons/ModuleButton';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../../core/blitzkrieg/tankDefinitions/constants';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
@@ -10,7 +10,40 @@ export function Modules() {
 
   return (
     <ConfigurationChildWrapper>
-      <Heading size="4">Modules</Heading>
+      <Flex gap="4" align="center">
+        <Heading size="4">Modules</Heading>
+        <Button
+          variant="ghost"
+          color="red"
+          onClick={() => {
+            mutateDuel((draft) => {
+              draft.protagonist!.turret = draft.protagonist!.tank.turrets[0];
+              draft.protagonist!.gun = draft.protagonist!.turret.guns[0];
+              draft.protagonist!.shell = draft.protagonist!.gun.shells[0];
+              draft.protagonist!.engine = draft.protagonist!.tank.engines[0];
+              draft.protagonist!.track = draft.protagonist!.tank.tracks[0];
+            });
+          }}
+        >
+          Stock
+        </Button>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            mutateDuel((draft) => {
+              draft.protagonist!.turret =
+                draft.protagonist!.tank.turrets.at(-1)!;
+              draft.protagonist!.gun = draft.protagonist!.turret.guns.at(-1)!;
+              draft.protagonist!.shell = draft.protagonist!.gun.shells.at(-1)!;
+              draft.protagonist!.engine =
+                draft.protagonist!.tank.engines.at(-1)!;
+              draft.protagonist!.track = draft.protagonist!.tank.tracks.at(-1)!;
+            });
+          }}
+        >
+          Upgrade
+        </Button>
+      </Flex>
 
       <Flex gap="2" wrap="wrap">
         <Flex>

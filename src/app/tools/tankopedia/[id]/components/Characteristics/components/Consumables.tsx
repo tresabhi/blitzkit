@@ -1,4 +1,4 @@
-import { Flex, Heading } from '@radix-ui/themes';
+import { Button, Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
 import { ConsumableButton } from '../../../../../../../components/ModuleButtons/ConsumableButton';
 import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
@@ -27,7 +27,20 @@ export function Consumables() {
 
   return (
     <ConfigurationChildWrapper>
-      <Heading size="4">Consumables</Heading>
+      <Flex gap="4" align="center">
+        <Heading size="4">Consumables</Heading>
+        <Button
+          variant="ghost"
+          color="red"
+          onClick={() => {
+            mutateDuel((draft) => {
+              draft.protagonist!.consumables = [];
+            });
+          }}
+        >
+          Clear
+        </Button>
+      </Flex>
 
       <Flex wrap="wrap">
         {consumablesList.map((consumable, index) => {

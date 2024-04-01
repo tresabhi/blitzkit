@@ -1,4 +1,4 @@
-import { Flex, Heading } from '@radix-ui/themes';
+import { Button, Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
 import { EquipmentButton } from '../../../../../../../components/ModuleButtons/EquipmentButton';
 import { equipmentDefinitions } from '../../../../../../../core/blitzkrieg/equipmentDefinitions';
@@ -14,7 +14,24 @@ export function Equipment() {
 
   return (
     <ConfigurationChildWrapper>
-      <Heading size="4">Equipment</Heading>
+      <Flex gap="4" align="center">
+        <Heading size="4">Equipment</Heading>
+        <Button
+          variant="ghost"
+          color="red"
+          onClick={() => {
+            mutateDuel((draft) => {
+              draft.protagonist!.equipment.forEach((row) => {
+                row.forEach((_, index) => {
+                  row[index] = 0;
+                });
+              });
+            });
+          }}
+        >
+          Clear
+        </Button>
+      </Flex>
 
       <Flex direction="column" gap="2">
         {equipmentRows.map((equipmentRow, rowIndex) => (

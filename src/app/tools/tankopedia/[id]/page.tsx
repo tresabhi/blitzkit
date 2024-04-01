@@ -90,7 +90,7 @@ export default function Page({ params }: { params: { id: string } }) {
               <TankSandbox />
               <AntagonistBar />
 
-              <Flex direction="column" gap="4">
+              <Flex direction="column" gap="5">
                 <Modules />
                 <Provisions />
                 <Equipment />

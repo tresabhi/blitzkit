@@ -1,4 +1,4 @@
-import { Flex, Heading } from '@radix-ui/themes';
+import { Button, Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
 import { ProvisionButton } from '../../../../../../../components/ModuleButtons/ProvisionButton';
 import { availableProvisions } from '../../../../../../../core/blitzkrieg/availableProvisions';
@@ -18,7 +18,20 @@ export function Provisions() {
 
   return (
     <ConfigurationChildWrapper>
-      <Heading size="4">Provisions</Heading>
+      <Flex gap="4" align="center">
+        <Heading size="4">Provisions</Heading>
+        <Button
+          variant="ghost"
+          color="red"
+          onClick={() => {
+            mutateDuel((draft) => {
+              draft.protagonist!.provisions = [];
+            });
+          }}
+        >
+          Clear
+        </Button>
+      </Flex>
 
       <Flex wrap="wrap">
         {provisionsList.map((provision, index) => {
