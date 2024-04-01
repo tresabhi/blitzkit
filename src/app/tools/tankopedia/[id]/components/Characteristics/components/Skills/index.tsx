@@ -61,8 +61,10 @@ export function Skills() {
       </Flex>
 
       <Text>
-        <InfoCircledIcon /> Skills in yellow only apply under special
-        circumstances.
+        <Text color="amber">
+          <InfoCircledIcon /> Yellow
+        </Text>{' '}
+        skills apply under special circumstances.
       </Text>
 
       <Flex direction="column" gap="2">

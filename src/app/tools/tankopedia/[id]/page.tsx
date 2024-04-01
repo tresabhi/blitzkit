@@ -65,7 +65,7 @@ export default function Page({ params }: { params: { id: string } }) {
   }, [initialId, assigned]);
 
   return (
-    <PageWrapper color="purple" size="double">
+    <PageWrapper color="purple" size={1600}>
       {assigned && (
         <>
           <Title />
@@ -78,7 +78,7 @@ export default function Page({ params }: { params: { id: string } }) {
             justify="center"
           >
             <Flex
-              gap="4"
+              gap="8"
               direction="column"
               style={{
                 flex: 1,
@@ -90,13 +90,15 @@ export default function Page({ params }: { params: { id: string } }) {
               <TankSandbox />
               <AntagonistBar />
 
-              <Flex direction="column" gap="5">
+              <Flex gap="5" wrap="wrap">
                 <Modules />
                 <Provisions />
-                <Equipment />
                 <Miscellaneous />
                 <Consumables />
-                <Skills />
+                <Flex gap="5" wrap="wrap">
+                  <Equipment />
+                  <Skills />
+                </Flex>
               </Flex>
             </Flex>
 

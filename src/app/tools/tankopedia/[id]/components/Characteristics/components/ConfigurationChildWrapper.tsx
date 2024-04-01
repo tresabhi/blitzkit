@@ -1,5 +1,5 @@
+import { Flex } from '@radix-ui/themes';
 import { ReactNode } from 'react';
-import * as styles from '../../../../page.css';
 
 interface ConfigurationChildWrapperProps {
   children: ReactNode;
@@ -8,5 +8,9 @@ interface ConfigurationChildWrapperProps {
 export function ConfigurationChildWrapper({
   children,
 }: ConfigurationChildWrapperProps) {
-  return <div className={styles.configurationChild}>{children}</div>;
+  return (
+    <Flex gap="2" direction="column">
+      {children}
+    </Flex>
+  );
 }

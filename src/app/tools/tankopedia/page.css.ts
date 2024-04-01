@@ -74,12 +74,6 @@ export const characteristics = style({
   },
 });
 
-export const configurationChild = style({
-  display: 'flex',
-  gap: 8,
-  flexDirection: 'column',
-});
-
 export const configuration = style({
   display: 'flex',
   flexDirection: 'column',

@@ -8,7 +8,7 @@ export default function Page() {
   const router = useRouter();
 
   return (
-    <PageWrapper size="double" color="purple">
+    <PageWrapper size={1200} color="purple">
       <TankSearch
         onSelect={(tank) => {
           router.push(`./tankopedia/${tank.id}`);
