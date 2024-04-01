@@ -1,5 +1,13 @@
-import { AccessibilityIcon } from '@radix-ui/react-icons';
-import { Flex, Heading, Slider, Text, TextField } from '@radix-ui/themes';
+import { AccessibilityIcon, InfoCircledIcon } from '@radix-ui/react-icons';
+import {
+  Flex,
+  Heading,
+  IconButton,
+  Popover,
+  Slider,
+  Text,
+  TextField,
+} from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
@@ -657,7 +665,24 @@ export function Characteristics() {
       </Flex>
 
       <Flex direction="column" gap="2">
-        <Heading size="5">Crew training</Heading>
+        <Flex gap="2" align="center">
+          <Heading size="5">Crew training</Heading>
+
+          <Popover.Root>
+            <Popover.Trigger>
+              <IconButton variant="ghost">
+                <InfoCircledIcon />
+              </IconButton>
+            </Popover.Trigger>
+
+            <Popover.Content>
+              <Flex gap="1" align="center">
+                <AccessibilityIcon />
+                <Text>represents the other roles a crew member can take.</Text>
+              </Flex>
+            </Popover.Content>
+          </Popover.Root>
+        </Flex>
 
         {tank.crew.map((member) => {
           const count = member.count ?? 1;

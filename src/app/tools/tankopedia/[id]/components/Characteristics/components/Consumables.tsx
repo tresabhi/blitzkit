@@ -37,6 +37,8 @@ export function Consumables() {
     <ConfigurationChildWrapper>
       <Flex gap="4" align="center">
         <Flex gap="2" align="center">
+          <Heading size="4">Consumables</Heading>
+
           <Popover.Root>
             <Popover.Trigger>
               <IconButton variant="ghost">
@@ -45,16 +47,12 @@ export function Consumables() {
             </Popover.Trigger>
 
             <Popover.Content>
-              <Flex direction="column" gap="2">
-                <Text>
-                  <Text color="amber">Yellow consumables</Text> do not affect
-                  the statistics.
-                </Text>
-              </Flex>
+              <Text>
+                <Text color="amber">Yellow consumables</Text> do not affect the
+                statistics.
+              </Text>
             </Popover.Content>
           </Popover.Root>
-
-          <Heading size="4">Consumables</Heading>
         </Flex>
 
         <Button

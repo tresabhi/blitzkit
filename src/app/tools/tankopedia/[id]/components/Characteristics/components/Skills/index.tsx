@@ -41,6 +41,8 @@ export function Skills() {
     <ConfigurationChildWrapper>
       <Flex gap="4" align="center">
         <Flex gap="2" align="center">
+          <Heading size="4">Crew skills</Heading>
+
           <Popover.Root>
             <Popover.Trigger>
               <IconButton variant="ghost">
@@ -61,8 +63,6 @@ export function Skills() {
               </Flex>
             </Popover.Content>
           </Popover.Root>
-
-          <Heading size="4">Crew skills</Heading>
         </Flex>
 
         <Button
