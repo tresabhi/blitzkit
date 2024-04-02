@@ -12,6 +12,7 @@ import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTran
 import { Pose, poseEvent } from '../../../../../../core/blitzkrieg/pose';
 import { tankIcon } from '../../../../../../core/blitzkrieg/tankIcon';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
+import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import mutateTankopediaPersistent, {
@@ -33,7 +34,6 @@ export function TankSandbox() {
   const hasImprovedVerticalStabilizer = useEquipment(122);
   const awaitedModelDefinitions = use(modelDefinitions);
   const canvasWrapper = useRef<HTMLDivElement>(null);
-  const [isFullScreen, setIsFullScreen] = useState(false);
   const mode = useTankopediaPersistent((state) => state.mode);
   const protagonist = useDuel((state) => state.protagonist!);
   const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
@@ -43,6 +43,7 @@ export function TankSandbox() {
   const wideFormat = useWideFormat();
   const [loadModel, setLoadModel] = useState(wideFormat || !isMobile);
   const duel = useDuel();
+  const isFullScreen = useFullScreen();
 
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);
@@ -59,10 +60,6 @@ export function TankSandbox() {
   }
 
   useEffect(() => {
-    function handleFullScreenChange() {
-      setIsFullScreen(document.fullscreenElement !== null);
-    }
-
     function handlePoseEvent(pose: Pose) {
       switch (pose) {
         case Pose.HullDown: {
@@ -121,10 +118,8 @@ export function TankSandbox() {
     }
 
     poseEvent.on(handlePoseEvent);
-    document.addEventListener('fullscreenchange', handleFullScreenChange);
 
     return () => {
-      document.removeEventListener('fullscreenchange', handleFullScreenChange);
       poseEvent.off(handlePoseEvent);
     };
   });
@@ -145,8 +140,13 @@ export function TankSandbox() {
     <Theme radius={isFullScreen ? 'none' : undefined}>
       <Card
         style={{
-          position: 'relative',
+          position: isFullScreen ? 'fixed' : 'relative',
           border: isFullScreen ? 'none' : 'unset',
+          width: isFullScreen ? '100vw' : 'unset',
+          height: isFullScreen ? 'calc(100vh)' : 'unset',
+          top: isFullScreen ? 0 : 'unset',
+          left: isFullScreen ? 0 : 'unset',
+          zIndex: isFullScreen ? 2 : 'unset',
         }}
         ref={canvasWrapper}
       >

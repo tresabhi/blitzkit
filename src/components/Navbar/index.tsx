@@ -1,10 +1,15 @@
 import { DiscordLogoIcon } from '@radix-ui/react-icons';
 import { Flex, Text, Theme } from '@radix-ui/themes';
 import Link from 'next/link';
+import { useFullScreen } from '../../hooks/useFullScreen';
 import { BlitzkriegWormWide } from '../../icons/BlitzkriegWormWide';
 import { theme } from '../../stitches.config';
 
 export default function Navbar() {
+  const isFullScreen = useFullScreen();
+
+  if (isFullScreen) return null;
+
   return (
     <Theme radius="none">
       <div
