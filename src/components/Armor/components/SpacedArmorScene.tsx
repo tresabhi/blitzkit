@@ -31,6 +31,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
   const initialTankopediaState = useTankopediaPersistent.getState();
+  const protagonist = useDuel((draft) => draft.protagonist!);
 
   useEffect(() => {
     if (!modelDefinitions) return;
@@ -99,7 +100,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
       turretContainer.current?.rotation.copy(turretRotation);
     }
 
-    handleModelTransform(useDuel.getState().protagonist!);
+    handleModelTransform(protagonist);
     modelTransformEvent.on(handleModelTransform);
 
     return () => {
