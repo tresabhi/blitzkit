@@ -104,7 +104,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <PageWrapper>
               <a
                 target="_blank"
-                href="https://ko-fi.com/tresabhi"
+                href="https://www.patreon.com/tresabhi"
                 style={{ textDecoration: 'none' }}
               >
                 <Flex

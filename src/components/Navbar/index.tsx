@@ -3,6 +3,7 @@ import { Flex, Text, Theme } from '@radix-ui/themes';
 import Link from 'next/link';
 import { useFullScreen } from '../../hooks/useFullScreen';
 import { BlitzkriegWormWide } from '../../icons/BlitzkriegWormWide';
+import { PatreonIcon } from '../../icons/Patreon';
 import { theme } from '../../stitches.config';
 
 export default function Navbar() {
@@ -56,9 +57,10 @@ export default function Navbar() {
               </Text>
             </Flex>
 
-            <Flex justify="center" align="center" gap="2">
+            <Flex justify="center" align="center" gap="4">
               <Link
                 href="https://discord.gg/nDt7AjGJQH"
+                target="_blank"
                 style={{
                   color: 'inherit',
                   display: 'flex',
@@ -66,7 +68,40 @@ export default function Navbar() {
                   justifyContent: 'center',
                 }}
               >
-                <DiscordLogoIcon />
+                <DiscordLogoIcon width={16} height={16} />
+              </Link>
+
+              <Link
+                href="https://ko-fi.com/tresabhi"
+                target="_blank"
+                style={{
+                  color: 'inherit',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <img
+                  src="https://i.imgur.com/QdqgdP2.png"
+                  style={{
+                    width: 20,
+                    height: 20,
+                    objectFit: 'contain',
+                  }}
+                />
+              </Link>
+
+              <Link
+                href="https://www.patreon.com/tresabhi"
+                target="_blank"
+                style={{
+                  color: 'inherit',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <PatreonIcon width={14} height={14} />
               </Link>
             </Flex>
           </Flex>
