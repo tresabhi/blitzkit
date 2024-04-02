@@ -95,7 +95,7 @@ export function SpacedArmorSubSpaced({
     return () => {
       unsubscribes.forEach((unsubscribe) => unsubscribe());
     };
-  }, []);
+  });
 
   return (
     <>

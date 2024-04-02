@@ -83,7 +83,7 @@ export function SpacedArmorSubExternal({
     return () => {
       unsubscribes.forEach((unsubscribe) => unsubscribe());
     };
-  }, []);
+  });
 
   return (
     <>
