@@ -178,6 +178,33 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
         });
         break;
 
+      case 'survivability.length':
+        sorted = filtered.sort((a, b) => {
+          const aTankModelDefinition = awaitedModelDefinitions[a.id];
+          const bTankModelDefinition = awaitedModelDefinitions[b.id];
+          const aTurretModelDefinition =
+            aTankModelDefinition.turrets[a.turrets.at(-1)!.id];
+          const bTurretModelDefinition =
+            bTankModelDefinition.turrets[b.turrets.at(-1)!.id];
+          const aSize = normalizeBoundingBox(
+            unionBoundingBox(
+              aTankModelDefinition.boundingBox,
+              aTurretModelDefinition.boundingBox,
+            ),
+          );
+          const bSize = normalizeBoundingBox(
+            unionBoundingBox(
+              bTankModelDefinition.boundingBox,
+              bTurretModelDefinition.boundingBox,
+            ),
+          );
+          const aLength = Math.max(aSize[0], aSize[1], aSize[2]);
+          const bLength = Math.max(bSize[0], bSize[1], bSize[2]);
+
+          return aLength - bLength;
+        });
+        break;
+
       case 'fire.dpm':
         sorted = filtered.sort(
           (a, b) =>
@@ -706,6 +733,16 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
                     }}
                   >
                     Volume
+                  </DropdownMenu.CheckboxItem>
+                  <DropdownMenu.CheckboxItem
+                    checked={sort.by === 'survivability.length'}
+                    onClick={() => {
+                      mutateTankopediaPersistent((draft) => {
+                        draft.sort.by = 'survivability.length';
+                      });
+                    }}
+                  >
+                    Length
                   </DropdownMenu.CheckboxItem>
                 </DropdownMenu.SubContent>
               </DropdownMenu.Sub>

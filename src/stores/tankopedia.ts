@@ -100,6 +100,7 @@ export const SORT_NAMES = {
   'survivability.camouflageMoving': 'camouflage moving',
   'survivability.camouflageShooting': 'camouflage shooting',
   'survivability.volume': 'volume',
+  'survivability.length': 'length',
   'fire.dpm': 'DPM',
   'fire.reload': 'reload',
   'fire.caliber': 'caliber',
