@@ -57,9 +57,16 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
             textAlign: 'right',
           }}
           onBlur={() => {
+            const value = Number(turretYawInput.current!.value);
+            if (isNaN(value)) {
+              turretYawInput.current!.value = radToDeg(protagonist.yaw).toFixed(
+                1,
+              );
+              return;
+            }
             const [pitch, yaw] = applyPitchYawLimits(
               protagonist.pitch,
-              degToRad(Number(turretYawInput.current!.value)),
+              degToRad(value),
               gunModelDefinition.pitch,
               turretModelDefinition.yaw,
               hasImprovedVerticalStabilizer,
@@ -97,8 +104,15 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
             textAlign: 'right',
           }}
           onBlur={() => {
+            const value = Number(gunPitchInput.current!.value);
+            if (isNaN(value)) {
+              gunPitchInput.current!.value = (
+                -radToDeg(protagonist.pitch) + initialGunPitch
+              ).toFixed(1);
+              return;
+            }
             const [pitch, yaw] = applyPitchYawLimits(
-              degToRad(-Number(gunPitchInput.current!.value) + initialGunPitch),
+              degToRad(-value + initialGunPitch),
               protagonist.yaw,
               gunModelDefinition.pitch,
               turretModelDefinition.yaw,
