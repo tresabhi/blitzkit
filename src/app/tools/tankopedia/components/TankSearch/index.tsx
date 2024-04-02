@@ -14,6 +14,7 @@ import {
   TextField,
 } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
+import Link from 'next/link';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
 import { TreeType } from '../../../../../components/Tanks';
 import { TANK_CLASSES } from '../../../../../components/Tanks/components/Item/constants';
@@ -807,117 +808,123 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
       <Flex wrap="wrap" gap="2" justify={compact ? 'between' : 'center'}>
         {!compact &&
           searchResultsPageSlice.map((tank) => (
-            <Card
-              key={tank.id}
-              onClick={() => onSelect(tank)}
-              className={styles.listing}
+            <Link
+              href={`/tools/tankopedia/${tank.id}`}
               style={{
                 flex: 1,
-                cursor: 'pointer',
-                height: 64,
                 minWidth: 256,
               }}
             >
-              <Inset
+              <Card
                 key={tank.id}
+                className={styles.listing}
                 style={{
-                  minHeight: 64,
-                  position: 'relative',
-                  display: 'flex',
+                  cursor: 'pointer',
+                  height: 64,
+                  width: '100%',
                 }}
               >
-                <img
-                  className={styles.flag}
-                  src={asset(`flags/scratched/${tank.nation}.webp`)}
+                <Inset
+                  key={tank.id}
                   style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'contain',
-                    position: 'absolute',
+                    minHeight: 64,
+                    position: 'relative',
+                    display: 'flex',
                   }}
-                />
-
-                <div
-                  className={styles.listingShadow}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'absolute',
-                    transition: `box-shadow ${theme.durations.regular}`,
-                  }}
-                />
-
-                <div
-                  style={{
-                    width: 256,
-                    height: 128,
-                  }}
-                  className={styles.listingImage}
                 >
                   <img
-                    src={tankIcon(tank.id)}
+                    className={styles.flag}
+                    src={asset(`flags/scratched/${tank.nation}.webp`)}
                     style={{
+                      width: '100%',
+                      height: '100%',
                       objectFit: 'contain',
-                      objectPosition: 'left center',
+                      position: 'absolute',
                     }}
                   />
-                </div>
 
-                <Flex
-                  align="center"
-                  justify="between"
-                  className={styles.listingLabel}
-                  style={{
-                    position: 'absolute',
-                    bottom: 8,
-                    padding: '0 12px',
-                    width: '100%',
-                    boxSizing: 'border-box',
-                  }}
-                >
-                  <Flex align="center" justify="center" gap="1">
+                  <div
+                    className={styles.listingShadow}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      position: 'absolute',
+                      transition: `box-shadow ${theme.durations.regular}`,
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      width: 256,
+                      height: 128,
+                    }}
+                    className={styles.listingImage}
+                  >
                     <img
-                      src={
-                        (tank.treeType === 'collector'
-                          ? TANK_ICONS_COLLECTOR
-                          : tank.treeType === 'premium'
-                            ? TANK_ICONS_PREMIUM
-                            : TANK_ICONS)[tank.class]
-                      }
-                      style={{ width: '1em', height: '1em' }}
-                    />
-                    <Text
-                      size="4"
-                      color={
-                        tank.treeType === 'collector'
-                          ? 'blue'
-                          : tank.treeType === 'premium'
-                            ? 'amber'
-                            : undefined
-                      }
-                      weight="medium"
+                      src={tankIcon(tank.id)}
                       style={{
-                        color:
-                          tank.treeType === 'researchable'
-                            ? slateDark.slate12
-                            : undefined,
-                        whiteSpace: 'nowrap',
-                        maxWidth: 160,
-                        display: 'block',
-                        textOverflow: 'ellipsis',
-                        overflow: 'hidden',
+                        objectFit: 'contain',
+                        objectPosition: 'left center',
                       }}
-                    >
-                      {tank.name}
+                    />
+                  </div>
+
+                  <Flex
+                    align="center"
+                    justify="between"
+                    className={styles.listingLabel}
+                    style={{
+                      position: 'absolute',
+                      bottom: 8,
+                      padding: '0 12px',
+                      width: '100%',
+                      boxSizing: 'border-box',
+                    }}
+                  >
+                    <Flex align="center" justify="center" gap="1">
+                      <img
+                        src={
+                          (tank.treeType === 'collector'
+                            ? TANK_ICONS_COLLECTOR
+                            : tank.treeType === 'premium'
+                              ? TANK_ICONS_PREMIUM
+                              : TANK_ICONS)[tank.class]
+                        }
+                        style={{ width: '1em', height: '1em' }}
+                      />
+                      <Text
+                        size="4"
+                        color={
+                          tank.treeType === 'collector'
+                            ? 'blue'
+                            : tank.treeType === 'premium'
+                              ? 'amber'
+                              : undefined
+                        }
+                        weight="medium"
+                        style={{
+                          color:
+                            tank.treeType === 'researchable'
+                              ? slateDark.slate12
+                              : undefined,
+                          whiteSpace: 'nowrap',
+                          maxWidth: 160,
+                          display: 'block',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {tank.name}
+                      </Text>
+                    </Flex>
+
+                    <Text size="4" color="gray" highContrast={false}>
+                      {TIER_ROMAN_NUMERALS[tank.tier]}
                     </Text>
                   </Flex>
-
-                  <Text size="4" color="gray" highContrast={false}>
-                    {TIER_ROMAN_NUMERALS[tank.tier]}
-                  </Text>
-                </Flex>
-              </Inset>
-            </Card>
+                </Inset>
+              </Card>
+            </Link>
           ))}
 
         {compact && (
