@@ -87,8 +87,10 @@ export default function Page({ params }: { params: { id: string } }) {
                 position: wideFormat ? 'sticky' : undefined,
               }}
             >
-              <TankSandbox />
-              <AntagonistBar />
+              <Flex gap="4" direction="column">
+                <TankSandbox />
+                <AntagonistBar />
+              </Flex>
 
               <Flex gap="5" wrap="wrap">
                 <Modules />
