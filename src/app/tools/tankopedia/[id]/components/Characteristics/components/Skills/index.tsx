@@ -53,8 +53,8 @@ export function Skills() {
             <Popover.Content>
               <Flex direction="column" gap="2">
                 <Text>
-                  <Text color="amber">Yellow skills</Text> apply under special
-                  circumstances.
+                  <Text color="amber">Yellow skills</Text> only apply under
+                  special circumstances.
                 </Text>
 
                 <Text>

@@ -87,7 +87,7 @@ export function Miscellaneous() {
             direction="column"
             gap="1"
             justify="end"
-            style={{ width: 180 }}
+            style={{ width: 120 }}
           >
             <TextField.Root
               ref={crewInput}
