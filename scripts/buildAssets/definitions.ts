@@ -118,6 +118,7 @@ interface VehicleDefinitions {
       weight: number;
       terrainResistance: string;
       rotationSpeed: number;
+      userString: string;
       shotDispersionFactors: {
         vehicleMovement: number;
         vehicleRotation: number;
@@ -566,6 +567,7 @@ export async function definitions(production: boolean) {
           tankDefinitions[tankId].tracks.push({
             id: trackId,
             weight: track.weight,
+            name: strings[track.userString],
             traverseSpeed: track.rotationSpeed,
             dispersion: {
               move: track.shotDispersionFactors.vehicleMovement,

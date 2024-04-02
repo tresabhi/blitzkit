@@ -55,6 +55,7 @@ export interface TankDefinition {
 export interface TrackDefinition {
   id: number;
   tier: Tier;
+  name: string;
   weight: number;
   traverseSpeed: number;
   xp?: number;

@@ -15,6 +15,7 @@ export interface TankComponentButtonProps
 }
 
 export function TankComponentButton({
+  variant,
   selected,
   first = false,
   last = false,
@@ -23,13 +24,15 @@ export function TankComponentButton({
   special,
   children,
   banner,
+  disabled,
+  style,
   ...props
 }: TankComponentButtonProps) {
   return (
     <Button
       radius="medium"
       color={selected ? (special ? 'amber' : undefined) : 'gray'}
-      variant={selected ? 'surface' : 'soft'}
+      variant={variant ?? (selected ? 'surface' : 'soft')}
       style={{
         padding: 0,
         minWidth: 48,
@@ -41,7 +44,11 @@ export function TankComponentButton({
         borderBottomRightRadius: last ? undefined : 0,
         margin: rowChild ? -0.5 : 'unset',
         overflow: 'hidden',
+        cursor: 'unset',
+        pointerEvents: variant === 'ghost' ? 'none' : undefined,
+        ...style,
       }}
+      disabled={variant === 'ghost' || disabled}
       {...props}
     >
       {banner !== undefined && (
@@ -69,6 +76,7 @@ export function TankComponentButton({
             right: 8,
             textAlign: 'right',
           }}
+          color={variant === 'ghost' ? 'gray' : undefined}
         >
           {discriminator}
         </Text>
