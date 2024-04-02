@@ -13,6 +13,7 @@ import Navbar from '../components/Navbar';
 import PageWrapper from '../components/PageWrapper';
 import isDev from '../core/blitzkrieg/isDev';
 import { isLocalhost } from '../core/blitzkrieg/isLocalhost';
+import { useFullScreen } from '../hooks/useFullScreen';
 import { useApp } from '../stores/app';
 import { mintTheme } from '../themes/mint';
 
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const pathname = usePathname();
   const isEmbed = pathname.split('/')[1] === 'embeds';
   const [showDevBuildAlert, setShowDevBuildAlert] = useState(false);
+  const isFullScreen = useFullScreen();
 
   useEffect(() => {
     setShowDevBuildAlert(
@@ -100,7 +102,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
           <Flex direction="column">{children}</Flex>
 
-          {!isEmbed && (
+          {!isEmbed && !isFullScreen && (
             <PageWrapper>
               <a
                 target="_blank"

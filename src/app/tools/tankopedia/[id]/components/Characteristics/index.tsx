@@ -30,6 +30,7 @@ import {
 import { unionBoundingBox } from '../../../../../../core/blitzkrieg/unionBoundingBox';
 import { useConsumable } from '../../../../../../hooks/useConsumable';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
+import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import { useProvision } from '../../../../../../hooks/useProvision';
 import { useProvisions } from '../../../../../../hooks/useProvisions';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
@@ -43,6 +44,7 @@ export function Characteristics() {
   const { tank, turret, gun, engine, track, shell } = useDuel(
     (state) => state.protagonist!,
   );
+  const isFullScreen = useFullScreen();
   const hasImprovedVentilation = useEquipment(102);
   const provisions = useProvisions();
   const crewMastery = useDuel((state) => state.protagonist!.crewMastery);
@@ -259,6 +261,8 @@ export function Characteristics() {
       );
     });
   }, [hasImprovedVerticalStabilizer]);
+
+  if (isFullScreen) return null;
 
   return (
     <Flex direction="column" gap="8" style={{ width: '100%' }}>

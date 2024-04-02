@@ -65,12 +65,13 @@ export function TankComponentButton({
         />
       )}
 
+      {children}
+
       {discriminator !== undefined && (
         <Text
           size="1"
           style={{
             textShadow: '0 0 4px black',
-            zIndex: 1,
             position: 'absolute',
             top: '50%',
             right: 8,
@@ -81,8 +82,6 @@ export function TankComponentButton({
           {discriminator}
         </Text>
       )}
-
-      {children}
     </Button>
   );
 }
