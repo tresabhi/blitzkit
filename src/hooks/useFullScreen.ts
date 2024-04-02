@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 export function useFullScreen() {
   const [isFullScreen, setIsFullScreen] = useState(
-    document.fullscreenElement !== null,
+    typeof document !== 'undefined' && document.fullscreenElement !== null,
   );
 
   useEffect(() => {

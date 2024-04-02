@@ -183,9 +183,7 @@ export function Options({ isFullScreen }: OptionsProps) {
           onClick={() => {
             if (isFullScreen) {
               document.exitFullscreen();
-            } else if (typeof document !== 'undefined') {
-              document.body.requestFullscreen();
-            }
+            } else document.body.requestFullscreen();
           }}
         >
           {isFullScreen ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
