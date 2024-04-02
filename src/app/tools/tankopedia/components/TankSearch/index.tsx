@@ -151,7 +151,7 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
         );
         break;
 
-      case 'survivability.size':
+      case 'survivability.volume':
         sorted = filtered.sort((a, b) => {
           const aTankModelDefinition = awaitedModelDefinitions[a.id];
           const bTankModelDefinition = awaitedModelDefinitions[b.id];
@@ -698,14 +698,14 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
                     Camouflage shooting
                   </DropdownMenu.CheckboxItem>
                   <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'survivability.size'}
+                    checked={sort.by === 'survivability.volume'}
                     onClick={() => {
                       mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'survivability.size';
+                        draft.sort.by = 'survivability.volume';
                       });
                     }}
                   >
-                    Size
+                    Volume
                   </DropdownMenu.CheckboxItem>
                 </DropdownMenu.SubContent>
               </DropdownMenu.Sub>
