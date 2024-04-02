@@ -1,13 +1,5 @@
 import { Cross1Icon, ShuffleIcon } from '@radix-ui/react-icons';
-import {
-  Button,
-  Card,
-  Dialog,
-  Flex,
-  Heading,
-  Tabs,
-  Tooltip,
-} from '@radix-ui/themes';
+import { Button, Card, Dialog, Flex, Heading, Tabs } from '@radix-ui/themes';
 import { useState } from 'react';
 import { ModuleButton } from '../../../../../components/ModuleButtons/ModuleButton';
 import { ShellButton } from '../../../../../components/ModuleButtons/ShellButton';
@@ -169,61 +161,51 @@ export function AntagonistBar({ floating }: AntagonistBarProps) {
                           <Flex gap="2" wrap="wrap">
                             <Flex>
                               {antagonist.tank.turrets.map((turret, index) => (
-                                <Tooltip content={turret.name} key={turret.id}>
-                                  <ModuleButton
-                                    rowChild
-                                    first={index === 0}
-                                    last={
-                                      index ===
-                                      antagonist.tank.turrets.length - 1
-                                    }
-                                    key={turret.id}
-                                    onClick={() => {
-                                      mutateDuel((draft) => {
-                                        draft.antagonist!.turret = turret;
-                                        draft.antagonist!.gun =
-                                          turret.guns.at(-1)!;
-                                        draft.antagonist!.shell =
-                                          draft.antagonist!.gun.shells[0];
-                                      });
-                                      mutateTankopediaTemporary((draft) => {
-                                        draft.shot = undefined;
-                                      });
-                                    }}
-                                    selected={
-                                      antagonist.turret.id === turret.id
-                                    }
-                                    discriminator={
-                                      TIER_ROMAN_NUMERALS[turret.tier]
-                                    }
-                                    module="turret"
-                                  />
-                                </Tooltip>
+                                <ModuleButton
+                                  rowChild
+                                  first={index === 0}
+                                  last={
+                                    index === antagonist.tank.turrets.length - 1
+                                  }
+                                  key={turret.id}
+                                  onClick={() => {
+                                    mutateDuel((draft) => {
+                                      draft.antagonist!.turret = turret;
+                                      draft.antagonist!.gun =
+                                        turret.guns.at(-1)!;
+                                      draft.antagonist!.shell =
+                                        draft.antagonist!.gun.shells[0];
+                                    });
+                                    mutateTankopediaTemporary((draft) => {
+                                      draft.shot = undefined;
+                                    });
+                                  }}
+                                  selected={antagonist.turret.id === turret.id}
+                                  discriminator={
+                                    TIER_ROMAN_NUMERALS[turret.tier]
+                                  }
+                                  module="turret"
+                                />
                               ))}
                             </Flex>
                             <Flex>
                               {antagonist.turret.guns.map((gun, index) => (
-                                <Tooltip content={gun.name} key={gun.id}>
-                                  <ModuleButton
-                                    rowChild
-                                    first={index === 0}
-                                    last={
-                                      index ===
-                                      antagonist.turret.guns.length - 1
-                                    }
-                                    onClick={() => {
-                                      mutateDuel((draft) => {
-                                        draft.antagonist!.gun = gun;
-                                        draft.antagonist!.shell = gun.shells[0];
-                                      });
-                                    }}
-                                    selected={antagonist.gun.id === gun.id}
-                                    discriminator={
-                                      TIER_ROMAN_NUMERALS[gun.tier]
-                                    }
-                                    module="gun"
-                                  />
-                                </Tooltip>
+                                <ModuleButton
+                                  rowChild
+                                  first={index === 0}
+                                  last={
+                                    index === antagonist.turret.guns.length - 1
+                                  }
+                                  onClick={() => {
+                                    mutateDuel((draft) => {
+                                      draft.antagonist!.gun = gun;
+                                      draft.antagonist!.shell = gun.shells[0];
+                                    });
+                                  }}
+                                  selected={antagonist.gun.id === gun.id}
+                                  discriminator={TIER_ROMAN_NUMERALS[gun.tier]}
+                                  module="gun"
+                                />
                               ))}
                             </Flex>
                           </Flex>
