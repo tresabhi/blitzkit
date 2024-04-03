@@ -6,7 +6,7 @@ import { Glow } from '../components/AllStatsOverview/components/HeroStat/compone
 import CommandWrapper from '../components/CommandWrapper';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
-import { linkBlitzAndDiscord } from '../core/blitzkrieg/discordBlitz';
+import { linkBlitzAndDiscord } from '../core/blitzkrieg/discordBlitzLink';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
@@ -29,11 +29,11 @@ export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
     async handler(interaction) {
       const { t, translate } = translator(interaction.locale);
       const { id, region } = await resolvePlayerFromCommand(interaction);
-      const discordId = parseInt(interaction.user.id);
+      const discordId = BigInt(interaction.user.id);
       const accountInfo = await getAccountInfo(region, id);
       const clanAccountInfo = await getClanAccountInfo(region, id, ['clan']);
 
-      await linkBlitzAndDiscord(discordId, region, id);
+      await linkBlitzAndDiscord(discordId, id);
 
       if (interaction.guildId === discord.sklld_guild_id) {
         if (!interaction.guild?.members.me?.permissions.has('ManageRoles')) {

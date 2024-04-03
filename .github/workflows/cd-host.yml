@@ -33,4 +33,4 @@ jobs:
           unzip bot.zip
 
       - name: Run bot
-        run: NODE_ENV=production GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DISCORD_BLITZ_DB=${{ secrets.DISCORD_BLITZ_DB }} node --enable-source-maps index.cjs
+        run: NODE_ENV=production GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} node --enable-source-maps index.cjs

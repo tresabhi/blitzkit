@@ -1,5 +1,5 @@
+import { usersDatabase } from '../../databases/users';
 import { client } from '../discord/client';
-import { discordBlitzDB } from './discordBlitzDB';
 
 const EXIT_EVENTS = [
   'beforeExit',
@@ -13,7 +13,7 @@ const EXIT_EVENTS = [
 async function cleanup() {
   console.log('Cleaning up...');
 
-  await Promise.all([discordBlitzDB.$disconnect(), client.destroy()]);
+  await Promise.all([usersDatabase.$disconnect(), client.destroy()]);
 
   console.log('Gracefully exiting...');
 

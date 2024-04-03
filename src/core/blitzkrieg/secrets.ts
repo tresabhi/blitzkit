@@ -5,7 +5,7 @@ config();
 const SECRET_KEYS = [
   'DISCORD_TOKEN',
   'GH_TOKEN',
-  'DISCORD_BLITZ_DB',
+  'DATABASE_URL',
   'WOTB_DLC_CDN',
 ] as const;
 

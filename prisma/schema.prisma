@@ -4,11 +4,15 @@ generator client {
 
 datasource db {
   provider = "cockroachdb"
-  url      = env("DISCORD_BLITZ_DB")
+  url      = env("DATABASE_URL")
 }
 
-model discord_blitz {
+model Users {
+  blitz     Int       @id
+  last_used DateTime? @default(now())
+}
+
+model DiscordUsers {
   discord BigInt @id
-  region  String
   blitz   Int
 }

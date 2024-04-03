@@ -3,7 +3,7 @@ import markdownEscape from 'markdown-escape';
 import { Region } from '../../../constants/regions';
 import { UserError } from '../../../hooks/userError';
 import searchPlayersAcrossRegions from '../../blitz/searchPlayersAcrossRegions';
-import { getBlitzFromDiscord } from '../../blitzkrieg/discordBlitz';
+import { getBlitzFromDiscord } from '../../blitzkrieg/discordBlitzLink';
 import { translator } from '../../localization/translator';
 import { serverAndIdPattern } from './constants';
 
@@ -43,12 +43,10 @@ export default async function resolvePlayerFromCommand(
       }
     }
   } else {
-    const account = await getBlitzFromDiscord(parseInt(interaction.user.id));
+    const account = await getBlitzFromDiscord(BigInt(interaction.user.id));
 
-    if (account) {
-      return { region: account.region, id: account.blitz };
-    } else {
-      throw new UserError(t`bot.common.errors.player_not_linked`);
-    }
+    if (account) return account;
+
+    throw new UserError(t`bot.common.errors.player_not_linked`);
   }
 }
