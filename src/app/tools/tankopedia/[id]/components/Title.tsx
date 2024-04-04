@@ -13,8 +13,6 @@ export function Title() {
 
   return (
     <>
-      <title>{protagonist.tank.name}</title>
-
       <Flex gap="6" justify="center" align="center" style={{ padding: 16 }}>
         <Flex gap="2" align="center">
           <Heading
