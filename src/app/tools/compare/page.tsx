@@ -28,7 +28,7 @@ export default function Page() {
   );
 
   return (
-    <PageWrapper color="crimson">
+    <PageWrapper color="crimson" size="100%">
       <Flex justify="center">
         <Dialog.Root
           open={addTankDialogOpen}
@@ -66,45 +66,63 @@ export default function Page() {
         </Dialog.Root>
       </Flex>
 
-      <Table.Root variant="surface">
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeaderCell>Statistics</Table.ColumnHeaderCell>
-            {tanks.map((id) => {
-              const tank = awaitedTankDefinitions[id];
-
-              return (
-                <Table.ColumnHeaderCell>
-                  <Flex direction="column">
-                    <img src={tankIcon(id)} />
-                    <Text>{tank.name}</Text>
-                  </Flex>
+      {tanks.length > 0 && (
+        <Flex justify="center">
+          <Table.Root
+            variant="surface"
+            style={{
+              maxWidth: '100%',
+            }}
+          >
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeaderCell width="0">
+                  Statistics
                 </Table.ColumnHeaderCell>
-              );
-            })}
-          </Table.Row>
-        </Table.Header>
+                {tanks.map((id) => {
+                  const tank = awaitedTankDefinitions[id];
 
-        <Table.Body>
-          <Table.Row>
-            <Table.RowHeaderCell>Stat 1</Table.RowHeaderCell>
-            {tanks.map((id) => {
-              const tank = awaitedTankDefinitions[id];
+                  return (
+                    <Table.ColumnHeaderCell width="0">
+                      <Flex direction="column" align="center">
+                        <img
+                          src={tankIcon(id)}
+                          width={64}
+                          height={64}
+                          style={{
+                            objectFit: 'contain',
+                          }}
+                        />
+                        <Text>{tank.name}</Text>
+                      </Flex>
+                    </Table.ColumnHeaderCell>
+                  );
+                })}
+              </Table.Row>
+            </Table.Header>
 
-              return <Table.Cell>{Math.random()}</Table.Cell>;
-            })}
-          </Table.Row>
+            <Table.Body>
+              <Table.Row>
+                <Table.RowHeaderCell>Stat 1</Table.RowHeaderCell>
+                {tanks.map((id) => {
+                  const tank = awaitedTankDefinitions[id];
 
-          <Table.Row>
-            <Table.RowHeaderCell>Stat 2</Table.RowHeaderCell>
-            {tanks.map((id) => {
-              const tank = awaitedTankDefinitions[id];
+                  return <Table.Cell>{Math.random()}</Table.Cell>;
+                })}
+              </Table.Row>
 
-              return <Table.Cell>{Math.random()}</Table.Cell>;
-            })}
-          </Table.Row>
-        </Table.Body>
-      </Table.Root>
+              <Table.Row>
+                <Table.RowHeaderCell>Stat 2</Table.RowHeaderCell>
+                {tanks.map((id) => {
+                  const tank = awaitedTankDefinitions[id];
+
+                  return <Table.Cell>{Math.random()}</Table.Cell>;
+                })}
+              </Table.Row>
+            </Table.Body>
+          </Table.Root>
+        </Flex>
+      )}
     </PageWrapper>
   );
 }

@@ -1,7 +1,8 @@
 import { readdir } from 'fs/promises';
+import sharp from 'sharp';
 import { Vector3Tuple } from 'three';
 import { NATION_IDS } from '../../src/constants/nations';
-import { readBase64DVPL } from '../../src/core/blitz/readBase64DVPL';
+import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
@@ -50,23 +51,29 @@ export async function tankIcons(production: boolean) {
           const parameters = await readYAMLDVPL<TankParameters>(
             `${DATA}/${POI.tankParameters}/${nation}/${tankKey}.yaml.dvpl`,
           );
-          const small = `${DATA}/${parameters.resourcesPath.smallIconPath
+          const smallPath = `${DATA}/${parameters.resourcesPath.smallIconPath
             .replace(/~res:\//, '')
             .replace(/\..+/, '')}.packed.webp.dvpl`;
-          const big = `${DATA}/${parameters.resourcesPath.bigIconPath
+          const bigPath = `${DATA}/${parameters.resourcesPath.bigIconPath
             .replace(/~res:\//, '')
             .replace(/\..+/, '')}.packed.webp.dvpl`;
+          const big = await sharp(await readDVPLFile(bigPath))
+            .trim()
+            .toBuffer();
+          const small = await sharp(await readDVPLFile(smallPath))
+            .trim()
+            .toBuffer();
 
           if (big) {
             changes.push({
-              content: await readBase64DVPL(big),
+              content: big.toString('base64'),
               encoding: 'base64',
               path: `icons/tanks/big/${id}.webp`,
             });
           }
           if (small) {
             changes.push({
-              content: await readBase64DVPL(small),
+              content: small.toString('base64'),
               encoding: 'base64',
               path: `icons/tanks/small/${id}.webp`,
             });

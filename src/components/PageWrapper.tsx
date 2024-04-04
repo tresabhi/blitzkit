@@ -3,7 +3,7 @@ import { ComponentProps } from 'react';
 
 type PageWrapperProps = FlexProps & {
   color?: ComponentProps<typeof Theme>['accentColor'];
-  size?: number;
+  size?: number | string;
 };
 
 export default function PageWrapper({
