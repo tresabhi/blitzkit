@@ -3,7 +3,6 @@ import { ComponentProps } from 'react';
 export function PatreonIcon(props: ComponentProps<'svg'>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 436 476" {...props}>
-      <title>Patreon logo</title>
       <path
         fill="currentColor"
         data-fill="1"
