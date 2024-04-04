@@ -2,32 +2,70 @@
 
 import { PlusIcon } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, Table, Text } from '@radix-ui/themes';
-import { useSearchParams } from 'next/navigation';
-import { use, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { use, useCallback, useEffect, useMemo, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
 import { tankCharacteristics } from '../../../core/blitzkrieg/tankCharacteristics';
+import { tankDefinitions } from '../../../core/blitzkrieg/tankDefinitions';
 import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
-import mutateCompare, { useCompare } from '../../../stores/compare';
-import { genericDefaultEquipmentMatrix } from '../../../stores/duel/constants';
+import { tankToDuelMember } from '../../../core/blitzkrieg/tankToDuelMember';
+import mutateCompare, {
+  CompareMember,
+  useCompare,
+} from '../../../stores/compare';
 import { TankSearch } from '../tankopedia/components/TankSearch';
 
 export default function Page() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const awaitedTankDefinitions = use(tankDefinitions);
   const searchParams = useSearchParams();
   const tanks = useCompare((state) => state.tanks);
   const [addTankDialogOpen, setAddTankDialogOpen] = useState(false);
-  const stats = use(
-    Promise.all(
-      tanks.map((item) =>
-        tankCharacteristics({
-          ...item,
-          stockEngine: item.tank.engines[0],
-          stockGun: item.tank.turrets[0].guns[0],
-          stockTrack: item.tank.tracks[0],
-          stockTurret: item.tank.turrets[0],
-        }),
+  const statsPromise = useMemo(
+    () =>
+      Promise.all(
+        tanks.map((item) =>
+          tankCharacteristics({
+            ...item,
+            stockEngine: item.tank.engines[0],
+            stockGun: item.tank.turrets[0].guns[0],
+            stockTrack: item.tank.tracks[0],
+            stockTurret: item.tank.turrets[0],
+          }),
+        ),
       ),
-    ),
+    [tanks],
   );
+  const stats = use(statsPromise);
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  useEffect(() => {
+    const tanksParam = searchParams.get('tanks');
+
+    if (tanksParam) {
+      mutateCompare((draft) => {
+        draft.tanks = tanksParam
+          .split(',')
+          .map(Number)
+          .map(
+            (id) =>
+              ({
+                ...tankToDuelMember(awaitedTankDefinitions[id]),
+                crewSkills: {},
+              }) satisfies CompareMember,
+          );
+      });
+    }
+  }, []);
 
   function Row({
     value,
@@ -85,22 +123,18 @@ export default function Page() {
                   onSelect={(tank) => {
                     mutateCompare((draft) => {
                       draft.tanks.push({
-                        camouflage: true,
-                        consumables: [],
-                        equipmentMatrix: genericDefaultEquipmentMatrix,
-                        cooldownBooster: 0,
-                        crewMastery: 1,
-                        provisions: [],
-                        engine: tank.engines.at(-1)!,
-                        gun: tank.turrets.at(-1)!.guns.at(-1)!,
-                        shell: tank.turrets.at(-1)!.guns.at(-1)!.shells[0],
-                        tank,
-                        track: tank.tracks.at(-1)!,
-                        yaw: 0,
-                        pitch: 0,
-                        turret: tank.turrets.at(-1)!,
+                        ...tankToDuelMember(tank),
                         crewSkills: {},
                       });
+
+                      router.push(
+                        pathname +
+                          '?' +
+                          createQueryString(
+                            'tanks',
+                            draft.tanks.map(({ tank }) => tank.id).join(','),
+                          ),
+                      );
                     });
 
                     setAddTankDialogOpen(false);
