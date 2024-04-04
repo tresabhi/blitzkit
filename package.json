@@ -7,7 +7,7 @@
   "scripts": {
     "build:db": "prisma generate",
     "build:bot": "vite-node --script scripts/build --production",
-    "build:website": "build:db && next build && next-sitemap --config next-sitemap.config.cjs",
+    "build:website": "prisma generate && next build && next-sitemap --config next-sitemap.config.cjs",
     "build:docs": "vitepress build docs",
     "build:ratingleaderboard": "vite-node --script scripts/buildRatingLeaderboard",
     "build:assets": "vite-node --max_old_space_size=16384 --script scripts/buildAssets/index",
