@@ -17,6 +17,7 @@ import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { coefficient } from '../../../../../../core/blitzkrieg/coefficient';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { provisionDefinitions } from '../../../../../../core/blitzkrieg/provisionDefinitions';
+import { tankCharacteristics } from '../../../../../../core/blitzkrieg/tankCharacteristics';
 import {
   CREW_MEMBER_NAMES,
   GUN_TYPE_NAMES,
@@ -24,7 +25,6 @@ import {
 } from '../../../../../../core/blitzkrieg/tankDefinitions/constants';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
-import { useTankCharacteristics } from '../../../../../../hooks/useTankCharacteristics';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
 import { Info } from './components/Info';
@@ -53,7 +53,9 @@ export function Characteristics() {
   const crewMemberMastery = commanderMastery * 1.1;
   const consumables = useDuel((state) => state.protagonist!.consumables);
   const camouflage = useDuel((state) => state.protagonist!.camouflage);
-  const equipmentMatrix = useDuel((state) => state.protagonist!.equipment);
+  const equipmentMatrix = useDuel(
+    (state) => state.protagonist!.equipmentMatrix,
+  );
   const { tank, turret, gun, engine, track, shell } = useDuel(
     (state) => state.protagonist!,
   );
@@ -64,24 +66,26 @@ export function Characteristics() {
   const tankModelDefinition = awaitedModelDefinitions[tank.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];
-  const stats = useTankCharacteristics({
-    tank,
-    camouflage,
-    consumables,
-    crewMastery,
-    crewSkills,
-    engine,
-    equipmentMatrix,
-    gun,
-    provisions,
-    shell,
-    turret,
-    track,
-    stockEngine,
-    stockGun,
-    stockTrack,
-    stockTurret,
-  });
+  const stats = use(
+    tankCharacteristics({
+      tank,
+      camouflage,
+      consumables,
+      crewMastery,
+      crewSkills,
+      engine,
+      equipmentMatrix,
+      gun,
+      provisions,
+      shell,
+      turret,
+      track,
+      stockEngine,
+      stockGun,
+      stockTrack,
+      stockTurret,
+    }),
+  );
 
   const hasSupercharger = useEquipment(107);
   const hasCalibratedShells = useEquipment(103);

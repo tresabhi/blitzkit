@@ -93,12 +93,12 @@ export function SpacedArmorSceneComponent({
             const hasCalibratedShells = await hasEquipment(
               103,
               duel.antagonist!.tank.equipment,
-              duel.antagonist!.equipment,
+              duel.antagonist!.equipmentMatrix,
             );
             const hasEnhancedArmor = await hasEquipment(
               110,
               duel.protagonist!.tank.equipment,
-              duel.protagonist!.equipment,
+              duel.protagonist!.equipmentMatrix,
             );
             const thicknessCoefficient = hasEnhancedArmor ? 1.04 : 1;
             const shell = useDuel.getState().antagonist!.shell;

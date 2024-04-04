@@ -10,7 +10,8 @@ export function useEquipment(id: number, antagonist = false) {
   const equipmentRows =
     awaitedEquipmentDefinitions.presets[member.tank.equipment];
   const equipmentMatrix = useDuel(
-    (state) => state[antagonist ? 'antagonist' : 'protagonist']!.equipment,
+    (state) =>
+      state[antagonist ? 'antagonist' : 'protagonist']!.equipmentMatrix,
   );
   const value = useMemo(
     () =>

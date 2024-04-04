@@ -2,30 +2,62 @@
 
 import { PlusIcon } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, Table, Text } from '@radix-ui/themes';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { use, useCallback, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { use, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
-import { tankDefinitions } from '../../../core/blitzkrieg/tankDefinitions';
+import { tankCharacteristics } from '../../../core/blitzkrieg/tankCharacteristics';
 import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
+import mutateCompare, { useCompare } from '../../../stores/compare';
+import { genericDefaultEquipmentMatrix } from '../../../stores/duel/constants';
 import { TankSearch } from '../tankopedia/components/TankSearch';
 
 export default function Page() {
-  const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const tanks = searchParams.get('tanks')?.split(',').map(Number) ?? [];
-  const awaitedTankDefinitions = use(tankDefinitions);
+  const tanks = useCompare((state) => state.tanks);
   const [addTankDialogOpen, setAddTankDialogOpen] = useState(false);
-
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-
-      return params.toString();
-    },
-    [searchParams],
+  const stats = use(
+    Promise.all(
+      tanks.map((item) =>
+        tankCharacteristics({
+          ...item,
+          stockEngine: item.tank.engines[0],
+          stockGun: item.tank.turrets[0].guns[0],
+          stockTrack: item.tank.tracks[0],
+          stockTurret: item.tank.turrets[0],
+        }),
+      ),
+    ),
   );
+
+  function Row({
+    value,
+    decimals,
+    name,
+  }: {
+    name: string;
+    value: (member: Awaited<ReturnType<typeof tankCharacteristics>>) => number;
+    decimals?: number;
+  }) {
+    const values = stats.map(value);
+
+    return (
+      <Table.Row>
+        <Table.RowHeaderCell>{name}</Table.RowHeaderCell>
+
+        {values.map((value, index) => (
+          <Table.Cell key={index}>
+            <Text
+              color={
+                index === 0 ? undefined : value > values[0] ? 'green' : 'red'
+              }
+            >
+              {decimals === undefined ? value : value.toFixed(decimals)}
+            </Text>
+          </Table.Cell>
+        ))}
+      </Table.Row>
+    );
+  }
 
   return (
     <PageWrapper color="crimson" size="100%">
@@ -51,12 +83,26 @@ export default function Page() {
                 <TankSearch
                   compact
                   onSelect={(tank) => {
-                    tanks.push(tank.id);
-                    router.push(
-                      pathname +
-                        '?' +
-                        createQueryString('tanks', tanks.join(',')),
-                    );
+                    mutateCompare((draft) => {
+                      draft.tanks.push({
+                        camouflage: true,
+                        consumables: [],
+                        equipmentMatrix: genericDefaultEquipmentMatrix,
+                        cooldownBooster: 0,
+                        crewMastery: 1,
+                        provisions: [],
+                        engine: tank.engines.at(-1)!,
+                        gun: tank.turrets.at(-1)!.guns.at(-1)!,
+                        shell: tank.turrets.at(-1)!.guns.at(-1)!.shells[0],
+                        tank,
+                        track: tank.tracks.at(-1)!,
+                        yaw: 0,
+                        pitch: 0,
+                        turret: tank.turrets.at(-1)!,
+                        crewSkills: {},
+                      });
+                    });
+
                     setAddTankDialogOpen(false);
                   }}
                 />
@@ -76,30 +122,21 @@ export default function Page() {
           >
             <Table.Header>
               <Table.Row>
-                <Table.ColumnHeaderCell width="0">
-                  <Flex
-                    align="center"
-                    justify="center"
-                    style={{ width: '100%', height: '100%' }}
-                  >
-                    Statistics
-                  </Flex>
-                </Table.ColumnHeaderCell>
-                {tanks.map((id) => {
-                  const tank = awaitedTankDefinitions[id];
+                <Table.ColumnHeaderCell />
 
+                {tanks.map(({ tank }) => {
                   return (
-                    <Table.ColumnHeaderCell width="0">
+                    <Table.ColumnHeaderCell width="0" key={tank.id}>
                       <Flex direction="column" align="center">
                         <img
-                          src={tankIcon(id)}
+                          src={tankIcon(tank.id)}
                           width={64}
                           height={64}
                           style={{
                             objectFit: 'contain',
                           }}
                         />
-                        <Text>{tank.name}</Text>
+                        <Text style={{ textAlign: 'center' }}>{tank.name}</Text>
                       </Flex>
                     </Table.ColumnHeaderCell>
                   );
@@ -108,23 +145,7 @@ export default function Page() {
             </Table.Header>
 
             <Table.Body>
-              <Table.Row>
-                <Table.RowHeaderCell>Stat 1</Table.RowHeaderCell>
-                {tanks.map((id) => {
-                  const tank = awaitedTankDefinitions[id];
-
-                  return <Table.Cell>{Math.random()}</Table.Cell>;
-                })}
-              </Table.Row>
-
-              <Table.Row>
-                <Table.RowHeaderCell>Stat 2</Table.RowHeaderCell>
-                {tanks.map((id) => {
-                  const tank = awaitedTankDefinitions[id];
-
-                  return <Table.Cell>{Math.random()}</Table.Cell>;
-                })}
-              </Table.Row>
+              <Row name="DPM" value={(stats) => stats.dpm} decimals={0} />
             </Table.Body>
           </Table.Root>
         </Flex>

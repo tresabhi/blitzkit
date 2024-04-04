@@ -1,15 +1,15 @@
-import { use } from 'react';
-import { isExplosive } from '../core/blitz/isExplosive';
-import { resolveNearPenetration } from '../core/blitz/resolveNearPenetration';
-import { coefficient } from '../core/blitzkrieg/coefficient';
-import { degressiveStat } from '../core/blitzkrieg/degressiveStat';
-import { equipmentDefinitions } from '../core/blitzkrieg/equipmentDefinitions';
-import { modelDefinitions } from '../core/blitzkrieg/modelDefinitions';
-import { normalizeBoundingBox } from '../core/blitzkrieg/normalizeBoundingBox';
-import { progressiveStat } from '../core/blitzkrieg/progressiveStat';
-import { provisionDefinitions } from '../core/blitzkrieg/provisionDefinitions';
-import { resolveDpm } from '../core/blitzkrieg/resolveDpm';
-import { sum } from '../core/blitzkrieg/sum';
+import { EquipmentMatrix } from '../../stores/duel';
+import { isExplosive } from '../blitz/isExplosive';
+import { resolveNearPenetration } from '../blitz/resolveNearPenetration';
+import { coefficient } from './coefficient';
+import { degressiveStat } from './degressiveStat';
+import { equipmentDefinitions } from './equipmentDefinitions';
+import { modelDefinitions } from './modelDefinitions';
+import { normalizeBoundingBox } from './normalizeBoundingBox';
+import { progressiveStat } from './progressiveStat';
+import { provisionDefinitions } from './provisionDefinitions';
+import { resolveDpm } from './resolveDpm';
+import { sum } from './sum';
 import {
   EngineDefinition,
   GunDefinition,
@@ -17,11 +17,10 @@ import {
   TankDefinition,
   TrackDefinition,
   TurretDefinition,
-} from '../core/blitzkrieg/tankDefinitions';
-import { unionBoundingBox } from '../core/blitzkrieg/unionBoundingBox';
-import { EquipmentMatrix } from '../stores/duel';
+} from './tankDefinitions';
+import { unionBoundingBox } from './unionBoundingBox';
 
-export function useTankCharacteristics({
+export async function tankCharacteristics({
   tank,
   turret,
   gun,
@@ -56,9 +55,9 @@ export function useTankCharacteristics({
   crewSkills: Record<string, number>;
   camouflage: boolean;
 }) {
-  const awaitedModelDefinitions = use(modelDefinitions);
-  const awaitedEquipmentDefinitions = use(equipmentDefinitions);
-  const awaitedProvisionDefinitions = use(provisionDefinitions);
+  const awaitedModelDefinitions = await modelDefinitions;
+  const awaitedEquipmentDefinitions = await equipmentDefinitions;
+  const awaitedProvisionDefinitions = await provisionDefinitions;
   const presetRows = awaitedEquipmentDefinitions.presets[tank.equipment];
   const tankModelDefinition = awaitedModelDefinitions[tank.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];

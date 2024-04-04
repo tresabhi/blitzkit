@@ -159,7 +159,9 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
             active={hasCalibratedShells}
             onClick={() => {
               mutateDuel((draft) => {
-                draft.antagonist!.equipment[0][0] = hasCalibratedShells ? 0 : 1;
+                draft.antagonist!.equipmentMatrix[0][0] = hasCalibratedShells
+                  ? 0
+                  : 1;
               });
             }}
           />
@@ -168,7 +170,9 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
             active={hasEnhancedArmor}
             onClick={() => {
               mutateDuel((draft) => {
-                draft.protagonist!.equipment[1][1] = hasEnhancedArmor ? 0 : -1;
+                draft.protagonist!.equipmentMatrix[1][1] = hasEnhancedArmor
+                  ? 0
+                  : -1;
               });
             }}
           />

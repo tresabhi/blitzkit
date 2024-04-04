@@ -166,7 +166,7 @@ export const TankModel = memo(() => {
             const hasImprovedVerticalStabilizer = await hasEquipment(
               122,
               duel.protagonist!.tank.equipment,
-              duel.protagonist!.equipment,
+              duel.protagonist!.equipmentMatrix,
             );
             [pitch, yaw] = applyPitchYawLimits(
               pitch,
@@ -232,7 +232,7 @@ export const TankModel = memo(() => {
               const hasImprovedVerticalStabilizer = await hasEquipment(
                 122,
                 duel.protagonist!.tank.equipment,
-                duel.protagonist!.equipment,
+                duel.protagonist!.equipmentMatrix,
               );
               [pitch, yaw] = applyPitchYawLimits(
                 pitch - event.movementY * (Math.PI / canvas.height),

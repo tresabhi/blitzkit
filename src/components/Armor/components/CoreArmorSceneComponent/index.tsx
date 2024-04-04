@@ -70,8 +70,8 @@ export function CoreArmorSceneComponent({
       material.uniforms.explosionRadius.value = shell.explosionRadius;
 
       const duel = useDuel.getState();
-      await handleProtagonistEquipmentChange(duel.protagonist!.equipment);
-      await handleAntagonistEquipmentChange(duel.antagonist!.equipment);
+      await handleProtagonistEquipmentChange(duel.protagonist!.equipmentMatrix);
+      await handleAntagonistEquipmentChange(duel.antagonist!.equipmentMatrix);
     }
     function handleVisualChange(
       visual: TankopediaPersistent['model']['visual'],
@@ -112,8 +112,12 @@ export function CoreArmorSceneComponent({
 
     handleShellChange(useDuel.getState().antagonist!.shell);
     handleVisualChange(useTankopediaPersistent.getState().model.visual);
-    handleProtagonistEquipmentChange(useDuel.getState().protagonist!.equipment);
-    handleAntagonistEquipmentChange(useDuel.getState().antagonist!.equipment);
+    handleProtagonistEquipmentChange(
+      useDuel.getState().protagonist!.equipmentMatrix,
+    );
+    handleAntagonistEquipmentChange(
+      useDuel.getState().antagonist!.equipmentMatrix,
+    );
 
     const unsubscribes = [
       useDuel.subscribe((state) => state.antagonist!.shell, handleShellChange),
@@ -122,11 +126,11 @@ export function CoreArmorSceneComponent({
         handleVisualChange,
       ),
       useDuel.subscribe(
-        (state) => state.protagonist!.equipment,
+        (state) => state.protagonist!.equipmentMatrix,
         handleProtagonistEquipmentChange,
       ),
       useDuel.subscribe(
-        (state) => state.antagonist!.equipment,
+        (state) => state.antagonist!.equipmentMatrix,
         handleAntagonistEquipmentChange,
       ),
     ];

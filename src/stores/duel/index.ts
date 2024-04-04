@@ -29,7 +29,7 @@ export interface DuelMember {
   gun: GunDefinition;
   shell: ShellDefinition;
   track: TrackDefinition;
-  equipment: EquipmentMatrix;
+  equipmentMatrix: EquipmentMatrix;
   pitch: number;
   yaw: number;
   consumables: number[];

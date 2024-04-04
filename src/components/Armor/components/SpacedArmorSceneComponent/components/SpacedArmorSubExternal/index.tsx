@@ -76,17 +76,21 @@ export function SpacedArmorSubExternal({
     }
 
     handleShellChange(useDuel.getState().antagonist!.shell);
-    handleProtagonistEquipmentChange(useDuel.getState().protagonist!.equipment);
-    handleAntagonistEquipmentChange(useDuel.getState().antagonist!.equipment);
+    handleProtagonistEquipmentChange(
+      useDuel.getState().protagonist!.equipmentMatrix,
+    );
+    handleAntagonistEquipmentChange(
+      useDuel.getState().antagonist!.equipmentMatrix,
+    );
 
     const unsubscribes = [
       useDuel.subscribe((state) => state.antagonist!.shell, handleShellChange),
       useDuel.subscribe(
-        (state) => state.protagonist!.equipment,
+        (state) => state.protagonist!.equipmentMatrix,
         handleProtagonistEquipmentChange,
       ),
       useDuel.subscribe(
-        (state) => state.antagonist!.equipment,
+        (state) => state.antagonist!.equipmentMatrix,
         handleAntagonistEquipmentChange,
       ),
     ];

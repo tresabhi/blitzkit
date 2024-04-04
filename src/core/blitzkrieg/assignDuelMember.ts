@@ -32,7 +32,7 @@ export async function assignDuelMember(
     gun,
     shell,
     track,
-    equipment: genericDefaultEquipmentMatrix,
+    equipmentMatrix: genericDefaultEquipmentMatrix,
     pitch: degToRad(tankModelDefinition.turretRotation?.pitch ?? 0),
     yaw: 0,
     camouflage: true,

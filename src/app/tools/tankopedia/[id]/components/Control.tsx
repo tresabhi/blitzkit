@@ -73,7 +73,7 @@ export function Controls() {
       const hasImprovedVerticalStabilizer = await hasEquipment(
         122,
         duel.protagonist!.tank.equipment,
-        duel.protagonist!.equipment,
+        duel.protagonist!.equipmentMatrix,
       );
 
       switch (event) {

@@ -10,7 +10,9 @@ export function Equipment() {
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const equipmentRows =
     awaitedEquipmentDefinitions.presets[protagonist.tank.equipment];
-  const equipmentMatrix = useDuel((state) => state.protagonist!.equipment);
+  const equipmentMatrix = useDuel(
+    (state) => state.protagonist!.equipmentMatrix,
+  );
 
   return (
     <ConfigurationChildWrapper>
@@ -21,7 +23,7 @@ export function Equipment() {
           color="red"
           onClick={() => {
             mutateDuel((draft) => {
-              draft.protagonist!.equipment.forEach((row) => {
+              draft.protagonist!.equipmentMatrix.forEach((row) => {
                 row.forEach((_, index) => {
                   row[index] = 0;
                 });
@@ -46,10 +48,13 @@ export function Equipment() {
                   onClick={() => {
                     mutateDuel((draft) => {
                       if (equipmentMatrix[rowIndex][columnIndex] === -1) {
-                        draft.protagonist!.equipment[rowIndex][columnIndex] = 0;
+                        draft.protagonist!.equipmentMatrix[rowIndex][
+                          columnIndex
+                        ] = 0;
                       } else {
-                        draft.protagonist!.equipment[rowIndex][columnIndex] =
-                          -1;
+                        draft.protagonist!.equipmentMatrix[rowIndex][
+                          columnIndex
+                        ] = -1;
                       }
                     });
                   }}
@@ -62,9 +67,13 @@ export function Equipment() {
                   onClick={() => {
                     mutateDuel((draft) => {
                       if (equipmentMatrix[rowIndex][columnIndex] === 1) {
-                        draft.protagonist!.equipment[rowIndex][columnIndex] = 0;
+                        draft.protagonist!.equipmentMatrix[rowIndex][
+                          columnIndex
+                        ] = 0;
                       } else {
-                        draft.protagonist!.equipment[rowIndex][columnIndex] = 1;
+                        draft.protagonist!.equipmentMatrix[rowIndex][
+                          columnIndex
+                        ] = 1;
                       }
                     });
                   }}
