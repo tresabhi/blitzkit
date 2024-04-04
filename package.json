@@ -7,7 +7,7 @@
   "scripts": {
     "build:db": "prisma generate",
     "build:bot": "vite-node --script scripts/build --production",
-    "build:website": "yarn build:db && next build && yarn build:sitemap",
+    "build:website": "yarn build:db && yarn build:sitemap && next build",
     "build:sitemap": "vite-node scripts/sitemap",
     "build:docs": "vitepress build docs",
     "build:ratingleaderboard": "vite-node --script scripts/buildRatingLeaderboard",
