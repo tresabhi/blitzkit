@@ -7,7 +7,8 @@
   "scripts": {
     "build:db": "prisma generate",
     "build:bot": "vite-node --script scripts/build --production",
-    "build:website": "prisma generate && next build && next-sitemap --config next-sitemap.config.cjs",
+    "build:website": "yarn build:db && next build && yarn build:sitemap",
+    "build:sitemap": "vite-node scripts/sitemap",
     "build:docs": "vitepress build docs",
     "build:ratingleaderboard": "vite-node --script scripts/buildRatingLeaderboard",
     "build:assets": "vite-node --max_old_space_size=16384 --script scripts/buildAssets/index",
@@ -57,7 +58,6 @@
     "lz4js": "^0.2.0",
     "markdown-escape": "^2.0.0",
     "next": "^14.1.0",
-    "next-sitemap": "^4.2.3",
     "parse-dds": "^1.2.1",
     "postprocessing": "^6.34.1",
     "react": "^18.2.0",
