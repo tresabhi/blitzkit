@@ -1,7 +1,7 @@
 import { writeFile } from 'fs/promises';
 import { tankDefinitions } from '../src/core/blitzkrieg/tankDefinitions';
 
-console.log('Building sitemap...');
+console.log('Building sitemap...', require('fs'));
 
 const awaitedTankDefinitions = await tankDefinitions;
 const values = Object.values(awaitedTankDefinitions);
