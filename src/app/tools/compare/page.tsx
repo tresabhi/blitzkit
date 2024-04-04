@@ -69,28 +69,65 @@ export default function Page() {
 
   function Row({
     value,
-    decimals,
     name,
+    display,
+    deltaType = 'higherIsBetter',
   }: {
     name: string;
-    value: (member: Awaited<ReturnType<typeof tankCharacteristics>>) => number;
-    decimals?: number;
+    value:
+      | keyof Awaited<ReturnType<typeof tankCharacteristics>>
+      | ((
+          member: Awaited<ReturnType<typeof tankCharacteristics>>,
+        ) => number | undefined);
+    display: (
+      member: Awaited<ReturnType<typeof tankCharacteristics>>,
+    ) => number | string;
+    deltaType?: 'higherIsBetter' | 'lowerIsBetter';
   }) {
-    const values = stats.map(value);
+    const values = stats.map((stat) =>
+      typeof value === 'function' ? value(stat) : (stat[value] as number),
+    );
 
     return (
       <Table.Row>
-        <Table.RowHeaderCell>{name}</Table.RowHeaderCell>
+        <Table.RowHeaderCell>
+          <Flex
+            align="center"
+            justify="center"
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            {name}
+          </Flex>
+        </Table.RowHeaderCell>
 
         {values.map((value, index) => (
-          <Table.Cell key={index} justify="center">
-            <Text
-              color={
-                index === 0 ? undefined : value > values[0] ? 'green' : 'red'
-              }
+          <Table.Cell key={index}>
+            <Flex
+              align="center"
+              justify="center"
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
             >
-              {decimals === undefined ? value : value.toFixed(decimals)}
-            </Text>
+              <Text
+                style={{
+                  textAlign: 'center',
+                }}
+                color={
+                  index === 0 || value === undefined || values[0] === undefined
+                    ? undefined
+                    : (deltaType ? value > values[0] : value < values[0])
+                      ? 'green'
+                      : 'red'
+                }
+              >
+                {display(stats[index])}
+              </Text>
+            </Flex>
           </Table.Cell>
         ))}
       </Table.Row>
@@ -179,7 +216,22 @@ export default function Page() {
             </Table.Header>
 
             <Table.Body>
-              <Row name="DPM" value={(stats) => stats.dpm} decimals={0} />
+              <Row
+                name="DPM"
+                value="dpm"
+                display={(stats) => Math.round(stats.dpm).toLocaleString()}
+              />
+              <Row
+                name="Reload"
+                deltaType="lowerIsBetter"
+                value={(stats) => stats.shellReload}
+                display={(stats) =>
+                  stats.shellReload?.toFixed(2) ??
+                  stats
+                    .shellReloads!.map((reload) => reload.toFixed(2))
+                    .join(', ')
+                }
+              />
             </Table.Body>
           </Table.Root>
         </Flex>
