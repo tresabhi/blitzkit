@@ -25,6 +25,11 @@ export default function ToolsLayout({ children }: ToolsLayoutProps) {
           {tool.pageDescription !== undefined && (
             <meta name="description" content={tool.pageDescription} />
           )}
+
+          <meta
+            property="og:image"
+            content={`/assets/banners/${toolId}.webp`}
+          />
         </>
       )}
 
