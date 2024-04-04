@@ -1,10 +1,26 @@
 'use client';
 
-import { PlusIcon } from '@radix-ui/react-icons';
-import { Button, Dialog, Flex, Table, Text } from '@radix-ui/themes';
+import {
+  CaretLeftIcon,
+  CaretRightIcon,
+  PlusIcon,
+  ShuffleIcon,
+  TrashIcon,
+} from '@radix-ui/react-icons';
+import {
+  Button,
+  Dialog,
+  Flex,
+  IconButton,
+  Table,
+  Text,
+} from '@radix-ui/themes';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
+import { equipmentDefinitions } from '../../../core/blitzkrieg/equipmentDefinitions';
+import { modelDefinitions } from '../../../core/blitzkrieg/modelDefinitions';
+import { provisionDefinitions } from '../../../core/blitzkrieg/provisionDefinitions';
 import { tankCharacteristics } from '../../../core/blitzkrieg/tankCharacteristics';
 import { tankDefinitions } from '../../../core/blitzkrieg/tankDefinitions';
 import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
@@ -22,22 +38,29 @@ export default function Page() {
   const searchParams = useSearchParams();
   const tanks = useCompare((state) => state.tanks);
   const [addTankDialogOpen, setAddTankDialogOpen] = useState(false);
-  const statsPromise = useMemo(
+  const awaitedModelDefinitions = use(modelDefinitions);
+  const awaitedEquipmentDefinitions = use(equipmentDefinitions);
+  const awaitedProvisionDefinitions = use(provisionDefinitions);
+  const stats = useMemo(
     () =>
-      Promise.all(
-        tanks.map((item) =>
-          tankCharacteristics({
+      tanks.map((item) =>
+        tankCharacteristics(
+          {
             ...item,
             stockEngine: item.tank.engines[0],
             stockGun: item.tank.turrets[0].guns[0],
             stockTrack: item.tank.tracks[0],
             stockTurret: item.tank.turrets[0],
-          }),
+          },
+          {
+            equipmentDefinitions: awaitedEquipmentDefinitions,
+            modelDefinitions: awaitedModelDefinitions,
+            provisionDefinitions: awaitedProvisionDefinitions,
+          },
         ),
       ),
     [tanks],
   );
-  const stats = use(statsPromise);
   const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -50,6 +73,13 @@ export default function Page() {
 
   const hasNonRegularGun = tanks.some(({ gun }) => gun.type !== 'regular');
 
+  useEffect(() => {
+    router.push(
+      pathname +
+        '?' +
+        createQueryString('tanks', tanks.map(({ tank }) => tank.id).join(',')),
+    );
+  }, [tanks]);
   useEffect(() => {
     const tanksParam = searchParams.get('tanks');
 
@@ -164,15 +194,6 @@ export default function Page() {
                         ...tankToDuelMember(tank),
                         crewSkills: {},
                       });
-
-                      router.push(
-                        pathname +
-                          '?' +
-                          createQueryString(
-                            'tanks',
-                            draft.tanks.map(({ tank }) => tank.id).join(','),
-                          ),
-                      );
                     });
 
                     setAddTankDialogOpen(false);
@@ -196,10 +217,103 @@ export default function Page() {
               <Table.Row>
                 <Table.ColumnHeaderCell />
 
+                {tanks.map(({ tank }, index) => {
+                  return (
+                    <Table.ColumnHeaderCell width="0" key={tank.id}>
+                      <Flex gap="4" style={{ padding: '0 4px' }}>
+                        {index !== 0 && (
+                          <IconButton
+                            variant="ghost"
+                            onClick={() => {
+                              mutateCompare((draft) => {
+                                const item = draft.tanks[index];
+                                draft.tanks.splice(index, 1);
+                                draft.tanks.splice(index - 1, 0, item);
+                              });
+                            }}
+                          >
+                            <CaretLeftIcon />
+                          </IconButton>
+                        )}
+                        <IconButton
+                          variant="ghost"
+                          onClick={() => {
+                            mutateCompare((draft) => {
+                              draft.tanks.splice(index, 1);
+                            });
+                          }}
+                        >
+                          <TrashIcon />
+                        </IconButton>
+                        <Dialog.Root
+                          open={addTankDialogOpen}
+                          onOpenChange={setAddTankDialogOpen}
+                        >
+                          <Dialog.Trigger>
+                            <IconButton variant="ghost">
+                              <ShuffleIcon />
+                            </IconButton>
+                          </Dialog.Trigger>
+
+                          <Dialog.Content>
+                            <Flex gap="4" direction="column">
+                              <Flex
+                                direction="column"
+                                gap="4"
+                                style={{ flex: 1 }}
+                                justify="center"
+                              >
+                                <TankSearch
+                                  compact
+                                  onSelect={(tank) => {
+                                    mutateCompare((draft) => {
+                                      draft.tanks[index] = {
+                                        ...tankToDuelMember(tank),
+                                        crewSkills: {},
+                                      };
+                                    });
+                                    setAddTankDialogOpen(false);
+                                  }}
+                                />
+                              </Flex>
+                            </Flex>
+                          </Dialog.Content>
+                        </Dialog.Root>
+                        {index !== tanks.length - 1 && (
+                          <IconButton
+                            variant="ghost"
+                            onClick={() => {
+                              mutateCompare((draft) => {
+                                const item = draft.tanks[index];
+                                draft.tanks.splice(index, 1);
+                                draft.tanks.splice(index + 1, 0, item);
+                              });
+                            }}
+                          >
+                            <CaretRightIcon />
+                          </IconButton>
+                        )}
+                      </Flex>
+                    </Table.ColumnHeaderCell>
+                  );
+                })}
+              </Table.Row>
+            </Table.Header>
+
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeaderCell />
+
                 {tanks.map(({ tank }) => {
                   return (
                     <Table.ColumnHeaderCell width="0" key={tank.id}>
-                      <Flex direction="column" align="center">
+                      <Flex
+                        direction="column"
+                        align="center"
+                        justify="between"
+                        gap="2"
+                        style={{ height: '100%' }}
+                      >
                         <img
                           src={tankIcon(tank.id)}
                           width={64}

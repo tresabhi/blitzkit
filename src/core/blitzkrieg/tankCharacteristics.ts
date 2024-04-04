@@ -3,11 +3,11 @@ import { isExplosive } from '../blitz/isExplosive';
 import { resolveNearPenetration } from '../blitz/resolveNearPenetration';
 import { coefficient } from './coefficient';
 import { degressiveStat } from './degressiveStat';
-import { equipmentDefinitions } from './equipmentDefinitions';
-import { modelDefinitions } from './modelDefinitions';
+import { EquipmentDefinitions } from './equipmentDefinitions';
+import { ModelDefinitions } from './modelDefinitions';
 import { normalizeBoundingBox } from './normalizeBoundingBox';
 import { progressiveStat } from './progressiveStat';
-import { provisionDefinitions } from './provisionDefinitions';
+import { ProvisionDefinitions } from './provisionDefinitions';
 import { resolveDpm } from './resolveDpm';
 import { sum } from './sum';
 import {
@@ -20,46 +20,54 @@ import {
 } from './tankDefinitions';
 import { unionBoundingBox } from './unionBoundingBox';
 
-export async function tankCharacteristics({
-  tank,
-  turret,
-  gun,
-  shell,
-  consumables,
-  equipmentMatrix,
-  crewMastery,
-  provisions,
-  engine,
-  crewSkills,
-  camouflage,
-  track,
-  stockEngine,
-  stockTrack,
-  stockTurret,
-  stockGun,
-}: {
-  tank: TankDefinition;
-  turret: TurretDefinition;
-  gun: GunDefinition;
-  shell: ShellDefinition;
-  track: TrackDefinition;
-  engine: EngineDefinition;
-  stockEngine: EngineDefinition;
-  stockTrack: TrackDefinition;
-  stockTurret: TurretDefinition;
-  stockGun: GunDefinition;
-  consumables: number[];
-  equipmentMatrix: EquipmentMatrix;
-  crewMastery: number;
-  provisions: number[];
-  crewSkills: Record<string, number>;
-  camouflage: boolean;
-}) {
-  const awaitedModelDefinitions = await modelDefinitions;
-  const awaitedEquipmentDefinitions = await equipmentDefinitions;
-  const awaitedProvisionDefinitions = await provisionDefinitions;
-  const presetRows = awaitedEquipmentDefinitions.presets[tank.equipment];
-  const tankModelDefinition = awaitedModelDefinitions[tank.id];
+export function tankCharacteristics(
+  {
+    tank,
+    turret,
+    gun,
+    shell,
+    consumables,
+    equipmentMatrix,
+    crewMastery,
+    provisions,
+    engine,
+    crewSkills,
+    camouflage,
+    track,
+    stockEngine,
+    stockTrack,
+    stockTurret,
+    stockGun,
+  }: {
+    tank: TankDefinition;
+    turret: TurretDefinition;
+    gun: GunDefinition;
+    shell: ShellDefinition;
+    track: TrackDefinition;
+    engine: EngineDefinition;
+    stockEngine: EngineDefinition;
+    stockTrack: TrackDefinition;
+    stockTurret: TurretDefinition;
+    stockGun: GunDefinition;
+    consumables: number[];
+    equipmentMatrix: EquipmentMatrix;
+    crewMastery: number;
+    provisions: number[];
+    crewSkills: Record<string, number>;
+    camouflage: boolean;
+  },
+  {
+    modelDefinitions,
+    equipmentDefinitions,
+    provisionDefinitions,
+  }: {
+    modelDefinitions: ModelDefinitions;
+    equipmentDefinitions: EquipmentDefinitions;
+    provisionDefinitions: ProvisionDefinitions;
+  },
+) {
+  const presetRows = equipmentDefinitions.presets[tank.equipment];
+  const tankModelDefinition = modelDefinitions[tank.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];
 
@@ -115,8 +123,8 @@ export async function tankCharacteristics({
   const provisionCrewBonus =
     provisions.reduce(
       (total, provision) =>
-        awaitedProvisionDefinitions[provision].crew
-          ? total + awaitedProvisionDefinitions[provision].crew! / 100
+        provisionDefinitions[provision].crew
+          ? total + provisionDefinitions[provision].crew! / 100
           : total,
       0,
     ) + (hasImprovedVentilation ? 0.05 : 0);
