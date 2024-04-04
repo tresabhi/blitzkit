@@ -45,7 +45,7 @@ export default function Page() {
         <Table.RowHeaderCell>{name}</Table.RowHeaderCell>
 
         {values.map((value, index) => (
-          <Table.Cell key={index}>
+          <Table.Cell key={index} justify="center">
             <Text
               color={
                 index === 0 ? undefined : value > values[0] ? 'green' : 'red'
