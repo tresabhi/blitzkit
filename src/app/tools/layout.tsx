@@ -19,7 +19,14 @@ export default function ToolsLayout({ children }: ToolsLayoutProps) {
 
   return (
     <>
-      {tool && <title>{tool.title}</title>}
+      {tool && (
+        <>
+          <title>{tool.title}</title>
+          {tool.pageDescription !== undefined && (
+            <meta name="description" content={tool.pageDescription} />
+          )}
+        </>
+      )}
 
       {pathSplit.length === 3 && (
         <div

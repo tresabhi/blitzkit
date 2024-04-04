@@ -4,6 +4,7 @@ interface Tool {
   description: string;
   disabled?: boolean;
   href?: string;
+  pageDescription?: string;
 }
 
 export const TOOLS: Tool[] = [
@@ -11,16 +12,22 @@ export const TOOLS: Tool[] = [
     id: 'session',
     title: 'Session tracker',
     description: 'Live session performance tracker',
+    pageDescription:
+      'Track your stats in real time as you play World of Tanks Blitz',
   },
   {
     id: 'tankopedia',
     title: 'Tankopedia',
     description: 'Blitz tank encyclopedia',
+    pageDescription:
+      'Statistics, armor, and more for all tanks in World of Tanks Blitz',
   },
   {
     id: 'rating',
     title: 'Rating leaderboard',
     description: 'Full rating gamemode leaderboard',
+    pageDescription:
+      'Live and archived full rating leaderboard for World of Tanks Blitz',
   },
   {
     id: 'discord',
@@ -28,18 +35,6 @@ export const TOOLS: Tool[] = [
     description: 'Stats and tools right in Discord',
     href: 'https://discord.com/application-directory/1097673957865443370',
   },
-  // {
-  //   id: 'inactive',
-  //   title: 'Inactivity tracker',
-  //   description: 'Find inactive members of a clan',
-  //   disabled: true,
-  // },
-  // {
-  //   id: 'profile',
-  //   title: 'Player profile',
-  //   description: "A player's basic non-statistical info",
-  //   disabled: true,
-  // },
   {
     id: 'more',
     title: 'More coming soon',
