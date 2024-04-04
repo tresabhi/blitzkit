@@ -7,11 +7,11 @@ export interface CompareMember extends DuelMember {
 }
 
 export interface Compare {
-  tanks: CompareMember[];
+  members: CompareMember[];
 }
 
 export const useCompare = create<Compare>()(() => ({
-  tanks: [],
+  members: [],
 }));
 
 export default function mutateCompare(recipe: (draft: Compare) => void) {
