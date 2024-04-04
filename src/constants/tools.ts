@@ -30,6 +30,13 @@ export const TOOLS: Tool[] = [
       'Live and archived full rating leaderboard for World of Tanks Blitz',
   },
   {
+    id: 'tank-compare',
+    title: 'Tank compare',
+    description: 'Compare tank statistics and loadouts',
+    pageDescription:
+      'Compare tanks statistics and loadouts in World of Tanks Blitz',
+  },
+  {
     id: 'discord',
     title: 'Discord bot',
     description: 'Stats and tools right in Discord',
