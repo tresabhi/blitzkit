@@ -1,6 +1,6 @@
 import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin';
 
-const withVanillaExtract = createVanillaExtractPlugin({ test: /\.css$/ });
+const withVanillaExtract = createVanillaExtractPlugin({ tests: /\.css$/ });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
