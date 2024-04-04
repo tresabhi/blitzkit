@@ -1,16 +1,13 @@
-import { useDuel } from '../../stores/duel';
+import { EquipmentMatrix } from '../../stores/duel';
 import { equipmentDefinitions } from './equipmentDefinitions';
 
 export async function hasEquipment(
   id: number,
-  antagonist = false,
-  equipmentMatrix = useDuel.getState()[
-    antagonist ? 'antagonist' : 'protagonist'
-  ]!.equipment,
+  equipmentPreset: string,
+  equipmentMatrix: EquipmentMatrix,
 ) {
   const awaitedEquipmentDefinitions = await equipmentDefinitions;
-  const member = useDuel.getState()[antagonist ? 'antagonist' : 'protagonist']!;
-  const presetRows = awaitedEquipmentDefinitions.presets[member.tank.equipment];
+  const presetRows = awaitedEquipmentDefinitions.presets[equipmentPreset];
   return presetRows.some((equipmentRow, rowIndex) => {
     return equipmentRow.some((equipment, columnIndex) => {
       const choice = equipmentMatrix[rowIndex][columnIndex];

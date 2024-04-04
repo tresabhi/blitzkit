@@ -69,7 +69,12 @@ export function Controls() {
     );
 
     async function handlePoseEvent(event: Pose) {
-      const hasImprovedVerticalStabilizer = await hasEquipment(122);
+      const duel = useDuel.getState();
+      const hasImprovedVerticalStabilizer = await hasEquipment(
+        122,
+        duel.protagonist!.tank.equipment,
+        duel.protagonist!.equipment,
+      );
 
       switch (event) {
         case Pose.HullDown: {

@@ -14,25 +14,17 @@ import { lerp } from 'three/src/math/MathUtils';
 import { ShellButton } from '../../../../../../components/ModuleButtons/ShellButton';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
-import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { coefficient } from '../../../../../../core/blitzkrieg/coefficient';
-import { degressiveStat } from '../../../../../../core/blitzkrieg/degressiveStat';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
-import { normalizeBoundingBox } from '../../../../../../core/blitzkrieg/normalizeBoundingBox';
-import { progressiveStat } from '../../../../../../core/blitzkrieg/progressiveStat';
-import { resolveDpm } from '../../../../../../core/blitzkrieg/resolveDpm';
-import { sum } from '../../../../../../core/blitzkrieg/sum';
+import { provisionDefinitions } from '../../../../../../core/blitzkrieg/provisionDefinitions';
 import {
   CREW_MEMBER_NAMES,
   GUN_TYPE_NAMES,
   SHELL_NAMES,
 } from '../../../../../../core/blitzkrieg/tankDefinitions/constants';
-import { unionBoundingBox } from '../../../../../../core/blitzkrieg/unionBoundingBox';
-import { useConsumable } from '../../../../../../hooks/useConsumable';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
-import { useProvision } from '../../../../../../hooks/useProvision';
-import { useProvisions } from '../../../../../../hooks/useProvisions';
+import { useTankCharacteristics } from '../../../../../../hooks/useTankCharacteristics';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
 import { Info } from './components/Info';
@@ -40,22 +32,31 @@ import { InfoWithDelta } from './components/InfoWithDelta';
 
 export function Characteristics() {
   const awaitedModelDefinitions = use(modelDefinitions);
+  const awaitedProvisionDefinitions = use(provisionDefinitions);
   const crewSkills = useTankopediaTemporary((state) => state.skills);
-  const { tank, turret, gun, engine, track, shell } = useDuel(
-    (state) => state.protagonist!,
-  );
+  const penetrationDistanceInput = useRef<HTMLInputElement>(null);
   const isFullScreen = useFullScreen();
   const hasImprovedVentilation = useEquipment(102);
-  const provisions = useProvisions();
   const crewMastery = useDuel((state) => state.protagonist!.crewMastery);
+  const [penetrationDistance, setPenetrationDistance] = useState(250);
+
+  const provisions = useDuel((state) => state.protagonist!.provisions);
   const provisionCrewBonus =
     provisions.reduce(
       (total, provision) =>
-        provision.crew ? total + provision.crew / 100 : total,
+        awaitedProvisionDefinitions[provision].crew
+          ? total + awaitedProvisionDefinitions[provision].crew! / 100
+          : total,
       0,
     ) + (hasImprovedVentilation ? 0.05 : 0);
   const commanderMastery = crewMastery + provisionCrewBonus;
   const crewMemberMastery = commanderMastery * 1.1;
+  const consumables = useDuel((state) => state.protagonist!.consumables);
+  const camouflage = useDuel((state) => state.protagonist!.camouflage);
+  const equipmentMatrix = useDuel((state) => state.protagonist!.equipment);
+  const { tank, turret, gun, engine, track, shell } = useDuel(
+    (state) => state.protagonist!,
+  );
   const stockEngine = tank.engines[0];
   const stockTrack = tank.tracks[0];
   const stockTurret = tank.turrets[0];
@@ -63,187 +64,36 @@ export function Characteristics() {
   const tankModelDefinition = awaitedModelDefinitions[tank.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];
-  const size = normalizeBoundingBox(
-    unionBoundingBox(
-      tankModelDefinition.boundingBox,
-      turretModelDefinition.boundingBox,
-    ),
-  );
-  const gunDefaultPitch = tankModelDefinition.turretRotation?.pitch ?? 0;
-  const weight =
-    tank.weight + engine.weight + track.weight + turret.weight + gun.weight;
-  const weightTons = weight / 1000;
-  const stockWeight =
-    tank.weight +
-    stockEngine.weight +
-    stockTrack.weight +
-    stockTurret.weight +
-    stockGun.weight;
-  const [penetrationDistance, setPenetrationDistance] = useState(250);
-  const camouflage = useDuel((state) => state.protagonist!.camouflage);
-  const hasRammer = useEquipment(100);
-  const hasCalibratedShells = useEquipment(103);
-  const hasEnhancedGunLayingDrive = useEquipment(104);
-  const hasSupercharger = useEquipment(107);
-  const hasVerticalStabilizer = useEquipment(105);
-  const hasRefinedGun = useEquipment(106);
-  const hasImprovedAssembly = useEquipment(111);
-  const hasImprovedOptics = useEquipment(114);
-  const hasImprovedControl = useEquipment(116);
-  const hasEngineAccelerator = useEquipment(117);
-  const hasCamouflageNet = useEquipment(115);
-  const hasImprovedVerticalStabilizer = useEquipment(122);
-  const hasImprovedSuspension = useEquipment(123);
-  const penetrationDistanceInput = useRef<HTMLInputElement>(null);
-  const hasEnginePowerBoost = useConsumable(14);
-  const hasImprovedEnginePowerBoost = useConsumable(27);
-  const hasAdrenaline = useConsumable(18);
-  const hasTungsten = useConsumable(45);
-  const hasReticleCalibration = useConsumable(28);
-  const hasShellReloadBoost = useConsumable(29);
-  const hasStandardFuel = useProvision(18);
-  const hasImprovedFuel = useProvision(19);
-  const hasProtectiveKit = useProvision(22);
-  const hasSandbagArmor = useProvision(28);
-  const hasEnhancedSandbagArmor = useProvision(29);
-  const hasImprovedGunPowder = useProvision(46);
-  const hasGearOil = useProvision(44);
-  const hasImprovedGearOil = useProvision(45);
+  const stats = useTankCharacteristics({
+    tank,
+    camouflage,
+    consumables,
+    crewMastery,
+    crewSkills,
+    engine,
+    equipmentMatrix,
+    gun,
+    provisions,
+    shell,
+    turret,
+    track,
+    stockEngine,
+    stockGun,
+    stockTrack,
+    stockTurret,
+  });
 
-  const healthCoefficient = coefficient(
-    [hasSandbagArmor, 0.03],
-    [hasEnhancedSandbagArmor, 0.06],
-    [hasImprovedAssembly, 0.06],
-  );
-  const reloadCoefficient =
-    (coefficient([hasRammer, -0.07]) *
-      coefficient([true, degressiveStat(crewMemberMastery)])) /
-    coefficient([hasAdrenaline && gun.type === 'regular', 0.2]);
+  const hasSupercharger = useEquipment(107);
+  const hasCalibratedShells = useEquipment(103);
+  const hasImprovedVerticalStabilizer = useEquipment(122);
   const penetrationCoefficient = coefficient([
     hasCalibratedShells,
     isExplosive(shell.type) ? 0.1 : 0.05,
   ]);
-  const damageCoefficient = coefficient(
-    // TODO: add max rolls
-    [hasTungsten, 0.15],
-  );
-  const intraClipCoefficient = coefficient([hasShellReloadBoost, -0.3]);
-  const shellVelocityCoefficient = coefficient(
-    [hasSupercharger, 0.3],
-    [hasImprovedGunPowder, 0.3],
-  );
   const penetrationLossOverDistanceCoefficient = coefficient([
     hasSupercharger,
     -0.5,
   ]);
-  const aimTimeCoefficient =
-    coefficient(
-      [hasEnhancedGunLayingDrive, -0.1],
-      [hasReticleCalibration, -0.4],
-    ) * coefficient([true, degressiveStat(crewMemberMastery)]);
-  const dispersionStillCoefficient =
-    coefficient([hasRefinedGun, -0.1], [hasReticleCalibration, -0.4]) *
-    coefficient([true, degressiveStat(crewMemberMastery)]);
-  const dispersionDamagedCoefficient = coefficient([
-    hasVerticalStabilizer,
-    -0.15,
-  ]);
-  const dispersionHullTraverseCoefficient = coefficient(
-    [hasVerticalStabilizer, -0.15],
-    [true, -crewSkills.smooth_turn / 100],
-  );
-  const dispersionAfterShotCoefficient = coefficient(
-    [hasVerticalStabilizer, -0.15],
-    [true, -crewSkills.soft_recoil / 100],
-  );
-  const dispersionMovingCoefficient = coefficient(
-    [hasVerticalStabilizer, -0.15],
-    [true, -crewSkills.smooth_driving / 100],
-  );
-  const dispersionTurretTraverseCoefficient = coefficient(
-    [hasVerticalStabilizer, -0.15],
-    [true, -crewSkills.smooth_turret * (2 / 100)],
-  );
-  const enginePowerCoefficient = coefficient(
-    [
-      hasEngineAccelerator &&
-        (tank.class === 'lightTank' || tank.class === 'mediumTank'),
-      0.05,
-    ],
-    [
-      hasEngineAccelerator &&
-        (tank.class === 'heavyTank' || tank.class === 'AT-SPG'),
-      0.07,
-    ],
-    [hasEnginePowerBoost, 0.2],
-    [hasImprovedEnginePowerBoost, 0.4],
-    [hasStandardFuel, 0.03],
-    [hasImprovedFuel, 0.1],
-    [hasGearOil, 0.03],
-    [hasImprovedGearOil, 0.06],
-  );
-  const turretTraverseCoefficient =
-    coefficient([hasStandardFuel, 0.03], [hasImprovedFuel, 0.1]) *
-    coefficient([true, progressiveStat(crewMemberMastery)]);
-  const hullTraverseCoefficient =
-    coefficient(
-      [hasImprovedControl, 0.1],
-      [hasImprovedEnginePowerBoost, 0.05],
-      [true, crewSkills.virtuoso / 100],
-    ) * coefficient([true, progressiveStat(crewMemberMastery)]);
-  const resistanceCoefficient = coefficient([hasImprovedSuspension, -0.25]);
-  const viewRangeCoefficient =
-    coefficient([
-      hasImprovedOptics,
-      tank.class === 'AT-SPG' ? 0.05 : tank.class === 'heavyTank' ? 0.07 : 0.1,
-    ]) * coefficient([true, progressiveStat(commanderMastery)]);
-  const fireChanceCoefficient = coefficient([hasProtectiveKit, -0.2]);
-
-  const speedForwardsSum = sum(
-    [hasImprovedEnginePowerBoost, 5],
-    [hasGearOil, 2],
-    [hasImprovedGearOil, 4],
-  );
-  const speedBackwardsSum = sum(
-    [hasImprovedEnginePowerBoost, 10],
-    [hasGearOil, 2],
-    [hasImprovedGearOil, 4],
-  );
-  const camouflageSumMoving = sum(
-    [
-      hasCamouflageNet,
-      tank.class === 'heavyTank' ? 0.03 : tank.class === 'AT-SPG' ? 0.07 : 0.05,
-    ],
-    [
-      camouflage,
-      tank.class === 'AT-SPG' ? 0.04 : tank.class === 'heavyTank' ? 0.03 : 0.02,
-    ],
-  );
-  const camouflageSumStill = sum(
-    [
-      hasCamouflageNet,
-      2 *
-        (tank.class === 'heavyTank'
-          ? 0.03
-          : tank.class === 'AT-SPG'
-            ? 0.07
-            : 0.05),
-    ],
-    [
-      camouflage,
-      tank.class === 'AT-SPG' ? 0.04 : tank.class === 'heavyTank' ? 0.03 : 0.02,
-    ],
-    [true, crewSkills.camouflage * (3 / 100)],
-  );
-
-  const resolvedEnginePower = engine.power * enginePowerCoefficient;
-  const dpm = resolveDpm(
-    gun,
-    shell,
-    damageCoefficient,
-    reloadCoefficient,
-    intraClipCoefficient,
-  );
 
   useEffect(() => {
     if (penetrationDistanceInput.current) {
@@ -294,19 +144,12 @@ export function Characteristics() {
 
         <Info name="Gun type">{GUN_TYPE_NAMES[gun.type]}</Info>
         <InfoWithDelta name="DPM" decimals={0} unit="hp / min">
-          {dpm}
+          {stats.dpm}
         </InfoWithDelta>
         {gun.type === 'autoReloader' && (
           <>
             <InfoWithDelta decimals={0} indent name="Maximum" unit="hp / min">
-              {gun.reload.at(-1)! < gun.reload.at(-2)!
-                ? ((damageCoefficient * shell.damage.armor) /
-                    (gun.reload.at(-1)! * reloadCoefficient +
-                      gun.intraClip * intraClipCoefficient)) *
-                  60
-                : ((damageCoefficient * shell.damage.armor) /
-                    (gun.reload[0] * reloadCoefficient)) *
-                  60}
+              {stats.dpmMaximum!}
             </InfoWithDelta>
             <InfoWithDelta
               decimals={0}
@@ -314,27 +157,7 @@ export function Characteristics() {
               name="Effective at 60s"
               unit="hp / min"
             >
-              {gun.reload.at(-1)! < gun.reload.at(-2)!
-                ? ((damageCoefficient * shell.damage.armor) /
-                    (gun.reload.at(-1)! * reloadCoefficient +
-                      gun.intraClip * intraClipCoefficient)) *
-                    (60 -
-                      (gun.reload.slice(0, -1).length - 1) *
-                        gun.intraClip *
-                        intraClipCoefficient) +
-                  damageCoefficient *
-                    shell.damage.armor *
-                    gun.reload.slice(0, -1).length
-                : ((damageCoefficient * shell.damage.armor) /
-                    (gun.reload[0] * reloadCoefficient +
-                      gun.intraClip * intraClipCoefficient)) *
-                    (60 -
-                      (gun.reload.slice(1).length - 1) *
-                        gun.intraClip *
-                        intraClipCoefficient) +
-                  damageCoefficient *
-                    shell.damage.armor *
-                    gun.reload.slice(1).length}
+              {stats.dpmEffective!}
             </InfoWithDelta>
             <Info
               indent
@@ -349,14 +172,17 @@ export function Characteristics() {
             />
           </>
         )}
+        {gun.type !== 'regular' && (
+          <InfoWithDelta name="Shells">{stats.shells}</InfoWithDelta>
+        )}
+
         {gun.type === 'autoReloader' ? (
           <>
-            <InfoWithDelta name="Shells">{gun.reload.length}</InfoWithDelta>
             <Info indent name="Most optimal">
-              {gun.reload.at(-1)! < gun.reload.at(-2)! ? gun.reload.length : 1}
+              {stats.mostOptimalShellIndex}
             </Info>
             <Info name="Shell reloads" unit="s" />
-            {gun.reload.map((reload, index) => (
+            {stats.shellReloads!.map((reload, index) => (
               <InfoWithDelta
                 key={index}
                 indent
@@ -364,7 +190,7 @@ export function Characteristics() {
                 decimals={2}
                 deltaType="lowerIsBetter"
               >
-                {reload * reloadCoefficient}
+                {reload}
               </InfoWithDelta>
             ))}
           </>
@@ -375,7 +201,7 @@ export function Characteristics() {
             unit="s"
             deltaType="lowerIsBetter"
           >
-            {gun.reload * reloadCoefficient}
+            {stats.shellReload!}
           </InfoWithDelta>
         )}
         {gun.type === 'autoLoader' ||
@@ -387,14 +213,14 @@ export function Characteristics() {
               unit="s"
               deltaType="lowerIsBetter"
             >
-              {gun.intraClip * intraClipCoefficient}
+              {stats.intraClip!}
             </InfoWithDelta>
           ))}
         <InfoWithDelta name="Caliber" decimals={0} unit="mm">
-          {shell.caliber}
+          {stats.caliber}
         </InfoWithDelta>
         <InfoWithDelta decimals={0} name="Penetration" unit="mm">
-          {resolveNearPenetration(shell.penetration) * penetrationCoefficient}
+          {stats.penetration}
         </InfoWithDelta>
         {typeof shell.penetration !== 'number' && (
           <>
@@ -446,18 +272,18 @@ export function Characteristics() {
           </>
         )}
         <InfoWithDelta name="Damage" unit="hp" decimals={0}>
-          {shell.damage.armor * damageCoefficient}
+          {stats.damage}
         </InfoWithDelta>
         <InfoWithDelta name="Module damage" unit="hp" decimals={0}>
-          {shell.damage.module * damageCoefficient}
+          {stats.moduleDamage}
         </InfoWithDelta>
         {isExplosive(shell.type) && (
           <InfoWithDelta name="Splash radius" unit="m" decimals={0}>
-            {shell.explosionRadius!}
+            {stats.explosionRadius!}
           </InfoWithDelta>
         )}
         <InfoWithDelta name="Shell velocity" unit="m/s" decimals={0}>
-          {shell.speed * shellVelocityCoefficient}
+          {stats.shellVelocity}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={2}
@@ -465,7 +291,7 @@ export function Characteristics() {
           unit="s"
           deltaType="lowerIsBetter"
         >
-          {gun.aimTime * aimTimeCoefficient}
+          {stats.aimTime}
         </InfoWithDelta>
         <Info name="Dispersion at 100m" />
         <InfoWithDelta
@@ -475,7 +301,7 @@ export function Characteristics() {
           unit="m"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.base * dispersionStillCoefficient}
+          {stats.dispersion}
         </InfoWithDelta>
         <InfoWithDelta
           prefix="+ "
@@ -484,7 +310,7 @@ export function Characteristics() {
           name="Moving"
           deltaType="lowerIsBetter"
         >
-          {track.dispersion.move * dispersionMovingCoefficient}
+          {stats.dispersionMoving}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={3}
@@ -493,7 +319,7 @@ export function Characteristics() {
           name="Hull traversing"
           deltaType="lowerIsBetter"
         >
-          {track.dispersion.traverse * dispersionHullTraverseCoefficient}
+          {stats.dispersionHullTraversing}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={3}
@@ -502,7 +328,7 @@ export function Characteristics() {
           name="Turret traversing"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.traverse * dispersionTurretTraverseCoefficient}
+          {stats.dispersionTurretTraversing}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={3}
@@ -511,7 +337,7 @@ export function Characteristics() {
           name="After shooting"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.shot * dispersionAfterShotCoefficient}
+          {stats.dispersionShooting}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={1}
@@ -521,46 +347,42 @@ export function Characteristics() {
           unit="scalar"
           deltaType="lowerIsBetter"
         >
-          {gun.dispersion.damaged * dispersionDamagedCoefficient}
+          {stats.dispersionGunDamaged}
         </InfoWithDelta>
         <Info name="Gun flexibility" unit="°" />
         <InfoWithDelta decimals={1} indent name="Depression">
-          {gunModelDefinition.pitch.max +
-            gunDefaultPitch +
-            (hasImprovedVerticalStabilizer ? 3 : 0)}
+          {stats.gunDepression}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="Elevation">
-          {-gunModelDefinition.pitch.min -
-            gunDefaultPitch +
-            (hasImprovedVerticalStabilizer ? 3 : 0)}
+          {stats.gunElevation}
         </InfoWithDelta>
         {gunModelDefinition.pitch.front && (
           <>
             <InfoWithDelta decimals={1} indent name="Frontal depression">
-              {gunModelDefinition.pitch.front.max}
+              {stats.gunFrontalDepression!}
             </InfoWithDelta>
             <InfoWithDelta decimals={1} indent name="Frontal elevation">
-              {-gunModelDefinition.pitch.front.min}
+              {stats.gunFrontalElevation!}
             </InfoWithDelta>
           </>
         )}
         {gunModelDefinition.pitch.back && (
           <>
             <InfoWithDelta decimals={1} indent name="Rear depression">
-              {gunModelDefinition.pitch.back.max}
+              {stats.gunRearDepression!}
             </InfoWithDelta>
             <InfoWithDelta decimals={1} indent name="Rear elevation">
-              {-gunModelDefinition.pitch.back.min}
+              {stats.gunRearElevation!}
             </InfoWithDelta>
           </>
         )}
         {turretModelDefinition.yaw && (
           <>
             <InfoWithDelta decimals={1} indent name="Azimuth left">
-              {-turretModelDefinition.yaw.min}
+              {stats.azimuthLeft!}
             </InfoWithDelta>
             <InfoWithDelta decimals={1} indent name="Azimuth right">
-              {turretModelDefinition.yaw.max}
+              {stats.azimuthRight!}
             </InfoWithDelta>
           </>
         )}
@@ -570,29 +392,23 @@ export function Characteristics() {
         <Heading size="5">Maneuverability</Heading>
         <Info name="Speed" unit="km/hr" />
         <InfoWithDelta decimals={0} indent name="Forwards">
-          {tank.speed.forwards + speedForwardsSum}
+          {stats.speedForwards}
         </InfoWithDelta>
         <InfoWithDelta decimals={0} indent name="Backwards">
-          {tank.speed.backwards + speedBackwardsSum}
+          {stats.speedBackwards}
         </InfoWithDelta>
         <InfoWithDelta decimals={0} name="Power" unit="hp">
-          {resolvedEnginePower}
+          {stats.enginePower}
         </InfoWithDelta>
         <Info name="Power to weight ratio" unit="hp/tn" />
         <InfoWithDelta decimals={1} indent name="On hard terrain">
-          {resolvedEnginePower /
-            weightTons /
-            (track.resistance.hard * resistanceCoefficient)}
+          {stats.powerToWeightRatioHardTerrain}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On medium terrain">
-          {resolvedEnginePower /
-            weightTons /
-            (track.resistance.medium * resistanceCoefficient)}
+          {stats.powerToWeightRatioMediumTerrain}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On soft terrain">
-          {resolvedEnginePower /
-            weightTons /
-            (track.resistance.soft * resistanceCoefficient)}
+          {stats.powerToWeightRatioSoftTerrain}
         </InfoWithDelta>
         <InfoWithDelta
           decimals={1}
@@ -600,71 +416,57 @@ export function Characteristics() {
           unit="tn"
           deltaType="lowerIsBetter"
         >
-          {weightTons}
+          {stats.weight}
         </InfoWithDelta>
         <InfoWithDelta name="Turret traverse speed" unit="°/s" decimals={0}>
-          {turret.traverseSpeed * turretTraverseCoefficient}
+          {stats.turretTraverseSpeed}
         </InfoWithDelta>
         <Info name="Effective traverse speed" unit="°/s" />
         <InfoWithDelta decimals={1} indent name="On hard terrain">
-          {(resolvedEnginePower / stockEngine.power) *
-            track.traverseSpeed *
-            hullTraverseCoefficient *
-            (track.resistance.hard /
-              (track.resistance.hard * resistanceCoefficient)) *
-            (stockWeight / weight)}
+          {stats.hullTraverseHardTerrain}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On medium terrain">
-          {(resolvedEnginePower / stockEngine.power) *
-            track.traverseSpeed *
-            hullTraverseCoefficient *
-            (track.resistance.hard /
-              (track.resistance.medium * resistanceCoefficient)) *
-            (stockWeight / weight)}
+          {stats.hullTraverseMediumTerrain}
         </InfoWithDelta>
         <InfoWithDelta decimals={1} indent name="On soft terrain">
-          {(resolvedEnginePower / stockEngine.power) *
-            track.traverseSpeed *
-            hullTraverseCoefficient *
-            (track.resistance.hard /
-              (track.resistance.soft * resistanceCoefficient)) *
-            (stockWeight / weight)}
+          {stats.hullTraverseSoftTerrain}
         </InfoWithDelta>
       </Flex>
 
       <Flex direction="column" gap="2">
         <Heading size="5">Survivability</Heading>
         <InfoWithDelta name="Health" unit="hp" decimals={0}>
-          {(tank.health + turret.health) * healthCoefficient}
+          {stats.health}
         </InfoWithDelta>
-        <InfoWithDelta name="Fire chance" unit="%" deltaType="lowerIsBetter">
-          {Math.round(engine.fireChance * fireChanceCoefficient * 100)}
+        <InfoWithDelta
+          name="Fire chance"
+          unit="%"
+          deltaType="lowerIsBetter"
+          decimals={0}
+        >
+          {stats.fireChance * 100}
         </InfoWithDelta>
         <InfoWithDelta name="View range" unit="m" decimals={0}>
-          {turret.viewRange * viewRangeCoefficient}
+          {stats.viewRange}
         </InfoWithDelta>
         <Info name="Camouflage" unit="%" />
         <InfoWithDelta indent name="Still" decimals={2}>
-          {(tank.camouflage.still + camouflageSumStill) * 100}
+          {stats.camouflageStill * 100}
         </InfoWithDelta>
         <InfoWithDelta indent name="Moving" decimals={2}>
-          {(tank.camouflage.moving + camouflageSumMoving) * 100}
+          {stats.camouflageMoving * 100}
         </InfoWithDelta>
         <InfoWithDelta indent name="Shooting still" decimals={2}>
-          {(tank.camouflage.still * gun.camouflageLoss + camouflageSumStill) *
-            100}
+          {stats.camouflageShootingStill * 100}
         </InfoWithDelta>
         <InfoWithDelta indent name="Shooting on move" decimals={2}>
-          {(tank.camouflage.moving * gun.camouflageLoss + camouflageSumMoving) *
-            100}
+          {stats.camouflageShootingMoving * 100}
         </InfoWithDelta>
         <InfoWithDelta indent name="Caught on fire" decimals={2}>
-          {(tank.camouflage.onFire * tank.camouflage.still +
-            camouflageSumStill) *
-            100}
+          {stats.camouflageCaughtOnFire * 100}
         </InfoWithDelta>
         <Info name="Size" unit="m">
-          {size[0].toFixed(2)} x {size[2].toFixed(2)} x {size[1].toFixed(2)}
+          {stats.tankSize.map((component) => component.toFixed(2)).join(' x ')}
         </Info>
       </Flex>
 

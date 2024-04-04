@@ -89,8 +89,17 @@ export function SpacedArmorSceneComponent({
           async onClick(event) {
             event.stopPropagation();
 
-            const hasCalibratedShells = await hasEquipment(103, true);
-            const hasEnhancedArmor = await hasEquipment(110);
+            const duel = useDuel.getState();
+            const hasCalibratedShells = await hasEquipment(
+              103,
+              duel.antagonist!.tank.equipment,
+              duel.antagonist!.equipment,
+            );
+            const hasEnhancedArmor = await hasEquipment(
+              110,
+              duel.protagonist!.tank.equipment,
+              duel.protagonist!.equipment,
+            );
             const thicknessCoefficient = hasEnhancedArmor ? 1.04 : 1;
             const shell = useDuel.getState().antagonist!.shell;
             const explosive = isExplosive(shell.type);

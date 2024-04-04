@@ -162,7 +162,12 @@ export const TankModel = memo(() => {
             }
           }
           async function handlePointerMove(event: PointerEvent) {
-            const hasImprovedVerticalStabilizer = await hasEquipment(122);
+            const duel = useDuel.getState();
+            const hasImprovedVerticalStabilizer = await hasEquipment(
+              122,
+              duel.protagonist!.tank.equipment,
+              duel.protagonist!.equipment,
+            );
             [pitch, yaw] = applyPitchYawLimits(
               pitch,
               yaw + event.movementX * (Math.PI / canvas.width),
@@ -223,7 +228,12 @@ export const TankModel = memo(() => {
               window.addEventListener('pointerup', handlePointerUp);
             }
             async function handlePointerMove(event: PointerEvent) {
-              const hasImprovedVerticalStabilizer = await hasEquipment(122);
+              const duel = useDuel.getState();
+              const hasImprovedVerticalStabilizer = await hasEquipment(
+                122,
+                duel.protagonist!.tank.equipment,
+                duel.protagonist!.equipment,
+              );
               [pitch, yaw] = applyPitchYawLimits(
                 pitch - event.movementY * (Math.PI / canvas.height),
                 yaw + event.movementX * (Math.PI / canvas.width),

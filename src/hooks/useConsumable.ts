@@ -1,6 +1,3 @@
-import { useDuel } from '../stores/duel';
-
-export function useConsumable(id: number) {
-  const consumables = useDuel((state) => state.protagonist!.consumables);
+export function useConsumable(id: number, consumables: number[]) {
   return consumables.includes(id);
 }

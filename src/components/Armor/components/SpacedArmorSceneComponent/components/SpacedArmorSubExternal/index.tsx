@@ -50,17 +50,28 @@ export function SpacedArmorSubExternal({
     async function handleProtagonistEquipmentChange(
       equipment: EquipmentMatrix,
     ) {
-      const hasEnhancedArmor = await hasEquipment(110, false, equipment);
+      const duel = useDuel.getState();
+      const hasEnhancedArmor = await hasEquipment(
+        110,
+        duel.protagonist!.tank.equipment,
+        equipment,
+      );
       material.uniforms.thickness.value = hasEnhancedArmor
         ? thickness * 1.04
         : thickness;
     }
     async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
-      const shell = useDuel.getState().antagonist!.shell;
-      const penetration = resolveNearPenetration(shell.penetration);
-      const hasCalibratedShells = await hasEquipment(103, true, equipment);
+      const duel = useDuel.getState();
+      const penetration = resolveNearPenetration(
+        duel.antagonist!.shell.penetration,
+      );
+      const hasCalibratedShells = await hasEquipment(
+        103,
+        duel.antagonist!.tank.equipment,
+        equipment,
+      );
       material.uniforms.penetration.value = hasCalibratedShells
-        ? penetration * (isExplosive(shell.type) ? 1.1 : 1.05)
+        ? penetration * (isExplosive(duel.antagonist!.shell.type) ? 1.1 : 1.05)
         : penetration;
     }
 
