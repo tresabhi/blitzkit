@@ -48,6 +48,8 @@ export default function Page() {
     [searchParams],
   );
 
+  const hasNonRegularGun = tanks.some(({ gun }) => gun.type !== 'regular');
+
   useEffect(() => {
     const tanksParam = searchParams.get('tanks');
 
@@ -81,7 +83,7 @@ export default function Page() {
         ) => number | undefined);
     display: (
       member: Awaited<ReturnType<typeof tankCharacteristics>>,
-    ) => number | string;
+    ) => number | string | undefined;
     deltaType?: 'higherIsBetter' | 'lowerIsBetter';
   }) {
     const values = stats.map((stat) =>
@@ -93,7 +95,6 @@ export default function Page() {
         <Table.RowHeaderCell>
           <Flex
             align="center"
-            justify="center"
             style={{
               width: '100%',
               height: '100%',
@@ -231,6 +232,23 @@ export default function Page() {
                     .shellReloads!.map((reload) => reload.toFixed(2))
                     .join(', ')
                 }
+              />
+              {hasNonRegularGun && (
+                <Row
+                  name="Intra-clip"
+                  value={(stat) => stat.intraClip}
+                  display={(stats) => stats.intraClip?.toFixed(2)}
+                />
+              )}
+              <Row
+                name="Caliber"
+                value="caliber"
+                display={(stats) => stats.caliber.toFixed(0)}
+              />
+              <Row
+                name="Penetration"
+                value="penetration"
+                display={(stats) => stats.penetration.toFixed(0)}
               />
             </Table.Body>
           </Table.Root>
