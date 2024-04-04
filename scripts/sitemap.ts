@@ -1,4 +1,3 @@
-import fs from 'fs';
 import { tankDefinitions } from '../src/core/blitzkrieg/tankDefinitions';
 
 console.log('Building sitemap...');
@@ -9,6 +8,6 @@ const sitemap = values
   .map((tank) => `https://blitz-krieg.vercel.app/tools/tankopedia/${tank.id}`)
   .join('\n');
 
-fs.writeFileSync('public/sitemap.txt', sitemap);
+require('fs').writeFileSync('public/sitemap.txt', sitemap);
 
 console.log(`Built sitemap for ${values.length} tanks`);
