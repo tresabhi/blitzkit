@@ -77,7 +77,13 @@ export default function Page() {
             <Table.Header>
               <Table.Row>
                 <Table.ColumnHeaderCell width="0">
-                  Statistics
+                  <Flex
+                    align="center"
+                    justify="center"
+                    style={{ width: '100%', height: '100%' }}
+                  >
+                    Statistics
+                  </Flex>
                 </Table.ColumnHeaderCell>
                 {tanks.map((id) => {
                   const tank = awaitedTankDefinitions[id];
