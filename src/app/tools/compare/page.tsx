@@ -189,15 +189,17 @@ export default function Page() {
 
   function Title({ children }: { children: string }) {
     return (
-      <Table.Row>
-        <Table.RowHeaderCell>
-          <Heading>{children}</Heading>
-        </Table.RowHeaderCell>
+      <Table.Header>
+        <Table.Row>
+          <Table.ColumnHeaderCell>
+            <Heading size="4">{children}</Heading>
+          </Table.ColumnHeaderCell>
 
-        {members.map(() => (
-          <Table.Cell />
-        ))}
-      </Table.Row>
+          {members.map(() => (
+            <Table.ColumnHeaderCell />
+          ))}
+        </Table.Row>
+      </Table.Header>
     );
   }
 
@@ -260,22 +262,7 @@ export default function Page() {
               <Table.Row>
                 <Table.ColumnHeaderCell />
 
-                {members.map(({ tank }, index) => (
-                  <TankControl
-                    index={index}
-                    key={tank.id}
-                    tank={tank}
-                    members={members}
-                  />
-                ))}
-              </Table.Row>
-            </Table.Header>
-
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeaderCell />
-
-                {members.map(({ tank }) => {
+                {members.map(({ tank }, index) => {
                   return (
                     <Table.ColumnHeaderCell width="0" key={tank.id}>
                       <Flex
@@ -285,6 +272,12 @@ export default function Page() {
                         gap="2"
                         style={{ height: '100%' }}
                       >
+                        <TankControl
+                          index={index}
+                          key={tank.id}
+                          tank={tank}
+                          members={members}
+                        />
                         <img
                           src={tankIcon(tank.id)}
                           width={64}
@@ -301,8 +294,8 @@ export default function Page() {
               </Table.Row>
             </Table.Header>
 
+            <Title>Fire</Title>
             <Table.Body>
-              <Title>Fire</Title>
               <Row name="DPM" value="dpm" decimals={0} />
               <Row
                 name="Reload"
@@ -376,8 +369,10 @@ export default function Page() {
               />
               <Row name="Gun depression" value="gunDepression" decimals={1} />
               <Row name="Gun elevation" value="gunElevation" decimals={1} />
+            </Table.Body>
 
-              <Title>Maneuverability</Title>
+            <Title>Maneuverability</Title>
+            <Table.Body>
               <Row name="Speed forwards" value="speedForwards" decimals={0} />
               <Row name="Speed backwards" value="speedBackwards" decimals={0} />
               <Row name="Engine power" value="enginePower" decimals={0} />
@@ -396,8 +391,10 @@ export default function Page() {
                 value="powerToWeightRatioSoftTerrain"
                 decimals={1}
               />
+            </Table.Body>
 
-              <Title>Survivability</Title>
+            <Title>Survivability</Title>
+            <Table.Body>
               <Row name="Health" value="health" decimals={0} />
               <Row
                 name="Fire chance"
