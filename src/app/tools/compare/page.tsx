@@ -15,14 +15,12 @@ import PageWrapper from '../../../components/PageWrapper';
 import { equipmentDefinitions } from '../../../core/blitzkrieg/equipmentDefinitions';
 import { modelDefinitions } from '../../../core/blitzkrieg/modelDefinitions';
 import { provisionDefinitions } from '../../../core/blitzkrieg/provisionDefinitions';
+import { skillDefinitions } from '../../../core/blitzkrieg/skillDefinitions';
 import { tankCharacteristics } from '../../../core/blitzkrieg/tankCharacteristics';
 import { tankDefinitions } from '../../../core/blitzkrieg/tankDefinitions';
 import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
 import { tankToCompareMember } from '../../../core/blitzkrieg/tankToCompareMember';
-import mutateCompare, {
-  CompareMember,
-  useCompare,
-} from '../../../stores/compare';
+import mutateCompare, { useCompare } from '../../../stores/compare';
 import { TankSearch } from '../tankopedia/components/TankSearch';
 import { TankControl } from './components/TankControl';
 
@@ -30,6 +28,7 @@ export default function Page() {
   const pathname = usePathname();
   const router = useRouter();
   const awaitedTankDefinitions = use(tankDefinitions);
+  const awaitedSkillDefinitions = use(skillDefinitions);
   const searchParams = useSearchParams();
   const members = useCompare((state) => state.members);
   const [addTankDialogOpen, setAddTankDialogOpen] = useState(false);
@@ -87,11 +86,11 @@ export default function Page() {
         draft.members = tanksParam
           .split(',')
           .map(Number)
-          .map(
-            (id) =>
-              tankToCompareMember(
-                awaitedTankDefinitions[id],
-              ) satisfies CompareMember,
+          .map((id) =>
+            tankToCompareMember(
+              awaitedTankDefinitions[id],
+              awaitedSkillDefinitions,
+            ),
           );
       });
     }
@@ -147,7 +146,10 @@ export default function Page() {
                   textAlign: 'center',
                 }}
                 color={
-                  index === 0 || value === undefined || values[0] === undefined
+                  index === 0 ||
+                  value === undefined ||
+                  values[0] === undefined ||
+                  value > values[0]
                     ? undefined
                     : (
                           deltaType === 'higherIsBetter'
@@ -205,7 +207,9 @@ export default function Page() {
                   compact
                   onSelect={(tank) => {
                     mutateCompare((draft) => {
-                      draft.members.push(tankToCompareMember(tank));
+                      draft.members.push(
+                        tankToCompareMember(tank, awaitedSkillDefinitions),
+                      );
                     });
 
                     setAddTankDialogOpen(false);
@@ -309,17 +313,41 @@ export default function Page() {
                 value="dispersion"
                 display={(stats) => stats.dispersion.toFixed(3)}
               />
-              <Row name="Dispersion moving" value="dispersionMoving" />
+              <Row
+                name="Dispersion moving"
+                value="dispersionMoving"
+                display={(stats) => stats.dispersionMoving.toFixed(3)}
+              />
               <Row
                 name="Dispersion hull traversing"
                 value="dispersionHullTraversing"
+                display={(stats) => stats.dispersionHullTraversing.toFixed(3)}
               />
               <Row
                 name="Dispersion turret traversing"
                 value="dispersionTurretTraversing"
+                display={(stats) => stats.dispersionTurretTraversing.toFixed(3)}
               />
-              <Row name="Dispersion shooting" value="dispersionShooting" />
-              <Row name="Dispersion gun damaged" value="dispersionGunDamaged" />
+              <Row
+                name="Dispersion shooting"
+                value="dispersionShooting"
+                display={(stats) => stats.dispersionShooting.toFixed(3)}
+              />
+              <Row
+                name="Dispersion gun damaged"
+                value="dispersionGunDamaged"
+                display={(stats) => stats.dispersionGunDamaged.toFixed(3)}
+              />
+              <Row
+                name="Gun depression"
+                value="gunDepression"
+                display={(stats) => stats.gunDepression.toFixed(1)}
+              />
+              <Row
+                name="Gun elevation"
+                value="gunElevation"
+                display={(stats) => stats.gunElevation.toFixed(1)}
+              />
             </Table.Body>
           </Table.Root>
         </Flex>
