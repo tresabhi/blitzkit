@@ -476,8 +476,14 @@ export function Characteristics() {
         <InfoWithDelta indent name="Caught on fire" decimals={0}>
           {stats.camouflageCaughtOnFire * 100}
         </InfoWithDelta>
-        <Info name="Size" unit="m">
-          {stats.tankSize.map((component) => component.toFixed(1)).join(' x ')}
+        <Info name="Width" unit="m" decimals={0}>
+          {stats.tankSize[1]}
+        </Info>
+        <Info name="Height" unit="m" decimals={0}>
+          {stats.tankSize[0]}
+        </Info>
+        <Info name="Length" unit="m" decimals={0}>
+          {stats.tankSize[2]}
         </Info>
       </Flex>
 

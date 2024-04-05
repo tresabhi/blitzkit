@@ -423,13 +423,29 @@ export default function Page() {
                 }
               />
               <Row
-                name="Size"
+                name="Width"
+                value={(stats) => stats.tankSize[1]}
+                deltaType="lowerIsBetter"
+                display={(stats) => stats.tankSize[1].toFixed(1)}
+              />
+              <Row
+                name="Height"
+                value={(stats) => stats.tankSize[0]}
+                deltaType="lowerIsBetter"
+                display={(stats) => stats.tankSize[0].toFixed(1)}
+              />
+              <Row
+                name="Length"
+                value={(stats) => stats.tankSize[2]}
+                deltaType="lowerIsBetter"
+                display={(stats) => stats.tankSize[2].toFixed(1)}
+              />
+              <Row
+                name="Volume"
                 value={(stats) => stats.tankSize.reduce((a, b) => a * b, 1)}
                 deltaType="lowerIsBetter"
                 display={(stats) =>
-                  stats.tankSize
-                    .map((tankSize) => tankSize.toFixed(1))
-                    .join(' x ')
+                  stats.tankSize.reduce((a, b) => a * b, 1).toFixed(1)
                 }
               />
             </Table.Body>
