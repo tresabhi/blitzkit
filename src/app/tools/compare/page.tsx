@@ -278,7 +278,11 @@ export default function Page() {
               <Row
                 name="Reload"
                 deltaType="lowerIsBetter"
-                value={(stats) => stats.shellReload}
+                value={(stats) =>
+                  stats.shellReload ??
+                  stats.shellReloads!.reduce((a, b) => a + b, 0) /
+                    stats.shellReloads!.length
+                }
                 display={(stats) =>
                   stats.shellReload?.toFixed(2) ??
                   stats
