@@ -138,7 +138,7 @@ export default function Page() {
         {values.map((value, index) => {
           const deltaPercentage = (value ?? 1) / (values[0] ?? 1) - 1;
           const normalizedDeltaPercentage = Math.round(
-            Math.min(100, Math.abs(deltaPercentage) * 100 + 25),
+            Math.min(100, Math.abs(deltaPercentage) * 2 * 100 + 25),
           );
 
           return (
