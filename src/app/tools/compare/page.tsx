@@ -424,7 +424,7 @@ export default function Page() {
               />
               <Row
                 name="Size"
-                value={(stats) => Math.max(...stats.tankSize)}
+                value={(stats) => stats.tankSize.reduce((a, b) => a * b, 1)}
                 deltaType="lowerIsBetter"
                 display={(stats) =>
                   stats.tankSize
