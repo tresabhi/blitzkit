@@ -65,7 +65,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       >
         <Theme
           appearance="dark"
-          panelBackground="translucent"
+          panelBackground="solid"
           radius="full"
           suppressHydrationWarning
           suppressContentEditableWarning
