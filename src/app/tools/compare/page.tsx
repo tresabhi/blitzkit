@@ -12,6 +12,7 @@ import {
 } from '@radix-ui/themes';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
+import { EquipmentMatrixCompact } from '../../../components/EquipmentMatrixCompact';
 import PageWrapper from '../../../components/PageWrapper';
 import { equipmentDefinitions } from '../../../core/blitzkrieg/equipmentDefinitions';
 import { modelDefinitions } from '../../../core/blitzkrieg/modelDefinitions';
@@ -230,8 +231,8 @@ export default function Page() {
             <Heading size="4">{children}</Heading>
           </Table.ColumnHeaderCell>
 
-          {members.map(() => (
-            <Table.ColumnHeaderCell />
+          {members.map((_, index) => (
+            <Table.ColumnHeaderCell key={index} />
           ))}
         </Table.Row>
       </Table.Header>
@@ -337,6 +338,29 @@ export default function Page() {
                 })}
               </Table.Row>
             </Table.Header>
+
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell />
+
+                {members.map(({ equipmentMatrix }) => (
+                  <Table.Cell>
+                    <Flex
+                      align="center"
+                      justify="between"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                      }}
+                    >
+                      <EquipmentMatrixCompact
+                        equipmentMatrix={equipmentMatrix}
+                      />
+                    </Flex>
+                  </Table.Cell>
+                ))}
+              </Table.Row>
+            </Table.Body>
 
             <Title>Fire</Title>
             <Table.Body>
