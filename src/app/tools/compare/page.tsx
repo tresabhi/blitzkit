@@ -6,13 +6,15 @@ import {
   Dialog,
   Flex,
   Heading,
+  Popover,
   SegmentedControl,
   Table,
   Text,
 } from '@radix-ui/themes';
+import { times } from 'lodash';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
-import { EquipmentMatrixCompact } from '../../../components/EquipmentMatrixCompact';
+import { EquipmentButton } from '../../../components/ModuleButtons/EquipmentButton';
 import PageWrapper from '../../../components/PageWrapper';
 import { equipmentDefinitions } from '../../../core/blitzkrieg/equipmentDefinitions';
 import { modelDefinitions } from '../../../core/blitzkrieg/modelDefinitions';
@@ -343,22 +345,147 @@ export default function Page() {
               <Table.Row>
                 <Table.Cell />
 
-                {members.map(({ equipmentMatrix }) => (
-                  <Table.Cell>
-                    <Flex
-                      align="center"
-                      justify="between"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                      }}
-                    >
-                      <EquipmentMatrixCompact
-                        equipmentMatrix={equipmentMatrix}
-                      />
-                    </Flex>
-                  </Table.Cell>
-                ))}
+                {members.map(({ equipmentMatrix, tank }) => {
+                  const equipmentRows =
+                    awaitedEquipmentDefinitions.presets[tank.equipment];
+
+                  return (
+                    <Table.Cell>
+                      <Flex
+                        align="center"
+                        justify="between"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      >
+                        <Popover.Root>
+                          <Popover.Trigger>
+                            <Button variant="ghost" radius="large">
+                              <Flex gap="1" direction="column">
+                                {times(3, (y) => (
+                                  <Flex
+                                    style={{
+                                      gap: 6,
+                                    }}
+                                  >
+                                    {times(3, (x) => {
+                                      const equipment = equipmentMatrix[y][x];
+
+                                      return (
+                                        <Flex
+                                          style={{
+                                            gap: 2,
+                                          }}
+                                        >
+                                          <div
+                                            style={{
+                                              width: 4,
+                                              height: 8,
+                                              backgroundColor:
+                                                equipment === -1
+                                                  ? theme.colors
+                                                      .textLowContrast_green
+                                                  : theme.colors
+                                                      .textLowContrast,
+                                              borderRadius: 2,
+                                            }}
+                                          />
+                                          <div
+                                            style={{
+                                              width: 4,
+                                              height: 8,
+                                              backgroundColor:
+                                                equipment === 1
+                                                  ? theme.colors
+                                                      .textLowContrast_green
+                                                  : theme.colors
+                                                      .textLowContrast,
+                                              borderRadius: 2,
+                                            }}
+                                          />
+                                        </Flex>
+                                      );
+                                    })}
+                                  </Flex>
+                                ))}
+                              </Flex>
+                            </Button>
+                          </Popover.Trigger>
+
+                          <Popover.Content>
+                            <Flex direction="column" gap="2">
+                              {equipmentRows.map((equipmentRow, rowIndex) => (
+                                <Flex gap="2" key={rowIndex}>
+                                  {equipmentRow.map(
+                                    (equipment, columnIndex) => (
+                                      <Flex key={columnIndex}>
+                                        <EquipmentButton
+                                          equipment={equipment[0]}
+                                          first
+                                          rowChild
+                                          selected={
+                                            equipmentMatrix[rowIndex][
+                                              columnIndex
+                                            ] === -1
+                                          }
+                                          onClick={() => {
+                                            // mutateDuel((draft) => {
+                                            //   if (
+                                            //     equipmentMatrix[rowIndex][
+                                            //       columnIndex
+                                            //     ] === -1
+                                            //   ) {
+                                            //     draft.protagonist!.equipmentMatrix[
+                                            //       rowIndex
+                                            //     ][columnIndex] = 0;
+                                            //   } else {
+                                            //     draft.protagonist!.equipmentMatrix[
+                                            //       rowIndex
+                                            //     ][columnIndex] = -1;
+                                            //   }
+                                            // });
+                                          }}
+                                        />
+                                        <EquipmentButton
+                                          equipment={equipment[1]}
+                                          last
+                                          rowChild
+                                          selected={
+                                            equipmentMatrix[rowIndex][
+                                              columnIndex
+                                            ] === 1
+                                          }
+                                          onClick={() => {
+                                            // mutateDuel((draft) => {
+                                            //   if (
+                                            //     equipmentMatrix[rowIndex][
+                                            //       columnIndex
+                                            //     ] === 1
+                                            //   ) {
+                                            //     draft.protagonist!.equipmentMatrix[
+                                            //       rowIndex
+                                            //     ][columnIndex] = 0;
+                                            //   } else {
+                                            //     draft.protagonist!.equipmentMatrix[
+                                            //       rowIndex
+                                            //     ][columnIndex] = 1;
+                                            //   }
+                                            // });
+                                          }}
+                                        />
+                                      </Flex>
+                                    ),
+                                  )}
+                                </Flex>
+                              ))}
+                            </Flex>
+                          </Popover.Content>
+                        </Popover.Root>
+                      </Flex>
+                    </Table.Cell>
+                  );
+                })}
               </Table.Row>
             </Table.Body>
 
