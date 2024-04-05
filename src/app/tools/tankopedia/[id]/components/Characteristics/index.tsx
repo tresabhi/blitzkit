@@ -15,6 +15,7 @@ import { ShellButton } from '../../../../../../components/ModuleButtons/ShellBut
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { coefficient } from '../../../../../../core/blitzkrieg/coefficient';
+import { equipmentDefinitions } from '../../../../../../core/blitzkrieg/equipmentDefinitions';
 import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
 import { provisionDefinitions } from '../../../../../../core/blitzkrieg/provisionDefinitions';
 import { tankCharacteristics } from '../../../../../../core/blitzkrieg/tankCharacteristics';
@@ -31,6 +32,7 @@ import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
 
 export function Characteristics() {
+  const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const awaitedModelDefinitions = use(modelDefinitions);
   const awaitedProvisionDefinitions = use(provisionDefinitions);
   const crewSkills = useTankopediaTemporary((state) => state.skills);
@@ -66,8 +68,8 @@ export function Characteristics() {
   const tankModelDefinition = awaitedModelDefinitions[tank.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];
-  const stats = use(
-    tankCharacteristics({
+  const stats = tankCharacteristics(
+    {
       tank,
       camouflage,
       consumables,
@@ -84,7 +86,12 @@ export function Characteristics() {
       stockGun,
       stockTrack,
       stockTurret,
-    }),
+    },
+    {
+      equipmentDefinitions: awaitedEquipmentDefinitions,
+      modelDefinitions: awaitedModelDefinitions,
+      provisionDefinitions: awaitedProvisionDefinitions,
+    },
   );
 
   const hasSupercharger = useEquipment(107);
