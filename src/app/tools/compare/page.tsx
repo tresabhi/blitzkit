@@ -137,7 +137,8 @@ export default function Page() {
 
         {values.map((value, index) => {
           const deltaPercentage = (value ?? 1) / (values[0] ?? 1) - 1;
-          const significantChange = Math.abs(deltaPercentage) >= 0.15;
+          const normalizedDeltaPercentage =
+            Math.abs(deltaPercentage) * 100 + 25;
 
           return (
             <Table.Cell
@@ -154,12 +155,8 @@ export default function Page() {
                             ? value > values[0]
                             : value < values[0]
                         )
-                      ? significantChange
-                        ? theme.colors.componentInteractiveActive_green
-                        : theme.colors.componentInteractive_green
-                      : significantChange
-                        ? theme.colors.componentInteractiveActive_red
-                        : theme.colors.componentInteractive_red,
+                      ? `color-mix(in srgb, ${theme.colors.componentInteractiveActive_green} ${normalizedDeltaPercentage}%, ${theme.colors.componentInteractiveActive_green}00)`
+                      : `color-mix(in srgb, ${theme.colors.componentInteractiveActive_red} ${normalizedDeltaPercentage}%, ${theme.colors.componentInteractiveActive_red}00)`,
               }}
             >
               <Flex
