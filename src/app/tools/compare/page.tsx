@@ -179,11 +179,7 @@ export default function Page() {
                   height: '100%',
                 }}
               >
-                <Text
-                  style={{
-                    textAlign: 'center',
-                  }}
-                >
+                <Text style={{ textAlign: 'center' }} wrap="nowrap">
                   {display
                     ? display(stats[index])
                     : decimals === undefined
@@ -203,6 +199,16 @@ export default function Page() {
                               ? delta
                               : delta.toFixed(decimals)
                         }`}
+                        )
+                      </Text>
+                    )}
+
+                    {deltaMode === 'percentage' && (
+                      <Text color="gray">
+                        (
+                        {`${deltaPercentage > 0 ? '+' : ''}${Math.round(
+                          deltaPercentage * 100,
+                        )}%`}
                         )
                       </Text>
                     )}
@@ -416,17 +422,17 @@ export default function Page() {
               <Row name="Speed backwards" value="speedBackwards" decimals={0} />
               <Row name="Engine power" value="enginePower" decimals={0} />
               <Row
-                name="Power to weight ratio on hard terrain"
+                name="Power to weight ratio hard terrain"
                 value="powerToWeightRatioHardTerrain"
                 decimals={1}
               />
               <Row
-                name="Power to weight ratio on medium terrain"
+                name="Power to weight ratio medium terrain"
                 value="powerToWeightRatioMediumTerrain"
                 decimals={1}
               />
               <Row
-                name="Power to weight ratio on soft terrain"
+                name="Power to weight ratio soft terrain"
                 value="powerToWeightRatioSoftTerrain"
                 decimals={1}
               />
