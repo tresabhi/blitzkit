@@ -1,7 +1,7 @@
 import {
   CaretLeftIcon,
   CaretRightIcon,
-  ShuffleIcon,
+  LoopIcon,
   TrashIcon,
 } from '@radix-ui/react-icons';
 import { Dialog, Flex, IconButton } from '@radix-ui/themes';
@@ -55,7 +55,7 @@ export function TankControl({ index, tank, members }: TankControlProps) {
       >
         <Dialog.Trigger>
           <IconButton variant="ghost">
-            <ShuffleIcon />
+            <LoopIcon />
           </IconButton>
         </Dialog.Trigger>
 
