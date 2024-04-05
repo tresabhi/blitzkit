@@ -5,6 +5,7 @@ import {
   Button,
   Dialog,
   Flex,
+  Heading,
   SegmentedControl,
   Table,
   Text,
@@ -24,8 +25,6 @@ import { theme } from '../../../stitches.config';
 import mutateCompare, { useCompare } from '../../../stores/compare';
 import { TankSearch } from '../tankopedia/components/TankSearch';
 import { TankControl } from './components/TankControl';
-
-const SIGNIFICANT_CHANGE_THRESHOLD = 0.15;
 
 export default function Page() {
   const pathname = usePathname();
@@ -138,8 +137,7 @@ export default function Page() {
 
         {values.map((value, index) => {
           const deltaPercentage = (value ?? 1) / (values[0] ?? 1) - 1;
-          const significantChange =
-            Math.abs(deltaPercentage) >= SIGNIFICANT_CHANGE_THRESHOLD;
+          const significantChange = Math.abs(deltaPercentage) >= 0.15;
 
           return (
             <Table.Cell
@@ -187,6 +185,20 @@ export default function Page() {
             </Table.Cell>
           );
         })}
+      </Table.Row>
+    );
+  }
+
+  function Title({ children }: { children: string }) {
+    return (
+      <Table.Row>
+        <Table.RowHeaderCell>
+          <Heading>{children}</Heading>
+        </Table.RowHeaderCell>
+
+        {members.map(() => (
+          <Table.Cell />
+        ))}
       </Table.Row>
     );
   }
@@ -292,6 +304,7 @@ export default function Page() {
             </Table.Header>
 
             <Table.Body>
+              <Title>Fire</Title>
               <Row name="DPM" value="dpm" decimals={0} />
               <Row
                 name="Reload"
@@ -365,6 +378,8 @@ export default function Page() {
               />
               <Row name="Gun depression" value="gunDepression" decimals={1} />
               <Row name="Gun elevation" value="gunElevation" decimals={1} />
+
+              <Title>Maneuverability</Title>
               <Row name="Speed forwards" value="speedForwards" decimals={0} />
               <Row name="Speed backwards" value="speedBackwards" decimals={0} />
               <Row name="Engine power" value="enginePower" decimals={0} />
@@ -383,6 +398,8 @@ export default function Page() {
                 value="powerToWeightRatioSoftTerrain"
                 decimals={1}
               />
+
+              <Title>Survivability</Title>
               <Row name="Health" value="health" decimals={0} />
               <Row
                 name="Fire chance"
