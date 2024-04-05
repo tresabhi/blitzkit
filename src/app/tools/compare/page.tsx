@@ -22,7 +22,13 @@ import { tankDefinitions } from '../../../core/blitzkrieg/tankDefinitions';
 import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
 import { tankToCompareMember } from '../../../core/blitzkrieg/tankToCompareMember';
 import { theme } from '../../../stitches.config';
-import mutateCompare, { useCompare } from '../../../stores/compare';
+import {
+  DeltaMode,
+  mutateComparePersistent,
+  mutateCompareTemporary,
+  useComparePersistent,
+  useCompareTemporary,
+} from '../../../stores/compare';
 import { TankSearch } from '../tankopedia/components/TankSearch';
 import { TankControl } from './components/TankControl';
 
@@ -32,11 +38,12 @@ export default function Page() {
   const awaitedTankDefinitions = use(tankDefinitions);
   const awaitedSkillDefinitions = use(skillDefinitions);
   const searchParams = useSearchParams();
-  const members = useCompare((state) => state.members);
+  const members = useCompareTemporary((state) => state.members);
   const [addTankDialogOpen, setAddTankDialogOpen] = useState(false);
   const awaitedModelDefinitions = use(modelDefinitions);
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const awaitedProvisionDefinitions = use(provisionDefinitions);
+  const deltaMode = useComparePersistent((state) => state.deltaMode);
   const stats = useMemo(
     () =>
       members.map((item) =>
@@ -84,7 +91,7 @@ export default function Page() {
     const tanksParam = searchParams.get('tanks');
 
     if (tanksParam) {
-      mutateCompare((draft) => {
+      mutateCompareTemporary((draft) => {
         draft.members = tanksParam
           .split(',')
           .map(Number)
@@ -104,6 +111,7 @@ export default function Page() {
     display,
     deltaType = 'higherIsBetter',
     decimals,
+    deltaNominalDisplay,
   }: {
     name: string;
     value:
@@ -116,6 +124,7 @@ export default function Page() {
     ) => number | string | undefined;
     deltaType?: 'higherIsBetter' | 'lowerIsBetter';
     decimals?: number;
+    deltaNominalDisplay?: (delta: number) => string | number;
   }) {
     const values = stats.map((stat) =>
       typeof value === 'function' ? value(stat) : (stat[value] as number),
@@ -136,6 +145,7 @@ export default function Page() {
         </Table.RowHeaderCell>
 
         {values.map((value, index) => {
+          const delta = (value ?? 0) - (values[0] ?? 0);
           const deltaPercentage = (value ?? 1) / (values[0] ?? 1) - 1;
           const normalizedDeltaPercentage = Math.round(
             Math.min(100, Math.abs(deltaPercentage) * 2 * 100 + 25),
@@ -163,6 +173,7 @@ export default function Page() {
               <Flex
                 align="center"
                 justify="center"
+                gap="2"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -179,6 +190,24 @@ export default function Page() {
                       ? value
                       : value?.toFixed(decimals)}
                 </Text>
+
+                {delta !== 0 && (
+                  <>
+                    {deltaMode === 'nominal' && (
+                      <Text color="gray">
+                        (
+                        {`${delta > 0 ? '+' : ''}${
+                          deltaNominalDisplay
+                            ? deltaNominalDisplay(delta)
+                            : decimals === undefined
+                              ? delta
+                              : delta.toFixed(decimals)
+                        }`}
+                        )
+                      </Text>
+                    )}
+                  </>
+                )}
               </Flex>
             </Table.Cell>
           );
@@ -208,12 +237,21 @@ export default function Page() {
       <Flex justify="center" gap="6" align="center">
         <Flex justify="center" gap="2" align="center">
           Delta:{' '}
-          <SegmentedControl.Root defaultValue="none">
-            <SegmentedControl.Item value="none">None</SegmentedControl.Item>
-            <SegmentedControl.Item value="percentage">
+          <SegmentedControl.Root
+            value={deltaMode}
+            onValueChange={(value) => {
+              mutateComparePersistent((draft) => {
+                draft.deltaMode = value as DeltaMode;
+              });
+            }}
+          >
+            <SegmentedControl.Item value={'none' satisfies DeltaMode}>
+              None
+            </SegmentedControl.Item>
+            <SegmentedControl.Item value={'percentage' satisfies DeltaMode}>
               Percentage
             </SegmentedControl.Item>
-            <SegmentedControl.Item value="nominal">
+            <SegmentedControl.Item value={'nominal' satisfies DeltaMode}>
               Nominal
             </SegmentedControl.Item>
           </SegmentedControl.Root>
@@ -240,7 +278,7 @@ export default function Page() {
                 <TankSearch
                   compact
                   onSelect={(tank) => {
-                    mutateCompare((draft) => {
+                    mutateCompareTemporary((draft) => {
                       draft.members.push(
                         tankToCompareMember(tank, awaitedSkillDefinitions),
                       );
@@ -311,6 +349,7 @@ export default function Page() {
                     .shellReloads!.map((reload) => reload.toFixed(2))
                     .join(', ')
                 }
+                deltaNominalDisplay={(delta) => delta.toFixed(2)}
               />
               {hasNonRegularGun && (
                 <Row
@@ -401,17 +440,20 @@ export default function Page() {
                 value="fireChance"
                 deltaType="lowerIsBetter"
                 display={(stats) => (stats.fireChance * 100).toFixed(0)}
+                deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
               />
               <Row name="View range" value="viewRange" decimals={0} />
               <Row
                 name="Camouflage still"
                 value="camouflageStill"
                 display={(stats) => (stats.camouflageStill * 100).toFixed(0)}
+                deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
               />
               <Row
                 name="Camouflage moving"
                 value="camouflageMoving"
                 display={(stats) => (stats.camouflageMoving * 100).toFixed(0)}
+                deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
               />
               <Row
                 name="Camouflage shooting still"
@@ -419,6 +461,7 @@ export default function Page() {
                 display={(stats) =>
                   (stats.camouflageShootingStill * 100).toFixed(0)
                 }
+                deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
               />
               <Row
                 name="Camouflage shooting moving"
@@ -426,6 +469,7 @@ export default function Page() {
                 display={(stats) =>
                   (stats.camouflageShootingMoving * 100).toFixed(0)
                 }
+                deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
               />
               <Row
                 name="Camouflage caught on fire"
@@ -433,6 +477,7 @@ export default function Page() {
                 display={(stats) =>
                   (stats.camouflageCaughtOnFire * 100).toFixed(0)
                 }
+                deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
               />
               <Row
                 name="Width"
