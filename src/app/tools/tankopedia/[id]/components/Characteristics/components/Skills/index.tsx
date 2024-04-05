@@ -11,6 +11,7 @@ import {
 import { use } from 'react';
 import { GenericTankComponentButton } from '../../../../../../../../components/ModuleButtons/GenericTankComponentButton';
 import { asset } from '../../../../../../../../core/blitzkrieg/asset';
+import { createDefaultSkills } from '../../../../../../../../core/blitzkrieg/createDefaultSkills';
 import { skillDefinitions } from '../../../../../../../../core/blitzkrieg/skillDefinitions';
 import { Tier } from '../../../../../../../../core/blitzkrieg/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../../../core/blitzkrieg/tankDefinitions/constants';
@@ -27,11 +28,7 @@ export function Skills() {
 
   if (Object.keys(skillLevels).length === 0) {
     mutateTankopediaTemporary((draft) => {
-      Object.values(awaitedSkillDefinitions.classes).forEach((skills) => {
-        skills.forEach((skill) => {
-          draft.skills[skill] = permanentSkills.includes(skill) ? 7 : 0;
-        });
-      });
+      draft.skills = createDefaultSkills(awaitedSkillDefinitions);
     });
 
     return null;

@@ -149,7 +149,7 @@ export default function Page() {
                   index === 0 ||
                   value === undefined ||
                   values[0] === undefined ||
-                  value > values[0]
+                  value === values[0]
                     ? undefined
                     : (
                           deltaType === 'higherIsBetter'
@@ -223,12 +223,7 @@ export default function Page() {
 
       {members.length > 0 && (
         <Flex justify="center">
-          <Table.Root
-            variant="surface"
-            style={{
-              maxWidth: '100%',
-            }}
-          >
+          <Table.Root variant="surface" style={{ maxWidth: '100%' }}>
             <Table.Header>
               <Table.Row>
                 <Table.ColumnHeaderCell />
@@ -347,6 +342,81 @@ export default function Page() {
                 name="Gun elevation"
                 value="gunElevation"
                 display={(stats) => stats.gunElevation.toFixed(1)}
+              />
+              <Row name="Speed forwards" value="speedForwards" />
+              <Row name="Speed backwards" value="speedBackwards" />
+              <Row name="Engine power" value="enginePower" />
+              <Row
+                name="Power to weight ratio on hard terrain"
+                value="powerToWeightRatioHardTerrain"
+                display={(stats) =>
+                  stats.powerToWeightRatioHardTerrain.toFixed(1)
+                }
+              />
+              <Row
+                name="Power to weight ratio on medium terrain"
+                value="powerToWeightRatioMediumTerrain"
+                display={(stats) =>
+                  stats.powerToWeightRatioMediumTerrain.toFixed(1)
+                }
+              />
+              <Row
+                name="Power to weight ratio on soft terrain"
+                value="powerToWeightRatioSoftTerrain"
+                display={(stats) =>
+                  stats.powerToWeightRatioSoftTerrain.toFixed(1)
+                }
+              />
+              <Row name="Health" value="health" />
+              <Row
+                name="Fire chance"
+                value="fireChance"
+                display={(stats) => (stats.fireChance * 100).toFixed(0)}
+              />
+              <Row
+                name="View range"
+                value="viewRange"
+                display={(stats) => stats.viewRange.toFixed(0)}
+              />
+              <Row
+                name="Camouflage still"
+                value="camouflageStill"
+                display={(stats) => (stats.camouflageStill * 100).toFixed(0)}
+              />
+              <Row
+                name="Camouflage moving"
+                value="camouflageMoving"
+                display={(stats) => (stats.camouflageMoving * 100).toFixed(0)}
+              />
+              <Row
+                name="Camouflage shooting still"
+                value="camouflageShootingStill"
+                display={(stats) =>
+                  (stats.camouflageShootingStill * 100).toFixed(0)
+                }
+              />
+              <Row
+                name="Camouflage shooting moving"
+                value="camouflageShootingMoving"
+                display={(stats) =>
+                  (stats.camouflageShootingMoving * 100).toFixed(0)
+                }
+              />
+              <Row
+                name="Camouflage caught on fire"
+                value="camouflageCaughtOnFire"
+                display={(stats) =>
+                  (stats.camouflageCaughtOnFire * 100).toFixed(0)
+                }
+              />
+              <Row
+                name="Size"
+                value={(stats) => Math.max(...stats.tankSize)}
+                display={(stats) =>
+                  stats.tankSize
+                    .map((tankSize) => tankSize.toFixed(1))
+                    .join(' x ')
+                }
               />
             </Table.Body>
           </Table.Root>

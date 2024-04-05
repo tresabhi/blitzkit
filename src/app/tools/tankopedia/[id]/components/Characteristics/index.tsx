@@ -408,7 +408,7 @@ export function Characteristics() {
         <InfoWithDelta decimals={0} indent name="Backwards">
           {stats.speedBackwards}
         </InfoWithDelta>
-        <InfoWithDelta decimals={0} name="Power" unit="hp">
+        <InfoWithDelta decimals={0} name="Engine power" unit="hp">
           {stats.enginePower}
         </InfoWithDelta>
         <Info name="Power to weight ratio" unit="hp/tn" />
@@ -461,23 +461,23 @@ export function Characteristics() {
           {stats.viewRange}
         </InfoWithDelta>
         <Info name="Camouflage" unit="%" />
-        <InfoWithDelta indent name="Still" decimals={2}>
+        <InfoWithDelta indent name="Still" decimals={0}>
           {stats.camouflageStill * 100}
         </InfoWithDelta>
-        <InfoWithDelta indent name="Moving" decimals={2}>
+        <InfoWithDelta indent name="Moving" decimals={0}>
           {stats.camouflageMoving * 100}
         </InfoWithDelta>
-        <InfoWithDelta indent name="Shooting still" decimals={2}>
+        <InfoWithDelta indent name="Shooting still" decimals={0}>
           {stats.camouflageShootingStill * 100}
         </InfoWithDelta>
-        <InfoWithDelta indent name="Shooting on move" decimals={2}>
+        <InfoWithDelta indent name="Shooting moving" decimals={0}>
           {stats.camouflageShootingMoving * 100}
         </InfoWithDelta>
-        <InfoWithDelta indent name="Caught on fire" decimals={2}>
+        <InfoWithDelta indent name="Caught on fire" decimals={0}>
           {stats.camouflageCaughtOnFire * 100}
         </InfoWithDelta>
         <Info name="Size" unit="m">
-          {stats.tankSize.map((component) => component.toFixed(2)).join(' x ')}
+          {stats.tankSize.map((component) => component.toFixed(1)).join(' x ')}
         </Info>
       </Flex>
 
