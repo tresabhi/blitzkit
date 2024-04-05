@@ -1,7 +1,14 @@
 'use client';
 
 import { PlusIcon } from '@radix-ui/react-icons';
-import { Button, Dialog, Flex, Table, Text } from '@radix-ui/themes';
+import {
+  Button,
+  Dialog,
+  Flex,
+  SegmentedControl,
+  Table,
+  Text,
+} from '@radix-ui/themes';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
@@ -11,7 +18,7 @@ import { provisionDefinitions } from '../../../core/blitzkrieg/provisionDefiniti
 import { tankCharacteristics } from '../../../core/blitzkrieg/tankCharacteristics';
 import { tankDefinitions } from '../../../core/blitzkrieg/tankDefinitions';
 import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
-import { tankToDuelMember } from '../../../core/blitzkrieg/tankToDuelMember';
+import { tankToCompareMember } from '../../../core/blitzkrieg/tankToCompareMember';
 import mutateCompare, {
   CompareMember,
   useCompare,
@@ -82,10 +89,9 @@ export default function Page() {
           .map(Number)
           .map(
             (id) =>
-              ({
-                ...tankToDuelMember(awaitedTankDefinitions[id]),
-                crewSkills: {},
-              }) satisfies CompareMember,
+              tankToCompareMember(
+                awaitedTankDefinitions[id],
+              ) satisfies CompareMember,
           );
       });
     }
@@ -103,7 +109,7 @@ export default function Page() {
       | ((
           member: Awaited<ReturnType<typeof tankCharacteristics>>,
         ) => number | undefined);
-    display: (
+    display?: (
       member: Awaited<ReturnType<typeof tankCharacteristics>>,
     ) => number | string | undefined;
     deltaType?: 'higherIsBetter' | 'lowerIsBetter';
@@ -152,7 +158,7 @@ export default function Page() {
                       : 'red'
                 }
               >
-                {display(stats[index])}
+                {display ? display(stats[index]) : value}
               </Text>
             </Flex>
           </Table.Cell>
@@ -163,7 +169,20 @@ export default function Page() {
 
   return (
     <PageWrapper color="crimson" size="100%">
-      <Flex justify="center">
+      <Flex justify="center" gap="6" align="center">
+        <Flex justify="center" gap="2" align="center">
+          Delta:{' '}
+          <SegmentedControl.Root defaultValue="none">
+            <SegmentedControl.Item value="none">None</SegmentedControl.Item>
+            <SegmentedControl.Item value="percentage">
+              Percentage
+            </SegmentedControl.Item>
+            <SegmentedControl.Item value="nominal">
+              Nominal
+            </SegmentedControl.Item>
+          </SegmentedControl.Root>
+        </Flex>
+
         <Dialog.Root
           open={addTankDialogOpen}
           onOpenChange={setAddTankDialogOpen}
@@ -186,10 +205,7 @@ export default function Page() {
                   compact
                   onSelect={(tank) => {
                     mutateCompare((draft) => {
-                      draft.members.push({
-                        ...tankToDuelMember(tank),
-                        crewSkills: {},
-                      });
+                      draft.members.push(tankToCompareMember(tank));
                     });
 
                     setAddTankDialogOpen(false);
@@ -278,16 +294,32 @@ export default function Page() {
                   display={(stats) => stats.intraClip?.toFixed(2)}
                 />
               )}
+              <Row name="Caliber" value="caliber" />
+              <Row name="Penetration" value="penetration" />
+              <Row name="Damage" value="damage" />
+              <Row name="Module damage" value="moduleDamage" />
+              <Row name="Shell velocity" value="shellVelocity" />
               <Row
-                name="Caliber"
-                value="caliber"
-                display={(stats) => stats.caliber.toFixed(0)}
+                name="Aim time"
+                value="aimTime"
+                display={(stats) => stats.aimTime.toFixed(2)}
               />
               <Row
-                name="Penetration"
-                value="penetration"
-                display={(stats) => stats.penetration.toFixed(0)}
+                name="Dispersion"
+                value="dispersion"
+                display={(stats) => stats.dispersion.toFixed(3)}
               />
+              <Row name="Dispersion moving" value="dispersionMoving" />
+              <Row
+                name="Dispersion hull traversing"
+                value="dispersionHullTraversing"
+              />
+              <Row
+                name="Dispersion turret traversing"
+                value="dispersionTurretTraversing"
+              />
+              <Row name="Dispersion shooting" value="dispersionShooting" />
+              <Row name="Dispersion gun damaged" value="dispersionGunDamaged" />
             </Table.Body>
           </Table.Root>
         </Flex>
