@@ -476,14 +476,17 @@ export function Characteristics() {
         <InfoWithDelta indent name="Caught on fire" decimals={0}>
           {stats.camouflageCaughtOnFire * 100}
         </InfoWithDelta>
-        <Info name="Width" unit="m" decimals={0}>
+        <Info name="Width" unit="m" decimals={0} deltaType="lowerIsBetter">
           {stats.tankSize[1]}
         </Info>
-        <Info name="Height" unit="m" decimals={0}>
+        <Info name="Height" unit="m" decimals={0} deltaType="lowerIsBetter">
           {stats.tankSize[0]}
         </Info>
-        <Info name="Length" unit="m" decimals={0}>
+        <Info name="Length" unit="m" decimals={0} deltaType="lowerIsBetter">
           {stats.tankSize[2]}
+        </Info>
+        <Info name="Volume" unit="m" decimals={0} deltaType="lowerIsBetter">
+          {stats.tankSize.reduce((a, b) => a * b, 1)}
         </Info>
       </Flex>
 
