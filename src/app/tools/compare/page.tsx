@@ -289,6 +289,7 @@ export default function Page() {
               {hasNonRegularGun && (
                 <Row
                   name="Intra-clip"
+                  deltaType="lowerIsBetter"
                   value={(stat) => stat.intraClip}
                   display={(stats) => stats.intraClip?.toFixed(2)}
                 />
@@ -301,36 +302,43 @@ export default function Page() {
               <Row
                 name="Aim time"
                 value="aimTime"
+                deltaType="lowerIsBetter"
                 display={(stats) => stats.aimTime.toFixed(2)}
               />
               <Row
                 name="Dispersion"
                 value="dispersion"
+                deltaType="lowerIsBetter"
                 display={(stats) => stats.dispersion.toFixed(3)}
               />
               <Row
                 name="Dispersion moving"
                 value="dispersionMoving"
+                deltaType="lowerIsBetter"
                 display={(stats) => stats.dispersionMoving.toFixed(3)}
               />
               <Row
                 name="Dispersion hull traversing"
                 value="dispersionHullTraversing"
+                deltaType="lowerIsBetter"
                 display={(stats) => stats.dispersionHullTraversing.toFixed(3)}
               />
               <Row
                 name="Dispersion turret traversing"
                 value="dispersionTurretTraversing"
+                deltaType="lowerIsBetter"
                 display={(stats) => stats.dispersionTurretTraversing.toFixed(3)}
               />
               <Row
                 name="Dispersion shooting"
                 value="dispersionShooting"
+                deltaType="lowerIsBetter"
                 display={(stats) => stats.dispersionShooting.toFixed(3)}
               />
               <Row
                 name="Dispersion gun damaged"
                 value="dispersionGunDamaged"
+                deltaType="lowerIsBetter"
                 display={(stats) => stats.dispersionGunDamaged.toFixed(3)}
               />
               <Row
@@ -371,6 +379,7 @@ export default function Page() {
               <Row
                 name="Fire chance"
                 value="fireChance"
+                deltaType="lowerIsBetter"
                 display={(stats) => (stats.fireChance * 100).toFixed(0)}
               />
               <Row
@@ -412,6 +421,7 @@ export default function Page() {
               <Row
                 name="Size"
                 value={(stats) => Math.max(...stats.tankSize)}
+                deltaType="lowerIsBetter"
                 display={(stats) =>
                   stats.tankSize
                     .map((tankSize) => tankSize.toFixed(1))
