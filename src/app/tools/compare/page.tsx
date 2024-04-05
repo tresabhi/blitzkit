@@ -20,9 +20,12 @@ import { tankCharacteristics } from '../../../core/blitzkrieg/tankCharacteristic
 import { tankDefinitions } from '../../../core/blitzkrieg/tankDefinitions';
 import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
 import { tankToCompareMember } from '../../../core/blitzkrieg/tankToCompareMember';
+import { theme } from '../../../stitches.config';
 import mutateCompare, { useCompare } from '../../../stores/compare';
 import { TankSearch } from '../tankopedia/components/TankSearch';
 import { TankControl } from './components/TankControl';
+
+const SIGNIFICANT_CHANGE_THRESHOLD = 0.15;
 
 export default function Page() {
   const pathname = usePathname();
@@ -131,21 +134,16 @@ export default function Page() {
           </Flex>
         </Table.RowHeaderCell>
 
-        {values.map((value, index) => (
-          <Table.Cell key={index}>
-            <Flex
-              align="center"
-              justify="center"
+        {values.map((value, index) => {
+          const deltaPercentage = (value ?? 1) / (values[0] ?? 1) - 1;
+          const significantChange =
+            Math.abs(deltaPercentage) >= SIGNIFICANT_CHANGE_THRESHOLD;
+
+          return (
+            <Table.Cell
+              key={index}
               style={{
-                width: '100%',
-                height: '100%',
-              }}
-            >
-              <Text
-                style={{
-                  textAlign: 'center',
-                }}
-                color={
+                backgroundColor:
                   index === 0 ||
                   value === undefined ||
                   values[0] === undefined ||
@@ -156,15 +154,33 @@ export default function Page() {
                             ? value > values[0]
                             : value < values[0]
                         )
-                      ? 'green'
-                      : 'red'
-                }
+                      ? significantChange
+                        ? theme.colors.componentInteractiveActive_green
+                        : theme.colors.componentInteractive_green
+                      : significantChange
+                        ? theme.colors.componentInteractiveActive_red
+                        : theme.colors.componentInteractive_red,
+              }}
+            >
+              <Flex
+                align="center"
+                justify="center"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
               >
-                {display ? display(stats[index]) : value}
-              </Text>
-            </Flex>
-          </Table.Cell>
-        ))}
+                <Text
+                  style={{
+                    textAlign: 'center',
+                  }}
+                >
+                  {display ? display(stats[index]) : value}
+                </Text>
+              </Flex>
+            </Table.Cell>
+          );
+        })}
       </Table.Row>
     );
   }
