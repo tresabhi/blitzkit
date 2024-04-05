@@ -410,7 +410,10 @@ export function tankCharacteristics(
     tank.camouflage.moving * gun.camouflageLoss + camouflageSumMoving;
   const camouflageCaughtOnFire =
     tank.camouflage.onFire * tank.camouflage.still + camouflageSumStill;
-  const tankSize = [size[0], size[2], size[1]];
+  const width = size[2];
+  const height = size[0];
+  const length = size[1];
+  const volume = width * height * length;
 
   return {
     dpm,
@@ -461,6 +464,9 @@ export function tankCharacteristics(
     camouflageShootingStill,
     camouflageShootingMoving,
     camouflageCaughtOnFire,
-    tankSize,
+    width,
+    height,
+    length,
+    volume,
   };
 }

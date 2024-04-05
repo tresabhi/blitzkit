@@ -104,6 +104,7 @@ export default function Page() {
     name,
     display,
     deltaType = 'higherIsBetter',
+    decimals,
   }: {
     name: string;
     value:
@@ -115,6 +116,7 @@ export default function Page() {
       member: Awaited<ReturnType<typeof tankCharacteristics>>,
     ) => number | string | undefined;
     deltaType?: 'higherIsBetter' | 'lowerIsBetter';
+    decimals?: number;
   }) {
     const values = stats.map((stat) =>
       typeof value === 'function' ? value(stat) : (stat[value] as number),
@@ -175,7 +177,11 @@ export default function Page() {
                     textAlign: 'center',
                   }}
                 >
-                  {display ? display(stats[index]) : value}
+                  {display
+                    ? display(stats[index])
+                    : decimals === undefined
+                      ? value
+                      : value?.toFixed(decimals)}
                 </Text>
               </Flex>
             </Table.Cell>
@@ -286,11 +292,7 @@ export default function Page() {
             </Table.Header>
 
             <Table.Body>
-              <Row
-                name="DPM"
-                value="dpm"
-                display={(stats) => Math.round(stats.dpm).toLocaleString()}
-              />
+              <Row name="DPM" value="dpm" decimals={0} />
               <Row
                 name="Reload"
                 deltaType="lowerIsBetter"
@@ -311,7 +313,7 @@ export default function Page() {
                   name="Intra-clip"
                   deltaType="lowerIsBetter"
                   value={(stat) => stat.intraClip}
-                  display={(stats) => stats.intraClip?.toFixed(2)}
+                  decimals={2}
                 />
               )}
               <Row name="Caliber" value="caliber" />
@@ -323,90 +325,72 @@ export default function Page() {
                 name="Aim time"
                 value="aimTime"
                 deltaType="lowerIsBetter"
-                display={(stats) => stats.aimTime.toFixed(2)}
+                decimals={2}
               />
               <Row
                 name="Dispersion"
                 value="dispersion"
                 deltaType="lowerIsBetter"
-                display={(stats) => stats.dispersion.toFixed(3)}
+                decimals={3}
               />
               <Row
                 name="Dispersion moving"
                 value="dispersionMoving"
                 deltaType="lowerIsBetter"
-                display={(stats) => stats.dispersionMoving.toFixed(3)}
+                decimals={3}
               />
               <Row
                 name="Dispersion hull traversing"
                 value="dispersionHullTraversing"
                 deltaType="lowerIsBetter"
-                display={(stats) => stats.dispersionHullTraversing.toFixed(3)}
+                decimals={3}
               />
               <Row
                 name="Dispersion turret traversing"
                 value="dispersionTurretTraversing"
                 deltaType="lowerIsBetter"
-                display={(stats) => stats.dispersionTurretTraversing.toFixed(3)}
+                decimals={3}
               />
               <Row
                 name="Dispersion shooting"
                 value="dispersionShooting"
                 deltaType="lowerIsBetter"
-                display={(stats) => stats.dispersionShooting.toFixed(3)}
+                decimals={3}
               />
               <Row
                 name="Dispersion gun damaged"
                 value="dispersionGunDamaged"
                 deltaType="lowerIsBetter"
-                display={(stats) => stats.dispersionGunDamaged.toFixed(3)}
+                decimals={3}
               />
-              <Row
-                name="Gun depression"
-                value="gunDepression"
-                display={(stats) => stats.gunDepression.toFixed(1)}
-              />
-              <Row
-                name="Gun elevation"
-                value="gunElevation"
-                display={(stats) => stats.gunElevation.toFixed(1)}
-              />
-              <Row name="Speed forwards" value="speedForwards" />
-              <Row name="Speed backwards" value="speedBackwards" />
-              <Row name="Engine power" value="enginePower" />
+              <Row name="Gun depression" value="gunDepression" decimals={1} />
+              <Row name="Gun elevation" value="gunElevation" decimals={1} />
+              <Row name="Speed forwards" value="speedForwards" decimals={0} />
+              <Row name="Speed backwards" value="speedBackwards" decimals={0} />
+              <Row name="Engine power" value="enginePower" decimals={0} />
               <Row
                 name="Power to weight ratio on hard terrain"
                 value="powerToWeightRatioHardTerrain"
-                display={(stats) =>
-                  stats.powerToWeightRatioHardTerrain.toFixed(1)
-                }
+                decimals={1}
               />
               <Row
                 name="Power to weight ratio on medium terrain"
                 value="powerToWeightRatioMediumTerrain"
-                display={(stats) =>
-                  stats.powerToWeightRatioMediumTerrain.toFixed(1)
-                }
+                decimals={1}
               />
               <Row
                 name="Power to weight ratio on soft terrain"
                 value="powerToWeightRatioSoftTerrain"
-                display={(stats) =>
-                  stats.powerToWeightRatioSoftTerrain.toFixed(1)
-                }
+                decimals={1}
               />
-              <Row name="Health" value="health" />
+              <Row name="Health" value="health" decimals={0} />
               <Row
                 name="Fire chance"
                 value="fireChance"
                 deltaType="lowerIsBetter"
                 display={(stats) => (stats.fireChance * 100).toFixed(0)}
               />
-              <Row
-                name="View range"
-                value="viewRange"
-                display={(stats) => stats.viewRange.toFixed(0)}
-              />
+              <Row name="View range" value="viewRange" decimals={0} />
               <Row
                 name="Camouflage still"
                 value="camouflageStill"
@@ -440,29 +424,27 @@ export default function Page() {
               />
               <Row
                 name="Width"
-                value={(stats) => stats.tankSize[1]}
+                value="width"
                 deltaType="lowerIsBetter"
-                display={(stats) => stats.tankSize[1].toFixed(1)}
+                decimals={1}
               />
               <Row
                 name="Height"
-                value={(stats) => stats.tankSize[0]}
+                value="height"
                 deltaType="lowerIsBetter"
-                display={(stats) => stats.tankSize[0].toFixed(1)}
+                decimals={1}
               />
               <Row
                 name="Length"
-                value={(stats) => stats.tankSize[2]}
+                value="length"
                 deltaType="lowerIsBetter"
-                display={(stats) => stats.tankSize[2].toFixed(1)}
+                decimals={1}
               />
               <Row
                 name="Volume"
-                value={(stats) => stats.tankSize.reduce((a, b) => a * b, 1)}
+                value="volume"
                 deltaType="lowerIsBetter"
-                display={(stats) =>
-                  stats.tankSize.reduce((a, b) => a * b, 1).toFixed(1)
-                }
+                decimals={1}
               />
             </Table.Body>
           </Table.Root>
