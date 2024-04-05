@@ -155,8 +155,8 @@ export default function Page() {
                             ? value > values[0]
                             : value < values[0]
                         )
-                      ? `color-mix(in srgb, ${theme.colors.componentInteractiveActive_green} ${normalizedDeltaPercentage}%, ${theme.colors.componentInteractiveActive_green}00)`
-                      : `color-mix(in srgb, ${theme.colors.componentInteractiveActive_red} ${normalizedDeltaPercentage}%, ${theme.colors.componentInteractiveActive_red}00)`,
+                      ? `color-mix(in srgb, ${theme.colors.componentCallToActionInteractive_green} ${normalizedDeltaPercentage}%, ${theme.colors.componentCallToActionInteractive_green}00)`
+                      : `color-mix(in srgb, ${theme.colors.componentCallToActionInteractive_red} ${normalizedDeltaPercentage}%, ${theme.colors.componentCallToActionInteractive_red}00)`,
               }}
             >
               <Flex
