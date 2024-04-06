@@ -5,6 +5,7 @@ import {
   TrashIcon,
 } from '@radix-ui/react-icons';
 import {
+  AlertDialog,
   Button,
   Card,
   DropdownMenu,
@@ -51,11 +52,16 @@ import { Options } from './components/Options';
 interface TankSearchProps {
   compact?: boolean;
   onSelect?: (tank: TankDefinition) => void;
+  onSelectAll?: (tanks: TankDefinition[]) => void;
 }
 
 const treeTypeOrder: TreeType[] = ['researchable', 'premium', 'collector'];
 
-export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
+export function TankSearch({
+  compact,
+  onSelect = () => {},
+  onSelectAll,
+}: TankSearchProps) {
   const tanksPerPage = compact ? 16 : 96;
   const nations = use(NATIONS);
   const filters = useTankopediaPersistent((state) => state.filters);
@@ -796,10 +802,47 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
         <Options />
       </Flex>
 
-      <Flex justify="center">
+      <Flex justify="center" gap="4" align="center">
         <Text color="gray">
           Sorting: {SORT_NAMES[sort.by]}, {sort.direction}
         </Text>
+
+        {onSelectAll && searchResults.length <= 8 && (
+          <Button variant="ghost" onClick={() => onSelectAll(searchResults)}>
+            Select all
+          </Button>
+        )}
+        {onSelectAll && searchResults.length > 8 && (
+          <AlertDialog.Root>
+            <AlertDialog.Trigger>
+              <Button variant="ghost">Select all</Button>
+            </AlertDialog.Trigger>
+
+            <AlertDialog.Content>
+              <AlertDialog.Title>
+                Woah! That's a lot of tanks.
+              </AlertDialog.Title>
+              <AlertDialog.Description>
+                Would you like to select{' '}
+                <Text color="red">all {searchResults.length} tanks</Text>?
+              </AlertDialog.Description>
+
+              <Flex gap="2" justify="end">
+                <AlertDialog.Cancel>
+                  <Button variant="soft" color="gray">
+                    Cancel
+                  </Button>
+                </AlertDialog.Cancel>
+
+                <AlertDialog.Action onClick={() => onSelectAll(searchResults)}>
+                  <Button variant="solid" color="red">
+                    Select {searchResults.length} tanks
+                  </Button>
+                </AlertDialog.Action>
+              </Flex>
+            </AlertDialog.Content>
+          </AlertDialog.Root>
+        )}
       </Flex>
 
       {!compact && (
@@ -935,6 +978,7 @@ export function TankSearch({ compact, onSelect = () => {} }: TankSearchProps) {
           <CompactSearchResultRow tanks={secondChunk} onSelect={onSelect} />
         )}
       </Flex>
+
       <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />
     </>
   );

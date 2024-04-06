@@ -293,7 +293,16 @@ export default function Page() {
                         tankToCompareMember(tank, awaitedSkillDefinitions),
                       );
                     });
-
+                    setAddTankDialogOpen(false);
+                  }}
+                  onSelectAll={(tanks) => {
+                    mutateCompareTemporary((draft) => {
+                      draft.members.push(
+                        ...tanks.map((tank) =>
+                          tankToCompareMember(tank, awaitedSkillDefinitions),
+                        ),
+                      );
+                    });
                     setAddTankDialogOpen(false);
                   }}
                 />
