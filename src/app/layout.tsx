@@ -4,6 +4,7 @@ import {
   AlertDialog,
   Button,
   Card,
+  Code,
   Flex,
   ScrollArea,
   Text,
@@ -130,11 +131,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
                             padding: '0 16px',
                           }}
                         >
-                          <Text color="gray">
-                            Blitzkrieg {packageJSON.version} for WoTB 10.7
+                          <Text color="gray" size="2">
+                            Blitzkrieg <Code>{packageJSON.version}</Code> for
+                            WoTB <Code>{awaitedGameDefinitions.version}</Code>
                           </Text>
 
-                          <Text color="gray">Free forever, for everyone.</Text>
+                          <Text color="gray" size="2">
+                            Free forever, for everyone.
+                          </Text>
                         </Flex>
                       </Flex>
                     </Card>
