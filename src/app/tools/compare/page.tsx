@@ -309,7 +309,15 @@ export default function Page() {
           </SegmentedControl.Item>
         </SegmentedControl.Root>
 
-        <IconButton variant="soft" color="red">
+        <IconButton
+          variant="soft"
+          color="red"
+          onClick={() => {
+            mutateCompareTemporary((draft) => {
+              draft.members = [];
+            });
+          }}
+        >
           <TrashIcon />
         </IconButton>
       </Flex>
