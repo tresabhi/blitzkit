@@ -5,11 +5,10 @@ import '@radix-ui/themes/styles.css';
 import { config } from 'dotenv';
 import { Roboto_Flex } from 'next/font/google';
 import { usePathname } from 'next/navigation';
-import { ReactNode, use, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Analytics } from '../components/Analytics';
 import { Footer } from '../components/Footer';
 import Navbar from '../components/Navbar';
-import { gameDefinitions } from '../core/blitzkrieg/gameDefinitions';
 import isDev from '../core/blitzkrieg/isDev';
 import { isLocalhost } from '../core/blitzkrieg/isLocalhost';
 import { useFullScreen } from '../hooks/useFullScreen';
@@ -29,7 +28,6 @@ const robotoFlex = Roboto_Flex({
 });
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  const awaitedGameDefinitions = use(gameDefinitions);
   const pathname = usePathname();
   const isEmbed = pathname.split('/')[1] === 'embeds';
   const [showDevBuildAlert, setShowDevBuildAlert] = useState(false);
@@ -58,7 +56,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         style={{
           margin: 0,
-          paddingTop: isEmbed ? 0 : '3.25rem',
           backgroundColor: isEmbed ? 'transparent' : undefined,
         }}
       >
@@ -69,7 +66,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
           suppressHydrationWarning
           suppressContentEditableWarning
         >
-          <Flex direction="column" style={{ height: '100%' }}>
+          <Flex
+            direction="column"
+            style={{ minHeight: '100vh', paddingTop: 52 }}
+          >
             {!isEmbed && <Navbar />}
             <AlertDialog.Root open={showDevBuildAlert}>
               <AlertDialog.Content>
