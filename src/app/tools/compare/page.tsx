@@ -23,6 +23,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
 import { EquipmentManager } from '../../../components/EquipmentManager';
 import PageWrapper from '../../../components/PageWrapper';
+import { asset } from '../../../core/blitzkrieg/asset';
 import { equipmentDefinitions } from '../../../core/blitzkrieg/equipmentDefinitions';
 import { modelDefinitions } from '../../../core/blitzkrieg/modelDefinitions';
 import { provisionDefinitions } from '../../../core/blitzkrieg/provisionDefinitions';
@@ -86,6 +87,7 @@ export default function Page() {
     [searchParams],
   );
 
+  const test = Object.keys(awaitedProvisionDefinitions).slice(0, 1);
   const hasNonRegularGun = members.some(({ gun }) => gun.type !== 'regular');
 
   useEffect(() => {
@@ -436,126 +438,174 @@ export default function Page() {
               <Table.Row>
                 <Table.Cell />
 
-                {members.map(({ equipmentMatrix, tank, key }, index) => {
-                  const equipmentPreset =
-                    awaitedEquipmentDefinitions.presets[tank.equipment];
+                {members.map(
+                  ({ equipmentMatrix, tank, key, provisions }, index) => {
+                    const equipmentPreset =
+                      awaitedEquipmentDefinitions.presets[tank.equipment];
 
-                  return (
-                    <Table.Cell key={key}>
-                      <Flex
-                        align="center"
-                        justify="center"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                        }}
-                      >
-                        <Popover.Root>
-                          <Popover.Trigger>
-                            <Button variant="ghost" radius="large">
-                              <Flex gap="1" direction="column">
-                                {times(3, (y) => (
-                                  <Flex
-                                    style={{
-                                      gap: 6,
-                                    }}
-                                  >
-                                    {times(3, (x) => {
-                                      const equipment = equipmentMatrix[y][x];
+                    return (
+                      <Table.Cell key={key}>
+                        <Flex
+                          align="center"
+                          justify="center"
+                          gap="4"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                          }}
+                        >
+                          <Popover.Root>
+                            <Popover.Trigger>
+                              <Button variant="ghost" radius="large">
+                                <Flex gap="1" direction="column">
+                                  {times(3, (y) => (
+                                    <Flex
+                                      style={{
+                                        gap: 6,
+                                      }}
+                                    >
+                                      {times(3, (x) => {
+                                        const equipment = equipmentMatrix[y][x];
 
-                                      return (
-                                        <Flex
-                                          style={{
-                                            gap: 2,
-                                          }}
-                                        >
-                                          <div
+                                        return (
+                                          <Flex
                                             style={{
-                                              width: 4,
-                                              height: 8,
-                                              backgroundColor:
-                                                equipment === -1
-                                                  ? theme.colors
-                                                      .textLowContrast_crimson
-                                                  : theme.colors
-                                                      .textLowContrast,
-                                              borderRadius: 2,
+                                              gap: 2,
                                             }}
-                                          />
-                                          <div
-                                            style={{
-                                              width: 4,
-                                              height: 8,
-                                              backgroundColor:
-                                                equipment === 1
-                                                  ? theme.colors
-                                                      .textLowContrast_crimson
-                                                  : theme.colors
-                                                      .textLowContrast,
-                                              borderRadius: 2,
-                                            }}
-                                          />
-                                        </Flex>
-                                      );
-                                    })}
-                                  </Flex>
-                                ))}
-                              </Flex>
-                            </Button>
-                          </Popover.Trigger>
+                                          >
+                                            <div
+                                              style={{
+                                                width: 4,
+                                                height: 8,
+                                                backgroundColor:
+                                                  equipment === -1
+                                                    ? theme.colors
+                                                        .textLowContrast_crimson
+                                                    : theme.colors
+                                                        .textLowContrast,
+                                                borderRadius: 2,
+                                              }}
+                                            />
+                                            <div
+                                              style={{
+                                                width: 4,
+                                                height: 8,
+                                                backgroundColor:
+                                                  equipment === 1
+                                                    ? theme.colors
+                                                        .textLowContrast_crimson
+                                                    : theme.colors
+                                                        .textLowContrast,
+                                                borderRadius: 2,
+                                              }}
+                                            />
+                                          </Flex>
+                                        );
+                                      })}
+                                    </Flex>
+                                  ))}
+                                </Flex>
+                              </Button>
+                            </Popover.Trigger>
 
-                          <Popover.Content>
-                            <Flex direction="column" gap="4">
-                              <EquipmentManager
-                                matrix={equipmentMatrix}
-                                preset={equipmentPreset}
-                                onChange={(matrix) => {
-                                  mutateCompareTemporary((draft) => {
-                                    draft.members[index].equipmentMatrix =
-                                      matrix;
-                                    draft.sorting = undefined;
-                                  });
-                                }}
-                              />
-
-                              <Flex justify="end" gap="4">
-                                <Button
-                                  variant="ghost"
-                                  color="red"
-                                  onClick={() => {
+                            <Popover.Content>
+                              <Flex direction="column" gap="4">
+                                <EquipmentManager
+                                  matrix={equipmentMatrix}
+                                  preset={equipmentPreset}
+                                  onChange={(matrix) => {
                                     mutateCompareTemporary((draft) => {
                                       draft.members[index].equipmentMatrix =
-                                        times(3, () =>
-                                          times(3, () => 0),
-                                        ) as EquipmentMatrix;
+                                        matrix;
                                       draft.sorting = undefined;
                                     });
                                   }}
-                                >
-                                  Clear
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  onClick={() => {
-                                    mutateCompareTemporary((draft) => {
-                                      draft.members.forEach((member) => {
-                                        member.equipmentMatrix =
-                                          draft.members[index].equipmentMatrix;
+                                />
+
+                                <Flex justify="end" gap="4">
+                                  <Button
+                                    variant="ghost"
+                                    color="red"
+                                    onClick={() => {
+                                      mutateCompareTemporary((draft) => {
+                                        draft.members[index].equipmentMatrix =
+                                          times(3, () =>
+                                            times(3, () => 0),
+                                          ) as EquipmentMatrix;
                                         draft.sorting = undefined;
                                       });
-                                    });
-                                  }}
-                                >
-                                  Apply to all
-                                </Button>
+                                    }}
+                                  >
+                                    Clear
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    onClick={() => {
+                                      mutateCompareTemporary((draft) => {
+                                        draft.members.forEach((member) => {
+                                          member.equipmentMatrix =
+                                            draft.members[
+                                              index
+                                            ].equipmentMatrix;
+                                          draft.sorting = undefined;
+                                        });
+                                      });
+                                    }}
+                                  >
+                                    Apply to all
+                                  </Button>
+                                </Flex>
                               </Flex>
+                            </Popover.Content>
+                          </Popover.Root>
+
+                          <Button
+                            variant="ghost"
+                            radius="large"
+                            style={{
+                              height: '100%',
+                              width: 16,
+                              position: 'relative',
+                            }}
+                          >
+                            <Flex direction="column">
+                              {provisions.map((provision, index) => (
+                                <img
+                                  key={provision}
+                                  src={asset(
+                                    `/icons/provisions/${provision}.webp`,
+                                  )}
+                                  style={{
+                                    left: '50%',
+                                    /**
+                                     * max = 100% - 16px - 4px
+                                     * min = 4px
+                                     * diff = max - min
+                                     *      = 100% - 16px - 4px - 4px
+                                     *      = 100% - 24px
+                                     * coefficient = index / length - 1
+                                     * position = min + coefficient * diff
+                                     */
+                                    top: `calc(4px + ${
+                                      provisions.length === 1
+                                        ? 0.5
+                                        : index / (provisions.length - 1)
+                                    } * (100% - 24px))`,
+                                    transform: 'translateX(-50%)',
+                                    position: 'absolute',
+                                    width: 16,
+                                    height: 16,
+                                    objectFit: 'contain',
+                                  }}
+                                />
+                              ))}
                             </Flex>
-                          </Popover.Content>
-                        </Popover.Root>
-                      </Flex>
-                    </Table.Cell>
-                  );
-                })}
+                          </Button>
+                        </Flex>
+                      </Table.Cell>
+                    );
+                  },
+                )}
               </Table.Row>
             </Table.Body>
 
