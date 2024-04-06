@@ -85,7 +85,15 @@ export default function ToolsLayout({ children }: ToolsLayoutProps) {
         </div>
       )}
 
-      <Suspense fallback={<Loader />}>{children}</Suspense>
+      <Suspense
+        fallback={
+          <div style={{ flex: 1 }}>
+            <Loader />
+          </div>
+        }
+      >
+        {children}
+      </Suspense>
     </>
   );
 }
