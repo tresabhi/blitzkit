@@ -58,7 +58,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         style={{
           margin: 0,
-          // paddingTop: isEmbed ? 0 : '3.25rem',
+          paddingTop: isEmbed ? 0 : '3.25rem',
           backgroundColor: isEmbed ? 'transparent' : undefined,
         }}
       >
