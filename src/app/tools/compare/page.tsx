@@ -14,7 +14,7 @@ import {
 import { times } from 'lodash';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
-import { EquipmentButton } from '../../../components/ModuleButtons/EquipmentButton';
+import { EquipmentManager } from '../../../components/EquipmentManager';
 import PageWrapper from '../../../components/PageWrapper';
 import { equipmentDefinitions } from '../../../core/blitzkrieg/equipmentDefinitions';
 import { modelDefinitions } from '../../../core/blitzkrieg/modelDefinitions';
@@ -32,6 +32,7 @@ import {
   useComparePersistent,
   useCompareTemporary,
 } from '../../../stores/compare';
+import { EquipmentMatrix } from '../../../stores/duel';
 import { TankSearch } from '../tankopedia/components/TankSearch';
 import { TankControl } from './components/TankControl';
 
@@ -346,7 +347,7 @@ export default function Page() {
                 <Table.Cell />
 
                 {members.map(({ equipmentMatrix, tank }, index) => {
-                  const equipmentRows =
+                  const equipmentPreset =
                     awaitedEquipmentDefinitions.presets[tank.equipment];
 
                   return (
@@ -414,81 +415,45 @@ export default function Page() {
                           </Popover.Trigger>
 
                           <Popover.Content>
-                            <Flex direction="column" gap="2">
-                              {equipmentRows.map((equipmentRow, rowIndex) => (
-                                <Flex gap="2" key={rowIndex}>
-                                  {equipmentRow.map(
-                                    (equipment, columnIndex) => (
-                                      <Flex key={columnIndex}>
-                                        <EquipmentButton
-                                          equipment={equipment[0]}
-                                          first
-                                          rowChild
-                                          selected={
-                                            equipmentMatrix[rowIndex][
-                                              columnIndex
-                                            ] === -1
-                                          }
-                                          onClick={() => {
-                                            mutateCompareTemporary((draft) => {
-                                              if (
-                                                draft.members[index]
-                                                  .equipmentMatrix[rowIndex][
-                                                  columnIndex
-                                                ] === -1
-                                              ) {
-                                                draft.members[
-                                                  index
-                                                ].equipmentMatrix[rowIndex][
-                                                  columnIndex
-                                                ] = 0;
-                                              } else {
-                                                draft.members[
-                                                  index
-                                                ].equipmentMatrix[rowIndex][
-                                                  columnIndex
-                                                ] = -1;
-                                              }
-                                            });
-                                          }}
-                                        />
-                                        <EquipmentButton
-                                          equipment={equipment[1]}
-                                          last
-                                          rowChild
-                                          selected={
-                                            equipmentMatrix[rowIndex][
-                                              columnIndex
-                                            ] === 1
-                                          }
-                                          onClick={() => {
-                                            mutateCompareTemporary((draft) => {
-                                              if (
-                                                draft.members[index]
-                                                  .equipmentMatrix[rowIndex][
-                                                  columnIndex
-                                                ] === 1
-                                              ) {
-                                                draft.members[
-                                                  index
-                                                ].equipmentMatrix[rowIndex][
-                                                  columnIndex
-                                                ] = 0;
-                                              } else {
-                                                draft.members[
-                                                  index
-                                                ].equipmentMatrix[rowIndex][
-                                                  columnIndex
-                                                ] = 1;
-                                              }
-                                            });
-                                          }}
-                                        />
-                                      </Flex>
-                                    ),
-                                  )}
-                                </Flex>
-                              ))}
+                            <Flex direction="column" gap="4">
+                              <EquipmentManager
+                                matrix={equipmentMatrix}
+                                preset={equipmentPreset}
+                                onChange={(matrix) => {
+                                  mutateCompareTemporary((draft) => {
+                                    draft.members[index].equipmentMatrix =
+                                      matrix;
+                                  });
+                                }}
+                              />
+
+                              <Flex justify="end" gap="2">
+                                <Button
+                                  color="red"
+                                  onClick={() => {
+                                    mutateCompareTemporary((draft) => {
+                                      draft.members[index].equipmentMatrix =
+                                        times(3, () =>
+                                          times(3, () => 0),
+                                        ) as EquipmentMatrix;
+                                    });
+                                  }}
+                                >
+                                  Reset
+                                </Button>
+                                <Button
+                                  onClick={() => {
+                                    mutateCompareTemporary((draft) => {
+                                      draft.members.forEach((member) => {
+                                        member.equipmentMatrix =
+                                          draft.members[index].equipmentMatrix;
+                                      });
+                                    });
+                                  }}
+                                >
+                                  Apply to all
+                                </Button>
+                              </Flex>
                             </Flex>
                           </Popover.Content>
                         </Popover.Root>
