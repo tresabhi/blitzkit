@@ -345,7 +345,7 @@ export default function Page() {
               <Table.Row>
                 <Table.Cell />
 
-                {members.map(({ equipmentMatrix, tank }) => {
+                {members.map(({ equipmentMatrix, tank }, index) => {
                   const equipmentRows =
                     awaitedEquipmentDefinitions.presets[tank.equipment];
 
@@ -430,21 +430,26 @@ export default function Page() {
                                             ] === -1
                                           }
                                           onClick={() => {
-                                            // mutateDuel((draft) => {
-                                            //   if (
-                                            //     equipmentMatrix[rowIndex][
-                                            //       columnIndex
-                                            //     ] === -1
-                                            //   ) {
-                                            //     draft.protagonist!.equipmentMatrix[
-                                            //       rowIndex
-                                            //     ][columnIndex] = 0;
-                                            //   } else {
-                                            //     draft.protagonist!.equipmentMatrix[
-                                            //       rowIndex
-                                            //     ][columnIndex] = -1;
-                                            //   }
-                                            // });
+                                            mutateCompareTemporary((draft) => {
+                                              if (
+                                                draft.members[index]
+                                                  .equipmentMatrix[rowIndex][
+                                                  columnIndex
+                                                ] === -1
+                                              ) {
+                                                draft.members[
+                                                  index
+                                                ].equipmentMatrix[rowIndex][
+                                                  columnIndex
+                                                ] = 0;
+                                              } else {
+                                                draft.members[
+                                                  index
+                                                ].equipmentMatrix[rowIndex][
+                                                  columnIndex
+                                                ] = -1;
+                                              }
+                                            });
                                           }}
                                         />
                                         <EquipmentButton
@@ -457,21 +462,26 @@ export default function Page() {
                                             ] === 1
                                           }
                                           onClick={() => {
-                                            // mutateDuel((draft) => {
-                                            //   if (
-                                            //     equipmentMatrix[rowIndex][
-                                            //       columnIndex
-                                            //     ] === 1
-                                            //   ) {
-                                            //     draft.protagonist!.equipmentMatrix[
-                                            //       rowIndex
-                                            //     ][columnIndex] = 0;
-                                            //   } else {
-                                            //     draft.protagonist!.equipmentMatrix[
-                                            //       rowIndex
-                                            //     ][columnIndex] = 1;
-                                            //   }
-                                            // });
+                                            mutateCompareTemporary((draft) => {
+                                              if (
+                                                draft.members[index]
+                                                  .equipmentMatrix[rowIndex][
+                                                  columnIndex
+                                                ] === 1
+                                              ) {
+                                                draft.members[
+                                                  index
+                                                ].equipmentMatrix[rowIndex][
+                                                  columnIndex
+                                                ] = 0;
+                                              } else {
+                                                draft.members[
+                                                  index
+                                                ].equipmentMatrix[rowIndex][
+                                                  columnIndex
+                                                ] = 1;
+                                              }
+                                            });
                                           }}
                                         />
                                       </Flex>
@@ -516,8 +526,8 @@ export default function Page() {
                   decimals={2}
                 />
               )}
-              <Row name="Caliber" value="caliber" />
-              <Row name="Penetration" value="penetration" />
+              <Row name="Caliber" value="caliber" decimals={0} />
+              <Row name="Penetration" value="penetration" decimals={0} />
               <Row name="Damage" value="damage" />
               <Row name="Module damage" value="moduleDamage" />
               <Row name="Shell velocity" value="shellVelocity" />
