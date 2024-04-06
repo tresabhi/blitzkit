@@ -516,7 +516,7 @@ export default function Page() {
                                     });
                                   }}
                                 >
-                                  Reset
+                                  Clear
                                 </Button>
                                 <Button
                                   variant="ghost"
