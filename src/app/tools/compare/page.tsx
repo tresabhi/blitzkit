@@ -652,9 +652,14 @@ export default function Page() {
       )}
 
       {members.length === 0 && (
-        <Flex align="center" mt="2" direction="column">
-          <Heading>No tanks selected</Heading>
-          <Text>
+        <Flex
+          align="center"
+          justify="center"
+          direction="column"
+          style={{ flex: 1 }}
+        >
+          <Heading color="gray">No tanks selected</Heading>
+          <Text color="gray">
             Press the <PlusIcon /> Add button to get started
           </Text>
         </Flex>

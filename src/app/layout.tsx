@@ -100,14 +100,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
               </AlertDialog.Content>
             </AlertDialog.Root>
 
-            <Flex direction="column">{children}</Flex>
+            {children}
 
-            {!isEmbed && !isFullScreen && (
-              <>
-                <div style={{ flex: 1 }} />
-                <Footer />
-              </>
-            )}
+            {!isEmbed && !isFullScreen && <Footer />}
           </Flex>
         </Theme>
       </body>

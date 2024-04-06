@@ -13,7 +13,14 @@ export default function PageWrapper({
   ...props
 }: PageWrapperProps) {
   return (
-    <Theme accentColor={color}>
+    <Theme
+      accentColor={color}
+      style={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <Flex
         direction="column"
         gap="4"
@@ -23,6 +30,7 @@ export default function PageWrapper({
           margin: 'auto',
           padding: 16,
           boxSizing: 'border-box',
+          flex: 1,
 
           ...style,
         }}
