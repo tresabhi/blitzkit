@@ -1,22 +1,13 @@
 'use client';
 
-import {
-  AlertDialog,
-  Button,
-  Card,
-  Code,
-  Flex,
-  ScrollArea,
-  Text,
-  Theme,
-} from '@radix-ui/themes';
+import { AlertDialog, Button, Flex, ScrollArea, Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
 import { config } from 'dotenv';
 import { Roboto_Flex } from 'next/font/google';
 import { usePathname } from 'next/navigation';
 import { ReactNode, use, useEffect, useState } from 'react';
-import packageJSON from '../../package.json';
 import { Analytics } from '../components/Analytics';
+import { Footer } from '../components/Footer';
 import Navbar from '../components/Navbar';
 import { gameDefinitions } from '../core/blitzkrieg/gameDefinitions';
 import isDev from '../core/blitzkrieg/isDev';
@@ -119,30 +110,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               {!isEmbed && !isFullScreen && (
                 <>
                   <div style={{ flex: 1 }} />
-
-                  <Theme radius="none">
-                    <Card>
-                      <Flex justify="center">
-                        <Flex
-                          justify="between"
-                          style={{
-                            flex: 1,
-                            maxWidth: 800,
-                            padding: '0 16px',
-                          }}
-                        >
-                          <Text color="gray" size="2">
-                            Blitzkrieg <Code>{packageJSON.version}</Code> for
-                            WoTB <Code>{awaitedGameDefinitions.version}</Code>
-                          </Text>
-
-                          <Text color="gray" size="2">
-                            Free forever, for everyone.
-                          </Text>
-                        </Flex>
-                      </Flex>
-                    </Card>
-                  </Theme>
+                  <Footer />
                 </>
               )}
             </Flex>
