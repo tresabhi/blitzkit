@@ -1,33 +1,22 @@
 import { blackA } from '@radix-ui/colors';
-import { Flex, Text } from '@radix-ui/themes';
-import { PuffLoader } from 'react-spinners';
+import { Flex, Spinner, Text } from '@radix-ui/themes';
 import { theme } from '../../../stitches.config';
 
 const NAV_HEIGHT = 52.65;
 
 interface LoaderProps {
   naked?: boolean;
-  color?: string;
   progress?: number;
 }
 
-export function Loader({ naked, color, progress }: LoaderProps) {
+export function Loader({ naked, progress }: LoaderProps) {
   const animation = (
-    <div style={{ position: 'relative' }}>
+    <Flex align="center" gap="2">
+      <Spinner />
       {progress !== undefined && (
-        <Text
-          style={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(calc(-50% + 5px), calc(-50% + 5px))',
-          }}
-        >
-          {Math.round(progress * 100)}%
-        </Text>
+        <Text color="gray">{Math.round(progress * 100)}%</Text>
       )}
-      <PuffLoader color={color ?? theme.colors.solidBackground} />
-    </div>
+    </Flex>
   );
 
   if (naked) return animation;

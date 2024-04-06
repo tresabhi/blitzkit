@@ -202,7 +202,6 @@ export function TankSandbox() {
                     <SceneProps />
 
                     <Suspense fallback={<ModelLoader />}>
-                      {/* TODO: add rotation cube to the top right */}
                       <Lighting />
                       <TankModel />
                       <Armor />
