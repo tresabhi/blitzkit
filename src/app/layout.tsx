@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertDialog, Button, Flex, ScrollArea, Theme } from '@radix-ui/themes';
+import { AlertDialog, Button, Flex, Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
 import { config } from 'dotenv';
 import { Roboto_Flex } from 'next/font/google';
@@ -69,52 +69,46 @@ export default function RootLayout({ children }: RootLayoutProps) {
           suppressHydrationWarning
           suppressContentEditableWarning
         >
-          <ScrollArea
-            style={{
-              height: '100vh',
-            }}
-          >
-            <Flex direction="column" style={{ height: '100%' }}>
-              {!isEmbed && <Navbar />}
-              <AlertDialog.Root open={showDevBuildAlert}>
-                <AlertDialog.Content>
-                  <AlertDialog.Title>Experimental version!</AlertDialog.Title>
-                  <AlertDialog.Description>
-                    This version may have a lot of issues. Report issues to{' '}
-                    <a href="https://discord.gg/nDt7AjGJQH" target="_blank">
-                      the official Discord server
-                    </a>
-                    . Also consider using{' '}
-                    <a href="https://blitz-krieg.vercel.app/">
-                      the more stable release version
-                    </a>
-                    . You will be asked again in 8 days.
-                  </AlertDialog.Description>
+          <Flex direction="column" style={{ height: '100%' }}>
+            {!isEmbed && <Navbar />}
+            <AlertDialog.Root open={showDevBuildAlert}>
+              <AlertDialog.Content>
+                <AlertDialog.Title>Experimental version!</AlertDialog.Title>
+                <AlertDialog.Description>
+                  This version may have a lot of issues. Report issues to{' '}
+                  <a href="https://discord.gg/nDt7AjGJQH" target="_blank">
+                    the official Discord server
+                  </a>
+                  . Also consider using{' '}
+                  <a href="https://blitz-krieg.vercel.app/">
+                    the more stable release version
+                  </a>
+                  . You will be asked again in 8 days.
+                </AlertDialog.Description>
 
-                  <Flex justify="end">
-                    <Button
-                      variant="solid"
-                      onClick={() => {
-                        setShowDevBuildAlert(false);
-                        useApp.setState({ devBuildAgreementTime: Date.now() });
-                      }}
-                    >
-                      Continue
-                    </Button>
-                  </Flex>
-                </AlertDialog.Content>
-              </AlertDialog.Root>
+                <Flex justify="end">
+                  <Button
+                    variant="solid"
+                    onClick={() => {
+                      setShowDevBuildAlert(false);
+                      useApp.setState({ devBuildAgreementTime: Date.now() });
+                    }}
+                  >
+                    Continue
+                  </Button>
+                </Flex>
+              </AlertDialog.Content>
+            </AlertDialog.Root>
 
-              <Flex direction="column">{children}</Flex>
+            <Flex direction="column">{children}</Flex>
 
-              {!isEmbed && !isFullScreen && (
-                <>
-                  <div style={{ flex: 1 }} />
-                  <Footer />
-                </>
-              )}
-            </Flex>
-          </ScrollArea>
+            {!isEmbed && !isFullScreen && (
+              <>
+                <div style={{ flex: 1 }} />
+                <Footer />
+              </>
+            )}
+          </Flex>
         </Theme>
       </body>
     </html>
