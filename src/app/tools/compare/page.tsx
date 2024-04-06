@@ -1,6 +1,12 @@
 'use client';
 
-import { PlusIcon, TrashIcon } from '@radix-ui/react-icons';
+import {
+  CaretLeftIcon,
+  CaretRightIcon,
+  CaretSortIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@radix-ui/react-icons';
 import {
   Button,
   Dialog,
@@ -45,6 +51,7 @@ export default function Page() {
   const searchParams = useSearchParams();
   const members = useCompareTemporary((state) => state.members);
   const [addTankDialogOpen, setAddTankDialogOpen] = useState(false);
+  const sorting = useCompareTemporary((state) => state.sorting);
   const awaitedModelDefinitions = use(modelDefinitions);
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const awaitedProvisionDefinitions = use(provisionDefinitions);
@@ -132,7 +139,7 @@ export default function Page() {
     deltaNominalDisplay?: (delta: number) => string | number;
   }) {
     const values = stats.map((stat) =>
-      typeof value === 'function' ? value(stat) : (stat[value] as number),
+      typeof value === 'function' ? value(stat)! : (stat[value] as number),
     );
 
     return (
@@ -140,18 +147,57 @@ export default function Page() {
         <Table.RowHeaderCell>
           <Flex
             align="center"
+            gap="2"
             style={{
               width: '100%',
               height: '100%',
             }}
           >
+            <IconButton
+              variant="ghost"
+              onClick={() => {
+                mutateCompareTemporary((draft) => {
+                  draft.members.sort((memberA, memberB) => {
+                    const indexA = draft.members.indexOf(memberA);
+                    const indexB = draft.members.indexOf(memberB);
+                    const valueA = values[indexA];
+                    const valueB = values[indexB];
+
+                    return draft.sorting?.direction === 'ascending' &&
+                      draft.sorting.by === name
+                      ? valueA - valueB
+                      : valueB - valueA;
+                  });
+
+                  draft.sorting = {
+                    by: name,
+                    direction:
+                      draft.sorting?.direction === 'ascending' &&
+                      draft.sorting.by === name
+                        ? 'descending'
+                        : 'ascending',
+                  };
+                });
+              }}
+            >
+              {(sorting === undefined || sorting.by !== name) && (
+                <CaretSortIcon style={{ transform: 'rotate(90deg)' }} />
+              )}
+              {sorting?.by === name && (
+                <>
+                  {sorting.direction === 'ascending' && <CaretLeftIcon />}
+                  {sorting.direction === 'descending' && <CaretRightIcon />}
+                </>
+              )}
+            </IconButton>
+
             {name}
           </Flex>
         </Table.RowHeaderCell>
 
         {values.map((value, index) => {
-          const delta = (value ?? 0) - (values[0] ?? 0);
-          const deltaPercentage = (value ?? 1) / (values[0] ?? 1) - 1;
+          const delta = value - values[0];
+          const deltaPercentage = value / values[0] - 1;
           const normalizedDeltaPercentage = Math.round(
             Math.min(100, Math.abs(deltaPercentage) * 2 * 100 + 25),
           );

@@ -11,6 +11,10 @@ export interface CompareMember extends DuelMember {
 
 export interface CompareTemporary {
   members: CompareMember[];
+  sorting?: {
+    direction: 'ascending' | 'descending';
+    by: string;
+  };
 }
 
 export type DeltaMode = 'none' | 'percentage' | 'nominal';
