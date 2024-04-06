@@ -399,7 +399,17 @@ export default function Page() {
                             objectFit: 'contain',
                           }}
                         />
-                        <Text style={{ textAlign: 'center' }}>{tank.name}</Text>
+
+                        <Text
+                          style={{
+                            whiteSpace: 'nowrap',
+                            maxWidth: 128,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {tank.name}
+                        </Text>
                       </Flex>
                     </Table.ColumnHeaderCell>
                   );
