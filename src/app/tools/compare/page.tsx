@@ -446,8 +446,9 @@ export default function Page() {
                                 }}
                               />
 
-                              <Flex justify="end" gap="2">
+                              <Flex justify="end" gap="4">
                                 <Button
+                                  variant="ghost"
                                   color="red"
                                   onClick={() => {
                                     mutateCompareTemporary((draft) => {
@@ -461,6 +462,7 @@ export default function Page() {
                                   Reset
                                 </Button>
                                 <Button
+                                  variant="ghost"
                                   onClick={() => {
                                     mutateCompareTemporary((draft) => {
                                       draft.members.forEach((member) => {
