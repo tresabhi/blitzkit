@@ -110,6 +110,7 @@ export default function Page() {
           .map((id) =>
             tankToCompareMember(
               awaitedTankDefinitions[id],
+              awaitedProvisionDefinitions,
               awaitedSkillDefinitions,
             ),
           );
@@ -317,7 +318,11 @@ export default function Page() {
                     onSelect={(tank) => {
                       mutateCompareTemporary((draft) => {
                         draft.members.push(
-                          tankToCompareMember(tank, awaitedSkillDefinitions),
+                          tankToCompareMember(
+                            tank,
+                            awaitedProvisionDefinitions,
+                            awaitedSkillDefinitions,
+                          ),
                         );
                         draft.sorting = undefined;
                       });
@@ -327,7 +332,11 @@ export default function Page() {
                       mutateCompareTemporary((draft) => {
                         draft.members.push(
                           ...tanks.map((tank) =>
-                            tankToCompareMember(tank, awaitedSkillDefinitions),
+                            tankToCompareMember(
+                              tank,
+                              awaitedProvisionDefinitions,
+                              awaitedSkillDefinitions,
+                            ),
                           ),
                         );
                         draft.sorting = undefined;
