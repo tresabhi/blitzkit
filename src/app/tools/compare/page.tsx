@@ -154,6 +154,7 @@ export default function Page() {
             }}
           >
             <IconButton
+              color={sorting?.by === name ? undefined : 'gray'}
               variant="ghost"
               onClick={() => {
                 mutateCompareTemporary((draft) => {
@@ -185,8 +186,8 @@ export default function Page() {
               )}
               {sorting?.by === name && (
                 <>
-                  {sorting.direction === 'ascending' && <CaretLeftIcon />}
-                  {sorting.direction === 'descending' && <CaretRightIcon />}
+                  {sorting.direction === 'ascending' && <CaretRightIcon />}
+                  {sorting.direction === 'descending' && <CaretLeftIcon />}
                 </>
               )}
             </IconButton>
