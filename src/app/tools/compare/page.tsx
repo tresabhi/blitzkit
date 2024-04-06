@@ -318,6 +318,7 @@ export default function Page() {
                       draft.members.push(
                         tankToCompareMember(tank, awaitedSkillDefinitions),
                       );
+                      draft.sorting = undefined;
                     });
                     setAddTankDialogOpen(false);
                   }}
@@ -328,6 +329,7 @@ export default function Page() {
                           tankToCompareMember(tank, awaitedSkillDefinitions),
                         ),
                       );
+                      draft.sorting = undefined;
                     });
                     setAddTankDialogOpen(false);
                   }}
@@ -362,6 +364,7 @@ export default function Page() {
           onClick={() => {
             mutateCompareTemporary((draft) => {
               draft.members = [];
+              draft.sorting = undefined;
             });
           }}
         >
@@ -499,6 +502,7 @@ export default function Page() {
                                   mutateCompareTemporary((draft) => {
                                     draft.members[index].equipmentMatrix =
                                       matrix;
+                                    draft.sorting = undefined;
                                   });
                                 }}
                               />
@@ -513,6 +517,7 @@ export default function Page() {
                                         times(3, () =>
                                           times(3, () => 0),
                                         ) as EquipmentMatrix;
+                                      draft.sorting = undefined;
                                     });
                                   }}
                                 >
@@ -525,6 +530,7 @@ export default function Page() {
                                       draft.members.forEach((member) => {
                                         member.equipmentMatrix =
                                           draft.members[index].equipmentMatrix;
+                                        draft.sorting = undefined;
                                       });
                                     });
                                   }}

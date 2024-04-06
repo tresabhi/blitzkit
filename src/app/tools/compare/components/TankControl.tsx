@@ -35,6 +35,7 @@ export function TankControl({ index, tank, members }: TankControlProps) {
               const item = draft.members[index];
               draft.members.splice(index, 1);
               draft.members.splice(index - 1, 0, item);
+              draft.sorting = undefined;
             });
           }}
         >
@@ -46,6 +47,7 @@ export function TankControl({ index, tank, members }: TankControlProps) {
         onClick={() => {
           mutateCompareTemporary((draft) => {
             draft.members.splice(index, 1);
+            draft.sorting = undefined;
           });
         }}
       >
@@ -77,6 +79,7 @@ export function TankControl({ index, tank, members }: TankControlProps) {
                       tank,
                       awaitedSkillDefinitions,
                     );
+                    draft.sorting = undefined;
                   });
                   setSwitchTankDialogOpen(false);
                 }}
@@ -93,6 +96,7 @@ export function TankControl({ index, tank, members }: TankControlProps) {
               const item = draft.members[index];
               draft.members.splice(index, 1);
               draft.members.splice(index + 1, 0, item);
+              draft.sorting = undefined;
             });
           }}
         >
