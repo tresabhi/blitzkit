@@ -385,7 +385,7 @@ export default function Page() {
                                               backgroundColor:
                                                 equipment === -1
                                                   ? theme.colors
-                                                      .textLowContrast_green
+                                                      .textLowContrast_crimson
                                                   : theme.colors
                                                       .textLowContrast,
                                               borderRadius: 2,
@@ -398,7 +398,7 @@ export default function Page() {
                                               backgroundColor:
                                                 equipment === 1
                                                   ? theme.colors
-                                                      .textLowContrast_green
+                                                      .textLowContrast_crimson
                                                   : theme.colors
                                                       .textLowContrast,
                                               borderRadius: 2,

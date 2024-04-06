@@ -3,6 +3,7 @@ import {
   amberDarkA,
   blueDark,
   brownDark,
+  crimsonDark,
   greenDark,
   mauveDark,
   orangeDark,
@@ -36,6 +37,7 @@ export const theme = {
     ...createColors(brownDark, 'brown'),
     ...createColors(mauveDark, 'mauve'),
     ...createColors(sandDark, 'sand'),
+    ...createColors(crimsonDark, 'crimson'),
   },
 
   borderStyles: {
