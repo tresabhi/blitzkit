@@ -241,7 +241,7 @@ export default function Page() {
 
                 {delta !== 0 && (
                   <>
-                    {deltaMode === 'nominal' && (
+                    {deltaMode === 'absolute' && (
                       <Text color="gray">
                         (
                         {`${delta > 0 ? '+' : ''}${
@@ -368,8 +368,8 @@ export default function Page() {
           <SegmentedControl.Item value={'percentage' satisfies DeltaMode}>
             Percentage
           </SegmentedControl.Item>
-          <SegmentedControl.Item value={'nominal' satisfies DeltaMode}>
-            Nominal
+          <SegmentedControl.Item value={'absolute' satisfies DeltaMode}>
+            Absolute
           </SegmentedControl.Item>
         </SegmentedControl.Root>
       </Flex>

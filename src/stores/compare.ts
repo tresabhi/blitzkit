@@ -17,7 +17,7 @@ export interface CompareTemporary {
   };
 }
 
-export type DeltaMode = 'none' | 'percentage' | 'nominal';
+export type DeltaMode = 'none' | 'percentage' | 'absolute';
 export interface ComparePersistent {
   deltaMode: DeltaMode;
 }
