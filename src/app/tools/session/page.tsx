@@ -12,6 +12,7 @@ import {
   Checkbox,
   DropdownMenu,
   Flex,
+  Heading,
   Text,
   TextField,
 } from '@radix-ui/themes';
@@ -249,6 +250,20 @@ export default function Page() {
       </div>
 
       <SessionPage naked={false} />
+
+      {!session.isTracking && (
+        <Flex
+          align="center"
+          justify="center"
+          direction="column"
+          style={{ flex: 1 }}
+        >
+          <Heading color="gray">No player selected</Heading>
+          <Text color="gray">
+            Search for a <PersonIcon /> Player to get started
+          </Text>
+        </Flex>
+      )}
     </PageWrapper>
   );
 }
