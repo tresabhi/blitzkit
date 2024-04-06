@@ -292,52 +292,67 @@ export default function Page() {
 
   return (
     <PageWrapper color="crimson" size="100%">
-      <Flex justify="center" gap="2" align="center" mt="4">
-        <Dialog.Root
-          open={addTankDialogOpen}
-          onOpenChange={setAddTankDialogOpen}
-        >
-          <Dialog.Trigger>
-            <Button>
-              <PlusIcon /> Add
-            </Button>
-          </Dialog.Trigger>
+      <Flex justify="center" gap="2" align="center" mt="4" direction="column">
+        <Flex gap="2">
+          <Dialog.Root
+            open={addTankDialogOpen}
+            onOpenChange={setAddTankDialogOpen}
+          >
+            <Dialog.Trigger>
+              <Button>
+                <PlusIcon /> Add
+              </Button>
+            </Dialog.Trigger>
 
-          <Dialog.Content>
-            <Flex gap="4" direction="column">
-              <Flex
-                direction="column"
-                gap="4"
-                style={{ flex: 1 }}
-                justify="center"
-              >
-                <TankSearch
-                  compact
-                  onSelect={(tank) => {
-                    mutateCompareTemporary((draft) => {
-                      draft.members.push(
-                        tankToCompareMember(tank, awaitedSkillDefinitions),
-                      );
-                      draft.sorting = undefined;
-                    });
-                    setAddTankDialogOpen(false);
-                  }}
-                  onSelectAll={(tanks) => {
-                    mutateCompareTemporary((draft) => {
-                      draft.members.push(
-                        ...tanks.map((tank) =>
+            <Dialog.Content>
+              <Flex gap="4" direction="column">
+                <Flex
+                  direction="column"
+                  gap="4"
+                  style={{ flex: 1 }}
+                  justify="center"
+                >
+                  <TankSearch
+                    compact
+                    onSelect={(tank) => {
+                      mutateCompareTemporary((draft) => {
+                        draft.members.push(
                           tankToCompareMember(tank, awaitedSkillDefinitions),
-                        ),
-                      );
-                      draft.sorting = undefined;
-                    });
-                    setAddTankDialogOpen(false);
-                  }}
-                />
+                        );
+                        draft.sorting = undefined;
+                      });
+                      setAddTankDialogOpen(false);
+                    }}
+                    onSelectAll={(tanks) => {
+                      mutateCompareTemporary((draft) => {
+                        draft.members.push(
+                          ...tanks.map((tank) =>
+                            tankToCompareMember(tank, awaitedSkillDefinitions),
+                          ),
+                        );
+                        draft.sorting = undefined;
+                      });
+                      setAddTankDialogOpen(false);
+                    }}
+                  />
+                </Flex>
               </Flex>
-            </Flex>
-          </Dialog.Content>
-        </Dialog.Root>
+            </Dialog.Content>
+          </Dialog.Root>
+
+          <Button
+            variant="soft"
+            color="red"
+            onClick={() => {
+              mutateCompareTemporary((draft) => {
+                draft.members = [];
+                draft.sorting = undefined;
+              });
+            }}
+          >
+            <TrashIcon /> Clear
+          </Button>
+        </Flex>
 
         <SegmentedControl.Root
           value={deltaMode}
@@ -357,19 +372,6 @@ export default function Page() {
             Nominal
           </SegmentedControl.Item>
         </SegmentedControl.Root>
-
-        <IconButton
-          variant="soft"
-          color="red"
-          onClick={() => {
-            mutateCompareTemporary((draft) => {
-              draft.members = [];
-              draft.sorting = undefined;
-            });
-          }}
-        >
-          <TrashIcon />
-        </IconButton>
       </Flex>
 
       {members.length > 0 && (
