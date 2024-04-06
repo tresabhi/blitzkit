@@ -1,11 +1,12 @@
 'use client';
 
-import { PlusIcon } from '@radix-ui/react-icons';
+import { PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import {
   Button,
   Dialog,
   Flex,
   Heading,
+  IconButton,
   Popover,
   SegmentedControl,
   Table,
@@ -244,29 +245,7 @@ export default function Page() {
 
   return (
     <PageWrapper color="crimson" size="100%">
-      <Flex justify="center" gap="6" align="center">
-        <Flex justify="center" gap="2" align="center">
-          Delta:{' '}
-          <SegmentedControl.Root
-            value={deltaMode}
-            onValueChange={(value) => {
-              mutateComparePersistent((draft) => {
-                draft.deltaMode = value as DeltaMode;
-              });
-            }}
-          >
-            <SegmentedControl.Item value={'none' satisfies DeltaMode}>
-              None
-            </SegmentedControl.Item>
-            <SegmentedControl.Item value={'percentage' satisfies DeltaMode}>
-              Percentage
-            </SegmentedControl.Item>
-            <SegmentedControl.Item value={'nominal' satisfies DeltaMode}>
-              Nominal
-            </SegmentedControl.Item>
-          </SegmentedControl.Root>
-        </Flex>
-
+      <Flex justify="center" gap="2" align="center" mt="4">
         <Dialog.Root
           open={addTankDialogOpen}
           onOpenChange={setAddTankDialogOpen}
@@ -310,6 +289,29 @@ export default function Page() {
             </Flex>
           </Dialog.Content>
         </Dialog.Root>
+
+        <SegmentedControl.Root
+          value={deltaMode}
+          onValueChange={(value) => {
+            mutateComparePersistent((draft) => {
+              draft.deltaMode = value as DeltaMode;
+            });
+          }}
+        >
+          <SegmentedControl.Item value={'none' satisfies DeltaMode}>
+            No deltas
+          </SegmentedControl.Item>
+          <SegmentedControl.Item value={'percentage' satisfies DeltaMode}>
+            Percentage
+          </SegmentedControl.Item>
+          <SegmentedControl.Item value={'nominal' satisfies DeltaMode}>
+            Nominal
+          </SegmentedControl.Item>
+        </SegmentedControl.Root>
+
+        <IconButton variant="soft" color="red">
+          <TrashIcon />
+        </IconButton>
       </Flex>
 
       {members.length > 0 && (
@@ -646,6 +648,15 @@ export default function Page() {
               />
             </Table.Body>
           </Table.Root>
+        </Flex>
+      )}
+
+      {members.length === 0 && (
+        <Flex align="center" mt="2" direction="column">
+          <Heading>No tanks selected</Heading>
+          <Text>
+            Press the <PlusIcon /> Add button to get started
+          </Text>
         </Flex>
       )}
     </PageWrapper>
