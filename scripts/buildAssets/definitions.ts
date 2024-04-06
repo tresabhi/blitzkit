@@ -3,6 +3,7 @@ import { parse as parsePath } from 'path';
 import { Vector3Tuple } from 'three';
 import { parse as parseYaml } from 'yaml';
 import { TankClass } from '../../src/components/Tanks';
+import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
@@ -16,6 +17,7 @@ import {
   EquipmentPreset,
   EquipmentRow,
 } from '../../src/core/blitzkrieg/equipmentDefinitions';
+import { GameDefinitions } from '../../src/core/blitzkrieg/gameDefinitions';
 import {
   ModelArmor,
   ModelDefinitions,
@@ -336,6 +338,13 @@ const missingStrings: Record<string, string> = {
 export async function definitions(production: boolean) {
   console.log('Building definitions...');
 
+  const gameDefinitions: GameDefinitions = {
+    version: (await readStringDVPL(`${DATA}/version.txt.dvpl`))
+      .split(' ')[0]
+      .split('.')
+      .slice(0, 3)
+      .join('.'),
+  };
   const tankDefinitions: TankDefinitions = {};
   const modelDefinitions: ModelDefinitions = {};
   const equipmentDefinitions: EquipmentDefinitions = {
@@ -1101,6 +1110,11 @@ export async function definitions(production: boolean) {
   await commitAssets(
     'definitions',
     [
+      {
+        content: superCompress(gameDefinitions),
+        encoding: 'base64',
+        path: 'definitions/game.cdon.lz4',
+      },
       {
         content: superCompress(tankDefinitions),
         encoding: 'base64',

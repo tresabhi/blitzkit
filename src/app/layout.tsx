@@ -1,21 +1,27 @@
 'use client';
 
-import { CaretRightIcon } from '@radix-ui/react-icons';
-import { AlertDialog, Button, Flex, Text, Theme } from '@radix-ui/themes';
+import {
+  AlertDialog,
+  Button,
+  Card,
+  Flex,
+  ScrollArea,
+  Text,
+  Theme,
+} from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
 import { config } from 'dotenv';
 import { Roboto_Flex } from 'next/font/google';
 import { usePathname } from 'next/navigation';
-import { ReactNode, useEffect, useState } from 'react';
-import { SkyLine } from '../assets/art/SkyLine';
+import { ReactNode, use, useEffect, useState } from 'react';
+import packageJSON from '../../package.json';
 import { Analytics } from '../components/Analytics';
 import Navbar from '../components/Navbar';
-import PageWrapper from '../components/PageWrapper';
+import { gameDefinitions } from '../core/blitzkrieg/gameDefinitions';
 import isDev from '../core/blitzkrieg/isDev';
 import { isLocalhost } from '../core/blitzkrieg/isLocalhost';
 import { useFullScreen } from '../hooks/useFullScreen';
 import { useApp } from '../stores/app';
-import { mintTheme } from '../themes/mint';
 
 config();
 
@@ -31,6 +37,7 @@ const robotoFlex = Roboto_Flex({
 });
 
 export default function RootLayout({ children }: RootLayoutProps) {
+  const awaitedGameDefinitions = use(gameDefinitions);
   const pathname = usePathname();
   const isEmbed = pathname.split('/')[1] === 'embeds';
   const [showDevBuildAlert, setShowDevBuildAlert] = useState(false);
@@ -59,7 +66,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         style={{
           margin: 0,
-          paddingTop: isEmbed ? 0 : '3.25rem',
+          // paddingTop: isEmbed ? 0 : '3.25rem',
           backgroundColor: isEmbed ? 'transparent' : undefined,
         }}
       >
@@ -70,93 +77,72 @@ export default function RootLayout({ children }: RootLayoutProps) {
           suppressHydrationWarning
           suppressContentEditableWarning
         >
-          {!isEmbed && <Navbar />}
-          <AlertDialog.Root open={showDevBuildAlert}>
-            <AlertDialog.Content>
-              <AlertDialog.Title>Experimental version!</AlertDialog.Title>
-              <AlertDialog.Description>
-                This version may have a lot of issues. Report issues to{' '}
-                <a href="https://discord.gg/nDt7AjGJQH" target="_blank">
-                  the official Discord server
-                </a>
-                . Also consider using{' '}
-                <a href="https://blitz-krieg.vercel.app/">
-                  the more stable release version
-                </a>
-                . You will be asked again in 8 days.
-              </AlertDialog.Description>
+          <ScrollArea
+            style={{
+              height: '100vh',
+            }}
+          >
+            <Flex direction="column" style={{ height: '100%' }}>
+              {!isEmbed && <Navbar />}
+              <AlertDialog.Root open={showDevBuildAlert}>
+                <AlertDialog.Content>
+                  <AlertDialog.Title>Experimental version!</AlertDialog.Title>
+                  <AlertDialog.Description>
+                    This version may have a lot of issues. Report issues to{' '}
+                    <a href="https://discord.gg/nDt7AjGJQH" target="_blank">
+                      the official Discord server
+                    </a>
+                    . Also consider using{' '}
+                    <a href="https://blitz-krieg.vercel.app/">
+                      the more stable release version
+                    </a>
+                    . You will be asked again in 8 days.
+                  </AlertDialog.Description>
 
-              <Flex justify="end">
-                <Button
-                  variant="solid"
-                  onClick={() => {
-                    setShowDevBuildAlert(false);
-                    useApp.setState({ devBuildAgreementTime: Date.now() });
-                  }}
-                >
-                  Continue
-                </Button>
-              </Flex>
-            </AlertDialog.Content>
-          </AlertDialog.Root>
-
-          <Flex direction="column">{children}</Flex>
-
-          {!isEmbed && !isFullScreen && (
-            <PageWrapper>
-              <a
-                target="_blank"
-                href="https://www.patreon.com/tresabhi"
-                style={{ textDecoration: 'none' }}
-              >
-                <Flex
-                  align="center"
-                  style={{
-                    padding: 16,
-                    borderRadius: 8,
-                    backgroundColor: mintTheme.colors.componentInteractive,
-                    position: 'relative',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <Flex
-                    direction="column"
-                    gap="1"
-                    style={{
-                      flex: 1,
-                      zIndex: 1,
-                    }}
-                  >
-                    <Text size="4" color="mint">
-                      Blitzkrieg. Free forever. For everyone.
-                    </Text>
-                    <Text color="mint">
-                      <b>Consider supporting today 🍀</b>
-                    </Text>
+                  <Flex justify="end">
+                    <Button
+                      variant="solid"
+                      onClick={() => {
+                        setShowDevBuildAlert(false);
+                        useApp.setState({ devBuildAgreementTime: Date.now() });
+                      }}
+                    >
+                      Continue
+                    </Button>
                   </Flex>
+                </AlertDialog.Content>
+              </AlertDialog.Root>
 
-                  <Text
-                    color="mint"
-                    style={{
-                      zIndex: 1,
-                    }}
-                  >
-                    <Flex>
-                      <CaretRightIcon width={32} height={32} />
-                    </Flex>
-                  </Text>
+              <Flex direction="column">{children}</Flex>
 
-                  <SkyLine
-                    style={{
-                      position: 'absolute',
-                      right: 'min(8vw, 15%)',
-                      top: '5%',
-                    }}
-                  />
-                </Flex>
-              </a>
-            </PageWrapper>
-          )}
+              {!isEmbed && !isFullScreen && (
+                <>
+                  <div style={{ flex: 1 }} />
+
+                  <Theme radius="none">
+                    <Card>
+                      <Flex justify="center">
+                        <Flex
+                          justify="between"
+                          style={{
+                            flex: 1,
+                            maxWidth: 800,
+                            padding: '0 16px',
+                          }}
+                        >
+                          <Text color="gray">
+                            Blitzkrieg {packageJSON.version} for WoTB 10.7
+                          </Text>
+
+                          <Text color="gray">Free forever, for everyone.</Text>
+                        </Flex>
+                      </Flex>
+                    </Card>
+                  </Theme>
+                </>
+              )}
+            </Flex>
+          </ScrollArea>
         </Theme>
       </body>
     </html>
