@@ -5,9 +5,10 @@ import {
   TrashIcon,
 } from '@radix-ui/react-icons';
 import { Dialog, Flex, IconButton } from '@radix-ui/themes';
-import { useState } from 'react';
+import { use, useState } from 'react';
+import { skillDefinitions } from '../../../../core/blitzkrieg/skillDefinitions';
 import { TankDefinition } from '../../../../core/blitzkrieg/tankDefinitions';
-import { tankToDuelMember } from '../../../../core/blitzkrieg/tankToDuelMember';
+import { tankToCompareMember } from '../../../../core/blitzkrieg/tankToCompareMember';
 import {
   CompareMember,
   mutateCompareTemporary,
@@ -21,6 +22,7 @@ interface TankControlProps {
 }
 
 export function TankControl({ index, tank, members }: TankControlProps) {
+  const awaitedSkillDefinitions = use(skillDefinitions);
   const [switchTankDialogOpen, setSwitchTankDialogOpen] = useState(false);
 
   return (
@@ -71,10 +73,10 @@ export function TankControl({ index, tank, members }: TankControlProps) {
                 compact
                 onSelect={(tank) => {
                   mutateCompareTemporary((draft) => {
-                    draft.members[index] = {
-                      ...tankToDuelMember(tank),
-                      crewSkills: {},
-                    };
+                    draft.members[index] = tankToCompareMember(
+                      tank,
+                      awaitedSkillDefinitions,
+                    );
                   });
                   setSwitchTankDialogOpen(false);
                 }}

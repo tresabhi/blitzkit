@@ -234,8 +234,8 @@ export default function Page() {
             <Heading size="4">{children}</Heading>
           </Table.ColumnHeaderCell>
 
-          {members.map((_, index) => (
-            <Table.ColumnHeaderCell key={index} />
+          {members.map(({ key }) => (
+            <Table.ColumnHeaderCell key={key} />
           ))}
         </Table.Row>
       </Table.Header>
@@ -310,9 +310,9 @@ export default function Page() {
               <Table.Row>
                 <Table.ColumnHeaderCell />
 
-                {members.map(({ tank }, index) => {
+                {members.map(({ tank, key }, index) => {
                   return (
-                    <Table.ColumnHeaderCell width="0" key={tank.id}>
+                    <Table.ColumnHeaderCell width="0" key={key}>
                       <Flex
                         direction="column"
                         align="center"
@@ -346,15 +346,15 @@ export default function Page() {
               <Table.Row>
                 <Table.Cell />
 
-                {members.map(({ equipmentMatrix, tank }, index) => {
+                {members.map(({ equipmentMatrix, tank, key }, index) => {
                   const equipmentPreset =
                     awaitedEquipmentDefinitions.presets[tank.equipment];
 
                   return (
-                    <Table.Cell>
+                    <Table.Cell key={key}>
                       <Flex
                         align="center"
-                        justify="between"
+                        justify="center"
                         style={{
                           width: '100%',
                           height: '100%',

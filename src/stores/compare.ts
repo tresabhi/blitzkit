@@ -5,6 +5,7 @@ import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { DuelMember } from './duel';
 
 export interface CompareMember extends DuelMember {
+  key: string;
   crewSkills: Record<string, number>;
 }
 
@@ -26,7 +27,10 @@ export const useComparePersistent = create<ComparePersistent>()(
     subscribeWithSelector<ComparePersistent>(() => ({
       deltaMode: 'none',
     })),
-    { name: 'compare', merge: (a, b) => merge(b, a) },
+    {
+      name: 'compare',
+      merge: (a, b) => merge(b, a),
+    },
   ),
 );
 

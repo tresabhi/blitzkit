@@ -1,3 +1,4 @@
+import { uniqueId } from 'lodash';
 import { CompareMember } from '../../stores/compare';
 import { createDefaultSkills } from './createDefaultSkills';
 import { SkillDefinitions } from './skillDefinitions';
@@ -11,5 +12,6 @@ export function tankToCompareMember(
   return {
     ...tankToDuelMember(tank),
     crewSkills: createDefaultSkills(skillDefinitions),
+    key: uniqueId(),
   } satisfies CompareMember;
 }
