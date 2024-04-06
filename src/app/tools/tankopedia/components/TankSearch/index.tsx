@@ -401,14 +401,17 @@ export function TankSearch({
   ]);
   const [searchResults, setSearchedList] = useState(searchableTanks);
   const page = useTankopediaPersistent((state) => state.filters.page);
-  const wideFormat = typeof window !== 'undefined' && window.innerWidth > 512;
-  const chunkSize = wideFormat ? tanksPerPage / 2 : Infinity;
   const searchResultsPageSlice = searchResults.slice(
     page * tanksPerPage,
     (page + 1) * tanksPerPage,
   );
-  const firstChunk = searchResultsPageSlice.slice(0, chunkSize);
-  const secondChunk = searchResultsPageSlice.slice(chunkSize);
+  const firstChunk = searchResultsPageSlice.slice(
+    0,
+    Math.ceil(searchResultsPageSlice.length / 2),
+  );
+  const secondChunk = searchResultsPageSlice.slice(
+    Math.ceil(searchResultsPageSlice.length / 2),
+  );
 
   useEffect(() => {
     setSearchedList(searchableTanks);
@@ -848,7 +851,17 @@ export function TankSearch({
       {!compact && (
         <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />
       )}
-      <Flex wrap="wrap" gap="2" justify={compact ? 'between' : 'center'}>
+
+      <Flex
+        wrap="wrap"
+        gap="2"
+        style={{
+          justifyContent:
+            compact && firstChunk.length > 0 && secondChunk.length > 0
+              ? 'space-around'
+              : 'center',
+        }}
+      >
         {!compact &&
           searchResultsPageSlice.map((tank) => (
             <Link
@@ -970,7 +983,7 @@ export function TankSearch({
             </Link>
           ))}
 
-        {compact && (
+        {compact && firstChunk.length > 0 && (
           <CompactSearchResultRow tanks={firstChunk} onSelect={onSelect} />
         )}
 
