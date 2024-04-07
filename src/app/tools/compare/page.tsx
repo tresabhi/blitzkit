@@ -4,6 +4,7 @@ import {
   CaretLeftIcon,
   CaretRightIcon,
   CaretSortIcon,
+  ComponentPlaceholderIcon,
   GroupIcon,
   PlusIcon,
   TrashIcon,
@@ -22,11 +23,14 @@ import {
 import { times } from 'lodash';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
+import { ConsumablesManager } from '../../../components/ConsumablesManager';
 import { EquipmentManager } from '../../../components/EquipmentManager';
 import PageWrapper from '../../../components/PageWrapper';
 import { ProvisionsManager } from '../../../components/ProvisionsManager';
 import { asset } from '../../../core/blitzkrieg/asset';
 import { availableProvisions } from '../../../core/blitzkrieg/availableProvisions';
+import { checkConsumableProvisionInclusivity } from '../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
+import { consumableDefinitions } from '../../../core/blitzkrieg/consumableDefinitions';
 import { equipmentDefinitions } from '../../../core/blitzkrieg/equipmentDefinitions';
 import { modelDefinitions } from '../../../core/blitzkrieg/modelDefinitions';
 import { provisionDefinitions } from '../../../core/blitzkrieg/provisionDefinitions';
@@ -52,6 +56,7 @@ export default function Page() {
   const router = useRouter();
   const awaitedTankDefinitions = use(tankDefinitions);
   const awaitedSkillDefinitions = use(skillDefinitions);
+  const awaitedConsumableDefinitions = use(consumableDefinitions);
   const searchParams = useSearchParams();
   const members = useCompareTemporary((state) => state.members);
   const [addTankDialogOpen, setAddTankDialogOpen] = useState(false);
@@ -442,13 +447,32 @@ export default function Page() {
                 <Table.Cell />
 
                 {members.map(
-                  ({ equipmentMatrix, tank, key, provisions, gun }, index) => {
+                  (
+                    {
+                      equipmentMatrix,
+                      tank,
+                      key,
+                      provisions,
+                      gun,
+                      consumables,
+                    },
+                    index,
+                  ) => {
                     const equipmentPreset =
                       awaitedEquipmentDefinitions.presets[tank.equipment];
                     const provisionsList = availableProvisions(
                       tank,
                       gun,
                       awaitedProvisionDefinitions,
+                    );
+                    const consumablesList = Object.values(
+                      awaitedConsumableDefinitions,
+                    ).filter((consumable) =>
+                      checkConsumableProvisionInclusivity(
+                        consumable,
+                        tank,
+                        gun,
+                      ),
                     );
 
                     return (
@@ -462,6 +486,84 @@ export default function Page() {
                             height: '100%',
                           }}
                         >
+                          <Popover.Root>
+                            <Popover.Trigger>
+                              <Button
+                                variant="ghost"
+                                radius="large"
+                                style={{
+                                  height: '100%',
+                                  width: 12,
+                                  position: 'relative',
+                                }}
+                              >
+                                <Flex direction="column" justify="center">
+                                  {provisions.map((provision, index) => (
+                                    <img
+                                      key={provision}
+                                      src={asset(
+                                        `/icons/provisions/${provision}.webp`,
+                                      )}
+                                      style={{
+                                        left: '50%',
+                                        /**
+                                         * max = 100% - 16px - 4px
+                                         * min = 4px
+                                         * diff = max - min
+                                         *      = 100% - 16px - 4px - 4px
+                                         *      = 100% - 24px
+                                         * coefficient = index / length - 1
+                                         * position = min + coefficient * diff
+                                         */
+                                        top: `calc(4px + ${
+                                          provisions.length === 1
+                                            ? 0.5
+                                            : index / (provisions.length - 1)
+                                        } * (100% - 24px))`,
+                                        transform: 'translateX(-50%)',
+                                        position: 'absolute',
+                                        width: 16,
+                                        height: 16,
+                                        objectFit: 'contain',
+                                      }}
+                                    />
+                                  ))}
+
+                                  {provisions.length === 0 && <GroupIcon />}
+                                </Flex>
+                              </Button>
+                            </Popover.Trigger>
+
+                            <Popover.Content>
+                              <ProvisionsManager
+                                provisions={provisionsList.map(
+                                  (provision) => provision.id,
+                                )}
+                                selected={provisions}
+                                disabled={tank.provisions === provisions.length}
+                                onChange={(provisions) => {
+                                  mutateCompareTemporary((draft) => {
+                                    draft.members[index].provisions =
+                                      provisions;
+                                  });
+                                }}
+                              />
+
+                              <Flex justify="end" mt="4">
+                                <Button
+                                  variant="ghost"
+                                  onClick={() => {
+                                    mutateCompareTemporary((draft) => {
+                                      draft.members[index].provisions = [];
+                                    });
+                                  }}
+                                >
+                                  Clear
+                                </Button>
+                              </Flex>
+                            </Popover.Content>
+                          </Popover.Root>
+
                           <Popover.Root>
                             <Popover.Trigger>
                               <Button variant="ghost" radius="large">
@@ -575,11 +677,11 @@ export default function Page() {
                                 }}
                               >
                                 <Flex direction="column" justify="center">
-                                  {provisions.map((provision, index) => (
+                                  {consumables.map((consumable, index) => (
                                     <img
-                                      key={provision}
+                                      key={consumable}
                                       src={asset(
-                                        `/icons/provisions/${provision}.webp`,
+                                        `/icons/consumables/${consumable}.webp`,
                                       )}
                                       style={{
                                         left: '50%',
@@ -593,9 +695,9 @@ export default function Page() {
                                          * position = min + coefficient * diff
                                          */
                                         top: `calc(4px + ${
-                                          provisions.length === 1
+                                          consumables.length === 1
                                             ? 0.5
-                                            : index / (provisions.length - 1)
+                                            : index / (consumables.length - 1)
                                         } * (100% - 24px))`,
                                         transform: 'translateX(-50%)',
                                         position: 'absolute',
@@ -606,24 +708,26 @@ export default function Page() {
                                     />
                                   ))}
 
-                                  {provisions.length === 0 && <GroupIcon />}
+                                  {consumables.length === 0 && (
+                                    <ComponentPlaceholderIcon />
+                                  )}
                                 </Flex>
                               </Button>
                             </Popover.Trigger>
 
                             <Popover.Content>
-                              <ProvisionsManager
-                                provisions={provisionsList.map(
-                                  (provision) => provision.id,
-                                )}
-                                selected={provisions}
-                                disabled={tank.provisions === provisions.length}
-                                onChange={(provisions) => {
+                              <ConsumablesManager
+                                consumables={consumablesList}
+                                selected={consumables}
+                                onChange={(consumables) => {
                                   mutateCompareTemporary((draft) => {
-                                    draft.members[index].provisions =
-                                      provisions;
+                                    draft.members[index].consumables =
+                                      consumables;
                                   });
                                 }}
+                                disabled={
+                                  tank.consumables === consumables.length
+                                }
                               />
 
                               <Flex justify="end" mt="4">
@@ -631,7 +735,7 @@ export default function Page() {
                                   variant="ghost"
                                   onClick={() => {
                                     mutateCompareTemporary((draft) => {
-                                      draft.members[index].provisions = [];
+                                      draft.members[index].consumables = [];
                                     });
                                   }}
                                 >

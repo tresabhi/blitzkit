@@ -8,7 +8,7 @@ import {
   Text,
 } from '@radix-ui/themes';
 import { use } from 'react';
-import { ConsumableButton } from '../../../../../../../components/ModuleButtons/ConsumableButton';
+import { ConsumablesManager } from '../../../../../../../components/ConsumablesManager';
 import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
 import { consumableDefinitions } from '../../../../../../../core/blitzkrieg/consumableDefinitions';
 import { useEquipment } from '../../../../../../../hooks/useEquipment';
@@ -68,48 +68,20 @@ export function Consumables() {
         </Button>
       </Flex>
 
-      <Flex wrap="wrap">
-        {consumablesList.map((consumable, index) => {
-          const selected = consumables.includes(consumable.id);
-
-          return (
-            <ConsumableButton
-              special={consumable.duration === undefined}
-              duration={
-                consumable.duration === undefined
-                  ? undefined
-                  : consumable.duration * (hasHighEndConsumables ? 0.7 : 1)
-              }
-              cooldown={
-                consumable.cooldown *
-                (hasConsumableDeliverySystem ? 0.85 : 1) *
-                (1 - cooldownBooster * 0.1)
-              }
-              key={consumable.id}
-              first={index === 0}
-              last={index === consumablesList.length - 1}
-              rowChild
-              disabled={
-                protagonist.tank.consumables === consumables.length && !selected
-              }
-              consumable={consumable.id}
-              selected={selected}
-              onClick={() => {
-                mutateDuel((draft) => {
-                  if (selected) {
-                    draft.protagonist!.consumables =
-                      draft.protagonist!.consumables.filter(
-                        (id) => id !== consumable.id,
-                      );
-                  } else {
-                    draft.protagonist!.consumables.push(consumable.id);
-                  }
-                });
-              }}
-            />
-          );
-        })}
-      </Flex>
+      <ConsumablesManager
+        consumables={consumablesList}
+        selected={consumables}
+        cooldownBooster={cooldownBooster}
+        disabled={protagonist.tank.consumables === consumables.length}
+        hasConsumableDeliverySystem={hasConsumableDeliverySystem}
+        hasHighEndConsumables={hasHighEndConsumables}
+        timers
+        onChange={(consumables) => {
+          mutateDuel((draft) => {
+            draft.protagonist!.consumables = consumables;
+          });
+        }}
+      />
     </ConfigurationChildWrapper>
   );
 }
