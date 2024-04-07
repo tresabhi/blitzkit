@@ -1,6 +1,7 @@
 import { slateDark } from '@radix-ui/colors';
 import {
   CaretDownIcon,
+  CaretRightIcon,
   MagnifyingGlassIcon,
   TrashIcon,
 } from '@radix-ui/react-icons';
@@ -445,10 +446,34 @@ export function TankSearch({
 
               setSearchedList(results);
             }}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                if (
+                  searchResults.length > 0 &&
+                  input.current &&
+                  input.current.value.length > 0
+                ) {
+                  onSelect(searchResults[0]);
+                }
+              }
+            }}
           >
             <TextField.Slot>
               <MagnifyingGlassIcon height="16" width="16" />
             </TextField.Slot>
+
+            {searchResults.length > 0 &&
+              input.current &&
+              input.current.value.length > 0 && (
+                <TextField.Slot>
+                  <Button
+                    variant="ghost"
+                    onClick={() => onSelect(searchResults[0])}
+                  >
+                    {searchResults[0].name} <CaretRightIcon />
+                  </Button>
+                </TextField.Slot>
+              )}
           </TextField.Root>
 
           <DropdownMenu.Root>
