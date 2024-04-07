@@ -5,7 +5,6 @@ import {
   CaretRightIcon,
   CaretSortIcon,
   ComponentPlaceholderIcon,
-  GroupIcon,
   PlusIcon,
   TrashIcon,
 } from '@radix-ui/react-icons';
@@ -529,7 +528,9 @@ export default function Page() {
                                     />
                                   ))}
 
-                                  {provisions.length === 0 && <GroupIcon />}
+                                  {provisions.length === 0 && (
+                                    <ComponentPlaceholderIcon />
+                                  )}
                                 </Flex>
                               </Button>
                             </Popover.Trigger>
