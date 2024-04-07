@@ -14,6 +14,8 @@ export function ProvisionsManager({
   onChange,
   disabled,
 }: ProvisionsManagerProps) {
+  console.log(disabled);
+
   return (
     <Flex wrap="wrap">
       {provisions.map((provision, index) => {
@@ -25,7 +27,7 @@ export function ProvisionsManager({
             first={index === 0}
             last={index === provisions.length - 1}
             rowChild
-            disabled={disabled && !selected}
+            disabled={disabled && !isSelected}
             provision={provision}
             selected={isSelected}
             onClick={() => {

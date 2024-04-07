@@ -573,7 +573,7 @@ export default function Page() {
                                 radius="large"
                                 style={{
                                   height: '100%',
-                                  width: 16,
+                                  width: 12,
                                   position: 'relative',
                                 }}
                               >
@@ -618,9 +618,7 @@ export default function Page() {
                                   (provision) => provision.id,
                                 )}
                                 selected={provisions}
-                                disabled={
-                                  tank.provisions === provisionsList.length
-                                }
+                                disabled={tank.provisions === provisions.length}
                                 onChange={(provisions) => {
                                   mutateCompareTemporary((draft) => {
                                     draft.members[index].provisions =
