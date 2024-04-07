@@ -4,6 +4,7 @@ import {
   CaretLeftIcon,
   CaretRightIcon,
   CaretSortIcon,
+  GroupIcon,
   PlusIcon,
   TrashIcon,
 } from '@radix-ui/react-icons';
@@ -577,7 +578,7 @@ export default function Page() {
                                   position: 'relative',
                                 }}
                               >
-                                <Flex direction="column">
+                                <Flex direction="column" justify="center">
                                   {provisions.map((provision, index) => (
                                     <img
                                       key={provision}
@@ -608,6 +609,8 @@ export default function Page() {
                                       }}
                                     />
                                   ))}
+
+                                  {provisions.length === 0 && <GroupIcon />}
                                 </Flex>
                               </Button>
                             </Popover.Trigger>
