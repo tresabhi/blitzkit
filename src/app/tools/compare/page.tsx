@@ -517,52 +517,48 @@ export default function Page() {
                             </Popover.Trigger>
 
                             <Popover.Content>
-                              <Flex direction="column" gap="4">
-                                <EquipmentManager
-                                  matrix={equipmentMatrix}
-                                  preset={equipmentPreset}
-                                  onChange={(matrix) => {
+                              <EquipmentManager
+                                matrix={equipmentMatrix}
+                                preset={equipmentPreset}
+                                onChange={(matrix) => {
+                                  mutateCompareTemporary((draft) => {
+                                    draft.members[index].equipmentMatrix =
+                                      matrix;
+                                    draft.sorting = undefined;
+                                  });
+                                }}
+                              />
+
+                              <Flex justify="end" gap="4" mt="4">
+                                <Button
+                                  variant="ghost"
+                                  color="red"
+                                  onClick={() => {
                                     mutateCompareTemporary((draft) => {
                                       draft.members[index].equipmentMatrix =
-                                        matrix;
+                                        times(3, () =>
+                                          times(3, () => 0),
+                                        ) as EquipmentMatrix;
                                       draft.sorting = undefined;
                                     });
                                   }}
-                                />
-
-                                <Flex justify="end" gap="4">
-                                  <Button
-                                    variant="ghost"
-                                    color="red"
-                                    onClick={() => {
-                                      mutateCompareTemporary((draft) => {
-                                        draft.members[index].equipmentMatrix =
-                                          times(3, () =>
-                                            times(3, () => 0),
-                                          ) as EquipmentMatrix;
+                                >
+                                  Clear
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  onClick={() => {
+                                    mutateCompareTemporary((draft) => {
+                                      draft.members.forEach((member) => {
+                                        member.equipmentMatrix =
+                                          draft.members[index].equipmentMatrix;
                                         draft.sorting = undefined;
                                       });
-                                    }}
-                                  >
-                                    Clear
-                                  </Button>
-                                  <Button
-                                    variant="ghost"
-                                    onClick={() => {
-                                      mutateCompareTemporary((draft) => {
-                                        draft.members.forEach((member) => {
-                                          member.equipmentMatrix =
-                                            draft.members[
-                                              index
-                                            ].equipmentMatrix;
-                                          draft.sorting = undefined;
-                                        });
-                                      });
-                                    }}
-                                  >
-                                    Apply to all
-                                  </Button>
-                                </Flex>
+                                    });
+                                  }}
+                                >
+                                  Apply to all
+                                </Button>
                               </Flex>
                             </Popover.Content>
                           </Popover.Root>
@@ -629,6 +625,19 @@ export default function Page() {
                                   });
                                 }}
                               />
+
+                              <Flex justify="end" mt="4">
+                                <Button
+                                  variant="ghost"
+                                  onClick={() => {
+                                    mutateCompareTemporary((draft) => {
+                                      draft.members[index].provisions = [];
+                                    });
+                                  }}
+                                >
+                                  Clear
+                                </Button>
+                              </Flex>
                             </Popover.Content>
                           </Popover.Root>
                         </Flex>
