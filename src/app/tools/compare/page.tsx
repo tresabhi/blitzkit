@@ -781,9 +781,9 @@ export default function Page() {
               )}
               <Row name="Caliber" value="caliber" decimals={0} />
               <Row name="Penetration" value="penetration" decimals={0} />
-              <Row name="Damage" value="damage" />
-              <Row name="Module damage" value="moduleDamage" />
-              <Row name="Shell velocity" value="shellVelocity" />
+              <Row name="Damage" value="damage" decimals={0} />
+              <Row name="Module damage" value="moduleDamage" decimals={0} />
+              <Row name="Shell velocity" value="shellVelocity" decimals={0} />
               <Row
                 name="Aim time"
                 value="aimTime"
