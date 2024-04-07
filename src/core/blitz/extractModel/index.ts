@@ -161,15 +161,6 @@ export async function extractModel(data: string, path: string) {
             const rotation = new Quaternion();
             const scale = new Vector3();
 
-            if (
-              !component['tc.worldTranslation'] ||
-              !component['tc.worldScale'] ||
-              !component['tc.localTranslation'] ||
-              !component['tc.localScale']
-            ) {
-              console.log(component);
-            }
-
             new Matrix4()
               .multiplyMatrices(
                 new Matrix4().compose(

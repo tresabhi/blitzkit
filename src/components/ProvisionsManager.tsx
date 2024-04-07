@@ -14,8 +14,6 @@ export function ProvisionsManager({
   onChange,
   disabled,
 }: ProvisionsManagerProps) {
-  console.log(disabled);
-
   return (
     <Flex wrap="wrap">
       {provisions.map((provision, index) => {
