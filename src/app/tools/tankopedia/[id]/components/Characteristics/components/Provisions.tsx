@@ -1,6 +1,6 @@
 import { Button, Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
-import { ProvisionButton } from '../../../../../../../components/ModuleButtons/ProvisionButton';
+import { ProvisionsManager } from '../../../../../../../components/ProvisionsManager';
 import { availableProvisions } from '../../../../../../../core/blitzkrieg/availableProvisions';
 import { provisionDefinitions } from '../../../../../../../core/blitzkrieg/provisionDefinitions';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
@@ -33,35 +33,16 @@ export function Provisions() {
         </Button>
       </Flex>
 
-      <Flex wrap="wrap">
-        {provisionsList.map((provision, index) => {
-          const selected = provisions.includes(provision.id);
-
-          return (
-            <ProvisionButton
-              key={provision.id}
-              first={index === 0}
-              last={index === provisionsList.length - 1}
-              rowChild
-              disabled={tank.provisions === provisions.length && !selected}
-              provision={provision.id}
-              selected={selected}
-              onClick={() => {
-                mutateDuel((draft) => {
-                  if (selected) {
-                    draft.protagonist!.provisions =
-                      draft.protagonist!.provisions.filter(
-                        (id) => id !== provision.id,
-                      );
-                  } else {
-                    draft.protagonist!.provisions.push(provision.id);
-                  }
-                });
-              }}
-            />
-          );
-        })}
-      </Flex>
+      <ProvisionsManager
+        provisions={provisionsList.map((provision) => provision.id)}
+        selected={provisions}
+        disabled={tank.provisions === provisionsList.length}
+        onChange={(provisions) => {
+          mutateDuel((draft) => {
+            draft.protagonist!.provisions = provisions;
+          });
+        }}
+      />
     </ConfigurationChildWrapper>
   );
 }

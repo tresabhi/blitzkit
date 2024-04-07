@@ -23,7 +23,9 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
 import { EquipmentManager } from '../../../components/EquipmentManager';
 import PageWrapper from '../../../components/PageWrapper';
+import { ProvisionsManager } from '../../../components/ProvisionsManager';
 import { asset } from '../../../core/blitzkrieg/asset';
+import { availableProvisions } from '../../../core/blitzkrieg/availableProvisions';
 import { equipmentDefinitions } from '../../../core/blitzkrieg/equipmentDefinitions';
 import { modelDefinitions } from '../../../core/blitzkrieg/modelDefinitions';
 import { provisionDefinitions } from '../../../core/blitzkrieg/provisionDefinitions';
@@ -439,9 +441,14 @@ export default function Page() {
                 <Table.Cell />
 
                 {members.map(
-                  ({ equipmentMatrix, tank, key, provisions }, index) => {
+                  ({ equipmentMatrix, tank, key, provisions, gun }, index) => {
                     const equipmentPreset =
                       awaitedEquipmentDefinitions.presets[tank.equipment];
+                    const provisionsList = availableProvisions(
+                      tank,
+                      gun,
+                      awaitedProvisionDefinitions,
+                    );
 
                     return (
                       <Table.Cell key={key}>
@@ -559,48 +566,70 @@ export default function Page() {
                             </Popover.Content>
                           </Popover.Root>
 
-                          <Button
-                            variant="ghost"
-                            radius="large"
-                            style={{
-                              height: '100%',
-                              width: 16,
-                              position: 'relative',
-                            }}
-                          >
-                            <Flex direction="column">
-                              {provisions.map((provision, index) => (
-                                <img
-                                  key={provision}
-                                  src={asset(
-                                    `/icons/provisions/${provision}.webp`,
-                                  )}
-                                  style={{
-                                    left: '50%',
-                                    /**
-                                     * max = 100% - 16px - 4px
-                                     * min = 4px
-                                     * diff = max - min
-                                     *      = 100% - 16px - 4px - 4px
-                                     *      = 100% - 24px
-                                     * coefficient = index / length - 1
-                                     * position = min + coefficient * diff
-                                     */
-                                    top: `calc(4px + ${
-                                      provisions.length === 1
-                                        ? 0.5
-                                        : index / (provisions.length - 1)
-                                    } * (100% - 24px))`,
-                                    transform: 'translateX(-50%)',
-                                    position: 'absolute',
-                                    width: 16,
-                                    height: 16,
-                                    objectFit: 'contain',
-                                  }}
-                                />
-                              ))}
-                            </Flex>
-                          </Button>
+                          <Popover.Root>
+                            <Popover.Trigger>
+                              <Button
+                                variant="ghost"
+                                radius="large"
+                                style={{
+                                  height: '100%',
+                                  width: 16,
+                                  position: 'relative',
+                                }}
+                              >
+                                <Flex direction="column">
+                                  {provisions.map((provision, index) => (
+                                    <img
+                                      key={provision}
+                                      src={asset(
+                                        `/icons/provisions/${provision}.webp`,
+                                      )}
+                                      style={{
+                                        left: '50%',
+                                        /**
+                                         * max = 100% - 16px - 4px
+                                         * min = 4px
+                                         * diff = max - min
+                                         *      = 100% - 16px - 4px - 4px
+                                         *      = 100% - 24px
+                                         * coefficient = index / length - 1
+                                         * position = min + coefficient * diff
+                                         */
+                                        top: `calc(4px + ${
+                                          provisions.length === 1
+                                            ? 0.5
+                                            : index / (provisions.length - 1)
+                                        } * (100% - 24px))`,
+                                        transform: 'translateX(-50%)',
+                                        position: 'absolute',
+                                        width: 16,
+                                        height: 16,
+                                        objectFit: 'contain',
+                                      }}
+                                    />
+                                  ))}
+                                </Flex>
+                              </Button>
+                            </Popover.Trigger>
+
+                            <Popover.Content>
+                              <ProvisionsManager
+                                provisions={provisionsList.map(
+                                  (provision) => provision.id,
+                                )}
+                                selected={provisions}
+                                disabled={
+                                  tank.provisions === provisionsList.length
+                                }
+                                onChange={(provisions) => {
+                                  mutateCompareTemporary((draft) => {
+                                    draft.members[index].provisions =
+                                      provisions;
+                                  });
+                                }}
+                              />
+                            </Popover.Content>
+                          </Popover.Root>
                         </Flex>
                       </Table.Cell>
                     );
