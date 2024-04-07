@@ -480,7 +480,7 @@ export default function Page() {
                         <Flex
                           align="center"
                           justify="center"
-                          gap="4"
+                          gap="3"
                           style={{
                             width: '100%',
                             height: '100%',
