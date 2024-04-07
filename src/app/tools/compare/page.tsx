@@ -35,7 +35,10 @@ import { modelDefinitions } from '../../../core/blitzkrieg/modelDefinitions';
 import { provisionDefinitions } from '../../../core/blitzkrieg/provisionDefinitions';
 import { skillDefinitions } from '../../../core/blitzkrieg/skillDefinitions';
 import { tankCharacteristics } from '../../../core/blitzkrieg/tankCharacteristics';
-import { tankDefinitions } from '../../../core/blitzkrieg/tankDefinitions';
+import {
+  TankDefinition,
+  tankDefinitions,
+} from '../../../core/blitzkrieg/tankDefinitions';
 import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
 import { tankToCompareMember } from '../../../core/blitzkrieg/tankToCompareMember';
 import { theme } from '../../../stitches.config';
@@ -94,7 +97,6 @@ export default function Page() {
     [searchParams],
   );
 
-  const test = Object.keys(awaitedProvisionDefinitions).slice(0, 1);
   const hasNonRegularGun = members.some(({ gun }) => gun.type !== 'regular');
 
   useEffect(() => {
@@ -300,6 +302,46 @@ export default function Page() {
     );
   }
 
+  function TankCard({ index, tank }: { index: number; tank: TankDefinition }) {
+    return (
+      <Table.ColumnHeaderCell width="0" style={{ left: 0 }}>
+        <Flex
+          direction="column"
+          align="center"
+          justify="between"
+          gap="2"
+          style={{ height: '100%' }}
+        >
+          <TankControl
+            index={index}
+            key={tank.id}
+            tank={tank}
+            members={members}
+          />
+          <img
+            src={tankIcon(tank.id)}
+            width={64}
+            height={64}
+            style={{
+              objectFit: 'contain',
+            }}
+          />
+
+          <Text
+            style={{
+              whiteSpace: 'nowrap',
+              maxWidth: 128,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {tank.name}
+          </Text>
+        </Flex>
+      </Table.ColumnHeaderCell>
+    );
+  }
+
   return (
     <PageWrapper color="crimson" size="100%">
       <Flex justify="center" gap="2" align="center" mt="4" direction="column">
@@ -397,46 +439,10 @@ export default function Page() {
           <Table.Root variant="surface" style={{ maxWidth: '100%' }}>
             <Table.Header>
               <Table.Row>
-                <Table.ColumnHeaderCell />
+                <Table.ColumnHeaderCell width="0" />
 
                 {members.map(({ tank, key }, index) => {
-                  return (
-                    <Table.ColumnHeaderCell width="0" key={key}>
-                      <Flex
-                        direction="column"
-                        align="center"
-                        justify="between"
-                        gap="2"
-                        style={{ height: '100%' }}
-                      >
-                        <TankControl
-                          index={index}
-                          key={tank.id}
-                          tank={tank}
-                          members={members}
-                        />
-                        <img
-                          src={tankIcon(tank.id)}
-                          width={64}
-                          height={64}
-                          style={{
-                            objectFit: 'contain',
-                          }}
-                        />
-
-                        <Text
-                          style={{
-                            whiteSpace: 'nowrap',
-                            maxWidth: 128,
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                          }}
-                        >
-                          {tank.name}
-                        </Text>
-                      </Flex>
-                    </Table.ColumnHeaderCell>
-                  );
+                  return <TankCard index={index} key={key} tank={tank} />;
                 })}
               </Table.Row>
             </Table.Header>
@@ -571,6 +577,7 @@ export default function Page() {
                                 <Flex gap="1" direction="column">
                                   {times(3, (y) => (
                                     <Flex
+                                      key={y}
                                       style={{
                                         gap: 6,
                                       }}
@@ -580,6 +587,7 @@ export default function Page() {
 
                                         return (
                                           <Flex
+                                            key={x}
                                             style={{
                                               gap: 2,
                                             }}
