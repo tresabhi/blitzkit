@@ -488,274 +488,300 @@ export default function Page() {
                         <Flex
                           align="center"
                           justify="center"
+                          direction="column"
                           gap="3"
                           style={{
                             width: '100%',
                             height: '100%',
                           }}
                         >
-                          <Popover.Root>
-                            <Popover.Trigger>
-                              <Button
-                                variant="ghost"
-                                radius="large"
-                                style={{
-                                  height: '100%',
-                                  width: 12,
-                                  position: 'relative',
-                                }}
-                              >
-                                <Flex direction="column" justify="center">
-                                  {provisions.map((provision, index) => (
-                                    <img
-                                      key={provision}
-                                      src={asset(
-                                        `/icons/provisions/${provision}.webp`,
-                                      )}
-                                      style={{
-                                        left: '50%',
-                                        /**
-                                         * max = 100% - 16px - 4px
-                                         * min = 4px
-                                         * diff = max - min
-                                         *      = 100% - 16px - 4px - 4px
-                                         *      = 100% - 24px
-                                         * coefficient = index / length - 1
-                                         * position = min + coefficient * diff
-                                         */
-                                        top: `calc(4px + ${
-                                          provisions.length === 1
-                                            ? 0.5
-                                            : index / (provisions.length - 1)
-                                        } * (100% - 24px))`,
-                                        transform: 'translateX(-50%)',
-                                        position: 'absolute',
-                                        width: 16,
-                                        height: 16,
-                                        objectFit: 'contain',
-                                      }}
-                                    />
-                                  ))}
-
-                                  {provisions.length === 0 && (
-                                    <ComponentPlaceholderIcon />
-                                  )}
-                                </Flex>
-                              </Button>
-                            </Popover.Trigger>
-
-                            <Popover.Content>
-                              <ProvisionsManager
-                                provisions={provisionsList.map(
-                                  (provision) => provision.id,
-                                )}
-                                selected={provisions}
-                                disabled={tank.provisions === provisions.length}
-                                onChange={(provisions) => {
-                                  mutateCompareTemporary((draft) => {
-                                    draft.members[index].provisions =
-                                      provisions;
-                                  });
-                                }}
-                              />
-
-                              <Flex justify="end" mt="4">
+                          <Flex align="center" justify="center" gap="3">
+                            <Popover.Root>
+                              <Popover.Trigger>
                                 <Button
                                   variant="ghost"
-                                  onClick={() => {
-                                    mutateCompareTemporary((draft) => {
-                                      draft.members[index].provisions = [];
-                                    });
+                                  radius="large"
+                                  style={{
+                                    height: '100%',
+                                    width: 12,
+                                    position: 'relative',
                                   }}
                                 >
-                                  Clear
+                                  <Flex direction="column" justify="center">
+                                    {provisions.map((provision, index) => (
+                                      <img
+                                        key={provision}
+                                        src={asset(
+                                          `/icons/provisions/${provision}.webp`,
+                                        )}
+                                        style={{
+                                          left: '50%',
+                                          /**
+                                           * max = 100% - 16px - 4px
+                                           * min = 4px
+                                           * diff = max - min
+                                           *      = 100% - 16px - 4px - 4px
+                                           *      = 100% - 24px
+                                           * coefficient = index / length - 1
+                                           * position = min + coefficient * diff
+                                           */
+                                          top: `calc(4px + ${
+                                            provisions.length === 1
+                                              ? 0.5
+                                              : index / (provisions.length - 1)
+                                          } * (100% - 24px))`,
+                                          transform: 'translateX(-50%)',
+                                          position: 'absolute',
+                                          width: 16,
+                                          height: 16,
+                                          objectFit: 'contain',
+                                        }}
+                                      />
+                                    ))}
+
+                                    {provisions.length === 0 && (
+                                      <ComponentPlaceholderIcon />
+                                    )}
+                                  </Flex>
                                 </Button>
-                              </Flex>
-                            </Popover.Content>
-                          </Popover.Root>
+                              </Popover.Trigger>
 
-                          <Popover.Root>
-                            <Popover.Trigger>
-                              <Button variant="ghost" radius="large">
-                                <Flex gap="1" direction="column">
-                                  {times(3, (y) => (
-                                    <Flex
-                                      key={y}
-                                      style={{
-                                        gap: 6,
-                                      }}
-                                    >
-                                      {times(3, (x) => {
-                                        const equipment = equipmentMatrix[y][x];
+                              <Popover.Content>
+                                <ProvisionsManager
+                                  provisions={provisionsList.map(
+                                    (provision) => provision.id,
+                                  )}
+                                  selected={provisions}
+                                  disabled={
+                                    tank.provisions === provisions.length
+                                  }
+                                  onChange={(provisions) => {
+                                    mutateCompareTemporary((draft) => {
+                                      draft.members[index].provisions =
+                                        provisions;
+                                    });
+                                  }}
+                                />
 
-                                        return (
-                                          <Flex
-                                            key={x}
-                                            style={{
-                                              gap: 2,
-                                            }}
-                                          >
-                                            <div
-                                              style={{
-                                                width: 4,
-                                                height: 8,
-                                                backgroundColor:
-                                                  equipment === -1
-                                                    ? theme.colors
-                                                        .textLowContrast_crimson
-                                                    : theme.colors
-                                                        .textLowContrast,
-                                                borderRadius: 2,
-                                              }}
-                                            />
-                                            <div
-                                              style={{
-                                                width: 4,
-                                                height: 8,
-                                                backgroundColor:
-                                                  equipment === 1
-                                                    ? theme.colors
-                                                        .textLowContrast_crimson
-                                                    : theme.colors
-                                                        .textLowContrast,
-                                                borderRadius: 2,
-                                              }}
-                                            />
-                                          </Flex>
-                                        );
-                                      })}
-                                    </Flex>
-                                  ))}
+                                <Flex justify="end" mt="4">
+                                  <Button
+                                    variant="ghost"
+                                    onClick={() => {
+                                      mutateCompareTemporary((draft) => {
+                                        draft.members[index].provisions = [];
+                                      });
+                                    }}
+                                  >
+                                    Clear
+                                  </Button>
                                 </Flex>
-                              </Button>
-                            </Popover.Trigger>
+                              </Popover.Content>
+                            </Popover.Root>
 
-                            <Popover.Content>
-                              <EquipmentManager
-                                matrix={equipmentMatrix}
-                                preset={equipmentPreset}
-                                onChange={(matrix) => {
-                                  mutateCompareTemporary((draft) => {
-                                    draft.members[index].equipmentMatrix =
-                                      matrix;
-                                    draft.sorting = undefined;
-                                  });
-                                }}
-                              />
+                            <Popover.Root>
+                              <Popover.Trigger>
+                                <Button variant="ghost" radius="large">
+                                  <Flex gap="1" direction="column">
+                                    {times(3, (y) => (
+                                      <Flex
+                                        key={y}
+                                        style={{
+                                          gap: 6,
+                                        }}
+                                      >
+                                        {times(3, (x) => {
+                                          const equipment =
+                                            equipmentMatrix[y][x];
 
-                              <Flex justify="end" gap="4" mt="4">
-                                <Button
-                                  variant="ghost"
-                                  color="red"
-                                  onClick={() => {
+                                          return (
+                                            <Flex
+                                              key={x}
+                                              style={{
+                                                gap: 2,
+                                              }}
+                                            >
+                                              <div
+                                                style={{
+                                                  width: 4,
+                                                  height: 8,
+                                                  backgroundColor:
+                                                    equipment === -1
+                                                      ? theme.colors
+                                                          .textLowContrast_crimson
+                                                      : theme.colors
+                                                          .textLowContrast,
+                                                  borderRadius: 2,
+                                                }}
+                                              />
+                                              <div
+                                                style={{
+                                                  width: 4,
+                                                  height: 8,
+                                                  backgroundColor:
+                                                    equipment === 1
+                                                      ? theme.colors
+                                                          .textLowContrast_crimson
+                                                      : theme.colors
+                                                          .textLowContrast,
+                                                  borderRadius: 2,
+                                                }}
+                                              />
+                                            </Flex>
+                                          );
+                                        })}
+                                      </Flex>
+                                    ))}
+                                  </Flex>
+                                </Button>
+                              </Popover.Trigger>
+
+                              <Popover.Content>
+                                <EquipmentManager
+                                  matrix={equipmentMatrix}
+                                  preset={equipmentPreset}
+                                  onChange={(matrix) => {
                                     mutateCompareTemporary((draft) => {
                                       draft.members[index].equipmentMatrix =
-                                        times(3, () =>
-                                          times(3, () => 0),
-                                        ) as EquipmentMatrix;
+                                        matrix;
                                       draft.sorting = undefined;
                                     });
                                   }}
-                                >
-                                  Clear
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  onClick={() => {
-                                    mutateCompareTemporary((draft) => {
-                                      draft.members.forEach((member) => {
-                                        member.equipmentMatrix =
-                                          draft.members[index].equipmentMatrix;
+                                />
+
+                                <Flex justify="end" gap="4" mt="4">
+                                  <Button
+                                    variant="ghost"
+                                    color="red"
+                                    onClick={() => {
+                                      mutateCompareTemporary((draft) => {
+                                        draft.members[index].equipmentMatrix =
+                                          times(3, () =>
+                                            times(3, () => 0),
+                                          ) as EquipmentMatrix;
                                         draft.sorting = undefined;
                                       });
-                                    });
-                                  }}
-                                >
-                                  Apply to all
-                                </Button>
-                              </Flex>
-                            </Popover.Content>
-                          </Popover.Root>
-
-                          <Popover.Root>
-                            <Popover.Trigger>
-                              <Button
-                                variant="ghost"
-                                radius="large"
-                                style={{
-                                  height: '100%',
-                                  width: 12,
-                                  position: 'relative',
-                                }}
-                              >
-                                <Flex direction="column" justify="center">
-                                  {consumables.map((consumable, index) => (
-                                    <img
-                                      key={consumable}
-                                      src={asset(
-                                        `/icons/consumables/${consumable}.webp`,
-                                      )}
-                                      style={{
-                                        left: '50%',
-                                        /**
-                                         * max = 100% - 16px - 4px
-                                         * min = 4px
-                                         * diff = max - min
-                                         *      = 100% - 16px - 4px - 4px
-                                         *      = 100% - 24px
-                                         * coefficient = index / length - 1
-                                         * position = min + coefficient * diff
-                                         */
-                                        top: `calc(4px + ${
-                                          consumables.length === 1
-                                            ? 0.5
-                                            : index / (consumables.length - 1)
-                                        } * (100% - 24px))`,
-                                        transform: 'translateX(-50%)',
-                                        position: 'absolute',
-                                        width: 16,
-                                        height: 16,
-                                        objectFit: 'contain',
-                                      }}
-                                    />
-                                  ))}
-
-                                  {consumables.length === 0 && (
-                                    <ComponentPlaceholderIcon />
-                                  )}
+                                    }}
+                                  >
+                                    Clear
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    onClick={() => {
+                                      mutateCompareTemporary((draft) => {
+                                        draft.members.forEach((member) => {
+                                          member.equipmentMatrix =
+                                            draft.members[
+                                              index
+                                            ].equipmentMatrix;
+                                          draft.sorting = undefined;
+                                        });
+                                      });
+                                    }}
+                                  >
+                                    Apply to all
+                                  </Button>
                                 </Flex>
-                              </Button>
-                            </Popover.Trigger>
+                              </Popover.Content>
+                            </Popover.Root>
 
-                            <Popover.Content>
-                              <ConsumablesManager
-                                consumables={consumablesList}
-                                selected={consumables}
-                                onChange={(consumables) => {
-                                  mutateCompareTemporary((draft) => {
-                                    draft.members[index].consumables =
-                                      consumables;
-                                  });
-                                }}
-                                disabled={
-                                  tank.consumables === consumables.length
-                                }
-                              />
-
-                              <Flex justify="end" mt="4">
+                            <Popover.Root>
+                              <Popover.Trigger>
                                 <Button
                                   variant="ghost"
-                                  onClick={() => {
-                                    mutateCompareTemporary((draft) => {
-                                      draft.members[index].consumables = [];
-                                    });
+                                  radius="large"
+                                  style={{
+                                    height: '100%',
+                                    width: 12,
+                                    position: 'relative',
                                   }}
                                 >
-                                  Clear
+                                  <Flex direction="column" justify="center">
+                                    {consumables.map((consumable, index) => (
+                                      <img
+                                        key={consumable}
+                                        src={asset(
+                                          `/icons/consumables/${consumable}.webp`,
+                                        )}
+                                        style={{
+                                          left: '50%',
+                                          /**
+                                           * max = 100% - 16px - 4px
+                                           * min = 4px
+                                           * diff = max - min
+                                           *      = 100% - 16px - 4px - 4px
+                                           *      = 100% - 24px
+                                           * coefficient = index / length - 1
+                                           * position = min + coefficient * diff
+                                           */
+                                          top: `calc(4px + ${
+                                            consumables.length === 1
+                                              ? 0.5
+                                              : index / (consumables.length - 1)
+                                          } * (100% - 24px))`,
+                                          transform: 'translateX(-50%)',
+                                          position: 'absolute',
+                                          width: 16,
+                                          height: 16,
+                                          objectFit: 'contain',
+                                        }}
+                                      />
+                                    ))}
+
+                                    {consumables.length === 0 && (
+                                      <ComponentPlaceholderIcon />
+                                    )}
+                                  </Flex>
                                 </Button>
-                              </Flex>
-                            </Popover.Content>
-                          </Popover.Root>
+                              </Popover.Trigger>
+
+                              <Popover.Content>
+                                <ConsumablesManager
+                                  consumables={consumablesList}
+                                  selected={consumables}
+                                  onChange={(consumables) => {
+                                    mutateCompareTemporary((draft) => {
+                                      draft.members[index].consumables =
+                                        consumables;
+                                    });
+                                  }}
+                                  disabled={
+                                    tank.consumables === consumables.length
+                                  }
+                                />
+
+                                <Flex justify="end" mt="4">
+                                  <Button
+                                    variant="ghost"
+                                    onClick={() => {
+                                      mutateCompareTemporary((draft) => {
+                                        draft.members[index].consumables = [];
+                                      });
+                                    }}
+                                  >
+                                    Clear
+                                  </Button>
+                                </Flex>
+                              </Popover.Content>
+                            </Popover.Root>
+                          </Flex>
+
+                          <Button variant="ghost">
+                            <Flex align="center">
+                              {['turret', 'gun', 'engine', 'chassis'].map(
+                                (module, index) => (
+                                  <img
+                                    width={24}
+                                    height={24}
+                                    src={asset(`icons/modules/${module}.webp`)}
+                                    style={{
+                                      objectFit: 'contain',
+                                      marginLeft: index > 0 ? -4 : 0,
+                                    }}
+                                  />
+                                ),
+                              )}
+                            </Flex>
+                          </Button>
                         </Flex>
                       </Table.Cell>
                     );
