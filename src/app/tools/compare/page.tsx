@@ -214,6 +214,11 @@ export default function Page() {
           const normalizedDeltaPercentage = Math.round(
             Math.min(100, Math.abs(deltaPercentage) * 2 * 100 + 25),
           );
+          const resolvedDisplayValue = display
+            ? display(stats[index])
+            : decimals === undefined
+              ? value
+              : value?.toFixed(decimals);
 
           return (
             <Table.Cell
@@ -244,40 +249,38 @@ export default function Page() {
                 }}
               >
                 <Text style={{ textAlign: 'center' }} wrap="nowrap">
-                  {display
-                    ? display(stats[index])
-                    : decimals === undefined
-                      ? value
-                      : value?.toFixed(decimals)}
+                  {resolvedDisplayValue}
                 </Text>
 
-                {delta !== 0 && (
-                  <>
-                    {deltaMode === 'absolute' && (
-                      <Text color="gray">
-                        (
-                        {`${delta > 0 ? '+' : ''}${
-                          deltaNominalDisplay
-                            ? deltaNominalDisplay(delta)
-                            : decimals === undefined
-                              ? delta
-                              : delta.toFixed(decimals)
-                        }`}
-                        )
-                      </Text>
-                    )}
+                {delta !== 0 &&
+                  resolvedDisplayValue !== undefined &&
+                  values[0] !== undefined && (
+                    <>
+                      {deltaMode === 'absolute' && (
+                        <Text color="gray">
+                          (
+                          {`${delta > 0 ? '+' : ''}${
+                            deltaNominalDisplay
+                              ? deltaNominalDisplay(delta)
+                              : decimals === undefined
+                                ? delta
+                                : delta.toFixed(decimals)
+                          }`}
+                          )
+                        </Text>
+                      )}
 
-                    {deltaMode === 'percentage' && (
-                      <Text color="gray">
-                        (
-                        {`${deltaPercentage > 0 ? '+' : ''}${Math.round(
-                          deltaPercentage * 100,
-                        )}%`}
-                        )
-                      </Text>
-                    )}
-                  </>
-                )}
+                      {deltaMode === 'percentage' && (
+                        <Text color="gray">
+                          (
+                          {`${deltaPercentage > 0 ? '+' : ''}${Math.round(
+                            deltaPercentage * 100,
+                          )}%`}
+                          )
+                        </Text>
+                      )}
+                    </>
+                  )}
               </Flex>
             </Table.Cell>
           );
