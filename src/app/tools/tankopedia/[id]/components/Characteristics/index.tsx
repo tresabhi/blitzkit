@@ -411,6 +411,14 @@ export function Characteristics() {
         <InfoWithDelta decimals={0} name="Engine power" unit="hp">
           {stats.enginePower}
         </InfoWithDelta>
+        <InfoWithDelta
+          decimals={1}
+          name="Weight"
+          unit="tn"
+          deltaType="lowerIsBetter"
+        >
+          {stats.weight}
+        </InfoWithDelta>
         <Info name="Power to weight ratio" unit="hp/tn" />
         <InfoWithDelta decimals={1} indent name="On hard terrain">
           {stats.powerToWeightRatioHardTerrain}
@@ -421,18 +429,10 @@ export function Characteristics() {
         <InfoWithDelta decimals={1} indent name="On soft terrain">
           {stats.powerToWeightRatioSoftTerrain}
         </InfoWithDelta>
-        <InfoWithDelta
-          decimals={1}
-          name="Weight"
-          unit="tn"
-          deltaType="lowerIsBetter"
-        >
-          {stats.weight}
-        </InfoWithDelta>
         <InfoWithDelta name="Turret traverse speed" unit="°/s" decimals={0}>
           {stats.turretTraverseSpeed}
         </InfoWithDelta>
-        <Info name="Effective traverse speed" unit="°/s" />
+        <Info name="Hull traverse speed" unit="°/s" />
         <InfoWithDelta decimals={1} indent name="On hard terrain">
           {stats.hullTraverseHardTerrain}
         </InfoWithDelta>

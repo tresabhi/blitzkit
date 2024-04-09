@@ -23,6 +23,7 @@ import { times } from 'lodash';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
 import { ConsumablesManager } from '../../../components/ConsumablesManager';
+import { CrewSkillManager } from '../../../components/CrewSkillManager';
 import { EquipmentManager } from '../../../components/EquipmentManager';
 import { ModuleManager } from '../../../components/ModuleManager';
 import PageWrapper from '../../../components/PageWrapper';
@@ -520,7 +521,14 @@ export default function Page() {
                       </Popover.Trigger>
 
                       <Popover.Content>
-                        <Heading>ඞ</Heading>
+                        <CrewSkillManager
+                          skillLevels={crewSkills}
+                          onChange={(skills) => {
+                            mutateCompareTemporary((draft) => {
+                              draft.crewSkills = skills;
+                            });
+                          }}
+                        />
                       </Popover.Content>
                     </Popover.Root>
                   </Flex>
@@ -1016,19 +1024,40 @@ export default function Page() {
               <Row name="Speed forwards" value="speedForwards" decimals={0} />
               <Row name="Speed backwards" value="speedBackwards" decimals={0} />
               <Row name="Engine power" value="enginePower" decimals={0} />
+              <Row name="Weight" value="weight" decimals={1} />
               <Row
-                name="Power to weight ratio hard terrain"
+                name="Power to weight ratio on hard terrain"
                 value="powerToWeightRatioHardTerrain"
                 decimals={1}
               />
               <Row
-                name="Power to weight ratio medium terrain"
+                name="Power to weight ratio on medium terrain"
                 value="powerToWeightRatioMediumTerrain"
                 decimals={1}
               />
               <Row
-                name="Power to weight ratio soft terrain"
+                name="Power to weight ratio on soft terrain"
                 value="powerToWeightRatioSoftTerrain"
+                decimals={1}
+              />
+              <Row
+                name="Traverse speed"
+                value="turretTraverseSpeed"
+                decimals={1}
+              />
+              <Row
+                name="Traverse speed on hard terrain"
+                value="hullTraverseHardTerrain"
+                decimals={1}
+              />
+              <Row
+                name="Traverse speed on medium terrain"
+                value="hullTraverseMediumTerrain"
+                decimals={1}
+              />
+              <Row
+                name="Traverse speed on soft terrain"
+                value="hullTraverseSoftTerrain"
                 decimals={1}
               />
             </Table.Body>
