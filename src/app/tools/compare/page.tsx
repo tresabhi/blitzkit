@@ -24,6 +24,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
 import { ConsumablesManager } from '../../../components/ConsumablesManager';
 import { EquipmentManager } from '../../../components/EquipmentManager';
+import { ModuleManager } from '../../../components/ModuleManager';
 import PageWrapper from '../../../components/PageWrapper';
 import { ProvisionsManager } from '../../../components/ProvisionsManager';
 import { asset } from '../../../core/blitzkrieg/asset';
@@ -462,6 +463,10 @@ export default function Page() {
                       key,
                       provisions,
                       gun,
+                      shell,
+                      turret,
+                      engine,
+                      track,
                       consumables,
                     },
                     index,
@@ -482,6 +487,7 @@ export default function Page() {
                         gun,
                       ),
                     );
+                    const modules = { turret, gun, engine, chassis: track };
 
                     return (
                       <Table.Cell key={key}>
@@ -489,7 +495,7 @@ export default function Page() {
                           align="center"
                           justify="center"
                           direction="column"
-                          gap="3"
+                          gap="2"
                           style={{
                             width: '100%',
                             height: '100%',
@@ -765,22 +771,52 @@ export default function Page() {
                             </Popover.Root>
                           </Flex>
 
-                          <Button variant="ghost">
-                            <Flex align="center">
-                              {['turret', 'gun', 'engine', 'chassis'].map(
-                                (module, index) => (
-                                  <img
-                                    width={24}
-                                    height={24}
-                                    src={asset(`icons/modules/${module}.webp`)}
-                                    style={{
-                                      objectFit: 'contain',
-                                      marginLeft: index > 0 ? -4 : 0,
-                                    }}
-                                  />
-                                ),
-                              )}
-                            </Flex>
+                          <Button variant="ghost" radius="large">
+                            <Popover.Root>
+                              <Popover.Trigger>
+                                <Flex align="center">
+                                  {(
+                                    [
+                                      'turret',
+                                      'gun',
+                                      'engine',
+                                      'chassis',
+                                    ] as const
+                                  ).map((module, index) => (
+                                    <img
+                                      width={24}
+                                      height={24}
+                                      src={asset(
+                                        `icons/modules/${module}.webp`,
+                                      )}
+                                      style={{
+                                        marginLeft: index > 0 ? -8 : 0,
+                                        objectFit: 'contain',
+                                      }}
+                                    />
+                                  ))}
+                                </Flex>
+                              </Popover.Trigger>
+
+                              <Popover.Content>
+                                <ModuleManager
+                                  tank={tank}
+                                  turret={turret}
+                                  gun={gun}
+                                  shell={shell}
+                                  engine={engine}
+                                  track={track}
+                                  onChange={(modules) => {
+                                    mutateCompareTemporary((draft) => {
+                                      draft.members[index] = {
+                                        ...draft.members[index],
+                                        ...modules,
+                                      };
+                                    });
+                                  }}
+                                />
+                              </Popover.Content>
+                            </Popover.Root>
                           </Button>
                         </Flex>
                       </Table.Cell>
