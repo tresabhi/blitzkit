@@ -52,6 +52,7 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
     >
       <Flex gap="2" style={{ width: 256, pointerEvents: 'auto' }}>
         <TextField.Root
+          radius="full"
           style={{
             flex: 1,
             textAlign: 'right',
@@ -99,6 +100,7 @@ export function RotationInputs({ isFullScreen }: RotationInputsProps) {
         </TextField.Root>
 
         <TextField.Root
+          radius="full"
           style={{
             flex: 1,
             textAlign: 'right',

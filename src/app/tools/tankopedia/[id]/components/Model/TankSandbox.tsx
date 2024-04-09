@@ -1,5 +1,5 @@
 import { LightningBoltIcon } from '@radix-ui/react-icons';
-import { Button, Card, Flex, Tabs, Theme } from '@radix-ui/themes';
+import { Button, Card, Flex, Tabs, Text, Theme } from '@radix-ui/themes';
 import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef, useState } from 'react';
@@ -14,6 +14,7 @@ import { tankIcon } from '../../../../../../core/blitzkrieg/tankIcon';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
+import { BlitzkriegWormWide } from '../../../../../../icons/BlitzkriegWormWide';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import mutateTankopediaPersistent, {
   TankopediaMode,
@@ -150,111 +151,117 @@ export function TankSandbox() {
         }}
         ref={canvasWrapper}
       >
-        <Theme radius="full" style={{ height: '100%' }}>
-          <Flex
-            style={{
-              height: isFullScreen ? '100%' : '75vh',
-              maxHeight: isFullScreen ? 'unset' : 576,
+        <Flex
+          style={{
+            height: isFullScreen ? '100%' : '75vh',
+            maxHeight: isFullScreen ? 'unset' : 576,
+          }}
+          direction="column"
+          gap="2"
+        >
+          <Tabs.Root
+            value={mode}
+            onValueChange={(mode) => {
+              mutateTankopediaPersistent((draft) => {
+                draft.mode = mode as TankopediaMode;
+              });
             }}
-            direction="column"
-            gap="2"
           >
-            <Tabs.Root
-              value={mode}
-              onValueChange={(mode) => {
-                mutateTankopediaPersistent((draft) => {
-                  draft.mode = mode as TankopediaMode;
-                });
-              }}
-            >
-              <Tabs.List>
-                <Tabs.Trigger value="model">
-                  <Flex gap="2" align="center">
-                    Model
-                  </Flex>
-                </Tabs.Trigger>
-                <Tabs.Trigger value="armor">Armor</Tabs.Trigger>
-              </Tabs.List>
-            </Tabs.Root>
-
-            <div
-              style={{
-                height: 'calc(100% - 64px)',
-                position: 'absolute',
-                width: '100%',
-                bottom: 0,
-              }}
-            >
-              {loadModel ? (
-                <div style={{ width: '100%', height: '100%' }}>
-                  <Canvas
-                    shadows
-                    ref={canvas}
-                    onPointerDown={handlePointerDown}
-                    onPointerMissed={() => {
-                      mutateTankopediaTemporary((draft) => {
-                        draft.shot = undefined;
-                      });
-                    }}
-                  >
-                    <PerspectiveCamera makeDefault fov={25} far={32} />
-                    <Controls />
-                    <SceneProps />
-
-                    <Suspense fallback={<ModelLoader />}>
-                      <Lighting />
-                      <TankModel />
-                      <Armor />
-                      <ShotDisplay />
-                    </Suspense>
-                  </Canvas>
-                </div>
-              ) : (
-                <Flex
-                  align="center"
-                  justify="center"
-                  style={{ height: '100%', position: 'relative' }}
-                >
-                  <Button
-                    style={{
-                      zIndex: 1,
-                    }}
-                    onClick={() => {
-                      setLoadModel(true);
-                    }}
-                  >
-                    <LightningBoltIcon /> Load model
-                  </Button>
-
-                  <Flex
-                    style={{
-                      filter: 'blur(16px)',
-                      width: 256,
-                      height: 128,
-                      display: 'flex',
-                      position: 'absolute',
-                      top: '50%',
-                      left: '50%',
-                      transformOrigin: 'center center',
-                      transform: 'translate(25%, -25%) scale(300%)',
-                    }}
-                  >
-                    <img src={tankIcon(duel.antagonist!.tank.id, 'big')} />
-                  </Flex>
+            <Tabs.List>
+              <Tabs.Trigger value="model">
+                <Flex gap="2" align="center">
+                  Model
                 </Flex>
-              )}
-            </div>
+              </Tabs.Trigger>
+              <Tabs.Trigger value="armor">Armor</Tabs.Trigger>
+            </Tabs.List>
+          </Tabs.Root>
 
-            <Options
-              canvasWrapper={canvasWrapper}
-              isFullScreen={isFullScreen}
-            />
+          <Text
+            color="gray"
+            style={{
+              position: 'absolute',
+              left: '50%',
+              top: 11,
+            }}
+          >
+            <BlitzkriegWormWide height={32} />
+          </Text>
 
-            {isFullScreen && <AntagonistBar floating />}
+          <div
+            style={{
+              height: 'calc(100% - 64px)',
+              position: 'absolute',
+              width: '100%',
+              bottom: 0,
+            }}
+          >
+            {loadModel ? (
+              <div style={{ width: '100%', height: '100%' }}>
+                <Canvas
+                  shadows
+                  ref={canvas}
+                  onPointerDown={handlePointerDown}
+                  onPointerMissed={() => {
+                    mutateTankopediaTemporary((draft) => {
+                      draft.shot = undefined;
+                    });
+                  }}
+                >
+                  <PerspectiveCamera makeDefault fov={25} far={32} />
+                  <Controls />
+                  <SceneProps />
 
-            {loadModel && <RotationInputs isFullScreen={isFullScreen} />}
-          </Flex>
-        </Theme>
+                  <Suspense fallback={<ModelLoader />}>
+                    <Lighting />
+                    <TankModel />
+                    <Armor />
+                    <ShotDisplay />
+                  </Suspense>
+                </Canvas>
+              </div>
+            ) : (
+              <Flex
+                align="center"
+                justify="center"
+                style={{ height: '100%', position: 'relative' }}
+              >
+                <Button
+                  style={{
+                    zIndex: 1,
+                  }}
+                  onClick={() => {
+                    setLoadModel(true);
+                  }}
+                >
+                  <LightningBoltIcon /> Load model
+                </Button>
+
+                <Flex
+                  style={{
+                    filter: 'blur(16px)',
+                    width: 256,
+                    height: 128,
+                    display: 'flex',
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transformOrigin: 'center center',
+                    transform: 'translate(25%, -25%) scale(300%)',
+                  }}
+                >
+                  <img src={tankIcon(duel.antagonist!.tank.id, 'big')} />
+                </Flex>
+              </Flex>
+            )}
+          </div>
+
+          <Options canvasWrapper={canvasWrapper} isFullScreen={isFullScreen} />
+
+          {isFullScreen && <AntagonistBar floating />}
+
+          {loadModel && <RotationInputs isFullScreen={isFullScreen} />}
+        </Flex>
       </Card>
     </Theme>
   );
