@@ -29,8 +29,9 @@ if (!targets && !allTargets) throw new Error('No target(s) specified');
 
 const methods = [
   definitions,
-  tankIcons,
   scratchedFlags,
+  currencies,
+  skillIcons,
   circleFlags,
   shellIcons,
   moduleIcons,
@@ -38,10 +39,9 @@ const methods = [
   consumableProvisionIcons,
   camouflageIcons,
   boosterIcons,
+  tankIcons,
   tankArmors,
   tankModels,
-  currencies,
-  skillIcons,
 ];
 
 for (const method of methods) {
