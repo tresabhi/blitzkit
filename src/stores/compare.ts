@@ -6,10 +6,10 @@ import { DuelMember } from './duel';
 
 export interface CompareMember extends DuelMember {
   key: string;
-  crewSkills: Record<string, number>;
 }
 
 export interface CompareTemporary {
+  crewSkills: Record<string, number>;
   members: CompareMember[];
   sorting?: {
     direction: 'ascending' | 'descending';
@@ -23,6 +23,7 @@ export interface ComparePersistent {
 }
 
 export const useCompareTemporary = create<CompareTemporary>()(() => ({
+  crewSkills: {},
   members: [],
 }));
 

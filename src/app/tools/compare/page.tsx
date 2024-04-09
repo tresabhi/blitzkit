@@ -31,6 +31,7 @@ import { asset } from '../../../core/blitzkrieg/asset';
 import { availableProvisions } from '../../../core/blitzkrieg/availableProvisions';
 import { checkConsumableProvisionInclusivity } from '../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
 import { consumableDefinitions } from '../../../core/blitzkrieg/consumableDefinitions';
+import { createDefaultSkills } from '../../../core/blitzkrieg/createDefaultSkills';
 import { equipmentDefinitions } from '../../../core/blitzkrieg/equipmentDefinitions';
 import { modelDefinitions } from '../../../core/blitzkrieg/modelDefinitions';
 import { provisionDefinitions } from '../../../core/blitzkrieg/provisionDefinitions';
@@ -68,12 +69,14 @@ export default function Page() {
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const awaitedProvisionDefinitions = use(provisionDefinitions);
   const deltaMode = useComparePersistent((state) => state.deltaMode);
+  const crewSkills = useCompareTemporary((state) => state.crewSkills);
   const stats = useMemo(
     () =>
       members.map((item) =>
         tankCharacteristics(
           {
             ...item,
+            crewSkills,
             stockEngine: item.tank.engines[0],
             stockGun: item.tank.turrets[0].guns[0],
             stockTrack: item.tank.tracks[0],
@@ -123,9 +126,14 @@ export default function Page() {
             tankToCompareMember(
               awaitedTankDefinitions[id],
               awaitedProvisionDefinitions,
-              awaitedSkillDefinitions,
             ),
           );
+      });
+    }
+
+    if (Object.keys(crewSkills).length === 0) {
+      mutateCompareTemporary((draft) => {
+        draft.crewSkills = createDefaultSkills(awaitedSkillDefinitions);
       });
     }
   }, []);
@@ -376,7 +384,6 @@ export default function Page() {
                           tankToCompareMember(
                             tank,
                             awaitedProvisionDefinitions,
-                            awaitedSkillDefinitions,
                           ),
                         );
                         draft.sorting = undefined;
@@ -390,7 +397,6 @@ export default function Page() {
                             tankToCompareMember(
                               tank,
                               awaitedProvisionDefinitions,
-                              awaitedSkillDefinitions,
                             ),
                           ),
                         );
@@ -453,7 +459,60 @@ export default function Page() {
 
             <Table.Body>
               <Table.Row>
-                <Table.Cell />
+                <Table.Cell>
+                  <Flex
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                    align="center"
+                    justify="center"
+                  >
+                    <Popover.Root>
+                      <Popover.Trigger>
+                        <Button variant="ghost" radius="large">
+                          <Flex
+                            direction="column"
+                            style={{
+                              gap: 2,
+                            }}
+                          >
+                            {Object.entries(
+                              awaitedSkillDefinitions.classes,
+                            ).map(([tankClass, skills]) => (
+                              <Flex
+                                key={tankClass}
+                                style={{
+                                  gap: 2,
+                                }}
+                              >
+                                {skills.map((skill) => (
+                                  <div
+                                    key={skill}
+                                    style={{
+                                      width: 6,
+                                      height: 6,
+                                      borderRadius: 2,
+                                      backgroundColor:
+                                        crewSkills[skill] === 0
+                                          ? theme.colors.textLowContrast
+                                          : theme.colors
+                                              .textLowContrast_crimson,
+                                    }}
+                                  />
+                                ))}
+                              </Flex>
+                            ))}
+                          </Flex>
+                        </Button>
+                      </Popover.Trigger>
+
+                      <Popover.Content>
+                        <Heading>ඞ</Heading>
+                      </Popover.Content>
+                    </Popover.Root>
+                  </Flex>
+                </Table.Cell>
 
                 {members.map(
                   (
@@ -487,7 +546,6 @@ export default function Page() {
                         gun,
                       ),
                     );
-                    const modules = { turret, gun, engine, chassis: track };
 
                     return (
                       <Table.Cell key={key}>
