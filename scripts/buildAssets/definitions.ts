@@ -334,6 +334,7 @@ const blitzShellKindToBLitzkrieg: Record<ShellKind, ShellType> = {
 const missingStrings: Record<string, string> = {
   '#artefacts:tungstentip/name': 'Tungsten Shells',
 };
+const botPattern = /^.+((tutorial_bot(\d+)?)|(TU(R?)))$/;
 
 export async function definitions(production: boolean) {
   console.log('Building definitions...');
@@ -420,6 +421,8 @@ export async function definitions(production: boolean) {
       );
 
       for (const tankKey in tankList.root) {
+        if (botPattern.test(tankKey)) continue;
+
         const gunXps = new Map<number, number>();
         const turretXps = new Map<number, number>();
         const engineXps = new Map<number, number>();
