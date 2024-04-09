@@ -472,37 +472,45 @@ export default function Page() {
                       <Popover.Trigger>
                         <Button variant="ghost" radius="large">
                           <Flex
+                            gap="1"
+                            align="center"
+                            justify="center"
                             direction="column"
-                            style={{
-                              gap: 2,
-                            }}
                           >
-                            {Object.entries(
-                              awaitedSkillDefinitions.classes,
-                            ).map(([tankClass, skills]) => (
-                              <Flex
-                                key={tankClass}
-                                style={{
-                                  gap: 2,
-                                }}
-                              >
-                                {skills.map((skill) => (
-                                  <div
-                                    key={skill}
-                                    style={{
-                                      width: 6,
-                                      height: 6,
-                                      borderRadius: 2,
-                                      backgroundColor:
-                                        crewSkills[skill] === 0
-                                          ? theme.colors.textLowContrast
-                                          : theme.colors
-                                              .textLowContrast_crimson,
-                                    }}
-                                  />
-                                ))}
-                              </Flex>
-                            ))}
+                            Skills
+                            <Flex
+                              direction="column"
+                              style={{
+                                gap: 2,
+                              }}
+                            >
+                              {Object.entries(
+                                awaitedSkillDefinitions.classes,
+                              ).map(([tankClass, skills]) => (
+                                <Flex
+                                  key={tankClass}
+                                  style={{
+                                    gap: 2,
+                                  }}
+                                >
+                                  {skills.map((skill) => (
+                                    <div
+                                      key={skill}
+                                      style={{
+                                        width: 6,
+                                        height: 6,
+                                        borderRadius: 2,
+                                        backgroundColor:
+                                          crewSkills[skill] === 0
+                                            ? theme.colors.textLowContrast
+                                            : theme.colors
+                                                .textLowContrast_crimson,
+                                      }}
+                                    />
+                                  ))}
+                                </Flex>
+                              ))}
+                            </Flex>
                           </Flex>
                         </Button>
                       </Popover.Trigger>
