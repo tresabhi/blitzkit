@@ -80,7 +80,6 @@ export function TankControl({ index, tank, members }: TankControlProps) {
                     draft.members[index] = tankToCompareMember(
                       tank,
                       awaitedProvisionDefinitions,
-                      awaitedSkillDefinitions,
                     );
                     draft.sorting = undefined;
                   });
