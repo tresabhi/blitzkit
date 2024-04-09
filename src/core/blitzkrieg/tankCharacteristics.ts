@@ -310,7 +310,7 @@ export function tankCharacteristics(
                 intraClipCoefficient) +
           damageCoefficient * shell.damage.armor * gun.reload.slice(1).length
       : undefined;
-  const shells = gun.type === 'regular' ? 1 : gun.shells.length;
+  const shells = gun.type === 'regular' ? 1 : gun.count;
   const mostOptimalShellIndex =
     gun.type === 'autoReloader'
       ? gun.reload.at(-1)! < gun.reload.at(-2)!
