@@ -996,12 +996,15 @@ export default function Page() {
                 deltaNominalDisplay={(delta) => delta.toFixed(2)}
               />
               {hasNonRegularGun && (
-                <Row
-                  name="Intra-clip"
-                  deltaType="lowerIsBetter"
-                  value={(stat) => stat.intraClip}
-                  decimals={2}
-                />
+                <>
+                  <Row
+                    name="Intra-clip"
+                    deltaType="lowerIsBetter"
+                    value="intraClip"
+                    decimals={2}
+                  />
+                  <Row name="Shells" value="shells" decimals={0} />
+                </>
               )}
               <Row name="Caliber" value="caliber" decimals={0} />
               <Row name="Penetration" value="penetration" decimals={0} />
