@@ -43,6 +43,7 @@ import {
 } from '../../../core/blitzkrieg/tankDefinitions';
 import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
 import { tankToCompareMember } from '../../../core/blitzkrieg/tankToCompareMember';
+import { BlitzkriegButtonWatermark } from '../../../icons/BlitzkriegButtonWatermark';
 import { theme } from '../../../stitches.config';
 import {
   DeltaMode,
@@ -449,7 +450,18 @@ export default function Page() {
           <Table.Root variant="surface" style={{ maxWidth: '100%' }}>
             <Table.Header>
               <Table.Row>
-                <Table.ColumnHeaderCell width="0" />
+                <Table.ColumnHeaderCell width="0">
+                  <Flex
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                    align="center"
+                    justify="center"
+                  >
+                    <BlitzkriegButtonWatermark width={64} height={64} />
+                  </Flex>
+                </Table.ColumnHeaderCell>
 
                 {members.map(({ tank, key }, index) => {
                   return <TankCard index={index} key={key} tank={tank} />;
@@ -472,45 +484,37 @@ export default function Page() {
                       <Popover.Trigger>
                         <Button variant="ghost" radius="large">
                           <Flex
-                            gap="1"
-                            align="center"
-                            justify="center"
                             direction="column"
+                            style={{
+                              gap: 2,
+                            }}
                           >
-                            Skills
-                            <Flex
-                              direction="column"
-                              style={{
-                                gap: 2,
-                              }}
-                            >
-                              {Object.entries(
-                                awaitedSkillDefinitions.classes,
-                              ).map(([tankClass, skills]) => (
-                                <Flex
-                                  key={tankClass}
-                                  style={{
-                                    gap: 2,
-                                  }}
-                                >
-                                  {skills.map((skill) => (
-                                    <div
-                                      key={skill}
-                                      style={{
-                                        width: 6,
-                                        height: 6,
-                                        borderRadius: 2,
-                                        backgroundColor:
-                                          crewSkills[skill] === 0
-                                            ? theme.colors.textLowContrast
-                                            : theme.colors
-                                                .textLowContrast_crimson,
-                                      }}
-                                    />
-                                  ))}
-                                </Flex>
-                              ))}
-                            </Flex>
+                            {Object.entries(
+                              awaitedSkillDefinitions.classes,
+                            ).map(([tankClass, skills]) => (
+                              <Flex
+                                key={tankClass}
+                                style={{
+                                  gap: 2,
+                                }}
+                              >
+                                {skills.map((skill) => (
+                                  <div
+                                    key={skill}
+                                    style={{
+                                      width: 6,
+                                      height: 6,
+                                      borderRadius: 2,
+                                      backgroundColor:
+                                        crewSkills[skill] === 0
+                                          ? theme.colors.textLowContrast
+                                          : theme.colors
+                                              .textLowContrast_crimson,
+                                    }}
+                                  />
+                                ))}
+                              </Flex>
+                            ))}
                           </Flex>
                         </Button>
                       </Popover.Trigger>
