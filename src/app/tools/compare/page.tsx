@@ -89,6 +89,11 @@ export default function Page() {
                 member.key !== thisMember.key &&
                 member.consumables.includes(33),
             ),
+            applyDynamicArmor: members.some(
+              (member) =>
+                member.key !== thisMember.key &&
+                member.consumables.includes(73),
+            ),
           },
           {
             equipmentDefinitions: awaitedEquipmentDefinitions,

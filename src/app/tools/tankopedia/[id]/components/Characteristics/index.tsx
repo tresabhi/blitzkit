@@ -87,6 +87,7 @@ export function Characteristics() {
       stockTrack,
       stockTurret,
       applyReactive: false,
+      applyDynamicArmor: false,
     },
     {
       equipmentDefinitions: awaitedEquipmentDefinitions,

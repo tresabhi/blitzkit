@@ -39,6 +39,7 @@ export function tankCharacteristics(
     stockTurret,
     stockGun,
     applyReactive,
+    applyDynamicArmor,
   }: {
     tank: TankDefinition;
     turret: TurretDefinition;
@@ -57,6 +58,7 @@ export function tankCharacteristics(
     crewSkills: Record<string, number>;
     camouflage: boolean;
     applyReactive: boolean;
+    applyDynamicArmor: boolean;
   },
   {
     modelDefinitions,
@@ -135,7 +137,8 @@ export function tankCharacteristics(
 
   const intraClipCoefficient = coefficient([hasShellReloadBoost, -0.3]);
   const damageCoefficient =
-    coefficient([hasTungsten, 0.15]) * coefficient([applyReactive, -0.2]);
+    coefficient([hasTungsten, 0.15]) *
+    coefficient([applyReactive, -0.2], [applyDynamicArmor, -0.1]);
   const reloadCoefficient =
     (coefficient([hasRammer, -0.07]) *
       coefficient([true, degressiveStat(crewMemberMastery)])) /
