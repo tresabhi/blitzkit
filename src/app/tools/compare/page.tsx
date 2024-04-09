@@ -54,6 +54,7 @@ import {
   useCompareTemporary,
 } from '../../../stores/compare';
 import { EquipmentMatrix } from '../../../stores/duel';
+import { permanentSkills } from '../tankopedia/[id]/components/Characteristics/components/Skills/constants';
 import { TankSearch } from '../tankopedia/components/TankSearch';
 import { TankControl } from './components/TankControl';
 
@@ -509,8 +510,11 @@ export default function Page() {
                                       backgroundColor:
                                         crewSkills[skill] === 0
                                           ? theme.colors.textLowContrast
-                                          : theme.colors
-                                              .textLowContrast_crimson,
+                                          : permanentSkills.includes(skill)
+                                            ? theme.colors
+                                                .textLowContrast_crimson
+                                            : theme.colors
+                                                .textLowContrast_amber,
                                     }}
                                   />
                                 ))}
@@ -529,6 +533,37 @@ export default function Page() {
                             });
                           }}
                         />
+
+                        <Flex justify="end" mt="4" gap="4">
+                          <Button
+                            variant="ghost"
+                            onClick={() => {
+                              mutateCompareTemporary((draft) => {
+                                Object.keys(draft.crewSkills).forEach(
+                                  (skill) => {
+                                    draft.crewSkills[skill] = 0;
+                                  },
+                                );
+                              });
+                            }}
+                          >
+                            Clear
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            onClick={() => {
+                              mutateCompareTemporary((draft) => {
+                                Object.keys(draft.crewSkills).forEach(
+                                  (skill) => {
+                                    draft.crewSkills[skill] = 7;
+                                  },
+                                );
+                              });
+                            }}
+                          >
+                            Maximize
+                          </Button>
+                        </Flex>
                       </Popover.Content>
                     </Popover.Root>
                   </Flex>
