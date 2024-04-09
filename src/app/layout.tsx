@@ -6,7 +6,7 @@ import { config } from 'dotenv';
 import { Roboto_Flex } from 'next/font/google';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useEffect, useState } from 'react';
-import { Analytics } from '../components/Analytics';
+import { Google } from '../components/Google';
 import { Footer } from '../components/Footer';
 import Navbar from '../components/Navbar';
 import isDev from '../core/blitzkrieg/isDev';
@@ -50,7 +50,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
           name="description"
           content="🎉 Tools for everything World of Tanks Blitz"
         />
-        <Analytics />
+
+        <Google />
       </head>
 
       <body
