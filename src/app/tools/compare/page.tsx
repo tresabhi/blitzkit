@@ -501,6 +501,91 @@ export default function Page() {
                             height: '100%',
                           }}
                         >
+                          <Popover.Root>
+                            <Popover.Trigger>
+                              <Button variant="ghost">
+                                <Flex align="center">
+                                  {(
+                                    [
+                                      'turret',
+                                      'gun',
+                                      'engine',
+                                      'chassis',
+                                    ] as const
+                                  ).map((module, index) => (
+                                    <img
+                                      width={24}
+                                      height={24}
+                                      src={asset(
+                                        `icons/modules/${module}.webp`,
+                                      )}
+                                      style={{
+                                        marginLeft: index > 0 ? -8 : 0,
+                                        objectFit: 'contain',
+                                      }}
+                                    />
+                                  ))}
+                                </Flex>
+                              </Button>
+                            </Popover.Trigger>
+
+                            <Popover.Content>
+                              <ModuleManager
+                                tank={tank}
+                                turret={turret}
+                                gun={gun}
+                                shell={shell}
+                                engine={engine}
+                                track={track}
+                                onChange={(modules) => {
+                                  mutateCompareTemporary((draft) => {
+                                    draft.members[index] = {
+                                      ...draft.members[index],
+                                      ...modules,
+                                    };
+                                  });
+                                }}
+                              />
+
+                              <Flex justify="end" mt="4" gap="4">
+                                <Button
+                                  variant="ghost"
+                                  onClick={() => {
+                                    mutateCompareTemporary((draft) => {
+                                      const member = draft.members[index];
+
+                                      member.turret = member.tank.turrets[0];
+                                      member.gun = member.turret.guns[0];
+                                      member.shell = member.gun.shells[0];
+                                      member.engine = member.tank.engines[0];
+                                      member.track = member.tank.tracks[0];
+                                    });
+                                  }}
+                                >
+                                  Stock
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  onClick={() => {
+                                    mutateCompareTemporary((draft) => {
+                                      const member = draft.members[index];
+
+                                      member.turret =
+                                        member.tank.turrets.at(-1)!;
+                                      member.gun = member.turret.guns.at(-1)!;
+                                      member.shell = member.gun.shells[0];
+                                      member.engine =
+                                        member.tank.engines.at(-1)!;
+                                      member.track = member.tank.tracks.at(-1)!;
+                                    });
+                                  }}
+                                >
+                                  Upgrade
+                                </Button>
+                              </Flex>
+                            </Popover.Content>
+                          </Popover.Root>
+
                           <Flex align="center" justify="center" gap="3">
                             <Popover.Root>
                               <Popover.Trigger>
@@ -770,91 +855,6 @@ export default function Page() {
                               </Popover.Content>
                             </Popover.Root>
                           </Flex>
-
-                          <Popover.Root>
-                            <Popover.Trigger>
-                              <Button variant="ghost">
-                                <Flex align="center">
-                                  {(
-                                    [
-                                      'turret',
-                                      'gun',
-                                      'engine',
-                                      'chassis',
-                                    ] as const
-                                  ).map((module, index) => (
-                                    <img
-                                      width={24}
-                                      height={24}
-                                      src={asset(
-                                        `icons/modules/${module}.webp`,
-                                      )}
-                                      style={{
-                                        marginLeft: index > 0 ? -8 : 0,
-                                        objectFit: 'contain',
-                                      }}
-                                    />
-                                  ))}
-                                </Flex>
-                              </Button>
-                            </Popover.Trigger>
-
-                            <Popover.Content>
-                              <ModuleManager
-                                tank={tank}
-                                turret={turret}
-                                gun={gun}
-                                shell={shell}
-                                engine={engine}
-                                track={track}
-                                onChange={(modules) => {
-                                  mutateCompareTemporary((draft) => {
-                                    draft.members[index] = {
-                                      ...draft.members[index],
-                                      ...modules,
-                                    };
-                                  });
-                                }}
-                              />
-
-                              <Flex justify="end" mt="4" gap="4">
-                                <Button
-                                  variant="ghost"
-                                  onClick={() => {
-                                    mutateCompareTemporary((draft) => {
-                                      const member = draft.members[index];
-
-                                      member.turret = member.tank.turrets[0];
-                                      member.gun = member.turret.guns[0];
-                                      member.shell = member.gun.shells[0];
-                                      member.engine = member.tank.engines[0];
-                                      member.track = member.tank.tracks[0];
-                                    });
-                                  }}
-                                >
-                                  Stock
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  onClick={() => {
-                                    mutateCompareTemporary((draft) => {
-                                      const member = draft.members[index];
-
-                                      member.turret =
-                                        member.tank.turrets.at(-1)!;
-                                      member.gun = member.turret.guns.at(-1)!;
-                                      member.shell = member.gun.shells[0];
-                                      member.engine =
-                                        member.tank.engines.at(-1)!;
-                                      member.track = member.tank.tracks.at(-1)!;
-                                    });
-                                  }}
-                                >
-                                  Upgrade
-                                </Button>
-                              </Flex>
-                            </Popover.Content>
-                          </Popover.Root>
                         </Flex>
                       </Table.Cell>
                     );
