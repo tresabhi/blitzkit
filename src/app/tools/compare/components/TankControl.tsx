@@ -7,7 +7,6 @@ import {
 import { Dialog, Flex, IconButton } from '@radix-ui/themes';
 import { use, useState } from 'react';
 import { provisionDefinitions } from '../../../../core/blitzkrieg/provisionDefinitions';
-import { skillDefinitions } from '../../../../core/blitzkrieg/skillDefinitions';
 import { TankDefinition } from '../../../../core/blitzkrieg/tankDefinitions';
 import { tankToCompareMember } from '../../../../core/blitzkrieg/tankToCompareMember';
 import {
@@ -24,7 +23,6 @@ interface TankControlProps {
 
 export function TankControl({ index, tank, members }: TankControlProps) {
   const awaitedProvisionDefinitions = use(provisionDefinitions);
-  const awaitedSkillDefinitions = use(skillDefinitions);
   const [switchTankDialogOpen, setSwitchTankDialogOpen] = useState(false);
 
   return (

@@ -23,7 +23,7 @@ export function Google() {
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1289406790225052"
         crossOrigin="anonymous"
-      ></script>
+      />
     </>
   );
 }
