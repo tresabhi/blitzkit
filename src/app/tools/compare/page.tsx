@@ -91,7 +91,7 @@ export default function Page() {
           },
         ),
       ),
-    [members],
+    [members, crewSkills],
   );
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -1041,7 +1041,7 @@ export default function Page() {
                 decimals={1}
               />
               <Row
-                name="Traverse speed"
+                name="Turret traverse speed"
                 value="turretTraverseSpeed"
                 decimals={1}
               />

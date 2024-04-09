@@ -429,7 +429,7 @@ export function Characteristics() {
         <InfoWithDelta decimals={1} indent name="On soft terrain">
           {stats.powerToWeightRatioSoftTerrain}
         </InfoWithDelta>
-        <InfoWithDelta name="Turret traverse speed" unit="°/s" decimals={0}>
+        <InfoWithDelta name="Turret traverse speed" unit="°/s" decimals={1}>
           {stats.turretTraverseSpeed}
         </InfoWithDelta>
         <Info name="Hull traverse speed" unit="°/s" />
