@@ -38,6 +38,7 @@ export function tankCharacteristics(
     stockTrack,
     stockTurret,
     stockGun,
+    applyReactive,
   }: {
     tank: TankDefinition;
     turret: TurretDefinition;
@@ -55,6 +56,7 @@ export function tankCharacteristics(
     provisions: number[];
     crewSkills: Record<string, number>;
     camouflage: boolean;
+    applyReactive: boolean;
   },
   {
     modelDefinitions,
@@ -132,7 +134,8 @@ export function tankCharacteristics(
   const crewMemberMastery = commanderMastery * 1.1;
 
   const intraClipCoefficient = coefficient([hasShellReloadBoost, -0.3]);
-  const damageCoefficient = coefficient([hasTungsten, 0.15]);
+  const damageCoefficient =
+    coefficient([hasTungsten, 0.15]) * coefficient([applyReactive, -0.2]);
   const reloadCoefficient =
     (coefficient([hasRammer, -0.07]) *
       coefficient([true, degressiveStat(crewMemberMastery)])) /

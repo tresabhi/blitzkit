@@ -75,15 +75,20 @@ export default function Page() {
   const crewSkills = useCompareTemporary((state) => state.crewSkills);
   const stats = useMemo(
     () =>
-      members.map((item) =>
+      members.map((thisMember) =>
         tankCharacteristics(
           {
-            ...item,
+            ...thisMember,
             crewSkills,
-            stockEngine: item.tank.engines[0],
-            stockGun: item.tank.turrets[0].guns[0],
-            stockTrack: item.tank.tracks[0],
-            stockTurret: item.tank.turrets[0],
+            stockEngine: thisMember.tank.engines[0],
+            stockGun: thisMember.tank.turrets[0].guns[0],
+            stockTrack: thisMember.tank.tracks[0],
+            stockTurret: thisMember.tank.turrets[0],
+            applyReactive: members.some(
+              (member) =>
+                member.key !== thisMember.key &&
+                member.consumables.includes(33),
+            ),
           },
           {
             equipmentDefinitions: awaitedEquipmentDefinitions,
