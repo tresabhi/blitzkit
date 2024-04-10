@@ -21,7 +21,8 @@ import {
 } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { use, useCallback, useEffect, useMemo, useState } from 'react';
+import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Vector2 } from 'three';
 import { ConsumablesManager } from '../../../components/ConsumablesManager';
 import { CrewSkillManager } from '../../../components/CrewSkillManager';
 import { EquipmentManager } from '../../../components/EquipmentManager';
@@ -57,6 +58,8 @@ import { EquipmentMatrix } from '../../../stores/duel';
 import { permanentSkills } from '../tankopedia/[id]/components/Characteristics/components/Skills/constants';
 import { TankSearch } from '../tankopedia/components/TankSearch';
 import { TankControl } from './components/TankControl';
+
+const insertionMarkers: { element: HTMLDivElement; index: number }[] = [];
 
 export default function Page() {
   const pathname = usePathname();
@@ -328,8 +331,94 @@ export default function Page() {
   }
 
   function TankCard({ index, tank }: { index: number; tank: TankDefinition }) {
+    const image = useRef<HTMLImageElement>(null);
+
+    useEffect(() => {
+      const initial = new Vector2();
+      const current = new Vector2();
+      const delta = new Vector2();
+      const marker = new Vector2();
+      let initialRect = image.current!.getBoundingClientRect();
+      let dropIndex = -1;
+
+      function handlePointerDown(event: PointerEvent) {
+        event.preventDefault();
+
+        initialRect = image.current!.getBoundingClientRect();
+
+        delta.set(0, 0);
+        current.copy(initial.set(event.clientX, event.clientY));
+        window.addEventListener('pointermove', handlePointerMove);
+        window.addEventListener('pointerup', handlePointerUp);
+      }
+      function handlePointerMove(event: PointerEvent) {
+        event.preventDefault();
+
+        current.set(event.clientX, event.clientY);
+        delta.copy(current).sub(initial);
+        insertionMarkers.forEach(({ element }) => {
+          element.style.opacity = '0';
+        });
+
+        const distances = insertionMarkers.map((insertionMarker) => {
+          const markerBounds = insertionMarker.element.getBoundingClientRect();
+          marker.set(markerBounds.left, markerBounds.top);
+
+          return {
+            ...insertionMarker,
+            distance: marker.distanceTo(current),
+          };
+        });
+        const closest = distances.reduce((a, b) =>
+          a.distance < b.distance ? a : b,
+        );
+
+        dropIndex = closest.index;
+        closest.element.style.opacity = '1';
+        image.current!.style.position = 'fixed';
+        image.current!.style.zIndex = '1';
+        image.current!.style.left = `${initialRect.left + delta.x}px`;
+        image.current!.style.top = `${initialRect.top + delta.y}px`;
+      }
+      function handlePointerUp(event: PointerEvent) {
+        event.preventDefault();
+
+        image.current!.style.position = 'static';
+        image.current!.style.zIndex = 'unset';
+
+        insertionMarkers.forEach(({ element }) => {
+          element.style.opacity = '0';
+        });
+
+        window.removeEventListener('pointermove', handlePointerMove);
+        window.removeEventListener('pointerup', handlePointerUp);
+
+        if (dropIndex === -1) return;
+
+        mutateCompareTemporary((draft) => {
+          const fromIndex = index;
+          const toIndex = dropIndex > index ? dropIndex - 1 : dropIndex;
+
+          const member = draft.members[fromIndex];
+          draft.members.splice(fromIndex, 1);
+          draft.members.splice(toIndex, 0, member);
+        });
+
+        dropIndex = -1;
+      }
+
+      image.current?.addEventListener('pointerdown', handlePointerDown);
+
+      return () => {
+        image.current?.removeEventListener('pointerdown', handlePointerDown);
+      };
+    }, []);
+
     return (
-      <Table.ColumnHeaderCell width="0" style={{ left: 0 }}>
+      <Table.ColumnHeaderCell
+        width="0"
+        style={{ left: 0, position: 'relative' }}
+      >
         <Flex
           direction="column"
           align="center"
@@ -344,10 +433,15 @@ export default function Page() {
             members={members}
           />
           <img
+            ref={image}
+            alt={tank.name}
             src={tankIcon(tank.id)}
             width={64}
             height={64}
+            draggable={false}
             style={{
+              userSelect: 'none',
+              cursor: 'grab',
               objectFit: 'contain',
             }}
           />
@@ -363,7 +457,48 @@ export default function Page() {
             {tank.name}
           </Text>
         </Flex>
+
+        <InsertionMarker index={index + 1} />
       </Table.ColumnHeaderCell>
+    );
+  }
+
+  function InsertionMarker({ index }: { index: number }) {
+    const marker = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      insertionMarkers.push({
+        element: marker.current!,
+        index,
+      });
+
+      console.log(insertionMarkers);
+
+      return () => {
+        insertionMarkers.splice(
+          insertionMarkers.findIndex(
+            (insertionMarker) => insertionMarker.element === marker.current!,
+          ),
+          1,
+        );
+      };
+    });
+
+    return (
+      <div
+        ref={marker}
+        style={{
+          height: '75%',
+          width: 2,
+          borderRadius: 1,
+          backgroundColor: theme.colors.textLowContrast_crimson,
+          position: 'absolute',
+          right: 0,
+          top: '50%',
+          transform: 'translateY(-50%)',
+          opacity: 0,
+        }}
+      />
     );
   }
 
@@ -462,7 +597,12 @@ export default function Page() {
           <Table.Root variant="surface" style={{ maxWidth: '100%' }}>
             <Table.Header>
               <Table.Row>
-                <Table.ColumnHeaderCell width="0">
+                <Table.ColumnHeaderCell
+                  width="0"
+                  style={{
+                    position: 'relative',
+                  }}
+                >
                   <Flex
                     style={{
                       width: '100%',
@@ -472,6 +612,7 @@ export default function Page() {
                     justify="center"
                   >
                     <BlitzkriegButtonWatermark width={64} height={64} />
+                    <InsertionMarker index={0} />
                   </Flex>
                 </Table.ColumnHeaderCell>
 
