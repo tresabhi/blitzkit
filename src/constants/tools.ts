@@ -31,7 +31,7 @@ export const TOOLS: Tool[] = [
   },
   {
     id: 'compare',
-    title: 'Tank compare',
+    title: 'Compare',
     description: 'Compare tank statistics and loadouts',
     pageDescription:
       'Compare tanks statistics and loadouts in World of Tanks Blitz',
