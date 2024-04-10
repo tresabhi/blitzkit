@@ -443,6 +443,7 @@ export default function Page() {
             draggable={false}
             style={{
               userSelect: 'none',
+              touchAction: 'none',
               cursor: 'grab',
               objectFit: 'contain',
             }}
@@ -473,8 +474,6 @@ export default function Page() {
         element: marker.current!,
         index,
       });
-
-      console.log(insertionMarkers);
 
       return () => {
         insertionMarkers.splice(
