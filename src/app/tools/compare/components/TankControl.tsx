@@ -2,21 +2,15 @@ import { LoopIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Dialog, Flex, IconButton } from '@radix-ui/themes';
 import { use, useState } from 'react';
 import { provisionDefinitions } from '../../../../core/blitzkrieg/provisionDefinitions';
-import { TankDefinition } from '../../../../core/blitzkrieg/tankDefinitions';
 import { tankToCompareMember } from '../../../../core/blitzkrieg/tankToCompareMember';
-import {
-  CompareMember,
-  mutateCompareTemporary,
-} from '../../../../stores/compare';
+import { mutateCompareTemporary } from '../../../../stores/compare';
 import { TankSearch } from '../../tankopedia/components/TankSearch';
 
 interface TankControlProps {
   index: number;
-  tank: TankDefinition;
-  members: CompareMember[];
 }
 
-export function TankControl({ index, tank, members }: TankControlProps) {
+export function TankControl({ index }: TankControlProps) {
   const awaitedProvisionDefinitions = use(provisionDefinitions);
   const [switchTankDialogOpen, setSwitchTankDialogOpen] = useState(false);
 

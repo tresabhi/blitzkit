@@ -331,20 +331,20 @@ export default function Page() {
   }
 
   function TankCard({ index, tank }: { index: number; tank: TankDefinition }) {
-    const image = useRef<HTMLImageElement>(null);
+    const draggable = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       const initial = new Vector2();
       const current = new Vector2();
       const delta = new Vector2();
       const marker = new Vector2();
-      let initialRect = image.current!.getBoundingClientRect();
+      let initialRect = draggable.current!.getBoundingClientRect();
       let dropIndex = -1;
 
       function handlePointerDown(event: PointerEvent) {
         event.preventDefault();
 
-        initialRect = image.current!.getBoundingClientRect();
+        initialRect = draggable.current!.getBoundingClientRect();
 
         delta.set(0, 0);
         current.copy(initial.set(event.clientX, event.clientY));
@@ -375,18 +375,18 @@ export default function Page() {
 
         dropIndex = closest.index;
         closest.element.style.opacity = '1';
-        image.current!.style.position = 'fixed';
-        image.current!.style.cursor = 'grabbing';
-        image.current!.style.zIndex = '1';
-        image.current!.style.left = `${initialRect.left + delta.x}px`;
-        image.current!.style.top = `${initialRect.top + delta.y}px`;
+        draggable.current!.style.position = 'fixed';
+        draggable.current!.style.cursor = 'grabbing';
+        draggable.current!.style.zIndex = '1';
+        draggable.current!.style.left = `${initialRect.left + delta.x}px`;
+        draggable.current!.style.top = `${initialRect.top + delta.y}px`;
       }
       function handlePointerUp(event: PointerEvent) {
         event.preventDefault();
 
-        image.current!.style.position = 'static';
-        image.current!.style.zIndex = 'unset';
-        image.current!.style.cursor = 'grab';
+        draggable.current!.style.position = 'static';
+        draggable.current!.style.zIndex = 'unset';
+        draggable.current!.style.cursor = 'grab';
 
         insertionMarkers.forEach(({ element }) => {
           element.style.opacity = '0';
@@ -409,10 +409,13 @@ export default function Page() {
         dropIndex = -1;
       }
 
-      image.current?.addEventListener('pointerdown', handlePointerDown);
+      draggable.current?.addEventListener('pointerdown', handlePointerDown);
 
       return () => {
-        image.current?.removeEventListener('pointerdown', handlePointerDown);
+        draggable.current?.removeEventListener(
+          'pointerdown',
+          handlePointerDown,
+        );
       };
     }, []);
 
@@ -428,37 +431,42 @@ export default function Page() {
           gap="2"
           style={{ height: '100%' }}
         >
-          <TankControl
-            index={index}
-            key={tank.id}
-            tank={tank}
-            members={members}
-          />
-          <img
-            ref={image}
-            alt={tank.name}
-            src={tankIcon(tank.id)}
-            width={64}
-            height={64}
-            draggable={false}
+          <TankControl index={index} key={tank.id} />
+
+          <Flex
+            ref={draggable}
+            direction="column"
+            align="center"
+            justify="between"
+            gap="2"
             style={{
               userSelect: 'none',
               touchAction: 'none',
               cursor: 'grab',
-              objectFit: 'contain',
-            }}
-          />
-
-          <Text
-            style={{
-              whiteSpace: 'nowrap',
-              maxWidth: 128,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
             }}
           >
-            {tank.name}
-          </Text>
+            <img
+              alt={tank.name}
+              src={tankIcon(tank.id)}
+              width={64}
+              height={64}
+              draggable={false}
+              style={{
+                objectFit: 'contain',
+              }}
+            />
+
+            <Text
+              style={{
+                whiteSpace: 'nowrap',
+                maxWidth: 128,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {tank.name}
+            </Text>
+          </Flex>
         </Flex>
 
         <InsertionMarker index={index + 1} />
