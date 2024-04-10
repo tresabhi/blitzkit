@@ -88,6 +88,7 @@ export function Characteristics() {
       stockTurret,
       applyReactive: false,
       applyDynamicArmor: false,
+      applySpallLiner: false,
     },
     {
       equipmentDefinitions: awaitedEquipmentDefinitions,

@@ -5,11 +5,13 @@ import {
   CaretRightIcon,
   CaretSortIcon,
   ComponentPlaceholderIcon,
+  InfoCircledIcon,
   PlusIcon,
   TrashIcon,
 } from '@radix-ui/react-icons';
 import {
   Button,
+  Callout,
   Dialog,
   Flex,
   Heading,
@@ -76,6 +78,15 @@ export default function Page() {
   const awaitedProvisionDefinitions = use(provisionDefinitions);
   const deltaMode = useComparePersistent((state) => state.deltaMode);
   const crewSkills = useCompareTemporary((state) => state.crewSkills);
+  const haveReactive = members.some((member) =>
+    member.consumables.includes(33),
+  );
+  const haveDynamicArmor = members.some((member) =>
+    member.consumables.includes(73),
+  );
+  const haveSpallLiner = members.some((member) =>
+    member.provisions.includes(101),
+  );
   const stats = useMemo(
     () =>
       members.map((thisMember) =>
@@ -96,6 +107,11 @@ export default function Page() {
               (member) =>
                 member.key !== thisMember.key &&
                 member.consumables.includes(73),
+            ),
+            applySpallLiner: members.some(
+              (member) =>
+                member.key !== thisMember.key &&
+                member.provisions.includes(101),
             ),
           },
           {
@@ -514,6 +530,18 @@ export default function Page() {
   return (
     <PageWrapper color="crimson" size="100%">
       <Flex justify="center" gap="2" align="center" mt="4" direction="column">
+        {(haveReactive || haveDynamicArmor || haveSpallLiner) && (
+          <Callout.Root mb="4">
+            <Callout.Icon>
+              <InfoCircledIcon />
+            </Callout.Icon>
+            <Callout.Text>
+              Consumables like Reactive Armor and Dynamic Armor System and
+              provisions like Spall Liner may reduce other tanks' damage.
+            </Callout.Text>
+          </Callout.Root>
+        )}
+
         <Flex gap="2">
           <Dialog.Root
             open={addTankDialogOpen}

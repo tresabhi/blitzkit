@@ -17,3 +17,5 @@ export interface ProvisionDefinitions {
 export const provisionDefinitions = fetchCdonLz4<ProvisionDefinitions>(
   asset('definitions/provisions.cdon.lz4'),
 );
+
+provisionDefinitions.then(console.log);
