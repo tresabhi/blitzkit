@@ -529,9 +529,9 @@ export default function Page() {
 
   return (
     <PageWrapper color="crimson" size="100%">
-      <Flex justify="center" gap="2" align="center" mt="4" direction="column">
+      <Flex justify="center" gap="4" align="center" mt="4" direction="column">
         {(haveReactive || haveDynamicArmor || haveSpallLiner) && (
-          <Callout.Root mb="4">
+          <Callout.Root>
             <Callout.Icon>
               <InfoCircledIcon />
             </Callout.Icon>
@@ -542,13 +542,13 @@ export default function Page() {
           </Callout.Root>
         )}
 
-        <Flex gap="2">
+        <Flex gap="2" wrap="wrap" justify="center">
           <Dialog.Root
             open={addTankDialogOpen}
             onOpenChange={setAddTankDialogOpen}
           >
             <Dialog.Trigger>
-              <Button>
+              <Button variant="soft">
                 <PlusIcon /> Add
               </Button>
             </Dialog.Trigger>
@@ -607,26 +607,26 @@ export default function Page() {
           >
             <TrashIcon /> Clear
           </Button>
-        </Flex>
 
-        <SegmentedControl.Root
-          value={deltaMode}
-          onValueChange={(value) => {
-            mutateComparePersistent((draft) => {
-              draft.deltaMode = value as DeltaMode;
-            });
-          }}
-        >
-          <SegmentedControl.Item value={'none' satisfies DeltaMode}>
-            No deltas
-          </SegmentedControl.Item>
-          <SegmentedControl.Item value={'percentage' satisfies DeltaMode}>
-            Percentage
-          </SegmentedControl.Item>
-          <SegmentedControl.Item value={'absolute' satisfies DeltaMode}>
-            Absolute
-          </SegmentedControl.Item>
-        </SegmentedControl.Root>
+          <SegmentedControl.Root
+            value={deltaMode}
+            onValueChange={(value) => {
+              mutateComparePersistent((draft) => {
+                draft.deltaMode = value as DeltaMode;
+              });
+            }}
+          >
+            <SegmentedControl.Item value={'none' satisfies DeltaMode}>
+              No deltas
+            </SegmentedControl.Item>
+            <SegmentedControl.Item value={'percentage' satisfies DeltaMode}>
+              Percentage
+            </SegmentedControl.Item>
+            <SegmentedControl.Item value={'absolute' satisfies DeltaMode}>
+              Absolute
+            </SegmentedControl.Item>
+          </SegmentedControl.Root>
+        </Flex>
       </Flex>
 
       {members.length > 0 && (
