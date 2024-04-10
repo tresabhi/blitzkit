@@ -63,10 +63,14 @@ export default async function handleChatInputCommand(
         (psa.data.commands === undefined ||
           psa.data.commands.includes(interaction.commandName))
       ) {
-        if (psa.data.type === 'embed') {
+        if (psa.data.type === undefined || psa.data.type === 'embed') {
           if (!reply.embeds) reply.embeds = [];
-          reply.embeds.push(embedWarning(psa.data.title, psa.data.description));
-        } else {
+
+          const embed = embedWarning(psa.data.title, psa.data.description);
+
+          if (psa.data.image) embed.setImage(psa.data.image);
+          reply.embeds.push(embed);
+        } else if (psa.data.type === 'image') {
           if (!reply.files) reply.files = [];
           reply.files.push(new AttachmentBuilder(psa.data.image));
           reply.content = reply.content ?? psa.data.title;
@@ -101,12 +105,14 @@ export default async function handleChatInputCommand(
           ephemeral: true,
         };
 
-        if (psa.data.type === 'embed') {
+        if (psa.data.type === undefined || psa.data.type === 'embed') {
           if (!followUp.embeds) followUp.embeds = [];
-          followUp.embeds.push(
-            embedWarning(psa.data.title, psa.data.description),
-          );
-        } else {
+
+          const embed = embedWarning(psa.data.title, psa.data.description);
+
+          if (psa.data.image) embed.setImage(psa.data.image);
+          followUp.embeds.push(embed);
+        } else if (psa.data.type === 'image') {
           if (!followUp.files) followUp.files = [];
           followUp.files.push(new AttachmentBuilder(psa.data.image));
           followUp.content = followUp.content ?? psa.data.title;

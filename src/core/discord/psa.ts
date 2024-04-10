@@ -7,14 +7,15 @@ export type PSAData = {
   commands?: string[];
 } & (
   | {
+      type?: 'embed';
+      title: string;
+      description: string;
+      image?: string;
+    }
+  | {
       type: 'image';
       image: string;
       title?: string;
-    }
-  | {
-      type: 'embed';
-      title: string;
-      description: string;
     }
 );
 
