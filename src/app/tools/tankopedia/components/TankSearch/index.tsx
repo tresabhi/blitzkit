@@ -400,7 +400,15 @@ export function TankSearch({
       .filter(([name]) => name !== 'page')
       .map(([, value]) => value),
   ]);
-  const [searchResults, setSearchedList] = useState(searchableTanks);
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchResults = useMemo(
+    () =>
+      go(searchQuery, searchableTanks, {
+        keys: ['name', 'nameFull', 'id'] satisfies (keyof TankDefinition)[],
+        all: true,
+      }).map(({ obj }) => obj),
+    [searchQuery, searchableTanks],
+  );
   const page = useTankopediaPersistent((state) => state.filters.page);
   const searchResultsPageSlice = searchResults.slice(
     page * tanksPerPage,
@@ -414,9 +422,6 @@ export function TankSearch({
     Math.ceil(searchResultsPageSlice.length / 2),
   );
 
-  useEffect(() => {
-    setSearchedList(searchableTanks);
-  }, [searchableTanks]);
   useEffect(() => {
     mutateTankopediaPersistent((draft) => {
       draft.filters.page = Math.min(
@@ -435,16 +440,7 @@ export function TankSearch({
             ref={input}
             placeholder="Search tanks..."
             onChange={(event) => {
-              const results = go(event.target.value, searchableTanks, {
-                keys: [
-                  'name',
-                  'nameFull',
-                  'id',
-                ] satisfies (keyof TankDefinition)[],
-                all: true,
-              }).map(({ obj }) => obj);
-
-              setSearchedList(results);
+              setSearchQuery(event.target.value);
             }}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
