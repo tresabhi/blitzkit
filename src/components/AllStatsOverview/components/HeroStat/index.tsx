@@ -53,6 +53,7 @@ export function HeroStat({ stats, locale }: WN8DisplayProps) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
+            gap: -4,
           }}
         >
           <span
