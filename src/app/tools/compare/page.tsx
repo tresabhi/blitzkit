@@ -376,6 +376,7 @@ export default function Page() {
         dropIndex = closest.index;
         closest.element.style.opacity = '1';
         image.current!.style.position = 'fixed';
+        image.current!.style.cursor = 'grabbing';
         image.current!.style.zIndex = '1';
         image.current!.style.left = `${initialRect.left + delta.x}px`;
         image.current!.style.top = `${initialRect.top + delta.y}px`;
@@ -385,6 +386,7 @@ export default function Page() {
 
         image.current!.style.position = 'static';
         image.current!.style.zIndex = 'unset';
+        image.current!.style.cursor = 'grab';
 
         insertionMarkers.forEach(({ element }) => {
           element.style.opacity = '0';
