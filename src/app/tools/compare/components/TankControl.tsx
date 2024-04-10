@@ -1,9 +1,4 @@
-import {
-  CaretLeftIcon,
-  CaretRightIcon,
-  LoopIcon,
-  TrashIcon,
-} from '@radix-ui/react-icons';
+import { LoopIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Dialog, Flex, IconButton } from '@radix-ui/themes';
 import { use, useState } from 'react';
 import { provisionDefinitions } from '../../../../core/blitzkrieg/provisionDefinitions';
@@ -27,21 +22,6 @@ export function TankControl({ index, tank, members }: TankControlProps) {
 
   return (
     <Flex gap="2" justify="center" style={{ width: '100%' }}>
-      {index !== 0 && (
-        <IconButton
-          variant="ghost"
-          onClick={() => {
-            mutateCompareTemporary((draft) => {
-              const item = draft.members[index];
-              draft.members.splice(index, 1);
-              draft.members.splice(index - 1, 0, item);
-              draft.sorting = undefined;
-            });
-          }}
-        >
-          <CaretLeftIcon />
-        </IconButton>
-      )}
       <IconButton
         variant="ghost"
         onClick={() => {
@@ -88,21 +68,6 @@ export function TankControl({ index, tank, members }: TankControlProps) {
           </Flex>
         </Dialog.Content>
       </Dialog.Root>
-      {index !== members.length - 1 && (
-        <IconButton
-          variant="ghost"
-          onClick={() => {
-            mutateCompareTemporary((draft) => {
-              const item = draft.members[index];
-              draft.members.splice(index, 1);
-              draft.members.splice(index + 1, 0, item);
-              draft.sorting = undefined;
-            });
-          }}
-        >
-          <CaretRightIcon />
-        </IconButton>
-      )}
     </Flex>
   );
 }
