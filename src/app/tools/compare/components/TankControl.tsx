@@ -15,7 +15,7 @@ export function TankControl({ index }: TankControlProps) {
   const [switchTankDialogOpen, setSwitchTankDialogOpen] = useState(false);
 
   return (
-    <Flex gap="2" justify="center" style={{ width: '100%' }}>
+    <Flex gap="3" justify="center" style={{ width: '100%' }}>
       <IconButton
         variant="ghost"
         onClick={() => {
