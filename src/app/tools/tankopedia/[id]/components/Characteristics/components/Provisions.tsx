@@ -36,7 +36,7 @@ export function Provisions() {
       <ProvisionsManager
         provisions={provisionsList.map((provision) => provision.id)}
         selected={provisions}
-        disabled={tank.provisions === provisionsList.length}
+        disabled={tank.provisions === provisions.length}
         onChange={(provisions) => {
           mutateDuel((draft) => {
             draft.protagonist!.provisions = provisions;
