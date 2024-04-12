@@ -385,26 +385,17 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                         right: '5%',
                       }}
                     >
-                      <div
+                      <img
+                        src={await tankIconPng(id)}
                         style={{
-                          height: 120,
-                          width: 240,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'flex-start',
+                          height: 100,
+                          width: 100,
+                          objectFit: 'contain',
+                          position: 'absolute',
                           left: '25%',
-                          top: '5%',
+                          top: 0,
                         }}
-                      >
-                        <img
-                          src={await tankIconPng(id)}
-                          style={{
-                            height: '100%',
-                            position: 'absolute',
-                            objectFit: 'contain',
-                          }}
-                        />
-                      </div>
+                      />
 
                       <div
                         style={{
