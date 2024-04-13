@@ -147,7 +147,9 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
     -turretModelDefinition.gunOrigin[2],
   ).applyAxisAngle(I_HAT, Math.PI / 2);
   const maskOrigin =
-    gunModelDefinition.mask! + hullOrigin.y + turretOrigin.y + gunOrigin.y;
+    gunModelDefinition.mask === undefined
+      ? undefined
+      : gunModelDefinition.mask + hullOrigin.y + turretOrigin.y + gunOrigin.y;
 
   return (
     <group
@@ -272,7 +274,11 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
                 thickness={gunModelDefinition.thickness}
                 variant="gun"
                 node={node}
-                clip={new Plane(new Vector3(0, 0, -1), -maskOrigin)}
+                clip={
+                  maskOrigin === undefined
+                    ? undefined
+                    : new Plane(new Vector3(0, 0, -1), -maskOrigin)
+                }
               />
             );
           })}
