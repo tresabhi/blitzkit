@@ -1,6 +1,6 @@
 import { Region } from '../../constants/regions';
 
-export function idToRange(id: number): Region {
+export function idToRegion(id: number): Region {
   if (id >= 42e8) {
     throw new Error('bot id');
   } else if (id >= 31e8) {
