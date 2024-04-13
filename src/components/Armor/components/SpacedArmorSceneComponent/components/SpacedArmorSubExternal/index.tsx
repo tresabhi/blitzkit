@@ -3,6 +3,7 @@ import {
   AdditiveBlending,
   MeshBasicMaterial,
   Object3D,
+  Plane,
   ShaderMaterial,
 } from 'three';
 import { ArmorUserData, ExternalModuleVariant } from '../..';
@@ -20,12 +21,14 @@ interface SpacedArmorSubExternalProps {
   node: Object3D;
   thickness: number;
   variant: ExternalModuleVariant;
+  clip?: Plane;
 }
 
 export function SpacedArmorSubExternal({
   node,
   thickness,
   variant,
+  clip,
 }: SpacedArmorSubExternalProps) {
   const material = new ShaderMaterial({
     fragmentShader,
@@ -34,6 +37,8 @@ export function SpacedArmorSubExternal({
     depthTest: true,
     depthWrite: false,
     blending: AdditiveBlending,
+    clippingPlanes: clip ? [clip] : undefined,
+    clipping: true,
 
     uniforms: {
       thickness: { value: null },
@@ -108,6 +113,7 @@ export function SpacedArmorSubExternal({
           colorWrite: false,
           depthTest: true,
           depthWrite: true,
+          clippingPlanes: clip ? [clip] : undefined,
         }),
         onClick() {},
         userData: {
@@ -116,6 +122,7 @@ export function SpacedArmorSubExternal({
           variant,
         } satisfies ArmorUserData,
       })}
+
       {jsxTree(node, {
         renderOrder: 4,
         material,

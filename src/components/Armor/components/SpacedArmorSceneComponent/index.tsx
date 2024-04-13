@@ -3,6 +3,7 @@ import {
   Intersection,
   MeshBasicMaterial,
   Object3D,
+  Plane,
   Quaternion,
   Raycaster,
   Scene,
@@ -29,6 +30,7 @@ type SpacedArmorSceneComponentProps = {
   node: Object3D;
   thickness: number;
   scene: Scene;
+  clip?: Plane;
 } & (
   | {
       type: Exclude<ArmorType, ArmorType.External>;
@@ -71,6 +73,7 @@ export function SpacedArmorSceneComponent({
   node,
   thickness,
   scene,
+  clip,
   ...props
 }: SpacedArmorSceneComponentProps) {
   const camera = useThree((state) => state.camera);
@@ -333,6 +336,7 @@ export function SpacedArmorSceneComponent({
           node={node}
           thickness={thickness}
           variant={props.variant}
+          clip={clip}
         />
       )}
     </>

@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef } from 'react';
-import { Euler, Group, Scene, Vector3 } from 'three';
+import { Euler, Group, Plane, Scene, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { I_HAT, J_HAT, K_HAT } from '../../../constants/axis';
 import {
@@ -146,6 +146,8 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
     turretModelDefinition.gunOrigin[1],
     -turretModelDefinition.gunOrigin[2],
   ).applyAxisAngle(I_HAT, Math.PI / 2);
+  const maskOrigin =
+    gunModelDefinition.mask! + hullOrigin.y + turretOrigin.y + gunOrigin.y;
 
   return (
     <group
@@ -270,6 +272,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
                 thickness={gunModelDefinition.thickness}
                 variant="gun"
                 node={node}
+                clip={new Plane(new Vector3(0, 0, -1), -maskOrigin)}
               />
             );
           })}

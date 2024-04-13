@@ -739,6 +739,17 @@ export async function definitions(production: boolean) {
               const gunArmor: ModelArmor = { thickness: {} };
               const shotDispersionFactors =
                 gun.shotDispersionFactors ?? gunListEntry.shotDispersionFactors;
+              const maskName = `gun_${gunModel.toString().padStart(2, '0')}`;
+              const maskEnabled =
+                tankParameters.maskSlice?.[maskName]?.enabled ?? false;
+              let mask: number | undefined;
+
+              if (maskEnabled) {
+                const maskRaw = tankParameters.maskSlice![maskName]!;
+                mask = maskRaw.planePosition[1];
+              } else {
+                mask = undefined;
+              }
 
               totalUnlocks.push(gun.unlocks);
               Object.keys(gun.armor)
@@ -788,6 +799,7 @@ export async function definitions(production: boolean) {
               modelDefinitions[tankId].turrets[turretId].guns[gunId] = {
                 armor: gunArmor,
                 model: gunModel,
+                mask,
                 thickness:
                   gun.armor.gun === undefined
                     ? 0

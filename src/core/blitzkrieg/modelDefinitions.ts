@@ -47,6 +47,7 @@ interface GunModelDefinition {
   thickness: number;
   model: number;
   pitch: PitchLimits;
+  mask?: number;
 }
 export interface PitchLimits {
   min: number;

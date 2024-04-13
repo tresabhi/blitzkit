@@ -199,6 +199,10 @@ export function TankSandbox() {
             {loadModel ? (
               <div style={{ width: '100%', height: '100%' }}>
                 <Canvas
+                  gl={{
+                    clippingPlanes: Object.freeze([]),
+                    localClippingEnabled: true,
+                  }}
                   shadows
                   ref={canvas}
                   onPointerDown={handlePointerDown}

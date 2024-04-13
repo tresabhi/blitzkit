@@ -26,6 +26,20 @@ export interface TankParameters {
       averageThickness?: Record<string, number>;
     };
   };
+  maskSlice?: {
+    [key: string]:
+      | {
+          enabled: boolean;
+          planePosition: Vector3Tuple;
+          planeNormal: Vector3Tuple;
+          planeAxis: Vector3Tuple;
+          frustumConeBaseRadius: number;
+          frustumConeAngleDegrees: number;
+          planeSliceMode: number;
+          frustumConeSliceMode: number;
+        }
+      | undefined;
+  };
 }
 
 export async function tankIcons(production: boolean) {
