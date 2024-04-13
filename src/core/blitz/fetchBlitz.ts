@@ -10,7 +10,8 @@ type BlitzResponse<Data extends object> =
       data: Data;
     };
 
-const MAX_CALLS_PER_SECOND = 10;
+// 1 less than 10 to ensure not bad things lol
+const MAX_CALLS_PER_SECOND = 9;
 
 const queue: { url: string; resolve: (data: object) => void }[] = [];
 let inProgress = 0;
