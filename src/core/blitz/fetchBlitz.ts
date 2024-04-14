@@ -10,8 +10,7 @@ type BlitzResponse<Data extends object> =
       data: Data;
     };
 
-// 1 less than 10 to ensure not bad things lol
-const MAX_CALLS_PER_SECOND = 9;
+const MAX_CALLS_PER_SECOND = 10;
 
 const queue: { url: string; resolve: (data: object) => void }[] = [];
 let inProgress = 0;
@@ -25,23 +24,36 @@ async function manageQueue() {
       manageQueue();
     }, 1000);
 
-    const { url, resolve } = queue.shift()!;
-    const data = (await patientFetch(url)
+    const request = queue.shift()!;
+    const data = (await patientFetch(request.url)
       .then((response) => response.json())
       .catch((error) => ({ status: 'error', error }))) as BlitzResponse<
-      typeof resolve
+      typeof request.resolve
     >;
 
     if (data.status === 'ok') {
-      resolve(data.data);
+      request.resolve(data.data);
     } else {
-      clearTimeout(timeout);
-      inProgress--;
-      manageQueue();
+      if (data.error.message === 'REQUEST_LIMIT_EXCEEDED') {
+        console.log(
+          `Rate limit exceeded, putting "${request.url}" back in queue...`,
+        );
 
-      throw new Error(`Wargaming response error status: "${data.status}"`, {
-        cause: `Message: "${data.error.message}"\nURL: "${url}"`,
-      });
+        clearTimeout(timeout);
+        setTimeout(() => {
+          queue.push(request);
+          inProgress--;
+          manageQueue();
+        }, 1000 / MAX_CALLS_PER_SECOND);
+      } else {
+        clearTimeout(timeout);
+        inProgress--;
+        manageQueue();
+
+        throw new Error(`Wargaming response error status: "${data.status}"`, {
+          cause: `Message: "${data.error.message}"\nURL: "${request.url}"`,
+        });
+      }
     }
   }
 }
