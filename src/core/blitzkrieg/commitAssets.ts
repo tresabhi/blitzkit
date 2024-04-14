@@ -4,6 +4,7 @@ export async function commitAssets(
   message: string,
   changes: FileChange[],
   production: boolean,
+  verbose = true,
 ) {
   console.log(`Committing ${message}...`);
 
@@ -15,6 +16,6 @@ export async function commitAssets(
     production ? 'main' : 'dev',
     `${message} - ${new Date().toDateString()}`,
     changes,
-    true,
+    verbose,
   );
 }
