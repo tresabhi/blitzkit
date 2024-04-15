@@ -18,48 +18,36 @@ const PLAYERS_PER_CHUNK = 256;
 const CHUNKS_PER_BATCH = 128;
 
 const production = argv.includes('--production');
-const users = usersRaw; //.slice(0, 10);
+const region = argv
+  .find((argument) => argument.startsWith('--region'))
+  ?.split('=')[1] as Region | undefined;
 
-let done = 0;
-const regionSortedUsers = REGIONS.map((region) => ({
-  region,
-  users: users.filter((user) => idToRegion(user.blitz) === region),
-}));
+if (!region || !REGIONS.includes(region)) {
+  throw new Error('No valid region specified');
+}
 
 const today = new Date();
 const todayPath = `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`;
-const bases: Partial<Record<Region, number>> = {};
-const chunks = regionSortedUsers
-  .map(({ region, users }) => {
-    const base = Math.ceil(users.length / PLAYERS_PER_CHUNK);
-    bases[region] = base;
-
-    return times(base, (offset) => {
-      return {
-        region,
-        offset,
-        users: users.filter((user) => user.blitz % base === offset),
-      };
-    });
-  })
-  .flat();
+const users = usersRaw.filter(({ blitz }) => idToRegion(blitz) === region);
+const base = Math.ceil(users.length / PLAYERS_PER_CHUNK);
+const chunks = times(base, (offset) => ({
+  offset,
+  users: users.filter((user) => user.blitz % base === offset),
+}));
 const batches = chunk(chunks, CHUNKS_PER_BATCH);
-
-const manifests = Object.entries(bases).map(([region, base]) => {
-  const writeStream = new RtsmWriteStream();
-
-  writeStream.rtsm(base);
-
-  return {
-    encoding: 'base64',
-    path: `regions/${region}/regular/tanks/${todayPath}/manifest.rtsm`,
-    content: Buffer.from(compress(writeStream.uint8Array)).toString('base64'),
-  } satisfies FileChange;
-});
+const manifestWriteStream = new RtsmWriteStream();
 
 await commitAssets(
   `regular tank stats manifests ${todayPath}`,
-  manifests,
+  [
+    {
+      encoding: 'base64',
+      path: `regions/${region}/regular/tanks/${todayPath}/manifest.rtsm`,
+      content: Buffer.from(
+        compress(manifestWriteStream.rtsm(base).uint8Array),
+      ).toString('base64'),
+    },
+  ],
   production,
 );
 
@@ -76,11 +64,7 @@ for (const batch of batches) {
     let playersDone = 0;
     const players = await Promise.all(
       chunk.users.map(async (user) => {
-        const tanks = await getTankStats(
-          chunk.region,
-          user.blitz,
-          Locale.EnglishUS,
-        );
+        const tanks = await getTankStats(region, user.blitz, Locale.EnglishUS);
 
         console.log(`Player ${++playersDone} of ${chunk.users.length}`);
 
@@ -98,7 +82,7 @@ for (const batch of batches) {
     changes.push({
       encoding: 'base64',
       content: Buffer.from(compress(writeStream.uint8Array)).toString('base64'),
-      path: `regions/${chunk.region}/regular/tanks/${todayPath}/${chunk.offset}.rtsc.lz4`,
+      path: `regions/${region}/regular/tanks/${todayPath}/${chunk.offset}.rtsc.lz4`,
     });
   }
 
@@ -107,6 +91,5 @@ for (const batch of batches) {
     `regular tank stats ${todayPath} batch ${batches.indexOf(batch) + 1}`,
     changes,
     production,
-    false,
   );
 }
