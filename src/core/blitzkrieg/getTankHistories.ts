@@ -1,5 +1,6 @@
 import { Locale } from 'discord.js';
 import { Region } from '../../constants/regions';
+import { UserError } from '../../hooks/userError';
 import {
   GetHistoriesOptions,
   Histories,
@@ -8,6 +9,7 @@ import {
 } from '../../types/histories';
 import getTankStats from '../blitz/getTankStats';
 import { emptyAllStats } from '../blitzstars/getStatsInPeriod/constants';
+import { translator } from '../localization/translator';
 
 export interface TankHistory extends History {
   tank_id: number;
@@ -38,6 +40,7 @@ export default async function getTankHistories(
   locale: Locale,
   options?: Partial<GetTankHistoriesOptions>,
 ) {
+  const { t } = translator(locale);
   const mergedOptions = { ...getTankHistoriesDefaultOptions, ...options };
   const tankHistoriesResponse = await fetch(
     `https://www.blitzstars.com/api/tankhistories/for/${id}/`,
@@ -78,7 +81,13 @@ export default async function getTankHistories(
   const latestNodes: TankHistories = [];
 
   if (mergedOptions.includeLatestHistories) {
-    (await getTankStats(server, id, locale)).forEach((tankHistory) => {
+    const tankStats = await getTankStats(server, id);
+
+    if (tankStats === null) {
+      throw new UserError(t`bot.common.errors.no_tank_stats`);
+    }
+
+    tankStats.forEach((tankHistory) => {
       if (
         tankHistory.all.battles > (lastBattles[tankHistory.tank_id] ?? 0) &&
         (mergedOptions.tankId === undefined ||

@@ -20,6 +20,7 @@ import { translator } from '../../core/localization/translator';
 import calculateWN8 from '../../core/statistics/calculateWN8';
 import { StatFilters, filterStats } from '../../core/statistics/filterStats';
 import getWN8Percentile from '../../core/statistics/getWN8Percentile';
+import { UserError } from '../../hooks/userError';
 
 const ROWS_PER_PAGE = 8;
 const MAX_PAGES = 9;
@@ -37,13 +38,17 @@ export async function renderBreakdown(
   const { filteredOrder } = await filterStats(statsInPeriod, filters);
   const accountInfo = await getAccountInfo(region, id);
   const clanData = await getClanAccountInfo(region, id, ['clan']);
-  const tankStats = await getTankStats(region, id, locale);
+  const tankStats = await getTankStats(region, id);
   const filterDescriptions = await filtersToDescription(filters, locale);
   const orderedCurrentStats: AllStats[] = [];
   const orderedCareerStats: AllStats[] = [];
   const orderedCurrentWN8: (number | undefined)[] = [];
   const orderedCareerWN8: (number | undefined)[] = [];
   const orderedCareerWN8Full: (number | undefined)[] = [];
+
+  if (tankStats === null) {
+    throw new UserError(t`bot.common.errors.no_tank_stats`);
+  }
 
   filteredOrder.forEach((id) => {
     const tankAveragesEntry = awaitedTankAverages[id];
