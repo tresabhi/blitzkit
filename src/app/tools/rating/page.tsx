@@ -25,7 +25,6 @@ import {
   Region,
   UNLOCALIZED_REGION_NAMES,
 } from '../../../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import fetchBlitz from '../../../core/blitz/fetchBlitz';
 import { getClanAccountInfo } from '../../../core/blitz/getClanAccountInfo';
 import getRatingInfo from '../../../core/blitz/getRatingInfo';
@@ -818,7 +817,9 @@ export default function Page() {
                         } else {
                           setSearchLoading(true);
                           const accountList = await fetchBlitz<AccountList>(
-                            `https://api.wotblitz.${region}/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodedSearch}`,
+                            region,
+                            'account/list',
+                            { search: encodedSearch },
                           );
                           const playerKeys = Object.keys(
                             leaderboard[region][season],

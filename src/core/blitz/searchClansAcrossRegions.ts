@@ -1,5 +1,4 @@
 import { Region } from '../../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { ClanList } from '../../types/clanList';
 import fetchBlitz from './fetchBlitz';
 
@@ -15,9 +14,10 @@ export default async function searchClansAcrossRegions(
 
   return (
     await Promise.all([
-      fetchBlitz<ClanList>(
-        `https://api.wotblitz.com/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
-      ).then((value) =>
+      fetchBlitz<ClanList>('com', 'clans/list', {
+        search,
+        limit: normalizedLimit,
+      }).then((value) =>
         value
           .map((account) => ({
             ...account,
@@ -25,9 +25,10 @@ export default async function searchClansAcrossRegions(
           }))
           .splice(0, normalizedLimit),
       ),
-      fetchBlitz<ClanList>(
-        `https://api.wotblitz.eu/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
-      ).then((value) =>
+      fetchBlitz<ClanList>('eu', 'clans/list', {
+        search,
+        limit: normalizedLimit,
+      }).then((value) =>
         value
           .map((account) => ({
             ...account,
@@ -35,9 +36,10 @@ export default async function searchClansAcrossRegions(
           }))
           .splice(0, normalizedLimit),
       ),
-      fetchBlitz<ClanList>(
-        `https://api.wotblitz.asia/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${search}&limit=${normalizedLimit}`,
-      ).then((value) =>
+      fetchBlitz<ClanList>('asia', 'clans/list', {
+        search,
+        limit: normalizedLimit,
+      }).then((value) =>
         value
           .map((account) => ({
             ...account,

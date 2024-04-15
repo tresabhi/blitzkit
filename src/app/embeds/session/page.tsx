@@ -3,7 +3,6 @@
 import { ContextMenu } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
 import * as Breakdown from '../../../components/Breakdown';
-import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import fetchBlitz from '../../../core/blitz/fetchBlitz';
 import { resetSession } from '../../../core/blitzkrieg/resetSession';
 import {
@@ -88,10 +87,10 @@ export default function SessionPage({ naked = true }: SessionPageProps) {
     async function recalculateDiff() {
       if (session.isTracking) {
         const { id, region } = session;
-        const careerRaw = await fetchBlitz<TanksStats>(
-          `https://api.wotblitz.${region}/wotb/tanks/stats/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${id}`,
-        );
-        const career = careerRaw[id].reduce<
+        const careerRaw = await fetchBlitz<TanksStats>(region, 'tanks/stats', {
+          account_id: id,
+        });
+        const career = careerRaw[id]!.reduce<
           Record<number, IndividualTankStats>
         >(
           (accumulator, curr) => ({
@@ -103,7 +102,7 @@ export default function SessionPage({ naked = true }: SessionPageProps) {
         const awaitedTankDefinitions = await tankDefinitions;
         const awaitedTankAverages = await tankAverages;
         const careerWN8 =
-          careerRaw[id].reduce(
+          careerRaw[id]!.reduce(
             (accumulator, { tank_id, all }) =>
               accumulator +
               (awaitedTankAverages[tank_id] && all.battles > 0
@@ -112,7 +111,7 @@ export default function SessionPage({ naked = true }: SessionPageProps) {
                 : 0),
             0,
           ) /
-          careerRaw[id].reduce(
+          careerRaw[id]!.reduce(
             (accumulator, { tank_id, all }) =>
               accumulator +
               (awaitedTankAverages[tank_id] && all.battles > 0
