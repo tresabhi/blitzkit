@@ -1,4 +1,3 @@
-import { Locale } from 'discord.js';
 import { chunk, times } from 'lodash';
 import { compress } from 'lz4js';
 import { argv } from 'process';
@@ -64,7 +63,7 @@ for (const batch of batches) {
     let playersDone = 0;
     const players = await Promise.all(
       chunk.users.map(async (user) => {
-        const tanks = await getTankStats(region, user.blitz, Locale.EnglishUS);
+        const tanks = await getTankStats(region, user.blitz);
 
         console.log(`Player ${++playersDone} of ${chunk.users.length}`);
 

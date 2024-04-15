@@ -31,11 +31,16 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
       .addStringOption(addUsernameChoices),
 
     async handler(interaction) {
-      const { translate } = translator(interaction.locale);
+      const { t, translate } = translator(interaction.locale);
       const tier = Number(interaction.options.getString('tier'));
       const { id, region } = await resolvePlayerFromCommand(interaction);
       const accountInfo = await getAccountInfo(region, id);
-      const tankStats = await getTankStats(region, id, interaction.locale);
+      const tankStats = await getTankStats(region, id);
+
+      if (tankStats === null) {
+        return t`bot.common.errors.no_tank_stats`;
+      }
+
       const filteredTanks = (
         await Promise.all(
           tankStats.map(async (tankData) => ({
