@@ -1,7 +1,6 @@
 import { Locale } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { Region } from '../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import fetchBlitz from '../core/blitz/fetchBlitz';
 import addClanChoices from '../core/discord/addClanChoices';
 import addRegionChoices from '../core/discord/addRegionChoices';
@@ -49,17 +48,18 @@ export const searchClansCommand = new Promise<CommandRegistry>((resolve) => {
 
     async handler(interaction) {
       const { translate } = translator(interaction.locale);
-      const server = interaction.options.getString('region') as Region;
+      const region = interaction.options.getString('region') as Region;
       const clan = interaction.options.getString('clan')!;
       const limit = interaction.options.getInteger('limit') ?? DEFAULT_LIMIT;
-      const clanList = await fetchBlitz<ClanList>(
-        `https://api.wotblitz.${server}/wotb/clans/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${clan}&limit=${limit}`,
-      );
+      const clanList = await fetchBlitz<ClanList>(region, 'clans/list', {
+        search: clan,
+        limit,
+      });
 
       return embedInfo(
         translate('bot.commands.search_clans.body.title', [
           markdownEscape(clan),
-          translate(`common.regions.normal.${server}`),
+          translate(`common.regions.normal.${region}`),
         ]),
         clanList.length === 0
           ? translate('bot.commands.search_clans.body.no_results')

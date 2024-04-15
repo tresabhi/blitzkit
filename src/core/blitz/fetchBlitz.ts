@@ -1,3 +1,5 @@
+import { Region } from '../../constants/regions';
+import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { patientFetch } from '../blitzkrieg/patientFetch';
 
 type BlitzResponse<Data extends object> =
@@ -58,10 +60,20 @@ async function manageQueue() {
   }
 }
 
-export default function fetchBlitz<Data extends object>(url: string) {
+export default function fetchBlitz<Data extends object>(
+  region: Region,
+  path: string,
+  params: Record<string, string | number | undefined> = {},
+) {
   return new Promise<Data>((resolve) => {
     queue.push({
-      url,
+      url: `https://api.wotblitz.${region}/wotb/${path}/?${Object.entries({
+        application_id: WARGAMING_APPLICATION_ID,
+        ...params,
+      })
+        .filter(([_, value]) => value !== undefined)
+        .map(([key, value]) => `${key}=${encodeURIComponent(value!)}`)
+        .join('&')}`,
       resolve(data) {
         resolve(data as Data);
       },
