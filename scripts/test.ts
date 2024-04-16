@@ -26,7 +26,7 @@ if (!region || !REGIONS.includes(region)) {
 }
 
 const today = new Date();
-const todayPath = `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`;
+const todayPath = `${today.getUTCFullYear()}/${today.getUTCMonth() + 1}/${today.getUTCDate()}`;
 const users = usersRaw.filter(({ blitz }) => idToRegion(blitz) === region);
 const base = Math.ceil(users.length / PLAYERS_PER_CHUNK);
 const chunks = times(base, (offset) => ({
