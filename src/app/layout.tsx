@@ -50,6 +50,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           name="description"
           content="🎉 Tools for everything World of Tanks Blitz"
         />
+        <meta property="og:site_name" content="Blitzkrieg" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
         <Google />
