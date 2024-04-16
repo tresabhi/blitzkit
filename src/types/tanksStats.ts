@@ -15,7 +15,7 @@ export interface IndividualTankStats {
 }
 
 export interface TanksStats {
-  [accountId: number]: IndividualTankStats[];
+  [accountId: number]: null | IndividualTankStats[];
 }
 
 export interface NormalizedTankStats {

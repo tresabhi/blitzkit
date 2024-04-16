@@ -126,7 +126,11 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
           ]);
         }
 
-        const tankStats = await getTankStats(region, id, interaction.locale);
+        const tankStats = await getTankStats(region, id);
+
+        if (tankStats === null) {
+          return t`bot.common.errors.no_tank_stats`;
+        }
 
         if (tankStats.some(({ tank_id }) => tank_id === targetTankId)) {
           return translate('bot.commands.research.errors.already_researched', [

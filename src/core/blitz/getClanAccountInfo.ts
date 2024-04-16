@@ -1,7 +1,5 @@
 import { Region } from '../../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import fetchBlitz from './fetchBlitz';
-import { normalizeExtra } from './normalizeExtra';
 import { normalizeIds } from './normalizeIds';
 
 type IndividualClanAccountInfo = {
@@ -30,11 +28,14 @@ export async function getClanAccountInfo<
   ReturnType = Ids extends number
     ? IndividualClanAccountInfo
     : IndividualClanAccountInfo[],
->(region: Region, ids: Ids, extra?: string[]) {
+>(region: Region, ids: Ids, extra: string[] = []) {
   const object = await fetchBlitz<ClanAccountInfo>(
-    `https://api.wotblitz.${region}/wotb/clans/accountinfo/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${normalizeIds(
-      ids,
-    )}${normalizeExtra(extra)}`,
+    region,
+    'clans/accountinfo',
+    {
+      account_id: normalizeIds(ids),
+      extra: extra.length === 0 ? undefined : extra.join(','),
+    },
   );
 
   if (typeof ids === 'number') {

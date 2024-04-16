@@ -1,3 +1,5 @@
+import { Region } from '../../constants/regions';
+import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { patientFetch } from '../blitzkrieg/patientFetch';
 
 type BlitzResponse<Data extends object> =
@@ -24,31 +26,54 @@ async function manageQueue() {
       manageQueue();
     }, 1000);
 
-    const { url, resolve } = queue.shift()!;
-    const data = (await patientFetch(url)
+    const request = queue.shift()!;
+    const data = (await patientFetch(request.url)
       .then((response) => response.json())
       .catch((error) => ({ status: 'error', error }))) as BlitzResponse<
-      typeof resolve
+      typeof request.resolve
     >;
 
     if (data.status === 'ok') {
-      resolve(data.data);
+      request.resolve(data.data);
     } else {
-      clearTimeout(timeout);
-      inProgress--;
-      manageQueue();
+      if (data.error.message === 'REQUEST_LIMIT_EXCEEDED') {
+        console.log(
+          `Rate limit exceeded, putting "${request.url}" back in queue...`,
+        );
 
-      throw new Error(`Wargaming response error status: "${data.status}"`, {
-        cause: `Message: "${data.error.message}"\nURL: "${url}"`,
-      });
+        clearTimeout(timeout);
+        setTimeout(() => {
+          queue.push(request);
+          inProgress--;
+          manageQueue();
+        }, 1000 / MAX_CALLS_PER_SECOND);
+      } else {
+        clearTimeout(timeout);
+        inProgress--;
+        manageQueue();
+
+        throw new Error(`Wargaming response error status: "${data.status}"`, {
+          cause: `Message: "${data.error.message}"\nURL: "${request.url}"`,
+        });
+      }
     }
   }
 }
 
-export default function fetchBlitz<Data extends object>(url: string) {
+export default function fetchBlitz<Data extends object>(
+  region: Region,
+  path: string,
+  params: Record<string, string | number | undefined> = {},
+) {
   return new Promise<Data>((resolve) => {
     queue.push({
-      url,
+      url: `https://api.wotblitz.${region}/wotb/${path}/?${Object.entries({
+        application_id: WARGAMING_APPLICATION_ID,
+        ...params,
+      })
+        .filter(([_, value]) => value !== undefined)
+        .map(([key, value]) => `${key}=${encodeURIComponent(value!)}`)
+        .join('&')}`,
       resolve(data) {
         resolve(data as Data);
       },

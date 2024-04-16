@@ -1,7 +1,6 @@
 import { Locale } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { Region } from '../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../constants/wargamingApplicationID';
 import fetchBlitz from '../core/blitz/fetchBlitz';
 import { AccountList } from '../core/blitz/searchPlayersAcrossRegions';
 import { usernamePattern } from '../core/blitz/searchPlayersAcrossRegions/constants';
@@ -50,22 +49,21 @@ export const searchPlayersCommand = new Promise<CommandRegistry>((resolve) => {
 
     async handler(interaction) {
       const { translate } = translator(interaction.locale);
-      const server = interaction.options.getString('region') as Region;
+      const region = interaction.options.getString('region') as Region;
       const name = interaction.options.getString('username')!;
       const limit = interaction.options.getInteger('limit') ?? 25;
       const trimmedSearch = name.trim();
       const players = usernamePattern.test(trimmedSearch)
-        ? await fetchBlitz<AccountList>(
-            `https://api.wotblitz.${server}/wotb/account/list/?application_id=${WARGAMING_APPLICATION_ID}&search=${encodeURIComponent(
-              trimmedSearch,
-            )}&limit=${limit}`,
-          )
+        ? await fetchBlitz<AccountList>(region, 'account/list', {
+            search: trimmedSearch,
+            limit,
+          })
         : [];
 
       return embedInfo(
         translate('bot.commands.search_players.body.title', [
           markdownEscape(trimmedSearch),
-          translate(`common.regions.normal.${server}`),
+          translate(`common.regions.normal.${region}`),
         ]),
         `\`\`\`${
           players.length === 0

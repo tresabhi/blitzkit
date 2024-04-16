@@ -1,5 +1,5 @@
 import { usersDatabase } from '../../databases/users';
-import { idToRange } from '../blitz/idToRegion';
+import { idToRegion } from '../blitz/idToRegion';
 
 export async function flagUserActivity(blitz: number) {
   await usersDatabase.users.upsert({
@@ -26,5 +26,5 @@ export async function getBlitzFromDiscord(discord: bigint) {
   if (unique === null) return null;
 
   await flagUserActivity(unique.blitz);
-  return { id: unique.blitz, region: idToRange(unique.blitz) };
+  return { id: unique.blitz, region: idToRegion(unique.blitz) };
 }

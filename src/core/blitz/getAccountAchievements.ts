@@ -1,5 +1,4 @@
 import { Region } from '../../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import fetchBlitz from './fetchBlitz';
 import { normalizeIds } from './normalizeIds';
 
@@ -23,9 +22,9 @@ export async function getAccountAchievements<
     : IndividualAccountAchievements[],
 >(region: Region, ids: Ids) {
   const object = await fetchBlitz<AccountAchievements>(
-    `https://api.wotblitz.${region}/wotb/account/achievements/?application_id=${WARGAMING_APPLICATION_ID}&account_id=${normalizeIds(
-      ids,
-    )}`,
+    region,
+    'account/achievements',
+    { account_id: normalizeIds(ids) },
   );
 
   if (typeof ids === 'number') {
