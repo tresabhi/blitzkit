@@ -16,7 +16,8 @@ Header {
 }
 
 Body {
-  primary uint8 base;
+  uint32 time;
+  uint8 base;
 }
 ```
 
