@@ -1,7 +1,6 @@
 'use client';
 
-import { CaretDownIcon } from '@radix-ui/react-icons';
-import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
+import { Button, Flex } from '@radix-ui/themes';
 import { use } from 'react';
 import { Flag } from '../../../../../../../components/Flag';
 import {} from '../../../../../../../components/Tanks';
@@ -17,7 +16,6 @@ import {
   TIER_ROMAN_NUMERALS,
 } from '../../../../../../../core/blitzkrieg/tankDefinitions/constants';
 import mutateTankopediaPersistent, {
-  TankopediaTestTankDisplay,
   useTankopediaPersistent,
 } from '../../../../../../../stores/tankopedia';
 import * as styles from './index.css';
@@ -28,32 +26,6 @@ export function Options() {
 
   return (
     <Flex gap="2" wrap="wrap" justify="center">
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          <Button variant="soft" color="gray">
-            Test tanks
-            <CaretDownIcon />
-          </Button>
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content>
-          <DropdownMenu.RadioGroup
-            value={filters.test}
-            onValueChange={(value) =>
-              mutateTankopediaPersistent((draft) => {
-                draft.filters.test = value as TankopediaTestTankDisplay;
-              })
-            }
-          >
-            <DropdownMenu.RadioItem value="include">
-              Include
-            </DropdownMenu.RadioItem>
-            <DropdownMenu.RadioItem value="exclude">
-              Exclude
-            </DropdownMenu.RadioItem>
-            <DropdownMenu.RadioItem value="only">Only</DropdownMenu.RadioItem>
-          </DropdownMenu.RadioGroup>
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
       <Flex>
         {TREE_TYPES.map((type, index) => (
           <Button
@@ -334,6 +306,32 @@ export function Options() {
           ))}
         </Flex>
       </Flex>
+      {/* <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <Button variant="soft" color="gray">
+            Test tanks
+            <CaretDownIcon />
+          </Button>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.RadioGroup
+            value={filters.test}
+            onValueChange={(value) =>
+              mutateTankopediaPersistent((draft) => {
+                draft.filters.test = value as TankopediaTestTankDisplay;
+              })
+            }
+          >
+            <DropdownMenu.RadioItem value="include">
+              Include
+            </DropdownMenu.RadioItem>
+            <DropdownMenu.RadioItem value="exclude">
+              Exclude
+            </DropdownMenu.RadioItem>
+            <DropdownMenu.RadioItem value="only">Only</DropdownMenu.RadioItem>
+          </DropdownMenu.RadioGroup>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root> */}
     </Flex>
   );
 }
