@@ -291,7 +291,11 @@ export function tankCharacteristics(
   );
   const dpmMaximum =
     gun.type === 'autoReloader'
-      ? gun.reload.at(-1)! < gun.reload.at(-2)!
+      ? (
+          gun.count > 2
+            ? gun.reload.at(-1)! < gun.reload.at(-2)!
+            : gun.reload.at(-1)! + gun.intraClip < gun.reload.at(-2)!
+        )
         ? ((damageCoefficient * shell.damage.armor) /
             (gun.reload.at(-1)! * reloadCoefficient +
               gun.intraClip * intraClipCoefficient)) *
