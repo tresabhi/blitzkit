@@ -36,6 +36,8 @@ const chunks = times(base, (offset) => ({
 const batches = chunk(chunks, CHUNKS_PER_BATCH);
 const manifestWriteStream = new RtsmWriteStream();
 
+console.log(`Found ${users.length} players in ${region}`);
+
 await commitAssets(
   `regular tank stats manifests ${todayPath}`,
   [

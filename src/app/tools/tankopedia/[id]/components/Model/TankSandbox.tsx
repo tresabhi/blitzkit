@@ -177,16 +177,18 @@ export function TankSandbox() {
             </Tabs.List>
           </Tabs.Root>
 
-          <Text
-            color="gray"
-            style={{
-              position: 'absolute',
-              left: '50%',
-              top: 11,
-            }}
-          >
-            <BlitzkriegWormWide height={32} />
-          </Text>
+          {wideFormat && (
+            <Text
+              color="gray"
+              style={{
+                position: 'absolute',
+                left: '50%',
+                top: 11,
+              }}
+            >
+              <BlitzkriegWormWide height={32} />
+            </Text>
+          )}
 
           <div
             style={{
