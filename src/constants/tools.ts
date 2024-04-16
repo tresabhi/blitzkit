@@ -9,11 +9,11 @@ interface Tool {
 
 export const TOOLS: Tool[] = [
   {
-    id: 'session',
-    title: 'Session tracker',
-    description: 'Live session performance tracker',
+    id: 'statistics',
+    title: 'Statistics',
+    description: 'Periodical player statistics',
     pageDescription:
-      'Track your stats in real time as you play World of Tanks Blitz',
+      'Periodical player statistics and tanks played in World of Tanks Blitz',
   },
   {
     id: 'tankopedia',
@@ -28,6 +28,13 @@ export const TOOLS: Tool[] = [
     description: 'Full rating gamemode leaderboard',
     pageDescription:
       'Live and archived full rating leaderboard for World of Tanks Blitz',
+  },
+  {
+    id: 'session',
+    title: 'Session tracker',
+    description: 'Live session performance tracker',
+    pageDescription:
+      'Track your stats in real time as you play World of Tanks Blitz',
   },
   {
     id: 'compare',
