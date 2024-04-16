@@ -33,6 +33,7 @@ export class RtsmReadStream extends ReadStream {
 
   body() {
     return {
+      time: this.uint32(),
       base: this.uint8(),
     };
   }
@@ -56,6 +57,7 @@ export class RtsmWriteStream extends WriteStream {
   }
 
   body(base: number) {
+    this.uint32(Math.round(Date.now() / 1000));
     this.uint8(base);
   }
 }
