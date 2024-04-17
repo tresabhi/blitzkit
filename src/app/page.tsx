@@ -43,7 +43,6 @@ export default function Page() {
                 alignItems: 'flex-start',
                 justifyContent: 'flex-end',
                 padding: 16,
-                gap: 4,
                 transition: `box-shadow ${theme.durations.regular}`,
               }}
               onClick={(event) => {
