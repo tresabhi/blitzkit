@@ -1,6 +1,9 @@
 import { Locale } from 'discord.js';
+import { Percentile } from '../../constants/percentiles';
 import { SupplementaryStats } from '../../core/blitz/getAccountInfo';
 import { translator } from '../../core/localization/translator';
+import getWN8Percentile from '../../core/statistics/getWN8Percentile';
+import { PERCENTILE_COLORS } from '../PercentileIndicator/constants';
 import { HeroStat } from './components/HeroStat';
 import {
   WN8SurroundingStat,
@@ -27,7 +30,16 @@ export default function AllStatsOverview({
   locale,
   supplementaryStats,
 }: AllStatsOverviewProps) {
-  const { t } = translator(locale);
+  const { t, translate } = translator(locale);
+  const percentile =
+    supplementaryStats.WN8 === undefined
+      ? Percentile.VeryBad
+      : getWN8Percentile(supplementaryStats.WN8);
+  const color = PERCENTILE_COLORS[percentile];
+  const heroStat =
+    supplementaryStats.WN8 === undefined
+      ? '--'
+      : supplementaryStats.WN8.toFixed(0);
 
   return (
     <div
@@ -73,7 +85,11 @@ export default function AllStatsOverview({
         />
       </div>
 
-      <HeroStat locale={locale} stats={supplementaryStats} />
+      <HeroStat
+        value={heroStat}
+        subtitle={translate(`common.wn8_percentile.${percentile}`)}
+        color={color}
+      />
 
       <div
         style={{

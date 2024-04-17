@@ -1,26 +1,13 @@
-import { Locale } from 'discord.js';
-import { Percentile } from '../../../../constants/percentiles';
-import { SupplementaryStats } from '../../../../core/blitz/getAccountInfo';
-import { translator } from '../../../../core/localization/translator';
-import getWN8Percentile from '../../../../core/statistics/getWN8Percentile';
 import { theme } from '../../../../stitches.config';
-import { PERCENTILE_COLORS } from '../../../PercentileIndicator/constants';
 import { Glow } from './components/Glow';
 
 export interface WN8DisplayProps {
-  stats: SupplementaryStats;
-  locale: Locale;
+  subtitle: string;
+  color: string;
+  value: string | number;
 }
 
-export function HeroStat({ stats, locale }: WN8DisplayProps) {
-  const { translate } = translator(locale);
-
-  const percentile =
-    stats.WN8 === undefined ? Percentile.VeryBad : getWN8Percentile(stats.WN8);
-  const color = PERCENTILE_COLORS[percentile];
-  const heroStat = stats.WN8 === undefined ? '--' : stats.WN8.toFixed(0);
-  const subtitle = translate(`common.wn8_percentile.${percentile}`);
-
+export function HeroStat({ color, subtitle, value }: WN8DisplayProps) {
   return (
     <div
       style={{
@@ -29,10 +16,9 @@ export function HeroStat({ stats, locale }: WN8DisplayProps) {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: -16,
       }}
     >
-      <Glow color={color} />
+      <Glow color={color} style={{ marginBottom: -16 }} />
 
       <div
         style={{
@@ -44,7 +30,6 @@ export function HeroStat({ stats, locale }: WN8DisplayProps) {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: -4,
         }}
       >
         <div
@@ -53,20 +38,22 @@ export function HeroStat({ stats, locale }: WN8DisplayProps) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: -4,
           }}
         >
           <span
             style={{
+              display: 'block',
               fontWeight: 900,
               fontSize: 32,
               color: theme.colors.textHighContrast,
+              lineHeight: '26px',
             }}
           >
-            {heroStat}
+            {value}
           </span>
           <span
             style={{
+              display: 'block',
               fontSize: 16,
               color: theme.colors.textHighContrast,
             }}
@@ -76,7 +63,7 @@ export function HeroStat({ stats, locale }: WN8DisplayProps) {
         </div>
       </div>
 
-      <Glow color={color} direction="reverse" />
+      <Glow color={color} direction="reverse" style={{ marginTop: -16 }} />
     </div>
   );
 }
