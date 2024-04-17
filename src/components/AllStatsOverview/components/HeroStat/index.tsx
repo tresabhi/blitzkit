@@ -38,6 +38,7 @@ export function HeroStat({ color, subtitle, value }: WN8DisplayProps) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
+            gap: 2,
           }}
         >
           <span
@@ -47,6 +48,7 @@ export function HeroStat({ color, subtitle, value }: WN8DisplayProps) {
               fontSize: 32,
               color: theme.colors.textHighContrast,
               lineHeight: '26px',
+              letterSpacing: '-0.03em',
             }}
           >
             {value}
@@ -55,6 +57,7 @@ export function HeroStat({ color, subtitle, value }: WN8DisplayProps) {
             style={{
               display: 'block',
               fontSize: 16,
+              lineHeight: '16px',
               color: theme.colors.textHighContrast,
             }}
           >

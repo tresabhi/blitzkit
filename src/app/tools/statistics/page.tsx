@@ -10,7 +10,7 @@ export default function Page() {
         <Heading color="gray">[OPTML]</Heading>
       </Flex>
 
-      <HeroStat color="#00b1ff" subtitle="Super Unicum" value={3112} />
+      <HeroStat color="#8E4EC6" subtitle="Super Unicum" value={3142} />
     </PageWrapper>
   );
 }
