@@ -1,5 +1,5 @@
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
-import { Flex, IconButton } from '@radix-ui/themes';
+import { Flex, IconButton, Popover } from '@radix-ui/themes';
 import Link from 'next/link';
 import { useFullScreen } from '../../hooks/useFullScreen';
 import { BlitzkriegWormWide } from '../../icons/BlitzkriegWormWide';
@@ -48,9 +48,13 @@ export default function Navbar() {
 
           <EverythingSearch style={{ flex: 1 }} />
 
-          <IconButton variant="ghost">
-            <HamburgerMenuIcon />
-          </IconButton>
+          <Popover.Root>
+            <Popover.Trigger>
+              <IconButton variant="ghost">
+                <HamburgerMenuIcon />
+              </IconButton>
+            </Popover.Trigger>
+          </Popover.Root>
 
           {/* <Flex justify="center" align="center" gap="4">
             <Link
