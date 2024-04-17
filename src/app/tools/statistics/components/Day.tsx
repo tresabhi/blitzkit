@@ -18,6 +18,7 @@ export function Day({ offset }: DayProps) {
   const [expanded, setExpanded] = useState(true);
   const time = new Date(Date.now() - offset * 24 * 60 * 60 * 1000);
   const tanks = tanksList
+    .filter((tank) => tank.tier === 10)
     .sort(() => Math.random() - 0.5)
     .slice(0, random(2, 5));
 
@@ -26,12 +27,24 @@ export function Day({ offset }: DayProps) {
       <Table.Row>
         <Table.RowHeaderCell>
           <Button
+            style={{
+              width: '100%',
+            }}
             variant="ghost"
             onClick={() => setExpanded((state) => !state)}
           >
-            <Flex align="center" gap="1">
+            <Flex
+              align="center"
+              gap="1"
+              style={{
+                width: '100%',
+              }}
+            >
               {expanded ? <CaretDownIcon /> : <CaretRightIcon />}
-              {`${time.getDate()}/${time.getMonth()}`}
+              {time.toLocaleString('default', {
+                month: 'short',
+                day: 'numeric',
+              })}
             </Flex>
           </Button>
         </Table.RowHeaderCell>
@@ -56,21 +69,48 @@ export function Day({ offset }: DayProps) {
                 overflowY: 'hidden',
               }}
             >
-              <img
-                src={tankIcon(tank.id)}
+              <Flex
+                align="center"
+                justify="center"
                 style={{
                   position: 'absolute',
                   width: 128,
                   height: '200%',
                   top: '-50%',
-                  left: 'calc(128px)',
-                  objectFit: 'contain',
-                  objectPosition: 'left',
-                  overflow: 'hidden',
+                  left: 16,
                 }}
-              />
+              >
+                <img
+                  src={tankIcon(tank.id)}
+                  style={{
+                    objectFit: 'contain',
+                    objectPosition: 'left',
+                    overflow: 'hidden',
+                  }}
+                />
+              </Flex>
 
-              <Text>{tank.name}</Text>
+              <Flex
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: 128,
+                  height: '100%',
+                  paddingLeft: 32,
+                  background:
+                    'linear-gradient(90deg, #00000000, #00000060, #00000000)',
+                }}
+                align="center"
+              >
+                <Text
+                  style={{
+                    textWrap: 'nowrap',
+                  }}
+                >
+                  {tank.name}
+                </Text>
+              </Flex>
             </Table.RowHeaderCell>
             <Table.Cell align="right">{random(1, 10)}</Table.Cell>
             <Table.Cell align="right">
