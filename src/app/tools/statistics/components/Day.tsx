@@ -69,48 +69,30 @@ export function Day({ offset }: DayProps) {
                 overflowY: 'hidden',
               }}
             >
-              <Flex
-                align="center"
-                justify="center"
+              <img
+                src={tankIcon(tank.id)}
                 style={{
                   position: 'absolute',
-                  width: 128,
+                  width: 128 + 32,
                   height: '200%',
                   top: '-50%',
-                  left: 16,
-                }}
-              >
-                <img
-                  src={tankIcon(tank.id)}
-                  style={{
-                    objectFit: 'contain',
-                    objectPosition: 'left',
-                    overflow: 'hidden',
-                  }}
-                />
-              </Flex>
-
-              <Flex
-                style={{
-                  position: 'absolute',
-                  top: 0,
                   left: 0,
-                  width: 128,
-                  height: '100%',
-                  paddingLeft: 32,
-                  background:
-                    'linear-gradient(90deg, #00000000, #00000060, #00000000)',
+                  boxShadow: 'inset 128px 0 64px -64px #00000040',
+                  objectFit: 'contain',
+                  objectPosition: '50% 50%',
+                  overflow: 'hidden',
                 }}
-                align="center"
+              />
+
+              <Text
+                style={{
+                  position: 'relative',
+                  textWrap: 'nowrap',
+                  textShadow: 'black 0 0 4px',
+                }}
               >
-                <Text
-                  style={{
-                    textWrap: 'nowrap',
-                  }}
-                >
-                  {tank.name}
-                </Text>
-              </Flex>
+                {tank.name}
+              </Text>
             </Table.RowHeaderCell>
             <Table.Cell align="right">{random(1, 10)}</Table.Cell>
             <Table.Cell align="right">
