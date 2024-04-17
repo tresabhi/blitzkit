@@ -14,6 +14,7 @@ export const TOOLS: Tool[] = [
     description: 'Periodical player statistics',
     pageDescription:
       'Periodical player statistics and tanks played in World of Tanks Blitz',
+    disabled: true,
   },
   {
     id: 'tankopedia',
