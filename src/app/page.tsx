@@ -11,13 +11,30 @@ import * as styles from './page.css';
 export default function Page() {
   return (
     <PageWrapper>
-      <Flex direction="column" gap="4" justify="center" style={{ flex: 1 }}>
-        {/* <TextField.Root placeholder="Search anything...">
-          <TextField.Slot>
-            <MagnifyingGlassIcon height="16" width="16" />
-          </TextField.Slot>
-        </TextField.Root> */}
+      {/* <Flex
+        direction="column"
+        gap="6"
+        align="center"
+        justify="center"
+        style={{
+          height: '80vh',
+        }}
+      >
+        <BlitzkriegWormWide
+          style={{
+            height: 48,
+            width: '100%',
+          }}
+        />
 
+        <EverythingSearch size="3" style={{ width: '100%' }} />
+
+        <Button variant="ghost">
+          All tools <CaretDownIcon />
+        </Button>
+      </Flex> */}
+
+      <Flex direction="column" gap="4" justify="center" style={{ flex: 1 }}>
         <Flex gap="3" wrap="wrap" align="center" justify="center">
           {TOOLS.map((tool) => (
             <Link

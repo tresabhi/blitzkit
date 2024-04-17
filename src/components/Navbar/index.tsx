@@ -1,12 +1,14 @@
-import { HamburgerMenuIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
-import { Flex, IconButton, TextField } from '@radix-ui/themes';
+import { HamburgerMenuIcon } from '@radix-ui/react-icons';
+import { Flex, IconButton } from '@radix-ui/themes';
 import Link from 'next/link';
 import { useFullScreen } from '../../hooks/useFullScreen';
 import { BlitzkriegWormWide } from '../../icons/BlitzkriegWormWide';
 import { theme } from '../../stitches.config';
+import { EverythingSearch } from './components/EverythingSearch';
 
 export default function Navbar() {
   const isFullScreen = useFullScreen();
+  // const pathName = usePathname();
 
   if (isFullScreen) return null;
 
@@ -44,14 +46,7 @@ export default function Navbar() {
             <BlitzkriegWormWide />
           </Link>
 
-          <TextField.Root
-            placeholder="Search player, tanks, clans, anything..."
-            style={{ flex: 1 }}
-          >
-            <TextField.Slot>
-              <MagnifyingGlassIcon />
-            </TextField.Slot>
-          </TextField.Root>
+          <EverythingSearch style={{ flex: 1 }} />
 
           <IconButton variant="ghost">
             <HamburgerMenuIcon />
