@@ -8,7 +8,7 @@ import { Day } from './components/Day';
 
 export default function Page() {
   return (
-    <PageWrapper color="indigo">
+    <PageWrapper color="iris">
       <Flex gap="2">
         <Heading>TresAbhi</Heading>
         <Heading color="gray">[OPTML]</Heading>

@@ -10,13 +10,14 @@ interface DayProps {
 }
 
 export function Day({ offset }: DayProps) {
+  const timeTo = new Date(Date.now() - offset * 24 * 60 * 60 * 1000);
+  const timeFrom = new Date(Date.now() - (offset + 1) * 24 * 60 * 60 * 1000);
   const awaitedTankDefinitions = use(tankDefinitions);
   const tanksList = useMemo(
     () => Object.values(awaitedTankDefinitions),
     [awaitedTankDefinitions],
   );
-  const [expanded, setExpanded] = useState(true);
-  const time = new Date(Date.now() - offset * 24 * 60 * 60 * 1000);
+  const [expanded, setExpanded] = useState(offset === 0);
   const tanks = tanksList
     .filter((tank) => tank.tier === 10)
     .sort(() => Math.random() - 0.5)
@@ -41,7 +42,7 @@ export function Day({ offset }: DayProps) {
               }}
             >
               {expanded ? <CaretDownIcon /> : <CaretRightIcon />}
-              {time.toLocaleString('default', {
+              {timeTo.toLocaleString('default', {
                 month: 'short',
                 day: 'numeric',
               })}
@@ -70,6 +71,7 @@ export function Day({ offset }: DayProps) {
               }}
             >
               <img
+                draggable={false}
                 src={tankIcon(tank.id)}
                 style={{
                   position: 'absolute',
