@@ -1,6 +1,7 @@
 'use client';
 
-import { Button, Flex } from '@radix-ui/themes';
+import { CaretDownIcon } from '@radix-ui/react-icons';
+import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
 import { use } from 'react';
 import { Flag } from '../../../../../../../components/Flag';
 import {} from '../../../../../../../components/Tanks';
@@ -16,6 +17,7 @@ import {
   TIER_ROMAN_NUMERALS,
 } from '../../../../../../../core/blitzkrieg/tankDefinitions/constants';
 import mutateTankopediaPersistent, {
+  TankopediaTestTankDisplay,
   useTankopediaPersistent,
 } from '../../../../../../../stores/tankopedia';
 import * as styles from './index.css';
@@ -306,7 +308,7 @@ export function Options() {
           ))}
         </Flex>
       </Flex>
-      {/* <DropdownMenu.Root>
+      <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           <Button variant="soft" color="gray">
             Test tanks
@@ -331,7 +333,7 @@ export function Options() {
             <DropdownMenu.RadioItem value="only">Only</DropdownMenu.RadioItem>
           </DropdownMenu.RadioGroup>
         </DropdownMenu.Content>
-      </DropdownMenu.Root> */}
+      </DropdownMenu.Root>
     </Flex>
   );
 }
