@@ -28,11 +28,11 @@ import { tankModels } from './tankModels';
 if (!targets && !allTargets) throw new Error('No target(s) specified');
 
 const methods = [
-  definitions,
-  scratchedFlags,
-  currencies,
-  skillIcons,
-  circleFlags,
+  // definitions,
+  // scratchedFlags,
+  // currencies,
+  // skillIcons,
+  // circleFlags,
   shellIcons,
   moduleIcons,
   equipmentIcons,
