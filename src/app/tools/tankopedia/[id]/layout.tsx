@@ -22,6 +22,7 @@ export default async function TankopediaLayout({
         name="description"
         content={`Statistics, armor profiles, equipment, and more about ${tank.name}`}
       />
+      <meta property="og:title" content={tank.name} />
       <meta property="og:image" content={tankIcon(id)} />
 
       {children}
