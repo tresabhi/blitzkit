@@ -2187,6 +2187,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/lz4js@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@types/lz4js/-/lz4js-0.2.1.tgz#44214fe6b28187ff36eee03afc2b344cbd886b3e"
+  integrity sha512-aAnbA4uKPNqZqu0XK1QAwKP0Wskb4Oa7ZFqxW5CMIyGgqYQKFgBxTfK3m3KODXoOLv5t14VregzgrEak13uGQA==
+
 "@types/markdown-escape@^1.1.0":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@types/markdown-escape/-/markdown-escape-1.1.3.tgz#b880ab7c1e23c76b1d663e5a5640107c493e0c3e"

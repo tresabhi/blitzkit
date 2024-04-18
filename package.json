@@ -83,6 +83,7 @@
     "@types/js-yaml": "^4.0.8",
     "@types/lodash": "^4.14.199",
     "@types/lz4": "^0.6.4",
+    "@types/lz4js": "^0.2.1",
     "@types/markdown-escape": "^1.1.0",
     "@types/node": "^20.6.5",
     "@types/parse-dds": "^1.0.3",
