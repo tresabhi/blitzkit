@@ -1,13 +1,19 @@
-import { HamburgerMenuIcon } from '@radix-ui/react-icons';
+import {
+  GearIcon,
+  HamburgerMenuIcon,
+  MagnifyingGlassIcon,
+} from '@radix-ui/react-icons';
 import { Flex, IconButton, Popover } from '@radix-ui/themes';
 import Link from 'next/link';
 import { useFullScreen } from '../../hooks/useFullScreen';
+import { useWideFormat } from '../../hooks/useWideFormat';
 import { BlitzkriegWormWide } from '../../icons/BlitzkriegWormWide';
 import { theme } from '../../stitches.config';
 import { EverythingSearch } from './components/EverythingSearch';
 
 export default function Navbar() {
   const isFullScreen = useFullScreen();
+  const wideFormat = useWideFormat(600);
   // const pathName = usePathname();
 
   if (isFullScreen) return null;
@@ -19,6 +25,7 @@ export default function Navbar() {
         top: 0,
         left: 0,
         width: '100%',
+        height: 64 + 1, // extra pixel for frost bleeding
         zIndex: 1,
         padding: '1rem',
         background: theme.colors.appBackground1_alpha,
@@ -27,7 +34,12 @@ export default function Navbar() {
         boxSizing: 'border-box',
       }}
     >
-      <Flex justify="center">
+      <Flex
+        justify="center"
+        style={{
+          height: '100%',
+        }}
+      >
         <Flex
           justify="between"
           align="center"
@@ -46,15 +58,35 @@ export default function Navbar() {
             <BlitzkriegWormWide />
           </Link>
 
-          <EverythingSearch style={{ flex: 1 }} />
+          {wideFormat ? (
+            <EverythingSearch style={{ flex: 1 }} />
+          ) : (
+            <div style={{ flex: 1 }} />
+          )}
+
+          {!wideFormat && (
+            <IconButton variant="ghost" color="gray">
+              <MagnifyingGlassIcon />
+            </IconButton>
+          )}
 
           <Popover.Root>
             <Popover.Trigger>
-              <IconButton variant="ghost">
+              <IconButton variant="ghost" color="gray">
                 <HamburgerMenuIcon />
               </IconButton>
             </Popover.Trigger>
+
+            <Popover.Content></Popover.Content>
           </Popover.Root>
+
+          <Link href="/settings">
+            <Flex style={{ width: '100%', height: '100%' }} justify="center">
+              <IconButton variant="ghost" color="gray">
+                <GearIcon />
+              </IconButton>
+            </Flex>
+          </Link>
 
           {/* <Flex justify="center" align="center" gap="4">
             <Link

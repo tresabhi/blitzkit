@@ -72,7 +72,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         >
           <Flex
             direction="column"
-            style={{ minHeight: '100vh', paddingTop: isEmbed ? undefined : 52 }}
+            style={{ minHeight: '100vh', paddingTop: isEmbed ? undefined : 64 }}
           >
             {!isEmbed && <Navbar />}
             <AlertDialog.Root open={showDevBuildAlert}>

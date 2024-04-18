@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
-function hasWideFormat() {
-  return typeof window !== 'undefined' && window.innerWidth > 880;
-}
+export function useWideFormat(size = 880) {
+  function hasWideFormat() {
+    return typeof window !== 'undefined' && window.innerWidth > size;
+  }
 
-export function useWideFormat() {
   const [wideFormat, setWideFormat] = useState(hasWideFormat());
 
   useEffect(() => {
