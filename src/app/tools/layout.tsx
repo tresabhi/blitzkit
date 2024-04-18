@@ -15,21 +15,26 @@ export default function ToolsLayout({ children }: ToolsLayoutProps) {
   const pathname = usePathname();
   const pathSplit = pathname.split('/');
   const toolId = pathSplit.at(2);
+  const isToolRoot = pathname === `/tools/${toolId}`;
   const tool = TOOLS.find((tool) => tool.id === toolId);
 
   return (
     <>
       {tool && (
         <>
-          <title>{tool.title}</title>
-          {tool.pageDescription !== undefined && (
-            <meta name="description" content={tool.pageDescription} />
-          )}
+          {isToolRoot && (
+            <>
+              <title>{tool.title}</title>
+              <meta
+                property="og:image"
+                content={`/assets/banners/${toolId}.webp`}
+              />
 
-          <meta
-            property="og:image"
-            content={`/assets/banners/${toolId}.webp`}
-          />
+              {tool.pageDescription !== undefined && (
+                <meta name="description" content={tool.pageDescription} />
+              )}
+            </>
+          )}
         </>
       )}
 

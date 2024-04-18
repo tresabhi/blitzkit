@@ -30,6 +30,7 @@ const robotoFlex = Roboto_Flex({
 export default function RootLayout({ children }: RootLayoutProps) {
   const pathname = usePathname();
   const isEmbed = pathname.split('/')[1] === 'embeds';
+  const isRoot = pathname === '/';
   const [showDevBuildAlert, setShowDevBuildAlert] = useState(false);
   const isFullScreen = useFullScreen();
 
@@ -45,7 +46,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" className={robotoFlex.className}>
       <head>
-        <title>Blitzkrieg</title>
+        {isRoot && <title>Blitzkrieg</title>}
         <meta
           name="description"
           content="🎉 Tools for everything World of Tanks Blitz"
