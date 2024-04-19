@@ -1,7 +1,7 @@
 import {
+  DiscordLogoIcon,
   GearIcon,
   HamburgerMenuIcon,
-  MagnifyingGlassIcon,
 } from '@radix-ui/react-icons';
 import {
   Flex,
@@ -15,8 +15,8 @@ import { TOOLS } from '../../constants/tools';
 import { useFullScreen } from '../../hooks/useFullScreen';
 import { useWideFormat } from '../../hooks/useWideFormat';
 import { BlitzkriegWormWide } from '../../icons/BlitzkriegWormWide';
+import { PatreonIcon } from '../../icons/Patreon';
 import { theme } from '../../stitches.config';
-import { EverythingSearch } from './components/EverythingSearch';
 
 export default function Navbar() {
   const isFullScreen = useFullScreen();
@@ -52,6 +52,46 @@ export default function Navbar() {
           style={{ maxWidth: 800, width: '100%', padding: '0 16px' }}
           gap="4"
         >
+          {/* {wideFormat ? (
+            <EverythingSearch style={{ flex: 1 }} />
+          ) : (
+            <div style={{ flex: 1 }} />
+          )}
+          
+          {!wideFormat && (
+            <IconButton variant="ghost" color="gray">
+              <MagnifyingGlassIcon />
+            </IconButton>
+          )} */}
+
+          <Link
+            href="https://discord.gg/nDt7AjGJQH"
+            target="_blank"
+            style={{
+              color: 'inherit',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <DiscordLogoIcon width={16} height={16} />
+          </Link>
+
+          <Link
+            href="https://www.patreon.com/tresabhi"
+            target="_blank"
+            style={{
+              color: 'inherit',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <PatreonIcon width={14} height={14} />
+          </Link>
+
+          <div style={{ flex: 1 }} />
+
           <Link
             href="/"
             style={{
@@ -64,17 +104,15 @@ export default function Navbar() {
             <BlitzkriegWormWide />
           </Link>
 
-          {wideFormat ? (
-            <EverythingSearch style={{ flex: 1 }} />
-          ) : (
-            <div style={{ flex: 1 }} />
-          )}
+          <div style={{ flex: 1 }} />
 
-          {!wideFormat && (
-            <IconButton variant="ghost" color="gray">
-              <MagnifyingGlassIcon />
-            </IconButton>
-          )}
+          <Link href="/settings">
+            <Flex style={{ width: '100%', height: '100%' }} justify="center">
+              <IconButton variant="ghost" color="gray">
+                <GearIcon />
+              </IconButton>
+            </Flex>
+          </Link>
 
           <Popover.Root>
             <Popover.Trigger>
@@ -114,62 +152,6 @@ export default function Navbar() {
               </Flex>
             </Popover.Content>
           </Popover.Root>
-
-          <Link href="/settings">
-            <Flex style={{ width: '100%', height: '100%' }} justify="center">
-              <IconButton variant="ghost" color="gray">
-                <GearIcon />
-              </IconButton>
-            </Flex>
-          </Link>
-
-          {/* <Flex justify="center" align="center" gap="4">
-            <Link
-              href="https://discord.gg/nDt7AjGJQH"
-              target="_blank"
-              style={{
-                color: 'inherit',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <DiscordLogoIcon width={16} height={16} />
-            </Link>
-
-            <Link
-              href="https://ko-fi.com/tresabhi"
-              target="_blank"
-              style={{
-                color: 'inherit',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <img
-                src="https://i.imgur.com/QdqgdP2.png"
-                style={{
-                  width: 20,
-                  height: 20,
-                  objectFit: 'contain',
-                }}
-              />
-            </Link>
-
-            <Link
-              href="https://www.patreon.com/tresabhi"
-              target="_blank"
-              style={{
-                color: 'inherit',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <PatreonIcon width={14} height={14} />
-            </Link>
-          </Flex> */}
         </Flex>
       </Flex>
     </div>
