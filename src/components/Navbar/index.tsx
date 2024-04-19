@@ -3,8 +3,15 @@ import {
   HamburgerMenuIcon,
   MagnifyingGlassIcon,
 } from '@radix-ui/react-icons';
-import { Flex, IconButton, Popover } from '@radix-ui/themes';
+import {
+  Flex,
+  Heading,
+  IconButton,
+  Link as LinkRadix,
+  Popover,
+} from '@radix-ui/themes';
 import Link from 'next/link';
+import { TOOLS } from '../../constants/tools';
 import { useFullScreen } from '../../hooks/useFullScreen';
 import { useWideFormat } from '../../hooks/useWideFormat';
 import { BlitzkriegWormWide } from '../../icons/BlitzkriegWormWide';
@@ -77,7 +84,36 @@ export default function Navbar() {
               </IconButton>
             </Popover.Trigger>
 
-            <Popover.Content></Popover.Content>
+            <Popover.Content align="center">
+              <Flex direction="column" gap="2">
+                <Heading size="4">Tools</Heading>
+
+                <Flex direction="column" gap="1" pl="4">
+                  {TOOLS.map((tool, index) => {
+                    if (tool.href || tool.disabled) return null;
+
+                    return (
+                      <LinkRadix
+                        tabIndex={-1}
+                        href={`/tools/${tool.id}`}
+                        onClick={(event) => event.preventDefault()}
+                      >
+                        <Link
+                          href={`/tools/${tool.id}`}
+                          key={index}
+                          style={{
+                            textDecoration: 'none',
+                            color: 'inherit',
+                          }}
+                        >
+                          {tool.title}
+                        </Link>
+                      </LinkRadix>
+                    );
+                  })}
+                </Flex>
+              </Flex>
+            </Popover.Content>
           </Popover.Root>
 
           <Link href="/settings">
