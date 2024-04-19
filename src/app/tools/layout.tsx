@@ -30,7 +30,13 @@ export default function ToolsLayout({ children }: ToolsLayoutProps) {
               />
 
               {tool.pageDescription !== undefined && (
-                <meta name="description" content={tool.pageDescription} />
+                <>
+                  <meta name="description" content={tool.pageDescription} />
+                  <meta
+                    property="og:description"
+                    content={tool.pageDescription}
+                  />
+                </>
               )}
             </>
           )}
