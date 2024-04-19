@@ -7,6 +7,7 @@ import {
 import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
 import { RefObject } from 'react';
 import { Pose, poseEvent } from '../../../../../../../core/blitzkrieg/pose';
+import { useApp } from '../../../../../../../stores/app';
 import mutateTankopediaPersistent, {
   mutateTankopediaTemporary,
   useTankopediaPersistent,
@@ -40,6 +41,7 @@ export function Options({ isFullScreen }: OptionsProps) {
   const environment = useTankopediaPersistent(
     (state) => state.model.visual.environment,
   );
+  const developerMode = useApp((state) => state.developerMode);
 
   return (
     <Flex
@@ -107,16 +109,18 @@ export function Options({ isFullScreen }: OptionsProps) {
             Green penetration
           </DropdownMenu.CheckboxItem>
 
-          <DropdownMenu.CheckboxItem
-            checked={wireframe}
-            onCheckedChange={(checked) => {
-              mutateTankopediaPersistent((draft) => {
-                draft.model.visual.wireframe = checked;
-              });
-            }}
-          >
-            Wireframe
-          </DropdownMenu.CheckboxItem>
+          {developerMode && (
+            <DropdownMenu.CheckboxItem
+              checked={wireframe}
+              onCheckedChange={(checked) => {
+                mutateTankopediaPersistent((draft) => {
+                  draft.model.visual.wireframe = checked;
+                });
+              }}
+            >
+              Wireframe
+            </DropdownMenu.CheckboxItem>
+          )}
 
           <DropdownMenu.CheckboxItem
             checked={opaque}
