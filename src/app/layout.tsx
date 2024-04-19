@@ -5,9 +5,10 @@ import '@radix-ui/themes/styles.css';
 import { config } from 'dotenv';
 import { Roboto_Flex } from 'next/font/google';
 import { usePathname } from 'next/navigation';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, Suspense, useEffect, useState } from 'react';
 import { Footer } from '../components/Footer';
 import { Google } from '../components/Google';
+import { Loader } from '../components/Loader';
 import Navbar from '../components/Navbar';
 import isDev from '../core/blitzkrieg/isDev';
 import { isLocalhost } from '../core/blitzkrieg/isLocalhost';
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const pathname = usePathname();
   const isEmbed = pathname.split('/')[1] === 'embeds';
   const isRoot = pathname === '/';
+  const darkMode = useApp((state) => state.darkMode);
   const [showDevBuildAlert, setShowDevBuildAlert] = useState(false);
   const isFullScreen = useFullScreen();
 
@@ -46,11 +48,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" className={robotoFlex.className}>
       <head>
-        {isRoot && <title>Blitzkrieg</title>}
-        <meta
-          name="description"
-          content="🎉 Tools for everything World of Tanks Blitz"
-        />
+        {isRoot && (
+          <>
+            <title>Blitzkrieg</title>
+            <meta
+              name="description"
+              content="🎉 Tools for everything World of Tanks Blitz"
+            />
+          </>
+        )}
         <meta property="og:site_name" content="Blitzkrieg" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
@@ -64,7 +70,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         }}
       >
         <Theme
-          appearance="dark"
+          appearance={darkMode ? 'dark' : 'light'}
           panelBackground="solid"
           radius="full"
           suppressHydrationWarning
@@ -104,7 +110,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
               </AlertDialog.Content>
             </AlertDialog.Root>
 
-            {children}
+            <Suspense
+              fallback={
+                <div style={{ flex: 1 }}>
+                  <Loader />
+                </div>
+              }
+            >
+              {children}
+            </Suspense>
 
             {!isEmbed && !isFullScreen && <Footer />}
           </Flex>

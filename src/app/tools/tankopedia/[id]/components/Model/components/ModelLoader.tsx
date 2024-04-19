@@ -1,5 +1,5 @@
 import { Html, useProgress } from '@react-three/drei';
-import { Loader } from '../../../../../components/Loader';
+import { Loader } from '../../../../../../../components/Loader';
 
 export function ModelLoader() {
   const { progress } = useProgress();

@@ -10,6 +10,7 @@ export default function PageWrapper({
   style,
   color,
   size = 800,
+  children,
   ...props
 }: PageWrapperProps) {
   return (
@@ -31,11 +32,12 @@ export default function PageWrapper({
           padding: 16,
           boxSizing: 'border-box',
           flex: 1,
-
           ...style,
         }}
         {...props}
-      />
+      >
+        {children}
+      </Flex>
     </Theme>
   );
 }

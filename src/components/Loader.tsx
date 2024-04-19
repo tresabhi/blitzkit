@@ -1,6 +1,6 @@
 import { blackA } from '@radix-ui/colors';
 import { Flex, Spinner, Text } from '@radix-ui/themes';
-import { theme } from '../../../stitches.config';
+import { theme } from '../stitches.config';
 
 const NAV_HEIGHT = 52.65;
 
