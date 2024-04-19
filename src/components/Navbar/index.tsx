@@ -21,7 +21,6 @@ import { EverythingSearch } from './components/EverythingSearch';
 export default function Navbar() {
   const isFullScreen = useFullScreen();
   const wideFormat = useWideFormat(600);
-  // const pathName = usePathname();
 
   if (isFullScreen) return null;
 
