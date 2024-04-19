@@ -1,5 +1,6 @@
-import { LoopIcon, TrashIcon } from '@radix-ui/react-icons';
+import { ExternalLinkIcon, LoopIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Dialog, Flex, IconButton } from '@radix-ui/themes';
+import Link from 'next/link';
 import { use, useState } from 'react';
 import { provisionDefinitions } from '../../../../core/blitzkrieg/provisionDefinitions';
 import { tankToCompareMember } from '../../../../core/blitzkrieg/tankToCompareMember';
@@ -8,9 +9,10 @@ import { TankSearch } from '../../tankopedia/components/TankSearch';
 
 interface TankControlProps {
   index: number;
+  id: number;
 }
 
-export function TankControl({ index }: TankControlProps) {
+export function TankControl({ index, id }: TankControlProps) {
   const awaitedProvisionDefinitions = use(provisionDefinitions);
   const [switchTankDialogOpen, setSwitchTankDialogOpen] = useState(false);
 
@@ -27,6 +29,7 @@ export function TankControl({ index }: TankControlProps) {
       >
         <TrashIcon />
       </IconButton>
+
       <Dialog.Root
         open={switchTankDialogOpen}
         onOpenChange={setSwitchTankDialogOpen}
@@ -62,6 +65,12 @@ export function TankControl({ index }: TankControlProps) {
           </Flex>
         </Dialog.Content>
       </Dialog.Root>
+
+      <Link href={`/tools/tankopedia/${id}`}>
+        <IconButton variant="ghost">
+          <ExternalLinkIcon />
+        </IconButton>
+      </Link>
     </Flex>
   );
 }

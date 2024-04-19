@@ -447,7 +447,7 @@ export default function Page() {
           gap="2"
           style={{ height: '100%' }}
         >
-          <TankControl index={index} key={tank.id} />
+          <TankControl index={index} key={tank.id} id={tank.id} />
 
           <Flex
             ref={draggable}
