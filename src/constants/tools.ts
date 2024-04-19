@@ -8,14 +8,14 @@ interface Tool {
 }
 
 export const TOOLS: Tool[] = [
-  {
-    id: 'statistics',
-    title: 'Statistics',
-    description: 'Periodical player statistics',
-    pageDescription:
-      'Periodical player statistics and tanks played in World of Tanks Blitz',
-    disabled: true,
-  },
+  // {
+  //   id: 'statistics',
+  //   title: 'Statistics',
+  //   description: 'Periodical player statistics',
+  //   pageDescription:
+  //     'Periodical player statistics and tanks played in World of Tanks Blitz',
+  //   disabled: true,
+  // },
   {
     id: 'tankopedia',
     title: 'Tankopedia',
