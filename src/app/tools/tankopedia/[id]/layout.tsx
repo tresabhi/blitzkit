@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 import { tankDefinitions } from '../../../../core/blitzkrieg/tankDefinitions';
+import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkrieg/tankDefinitions/constants';
 import { tankIcon } from '../../../../core/blitzkrieg/tankIcon';
+import strings from '../../../../lang/en-US.json';
 
 interface TankopediaLayoutProps {
   children: ReactNode;
@@ -14,16 +16,18 @@ export default async function TankopediaLayout({
   const id = Number(params.id);
   const awaitedTankDefinitions = await tankDefinitions;
   const tank = awaitedTankDefinitions[id];
+  const title = `${tank.name} - Tier ${TIER_ROMAN_NUMERALS[tank.tier]} ${
+    (strings.common.nations as Record<string, string>)[tank.nation]
+  } ${strings.common.tank_class_short[tank.class]}`;
+  const description = `Statistics, armor profiles, and equipment for ${tank.name}`;
 
   return (
     <>
-      <title>{tank.name}</title>
-      <meta
-        name="description"
-        content={`Statistics, armor profiles, equipment, and more about ${tank.name}`}
-      />
+      <title>{title}</title>
+      <meta name="description" content={description} />
       <meta property="og:title" content={tank.name} />
       <meta property="og:image" content={tankIcon(id)} />
+      <meta property="og:description" content={description} />
 
       {children}
     </>
