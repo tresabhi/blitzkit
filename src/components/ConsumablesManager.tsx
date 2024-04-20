@@ -35,7 +35,7 @@ export function ConsumablesManager({
               timers
                 ? consumable.duration === undefined
                   ? undefined
-                  : consumable.duration * (hasHighEndConsumables ? 0.7 : 1)
+                  : consumable.duration * (hasHighEndConsumables ? 1.7 : 1)
                 : undefined
             }
             cooldown={

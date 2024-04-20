@@ -30,9 +30,9 @@ export function ConsumableButton({
           {duration && (
             <Text
               color={
-                durationDelta < 0
+                durationDelta > 0
                   ? 'green'
-                  : durationDelta > 0
+                  : durationDelta < 0
                     ? 'tomato'
                     : undefined
               }
