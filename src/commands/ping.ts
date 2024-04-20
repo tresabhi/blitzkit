@@ -9,7 +9,7 @@ export const pingCommand = new Promise<CommandRegistry>((resolve) => {
     handlesInteraction: true,
 
     command: createLocalizedCommand('ping', [
-      { subcommand: 'blitzkrieg' },
+      { subcommand: 'blitzrinth' },
       { subcommand: 'wotb' },
     ]),
 
@@ -18,7 +18,7 @@ export const pingCommand = new Promise<CommandRegistry>((resolve) => {
       const subcommand = interaction.options.getSubcommand();
       const executionStart = Date.now();
 
-      if (subcommand === 'blitzkrieg') {
+      if (subcommand === 'blitzrinth') {
         await interaction.editReply(t`bot.commands.ping.body.pong`);
       } else {
         await fetch('https://api.wotblitz.com/');

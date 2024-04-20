@@ -1,5 +1,5 @@
 import { use, useMemo } from 'react';
-import { equipmentDefinitions } from '../core/blitzkrieg/equipmentDefinitions';
+import { equipmentDefinitions } from '../core/blitzrinth/equipmentDefinitions';
 import { useDuel } from '../stores/duel';
 
 export function useEquipment(id: number, antagonist = false) {

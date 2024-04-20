@@ -1,3 +1,3 @@
 # Inviting the Bot
 
-Go to [application directory for Blitzkrieg](https://discord.com/application-directory/1097673957865443370) and click "Add to Server." Voila! You're ready to go.
+Go to [application directory for Blitzrinth](https://discord.com/application-directory/1097673957865443370) and click "Add to Server." Voila! You're ready to go.

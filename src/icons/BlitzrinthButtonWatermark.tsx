@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 
-export function BlitzkriegButtonWatermark(props: ComponentProps<'svg'>) {
+export function BlitzrinthButtonWatermark(props: ComponentProps<'svg'>) {
   return (
     <svg
       color="#ffffff"

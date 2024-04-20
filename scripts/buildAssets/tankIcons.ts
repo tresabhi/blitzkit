@@ -5,8 +5,8 @@ import { NATION_IDS } from '../../src/constants/nations';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
-import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
-import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { commitAssets } from '../../src/core/blitzrinth/commitAssets';
+import { FileChange } from '../../src/core/blitzrinth/commitMultipleFiles';
 import { DATA, POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 

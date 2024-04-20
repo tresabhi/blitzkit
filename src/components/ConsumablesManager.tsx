@@ -1,5 +1,5 @@
 import { Flex } from '@radix-ui/themes';
-import { ConsumableEntry } from '../core/blitzkrieg/consumableDefinitions';
+import { ConsumableEntry } from '../core/blitzrinth/consumableDefinitions';
 import { ConsumableButton } from './ModuleButtons/ConsumableButton';
 
 interface ConsumablesManagerProps {

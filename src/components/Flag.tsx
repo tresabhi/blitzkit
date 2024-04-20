@@ -1,4 +1,4 @@
-import { asset } from '../core/blitzkrieg/asset';
+import { asset } from '../core/blitzrinth/asset';
 
 interface FlagProps {
   nation: string;

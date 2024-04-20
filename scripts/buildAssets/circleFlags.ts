@@ -1,7 +1,7 @@
 import { readdir } from 'fs/promises';
 import { readBase64DVPL } from '../../src/core/blitz/readBase64DVPL';
-import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
-import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { commitAssets } from '../../src/core/blitzrinth/commitAssets';
+import { FileChange } from '../../src/core/blitzrinth/commitMultipleFiles';
 import { DATA, POI } from './constants';
 
 export async function circleFlags(production: boolean) {

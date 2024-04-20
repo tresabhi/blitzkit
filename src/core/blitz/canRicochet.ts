@@ -1,4 +1,4 @@
-import { ShellDefinition } from '../blitzkrieg/tankDefinitions';
+import { ShellDefinition } from '../blitzrinth/tankDefinitions';
 
 export function canRicochet(
   type: ShellDefinition['type'],

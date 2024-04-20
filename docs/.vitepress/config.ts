@@ -5,9 +5,9 @@ import { defineConfig } from 'vitepress';
 import { getSidebar } from 'vitepress-plugin-auto-sidebar';
 
 export default defineConfig({
-  title: 'blitzkrieg',
+  title: 'blitzrinth',
   description: '🎉 All-in-one Discord bot for everything World of Tanks Blitz',
-  base: '/blitzkrieg/',
+  base: '/blitzrinth/',
   outDir: '../dist/docs',
 
   themeConfig: {
@@ -33,7 +33,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/tresabhi/blitzkrieg' },
+      { icon: 'github', link: 'https://github.com/tresabhi/blitzrinth' },
     ],
   },
 });

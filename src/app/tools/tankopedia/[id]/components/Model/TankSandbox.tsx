@@ -7,14 +7,14 @@ import { isMobile } from 'react-device-detect';
 import { Armor } from '../../../../../../components/Armor';
 import { ShotDisplay } from '../../../../../../components/Armor/components/ShotDisplay';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
-import { modelDefinitions } from '../../../../../../core/blitzkrieg/modelDefinitions';
-import { modelTransformEvent } from '../../../../../../core/blitzkrieg/modelTransform';
-import { Pose, poseEvent } from '../../../../../../core/blitzkrieg/pose';
-import { tankIcon } from '../../../../../../core/blitzkrieg/tankIcon';
+import { modelDefinitions } from '../../../../../../core/blitzrinth/modelDefinitions';
+import { modelTransformEvent } from '../../../../../../core/blitzrinth/modelTransform';
+import { Pose, poseEvent } from '../../../../../../core/blitzrinth/pose';
+import { tankIcon } from '../../../../../../core/blitzrinth/tankIcon';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
-import { BlitzkriegWormWide } from '../../../../../../icons/BlitzkriegWormWide';
+import { BlitzrinthWormWide } from '../../../../../../icons/BlitzrinthWormWide';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import mutateTankopediaPersistent, {
   TankopediaMode,
@@ -186,7 +186,7 @@ export function TankSandbox() {
                 top: 11,
               }}
             >
-              <BlitzkriegWormWide height={32} />
+              <BlitzrinthWormWide height={32} />
             </Text>
           )}
 

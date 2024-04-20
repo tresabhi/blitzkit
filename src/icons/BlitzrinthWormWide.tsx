@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 
-export function BlitzkriegWormWide(props: ComponentProps<'svg'>) {
+export function BlitzrinthWormWide(props: ComponentProps<'svg'>) {
   return (
     <svg
       width="74"

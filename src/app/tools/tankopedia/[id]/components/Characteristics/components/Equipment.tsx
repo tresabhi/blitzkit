@@ -1,7 +1,7 @@
 import { Button, Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
 import { EquipmentManager } from '../../../../../../../components/EquipmentManager';
-import { equipmentDefinitions } from '../../../../../../../core/blitzkrieg/equipmentDefinitions';
+import { equipmentDefinitions } from '../../../../../../../core/blitzrinth/equipmentDefinitions';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 

@@ -31,23 +31,23 @@ import { EquipmentManager } from '../../../components/EquipmentManager';
 import { ModuleManager } from '../../../components/ModuleManager';
 import PageWrapper from '../../../components/PageWrapper';
 import { ProvisionsManager } from '../../../components/ProvisionsManager';
-import { asset } from '../../../core/blitzkrieg/asset';
-import { availableProvisions } from '../../../core/blitzkrieg/availableProvisions';
-import { checkConsumableProvisionInclusivity } from '../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
-import { consumableDefinitions } from '../../../core/blitzkrieg/consumableDefinitions';
-import { createDefaultSkills } from '../../../core/blitzkrieg/createDefaultSkills';
-import { equipmentDefinitions } from '../../../core/blitzkrieg/equipmentDefinitions';
-import { modelDefinitions } from '../../../core/blitzkrieg/modelDefinitions';
-import { provisionDefinitions } from '../../../core/blitzkrieg/provisionDefinitions';
-import { skillDefinitions } from '../../../core/blitzkrieg/skillDefinitions';
-import { tankCharacteristics } from '../../../core/blitzkrieg/tankCharacteristics';
+import { asset } from '../../../core/blitzrinth/asset';
+import { availableProvisions } from '../../../core/blitzrinth/availableProvisions';
+import { checkConsumableProvisionInclusivity } from '../../../core/blitzrinth/checkConsumableProvisionInclusivity';
+import { consumableDefinitions } from '../../../core/blitzrinth/consumableDefinitions';
+import { createDefaultSkills } from '../../../core/blitzrinth/createDefaultSkills';
+import { equipmentDefinitions } from '../../../core/blitzrinth/equipmentDefinitions';
+import { modelDefinitions } from '../../../core/blitzrinth/modelDefinitions';
+import { provisionDefinitions } from '../../../core/blitzrinth/provisionDefinitions';
+import { skillDefinitions } from '../../../core/blitzrinth/skillDefinitions';
+import { tankCharacteristics } from '../../../core/blitzrinth/tankCharacteristics';
 import {
   TankDefinition,
   tankDefinitions,
-} from '../../../core/blitzkrieg/tankDefinitions';
-import { tankIcon } from '../../../core/blitzkrieg/tankIcon';
-import { tankToCompareMember } from '../../../core/blitzkrieg/tankToCompareMember';
-import { BlitzkriegButtonWatermark } from '../../../icons/BlitzkriegButtonWatermark';
+} from '../../../core/blitzrinth/tankDefinitions';
+import { tankIcon } from '../../../core/blitzrinth/tankIcon';
+import { tankToCompareMember } from '../../../core/blitzrinth/tankToCompareMember';
+import { BlitzrinthButtonWatermark } from '../../../icons/BlitzrinthButtonWatermark';
 import { theme } from '../../../stitches.config';
 import {
   DeltaMode,
@@ -648,7 +648,7 @@ export default function Page() {
                     align="center"
                     justify="center"
                   >
-                    <BlitzkriegButtonWatermark width={64} height={64} />
+                    <BlitzrinthButtonWatermark width={64} height={64} />
                     <InsertionMarker index={0} />
                   </Flex>
                 </Table.ColumnHeaderCell>

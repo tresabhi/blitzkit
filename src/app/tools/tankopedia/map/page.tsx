@@ -1,7 +1,7 @@
 import { Flex, Link } from '@radix-ui/themes';
 import { use } from 'react';
 import PageWrapper from '../../../../components/PageWrapper';
-import { tankDefinitions } from '../../../../core/blitzkrieg/tankDefinitions';
+import { tankDefinitions } from '../../../../core/blitzrinth/tankDefinitions';
 
 export default function Page() {
   const awaitedTankDefinitions = use(tankDefinitions);

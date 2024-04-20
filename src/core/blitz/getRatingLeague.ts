@@ -1,7 +1,7 @@
 import { LeagueTop, RatingPlayer } from '../../commands/ratingLeaderboard';
 import { Region } from '../../constants/regions';
-import { context } from '../blitzkrieg/context';
-import { patientFetch } from '../blitzkrieg/patientFetch';
+import { context } from '../blitzrinth/context';
+import { patientFetch } from '../blitzrinth/patientFetch';
 import regionToRegionSubdomain from './regionToRegionSubdomain';
 
 export async function getRatingLeague(

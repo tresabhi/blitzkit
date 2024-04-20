@@ -3,7 +3,7 @@ import {
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
-} from '../../../../core/blitzkrieg/tankDefinitions/constants';
+} from '../../../../core/blitzrinth/tankDefinitions/constants';
 
 export const TREE_TYPES = ['researchable', 'premium', 'collector'] as const; // BIG TODO: REMOVE THIS AFTER LOCALIZATION
 

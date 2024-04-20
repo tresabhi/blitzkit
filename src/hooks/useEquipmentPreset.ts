@@ -1,4 +1,4 @@
-import { equipmentDefinitions } from '../core/blitzkrieg/equipmentDefinitions';
+import { equipmentDefinitions } from '../core/blitzrinth/equipmentDefinitions';
 import { useAwait } from './useAwait';
 
 export function useEquipmentPreset(preset: string) {

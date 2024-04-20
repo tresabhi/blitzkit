@@ -2,8 +2,8 @@ import sharp from 'sharp';
 import { TankClass } from '../../src/components/Tanks';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
-import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
-import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { commitAssets } from '../../src/core/blitzrinth/commitAssets';
+import { FileChange } from '../../src/core/blitzrinth/commitMultipleFiles';
 import { DATA } from './constants';
 
 interface SkillIcon {

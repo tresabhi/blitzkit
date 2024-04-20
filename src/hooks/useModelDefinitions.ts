@@ -1,4 +1,4 @@
-import { modelDefinitions } from '../core/blitzkrieg/modelDefinitions';
+import { modelDefinitions } from '../core/blitzrinth/modelDefinitions';
 import { useAwait } from './useAwait';
 
 export function useModelDefinitions() {

@@ -1,6 +1,6 @@
 import { Code } from '@radix-ui/themes';
 import { use } from 'react';
-import { gameDefinitions } from '../../../core/blitzkrieg/gameDefinitions';
+import { gameDefinitions } from '../../../core/blitzrinth/gameDefinitions';
 
 export function WoTBVersion() {
   const awaitedGameDefinitions = use(gameDefinitions);

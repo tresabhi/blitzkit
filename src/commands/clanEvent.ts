@@ -84,7 +84,7 @@
 
 //       embedWarning(
 //         'This is an approximation!',
-//         "Wargaming provides very little information about platoons publicly. Caveats:\n- Players in two different clans platooning artificially inflates the total count\n- Game-mode battles aren't counted since Wargaming doesn't publicly share that data\n- This command is also subject to Blitzkrieg's reset times (use `/about timezones` for more info)",
+//         "Wargaming provides very little information about platoons publicly. Caveats:\n- Players in two different clans platooning artificially inflates the total count\n- Game-mode battles aren't counted since Wargaming doesn't publicly share that data\n- This command is also subject to Blitzrinth's reset times (use `/about timezones` for more info)",
 //       ),
 //     ];
 //   },

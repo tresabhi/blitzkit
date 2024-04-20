@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { tankDefinitions } from '../../../../core/blitzkrieg/tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkrieg/tankDefinitions/constants';
-import { tankIcon } from '../../../../core/blitzkrieg/tankIcon';
+import { tankDefinitions } from '../../../../core/blitzrinth/tankDefinitions';
+import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzrinth/tankDefinitions/constants';
+import { tankIcon } from '../../../../core/blitzrinth/tankIcon';
 import strings from '../../../../lang/en-US.json';
 
 interface TankopediaLayoutProps {

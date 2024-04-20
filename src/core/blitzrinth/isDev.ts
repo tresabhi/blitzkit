@@ -1,4 +1,10 @@
-const devHostStartNames = ['blitzkrieg-', 'localhost', 'betakrieg', 'devkrieg'];
+const devHostStartNames = [
+  'blitzkrieg-',
+  'localhost',
+  'betakrieg',
+  'devkrieg',
+  'blitzrinth-',
+];
 
 export default function isDev() {
   return (

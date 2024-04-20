@@ -7,24 +7,24 @@ import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
-import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
+import { commitAssets } from '../../src/core/blitzrinth/commitAssets';
 import {
   ConsumableDefinitions,
   TankFilterDefinitionCategory,
-} from '../../src/core/blitzkrieg/consumableDefinitions';
+} from '../../src/core/blitzrinth/consumableDefinitions';
 import {
   EquipmentDefinitions,
   EquipmentPreset,
   EquipmentRow,
-} from '../../src/core/blitzkrieg/equipmentDefinitions';
-import { GameDefinitions } from '../../src/core/blitzkrieg/gameDefinitions';
+} from '../../src/core/blitzrinth/equipmentDefinitions';
+import { GameDefinitions } from '../../src/core/blitzrinth/gameDefinitions';
 import {
   ModelArmor,
   ModelDefinitions,
-} from '../../src/core/blitzkrieg/modelDefinitions';
-import { ProvisionDefinitions } from '../../src/core/blitzkrieg/provisionDefinitions';
-import { SkillDefinitions } from '../../src/core/blitzkrieg/skillDefinitions';
-import { superCompress } from '../../src/core/blitzkrieg/superCompress';
+} from '../../src/core/blitzrinth/modelDefinitions';
+import { ProvisionDefinitions } from '../../src/core/blitzrinth/provisionDefinitions';
+import { SkillDefinitions } from '../../src/core/blitzrinth/skillDefinitions';
+import { superCompress } from '../../src/core/blitzrinth/superCompress';
 import {
   Crew,
   CrewMember,
@@ -33,7 +33,7 @@ import {
   TankDefinitionPrice,
   TankDefinitions,
   Tier,
-} from '../../src/core/blitzkrieg/tankDefinitions';
+} from '../../src/core/blitzrinth/tankDefinitions';
 import { DATA, POI } from './constants';
 import { Avatar } from './skillIcons';
 import { TankParameters } from './tankIcons';
@@ -325,7 +325,7 @@ type ConsumablesVehicleFilter =
   | { name: string }
   | { extendedTags: string };
 
-const blitzShellKindToBLitzkrieg: Record<ShellKind, ShellType> = {
+const blitzShellKindToBlitzrinth: Record<ShellKind, ShellType> = {
   ARMOR_PIERCING: 'ap',
   ARMOR_PIERCING_CR: 'ap_cr',
   HIGH_EXPLOSIVE: 'he',
@@ -852,7 +852,7 @@ export async function definitions(production: boolean) {
                   caliber: shell.caliber,
                   normalization: shell.normalizationAngle,
                   ricochet: shell.ricochetAngle,
-                  type: blitzShellKindToBLitzkrieg[shell.kind],
+                  type: blitzShellKindToBlitzrinth[shell.kind],
                   explosionRadius:
                     shell.kind === 'HIGH_EXPLOSIVE'
                       ? shell.explosionRadius ?? 0

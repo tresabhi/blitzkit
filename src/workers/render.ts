@@ -1,5 +1,5 @@
 import { parentPort, threadId } from 'worker_threads';
-import svgToPng from '../core/blitzkrieg/svgToPng';
+import svgToPng from '../core/blitzrinth/svgToPng';
 
 console.log(`🟢 Launched render worker ${threadId}`);
 

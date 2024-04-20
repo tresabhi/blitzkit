@@ -21,24 +21,24 @@ import { use, useEffect, useMemo, useRef, useState } from 'react';
 import { TreeType } from '../../../../../components/Tanks';
 import { TANK_CLASSES } from '../../../../../components/Tanks/components/Item/constants';
 import { resolveNearPenetration } from '../../../../../core/blitz/resolveNearPenetration';
-import { asset } from '../../../../../core/blitzkrieg/asset';
-import { modelDefinitions } from '../../../../../core/blitzkrieg/modelDefinitions';
-import { normalizeBoundingBox } from '../../../../../core/blitzkrieg/normalizeBoundingBox';
-import { resolveDpm } from '../../../../../core/blitzkrieg/resolveDpm';
-import { resolveReload } from '../../../../../core/blitzkrieg/resolveReload';
+import { asset } from '../../../../../core/blitzrinth/asset';
+import { modelDefinitions } from '../../../../../core/blitzrinth/modelDefinitions';
+import { normalizeBoundingBox } from '../../../../../core/blitzrinth/normalizeBoundingBox';
+import { resolveDpm } from '../../../../../core/blitzrinth/resolveDpm';
+import { resolveReload } from '../../../../../core/blitzrinth/resolveReload';
 import {
   NATIONS,
   TankDefinition,
   tanksDefinitionsArray,
-} from '../../../../../core/blitzkrieg/tankDefinitions';
+} from '../../../../../core/blitzrinth/tankDefinitions';
 import {
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
   TIER_ROMAN_NUMERALS,
-} from '../../../../../core/blitzkrieg/tankDefinitions/constants';
-import { tankIcon } from '../../../../../core/blitzkrieg/tankIcon';
-import { unionBoundingBox } from '../../../../../core/blitzkrieg/unionBoundingBox';
+} from '../../../../../core/blitzrinth/tankDefinitions/constants';
+import { tankIcon } from '../../../../../core/blitzrinth/tankIcon';
+import { unionBoundingBox } from '../../../../../core/blitzrinth/unionBoundingBox';
 import { theme } from '../../../../../stitches.config';
 import mutateTankopediaPersistent, {
   SORT_NAMES,

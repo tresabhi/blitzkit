@@ -70,7 +70,7 @@
         "tank_id_not_found": "# Tank not found\nCould not find tank by the ID \"%s\". Try typing the name of the tank instead of a number.",
         "no_tank_stats": "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
         "get_help": "Help Discord server",
-        "uncaught_error": "# Blitzkrieg ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help.",
+        "uncaught_error": "# Blitzrinth ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help.",
         "preview": "# This command is in preview\n\nYou can only access this command in [the official Discord server](https://discord.gg/nDt7AjGJQH). The command will be generally available soon."
       },
 
@@ -250,7 +250,7 @@
           "commands": {
             "$": "commands",
             "description": "List of all commands and their descriptions",
-            "body": "# Commands\n\nBlitzkrieg offers the following commands:\n\n"
+            "body": "# Commands\n\nBlitzrinth offers the following commands:\n\n"
           },
           "embeds": {
             "$": "embeds",
@@ -266,7 +266,7 @@
           },
           "timezones": {
             "$": "timezones",
-            "description": "How Blitzkrieg infers and uses your timezone"
+            "description": "How Blitzrinth infers and uses your timezone"
           },
           "creators": {
             "$": "creators",
@@ -515,9 +515,9 @@
         },
 
         "subcommands": {
-          "blitzkrieg": {
-            "$": "blitzkrieg",
-            "description": "Ping Blitzkrieg"
+          "blitzrinth": {
+            "$": "blitzrinth",
+            "description": "Ping Blitzrinth"
           },
           "wotb": {
             "$": "wotb",

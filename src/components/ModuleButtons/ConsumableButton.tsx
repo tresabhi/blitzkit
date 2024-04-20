@@ -1,6 +1,6 @@
 import { ClockIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Flex, Text } from '@radix-ui/themes';
-import { asset } from '../../core/blitzkrieg/asset';
+import { asset } from '../../core/blitzrinth/asset';
 import { useDelta } from '../../hooks/useDelta';
 import { GenericTankComponentButton } from './GenericTankComponentButton';
 import { TankComponentButtonProps } from './TankComponentButton';

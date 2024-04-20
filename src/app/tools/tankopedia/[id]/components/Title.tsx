@@ -3,8 +3,8 @@ import { Button, Dialog, Flex, Heading } from '@radix-ui/themes';
 import Link from 'next/link';
 import { useState } from 'react';
 import { TREE_TYPE_ICONS } from '../../../../../components/Tanks/components/Item/constants';
-import { assignDuelMember } from '../../../../../core/blitzkrieg/assignDuelMember';
-import { pushTankopediaPath } from '../../../../../core/blitzkrieg/pushTankopediaPath';
+import { assignDuelMember } from '../../../../../core/blitzrinth/assignDuelMember';
+import { pushTankopediaPath } from '../../../../../core/blitzrinth/pushTankopediaPath';
 import { useDuel } from '../../../../../stores/duel';
 import { TankSearch } from '../../components/TankSearch';
 

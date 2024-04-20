@@ -3,7 +3,7 @@ import { IndividualTankStats } from '../../types/tanksStats';
 import { AllStats } from '../blitz/getAccountInfo';
 import { ReadStream, WriteStream } from './buffer';
 
-export interface BlitzkriegTankStats extends AllStats {
+export interface BlitzrinthTankStats extends AllStats {
   id: number;
   battle_life_time: number;
   last_battle_time: number;
@@ -123,7 +123,7 @@ export class RtscReadStream extends ReadStream {
       win_and_survived: this.uint32(),
       wins: this.uint32(),
       xp: this.uint32(),
-    } satisfies BlitzkriegTankStats;
+    } satisfies BlitzrinthTankStats;
   }
 }
 

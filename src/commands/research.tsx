@@ -6,17 +6,17 @@ import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
 import resolveTankId from '../core/blitz/resolveTankId';
-import { asset } from '../core/blitzkrieg/asset';
-import { buildTechTreeLine } from '../core/blitzkrieg/buildTechTreeLine';
-import { emblemURL } from '../core/blitzkrieg/emblemURL';
-import { webpToPng } from '../core/blitzkrieg/iconPng';
-import { resolveAncestry } from '../core/blitzkrieg/resolveAncestry';
-import { tankDefinitions } from '../core/blitzkrieg/tankDefinitions';
+import { asset } from '../core/blitzrinth/asset';
+import { buildTechTreeLine } from '../core/blitzrinth/buildTechTreeLine';
+import { emblemURL } from '../core/blitzrinth/emblemURL';
+import { webpToPng } from '../core/blitzrinth/iconPng';
+import { resolveAncestry } from '../core/blitzrinth/resolveAncestry';
+import { tankDefinitions } from '../core/blitzrinth/tankDefinitions';
 import {
   TANK_ICONS,
   TIER_ROMAN_NUMERALS,
-} from '../core/blitzkrieg/tankDefinitions/constants';
-import { tankIconPng } from '../core/blitzkrieg/tankIconPng';
+} from '../core/blitzrinth/tankDefinitions/constants';
+import { tankIconPng } from '../core/blitzrinth/tankIconPng';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
