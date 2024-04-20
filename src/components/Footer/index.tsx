@@ -5,21 +5,23 @@ import { useWideFormat } from '../../hooks/useWideFormat';
 import { WoTBVersion } from './components/WoTBVersion';
 
 export function Footer() {
-  const wideFormat = useWideFormat();
+  const wideFormat = useWideFormat(640);
 
   return (
     <Theme radius="none">
       <Card>
-        <Flex justify="center">
+        <Flex align="center" direction="column" gap="3" justify="center">
           <Flex
+            align="center"
             justify={wideFormat ? 'between' : 'center'}
+            wrap="wrap"
             style={{
-              flex: 1,
+              width: '100%',
               maxWidth: 800,
               padding: '0 16px',
             }}
           >
-            <Flex gap="1">
+            <Flex gap="1" justify="center" align="center">
               <Text color="gray" size="2">
                 Blitzkrieg
               </Text>
@@ -37,15 +39,29 @@ export function Footer() {
               </Suspense>
             </Flex>
 
-            {wideFormat && (
+            <Flex
+              justify="center"
+              align="center"
+              gap="2"
+              style={{
+                maxWidth: 800,
+                padding: '0 16px',
+              }}
+            >
+              <Link size="2" href="https://tresabhi.github.io/" target="_blank">
+                Made by TrèsAbhi
+              </Link>
+
+              <Text color="gray">•</Text>
+
               <Link
                 size="2"
-                href="https://www.patreon.com/tresabhi"
+                href="https://tresabhi.github.io/blitzkrieg/guide/credits.html"
                 target="_blank"
               >
-                Consider donating on Patreon
+                Full credits
               </Link>
-            )}
+            </Flex>
           </Flex>
         </Flex>
       </Card>
