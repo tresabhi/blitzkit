@@ -1,3 +1,4 @@
+import { ASSETS_REPO } from '../../constants/assets';
 import commitMultipleFiles, { FileChange } from './commitMultipleFiles';
 
 export async function commitAssets(
@@ -12,7 +13,7 @@ export async function commitAssets(
 
   await commitMultipleFiles(
     'tresabhi',
-    'blitzkrieg-assets',
+    ASSETS_REPO,
     production ? 'main' : 'dev',
     `${message} - ${new Date().toDateString()}`,
     changes,
