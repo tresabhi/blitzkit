@@ -1,40 +1,36 @@
 'use client';
 
 import { CaretRightIcon } from '@radix-ui/react-icons';
-import { Flex } from '@radix-ui/themes';
+import { Button, Flex, Link as LinkRadix } from '@radix-ui/themes';
 import Link from 'next/link';
 import PageWrapper from '../components/PageWrapper';
 import { TOOLS } from '../constants/tools';
+import { PatreonIcon } from '../icons/Patreon';
 import { theme } from '../stitches.config';
 import * as styles from './page.css';
 
 export default function Page() {
   return (
     <PageWrapper>
-      {/* <Flex
+      <Flex
         direction="column"
-        gap="6"
-        align="center"
+        gap="5"
         justify="center"
-        style={{
-          height: '80vh',
-        }}
+        align="center"
+        style={{ flex: 1 }}
       >
-        <BlitzkriegWormWide
-          style={{
-            height: 48,
-            width: '100%',
-          }}
-        />
+        <LinkRadix href="https://www.patreon.com/tresabhi" target="_blank">
+          <Button
+            color="ruby"
+            style={{
+              boxShadow: `0 0 8px ${theme.colors.solidBackground_ruby}f0`,
+            }}
+          >
+            <PatreonIcon style={{ width: '1em', height: '1em' }} /> Consider
+            donating on Patreon
+          </Button>
+        </LinkRadix>
 
-        <EverythingSearch size="3" style={{ width: '100%' }} />
-
-        <Button variant="ghost">
-          All tools <CaretDownIcon />
-        </Button>
-      </Flex> */}
-
-      <Flex direction="column" gap="4" justify="center" style={{ flex: 1 }}>
         <Flex gap="3" wrap="wrap" align="center" justify="center">
           {TOOLS.map((tool) => (
             <Link

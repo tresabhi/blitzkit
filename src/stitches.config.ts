@@ -9,6 +9,7 @@ import {
   orangeDark,
   purpleDark,
   redDark,
+  rubyDark,
   sandDark,
   slate,
   slateDark,
@@ -38,6 +39,7 @@ export const theme = {
     ...createColors(mauveDark, 'mauve'),
     ...createColors(sandDark, 'sand'),
     ...createColors(crimsonDark, 'crimson'),
+    ...createColors(rubyDark, 'ruby'),
   },
 
   borderStyles: {

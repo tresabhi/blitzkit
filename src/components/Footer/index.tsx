@@ -10,7 +10,7 @@ export function Footer() {
   return (
     <Theme radius="none">
       <Card>
-        <Flex align="center" direction="column" gap="3" justify="center">
+        <Flex justify="center" align="center" gap="3">
           <Flex
             align="center"
             justify={wideFormat ? 'between' : 'center'}
