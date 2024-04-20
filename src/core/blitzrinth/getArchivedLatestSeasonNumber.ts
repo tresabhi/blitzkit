@@ -16,7 +16,7 @@ export async function getArchivedLatestSeasonNumber() {
   if (ratingInfo.detail) {
     const regionsURL = (
       (await fetch(
-        'https://api.github.com/repos/tresabhi/blitzrinth-assets/git/trees/main',
+        'https://api.github.com/repos/tresabhi/blitzkrieg-assets/git/trees/main',
       ).then((response) => response.json())) as GitHubTrees
     ).tree.find(({ path }) => path === 'regions')!.url;
     const comURL = (

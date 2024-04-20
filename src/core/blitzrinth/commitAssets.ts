@@ -12,7 +12,7 @@ export async function commitAssets(
 
   await commitMultipleFiles(
     'tresabhi',
-    'blitzrinth-assets',
+    'blitzkrieg-assets',
     production ? 'main' : 'dev',
     `${message} - ${new Date().toDateString()}`,
     changes,
