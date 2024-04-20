@@ -218,18 +218,17 @@ export function Characteristics() {
             {stats.shellReload!}
           </InfoWithDelta>
         )}
-        {gun.type === 'autoLoader' ||
-          (gun.type === 'autoReloader' && (
-            <InfoWithDelta
-              indent
-              decimals={2}
-              name="Intra-clip"
-              unit="s"
-              deltaType="lowerIsBetter"
-            >
-              {stats.intraClip!}
-            </InfoWithDelta>
-          ))}
+        {(gun.type === 'autoLoader' || gun.type === 'autoReloader') && (
+          <InfoWithDelta
+            indent
+            decimals={2}
+            name="Intra-clip"
+            unit="s"
+            deltaType="lowerIsBetter"
+          >
+            {stats.intraClip!}
+          </InfoWithDelta>
+        )}
         <InfoWithDelta name="Caliber" decimals={0} unit="mm">
           {stats.caliber}
         </InfoWithDelta>
