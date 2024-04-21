@@ -16,7 +16,6 @@ import { Modules } from './components/Characteristics/components/Modules';
 import { Provisions } from './components/Characteristics/components/Provisions';
 import { Skills } from './components/Characteristics/components/Skills';
 import { TankSandbox } from './components/Model/TankSandbox';
-import { TextualReference } from './components/TextualReference';
 import { Title } from './components/Title';
 import { Videos } from './components/Videos';
 
@@ -113,7 +112,6 @@ export default function Page({ params }: { params: { id: string } }) {
           </Flex>
 
           <Videos />
-          <TextualReference />
         </>
       )}
     </PageWrapper>
