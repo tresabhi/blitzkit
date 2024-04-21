@@ -2,12 +2,16 @@ import { PlusIcon } from '@radix-ui/react-icons';
 import { Card, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import { videoDefinitions } from '../../../../../core/blitzkrieg/videos';
+import { useFullScreen } from '../../../../../hooks/useFullScreen';
 import { useDuel } from '../../../../../stores/duel';
 
 export function Videos() {
+  const isFullScreen = useFullScreen();
   const id = useDuel((state) => state.protagonist!.tank.id);
   const awaitedVideoDefinitions = use(videoDefinitions);
   const videos = awaitedVideoDefinitions[id] ?? [];
+
+  if (isFullScreen) return null;
 
   return (
     <Flex direction="column" gap="2" mt="4">
