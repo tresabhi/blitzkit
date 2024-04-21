@@ -1,4 +1,10 @@
-export function Google() {
+import { useEffect } from 'react';
+
+export function Party3() {
+  useEffect(() => {
+    (window as any).msAdsQueue = (window as any).msAdsQueue || [];
+  }, []);
+
   return (
     <>
       {/* analytics */}
@@ -24,6 +30,13 @@ export function Google() {
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1289406790225052"
         crossOrigin="anonymous"
       />
+
+      {/* pub center */}
+      {/* <script
+        async
+        src="https://adsdk.microsoft.com/pubcenter/sdk.js?siteId=364477&publisherId=253617120"
+        crossOrigin="anonymous"
+      /> */}
     </>
   );
 }
