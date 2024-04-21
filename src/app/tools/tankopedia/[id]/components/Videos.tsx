@@ -20,6 +20,7 @@ export function Videos() {
       <Flex gap="3" wrap="wrap">
         {videos.map((video) => (
           <Link
+            key={video}
             href={`https://www.youtube.com/watch?v=${video}`}
             target="_blank"
           >
