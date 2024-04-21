@@ -7,9 +7,9 @@ import { Roboto_Flex } from 'next/font/google';
 import { usePathname } from 'next/navigation';
 import { ReactNode, Suspense, useEffect, useState } from 'react';
 import { Footer } from '../components/Footer';
-import { Google } from '../components/Google';
 import { Loader } from '../components/Loader';
 import Navbar from '../components/Navbar';
+import { Party3 } from '../components/Party3';
 import isDev from '../core/blitzkrieg/isDev';
 import { isLocalhost } from '../core/blitzkrieg/isLocalhost';
 import { useFullScreen } from '../hooks/useFullScreen';
@@ -60,7 +60,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <meta property="og:site_name" content="Blitzkrieg" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
-        <Google />
+        <Party3 />
       </head>
 
       <body
