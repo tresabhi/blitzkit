@@ -24,15 +24,17 @@ import { skillIcons } from './skillIcons';
 import { tankArmors } from './tankArmors';
 import { tankIcons } from './tankIcons';
 import { tankModels } from './tankModels';
+import { videos } from './videos';
 
 if (!targets && !allTargets) throw new Error('No target(s) specified');
 
 const methods = [
-  // definitions,
-  // scratchedFlags,
-  // currencies,
-  // skillIcons,
-  // circleFlags,
+  definitions,
+  videos,
+  scratchedFlags,
+  currencies,
+  skillIcons,
+  circleFlags,
   shellIcons,
   moduleIcons,
   equipmentIcons,

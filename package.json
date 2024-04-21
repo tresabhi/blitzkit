@@ -52,6 +52,7 @@
     "express": "^4.18.2",
     "false": "^0.0.4",
     "fuzzysort": "^2.0.4",
+    "googleapis": "^134.0.0",
     "immer": "^10.0.2",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
