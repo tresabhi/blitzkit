@@ -1,4 +1,10 @@
+import { useEffect } from 'react';
+
 export function Party3() {
+  useEffect(() => {
+    (window as any).msAdsQueue = (window as any).msAdsQueue || [];
+  }, []);
+
   return (
     <>
       {/* analytics */}
@@ -26,13 +32,6 @@ export function Party3() {
       /> */}
 
       {/* pub center */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.msAdsQueue = window.msAdsQueue || [];
-          `,
-        }}
-      />
       <script
         async
         src="https://adsdk.microsoft.com/pubcenter/sdk.js?siteId=364477&publisherId=253617120"
