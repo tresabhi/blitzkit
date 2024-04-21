@@ -153,14 +153,22 @@ export function CoreArmorSceneComponent({
 
   return (
     <>
-      {jsxTree(node, {
-        renderOrder: 0,
-        material: excludeMaterial,
-      })}
-      {jsxTree(node, {
-        renderOrder: 1,
-        material,
-      })}
+      {jsxTree(
+        node,
+        {
+          renderOrder: 0,
+          material: excludeMaterial,
+        },
+        node.uuid,
+      )}
+      {jsxTree(
+        node,
+        {
+          renderOrder: 1,
+          material,
+        },
+        node.uuid,
+      )}
     </>
   );
 }

@@ -124,11 +124,15 @@ export const TankModel = memo(() => {
           event.stopPropagation();
         }
 
-        return jsxTree(node, {
-          castShadow: true,
-          receiveShadow: true,
-          onPointerDown,
-        });
+        return jsxTree(
+          node,
+          {
+            castShadow: true,
+            receiveShadow: true,
+            onPointerDown,
+          },
+          node.uuid,
+        );
       })}
 
       <group ref={turretContainer}>
@@ -189,11 +193,15 @@ export const TankModel = memo(() => {
             window.removeEventListener('pointerup', handlePointerUp);
           }
 
-          return jsxTree(node, {
-            castShadow: true,
-            receiveShadow: true,
-            onPointerDown,
-          });
+          return jsxTree(
+            node,
+            {
+              castShadow: true,
+              receiveShadow: true,
+              onPointerDown,
+            },
+            node.uuid,
+          );
         })}
 
         <group ref={gunContainer}>
@@ -255,11 +263,15 @@ export const TankModel = memo(() => {
               window.removeEventListener('pointerup', handlePointerUp);
             }
 
-            return jsxTree(node, {
-              castShadow: true,
-              receiveShadow: true,
-              onPointerDown,
-            });
+            return jsxTree(
+              node,
+              {
+                castShadow: true,
+                receiveShadow: true,
+                onPointerDown,
+              },
+              node.uuid,
+            );
           })}
         </group>
       </group>
