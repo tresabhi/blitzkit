@@ -9,7 +9,7 @@ import {
   TextField,
 } from '@radix-ui/themes';
 import { debounce } from 'lodash';
-import { use, useEffect, useRef, useState } from 'react';
+import { Fragment, use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
 import { ShellButton } from '../../../../../../components/ModuleButtons/ShellButton';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
@@ -516,7 +516,7 @@ export function Characteristics() {
           const count = member.count ?? 1;
 
           return (
-            <>
+            <Fragment key={member.type}>
               <InfoWithDelta
                 key={`${member.type}-root`}
                 name={`${CREW_MEMBER_NAMES[member.type]}${count > 1 ? ` x ${count}` : ''}`}
@@ -545,7 +545,7 @@ export function Characteristics() {
                   }
                 />
               )}
-            </>
+            </Fragment>
           );
         })}
       </Flex>
