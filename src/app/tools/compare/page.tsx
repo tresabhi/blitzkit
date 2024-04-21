@@ -1233,10 +1233,21 @@ export default function Page() {
                   <Row name="Shells" value="shells" decimals={0} />
                 </>
               )}
-              <Row name="Caliber" value="caliber" decimals={0} />
               <Row name="Penetration" value="penetration" decimals={0} />
               <Row name="Damage" value="damage" decimals={0} />
               <Row name="Module damage" value="moduleDamage" decimals={0} />
+              <Row name="Caliber" value="caliber" decimals={0} />
+              <Row
+                name="Normalization"
+                value="shellNormalization"
+                decimals={0}
+              />
+              <Row
+                name="Ricochet"
+                value="shellRicochet"
+                deltaType="lowerIsBetter"
+                decimals={0}
+              />
               <Row name="Shell velocity" value="shellVelocity" decimals={0} />
               <Row
                 name="Aim time"

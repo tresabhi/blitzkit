@@ -155,7 +155,6 @@ export function Characteristics() {
             })}
           </Flex>
         </Flex>
-
         <Info name="Gun type">{GUN_TYPE_NAMES[gun.type]}</Info>
         <InfoWithDelta name="DPM" decimals={0} unit="hp / min">
           {stats.dpm}
@@ -189,7 +188,6 @@ export function Characteristics() {
         {gun.type !== 'regular' && (
           <InfoWithDelta name="Shells">{stats.shells}</InfoWithDelta>
         )}
-
         {gun.type === 'autoReloader' ? (
           <>
             <Info indent name="Most optimal">
@@ -229,9 +227,6 @@ export function Characteristics() {
             {stats.intraClip!}
           </InfoWithDelta>
         )}
-        <InfoWithDelta name="Caliber" decimals={0} unit="mm">
-          {stats.caliber}
-        </InfoWithDelta>
         <InfoWithDelta decimals={0} name="Penetration" unit="mm">
           {stats.penetration}
         </InfoWithDelta>
@@ -293,6 +288,22 @@ export function Characteristics() {
         {isExplosive(shell.type) && (
           <InfoWithDelta name="Splash radius" unit="m" decimals={0}>
             {stats.explosionRadius!}
+          </InfoWithDelta>
+        )}
+        <InfoWithDelta name="Caliber" decimals={0} unit="mm">
+          {stats.caliber}
+        </InfoWithDelta>
+        <InfoWithDelta name="Normalization" decimals={0} unit="°">
+          {stats.shellNormalization}
+        </InfoWithDelta>
+        {shell.type !== 'he' && (
+          <InfoWithDelta
+            name="Ricochet"
+            decimals={0}
+            deltaType="lowerIsBetter"
+            unit="°"
+          >
+            {stats.shellRicochet!}
           </InfoWithDelta>
         )}
         <InfoWithDelta name="Shell velocity" unit="m/s" decimals={0}>
