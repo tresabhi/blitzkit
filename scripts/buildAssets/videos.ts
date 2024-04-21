@@ -11,7 +11,7 @@ export async function videos(production: boolean) {
   const sheets = google.sheets({ version: 'v4', auth });
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId: env.VIDEOS_SHEET,
-    range: 'Sheet1!A:E',
+    range: 'Sheet1!A:Z',
   });
 
   if (!response.data.values) {
