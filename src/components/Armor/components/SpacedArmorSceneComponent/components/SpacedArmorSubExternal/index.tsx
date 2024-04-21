@@ -37,8 +37,8 @@ export function SpacedArmorSubExternal({
     depthTest: true,
     depthWrite: false,
     blending: AdditiveBlending,
-    clippingPlanes: clip ? [clip] : undefined,
-    clipping: true,
+    clipping: clip !== undefined,
+    ...(clip ? { clippingPlanes: [clip] } : {}),
 
     uniforms: {
       thickness: { value: null },
@@ -113,7 +113,7 @@ export function SpacedArmorSubExternal({
           colorWrite: false,
           depthTest: true,
           depthWrite: true,
-          clippingPlanes: clip ? [clip] : undefined,
+          ...(clip ? { clippingPlanes: [clip] } : {}),
         }),
         onClick() {},
         userData: {
