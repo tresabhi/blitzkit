@@ -124,7 +124,7 @@ export function SpacedArmorSubSpaced({
             thickness,
           } satisfies ArmorUserData,
         },
-        node.uuid,
+        `${node.uuid}-exclude`,
       )}
 
       {jsxTree(
@@ -133,7 +133,7 @@ export function SpacedArmorSubSpaced({
           renderOrder: 5,
           material: depthWriteMaterial,
         },
-        node.uuid,
+        `${node.uuid}-include`,
       )}
     </>
   );

@@ -124,17 +124,10 @@ export function SpacedArmorSubExternal({
             variant,
           } satisfies ArmorUserData,
         },
-        node.uuid,
+        `${node.uuid}-exclude`,
       )}
 
-      {jsxTree(
-        node,
-        {
-          renderOrder: 4,
-          material,
-        },
-        node.uuid,
-      )}
+      {jsxTree(node, { renderOrder: 4, material }, `${node.uuid}-include`)}
     </>
   );
 }

@@ -155,20 +155,10 @@ export function CoreArmorSceneComponent({
     <>
       {jsxTree(
         node,
-        {
-          renderOrder: 0,
-          material: excludeMaterial,
-        },
-        node.uuid,
+        { renderOrder: 0, material: excludeMaterial },
+        `${node.uuid}-exclude`,
       )}
-      {jsxTree(
-        node,
-        {
-          renderOrder: 1,
-          material,
-        },
-        node.uuid,
-      )}
+      {jsxTree(node, { renderOrder: 1, material }, `${node.uuid}-include`)}
     </>
   );
 }
