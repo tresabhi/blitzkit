@@ -1,3 +1,5 @@
+'use client';
+
 import { Flex, Link } from '@radix-ui/themes';
 import { use } from 'react';
 import { AdHorizontal } from '../../../../components/Ads/Horizontal';
