@@ -65,5 +65,6 @@ export default async function commitMultipleFiles(
     repo,
     ref: `heads/${branch}`,
     sha: newCommitData.sha,
+    force: true,
   });
 }
