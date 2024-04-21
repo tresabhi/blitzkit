@@ -1,14 +1,24 @@
 export function AdHorizontal() {
-  // useEffect(() => {
-  //   (window as any).msAdsQueue.push(() => {
-  //     (window as any).pubCenterSdk.render({
-  //       adUnitId: '635230699',
-  //       elementId: 'ms-ad-635230699',
-  //     });
-  //   });
-  // });
-
-  // return <div id="ms-ad-635230699" />;
-
-  return null;
+  return (
+    <>
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1289406790225052"
+        crossOrigin="anonymous"
+      />
+      <ins
+        className="adsbygoogle"
+        style={{ display: 'block' }}
+        data-ad-client="ca-pub-1289406790225052"
+        data-ad-slot="2391822409"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(adsbygoogle = window.adsbygoogle || []).push({});`,
+        }}
+      />
+    </>
+  );
 }
