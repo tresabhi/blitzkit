@@ -38,7 +38,7 @@ import { DATA, POI } from './constants';
 import { Avatar } from './skillIcons';
 import { TankParameters } from './tankIcons';
 
-interface Strings {
+export interface BlitzStrings {
   [key: string]: string;
 }
 type ShellKind =
@@ -334,7 +334,7 @@ const blitzShellKindToBlitzrinth: Record<ShellKind, ShellType> = {
 const missingStrings: Record<string, string> = {
   '#artefacts:tungstentip/name': 'Tungsten Shells',
 };
-const botPattern = /^.+((tutorial_bot(\d+)?)|(TU(R?)))$/;
+export const botPattern = /^.+((tutorial_bot(\d+)?)|(TU(R?)))$/;
 
 export async function definitions(production: boolean) {
   console.log('Building definitions...');
@@ -361,12 +361,12 @@ export async function definitions(production: boolean) {
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
   const tankStringIdMap: Record<string, number> = {};
-  const stringsPreInstalled = await readYAMLDVPL<Strings>(
+  const stringsPreInstalled = await readYAMLDVPL<BlitzStrings>(
     `${DATA}/${POI.strings}/en.yaml.dvpl`,
   );
   const stringsCache = await fetch(POI.cachedStrings)
     .then((response) => response.text())
-    .then((string) => parseYaml(string) as Strings);
+    .then((string) => parseYaml(string) as BlitzStrings);
   const optionalDevices = await readXMLDVPL<{ root: OptionalDevices }>(
     `${DATA}/${POI.optionalDevices}.dvpl`,
   );

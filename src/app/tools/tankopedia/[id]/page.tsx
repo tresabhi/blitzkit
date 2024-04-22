@@ -17,6 +17,7 @@ import { Provisions } from './components/Characteristics/components/Provisions';
 import { Skills } from './components/Characteristics/components/Skills';
 import { TankSandbox } from './components/Model/TankSandbox';
 import { Title } from './components/Title';
+import { Videos } from './components/Videos';
 
 export default function Page({ params }: { params: { id: string } }) {
   const initialId = parseInt(params.id);
@@ -83,7 +84,7 @@ export default function Page({ params }: { params: { id: string } }) {
               style={{
                 flex: 1,
                 width: '100%',
-                top: 64,
+                top: 64 + 16,
                 position: wideFormat ? 'sticky' : undefined,
               }}
             >
@@ -91,7 +92,6 @@ export default function Page({ params }: { params: { id: string } }) {
                 <TankSandbox />
                 <AntagonistBar />
               </Flex>
-
               <Flex gap="5" wrap="wrap">
                 <Modules />
                 <Provisions />
@@ -110,6 +110,8 @@ export default function Page({ params }: { params: { id: string } }) {
               <Characteristics />
             </Flex>
           </Flex>
+
+          <Videos />
         </>
       )}
     </PageWrapper>

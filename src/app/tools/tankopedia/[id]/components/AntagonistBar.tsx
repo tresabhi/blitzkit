@@ -191,6 +191,7 @@ export function AntagonistBar({ floating }: AntagonistBarProps) {
                             <Flex>
                               {antagonist.turret.guns.map((gun, index) => (
                                 <ModuleButton
+                                  key={gun.id}
                                   rowChild
                                   first={index === 0}
                                   last={

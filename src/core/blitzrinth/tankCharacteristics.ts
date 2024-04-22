@@ -430,8 +430,12 @@ export function tankCharacteristics(
   const height = size[0];
   const length = size[1];
   const volume = width * height * length;
+  const shellNormalization = shell.normalization ?? 0;
+  const shellRicochet = shell.ricochet;
 
   return {
+    shellNormalization,
+    shellRicochet,
     dpm,
     dpmMaximum,
     dpmEffective,

@@ -131,6 +131,7 @@ export default function Navbar() {
 
                     return (
                       <LinkRadix
+                        key={tool.id}
                         tabIndex={-1}
                         href={`/tools/${tool.id}`}
                         onClick={(event) => event.preventDefault()}

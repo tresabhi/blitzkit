@@ -28,6 +28,7 @@ export function CrewSkillManager({
 
               return (
                 <GenericTankComponentButton
+                  key={skill}
                   special={!permanentSkills.includes(skill)}
                   first
                   last

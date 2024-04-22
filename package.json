@@ -1,6 +1,6 @@
 {
-  "name": "blitzrinth",
-  "version": "1.19.4",
+  "name": "blitzkrieg",
+  "version": "1.19.5",
   "description": "🎉 Tools for everything World of Tanks Blitz",
   "main": "src/server.ts",
   "type": "module",
@@ -52,6 +52,7 @@
     "express": "^4.18.2",
     "false": "^0.0.4",
     "fuzzysort": "^2.0.4",
+    "googleapis": "^134.0.0",
     "immer": "^10.0.2",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",

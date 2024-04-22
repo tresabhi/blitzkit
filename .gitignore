@@ -19,3 +19,4 @@ temp/
 /.yarn
 depots
 public/sitemap*
+/firebase.json
