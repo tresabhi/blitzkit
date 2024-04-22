@@ -1,7 +1,7 @@
 import { InfoCircledIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Callout, Card, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import { use } from 'react';
-import { videoDefinitions } from '../../../../../core/blitzkrieg/videos';
+import { videoDefinitions } from '../../../../../core/blitzrinth/videos';
 import { useFullScreen } from '../../../../../hooks/useFullScreen';
 import { useDuel } from '../../../../../stores/duel';
 

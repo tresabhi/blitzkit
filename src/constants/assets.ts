@@ -1,1 +1,1 @@
-export const ASSETS_REPO = 'blitzkrieg-assets';
+export const ASSETS_REPO = 'blitzrinth-assets';
