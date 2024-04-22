@@ -17,6 +17,16 @@ export function Videos() {
     <Flex direction="column" gap="2" mt="4" align="start">
       <Heading size="6">Review videos</Heading>
 
+      <Callout.Root>
+        <Callout.Icon>
+          <InfoCircledIcon />
+        </Callout.Icon>
+        <Callout.Text>
+          Some YouTubers may not have videos on the {tank.name} leading to
+          off-topic videos.
+        </Callout.Text>
+      </Callout.Root>
+
       <Flex gap="3" wrap="wrap">
         {videos.map((video) => (
           <Link
@@ -59,16 +69,6 @@ export function Videos() {
           </Card>
         </Link>
       </Flex>
-
-      <Callout.Root>
-        <Callout.Icon>
-          <InfoCircledIcon />
-        </Callout.Icon>
-        <Callout.Text>
-          Some YouTubers may not have videos on the {tank.name} leading to
-          off-topic videos.
-        </Callout.Text>
-      </Callout.Root>
     </Flex>
   );
 }
