@@ -1,10 +1,15 @@
 import { readdir } from 'fs/promises';
 import { google } from 'googleapis';
+import { cloneDeep, uniqBy } from 'lodash';
 import { parse as parseYaml } from 'yaml';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
+import {
+  VideoDefinitions,
+  videoDefinitions,
+} from '../../src/core/blitzkrieg/videos';
 import { DATA, POI } from './constants';
 import { BlitzStrings, botPattern, VehicleDefinitionList } from './definitions';
 
@@ -16,21 +21,11 @@ const youtubers = [
 export async function videos(production: boolean) {
   console.log('Building videos...');
 
+  const currentVideos = await videoDefinitions;
   const auth = await google.auth.getClient({
     scopes: ['https://www.googleapis.com/auth/youtube.readonly'],
   });
   const youtube = google.youtube({ version: 'v3', auth });
-
-  async function search(channel: string, search: string) {
-    (
-      await youtube.search.list({
-        channelId: channel,
-        maxResults: 1,
-        part: ['snippet'],
-        q: search,
-      })
-    ).data.items?.at(0)?.id ?? null;
-  }
 
   const nations = await readdir(`${DATA}/${POI.vehicleDefinitions}`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
@@ -45,7 +40,7 @@ export async function videos(production: boolean) {
     ...stringsPreInstalled,
     ...stringsCache,
   };
-  const tanks: { id: number; name: string }[] = [];
+  const tanks: { id: number; name: string; tier: number }[] = [];
   await Promise.all(
     nations.map(async (nation) => {
       const tankList = await readXMLDVPL<{ root: VehicleDefinitionList }>(
@@ -61,32 +56,65 @@ export async function videos(production: boolean) {
             (tank.shortUserString
               ? strings[tank.shortUserString]
               : undefined) ?? strings[tank.userString];
+          const tier = tank.level;
 
-          tanks.push({ id, name });
+          tanks.push({ id, name, tier });
         }),
       );
     }),
   );
 
-  let content = '';
+  const tanksSanitized = tanks
+    .sort((a, b) => b.tier - a.tier)
+    .sort((a, b) => {
+      const lastUpdatedA = currentVideos[a.id]?.lastUpdated ?? 0;
+      const lastUpdatedB = currentVideos[b.id]?.lastUpdated ?? 0;
+      return lastUpdatedA - lastUpdatedB;
+    });
+  const videos: VideoDefinitions = cloneDeep(currentVideos);
+
   let done = 0;
-  for (const tank of tanks) {
-    const results = await Promise.all(
-      youtubers.map((channel) => search(channel, tank.name)),
-    ).then((results) => results.filter((result) => result !== null));
+  for (const tank of tanksSanitized) {
+    try {
+      const results = await youtube.search.list({
+        part: ['snippet'],
+        q: `World of Tanks Blitz ${tank.name}`,
+      });
 
-    if (results.length === 0) continue;
+      if (!results.data.items || results.data.items.length === 0) continue;
 
-    const line = `${tank.id},${results.join(',')}`;
-    content += `${line}\n`;
-    console.log(`${++done} / ${tanks.length} done`, tank.name, line);
+      const items = uniqBy(
+        results.data.items.filter(
+          (item) =>
+            item.snippet?.channelId &&
+            item.id?.videoId &&
+            youtubers.includes(item.snippet.channelId),
+        ),
+        (item) => item.snippet!.channelId,
+      );
 
-    await new Promise((resolve) =>
-      setTimeout(resolve, (1000 / 5) * youtubers.length),
-    );
+      videos[tank.id] = {
+        lastUpdated: Math.round(Date.now() / 1000),
+        videos: items.map((item) => item.id!.videoId!),
+      };
+
+      console.log(
+        `${++done} / ${tanks.length} (${Math.round(100 * (done / tanks.length))}%) done; found ${items.length} for ${tank.name}`,
+      );
+
+      await new Promise((resolve) => setTimeout(resolve, 1000 / 5));
+    } catch (error) {
+      console.warn('An error occurred, safely exiting prematurely...', error);
+      break;
+    }
   }
 
-  console.log(content);
+  const content = Object.entries(videos)
+    .map(
+      ([id, { videos, lastUpdated }]) =>
+        `${id},${lastUpdated},${videos.join(',')}`,
+    )
+    .join('\n');
 
   await commitAssets(
     'videos',

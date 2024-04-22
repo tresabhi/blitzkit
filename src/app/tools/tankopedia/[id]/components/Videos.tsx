@@ -9,7 +9,7 @@ export function Videos() {
   const isFullScreen = useFullScreen();
   const tank = useDuel((state) => state.protagonist!.tank);
   const awaitedVideoDefinitions = use(videoDefinitions);
-  const videos = awaitedVideoDefinitions[tank.id] ?? [];
+  const videos = awaitedVideoDefinitions[tank.id].videos ?? [];
 
   if (isFullScreen) return null;
 
