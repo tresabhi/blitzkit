@@ -15,7 +15,7 @@ Blitzrinth is available as a Discord bot and can be [installed very easily](/gui
 
 ## Website
 
-Provides a bunch of very helpful tools; https://blitz-krieg.vercel.app/
+Provides a bunch of very helpful tools; https://blitzrinth.vercel.app/
 
 - Session tracker
 - Rating leaderboard

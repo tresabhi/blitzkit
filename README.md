@@ -12,9 +12,9 @@ Go to [application directory for Blitzrinth](https://discord.com/application-dir
 
 ## Visit the website
 
-### https://blitz-krieg.vercel.app/
+### https://blitzrinth.vercel.app/
 
-![Blitzrinth website](https://i.imgur.com/eRIZe5P.png)
+![Blitzrinth website](https://i.imgur.com/oLVIx2n.png)
 
 ## Visit the documentation website
 
