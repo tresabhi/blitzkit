@@ -1,5 +1,5 @@
-import { PlusIcon } from '@radix-ui/react-icons';
-import { Card, Flex, Heading, Link, Text } from '@radix-ui/themes';
+import { InfoCircledIcon, PlusIcon } from '@radix-ui/react-icons';
+import { Callout, Card, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import { videoDefinitions } from '../../../../../core/blitzkrieg/videos';
 import { useFullScreen } from '../../../../../hooks/useFullScreen';
@@ -7,14 +7,14 @@ import { useDuel } from '../../../../../stores/duel';
 
 export function Videos() {
   const isFullScreen = useFullScreen();
-  const id = useDuel((state) => state.protagonist!.tank.id);
+  const tank = useDuel((state) => state.protagonist!.tank);
   const awaitedVideoDefinitions = use(videoDefinitions);
-  const videos = awaitedVideoDefinitions[id] ?? [];
+  const videos = awaitedVideoDefinitions[tank.id] ?? [];
 
   if (isFullScreen) return null;
 
   return (
-    <Flex direction="column" gap="2" mt="4">
+    <Flex direction="column" gap="2" mt="4" align="start">
       <Heading size="6">Review videos</Heading>
 
       <Flex gap="3" wrap="wrap">
@@ -59,6 +59,16 @@ export function Videos() {
           </Card>
         </Link>
       </Flex>
+
+      <Callout.Root>
+        <Callout.Icon>
+          <InfoCircledIcon />
+        </Callout.Icon>
+        <Callout.Text>
+          Some YouTubers may not have videos on the {tank.name} leading to
+          off-topic videos.
+        </Callout.Text>
+      </Callout.Root>
     </Flex>
   );
 }
