@@ -14,7 +14,7 @@ export function Videos() {
   if (isFullScreen) return null;
 
   return (
-    <Flex direction="column" gap="2" mt="4" align="start">
+    <Flex direction="column" gap="4" mt="4" align="start">
       <Heading size="6">Review videos</Heading>
 
       <Callout.Root>
