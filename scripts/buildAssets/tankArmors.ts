@@ -28,9 +28,6 @@ export async function tankArmors(production: boolean) {
           if (tankKey.includes('tutorial_bot')) return;
 
           const id = toUniqueId(nation, tank.id);
-
-          console.log(`Building armor ${id} @ ${nation}/${tankKey}`);
-
           const model = await extractArmor(DATA, `${nation}-${tankKey}`);
 
           changes.push({

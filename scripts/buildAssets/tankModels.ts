@@ -32,9 +32,6 @@ export async function tankModels(production: boolean) {
         if (tankKey.includes('tutorial_bot')) return;
 
         const id = toUniqueId(nation, tank.id);
-
-        console.log(`Building model ${id} @ ${nation}/${tankKey}`);
-
         const parameters = await readYAMLDVPL<TankParameters>(
           `${DATA}/${POI.tankParameters}/${nation}/${tankKey}.yaml.dvpl`,
         );
