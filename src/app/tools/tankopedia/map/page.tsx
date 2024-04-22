@@ -4,7 +4,7 @@ import { Flex, Link } from '@radix-ui/themes';
 import { use } from 'react';
 import { AdHorizontal } from '../../../../components/Ads/Horizontal';
 import PageWrapper from '../../../../components/PageWrapper';
-import { tankDefinitions } from '../../../../core/blitzkrieg/tankDefinitions';
+import { tankDefinitions } from '../../../../core/blitzrinth/tankDefinitions';
 
 export default function Page() {
   const awaitedTankDefinitions = use(tankDefinitions);

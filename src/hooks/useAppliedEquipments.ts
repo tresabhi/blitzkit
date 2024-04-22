@@ -1,4 +1,4 @@
-import { EquipmentPreset } from '../core/blitzkrieg/equipmentDefinitions';
+import { EquipmentPreset } from '../core/blitzrinth/equipmentDefinitions';
 import { EquipmentMatrix } from '../stores/duel';
 
 export function useAppliedEquipments(

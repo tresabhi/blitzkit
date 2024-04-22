@@ -1,7 +1,7 @@
 import { RatingNeighbors } from '../../commands/ratingLeaderboard';
 import { Region } from '../../constants/regions';
-import { patientFetch } from '../blitzkrieg/patientFetch';
-import { withCORSProxy } from '../blitzkrieg/withCORSProxy';
+import { patientFetch } from '../blitzrinth/patientFetch';
+import { withCORSProxy } from '../blitzrinth/withCORSProxy';
 import regionToRegionSubdomain from './regionToRegionSubdomain';
 
 export async function getRatingNeighbors(

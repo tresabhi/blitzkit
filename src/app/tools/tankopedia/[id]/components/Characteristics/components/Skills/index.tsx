@@ -10,8 +10,8 @@ import {
 } from '@radix-ui/themes';
 import { use } from 'react';
 import { CrewSkillManager } from '../../../../../../../../components/CrewSkillManager';
-import { createDefaultSkills } from '../../../../../../../../core/blitzkrieg/createDefaultSkills';
-import { skillDefinitions } from '../../../../../../../../core/blitzkrieg/skillDefinitions';
+import { createDefaultSkills } from '../../../../../../../../core/blitzrinth/createDefaultSkills';
+import { skillDefinitions } from '../../../../../../../../core/blitzrinth/skillDefinitions';
 import {
   mutateTankopediaTemporary,
   useTankopediaTemporary,

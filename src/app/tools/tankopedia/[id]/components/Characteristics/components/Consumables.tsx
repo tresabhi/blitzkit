@@ -9,8 +9,8 @@ import {
 } from '@radix-ui/themes';
 import { use } from 'react';
 import { ConsumablesManager } from '../../../../../../../components/ConsumablesManager';
-import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkrieg/checkConsumableProvisionInclusivity';
-import { consumableDefinitions } from '../../../../../../../core/blitzkrieg/consumableDefinitions';
+import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzrinth/checkConsumableProvisionInclusivity';
+import { consumableDefinitions } from '../../../../../../../core/blitzrinth/consumableDefinitions';
 import { useEquipment } from '../../../../../../../hooks/useEquipment';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';

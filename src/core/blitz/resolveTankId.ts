@@ -2,7 +2,7 @@ import { Locale } from 'discord.js';
 import { go } from 'fuzzysort';
 import markdownEscape from 'markdown-escape';
 import { UserError } from '../../hooks/userError';
-import { tankDefinitions, tankNames } from '../blitzkrieg/tankDefinitions';
+import { tankDefinitions, tankNames } from '../blitzrinth/tankDefinitions';
 import { tankNamesTechTreeOnly } from '../discord/autocompleteTanks';
 import { translator } from '../localization/translator';
 

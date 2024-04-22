@@ -4,13 +4,13 @@ import { Euler, Group, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { I_HAT, J_HAT, K_HAT } from '../../../../../../../constants/axis';
 import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
-import { hasEquipment } from '../../../../../../../core/blitzkrieg/hasEquipment';
-import { jsxTree } from '../../../../../../../core/blitzkrieg/jsxTree';
-import { modelDefinitions } from '../../../../../../../core/blitzkrieg/modelDefinitions';
+import { hasEquipment } from '../../../../../../../core/blitzrinth/hasEquipment';
+import { jsxTree } from '../../../../../../../core/blitzrinth/jsxTree';
+import { modelDefinitions } from '../../../../../../../core/blitzrinth/modelDefinitions';
 import {
   ModelTransformEventData,
   modelTransformEvent,
-} from '../../../../../../../core/blitzkrieg/modelTransform';
+} from '../../../../../../../core/blitzrinth/modelTransform';
 import { normalizeAngleRad } from '../../../../../../../core/math/normalizeAngleRad';
 import { useAwait } from '../../../../../../../hooks/useAwait';
 import { useModel } from '../../../../../../../hooks/useModel';

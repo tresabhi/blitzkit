@@ -6,7 +6,7 @@ import { Glow } from '../components/AllStatsOverview/components/HeroStat/compone
 import CommandWrapper from '../components/CommandWrapper';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
-import { linkBlitzAndDiscord } from '../core/blitzkrieg/discordBlitzLink';
+import { linkBlitzAndDiscord } from '../core/blitzrinth/discordBlitzLink';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';

@@ -6,7 +6,7 @@ import {
 } from '@radix-ui/react-icons';
 import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
 import { RefObject } from 'react';
-import { Pose, poseEvent } from '../../../../../../../core/blitzkrieg/pose';
+import { Pose, poseEvent } from '../../../../../../../core/blitzrinth/pose';
 import { useApp } from '../../../../../../../stores/app';
 import mutateTankopediaPersistent, {
   mutateTankopediaTemporary,

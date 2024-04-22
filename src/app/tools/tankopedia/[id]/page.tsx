@@ -3,7 +3,7 @@
 import { Flex } from '@radix-ui/themes';
 import { useEffect } from 'react';
 import PageWrapper from '../../../../components/PageWrapper';
-import { assignDuelMember } from '../../../../core/blitzkrieg/assignDuelMember';
+import { assignDuelMember } from '../../../../core/blitzrinth/assignDuelMember';
 import { useWideFormat } from '../../../../hooks/useWideFormat';
 import { mutateDuel, useDuel } from '../../../../stores/duel';
 import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';

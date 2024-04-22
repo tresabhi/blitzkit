@@ -3,7 +3,7 @@ import {
   SlashCommandSubcommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
-import { NATIONS } from '../blitzkrieg/tankDefinitions';
+import { NATIONS } from '../blitzrinth/tankDefinitions';
 import { addFilterOptions } from './addFilterOptions';
 import { addPeriodSubCommands } from './addPeriodSubCommands';
 

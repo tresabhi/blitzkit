@@ -7,9 +7,9 @@
 
 // import { SlashCommandBuilder } from 'discord.js';
 // import { getAccountInfo } from '../core/blitz/getAccountInfo';
-// import getPeriodNow from '../core/blitzkrieg/getPeriodNow';
-// import getTimeDaysAgo from '../core/blitzkrieg/getTimeDaysAgo';
-// import { tankDefinitions } from '../core/blitzkrieg/tankDefinitions';
+// import getPeriodNow from '../core/blitzrinth/getPeriodNow';
+// import getTimeDaysAgo from '../core/blitzrinth/getTimeDaysAgo';
+// import { tankDefinitions } from '../core/blitzrinth/tankDefinitions';
 // import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
 // import { tankAverages } from '../core/blitzstars/tankAverages';
 // import addUsernameChoices from '../core/discord/addUsernameChoices';

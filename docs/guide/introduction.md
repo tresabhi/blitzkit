@@ -4,7 +4,7 @@
 
 ## Bot
 
-Blitzkrieg is available as a Discord bot and can be [installed very easily](/guide/invite).
+Blitzrinth is available as a Discord bot and can be [installed very easily](/guide/invite).
 
 - Track statistics
 - Find inactive players in a clan

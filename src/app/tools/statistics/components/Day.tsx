@@ -2,8 +2,8 @@ import { CaretDownIcon, CaretRightIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Table, Text } from '@radix-ui/themes';
 import { random } from 'lodash';
 import { use, useMemo, useState } from 'react';
-import { tankDefinitions } from '../../../../core/blitzkrieg/tankDefinitions';
-import { tankIcon } from '../../../../core/blitzkrieg/tankIcon';
+import { tankDefinitions } from '../../../../core/blitzrinth/tankDefinitions';
+import { tankIcon } from '../../../../core/blitzrinth/tankIcon';
 
 interface DayProps {
   offset: number;

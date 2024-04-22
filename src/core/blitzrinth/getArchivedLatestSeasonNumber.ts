@@ -1,3 +1,4 @@
+import { ASSETS_REPO } from '../../constants/assets';
 import getRatingInfo from '../blitz/getRatingInfo';
 
 interface GitHubTrees {
@@ -16,7 +17,7 @@ export async function getArchivedLatestSeasonNumber() {
   if (ratingInfo.detail) {
     const regionsURL = (
       (await fetch(
-        'https://api.github.com/repos/tresabhi/blitzkrieg-assets/git/trees/main',
+        `https://api.github.com/repos/tresabhi/${ASSETS_REPO}/git/trees/main`,
       ).then((response) => response.json())) as GitHubTrees
     ).tree.find(({ path }) => path === 'regions')!.url;
     const comURL = (

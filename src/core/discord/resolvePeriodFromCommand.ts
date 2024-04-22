@@ -1,8 +1,8 @@
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { Region } from '../../constants/regions';
-import getPeriodNow from '../blitzkrieg/getPeriodNow';
-import getPeriodStart from '../blitzkrieg/getPeriodStart';
-import getTimeDaysAgo from '../blitzkrieg/getTimeDaysAgo';
+import getPeriodNow from '../blitzrinth/getPeriodNow';
+import getPeriodStart from '../blitzrinth/getPeriodStart';
+import getTimeDaysAgo from '../blitzrinth/getTimeDaysAgo';
 import { translator } from '../localization/translator';
 import { PeriodType } from './addPeriodSubCommands';
 import { getPeriodOptionName } from './getPeriodOptionName';

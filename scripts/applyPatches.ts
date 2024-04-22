@@ -3,7 +3,7 @@ import { parse as parsePath } from 'path';
 import { parse as parseYaml } from 'yaml';
 import { readStringDVPL } from '../src/core/blitz/readStringDVPL';
 import { writeDVPL } from '../src/core/blitz/writeDVPL';
-import { secrets } from '../src/core/blitzkrieg/secrets';
+import { secrets } from '../src/core/blitzrinth/secrets';
 import { dvp } from '../submodules/closedkrieg/src/dvp';
 import { DATA } from './buildAssets/constants';
 

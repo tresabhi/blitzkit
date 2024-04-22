@@ -1,6 +1,6 @@
 import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
-import { patientFetch } from '../blitzkrieg/patientFetch';
+import { patientFetch } from '../blitzrinth/patientFetch';
 
 type BlitzResponse<Data extends object> =
   | {

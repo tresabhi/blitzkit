@@ -1,8 +1,8 @@
 import { Button, Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
 import { ProvisionsManager } from '../../../../../../../components/ProvisionsManager';
-import { availableProvisions } from '../../../../../../../core/blitzkrieg/availableProvisions';
-import { provisionDefinitions } from '../../../../../../../core/blitzkrieg/provisionDefinitions';
+import { availableProvisions } from '../../../../../../../core/blitzrinth/availableProvisions';
+import { provisionDefinitions } from '../../../../../../../core/blitzrinth/provisionDefinitions';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 

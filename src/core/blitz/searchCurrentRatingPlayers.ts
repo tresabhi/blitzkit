@@ -1,5 +1,5 @@
 import { Region } from '../../constants/regions';
-import { context } from '../blitzkrieg/context';
+import { context } from '../blitzrinth/context';
 import regionToRegionSubdomain from './regionToRegionSubdomain';
 
 type CurrentRatingPlayerSearch = Record<

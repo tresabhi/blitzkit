@@ -23,7 +23,7 @@ export function Footer() {
           >
             <Flex gap="1" justify="center" align="center">
               <Text color="gray" size="2">
-                Blitzkrieg
+                Blitzrinth
               </Text>
 
               <Code color="gray" size="2">
@@ -56,7 +56,7 @@ export function Footer() {
 
               <Link
                 size="2"
-                href="https://tresabhi.github.io/blitzkrieg/guide/credits.html"
+                href="https://tresabhi.github.io/blitzrinth/guide/credits.html"
                 target="_blank"
               >
                 Full credits

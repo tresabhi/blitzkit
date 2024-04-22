@@ -10,8 +10,8 @@ import { Footer } from '../components/Footer';
 import { Loader } from '../components/Loader';
 import Navbar from '../components/Navbar';
 import { Party3 } from '../components/Party3';
-import isDev from '../core/blitzkrieg/isDev';
-import { isLocalhost } from '../core/blitzkrieg/isLocalhost';
+import isDev from '../core/blitzrinth/isDev';
+import { isLocalhost } from '../core/blitzrinth/isLocalhost';
 import { useFullScreen } from '../hooks/useFullScreen';
 import { useApp } from '../stores/app';
 
@@ -50,14 +50,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head>
         {isRoot && (
           <>
-            <title>Blitzkrieg</title>
+            <title>Blitzrinth</title>
             <meta
               name="description"
               content="🎉 Tools for everything World of Tanks Blitz"
             />
           </>
         )}
-        <meta property="og:site_name" content="Blitzkrieg" />
+        <meta property="og:site_name" content="Blitzrinth" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
         <Party3 />

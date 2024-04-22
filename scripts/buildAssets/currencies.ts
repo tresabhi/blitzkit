@@ -1,7 +1,7 @@
 import sharp from 'sharp';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
-import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
-import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { commitAssets } from '../../src/core/blitzrinth/commitAssets';
+import { FileChange } from '../../src/core/blitzrinth/commitMultipleFiles';
 import { DATA } from './constants';
 
 const ICONS = [

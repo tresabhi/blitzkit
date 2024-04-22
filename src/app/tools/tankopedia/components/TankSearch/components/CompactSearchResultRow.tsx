@@ -1,7 +1,7 @@
 import { Button, Flex, Text } from '@radix-ui/themes';
 import { SmallTankIcon } from '../../../../../../components/SmallTankIcon';
-import { TankDefinition } from '../../../../../../core/blitzkrieg/tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkrieg/tankDefinitions/constants';
+import { TankDefinition } from '../../../../../../core/blitzrinth/tankDefinitions';
+import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzrinth/tankDefinitions/constants';
 
 interface CompactSearchResultRowProps {
   tanks: TankDefinition[];

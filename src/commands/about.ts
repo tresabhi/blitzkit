@@ -60,7 +60,7 @@ export const aboutCommand = new Promise<CommandRegistry>(async (resolve) => {
           .join('\n')}`;
       }
 
-      const url = `https://raw.githubusercontent.com/tresabhi/blitzkrieg/main/docs/${DOCS[subcommand as Subcommand]}.md`;
+      const url = `https://raw.githubusercontent.com/tresabhi/blitzrinth/main/docs/${DOCS[subcommand as Subcommand]}.md`;
       const content = fetch(url).then((response) => response.text());
 
       return content;

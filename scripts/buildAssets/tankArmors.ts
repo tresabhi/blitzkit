@@ -3,8 +3,8 @@ import { readdir } from 'fs/promises';
 import { extractArmor } from '../../src/core/blitz/extractArmor';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
-import { commitAssets } from '../../src/core/blitzkrieg/commitAssets';
-import { FileChange } from '../../src/core/blitzkrieg/commitMultipleFiles';
+import { commitAssets } from '../../src/core/blitzrinth/commitAssets';
+import { FileChange } from '../../src/core/blitzrinth/commitMultipleFiles';
 import { DATA, POI } from './constants';
 import { VehicleDefinitionList } from './definitions';
 

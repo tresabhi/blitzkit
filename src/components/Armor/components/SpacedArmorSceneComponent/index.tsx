@@ -13,8 +13,8 @@ import { degToRad } from 'three/src/math/MathUtils';
 import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
-import { hasEquipment } from '../../../../core/blitzkrieg/hasEquipment';
-import { jsxTree } from '../../../../core/blitzkrieg/jsxTree';
+import { hasEquipment } from '../../../../core/blitzrinth/hasEquipment';
+import { jsxTree } from '../../../../core/blitzrinth/jsxTree';
 import { useDuel } from '../../../../stores/duel';
 import {
   Shot,

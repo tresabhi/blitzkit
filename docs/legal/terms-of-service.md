@@ -1,12 +1,12 @@
-# Blitzkrieg Terms of Service
+# Blitzrinth Terms of Service
 
 ## About
 
-Blitzkrieg is a multi-function Discord bot that serves users with needs specific to the game World of Tanks Blitz.
+Blitzrinth is a multi-function Discord bot that serves users with needs specific to the game World of Tanks Blitz.
 
 ## License
 
-Blitzkrieg is licensed under the MIT License.
+Blitzrinth is licensed under the MIT License.
 
 ## 3rd Party
 
