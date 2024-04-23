@@ -14,7 +14,7 @@ import { tankIcon } from '../../../../../../core/blitzkit/tankIcon';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
-import { BlitzrinthWide } from '../../../../../../icons/BlitzrinthWide';
+import { BlitzkitWide } from '../../../../../../icons/BlitzkitWide';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import mutateTankopediaPersistent, {
   TankopediaMode,
@@ -186,7 +186,7 @@ export function TankSandbox() {
                 top: 16,
               }}
             >
-              <BlitzrinthWide height={32} />
+              <BlitzkitWide height={32} />
             </Text>
           )}
 

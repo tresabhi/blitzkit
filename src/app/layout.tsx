@@ -50,14 +50,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head>
         {isRoot && (
           <>
-            <title>Blitzrinth</title>
+            <title>BlitzKit</title>
             <meta
               name="description"
               content="🎉 Tools for everything World of Tanks Blitz"
             />
           </>
         )}
-        <meta property="og:site_name" content="Blitzrinth" />
+        <meta property="og:site_name" content="BlitzKit" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
         <Party3 />
@@ -90,7 +90,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                     the official Discord server
                   </a>
                   . Also consider using{' '}
-                  <a href="https://blitzrinth.vercel.app/">
+                  <a href="https://blitzkit.vercel.app/">
                     the more stable release version
                   </a>
                   . You will be asked again in 8 days.

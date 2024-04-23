@@ -23,7 +23,7 @@ export function Footer() {
           >
             <Flex gap="1" justify="center" align="center">
               <Text color="gray" size="2">
-                Blitzrinth
+                BlitzKit
               </Text>
 
               <Code color="gray" size="2">

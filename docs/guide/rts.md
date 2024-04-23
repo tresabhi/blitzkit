@@ -1,4 +1,4 @@
-# Blitzrinth Regular Tank Stats
+# BlitzKit Regular Tank Stats
 
 A straightforward way of storing the entire World of Tanks Blitz tank statistics for players to disk.
 

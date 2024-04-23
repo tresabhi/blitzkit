@@ -1,12 +1,12 @@
-# Blitzrinth Terms of Service
+# BlitzKit Terms of Service
 
 ## About
 
-Blitzrinth is a multi-function Discord bot that serves users with needs specific to the game World of Tanks Blitz.
+BlitzKit is a multi-function Discord bot that serves users with needs specific to the game World of Tanks Blitz.
 
 ## License
 
-Blitzrinth is licensed under the MIT License.
+BlitzKit is licensed under the MIT License.
 
 ## 3rd Party
 

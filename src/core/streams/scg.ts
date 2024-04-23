@@ -16,10 +16,10 @@ interface PolygonGroupRaw {
   vertices: ArrayBuffer;
 }
 
-type BlitzrinthVertex = { attribute: VertexAttribute; value: number[] }[];
+type BlitzkitVertex = { attribute: VertexAttribute; value: number[] }[];
 
-interface BlitzrinthPolygonGroup {
-  vertices: BlitzrinthVertex[];
+interface BlitzkitPolygonGroup {
+  vertices: BlitzkitVertex[];
   indices: number[];
 }
 
@@ -63,7 +63,7 @@ export class ScgReadStream extends ScpgReadStream {
   scg() {
     const header = this.header();
     const polygonGroupsRaw: PolygonGroupRaw[] = [];
-    const polygonGroups = new Map<bigint, BlitzrinthPolygonGroup>();
+    const polygonGroups = new Map<bigint, BlitzkitPolygonGroup>();
 
     for (let index = 0; index < header.nodeCount; index++) {
       const polygonGroupRaw = this.ka() as PolygonGroupRaw;
@@ -83,7 +83,7 @@ export class ScgReadStream extends ScpgReadStream {
       }
 
       const verticesStream = new ScpgReadStream(polygonGroupRaw.vertices);
-      const vertices: BlitzrinthVertex[] = [];
+      const vertices: BlitzkitVertex[] = [];
       const { format, stride } = ScgReadStream.parseVertexFormat(
         polygonGroupRaw.vertexFormat,
       );

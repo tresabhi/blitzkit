@@ -325,7 +325,7 @@ type ConsumablesVehicleFilter =
   | { name: string }
   | { extendedTags: string };
 
-const blitzShellKindToBlitzrinth: Record<ShellKind, ShellType> = {
+const blitzShellKindToBlitzkit: Record<ShellKind, ShellType> = {
   ARMOR_PIERCING: 'ap',
   ARMOR_PIERCING_CR: 'ap_cr',
   HIGH_EXPLOSIVE: 'he',
@@ -852,7 +852,7 @@ export async function definitions(production: boolean) {
                   caliber: shell.caliber,
                   normalization: shell.normalizationAngle,
                   ricochet: shell.ricochetAngle,
-                  type: blitzShellKindToBlitzrinth[shell.kind],
+                  type: blitzShellKindToBlitzkit[shell.kind],
                   explosionRadius:
                     shell.kind === 'HIGH_EXPLOSIVE'
                       ? shell.explosionRadius ?? 0

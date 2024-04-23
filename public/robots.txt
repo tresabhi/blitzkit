@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-Host: https://blitzrinth.vercel.app
+Host: https://blitzkit.vercel.app
 
-Sitemap: https://blitzrinth.vercel.app/sitemap.txt
-Sitemap: https://blitzrinth.vercel.app/sitemap.xml
+Sitemap: https://blitzkit.vercel.app/sitemap.txt
+Sitemap: https://blitzkit.vercel.app/sitemap.xml

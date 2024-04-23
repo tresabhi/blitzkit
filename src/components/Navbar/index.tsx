@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { TOOLS } from '../../constants/tools';
 import { useFullScreen } from '../../hooks/useFullScreen';
 import { useWideFormat } from '../../hooks/useWideFormat';
-import { BlitzrinthWide } from '../../icons/BlitzrinthWide';
+import { BlitzkitWide } from '../../icons/BlitzkitWide';
 import { PatreonIcon } from '../../icons/Patreon';
 import { theme } from '../../stitches.config';
 
@@ -101,7 +101,7 @@ export default function Navbar() {
               justifyContent: 'center',
             }}
           >
-            <BlitzrinthWide />
+            <BlitzkitWide />
           </Link>
 
           <div style={{ flex: 1 }} />

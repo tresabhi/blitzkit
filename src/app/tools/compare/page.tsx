@@ -47,7 +47,7 @@ import {
 } from '../../../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../../../core/blitzkit/tankIcon';
 import { tankToCompareMember } from '../../../core/blitzkit/tankToCompareMember';
-import { BlitzrinthButtonWatermark } from '../../../icons/BlitzrinthButtonWatermark';
+import { BlitzkitButtonWatermark } from '../../../icons/BlitzkitButtonWatermark';
 import { theme } from '../../../stitches.config';
 import {
   DeltaMode,
@@ -648,7 +648,7 @@ export default function Page() {
                     align="center"
                     justify="center"
                   >
-                    <BlitzrinthButtonWatermark width={64} height={64} />
+                    <BlitzkitButtonWatermark width={64} height={64} />
                     <InsertionMarker index={0} />
                   </Flex>
                 </Table.ColumnHeaderCell>
