@@ -8,16 +8,16 @@ Tools for everything World of Tanks Blitz
 
 Go to [application directory for BlitzKit](https://discord.com/application-directory/1097673957865443370) and click "Add to Server." Voila! You're ready to go.
 
-![BlitzKit application directory](https://i.imgur.com/JlEA0J1.png)
+![BlitzKit application directory](https://i.imgur.com/YWCtOuJ.png)
 
 ## Visit the website
 
 ### https://blitzkit.vercel.app/
 
-![BlitzKit website](https://i.imgur.com/oLVIx2n.png)
+![BlitzKit website](https://i.imgur.com/bdYMUCL.png)
 
 ## Visit the documentation website
 
 ### https://tresabhi.github.io/blitzkit/
 
-![BlitzKit documentation website](https://i.imgur.com/TOt5fMx.png)
+![BlitzKit documentation website](https://i.imgur.com/hm3KTsF.png)
