@@ -1,5 +1,5 @@
 {
-  "name": "blitzrinth",
+  "name": "blitzkit",
   "version": "1.19.5",
   "description": "🎉 Tools for everything World of Tanks Blitz",
   "main": "src/server.ts",

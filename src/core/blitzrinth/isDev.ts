@@ -4,6 +4,7 @@ const devHostStartNames = [
   'betakrieg',
   'devkrieg',
   'blitzrinth-',
+  'blitzkit-',
 ];
 
 export default function isDev() {
