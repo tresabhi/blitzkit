@@ -27,6 +27,7 @@ import { pingCommand } from '../../commands/ping';
 import { playerInfoCommand } from '../../commands/playerInfo';
 import { ratingCommand } from '../../commands/rating';
 import { ratingLeaderboardCommand } from '../../commands/ratingLeaderboard';
+import { replayCommand } from '../../commands/replay';
 import { researchCommand } from '../../commands/research';
 import { searchClansCommand } from '../../commands/searchClans';
 import { searchPlayersCommand } from '../../commands/searchPlayers';
@@ -97,6 +98,7 @@ export const COMMANDS_RAW: Promise<CommandRegistry>[] = [
   todayCommand,
   researchCommand,
   ratingCommand,
+  replayCommand,
 ];
 
 export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {

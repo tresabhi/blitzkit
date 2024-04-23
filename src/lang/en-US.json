@@ -208,6 +208,11 @@
     },
 
     "commands": {
+      "replay": {
+        "$": "replay",
+        "description": "Display replay results"
+      },
+
       "research": {
         "$": "research",
         "description": "Lists the expenses in researching a line",
