@@ -65,7 +65,7 @@
       "errors": {
         "clan_not_found": "# Could not find clan\nCouldn't find \"%s\". Try selecting a clan from the search result.",
         "player_not_found": "# Could not find user\nI couldn't find user \"%s\". Try picking an user from the search result, typing in a valid username, or using the `/link` command.",
-        "player_not_linked": "# I don't know who you are\nUse the `/link` command to get started.",
+        "player_not_linked": "# Use `/link` to get started\nI don't know who you are but you can tell me today!",
         "tank_name_not_found": "# Tank not found\nCould not find tank by the name \"%s\".",
         "tank_id_not_found": "# Tank not found\nCould not find tank by the ID \"%s\". Try typing the name of the tank instead of a number.",
         "no_tank_stats": "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
