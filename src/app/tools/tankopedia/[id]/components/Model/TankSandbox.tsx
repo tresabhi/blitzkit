@@ -183,7 +183,7 @@ export function TankSandbox() {
               style={{
                 position: 'absolute',
                 left: '50%',
-                top: 16,
+                top: 10,
               }}
             >
               <BlitzkitWide height={32} />
