@@ -5,11 +5,11 @@ import { ModuleButton } from '../../../../../components/ModuleButtons/ModuleButt
 import { ShellButton } from '../../../../../components/ModuleButtons/ShellButton';
 import { SmallTankIcon } from '../../../../../components/SmallTankIcon';
 import { resolveNearPenetration } from '../../../../../core/blitz/resolveNearPenetration';
-import { pushTankopediaPath } from '../../../../../core/blitzrinth/pushTankopediaPath';
+import { pushTankopediaPath } from '../../../../../core/blitzkit/pushTankopediaPath';
 import {
   SHELL_NAMES,
   TIER_ROMAN_NUMERALS,
-} from '../../../../../core/blitzrinth/tankDefinitions/constants';
+} from '../../../../../core/blitzkit/tankDefinitions/constants';
 import { mutateDuel, useDuel } from '../../../../../stores/duel';
 import {
   mutateTankopediaTemporary,

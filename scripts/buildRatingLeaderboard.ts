@@ -8,10 +8,10 @@ import {
 import { RegionSubdomain } from '../src/constants/regions';
 import { getAccountInfo } from '../src/core/blitz/getAccountInfo';
 import regionSubdomainToRegion from '../src/core/blitz/regionSubdomainToRegion';
-import { commitAssets } from '../src/core/blitzrinth/commitAssets';
-import { FileChange } from '../src/core/blitzrinth/commitMultipleFiles.js';
-import { patientFetchJSON } from '../src/core/blitzrinth/patientFetchJSON';
-import { superCompress } from '../src/core/blitzrinth/superCompress';
+import { commitAssets } from '../src/core/blitzkit/commitAssets';
+import { FileChange } from '../src/core/blitzkit/commitMultipleFiles.js';
+import { patientFetchJSON } from '../src/core/blitzkit/patientFetchJSON';
+import { superCompress } from '../src/core/blitzkit/superCompress';
 import {
   BkrlBaseEntry,
   BkrlFormat,

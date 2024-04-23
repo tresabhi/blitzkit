@@ -10,8 +10,8 @@ import { Footer } from '../components/Footer';
 import { Loader } from '../components/Loader';
 import Navbar from '../components/Navbar';
 import { Party3 } from '../components/Party3';
-import isDev from '../core/blitzrinth/isDev';
-import { isLocalhost } from '../core/blitzrinth/isLocalhost';
+import isDev from '../core/blitzkit/isDev';
+import { isLocalhost } from '../core/blitzkit/isLocalhost';
 import { useFullScreen } from '../hooks/useFullScreen';
 import { useApp } from '../stores/app';
 

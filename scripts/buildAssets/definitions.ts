@@ -7,24 +7,24 @@ import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
-import { commitAssets } from '../../src/core/blitzrinth/commitAssets';
+import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import {
   ConsumableDefinitions,
   TankFilterDefinitionCategory,
-} from '../../src/core/blitzrinth/consumableDefinitions';
+} from '../../src/core/blitzkit/consumableDefinitions';
 import {
   EquipmentDefinitions,
   EquipmentPreset,
   EquipmentRow,
-} from '../../src/core/blitzrinth/equipmentDefinitions';
-import { GameDefinitions } from '../../src/core/blitzrinth/gameDefinitions';
+} from '../../src/core/blitzkit/equipmentDefinitions';
+import { GameDefinitions } from '../../src/core/blitzkit/gameDefinitions';
 import {
   ModelArmor,
   ModelDefinitions,
-} from '../../src/core/blitzrinth/modelDefinitions';
-import { ProvisionDefinitions } from '../../src/core/blitzrinth/provisionDefinitions';
-import { SkillDefinitions } from '../../src/core/blitzrinth/skillDefinitions';
-import { superCompress } from '../../src/core/blitzrinth/superCompress';
+} from '../../src/core/blitzkit/modelDefinitions';
+import { ProvisionDefinitions } from '../../src/core/blitzkit/provisionDefinitions';
+import { SkillDefinitions } from '../../src/core/blitzkit/skillDefinitions';
+import { superCompress } from '../../src/core/blitzkit/superCompress';
 import {
   Crew,
   CrewMember,
@@ -33,7 +33,7 @@ import {
   TankDefinitionPrice,
   TankDefinitions,
   Tier,
-} from '../../src/core/blitzrinth/tankDefinitions';
+} from '../../src/core/blitzkit/tankDefinitions';
 import { DATA, POI } from './constants';
 import { Avatar } from './skillIcons';
 import { TankParameters } from './tankIcons';

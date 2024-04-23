@@ -5,11 +5,11 @@ import { parse as parseYaml } from 'yaml';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
-import { commitAssets } from '../../src/core/blitzrinth/commitAssets';
+import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import {
   VideoDefinitions,
   videoDefinitions,
-} from '../../src/core/blitzrinth/videos';
+} from '../../src/core/blitzkit/videos';
 import { DATA, POI } from './constants';
 import { BlitzStrings, botPattern, VehicleDefinitionList } from './definitions';
 

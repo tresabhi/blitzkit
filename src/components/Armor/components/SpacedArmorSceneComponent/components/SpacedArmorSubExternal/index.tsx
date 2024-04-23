@@ -9,9 +9,9 @@ import {
 import { ArmorUserData, ExternalModuleVariant } from '../..';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
-import { hasEquipment } from '../../../../../../core/blitzrinth/hasEquipment';
-import { jsxTree } from '../../../../../../core/blitzrinth/jsxTree';
-import { ShellDefinition } from '../../../../../../core/blitzrinth/tankDefinitions';
+import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
+import { jsxTree } from '../../../../../../core/blitzkit/jsxTree';
+import { ShellDefinition } from '../../../../../../core/blitzkit/tankDefinitions';
 import { EquipmentMatrix, useDuel } from '../../../../../../stores/duel';
 import { ArmorType } from '../../../SpacedArmorScene';
 import fragmentShader from './shaders/fragment.glsl';

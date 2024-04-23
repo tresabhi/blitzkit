@@ -2,8 +2,8 @@ import { ExternalLinkIcon, LoopIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Dialog, Flex, IconButton } from '@radix-ui/themes';
 import Link from 'next/link';
 import { use, useState } from 'react';
-import { provisionDefinitions } from '../../../../core/blitzrinth/provisionDefinitions';
-import { tankToCompareMember } from '../../../../core/blitzrinth/tankToCompareMember';
+import { provisionDefinitions } from '../../../../core/blitzkit/provisionDefinitions';
+import { tankToCompareMember } from '../../../../core/blitzkit/tankToCompareMember';
 import { mutateCompareTemporary } from '../../../../stores/compare';
 import { TankSearch } from '../../tankopedia/components/TankSearch';
 

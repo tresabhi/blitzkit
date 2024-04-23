@@ -1,6 +1,6 @@
 import { ASSETS_REPO } from '../../constants/assets';
-import { GithubChangeBlob, createBlob } from '../blitzrinth/createBlob';
-import { octokit } from '../blitzrinth/octokit';
+import { GithubChangeBlob, createBlob } from '../blitzkit/createBlob';
+import { octokit } from '../blitzkit/octokit';
 
 export class AssetCommit {
   constructor(

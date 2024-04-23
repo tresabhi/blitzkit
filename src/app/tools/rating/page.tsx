@@ -35,9 +35,9 @@ import {
   AccountList,
   AccountListItem,
 } from '../../../core/blitz/searchPlayersAcrossRegions';
-import { getArchivedLatestSeasonNumber } from '../../../core/blitzrinth/getArchivedLatestSeasonNumber';
-import getArchivedRatingInfo from '../../../core/blitzrinth/getArchivedRatingInfo';
-import { getArchivedRatingLeaderboard } from '../../../core/blitzrinth/getArchivedRatingLeaderboard';
+import { getArchivedLatestSeasonNumber } from '../../../core/blitzkit/getArchivedLatestSeasonNumber';
+import getArchivedRatingInfo from '../../../core/blitzkit/getArchivedRatingInfo';
+import { getArchivedRatingLeaderboard } from '../../../core/blitzkit/getArchivedRatingLeaderboard';
 import { theme } from '../../../stitches.config';
 import { PageTurner } from './components/PageTurner';
 

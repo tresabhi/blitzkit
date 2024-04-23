@@ -3,7 +3,7 @@ import { use, useMemo } from 'react';
 import {
   TankDefinition,
   tankDefinitions,
-} from '../core/blitzrinth/tankDefinitions';
+} from '../core/blitzkit/tankDefinitions';
 import { useDuel } from '../stores/duel';
 
 export enum UseEccentricityMode {

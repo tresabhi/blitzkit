@@ -1,9 +1,9 @@
-# Blitzrinth Rating Leaderboard
+# Blitzkit Rating Leaderboard
 
 A straightforward way of storing the entire World of Tanks Blitz rating leaderboard to disk.
 
 ```cpp
-primary BlitzrinthRatingLeaderboard {
+primary BlitzkitRatingLeaderboard {
   utf8"BKRL" magic;
   Header header;
   primary Body<header> body;

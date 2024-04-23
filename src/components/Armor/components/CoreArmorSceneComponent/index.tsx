@@ -5,9 +5,9 @@ import { degToRad } from 'three/src/math/MathUtils';
 import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
-import { hasEquipment } from '../../../../core/blitzrinth/hasEquipment';
-import { jsxTree } from '../../../../core/blitzrinth/jsxTree';
-import { ShellDefinition } from '../../../../core/blitzrinth/tankDefinitions';
+import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
+import { jsxTree } from '../../../../core/blitzkit/jsxTree';
+import { ShellDefinition } from '../../../../core/blitzkit/tankDefinitions';
 import { EquipmentMatrix, useDuel } from '../../../../stores/duel';
 import {
   TankopediaPersistent,

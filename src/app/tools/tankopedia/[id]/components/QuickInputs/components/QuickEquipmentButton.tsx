@@ -1,6 +1,6 @@
 import { Button } from '@radix-ui/themes';
 import { ComponentProps } from 'react';
-import { asset } from '../../../../../../../core/blitzrinth/asset';
+import { asset } from '../../../../../../../core/blitzkit/asset';
 
 interface QuickEquipmentButtonProps extends ComponentProps<typeof Button> {
   equipment: number;

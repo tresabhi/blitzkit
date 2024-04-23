@@ -4,7 +4,7 @@
 
 ## Bot
 
-Blitzrinth is available as a Discord bot and can be [installed very easily](/guide/invite).
+BlitzKit is available as a Discord bot and can be [installed very easily](/guide/invite).
 
 - Track statistics
 - Find inactive players in a clan
@@ -15,7 +15,7 @@ Blitzrinth is available as a Discord bot and can be [installed very easily](/gui
 
 ## Website
 
-Provides a bunch of very helpful tools; https://blitzrinth.vercel.app/
+Provides a bunch of very helpful tools; https://blitzkit.vercel.app/
 
 - Session tracker
 - Rating leaderboard

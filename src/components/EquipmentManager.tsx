@@ -1,6 +1,6 @@
 import { Flex } from '@radix-ui/themes';
 import { cloneDeep } from 'lodash';
-import { EquipmentPreset } from '../core/blitzrinth/equipmentDefinitions';
+import { EquipmentPreset } from '../core/blitzkit/equipmentDefinitions';
 import { EquipmentMatrix } from '../stores/duel';
 import { EquipmentButton } from './ModuleButtons/EquipmentButton';
 

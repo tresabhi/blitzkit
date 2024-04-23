@@ -7,8 +7,8 @@ import {
   TankDefinition,
   TrackDefinition,
   TurretDefinition,
-} from '../core/blitzrinth/tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from '../core/blitzrinth/tankDefinitions/constants';
+} from '../core/blitzkit/tankDefinitions';
+import { TIER_ROMAN_NUMERALS } from '../core/blitzkit/tankDefinitions/constants';
 import { ModuleButton } from './ModuleButtons/ModuleButton';
 
 interface ModuleManagerProps {

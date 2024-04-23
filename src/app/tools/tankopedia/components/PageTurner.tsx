@@ -1,7 +1,7 @@
 import { CaretLeftIcon, CaretRightIcon } from '@radix-ui/react-icons';
 import { Button, Flex, TextField } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
-import { TankDefinition } from '../../../../core/blitzrinth/tankDefinitions';
+import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
 import mutateTankopediaPersistent, {
   useTankopediaPersistent,
 } from '../../../../stores/tankopedia';

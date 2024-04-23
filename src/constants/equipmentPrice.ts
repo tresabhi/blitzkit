@@ -1,5 +1,5 @@
 import { Vector3Tuple } from 'three';
-import { Tier } from '../core/blitzrinth/tankDefinitions';
+import { Tier } from '../core/blitzkit/tankDefinitions';
 
 export const equipmentPriceMatrix: Record<Tier, Vector3Tuple> = {
   1: [100, 200, 300],

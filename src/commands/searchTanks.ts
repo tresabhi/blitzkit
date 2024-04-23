@@ -8,7 +8,7 @@
 // import { SlashCommandBuilder } from 'discord.js';
 // import { go } from 'fuzzysort';
 // import markdownEscape from 'markdown-escape';
-// import { tankNames } from '../core/blitzrinth/tankDefinitions';
+// import { tankNames } from '../core/blitzkit/tankDefinitions';
 // import addTankChoices from '../core/discord/addTankChoices';
 // import embedInfo from '../core/discord/embedInfo';
 // import { CommandRegistry } from '../events/interactionCreate';

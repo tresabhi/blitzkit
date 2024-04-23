@@ -1,4 +1,4 @@
-import { NATIONS } from '../core/blitzrinth/tankDefinitions';
+import { NATIONS } from '../core/blitzkit/tankDefinitions';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import { addFilterOptions } from '../core/discord/addFilterOptions';
 import addUsernameChoices from '../core/discord/addUsernameChoices';

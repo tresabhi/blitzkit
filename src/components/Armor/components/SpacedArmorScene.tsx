@@ -5,9 +5,9 @@ import { I_HAT, J_HAT, K_HAT } from '../../../constants/axis';
 import {
   ModelTransformEventData,
   modelTransformEvent,
-} from '../../../core/blitzrinth/modelTransform';
-import { nameToArmorId } from '../../../core/blitzrinth/nameToArmorId';
-import { resolveArmor } from '../../../core/blitzrinth/resolveThickness';
+} from '../../../core/blitzkit/modelTransform';
+import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
+import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
 import { useArmor } from '../../../hooks/useArmor';
 import { useModel } from '../../../hooks/useModel';
 import { useModelDefinitions } from '../../../hooks/useModelDefinitions';

@@ -4,7 +4,7 @@ import { AllStats } from '../../blitz/getAccountInfo';
 import getTankHistories, {
   TankHistories,
   TankHistoryRaw,
-} from '../../blitzrinth/getTankHistories';
+} from '../../blitzkit/getTankHistories';
 import { emptyAllStats } from './constants';
 
 const emptyTankHistoryNode: TankHistoryRaw = {

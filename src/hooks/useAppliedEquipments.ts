@@ -1,4 +1,4 @@
-import { EquipmentPreset } from '../core/blitzrinth/equipmentDefinitions';
+import { EquipmentPreset } from '../core/blitzkit/equipmentDefinitions';
 import { EquipmentMatrix } from '../stores/duel';
 
 export function useAppliedEquipments(

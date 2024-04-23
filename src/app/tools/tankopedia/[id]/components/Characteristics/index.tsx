@@ -14,16 +14,16 @@ import { lerp } from 'three/src/math/MathUtils';
 import { ShellButton } from '../../../../../../components/ModuleButtons/ShellButton';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
-import { coefficient } from '../../../../../../core/blitzrinth/coefficient';
-import { equipmentDefinitions } from '../../../../../../core/blitzrinth/equipmentDefinitions';
-import { modelDefinitions } from '../../../../../../core/blitzrinth/modelDefinitions';
-import { provisionDefinitions } from '../../../../../../core/blitzrinth/provisionDefinitions';
-import { tankCharacteristics } from '../../../../../../core/blitzrinth/tankCharacteristics';
+import { coefficient } from '../../../../../../core/blitzkit/coefficient';
+import { equipmentDefinitions } from '../../../../../../core/blitzkit/equipmentDefinitions';
+import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitions';
+import { provisionDefinitions } from '../../../../../../core/blitzkit/provisionDefinitions';
+import { tankCharacteristics } from '../../../../../../core/blitzkit/tankCharacteristics';
 import {
   CREW_MEMBER_NAMES,
   GUN_TYPE_NAMES,
   SHELL_NAMES,
-} from '../../../../../../core/blitzrinth/tankDefinitions/constants';
+} from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
@@ -177,7 +177,7 @@ export function Characteristics() {
               name={
                 <a
                   target="_blank"
-                  href="https://tresabhi.github.io/blitzrinth/guide/dpm.html"
+                  href="https://tresabhi.github.io/blitzkit/guide/dpm.html"
                 >
                   What's the difference?
                 </a>

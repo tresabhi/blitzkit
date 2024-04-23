@@ -8,7 +8,7 @@ import {
   MessageEditOptions,
 } from 'discord.js';
 import { InteractionReturnable } from '../../events/interactionCreate';
-import jsxToPngThreaded from '../blitzrinth/jsxToPngThreaded';
+import jsxToPngThreaded from '../blitzkit/jsxToPngThreaded';
 
 export default async function normalizeInteractionReturnable(
   returnable: InteractionReturnable,

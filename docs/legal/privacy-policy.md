@@ -4,7 +4,7 @@ Blitzrinth collects little to no data. Regardless, here is an exhaustive list of
 
 ## Logs
 
-All Blitzrinth logs are available to the public as an effort for open source transparency. A history of all logs [can be found on GitHub](https://github.com/tresabhi/blitzrinth/actions/workflows/host.yml). All logs expire automatically and are permanently deleted after 30 days. However, anyone may chose to save a local copy of the logs which is not tracked by GitHub.
+All Blitzrinth logs are available to the public as an effort for open source transparency. A history of all logs [can be found on GitHub](https://github.com/tresabhi/blitzkit/actions/workflows/host.yml). All logs expire automatically and are permanently deleted after 30 days. However, anyone may chose to save a local copy of the logs which is not tracked by GitHub.
 
 ## Commands
 

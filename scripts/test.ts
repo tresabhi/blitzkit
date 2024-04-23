@@ -4,8 +4,8 @@ import { argv } from 'process';
 import { Region, REGIONS } from '../src/constants/regions';
 import getTankStats from '../src/core/blitz/getTankStats';
 import { idToRegion } from '../src/core/blitz/idToRegion';
-import { commitAssets } from '../src/core/blitzrinth/commitAssets';
-import { FileChange } from '../src/core/blitzrinth/commitMultipleFiles';
+import { commitAssets } from '../src/core/blitzkit/commitAssets';
+import { FileChange } from '../src/core/blitzkit/commitMultipleFiles';
 import {
   RtscWritePlayer,
   RtscWriteStream,

@@ -2,7 +2,7 @@ import { Flex, Heading, Slider, TextField } from '@radix-ui/themes';
 import { clamp, debounce } from 'lodash';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GenericTankComponentButton } from '../../../../../../../components/ModuleButtons/GenericTankComponentButton';
-import { asset } from '../../../../../../../core/blitzrinth/asset';
+import { asset } from '../../../../../../../core/blitzkit/asset';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 

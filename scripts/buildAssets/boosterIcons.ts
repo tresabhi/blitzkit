@@ -2,8 +2,8 @@ import { readdir } from 'fs/promises';
 import sharp from 'sharp';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
-import { commitAssets } from '../../src/core/blitzrinth/commitAssets';
-import { FileChange } from '../../src/core/blitzrinth/commitMultipleFiles';
+import { commitAssets } from '../../src/core/blitzkit/commitAssets';
+import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
 import { DATA, POI } from './constants';
 
 export async function boosterIcons(production: boolean) {

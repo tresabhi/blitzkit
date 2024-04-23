@@ -1,6 +1,6 @@
 import { AllStats } from '../blitz/getAccountInfo';
-import { context } from '../blitzrinth/context';
-import { tankDefinitions } from '../blitzrinth/tankDefinitions';
+import { context } from '../blitzkit/context';
+import { tankDefinitions } from '../blitzkit/tankDefinitions';
 
 interface SpecialStats {
   winrate: number;

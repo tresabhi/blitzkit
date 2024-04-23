@@ -11,11 +11,11 @@ import {
   TREE_TYPE_ICONS,
   TREE_TYPE_IMAGES,
 } from '../../../../../../../components/Tanks/components/Item/constants';
-import { NATIONS } from '../../../../../../../core/blitzrinth/tankDefinitions';
+import { NATIONS } from '../../../../../../../core/blitzkit/tankDefinitions';
 import {
   TIERS,
   TIER_ROMAN_NUMERALS,
-} from '../../../../../../../core/blitzrinth/tankDefinitions/constants';
+} from '../../../../../../../core/blitzkit/tankDefinitions/constants';
 import mutateTankopediaPersistent, {
   TankopediaTestTankDisplay,
   useTankopediaPersistent,

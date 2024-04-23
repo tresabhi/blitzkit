@@ -31,22 +31,22 @@ import { EquipmentManager } from '../../../components/EquipmentManager';
 import { ModuleManager } from '../../../components/ModuleManager';
 import PageWrapper from '../../../components/PageWrapper';
 import { ProvisionsManager } from '../../../components/ProvisionsManager';
-import { asset } from '../../../core/blitzrinth/asset';
-import { availableProvisions } from '../../../core/blitzrinth/availableProvisions';
-import { checkConsumableProvisionInclusivity } from '../../../core/blitzrinth/checkConsumableProvisionInclusivity';
-import { consumableDefinitions } from '../../../core/blitzrinth/consumableDefinitions';
-import { createDefaultSkills } from '../../../core/blitzrinth/createDefaultSkills';
-import { equipmentDefinitions } from '../../../core/blitzrinth/equipmentDefinitions';
-import { modelDefinitions } from '../../../core/blitzrinth/modelDefinitions';
-import { provisionDefinitions } from '../../../core/blitzrinth/provisionDefinitions';
-import { skillDefinitions } from '../../../core/blitzrinth/skillDefinitions';
-import { tankCharacteristics } from '../../../core/blitzrinth/tankCharacteristics';
+import { asset } from '../../../core/blitzkit/asset';
+import { availableProvisions } from '../../../core/blitzkit/availableProvisions';
+import { checkConsumableProvisionInclusivity } from '../../../core/blitzkit/checkConsumableProvisionInclusivity';
+import { consumableDefinitions } from '../../../core/blitzkit/consumableDefinitions';
+import { createDefaultSkills } from '../../../core/blitzkit/createDefaultSkills';
+import { equipmentDefinitions } from '../../../core/blitzkit/equipmentDefinitions';
+import { modelDefinitions } from '../../../core/blitzkit/modelDefinitions';
+import { provisionDefinitions } from '../../../core/blitzkit/provisionDefinitions';
+import { skillDefinitions } from '../../../core/blitzkit/skillDefinitions';
+import { tankCharacteristics } from '../../../core/blitzkit/tankCharacteristics';
 import {
   TankDefinition,
   tankDefinitions,
-} from '../../../core/blitzrinth/tankDefinitions';
-import { tankIcon } from '../../../core/blitzrinth/tankIcon';
-import { tankToCompareMember } from '../../../core/blitzrinth/tankToCompareMember';
+} from '../../../core/blitzkit/tankDefinitions';
+import { tankIcon } from '../../../core/blitzkit/tankIcon';
+import { tankToCompareMember } from '../../../core/blitzkit/tankToCompareMember';
 import { BlitzrinthButtonWatermark } from '../../../icons/BlitzrinthButtonWatermark';
 import { theme } from '../../../stitches.config';
 import {

@@ -7,11 +7,11 @@ import TitleBar from '../../components/TitleBar';
 import { AllStats, getAccountInfo } from '../../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../core/blitz/getClanAccountInfo';
 import getTankStats from '../../core/blitz/getTankStats';
-import { filtersToDescription } from '../../core/blitzrinth/filtersToDescription';
+import { filtersToDescription } from '../../core/blitzkit/filtersToDescription';
 import {
   TankDefinition,
   tankDefinitions,
-} from '../../core/blitzrinth/tankDefinitions';
+} from '../../core/blitzkit/tankDefinitions';
 import getStatsInPeriod from '../../core/blitzstars/getStatsInPeriod';
 import { tankAverages } from '../../core/blitzstars/tankAverages';
 import { ResolvedPeriod } from '../../core/discord/resolvePeriodFromCommand';

@@ -9,8 +9,8 @@ import {
   Tier,
   flags,
   tankDefinitions,
-} from '../core/blitzrinth/tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from '../core/blitzrinth/tankDefinitions/constants';
+} from '../core/blitzkit/tankDefinitions';
+import { TIER_ROMAN_NUMERALS } from '../core/blitzkit/tankDefinitions/constants';
 import addTierChoices from '../core/discord/addTierChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';

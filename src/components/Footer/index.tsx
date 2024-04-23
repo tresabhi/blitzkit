@@ -56,7 +56,7 @@ export function Footer() {
 
               <Link
                 size="2"
-                href="https://tresabhi.github.io/blitzrinth/guide/credits.html"
+                href="https://tresabhi.github.io/blitzkit/guide/credits.html"
                 target="_blank"
               >
                 Full credits

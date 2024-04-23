@@ -6,7 +6,7 @@ import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { ENVIRONMENTS } from '../app/tools/tankopedia/[id]/components/Lighting';
 import { ArmorType } from '../components/Armor/components/SpacedArmorScene';
 import { TankClass, TreeType } from '../components/Tanks';
-import { Tier } from '../core/blitzrinth/tankDefinitions';
+import { Tier } from '../core/blitzkit/tankDefinitions';
 
 export type TankopediaSortBy = keyof typeof SORT_NAMES;
 export type TankopediaSortDirection = 'ascending' | 'descending';

@@ -1,10 +1,10 @@
 import { Flex } from '@radix-ui/themes';
 import { use } from 'react';
 import { permanentSkills } from '../app/tools/tankopedia/[id]/components/Characteristics/components/Skills/constants';
-import { asset } from '../core/blitzrinth/asset';
-import { skillDefinitions } from '../core/blitzrinth/skillDefinitions';
-import { Tier } from '../core/blitzrinth/tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from '../core/blitzrinth/tankDefinitions/constants';
+import { asset } from '../core/blitzkit/asset';
+import { skillDefinitions } from '../core/blitzkit/skillDefinitions';
+import { Tier } from '../core/blitzkit/tankDefinitions';
+import { TIER_ROMAN_NUMERALS } from '../core/blitzkit/tankDefinitions/constants';
 import { GenericTankComponentButton } from './ModuleButtons/GenericTankComponentButton';
 
 interface CrewSkillManagerProps {

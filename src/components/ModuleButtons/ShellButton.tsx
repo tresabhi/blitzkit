@@ -1,4 +1,4 @@
-import { asset } from '../../core/blitzrinth/asset';
+import { asset } from '../../core/blitzkit/asset';
 import { GenericTankComponentButton } from './GenericTankComponentButton';
 import { TankComponentButtonProps } from './TankComponentButton';
 

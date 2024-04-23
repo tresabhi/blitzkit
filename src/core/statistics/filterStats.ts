@@ -1,6 +1,6 @@
 import { TreeType } from '../../components/Tanks';
 import { SupplementaryStats } from '../blitz/getAccountInfo';
-import { tankDefinitions } from '../blitzrinth/tankDefinitions';
+import { tankDefinitions } from '../blitzkit/tankDefinitions';
 import { DiffedTankStats } from '../blitzstars/getStatsInPeriod';
 import { tankAverages } from '../blitzstars/tankAverages';
 import calculateWN8 from './calculateWN8';

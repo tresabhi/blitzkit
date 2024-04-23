@@ -4,11 +4,11 @@ import { ContextMenu } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
 import * as Breakdown from '../../../components/Breakdown';
 import fetchBlitz from '../../../core/blitz/fetchBlitz';
-import { resetSession } from '../../../core/blitzrinth/resetSession';
+import { resetSession } from '../../../core/blitzkit/resetSession';
 import {
   TankDefinition,
   tankDefinitions,
-} from '../../../core/blitzrinth/tankDefinitions';
+} from '../../../core/blitzkit/tankDefinitions';
 import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import calculateWN8 from '../../../core/statistics/calculateWN8';
 import { deltaTankStats } from '../../../core/statistics/deltaTankStats';

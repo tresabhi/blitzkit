@@ -1,4 +1,4 @@
-import { ShellDefinition } from '../blitzrinth/tankDefinitions';
+import { ShellDefinition } from '../blitzkit/tankDefinitions';
 
 export function isExplosive(
   type: ShellDefinition['type'],

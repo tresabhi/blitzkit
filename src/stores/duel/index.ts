@@ -8,7 +8,7 @@ import {
   TankDefinition,
   TrackDefinition,
   TurretDefinition,
-} from '../../core/blitzrinth/tankDefinitions';
+} from '../../core/blitzkit/tankDefinitions';
 
 type EquipmentMatrixItem = -1 | 0 | 1;
 type EquipmentMatrixRow = [
