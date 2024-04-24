@@ -9,6 +9,7 @@ import {
 } from 'discord.js';
 import { InteractionReturnable } from '../../events/interactionCreate';
 import jsxToPngThreaded from '../blitzkit/jsxToPngThreaded';
+import { RenderConfiguration } from '../blitzkit/renderConfiguration';
 
 export default async function normalizeInteractionReturnable(
   returnable: InteractionReturnable,
@@ -17,11 +18,11 @@ export default async function normalizeInteractionReturnable(
   const reply: InteractionEditReplyOptions &
     InteractionReplyOptions &
     MessageEditOptions = {};
-
   const awaitedReturnable = await returnable;
   const normalizedReturnable = Array.isArray(awaitedReturnable)
     ? awaitedReturnable
     : [awaitedReturnable];
+  let renderConfiguration = new RenderConfiguration();
 
   await Promise.all(
     normalizedReturnable.map(async (item, index) => {
@@ -39,10 +40,12 @@ export default async function normalizeInteractionReturnable(
       } else if (item instanceof AttachmentBuilder) {
         if (!reply.files) reply.files = [];
         reply.files.push(item);
+      } else if (item instanceof RenderConfiguration) {
+        renderConfiguration = item;
       } else if (item === null) {
         return;
       } else {
-        const image = await jsxToPngThreaded(item);
+        const image = await jsxToPngThreaded(item, renderConfiguration);
         images.push([index, image]);
       }
     }),

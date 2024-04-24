@@ -35,6 +35,7 @@ import { statsCommand } from '../../commands/stats';
 import { todayCommand } from '../../commands/today';
 import getClientId from '../../core/blitzkit/getClientId';
 import isDev from '../../core/blitzkit/isDev';
+import { RenderConfiguration } from '../../core/blitzkit/renderConfiguration';
 import { secrets } from '../../core/blitzkit/secrets';
 import handleAutocomplete from './handlers/autocomplete';
 import handleButton from './handlers/button';
@@ -45,6 +46,7 @@ export type InteractionRawReturnable =
   | EmbedBuilder
   | ButtonBuilder
   | AttachmentBuilder
+  | RenderConfiguration
   | JSX.Element
   | null;
 export type InteractionIterableReturnable =

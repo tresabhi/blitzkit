@@ -2,7 +2,7 @@ import sharp from 'sharp';
 
 const cache: Record<string, Buffer> = {};
 
-export async function webpToPng(url: string) {
+export async function iconPng(url: string) {
   if (!url.endsWith('.webp')) return url;
 
   if (!cache[url]) {

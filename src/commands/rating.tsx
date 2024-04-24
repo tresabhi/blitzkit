@@ -11,7 +11,7 @@ import { getRatingNeighbors } from '../core/blitz/getRatingNeighbors';
 import { normalizeLeagueIcon } from '../core/blitz/normalizeLeagueIcon';
 import { emblemURL } from '../core/blitzkit/emblemURL';
 import getArchivedRatingMidnightLeaderboard from '../core/blitzkit/getArchivedRatingMidnightLeaderboard';
-import { webpToPng } from '../core/blitzkit/iconPng';
+import { iconPng } from '../core/blitzkit/iconPng';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
@@ -295,7 +295,7 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
                       height: 64,
                       objectFit: 'cover',
                     }}
-                    src={await webpToPng(
+                    src={await iconPng(
                       reward.type === 'vehicle'
                         ? reward.vehicle.preview_image_url
                         : reward.stuff.image_url,

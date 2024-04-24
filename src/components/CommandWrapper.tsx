@@ -14,7 +14,7 @@ export default function CommandWrapper({ children, fat }: CommandWrapperProps) {
         flexDirection: 'column',
         padding: `16px ${fat ? 0 : 16}px`,
         gap: 16,
-        width: 480,
+        width: '100%',
         color: theme.colors.textHighContrast,
         position: 'relative',
         background: theme.colors.appBackground1,
