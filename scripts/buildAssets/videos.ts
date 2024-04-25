@@ -133,7 +133,6 @@ export async function videos(production: boolean) {
     )
     .join('\n');
 
-  return;
   await commitAssets(
     'videos',
     [{ content, encoding: 'utf-8', path: 'definitions/videos.csv' }],
