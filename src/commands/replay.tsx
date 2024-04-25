@@ -304,6 +304,7 @@ async function playerListing(
               style={{
                 fontSize: 16,
                 color: theme.colors[`textLowContrast${blockAccent}`],
+                whiteSpace: 'nowrap',
               }}
             >
               {player.name}
