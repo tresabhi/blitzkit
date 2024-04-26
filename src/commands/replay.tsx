@@ -99,7 +99,7 @@ interface WotInspectorReplay {
   id: string;
   map_id: number;
   battle_duration: number;
-  title: null;
+  title: unknown | null;
   player_name: string;
   protagonist: number;
   vehicle_descr: number;
@@ -111,7 +111,10 @@ interface WotInspectorReplay {
   damage_made: number;
   details_url: string;
   download_url: string;
-  game_version: WotInspectorReplayGameVersion;
+  game_version: {
+    name: string;
+    package: string;
+  };
   arena_unique_id: string;
   download_count: number;
   data_version: number;
@@ -142,11 +145,6 @@ interface WotInspectorReplay {
   credits_contribution_in: number;
   credits_contribution_out: number;
   camouflage_id: number;
-}
-
-export interface WotInspectorReplayGameVersion {
-  name: string;
-  package: string;
 }
 
 export interface WotInspectorReplayPlayerData {
