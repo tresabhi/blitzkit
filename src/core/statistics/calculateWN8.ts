@@ -6,7 +6,17 @@ import { AllStats } from '../blitz/getAccountInfo';
  * @param expected what all players on average perform like
  * @param average what the player in question performs like
  */
-export default function calculateWN8(expected: AllStats, average: AllStats) {
+export default function calculateWN8(
+  expected: AllStats,
+  average: {
+    damage_dealt: number;
+    battles: number;
+    spotted: number;
+    frags: number;
+    dropped_capture_points: number;
+    wins: number;
+  },
+) {
   const avgDmg = average.damage_dealt / average.battles;
   const avgSpot = average.spotted / average.battles;
   const avgFrag = average.frags / average.battles;

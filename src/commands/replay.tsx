@@ -6,8 +6,10 @@ import { RenderConfiguration } from '../core/blitzkit/renderConfiguration';
 import { tankDefinitions } from '../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../core/blitzkit/tankDefinitions/constants';
 import { tankIcon } from '../core/blitzkit/tankIcon';
+import { tankAverages } from '../core/blitzstars/tankAverages';
 import buttonLink from '../core/discord/buttonLink';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
+import calculateWN8 from '../core/statistics/calculateWN8';
 import { CommandRegistry } from '../events/interactionCreate';
 import { theme } from '../stitches.config';
 
@@ -212,8 +214,10 @@ function stat(value: string | number, flex = 2) {
 async function playerListing(
   player: WotInspectorReplayPlayerData,
   protagonistTeam: boolean,
+  winningTeam: number,
   recordingPlayer = false,
 ) {
+  const awaitedTankAverages = await tankAverages;
   const awaitedTankDefinitions = await tankDefinitions;
   const tank = awaitedTankDefinitions[player.vehicle_descr];
   const blockAccent = recordingPlayer ? '_amber' : '';
@@ -231,6 +235,18 @@ async function playerListing(
   )[0];
   const totalHealth = turret.health + tank.health;
   const healthLeft = clamp(player.hitpoints_left / totalHealth, 0, 1);
+  const tankAveragesEntry = awaitedTankAverages[player.vehicle_descr];
+  const wn8 =
+    tankAveragesEntry === undefined
+      ? -1
+      : calculateWN8(tankAveragesEntry.all, {
+          battles: 1,
+          damage_dealt: player.damage_made,
+          dropped_capture_points: player.base_defend_points,
+          frags: player.enemies_destroyed,
+          spotted: player.enemies_spotted,
+          wins: winningTeam === player.team ? 1 : 0,
+        });
 
   return (
     <div
@@ -320,7 +336,7 @@ async function playerListing(
           }}
         >
           {stat(player.damage_made.toLocaleString())}
-          {stat((2830).toLocaleString())}
+          {stat(wn8 === -1 ? '--' : Math.round(wn8).toLocaleString())}
           {stat(player.exp.toLocaleString())}
           {stat(player.enemies_destroyed, 1)}
         </div>
@@ -342,6 +358,97 @@ async function playerListing(
             backgroundColor: theme.colors[`solidBackground${healthAccent}`],
           }}
         />
+      </div>
+    </div>
+  );
+}
+
+function Header() {
+  return (
+    <div
+      style={{
+        padding: 8,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+      }}
+    >
+      <div style={{ flex: 1 }} />
+
+      <div
+        style={{
+          display: 'flex',
+          flex: 1,
+        }}
+      >
+        <div
+          style={{
+            flex: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <span
+            style={{
+              fontSize: 16,
+              color: theme.colors.textLowContrast,
+            }}
+          >
+            Damage
+          </span>
+        </div>
+        <div
+          style={{
+            flex: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <span
+            style={{
+              fontSize: 16,
+              color: theme.colors.textLowContrast,
+            }}
+          >
+            WN8
+          </span>
+        </div>
+        <div
+          style={{
+            flex: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <span
+            style={{
+              fontSize: 16,
+              color: theme.colors.textLowContrast,
+            }}
+          >
+            XP
+          </span>
+        </div>
+        <div
+          style={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <span
+            style={{
+              fontSize: 16,
+              color: theme.colors.textLowContrast,
+            }}
+          >
+            Kills
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -404,6 +511,8 @@ export const replayCommand = new Promise<CommandRegistry>((resolve) => {
                 gap: 4,
               }}
             >
+              <Header />
+
               {await Promise.all(
                 players
                   .filter((player) => player.team === protagonistTeamId)
@@ -411,6 +520,7 @@ export const replayCommand = new Promise<CommandRegistry>((resolve) => {
                     playerListing(
                       player,
                       true,
+                      replayData.winner_team,
                       player.dbid === replayData.protagonist,
                     ),
                   ),
@@ -425,10 +535,14 @@ export const replayCommand = new Promise<CommandRegistry>((resolve) => {
                 gap: 4,
               }}
             >
+              <Header />
+
               {await Promise.all(
                 players
                   .filter((player) => player.team === antagonistTeamId)
-                  .map((player) => playerListing(player, false)),
+                  .map((player) =>
+                    playerListing(player, false, replayData.winner_team),
+                  ),
               )}
             </div>
           </div>
