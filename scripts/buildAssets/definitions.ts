@@ -18,6 +18,7 @@ import {
   EquipmentRow,
 } from '../../src/core/blitzkit/equipmentDefinitions';
 import { GameDefinitions } from '../../src/core/blitzkit/gameDefinitions';
+import { MapDefinitions } from '../../src/core/blitzkit/mapDefinitions';
 import {
   ModelArmor,
   ModelDefinitions,
@@ -325,6 +326,31 @@ type ConsumablesVehicleFilter =
   | { name: string }
   | { extendedTags: string };
 
+export interface Maps {
+  maps: {
+    [key: string]: {
+      id: number;
+      tags?: string;
+      localName: string;
+      avaliableInTrainingRoom: boolean; // lol wg typo
+      spriteFrame: number;
+      supremacyPointsThreshold?: number;
+      availableModes: number[];
+      shadowMapsAvailable?: boolean;
+      assaultRespawnPoints: {
+        allies: MapAlly[];
+        enemies: MapAlly[];
+      };
+      levels?: number[];
+    };
+  };
+}
+
+export interface MapAlly {
+  respawnNumber: number;
+  points: Array<number[]>;
+}
+
 const blitzShellKindToBlitzkit: Record<ShellKind, ShellType> = {
   ARMOR_PIERCING: 'ap',
   ARMOR_PIERCING_CR: 'ap_cr',
@@ -348,6 +374,7 @@ export async function definitions(production: boolean) {
   };
   const tankDefinitions: TankDefinitions = {};
   const modelDefinitions: ModelDefinitions = {};
+  const mapDefinitions: MapDefinitions = {};
   const equipmentDefinitions: EquipmentDefinitions = {
     presets: {},
     equipments: {},
@@ -386,7 +413,7 @@ export async function definitions(production: boolean) {
   const avatar = await readXMLDVPL<{ root: Avatar }>(
     `${DATA}/XML/item_defs/tankmen/avatar.xml.dvpl`,
   );
-
+  const maps = await readYAMLDVPL<Maps>(`${DATA}/maps.yaml.dvpl`);
   const tankXps = new Map<number, number>();
 
   await Promise.all(
@@ -1122,6 +1149,13 @@ export async function definitions(production: boolean) {
     skillDefinitions.classes[tankClass as TankClass] = skills.split(' ');
   });
 
+  Object.entries(maps.maps).forEach(([key, map]) => {
+    mapDefinitions[map.id] = {
+      id: map.id,
+      name: strings[`#maps:${key}:${map.localName}`],
+    };
+  });
+
   await commitAssets(
     'definitions',
     [
@@ -1159,6 +1193,11 @@ export async function definitions(production: boolean) {
         content: superCompress(skillDefinitions),
         encoding: 'base64',
         path: 'definitions/skills.cdon.lz4',
+      },
+      {
+        content: superCompress(mapDefinitions),
+        encoding: 'base64',
+        path: 'definitions/maps.cdon.lz4',
       },
     ],
     production,
