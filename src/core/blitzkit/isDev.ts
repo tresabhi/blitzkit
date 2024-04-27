@@ -1,3 +1,7 @@
+import { config } from 'dotenv';
+
+config();
+
 const devHostStartNames = [
   'blitzkrieg-',
   'localhost',

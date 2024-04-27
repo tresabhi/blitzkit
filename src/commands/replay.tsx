@@ -1,7 +1,11 @@
 import { clamp } from 'lodash';
 import CommandWrapper from '../components/CommandWrapper';
 import TitleBar from '../components/TitleBar';
+import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
+import { idToRegion } from '../core/blitz/idToRegion';
+import { emblemURL } from '../core/blitzkit/emblemURL';
 import { iconPng } from '../core/blitzkit/iconPng';
+import { mapDefinitions } from '../core/blitzkit/mapDefinitions';
 import { RenderConfiguration } from '../core/blitzkit/renderConfiguration';
 import { tankDefinitions } from '../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../core/blitzkit/tankDefinitions/constants';
@@ -461,6 +465,7 @@ export const replayCommand = new Promise<CommandRegistry>((resolve) => {
     ),
 
     async handler(interaction) {
+      const awaitedMapDefinitions = await mapDefinitions;
       const file = interaction.options.getAttachment('file')!;
       // const file = {
       //   url: 'https://cdn.discordapp.com/ephemeral-attachments/1232434891652861972/1232781496016834581/20240328_1530__TresAbhi_M60_1157057448155406708.wotbreplay?ex=662ab4bc&is=6629633c&hm=c784cd10e80232350ddaf291fa987b879c4d0a8083b78298c9eee4fa0d507f6c&',
@@ -479,20 +484,30 @@ export const replayCommand = new Promise<CommandRegistry>((resolve) => {
       const replayData = (await fetch(
         `https://api.wotinspector.com/v2/blitz/replays/${replayId}/`,
       ).then((response) => response.json())) as WotInspectorReplay;
-      const protagonistTeamId = replayData.players_data.find(
-        (player) => player.dbid === replayData.protagonist,
-      )!.team;
-      const antagonistTeamId = 3 - protagonistTeamId;
+      const antagonistTeamId = 3 - replayData.protagonist_team;
       const players = replayData.players_data.sort(
         (a, b) => b.damage_made - a.damage_made,
       );
+      const clan = (
+        await getClanAccountInfo(
+          idToRegion(replayData.protagonist),
+          replayData.protagonist,
+          ['clan'],
+        )
+      )?.clan;
+      const clanImage = clan ? emblemURL(clan.emblem_set_id) : undefined;
 
       return [
         new RenderConfiguration({ width: 960 }),
         <CommandWrapper>
           <TitleBar
             title={replayData.player_name}
-            description={`uwu <3 xoxo hugs and kicks`}
+            image={clanImage}
+            description={`${
+              replayData.protagonist_team === replayData.winner_team
+                ? 'Victory'
+                : 'Defeat'
+            } • ${awaitedMapDefinitions[replayData.map_id].name}`}
           />
 
           <div
@@ -513,7 +528,9 @@ export const replayCommand = new Promise<CommandRegistry>((resolve) => {
 
               {await Promise.all(
                 players
-                  .filter((player) => player.team === protagonistTeamId)
+                  .filter(
+                    (player) => player.team === replayData.protagonist_team,
+                  )
                   .map((player) =>
                     playerListing(
                       player,
