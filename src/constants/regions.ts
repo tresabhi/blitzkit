@@ -11,3 +11,12 @@ export const UNLOCALIZED_REGION_NAMES: Record<Region, string> = {
   asia: 'Asia',
   eu: 'Europe',
 };
+
+/**
+ * @deprecated
+ */
+export const UNLOCALIZED_REGION_NAMES_SHORT: Record<Region, string> = {
+  com: 'NA',
+  asia: 'APAC',
+  eu: 'EU',
+};
