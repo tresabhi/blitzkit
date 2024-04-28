@@ -1,0 +1,298 @@
+syntax = "proto3";
+
+package BattleResultsGenerated;
+
+import "PlayerAvatarImage.proto";
+
+message Int32List {
+  repeated int32 values = 1;
+}
+
+message PlayerInfo {
+  message AvatarEntry {
+    int32 key = 1;
+    .PlayerAvatarInfo value = 2;
+  }
+
+  string name = 1;
+  int32 prebattleID = 2;
+  int32 team = 3;
+  int64 clanID = 4;
+  string clanTag = 5;
+  repeated int32 chatMessageCount = 6;
+  repeated .BattleResultsGenerated.PlayerInfo.AvatarEntry avatar = 7;
+  int32 profileBackground = 8;
+  int32 vehicleRank = 9;
+}
+
+message TeamInfo {
+  string title = 1;
+  string icon = 2;
+}
+
+message VehiclePublicResults {
+  message ExtVehAchievementsEntry {
+    int32 key = 1;
+    int32 value = 2;
+  }
+
+  message ExtAccAchievementsEntry {
+    int32 key = 1;
+    int32 value = 2;
+  }
+
+  int32 health = 1;
+  int32 credits = 2;
+  int32 xp = 3;
+  int32 shots = 4;
+  int32 directHits = 5;
+  int32 explosionHits = 6;
+  int32 piercings = 7;
+  int32 damageDealt = 8;
+  int32 damageAssistedRadio = 9;
+  int32 damageAssistedTrack = 10;
+  int32 damageReceived = 11;
+  int32 directHitsReceived = 12;
+  int32 noDamageDirectHitsReceived = 13;
+  int32 explosionHitsReceived = 14;
+  int32 piercingsReceived = 15;
+  int32 spotted = 16;
+  int32 damaged = 17;
+  int32 kills = 18;
+  int32 tdamageDealt = 19;
+  int32 tkills = 20;
+  int32 capturePoints = 21;
+  int32 droppedCapturePoints = 22;
+  int32 mileage = 23;
+  int32 lifeTime = 24;
+  int32 killerID = 25;
+  repeated int32 achievements = 26;
+  repeated .BattleResultsGenerated.VehiclePublicResults.ExtVehAchievementsEntry extVehAchievements = 27;
+  repeated .BattleResultsGenerated.VehiclePublicResults.ExtAccAchievementsEntry extAccAchievements = 28;
+  int32 xpDamage = 29;
+  int32 xpAssist = 30;
+  int32 xpTeamBonus = 31;
+  int32 wpEarned = 32;
+  int32 wpStolen = 33;
+  int32 heroCreditsBonus = 34;
+  int32 heroXpBonus = 35;
+  int64 accountDBID = 101;
+  int32 team = 102;
+  int32 serializedVehType = 103;
+  int32 gold = 104;
+  int32 deathReason = 105;
+  int32 camouflage = 106;
+  float mmr = 107;
+  float mmrDiff = 108;
+  int32 calibrationBattlesLeft = 109;
+  int32 healedHP = 114;
+  int32 wasHealedFor = 115;
+  int32 xpActivity = 36;
+  int32 customization = 116;
+  int32 potentialEnemyDamage = 117;
+  int32 rammingDamage = 118;
+  int32 helpedToKill = 119;
+}
+
+message BattleResultsFinalXp {
+  int32 xpDamagePure = 1;
+  int32 xpDamagePrem = 2;
+  int32 xpAssistPure = 3;
+  int32 xpAssistPrem = 4;
+  int32 xpActivityPure = 5;
+  int32 xpActivityPrem = 6;
+  int32 xpTeamBonusPure = 7;
+  int32 xpTeamBonusPrem = 8;
+  int32 healingXpPure = 9;
+  int32 healingXpPrem = 10;
+  int32 heroXpBonusPure = 11;
+  int32 heroXpBonusPrem = 12;
+  int32 earnedFreeXpPure = 13;
+  int32 earnedFreeXpPrem = 14;
+  int32 earnedAvatarXpPure = 15;
+  int32 earnedAvatarXpPrem = 16;
+  int32 xpNoModifiers = 17;
+  int32 xpPure = 18;
+  int32 xpPrem = 19;
+  int32 totalFreeXpPure = 20;
+  int32 totalFreeXpPrem = 21;
+  int32 totalAvatarXpPure = 22;
+  int32 totalAvatarXpPrem = 23;
+}
+
+message Ribbons {
+  int32 id = 1;
+  int32 grade = 2;
+  int32 amount = 3;
+  int32 value = 4;
+}
+
+message BattleResultsUpdate {
+  message ExcellentBattleDataEntry {
+    string key = 1;
+    int32 value = 2;
+  }
+
+  message StuffEntry {
+    int32 key = 1;
+    int32 value = 2;
+  }
+
+  message RatingBattleStuffBonusEntry {
+    int32 key = 1;
+    int32 value = 2;
+  }
+
+  int32 avatarXP = 1;
+  int32 eventCredits = 2;
+  int32 eventGold = 3;
+  int32 eventXP = 4;
+  int32 eventFreeXP = 5;
+  int32 eventAvatarXP = 6;
+  int32 autoRepairCost = 7;
+  repeated int32 autoLoadCost = 8;
+  repeated int32 autoEquipCost = 9;
+  repeated int32 autoProvCost = 10;
+  bool isPremium = 12;
+  int32 premiumXPFactor10 = 13;
+  int32 premiumCreditsFactor10 = 14;
+  int32 xpFactor10 = 15;
+  int32 creditsFactor10 = 16;
+  int32 aogasFactor10 = 17;
+  int32 markOfMastery = 18;
+  repeated .BattleResultsGenerated.BattleResultsUpdate.ExcellentBattleDataEntry excellentBattleData = 19;
+  bytes vehDossier = 20;
+  bytes accDossier = 21;
+  bytes vehDossierPrev = 22;
+  bytes accDossierPrev = 23;
+  int32 autoRepairDiscount = 24;
+  repeated int32 autoEquipDiscount = 25;
+  repeated int32 autoProvDiscount = 26;
+  repeated .BattleResultsGenerated.BattleResultsUpdate.StuffEntry stuff = 27;
+  int32 boosterCredits = 29;
+  int32 boosterXp = 30;
+  int32 boosterFreeXp = 31;
+  int32 boosterAvatarXp = 32;
+  int32 complimentsLimit = 33;
+  repeated int32 autoAbilsCost = 34;
+  repeated int32 autoAbilsDiscount = 35;
+  bool hasHealingReward = 36;
+  int32 healingCredits = 37;
+  int32 healingXp = 38;
+  int32 healingFreeXp = 39;
+  int32 healingAvatarXp = 40;
+  float mmr = 107;
+  float mmrDiff = 108;
+  int32 calibrationBattlesLeft = 109;
+  int32 ratingBattleXp = 110;
+  int32 ratingBattleFreeXp = 111;
+  int32 ratingBattleAvatarXp = 112;
+  repeated .BattleResultsGenerated.BattleResultsUpdate.RatingBattleStuffBonusEntry ratingBattleStuffBonus = 113;
+  repeated .BattleResultsGenerated.Ribbons ribbons = 114;
+}
+
+message DropData {
+  message StuffEntry {
+    int32 key = 1;
+    int32 value = 2;
+  }
+
+  int32 credits = 1;
+  int32 gold = 2;
+  int32 xp = 3;
+  int32 freeXP = 4;
+  int32 avatarXP = 5;
+  repeated .BattleResultsGenerated.DropData.StuffEntry stuff = 27;
+}
+
+message VehicleInteractionDetails {
+  message DamagedModulesEntry {
+    int32 key = 1;
+    int32 value = 2;
+  }
+
+  message DestroyedModulesEntry {
+    int32 key = 1;
+    int32 value = 2;
+  }
+
+  bool spotted = 1;
+  int32 deathReason = 2;
+  int32 directHits = 3;
+  int32 directHitWithoutDamage = 4;
+  int32 explosionHits = 5;
+  int32 piercings = 6;
+  int32 damageDealt = 7;
+  int32 damageAssistedTrack = 8;
+  int32 damageAssistedRadio = 9;
+  int32 fire = 10;
+  repeated .BattleResultsGenerated.VehicleInteractionDetails.DamagedModulesEntry damagedModules = 11;
+  repeated .BattleResultsGenerated.VehicleInteractionDetails.DestroyedModulesEntry destroyedModules = 12;
+  int32 ricochetHitWithoutDamage = 13;
+}
+
+message InteractionDetails {
+  message VehiclesEntry {
+    int32 key = 1;
+    .BattleResultsGenerated.VehicleInteractionDetails value = 2;
+  }
+
+  repeated .BattleResultsGenerated.InteractionDetails.VehiclesEntry vehicles = 1;
+}
+
+message PrebattleStats {
+  int32 freeXp = 1;
+  int32 vehicleXp = 2;
+}
+
+message BattleResultsClient {
+  message QuestsProgressEntry {
+    string key = 1;
+    .BattleResultsGenerated.Int32List value = 2;
+  }
+
+  message DropCategoriesEntry {
+    string key = 1;
+    .BattleResultsGenerated.DropData value = 2;
+  }
+
+  message PlayersEntry {
+    int64 key = 1;
+    .BattleResultsGenerated.PlayerInfo value = 2;
+  }
+
+  message VehiclesEntry {
+    int32 key = 1;
+    .BattleResultsGenerated.VehiclePublicResults value = 2;
+  }
+
+  int32 arenaTypeID = 1;
+  int32 arenaCreateTime = 2;
+  int32 winnerTeam = 3;
+  int32 finishReason = 4;
+  int32 duration = 5;
+  int32 bonusType = 6;
+  int32 vehLockMode = 7;
+  .BattleResultsGenerated.VehiclePublicResults public = 8;
+  int32 gameModeID = 9;
+  int32 observerMode = 10;
+  .BattleResultsGenerated.BattleResultsFinalXp finalXp = 11;
+  int32 repair = 136;
+  int32 freeXP = 137;
+  int32 xpPenalty = 145;
+  int32 creditsPenalty = 146;
+  int32 creditsContributionIn = 147;
+  int32 creditsContributionOut = 148;
+  .BattleResultsGenerated.BattleResultsUpdate update = 150;
+  int32 originalXP = 181;
+  int32 originalFreeXP = 182;
+  int32 originalCredits = 183;
+  repeated .BattleResultsGenerated.BattleResultsClient.QuestsProgressEntry questsProgress = 184;
+  repeated .BattleResultsGenerated.BattleResultsClient.DropCategoriesEntry dropCategories = 185;
+  .BattleResultsGenerated.TeamInfo teamInfo = 186;
+  repeated .BattleResultsGenerated.BattleResultsClient.PlayersEntry players = 201;
+  repeated .BattleResultsGenerated.BattleResultsClient.VehiclesEntry vehicles = 301;
+  .BattleResultsGenerated.InteractionDetails interactionDetails = 302;
+  .BattleResultsGenerated.PrebattleStats prebattleStats = 303;
+}
+
