@@ -1,6 +1,6 @@
 'use client';
 
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { InfoCircledIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import {
   AlertDialog,
   Button,
@@ -16,6 +16,7 @@ import PageWrapper from '../../../components/PageWrapper';
 import { UNLOCALIZED_REGION_NAMES_SHORT } from '../../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
 import { getAccountInfo } from '../../../core/blitz/getAccountInfo';
+import getTankStats from '../../../core/blitz/getTankStats';
 import { idToRegion } from '../../../core/blitz/idToRegion';
 import searchPlayersAcrossRegions, {
   AccountListWithServer,
@@ -44,15 +45,34 @@ export default function Page() {
 
   useEffect(() => {
     (async () => {
-      if (!session.tracking) return;
+      if (!session.tracking || !input.current) return;
 
-      const accountInfo = await getAccountInfo(
-        idToRegion(session.player.id),
+      let accountInfo = await getAccountInfo(
+        session.player.region,
+        session.player.id,
+      );
+      let tankStats = await getTankStats(
+        session.player.region,
         session.player.id,
       );
 
       if (accountInfo === null) {
         if (login?.id === session.player.id) {
+          accountInfo = await getAccountInfo(
+            idToRegion(session.player.id),
+            session.player.id,
+            [],
+            { access_token: login.token },
+          );
+          tankStats = await getTankStats(
+            idToRegion(session.player.id),
+            session.player.id,
+            { access_token: login.token },
+          );
+
+          console.log(accountInfo, tankStats);
+
+          input.current.value = accountInfo.nickname;
         } else {
           setShowFurtherVerification(true);
         }
@@ -68,13 +88,15 @@ export default function Page() {
           <AlertDialog.Content>
             <AlertDialog.Title>We need further verification</AlertDialog.Title>
             <AlertDialog.Description>
-              You're trying to track a CC account with private statistics.
-              Please sign in to verify the ownership of this account.
+              You're trying to track a CC account which have private statistics.
+              Please sign in to verify the ownership of this account. Individual
+              tank statistics won't be available.
             </AlertDialog.Description>
 
             {login && (
               <AlertDialog.Description mt="2" color="red">
-                You are currently signed with a different account.
+                <InfoCircledIcon /> You are currently signed with a different
+                account.
               </AlertDialog.Description>
             )}
 

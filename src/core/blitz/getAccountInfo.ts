@@ -1,5 +1,5 @@
 import { Region } from '../../constants/regions';
-import fetchBlitz from './fetchBlitz';
+import fetchBlitz, { FetchBlitzParams } from './fetchBlitz';
 import { normalizeIds } from './normalizeIds';
 
 export interface AllStats {
@@ -95,10 +95,16 @@ export async function getAccountInfo<
   ReturnType = Ids extends number
     ? IndividualAccountInfo
     : IndividualAccountInfo[],
->(region: Region, ids: Ids, extra: string[] = []) {
+>(
+  region: Region,
+  ids: Ids,
+  extra: string[] = [],
+  params: FetchBlitzParams = {},
+) {
   const object = await fetchBlitz<AccountInfo>(region, 'account/info', {
     account_id: normalizeIds(ids),
     extra: extra.length === 0 ? undefined : extra.join(','),
+    ...params,
   });
 
   if (typeof ids === 'number') {

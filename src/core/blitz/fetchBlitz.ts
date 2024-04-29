@@ -60,10 +60,12 @@ async function manageQueue() {
   }
 }
 
+export type FetchBlitzParams = Record<string, string | number | undefined>;
+
 export default function fetchBlitz<Data extends object>(
   region: Region,
   path: string,
-  params: Record<string, string | number | undefined> = {},
+  params: FetchBlitzParams = {},
 ) {
   return new Promise<Data>((resolve) => {
     queue.push({
