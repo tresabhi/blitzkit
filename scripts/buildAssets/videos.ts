@@ -13,6 +13,7 @@ import { BlitzStrings, botPattern, VehicleDefinitionList } from './definitions';
 const youtubers = [
   'UCKBYXp4Xn2I2tL1UL4fpbhw', // droodles
   'UCrQ-Dy8lVsm11u8pCJ8W7Tw', // fatness
+  'UCxRpZqMElssTdPYDK3x7wyg', // n90
 ];
 
 export async function videos(production: boolean) {
