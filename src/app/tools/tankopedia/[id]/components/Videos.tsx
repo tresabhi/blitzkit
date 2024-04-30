@@ -1,5 +1,5 @@
-import { InfoCircledIcon, PlusIcon } from '@radix-ui/react-icons';
-import { Callout, Card, Flex, Heading, Link, Text } from '@radix-ui/themes';
+import { PlusIcon } from '@radix-ui/react-icons';
+import { Card, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import { videoDefinitions } from '../../../../../core/blitzkit/videos';
 import { useFullScreen } from '../../../../../hooks/useFullScreen';
@@ -16,16 +16,6 @@ export function Videos() {
   return (
     <Flex direction="column" gap="4" mt="4" align="start">
       <Heading size="6">Review videos</Heading>
-
-      <Callout.Root>
-        <Callout.Icon>
-          <InfoCircledIcon />
-        </Callout.Icon>
-        <Callout.Text>
-          Some YouTubers may not have videos on the {tank.name} leading to
-          off-topic videos.
-        </Callout.Text>
-      </Callout.Root>
 
       <Flex gap="3" wrap="wrap">
         {videos.map((video) => (
