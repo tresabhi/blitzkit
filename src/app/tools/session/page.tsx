@@ -22,6 +22,11 @@ import PageWrapper from '../../../components/PageWrapper';
 import { UNLOCALIZED_REGION_NAMES_SHORT } from '../../../constants/regions';
 import { authURL } from '../../../core/blitz/authURL';
 import {
+  generateStats,
+  prettifyStats,
+  STAT_NAMES,
+} from '../../../core/blitz/generateStats';
+import {
   getAccountInfo,
   IndividualAccountInfo,
 } from '../../../core/blitz/getAccountInfo';
@@ -32,6 +37,7 @@ import searchPlayersAcrossRegions, {
 } from '../../../core/blitz/searchPlayersAcrossRegions';
 import { tankDefinitions } from '../../../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../../../core/blitzkit/tankIcon';
+import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import { theme } from '../../../stitches.config';
 import { useApp } from '../../../stores/app';
 import mutateSession, {
@@ -42,6 +48,7 @@ import { IndividualTankStats } from '../../../types/tanksStats';
 
 export default function Page() {
   const awaitedTankDefinitions = use(tankDefinitions);
+  const awaitedTankAvearges = use(tankAverages);
   const [showSearch, setShowSearch] = useState(false);
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<AccountListWithServer>([]);
@@ -306,8 +313,11 @@ export default function Page() {
           <Table.Header>
             <Table.Row>
               <Table.ColumnHeaderCell>Tank</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell width="0">Battles</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell width="0">Winrate</Table.ColumnHeaderCell>
+              {session.columns.map((column) => (
+                <Table.ColumnHeaderCell width="0" key={column} align="right">
+                  {STAT_NAMES[column]}
+                </Table.ColumnHeaderCell>
+              ))}
             </Table.Row>
           </Table.Header>
 
@@ -315,8 +325,12 @@ export default function Page() {
             {tankStatsB
               .filter((stat) => stat.all.battles > 0)
               .sort((a, b) => b.last_battle_time - a.last_battle_time)
-              .map((stat) => {
-                const tank = awaitedTankDefinitions[stat.tank_id];
+              .map((entry) => {
+                const tank = awaitedTankDefinitions[entry.tank_id];
+                const average = awaitedTankAvearges[tank.id];
+                const stats = prettifyStats(
+                  generateStats(entry.all, average?.all),
+                );
 
                 return (
                   <Table.Row
@@ -373,10 +387,11 @@ export default function Page() {
                         </Text>
                       </Link>
                     </Table.RowHeaderCell>
-                    <Table.Cell align="right">{stat.all.battles}</Table.Cell>
-                    <Table.Cell align="right">
-                      {((100 * stat.all.wins) / stat.all.battles).toFixed(0)}%
-                    </Table.Cell>
+                    {session.columns.map((column) => (
+                      <Table.Cell key={column} align="right">
+                        {stats[column]}
+                      </Table.Cell>
+                    ))}
                   </Table.Row>
                 );
               })}
