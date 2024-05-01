@@ -254,108 +254,102 @@ async function playerListing(
     <div
       key={player.entity_id}
       style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
         backgroundColor: theme.colors[`appBackground2${blockAccent}`],
         padding: 8,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 8,
       }}
     >
       <div
         style={{
           display: 'flex',
-          alignItems: 'center',
           gap: 8,
+          flex: 1,
+          overflow: 'hidden',
+          alignItems: 'center',
         }}
       >
+        <img
+          src={await iconPng(tankIcon(tank.id))}
+          style={{
+            width: 32,
+            height: 32,
+            objectFit: 'contain',
+          }}
+        />
+
         <div
           style={{
             display: 'flex',
-            gap: 8,
-            flex: 1,
-            overflow: 'hidden',
-            alignItems: 'center',
+            flexDirection: 'column',
+            // align
           }}
         >
-          <img
-            src={await iconPng(tankIcon(tank.id))}
-            style={{
-              width: 32,
-              height: 32,
-              objectFit: 'contain',
-            }}
-          />
-
           <div
             style={{
               display: 'flex',
-              flexDirection: 'column',
-              // align
+              gap: 4,
+              alignItems: 'center',
             }}
           >
-            <div
-              style={{
-                display: 'flex',
-                gap: 4,
-                alignItems: 'center',
-              }}
-            >
-              <span
-                style={{
-                  color: theme.colors[`textLowContrast${blockAccent}`],
-                  fontSize: 12,
-                }}
-              >
-                {TIER_ROMAN_NUMERALS[tank.tier]}
-              </span>
-              <span
-                style={{
-                  color: theme.colors[`textHighContrast${blockAccent}`],
-                  fontSize: 16,
-                }}
-              >
-                {tank.name}
-              </span>
-            </div>
-
             <span
               style={{
-                fontSize: 16,
                 color: theme.colors[`textLowContrast${blockAccent}`],
-                whiteSpace: 'nowrap',
+                fontSize: 12,
               }}
             >
-              {player.name}
-              {player.clan_tag ? ` [${player.clan_tag}]` : ''}
+              {TIER_ROMAN_NUMERALS[tank.tier]}
+            </span>
+            <span
+              style={{
+                color: theme.colors[`textHighContrast${blockAccent}`],
+                fontSize: 16,
+              }}
+            >
+              {tank.name}
             </span>
           </div>
-        </div>
 
-        <div
-          style={{
-            display: 'flex',
-            flex: 1,
-          }}
-        >
-          {stat(player.damage_made.toLocaleString())}
-          {stat(wn8 === -1 ? '--' : Math.round(wn8).toLocaleString())}
-          {stat(player.exp.toLocaleString())}
-          {stat(player.enemies_destroyed, 1)}
+          <span
+            style={{
+              fontSize: 16,
+              color: theme.colors[`textLowContrast${blockAccent}`],
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {player.name}
+            {player.clan_tag ? ` [${player.clan_tag}]` : ''}
+          </span>
         </div>
       </div>
 
       <div
         style={{
-          height: 4,
+          display: 'flex',
+          flex: 1,
+        }}
+      >
+        {stat(player.damage_made.toLocaleString())}
+        {stat(wn8 === -1 ? '--' : Math.round(wn8).toLocaleString())}
+        {stat(player.exp.toLocaleString())}
+        {stat(player.enemies_destroyed, 1)}
+      </div>
+
+      <div
+        style={{
           borderRadius: 2,
           backgroundColor: theme.colors[`componentInteractive${healthAccent}`],
           display: 'flex',
+          width: 4,
+          height: '100%',
+          transform: 'scaleY(-1)',
         }}
       >
         <div
           style={{
-            width: `${healthLeft * 100}%`,
-            height: '100%',
+            width: '100%',
+            height: `${healthLeft * 100}%`,
             borderRadius: 2,
             backgroundColor: theme.colors[`solidBackground${healthAccent}`],
           }}
