@@ -11,6 +11,7 @@ export interface SessionTracking extends SessionBase {
   player: {
     id: number;
     region: Region;
+    since: number;
   };
 }
 

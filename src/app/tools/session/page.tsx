@@ -249,6 +249,7 @@ export default function Page() {
                             (draft as SessionTracking).player = {
                               id: player.account_id,
                               region: player.region,
+                              since: Date.now(),
                             };
 
                             input.current.value = player.nickname;
@@ -268,19 +269,25 @@ export default function Page() {
       )}
 
       {session.tracking && (
-        <Flex gap="4" align="center" justify="center" mt="2">
-          <Heading size="5">Tracking {accountInfo?.nickname}</Heading>
-          <Button
-            color="red"
-            variant="ghost"
-            onClick={() => {
-              mutateSession((draft) => {
-                draft.tracking = false;
-              });
-            }}
-          >
-            Stop
-          </Button>
+        <Flex mt="2" mb="2" direction="column" align="center" gap="2">
+          <Flex gap="4" align="center" justify="center">
+            <Heading size="5">Tracking {accountInfo?.nickname}</Heading>
+            <Button
+              color="red"
+              variant="ghost"
+              onClick={() => {
+                mutateSession((draft) => {
+                  draft.tracking = false;
+                });
+              }}
+            >
+              Stop
+            </Button>
+          </Flex>
+
+          <Text color="gray">
+            Since {new Date(session.player.since).toLocaleString()}
+          </Text>
         </Flex>
       )}
 
