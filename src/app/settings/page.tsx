@@ -15,7 +15,7 @@ export default function Page() {
           <Heading size="5">Appearance</Heading>
 
           <Flex align="center" gap="2">
-            <Text>Dark mode</Text>
+            <Text>Dark mode (experimental)</Text>
             <Switch
               checked={darkMode}
               onCheckedChange={(checked) =>
@@ -38,10 +38,6 @@ export default function Page() {
             />
           </Flex>
         </Flex>
-
-        <Text color="gray">
-          <i>Not a lot here, eh?</i>
-        </Text>
       </Flex>
     </PageWrapper>
   );
