@@ -10,7 +10,7 @@ export function Party3() {
       {/* analytics */}
       <script
         async
-        src="https://www.googletagmanager.com/gtag/js?id=G-D8DT6EWVFJ"
+        src="https://www.googletagmanager.com/gtag/js?id=G-F901X282X7"
       />
       <script
         dangerouslySetInnerHTML={{

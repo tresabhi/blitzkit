@@ -6,22 +6,40 @@ import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import { commitAssets } from '../../src/core/blitzkit/commitAssets';
-import {
-  VideoDefinitions,
-  videoDefinitions,
-} from '../../src/core/blitzkit/videos';
+import { VideoDefinitions } from '../../src/core/blitzkit/videos';
 import { DATA, POI } from './constants';
 import { BlitzStrings, botPattern, VehicleDefinitionList } from './definitions';
 
 const youtubers = [
   'UCKBYXp4Xn2I2tL1UL4fpbhw', // droodles
   'UCrQ-Dy8lVsm11u8pCJ8W7Tw', // fatness
+  'UCxRpZqMElssTdPYDK3x7wyg', // n90
 ];
 
 export async function videos(production: boolean) {
   console.log('Building videos...');
 
-  const currentVideos = await videoDefinitions;
+  const currentVideos = await fetch(
+    'https://raw.githubusercontent.com/tresabhi/blitzkit-assets/main/definitions/videos.csv',
+  )
+    .then((response) => response.text())
+    .then((lines) => {
+      return lines
+        .split('\n')
+        .map((line) => {
+          const [idString, lastUpdatedString, ...videos] = line.split(',');
+          const id = Number(idString);
+          const lastUpdated = Number(lastUpdatedString);
+          return { id, lastUpdated, videos };
+        })
+        .reduce<VideoDefinitions>(
+          (accumulator, { id, lastUpdated, videos }) => {
+            accumulator[id] = { lastUpdated, videos };
+            return accumulator;
+          },
+          {},
+        );
+    });
   const auth = await google.auth.getClient({
     scopes: ['https://www.googleapis.com/auth/youtube.readonly'],
   });

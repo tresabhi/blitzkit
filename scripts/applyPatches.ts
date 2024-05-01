@@ -4,7 +4,7 @@ import { parse as parseYaml } from 'yaml';
 import { readStringDVPL } from '../src/core/blitz/readStringDVPL';
 import { writeDVPL } from '../src/core/blitz/writeDVPL';
 import { secrets } from '../src/core/blitzkit/secrets';
-import { dvp } from '../submodules/closedkrieg/src/dvp';
+import { dvp } from '../submodules/blitzkit-closed/src/dvp';
 import { DATA } from './buildAssets/constants';
 
 const versionTextFile = await readStringDVPL(`${DATA}/version.txt.dvpl`);
