@@ -32,6 +32,7 @@ import searchPlayersAcrossRegions, {
 } from '../../../core/blitz/searchPlayersAcrossRegions';
 import { tankDefinitions } from '../../../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../../../core/blitzkit/tankIcon';
+import { theme } from '../../../stitches.config';
 import { useApp } from '../../../stores/app';
 import mutateSession, {
   SessionTracking,
@@ -270,8 +271,12 @@ export default function Page() {
 
       {session.tracking && (
         <Flex mt="2" mb="2" direction="column" align="center" gap="2">
+          <Heading size="5">Tracking {accountInfo?.nickname}</Heading>
+          <Text color="gray">
+            Since {new Date(session.player.since).toLocaleString()}
+          </Text>
+
           <Flex gap="4" align="center" justify="center">
-            <Heading size="5">Tracking {accountInfo?.nickname}</Heading>
             <Button
               color="red"
               variant="ghost"
@@ -283,11 +288,16 @@ export default function Page() {
             >
               Stop
             </Button>
+            <Button
+              color="red"
+              variant="ghost"
+              onClick={() => {
+                // TODO: add functionality
+              }}
+            >
+              Reset
+            </Button>
           </Flex>
-
-          <Text color="gray">
-            Since {new Date(session.player.since).toLocaleString()}
-          </Text>
         </Flex>
       )}
 
@@ -322,43 +332,46 @@ export default function Page() {
                         overflowY: 'hidden',
                       }}
                     >
-                      <img
-                        draggable={false}
-                        src={tankIcon(tank.id)}
-                        style={{
-                          position: 'absolute',
-                          width: 128 + 32,
-                          height: '200%',
-                          top: '-50%',
-                          left: 0,
-                          objectFit: 'contain',
-                          objectPosition: '50% 50%',
-                          overflow: 'hidden',
-                        }}
-                      />
+                      <Link href={`/tools/tankopedia/${tank.id}`}>
+                        <img
+                          draggable={false}
+                          src={tankIcon(tank.id)}
+                          style={{
+                            position: 'absolute',
+                            width: 128 + 32,
+                            height: '200%',
+                            top: '-50%',
+                            left: 0,
+                            objectFit: 'contain',
+                            objectPosition: '50% 50%',
+                            overflow: 'hidden',
+                          }}
+                        />
 
-                      <div
-                        style={{
-                          backgroundColor: 'red',
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          height: '100%',
-                          width: 128,
-                          background:
-                            'linear-gradient(90deg, #00000080, #00000000)',
-                        }}
-                      />
+                        <div
+                          style={{
+                            backgroundColor: 'red',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            height: '100%',
+                            width: 128,
+                            background:
+                              'linear-gradient(90deg, #00000080, #00000000)',
+                          }}
+                        />
 
-                      <Text
-                        style={{
-                          position: 'relative',
-                          textWrap: 'nowrap',
-                          textShadow: 'black 0 0 4px',
-                        }}
-                      >
-                        {tank.name}
-                      </Text>
+                        <Text
+                          style={{
+                            color: theme.colors.textHighContrast,
+                            position: 'relative',
+                            textWrap: 'nowrap',
+                            textShadow: 'black 0 0 4px',
+                          }}
+                        >
+                          {tank.name}
+                        </Text>
+                      </Link>
                     </Table.RowHeaderCell>
                     <Table.Cell align="right">{stat.all.battles}</Table.Cell>
                     <Table.Cell align="right">
