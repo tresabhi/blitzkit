@@ -5,7 +5,6 @@ import fetchBlitz, { FetchBlitzParams } from './fetchBlitz';
 export default async function getTankStats(
   region: Region,
   id: number,
-
   params?: FetchBlitzParams,
 ) {
   const tankStats = await fetchBlitz<TanksStats>(region, 'tanks/stats', {

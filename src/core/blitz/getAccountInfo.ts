@@ -71,7 +71,7 @@ export interface RatingStats {
   dropped_capture_points: number;
 }
 
-interface IndividualAccountInfo {
+export interface IndividualAccountInfo {
   account_id: number;
   created_at: number;
   updated_at: number;
