@@ -1,5 +1,5 @@
 import AdmZip from 'adm-zip';
-import { readFile } from 'fs/promises';
+import { readFile, writeFile } from 'fs/promises';
 import { Parser } from 'pickleparser';
 import protobuf from 'protobufjs';
 import { ReadStream } from './buffer';
@@ -42,10 +42,14 @@ export class WotbReplayReadStream extends ReadStream {
       'BattleResultsGenerated.BattleResultsClient',
     );
 
-    const decodedBattleResults = BattleResults.decode(
-      Buffer.from(battleResultsString, 'binary'),
-    );
-    console.log(decodedBattleResults.toJSON());
+    writeFile('test.dat', Buffer.from(battleResultsString));
+
+    const reader = protobuf.Reader.create(Buffer.from(battleResultsString));
+
+    // const decodedBattleResults = BattleResults.decodeDelimited(
+    //   Buffer.from(battleResultsString),
+    // );
+    // console.log(decodedBattleResults.toJSON());
   }
 }
 

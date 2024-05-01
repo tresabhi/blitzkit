@@ -14,7 +14,7 @@ import { debounce } from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
 import { UNLOCALIZED_REGION_NAMES_SHORT } from '../../../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../../../constants/wargamingApplicationID';
+import { authURL } from '../../../core/blitz/authURL';
 import { getAccountInfo } from '../../../core/blitz/getAccountInfo';
 import getTankStats from '../../../core/blitz/getTankStats';
 import { idToRegion } from '../../../core/blitz/idToRegion';
@@ -117,11 +117,10 @@ export default function Page() {
               </AlertDialog.Cancel>
               <AlertDialog.Action>
                 <Link
-                  href={`https://api.worldoftanks.${
-                    (session as SessionTracking).player.region
-                  }/wot/auth/login/?application_id=${WARGAMING_APPLICATION_ID}&redirect_uri=${encodeURIComponent(
-                    `${location.origin}/callback/wargaming/?return=${location.href}`,
-                  )}`}
+                  href={authURL(
+                    (session as SessionTracking).player.region,
+                    location.href,
+                  )}
                 >
                   <Button variant="solid">Sign in</Button>
                 </Link>

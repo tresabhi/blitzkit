@@ -2,25 +2,50 @@ import {
   DiscordLogoIcon,
   GearIcon,
   HamburgerMenuIcon,
+  PersonIcon,
 } from '@radix-ui/react-icons';
 import {
+  Button,
   Flex,
   Heading,
   IconButton,
   Link as LinkRadix,
   Popover,
+  Select,
+  Spinner,
+  Text,
 } from '@radix-ui/themes';
 import Link from 'next/link';
+import { Suspense, useEffect, useState } from 'react';
+import { Region } from '../../constants/regions';
 import { TOOLS } from '../../constants/tools';
+import { authURL } from '../../core/blitz/authURL';
+import { extendAuth } from '../../core/blitz/extendAuth';
+import { logout } from '../../core/blitz/logout';
 import { useFullScreen } from '../../hooks/useFullScreen';
-import { useWideFormat } from '../../hooks/useWideFormat';
 import { BlitzkitWide } from '../../icons/BlitzkitWide';
 import { PatreonIcon } from '../../icons/Patreon';
 import { theme } from '../../stitches.config';
+import { useApp } from '../../stores/app';
+import { LoggedIn } from './components/LoggedIn';
 
 export default function Navbar() {
   const isFullScreen = useFullScreen();
-  const wideFormat = useWideFormat(600);
+  const login = useApp((state) => state.login);
+  const [region, setRegion] = useState<Region>('com');
+
+  useEffect(() => {
+    if (!login) return;
+
+    const expiresIn = login.expiresAt - Date.now() / 1000;
+    const expiresInDays = expiresIn / 60 / 60 / 24;
+
+    if (expiresInDays < 0) {
+      logout();
+    } else if (expiresInDays < 7) {
+      extendAuth();
+    }
+  });
 
   if (isFullScreen) return null;
 
@@ -89,6 +114,7 @@ export default function Navbar() {
           >
             <PatreonIcon width={14} height={14} />
           </Link>
+          <div style={{ width: 14, height: 14 }} />
 
           <div style={{ flex: 1 }} />
 
@@ -150,6 +176,54 @@ export default function Navbar() {
                     );
                   })}
                 </Flex>
+              </Flex>
+            </Popover.Content>
+          </Popover.Root>
+
+          <Popover.Root>
+            <Popover.Trigger>
+              <IconButton variant="ghost" color="gray">
+                <PersonIcon />
+              </IconButton>
+            </Popover.Trigger>
+
+            <Popover.Content align="center">
+              <Flex direction="column" gap="2">
+                {login && (
+                  <Suspense fallback={<Spinner />}>
+                    <LoggedIn />
+                  </Suspense>
+                )}
+
+                {!login && (
+                  <>
+                    <Text color="gray">Currently signed out</Text>
+
+                    <Flex gap="2">
+                      <Select.Root
+                        value={region}
+                        onValueChange={(value) => setRegion(value as Region)}
+                      >
+                        <Select.Trigger />
+                        <Select.Content>
+                          <Select.Item value={'com' satisfies Region}>
+                            North America
+                          </Select.Item>
+                          <Select.Item value={'eu' satisfies Region}>
+                            Europe
+                          </Select.Item>
+                          <Select.Item value={'asia' satisfies Region}>
+                            Asia
+                          </Select.Item>
+                        </Select.Content>
+                      </Select.Root>
+
+                      <LinkRadix href={authURL(region)}>
+                        <Button>Sign in</Button>
+                      </LinkRadix>
+                    </Flex>
+                  </>
+                )}
               </Flex>
             </Popover.Content>
           </Popover.Root>
