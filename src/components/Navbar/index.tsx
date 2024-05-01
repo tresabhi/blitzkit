@@ -6,23 +6,27 @@ import {
 } from '@radix-ui/react-icons';
 import {
   Button,
+  Dialog,
   Flex,
   Heading,
   IconButton,
   Link as LinkRadix,
   Popover,
-  Select,
   Spinner,
-  Text,
 } from '@radix-ui/themes';
 import Link from 'next/link';
 import { Suspense, useEffect, useState } from 'react';
-import { Region } from '../../constants/regions';
+import {
+  Region,
+  REGIONS,
+  UNLOCALIZED_REGION_NAMES,
+} from '../../constants/regions';
 import { TOOLS } from '../../constants/tools';
 import { authURL } from '../../core/blitz/authURL';
 import { extendAuth } from '../../core/blitz/extendAuth';
 import { logout } from '../../core/blitz/logout';
 import { useFullScreen } from '../../hooks/useFullScreen';
+import { useWideFormat } from '../../hooks/useWideFormat';
 import { BlitzkitWide } from '../../icons/BlitzkitWide';
 import { PatreonIcon } from '../../icons/Patreon';
 import { theme } from '../../stitches.config';
@@ -31,6 +35,7 @@ import { LoggedIn } from './components/LoggedIn';
 
 export default function Navbar() {
   const isFullScreen = useFullScreen();
+  const wideFormat = useWideFormat(480);
   const login = useApp((state) => state.login);
   const [region, setRegion] = useState<Region>('com');
 
@@ -48,6 +53,36 @@ export default function Navbar() {
   });
 
   if (isFullScreen) return null;
+
+  const plugs = (
+    <>
+      <Link
+        href="https://discord.gg/nDt7AjGJQH"
+        target="_blank"
+        style={{
+          color: 'inherit',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <DiscordLogoIcon width={16} height={16} />
+      </Link>
+
+      <Link
+        href="https://www.patreon.com/tresabhi"
+        target="_blank"
+        style={{
+          color: 'inherit',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <PatreonIcon width={14} height={14} />
+      </Link>
+    </>
+  );
 
   return (
     <div
@@ -77,46 +112,49 @@ export default function Navbar() {
           style={{ maxWidth: 800, width: '100%', padding: '0 16px' }}
           gap="4"
         >
-          {/* {wideFormat ? (
-            <EverythingSearch style={{ flex: 1 }} />
-          ) : (
-            <div style={{ flex: 1 }} />
-          )}
-          
-          {!wideFormat && (
-            <IconButton variant="ghost" color="gray">
-              <MagnifyingGlassIcon />
-            </IconButton>
-          )} */}
+          <Popover.Root>
+            <Popover.Trigger>
+              <IconButton variant="ghost" color="gray">
+                <HamburgerMenuIcon />
+              </IconButton>
+            </Popover.Trigger>
 
-          <Link
-            href="https://discord.gg/nDt7AjGJQH"
-            target="_blank"
-            style={{
-              color: 'inherit',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <DiscordLogoIcon width={16} height={16} />
-          </Link>
+            <Popover.Content>
+              <Flex direction="column" gap="4">
+                {!wideFormat && <Flex gap="2">{plugs}</Flex>}
 
-          <Link
-            href="https://www.patreon.com/tresabhi"
-            target="_blank"
-            style={{
-              color: 'inherit',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <PatreonIcon width={14} height={14} />
-          </Link>
-          <div style={{ width: 14, height: 14 }} />
+                <Flex direction="column" gap="2">
+                  <Heading size="4">Tools</Heading>
 
-          <div style={{ flex: 1 }} />
+                  <Flex direction="column" gap="1" pl="4">
+                    {TOOLS.map((tool, index) => {
+                      if (tool.href || tool.disabled) return null;
+
+                      return (
+                        <LinkRadix
+                          key={tool.id}
+                          tabIndex={-1}
+                          href={`/tools/${tool.id}`}
+                          onClick={(event) => event.preventDefault()}
+                        >
+                          <Link
+                            href={`/tools/${tool.id}`}
+                            key={index}
+                            style={{
+                              textDecoration: 'none',
+                              color: 'inherit',
+                            }}
+                          >
+                            {tool.title}
+                          </Link>
+                        </LinkRadix>
+                      );
+                    })}
+                  </Flex>
+                </Flex>
+              </Flex>
+            </Popover.Content>
+          </Popover.Root>
 
           <Link
             href="/"
@@ -132,6 +170,8 @@ export default function Navbar() {
 
           <div style={{ flex: 1 }} />
 
+          {wideFormat && plugs}
+
           <Link href="/settings">
             <Flex style={{ width: '100%', height: '100%' }} justify="center">
               <IconButton variant="ghost" color="gray">
@@ -140,93 +180,49 @@ export default function Navbar() {
             </Flex>
           </Link>
 
-          <Popover.Root>
-            <Popover.Trigger>
-              <IconButton variant="ghost" color="gray">
-                <HamburgerMenuIcon />
-              </IconButton>
-            </Popover.Trigger>
+          {login && (
+            <Popover.Root>
+              <Popover.Trigger>
+                <IconButton variant="ghost" color="gray">
+                  <PersonIcon />
+                </IconButton>
+              </Popover.Trigger>
 
-            <Popover.Content align="center">
-              <Flex direction="column" gap="2">
-                <Heading size="4">Tools</Heading>
-
-                <Flex direction="column" gap="1" pl="4">
-                  {TOOLS.map((tool, index) => {
-                    if (tool.href || tool.disabled) return null;
-
-                    return (
-                      <LinkRadix
-                        key={tool.id}
-                        tabIndex={-1}
-                        href={`/tools/${tool.id}`}
-                        onClick={(event) => event.preventDefault()}
-                      >
-                        <Link
-                          href={`/tools/${tool.id}`}
-                          key={index}
-                          style={{
-                            textDecoration: 'none',
-                            color: 'inherit',
-                          }}
-                        >
-                          {tool.title}
-                        </Link>
-                      </LinkRadix>
-                    );
-                  })}
-                </Flex>
-              </Flex>
-            </Popover.Content>
-          </Popover.Root>
-
-          <Popover.Root>
-            <Popover.Trigger>
-              <IconButton variant="ghost" color="gray">
-                <PersonIcon />
-              </IconButton>
-            </Popover.Trigger>
-
-            <Popover.Content align="center">
-              <Flex direction="column" gap="2">
-                {login && (
+              <Popover.Content align="center">
+                <Flex direction="column" gap="2">
                   <Suspense fallback={<Spinner />}>
                     <LoggedIn />
                   </Suspense>
-                )}
+                </Flex>
+              </Popover.Content>
+            </Popover.Root>
+          )}
 
-                {!login && (
-                  <>
-                    <Text color="gray">Currently signed out</Text>
+          {!login && (
+            <Dialog.Root>
+              <Dialog.Trigger>
+                <Button>Log in</Button>
+              </Dialog.Trigger>
 
-                    <Flex gap="2">
-                      <Select.Root
-                        value={region}
-                        onValueChange={(value) => setRegion(value as Region)}
-                      >
-                        <Select.Trigger />
-                        <Select.Content>
-                          <Select.Item value={'com' satisfies Region}>
-                            North America
-                          </Select.Item>
-                          <Select.Item value={'eu' satisfies Region}>
-                            Europe
-                          </Select.Item>
-                          <Select.Item value={'asia' satisfies Region}>
-                            Asia
-                          </Select.Item>
-                        </Select.Content>
-                      </Select.Root>
+              <Dialog.Content
+                style={{
+                  maxWidth: 360,
+                }}
+              >
+                <Flex direction="column" gap="2" align="center">
+                  <Heading size="3">Choose your region</Heading>
 
-                      <LinkRadix href={authURL(region)}>
-                        <Button>Sign in</Button>
+                  <Flex gap="4" align="center" justify="center" wrap="wrap">
+                    {REGIONS.map((region) => (
+                      <LinkRadix key={region} href={authURL(region)}>
+                        {UNLOCALIZED_REGION_NAMES[region]}
                       </LinkRadix>
-                    </Flex>
-                  </>
-                )}
-              </Flex>
-            </Popover.Content>
-          </Popover.Root>
+                    ))}
+                  </Flex>
+                </Flex>
+              </Dialog.Content>
+            </Dialog.Root>
+          )}
         </Flex>
       </Flex>
     </div>
