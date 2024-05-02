@@ -201,7 +201,7 @@ export default function Navbar() {
           {!login && (
             <Dialog.Root>
               <Dialog.Trigger>
-                <Button>Log in</Button>
+                <Button variant="ghost">Log in</Button>
               </Dialog.Trigger>
 
               <Dialog.Content
