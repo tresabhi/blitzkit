@@ -13,7 +13,7 @@ const fonts = [
 
 export default async function jsxToSvg(
   jsx: JSX.Element,
-  renderConfiguration: RenderConfiguration,
+  renderConfiguration = new RenderConfiguration(),
 ) {
   return await satori(jsx, {
     width: renderConfiguration.width,
