@@ -214,7 +214,10 @@ export default function Navbar() {
 
                   <Flex gap="4" align="center" justify="center" wrap="wrap">
                     {REGIONS.map((region) => (
-                      <LinkRadix key={region} href={authURL(region)}>
+                      <LinkRadix
+                        key={region}
+                        href={authURL(region, location.href)}
+                      >
                         {UNLOCALIZED_REGION_NAMES[region]}
                       </LinkRadix>
                     ))}
