@@ -38,6 +38,7 @@ import searchPlayersAcrossRegions, {
 import { tankDefinitions } from '../../../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../../../core/blitzkit/tankIcon';
 import { tankAverages } from '../../../core/blitzstars/tankAverages';
+import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
 import { theme } from '../../../stitches.config';
 import { useApp } from '../../../stores/app';
 import mutateSession, {
@@ -71,6 +72,15 @@ export default function Page() {
     [session.tracking && session.player.id],
   );
   const accountInfo = use(accountInfoPromise);
+  const delta = useMemo(
+    () =>
+      session.tracking && tankStatsB
+        ? deltaTankStats(session.player.stats, tankStatsB).sort(
+            (a, b) => b.last_battle_time - a.last_battle_time,
+          )
+        : undefined,
+    [session.tracking && session.player, tankStatsB],
+  );
 
   const search = debounce(async () => {
     if (!input.current) return;
@@ -248,7 +258,12 @@ export default function Page() {
                       <Button
                         key={player.account_id}
                         variant="ghost"
-                        onClick={() => {
+                        onClick={async () => {
+                          const stats = (await getTankStats(
+                            player.region,
+                            player.account_id,
+                          ))!;
+
                           setShowSearch(false);
                           mutateSession((draft) => {
                             if (!input.current) return;
@@ -258,6 +273,7 @@ export default function Page() {
                               id: player.account_id,
                               region: player.region,
                               since: Date.now(),
+                              stats,
                             };
 
                             input.current.value = player.nickname;
@@ -308,7 +324,7 @@ export default function Page() {
         </Flex>
       )}
 
-      {session.tracking && tankStatsB && tankStatsB.length > 0 && (
+      {session.tracking && delta && delta.length > 0 && (
         <Table.Root variant="surface">
           <Table.Header>
             <Table.Row>
@@ -322,84 +338,81 @@ export default function Page() {
           </Table.Header>
 
           <Table.Body>
-            {tankStatsB
-              .filter((stat) => stat.all.battles > 0)
-              .sort((a, b) => b.last_battle_time - a.last_battle_time)
-              .map((entry) => {
-                const tank = awaitedTankDefinitions[entry.tank_id];
-                const average = awaitedTankAvearges[tank.id];
-                const stats = prettifyStats(
-                  generateStats(entry.all, average?.all),
-                );
+            {delta.map((entry) => {
+              const tank = awaitedTankDefinitions[entry.tank_id];
+              const average = awaitedTankAvearges[tank.id];
+              const stats = prettifyStats(
+                generateStats(entry.all, average?.all),
+              );
 
-                return (
-                  <Table.Row
-                    key={tank.id}
+              return (
+                <Table.Row
+                  key={tank.id}
+                  style={{
+                    overflow: 'hidden',
+                  }}
+                >
+                  <Table.RowHeaderCell
                     style={{
-                      overflow: 'hidden',
+                      paddingLeft: 32,
+                      position: 'relative',
+                      overflowY: 'hidden',
                     }}
                   >
-                    <Table.RowHeaderCell
-                      style={{
-                        paddingLeft: 32,
-                        position: 'relative',
-                        overflowY: 'hidden',
-                      }}
-                    >
-                      <Link href={`/tools/tankopedia/${tank.id}`}>
-                        <img
-                          draggable={false}
-                          src={tankIcon(tank.id)}
-                          style={{
-                            position: 'absolute',
-                            width: 128 + 32,
-                            height: '200%',
-                            top: '-50%',
-                            left: 0,
-                            objectFit: 'contain',
-                            objectPosition: '50% 50%',
-                            overflow: 'hidden',
-                          }}
-                        />
+                    <Link href={`/tools/tankopedia/${tank.id}`}>
+                      <img
+                        draggable={false}
+                        src={tankIcon(tank.id)}
+                        style={{
+                          position: 'absolute',
+                          width: 128 + 32,
+                          height: '200%',
+                          top: '-50%',
+                          left: 0,
+                          objectFit: 'contain',
+                          objectPosition: '50% 50%',
+                          overflow: 'hidden',
+                        }}
+                      />
 
-                        <div
-                          style={{
-                            backgroundColor: 'red',
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            height: '100%',
-                            width: 128,
-                            background:
-                              'linear-gradient(90deg, #00000080, #00000000)',
-                          }}
-                        />
+                      <div
+                        style={{
+                          backgroundColor: 'red',
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          height: '100%',
+                          width: 128,
+                          background:
+                            'linear-gradient(90deg, #00000080, #00000000)',
+                        }}
+                      />
 
-                        <Text
-                          style={{
-                            color: theme.colors.textHighContrast,
-                            position: 'relative',
-                            textWrap: 'nowrap',
-                            textShadow: 'black 0 0 4px',
-                          }}
-                        >
-                          {tank.name}
-                        </Text>
-                      </Link>
-                    </Table.RowHeaderCell>
-                    {session.columns.map((column) => (
-                      <Table.Cell key={column} align="right">
-                        {stats[column]}
-                      </Table.Cell>
-                    ))}
-                  </Table.Row>
-                );
-              })}
+                      <Text
+                        style={{
+                          color: theme.colors.textHighContrast,
+                          position: 'relative',
+                          textWrap: 'nowrap',
+                          textShadow: 'black 0 0 4px',
+                        }}
+                      >
+                        {tank.name}
+                      </Text>
+                    </Link>
+                  </Table.RowHeaderCell>
+                  {session.columns.map((column) => (
+                    <Table.Cell key={column} align="right">
+                      {stats[column]}
+                    </Table.Cell>
+                  ))}
+                </Table.Row>
+              );
+            })}
           </Table.Body>
         </Table.Root>
       )}
 
-      {session.tracking && tankStatsB && tankStatsB.length === 0 && (
+      {session.tracking && delta && delta.length === 0 && (
         <Flex
           align="center"
           justify="center"

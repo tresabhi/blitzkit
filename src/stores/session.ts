@@ -4,6 +4,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Region } from '../constants/regions';
 import { Stat } from '../core/blitz/generateStats';
+import { IndividualTankStats } from '../types/tanksStats';
 
 interface SessionBase {
   columns: Stat[];
@@ -15,6 +16,7 @@ export interface SessionTracking extends SessionBase {
     id: number;
     region: Region;
     since: number;
+    stats: IndividualTankStats[];
   };
 }
 

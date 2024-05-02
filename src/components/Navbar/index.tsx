@@ -15,12 +15,8 @@ import {
   Spinner,
 } from '@radix-ui/themes';
 import Link from 'next/link';
-import { Suspense, useEffect, useState } from 'react';
-import {
-  Region,
-  REGIONS,
-  UNLOCALIZED_REGION_NAMES,
-} from '../../constants/regions';
+import { Suspense, useEffect } from 'react';
+import { REGIONS, UNLOCALIZED_REGION_NAMES } from '../../constants/regions';
 import { TOOLS } from '../../constants/tools';
 import { authURL } from '../../core/blitz/authURL';
 import { extendAuth } from '../../core/blitz/extendAuth';
@@ -37,7 +33,6 @@ export default function Navbar() {
   const isFullScreen = useFullScreen();
   const wideFormat = useWideFormat(480);
   const login = useApp((state) => state.login);
-  const [region, setRegion] = useState<Region>('com');
 
   useEffect(() => {
     if (!login) return;
