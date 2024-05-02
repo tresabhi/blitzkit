@@ -8,7 +8,11 @@ import { useApp } from '../../../stores/app';
 
 export function LoggedIn() {
   const login = useApp((state) => state.login!);
-  const accountInfo = use(getAccountInfo(idToRegion(login.id), login.id));
+  const accountInfo = use(
+    getAccountInfo(idToRegion(login.id), login.id, [], {
+      access_token: login.token,
+    }),
+  );
 
   return (
     <Flex gap="3" align="center">
