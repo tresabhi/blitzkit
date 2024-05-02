@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  ArrowDownIcon,
-  InfoCircledIcon,
-  MagnifyingGlassIcon,
-} from '@radix-ui/react-icons';
+import { ArrowDownIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import {
   AlertDialog,
   Button,
@@ -20,7 +16,6 @@ import { debounce } from 'lodash';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
 import { UNLOCALIZED_REGION_NAMES_SHORT } from '../../../constants/regions';
-import { authURL } from '../../../core/blitz/authURL';
 import {
   generateStats,
   prettifyStats,
@@ -40,6 +35,7 @@ import { tankDefinitions } from '../../../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../../../core/blitzkit/tankIcon';
 import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
+import { useWideFormat } from '../../../hooks/useWideFormat';
 import { theme } from '../../../stitches.config';
 import { useApp } from '../../../stores/app';
 import mutateSession, {
@@ -49,12 +45,14 @@ import mutateSession, {
 import { IndividualTankStats } from '../../../types/tanksStats';
 
 export default function Page() {
+  const wideFormat = useWideFormat(640);
   const awaitedTankDefinitions = use(tankDefinitions);
   const awaitedTankAvearges = use(tankAverages);
   const [showSearch, setShowSearch] = useState(false);
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<AccountListWithServer>([]);
-  const [showFurtherVerification, setShowFurtherVerification] = useState(false);
+  const [showCCInaccessibilityPrompt, setShowCCInaccessibilityPrompt] =
+    useState(false);
   const input = useRef<HTMLInputElement>(null);
   const session = useSession();
   const login = useApp((state) => state.login);
@@ -109,105 +107,44 @@ export default function Page() {
   }, 500);
 
   useEffect(() => {
-    (async () => {
-      if (!session.tracking || !input.current) return;
+    async function update() {
+      if (!session.tracking) return;
 
-      let accountInfo = await getAccountInfo(
-        session.player.region,
+      const tankStats = await getTankStats(
+        idToRegion(session.player.id),
         session.player.id,
       );
-      let tankStats = await getTankStats(
-        session.player.region,
-        session.player.id,
-      );
-
-      if (accountInfo === null) {
-        if (login?.id === session.player.id) {
-          accountInfo = await getAccountInfo(
-            idToRegion(session.player.id),
-            session.player.id,
-            [],
-            { access_token: login.token },
-          );
-          tankStats = await getTankStats(
-            idToRegion(session.player.id),
-            session.player.id,
-            { access_token: login.token },
-          );
-
-          console.log(accountInfo, tankStats);
-
-          input.current.value = accountInfo.nickname;
-        } else {
-          setShowFurtherVerification(true);
-        }
-      }
-    })();
-
-    if (session.tracking) {
-      const interval = setInterval(async () => {
-        const tankStats = await getTankStats(
-          idToRegion(session.player.id),
-          session.player.id,
-        );
-        setTankStatsB(tankStats);
-
-        // TODO: make refresh rate configurable
-      }, 1000);
-
-      return () => clearInterval(interval);
+      setTankStatsB(tankStats);
     }
+
+    update();
+    const interval = setInterval(update, 5 * 1000);
+
+    return () => clearInterval(interval);
   }, [session.tracking && session.player.id]);
 
   return (
     <PageWrapper>
-      {/* omit totally to avoid accessing undefined player */}
-      {showFurtherVerification && (
-        <AlertDialog.Root open>
-          <AlertDialog.Content>
-            <AlertDialog.Title>We need further verification</AlertDialog.Title>
-            <AlertDialog.Description>
-              You're trying to track a CC account which have private statistics.
-              Please sign in to verify the ownership of this account. Individual
-              tank statistics won't be available.
-            </AlertDialog.Description>
+      <AlertDialog.Root
+        open={showCCInaccessibilityPrompt}
+        onOpenChange={setShowCCInaccessibilityPrompt}
+      >
+        <AlertDialog.Content>
+          <AlertDialog.Title>
+            You're attempting to track a CC account
+          </AlertDialog.Title>
+          <AlertDialog.Description>
+            CC (community contributor) accounts do not have public tank
+            statistics. <Link href="/tools/embeds">Looking for embeds?</Link>
+          </AlertDialog.Description>
 
-            {login && (
-              <AlertDialog.Description mt="2" color="red">
-                <InfoCircledIcon /> You are currently signed with a different
-                account.
-              </AlertDialog.Description>
-            )}
-
-            <Flex gap="3" mt="4" justify="end">
-              <AlertDialog.Cancel>
-                <Button
-                  variant="soft"
-                  color="gray"
-                  onClick={() => {
-                    mutateSession((draft) => {
-                      draft.tracking = false;
-                    });
-                    setShowFurtherVerification(false);
-                  }}
-                >
-                  Cancel
-                </Button>
-              </AlertDialog.Cancel>
-              <AlertDialog.Action>
-                <Link
-                  href={authURL(
-                    (session as SessionTracking).player.region,
-                    location.href,
-                  )}
-                >
-                  <Button variant="solid">Sign in</Button>
-                </Link>
-              </AlertDialog.Action>
-            </Flex>
-          </AlertDialog.Content>
-        </AlertDialog.Root>
-      )}
+          <Flex mt="4" justify="end">
+            <AlertDialog.Action>
+              <Button variant="solid">Alright</Button>
+            </AlertDialog.Action>
+          </Flex>
+        </AlertDialog.Content>
+      </AlertDialog.Root>
 
       {!session.tracking && (
         <Flex
@@ -278,10 +215,15 @@ export default function Page() {
                         key={player.account_id}
                         variant="ghost"
                         onClick={async () => {
-                          const stats = (await getTankStats(
+                          const stats = await getTankStats(
                             player.region,
                             player.account_id,
-                          ))!;
+                          );
+
+                          if (stats === null) {
+                            setShowCCInaccessibilityPrompt(true);
+                            return;
+                          }
 
                           setShowSearch(false);
                           mutateSession((draft) => {
@@ -312,32 +254,50 @@ export default function Page() {
       )}
 
       {session.tracking && (
-        <Flex mt="2" mb="2" direction="column" align="center" gap="2">
-          <Heading size="5">Tracking {accountInfo?.nickname}</Heading>
-          <Text color="gray">
-            Since {new Date(session.player.since).toLocaleString()}
-          </Text>
+        <Flex
+          mt="2"
+          mb="2"
+          direction={wideFormat ? 'row' : 'column'}
+          align="center"
+          justify="between"
+          gap="2"
+        >
+          <Flex mt="2" mb="2" direction="column" gap="2">
+            <Heading size="5">Tracking {accountInfo?.nickname}</Heading>
+            <Text color="gray">
+              Since {new Date(session.player.since).toLocaleString()}
+            </Text>
+          </Flex>
 
-          <Flex gap="4" align="center" justify="center">
+          <Flex gap="2" align="center" justify="center">
             <Button
               color="red"
-              variant="ghost"
+              onClick={async () => {
+                const stats = await getTankStats(
+                  session.player.region,
+                  session.player.id,
+                );
+
+                if (stats === null) {
+                  setShowCCInaccessibilityPrompt(true);
+                  return;
+                }
+
+                mutateSession((draft) => {
+                  (draft as SessionTracking).player.stats = stats;
+                });
+              }}
+            >
+              Reset
+            </Button>
+            <Button
               onClick={() => {
                 mutateSession((draft) => {
                   draft.tracking = false;
                 });
               }}
             >
-              Stop
-            </Button>
-            <Button
-              color="red"
-              variant="ghost"
-              onClick={() => {
-                // TODO: add functionality
-              }}
-            >
-              Reset
+              Change
             </Button>
           </Flex>
         </Flex>
