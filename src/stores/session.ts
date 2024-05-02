@@ -29,7 +29,7 @@ type Session = SessionTracking | SessionNotTracking;
 export const useSession = create<Session>()(
   persist(
     (set) => ({
-      columns: ['battles', 'winrate', 'wn8', 'damage'],
+      columns: ['battles', 'winrate', 'wn8', 'averageDamage'],
       tracking: false,
     }),
     { name: 'session-2', merge: (a, b) => merge(b, a) },

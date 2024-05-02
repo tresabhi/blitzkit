@@ -25,6 +25,7 @@ import {
   generateStats,
   prettifyStats,
   STAT_NAMES,
+  sumStats,
 } from '../../../core/blitz/generateStats';
 import {
   getAccountInfo,
@@ -75,11 +76,29 @@ export default function Page() {
   const delta = useMemo(
     () =>
       session.tracking && tankStatsB
-        ? deltaTankStats(session.player.stats, tankStatsB).sort(
-            (a, b) => b.last_battle_time - a.last_battle_time,
-          )
+        ? deltaTankStats(session.player.stats, tankStatsB)
+            .sort((a, b) => b.last_battle_time - a.last_battle_time)
+            .map((entry) => {
+              const tank = awaitedTankDefinitions[entry.tank_id];
+              const average = awaitedTankAvearges[tank.id];
+              const stats = generateStats(entry.all, average?.all);
+              const statsPretty = prettifyStats(stats);
+
+              return {
+                tank,
+                stats,
+                statsPretty,
+              };
+            })
         : undefined,
     [session.tracking && session.player, tankStatsB],
+  );
+  const total = useMemo(
+    () =>
+      delta
+        ? prettifyStats(sumStats(delta.map(({ stats }) => stats)))
+        : undefined,
+    [delta],
   );
 
   const search = debounce(async () => {
@@ -338,13 +357,28 @@ export default function Page() {
           </Table.Header>
 
           <Table.Body>
-            {delta.map((entry) => {
-              const tank = awaitedTankDefinitions[entry.tank_id];
-              const average = awaitedTankAvearges[tank.id];
-              const stats = prettifyStats(
-                generateStats(entry.all, average?.all),
-              );
+            <Table.Row
+              style={{
+                overflow: 'hidden',
+              }}
+            >
+              <Table.RowHeaderCell
+                style={{
+                  paddingLeft: 32,
+                  position: 'relative',
+                  overflowY: 'hidden',
+                }}
+              >
+                Total
+              </Table.RowHeaderCell>
+              {session.columns.map((column) => (
+                <Table.Cell key={column} align="right">
+                  {total![column]}
+                </Table.Cell>
+              ))}
+            </Table.Row>
 
+            {delta.map(({ statsPretty, tank }) => {
               return (
                 <Table.Row
                   key={tank.id}
@@ -402,7 +436,7 @@ export default function Page() {
                   </Table.RowHeaderCell>
                   {session.columns.map((column) => (
                     <Table.Cell key={column} align="right">
-                      {stats[column]}
+                      {statsPretty[column]}
                     </Table.Cell>
                   ))}
                 </Table.Row>
