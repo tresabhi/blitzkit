@@ -211,7 +211,12 @@ export default function Navbar() {
                     {REGIONS.map((region) => (
                       <LinkRadix
                         key={region}
-                        href={authURL(region, location.href)}
+                        href={authURL(
+                          region,
+                          typeof window === 'undefined'
+                            ? undefined
+                            : location.href,
+                        )}
                       >
                         {UNLOCALIZED_REGION_NAMES[region]}
                       </LinkRadix>
