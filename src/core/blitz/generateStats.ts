@@ -8,9 +8,11 @@ export const STAT_NAMES: Record<Stat, string> = {
   winrate: 'Winrate',
   wn8: 'WN8',
   averageDamage: 'Damage',
-  damage: 'Damage',
+  damage: 'Accumulated damage',
   wins: 'Wins',
 };
+
+export const STAT_KEYS = Object.keys(STAT_NAMES) as Stat[];
 
 export function generateStats(s: AllStats, e?: AllStats) {
   return {

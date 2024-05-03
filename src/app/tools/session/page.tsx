@@ -1,13 +1,20 @@
 'use client';
 
-import { ArrowDownIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import {
+  ArrowDownIcon,
+  MagnifyingGlassIcon,
+  PlusIcon,
+} from '@radix-ui/react-icons';
 import {
   AlertDialog,
   Button,
   Card,
+  DropdownMenu,
   Flex,
   Heading,
+  IconButton,
   Link,
+  Select,
   Table,
   Text,
   TextField,
@@ -19,6 +26,8 @@ import { UNLOCALIZED_REGION_NAMES_SHORT } from '../../../constants/regions';
 import {
   generateStats,
   prettifyStats,
+  Stat,
+  STAT_KEYS,
   STAT_NAMES,
   sumStats,
 } from '../../../core/blitz/generateStats';
@@ -308,9 +317,83 @@ export default function Page() {
           <Table.Header>
             <Table.Row>
               <Table.ColumnHeaderCell>Tank</Table.ColumnHeaderCell>
-              {session.columns.map((column) => (
-                <Table.ColumnHeaderCell width="0" key={column} align="right">
-                  {STAT_NAMES[column]}
+              {session.columns.map((column, index) => (
+                <Table.ColumnHeaderCell
+                  width="0"
+                  key={column}
+                  style={{
+                    position: 'relative',
+                  }}
+                >
+                  {index === 0 && session.columns.length < 4 && (
+                    <DropdownMenu.Root>
+                      <DropdownMenu.Trigger>
+                        <IconButton
+                          size="1"
+                          variant="surface"
+                          style={{
+                            position: 'absolute',
+                            left: 0,
+                            top: '50%',
+                            transform: 'translate(-100%, -50%)',
+                            zIndex: 1,
+                          }}
+                        >
+                          <PlusIcon />
+                        </IconButton>
+                      </DropdownMenu.Trigger>
+
+                      <DropdownMenu.Content>
+                        {STAT_KEYS.filter(
+                          (item) => !session.columns.includes(item),
+                        ).map((key) => (
+                          <DropdownMenu.Item
+                            key={key}
+                            onClick={() => {
+                              mutateSession((draft) => {
+                                (draft as SessionTracking).columns.unshift(
+                                  key as Stat,
+                                );
+                              });
+                            }}
+                          >
+                            {STAT_NAMES[key]}
+                          </DropdownMenu.Item>
+                        ))}
+                      </DropdownMenu.Content>
+                    </DropdownMenu.Root>
+                  )}
+
+                  <Select.Root
+                    value={column}
+                    onValueChange={(value) => {
+                      mutateSession((draft) => {
+                        if (value === 'remove') {
+                          (draft as SessionTracking).columns.splice(index, 1);
+                        } else {
+                          (draft as SessionTracking).columns[index] =
+                            value as Stat;
+                        }
+                      });
+                    }}
+                  >
+                    <Select.Trigger variant="ghost" />
+
+                    <Select.Content>
+                      {STAT_KEYS.filter(
+                        (item) =>
+                          !session.columns.includes(item) || item === column,
+                      ).map((key) => (
+                        <Select.Item key={key} value={key}>
+                          {STAT_NAMES[key]}
+                        </Select.Item>
+                      ))}
+
+                      <Select.Separator />
+
+                      <Select.Item value="remove">Remove</Select.Item>
+                    </Select.Content>
+                  </Select.Root>
                 </Table.ColumnHeaderCell>
               ))}
             </Table.Row>
@@ -332,9 +415,7 @@ export default function Page() {
                 Total
               </Table.RowHeaderCell>
               {session.columns.map((column) => (
-                <Table.Cell key={column} align="right">
-                  {total![column]}
-                </Table.Cell>
+                <Table.Cell key={column}>{total![column]}</Table.Cell>
               ))}
             </Table.Row>
 
@@ -395,9 +476,7 @@ export default function Page() {
                     </Link>
                   </Table.RowHeaderCell>
                   {session.columns.map((column) => (
-                    <Table.Cell key={column} align="right">
-                      {statsPretty[column]}
-                    </Table.Cell>
+                    <Table.Cell key={column}>{statsPretty[column]}</Table.Cell>
                   ))}
                 </Table.Row>
               );
