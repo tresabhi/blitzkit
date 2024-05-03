@@ -1,23 +1,12 @@
 'use client';
 
-import { Flex } from '@radix-ui/themes';
 import { useEffect } from 'react';
 import PageWrapper from '../../../../components/PageWrapper';
 import { assignDuelMember } from '../../../../core/blitzkit/assignDuelMember';
 import { useWideFormat } from '../../../../hooks/useWideFormat';
 import { mutateDuel, useDuel } from '../../../../stores/duel';
 import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
-import { AntagonistBar } from './components/AntagonistBar';
-import { Characteristics } from './components/Characteristics';
-import { Consumables } from './components/Characteristics/components/Consumables';
-import { Equipment } from './components/Characteristics/components/Equipment';
-import { Miscellaneous } from './components/Characteristics/components/Miscellaneous';
-import { Modules } from './components/Characteristics/components/Modules';
-import { Provisions } from './components/Characteristics/components/Provisions';
-import { Skills } from './components/Characteristics/components/Skills';
-import { TankSandbox } from './components/Model/TankSandbox';
-import { Title } from './components/Title';
-import { Videos } from './components/Videos';
+import { HeroSection } from './components/Model/HeroSection';
 
 export default function Page({ params }: { params: { id: string } }) {
   const initialId = parseInt(params.id);
@@ -66,52 +55,10 @@ export default function Page({ params }: { params: { id: string } }) {
   }, [initialId, assigned]);
 
   return (
-    <PageWrapper color="purple" size={1600}>
+    <PageWrapper noPadding noMaxWidth color="purple" size={1600}>
       {assigned && (
         <>
-          <Title />
-
-          <Flex
-            style={{ width: '100%' }}
-            gap="8"
-            direction={wideFormat ? 'row' : 'column'}
-            align="start"
-            justify="center"
-          >
-            <Flex
-              gap="8"
-              direction="column"
-              style={{
-                flex: 1,
-                width: '100%',
-                top: 64 + 16,
-                position: wideFormat ? 'sticky' : undefined,
-              }}
-            >
-              <Flex gap="4" direction="column">
-                <TankSandbox />
-                <AntagonistBar />
-              </Flex>
-              <Flex gap="5" wrap="wrap">
-                <Modules />
-                <Provisions />
-                <Consumables />
-
-                <Flex gap="5" wrap="wrap">
-                  <Skills />
-                  <Equipment />
-                </Flex>
-
-                <Miscellaneous />
-              </Flex>
-            </Flex>
-
-            <Flex style={{ width: wideFormat ? 320 : '100%' }}>
-              <Characteristics />
-            </Flex>
-          </Flex>
-
-          <Videos />
+          <HeroSection />
         </>
       )}
     </PageWrapper>

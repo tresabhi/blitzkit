@@ -4,6 +4,8 @@ import { ComponentProps } from 'react';
 type PageWrapperProps = FlexProps & {
   color?: ComponentProps<typeof Theme>['accentColor'];
   size?: number | string;
+  noPadding?: boolean;
+  noMaxWidth?: boolean;
 };
 
 export default function PageWrapper({
@@ -11,6 +13,8 @@ export default function PageWrapper({
   color,
   size = 800,
   children,
+  noPadding = false,
+  noMaxWidth = false,
   ...props
 }: PageWrapperProps) {
   return (
@@ -27,9 +31,9 @@ export default function PageWrapper({
         gap="4"
         style={{
           width: '100%',
-          maxWidth: size,
+          maxWidth: noMaxWidth ? undefined : size,
           margin: 'auto',
-          padding: 16,
+          padding: noPadding ? 0 : 16,
           boxSizing: 'border-box',
           flex: 1,
           ...style,
