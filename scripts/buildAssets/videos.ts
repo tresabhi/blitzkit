@@ -128,6 +128,7 @@ export async function videos(production: boolean) {
   }
 
   const content = Object.entries(videos)
+    .filter(([_, { videos }]) => videos.length > 0)
     .map(
       ([id, { videos, lastUpdated }]) =>
         `${id},${lastUpdated},${videos.join(',')}`,
