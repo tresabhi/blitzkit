@@ -46,7 +46,6 @@ import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
 import { useWideFormat } from '../../../hooks/useWideFormat';
 import { theme } from '../../../stitches.config';
-import { useApp } from '../../../stores/app';
 import mutateSession, {
   SessionTracking,
   useSession,
@@ -64,7 +63,6 @@ export default function Page() {
     useState(false);
   const input = useRef<HTMLInputElement>(null);
   const session = useSession();
-  const login = useApp((state) => state.login);
   const [tankStatsB, setTankStatsB] = useState<IndividualTankStats[] | null>(
     null,
   );
@@ -83,7 +81,7 @@ export default function Page() {
   const delta = useMemo(
     () =>
       session.tracking && tankStatsB
-        ? deltaTankStats(session.player.stats, tankStatsB)
+        ? deltaTankStats([], tankStatsB)
             .sort((a, b) => b.last_battle_time - a.last_battle_time)
             .map((entry) => {
               const tank = awaitedTankDefinitions[entry.tank_id];

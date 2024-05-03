@@ -1,4 +1,7 @@
-import { IndividualTankStats } from '../../types/tanksStats';
+import {
+  emptyIndividualTankStats,
+  IndividualTankStats,
+} from '../../types/tanksStats';
 
 export function deltaTankStats(
   tanksA: IndividualTankStats[],
@@ -6,8 +9,8 @@ export function deltaTankStats(
 ) {
   return tanksB
     .map((b) => {
-      const a = tanksA.find((a) => a.tank_id === b.tank_id);
-      if (!a) return null;
+      const a =
+        tanksA.find((a) => a.tank_id === b.tank_id) ?? emptyIndividualTankStats;
 
       return {
         account_id: b.account_id,
