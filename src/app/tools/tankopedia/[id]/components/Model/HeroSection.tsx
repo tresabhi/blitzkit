@@ -18,7 +18,7 @@ export function HeroSection() {
   return (
     <Flex
       justify="center"
-      pl={wideFormat ? '9' : undefined}
+      // pl={wideFormat ? '9' : undefined}
       p={wideFormat ? '0' : '6'}
       pb={wideFormat ? '0' : '6'}
       style={{
@@ -53,7 +53,7 @@ export function HeroSection() {
         <div
           style={{
             height: 512,
-            flex: wideFormat ? 3 : undefined,
+            flex: wideFormat ? 2 : undefined,
             position: 'relative',
           }}
         >
@@ -61,31 +61,39 @@ export function HeroSection() {
             style={{
               width: '100%',
               height: '100%',
-            }}
-          >
-            <TankSandbox />
-          </div>
-
-          <Flex
-            style={{
               position: 'absolute',
-              bottom: 16,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              cursor: 'default',
-              userSelect: 'none',
-            }}
-            align="center"
-            gap="2"
-            onClick={() => {
-              mutateTankopediaPersistent((draft) => {
-                draft.mode = draft.mode === 'armor' ? 'model' : 'armor';
-              });
             }}
           >
-            <Checkbox checked={mode === 'armor'} />
-            Armor
-          </Flex>
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+            >
+              <TankSandbox />
+            </div>
+
+            <Flex
+              style={{
+                position: 'absolute',
+                bottom: 16,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                cursor: 'default',
+                userSelect: 'none',
+              }}
+              align="center"
+              gap="2"
+              onClick={() => {
+                mutateTankopediaPersistent((draft) => {
+                  draft.mode = draft.mode === 'armor' ? 'model' : 'armor';
+                });
+              }}
+            >
+              <Checkbox checked={mode === 'armor'} />
+              Armor
+            </Flex>
+          </div>
         </div>
       </Flex>
 
