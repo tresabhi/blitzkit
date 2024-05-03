@@ -144,7 +144,8 @@ export default function Page() {
           </AlertDialog.Title>
           <AlertDialog.Description>
             CC (community contributor) accounts do not have public tank
-            statistics. <Link href="/tools/embeds">Looking for embeds?</Link>
+            statistics. We are in the process of adding embeds for CC accounts,
+            stay tuned.
           </AlertDialog.Description>
 
           <Flex mt="4" justify="end">
