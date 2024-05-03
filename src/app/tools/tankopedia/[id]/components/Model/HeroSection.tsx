@@ -1,18 +1,14 @@
-import { Flex, Heading, Switch, Text } from '@radix-ui/themes';
+import { Flex, Heading, Text } from '@radix-ui/themes';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import strings from '../../../../../../lang/en-US.json';
 import { theme } from '../../../../../../stitches.config';
 import { useDuel } from '../../../../../../stores/duel';
-import mutateTankopediaPersistent, {
-  useTankopediaPersistent,
-} from '../../../../../../stores/tankopedia';
 import { TankSandbox } from './TankSandbox';
 import { Options } from './components/Options';
 
 export function HeroSection() {
   const tank = useDuel((state) => state.protagonist!.tank);
-  const mode = useTankopediaPersistent((state) => state.mode);
   const wideFormat = useWideFormat(880);
 
   return (
@@ -77,31 +73,10 @@ export function HeroSection() {
               <TankSandbox />
             </div>
 
-            <Flex
-              style={{
-                position: 'absolute',
-                bottom: 16,
-                left: '50%',
-                transform: 'translateX(-50%)',
-                cursor: 'default',
-                userSelect: 'none',
-              }}
-              align="center"
-              gap="2"
-              onClick={() => {
-                mutateTankopediaPersistent((draft) => {
-                  draft.mode = draft.mode === 'armor' ? 'model' : 'armor';
-                });
-              }}
-            >
-              <Switch checked={mode === 'armor'} />
-              Armor
-            </Flex>
+            <Options />
           </div>
         </div>
       </Flex>
-
-      <Options />
     </Flex>
   );
 }
