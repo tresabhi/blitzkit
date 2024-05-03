@@ -1,4 +1,4 @@
-import { Checkbox, Flex, Heading, Text } from '@radix-ui/themes';
+import { Flex, Heading, Switch, Text } from '@radix-ui/themes';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import strings from '../../../../../../lang/en-US.json';
@@ -90,7 +90,7 @@ export function HeroSection() {
                 });
               }}
             >
-              <Checkbox checked={mode === 'armor'} />
+              <Switch checked={mode === 'armor'} />
               Armor
             </Flex>
           </div>
