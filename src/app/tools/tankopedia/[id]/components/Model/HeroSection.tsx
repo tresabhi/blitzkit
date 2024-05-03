@@ -1,6 +1,5 @@
 import { Checkbox, Flex, Heading, Text } from '@radix-ui/themes';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
-import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import strings from '../../../../../../lang/en-US.json';
 import { theme } from '../../../../../../stitches.config';
@@ -14,7 +13,6 @@ import { Options } from './components/Options';
 export function HeroSection() {
   const tank = useDuel((state) => state.protagonist!.tank);
   const mode = useTankopediaPersistent((state) => state.mode);
-  const isFullScreen = useFullScreen();
   const wideFormat = useWideFormat(880);
 
   return (
@@ -36,19 +34,20 @@ export function HeroSection() {
         }}
       >
         <Flex
-          direction="column"
+          align="center"
           justify="center"
-          gap={wideFormat ? '4' : '2'}
           style={{
             flex: 1,
           }}
         >
-          <Heading size={wideFormat ? '9' : '8'}>{tank.name}</Heading>
-          <Text color="gray">
-            Tier {TIER_ROMAN_NUMERALS[tank.tier]}{' '}
-            {(strings.common.nations as Record<string, string>)[tank.nation]}{' '}
-            {strings.common.tank_class_short[tank.class]}
-          </Text>
+          <Flex gap={wideFormat ? '4' : '2'} direction="column">
+            <Heading size={wideFormat ? '9' : '8'}>{tank.name}</Heading>
+            <Text color="gray">
+              Tier {TIER_ROMAN_NUMERALS[tank.tier]}{' '}
+              {(strings.common.nations as Record<string, string>)[tank.nation]}{' '}
+              {strings.common.tank_class_short[tank.class]}
+            </Text>
+          </Flex>
         </Flex>
 
         <div
