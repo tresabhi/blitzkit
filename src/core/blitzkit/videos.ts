@@ -13,7 +13,9 @@ export const videoDefinitions = fetch(asset('definitions/videos.csv'))
     text
       .split('\n')
       .map((line) => {
-        const [idString, lastUpdatedString, ...videos] = line.split(',');
+        const [idString, lastUpdatedString, ...videos] = line
+          .split(',')
+          .filter(Boolean);
         const id = Number(idString);
         const lastUpdated = Number(lastUpdatedString);
         return { id, videos, lastUpdated };
