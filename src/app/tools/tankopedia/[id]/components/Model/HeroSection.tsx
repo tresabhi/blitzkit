@@ -24,7 +24,7 @@ export function HeroSection() {
       p={wideFormat ? '0' : '6'}
       pb={wideFormat ? '0' : '6'}
       style={{
-        background: `linear-gradient(90deg, ${theme.colors.appBackground1}, ${theme.colors.appBackground2})`,
+        background: `linear-gradient(-90deg, ${theme.colors.appBackground1}, ${theme.colors.appBackground2})`,
         position: 'relative',
       }}
     >
@@ -89,25 +89,6 @@ export function HeroSection() {
           </Flex>
         </div>
       </Flex>
-
-      {/* <IconButton
-        variant="ghost"
-        color="gray"
-        style={{
-          position: 'absolute',
-          top: 16,
-          right: 16,
-        }}
-        onClick={() => {
-          if (isFullScreen) {
-            document.exitFullscreen();
-          } else {
-            document.body.requestFullscreen();
-          }
-        }}
-      >
-        {isFullScreen ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
-      </IconButton> */}
 
       <Options />
     </Flex>
