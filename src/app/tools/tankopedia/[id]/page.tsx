@@ -6,6 +6,7 @@ import { assignDuelMember } from '../../../../core/blitzkit/assignDuelMember';
 import { useWideFormat } from '../../../../hooks/useWideFormat';
 import { mutateDuel, useDuel } from '../../../../stores/duel';
 import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
+import { CharacteristicsSection } from './components/Model/CharacteristicsSection';
 import { HeroSection } from './components/Model/HeroSection';
 
 export default function Page({ params }: { params: { id: string } }) {
@@ -59,6 +60,7 @@ export default function Page({ params }: { params: { id: string } }) {
       {assigned && (
         <>
           <HeroSection />
+          <CharacteristicsSection />
         </>
       )}
     </PageWrapper>

@@ -11,9 +11,9 @@ import {
 import { debounce } from 'lodash';
 import { Fragment, use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
-import { ShellButton } from '../../../../../../components/ModuleButtons/ShellButton';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
+import { asset } from '../../../../../../core/blitzkit/asset';
 import { coefficient } from '../../../../../../core/blitzkit/coefficient';
 import { equipmentDefinitions } from '../../../../../../core/blitzkit/equipmentDefinitions';
 import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitions';
@@ -22,7 +22,6 @@ import { tankCharacteristics } from '../../../../../../core/blitzkit/tankCharact
 import {
   CREW_MEMBER_NAMES,
   GUN_TYPE_NAMES,
-  SHELL_NAMES,
 } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
@@ -129,12 +128,12 @@ export function Characteristics() {
   if (isFullScreen) return null;
 
   return (
-    <Flex direction="column" gap="8" style={{ width: '100%' }}>
+    <Flex direction="column" gap="8">
       <Flex direction="column" gap="2">
         <Flex align="center" gap="4">
           <Heading size="5">Fire</Heading>
 
-          <Flex>
+          {/* <Flex>
             {gun.shells.map((thisShell, index) => {
               return (
                 <ShellButton
@@ -153,6 +152,36 @@ export function Characteristics() {
                 />
               );
             })}
+          </Flex> */}
+
+          <Flex>
+            {gun.shells.map((thisShell, shellIndex) => (
+              <IconButton
+                color={thisShell.id === shell.id ? undefined : 'gray'}
+                variant="soft"
+                key={thisShell.id}
+                style={{
+                  borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
+                  borderBottomLeftRadius: shellIndex === 0 ? undefined : 0,
+                  borderTopRightRadius:
+                    shellIndex === gun.shells.length - 1 ? undefined : 0,
+                  borderBottomRightRadius:
+                    shellIndex === gun.shells.length - 1 ? undefined : 0,
+                  marginLeft: shellIndex === 0 ? 0 : -1,
+                }}
+                onClick={() => {
+                  mutateDuel((draft) => {
+                    draft.protagonist!.shell = thisShell;
+                  });
+                }}
+              >
+                <img
+                  width={16}
+                  height={16}
+                  src={asset(`icons/shells/${thisShell.icon}.webp`)}
+                />
+              </IconButton>
+            ))}
           </Flex>
         </Flex>
         <Info name="Gun type">{GUN_TYPE_NAMES[gun.type]}</Info>

@@ -1,7 +1,7 @@
-import { EnterFullScreenIcon, ExitFullScreenIcon } from '@radix-ui/react-icons';
-import { Checkbox, Flex, Heading, IconButton, Text } from '@radix-ui/themes';
+import { Checkbox, Flex, Heading, Text } from '@radix-ui/themes';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
+import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import strings from '../../../../../../lang/en-US.json';
 import { theme } from '../../../../../../stitches.config';
 import { useDuel } from '../../../../../../stores/duel';
@@ -9,22 +9,27 @@ import mutateTankopediaPersistent, {
   useTankopediaPersistent,
 } from '../../../../../../stores/tankopedia';
 import { TankSandbox } from './TankSandbox';
+import { Options } from './components/Options';
 
 export function HeroSection() {
   const tank = useDuel((state) => state.protagonist!.tank);
   const mode = useTankopediaPersistent((state) => state.mode);
   const isFullScreen = useFullScreen();
+  const wideFormat = useWideFormat(880);
 
   return (
     <Flex
       justify="center"
-      pl="9"
+      pl={wideFormat ? '9' : undefined}
+      p={wideFormat ? '0' : '6'}
+      pb={wideFormat ? '0' : '6'}
       style={{
         background: `linear-gradient(90deg, ${theme.colors.appBackground1}, ${theme.colors.appBackground2})`,
         position: 'relative',
       }}
     >
       <Flex
+        direction={wideFormat ? 'row' : 'column'}
         style={{
           maxWidth: 1600,
           flex: 1,
@@ -33,12 +38,12 @@ export function HeroSection() {
         <Flex
           direction="column"
           justify="center"
-          gap="4"
+          gap={wideFormat ? '4' : '2'}
           style={{
             flex: 1,
           }}
         >
-          <Heading size="9">{tank.name}</Heading>
+          <Heading size={wideFormat ? '9' : '8'}>{tank.name}</Heading>
           <Text color="gray">
             Tier {TIER_ROMAN_NUMERALS[tank.tier]}{' '}
             {(strings.common.nations as Record<string, string>)[tank.nation]}{' '}
@@ -49,7 +54,7 @@ export function HeroSection() {
         <div
           style={{
             height: 512,
-            flex: 3,
+            flex: wideFormat ? 3 : undefined,
             position: 'relative',
           }}
         >
@@ -57,7 +62,6 @@ export function HeroSection() {
             style={{
               width: '100%',
               height: '100%',
-              position: 'relative',
             }}
           >
             <TankSandbox />
@@ -86,8 +90,9 @@ export function HeroSection() {
         </div>
       </Flex>
 
-      <IconButton
+      {/* <IconButton
         variant="ghost"
+        color="gray"
         style={{
           position: 'absolute',
           top: 16,
@@ -102,7 +107,9 @@ export function HeroSection() {
         }}
       >
         {isFullScreen ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
-      </IconButton>
+      </IconButton> */}
+
+      <Options />
     </Flex>
   );
 }

@@ -4,9 +4,9 @@ import {
   EyeOpenIcon,
   GearIcon,
 } from '@radix-ui/react-icons';
-import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
-import { RefObject } from 'react';
+import { DropdownMenu, Flex, IconButton } from '@radix-ui/themes';
 import { Pose, poseEvent } from '../../../../../../../core/blitzkit/pose';
+import { useFullScreen } from '../../../../../../../hooks/useFullScreen';
 import { useApp } from '../../../../../../../stores/app';
 import mutateTankopediaPersistent, {
   mutateTankopediaTemporary,
@@ -14,12 +14,8 @@ import mutateTankopediaPersistent, {
 } from '../../../../../../../stores/tankopedia';
 import { ENVIRONMENTS } from '../../Lighting';
 
-interface OptionsProps {
-  isFullScreen: boolean;
-  canvasWrapper: RefObject<HTMLElement>;
-}
-
-export function Options({ isFullScreen }: OptionsProps) {
+export function Options() {
+  const isFullScreen = useFullScreen();
   const showGrid = useTankopediaPersistent(
     (state) => state.model.visual.showGrid,
   );
@@ -54,9 +50,9 @@ export function Options({ isFullScreen }: OptionsProps) {
     >
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <Button variant="ghost">
+          <IconButton variant="ghost" color="gray">
             <EyeOpenIcon />
-          </Button>
+          </IconButton>
         </DropdownMenu.Trigger>
 
         <DropdownMenu.Content>
@@ -76,9 +72,9 @@ export function Options({ isFullScreen }: OptionsProps) {
 
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <Button variant="ghost">
+          <IconButton variant="ghost" color="gray">
             <GearIcon />
-          </Button>
+          </IconButton>
         </DropdownMenu.Trigger>
 
         <DropdownMenu.Content>
@@ -154,6 +150,7 @@ export function Options({ isFullScreen }: OptionsProps) {
               });
             }}
           >
+            {/* TODO: consider removing this? */}
             View environment
           </DropdownMenu.CheckboxItem>
 
@@ -182,7 +179,8 @@ export function Options({ isFullScreen }: OptionsProps) {
       </DropdownMenu.Root>
 
       {fullScreenAvailable && (
-        <Button
+        <IconButton
+          color="gray"
           variant="ghost"
           onClick={() => {
             if (isFullScreen) {
@@ -191,7 +189,7 @@ export function Options({ isFullScreen }: OptionsProps) {
           }}
         >
           {isFullScreen ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
-        </Button>
+        </IconButton>
       )}
     </Flex>
   );
