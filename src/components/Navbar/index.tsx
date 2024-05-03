@@ -193,7 +193,8 @@ export default function Navbar() {
             </Popover.Root>
           )}
 
-          {!login && (
+          {/* TODO: re-enable in the future */}
+          {!login && false && (
             <Dialog.Root>
               <Dialog.Trigger>
                 <Button variant="ghost">Log in</Button>
