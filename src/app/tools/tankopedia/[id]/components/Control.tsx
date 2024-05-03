@@ -1,6 +1,6 @@
 import { OrbitControls } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Vector3 } from 'three';
 import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
 import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
@@ -19,6 +19,7 @@ const poseDistances: Record<Pose, number> = {
 
 export function Controls() {
   const camera = useThree((state) => state.camera);
+  const canvas = useThree((state) => state.gl.domElement);
   const orbitControls = useRef<OrbitControlsClass>(null);
   const awaitedModelDefinitions = useAwait(modelDefinitions);
   const protagonist = useDuel((state) => state.protagonist!);
@@ -53,7 +54,7 @@ export function Controls() {
     protagonistTrackModelDefinition.origin[1] +
     antagonistModelDefinition.turretOrigin[1] +
     antagonistTurretModelDefinition.gunOrigin[1];
-  // const hasSetInitialPose = useRef(false);
+  const [autoRotate, setAutoRotate] = useState(true);
 
   useEffect(() => {
     camera.position.set(-4, 4, -16);
@@ -162,6 +163,18 @@ export function Controls() {
     };
   }, [camera, protagonist.tank.id, antagonist.tank.id]);
 
+  useEffect(() => {
+    function handleClick() {
+      setAutoRotate(false);
+    }
+
+    canvas.addEventListener('click', handleClick);
+
+    return () => {
+      canvas.removeEventListener('click', handleClick);
+    };
+  }, []);
+
   return (
     <OrbitControls
       maxDistance={20}
@@ -170,6 +183,8 @@ export function Controls() {
       enabled={useTankopediaPersistent.getState().model.visual.controlsEnabled}
       rotateSpeed={0.25}
       enableDamping={false}
+      autoRotate={autoRotate}
+      autoRotateSpeed={1 / 4}
     />
   );
 }

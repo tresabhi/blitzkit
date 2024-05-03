@@ -33,11 +33,12 @@ export function HeroSection() {
         <Flex
           direction="column"
           justify="center"
+          gap="4"
           style={{
             flex: 1,
           }}
         >
-          <Heading size="7">{tank.name}</Heading>
+          <Heading size="9">{tank.name}</Heading>
           <Text color="gray">
             Tier {TIER_ROMAN_NUMERALS[tank.tier]}{' '}
             {(strings.common.nations as Record<string, string>)[tank.nation]}{' '}
@@ -93,7 +94,11 @@ export function HeroSection() {
           right: 16,
         }}
         onClick={() => {
-          document.body.requestFullscreen();
+          if (isFullScreen) {
+            document.exitFullscreen();
+          } else {
+            document.body.requestFullscreen();
+          }
         }}
       >
         {isFullScreen ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
