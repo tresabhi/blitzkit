@@ -21,6 +21,7 @@ export interface Crew {
 }
 export interface TankDefinition {
   id: number;
+  description?: string;
   fixedCamouflage?: boolean;
   ancestors?: number[];
   successors?: number[];

@@ -3,6 +3,7 @@ import { parse as parsePath } from 'path';
 import { Vector3Tuple } from 'three';
 import { parse as parseYaml } from 'yaml';
 import { TankClass } from '../../src/components/Tanks';
+import { WARGAMING_APPLICATION_ID } from '../../src/constants/wargamingApplicationID';
 import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
@@ -365,6 +366,11 @@ export const botPattern = /^.+((tutorial_bot(\d+)?)|(TU(R?)))$/;
 export async function definitions(production: boolean) {
   console.log('Building definitions...');
 
+  const wargamingTankopedia = (await fetch(
+    `https://api.wotblitz.com/wotb/encyclopedia/vehicles/?application_id=${WARGAMING_APPLICATION_ID}&fields=description`,
+  ).then((response) => response.json())) as {
+    data: { [key: number]: { description: null | string } };
+  };
   const gameDefinitions: GameDefinitions = {
     version: (await readStringDVPL(`${DATA}/version.txt.dvpl`))
       .split(' ')[0]
@@ -535,6 +541,8 @@ export async function definitions(production: boolean) {
 
         tankDefinitions[tankId] = {
           id: tankId,
+          description:
+            wargamingTankopedia.data[tank.id]?.description ?? undefined,
           fixedCamouflage: fixedCamouflage ? true : undefined,
           crew,
           weight: tankDefinition.root.hull.weight,
