@@ -115,7 +115,7 @@ export function ModuleManager({
                   <ModuleButton
                     variant="ghost"
                     module="gun"
-                    discriminator={TIER_ROMAN_NUMERALS[modules.gun.tier]}
+                    discriminator={TIER_ROMAN_NUMERALS[gun.tier]}
                   />{' '}
                   {gun.name}
                 </DropdownMenu.RadioItem>

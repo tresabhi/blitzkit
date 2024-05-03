@@ -133,27 +133,6 @@ export function Characteristics() {
         <Flex align="center" gap="4">
           <Heading size="5">Fire</Heading>
 
-          {/* <Flex>
-            {gun.shells.map((thisShell, index) => {
-              return (
-                <ShellButton
-                  key={thisShell.id}
-                  shell={thisShell.icon}
-                  discriminator={SHELL_NAMES[thisShell.type]}
-                  selected={thisShell.id === shell.id}
-                  first={index === 0}
-                  last={index === gun.shells.length - 1}
-                  rowChild
-                  onClick={() => {
-                    mutateDuel((draft) => {
-                      draft.protagonist!.shell = thisShell;
-                    });
-                  }}
-                />
-              );
-            })}
-          </Flex> */}
-
           <Flex>
             {gun.shells.map((thisShell, shellIndex) => (
               <IconButton
