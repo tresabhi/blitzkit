@@ -25,6 +25,18 @@
       "other": "Hybrid nation"
     },
 
+    "nations_adjectives": {
+      "ussr": "U.S.S.R.",
+      "germany": "German",
+      "usa": "U.S.A.",
+      "china": "Chinese",
+      "uk": "U.K.",
+      "france": "French",
+      "japan": "Japanese",
+      "european": "European",
+      "other": "Hybrid"
+    },
+
     "tank_class_short": {
       "lightTank": "Light",
       "mediumTank": "Medium",

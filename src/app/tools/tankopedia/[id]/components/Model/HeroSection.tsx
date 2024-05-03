@@ -44,7 +44,11 @@ export function HeroSection() {
             <Heading size={wideFormat ? '9' : '8'}>{tank.name}</Heading>
             <Text color="gray">
               Tier {TIER_ROMAN_NUMERALS[tank.tier]}{' '}
-              {(strings.common.nations as Record<string, string>)[tank.nation]}{' '}
+              {
+                (strings.common.nations_adjectives as Record<string, string>)[
+                  tank.nation
+                ]
+              }{' '}
               {strings.common.tank_class_short[tank.class]}
             </Text>
           </Flex>
