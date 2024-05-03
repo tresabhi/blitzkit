@@ -81,7 +81,7 @@ export default function Page() {
   const delta = useMemo(
     () =>
       session.tracking && tankStatsB
-        ? deltaTankStats([], tankStatsB)
+        ? deltaTankStats(session.player.stats, tankStatsB)
             .sort((a, b) => b.last_battle_time - a.last_battle_time)
             .map((entry) => {
               const tank = awaitedTankDefinitions[entry.tank_id];
