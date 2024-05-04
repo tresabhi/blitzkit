@@ -9,7 +9,7 @@ import { Provisions } from '../Characteristics/components/Provisions';
 import { Skills } from '../Characteristics/components/Skills';
 
 export function CharacteristicsSection() {
-  const wideFormat = useWideFormat(700);
+  const wideFormat = useWideFormat(880);
 
   return (
     <Flex
@@ -27,7 +27,7 @@ export function CharacteristicsSection() {
         direction={wideFormat ? 'row' : 'column'}
         justify="center"
       >
-        <Flex style={{ flex: 1, maxWidth: 380 }} direction="column" gap="4">
+        <Flex direction="column" gap="4">
           <Heading>Configure</Heading>
           <Modules />
           <Equipment />

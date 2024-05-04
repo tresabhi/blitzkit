@@ -6,7 +6,6 @@ import {
   IconButton,
   Link,
   Text,
-  Theme,
 } from '@radix-ui/themes';
 import { use } from 'react';
 import { asset } from '../../../../../../../core/blitzkit/asset';
@@ -38,6 +37,7 @@ function ModuleButton({
     notation: 'compact',
     maximumFractionDigits: 0,
   });
+  const isTank = unlock.type === 'vehicle';
   const button = (
     <IconButton
       size="4"
@@ -47,6 +47,8 @@ function ModuleButton({
       onClick={onClick}
       style={{
         position: 'relative',
+        width: isTank ? 72 : undefined,
+        height: isTank ? 72 : undefined,
       }}
     >
       <Text
@@ -54,8 +56,8 @@ function ModuleButton({
         color="gray"
         style={{
           position: 'absolute',
-          left: 4,
-          top: 4,
+          left: isTank ? 8 : 4,
+          top: isTank ? 8 : 4,
         }}
       >
         {TIER_ROMAN_NUMERALS[tier]}
@@ -70,6 +72,7 @@ function ModuleButton({
             transform: 'translateX(-50%)',
           }}
           align="center"
+          gap={isTank ? '1' : undefined}
         >
           <Text size="1" color="gray">
             {numberFormat.format(unlock.cost.value)}
@@ -90,23 +93,21 @@ function ModuleButton({
       <img
         alt={unlock.type}
         src={
-          unlock.type === 'vehicle'
+          isTank
             ? tankIcon(unlock.id)
             : asset(`icons/modules/${unlock.type}.webp`)
         }
         style={{
-          width: 32,
-          height: 32,
+          width: isTank ? 64 : 32,
+          height: isTank ? 64 : 32,
           objectFit: 'contain',
         }}
       />
     </IconButton>
   );
 
-  return unlock.type === 'vehicle' ? (
-    <Link href={`/tools/tankopedia/${unlock.id}`}>
-      <Theme scaling="110%">{button}</Theme>
-    </Link>
+  return isTank ? (
+    <Link href={`/tools/tankopedia/${unlock.id}`}>{button}</Link>
   ) : (
     button
   );

@@ -24,7 +24,12 @@ export function ConsumablesManager({
   hasHighEndConsumables,
 }: ConsumablesManagerProps) {
   return (
-    <Flex wrap="wrap">
+    <Flex
+      wrap="wrap"
+      style={{
+        maxWidth: 360,
+      }}
+    >
       {consumables.map((consumable, index) => {
         const isSelected = selected.some((id) => id === consumable.id);
 
