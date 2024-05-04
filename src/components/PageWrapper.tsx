@@ -9,6 +9,7 @@ type PageWrapperProps = FlexProps & {
   noMaxWidth?: boolean;
   highlight?: boolean;
   containerProps?: ComponentProps<typeof Theme>;
+  noFlex1?: boolean;
 };
 
 export default function PageWrapper({
@@ -18,6 +19,7 @@ export default function PageWrapper({
   children,
   noPadding = false,
   noMaxWidth = false,
+  noFlex1 = false,
   highlight = false,
   containerProps,
   ...props
@@ -27,7 +29,7 @@ export default function PageWrapper({
       {...containerProps}
       accentColor={color}
       style={{
-        flex: 1,
+        flex: noFlex1 ? undefined : 1,
         display: 'flex',
         flexDirection: 'column',
         background: highlight

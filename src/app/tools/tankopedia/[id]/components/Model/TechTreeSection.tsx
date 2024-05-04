@@ -128,6 +128,7 @@ export function TechTreeSection() {
 
   return (
     <PageWrapper
+      noFlex1
       containerProps={{
         style: {
           overflow: 'hidden',

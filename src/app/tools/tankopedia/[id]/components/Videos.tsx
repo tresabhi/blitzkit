@@ -14,7 +14,7 @@ export function Videos() {
   if (isFullScreen || videos.length === 0) return null;
 
   return (
-    <PageWrapper>
+    <PageWrapper noFlex1>
       <Flex direction="column" gap="4" align="start">
         <Heading size="6">Review videos</Heading>
 
