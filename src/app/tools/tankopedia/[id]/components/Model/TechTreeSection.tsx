@@ -115,7 +115,16 @@ export function TechTreeSection() {
       <Flex align="center" gap="6">
         {tank.ancestors && (
           <>
-            <Flex direction="column" style={{}} gap="4">
+            <Flex
+              wrap="wrap"
+              direction="column"
+              align="center"
+              justify="center"
+              style={{
+                maxHeight: 360,
+              }}
+              gap="4"
+            >
               {tank.ancestors.map((id) => (
                 <Card key={id} id={id} />
               ))}
@@ -125,15 +134,44 @@ export function TechTreeSection() {
           </>
         )}
 
-        <Flex direction="column" style={{}}>
+        <Flex
+          direction="column"
+          style={{
+            position: 'relative',
+          }}
+        >
           <Card id={tank.id} />
+
+          <img
+            src={asset(`flags/scratched/${tank.nation}.webp`)}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              height: 180,
+              transform: 'translate(-42%, -50%)',
+              backgroundRepeat: 'no-repeat',
+              zIndex: -1,
+              opacity: 1 / 4,
+              filter: 'blur(4px)',
+            }}
+          />
         </Flex>
 
         {tank.successors && (
           <>
             <Arrow />
 
-            <Flex direction="column" style={{}} gap="4">
+            <Flex
+              wrap="wrap"
+              direction="column"
+              align="center"
+              justify="center"
+              style={{
+                maxHeight: 360,
+              }}
+              gap="4"
+            >
               {tank.successors.map((id) => (
                 <Card key={id} id={id} />
               ))}
