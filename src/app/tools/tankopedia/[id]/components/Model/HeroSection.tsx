@@ -18,7 +18,7 @@ export function HeroSection() {
       style={{
         background: `linear-gradient(${wideFormat ? -90 : 180}deg, ${theme.colors.appBackground1}, ${theme.colors.appBackground2})`,
         position: 'relative',
-        height: wideFormat ? undefined : 'calc(100vh - 64px)',
+        height: wideFormat ? undefined : 'calc(87.5vh - 64px)',
       }}
       gap="4"
     >
