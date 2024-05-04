@@ -87,7 +87,7 @@ export default function Navbar() {
         left: 0,
         width: '100%',
         height: 64 + 1, // extra pixel for frost bleeding
-        zIndex: 1,
+        zIndex: 2,
         padding: '1rem',
         background: theme.colors.appBackground1_alpha,
         borderBottom: theme.borderStyles.nonInteractive,

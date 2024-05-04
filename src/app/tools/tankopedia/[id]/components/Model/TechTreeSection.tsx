@@ -6,6 +6,7 @@ import PageWrapper from '../../../../../../components/PageWrapper';
 import { asset } from '../../../../../../core/blitzkit/asset';
 import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
+import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import { useDuel } from '../../../../../../stores/duel';
 
 export function TreeArrow({
@@ -50,6 +51,7 @@ export function TreeArrow({
 }
 
 export function TechTreeSection() {
+  const wideFormat = useWideFormat(720);
   const awaitedTankDefinitions = use(tankDefinitions);
   const tank = useDuel((state) => state.protagonist!.tank);
 
@@ -65,6 +67,7 @@ export function TechTreeSection() {
         style={{
           textDecoration: 'none',
           color: 'inherit',
+          position: 'relative',
         }}
       >
         <Flex direction="column" align="center">
@@ -125,9 +128,6 @@ export function TechTreeSection() {
 
   return (
     <PageWrapper
-      style={{
-        position: 'relative',
-      }}
       containerProps={{
         style: {
           overflow: 'hidden',
@@ -138,20 +138,6 @@ export function TechTreeSection() {
       gap="0"
       highlight
     >
-      <img
-        alt={tank.nation}
-        src={asset(`flags/scratched/${tank.nation}.webp`)}
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          height: '200%',
-          transform: 'translate(-40%, -48%)',
-          backgroundRepeat: 'no-repeat',
-          opacity: 1 / 4,
-        }}
-      />
-
       {/* <Flex justify="center">
         <Heading>Tech tree</Heading>
       </Flex> */}
@@ -159,15 +145,14 @@ export function TechTreeSection() {
       <Flex
         align="center"
         gap="6"
-        style={{
-          zIndex: 1,
-        }}
+        style={{}}
+        direction={wideFormat ? 'row' : 'column'}
       >
         {tank.ancestors && (
           <>
             <Flex
               wrap="wrap"
-              direction="column"
+              direction={wideFormat ? 'column' : 'row'}
               align="center"
               justify="center"
               style={{
@@ -180,21 +165,41 @@ export function TechTreeSection() {
               ))}
             </Flex>
 
-            <TreeArrow />
+            <TreeArrow down={!wideFormat} />
           </>
         )}
 
-        <Flex direction="column">
+        <Flex
+          direction="column"
+          style={{
+            position: 'relative',
+          }}
+        >
+          <img
+            alt={tank.nation}
+            src={asset(`flags/scratched/${tank.nation}.webp`)}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              height: '200%',
+              transform: 'translate(-40%, -50%)',
+              backgroundRepeat: 'no-repeat',
+              opacity: 1 / 4,
+              filter: 'blur(4px)',
+            }}
+          />
+
           <Card id={tank.id} />
         </Flex>
 
         {tank.successors && (
           <>
-            <TreeArrow />
+            <TreeArrow down={!wideFormat} />
 
             <Flex
               wrap="wrap"
-              direction="column"
+              direction={wideFormat ? 'column' : 'row'}
               align="center"
               justify="center"
               style={{
