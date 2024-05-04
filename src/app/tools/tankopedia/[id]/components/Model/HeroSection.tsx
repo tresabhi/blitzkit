@@ -14,7 +14,7 @@ export function HeroSection() {
   return (
     <Flex
       justify="center"
-      py={wideFormat ? '0' : '6'}
+      pt={wideFormat ? '0' : '6'}
       style={{
         background: `linear-gradient(${wideFormat ? -90 : 180}deg, ${theme.colors.appBackground1}, ${theme.colors.appBackground2})`,
         position: 'relative',
