@@ -26,11 +26,13 @@ function ModuleButton({
   tier,
   selected,
   unlock,
+  top,
   onClick,
 }: {
   unlock: Unlock;
   tier: Tier;
   selected: boolean;
+  top: boolean;
   onClick: () => void;
 }) {
   const numberFormat = Intl.NumberFormat(undefined, {
@@ -43,7 +45,7 @@ function ModuleButton({
       size="4"
       radius="small"
       variant={selected ? 'surface' : 'soft'}
-      color={selected ? undefined : 'gray'}
+      color={top ? 'amber' : selected ? undefined : 'gray'}
       onClick={onClick}
       style={{
         position: 'relative',
@@ -129,6 +131,10 @@ export function Modules() {
   const gun0 = turret0.guns[0];
   const engine0 = tank.engines[0];
   const track0 = tank.tracks[0];
+  const topTurret = tank.turrets.at(-1)!;
+  const topGun = topTurret.guns.at(-1)!;
+  const topEngine = tank.engines.at(-1)!;
+  const topTrack = tank.tracks.at(-1)!;
 
   function setByUnlock(unlock: Unlock) {
     mutateDuel((draft) => {
@@ -265,6 +271,17 @@ export function Modules() {
                         : unlock.type === 'chassis'
                           ? track.id
                           : -1) === unlock.id
+                }
+                top={
+                  unlock.type === 'turret'
+                    ? module.id == topTurret.id
+                    : unlock.type === 'gun'
+                      ? module.id === topGun.id
+                      : unlock.type === 'engine'
+                        ? module.id === topEngine.id
+                        : unlock.type === 'chassis'
+                          ? module.id === topTrack.id
+                          : false
                 }
                 onClick={() => setByUnlock(unlock)}
               />
