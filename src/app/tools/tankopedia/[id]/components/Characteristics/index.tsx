@@ -25,12 +25,14 @@ import {
 } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
+import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
 
 export function Characteristics() {
+  const wideFormat = useWideFormat(960);
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const awaitedModelDefinitions = use(modelDefinitions);
   const awaitedProvisionDefinitions = use(provisionDefinitions);
@@ -128,445 +130,450 @@ export function Characteristics() {
   if (isFullScreen) return null;
 
   return (
-    <Flex direction="column" gap="8">
-      <Flex direction="column" gap="2">
-        <Flex align="center" gap="4">
-          <Heading size="5">Fire</Heading>
+    <Flex direction={wideFormat ? 'row' : 'column'} gap="8" wrap="wrap">
+      <Flex direction="column" gap="8" style={{ flex: 1 }}>
+        <Flex direction="column" gap="2">
+          <Flex align="center" gap="4">
+            <Heading size="5">Fire</Heading>
 
-          <Flex>
-            {gun.shells.map((thisShell, shellIndex) => (
-              <IconButton
-                color={thisShell.id === shell.id ? undefined : 'gray'}
-                variant="soft"
-                key={thisShell.id}
-                style={{
-                  borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
-                  borderBottomLeftRadius: shellIndex === 0 ? undefined : 0,
-                  borderTopRightRadius:
-                    shellIndex === gun.shells.length - 1 ? undefined : 0,
-                  borderBottomRightRadius:
-                    shellIndex === gun.shells.length - 1 ? undefined : 0,
-                  marginLeft: shellIndex === 0 ? 0 : -1,
-                }}
-                onClick={() => {
-                  mutateDuel((draft) => {
-                    draft.protagonist!.shell = thisShell;
-                  });
-                }}
-              >
-                <img
-                  width={16}
-                  height={16}
-                  src={asset(`icons/shells/${thisShell.icon}.webp`)}
-                />
-              </IconButton>
-            ))}
-          </Flex>
-        </Flex>
-        <Info name="Gun type">{GUN_TYPE_NAMES[gun.type]}</Info>
-        <InfoWithDelta name="DPM" decimals={0} unit="hp / min">
-          {stats.dpm}
-        </InfoWithDelta>
-        {gun.type === 'autoReloader' && (
-          <>
-            <InfoWithDelta decimals={0} indent name="Maximum" unit="hp / min">
-              {stats.dpmMaximum!}
-            </InfoWithDelta>
-            <InfoWithDelta
-              decimals={0}
-              indent
-              name="Effective at 60s"
-              unit="hp / min"
-            >
-              {stats.dpmEffective!}
-            </InfoWithDelta>
-            <Info
-              indent
-              name={
-                <a
-                  target="_blank"
-                  href="https://tresabhi.github.io/blitzkit/guide/dpm.html"
+            <Flex>
+              {gun.shells.map((thisShell, shellIndex) => (
+                <IconButton
+                  color={thisShell.id === shell.id ? undefined : 'gray'}
+                  variant="soft"
+                  key={thisShell.id}
+                  style={{
+                    borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
+                    borderBottomLeftRadius: shellIndex === 0 ? undefined : 0,
+                    borderTopRightRadius:
+                      shellIndex === gun.shells.length - 1 ? undefined : 0,
+                    borderBottomRightRadius:
+                      shellIndex === gun.shells.length - 1 ? undefined : 0,
+                    marginLeft: shellIndex === 0 ? 0 : -1,
+                  }}
+                  onClick={() => {
+                    mutateDuel((draft) => {
+                      draft.protagonist!.shell = thisShell;
+                    });
+                  }}
                 >
-                  What's the difference?
-                </a>
-              }
-            />
-          </>
-        )}
-        {gun.type !== 'regular' && (
-          <InfoWithDelta name="Shells">{stats.shells}</InfoWithDelta>
-        )}
-        {gun.type === 'autoReloader' ? (
-          <>
-            <Info indent name="Most optimal">
-              {stats.mostOptimalShellIndex}
-            </Info>
-            <Info name="Shell reloads" unit="s" />
-            {stats.shellReloads!.map((reload, index) => (
-              <InfoWithDelta
-                key={index}
-                indent
-                name={`Shell ${index + 1}`}
-                decimals={2}
-                deltaType="lowerIsBetter"
-              >
-                {reload}
+                  <img
+                    width={16}
+                    height={16}
+                    src={asset(`icons/shells/${thisShell.icon}.webp`)}
+                  />
+                </IconButton>
+              ))}
+            </Flex>
+          </Flex>
+          <Info name="Gun type">{GUN_TYPE_NAMES[gun.type]}</Info>
+          <InfoWithDelta name="DPM" decimals={0} unit="hp / min">
+            {stats.dpm}
+          </InfoWithDelta>
+          {gun.type === 'autoReloader' && (
+            <>
+              <InfoWithDelta decimals={0} indent name="Maximum" unit="hp / min">
+                {stats.dpmMaximum!}
               </InfoWithDelta>
-            ))}
-          </>
-        ) : (
-          <InfoWithDelta
-            decimals={2}
-            name="Reload"
-            unit="s"
-            deltaType="lowerIsBetter"
-          >
-            {stats.shellReload!}
-          </InfoWithDelta>
-        )}
-        {(gun.type === 'autoLoader' || gun.type === 'autoReloader') && (
-          <InfoWithDelta
-            indent
-            decimals={2}
-            name="Intra-clip"
-            unit="s"
-            deltaType="lowerIsBetter"
-          >
-            {stats.intraClip!}
-          </InfoWithDelta>
-        )}
-        <InfoWithDelta decimals={0} name="Penetration" unit="mm">
-          {stats.penetration}
-        </InfoWithDelta>
-        {typeof shell.penetration !== 'number' && (
-          <>
+              <InfoWithDelta
+                decimals={0}
+                indent
+                name="Effective at 60s"
+                unit="hp / min"
+              >
+                {stats.dpmEffective!}
+              </InfoWithDelta>
+              <Info
+                indent
+                name={
+                  <a
+                    target="_blank"
+                    href="https://tresabhi.github.io/blitzkit/guide/dpm.html"
+                  >
+                    What's the difference?
+                  </a>
+                }
+              />
+            </>
+          )}
+          {gun.type !== 'regular' && (
+            <InfoWithDelta name="Shells">{stats.shells}</InfoWithDelta>
+          )}
+          {gun.type === 'autoReloader' ? (
+            <>
+              <Info indent name="Most optimal">
+                {stats.mostOptimalShellIndex}
+              </Info>
+              <Info name="Shell reloads" unit="s" />
+              {stats.shellReloads!.map((reload, index) => (
+                <InfoWithDelta
+                  key={index}
+                  indent
+                  name={`Shell ${index + 1}`}
+                  decimals={2}
+                  deltaType="lowerIsBetter"
+                >
+                  {reload}
+                </InfoWithDelta>
+              ))}
+            </>
+          ) : (
+            <InfoWithDelta
+              decimals={2}
+              name="Reload"
+              unit="s"
+              deltaType="lowerIsBetter"
+            >
+              {stats.shellReload!}
+            </InfoWithDelta>
+          )}
+          {(gun.type === 'autoLoader' || gun.type === 'autoReloader') && (
             <InfoWithDelta
               indent
-              decimals={0}
-              name={`At ${penetrationDistance}m`}
+              decimals={2}
+              name="Intra-clip"
+              unit="s"
+              deltaType="lowerIsBetter"
             >
-              {lerp(
-                shell.penetration[0],
-                shell.penetration[1],
-                (penetrationDistance * penetrationLossOverDistanceCoefficient) /
-                  500,
-              ) * penetrationCoefficient}
+              {stats.intraClip!}
             </InfoWithDelta>
-            <Flex align="center" gap="2" style={{ paddingLeft: 24 }}>
-              <Text>Distance</Text>
-              <Slider
-                key={penetrationDistance}
-                min={0}
-                max={500}
-                style={{ flex: 1 }}
-                defaultValue={[penetrationDistance]}
-                onValueChange={debounce(([value]) => {
-                  setPenetrationDistance(value);
-                }, 500)}
-              />
-              <TextField.Root
-                style={{ width: 64 }}
-                ref={penetrationDistanceInput}
-                defaultValue={penetrationDistance}
-                onBlur={() => {
-                  setPenetrationDistance(
-                    Math.min(
-                      parseInt(penetrationDistanceInput.current!.value),
-                      500,
-                    ),
-                  );
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    event.currentTarget.blur();
-                  }
-                }}
-              >
-                <TextField.Slot side="right">m</TextField.Slot>
-              </TextField.Root>
-            </Flex>
-          </>
-        )}
-        <InfoWithDelta name="Damage" unit="hp" decimals={0}>
-          {stats.damage}
-        </InfoWithDelta>
-        <InfoWithDelta name="Module damage" unit="hp" decimals={0}>
-          {stats.moduleDamage}
-        </InfoWithDelta>
-        {isExplosive(shell.type) && (
-          <InfoWithDelta name="Splash radius" unit="m" decimals={0}>
-            {stats.explosionRadius!}
+          )}
+          <InfoWithDelta decimals={0} name="Penetration" unit="mm">
+            {stats.penetration}
           </InfoWithDelta>
-        )}
-        <InfoWithDelta name="Caliber" decimals={0} unit="mm">
-          {stats.caliber}
-        </InfoWithDelta>
-        <InfoWithDelta name="Normalization" decimals={0} unit="°">
-          {stats.shellNormalization}
-        </InfoWithDelta>
-        {shell.type !== 'he' && (
-          <InfoWithDelta
-            name="Ricochet"
-            decimals={0}
-            deltaType="lowerIsBetter"
-            unit="°"
-          >
-            {stats.shellRicochet!}
-          </InfoWithDelta>
-        )}
-        <InfoWithDelta name="Shell velocity" unit="m/s" decimals={0}>
-          {stats.shellVelocity}
-        </InfoWithDelta>
-        <InfoWithDelta
-          decimals={2}
-          name="Aim time"
-          unit="s"
-          deltaType="lowerIsBetter"
-        >
-          {stats.aimTime}
-        </InfoWithDelta>
-        <Info name="Dispersion at 100m" />
-        <InfoWithDelta
-          decimals={3}
-          indent
-          name="Still"
-          unit="m"
-          deltaType="lowerIsBetter"
-        >
-          {stats.dispersion}
-        </InfoWithDelta>
-        <InfoWithDelta
-          prefix="+ "
-          decimals={3}
-          indent
-          name="Moving"
-          deltaType="lowerIsBetter"
-        >
-          {stats.dispersionMoving}
-        </InfoWithDelta>
-        <InfoWithDelta
-          decimals={3}
-          prefix="+ "
-          indent
-          name="Hull traversing"
-          deltaType="lowerIsBetter"
-        >
-          {stats.dispersionHullTraversing}
-        </InfoWithDelta>
-        <InfoWithDelta
-          decimals={3}
-          prefix="+ "
-          indent
-          name="Turret traversing"
-          deltaType="lowerIsBetter"
-        >
-          {stats.dispersionTurretTraversing}
-        </InfoWithDelta>
-        <InfoWithDelta
-          decimals={3}
-          prefix="+ "
-          indent
-          name="After shooting"
-          deltaType="lowerIsBetter"
-        >
-          {stats.dispersionShooting}
-        </InfoWithDelta>
-        <InfoWithDelta
-          decimals={1}
-          prefix="x "
-          indent
-          name="Gun damaged"
-          unit="scalar"
-          deltaType="lowerIsBetter"
-        >
-          {stats.dispersionGunDamaged}
-        </InfoWithDelta>
-        <Info name="Gun flexibility" unit="°" />
-        <InfoWithDelta decimals={1} indent name="Depression">
-          {stats.gunDepression}
-        </InfoWithDelta>
-        <InfoWithDelta decimals={1} indent name="Elevation">
-          {stats.gunElevation}
-        </InfoWithDelta>
-        {gunModelDefinition.pitch.front && (
-          <>
-            <InfoWithDelta decimals={1} indent name="Frontal depression">
-              {stats.gunFrontalDepression!}
-            </InfoWithDelta>
-            <InfoWithDelta decimals={1} indent name="Frontal elevation">
-              {stats.gunFrontalElevation!}
-            </InfoWithDelta>
-          </>
-        )}
-        {gunModelDefinition.pitch.back && (
-          <>
-            <InfoWithDelta decimals={1} indent name="Rear depression">
-              {stats.gunRearDepression!}
-            </InfoWithDelta>
-            <InfoWithDelta decimals={1} indent name="Rear elevation">
-              {stats.gunRearElevation!}
-            </InfoWithDelta>
-          </>
-        )}
-        {turretModelDefinition.yaw && (
-          <>
-            <InfoWithDelta decimals={1} indent name="Azimuth left">
-              {stats.azimuthLeft!}
-            </InfoWithDelta>
-            <InfoWithDelta decimals={1} indent name="Azimuth right">
-              {stats.azimuthRight!}
-            </InfoWithDelta>
-          </>
-        )}
-      </Flex>
-
-      <Flex direction="column" gap="2">
-        <Heading size="5">Maneuverability</Heading>
-        <Info name="Speed" unit="km/hr" />
-        <InfoWithDelta decimals={0} indent name="Forwards">
-          {stats.speedForwards}
-        </InfoWithDelta>
-        <InfoWithDelta decimals={0} indent name="Backwards">
-          {stats.speedBackwards}
-        </InfoWithDelta>
-        <InfoWithDelta decimals={0} name="Engine power" unit="hp">
-          {stats.enginePower}
-        </InfoWithDelta>
-        <InfoWithDelta
-          decimals={1}
-          name="Weight"
-          unit="tn"
-          deltaType="lowerIsBetter"
-        >
-          {stats.weight}
-        </InfoWithDelta>
-        <Info name="Power to weight ratio" unit="hp/tn" />
-        <InfoWithDelta decimals={1} indent name="On hard terrain">
-          {stats.powerToWeightRatioHardTerrain}
-        </InfoWithDelta>
-        <InfoWithDelta decimals={1} indent name="On medium terrain">
-          {stats.powerToWeightRatioMediumTerrain}
-        </InfoWithDelta>
-        <InfoWithDelta decimals={1} indent name="On soft terrain">
-          {stats.powerToWeightRatioSoftTerrain}
-        </InfoWithDelta>
-        <InfoWithDelta name="Turret traverse speed" unit="°/s" decimals={1}>
-          {stats.turretTraverseSpeed}
-        </InfoWithDelta>
-        <Info name="Hull traverse speed" unit="°/s" />
-        <InfoWithDelta decimals={1} indent name="On hard terrain">
-          {stats.hullTraverseHardTerrain}
-        </InfoWithDelta>
-        <InfoWithDelta decimals={1} indent name="On medium terrain">
-          {stats.hullTraverseMediumTerrain}
-        </InfoWithDelta>
-        <InfoWithDelta decimals={1} indent name="On soft terrain">
-          {stats.hullTraverseSoftTerrain}
-        </InfoWithDelta>
-      </Flex>
-
-      <Flex direction="column" gap="2">
-        <Heading size="5">Survivability</Heading>
-        <InfoWithDelta name="Health" unit="hp" decimals={0}>
-          {stats.health}
-        </InfoWithDelta>
-        <InfoWithDelta
-          name="Fire chance"
-          unit="%"
-          deltaType="lowerIsBetter"
-          decimals={0}
-        >
-          {stats.fireChance * 100}
-        </InfoWithDelta>
-        <InfoWithDelta name="View range" unit="m" decimals={0}>
-          {stats.viewRange}
-        </InfoWithDelta>
-        <Info name="Camouflage" unit="%" />
-        <InfoWithDelta indent name="Still" decimals={0}>
-          {stats.camouflageStill * 100}
-        </InfoWithDelta>
-        <InfoWithDelta indent name="Moving" decimals={0}>
-          {stats.camouflageMoving * 100}
-        </InfoWithDelta>
-        <InfoWithDelta indent name="Shooting still" decimals={0}>
-          {stats.camouflageShootingStill * 100}
-        </InfoWithDelta>
-        <InfoWithDelta indent name="Shooting moving" decimals={0}>
-          {stats.camouflageShootingMoving * 100}
-        </InfoWithDelta>
-        <InfoWithDelta indent name="Caught on fire" decimals={0}>
-          {stats.camouflageCaughtOnFire * 100}
-        </InfoWithDelta>
-        <Info name="Width" unit="m" decimals={0} deltaType="lowerIsBetter">
-          {stats.width}
-        </Info>
-        <Info name="Height" unit="m" decimals={0} deltaType="lowerIsBetter">
-          {stats.height}
-        </Info>
-        <Info name="Length" unit="m" decimals={0} deltaType="lowerIsBetter">
-          {stats.length}
-        </Info>
-        <Info name="Volume" unit="m" decimals={0} deltaType="lowerIsBetter">
-          {stats.volume}
-        </Info>
-      </Flex>
-
-      <Flex direction="column" gap="2">
-        <Flex gap="2" align="center">
-          <Heading size="5">Crew training</Heading>
-
-          <Popover.Root>
-            <Popover.Trigger>
-              <IconButton variant="ghost">
-                <InfoCircledIcon />
-              </IconButton>
-            </Popover.Trigger>
-
-            <Popover.Content>
-              <Flex gap="1" align="center">
-                <AccessibilityIcon />
-                <Text>represents the other roles a crew member can take.</Text>
-              </Flex>
-            </Popover.Content>
-          </Popover.Root>
-        </Flex>
-
-        {tank.crew.map((member) => {
-          const count = member.count ?? 1;
-
-          return (
-            <Fragment key={member.type}>
+          {typeof shell.penetration !== 'number' && (
+            <>
               <InfoWithDelta
-                key={`${member.type}-root`}
-                name={`${CREW_MEMBER_NAMES[member.type]}${count > 1 ? ` x ${count}` : ''}`}
-                unit="%"
+                indent
                 decimals={0}
+                name={`At ${penetrationDistance}m`}
               >
-                {(member.type === 'commander'
-                  ? commanderMastery
-                  : crewMemberMastery) * 100}
+                {lerp(
+                  shell.penetration[0],
+                  shell.penetration[1],
+                  (penetrationDistance *
+                    penetrationLossOverDistanceCoefficient) /
+                    500,
+                ) * penetrationCoefficient}
               </InfoWithDelta>
-              {member.substitute && (
-                <Info
-                  key={`${member.type}-substitute`}
-                  indent
-                  name={
-                    <>
-                      <Flex align="center" gap="1">
-                        <AccessibilityIcon />
-                        {member.substitute
-                          .map((sub, index) =>
-                            index === 0 ? CREW_MEMBER_NAMES[sub] : sub,
-                          )
-                          .join(', ')}
-                      </Flex>
-                    </>
-                  }
+              <Flex align="center" gap="2" style={{ paddingLeft: 24 }}>
+                <Text>Distance</Text>
+                <Slider
+                  key={penetrationDistance}
+                  min={0}
+                  max={500}
+                  style={{ flex: 1 }}
+                  defaultValue={[penetrationDistance]}
+                  onValueChange={debounce(([value]) => {
+                    setPenetrationDistance(value);
+                  }, 500)}
                 />
-              )}
-            </Fragment>
-          );
-        })}
+                <TextField.Root
+                  style={{ width: 64 }}
+                  ref={penetrationDistanceInput}
+                  defaultValue={penetrationDistance}
+                  onBlur={() => {
+                    setPenetrationDistance(
+                      Math.min(
+                        parseInt(penetrationDistanceInput.current!.value),
+                        500,
+                      ),
+                    );
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.currentTarget.blur();
+                    }
+                  }}
+                >
+                  <TextField.Slot side="right">m</TextField.Slot>
+                </TextField.Root>
+              </Flex>
+            </>
+          )}
+          <InfoWithDelta name="Damage" unit="hp" decimals={0}>
+            {stats.damage}
+          </InfoWithDelta>
+          <InfoWithDelta name="Module damage" unit="hp" decimals={0}>
+            {stats.moduleDamage}
+          </InfoWithDelta>
+          {isExplosive(shell.type) && (
+            <InfoWithDelta name="Splash radius" unit="m" decimals={0}>
+              {stats.explosionRadius!}
+            </InfoWithDelta>
+          )}
+          <InfoWithDelta name="Caliber" decimals={0} unit="mm">
+            {stats.caliber}
+          </InfoWithDelta>
+          <InfoWithDelta name="Normalization" decimals={0} unit="°">
+            {stats.shellNormalization}
+          </InfoWithDelta>
+          {shell.type !== 'he' && (
+            <InfoWithDelta
+              name="Ricochet"
+              decimals={0}
+              deltaType="lowerIsBetter"
+              unit="°"
+            >
+              {stats.shellRicochet!}
+            </InfoWithDelta>
+          )}
+          <InfoWithDelta name="Shell velocity" unit="m/s" decimals={0}>
+            {stats.shellVelocity}
+          </InfoWithDelta>
+          <InfoWithDelta
+            decimals={2}
+            name="Aim time"
+            unit="s"
+            deltaType="lowerIsBetter"
+          >
+            {stats.aimTime}
+          </InfoWithDelta>
+          <Info name="Dispersion at 100m" />
+          <InfoWithDelta
+            decimals={3}
+            indent
+            name="Still"
+            unit="m"
+            deltaType="lowerIsBetter"
+          >
+            {stats.dispersion}
+          </InfoWithDelta>
+          <InfoWithDelta
+            prefix="+ "
+            decimals={3}
+            indent
+            name="Moving"
+            deltaType="lowerIsBetter"
+          >
+            {stats.dispersionMoving}
+          </InfoWithDelta>
+          <InfoWithDelta
+            decimals={3}
+            prefix="+ "
+            indent
+            name="Hull traversing"
+            deltaType="lowerIsBetter"
+          >
+            {stats.dispersionHullTraversing}
+          </InfoWithDelta>
+          <InfoWithDelta
+            decimals={3}
+            prefix="+ "
+            indent
+            name="Turret traversing"
+            deltaType="lowerIsBetter"
+          >
+            {stats.dispersionTurretTraversing}
+          </InfoWithDelta>
+          <InfoWithDelta
+            decimals={3}
+            prefix="+ "
+            indent
+            name="After shooting"
+            deltaType="lowerIsBetter"
+          >
+            {stats.dispersionShooting}
+          </InfoWithDelta>
+          <InfoWithDelta
+            decimals={1}
+            prefix="x "
+            indent
+            name="Gun damaged"
+            unit="scalar"
+            deltaType="lowerIsBetter"
+          >
+            {stats.dispersionGunDamaged}
+          </InfoWithDelta>
+          <Info name="Gun flexibility" unit="°" />
+          <InfoWithDelta decimals={1} indent name="Depression">
+            {stats.gunDepression}
+          </InfoWithDelta>
+          <InfoWithDelta decimals={1} indent name="Elevation">
+            {stats.gunElevation}
+          </InfoWithDelta>
+          {gunModelDefinition.pitch.front && (
+            <>
+              <InfoWithDelta decimals={1} indent name="Frontal depression">
+                {stats.gunFrontalDepression!}
+              </InfoWithDelta>
+              <InfoWithDelta decimals={1} indent name="Frontal elevation">
+                {stats.gunFrontalElevation!}
+              </InfoWithDelta>
+            </>
+          )}
+          {gunModelDefinition.pitch.back && (
+            <>
+              <InfoWithDelta decimals={1} indent name="Rear depression">
+                {stats.gunRearDepression!}
+              </InfoWithDelta>
+              <InfoWithDelta decimals={1} indent name="Rear elevation">
+                {stats.gunRearElevation!}
+              </InfoWithDelta>
+            </>
+          )}
+          {turretModelDefinition.yaw && (
+            <>
+              <InfoWithDelta decimals={1} indent name="Azimuth left">
+                {stats.azimuthLeft!}
+              </InfoWithDelta>
+              <InfoWithDelta decimals={1} indent name="Azimuth right">
+                {stats.azimuthRight!}
+              </InfoWithDelta>
+            </>
+          )}
+        </Flex>
+        <Flex direction="column" gap="2">
+          <Flex gap="2" align="center">
+            <Heading size="5">Crew training</Heading>
+
+            <Popover.Root>
+              <Popover.Trigger>
+                <IconButton variant="ghost">
+                  <InfoCircledIcon />
+                </IconButton>
+              </Popover.Trigger>
+
+              <Popover.Content>
+                <Flex gap="1" align="center">
+                  <AccessibilityIcon />
+                  <Text>
+                    represents the other roles a crew member can take.
+                  </Text>
+                </Flex>
+              </Popover.Content>
+            </Popover.Root>
+          </Flex>
+
+          {tank.crew.map((member) => {
+            const count = member.count ?? 1;
+
+            return (
+              <Fragment key={member.type}>
+                <InfoWithDelta
+                  key={`${member.type}-root`}
+                  name={`${CREW_MEMBER_NAMES[member.type]}${count > 1 ? ` x ${count}` : ''}`}
+                  unit="%"
+                  decimals={0}
+                >
+                  {(member.type === 'commander'
+                    ? commanderMastery
+                    : crewMemberMastery) * 100}
+                </InfoWithDelta>
+                {member.substitute && (
+                  <Info
+                    key={`${member.type}-substitute`}
+                    indent
+                    name={
+                      <>
+                        <Flex align="center" gap="1">
+                          <AccessibilityIcon />
+                          {member.substitute
+                            .map((sub, index) =>
+                              index === 0 ? CREW_MEMBER_NAMES[sub] : sub,
+                            )
+                            .join(', ')}
+                        </Flex>
+                      </>
+                    }
+                  />
+                )}
+              </Fragment>
+            );
+          })}
+        </Flex>
+      </Flex>
+
+      <Flex direction="column" gap="8" style={{ flex: 1 }}>
+        <Flex direction="column" gap="2">
+          <Heading size="5">Maneuverability</Heading>
+          <Info name="Speed" unit="km/hr" />
+          <InfoWithDelta decimals={0} indent name="Forwards">
+            {stats.speedForwards}
+          </InfoWithDelta>
+          <InfoWithDelta decimals={0} indent name="Backwards">
+            {stats.speedBackwards}
+          </InfoWithDelta>
+          <InfoWithDelta decimals={0} name="Engine power" unit="hp">
+            {stats.enginePower}
+          </InfoWithDelta>
+          <InfoWithDelta
+            decimals={1}
+            name="Weight"
+            unit="tn"
+            deltaType="lowerIsBetter"
+          >
+            {stats.weight}
+          </InfoWithDelta>
+          <Info name="Power to weight ratio" unit="hp/tn" />
+          <InfoWithDelta decimals={1} indent name="On hard terrain">
+            {stats.powerToWeightRatioHardTerrain}
+          </InfoWithDelta>
+          <InfoWithDelta decimals={1} indent name="On medium terrain">
+            {stats.powerToWeightRatioMediumTerrain}
+          </InfoWithDelta>
+          <InfoWithDelta decimals={1} indent name="On soft terrain">
+            {stats.powerToWeightRatioSoftTerrain}
+          </InfoWithDelta>
+          <InfoWithDelta name="Turret traverse speed" unit="°/s" decimals={1}>
+            {stats.turretTraverseSpeed}
+          </InfoWithDelta>
+          <Info name="Hull traverse speed" unit="°/s" />
+          <InfoWithDelta decimals={1} indent name="On hard terrain">
+            {stats.hullTraverseHardTerrain}
+          </InfoWithDelta>
+          <InfoWithDelta decimals={1} indent name="On medium terrain">
+            {stats.hullTraverseMediumTerrain}
+          </InfoWithDelta>
+          <InfoWithDelta decimals={1} indent name="On soft terrain">
+            {stats.hullTraverseSoftTerrain}
+          </InfoWithDelta>
+        </Flex>
+        <Flex direction="column" gap="2">
+          <Heading size="5">Survivability</Heading>
+          <InfoWithDelta name="Health" unit="hp" decimals={0}>
+            {stats.health}
+          </InfoWithDelta>
+          <InfoWithDelta
+            name="Fire chance"
+            unit="%"
+            deltaType="lowerIsBetter"
+            decimals={0}
+          >
+            {stats.fireChance * 100}
+          </InfoWithDelta>
+          <InfoWithDelta name="View range" unit="m" decimals={0}>
+            {stats.viewRange}
+          </InfoWithDelta>
+          <Info name="Camouflage" unit="%" />
+          <InfoWithDelta indent name="Still" decimals={0}>
+            {stats.camouflageStill * 100}
+          </InfoWithDelta>
+          <InfoWithDelta indent name="Moving" decimals={0}>
+            {stats.camouflageMoving * 100}
+          </InfoWithDelta>
+          <InfoWithDelta indent name="Shooting still" decimals={0}>
+            {stats.camouflageShootingStill * 100}
+          </InfoWithDelta>
+          <InfoWithDelta indent name="Shooting moving" decimals={0}>
+            {stats.camouflageShootingMoving * 100}
+          </InfoWithDelta>
+          <InfoWithDelta indent name="Caught on fire" decimals={0}>
+            {stats.camouflageCaughtOnFire * 100}
+          </InfoWithDelta>
+          <Info name="Width" unit="m" decimals={0} deltaType="lowerIsBetter">
+            {stats.width}
+          </Info>
+          <Info name="Height" unit="m" decimals={0} deltaType="lowerIsBetter">
+            {stats.height}
+          </Info>
+          <Info name="Length" unit="m" decimals={0} deltaType="lowerIsBetter">
+            {stats.length}
+          </Info>
+          <Info name="Volume" unit="m" decimals={0} deltaType="lowerIsBetter">
+            {stats.volume}
+          </Info>
+        </Flex>
       </Flex>
     </Flex>
   );

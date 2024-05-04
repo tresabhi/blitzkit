@@ -1,5 +1,4 @@
 import { Flex, Heading } from '@radix-ui/themes';
-import PageWrapper from '../../../../../../components/PageWrapper';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import { Characteristics } from '../Characteristics';
 import { Consumables } from '../Characteristics/components/Consumables';
@@ -10,16 +9,25 @@ import { Provisions } from '../Characteristics/components/Provisions';
 import { Skills } from '../Characteristics/components/Skills';
 
 export function CharacteristicsSection() {
-  const wideFormat = useWideFormat(720);
+  const wideFormat = useWideFormat(700);
 
   return (
-    <PageWrapper >
+    <Flex
+      align="center"
+      px="4"
+      style={{
+        boxSizing: 'border-box',
+      }}
+      direction={wideFormat ? 'row' : 'column'}
+      mt="4"
+    >
       <Flex
         gap="6"
         style={{ width: '100%' }}
         direction={wideFormat ? 'row' : 'column'}
+        justify="center"
       >
-        <Flex style={{ flex: 1, maxWidth: 480 }} direction="column" gap="4">
+        <Flex style={{ flex: 1, maxWidth: 380 }} direction="column" gap="4">
           <Heading>Configure</Heading>
           <Modules />
           <Equipment />
@@ -30,7 +38,11 @@ export function CharacteristicsSection() {
         </Flex>
 
         <Flex
-          style={{ flex: 1, width: wideFormat ? undefined : '100%' }}
+          style={{
+            flex: 1,
+            maxWidth: wideFormat ? 640 : undefined,
+            minWidth: 320,
+          }}
           direction="column"
           gap="4"
         >
@@ -38,6 +50,6 @@ export function CharacteristicsSection() {
           <Characteristics />
         </Flex>
       </Flex>
-    </PageWrapper>
+    </Flex>
   );
 }

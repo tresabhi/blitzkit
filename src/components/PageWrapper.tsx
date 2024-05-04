@@ -8,6 +8,7 @@ type PageWrapperProps = FlexProps & {
   noPadding?: boolean;
   noMaxWidth?: boolean;
   highlight?: boolean;
+  containerProps?: ComponentProps<typeof Theme>;
 };
 
 export default function PageWrapper({
@@ -18,6 +19,7 @@ export default function PageWrapper({
   noPadding = false,
   noMaxWidth = false,
   highlight = false,
+  containerProps,
   ...props
 }: PageWrapperProps) {
   return (
@@ -30,7 +32,9 @@ export default function PageWrapper({
         background: highlight
           ? `linear-gradient(-90deg, ${theme.colors.appBackground1}, ${theme.colors.appBackground2})`
           : undefined,
+        ...containerProps?.style,
       }}
+      {...containerProps}
     >
       <Flex
         direction="column"

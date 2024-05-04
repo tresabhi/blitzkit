@@ -124,7 +124,12 @@ export function TechTreeSection() {
     <PageWrapper
       style={{
         position: 'relative',
-        overflow: 'hidden',
+      }}
+      containerProps={{
+        style: {
+          overflow: 'hidden',
+          marginTop: 16,
+        },
       }}
       size={tank.ancestors && tank.successors ? 880 : 480}
       gap="0"

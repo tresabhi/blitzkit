@@ -32,7 +32,7 @@ export function Info({
       style={{ width: '100%', paddingLeft: indent ? 24 : 0 }}
       gap="4"
     >
-      <Text color={highlight ? 'amber' : undefined}>
+      <Text color={highlight ? 'amber' : 'gray'}>
         {name}
         {unit != undefined && (
           <>
