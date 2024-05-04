@@ -337,7 +337,7 @@ export function Options() {
           </Flex>
         )}
 
-        <Flex gap="4" align="center">
+        <Flex gap="3" align="center">
           <Flex
             style={{
               cursor: 'default',
@@ -350,7 +350,7 @@ export function Options() {
                 draft.mode = draft.mode === 'armor' ? 'model' : 'armor';
               });
             }}
-            mr="2"
+            mr="1"
           >
             <Switch size="1" checked={mode === 'armor'} />
             Armor

@@ -14,13 +14,13 @@ export function HeroSection() {
   return (
     <Flex
       justify="center"
-      // pl={wideFormat ? '9' : undefined}
-      p={wideFormat ? '0' : '6'}
-      pb={wideFormat ? '0' : '6'}
+      py={wideFormat ? '0' : '6'}
       style={{
-        background: `linear-gradient(-90deg, ${theme.colors.appBackground1}, ${theme.colors.appBackground2})`,
+        background: `linear-gradient(${wideFormat ? -90 : 180}deg, ${theme.colors.appBackground1}, ${theme.colors.appBackground2})`,
         position: 'relative',
+        height: wideFormat ? undefined : 'calc(100vh - 64px)',
       }}
+      gap="4"
     >
       <Flex
         direction={wideFormat ? 'row' : 'column'}
@@ -33,16 +33,16 @@ export function HeroSection() {
           align="center"
           justify="center"
           style={{
-            flex: 1,
+            flex: wideFormat ? 1 : undefined,
           }}
         >
           <Flex
             gap={wideFormat ? '4' : '2'}
             direction="column"
-            ml="8"
+            ml={wideFormat ? '8' : undefined}
             align={wideFormat ? undefined : 'center'}
           >
-            <Heading size="9">{tank.name}</Heading>
+            <Heading size={wideFormat ? '9' : '8'}>{tank.name}</Heading>
             <Text color="gray">
               Tier {TIER_ROMAN_NUMERALS[tank.tier]}{' '}
               {
@@ -57,8 +57,8 @@ export function HeroSection() {
 
         <div
           style={{
-            height: 512,
-            flex: wideFormat ? 2 : undefined,
+            height: wideFormat ? 512 : undefined,
+            flex: 2,
             position: 'relative',
           }}
         >
