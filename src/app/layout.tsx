@@ -12,7 +12,6 @@ import Navbar from '../components/Navbar';
 import { Party3 } from '../components/Party3';
 import isDev from '../core/blitzkit/isDev';
 import { isLocalhost } from '../core/blitzkit/isLocalhost';
-import { useFullScreen } from '../hooks/useFullScreen';
 import { useApp } from '../stores/app';
 
 config();
@@ -34,7 +33,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const isRoot = pathname === '/';
   const darkMode = useApp((state) => state.darkMode);
   const [showDevBuildAlert, setShowDevBuildAlert] = useState(false);
-  const isFullScreen = useFullScreen();
 
   useEffect(() => {
     setShowDevBuildAlert(
@@ -120,7 +118,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               {children}
             </Suspense>
 
-            {!isEmbed && !isFullScreen && <Footer />}
+            {!isEmbed && <Footer />}
           </Flex>
         </Theme>
       </body>

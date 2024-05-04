@@ -1,7 +1,6 @@
 import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { Suspense, use, useEffect, useRef, useState } from 'react';
-import { isMobile } from 'react-device-detect';
+import { Suspense, use, useEffect, useRef } from 'react';
 import { Armor } from '../../../../../../components/Armor';
 import { ShotDisplay } from '../../../../../../components/Armor/components/ShotDisplay';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
@@ -9,13 +8,8 @@ import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitio
 import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
-import { useFullScreen } from '../../../../../../hooks/useFullScreen';
-import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
-import {
-  mutateTankopediaTemporary,
-  useTankopediaPersistent,
-} from '../../../../../../stores/tankopedia';
+import { mutateTankopediaTemporary } from '../../../../../../stores/tankopedia';
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
 import { SceneProps } from '../SceneProps';
@@ -26,17 +20,11 @@ export function TankSandbox() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const hasImprovedVerticalStabilizer = useEquipment(122);
   const awaitedModelDefinitions = use(modelDefinitions);
-  const canvasWrapper = useRef<HTMLDivElement>(null);
-  const mode = useTankopediaPersistent((state) => state.mode);
   const protagonist = useDuel((state) => state.protagonist!);
   const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
-  const wideFormat = useWideFormat();
-  const [loadModel, setLoadModel] = useState(wideFormat || !isMobile);
-  const duel = useDuel();
-  const isFullScreen = useFullScreen();
 
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);

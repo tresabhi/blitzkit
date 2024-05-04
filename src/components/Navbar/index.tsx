@@ -21,7 +21,6 @@ import { TOOLS } from '../../constants/tools';
 import { authURL } from '../../core/blitz/authURL';
 import { extendAuth } from '../../core/blitz/extendAuth';
 import { logout } from '../../core/blitz/logout';
-import { useFullScreen } from '../../hooks/useFullScreen';
 import { useWideFormat } from '../../hooks/useWideFormat';
 import { BlitzkitWide } from '../../icons/BlitzkitWide';
 import { PatreonIcon } from '../../icons/Patreon';
@@ -30,7 +29,6 @@ import { useApp } from '../../stores/app';
 import { LoggedIn } from './components/LoggedIn';
 
 export default function Navbar() {
-  const isFullScreen = useFullScreen();
   const wideFormat = useWideFormat(480);
   const login = useApp((state) => state.login);
 
@@ -46,8 +44,6 @@ export default function Navbar() {
       extendAuth();
     }
   });
-
-  if (isFullScreen) return null;
 
   const plugs = (
     <>

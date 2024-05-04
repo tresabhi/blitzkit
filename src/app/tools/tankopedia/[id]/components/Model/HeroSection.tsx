@@ -2,6 +2,7 @@ import { ChevronLeftIcon, MixIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
+import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import strings from '../../../../../../lang/en-US.json';
 import { theme } from '../../../../../../stitches.config';
@@ -17,6 +18,7 @@ export function HeroSection() {
     protagonistTank.id === antagonistTank.id
       ? [protagonistTank.id]
       : [protagonistTank.id, antagonistTank.id];
+  const isFullScreen = useFullScreen();
 
   return (
     <Flex
@@ -87,9 +89,14 @@ export function HeroSection() {
 
         <div
           style={{
-            height: wideFormat ? 512 : undefined,
             flex: 2,
-            position: 'relative',
+            position: isFullScreen ? 'fixed' : 'relative',
+            top: isFullScreen ? 0 : undefined,
+            left: isFullScreen ? 0 : undefined,
+            width: isFullScreen ? '100vw' : undefined,
+            height: isFullScreen ? '100vh' : wideFormat ? 512 : undefined,
+            zIndex: isFullScreen ? 3 : undefined,
+            background: isFullScreen ? theme.colors.appBackground1 : undefined,
           }}
         >
           <div

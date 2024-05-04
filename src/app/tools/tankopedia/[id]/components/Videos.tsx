@@ -2,16 +2,14 @@ import { Flex, Heading, Link } from '@radix-ui/themes';
 import { use } from 'react';
 import PageWrapper from '../../../../../components/PageWrapper';
 import { videoDefinitions } from '../../../../../core/blitzkit/videos';
-import { useFullScreen } from '../../../../../hooks/useFullScreen';
 import { useDuel } from '../../../../../stores/duel';
 
 export function Videos() {
-  const isFullScreen = useFullScreen();
   const tank = useDuel((state) => state.protagonist!.tank);
   const awaitedVideoDefinitions = use(videoDefinitions);
   const videos = awaitedVideoDefinitions[tank.id]?.videos ?? [];
 
-  if (isFullScreen || videos.length === 0) return null;
+  if (videos.length === 0) return null;
 
   return (
     <PageWrapper noFlex1>

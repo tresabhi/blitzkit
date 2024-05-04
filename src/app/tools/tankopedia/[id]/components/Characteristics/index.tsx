@@ -24,7 +24,6 @@ import {
   GUN_TYPE_NAMES,
 } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
-import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
@@ -38,7 +37,6 @@ export function Characteristics() {
   const awaitedProvisionDefinitions = use(provisionDefinitions);
   const crewSkills = useTankopediaTemporary((state) => state.skills);
   const penetrationDistanceInput = useRef<HTMLInputElement>(null);
-  const isFullScreen = useFullScreen();
   const hasImprovedVentilation = useEquipment(102);
   const crewMastery = useDuel((state) => state.protagonist!.crewMastery);
   const [penetrationDistance, setPenetrationDistance] = useState(250);
@@ -126,8 +124,6 @@ export function Characteristics() {
       );
     });
   }, [hasImprovedVerticalStabilizer]);
-
-  if (isFullScreen) return null;
 
   return (
     <Flex direction={wideFormat ? 'row' : 'column'} gap="8" wrap="wrap">
