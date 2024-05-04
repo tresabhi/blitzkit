@@ -88,6 +88,7 @@ export function HeroSection() {
         </Flex>
 
         <div
+          className="tank-sandbox-container"
           style={{
             flex: 2,
             position: isFullScreen ? 'fixed' : 'relative',

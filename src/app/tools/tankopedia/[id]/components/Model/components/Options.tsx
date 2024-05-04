@@ -36,6 +36,7 @@ import mutateTankopediaPersistent, {
 } from '../../../../../../../stores/tankopedia';
 import { TankSearch } from '../../../../components/TankSearch';
 import { ENVIRONMENTS } from '../../Lighting';
+import { RotationInputs } from '../../QuickInputs';
 
 export function Options() {
   const mode = useTankopediaPersistent((state) => state.mode);
@@ -73,6 +74,8 @@ export function Options() {
 
   return (
     <>
+      <RotationInputs />
+
       {mode === 'armor' && (
         <Flex
           gap="2"
