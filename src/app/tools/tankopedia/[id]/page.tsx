@@ -3,16 +3,18 @@
 import { useEffect } from 'react';
 import PageWrapper from '../../../../components/PageWrapper';
 import { assignDuelMember } from '../../../../core/blitzkit/assignDuelMember';
-import { useWideFormat } from '../../../../hooks/useWideFormat';
 import { mutateDuel, useDuel } from '../../../../stores/duel';
 import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
 import { CharacteristicsSection } from './components/Model/CharacteristicsSection';
 import { HeroSection } from './components/Model/HeroSection';
+import { HistoricalSection } from './components/Model/HistoricalSection';
+import { TankopediaPlug } from './components/Model/TankopediaPlug';
+import { TankopediaSeparator } from './components/TankopediaSeparator';
+import { Videos } from './components/Videos';
 
 export default function Page({ params }: { params: { id: string } }) {
   const initialId = parseInt(params.id);
   const assigned = useDuel((state) => state.assigned);
-  const wideFormat = useWideFormat();
 
   useEffect(() => {
     assignDuelMember('both', initialId);
@@ -60,7 +62,11 @@ export default function Page({ params }: { params: { id: string } }) {
       {assigned && (
         <>
           <HeroSection />
+          <TankopediaPlug />
           <CharacteristicsSection />
+          <TankopediaSeparator />
+          <Videos />
+          <HistoricalSection />
         </>
       )}
     </PageWrapper>

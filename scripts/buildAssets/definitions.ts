@@ -542,7 +542,7 @@ export async function definitions(production: boolean) {
         tankDefinitions[tankId] = {
           id: tankId,
           description:
-            wargamingTankopedia.data[tank.id]?.description ?? undefined,
+            wargamingTankopedia.data[tankId]?.description ?? undefined,
           fixedCamouflage: fixedCamouflage ? true : undefined,
           crew,
           weight: tankDefinition.root.hull.weight,

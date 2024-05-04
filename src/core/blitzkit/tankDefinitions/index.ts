@@ -148,10 +148,6 @@ export const tankDefinitions = fetchCdonLz4<TankDefinitions>(
   asset('definitions/tanks.cdon.lz4'),
 );
 
-// export const tankDefinitions = readFile('test.tanks.cdon.lz4').then((data) =>
-//   superDecompress<TankDefinitions>(data.buffer),
-// );
-
 const entries = new Promise<TankDefinition[]>(async (resolve) => {
   resolve(Object.entries(await tankDefinitions).map(([, entry]) => entry));
 });

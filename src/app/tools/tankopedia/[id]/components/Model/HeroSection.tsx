@@ -36,8 +36,13 @@ export function HeroSection() {
             flex: 1,
           }}
         >
-          <Flex gap={wideFormat ? '4' : '2'} direction="column">
-            <Heading size={wideFormat ? '9' : '8'}>{tank.name}</Heading>
+          <Flex
+            gap={wideFormat ? '4' : '2'}
+            direction="column"
+            ml="8"
+            align={wideFormat ? undefined : 'center'}
+          >
+            <Heading size="9">{tank.name}</Heading>
             <Text color="gray">
               Tier {TIER_ROMAN_NUMERALS[tank.tier]}{' '}
               {

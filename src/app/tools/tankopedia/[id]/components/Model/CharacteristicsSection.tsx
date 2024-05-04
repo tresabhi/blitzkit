@@ -1,4 +1,5 @@
 import { Flex, Heading } from '@radix-ui/themes';
+import PageWrapper from '../../../../../../components/PageWrapper';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import { Characteristics } from '../Characteristics';
 import { Consumables } from '../Characteristics/components/Consumables';
@@ -12,9 +13,9 @@ export function CharacteristicsSection() {
   const wideFormat = useWideFormat(720);
 
   return (
-    <Flex justify="center" mt="4" direction={wideFormat ? 'row' : 'column'}>
-      <Flex gap="4">
-        <Flex style={{ flex: 1, maxWidth: 320 }} direction="column" gap="4">
+    <PageWrapper>
+      <Flex gap="4" style={{ width: '100%' }}>
+        <Flex style={{ flex: 1 }} direction="column" gap="4">
           <Heading>Configure</Heading>
           <Modules />
           <Equipment />
@@ -24,11 +25,11 @@ export function CharacteristicsSection() {
           <Miscellaneous />
         </Flex>
 
-        <Flex direction="column" gap="4">
+        <Flex style={{ flex: 1 }} direction="column" gap="4">
           <Heading>Characteristics</Heading>
           <Characteristics />
         </Flex>
       </Flex>
-    </Flex>
+    </PageWrapper>
   );
 }
