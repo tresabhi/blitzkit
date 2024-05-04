@@ -8,6 +8,7 @@ import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
 import { CharacteristicsSection } from './components/Model/CharacteristicsSection';
 import { HeroSection } from './components/Model/HeroSection';
 import { HistoricalSection } from './components/Model/HistoricalSection';
+import { TechTreeSection } from './components/Model/TechTreeSection';
 import { TankopediaSeparator } from './components/TankopediaSeparator';
 import { Videos } from './components/Videos';
 
@@ -62,6 +63,7 @@ export default function Page({ params }: { params: { id: string } }) {
         <>
           <HeroSection />
           {/* <TankopediaPlug /> */}
+          <TechTreeSection />
           <CharacteristicsSection />
           <TankopediaSeparator />
           <Videos />
