@@ -189,8 +189,8 @@ export function Options() {
               <Dialog.Trigger>
                 <Button variant="ghost">
                   <Flex gap="2" align="center">
-                    {antagonistTank.name}
                     <SmallTankIcon id={antagonistTank.id} size={16} />
+                    {antagonistTank.name}
                   </Flex>
                 </Button>
               </Dialog.Trigger>
