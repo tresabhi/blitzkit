@@ -14,8 +14,13 @@ export function CharacteristicsSection() {
 
   return (
     <PageWrapper>
-      <Flex gap="4" style={{ width: '100%' }}>
-        <Flex style={{ flex: 1 }} direction="column" gap="4">
+      <Flex
+        gap="5"
+        style={{ width: '100%' }}
+        direction={wideFormat ? 'row' : 'column'}
+        align={wideFormat ? undefined : 'center'}
+      >
+        <Flex style={{ flex: 1, maxWidth: 480 }} direction="column" gap="4">
           <Heading>Configure</Heading>
           <Modules />
           <Equipment />
@@ -25,7 +30,11 @@ export function CharacteristicsSection() {
           <Miscellaneous />
         </Flex>
 
-        <Flex style={{ flex: 1 }} direction="column" gap="4">
+        <Flex
+          style={{ flex: 1, width: wideFormat ? undefined : '100%' }}
+          direction="column"
+          gap="4"
+        >
           <Heading>Characteristics</Heading>
           <Characteristics />
         </Flex>
