@@ -14,6 +14,11 @@ export type CrewMember =
   | 'driver'
   | 'loader';
 export type TankDefinitions = Record<number, TankDefinition>;
+export type ModuleType = 'vehicle' | 'engine' | 'chassis' | 'turret' | 'gun';
+export interface Unlock {
+  type: ModuleType;
+  id: number;
+}
 export interface Crew {
   type: CrewMember;
   count?: number;
@@ -69,6 +74,7 @@ export interface TrackDefinition {
     medium: number;
     soft: number;
   };
+  unlocks?: Unlock[];
 }
 export interface EngineDefinition {
   id: number;
@@ -78,6 +84,7 @@ export interface EngineDefinition {
   fireChance: number;
   power: number;
   weight: number;
+  unlocks?: Unlock[];
 }
 export type TankDefinitionPrice =
   | { type: 'credits'; value: number }
@@ -92,6 +99,7 @@ export interface TurretDefinition {
   tier: Tier;
   guns: GunDefinition[];
   weight: number;
+  unlocks?: Unlock[];
 }
 export type GunDefinition =
   | GunDefinitionRegular
@@ -113,6 +121,7 @@ interface GunDefinitionBase {
     shot: number;
     damaged: number;
   };
+  unlocks?: Unlock[];
 }
 interface GunDefinitionRegular extends GunDefinitionBase {
   type: 'regular';

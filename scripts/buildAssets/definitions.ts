@@ -453,6 +453,36 @@ export async function definitions(production: boolean) {
         `${DATA}/${POI.vehicleDefinitions}/${nation}/components/chassis.xml.dvpl`,
       );
 
+      function resolveUnlocks(unlocks?: Unlocks) {
+        if (!unlocks) return undefined;
+
+        return Object.entries(unlocks)
+          .map(([type, list]) =>
+            (Array.isArray(list) ? list : [list]).map((item) => {
+              const typeTyped = type as keyof Unlocks;
+              let rawId: number;
+
+              if (typeTyped === 'chassis') {
+                rawId = chassisList.root.ids[item['#text']];
+              } else if (typeTyped === 'engine') {
+                rawId = enginesList.root.ids[item['#text']];
+              } else if (typeTyped === 'gun') {
+                rawId = gunList.root.ids[item['#text']];
+              } else if (typeTyped === 'turret') {
+                rawId = turretList.root.ids[item['#text']];
+              } else if (typeTyped === 'vehicle') {
+                rawId = tankList.root[item['#text']].id;
+              }
+
+              return {
+                type: typeTyped,
+                id: toUniqueId(nation, rawId!),
+              };
+            }),
+          )
+          .flat();
+      }
+
       for (const tankKey in tankList.root) {
         if (botPattern.test(tankKey)) continue;
 
@@ -626,6 +656,7 @@ export async function definitions(production: boolean) {
               soft: terrainResistances[2],
             },
             tier: track.level as Tier,
+            unlocks: resolveUnlocks(track.unlocks),
           });
 
           modelDefinitions[tankId].tracks[trackId] = {
@@ -650,6 +681,7 @@ export async function definitions(production: boolean) {
             tier: engineListEntry.level as Tier,
             weight: engineListEntry.weight,
             power: engineListEntry.power,
+            unlocks: resolveUnlocks(engine.unlocks),
           });
         });
 
@@ -711,6 +743,7 @@ export async function definitions(production: boolean) {
               health: turret.maxHealth,
               viewRange: turret.circularVisionRadius,
               weight: turret.weight,
+              unlocks: resolveUnlocks(turret.unlocks),
             });
 
             modelDefinitions[tankId].turrets[turretId] = {
@@ -829,6 +862,7 @@ export async function definitions(production: boolean) {
                   shot: shotDispersionFactors.afterShot,
                   traverse: shotDispersionFactors.turretRotation,
                 },
+                unlocks: resolveUnlocks(gun.unlocks),
               } as GunDefinition);
 
               modelDefinitions[tankId].turrets[turretId].guns[gunId] = {

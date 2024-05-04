@@ -7,6 +7,7 @@ import { mutateDuel, useDuel } from '../../../../stores/duel';
 import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
 import { HeroSection } from './components/Model/HeroSection';
 import { HistoricalSection } from './components/Model/HistoricalSection';
+import { ModulesSection } from './components/Model/ModulesSection';
 import { TechTreeSection } from './components/Model/TechTreeSection';
 import { Videos } from './components/Videos';
 
@@ -62,6 +63,7 @@ export default function Page({ params }: { params: { id: string } }) {
           <HeroSection />
           {/* <TankopediaPlug /> */}
           <TechTreeSection />
+          <ModulesSection />
           {/* <CharacteristicsSection />
           <TankopediaSeparator /> */}
           <Videos />
