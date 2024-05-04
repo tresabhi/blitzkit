@@ -1016,7 +1016,9 @@ export function TankSearch({
         )}
       </Flex>
 
-      <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />
+      {searchResultsPageSlice.length > tanksPerPage / 4 && (
+        <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />
+      )}
     </>
   );
 }
