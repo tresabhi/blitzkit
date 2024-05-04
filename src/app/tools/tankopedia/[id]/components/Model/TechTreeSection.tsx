@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from '@radix-ui/react-icons';
-import { ChevronDownIcon, Flex, Heading, Text } from '@radix-ui/themes';
+import { ChevronDownIcon, Flex, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { ComponentProps, use } from 'react';
 import PageWrapper from '../../../../../../components/PageWrapper';
@@ -121,10 +121,39 @@ export function TechTreeSection() {
   }
 
   return (
-    <PageWrapper>
-      <Heading>Tech tree</Heading>
+    <PageWrapper
+      style={{
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+      size={tank.ancestors && tank.successors ? 880 : 480}
+      gap="0"
+      highlight
+    >
+      <img
+        src={asset(`flags/scratched/${tank.nation}.webp`)}
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          height: '200%',
+          transform: 'translate(-40%, -48%)',
+          backgroundRepeat: 'no-repeat',
+          opacity: 1 / 4,
+        }}
+      />
 
-      <Flex align="center" gap="6">
+      {/* <Flex justify="center">
+        <Heading>Tech tree</Heading>
+      </Flex> */}
+
+      <Flex
+        align="center"
+        gap="6"
+        style={{
+          zIndex: 1,
+        }}
+      >
         {tank.ancestors && (
           <>
             <Flex
@@ -146,28 +175,8 @@ export function TechTreeSection() {
           </>
         )}
 
-        <Flex
-          direction="column"
-          style={{
-            position: 'relative',
-          }}
-        >
+        <Flex direction="column">
           <Card id={tank.id} />
-
-          <img
-            src={asset(`flags/scratched/${tank.nation}.webp`)}
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              height: 180,
-              transform: 'translate(-42%, -50%)',
-              backgroundRepeat: 'no-repeat',
-              zIndex: -1,
-              opacity: 1 / 4,
-              filter: 'blur(4px)',
-            }}
-          />
         </Flex>
 
         {tank.successors && (

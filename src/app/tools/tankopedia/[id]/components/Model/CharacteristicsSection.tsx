@@ -13,9 +13,9 @@ export function CharacteristicsSection() {
   const wideFormat = useWideFormat(720);
 
   return (
-    <PageWrapper>
+    <PageWrapper >
       <Flex
-        gap={wideFormat ? '4' : '6'}
+        gap="6"
         style={{ width: '100%' }}
         direction={wideFormat ? 'row' : 'column'}
       >

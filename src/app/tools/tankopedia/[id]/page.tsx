@@ -5,9 +5,9 @@ import PageWrapper from '../../../../components/PageWrapper';
 import { assignDuelMember } from '../../../../core/blitzkit/assignDuelMember';
 import { mutateDuel, useDuel } from '../../../../stores/duel';
 import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
+import { CharacteristicsSection } from './components/Model/CharacteristicsSection';
 import { HeroSection } from './components/Model/HeroSection';
 import { HistoricalSection } from './components/Model/HistoricalSection';
-import { ModulesSection } from './components/Model/ModulesSection';
 import { TechTreeSection } from './components/Model/TechTreeSection';
 import { Videos } from './components/Videos';
 
@@ -62,10 +62,9 @@ export default function Page({ params }: { params: { id: string } }) {
         <>
           <HeroSection />
           {/* <TankopediaPlug /> */}
-          <ModulesSection />
+          <CharacteristicsSection />
           <TechTreeSection />
-          {/* <CharacteristicsSection />
-          <TankopediaSeparator /> */}
+          {/* <TankopediaSeparator /> */}
           <Videos />
           <HistoricalSection />
         </>
