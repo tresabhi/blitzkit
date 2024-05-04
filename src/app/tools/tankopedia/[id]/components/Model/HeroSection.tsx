@@ -1,4 +1,4 @@
-import { CaretRightIcon } from '@radix-ui/react-icons';
+import { ChevronLeftIcon, MixIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
@@ -48,10 +48,15 @@ export function HeroSection() {
             direction="column"
             ml={wideFormat ? '8' : undefined}
             align={wideFormat ? undefined : 'center'}
+            justify="center"
+            style={{
+              height: '100%',
+            }}
           >
             <Heading size={wideFormat ? '9' : '8'}>
               {protagonistTank.name}
             </Heading>
+
             <Text color="gray">
               Tier {TIER_ROMAN_NUMERALS[protagonistTank.tier]}{' '}
               {
@@ -62,11 +67,21 @@ export function HeroSection() {
               {strings.common.tank_class_short[protagonistTank.class]}
             </Text>
 
-            <Link href={`/tools/compare?tanks=${compareTanks.join('%2C')}`}>
-              <Button variant="ghost">
-                Compare <CaretRightIcon />
-              </Button>
-            </Link>
+            <Flex gap="4" mt="-1">
+              <Link href="/tools/tankopedia">
+                <Button variant="ghost" size="1" ml="-1">
+                  <ChevronLeftIcon />
+                  Back
+                </Button>
+              </Link>
+
+              <Link href={`/tools/compare?tanks=${compareTanks.join('%2C')}`}>
+                <Button variant="ghost" size="1">
+                  <MixIcon />
+                  Compare
+                </Button>
+              </Link>
+            </Flex>
           </Flex>
         </Flex>
 
