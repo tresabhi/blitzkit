@@ -1,17 +1,105 @@
-import { Flex, Heading } from '@radix-ui/themes';
+import { Flex, Heading, IconButton, Text } from '@radix-ui/themes';
+import Link from 'next/link';
 import { use } from 'react';
-import { ModuleButton } from '../../../../../../components/ModuleButtons/ModuleButton';
 import PageWrapper from '../../../../../../components/PageWrapper';
+import { asset } from '../../../../../../core/blitzkit/asset';
 import {
   ModuleDefinition,
   ModuleType,
   TankDefinition,
   tankDefinitions,
+  Tier,
   Unlock,
 } from '../../../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
+import { tankIcon } from '../../../../../../core/blitzkit/tankIcon';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import { TreeArrow } from './TechTreeSection';
+
+function ModuleButton({
+  tier,
+  selected,
+  unlock,
+  onClick,
+}: {
+  unlock: Unlock;
+  tier: Tier;
+  selected: boolean;
+  onClick: () => void;
+}) {
+  const numberFormat = Intl.NumberFormat(undefined, {
+    notation: 'compact',
+    maximumFractionDigits: 0,
+  });
+  const button = (
+    <IconButton
+      size="4"
+      radius="small"
+      variant={selected ? 'surface' : 'soft'}
+      color={selected ? undefined : 'gray'}
+      onClick={onClick}
+      style={{
+        position: 'relative',
+      }}
+    >
+      <Text
+        size="1"
+        color="gray"
+        style={{
+          position: 'absolute',
+          left: 4,
+          top: 4,
+        }}
+      >
+        {TIER_ROMAN_NUMERALS[tier]}
+      </Text>
+
+      {unlock.cost.value > 0 && (
+        <Flex
+          style={{
+            position: 'absolute',
+            left: '50%',
+            bottom: 4,
+            transform: 'translateX(-50%)',
+          }}
+          align="center"
+        >
+          <Text size="1" color="gray">
+            {numberFormat.format(unlock.cost.value)}
+          </Text>
+
+          <img
+            src={asset(`icons/currencies/${unlock.cost.type}.webp`)}
+            style={{
+              width: 12,
+              height: 12,
+              objectFit: 'contain',
+            }}
+          />
+        </Flex>
+      )}
+
+      <img
+        src={
+          unlock.type === 'vehicle'
+            ? tankIcon(unlock.id)
+            : asset(`icons/modules/${unlock.type}.webp`)
+        }
+        style={{
+          width: 32,
+          height: 32,
+          objectFit: 'contain',
+        }}
+      />
+    </IconButton>
+  );
+
+  return unlock.type === 'vehicle' ? (
+    <Link href={`/tools/tankopedia/${unlock.id}`}>{button}</Link>
+  ) : (
+    button
+  );
+}
 
 export function ModulesSection() {
   const awaitedTankDefinitions = use(tankDefinitions);
@@ -92,21 +180,17 @@ export function ModulesSection() {
                 turret.guns.some((gun) => gun.id === unlock.id),
               )!
               .guns.find((gun) => gun.id === unlock.id)!;
+          } else if (unlock.type === 'vehicle') {
+            module = awaitedTankDefinitions[unlock.id];
           }
 
           if (module === undefined) return null;
 
-          const unlocksFiltered = (module as ModuleDefinition).unlocks?.filter(
-            ({ type }) => type !== 'vehicle',
-          );
-
           return (
             <Flex align="center" gap="2">
               <ModuleButton
-                first
-                last
-                module={unlock.type}
-                discriminator={TIER_ROMAN_NUMERALS[module.tier]}
+                unlock={unlock}
+                tier={module.tier}
                 selected={
                   (unlock.type === 'turret'
                     ? turret.id
@@ -121,7 +205,7 @@ export function ModulesSection() {
                 onClick={() => setByUnlock(unlock)}
               />
 
-              {unlocksFiltered && unlocksFiltered.length > 0 && (
+              {(module as ModuleDefinition).unlocks && (
                 <>
                   <TreeArrow style={{ width: 32 }} />
                   {tree(type, (module as ModuleDefinition).unlocks!)}
@@ -141,12 +225,20 @@ export function ModulesSection() {
       <Flex direction="column" gap="2">
         <Flex align="center" gap="2">
           <ModuleButton
-            module="turret"
-            first
-            last
-            discriminator={TIER_ROMAN_NUMERALS[turret0.tier]}
+            unlock={{
+              type: 'turret',
+              id: turret0.id,
+              cost: { type: 'xp', value: 0 },
+            }}
+            tier={turret0.tier}
             selected={turret0.id === turret.id}
-            onClick={() => setByUnlock({ id: turret0.id, type: 'turret' })}
+            onClick={() =>
+              setByUnlock({
+                id: turret0.id,
+                type: 'turret',
+                cost: { type: 'xp', value: 0 },
+              })
+            }
           />
 
           {turret0.unlocks && (
@@ -159,12 +251,20 @@ export function ModulesSection() {
 
         <Flex align="center" gap="2">
           <ModuleButton
-            module="gun"
-            first
-            last
-            discriminator={TIER_ROMAN_NUMERALS[gun0.tier]}
+            unlock={{
+              type: 'gun',
+              id: gun0.id,
+              cost: { type: 'xp', value: 0 },
+            }}
+            tier={gun0.tier}
             selected={gun0.id === gun.id}
-            onClick={() => setByUnlock({ id: gun0.id, type: 'gun' })}
+            onClick={() =>
+              setByUnlock({
+                id: gun0.id,
+                type: 'gun',
+                cost: { type: 'xp', value: 0 },
+              })
+            }
           />
 
           {gun0.unlocks && (
@@ -177,12 +277,20 @@ export function ModulesSection() {
 
         <Flex align="center" gap="2">
           <ModuleButton
-            module="engine"
-            first
-            last
-            discriminator={TIER_ROMAN_NUMERALS[engine0.tier]}
+            unlock={{
+              type: 'engine',
+              id: engine0.id,
+              cost: { type: 'xp', value: 0 },
+            }}
+            tier={engine0.tier}
             selected={engine0.id === engine.id}
-            onClick={() => setByUnlock({ id: engine0.id, type: 'engine' })}
+            onClick={() =>
+              setByUnlock({
+                id: engine0.id,
+                type: 'engine',
+                cost: { type: 'xp', value: 0 },
+              })
+            }
           />
 
           {engine0.unlocks && (
@@ -195,12 +303,20 @@ export function ModulesSection() {
 
         <Flex align="center" gap="2">
           <ModuleButton
-            module="chassis"
-            first
-            last
-            discriminator={TIER_ROMAN_NUMERALS[track0.tier]}
+            unlock={{
+              type: 'chassis',
+              id: track0.id,
+              cost: { type: 'xp', value: 0 },
+            }}
+            tier={track0.tier}
             selected={track0.id === track.id}
-            onClick={() => setByUnlock({ id: track0.id, type: 'chassis' })}
+            onClick={() =>
+              setByUnlock({
+                id: track0.id,
+                type: 'chassis',
+                cost: { type: 'xp', value: 0 },
+              })
+            }
           />
 
           {track0.unlocks && (
@@ -210,16 +326,6 @@ export function ModulesSection() {
             </>
           )}
         </Flex>
-
-        {/* <Heading>gun0</Heading>
-        {tank.turrets[0].guns[0].unlocks &&
-          tree('gun', tank.turrets[0].guns[0].unlocks)}
-
-        <Heading>engine0</Heading>
-        {tank.engines[0].unlocks && tree('engine', tank.engines[0].unlocks)}
-
-        <Heading>track0</Heading>
-        {tank.tracks[0].unlocks && tree('chassis', tank.tracks[0].unlocks)} */}
       </Flex>
     </PageWrapper>
   );

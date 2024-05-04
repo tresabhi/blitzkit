@@ -35,6 +35,7 @@ import {
   TankDefinitionPrice,
   TankDefinitions,
   Tier,
+  Unlock,
 } from '../../src/core/blitzkit/tankDefinitions';
 import { DATA, POI } from './constants';
 import { Avatar } from './skillIcons';
@@ -86,7 +87,7 @@ type VehicleDefinitionArmor = Record<
   number | { vehicleDamageFactor: 0; '#text': number }
 >;
 interface UnlocksInner {
-  cost: number;
+  cost: number | string;
   '#text': number;
 }
 type Unlocks = {
@@ -477,7 +478,17 @@ export async function definitions(production: boolean) {
               return {
                 type: typeTyped,
                 id: toUniqueId(nation, rawId!),
-              };
+                cost: {
+                  type:
+                    typeof item.cost === 'number'
+                      ? 'xp'
+                      : item.cost.split(':')[0],
+                  value:
+                    typeof item.cost === 'number'
+                      ? item.cost
+                      : Number(item.cost.split(':')[1]),
+                },
+              } satisfies Unlock;
             }),
           )
           .flat();
@@ -948,7 +959,7 @@ export async function definitions(production: boolean) {
                   const currentTank = tankDefinitions[tankId];
                   const successorId = toUniqueId(nation, tankListEntry.id);
 
-                  tankXps.set(successorId, vehicle.cost);
+                  tankXps.set(successorId, vehicle.cost as number);
 
                   if (currentTank.successors === undefined) {
                     currentTank.successors = [];
@@ -962,7 +973,7 @@ export async function definitions(production: boolean) {
                 case 'gun': {
                   gunXps.set(
                     toUniqueId(nation, gunList.root.ids[vehicle['#text']]),
-                    vehicle.cost,
+                    vehicle.cost as number,
                   );
                   break;
                 }
@@ -970,7 +981,7 @@ export async function definitions(production: boolean) {
                 case 'turret': {
                   turretXps.set(
                     toUniqueId(nation, turretList.root.ids[vehicle['#text']]),
-                    vehicle.cost,
+                    vehicle.cost as number,
                   );
                   break;
                 }
@@ -978,7 +989,7 @@ export async function definitions(production: boolean) {
                 case 'engine': {
                   engineXps.set(
                     toUniqueId(nation, enginesList.root.ids[vehicle['#text']]),
-                    vehicle.cost,
+                    vehicle.cost as number,
                   );
                   break;
                 }
@@ -986,7 +997,7 @@ export async function definitions(production: boolean) {
                 case 'chassis': {
                   trackXps.set(
                     toUniqueId(nation, chassisList.root.ids[vehicle['#text']]),
-                    vehicle.cost,
+                    vehicle.cost as number,
                   );
                   break;
                 }

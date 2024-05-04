@@ -18,6 +18,11 @@ export type ModuleType = 'vehicle' | 'engine' | 'chassis' | 'turret' | 'gun';
 export interface Unlock {
   type: ModuleType;
   id: number;
+  cost: {
+    // string being the season coins
+    type: 'xp' | string;
+    value: number;
+  };
 }
 export interface Crew {
   type: CrewMember;
