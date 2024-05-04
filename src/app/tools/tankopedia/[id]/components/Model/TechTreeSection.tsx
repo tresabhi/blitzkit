@@ -84,7 +84,7 @@ export function TechTreeSection() {
                   }}
                 />
                 <Text color="gray" size="1">
-                  {tank.xp?.toLocaleString()}
+                  {ancestor.xp?.toLocaleString()}
                 </Text>
               </Flex>
 
@@ -98,7 +98,7 @@ export function TechTreeSection() {
                   }}
                 />
                 <Text color="gray" size="1">
-                  {tank.price.value?.toLocaleString()}
+                  {ancestor.price.value?.toLocaleString()}
                 </Text>
               </Flex>
             </Flex>
