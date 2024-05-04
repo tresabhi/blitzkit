@@ -68,7 +68,7 @@ export function Options() {
                   shellIndex === gun.shells.length - 1 ? undefined : 0,
                 borderBottomLeftRadius:
                   shellIndex === gun.shells.length - 1 ? undefined : 0,
-                marginLeft: shellIndex === 0 ? 0 : -1,
+                marginTop: shellIndex === 0 ? 0 : -1,
               }}
               onClick={() => {
                 mutateDuel((draft) => {
