@@ -15,10 +15,9 @@ export function CharacteristicsSection() {
   return (
     <PageWrapper>
       <Flex
-        gap="5"
+        gap={wideFormat ? '4' : '6'}
         style={{ width: '100%' }}
         direction={wideFormat ? 'row' : 'column'}
-        align={wideFormat ? undefined : 'center'}
       >
         <Flex style={{ flex: 1, maxWidth: 480 }} direction="column" gap="4">
           <Heading>Configure</Heading>

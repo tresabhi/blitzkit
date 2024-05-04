@@ -1,4 +1,6 @@
-import { Flex, Heading, Text } from '@radix-ui/themes';
+import { CaretRightIcon } from '@radix-ui/react-icons';
+import { Button, Flex, Heading, Text } from '@radix-ui/themes';
+import Link from 'next/link';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import strings from '../../../../../../lang/en-US.json';
@@ -8,8 +10,13 @@ import { TankSandbox } from './TankSandbox';
 import { Options } from './components/Options';
 
 export function HeroSection() {
-  const tank = useDuel((state) => state.protagonist!.tank);
+  const protagonistTank = useDuel((state) => state.protagonist!.tank);
+  const antagonistTank = useDuel((state) => state.antagonist!.tank);
   const wideFormat = useWideFormat(880);
+  const compareTanks =
+    protagonistTank.id === antagonistTank.id
+      ? [protagonistTank.id]
+      : [protagonistTank.id, antagonistTank.id];
 
   return (
     <Flex
@@ -42,16 +49,24 @@ export function HeroSection() {
             ml={wideFormat ? '8' : undefined}
             align={wideFormat ? undefined : 'center'}
           >
-            <Heading size={wideFormat ? '9' : '8'}>{tank.name}</Heading>
+            <Heading size={wideFormat ? '9' : '8'}>
+              {protagonistTank.name}
+            </Heading>
             <Text color="gray">
-              Tier {TIER_ROMAN_NUMERALS[tank.tier]}{' '}
+              Tier {TIER_ROMAN_NUMERALS[protagonistTank.tier]}{' '}
               {
                 (strings.common.nations_adjectives as Record<string, string>)[
-                  tank.nation
+                  protagonistTank.nation
                 ]
               }{' '}
-              {strings.common.tank_class_short[tank.class]}
+              {strings.common.tank_class_short[protagonistTank.class]}
             </Text>
+
+            <Link href={`/tools/compare?tanks=${compareTanks.join('%2C')}`}>
+              <Button variant="ghost">
+                Compare <CaretRightIcon />
+              </Button>
+            </Link>
           </Flex>
         </Flex>
 
