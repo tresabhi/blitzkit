@@ -1,4 +1,10 @@
-import { Flex, Heading, IconButton, Text } from '@radix-ui/themes';
+import {
+  ChevronDownIcon,
+  Flex,
+  Heading,
+  IconButton,
+  Text,
+} from '@radix-ui/themes';
 import Link from 'next/link';
 import { use } from 'react';
 import PageWrapper from '../../../../../../components/PageWrapper';
@@ -14,7 +20,6 @@ import {
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { tankIcon } from '../../../../../../core/blitzkit/tankIcon';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
-import { TreeArrow } from './TechTreeSection';
 
 function ModuleButton({
   tier,
@@ -162,11 +167,10 @@ export function ModulesSection() {
 
   function tree(type: ModuleType, unlocks: Unlock[]) {
     return (
-      <Flex direction="column" gap="2">
-        {unlocks.map((unlock) => {
+      <Flex gap="2">
+        {unlocks.map((unlock, index) => {
+          const direction = index < Math.floor(unlocks.length / 2) ? -1 : 1;
           let module: ModuleDefinition | TankDefinition | undefined = undefined;
-
-          console.log(unlock.type);
 
           if (unlock.type === 'chassis') {
             module = tank.tracks.find((track) => track.id === unlock.id)!;
@@ -187,7 +191,53 @@ export function ModulesSection() {
           if (module === undefined) return null;
 
           return (
-            <Flex align="center" gap="2">
+            <Flex
+              align="center"
+              direction="column"
+              gap="2"
+              style={{
+                position: 'relative',
+              }}
+            >
+              {unlock.cost.value > 0 && (
+                <>
+                  {unlocks.length > 1 && (
+                    <div
+                      style={{
+                        backgroundColor: 'currentcolor',
+                        width: 'calc(50% + 4px)',
+                        height: 1,
+                        position: 'absolute',
+                        right: direction < 0 ? 0 : undefined,
+                        left: direction > 0 ? 0 : undefined,
+                        transform: `translateX(${direction * -4}px)`,
+                      }}
+                    />
+                  )}
+
+                  <Flex
+                    direction="column"
+                    align="center"
+                    style={{
+                      marginBottom: -7,
+                    }}
+                  >
+                    <div
+                      style={{
+                        backgroundColor: 'currentcolor',
+                        width: 1,
+                        height: 8,
+                      }}
+                    />
+                    <ChevronDownIcon
+                      style={{
+                        transform: 'translateY(-7px)',
+                      }}
+                    />
+                  </Flex>
+                </>
+              )}
+
               <ModuleButton
                 unlock={unlock}
                 tier={module.tier}
@@ -205,12 +255,20 @@ export function ModulesSection() {
                 onClick={() => setByUnlock(unlock)}
               />
 
-              {(module as ModuleDefinition).unlocks && (
-                <>
-                  <TreeArrow style={{ width: 32 }} />
-                  {tree(type, (module as ModuleDefinition).unlocks!)}
-                </>
-              )}
+              {(module as ModuleDefinition).unlocks &&
+                (module as ModuleDefinition).unlocks!.length > 1 && (
+                  <div
+                    style={{
+                      backgroundColor: 'currentcolor',
+                      width: 1,
+                      height: 8,
+                      marginBottom: -8,
+                    }}
+                  />
+                )}
+
+              {(module as ModuleDefinition).unlocks &&
+                tree(type, (module as ModuleDefinition).unlocks!)}
             </Flex>
           );
         })}
@@ -222,110 +280,35 @@ export function ModulesSection() {
     <PageWrapper>
       <Heading>Modules</Heading>
 
-      <Flex direction="column" gap="2">
-        <Flex align="center" gap="2">
-          <ModuleButton
-            unlock={{
-              type: 'turret',
-              id: turret0.id,
-              cost: { type: 'xp', value: 0 },
-            }}
-            tier={turret0.tier}
-            selected={turret0.id === turret.id}
-            onClick={() =>
-              setByUnlock({
-                id: turret0.id,
-                type: 'turret',
-                cost: { type: 'xp', value: 0 },
-              })
-            }
-          />
-
-          {turret0.unlocks && (
-            <>
-              <TreeArrow style={{ width: 32, flex: undefined }} />
-              {tree('turret', turret0.unlocks)}
-            </>
-          )}
-        </Flex>
-
-        <Flex align="center" gap="2">
-          <ModuleButton
-            unlock={{
-              type: 'gun',
-              id: gun0.id,
-              cost: { type: 'xp', value: 0 },
-            }}
-            tier={gun0.tier}
-            selected={gun0.id === gun.id}
-            onClick={() =>
-              setByUnlock({
-                id: gun0.id,
-                type: 'gun',
-                cost: { type: 'xp', value: 0 },
-              })
-            }
-          />
-
-          {gun0.unlocks && (
-            <>
-              <TreeArrow style={{ width: 32, flex: undefined }} />
-              {tree('gun', gun0.unlocks)}
-            </>
-          )}
-        </Flex>
-
-        <Flex align="center" gap="2">
-          <ModuleButton
-            unlock={{
-              type: 'engine',
-              id: engine0.id,
-              cost: { type: 'xp', value: 0 },
-            }}
-            tier={engine0.tier}
-            selected={engine0.id === engine.id}
-            onClick={() =>
-              setByUnlock({
-                id: engine0.id,
-                type: 'engine',
-                cost: { type: 'xp', value: 0 },
-              })
-            }
-          />
-
-          {engine0.unlocks && (
-            <>
-              <TreeArrow style={{ width: 32, flex: undefined }} />
-              {tree('engine', engine0.unlocks)}
-            </>
-          )}
-        </Flex>
-
-        <Flex align="center" gap="2">
-          <ModuleButton
-            unlock={{
-              type: 'chassis',
-              id: track0.id,
-              cost: { type: 'xp', value: 0 },
-            }}
-            tier={track0.tier}
-            selected={track0.id === track.id}
-            onClick={() =>
-              setByUnlock({
-                id: track0.id,
-                type: 'chassis',
-                cost: { type: 'xp', value: 0 },
-              })
-            }
-          />
-
-          {track0.unlocks && (
-            <>
-              <TreeArrow style={{ width: 32, flex: undefined }} />
-              {tree('chassis', track0.unlocks)}
-            </>
-          )}
-        </Flex>
+      <Flex gap="2">
+        {tree('turret', [
+          {
+            cost: { type: 'xp', value: 0 },
+            id: turret0.id,
+            type: 'turret',
+          },
+        ])}
+        {tree('gun', [
+          {
+            cost: { type: 'xp', value: 0 },
+            id: gun0.id,
+            type: 'gun',
+          },
+        ])}
+        {tree('engine', [
+          {
+            cost: { type: 'xp', value: 0 },
+            id: engine0.id,
+            type: 'engine',
+          },
+        ])}
+        {tree('chassis', [
+          {
+            cost: { type: 'xp', value: 0 },
+            id: track0.id,
+            type: 'chassis',
+          },
+        ])}
       </Flex>
     </PageWrapper>
   );

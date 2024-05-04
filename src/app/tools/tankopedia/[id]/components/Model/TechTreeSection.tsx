@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from '@radix-ui/react-icons';
-import { Flex, Heading, Text } from '@radix-ui/themes';
+import { ChevronDownIcon, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { ComponentProps, use } from 'react';
 import PageWrapper from '../../../../../../components/PageWrapper';
@@ -8,7 +8,13 @@ import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useDuel } from '../../../../../../stores/duel';
 
-export function TreeArrow({ style, ...props }: ComponentProps<typeof Text>) {
+export function TreeArrow({
+  style,
+  down = false,
+  ...props
+}: ComponentProps<typeof Text> & { down?: boolean }) {
+  const Icon = down ? ChevronDownIcon : ChevronRightIcon;
+
   return (
     <Text
       color="gray"
@@ -21,17 +27,21 @@ export function TreeArrow({ style, ...props }: ComponentProps<typeof Text>) {
       <Flex
         style={{
           backgroundColor: 'currentcolor',
-          height: 1,
+          height: down ? '100%' : 1,
+          width: down ? 1 : '100%',
           position: 'relative',
         }}
+        direction={down ? 'column' : 'row'}
         justify="end"
       >
-        <ChevronRightIcon
+        <Icon
           style={{
             position: 'absolute',
-            right: 0,
-            top: '50%',
-            transform: 'translate(5px, -50%)',
+            right: down ? undefined : 0,
+            top: down ? undefined : '50%',
+            bottom: down ? 0 : undefined,
+            left: down ? '50%' : undefined,
+            transform: down ? 'translate(-50%, 2px)' : 'translate(5px, -50%)',
           }}
         />
       </Flex>
