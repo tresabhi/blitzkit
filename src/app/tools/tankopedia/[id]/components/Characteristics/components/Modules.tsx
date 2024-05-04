@@ -6,6 +6,7 @@ import {
   IconButton,
   Link,
   Text,
+  Theme,
 } from '@radix-ui/themes';
 import { use } from 'react';
 import { asset } from '../../../../../../../core/blitzkit/asset';
@@ -103,7 +104,9 @@ function ModuleButton({
   );
 
   return unlock.type === 'vehicle' ? (
-    <Link href={`/tools/tankopedia/${unlock.id}`}>{button}</Link>
+    <Link href={`/tools/tankopedia/${unlock.id}`}>
+      <Theme scaling="110%">{button}</Theme>
+    </Link>
   ) : (
     button
   );

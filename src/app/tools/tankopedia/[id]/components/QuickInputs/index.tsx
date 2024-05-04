@@ -1,4 +1,4 @@
-import { CaretSortIcon } from '@radix-ui/react-icons';
+import { HeightIcon, WidthIcon } from '@radix-ui/react-icons';
 import { Flex, TextField } from '@radix-ui/themes';
 import { use, useEffect, useRef } from 'react';
 import { degToRad, radToDeg } from 'three/src/math/MathUtils';
@@ -87,7 +87,7 @@ export function RotationInputs() {
             userSelect: 'none',
           }}
         >
-          <CaretSortIcon style={{ transform: 'rotate(90deg)' }} />
+          <WidthIcon />
         </TextField.Slot>
         <TextField.Slot style={{ userSelect: 'none' }}>°</TextField.Slot>
       </TextField.Root>
@@ -136,7 +136,7 @@ export function RotationInputs() {
             userSelect: 'none',
           }}
         >
-          <CaretSortIcon />
+          <HeightIcon />
         </TextField.Slot>
         <TextField.Slot
           style={{
