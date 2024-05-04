@@ -38,6 +38,7 @@ export function Title() {
           >
             <Flex align="center" gap="2">
               <img
+                alt={protagonist.tank.name}
                 src={
                   TREE_TYPE_ICONS[protagonist.tank.treeType][
                     protagonist.tank.class

@@ -75,6 +75,7 @@ function ModuleButton({
           </Text>
 
           <img
+            alt={unlock.cost.type}
             src={asset(`icons/currencies/${unlock.cost.type}.webp`)}
             style={{
               width: 12,
@@ -86,6 +87,7 @@ function ModuleButton({
       )}
 
       <img
+        alt={unlock.type}
         src={
           unlock.type === 'vehicle'
             ? tankIcon(unlock.id)

@@ -271,6 +271,7 @@ async function playerListing(
         }}
       >
         <img
+          alt={tank.name}
           src={await iconPng(tankIcon(tank.id))}
           style={{
             width: 32,

@@ -110,6 +110,7 @@ export function Options() {
                 }}
               >
                 <img
+                  alt={thisShell.name}
                   width={16}
                   height={16}
                   src={asset(`icons/shells/${thisShell.icon}.webp`)}
@@ -135,6 +136,7 @@ export function Options() {
               }}
             >
               <img
+                alt="Calibrated Shells"
                 width={16}
                 height={16}
                 src={asset('icons/equipment/103.webp')}
@@ -157,6 +159,7 @@ export function Options() {
               }}
             >
               <img
+                alt="Enhanced Armor"
                 width={16}
                 height={16}
                 src={asset('icons/equipment/110.webp')}

@@ -15,6 +15,7 @@ export function QuickEquipmentButton({
   return (
     <Button variant="ghost" {...props}>
       <img
+        alt={`Equipment ${equipment}`}
         style={{ opacity: active ? 1 : 0.5 }}
         src={asset(`icons/equipment/${equipment}.webp`)}
         width={24}

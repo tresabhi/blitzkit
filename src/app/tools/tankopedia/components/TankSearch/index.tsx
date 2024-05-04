@@ -910,6 +910,7 @@ export function TankSearch({
                   }}
                 >
                   <img
+                    alt={tank.name}
                     className={styles.flag}
                     src={asset(`flags/scratched/${tank.nation}.webp`)}
                     style={{
@@ -938,6 +939,7 @@ export function TankSearch({
                     className={styles.listingImage}
                   >
                     <img
+                      alt={tank.name}
                       src={tankIcon(tank.id)}
                       style={{
                         objectFit: 'contain',
@@ -960,6 +962,7 @@ export function TankSearch({
                   >
                     <Flex align="center" justify="center" gap="1">
                       <img
+                        alt={tank.name}
                         src={
                           (tank.treeType === 'collector'
                             ? TANK_ICONS_COLLECTOR

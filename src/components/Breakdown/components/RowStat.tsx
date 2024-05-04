@@ -48,6 +48,7 @@ export function RowStat({
       >
         {percentile === undefined && delta !== undefined && delta !== 0 && (
           <img
+            alt={delta > 0 ? 'Increase' : 'Decrease'}
             src={
               (delta ?? 0) > 0
                 ? 'https://i.imgur.com/qbjiXa1.png'

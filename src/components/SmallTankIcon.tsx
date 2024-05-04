@@ -18,6 +18,7 @@ export function SmallTankIcon({ id, size = HEIGHT }: SmallTankIconProps) {
       }}
     >
       <img
+        alt={`Tank ${id}`}
         src={asset(`icons/tanks/small/${id}.webp`)}
         style={{
           transform: `scale(${(size / HEIGHT) * 100}%)`,

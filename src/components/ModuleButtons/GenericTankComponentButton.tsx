@@ -25,6 +25,7 @@ export function GenericTankComponentButton({
         }}
       >
         <img
+          alt={icon}
           draggable={false}
           src={icon}
           style={{

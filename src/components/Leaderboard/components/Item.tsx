@@ -90,6 +90,7 @@ export function Item({
           }}
         >
           <img
+            alt={deltaPosition > 0 ? 'Increase' : 'Decrease'}
             style={{
               width: 8,
               height: 8,
@@ -139,6 +140,7 @@ export function Item({
         )}
         {deltaScore !== 0 && deltaScore !== undefined && (
           <img
+            alt={deltaScore > 0 ? 'Increase' : 'Decrease'}
             style={{
               width: 8,
               height: 8,

@@ -13,7 +13,7 @@ export function Flag({ nation }: FlagProps) {
         overflow: 'hidden',
       }}
     >
-      <img src={asset(`flags/circle/${nation}.webp`)} alt={nation} />
+      <img alt={nation} src={asset(`flags/circle/${nation}.webp`)} />
     </div>
   );
 }

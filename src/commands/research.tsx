@@ -280,6 +280,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                   }}
                 >
                   <img
+                    alt="XP icon"
                     src={await iconPng(asset('icons/currencies/xp.webp'))}
                     width={16}
                     height={16}
@@ -305,6 +306,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                   }}
                 >
                   <img
+                    alt="Silver icon"
                     src={await iconPng(asset('icons/currencies/silver.webp'))}
                     width={16}
                     height={16}
@@ -330,6 +332,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                   }}
                 >
                   <img
+                    alt="Silver icon"
                     src={await iconPng(asset('icons/currencies/silver.webp'))}
                     width={16}
                     height={16}
@@ -390,6 +393,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                       }}
                     >
                       <img
+                        alt="Tank icon"
                         src={await tankIconPng(id)}
                         style={{
                           height: 100,
@@ -414,6 +418,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                         }}
                       >
                         <img
+                          alt={tank.name}
                           src={TANK_ICONS[tank.class]}
                           width={16}
                           height={16}
@@ -447,6 +452,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                         }}
                       >
                         <img
+                          alt="XP icon"
                           src={await iconPng(asset('icons/currencies/xp.webp'))}
                           width={16}
                           height={16}
@@ -474,6 +480,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                           }}
                         >
                           <img
+                            alt="Free XP icon"
                             src={await iconPng(
                               asset('icons/currencies/free-xp.webp'),
                             )}
@@ -501,6 +508,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                         }}
                       >
                         <img
+                          alt="Silver icon"
                           src={await iconPng(
                             asset('icons/currencies/silver.webp'),
                           )}
@@ -529,6 +537,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                         }}
                       >
                         <img
+                          alt="Silver icon"
                           src={await iconPng(
                             asset('icons/currencies/silver.webp'),
                           )}

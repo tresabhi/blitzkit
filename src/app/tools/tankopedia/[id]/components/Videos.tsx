@@ -1,4 +1,4 @@
-import { Flex, Heading, Link, Separator } from '@radix-ui/themes';
+import { Flex, Heading, Link } from '@radix-ui/themes';
 import { use } from 'react';
 import PageWrapper from '../../../../../components/PageWrapper';
 import { videoDefinitions } from '../../../../../core/blitzkit/videos';
@@ -15,8 +15,7 @@ export function Videos() {
 
   return (
     <PageWrapper>
-
-      <Flex direction="column" gap="4" mt="4" align="start">
+      <Flex direction="column" gap="4" align="start">
         <Heading size="6">Review videos</Heading>
 
         <Flex gap="3" wrap="wrap">
@@ -27,6 +26,7 @@ export function Videos() {
               target="_blank"
             >
               <img
+                alt="Video thumbnail"
                 src={`https://i.ytimg.com/vi/${video}/hqdefault.jpg`}
                 style={{
                   aspectRatio: '16 / 9',

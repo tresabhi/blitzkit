@@ -57,6 +57,7 @@ export function Options() {
             }
           >
             <img
+              alt={type}
               src={TREE_TYPE_IMAGES[type]}
               style={{ width: '1em', height: '1em' }}
             />
@@ -124,6 +125,7 @@ export function Options() {
             }
           >
             <img
+              alt={type}
               src={TREE_TYPE_ICONS.researchable[type]}
               style={{ width: '1em', height: '1em' }}
             />

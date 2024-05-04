@@ -69,6 +69,7 @@ export function TechTreeSection() {
       >
         <Flex direction="column" align="center">
           <img
+            alt={ancestor.name}
             src={asset(`icons/tanks/big/${id}.webp`)}
             width={64}
             height={64}
@@ -88,6 +89,7 @@ export function TechTreeSection() {
             <Flex gap="2" align="center">
               <Flex gap="1" align="center">
                 <img
+                  alt="XP"
                   src={asset('icons/currencies/xp.webp')}
                   width={16}
                   height={16}
@@ -102,6 +104,7 @@ export function TechTreeSection() {
 
               <Flex gap="1" align="center">
                 <img
+                  alt="Silver"
                   src={asset('icons/currencies/silver.webp')}
                   width={16}
                   height={16}
@@ -136,6 +139,7 @@ export function TechTreeSection() {
       highlight
     >
       <img
+        alt={tank.nation}
         src={asset(`flags/scratched/${tank.nation}.webp`)}
         style={{
           position: 'absolute',

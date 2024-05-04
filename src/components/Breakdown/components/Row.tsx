@@ -69,6 +69,7 @@ export function Row({
       >
         {type === 'tank' && tankType !== undefined && (
           <img
+            alt={tankType}
             src={TREE_TYPE_ICONS[treeType ?? 'researchable'][tankType]}
             style={{ width: 16, height: 16 }}
           />

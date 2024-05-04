@@ -435,6 +435,7 @@ export default function Page() {
                   >
                     <Link href={`/tools/tankopedia/${tank.id}`}>
                       <img
+                        alt={tank.name}
                         draggable={false}
                         src={tankIcon(tank.id)}
                         style={{

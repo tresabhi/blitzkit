@@ -815,6 +815,7 @@ export default function Page() {
                                     ] as const
                                   ).map((module, index) => (
                                     <img
+                                      alt={module}
                                       width={24}
                                       height={24}
                                       src={asset(
@@ -901,6 +902,10 @@ export default function Page() {
                                   <Flex direction="column" justify="center">
                                     {provisions.map((provision, index) => (
                                       <img
+                                        alt={
+                                          awaitedProvisionDefinitions[provision]
+                                            .name
+                                        }
                                         key={provision}
                                         src={asset(
                                           `/icons/provisions/${provision}.webp`,
@@ -1089,6 +1094,11 @@ export default function Page() {
                                   <Flex direction="column" justify="center">
                                     {consumables.map((consumable, index) => (
                                       <img
+                                        alt={
+                                          awaitedConsumableDefinitions[
+                                            consumable
+                                          ].name
+                                        }
                                         key={consumable}
                                         src={asset(
                                           `/icons/consumables/${consumable}.webp`,
@@ -1186,6 +1196,7 @@ export default function Page() {
                                 }}
                               >
                                 <img
+                                  alt={thisShell.name}
                                   width={16}
                                   height={16}
                                   src={asset(

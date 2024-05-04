@@ -86,6 +86,7 @@ export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
                 }}
               >
                 <img
+                  alt="avatar"
                   src={
                     interaction.user.avatarURL({ extension: 'png' }) ??
                     'https://i.stack.imgur.com/l60Hf.png'
@@ -139,6 +140,7 @@ export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
                 }}
               >
                 <img
+                  alt="accounts linked"
                   src="https://i.imgur.com/jIcRgog.png"
                   style={{
                     width: 16,
@@ -160,6 +162,7 @@ export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
               >
                 {clanAccountInfo?.clan ? (
                   <img
+                    alt="clan emblem"
                     style={{
                       width: 64,
                       height: 64,

@@ -142,6 +142,7 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
                 }}
               >
                 <img
+                  alt={`League ${league.name}`}
                   style={{
                     width: 64,
                     height: 64,

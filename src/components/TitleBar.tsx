@@ -28,6 +28,7 @@ export default function TitleBar({ title, image, description }: TitleBarProps) {
       >
         {image && (
           <img
+            alt={title}
             style={{ width: 32, height: 32, objectFit: 'contain' }}
             src={image}
           />

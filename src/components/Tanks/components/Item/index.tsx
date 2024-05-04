@@ -43,6 +43,7 @@ export function Item({ tankType, name, treeType }: ItemProps) {
       >
         {tankType && (
           <img
+            alt={tankType}
             src={TREE_TYPE_ICONS[treeType][tankType]}
             style={{ width: 14, height: 14 }}
           />
@@ -61,6 +62,7 @@ export function Item({ tankType, name, treeType }: ItemProps) {
       {/* {image && (
         // TODO: remove hardcoded dimensions when satori fixes non-width unloadable images
         <img
+          alt={name}
           src={image}
           width={106}
           height={32}

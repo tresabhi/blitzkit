@@ -158,6 +158,7 @@ export function Characteristics() {
                   }}
                 >
                   <img
+                    alt={thisShell.name}
                     width={16}
                     height={16}
                     src={asset(`icons/shells/${thisShell.icon}.webp`)}

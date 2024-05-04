@@ -71,6 +71,7 @@ export function Day({ offset }: DayProps) {
               }}
             >
               <img
+                alt="Tank icon"
                 draggable={false}
                 src={tankIcon(tank.id)}
                 style={{
