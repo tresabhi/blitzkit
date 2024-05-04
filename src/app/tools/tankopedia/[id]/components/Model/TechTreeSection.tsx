@@ -1,20 +1,22 @@
 import { ChevronRightIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
-import { use } from 'react';
+import { ComponentProps, use } from 'react';
 import PageWrapper from '../../../../../../components/PageWrapper';
 import { asset } from '../../../../../../core/blitzkit/asset';
 import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useDuel } from '../../../../../../stores/duel';
 
-function Arrow() {
+export function TreeArrow({ style, ...props }: ComponentProps<typeof Text>) {
   return (
     <Text
       color="gray"
       style={{
         flex: 1,
+        ...style,
       }}
+      {...props}
     >
       <Flex
         style={{
@@ -130,7 +132,7 @@ export function TechTreeSection() {
               ))}
             </Flex>
 
-            <Arrow />
+            <TreeArrow />
           </>
         )}
 
@@ -160,7 +162,7 @@ export function TechTreeSection() {
 
         {tank.successors && (
           <>
-            <Arrow />
+            <TreeArrow />
 
             <Flex
               wrap="wrap"

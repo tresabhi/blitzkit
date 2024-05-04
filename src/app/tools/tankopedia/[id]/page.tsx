@@ -62,8 +62,8 @@ export default function Page({ params }: { params: { id: string } }) {
         <>
           <HeroSection />
           {/* <TankopediaPlug /> */}
-          <TechTreeSection />
           <ModulesSection />
+          <TechTreeSection />
           {/* <CharacteristicsSection />
           <TankopediaSeparator /> */}
           <Videos />

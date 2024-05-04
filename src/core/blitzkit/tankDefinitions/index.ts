@@ -24,6 +24,11 @@ export interface Crew {
   count?: number;
   substitute?: CrewMember[];
 }
+export type ModuleDefinition =
+  | TrackDefinition
+  | EngineDefinition
+  | TurretDefinition
+  | GunDefinition;
 export interface TankDefinition {
   id: number;
   description?: string;
