@@ -5,9 +5,11 @@ import {
   GearIcon,
 } from '@radix-ui/react-icons';
 import { DropdownMenu, Flex, IconButton, Switch } from '@radix-ui/themes';
+import { asset } from '../../../../../../../core/blitzkit/asset';
 import { Pose, poseEvent } from '../../../../../../../core/blitzkit/pose';
 import { useFullScreen } from '../../../../../../../hooks/useFullScreen';
 import { useApp } from '../../../../../../../stores/app';
+import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import mutateTankopediaPersistent, {
   mutateTankopediaTemporary,
   useTankopediaPersistent,
@@ -39,183 +41,227 @@ export function Options() {
     (state) => state.model.visual.environment,
   );
   const developerMode = useApp((state) => state.developerMode);
+  const gun = useDuel((state) => state.antagonist!.gun);
+  const shell = useDuel((state) => state.antagonist!.shell);
 
   return (
-    <Flex
-      gap="4"
-      align="center"
-      style={{
-        position: 'absolute',
-        bottom: 16,
-        left: '50%',
-        transform: 'translateX(-50%)',
-      }}
-    >
+    <>
+      {mode === 'armor' && (
+        <Flex
+          style={{
+            position: 'absolute',
+            right: 16,
+            top: '50%',
+            transform: 'translateY(-50%)',
+          }}
+          direction="column"
+        >
+          {gun.shells.map((thisShell, shellIndex) => (
+            <IconButton
+              color={thisShell.id === shell.id ? undefined : 'gray'}
+              variant="soft"
+              key={thisShell.id}
+              style={{
+                borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
+                borderTopRightRadius: shellIndex === 0 ? undefined : 0,
+                borderBottomRightRadius:
+                  shellIndex === gun.shells.length - 1 ? undefined : 0,
+                borderBottomLeftRadius:
+                  shellIndex === gun.shells.length - 1 ? undefined : 0,
+                marginLeft: shellIndex === 0 ? 0 : -1,
+              }}
+              onClick={() => {
+                mutateDuel((draft) => {
+                  draft.antagonist!.shell = thisShell;
+                });
+              }}
+            >
+              <img
+                width={16}
+                height={16}
+                src={asset(`icons/shells/${thisShell.icon}.webp`)}
+              />
+            </IconButton>
+          ))}
+        </Flex>
+      )}
+
       <Flex
-        style={{
-          cursor: 'default',
-          userSelect: 'none',
-        }}
+        gap="4"
         align="center"
-        gap="2"
-        onClick={() => {
-          mutateTankopediaPersistent((draft) => {
-            draft.mode = draft.mode === 'armor' ? 'model' : 'armor';
-          });
+        style={{
+          position: 'absolute',
+          bottom: 16,
+          left: '50%',
+          transform: 'translateX(-50%)',
         }}
-        mr="2"
       >
-        <Switch size="1" checked={mode === 'armor'} />
-        Armor
-      </Flex>
+        <Flex
+          style={{
+            cursor: 'default',
+            userSelect: 'none',
+          }}
+          align="center"
+          gap="2"
+          onClick={() => {
+            mutateTankopediaPersistent((draft) => {
+              draft.mode = draft.mode === 'armor' ? 'model' : 'armor';
+            });
+          }}
+          mr="2"
+        >
+          <Switch size="1" checked={mode === 'armor'} />
+          Armor
+        </Flex>
 
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          <IconButton variant="ghost" color="gray">
-            <EyeOpenIcon />
-          </IconButton>
-        </DropdownMenu.Trigger>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <IconButton variant="ghost" color="gray">
+              <EyeOpenIcon />
+            </IconButton>
+          </DropdownMenu.Trigger>
 
-        <DropdownMenu.Content>
-          <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.HullDown)}>
-            Hull down
-          </DropdownMenu.Item>
+          <DropdownMenu.Content>
+            <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.HullDown)}>
+              Hull down
+            </DropdownMenu.Item>
 
-          <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.FaceHug)}>
-            Face hug
-          </DropdownMenu.Item>
+            <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.FaceHug)}>
+              Face hug
+            </DropdownMenu.Item>
 
-          <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.Default)}>
-            Default
-          </DropdownMenu.Item>
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
+            <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.Default)}>
+              Default
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
 
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          <IconButton variant="ghost" color="gray">
-            <GearIcon />
-          </IconButton>
-        </DropdownMenu.Trigger>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <IconButton variant="ghost" color="gray">
+              <GearIcon />
+            </IconButton>
+          </DropdownMenu.Trigger>
 
-        <DropdownMenu.Content>
-          {mode === 'armor' && (
-            <>
-              <DropdownMenu.Label>Armor</DropdownMenu.Label>
+          <DropdownMenu.Content>
+            {mode === 'armor' && (
+              <>
+                <DropdownMenu.Label>Armor</DropdownMenu.Label>
 
-              <DropdownMenu.CheckboxItem
-                checked={showSpacedArmor}
-                onCheckedChange={(checked) => {
-                  mutateTankopediaPersistent((draft) => {
-                    draft.model.visual.showSpacedArmor = checked;
-                  });
-                  mutateTankopediaTemporary((draft) => {
-                    draft.shot = undefined;
-                  });
-                }}
-              >
-                Spaced armor
-              </DropdownMenu.CheckboxItem>
-
-              <DropdownMenu.CheckboxItem
-                checked={greenPenetration}
-                onCheckedChange={(checked) => {
-                  mutateTankopediaPersistent((draft) => {
-                    draft.model.visual.greenPenetration = checked;
-                  });
-                }}
-              >
-                Green penetration
-              </DropdownMenu.CheckboxItem>
-
-              {developerMode && (
                 <DropdownMenu.CheckboxItem
-                  checked={wireframe}
+                  checked={showSpacedArmor}
                   onCheckedChange={(checked) => {
                     mutateTankopediaPersistent((draft) => {
-                      draft.model.visual.wireframe = checked;
+                      draft.model.visual.showSpacedArmor = checked;
+                    });
+                    mutateTankopediaTemporary((draft) => {
+                      draft.shot = undefined;
                     });
                   }}
                 >
-                  Wireframe
+                  Spaced armor
                 </DropdownMenu.CheckboxItem>
-              )}
 
-              <DropdownMenu.CheckboxItem
-                checked={opaque}
-                onCheckedChange={(checked) => {
-                  mutateTankopediaPersistent((draft) => {
-                    draft.model.visual.opaque = checked;
-                  });
-                }}
-              >
-                Opaque
-              </DropdownMenu.CheckboxItem>
-            </>
-          )}
+                <DropdownMenu.CheckboxItem
+                  checked={greenPenetration}
+                  onCheckedChange={(checked) => {
+                    mutateTankopediaPersistent((draft) => {
+                      draft.model.visual.greenPenetration = checked;
+                    });
+                  }}
+                >
+                  Green penetration
+                </DropdownMenu.CheckboxItem>
 
-          <DropdownMenu.Label>Environment</DropdownMenu.Label>
-
-          <DropdownMenu.CheckboxItem
-            checked={showGrid}
-            onCheckedChange={(checked) => {
-              mutateTankopediaPersistent((draft) => {
-                draft.model.visual.showGrid = checked;
-              });
-            }}
-          >
-            Show grid
-          </DropdownMenu.CheckboxItem>
-
-          <DropdownMenu.CheckboxItem
-            checked={showEnvironment}
-            onCheckedChange={(checked) => {
-              mutateTankopediaPersistent((draft) => {
-                draft.model.visual.showEnvironment = checked;
-              });
-            }}
-          >
-            {/* TODO: consider removing this? */}
-            View environment
-          </DropdownMenu.CheckboxItem>
-
-          <DropdownMenu.Sub>
-            <DropdownMenu.SubTrigger>Lighting</DropdownMenu.SubTrigger>
-
-            <DropdownMenu.SubContent>
-              <DropdownMenu.RadioGroup value={environment}>
-                {ENVIRONMENTS.map((environment) => (
-                  <DropdownMenu.RadioItem
-                    key={environment}
-                    value={environment}
-                    onClick={() => {
+                {developerMode && (
+                  <DropdownMenu.CheckboxItem
+                    checked={wireframe}
+                    onCheckedChange={(checked) => {
                       mutateTankopediaPersistent((draft) => {
-                        draft.model.visual.environment = environment;
+                        draft.model.visual.wireframe = checked;
                       });
                     }}
                   >
-                    {environment[0].toUpperCase() + environment.slice(1)}
-                  </DropdownMenu.RadioItem>
-                ))}
-              </DropdownMenu.RadioGroup>
-            </DropdownMenu.SubContent>
-          </DropdownMenu.Sub>
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
+                    Wireframe
+                  </DropdownMenu.CheckboxItem>
+                )}
 
-      {fullScreenAvailable && (
-        <IconButton
-          color="gray"
-          variant="ghost"
-          onClick={() => {
-            if (isFullScreen) {
-              document.exitFullscreen();
-            } else document.body.requestFullscreen();
-          }}
-        >
-          {isFullScreen ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
-        </IconButton>
-      )}
-    </Flex>
+                <DropdownMenu.CheckboxItem
+                  checked={opaque}
+                  onCheckedChange={(checked) => {
+                    mutateTankopediaPersistent((draft) => {
+                      draft.model.visual.opaque = checked;
+                    });
+                  }}
+                >
+                  Opaque
+                </DropdownMenu.CheckboxItem>
+              </>
+            )}
+
+            <DropdownMenu.Label>Environment</DropdownMenu.Label>
+
+            <DropdownMenu.CheckboxItem
+              checked={showGrid}
+              onCheckedChange={(checked) => {
+                mutateTankopediaPersistent((draft) => {
+                  draft.model.visual.showGrid = checked;
+                });
+              }}
+            >
+              Show grid
+            </DropdownMenu.CheckboxItem>
+
+            <DropdownMenu.CheckboxItem
+              checked={showEnvironment}
+              onCheckedChange={(checked) => {
+                mutateTankopediaPersistent((draft) => {
+                  draft.model.visual.showEnvironment = checked;
+                });
+              }}
+            >
+              {/* TODO: consider removing this? */}
+              View environment
+            </DropdownMenu.CheckboxItem>
+
+            <DropdownMenu.Sub>
+              <DropdownMenu.SubTrigger>Lighting</DropdownMenu.SubTrigger>
+
+              <DropdownMenu.SubContent>
+                <DropdownMenu.RadioGroup value={environment}>
+                  {ENVIRONMENTS.map((environment) => (
+                    <DropdownMenu.RadioItem
+                      key={environment}
+                      value={environment}
+                      onClick={() => {
+                        mutateTankopediaPersistent((draft) => {
+                          draft.model.visual.environment = environment;
+                        });
+                      }}
+                    >
+                      {environment[0].toUpperCase() + environment.slice(1)}
+                    </DropdownMenu.RadioItem>
+                  ))}
+                </DropdownMenu.RadioGroup>
+              </DropdownMenu.SubContent>
+            </DropdownMenu.Sub>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+
+        {fullScreenAvailable && (
+          <IconButton
+            color="gray"
+            variant="ghost"
+            onClick={() => {
+              if (isFullScreen) {
+                document.exitFullscreen();
+              } else document.body.requestFullscreen();
+            }}
+          >
+            {isFullScreen ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
+          </IconButton>
+        )}
+      </Flex>
+    </>
   );
 }
