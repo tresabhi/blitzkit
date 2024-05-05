@@ -254,7 +254,7 @@ export function Characteristics() {
                 ) * penetrationCoefficient}
               </InfoWithDelta>
               <Flex align="center" gap="2" style={{ paddingLeft: 24 }}>
-                <Text>Distance</Text>
+                <Text color="gray">Distance</Text>
                 <Slider
                   key={penetrationDistance}
                   min={0}
