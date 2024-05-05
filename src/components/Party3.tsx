@@ -10,7 +10,7 @@ export function Party3() {
       {/* analytics */}
       <script
         async
-        src="https://www.googletagmanager.com/gtag/js?id=G-F901X282X7"
+        src="https://www.googletagmanager.com/gtag/js?id=G-GL2JVHCGPQ"
       />
       <script
         dangerouslySetInnerHTML={{
@@ -19,7 +19,7 @@ export function Party3() {
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', 'G-D8DT6EWVFJ');
+            gtag('config', 'G-GL2JVHCGPQ');
           `,
         }}
       />
