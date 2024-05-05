@@ -8,7 +8,11 @@ export function TankopediaPlug() {
       <Flex justify="center">
         <Text>
           Liking BlitzKit? Consider donating on{' '}
-          <Link href="https://www.patreon.com/tresabhi" target="_blank">
+          <Link
+            href="https://www.patreon.com/tresabhi"
+            target="_blank"
+            underline="hover"
+          >
             <PatreonIcon
               style={{
                 width: '1em',

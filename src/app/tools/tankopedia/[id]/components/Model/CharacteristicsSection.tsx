@@ -19,7 +19,6 @@ export function CharacteristicsSection() {
         boxSizing: 'border-box',
       }}
       direction={wideFormat ? 'row' : 'column'}
-      mt="4"
     >
       <Flex
         gap="6"
