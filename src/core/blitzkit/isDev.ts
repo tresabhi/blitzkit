@@ -3,6 +3,8 @@ import { config } from 'dotenv';
 config();
 
 const devHostStartNames = [
+  'dev',
+  'beta',
   'blitzkrieg-',
   'localhost',
   'betakrieg',
