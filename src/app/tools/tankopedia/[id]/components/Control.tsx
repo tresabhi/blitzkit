@@ -164,14 +164,16 @@ export function Controls() {
   }, [camera, protagonist.tank.id, antagonist.tank.id]);
 
   useEffect(() => {
-    function handlePointerDown() {
+    function handleDisturbance() {
       setAutoRotate(false);
     }
 
-    canvas.addEventListener('pointerdown', handlePointerDown);
+    poseEvent.on(handleDisturbance);
+    canvas.addEventListener('pointerdown', handleDisturbance);
 
     return () => {
-      canvas.removeEventListener('pointerdown', handlePointerDown);
+      canvas.removeEventListener('pointerdown', handleDisturbance);
+      poseEvent.off(handleDisturbance);
     };
   }, []);
 
