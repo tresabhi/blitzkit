@@ -27,7 +27,7 @@ export function CharacteristicsSection() {
         justify="center"
       >
         <Flex direction="column" gap="4">
-          <Heading>Configure</Heading>
+          <Heading>Configuration</Heading>
           <Modules />
           <Equipment />
           <Provisions />
