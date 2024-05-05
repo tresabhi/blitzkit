@@ -18,6 +18,7 @@ export interface EquipmentDefinitions {
   equipments: {
     [key: number]: {
       name: string;
+      description: string;
     };
   };
 }

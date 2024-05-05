@@ -1047,6 +1047,7 @@ export async function definitions(production: boolean) {
 
       equipmentDefinitions.equipments[optionalDeviceEntry.id] = {
         name: strings[optionalDeviceEntry.userString],
+        description: strings[optionalDeviceEntry.description],
       };
     },
   );
