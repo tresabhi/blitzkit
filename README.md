@@ -12,7 +12,7 @@ Go to [application directory for BlitzKit](https://discord.com/application-direc
 
 ## Visit the website
 
-### https://blitzkit.vercel.app/
+### https://blitzkit.app/
 
 ![BlitzKit website](https://i.imgur.com/bdYMUCL.png)
 

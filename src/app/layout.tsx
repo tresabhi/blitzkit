@@ -88,7 +88,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                     the official Discord server
                   </a>
                   . Also consider using{' '}
-                  <a href="https://blitzkit.vercel.app/">
+                  <a href="https://blitzkit.app/">
                     the more stable release version
                   </a>
                   . You will be asked again in 8 days.

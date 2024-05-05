@@ -15,7 +15,7 @@ BlitzKit is available as a Discord bot and can be [installed very easily](/guide
 
 ## Website
 
-Provides a bunch of very helpful tools; https://blitzkit.vercel.app/
+Provides a bunch of very helpful tools; https://blitzkit.app/
 
 - Session tracker
 - Rating leaderboard
