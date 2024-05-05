@@ -27,7 +27,7 @@ export function ConsumablesManager({
     <Flex
       wrap="wrap"
       style={{
-        maxWidth: 360,
+        maxWidth: 288,
       }}
     >
       {consumables.map((consumable, index) => {
