@@ -25,17 +25,10 @@ export const TOOLS: Tool[] = [
   },
   {
     id: 'rating',
-    title: 'Rating leaderboard',
+    title: 'Rating',
     description: 'Full rating gamemode leaderboard',
     pageDescription:
       'Live and archived full rating leaderboard for World of Tanks Blitz',
-  },
-  {
-    id: 'session',
-    title: 'Session tracker',
-    description: 'Live session performance tracker',
-    pageDescription:
-      'Track your stats in real time as you play World of Tanks Blitz',
   },
   {
     id: 'compare',
@@ -43,6 +36,13 @@ export const TOOLS: Tool[] = [
     description: 'Compare tank statistics and loadouts',
     pageDescription:
       'Compare tanks statistics and loadouts in World of Tanks Blitz',
+  },
+  {
+    id: 'session',
+    title: 'Session tracker',
+    description: 'Live session performance tracker',
+    pageDescription:
+      'Track your stats in real time as you play World of Tanks Blitz',
   },
   {
     id: 'discord',

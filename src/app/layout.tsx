@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 import { ReactNode, Suspense, useEffect, useState } from 'react';
 import { Footer } from '../components/Footer';
 import { Loader } from '../components/Loader';
-import Navbar from '../components/Navbar';
+import Navbar, { NAVBAR_HEIGHT } from '../components/Navbar';
 import { Party3 } from '../components/Party3';
 import isDev from '../core/blitzkit/isDev';
 import { isLocalhost } from '../core/blitzkit/isLocalhost';
@@ -31,7 +31,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const pathname = usePathname();
   const isEmbed = pathname.split('/')[1] === 'embeds';
   const isRoot = pathname === '/';
-  const darkMode = useApp((state) => state.darkMode);
   const [showDevBuildAlert, setShowDevBuildAlert] = useState(false);
 
   useEffect(() => {
@@ -68,7 +67,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         }}
       >
         <Theme
-          appearance={darkMode ? 'dark' : 'light'}
+          appearance="dark"
           panelBackground="solid"
           radius="full"
           suppressHydrationWarning
@@ -76,9 +75,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
         >
           <Flex
             direction="column"
-            style={{ minHeight: '100vh', paddingTop: isEmbed ? undefined : 64 }}
+            style={{
+              minHeight: '100vh',
+              paddingTop: isEmbed ? undefined : NAVBAR_HEIGHT,
+            }}
           >
             {!isEmbed && <Navbar />}
+
             <AlertDialog.Root open={showDevBuildAlert}>
               <AlertDialog.Content>
                 <AlertDialog.Title>Experimental version!</AlertDialog.Title>
