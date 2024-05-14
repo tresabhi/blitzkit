@@ -38,7 +38,7 @@ export const NAVBAR_HEIGHT = 64;
 export default function Navbar() {
   const wideFormat = useWideFormat(480);
   const login = useApp((state) => state.login);
-  const [showHamburgerMenu, setShowHamburgerMenu] = useState(true);
+  const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
 
   useEffect(() => {
     if (!login) return;
