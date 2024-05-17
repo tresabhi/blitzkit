@@ -1,8 +1,6 @@
-<div style="display: flex; flex-direction: column; align-items: center">
-  <img src="https://i.imgur.com/ytgXskL.png">
-  <h1>BlitzKit Performance Metric</h1>
-  <span>Revision 1</span>
-</div>
+![Neutrality Index](https://i.imgur.com/XcGy5rh.png 'Neutrality Index')
+
+# BlitzKit Neutrality Index
 
 > [!CAUTION]
 > This is a working draft and is incomplete. Do not implement.
@@ -18,12 +16,44 @@ BkPM addresses a lot of issues with WN8:
 
 ## Preface
 
-The goal of this paper is to deliver a numerical metric for judging player performance by converging all statistics down to a single, easy-to-consume, human-readable value. This must be a mathematically elegant process that yields a reasonable number that asymptotes under extreme situations. More specifically, this value should equal 0, on average across all players and tanks. Extreme cases should be mapped in $[-1, 1]$. To attain the human readable value, we will be transforming the raw metric to a scale of $[0, 200]$ using $M = \text{round}(sx + s)$ where $M$ is the resulting human-readable metric, $s = 100$ is an arbitrary scaling factor, and $x$ is the raw metric.
+The goal of this paper is to deliver a numerical metric for judging player performance by converging all statistics down to a single, easy-to-consume, human-readable value. This must be a mathematically elegant process that yields a reasonable number that asymptotes under extreme situations. More specifically, this value should equal 0, on average across all players and tanks. Extreme cases should be mapped onto the range $[-1, 1]$. To attain the human readable value, we will be transforming the raw metric to a scale of $[0, 2s]$ using $M=\operatorname{round}\left(sR+s\right)$ where $M$ is the resulting human-readable metric, $s = 100$ is an arbitrary scaling factor, and $R$ is the raw metric.
 
 Wargaming provides cumulative statistics for players and tanks. The big idea is to average all provided statistics together to get one unified value. We will also incorporate other composite values based on these default statistics into the average. However, averaging this way poses two problems:
 
 1. All statistics do not scale equally. For example, good players performing with 3,000 damage per battle could also attain a kill-to-death ratio of 3. But averaging them as-is would imply damage per battle has weight 1000 times that of the kill ratio. In other words, damage per battle would totally diminish the impact of kill ratios on the average. Hence, there’s a need for normalization. Normalization, in most cases, simply means dividing by the corresponding averages.
 2. All statistics are not equally important. For example, dealing damage is arguably far more important than base capture; hence, it does not make sense to average them together. But this does not mean we totally discard this value as it does make an impact albeit very small. Instead, we will be incorporating weighted averages where the weights will be calculated through correlational analysis against win rate. Specifically, the weights of the statistics will be the corresponding correlation coefficient, r. One caveat to look out for is that r can be negative for statistics like damage received which must be minimized. Fortunately, negative weights are okay and make intuitive sense; after all, bleeding health should punish the metric.
+
+## Computation
+
+$\mu$ is a simple weighted average of statistics across all players where $C_{battles}$ is the number of player battles and $x_{i}$ is the statistic for player $i$.
+
+$$
+\mu=\frac{\sum_{ }^{ }C_{battles}x_{i}}{\sum_{ }^{ }C_{battles}}
+$$
+
+$\sigma$ is the standard deviation of the statistic across all players. Below is a refresher of the formula where $x_{i}$ is the statistic for player $i$ and $n$ is the number of players (or the sample size).
+
+$$
+\sigma=\sqrt{\frac{\sum_{ }^{ }\left(x_{i}-\mu\right)^{2}}{n}}
+$$
+
+An individual atomic statistic is provided by the equation below where $x$ is the player's statistic being evaluated, $\mu$ is the mean of the statistic across all players, and $\sigma$ is the standard deviation of the statistic across all players. During computation, one may pre-compute and reuse $\gamma=x-\mu$.
+
+$$
+A=\frac{x-\mu}{\left|x-\mu\right|}\left(1-e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^{2}}\right)=\frac{\gamma}{\left|\gamma\right|}\left(1-e^{-\frac{1}{2}\left(\frac{\gamma}{\sigma}\right)^{2}}\right)
+$$
+
+The raw metric is the weighted average of all atomic statistics.
+
+$$
+R=\frac{\sum_{ }^{ }wA}{\sum_{ }^{ }w}
+$$
+
+The final human-readable metric will be passed through the following transformation where $s=100$.
+
+$$
+M=\operatorname{round}\left(sR+s\right)
+$$
 
 ## Constants
 
