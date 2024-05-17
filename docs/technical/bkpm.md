@@ -4,12 +4,21 @@
   <span>Revision 1</span>
 </div>
 
-## Preface
-
 > [!CAUTION]
 > This is a working draft and is incomplete. Do not implement.
 
-The goal of this paper is to deliver a numerical metric for judging player performance by converging all statistics down to a single, easy-to-consume, human-readable value. This must be a mathematically elegant process that yields a reasonable number that asymptotes under extreme situations. More specifically, this value should equal 1, on average across all players and tanks. Extreme cases should be mapped between 0 and 2. This value will be multiplied by 100 and rounded to the nearest integer for readability purposes.
+## Why BkPM over WN8?
+
+BkPM addresses a lot of issues with WN8:
+
+- WN8 incorporates win rate into the metric; a metric like this must be a correlate of win rate, not a dependent
+- The weights and biases are not dynamic and their formulation is not transparent
+- WN8 values do not asymptote under extreme conditions resulting in meaninglessly large or negative values
+- WN8 has too many digits; it doesn't make sense to differentiate between players with sub-one-thousandth's worth of precision
+
+## Preface
+
+The goal of this paper is to deliver a numerical metric for judging player performance by converging all statistics down to a single, easy-to-consume, human-readable value. This must be a mathematically elegant process that yields a reasonable number that asymptotes under extreme situations. More specifically, this value should equal 0, on average across all players and tanks. Extreme cases should be mapped in $[-1, 1]$. To attain the human readable value, we will be transforming the raw metric to a scale of $[0, 200]$ using $M = \text{round}(sx + s)$ where $M$ is the resulting human-readable metric, $s = 100$ is an arbitrary scaling factor, and $x$ is the raw metric.
 
 Wargaming provides cumulative statistics for players and tanks. The big idea is to average all provided statistics together to get one unified value. We will also incorporate other composite values based on these default statistics into the average. However, averaging this way poses two problems:
 
@@ -73,20 +82,58 @@ damage_per_hit = composite.damage_dealt / composite.hits;
 
 ## Normalized Statistics
 
-The goal is to adjust all values such that each value individually averages out to 1 across all players. Most normalizations are simple. The more complex ones will be represented mathematically. Assigned under the “normalized” object.
-
-```
-win_rate = composite.win_rate / average.win_rate
-damage_dealt = composite.damage_dealt / tier_average.health
-damage_received = composite.damage_received / tier_average.health
-```
-
-Now the complex normalizations.
-
-### `frags`
-
-On average, a player kills 1 player on the enemy team. However, the max is 7. We need to map 0 frags to 0, 1 to 1, and 7 to 2 to maintain, for the lack of a better term, an asymptotic behavior in extreme cases. $\sqrt{x}$ serves as an excellent choice as a parent function as it already features points $\left( 0, 0 \right)$ and $\left( 1, 1 \right)$. However, at $x = 7 \Leftrightarrow y = \sqrt{7}$ but we desire 2. We can achieve this by applying a coefficient of $\frac{2}{\sqrt{7}}$. This however shifts the point $\left( 1, 1 \right)$; hence, we have to linearly interpolate the coefficient between 1 and $\frac{2}{\sqrt{7}}$ on the interval $\left[ 1, 6 \right]$. Proof for the coefficient is left as an exercise for the reader.
+We will be using the standard deviation and the mean of each metric supplied to this expression below to normalize each metric in the range $[-1, 1]$. The goal is to map the mean of the statistic to $0$, and the extrema to $-1$ and $1$ (whichever direction that may be in).
 
 $$
-normalized.frags = \left[ \frac{composite.frags - 1}{constants.players\_per\_team - 1} \left( \frac{2}{\sqrt{constants.players\_per\_team}} -1 \right) +1 \right] \sqrt{composite.frags}
+\frac{x-\mu}{\left|x-\mu\right|}\left[1-e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^{2}}\right]
+$$
+
+During computation, one may pre-compute and reuse $\gamma=x-\mu$ in:
+
+$$
+\frac{\gamma}{\left|\gamma\right|}\left[1-e^{-\frac{1}{2}\left(\frac{\gamma}{\sigma}\right)^{2}}\right]
+$$
+
+Here is an example of HisRoyalFatness scoring a very high $0.988$ with the frags metric with his [XM551 Sheridan](https://blitzkit.app/tools/tankopedia/20257). $\mu=\frac{1081.164}{1405.2273}$, $\sigma=0.2492$, and $x=\frac{7310}{4837}$, HisRoyalFatness' average frags. At $x = 0$ (if the player manages to get no frags), the metric drops nearly to $-1$ and vice versa. And, at $x=\mu$, the metric is exactly $0$.
+
+![](https://i.imgur.com/aIUQmGF.png)
+
+### Derivation
+
+We start with the standard normal distribution formula
+
+$$
+\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^{2}}
+$$
+
+![](https://i.imgur.com/a10m8Xz.png)
+
+We remove the coefficient to transform the range of the function from $\left(0,\frac{1}{\sigma\sqrt{2\pi}}\right]$ to $\left(0,1\right]$. From this point onwards, I will be using the substitution $\gamma=x-\mu$.
+
+$$
+e^{-\frac{1}{2}\left(\frac{\gamma}{\sigma}\right)^{2}}
+$$
+
+![](https://i.imgur.com/67DO69i.png)
+
+Then we mirror the function across $y=\frac{1}{2}$ to allow the function to be rewarding as you reach the extrema.
+
+$$
+1-e^{-\frac{1}{2}\left(\frac{\gamma}{\sigma}\right)^{2}}
+$$
+
+![](https://i.imgur.com/1J0cTyb.png)
+
+Finally, to punish the function as you approach the left extreme, we flip the sign of the function when $x<\mu$. One may choose to implement this as a piece-wise function (especially when implementing this in a computer), but I have chosen to represent it as one unified coefficient in this paper.
+
+$$
+\frac{\gamma}{\left|\gamma\right|}\left[1-e^{-\frac{1}{2}\left(\frac{\gamma}{\sigma}\right)^{2}}\right]
+$$
+
+![](https://i.imgur.com/O8stVlJ.png)
+
+For cases where increased $x$ negativey impacts gameplay, like in the case of `composite.damage_received`, the sign of the coefficient can simply be flipped. In fact, the sign of the function can be determined by the sign of the corelation coefficient.
+
+$$
+\frac{r\gamma}{\left|r\gamma\right|}\left[1-e^{-\frac{1}{2}\left(\frac{\gamma}{\sigma}\right)^{2}}\right]
 $$
