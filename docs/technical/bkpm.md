@@ -37,10 +37,22 @@ $$
 \sigma=\sqrt{\frac{\sum_{ }^{ }\left(x_{i}-\mu\right)^{2}}{n}}
 $$
 
-An individual atomic statistic is provided by the equation below where $x$ is the player's statistic being evaluated, $\mu$ is the mean of the statistic across all players, and $\sigma$ is the standard deviation of the statistic across all players. During computation, one may pre-compute and reuse $\gamma=x-\mu$.
+A normalized atomic statistic is provided by the equation below where $x$ is the player's statistic being evaluated, $\mu$ is the mean of the statistic across all players, and $\sigma$ is the standard deviation of the statistic across all players. During computation, one may pre-compute and reuse $\gamma=x-\mu$.
 
 $$
 A=\frac{x-\mu}{\left|x-\mu\right|}\left(1-e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^{2}}\right)=\frac{\gamma}{\left|\gamma\right|}\left(1-e^{-\frac{1}{2}\left(\frac{\gamma}{\sigma}\right)^{2}}\right)
+$$
+
+$m$ is the slope of the least squares regression line. Below is a refresher of the formula where $x_i$ is the player's statistic being evaluated, $y_i$ is the player's win rate, and $n$ is the number of players (or the sample size).
+
+$$
+m=\frac{n\sum_{ }^{ }x_{i}y_{i}-\sum_{ }^{ }x_{i}\sum_{ }^{ }y_{i}}{n\sum_{ }^{ }x_{i}^{2}-\left(\sum_{ }^{ }x_{i}\right)^{2}}
+$$
+
+The weight of an atomic statistic is $w$ where $r$ is the correlation coefficient between the statistic and win rate, $\mu$ is the mean of the statistic across all players, and $m$ is the slope of the least squares regression line.
+
+$$
+w=\mu mr
 $$
 
 The raw metric is the weighted average of all atomic statistics.
@@ -124,7 +136,7 @@ $$
 \frac{\gamma}{\left|\gamma\right|}\left[1-e^{-\frac{1}{2}\left(\frac{\gamma}{\sigma}\right)^{2}}\right]
 $$
 
-Here is an example of HisRoyalFatness scoring a very high $0.988$ with the frags metric with his [XM551 Sheridan](https://blitzkit.app/tools/tankopedia/20257). $\mu=\frac{1081.164}{1405.2273}$, $\sigma=0.2492$, and $x=\frac{7310}{4837}$, HisRoyalFatness' average frags. At $x = 0$ (if the player manages to get no frags), the metric drops nearly to $-1$ and vice versa. And, at $x=\mu$, the metric is exactly $0$.
+Here is an example of HisRoyalFatness scoring a very high $0.988$ with the frags metric with his [XM551 Sheridan](https://blitzkit.app/tools/tankopedia/20257). $\mu=0.7694$, $\sigma=0.2492$, and $x=1.5113$, HisRoyalFatness' average frags. At $x = 0$ (if the player manages to get no frags), the metric drops nearly to $-1$ and vice versa. And, at $x=\mu$, the metric is exactly $0$.
 
 ![](https://i.imgur.com/aIUQmGF.png)
 
@@ -161,9 +173,3 @@ $$
 $$
 
 ![](https://i.imgur.com/O8stVlJ.png)
-
-For cases where increased $x$ negativey impacts gameplay, like in the case of `composite.damage_received`, the sign of the coefficient can simply be flipped. In fact, the sign of the function can be determined by the sign of the corelation coefficient.
-
-$$
-\frac{r\gamma}{\left|r\gamma\right|}\left[1-e^{-\frac{1}{2}\left(\frac{\gamma}{\sigma}\right)^{2}}\right]
-$$
