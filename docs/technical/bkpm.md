@@ -43,6 +43,12 @@ $$
 A=\frac{x-\mu}{\left|x-\mu\right|}\left(1-e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^{2}}\right)=\frac{\gamma}{\left|\gamma\right|}\left(1-e^{-\frac{1}{2}\left(\frac{\gamma}{\sigma}\right)^{2}}\right)
 $$
 
+$r$ is the correlation coefficient of the statistic across all players. Below is a refresher of the formula where $x_{i}$ is the statistic for player, $y_{i}$ is the player's win rate, $\mu$ is the mean of the statistic across all players, and $\overline{y}$ is the average win rate across all players.
+
+$$
+r=\frac{\sum_{ }^{ }\left(x_{i}-\mu\right)\left(y_{i}-\overline{y}\right)}{\sqrt{\sum_{ }^{ }\left(x_{i}-\mu\right)^{2}\sum_{ }^{ }\left(y_{i}-\overline{y}\right)^{2}}}
+$$
+
 $m$ is the slope of the least squares regression line. Below is a refresher of the formula where $x_i$ is the player's statistic being evaluated, $y_i$ is the player's win rate, and $n$ is the number of players (or the sample size).
 
 $$
