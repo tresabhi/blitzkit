@@ -58,7 +58,7 @@ $$
 The weight of an atomic statistic is $w$ where $r$ is the correlation coefficient between the statistic and win rate, $\mu$ is the mean of the statistic across all players, and $m$ is the slope of the least squares regression line.
 
 $$
-w=\mu mr
+w=\left|r\right|\mu m
 $$
 
 The raw metric is the weighted average of all atomic statistics.

@@ -1,29 +1,31 @@
-import { mkdir, writeFile } from 'fs/promises';
 import { times } from 'lodash';
 import { compress } from 'lz4js';
+import { argv } from 'process';
+import ProgressBar from 'progress';
 import { Region, REGIONS } from '../src/constants/regions';
 import getTankStats from '../src/core/blitz/getTankStats';
 import { idToRegion, MAX_IDS, MIN_IDS } from '../src/core/blitz/idToRegion';
 import { asset } from '../src/core/blitzkit/asset';
+import {
+  AverageDefinitions,
+  AverageDefinitionsAllStats,
+} from '../src/core/blitzkit/averageDefinitions';
+import { averageDefinitionsAllStatsKeys } from '../src/core/blitzkit/averageDefinitions/constants';
+import { commitAssets } from '../src/core/blitzkit/commitAssets';
 import { superCompress } from '../src/core/blitzkit/superCompress';
 import { DidsReadStream, DidsWriteStream } from '../src/core/streams/dids';
 import { IndividualTankStats } from '../src/types/tanksStats';
 
-const RUN_TIME = 1000 * 60;
+const RUN_TIME = 1000 * 0;
 const MAX_REQUESTS = 10;
-const startTime = Date.now();
 
-const list: IndividualTankStats[][] = [];
+const production = argv.includes('--production');
+const startTime = Date.now();
+const fields = 'all,tank_id,battle_life_time';
+
+const players: IndividualTankStats[][] = [];
 const preDiscovered = await fetch(asset('averages/discovered.dids.lz4')).then(
   async (response) => {
-    return [
-      1000000048, 500000058, 500000076, 2000000096, 2000000097, 2000000102,
-      2000000103, 2000000109, 1000000116, 500000131, 2000000138, 2000000141,
-      2000000140, 2000000143, 2000000144, 2000000145, 500000147, 2000000150,
-      2000000173, 2000000174, 2000000178, 2000000177, 2000000182, 2000000189,
-      500000191, 2000000191, 2000000192, 2000000196,
-    ];
-
     if (response.status === 200) {
       const buffer = await response.arrayBuffer();
       return new DidsReadStream(buffer).dids();
@@ -40,17 +42,22 @@ if (preDiscovered) {
     `Revalidating ${preDiscovered.length} pre-discovered ids with ${MAX_REQUESTS} chains...`,
   );
 
+  const preDiscoveredBar = new ProgressBar(':bar', {
+    total: preDiscovered.length,
+  });
   let preDiscoveredIndex = 0;
 
   async function chainPreDiscovery() {
     processes++;
 
-    if (preDiscoveredIndex >= preDiscovered!.length) {
+    if (preDiscoveredIndex === preDiscovered!.length) {
       processes--;
 
       if (processes !== 0) return;
 
-      console.log(`Rediscovered ids in ${Date.now() - startTime}ms`);
+      console.log(
+        `Rediscovered ${discoveredIds.length} / ${preDiscovered!.length} ids in ${Date.now() - startTime}ms`,
+      );
       discover();
 
       return;
@@ -61,13 +68,12 @@ if (preDiscovered) {
 
     if (id > MAX_IDS[region]) return;
 
-    const stats = await getTankStats(region, id, { felids: 'all' });
+    const stats = await getTankStats(region, id, { fields });
 
     if (stats !== null && stats.length > 0) {
       discoveredIds.push(id);
-      list.push(stats);
-
-      console.log(`re-discovered ${id} in ${region}`);
+      players.push(stats);
+      preDiscoveredBar.tick();
     }
 
     processes--;
@@ -89,51 +95,170 @@ function discover() {
   };
 
   let regionIndex = 0;
+  let done = 0;
 
   async function chainDiscovery() {
-    processes++;
-
-    if (Date.now() - startTime > RUN_TIME) {
-      processes--;
-
-      if (processes !== 0) return;
-
-      const discoveredIdsContent = compress(
-        new DidsWriteStream().dids(discoveredIds).uint8Array,
-      );
-
-      await mkdir('temp/averages', { recursive: true });
-      writeFile('temp/averages/discovered.dids.lz4', discoveredIdsContent);
-      writeFile('temp/averages/list.cdon.lz4', superCompress(list));
-
-      console.log(
-        `Total run time: ${
-          Date.now() - startTime
-        }ms\nDiscovered ids: ${discoveredIds.length}`,
-      );
-
-      return;
-    }
-
     regionIndex = (regionIndex + 1) % REGIONS.length;
     const region = REGIONS[regionIndex];
     const id = index[region]++;
 
+    if (Date.now() - startTime > RUN_TIME || id === MAX_IDS[region]) {
+      if (++done !== MAX_REQUESTS) return;
+
+      console.log(
+        `Total discovery run time: ${
+          Date.now() - startTime
+        }ms\nDiscovered ids: ${discoveredIds.length}`,
+      );
+
+      postWork();
+
+      return;
+    }
+
     if (id > MAX_IDS[region]) return;
 
-    const stats = await getTankStats(region, id, { felids: 'all' });
+    const stats = await getTankStats(region, id, { fields });
 
     if (stats !== null && stats.length > 0) {
       discoveredIds.push(id);
-      list.push(stats);
+      players.push(stats);
 
       console.log(`discovered ${id} in ${region}`);
     }
 
-    processes--;
     setTimeout(chainDiscovery); // circumvent max call stack
   }
 
   console.log(`Spawning ${MAX_REQUESTS} discovery chains...`);
   times(MAX_REQUESTS, chainDiscovery);
+}
+
+function postWork() {
+  const tankIds: number[] = [];
+  const sorted: Record<number, IndividualTankStats[]> = {};
+
+  players.forEach((tanks) => {
+    tanks.forEach((tank) => {
+      if (tank.all.battles === 0) return;
+
+      if (!sorted[tank.tank_id]) {
+        tankIds.push(tank.tank_id);
+        sorted[tank.tank_id] = [];
+      }
+      sorted[tank.tank_id].push(tank);
+    });
+  });
+
+  console.log(
+    `Generating statistics based off ${players.length} players and ${tankIds.length} tanks...`,
+  );
+
+  const averages: AverageDefinitions = {};
+
+  tankIds.forEach((id) => {
+    const tanks = sorted[id];
+    const samples = tanks.length;
+
+    function sum(slice: (tank: AverageDefinitionsAllStats) => number) {
+      return tanks.reduce((acc, tank) => {
+        return (
+          acc + slice({ battle_life_time: tank.battle_life_time, ...tank.all })
+        );
+      }, 0);
+    }
+
+    const denominator = sum((tank) => tank.battles);
+
+    function moment(slice: (tank: AverageDefinitionsAllStats) => number) {
+      return tanks.reduce((acc, tank) => {
+        return (
+          acc +
+          tank.all.battles *
+            slice({ battle_life_time: tank.battle_life_time, ...tank.all })
+        );
+      }, 0);
+    }
+
+    function weightedAverage(
+      slice: (tank: AverageDefinitionsAllStats) => number,
+    ) {
+      return moment(slice) / denominator;
+    }
+
+    const mu = averageDefinitionsAllStatsKeys.reduce<
+      Partial<AverageDefinitionsAllStats>
+    >((acc, key) => {
+      acc[key] = weightedAverage((tank) => tank[key]);
+      return acc;
+    }, {}) as AverageDefinitionsAllStats;
+    const sigma = averageDefinitionsAllStatsKeys.reduce<
+      Partial<AverageDefinitionsAllStats>
+    >((acc, key) => {
+      acc[key] = Math.sqrt(sum((tank) => (tank[key] - mu[key]) ** 2) / samples);
+      return acc;
+    }, {}) as AverageDefinitionsAllStats;
+    const r = averageDefinitionsAllStatsKeys.reduce<
+      Partial<AverageDefinitionsAllStats>
+    >((acc, key) => {
+      acc[key] =
+        (samples *
+          sum(
+            (tank) => (tank[key] / tank.battles) * (tank.wins / tank.battles),
+          ) -
+          sum((tank) => tank[key] / tank.battles) *
+            sum((tank) => tank.wins / tank.battles)) /
+        Math.sqrt(
+          (samples * sum((tank) => (tank[key] / tank.battles) ** 2) -
+            sum((tank) => tank[key] / tank.battles) ** 2) *
+            (samples * sum((tank) => (tank.wins / tank.battles) ** 2) -
+              sum((tank) => tank.wins / tank.battles) ** 2),
+        );
+      return acc;
+    }, {}) as AverageDefinitionsAllStats;
+    const m = averageDefinitionsAllStatsKeys.reduce<
+      Partial<AverageDefinitionsAllStats>
+    >((acc, key) => {
+      acc[key] =
+        (samples *
+          sum(
+            (tank) => (tank[key] / tank.battles) * (tank.wins / tank.battles),
+          ) -
+          sum((tank) => tank[key] / tank.battles) *
+            sum((tank) => tank.wins / tank.battles)) /
+        (samples * sum((tank) => (tank[key] / tank.battles) ** 2) -
+          sum((tank) => tank[key] / tank.battles) ** 2);
+      return acc;
+    }, {}) as AverageDefinitionsAllStats;
+    const b = averageDefinitionsAllStatsKeys.reduce<
+      Partial<AverageDefinitionsAllStats>
+    >((acc, key) => {
+      acc[key] =
+        (sum((tank) => tank.wins / tank.battles) -
+          m[key] * sum((tank) => tank[key] / tank.battles)) /
+        samples;
+      return acc;
+    }, {}) as AverageDefinitionsAllStats;
+
+    averages[id] = { samples, mu, sigma, r, m, b };
+  });
+
+  commitAssets(
+    'averages',
+    [
+      {
+        path: 'definitions/averages.cdon.lz4',
+        content: superCompress(averages),
+        encoding: 'base64',
+      },
+      {
+        path: 'definitions/discovered.dids.lz4',
+        content: Buffer.from(
+          compress(new DidsWriteStream().dids(discoveredIds).uint8Array),
+        ).toString('base64'),
+        encoding: 'base64',
+      },
+    ],
+    production,
+  );
 }
