@@ -16,7 +16,7 @@ import { superCompress } from '../src/core/blitzkit/superCompress';
 import { DidsReadStream, DidsWriteStream } from '../src/core/streams/dids';
 import { IndividualTankStats } from '../src/types/tanksStats';
 
-const RUN_TIME = 1000 * 0;
+const RUN_TIME = 1000 * 60 * 60;
 const MAX_REQUESTS = 10;
 
 const production = argv.includes('--production');
@@ -124,7 +124,9 @@ function discover() {
       discoveredIds.push(id);
       players.push(stats);
 
-      console.log(`discovered ${id} in ${region}`);
+      console.log(
+        `discovered ${id} in ${region} (time left: ${RUN_TIME - (Date.now() - startTime)}ms)`,
+      );
     }
 
     setTimeout(chainDiscovery); // circumvent max call stack
