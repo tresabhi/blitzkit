@@ -26,7 +26,6 @@ export default function PageWrapper({
 }: PageWrapperProps) {
   return (
     <Theme
-      {...containerProps}
       accentColor={color}
       style={{
         flex: noFlex1 ? undefined : 1,
@@ -37,6 +36,7 @@ export default function PageWrapper({
           : undefined,
         ...containerProps?.style,
       }}
+      {...containerProps}
     >
       <Flex
         direction="column"

@@ -1,91 +1,83 @@
 'use client';
 
-import { CaretRightIcon } from '@radix-ui/react-icons';
-import { Button, Flex, Link as LinkRadix } from '@radix-ui/themes';
-import Link from 'next/link';
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { Flex, Heading, Text, TextField } from '@radix-ui/themes';
+import { NAVBAR_HEIGHT } from '../components/Navbar';
 import PageWrapper from '../components/PageWrapper';
-import { TOOLS } from '../constants/tools';
-import { PatreonIcon } from '../icons/Patreon';
 import { theme } from '../stitches.config';
-import * as styles from './page.css';
 
 export default function Page() {
   return (
-    <PageWrapper>
+    <>
       <Flex
-        direction="column"
-        gap="5"
-        justify="center"
         align="center"
-        style={{ flex: 1 }}
+        justify="center"
+        style={{
+          height: `calc(75vh - ${NAVBAR_HEIGHT}px)`,
+          position: 'relative',
+        }}
+        p="4"
       >
-        <LinkRadix href="https://www.patreon.com/tresabhi" target="_blank">
-          <Button
-            color="ruby"
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'url(https://i.imgur.com/qfFQvyl.png)',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: `linear-gradient(${theme.colors.appBackground1}c0, ${theme.colors.appBackground1}ff)`,
+          }}
+        />
+
+        <Flex
+          direction="column"
+          gap="4"
+          align="center"
+          justify="center"
+          style={{ position: 'relative', width: '100%' }}
+        >
+          <Flex direction="column" align="center">
+            <Heading size="9" weight="bold" align="center">
+              BlitzKit
+            </Heading>
+            <Text color="gray" align="center">
+              Everything World of Tanks Blitz
+            </Text>
+          </Flex>
+
+          <TextField.Root
+            size="3"
+            placeholder="Search players or tanks..."
             style={{
-              boxShadow: `0 0 8px ${theme.colors.solidBackground_ruby}f0`,
+              width: 352,
+              maxWidth: '100%',
             }}
           >
-            <PatreonIcon style={{ width: '1em', height: '1em' }} /> Consider
-            donating on Patreon
-          </Button>
-        </LinkRadix>
-
-        <Flex gap="3" wrap="wrap" align="center" justify="center">
-          {TOOLS.map((tool) => (
-            <Link
-              href={tool.href ?? `/tools/${tool.id}`}
-              target={tool.href ? '_blank' : undefined}
-              className={
-                tool.disabled ? styles.tool.disabled : styles.tool.enabled
-              }
-              style={{
-                backgroundImage: `url(/assets/banners/${tool.id}.webp)`,
-                cursor: tool.disabled ? 'default' : 'pointer',
-                opacity: tool.disabled ? 0.25 : 1,
-                height: 128,
-                minWidth: 256,
-                flex: 1,
-                borderRadius: 8,
-                textDecoration: 'none',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                overflow: 'hidden',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                justifyContent: 'flex-end',
-                padding: 16,
-                transition: `box-shadow ${theme.durations.regular}`,
-              }}
-              onClick={(event) => {
-                if (tool.disabled) event.preventDefault();
-              }}
-            >
-              <span
-                style={{
-                  fontSize: 32,
-                  color: theme.colors.textHighContrast,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                {tool.title}
-                <CaretRightIcon style={{ width: '1em', height: '1em' }} />
-              </span>
-              <span
-                style={{
-                  color: theme.colors.textLowContrast,
-                  fontSize: 16,
-                }}
-              >
-                {tool.disabled ? 'Coming soon!' : tool.description}
-              </span>
-            </Link>
-          ))}
+            <TextField.Slot>
+              <MagnifyingGlassIcon />
+            </TextField.Slot>
+          </TextField.Root>
         </Flex>
       </Flex>
-    </PageWrapper>
+
+      <PageWrapper noFlex1>
+        hello there! ignore my existence pretty please :&#41;
+      </PageWrapper>
+
+      <div style={{ flex: 1 }} />
+    </>
   );
 }
