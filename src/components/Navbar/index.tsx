@@ -56,6 +56,7 @@ export default function Navbar() {
   const plugs = (
     <>
       <Link
+        onClick={() => setShowHamburgerMenu(false)}
         href="https://discord.gg/nDt7AjGJQH"
         target="_blank"
         style={{
@@ -69,6 +70,7 @@ export default function Navbar() {
       </Link>
 
       <Link
+        onClick={() => setShowHamburgerMenu(false)}
         href="https://www.patreon.com/tresabhi"
         target="_blank"
         style={{
@@ -101,7 +103,10 @@ export default function Navbar() {
           transition: 'height 0.2s ease',
           overflow: 'hidden',
         }}
-        onPointerEnter={() => setShowHamburgerMenu(true)}
+        onPointerEnter={() => {
+          console.log('open!');
+          setShowHamburgerMenu(true);
+        }}
         onPointerLeave={() => setShowHamburgerMenu(false)}
       >
         <Flex direction="column" align="center" pt="2">
@@ -120,6 +125,7 @@ export default function Navbar() {
             </IconButton>
 
             <Link
+              onClick={() => setShowHamburgerMenu(false)}
               href="/"
               style={{
                 color: 'inherit',
@@ -135,7 +141,7 @@ export default function Navbar() {
 
             {wideFormat && plugs}
 
-            <Link href="/settings">
+            <Link href="/settings" onClick={() => setShowHamburgerMenu(false)}>
               <Flex style={{ width: '100%', height: '100%' }} justify="center">
                 <IconButton variant="ghost" color="gray">
                   <GearIcon />
@@ -179,6 +185,7 @@ export default function Navbar() {
                     <Flex gap="4" align="center" justify="center" wrap="wrap">
                       {REGIONS.map((region) => (
                         <LinkRadix
+                          onClick={() => setShowHamburgerMenu(false)}
                           key={region}
                           href={authURL(
                             region,
@@ -224,9 +231,7 @@ export default function Navbar() {
                     padding: 8,
                     transition: `box-shadow ${theme.durations.regular}`,
                   }}
-                  onClick={(event) => {
-                    if (tool.disabled) event.preventDefault();
-                  }}
+                  onClick={() => setShowHamburgerMenu(false)}
                 >
                   <Text
                     style={{
