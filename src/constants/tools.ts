@@ -38,8 +38,9 @@ export const TOOLS: Tool[] = [
       'Compare tanks statistics and loadouts in World of Tanks Blitz',
   },
   {
+    // TODO: rename to tracker
     id: 'session',
-    title: 'Session tracker',
+    title: 'Session',
     description: 'Live session performance tracker',
     pageDescription:
       'Track your stats in real time as you play World of Tanks Blitz',
