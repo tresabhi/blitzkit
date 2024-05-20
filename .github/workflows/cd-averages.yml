@@ -1,8 +1,6 @@
 name: CD Averages
 
 on:
-  push:
-    branches: dev
   workflow_dispatch:
   schedule:
     - cron: '0 12 * * 0'

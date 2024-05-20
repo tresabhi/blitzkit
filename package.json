@@ -5,7 +5,7 @@
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
-    "build:averages": "vite-node --script scripts/averages",
+    "build:averages": "bun scripts/averages",
     "build:db": "prisma generate",
     "build:bot": "vite-node --script scripts/build --production",
     "build:website": "yarn build:db && yarn build:sitemap && next build",
