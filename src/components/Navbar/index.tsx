@@ -101,6 +101,8 @@ export default function Navbar() {
           transition: 'height 0.2s ease',
           overflow: 'hidden',
         }}
+        onPointerEnter={() => setShowHamburgerMenu(true)}
+        onPointerLeave={() => setShowHamburgerMenu(false)}
       >
         <Flex direction="column" align="center" pt="2">
           <Flex
