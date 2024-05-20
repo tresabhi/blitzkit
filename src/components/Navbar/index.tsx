@@ -99,6 +99,7 @@ export default function Navbar() {
         background: theme.colors.appBackground1_alpha,
         borderBottom: theme.borderStyles.nonInteractive,
         backdropFilter: 'blur(4rem)',
+        WebkitBackdropFilter: 'blur(4rem)',
         boxSizing: 'border-box',
         transition: 'max-height 0.5s ease',
         overflow: 'hidden',
