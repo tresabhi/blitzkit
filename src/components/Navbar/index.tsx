@@ -14,7 +14,6 @@ import {
   IconButton,
   Link as LinkRadix,
   Popover,
-  ScrollArea,
   Spinner,
   Text,
 } from '@radix-ui/themes';
@@ -38,7 +37,7 @@ export const NAVBAR_HEIGHT = 64;
 export default function Navbar() {
   const wideFormat = useWideFormat(480);
   const login = useApp((state) => state.login);
-  const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
+  const [showHamburgerMenu, setShowHamburgerMenu] = useState(true);
 
   useEffect(() => {
     if (!login) return;
@@ -93,20 +92,17 @@ export default function Navbar() {
           top: 0,
           left: 0,
           width: '100%',
-          height: showHamburgerMenu ? 176 : NAVBAR_HEIGHT + 1, // extra pixel for frost bleeding
+          maxHeight: showHamburgerMenu ? '100%' : NAVBAR_HEIGHT + 1, // extra pixel for frost bleeding
           zIndex: 2,
           padding: '1rem',
           background: theme.colors.appBackground1_alpha,
           borderBottom: theme.borderStyles.nonInteractive,
           backdropFilter: 'blur(4rem)',
           boxSizing: 'border-box',
-          transition: 'height 0.2s ease',
+          transition: 'max-height 0.5s ease',
           overflow: 'hidden',
         }}
-        onPointerEnter={() => {
-          console.log('open!');
-          setShowHamburgerMenu(true);
-        }}
+        onPointerEnter={() => setShowHamburgerMenu(true)}
         onPointerLeave={() => setShowHamburgerMenu(false)}
       >
         <Flex direction="column" align="center" pt="2">
@@ -204,49 +200,47 @@ export default function Navbar() {
             )}
           </Flex>
 
-          <ScrollArea scrollbars="horizontal">
-            <Flex mt="6" gap="3" justify="center">
-              {TOOLS.filter((tool) => !tool.href).map((tool) => (
-                <Link
-                  href={tool.href ?? `/tools/${tool.id}`}
-                  target={tool.href ? '_blank' : undefined}
-                  className={
-                    tool.disabled ? styles.tool.disabled : styles.tool.enabled
-                  }
+          <Flex mt="6" gap="3" justify="center" wrap="wrap">
+            {TOOLS.filter((tool) => !tool.href).map((tool) => (
+              <Link
+                href={tool.href ?? `/tools/${tool.id}`}
+                target={tool.href ? '_blank' : undefined}
+                className={
+                  tool.disabled ? styles.tool.disabled : styles.tool.enabled
+                }
+                style={{
+                  backgroundImage: `url(/assets/banners/${tool.id}.webp)`,
+                  cursor: tool.disabled ? 'default' : 'pointer',
+                  opacity: tool.disabled ? 0.25 : 1,
+                  height: 64,
+                  width: 144,
+                  borderRadius: 8,
+                  textDecoration: 'none',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  overflow: 'hidden',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-end',
+                  padding: 8,
+                  transition: `box-shadow ${theme.durations.regular}`,
+                }}
+                onClick={() => setShowHamburgerMenu(false)}
+              >
+                <Text
                   style={{
-                    backgroundImage: `url(/assets/banners/${tool.id}.webp)`,
-                    cursor: tool.disabled ? 'default' : 'pointer',
-                    opacity: tool.disabled ? 0.25 : 1,
-                    height: 64,
-                    width: 144,
-                    borderRadius: 8,
-                    textDecoration: 'none',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    overflow: 'hidden',
+                    color: theme.colors.textHighContrast,
                     display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    justifyContent: 'flex-end',
-                    padding: 8,
-                    transition: `box-shadow ${theme.durations.regular}`,
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
-                  onClick={() => setShowHamburgerMenu(false)}
                 >
-                  <Text
-                    style={{
-                      color: theme.colors.textHighContrast,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {tool.title}
-                  </Text>
-                </Link>
-              ))}
-            </Flex>
-          </ScrollArea>
+                  {tool.title}
+                </Text>
+              </Link>
+            ))}
+          </Flex>
         </Flex>
       </Box>
     </>
