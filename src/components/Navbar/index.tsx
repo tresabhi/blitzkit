@@ -18,7 +18,7 @@ import {
   Text,
 } from '@radix-ui/themes';
 import Link from 'next/link';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import * as styles from '../../app/page.css';
 import { REGIONS, UNLOCALIZED_REGION_NAMES } from '../../constants/regions';
 import { TOOLS } from '../../constants/tools';
@@ -37,7 +37,8 @@ export const NAVBAR_HEIGHT = 64;
 export default function Navbar() {
   const wideFormat = useWideFormat(480);
   const login = useApp((state) => state.login);
-  const [showHamburgerMenu, setShowHamburgerMenu] = useState(true);
+  const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
+  const navbar = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!login) return;
@@ -85,164 +86,177 @@ export default function Navbar() {
   );
 
   return (
-    <>
-      <Box
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          maxHeight: showHamburgerMenu ? '100%' : NAVBAR_HEIGHT + 1, // extra pixel for frost bleeding
-          zIndex: 2,
-          padding: '1rem',
-          background: theme.colors.appBackground1_alpha,
-          borderBottom: theme.borderStyles.nonInteractive,
-          backdropFilter: 'blur(4rem)',
-          boxSizing: 'border-box',
-          transition: 'max-height 0.5s ease',
-          overflow: 'hidden',
-        }}
-        onPointerEnter={() => setShowHamburgerMenu(true)}
-        onPointerLeave={() => setShowHamburgerMenu(false)}
-      >
-        <Flex direction="column" align="center" pt="2">
-          <Flex
-            justify="between"
-            align="center"
-            style={{ maxWidth: 1600, width: '100%', padding: '0 16px' }}
-            gap="4"
+    <Box
+      ref={navbar}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        maxHeight: showHamburgerMenu ? '100%' : NAVBAR_HEIGHT + 1, // extra pixel for frost bleeding
+        zIndex: 2,
+        padding: '1rem',
+        background: theme.colors.appBackground1_alpha,
+        borderBottom: theme.borderStyles.nonInteractive,
+        backdropFilter: 'blur(4rem)',
+        boxSizing: 'border-box',
+        transition: 'max-height 0.5s ease',
+        overflow: 'hidden',
+      }}
+      onPointerEnter={() => setShowHamburgerMenu(true)}
+      onPointerLeave={(event) => {
+        if (
+          navbar.current ===
+          document.elementFromPoint(event.clientX, event.clientY)
+        ) {
+          // false positive bug: https://stackoverflow.com/a/45267167/12294756
+          return;
+        }
+
+        setShowHamburgerMenu(false);
+      }}
+      onFocus={() => setShowHamburgerMenu(true)}
+      onBlur={() => setShowHamburgerMenu(false)}
+    >
+      <Flex direction="column" align="center" pt="2">
+        <Flex
+          justify="between"
+          align="center"
+          style={{ maxWidth: 1600, width: '100%', padding: '0 16px' }}
+          gap="4"
+        >
+          <IconButton
+            variant="ghost"
+            color="gray"
+            onClick={() => setShowHamburgerMenu((state) => !state)}
           >
-            <IconButton
-              variant="ghost"
-              color="gray"
-              onClick={() => setShowHamburgerMenu((state) => !state)}
-            >
-              {showHamburgerMenu ? <Cross1Icon /> : <HamburgerMenuIcon />}
-            </IconButton>
+            {showHamburgerMenu ? <Cross1Icon /> : <HamburgerMenuIcon />}
+          </IconButton>
 
-            <Link
-              onClick={() => setShowHamburgerMenu(false)}
-              href="/"
-              style={{
-                color: 'inherit',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <BlitzkitWide />
-            </Link>
+          <Link
+            onClick={() => setShowHamburgerMenu(false)}
+            href="/"
+            style={{
+              color: 'inherit',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <BlitzkitWide />
+          </Link>
 
-            <div style={{ flex: 1 }} />
+          <div style={{ flex: 1 }} />
 
-            {wideFormat && plugs}
+          {wideFormat && plugs}
 
-            <Link href="/settings" onClick={() => setShowHamburgerMenu(false)}>
-              <Flex style={{ width: '100%', height: '100%' }} justify="center">
+          <Link href="/settings" onClick={() => setShowHamburgerMenu(false)}>
+            <Flex style={{ width: '100%', height: '100%' }} justify="center">
+              <IconButton variant="ghost" color="gray">
+                <GearIcon />
+              </IconButton>
+            </Flex>
+          </Link>
+
+          {login && (
+            <Popover.Root>
+              <Popover.Trigger>
                 <IconButton variant="ghost" color="gray">
-                  <GearIcon />
+                  <PersonIcon />
                 </IconButton>
-              </Flex>
-            </Link>
+              </Popover.Trigger>
 
-            {login && (
-              <Popover.Root>
-                <Popover.Trigger>
-                  <IconButton variant="ghost" color="gray">
-                    <PersonIcon />
-                  </IconButton>
-                </Popover.Trigger>
+              <Popover.Content align="center">
+                <Flex direction="column" gap="2">
+                  <Suspense fallback={<Spinner />}>
+                    <LoggedIn />
+                  </Suspense>
+                </Flex>
+              </Popover.Content>
+            </Popover.Root>
+          )}
 
-                <Popover.Content align="center">
-                  <Flex direction="column" gap="2">
-                    <Suspense fallback={<Spinner />}>
-                      <LoggedIn />
-                    </Suspense>
-                  </Flex>
-                </Popover.Content>
-              </Popover.Root>
-            )}
+          {/* TODO: re-enable in the future */}
+          {!login && false && (
+            <Dialog.Root>
+              <Dialog.Trigger>
+                <Button variant="ghost">Log in</Button>
+              </Dialog.Trigger>
 
-            {/* TODO: re-enable in the future */}
-            {!login && false && (
-              <Dialog.Root>
-                <Dialog.Trigger>
-                  <Button variant="ghost">Log in</Button>
-                </Dialog.Trigger>
-
-                <Dialog.Content
-                  style={{
-                    maxWidth: 360,
-                  }}
-                >
-                  <Flex direction="column" gap="2" align="center">
-                    <Heading size="3">Choose your region</Heading>
-
-                    <Flex gap="4" align="center" justify="center" wrap="wrap">
-                      {REGIONS.map((region) => (
-                        <LinkRadix
-                          onClick={() => setShowHamburgerMenu(false)}
-                          key={region}
-                          href={authURL(
-                            region,
-                            typeof window === 'undefined'
-                              ? undefined
-                              : location.href,
-                          )}
-                        >
-                          {UNLOCALIZED_REGION_NAMES[region]}
-                        </LinkRadix>
-                      ))}
-                    </Flex>
-                  </Flex>
-                </Dialog.Content>
-              </Dialog.Root>
-            )}
-          </Flex>
-
-          <Flex mt="6" gap="3" justify="center" wrap="wrap">
-            {TOOLS.filter((tool) => !tool.href).map((tool) => (
-              <Link
-                href={tool.href ?? `/tools/${tool.id}`}
-                target={tool.href ? '_blank' : undefined}
-                className={
-                  tool.disabled ? styles.tool.disabled : styles.tool.enabled
-                }
+              <Dialog.Content
                 style={{
-                  backgroundImage: `url(/assets/banners/${tool.id}.webp)`,
-                  cursor: tool.disabled ? 'default' : 'pointer',
-                  opacity: tool.disabled ? 0.25 : 1,
-                  height: 64,
-                  width: 144,
-                  borderRadius: 8,
-                  textDecoration: 'none',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  overflow: 'hidden',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  justifyContent: 'flex-end',
-                  padding: 8,
-                  transition: `box-shadow ${theme.durations.regular}`,
+                  maxWidth: 360,
                 }}
-                onClick={() => setShowHamburgerMenu(false)}
               >
-                <Text
-                  style={{
-                    color: theme.colors.textHighContrast,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {tool.title}
-                </Text>
-              </Link>
-            ))}
-          </Flex>
+                <Flex direction="column" gap="2" align="center">
+                  <Heading size="3">Choose your region</Heading>
+
+                  <Flex gap="4" align="center" justify="center" wrap="wrap">
+                    {REGIONS.map((region) => (
+                      <LinkRadix
+                        onClick={() => setShowHamburgerMenu(false)}
+                        key={region}
+                        href={authURL(
+                          region,
+                          typeof window === 'undefined'
+                            ? undefined
+                            : location.href,
+                        )}
+                      >
+                        {UNLOCALIZED_REGION_NAMES[region]}
+                      </LinkRadix>
+                    ))}
+                  </Flex>
+                </Flex>
+              </Dialog.Content>
+            </Dialog.Root>
+          )}
         </Flex>
-      </Box>
-    </>
+
+        <Flex mt="6" gap="3" justify="center" wrap="wrap">
+          {TOOLS.filter((tool) => !tool.href).map((tool) => (
+            <Link
+              href={tool.href ?? `/tools/${tool.id}`}
+              target={tool.href ? '_blank' : undefined}
+              className={
+                tool.disabled ? styles.tool.disabled : styles.tool.enabled
+              }
+              style={{
+                backgroundImage: `url(/assets/banners/${tool.id}.webp)`,
+                cursor: tool.disabled ? 'default' : 'pointer',
+                opacity: tool.disabled ? 0.25 : 1,
+                height: 64,
+                minWidth: 144,
+                maxWidth: 192,
+                flex: 1,
+                borderRadius: 8,
+                textDecoration: 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                justifyContent: 'flex-end',
+                padding: 8,
+                transition: `box-shadow ${theme.durations.regular}`,
+              }}
+              onClick={() => setShowHamburgerMenu(false)}
+            >
+              <Text
+                style={{
+                  color: theme.colors.textHighContrast,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {tool.title}
+              </Text>
+            </Link>
+          ))}
+        </Flex>
+      </Flex>
+    </Box>
   );
 }
