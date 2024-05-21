@@ -70,6 +70,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           appearance="dark"
           panelBackground="solid"
           radius="full"
+          accentColor="amber"
           suppressHydrationWarning
           suppressContentEditableWarning
         >

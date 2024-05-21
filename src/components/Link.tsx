@@ -16,6 +16,7 @@ export function Link({ href, children, target, onClick, ...props }: LinkProps) {
       {...props}
     >
       <NextLink
+        tabIndex={-1}
         href={href}
         target={target}
         onClick={onClick}

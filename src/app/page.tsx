@@ -1,11 +1,16 @@
 'use client';
 
-import { CaretRightIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import {
+  CaretRightIcon,
+  Cross2Icon,
+  MagnifyingGlassIcon,
+} from '@radix-ui/react-icons';
 import {
   Button,
   Card,
   Flex,
   Heading,
+  IconButton,
   Spinner,
   Text,
   TextField,
@@ -16,6 +21,7 @@ import { useRef, useState } from 'react';
 import { Link } from '../components/Link';
 import { NAVBAR_HEIGHT } from '../components/Navbar';
 import PageWrapper from '../components/PageWrapper';
+import { UNLOCALIZED_REGION_NAMES_SHORT } from '../constants/regions';
 import searchPlayersAcrossRegions, {
   AccountListWithServer,
 } from '../core/blitz/searchPlayersAcrossRegions';
@@ -24,10 +30,14 @@ import {
   tankDefinitions,
   tankNames,
 } from '../core/blitzkit/tankDefinitions';
-import { tankIcon } from '../core/blitzkit/tankIcon';
+import { TIER_ROMAN_NUMERALS } from '../core/blitzkit/tankDefinitions/constants';
+import { useWideFormat } from '../hooks/useWideFormat';
 import { theme } from '../stitches.config';
 
+const DISCRIMINATOR_WIDTH = 32;
+
 export default function Page() {
+  const wideFormat = useWideFormat(512);
   const [showSearch, setShowSearch] = useState(false);
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<null | {
@@ -44,9 +54,9 @@ export default function Page() {
     const awaitedTankNames = await tankNames;
     const tanks = go(sanitized, awaitedTankNames, {
       keys: ['combined'],
-      limit: 9,
+      limit: 6,
     });
-    const players = await searchPlayersAcrossRegions(sanitized, 9);
+    const players = await searchPlayersAcrossRegions(sanitized, 6);
 
     setSearchResults({
       tanks: tanks.map((tank) => awaitedTankDefinitions[tank.obj.id]),
@@ -77,7 +87,7 @@ export default function Page() {
             background: 'url(/assets/banners/home.webp)',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'bottom',
+            backgroundPosition: 'center',
           }}
         />
         <div
@@ -146,6 +156,23 @@ export default function Page() {
               <TextField.Slot>
                 <MagnifyingGlassIcon />
               </TextField.Slot>
+
+              {showSearch && (
+                <TextField.Slot>
+                  <IconButton
+                    variant="ghost"
+                    color="gray"
+                    onClick={() => {
+                      if (!search.current) return;
+
+                      search.current.value = '';
+                      setShowSearch(false);
+                    }}
+                  >
+                    <Cross2Icon />
+                  </IconButton>
+                </TextField.Slot>
+              )}
             </TextField.Root>
 
             {showSearch && (
@@ -167,14 +194,33 @@ export default function Page() {
 
                 {!searching && searchResults && (
                   <>
-                    <Flex gap="6">
-                      <Flex direction="column" gap="2" style={{ flex: 1 }}>
+                    <Flex
+                      gap={wideFormat ? '6' : '2'}
+                      justify="center"
+                      direction={wideFormat ? 'row' : 'column'}
+                    >
+                      <Flex
+                        direction="column"
+                        gap="2"
+                        style={{
+                          flex: 1,
+                          maxWidth: wideFormat ? '50%' : undefined,
+                        }}
+                      >
                         <Link
                           underline="hover"
-                          color="gray"
                           href="/tools/tankopedia"
+                          color="gray"
+                          style={{
+                            width: '100%',
+                          }}
                         >
-                          <Flex align="center">
+                          <Flex
+                            align="center"
+                            style={{
+                              width: '100%',
+                            }}
+                          >
                             Tankopedia
                             <CaretRightIcon />
                           </Flex>
@@ -189,6 +235,7 @@ export default function Page() {
                                 href={`/tools/tankopedia/${tank.id}`}
                               >
                                 <Button
+                                  tabIndex={-1}
                                   size="2"
                                   variant="ghost"
                                   color="gray"
@@ -196,18 +243,22 @@ export default function Page() {
                                     justifyContent: 'flex-start',
                                     width: '100%',
                                     color: 'inherit',
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
                                   }}
                                 >
                                   <Flex align="center" gap="2">
-                                    <img
-                                      src={tankIcon(tank.id, 'small')}
+                                    <Text
+                                      color="gray"
+                                      size="1"
                                       style={{
-                                        height: 16,
-                                        width: 32,
-                                        objectFit: 'contain',
-                                        objectPosition: 'left',
+                                        width: DISCRIMINATOR_WIDTH,
+                                        textAlign: 'left',
                                       }}
-                                    />
+                                    >
+                                      {TIER_ROMAN_NUMERALS[tank.tier]}
+                                    </Text>
 
                                     {tank.name}
                                   </Flex>
@@ -215,18 +266,75 @@ export default function Page() {
                               </Link>
                             </Text>
                           ))}
+
+                          {searchResults.tanks.length === 0 && (
+                            <Text color="gray" size="2">
+                              No tanks found
+                            </Text>
+                          )}
                         </Flex>
                       </Flex>
 
-                      <Flex direction="column" gap="2" style={{ flex: 1 }}>
+                      <Flex
+                        direction="column"
+                        gap="2"
+                        style={{
+                          flex: 1,
+                          maxWidth: wideFormat ? '50%' : undefined,
+                        }}
+                      >
                         <Text color="gray">Players</Text>
 
                         <Flex direction="column">
                           {searchResults.players.map((player) => (
-                            <Link href={`/`} size="2">
-                              {player.nickname}
-                            </Link>
+                            <Text>
+                              <Link
+                                underline="none"
+                                style={{ color: 'inherit' }}
+                                href={`/tools/session/?id=${player.account_id}`}
+                              >
+                                <Button
+                                  tabIndex={-1}
+                                  size="2"
+                                  variant="ghost"
+                                  color="gray"
+                                  style={{
+                                    justifyContent: 'flex-start',
+                                    width: '100%',
+                                    color: 'inherit',
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                  }}
+                                >
+                                  <Flex align="center" gap="2">
+                                    <Text
+                                      color="gray"
+                                      size="1"
+                                      style={{
+                                        width: DISCRIMINATOR_WIDTH,
+                                        textAlign: 'left',
+                                      }}
+                                    >
+                                      {
+                                        UNLOCALIZED_REGION_NAMES_SHORT[
+                                          player.region
+                                        ]
+                                      }
+                                    </Text>
+
+                                    {player.nickname}
+                                  </Flex>
+                                </Button>
+                              </Link>
+                            </Text>
                           ))}
+
+                          {searchResults.players.length === 0 && (
+                            <Text color="gray" size="2">
+                              No players found
+                            </Text>
+                          )}
                         </Flex>
                       </Flex>
                     </Flex>
@@ -239,7 +347,7 @@ export default function Page() {
       </Flex>
 
       <PageWrapper noFlex1>
-        hello there! ignore my existence pretty please :&#41;
+        {/* hello there! ignore my existence pretty please :&#41; */}
       </PageWrapper>
 
       <div style={{ flex: 1 }} />
