@@ -114,6 +114,7 @@ export default function Navbar() {
 
                 return (
                   <LinkRadix
+                    highContrast={selected}
                     color="gray"
                     underline={selected ? 'always' : 'hover'}
                     href="#"
