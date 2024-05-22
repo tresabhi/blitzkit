@@ -1,5 +1,5 @@
 import { slateDark } from '@radix-ui/colors';
-import { Card, Flex, Inset, Link } from '@radix-ui/themes';
+import { Card, Flex, Inset, Link, Text } from '@radix-ui/themes';
 import { asset } from '../../../../../../core/blitzkit/asset';
 import { TankDefinition } from '../../../../../../core/blitzkit/tankDefinitions';
 import {
@@ -10,14 +10,16 @@ import {
 } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { tankIcon } from '../../../../../../core/blitzkit/tankIcon';
 import { theme } from '../../../../../../stitches.config';
+import * as styles from '../../../page.css';
 import { CompactSearchResultRow } from './CompactSearchResultRow';
 
 interface ResultsProps {
   compact?: boolean;
   results: TankDefinition[];
+  onSelect?: (tank: TankDefinition) => void;
 }
 
-export function Results({ compact, results }: ResultsProps) {
+export function Results({ compact, results, onSelect }: ResultsProps) {
   const firstChunk = compact
     ? results.slice(0, Math.ceil(results.length / 2))
     : [];
@@ -39,6 +41,7 @@ export function Results({ compact, results }: ResultsProps) {
       {!compact &&
         results.map((tank) => (
           <Link
+            className={styles.listing}
             href={`/tools/tankopedia/${tank.id}`}
             style={{
               flex: 1,

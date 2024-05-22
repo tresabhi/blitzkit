@@ -1,6 +1,8 @@
 import { style } from '@vanilla-extract/css';
 import { theme } from '../../../stitches.config';
 
+export const listing = style({});
+
 export const flag = style({
   transitionDuration: theme.durations.regular,
   left: '0',

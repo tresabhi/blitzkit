@@ -1,4 +1,4 @@
-import { Flex, Heading, Link } from '@radix-ui/themes';
+import { Flex, Heading, Link, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import PageWrapper from '../../../../../components/PageWrapper';
 import { videoDefinitions } from '../../../../../core/blitzkit/videos';
@@ -14,7 +14,10 @@ export function Videos() {
   return (
     <PageWrapper noFlex1>
       <Flex direction="column" gap="4" align="start">
-        <Heading size="6">Review videos</Heading>
+        <Flex direction="column">
+          <Heading size="6">Review videos</Heading>
+          <Text color="gray">BlitzKit does not endorse any review videos.</Text>
+        </Flex>
 
         <Flex gap="3" wrap="wrap">
           {videos.map((video) => (

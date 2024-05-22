@@ -400,7 +400,6 @@ export function TankSearch({
     page * tanksPerPage,
     (page + 1) * tanksPerPage,
   );
-  
 
   useEffect(() => {
     mutateTankopediaPersistent((draft) => {
@@ -853,7 +852,11 @@ export function TankSearch({
         <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />
       )}
 
-      <Results compact={compact} results={searchResultsPageSlice} />
+      <Results
+        compact={compact}
+        results={searchResultsPageSlice}
+        onSelect={onSelect}
+      />
 
       {searchResultsPageSlice.length > tanksPerPage / 4 && (
         <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />
