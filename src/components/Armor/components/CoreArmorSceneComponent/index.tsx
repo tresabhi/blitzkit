@@ -91,7 +91,7 @@ export function CoreArmorSceneComponent({
         equipment,
       );
       material.uniforms.thickness.value = hasEnhancedArmor
-        ? thickness * 1.04
+        ? thickness * 1.03
         : thickness;
     }
     async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
@@ -106,7 +106,14 @@ export function CoreArmorSceneComponent({
       );
 
       material.uniforms.penetration.value = hasCalibratedShells
-        ? penetration * (isExplosive(duel.antagonist!.shell.type) ? 1.1 : 1.05)
+        ? penetration *
+          (duel.antagonist!.shell.type === 'ap'
+            ? 0.08
+            : duel.antagonist!.shell.type === 'ap_cr'
+              ? 0.05
+              : duel.antagonist!.shell.type === 'hc'
+                ? 0.13
+                : 0.8)
         : penetration;
     }
 

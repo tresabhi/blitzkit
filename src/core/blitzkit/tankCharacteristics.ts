@@ -1,5 +1,4 @@
 import { EquipmentMatrix } from '../../stores/duel';
-import { isExplosive } from '../blitz/isExplosive';
 import { resolveNearPenetration } from '../blitz/resolveNearPenetration';
 import { coefficient } from './coefficient';
 import { degressiveStat } from './degressiveStat';
@@ -38,7 +37,7 @@ export function tankCharacteristics(
     stockTrack,
     stockTurret,
     stockGun,
-    applyReactive,
+    applyReactiveArmor,
     applyDynamicArmor,
     applySpallLiner,
   }: {
@@ -58,7 +57,7 @@ export function tankCharacteristics(
     provisions: number[];
     crewSkills: Record<string, number>;
     camouflage: boolean;
-    applyReactive: boolean;
+    applyReactiveArmor: boolean;
     applyDynamicArmor: boolean;
     applySpallLiner: boolean;
   },
@@ -94,7 +93,7 @@ export function tankCharacteristics(
     return provisions.includes(id);
   }
 
-  const hasRammer = equipment(100);
+  const hasGunRammer = equipment(100);
   const hasImprovedVentilation = equipment(102);
   const hasCalibratedShells = equipment(103);
   const hasEnhancedGunLayingDrive = equipment(104);
@@ -115,6 +114,7 @@ export function tankCharacteristics(
   const hasEnginePowerBoost = consumable(14);
   const hasImprovedEnginePowerBoost = consumable(27);
   const hasReticleCalibration = consumable(28);
+  const hasReducedEnginePowerBoost = consumable(80);
 
   const hasStandardFuel = provision(18);
   const hasImprovedFuel = provision(19);
@@ -133,7 +133,7 @@ export function tankCharacteristics(
           ? total + provisionDefinitions[provision].crew! / 100
           : total,
       0,
-    ) + (hasImprovedVentilation ? 0.05 : 0);
+    ) + (hasImprovedVentilation ? 0.08 : 0);
   const commanderMastery = crewMastery + provisionCrewBonus;
   const crewMemberMastery = commanderMastery * 1.1;
 
@@ -141,42 +141,48 @@ export function tankCharacteristics(
   const damageCoefficient =
     coefficient([hasTungsten, 0.15]) *
     coefficient(
-      [applyReactive, -0.2],
+      [applyReactiveArmor, -0.27],
       [applyDynamicArmor, -0.1],
       [applySpallLiner && shell.type === 'he', -0.2],
     );
   const reloadCoefficient =
-    (coefficient([hasRammer, -0.07]) *
+    (coefficient([hasGunRammer, -0.05]) *
       coefficient([true, degressiveStat(crewMemberMastery)])) /
-    coefficient([hasAdrenaline && gun.type === 'regular', 0.2]);
+    coefficient([hasAdrenaline && gun.type === 'regular', 0.17]);
   const penetrationCoefficient = coefficient([
     hasCalibratedShells,
-    isExplosive(shell.type) ? 0.1 : 0.05,
+    shell.type === 'ap'
+      ? 0.08
+      : shell.type === 'ap_cr'
+        ? 0.05
+        : shell.type === 'hc'
+          ? 0.13
+          : 0.8,
   ]);
   const healthCoefficient = coefficient(
     [hasSandbagArmor, 0.03],
     [hasEnhancedSandbagArmor, 0.06],
-    [hasImprovedAssembly, 0.06],
+    [hasImprovedAssembly, 0.04],
   );
   const shellVelocityCoefficient = coefficient(
-    [hasSupercharger, 0.3],
+    [hasSupercharger, 0.35],
     [hasImprovedGunPowder, 0.3],
   );
   const penetrationLossOverDistanceCoefficient = coefficient([
     hasSupercharger,
-    -0.5,
+    -0.6,
   ]);
   const aimTimeCoefficient =
     coefficient(
-      [hasEnhancedGunLayingDrive, -0.1],
-      [hasReticleCalibration, -0.4],
+      [hasEnhancedGunLayingDrive, -0.15],
+      [hasReticleCalibration, -0.3],
     ) * coefficient([true, degressiveStat(crewMemberMastery)]);
   const dispersionStillCoefficient =
-    coefficient([hasRefinedGun, -0.1], [hasReticleCalibration, -0.4]) *
+    coefficient([hasRefinedGun, -0.15], [hasReticleCalibration, -0.3]) *
     coefficient([true, degressiveStat(crewMemberMastery)]);
   const dispersionDamagedCoefficient = coefficient([
     hasVerticalStabilizer,
-    -0.15,
+    -0.12,
   ]);
   const dispersionHullTraverseCoefficient = coefficient(
     [hasVerticalStabilizer, -0.15],
@@ -196,17 +202,12 @@ export function tankCharacteristics(
   );
   const enginePowerCoefficient = coefficient(
     [
-      hasEngineAccelerator &&
-        (tank.class === 'lightTank' || tank.class === 'mediumTank'),
-      0.05,
+      hasEngineAccelerator,
+      tank.class === 'heavyTank' || tank.class === 'AT-SPG' ? 0.05 : 0.04,
     ],
-    [
-      hasEngineAccelerator &&
-        (tank.class === 'heavyTank' || tank.class === 'AT-SPG'),
-      0.07,
-    ],
+    [hasReducedEnginePowerBoost, 0.1],
     [hasEnginePowerBoost, 0.2],
-    [hasImprovedEnginePowerBoost, 0.4],
+    [hasImprovedEnginePowerBoost, 0.35],
     [hasStandardFuel, 0.03],
     [hasImprovedFuel, 0.1],
     [hasGearOil, 0.03],
@@ -217,32 +218,50 @@ export function tankCharacteristics(
     coefficient([true, progressiveStat(crewMemberMastery)]);
   const hullTraverseCoefficient =
     coefficient(
-      [hasImprovedControl, 0.1],
-      [hasImprovedEnginePowerBoost, 0.05],
+      [hasImprovedControl, 0.11],
+      [hasImprovedEnginePowerBoost, 0.01],
       [true, crewSkills.virtuoso / 100],
     ) * coefficient([true, progressiveStat(crewMemberMastery)]);
-  const resistanceCoefficient = coefficient([hasImprovedSuspension, -0.25]);
+  const resistanceHardCoefficient = coefficient([hasImprovedSuspension, -0.2]);
+  const resistanceMediumCoefficient = coefficient([
+    hasImprovedSuspension,
+    -0.15,
+  ]);
+  const resistanceSoftCoefficient = coefficient([hasImprovedSuspension, -0.3]);
   const viewRangeCoefficient =
     coefficient([
       hasImprovedOptics,
-      tank.class === 'AT-SPG' ? 0.05 : tank.class === 'heavyTank' ? 0.07 : 0.1,
+      tank.class === 'heavyTank'
+        ? 0.06
+        : tank.class === 'mediumTank'
+          ? 0.08
+          : tank.class === 'lightTank'
+            ? 0.11
+            : 0.04,
     ]) * coefficient([true, progressiveStat(commanderMastery)]);
   const fireChanceCoefficient = coefficient([hasProtectiveKit, -0.2]);
 
   const speedForwardsSum = sum(
-    [hasImprovedEnginePowerBoost, 5],
+    [hasImprovedEnginePowerBoost, 4],
     [hasGearOil, 2],
     [hasImprovedGearOil, 4],
   );
   const speedBackwardsSum = sum(
-    [hasImprovedEnginePowerBoost, 10],
+    [hasImprovedEnginePowerBoost, 8],
     [hasGearOil, 2],
     [hasImprovedGearOil, 4],
   );
   const camouflageSumMoving = sum(
     [
       hasCamouflageNet,
-      tank.class === 'heavyTank' ? 0.03 : tank.class === 'AT-SPG' ? 0.07 : 0.05,
+
+      tank.class === 'heavyTank'
+        ? 0.02
+        : tank.class === 'mediumTank'
+          ? 0.04
+          : tank.class === 'lightTank'
+            ? 0.07
+            : 0.1,
     ],
     [
       camouflage,
@@ -252,12 +271,13 @@ export function tankCharacteristics(
   const camouflageSumStill = sum(
     [
       hasCamouflageNet,
-      2 *
-        (tank.class === 'heavyTank'
-          ? 0.03
-          : tank.class === 'AT-SPG'
-            ? 0.07
-            : 0.05),
+      tank.class === 'heavyTank'
+        ? 0.04
+        : tank.class === 'mediumTank'
+          ? 0.08
+          : tank.class === 'lightTank'
+            ? 0.14
+            : 0.2,
     ],
     [
       camouflage,
@@ -362,7 +382,7 @@ export function tankCharacteristics(
   const gunDepression =
     gunModelDefinition.pitch.max +
     gunDefaultPitch +
-    (hasImprovedVerticalStabilizer ? 3 : 0);
+    (hasImprovedVerticalStabilizer ? 4 : 0);
   const gunElevation =
     -gunModelDefinition.pitch.min -
     gunDefaultPitch +
@@ -385,35 +405,37 @@ export function tankCharacteristics(
   const powerToWeightRatioHardTerrain =
     resolvedEnginePower /
     weightTons /
-    (track.resistance.hard * resistanceCoefficient);
+    (track.resistance.hard * resistanceHardCoefficient);
   const powerToWeightRatioMediumTerrain =
     resolvedEnginePower /
     weightTons /
-    (track.resistance.medium * resistanceCoefficient);
+    (track.resistance.medium * resistanceMediumCoefficient);
   const powerToWeightRatioSoftTerrain =
     resolvedEnginePower /
     weightTons /
-    (track.resistance.soft * resistanceCoefficient);
+    (track.resistance.soft * resistanceSoftCoefficient);
   const weight = weightTons;
   const turretTraverseSpeed = turret.traverseSpeed * turretTraverseCoefficient;
   const hullTraverseHardTerrain =
     (resolvedEnginePower / stockEngine.power) *
     track.traverseSpeed *
     hullTraverseCoefficient *
-    (track.resistance.hard / (track.resistance.hard * resistanceCoefficient)) *
+    (track.resistance.hard /
+      (track.resistance.hard * resistanceHardCoefficient)) *
     (stockWeight / weightKg);
   const hullTraverseMediumTerrain =
     (resolvedEnginePower / stockEngine.power) *
     track.traverseSpeed *
     hullTraverseCoefficient *
     (track.resistance.hard /
-      (track.resistance.medium * resistanceCoefficient)) *
+      (track.resistance.medium * resistanceMediumCoefficient)) *
     (stockWeight / weightKg);
   const hullTraverseSoftTerrain =
     (resolvedEnginePower / stockEngine.power) *
     track.traverseSpeed *
     hullTraverseCoefficient *
-    (track.resistance.hard / (track.resistance.soft * resistanceCoefficient)) *
+    (track.resistance.hard /
+      (track.resistance.soft * resistanceSoftCoefficient)) *
     (stockWeight / weightKg);
   const health = (tank.health + turret.health) * healthCoefficient;
   const fireChance = engine.fireChance * fireChanceCoefficient;

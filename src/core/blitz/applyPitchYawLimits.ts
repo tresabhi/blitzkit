@@ -19,9 +19,10 @@ export function applyPitchYawLimits(
     );
   }
 
-  const pitchBuff = verticalStabilizer ? degToRad(3) : 0;
-  let lowerPitch = -degToRad(pitchLimits.max) - pitchBuff;
-  let upperPitch = -degToRad(pitchLimits.min) + pitchBuff;
+  const depressionBuff = verticalStabilizer ? degToRad(4) : 0;
+  const elevationBuff = verticalStabilizer ? degToRad(3) : 0;
+  let lowerPitch = -degToRad(pitchLimits.max) - depressionBuff;
+  let upperPitch = -degToRad(pitchLimits.min) + elevationBuff;
   const transition = degToRad(pitchLimits.transition ?? 10);
 
   if (pitchLimits.back) {
