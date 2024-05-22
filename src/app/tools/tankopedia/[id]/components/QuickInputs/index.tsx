@@ -4,7 +4,10 @@ import { use, useEffect, useRef } from 'react';
 import { degToRad, radToDeg } from 'three/src/math/MathUtils';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitions';
-import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
+import {
+  modelTransformEvent,
+  ModelTransformEventData,
+} from '../../../../../../core/blitzkit/modelTransform';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
@@ -13,8 +16,8 @@ import * as styles from './index.css';
 export function RotationInputs() {
   const protagonist = useDuel((state) => state.protagonist!);
   const awaitedModelDefinitions = use(modelDefinitions);
-  const turretYawInput = useRef<HTMLInputElement>(null);
-  const gunPitchInput = useRef<HTMLInputElement>(null);
+  const yawInput = useRef<HTMLInputElement>(null);
+  const pitchInput = useRef<HTMLInputElement>(null);
   const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
@@ -24,13 +27,30 @@ export function RotationInputs() {
   const isFullScreen = useFullScreen();
 
   useEffect(() => {
-    turretYawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
+    yawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
   }, [protagonist.yaw]);
   useEffect(() => {
-    gunPitchInput.current!.value = (
+    pitchInput.current!.value = (
       -radToDeg(protagonist.pitch) + initialGunPitch
     ).toFixed(1);
   }, [protagonist.pitch]);
+  useEffect(() => {
+    function handleTransformEvent({ pitch, yaw }: ModelTransformEventData) {
+      if (!pitchInput.current || !yawInput.current) return;
+
+      pitchInput.current.value = (-radToDeg(pitch)).toFixed(1);
+
+      if (yaw === undefined) return;
+
+      yawInput.current.value = radToDeg(yaw).toFixed(1);
+    }
+
+    modelTransformEvent.on(handleTransformEvent);
+
+    return () => {
+      modelTransformEvent.off(handleTransformEvent);
+    };
+  }, []);
 
   return (
     <Flex
@@ -53,11 +73,9 @@ export function RotationInputs() {
           textAlign: 'right',
         }}
         onBlur={() => {
-          const value = Number(turretYawInput.current!.value);
+          const value = Number(yawInput.current!.value);
           if (isNaN(value)) {
-            turretYawInput.current!.value = radToDeg(protagonist.yaw).toFixed(
-              1,
-            );
+            yawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
             return;
           }
           const [pitch, yaw] = applyPitchYawLimits(
@@ -72,15 +90,15 @@ export function RotationInputs() {
             state.protagonist!.pitch = pitch;
             state.protagonist!.yaw = yaw;
           });
-          turretYawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
+          yawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
         }}
         onKeyDown={(event) => {
           if (event.key === 'Enter') {
-            turretYawInput.current?.blur();
+            yawInput.current?.blur();
           }
         }}
-        onFocus={() => turretYawInput.current?.focus()}
-        ref={turretYawInput}
+        onFocus={() => yawInput.current?.focus()}
+        ref={yawInput}
       >
         <TextField.Slot
           style={{
@@ -100,9 +118,9 @@ export function RotationInputs() {
           textAlign: 'right',
         }}
         onBlur={() => {
-          const value = Number(gunPitchInput.current!.value);
+          const value = Number(pitchInput.current!.value);
           if (isNaN(value)) {
-            gunPitchInput.current!.value = (
+            pitchInput.current!.value = (
               -radToDeg(protagonist.pitch) + initialGunPitch
             ).toFixed(1);
             return;
@@ -119,17 +137,17 @@ export function RotationInputs() {
             state.protagonist!.pitch = pitch;
             state.protagonist!.yaw = yaw;
           });
-          gunPitchInput.current!.value = (
+          pitchInput.current!.value = (
             -radToDeg(protagonist.pitch) + initialGunPitch
           ).toFixed(1);
         }}
         onKeyDown={(event) => {
           if (event.key === 'Enter') {
-            gunPitchInput.current?.blur();
+            pitchInput.current?.blur();
           }
         }}
-        onFocus={() => gunPitchInput.current?.focus()}
-        ref={gunPitchInput}
+        onFocus={() => pitchInput.current?.focus()}
+        ref={pitchInput}
       >
         <TextField.Slot
           style={{
