@@ -1,22 +1,19 @@
 'use client';
 
-import { AlertDialog, Button, Flex, Theme } from '@radix-ui/themes';
+import { Flex, Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
 import { config } from 'dotenv';
 import { Roboto_Flex } from 'next/font/google';
 import { usePathname } from 'next/navigation';
-import { ReactNode, Suspense, useEffect, useState } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { Footer } from '../components/Footer';
 import { Loader } from '../components/Loader';
 import Navbar, { NAVBAR_HEIGHT } from '../components/Navbar';
 import { Party3 } from '../components/Party3';
-import isDev from '../core/blitzkit/isDev';
-import { isLocalhost } from '../core/blitzkit/isLocalhost';
-import { useApp } from '../stores/app';
+import { Checks } from './components/Checks';
+import './layout.css';
 
 config();
-
-const DEV_BUILD_AGREEMENT_COOLDOWN = 8 * 24 * 60 * 60 * 1000;
 
 interface RootLayoutProps {
   children: ReactNode;
@@ -31,16 +28,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const pathname = usePathname();
   const isEmbed = pathname.split('/')[1] === 'embeds';
   const isRoot = pathname === '/';
-  const [showDevBuildAlert, setShowDevBuildAlert] = useState(false);
-
-  useEffect(() => {
-    setShowDevBuildAlert(
-      isDev() &&
-        !isLocalhost() &&
-        Date.now() - useApp.getState().devBuildAgreementTime >=
-          DEV_BUILD_AGREEMENT_COOLDOWN,
-    );
-  }, []);
 
   return (
     <html lang="en" className={robotoFlex.className}>
@@ -83,34 +70,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           >
             {!isEmbed && <Navbar />}
 
-            <AlertDialog.Root open={showDevBuildAlert}>
-              <AlertDialog.Content>
-                <AlertDialog.Title>Experimental version!</AlertDialog.Title>
-                <AlertDialog.Description>
-                  This version may have a lot of issues. Report issues to{' '}
-                  <a href="https://discord.gg/nDt7AjGJQH" target="_blank">
-                    the official Discord server
-                  </a>
-                  . Also consider using{' '}
-                  <a href="https://blitzkit.app/">
-                    the more stable release version
-                  </a>
-                  . You will be asked again in 8 days.
-                </AlertDialog.Description>
-
-                <Flex justify="end">
-                  <Button
-                    variant="solid"
-                    onClick={() => {
-                      setShowDevBuildAlert(false);
-                      useApp.setState({ devBuildAgreementTime: Date.now() });
-                    }}
-                  >
-                    Continue
-                  </Button>
-                </Flex>
-              </AlertDialog.Content>
-            </AlertDialog.Root>
+            <Checks />
 
             <Suspense
               fallback={

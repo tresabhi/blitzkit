@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Cross1Icon,
   DiscordLogoIcon,
@@ -19,13 +21,11 @@ import {
 } from '@radix-ui/themes';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
 import * as styles from '../../app/page.css';
 import { REGIONS, UNLOCALIZED_REGION_NAMES } from '../../constants/regions';
 import { TOOLS } from '../../constants/tools';
 import { authURL } from '../../core/blitz/authURL';
-import { extendAuth } from '../../core/blitz/extendAuth';
-import { logout } from '../../core/blitz/logout';
 import { useWideFormat } from '../../hooks/useWideFormat';
 import { BlitzkitWide } from '../../icons/BlitzkitWide';
 import { PatreonIcon } from '../../icons/Patreon';
@@ -37,22 +37,9 @@ export const NAVBAR_HEIGHT = 64;
 
 export default function Navbar() {
   const wideFormat = useWideFormat(688 - 32 - 64);
-  const login = useApp((state) => state.login);
   const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
   const pathname = usePathname();
-
-  useEffect(() => {
-    if (!login) return;
-
-    const expiresIn = login.expiresAt - Date.now() / 1000;
-    const expiresInDays = expiresIn / 60 / 60 / 24;
-
-    if (expiresInDays < 0) {
-      logout();
-    } else if (expiresInDays < 7) {
-      extendAuth();
-    }
-  });
+  const login = useApp((state) => state.login!);
 
   return (
     <Box

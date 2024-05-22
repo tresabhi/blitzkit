@@ -33,7 +33,7 @@ export function EverythingSearch({
                 width: '100%',
                 zIndex: 1,
               }}
-            ></Card>
+            />
           </TextField.Slot>
         )}
       </TextField.Root>

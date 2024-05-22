@@ -1,3 +1,5 @@
+'use client';
+
 import { Code, Flex, Link, Spinner, Text, Theme } from '@radix-ui/themes';
 import { Suspense } from 'react';
 import packageJSON from '../../../package.json';
