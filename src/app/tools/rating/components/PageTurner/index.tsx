@@ -3,7 +3,7 @@ import {
   CaretRightIcon,
   SymbolIcon,
 } from '@radix-ui/react-icons';
-import { Button, Flex, TextField } from '@radix-ui/themes';
+import { Flex, IconButton, TextField } from '@radix-ui/themes';
 import { range } from 'lodash';
 import { useEffect, useRef } from 'react';
 import { infiniteSpin } from './index.css';
@@ -42,7 +42,7 @@ export function PageTurner({
   return (
     <Flex justify="center" wrap="wrap" gap="2">
       <Flex gap="2">
-        <Button
+        <IconButton
           variant="soft"
           onClick={() => onPageChange(Math.max(page - 1, 0), true)}
           disabled={page === 0 || leftLoading}
@@ -52,7 +52,7 @@ export function PageTurner({
           ) : (
             <CaretLeftIcon />
           )}
-        </Button>
+        </IconButton>
 
         <TextField.Root
           type="number"
@@ -75,7 +75,7 @@ export function PageTurner({
           <TextField.Slot>Page</TextField.Slot>
           <TextField.Slot>out of {pages}</TextField.Slot>
         </TextField.Root>
-        <Button
+        <IconButton
           variant="soft"
           onClick={() => {
             onPageChange(Math.min(page + 1, pages - 1), true);
@@ -87,7 +87,7 @@ export function PageTurner({
           ) : (
             <CaretRightIcon />
           )}
-        </Button>
+        </IconButton>
       </Flex>
     </Flex>
   );

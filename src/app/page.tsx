@@ -20,7 +20,6 @@ import { debounce } from 'lodash';
 import { useRef, useState } from 'react';
 import { Link } from '../components/Link';
 import { NAVBAR_HEIGHT } from '../components/Navbar';
-import PageWrapper from '../components/PageWrapper';
 import { UNLOCALIZED_REGION_NAMES_SHORT } from '../constants/regions';
 import searchPlayersAcrossRegions, {
   AccountListWithServer,
@@ -345,10 +344,6 @@ export default function Page() {
           </div>
         </Flex>
       </Flex>
-
-      <PageWrapper noFlex1>
-        {/* hello there! ignore my existence pretty please :&#41; */}
-      </PageWrapper>
 
       <div style={{ flex: 1 }} />
     </>
