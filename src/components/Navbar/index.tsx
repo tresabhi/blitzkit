@@ -118,7 +118,7 @@ export default function Navbar() {
                     color="gray"
                     underline={selected ? 'always' : 'hover'}
                     href="#"
-                    size="1"
+                    size="2"
                     onClick={(event) => event.preventDefault()}
                   >
                     <Link
