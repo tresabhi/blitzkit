@@ -113,12 +113,12 @@ export function SpacedArmorSceneComponent({
                 resolveNearPenetration(shell.penetration) *
                 (hasCalibratedShells
                   ? duel.antagonist!.shell.type === 'ap'
-                    ? 0.08
+                    ? 1.08
                     : duel.antagonist!.shell.type === 'ap_cr'
-                      ? 0.05
+                      ? 1.05
                       : duel.antagonist!.shell.type === 'hc'
-                        ? 0.13
-                        : 0.8
+                        ? 1.13
+                        : 1.8
                   : 1);
               const shot: Shot = {
                 layers: [],
