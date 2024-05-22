@@ -23,6 +23,11 @@ export function ConsumableButton({
   return (
     <GenericTankComponentButton
       icon={asset(`icons/consumables/${consumable}.webp`)}
+      style={{
+        flex: 1,
+        minWidth: 'fit-content',
+        borderRadius: 0,
+      }}
       {...props}
     >
       {(cooldown || duration) && (
