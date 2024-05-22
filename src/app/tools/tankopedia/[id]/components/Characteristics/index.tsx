@@ -49,7 +49,7 @@ export function Characteristics() {
           ? total + awaitedProvisionDefinitions[provision].crew! / 100
           : total,
       0,
-    ) + (hasImprovedVentilation ? 0.05 : 0);
+    ) + (hasImprovedVentilation ? 0.08 : 0);
   const commanderMastery = crewMastery + provisionCrewBonus;
   const crewMemberMastery = commanderMastery * 1.1;
   const consumables = useDuel((state) => state.protagonist!.consumables);
@@ -85,7 +85,7 @@ export function Characteristics() {
       stockGun,
       stockTrack,
       stockTurret,
-      applyReactive: false,
+      applyReactiveArmor: false,
       applyDynamicArmor: false,
       applySpallLiner: false,
     },
@@ -101,11 +101,17 @@ export function Characteristics() {
   const hasImprovedVerticalStabilizer = useEquipment(122);
   const penetrationCoefficient = coefficient([
     hasCalibratedShells,
-    isExplosive(shell.type) ? 0.1 : 0.05,
+    shell.type === 'ap'
+      ? 0.08
+      : shell.type === 'ap_cr'
+        ? 0.05
+        : shell.type === 'hc'
+          ? 0.13
+          : 0.8,
   ]);
   const penetrationLossOverDistanceCoefficient = coefficient([
     hasSupercharger,
-    -0.5,
+    -0.6,
   ]);
 
   useEffect(() => {

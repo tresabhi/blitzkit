@@ -105,16 +105,20 @@ export function SpacedArmorSceneComponent({
                 duel.protagonist!.tank.equipment,
                 duel.protagonist!.equipmentMatrix,
               );
-              const thicknessCoefficient = hasEnhancedArmor ? 1.04 : 1;
+              const thicknessCoefficient = hasEnhancedArmor ? 1.03 : 1;
               const shell = useDuel.getState().antagonist!.shell;
               const explosive = isExplosive(shell.type);
               const splashing = canSplash(shell.type);
               const penetration =
                 resolveNearPenetration(shell.penetration) *
                 (hasCalibratedShells
-                  ? isExplosive(shell.type)
-                    ? 1.1
-                    : 1.05
+                  ? duel.antagonist!.shell.type === 'ap'
+                    ? 0.08
+                    : duel.antagonist!.shell.type === 'ap_cr'
+                      ? 0.05
+                      : duel.antagonist!.shell.type === 'hc'
+                        ? 0.13
+                        : 0.8
                   : 1);
               const shot: Shot = {
                 layers: [],
