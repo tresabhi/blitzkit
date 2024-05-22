@@ -185,7 +185,7 @@ export function Modules() {
 
   function tree(type: ModuleType, unlocks: Unlock[]) {
     return (
-      <Flex gap="2" justify="between" style={{ width: '100%' }}>
+      <Flex gap="2">
         {unlocks.map((unlock, index) => {
           const first = index === 0;
           const last = index === unlocks.length - 1;
