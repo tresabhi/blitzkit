@@ -16,7 +16,7 @@ import {
   TextField,
 } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
-import { debounce } from 'lodash';
+import { debounce, times } from 'lodash';
 import { useRef, useState } from 'react';
 import { Link } from '../components/Link';
 import { NAVBAR_HEIGHT } from '../components/Navbar';
@@ -148,8 +148,15 @@ export default function Page() {
                 if (!search.current) return;
 
                 const sanitized = search.current.value.trim();
-
                 setShowSearch(sanitized.length > 0);
+
+                window.scrollTo({
+                  top:
+                    search.current.getBoundingClientRect().top -
+                    NAVBAR_HEIGHT -
+                    32,
+                  behavior: 'smooth',
+                });
               }}
             >
               <TextField.Slot>
@@ -344,6 +351,10 @@ export default function Page() {
           </div>
         </Flex>
       </Flex>
+
+      {times(64, () => (
+        <br />
+      ))}
 
       <div style={{ flex: 1 }} />
     </>
