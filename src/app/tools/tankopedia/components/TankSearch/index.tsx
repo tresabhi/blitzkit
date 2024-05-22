@@ -1,4 +1,3 @@
-import { slateDark } from '@radix-ui/colors';
 import {
   CaretDownIcon,
   CaretRightIcon,
@@ -8,20 +7,16 @@ import {
 import {
   AlertDialog,
   Button,
-  Card,
   DropdownMenu,
   Flex,
-  Inset,
   Text,
   TextField,
 } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
-import Link from 'next/link';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
 import { TreeType } from '../../../../../components/Tanks';
 import { TANK_CLASSES } from '../../../../../components/Tanks/components/Item/constants';
 import { resolveNearPenetration } from '../../../../../core/blitz/resolveNearPenetration';
-import { asset } from '../../../../../core/blitzkit/asset';
 import { modelDefinitions } from '../../../../../core/blitzkit/modelDefinitions';
 import { normalizeBoundingBox } from '../../../../../core/blitzkit/normalizeBoundingBox';
 import { resolveDpm } from '../../../../../core/blitzkit/resolveDpm';
@@ -31,24 +26,15 @@ import {
   TankDefinition,
   tanksDefinitionsArray,
 } from '../../../../../core/blitzkit/tankDefinitions';
-import {
-  TANK_ICONS,
-  TANK_ICONS_COLLECTOR,
-  TANK_ICONS_PREMIUM,
-  TIER_ROMAN_NUMERALS,
-} from '../../../../../core/blitzkit/tankDefinitions/constants';
-import { tankIcon } from '../../../../../core/blitzkit/tankIcon';
 import { unionBoundingBox } from '../../../../../core/blitzkit/unionBoundingBox';
-import { theme } from '../../../../../stitches.config';
 import mutateTankopediaPersistent, {
   SORT_NAMES,
   TankopediaSortDirection,
   useTankopediaPersistent,
 } from '../../../../../stores/tankopedia';
-import * as styles from '../../page.css';
 import { PageTurner } from '../PageTurner';
-import { CompactSearchResultRow } from './components/CompactSearchResultRow';
 import { Options } from './components/Options';
+import { Results } from './components/Results';
 
 interface TankSearchProps {
   compact?: boolean;
@@ -414,13 +400,7 @@ export function TankSearch({
     page * tanksPerPage,
     (page + 1) * tanksPerPage,
   );
-  const firstChunk = searchResultsPageSlice.slice(
-    0,
-    Math.ceil(searchResultsPageSlice.length / 2),
-  );
-  const secondChunk = searchResultsPageSlice.slice(
-    Math.ceil(searchResultsPageSlice.length / 2),
-  );
+  
 
   useEffect(() => {
     mutateTankopediaPersistent((draft) => {
@@ -873,148 +853,7 @@ export function TankSearch({
         <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />
       )}
 
-      <Flex
-        wrap="wrap"
-        gap="2"
-        style={{
-          justifyContent:
-            compact && firstChunk.length > 0 && secondChunk.length > 0
-              ? 'space-around'
-              : 'center',
-        }}
-      >
-        {!compact &&
-          searchResultsPageSlice.map((tank) => (
-            <Link
-              href={`/tools/tankopedia/${tank.id}`}
-              style={{
-                flex: 1,
-                minWidth: 256,
-              }}
-            >
-              <Card
-                key={tank.id}
-                className={styles.listing}
-                style={{
-                  cursor: 'pointer',
-                  height: 64,
-                  width: '100%',
-                }}
-              >
-                <Inset
-                  key={tank.id}
-                  style={{
-                    minHeight: 64,
-                    position: 'relative',
-                    display: 'flex',
-                  }}
-                >
-                  <img
-                    alt={tank.name}
-                    className={styles.flag}
-                    src={asset(`flags/scratched/${tank.nation}.webp`)}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'contain',
-                      position: 'absolute',
-                    }}
-                  />
-
-                  <div
-                    className={styles.listingShadow}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      position: 'absolute',
-                      transition: `box-shadow ${theme.durations.regular}`,
-                    }}
-                  />
-
-                  <div
-                    style={{
-                      width: 256,
-                      height: 128,
-                    }}
-                    className={styles.listingImage}
-                  >
-                    <img
-                      alt={tank.name}
-                      src={tankIcon(tank.id)}
-                      style={{
-                        objectFit: 'contain',
-                        objectPosition: 'left center',
-                      }}
-                    />
-                  </div>
-
-                  <Flex
-                    align="center"
-                    justify="between"
-                    className={styles.listingLabel}
-                    style={{
-                      position: 'absolute',
-                      bottom: 8,
-                      padding: '0 12px',
-                      width: '100%',
-                      boxSizing: 'border-box',
-                    }}
-                  >
-                    <Flex align="center" justify="center" gap="1">
-                      <img
-                        alt={tank.name}
-                        src={
-                          (tank.treeType === 'collector'
-                            ? TANK_ICONS_COLLECTOR
-                            : tank.treeType === 'premium'
-                              ? TANK_ICONS_PREMIUM
-                              : TANK_ICONS)[tank.class]
-                        }
-                        style={{ width: '1em', height: '1em' }}
-                      />
-                      <Text
-                        size="4"
-                        color={
-                          tank.treeType === 'collector'
-                            ? 'blue'
-                            : tank.treeType === 'premium'
-                              ? 'amber'
-                              : undefined
-                        }
-                        weight="medium"
-                        style={{
-                          color:
-                            tank.treeType === 'researchable'
-                              ? slateDark.slate12
-                              : undefined,
-                          whiteSpace: 'nowrap',
-                          maxWidth: 160,
-                          display: 'block',
-                          textOverflow: 'ellipsis',
-                          overflow: 'hidden',
-                        }}
-                      >
-                        {tank.name}
-                      </Text>
-                    </Flex>
-
-                    <Text size="4" color="gray" highContrast={false}>
-                      {TIER_ROMAN_NUMERALS[tank.tier]}
-                    </Text>
-                  </Flex>
-                </Inset>
-              </Card>
-            </Link>
-          ))}
-
-        {compact && firstChunk.length > 0 && (
-          <CompactSearchResultRow tanks={firstChunk} onSelect={onSelect} />
-        )}
-
-        {compact && secondChunk.length > 0 && (
-          <CompactSearchResultRow tanks={secondChunk} onSelect={onSelect} />
-        )}
-      </Flex>
+      <Results compact={compact} results={searchResultsPageSlice} />
 
       {searchResultsPageSlice.length > tanksPerPage / 4 && (
         <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />
