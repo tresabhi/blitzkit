@@ -7,7 +7,6 @@ import {
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { ArmorUserData } from '../..';
-import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../../../core/blitzkit/jsxTree';
@@ -69,7 +68,7 @@ export function SpacedArmorSubSpaced({
         equipment,
       );
       material.uniforms.thickness.value = hasEnhancedArmor
-        ? thickness * 1.04
+        ? thickness * 1.03
         : thickness;
     }
     async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
@@ -82,7 +81,14 @@ export function SpacedArmorSubSpaced({
         equipment,
       );
       material.uniforms.penetration.value = hasCalibratedShells
-        ? penetration * (isExplosive(shell.type) ? 1.1 : 1.05)
+        ? penetration *
+          (duel.antagonist!.shell.type === 'ap'
+            ? 0.08
+            : duel.antagonist!.shell.type === 'ap_cr'
+              ? 0.05
+              : duel.antagonist!.shell.type === 'hc'
+                ? 0.13
+                : 0.8)
         : penetration;
     }
 

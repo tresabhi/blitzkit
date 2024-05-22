@@ -98,7 +98,7 @@ export default function Page() {
             stockGun: thisMember.tank.turrets[0].guns[0],
             stockTrack: thisMember.tank.tracks[0],
             stockTurret: thisMember.tank.turrets[0],
-            applyReactive: members.some(
+            applyReactiveArmor: members.some(
               (member) =>
                 member.key !== thisMember.key &&
                 member.consumables.includes(33),
