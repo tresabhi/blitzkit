@@ -3,12 +3,10 @@
 import { Code, Flex, Link, Spinner, Text, Theme } from '@radix-ui/themes';
 import { Suspense } from 'react';
 import packageJSON from '../../../package.json';
-import { useWideFormat } from '../../hooks/useWideFormat';
 import { WoTBVersion } from './components/WoTBVersion';
+import * as styles from './index.css';
 
 export function Footer() {
-  const wideFormat = useWideFormat(640);
-
   return (
     <Theme radius="none">
       <Flex
@@ -20,16 +18,7 @@ export function Footer() {
           backgroundColor: 'var(--color-panel)',
         }}
       >
-        <Flex
-          align="center"
-          justify={wideFormat ? 'between' : 'center'}
-          wrap="wrap"
-          style={{
-            width: '100%',
-            maxWidth: 800,
-            padding: '0 16px',
-          }}
-        >
+        <Flex align="center" wrap="wrap" className={styles.containerInner}>
           <Flex gap="1" justify="center" align="center">
             <Text color="gray" size="2">
               BlitzKit

@@ -6,6 +6,7 @@ import { config } from 'dotenv';
 import { Roboto_Flex } from 'next/font/google';
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
+import { Footer } from '../components/Footer';
 import Navbar, { NAVBAR_HEIGHT } from '../components/Navbar';
 import { Party3 } from '../components/Party3';
 import { Checks } from './components/Checks';
@@ -80,7 +81,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               {children}
             </Suspense> */}
 
-            {/* {!isEmbed && <Footer />} */}
+            {!isEmbed && <Footer />}
           </Flex>
         </Theme>
       </body>
