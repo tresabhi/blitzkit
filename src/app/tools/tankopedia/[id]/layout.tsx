@@ -17,7 +17,7 @@ export default async function TankopediaLayout({
   const awaitedTankDefinitions = await tankDefinitions;
   const tank = awaitedTankDefinitions[id];
   const title = `${tank.name} - Tier ${TIER_ROMAN_NUMERALS[tank.tier]} ${
-    (strings.common.nations as Record<string, string>)[tank.nation]
+    (strings.common.nations_adjectives as Record<string, string>)[tank.nation]
   } ${strings.common.tank_class_short[tank.class]}`;
   const description = `Statistics, armor profiles, and equipment for ${tank.name}`;
 
