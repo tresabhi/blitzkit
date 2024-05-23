@@ -7,7 +7,7 @@ export default function Page() {
       <Hero />
 
       {times(64, () => (
-        <br />
+        <p>test {Math.random()}</p>
       ))}
 
       <div style={{ flex: 1 }} />
