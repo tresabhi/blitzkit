@@ -118,7 +118,7 @@ export function SpacedArmorSceneComponent({
                       ? 1.05
                       : duel.antagonist!.shell.type === 'hc'
                         ? 1.13
-                        : 1.8
+                        : 1.08
                   : 1);
               const shot: Shot = {
                 layers: [],
