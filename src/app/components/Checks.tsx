@@ -1,9 +1,15 @@
 'use client';
 
-import { AlertDialog, Button, Flex, Heading, Text } from '@radix-ui/themes';
+import {
+  AlertDialog,
+  Button,
+  Flex,
+  Heading,
+  Link,
+  Text,
+} from '@radix-ui/themes';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Link } from '../../components/Link';
 import { extendAuth } from '../../core/blitz/extendAuth';
 import { logout } from '../../core/blitz/logout';
 import isDev from '../../core/blitzkit/isDev';
@@ -20,6 +26,7 @@ export function Checks() {
   );
   const pathname = usePathname();
   const isLegal = pathname.startsWith('/legal');
+  const [showPoliciesAgreement, setShowPoliciesAgreement] = useState(false);
 
   useEffect(() => {
     setShowDevBuildAlert(
@@ -29,6 +36,11 @@ export function Checks() {
           DEV_BUILD_AGREEMENT_COOLDOWN,
     );
   }, []);
+  useEffect(() => {
+    setShowPoliciesAgreement(
+      policiesAgreementIndex !== CURRENT_POLICIES_AGREEMENT_INDEX && !isLegal,
+    );
+  }, [policiesAgreementIndex, isLegal]);
 
   useEffect(() => {
     if (!login) return;
@@ -72,70 +84,68 @@ export function Checks() {
         </AlertDialog.Content>
       </AlertDialog.Root>
 
-      {policiesAgreementIndex !== CURRENT_POLICIES_AGREEMENT_INDEX &&
-        !isLegal && (
+      {showPoliciesAgreement && (
+        <Flex
+          align="end"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'var(--color-overlay)',
+            zIndex: 2,
+          }}
+        >
           <Flex
-            align="end"
+            p="8"
             style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
               width: '100%',
-              height: '100%',
-              background: 'var(--color-overlay)',
-              zIndex: 2,
+              background: 'var(--color-panel-solid)',
             }}
+            justify="center"
           >
             <Flex
-              p="8"
+              align="start"
+              gap="4"
               style={{
-                width: '100%',
-                background: 'var(--color-panel-solid)',
+                maxWidth: 640 * 2,
               }}
-              justify="center"
+              direction="column"
             >
-              <Flex
-                align="start"
-                gap="4"
-                style={{
-                  maxWidth: 640 * 2,
-                }}
-                direction="column"
-              >
-                <Flex direction="column" gap="2">
-                  <Heading>
-                    {policiesAgreementIndex === -1
-                      ? "BlitzKit's cookies"
-                      : "BlitzKit's policies have changed"}
-                  </Heading>
+              <Flex direction="column" gap="2">
+                <Heading>
+                  {policiesAgreementIndex === -1
+                    ? "BlitzKit's cookies"
+                    : "BlitzKit's policies have changed"}
+                </Heading>
 
-                  <Text>
-                    This website utilizes cookies to perform analytics and
-                    personalize your experience. You can learn more through{' '}
-                    <Link href="/legal/privacy-policy">our privacy policy</Link>
-                    . You may opt out of personalized advertizement by visiting{' '}
-                    <Link href="https://www.google.com/settings/ads">
-                      Google Ad Settings
-                    </Link>
-                    . By using BlitzKit, you also agree to our{' '}
-                    <Link href="/legal/terms-of-service">terms of service</Link>
-                    .
-                  </Text>
-                </Flex>
-
-                <Button
-                  onClick={() => {
-                    useApp.setState({
-                      policiesAgreementIndex: CURRENT_POLICIES_AGREEMENT_INDEX,
-                    });
-                  }}
-                >
-                  I Agree
-                </Button>
+                <Text>
+                  This website utilizes cookies to perform analytics and
+                  personalize your experience. You can learn more through{' '}
+                  <Link href="/legal/privacy-policy">our privacy policy</Link>.
+                  You may opt out of personalized advertizement by visiting{' '}
+                  <Link href="https://www.google.com/settings/ads">
+                    Google Ad Settings
+                  </Link>
+                  . By using BlitzKit, you also agree to our{' '}
+                  <Link href="/legal/terms-of-service">terms of service</Link>.
+                </Text>
               </Flex>
+
+              <Button
+                onClick={() => {
+                  useApp.setState({
+                    policiesAgreementIndex: CURRENT_POLICIES_AGREEMENT_INDEX,
+                  });
+                }}
+              >
+                I Agree
+              </Button>
             </Flex>
           </Flex>
-        )}
+        </Flex>
+      )}
     </>
   );
 }

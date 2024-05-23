@@ -190,6 +190,7 @@ export default function Navbar() {
         <Flex mt="6" gap="3" justify="center" wrap="wrap">
           {TOOLS.filter((tool) => !tool.href).map((tool) => (
             <Link
+              key={tool.id}
               href={tool.href ?? `/tools/${tool.id}`}
               target={tool.href ? '_blank' : undefined}
               className={styles.toolCard}
