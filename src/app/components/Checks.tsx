@@ -1,6 +1,7 @@
 'use client';
 
 import { AlertDialog, Button, Flex, Heading, Text } from '@radix-ui/themes';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Link } from '../../components/Link';
 import { extendAuth } from '../../core/blitz/extendAuth';
@@ -17,6 +18,8 @@ export function Checks() {
   const policiesAgreementIndex = useApp(
     (state) => state.policiesAgreementIndex,
   );
+  const pathname = usePathname();
+  const isLegal = pathname.startsWith('/legal');
 
   useEffect(() => {
     setShowDevBuildAlert(
@@ -69,68 +72,70 @@ export function Checks() {
         </AlertDialog.Content>
       </AlertDialog.Root>
 
-      {policiesAgreementIndex !== CURRENT_POLICIES_AGREEMENT_INDEX && (
-        <Flex
-          align="end"
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'var(--color-overlay)',
-            zIndex: 2,
-          }}
-        >
+      {policiesAgreementIndex !== CURRENT_POLICIES_AGREEMENT_INDEX &&
+        !isLegal && (
           <Flex
-            p="8"
+            align="end"
             style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
               width: '100%',
-              background: 'var(--color-panel-solid)',
+              height: '100%',
+              background: 'var(--color-overlay)',
+              zIndex: 2,
             }}
-            justify="center"
           >
             <Flex
-              align="start"
-              gap="4"
+              p="8"
               style={{
-                maxWidth: 640 * 2,
+                width: '100%',
+                background: 'var(--color-panel-solid)',
               }}
-              direction="column"
+              justify="center"
             >
-              <Flex direction="column" gap="2">
-                <Heading>
-                  {policiesAgreementIndex === -1
-                    ? "BlitzKit's cookies"
-                    : "BlitzKit's policies have changed"}
-                </Heading>
-
-                <Text>
-                  This website utilizes cookies to perform analytics and
-                  personalize your experience. You can learn more through{' '}
-                  <Link href="/legal/privacy-policy">our privacy policy</Link>.
-                  You may opt out of personalized advertizement by visiting{' '}
-                  <Link href="https://www.google.com/settings/ads">
-                    Google Ad Settings
-                  </Link>
-                  . By using BlitzKit, you also agree to our{' '}
-                  <Link href="/legal/terms-of-service">terms of service</Link>.
-                </Text>
-              </Flex>
-
-              <Button
-                onClick={() => {
-                  useApp.setState({
-                    policiesAgreementIndex: CURRENT_POLICIES_AGREEMENT_INDEX,
-                  });
+              <Flex
+                align="start"
+                gap="4"
+                style={{
+                  maxWidth: 640 * 2,
                 }}
+                direction="column"
               >
-                I Agree
-              </Button>
+                <Flex direction="column" gap="2">
+                  <Heading>
+                    {policiesAgreementIndex === -1
+                      ? "BlitzKit's cookies"
+                      : "BlitzKit's policies have changed"}
+                  </Heading>
+
+                  <Text>
+                    This website utilizes cookies to perform analytics and
+                    personalize your experience. You can learn more through{' '}
+                    <Link href="/legal/privacy-policy">our privacy policy</Link>
+                    . You may opt out of personalized advertizement by visiting{' '}
+                    <Link href="https://www.google.com/settings/ads">
+                      Google Ad Settings
+                    </Link>
+                    . By using BlitzKit, you also agree to our{' '}
+                    <Link href="/legal/terms-of-service">terms of service</Link>
+                    .
+                  </Text>
+                </Flex>
+
+                <Button
+                  onClick={() => {
+                    useApp.setState({
+                      policiesAgreementIndex: CURRENT_POLICIES_AGREEMENT_INDEX,
+                    });
+                  }}
+                >
+                  I Agree
+                </Button>
+              </Flex>
             </Flex>
           </Flex>
-        </Flex>
-      )}
+        )}
     </>
   );
 }
