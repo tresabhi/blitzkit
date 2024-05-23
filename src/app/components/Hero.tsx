@@ -19,6 +19,7 @@ import {
 import { go } from 'fuzzysort';
 import { debounce } from 'lodash';
 import { useRef, useState } from 'react';
+import { isMobile } from 'react-device-detect';
 import { NAVBAR_HEIGHT } from '../../components/Navbar';
 import { UNLOCALIZED_REGION_NAMES_SHORT } from '../../constants/regions';
 import searchPlayersAcrossRegions, {
@@ -144,7 +145,7 @@ export function Hero() {
               }
             }}
             onFocus={() => {
-              if (!search.current) return;
+              if (!search.current || !isMobile) return;
 
               const sanitized = search.current.value.trim();
               setShowSearch(sanitized.length > 0);
