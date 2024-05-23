@@ -3,7 +3,14 @@ import {
   MagnifyingGlassIcon,
   TrashIcon,
 } from '@radix-ui/react-icons';
-import { AlertDialog, Button, Flex, Text, TextField } from '@radix-ui/themes';
+import {
+  AlertDialog,
+  Button,
+  Flex,
+  Spinner,
+  Text,
+  TextField,
+} from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
 import { isMobileOnly } from 'react-device-detect';
@@ -48,6 +55,7 @@ export function TankSearch({
   const sort = useTankopediaPersistent((state) => state.sort);
   const awaitedTanks = use(tanksDefinitionsArray);
   const awaitedModelDefinitions = use(modelDefinitions);
+  const [loaded, setLoaded] = useState(false);
   const defaultSortedTanks = useMemo(
     () =>
       awaitedTanks
@@ -402,6 +410,18 @@ export function TankSearch({
       );
     });
   }, [searchResults]);
+
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
+
+  if (!loaded) {
+    return (
+      <Flex justify="center">
+        <Spinner />
+      </Flex>
+    );
+  }
 
   return (
     <>
