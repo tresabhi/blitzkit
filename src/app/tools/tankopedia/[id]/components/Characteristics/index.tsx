@@ -107,7 +107,7 @@ export function Characteristics() {
         ? 0.05
         : shell.type === 'hc'
           ? 0.13
-          : 0.8,
+          : 0.08,
   ]);
   const penetrationLossOverDistanceCoefficient = coefficient([
     hasSupercharger,
