@@ -14,11 +14,11 @@ import {
   Flex,
   Heading,
   IconButton,
-  Link,
   Popover,
   Spinner,
   Text,
 } from '@radix-ui/themes';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Suspense, useState } from 'react';
 import { REGIONS, UNLOCALIZED_REGION_NAMES } from '../../constants/regions';
@@ -80,13 +80,9 @@ export default function Navbar() {
 
               return (
                 <Link
-                  highContrast={selected}
-                  color="gray"
-                  underline={selected ? 'always' : 'hover'}
-                  size="2"
-                  onClick={(event) => event.preventDefault()}
-                  style={{ all: 'inherit' }}
                   key={tool.id}
+                  data-accent-color="gray"
+                  className={`rt-Text rt-reset rt-Link rt-r-size-2 rt-underline-${selected ? 'always' : 'hover'}`}
                   href={`/tools/${tool.id}`}
                 >
                   {tool.title}
@@ -191,7 +187,7 @@ export default function Navbar() {
           {TOOLS.filter((tool) => !tool.href).map((tool) => (
             <Link
               key={tool.id}
-              href={tool.href ?? `/tools/${tool.id}`}
+              href={`/tools/${tool.id}`}
               target={tool.href ? '_blank' : undefined}
               className={styles.toolCard}
               style={{
