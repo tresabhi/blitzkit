@@ -15,6 +15,7 @@ import {
   IconButton,
   Link,
   Select,
+  Spinner,
   Table,
   Text,
   TextField,
@@ -52,7 +53,12 @@ import mutateSession, {
 } from '../../../stores/session';
 import { IndividualTankStats } from '../../../types/tanksStats';
 
-export default function Page() {
+export default function Page({
+  searchParams,
+}: {
+  searchParams: { id?: string };
+}) {
+  const [loaded, setLoaded] = useState(false);
   const wideFormat = useWideFormat(640);
   const awaitedTankDefinitions = use(tankDefinitions);
   const awaitedTankAvearges = use(tankAverages);
@@ -105,6 +111,7 @@ export default function Page() {
         : undefined,
     [delta],
   );
+  const [showLinkOverridePrompt, setShowLinkOverridePrompt] = useState(true);
 
   const search = debounce(async () => {
     if (!input.current) return;
@@ -112,6 +119,32 @@ export default function Page() {
     setSearchResults(await searchPlayersAcrossRegions(input.current.value, 9));
     setSearching(false);
   }, 500);
+
+  async function track(id: number) {
+    const region = idToRegion(id);
+    const player = await getAccountInfo(region, id);
+    const stats = await getTankStats(region, id);
+
+    if (stats === null) {
+      setShowCCInaccessibilityPrompt(true);
+      return;
+    }
+
+    setShowSearch(false);
+    mutateSession((draft) => {
+      if (!input.current) return;
+
+      draft.tracking = true;
+      (draft as SessionTracking).player = {
+        id,
+        region,
+        since: Date.now(),
+        stats,
+      };
+
+      input.current.value = player.nickname;
+    });
+  }
 
   useEffect(() => {
     async function update() {
@@ -129,6 +162,22 @@ export default function Page() {
 
     return () => clearInterval(interval);
   }, [session.tracking && session.player.id]);
+
+  useEffect(() => {
+    setLoaded(true);
+
+    if (searchParams.id && !session.tracking) {
+      track(Number(searchParams.id));
+    }
+  }, []);
+
+  if (!loaded) {
+    return (
+      <PageWrapper align="center" justify="center">
+        <Spinner />
+      </PageWrapper>
+    );
+  }
 
   return (
     <PageWrapper>
@@ -153,6 +202,39 @@ export default function Page() {
           </Flex>
         </AlertDialog.Content>
       </AlertDialog.Root>
+
+      {searchParams.id &&
+        session.tracking &&
+        Number(searchParams.id) !== session.player.id && (
+          <AlertDialog.Root
+            open={showLinkOverridePrompt}
+            onOpenChange={setShowLinkOverridePrompt}
+          >
+            <AlertDialog.Content>
+              <AlertDialog.Title>
+                You are currently tracking {accountInfo?.nickname}
+              </AlertDialog.Title>
+              <AlertDialog.Description>
+                Would you like to stop tracking {accountInfo?.nickname} and
+                start tracking a new player?
+              </AlertDialog.Description>
+
+              <Flex mt="4" justify="end">
+                <AlertDialog.Action>
+                  <Button
+                    variant="solid"
+                    onClick={() => {
+                      setShowLinkOverridePrompt(false);
+                      track(Number(searchParams.id));
+                    }}
+                  >
+                    Proceed
+                  </Button>
+                </AlertDialog.Action>
+              </Flex>
+            </AlertDialog.Content>
+          </AlertDialog.Root>
+        )}
 
       {!session.tracking && (
         <Flex
@@ -222,32 +304,7 @@ export default function Page() {
                       <Button
                         key={player.account_id}
                         variant="ghost"
-                        onClick={async () => {
-                          const stats = await getTankStats(
-                            player.region,
-                            player.account_id,
-                          );
-
-                          if (stats === null) {
-                            setShowCCInaccessibilityPrompt(true);
-                            return;
-                          }
-
-                          setShowSearch(false);
-                          mutateSession((draft) => {
-                            if (!input.current) return;
-
-                            draft.tracking = true;
-                            (draft as SessionTracking).player = {
-                              id: player.account_id,
-                              region: player.region,
-                              since: Date.now(),
-                              stats,
-                            };
-
-                            input.current.value = player.nickname;
-                          });
-                        }}
+                        onClick={() => track(player.account_id)}
                       >
                         {player.nickname} (
                         {UNLOCALIZED_REGION_NAMES_SHORT[player.region]})
