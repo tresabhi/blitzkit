@@ -14,52 +14,33 @@ import {
   Flex,
   Heading,
   IconButton,
-  Link as LinkRadix,
+  Link,
   Popover,
   Spinner,
   Text,
 } from '@radix-ui/themes';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Suspense, useState } from 'react';
-import * as styles from '../../app/page.css';
 import { REGIONS, UNLOCALIZED_REGION_NAMES } from '../../constants/regions';
 import { TOOLS } from '../../constants/tools';
 import { authURL } from '../../core/blitz/authURL';
-import { useWideFormat } from '../../hooks/useWideFormat';
 import { BlitzkitWide } from '../../icons/BlitzkitWide';
 import { PatreonIcon } from '../../icons/Patreon';
 import { theme } from '../../stitches.config';
 import { useApp } from '../../stores/app';
 import { LoggedIn } from './components/LoggedIn';
+import * as styles from './index.css';
 
 export const NAVBAR_HEIGHT = 64;
 
 export default function Navbar() {
-  const wideFormat = useWideFormat(688 - 32 - 64);
   const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
   const pathname = usePathname();
   const login = useApp((state) => state.login!);
 
   return (
     <Box
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        maxHeight:
-          showHamburgerMenu && !wideFormat ? '100%' : NAVBAR_HEIGHT + 1,
-        zIndex: 2,
-        padding: '1rem',
-        background: theme.colors.appBackground1_alpha,
-        borderBottom: theme.borderStyles.nonInteractive,
-        backdropFilter: 'blur(4rem)',
-        WebkitBackdropFilter: 'blur(4rem)',
-        boxSizing: 'border-box',
-        transition: 'max-height 0.2s ease-in-out',
-        overflow: 'hidden',
-      }}
+      className={styles.navbar[showHamburgerMenu ? 'expanded' : 'collapsed']}
     >
       <Flex direction="column" align="center" pt="2">
         <Flex
@@ -69,16 +50,15 @@ export default function Navbar() {
           gap="8"
         >
           <Flex align="center" gap="4">
-            {!wideFormat && (
-              <IconButton
-                size="4"
-                variant="ghost"
-                color="gray"
-                onClick={() => setShowHamburgerMenu((state) => !state)}
-              >
-                {showHamburgerMenu ? <Cross1Icon /> : <HamburgerMenuIcon />}
-              </IconButton>
-            )}
+            <IconButton
+              className={styles.hamburgerButton}
+              size="4"
+              variant="ghost"
+              color="gray"
+              onClick={() => setShowHamburgerMenu((state) => !state)}
+            >
+              {showHamburgerMenu ? <Cross1Icon /> : <HamburgerMenuIcon />}
+            </IconButton>
 
             <Link
               onClick={() => setShowHamburgerMenu(false)}
@@ -94,32 +74,26 @@ export default function Navbar() {
             </Link>
           </Flex>
 
-          {wideFormat && (
-            <Flex justify="center" gap="4">
-              {TOOLS.filter((tool) => !tool.href).map((tool) => {
-                const selected = pathname.startsWith(`/tools/${tool.id}`);
+          <Flex justify="center" gap="4" className={styles.toolTexts}>
+            {TOOLS.filter((tool) => !tool.href).map((tool) => {
+              const selected = pathname.startsWith(`/tools/${tool.id}`);
 
-                return (
-                  <LinkRadix
-                    highContrast={selected}
-                    color="gray"
-                    underline={selected ? 'always' : 'hover'}
-                    href="#"
-                    size="2"
-                    onClick={(event) => event.preventDefault()}
-                  >
-                    <Link
-                      style={{ all: 'inherit' }}
-                      key={tool.id}
-                      href={`/tools/${tool.id}`}
-                    >
-                      {tool.title}
-                    </Link>
-                  </LinkRadix>
-                );
-              })}
-            </Flex>
-          )}
+              return (
+                <Link
+                  highContrast={selected}
+                  color="gray"
+                  underline={selected ? 'always' : 'hover'}
+                  size="2"
+                  onClick={(event) => event.preventDefault()}
+                  style={{ all: 'inherit' }}
+                  key={tool.id}
+                  href={`/tools/${tool.id}`}
+                >
+                  {tool.title}
+                </Link>
+              );
+            })}
+          </Flex>
 
           <Flex align="center" gap="4">
             <Link
@@ -176,7 +150,6 @@ export default function Navbar() {
               </Popover.Root>
             )}
 
-            {/* TODO: re-enable in the future */}
             {!login && false && (
               <Dialog.Root>
                 <Dialog.Trigger>
@@ -193,7 +166,7 @@ export default function Navbar() {
 
                     <Flex gap="4" align="center" justify="center" wrap="wrap">
                       {REGIONS.map((region) => (
-                        <LinkRadix
+                        <Link
                           onClick={() => setShowHamburgerMenu(false)}
                           key={region}
                           href={authURL(
@@ -204,7 +177,7 @@ export default function Navbar() {
                           )}
                         >
                           {UNLOCALIZED_REGION_NAMES[region]}
-                        </LinkRadix>
+                        </Link>
                       ))}
                     </Flex>
                   </Flex>
@@ -219,9 +192,7 @@ export default function Navbar() {
             <Link
               href={tool.href ?? `/tools/${tool.id}`}
               target={tool.href ? '_blank' : undefined}
-              className={
-                tool.disabled ? styles.tool.disabled : styles.tool.enabled
-              }
+              className={styles.toolCard}
               style={{
                 backgroundImage: `url(/assets/banners/${tool.id}.webp)`,
                 cursor: tool.disabled ? 'default' : 'pointer',
