@@ -311,7 +311,7 @@ export function Characteristics() {
           <InfoWithDelta name="Normalization" decimals={0} unit="°">
             {stats.shellNormalization}
           </InfoWithDelta>
-          {shell.type !== 'he' && (
+          {!isExplosive(shell.type) && (
             <InfoWithDelta
               name="Ricochet"
               decimals={0}

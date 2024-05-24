@@ -7,6 +7,7 @@ import {
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { ArmorUserData } from '../..';
+import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../../../core/blitzkit/jsxTree';
@@ -53,7 +54,9 @@ export function SpacedArmorSubSpaced({
         shell.penetration,
       );
       material.uniforms.caliber.value = shell.caliber;
-      material.uniforms.ricochet.value = degToRad(shell.ricochet ?? 90);
+      material.uniforms.ricochet.value = degToRad(
+        isExplosive(shell.type) ? 90 : shell.ricochet!,
+      );
       material.uniforms.normalization.value = degToRad(
         shell.normalization ?? 0,
       );

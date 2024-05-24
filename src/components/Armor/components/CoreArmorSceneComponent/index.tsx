@@ -60,7 +60,9 @@ export function CoreArmorSceneComponent({
   useEffect(() => {
     async function handleShellChange(shell: ShellDefinition) {
       material.uniforms.caliber.value = shell.caliber;
-      material.uniforms.ricochet.value = degToRad(shell.ricochet ?? 90);
+      material.uniforms.ricochet.value = degToRad(
+        isExplosive(shell.type) ? 90 : shell.ricochet!,
+      );
       material.uniforms.normalization.value = degToRad(
         shell.normalization ?? 0,
       );

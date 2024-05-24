@@ -268,7 +268,9 @@ export function SpacedArmorSceneComponent({
                   } else {
                     const type = intersection.object.userData.type;
                     const angle = surfaceNormal.angleTo(shellNormal);
-                    const ricochet = degToRad(shell.ricochet ?? 90);
+                    const ricochet = degToRad(
+                      isExplosive(shell.type) ? 90 : shell.ricochet!,
+                    );
                     const normalization = degToRad(shell.normalization ?? 0);
                     const threeCalibersRule =
                       shell.caliber > thickness * 3 || layerIndex > 0;
