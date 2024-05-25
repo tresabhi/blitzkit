@@ -93,14 +93,15 @@ export function SpacedArmorSceneComponent({
             async onClick(event) {
               event.stopPropagation();
 
+              const { antagonist, protagonist } = useDuel.getState();
+              const shell = antagonist!.shell;
               const shot: Shot = {
                 status: 'blocked',
                 damage: -1,
+                containsGaps: shell.type === ShellType.HEAT,
                 layersIn: [],
                 point: event.point,
               };
-              const { antagonist, protagonist } = useDuel.getState();
-              const shell = antagonist!.shell;
               const cameraNormal = camera.position
                 .clone()
                 .sub(event.point)
@@ -185,6 +186,7 @@ export function SpacedArmorSceneComponent({
                     point: intersection.point,
                     surfaceNormal: intersection.face!.normal,
                     status: blocked ? 'blocked' : 'penetration',
+                    variant: layer.variant,
                   });
                 } else {
                   const thickness = layer.thickness;

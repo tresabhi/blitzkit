@@ -5,6 +5,7 @@ import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { ENVIRONMENTS } from '../app/tools/tankopedia/[id]/components/Lighting';
 import { ArmorType } from '../components/Armor/components/SpacedArmorScene';
+import { ExternalModuleVariant } from '../components/Armor/components/SpacedArmorSceneComponent';
 import { TankClass, TreeType } from '../components/Tanks';
 import { Tier } from '../core/blitzkit/tankDefinitions';
 
@@ -56,6 +57,7 @@ export interface ShotLayerBase {
 
 interface ShotLayerExternal extends ShotLayerBase {
   type: ArmorType.External;
+  variant: ExternalModuleVariant;
 }
 
 export interface ShotLayerNonExternal extends ShotLayerBase {
@@ -74,6 +76,7 @@ export type ShotLayer = ShotLayerExternal | ShotLayerNonExternal | ShotLayerGap;
 
 export type Shot = {
   status: 'penetration' | 'blocked' | 'ricochet' | 'splash';
+  containsGaps: boolean;
   damage: number;
   point: Vector3;
   layersIn: ShotLayer[];

@@ -111,6 +111,9 @@ export function Options() {
                   mutateDuel((draft) => {
                     draft.antagonist!.shell = thisShell;
                   });
+                  mutateTankopediaTemporary((draft) => {
+                    draft.shot = undefined;
+                  });
                 }}
               >
                 <img
@@ -138,6 +141,9 @@ export function Options() {
                     ? 0
                     : 1;
                 });
+                mutateTankopediaTemporary((draft) => {
+                  draft.shot = undefined;
+                });
               }}
             >
               <img
@@ -161,6 +167,9 @@ export function Options() {
                   draft.protagonist!.equipmentMatrix[1][1] = hasEnhancedArmor
                     ? 0
                     : -1;
+                });
+                mutateTankopediaTemporary((draft) => {
+                  draft.shot = undefined;
                 });
               }}
             >
