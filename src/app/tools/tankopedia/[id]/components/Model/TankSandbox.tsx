@@ -131,6 +131,9 @@ export function TankSandbox() {
           draft.shot = undefined;
         });
       }}
+      style={{
+        userSelect: 'none',
+      }}
     >
       <PerspectiveCamera makeDefault fov={25} far={32} />
       <Controls />
