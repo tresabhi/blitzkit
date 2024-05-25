@@ -338,8 +338,7 @@ export function Modules() {
                     draft.protagonist!.tank.turrets.at(-1)!;
                   draft.protagonist!.gun =
                     draft.protagonist!.turret.guns.at(-1)!;
-                  draft.protagonist!.shell =
-                    draft.protagonist!.gun.shells.at(-1)!;
+                  draft.protagonist!.shell = draft.protagonist!.gun.shells[0];
                   draft.protagonist!.engine =
                     draft.protagonist!.tank.engines.at(-1)!;
                   draft.protagonist!.track =
