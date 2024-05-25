@@ -238,7 +238,9 @@ export function SpacedArmorSceneComponent({
                   }
                 }
 
-                if (remainingPenetration <= 0) break;
+                if (shell.type !== ShellType.HE && remainingPenetration <= 0) {
+                  break;
+                }
 
                 index++;
               }
@@ -271,6 +273,8 @@ export function SpacedArmorSceneComponent({
                   shot.layersIn.length > 1 ||
                   lastLayer.status === 'blocked'
                 ) {
+                  console.log(finalDamage);
+
                   shot.status = finalDamage > 0 ? 'splash' : 'blocked';
                   shot.damage = finalDamage;
                 } else {
@@ -278,7 +282,16 @@ export function SpacedArmorSceneComponent({
                   shot.damage = shell.damage.armor;
                 }
               } else {
-                shot.status = lastLayer.status;
+                if (lastLayer.status === 'blocked') {
+                  shot.status = 'blocked';
+                  shot.damage = 0;
+                } else if (lastLayer.status === 'penetration') {
+                  shot.status = 'penetration';
+                  shot.damage = shell.damage.armor;
+                } else {
+                  // check second array for result
+                  shot.status = 'ricochet';
+                }
               }
 
               console.log(shot);
