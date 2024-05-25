@@ -5,6 +5,7 @@ import { degToRad } from 'three/src/math/MathUtils';
 import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
+import { resolvePenetrationCoefficient } from '../../../../core/blitz/resolvePenetrationCoefficient';
 import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../core/blitzkit/jsxTree';
 import { ShellDefinition } from '../../../../core/blitzkit/tankDefinitions';
@@ -98,25 +99,17 @@ export function CoreArmorSceneComponent({
     }
     async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
       const duel = useDuel.getState();
-      const penetration = resolveNearPenetration(
-        duel.antagonist!.shell.penetration,
-      );
+      const shell = duel.antagonist!.shell;
+      const penetration = resolveNearPenetration(shell.penetration);
       const hasCalibratedShells = await hasEquipment(
         103,
         duel.antagonist!.tank.equipment,
         equipment,
       );
 
-      material.uniforms.penetration.value = hasCalibratedShells
-        ? penetration *
-          (duel.antagonist!.shell.type === 'ap'
-            ? 1.08
-            : duel.antagonist!.shell.type === 'ap_cr'
-              ? 1.05
-              : duel.antagonist!.shell.type === 'hc'
-                ? 1.13
-                : 1.08)
-        : penetration;
+      material.uniforms.penetration.value =
+        penetration *
+        resolvePenetrationCoefficient(hasCalibratedShells, shell.type);
     }
 
     handleShellChange(useDuel.getState().antagonist!.shell);

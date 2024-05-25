@@ -13,6 +13,7 @@ import { Fragment, use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
+import { resolvePenetrationCoefficient } from '../../../../../../core/blitz/resolvePenetrationCoefficient';
 import { asset } from '../../../../../../core/blitzkit/asset';
 import { coefficient } from '../../../../../../core/blitzkit/coefficient';
 import { equipmentDefinitions } from '../../../../../../core/blitzkit/equipmentDefinitions';
@@ -101,13 +102,7 @@ export function Characteristics() {
   const hasImprovedVerticalStabilizer = useEquipment(122);
   const penetrationCoefficient = coefficient([
     hasCalibratedShells,
-    shell.type === 'ap'
-      ? 0.08
-      : shell.type === 'ap_cr'
-        ? 0.05
-        : shell.type === 'hc'
-          ? 0.13
-          : 0.08,
+    resolvePenetrationCoefficient(true, shell.type) - 1,
   ]);
   const penetrationLossOverDistanceCoefficient = coefficient([
     hasSupercharger,

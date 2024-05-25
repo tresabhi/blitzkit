@@ -35,30 +35,33 @@ const TRACER_THICK = 1 / 64;
 const TRACER_THIN = TRACER_THICK / 2;
 
 export function ShotDisplay() {
+  return null;
+
   const shot = useTankopediaTemporary((state) => state.shot);
   const preMidPointTracer = useRef<Mesh>(null);
   const postMidPointTracer = useRef<Mesh>(null);
-  const hasMultipleLayers = shot?.layers.some(
+  const hasMultipleLayers = shot?.layersIn.some(
     (layer, index) => index !== 0 && layer.type !== null,
   );
   const { shell } = useDuel.getState().antagonist!;
   const explosive = isExplosive(shell.type);
   const splashing = canSplash(shell.type);
-  const midPointLayer = (shot?.layers.findLast(
+  const midPointLayer = (shot?.layersIn.findLast(
     (layer) => layer.type !== null && layer.status === 'ricochet',
-  ) ?? shot?.layers.findLast((layer) => layer.type !== null)) as ShotLayerBase;
-  const firstLayer = shot?.layers[0] as Exclude<ShotLayer, ShotLayerGap>;
-  const lastLayer = shot?.layers.at(-1)!;
+  ) ??
+    shot?.layersIn.findLast((layer) => layer.type !== null)) as ShotLayerBase;
+  const firstLayer = shot?.layersIn[0] as Exclude<ShotLayer, ShotLayerGap>;
+  const lastLayer = shot?.layersIn.at(-1)!;
   const distanceFromSpacedArmor = shot
     ? firstLayer.point.distanceTo(shot.point)
     : undefined;
-  const preMidPointLayers = shot?.layers.slice(
+  const preMidPointLayers = shot?.layersIn.slice(
     0,
-    shot.layers.indexOf(midPointLayer as ShotLayer),
+    shot.layersIn.indexOf(midPointLayer as ShotLayer),
   );
-  const postMidPointLayers = shot?.layers.slice(
-    shot.layers.indexOf(midPointLayer as ShotLayer),
-    shot.layers.length,
+  const postMidPointLayers = shot?.layersIn.slice(
+    shot.layersIn.indexOf(midPointLayer as ShotLayer),
+    shot.layersIn.length,
   );
   const preMidPointGap = shot
     ? preMidPointLayers!.reduce((accumulator, layer) => {
@@ -84,6 +87,8 @@ export function ShotDisplay() {
         return accumulator;
       }, 0) || LENGTH_INFINITY
     : undefined;
+  const spacedBlockedHE =
+    shell.type === 'he' && postMidPointGap && postMidPointGap > 0;
 
   useFrame(({ clock }) => {
     if (!shot || !preMidPointTracer.current) return;
@@ -175,11 +180,11 @@ export function ShotDisplay() {
         </group>
       )}
 
-      {shot.layers.map((layer, index) => {
+      {shot.layersIn.map((layer, index) => {
         if (layer.type === null) return;
 
         const shellRotation = normalToEuler(layer.shellNormal);
-        const nextLayer = shot.layers[index + 1] as ShotLayerGap | undefined;
+        const nextLayer = shot.layersIn[index + 1] as ShotLayerGap | undefined;
         const trueStatus =
           nextLayer?.status === 'blocked' ? 'blocked' : layer.status;
 
@@ -247,9 +252,12 @@ export function ShotDisplay() {
             <Text>
               {lastLayer.status[0].toUpperCase()}
               {lastLayer.status.slice(1)}
+
               {lastLayer.status === 'penetration' &&
+                !spacedBlockedHE &&
                 `: ${Math.round(shell.damage.armor)}hp`}
-              {lastLayer.status === 'blocked' &&
+
+              {(lastLayer.status === 'blocked' || spacedBlockedHE) &&
                 shell.type === 'he' &&
                 `: ${NaNFallback(
                   Math.max(
@@ -269,7 +277,7 @@ export function ShotDisplay() {
                 )}hp`}
             </Text>
 
-            {shot.layers.map((layer, index) => {
+            {shot.layersIn.map((layer, index) => {
               if (layer.type === null && (!explosive || splashing)) return null;
 
               return (

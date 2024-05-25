@@ -5,7 +5,12 @@ import { asset } from '../asset';
 import { fetchCdonLz4 } from '../fetchCdonLz4';
 import { TIERS } from './constants';
 
-export type ShellType = 'ap' | 'ap_cr' | 'hc' | 'he';
+export enum ShellType {
+  AP = 'ap',
+  APCR = 'ap_cr',
+  HEAT = 'hc',
+  HE = 'he',
+}
 
 export type CrewMember =
   | 'commander'

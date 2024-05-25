@@ -16,6 +16,8 @@ import { EquipmentMatrix, useDuel } from '../../../../../../stores/duel';
 import { ArmorType } from '../../../SpacedArmorScene';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
+import { resolvePenetrationCoefficient } from '../../../../../../core/blitz/resolvePenetrationCoefficient';
+import { hasColorSpace } from '@react-three/fiber/dist/declarations/src/core/utils';
 
 interface SpacedArmorSubSpacedProps {
   node: Object3D;
@@ -83,16 +85,8 @@ export function SpacedArmorSubSpaced({
         duel.antagonist!.tank.equipment,
         equipment,
       );
-      material.uniforms.penetration.value = hasCalibratedShells
-        ? penetration *
-          (duel.antagonist!.shell.type === 'ap'
-            ? 1.08
-            : duel.antagonist!.shell.type === 'ap_cr'
-              ? 1.05
-              : duel.antagonist!.shell.type === 'hc'
-                ? 1.13
-                : 1.08)
-        : penetration;
+      
+        material.uniforms.penetration.value=penetration*resolvePenetrationCoefficient(hasCalibratedShells,  shell.type)
     }
 
     handleShellChange(useDuel.getState().antagonist!.shell);

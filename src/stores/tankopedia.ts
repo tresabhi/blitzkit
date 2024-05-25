@@ -50,7 +50,6 @@ export interface ShotLayerBase {
   index: number;
   thickness: number;
   point: Vector3;
-  shellNormal: Vector3;
   surfaceNormal: Vector3;
   status: 'blocked' | 'penetration' | 'ricochet';
 }
@@ -74,8 +73,11 @@ export interface ShotLayerGap {
 export type ShotLayer = ShotLayerExternal | ShotLayerNonExternal | ShotLayerGap;
 
 export type Shot = {
+  status: 'penetration' | 'blocked' | 'ricochet' | 'splash';
+  damage: number;
   point: Vector3;
-  layers: ShotLayer[];
+  layersIn: ShotLayer[];
+  layersOut?: ShotLayer[];
 };
 
 export type ArmorPiercingLayer =

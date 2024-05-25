@@ -1,5 +1,6 @@
 import { EquipmentMatrix } from '../../stores/duel';
 import { resolveNearPenetration } from '../blitz/resolveNearPenetration';
+import { resolvePenetrationCoefficient } from '../blitz/resolvePenetrationCoefficient';
 import { coefficient } from './coefficient';
 import { degressiveStat } from './degressiveStat';
 import { EquipmentDefinitions } from './equipmentDefinitions';
@@ -151,13 +152,7 @@ export function tankCharacteristics(
     coefficient([hasAdrenaline && gun.type === 'regular', 0.17]);
   const penetrationCoefficient = coefficient([
     hasCalibratedShells,
-    shell.type === 'ap'
-      ? 0.08
-      : shell.type === 'ap_cr'
-        ? 0.05
-        : shell.type === 'hc'
-          ? 0.13
-          : 0.08,
+    resolvePenetrationCoefficient(true, shell.type) - 1,
   ]);
   const healthCoefficient = coefficient(
     [hasSandbagArmor, 0.03],
