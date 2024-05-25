@@ -9,6 +9,7 @@ import { degToRad } from 'three/src/math/MathUtils';
 import { ArmorUserData } from '../..';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
+import { resolvePenetrationCoefficient } from '../../../../../../core/blitz/resolvePenetrationCoefficient';
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../../../core/blitzkit/jsxTree';
 import { ShellDefinition } from '../../../../../../core/blitzkit/tankDefinitions';
@@ -16,8 +17,6 @@ import { EquipmentMatrix, useDuel } from '../../../../../../stores/duel';
 import { ArmorType } from '../../../SpacedArmorScene';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
-import { resolvePenetrationCoefficient } from '../../../../../../core/blitz/resolvePenetrationCoefficient';
-import { hasColorSpace } from '@react-three/fiber/dist/declarations/src/core/utils';
 
 interface SpacedArmorSubSpacedProps {
   node: Object3D;
@@ -85,8 +84,10 @@ export function SpacedArmorSubSpaced({
         duel.antagonist!.tank.equipment,
         equipment,
       );
-      
-        material.uniforms.penetration.value=penetration*resolvePenetrationCoefficient(hasCalibratedShells,  shell.type)
+
+      material.uniforms.penetration.value =
+        penetration *
+        resolvePenetrationCoefficient(hasCalibratedShells, shell.type);
     }
 
     handleShellChange(useDuel.getState().antagonist!.shell);

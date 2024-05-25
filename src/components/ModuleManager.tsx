@@ -63,7 +63,7 @@ export function ModuleManager({
                     const draft = { ...modules };
                     draft.turret = turret;
                     draft.gun = draft.turret.guns.at(-1)!;
-                    draft.shell = draft.gun.shells.at(-1)!;
+                    draft.shell = draft.gun.shells[0];
 
                     onChange?.(draft);
                     setTurretMenuOpen(false);
@@ -106,7 +106,7 @@ export function ModuleManager({
                   onClick={() => {
                     const draft = { ...modules };
                     draft.gun = gun;
-                    draft.shell = draft.gun.shells.at(-1)!;
+                    draft.shell = draft.gun.shells[0];
 
                     onChange?.(draft);
                     setGunMenuOpen(false);

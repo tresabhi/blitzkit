@@ -149,7 +149,7 @@ export function Modules() {
           )
         ) {
           draft.protagonist!.gun = draft.protagonist!.turret.guns.at(-1)!;
-          draft.protagonist!.shell = draft.protagonist!.gun.shells.at(-1)!;
+          draft.protagonist!.shell = draft.protagonist!.gun.shells[0];
         }
       } else if (unlock.type === 'gun') {
         const gunInTurret = draft.protagonist!.turret.guns.find(
@@ -157,7 +157,7 @@ export function Modules() {
         );
         if (gunInTurret) {
           draft.protagonist!.gun = gunInTurret;
-          draft.protagonist!.shell = gunInTurret.shells.at(-1)!;
+          draft.protagonist!.shell = gunInTurret.shells[0];
         } else {
           // TODO: warn somehow?
           const suitableTurret = draft.protagonist!.tank.turrets.find(
@@ -169,7 +169,7 @@ export function Modules() {
 
           draft.protagonist!.turret = suitableTurret;
           draft.protagonist!.gun = gunInSuitableTurret;
-          draft.protagonist!.shell = gunInSuitableTurret.shells.at(-1)!;
+          draft.protagonist!.shell = gunInSuitableTurret.shells[0];
         }
       } else if (unlock.type === 'engine') {
         draft.protagonist!.engine = draft.protagonist!.tank.engines.find(
