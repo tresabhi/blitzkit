@@ -95,17 +95,20 @@ export function SpacedArmorSceneComponent({
 
               const { antagonist, protagonist } = useDuel.getState();
               const shell = antagonist!.shell;
-              const shot: Shot = {
-                status: 'blocked',
-                damage: -1,
-                containsGaps: shell.type === ShellType.HEAT,
-                layersIn: [],
-                point: event.point,
-              };
               const cameraNormal = camera.position
                 .clone()
                 .sub(event.point)
                 .normalize();
+              const shot: Shot = {
+                damage: -1,
+                containsGaps: shell.type === ShellType.HEAT,
+                in: {
+                  cameraNormal,
+                  layers: [],
+                  status: 'blocked',
+                },
+                point: event.point,
+              };
 
               const hasCalibratedShells = await hasEquipment(
                 103,
@@ -157,14 +160,14 @@ export function SpacedArmorSceneComponent({
                 const layer = intersection.object.userData;
 
                 if (shell.type === ShellType.HEAT && index > 0) {
-                  const lastLayer = shot.layersIn.at(-1) as ShotLayerBase;
+                  const lastLayer = shot.in.layers.at(-1) as ShotLayerBase;
                   const distance = lastLayer.point.distanceTo(
                     intersection.point,
                   );
                   remainingPenetration -= 0.5 * remainingPenetration * distance;
                   const blocked = remainingPenetration <= 0;
 
-                  shot.layersIn.push({
+                  shot.in.layers.push({
                     type: null,
                     distance,
                     status: blocked ? 'blocked' : 'penetration',
@@ -179,7 +182,7 @@ export function SpacedArmorSceneComponent({
                   const blocked =
                     remainingPenetration <= 0 || shell.type === ShellType.HE;
 
-                  shot.layersIn.push({
+                  shot.in.layers.push({
                     type: ArmorType.External,
                     index,
                     thickness,
@@ -213,7 +216,7 @@ export function SpacedArmorSceneComponent({
                   if (!threeCalibersRule && angle >= ricochet) {
                     remainingPenetration *= 0.75;
 
-                    shot.layersIn.push({
+                    shot.in.layers.push({
                       type: layer.type,
                       index,
                       thickness,
@@ -229,7 +232,7 @@ export function SpacedArmorSceneComponent({
                     remainingPenetration -= finalThickness;
                     const blocked = remainingPenetration <= 0;
 
-                    shot.layersIn.push({
+                    shot.in.layers.push({
                       type: layer.type,
                       index,
                       thickness,
@@ -249,11 +252,11 @@ export function SpacedArmorSceneComponent({
                 index++;
               }
 
-              const lastLayer = shot.layersIn.at(-1) as ShotLayerNonExternal;
-              const firstLayer = shot.layersIn[0] as ShotLayerBase;
+              const lastLayer = shot.in.layers.at(-1) as ShotLayerNonExternal;
+              const firstLayer = shot.in.layers[0] as ShotLayerBase;
 
               if (shell.type === ShellType.HE) {
-                const totalSpacedArmorThickness = shot.layersIn.reduce(
+                const totalSpacedArmorThickness = shot.in.layers.reduce(
                   (acc, layer) => {
                     if (layer.type === null || layer.type === ArmorType.Core) {
                       return acc;
@@ -292,25 +295,25 @@ export function SpacedArmorSceneComponent({
                  */
 
                 if (
-                  shot.layersIn.length > 1 ||
+                  shot.in.layers.length > 1 ||
                   lastLayer.status === 'blocked'
                 ) {
-                  shot.status = finalDamage > 0 ? 'splash' : 'blocked';
+                  shot.in.status = finalDamage > 0 ? 'splash' : 'blocked';
                   shot.damage = finalDamage;
                 } else {
-                  shot.status = 'penetration';
+                  shot.in.status = 'penetration';
                   shot.damage = shell.damage.armor;
                 }
               } else {
                 if (lastLayer.status === 'blocked') {
-                  shot.status = 'blocked';
+                  shot.in.status = 'blocked';
                   shot.damage = 0;
                 } else if (lastLayer.status === 'penetration') {
-                  shot.status = 'penetration';
+                  shot.in.status = 'penetration';
                   shot.damage = shell.damage.armor;
                 } else {
                   // check second array for result
-                  shot.status = 'ricochet';
+                  shot.in.status = 'ricochet';
                 }
               }
 

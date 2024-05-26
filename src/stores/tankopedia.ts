@@ -75,13 +75,22 @@ export interface ShotLayerGap {
 export type ShotLayer = ShotLayerExternal | ShotLayerNonExternal | ShotLayerGap;
 
 export type Shot = {
-  status: 'penetration' | 'blocked' | 'ricochet' | 'splash';
   containsGaps: boolean;
   damage: number;
   point: Vector3;
-  layersIn: ShotLayer[];
-  layersOut?: ShotLayer[];
+
+  in: {
+    cameraNormal: Vector3;
+    status: ShotStatus;
+    layers: ShotLayer[];
+  };
+  out?: {
+    status: ShotStatus;
+    layers: ShotLayer[];
+  };
 };
+
+export type ShotStatus = 'penetration' | 'blocked' | 'ricochet' | 'splash';
 
 export type ArmorPiercingLayer =
   | {
