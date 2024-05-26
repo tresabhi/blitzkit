@@ -77,14 +77,14 @@ export type ShotLayer = ShotLayerExternal | ShotLayerNonExternal | ShotLayerGap;
 export type Shot = {
   containsGaps: boolean;
   damage: number;
-  point: Vector3;
 
   in: {
-    cameraNormal: Vector3;
+    surfaceNormal: Vector3;
     status: ShotStatus;
     layers: ShotLayer[];
   };
   out?: {
+    surfaceNormal: Vector3;
     status: ShotStatus;
     layers: ShotLayer[];
   };
