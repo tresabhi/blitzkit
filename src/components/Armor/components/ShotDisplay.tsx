@@ -163,7 +163,9 @@ export function ShotDisplay() {
           (shot.out.layers.at(-1) as ShotLayerNonExternal).point,
         )
       : LENGTH_INFINITY;
-  const inLast = shot.in.layers.findLast((layer) => layer.type !== null)!;
+  const inLast = shot.in.layers.findLast(
+    (layer) => layer.type !== null,
+  ) as ShotLayerNonExternal;
   const outTitleColor = shot.out
     ? shotStatusColors[shot.out.status]
     : undefined;

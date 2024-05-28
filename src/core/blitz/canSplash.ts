@@ -1,5 +1,5 @@
-import { ShellDefinition } from '../blitzkit/tankDefinitions';
+import { ShellDefinition, ShellType } from '../blitzkit/tankDefinitions';
 
-export function canSplash(type: ShellDefinition['type']): type is 'he' {
-  return type === 'he';
+export function canSplash(type: ShellDefinition['type']): type is ShellType.HE {
+  return type === ShellType.HE;
 }

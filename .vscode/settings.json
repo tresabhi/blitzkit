@@ -182,5 +182,6 @@
   ],
   "deno.enable": false,
   "deno.unstable": false,
-  "cSpell.enableFiletypes": ["glsl"]
+  "cSpell.enableFiletypes": ["glsl"],
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

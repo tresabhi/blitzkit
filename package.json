@@ -107,7 +107,7 @@
     "lz4": "^0.6.5",
     "prettier": "^3.0.3",
     "prisma": "^5.4.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.4.5"
   },
   "packageManager": "yarn@1.22.1"
 }
