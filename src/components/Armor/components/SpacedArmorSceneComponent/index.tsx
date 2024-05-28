@@ -176,7 +176,12 @@ export function SpacedArmorSceneComponent({
           thickness,
           point: intersection.point,
           surfaceNormal,
-          status: blocked ? 'blocked' : 'penetration',
+          status:
+            shell.type === ShellType.HE
+              ? 'blocked'
+              : blocked
+                ? 'blocked'
+                : 'penetration',
           variant: layer.variant,
         });
       } else {
@@ -221,7 +226,12 @@ export function SpacedArmorSceneComponent({
             thicknessAngled: finalThickness,
             point: intersection.point,
             surfaceNormal: intersection.face!.normal,
-            status: blocked ? 'blocked' : 'penetration',
+            status:
+              shell.type === ShellType.HE
+                ? 'blocked'
+                : blocked
+                  ? 'blocked'
+                  : 'penetration',
             angle,
           });
         }
