@@ -209,6 +209,7 @@ export function ShotDisplay() {
 
                   return (
                     <LayerEntry
+                      key={index}
                       layer={layer}
                       layerIndex={layerIndex}
                       layerName={layerName}
@@ -274,6 +275,7 @@ export function ShotDisplay() {
 
                     return (
                       <LayerEntry
+                        key={index}
                         layer={layer}
                         layerIndex={layerIndex}
                         layerName={layerName}
@@ -308,6 +310,7 @@ export function ShotDisplay() {
 
         return (
           <Html
+            key={index}
             position={layer.point}
             center
             style={{
