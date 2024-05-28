@@ -13,6 +13,7 @@ import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
 import { useDuel } from '../../../stores/duel';
 import { useTankopediaPersistent } from '../../../stores/tankopedia';
 import { CoreArmorSceneComponent } from './CoreArmorSceneComponent';
+import { ShotDisplay } from './ShotDisplay';
 
 export const CoreArmorScene = memo(() => {
   const wrapper = useRef<Group>(null);
@@ -135,86 +136,94 @@ export const CoreArmorScene = memo(() => {
   ).applyAxisAngle(I_HAT, Math.PI / 2);
 
   return (
-    <group
-      ref={wrapper}
-      rotation={[-Math.PI / 2, 0, 0]}
-      visible={initialTankopediaState.mode === 'armor'}
-    >
-      <group position={hullOrigin}>
-        {armorNodes.map((node) => {
-          const isHull = node.name.startsWith('hull_');
-          const isVisible = isHull;
-          const armorId = nameToArmorId(node.name);
-          const { spaced, thickness } = resolveArmor(
-            tankModelDefinition.armor,
-            armorId,
-          );
+    <>
+      <ShotDisplay />
 
-          if (!isVisible || spaced || thickness === undefined) return null;
-
-          return (
-            <CoreArmorSceneComponent
-              key={node.uuid}
-              thickness={thickness}
-              node={node}
-            />
-          );
-        })}
-      </group>
-
-      <group ref={turretContainer}>
+      <group
+        ref={wrapper}
+        rotation={[-Math.PI / 2, 0, 0]}
+        visible={initialTankopediaState.mode === 'armor'}
+      >
         <group position={hullOrigin}>
           {armorNodes.map((node) => {
-            const isCurrentTurret = node.name.startsWith(
-              `turret_${turretModelDefinition.model.toString().padStart(2, '0')}`,
-            );
-            const isVisible = isCurrentTurret;
+            const isHull = node.name.startsWith('hull_');
+            const isVisible = isHull;
             const armorId = nameToArmorId(node.name);
             const { spaced, thickness } = resolveArmor(
-              turretModelDefinition.armor,
+              tankModelDefinition.armor,
               armorId,
             );
 
             if (!isVisible || spaced || thickness === undefined) return null;
 
             return (
-              <group key={node.uuid} position={turretOrigin}>
-                <CoreArmorSceneComponent
-                  key={node.uuid}
-                  thickness={thickness}
-                  node={node}
-                />
-              </group>
+              <CoreArmorSceneComponent
+                key={node.uuid}
+                thickness={thickness}
+                node={node}
+              />
             );
           })}
         </group>
-        <group ref={gunContainer}>
+
+        <group ref={turretContainer}>
           <group position={hullOrigin}>
             {armorNodes.map((node) => {
-              const isCurrentGun = node.name.startsWith(
-                `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
+              const isCurrentTurret = node.name.startsWith(
+                `turret_${turretModelDefinition.model.toString().padStart(2, '0')}`,
               );
-              const isVisible = isCurrentGun;
+              const isVisible = isCurrentTurret;
               const armorId = nameToArmorId(node.name);
               const { spaced, thickness } = resolveArmor(
-                gunModelDefinition.armor,
+                turretModelDefinition.armor,
                 armorId,
               );
 
               if (!isVisible || spaced || thickness === undefined) return null;
 
               return (
-                <group
-                  key={node.uuid}
-                  position={turretOrigin.clone().add(gunOrigin)}
-                >
-                  <CoreArmorSceneComponent thickness={thickness} node={node} />
+                <group key={node.uuid} position={turretOrigin}>
+                  <CoreArmorSceneComponent
+                    key={node.uuid}
+                    thickness={thickness}
+                    node={node}
+                  />
                 </group>
               );
             })}
           </group>
+          <group ref={gunContainer}>
+            <group position={hullOrigin}>
+              {armorNodes.map((node) => {
+                const isCurrentGun = node.name.startsWith(
+                  `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
+                );
+                const isVisible = isCurrentGun;
+                const armorId = nameToArmorId(node.name);
+                const { spaced, thickness } = resolveArmor(
+                  gunModelDefinition.armor,
+                  armorId,
+                );
+
+                if (!isVisible || spaced || thickness === undefined)
+                  return null;
+
+                return (
+                  <group
+                    key={node.uuid}
+                    position={turretOrigin.clone().add(gunOrigin)}
+                  >
+                    <CoreArmorSceneComponent
+                      thickness={thickness}
+                      node={node}
+                    />
+                  </group>
+                );
+              })}
+            </group>
+          </group>
         </group>
       </group>
-    </group>
+    </>
   );
 });

@@ -164,6 +164,10 @@ export function ShotDisplay() {
         )
       : LENGTH_INFINITY;
   const inLast = shot.in.layers.findLast((layer) => layer.type !== null)!;
+  const outTitleColor = shot.out
+    ? shotStatusColors[shot.out.status]
+    : undefined;
+  const inTitleColor = shotStatusColors[shot.in.status];
 
   return (
     <group>
@@ -177,7 +181,7 @@ export function ShotDisplay() {
         <Card ml="9" style={{ width: 300 }}>
           <Flex direction="column" gap="2">
             <Flex direction="column" gap="1">
-              <Text color={shotStatusColors[shot.in.status]} weight="bold">
+              <Text color={inTitleColor} weight="bold">
                 {shot.in.status !== 'blocked' &&
                   shot.in.status !== 'ricochet' && (
                     <>
@@ -224,10 +228,24 @@ export function ShotDisplay() {
             {shot.out && shot.out.layers.length > 0 && (
               <>
                 <Inset side="x">
-                  <Separator size="4" />
+                  <Flex align="center" gap="2">
+                    <Separator
+                      style={{
+                        flex: 1,
+                      }}
+                    />
+                    <Text size="1" color="gray">
+                      ricochet (-25% penetration)
+                    </Text>
+                    <Separator
+                      style={{
+                        flex: 1,
+                      }}
+                    />
+                  </Flex>
                 </Inset>
 
-                <Text color={shotStatusColors[shot.out.status]} weight="bold">
+                <Text color={outTitleColor} weight="bold">
                   {shot.out.status !== 'blocked' &&
                     shot.out.status !== 'ricochet' && (
                       <>
@@ -309,18 +327,22 @@ export function ShotDisplay() {
           new Quaternion().setFromUnitVectors(J_HAT, shot.in.surfaceNormal),
         )}
       >
-        <mesh position={[0, inLength / 2, 0]}>
+        <mesh position={[0, inLength / 2, 0]} renderOrder={2}>
           <cylinderGeometry
             args={[TRACER_THIN / 2, TRACER_THIN / 2, inLength]}
           />
-          <meshBasicMaterial depthTest={false} />
+          <meshBasicMaterial depthTest={false} transparent />
         </mesh>
 
-        <mesh ref={inTracer} position={[0, inLength / 2, 0]}>
+        <mesh ref={inTracer} position={[0, inLength / 2, 0]} renderOrder={3}>
           <cylinderGeometry
             args={[TRACER_THICK / 2, TRACER_THICK / 2, inLength]}
           />
-          <meshBasicMaterial color="red" />
+          <meshBasicMaterial
+            color={inTitleColor}
+            depthTest={false}
+            transparent
+          />
         </mesh>
       </group>
 
@@ -334,18 +356,26 @@ export function ShotDisplay() {
             ),
           )}
         >
-          <mesh position={[0, outLength / 2, 0]}>
+          <mesh position={[0, outLength / 2, 0]} renderOrder={2}>
             <cylinderGeometry
               args={[TRACER_THIN / 2, TRACER_THIN / 2, outLength]}
             />
-            <meshBasicMaterial depthTest={false} />
+            <meshBasicMaterial depthTest={false} transparent />
           </mesh>
 
-          <mesh ref={outTracer} position={[0, outLength / 2, 0]}>
+          <mesh
+            ref={outTracer}
+            position={[0, outLength / 2, 0]}
+            renderOrder={3}
+          >
             <cylinderGeometry
               args={[TRACER_THICK / 2, TRACER_THICK / 2, outLength]}
             />
-            <meshBasicMaterial color="yellow" />
+            <meshBasicMaterial
+              color={outTitleColor}
+              depthTest={false}
+              transparent
+            />
           </mesh>
         </group>
       )}
