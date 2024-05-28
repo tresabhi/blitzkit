@@ -1,5 +1,6 @@
 interface Tool {
   id: string;
+  image: string;
   title: string;
   description: string;
   disabled?: boolean;
@@ -15,6 +16,7 @@ export const TOOLS: Tool[] = [
   //   pageDescription:
   //     'Periodical player statistics and tanks played in World of Tanks Blitz',
   //   disabled: true,
+  //   image: '8gJGkKP'
   // },
   {
     id: 'tankopedia',
@@ -22,6 +24,7 @@ export const TOOLS: Tool[] = [
     description: 'Blitz tank encyclopedia',
     pageDescription:
       'Statistics, armor, and more for all tanks in World of Tanks Blitz',
+    image: 'D8j6GZx',
   },
   {
     id: 'rating',
@@ -29,6 +32,7 @@ export const TOOLS: Tool[] = [
     description: 'Full rating gamemode leaderboard',
     pageDescription:
       'Live and archived full rating leaderboard for World of Tanks Blitz',
+    image: 'WEyMZH3',
   },
   {
     id: 'compare',
@@ -36,6 +40,7 @@ export const TOOLS: Tool[] = [
     description: 'Compare tank statistics and loadouts',
     pageDescription:
       'Compare tanks statistics and loadouts in World of Tanks Blitz',
+    image: 'O6VNl6e',
   },
   {
     // TODO: rename to tracker
@@ -44,17 +49,20 @@ export const TOOLS: Tool[] = [
     description: 'Live session performance tracker',
     pageDescription:
       'Track your stats in real time as you play World of Tanks Blitz',
+    image: 'HdG9sTf',
   },
   {
     id: 'discord',
     title: 'Discord bot',
     description: 'Stats and tools right in Discord',
     href: 'https://discord.com/application-directory/1097673957865443370',
+    image: '0bWE5hC',
   },
   {
     id: 'more',
     title: 'More coming soon',
     description: 'This site is being actively developed',
     href: 'https://discord.gg/nDt7AjGJQH',
+    image: '1nPm6VI',
   },
 ];

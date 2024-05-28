@@ -36,6 +36,8 @@ import { theme } from '../../stitches.config';
 
 const DISCRIMINATOR_WIDTH = 32;
 
+// https://i.imgur.com/rUPie9G.jpeg
+
 export function Hero() {
   const wideFormat = useWideFormat(512);
   const [showSearch, setShowSearch] = useState(false);
