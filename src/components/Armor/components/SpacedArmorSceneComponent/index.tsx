@@ -83,6 +83,7 @@ export function SpacedArmorSceneComponent({
     point: Vector3,
     intersections: Intersection[],
     allowRicochet: boolean,
+    remainingPenetrationInput?: number,
   ) {
     const { antagonist, protagonist } = useDuel.getState();
     const shell = antagonist!.shell;
@@ -138,7 +139,7 @@ export function SpacedArmorSceneComponent({
       }
     }
 
-    let remainingPenetration = penetration;
+    let remainingPenetration = remainingPenetrationInput ?? penetration;
     let index = 0;
     for (const intersection of noDuplicateIntersections) {
       const layer = intersection.object.userData;
@@ -314,6 +315,7 @@ export function SpacedArmorSceneComponent({
             lastLayer.point,
             ricochetIntersections,
             false,
+            remainingPenetration,
           );
 
           shot.in.status = 'ricochet';
@@ -327,6 +329,7 @@ export function SpacedArmorSceneComponent({
           } else {
             shot.damage = outShot.damage;
             shot.out = outShot.in;
+            shot.out.surfaceNormal = ricochetNormal;
           }
         }
       }

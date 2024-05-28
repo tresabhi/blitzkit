@@ -7,6 +7,7 @@ import { radToDeg } from 'three/src/math/MathUtils';
 import { J_HAT } from '../../../constants/axis';
 import {
   ShotLayer,
+  ShotLayerNonExternal,
   ShotStatus,
   useTankopediaTemporary,
 } from '../../../stores/tankopedia';
@@ -43,7 +44,7 @@ const shotStatusColors: Record<
 };
 
 const LENGTH_INFINITY = 4;
-const TRACER_THICK = 1 / 64;
+const TRACER_THICK = 1 / 32;
 const TRACER_THIN = TRACER_THICK / 2;
 
 function LayerEntry({
@@ -146,7 +147,7 @@ export function ShotDisplay() {
     if (!outTracer.current) return;
 
     outTracer.current.scale.set(1, 1 - 2 * Math.abs(t2 - 0.5), 1);
-    outTracer.current.position.set(0, t2 * inLength, 0);
+    outTracer.current.position.set(0, t2 * outLength, 0);
   });
 
   if (!shot) return null;
@@ -156,6 +157,12 @@ export function ShotDisplay() {
       if (layer.type === null) return accumulator + layer.distance;
       return accumulator;
     }, 0) + LENGTH_INFINITY;
+  const outLength =
+    shot.out && shot.out.layers.length > 0
+      ? (shot.in.layers.at(-1) as ShotLayerNonExternal).point.distanceTo(
+          (shot.out.layers.at(-1) as ShotLayerNonExternal).point,
+        )
+      : LENGTH_INFINITY;
   const inLast = shot.in.layers.findLast((layer) => layer.type !== null)!;
 
   return (
@@ -282,7 +289,13 @@ export function ShotDisplay() {
             : shotStatusColors[layer.status];
 
         return (
-          <Html position={layer.point} center>
+          <Html
+            position={layer.point}
+            center
+            style={{
+              pointerEvents: 'none',
+            }}
+          >
             <Kbd>
               <Text color={shotStatusColor}>{layerIndex}</Text>
             </Kbd>
@@ -315,21 +328,24 @@ export function ShotDisplay() {
         <group
           position={inLast.point}
           rotation={new Euler().setFromQuaternion(
-            new Quaternion().setFromUnitVectors(J_HAT, shot.out.surfaceNormal),
+            new Quaternion().setFromUnitVectors(
+              J_HAT,
+              shot.out.surfaceNormal.clone(),
+            ),
           )}
         >
-          <mesh position={[0, inLength / 2, 0]}>
+          <mesh position={[0, outLength / 2, 0]}>
             <cylinderGeometry
-              args={[TRACER_THIN / 2, TRACER_THIN / 2, inLength]}
+              args={[TRACER_THIN / 2, TRACER_THIN / 2, outLength]}
             />
             <meshBasicMaterial depthTest={false} />
           </mesh>
 
-          <mesh ref={outTracer} position={[0, inLength / 2, 0]}>
+          <mesh ref={outTracer} position={[0, outLength / 2, 0]}>
             <cylinderGeometry
-              args={[TRACER_THICK / 2, TRACER_THICK / 2, inLength]}
+              args={[TRACER_THICK / 2, TRACER_THICK / 2, outLength]}
             />
-            <meshBasicMaterial color="red" />
+            <meshBasicMaterial color="yellow" />
           </mesh>
         </group>
       )}
