@@ -14,3 +14,4 @@
 - \_34, HisRoyalFatness, Synx, xkdkw: embed UX
 - [OPTML], Aeson, \_34, Droodles: beta testing Tankopedia
 - [OPTML], Droodles: beta testing Compare
+- GonnaHetzMe: stuff
