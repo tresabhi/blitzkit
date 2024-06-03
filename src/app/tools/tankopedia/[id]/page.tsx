@@ -57,6 +57,19 @@ export default function Page({ params }: { params: { id: string } }) {
     };
   }, [initialId, assigned]);
 
+  useEffect(() => {
+    const unsubscribe = useDuel.subscribe(
+      (state) => state.protagonist?.tank.id,
+      () => {
+        mutateTankopediaTemporary((draft) => {
+          draft.shot = undefined;
+        });
+      },
+    );
+
+    return unsubscribe;
+  }, []);
+
   return (
     <PageWrapper noPadding noMaxWidth color="purple" size={1600}>
       {assigned && (
