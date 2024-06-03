@@ -18,7 +18,6 @@ import {
   Spinner,
   Text,
 } from '@radix-ui/themes';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Suspense, useState } from 'react';
 import { REGIONS, UNLOCALIZED_REGION_NAMES } from '../../constants/regions';
@@ -28,6 +27,7 @@ import { BlitzkitWide } from '../../icons/BlitzkitWide';
 import { PatreonIcon } from '../../icons/Patreon';
 import { theme } from '../../stitches.config';
 import { useApp } from '../../stores/app';
+import { Link } from '../Link';
 import { LoggedIn } from './components/LoggedIn';
 import * as styles from './index.css';
 
@@ -81,8 +81,9 @@ export default function Navbar() {
               return (
                 <Link
                   key={tool.id}
-                  data-accent-color="gray"
-                  className={`rt-Text rt-reset rt-Link rt-r-size-2 rt-underline-${selected ? 'always' : 'hover'}`}
+                  color="gray"
+                  size="2"
+                  underline={selected ? 'always' : 'hover'}
                   href={`/tools/${tool.id}`}
                 >
                   {tool.title}
@@ -188,7 +189,6 @@ export default function Navbar() {
             <Link
               key={tool.id}
               href={`/tools/${tool.id}`}
-              target={tool.href ? '_blank' : undefined}
               className={styles.toolCard}
               style={{
                 backgroundImage: `url(/assets/banners/${tool.id}.webp)`,

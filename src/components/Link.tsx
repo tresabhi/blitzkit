@@ -1,13 +1,13 @@
 'use client';
 
-import { LinkProps } from '@radix-ui/themes';
+import { LinkProps, Link as RadixLink } from '@radix-ui/themes';
 import { useRouter } from 'next/navigation';
 
 export function Link({ href, onClick, ...props }: LinkProps) {
   const router = useRouter();
 
   return (
-    <Link
+    <RadixLink
       href={href}
       onClick={(event) => {
         event.preventDefault();
