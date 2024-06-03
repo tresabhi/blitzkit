@@ -259,9 +259,10 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
           </group>
 
           {modelNodes.map((node) => {
-            const isCurrentGun = node.name.startsWith(
-              `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
-            );
+            const gunString = `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`;
+            const isCurrentGun = gunModelDefinition.mask
+              ? node.name.startsWith(gunString)
+              : node.name === gunString;
             const isVisible = isCurrentGun;
 
             if (!isVisible) return null;
