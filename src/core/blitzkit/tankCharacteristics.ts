@@ -246,10 +246,9 @@ export function tankCharacteristics(
     [hasGearOil, 2],
     [hasImprovedGearOil, 4],
   );
-  const camouflageSumMoving = sum(
+  const camouflageCoefficientMoving = coefficient(
     [
       hasCamouflageNet,
-
       tank.class === 'heavyTank'
         ? 0.02
         : tank.class === 'mediumTank'
@@ -263,7 +262,7 @@ export function tankCharacteristics(
       tank.class === 'AT-SPG' ? 0.04 : tank.class === 'heavyTank' ? 0.03 : 0.02,
     ],
   );
-  const camouflageSumStill = sum(
+  const camouflageCoefficientStill = coefficient(
     [
       hasCamouflageNet,
       tank.class === 'heavyTank'
@@ -435,14 +434,14 @@ export function tankCharacteristics(
   const health = (tank.health + turret.health) * healthCoefficient;
   const fireChance = engine.fireChance * fireChanceCoefficient;
   const viewRange = turret.viewRange * viewRangeCoefficient;
-  const camouflageStill = tank.camouflage.still + camouflageSumStill;
-  const camouflageMoving = tank.camouflage.moving + camouflageSumMoving;
+  const camouflageStill = tank.camouflage.still * camouflageCoefficientStill;
+  const camouflageMoving = tank.camouflage.moving * camouflageCoefficientMoving;
   const camouflageShootingStill =
-    tank.camouflage.still * gun.camouflageLoss + camouflageSumStill;
+    tank.camouflage.still * gun.camouflageLoss * camouflageCoefficientStill;
   const camouflageShootingMoving =
-    tank.camouflage.moving * gun.camouflageLoss + camouflageSumMoving;
+    tank.camouflage.moving * gun.camouflageLoss * camouflageCoefficientMoving;
   const camouflageCaughtOnFire =
-    tank.camouflage.onFire * tank.camouflage.still + camouflageSumStill;
+    tank.camouflage.onFire * tank.camouflage.still * camouflageCoefficientStill;
   const width = size[2];
   const height = size[0];
   const length = size[1];
