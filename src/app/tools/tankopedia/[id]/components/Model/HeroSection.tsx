@@ -25,7 +25,7 @@ export function HeroSection() {
       justify="center"
       pt={wideFormat ? '0' : '6'}
       style={{
-        background: `linear-gradient(${wideFormat ? -90 : 180}deg, ${theme.colors.appBackground1}, ${theme.colors.appBackground2})`,
+        background: 'var(--color-surface)',
         position: 'relative',
         height: wideFormat ? undefined : 'calc(75vh - 64px)',
       }}
