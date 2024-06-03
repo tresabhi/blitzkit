@@ -50,9 +50,9 @@ export default function Page() {
                   <Flex
                     px={{
                       initial: '6',
-                      md: '8',
+                      md: tool.significant ? '8' : '6',
                     }}
-                    py="6"
+                    py={tool.significant ? '6' : '4'}
                     gap="4"
                     align="center"
                     justify="between"
@@ -80,7 +80,7 @@ export default function Page() {
                           sm: 'left',
                         }}
                         size={{
-                          initial: '7',
+                          initial: '6',
                           sm: tool.significant ? '7' : '5',
                         }}
                         weight="medium"
@@ -93,7 +93,7 @@ export default function Page() {
                           sm: 'left',
                         }}
                         size={{
-                          initial: '4',
+                          initial: '3',
                           sm: tool.significant ? '4' : '3',
                         }}
                         color="gray"
