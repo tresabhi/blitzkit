@@ -4,10 +4,13 @@ import Link from 'next/link';
 import PageWrapper from '../components/PageWrapper';
 import { TOOLS } from '../constants/tools';
 import { imgur } from '../core/blitzkit/imgur';
+import { Hero } from './components/Hero';
 
 export default function Page() {
   return (
     <>
+      <Hero />
+
       <PageWrapper size={1028}>
         <Grid
           p="4"
