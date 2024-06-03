@@ -22,6 +22,7 @@ interface RootLayoutProps {
 const robotoFlex = Roboto_Flex({
   subsets: ['latin'],
   display: 'swap',
+  variable: '--font-roboto-flex',
 });
 
 export default function RootLayout({ children }: RootLayoutProps) {
