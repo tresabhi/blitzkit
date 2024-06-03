@@ -312,6 +312,7 @@ export function ShotDisplay() {
             position={layer.point}
             key={index}
             style={{
+              pointerEvents: 'none',
               transform: 'translateY(-50%)',
             }}
           >
