@@ -1,4 +1,4 @@
-import { Card, Flex, Inset, Kbd, Separator, Text } from '@radix-ui/themes';
+import { Card, Flex, Inset, Separator, Text } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { ComponentProps, useRef } from 'react';
@@ -43,6 +43,7 @@ const shotStatusColors: Record<
   splash: 'orange',
 };
 
+const SURFACE_POINT_SIZE = 12;
 const LENGTH_INFINITY = 4;
 const TRACER_THICK = 1 / 32;
 const TRACER_THIN = TRACER_THICK / 2;
@@ -298,13 +299,9 @@ export function ShotDisplay() {
         </Card>
       </Html>
 
-      {shot.in.layers.map((layer, index) => {
+      {[...shot.in.layers, ...(shot.out?.layers ?? [])].map((layer, index) => {
         if (layer.type === null) return null;
 
-        const layerIndex =
-          layer.type === null
-            ? null
-            : (shot.containsGaps ? index / 2 : index) + 1;
         const shotStatusColor =
           shot.in.status === 'splash'
             ? shotStatusColors.splash
@@ -312,16 +309,27 @@ export function ShotDisplay() {
 
         return (
           <Html
-            key={index}
             position={layer.point}
-            center
+            key={index}
             style={{
-              pointerEvents: 'none',
+              transform: 'translateY(-50%)',
             }}
           >
-            <Kbd>
-              <Text color={shotStatusColor}>{layerIndex}</Text>
-            </Kbd>
+            <Flex
+              style={{
+                marginLeft: -SURFACE_POINT_SIZE / 2,
+              }}
+            >
+              <div
+                style={{
+                  width: SURFACE_POINT_SIZE,
+                  height: SURFACE_POINT_SIZE,
+                  backgroundColor: shotStatusColor,
+                  opacity: 0.75,
+                  borderRadius: SURFACE_POINT_SIZE / 2,
+                }}
+              />
+            </Flex>
           </Html>
         );
       })}
