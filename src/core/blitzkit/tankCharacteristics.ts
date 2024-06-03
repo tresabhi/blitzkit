@@ -436,17 +436,16 @@ export function tankCharacteristics(
   const viewRange = turret.viewRange * viewRangeCoefficient;
   const camouflageStill = tank.camouflage.still * camouflageCoefficientStill;
   const camouflageMoving =
-    (tank.class === 'lightTank'
-      ? tank.camouflage.still
-      : tank.camouflage.moving) * camouflageCoefficientMoving;
+    tank.class === 'lightTank'
+      ? tank.camouflage.still * camouflageCoefficientStill
+      : tank.camouflage.moving * camouflageCoefficientMoving;
   const camouflageShootingStill =
     tank.camouflage.still * gun.camouflageLoss * camouflageCoefficientStill;
   const camouflageShootingMoving =
     (tank.class === 'lightTank'
-      ? tank.camouflage.still
-      : tank.camouflage.moving) *
-    gun.camouflageLoss *
-    camouflageCoefficientMoving;
+      ? tank.camouflage.still * camouflageCoefficientStill
+      : tank.camouflage.moving * camouflageCoefficientMoving) *
+    gun.camouflageLoss;
   const camouflageCaughtOnFire =
     tank.camouflage.onFire * tank.camouflage.still * camouflageCoefficientStill;
   const width = size[2];
