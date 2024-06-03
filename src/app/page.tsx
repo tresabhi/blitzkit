@@ -29,7 +29,7 @@ export default function Page() {
                   position: 'relative',
                   borderRadius: 'var(--radius-2)',
                   overflow: 'hidden',
-                  backgroundImage: `url(${imgur(tool.image)})`,
+                  backgroundImage: `url(${imgur(tool.image, { format: 'jpeg' })})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   height: tool.significant ? 'min(320px, 50vh)' : '256px',
