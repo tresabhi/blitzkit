@@ -1,124 +1,127 @@
 import { CaretRightIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Grid, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
+import PageWrapper from '../components/PageWrapper';
 import { TOOLS } from '../constants/tools';
 import { imgur } from '../core/blitzkit/imgur';
 
 export default function Page() {
   return (
     <>
-      <Grid
-        p="4"
-        gap="4"
-        columns={{
-          initial: undefined,
-          sm: '2',
-        }}
-        flow="row-dense"
-      >
-        {TOOLS.map((tool) => {
-          return (
-            <Flex
-              key={tool.id}
-              style={{
-                position: 'relative',
-                borderRadius: 'var(--radius-2)',
-                overflow: 'hidden',
-                backgroundImage: `url(${imgur(tool.image)})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                height: tool.significant ? 'min(320px, 50vh)' : '256px',
-              }}
-              gridColumn={{
-                initial: undefined,
-                sm: tool.significant ? '1 / 3' : undefined,
-              }}
-            >
-              <Link
-                href={tool.href ?? `/tools/${tool.id}`}
+      <PageWrapper size={1028}>
+        <Grid
+          p="4"
+          gap="4"
+          columns={{
+            initial: undefined,
+            sm: '2',
+          }}
+          flow="row-dense"
+        >
+          {TOOLS.map((tool) => {
+            return (
+              <Flex
+                key={tool.id}
                 style={{
-                  display: 'flex',
-                  width: '100%',
-                  height: '100%',
-                  alignItems: 'end',
-                  textDecoration: 'none',
-                  color: 'inherit',
+                  position: 'relative',
+                  borderRadius: 'var(--radius-2)',
+                  overflow: 'hidden',
+                  backgroundImage: `url(${imgur(tool.image)})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  height: tool.significant ? 'min(320px, 50vh)' : '256px',
+                }}
+                gridColumn={{
+                  initial: undefined,
+                  sm: tool.significant ? '1 / 3' : undefined,
                 }}
               >
-                <Flex
-                  px={{
-                    initial: '6',
-                    md: '8',
-                  }}
-                  py="6"
-                  gap="4"
-                  align="center"
-                  justify="between"
-                  width="100%"
-                  direction={{
-                    initial: 'column',
-                    sm: 'row',
-                  }}
+                <Link
+                  href={tool.href ?? `/tools/${tool.id}`}
                   style={{
-                    backgroundColor: 'var(--color-panel-translucent)',
-                    backdropFilter: 'blur(16px)',
+                    display: 'flex',
+                    width: '100%',
+                    height: '100%',
+                    alignItems: 'end',
+                    textDecoration: 'none',
+                    color: 'inherit',
                   }}
                 >
                   <Flex
-                    direction="column"
-                    justify="center"
-                    align={{
-                      initial: 'center',
-                      sm: 'start',
+                    px={{
+                      initial: '6',
+                      md: '8',
                     }}
-                  >
-                    <Heading
-                      align={{
-                        initial: 'center',
-                        sm: 'left',
-                      }}
-                      size={{
-                        initial: '7',
-                        sm: tool.significant ? '7' : '5',
-                      }}
-                      weight="medium"
-                    >
-                      {tool.title}
-                    </Heading>
-                    <Text
-                      align={{
-                        initial: 'center',
-                        sm: 'left',
-                      }}
-                      size={{
-                        initial: '4',
-                        sm: tool.significant ? '4' : '3',
-                      }}
-                      color="gray"
-                    >
-                      {tool.description}
-                    </Text>
-                  </Flex>
-
-                  <Button
-                    size={{
-                      initial: undefined,
-                      sm: tool.significant ? '3' : undefined,
+                    py="6"
+                    gap="4"
+                    align="center"
+                    justify="between"
+                    width="100%"
+                    direction={{
+                      initial: 'column',
+                      sm: 'row',
                     }}
-                    color={tool.button.color}
                     style={{
-                      cursor: 'inherit',
+                      backgroundColor: 'var(--color-panel-translucent)',
+                      backdropFilter: 'blur(16px)',
                     }}
                   >
-                    {tool.button.text}
-                    <CaretRightIcon />
-                  </Button>
-                </Flex>
-              </Link>
-            </Flex>
-          );
-        })}
-      </Grid>
+                    <Flex
+                      direction="column"
+                      justify="center"
+                      align={{
+                        initial: 'center',
+                        sm: 'start',
+                      }}
+                    >
+                      <Heading
+                        align={{
+                          initial: 'center',
+                          sm: 'left',
+                        }}
+                        size={{
+                          initial: '7',
+                          sm: tool.significant ? '7' : '5',
+                        }}
+                        weight="medium"
+                      >
+                        {tool.title}
+                      </Heading>
+                      <Text
+                        align={{
+                          initial: 'center',
+                          sm: 'left',
+                        }}
+                        size={{
+                          initial: '4',
+                          sm: tool.significant ? '4' : '3',
+                        }}
+                        color="gray"
+                      >
+                        {tool.description}
+                      </Text>
+                    </Flex>
+
+                    <Button
+                      size={{
+                        initial: undefined,
+                        sm: tool.significant ? '3' : undefined,
+                      }}
+                      color={tool.button.color}
+                      style={{
+                        cursor: 'inherit',
+                      }}
+                    >
+                      {tool.button.text}
+                      <CaretRightIcon />
+                    </Button>
+                  </Flex>
+                </Link>
+              </Flex>
+            );
+          })}
+        </Grid>
+      </PageWrapper>
 
       <div style={{ flex: 1 }} />
     </>
