@@ -42,7 +42,7 @@ export const TOOLS: Tool[] = [
   {
     id: 'rating',
     title: 'Rating',
-    description: 'Full rating gamemode leaderboard',
+    description: 'Full rating leaderboard',
     pageDescription:
       'Live and archived full rating leaderboard for World of Tanks Blitz',
     image: 'WEyMZH3',
@@ -54,7 +54,7 @@ export const TOOLS: Tool[] = [
   {
     id: 'compare',
     title: 'Compare',
-    description: 'Compare tank statistics and loadouts',
+    description: 'Compare tank statistics',
     pageDescription:
       'Compare tanks statistics and loadouts in World of Tanks Blitz',
     image: 'O6VNl6e',
@@ -67,7 +67,7 @@ export const TOOLS: Tool[] = [
     // TODO: rename to tracker
     id: 'session',
     title: 'Session',
-    description: 'Live session performance tracker',
+    description: 'Live session stats tracker',
     pageDescription:
       'Track your stats in real time as you play World of Tanks Blitz',
     image: 'HdG9sTf',
@@ -79,7 +79,7 @@ export const TOOLS: Tool[] = [
   {
     id: 'discord',
     title: 'Discord bot',
-    description: 'Stats and tools right in Discord',
+    description: 'Statistics right in Discord',
     href: 'https://discord.com/application-directory/1097673957865443370',
     image: '0bWE5hC',
     button: {
@@ -90,7 +90,7 @@ export const TOOLS: Tool[] = [
   {
     id: 'more',
     title: 'More coming soon',
-    description: 'This site is being actively developed',
+    description: "See what's being developed",
     href: 'https://discord.gg/nDt7AjGJQH',
     image: '1nPm6VI',
     button: {
