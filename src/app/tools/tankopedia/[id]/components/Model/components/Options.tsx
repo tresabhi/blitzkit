@@ -6,12 +6,14 @@ import {
   GearIcon,
 } from '@radix-ui/react-icons';
 import {
+  Box,
   Button,
   Dialog,
   DropdownMenu,
   Flex,
   Heading,
   IconButton,
+  Strong,
   Switch,
   Tabs,
   Text,
@@ -74,6 +76,31 @@ export function Options() {
 
   return (
     <>
+      {isFullScreen && (
+        <Box
+          pl="4"
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: '50%',
+            transform: 'translateY(-50%)',
+          }}
+        >
+          <Text
+            size={{
+              initial: '3',
+              xs: '5',
+            }}
+            color="gray"
+            style={{
+              writingMode: 'vertical-lr',
+            }}
+          >
+            <Strong>BlitzKit</Strong> Tankopedia
+          </Text>
+        </Box>
+      )}
+
       <RotationInputs />
 
       {mode === 'armor' && (
