@@ -1,29 +1,20 @@
-import {
-  Link as RadixLink,
-  LinkProps as RadixLinkProps,
-} from '@radix-ui/themes';
-import NextLink from 'next/link';
+'use client';
 
-interface LinkProps extends RadixLinkProps {
-  href: string;
-}
+import { LinkProps } from '@radix-ui/themes';
+import { useRouter } from 'next/navigation';
 
-export function Link({ href, children, target, onClick, ...props }: LinkProps) {
+export function Link({ href, onClick, ...props }: LinkProps) {
+  const router = useRouter();
+
   return (
-    <RadixLink
+    <Link
       href={href}
-      onClick={(event) => event.preventDefault()}
+      onClick={(event) => {
+        event.preventDefault();
+        if (href) router.push(href);
+        onClick?.(event);
+      }}
       {...props}
-    >
-      <NextLink
-        tabIndex={-1}
-        href={href}
-        target={target}
-        onClick={onClick}
-        style={{ all: 'inherit' }}
-      >
-        {children}
-      </NextLink>
-    </RadixLink>
+    />
   );
 }

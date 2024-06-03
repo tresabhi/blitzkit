@@ -1,3 +1,6 @@
+import { Button } from '@radix-ui/themes';
+import { ComponentProps } from 'react';
+
 interface Tool {
   id: string;
   image: string;
@@ -6,6 +9,11 @@ interface Tool {
   disabled?: boolean;
   href?: string;
   pageDescription?: string;
+  button: {
+    text: string;
+    color: ComponentProps<typeof Button>['color'];
+  };
+  significant?: boolean;
 }
 
 export const TOOLS: Tool[] = [
@@ -25,6 +33,11 @@ export const TOOLS: Tool[] = [
     pageDescription:
       'Statistics, armor, and more for all tanks in World of Tanks Blitz',
     image: 'D8j6GZx',
+    button: {
+      text: 'Find your tank',
+      color: 'purple',
+    },
+    significant: true,
   },
   {
     id: 'rating',
@@ -33,6 +46,10 @@ export const TOOLS: Tool[] = [
     pageDescription:
       'Live and archived full rating leaderboard for World of Tanks Blitz',
     image: 'WEyMZH3',
+    button: {
+      text: 'View leaderboard',
+      color: 'orange',
+    },
   },
   {
     id: 'compare',
@@ -41,6 +58,10 @@ export const TOOLS: Tool[] = [
     pageDescription:
       'Compare tanks statistics and loadouts in World of Tanks Blitz',
     image: 'O6VNl6e',
+    button: {
+      text: 'Compare tanks',
+      color: 'crimson',
+    },
   },
   {
     // TODO: rename to tracker
@@ -50,6 +71,10 @@ export const TOOLS: Tool[] = [
     pageDescription:
       'Track your stats in real time as you play World of Tanks Blitz',
     image: 'HdG9sTf',
+    button: {
+      text: 'Start tracking',
+      color: 'blue',
+    },
   },
   {
     id: 'discord',
@@ -57,6 +82,10 @@ export const TOOLS: Tool[] = [
     description: 'Stats and tools right in Discord',
     href: 'https://discord.com/application-directory/1097673957865443370',
     image: '0bWE5hC',
+    button: {
+      text: 'Install now',
+      color: 'indigo',
+    },
   },
   {
     id: 'more',
@@ -64,5 +93,9 @@ export const TOOLS: Tool[] = [
     description: 'This site is being actively developed',
     href: 'https://discord.gg/nDt7AjGJQH',
     image: '1nPm6VI',
+    button: {
+      text: 'Join Discord',
+      color: 'indigo',
+    },
   },
 ];

@@ -25,16 +25,16 @@ import { use, useEffect, useMemo, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
 import { UNLOCALIZED_REGION_NAMES_SHORT } from '../../../constants/regions';
 import {
-  generateStats,
-  prettifyStats,
-  Stat,
   STAT_KEYS,
   STAT_NAMES,
+  Stat,
+  generateStats,
+  prettifyStats,
   sumStats,
 } from '../../../core/blitz/generateStats';
 import {
-  getAccountInfo,
   IndividualAccountInfo,
+  getAccountInfo,
 } from '../../../core/blitz/getAccountInfo';
 import getTankStats from '../../../core/blitz/getTankStats';
 import { idToRegion } from '../../../core/blitz/idToRegion';
@@ -180,7 +180,7 @@ export default function Page({
   }
 
   return (
-    <PageWrapper>
+    <PageWrapper color="blue">
       <AlertDialog.Root
         open={showCCInaccessibilityPrompt}
         onOpenChange={setShowCCInaccessibilityPrompt}
