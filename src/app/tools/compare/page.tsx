@@ -440,13 +440,7 @@ export default function Page() {
         width="0"
         style={{ left: 0, position: 'relative' }}
       >
-        <Flex
-          direction="column"
-          align="center"
-          justify="between"
-          gap="2"
-          style={{ height: '100%' }}
-        >
+        <Flex direction="column" align="center" justify="between" gap="2">
           <TankControl index={index} key={tank.id} id={tank.id} />
 
           <Flex
