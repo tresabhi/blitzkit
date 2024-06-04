@@ -198,14 +198,7 @@ export default function Page() {
     return (
       <Table.Row>
         <Table.RowHeaderCell>
-          <Flex
-            align="center"
-            gap="2"
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
-          >
+          <Flex align="center" gap="2">
             <IconButton
               color={sorting?.by === name ? undefined : 'gray'}
               variant="ghost"
@@ -632,6 +625,7 @@ export default function Page() {
                   width="0"
                   style={{
                     position: 'relative',
+                    height: '100%',
                   }}
                 >
                   <Flex
