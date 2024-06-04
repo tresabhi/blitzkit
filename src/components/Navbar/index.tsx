@@ -83,6 +83,7 @@ export default function Navbar() {
                   key={tool.id}
                   color="gray"
                   size="2"
+                  highContrast={selected}
                   underline={selected ? 'always' : 'hover'}
                   href={`/tools/${tool.id}`}
                 >
