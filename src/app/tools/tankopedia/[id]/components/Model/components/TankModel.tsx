@@ -172,9 +172,10 @@ export const TankModel = memo(() => {
               duel.protagonist!.tank.equipment,
               duel.protagonist!.equipmentMatrix,
             );
+            const boundingRect = canvas.getBoundingClientRect();
             [pitch, yaw] = applyPitchYawLimits(
               pitch,
-              yaw + event.movementX * (Math.PI / canvas.width),
+              yaw + event.movementX * (Math.PI / boundingRect.width),
               gunModelDefinition.pitch,
               turretModelDefinition.yaw,
               hasImprovedVerticalStabilizer,
@@ -242,9 +243,10 @@ export const TankModel = memo(() => {
                 duel.protagonist!.tank.equipment,
                 duel.protagonist!.equipmentMatrix,
               );
+              const boundingRect = canvas.getBoundingClientRect();
               [pitch, yaw] = applyPitchYawLimits(
-                pitch - event.movementY * (Math.PI / canvas.height),
-                yaw + event.movementX * (Math.PI / canvas.width),
+                pitch - event.movementY * (Math.PI / boundingRect.height),
+                yaw + event.movementX * (Math.PI / boundingRect.width),
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
                 hasImprovedVerticalStabilizer,
