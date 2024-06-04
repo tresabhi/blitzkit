@@ -1,9 +1,9 @@
 import { CaretRightIcon } from '@radix-ui/react-icons';
-import { Button, Flex, Grid, Heading, Text } from '@radix-ui/themes';
+import { Box, Button, Flex, Grid, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import PageWrapper from '../components/PageWrapper';
 import { TOOLS } from '../constants/tools';
-import { imgur } from '../core/blitzkit/imgur';
+import { ImgurSize, imgur } from '../core/blitzkit/imgur';
 import { Hero } from './components/Hero';
 
 export default function Page() {
@@ -22,6 +22,10 @@ export default function Page() {
           flow="row-dense"
         >
           {TOOLS.map((tool) => {
+            const size = tool.significant
+              ? ImgurSize.HugeThumbnail
+              : ImgurSize.LargeThumbnail;
+
             return (
               <Flex
                 key={tool.id}
@@ -29,7 +33,7 @@ export default function Page() {
                   position: 'relative',
                   borderRadius: 'var(--radius-2)',
                   overflow: 'hidden',
-                  backgroundImage: `url(${imgur(tool.image, { format: 'jpeg' })})`,
+                  backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size })})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   height: tool.significant ? 'min(320px, 50vh)' : '256px',
@@ -45,11 +49,20 @@ export default function Page() {
                     display: 'flex',
                     width: '100%',
                     height: '100%',
-                    alignItems: 'end',
+                    flexDirection: 'column',
                     textDecoration: 'none',
                     color: 'inherit',
                   }}
                 >
+                  <Box
+                    flexGrow="1"
+                    style={{
+                      backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size })})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  />
+
                   <Flex
                     px={{
                       initial: '6',
@@ -66,7 +79,8 @@ export default function Page() {
                     }}
                     style={{
                       backgroundColor: 'var(--color-panel-translucent)',
-                      backdropFilter: 'blur(16px)',
+                      backdropFilter: 'blur(64px)',
+                      WebkitBackdropFilter: 'blur(64px)',
                     }}
                   >
                     <Flex
