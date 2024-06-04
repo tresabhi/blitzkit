@@ -655,7 +655,11 @@ export default function Page() {
 
             <Table.Body>
               <Table.Row>
-                <Table.Cell>
+                <Table.Cell
+                  style={{
+                    height: '100%',
+                  }}
+                >
                   <Flex
                     style={{
                       width: '100%',
@@ -791,10 +795,6 @@ export default function Page() {
                           justify="center"
                           direction="column"
                           gap="2"
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                          }}
                         >
                           <Popover.Root>
                             <Popover.Trigger>
@@ -881,6 +881,7 @@ export default function Page() {
                               </Flex>
                             </Popover.Content>
                           </Popover.Root>
+
                           <Flex align="center" justify="center" gap="3">
                             <Popover.Root>
                               <Popover.Trigger>
