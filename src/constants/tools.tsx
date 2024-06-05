@@ -67,7 +67,7 @@ export const TOOLS: Tool[] = [
     // TODO: rename to tracker
     id: 'session',
     title: 'Session',
-    description: 'Live session stats tracker',
+    description: 'Live session stats',
     pageDescription:
       'Track your stats in real time as you play World of Tanks Blitz',
     image: 'HdG9sTf',
@@ -79,7 +79,7 @@ export const TOOLS: Tool[] = [
   {
     id: 'discord',
     title: 'Discord bot',
-    description: 'Statistics right in Discord',
+    description: 'Stats right in Discord',
     href: 'https://discord.com/application-directory/1097673957865443370',
     image: '0bWE5hC',
     button: {
@@ -90,7 +90,7 @@ export const TOOLS: Tool[] = [
   {
     id: 'more',
     title: 'More coming soon',
-    description: "See what's being developed",
+    description: "What we're making",
     href: 'https://discord.gg/nDt7AjGJQH',
     image: '1nPm6VI',
     button: {

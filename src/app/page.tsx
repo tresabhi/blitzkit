@@ -68,7 +68,10 @@ export default function Page() {
                       initial: '6',
                       md: tool.significant ? '8' : '6',
                     }}
-                    py={tool.significant ? '6' : '4'}
+                    py={{
+                      initial: '4',
+                      sm: tool.significant ? '6' : '4',
+                    }}
                     gap="4"
                     align="center"
                     justify="between"
