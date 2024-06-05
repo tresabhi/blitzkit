@@ -1,27 +1,18 @@
-import { Card, Flex, Text } from '@radix-ui/themes';
+import { Card, Flex, Inset, Separator, Text } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { useEffect, useRef } from 'react';
-import { Mesh } from 'three';
+import { ComponentProps, useRef } from 'react';
+import { Euler, Mesh, Quaternion } from 'three';
 import { radToDeg } from 'three/src/math/MathUtils';
-import { canSplash } from '../../../core/blitz/canSplash';
-import { isExplosive } from '../../../core/blitz/isExplosive';
-import { NaNFallback } from '../../../core/math/NaNFallback';
-import { normalToEuler } from '../../../core/math/normalToEuler';
-import { AngledPenetration } from '../../../icons/AngledPenetration';
-import { Block } from '../../../icons/Block';
-import { NominalPenetration } from '../../../icons/NominalPenetration';
-import { Ricochet } from '../../../icons/Ricochet';
-import { useDuel } from '../../../stores/duel';
+import { J_HAT } from '../../../constants/axis';
 import {
   ShotLayer,
-  ShotLayerBase,
-  ShotLayerGap,
   ShotLayerNonExternal,
-  mutateTankopediaTemporary,
+  ShotStatus,
   useTankopediaTemporary,
 } from '../../../stores/tankopedia';
 import { ArmorType } from './SpacedArmorScene';
+import { ExternalModuleVariant } from './SpacedArmorSceneComponent';
 
 const layerTypeNames: Record<ArmorType | 'null', string> = {
   [ArmorType.Core]: 'Core',
@@ -30,297 +21,378 @@ const layerTypeNames: Record<ArmorType | 'null', string> = {
   null: 'Gap',
 };
 
+const externalLayerNames: Record<ExternalModuleVariant, string> = {
+  gun: 'Gun',
+  track: 'Tracks',
+};
+
+const shotStatusNames: Record<ShotStatus, string> = {
+  blocked: 'Blocked',
+  ricochet: 'Ricochet',
+  penetration: 'penetration',
+  splash: 'splash',
+};
+
+const shotStatusColors: Record<
+  ShotStatus,
+  ComponentProps<typeof Text>['color']
+> = {
+  blocked: 'red',
+  penetration: 'green',
+  ricochet: 'yellow',
+  splash: 'orange',
+};
+
+const SURFACE_POINT_SIZE = 12;
 const LENGTH_INFINITY = 4;
-const TRACER_THICK = 1 / 64;
+const TRACER_THICK = 1 / 32;
 const TRACER_THIN = TRACER_THICK / 2;
+
+function LayerEntry({
+  layerIndex,
+  shotStatusColor,
+  layerName,
+  layer,
+  angle,
+}: {
+  layerIndex?: string;
+  shotStatusColor: ComponentProps<typeof Text>['color'];
+  layerName: string;
+  layer: ShotLayer;
+  angle?: number;
+}) {
+  return (
+    <Flex align="center" gap="2">
+      <Text
+        size="1"
+        color="gray"
+        style={{
+          width: 12,
+        }}
+      >
+        {layerIndex}
+      </Text>
+      <Text size="2" color={shotStatusColor} style={{ width: 47 }}>
+        {layerName}
+      </Text>
+
+      {layer.type === null && (
+        <>
+          <Text
+            size="2"
+            color={shotStatusColor}
+            style={{
+              width: 64,
+            }}
+          >
+            {Math.round(layer.distance * 1000).toLocaleString()}
+            <Text size="1">mm</Text>
+          </Text>
+
+          <Text size="2" color="gray">
+            {Math.max(-100, Math.round(-50 * layer.distance))}% penetration
+          </Text>
+        </>
+      )}
+
+      {layer.type === ArmorType.External && (
+        <Text
+          size="2"
+          color={shotStatusColor}
+          style={{
+            width: 64,
+          }}
+        >
+          {Math.round(layer.thickness).toLocaleString()}
+          <Text size="1">mm</Text>
+        </Text>
+      )}
+
+      {(layer.type === ArmorType.Core || layer.type === ArmorType.Spaced) && (
+        <>
+          <Text
+            size="2"
+            color={shotStatusColor}
+            style={{
+              width: 80,
+            }}
+          >
+            {Math.round(layer.thicknessAngled).toLocaleString()}
+            <Text size="1">{`mm${angle === undefined ? '' : ` ${Math.round(radToDeg(angle))}°`}`}</Text>
+          </Text>
+
+          <Text size="2" color="gray">
+            {Math.round(layer.thickness).toLocaleString()}
+            <Text size="1">mm</Text> nominal
+          </Text>
+        </>
+      )}
+    </Flex>
+  );
+}
 
 export function ShotDisplay() {
   const shot = useTankopediaTemporary((state) => state.shot);
-  const preMidPointTracer = useRef<Mesh>(null);
-  const postMidPointTracer = useRef<Mesh>(null);
-  const hasMultipleLayers = shot?.layers.some(
-    (layer, index) => index !== 0 && layer.type !== null,
-  );
-  const { shell } = useDuel.getState().antagonist!;
-  const explosive = isExplosive(shell.type);
-  const splashing = canSplash(shell.type);
-  const midPointLayer = (shot?.layers.findLast(
-    (layer) => layer.type !== null && layer.status === 'ricochet',
-  ) ?? shot?.layers.findLast((layer) => layer.type !== null)) as ShotLayerBase;
-  const firstLayer = shot?.layers[0] as Exclude<ShotLayer, ShotLayerGap>;
-  const lastLayer = shot?.layers.at(-1)!;
-  const distanceFromSpacedArmor = shot
-    ? firstLayer.point.distanceTo(shot.point)
-    : undefined;
-  const preMidPointLayers = shot?.layers.slice(
-    0,
-    shot.layers.indexOf(midPointLayer as ShotLayer),
-  );
-  const postMidPointLayers = shot?.layers.slice(
-    shot.layers.indexOf(midPointLayer as ShotLayer),
-    shot.layers.length,
-  );
-  const preMidPointGap = shot
-    ? preMidPointLayers!.reduce((accumulator, layer) => {
-        if (layer.type === null) return accumulator + layer.distance;
-        return accumulator;
-      }, 0) + LENGTH_INFINITY
-    : undefined;
-  const preMidPointThickness = shot
-    ? preMidPointLayers!.reduce(
-        (accumulator, layer) =>
-          accumulator +
-          (layer.type === null
-            ? 0
-            : layer.type === ArmorType.External
-              ? layer.thickness
-              : layer.thicknessAngled),
-        0,
-      )
-    : undefined;
-  const postMidPointGap = shot
-    ? postMidPointLayers!.reduce((accumulator, layer) => {
-        if (layer.type === null) return accumulator + layer.distance;
-        return accumulator;
-      }, 0) || LENGTH_INFINITY
-    : undefined;
+  const inTracer = useRef<Mesh>(null);
+  const outTracer = useRef<Mesh>(null);
 
   useFrame(({ clock }) => {
-    if (!shot || !preMidPointTracer.current) return;
+    if (!shot || !inTracer.current) return;
 
     const t1 = clock.elapsedTime % 1;
     const t2 = (clock.elapsedTime + 0.5) % 1;
 
-    preMidPointTracer.current.position.set(0, (1 - t1) * preMidPointGap!, 0);
-    preMidPointTracer.current.scale.set(1, 1 - 2 * Math.abs(t1 - 0.5), 1);
+    inTracer.current.scale.set(1, 1 - 2 * Math.abs(t1 - 0.5), 1);
+    inTracer.current.position.set(0, (1 - t1) * inLength, 0);
 
-    if (!postMidPointTracer.current) return;
+    if (!outTracer.current) return;
 
-    postMidPointTracer.current.position.set(0, t2 * postMidPointGap!, 0);
-    postMidPointTracer.current.scale.set(1, 1 - 2 * Math.abs(t2 - 0.5), 1);
-  });
-
-  useEffect(() => {
-    function resetShot() {
-      mutateTankopediaTemporary((draft) => {
-        draft.shot = undefined;
-      });
-    }
-
-    const unsubscribes = [
-      useDuel.subscribe((state) => state.protagonist?.tank, resetShot),
-      useDuel.subscribe((state) => state.antagonist?.tank, resetShot),
-    ];
-
-    return () => {
-      unsubscribes.forEach((unsubscribe) => unsubscribe());
-    };
+    outTracer.current.scale.set(1, 1 - 2 * Math.abs(t2 - 0.5), 1);
+    outTracer.current.position.set(0, t2 * outLength, 0);
   });
 
   if (!shot) return null;
 
+  const inLength =
+    shot.in.layers.reduce((accumulator, layer) => {
+      if (layer.type === null) return accumulator + layer.distance;
+      return accumulator;
+    }, 0) + LENGTH_INFINITY;
+  const outLength =
+    shot.out && shot.out.layers.length > 0
+      ? (shot.in.layers.at(-1) as ShotLayerNonExternal).point.distanceTo(
+          (shot.out.layers.at(-1) as ShotLayerNonExternal).point,
+        )
+      : LENGTH_INFINITY;
+  const inLast = shot.in.layers.findLast(
+    (layer) => layer.type !== null,
+  ) as ShotLayerNonExternal;
+  const outTitleColor = shot.out
+    ? shotStatusColors[shot.out.status]
+    : undefined;
+  const inTitleColor = shotStatusColors[shot.in.status];
+
   return (
-    <>
-      <group
-        position={midPointLayer.point}
-        rotation={normalToEuler(midPointLayer.shellNormal)}
+    <group>
+      <Html
+        position={inLast.point}
+        style={{
+          pointerEvents: 'none',
+          transform: 'translateY(-50%)',
+        }}
       >
-        <mesh position={[0, preMidPointGap! / 2, 0]}>
-          <cylinderGeometry args={[TRACER_THIN, TRACER_THIN, preMidPointGap]} />
-          <meshBasicMaterial depthTest={false} />
+        <Card ml="9" style={{ width: 300 }}>
+          <Flex direction="column" gap="2">
+            <Flex direction="column" gap="1">
+              <Text color={inTitleColor} weight="bold">
+                {shot.in.status !== 'blocked' &&
+                  shot.in.status !== 'ricochet' && (
+                    <>
+                      {Math.round(shot.damage).toLocaleString()}
+                      <Text size="1">hp</Text>
+                    </>
+                  )}
+                {` ${shotStatusNames[shot.in.status]} `}
+              </Text>
+
+              <Flex direction="column">
+                {shot.in.layers.map((layer, index) => {
+                  const layerName =
+                    layer.type === ArmorType.External
+                      ? externalLayerNames[layer.variant]
+                      : layerTypeNames[`${layer.type}`];
+                  const layerIndex =
+                    layer.type === null
+                      ? undefined
+                      : `${(shot.containsGaps ? index / 2 : index) + 1}.`;
+                  const shotStatusColor =
+                    shot.in.status === 'splash'
+                      ? shotStatusColors.splash
+                      : shotStatusColors[layer.status];
+
+                  return (
+                    <LayerEntry
+                      key={index}
+                      layer={layer}
+                      layerIndex={layerIndex}
+                      layerName={layerName}
+                      shotStatusColor={shotStatusColor}
+                      angle={
+                        layer.type === ArmorType.Core ||
+                        layer.type === ArmorType.Spaced
+                          ? layer.angle
+                          : undefined
+                      }
+                    />
+                  );
+                })}
+              </Flex>
+            </Flex>
+
+            {shot.out && shot.out.layers.length > 0 && (
+              <>
+                <Inset side="x">
+                  <Flex align="center" gap="2">
+                    <Separator
+                      style={{
+                        flex: 1,
+                      }}
+                    />
+                    <Text size="1" color="gray">
+                      ricochet (-25% penetration)
+                    </Text>
+                    <Separator
+                      style={{
+                        flex: 1,
+                      }}
+                    />
+                  </Flex>
+                </Inset>
+
+                <Text color={outTitleColor} weight="bold">
+                  {shot.out.status !== 'blocked' &&
+                    shot.out.status !== 'ricochet' && (
+                      <>
+                        {Math.round(shot.damage).toLocaleString()}
+                        <Text size="1">hp</Text>
+                      </>
+                    )}
+                  {` ${shotStatusNames[shot.out.status]} `}
+                </Text>
+
+                <Flex direction="column">
+                  {shot.out.layers.map((layer, index) => {
+                    const layerName =
+                      layer.type === ArmorType.External
+                        ? externalLayerNames[layer.variant]
+                        : layerTypeNames[`${layer.type}`];
+                    const shiftedIndex = index + shot.out!.layers.length;
+                    const layerIndex =
+                      layer.type === null
+                        ? undefined
+                        : `${(shot.containsGaps ? shiftedIndex / 2 : shiftedIndex) + 1}.`;
+                    const shotStatusColor =
+                      shot.out!.status === 'splash'
+                        ? shotStatusColors.splash
+                        : shotStatusColors[layer.status];
+
+                    return (
+                      <LayerEntry
+                        key={index}
+                        layer={layer}
+                        layerIndex={layerIndex}
+                        layerName={layerName}
+                        shotStatusColor={shotStatusColor}
+                        angle={
+                          layer.type === ArmorType.Core ||
+                          layer.type === ArmorType.Spaced
+                            ? layer.angle
+                            : undefined
+                        }
+                      />
+                    );
+                  })}
+                </Flex>
+              </>
+            )}
+          </Flex>
+        </Card>
+      </Html>
+
+      {[...shot.in.layers, ...(shot.out?.layers ?? [])].map((layer, index) => {
+        if (layer.type === null) return null;
+
+        const shotStatusColor =
+          shot.in.status === 'splash'
+            ? shotStatusColors.splash
+            : shotStatusColors[layer.status];
+
+        return (
+          <Html
+            position={layer.point}
+            key={index}
+            style={{
+              pointerEvents: 'none',
+              transform: 'translateY(-50%)',
+            }}
+          >
+            <Flex
+              style={{
+                marginLeft: -SURFACE_POINT_SIZE / 2,
+              }}
+            >
+              <div
+                style={{
+                  width: SURFACE_POINT_SIZE,
+                  height: SURFACE_POINT_SIZE,
+                  backgroundColor: shotStatusColor,
+                  opacity: 0.75,
+                  borderRadius: SURFACE_POINT_SIZE / 2,
+                }}
+              />
+            </Flex>
+          </Html>
+        );
+      })}
+
+      <group
+        position={inLast.point}
+        rotation={new Euler().setFromQuaternion(
+          new Quaternion().setFromUnitVectors(J_HAT, shot.in.surfaceNormal),
+        )}
+      >
+        <mesh position={[0, inLength / 2, 0]} renderOrder={2}>
+          <cylinderGeometry
+            args={[TRACER_THIN / 2, TRACER_THIN / 2, inLength]}
+          />
+          <meshBasicMaterial depthTest={false} transparent />
         </mesh>
 
-        <mesh position={[0, preMidPointGap! / 2, 0]} ref={preMidPointTracer}>
+        <mesh ref={inTracer} position={[0, inLength / 2, 0]} renderOrder={3}>
           <cylinderGeometry
-            args={[TRACER_THICK, TRACER_THICK, preMidPointGap]}
+            args={[TRACER_THICK / 2, TRACER_THICK / 2, inLength]}
           />
           <meshBasicMaterial
-            color={
-              lastLayer.status === 'blocked'
-                ? 0xff4040
-                : lastLayer.status === 'penetration'
-                  ? 0x00ff00
-                  : 0xffff00
-            }
+            color={inTitleColor}
+            depthTest={false}
+            transparent
           />
         </mesh>
       </group>
 
-      {midPointLayer.status === 'ricochet' && (
+      {shot.out && (
         <group
-          position={midPointLayer.point}
-          rotation={normalToEuler(
-            midPointLayer.shellNormal
-              .clone()
-              .reflect(midPointLayer.surfaceNormal)
-              .multiplyScalar(-1),
+          position={inLast.point}
+          rotation={new Euler().setFromQuaternion(
+            new Quaternion().setFromUnitVectors(
+              J_HAT,
+              shot.out.surfaceNormal.clone(),
+            ),
           )}
         >
-          <mesh position={[0, postMidPointGap! / 2, 0]}>
+          <mesh position={[0, outLength / 2, 0]} renderOrder={2}>
             <cylinderGeometry
-              args={[TRACER_THIN, TRACER_THIN, postMidPointGap]}
+              args={[TRACER_THIN / 2, TRACER_THIN / 2, outLength]}
             />
-            <meshBasicMaterial depthTest={false} />
+            <meshBasicMaterial depthTest={false} transparent />
           </mesh>
 
           <mesh
-            position={[0, postMidPointGap! / 2, 0]}
-            ref={postMidPointTracer}
+            ref={outTracer}
+            position={[0, outLength / 2, 0]}
+            renderOrder={3}
           >
             <cylinderGeometry
-              args={[TRACER_THICK, TRACER_THICK, postMidPointGap]}
+              args={[TRACER_THICK / 2, TRACER_THICK / 2, outLength]}
             />
-            <meshBasicMaterial color={0xffff00} />
+            <meshBasicMaterial
+              color={outTitleColor}
+              depthTest={false}
+              transparent
+            />
           </mesh>
         </group>
       )}
-
-      {shot.layers.map((layer, index) => {
-        if (layer.type === null) return;
-
-        const shellRotation = normalToEuler(layer.shellNormal);
-        const nextLayer = shot.layers[index + 1] as ShotLayerGap | undefined;
-        const trueStatus =
-          nextLayer?.status === 'blocked' ? 'blocked' : layer.status;
-
-        return (
-          <>
-            <group
-              key={`${index}-line`}
-              position={layer.point}
-              rotation={shellRotation}
-            >
-              <Html
-                center
-                style={{
-                  pointerEvents: 'none',
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor:
-                      trueStatus === 'penetration'
-                        ? '#00ff0080'
-                        : trueStatus === 'blocked'
-                          ? '#ff000080'
-                          : '#ffff0080',
-                    borderRadius: 8,
-                    border: 'none',
-                    padding: 4,
-                    width: hasMultipleLayers ? undefined : 8,
-                    height: hasMultipleLayers ? undefined : 8,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {hasMultipleLayers && (
-                    <Text
-                      size="2"
-                      style={{
-                        width: '100%',
-                        display: 'block',
-                        textAlign: 'center',
-                        color: trueStatus === 'ricochet' ? 'black' : undefined,
-                      }}
-                    >
-                      <b>{layer.index + 1}</b>
-                    </Text>
-                  )}
-                </div>
-              </Html>
-            </group>
-          </>
-        );
-      })}
-
-      <Html
-        position={midPointLayer.point}
-        style={{
-          transform: 'translateY(-50%)',
-          marginLeft: 32,
-          pointerEvents: 'none',
-        }}
-      >
-        <Card style={{ width: 256 + 32 }}>
-          <Flex direction="column">
-            <Text>
-              {lastLayer.status[0].toUpperCase()}
-              {lastLayer.status.slice(1)}
-              {lastLayer.status === 'penetration' &&
-                `: ${Math.round(shell.damage.armor)}hp`}
-              {lastLayer.status === 'blocked' &&
-                shell.type === 'he' &&
-                `: ${NaNFallback(
-                  Math.max(
-                    0,
-                    Math.round(
-                      0.5 *
-                        shell.damage.armor *
-                        (1 -
-                          distanceFromSpacedArmor! / shell.explosionRadius!) -
-                        1.1 *
-                          ((midPointLayer as ShotLayerNonExternal)
-                            .thicknessAngled +
-                            preMidPointThickness!),
-                    ),
-                  ),
-                  0,
-                )}hp`}
-            </Text>
-
-            {shot.layers.map((layer, index) => {
-              if (layer.type === null && (!explosive || splashing)) return null;
-
-              return (
-                <Flex key={index} align="center" gap="2">
-                  <Flex>
-                    {hasMultipleLayers && (
-                      <Text size="2" style={{ width: 16 }}>
-                        {layer.type === null ? null : `${layer.index + 1}.`}
-                      </Text>
-                    )}
-                    <Text size="2">{layerTypeNames[`${layer.type}`]}</Text>
-                  </Flex>
-
-                  {layer.type !== null && (
-                    <>
-                      <Flex align="center" style={{ width: 64 }}>
-                        <NominalPenetration width={16} height={16} />
-                        <Text size="2">{Math.round(layer.thickness)}mm</Text>
-                      </Flex>
-
-                      {layer.type !== ArmorType.External && (
-                        <Flex align="center">
-                          {layer.status === 'ricochet' ? (
-                            <Ricochet width={16} height={16} />
-                          ) : layer.status === 'blocked' ? (
-                            <Block width={16} height={16} />
-                          ) : (
-                            <AngledPenetration width={16} height={16} />
-                          )}
-                          <Text size="2">
-                            {Math.round(layer.thicknessAngled)}mm (
-                            {Math.round(radToDeg(layer.angle))}°)
-                          </Text>
-                        </Flex>
-                      )}
-                    </>
-                  )}
-
-                  {layer.type === null && (
-                    <Text size="2">
-                      {Math.round(layer.distance * 1000)}mm (-
-                      {Math.round(Math.min(100, layer.distance * 50))}%
-                      penetration)
-                    </Text>
-                  )}
-                </Flex>
-              );
-            })}
-          </Flex>
-        </Card>
-      </Html>
-    </>
+    </group>
   );
 }

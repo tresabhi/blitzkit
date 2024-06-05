@@ -1,5 +1,5 @@
 import { CaretLeftIcon, CaretRightIcon } from '@radix-ui/react-icons';
-import { Button, Flex, TextField } from '@radix-ui/themes';
+import { Flex, IconButton, TextField } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
 import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
 import mutateTankopediaPersistent, {
@@ -21,7 +21,7 @@ export function PageTurner({ searchedList, tanksPerPage }: PageTurnerProps) {
 
   return (
     <Flex align="center" justify="center" gap="2">
-      <Button
+      <IconButton
         variant="soft"
         disabled={page === 0}
         onClick={() => {
@@ -31,7 +31,7 @@ export function PageTurner({ searchedList, tanksPerPage }: PageTurnerProps) {
         }}
       >
         <CaretLeftIcon />
-      </Button>
+      </IconButton>
       <TextField.Root
         defaultValue={1}
         type="number"
@@ -61,7 +61,7 @@ export function PageTurner({ searchedList, tanksPerPage }: PageTurnerProps) {
           out of {Math.floor(searchedList.length / tanksPerPage) + 1}
         </TextField.Slot>
       </TextField.Root>
-      <Button
+      <IconButton
         variant="soft"
         disabled={Math.floor(searchedList.length / tanksPerPage) === page}
         onClick={() => {
@@ -74,7 +74,7 @@ export function PageTurner({ searchedList, tanksPerPage }: PageTurnerProps) {
         }}
       >
         <CaretRightIcon />
-      </Button>
+      </IconButton>
     </Flex>
   );
 }

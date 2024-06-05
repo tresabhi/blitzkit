@@ -1,10 +1,11 @@
 {
   "name": "blitzkit",
-  "version": "1.20.0",
+  "version": "1.20.1",
   "description": "🎉 Tools for everything World of Tanks Blitz",
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
+    "build:averages": "bun scripts/averages",
     "build:db": "prisma generate",
     "build:bot": "vite-node --script scripts/build --production",
     "build:website": "yarn build:db && yarn build:sitemap && next build",
@@ -60,10 +61,12 @@
     "lodash": "^4.17.21",
     "lz4js": "^0.2.0",
     "markdown-escape": "^2.0.0",
+    "markdown-to-jsx": "^7.4.7",
     "next": "^14.1.0",
     "parse-dds": "^1.2.1",
     "pickleparser": "^0.2.1",
     "postprocessing": "^6.34.1",
+    "progress": "^2.0.3",
     "protobufjs": "^7.2.6",
     "react": "^18.2.0",
     "react-device-detect": "^2.2.3",
@@ -94,6 +97,7 @@
     "@types/node": "^20.6.5",
     "@types/parse-dds": "^1.0.3",
     "@types/pngjs": "^6.0.4",
+    "@types/progress": "^2.0.7",
     "@types/react": "^18.2.22",
     "@vanilla-extract/next-plugin": "^2.3.1",
     "compare-versions": "^6.1.0",
@@ -103,7 +107,7 @@
     "lz4": "^0.6.5",
     "prettier": "^3.0.3",
     "prisma": "^5.4.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.4.5"
   },
   "packageManager": "yarn@1.22.1"
 }

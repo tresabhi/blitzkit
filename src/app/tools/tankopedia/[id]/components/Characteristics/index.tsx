@@ -11,8 +11,10 @@ import {
 import { debounce } from 'lodash';
 import { Fragment, use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
+import { Link } from '../../../../../../components/Link';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
+import { resolvePenetrationCoefficient } from '../../../../../../core/blitz/resolvePenetrationCoefficient';
 import { asset } from '../../../../../../core/blitzkit/asset';
 import { coefficient } from '../../../../../../core/blitzkit/coefficient';
 import { equipmentDefinitions } from '../../../../../../core/blitzkit/equipmentDefinitions';
@@ -101,13 +103,7 @@ export function Characteristics() {
   const hasImprovedVerticalStabilizer = useEquipment(122);
   const penetrationCoefficient = coefficient([
     hasCalibratedShells,
-    shell.type === 'ap'
-      ? 0.08
-      : shell.type === 'ap_cr'
-        ? 0.05
-        : shell.type === 'hc'
-          ? 0.13
-          : 0.08,
+    resolvePenetrationCoefficient(true, shell.type) - 1,
   ]);
   const penetrationLossOverDistanceCoefficient = coefficient([
     hasSupercharger,
@@ -189,12 +185,9 @@ export function Characteristics() {
               <Info
                 indent
                 name={
-                  <a
-                    target="_blank"
-                    href="https://tresabhi.github.io/blitzkit/guide/dpm.html"
-                  >
+                  <Link target="_blank" href="/docs/guide/dpm">
                     What's the difference?
-                  </a>
+                  </Link>
                 }
               />
             </>
@@ -311,7 +304,7 @@ export function Characteristics() {
           <InfoWithDelta name="Normalization" decimals={0} unit="°">
             {stats.shellNormalization}
           </InfoWithDelta>
-          {shell.type !== 'he' && (
+          {!isExplosive(shell.type) && (
             <InfoWithDelta
               name="Ricochet"
               decimals={0}

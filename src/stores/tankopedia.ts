@@ -5,6 +5,7 @@ import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { ENVIRONMENTS } from '../app/tools/tankopedia/[id]/components/Lighting';
 import { ArmorType } from '../components/Armor/components/SpacedArmorScene';
+import { ExternalModuleVariant } from '../components/Armor/components/SpacedArmorSceneComponent';
 import { TankClass, TreeType } from '../components/Tanks';
 import { Tier } from '../core/blitzkit/tankDefinitions';
 
@@ -50,13 +51,13 @@ export interface ShotLayerBase {
   index: number;
   thickness: number;
   point: Vector3;
-  shellNormal: Vector3;
   surfaceNormal: Vector3;
   status: 'blocked' | 'penetration' | 'ricochet';
 }
 
 interface ShotLayerExternal extends ShotLayerBase {
   type: ArmorType.External;
+  variant: ExternalModuleVariant;
 }
 
 export interface ShotLayerNonExternal extends ShotLayerBase {
@@ -74,9 +75,22 @@ export interface ShotLayerGap {
 export type ShotLayer = ShotLayerExternal | ShotLayerNonExternal | ShotLayerGap;
 
 export type Shot = {
-  point: Vector3;
-  layers: ShotLayer[];
+  containsGaps: boolean;
+  damage: number;
+
+  in: {
+    surfaceNormal: Vector3;
+    status: ShotStatus;
+    layers: ShotLayer[];
+  };
+  out?: {
+    surfaceNormal: Vector3;
+    status: ShotStatus;
+    layers: ShotLayer[];
+  };
 };
+
+export type ShotStatus = 'penetration' | 'blocked' | 'ricochet' | 'splash';
 
 export type ArmorPiercingLayer =
   | {

@@ -2,7 +2,6 @@ import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef } from 'react';
 import { Armor } from '../../../../../../components/Armor';
-import { ShotDisplay } from '../../../../../../components/Armor/components/ShotDisplay';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
@@ -131,6 +130,9 @@ export function TankSandbox() {
           draft.shot = undefined;
         });
       }}
+      style={{
+        userSelect: 'none',
+      }}
     >
       <PerspectiveCamera makeDefault fov={25} far={32} />
       <Controls />
@@ -140,7 +142,6 @@ export function TankSandbox() {
         <Lighting />
         <TankModel />
         <Armor />
-        <ShotDisplay />
       </Suspense>
     </Canvas>
   );

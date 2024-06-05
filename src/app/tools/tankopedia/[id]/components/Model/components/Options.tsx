@@ -6,12 +6,14 @@ import {
   GearIcon,
 } from '@radix-ui/react-icons';
 import {
+  Box,
   Button,
   Dialog,
   DropdownMenu,
   Flex,
   Heading,
   IconButton,
+  Strong,
   Switch,
   Tabs,
   Text,
@@ -74,6 +76,31 @@ export function Options() {
 
   return (
     <>
+      {isFullScreen && (
+        <Box
+          pl="4"
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: '50%',
+            transform: 'translateY(-50%)',
+          }}
+        >
+          <Text
+            size={{
+              initial: '3',
+              xs: '5',
+            }}
+            color="gray"
+            style={{
+              writingMode: 'vertical-lr',
+            }}
+          >
+            <Strong>BlitzKit</Strong> Tankopedia
+          </Text>
+        </Box>
+      )}
+
       <RotationInputs />
 
       {mode === 'armor' && (
@@ -93,7 +120,10 @@ export function Options() {
                 color={thisShell.id === antagonistShell.id ? undefined : 'gray'}
                 variant="soft"
                 key={thisShell.id}
-                size="3"
+                size={{
+                  initial: '2',
+                  sm: '3',
+                }}
                 style={{
                   borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
                   borderTopRightRadius: shellIndex === 0 ? undefined : 0,
@@ -111,13 +141,18 @@ export function Options() {
                   mutateDuel((draft) => {
                     draft.antagonist!.shell = thisShell;
                   });
+                  mutateTankopediaTemporary((draft) => {
+                    draft.shot = undefined;
+                  });
                 }}
               >
                 <img
                   alt={thisShell.name}
-                  width={20}
-                  height={20}
                   src={asset(`icons/shells/${thisShell.icon}.webp`)}
+                  style={{
+                    width: '50%',
+                    height: '50%',
+                  }}
                 />
               </IconButton>
             ))}
@@ -131,26 +166,37 @@ export function Options() {
                 borderBottomRightRadius: 0,
                 borderBottomLeftRadius: 0,
               }}
-              size="3"
+              size={{
+                initial: '2',
+                sm: '3',
+              }}
               onClick={() => {
                 mutateDuel((draft) => {
                   draft.antagonist!.equipmentMatrix[0][0] = hasCalibratedShells
                     ? 0
                     : 1;
                 });
+                mutateTankopediaTemporary((draft) => {
+                  draft.shot = undefined;
+                });
               }}
             >
               <img
                 alt="Calibrated Shells"
-                width={20}
-                height={20}
                 src={asset('icons/equipment/103.webp')}
+                style={{
+                  width: '50%',
+                  height: '50%',
+                }}
               />
             </IconButton>
             <IconButton
               color={hasEnhancedArmor ? undefined : 'gray'}
               variant="soft"
-              size="3"
+              size={{
+                initial: '2',
+                sm: '3',
+              }}
               style={{
                 borderTopRightRadius: 0,
                 borderTopLeftRadius: 0,
@@ -162,13 +208,18 @@ export function Options() {
                     ? 0
                     : -1;
                 });
+                mutateTankopediaTemporary((draft) => {
+                  draft.shot = undefined;
+                });
               }}
             >
               <img
                 alt="Enhanced Armor"
-                width={20}
-                height={20}
                 src={asset('icons/equipment/110.webp')}
+                style={{
+                  width: '50%',
+                  height: '50%',
+                }}
               />
             </IconButton>
           </Flex>

@@ -1,70 +1,103 @@
-import { Card, Code, Flex, Link, Spinner, Text, Theme } from '@radix-ui/themes';
-import { Suspense } from 'react';
-import packageJSON from '../../../package.json';
-import { useWideFormat } from '../../hooks/useWideFormat';
-import { WoTBVersion } from './components/WoTBVersion';
+'use client';
+
+import { Flex, Heading, Text, Theme } from '@radix-ui/themes';
+import packageJson from '../../../package.json';
+import { Link } from '../Link';
 
 export function Footer() {
-  const wideFormat = useWideFormat(640);
-
   return (
     <Theme radius="none">
-      <Card>
-        <Flex justify="center" align="center" gap="3">
-          <Flex
-            align="center"
-            justify={wideFormat ? 'between' : 'center'}
-            wrap="wrap"
-            style={{
-              width: '100%',
-              maxWidth: 800,
-              padding: '0 16px',
-            }}
-          >
-            <Flex gap="1" justify="center" align="center">
-              <Text color="gray" size="2">
-                BlitzKit
+      <Flex
+        justify="center"
+        gap="3"
+        p="6"
+        style={{
+          backgroundColor: 'var(--color-panel)',
+        }}
+      >
+        <Flex
+          align="center"
+          justify="between"
+          maxWidth="640px"
+          flexGrow="1"
+          gap="6"
+          position="relative"
+          direction={{
+            initial: 'column',
+            sm: 'row',
+          }}
+        >
+          <Flex direction="column">
+            <Heading>
+              BlitzKit{' '}
+              <Text color="gray" size="1" weight="regular">
+                {packageJson.version}
               </Text>
+            </Heading>
 
-              <Code color="gray" size="2">
-                {packageJSON.version}
-              </Code>
+            <Text color="gray">Everything World of Tanks Blitz</Text>
+          </Flex>
 
-              <Text color="gray" size="2">
-                for WoTB
-              </Text>
-
-              <Suspense fallback={<Spinner />}>
-                <WoTBVersion />
-              </Suspense>
-            </Flex>
-
+          <Flex gap="6">
             <Flex
-              justify="center"
-              align="center"
-              gap="2"
-              style={{
-                maxWidth: 800,
-                padding: '0 16px',
+              direction="column"
+              gap="1"
+              align={{
+                initial: 'end',
+                sm: 'start',
               }}
             >
-              <Link size="2" href="https://tresabhi.github.io/" target="_blank">
-                Made by TrèsAbhi
-              </Link>
-
-              <Text color="gray">•</Text>
-
-              <Link
-                size="2"
-                href="https://tresabhi.github.io/blitzkit/guide/credits.html"
-                target="_blank"
+              <Heading size="3">About</Heading>
+              <Flex
+                direction="column"
+                align={{
+                  initial: 'end',
+                  sm: 'start',
+                }}
               >
-                Full credits
-              </Link>
+                <Link href="/docs/about/credits" color="gray">
+                  Credits
+                </Link>
+                <Link
+                  href="https://discord.gg/nDt7AjGJQH"
+                  target="_blank"
+                  color="gray"
+                >
+                  Discord
+                </Link>
+                <Link
+                  href="https://github.com/tresabhi/blitzkit"
+                  target="_blank"
+                  color="gray"
+                >
+                  GitHub
+                </Link>
+
+                {/* patreon supporters? */}
+              </Flex>
+            </Flex>
+
+            <Flex direction="column" gap="1">
+              <Heading size="3">Legal</Heading>
+              <Flex direction="column">
+                <Link href="/docs/legal/privacy-policy" color="gray">
+                  Privacy policy
+                </Link>
+                <Link href="/docs/legal/terms-of-service" color="gray">
+                  Terms of service
+                </Link>
+                <Link
+                  href="https://www.google.com/settings/ads"
+                  target="_blank"
+                  color="gray"
+                >
+                  Ad settings
+                </Link>
+              </Flex>
             </Flex>
           </Flex>
         </Flex>
-      </Card>
+      </Flex>
     </Theme>
   );
 }

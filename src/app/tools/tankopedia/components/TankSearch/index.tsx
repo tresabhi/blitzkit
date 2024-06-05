@@ -1,6 +1,4 @@
-import { slateDark } from '@radix-ui/colors';
 import {
-  CaretDownIcon,
   CaretRightIcon,
   MagnifyingGlassIcon,
   TrashIcon,
@@ -8,20 +6,17 @@ import {
 import {
   AlertDialog,
   Button,
-  Card,
-  DropdownMenu,
   Flex,
-  Inset,
+  Spinner,
   Text,
   TextField,
 } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
-import Link from 'next/link';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
+import { isMobileOnly } from 'react-device-detect';
 import { TreeType } from '../../../../../components/Tanks';
 import { TANK_CLASSES } from '../../../../../components/Tanks/components/Item/constants';
 import { resolveNearPenetration } from '../../../../../core/blitz/resolveNearPenetration';
-import { asset } from '../../../../../core/blitzkit/asset';
 import { modelDefinitions } from '../../../../../core/blitzkit/modelDefinitions';
 import { normalizeBoundingBox } from '../../../../../core/blitzkit/normalizeBoundingBox';
 import { resolveDpm } from '../../../../../core/blitzkit/resolveDpm';
@@ -31,24 +26,15 @@ import {
   TankDefinition,
   tanksDefinitionsArray,
 } from '../../../../../core/blitzkit/tankDefinitions';
-import {
-  TANK_ICONS,
-  TANK_ICONS_COLLECTOR,
-  TANK_ICONS_PREMIUM,
-  TIER_ROMAN_NUMERALS,
-} from '../../../../../core/blitzkit/tankDefinitions/constants';
-import { tankIcon } from '../../../../../core/blitzkit/tankIcon';
 import { unionBoundingBox } from '../../../../../core/blitzkit/unionBoundingBox';
-import { theme } from '../../../../../stitches.config';
 import mutateTankopediaPersistent, {
   SORT_NAMES,
-  TankopediaSortDirection,
   useTankopediaPersistent,
 } from '../../../../../stores/tankopedia';
-import * as styles from '../../page.css';
 import { PageTurner } from '../PageTurner';
-import { CompactSearchResultRow } from './components/CompactSearchResultRow';
 import { Options } from './components/Options';
+import { Results } from './components/Results';
+import { Sort } from './components/Sort';
 
 interface TankSearchProps {
   compact?: boolean;
@@ -63,12 +49,13 @@ export function TankSearch({
   onSelect = () => {},
   onSelectAll,
 }: TankSearchProps) {
-  const tanksPerPage = compact ? 16 : 96;
+  const tanksPerPage = (compact ? 16 : 96) * (isMobileOnly ? 0.5 : 1);
   const nations = use(NATIONS);
   const filters = useTankopediaPersistent((state) => state.filters);
   const sort = useTankopediaPersistent((state) => state.sort);
   const awaitedTanks = use(tanksDefinitionsArray);
   const awaitedModelDefinitions = use(modelDefinitions);
+  const [loaded, setLoaded] = useState(false);
   const defaultSortedTanks = useMemo(
     () =>
       awaitedTanks
@@ -414,13 +401,6 @@ export function TankSearch({
     page * tanksPerPage,
     (page + 1) * tanksPerPage,
   );
-  const firstChunk = searchResultsPageSlice.slice(
-    0,
-    Math.ceil(searchResultsPageSlice.length / 2),
-  );
-  const secondChunk = searchResultsPageSlice.slice(
-    Math.ceil(searchResultsPageSlice.length / 2),
-  );
 
   useEffect(() => {
     mutateTankopediaPersistent((draft) => {
@@ -430,6 +410,18 @@ export function TankSearch({
       );
     });
   }, [searchResults]);
+
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
+
+  if (!loaded) {
+    return (
+      <Flex justify="center">
+        <Spinner />
+      </Flex>
+    );
+  }
 
   return (
     <>
@@ -472,332 +464,7 @@ export function TankSearch({
               )}
           </TextField.Root>
 
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-              <Button variant="soft" color="gray">
-                Sort
-                <CaretDownIcon />
-              </Button>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content>
-              <DropdownMenu.Label>By</DropdownMenu.Label>
-
-              <DropdownMenu.Sub>
-                <DropdownMenu.SubTrigger>Meta</DropdownMenu.SubTrigger>
-                <DropdownMenu.SubContent>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'meta.tier'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'meta.tier';
-                      });
-                    }}
-                  >
-                    Tier
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'meta.name'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'meta.name';
-                      });
-                    }}
-                  >
-                    Name
-                  </DropdownMenu.CheckboxItem>
-                </DropdownMenu.SubContent>
-              </DropdownMenu.Sub>
-
-              <DropdownMenu.Sub>
-                <DropdownMenu.SubTrigger>Fire</DropdownMenu.SubTrigger>
-                <DropdownMenu.SubContent>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'fire.dpm'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'fire.dpm';
-                      });
-                    }}
-                  >
-                    DPM
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'fire.reload'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'fire.reload';
-                      });
-                    }}
-                  >
-                    Reload
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'fire.caliber'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'fire.caliber';
-                      });
-                    }}
-                  >
-                    Caliber
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'fire.standardPenetration'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'fire.standardPenetration';
-                      });
-                    }}
-                  >
-                    Standard penetration
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'fire.premiumPenetration'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'fire.premiumPenetration';
-                      });
-                    }}
-                  >
-                    Premium penetration
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'fire.damage'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'fire.damage';
-                      });
-                    }}
-                  >
-                    Damage
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'fire.shellVelocity'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'fire.shellVelocity';
-                      });
-                    }}
-                  >
-                    Shell velocity
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'fire.aimTime'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'fire.aimTime';
-                      });
-                    }}
-                  >
-                    Aim time
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'fire.dispersionStill'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'fire.dispersionStill';
-                      });
-                    }}
-                  >
-                    Dispersion still
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'fire.dispersionMoving'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'fire.dispersionMoving';
-                      });
-                    }}
-                  >
-                    Dispersion moving
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'fire.gunDepression'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'fire.gunDepression';
-                      });
-                    }}
-                  >
-                    Gun depression
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'fire.gunElevation'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'fire.gunElevation';
-                      });
-                    }}
-                  >
-                    Gun elevation
-                  </DropdownMenu.CheckboxItem>
-                </DropdownMenu.SubContent>
-              </DropdownMenu.Sub>
-
-              <DropdownMenu.Sub>
-                <DropdownMenu.SubTrigger>
-                  Maneuverability
-                </DropdownMenu.SubTrigger>
-                <DropdownMenu.SubContent>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'maneuverability.forwardsSpeed'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'maneuverability.forwardsSpeed';
-                      });
-                    }}
-                  >
-                    Forwards speed
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'maneuverability.backwardsSpeed'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'maneuverability.backwardsSpeed';
-                      });
-                    }}
-                  >
-                    Backwards speed
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'maneuverability.power'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'maneuverability.power';
-                      });
-                    }}
-                  >
-                    Power
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'maneuverability.powerToWeight'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'maneuverability.powerToWeight';
-                      });
-                    }}
-                  >
-                    Power to weight
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'maneuverability.weight'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'maneuverability.weight';
-                      });
-                    }}
-                  >
-                    Weight
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'maneuverability.traverseSpeed'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'maneuverability.traverseSpeed';
-                      });
-                    }}
-                  >
-                    Traverse speed
-                  </DropdownMenu.CheckboxItem>
-                </DropdownMenu.SubContent>
-              </DropdownMenu.Sub>
-
-              <DropdownMenu.Sub>
-                <DropdownMenu.SubTrigger>Survivability</DropdownMenu.SubTrigger>
-                <DropdownMenu.SubContent>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'survivability.health'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'survivability.health';
-                      });
-                    }}
-                  >
-                    Health
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'survivability.viewRange'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'survivability.viewRange';
-                      });
-                    }}
-                  >
-                    View range
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'survivability.camouflageStill'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'survivability.camouflageStill';
-                      });
-                    }}
-                  >
-                    Camouflage
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'survivability.camouflageMoving'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'survivability.camouflageMoving';
-                      });
-                    }}
-                  >
-                    Camouflage moving
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'survivability.camouflageShooting'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'survivability.camouflageShooting';
-                      });
-                    }}
-                  >
-                    Camouflage shooting
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'survivability.volume'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'survivability.volume';
-                      });
-                    }}
-                  >
-                    Volume
-                  </DropdownMenu.CheckboxItem>
-                  <DropdownMenu.CheckboxItem
-                    checked={sort.by === 'survivability.length'}
-                    onClick={() => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.sort.by = 'survivability.length';
-                      });
-                    }}
-                  >
-                    Length
-                  </DropdownMenu.CheckboxItem>
-                </DropdownMenu.SubContent>
-              </DropdownMenu.Sub>
-
-              <DropdownMenu.Separator />
-
-              <DropdownMenu.Label>Direction</DropdownMenu.Label>
-              <DropdownMenu.RadioGroup
-                value={sort.direction}
-                onValueChange={(value) =>
-                  mutateTankopediaPersistent((draft) => {
-                    draft.sort.direction = value as TankopediaSortDirection;
-                  })
-                }
-              >
-                <DropdownMenu.RadioItem value="ascending">
-                  Ascending
-                </DropdownMenu.RadioItem>
-                <DropdownMenu.RadioItem value="descending">
-                  Descending
-                </DropdownMenu.RadioItem>
-              </DropdownMenu.RadioGroup>
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
+          <Sort />
 
           <Button
             color="red"
@@ -873,148 +540,11 @@ export function TankSearch({
         <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />
       )}
 
-      <Flex
-        wrap="wrap"
-        gap="2"
-        style={{
-          justifyContent:
-            compact && firstChunk.length > 0 && secondChunk.length > 0
-              ? 'space-around'
-              : 'center',
-        }}
-      >
-        {!compact &&
-          searchResultsPageSlice.map((tank) => (
-            <Link
-              href={`/tools/tankopedia/${tank.id}`}
-              style={{
-                flex: 1,
-                minWidth: 256,
-              }}
-            >
-              <Card
-                key={tank.id}
-                className={styles.listing}
-                style={{
-                  cursor: 'pointer',
-                  height: 64,
-                  width: '100%',
-                }}
-              >
-                <Inset
-                  key={tank.id}
-                  style={{
-                    minHeight: 64,
-                    position: 'relative',
-                    display: 'flex',
-                  }}
-                >
-                  <img
-                    alt={tank.name}
-                    className={styles.flag}
-                    src={asset(`flags/scratched/${tank.nation}.webp`)}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'contain',
-                      position: 'absolute',
-                    }}
-                  />
-
-                  <div
-                    className={styles.listingShadow}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      position: 'absolute',
-                      transition: `box-shadow ${theme.durations.regular}`,
-                    }}
-                  />
-
-                  <div
-                    style={{
-                      width: 256,
-                      height: 128,
-                    }}
-                    className={styles.listingImage}
-                  >
-                    <img
-                      alt={tank.name}
-                      src={tankIcon(tank.id)}
-                      style={{
-                        objectFit: 'contain',
-                        objectPosition: 'left center',
-                      }}
-                    />
-                  </div>
-
-                  <Flex
-                    align="center"
-                    justify="between"
-                    className={styles.listingLabel}
-                    style={{
-                      position: 'absolute',
-                      bottom: 8,
-                      padding: '0 12px',
-                      width: '100%',
-                      boxSizing: 'border-box',
-                    }}
-                  >
-                    <Flex align="center" justify="center" gap="1">
-                      <img
-                        alt={tank.name}
-                        src={
-                          (tank.treeType === 'collector'
-                            ? TANK_ICONS_COLLECTOR
-                            : tank.treeType === 'premium'
-                              ? TANK_ICONS_PREMIUM
-                              : TANK_ICONS)[tank.class]
-                        }
-                        style={{ width: '1em', height: '1em' }}
-                      />
-                      <Text
-                        size="4"
-                        color={
-                          tank.treeType === 'collector'
-                            ? 'blue'
-                            : tank.treeType === 'premium'
-                              ? 'amber'
-                              : undefined
-                        }
-                        weight="medium"
-                        style={{
-                          color:
-                            tank.treeType === 'researchable'
-                              ? slateDark.slate12
-                              : undefined,
-                          whiteSpace: 'nowrap',
-                          maxWidth: 160,
-                          display: 'block',
-                          textOverflow: 'ellipsis',
-                          overflow: 'hidden',
-                        }}
-                      >
-                        {tank.name}
-                      </Text>
-                    </Flex>
-
-                    <Text size="4" color="gray" highContrast={false}>
-                      {TIER_ROMAN_NUMERALS[tank.tier]}
-                    </Text>
-                  </Flex>
-                </Inset>
-              </Card>
-            </Link>
-          ))}
-
-        {compact && firstChunk.length > 0 && (
-          <CompactSearchResultRow tanks={firstChunk} onSelect={onSelect} />
-        )}
-
-        {compact && secondChunk.length > 0 && (
-          <CompactSearchResultRow tanks={secondChunk} onSelect={onSelect} />
-        )}
-      </Flex>
+      <Results
+        compact={compact}
+        results={searchResultsPageSlice}
+        onSelect={onSelect}
+      />
 
       {searchResultsPageSlice.length > tanksPerPage / 4 && (
         <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />

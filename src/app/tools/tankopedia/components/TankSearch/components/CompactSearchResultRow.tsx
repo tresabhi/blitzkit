@@ -5,7 +5,7 @@ import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinit
 
 interface CompactSearchResultRowProps {
   tanks: TankDefinition[];
-  onSelect: (tank: TankDefinition) => void;
+  onSelect?: (tank: TankDefinition) => void;
 }
 
 export function CompactSearchResultRow({

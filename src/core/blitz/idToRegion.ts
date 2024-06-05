@@ -1,5 +1,17 @@
 import { Region } from '../../constants/regions';
 
+export const MIN_IDS: Record<Region, number> = {
+  asia: 20e8,
+  com: 10e8,
+  eu: 5e8,
+};
+
+export const MAX_IDS: Record<Region, number> = {
+  asia: 31e8 - 1,
+  com: MIN_IDS.asia - 1,
+  eu: MIN_IDS.com - 1,
+};
+
 export function idToRegion(id: number): Region {
   if (id >= 42e8) {
     throw new Error('bot id');

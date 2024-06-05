@@ -49,6 +49,7 @@
     "degressive",
     "devkrieg",
     "diacriticless",
+    "DIDS",
     "donotremove",
     "drei",
     "Droodles",
@@ -65,11 +66,13 @@
     "fullstats",
     "fuzzysort",
     "gamemode",
+    "gameplay",
     "glsl",
     "GLTF",
     "haha",
     "highp",
     "iife",
+    "imgur",
     "immer",
     "Inclusivity",
     "JOINTINDEX",
@@ -180,5 +183,6 @@
   ],
   "deno.enable": false,
   "deno.unstable": false,
-  "cSpell.enableFiletypes": ["glsl"]
+  "cSpell.enableFiletypes": ["glsl"],
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

@@ -28,6 +28,8 @@ export function ConsumablesManager({
       wrap="wrap"
       style={{
         maxWidth: 288,
+        borderRadius: 4,
+        overflow: 'hidden',
       }}
     >
       {consumables.map((consumable, index) => {

@@ -133,11 +133,11 @@ export function TechTreeSection() {
         style: {
           overflow: 'hidden',
           marginTop: 16,
+          backgroundColor: 'var(--color-surface)',
         },
       }}
       size={tank.ancestors && tank.successors ? 880 : 480}
       gap="0"
-      highlight
     >
       {/* <Flex justify="center">
         <Heading>Tech tree</Heading>

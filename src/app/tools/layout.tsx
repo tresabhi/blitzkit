@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
 import { TOOLS } from '../../constants/tools';
+import { ImgurSize, imgur } from '../../core/blitzkit/imgur';
 import { theme } from '../../stitches.config';
 
 interface ToolsLayoutProps {
@@ -24,10 +25,7 @@ export default function ToolsLayout({ children }: ToolsLayoutProps) {
           {isToolRoot && (
             <>
               <title>{tool.title}</title>
-              <meta
-                property="og:image"
-                content={`/assets/banners/${toolId}.webp`}
-              />
+              <meta property="og:image" content={imgur(tool.image)} />
 
               {tool.pageDescription !== undefined && (
                 <>
@@ -59,7 +57,7 @@ export default function ToolsLayout({ children }: ToolsLayoutProps) {
           <div
             style={{
               position: 'absolute',
-              backgroundImage: `url(/assets/banners/${toolId}.webp)`,
+              backgroundImage: `url(${imgur(tool!.image, { format: 'jpeg', size: ImgurSize.HugeThumbnail })})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               width: '100%',
@@ -67,7 +65,7 @@ export default function ToolsLayout({ children }: ToolsLayoutProps) {
               top: 0,
               left: 0,
               zIndex: -1,
-              filter: 'blur(4px)',
+              // filter: 'blur(4px)',
               transform: 'scale(calc((128 + 8) / 128))',
             }}
           />

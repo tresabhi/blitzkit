@@ -149,7 +149,7 @@ export function Modules() {
           )
         ) {
           draft.protagonist!.gun = draft.protagonist!.turret.guns.at(-1)!;
-          draft.protagonist!.shell = draft.protagonist!.gun.shells.at(-1)!;
+          draft.protagonist!.shell = draft.protagonist!.gun.shells[0];
         }
       } else if (unlock.type === 'gun') {
         const gunInTurret = draft.protagonist!.turret.guns.find(
@@ -157,7 +157,7 @@ export function Modules() {
         );
         if (gunInTurret) {
           draft.protagonist!.gun = gunInTurret;
-          draft.protagonist!.shell = gunInTurret.shells.at(-1)!;
+          draft.protagonist!.shell = gunInTurret.shells[0];
         } else {
           // TODO: warn somehow?
           const suitableTurret = draft.protagonist!.tank.turrets.find(
@@ -169,7 +169,7 @@ export function Modules() {
 
           draft.protagonist!.turret = suitableTurret;
           draft.protagonist!.gun = gunInSuitableTurret;
-          draft.protagonist!.shell = gunInSuitableTurret.shells.at(-1)!;
+          draft.protagonist!.shell = gunInSuitableTurret.shells[0];
         }
       } else if (unlock.type === 'engine') {
         draft.protagonist!.engine = draft.protagonist!.tank.engines.find(
@@ -185,7 +185,7 @@ export function Modules() {
 
   function tree(type: ModuleType, unlocks: Unlock[]) {
     return (
-      <Flex gap="2" justify="between" style={{ width: '100%' }}>
+      <Flex gap="2">
         {unlocks.map((unlock, index) => {
           const first = index === 0;
           const last = index === unlocks.length - 1;
@@ -338,8 +338,7 @@ export function Modules() {
                     draft.protagonist!.tank.turrets.at(-1)!;
                   draft.protagonist!.gun =
                     draft.protagonist!.turret.guns.at(-1)!;
-                  draft.protagonist!.shell =
-                    draft.protagonist!.gun.shells.at(-1)!;
+                  draft.protagonist!.shell = draft.protagonist!.gun.shells[0];
                   draft.protagonist!.engine =
                     draft.protagonist!.tank.engines.at(-1)!;
                   draft.protagonist!.track =

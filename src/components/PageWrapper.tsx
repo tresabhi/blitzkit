@@ -1,13 +1,11 @@
 import { Flex, FlexProps, Theme } from '@radix-ui/themes';
 import { ComponentProps } from 'react';
-import { theme } from '../stitches.config';
 
 type PageWrapperProps = FlexProps & {
   color?: ComponentProps<typeof Theme>['accentColor'];
   size?: number | string;
   noPadding?: boolean;
   noMaxWidth?: boolean;
-  highlight?: boolean;
   containerProps?: ComponentProps<typeof Theme>;
   noFlex1?: boolean;
 };
@@ -20,23 +18,19 @@ export default function PageWrapper({
   noPadding = false,
   noMaxWidth = false,
   noFlex1 = false,
-  highlight = false,
   containerProps,
   ...props
 }: PageWrapperProps) {
   return (
     <Theme
-      {...containerProps}
       accentColor={color}
       style={{
         flex: noFlex1 ? undefined : 1,
         display: 'flex',
         flexDirection: 'column',
-        background: highlight
-          ? `linear-gradient(-90deg, ${theme.colors.appBackground1}, ${theme.colors.appBackground2})`
-          : undefined,
         ...containerProps?.style,
       }}
+      {...containerProps}
     >
       <Flex
         direction="column"
