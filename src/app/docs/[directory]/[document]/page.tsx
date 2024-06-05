@@ -1,3 +1,4 @@
+import { Table } from '@radix-ui/themes';
 import Markdown from 'markdown-to-jsx';
 import { use } from 'react';
 import { Link } from '../../../../components/Link';
@@ -21,6 +22,12 @@ export default function Page({
         options={{
           overrides: {
             a: { component: Link },
+            table: { component: Table.Root },
+            thead: { component: Table.Header },
+            tbody: { component: Table.Body },
+            tr: { component: Table.Row },
+            th: { component: Table.ColumnHeaderCell },
+            td: { component: Table.Cell },
           },
         }}
       >
