@@ -1,6 +1,6 @@
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { memo, useEffect, useRef } from 'react';
-import { Euler, Group, Vector3 } from 'three';
+import { Euler, Group, Vector2, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { I_HAT, J_HAT, K_HAT } from '../../../../../../../constants/axis';
 import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
@@ -142,6 +142,8 @@ export const TankModel = memo(() => {
             node.name ===
             `turret_${turretModelDefinition.model.toString().padStart(2, '0')}`;
           const isVisible = isCurrentTurret;
+          const position = new Vector2();
+          const delta = new Vector2();
 
           if (!isVisible) return null;
 
@@ -152,6 +154,7 @@ export const TankModel = memo(() => {
             event.stopPropagation();
 
             if (isTurret) {
+              position.set(event.clientX, event.clientY);
               yaw = protagonist.yaw;
               pitch = protagonist.pitch;
 
@@ -173,9 +176,13 @@ export const TankModel = memo(() => {
               duel.protagonist!.equipmentMatrix,
             );
             const boundingRect = canvas.getBoundingClientRect();
+
+            delta.set(event.clientX, event.clientY).sub(position);
+            position.set(event.clientX, event.clientY);
+
             [pitch, yaw] = applyPitchYawLimits(
               pitch,
-              yaw + event.movementX * (Math.PI / boundingRect.width),
+              yaw + delta.x * (Math.PI / boundingRect.width),
               gunModelDefinition.pitch,
               turretModelDefinition.yaw,
               hasImprovedVerticalStabilizer,
@@ -216,6 +223,8 @@ export const TankModel = memo(() => {
               node.name ===
               `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`;
             const isVisible = isCurrentGun || isCurrentMantlet;
+            const position = new Vector2();
+            const delta = new Vector2();
 
             if (!isVisible) return null;
 
@@ -231,8 +240,11 @@ export const TankModel = memo(() => {
               mutateTankopediaTemporary((draft) => {
                 draft.shot = undefined;
               });
+
+              position.set(event.clientX, event.clientY);
               pitch = protagonist.pitch;
               yaw = protagonist.yaw;
+
               window.addEventListener('pointermove', handlePointerMove);
               window.addEventListener('pointerup', handlePointerUp);
             }
@@ -244,9 +256,12 @@ export const TankModel = memo(() => {
                 duel.protagonist!.equipmentMatrix,
               );
               const boundingRect = canvas.getBoundingClientRect();
+              delta.set(event.clientX, event.clientY).sub(position);
+              position.set(event.clientX, event.clientY);
+
               [pitch, yaw] = applyPitchYawLimits(
-                pitch - event.movementY * (Math.PI / boundingRect.height),
-                yaw + event.movementX * (Math.PI / boundingRect.width),
+                pitch - delta.y * (Math.PI / boundingRect.height),
+                yaw + delta.x * (Math.PI / boundingRect.width),
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
                 hasImprovedVerticalStabilizer,
