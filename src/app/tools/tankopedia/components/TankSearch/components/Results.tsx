@@ -41,6 +41,7 @@ export function Results({ compact, results, onSelect }: ResultsProps) {
       {!compact &&
         results.map((tank) => (
           <Link
+            key={tank.id}
             className={styles.listing}
             href={`/tools/tankopedia/${tank.id}`}
             style={{

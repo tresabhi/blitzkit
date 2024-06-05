@@ -227,7 +227,7 @@ export function SpacedArmorSceneComponent({
             point: intersection.point,
             surfaceNormal: intersection.face!.normal,
             status:
-              shell.type === ShellType.HE
+              shell.type === ShellType.HE && layer.type !== ArmorType.Core
                 ? 'blocked'
                 : blocked
                   ? 'blocked'
