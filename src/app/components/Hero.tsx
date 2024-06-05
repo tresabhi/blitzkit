@@ -1,6 +1,5 @@
 import { Flex, Heading, Text } from '@radix-ui/themes';
 import { imgur } from '../../core/blitzkit/imgur';
-import { theme } from '../../stitches.config';
 
 export function Hero() {
   return (
@@ -9,6 +8,10 @@ export function Hero() {
       justify="center"
       style={{
         position: 'relative',
+        background: `url(${imgur('rUPie9G', { format: 'jpeg' })})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
       }}
       px="4"
       py="9"
@@ -20,20 +23,8 @@ export function Hero() {
           left: 0,
           width: '100%',
           height: '100%',
-          background: `url(${imgur('rUPie9G', { format: 'jpeg' })})`,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          background: `linear-gradient(${theme.colors.appBackground1}80, ${theme.colors.appBackground1}ff)`,
+          background:
+            'linear-gradient(var(--color-panel-translucent), var(--color-background))',
         }}
       />
 
@@ -42,7 +33,8 @@ export function Hero() {
         gap="4"
         align="center"
         justify="center"
-        style={{ position: 'relative', width: '100%' }}
+        position="relative"
+        width="100%"
       >
         <Flex direction="column" align="center">
           <Heading size="9" weight="bold" align="center">

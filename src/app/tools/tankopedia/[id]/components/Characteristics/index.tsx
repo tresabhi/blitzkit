@@ -11,6 +11,7 @@ import {
 import { debounce } from 'lodash';
 import { Fragment, use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
+import { Link } from '../../../../../../components/Link';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolvePenetrationCoefficient } from '../../../../../../core/blitz/resolvePenetrationCoefficient';
@@ -184,12 +185,9 @@ export function Characteristics() {
               <Info
                 indent
                 name={
-                  <a
-                    target="_blank"
-                    href="https://tresabhi.github.io/blitzkit/guide/dpm.html"
-                  >
+                  <Link target="_blank" href="/docs/guide/dpm">
                     What's the difference?
-                  </a>
+                  </Link>
                 }
               />
             </>
