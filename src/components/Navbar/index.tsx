@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Cross1Icon,
   DiscordLogoIcon,
