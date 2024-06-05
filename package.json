@@ -30,7 +30,8 @@
     "knip": "knip",
     "update": "yarn upgrade --latest",
     "setup:depotdownloader": "vite-node --script scripts/setupDepotDownloader",
-    "tunnel": "cloudflared tunnel --url http://localhost:3000"
+    "tunnel": "cloudflared tunnel --url http://localhost:3000",
+    "discoverids": "bun run scripts/discoverIds"
   },
   "license": "MIT",
   "dependencies": {
