@@ -1,16 +1,17 @@
-# Team
+# BlitzKit Credits
 
-- TrèsAbhi: creator & programmer
+BlitzKit is a one man band **TrèsAbhi** but I am far from solo.
 
-# Contributors
-
-- Prince_NA: general game advisor and tester
-- S0AP: bot verification and initial advertizement platform
-- Vovko: discord bot rendering pipeline
-- Maddox: game file decompression
-- Pyogenics: tank model parsing
-- Aeson: game files layout
-- Minitelrose, ChickenMan7777: 3-caliber rule edge cases
-- \_34, HisRoyalFatness, Synx, xkdkw: embed UX
-- [OPTML], Aeson, \_34, Droodles: beta testing Tankopedia
-- [OPTML], Droodles: beta testing Compare
+| Role                           | People                         |
+| ------------------------------ | ------------------------------ |
+| Bot verification               | S0AP                           |
+| Bot advertisement platform     | S0AP                           |
+| Bot rendering pipeline         | Vovko                          |
+| Game asset decompression       | Maddox                         |
+| Game 3D model parsing          | Pyogenics                      |
+| Game file layout               | Aeson                          |
+| 3-caliber rule edge cases      | Minitelrose, ChickenMan7777    |
+| Embed UX                       | \_34, HisRoyalFatness, Synx    |
+| Tankopedia pre-release testing | [OPTML], Aeson, \_34, Droodles |
+| Website advertisement platform | Aeson, Droodles                |
+| Compare pre-release testing    | [OPTML], Droodles              |
