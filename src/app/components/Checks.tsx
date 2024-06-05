@@ -116,20 +116,25 @@ export function Checks() {
               <Flex direction="column" gap="2">
                 <Heading>
                   {policiesAgreementIndex === -1
-                    ? "BlitzKit's cookies"
+                    ? "BlitzKit's policies"
                     : "BlitzKit's policies have changed"}
                 </Heading>
 
                 <Text>
                   This website utilizes cookies to perform analytics and
                   personalize your experience. You can learn more through{' '}
-                  <Link href="/legal/privacy-policy">our privacy policy</Link>.
-                  You may opt out of personalized advertizement by visiting{' '}
+                  <Link href="/docs/legal/privacy-policy">
+                    our privacy policy
+                  </Link>
+                  . You may opt out of personalized advertizement by visiting{' '}
                   <Link href="https://www.google.com/settings/ads">
                     Google Ad Settings
                   </Link>
                   . By using BlitzKit, you also agree to our{' '}
-                  <Link href="/legal/terms-of-service">terms of service</Link>.
+                  <Link href="/docs/legal/terms-of-service">
+                    terms of service
+                  </Link>
+                  .
                 </Text>
               </Flex>
 

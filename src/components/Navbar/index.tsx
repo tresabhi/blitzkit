@@ -46,7 +46,7 @@ export default function Navbar() {
         <Flex
           justify="between"
           align="center"
-          style={{ maxWidth: 800, width: '100%', padding: '0 16px' }}
+          style={{ maxWidth: 1024, width: '100%', padding: '0 16px' }}
           gap="8"
         >
           <Flex align="center" gap="4">
