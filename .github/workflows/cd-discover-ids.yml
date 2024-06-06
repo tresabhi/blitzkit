@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -23,4 +23,4 @@ jobs:
         run: bun install
 
       - name: Discover IDs
-        run: bun scripts/discoverIds.ts
+        run: DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} bun scripts/discoverIds.ts
