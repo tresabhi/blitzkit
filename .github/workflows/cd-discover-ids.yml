@@ -23,4 +23,4 @@ jobs:
         run: bun install
 
       - name: Discover IDs
-        run: DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} GH_TOKEN=${{ secrets.GH_TOKEN }} bun scripts/discoverIds.ts
+        run: DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} GH_TOKEN=${{ secrets.GH_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} bun scripts/discoverIds.ts
