@@ -1,6 +1,9 @@
 import { Region } from '../../constants/regions';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
+import { EventManager } from '../blitzkit/eventManager';
 import { patientFetch } from '../blitzkit/patientFetch';
+
+export const requestLimitExceededEvent = new EventManager();
 
 type BlitzResponse<Data extends object> =
   | {
@@ -41,6 +44,7 @@ async function manageQueue() {
           `Rate limit exceeded, putting "${request.url}" back in queue...`,
         );
 
+        requestLimitExceededEvent.emit(undefined);
         clearTimeout(timeout);
         setTimeout(() => {
           queue.push(request);

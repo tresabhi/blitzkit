@@ -1,0 +1,26 @@
+name: CD Discover IDs
+
+on:
+  push:
+    branches: main
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * *'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Discover IDs
+        run: bun scripts/discoverIds.ts

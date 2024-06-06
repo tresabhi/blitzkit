@@ -1,19 +1,40 @@
 import { times } from 'lodash';
 import { argv } from 'process';
 import { Region, REGIONS } from '../src/constants/regions';
+import { requestLimitExceededEvent } from '../src/core/blitz/fetchBlitz';
 import { getAccountInfo } from '../src/core/blitz/getAccountInfo';
 import { idToRegion, MIN_IDS } from '../src/core/blitz/idToRegion';
 import { asset } from '../src/core/blitzkit/asset';
+import { commitAssets } from '../src/core/blitzkit/commitAssets';
 import { DidsReadStream, DidsWriteStream } from '../src/core/streams/dids';
 
-// const RUN_TIME = 1000 * 60 * 60 * 5;
-const RUN_TIME = 1000 * 5;
+const RUN_TIME = 1000 * 60 * 60 * 5.5;
 const MAX_REQUESTS = 10;
 const ACCOUNTS_PER_CALL = 100;
 const REMOVE_REGION_THRESHOLD = 10;
 
 const production = argv.includes('--production');
 const startTime = Date.now();
+const indexableRegions = [...REGIONS];
+const preDiscoveredRaw = await fetch(
+  asset('averages/discovered.dids.lz4', !production),
+).then(async (response) => {
+  if (response.status === 200) {
+    const buffer = await response.arrayBuffer();
+    return new DidsReadStream(buffer).dids();
+  }
+
+  return undefined;
+});
+const ids: number[] = [...(preDiscoveredRaw ?? [])]; // TODO: re-validate these ids
+const regionalIdIndex: Record<Region, number> = {
+  asia: ids.find((id) => idToRegion(id) === 'asia') ?? MIN_IDS.asia,
+  com: ids.find((id) => idToRegion(id) === 'com') ?? MIN_IDS.com,
+  eu: ids.find((id) => idToRegion(id) === 'eu') ?? MIN_IDS.eu,
+};
+const zeroStreak: Record<Region, number> = { asia: 0, com: 0, eu: 0 };
+let regionIndex = 0;
+let outOfTimeFlagged = false;
 
 async function verify(region: Region, ids: number[]) {
   const infos = await getAccountInfo(region, ids, undefined, {
@@ -28,31 +49,14 @@ async function verify(region: Region, ids: number[]) {
   return filtered;
 }
 
-const indexableRegions = [...REGIONS];
-const ids: number[] = [];
-
-const preDiscoveredRaw = await fetch(
-  asset('averages/discovered.dids.lz4', !production),
-).then(async (response) => {
-  if (response.status === 200) {
-    const buffer = await response.arrayBuffer();
-    return new DidsReadStream(buffer).dids();
-  }
-
-  return undefined;
+let discardAttempts = 0;
+requestLimitExceededEvent.on(() => {
+  discardAttempts++;
 });
 
-const regionalIdIndex: Record<Region, number> = {
-  asia:
-    preDiscoveredRaw?.find((id) => idToRegion(id) === 'asia') ?? MIN_IDS.asia,
-  com: preDiscoveredRaw?.find((id) => idToRegion(id) === 'com') ?? MIN_IDS.com,
-  eu: preDiscoveredRaw?.find((id) => idToRegion(id) === 'eu') ?? MIN_IDS.eu,
-};
-const zeroStreak: Record<Region, number> = { asia: 0, com: 0, eu: 0 };
-let regionIndex = 0;
-let outOfTimeFlagged = false;
-
 const interval = setInterval(async () => {
+  if (discardAttempts > 0) return discardAttempts--;
+
   const region = indexableRegions[regionIndex];
   const idsToVerify = times(
     ACCOUNTS_PER_CALL,
@@ -100,6 +104,17 @@ function post() {
   console.log(`Uploading ${ids.length} ids...`);
 
   const didsWriteStream = new DidsWriteStream().dids(ids);
+  const content = Buffer.from(didsWriteStream.uint8Array).toString();
 
-  console.log(didsWriteStream.uint8Array.length);
+  commitAssets(
+    'discovered ids',
+    [
+      {
+        content,
+        encoding: 'base64',
+        path: 'definitions/ids.dids',
+      },
+    ],
+    production,
+  );
 }

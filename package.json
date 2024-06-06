@@ -31,7 +31,7 @@
     "update": "yarn upgrade --latest",
     "setup:depotdownloader": "vite-node --script scripts/setupDepotDownloader",
     "tunnel": "cloudflared tunnel --url http://localhost:3000",
-    "discoverids": "bun run scripts/discoverIds"
+    "discoverids": "scripts/discoverIds.ts"
   },
   "license": "MIT",
   "dependencies": {
