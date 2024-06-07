@@ -32,14 +32,15 @@ export default function AllStatsOverview({
 }: AllStatsOverviewProps) {
   const { t, translate } = translator(locale);
   const percentile =
-    supplementaryStats.WN8 === undefined
-      ? Percentile.VeryBad
-      : getWN8Percentile(supplementaryStats.WN8);
+    typeof supplementaryStats.WN8 === 'number'
+      ? getWN8Percentile(supplementaryStats.WN8)
+      : Percentile.VeryBad;
   const color = PERCENTILE_COLORS[percentile];
+
   const heroStat =
-    supplementaryStats.WN8 === undefined
-      ? '--'
-      : supplementaryStats.WN8.toFixed(0);
+    typeof supplementaryStats.WN8 === 'number'
+      ? supplementaryStats.WN8.toFixed(0)
+      : '--';
 
   return (
     <div
