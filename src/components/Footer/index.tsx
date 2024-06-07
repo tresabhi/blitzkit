@@ -72,6 +72,9 @@ export function Footer() {
                 >
                   GitHub
                 </Link>
+                <Link href="/docs/patches" target="_blank" color="gray">
+                  Patches
+                </Link>
 
                 {/* patreon supporters? */}
               </Flex>
