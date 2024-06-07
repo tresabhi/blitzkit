@@ -215,13 +215,13 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
                     </span>
                     {positionDelta !== undefined && positionDelta !== 0 && (
                       <>
-                        <DeltaCaret delta={positionDelta} />
+                        <DeltaCaret delta={-positionDelta} />
                         <span
                           style={{
                             color:
                               positionDelta > 0
-                                ? theme.colors.textLowContrast_green
-                                : theme.colors.textLowContrast_red,
+                                ? theme.colors.textLowContrast_red
+                                : theme.colors.textLowContrast_green,
                             fontSize: 16,
                           }}
                         >
