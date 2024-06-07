@@ -1,3 +1,4 @@
+import { SlashCommandSubcommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { Glow } from '../components/AllStatsOverview/components/HeroStat/components/Glow';
 import CommandWrapper from '../components/CommandWrapper';
@@ -31,13 +32,28 @@ const LEAGUE_ACCENT = [
 
 export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
-    command:
-      createLocalizedCommand('rating').addStringOption(addUsernameChoices),
+    command: createLocalizedCommand('rating', [
+      {
+        subcommand: 'today',
+        modify(option: SlashCommandSubcommandBuilder) {
+          option.addStringOption(addUsernameChoices);
+        },
+      },
+      {
+        subcommand: 'season',
+        modify(option: SlashCommandSubcommandBuilder) {
+          option.addStringOption(addUsernameChoices);
+        },
+      },
+    ]),
 
     inProduction: true,
     inPublic: true,
 
     async handler(interaction) {
+      const subcommand = interaction.options.getSubcommand(true) as
+        | 'season'
+        | 'today';
       const { t, translate } = translator(interaction.locale);
       const { id, region } = await resolvePlayerFromCommand(interaction);
       const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
@@ -51,7 +67,7 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
 
       const leaderboard = await getArchivedRatingMidnightLeaderboard(
         region,
-        ratingInfo.current_season,
+        ratingInfo.current_season - (subcommand === 'today' ? 0 : 1),
       );
 
       if (leaderboard?.format === BkrlFormat.Base) {
@@ -101,7 +117,7 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
           <TitleBar
             title={accountInfo.nickname}
             image={clanImage}
-            description={`${t`bot.commands.rating.body.subtitle`} • ${new Date().toLocaleDateString(
+            description={`${translate(`bot.commands.rating.body.subtitle.${subcommand}`)} • ${new Date().toLocaleDateString(
               interaction.locale,
             )}`}
           />

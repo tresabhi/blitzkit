@@ -562,8 +562,22 @@
         "$": "rating-session",
         "description": "Rating player's statistics",
 
+        "subcommands": {
+          "today": {
+            "$": "today",
+            "description": "Today's rating statistics"
+          },
+          "season": {
+            "$": "season",
+            "description": "This season's rating statistics"
+          }
+        },
+
         "body": {
-          "subtitle": "Today's rating statistics"
+          "subtitle": {
+            "today": "Today's rating statistics",
+            "season": "This season's rating statistics"
+          }
         },
 
         "errors": {
