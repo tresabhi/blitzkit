@@ -75,7 +75,7 @@
     "react-fuzzysort": "^1.0.1",
     "react-promise-suspense": "^0.3.4",
     "satori": "^0.10.13",
-    "sharp": "^0.33.3",
+    "sharp": "^0.33.4",
     "three": "0.159.0",
     "three-stdlib": "^2.29.4",
     "vite-node": "^0.34.5",

@@ -42,9 +42,16 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
       const { id, region } = await resolvePlayerFromCommand(interaction);
       const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
       const clanImage = clan ? emblemURL(clan.emblem_set_id) : undefined;
+
+      const ratingInfo = await getRatingInfo(region);
+
+      if (ratingInfo.detail) {
+        throw new Error(`Rating info not available for ${region}`);
+      }
+
       const leaderboard = await getArchivedRatingMidnightLeaderboard(
         region,
-        53,
+        ratingInfo.current_season,
       );
 
       if (leaderboard?.format === BkrlFormat.Base) {
@@ -53,7 +60,6 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
         );
       }
 
-      const ratingInfo = await getRatingInfo(region);
       const accountInfo = await getAccountInfo(region, id, [
         'statistics.rating',
       ]);
@@ -66,9 +72,6 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
       const [statsB2] = (await getRatingNeighbors(region, id, 0)).neighbors;
       const league = getLeagueFromScore(statsB2.score);
 
-      if (ratingInfo.detail) {
-        throw new Error(`Rating info not available for ${region}`);
-      }
       if (!statsA) {
         return t`bot.commands.rating.errors.unrecorded_stats`;
       }
