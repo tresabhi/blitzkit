@@ -13,6 +13,20 @@
       "9": "Super unicum"
     },
 
+    "bkni_percentile": {
+      "0": "Super malum",
+      "1": "Malum",
+      "2": "Very bad",
+      "3": "Bad",
+      "4": "Below average",
+      "5": "Average",
+      "6": "Above average",
+      "7": "Good",
+      "8": "Very good",
+      "9": "Unicum",
+      "10": "Super unicum"
+    },
+
     "nations": {
       "ussr": "U.S.S.R.",
       "germany": "Germany",

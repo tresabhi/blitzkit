@@ -31,9 +31,9 @@ export const TOOLS: Tool[] = [
     significant: true,
   },
   {
-    id: 'statistics',
-    title: 'Statistics',
-    description: 'Player statistics',
+    id: 'player-stats',
+    title: 'Player stats',
+    description: 'Periodical player statistics',
     pageDescription:
       'Periodical player statistics and tanks played in World of Tanks Blitz',
     image: '8gJGkKP',

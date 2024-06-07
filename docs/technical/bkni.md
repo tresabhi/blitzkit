@@ -5,9 +5,9 @@
 > [!CAUTION]
 > This is a working draft and is incomplete. Do not implement.
 
-## Why BkPM over WN8?
+## Why BkNI over WN8?
 
-BkPM addresses a lot of issues with WN8:
+BkNI addresses a lot of issues with WN8:
 
 - WN8 incorporates win rate into the metric; a metric like this must be a correlate of win rate, not a dependent
 - The weights and biases are not dynamic and their formulation is not transparent
