@@ -1,3 +1,4 @@
+import { SlashCommandSubcommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { Glow } from '../components/AllStatsOverview/components/HeroStat/components/Glow';
 import CommandWrapper from '../components/CommandWrapper';
@@ -31,20 +32,42 @@ const LEAGUE_ACCENT = [
 
 export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
-    command:
-      createLocalizedCommand('rating').addStringOption(addUsernameChoices),
+    command: createLocalizedCommand('rating', [
+      {
+        subcommand: 'today',
+        modify(option: SlashCommandSubcommandBuilder) {
+          option.addStringOption(addUsernameChoices);
+        },
+      },
+      {
+        subcommand: 'season',
+        modify(option: SlashCommandSubcommandBuilder) {
+          option.addStringOption(addUsernameChoices);
+        },
+      },
+    ]),
 
     inProduction: true,
     inPublic: true,
 
     async handler(interaction) {
+      const subcommand = interaction.options.getSubcommand(true) as
+        | 'season'
+        | 'today';
       const { t, translate } = translator(interaction.locale);
       const { id, region } = await resolvePlayerFromCommand(interaction);
       const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
       const clanImage = clan ? emblemURL(clan.emblem_set_id) : undefined;
+
+      const ratingInfo = await getRatingInfo(region);
+
+      if (ratingInfo.detail) {
+        throw new Error(`Rating info not available for ${region}`);
+      }
+
       const leaderboard = await getArchivedRatingMidnightLeaderboard(
         region,
-        53,
+        ratingInfo.current_season - (subcommand === 'today' ? 0 : 1),
       );
 
       if (leaderboard?.format === BkrlFormat.Base) {
@@ -53,7 +76,6 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
         );
       }
 
-      const ratingInfo = await getRatingInfo(region);
       const accountInfo = await getAccountInfo(region, id, [
         'statistics.rating',
       ]);
@@ -63,12 +85,17 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
       const statsA = leaderboard ? leaderboard.entries[statsIndex!] : null;
       const positionA = leaderboard ? statsIndex! + 1 : undefined;
       const statsB1 = accountInfo.statistics.rating!;
-      const [statsB2] = (await getRatingNeighbors(region, id, 0)).neighbors;
+      const statsB2Array = (await getRatingNeighbors(region, id, 0)).neighbors;
+
+      if (statsB2Array === undefined) {
+        return translate('bot.commands.rating.errors.no_participation', [
+          markdownEscape(accountInfo.nickname),
+        ]);
+      }
+
+      const [statsB2] = statsB2Array;
       const league = getLeagueFromScore(statsB2.score);
 
-      if (ratingInfo.detail) {
-        throw new Error(`Rating info not available for ${region}`);
-      }
       if (!statsA) {
         return t`bot.commands.rating.errors.unrecorded_stats`;
       }
@@ -98,7 +125,7 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
           <TitleBar
             title={accountInfo.nickname}
             image={clanImage}
-            description={`${t`bot.commands.rating.body.subtitle`} • ${new Date().toLocaleDateString(
+            description={`${translate(`bot.commands.rating.body.subtitle.${subcommand}`)} • ${new Date().toLocaleDateString(
               interaction.locale,
             )}`}
           />
@@ -212,13 +239,13 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
                     </span>
                     {positionDelta !== undefined && positionDelta !== 0 && (
                       <>
-                        <DeltaCaret delta={positionDelta} />
+                        <DeltaCaret delta={-positionDelta} />
                         <span
                           style={{
                             color:
                               positionDelta > 0
-                                ? theme.colors.textLowContrast_green
-                                : theme.colors.textLowContrast_red,
+                                ? theme.colors.textLowContrast_red
+                                : theme.colors.textLowContrast_green,
                             fontSize: 16,
                           }}
                         >
