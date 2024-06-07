@@ -85,7 +85,15 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
       const statsA = leaderboard ? leaderboard.entries[statsIndex!] : null;
       const positionA = leaderboard ? statsIndex! + 1 : undefined;
       const statsB1 = accountInfo.statistics.rating!;
-      const [statsB2] = (await getRatingNeighbors(region, id, 0)).neighbors;
+      const statsB2Array = (await getRatingNeighbors(region, id, 0)).neighbors;
+
+      if (statsB2Array === undefined) {
+        return translate('bot.commands.rating.errors.no_participation', [
+          markdownEscape(accountInfo.nickname),
+        ]);
+      }
+
+      const [statsB2] = statsB2Array;
       const league = getLeagueFromScore(statsB2.score);
 
       if (!statsA) {
