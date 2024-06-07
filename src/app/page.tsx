@@ -13,7 +13,6 @@ export default function Page() {
 
       <PageWrapper size={1028}>
         <Grid
-          p="4"
           gap="4"
           columns={{
             initial: undefined,

@@ -17,15 +17,6 @@ interface Tool {
 }
 
 export const TOOLS: Tool[] = [
-  // {
-  //   id: 'statistics',
-  //   title: 'Statistics',
-  //   description: 'Periodical player statistics',
-  //   pageDescription:
-  //     'Periodical player statistics and tanks played in World of Tanks Blitz',
-  //   disabled: true,
-  //   image: '8gJGkKP'
-  // },
   {
     id: 'tankopedia',
     title: 'Tankopedia',
@@ -38,6 +29,18 @@ export const TOOLS: Tool[] = [
       color: 'purple',
     },
     significant: true,
+  },
+  {
+    id: 'statistics',
+    title: 'Statistics',
+    description: 'Player statistics',
+    pageDescription:
+      'Periodical player statistics and tanks played in World of Tanks Blitz',
+    image: '8gJGkKP',
+    button: {
+      text: 'Search players',
+      color: 'blue',
+    },
   },
   {
     id: 'rating',
