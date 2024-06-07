@@ -20,14 +20,20 @@ export function Footer() {
           justify="between"
           maxWidth="640px"
           flexGrow="1"
-          gap="6"
+          gap="5"
           position="relative"
           direction={{
             initial: 'column',
             sm: 'row',
           }}
         >
-          <Flex direction="column">
+          <Flex
+            direction="column"
+            align={{
+              initial: 'center',
+              sm: 'start',
+            }}
+          >
             <Heading>
               BlitzKit{' '}
               <Text color="gray" size="1" weight="regular">
@@ -38,13 +44,27 @@ export function Footer() {
             <Text color="gray">Everything World of Tanks Blitz</Text>
           </Flex>
 
-          <Flex gap="6">
+          <Flex
+            gap="6"
+            width={{
+              initial: '100%',
+              sm: 'auto',
+            }}
+          >
             <Flex
               direction="column"
               gap="1"
               align={{
                 initial: 'end',
                 sm: 'start',
+              }}
+              flexGrow={{
+                initial: '1',
+                sm: '0',
+              }}
+              flexBasis={{
+                initial: '0',
+                sm: 'auto',
               }}
             >
               <Heading size="3">About</Heading>
@@ -80,7 +100,18 @@ export function Footer() {
               </Flex>
             </Flex>
 
-            <Flex direction="column" gap="1">
+            <Flex
+              direction="column"
+              gap="1"
+              flexGrow={{
+                initial: '1',
+                sm: '0',
+              }}
+              flexBasis={{
+                initial: '0',
+                sm: 'auto',
+              }}
+            >
               <Heading size="3">Legal</Heading>
               <Flex direction="column">
                 <Link href="/docs/legal/privacy-policy" color="gray">
