@@ -11,7 +11,7 @@ import { DidsReadStream, DidsWriteStream } from '../src/core/streams/dids';
 const RUN_TIME = 1000 * 60 * 60 * 5.5;
 const MAX_REQUESTS = 10;
 const ACCOUNTS_PER_CALL = 100;
-const REMOVE_REGION_THRESHOLD = 10;
+const TERMINATION_THRESHOLD = 1000;
 
 const production = argv.includes('--production');
 const startTime = Date.now();
@@ -26,6 +26,13 @@ const preDiscoveredRaw = await fetch(
 
   return undefined;
 });
+
+if (preDiscoveredRaw === undefined) {
+  console.log('No pre-discovered ids found :(');
+} else {
+  console.log(`Found ${preDiscoveredRaw.length} pre-discovered ids`);
+}
+
 const ids: number[] = [...(preDiscoveredRaw ?? [])]; // TODO: re-validate these ids
 const regionalIdIndex: Record<Region, number> = {
   asia: ids.find((id) => idToRegion(id) === 'asia') ?? MIN_IDS.asia,
@@ -64,10 +71,12 @@ const interval = setInterval(async () => {
   );
   const verified = await verify(region, idsToVerify);
 
+  console.log(`${region.padEnd(4)} ${verified.length.toString().padStart(3)}`);
+
   if (verified.length === 0) {
     zeroStreak[region]++;
 
-    if (zeroStreak[region] >= REMOVE_REGION_THRESHOLD) {
+    if (zeroStreak[region] >= TERMINATION_THRESHOLD) {
       const sliceableIndex = indexableRegions.indexOf(region);
 
       if (sliceableIndex !== -1) {
@@ -81,10 +90,6 @@ const interval = setInterval(async () => {
       }
     }
   } else {
-    console.log(
-      `${region.padEnd(4)} ${verified.length.toString().padStart(3)}`,
-    );
-
     zeroStreak[region] = 0;
     ids.push(...verified);
   }
