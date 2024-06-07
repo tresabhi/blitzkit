@@ -111,7 +111,7 @@ function post() {
   console.log(`Uploading ${ids.length} ids...`);
 
   const didsWriteStream = new DidsWriteStream().dids(ids);
-  const content = Buffer.from(didsWriteStream.uint8Array).toString();
+  const content = Buffer.from(didsWriteStream.uint8Array).toString('base64');
 
   commitAssets(
     'discovered ids',
