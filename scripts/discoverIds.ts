@@ -27,6 +27,8 @@ const preDiscoveredRaw = await fetch(
   return undefined;
 });
 
+console.log(`Running in ${production ? 'production' : 'development'} mode`);
+
 if (preDiscoveredRaw === undefined) {
   console.log('No pre-discovered ids found :(');
 } else {
