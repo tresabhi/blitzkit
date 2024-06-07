@@ -17,7 +17,7 @@ const production = argv.includes('--production');
 const startTime = Date.now();
 const indexableRegions = [...REGIONS];
 const preDiscoveredRaw = await fetch(
-  asset('averages/ids.dids', !production),
+  asset('definitions/ids.dids', !production),
 ).then(async (response) => {
   if (response.status === 200) {
     const buffer = await response.arrayBuffer();
