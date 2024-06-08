@@ -69,7 +69,7 @@ export default function Page({ params }: { params: { id: string } }) {
   }, []);
 
   return (
-    <PageWrapper noPadding noMaxWidth color="purple" size={1600}>
+    <PageWrapper p="0" noMaxWidth color="purple" size={1600}>
       {assigned && (
         <>
           <HeroSection />
