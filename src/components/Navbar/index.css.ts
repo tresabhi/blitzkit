@@ -1,8 +1,10 @@
 import { style, styleVariants } from '@vanilla-extract/css';
 
+const MAX_EXPANDED_TOOLS = 680;
+
 export const hamburgerButton = style({
   '@media': {
-    'screen and (min-width: 592px)': {
+    [`screen and (min-width: ${MAX_EXPANDED_TOOLS}px)`]: {
       display: 'none',
     },
   },
@@ -47,7 +49,7 @@ export const toolCard = style({
 
 export const toolTexts = style({
   '@media': {
-    'screen and (max-width: 592px)': {
+    [`screen and (max-width: ${MAX_EXPANDED_TOOLS}px)`]: {
       display: 'none',
     },
   },

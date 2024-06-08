@@ -26,7 +26,7 @@ export enum BkniPercentile {
   SuperUnicum,
 }
 
-const BKNI_PERCENTILES = [
+export const BKNI_PERCENTILES = [
   { min: 0, percentile: BkniPercentile.SuperMalum },
   { min: 10, percentile: BkniPercentile.Malum },
   { min: 20, percentile: BkniPercentile.VeryBad },
@@ -39,6 +39,20 @@ const BKNI_PERCENTILES = [
   { min: 180, percentile: BkniPercentile.Unicum },
   { min: 190, percentile: BkniPercentile.SuperUnicum },
 ];
+
+export const BKNI_COLORS = {
+  [BkniPercentile.SuperMalum]: 'tomato',
+  [BkniPercentile.Malum]: 'orange',
+  [BkniPercentile.VeryBad]: 'amber',
+  [BkniPercentile.Bad]: 'yellow',
+  [BkniPercentile.BelowAverage]: 'lime',
+  [BkniPercentile.Average]: 'green',
+  [BkniPercentile.AboveAverage]: 'teal',
+  [BkniPercentile.Good]: 'cyan',
+  [BkniPercentile.VeryGood]: 'pink',
+  [BkniPercentile.Unicum]: 'plum',
+  [BkniPercentile.SuperUnicum]: 'purple',
+} as const;
 
 export default function getBkniPercentile(wn8: number) {
   const lastIndex = BKNI_PERCENTILES.findLastIndex(({ min }) => min <= wn8);
