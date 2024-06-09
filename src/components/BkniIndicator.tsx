@@ -1,9 +1,9 @@
 import { TimerIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Heading, Popover, Text } from '@radix-ui/themes';
-import getBkniPercentile, {
+import { parseBkni } from '../core/blitzkit/parseBkni';
+import {
   BKNI_COLORS,
   BKNI_PERCENTILES,
-  BkniPercentile,
 } from '../core/statistics/getBkniPercentile';
 import strings from '../lang/en-US.json';
 
@@ -12,12 +12,8 @@ interface BkniIndicatorProps {
 }
 
 export function BkniIndicator({ bkni }: BkniIndicatorProps) {
-  const bkniFraction = (bkni + 1) / 2;
-  const bkniMetric = Math.round(bkniFraction * 200);
-  const bkniPercentile = getBkniPercentile(bkniMetric);
-  const lastBkniPercentile = Math.max(0, bkniPercentile - 1) as BkniPercentile;
-  const bkniColor = BKNI_COLORS[bkniPercentile];
-  const lastBkniColor = BKNI_COLORS[lastBkniPercentile];
+  const { bkniColor, bkniFraction, bkniMetric, bkniPercentile } =
+    parseBkni(bkni);
 
   return (
     <Flex direction="column" align="center">
@@ -28,24 +24,13 @@ export function BkniIndicator({ bkni }: BkniIndicatorProps) {
           transform: 'scaleX(-1)',
         }}
       >
-        <defs>
-          <linearGradient id="bkni-gradient">
-            <stop offset="0%" stopColor={`var(--${bkniColor}-indicator)`} />
-            <stop offset="50%" stopColor={`var(--${bkniColor}-indicator)`} />
-            <stop
-              offset="100%"
-              stopColor={`var(--${lastBkniColor}-indicator)`}
-            />
-          </linearGradient>
-        </defs>
-
         <circle
           cx={90}
           cy={90}
           r={80}
           strokeLinecap="round"
           fill="none"
-          stroke="var(--color-panel-solid)"
+          stroke="var(--color-surface)"
           strokeWidth={20}
           strokeDasharray={80 * Math.PI}
           strokeDashoffset={80 * Math.PI}
@@ -56,7 +41,7 @@ export function BkniIndicator({ bkni }: BkniIndicatorProps) {
           r={80}
           strokeLinecap="round"
           fill="none"
-          stroke="url(#bkni-gradient)"
+          stroke={`var(--${bkniColor}-indicator)`}
           strokeWidth={20}
           strokeDasharray={(160 - 80 * bkniFraction) * Math.PI}
           strokeDashoffset={(160 - 80 * bkniFraction) * Math.PI}
@@ -70,7 +55,12 @@ export function BkniIndicator({ bkni }: BkniIndicatorProps) {
 
         <Popover.Root>
           <Popover.Trigger>
-            <Button color="gray" size="2" variant="ghost">
+            <Button
+              style={{ position: 'relative' }}
+              color="gray"
+              size="2"
+              variant="ghost"
+            >
               <TimerIcon />
               {strings.common.bkni_percentile[bkniPercentile]}
             </Button>
@@ -83,9 +73,9 @@ export function BkniIndicator({ bkni }: BkniIndicatorProps) {
                 width: 'fit-content',
               }}
             >
-              <Flex direction="column" mb="3">
+              <Flex direction="column" mb="3" align="center">
                 <Heading weight="bold" size="5">
-                  BlitzKit Neutrality Index
+                  BkNI
                 </Heading>
                 <Text size="2" color="gray" wrap="wrap">
                   A next generation performance metric
@@ -93,7 +83,11 @@ export function BkniIndicator({ bkni }: BkniIndicatorProps) {
               </Flex>
 
               {BKNI_PERCENTILES.map(({ percentile, min }, index) => (
-                <Button radius="none" color={BKNI_COLORS[percentile]}>
+                <Button
+                  radius="none"
+                  color={BKNI_COLORS[percentile]}
+                  key={percentile}
+                >
                   <Flex align="center" justify="between" width="100%" gap="2">
                     <Text>{strings.common.bkni_percentile[percentile]}</Text>
                     <Text size="1">
