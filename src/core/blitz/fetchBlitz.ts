@@ -3,7 +3,9 @@ import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID
 import { EventManager } from '../blitzkit/eventManager';
 import { patientFetch } from '../blitzkit/patientFetch';
 
-export const requestLimitExceededEvent = new EventManager();
+const RETRY_ERRORS = ['REQUEST_LIMIT_EXCEEDED', 'SOURCE_NOT_AVAILABLE'];
+
+export const retryAbleBlitzFetchEvent = new EventManager();
 
 type BlitzResponse<Data extends object> =
   | {
@@ -39,12 +41,12 @@ async function manageQueue() {
     if (data.status === 'ok') {
       request.resolve(data.data);
     } else {
-      if (data.error.message === 'REQUEST_LIMIT_EXCEEDED') {
+      if (RETRY_ERRORS.includes(data.error.message)) {
         console.log(
-          `Rate limit exceeded, putting "${request.url}" back in queue...`,
+          `Encountered retry-able error ${data.error}, putting "${request.url}" back in queue...`,
         );
 
-        requestLimitExceededEvent.emit(undefined);
+        retryAbleBlitzFetchEvent.emit(undefined);
         clearTimeout(timeout);
         setTimeout(() => {
           queue.push(request);
