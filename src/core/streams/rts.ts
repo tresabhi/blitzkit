@@ -34,16 +34,16 @@ export class RtsmReadStream extends ReadStream {
   body() {
     return {
       time: this.uint32(),
-      base: this.uint8(),
+      bases: this.uint8(),
     };
   }
 }
 
 export class RtsmWriteStream extends WriteStream {
-  rtsm(base: number) {
+  rtsm(bases: number) {
     this.magic();
     this.header();
-    this.body(base);
+    this.body(bases);
 
     return this;
   }
