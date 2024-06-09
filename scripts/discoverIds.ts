@@ -1,14 +1,16 @@
 import { times } from 'lodash';
+import { compress, decompress } from 'lz4js';
 import { argv } from 'process';
-import { Region, REGIONS } from '../src/constants/regions';
-import { requestLimitExceededEvent } from '../src/core/blitz/fetchBlitz';
+import { REGIONS, Region } from '../src/constants/regions';
+import { retryAbleBlitzFetchEvent } from '../src/core/blitz/fetchBlitz';
 import { getAccountInfo } from '../src/core/blitz/getAccountInfo';
-import { idToRegion, MIN_IDS } from '../src/core/blitz/idToRegion';
+import { MIN_IDS, idToRegion } from '../src/core/blitz/idToRegion';
 import { asset } from '../src/core/blitzkit/asset';
 import { commitAssets } from '../src/core/blitzkit/commitAssets';
 import { DidsReadStream, DidsWriteStream } from '../src/core/streams/dids';
 
 const RUN_TIME = 1000 * 60 * 60 * 5.5;
+const PROGRESS_UPDATE_FREQUENCY = 1000 * 60;
 const MAX_REQUESTS = 10;
 const ACCOUNTS_PER_CALL = 100;
 const TERMINATION_THRESHOLD = 1000;
@@ -17,11 +19,12 @@ const production = argv.includes('--production');
 const startTime = Date.now();
 const indexableRegions = [...REGIONS];
 const preDiscoveredRaw = await fetch(
-  asset('definitions/ids.dids', !production),
+  asset('definitions/ids.dids.lz4', !production),
 ).then(async (response) => {
   if (response.status === 200) {
     const buffer = await response.arrayBuffer();
-    return new DidsReadStream(buffer).dids();
+    const decompressed = decompress(new Uint8Array(buffer)).buffer;
+    return new DidsReadStream(decompressed).dids();
   }
 
   return undefined;
@@ -59,7 +62,9 @@ async function verify(region: Region, ids: number[]) {
 }
 
 let discardAttempts = 0;
-requestLimitExceededEvent.on(() => {
+let lastProgressUpdate = 0;
+
+retryAbleBlitzFetchEvent.on(() => {
   discardAttempts++;
 });
 
@@ -73,7 +78,12 @@ const interval = setInterval(async () => {
   );
   const verified = await verify(region, idsToVerify);
 
-  console.log(`${region.padEnd(4)} ${verified.length.toString().padStart(3)}`);
+  if (Date.now() - lastProgressUpdate > PROGRESS_UPDATE_FREQUENCY) {
+    lastProgressUpdate = Date.now();
+    console.log(
+      `Discovered ${verified.length} / ${idsToVerify.length} ids in ${Date.now() - startTime}ms`,
+    );
+  }
 
   if (verified.length === 0) {
     zeroStreak[region]++;
@@ -110,8 +120,10 @@ function post() {
   clearInterval(interval);
   console.log(`Uploading ${ids.length} ids...`);
 
-  const didsWriteStream = new DidsWriteStream().dids(ids);
-  const content = Buffer.from(didsWriteStream.uint8Array).toString('base64');
+  const idsSorted = ids.sort((a, b) => a - b);
+  const didsWriteStream = new DidsWriteStream().dids(idsSorted);
+  const compressed = compress(didsWriteStream.uint8Array);
+  const content = Buffer.from(compressed).toString('base64');
 
   commitAssets(
     'discovered ids',
