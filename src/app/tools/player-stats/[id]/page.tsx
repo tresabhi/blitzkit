@@ -1,10 +1,19 @@
 'use client';
 
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
-import { Box, Callout, Flex, Heading, Tabs, Text } from '@radix-ui/themes';
+import {
+  Box,
+  Callout,
+  Flex,
+  Heading,
+  Popover,
+  Tabs,
+  Text,
+} from '@radix-ui/themes';
 import { use, useMemo, useState } from 'react';
 import { BkniIndicator } from '../../../../components/BkniIndicator';
 import { DatePicker } from '../../../../components/DatePicker';
+import { DummyLink } from '../../../../components/DummyLink';
 import PageWrapper from '../../../../components/PageWrapper';
 import { getAccountInfo } from '../../../../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../../core/blitz/getClanAccountInfo';
@@ -23,8 +32,7 @@ export default function Page({ params }: { params: { id: string } }) {
     [id],
   );
   const clanAccountInfo = use(clanAccountInfoPromise);
-  const bkni = Math.random() * 2 - 1;
-  // const bkni = 0.87;
+  const bkni = ((Math.round(Date.now() / 1000 / 60) / 100) % 2) - 1;
   const [period, setPeriod] = useState<'custom' | number>(30);
   const { bkniColor } = parseBkni(bkni);
   const isTracking = false;
@@ -100,10 +108,22 @@ export default function Page({ params }: { params: { id: string } }) {
             <FlippedTrigger value="custom">Custom</FlippedTrigger>
           </Tabs.List>
         </Tabs.Root>
-      </PageWrapper>
 
-      <PageWrapper color={bkniColor} noFlex1>
-        <DatePicker />
+        {period === 'custom' && (
+          <Text>
+            From{' '}
+            <Popover.Root>
+              <Popover.Trigger>
+                <DummyLink underline="always">June 1, 2021</DummyLink>
+              </Popover.Trigger>
+
+              <Popover.Content>
+                <DatePicker />
+              </Popover.Content>
+            </Popover.Root>{' '}
+            to <DummyLink underline="always">June 7, 2024</DummyLink>
+          </Text>
+        )}
       </PageWrapper>
 
       {!isTracking && (

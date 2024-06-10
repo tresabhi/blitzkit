@@ -17,25 +17,48 @@ import {
 } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { useState } from 'react';
+import { Vector3Tuple } from 'three';
 
 const DAY_TITLES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const YEAR_OPTIONS = 7;
 
-export function DatePicker() {
+interface DatePickerProps {
+  onDateChange?: (date: Vector3Tuple) => void;
+  defaultDate?: Vector3Tuple;
+}
+
+export function DatePicker({ onDateChange, defaultDate }: DatePickerProps) {
   const initialDate = new Date();
 
-  const [year, setYear] = useState(initialDate.getFullYear());
-  const [month, setMonth] = useState(initialDate.getMonth());
-  const [day, setDay] = useState(initialDate.getDate());
+  const [year, setYear] = useState(
+    defaultDate?.[2] ?? initialDate.getFullYear(),
+  );
+  const [month, setMonth] = useState(
+    defaultDate?.[1] ?? initialDate.getMonth(),
+  );
+  const [day, setDay] = useState(defaultDate?.[0] ?? initialDate.getDate());
+  const [yearScroll, setYearScroll] = useState(0);
   const [yearOffset, setYearOffset] = useState(0);
   const [monthOffset, setMonthOffset] = useState(0);
   const date = new Date(year + yearOffset, month + monthOffset, day);
 
-  const daysInLastMonth = new Date(year, month + monthOffset, 0).getDate();
-  const daysInMonth = new Date(year, month + monthOffset + 1, 0).getDate();
-  const firstDayOfMonth = new Date(year, month + monthOffset, 1).getDay();
+  const daysInLastMonth = new Date(
+    year + yearOffset,
+    month + monthOffset,
+    0,
+  ).getDate();
+  const daysInMonth = new Date(
+    year + yearOffset,
+    month + monthOffset + 1,
+    0,
+  ).getDate();
+  const firstDayOfMonth = new Date(
+    year + yearOffset,
+    month + monthOffset,
+    1,
+  ).getDay();
   const lastDayOfMonth = new Date(
-    year,
+    year + yearOffset,
     month + monthOffset,
     daysInMonth,
   ).getDay();
@@ -50,7 +73,14 @@ export function DatePicker() {
         <IconButton
           size="3"
           variant="ghost"
-          onClick={() => setMonthOffset((state) => state - 1)}
+          onClick={() => {
+            if (monthOffset === 0) {
+              setYearOffset((state) => state - 1);
+              setMonthOffset(11);
+            } else {
+              setMonthOffset((state) => state - 1);
+            }
+          }}
           ml="2"
         >
           <ChevronLeftIcon />
@@ -72,9 +102,13 @@ export function DatePicker() {
           </IconButton>
 
           <Flex gap="1">
-            <Text>{date.toLocaleString(undefined, { month: 'long' })} </Text>
+            <Text>
+              {date.toLocaleString(undefined, {
+                month: 'long',
+              })}
+            </Text>
 
-            <Popover.Root onOpenChange={() => setYearOffset(0)}>
+            <Popover.Root onOpenChange={() => setYearScroll(0)}>
               <Popover.Trigger>
                 <Link underline="always" href="#">
                   {date.getFullYear()}
@@ -85,7 +119,7 @@ export function DatePicker() {
                 <Flex direction="column" gap="1">
                   <IconButton
                     variant="ghost"
-                    onClick={() => setYearOffset((state) => state + 1)}
+                    onClick={() => setYearScroll((state) => state + 1)}
                     mb="2"
                   >
                     <ChevronUpIcon />
@@ -93,22 +127,31 @@ export function DatePicker() {
 
                   {times(YEAR_OPTIONS, (index) => {
                     const thisYear =
-                      year - index + Math.floor(YEAR_OPTIONS / 2) + yearOffset;
+                      year +
+                      yearOffset -
+                      index +
+                      Math.floor(YEAR_OPTIONS / 2) +
+                      yearScroll;
+                    const selected = year + yearOffset === thisYear;
 
                     return (
-                      <Button
-                        variant={year === thisYear ? 'solid' : 'soft'}
-                        radius="large"
-                        onClick={() => setYear(thisYear)}
-                      >
-                        {thisYear}
-                      </Button>
+                      <Popover.Close key={thisYear}>
+                        <Button
+                          variant={selected ? 'solid' : 'soft'}
+                          radius="large"
+                          onClick={() => {
+                            setYearOffset(thisYear - year);
+                          }}
+                        >
+                          {thisYear}
+                        </Button>
+                      </Popover.Close>
                     );
                   })}
 
                   <IconButton
                     variant="ghost"
-                    onClick={() => setYearOffset((state) => state - 1)}
+                    onClick={() => setYearScroll((state) => state - 1)}
                     mt="2"
                   >
                     <ChevronDownIcon />
@@ -122,7 +165,14 @@ export function DatePicker() {
         <IconButton
           size="3"
           variant="ghost"
-          onClick={() => setMonthOffset((state) => state + 1)}
+          onClick={() => {
+            if (monthOffset === 11) {
+              setYearOffset((state) => state + 1);
+              setMonthOffset(0);
+            } else {
+              setMonthOffset((state) => state + 1);
+            }
+          }}
           mr="2"
         >
           <ChevronRightIcon />
@@ -153,7 +203,8 @@ export function DatePicker() {
         ))}
 
         {times(daysInMonth, (index) => {
-          const selected = index === day - 1 && monthOffset === 0;
+          const selected =
+            index === day - 1 && monthOffset === 0 && yearOffset === 0;
 
           return (
             <IconButton
@@ -161,11 +212,18 @@ export function DatePicker() {
               key={index}
               variant={selected ? 'solid' : 'soft'}
               onClick={() => {
-                setYear(year + yearOffset);
-                setMonth((month + monthOffset) % 12);
-                setDay(index + 1);
+                const newYear =
+                  year + yearOffset + Math.floor((month + monthOffset) / 12);
+                const newMonth = (month + monthOffset) % 12;
+                const newDay = index + 1;
+
+                setYear(newYear);
+                setMonth(newMonth);
+                setDay(newDay);
                 setYearOffset(0);
                 setMonthOffset(0);
+
+                onDateChange?.([newDay, newMonth, newYear]);
               }}
             >
               {index + 1}
@@ -179,8 +237,6 @@ export function DatePicker() {
           </IconButton>
         ))}
       </Grid>
-
-      {/* {`${day} ${month} ${year}`} */}
     </Card>
   );
 }
