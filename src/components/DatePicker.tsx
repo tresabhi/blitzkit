@@ -6,7 +6,6 @@ import {
 } from '@radix-ui/react-icons';
 import {
   Button,
-  Card,
   ChevronDownIcon,
   Flex,
   Grid,
@@ -17,26 +16,22 @@ import {
 } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { useState } from 'react';
-import { Vector3Tuple } from 'three';
 
 const DAY_TITLES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const YEAR_OPTIONS = 7;
 
 interface DatePickerProps {
-  onDateChange?: (date: Vector3Tuple) => void;
-  defaultDate?: Vector3Tuple;
+  onDateChange?: (date: Date) => void;
+  defaultDate?: Date;
 }
 
-export function DatePicker({ onDateChange, defaultDate }: DatePickerProps) {
-  const initialDate = new Date();
-
-  const [year, setYear] = useState(
-    defaultDate?.[2] ?? initialDate.getFullYear(),
-  );
-  const [month, setMonth] = useState(
-    defaultDate?.[1] ?? initialDate.getMonth(),
-  );
-  const [day, setDay] = useState(defaultDate?.[0] ?? initialDate.getDate());
+export function DatePicker({
+  onDateChange,
+  defaultDate = new Date(),
+}: DatePickerProps) {
+  const [year, setYear] = useState(defaultDate.getFullYear());
+  const [month, setMonth] = useState(defaultDate.getMonth());
+  const [day, setDay] = useState(defaultDate.getDate());
   const [yearScroll, setYearScroll] = useState(0);
   const [yearOffset, setYearOffset] = useState(0);
   const [monthOffset, setMonthOffset] = useState(0);
@@ -64,11 +59,7 @@ export function DatePicker({ onDateChange, defaultDate }: DatePickerProps) {
   ).getDay();
 
   return (
-    <Card
-      style={{
-        width: 'fit-content',
-      }}
-    >
+    <Flex direction="column" width="fit-content">
       <Flex justify="between" mb="2" align="center" py="2">
         <IconButton
           size="3"
@@ -91,9 +82,9 @@ export function DatePicker({ onDateChange, defaultDate }: DatePickerProps) {
             size="3"
             variant="ghost"
             onClick={() => {
-              setYear(initialDate.getFullYear());
-              setMonth(initialDate.getMonth());
-              setDay(initialDate.getDate());
+              setYear(defaultDate.getFullYear());
+              setMonth(defaultDate.getMonth());
+              setDay(defaultDate.getDate());
               setYearOffset(0);
               setMonthOffset(0);
             }}
@@ -223,7 +214,7 @@ export function DatePicker({ onDateChange, defaultDate }: DatePickerProps) {
                 setYearOffset(0);
                 setMonthOffset(0);
 
-                onDateChange?.([newDay, newMonth, newYear]);
+                onDateChange?.(new Date(newYear, newMonth, newDay));
               }}
             >
               {index + 1}
@@ -237,6 +228,6 @@ export function DatePicker({ onDateChange, defaultDate }: DatePickerProps) {
           </IconButton>
         ))}
       </Grid>
-    </Card>
+    </Flex>
   );
 }

@@ -6,36 +6,38 @@ import {
   Callout,
   Flex,
   Heading,
+  Link,
   Popover,
   Tabs,
   Text,
 } from '@radix-ui/themes';
-import { use, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { BkniIndicator } from '../../../../components/BkniIndicator';
 import { DatePicker } from '../../../../components/DatePicker';
-import { DummyLink } from '../../../../components/DummyLink';
 import PageWrapper from '../../../../components/PageWrapper';
 import { getAccountInfo } from '../../../../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../../core/blitz/getClanAccountInfo';
 import { idToRegion } from '../../../../core/blitz/idToRegion';
 import { parseBkni } from '../../../../core/blitzkit/parseBkni';
+import { useAwait } from '../../../../hooks/useAwait';
 import strings from '../../../../lang/en-US.json';
 import { FlippedTrigger } from './components/FlippedTrigger';
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = parseInt(params.id);
   const region = idToRegion(id);
-  const accountInfoPromise = useMemo(() => getAccountInfo(region, id), [id]);
-  const accountInfo = use(accountInfoPromise);
-  const clanAccountInfoPromise = useMemo(
-    () => getClanAccountInfo(region, id, ['clan']),
-    [id],
-  );
-  const clanAccountInfo = use(clanAccountInfoPromise);
+  const accountInfo = useAwait(getAccountInfo(region, id));
+  const clanAccountInfo = useAwait(getClanAccountInfo(region, id, ['clan']));
   const bkni = ((Math.round(Date.now() / 1000 / 60) / 100) % 2) - 1;
   const [period, setPeriod] = useState<'custom' | number>(30);
   const { bkniColor } = parseBkni(bkni);
   const isTracking = false;
+  const [customFrom, setCustomFrom] = useState<Date>(
+    new Date(Date.now() - 29 * 24 * 60 * 60 * 1000),
+  );
+  const [customTo, setCustomTo] = useState<Date>(new Date());
+  const [fromSelectorOpen, setFromSelectorOpen] = useState(false);
+  const [toSelectorOpen, setToSelectorOpen] = useState(false);
 
   return (
     <>
@@ -112,16 +114,55 @@ export default function Page({ params }: { params: { id: string } }) {
         {period === 'custom' && (
           <Text>
             From{' '}
-            <Popover.Root>
+            <Popover.Root
+              open={fromSelectorOpen}
+              onOpenChange={setFromSelectorOpen}
+            >
               <Popover.Trigger>
-                <DummyLink underline="always">June 1, 2021</DummyLink>
+                <Link underline="always" href="#">
+                  {customFrom.toLocaleString(undefined, {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </Link>
               </Popover.Trigger>
 
               <Popover.Content>
-                <DatePicker />
+                <DatePicker
+                  defaultDate={customFrom}
+                  onDateChange={(date) => {
+                    setCustomFrom(date);
+                    setFromSelectorOpen(false);
+                  }}
+                />
               </Popover.Content>
             </Popover.Root>{' '}
-            to <DummyLink underline="always">June 7, 2024</DummyLink>
+            to{' '}
+            <Popover.Root
+              open={toSelectorOpen}
+              onOpenChange={setToSelectorOpen}
+            >
+              <Popover.Trigger>
+                <Link underline="always" href="#">
+                  {customTo.toLocaleString(undefined, {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </Link>
+              </Popover.Trigger>
+
+              <Popover.Content>
+                <DatePicker
+                  defaultDate={customTo}
+                  onDateChange={(date) => {
+                    setCustomTo(date);
+                    setToSelectorOpen(false);
+                  }}
+                />
+              </Popover.Content>
+            </Popover.Root>
           </Text>
         )}
       </PageWrapper>
