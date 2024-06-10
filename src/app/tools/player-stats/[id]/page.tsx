@@ -4,6 +4,7 @@ import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { Box, Callout, Flex, Heading, Tabs, Text } from '@radix-ui/themes';
 import { use, useMemo, useState } from 'react';
 import { BkniIndicator } from '../../../../components/BkniIndicator';
+import { DatePicker } from '../../../../components/DatePicker';
 import PageWrapper from '../../../../components/PageWrapper';
 import { getAccountInfo } from '../../../../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../../core/blitz/getClanAccountInfo';
@@ -22,8 +23,8 @@ export default function Page({ params }: { params: { id: string } }) {
     [id],
   );
   const clanAccountInfo = use(clanAccountInfoPromise);
-  // const bkni = Math.random() * 2 - 1;
-  const bkni = 0.87;
+  const bkni = Math.random() * 2 - 1;
+  // const bkni = 0.87;
   const [period, setPeriod] = useState<'custom' | number>(30);
   const { bkniColor } = parseBkni(bkni);
   const isTracking = false;
@@ -99,6 +100,10 @@ export default function Page({ params }: { params: { id: string } }) {
             <FlippedTrigger value="custom">Custom</FlippedTrigger>
           </Tabs.List>
         </Tabs.Root>
+      </PageWrapper>
+
+      <PageWrapper color={bkniColor} noFlex1>
+        <DatePicker />
       </PageWrapper>
 
       {!isTracking && (
