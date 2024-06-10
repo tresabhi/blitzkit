@@ -139,7 +139,7 @@ function post() {
   const idsSorted = ids.sort((a, b) => a - b);
   const idsChunked = chunk(idsSorted, CHUNK_SIZE);
   const files = idsChunked.map((ids, chunk) => {
-    const didsWriteStream = new DidsWriteStream().dids(idsSorted);
+    const didsWriteStream = new DidsWriteStream().dids(ids);
     const compressed = compress(didsWriteStream.uint8Array);
     const content = Buffer.from(compressed).toString('base64');
 
