@@ -48,7 +48,7 @@ while (chunkIndex < preDiscoveredManifest.chunks) {
   });
 
   // no spread syntax: https://github.com/oven-sh/bun/issues/11734
-  preDiscovered.forEach((id) => ids.push(id));
+  preDiscovered.forEach((id) => !ids.includes(id) && ids.push(id));
 
   console.log(
     `Pre-discovered ${preDiscovered.length} ids (chunk ${chunkIndex})`,
