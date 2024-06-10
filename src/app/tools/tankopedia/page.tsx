@@ -12,15 +12,15 @@ export default function Page() {
 
   return (
     <PageWrapper size={1200} color="purple">
-      <Flex justify="center">
-        <Ad type={AdType.TankopediaHorizontal800} style={{ flex: 1 }} />
-      </Flex>
-
       <TankSearch
         onSelect={(tank) => {
           router.push(`./tankopedia/${tank.id}`);
         }}
       />
+
+      <Flex justify="center">
+        <Ad type={AdType.TankopediaHorizontal800} />
+      </Flex>
 
       <Flex justify="center" mt="4">
         <Link href="/tools/tankopedia/map">Super duper secret map</Link>
