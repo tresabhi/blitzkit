@@ -1,6 +1,7 @@
 'use client';
 
-import { ComponentProps, useEffect } from 'react';
+import { uniqueId } from 'lodash';
+import { ComponentProps, useEffect, useRef } from 'react';
 
 export enum AdType {
   TankopediaHorizontal800 = 738182777,
@@ -11,11 +12,16 @@ interface AdProps extends ComponentProps<'div'> {
 }
 
 export function Ad({ type, ...props }: AdProps) {
+  const id = useRef(uniqueId());
+
   useEffect(() => {
     (window as any).msAdsQueue.push(function () {
-      (window as any).mmnow.render({ adUnitId: type, elementId: type });
+      (window as any).mmnow.render({
+        adUnitId: type,
+        elementId: `${type}-${id.current}`,
+      });
     });
   });
 
-  return <div id={`${type}`} {...props} />;
+  return <div id={`${type}-${id.current}`} {...props} />;
 }
