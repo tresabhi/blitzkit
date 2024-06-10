@@ -1,4 +1,4 @@
-import { chunk, times } from 'lodash';
+import { chunk, times, uniq } from 'lodash';
 import { compress, decompress } from 'lz4js';
 import { argv } from 'process';
 import { REGIONS, Region } from '../src/constants/regions';
@@ -48,9 +48,7 @@ while (chunkIndex < preDiscoveredManifest.chunks) {
   });
 
   // no spread syntax: https://github.com/oven-sh/bun/issues/11734
-  preDiscovered.forEach((id) => {
-    if (!ids.includes(id)) ids.push(id);
-  });
+  preDiscovered.forEach((id) => ids.push(id));
 
   console.log(
     `Pre-discovered ${preDiscovered.length} ids (chunk ${chunkIndex})`,
@@ -138,7 +136,7 @@ function post() {
   clearInterval(interval);
   console.log(`Uploading ${ids.length} ids...`);
 
-  const idsSorted = ids.sort((a, b) => a - b);
+  const idsSorted = uniq(ids).sort((a, b) => a - b);
   const idsChunked = chunk(idsSorted, CHUNK_SIZE);
   const files = idsChunked.map((ids, chunk) => {
     const didsWriteStream = new DidsWriteStream().dids(ids);
