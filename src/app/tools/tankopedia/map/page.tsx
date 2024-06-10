@@ -2,7 +2,6 @@
 
 import { Flex, Link } from '@radix-ui/themes';
 import { use } from 'react';
-import { AdHorizontal } from '../../../../components/Ads/Horizontal';
 import PageWrapper from '../../../../components/PageWrapper';
 import { tankDefinitions } from '../../../../core/blitzkit/tankDefinitions';
 
@@ -12,8 +11,6 @@ export default function Page() {
   return (
     <PageWrapper>
       <title>Super duper secret map for SEO</title>
-
-      <AdHorizontal />
 
       <Flex direction="column" align="center">
         {Object.values(awaitedTankDefinitions)

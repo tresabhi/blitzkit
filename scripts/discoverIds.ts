@@ -1,4 +1,4 @@
-import { chunk, times } from 'lodash';
+import { chunk, times, uniq } from 'lodash';
 import { compress, decompress } from 'lz4js';
 import { argv } from 'process';
 import { REGIONS, Region } from '../src/constants/regions';
@@ -136,10 +136,10 @@ function post() {
   clearInterval(interval);
   console.log(`Uploading ${ids.length} ids...`);
 
-  const idsSorted = ids.sort((a, b) => a - b);
+  const idsSorted = uniq(ids).sort((a, b) => a - b);
   const idsChunked = chunk(idsSorted, CHUNK_SIZE);
   const files = idsChunked.map((ids, chunk) => {
-    const didsWriteStream = new DidsWriteStream().dids(idsSorted);
+    const didsWriteStream = new DidsWriteStream().dids(ids);
     const compressed = compress(didsWriteStream.uint8Array);
     const content = Buffer.from(compressed).toString('base64');
 

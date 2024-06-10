@@ -36,7 +36,7 @@ export function Party3() {
       {/* pub center */}
       <script
         async
-        src="https://adsdk.microsoft.com/pubcenter/sdk.js?siteId=364600&publisherId=253617120"
+        src="https://adsdk.microsoft.com/mmnow/sdk.js?siteId=364645&publisherId=253617120"
         crossOrigin="anonymous"
       />
     </>
