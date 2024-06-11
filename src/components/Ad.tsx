@@ -1,8 +1,8 @@
 'use client';
 
-import { Box, Flex, Text } from '@radix-ui/themes';
+import { Box, BoxProps, Flex, Text } from '@radix-ui/themes';
 import { uniqueId } from 'lodash';
-import { ComponentProps, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Vector2Tuple } from 'three';
 import { imgur } from '../core/blitzkit/imgur';
 import { useApp } from '../stores/app';
@@ -21,9 +21,9 @@ const AD_DIMENSIONS: Record<AdType, Vector2Tuple> = {
   [AdType.HalfPageVerticalPurple]: [300, 600],
 };
 
-interface AdProps extends ComponentProps<'div'> {
+type AdProps = BoxProps & {
   type: AdType;
-}
+};
 
 export function Ad({ type, ...props }: AdProps) {
   const id = useRef(uniqueId());
