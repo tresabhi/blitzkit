@@ -25,7 +25,7 @@ type AdProps = BoxProps & {
   type: AdType;
 };
 
-export function Ad({ type, ...props }: AdProps) {
+export function Ad({ type, style, ...props }: AdProps) {
   const id = useRef(uniqueId());
   const dimensions = AD_DIMENSIONS[type];
   const developerMode = useApp((state) => state.developerMode);
@@ -48,6 +48,7 @@ export function Ad({ type, ...props }: AdProps) {
         outline: '1px solid var(--gray-3)',
         borderRadius: 'var(--radius-1)',
         background: `url(${imgur('DK21EHY')})`,
+        ...style,
       }}
       {...props}
     >
