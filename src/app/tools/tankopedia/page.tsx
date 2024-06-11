@@ -20,8 +20,8 @@ export default function Page() {
       />
 
       <Flex justify="center" wrap="wrap">
-        {times(2, () => (
-          <Ad type={AdType.TankopediaHorizontal800} />
+        {times(2, (index) => (
+          <Ad key={index} type={AdType.MediumRectangleHorizontalPurple} />
         ))}
       </Flex>
 
