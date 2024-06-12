@@ -1,14 +1,16 @@
 'use client';
 
 import { useEffect } from 'react';
+import { MidSectionAd } from '../../../../components/MidSectionAd';
 import PageWrapper from '../../../../components/PageWrapper';
 import { assignDuelMember } from '../../../../core/blitzkit/assignDuelMember';
 import { mutateDuel, useDuel } from '../../../../stores/duel';
 import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
+import { HistorySection } from './components/HistorySection';
 import { CharacteristicsSection } from './components/Model/CharacteristicsSection';
 import { HeroSection } from './components/Model/HeroSection';
-import { TankopediaPlug } from './components/Model/TankopediaPlug';
 import { TechTreeSection } from './components/Model/TechTreeSection';
+import { VideoSection } from './components/VideoSection';
 
 export default function Page({ params }: { params: { id: string } }) {
   const initialId = parseInt(params.id);
@@ -73,9 +75,13 @@ export default function Page({ params }: { params: { id: string } }) {
       {assigned && (
         <>
           <HeroSection />
-          <TankopediaPlug />
+          <MidSectionAd />
           <CharacteristicsSection />
+          <MidSectionAd />
           <TechTreeSection />
+          <VideoSection />
+          <MidSectionAd />
+          <HistorySection />
           {/* <TankopediaSeparator /> */}
         </>
       )}
