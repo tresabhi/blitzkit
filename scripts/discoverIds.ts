@@ -28,7 +28,7 @@ console.log(`Running in ${production ? 'production' : 'development'} mode`);
 
 const startTime = Date.now();
 const indexableRegions = [...REGIONS];
-const ids: number[] = [];
+let ids: number[] = [];
 const preDiscoveredManifest = (await fetch(
   asset('ids/manifest.json', !production),
 ).then((response) => response.json())) as DiscoverIdsManifest;
@@ -48,7 +48,7 @@ while (chunkIndex < preDiscoveredManifest.chunks) {
   });
 
   // no spread syntax: https://github.com/oven-sh/bun/issues/11734
-  preDiscovered.forEach((id) => ids.push(id));
+  ids = ids.concat(preDiscovered);
 
   console.log(
     `Pre-discovered ${preDiscovered.length} ids (chunk ${chunkIndex})`,
@@ -134,19 +134,25 @@ const interval = setInterval(async () => {
 
 function post() {
   clearInterval(interval);
+  ids = uniq(ids).sort((a, b) => a - b);
   console.log(`Uploading ${ids.length} ids...`);
 
-  const idsSorted = uniq(ids).sort((a, b) => a - b);
-  const idsChunked = chunk(idsSorted, CHUNK_SIZE);
-  const files = idsChunked.map((ids, chunk) => {
-    const didsWriteStream = new DidsWriteStream().dids(ids);
-    const compressed = compress(didsWriteStream.uint8Array);
+  const idsChunked = chunk(ids, CHUNK_SIZE);
+  const files = idsChunked.map((chunk, index) => {
+    const didsWriteStream = new DidsWriteStream().dids(chunk);
+    const buffer = didsWriteStream.uint8Array;
+    const compressed = compress(buffer);
+
+    console.log(
+      `Chunk ${index} with ${chunk.length} ids (compressed: ${compressed.length}; uncompressed: ${buffer.length})`,
+    );
+
     const content = Buffer.from(compressed).toString('base64');
 
     return {
       content,
       encoding: 'base64' as const,
-      path: `ids/${chunk}.dids.lz4`,
+      path: `ids/${index}.dids.lz4`,
     };
   });
 
