@@ -1,27 +1,23 @@
 'use client';
 
-import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import {
   Box,
-  Callout,
   Flex,
   Heading,
   Link,
   Popover,
-  Tabs,
   Text,
+  Theme,
 } from '@radix-ui/themes';
 import { useState } from 'react';
 import { BkniIndicator } from '../../../../components/BkniIndicator';
 import { DatePicker } from '../../../../components/DatePicker';
-import PageWrapper from '../../../../components/PageWrapper';
 import { getAccountInfo } from '../../../../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../../core/blitz/getClanAccountInfo';
 import { idToRegion } from '../../../../core/blitz/idToRegion';
 import { parseBkni } from '../../../../core/blitzkit/parseBkni';
 import { useAwait } from '../../../../hooks/useAwait';
 import strings from '../../../../lang/en-US.json';
-import { FlippedTrigger } from './components/FlippedTrigger';
 import * as styles from './page.css';
 
 export default function Page({ params }: { params: { id: string } }) {
@@ -39,12 +35,12 @@ export default function Page({ params }: { params: { id: string } }) {
   );
   const stats = [
     ['Winrate', '70%'],
-    ['Damage', '3,203'],
-    ['Damage ratio', '2.45'],
-    ['Tier', '9.83'],
     ['Survival', '70%'],
-    ['Accuracy', '91%'],
+    ['Damage', '3,203'],
+    ['Tier', '9.83'],
     ['Kills', '1.54'],
+    ['Damage ratio', '2.45'],
+    ['Accuracy', '91%'],
   ];
   const [customTo, setCustomTo] = useState<Date>(new Date());
   const [fromSelectorOpen, setFromSelectorOpen] = useState(false);
@@ -52,16 +48,118 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <PageWrapper
-        p={{
-          initial: '6',
-          md: '8',
-        }}
-        pt={{
-          initial: '9',
-          md: '8',
-        }}
-        size={1024}
+      <Theme accentColor={bkniColor}>
+        <Flex
+          direction="column"
+          align="center"
+          p="8"
+          gap="8"
+          style={{
+            background: `linear-gradient(var(--${bkniColor}-a2), var(--${bkniColor}-a1))`,
+          }}
+        >
+          <Flex width="100%" maxWidth="1600px" align="center">
+            <Flex style={{ flex: 1 }} direction="column" align="start" gap="4">
+              <Heading size="9">{accountInfo.nickname}</Heading>
+
+              <Text color="gray">
+                {clanAccountInfo?.clan && `[${clanAccountInfo.clan.tag}] • `}
+                {
+                  (clanAccountInfo?.clan
+                    ? strings.common.regions.short
+                    : strings.common.regions.normal)[region]
+                }
+              </Text>
+
+              {/* <Flex gap="4" mt="-1">
+                <Link href="/tools/tankopedia">
+                  <Button variant="ghost" size="1" ml="-1">
+                    <ChevronLeftIcon />
+                    Back
+                  </Button>
+                </Link>
+              </Flex> */}
+            </Flex>
+
+            <Flex style={{ flex: 1 }} justify="center">
+              <BkniIndicator bkni={bkni} className={styles.bkniIndicator} />
+            </Flex>
+
+            <Flex style={{ flex: 1 }} wrap="wrap" gap="2" justify="center">
+              {stats.map((stat) => (
+                <Flex minWidth="96px" direction="column" align="center">
+                  <Text size="7">{stat[1]}</Text>
+                  <Text color="gray" size="2">
+                    {stat[0]}
+                  </Text>
+                </Flex>
+              ))}
+            </Flex>
+          </Flex>
+
+          {period === 'custom' && (
+            <Text>
+              From{' '}
+              <Popover.Root
+                open={fromSelectorOpen}
+                onOpenChange={setFromSelectorOpen}
+              >
+                <Popover.Trigger>
+                  <Link underline="always" href="#">
+                    {customFrom.toLocaleString(undefined, {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </Link>
+                </Popover.Trigger>
+
+                <Popover.Content>
+                  <DatePicker
+                    defaultDate={customFrom}
+                    onDateChange={(date) => {
+                      setCustomFrom(date);
+                      setFromSelectorOpen(false);
+                    }}
+                  />
+                </Popover.Content>
+              </Popover.Root>{' '}
+              to{' '}
+              <Popover.Root
+                open={toSelectorOpen}
+                onOpenChange={setToSelectorOpen}
+              >
+                <Popover.Trigger>
+                  <Link underline="always" href="#">
+                    {customTo.toLocaleString(undefined, {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </Link>
+                </Popover.Trigger>
+
+                <Popover.Content>
+                  <DatePicker
+                    defaultDate={customTo}
+                    onDateChange={(date) => {
+                      setCustomTo(date);
+                      setToSelectorOpen(false);
+                    }}
+                  />
+                </Popover.Content>
+              </Popover.Root>
+            </Text>
+          )}
+        </Flex>
+      </Theme>
+
+      <Box flexGrow="1" />
+
+      {/* <PageWrapper
+        p="6"
+        pt="9"
+        size={1600}
         noFlex1
         position="relative"
         color={bkniColor}
@@ -91,109 +189,9 @@ export default function Page({ params }: { params: { id: string } }) {
           </Tabs.List>
         </Tabs.Root>
 
-        <Flex
-          justify="between"
-          align="center"
-          direction={{
-            initial: 'column',
-            md: 'row',
-          }}
-          gap="4"
-        >
-          <Flex
-            direction="column"
-            align={{
-              initial: 'center',
-              md: 'start',
-            }}
-          >
-            <Heading size="8">{accountInfo.nickname}</Heading>
+       
 
-            <Text color="gray">
-              {clanAccountInfo?.clan && `[${clanAccountInfo.clan.tag}] • `}
-              {
-                (clanAccountInfo?.clan
-                  ? strings.common.regions.short
-                  : strings.common.regions.normal)[region]
-              }
-            </Text>
-          </Flex>
-
-          <BkniIndicator bkni={bkni} className={styles.bkniIndicator} />
-        </Flex>
-      </PageWrapper>
-
-      <PageWrapper color={bkniColor} noFlex1 align="center">
-        {period === 'custom' && (
-          <Text>
-            From{' '}
-            <Popover.Root
-              open={fromSelectorOpen}
-              onOpenChange={setFromSelectorOpen}
-            >
-              <Popover.Trigger>
-                <Link underline="always" href="#">
-                  {customFrom.toLocaleString(undefined, {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
-                </Link>
-              </Popover.Trigger>
-
-              <Popover.Content>
-                <DatePicker
-                  defaultDate={customFrom}
-                  onDateChange={(date) => {
-                    setCustomFrom(date);
-                    setFromSelectorOpen(false);
-                  }}
-                />
-              </Popover.Content>
-            </Popover.Root>{' '}
-            to{' '}
-            <Popover.Root
-              open={toSelectorOpen}
-              onOpenChange={setToSelectorOpen}
-            >
-              <Popover.Trigger>
-                <Link underline="always" href="#">
-                  {customTo.toLocaleString(undefined, {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
-                </Link>
-              </Popover.Trigger>
-
-              <Popover.Content>
-                <DatePicker
-                  defaultDate={customTo}
-                  onDateChange={(date) => {
-                    setCustomTo(date);
-                    setToSelectorOpen(false);
-                  }}
-                />
-              </Popover.Content>
-            </Popover.Root>
-          </Text>
-        )}
-
-        <Flex direction="column" align="center">
-          <Heading size="9">72%</Heading>
-          <Text color="gray">Winrate</Text>
-        </Flex>
-
-        <Flex wrap="wrap" gap="2" justify="center" maxWidth="416px">
-          {stats.map((stat) => (
-            <Flex minWidth="96px" direction="column" align="center">
-              <Text size="7">{stat[1]}</Text>
-              <Text color="gray" size="2">
-                {stat[0]}
-              </Text>
-            </Flex>
-          ))}
-        </Flex>
+        
       </PageWrapper>
 
       <Flex flexGrow="1" justify="center" align="center" p="4">
@@ -208,7 +206,7 @@ export default function Page({ params }: { params: { id: string } }) {
         </Callout.Root>
       </Flex>
 
-      {isTracking && <Box flexGrow="1" />}
+      {isTracking && <Box flexGrow="1" />} */}
     </>
   );
 }
