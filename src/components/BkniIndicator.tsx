@@ -1,5 +1,12 @@
 import { TimerIcon } from '@radix-ui/react-icons';
-import { Button, Flex, Heading, Popover, Text } from '@radix-ui/themes';
+import {
+  Button,
+  Flex,
+  FlexProps,
+  Heading,
+  Popover,
+  Text,
+} from '@radix-ui/themes';
 import { parseBkni } from '../core/blitzkit/parseBkni';
 import {
   BKNI_COLORS,
@@ -7,16 +14,16 @@ import {
 } from '../core/statistics/getBkniPercentile';
 import strings from '../lang/en-US.json';
 
-interface BkniIndicatorProps {
+type BkniIndicatorProps = FlexProps & {
   bkni: number;
-}
+};
 
-export function BkniIndicator({ bkni }: BkniIndicatorProps) {
+export function BkniIndicator({ bkni, ...props }: BkniIndicatorProps) {
   const { bkniColor, bkniFraction, bkniMetric, bkniPercentile } =
     parseBkni(bkni);
 
   return (
-    <Flex direction="column" align="center">
+    <Flex direction="column" align="center" {...props}>
       <svg
         width={180}
         height={100}
