@@ -42,7 +42,7 @@ export function Ad({ type, style, ...props }: AdProps) {
       position="relative"
       width={`${dimensions[0]}px`}
       height={`${dimensions[1]}px`}
-      overflow="hidden"
+      // overflow="hidden"
       style={{
         outline: '1px solid var(--gray-3)',
         borderRadius: 'var(--radius-1)',
