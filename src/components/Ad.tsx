@@ -5,7 +5,6 @@ import { uniqueId } from 'lodash';
 import { useEffect, useRef } from 'react';
 import { Vector2Tuple } from 'three';
 import { imgur } from '../core/blitzkit/imgur';
-import { useApp } from '../stores/app';
 
 export enum AdType {
   MediumRectangleHorizontalPurple = 738182777,
@@ -28,7 +27,6 @@ type AdProps = BoxProps & {
 export function Ad({ type, style, ...props }: AdProps) {
   const id = useRef(uniqueId());
   const dimensions = AD_DIMENSIONS[type];
-  const developerMode = useApp((state) => state.developerMode);
 
   useEffect(() => {
     (window as any).msAdsQueue.push(function () {
@@ -44,10 +42,12 @@ export function Ad({ type, style, ...props }: AdProps) {
       position="relative"
       width={`${dimensions[0]}px`}
       height={`${dimensions[1]}px`}
+      overflow="hidden"
       style={{
         outline: '1px solid var(--gray-3)',
         borderRadius: 'var(--radius-1)',
         background: `url(${imgur('DK21EHY')})`,
+
         ...style,
       }}
       {...props}
@@ -60,20 +60,18 @@ export function Ad({ type, style, ...props }: AdProps) {
         direction="column"
         align="center"
       >
-        {!developerMode && <Text color="gray">Advertisement</Text>}
-        {developerMode && (
-          <>
-            <Text size="1" color="gray">
-              {AdType[type]}
-            </Text>
-            <Text size="1" color="gray">
-              {dimensions[0]}x{dimensions[1]}
-            </Text>
-          </>
-        )}
+        <Text color="gray">Advertisement</Text>
+        <Text size="1" color="gray">
+          {dimensions[0]}x{dimensions[1]}
+        </Text>
       </Flex>
 
-      <Box position="relative" id={`${type}-${id.current}`} />
+      <Box
+        width={`${dimensions[0]}px`}
+        height={`${dimensions[1]}px`}
+        position="relative"
+        id={`${type}-${id.current}`}
+      />
     </Box>
   );
 }

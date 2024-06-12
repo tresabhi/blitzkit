@@ -2,7 +2,6 @@
 
 import { Flex } from '@radix-ui/themes';
 import { times } from 'lodash';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Ad, AdType } from '../../../components/Ad';
 import PageWrapper from '../../../components/PageWrapper';
@@ -23,10 +22,6 @@ export default function Page() {
         {times(2, (index) => (
           <Ad key={index} type={AdType.MediumRectangleHorizontalPurple} />
         ))}
-      </Flex>
-
-      <Flex justify="center" mt="4">
-        <Link href="/tools/tankopedia/map">Super duper secret map</Link>
       </Flex>
     </PageWrapper>
   );
