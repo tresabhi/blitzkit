@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { MidSectionAd } from '../../../../components/MidSectionAd';
+import { AdMidSectionResponsive } from '../../../../components/AdMidSectionResponsive';
+import { AdMidSectionWideOnly } from '../../../../components/AdMidSectionWideOnly';
 import PageWrapper from '../../../../components/PageWrapper';
 import { assignDuelMember } from '../../../../core/blitzkit/assignDuelMember';
 import { mutateDuel, useDuel } from '../../../../stores/duel';
@@ -75,12 +76,12 @@ export default function Page({ params }: { params: { id: string } }) {
       {assigned && (
         <>
           <HeroSection />
-          <MidSectionAd />
+          <AdMidSectionWideOnly />
           <CharacteristicsSection />
-          <MidSectionAd />
+          <AdMidSectionResponsive />
           <TechTreeSection />
           <VideoSection />
-          <MidSectionAd />
+          <AdMidSectionResponsive />
           <HistorySection />
           {/* <TankopediaSeparator /> */}
         </>

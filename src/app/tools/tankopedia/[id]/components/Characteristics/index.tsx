@@ -11,6 +11,7 @@ import {
 import { debounce } from 'lodash';
 import { Fragment, use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
+import { Ad, AdType } from '../../../../../../components/Ad';
 import { Link } from '../../../../../../components/Link';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
@@ -26,14 +27,12 @@ import {
   GUN_TYPE_NAMES,
 } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
-import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
 
 export function Characteristics() {
-  const wideFormat = useWideFormat(960);
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const awaitedModelDefinitions = use(modelDefinitions);
   const awaitedProvisionDefinitions = use(provisionDefinitions);
@@ -128,7 +127,13 @@ export function Characteristics() {
   }, [hasImprovedVerticalStabilizer]);
 
   return (
-    <Flex direction={wideFormat ? 'row' : 'column'} gap="8" wrap="wrap">
+    <Flex
+      gap="8"
+      direction={{
+        initial: 'column',
+        md: 'row',
+      }}
+    >
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
         <Flex direction="column" gap="2">
           <Flex align="center" gap="4">
@@ -478,6 +483,16 @@ export function Characteristics() {
             );
           })}
         </Flex>
+      </Flex>
+
+      <Flex
+        justify="center"
+        display={{
+          initial: 'flex',
+          xs: 'none',
+        }}
+      >
+        <Ad type={AdType.MediumRectangleHorizontalPurple} />
       </Flex>
 
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
