@@ -10,17 +10,24 @@ import {
 } from '@radix-ui/themes';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { extendAuth } from '../../core/blitz/extendAuth';
-import { logout } from '../../core/blitz/logout';
+import { extendAuthPatreon } from '../../core/blitz/extendAuthPatreon';
+import { extendAuthWargaming } from '../../core/blitz/extendAuthWargaming';
+import { logoutPatreon } from '../../core/blitz/logoutPatreon';
+import { logoutWargaming } from '../../core/blitz/logoutWargaming';
 import isDev from '../../core/blitzkit/isDev';
 import { isLocalhost } from '../../core/blitzkit/isLocalhost';
 import { CURRENT_POLICIES_AGREEMENT_INDEX, useApp } from '../../stores/app';
 
 const DEV_BUILD_AGREEMENT_COOLDOWN = 8 * 24 * 60 * 60 * 1000;
 
+/**
+ * Wargaming: 14 (refresh: 7)
+ * Patreon: 31 (refresh: 15)
+ */
+
 export function Checks() {
   const [showDevBuildAlert, setShowDevBuildAlert] = useState(false);
-  const login = useApp((state) => state.login);
+  const logins = useApp((state) => state.logins);
   const policiesAgreementIndex = useApp(
     (state) => state.policiesAgreementIndex,
   );
@@ -43,15 +50,26 @@ export function Checks() {
   }, [policiesAgreementIndex, isLegal]);
 
   useEffect(() => {
-    if (!login) return;
+    if (logins.wargaming) {
+      const expiresIn = logins.wargaming.expires - Date.now();
+      const expiresInDays = expiresIn / 1000 / 60 / 60 / 24;
 
-    const expiresIn = login.expiresAt - Date.now() / 1000;
-    const expiresInDays = expiresIn / 60 / 60 / 24;
+      if (expiresInDays < 0) {
+        logoutWargaming();
+      } else if (expiresInDays < 7) {
+        extendAuthWargaming();
+      }
+    }
 
-    if (expiresInDays < 0) {
-      logout();
-    } else if (expiresInDays < 7) {
-      extendAuth();
+    if (logins.patreon) {
+      const expiresIn = logins.patreon.expires - Date.now();
+      const expiresInDays = expiresIn / 1000 / 60 / 60 / 24;
+
+      if (expiresInDays < 0) {
+        logoutPatreon();
+      } else if (expiresInDays < 15) {
+        extendAuthPatreon();
+      }
     }
   });
 

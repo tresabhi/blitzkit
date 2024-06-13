@@ -1,7 +1,7 @@
 import { mutateApp } from '../../stores/app';
 
-export function logout() {
+export function logoutWargaming() {
   mutateApp((draft) => {
-    draft.login = undefined;
+    draft.logins.wargaming = undefined;
   });
 }

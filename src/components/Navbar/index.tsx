@@ -5,28 +5,16 @@ import {
   HamburgerMenuIcon,
   PersonIcon,
 } from '@radix-ui/react-icons';
-import {
-  Box,
-  Button,
-  Dialog,
-  Flex,
-  Heading,
-  IconButton,
-  Popover,
-  Spinner,
-  Text,
-} from '@radix-ui/themes';
+import { Box, Button, Flex, IconButton, Popover, Text } from '@radix-ui/themes';
 import { usePathname } from 'next/navigation';
-import { Suspense, useState } from 'react';
-import { REGIONS, UNLOCALIZED_REGION_NAMES } from '../../constants/regions';
+import { useState } from 'react';
 import { TOOLS } from '../../constants/tools';
-import { authURL } from '../../core/blitz/authURL';
 import { BlitzkitWide } from '../../icons/BlitzkitWide';
 import { PatreonIcon } from '../../icons/Patreon';
+import { WargamingIcon } from '../../icons/Wargaming';
 import { theme } from '../../stitches.config';
 import { useApp } from '../../stores/app';
 import { Link } from '../Link';
-import { LoggedIn } from './components/LoggedIn';
 import * as styles from './index.css';
 
 export const NAVBAR_HEIGHT = 64;
@@ -34,7 +22,7 @@ export const NAVBAR_HEIGHT = 64;
 export default function Navbar() {
   const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
   const pathname = usePathname();
-  const login = useApp((state) => state.login!);
+  const logins = useApp((state) => state.logins);
 
   return (
     <Box
@@ -120,66 +108,40 @@ export default function Navbar() {
               <PatreonIcon width={14} height={14} />
             </Link>
 
-            <Link href="/settings" onClick={() => setShowHamburgerMenu(false)}>
+            <Link
+              href="/settings"
+              onClick={() => setShowHamburgerMenu(false)}
+              color="gray"
+              highContrast
+            >
               <Flex style={{ width: '100%', height: '100%' }} justify="center">
-                <IconButton size="4" variant="ghost" color="gray">
-                  <GearIcon />
-                </IconButton>
+                <GearIcon />
               </Flex>
             </Link>
 
-            {login && (
-              <Popover.Root>
-                <Popover.Trigger>
-                  <IconButton size="4" variant="ghost" color="gray">
-                    <PersonIcon />
-                  </IconButton>
-                </Popover.Trigger>
+            <Popover.Root>
+              <Popover.Trigger>
+                <PersonIcon style={{ cursor: 'pointer' }} />
+              </Popover.Trigger>
 
-                <Popover.Content align="center">
-                  <Flex direction="column" gap="2">
-                    <Suspense fallback={<Spinner />}>
-                      <LoggedIn />
-                    </Suspense>
-                  </Flex>
-                </Popover.Content>
-              </Popover.Root>
-            )}
+              <Popover.Content align="end" width="320px">
+                <Flex direction="column" gap="2">
+                  <Text align="center">Log in with...</Text>
 
-            {!login && false && (
-              <Dialog.Root>
-                <Dialog.Trigger>
-                  <Button variant="ghost">Log in</Button>
-                </Dialog.Trigger>
-
-                <Dialog.Content
-                  style={{
-                    maxWidth: 360,
-                  }}
-                >
-                  <Flex direction="column" gap="2" align="center">
-                    <Heading size="3">Choose your region</Heading>
-
-                    <Flex gap="4" align="center" justify="center" wrap="wrap">
-                      {REGIONS.map((region) => (
-                        <Link
-                          onClick={() => setShowHamburgerMenu(false)}
-                          key={region}
-                          href={authURL(
-                            region,
-                            typeof window === 'undefined'
-                              ? undefined
-                              : location.href,
-                          )}
-                        >
-                          {UNLOCALIZED_REGION_NAMES[region]}
-                        </Link>
-                      ))}
-                    </Flex>
-                  </Flex>
-                </Dialog.Content>
-              </Dialog.Root>
-            )}
+                  <Link
+                    style={{ width: '100%' }}
+                    href={`https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_PATREON_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_PATREON_REDIRECT_URI}`}
+                  >
+                    <Button style={{ width: '100%' }} color="tomato">
+                      <PatreonIcon width={15} height={15} /> Patreon
+                    </Button>
+                  </Link>
+                  <Button color="red">
+                    <WargamingIcon width={15} height={15} /> Wargaming
+                  </Button>
+                </Flex>
+              </Popover.Content>
+            </Popover.Root>
           </Flex>
         </Flex>
 
