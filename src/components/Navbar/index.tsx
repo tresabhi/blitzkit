@@ -5,13 +5,28 @@ import {
   HamburgerMenuIcon,
   PersonIcon,
 } from '@radix-ui/react-icons';
-import { Box, Button, Flex, IconButton, Popover, Text } from '@radix-ui/themes';
+import {
+  Box,
+  Button,
+  Dialog,
+  Flex,
+  IconButton,
+  Inset,
+  Popover,
+  Separator,
+  Text,
+} from '@radix-ui/themes';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { REGIONS } from '../../constants/regions';
 import { TOOLS } from '../../constants/tools';
+import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
+import { logoutPatreon } from '../../core/blitz/logoutPatreon';
+import { logoutWargaming } from '../../core/blitz/logoutWargaming';
 import { BlitzkitWide } from '../../icons/BlitzkitWide';
 import { PatreonIcon } from '../../icons/Patreon';
 import { WargamingIcon } from '../../icons/Wargaming';
+import strings from '../../lang/en-US.json';
 import { theme } from '../../stitches.config';
 import { useApp } from '../../stores/app';
 import { Link } from '../Link';
@@ -125,21 +140,98 @@ export default function Navbar() {
               </Popover.Trigger>
 
               <Popover.Content align="end" width="320px">
-                <Flex direction="column" gap="2">
-                  <Text align="center">Log in with...</Text>
+                {(logins.patreon || logins.wargaming) && (
+                  <Flex direction="column" gap="2">
+                    <Text align="center" color="gray">
+                      Logged in accounts
+                    </Text>
 
-                  <Link
-                    style={{ width: '100%' }}
-                    href={`https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_PATREON_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_PATREON_REDIRECT_URI}`}
-                  >
-                    <Button style={{ width: '100%' }} color="tomato">
-                      <PatreonIcon width={15} height={15} /> Patreon
-                    </Button>
-                  </Link>
-                  <Button color="red">
-                    <WargamingIcon width={15} height={15} /> Wargaming
-                  </Button>
-                </Flex>
+                    {logins.patreon && (
+                      <Flex align="center" gap="2" justify="center">
+                        <PatreonIcon width={15} height={15} />
+                        <Text>Patreon</Text>
+                        <Button
+                          color="red"
+                          variant="ghost"
+                          onClick={logoutPatreon}
+                        >
+                          Logout
+                        </Button>
+                      </Flex>
+                    )}
+
+                    {logins.wargaming && (
+                      <Flex align="center" gap="2" justify="center">
+                        <WargamingIcon width={15} height={15} />
+                        <Text>Wargaming</Text>
+                        <Button
+                          color="red"
+                          variant="ghost"
+                          onClick={logoutWargaming}
+                        >
+                          Logout
+                        </Button>
+                      </Flex>
+                    )}
+                  </Flex>
+                )}
+
+                {!logins.patreon !== !logins.wargaming && (
+                  <Inset side="x">
+                    <Separator my="4" size="4" />
+                  </Inset>
+                )}
+
+                {(!logins.patreon || !logins.wargaming) && (
+                  <Flex direction="column" gap="2">
+                    <Text align="center" color="gray">
+                      Log in with...
+                    </Text>
+
+                    {!logins.patreon && (
+                      <Link
+                        style={{ width: '100%' }}
+                        href={`https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_PATREON_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_PATREON_REDIRECT_URI}`}
+                      >
+                        <Button style={{ width: '100%' }} color="tomato">
+                          <PatreonIcon width={15} height={15} /> Patreon
+                        </Button>
+                      </Link>
+                    )}
+
+                    {!logins.wargaming && (
+                      <Dialog.Root>
+                        <Dialog.Trigger>
+                          <Button color="red">
+                            <WargamingIcon width={15} height={15} /> Wargaming
+                          </Button>
+                        </Dialog.Trigger>
+
+                        <Dialog.Content width="fit-content">
+                          <Flex direction="column" gap="4" align="center">
+                            <Text color="gray">Choose your region</Text>
+
+                            <Flex gap="2" wrap="wrap">
+                              {REGIONS.map((region) => (
+                                <Dialog.Close>
+                                  <Link
+                                    href={`https://api.worldoftanks.${region}/wot/auth/login/?application_id=${WARGAMING_APPLICATION_ID}&redirect_uri=${encodeURIComponent(
+                                      `${location.origin}/auth/wargaming?return=${location.origin}${location.pathname}`,
+                                    )}`}
+                                  >
+                                    <Button color="red">
+                                      {strings.common.regions.normal[region]}
+                                    </Button>
+                                  </Link>
+                                </Dialog.Close>
+                              ))}
+                            </Flex>
+                          </Flex>
+                        </Dialog.Content>
+                      </Dialog.Root>
+                    )}
+                  </Flex>
+                )}
               </Popover.Content>
             </Popover.Root>
           </Flex>
