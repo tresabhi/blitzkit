@@ -51,7 +51,7 @@ export default function Page({
           if (!searchParams.code) break;
 
           const data = (await fetch(
-            `/api/auth/patreon/${searchParams.code}`,
+            `/api/patreon/auth/${searchParams.code}`,
           ).then((response) => response.json())) as PatreonAuthResponse;
 
           mutateApp((draft) => {

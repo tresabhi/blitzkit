@@ -7,7 +7,7 @@ export async function extendAuthPatreon() {
   if (!patreon) return;
 
   const data = (await fetch(
-    `/api/auth/patreon/refresh/${patreon.refreshToken}`,
+    `/api/patreon/refresh/${patreon.refreshToken}`,
   ).then((response) => response.json())) as PatreonAuthResponse;
 
   mutateApp((draft) => {

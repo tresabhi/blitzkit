@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Cross1Icon,
   DiscordLogoIcon,
@@ -16,7 +18,7 @@ import {
   Separator,
   Text,
 } from '@radix-ui/themes';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { REGIONS } from '../../constants/regions';
 import { TOOLS } from '../../constants/tools';
@@ -35,6 +37,7 @@ import * as styles from './index.css';
 export const NAVBAR_HEIGHT = 64;
 
 export default function Navbar() {
+  const router = useRouter();
   const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
   const pathname = usePathname();
   const logins = useApp((state) => state.logins);
@@ -191,7 +194,7 @@ export default function Navbar() {
                     {!logins.patreon && (
                       <Link
                         style={{ width: '100%' }}
-                        href={`https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_PATREON_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_PATREON_REDIRECT_URI}`}
+                        href={`https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_PATREON_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_PATREON_REDIRECT_URI}&scope=identity`}
                       >
                         <Button style={{ width: '100%' }} color="tomato">
                           <PatreonIcon width={15} height={15} /> Patreon
@@ -215,9 +218,13 @@ export default function Navbar() {
                               {REGIONS.map((region) => (
                                 <Dialog.Close>
                                   <Link
-                                    href={`https://api.worldoftanks.${region}/wot/auth/login/?application_id=${WARGAMING_APPLICATION_ID}&redirect_uri=${encodeURIComponent(
-                                      `${location.origin}/auth/wargaming?return=${location.origin}${location.pathname}`,
-                                    )}`}
+                                    href={
+                                      typeof window?.location === undefined
+                                        ? undefined
+                                        : `https://api.worldoftanks.${region}/wot/auth/login/?application_id=${WARGAMING_APPLICATION_ID}&redirect_uri=${encodeURIComponent(
+                                            `${location.origin}/auth/wargaming?return=${location.origin}${location.pathname}`,
+                                          )}`
+                                    }
                                   >
                                     <Button color="red">
                                       {strings.common.regions.normal[region]}
