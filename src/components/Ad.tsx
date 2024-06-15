@@ -5,7 +5,6 @@ import { uniqueId } from 'lodash';
 import { useEffect, useRef } from 'react';
 import { Vector2Tuple } from 'three';
 import { imgur } from '../core/blitzkit/imgur';
-import { useAdExempt } from '../hooks/useAdExempt';
 
 export enum AdType {
   MediumRectangleHorizontalPurple = 738182777,
@@ -28,9 +27,6 @@ type AdProps = BoxProps & {
 export function Ad({ type, style, ...props }: AdProps) {
   const id = useRef(uniqueId());
   const dimensions = AD_DIMENSIONS[type];
-  const exempt = useAdExempt();
-
-  if (exempt) return null;
 
   useEffect(() => {
     (window as any).msAdsQueue.push(function () {

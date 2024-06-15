@@ -2,9 +2,9 @@
 
 import { useEffect } from 'react';
 import { AdMidSectionResponsive } from '../../../../components/AdMidSectionResponsive';
-import { AdMidSectionWideOnly } from '../../../../components/AdMidSectionWideOnly';
 import PageWrapper from '../../../../components/PageWrapper';
 import { assignDuelMember } from '../../../../core/blitzkit/assignDuelMember';
+import { useAdExempt } from '../../../../hooks/useAdExempt';
 import { mutateDuel, useDuel } from '../../../../stores/duel';
 import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
 import { HistorySection } from './components/HistorySection';
@@ -16,6 +16,7 @@ import { VideoSection } from './components/VideoSection';
 export default function Page({ params }: { params: { id: string } }) {
   const initialId = parseInt(params.id);
   const assigned = useDuel((state) => state.assigned);
+  const exempt = useAdExempt();
 
   useEffect(() => {
     assignDuelMember('both', initialId);
@@ -76,14 +77,13 @@ export default function Page({ params }: { params: { id: string } }) {
       {assigned && (
         <>
           <HeroSection />
-          <AdMidSectionWideOnly />
+          {!exempt && <AdMidSectionResponsive />}
           <CharacteristicsSection />
-          <AdMidSectionResponsive />
+          {!exempt && <AdMidSectionResponsive />}
           <TechTreeSection />
           <VideoSection />
-          <AdMidSectionResponsive />
+          {!exempt && <AdMidSectionResponsive />}
           <HistorySection />
-          {/* <TankopediaSeparator /> */}
         </>
       )}
     </PageWrapper>

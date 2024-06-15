@@ -26,6 +26,7 @@ import {
   CREW_MEMBER_NAMES,
   GUN_TYPE_NAMES,
 } from '../../../../../../core/blitzkit/tankDefinitions/constants';
+import { useAdExempt } from '../../../../../../hooks/useAdExempt';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
 import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
@@ -33,6 +34,7 @@ import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
 
 export function Characteristics() {
+  const exempt = useAdExempt();
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const awaitedModelDefinitions = use(modelDefinitions);
   const awaitedProvisionDefinitions = use(provisionDefinitions);
@@ -485,15 +487,17 @@ export function Characteristics() {
         </Flex>
       </Flex>
 
-      <Flex
-        justify="center"
-        display={{
-          initial: 'flex',
-          xs: 'none',
-        }}
-      >
-        <Ad type={AdType.MediumRectangleHorizontalPurple} />
-      </Flex>
+      {!exempt && (
+        <Flex
+          justify="center"
+          display={{
+            initial: 'flex',
+            xs: 'none',
+          }}
+        >
+          <Ad type={AdType.MediumRectangleHorizontalPurple} />
+        </Flex>
+      )}
 
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
         <Flex direction="column" gap="2">

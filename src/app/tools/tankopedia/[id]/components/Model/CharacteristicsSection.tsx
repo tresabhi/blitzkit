@@ -1,5 +1,6 @@
 import { Flex, Heading } from '@radix-ui/themes';
 import { Ad, AdType } from '../../../../../../components/Ad';
+import { useAdExempt } from '../../../../../../hooks/useAdExempt';
 import { Characteristics } from '../Characteristics';
 import { Consumables } from '../Characteristics/components/Consumables';
 import { Equipment } from '../Characteristics/components/Equipment';
@@ -9,8 +10,11 @@ import { Provisions } from '../Characteristics/components/Provisions';
 import { Skills } from '../Characteristics/components/Skills';
 
 export function CharacteristicsSection() {
+  const exempt = useAdExempt();
+
   return (
     <Flex
+      mt={exempt ? '4' : '0'}
       // align="center"
       px="4"
       style={{
@@ -18,21 +22,23 @@ export function CharacteristicsSection() {
       }}
       gap="6"
     >
-      <Flex
-        direction="column"
-        gap="4"
-        display={{
-          initial: 'none',
-          lg: 'flex',
-        }}
-        pt={{
-          initial: '9',
-          md: '0',
-        }}
-      >
-        <Ad type={AdType.WideSkyscraperVerticalPurple} />
-        <Ad type={AdType.WideSkyscraperVerticalPurple} />
-      </Flex>
+      {!exempt && (
+        <Flex
+          direction="column"
+          gap="4"
+          display={{
+            initial: 'none',
+            lg: 'flex',
+          }}
+          pt={{
+            initial: '9',
+            md: '0',
+          }}
+        >
+          <Ad type={AdType.WideSkyscraperVerticalPurple} />
+          <Ad type={AdType.WideSkyscraperVerticalPurple} />
+        </Flex>
+      )}
 
       <Flex
         flexGrow="1"
@@ -57,7 +63,7 @@ export function CharacteristicsSection() {
           flexGrow="1"
           maxWidth={{
             initial: 'unset',
-            xs: '320px',
+            xs: exempt ? undefined : '320px',
             md: '640px',
           }}
           direction="column"
@@ -68,22 +74,24 @@ export function CharacteristicsSection() {
         </Flex>
       </Flex>
 
-      <Flex
-        direction="column"
-        gap="4"
-        height="100%"
-        display={{
-          initial: 'none',
-          xs: 'flex',
-        }}
-        pt={{
-          initial: '9',
-          md: '0',
-        }}
-      >
-        <Ad type={AdType.WideSkyscraperVerticalPurple} />
-        <Ad type={AdType.WideSkyscraperVerticalPurple} />
-      </Flex>
+      {!exempt && (
+        <Flex
+          direction="column"
+          gap="4"
+          height="100%"
+          display={{
+            initial: 'none',
+            xs: 'flex',
+          }}
+          pt={{
+            initial: '9',
+            md: '0',
+          }}
+        >
+          <Ad type={AdType.WideSkyscraperVerticalPurple} />
+          <Ad type={AdType.WideSkyscraperVerticalPurple} />
+        </Flex>
+      )}
     </Flex>
   );
 }

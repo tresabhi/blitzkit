@@ -2,6 +2,8 @@ import { use } from 'react';
 import { useApp } from '../stores/app';
 
 export function useAdExempt() {
+  return true;
+
   const patreon = useApp((state) => state.logins.patreon);
 
   if (!patreon) return false;
