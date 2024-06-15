@@ -1,11 +1,19 @@
-import { CaretRightIcon } from '@radix-ui/react-icons';
-import { Box, Button, Flex, Grid, Heading, Text } from '@radix-ui/themes';
-import Link from 'next/link';
-import PageWrapper from '../components/PageWrapper';
-import { TOOLS } from '../constants/tools';
-import { ImgurSize, imgur } from '../core/blitzkit/imgur';
+'use client';
+
+import { Box, Flex } from '@radix-ui/themes';
+import { Ad, AdType } from '../components/Ad';
+import { AdMidSectionResponsive } from '../components/AdMidSectionResponsive';
+import {
+  compareTool,
+  discordTool,
+  moreTool,
+  ratingTool,
+  sessionTool,
+  tankopediaTool,
+} from '../constants/tools';
 import { Hero } from './components/Hero';
 import { PatreonPlug } from './components/PatreonPlug';
+import { ToolCard } from './components/ToolCard';
 
 export default function Page() {
   return (
@@ -14,136 +22,46 @@ export default function Page() {
 
       <PatreonPlug />
 
-      <PageWrapper size={1028}>
-        <Grid
-          gap="4"
-          columns={{
-            initial: undefined,
-            sm: '2',
+      <Flex p="4" justify="between" gap="4">
+        <Ad
+          type={AdType.WideSkyscraperVerticalPurple}
+          display={{
+            initial: 'none',
+            lg: 'block',
           }}
-          flow="row-dense"
-        >
-          {TOOLS.map((tool) => {
-            const size = tool.significant
-              ? ImgurSize.HugeThumbnail
-              : ImgurSize.LargeThumbnail;
+        />
 
-            return (
-              <Flex
-                key={tool.id}
-                style={{
-                  position: 'relative',
-                  borderRadius: 'var(--radius-2)',
-                  overflow: 'hidden',
-                  backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size })})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  height: tool.significant ? 'min(320px, 50vh)' : '256px',
-                }}
-                gridColumn={{
-                  initial: undefined,
-                  sm: tool.significant ? '1 / 3' : undefined,
-                }}
-              >
-                <Link
-                  href={tool.href ?? `/tools/${tool.id}`}
-                  style={{
-                    display: 'flex',
-                    width: '100%',
-                    height: '100%',
-                    flexDirection: 'column',
-                    textDecoration: 'none',
-                    color: 'inherit',
-                  }}
-                >
-                  <Box
-                    flexGrow="1"
-                    style={{
-                      backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size })})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
-                  />
+        <Flex maxWidth="1024px" flexGrow="1" gap="4" direction="column">
+          <ToolCard tool={tankopediaTool} />
 
-                  <Flex
-                    px={{
-                      initial: '6',
-                      md: tool.significant ? '8' : '6',
-                    }}
-                    py={{
-                      initial: '4',
-                      sm: tool.significant ? '6' : '4',
-                    }}
-                    gap="4"
-                    align="center"
-                    justify="between"
-                    width="100%"
-                    direction={{
-                      initial: 'column',
-                      sm: 'row',
-                    }}
-                    style={{
-                      backgroundColor: 'var(--color-panel-translucent)',
-                      backdropFilter: 'blur(64px)',
-                      WebkitBackdropFilter: 'blur(64px)',
-                    }}
-                  >
-                    <Flex
-                      direction="column"
-                      justify="center"
-                      align={{
-                        initial: 'center',
-                        sm: 'start',
-                      }}
-                    >
-                      <Heading
-                        align={{
-                          initial: 'center',
-                          sm: 'left',
-                        }}
-                        size={{
-                          initial: '6',
-                          sm: tool.significant ? '7' : '5',
-                        }}
-                        weight="medium"
-                      >
-                        {tool.title}
-                      </Heading>
-                      <Text
-                        align={{
-                          initial: 'center',
-                          sm: 'left',
-                        }}
-                        size={{
-                          initial: '3',
-                          sm: tool.significant ? '4' : '3',
-                        }}
-                        color="gray"
-                      >
-                        {tool.description}
-                      </Text>
-                    </Flex>
+          <AdMidSectionResponsive />
 
-                    <Button
-                      size={{
-                        initial: undefined,
-                        sm: tool.significant ? '3' : undefined,
-                      }}
-                      color={tool.button.color}
-                      style={{
-                        cursor: 'inherit',
-                      }}
-                    >
-                      {tool.button.text}
-                      <CaretRightIcon />
-                    </Button>
-                  </Flex>
-                </Link>
-              </Flex>
-            );
-          })}
-        </Grid>
-      </PageWrapper>
+          <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+            <ToolCard tool={compareTool} />
+            <ToolCard tool={sessionTool} />
+          </Flex>
+
+          <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+            <ToolCard tool={ratingTool} />
+            <ToolCard tool={discordTool} />
+          </Flex>
+
+          <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+            <ToolCard tool={moreTool} />
+            <Box flexGrow="1" flexBasis="0" />
+          </Flex>
+        </Flex>
+
+        <Ad
+          type={AdType.WideSkyscraperVerticalPurple}
+          display={{
+            initial: 'none',
+            md: 'block',
+          }}
+        />
+      </Flex>
+
+      <AdMidSectionResponsive />
 
       <div style={{ flex: 1 }} />
     </>

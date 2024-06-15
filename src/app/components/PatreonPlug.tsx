@@ -23,11 +23,13 @@ export function PatreonPlug() {
       py="8"
     >
       <Flex gap="1" align="center">
-        <Text size="4">Active Patreon supports go ad-free</Text>
+        <Text size="4" align="center">
+          Active Patreon supports go ad-free
+        </Text>
         <CheckIcon width="1em" height="1em" />
       </Flex>
 
-      <Flex gap="2">
+      <Flex gap="2" wrap="wrap" justify="center">
         <Link href="https://www.patreon.com/tresabhi" target="_blank">
           <Button>
             <PatreonIcon width={15} height={15} /> Support on Patreon
