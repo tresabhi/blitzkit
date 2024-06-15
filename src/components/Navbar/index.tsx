@@ -217,7 +217,7 @@ export default function Navbar() {
                                 <Dialog.Close key={region}>
                                   <Link
                                     href={
-                                      typeof window !== undefined
+                                      typeof window !== 'undefined'
                                         ? `https://api.worldoftanks.${region}/wot/auth/login/?application_id=${WARGAMING_APPLICATION_ID}&redirect_uri=${encodeURIComponent(
                                             `${location.origin}/auth/wargaming?return=${location.origin}${location.pathname}`,
                                           )}`
