@@ -25,6 +25,7 @@ import { TOOLS } from '../../constants/tools';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { logoutPatreon } from '../../core/blitz/logoutPatreon';
 import { logoutWargaming } from '../../core/blitz/logoutWargaming';
+import { patreonLoginUrl } from '../../core/blitzkit/patreonLoginUrl';
 import { BlitzkitWide } from '../../icons/BlitzkitWide';
 import { PatreonIcon } from '../../icons/Patreon';
 import { WargamingIcon } from '../../icons/Wargaming';
@@ -192,10 +193,7 @@ export default function Navbar() {
                     </Text>
 
                     {!logins.patreon && (
-                      <Link
-                        style={{ width: '100%' }}
-                        href={`https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_PATREON_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_PATREON_REDIRECT_URI}&scope=identity`}
-                      >
+                      <Link style={{ width: '100%' }} href={patreonLoginUrl()}>
                         <Button style={{ width: '100%' }} color="tomato">
                           <PatreonIcon width={15} height={15} /> Patreon
                         </Button>
@@ -216,10 +214,10 @@ export default function Navbar() {
 
                             <Flex gap="2" wrap="wrap">
                               {REGIONS.map((region) => (
-                                <Dialog.Close>
+                                <Dialog.Close key={region}>
                                   <Link
                                     href={
-                                      typeof window?.location === undefined
+                                      typeof window === undefined
                                         ? undefined
                                         : `https://api.worldoftanks.${region}/wot/auth/login/?application_id=${WARGAMING_APPLICATION_ID}&redirect_uri=${encodeURIComponent(
                                             `${location.origin}/auth/wargaming?return=${location.origin}${location.pathname}`,

@@ -28,8 +28,9 @@ type AdProps = BoxProps & {
 export function Ad({ type, style, ...props }: AdProps) {
   const id = useRef(uniqueId());
   const dimensions = AD_DIMENSIONS[type];
+  const exempt = useAdExempt();
 
-  useAdExempt();
+  if (exempt) return null;
 
   useEffect(() => {
     (window as any).msAdsQueue.push(function () {

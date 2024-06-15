@@ -1,3 +1,4 @@
+import { use } from 'react';
 import { useApp } from '../stores/app';
 
 export function useAdExempt() {
@@ -5,7 +6,11 @@ export function useAdExempt() {
 
   if (!patreon) return false;
 
-  fetch(`/api/patreon/membership/${patreon.token}`)
-    .then((response) => response.json())
-    .then(console.log);
+  const json = use(
+    fetch(`/api/patreon/membership/${patreon.token}`, {
+      cache: 'force-cache',
+    }).then((response) => response.json()),
+  );
+
+  return typeof json === 'boolean' && json;
 }

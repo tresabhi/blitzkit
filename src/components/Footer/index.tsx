@@ -27,7 +27,13 @@ export function Footer() {
             sm: 'row',
           }}
         >
-          <Flex direction="column">
+          <Flex
+            direction="column"
+            align={{
+              initial: 'center',
+              sm: 'start',
+            }}
+          >
             <Heading>
               BlitzKit{' '}
               <Text color="gray" size="1" weight="regular">

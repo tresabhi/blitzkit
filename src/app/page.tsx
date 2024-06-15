@@ -5,15 +5,17 @@ import PageWrapper from '../components/PageWrapper';
 import { TOOLS } from '../constants/tools';
 import { ImgurSize, imgur } from '../core/blitzkit/imgur';
 import { Hero } from './components/Hero';
+import { PatreonPlug } from './components/PatreonPlug';
 
 export default function Page() {
   return (
     <>
       <Hero />
 
+      <PatreonPlug />
+
       <PageWrapper size={1028}>
         <Grid
-          p="4"
           gap="4"
           columns={{
             initial: undefined,

@@ -25,53 +25,52 @@ export default function Page({
   const router = useRouter();
 
   useEffect(() => {
-    (async () => {
-      switch (params.provider) {
-        case 'wargaming': {
-          if (
-            !searchParams.expires_at ||
-            !searchParams.access_token ||
-            !searchParams.account_id
-          ) {
-            break;
-          }
-
-          mutateApp((draft) => {
-            draft.logins.wargaming = {
-              id: Number(searchParams.account_id),
-              token: searchParams.access_token,
-              expires: Number(searchParams.expires_at) * 1000,
-            };
-          });
-
+    switch (params.provider) {
+      case 'wargaming': {
+        if (
+          !searchParams.expires_at ||
+          !searchParams.access_token ||
+          !searchParams.account_id
+        ) {
           break;
         }
 
-        case 'patreon': {
-          if (!searchParams.code) break;
+        mutateApp((draft) => {
+          draft.logins.wargaming = {
+            id: Number(searchParams.account_id),
+            token: searchParams.access_token,
+            expires: Number(searchParams.expires_at) * 1000,
+          };
+        });
 
-          const data = (await fetch(
-            `/api/patreon/auth/${searchParams.code}`,
-          ).then((response) => response.json())) as PatreonAuthResponse;
-
-          mutateApp((draft) => {
-            draft.logins.patreon = {
-              token: data.access_token,
-              refreshToken: data.refresh_token,
-              expires: Date.now() + data.expires_in * 1000,
-            };
-          });
-
-          break;
-        }
-
-        default: {
-          console.error(`Unknown provider: ${params.provider}`);
-        }
+        break;
       }
 
-      router.push(searchParams.return ?? '/');
-    })();
+      case 'patreon': {
+        if (!searchParams.code) break;
+
+        // cannot await here because async breaks router.push :(
+        fetch(`/api/patreon/auth/${searchParams.code}`)
+          .then((response) => response.json() as Promise<PatreonAuthResponse>)
+          .then((data) => {
+            mutateApp((draft) => {
+              draft.logins.patreon = {
+                token: data.access_token,
+                refreshToken: data.refresh_token,
+                expires: Date.now() + data.expires_in * 1000,
+              };
+            });
+          });
+
+        break;
+      }
+
+      default: {
+        console.error(`Unknown provider: ${params.provider}`);
+      }
+    }
+
+    router.push(searchParams.return ?? '/');
   });
 
   return (
