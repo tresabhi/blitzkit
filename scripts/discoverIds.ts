@@ -58,9 +58,9 @@ while (chunkIndex < preDiscoveredManifest.chunks) {
 }
 
 const regionalIdIndex: Record<Region, number> = {
-  asia: ids.find((id) => idToRegion(id) === 'asia') ?? MIN_IDS.asia,
-  com: ids.find((id) => idToRegion(id) === 'com') ?? MIN_IDS.com,
-  eu: ids.find((id) => idToRegion(id) === 'eu') ?? MIN_IDS.eu,
+  asia: ids.findLast((id) => idToRegion(id) === 'asia') ?? MIN_IDS.asia,
+  com: ids.findLast((id) => idToRegion(id) === 'com') ?? MIN_IDS.com,
+  eu: ids.findLast((id) => idToRegion(id) === 'eu') ?? MIN_IDS.eu,
 };
 const zeroStreak: Record<Region, number> = { asia: 0, com: 0, eu: 0 };
 let regionIndex = 0;
