@@ -11,8 +11,6 @@ export function PatreonPlug() {
   const patreon = useApp((state) => state.logins.patreon);
   const exempt = useAdExempt();
 
-  if (exempt) return null;
-
   return (
     <Flex
       gap="2"
@@ -24,18 +22,21 @@ export function PatreonPlug() {
     >
       <Flex gap="1" align="center">
         <Text size="4" align="center">
-          Active Patreon supports go ad-free
+          {exempt
+            ? 'You are supporting BlitzKit, thank you!'
+            : 'Active Patreon supports go ad-free'}
         </Text>
-        <CheckIcon width="1em" height="1em" />
+        {!exempt && <CheckIcon width="1em" height="1em" />}
       </Flex>
 
       <Flex gap="2" wrap="wrap" justify="center">
         <Link href="https://www.patreon.com/tresabhi" target="_blank">
           <Button>
-            <PatreonIcon width={15} height={15} /> Support on Patreon
+            <PatreonIcon width={15} height={15} />{' '}
+            {exempt ? 'Manage membership' : 'Support on Patreon'}
           </Button>
         </Link>
-        {!patreon && (
+        {!patreon && !exempt && (
           <Link href={patreonLoginUrl()}>
             <Button variant="outline">Log in with Patreon</Button>
           </Link>
