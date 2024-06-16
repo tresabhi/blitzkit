@@ -1,4 +1,4 @@
-import { use } from 'react';
+import { use, useMemo } from 'react';
 import { useApp } from '../stores/app';
 
 let cache: boolean | undefined = undefined;
@@ -10,13 +10,16 @@ export function useAdExempt() {
 
   if (!patreon) return false;
 
-  const json = use(
-    fetch(`/api/patreon/membership/${patreon.token}`, {
-      cache: 'force-cache',
-    }).then((response) => response.json()),
+  const promise = useMemo(
+    () =>
+      fetch(`/api/patreon/membership/${patreon.token}`, {
+        cache: 'force-cache',
+      }).then((response) => response.json()),
+    [patreon.token],
   );
+  const data = use(promise);
 
-  const exempt = typeof json === 'boolean' && json;
+  const exempt = typeof data === 'boolean' && data;
   cache = exempt;
 
   return exempt;
