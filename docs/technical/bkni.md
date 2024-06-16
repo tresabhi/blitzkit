@@ -5,7 +5,9 @@
 > [!CAUTION]
 > This is a working draft and is incomplete. Do not implement.
 
-## Why BkNI over WN8?
+## Frequently Asked Questions
+
+### Why BkNI over WN8?
 
 BkNI addresses a lot of issues with WN8:
 
@@ -13,6 +15,10 @@ BkNI addresses a lot of issues with WN8:
 - The weights and biases are not dynamic and their formulation is not transparent
 - WN8 values do not asymptote under extreme conditions resulting in meaninglessly large or negative values
 - WN8 has too many digits; it doesn't make sense to differentiate between players with sub-one-thousandth's worth of precision
+
+### Why "BlitzKit" in "BkNI"?
+
+I believe that BkNI is far too complex for other developers to even bother implementing so it will probably stay native to BlitzKit. However, anyone is welcome to use BkNI!
 
 ## Preface
 
@@ -28,13 +34,13 @@ Wargaming provides cumulative statistics for players and tanks. The big idea is 
 $\mu$ is a simple weighted average of statistics across all players where $C_{battles}$ is the number of player battles and $x_{i}$ is the statistic for player $i$.
 
 $$
-\mu=\frac{\sum_{ }^{ }C_{battles}x_{i}}{\sum_{ }^{ }C_{battles}}
+\mu=\frac{\sum C_{battles}x_{i}}{\sum C_{battles}}
 $$
 
 $\sigma$ is the standard deviation of the statistic across all players. Below is a refresher of the formula where $x_{i}$ is the statistic for player $i$ and $n$ is the number of players (or the sample size).
 
 $$
-\sigma=\sqrt{\frac{\sum_{ }^{ }\left(x_{i}-\mu\right)^{2}}{n}}
+\sigma=\sqrt{\frac{\sum \left(x_{i}-\mu\right)^{2}}{n}}
 $$
 
 A normalized atomic statistic is provided by the equation below where $x$ is the player's statistic being evaluated, $\mu$ is the mean of the statistic across all players, and $\sigma$ is the standard deviation of the statistic across all players. During computation, one may pre-compute and reuse $\gamma=x-\mu$.
@@ -46,13 +52,13 @@ $$
 $r$ is the correlation coefficient of the statistic across all players. Below is a refresher of the formula where $x_{i}$ is the statistic for player, $y_{i}$ is the player's win rate, $\mu$ is the mean of the statistic across all players, and $\overline{y}$ is the average win rate across all players.
 
 $$
-r=\frac{\sum_{ }^{ }\left(x_{i}-\mu\right)\left(y_{i}-\overline{y}\right)}{\sqrt{\sum_{ }^{ }\left(x_{i}-\mu\right)^{2}\sum_{ }^{ }\left(y_{i}-\overline{y}\right)^{2}}}
+r=\frac{\sum \left(x_{i}-\mu\right)\left(y_{i}-\overline{y}\right)}{\sqrt{\sum \left(x_{i}-\mu\right)^{2}\sum \left(y_{i}-\overline{y}\right)^{2}}}
 $$
 
 $m$ is the slope of the least squares regression line. Below is a refresher of the formula where $x_i$ is the player's statistic being evaluated, $y_i$ is the player's win rate, and $n$ is the number of players (or the sample size).
 
 $$
-m=\frac{n\sum_{ }^{ }x_{i}y_{i}-\sum_{ }^{ }x_{i}\sum_{ }^{ }y_{i}}{n\sum_{ }^{ }x_{i}^{2}-\left(\sum_{ }^{ }x_{i}\right)^{2}}
+m=\frac{n\sum x_{i}y_{i}-\sum x_{i}\sum y_{i}}{n\sum x_{i}^{2}-\left(\sum x_{i}\right)^{2}}
 $$
 
 The weight of an atomic statistic is $w$ where $r$ is the correlation coefficient between the statistic and win rate, $\mu$ is the mean of the statistic across all players, and $m$ is the slope of the least squares regression line.
@@ -64,7 +70,7 @@ $$
 The raw metric is the weighted average of all atomic statistics.
 
 $$
-R=\frac{\sum_{ }^{ }wA}{\sum_{ }^{ }w}
+R=\frac{\sum wA}{\sum w}
 $$
 
 The final human-readable metric will be passed through the following transformation where $s=100$.
