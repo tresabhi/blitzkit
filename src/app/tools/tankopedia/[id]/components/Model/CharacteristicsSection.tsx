@@ -1,5 +1,6 @@
 import { Flex, Heading } from '@radix-ui/themes';
-import { useWideFormat } from '../../../../../../hooks/useWideFormat';
+import { Ad, AdType } from '../../../../../../components/Ad';
+import { useAdExempt } from '../../../../../../hooks/useAdExempt';
 import { Characteristics } from '../Characteristics';
 import { Consumables } from '../Characteristics/components/Consumables';
 import { Equipment } from '../Characteristics/components/Equipment';
@@ -9,22 +10,44 @@ import { Provisions } from '../Characteristics/components/Provisions';
 import { Skills } from '../Characteristics/components/Skills';
 
 export function CharacteristicsSection() {
-  const wideFormat = useWideFormat(880);
+  const exempt = useAdExempt();
 
   return (
     <Flex
-      align="center"
+      mt={exempt ? '4' : '0'}
+      // align="center"
       px="4"
       style={{
         boxSizing: 'border-box',
       }}
-      direction={wideFormat ? 'row' : 'column'}
+      gap="6"
     >
+      {!exempt && (
+        <Flex
+          direction="column"
+          gap="4"
+          display={{
+            initial: 'none',
+            lg: 'flex',
+          }}
+          pt={{
+            initial: '9',
+            md: '0',
+          }}
+        >
+          <Ad type={AdType.WideSkyscraperVerticalPurple} />
+          <Ad type={AdType.WideSkyscraperVerticalPurple} />
+        </Flex>
+      )}
+
       <Flex
+        flexGrow="1"
         gap="6"
-        style={{ width: '100%' }}
-        direction={wideFormat ? 'row' : 'column'}
         justify="center"
+        direction={{
+          initial: 'column',
+          sm: 'row',
+        }}
       >
         <Flex direction="column" gap="4">
           <Heading>Configuration</Heading>
@@ -37,10 +60,11 @@ export function CharacteristicsSection() {
         </Flex>
 
         <Flex
-          style={{
-            flex: 1,
-            maxWidth: wideFormat ? 640 : undefined,
-            minWidth: 320,
+          flexGrow="1"
+          maxWidth={{
+            initial: 'unset',
+            xs: exempt ? undefined : '320px',
+            md: '640px',
           }}
           direction="column"
           gap="4"
@@ -49,6 +73,25 @@ export function CharacteristicsSection() {
           <Characteristics />
         </Flex>
       </Flex>
+
+      {!exempt && (
+        <Flex
+          direction="column"
+          gap="4"
+          height="100%"
+          display={{
+            initial: 'none',
+            xs: 'flex',
+          }}
+          pt={{
+            initial: '9',
+            md: '0',
+          }}
+        >
+          <Ad type={AdType.WideSkyscraperVerticalPurple} />
+          <Ad type={AdType.WideSkyscraperVerticalPurple} />
+        </Flex>
+      )}
     </Flex>
   );
 }

@@ -10,10 +10,10 @@ interface Extension {
   };
 }
 
-export async function extendAuth() {
-  const { login } = useApp.getState();
+export async function extendAuthWargaming() {
+  const { wargaming } = useApp.getState().logins;
 
-  if (!login) return;
+  if (!wargaming) return;
 
   // error handling? what's that?
   /*
@@ -42,18 +42,18 @@ export async function extendAuth() {
 
   const response = await fetch(
     `https://api.worldoftanks.${idToRegion(
-      login.id,
+      wargaming.id,
     )}/wot/auth/prolongate/?application_id=${WARGAMING_APPLICATION_ID}&access_token=${
-      login.token
+      wargaming.token
     }`,
   );
   const json = (await response.json()) as Extension;
 
   mutateApp((draft) => {
-    draft.login = {
-      id: login.id,
+    draft.logins.wargaming = {
+      id: wargaming.id,
       token: json.data.access_token,
-      expiresAt: json.data.expires_at,
+      expires: json.data.expires_at * 1000,
     };
   });
 }

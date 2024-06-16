@@ -6,6 +6,15 @@ import { useEffect } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
 import { mutateApp } from '../../../stores/app';
 
+export interface PatreonAuthResponse {
+  access_token: string;
+  expires_in: number;
+  token_type: 'Bearer';
+  scope: string;
+  refresh_token: string;
+  version: string;
+}
+
 export default function Page({
   params,
   searchParams,
@@ -27,12 +36,31 @@ export default function Page({
         }
 
         mutateApp((draft) => {
-          draft.login = {
-            expiresAt: Number(searchParams.expires_at),
+          draft.logins.wargaming = {
             id: Number(searchParams.account_id),
             token: searchParams.access_token,
+            expires: Number(searchParams.expires_at) * 1000,
           };
         });
+
+        break;
+      }
+
+      case 'patreon': {
+        if (!searchParams.code) break;
+
+        // cannot await here because async breaks router.push :(
+        fetch(`/api/patreon/auth/${searchParams.code}`)
+          .then((response) => response.json() as Promise<PatreonAuthResponse>)
+          .then((data) => {
+            mutateApp((draft) => {
+              draft.logins.patreon = {
+                token: data.access_token,
+                refreshToken: data.refresh_token,
+                expires: Date.now() + data.expires_in * 1000,
+              };
+            });
+          });
 
         break;
       }
@@ -42,7 +70,7 @@ export default function Page({
       }
     }
 
-    router.push(searchParams.return ? searchParams.return : '/');
+    router.push(searchParams.return ?? '/');
   });
 
   return (

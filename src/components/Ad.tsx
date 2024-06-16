@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, BoxProps, Flex, Text } from '@radix-ui/themes';
+import { Box, BoxProps, Text } from '@radix-ui/themes';
 import { uniqueId } from 'lodash';
 import { useEffect, useRef } from 'react';
 import { Vector2Tuple } from 'three';
@@ -51,19 +51,18 @@ export function Ad({ type, style, ...props }: AdProps) {
       }}
       {...props}
     >
-      <Flex
-        position="absolute"
-        top="50%"
-        left="50%"
-        style={{ transform: 'translate(-50%, -50%)' }}
-        direction="column"
+      <Text
+        color="gray"
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
         align="center"
       >
-        <Text color="gray">Advertisement</Text>
-        <Text size="1" color="gray">
-          {dimensions[0]}x{dimensions[1]}
-        </Text>
-      </Flex>
+        Advertisement
+      </Text>
 
       <Box
         width={`${dimensions[0]}px`}

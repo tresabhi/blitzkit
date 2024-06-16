@@ -11,7 +11,13 @@ export function Link({ href, onClick, ...props }: LinkProps) {
       href={href}
       onClick={(event) => {
         event.preventDefault();
-        if (href) router.push(href);
+        if (href) {
+          if (event.ctrlKey || event.metaKey) {
+            window.open(href);
+          } else {
+            router.push(href);
+          }
+        }
         onClick?.(event);
       }}
       {...props}

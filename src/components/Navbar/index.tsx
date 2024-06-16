@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Cross1Icon,
   DiscordLogoIcon,
@@ -10,31 +12,36 @@ import {
   Button,
   Dialog,
   Flex,
-  Heading,
   IconButton,
+  Inset,
   Popover,
-  Spinner,
+  Separator,
   Text,
 } from '@radix-ui/themes';
-import { usePathname } from 'next/navigation';
-import { Suspense, useState } from 'react';
-import { REGIONS, UNLOCALIZED_REGION_NAMES } from '../../constants/regions';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { REGIONS } from '../../constants/regions';
 import { TOOLS } from '../../constants/tools';
-import { authURL } from '../../core/blitz/authURL';
+import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
+import { logoutPatreon } from '../../core/blitz/logoutPatreon';
+import { logoutWargaming } from '../../core/blitz/logoutWargaming';
+import { patreonLoginUrl } from '../../core/blitzkit/patreonLoginUrl';
 import { BlitzkitWide } from '../../icons/BlitzkitWide';
 import { PatreonIcon } from '../../icons/Patreon';
+import { WargamingIcon } from '../../icons/Wargaming';
+import strings from '../../lang/en-US.json';
 import { theme } from '../../stitches.config';
 import { useApp } from '../../stores/app';
 import { Link } from '../Link';
-import { LoggedIn } from './components/LoggedIn';
 import * as styles from './index.css';
 
 export const NAVBAR_HEIGHT = 64;
 
 export default function Navbar() {
+  const router = useRouter();
   const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
   const pathname = usePathname();
-  const login = useApp((state) => state.login!);
+  const logins = useApp((state) => state.logins);
 
   return (
     <Box
@@ -120,66 +127,118 @@ export default function Navbar() {
               <PatreonIcon width={14} height={14} />
             </Link>
 
-            <Link href="/settings" onClick={() => setShowHamburgerMenu(false)}>
+            <Link
+              href="/settings"
+              onClick={() => setShowHamburgerMenu(false)}
+              color="gray"
+              highContrast
+            >
               <Flex style={{ width: '100%', height: '100%' }} justify="center">
-                <IconButton size="4" variant="ghost" color="gray">
-                  <GearIcon />
-                </IconButton>
+                <GearIcon />
               </Flex>
             </Link>
 
-            {login && (
-              <Popover.Root>
-                <Popover.Trigger>
-                  <IconButton size="4" variant="ghost" color="gray">
-                    <PersonIcon />
-                  </IconButton>
-                </Popover.Trigger>
+            <Popover.Root>
+              <Popover.Trigger>
+                <PersonIcon style={{ cursor: 'pointer' }} />
+              </Popover.Trigger>
 
-                <Popover.Content align="center">
+              <Popover.Content align="end" width="320px">
+                {(logins.patreon || logins.wargaming) && (
                   <Flex direction="column" gap="2">
-                    <Suspense fallback={<Spinner />}>
-                      <LoggedIn />
-                    </Suspense>
-                  </Flex>
-                </Popover.Content>
-              </Popover.Root>
-            )}
+                    <Text align="center" color="gray">
+                      Logged in accounts
+                    </Text>
 
-            {!login && false && (
-              <Dialog.Root>
-                <Dialog.Trigger>
-                  <Button variant="ghost">Log in</Button>
-                </Dialog.Trigger>
-
-                <Dialog.Content
-                  style={{
-                    maxWidth: 360,
-                  }}
-                >
-                  <Flex direction="column" gap="2" align="center">
-                    <Heading size="3">Choose your region</Heading>
-
-                    <Flex gap="4" align="center" justify="center" wrap="wrap">
-                      {REGIONS.map((region) => (
-                        <Link
-                          onClick={() => setShowHamburgerMenu(false)}
-                          key={region}
-                          href={authURL(
-                            region,
-                            typeof window === 'undefined'
-                              ? undefined
-                              : location.href,
-                          )}
+                    {logins.patreon && (
+                      <Flex align="center" gap="2" justify="center">
+                        <PatreonIcon width={15} height={15} />
+                        <Text>Patreon</Text>
+                        <Button
+                          color="red"
+                          variant="ghost"
+                          onClick={logoutPatreon}
                         >
-                          {UNLOCALIZED_REGION_NAMES[region]}
-                        </Link>
-                      ))}
-                    </Flex>
+                          Logout
+                        </Button>
+                      </Flex>
+                    )}
+
+                    {logins.wargaming && (
+                      <Flex align="center" gap="2" justify="center">
+                        <WargamingIcon width={15} height={15} />
+                        <Text>Wargaming</Text>
+                        <Button
+                          color="red"
+                          variant="ghost"
+                          onClick={logoutWargaming}
+                        >
+                          Logout
+                        </Button>
+                      </Flex>
+                    )}
                   </Flex>
-                </Dialog.Content>
-              </Dialog.Root>
-            )}
+                )}
+
+                {!logins.patreon !== !logins.wargaming && (
+                  <Inset side="x">
+                    <Separator my="4" size="4" />
+                  </Inset>
+                )}
+
+                {(!logins.patreon || !logins.wargaming) && (
+                  <Flex direction="column" gap="2">
+                    <Text align="center" color="gray">
+                      Log in with...
+                    </Text>
+
+                    {!logins.patreon && (
+                      <Link style={{ width: '100%' }} href={patreonLoginUrl()}>
+                        <Button style={{ width: '100%' }} color="tomato">
+                          <PatreonIcon width={15} height={15} /> Patreon
+                        </Button>
+                      </Link>
+                    )}
+
+                    {!logins.wargaming && (
+                      <Dialog.Root>
+                        <Dialog.Trigger>
+                          <Button color="red">
+                            <WargamingIcon width={15} height={15} /> Wargaming
+                          </Button>
+                        </Dialog.Trigger>
+
+                        <Dialog.Content width="fit-content">
+                          <Flex direction="column" gap="4" align="center">
+                            <Text color="gray">Choose your region</Text>
+
+                            <Flex gap="2" wrap="wrap">
+                              {REGIONS.map((region) => (
+                                <Dialog.Close key={region}>
+                                  <Link
+                                    href={
+                                      typeof window !== 'undefined'
+                                        ? `https://api.worldoftanks.${region}/wot/auth/login/?application_id=${WARGAMING_APPLICATION_ID}&redirect_uri=${encodeURIComponent(
+                                            `${location.origin}/auth/wargaming?return=${location.origin}${location.pathname}`,
+                                          )}`
+                                        : undefined
+                                    }
+                                  >
+                                    <Button color="red">
+                                      {strings.common.regions.normal[region]}
+                                    </Button>
+                                  </Link>
+                                </Dialog.Close>
+                              ))}
+                            </Flex>
+                          </Flex>
+                        </Dialog.Content>
+                      </Dialog.Root>
+                    )}
+                  </Flex>
+                )}
+              </Popover.Content>
+            </Popover.Root>
           </Flex>
         </Flex>
 
