@@ -43,7 +43,7 @@ async function manageQueue() {
     } else {
       if (RETRY_ERRORS.includes(data.error.message)) {
         console.log(
-          `Encountered retry-able error ${data.error}, putting "${request.url}" back in queue...`,
+          `Encountered retry-able error ${data.error.code} ${data.error.message}, putting "${request.url}" back in queue...`,
         );
 
         retryAbleBlitzFetchEvent.emit(undefined);

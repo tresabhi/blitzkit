@@ -94,10 +94,23 @@ export const moreTool: Tool = {
   },
 };
 
+export const playerStatsTool: Tool = {
+  id: 'player-stats',
+  title: 'Player stats',
+  description: 'Periodical player statistics',
+  pageDescription: 'Periodical player statistics in World of Tanks Blitz',
+  button: {
+    text: 'Lookup player',
+    color: 'blue',
+  },
+  image: 'YelSOfT',
+};
+
 export const TOOLS: Tool[] = [
   tankopediaTool,
   ratingTool,
   compareTool,
+  playerStatsTool,
   sessionTool,
   discordTool,
   moreTool,
