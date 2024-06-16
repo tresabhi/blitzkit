@@ -1,26 +1,28 @@
-import { use, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useApp } from '../stores/app';
+import { useAwait } from './useAwait';
 
-let cache: boolean | undefined = undefined;
+let cache: Record<string, boolean> = {};
 
 export function useAdExempt() {
-  if (cache !== undefined) return cache;
-
   const patreon = useApp((state) => state.logins.patreon);
-
-  if (!patreon) return false;
-
   const promise = useMemo(
     () =>
-      fetch(`/api/patreon/membership/${patreon.token}`, {
-        cache: 'force-cache',
-      }).then((response) => response.json()),
-    [patreon.token],
+      new Promise<boolean>(async (resolve) => {
+        if (!patreon) return resolve(false);
+        if (patreon.token in cache) return resolve(cache[patreon.token]);
+
+        const response = await fetch(
+          `/api/patreon/membership/${patreon.token}`,
+          { cache: 'force-cache' },
+        );
+        const json = await response.json();
+        const exempt = typeof json === 'boolean' && json;
+        cache[patreon.token] = exempt;
+
+        resolve(exempt);
+      }),
+    [patreon?.token],
   );
-  const data = use(promise);
-
-  const exempt = typeof data === 'boolean' && data;
-  cache = exempt;
-
-  return exempt;
+  return useAwait(promise);
 }
