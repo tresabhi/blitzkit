@@ -1,6 +1,5 @@
-import { useMemo } from 'react';
+import { use, useMemo } from 'react';
 import { useApp } from '../stores/app';
-import { useAwait } from './useAwait';
 
 let cache: Record<string, boolean> = {};
 
@@ -24,5 +23,5 @@ export function useAdExempt() {
       }),
     [patreon?.token],
   );
-  return useAwait(promise);
+  return use(promise);
 }
