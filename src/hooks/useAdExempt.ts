@@ -1,7 +1,11 @@
 import { use } from 'react';
 import { useApp } from '../stores/app';
 
+let cache: boolean | undefined = undefined;
+
 export function useAdExempt() {
+  if (cache !== undefined) return cache;
+
   const patreon = useApp((state) => state.logins.patreon);
 
   if (!patreon) return false;
@@ -12,5 +16,8 @@ export function useAdExempt() {
     }).then((response) => response.json()),
   );
 
-  return typeof json === 'boolean' && json;
+  const exempt = typeof json === 'boolean' && json;
+  cache = exempt;
+
+  return exempt;
 }
