@@ -28,22 +28,16 @@ $$
 A=\frac{\sum wa}{\sum w}
 $$
 
-$w$, the weight of each asymptotic score, must be determined using $r$, the correlation coefficient, and $m$, the slope of regression line. Both of these values must be determined for each asymptotic scores through corelation analysis. Formulas for both will be discussed later. Here, $\left|r\right|$ represents the "confidence" of corelation and $m$ represents the actual corelation. $m$ is allowed to be negative such that asymptotic scores that actually harm the player's winrate will have a negative effect on the weighted average.
+$w$, the weight of each asymptotic score is just $r$, the correlation coefficient. This value must be determined for each asymptotic scores through corelation analysis. $r$ is allowed to be negative so that asymptotic scores that actually harm the player's winrate will have a negative effect on the weighted average.
 
 $$
-w=\left|r\right|m
+w=r
 $$
 
 $r$ is the corelation coefficient determined by analysis between the effect of $x_{i}$, any individual statistic like damage dealt normalized by the number of battles, against $y_{i}$, the wins also normalized by the number of battles. Normalizing this way makes $x_{i}$ the average of said statistics over all battles and $y_{i}$ the average winrate. Each player will have their own average $x_{i}$ and $y_{i}$ values which can be used to determine $r$. $n$ here is the number of players sampled to determine $r$.
 
 $$
 r=\frac{n\sum x_{i}y_{i}-\sum x_{i}\sum y_{i}}{\sqrt{\left(n\sum x_{i}^{2}-\left(\sum x_{i}\right)^{2}\right)\left(n\sum y_{i}^{2}-\left(\sum y_{i}\right)^{2}\right)}}
-$$
-
-$m$, in a similar fashion to $r$ can be computed using the slope of the regression line. In case you are wondering, the y-intercept $b$ of the regression line is a not required in our use case.
-
-$$
-m=\frac{n\sum x_{i}y_{i}-\sum x_{i}\sum y_{i}}{n\sum x_{i}^{2}-\left(\sum x_{i}\right)^{2}}
 $$
 
 Though not discussed yet, we will also be needing the two constants of a normal distribution. $\mu$ is the mean of the distribution.
@@ -58,7 +52,7 @@ $$
 \sigma=\sqrt{\frac{\sum \left(x_{i}-\mu\right)^{2}}{n}}
 $$
 
-Note that $r$, $m$, and $\mu$ use many of the same summations just in different places. During real computation, I would highly recommend pre-computing all the summations and deploying them to use to avoid excessive computation. This makes a world of difference when sampling hundreds of millions of players.
+Note that both $r$ and $\mu$ use many of the same summations just in different places. During real computation, I would highly recommend pre-computing all the summations and deploying them to use to avoid excessive computation. This makes a world of difference when sampling hundreds of millions of players.
 
 $a$ is the asymptotic score. An individual asymptotic score is a function of $z$, the standard score. We will be using the asymptotic scores for all available statistics except for the winrate to allow us to judge player performance based purely off their contribution to the team regardless of wether they win. $z$, as we will discuss next, is not asymptotic (it's possible for it to reach absurd, incomprehensible values that start to loose meaning in extreme cases); thus, the asymptotic score is simply a transformation of the standard score using hyperbolic tangent.
 
