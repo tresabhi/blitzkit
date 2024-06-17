@@ -25,6 +25,10 @@ const nextConfig = {
 
   distDir: 'dist/website',
   reactStrictMode: false,
+
+  experimental: {
+    workerThreads: false,
+  },
 };
 
 export default nextConfig;
