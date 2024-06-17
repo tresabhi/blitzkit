@@ -19,7 +19,7 @@ The final metric, $M$, is an integer in the range $\left[0,200\right]$ where $10
 $M$, the human-readable metric, is a function of $A$, the raw score in the range $\left(-1,1\right)$, where $C=100$ is an arbitrary scaling and offset factor.
 
 $$
-M=\operatorname{round}\left(CA+C\right)
+M=\text{round}\left(CA+C\right)
 $$
 
 $A$ is the weighted average of all $a$ ("asymptotic scores" will be discussed later) with weights $w$.
