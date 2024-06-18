@@ -56,7 +56,7 @@ export function HeroSection() {
             }}
           >
             <Heading size={wideFormat ? '9' : '8'}>
-              {protagonistTank.name}
+              {protagonistTank.nameFull ?? protagonistTank.name}
             </Heading>
 
             <Text color="gray">

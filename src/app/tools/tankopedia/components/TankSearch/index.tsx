@@ -14,7 +14,6 @@ import {
 import { go } from 'fuzzysort';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
 import { isMobileOnly } from 'react-device-detect';
-import { TreeType } from '../../../../../components/Tanks';
 import { TANK_CLASSES } from '../../../../../components/Tanks/components/Item/constants';
 import { resolveNearPenetration } from '../../../../../core/blitz/resolveNearPenetration';
 import { modelDefinitions } from '../../../../../core/blitzkit/modelDefinitions';
@@ -35,14 +34,13 @@ import { PageTurner } from '../PageTurner';
 import { Options } from './components/Options';
 import { Results } from './components/Results';
 import { Sort } from './components/Sort';
+import { treeTypeOrder } from './constants';
 
 interface TankSearchProps {
   compact?: boolean;
   onSelect?: (tank: TankDefinition) => void;
   onSelectAll?: (tanks: TankDefinition[]) => void;
 }
-
-const treeTypeOrder: TreeType[] = ['researchable', 'premium', 'collector'];
 
 export function TankSearch({
   compact,
