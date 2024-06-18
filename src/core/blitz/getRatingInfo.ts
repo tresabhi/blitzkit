@@ -16,7 +16,6 @@ export default async function getRatingInfo(region: Region) {
           region,
         )}.wotblitz.com/en/api/rating-leaderboards/season/`,
     undefined,
-    { cache: 'no-store' },
   );
   const data = (await response.json()) as RatingInfo;
 
