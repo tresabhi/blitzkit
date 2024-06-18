@@ -1,15 +1,15 @@
 import { chunk, times, uniq } from 'lodash';
-import { compress, decompress } from 'lz4js';
+import { compress } from 'lz4js';
 import { argv } from 'process';
 import { REGIONS, Region } from '../src/constants/regions';
 import { retryAbleBlitzFetchEvent } from '../src/core/blitz/fetchBlitz';
 import { getAccountInfo } from '../src/core/blitz/getAccountInfo';
 import { MIN_IDS, idToRegion } from '../src/core/blitz/idToRegion';
-import { asset } from '../src/core/blitzkit/asset';
 import { commitAssets } from '../src/core/blitzkit/commitAssets';
-import { DidsReadStream, DidsWriteStream } from '../src/core/streams/dids';
+import { fetchPreDiscoveredIds } from '../src/core/blitzkit/fetchPreDiscoveredIds';
+import { DidsWriteStream } from '../src/core/streams/dids';
 
-interface DiscoverIdsManifest {
+export interface DiscoverIdsManifest {
   time: number;
   chunks: number;
   count: number;
@@ -28,34 +28,7 @@ console.log(`Running in ${production ? 'production' : 'development'} mode`);
 
 const startTime = Date.now();
 const indexableRegions = [...REGIONS];
-let ids: number[] = [];
-const preDiscoveredManifest = (await fetch(
-  asset('ids/manifest.json', !production),
-).then((response) => response.json())) as DiscoverIdsManifest;
-
-console.log(
-  `Fetching ${preDiscoveredManifest.chunks} pre-discovered chunks...`,
-);
-
-let chunkIndex = 0;
-while (chunkIndex < preDiscoveredManifest.chunks) {
-  const preDiscovered = await fetch(
-    asset(`ids/${chunkIndex}.dids.lz4`, !production),
-  ).then(async (response) => {
-    const buffer = await response.arrayBuffer();
-    const decompressed = decompress(new Uint8Array(buffer)).buffer;
-    return new DidsReadStream(decompressed).dids();
-  });
-
-  // no spread syntax: https://github.com/oven-sh/bun/issues/11734
-  ids = ids.concat(preDiscovered);
-
-  console.log(
-    `Pre-discovered ${preDiscovered.length} ids (chunk ${chunkIndex})`,
-  );
-
-  chunkIndex++;
-}
+let ids = await fetchPreDiscoveredIds(!production);
 
 const regionalIdIndex: Record<Region, number> = {
   asia: ids.findLast((id) => idToRegion(id) === 'asia') ?? MIN_IDS.asia,
@@ -82,9 +55,7 @@ async function verify(region: Region, ids: number[]) {
 let discardAttempts = 0;
 let lastProgressUpdate = 0;
 
-retryAbleBlitzFetchEvent.on(() => {
-  discardAttempts++;
-});
+retryAbleBlitzFetchEvent.on(() => discardAttempts++);
 
 const interval = setInterval(async () => {
   if (discardAttempts > 0) return discardAttempts--;

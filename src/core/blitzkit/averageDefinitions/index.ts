@@ -8,18 +8,10 @@ export interface AverageDefinitionsAllStats extends AllStats {
 
 export interface AverageDefinitions {
   [id: number]: {
-    samples: number;
-
-    // average
-    mu: AverageDefinitionsAllStats;
-    // standard deviation
-    sigma: AverageDefinitionsAllStats;
-    // correlation coefficient
-    r: AverageDefinitionsAllStats;
-    // least squares regression line slope
-    m: AverageDefinitionsAllStats;
-    // least squares regression line y-intercept
-    b: AverageDefinitionsAllStats;
+    n: number; // sample size
+    r: AverageDefinitionsAllStats; // correlation coefficient
+    mu: AverageDefinitionsAllStats; // mean
+    sigma: AverageDefinitionsAllStats; // standard deviation
   };
 }
 

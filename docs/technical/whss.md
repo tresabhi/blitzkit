@@ -36,6 +36,8 @@ $$
 
 $r$ is the corelation coefficient determined by analysis between the effect of $x_{i}$, any individual statistic like damage dealt normalized by the number of battles, against $y_{i}$, the wins also normalized by the number of battles. Normalizing this way makes $x_{i}$ the average of said statistics over all battles and $y_{i}$ the average winrate. Each player will have their own average $x_{i}$ and $y_{i}$ values which can be used to determine $r$. $n$ here is the number of players sampled to determine $r$.
 
+TODO: ADD WEIGHTS TO R VALUE
+
 $$
 r=\frac{n\sum x_{i}y_{i}-\sum x_{i}\sum y_{i}}{\sqrt{\left(n\sum x_{i}^{2}-\left(\sum x_{i}\right)^{2}\right)\left(n\sum y_{i}^{2}-\left(\sum y_{i}\right)^{2}\right)}}
 $$
@@ -43,13 +45,13 @@ $$
 Though not discussed yet, we will also be needing the two constants of a normal distribution. $\mu$ is the mean of the distribution.
 
 $$
-\mu=\frac{\sum x_{i}}{n}
+\mu=\frac{\sum w_{i}x_{i}}{w_{i}}
 $$
 
 In a similar fashion, we will also need the standard deviation $\sigma$.
 
 $$
-\sigma=\sqrt{\frac{\sum \left(x_{i}-\mu\right)^{2}}{n}}
+\sigma=\sqrt{\frac{\sum w_{i}\left(x_{i}-\mu\right)^{2}}{\sum w_{i}}}
 $$
 
 Note that both $r$ and $\mu$ use many of the same summations just in different places. During real computation, I would highly recommend pre-computing all the summations and deploying them to use to avoid excessive computation. This makes a world of difference when sampling hundreds of millions of players.
