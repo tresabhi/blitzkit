@@ -1,5 +1,4 @@
-import { CaretRightIcon } from '@radix-ui/react-icons';
-import { Button, Flex, Heading, Text, TextField } from '@radix-ui/themes';
+import { Flex, Grid, Heading, Separator, Text } from '@radix-ui/themes';
 import { range } from 'lodash';
 import { use } from 'react';
 import { classIcons } from '../../../components/ClassIcon';
@@ -14,6 +13,7 @@ import {
 } from '../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../core/blitzkit/tankDefinitions/constants';
 import { tankIcon } from '../../../core/blitzkit/tankIcon';
+import strings from '../../../lang/en-US.json';
 import { treeTypeOrder } from './components/TankSearch/constants';
 
 export default function Page() {
@@ -22,7 +22,7 @@ export default function Page() {
 
   return (
     <PageWrapper color="purple">
-      <TextField.Root size="3" placeholder="Search tanks...">
+      {/* <TextField.Root size="3" placeholder="Search tanks...">
         <TextField.Slot />
 
         <TextField.Slot>
@@ -30,7 +30,7 @@ export default function Page() {
             M48 Patton <CaretRightIcon />
           </Button>
         </TextField.Slot>
-      </TextField.Root>
+      </TextField.Root> */}
 
       <Flex direction="column" gap="8" mt="4">
         {range(10, 0).map((tierUntyped) => {
@@ -41,9 +41,11 @@ export default function Page() {
 
           return (
             <Flex key={tier} direction="column" gap="4">
-              <Heading>Tier {TIER_ROMAN_NUMERALS[tier]}</Heading>
+              <Heading align="center" color="gray">
+                Tier {TIER_ROMAN_NUMERALS[tier]}
+              </Heading>
 
-              <Flex direction="column" gap="4">
+              <Flex direction="column" gap="8">
                 {awaitedNations.map((nation, nationIndex) => {
                   const nationTanks = tierTanks
                     .filter((tank) => tank.nation === nation)
@@ -61,93 +63,101 @@ export default function Page() {
                   if (nationTanks.length === 0) return null;
 
                   return (
-                    <>
-                      {nationIndex > 0 && (
-                        <div
-                          style={{
-                            height: '0.5px',
-                            background: 'var(--gray-6)',
-                          }}
-                        />
-                      )}
-
-                      <Flex key={nation} align="center">
+                    <Flex direction="column" gap="4">
+                      <Flex align="center">
                         <img
-                          alt={nation}
                           src={asset(`flags/scratched/${nation}.webp`)}
-                          width={128}
-                          height={64}
                           style={{
-                            objectFit: 'contain',
+                            height: 64,
+                            aspectRatio: '2 / 1',
                           }}
                         />
-                        <Flex wrap="wrap" gap="2">
-                          {nationTanks.map((tank) => {
-                            const Icon = classIcons[tank.class];
 
-                            return (
-                              <Link
-                                size="1"
-                                color={
-                                  tank.treeType === 'collector'
-                                    ? 'blue'
-                                    : tank.treeType === 'premium'
-                                      ? 'amber'
-                                      : 'gray'
-                                }
-                                highContrast={tank.treeType === 'researchable'}
-                                underline="hover"
-                                key={tank.id}
-                                href={`/tools/tankopedia/${tank.id}`}
-                              >
-                                <Flex
-                                  direction="column"
-                                  align="center"
-                                  width="80px"
-                                >
-                                  <img
-                                    alt={tank.name}
-                                    src={tankIcon(tank.id)}
-                                    width={64}
-                                    height={64}
-                                    style={{
-                                      objectFit: 'contain',
-                                    }}
-                                  />
+                        <Heading size="5" ml="-8" mr="4" wrap="nowrap">
+                          {
+                            strings.common.nations[
+                              nation as keyof typeof strings.common.nations
+                            ]
+                          }
+                        </Heading>
 
-                                  <Flex
-                                    justify="center"
-                                    gap="1"
-                                    align="center"
-                                    overflow="hidden"
-                                    width="100%"
-                                  >
-                                    <Icon
-                                      style={{
-                                        width: '1em',
-                                        height: '1em',
-                                        minWidth: '1em',
-                                        minHeight: '1em',
-                                      }}
-                                    />
-                                    <Text
-                                      align="center"
-                                      style={{
-                                        whiteSpace: 'nowrap',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                      }}
-                                    >
-                                      {tank.name}
-                                    </Text>
-                                  </Flex>
-                                </Flex>
-                              </Link>
-                            );
-                          })}
-                        </Flex>
+                        <Separator size="4" />
                       </Flex>
-                    </>
+
+                      <Grid
+                        flexGrow="1"
+                        columns="repeat(auto-fill, minmax(80px, 1fr))"
+                        gap="2"
+                        gapY="4"
+                        key={nation}
+                      >
+                        {nationTanks.map((tank) => {
+                          const Icon = classIcons[tank.class];
+
+                          return (
+                            <Link
+                              size="1"
+                              color={
+                                tank.treeType === 'collector'
+                                  ? 'blue'
+                                  : tank.treeType === 'premium'
+                                    ? 'amber'
+                                    : 'gray'
+                              }
+                              highContrast={tank.treeType === 'researchable'}
+                              underline="hover"
+                              key={tank.id}
+                              href={`/tools/tankopedia/${tank.id}`}
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                gap: 'var(--space-2)',
+                              }}
+                            >
+                              <img
+                                alt={tank.name}
+                                src={tankIcon(tank.id)}
+                                height={64}
+                                style={{
+                                  width: '100%',
+                                  objectPosition: 'center',
+                                  objectFit: 'contain',
+                                }}
+                              />
+
+                              <Flex
+                                justify="center"
+                                gap="1"
+                                align="center"
+                                overflow="hidden"
+                                width="100%"
+                                maxWidth="100%"
+                              >
+                                <Icon
+                                  style={{
+                                    width: '1em',
+                                    height: '1em',
+                                    minWidth: '1em',
+                                    minHeight: '1em',
+                                  }}
+                                />
+                                <Text
+                                  align="center"
+                                  style={{
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                  }}
+                                >
+                                  {tank.name}
+                                </Text>
+                              </Flex>
+                            </Link>
+                          );
+                        })}
+                      </Grid>
+                    </Flex>
                   );
                 })}
               </Flex>
