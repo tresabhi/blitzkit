@@ -1,7 +1,16 @@
-import { Flex, Grid, Heading, Link, Separator, Text } from '@radix-ui/themes';
+import {
+  Callout,
+  Flex,
+  Grid,
+  Heading,
+  Link,
+  Separator,
+  Text,
+} from '@radix-ui/themes';
 import { range } from 'lodash';
 import { memo, use } from 'react';
 import { classIcons } from '../../../../components/ClassIcon';
+import { ExperimentIcon } from '../../../../components/ExperimentIcon';
 import { TANK_CLASSES } from '../../../../components/Tanks/components/Item/constants';
 import { asset } from '../../../../core/blitzkit/asset';
 import { gameDefinitions } from '../../../../core/blitzkit/gameDefinitions';
@@ -35,6 +44,18 @@ export const Results = memo<ResultsProps>(({ filters }) => {
 
   return (
     <Flex direction="column" gap="8" flexGrow="1">
+      {filters.testing === 'only' && (
+        <Callout.Root color="amber" style={{ width: 'fit-content' }}>
+          <Callout.Icon>
+            <ExperimentIcon style={{ width: '1em', height: '1em' }} />
+          </Callout.Icon>
+          <Callout.Text>
+            Tanks in testing are subject to change and many not represent the
+            final product.
+          </Callout.Text>
+        </Callout.Root>
+      )}
+
       {range(10, 0).map((tierUntyped) => {
         const tier = tierUntyped as Tier;
         const tierTanks = tanksFiltered

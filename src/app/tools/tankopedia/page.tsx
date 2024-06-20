@@ -53,6 +53,7 @@ export default function Page() {
           initial: '0',
           sm: '6',
         }}
+        pb="6"
       >
         <Flex
           direction={{
