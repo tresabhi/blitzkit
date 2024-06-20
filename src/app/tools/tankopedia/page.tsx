@@ -4,16 +4,18 @@ import {
   Grid,
   Heading,
   IconButton,
-  RadioGroup,
   Separator,
   Text,
 } from '@radix-ui/themes';
 import { range, times } from 'lodash';
 import { use } from 'react';
 import { classIcons } from '../../../components/ClassIcon';
+import { ExperimentIcon } from '../../../components/ExperimentIcon';
 import { Link } from '../../../components/Link';
 import PageWrapper from '../../../components/PageWrapper';
 import { ResearchedIcon } from '../../../components/ResearchedIcon';
+import { ScienceIcon } from '../../../components/ScienceIcon';
+import { ScienceOffIcon } from '../../../components/ScienceOffIcon';
 import { TANK_CLASSES } from '../../../components/Tanks/components/Item/constants';
 import { asset } from '../../../core/blitzkit/asset';
 import { gameDefinitions } from '../../../core/blitzkit/gameDefinitions';
@@ -47,8 +49,15 @@ export default function Page() {
             initial: 'row',
             sm: 'column',
           }}
-          gap="4"
-          align="start"
+          gap="2"
+          align={{
+            initial: 'start',
+            sm: 'start',
+          }}
+          justify={{
+            initial: 'center',
+            sm: 'start',
+          }}
           pt={{
             initial: '0',
             sm: '8',
@@ -233,13 +242,31 @@ export default function Page() {
             </IconButton>
           </Flex>
 
-          <Flex direction="column" gap="2">
-            <Text wrap="nowrap">Test tanks</Text>
-            <RadioGroup.Root defaultValue="include">
-              <RadioGroup.Item value="include">Include</RadioGroup.Item>
-              <RadioGroup.Item value="exclude">Exclude</RadioGroup.Item>
-              <RadioGroup.Item value="only">Only</RadioGroup.Item>
-            </RadioGroup.Root>
+          <Flex
+            overflow="hidden"
+            style={{
+              borderRadius: 'var(--radius-full)',
+            }}
+            direction={{
+              sm: 'row',
+              initial: 'column',
+            }}
+          >
+            <IconButton variant="soft" radius="none" color="gray" highContrast>
+              <ExperimentIcon
+                style={{ width: '1em', height: '1em', color: 'currentColor' }}
+              />
+            </IconButton>
+            <IconButton variant="soft" radius="none" color="gray" highContrast>
+              <ScienceIcon
+                style={{ width: '1em', height: '1em', color: 'currentColor' }}
+              />
+            </IconButton>
+            <IconButton variant="soft" radius="none" color="gray" highContrast>
+              <ScienceOffIcon
+                style={{ width: '1em', height: '1em', color: 'currentColor' }}
+              />
+            </IconButton>
           </Flex>
         </Flex>
 
