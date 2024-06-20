@@ -197,6 +197,7 @@ export const tankNames = tanksDefinitionsArray.then((tanks) =>
 
 export type Tier = (typeof TIERS)[number];
 
+// TODO: DEPRICATE THISuuu
 export const NATIONS = tanksDefinitionsArray.then((tanks) => {
   const nations = Array.from(
     new Set<string>(Object.values(tanks).map((tank) => tank.nation)),

@@ -13,6 +13,7 @@ import { use } from 'react';
 import { classIcons } from '../../../components/ClassIcon';
 import { Link } from '../../../components/Link';
 import PageWrapper from '../../../components/PageWrapper';
+import { ResearchedIcon } from '../../../components/ResearchedIcon';
 import { TANK_CLASSES } from '../../../components/Tanks/components/Item/constants';
 import { asset } from '../../../core/blitzkit/asset';
 import { gameDefinitions } from '../../../core/blitzkit/gameDefinitions';
@@ -30,17 +31,45 @@ export default function Page() {
 
   return (
     <PageWrapper color="purple" size={1028 + 256}>
-      <Flex gap="8">
-        <Flex direction="column" gap="4" align="start" pt="9">
-          <Text mb="-3">Class</Text>
+      <Flex
+        gap="8"
+        direction={{
+          initial: 'column',
+          sm: 'row',
+        }}
+        pt={{
+          initial: '0',
+          sm: '6',
+        }}
+      >
+        <Flex
+          direction={{
+            initial: 'row',
+            sm: 'column',
+          }}
+          gap="4"
+          align="start"
+          pt={{
+            initial: '0',
+            sm: '8',
+          }}
+        >
           <Flex
-            direction="column"
+            direction={{
+              initial: 'row',
+              sm: 'column',
+            }}
             overflow="hidden"
             style={{
               borderRadius: 'var(--radius-4)',
             }}
           >
-            <Flex>
+            <Flex
+              direction={{
+                sm: 'row',
+                initial: 'column',
+              }}
+            >
               {times(5, (index) => {
                 const tier = (index + 1) as Tier;
 
@@ -60,7 +89,12 @@ export default function Page() {
                 );
               })}
             </Flex>
-            <Flex>
+            <Flex
+              direction={{
+                sm: 'row',
+                initial: 'column',
+              }}
+            >
               {times(5, (index) => {
                 const tier = (index + 6) as Tier;
 
@@ -82,50 +116,32 @@ export default function Page() {
             </Flex>
           </Flex>
 
-          <Text mb="-3">Type</Text>
           <Flex
-            overflow="hidden"
-            style={{
-              borderRadius: 'var(--radius-full)',
+            direction={{
+              initial: 'row',
+              sm: 'column',
             }}
-          >
-            {TANK_CLASSES.map((tankClass) => {
-              const Icon = classIcons[tankClass];
-
-              return (
-                <IconButton
-                  key={tankClass}
-                  variant="soft"
-                  radius="none"
-                  color="gray"
-                  highContrast
-                >
-                  <Icon style={{ width: '1em', height: '1em' }} />
-                </IconButton>
-              );
-            })}
-          </Flex>
-
-          <Text mb="-3">Nation</Text>
-          <Flex
-            direction="column"
             overflow="hidden"
             style={{
               borderRadius: 'var(--radius-4)',
             }}
           >
-            <Flex>
+            <Flex
+              direction={{
+                sm: 'row',
+                initial: 'column',
+              }}
+            >
               {awaitedGameDefinitions.nations
                 .slice(0, Math.ceil(awaitedGameDefinitions.nations.length / 2))
                 .map((nation) => (
                   <IconButton
-                    style={{ flex: 1 }}
+                    // style={{ flex: 1 }}
                     variant="soft"
                     color="gray"
                     highContrast
                     radius="none"
                   >
-                    {/* TODO: trim icons */}
                     <img
                       style={{ width: '1em', height: '1em' }}
                       src={asset(`flags/circle/${nation}.webp`)}
@@ -133,7 +149,12 @@ export default function Page() {
                   </IconButton>
                 ))}
             </Flex>
-            <Flex>
+            <Flex
+              direction={{
+                sm: 'row',
+                initial: 'column',
+              }}
+            >
               {awaitedGameDefinitions.nations
                 .slice(Math.ceil(awaitedGameDefinitions.nations.length / 2))
                 .map((nation) => (
@@ -154,15 +175,75 @@ export default function Page() {
             </Flex>
           </Flex>
 
-          <Text mb="-3">Test tanks</Text>
-          <RadioGroup.Root defaultValue="include">
-            <RadioGroup.Item value="include">Include</RadioGroup.Item>
-            <RadioGroup.Item value="exclude">Exclude</RadioGroup.Item>
-            <RadioGroup.Item value="only">Only</RadioGroup.Item>
-          </RadioGroup.Root>
+          <Flex
+            overflow="hidden"
+            style={{
+              borderRadius: 'var(--radius-full)',
+            }}
+            direction={{
+              sm: 'row',
+              initial: 'column',
+            }}
+          >
+            {TANK_CLASSES.map((tankClass) => {
+              const Icon = classIcons[tankClass];
+
+              return (
+                <IconButton
+                  key={tankClass}
+                  variant="soft"
+                  radius="none"
+                  color="gray"
+                  highContrast
+                >
+                  <Icon style={{ width: '1em', height: '1em' }} />
+                </IconButton>
+              );
+            })}
+          </Flex>
+
+          <Flex
+            overflow="hidden"
+            style={{
+              borderRadius: 'var(--radius-full)',
+            }}
+            direction={{
+              sm: 'row',
+              initial: 'column',
+            }}
+          >
+            <IconButton variant="soft" radius="none" color="gray" highContrast>
+              <ResearchedIcon style={{ width: '1em', height: '1em' }} />
+            </IconButton>
+            <IconButton variant="soft" radius="none" color="gray" highContrast>
+              <Text
+                color="amber"
+                style={{ display: 'flex', justifyContent: 'center' }}
+              >
+                <ResearchedIcon style={{ width: '1em', height: '1em' }} />
+              </Text>
+            </IconButton>
+            <IconButton variant="soft" radius="none" color="gray" highContrast>
+              <Text
+                color="blue"
+                style={{ display: 'flex', justifyContent: 'center' }}
+              >
+                <ResearchedIcon style={{ width: '1em', height: '1em' }} />
+              </Text>
+            </IconButton>
+          </Flex>
+
+          <Flex direction="column" gap="2">
+            <Text wrap="nowrap">Test tanks</Text>
+            <RadioGroup.Root defaultValue="include">
+              <RadioGroup.Item value="include">Include</RadioGroup.Item>
+              <RadioGroup.Item value="exclude">Exclude</RadioGroup.Item>
+              <RadioGroup.Item value="only">Only</RadioGroup.Item>
+            </RadioGroup.Root>
+          </Flex>
         </Flex>
 
-        <Flex direction="column" gap="8" mt="4" flexGrow="1">
+        <Flex direction="column" gap="8" flexGrow="1">
           {range(10, 0).map((tierUntyped) => {
             const tier = tierUntyped as Tier;
             const tierTanks = awaitedTanksDefinitionsArray
