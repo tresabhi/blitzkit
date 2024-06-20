@@ -1,35 +1,45 @@
-import {
-  Button,
-  Flex,
-  Grid,
-  Heading,
-  IconButton,
-  Separator,
-  Text,
-} from '@radix-ui/themes';
-import { range, times } from 'lodash';
-import { use } from 'react';
+'use client';
+
+import { TrashIcon } from '@radix-ui/react-icons';
+import { Box, Button, Flex, IconButton, Text } from '@radix-ui/themes';
+import { produce } from 'immer';
+import { times } from 'lodash';
+import { use, useState } from 'react';
 import { classIcons } from '../../../components/ClassIcon';
 import { ExperimentIcon } from '../../../components/ExperimentIcon';
-import { Link } from '../../../components/Link';
 import PageWrapper from '../../../components/PageWrapper';
 import { ResearchedIcon } from '../../../components/ResearchedIcon';
 import { ScienceIcon } from '../../../components/ScienceIcon';
 import { ScienceOffIcon } from '../../../components/ScienceOffIcon';
+import { TankClass, TreeType } from '../../../components/Tanks';
 import { TANK_CLASSES } from '../../../components/Tanks/components/Item/constants';
 import { asset } from '../../../core/blitzkit/asset';
 import { gameDefinitions } from '../../../core/blitzkit/gameDefinitions';
-import {
-  Tier,
-  tanksDefinitionsArray,
-} from '../../../core/blitzkit/tankDefinitions';
+import { Tier } from '../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../core/blitzkit/tankDefinitions/constants';
-import { tankIcon } from '../../../core/blitzkit/tankIcon';
-import { treeTypeOrder } from './components/TankSearch/constants';
+import { Results } from './components/Results';
+
+export interface TankopediaSearchPageFilters {
+  tier?: Tier;
+  nation?: string;
+  class?: TankClass;
+  type?: TreeType;
+  testing: 'include' | 'exclude' | 'only';
+}
+
+const defaultTankopediaSearchPageFilters: TankopediaSearchPageFilters = {
+  testing: 'include',
+};
 
 export default function Page() {
-  const awaitedTanksDefinitionsArray = use(tanksDefinitionsArray);
   const awaitedGameDefinitions = use(gameDefinitions);
+  const [filters, setFilters] = useState<TankopediaSearchPageFilters>(
+    defaultTankopediaSearchPageFilters,
+  );
+
+  function mutateFilters(recipe: (draft: TankopediaSearchPageFilters) => void) {
+    setFilters(produce(recipe));
+  }
 
   return (
     <PageWrapper color="purple" size={1028 + 256}>
@@ -58,10 +68,6 @@ export default function Page() {
             initial: 'center',
             sm: 'start',
           }}
-          pt={{
-            initial: '0',
-            sm: '8',
-          }}
         >
           <Flex
             direction={{
@@ -81,20 +87,23 @@ export default function Page() {
             >
               {times(5, (index) => {
                 const tier = (index + 1) as Tier;
+                const selected = filters.tier === tier;
 
                 return (
-                  <Button
+                  <IconButton
                     key={tier}
-                    variant="soft"
+                    variant={selected ? 'solid' : 'soft'}
                     radius="none"
-                    color="gray"
+                    color={selected ? undefined : 'gray'}
                     highContrast
-                    style={{
-                      width: 32,
-                    }}
+                    onClick={() =>
+                      mutateFilters((draft) => {
+                        draft.tier = draft.tier === tier ? undefined : tier;
+                      })
+                    }
                   >
-                    {TIER_ROMAN_NUMERALS[tier]}
-                  </Button>
+                    <Text size="2">{TIER_ROMAN_NUMERALS[tier]}</Text>
+                  </IconButton>
                 );
               })}
             </Flex>
@@ -106,20 +115,23 @@ export default function Page() {
             >
               {times(5, (index) => {
                 const tier = (index + 6) as Tier;
+                const selected = filters.tier === tier;
 
                 return (
-                  <Button
+                  <IconButton
                     key={tier}
-                    variant="soft"
+                    variant={selected ? 'solid' : 'soft'}
                     radius="none"
-                    color="gray"
+                    color={selected ? undefined : 'gray'}
                     highContrast
-                    style={{
-                      width: 32,
-                    }}
+                    onClick={() =>
+                      mutateFilters((draft) => {
+                        draft.tier = draft.tier === tier ? undefined : tier;
+                      })
+                    }
                   >
-                    {TIER_ROMAN_NUMERALS[tier]}
-                  </Button>
+                    <Text size="2">{TIER_ROMAN_NUMERALS[tier]}</Text>
+                  </IconButton>
                 );
               })}
             </Flex>
@@ -143,20 +155,29 @@ export default function Page() {
             >
               {awaitedGameDefinitions.nations
                 .slice(0, Math.ceil(awaitedGameDefinitions.nations.length / 2))
-                .map((nation) => (
-                  <IconButton
-                    // style={{ flex: 1 }}
-                    variant="soft"
-                    color="gray"
-                    highContrast
-                    radius="none"
-                  >
-                    <img
-                      style={{ width: '1em', height: '1em' }}
-                      src={asset(`flags/circle/${nation}.webp`)}
-                    />
-                  </IconButton>
-                ))}
+                .map((nation) => {
+                  const selected = filters.nation === nation;
+
+                  return (
+                    <IconButton
+                      variant={selected ? 'solid' : 'soft'}
+                      color={selected ? undefined : 'gray'}
+                      highContrast
+                      radius="none"
+                      onClick={() =>
+                        mutateFilters((draft) => {
+                          draft.nation =
+                            draft.nation === nation ? undefined : nation;
+                        })
+                      }
+                    >
+                      <img
+                        style={{ width: '1em', height: '1em' }}
+                        src={asset(`flags/circle/${nation}.webp`)}
+                      />
+                    </IconButton>
+                  );
+                })}
             </Flex>
             <Flex
               direction={{
@@ -166,21 +187,30 @@ export default function Page() {
             >
               {awaitedGameDefinitions.nations
                 .slice(Math.ceil(awaitedGameDefinitions.nations.length / 2))
-                .map((nation) => (
-                  <IconButton
-                    style={{ flex: 1 }}
-                    variant="soft"
-                    color="gray"
-                    highContrast
-                    radius="none"
-                  >
-                    {/* TODO: trim icons */}
-                    <img
-                      style={{ width: '1em', height: '1em' }}
-                      src={asset(`flags/circle/${nation}.webp`)}
-                    />
-                  </IconButton>
-                ))}
+                .map((nation) => {
+                  const selected = filters.nation === nation;
+
+                  return (
+                    <IconButton
+                      style={{ flex: 1 }}
+                      variant={selected ? 'solid' : 'soft'}
+                      color={selected ? undefined : 'gray'}
+                      highContrast
+                      radius="none"
+                      onClick={() =>
+                        mutateFilters((draft) => {
+                          draft.nation =
+                            draft.nation === nation ? undefined : nation;
+                        })
+                      }
+                    >
+                      <img
+                        style={{ width: '1em', height: '1em' }}
+                        src={asset(`flags/circle/${nation}.webp`)}
+                      />
+                    </IconButton>
+                  );
+                })}
             </Flex>
           </Flex>
 
@@ -196,14 +226,21 @@ export default function Page() {
           >
             {TANK_CLASSES.map((tankClass) => {
               const Icon = classIcons[tankClass];
+              const selected = filters.class === tankClass;
 
               return (
                 <IconButton
                   key={tankClass}
-                  variant="soft"
+                  variant={selected ? 'solid' : 'soft'}
                   radius="none"
-                  color="gray"
+                  color={selected ? undefined : 'gray'}
                   highContrast
+                  onClick={() =>
+                    mutateFilters((draft) => {
+                      draft.class =
+                        draft.class === tankClass ? undefined : tankClass;
+                    })
+                  }
                 >
                   <Icon style={{ width: '1em', height: '1em' }} />
                 </IconButton>
@@ -221,20 +258,52 @@ export default function Page() {
               initial: 'column',
             }}
           >
-            <IconButton variant="soft" radius="none" color="gray" highContrast>
+            <IconButton
+              variant={filters.type === 'researchable' ? 'solid' : 'soft'}
+              radius="none"
+              color={filters.type === 'researchable' ? undefined : 'gray'}
+              highContrast
+              onClick={() =>
+                mutateFilters((draft) => {
+                  draft.type =
+                    draft.type === 'researchable' ? undefined : 'researchable';
+                })
+              }
+            >
               <ResearchedIcon style={{ width: '1em', height: '1em' }} />
             </IconButton>
-            <IconButton variant="soft" radius="none" color="gray" highContrast>
+            <IconButton
+              variant={filters.type === 'premium' ? 'solid' : 'soft'}
+              radius="none"
+              color={filters.type === 'premium' ? 'amber' : 'gray'}
+              highContrast
+              onClick={() =>
+                mutateFilters((draft) => {
+                  draft.type = draft.type === 'premium' ? undefined : 'premium';
+                })
+              }
+            >
               <Text
-                color="amber"
+                color={filters.type === 'premium' ? undefined : 'amber'}
                 style={{ display: 'flex', justifyContent: 'center' }}
               >
                 <ResearchedIcon style={{ width: '1em', height: '1em' }} />
               </Text>
             </IconButton>
-            <IconButton variant="soft" radius="none" color="gray" highContrast>
+            <IconButton
+              variant={filters.type === 'collector' ? 'solid' : 'soft'}
+              radius="none"
+              color={filters.type === 'collector' ? 'blue' : 'gray'}
+              highContrast
+              onClick={() =>
+                mutateFilters((draft) => {
+                  draft.type =
+                    draft.type === 'collector' ? undefined : 'collector';
+                })
+              }
+            >
               <Text
-                color="blue"
+                color={filters.type === 'premium' ? undefined : 'blue'}
                 style={{ display: 'flex', justifyContent: 'center' }}
               >
                 <ResearchedIcon style={{ width: '1em', height: '1em' }} />
@@ -252,133 +321,74 @@ export default function Page() {
               initial: 'column',
             }}
           >
-            <IconButton variant="soft" radius="none" color="gray" highContrast>
+            <IconButton
+              variant={filters.testing === 'include' ? 'solid' : 'soft'}
+              radius="none"
+              color={filters.testing === 'include' ? undefined : 'gray'}
+              highContrast
+              onClick={() =>
+                mutateFilters((draft) => {
+                  draft.testing = 'include';
+                })
+              }
+            >
               <ExperimentIcon
                 style={{ width: '1em', height: '1em', color: 'currentColor' }}
               />
             </IconButton>
-            <IconButton variant="soft" radius="none" color="gray" highContrast>
-              <ScienceIcon
-                style={{ width: '1em', height: '1em', color: 'currentColor' }}
-              />
-            </IconButton>
-            <IconButton variant="soft" radius="none" color="gray" highContrast>
+            <IconButton
+              variant={filters.testing === 'exclude' ? 'solid' : 'soft'}
+              radius="none"
+              color={filters.testing === 'exclude' ? undefined : 'gray'}
+              highContrast
+              onClick={() =>
+                mutateFilters((draft) => {
+                  draft.testing = 'exclude';
+                })
+              }
+            >
               <ScienceOffIcon
                 style={{ width: '1em', height: '1em', color: 'currentColor' }}
               />
             </IconButton>
+            <IconButton
+              variant={filters.testing === 'only' ? 'solid' : 'soft'}
+              radius="none"
+              color={filters.testing === 'only' ? undefined : 'gray'}
+              highContrast
+              onClick={() =>
+                mutateFilters((draft) => {
+                  draft.testing = 'only';
+                })
+              }
+            >
+              <ScienceIcon
+                style={{ width: '1em', height: '1em', color: 'currentColor' }}
+              />
+            </IconButton>
           </Flex>
+
+          <Box display={{ initial: 'block', sm: 'none' }}>
+            <IconButton
+              color="red"
+              ml="2"
+              onClick={() => setFilters(defaultTankopediaSearchPageFilters)}
+            >
+              <TrashIcon />
+            </IconButton>
+          </Box>
+          <Box display={{ initial: 'none', sm: 'block' }}>
+            <Button
+              color="red"
+              mt="2"
+              onClick={() => setFilters(defaultTankopediaSearchPageFilters)}
+            >
+              <TrashIcon /> Clear
+            </Button>
+          </Box>
         </Flex>
 
-        <Flex direction="column" gap="8" flexGrow="1">
-          {range(10, 0).map((tierUntyped) => {
-            const tier = tierUntyped as Tier;
-            const tierTanks = awaitedTanksDefinitionsArray
-              .filter((tank) => tank.tier === tier)
-              .sort(
-                (a, b) =>
-                  treeTypeOrder.indexOf(a.treeType) -
-                  treeTypeOrder.indexOf(b.treeType),
-              )
-              .sort(
-                (a, b) =>
-                  TANK_CLASSES.indexOf(a.class) - TANK_CLASSES.indexOf(b.class),
-              )
-              .sort(
-                (a, b) =>
-                  awaitedGameDefinitions.nations.indexOf(a.nation) -
-                  awaitedGameDefinitions.nations.indexOf(b.nation),
-              );
-
-            return (
-              <Flex key={tier} direction="column" gap="4">
-                <Flex align="center" mb="4" gap="4">
-                  <Heading weight="regular">
-                    Tier {TIER_ROMAN_NUMERALS[tier]}
-                  </Heading>
-                  <Separator style={{ flex: 1 }} />
-                </Flex>
-
-                <Grid
-                  flexGrow="1"
-                  columns="repeat(auto-fill, minmax(100px, 1fr))"
-                  gap="2"
-                  gapY="6"
-                >
-                  {tierTanks.map((tank) => {
-                    const Icon = classIcons[tank.class];
-
-                    return (
-                      <Link
-                        key={tank.id}
-                        size="1"
-                        color={
-                          tank.treeType === 'collector'
-                            ? 'blue'
-                            : tank.treeType === 'premium'
-                              ? 'amber'
-                              : 'gray'
-                        }
-                        highContrast={tank.treeType === 'researchable'}
-                        underline="hover"
-                        href={`/tools/tankopedia/${tank.id}`}
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          gap: 'var(--space-2)',
-                          background: `url(${asset(`flags/scratched/${tank.nation}.webp`)})`,
-                          backgroundSize: 'contain',
-                          backgroundRepeat: 'no-repeat',
-                          backgroundPosition: 'top left',
-                        }}
-                      >
-                        <img
-                          alt={tank.name}
-                          src={tankIcon(tank.id)}
-                          height={64}
-                          style={{
-                            width: '100%',
-                            objectPosition: 'center right',
-                            objectFit: 'contain',
-                          }}
-                        />
-
-                        <Flex
-                          justify="center"
-                          gap="1"
-                          align="center"
-                          overflow="hidden"
-                          width="100%"
-                          maxWidth="100%"
-                        >
-                          <Icon
-                            style={{
-                              width: '1em',
-                              height: '1em',
-                              minWidth: '1em',
-                              minHeight: '1em',
-                            }}
-                          />
-                          <Text
-                            align="center"
-                            style={{
-                              whiteSpace: 'nowrap',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                            }}
-                          >
-                            {tank.name}
-                          </Text>
-                        </Flex>
-                      </Link>
-                    );
-                  })}
-                </Grid>
-              </Flex>
-            );
-          })}
-        </Flex>
+        <Results filters={filters} />
       </Flex>
     </PageWrapper>
   );
