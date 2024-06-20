@@ -197,18 +197,6 @@ export const tankNames = tanksDefinitionsArray.then((tanks) =>
 
 export type Tier = (typeof TIERS)[number];
 
-// TODO: DEPRICATE THISuuu
-export const NATIONS = tanksDefinitionsArray.then((tanks) => {
-  const nations = Array.from(
-    new Set<string>(Object.values(tanks).map((tank) => tank.nation)),
-  );
-
-  nations.splice(nations.indexOf('other'), 1);
-  nations.push('other');
-
-  return nations;
-});
-
 export const flags: Record<string, string> = {
   ussr: '<:ussr:1218421042033197197>',
   germany: '🇩🇪',

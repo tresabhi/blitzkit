@@ -3,7 +3,7 @@ import {
   SlashCommandSubcommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
-import { NATIONS } from '../blitzkit/tankDefinitions';
+import { gameDefinitions } from '../blitzkit/gameDefinitions';
 import { addFilterOptions } from './addFilterOptions';
 import { addPeriodSubCommands } from './addPeriodSubCommands';
 
@@ -15,9 +15,10 @@ export default async function addPeriodicFilterOptions<
     option: SlashCommandSubcommandBuilder,
   ) => SlashCommandSubcommandBuilder = (option) => option,
 ): Promise<OptionType> {
-  const nations = await NATIONS;
+  const awaitedGameDefinitions = await gameDefinitions;
+
   addPeriodSubCommands(option, (option) =>
-    addFilterOptions(extra(option), nations),
+    addFilterOptions(extra(option), awaitedGameDefinitions.nations),
   );
 
   return option;

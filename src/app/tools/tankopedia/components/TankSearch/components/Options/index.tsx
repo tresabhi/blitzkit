@@ -11,7 +11,7 @@ import {
   TREE_TYPE_ICONS,
   TREE_TYPE_IMAGES,
 } from '../../../../../../../components/Tanks/components/Item/constants';
-import { NATIONS } from '../../../../../../../core/blitzkit/tankDefinitions';
+import { gameDefinitions } from '../../../../../../../core/blitzkit/gameDefinitions';
 import {
   TIERS,
   TIER_ROMAN_NUMERALS,
@@ -23,7 +23,7 @@ import mutateTankopediaPersistent, {
 import * as styles from './index.css';
 
 export function Options() {
-  const nations = use(NATIONS);
+  const awaitedGameDefinitions = use(gameDefinitions);
   const filters = useTankopediaPersistent((state) => state.filters);
 
   return (
@@ -65,7 +65,7 @@ export function Options() {
         ))}
       </Flex>
       <Flex className={styles.oneLineFilters}>
-        {nations.map((nation, index) => (
+        {awaitedGameDefinitions.nations.map((nation, index) => (
           <Button
             key={nation}
             color={filters.nations.includes(nation) ? undefined : 'gray'}
@@ -76,9 +76,13 @@ export function Options() {
               borderTopLeftRadius: index === 0 ? undefined : 0,
               borderBottomLeftRadius: index === 0 ? undefined : 0,
               borderTopRightRadius:
-                index === nations.length - 1 ? undefined : 0,
+                index === awaitedGameDefinitions.nations.length - 1
+                  ? undefined
+                  : 0,
               borderBottomRightRadius:
-                index === nations.length - 1 ? undefined : 0,
+                index === awaitedGameDefinitions.nations.length - 1
+                  ? undefined
+                  : 0,
             }}
             onClick={() =>
               mutateTankopediaPersistent((draft) => {
@@ -241,7 +245,7 @@ export function Options() {
         style={{ width: '100%' }}
       >
         <Flex>
-          {nations.slice(0, 5).map((nation, index) => (
+          {awaitedGameDefinitions.nations.slice(0, 5).map((nation, index) => (
             <Button
               key={nation}
               color={filters.nations.includes(nation) ? undefined : 'gray'}
@@ -252,11 +256,15 @@ export function Options() {
                 borderTopLeftRadius: index === 0 ? 16 : 0,
                 borderBottomLeftRadius: 0,
                 borderTopRightRadius:
-                  index === nations.length - Math.round(nations.length / 2)
+                  index ===
+                  awaitedGameDefinitions.nations.length -
+                    Math.round(awaitedGameDefinitions.nations.length / 2)
                     ? 16
                     : 0,
                 borderBottomRightRadius:
-                  index === nations.length - 1 ? undefined : 0,
+                  index === awaitedGameDefinitions.nations.length - 1
+                    ? undefined
+                    : 0,
               }}
               onClick={() =>
                 mutateTankopediaPersistent((draft) => {
@@ -276,7 +284,7 @@ export function Options() {
         </Flex>
 
         <Flex>
-          {nations.slice(5).map((nation, index) => (
+          {awaitedGameDefinitions.nations.slice(5).map((nation, index) => (
             <Button
               key={nation}
               color={filters.nations.includes(nation) ? undefined : 'gray'}
@@ -287,9 +295,14 @@ export function Options() {
                 borderTopLeftRadius: 0,
                 borderBottomLeftRadius: index === 0 ? 16 : 0,
                 borderTopRightRadius:
-                  index === nations.length - 1 ? undefined : 0,
+                  index === awaitedGameDefinitions.nations.length - 1
+                    ? undefined
+                    : 0,
                 borderBottomRightRadius:
-                  index === nations.length - Math.round(nations.length / 2) - 1
+                  index ===
+                  awaitedGameDefinitions.nations.length -
+                    Math.round(awaitedGameDefinitions.nations.length / 2) -
+                    1
                     ? 16
                     : 0,
               }}

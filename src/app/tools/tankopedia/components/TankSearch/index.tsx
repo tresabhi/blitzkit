@@ -16,12 +16,12 @@ import { use, useEffect, useMemo, useRef, useState } from 'react';
 import { isMobileOnly } from 'react-device-detect';
 import { TANK_CLASSES } from '../../../../../components/Tanks/components/Item/constants';
 import { resolveNearPenetration } from '../../../../../core/blitz/resolveNearPenetration';
+import { gameDefinitions } from '../../../../../core/blitzkit/gameDefinitions';
 import { modelDefinitions } from '../../../../../core/blitzkit/modelDefinitions';
 import { normalizeBoundingBox } from '../../../../../core/blitzkit/normalizeBoundingBox';
 import { resolveDpm } from '../../../../../core/blitzkit/resolveDpm';
 import { resolveReload } from '../../../../../core/blitzkit/resolveReload';
 import {
-  NATIONS,
   TankDefinition,
   tanksDefinitionsArray,
 } from '../../../../../core/blitzkit/tankDefinitions';
@@ -48,7 +48,7 @@ export function TankSearch({
   onSelectAll,
 }: TankSearchProps) {
   const tanksPerPage = (compact ? 16 : 96) * (isMobileOnly ? 0.5 : 1);
-  const nations = use(NATIONS);
+  const awaitedGameDefinitions = use(gameDefinitions);
   const filters = useTankopediaPersistent((state) => state.filters);
   const sort = useTankopediaPersistent((state) => state.sort);
   const awaitedTanks = use(tanksDefinitionsArray);
@@ -70,7 +70,8 @@ export function TankSearch({
         )
         .sort(
           (a, b) =>
-            (nations.indexOf(a.nation) - nations.indexOf(b.nation)) *
+            (awaitedGameDefinitions.nations.indexOf(a.nation) -
+              awaitedGameDefinitions.nations.indexOf(b.nation)) *
             (sort.direction === 'descending' ? -1 : 1),
         ),
     [],
