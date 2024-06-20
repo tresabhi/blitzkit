@@ -353,11 +353,15 @@ export interface MapAlly {
   points: Array<number[]>;
 }
 
+interface AvailableNationsYaml {
+  available_nations: string[];
+}
+
 const blitzShellKindToBlitzkit: Record<ShellKind, ShellType> = {
-  ARMOR_PIERCING: 'ap',
-  ARMOR_PIERCING_CR: 'ap_cr',
-  HIGH_EXPLOSIVE: 'he',
-  HOLLOW_CHARGE: 'hc',
+  ARMOR_PIERCING: ShellType.AP,
+  ARMOR_PIERCING_CR: ShellType.APCR,
+  HIGH_EXPLOSIVE: ShellType.HE,
+  HOLLOW_CHARGE: ShellType.HEAT,
 };
 const missingStrings: Record<string, string> = {
   '#artefacts:tungstentip/name': 'Tungsten Shells',
@@ -378,6 +382,11 @@ export async function definitions(production: boolean) {
       .split('.')
       .slice(0, 3)
       .join('.'),
+    nations: (
+      await readYAMLDVPL<AvailableNationsYaml>(
+        `${DATA}/available_nations.yaml.dvpl`,
+      )
+    ).available_nations,
   };
   const tankDefinitions: TankDefinitions = {};
   const modelDefinitions: ModelDefinitions = {};

@@ -1,5 +1,6 @@
 import { readdir } from 'fs/promises';
-import { readBase64DVPL } from '../../src/core/blitz/readBase64DVPL';
+import sharp from 'sharp';
+import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
 import { DATA, POI } from './constants';
@@ -14,7 +15,10 @@ export async function circleFlags(production: boolean) {
           !flag.endsWith('@2x.packed.webp.dvpl'),
       )
       .map(async (flag) => {
-        const content = await readBase64DVPL(`${DATA}/${POI.flags}/${flag}`);
+        const image = sharp(await readDVPLFile(`${DATA}/${POI.flags}/${flag}`));
+        const content = (
+          await image.trim({ threshold: 100 }).toBuffer()
+        ).toString('base64');
         const name = flag.match(/flag_profile-stat_(.+)\.packed\.webp/)![1];
 
         return {
