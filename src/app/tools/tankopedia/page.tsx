@@ -25,8 +25,6 @@ import { tankIcon } from '../../../core/blitzkit/tankIcon';
 import strings from '../../../lang/en-US.json';
 import { treeTypeOrder } from './components/TankSearch/constants';
 
-// TODO: KEYS
-
 export default function Page() {
   const awaitedTanksDefinitionsArray = use(tanksDefinitionsArray);
   const awaitedNations = use(NATIONS);
@@ -51,6 +49,7 @@ export default function Page() {
 
                 return (
                   <Button
+                    key={tier}
                     variant="soft"
                     radius="none"
                     color="gray"
@@ -70,6 +69,7 @@ export default function Page() {
 
                 return (
                   <Button
+                    key={tier}
                     variant="soft"
                     radius="none"
                     color="gray"
@@ -99,6 +99,7 @@ export default function Page() {
 
               return (
                 <IconButton
+                  key={tankClass}
                   variant="soft"
                   radius="none"
                   color="gray"
@@ -168,7 +169,7 @@ export default function Page() {
                     if (nationTanks.length === 0) return null;
 
                     return (
-                      <Flex direction="column" gap="4">
+                      <Flex key={nation} direction="column" gap="4">
                         <Flex align="center">
                           <img
                             src={asset(`flags/scratched/${nation}.webp`)}
@@ -201,6 +202,7 @@ export default function Page() {
 
                             return (
                               <Link
+                                key={tank.id}
                                 size="1"
                                 color={
                                   tank.treeType === 'collector'
@@ -211,7 +213,6 @@ export default function Page() {
                                 }
                                 highContrast={tank.treeType === 'researchable'}
                                 underline="hover"
-                                key={tank.id}
                                 href={`/tools/tankopedia/${tank.id}`}
                                 style={{
                                   display: 'flex',
