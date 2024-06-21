@@ -6,6 +6,7 @@ import { times } from 'lodash';
 import { use } from 'react';
 import { classIcons } from '../../../components/ClassIcon';
 import { ExperimentIcon } from '../../../components/ExperimentIcon';
+import { NAVBAR_HEIGHT } from '../../../components/Navbar';
 import PageWrapper from '../../../components/PageWrapper';
 import { ResearchedIcon } from '../../../components/ResearchedIcon';
 import { ScienceIcon } from '../../../components/ScienceIcon';
@@ -44,6 +45,7 @@ export default function Page() {
             initial: 'row',
             sm: 'column',
           }}
+          height="fit-content"
           gap="2"
           align={{
             initial: 'start',
@@ -52,6 +54,13 @@ export default function Page() {
           justify={{
             initial: 'center',
             sm: 'start',
+          }}
+          position={{
+            initial: 'static',
+            sm: 'sticky',
+          }}
+          style={{
+            top: `calc(${NAVBAR_HEIGHT}px + var(--space-3))`,
           }}
         >
           <Flex
