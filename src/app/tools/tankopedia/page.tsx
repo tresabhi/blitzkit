@@ -2,44 +2,28 @@
 
 import { TrashIcon } from '@radix-ui/react-icons';
 import { Box, Button, Flex, IconButton, Text } from '@radix-ui/themes';
-import { produce } from 'immer';
 import { times } from 'lodash';
-import { use, useState } from 'react';
+import { use } from 'react';
 import { classIcons } from '../../../components/ClassIcon';
 import { ExperimentIcon } from '../../../components/ExperimentIcon';
 import PageWrapper from '../../../components/PageWrapper';
 import { ResearchedIcon } from '../../../components/ResearchedIcon';
 import { ScienceIcon } from '../../../components/ScienceIcon';
 import { ScienceOffIcon } from '../../../components/ScienceOffIcon';
-import { TankClass, TreeType } from '../../../components/Tanks';
 import { TANK_CLASSES } from '../../../components/Tanks/components/Item/constants';
 import { asset } from '../../../core/blitzkit/asset';
 import { gameDefinitions } from '../../../core/blitzkit/gameDefinitions';
 import { Tier } from '../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../core/blitzkit/tankDefinitions/constants';
+import {
+  mutateTankopediaFilters,
+  useTankopediaFilters,
+} from '../../../stores/tankopediaFilters';
 import { Results } from './components/Results';
-
-export interface TankopediaSearchPageFilters {
-  tier?: Tier;
-  nation?: string;
-  class?: TankClass;
-  type?: TreeType;
-  testing: 'include' | 'exclude' | 'only';
-}
-
-const defaultTankopediaSearchPageFilters: TankopediaSearchPageFilters = {
-  testing: 'include',
-};
 
 export default function Page() {
   const awaitedGameDefinitions = use(gameDefinitions);
-  const [filters, setFilters] = useState<TankopediaSearchPageFilters>(
-    defaultTankopediaSearchPageFilters,
-  );
-
-  function mutateFilters(recipe: (draft: TankopediaSearchPageFilters) => void) {
-    setFilters(produce(recipe));
-  }
+  const filters = useTankopediaFilters();
 
   return (
     <PageWrapper color="purple" size={1028 + 256}>
@@ -98,7 +82,7 @@ export default function Page() {
                     color={selected ? undefined : 'gray'}
                     highContrast
                     onClick={() =>
-                      mutateFilters((draft) => {
+                      mutateTankopediaFilters((draft) => {
                         draft.tier = draft.tier === tier ? undefined : tier;
                       })
                     }
@@ -126,7 +110,7 @@ export default function Page() {
                     color={selected ? undefined : 'gray'}
                     highContrast
                     onClick={() =>
-                      mutateFilters((draft) => {
+                      mutateTankopediaFilters((draft) => {
                         draft.tier = draft.tier === tier ? undefined : tier;
                       })
                     }
@@ -166,7 +150,7 @@ export default function Page() {
                       highContrast
                       radius="none"
                       onClick={() =>
-                        mutateFilters((draft) => {
+                        mutateTankopediaFilters((draft) => {
                           draft.nation =
                             draft.nation === nation ? undefined : nation;
                         })
@@ -199,7 +183,7 @@ export default function Page() {
                       highContrast
                       radius="none"
                       onClick={() =>
-                        mutateFilters((draft) => {
+                        mutateTankopediaFilters((draft) => {
                           draft.nation =
                             draft.nation === nation ? undefined : nation;
                         })
@@ -237,7 +221,7 @@ export default function Page() {
                   color={selected ? undefined : 'gray'}
                   highContrast
                   onClick={() =>
-                    mutateFilters((draft) => {
+                    mutateTankopediaFilters((draft) => {
                       draft.class =
                         draft.class === tankClass ? undefined : tankClass;
                     })
@@ -265,7 +249,7 @@ export default function Page() {
               color={filters.type === 'researchable' ? undefined : 'gray'}
               highContrast
               onClick={() =>
-                mutateFilters((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.type =
                     draft.type === 'researchable' ? undefined : 'researchable';
                 })
@@ -279,7 +263,7 @@ export default function Page() {
               color={filters.type === 'premium' ? 'amber' : 'gray'}
               highContrast
               onClick={() =>
-                mutateFilters((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.type = draft.type === 'premium' ? undefined : 'premium';
                 })
               }
@@ -297,7 +281,7 @@ export default function Page() {
               color={filters.type === 'collector' ? 'blue' : 'gray'}
               highContrast
               onClick={() =>
-                mutateFilters((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.type =
                     draft.type === 'collector' ? undefined : 'collector';
                 })
@@ -328,7 +312,7 @@ export default function Page() {
               color={filters.testing === 'include' ? undefined : 'gray'}
               highContrast
               onClick={() =>
-                mutateFilters((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.testing = 'include';
                 })
               }
@@ -343,7 +327,7 @@ export default function Page() {
               color={filters.testing === 'exclude' ? undefined : 'gray'}
               highContrast
               onClick={() =>
-                mutateFilters((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.testing = 'exclude';
                 })
               }
@@ -358,7 +342,7 @@ export default function Page() {
               color={filters.testing === 'only' ? undefined : 'gray'}
               highContrast
               onClick={() =>
-                mutateFilters((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.testing = 'only';
                 })
               }
@@ -373,7 +357,11 @@ export default function Page() {
             <IconButton
               color="red"
               ml="2"
-              onClick={() => setFilters(defaultTankopediaSearchPageFilters)}
+              onClick={() =>
+                useTankopediaFilters.setState(
+                  useTankopediaFilters.getInitialState(),
+                )
+              }
             >
               <TrashIcon />
             </IconButton>
@@ -382,14 +370,18 @@ export default function Page() {
             <Button
               color="red"
               mt="2"
-              onClick={() => setFilters(defaultTankopediaSearchPageFilters)}
+              onClick={() =>
+                useTankopediaFilters.setState(
+                  useTankopediaFilters.getInitialState(),
+                )
+              }
             >
               <TrashIcon /> Clear
             </Button>
           </Box>
         </Flex>
 
-        <Results filters={filters} />
+        <Results />
       </Flex>
     </PageWrapper>
   );
