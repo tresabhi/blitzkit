@@ -17,7 +17,10 @@ export async function boosterIcons(production: boolean) {
 
   await Promise.all(
     boosterFiles.map(async (file) => {
-      const name = file.match(/booster_(.+).txt.dvpl/)![1];
+      const name = file.match(/booster_(.+).txt.dvpl/)?.[1];
+
+      if (name === undefined) return;
+
       const sizes = (
         await readStringDVPL(`${DATA}/${POI.boosterIcons}/${file}`)
       )
