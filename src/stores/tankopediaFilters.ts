@@ -9,6 +9,7 @@ export interface TankopediaFilters {
   class?: TankClass;
   type?: TreeType;
   testing: 'include' | 'exclude' | 'only';
+  search?: string;
 }
 
 export const useTankopediaFilters = create<TankopediaFilters>()(() => ({

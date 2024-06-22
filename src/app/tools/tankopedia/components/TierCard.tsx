@@ -1,22 +1,27 @@
-import { Flex, Grid, Heading, Separator } from '@radix-ui/themes';
-import { memo, useEffect, useRef } from 'react';
+import { Flex, Heading, Separator } from '@radix-ui/themes';
+import { memo, use, useEffect, useMemo, useRef } from 'react';
 import {
-  TankDefinition,
   Tier,
+  tanksDefinitionsArray,
 } from '../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
 import { tankopediaFilterTank } from '../../../../core/blitzkit/tankopediaFilterTank';
 import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
 import { TankCard } from './TankCard';
+import { TankCardWrapper } from './TankCardWrapper';
 
 interface TierCardProps {
   tier: Tier;
-  tanks: TankDefinition[];
 }
 
 export const TierCard = memo(
-  ({ tier, tanks }: TierCardProps) => {
+  ({ tier }: TierCardProps) => {
+    const awaitedTanksDefinitionsArray = use(tanksDefinitionsArray);
     const container = useRef<HTMLDivElement>(null);
+    const tanks = useMemo(
+      () => awaitedTanksDefinitionsArray.filter((tank) => tank.tier === tier),
+      [tier],
+    );
 
     useEffect(() => {
       const unsubscribe = useTankopediaFilters.subscribe((filters) => {
@@ -37,22 +42,18 @@ export const TierCard = memo(
         direction="column"
         gap="4"
         display={tanks.length === 0 ? 'none' : 'flex'}
+        py="4"
       >
         <Flex align="center" mb="4" gap="4">
           <Heading weight="regular">Tier {TIER_ROMAN_NUMERALS[tier]}</Heading>
           <Separator style={{ flex: 1 }} />
         </Flex>
 
-        <Grid
-          flexGrow="1"
-          columns="repeat(auto-fill, minmax(100px, 1fr))"
-          gap="2"
-          gapY="6"
-        >
+        <TankCardWrapper>
           {tanks.map((tank) => (
             <TankCard key={tank.id} tank={tank} />
           ))}
-        </Grid>
+        </TankCardWrapper>
       </Flex>
     );
   },

@@ -1,26 +1,41 @@
 import { Callout, Flex } from '@radix-ui/themes';
+import { go } from 'fuzzysort';
 import { range } from 'lodash';
-import { memo, use } from 'react';
+import { memo, use, useMemo } from 'react';
 import { ExperimentIcon } from '../../../../components/ExperimentIcon';
-import { TANK_CLASSES } from '../../../../components/Tanks/components/Item/constants';
-import { gameDefinitions } from '../../../../core/blitzkit/gameDefinitions';
 import {
   Tier,
-  tanksDefinitionsArray,
+  tankDefinitions,
+  tankNames,
 } from '../../../../core/blitzkit/tankDefinitions';
 import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
-import { treeTypeOrder } from './TankSearch/constants';
+import { SearchBar } from './SearchBar';
+import { TankCard } from './TankCard';
+import { TankCardWrapper } from './TankCardWrapper';
 import { TierCard } from './TierCard';
 
 export const Results = memo(() => {
-  const tanks = use(tanksDefinitionsArray);
-  const awaitedGameDefinitions = use(gameDefinitions);
+  const awaitedTankDefinitions = use(tankDefinitions);
+  const awaitedTankNames = use(tankNames);
   const testing = useTankopediaFilters((state) => state.testing);
+  const search = useTankopediaFilters((state) => state.search);
+  const searchedTanks = useMemo(() => {
+    if (search === undefined) return undefined;
+
+    const searchedRaw = go(search, awaitedTankNames, { key: 'combined' });
+    const searchedTanks = searchedRaw.map(
+      (result) => awaitedTankDefinitions[result.obj.id],
+    );
+
+    return searchedTanks;
+  }, [search]);
 
   return (
-    <Flex direction="column" gap="8" flexGrow="1">
+    <Flex direction="column" gap="4" flexGrow="1">
+      <SearchBar topResult={searchedTanks?.[0]} />
+
       {testing === 'only' && (
-        <Callout.Root color="amber" style={{ width: 'fit-content' }}>
+        <Callout.Root color="amber">
           <Callout.Icon>
             <ExperimentIcon style={{ width: '1em', height: '1em' }} />
           </Callout.Icon>
@@ -31,27 +46,14 @@ export const Results = memo(() => {
         </Callout.Root>
       )}
 
-      {range(10, 0).map((tierUntyped) => {
-        const tier = tierUntyped as Tier;
-        const tierTanks = tanks
-          .filter((tank) => tank.tier === tier)
-          .sort(
-            (a, b) =>
-              treeTypeOrder.indexOf(a.treeType) -
-              treeTypeOrder.indexOf(b.treeType),
-          )
-          .sort(
-            (a, b) =>
-              TANK_CLASSES.indexOf(a.class) - TANK_CLASSES.indexOf(b.class),
-          )
-          .sort(
-            (a, b) =>
-              awaitedGameDefinitions.nations.indexOf(a.nation) -
-              awaitedGameDefinitions.nations.indexOf(b.nation),
-          );
+      {!search &&
+        range(10, 0).map((tier) => <TierCard key={tier} tier={tier as Tier} />)}
 
-        return <TierCard tanks={tierTanks} key={tier} tier={tier} />;
-      })}
+      {search && (
+        <TankCardWrapper py="4">
+          {searchedTanks?.map((tank) => <TankCard key={tank.id} tank={tank} />)}
+        </TankCardWrapper>
+      )}
     </Flex>
   );
 });
