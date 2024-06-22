@@ -10,8 +10,8 @@ export function ClassHeavy(props: ComponentProps<'svg'>) {
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <g clip-path="url(#clip0_70_177)">
-        <g clip-path="url(#clip1_70_177)">
+      <g clipPath="url(#clip0_70_177)">
+        <g clipPath="url(#clip1_70_177)">
           <rect
             y="32"
             width="45.2548"
