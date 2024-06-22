@@ -294,6 +294,7 @@ export function FilterControl() {
           onClick={() =>
             useTankopediaFilters.setState(
               useTankopediaFilters.getInitialState(),
+              true,
             )
           }
         >
@@ -307,6 +308,7 @@ export function FilterControl() {
           onClick={() =>
             useTankopediaFilters.setState(
               useTankopediaFilters.getInitialState(),
+              true,
             )
           }
         >
