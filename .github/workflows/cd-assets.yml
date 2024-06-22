@@ -13,55 +13,23 @@ concurrency:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.GH_TOKEN }}
-
-      - name: Use node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
-
-      - name: Install Yarn
-        run: npm install --location=global yarn
-
-      - name: Use node_modules cache
-        uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
 
       - name: Install dependencies
-        run: yarn
-
-      - name: Add fixed sharp
-        run: yarn add sharp@0.33.1 --ignore-engines
+        run: bun install
 
       - name: Setup DepotDownloader
-        run: yarn setup:depotdownloader
+        run: bun scripts/setupDepotDownloader.ts
 
       - name: Run DepotDownloader
-        run: ./temp/depotDownloader/DepotDownloader.exe -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
+        run: ./temp/depotDownloader/DepotDownloader.exe -os windows -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
 
       - name: Apply patches
-        run: |
-          $env:GH_TOKEN = "${{ secrets.GH_TOKEN }}"
-          $env:DISCORD_TOKEN = "${{ secrets.DISCORD_TOKEN }}"
-          $env:DATABASE_URL = "${{ secrets.DATABASE_URL }}"
-          $env:WOTB_DLC_CDN = "${{ secrets.WOTB_DLC_CDN }}"
-          yarn setup:patches --depot
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} WOTB_DLC_CDN=${{ secrets.WOTB_DLC_CDN }} bun scripts/applyPatches.ts --depot
 
       - name: Build assets
-        run: |
-          $env:GH_TOKEN = "${{ secrets.GH_TOKEN }}"
-          $env:DISCORD_TOKEN = "${{ secrets.DISCORD_TOKEN }}"
-          $env:DATABASE_URL = "${{ secrets.DATABASE_URL }}"
-          $env:VIDEOS_SHEET = "${{ secrets.VIDEOS_SHEET }}"
-          $env:GOOGLE_APPLICATION_CREDENTIALS = "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}"
-          yarn build:assets --all-targets --depot ${{ github.ref == 'refs/heads/main' && '--production' || '' }}
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} VIDEOS_SHEET=${{ secrets.VIDEOS_SHEET }} GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} bun scripts/buildAssets/index.ts --all-targets --depot --production
