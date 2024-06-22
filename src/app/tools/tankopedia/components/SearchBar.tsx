@@ -1,11 +1,12 @@
 import { CaretRightIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
-import { Button, Spinner, TextField } from '@radix-ui/themes';
+import { Button, Flex, Spinner, TextField } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { KeyboardEventHandler, useCallback, useRef, useState } from 'react';
 import { Link } from '../../../../components/Link';
 import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
 import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
+import { Sort } from './Sort';
 
 interface SearchBarProps {
   topResult?: TankDefinition;
@@ -44,26 +45,31 @@ export function SearchBar({ topResult }: SearchBarProps) {
   );
 
   return (
-    <TextField.Root
-      ref={input}
-      placeholder="Search tanks..."
-      size="3"
-      onChange={handleChange}
-      onKeyDown={handleKeyDown}
-    >
-      <TextField.Slot>
-        {searching ? <Spinner /> : <MagnifyingGlassIcon />}
-      </TextField.Slot>
-
-      {topResult && (
+    <Flex gap="2">
+      <TextField.Root
+        style={{ flex: 1 }}
+        ref={input}
+        placeholder="Search tanks..."
+        size="3"
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+      >
         <TextField.Slot>
-          <Link href={`/tools/tankopedia/${topResult.id}`}>
-            <Button variant="ghost" size="3">
-              {topResult.name} <CaretRightIcon />
-            </Button>
-          </Link>
+          {searching ? <Spinner /> : <MagnifyingGlassIcon />}
         </TextField.Slot>
-      )}
-    </TextField.Root>
+
+        {topResult && (
+          <TextField.Slot>
+            <Link href={`/tools/tankopedia/${topResult.id}`}>
+              <Button variant="ghost" size="3">
+                {topResult.name} <CaretRightIcon />
+              </Button>
+            </Link>
+          </TextField.Slot>
+        )}
+      </TextField.Root>
+
+      <Sort />
+    </Flex>
   );
 }

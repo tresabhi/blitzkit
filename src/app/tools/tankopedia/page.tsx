@@ -8,12 +8,7 @@ import { Results } from './components/Results';
 export default function Page() {
   return (
     <PageWrapper color="purple" size={1028 + 256}>
-      <Flex
-        gap="8"
-        direction={{ initial: 'column', sm: 'row' }}
-        pt={{ initial: '0', sm: '6' }}
-        pb="6"
-      >
+      <Flex gap="8" direction={{ initial: 'column', sm: 'row' }} pb="6">
         <FilterControl />
         <Results />
       </Flex>

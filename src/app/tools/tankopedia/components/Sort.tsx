@@ -1,23 +1,25 @@
 import { CaretDownIcon } from '@radix-ui/react-icons';
 import { Button, DropdownMenu } from '@radix-ui/themes';
-import mutateTankopediaPersistent, {
-  TankopediaSortDirection,
-  useTankopediaPersistent,
-} from '../../../../../../stores/tankopedia';
+import { TankopediaSortDirection } from '../../../../stores/tankopedia';
+import {
+  mutateTankopediaFilters,
+  useTankopediaFilters,
+} from '../../../../stores/tankopediaFilters';
 
 export function Sort() {
-  const sort = useTankopediaPersistent((state) => state.sort);
+  const sort = useTankopediaFilters((state) => state.sort);
 
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger>
-        <Button variant="soft" color="gray">
+        <Button variant="surface" size="3" color="gray">
           Sort
           <CaretDownIcon />
         </Button>
       </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Label>By</DropdownMenu.Label>
+
+      <DropdownMenu.Content align="end">
+        <DropdownMenu.Label>Sort by</DropdownMenu.Label>
 
         <DropdownMenu.Sub>
           <DropdownMenu.SubTrigger>Meta</DropdownMenu.SubTrigger>
@@ -25,7 +27,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'meta.tier'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'meta.tier';
                 });
               }}
@@ -35,7 +37,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'meta.name'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'meta.name';
                 });
               }}
@@ -51,7 +53,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'fire.dpm'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'fire.dpm';
                 });
               }}
@@ -61,7 +63,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'fire.reload'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'fire.reload';
                 });
               }}
@@ -71,7 +73,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'fire.caliber'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'fire.caliber';
                 });
               }}
@@ -81,7 +83,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'fire.standardPenetration'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'fire.standardPenetration';
                 });
               }}
@@ -91,7 +93,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'fire.premiumPenetration'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'fire.premiumPenetration';
                 });
               }}
@@ -101,7 +103,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'fire.damage'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'fire.damage';
                 });
               }}
@@ -111,7 +113,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'fire.shellVelocity'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'fire.shellVelocity';
                 });
               }}
@@ -121,7 +123,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'fire.aimTime'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'fire.aimTime';
                 });
               }}
@@ -131,7 +133,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'fire.dispersionStill'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'fire.dispersionStill';
                 });
               }}
@@ -141,7 +143,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'fire.dispersionMoving'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'fire.dispersionMoving';
                 });
               }}
@@ -151,7 +153,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'fire.gunDepression'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'fire.gunDepression';
                 });
               }}
@@ -161,7 +163,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'fire.gunElevation'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'fire.gunElevation';
                 });
               }}
@@ -177,7 +179,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'maneuverability.forwardsSpeed'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'maneuverability.forwardsSpeed';
                 });
               }}
@@ -187,7 +189,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'maneuverability.backwardsSpeed'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'maneuverability.backwardsSpeed';
                 });
               }}
@@ -197,7 +199,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'maneuverability.power'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'maneuverability.power';
                 });
               }}
@@ -207,7 +209,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'maneuverability.powerToWeight'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'maneuverability.powerToWeight';
                 });
               }}
@@ -217,7 +219,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'maneuverability.weight'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'maneuverability.weight';
                 });
               }}
@@ -227,7 +229,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'maneuverability.traverseSpeed'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'maneuverability.traverseSpeed';
                 });
               }}
@@ -243,7 +245,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'survivability.health'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'survivability.health';
                 });
               }}
@@ -253,7 +255,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'survivability.viewRange'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'survivability.viewRange';
                 });
               }}
@@ -263,7 +265,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'survivability.camouflageStill'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'survivability.camouflageStill';
                 });
               }}
@@ -273,7 +275,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'survivability.camouflageMoving'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'survivability.camouflageMoving';
                 });
               }}
@@ -283,7 +285,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'survivability.camouflageShooting'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'survivability.camouflageShooting';
                 });
               }}
@@ -293,7 +295,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'survivability.volume'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'survivability.volume';
                 });
               }}
@@ -303,7 +305,7 @@ export function Sort() {
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'survivability.length'}
               onClick={() => {
-                mutateTankopediaPersistent((draft) => {
+                mutateTankopediaFilters((draft) => {
                   draft.sort.by = 'survivability.length';
                 });
               }}
@@ -319,7 +321,7 @@ export function Sort() {
         <DropdownMenu.RadioGroup
           value={sort.direction}
           onValueChange={(value) =>
-            mutateTankopediaPersistent((draft) => {
+            mutateTankopediaFilters((draft) => {
               draft.sort.direction = value as TankopediaSortDirection;
             })
           }

@@ -31,9 +31,9 @@ import mutateTankopediaPersistent, {
   useTankopediaPersistent,
 } from '../../../../../stores/tankopedia';
 import { PageTurner } from '../PageTurner';
+import { Sort } from '../Sort';
 import { Options } from './components/Options';
 import { Results } from './components/Results';
-import { Sort } from './components/Sort';
 import { treeTypeOrder } from './constants';
 
 interface TankSearchProps {

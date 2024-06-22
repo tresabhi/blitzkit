@@ -1,7 +1,9 @@
 import { Flex, Link, Text } from '@radix-ui/themes';
-import { useEffect, useRef } from 'react';
+import { use, useEffect, useMemo, useRef } from 'react';
 import { classIcons } from '../../../../components/ClassIcon';
 import { asset } from '../../../../core/blitzkit/asset';
+import { modelDefinitions } from '../../../../core/blitzkit/modelDefinitions';
+import { resolveDpm } from '../../../../core/blitzkit/resolveDpm';
 import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../../../../core/blitzkit/tankIcon';
 import { tankopediaFilterTank } from '../../../../core/blitzkit/tankopediaFilterTank';
@@ -12,8 +14,36 @@ interface TankCardProps {
 }
 
 export function TankCard({ tank }: TankCardProps) {
+  const awaitedModelDefinitions = use(modelDefinitions);
   const Icon = classIcons[tank.class];
   const link = useRef<HTMLAnchorElement>(null);
+  const sortBy = useTankopediaFilters((state) => state.sort.by);
+  const discriminator = useMemo(() => {
+    if (sortBy.startsWith('meta')) return undefined;
+
+    const turret = tank.turrets.at(-1)!;
+    const gun = turret.guns.at(-1)!;
+    const shell = gun.shells[0];
+    const tracks = tank.tracks.at(-1)!;
+    const tankModelDefinition = awaitedModelDefinitions[tank.id];
+
+    switch (sortBy) {
+      case 'fire.aimTime':
+        return `${gun.aimTime.toFixed(2)}s`;
+      case 'fire.caliber':
+        return `${shell.caliber.toFixed(0)}mm`;
+      case 'fire.damage':
+        return `${shell.damage.armor.toFixed(0)}hp`;
+      case 'fire.dispersionMoving':
+        return `+ ${tracks.dispersion.move.toFixed(3)}`;
+      case 'fire.dispersionStill':
+        return gun.dispersion.base.toFixed(3);
+      case 'fire.dpm':
+        return resolveDpm(gun, shell).toFixed(0);
+      case 'fire.gunDepression':
+        return awaitedModelDefinitions;
+    }
+  }, [sortBy]);
 
   useEffect(() => {
     const unsubscribe = useTankopediaFilters.subscribe((filters) => {
@@ -89,6 +119,21 @@ export function TankCard({ tank }: TankCardProps) {
           {tank.name}
         </Text>
       </Flex>
+
+      {discriminator && (
+        <Text
+          mt="-2"
+          color="gray"
+          align="center"
+          style={{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {discriminator}
+        </Text>
+      )}
     </Link>
   );
 }

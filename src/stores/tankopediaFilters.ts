@@ -2,6 +2,7 @@ import { produce } from 'immer';
 import { create } from 'zustand';
 import { TankClass, TreeType } from '../components/Tanks';
 import { Tier } from '../core/blitzkit/tankDefinitions';
+import { TankopediaSortBy, TankopediaSortDirection } from './tankopedia';
 
 export interface TankopediaFilters {
   tier?: Tier;
@@ -10,10 +11,18 @@ export interface TankopediaFilters {
   type?: TreeType;
   testing: 'include' | 'exclude' | 'only';
   search?: string;
+  sort: {
+    by: TankopediaSortBy;
+    direction: TankopediaSortDirection;
+  };
 }
 
 export const useTankopediaFilters = create<TankopediaFilters>()(() => ({
   testing: 'include',
+  sort: {
+    by: 'meta.tier',
+    direction: 'descending',
+  },
 }));
 
 export function mutateTankopediaFilters(
