@@ -29,7 +29,18 @@ jobs:
         run: ./temp/depotDownloader/DepotDownloader.exe -os windows -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
 
       - name: Apply patches
-        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} WOTB_DLC_CDN=${{ secrets.WOTB_DLC_CDN }} bun scripts/applyPatches.ts --depot
+        run: |
+          $env:GH_TOKEN = "${{ secrets.GH_TOKEN }}" 
+          $env:DISCORD_TOKEN = "${{ secrets.DISCORD_TOKEN }}" 
+          $env:DATABASE_URL = "${{ secrets.DATABASE_URL }}" 
+          $env:WOTB_DLC_CDN = "${{ secrets.WOTB_DLC_CDN }}"
+          bun scripts/applyPatches.ts --depot
 
       - name: Build assets
-        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} VIDEOS_SHEET=${{ secrets.VIDEOS_SHEET }} GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} bun scripts/buildAssets/index.ts --all-targets --depot --production
+        run: |
+          $env:GH_TOKEN = "${{ secrets.GH_TOKEN }}" 
+          $env:DISCORD_TOKEN = "${{ secrets.DISCORD_TOKEN }}" 
+          $env:DATABASE_URL = "${{ secrets.DATABASE_URL }}" 
+          $env:VIDEOS_SHEET = "${{ secrets.VIDEOS_SHEET }}" 
+          $env:GOOGLE_APPLICATION_CREDENTIALS = "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}"
+          bun scripts/buildAssets/index.ts --all-targets --depot --production
