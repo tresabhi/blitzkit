@@ -2,7 +2,7 @@ import { CaretRightIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Spinner, TextField } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { useRouter } from 'next/navigation';
-import { KeyboardEventHandler, useCallback, useRef, useState } from 'react';
+import { KeyboardEventHandler, useCallback, useRef } from 'react';
 import { Link } from '../../../../components/Link';
 import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
 import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
@@ -14,11 +14,11 @@ interface SearchBarProps {
 
 export function SearchBar({ topResult }: SearchBarProps) {
   const router = useRouter();
-  const [searching, setSearching] = useState(false);
   const input = useRef<HTMLInputElement>(null);
+  const searching = useTankopediaFilters((state) => state.searching);
   const search = useCallback(
     debounce(() => {
-      setSearching(false);
+      useTankopediaFilters.setState({ searching: false });
 
       if (!input.current) return;
 
@@ -31,7 +31,7 @@ export function SearchBar({ topResult }: SearchBarProps) {
     [],
   );
   const handleChange = useCallback(() => {
-    setSearching(true);
+    useTankopediaFilters.setState({ searching: true });
     search();
   }, []);
   const handleKeyDown = useCallback<KeyboardEventHandler>(

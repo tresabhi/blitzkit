@@ -1,5 +1,6 @@
 import { Callout, Flex } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
+import { times } from 'lodash';
 import { memo, use, useMemo } from 'react';
 import { ExperimentIcon } from '../../../../components/ExperimentIcon';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
@@ -16,7 +17,9 @@ import {
 import { unionBoundingBox } from '../../../../core/blitzkit/unionBoundingBox';
 import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
 import { FilterControl } from './FilterControl';
+import { NoResults } from './NoResults';
 import { SearchBar } from './SearchBar';
+import { SkeletonTankCard } from './SkeletonTankCard';
 import { TankCard } from './TankCard';
 import { TankCardWrapper } from './TankCardWrapper';
 import { TierCard } from './TierCard';
@@ -30,6 +33,7 @@ export const Results = memo(() => {
   const search = useTankopediaFilters((state) => state.search);
   const tier = useTankopediaFilters((state) => state.tier);
   const sort = useTankopediaFilters((state) => state.sort);
+  const searching = useTankopediaFilters((state) => state.searching);
   const searchedTanks = useMemo(() => {
     if (search !== undefined) {
       const searchedRaw = go(search, awaitedTankNames, {
@@ -330,7 +334,7 @@ export const Results = memo(() => {
     <Flex direction="column" gap="4" flexGrow="1">
       <SearchBar topResult={searchedTanks?.[0]} />
 
-      {!search && <FilterControl />}
+      {!search && !searching && <FilterControl />}
 
       {testing === 'only' && (
         <Flex justify="center" mt="4">
@@ -346,11 +350,29 @@ export const Results = memo(() => {
         </Flex>
       )}
 
-      {!search && sort.by === 'meta.tier' && <TierCard tier={tier} />}
+      {!search && sort.by === 'meta.tier' && !searching && (
+        <TierCard tier={tier} />
+      )}
 
-      {(search || sort.by !== 'meta.tier') && (
-        <TankCardWrapper py="4">
-          {searchedTanks?.map((tank) => <TankCard key={tank.id} tank={tank} />)}
+      {(search || sort.by !== 'meta.tier') && !searching && searchedTanks && (
+        <>
+          {searchedTanks.length > 0 && (
+            <TankCardWrapper>
+              {searchedTanks.map((tank) => (
+                <TankCard key={tank.id} tank={tank} />
+              ))}
+            </TankCardWrapper>
+          )}
+
+          {searchedTanks.length === 0 && <NoResults type="search" />}
+        </>
+      )}
+
+      {searching && (
+        <TankCardWrapper>
+          {times(Math.round(10 + 10 * Math.random()), (index) => (
+            <SkeletonTankCard key={index} />
+          ))}
         </TankCardWrapper>
       )}
     </Flex>

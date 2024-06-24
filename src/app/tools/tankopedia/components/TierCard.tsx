@@ -1,6 +1,4 @@
-import { Flex, Text } from '@radix-ui/themes';
 import { memo, use, useMemo } from 'react';
-import { Link } from '../../../../components/Link';
 import { TANK_CLASSES } from '../../../../components/Tanks/components/Item/constants';
 import { gameDefinitions } from '../../../../core/blitzkit/gameDefinitions';
 import {
@@ -9,6 +7,7 @@ import {
 } from '../../../../core/blitzkit/tankDefinitions';
 import { tankopediaFilterTank } from '../../../../core/blitzkit/tankopediaFilterTank';
 import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
+import { NoResults } from './NoResults';
 import { TankCard } from './TankCard';
 import { TankCardWrapper } from './TankCardWrapper';
 import { treeTypeOrder } from './TankSearch/constants';
@@ -43,31 +42,10 @@ export const TierCard = memo(
       [tier, filters],
     );
 
-    if (tanks.length === 0)
-      return (
-        <Flex flexGrow="1" align="center" justify="center">
-          <Text color="gray">
-            No tanks found.{' '}
-            <Link
-              href="#"
-              underline="always"
-              color="red"
-              onClick={() =>
-                useTankopediaFilters.setState(
-                  useTankopediaFilters.getInitialState(),
-                  true,
-                )
-              }
-            >
-              Try clearing filters
-            </Link>
-            .
-          </Text>
-        </Flex>
-      );
+    if (tanks.length === 0) return <NoResults />;
 
     return (
-      <TankCardWrapper mt="6">
+      <TankCardWrapper>
         {tanks.map((tank) => (
           <TankCard key={tank.id} tank={tank} />
         ))}

@@ -15,6 +15,7 @@ export interface TankopediaFilters {
     by: TankopediaSortBy;
     direction: TankopediaSortDirection;
   };
+  searching: boolean;
 }
 
 export const useTankopediaFilters = create<TankopediaFilters>()(() => ({
@@ -24,6 +25,7 @@ export const useTankopediaFilters = create<TankopediaFilters>()(() => ({
     direction: 'descending',
   },
   tier: 10,
+  searching: false,
 }));
 
 export function mutateTankopediaFilters(
