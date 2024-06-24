@@ -7,7 +7,7 @@
   "scripts": {
     "build:averages": "bun scripts/averages",
     "build:db": "prisma generate",
-    "build:bot": "vite-node --script scripts/build --production",
+    "build:bot": "bun scripts/build.ts --production",
     "build:website": "yarn build:db && yarn build:sitemap && next build",
     "build:sitemap": "vite-node --script scripts/sitemap",
     "build:docs": "vitepress build docs",

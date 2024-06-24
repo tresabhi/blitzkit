@@ -12,26 +12,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
-
-      - name: Install Yarn
-        run: npm install --location=global yarn
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
 
       - name: Install dependencies
-        run: yarn
+        run: bun install
 
       - name: Build Prisma
-        run: yarn prisma generate
+        run: bun prisma generate
 
       - name: Build
-        run: yarn build:bot --production
+        run: bun build:bot --production
 
       - name: Archive build
         uses: actions/upload-artifact@v4
