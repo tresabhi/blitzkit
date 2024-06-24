@@ -13,7 +13,6 @@
     "build:sitemap": "bun scripts/sitemap.ts",
     "build:docs": "vitepress build docs",
     "build:ratingleaderboard": "bun --script scripts/buildRatingLeaderboard.ts",
-    "build:assets": "bun scripts/buildAssets/index.ts",
     "dev:bot": "vite-node --script scripts/build && yarn start:bot",
     "dev:docs": "vitepress dev docs",
     "dev:website": "next dev",
