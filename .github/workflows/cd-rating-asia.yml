@@ -9,26 +9,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
-
-      - name: Install Yarn
-        run: npm install --location=global yarn
-
-      - name: Use node_modules cache
-        uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
 
       - name: Install dependencies
-        run: yarn
+        run: bun install
 
       - name: Generate leaderboard
-        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} yarn publish:ratingleaderboard --region=asia --target=midnight --production
+        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} bun scripts/buildRatingLeaderboard.ts --region=asia --target=midnight --production

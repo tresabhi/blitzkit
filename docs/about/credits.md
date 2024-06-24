@@ -15,3 +15,4 @@ BlitzKit is a one man band **TrèsAbhi** but I am far from solo.
 | Tankopedia pre-release testing | [OPTML], Aeson, \_34, Droodles |
 | Website advertisement platform | Aeson, Droodles                |
 | Compare pre-release testing    | [OPTML], Droodles              |
+| Redacted                       | GonnaHetzMe                    |

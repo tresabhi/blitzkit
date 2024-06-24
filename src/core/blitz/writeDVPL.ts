@@ -1,5 +1,5 @@
 import { crc32 } from 'crc';
-import { encodeBlockHC } from 'lz4';
+import { compressBlock } from 'lz4js';
 
 /**
  * Thanks Maddoxkkm! Modernized heavily.
@@ -7,8 +7,16 @@ import { encodeBlockHC } from 'lz4';
  * https://github.com/Maddoxkkm/dvpl_converter/
  */
 export function writeDVPL(buffer: Buffer) {
-  let output = Buffer.alloc(buffer.length);
-  const compressedBlockSize = encodeBlockHC(buffer, output);
+  const source = new Uint8Array(buffer);
+  const destination = new Uint8Array(buffer.length);
+  const compressedBlockSize = compressBlock(
+    source,
+    destination,
+    0,
+    source.length,
+    0,
+  );
+  let output = Buffer.from(destination);
 
   if (compressedBlockSize === 0 || compressedBlockSize >= buffer.length) {
     const footerBuffer = toDVPLFooter(
