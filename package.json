@@ -40,6 +40,7 @@
     "@resvg/resvg-js": "^2.4.1",
     "@types/three": "^0.160.0",
     "@vanilla-extract/css": "^1.13.0",
+    "@vanilla-extract/dynamic": "^2.1.1",
     "adm-zip": "^0.5.12",
     "bepaint": "^0.1.0-beta.3",
     "csv-parse": "^5.5.6",

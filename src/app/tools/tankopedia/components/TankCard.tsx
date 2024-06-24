@@ -1,49 +1,50 @@
-import { Flex, Link, Text } from '@radix-ui/themes';
-import { use, useEffect, useMemo, useRef } from 'react';
-import { classIcons } from '../../../../components/ClassIcon';
+import { Flex, Text } from '@radix-ui/themes';
+import { Icon } from '@radix-ui/themes/dist/cjs/components/callout';
+import { assignInlineVars } from '@vanilla-extract/dynamic';
+import { useEffect, useRef } from 'react';
+import { Link } from '../../../../components/Link';
 import { asset } from '../../../../core/blitzkit/asset';
-import { modelDefinitions } from '../../../../core/blitzkit/modelDefinitions';
-import { resolveDpm } from '../../../../core/blitzkit/resolveDpm';
 import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../../../../core/blitzkit/tankIcon';
 import { tankopediaFilterTank } from '../../../../core/blitzkit/tankopediaFilterTank';
 import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
+import * as styles from './TankCard.css';
 
 interface TankCardProps {
   tank: TankDefinition;
 }
 
 export function TankCard({ tank }: TankCardProps) {
-  const awaitedModelDefinitions = use(modelDefinitions);
-  const Icon = classIcons[tank.class];
+  // const awaitedModelDefinitions = use(modelDefinitions);
+  // const Icon = classIcons[tank.class];
   const link = useRef<HTMLAnchorElement>(null);
-  const sortBy = useTankopediaFilters((state) => state.sort.by);
-  const discriminator = useMemo(() => {
-    if (sortBy.startsWith('meta')) return undefined;
+  // const sortBy = useTankopediaFilters((state) => state.sort.by);
+  // const discriminator = useMemo(() => {
+  //   if (sortBy.startsWith('meta')) return undefined;
 
-    const turret = tank.turrets.at(-1)!;
-    const gun = turret.guns.at(-1)!;
-    const shell = gun.shells[0];
-    const tracks = tank.tracks.at(-1)!;
-    const tankModelDefinition = awaitedModelDefinitions[tank.id];
+  //   const turret = tank.turrets.at(-1)!;
+  //   const gun = turret.guns.at(-1)!;
+  //   const shell = gun.shells[0];
+  //   const tracks = tank.tracks.at(-1)!;
+  //   const tankModelDefinition = awaitedModelDefinitions[tank.id];
 
-    switch (sortBy) {
-      case 'fire.aimTime':
-        return `${gun.aimTime.toFixed(2)}s`;
-      case 'fire.caliber':
-        return `${shell.caliber.toFixed(0)}mm`;
-      case 'fire.damage':
-        return `${shell.damage.armor.toFixed(0)}hp`;
-      case 'fire.dispersionMoving':
-        return `+ ${tracks.dispersion.move.toFixed(3)}`;
-      case 'fire.dispersionStill':
-        return gun.dispersion.base.toFixed(3);
-      case 'fire.dpm':
-        return resolveDpm(gun, shell).toFixed(0);
-      case 'fire.gunDepression':
-        return awaitedModelDefinitions;
-    }
-  }, [sortBy]);
+  //   switch (sortBy) {
+  //     case 'fire.aimTime':
+  //       return `${gun.aimTime.toFixed(2)}s`;
+  //     case 'fire.caliber':
+  //       return `${shell.caliber.toFixed(0)}mm`;
+  //     case 'fire.damage':
+  //       return `${shell.damage.armor.toFixed(0)}hp`;
+  //     case 'fire.dispersionMoving':
+  //       return `+ ${tracks.dispersion.move.toFixed(3)}`;
+  //     case 'fire.dispersionStill':
+  //       return gun.dispersion.base.toFixed(3);
+  //     case 'fire.dpm':
+  //       return resolveDpm(gun, shell).toFixed(0);
+  //     case 'fire.gunDepression':
+  //       return awaitedModelDefinitions;
+  //   }
+  // }, [sortBy]);
 
   useEffect(() => {
     const unsubscribe = useTankopediaFilters.subscribe((filters) => {
@@ -70,27 +71,12 @@ export function TankCard({ tank }: TankCardProps) {
       highContrast={tank.treeType === 'researchable'}
       underline="hover"
       href={`/tools/tankopedia/${tank.id}`}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: 'var(--space-2)',
-        background: `url(${asset(`flags/scratched/${tank.nation}.webp`)})`,
-        backgroundSize: 'contain',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'top left',
-      }}
+      className={styles.card}
+      style={assignInlineVars({
+        [styles.cardBackgroundVar]: `top left / contain no-repeat url(${asset(`flags/scratched/${tank.nation}.webp`)})`,
+      })}
     >
-      <img
-        alt={tank.name}
-        src={tankIcon(tank.id)}
-        height={64}
-        style={{
-          width: '100%',
-          objectPosition: 'center right',
-          objectFit: 'contain',
-        }}
-      />
+      <img alt={tank.name} src={tankIcon(tank.id)} className={styles.image} />
 
       <Flex
         justify="center"
@@ -100,27 +86,13 @@ export function TankCard({ tank }: TankCardProps) {
         width="100%"
         maxWidth="100%"
       >
-        <Icon
-          style={{
-            width: '1em',
-            height: '1em',
-            minWidth: '1em',
-            minHeight: '1em',
-          }}
-        />
-        <Text
-          align="center"
-          style={{
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
-        >
+        <Icon className={styles.classIcon} />
+        <Text align="center" className={styles.name}>
           {tank.name}
         </Text>
       </Flex>
 
-      {discriminator && (
+      {/* {discriminator && (
         <Text
           mt="-2"
           color="gray"
@@ -133,7 +105,7 @@ export function TankCard({ tank }: TankCardProps) {
         >
           {discriminator}
         </Text>
-      )}
+      )} */}
     </Link>
   );
 }
