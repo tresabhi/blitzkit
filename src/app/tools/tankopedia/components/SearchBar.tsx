@@ -36,7 +36,7 @@ export function SearchBar({ topResult }: SearchBarProps) {
   }, []);
   const handleKeyDown = useCallback<KeyboardEventHandler>(
     (event) => {
-      if (event.key !== 'Enter' || !topResult) return;
+      if (event.key !== 'Enter' || !topResult || searching) return;
 
       event.preventDefault();
       router.push(`/tools/tankopedia/${topResult.id}`);
@@ -58,7 +58,7 @@ export function SearchBar({ topResult }: SearchBarProps) {
             {searching ? <Spinner /> : <MagnifyingGlassIcon />}
           </TextField.Slot>
 
-          {topResult && (
+          {topResult && !searching && (
             <TextField.Slot>
               <Link href={`/tools/tankopedia/${topResult.id}`}>
                 <Button variant="ghost">
