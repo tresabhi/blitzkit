@@ -5,6 +5,7 @@
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
+    "build:assets": "bun scripts/buildAssets/index.ts",
     "build:averages": "bun scripts/averages",
     "build:db": "prisma generate",
     "build:bot": "bun scripts/build.ts --production",

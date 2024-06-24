@@ -46,4 +46,4 @@ jobs:
           $env:DATABASE_URL = "${{ secrets.DATABASE_URL }}" 
           $env:VIDEOS_SHEET = "${{ secrets.VIDEOS_SHEET }}" 
           $env:GOOGLE_APPLICATION_CREDENTIALS = "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}"
-          bun scripts/buildAssets/index.ts --all-targets --depot --production
+          bun build:assets --all-targets --depot --production
