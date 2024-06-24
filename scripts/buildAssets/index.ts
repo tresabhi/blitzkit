@@ -41,9 +41,9 @@ const methods = [
   consumableProvisionIcons,
   camouflageIcons,
   boosterIcons,
-  tankIcons,
   tankArmors,
   tankModels,
+  tankIcons,
 ];
 
 for (const method of methods) {
