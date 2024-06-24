@@ -23,8 +23,12 @@ const omitMeshNames = {
 export async function extractModel(data: string, path: string) {
   const sc2Path = `${data}/3d/${path}.sc2.dvpl`;
   const scgPath = `${data}/3d/${path}.scg.dvpl`;
-  const sc2 = new Sc2ReadStream((await readDVPLFile(sc2Path)).buffer).sc2();
-  const scg = new ScgReadStream((await readDVPLFile(scgPath)).buffer).scg();
+  const sc2 = new Sc2ReadStream(
+    (await readDVPLFile(sc2Path)).buffer as ArrayBuffer,
+  ).sc2();
+  const scg = new ScgReadStream(
+    (await readDVPLFile(scgPath)).buffer as ArrayBuffer,
+  ).scg();
   const document = new Document();
   const scene = document.createScene();
   const buffer = document.createBuffer();

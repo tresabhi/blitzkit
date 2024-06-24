@@ -12,8 +12,12 @@ import { readDVPLFile } from './readDVPLFile';
 export async function extractArmor(data: string, fileName: string) {
   const sc2Path = `${data}/3d/Tanks/CollisionMeshes/${fileName}.sc2.dvpl`;
   const scgPath = `${data}/3d/Tanks/CollisionMeshes/${fileName}.scg.dvpl`;
-  const sc2 = new Sc2ReadStream((await readDVPLFile(sc2Path)).buffer).sc2();
-  const scg = new ScgReadStream((await readDVPLFile(scgPath)).buffer).scg();
+  const sc2 = new Sc2ReadStream(
+    (await readDVPLFile(sc2Path)).buffer as ArrayBuffer,
+  ).sc2();
+  const scg = new ScgReadStream(
+    (await readDVPLFile(scgPath)).buffer as ArrayBuffer,
+  ).scg();
   const document = new Document();
   const scene = document.createScene();
   const buffer = document.createBuffer();

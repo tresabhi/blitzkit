@@ -8,6 +8,7 @@ import {
   MessageEditOptions,
 } from 'discord.js';
 import { InteractionReturnable } from '../../events/interactionCreate';
+import { Writeable } from '../../types/writable';
 import jsxToPngThreaded from '../blitzkit/jsxToPngThreaded';
 import { RenderConfiguration } from '../blitzkit/renderConfiguration';
 
@@ -30,7 +31,7 @@ export default async function normalizeInteractionReturnable(
         reply.content = item;
       } else if (item instanceof EmbedBuilder) {
         if (!reply.embeds) reply.embeds = [];
-        reply.embeds.push(item);
+        (reply.embeds as Writeable<typeof reply.embeds>).push(item);
       } else if (item instanceof ButtonBuilder) {
         if (!reply.components)
           reply.components = [new ActionRowBuilder<ButtonBuilder>()];
@@ -39,7 +40,7 @@ export default async function normalizeInteractionReturnable(
         );
       } else if (item instanceof AttachmentBuilder) {
         if (!reply.files) reply.files = [];
-        reply.files.push(item);
+        (reply.files as Writeable<typeof reply.files>).push(item);
       } else if (item instanceof RenderConfiguration) {
         renderConfiguration = item;
       } else if (item === null) {
@@ -54,7 +55,9 @@ export default async function normalizeInteractionReturnable(
   if (images.length > 0) {
     images.sort(([a], [b]) => b - a);
     if (!reply.files) reply.files = [];
-    images.forEach(([, image]) => reply.files?.push(image));
+    images.forEach(([, image]) =>
+      (reply.files as Writeable<typeof reply.files>)?.push(image),
+    );
   }
 
   return reply;

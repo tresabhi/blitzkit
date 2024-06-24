@@ -1,4 +1,4 @@
-import { Locale, SlashCommandBuilder } from 'discord.js';
+import { Locale } from 'discord.js';
 import CommandWrapper from '../components/CommandWrapper';
 import GenericStats from '../components/GenericStats';
 import NoData from '../components/NoData';
@@ -39,7 +39,7 @@ export const inactiveCommand = new Promise<CommandRegistry>((resolve) => {
             ),
           )
           .setMinValue(0);
-      }) as SlashCommandBuilder,
+      }),
 
     async handler(interaction) {
       const { translate } = translator(interaction.locale);

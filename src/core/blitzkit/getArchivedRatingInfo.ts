@@ -27,9 +27,7 @@ export default async function getArchivedRatingInfo(
     )
       .then((response) => response.arrayBuffer())
       .then((buffer) =>
-        superDecompress<RatingInfo & { detail: undefined }>(
-          new Uint8Array(buffer),
-        ),
+        superDecompress<RatingInfo & { detail: undefined }>(buffer),
       );
     cache[region][season] = info;
   }
