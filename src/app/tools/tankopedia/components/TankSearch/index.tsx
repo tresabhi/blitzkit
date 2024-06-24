@@ -105,10 +105,6 @@ export function TankSearch({
         sorted = filtered.sort((a, b) => a.tier - b.tier);
         break;
 
-      case 'meta.name':
-        sorted = filtered.sort((a, b) => a.name?.localeCompare(b.name));
-        break;
-
       case 'survivability.health': {
         sorted = filtered.sort((a, b) => {
           const aHealth = a.health + a.turrets.at(-1)!.health;

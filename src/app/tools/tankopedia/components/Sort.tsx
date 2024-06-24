@@ -34,16 +34,6 @@ export function Sort() {
             >
               Tier
             </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={sort.by === 'meta.name'}
-              onClick={() => {
-                mutateTankopediaFilters((draft) => {
-                  draft.sort.by = 'meta.name';
-                });
-              }}
-            >
-              Name
-            </DropdownMenu.CheckboxItem>
           </DropdownMenu.SubContent>
         </DropdownMenu.Sub>
 
