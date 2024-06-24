@@ -1,8 +1,6 @@
 import { Callout, Flex } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
-import { range } from 'lodash';
 import { memo, use, useMemo } from 'react';
-import { Vector2Tuple } from 'three';
 import { ExperimentIcon } from '../../../../components/ExperimentIcon';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { modelDefinitions } from '../../../../core/blitzkit/modelDefinitions';
@@ -11,13 +9,13 @@ import { resolveDpm } from '../../../../core/blitzkit/resolveDpm';
 import { resolveReload } from '../../../../core/blitzkit/resolveReload';
 import {
   TankDefinition,
-  Tier,
   tankDefinitions,
   tankNames,
   tanksDefinitionsArray,
 } from '../../../../core/blitzkit/tankDefinitions';
 import { unionBoundingBox } from '../../../../core/blitzkit/unionBoundingBox';
 import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
+import { FilterControl } from './FilterControl';
 import { SearchBar } from './SearchBar';
 import { TankCard } from './TankCard';
 import { TankCardWrapper } from './TankCardWrapper';
@@ -30,10 +28,14 @@ export const Results = memo(() => {
   const awaitedTankNames = use(tankNames);
   const testing = useTankopediaFilters((state) => state.testing);
   const search = useTankopediaFilters((state) => state.search);
+  const tier = useTankopediaFilters((state) => state.tier);
   const sort = useTankopediaFilters((state) => state.sort);
   const searchedTanks = useMemo(() => {
     if (search !== undefined) {
-      const searchedRaw = go(search, awaitedTankNames, { key: 'combined' });
+      const searchedRaw = go(search, awaitedTankNames, {
+        key: 'combined',
+        limit: 25,
+      });
       const searchedTanks = searchedRaw.map(
         (result) => awaitedTankDefinitions[result.obj.id],
       );
@@ -45,10 +47,6 @@ export const Results = memo(() => {
       let sorted: TankDefinition[];
 
       switch (sort.by) {
-        case 'meta.name':
-          sorted = filtered.sort((a, b) => a.name?.localeCompare(b.name));
-          break;
-
         case 'survivability.health': {
           sorted = filtered.sort((a, b) => {
             const aHealth = a.health + a.turrets.at(-1)!.health;
@@ -332,25 +330,23 @@ export const Results = memo(() => {
     <Flex direction="column" gap="4" flexGrow="1">
       <SearchBar topResult={searchedTanks?.[0]} />
 
+      {!search && <FilterControl />}
+
       {testing === 'only' && (
-        <Callout.Root color="amber">
-          <Callout.Icon>
-            <ExperimentIcon style={{ width: '1em', height: '1em' }} />
-          </Callout.Icon>
-          <Callout.Text>
-            Tanks in testing are subject to change and many not represent the
-            final product.
-          </Callout.Text>
-        </Callout.Root>
+        <Flex justify="center" mt="4">
+          <Callout.Root color="amber">
+            <Callout.Icon>
+              <ExperimentIcon style={{ width: '1em', height: '1em' }} />
+            </Callout.Icon>
+            <Callout.Text>
+              Tanks in testing are subject to change and many not represent the
+              final product.
+            </Callout.Text>
+          </Callout.Root>
+        </Flex>
       )}
 
-      {!search &&
-        sort.by === 'meta.tier' &&
-        range(
-          ...(sort.direction === 'descending'
-            ? ([10, 0] as Vector2Tuple)
-            : ([1, 11] as Vector2Tuple)),
-        ).map((tier) => <TierCard key={tier} tier={tier as Tier} />)}
+      {!search && sort.by === 'meta.tier' && <TierCard tier={tier} />}
 
       {(search || sort.by !== 'meta.tier') && (
         <TankCardWrapper py="4">

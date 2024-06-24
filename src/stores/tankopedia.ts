@@ -107,7 +107,6 @@ export type ArmorPiercingLayer =
 
 export const SORT_NAMES = {
   'meta.tier': 'tier',
-  'meta.name': 'name',
   'survivability.health': 'health',
   'survivability.viewRange': 'view range',
   'survivability.camouflageStill': 'camouflage still',

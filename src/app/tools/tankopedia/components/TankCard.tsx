@@ -1,13 +1,10 @@
 import { Flex, Text } from '@radix-ui/themes';
 import { Icon } from '@radix-ui/themes/dist/cjs/components/callout';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import { useEffect, useRef } from 'react';
 import { Link } from '../../../../components/Link';
 import { asset } from '../../../../core/blitzkit/asset';
 import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../../../../core/blitzkit/tankIcon';
-import { tankopediaFilterTank } from '../../../../core/blitzkit/tankopediaFilterTank';
-import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
 import * as styles from './TankCard.css';
 
 interface TankCardProps {
@@ -17,7 +14,7 @@ interface TankCardProps {
 export function TankCard({ tank }: TankCardProps) {
   // const awaitedModelDefinitions = use(modelDefinitions);
   // const Icon = classIcons[tank.class];
-  const link = useRef<HTMLAnchorElement>(null);
+  // const link = useRef<HTMLAnchorElement>(null);
   // const sortBy = useTankopediaFilters((state) => state.sort.by);
   // const discriminator = useMemo(() => {
   //   if (sortBy.startsWith('meta')) return undefined;
@@ -46,20 +43,20 @@ export function TankCard({ tank }: TankCardProps) {
   //   }
   // }, [sortBy]);
 
-  useEffect(() => {
-    const unsubscribe = useTankopediaFilters.subscribe((filters) => {
-      if (!link.current) return;
+  // useEffect(() => {
+  //   const unsubscribe = useTankopediaFilters.subscribe((filters) => {
+  //     if (!link.current) return;
 
-      const visible = tankopediaFilterTank(filters, tank);
-      link.current.style.display = visible ? 'flex' : 'none';
-    });
+  //     const visible = tankopediaFilterTank(filters, tank);
+  //     link.current.style.display = visible ? 'flex' : 'none';
+  //   });
 
-    return unsubscribe;
-  }, []);
+  //   return unsubscribe;
+  // }, []);
 
   return (
     <Link
-      ref={link}
+      // ref={link}
       size="1"
       color={
         tank.treeType === 'collector'

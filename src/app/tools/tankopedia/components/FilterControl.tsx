@@ -1,10 +1,9 @@
-import { TrashIcon } from '@radix-ui/react-icons';
-import { Box, Button, Flex, IconButton, Text } from '@radix-ui/themes';
+import { ReloadIcon } from '@radix-ui/react-icons';
+import { Box, Flex, IconButton, Text } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { use } from 'react';
 import { classIcons } from '../../../../components/ClassIcon';
 import { ExperimentIcon } from '../../../../components/ExperimentIcon';
-import { NAVBAR_HEIGHT } from '../../../../components/Navbar';
 import { ResearchedIcon } from '../../../../components/ResearchedIcon';
 import { ScienceIcon } from '../../../../components/ScienceIcon';
 import { ScienceOffIcon } from '../../../../components/ScienceOffIcon';
@@ -23,19 +22,11 @@ export function FilterControl() {
   const filters = useTankopediaFilters();
 
   return (
-    <Flex
-      direction={{ initial: 'row', sm: 'column' }}
-      height="fit-content"
-      gap="2"
-      align={{ initial: 'start', sm: 'start' }}
-      justify={{ initial: 'center', sm: 'start' }}
-      position={{ initial: 'static', sm: 'sticky' }}
-      style={{ top: `calc(${NAVBAR_HEIGHT}px + var(--space-3))` }}
-    >
+    <Flex height="fit-content" gap="2" align="start" justify="center">
       <Flex
         direction={{ initial: 'row', sm: 'column' }}
         overflow="hidden"
-        style={{ borderRadius: 'var(--radius-4)' }}
+        style={{ borderRadius: 'var(--radius-5)' }}
       >
         <Flex direction={{ sm: 'row', initial: 'column' }}>
           {times(5, (index) => {
@@ -51,7 +42,7 @@ export function FilterControl() {
                 highContrast
                 onClick={() =>
                   mutateTankopediaFilters((draft) => {
-                    draft.tier = draft.tier === tier ? undefined : tier;
+                    draft.tier = tier;
                   })
                 }
               >
@@ -74,7 +65,7 @@ export function FilterControl() {
                 highContrast
                 onClick={() =>
                   mutateTankopediaFilters((draft) => {
-                    draft.tier = draft.tier === tier ? undefined : tier;
+                    draft.tier = tier;
                   })
                 }
               >
@@ -88,7 +79,7 @@ export function FilterControl() {
       <Flex
         direction={{ initial: 'row', sm: 'column' }}
         overflow="hidden"
-        style={{ borderRadius: 'var(--radius-4)' }}
+        style={{ borderRadius: 'var(--radius-5)' }}
       >
         <Flex direction={{ sm: 'row', initial: 'column' }}>
           {awaitedGameDefinitions.nations
@@ -227,7 +218,7 @@ export function FilterControl() {
           }
         >
           <Text
-            color={filters.type === 'premium' ? undefined : 'blue'}
+            color={filters.type === 'collector' ? undefined : 'blue'}
             style={{ display: 'flex', justifyContent: 'center' }}
           >
             <ResearchedIcon style={{ width: '1em', height: '1em' }} />
@@ -287,10 +278,9 @@ export function FilterControl() {
         </IconButton>
       </Flex>
 
-      <Box display={{ initial: 'block', sm: 'none' }}>
+      <Box>
         <IconButton
           color="red"
-          ml="2"
           onClick={() =>
             useTankopediaFilters.setState(
               useTankopediaFilters.getInitialState(),
@@ -298,22 +288,8 @@ export function FilterControl() {
             )
           }
         >
-          <TrashIcon />
+          <ReloadIcon />
         </IconButton>
-      </Box>
-      <Box display={{ initial: 'none', sm: 'block' }}>
-        <Button
-          color="red"
-          mt="2"
-          onClick={() =>
-            useTankopediaFilters.setState(
-              useTankopediaFilters.getInitialState(),
-              true,
-            )
-          }
-        >
-          <TrashIcon /> Clear
-        </Button>
       </Box>
     </Flex>
   );

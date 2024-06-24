@@ -12,7 +12,7 @@ export function Sort() {
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger>
-        <Button variant="surface" size="3" color="gray">
+        <Button variant="surface" color="gray">
           Sort
           <CaretDownIcon />
         </Button>

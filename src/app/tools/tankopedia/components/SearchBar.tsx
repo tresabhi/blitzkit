@@ -45,31 +45,32 @@ export function SearchBar({ topResult }: SearchBarProps) {
   );
 
   return (
-    <Flex gap="2">
-      <TextField.Root
-        style={{ flex: 1 }}
-        ref={input}
-        placeholder="Search tanks..."
-        size="3"
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-      >
-        <TextField.Slot>
-          {searching ? <Spinner /> : <MagnifyingGlassIcon />}
-        </TextField.Slot>
-
-        {topResult && (
+    <Flex justify="center">
+      <Flex gap="2" flexGrow="1">
+        <TextField.Root
+          style={{ flex: 1 }}
+          ref={input}
+          placeholder="Search tanks..."
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+        >
           <TextField.Slot>
-            <Link href={`/tools/tankopedia/${topResult.id}`}>
-              <Button variant="ghost" size="3">
-                {topResult.name} <CaretRightIcon />
-              </Button>
-            </Link>
+            {searching ? <Spinner /> : <MagnifyingGlassIcon />}
           </TextField.Slot>
-        )}
-      </TextField.Root>
 
-      <Sort />
+          {topResult && (
+            <TextField.Slot>
+              <Link href={`/tools/tankopedia/${topResult.id}`}>
+                <Button variant="ghost">
+                  {topResult.name} <CaretRightIcon />
+                </Button>
+              </Link>
+            </TextField.Slot>
+          )}
+        </TextField.Root>
+
+        <Sort />
+      </Flex>
     </Flex>
   );
 }

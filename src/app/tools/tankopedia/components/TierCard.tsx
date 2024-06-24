@@ -1,12 +1,12 @@
-import { Flex, Heading, Separator } from '@radix-ui/themes';
-import { memo, use, useEffect, useMemo, useRef } from 'react';
+import { Flex, Text } from '@radix-ui/themes';
+import { memo, use, useMemo } from 'react';
+import { Link } from '../../../../components/Link';
 import { TANK_CLASSES } from '../../../../components/Tanks/components/Item/constants';
 import { gameDefinitions } from '../../../../core/blitzkit/gameDefinitions';
 import {
   Tier,
   tanksDefinitionsArray,
 } from '../../../../core/blitzkit/tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
 import { tankopediaFilterTank } from '../../../../core/blitzkit/tankopediaFilterTank';
 import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
 import { TankCard } from './TankCard';
@@ -21,11 +21,11 @@ export const TierCard = memo(
   ({ tier }: TierCardProps) => {
     const awaitedGameDefinitions = use(gameDefinitions);
     const awaitedTanksDefinitionsArray = use(tanksDefinitionsArray);
-    const container = useRef<HTMLDivElement>(null);
+    const filters = useTankopediaFilters();
     const tanks = useMemo(
       () =>
         awaitedTanksDefinitionsArray
-          .filter((tank) => tank.tier === tier)
+          .filter((tank) => tankopediaFilterTank(filters, tank))
           .sort(
             (a, b) =>
               treeTypeOrder.indexOf(a.treeType) -
@@ -40,41 +40,38 @@ export const TierCard = memo(
               awaitedGameDefinitions.nations.indexOf(a.nation) -
               awaitedGameDefinitions.nations.indexOf(b.nation),
           ),
-      [tier],
+      [tier, filters],
     );
 
-    useEffect(() => {
-      const unsubscribe = useTankopediaFilters.subscribe((filters) => {
-        if (!container.current) return;
-
-        const visible = tanks.some((tank) =>
-          tankopediaFilterTank(filters, tank),
-        );
-        container.current.style.display = visible ? 'flex' : 'none';
-      });
-
-      return unsubscribe;
-    }, []);
+    if (tanks.length === 0)
+      return (
+        <Flex flexGrow="1" align="center" justify="center">
+          <Text color="gray">
+            No tanks found.{' '}
+            <Link
+              href="#"
+              underline="always"
+              color="red"
+              onClick={() =>
+                useTankopediaFilters.setState(
+                  useTankopediaFilters.getInitialState(),
+                  true,
+                )
+              }
+            >
+              Try clearing filters
+            </Link>
+            .
+          </Text>
+        </Flex>
+      );
 
     return (
-      <Flex
-        ref={container}
-        direction="column"
-        gap="4"
-        display={tanks.length === 0 ? 'none' : 'flex'}
-        py="4"
-      >
-        <Flex align="center" mb="4" gap="4">
-          <Heading weight="regular">Tier {TIER_ROMAN_NUMERALS[tier]}</Heading>
-          <Separator style={{ flex: 1 }} />
-        </Flex>
-
-        <TankCardWrapper>
-          {tanks.map((tank) => (
-            <TankCard key={tank.id} tank={tank} />
-          ))}
-        </TankCardWrapper>
-      </Flex>
+      <TankCardWrapper mt="6">
+        {tanks.map((tank) => (
+          <TankCard key={tank.id} tank={tank} />
+        ))}
+      </TankCardWrapper>
     );
   },
   (prev, next) => prev.tier === next.tier,
