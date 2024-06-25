@@ -502,7 +502,7 @@ export function Characteristics() {
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
         <Flex direction="column" gap="2">
           <Heading size="5">Maneuverability</Heading>
-          <Info name="Speed" unit="km/hr" />
+          <Info name="Speed" unit="kph" />
           <InfoWithDelta decimals={0} indent name="Forwards">
             {stats.speedForwards}
           </InfoWithDelta>

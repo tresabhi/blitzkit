@@ -1,4 +1,4 @@
-import { Callout, Flex } from '@radix-ui/themes';
+import { Callout, Flex, Text } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { times } from 'lodash';
 import { memo, use, useMemo } from 'react';
@@ -18,6 +18,7 @@ import {
 } from '../../../../core/blitzkit/tankDefinitions';
 import { tankopediaFilterTank } from '../../../../core/blitzkit/tankopediaFilterTank';
 import { unionBoundingBox } from '../../../../core/blitzkit/unionBoundingBox';
+import { SORT_NAMES, SORT_UNITS } from '../../../../stores/tankopedia';
 import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
 import { FilterControl } from './FilterControl';
 import { NoResults } from './NoResults';
@@ -350,6 +351,18 @@ export const Results = memo(() => {
       <SearchBar topResult={tanks?.[0]} />
 
       {!filters.search && !filters.searching && <FilterControl />}
+
+      {filters.sort.by !== 'meta.none' && (
+        <Flex py="2" mt="2" justify="center">
+          <Text color="gray">
+            Sorting by {SORT_NAMES[filters.sort.by]}
+            {SORT_UNITS[filters.sort.by] === undefined
+              ? ''
+              : ` (${SORT_UNITS[filters.sort.by]})`}
+            , {filters.sort.direction}
+          </Text>
+        </Flex>
+      )}
 
       {filters.testing === 'only' && (
         <Flex justify="center" mt="4">
