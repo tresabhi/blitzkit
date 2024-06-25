@@ -1,11 +1,11 @@
-import { CaretRightIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
-import { Button, Flex, Spinner, TextField } from '@radix-ui/themes';
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { Flex, Spinner, TextField } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { KeyboardEventHandler, useCallback, useRef } from 'react';
-import { Link } from '../../../../components/Link';
 import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
 import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
+import { QuickLink } from './QuickLink';
 import { Sort } from './Sort';
 
 interface SearchBarProps {
@@ -16,7 +16,7 @@ export function SearchBar({ topResult }: SearchBarProps) {
   const router = useRouter();
   const input = useRef<HTMLInputElement>(null);
   const searching = useTankopediaFilters((state) => state.searching);
-  const search = useCallback(
+  const performSearch = useCallback(
     debounce(() => {
       useTankopediaFilters.setState({ searching: false });
 
@@ -31,8 +31,11 @@ export function SearchBar({ topResult }: SearchBarProps) {
     [],
   );
   const handleChange = useCallback(() => {
-    useTankopediaFilters.setState({ searching: true });
-    search();
+    if (!useTankopediaFilters.getState().searching) {
+      useTankopediaFilters.setState({ searching: true });
+    }
+
+    performSearch();
   }, []);
   const handleKeyDown = useCallback<KeyboardEventHandler>(
     (event) => {
@@ -58,15 +61,7 @@ export function SearchBar({ topResult }: SearchBarProps) {
             {searching ? <Spinner /> : <MagnifyingGlassIcon />}
           </TextField.Slot>
 
-          {topResult && !searching && (
-            <TextField.Slot>
-              <Link href={`/tools/tankopedia/${topResult.id}`}>
-                <Button variant="ghost">
-                  {topResult.name} <CaretRightIcon />
-                </Button>
-              </Link>
-            </TextField.Slot>
-          )}
+          <QuickLink topResult={topResult} />
         </TextField.Root>
 
         <Sort />
