@@ -19,23 +19,18 @@ export function Sort() {
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Content align="end">
-        <DropdownMenu.Label>Sort by</DropdownMenu.Label>
+        <DropdownMenu.CheckboxItem
+          checked={sort.by === 'meta.none'}
+          onClick={() => {
+            mutateTankopediaFilters((draft) => {
+              draft.sort.by = 'meta.none';
+            });
+          }}
+        >
+          No sort
+        </DropdownMenu.CheckboxItem>
 
-        <DropdownMenu.Sub>
-          <DropdownMenu.SubTrigger>Meta</DropdownMenu.SubTrigger>
-          <DropdownMenu.SubContent>
-            <DropdownMenu.CheckboxItem
-              checked={sort.by === 'meta.tier'}
-              onClick={() => {
-                mutateTankopediaFilters((draft) => {
-                  draft.sort.by = 'meta.tier';
-                });
-              }}
-            >
-              Tier
-            </DropdownMenu.CheckboxItem>
-          </DropdownMenu.SubContent>
-        </DropdownMenu.Sub>
+        <DropdownMenu.Label>Sort by</DropdownMenu.Label>
 
         <DropdownMenu.Sub>
           <DropdownMenu.SubTrigger>Fire</DropdownMenu.SubTrigger>
@@ -304,8 +299,6 @@ export function Sort() {
             </DropdownMenu.CheckboxItem>
           </DropdownMenu.SubContent>
         </DropdownMenu.Sub>
-
-        <DropdownMenu.Separator />
 
         <DropdownMenu.Label>Direction</DropdownMenu.Label>
         <DropdownMenu.RadioGroup

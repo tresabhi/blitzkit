@@ -3,7 +3,9 @@ import { go } from 'fuzzysort';
 import { times } from 'lodash';
 import { memo, use, useMemo } from 'react';
 import { ExperimentIcon } from '../../../../components/ExperimentIcon';
+import { TANK_CLASSES } from '../../../../components/Tanks/components/Item/constants';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
+import { gameDefinitions } from '../../../../core/blitzkit/gameDefinitions';
 import { modelDefinitions } from '../../../../core/blitzkit/modelDefinitions';
 import { normalizeBoundingBox } from '../../../../core/blitzkit/normalizeBoundingBox';
 import { resolveDpm } from '../../../../core/blitzkit/resolveDpm';
@@ -14,6 +16,7 @@ import {
   tankNames,
   tanksDefinitionsArray,
 } from '../../../../core/blitzkit/tankDefinitions';
+import { tankopediaFilterTank } from '../../../../core/blitzkit/tankopediaFilterTank';
 import { unionBoundingBox } from '../../../../core/blitzkit/unionBoundingBox';
 import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
 import { FilterControl } from './FilterControl';
@@ -22,35 +25,41 @@ import { SearchBar } from './SearchBar';
 import { SkeletonTankCard } from './SkeletonTankCard';
 import { TankCard } from './TankCard';
 import { TankCardWrapper } from './TankCardWrapper';
-import { TierCard } from './TierCard';
+import { treeTypeOrder } from './TankSearch/constants';
 
 export const Results = memo(() => {
+  const awaitedGameDefinitions = use(gameDefinitions);
   const awaitedModelDefinitions = use(modelDefinitions);
   const awaitedTankDefinitions = use(tankDefinitions);
   const awaitedTanksDefinitionsArray = use(tanksDefinitionsArray);
   const awaitedTankNames = use(tankNames);
-  const testing = useTankopediaFilters((state) => state.testing);
-  const search = useTankopediaFilters((state) => state.search);
-  const tier = useTankopediaFilters((state) => state.tier);
-  const sort = useTankopediaFilters((state) => state.sort);
-  const searching = useTankopediaFilters((state) => state.searching);
-  const searchedTanks = useMemo(() => {
-    if (search !== undefined) {
-      const searchedRaw = go(search, awaitedTankNames, {
-        key: 'combined',
-        limit: 25,
-      });
-      const searchedTanks = searchedRaw.map(
-        (result) => awaitedTankDefinitions[result.obj.id],
+  const filters = useTankopediaFilters();
+  const tanks = useMemo(() => {
+    if (filters.search === undefined) {
+      const filtered = awaitedTanksDefinitionsArray.filter((tank) =>
+        tankopediaFilterTank(filters, tank),
       );
-      return searchedTanks;
-    }
-
-    if (sort.by !== 'meta.tier') {
-      const filtered = awaitedTanksDefinitionsArray;
       let sorted: TankDefinition[];
 
-      switch (sort.by) {
+      switch (filters.sort.by) {
+        case 'meta.none':
+          sorted = filtered
+            .sort(
+              (a, b) =>
+                treeTypeOrder.indexOf(b.treeType) -
+                treeTypeOrder.indexOf(a.treeType),
+            )
+            .sort(
+              (a, b) =>
+                TANK_CLASSES.indexOf(b.class) - TANK_CLASSES.indexOf(a.class),
+            )
+            .sort(
+              (a, b) =>
+                awaitedGameDefinitions.nations.indexOf(b.nation) -
+                awaitedGameDefinitions.nations.indexOf(a.nation),
+            );
+          break;
+
         case 'survivability.health': {
           sorted = filtered.sort((a, b) => {
             const aHealth = a.health + a.turrets.at(-1)!.health;
@@ -82,8 +91,10 @@ export const Results = memo(() => {
         case 'survivability.camouflageShooting':
           sorted = filtered.sort(
             (a, b) =>
-              a.turrets.at(-1)!.guns.at(-1)!.camouflageLoss -
-              b.turrets.at(-1)!.guns.at(-1)!.camouflageLoss,
+              a.camouflage.still *
+                a.turrets.at(-1)!.guns.at(-1)!.camouflageLoss -
+              b.camouflage.still *
+                b.turrets.at(-1)!.guns.at(-1)!.camouflageLoss,
           );
           break;
 
@@ -187,16 +198,10 @@ export const Results = memo(() => {
           sorted = filtered.sort(
             (a, b) =>
               resolveNearPenetration(
-                (
-                  a.turrets.at(-1)!.guns.at(-1)!.shells[1] ??
-                  a.turrets.at(-1)!.guns.at(-1)!.shells[0]
-                ).penetration,
+                a.turrets.at(-1)!.guns.at(-1)!.shells[1]?.penetration ?? 0,
               ) -
               resolveNearPenetration(
-                (
-                  b.turrets.at(-1)!.guns.at(-1)!.shells[1] ??
-                  b.turrets.at(-1)!.guns.at(-1)!.shells[0]
-                ).penetration,
+                b.turrets.at(-1)!.guns.at(-1)!.shells[1]?.penetration ?? 0,
               ),
           );
           break;
@@ -246,23 +251,26 @@ export const Results = memo(() => {
             (a, b) =>
               awaitedModelDefinitions[a.id].turrets[a.turrets.at(-1)!.id].guns[
                 a.turrets.at(-1)!.guns.at(-1)!.id
-              ].pitch.max -
+              ].pitch.max +
+              (awaitedModelDefinitions[a.id].turretRotation?.pitch ?? 0) -
               awaitedModelDefinitions[b.id].turrets[b.turrets.at(-1)!.id].guns[
                 b.turrets.at(-1)!.guns.at(-1)!.id
-              ].pitch.max,
+              ].pitch.max -
+              (awaitedModelDefinitions[b.id].turretRotation?.pitch ?? 0),
           );
           break;
 
         case 'fire.gunElevation':
           sorted = filtered.sort(
             (a, b) =>
-              // reversed because of negative values
               awaitedModelDefinitions[b.id].turrets[b.turrets.at(-1)!.id].guns[
                 b.turrets.at(-1)!.guns.at(-1)!.id
-              ].pitch.min -
+              ].pitch.min +
+              (awaitedModelDefinitions[b.id].turretRotation?.pitch ?? 0) -
               awaitedModelDefinitions[a.id].turrets[a.turrets.at(-1)!.id].guns[
                 a.turrets.at(-1)!.guns.at(-1)!.id
-              ].pitch.min,
+              ].pitch.min -
+              (awaitedModelDefinitions[a.id].turretRotation?.pitch ?? 0),
           );
           break;
 
@@ -324,19 +332,26 @@ export const Results = memo(() => {
           break;
       }
 
-      return sort.direction === 'ascending' ? sorted : sorted.reverse();
+      return filters.sort.direction === 'ascending' ? sorted : sorted.reverse();
+    } else {
+      const searchedRaw = go(filters.search, awaitedTankNames, {
+        key: 'combined',
+        limit: 25,
+      });
+      const searchedTanks = searchedRaw.map(
+        (result) => awaitedTankDefinitions[result.obj.id],
+      );
+      return searchedTanks;
     }
-
-    return undefined;
-  }, [search, sort]);
+  }, [filters]);
 
   return (
     <Flex direction="column" gap="4" flexGrow="1">
-      <SearchBar topResult={searchedTanks?.[0]} />
+      <SearchBar topResult={tanks?.[0]} />
 
-      {!search && !searching && <FilterControl />}
+      {!filters.search && !filters.searching && <FilterControl />}
 
-      {testing === 'only' && (
+      {filters.testing === 'only' && (
         <Flex justify="center" mt="4">
           <Callout.Root color="amber">
             <Callout.Icon>
@@ -350,25 +365,21 @@ export const Results = memo(() => {
         </Flex>
       )}
 
-      {!search && sort.by === 'meta.tier' && !searching && (
-        <TierCard tier={tier} />
-      )}
-
-      {(search || sort.by !== 'meta.tier') && !searching && searchedTanks && (
+      {!filters.searching && (
         <>
-          {searchedTanks.length > 0 && (
+          {tanks.length > 0 && (
             <TankCardWrapper>
-              {searchedTanks.map((tank) => (
+              {tanks.map((tank) => (
                 <TankCard key={tank.id} tank={tank} />
               ))}
             </TankCardWrapper>
           )}
 
-          {searchedTanks.length === 0 && <NoResults type="search" />}
+          {tanks.length === 0 && <NoResults type="search" />}
         </>
       )}
 
-      {searching && (
+      {filters.searching && (
         <TankCardWrapper>
           {times(Math.round(10 + 10 * Math.random()), (index) => (
             <SkeletonTankCard key={index} />

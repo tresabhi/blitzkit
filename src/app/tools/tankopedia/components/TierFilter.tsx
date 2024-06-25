@@ -13,7 +13,7 @@ export const TierFilter = memo(() => {
   const sort = useTankopediaFilters((state) => state.sort);
   const search = useTankopediaFilters((state) => state.search);
 
-  if (sort.by !== 'meta.tier' || search) return null;
+  if (sort.by !== 'meta.none' || search) return null;
 
   return (
     <Flex justify="center">

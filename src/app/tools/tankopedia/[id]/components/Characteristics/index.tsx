@@ -343,7 +343,7 @@ export function Characteristics() {
             {stats.dispersion}
           </InfoWithDelta>
           <InfoWithDelta
-            prefix="+ "
+            prefix="+"
             decimals={3}
             indent
             name="Moving"
@@ -353,7 +353,7 @@ export function Characteristics() {
           </InfoWithDelta>
           <InfoWithDelta
             decimals={3}
-            prefix="+ "
+            prefix="+"
             indent
             name="Hull traversing"
             deltaType="lowerIsBetter"
@@ -362,7 +362,7 @@ export function Characteristics() {
           </InfoWithDelta>
           <InfoWithDelta
             decimals={3}
-            prefix="+ "
+            prefix="+"
             indent
             name="Turret traversing"
             deltaType="lowerIsBetter"
@@ -371,7 +371,7 @@ export function Characteristics() {
           </InfoWithDelta>
           <InfoWithDelta
             decimals={3}
-            prefix="+ "
+            prefix="+"
             indent
             name="After shooting"
             deltaType="lowerIsBetter"

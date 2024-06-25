@@ -106,7 +106,7 @@ export type ArmorPiercingLayer =
     };
 
 export const SORT_NAMES = {
-  'meta.tier': 'tier',
+  'meta.none': 'none',
   'survivability.health': 'health',
   'survivability.viewRange': 'view range',
   'survivability.camouflageStill': 'camouflage still',
@@ -150,7 +150,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
         },
       },
       sort: {
-        by: 'meta.tier',
+        by: 'meta.none',
         direction: 'descending',
       },
       filters: {

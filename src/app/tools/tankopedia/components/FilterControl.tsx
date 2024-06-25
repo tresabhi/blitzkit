@@ -42,7 +42,7 @@ export function FilterControl() {
                 highContrast
                 onClick={() =>
                   mutateTankopediaFilters((draft) => {
-                    draft.tier = tier;
+                    draft.tier = draft.tier === tier ? undefined : tier;
                   })
                 }
               >
@@ -65,7 +65,7 @@ export function FilterControl() {
                 highContrast
                 onClick={() =>
                   mutateTankopediaFilters((draft) => {
-                    draft.tier = tier;
+                    draft.tier = draft.tier === tier ? undefined : tier;
                   })
                 }
               >

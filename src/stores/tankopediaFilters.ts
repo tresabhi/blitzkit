@@ -5,7 +5,7 @@ import { Tier } from '../core/blitzkit/tankDefinitions';
 import { TankopediaSortBy, TankopediaSortDirection } from './tankopedia';
 
 export interface TankopediaFilters {
-  tier: Tier;
+  tier?: Tier;
   nation?: string;
   class?: TankClass;
   type?: TreeType;
@@ -21,7 +21,7 @@ export interface TankopediaFilters {
 export const useTankopediaFilters = create<TankopediaFilters>()(() => ({
   testing: 'include',
   sort: {
-    by: 'meta.tier',
+    by: 'meta.none',
     direction: 'descending',
   },
   tier: 10,

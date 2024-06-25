@@ -101,7 +101,7 @@ export function TankSearch({
     let sorted: TankDefinition[] = [];
 
     switch (sort.by) {
-      case 'meta.tier':
+      case 'meta.none':
         sorted = filtered.sort((a, b) => a.tier - b.tier);
         break;
 
@@ -475,7 +475,7 @@ export function TankSearch({
                   page: 0,
                 },
                 sort: {
-                  by: 'meta.tier',
+                  by: 'meta.none',
                   direction: 'descending',
                 },
               })
