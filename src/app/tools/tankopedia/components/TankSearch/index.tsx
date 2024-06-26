@@ -30,7 +30,7 @@ import { TankCard } from '../TankCard';
 import { TankCardWrapper } from '../TankCardWrapper';
 import { treeTypeOrder } from './constants';
 
-type TankSearchProps = FlexProps & {
+type TankSearchProps = Omit<FlexProps, 'onSelect'> & {
   compact?: boolean;
   onSelect?: (tank: TankDefinition) => void;
   onSelectAll?: (tanks: TankDefinition[]) => void;
