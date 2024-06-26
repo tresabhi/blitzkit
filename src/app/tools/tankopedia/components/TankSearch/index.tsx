@@ -1,19 +1,8 @@
-import {
-  CaretRightIcon,
-  MagnifyingGlassIcon,
-  TrashIcon,
-} from '@radix-ui/react-icons';
-import {
-  AlertDialog,
-  Button,
-  Flex,
-  Spinner,
-  Text,
-  TextField,
-} from '@radix-ui/themes';
+import { Callout, Flex, Text } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
-import { use, useEffect, useMemo, useRef, useState } from 'react';
-import { isMobileOnly } from 'react-device-detect';
+import { times } from 'lodash';
+import { memo, use, useMemo } from 'react';
+import { ExperimentIcon } from '../../../../../components/ExperimentIcon';
 import { TANK_CLASSES } from '../../../../../components/Tanks/components/Item/constants';
 import { resolveNearPenetration } from '../../../../../core/blitz/resolveNearPenetration';
 import { gameDefinitions } from '../../../../../core/blitzkit/gameDefinitions';
@@ -23,527 +12,400 @@ import { resolveDpm } from '../../../../../core/blitzkit/resolveDpm';
 import { resolveReload } from '../../../../../core/blitzkit/resolveReload';
 import {
   TankDefinition,
+  tankDefinitions,
+  tankNames,
   tanksDefinitionsArray,
 } from '../../../../../core/blitzkit/tankDefinitions';
+import { tankopediaFilterTank } from '../../../../../core/blitzkit/tankopediaFilterTank';
 import { unionBoundingBox } from '../../../../../core/blitzkit/unionBoundingBox';
-import mutateTankopediaPersistent, {
-  SORT_NAMES,
-  useTankopediaPersistent,
-} from '../../../../../stores/tankopedia';
-import { PageTurner } from '../PageTurner';
-import { Sort } from '../Sort';
-import { Options } from './components/Options';
-import { Results } from './components/Results';
+import { SORT_NAMES, SORT_UNITS } from '../../../../../stores/tankopedia';
+import { useTankopediaFilters } from '../../../../../stores/tankopediaFilters';
+import { FilterControl } from '../FilterControl';
+import { NoResults } from '../NoResults';
+import { SearchBar } from '../SearchBar';
+import { SkeletonTankCard } from '../SkeletonTankCard';
+import { TankCard } from '../TankCard';
+import { TankCardWrapper } from '../TankCardWrapper';
 import { treeTypeOrder } from './constants';
 
 interface TankSearchProps {
   compact?: boolean;
   onSelect?: (tank: TankDefinition) => void;
-  onSelectAll?: (tanks: TankDefinition[]) => void;
 }
 
-export function TankSearch({
-  compact,
-  onSelect = () => {},
-  onSelectAll,
-}: TankSearchProps) {
-  const tanksPerPage = (compact ? 16 : 96) * (isMobileOnly ? 0.5 : 1);
+export const TankSearch = memo<TankSearchProps>(({ compact, onSelect }) => {
   const awaitedGameDefinitions = use(gameDefinitions);
-  const filters = useTankopediaPersistent((state) => state.filters);
-  const sort = useTankopediaPersistent((state) => state.sort);
-  const awaitedTanks = use(tanksDefinitionsArray);
   const awaitedModelDefinitions = use(modelDefinitions);
-  const [loaded, setLoaded] = useState(false);
-  const defaultSortedTanks = useMemo(
-    () =>
-      awaitedTanks
-        .sort(
-          (a, b) =>
-            (treeTypeOrder.indexOf(a.treeType) -
-              treeTypeOrder.indexOf(b.treeType)) *
-            (sort.direction === 'descending' ? -1 : 1),
-        )
-        .sort(
-          (a, b) =>
-            (TANK_CLASSES.indexOf(a.class) - TANK_CLASSES.indexOf(b.class)) *
-            (sort.direction === 'descending' ? -1 : 1),
-        )
-        .sort(
-          (a, b) =>
-            (awaitedGameDefinitions.nations.indexOf(a.nation) -
-              awaitedGameDefinitions.nations.indexOf(b.nation)) *
-            (sort.direction === 'descending' ? -1 : 1),
-        ),
-    [],
-  );
-  const input = useRef<HTMLInputElement>(null);
-  const searchableTanks = useMemo(() => {
-    const filtered = defaultSortedTanks.filter(
-      (tank) =>
-        (filters.tiers.length === 0
-          ? true
-          : filters.tiers.includes(tank.tier)) &&
-        (filters.types.length === 0
-          ? true
-          : filters.types.includes(tank.class)) &&
-        (filters.treeTypes.length === 0
-          ? true
-          : filters.treeTypes.includes(tank.treeType)) &&
-        (filters.nations.length === 0
-          ? true
-          : filters.nations.includes(tank.nation)) &&
-        (filters.test === 'include'
-          ? true
-          : filters.test === 'exclude'
-            ? !tank.testing
-            : tank.testing),
-    );
-    let sorted: TankDefinition[] = [];
+  const awaitedTankDefinitions = use(tankDefinitions);
+  const awaitedTanksDefinitionsArray = use(tanksDefinitionsArray);
+  const awaitedTankNames = use(tankNames);
+  const filters = useTankopediaFilters();
+  const tanks = useMemo(() => {
+    if (filters.search === undefined) {
+      const filtered = awaitedTanksDefinitionsArray.filter((tank) =>
+        tankopediaFilterTank(filters, tank),
+      );
+      let sorted: TankDefinition[];
 
-    switch (sort.by) {
-      case 'meta.none':
-        sorted = filtered.sort((a, b) => a.tier - b.tier);
-        break;
+      switch (filters.sort.by) {
+        case 'meta.none':
+          sorted = filtered
+            .sort(
+              (a, b) =>
+                treeTypeOrder.indexOf(b.treeType) -
+                treeTypeOrder.indexOf(a.treeType),
+            )
+            .sort(
+              (a, b) =>
+                TANK_CLASSES.indexOf(b.class) - TANK_CLASSES.indexOf(a.class),
+            )
+            .sort(
+              (a, b) =>
+                awaitedGameDefinitions.nations.indexOf(b.nation) -
+                awaitedGameDefinitions.nations.indexOf(a.nation),
+            );
+          break;
 
-      case 'survivability.health': {
-        sorted = filtered.sort((a, b) => {
-          const aHealth = a.health + a.turrets.at(-1)!.health;
-          const bHealth = b.health + b.turrets.at(-1)!.health;
+        case 'survivability.health': {
+          sorted = filtered.sort((a, b) => {
+            const aHealth = a.health + a.turrets.at(-1)!.health;
+            const bHealth = b.health + b.turrets.at(-1)!.health;
 
-          return aHealth - bHealth;
-        });
-        break;
-      }
+            return aHealth - bHealth;
+          });
+          break;
+        }
 
-      case 'survivability.viewRange':
-        sorted = filtered.sort(
-          (a, b) => a.turrets.at(-1)!.viewRange - b.turrets.at(-1)!.viewRange,
-        );
-        break;
-
-      case 'survivability.camouflageStill':
-        sorted = filtered.sort(
-          (a, b) => a.camouflage.still - b.camouflage.still,
-        );
-        break;
-
-      case 'survivability.camouflageMoving':
-        sorted = filtered.sort(
-          (a, b) => a.camouflage.moving - b.camouflage.moving,
-        );
-        break;
-
-      case 'survivability.camouflageShooting':
-        sorted = filtered.sort(
-          (a, b) =>
-            a.turrets.at(-1)!.guns.at(-1)!.camouflageLoss -
-            b.turrets.at(-1)!.guns.at(-1)!.camouflageLoss,
-        );
-        break;
-
-      case 'survivability.volume':
-        sorted = filtered.sort((a, b) => {
-          const aTankModelDefinition = awaitedModelDefinitions[a.id];
-          const bTankModelDefinition = awaitedModelDefinitions[b.id];
-          const aTurretModelDefinition =
-            aTankModelDefinition.turrets[a.turrets.at(-1)!.id];
-          const bTurretModelDefinition =
-            bTankModelDefinition.turrets[b.turrets.at(-1)!.id];
-          const aSize = normalizeBoundingBox(
-            unionBoundingBox(
-              aTankModelDefinition.boundingBox,
-              aTurretModelDefinition.boundingBox,
-            ),
+        case 'survivability.viewRange':
+          sorted = filtered.sort(
+            (a, b) => a.turrets.at(-1)!.viewRange - b.turrets.at(-1)!.viewRange,
           );
-          const bSize = normalizeBoundingBox(
-            unionBoundingBox(
-              bTankModelDefinition.boundingBox,
-              bTurretModelDefinition.boundingBox,
-            ),
+          break;
+
+        case 'survivability.camouflageStill':
+          sorted = filtered.sort(
+            (a, b) => a.camouflage.still - b.camouflage.still,
           );
-          const aVolume = aSize[0] * aSize[1] * aSize[2];
-          const bVolume = bSize[0] * bSize[1] * bSize[2];
+          break;
 
-          return aVolume - bVolume;
-        });
-        break;
-
-      case 'survivability.length':
-        sorted = filtered.sort((a, b) => {
-          const aTankModelDefinition = awaitedModelDefinitions[a.id];
-          const bTankModelDefinition = awaitedModelDefinitions[b.id];
-          const aTurretModelDefinition =
-            aTankModelDefinition.turrets[a.turrets.at(-1)!.id];
-          const bTurretModelDefinition =
-            bTankModelDefinition.turrets[b.turrets.at(-1)!.id];
-          const aSize = normalizeBoundingBox(
-            unionBoundingBox(
-              aTankModelDefinition.boundingBox,
-              aTurretModelDefinition.boundingBox,
-            ),
+        case 'survivability.camouflageMoving':
+          sorted = filtered.sort(
+            (a, b) => a.camouflage.moving - b.camouflage.moving,
           );
-          const bSize = normalizeBoundingBox(
-            unionBoundingBox(
-              bTankModelDefinition.boundingBox,
-              bTurretModelDefinition.boundingBox,
-            ),
+          break;
+
+        case 'survivability.camouflageShooting':
+          sorted = filtered.sort(
+            (a, b) =>
+              a.camouflage.still *
+                a.turrets.at(-1)!.guns.at(-1)!.camouflageLoss -
+              b.camouflage.still *
+                b.turrets.at(-1)!.guns.at(-1)!.camouflageLoss,
           );
-          const aLength = Math.max(aSize[0], aSize[1], aSize[2]);
-          const bLength = Math.max(bSize[0], bSize[1], bSize[2]);
+          break;
 
-          return aLength - bLength;
-        });
-        break;
+        case 'survivability.volume':
+          sorted = filtered.sort((a, b) => {
+            const aTankModelDefinition = awaitedModelDefinitions[a.id];
+            const bTankModelDefinition = awaitedModelDefinitions[b.id];
+            const aTurretModelDefinition =
+              aTankModelDefinition.turrets[a.turrets.at(-1)!.id];
+            const bTurretModelDefinition =
+              bTankModelDefinition.turrets[b.turrets.at(-1)!.id];
+            const aSize = normalizeBoundingBox(
+              unionBoundingBox(
+                aTankModelDefinition.boundingBox,
+                aTurretModelDefinition.boundingBox,
+              ),
+            );
+            const bSize = normalizeBoundingBox(
+              unionBoundingBox(
+                bTankModelDefinition.boundingBox,
+                bTurretModelDefinition.boundingBox,
+              ),
+            );
+            const aVolume = aSize[0] * aSize[1] * aSize[2];
+            const bVolume = bSize[0] * bSize[1] * bSize[2];
 
-      case 'fire.dpm':
-        sorted = filtered.sort(
-          (a, b) =>
-            resolveDpm(
-              a.turrets.at(-1)!.guns.at(-1)!,
-              a.turrets.at(-1)!.guns.at(-1)!.shells[0],
-            ) -
-            resolveDpm(
-              b.turrets.at(-1)!.guns.at(-1)!,
-              b.turrets.at(-1)!.guns.at(-1)!.shells[0],
-            ),
-        );
-        break;
+            return aVolume - bVolume;
+          });
+          break;
 
-      case 'fire.reload':
-        sorted = filtered.sort(
-          (a, b) =>
-            resolveReload(a.turrets.at(-1)!.guns.at(-1)!) -
-            resolveReload(b.turrets.at(-1)!.guns.at(-1)!),
-        );
-        break;
+        case 'survivability.length':
+          sorted = filtered.sort((a, b) => {
+            const aTankModelDefinition = awaitedModelDefinitions[a.id];
+            const bTankModelDefinition = awaitedModelDefinitions[b.id];
+            const aTurretModelDefinition =
+              aTankModelDefinition.turrets[a.turrets.at(-1)!.id];
+            const bTurretModelDefinition =
+              bTankModelDefinition.turrets[b.turrets.at(-1)!.id];
+            const aSize = normalizeBoundingBox(
+              unionBoundingBox(
+                aTankModelDefinition.boundingBox,
+                aTurretModelDefinition.boundingBox,
+              ),
+            );
+            const bSize = normalizeBoundingBox(
+              unionBoundingBox(
+                bTankModelDefinition.boundingBox,
+                bTurretModelDefinition.boundingBox,
+              ),
+            );
+            const aLength = Math.max(aSize[0], aSize[1], aSize[2]);
+            const bLength = Math.max(bSize[0], bSize[1], bSize[2]);
 
-      case 'fire.caliber':
-        sorted = filtered.sort(
-          (a, b) =>
-            a.turrets.at(-1)!.guns.at(-1)!.shells[0].caliber -
-            b.turrets.at(-1)!.guns.at(-1)!.shells[0].caliber,
-        );
-        break;
+            return aLength - bLength;
+          });
+          break;
 
-      case 'fire.standardPenetration':
-        sorted = filtered.sort(
-          (a, b) =>
-            resolveNearPenetration(
-              a.turrets.at(-1)!.guns.at(-1)!.shells[0].penetration,
-            ) -
-            resolveNearPenetration(
-              b.turrets.at(-1)!.guns.at(-1)!.shells[0].penetration,
-            ),
-        );
-        break;
+        case 'fire.dpm':
+          sorted = filtered.sort(
+            (a, b) =>
+              resolveDpm(
+                a.turrets.at(-1)!.guns.at(-1)!,
+                a.turrets.at(-1)!.guns.at(-1)!.shells[0],
+              ) -
+              resolveDpm(
+                b.turrets.at(-1)!.guns.at(-1)!,
+                b.turrets.at(-1)!.guns.at(-1)!.shells[0],
+              ),
+          );
+          break;
 
-      case 'fire.premiumPenetration':
-        sorted = filtered.sort(
-          (a, b) =>
-            resolveNearPenetration(
-              (
-                a.turrets.at(-1)!.guns.at(-1)!.shells[1] ??
-                a.turrets.at(-1)!.guns.at(-1)!.shells[0]
-              ).penetration,
-            ) -
-            resolveNearPenetration(
-              (
-                b.turrets.at(-1)!.guns.at(-1)!.shells[1] ??
-                b.turrets.at(-1)!.guns.at(-1)!.shells[0]
-              ).penetration,
-            ),
-        );
-        break;
+        case 'fire.reload':
+          sorted = filtered.sort(
+            (a, b) =>
+              resolveReload(a.turrets.at(-1)!.guns.at(-1)!) -
+              resolveReload(b.turrets.at(-1)!.guns.at(-1)!),
+          );
+          break;
 
-      case 'fire.damage':
-        sorted = filtered.sort(
-          (a, b) =>
-            a.turrets.at(-1)!.guns.at(-1)!.shells[0].damage.armor -
-            b.turrets.at(-1)!.guns.at(-1)!.shells[0].damage.armor,
-        );
-        break;
+        case 'fire.caliber':
+          sorted = filtered.sort(
+            (a, b) =>
+              a.turrets.at(-1)!.guns.at(-1)!.shells[0].caliber -
+              b.turrets.at(-1)!.guns.at(-1)!.shells[0].caliber,
+          );
+          break;
 
-      case 'fire.shellVelocity':
-        sorted = filtered.sort(
-          (a, b) =>
-            a.turrets.at(-1)!.guns.at(-1)!.shells[0].speed -
-            b.turrets.at(-1)!.guns.at(-1)!.shells[0].speed,
-        );
-        break;
+        case 'fire.standardPenetration':
+          sorted = filtered.sort(
+            (a, b) =>
+              resolveNearPenetration(
+                a.turrets.at(-1)!.guns.at(-1)!.shells[0].penetration,
+              ) -
+              resolveNearPenetration(
+                b.turrets.at(-1)!.guns.at(-1)!.shells[0].penetration,
+              ),
+          );
+          break;
 
-      case 'fire.aimTime':
-        sorted = filtered.sort(
-          (a, b) =>
-            a.turrets.at(-1)!.guns.at(-1)!.aimTime -
-            b.turrets.at(-1)!.guns.at(-1)!.aimTime,
-        );
-        break;
+        case 'fire.premiumPenetration':
+          sorted = filtered.sort(
+            (a, b) =>
+              resolveNearPenetration(
+                a.turrets.at(-1)!.guns.at(-1)!.shells[1]?.penetration ?? 0,
+              ) -
+              resolveNearPenetration(
+                b.turrets.at(-1)!.guns.at(-1)!.shells[1]?.penetration ?? 0,
+              ),
+          );
+          break;
 
-      case 'fire.dispersionStill':
-        sorted = filtered.sort(
-          (a, b) =>
-            a.turrets.at(-1)!.guns.at(-1)!.dispersion.base -
-            b.turrets.at(-1)!.guns.at(-1)!.dispersion.base,
-        );
-        break;
+        case 'fire.damage':
+          sorted = filtered.sort(
+            (a, b) =>
+              a.turrets.at(-1)!.guns.at(-1)!.shells[0].damage.armor -
+              b.turrets.at(-1)!.guns.at(-1)!.shells[0].damage.armor,
+          );
+          break;
 
-      case 'fire.dispersionMoving':
-        sorted = filtered.sort(
-          (a, b) =>
-            a.tracks.at(-1)!.dispersion.move - b.tracks.at(-1)!.dispersion.move,
-        );
-        break;
+        case 'fire.shellVelocity':
+          sorted = filtered.sort(
+            (a, b) =>
+              a.turrets.at(-1)!.guns.at(-1)!.shells[0].speed -
+              b.turrets.at(-1)!.guns.at(-1)!.shells[0].speed,
+          );
+          break;
 
-      case 'fire.gunDepression':
-        sorted = filtered.sort(
-          (a, b) =>
-            awaitedModelDefinitions[a.id].turrets[a.turrets.at(-1)!.id].guns[
-              a.turrets.at(-1)!.guns.at(-1)!.id
-            ].pitch.max -
-            awaitedModelDefinitions[b.id].turrets[b.turrets.at(-1)!.id].guns[
-              b.turrets.at(-1)!.guns.at(-1)!.id
-            ].pitch.max,
-        );
-        break;
+        case 'fire.aimTime':
+          sorted = filtered.sort(
+            (a, b) =>
+              a.turrets.at(-1)!.guns.at(-1)!.aimTime -
+              b.turrets.at(-1)!.guns.at(-1)!.aimTime,
+          );
+          break;
 
-      case 'fire.gunElevation':
-        sorted = filtered.sort(
-          (a, b) =>
-            // reversed because of negative values
-            awaitedModelDefinitions[b.id].turrets[b.turrets.at(-1)!.id].guns[
-              b.turrets.at(-1)!.guns.at(-1)!.id
-            ].pitch.min -
-            awaitedModelDefinitions[a.id].turrets[a.turrets.at(-1)!.id].guns[
-              a.turrets.at(-1)!.guns.at(-1)!.id
-            ].pitch.min,
-        );
-        break;
+        case 'fire.dispersionStill':
+          sorted = filtered.sort(
+            (a, b) =>
+              a.turrets.at(-1)!.guns.at(-1)!.dispersion.base -
+              b.turrets.at(-1)!.guns.at(-1)!.dispersion.base,
+          );
+          break;
 
-      case 'maneuverability.forwardsSpeed':
-        sorted = filtered.sort((a, b) => a.speed.forwards - b.speed.forwards);
-        break;
+        case 'fire.dispersionMoving':
+          sorted = filtered.sort(
+            (a, b) =>
+              a.tracks.at(-1)!.dispersion.move -
+              b.tracks.at(-1)!.dispersion.move,
+          );
+          break;
 
-      case 'maneuverability.backwardsSpeed':
-        sorted = filtered.sort((a, b) => a.speed.backwards - b.speed.backwards);
-        break;
+        case 'fire.gunDepression':
+          sorted = filtered.sort(
+            (a, b) =>
+              awaitedModelDefinitions[a.id].turrets[a.turrets.at(-1)!.id].guns[
+                a.turrets.at(-1)!.guns.at(-1)!.id
+              ].pitch.max +
+              (awaitedModelDefinitions[a.id].turretRotation?.pitch ?? 0) -
+              awaitedModelDefinitions[b.id].turrets[b.turrets.at(-1)!.id].guns[
+                b.turrets.at(-1)!.guns.at(-1)!.id
+              ].pitch.max -
+              (awaitedModelDefinitions[b.id].turretRotation?.pitch ?? 0),
+          );
+          break;
 
-      case 'maneuverability.power':
-        sorted = filtered.sort(
-          (a, b) => a.engines.at(-1)!.power - b.engines.at(-1)!.power,
-        );
-        break;
+        case 'fire.gunElevation':
+          sorted = filtered.sort(
+            (a, b) =>
+              awaitedModelDefinitions[b.id].turrets[b.turrets.at(-1)!.id].guns[
+                b.turrets.at(-1)!.guns.at(-1)!.id
+              ].pitch.min +
+              (awaitedModelDefinitions[b.id].turretRotation?.pitch ?? 0) -
+              awaitedModelDefinitions[a.id].turrets[a.turrets.at(-1)!.id].guns[
+                a.turrets.at(-1)!.guns.at(-1)!.id
+              ].pitch.min -
+              (awaitedModelDefinitions[a.id].turretRotation?.pitch ?? 0),
+          );
+          break;
 
-      case 'maneuverability.powerToWeight':
-        sorted = filtered.sort(
-          (a, b) =>
-            a.engines.at(-1)!.power /
-              (a.weight +
-                a.engines.at(-1)!.weight +
-                a.tracks.at(-1)!.weight +
-                a.turrets.at(-1)!.weight +
-                a.turrets.at(-1)!.guns.at(-1)!.weight) -
-            b.engines.at(-1)!.power /
+        case 'maneuverability.forwardsSpeed':
+          sorted = filtered.sort((a, b) => a.speed.forwards - b.speed.forwards);
+          break;
+
+        case 'maneuverability.backwardsSpeed':
+          sorted = filtered.sort(
+            (a, b) => a.speed.backwards - b.speed.backwards,
+          );
+          break;
+
+        case 'maneuverability.power':
+          sorted = filtered.sort(
+            (a, b) => a.engines.at(-1)!.power - b.engines.at(-1)!.power,
+          );
+          break;
+
+        case 'maneuverability.powerToWeight':
+          sorted = filtered.sort(
+            (a, b) =>
+              a.engines.at(-1)!.power /
+                (a.weight +
+                  a.engines.at(-1)!.weight +
+                  a.tracks.at(-1)!.weight +
+                  a.turrets.at(-1)!.weight +
+                  a.turrets.at(-1)!.guns.at(-1)!.weight) -
+              b.engines.at(-1)!.power /
+                (b.weight +
+                  b.engines.at(-1)!.weight +
+                  b.tracks.at(-1)!.weight +
+                  b.turrets.at(-1)!.weight +
+                  b.turrets.at(-1)!.guns.at(-1)!.weight),
+          );
+          break;
+
+        case 'maneuverability.weight':
+          sorted = filtered.sort(
+            (a, b) =>
+              a.weight +
+              a.engines.at(-1)!.weight +
+              a.tracks.at(-1)!.weight +
+              a.turrets.at(-1)!.weight +
+              a.turrets.at(-1)!.guns.at(-1)!.weight -
               (b.weight +
                 b.engines.at(-1)!.weight +
                 b.tracks.at(-1)!.weight +
                 b.turrets.at(-1)!.weight +
                 b.turrets.at(-1)!.guns.at(-1)!.weight),
-        );
-        break;
+          );
+          break;
 
-      case 'maneuverability.weight':
-        sorted = filtered.sort(
-          (a, b) =>
-            a.weight +
-            a.engines.at(-1)!.weight +
-            a.tracks.at(-1)!.weight +
-            a.turrets.at(-1)!.weight +
-            a.turrets.at(-1)!.guns.at(-1)!.weight -
-            (b.weight +
-              b.engines.at(-1)!.weight +
-              b.tracks.at(-1)!.weight +
-              b.turrets.at(-1)!.weight +
-              b.turrets.at(-1)!.guns.at(-1)!.weight),
-        );
-        break;
+        case 'maneuverability.traverseSpeed':
+          sorted = filtered.sort(
+            (a, b) =>
+              a.tracks.at(-1)!.traverseSpeed - b.tracks.at(-1)!.traverseSpeed,
+          );
+          break;
+      }
 
-      case 'maneuverability.traverseSpeed':
-        sorted = filtered.sort(
-          (a, b) =>
-            a.tracks.at(-1)!.traverseSpeed - b.tracks.at(-1)!.traverseSpeed,
-        );
-        break;
-    }
-
-    return sort.direction === 'ascending' ? sorted : sorted.reverse();
-  }, [
-    sort,
-    ...Object.entries(filters)
-      .filter(([name]) => name !== 'page')
-      .map(([, value]) => value),
-  ]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const searchResults = useMemo(
-    () =>
-      go(searchQuery, searchableTanks, {
-        keys: ['name', 'nameFull', 'id'] satisfies (keyof TankDefinition)[],
-        all: true,
-      }).map(({ obj }) => obj),
-    [searchQuery, searchableTanks],
-  );
-  const page = useTankopediaPersistent((state) => state.filters.page);
-  const searchResultsPageSlice = searchResults.slice(
-    page * tanksPerPage,
-    (page + 1) * tanksPerPage,
-  );
-
-  useEffect(() => {
-    mutateTankopediaPersistent((draft) => {
-      draft.filters.page = Math.min(
-        Math.max(0, page),
-        Math.ceil(searchResults.length / tanksPerPage) - 1,
+      return filters.sort.direction === 'ascending' ? sorted : sorted.reverse();
+    } else {
+      const searchedRaw = go(filters.search, awaitedTankNames, {
+        key: 'combined',
+        limit: 25,
+      });
+      const searchedTanks = searchedRaw.map(
+        (result) => awaitedTankDefinitions[result.obj.id],
       );
-    });
-  }, [searchResults]);
-
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
-
-  if (!loaded) {
-    return (
-      <Flex justify="center">
-        <Spinner />
-      </Flex>
-    );
-  }
+      return searchedTanks;
+    }
+  }, [filters]);
 
   return (
-    <>
-      <Flex direction="column" gap="4">
-        <Flex gap="2">
-          <TextField.Root
-            style={{ flex: 1 }}
-            ref={input}
-            placeholder="Search tanks..."
-            onChange={(event) => {
-              setSearchQuery(event.target.value);
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                if (
-                  searchResults.length > 0 &&
-                  input.current &&
-                  input.current.value.length > 0
-                ) {
-                  onSelect(searchResults[0]);
-                }
-              }
-            }}
-          >
-            <TextField.Slot>
-              <MagnifyingGlassIcon height="16" width="16" />
-            </TextField.Slot>
+    <Flex direction="column" gap="4" flexGrow="1">
+      <SearchBar topResult={tanks?.[0]} />
 
-            {searchResults.length > 0 &&
-              input.current &&
-              input.current.value.length > 0 && (
-                <TextField.Slot>
-                  <Button
-                    variant="ghost"
-                    onClick={() => onSelect(searchResults[0])}
-                  >
-                    {searchResults[0].name} <CaretRightIcon />
-                  </Button>
-                </TextField.Slot>
-              )}
-          </TextField.Root>
+      {!filters.search && !filters.searching && (
+        <FilterControl compact={compact} />
+      )}
 
-          <Sort />
-
-          <Button
-            color="red"
-            variant="soft"
-            onClick={() =>
-              useTankopediaPersistent.setState({
-                filters: {
-                  nations: [],
-                  tiers: [],
-                  treeTypes: [],
-                  types: [],
-                  test: 'include',
-                  page: 0,
-                },
-                sort: {
-                  by: 'meta.none',
-                  direction: 'descending',
-                },
-              })
-            }
-          >
-            <TrashIcon />
-          </Button>
+      {filters.sort.by !== 'meta.none' && (
+        <Flex py="2" mt="2" justify="center">
+          <Text color="gray">
+            Sorting by {SORT_NAMES[filters.sort.by]}
+            {SORT_UNITS[filters.sort.by] === undefined
+              ? ''
+              : ` (${SORT_UNITS[filters.sort.by]})`}
+            , {filters.sort.direction}
+          </Text>
         </Flex>
-
-        <Options />
-      </Flex>
-
-      <Flex justify="center" gap="4" align="center">
-        <Text color="gray">
-          Sorting: {SORT_NAMES[sort.by]}, {sort.direction}
-        </Text>
-
-        {onSelectAll && searchResults.length <= 8 && (
-          <Button variant="ghost" onClick={() => onSelectAll(searchResults)}>
-            Select all
-          </Button>
-        )}
-        {onSelectAll && searchResults.length > 8 && (
-          <AlertDialog.Root>
-            <AlertDialog.Trigger>
-              <Button variant="ghost">Select all</Button>
-            </AlertDialog.Trigger>
-
-            <AlertDialog.Content>
-              <AlertDialog.Title>
-                Woah! That's a lot of tanks.
-              </AlertDialog.Title>
-              <AlertDialog.Description>
-                Would you like to select{' '}
-                <Text color="red">all {searchResults.length} tanks</Text>?
-              </AlertDialog.Description>
-
-              <Flex gap="2" justify="end">
-                <AlertDialog.Cancel>
-                  <Button variant="soft" color="gray">
-                    Cancel
-                  </Button>
-                </AlertDialog.Cancel>
-
-                <AlertDialog.Action onClick={() => onSelectAll(searchResults)}>
-                  <Button variant="solid" color="red">
-                    Select {searchResults.length} tanks
-                  </Button>
-                </AlertDialog.Action>
-              </Flex>
-            </AlertDialog.Content>
-          </AlertDialog.Root>
-        )}
-      </Flex>
-
-      {!compact && (
-        <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />
       )}
 
-      <Results
-        compact={compact}
-        results={searchResultsPageSlice}
-        onSelect={onSelect}
-      />
-
-      {searchResultsPageSlice.length > tanksPerPage / 4 && (
-        <PageTurner tanksPerPage={tanksPerPage} searchedList={searchResults} />
+      {filters.testing === 'only' && (
+        <Flex justify="center" mt="4">
+          <Callout.Root color="amber">
+            <Callout.Icon>
+              <ExperimentIcon style={{ width: '1em', height: '1em' }} />
+            </Callout.Icon>
+            <Callout.Text>
+              Tanks in testing are subject to change and many not represent the
+              final product.
+            </Callout.Text>
+          </Callout.Root>
+        </Flex>
       )}
-    </>
+
+      {!filters.searching && (
+        <>
+          {tanks.length > 0 && (
+            <TankCardWrapper>
+              {tanks.map((tank) => (
+                <TankCard onSelect={onSelect} key={tank.id} tank={tank} />
+              ))}
+            </TankCardWrapper>
+          )}
+
+          {tanks.length === 0 && <NoResults type="search" />}
+        </>
+      )}
+
+      {filters.searching && (
+        <TankCardWrapper>
+          {times(Math.round(10 + 10 * Math.random()), (index) => (
+            <SkeletonTankCard key={index} />
+          ))}
+        </TankCardWrapper>
+      )}
+    </Flex>
   );
-}
+});

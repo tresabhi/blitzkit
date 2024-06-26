@@ -3,6 +3,7 @@ import { createVar, style } from '@vanilla-extract/css';
 export const cardBackgroundVar = createVar();
 
 export const card = style({
+  cursor: 'pointer',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',

@@ -17,18 +17,22 @@ import {
   useTankopediaFilters,
 } from '../../../../stores/tankopediaFilters';
 
-export function FilterControl() {
+interface FilterControlProps {
+  compact?: boolean;
+}
+
+export function FilterControl({ compact }: FilterControlProps) {
   const awaitedGameDefinitions = use(gameDefinitions);
   const filters = useTankopediaFilters();
 
   return (
     <Flex height="fit-content" gap="2" align="start" justify="center">
       <Flex
-        direction={{ initial: 'row', sm: 'column' }}
+        direction={compact ? 'row' : { initial: 'row', sm: 'column' }}
         overflow="hidden"
         style={{ borderRadius: 'var(--radius-5)' }}
       >
-        <Flex direction={{ sm: 'row', initial: 'column' }}>
+        <Flex direction={compact ? 'column' : { sm: 'row', initial: 'column' }}>
           {times(5, (index) => {
             const tier = (index + 1) as Tier;
             const selected = filters.tier === tier;
@@ -51,7 +55,7 @@ export function FilterControl() {
             );
           })}
         </Flex>
-        <Flex direction={{ sm: 'row', initial: 'column' }}>
+        <Flex direction={compact ? 'column' : { sm: 'row', initial: 'column' }}>
           {times(5, (index) => {
             const tier = (index + 6) as Tier;
             const selected = filters.tier === tier;
@@ -77,11 +81,11 @@ export function FilterControl() {
       </Flex>
 
       <Flex
-        direction={{ initial: 'row', sm: 'column' }}
+        direction={compact ? 'row' : { initial: 'row', sm: 'column' }}
         overflow="hidden"
         style={{ borderRadius: 'var(--radius-5)' }}
       >
-        <Flex direction={{ sm: 'row', initial: 'column' }}>
+        <Flex direction={compact ? 'column' : { sm: 'row', initial: 'column' }}>
           {awaitedGameDefinitions.nations
             .slice(0, Math.ceil(awaitedGameDefinitions.nations.length / 2))
             .map((nation) => {
@@ -109,7 +113,7 @@ export function FilterControl() {
               );
             })}
         </Flex>
-        <Flex direction={{ sm: 'row', initial: 'column' }}>
+        <Flex direction={compact ? 'column' : { sm: 'row', initial: 'column' }}>
           {awaitedGameDefinitions.nations
             .slice(Math.ceil(awaitedGameDefinitions.nations.length / 2))
             .map((nation) => {
@@ -143,7 +147,7 @@ export function FilterControl() {
       <Flex
         overflow="hidden"
         style={{ borderRadius: 'var(--radius-full)' }}
-        direction={{ sm: 'row', initial: 'column' }}
+        direction={compact ? 'column' : { sm: 'row', initial: 'column' }}
       >
         {TANK_CLASSES.map((tankClass) => {
           const Icon = classIcons[tankClass];
@@ -172,7 +176,7 @@ export function FilterControl() {
       <Flex
         overflow="hidden"
         style={{ borderRadius: 'var(--radius-full)' }}
-        direction={{ sm: 'row', initial: 'column' }}
+        direction={compact ? 'column' : { sm: 'row', initial: 'column' }}
       >
         <IconButton
           variant={filters.type === 'researchable' ? 'solid' : 'soft'}
@@ -229,7 +233,7 @@ export function FilterControl() {
       <Flex
         overflow="hidden"
         style={{ borderRadius: 'var(--radius-full)' }}
-        direction={{ sm: 'row', initial: 'column' }}
+        direction={compact ? 'column' : { sm: 'row', initial: 'column' }}
       >
         <IconButton
           variant={filters.testing === 'include' ? 'solid' : 'soft'}

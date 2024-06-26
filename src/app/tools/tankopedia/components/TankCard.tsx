@@ -17,9 +17,10 @@ import * as styles from './TankCard.css';
 
 interface TankCardProps {
   tank: TankDefinition;
+  onSelect?: (tank: TankDefinition) => void;
 }
 
-export function TankCard({ tank }: TankCardProps) {
+export function TankCard({ tank, onSelect }: TankCardProps) {
   const awaitedModelDefinitions = use(modelDefinitions);
   const Icon = classIcons[tank.class];
   // const link = useRef<HTMLAnchorElement>(null);
@@ -131,7 +132,7 @@ export function TankCard({ tank }: TankCardProps) {
 
   return (
     <Link
-      // ref={link}
+      tabIndex={onSelect ? 0 : undefined}
       size="1"
       color={
         tank.treeType === 'collector'
@@ -142,7 +143,8 @@ export function TankCard({ tank }: TankCardProps) {
       }
       highContrast={tank.treeType === 'researchable'}
       underline="hover"
-      href={`/tools/tankopedia/${tank.id}`}
+      href={onSelect ? undefined : `/tools/tankopedia/${tank.id}`}
+      onClick={onSelect ? () => onSelect(tank) : undefined}
       className={styles.card}
       style={assignInlineVars({
         [styles.cardBackgroundVar]: `top left / contain no-repeat url(${asset(`flags/scratched/${tank.nation}.webp`)})`,
