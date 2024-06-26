@@ -16,6 +16,12 @@ import { superCompress } from '../src/core/blitzkit/superCompress';
 import { DidsReadStream, DidsWriteStream } from '../src/core/streams/dids';
 import { IndividualTankStats } from '../src/types/tanksStats';
 
+interface DataPoint {
+  x: number;
+  y: number;
+  w: number;
+}
+
 const RUN_TIME = 1000 * 60 * 60;
 const MAX_REQUESTS = 10;
 
@@ -138,17 +144,23 @@ function discover() {
 
 function postWork() {
   const tankIds: number[] = [];
-  const sorted: Record<number, IndividualTankStats[]> = {};
+  const sorted: Record<number, AverageDefinitionsAllStats[]> = {};
+
+  console.log('Sorting tanks...');
 
   players.forEach((tanks) => {
     tanks.forEach((tank) => {
       if (tank.all.battles === 0) return;
 
-      if (!sorted[tank.tank_id]) {
+      if (!tankIds.includes(tank.tank_id)) {
         tankIds.push(tank.tank_id);
         sorted[tank.tank_id] = [];
       }
-      sorted[tank.tank_id].push(tank);
+
+      sorted[tank.tank_id].push({
+        ...tank.all,
+        battle_life_time: tank.battle_life_time,
+      });
     });
   });
 
@@ -160,89 +172,33 @@ function postWork() {
 
   tankIds.forEach((id) => {
     const tanks = sorted[id];
-    const samples = tanks.length;
 
-    function sum(slice: (tank: AverageDefinitionsAllStats) => number) {
-      return tanks.reduce((acc, tank) => {
-        return (
-          acc + slice({ battle_life_time: tank.battle_life_time, ...tank.all })
+    averageDefinitionsAllStatsKeys.forEach((key) => {
+      const data: DataPoint[] = tanks.map((tank) => ({
+        w: tank.battles,
+        x: tank[key] / tank.battles,
+        y: tank.wins / tank.battles,
+      }));
+
+      function sum(slicer: (data: DataPoint) => number) {
+        return data.reduce(
+          (accumulator, data) => accumulator + slicer(data),
+          0,
         );
-      }, 0);
-    }
+      }
 
-    const denominator = sum((tank) => tank.battles);
+      const sum_w = sum(({ w }) => w);
+      const sum_wx = sum(({ w, x }) => w * x);
+      const sum_wy = sum(({ w, y }) => w * y);
+      const x_w = sum_wx / sum_w;
+      const y_w = sum_wy / sum_w;
+      const r_numerator = sum(({ w, x, y }) => w * (x - x_w) * (y - y_w));
+      const r_denominator_x = sum(({ w, x }) => w * (x - x_w) ** 2);
+      const r_denominator_y = sum(({ w, y }) => w * (y - y_w) ** 2);
 
-    function moment(slice: (tank: AverageDefinitionsAllStats) => number) {
-      return tanks.reduce((acc, tank) => {
-        return (
-          acc +
-          tank.all.battles *
-            slice({ battle_life_time: tank.battle_life_time, ...tank.all })
-        );
-      }, 0);
-    }
-
-    function weightedAverage(
-      slice: (tank: AverageDefinitionsAllStats) => number,
-    ) {
-      return moment(slice) / denominator;
-    }
-
-    const mu = averageDefinitionsAllStatsKeys.reduce<
-      Partial<AverageDefinitionsAllStats>
-    >((acc, key) => {
-      acc[key] = weightedAverage((tank) => tank[key]);
-      return acc;
-    }, {}) as AverageDefinitionsAllStats;
-    const sigma = averageDefinitionsAllStatsKeys.reduce<
-      Partial<AverageDefinitionsAllStats>
-    >((acc, key) => {
-      acc[key] = Math.sqrt(sum((tank) => (tank[key] - mu[key]) ** 2) / samples);
-      return acc;
-    }, {}) as AverageDefinitionsAllStats;
-    const r = averageDefinitionsAllStatsKeys.reduce<
-      Partial<AverageDefinitionsAllStats>
-    >((acc, key) => {
-      acc[key] =
-        (samples *
-          sum(
-            (tank) => (tank[key] / tank.battles) * (tank.wins / tank.battles),
-          ) -
-          sum((tank) => tank[key] / tank.battles) *
-            sum((tank) => tank.wins / tank.battles)) /
-        Math.sqrt(
-          (samples * sum((tank) => (tank[key] / tank.battles) ** 2) -
-            sum((tank) => tank[key] / tank.battles) ** 2) *
-            (samples * sum((tank) => (tank.wins / tank.battles) ** 2) -
-              sum((tank) => tank.wins / tank.battles) ** 2),
-        );
-      return acc;
-    }, {}) as AverageDefinitionsAllStats;
-    const m = averageDefinitionsAllStatsKeys.reduce<
-      Partial<AverageDefinitionsAllStats>
-    >((acc, key) => {
-      acc[key] =
-        (samples *
-          sum(
-            (tank) => (tank[key] / tank.battles) * (tank.wins / tank.battles),
-          ) -
-          sum((tank) => tank[key] / tank.battles) *
-            sum((tank) => tank.wins / tank.battles)) /
-        (samples * sum((tank) => (tank[key] / tank.battles) ** 2) -
-          sum((tank) => tank[key] / tank.battles) ** 2);
-      return acc;
-    }, {}) as AverageDefinitionsAllStats;
-    const b = averageDefinitionsAllStatsKeys.reduce<
-      Partial<AverageDefinitionsAllStats>
-    >((acc, key) => {
-      acc[key] =
-        (sum((tank) => tank.wins / tank.battles) -
-          m[key] * sum((tank) => tank[key] / tank.battles)) /
-        samples;
-      return acc;
-    }, {}) as AverageDefinitionsAllStats;
-
-    averages[id] = { samples, mu, sigma, r, m, b };
+      const r = r_numerator / Math.sqrt(r_denominator_x * r_denominator_y);
+      const mu = x_w;
+    });
   });
 
   commitAssets(
