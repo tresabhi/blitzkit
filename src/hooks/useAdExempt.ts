@@ -4,8 +4,6 @@ import { useApp } from '../stores/app';
 let cache: Record<string, boolean> = {};
 
 export function useAdExempt() {
-  return true;
-
   const patreon = useApp((state) => state.logins.patreon);
   const promise = useMemo(
     () =>
