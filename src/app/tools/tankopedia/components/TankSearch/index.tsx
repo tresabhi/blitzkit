@@ -19,6 +19,7 @@ import {
 } from '../../../../../core/blitzkit/tankDefinitions';
 import { tankopediaFilterTank } from '../../../../../core/blitzkit/tankopediaFilterTank';
 import { unionBoundingBox } from '../../../../../core/blitzkit/unionBoundingBox';
+import { useAdExempt } from '../../../../../hooks/useAdExempt';
 import { SORT_NAMES, SORT_UNITS } from '../../../../../stores/tankopedia';
 import { useTankopediaFilters } from '../../../../../stores/tankopediaFilters';
 import { FilterControl } from '../FilterControl';
@@ -37,6 +38,7 @@ type TankSearchProps = FlexProps & {
 
 export const TankSearch = memo<TankSearchProps>(
   ({ compact, onSelect, onSelectAll, ...props }) => {
+    const exempt = useAdExempt();
     const awaitedGameDefinitions = use(gameDefinitions);
     const awaitedModelDefinitions = use(modelDefinitions);
     const awaitedTankDefinitions = use(tankDefinitions);
@@ -415,9 +417,11 @@ export const TankSearch = memo<TankSearchProps>(
                 {tanks.map((tank, index) => (
                   <>
                     <TankCard onSelect={onSelect} key={tank.id} tank={tank} />
-                    {(index + 16) % 32 === 0 && index !== tanks.length - 1 && (
-                      <AdMidSectionResponsive gridColumn="1 / -1" />
-                    )}
+                    {!exempt &&
+                      (index + 16) % 32 === 0 &&
+                      index !== tanks.length - 1 && (
+                        <AdMidSectionResponsive gridColumn="1 / -1" />
+                      )}
                   </>
                 ))}
               </TankCardWrapper>
