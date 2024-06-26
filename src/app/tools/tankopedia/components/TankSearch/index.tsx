@@ -1,7 +1,8 @@
-import { Callout, Flex, Link, Text } from '@radix-ui/themes';
+import { Callout, Flex, FlexProps, Link, Text } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { times } from 'lodash';
 import { memo, use, useMemo } from 'react';
+import { AdMidSectionResponsive } from '../../../../../components/AdMidSectionResponsive';
 import { ExperimentIcon } from '../../../../../components/ExperimentIcon';
 import { TANK_CLASSES } from '../../../../../components/Tanks/components/Item/constants';
 import { resolveNearPenetration } from '../../../../../core/blitz/resolveNearPenetration';
@@ -28,14 +29,14 @@ import { TankCard } from '../TankCard';
 import { TankCardWrapper } from '../TankCardWrapper';
 import { treeTypeOrder } from './constants';
 
-interface TankSearchProps {
+type TankSearchProps = FlexProps & {
   compact?: boolean;
   onSelect?: (tank: TankDefinition) => void;
   onSelectAll?: (tanks: TankDefinition[]) => void;
-}
+};
 
 export const TankSearch = memo<TankSearchProps>(
-  ({ compact, onSelect, onSelectAll }) => {
+  ({ compact, onSelect, onSelectAll, ...props }) => {
     const awaitedGameDefinitions = use(gameDefinitions);
     const awaitedModelDefinitions = use(modelDefinitions);
     const awaitedTankDefinitions = use(tankDefinitions);
@@ -52,6 +53,7 @@ export const TankSearch = memo<TankSearchProps>(
         switch (filters.sort.by) {
           case 'meta.none':
             sorted = filtered
+              .sort((a, b) => b.tier - a.tier)
               .sort(
                 (a, b) =>
                   treeTypeOrder.indexOf(b.treeType) -
@@ -355,7 +357,7 @@ export const TankSearch = memo<TankSearchProps>(
     }, [filters]);
 
     return (
-      <Flex direction="column" gap="4" flexGrow="1">
+      <Flex direction="column" gap="4" flexGrow="1" {...props}>
         <SearchBar topResult={tanks?.[0]} />
 
         {!filters.search && !filters.searching && (
@@ -410,8 +412,13 @@ export const TankSearch = memo<TankSearchProps>(
           <>
             {tanks.length > 0 && (
               <TankCardWrapper>
-                {tanks.map((tank) => (
-                  <TankCard onSelect={onSelect} key={tank.id} tank={tank} />
+                {tanks.map((tank, index) => (
+                  <>
+                    <TankCard onSelect={onSelect} key={tank.id} tank={tank} />
+                    {(index + 16) % 32 === 0 && index !== tanks.length - 1 && (
+                      <AdMidSectionResponsive gridColumn="1 / -1" />
+                    )}
+                  </>
                 ))}
               </TankCardWrapper>
             )}
