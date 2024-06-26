@@ -54,6 +54,6 @@ export class WotbReplayReadStream extends ReadStream {
 }
 
 const replay = await readFile('temp/test3.wotbreplay');
-const stream = new WotbReplayReadStream(replay.buffer);
+const stream = new WotbReplayReadStream(replay.buffer as ArrayBuffer);
 
 stream.wotbReplay();

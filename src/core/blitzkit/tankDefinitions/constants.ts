@@ -19,18 +19,27 @@ export const GUN_TYPE_NAMES: Record<GunDefinition['type'], string> = {
   autoLoader: 'Auto loader',
   autoReloader: 'Auto reloader',
 };
+/**
+ * @deprecated use svg
+ */
 export const TANK_ICONS: Record<TankClass, string> = {
   'AT-SPG': 'https://i.imgur.com/BIHSEH0.png',
   lightTank: 'https://i.imgur.com/CSNha5V.png',
   mediumTank: 'https://i.imgur.com/wvf3ltm.png',
   heavyTank: 'https://i.imgur.com/ECeqlZa.png',
 };
+/**
+ * @deprecated use svg
+ */
 export const TANK_ICONS_PREMIUM: Record<TankClass, string> = {
   'AT-SPG': 'https://i.imgur.com/TCu3EdR.png',
   lightTank: 'https://i.imgur.com/zdkpTRb.png',
   mediumTank: 'https://i.imgur.com/3z7eHX6.png',
   heavyTank: 'https://i.imgur.com/P3vbmyA.png',
 };
+/**
+ * @deprecated use svg
+ */
 export const TANK_ICONS_COLLECTOR: Record<TankClass, string> = {
   'AT-SPG': 'https://i.imgur.com/WTjeirB.png',
   lightTank: 'https://i.imgur.com/EwhtKkU.png',

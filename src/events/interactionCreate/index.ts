@@ -11,6 +11,7 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody,
   Routes,
   SlashCommandBuilder,
+  SlashCommandOptionsOnlyBuilder,
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
 import discord from '../../../discord.json' assert { type: 'json' };
@@ -64,6 +65,7 @@ interface CommandRegistryBase {
   command:
     | SlashCommandBuilder
     | SlashCommandSubcommandsOnlyBuilder
+    | SlashCommandOptionsOnlyBuilder
     | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
 
   autocomplete?: (interaction: AutocompleteInteraction<CacheType>) => void;

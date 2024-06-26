@@ -14,6 +14,7 @@ import normalizeInteractionReturnable from '../../../core/discord/normalizeInter
 import { psa } from '../../../core/discord/psa';
 import { translator } from '../../../core/localization/translator';
 import { UserError } from '../../../hooks/userError';
+import { Writeable } from '../../../types/writable';
 
 const previewServers = [
   '734786591205359697', // abhi
@@ -69,10 +70,12 @@ export default async function handleChatInputCommand(
           const embed = embedWarning(psa.data.title, psa.data.description);
 
           if (psa.data.image) embed.setImage(psa.data.image);
-          reply.embeds.push(embed);
+          (reply.embeds as Writeable<typeof reply.embeds>).push(embed);
         } else if (psa.data.type === 'image') {
           if (!reply.files) reply.files = [];
-          reply.files.push(new AttachmentBuilder(psa.data.image));
+          (reply.files as Writeable<typeof reply.files>).push(
+            new AttachmentBuilder(psa.data.image),
+          );
           reply.content = reply.content ?? psa.data.title;
         }
 
@@ -111,10 +114,12 @@ export default async function handleChatInputCommand(
           const embed = embedWarning(psa.data.title, psa.data.description);
 
           if (psa.data.image) embed.setImage(psa.data.image);
-          followUp.embeds.push(embed);
+          (followUp.embeds as Writeable<typeof followUp.embeds>).push(embed);
         } else if (psa.data.type === 'image') {
           if (!followUp.files) followUp.files = [];
-          followUp.files.push(new AttachmentBuilder(psa.data.image));
+          (followUp.files as Writeable<typeof followUp.files>).push(
+            new AttachmentBuilder(psa.data.image),
+          );
           followUp.content = followUp.content ?? psa.data.title;
         }
 

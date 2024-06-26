@@ -17,44 +17,23 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
-
-      - name: Install Yarn
-        run: npm install --location=global yarn
-
-      - name: Use node_modules cache
-        uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
 
       - name: Install dependencies
-        run: yarn
+        run: bun install
 
       - name: Build docs
-        run: yarn build:docs
+        run: bun build:docs
 
-      - name: Configure pages
-        uses: actions/configure-pages@v2
-
-      - name: Upload pages artifact
-        uses: actions/upload-pages-artifact@v1
+      - uses: actions/configure-pages@v2
+      - uses: actions/upload-pages-artifact@v1
         with:
           path: dist/docs
 
-      - name: Deploy
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v1
-
-      - name: Archive build
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: dist
           path: docs/.vitepress/dist

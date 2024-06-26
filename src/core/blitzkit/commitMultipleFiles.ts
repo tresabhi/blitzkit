@@ -1,3 +1,4 @@
+import ProgressBar from 'progress';
 import { GithubChangeBlob, createBlob } from './createBlob';
 import { octokit } from './octokit';
 
@@ -30,21 +31,14 @@ export default async function commitMultipleFiles(
     })
   ).data.tree.sha;
   const blobs: GithubChangeBlob[] = [];
+  const bar = new ProgressBar('Blobs :bar', changes.length);
 
   for (const changeIndexString in changes) {
     const changeIndex = parseInt(changeIndexString);
     const change = changes[changeIndex];
     const createdBlob = await createBlob(owner, repo, change);
     blobs.push(createdBlob!);
-
-    if (verbose) {
-      console.log(
-        `Created blob ${changeIndex + 1} / ${changes.length} (${(
-          (100 * (changeIndex + 1)) /
-          changes.length
-        ).toFixed(2)}%)`,
-      );
-    }
+    bar.tick();
   }
 
   const { data: treeData } = await octokit.git.createTree({

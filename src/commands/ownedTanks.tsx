@@ -3,8 +3,8 @@ import markdownEscape from 'markdown-escape';
 import { TANK_CLASSES } from '../components/Tanks/components/Item/constants';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
+import { gameDefinitions } from '../core/blitzkit/gameDefinitions';
 import {
-  NATIONS,
   TankDefinition,
   Tier,
   flags,
@@ -62,7 +62,7 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
       });
 
       const awaitedTankDefinitions = await tankDefinitions;
-      const awaitedNations = await NATIONS;
+      const awaitedGameDefinitions = await gameDefinitions;
       const lines = tankStats
         .map(({ tank_id }) => awaitedTankDefinitions[tank_id])
         .filter((tank) => tank.tier === tier)
@@ -72,7 +72,8 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
         )
         .sort(
           (a, b) =>
-            awaitedNations.indexOf(a.nation) - awaitedNations.indexOf(b.nation),
+            awaitedGameDefinitions.nations.indexOf(a.nation) -
+            awaitedGameDefinitions.nations.indexOf(b.nation),
         )
         .map((tank) => `${flags[tank.nation]} ${markdownEscape(tank.name)}`);
 

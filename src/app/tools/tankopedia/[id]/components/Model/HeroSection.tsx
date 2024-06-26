@@ -55,8 +55,11 @@ export function HeroSection() {
               height: '100%',
             }}
           >
-            <Heading size={wideFormat ? '9' : '8'}>
-              {protagonistTank.name}
+            <Heading
+              size={wideFormat ? '9' : '8'}
+              align={wideFormat ? undefined : 'center'}
+            >
+              {protagonistTank.nameFull ?? protagonistTank.name}
             </Heading>
 
             <Text color="gray">

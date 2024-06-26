@@ -1,9 +1,8 @@
 import { crc32 } from 'crc';
-import { decodeBlock } from 'lz4';
+import { decompressBlock } from 'lz4js';
 
 /**
- * Thanks Maddoxkkm! Modernized heavily.
- *
+ * Thanks Maddoxkkm! Modified heavily to be modern.
  * https://github.com/Maddoxkkm/dvpl_converter/
  */
 export function readDVPL(buffer: Buffer) {
@@ -30,6 +29,7 @@ export function readDVPL(buffer: Buffer) {
   if (crc32(targetBlock) !== footerData.crc32) {
     throw new TypeError('DVPL CRC32 mismatch');
   }
+
   if (footerData.type === 0) {
     if (!(footerData.oSize === footerData.cSize && footerData.type === 0)) {
       throw new RangeError('DVPL type and size mismatch');
@@ -37,14 +37,23 @@ export function readDVPL(buffer: Buffer) {
 
     return targetBlock;
   } else if (footerData.type === 1 || footerData.type === 2) {
-    const deDVPLBlock = Buffer.alloc(footerData.oSize);
-    const DecompressedBlockSize = decodeBlock(targetBlock, deDVPLBlock);
+    const source = new Uint8Array(targetBlock);
+    const destination = new Uint8Array(footerData.oSize);
+    const decompressedSize = decompressBlock(
+      source,
+      destination,
+      0,
+      source.length,
+      0,
+    );
 
-    if (DecompressedBlockSize !== footerData.oSize) {
-      throw new RangeError('Decompressed DVPL size mismatch');
+    if (decompressedSize !== footerData.oSize) {
+      throw new RangeError(
+        `Decompressed DVPL size mismatch (${decompressedSize} vs ${footerData.oSize})`,
+      );
     }
 
-    return deDVPLBlock;
+    return Buffer.from(destination);
   } else {
     throw new SyntaxError('Unknown DVPL format');
   }

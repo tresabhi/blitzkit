@@ -1,4 +1,4 @@
-import { NATIONS } from '../core/blitzkit/tankDefinitions';
+import { gameDefinitions } from '../core/blitzkit/gameDefinitions';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import { addFilterOptions } from '../core/discord/addFilterOptions';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
@@ -18,14 +18,15 @@ import { CommandRegistry } from '../events/interactionCreate';
 import { renderBreakdown } from './breakdown/render';
 
 export const todayCommand = new Promise<CommandRegistry>(async (resolve) => {
-  const nations = await NATIONS;
+  const awaitedGameDefinitions = await gameDefinitions;
+
   resolve({
     inProduction: true,
     inPublic: true,
 
     command: addFilterOptions(
       createLocalizedCommand('today'),
-      nations,
+      awaitedGameDefinitions.nations,
     ).addStringOption(addUsernameChoices),
 
     async handler(interaction) {

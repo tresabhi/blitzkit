@@ -14,8 +14,8 @@ export async function readTexture(path: string, mutation?: TextureMutation) {
   const decompressedDvpl = await readDVPLFile(resolvedTexturePath);
 
   const raw = isDds
-    ? await new DdsReadStream(decompressedDvpl.buffer).dds()
-    : new PvrReadStream(decompressedDvpl.buffer).pvr();
+    ? await new DdsReadStream(decompressedDvpl.buffer as ArrayBuffer).dds()
+    : new PvrReadStream(decompressedDvpl.buffer as ArrayBuffer).pvr();
 
   switch (mutation) {
     case TextureMutation.Normal: {
