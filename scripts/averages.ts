@@ -1,10 +1,8 @@
 import { times } from 'lodash';
 import { argv } from 'process';
-import ProgressBar from 'progress';
 import { Region, REGIONS } from '../src/constants/regions';
-import getTankStats from '../src/core/blitz/getTankStats';
-import { idToRegion, MAX_IDS, MIN_IDS } from '../src/core/blitz/idToRegion';
-import { asset } from '../src/core/blitzkit/asset';
+import { blitzFetchQueueAvailableEvent } from '../src/core/blitz/fetchBlitz';
+import { idToRegion } from '../src/core/blitz/idToRegion';
 import {
   AverageDefinitions,
   AverageDefinitionsAllStats,
@@ -13,9 +11,8 @@ import {
 } from '../src/core/blitzkit/averageDefinitions';
 import { averageDefinitionsAllStatsKeys } from '../src/core/blitzkit/averageDefinitions/constants';
 import { commitAssets } from '../src/core/blitzkit/commitAssets';
+import { fetchPreDiscoveredIds } from '../src/core/blitzkit/fetchPreDiscoveredIds';
 import { superCompress } from '../src/core/blitzkit/superCompress';
-import { DidsReadStream } from '../src/core/streams/dids';
-import { IndividualTankStats } from '../src/types/tanksStats';
 
 interface DataPoint {
   x: number;
@@ -27,120 +24,29 @@ const RUN_TIME = 1000 * 60 * 60;
 const MAX_REQUESTS = 10;
 
 const production = argv.includes('--production');
-const startTime = Date.now();
-const fields = 'all,tank_id,battle_life_time';
+const preDiscoveredIds = await fetchPreDiscoveredIds(!production);
+const playerIds: Record<Region, number[]> = {
+  asia: preDiscoveredIds.filter((id) => idToRegion(id) === 'asia'),
+  com: preDiscoveredIds.filter((id) => idToRegion(id) === 'com'),
+  eu: preDiscoveredIds.filter((id) => idToRegion(id) === 'eu'),
+};
+const regionalIndices: Record<Region, number> = {
+  asia: playerIds.asia.length - 1,
+  com: playerIds.com.length - 1,
+  eu: playerIds.eu.length - 1,
+};
+let regionIndex = 0;
+const availableRegions = [...REGIONS];
 
-const players: IndividualTankStats[][] = [];
-const preDiscovered = await fetch(asset('averages/discovered.dids.lz4')).then(
-  async (response) => {
-    if (response.status === 200) {
-      const buffer = await response.arrayBuffer();
-      return new DidsReadStream(buffer).dids();
-    }
+times(MAX_REQUESTS, () => {
+  validate();
+  blitzFetchQueueAvailableEvent.on(validate);
+});
 
-    return undefined;
-  },
-);
-const discoveredIds: number[] = [];
-let processes = 0;
+function validate() {
+  const region = availableRegions[regionIndex];
 
-if (preDiscovered) {
-  console.log(
-    `Revalidating ${preDiscovered.length} pre-discovered ids with ${MAX_REQUESTS} chains...`,
-  );
-
-  const preDiscoveredBar = new ProgressBar(':bar', {
-    total: preDiscovered.length,
-  });
-  let preDiscoveredIndex = 0;
-
-  async function chainPreDiscovery() {
-    processes++;
-
-    if (preDiscoveredIndex === preDiscovered!.length) {
-      processes--;
-
-      if (processes !== 0) return;
-
-      console.log(
-        `Rediscovered ${discoveredIds.length} / ${preDiscovered!.length} ids in ${Date.now() - startTime}ms`,
-      );
-      discover();
-
-      return;
-    }
-
-    const id = preDiscovered![preDiscoveredIndex++];
-    const region = idToRegion(id);
-
-    if (id > MAX_IDS[region]) return;
-
-    const stats = await getTankStats(region, id, { fields });
-
-    if (stats !== null && stats.length > 0) {
-      discoveredIds.push(id);
-      players.push(stats);
-      preDiscoveredBar.tick();
-    }
-
-    processes--;
-    setTimeout(chainPreDiscovery); // circumvent max call stack
-  }
-
-  times(MAX_REQUESTS, chainPreDiscovery);
-} else {
-  console.log('No pre-discovered ids found :(');
-  discover();
-}
-
-function discover() {
-  const index: Record<Region, number> = {
-    asia:
-      preDiscovered?.find((id) => idToRegion(id) === 'asia') ?? MIN_IDS.asia,
-    com: preDiscovered?.find((id) => idToRegion(id) === 'com') ?? MIN_IDS.com,
-    eu: preDiscovered?.find((id) => idToRegion(id) === 'eu') ?? MIN_IDS.eu,
-  };
-
-  let regionIndex = 0;
-  let done = 0;
-
-  async function chainDiscovery() {
-    regionIndex = (regionIndex + 1) % REGIONS.length;
-    const region = REGIONS[regionIndex];
-    const id = index[region]++;
-
-    if (Date.now() - startTime > RUN_TIME || id === MAX_IDS[region]) {
-      if (++done !== MAX_REQUESTS) return;
-
-      console.log(
-        `Total discovery run time: ${
-          Date.now() - startTime
-        }ms\nDiscovered ids: ${discoveredIds.length}`,
-      );
-
-      postWork();
-
-      return;
-    }
-
-    if (id > MAX_IDS[region]) return;
-
-    const stats = await getTankStats(region, id, { fields });
-
-    if (stats !== null && stats.length > 0) {
-      discoveredIds.push(id);
-      players.push(stats);
-
-      console.log(
-        `discovered ${id} in ${region} (time left: ${RUN_TIME - (Date.now() - startTime)}ms)`,
-      );
-    }
-
-    setTimeout(chainDiscovery); // circumvent max call stack
-  }
-
-  console.log(`Spawning ${MAX_REQUESTS} discovery chains...`);
-  times(MAX_REQUESTS, chainDiscovery);
+  regionIndex = (regionIndex + 1) % availableRegions.length;
 }
 
 function postWork() {

@@ -9,7 +9,7 @@ import { asset } from '../src/core/blitzkit/asset';
 import { commitAssets } from '../src/core/blitzkit/commitAssets';
 import { DidsReadStream, DidsWriteStream } from '../src/core/streams/dids';
 
-interface DiscoverIdsManifest {
+export interface DiscoverIdsManifest {
   time: number;
   chunks: number;
   count: number;
@@ -44,7 +44,7 @@ while (chunkIndex < preDiscoveredManifest.chunks) {
   ).then(async (response) => {
     const buffer = await response.arrayBuffer();
     const decompressed = decompress(new Uint8Array(buffer)).buffer;
-    return new DidsReadStream(decompressed).dids();
+    return new DidsReadStream(decompressed as ArrayBuffer).dids();
   });
 
   // no spread syntax: https://github.com/oven-sh/bun/issues/11734
