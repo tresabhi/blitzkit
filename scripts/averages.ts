@@ -1,5 +1,4 @@
 import { times } from 'lodash';
-import { compress } from 'lz4js';
 import { argv } from 'process';
 import ProgressBar from 'progress';
 import { Region, REGIONS } from '../src/constants/regions';
@@ -9,11 +8,13 @@ import { asset } from '../src/core/blitzkit/asset';
 import {
   AverageDefinitions,
   AverageDefinitionsAllStats,
+  AverageDefinitionsEntry,
+  AverageDefinitionsEntrySubPartial,
 } from '../src/core/blitzkit/averageDefinitions';
 import { averageDefinitionsAllStatsKeys } from '../src/core/blitzkit/averageDefinitions/constants';
 import { commitAssets } from '../src/core/blitzkit/commitAssets';
 import { superCompress } from '../src/core/blitzkit/superCompress';
-import { DidsReadStream, DidsWriteStream } from '../src/core/streams/dids';
+import { DidsReadStream } from '../src/core/streams/dids';
 import { IndividualTankStats } from '../src/types/tanksStats';
 
 interface DataPoint {
@@ -172,6 +173,13 @@ function postWork() {
 
   tankIds.forEach((id) => {
     const tanks = sorted[id];
+    const samples = tanks.length;
+    const entry: AverageDefinitionsEntrySubPartial = {
+      samples,
+      mu: {},
+      sigma: {},
+      r: {},
+    };
 
     averageDefinitionsAllStatsKeys.forEach((key) => {
       const data: DataPoint[] = tanks.map((tank) => ({
@@ -190,15 +198,24 @@ function postWork() {
       const sum_w = sum(({ w }) => w);
       const sum_wx = sum(({ w, x }) => w * x);
       const sum_wy = sum(({ w, y }) => w * y);
-      const x_w = sum_wx / sum_w;
-      const y_w = sum_wy / sum_w;
-      const r_numerator = sum(({ w, x, y }) => w * (x - x_w) * (y - y_w));
-      const r_denominator_x = sum(({ w, x }) => w * (x - x_w) ** 2);
-      const r_denominator_y = sum(({ w, y }) => w * (y - y_w) ** 2);
+      const mu_x = sum_wx / sum_w;
+      const mu_y = sum_wy / sum_w;
+      const mu = mu_x;
 
+      const sigma_numerator = sum(({ w, x }) => w * (x - mu_x) ** 2);
+      const sigma = Math.sqrt(sigma_numerator / sum_w);
+
+      const r_numerator = sum(({ w, x, y }) => w * (x - mu_x) * (y - mu_y));
+      const r_denominator_x = sum(({ w, x }) => w * (x - mu_x) ** 2);
+      const r_denominator_y = sum(({ w, y }) => w * (y - mu_y) ** 2);
       const r = r_numerator / Math.sqrt(r_denominator_x * r_denominator_y);
-      const mu = x_w;
+
+      entry.mu[key] = mu;
+      entry.sigma[key] = sigma;
+      entry.r[key] = r;
     });
+
+    averages[id] = entry as AverageDefinitionsEntry;
   });
 
   commitAssets(
@@ -207,13 +224,6 @@ function postWork() {
       {
         path: 'definitions/averages.cdon.lz4',
         content: superCompress(averages),
-        encoding: 'base64',
-      },
-      {
-        path: 'definitions/discovered.dids.lz4',
-        content: Buffer.from(
-          compress(new DidsWriteStream().dids(discoveredIds).uint8Array),
-        ).toString('base64'),
         encoding: 'base64',
       },
     ],

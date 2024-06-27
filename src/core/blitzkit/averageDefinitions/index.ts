@@ -6,21 +6,22 @@ export interface AverageDefinitionsAllStats extends AllStats {
   battle_life_time: number;
 }
 
-export interface AverageDefinitions {
-  [id: number]: {
-    samples: number;
+export interface AverageDefinitionsEntry {
+  samples: number;
+  mu: AverageDefinitionsAllStats;
+  sigma: AverageDefinitionsAllStats;
+  r: AverageDefinitionsAllStats;
+}
 
-    // average
-    mu: AverageDefinitionsAllStats;
-    // standard deviation
-    sigma: AverageDefinitionsAllStats;
-    // correlation coefficient
-    r: AverageDefinitionsAllStats;
-    // least squares regression line slope
-    m: AverageDefinitionsAllStats;
-    // least squares regression line y-intercept
-    b: AverageDefinitionsAllStats;
-  };
+export interface AverageDefinitionsEntrySubPartial {
+  samples: number;
+  mu: Partial<AverageDefinitionsAllStats>;
+  sigma: Partial<AverageDefinitionsAllStats>;
+  r: Partial<AverageDefinitionsAllStats>;
+}
+
+export interface AverageDefinitions {
+  [id: number]: AverageDefinitionsEntry;
 }
 
 export const averageDefinitions = fetchCdonLz4<AverageDefinitions>(
