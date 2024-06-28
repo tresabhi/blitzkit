@@ -33,7 +33,7 @@ async function manageQueue() {
   if (queue.length > 0 && inProgress < MAX_CALLS_PER_SECOND) {
     inProgress++;
 
-    const timeout = setTimeout(() => decrement, 1000);
+    const timeout = setTimeout(decrement, 1000);
     const request = queue.shift()!;
     const data = (await patientFetch(request.url)
       .then((response) => response.json())
@@ -45,10 +45,6 @@ async function manageQueue() {
       request.resolve(data.data);
     } else {
       if (RETRY_ERRORS.includes(data.error.message)) {
-        console.log(
-          `Encountered retry-able error ${data.error}, putting "${request.url}" back in queue...`,
-        );
-
         retryAbleBlitzFetchEvent.emit(undefined);
         clearTimeout(timeout);
         setTimeout(() => {

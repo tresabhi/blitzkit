@@ -1,21 +1,23 @@
 import { times } from 'lodash';
 import { decompress } from 'lz4js';
+import ProgressBar from 'progress';
 import { DiscoverIdsManifest } from '../../../scripts/discoverIds';
 import { DidsReadStream } from '../streams/dids';
 import { asset } from './asset';
 
 export async function fetchPreDiscoveredIds(dev: boolean) {
   const idChunks: number[][] = [];
-  const preDiscoveredManifest = (await fetch(
-    asset('ids/manifest.json', dev),
-  ).then((response) => response.json())) as DiscoverIdsManifest;
-
-  console.log(
-    `Fetching ${preDiscoveredManifest.chunks} pre-discovered chunks...`,
+  const manifest = (await fetch(asset('ids/manifest.json', dev)).then(
+    (response) => response.json(),
+  )) as DiscoverIdsManifest;
+  const bar = new ProgressBar(
+    `Fetching ${manifest.count.toLocaleString()} ids in ${manifest.chunks} chunks :bar`,
+    manifest.chunks,
   );
 
+  bar.render();
   await Promise.all(
-    times(preDiscoveredManifest.chunks, async (chunkIndex) => {
+    times(manifest.chunks, async (chunkIndex) => {
       const preDiscovered = await fetch(
         asset(`ids/${chunkIndex}.dids.lz4`, dev),
       ).then(async (response) => {
@@ -24,12 +26,8 @@ export async function fetchPreDiscoveredIds(dev: boolean) {
         return new DidsReadStream(decompressed as ArrayBuffer).dids();
       });
 
-      // no spread syntax: https://github.com/oven-sh/bun/issues/11734
       idChunks.push(preDiscovered);
-
-      console.log(
-        `Pre-discovered ${preDiscovered.length} ids (chunk ${chunkIndex})`,
-      );
+      bar.tick();
     }),
   );
 

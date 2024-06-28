@@ -1,7 +1,8 @@
 import { times } from 'lodash';
 import { argv } from 'process';
 import { Region, REGIONS } from '../src/constants/regions';
-import { blitzFetchQueueAvailableEvent } from '../src/core/blitz/fetchBlitz';
+import { getAccountInfo } from '../src/core/blitz/getAccountInfo';
+import getTankStats from '../src/core/blitz/getTankStats';
 import { idToRegion } from '../src/core/blitz/idToRegion';
 import {
   AverageDefinitions,
@@ -10,9 +11,7 @@ import {
   AverageDefinitionsEntrySubPartial,
 } from '../src/core/blitzkit/averageDefinitions';
 import { averageDefinitionsAllStatsKeys } from '../src/core/blitzkit/averageDefinitions/constants';
-import { commitAssets } from '../src/core/blitzkit/commitAssets';
 import { fetchPreDiscoveredIds } from '../src/core/blitzkit/fetchPreDiscoveredIds';
-import { superCompress } from '../src/core/blitzkit/superCompress';
 
 interface DataPoint {
   x: number;
@@ -20,9 +19,13 @@ interface DataPoint {
   w: number;
 }
 
-const RUN_TIME = 1000 * 60 * 60;
-const MAX_REQUESTS = 10;
+const MAX_ACTIVITY_TIME = 1000 * 60 * 60 * 24 * 120;
+const MIN_BATTLES = 5000;
+const RUN_TIME = 1000 * 60;
+const THREADS = 10;
+const PLAYER_IDS_PER_CALL = 100;
 
+const startTime = Date.now();
 const production = argv.includes('--production');
 const preDiscoveredIds = await fetchPreDiscoveredIds(!production);
 const playerIds: Record<Region, number[]> = {
@@ -31,54 +34,88 @@ const playerIds: Record<Region, number[]> = {
   eu: preDiscoveredIds.filter((id) => idToRegion(id) === 'eu'),
 };
 const regionalIndices: Record<Region, number> = {
-  asia: playerIds.asia.length - 1,
-  com: playerIds.com.length - 1,
-  eu: playerIds.eu.length - 1,
+  asia: 0,
+  com: 0,
+  eu: 0,
 };
 let regionIndex = 0;
+let playerCount = 0;
 const availableRegions = [...REGIONS];
+const tankIds: number[] = [];
+const tanksSorted: Record<number, AverageDefinitionsAllStats[]> = {};
+let postWorkRequested = false;
 
-times(MAX_REQUESTS, () => {
-  validate();
-  blitzFetchQueueAvailableEvent.on(validate);
-});
+times(THREADS, async () => {
+  while (availableRegions.length > 0 && startTime + RUN_TIME > Date.now()) {
+    const region = availableRegions[regionIndex];
+    const idIndex = regionalIndices[region];
+    const ids = playerIds[region].slice(idIndex, idIndex + PLAYER_IDS_PER_CALL);
+    const accountInfo = await getAccountInfo(region, ids, undefined, {
+      fields: 'last_battle_time,statistics.all.battles',
+    });
 
-function validate() {
-  const region = availableRegions[regionIndex];
+    /**
+     * Pass rates
+     * none: 1000 / 1000
+     * activity: 55 / 1000
+     * battles: 30 / 1000
+     * both: 23 / 1000
+     */
 
-  regionIndex = (regionIndex + 1) % availableRegions.length;
-}
+    const filteredIds = ids.filter((_, index) => {
+      const info = accountInfo[index];
+      return (
+        info !== null &&
+        Date.now() - info.last_battle_time * 1000 <= MAX_ACTIVITY_TIME &&
+        info.statistics.all.battles > MIN_BATTLES
+      );
+    });
+    playerCount += filteredIds.length;
+    const players = await Promise.all(
+      filteredIds.map((id) => getTankStats(region, id)),
+    );
 
-function postWork() {
-  const tankIds: number[] = [];
-  const sorted: Record<number, AverageDefinitionsAllStats[]> = {};
+    players.forEach((tanks) => {
+      tanks?.forEach((tank) => {
+        if (tank.all.battles === 0) return;
 
-  console.log('Sorting tanks...');
+        if (!tankIds.includes(tank.tank_id)) {
+          tankIds.push(tank.tank_id);
+          tanksSorted[tank.tank_id] = [];
+        }
 
-  players.forEach((tanks) => {
-    tanks.forEach((tank) => {
-      if (tank.all.battles === 0) return;
-
-      if (!tankIds.includes(tank.tank_id)) {
-        tankIds.push(tank.tank_id);
-        sorted[tank.tank_id] = [];
-      }
-
-      sorted[tank.tank_id].push({
-        ...tank.all,
-        battle_life_time: tank.battle_life_time,
+        tanksSorted[tank.tank_id].push({
+          ...tank.all,
+          battle_life_time: tank.battle_life_time,
+        });
       });
     });
-  });
 
+    regionalIndices[region] += PLAYER_IDS_PER_CALL;
+    if (
+      regionalIndices[region] >= playerIds[region].length - 1 &&
+      availableRegions.includes(region)
+    ) {
+      availableRegions.splice(availableRegions.indexOf(region), 1);
+    }
+    regionIndex = (regionIndex + 1) % availableRegions.length;
+  }
+
+  if (!postWorkRequested) {
+    postWorkRequested = true;
+    postWork();
+  }
+});
+
+async function postWork() {
   console.log(
-    `Generating statistics based off ${players.length} players and ${tankIds.length} tanks...`,
+    `Generating statistics based off ${playerCount} players and ${tankIds.length} tanks...`,
   );
 
   const averages: AverageDefinitions = {};
 
   tankIds.forEach((id) => {
-    const tanks = sorted[id];
+    const tanks = tanksSorted[id];
     const samples = tanks.length;
     const entry: AverageDefinitionsEntrySubPartial = {
       samples,
@@ -94,6 +131,8 @@ function postWork() {
         y: tank.wins / tank.battles,
       }));
 
+      if (data.length === 0) return;
+
       function sum(slicer: (data: DataPoint) => number) {
         return data.reduce(
           (accumulator, data) => accumulator + slicer(data),
@@ -104,16 +143,16 @@ function postWork() {
       const sum_w = sum(({ w }) => w);
       const sum_wx = sum(({ w, x }) => w * x);
       const sum_wy = sum(({ w, y }) => w * y);
-      const mu_x = sum_wx / sum_w;
-      const mu_y = sum_wy / sum_w;
-      const mu = mu_x;
+      const x_bar = sum_wx / sum_w;
+      const y_bar = sum_wy / sum_w;
+      const mu = x_bar;
 
-      const sigma_numerator = sum(({ w, x }) => w * (x - mu_x) ** 2);
+      const sigma_numerator = sum(({ w, x }) => w * (x - x_bar) ** 2);
       const sigma = Math.sqrt(sigma_numerator / sum_w);
 
-      const r_numerator = sum(({ w, x, y }) => w * (x - mu_x) * (y - mu_y));
-      const r_denominator_x = sum(({ w, x }) => w * (x - mu_x) ** 2);
-      const r_denominator_y = sum(({ w, y }) => w * (y - mu_y) ** 2);
+      const r_numerator = sum(({ w, x, y }) => w * (x - x_bar) * (y - y_bar));
+      const r_denominator_x = sum(({ w, x }) => w * (x - x_bar) ** 2);
+      const r_denominator_y = sum(({ w, y }) => w * (y - y_bar) ** 2);
       const r = r_numerator / Math.sqrt(r_denominator_x * r_denominator_y);
 
       entry.mu[key] = mu;
@@ -124,15 +163,15 @@ function postWork() {
     averages[id] = entry as AverageDefinitionsEntry;
   });
 
-  commitAssets(
-    'averages',
-    [
-      {
-        path: 'definitions/averages.cdon.lz4',
-        content: superCompress(averages),
-        encoding: 'base64',
-      },
-    ],
-    production,
-  );
+  // commitAssets(
+  //   'averages',
+  //   [
+  //     {
+  //       path: 'definitions/averages.cdon.lz4',
+  //       content: superCompress(averages),
+  //       encoding: 'base64',
+  //     },
+  //   ],
+  //   production,
+  // );
 }
