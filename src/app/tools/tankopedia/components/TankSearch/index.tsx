@@ -360,7 +360,7 @@ export const TankSearch = memo<TankSearchProps>(
 
     return (
       <Flex direction="column" gap="4" flexGrow="1" {...props}>
-        <SearchBar topResult={tanks?.[0]} />
+        <SearchBar topResult={tanks?.[0]} onSelect={onSelect} />
 
         {!filters.search && !filters.searching && (
           <FilterControl compact={compact} />
