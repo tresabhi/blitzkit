@@ -364,6 +364,14 @@ export function tankCharacteristics(
   const shellVelocity = shell.speed * shellVelocityCoefficient;
   const aimTime = gun.aimTime * aimTimeCoefficient;
   const dispersion = gun.dispersion.base * dispersionStillCoefficient;
+  const maxDispersion =
+    gun.dispersion.base *
+    Math.sqrt(
+      ((gun.dispersion.traverse * turret.traverseSpeed) ** 2 +
+        (track.dispersion.traverse * track.traverseSpeed) ** 2 +
+        track.dispersion.move * tank.speed.forwards) **
+        2,
+    );
   const dispersionMoving = track.dispersion.move * dispersionMovingCoefficient;
   const dispersionHullTraversing =
     track.dispersion.traverse * dispersionHullTraverseCoefficient;
@@ -474,6 +482,7 @@ export function tankCharacteristics(
     shellVelocity,
     aimTime,
     dispersion,
+    maxDispersion,
     dispersionMoving,
     dispersionHullTraversing,
     dispersionTurretTraversing,

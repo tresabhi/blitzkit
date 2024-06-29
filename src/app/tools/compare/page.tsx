@@ -1299,6 +1299,12 @@ export default function Page() {
                   deltaType="lowerIsBetter"
                   decimals={3}
                 />
+                <Row
+                  name="Max dispersion"
+                  value="maxDispersion"
+                  deltaType="lowerIsBetter"
+                  decimals={3}
+                />
                 <Row name="Gun depression" value="gunDepression" decimals={1} />
                 <Row name="Gun elevation" value="gunElevation" decimals={1} />
               </Table.Body>
