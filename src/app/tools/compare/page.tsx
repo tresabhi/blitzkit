@@ -178,6 +178,7 @@ export default function Page() {
     deltaType = 'higherIsBetter',
     decimals,
     deltaNominalDisplay,
+    indent,
   }: {
     name: string;
     value:
@@ -191,6 +192,7 @@ export default function Page() {
     deltaType?: 'higherIsBetter' | 'lowerIsBetter';
     decimals?: number;
     deltaNominalDisplay?: (delta: number) => string | number;
+    indent?: boolean;
   }) {
     const values = stats.map((stat) =>
       typeof value === 'function' ? value(stat)! : (stat[value] as number),
@@ -199,7 +201,11 @@ export default function Page() {
     return (
       <Table.Row>
         <Table.RowHeaderCell>
-          <Flex align="center" gap="2">
+          <Flex
+            align="center"
+            style={{ whiteSpace: 'nowrap' }}
+            gap={indent ? '6' : '2'}
+          >
             <IconButton
               color={sorting?.by === name ? undefined : 'gray'}
               variant="ghost"
@@ -620,7 +626,7 @@ export default function Page() {
       {members.length > 0 && (
         <Flex justify="center">
           <Box maxWidth="100%" position="relative">
-            <Table.Root variant="surface" style={{ maxWidth: '100%' }}>
+            <Table.Root size="1" variant="surface" style={{ maxWidth: '100%' }}>
               <Table.Header>
                 <Table.Row>
                   <Table.ColumnHeaderCell
@@ -1282,67 +1288,81 @@ export default function Page() {
                   decimals={3}
                 />
                 <Row
-                  name="Dispersion moving"
+                  name="moving"
+                  indent
                   value="dispersionMoving"
                   deltaType="lowerIsBetter"
                   decimals={3}
                 />
                 <Row
-                  name="Dispersion hull traversing"
+                  name="hull traversing"
+                  indent
                   value="dispersionHullTraversing"
                   deltaType="lowerIsBetter"
                   decimals={3}
                 />
                 <Row
-                  name="Dispersion turret traversing"
+                  name="turret traversing"
+                  indent
                   value="dispersionTurretTraversing"
                   deltaType="lowerIsBetter"
                   decimals={3}
                 />
                 <Row
-                  name="Dispersion shooting"
+                  name="shooting"
+                  indent
                   value="dispersionShooting"
                   deltaType="lowerIsBetter"
                   decimals={3}
                 />
                 <Row
-                  name="Dispersion gun damaged"
+                  name="gun damaged"
+                  indent
                   value="dispersionGunDamaged"
                   deltaType="lowerIsBetter"
                   decimals={3}
                 />
                 <Row
-                  name="Max dispersion"
+                  name="maximum"
+                  indent
                   value="maxDispersion"
                   deltaType="lowerIsBetter"
                   decimals={3}
                 />
                 <Row name="Gun depression" value="gunDepression" decimals={1} />
-                <Row name="Gun elevation" value="gunElevation" decimals={1} />
+                <Row
+                  name="elevation"
+                  indent
+                  value="gunElevation"
+                  decimals={1}
+                />
               </Table.Body>
 
               <Title>Maneuverability</Title>
               <Table.Body>
                 <Row name="Speed forwards" value="speedForwards" decimals={0} />
                 <Row
-                  name="Speed backwards"
+                  name="backwards"
+                  indent
                   value="speedBackwards"
                   decimals={0}
                 />
                 <Row name="Engine power" value="enginePower" decimals={0} />
                 <Row name="Weight" value="weight" decimals={1} />
                 <Row
-                  name="Power to weight ratio on hard terrain"
+                  name="Power to weight ratio"
                   value="powerToWeightRatioHardTerrain"
                   decimals={1}
                 />
                 <Row
-                  name="Power to weight ratio on medium terrain"
+                  name="medium terrain"
+                  indent
                   value="powerToWeightRatioMediumTerrain"
                   decimals={1}
                 />
                 <Row
-                  name="Power to weight ratio on soft terrain"
+                  name="soft terrain"
+                  indent
                   value="powerToWeightRatioSoftTerrain"
                   decimals={1}
                 />
@@ -1352,17 +1372,19 @@ export default function Page() {
                   decimals={1}
                 />
                 <Row
-                  name="Traverse speed on hard terrain"
+                  name="Traverse speed"
                   value="hullTraverseHardTerrain"
                   decimals={1}
                 />
                 <Row
-                  name="Traverse speed on medium terrain"
+                  name="medium terrain"
+                  indent
                   value="hullTraverseMediumTerrain"
                   decimals={1}
                 />
                 <Row
-                  name="Traverse speed on soft terrain"
+                  name="soft terrain"
+                  indent
                   value="hullTraverseSoftTerrain"
                   decimals={1}
                 />
@@ -1380,19 +1402,21 @@ export default function Page() {
                 />
                 <Row name="View range" value="viewRange" decimals={0} />
                 <Row
-                  name="Camouflage still"
+                  name="Camouflage"
                   value="camouflageStill"
                   display={(stats) => (stats.camouflageStill * 100).toFixed(0)}
                   deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
                 />
                 <Row
-                  name="Camouflage moving"
+                  name="moving"
+                  indent
                   value="camouflageMoving"
                   display={(stats) => (stats.camouflageMoving * 100).toFixed(0)}
                   deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
                 />
                 <Row
-                  name="Camouflage shooting still"
+                  name="shooting"
+                  indent
                   value="camouflageShootingStill"
                   display={(stats) =>
                     (stats.camouflageShootingStill * 100).toFixed(0)
@@ -1400,7 +1424,8 @@ export default function Page() {
                   deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
                 />
                 <Row
-                  name="Camouflage shooting moving"
+                  name="shooting & moving"
+                  indent
                   value="camouflageShootingMoving"
                   display={(stats) =>
                     (stats.camouflageShootingMoving * 100).toFixed(0)
@@ -1408,7 +1433,8 @@ export default function Page() {
                   deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
                 />
                 <Row
-                  name="Camouflage caught on fire"
+                  name="caught on fire"
+                  indent
                   value="camouflageCaughtOnFire"
                   display={(stats) =>
                     (stats.camouflageCaughtOnFire * 100).toFixed(0)
@@ -1416,26 +1442,29 @@ export default function Page() {
                   deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
                 />
                 <Row
-                  name="Width"
+                  name="Volume"
+                  value="volume"
+                  deltaType="lowerIsBetter"
+                  decimals={1}
+                />
+                <Row
+                  name="width"
+                  indent
                   value="width"
                   deltaType="lowerIsBetter"
                   decimals={1}
                 />
                 <Row
-                  name="Height"
+                  name="height"
+                  indent
                   value="height"
                   deltaType="lowerIsBetter"
                   decimals={1}
                 />
                 <Row
-                  name="Length"
+                  name="length"
+                  indent
                   value="length"
-                  deltaType="lowerIsBetter"
-                  decimals={1}
-                />
-                <Row
-                  name="Volume"
-                  value="volume"
                   deltaType="lowerIsBetter"
                   decimals={1}
                 />
