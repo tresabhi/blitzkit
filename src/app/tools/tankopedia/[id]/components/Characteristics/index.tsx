@@ -139,7 +139,7 @@ export function Characteristics() {
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
         <Flex direction="column" gap="2">
           <Flex align="center" gap="4">
-            <Heading size="5">Fire</Heading>
+            <Heading size="5">Firepower</Heading>
 
             <Flex>
               {gun.shells.map((thisShell, shellIndex) => (

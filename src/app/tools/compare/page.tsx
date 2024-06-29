@@ -1211,7 +1211,7 @@ export default function Page() {
                 </Table.Row>
               </Table.Body>
 
-              <Title>Fire</Title>
+              <Title>Firepower</Title>
               <Table.Body>
                 <Row name="DPM" value="dpm" decimals={0} />
                 <Row
