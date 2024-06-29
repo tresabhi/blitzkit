@@ -534,6 +534,16 @@ export function Characteristics() {
           >
             {stats.weight}
           </InfoWithDelta>
+          <Info name="Terrain coefficients" />
+          <InfoWithDelta decimals={1} indent name="Hard">
+            {stats.hardTerrainCoefficient}
+          </InfoWithDelta>
+          <InfoWithDelta decimals={1} indent name="Medium">
+            {stats.mediumTerrainCoefficient}
+          </InfoWithDelta>
+          <InfoWithDelta decimals={1} indent name="Soft">
+            {stats.softTerrainCoefficient}
+          </InfoWithDelta>
           <Info name="Power to weight ratio" unit="hp/tn" />
           <InfoWithDelta decimals={1} indent name="On hard terrain">
             {stats.powerToWeightRatioHardTerrain}

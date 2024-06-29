@@ -405,40 +405,37 @@ export function tankCharacteristics(
   const speedForwards = tank.speed.forwards + speedForwardsSum;
   const speedBackwards = tank.speed.backwards + speedBackwardsSum;
   const enginePower = resolvedEnginePower;
+  const hardTerrainCoefficient =
+    track.resistance.hard * resistanceHardCoefficient;
+  const mediumTerrainCoefficient =
+    track.resistance.medium * resistanceMediumCoefficient;
+  const softTerrainCoefficient =
+    track.resistance.soft * resistanceSoftCoefficient;
   const powerToWeightRatioHardTerrain =
-    resolvedEnginePower /
-    weightTons /
-    (track.resistance.hard * resistanceHardCoefficient);
+    resolvedEnginePower / weightTons / hardTerrainCoefficient;
   const powerToWeightRatioMediumTerrain =
-    resolvedEnginePower /
-    weightTons /
-    (track.resistance.medium * resistanceMediumCoefficient);
+    resolvedEnginePower / weightTons / mediumTerrainCoefficient;
   const powerToWeightRatioSoftTerrain =
-    resolvedEnginePower /
-    weightTons /
-    (track.resistance.soft * resistanceSoftCoefficient);
+    resolvedEnginePower / weightTons / softTerrainCoefficient;
   const weight = weightTons;
   const turretTraverseSpeed = turret.traverseSpeed * turretTraverseCoefficient;
   const hullTraverseHardTerrain =
     (resolvedEnginePower / stockEngine.power) *
     track.traverseSpeed *
     hullTraverseCoefficient *
-    (track.resistance.hard /
-      (track.resistance.hard * resistanceHardCoefficient)) *
+    (track.resistance.hard / hardTerrainCoefficient) *
     (stockWeight / weightKg);
   const hullTraverseMediumTerrain =
     (resolvedEnginePower / stockEngine.power) *
     track.traverseSpeed *
     hullTraverseCoefficient *
-    (track.resistance.hard /
-      (track.resistance.medium * resistanceMediumCoefficient)) *
+    (track.resistance.hard / mediumTerrainCoefficient) *
     (stockWeight / weightKg);
   const hullTraverseSoftTerrain =
     (resolvedEnginePower / stockEngine.power) *
     track.traverseSpeed *
     hullTraverseCoefficient *
-    (track.resistance.hard /
-      (track.resistance.soft * resistanceSoftCoefficient)) *
+    (track.resistance.hard / softTerrainCoefficient) *
     (stockWeight / weightKg);
   const health = (tank.health + turret.health) * healthCoefficient;
   const fireChance = engine.fireChance * fireChanceCoefficient;
@@ -500,6 +497,9 @@ export function tankCharacteristics(
     azimuthRight,
     speedForwards,
     speedBackwards,
+    hardTerrainCoefficient,
+    mediumTerrainCoefficient,
+    softTerrainCoefficient,
     enginePower,
     powerToWeightRatioHardTerrain,
     powerToWeightRatioMediumTerrain,

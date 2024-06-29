@@ -1358,6 +1358,23 @@ export default function Page() {
                 <Row name="Engine power" value="enginePower" decimals={0} />
                 <Row name="Weight" value="weight" decimals={1} />
                 <Row
+                  name="Terrain coefficient"
+                  value="hardTerrainCoefficient"
+                  decimals={1}
+                />
+                <Row
+                  name="medium terrain"
+                  indent
+                  value="mediumTerrainCoefficient"
+                  decimals={1}
+                />
+                <Row
+                  name="soft terrain"
+                  indent
+                  value="softTerrainCoefficient"
+                  decimals={1}
+                />
+                <Row
                   name="Power to weight ratio"
                   value="powerToWeightRatioHardTerrain"
                   decimals={1}
