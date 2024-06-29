@@ -66,7 +66,7 @@ export function TankControl({ index, id }: TankControlProps) {
         </Dialog.Content>
       </Dialog.Root>
 
-      <Link href={`/tools/tankopedia/${id}`}>
+      <Link href={`/tools/tankopedia/${id}`} target="_blank">
         <IconButton variant="ghost">
           <ExternalLinkIcon />
         </IconButton>
