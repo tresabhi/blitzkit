@@ -2,8 +2,8 @@ name: CD Averages
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: '0 12 * * 0'
+  schedule:
+    - cron: '0 0 * * 2'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

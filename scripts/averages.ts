@@ -11,7 +11,9 @@ import {
   AverageDefinitionsEntrySubPartial,
 } from '../src/core/blitzkit/averageDefinitions';
 import { averageDefinitionsAllStatsKeys } from '../src/core/blitzkit/averageDefinitions/constants';
+import { commitAssets } from '../src/core/blitzkit/commitAssets';
 import { fetchPreDiscoveredIds } from '../src/core/blitzkit/fetchPreDiscoveredIds';
+import { encodeToBase64 } from '../src/core/protobuf/encodeToBase64';
 
 interface DataPoint {
   x: number;
@@ -21,7 +23,7 @@ interface DataPoint {
 
 const MAX_ACTIVITY_TIME = 1000 * 60 * 60 * 24 * 120;
 const MIN_BATTLES = 5000;
-const RUN_TIME = 1000 * 60;
+const RUN_TIME = 1000 * 60 * 60 * 5.9;
 const THREADS = 10;
 const PLAYER_IDS_PER_CALL = 100;
 
@@ -39,7 +41,8 @@ const regionalIndices: Record<Region, number> = {
   eu: 0,
 };
 let regionIndex = 0;
-let playerCount = 0;
+let checkedPlayers = 0;
+let includedPlayers = 0;
 const availableRegions = [...REGIONS];
 const tankIds: number[] = [];
 const tanksSorted: Record<number, AverageDefinitionsAllStats[]> = {};
@@ -50,6 +53,7 @@ times(THREADS, async () => {
     const region = availableRegions[regionIndex];
     const idIndex = regionalIndices[region];
     const ids = playerIds[region].slice(idIndex, idIndex + PLAYER_IDS_PER_CALL);
+    checkedPlayers += PLAYER_IDS_PER_CALL;
     const accountInfo = await getAccountInfo(region, ids, undefined, {
       fields: 'last_battle_time,statistics.all.battles',
     });
@@ -70,7 +74,7 @@ times(THREADS, async () => {
         info.statistics.all.battles > MIN_BATTLES
       );
     });
-    playerCount += filteredIds.length;
+    includedPlayers += filteredIds.length;
     const players = await Promise.all(
       filteredIds.map((id) => getTankStats(region, id)),
     );
@@ -109,7 +113,7 @@ times(THREADS, async () => {
 
 async function postWork() {
   console.log(
-    `Generating statistics based off ${playerCount} players and ${tankIds.length} tanks...`,
+    `Generating statistics based off ${includedPlayers.toLocaleString()} players (${checkedPlayers.toLocaleString()} checked in total) and ${tankIds.length} tanks...`,
   );
 
   const averages: AverageDefinitions = {};
@@ -157,21 +161,23 @@ async function postWork() {
 
       entry.mu[key] = mu;
       entry.sigma[key] = sigma;
-      entry.r[key] = r;
+      entry.r[key] = isNaN(r) ? 0 : r;
     });
 
     averages[id] = entry as AverageDefinitionsEntry;
   });
 
-  // commitAssets(
-  //   'averages',
-  //   [
-  //     {
-  //       path: 'definitions/averages.cdon.lz4',
-  //       content: superCompress(averages),
-  //       encoding: 'base64',
-  //     },
-  //   ],
-  //   production,
-  // );
+  commitAssets(
+    'averages',
+    [
+      {
+        path: 'definitions/averages.pb',
+        content: await encodeToBase64('blitzkit.AverageDefinitions', {
+          averages,
+        }),
+        encoding: 'base64',
+      },
+    ],
+    production,
+  );
 }
