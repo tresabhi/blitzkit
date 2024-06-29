@@ -43,7 +43,17 @@ export function Sort() {
                 });
               }}
             >
-              DPM
+              Standard DPM
+            </DropdownMenu.CheckboxItem>
+            <DropdownMenu.CheckboxItem
+              checked={sort.by === 'fire.dpmPremium'}
+              onClick={() => {
+                mutateTankopediaFilters((draft) => {
+                  draft.sort.by = 'fire.dpmPremium';
+                });
+              }}
+            >
+              Premium DPM
             </DropdownMenu.CheckboxItem>
             <DropdownMenu.CheckboxItem
               checked={sort.by === 'fire.reload'}

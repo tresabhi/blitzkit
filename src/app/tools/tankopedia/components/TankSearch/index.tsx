@@ -180,6 +180,24 @@ export const TankSearch = memo<TankSearchProps>(
             );
             break;
 
+          case 'fire.dpmPremium':
+            sorted = filtered.sort(
+              (a, b) =>
+                (a.turrets.at(-1)!.guns.at(-1)!.shells[1]
+                  ? resolveDpm(
+                      a.turrets.at(-1)!.guns.at(-1)!,
+                      a.turrets.at(-1)!.guns.at(-1)!.shells[1],
+                    )
+                  : 0) -
+                (b.turrets.at(-1)!.guns.at(-1)!.shells[1]
+                  ? resolveDpm(
+                      b.turrets.at(-1)!.guns.at(-1)!,
+                      b.turrets.at(-1)!.guns.at(-1)!.shells[1],
+                    )
+                  : 0),
+            );
+            break;
+
           case 'fire.reload':
             sorted = filtered.sort(
               (a, b) =>
