@@ -20,7 +20,6 @@ export interface TankopediaPersistent {
       wireframe: boolean;
       opaque: boolean;
       environment: (typeof ENVIRONMENTS)[number];
-      controlsEnabled: boolean;
       showGrid: boolean;
       greenPenetration: boolean;
       showEnvironment: boolean;
@@ -45,6 +44,7 @@ export interface TankopediaPersistent {
 interface TankopediaTemporary {
   shot?: Shot;
   skills: Record<string, number>;
+  controlsEnabled: boolean;
 }
 
 export interface ShotLayerBase {
@@ -199,6 +199,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
 export const useTankopediaTemporary = create<TankopediaTemporary>()(
   subscribeWithSelector<TankopediaTemporary>(() => ({
     skills: {},
+    controlsEnabled: true,
   })),
 );
 
