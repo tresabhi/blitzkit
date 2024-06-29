@@ -1,4 +1,5 @@
 import { EquipmentMatrix } from '../../stores/duel';
+import { isExplosive } from '../blitz/isExplosive';
 import { resolveNearPenetration } from '../blitz/resolveNearPenetration';
 import { resolvePenetrationCoefficient } from '../blitz/resolvePenetrationCoefficient';
 import { coefficient } from './coefficient';
@@ -459,7 +460,7 @@ export function tankCharacteristics(
   const length = size[1];
   const volume = width * height * length;
   const shellNormalization = shell.normalization ?? 0;
-  const shellRicochet = shell.ricochet;
+  const shellRicochet = isExplosive(shell.type) ? undefined : shell.ricochet;
 
   return {
     shellNormalization,
