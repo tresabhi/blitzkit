@@ -35,11 +35,6 @@ const playerIds: Record<Region, number[]> = {
   com: preDiscoveredIds.filter((id) => idToRegion(id) === 'com'),
   eu: preDiscoveredIds.filter((id) => idToRegion(id) === 'eu'),
 };
-const regionalIndices: Record<Region, number> = {
-  asia: 0,
-  com: 0,
-  eu: 0,
-};
 let regionIndex = 0;
 let checkedPlayers = 0;
 let includedPlayers = 0;
@@ -51,8 +46,13 @@ let postWorkRequested = false;
 times(THREADS, async () => {
   while (availableRegions.length > 0 && startTime + RUN_TIME > Date.now()) {
     const region = availableRegions[regionIndex];
-    const idIndex = regionalIndices[region];
-    const ids = playerIds[region].slice(idIndex, idIndex + PLAYER_IDS_PER_CALL);
+    const regionIds = playerIds[region];
+    const initialLength = regionIds.length;
+    const idIndex = Math.min(
+      Math.floor(initialLength * Math.random()),
+      initialLength - 2,
+    );
+    const ids = playerIds[region].splice(idIndex, PLAYER_IDS_PER_CALL);
     checkedPlayers += PLAYER_IDS_PER_CALL;
     const accountInfo = await getAccountInfo(region, ids, undefined, {
       fields: 'last_battle_time,statistics.all.battles',
@@ -95,11 +95,7 @@ times(THREADS, async () => {
       });
     });
 
-    regionalIndices[region] += PLAYER_IDS_PER_CALL;
-    if (
-      regionalIndices[region] >= playerIds[region].length - 1 &&
-      availableRegions.includes(region)
-    ) {
+    if (regionIds.length === 0 && availableRegions.includes(region)) {
       availableRegions.splice(availableRegions.indexOf(region), 1);
     }
     regionIndex = (regionIndex + 1) % availableRegions.length;
