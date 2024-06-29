@@ -359,6 +359,7 @@ export function tankCharacteristics(
   const penetration =
     resolveNearPenetration(shell.penetration) * penetrationCoefficient;
   const damage = shell.damage.armor * damageCoefficient;
+  const clipDamage = gun.type === 'regular' ? undefined : gun.count * damage;
   const moduleDamage = shell.damage.module * damageCoefficient;
   const explosionRadius = shell.explosionRadius;
   const shellVelocity = shell.speed * shellVelocityCoefficient;
@@ -477,6 +478,7 @@ export function tankCharacteristics(
     caliber,
     penetration,
     damage,
+    clipDamage,
     moduleDamage,
     explosionRadius,
     shellVelocity,

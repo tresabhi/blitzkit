@@ -297,6 +297,11 @@ export function Characteristics() {
           <InfoWithDelta name="Damage" unit="hp" decimals={0}>
             {stats.damage}
           </InfoWithDelta>
+          {gun.type !== 'regular' && (
+            <InfoWithDelta name="Clipping potential" indent>
+              {stats.clipDamage!}
+            </InfoWithDelta>
+          )}
           <InfoWithDelta name="Module damage" unit="hp" decimals={0}>
             {stats.moduleDamage}
           </InfoWithDelta>

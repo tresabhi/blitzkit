@@ -1261,6 +1261,14 @@ export default function Page() {
                 )}
                 <Row name="Penetration" value="penetration" decimals={0} />
                 <Row name="Damage" value="damage" decimals={0} />
+                {hasNonRegularGun && (
+                  <Row
+                    name="clipping potential"
+                    indent
+                    value="clipDamage"
+                    decimals={0}
+                  />
+                )}
                 <Row name="Module damage" value="moduleDamage" decimals={0} />
                 <Row name="Caliber" value="caliber" decimals={0} />
                 <Row
