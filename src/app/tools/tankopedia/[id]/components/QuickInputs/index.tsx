@@ -38,7 +38,9 @@ export function RotationInputs() {
     function handleTransformEvent({ pitch, yaw }: ModelTransformEventData) {
       if (!pitchInput.current || !yawInput.current) return;
 
-      pitchInput.current.value = (-radToDeg(pitch)).toFixed(1);
+      pitchInput.current.value = (
+        -radToDeg(pitch) + (tankModelDefinition.turretRotation?.pitch ?? 0)
+      ).toFixed(1);
 
       if (yaw === undefined) return;
 
