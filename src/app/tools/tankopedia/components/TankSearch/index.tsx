@@ -69,7 +69,8 @@ export const TankSearch = memo<TankSearchProps>(
                 (a, b) =>
                   awaitedGameDefinitions.nations.indexOf(b.nation) -
                   awaitedGameDefinitions.nations.indexOf(a.nation),
-              );
+              )
+              .sort((a, b) => a.tier - b.tier);
             break;
 
           case 'survivability.health': {

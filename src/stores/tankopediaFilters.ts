@@ -24,7 +24,6 @@ export const useTankopediaFilters = create<TankopediaFilters>()(() => ({
     by: 'meta.none',
     direction: 'descending',
   },
-  tier: 10,
   searching: false,
 }));
 
