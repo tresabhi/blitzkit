@@ -116,13 +116,7 @@ export function Options() {
           }}
           align="end"
         >
-          <Text
-            color="gray"
-            size={{
-              initial: '1',
-              sm: '2',
-            }}
-          >
+          <Text color="gray" size={{ initial: '1', sm: '2' }}>
             {(
               resolvePenetrationCoefficient(
                 hasCalibratedShells,
