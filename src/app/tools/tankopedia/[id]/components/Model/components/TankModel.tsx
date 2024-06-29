@@ -143,6 +143,7 @@ export const TankModel = memo(() => {
         function onPointerDown(event: ThreeEvent<PointerEvent>) {
           if (!isTrack) return;
 
+          position.set(event.clientX, event.clientY);
           event.stopPropagation();
 
           mutateTankopediaTemporary((draft) => {
