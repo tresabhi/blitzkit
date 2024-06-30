@@ -1,4 +1,4 @@
-import { times } from 'lodash';
+import { chunk, times } from 'lodash';
 import { argv } from 'process';
 import { Region, REGIONS } from '../src/constants/regions';
 import { getAccountInfo } from '../src/core/blitz/getAccountInfo';
@@ -30,10 +30,19 @@ const PLAYER_IDS_PER_CALL = 100;
 const startTime = Date.now();
 const production = argv.includes('--production');
 const preDiscoveredIds = await fetchPreDiscoveredIds(!production);
-const playerIds: Record<Region, number[]> = {
-  asia: preDiscoveredIds.filter((id) => idToRegion(id) === 'asia'),
-  com: preDiscoveredIds.filter((id) => idToRegion(id) === 'com'),
-  eu: preDiscoveredIds.filter((id) => idToRegion(id) === 'eu'),
+const playerIds: Record<Region, number[][]> = {
+  asia: chunk(
+    preDiscoveredIds.filter((id) => idToRegion(id) === 'asia'),
+    PLAYER_IDS_PER_CALL,
+  ),
+  com: chunk(
+    preDiscoveredIds.filter((id) => idToRegion(id) === 'com'),
+    PLAYER_IDS_PER_CALL,
+  ),
+  eu: chunk(
+    preDiscoveredIds.filter((id) => idToRegion(id) === 'eu'),
+    PLAYER_IDS_PER_CALL,
+  ),
 };
 let regionIndex = 0;
 let checkedPlayers = 0;
@@ -47,16 +56,14 @@ times(THREADS, async () => {
   while (availableRegions.length > 0 && startTime + RUN_TIME > Date.now()) {
     const region = availableRegions[regionIndex];
     const regionIds = playerIds[region];
-    const initialLength = regionIds.length;
-    const idIndex = Math.min(
-      Math.floor(initialLength * Math.random()),
-      initialLength - 2,
+    const [ids] = regionIds.splice(
+      Math.floor(Math.random() * regionIds.length),
+      1,
     );
-    const ids = playerIds[region].splice(idIndex, PLAYER_IDS_PER_CALL);
-    checkedPlayers += PLAYER_IDS_PER_CALL;
     const accountInfo = await getAccountInfo(region, ids, undefined, {
       fields: 'last_battle_time,statistics.all.battles',
     });
+    checkedPlayers += ids.length;
 
     /**
      * Pass rates
