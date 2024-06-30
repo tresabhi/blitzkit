@@ -14,7 +14,6 @@ export default async function commitMultipleFiles(
   branch: string,
   message: string,
   changes: FileChange[],
-  verbose = false,
 ) {
   const latestCommitSha = (
     await octokit.git.getRef({

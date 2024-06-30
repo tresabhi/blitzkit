@@ -9,7 +9,7 @@ import { commitAssets } from '../src/core/blitzkit/commitAssets';
 import { fetchPreDiscoveredIds } from '../src/core/blitzkit/fetchPreDiscoveredIds';
 import { DidsWriteStream } from '../src/core/streams/dids';
 
-export interface DiscoverIdsManifest {
+export export interface DiscoverIdsManifest {
   time: number;
   chunks: number;
   count: number;
@@ -28,7 +28,34 @@ console.log(`Running in ${production ? 'production' : 'development'} mode`);
 
 const startTime = Date.now();
 const indexableRegions = [...REGIONS];
-let ids = await fetchPreDiscoveredIds(!production);
+let ids: number[] = [];
+const preDiscoveredManifest = (await fetch(
+  asset('ids/manifest.json', !production),
+).then((response) => response.json())) as DiscoverIdsManifest;
+
+console.log(
+  `Fetching ${preDiscoveredManifest.chunks} pre-discovered chunks...`,
+);
+
+let chunkIndex = 0;
+while (chunkIndex < preDiscoveredManifest.chunks) {
+  const preDiscovered = await fetch(
+    asset(`ids/${chunkIndex}.dids.lz4`, !production),
+  ).then(async (response) => {
+    const buffer = await response.arrayBuffer();
+    const decompressed = decompress(new Uint8Array(buffer)).buffer;
+    return new DidsReadStream(decompressed as ArrayBuffer).dids();
+  });
+
+  // no spread syntax: https://github.com/oven-sh/bun/issues/11734
+  ids = ids.concat(preDiscovered);
+
+  console.log(
+    `Pre-discovered ${preDiscovered.length} ids (chunk ${chunkIndex})`,
+  );
+
+  chunkIndex++;
+}
 
 const regionalIdIndex: Record<Region, number> = {
   asia: ids.findLast((id) => idToRegion(id) === 'asia') ?? MIN_IDS.asia,

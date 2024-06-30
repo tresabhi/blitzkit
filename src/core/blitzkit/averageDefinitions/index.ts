@@ -1,20 +1,39 @@
 import { AllStats } from '../../blitz/getAccountInfo';
+import { decode } from '../../protobuf/decode';
 import { asset } from '../asset';
-import { fetchCdonLz4 } from '../fetchCdonLz4';
 
 export interface AverageDefinitionsAllStats extends AllStats {
   battle_life_time: number;
 }
 
-export interface AverageDefinitions {
-  [id: number]: {
-    n: number; // sample size
-    r: AverageDefinitionsAllStats; // correlation coefficient
-    mu: AverageDefinitionsAllStats; // mean
-    sigma: AverageDefinitionsAllStats; // standard deviation
-  };
+export interface AverageDefinitionsEntry {
+  samples: number;
+  mu: AverageDefinitionsAllStats;
+  sigma: AverageDefinitionsAllStats;
+  r: AverageDefinitionsAllStats;
 }
 
-export const averageDefinitions = fetchCdonLz4<AverageDefinitions>(
-  asset('definitions/averages.cdon.lz4'),
-);
+export interface AverageDefinitionsEntrySubPartial {
+  samples: number;
+  mu: Partial<AverageDefinitionsAllStats>;
+  sigma: Partial<AverageDefinitionsAllStats>;
+  r: Partial<AverageDefinitionsAllStats>;
+}
+
+export interface AverageDefinitions {
+  [id: number]: AverageDefinitionsEntry;
+}
+
+interface AverageDefinitionsProto {
+  averages: AverageDefinitions;
+}
+
+export const averageDefinitions = fetch(asset('definitions/averages.pb'))
+  .then((response) => response.arrayBuffer())
+  .then((buffer) => {
+    return decode<AverageDefinitionsProto>(
+      'blitzkit.AverageDefinitions',
+      new Uint8Array(buffer),
+    );
+  })
+  .then((data) => data.averages);

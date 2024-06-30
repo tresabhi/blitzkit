@@ -6,6 +6,7 @@ import { patientFetch } from '../blitzkit/patientFetch';
 const RETRY_ERRORS = ['REQUEST_LIMIT_EXCEEDED', 'SOURCE_NOT_AVAILABLE'];
 
 export const retryAbleBlitzFetchEvent = new EventManager();
+export const blitzFetchQueueAvailableEvent = new EventManager();
 
 type BlitzResponse<Data extends object> =
   | {
@@ -22,15 +23,17 @@ const MAX_CALLS_PER_SECOND = 10;
 const queue: { url: string; resolve: (data: object) => void }[] = [];
 let inProgress = 0;
 
+function decrement() {
+  inProgress--;
+  blitzFetchQueueAvailableEvent.emit(undefined);
+  manageQueue();
+}
+
 async function manageQueue() {
   if (queue.length > 0 && inProgress < MAX_CALLS_PER_SECOND) {
     inProgress++;
 
-    const timeout = setTimeout(() => {
-      inProgress--;
-      manageQueue();
-    }, 1000);
-
+    const timeout = setTimeout(decrement, 1000);
     const request = queue.shift()!;
     const data = (await patientFetch(request.url)
       .then((response) => response.json())
@@ -42,21 +45,15 @@ async function manageQueue() {
       request.resolve(data.data);
     } else {
       if (RETRY_ERRORS.includes(data.error.message)) {
-        console.log(
-          `Encountered retry-able error ${data.error.code} ${data.error.message}, putting "${request.url}" back in queue...`,
-        );
-
         retryAbleBlitzFetchEvent.emit(undefined);
         clearTimeout(timeout);
         setTimeout(() => {
           queue.push(request);
-          inProgress--;
-          manageQueue();
+          decrement();
         }, 1000 / MAX_CALLS_PER_SECOND);
       } else {
         clearTimeout(timeout);
-        inProgress--;
-        manageQueue();
+        decrement();
 
         throw new Error(`Wargaming response error status: "${data.status}"`, {
           cause: `Message: "${data.error.message}"\nURL: "${request.url}"`,

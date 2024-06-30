@@ -1,5 +1,4 @@
 import { AverageDefinitionsAllStats } from '.';
-
 import { emptyAllStats } from '../../blitzstars/getStatsInPeriod/constants';
 
 export const emptyAverageDefinitionsAllStats: AverageDefinitionsAllStats = {
