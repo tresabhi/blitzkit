@@ -1,6 +1,6 @@
 import { AllStats } from '../../blitz/getAccountInfo';
+import { decode } from '../../protobuf/decode';
 import { asset } from '../asset';
-import { fetchCdonLz4 } from '../fetchCdonLz4';
 
 export interface AverageDefinitionsAllStats extends AllStats {
   battle_life_time: number;
@@ -24,6 +24,16 @@ export interface AverageDefinitions {
   [id: number]: AverageDefinitionsEntry;
 }
 
-export const averageDefinitions = fetchCdonLz4<AverageDefinitions>(
-  asset('definitions/averages.cdon.lz4'),
-);
+interface AverageDefinitionsProto {
+  averages: AverageDefinitions;
+}
+
+export const averageDefinitions = fetch(asset('definitions/averages.pb'))
+  .then((response) => response.arrayBuffer())
+  .then((buffer) => {
+    return decode<AverageDefinitionsProto>(
+      'blitzkit.AverageDefinitions',
+      new Uint8Array(buffer),
+    );
+  })
+  .then((data) => data.averages);
