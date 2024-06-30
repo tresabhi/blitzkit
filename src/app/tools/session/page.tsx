@@ -13,7 +13,6 @@ import {
   Flex,
   Heading,
   IconButton,
-  Link,
   Select,
   Spinner,
   Table,
@@ -23,6 +22,7 @@ import {
 import { debounce } from 'lodash';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
+import { TankRowHeaderCell } from '../../../components/TankRowHeaderCell';
 import { UNLOCALIZED_REGION_NAMES_SHORT } from '../../../constants/regions';
 import {
   STAT_KEYS,
@@ -42,11 +42,9 @@ import searchPlayersAcrossRegions, {
   AccountListWithServer,
 } from '../../../core/blitz/searchPlayersAcrossRegions';
 import { tankDefinitions } from '../../../core/blitzkit/tankDefinitions';
-import { tankIcon } from '../../../core/blitzkit/tankIcon';
 import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
 import { useWideFormat } from '../../../hooks/useWideFormat';
-import { theme } from '../../../stitches.config';
 import mutateSession, {
   SessionTracking,
   useSession,
@@ -483,55 +481,7 @@ export default function Page({
                     overflow: 'hidden',
                   }}
                 >
-                  <Table.RowHeaderCell
-                    style={{
-                      paddingLeft: 32,
-                      position: 'relative',
-                      overflowY: 'hidden',
-                    }}
-                  >
-                    <Link href={`/tools/tankopedia/${tank.id}`}>
-                      <img
-                        alt={tank.name}
-                        draggable={false}
-                        src={tankIcon(tank.id)}
-                        style={{
-                          position: 'absolute',
-                          width: 128 + 32,
-                          height: '200%',
-                          top: '-50%',
-                          left: 0,
-                          objectFit: 'contain',
-                          objectPosition: '50% 50%',
-                          overflow: 'hidden',
-                        }}
-                      />
-
-                      <div
-                        style={{
-                          backgroundColor: 'red',
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          height: '100%',
-                          width: 128,
-                          background:
-                            'linear-gradient(90deg, #00000080, #00000000)',
-                        }}
-                      />
-
-                      <Text
-                        style={{
-                          color: theme.colors.textHighContrast,
-                          position: 'relative',
-                          textWrap: 'nowrap',
-                          textShadow: 'black 0 0 4px',
-                        }}
-                      >
-                        {tank.name}
-                      </Text>
-                    </Link>
-                  </Table.RowHeaderCell>
+                  <TankRowHeaderCell tank={tank} />
                   {session.columns.map((column) => (
                     <Table.Cell key={column}>{statsPretty[column]}</Table.Cell>
                   ))}

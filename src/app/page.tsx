@@ -1,6 +1,6 @@
 'use client';
 
-import { Flex } from '@radix-ui/themes';
+import { Box, Flex } from '@radix-ui/themes';
 import { Ad, AdType } from '../components/Ad';
 import { AdMidSectionResponsive } from '../components/AdMidSectionResponsive';
 import {
@@ -11,6 +11,7 @@ import {
   ratingTool,
   sessionTool,
   tankopediaTool,
+  tankPerformanceTool,
 } from '../constants/tools';
 import { useAdExempt } from '../hooks/useAdExempt';
 import { Hero } from './components/Hero';
@@ -64,13 +65,13 @@ export default function Page() {
           )}
 
           <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
-            <ToolCard tool={compareTool} />
             <ToolCard tool={playerStatsTool} />
+            <ToolCard tool={compareTool} />
           </Flex>
 
           <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+            <ToolCard tool={tankPerformanceTool} />
             <ToolCard tool={sessionTool} />
-            <ToolCard tool={ratingTool} />
           </Flex>
 
           {!exempt && (
@@ -86,8 +87,13 @@ export default function Page() {
           )}
 
           <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+            <ToolCard tool={ratingTool} />
             <ToolCard tool={discordTool} />
+          </Flex>
+
+          <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
             <ToolCard tool={moreTool} />
+            <Box flexGrow="1" />
           </Flex>
         </Flex>
 

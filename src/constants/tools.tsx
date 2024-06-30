@@ -106,6 +106,18 @@ export const playerStatsTool: Tool = {
   image: 'YelSOfT',
 };
 
+export const tankPerformanceTool: Tool = {
+  id: 'tank-performance',
+  title: 'Tank performance',
+  description: 'Tank performance statistics',
+  pageDescription: 'Tank performance statistics in World of Tanks Blitz',
+  button: {
+    text: 'View tanks',
+    color: 'jade',
+  },
+  image: 'vOKFB03',
+};
+
 export const TOOLS: Tool[] = [
   tankopediaTool,
   ratingTool,
@@ -114,4 +126,5 @@ export const TOOLS: Tool[] = [
   sessionTool,
   discordTool,
   moreTool,
+  tankPerformanceTool,
 ];

@@ -37,3 +37,10 @@ export const averageDefinitions = fetch(asset('definitions/averages.pb'))
     );
   })
   .then((data) => data.averages);
+
+export const averageDefinitionsArray = averageDefinitions.then((data) =>
+  Object.entries(data).map(([key, value]) => ({
+    id: Number(key),
+    ...(value as AverageDefinitionsEntry),
+  })),
+);
