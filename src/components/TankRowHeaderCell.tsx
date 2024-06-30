@@ -1,7 +1,7 @@
-import { Table, Text } from '@radix-ui/themes';
+import { Flex, Table } from '@radix-ui/themes';
 import { TankDefinition } from '../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../core/blitzkit/tankIcon';
-import { theme } from '../stitches.config';
+import { ExperimentIcon } from './ExperimentIcon';
 import { Link } from './Link';
 
 interface TankRowHeaderCellProps {
@@ -10,52 +10,37 @@ interface TankRowHeaderCellProps {
 
 export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
   return (
-    <Table.RowHeaderCell
-      style={{
-        paddingLeft: 32,
-        position: 'relative',
-        overflowY: 'hidden',
-      }}
-    >
+    <Table.RowHeaderCell style={{ display: 'flex' }}>
       <Link href={`/tools/tankopedia/${tank.id}`}>
         <img
           alt={tank.name}
           draggable={false}
           src={tankIcon(tank.id)}
           style={{
-            position: 'absolute',
-            width: 128 + 32,
-            height: '200%',
-            top: '-50%',
-            left: 0,
-            objectFit: 'contain',
-            objectPosition: '50% 50%',
-            overflow: 'hidden',
+            margin: 'calc(-1 * var(--table-cell-padding)) 0',
+            height: 'calc(100% + 2 * var(--table-cell-padding))',
+            aspectRatio: '16 / 9',
+            objectFit: 'cover',
           }}
         />
+      </Link>
 
-        <div
-          style={{
-            backgroundColor: 'red',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            height: '100%',
-            width: 128,
-            background: 'linear-gradient(90deg, #00000080, #00000000)',
-          }}
-        />
-
-        <Text
-          style={{
-            color: theme.colors.textHighContrast,
-            position: 'relative',
-            textWrap: 'nowrap',
-            textShadow: 'black 0 0 4px',
-          }}
-        >
+      <Link
+        color="gray"
+        highContrast
+        underline="hover"
+        wrap="nowrap"
+        href={`/tools/tankopedia/${tank.id}`}
+        style={{
+          paddingLeft: 'var(--space-2)',
+        }}
+      >
+        <Flex align="center" gap="1" position="relative" pl="2">
+          {tank.testing && (
+            <ExperimentIcon style={{ width: '1em', height: '1em' }} />
+          )}
           {tank.name}
-        </Text>
+        </Flex>
       </Link>
     </Table.RowHeaderCell>
   );
