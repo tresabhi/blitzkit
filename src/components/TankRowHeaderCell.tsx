@@ -1,4 +1,4 @@
-import { Flex, Table } from '@radix-ui/themes';
+import { Table } from '@radix-ui/themes';
 import { TankDefinition } from '../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../core/blitzkit/tankIcon';
 import { ExperimentIcon } from './ExperimentIcon';
@@ -33,14 +33,19 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
         href={`/tools/tankopedia/${tank.id}`}
         style={{
           paddingLeft: 'var(--space-2)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 'var(--space-1)',
+          width: 128,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
         }}
       >
-        <Flex align="center" gap="1" position="relative" pl="2">
-          {tank.testing && (
-            <ExperimentIcon style={{ width: '1em', height: '1em' }} />
-          )}
-          {tank.name}
-        </Flex>
+        {tank.testing && (
+          <ExperimentIcon style={{ width: '1em', height: '1em' }} />
+        )}
+        {tank.name}
       </Link>
     </Table.RowHeaderCell>
   );
