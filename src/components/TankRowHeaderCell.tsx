@@ -11,7 +11,7 @@ interface TankRowHeaderCellProps {
 export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
   return (
     <Table.RowHeaderCell style={{ display: 'flex' }}>
-      <Link href={`/tools/tankopedia/${tank.id}`}>
+      <Link href={`/tools/tankopedia/${tank.id}`} tabIndex={-1}>
         <img
           alt={tank.name}
           draggable={false}
