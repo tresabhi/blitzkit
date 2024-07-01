@@ -1,15 +1,15 @@
 import { chunk, times, uniq } from 'lodash';
-import { compress } from 'lz4js';
+import { compress, decompress } from 'lz4js';
 import { argv } from 'process';
 import { REGIONS, Region } from '../src/constants/regions';
 import { retryAbleBlitzFetchEvent } from '../src/core/blitz/fetchBlitz';
 import { getAccountInfo } from '../src/core/blitz/getAccountInfo';
 import { MIN_IDS, idToRegion } from '../src/core/blitz/idToRegion';
+import { asset } from '../src/core/blitzkit/asset';
 import { commitAssets } from '../src/core/blitzkit/commitAssets';
-import { fetchPreDiscoveredIds } from '../src/core/blitzkit/fetchPreDiscoveredIds';
-import { DidsWriteStream } from '../src/core/streams/dids';
+import { DidsReadStream, DidsWriteStream } from '../src/core/streams/dids';
 
-export export interface DiscoverIdsManifest {
+export interface DiscoverIdsManifest {
   time: number;
   chunks: number;
   count: number;
