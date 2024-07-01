@@ -21,7 +21,7 @@ interface DataPoint {
   w: number;
 }
 
-const MAX_ACTIVITY_TIME = 1000 * 60 * 60 * 24 * 120;
+const MAX_ACTIVITY_TIME = 1000 * 60 * 60 * 24 * 30;
 const MIN_BATTLES = 5000;
 const RUN_TIME = 1000 * 60 * 60 * 5.9;
 const THREADS = 10;
