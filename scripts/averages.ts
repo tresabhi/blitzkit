@@ -130,12 +130,16 @@ async function postWork() {
       sigma: {},
       r: {},
     };
+    const dataWY = tanks.map((tank) => ({
+      w: tank.battles,
+      y: tank.wins / tank.battles,
+    }));
 
     averageDefinitionsAllStatsKeys.forEach((key) => {
-      const data: DataPoint[] = tanks.map((tank) => ({
-        w: tank.battles,
-        x: tank[key] / tank.battles,
-        y: tank.wins / tank.battles,
+      const data: DataPoint[] = dataWY.map(({ w, y }, index) => ({
+        w,
+        x: tanks[index][key] / w,
+        y,
       }));
 
       if (data.length === 0) return;
@@ -152,7 +156,8 @@ async function postWork() {
       const sum_wy = sum(({ w, y }) => w * y);
       const x_bar = sum_wx / sum_w;
       const y_bar = sum_wy / sum_w;
-      const mu = x_bar;
+      // undo normalization for mu to get a simple average
+      const mu = sum(({ w, x }) => w * x) / samples;
 
       const sigma_numerator = sum(({ w, x }) => w * (x - x_bar) ** 2);
       const sigma = Math.sqrt(sigma_numerator / sum_w);
