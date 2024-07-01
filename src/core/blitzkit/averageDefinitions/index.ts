@@ -22,7 +22,8 @@ export interface AverageDefinitionsEntrySubPartial {
 
 export interface AverageDefinitions {
   averages: Record<number, AverageDefinitionsEntry>;
-  players: number;
+  sampled_players: number;
+  scanned_players: number;
 }
 
 export const averageDefinitions = fetch(asset('definitions/averages.pb'))
