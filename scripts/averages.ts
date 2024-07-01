@@ -45,8 +45,8 @@ const playerIds: Record<Region, number[][]> = {
   ),
 };
 let regionIndex = 0;
-let checkedPlayers = 0;
-let includedPlayers = 0;
+let scanned_players = 0;
+let sampled_players = 0;
 const availableRegions = [...REGIONS];
 const tankIds: number[] = [];
 const tanksSorted: Record<number, AverageDefinitionsAllStats[]> = {};
@@ -63,7 +63,7 @@ times(THREADS, async () => {
     const accountInfo = await getAccountInfo(region, ids, undefined, {
       fields: 'last_battle_time,statistics.all.battles',
     });
-    checkedPlayers += ids.length;
+    scanned_players += ids.length;
 
     /**
      * Pass rates
@@ -81,7 +81,7 @@ times(THREADS, async () => {
         info.statistics.all.battles > MIN_BATTLES
       );
     });
-    includedPlayers += filteredIds.length;
+    sampled_players += filteredIds.length;
     const players = await Promise.all(
       filteredIds.map((id) => getTankStats(region, id)),
     );
@@ -116,7 +116,7 @@ times(THREADS, async () => {
 
 async function postWork() {
   console.log(
-    `Generating statistics based off ${includedPlayers.toLocaleString()} players (${checkedPlayers.toLocaleString()} checked in total) and ${tankIds.length} tanks...`,
+    `Generating statistics based off ${sampled_players.toLocaleString()} players (${scanned_players.toLocaleString()} checked in total) and ${tankIds.length} tanks...`,
   );
 
   const averages: Record<number, AverageDefinitionsEntry> = {};
@@ -172,7 +172,8 @@ async function postWork() {
 
   const averageDefinitions = {
     averages,
-    players: includedPlayers,
+    sampled_players,
+    scanned_players,
   } satisfies AverageDefinitions;
 
   commitAssets(
