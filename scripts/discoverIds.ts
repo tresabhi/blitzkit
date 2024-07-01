@@ -7,13 +7,8 @@ import { getAccountInfo } from '../src/core/blitz/getAccountInfo';
 import { MIN_IDS, idToRegion } from '../src/core/blitz/idToRegion';
 import { asset } from '../src/core/blitzkit/asset';
 import { commitAssets } from '../src/core/blitzkit/commitAssets';
+import { DiscoverIdsDefinitions } from '../src/core/blitzkit/discoveredIdDefinitions';
 import { DidsReadStream, DidsWriteStream } from '../src/core/streams/dids';
-
-export interface DiscoverIdsManifest {
-  time: number;
-  chunks: number;
-  count: number;
-}
 
 const CHUNK_SIZE = 2 ** 21;
 const RUN_TIME = 1000 * 60 * 60 * 5.5;
@@ -31,7 +26,7 @@ const indexableRegions = [...REGIONS];
 let ids: number[] = [];
 const preDiscoveredManifest = (await fetch(
   asset('ids/manifest.json', !production),
-).then((response) => response.json())) as DiscoverIdsManifest;
+).then((response) => response.json())) as DiscoverIdsDefinitions;
 
 console.log(
   `Fetching ${preDiscoveredManifest.chunks} pre-discovered chunks...`,
@@ -163,7 +158,7 @@ function post() {
           chunks: idsChunked.length,
           count: ids.length,
           time: Date.now(),
-        } satisfies DiscoverIdsManifest),
+        } satisfies DiscoverIdsDefinitions),
         encoding: 'utf-8',
         path: 'ids/manifest.json',
       },

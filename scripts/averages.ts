@@ -119,7 +119,7 @@ async function postWork() {
     `Generating statistics based off ${includedPlayers.toLocaleString()} players (${checkedPlayers.toLocaleString()} checked in total) and ${tankIds.length} tanks...`,
   );
 
-  const averages: AverageDefinitions = {};
+  const averages: Record<number, AverageDefinitionsEntry> = {};
 
   tankIds.forEach((id) => {
     const tanks = tanksSorted[id];
@@ -170,14 +170,20 @@ async function postWork() {
     averages[id] = entry as AverageDefinitionsEntry;
   });
 
+  const averageDefinitions = {
+    averages,
+    players: includedPlayers,
+  } satisfies AverageDefinitions;
+
   commitAssets(
     'averages',
     [
       {
         path: 'definitions/averages.pb',
-        content: await encodeToBase64('blitzkit.AverageDefinitions', {
-          averages,
-        }),
+        content: await encodeToBase64(
+          'blitzkit.AverageDefinitions',
+          averageDefinitions,
+        ),
         encoding: 'base64',
       },
     ],

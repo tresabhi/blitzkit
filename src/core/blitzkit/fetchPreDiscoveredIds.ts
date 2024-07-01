@@ -1,15 +1,15 @@
 import { times } from 'lodash';
 import { decompress } from 'lz4js';
 import ProgressBar from 'progress';
-import { DiscoverIdsManifest } from '../../../scripts/discoverIds';
 import { DidsReadStream } from '../streams/dids';
 import { asset } from './asset';
+import { DiscoveredIdsDefinitions } from './discoveredIdDefinitions';
 
 export async function fetchPreDiscoveredIds(dev: boolean) {
   const idChunks: number[][] = [];
   const manifest = (await fetch(asset('ids/manifest.json', dev)).then(
     (response) => response.json(),
-  )) as DiscoverIdsManifest;
+  )) as DiscoveredIdsDefinitions;
   const bar = new ProgressBar(
     `Fetching ${manifest.count.toLocaleString()} ids in ${manifest.chunks} chunks :bar`,
     manifest.chunks,

@@ -21,25 +21,21 @@ export interface AverageDefinitionsEntrySubPartial {
 }
 
 export interface AverageDefinitions {
-  [id: number]: AverageDefinitionsEntry;
-}
-
-interface AverageDefinitionsProto {
-  averages: AverageDefinitions;
+  averages: Record<number, AverageDefinitionsEntry>;
+  players: number;
 }
 
 export const averageDefinitions = fetch(asset('definitions/averages.pb'))
   .then((response) => response.arrayBuffer())
   .then((buffer) => {
-    return decode<AverageDefinitionsProto>(
+    return decode<AverageDefinitions>(
       'blitzkit.AverageDefinitions',
       new Uint8Array(buffer),
     );
-  })
-  .then((data) => data.averages);
+  });
 
 export const averageDefinitionsArray = averageDefinitions.then((data) =>
-  Object.entries(data).map(([key, value]) => ({
+  Object.entries(data.averages).map(([key, value]) => ({
     id: Number(key),
     ...(value as AverageDefinitionsEntry),
   })),

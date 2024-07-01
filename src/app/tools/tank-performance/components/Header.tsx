@@ -44,9 +44,6 @@ export function Header() {
         <Table.ColumnHeaderCell width="0" justify="center">
           Capture points
         </Table.ColumnHeaderCell>
-        <Table.ColumnHeaderCell width="0" justify="center">
-          Dropped capture points
-        </Table.ColumnHeaderCell>
       </Table.Row>
     </Table.Header>
   );

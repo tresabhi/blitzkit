@@ -4,6 +4,7 @@ package blitzkit;
 
 message AverageDefinitions {
   map<uint32, Tank> averages = 1;
+  uint32 players = 2;
 }
 
 message Tank {
