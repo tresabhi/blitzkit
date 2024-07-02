@@ -1,14 +1,17 @@
-import { Table } from '@radix-ui/themes';
+import { IconButton, Table } from '@radix-ui/themes';
 import { TankDefinition } from '../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../core/blitzkit/tankIcon';
-import { ExperimentIcon } from './ExperimentIcon';
+import { classIcons } from './ClassIcon';
 import { Link } from './Link';
+import { ScienceIcon } from './ScienceIcon';
 
 interface TankRowHeaderCellProps {
   tank: TankDefinition;
 }
 
 export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
+  const Icon = classIcons[tank.class];
+
   return (
     <Table.RowHeaderCell style={{ display: 'flex' }}>
       <Link href={`/tools/tankopedia/${tank.id}`} tabIndex={-1}>
@@ -26,8 +29,14 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
       </Link>
 
       <Link
-        color="gray"
-        highContrast
+        color={
+          tank.treeType === 'collector'
+            ? 'blue'
+            : tank.treeType === 'premium'
+              ? 'amber'
+              : 'gray'
+        }
+        highContrast={tank.treeType === 'researchable'}
         underline="hover"
         wrap="nowrap"
         href={`/tools/tankopedia/${tank.id}`}
@@ -36,16 +45,17 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
           display: 'flex',
           alignItems: 'center',
           gap: 'var(--space-1)',
-          width: 128,
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
         }}
       >
-        {tank.testing && (
-          <ExperimentIcon style={{ width: '1em', height: '1em' }} />
-        )}
+        <Icon width="1em" height="1em" />
+
         {tank.name}
+
+        {tank.testing && (
+          <IconButton size="1" ml="1">
+            <ScienceIcon style={{ width: '1em', height: '1em' }} />
+          </IconButton>
+        )}
       </Link>
     </Table.RowHeaderCell>
   );

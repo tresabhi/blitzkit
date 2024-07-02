@@ -30,7 +30,7 @@ export interface TankPerformanceSort {
 }
 
 export const useTankPerformanceSort = create<TankPerformanceSort>()(() => ({
-  type: 'battles',
+  type: 'winrate',
   direction: -1,
 }));
 

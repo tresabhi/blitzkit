@@ -22,6 +22,7 @@ export const TankRow = memo<TankRowProps>(
     return (
       <Table.Row>
         <TankRowHeaderCell tank={tank} />
+
         <Table.Cell align="center">
           {Math.round((averages.mu.wins / averages.mu.battles) * 100)}%
         </Table.Cell>

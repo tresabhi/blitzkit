@@ -25,9 +25,6 @@ export function Info() {
           Career stats based on {numberFormat.format(Math.round(samples))}{' '}
           players with at least 5K career battles and 1 battle in the past 30
           days; updated daily.
-          <br />
-          May differ from BlitzStars because BlitzKit includes{' '}
-          {Math.round(samples / 1e4)}x more players.
         </Callout.Text>
       </Callout.Root>
     </Flex>
