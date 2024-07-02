@@ -40,7 +40,7 @@ export function Header() {
                         direction: -sort.direction as 1 | -1,
                       });
                     } else {
-                      useTankPerformanceSort.setState({ type });
+                      useTankPerformanceSort.setState({ type, direction: -1 });
                     }
                   }}
                 >

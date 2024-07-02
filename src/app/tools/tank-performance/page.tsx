@@ -1,10 +1,10 @@
 import { Flex, Table } from '@radix-ui/themes';
 import { Suspense } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
+import { BodyLoader } from './components/BodyLoader';
 import { Header } from './components/Header';
 import { Info } from './components/Info';
 import { Tanks } from './components/Tanks';
-import { BodyLoader } from './components/BodyLoader';
 
 export default function Page() {
   return (
@@ -14,7 +14,6 @@ export default function Page() {
       <Flex justify="center">
         <Table.Root variant="surface" style={{ maxWidth: '100%' }}>
           <Header />
-
           <Suspense fallback={<BodyLoader />}>
             <Tanks />
           </Suspense>
