@@ -120,11 +120,11 @@ export const tankPerformanceTool: Tool = {
 
 export const TOOLS: Tool[] = [
   tankopediaTool,
-  ratingTool,
   compareTool,
+  tankPerformanceTool,
   // playerStatsTool,
   sessionTool,
+  ratingTool,
   discordTool,
   moreTool,
-  tankPerformanceTool,
 ];

@@ -18,13 +18,14 @@ import {
   Separator,
   Text,
 } from '@radix-ui/themes';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { REGIONS } from '../../constants/regions';
 import { TOOLS } from '../../constants/tools';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { logoutPatreon } from '../../core/blitz/logoutPatreon';
 import { logoutWargaming } from '../../core/blitz/logoutWargaming';
+import { imgur, ImgurSize } from '../../core/blitzkit/imgur';
 import { patreonLoginUrl } from '../../core/blitzkit/patreonLoginUrl';
 import { BlitzkitWide } from '../../icons/BlitzkitWide';
 import { PatreonIcon } from '../../icons/Patreon';
@@ -38,10 +39,10 @@ import * as styles from './index.css';
 export const NAVBAR_HEIGHT = 64;
 
 export default function Navbar() {
-  const router = useRouter();
   const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
   const pathname = usePathname();
   const logins = useApp((state) => state.logins);
+  const filteredTools = TOOLS.filter((tool) => !tool.href);
 
   return (
     <Box
@@ -80,7 +81,7 @@ export default function Navbar() {
           </Flex>
 
           <Flex justify="center" gap="4" className={styles.toolTexts}>
-            {TOOLS.filter((tool) => !tool.href).map((tool) => {
+            {filteredTools.map((tool) => {
               const selected = pathname.startsWith(`/tools/${tool.id}`);
 
               return (
@@ -247,13 +248,16 @@ export default function Navbar() {
         </Flex>
 
         <Flex mt="6" gap="3" justify="center" wrap="wrap">
-          {TOOLS.filter((tool) => !tool.href).map((tool) => (
+          {filteredTools.map((tool) => (
             <Link
               key={tool.id}
               href={`/tools/${tool.id}`}
               className={styles.toolCard}
               style={{
-                backgroundImage: `url(/assets/banners/${tool.id}.webp)`,
+                backgroundImage: `url(${imgur(tool.image, {
+                  format: 'jpeg',
+                  size: ImgurSize.MediumThumbnail,
+                })})`,
                 cursor: tool.disabled ? 'default' : 'pointer',
                 opacity: tool.disabled ? 0.25 : 1,
                 height: 64,
