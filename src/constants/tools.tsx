@@ -104,6 +104,7 @@ export const playerStatsTool: Tool = {
     color: 'blue',
   },
   image: 'YelSOfT',
+  href: '', // TODO: remove this to re-enable link
 };
 
 export const tankPerformanceTool: Tool = {
@@ -122,7 +123,7 @@ export const TOOLS: Tool[] = [
   tankopediaTool,
   compareTool,
   tankPerformanceTool,
-  // playerStatsTool,
+  playerStatsTool,
   sessionTool,
   ratingTool,
   discordTool,
