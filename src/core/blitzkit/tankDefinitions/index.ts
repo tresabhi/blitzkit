@@ -177,7 +177,7 @@ const entries = new Promise<TankDefinition[]>(async (resolve) => {
 });
 export const tanksDefinitionsArray = new Promise<TankDefinition[]>(
   async (resolve) => {
-    resolve((await entries).map((entry) => entry));
+    resolve((await entries).map((entry) => entry)); // TODO: wtf?
   },
 );
 export const tankNames = tanksDefinitionsArray.then((tanks) =>

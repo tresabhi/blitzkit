@@ -122,7 +122,7 @@ export const TOOLS: Tool[] = [
   tankopediaTool,
   ratingTool,
   compareTool,
-  playerStatsTool,
+  // playerStatsTool,
   sessionTool,
   discordTool,
   moreTool,
