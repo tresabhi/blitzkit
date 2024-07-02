@@ -70,20 +70,20 @@ Corelation analysis must be performed on a per-tank basis. If the goal is to eva
 
 The Wargaming API provides many pieces of statistics on a per-tank basis (as listed below). These values cumulate over time as the player plays more games; hence, all of these values must be normalized by dividing each metric by `all.battles`. I will go through and list which of the statistics need to be included as standard scores and why/why not. Omitted statistics must not be included and are obvious why they aren't used.
 
-- ✅ `battle_life_time`: Normalization of this value results in the average time spent alive in seconds. Good players strive to stay alive for as long as possible and must be rewarded while people who "yolo" at the beginning of the game will be penalized.
-- ❌ `all.battles`: Dividing this by itself will result in 1. Corelation analysis will always fail due to division by 0.
-- ✅ `all.capture_points`: Capturing points almost always have a negative corelation coefficient; hence, its inclusion is vital to punish players who waste time capturing points.
-- ✅ `all.damage_dealt`
-- ✅ `all.damage_received`
-- ✅ `all.dropped_capture_points`: Dropping capture points by dealing damage to opponents in base capture usually results in a very tiny positive corelation coefficient; nonetheless, it does have an effect on gameplay thus it is included.
-- ✅ `all.frags`
+- ✔️ `battle_life_time`: Normalization of this value results in the average time spent alive in seconds. Good players strive to stay alive for as long as possible and must be rewarded while people who "yolo" at the beginning of the game will be penalized.
+- $\xmapsto{asd}$ `all.battles`: Dividing this by itself will result in 1. Corelation analysis will always fail due to division by 0.
+- ✔️ `all.capture_points`: Capturing points almost always have a negative corelation coefficient; hence, its inclusion is vital to punish players who waste time capturing points.
+- ✔️ `all.damage_dealt`
+- ✔️ `all.damage_received`
+- ✔️ `all.dropped_capture_points`: Dropping capture points by dealing damage to opponents in base capture usually results in a very tiny positive corelation coefficient; nonetheless, it does have an effect on gameplay thus it is included.
+- ✔️ `all.frags`
 - ❌ `all.frags8p`: This value is `null` on most tanks below tier VIII because it only measures frags of and above tier VIII. Breaks math, pointless feature; do not include.
-- ✅ `all.hits`
+- ✔️ `all.hits`
 - ❌ `all.losses`: Function of winrate.
 - ❌ `all.max_frags`: Normalization with division by `all.battles` renders this metric useless. Do not include.
 - ❌ `all.max_xp`: Just like `all.max_frags`, this metric does not accumulate over time. Do not include.
-- ✅ `all.shots`
-- ✅ `all.spotted`
+- ✔️ `all.shots`
+- ✔️ `all.spotted`
 - ❌ `all.survived_battles`: Function of winrate.
 - ❌ `all.win_and_survived`: Function of winrate.
 - ❌ `all.wins`: Function of winrate.
