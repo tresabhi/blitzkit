@@ -13,6 +13,7 @@ export function Info() {
   const ratio =
     awaitedDiscoveredIdsDefinitions.count /
     awaitedAverageDefinitions.scanned_players;
+  const samples = ratio * awaitedAverageDefinitions.sampled_players;
 
   return (
     <Flex justify="center">
@@ -21,12 +22,12 @@ export function Info() {
           <InfoCircledIcon />
         </Callout.Icon>
         <Callout.Text>
-          Career stats based on{' '}
-          {numberFormat.format(
-            Math.round(ratio * awaitedAverageDefinitions.sampled_players),
-          )}{' '}
+          Career stats based on {numberFormat.format(Math.round(samples))}{' '}
           players with at least 5K career battles and 1 battle in the past 30
-          days. Updated daily.
+          days; updated daily.
+          <br />
+          May differ from BlitzStars because BlitzKit includes{' '}
+          {Math.round(samples / 1e4)}x more players.
         </Callout.Text>
       </Callout.Root>
     </Flex>

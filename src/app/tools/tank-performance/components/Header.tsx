@@ -1,49 +1,62 @@
-import { Table } from '@radix-ui/themes';
+'use client';
+
+import {
+  CaretDownIcon,
+  CaretSortIcon,
+  CaretUpIcon,
+} from '@radix-ui/react-icons';
+import { Flex, IconButton, Table } from '@radix-ui/themes';
+import {
+  tankPerformanceSortTypeNames,
+  tankPerformanceSortTypeNamesArray,
+  useTankPerformanceSort,
+} from '../../../../stores/tankPerformanceSort';
 
 export function Header() {
+  const sort = useTankPerformanceSort();
+
   return (
     <Table.Header style={{ whiteSpace: 'nowrap' }}>
-      <Table.Row align="end">
+      <Table.Row align="center">
         <Table.ColumnHeaderCell>Tank</Table.ColumnHeaderCell>
-        <Table.ColumnHeaderCell width="0" justify="center" minWidth="0px">
-          Winrate
-        </Table.ColumnHeaderCell>
-        <Table.ColumnHeaderCell width="0" justify="center" minWidth="0px">
-          Players (30d)
-        </Table.ColumnHeaderCell>
-        <Table.ColumnHeaderCell width="0" justify="center" minWidth="0px">
-          Damage
-        </Table.ColumnHeaderCell>
-        <Table.ColumnHeaderCell width="0" justify="center" minWidth="0px">
-          Survival
-        </Table.ColumnHeaderCell>
-        <Table.ColumnHeaderCell width="0" justify="center" minWidth="0px">
-          XP
-        </Table.ColumnHeaderCell>
-        <Table.ColumnHeaderCell width="0" justify="center" minWidth="0px">
-          Kills
-        </Table.ColumnHeaderCell>
-        <Table.ColumnHeaderCell width="0" justify="center" minWidth="0px">
-          Spots
-        </Table.ColumnHeaderCell>
-        <Table.ColumnHeaderCell width="0" justify="center" minWidth="0px">
-          Accuracy
-        </Table.ColumnHeaderCell>
-        <Table.ColumnHeaderCell width="0" justify="center" minWidth="0px">
-          Shots
-        </Table.ColumnHeaderCell>
-        <Table.ColumnHeaderCell width="0" justify="center" minWidth="0px">
-          Hits
-        </Table.ColumnHeaderCell>
-        <Table.ColumnHeaderCell width="0" justify="center" minWidth="0px">
-          Dmg. ratio
-        </Table.ColumnHeaderCell>
-        <Table.ColumnHeaderCell width="0" justify="center" minWidth="0px">
-          Dmg. taken
-        </Table.ColumnHeaderCell>
-        <Table.ColumnHeaderCell width="0" justify="center" minWidth="0px">
-          Cap points
-        </Table.ColumnHeaderCell>
+        {tankPerformanceSortTypeNamesArray.map((type) => {
+          const isSelected = sort.type === type;
+
+          return (
+            <Table.ColumnHeaderCell
+              key={type}
+              width="0"
+              justify="center"
+              minWidth="0px"
+            >
+              <Flex align="center" gap="1">
+                <IconButton
+                  variant={isSelected ? 'soft' : 'ghost'}
+                  color={isSelected ? undefined : 'gray'}
+                  highContrast={!isSelected}
+                  onClick={() => {
+                    if (isSelected) {
+                      useTankPerformanceSort.setState({
+                        direction: -sort.direction as 1 | -1,
+                      });
+                    } else {
+                      useTankPerformanceSort.setState({ type });
+                    }
+                  }}
+                >
+                  {!isSelected && <CaretSortIcon />}
+                  {isSelected && (
+                    <>
+                      {sort.direction === 1 && <CaretUpIcon />}
+                      {sort.direction === -1 && <CaretDownIcon />}
+                    </>
+                  )}
+                </IconButton>
+                {tankPerformanceSortTypeNames[type]}
+              </Flex>
+            </Table.ColumnHeaderCell>
+          );
+        })}
       </Table.Row>
     </Table.Header>
   );

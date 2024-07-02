@@ -29,6 +29,11 @@ export const TankRow = memo<TankRowProps>(
           {numberFormat.format(Math.round(ratio * averages.samples))}
         </Table.Cell>
         <Table.Cell align="center">
+          {numberFormat.format(
+            Math.round(ratio * averages.mu.battles * averages.samples),
+          )}
+        </Table.Cell>
+        <Table.Cell align="center">
           {Math.round(
             averages.mu.damage_dealt / averages.mu.battles,
           ).toLocaleString()}
@@ -49,13 +54,7 @@ export const TankRow = memo<TankRowProps>(
           {(averages.mu.spotted / averages.mu.battles).toFixed(2)}
         </Table.Cell>
         <Table.Cell align="center">
-          {Math.round(
-            (averages.mu.hits /
-              averages.mu.battles /
-              (averages.mu.shots / averages.mu.battles)) *
-              100,
-          )}
-          %
+          {Math.round((averages.mu.hits / averages.mu.shots) * 100)}%
         </Table.Cell>
         <Table.Cell align="center">
           {(averages.mu.shots / averages.mu.battles).toFixed(1)}
@@ -64,11 +63,7 @@ export const TankRow = memo<TankRowProps>(
           {(averages.mu.hits / averages.mu.battles).toFixed(1)}
         </Table.Cell>
         <Table.Cell align="center">
-          {(
-            averages.mu.damage_dealt /
-            averages.mu.battles /
-            (averages.mu.damage_received / averages.mu.battles)
-          ).toFixed(2)}
+          {(averages.mu.damage_dealt / averages.mu.damage_received).toFixed(2)}
         </Table.Cell>
         <Table.Cell align="center">
           {Math.round(
