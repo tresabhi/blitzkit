@@ -51,6 +51,8 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
         return gun.dispersion.base.toFixed(3);
       case 'fire.dpm':
         return resolveDpm(gun, shell0).toFixed(0);
+      case 'fire.dpmPremium':
+        return shell1 ? resolveDpm(gun, shell1).toFixed(0) : '--';
       case 'fire.reload':
         return resolveReload(gun).toFixed(2);
       case 'fire.standardPenetration':

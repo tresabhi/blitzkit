@@ -1,6 +1,13 @@
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { memo, useEffect, useRef } from 'react';
-import { Euler, Group, Vector2, Vector3 } from 'three';
+import {
+  Euler,
+  Group,
+  Mesh,
+  MeshStandardMaterial,
+  Vector2,
+  Vector3,
+} from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { I_HAT, J_HAT, K_HAT } from '../../../../../../../constants/axis';
 import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
@@ -15,9 +22,7 @@ import { normalizeAngleRad } from '../../../../../../../core/math/normalizeAngle
 import { useAwait } from '../../../../../../../hooks/useAwait';
 import { useModel } from '../../../../../../../hooks/useModel';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
-import mutateTankopediaPersistent, {
-  mutateTankopediaTemporary,
-} from '../../../../../../../stores/tankopedia';
+import { mutateTankopediaTemporary } from '../../../../../../../stores/tankopedia';
 
 export const TankModel = memo(() => {
   const awaitedModelDefinitions = useAwait(modelDefinitions);
@@ -117,11 +122,52 @@ export const TankModel = memo(() => {
         const isWheel = node.name.startsWith('chassis_wheel_');
         const isTrack = node.name.startsWith('chassis_track_');
         const isVisible = isHull || isWheel || isTrack;
+        const position = new Vector2();
+        const delta = new Vector2();
 
         if (!isVisible) return null;
 
+        function translateTexture(offset: number) {
+          const mesh = node.children[0] as Mesh;
+          const material = mesh?.material as MeshStandardMaterial;
+
+          if (!material) return;
+
+          if (material.map) material.map.offset.y += offset;
+          if (material.aoMap) material.aoMap.offset.y += offset;
+          if (material.normalMap) material.normalMap.offset.y += offset;
+          if (material.roughnessMap) material.roughnessMap.offset.y += offset;
+          if (material.metalnessMap) material.metalnessMap.offset.y += offset;
+        }
+
         function onPointerDown(event: ThreeEvent<PointerEvent>) {
+          if (!isTrack) return;
+
+          position.set(event.clientX, event.clientY);
           event.stopPropagation();
+
+          mutateTankopediaTemporary((draft) => {
+            draft.controlsEnabled = false;
+          });
+
+          window.addEventListener('pointermove', handlePointerMove);
+          window.addEventListener('pointerup', handlePointerUp);
+        }
+        function handlePointerMove(event: PointerEvent) {
+          delta.set(event.clientX, event.clientY).sub(position);
+          position.set(event.clientX, event.clientY);
+          const deltaX = delta.x / window.innerWidth;
+          const deltaY = delta.y / window.innerHeight;
+
+          translateTexture(deltaX + deltaY);
+        }
+        function handlePointerUp() {
+          mutateTankopediaTemporary((draft) => {
+            draft.controlsEnabled = true;
+          });
+
+          window.removeEventListener('pointermove', handlePointerMove);
+          window.removeEventListener('pointerup', handlePointerUp);
         }
 
         return jsxTree(
@@ -158,8 +204,8 @@ export const TankModel = memo(() => {
               yaw = protagonist.yaw;
               pitch = protagonist.pitch;
 
-              mutateTankopediaPersistent((draft) => {
-                draft.model.visual.controlsEnabled = false;
+              mutateTankopediaTemporary((draft) => {
+                draft.controlsEnabled = false;
               });
               mutateTankopediaTemporary((draft) => {
                 draft.shot = undefined;
@@ -194,8 +240,8 @@ export const TankModel = memo(() => {
               draft.protagonist!.pitch = normalizeAngleRad(pitch);
               draft.protagonist!.yaw = normalizeAngleRad(yaw);
             });
-            mutateTankopediaPersistent((draft) => {
-              draft.model.visual.controlsEnabled = true;
+            mutateTankopediaTemporary((draft) => {
+              draft.controlsEnabled = true;
             });
             window.removeEventListener('pointermove', handlePointerMove);
             window.removeEventListener('pointerup', handlePointerUp);
@@ -234,8 +280,8 @@ export const TankModel = memo(() => {
             function onPointerDown(event: ThreeEvent<PointerEvent>) {
               event.stopPropagation();
 
-              mutateTankopediaPersistent((draft) => {
-                draft.model.visual.controlsEnabled = false;
+              mutateTankopediaTemporary((draft) => {
+                draft.controlsEnabled = false;
               });
               mutateTankopediaTemporary((draft) => {
                 draft.shot = undefined;
@@ -269,8 +315,8 @@ export const TankModel = memo(() => {
               modelTransformEvent.emit({ pitch, yaw });
             }
             function handlePointerUp() {
-              mutateTankopediaPersistent((draft) => {
-                draft.model.visual.controlsEnabled = true;
+              mutateTankopediaTemporary((draft) => {
+                draft.controlsEnabled = true;
               });
               mutateDuel((draft) => {
                 draft.protagonist!.pitch = normalizeAngleRad(pitch);

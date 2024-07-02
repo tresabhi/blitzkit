@@ -143,7 +143,11 @@ export default function Navbar() {
                 <PersonIcon style={{ cursor: 'pointer' }} />
               </Popover.Trigger>
 
-              <Popover.Content align="end" width="320px">
+              <Popover.Content
+                align="end"
+                width="320px"
+                onOpenAutoFocus={(event) => event.preventDefault()}
+              >
                 {(logins.patreon || logins.wargaming) && (
                   <Flex direction="column" gap="2">
                     <Text align="center" color="gray">

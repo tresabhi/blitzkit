@@ -22,6 +22,7 @@ import { useState } from 'react';
 import { ModuleButton } from '../../../../../../../components/ModuleButtons/ModuleButton';
 import { SmallTankIcon } from '../../../../../../../components/SmallTankIcon';
 import { resolveNearPenetration } from '../../../../../../../core/blitz/resolveNearPenetration';
+import { resolvePenetrationCoefficient } from '../../../../../../../core/blitz/resolvePenetrationCoefficient';
 import { asset } from '../../../../../../../core/blitzkit/asset';
 import { Pose, poseEvent } from '../../../../../../../core/blitzkit/pose';
 import {
@@ -113,7 +114,17 @@ export function Options() {
             top: '50%',
             transform: 'translateY(-50%)',
           }}
+          align="end"
         >
+          <Text color="gray" size={{ initial: '1', sm: '2' }}>
+            {(
+              resolvePenetrationCoefficient(
+                hasCalibratedShells,
+                antagonistShell.type,
+              ) * resolveNearPenetration(antagonistShell.penetration)
+            ).toFixed(0)}
+            mm
+          </Text>
           <Flex direction="column">
             {antagonistGun.shells.map((thisShell, shellIndex) => (
               <IconButton
@@ -157,7 +168,6 @@ export function Options() {
               </IconButton>
             ))}
           </Flex>
-
           <Flex direction="column" style={{ pointerEvents: 'auto' }}>
             <IconButton
               color={hasCalibratedShells ? undefined : 'gray'}

@@ -1,4 +1,5 @@
 import { EquipmentMatrix } from '../../stores/duel';
+import { isExplosive } from '../blitz/isExplosive';
 import { resolveNearPenetration } from '../blitz/resolveNearPenetration';
 import { resolvePenetrationCoefficient } from '../blitz/resolvePenetrationCoefficient';
 import { coefficient } from './coefficient';
@@ -359,11 +360,20 @@ export function tankCharacteristics(
   const penetration =
     resolveNearPenetration(shell.penetration) * penetrationCoefficient;
   const damage = shell.damage.armor * damageCoefficient;
+  const clipDamage = gun.type === 'regular' ? undefined : gun.count * damage;
   const moduleDamage = shell.damage.module * damageCoefficient;
   const explosionRadius = shell.explosionRadius;
   const shellVelocity = shell.speed * shellVelocityCoefficient;
   const aimTime = gun.aimTime * aimTimeCoefficient;
   const dispersion = gun.dispersion.base * dispersionStillCoefficient;
+  const maxDispersion =
+    gun.dispersion.base *
+    Math.sqrt(
+      ((gun.dispersion.traverse * turret.traverseSpeed) ** 2 +
+        (track.dispersion.traverse * track.traverseSpeed) ** 2 +
+        track.dispersion.move * tank.speed.forwards) **
+        2,
+    );
   const dispersionMoving = track.dispersion.move * dispersionMovingCoefficient;
   const dispersionHullTraversing =
     track.dispersion.traverse * dispersionHullTraverseCoefficient;
@@ -396,40 +406,37 @@ export function tankCharacteristics(
   const speedForwards = tank.speed.forwards + speedForwardsSum;
   const speedBackwards = tank.speed.backwards + speedBackwardsSum;
   const enginePower = resolvedEnginePower;
+  const hardTerrainCoefficient =
+    track.resistance.hard * resistanceHardCoefficient;
+  const mediumTerrainCoefficient =
+    track.resistance.medium * resistanceMediumCoefficient;
+  const softTerrainCoefficient =
+    track.resistance.soft * resistanceSoftCoefficient;
   const powerToWeightRatioHardTerrain =
-    resolvedEnginePower /
-    weightTons /
-    (track.resistance.hard * resistanceHardCoefficient);
+    resolvedEnginePower / weightTons / hardTerrainCoefficient;
   const powerToWeightRatioMediumTerrain =
-    resolvedEnginePower /
-    weightTons /
-    (track.resistance.medium * resistanceMediumCoefficient);
+    resolvedEnginePower / weightTons / mediumTerrainCoefficient;
   const powerToWeightRatioSoftTerrain =
-    resolvedEnginePower /
-    weightTons /
-    (track.resistance.soft * resistanceSoftCoefficient);
+    resolvedEnginePower / weightTons / softTerrainCoefficient;
   const weight = weightTons;
   const turretTraverseSpeed = turret.traverseSpeed * turretTraverseCoefficient;
   const hullTraverseHardTerrain =
     (resolvedEnginePower / stockEngine.power) *
     track.traverseSpeed *
     hullTraverseCoefficient *
-    (track.resistance.hard /
-      (track.resistance.hard * resistanceHardCoefficient)) *
+    (track.resistance.hard / hardTerrainCoefficient) *
     (stockWeight / weightKg);
   const hullTraverseMediumTerrain =
     (resolvedEnginePower / stockEngine.power) *
     track.traverseSpeed *
     hullTraverseCoefficient *
-    (track.resistance.hard /
-      (track.resistance.medium * resistanceMediumCoefficient)) *
+    (track.resistance.hard / mediumTerrainCoefficient) *
     (stockWeight / weightKg);
   const hullTraverseSoftTerrain =
     (resolvedEnginePower / stockEngine.power) *
     track.traverseSpeed *
     hullTraverseCoefficient *
-    (track.resistance.hard /
-      (track.resistance.soft * resistanceSoftCoefficient)) *
+    (track.resistance.hard / softTerrainCoefficient) *
     (stockWeight / weightKg);
   const health = (tank.health + turret.health) * healthCoefficient;
   const fireChance = engine.fireChance * fireChanceCoefficient;
@@ -453,7 +460,7 @@ export function tankCharacteristics(
   const length = size[1];
   const volume = width * height * length;
   const shellNormalization = shell.normalization ?? 0;
-  const shellRicochet = shell.ricochet;
+  const shellRicochet = isExplosive(shell.type) ? undefined : shell.ricochet;
 
   return {
     shellNormalization,
@@ -469,11 +476,13 @@ export function tankCharacteristics(
     caliber,
     penetration,
     damage,
+    clipDamage,
     moduleDamage,
     explosionRadius,
     shellVelocity,
     aimTime,
     dispersion,
+    maxDispersion,
     dispersionMoving,
     dispersionHullTraversing,
     dispersionTurretTraversing,
@@ -489,6 +498,9 @@ export function tankCharacteristics(
     azimuthRight,
     speedForwards,
     speedBackwards,
+    hardTerrainCoefficient,
+    mediumTerrainCoefficient,
+    softTerrainCoefficient,
     enginePower,
     powerToWeightRatioHardTerrain,
     powerToWeightRatioMediumTerrain,

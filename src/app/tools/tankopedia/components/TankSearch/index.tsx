@@ -69,7 +69,8 @@ export const TankSearch = memo<TankSearchProps>(
                 (a, b) =>
                   awaitedGameDefinitions.nations.indexOf(b.nation) -
                   awaitedGameDefinitions.nations.indexOf(a.nation),
-              );
+              )
+              .sort((a, b) => a.tier - b.tier);
             break;
 
           case 'survivability.health': {
@@ -176,6 +177,24 @@ export const TankSearch = memo<TankSearchProps>(
                   b.turrets.at(-1)!.guns.at(-1)!,
                   b.turrets.at(-1)!.guns.at(-1)!.shells[0],
                 ),
+            );
+            break;
+
+          case 'fire.dpmPremium':
+            sorted = filtered.sort(
+              (a, b) =>
+                (a.turrets.at(-1)!.guns.at(-1)!.shells[1]
+                  ? resolveDpm(
+                      a.turrets.at(-1)!.guns.at(-1)!,
+                      a.turrets.at(-1)!.guns.at(-1)!.shells[1],
+                    )
+                  : 0) -
+                (b.turrets.at(-1)!.guns.at(-1)!.shells[1]
+                  ? resolveDpm(
+                      b.turrets.at(-1)!.guns.at(-1)!,
+                      b.turrets.at(-1)!.guns.at(-1)!.shells[1],
+                    )
+                  : 0),
             );
             break;
 
@@ -360,7 +379,7 @@ export const TankSearch = memo<TankSearchProps>(
 
     return (
       <Flex direction="column" gap="4" flexGrow="1" {...props}>
-        <SearchBar topResult={tanks?.[0]} />
+        <SearchBar topResult={tanks?.[0]} onSelect={onSelect} />
 
         {!filters.search && !filters.searching && (
           <FilterControl compact={compact} />

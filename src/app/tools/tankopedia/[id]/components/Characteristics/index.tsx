@@ -139,7 +139,7 @@ export function Characteristics() {
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
         <Flex direction="column" gap="2">
           <Flex align="center" gap="4">
-            <Heading size="5">Fire</Heading>
+            <Heading size="5">Firepower</Heading>
 
             <Flex>
               {gun.shells.map((thisShell, shellIndex) => (
@@ -297,6 +297,11 @@ export function Characteristics() {
           <InfoWithDelta name="Damage" unit="hp" decimals={0}>
             {stats.damage}
           </InfoWithDelta>
+          {gun.type !== 'regular' && (
+            <InfoWithDelta name="Clipping potential" indent>
+              {stats.clipDamage!}
+            </InfoWithDelta>
+          )}
           <InfoWithDelta name="Module damage" unit="hp" decimals={0}>
             {stats.moduleDamage}
           </InfoWithDelta>
@@ -387,6 +392,15 @@ export function Characteristics() {
             deltaType="lowerIsBetter"
           >
             {stats.dispersionGunDamaged}
+          </InfoWithDelta>
+          <InfoWithDelta
+            decimals={3}
+            indent
+            name="Maximum"
+            unit="m"
+            deltaType="lowerIsBetter"
+          >
+            {stats.maxDispersion}
           </InfoWithDelta>
           <Info name="Gun flexibility" unit="°" />
           <InfoWithDelta decimals={1} indent name="Depression">
@@ -519,6 +533,16 @@ export function Characteristics() {
             deltaType="lowerIsBetter"
           >
             {stats.weight}
+          </InfoWithDelta>
+          <Info name="Terrain coefficients" />
+          <InfoWithDelta decimals={1} indent name="Hard">
+            {stats.hardTerrainCoefficient}
+          </InfoWithDelta>
+          <InfoWithDelta decimals={1} indent name="Medium">
+            {stats.mediumTerrainCoefficient}
+          </InfoWithDelta>
+          <InfoWithDelta decimals={1} indent name="Soft">
+            {stats.softTerrainCoefficient}
           </InfoWithDelta>
           <Info name="Power to weight ratio" unit="hp/tn" />
           <InfoWithDelta decimals={1} indent name="On hard terrain">

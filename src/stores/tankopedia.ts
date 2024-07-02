@@ -20,7 +20,6 @@ export interface TankopediaPersistent {
       wireframe: boolean;
       opaque: boolean;
       environment: (typeof ENVIRONMENTS)[number];
-      controlsEnabled: boolean;
       showGrid: boolean;
       greenPenetration: boolean;
       showEnvironment: boolean;
@@ -45,6 +44,7 @@ export interface TankopediaPersistent {
 interface TankopediaTemporary {
   shot?: Shot;
   skills: Record<string, number>;
+  controlsEnabled: boolean;
 }
 
 export interface ShotLayerBase {
@@ -114,7 +114,8 @@ export const SORT_NAMES = {
   'survivability.camouflageShooting': 'camouflage shooting',
   'survivability.volume': 'volume',
   'survivability.length': 'length',
-  'fire.dpm': 'DPM',
+  'fire.dpm': 'standard DPM',
+  'fire.dpmPremium': 'premium DPM',
   'fire.reload': 'reload',
   'fire.caliber': 'caliber',
   'fire.standardPenetration': 'standard penetration',
@@ -143,6 +144,7 @@ export const SORT_UNITS: Record<TankopediaSortBy, string | undefined> = {
   'fire.dispersionMoving': 'm',
   'fire.dispersionStill': 'm',
   'fire.dpm': undefined,
+  'fire.dpmPremium': undefined,
   'fire.gunDepression': '°',
   'fire.gunElevation': '°',
   'fire.premiumPenetration': 'mm',
@@ -199,6 +201,7 @@ export const useTankopediaPersistent = create<TankopediaPersistent>()(
 export const useTankopediaTemporary = create<TankopediaTemporary>()(
   subscribeWithSelector<TankopediaTemporary>(() => ({
     skills: {},
+    controlsEnabled: true,
   })),
 );
 

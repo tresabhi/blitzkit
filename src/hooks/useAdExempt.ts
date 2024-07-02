@@ -15,6 +15,9 @@ export function useAdExempt() {
           `/api/patreon/membership/${patreon.token}`,
           { cache: 'force-cache' },
         );
+
+        if (!response.ok) return resolve(false);
+
         const json = await response.json();
         const exempt = typeof json === 'boolean' && json;
         cache[patreon.token] = exempt;

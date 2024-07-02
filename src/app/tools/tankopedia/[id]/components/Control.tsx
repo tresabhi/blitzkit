@@ -9,7 +9,7 @@ import { modelDefinitions } from '../../../../../core/blitzkit/modelDefinitions'
 import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
 import { useAwait } from '../../../../../hooks/useAwait';
 import { useDuel } from '../../../../../stores/duel';
-import { useTankopediaPersistent } from '../../../../../stores/tankopedia';
+import { useTankopediaTemporary } from '../../../../../stores/tankopedia';
 
 const poseDistances: Record<Pose, number> = {
   [Pose.HullDown]: 15,
@@ -62,8 +62,8 @@ export function Controls() {
   }, [camera]);
 
   useEffect(() => {
-    const unsubscribeTankopedia = useTankopediaPersistent.subscribe(
-      (state) => state.model.visual.controlsEnabled,
+    const unsubscribeTankopedia = useTankopediaTemporary.subscribe(
+      (state) => state.controlsEnabled,
       (enabled) => {
         if (orbitControls.current) orbitControls.current.enabled = enabled;
       },
@@ -182,7 +182,7 @@ export function Controls() {
       maxDistance={20}
       minDistance={5}
       ref={orbitControls}
-      enabled={useTankopediaPersistent.getState().model.visual.controlsEnabled}
+      enabled={useTankopediaTemporary.getState().controlsEnabled}
       rotateSpeed={0.25}
       enableDamping={false}
       autoRotate={autoRotate}

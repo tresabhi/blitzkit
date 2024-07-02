@@ -10,9 +10,10 @@ import { Sort } from './Sort';
 
 interface SearchBarProps {
   topResult?: TankDefinition;
+  onSelect?: (tank: TankDefinition) => void;
 }
 
-export function SearchBar({ topResult }: SearchBarProps) {
+export function SearchBar({ topResult, onSelect }: SearchBarProps) {
   const router = useRouter();
   const input = useRef<HTMLInputElement>(null);
   const searching = useTankopediaFilters((state) => state.searching);
@@ -42,7 +43,12 @@ export function SearchBar({ topResult }: SearchBarProps) {
       if (event.key !== 'Enter' || !topResult || searching) return;
 
       event.preventDefault();
-      router.push(`/tools/tankopedia/${topResult.id}`);
+
+      if (onSelect) {
+        onSelect(topResult);
+      } else {
+        router.push(`/tools/tankopedia/${topResult.id}`);
+      }
     },
     [topResult],
   );

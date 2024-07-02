@@ -1,6 +1,7 @@
 import { ChevronLeftIcon, MixIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
+import { classIcons } from '../../../../../../components/ClassIcon';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
@@ -11,14 +12,15 @@ import { TankSandbox } from './TankSandbox';
 import { Options } from './components/Options';
 
 export function HeroSection() {
-  const protagonistTank = useDuel((state) => state.protagonist!.tank);
-  const antagonistTank = useDuel((state) => state.antagonist!.tank);
+  const protagonist = useDuel((state) => state.protagonist!.tank);
+  const antagonist = useDuel((state) => state.antagonist!.tank);
   const wideFormat = useWideFormat(880);
   const compareTanks =
-    protagonistTank.id === antagonistTank.id
-      ? [protagonistTank.id]
-      : [protagonistTank.id, antagonistTank.id];
+    protagonist.id === antagonist.id
+      ? [protagonist.id]
+      : [protagonist.id, antagonist.id];
   const isFullScreen = useFullScreen();
+  const Icon = classIcons[protagonist.class];
 
   return (
     <Flex
@@ -58,18 +60,26 @@ export function HeroSection() {
             <Heading
               size={wideFormat ? '9' : '8'}
               align={wideFormat ? undefined : 'center'}
+              color={
+                protagonist.treeType === 'collector'
+                  ? 'blue'
+                  : protagonist.treeType === 'premium'
+                    ? 'amber'
+                    : undefined
+              }
             >
-              {protagonistTank.nameFull ?? protagonistTank.name}
+              <Icon style={{ width: '0.75em', height: '0.75em' }} />{' '}
+              {protagonist.nameFull ?? protagonist.name}
             </Heading>
 
             <Text color="gray">
-              Tier {TIER_ROMAN_NUMERALS[protagonistTank.tier]}{' '}
+              Tier {TIER_ROMAN_NUMERALS[protagonist.tier]}{' '}
               {
                 (strings.common.nations_adjectives as Record<string, string>)[
-                  protagonistTank.nation
+                  protagonist.nation
                 ]
               }{' '}
-              {strings.common.tank_class_short[protagonistTank.class]}
+              {strings.common.tank_class_short[protagonist.class]}
             </Text>
 
             <Flex gap="4" mt="-1">
