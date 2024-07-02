@@ -77,13 +77,13 @@ $$
 
 Doing this would make $w=\left|r\right|m$ or $w=r^{2}m$ where $\left|r\right|$ or $r^{2}$ represents the "confidence" in the standard score and $m$ is the "rate of effectiveness". Doing this was decided against because a drop in $m$ inherently implies a drop in the corelation $r$.
 
-To rephrase, this is what real data looks like where $r$ drops with $m$; there is no need to include both (https://www.desmos.com/calculator/fzccxmjjkk).
+To rephrase, this is what real data looks like where $r$ drops with $m$; there is no need to include both (https://www.desmos.com/calculator/0p5kye1s7z).
 
-![](https://i.imgur.com/lh7rv6T.gif)
+![](https://i.imgur.com/6gHCYUZ.gif)
 
-And this is what real data **DOES NOT** look like where $r$ remains constant as $m$ drops (https://www.desmos.com/calculator/ceneheliyr).
+And this is what real data **DOES NOT** look like where $r$ remains constant as $m$ drops (https://www.desmos.com/calculator/5yfl2ulemf).
 
-![](https://i.imgur.com/aUQgf2v.gif)
+![](https://i.imgur.com/iCbuun3.gif)
 
 ## WoTB Specific Notes
 
