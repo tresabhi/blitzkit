@@ -11,7 +11,10 @@ export function Tanks() {
   const awaitedTankDefinitions = use(tankDefinitions);
   const awaitedAverageDefinitionsArray = use(averageDefinitionsArray);
   const tankAverages = useMemo(
-    () => awaitedAverageDefinitionsArray.sort((a, b) => b.mu.wins - a.mu.wins),
+    () =>
+      awaitedAverageDefinitionsArray.sort(
+        (a, b) => b.mu.wins / b.mu.battles - a.mu.wins / a.mu.battles,
+      ),
     [],
   );
 

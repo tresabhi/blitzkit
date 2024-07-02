@@ -9,6 +9,7 @@ import { discoveredIdsDefinitions } from '../../../../core/blitzkit/discoveredId
 export function Info() {
   const awaitedAverageDefinitions = use(averageDefinitions);
   const awaitedDiscoveredIdsDefinitions = use(discoveredIdsDefinitions);
+  const numberFormat = Intl.NumberFormat(undefined, { notation: 'compact' });
   const ratio =
     awaitedDiscoveredIdsDefinitions.count /
     awaitedAverageDefinitions.scanned_players;
@@ -20,13 +21,12 @@ export function Info() {
           <InfoCircledIcon />
         </Callout.Icon>
         <Callout.Text>
-          Based on{' '}
-          {Math.round(
-            ratio * awaitedAverageDefinitions.sampled_players,
-          ).toLocaleString()}{' '}
-          players with at least 5,000 career battles and 1 battle in the past
-          120 days. {awaitedDiscoveredIdsDefinitions.count.toLocaleString()}{' '}
-          scanned in total. Updated daily.
+          Career stats based on{' '}
+          {numberFormat.format(
+            Math.round(ratio * awaitedAverageDefinitions.sampled_players),
+          )}{' '}
+          players with at least 5K career battles and 1 battle in the past 30
+          days. Updated daily.
         </Callout.Text>
       </Callout.Root>
     </Flex>

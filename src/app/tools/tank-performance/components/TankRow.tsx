@@ -1,7 +1,8 @@
 import { Table } from '@radix-ui/themes';
-import { memo, use, useMemo } from 'react';
+import { memo, use } from 'react';
 import { TankRowHeaderCell } from '../../../../components/TankRowHeaderCell';
 import { averageDefinitions } from '../../../../core/blitzkit/averageDefinitions';
+import { discoveredIdsDefinitions } from '../../../../core/blitzkit/discoveredIdDefinitions';
 import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
 
 interface TankRowProps {
@@ -10,46 +11,72 @@ interface TankRowProps {
 
 export const TankRow = memo<TankRowProps>(
   ({ tank }) => {
+    const awaitedDiscoveredIdsDefinitions = use(discoveredIdsDefinitions);
     const awaitedAverageDefinitions = use(averageDefinitions);
     const averages = awaitedAverageDefinitions.averages[tank.id];
-    const numberFormat = useMemo(
-      () => Intl.NumberFormat(undefined, { notation: 'compact' }),
-      [],
-    );
+    const numberFormat = Intl.NumberFormat(undefined, { notation: 'compact' });
+    const ratio =
+      awaitedDiscoveredIdsDefinitions.count /
+      awaitedAverageDefinitions.scanned_players;
 
     return (
       <Table.Row>
         <TankRowHeaderCell tank={tank} />
         <Table.Cell align="center">
-          {Math.round(averages.mu.wins * 100)}%
+          {Math.round((averages.mu.wins / averages.mu.battles) * 100)}%
         </Table.Cell>
         <Table.Cell align="center">
-          {numberFormat.format(Math.round(averages.samples))}
+          {numberFormat.format(Math.round(ratio * averages.samples))}
         </Table.Cell>
         <Table.Cell align="center">
-          {Math.round(averages.mu.damage_dealt).toLocaleString()}
+          {Math.round(
+            averages.mu.damage_dealt / averages.mu.battles,
+          ).toLocaleString()}
         </Table.Cell>
         <Table.Cell align="center">
-          {Math.round(averages.mu.survived_battles * 100)}%
+          {Math.round(
+            (averages.mu.survived_battles / averages.mu.battles) * 100,
+          )}
+          %
         </Table.Cell>
         <Table.Cell align="center">
-          {Math.round(averages.mu.xp).toLocaleString()}
-        </Table.Cell>
-        <Table.Cell align="center">{averages.mu.frags.toFixed(2)}</Table.Cell>
-        <Table.Cell align="center">{averages.mu.spotted.toFixed(2)}</Table.Cell>
-        <Table.Cell align="center">
-          {Math.round((averages.mu.hits / averages.mu.shots) * 100)}%
-        </Table.Cell>
-        <Table.Cell align="center">{averages.mu.shots.toFixed(1)}</Table.Cell>
-        <Table.Cell align="center">{averages.mu.hits.toFixed(1)}</Table.Cell>
-        <Table.Cell align="center">
-          {(averages.mu.damage_dealt / averages.mu.damage_received).toFixed(2)}
+          {Math.round(averages.mu.xp / averages.mu.battles).toLocaleString()}
         </Table.Cell>
         <Table.Cell align="center">
-          {Math.round(averages.mu.damage_received).toLocaleString()}
+          {(averages.mu.frags / averages.mu.battles).toFixed(2)}
         </Table.Cell>
         <Table.Cell align="center">
-          {averages.mu.capture_points.toFixed(2)}
+          {(averages.mu.spotted / averages.mu.battles).toFixed(2)}
+        </Table.Cell>
+        <Table.Cell align="center">
+          {Math.round(
+            (averages.mu.hits /
+              averages.mu.battles /
+              (averages.mu.shots / averages.mu.battles)) *
+              100,
+          )}
+          %
+        </Table.Cell>
+        <Table.Cell align="center">
+          {(averages.mu.shots / averages.mu.battles).toFixed(1)}
+        </Table.Cell>
+        <Table.Cell align="center">
+          {(averages.mu.hits / averages.mu.battles).toFixed(1)}
+        </Table.Cell>
+        <Table.Cell align="center">
+          {(
+            averages.mu.damage_dealt /
+            averages.mu.battles /
+            (averages.mu.damage_received / averages.mu.battles)
+          ).toFixed(2)}
+        </Table.Cell>
+        <Table.Cell align="center">
+          {Math.round(
+            averages.mu.damage_received / averages.mu.battles,
+          ).toLocaleString()}
+        </Table.Cell>
+        <Table.Cell align="center">
+          {(averages.mu.capture_points / averages.mu.battles).toFixed(2)}
         </Table.Cell>
       </Table.Row>
     );
