@@ -14,9 +14,9 @@ The mathematics behind this metric has been intentionally generalized such that 
 
 ## Understanding The Metric
 
-On average, the score across all players will be $0$. This is because the metric is essentially a convolution of multiple standard scores and their corresponding weights. A standard score of $z=\pm1$ implies an offset by $\pm\sigma$ ($1$ standard deviation) from $\mu$ (the mean). And since the scalar of WSS is $C=100$, $z=\pm1\iff Z=\pm C1=\pm100$ (note that capital letter $Z$ is the WSS metric and $z$ is the regular standard score).
+On average, the score across all players will be $0$. This is because the metric is essentially a convolution of multiple standard scores and their corresponding weights. A standard score of $z=\pm1$ implies an offset by $\pm\sigma$ ($1$ standard deviation) from $\mu$ (the mean). And since the scalar of WSS is $C=100$, $z=\pm1\iff M=\pm 1C=\pm100$.
 
-About $68.3\%$ of players lie within $\pm1\sigma\implies Z=\pm100$, about $95.4\%$ of players lie within $\pm2\sigma\implies Z=\pm200$, and about $99.7\%$ of players lie within $\pm3\sigma\implies Z=\pm300$.
+About $68.3\%$ of players lie within $\pm1\sigma\implies M=\pm100$, about $95.4\%$ of players lie within $\pm2\sigma\implies M=\pm200$, and about $99.7\%$ of players lie within $\pm3\sigma\implies M=\pm300$.
 
 ## Computation
 
@@ -63,6 +63,27 @@ $z$ is the standard score which uses the precomputed values of $\mu$ and $\sigma
 $$
 z=\frac{x-\mu}{\sigma}
 $$
+
+## FAQ
+
+### (WoTB specific) Why WSS over WN8?
+
+- Lot less aggressive: the weights of WN8 are disproportionately distinct from one another allow people to easily find "what makes the metric tick" and exploit it to "farm" higher WN8 with that being the only the explicit goal. WSS, on the other hand, because of its symmetric and normal nature, will remain at a similar value even if a player choses to aggressively maximize one statistic.
+- Mathematically grounded: every constant of WSS is based in data. Unlike WN8, it is recommended to recompute the constants of WSS often. In BlitzKit's implementation, an approximate 24 million players are samples every day to keep the metric relevant.
+- Easy to read: WN8 provides no clear indication of where the average is. WSS, on the other hand, clearly states that negative scores cause a lower than average chances of winning, a positive score causes a higher chance of winning, and 0 being the average.
+- Doesn't use winrate: WSS is strictly not a function of winrate. WN8, on the other hand, is majorly influenced by winrate and even XP. WSS is a measurement of your true performance regardless of what RNG may throw at you.
+
+### Why doesn't the weight include the slope of the linear regression?
+
+Doing this would make $w=\left|r\right|m$ or $w=r^{2}m$ where $\left|r\right|$ or $r^{2}$ represents the "confidence" in the standard score and $m$ is the "rate of effectiveness". Doing this was decided against because a drop in $m$ inherently implies a drop in the corelation $r$.
+
+To rephrase, this is what real data looks like where $r$ drops with $m$; there is no need to include both (https://www.desmos.com/calculator/fzccxmjjkk).
+
+![](https://i.imgur.com/lh7rv6T.gif)
+
+And this is what real data **DOES NOT** look like where $r$ remains constant as $m$ drops (https://www.desmos.com/calculator/ceneheliyr).
+
+![](https://i.imgur.com/aUQgf2v.gif)
 
 ## WoTB Specific Notes
 
