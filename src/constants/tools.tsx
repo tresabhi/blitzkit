@@ -104,7 +104,7 @@ export const playerStatsTool: Tool = {
     color: 'blue',
   },
   image: 'YelSOfT',
-  href: '', // TODO: remove this to re-enable link
+  href: '_', // TODO: remove this to re-enable link
 };
 
 export const tankPerformanceTool: Tool = {
