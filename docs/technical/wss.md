@@ -71,7 +71,7 @@ Corelation analysis must be performed on a per-tank basis. If the goal is to eva
 The Wargaming API provides many pieces of statistics on a per-tank basis (as listed below). These values cumulate over time as the player plays more games; hence, all of these values must be normalized by dividing each metric by `all.battles`. I will go through and list which of the statistics need to be included as standard scores and why/why not. Omitted statistics must not be included and are obvious why they aren't used.
 
 - ✔️ `battle_life_time`: Normalization of this value results in the average time spent alive in seconds. Good players strive to stay alive for as long as possible and must be rewarded while people who "yolo" at the beginning of the game will be penalized.
-- $\xmapsto{asd}$ `all.battles`: Dividing this by itself will result in 1. Corelation analysis will always fail due to division by 0.
+- ❌ `all.battles`: Dividing this by itself will result in 1. Corelation analysis will always fail due to division by 0.
 - ✔️ `all.capture_points`: Capturing points almost always have a negative corelation coefficient; hence, its inclusion is vital to punish players who waste time capturing points.
 - ✔️ `all.damage_dealt`
 - ✔️ `all.damage_received`
