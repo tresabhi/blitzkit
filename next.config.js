@@ -37,7 +37,7 @@ const nextConfig = {
   },
 
   distDir: 'dist/website',
-  reactStrictMode: false,
+  reactStrictMode: true,
 
   experimental: {
     workerThreads: false,
