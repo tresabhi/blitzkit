@@ -1,3 +1,5 @@
+'use client';
+
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { Box, Flex, IconButton, Text } from '@radix-ui/themes';
 import { times } from 'lodash';

@@ -4,6 +4,8 @@ import { Table } from '@radix-ui/themes';
 import { Suspense, use, useMemo } from 'react';
 import { averageDefinitionsArray } from '../../../../core/blitzkit/averageDefinitions';
 import { tankDefinitions } from '../../../../core/blitzkit/tankDefinitions';
+import { tankopediaFilterTank } from '../../../../core/blitzkit/tankopediaFilterTank';
+import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
 import { useTankPerformanceSort } from '../../../../stores/tankPerformanceSort';
 import { RowLoader } from './RowLoader';
 import { TankRow } from './TankRow';
@@ -11,8 +13,9 @@ import { TankRow } from './TankRow';
 export function Tanks() {
   const awaitedTankDefinitions = use(tankDefinitions);
   const awaitedAverageDefinitionsArray = use(averageDefinitionsArray);
+  const filters = useTankopediaFilters();
   const sort = useTankPerformanceSort();
-  const tankAverages = useMemo(() => {
+  const tanksSorted = useMemo(() => {
     switch (sort.type) {
       case 'accuracy':
         return awaitedAverageDefinitionsArray.sort(
@@ -101,10 +104,15 @@ export function Tanks() {
         );
     }
   }, [sort]);
+  const tanks = useMemo(() => {
+    return tanksSorted.filter((tank) =>
+      tankopediaFilterTank(filters, awaitedTankDefinitions[tank.id]),
+    );
+  }, [filters, tanksSorted]);
 
   return (
     <Table.Body>
-      {tankAverages.map((averages) => {
+      {tanks.map((averages) => {
         const tank = awaitedTankDefinitions[averages.id];
         return (
           <Suspense key={tank.id} fallback={<RowLoader />}>

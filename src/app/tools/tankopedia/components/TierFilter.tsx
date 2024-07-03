@@ -7,10 +7,11 @@ import {
   mutateTankopediaFilters,
   useTankopediaFilters,
 } from '../../../../stores/tankopediaFilters';
+import { useTankopediaSort } from '../../../../stores/tankopediaSort';
 
 export const TierFilter = memo(() => {
   const tierFilter = useTankopediaFilters((state) => state.tier);
-  const sort = useTankopediaFilters((state) => state.sort);
+  const sort = useTankopediaSort();
   const search = useTankopediaFilters((state) => state.search);
 
   if (sort.by !== 'meta.none' || search) return null;

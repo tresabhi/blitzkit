@@ -22,6 +22,7 @@ import { unionBoundingBox } from '../../../../../core/blitzkit/unionBoundingBox'
 import { useAdExempt } from '../../../../../hooks/useAdExempt';
 import { SORT_NAMES, SORT_UNITS } from '../../../../../stores/tankopedia';
 import { useTankopediaFilters } from '../../../../../stores/tankopediaFilters';
+import { useTankopediaSort } from '../../../../../stores/tankopediaSort';
 import { FilterControl } from '../FilterControl';
 import { NoResults } from '../NoResults';
 import { SearchBar } from '../SearchBar';
@@ -45,6 +46,7 @@ export const TankSearch = memo<TankSearchProps>(
     const awaitedTanksDefinitionsArray = use(tanksDefinitionsArray);
     const awaitedTankNames = use(tankNames);
     const filters = useTankopediaFilters();
+    const sort = useTankopediaSort();
     const tanks = useMemo(() => {
       if (filters.search === undefined) {
         const filtered = awaitedTanksDefinitionsArray.filter((tank) =>
@@ -52,7 +54,7 @@ export const TankSearch = memo<TankSearchProps>(
         );
         let sorted: TankDefinition[];
 
-        switch (filters.sort.by) {
+        switch (sort.by) {
           case 'meta.none':
             sorted = filtered
               .sort((a, b) => b.tier - a.tier)
@@ -362,9 +364,7 @@ export const TankSearch = memo<TankSearchProps>(
             break;
         }
 
-        return filters.sort.direction === 'ascending'
-          ? sorted
-          : sorted.reverse();
+        return sort.direction === 'ascending' ? sorted : sorted.reverse();
       } else {
         const searchedRaw = go(filters.search, awaitedTankNames, {
           key: 'combined',
@@ -385,7 +385,7 @@ export const TankSearch = memo<TankSearchProps>(
           <FilterControl compact={compact} />
         )}
 
-        {(filters.sort.by !== 'meta.none' || onSelectAll) && (
+        {(sort.by !== 'meta.none' || onSelectAll) && (
           <Flex
             py="2"
             mt="2"
@@ -393,13 +393,13 @@ export const TankSearch = memo<TankSearchProps>(
             align="center"
             justify="center"
           >
-            {filters.sort.by !== 'meta.none' && (
+            {sort.by !== 'meta.none' && (
               <Text color="gray">
-                Sorting by {SORT_NAMES[filters.sort.by]}
-                {SORT_UNITS[filters.sort.by] === undefined
+                Sorting by {SORT_NAMES[sort.by]}
+                {SORT_UNITS[sort.by] === undefined
                   ? ''
-                  : ` (${SORT_UNITS[filters.sort.by]})`}
-                , {filters.sort.direction}
+                  : ` (${SORT_UNITS[sort.by]})`}
+                , {sort.direction}
               </Text>
             )}
 
