@@ -13,7 +13,14 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
   const Icon = classIcons[tank.class];
 
   return (
-    <Table.RowHeaderCell style={{ display: 'flex' }}>
+    <Table.RowHeaderCell
+      style={{
+        display: 'flex',
+        position: 'sticky',
+        left: 0,
+        backgroundColor: 'var(--color-background)',
+      }}
+    >
       <Link href={`/tools/tankopedia/${tank.id}`} tabIndex={-1}>
         <img
           alt={tank.name}
