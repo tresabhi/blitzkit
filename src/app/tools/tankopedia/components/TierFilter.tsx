@@ -4,15 +4,15 @@ import { memo } from 'react';
 import { Tier } from '../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
 import {
-  mutateTankopediaFilters,
-  useTankopediaFilters,
-} from '../../../../stores/tankopediaFilters';
+  mutateTankFilters,
+  useTankFilters,
+} from '../../../../stores/tankFilters';
 import { useTankopediaSort } from '../../../../stores/tankopediaSort';
 
 export const TierFilter = memo(() => {
-  const tierFilter = useTankopediaFilters((state) => state.tier);
+  const tierFilter = useTankFilters((state) => state.tiers);
   const sort = useTankopediaSort();
-  const search = useTankopediaFilters((state) => state.search);
+  const search = useTankFilters((state) => state.search);
 
   if (sort.by !== 'meta.none' || search) return null;
 
@@ -35,8 +35,8 @@ export const TierFilter = memo(() => {
               color={selected ? undefined : 'gray'}
               highContrast
               onClick={() =>
-                mutateTankopediaFilters((draft) => {
-                  draft.tier = tier;
+                mutateTankFilters((draft) => {
+                  draft.tiers = tier;
                 })
               }
             >

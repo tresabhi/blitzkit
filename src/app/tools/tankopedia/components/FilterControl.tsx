@@ -15,9 +15,9 @@ import { gameDefinitions } from '../../../../core/blitzkit/gameDefinitions';
 import { Tier } from '../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
 import {
-  mutateTankopediaFilters,
-  useTankopediaFilters,
-} from '../../../../stores/tankopediaFilters';
+  mutateTankFilters,
+  useTankFilters,
+} from '../../../../stores/tankFilters';
 
 interface FilterControlProps {
   compact?: boolean;
@@ -25,7 +25,7 @@ interface FilterControlProps {
 
 export function FilterControl({ compact }: FilterControlProps) {
   const awaitedGameDefinitions = use(gameDefinitions);
-  const filters = useTankopediaFilters();
+  const filters = useTankFilters();
 
   return (
     <Flex height="fit-content" gap="2" align="start" justify="center">
@@ -37,7 +37,7 @@ export function FilterControl({ compact }: FilterControlProps) {
         <Flex direction={compact ? 'column' : { sm: 'row', initial: 'column' }}>
           {times(5, (index) => {
             const tier = (index + 1) as Tier;
-            const selected = filters.tier === tier;
+            const selected = filters.tiers?.includes(tier);
 
             return (
               <IconButton
@@ -47,8 +47,12 @@ export function FilterControl({ compact }: FilterControlProps) {
                 color={selected ? undefined : 'gray'}
                 highContrast
                 onClick={() =>
-                  mutateTankopediaFilters((draft) => {
-                    draft.tier = draft.tier === tier ? undefined : tier;
+                  mutateTankFilters((draft) => {
+                    if (draft.tiers?.includes(tier)) {
+                      draft.tiers = draft.tiers?.filter((t) => t !== tier);
+                    } else {
+                      draft.tiers = [...(draft.tiers ?? []), tier];
+                    }
                   })
                 }
               >
@@ -60,7 +64,7 @@ export function FilterControl({ compact }: FilterControlProps) {
         <Flex direction={compact ? 'column' : { sm: 'row', initial: 'column' }}>
           {times(5, (index) => {
             const tier = (index + 6) as Tier;
-            const selected = filters.tier === tier;
+            const selected = filters.tiers?.includes(tier);
 
             return (
               <IconButton
@@ -70,8 +74,12 @@ export function FilterControl({ compact }: FilterControlProps) {
                 color={selected ? undefined : 'gray'}
                 highContrast
                 onClick={() =>
-                  mutateTankopediaFilters((draft) => {
-                    draft.tier = draft.tier === tier ? undefined : tier;
+                  mutateTankFilters((draft) => {
+                    if (draft.tiers?.includes(tier)) {
+                      draft.tiers = draft.tiers?.filter((t) => t !== tier);
+                    } else {
+                      draft.tiers = [...(draft.tiers ?? []), tier];
+                    }
                   })
                 }
               >
@@ -91,7 +99,7 @@ export function FilterControl({ compact }: FilterControlProps) {
           {awaitedGameDefinitions.nations
             .slice(0, Math.ceil(awaitedGameDefinitions.nations.length / 2))
             .map((nation) => {
-              const selected = filters.nation === nation;
+              const selected = filters.nations?.includes(nation);
 
               return (
                 <IconButton
@@ -101,9 +109,14 @@ export function FilterControl({ compact }: FilterControlProps) {
                   highContrast
                   radius="none"
                   onClick={() =>
-                    mutateTankopediaFilters((draft) => {
-                      draft.nation =
-                        draft.nation === nation ? undefined : nation;
+                    mutateTankFilters((draft) => {
+                      if (draft.nations?.includes(nation)) {
+                        draft.nations = draft.nations?.filter(
+                          (n) => n !== nation,
+                        );
+                      } else {
+                        draft.nations = [...(draft.nations ?? []), nation];
+                      }
                     })
                   }
                 >
@@ -119,7 +132,7 @@ export function FilterControl({ compact }: FilterControlProps) {
           {awaitedGameDefinitions.nations
             .slice(Math.ceil(awaitedGameDefinitions.nations.length / 2))
             .map((nation) => {
-              const selected = filters.nation === nation;
+              const selected = filters.nations?.includes(nation);
 
               return (
                 <IconButton
@@ -130,9 +143,14 @@ export function FilterControl({ compact }: FilterControlProps) {
                   highContrast
                   radius="none"
                   onClick={() =>
-                    mutateTankopediaFilters((draft) => {
-                      draft.nation =
-                        draft.nation === nation ? undefined : nation;
+                    mutateTankFilters((draft) => {
+                      if (draft.nations?.includes(nation)) {
+                        draft.nations = draft.nations?.filter(
+                          (n) => n !== nation,
+                        );
+                      } else {
+                        draft.nations = [...(draft.nations ?? []), nation];
+                      }
                     })
                   }
                 >
@@ -153,7 +171,7 @@ export function FilterControl({ compact }: FilterControlProps) {
       >
         {TANK_CLASSES.map((tankClass) => {
           const Icon = classIcons[tankClass];
-          const selected = filters.class === tankClass;
+          const selected = filters.classes?.includes(tankClass);
 
           return (
             <IconButton
@@ -163,9 +181,14 @@ export function FilterControl({ compact }: FilterControlProps) {
               color={selected ? undefined : 'gray'}
               highContrast
               onClick={() =>
-                mutateTankopediaFilters((draft) => {
-                  draft.class =
-                    draft.class === tankClass ? undefined : tankClass;
+                mutateTankFilters((draft) => {
+                  if (draft.classes?.includes(tankClass)) {
+                    draft.classes = draft.classes?.filter(
+                      (c) => c !== tankClass,
+                    );
+                  } else {
+                    draft.classes = [...(draft.classes ?? []), tankClass];
+                  }
                 })
               }
             >
@@ -181,50 +204,61 @@ export function FilterControl({ compact }: FilterControlProps) {
         direction={compact ? 'column' : { sm: 'row', initial: 'column' }}
       >
         <IconButton
-          variant={filters.type === 'researchable' ? 'solid' : 'soft'}
+          variant={filters.types?.includes('researchable') ? 'solid' : 'soft'}
           radius="none"
-          color={filters.type === 'researchable' ? undefined : 'gray'}
+          color={filters.types?.includes('researchable') ? undefined : 'gray'}
           highContrast
           onClick={() =>
-            mutateTankopediaFilters((draft) => {
-              draft.type =
-                draft.type === 'researchable' ? undefined : 'researchable';
+            mutateTankFilters((draft) => {
+              if (draft.types?.includes('researchable')) {
+                draft.types = draft.types?.filter((t) => t !== 'researchable');
+              } else {
+                draft.types = [...(draft.types ?? []), 'researchable'];
+              }
             })
           }
         >
           <ResearchedIcon style={{ width: '1em', height: '1em' }} />
         </IconButton>
         <IconButton
-          variant={filters.type === 'premium' ? 'solid' : 'soft'}
+          variant={filters.types?.includes('premium') ? 'solid' : 'soft'}
           radius="none"
-          color={filters.type === 'premium' ? 'amber' : 'gray'}
+          color={filters.types?.includes('premium') ? 'amber' : 'gray'}
           highContrast
           onClick={() =>
-            mutateTankopediaFilters((draft) => {
-              draft.type = draft.type === 'premium' ? undefined : 'premium';
+            mutateTankFilters((draft) => {
+              if (draft.types?.includes('premium')) {
+                draft.types = draft.types?.filter((t) => t !== 'premium');
+              } else {
+                draft.types = [...(draft.types ?? []), 'premium'];
+              }
             })
           }
         >
           <Text
-            color={filters.type === 'premium' ? undefined : 'amber'}
+            color={filters.types?.includes('premium') ? undefined : 'amber'}
             style={{ display: 'flex', justifyContent: 'center' }}
           >
             <ResearchedIcon style={{ width: '1em', height: '1em' }} />
           </Text>
         </IconButton>
         <IconButton
-          variant={filters.type === 'collector' ? 'solid' : 'soft'}
+          variant={filters.types?.includes('collector') ? 'solid' : 'soft'}
           radius="none"
-          color={filters.type === 'collector' ? 'blue' : 'gray'}
+          color={filters.types?.includes('collector') ? 'blue' : 'gray'}
           highContrast
           onClick={() =>
-            mutateTankopediaFilters((draft) => {
-              draft.type = draft.type === 'collector' ? undefined : 'collector';
+            mutateTankFilters((draft) => {
+              if (draft.types?.includes('collector')) {
+                draft.types = draft.types?.filter((t) => t !== 'collector');
+              } else {
+                draft.types = [...(draft.types ?? []), 'collector'];
+              }
             })
           }
         >
           <Text
-            color={filters.type === 'collector' ? undefined : 'blue'}
+            color={filters.types?.includes('collector') ? undefined : 'blue'}
             style={{ display: 'flex', justifyContent: 'center' }}
           >
             <ResearchedIcon style={{ width: '1em', height: '1em' }} />
@@ -243,7 +277,7 @@ export function FilterControl({ compact }: FilterControlProps) {
           color={filters.testing === 'include' ? undefined : 'gray'}
           highContrast
           onClick={() =>
-            mutateTankopediaFilters((draft) => {
+            mutateTankFilters((draft) => {
               draft.testing = 'include';
             })
           }
@@ -258,7 +292,7 @@ export function FilterControl({ compact }: FilterControlProps) {
           color={filters.testing === 'exclude' ? undefined : 'gray'}
           highContrast
           onClick={() =>
-            mutateTankopediaFilters((draft) => {
+            mutateTankFilters((draft) => {
               draft.testing = 'exclude';
             })
           }
@@ -273,7 +307,7 @@ export function FilterControl({ compact }: FilterControlProps) {
           color={filters.testing === 'only' ? undefined : 'gray'}
           highContrast
           onClick={() =>
-            mutateTankopediaFilters((draft) => {
+            mutateTankFilters((draft) => {
               draft.testing = 'only';
             })
           }
@@ -288,10 +322,7 @@ export function FilterControl({ compact }: FilterControlProps) {
         <IconButton
           color="red"
           onClick={() =>
-            useTankopediaFilters.setState(
-              useTankopediaFilters.getInitialState(),
-              true,
-            )
+            useTankFilters.setState(useTankFilters.getInitialState(), true)
           }
         >
           <ReloadIcon />

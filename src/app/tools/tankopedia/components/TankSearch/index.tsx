@@ -6,6 +6,7 @@ import { AdMidSectionResponsive } from '../../../../../components/AdMidSectionRe
 import { ExperimentIcon } from '../../../../../components/ExperimentIcon';
 import { TANK_CLASSES } from '../../../../../components/Tanks/components/Item/constants';
 import { resolveNearPenetration } from '../../../../../core/blitz/resolveNearPenetration';
+import { filterTank } from '../../../../../core/blitzkit/filterTank';
 import { gameDefinitions } from '../../../../../core/blitzkit/gameDefinitions';
 import { modelDefinitions } from '../../../../../core/blitzkit/modelDefinitions';
 import { normalizeBoundingBox } from '../../../../../core/blitzkit/normalizeBoundingBox';
@@ -17,11 +18,10 @@ import {
   tankNames,
   tanksDefinitionsArray,
 } from '../../../../../core/blitzkit/tankDefinitions';
-import { tankopediaFilterTank } from '../../../../../core/blitzkit/tankopediaFilterTank';
 import { unionBoundingBox } from '../../../../../core/blitzkit/unionBoundingBox';
 import { useAdExempt } from '../../../../../hooks/useAdExempt';
+import { useTankFilters } from '../../../../../stores/tankFilters';
 import { SORT_NAMES, SORT_UNITS } from '../../../../../stores/tankopedia';
-import { useTankopediaFilters } from '../../../../../stores/tankopediaFilters';
 import { useTankopediaSort } from '../../../../../stores/tankopediaSort';
 import { FilterControl } from '../FilterControl';
 import { NoResults } from '../NoResults';
@@ -45,12 +45,12 @@ export const TankSearch = memo<TankSearchProps>(
     const awaitedTankDefinitions = use(tankDefinitions);
     const awaitedTanksDefinitionsArray = use(tanksDefinitionsArray);
     const awaitedTankNames = use(tankNames);
-    const filters = useTankopediaFilters();
+    const filters = useTankFilters();
     const sort = useTankopediaSort();
     const tanks = useMemo(() => {
       if (filters.search === undefined) {
         const filtered = awaitedTanksDefinitionsArray.filter((tank) =>
-          tankopediaFilterTank(filters, tank),
+          filterTank(filters, tank),
         );
         let sorted: TankDefinition[];
 

@@ -1,5 +1,5 @@
 import { Flex, Link, Text } from '@radix-ui/themes';
-import { useTankopediaFilters } from '../../../../stores/tankopediaFilters';
+import { useTankFilters } from '../../../../stores/tankFilters';
 
 interface NoResultsProps {
   type?: 'filters' | 'search';
@@ -15,10 +15,7 @@ export function NoResults({ type = 'filters' }: NoResultsProps) {
           underline="always"
           color="red"
           onClick={() =>
-            useTankopediaFilters.setState(
-              useTankopediaFilters.getInitialState(),
-              true,
-            )
+            useTankFilters.setState(useTankFilters.getInitialState(), true)
           }
         >
           {type === 'filters' ? 'Try clearing filters' : 'Try searching again'}
