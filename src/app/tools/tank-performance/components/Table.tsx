@@ -10,7 +10,11 @@ import { Tanks } from './Tanks';
 export function TankTable() {
   return (
     <Flex justify="center">
-      <StickyTableRoot variant="surface" style={{ maxWidth: '100%' }}>
+      <StickyTableRoot
+        size={{ initial: '1', sm: '2' }}
+        variant="surface"
+        style={{ maxWidth: '100%' }}
+      >
         <Header />
         <Suspense fallback={<BodyLoader />}>
           <Tanks />

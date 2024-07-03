@@ -1,4 +1,4 @@
-import { IconButton, Table } from '@radix-ui/themes';
+import { Table } from '@radix-ui/themes';
 import { TankDefinition } from '../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../core/blitzkit/tankIcon';
 import { classIcons } from './ClassIcon';
@@ -19,6 +19,8 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
         position: 'sticky',
         left: 0,
         backgroundColor: 'var(--color-background)',
+        maxWidth: 240,
+        overflow: 'hidden',
       }}
     >
       <Link href={`/tools/tankopedia/${tank.id}`} tabIndex={-1}>
@@ -52,16 +54,24 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
           display: 'flex',
           alignItems: 'center',
           gap: 'var(--space-1)',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
         }}
       >
-        <Icon width="1em" height="1em" />
+        <Icon
+          width="1em"
+          height="1em"
+          style={{
+            minWidth: '1em',
+            minHeight: '1em',
+          }}
+        />
 
         {tank.name}
 
         {tank.testing && (
-          <IconButton size="1" ml="1">
-            <ScienceIcon style={{ width: '1em', height: '1em' }} />
-          </IconButton>
+          <ScienceIcon style={{ width: '1em', height: '1em' }} />
         )}
       </Link>
     </Table.RowHeaderCell>
