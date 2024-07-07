@@ -134,16 +134,9 @@ export function Tanks() {
         return (
           <RowLoader
             key={index}
-            onIntersection={
-              index === 0
-                ? () => {
-                    console.log('Intersected');
-                    setLoadedRows((state) =>
-                      Math.min(state + PREVIEW_COUNT, tanks.length),
-                    );
-                  }
-                : undefined
-            }
+            onIntersection={() => {
+              setLoadedRows((state) => Math.min(state + 2, tanks.length));
+            }}
           />
         );
       })}

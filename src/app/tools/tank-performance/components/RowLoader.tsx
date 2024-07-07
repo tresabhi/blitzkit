@@ -1,6 +1,7 @@
 import { Skeleton, Table } from '@radix-ui/themes';
 import { times } from 'lodash';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useIntersection } from '../../../../hooks/useIntersection';
 import { tankPerformanceSortTypeNamesArray } from '../../../../stores/tankPerformanceSort';
 
 interface RowLoaderProps {
@@ -10,14 +11,9 @@ interface RowLoaderProps {
 export function RowLoader({ onIntersection }: RowLoaderProps) {
   const row = useRef<HTMLTableRowElement>(null);
 
-  useEffect(() => {
-    if (!onIntersection || !row.current) return;
-
-    const observer = new IntersectionObserver(onIntersection);
-    observer.observe(row.current);
-
-    return () => observer.disconnect();
-  }, []);
+  useIntersection(() => onIntersection?.(), row, {
+    disabled: onIntersection === undefined,
+  });
 
   return (
     <Table.Row ref={row}>

@@ -1,0 +1,31 @@
+import { RefObject, useLayoutEffect, useRef } from 'react';
+
+interface UseIntersectionOptions extends IntersectionObserverInit {
+  disabled: boolean;
+}
+
+export function useIntersection(
+  callback: () => void,
+  ref: RefObject<HTMLElement>,
+  options?: UseIntersectionOptions,
+) {
+  const observer = useRef<IntersectionObserver>();
+
+  useLayoutEffect(() => {
+    if (options?.disabled || !ref.current) return;
+
+    const rect = ref.current.getBoundingClientRect();
+    const visible = !(rect.bottom < 0 || rect.top - window.innerHeight >= 0);
+
+    if (visible) {
+      callback();
+    } else {
+      observer.current = new IntersectionObserver(callback, options);
+      observer.current.observe(ref.current);
+
+      return () => observer.current!.disconnect();
+    }
+  }, []);
+
+  return observer;
+}
