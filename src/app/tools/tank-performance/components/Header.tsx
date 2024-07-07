@@ -30,6 +30,8 @@ export function Header() {
               minWidth="0px"
             >
               <Flex align="center" gap="1">
+                {tankPerformanceSortTypeNames[type]}
+
                 <IconButton
                   size={isSelected ? '1' : '2'}
                   variant={isSelected ? 'soft' : 'ghost'}
@@ -53,7 +55,6 @@ export function Header() {
                     </>
                   )}
                 </IconButton>
-                {tankPerformanceSortTypeNames[type]}
               </Flex>
             </Table.ColumnHeaderCell>
           );

@@ -1,7 +1,6 @@
 import { Table } from '@radix-ui/themes';
-import { memo, use, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import {
-  averageDefinitions,
   AverageDefinitionsAllStats,
   AverageDefinitionsEntryWithId,
 } from '../../../../core/blitzkit/averageDefinitions';
@@ -13,7 +12,6 @@ interface TotalProps {
 
 export const Total = memo<TotalProps>(
   ({ tanks }) => {
-    const awaitedAverageDefinitions = use(averageDefinitions);
     const ratio = useAveragesExclusionRatio();
     const numberFormat = Intl.NumberFormat(undefined, { notation: 'compact' });
     const sum = useCallback(
