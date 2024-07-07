@@ -2,8 +2,8 @@ import { Table } from '@radix-ui/themes';
 import { memo, use } from 'react';
 import { TankRowHeaderCell } from '../../../../components/TankRowHeaderCell';
 import { averageDefinitions } from '../../../../core/blitzkit/averageDefinitions';
-import { discoveredIdsDefinitions } from '../../../../core/blitzkit/discoveredIdDefinitions';
 import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
+import { useAveragesExclusionRatio } from '../../../../hooks/useAveragesExclusionRatio';
 
 interface TankRowProps {
   tank: TankDefinition;
@@ -11,13 +11,10 @@ interface TankRowProps {
 
 export const TankRow = memo<TankRowProps>(
   ({ tank }) => {
-    const awaitedDiscoveredIdsDefinitions = use(discoveredIdsDefinitions);
     const awaitedAverageDefinitions = use(averageDefinitions);
     const averages = awaitedAverageDefinitions.averages[tank.id];
     const numberFormat = Intl.NumberFormat(undefined, { notation: 'compact' });
-    const ratio =
-      awaitedDiscoveredIdsDefinitions.count /
-      awaitedAverageDefinitions.scanned_players;
+    const ratio = useAveragesExclusionRatio();
 
     return (
       <Table.Row>

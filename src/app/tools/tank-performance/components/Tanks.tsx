@@ -10,6 +10,7 @@ import { useTankFilters } from '../../../../stores/tankFilters';
 import { useTankPerformanceSort } from '../../../../stores/tankPerformanceSort';
 import { RowLoader } from './RowLoader';
 import { TankRow } from './TankRow';
+import { Total } from './Total';
 
 const PREVIEW_COUNT = 10;
 const DEFAULT_LOADED_ROWS = 25;
@@ -121,6 +122,8 @@ export function Tanks() {
 
   return (
     <Table.Body>
+      <Total tanks={tanks} />
+
       {tanks.slice(0, loadedRows).map((averages) => {
         const tank = awaitedTankDefinitions[averages.id];
         return (

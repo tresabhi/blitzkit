@@ -13,6 +13,10 @@ export interface AverageDefinitionsEntry {
   r: AverageDefinitionsAllStats;
 }
 
+export interface AverageDefinitionsEntryWithId extends AverageDefinitionsEntry {
+  id: number;
+}
+
 export interface AverageDefinitionsEntrySubPartial {
   samples: number;
   mu: Partial<AverageDefinitionsAllStats>;
@@ -36,8 +40,11 @@ export const averageDefinitions = fetch(asset('definitions/averages.pb'))
   });
 
 export const averageDefinitionsArray = averageDefinitions.then((data) =>
-  Object.entries(data.averages).map(([key, value]) => ({
-    id: Number(key),
-    ...(value as AverageDefinitionsEntry),
-  })),
+  Object.entries(data.averages).map(
+    ([key, value]) =>
+      ({
+        id: Number(key),
+        ...(value as AverageDefinitionsEntry),
+      }) satisfies AverageDefinitionsEntryWithId,
+  ),
 );
