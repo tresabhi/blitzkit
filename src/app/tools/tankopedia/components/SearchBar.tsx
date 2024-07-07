@@ -4,7 +4,10 @@ import { debounce } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { KeyboardEventHandler, useCallback, useRef } from 'react';
 import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
-import { useTankFilters } from '../../../../stores/tankFilters';
+import {
+  useTankFilters,
+  useTankFiltersContext,
+} from '../../../../stores/tankFilters';
 import { QuickLink } from './QuickLink';
 import { Sort } from './Sort';
 
@@ -14,26 +17,27 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ topResult, onSelect }: SearchBarProps) {
+  const tankFiltersContext = useTankFiltersContext();
   const router = useRouter();
   const input = useRef<HTMLInputElement>(null);
   const searching = useTankFilters((state) => state.searching);
   const performSearch = useCallback(
     debounce(() => {
-      useTankFilters.setState({ searching: false });
+      tankFiltersContext.setState({ searching: false });
 
       if (!input.current) return;
 
       const sanitized = input.current.value.trim();
 
-      useTankFilters.setState({
+      tankFiltersContext.setState({
         search: sanitized.length === 0 ? undefined : sanitized,
       });
     }, 500),
     [],
   );
   const handleChange = useCallback(() => {
-    if (!useTankFilters.getState().searching) {
-      useTankFilters.setState({ searching: true });
+    if (!tankFiltersContext.getState().searching) {
+      tankFiltersContext.setState({ searching: true });
     }
 
     performSearch();

@@ -31,6 +31,7 @@ export function Header() {
             >
               <Flex align="center" gap="1">
                 <IconButton
+                  size={isSelected ? '1' : '2'}
                   variant={isSelected ? 'soft' : 'ghost'}
                   color={isSelected ? undefined : 'gray'}
                   highContrast={!isSelected}
