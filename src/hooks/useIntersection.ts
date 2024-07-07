@@ -17,14 +17,12 @@ export function useIntersection(
     const rect = ref.current.getBoundingClientRect();
     const visible = !(rect.bottom < 0 || rect.top - window.innerHeight >= 0);
 
-    if (visible) {
-      callback();
-    } else {
-      observer.current = new IntersectionObserver(callback, options);
-      observer.current.observe(ref.current);
+    if (visible) callback();
 
-      return () => observer.current!.disconnect();
-    }
+    observer.current = new IntersectionObserver(callback, options);
+    observer.current.observe(ref.current);
+
+    return () => observer.current!.disconnect();
   }, []);
 
   return observer;

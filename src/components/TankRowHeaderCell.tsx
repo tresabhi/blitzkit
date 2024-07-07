@@ -14,12 +14,15 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
 
   return (
     <Table.RowHeaderCell
+      maxWidth={{
+        initial: '180px',
+        sm: '240px',
+      }}
       style={{
         display: 'flex',
         position: 'sticky',
         left: 0,
         backgroundColor: 'var(--color-background)',
-        maxWidth: 240,
         overflow: 'hidden',
       }}
     >
@@ -31,7 +34,7 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
           style={{
             margin: 'calc(-1 * var(--table-cell-padding)) 0',
             height: 'calc(100% + 2 * var(--table-cell-padding))',
-            aspectRatio: '16 / 9',
+            aspectRatio: '4 / 3',
             objectFit: 'cover',
           }}
         />
