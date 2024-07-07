@@ -108,7 +108,7 @@ export function Tanks() {
     return tanksSorted.filter((tank) =>
       filterTank(filters, awaitedTankDefinitions[tank.id]),
     );
-  }, [filters, tanksSorted]);
+  }, [filters, tanksSorted, sort]);
 
   return (
     <Table.Body>

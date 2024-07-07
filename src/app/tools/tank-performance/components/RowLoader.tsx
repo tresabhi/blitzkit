@@ -1,5 +1,6 @@
 import { Skeleton, Table } from '@radix-ui/themes';
 import { times } from 'lodash';
+import { tankPerformanceSortTypeNamesArray } from '../../../../stores/tankPerformanceSort';
 
 export function RowLoader() {
   return (
@@ -8,7 +9,7 @@ export function RowLoader() {
         <Skeleton height="100%" width="128px" />
       </Table.RowHeaderCell>
 
-      {times(13, (index) => (
+      {times(tankPerformanceSortTypeNamesArray.length, (index) => (
         <Table.Cell key={index} align="center">
           <Skeleton height="1em" width="32px" />
         </Table.Cell>

@@ -15,8 +15,9 @@ import { gameDefinitions } from '../../../../core/blitzkit/gameDefinitions';
 import { Tier } from '../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
 import {
-  mutateTankFilters,
   useTankFilters,
+  useTankFiltersContext,
+  useTankFiltersMutation,
 } from '../../../../stores/tankFilters';
 
 interface FilterControlProps {
@@ -26,6 +27,8 @@ interface FilterControlProps {
 export function FilterControl({ compact }: FilterControlProps) {
   const awaitedGameDefinitions = use(gameDefinitions);
   const filters = useTankFilters();
+  const mutateTankFilters = useTankFiltersMutation();
+  const tankFiltersContext = useTankFiltersContext();
 
   return (
     <Flex height="fit-content" gap="2" align="start" justify="center">
@@ -321,9 +324,12 @@ export function FilterControl({ compact }: FilterControlProps) {
       <Box>
         <IconButton
           color="red"
-          onClick={() =>
-            useTankFilters.setState(useTankFilters.getInitialState(), true)
-          }
+          onClick={() => {
+            tankFiltersContext.setState(
+              tankFiltersContext.getInitialState(),
+              true,
+            );
+          }}
         >
           <ReloadIcon />
         </IconButton>

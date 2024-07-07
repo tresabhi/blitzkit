@@ -4,8 +4,8 @@ import { memo } from 'react';
 import { Tier } from '../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
 import {
-  mutateTankFilters,
   useTankFilters,
+  useTankFiltersMutation,
 } from '../../../../stores/tankFilters';
 import { useTankopediaSort } from '../../../../stores/tankopediaSort';
 
@@ -13,6 +13,7 @@ export const TierFilter = memo(() => {
   const tierFilter = useTankFilters((state) => state.tiers);
   const sort = useTankopediaSort();
   const search = useTankFilters((state) => state.search);
+  const mutateTankFilters = useTankFiltersMutation();
 
   if (sort.by !== 'meta.none' || search) return null;
 
@@ -25,7 +26,7 @@ export const TierFilter = memo(() => {
       >
         {times(10, (index) => {
           const tier = (10 - index) as Tier;
-          const selected = tierFilter === tier;
+          const selected = tierFilter.includes(tier);
 
           return (
             <IconButton
@@ -36,7 +37,11 @@ export const TierFilter = memo(() => {
               highContrast
               onClick={() =>
                 mutateTankFilters((draft) => {
-                  draft.tiers = tier;
+                  if (draft.tiers?.includes(tier)) {
+                    draft.tiers = draft.tiers?.filter((t) => t !== tier);
+                  } else {
+                    draft.tiers = [...(draft.tiers ?? []), tier];
+                  }
                 })
               }
             >
