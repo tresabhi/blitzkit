@@ -1,10 +1,26 @@
 import { Skeleton, Table } from '@radix-ui/themes';
 import { times } from 'lodash';
+import { useEffect, useRef } from 'react';
 import { tankPerformanceSortTypeNamesArray } from '../../../../stores/tankPerformanceSort';
 
-export function RowLoader() {
+interface RowLoaderProps {
+  onIntersection?: () => void;
+}
+
+export function RowLoader({ onIntersection }: RowLoaderProps) {
+  const row = useRef<HTMLTableRowElement>(null);
+
+  useEffect(() => {
+    if (!onIntersection || !row.current) return;
+
+    const observer = new IntersectionObserver(onIntersection);
+    observer.observe(row.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <Table.Row>
+    <Table.Row ref={row}>
       <Table.RowHeaderCell align="center">
         <Skeleton height="100%" width="128px" />
       </Table.RowHeaderCell>

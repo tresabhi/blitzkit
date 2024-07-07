@@ -1,7 +1,8 @@
 'use client';
 
 import { Table } from '@radix-ui/themes';
-import { Suspense, use, useMemo } from 'react';
+import { times } from 'lodash';
+import { Suspense, use, useEffect, useMemo, useState } from 'react';
 import { averageDefinitionsArray } from '../../../../core/blitzkit/averageDefinitions';
 import { filterTank } from '../../../../core/blitzkit/filterTank';
 import { tankDefinitions } from '../../../../core/blitzkit/tankDefinitions';
@@ -9,6 +10,9 @@ import { useTankFilters } from '../../../../stores/tankFilters';
 import { useTankPerformanceSort } from '../../../../stores/tankPerformanceSort';
 import { RowLoader } from './RowLoader';
 import { TankRow } from './TankRow';
+
+const PREVIEW_COUNT = 10;
+const DEFAULT_LOADED_ROWS = 25;
 
 export function Tanks() {
   const awaitedTankDefinitions = use(tankDefinitions);
@@ -108,16 +112,39 @@ export function Tanks() {
     return tanksSorted.filter((tank) =>
       filterTank(filters, awaitedTankDefinitions[tank.id]),
     );
-  }, [filters, tanksSorted, sort]);
+  }, [filters, sort]);
+  const [loadedRows, setLoadedRows] = useState(DEFAULT_LOADED_ROWS);
+
+  useEffect(() => {
+    setLoadedRows(DEFAULT_LOADED_ROWS);
+  }, [filters, sort]);
 
   return (
     <Table.Body>
-      {tanks.map((averages) => {
+      {tanks.slice(0, loadedRows).map((averages) => {
         const tank = awaitedTankDefinitions[averages.id];
         return (
           <Suspense key={tank.id} fallback={<RowLoader />}>
             <TankRow tank={tank} />
           </Suspense>
+        );
+      })}
+
+      {times(Math.min(PREVIEW_COUNT, tanks.length - loadedRows), (index) => {
+        return (
+          <RowLoader
+            key={index}
+            onIntersection={
+              index === 0
+                ? () => {
+                    console.log('Intersected');
+                    setLoadedRows((state) =>
+                      Math.min(state + PREVIEW_COUNT, tanks.length),
+                    );
+                  }
+                : undefined
+            }
+          />
         );
       })}
     </Table.Body>
