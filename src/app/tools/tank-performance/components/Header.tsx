@@ -16,7 +16,7 @@ export function Header() {
   const sort = useTankPerformanceSort();
 
   return (
-    <Table.Header style={{ whiteSpace: 'nowrap' }}>
+    <Table.Header>
       <Table.Row align="center">
         <Table.ColumnHeaderCell>Tank</Table.ColumnHeaderCell>
         {tankPerformanceSortTypeNamesArray.map((type) => {
@@ -24,6 +24,7 @@ export function Header() {
 
           return (
             <Table.ColumnHeaderCell
+              px="2"
               key={type}
               width="0"
               justify="center"
