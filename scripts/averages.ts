@@ -73,6 +73,9 @@ times(THREADS, async () => {
 
     const filteredIds = ids.filter((_, index) => {
       const info = accountInfo[index];
+
+      if (info === null) return false;
+
       const timeSinceLastActivity = Date.now() - info.last_battle_time * 1000;
 
       samples.total++;
@@ -84,7 +87,6 @@ times(THREADS, async () => {
       if (timeSinceLastActivity <= 1 * DAY) samples.d_1++;
 
       return (
-        info !== null &&
         timeSinceLastActivity <= MAX_ACTIVITY_TIME &&
         info.statistics.all.battles > MIN_BATTLES
       );
