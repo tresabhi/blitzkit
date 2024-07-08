@@ -1,5 +1,6 @@
 import { Table } from '@radix-ui/themes';
 import { memo, useCallback } from 'react';
+import { StickyRowHeaderCell } from '../../../../components/StickyRowHeaderCell';
 import {
   AverageDefinitionsAllStats,
   AverageDefinitionsEntryWithId,
@@ -42,7 +43,7 @@ export const Total = memo<TotalProps>(
 
     return (
       <Table.Row>
-        <Table.RowHeaderCell>Total</Table.RowHeaderCell>
+        <StickyRowHeaderCell>Total</StickyRowHeaderCell>
         <Table.Cell align="center">{(winrate * 100).toFixed(1)}%</Table.Cell>
         <Table.Cell align="center">
           {numberFormat.format(ratio * players)}

@@ -1,9 +1,9 @@
-import { Table } from '@radix-ui/themes';
 import { TankDefinition } from '../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../core/blitzkit/tankIcon';
 import { classIcons } from './ClassIcon';
 import { Link } from './Link';
 import { ScienceIcon } from './ScienceIcon';
+import { StickyRowHeaderCell } from './StickyRowHeaderCell';
 
 interface TankRowHeaderCellProps {
   tank: TankDefinition;
@@ -13,17 +13,14 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
   const Icon = classIcons[tank.class];
 
   return (
-    <Table.RowHeaderCell
+    <StickyRowHeaderCell
       maxWidth={{
         initial: '180px',
         sm: '240px',
       }}
       style={{
-        display: 'flex',
-        position: 'sticky',
-        left: 0,
-        backgroundColor: 'var(--color-background)',
         overflow: 'hidden',
+        display: 'flex',
       }}
     >
       <Link href={`/tools/tankopedia/${tank.id}`} tabIndex={-1}>
@@ -77,6 +74,6 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
           <ScienceIcon style={{ width: '1em', height: '1em' }} />
         )}
       </Link>
-    </Table.RowHeaderCell>
+    </StickyRowHeaderCell>
   );
 }
