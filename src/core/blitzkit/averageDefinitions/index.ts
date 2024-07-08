@@ -7,37 +7,57 @@ export interface AverageDefinitionsAllStats extends AllStats {
 }
 
 export interface AverageDefinitionsEntry {
-  samples: number;
   mu: AverageDefinitionsAllStats;
   sigma: AverageDefinitionsAllStats;
   r: AverageDefinitionsAllStats;
+  samples: Samples;
+}
+
+export interface AverageDefinitionsEntrySubPartial {
+  mu: Partial<AverageDefinitionsAllStats>;
+  sigma: Partial<AverageDefinitionsAllStats>;
+  r: Partial<AverageDefinitionsAllStats>;
+  samples: Samples;
 }
 
 export interface AverageDefinitionsEntryWithId extends AverageDefinitionsEntry {
   id: number;
 }
 
-export interface AverageDefinitionsEntrySubPartial {
-  samples: number;
-  mu: Partial<AverageDefinitionsAllStats>;
-  sigma: Partial<AverageDefinitionsAllStats>;
-  r: Partial<AverageDefinitionsAllStats>;
-}
-
 export interface AverageDefinitions {
   averages: Record<number, AverageDefinitionsEntry>;
-  sampled_players: number;
-  scanned_players: number;
+  samples: Samples;
+  time: number;
 }
 
-export const averageDefinitions = fetch(asset('definitions/averages.pb'))
+export interface Samples {
+  d_1: number;
+  d_7: number;
+  d_30: number;
+  d_60: number;
+  d_90: number;
+  d_120: number;
+  total: number;
+}
+
+export interface AverageDefinitionsManifest {
+  version: 1;
+  /**
+   * epoch in days
+   */
+  latest: number;
+}
+
+export const averageDefinitions = fetch(asset('averages/manifest.json'))
+  .then((response) => response.json() as Promise<AverageDefinitionsManifest>)
+  .then((manifest) => fetch(asset(`averages/${manifest.latest}.pb`)))
   .then((response) => response.arrayBuffer())
-  .then((buffer) => {
-    return decode<AverageDefinitions>(
+  .then((buffer) =>
+    decode<AverageDefinitions>(
       'blitzkit.AverageDefinitions',
       new Uint8Array(buffer),
-    );
-  });
+    ),
+  );
 
 export const averageDefinitionsArray = averageDefinitions.then((data) =>
   Object.entries(data.averages).map(

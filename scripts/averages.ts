@@ -6,14 +6,19 @@ import getTankStats from '../src/core/blitz/getTankStats';
 import { idToRegion } from '../src/core/blitz/idToRegion';
 import {
   AverageDefinitions,
-  AverageDefinitionsAllStats,
   AverageDefinitionsEntry,
   AverageDefinitionsEntrySubPartial,
+  AverageDefinitionsManifest,
+  Samples,
 } from '../src/core/blitzkit/averageDefinitions';
-import { averageDefinitionsAllStatsKeys } from '../src/core/blitzkit/averageDefinitions/constants';
+import {
+  averageDefinitionsAllStatsKeys,
+  emptySamples,
+} from '../src/core/blitzkit/averageDefinitions/constants';
 import { commitAssets } from '../src/core/blitzkit/commitAssets';
 import { fetchPreDiscoveredIds } from '../src/core/blitzkit/fetchPreDiscoveredIds';
 import { encodeToBase64 } from '../src/core/protobuf/encodeToBase64';
+import { IndividualTankStats } from '../src/types/tanksStats';
 
 interface DataPoint {
   x: number;
@@ -21,9 +26,12 @@ interface DataPoint {
   w: number;
 }
 
-const MAX_ACTIVITY_TIME = 1000 * 60 * 60 * 24 * 30;
+const MINUTE = 60 * 1000;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
+const MAX_ACTIVITY_TIME = 120 * DAY;
 const MIN_BATTLES = 5000;
-const RUN_TIME = 1000 * 60 * 60 * 5.9;
+const RUN_TIME = 5 * HOUR + 55 * MINUTE;
 const THREADS = 10;
 const PLAYER_IDS_PER_CALL = 100;
 
@@ -45,11 +53,10 @@ const playerIds: Record<Region, number[][]> = {
   ),
 };
 let regionIndex = 0;
-let scanned_players = 0;
-let sampled_players = 0;
+const samples: Samples = { ...emptySamples };
 const availableRegions = [...REGIONS];
 const tankIds: number[] = [];
-const tanksSorted: Record<number, AverageDefinitionsAllStats[]> = {};
+const tanksSorted: Record<number, IndividualTankStats[]> = {};
 let postWorkRequested = false;
 
 times(THREADS, async () => {
@@ -63,27 +70,32 @@ times(THREADS, async () => {
     const accountInfo = await getAccountInfo(region, ids, undefined, {
       fields: 'last_battle_time,statistics.all.battles',
     });
-    scanned_players += ids.length;
-
-    /**
-     * Pass rates
-     * none: 1000 / 1000
-     * activity: 55 / 1000
-     * battles: 30 / 1000
-     * both: 23 / 1000
-     */
 
     const filteredIds = ids.filter((_, index) => {
       const info = accountInfo[index];
+      const timeSinceLastActivity = Date.now() - info.last_battle_time * 1000;
+
+      samples.total++;
+      if (timeSinceLastActivity <= 120 * DAY) samples.d_120++;
+      if (timeSinceLastActivity <= 90 * DAY) samples.d_90++;
+      if (timeSinceLastActivity <= 60 * DAY) samples.d_60++;
+      if (timeSinceLastActivity <= 30 * DAY) samples.d_30++;
+      if (timeSinceLastActivity <= 7 * DAY) samples.d_7++;
+      if (timeSinceLastActivity <= 1 * DAY) samples.d_1++;
+
       return (
         info !== null &&
-        Date.now() - info.last_battle_time * 1000 <= MAX_ACTIVITY_TIME &&
+        timeSinceLastActivity <= MAX_ACTIVITY_TIME &&
         info.statistics.all.battles > MIN_BATTLES
       );
     });
-    sampled_players += filteredIds.length;
+
     const players = await Promise.all(
-      filteredIds.map((id) => getTankStats(region, id)),
+      filteredIds.map((id) =>
+        getTankStats(region, id, {
+          fields: 'last_battle_time,battle_life_time,all',
+        }),
+      ),
     );
 
     players.forEach((tanks) => {
@@ -95,10 +107,7 @@ times(THREADS, async () => {
           tanksSorted[tank.tank_id] = [];
         }
 
-        tanksSorted[tank.tank_id].push({
-          ...tank.all,
-          battle_life_time: tank.battle_life_time,
-        });
+        tanksSorted[tank.tank_id].push(tank);
       });
     });
 
@@ -116,29 +125,44 @@ times(THREADS, async () => {
 
 async function postWork() {
   console.log(
-    `Generating statistics based off ${sampled_players.toLocaleString()} players (${scanned_players.toLocaleString()} checked in total) and ${tankIds.length} tanks...`,
+    `Generating statistics based off ${samples.d_120.toLocaleString()} players (${samples.total.toLocaleString()} checked in total) and ${tankIds.length} tanks...`,
   );
 
   const averages: Record<number, AverageDefinitionsEntry> = {};
 
   tankIds.forEach((id) => {
     const tanks = tanksSorted[id];
-    const samples = tanks.length;
     const entry: AverageDefinitionsEntrySubPartial = {
-      samples,
       mu: {},
       sigma: {},
       r: {},
+      samples: { ...emptySamples },
     };
+
+    tanks.forEach((tank) => {
+      const timeSinceLastActivity = Date.now() - tank.last_battle_time * 1000;
+
+      entry.samples.total++;
+      if (timeSinceLastActivity <= 120 * DAY) entry.samples.d_120++;
+      if (timeSinceLastActivity <= 90 * DAY) entry.samples.d_90++;
+      if (timeSinceLastActivity <= 60 * DAY) entry.samples.d_60++;
+      if (timeSinceLastActivity <= 30 * DAY) entry.samples.d_30++;
+      if (timeSinceLastActivity <= 7 * DAY) entry.samples.d_7++;
+      if (timeSinceLastActivity <= 1 * DAY) entry.samples.d_1++;
+    });
+
     const dataWY = tanks.map((tank) => ({
-      w: tank.battles,
-      y: tank.wins / tank.battles,
+      w: tank.all.battles,
+      y: tank.all.wins / tank.all.battles,
     }));
 
     averageDefinitionsAllStatsKeys.forEach((key) => {
       const data: DataPoint[] = dataWY.map(({ w, y }, index) => ({
         w,
-        x: tanks[index][key] / w,
+        x:
+          (key === 'battle_life_time'
+            ? tanks[index].battle_life_time
+            : tanks[index].all[key]) / w,
         y,
       }));
 
@@ -157,7 +181,7 @@ async function postWork() {
       const x_bar = sum_wx / sum_w;
       const y_bar = sum_wy / sum_w;
       // undo normalization for mu to get a simple average
-      const mu = sum(({ w, x }) => w * x) / samples;
+      const mu = sum(({ w, x }) => w * x) / samples.d_120;
 
       const sigma_numerator = sum(({ w, x }) => w * (x - x_bar) ** 2);
       const sigma = Math.sqrt(sigma_numerator / sum_w);
@@ -175,22 +199,34 @@ async function postWork() {
     averages[id] = entry as AverageDefinitionsEntry;
   });
 
+  const time = Date.now();
+  const latest = Math.round(time / DAY);
   const averageDefinitions = {
     averages,
-    sampled_players,
-    scanned_players,
+    samples,
+    time,
   } satisfies AverageDefinitions;
+
+  const manifest: AverageDefinitionsManifest = {
+    version: 1,
+    latest,
+  };
 
   commitAssets(
     'averages',
     [
       {
-        path: 'definitions/averages.pb',
+        path: `averages/${latest}.pb`,
         content: await encodeToBase64(
           'blitzkit.AverageDefinitions',
           averageDefinitions,
         ),
         encoding: 'base64',
+      },
+      {
+        path: 'averages/manifest.json',
+        content: JSON.stringify(manifest),
+        encoding: 'utf-8',
       },
     ],
     production,

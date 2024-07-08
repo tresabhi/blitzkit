@@ -3,16 +3,16 @@ syntax = "proto3";
 package blitzkit;
 
 message AverageDefinitions {
-  map<uint32, Tank> averages = 1;
-  uint32 sampled_players = 2;
-  uint32 scanned_players = 3;
+  map<uint32, AverageDefinitionsEntry> averages = 1;
+  Samples samples = 2;
+  uint64 time = 3;
 }
 
-message Tank {
-  uint32 samples = 1;
-  AverageDefinitionsAllStats mu = 2;
-  AverageDefinitionsAllStats sigma = 3;
-  AverageDefinitionsAllStats r = 4;
+message AverageDefinitionsEntry {
+  AverageDefinitionsAllStats mu = 1;
+  AverageDefinitionsAllStats sigma = 2;
+  AverageDefinitionsAllStats r = 3;
+  Samples samples = 4;
 }
 
 message AverageDefinitionsAllStats {
@@ -34,4 +34,14 @@ message AverageDefinitionsAllStats {
   float wins = 16;
   float xp = 17;
   float battle_life_time = 18;
+}
+
+message Samples {
+  uint32 d_1 = 1;
+  uint32 d_7 = 2;
+  uint32 d_30 = 3;
+  uint32 d_60 = 4;
+  uint32 d_90 = 5;
+  uint32 d_120 = 6;
+  uint32 total = 7;
 }
