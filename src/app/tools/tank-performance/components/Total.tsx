@@ -18,7 +18,7 @@ export const Total = memo<TotalProps>(
     const sum = useCallback(
       (slice: (tank: AverageDefinitionsAllStats) => number) => {
         return tanks.reduce(
-          (acc, tank) => acc + tank.samples * slice(tank.mu),
+          (acc, tank) => acc + tank.samples.total * slice(tank.mu),
           0,
         );
       },

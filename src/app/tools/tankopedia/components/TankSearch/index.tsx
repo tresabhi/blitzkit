@@ -20,7 +20,7 @@ import {
 } from '../../../../../core/blitzkit/tankDefinitions';
 import { unionBoundingBox } from '../../../../../core/blitzkit/unionBoundingBox';
 import { useAdExempt } from '../../../../../hooks/useAdExempt';
-import { useTankFilters } from '../../../../../stores/tankFilters';
+import * as TankFilters from '../../../../../stores/tankFilters';
 import { SORT_NAMES, SORT_UNITS } from '../../../../../stores/tankopedia';
 import { useTankopediaSort } from '../../../../../stores/tankopediaSort';
 import { FilterControl } from '../FilterControl';
@@ -45,7 +45,7 @@ export const TankSearch = memo<TankSearchProps>(
     const awaitedTankDefinitions = use(tankDefinitions);
     const awaitedTanksDefinitionsArray = use(tanksDefinitionsArray);
     const awaitedTankNames = use(tankNames);
-    const filters = useTankFilters();
+    const filters = TankFilters.use();
     const sort = useTankopediaSort();
     const tanks = useMemo(() => {
       if (filters.search === undefined) {

@@ -6,7 +6,7 @@ import { Suspense, use, useEffect, useMemo, useState } from 'react';
 import { averageDefinitionsArray } from '../../../../core/blitzkit/averageDefinitions';
 import { filterTank } from '../../../../core/blitzkit/filterTank';
 import { tankDefinitions } from '../../../../core/blitzkit/tankDefinitions';
-import { useTankFilters } from '../../../../stores/tankFilters';
+import * as TankFilters from '../../../../stores/tankFilters';
 import { useTankPerformanceSort } from '../../../../stores/tankPerformanceSort';
 import { RowLoader } from './RowLoader';
 import { TankRow } from './TankRow';
@@ -18,7 +18,7 @@ const DEFAULT_LOADED_ROWS = 25;
 export function Tanks() {
   const awaitedTankDefinitions = use(tankDefinitions);
   const awaitedAverageDefinitionsArray = use(averageDefinitionsArray);
-  const filters = useTankFilters();
+  const filters = TankFilters.use();
   const sort = useTankPerformanceSort();
   const tanksSorted = useMemo(() => {
     switch (sort.type) {
@@ -31,7 +31,7 @@ export function Tanks() {
         return awaitedAverageDefinitionsArray.sort(
           (a, b) =>
             sort.direction *
-            (a.samples * a.mu.battles - b.samples * b.mu.battles),
+            (a.samples.total * a.mu.battles - b.samples.total * b.mu.battles),
         );
       case 'capturePoints':
         return awaitedAverageDefinitionsArray.sort(
@@ -81,7 +81,7 @@ export function Tanks() {
         );
       case 'players':
         return awaitedAverageDefinitionsArray.sort(
-          (a, b) => sort.direction * (a.samples - b.samples),
+          (a, b) => sort.direction * (a.samples.d_30 - b.samples.d_30),
         );
       case 'spots':
         return awaitedAverageDefinitionsArray.sort(

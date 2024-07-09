@@ -24,11 +24,11 @@ export const TankRow = memo<TankRowProps>(
           {((averages.mu.wins / averages.mu.battles) * 100).toFixed(1)}%
         </Table.Cell>
         <Table.Cell align="center">
-          {numberFormat.format(Math.round(ratio * averages.samples))}
+          {numberFormat.format(Math.round(ratio * averages.samples.d_30))}
         </Table.Cell>
         <Table.Cell align="center">
           {numberFormat.format(
-            Math.round(ratio * averages.mu.battles * averages.samples),
+            Math.round(ratio * averages.mu.battles * averages.samples.total),
           )}
         </Table.Cell>
         <Table.Cell align="center">

@@ -10,7 +10,7 @@ export function Info() {
   const awaitedAverageDefinitions = use(averageDefinitions);
   const numberFormat = Intl.NumberFormat(undefined, { notation: 'compact' });
   const ratio = useAveragesExclusionRatio();
-  const samples = ratio * awaitedAverageDefinitions.sampled_players;
+  const samples = ratio * awaitedAverageDefinitions.samples.d_120;
 
   return (
     <Flex justify="center">

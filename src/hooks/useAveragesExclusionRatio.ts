@@ -8,6 +8,6 @@ export function useAveragesExclusionRatio() {
 
   return (
     awaitedDiscoveredIdsDefinitions.count /
-    awaitedAverageDefinitions.scanned_players
+    awaitedAverageDefinitions.samples.total
   );
 }

@@ -44,7 +44,8 @@ export function TierBreakdown() {
 
               tierTanks.forEach((stats) => {
                 const tank = awaitedTankDefinitions[stats.id];
-                populations[tank.class] += stats.mu.battles * stats.samples;
+                populations[tank.class] +=
+                  stats.mu.battles * stats.samples.d_30;
               });
 
               TANK_CLASSES.forEach((tankClass) => {

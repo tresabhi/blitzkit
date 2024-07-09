@@ -3,17 +3,14 @@ import { times } from 'lodash';
 import { memo } from 'react';
 import { Tier } from '../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
-import {
-  useTankFilters,
-  useTankFiltersMutation,
-} from '../../../../stores/tankFilters';
+import * as TankFilters from '../../../../stores/tankFilters';
 import { useTankopediaSort } from '../../../../stores/tankopediaSort';
 
 export const TierFilter = memo(() => {
-  const tierFilter = useTankFilters((state) => state.tiers);
+  const tierFilter = TankFilters.use((state) => state.tiers);
   const sort = useTankopediaSort();
-  const search = useTankFilters((state) => state.search);
-  const mutateTankFilters = useTankFiltersMutation();
+  const search = TankFilters.use((state) => state.search);
+  const mutateTankFilters = TankFilters.useMutation();
 
   if (sort.by !== 'meta.none' || search) return null;
 
