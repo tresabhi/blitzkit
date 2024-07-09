@@ -6,14 +6,15 @@ import {
   CaretUpIcon,
 } from '@radix-ui/react-icons';
 import { Flex, IconButton, Table } from '@radix-ui/themes';
+import * as TankPerformanceSort from '../../../../stores/tankPerformanceSort';
 import {
   tankPerformanceSortTypeNames,
   tankPerformanceSortTypeNamesArray,
-  useTankPerformanceSort,
-} from '../../../../stores/tankPerformanceSort';
+} from '../../../../stores/tankPerformanceSort/constants';
 
 export function Header() {
-  const sort = useTankPerformanceSort();
+  const sort = TankPerformanceSort.use();
+  const store = TankPerformanceSort.useStore();
 
   return (
     <Table.Header>
@@ -40,11 +41,9 @@ export function Header() {
                   highContrast={!isSelected}
                   onClick={() => {
                     if (isSelected) {
-                      useTankPerformanceSort.setState({
-                        direction: -sort.direction as 1 | -1,
-                      });
+                      store.setState({ direction: -sort.direction as 1 | -1 });
                     } else {
-                      useTankPerformanceSort.setState({ type, direction: -1 });
+                      store.setState({ type, direction: -1 });
                     }
                   }}
                 >

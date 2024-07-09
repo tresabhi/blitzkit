@@ -20,7 +20,7 @@ export function Info() {
         </Callout.Icon>
         <Callout.Text>
           Career stats based on {numberFormat.format(Math.round(samples))}{' '}
-          players with at least 5K career battles and 1 battle in the past 30
+          players with at least 5K career battles and 1 battle in the past 120
           days; updated daily.
         </Callout.Text>
       </Callout.Root>

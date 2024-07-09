@@ -1,3 +1,4 @@
+import { TankFilters } from '../../stores/tankFilters';
 import { TankDefinition } from './tankDefinitions';
 
 export function filterTank(filters: TankFilters, tank: TankDefinition) {

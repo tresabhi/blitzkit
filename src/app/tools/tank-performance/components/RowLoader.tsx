@@ -2,7 +2,7 @@ import { Skeleton, Table } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { memo, useRef } from 'react';
 import { useIntersection } from '../../../../hooks/useIntersection';
-import { tankPerformanceSortTypeNamesArray } from '../../../../stores/tankPerformanceSort';
+import { tankPerformanceSortTypeNamesArray } from '../../../../stores/tankPerformanceSort/constants';
 
 interface RowLoaderProps {
   onIntersection?: () => void;

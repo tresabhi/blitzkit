@@ -7,7 +7,7 @@ import { averageDefinitionsArray } from '../../../../core/blitzkit/averageDefini
 import { filterTank } from '../../../../core/blitzkit/filterTank';
 import { tankDefinitions } from '../../../../core/blitzkit/tankDefinitions';
 import * as TankFilters from '../../../../stores/tankFilters';
-import { useTankPerformanceSort } from '../../../../stores/tankPerformanceSort';
+import * as TankPerformanceSort from '../../../../stores/tankPerformanceSort';
 import { RowLoader } from './RowLoader';
 import { TankRow } from './TankRow';
 import { Total } from './Total';
@@ -19,7 +19,7 @@ export function Tanks() {
   const awaitedTankDefinitions = use(tankDefinitions);
   const awaitedAverageDefinitionsArray = use(averageDefinitionsArray);
   const filters = TankFilters.use();
-  const sort = useTankPerformanceSort();
+  const sort = TankPerformanceSort.use();
   const tanksSorted = useMemo(() => {
     switch (sort.type) {
       case 'accuracy':
@@ -126,6 +126,9 @@ export function Tanks() {
 
       {tanks.slice(0, loadedRows).map((averages) => {
         const tank = awaitedTankDefinitions[averages.id];
+
+        if (tank === undefined) return null;
+
         return (
           <Suspense key={tank.id} fallback={<RowLoader />}>
             <TankRow tank={tank} />

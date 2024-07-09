@@ -42,9 +42,9 @@ export function createNextSafeStore<Type>(initialState: Type) {
 
   function useStore() {
     const store = useContext(Context);
-    if (!store) {
-      throw new Error('useStoreContext must be used within Provider');
-    }
+
+    if (!store) throw new Error('useStore must be used within Provider');
+
     return store;
   }
 

@@ -33,7 +33,7 @@ export function TierBreakdown() {
             data={times(10, (index) => {
               const tier = (index + 1) as Tier;
               const tierTanks = awaitedAverageDefinitionsArray.filter(
-                ({ id }) => awaitedTankDefinitions[id].tier === tier,
+                ({ id }) => awaitedTankDefinitions[id]?.tier === tier,
               );
               const populations: Record<TankClass, number> = {
                 'AT-SPG': 0,
