@@ -1,6 +1,6 @@
 import { CaretDownIcon } from '@radix-ui/react-icons';
 import { Button, DropdownMenu } from '@radix-ui/themes';
-import { TankopediaSortDirection } from '../../../../stores/tankopedia';
+import { TankopediaSortDirection } from '../../../../stores/tankopediaPersistent';
 import * as TankopediaSort from '../../../../stores/tankopediaSort';
 
 export function Sort() {

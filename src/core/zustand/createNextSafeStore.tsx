@@ -1,39 +1,28 @@
 import { Draft, produce } from 'immer';
-import { Context, createContext, ReactNode, useContext, useRef } from 'react';
-import { createStore, StoreApi, useStore as useStoreZustand } from 'zustand';
+import { createContext, ReactNode, useContext, useRef } from 'react';
+import { StoreApi, useStore as useStoreZustand } from 'zustand';
 
 interface StoreProviderProps {
   children: ReactNode;
 }
 
-export function createStoreContext<Type>() {
-  return createContext<StoreApi<Type> | undefined>(undefined);
+// idk why zustand doesn't export this
+type ExtractState<S> = S extends {
+  getState: () => infer T;
 }
+  ? T
+  : never;
 
-export function createStoreProvider<Type>(
-  initialState: Type,
-  Context: Context<StoreApi<Type> | undefined>,
+export function createNextSafeStore<Store extends StoreApi<unknown>>(
+  initial: () => Store,
 ) {
-  return function Provider({ children }: StoreProviderProps) {
-    const storeRef = useRef<StoreApi<Type>>();
-    if (!storeRef.current) {
-      storeRef.current = createStore<Type>()(() => ({ ...initialState }));
-    }
+  type Type = Store extends StoreApi<infer T> ? T : never;
 
-    return (
-      <Context.Provider value={storeRef.current}>{children}</Context.Provider>
-    );
-  };
-}
-
-export function createNextSafeStore<Type>(initialState: Type) {
-  const Context = createContext<StoreApi<Type> | undefined>(undefined);
+  const Context = createContext<Store | undefined>(undefined);
 
   function Provider({ children }: StoreProviderProps) {
-    const storeRef = useRef<StoreApi<Type>>();
-    if (!storeRef.current) {
-      storeRef.current = createStore<Type>()(() => ({ ...initialState }));
-    }
+    const storeRef = useRef<Store>();
+    if (!storeRef.current) storeRef.current = initial() as Store;
 
     return (
       <Context.Provider value={storeRef.current}>{children}</Context.Provider>
@@ -42,17 +31,18 @@ export function createNextSafeStore<Type>(initialState: Type) {
 
   function useStore() {
     const store = useContext(Context);
-
     if (!store) throw new Error('useStore must be used within Provider');
-
-    return store;
+    return store as Store;
   }
 
   function use<Slice = Type>(
-    selector: (store: Type) => Slice = (state) => state as unknown as Slice,
-  ): Slice {
+    selector: (store: Type) => Slice = (state) => state as Slice,
+  ) {
     const store = useStore();
-    return useStoreZustand(store, selector);
+    return useStoreZustand(
+      store,
+      selector as (state: ExtractState<Store>) => Slice,
+    );
   }
 
   function useMutation() {

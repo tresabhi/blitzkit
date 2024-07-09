@@ -12,15 +12,13 @@ import { use } from 'react';
 import { CrewSkillManager } from '../../../../../../../../components/CrewSkillManager';
 import { createDefaultSkills } from '../../../../../../../../core/blitzkit/createDefaultSkills';
 import { skillDefinitions } from '../../../../../../../../core/blitzkit/skillDefinitions';
-import {
-  mutateTankopediaTemporary,
-  useTankopediaTemporary,
-} from '../../../../../../../../stores/tankopedia';
+import * as TankopediaEphemeral from '../../../../../../../../stores/tankopediaEphemeral';
 import { ConfigurationChildWrapper } from '../ConfigurationChildWrapper';
 
 export function Skills() {
   const awaitedSkillDefinitions = use(skillDefinitions);
-  const skillLevels = useTankopediaTemporary((state) => state.skills);
+  const skillLevels = TankopediaEphemeral.use((state) => state.skills);
+  const mutateTankopediaTemporary = TankopediaEphemeral.useMutation();
 
   if (Object.keys(skillLevels).length === 0) {
     mutateTankopediaTemporary((draft) => {

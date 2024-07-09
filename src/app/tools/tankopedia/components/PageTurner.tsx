@@ -2,9 +2,7 @@ import { CaretLeftIcon, CaretRightIcon } from '@radix-ui/react-icons';
 import { Flex, IconButton, TextField } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
 import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
-import mutateTankopediaPersistent, {
-  useTankopediaPersistent,
-} from '../../../../stores/tankopedia';
+import * as TankopediaPersistent from '../../../../stores/tankopediaPersistent';
 
 interface PageTurnerProps {
   searchedList: TankDefinition[];
@@ -12,7 +10,8 @@ interface PageTurnerProps {
 }
 
 export function PageTurner({ searchedList, tanksPerPage }: PageTurnerProps) {
-  const page = useTankopediaPersistent((state) => state.filters.page);
+  const page = TankopediaPersistent.use((state) => state.filters.page);
+  const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
   const pageInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

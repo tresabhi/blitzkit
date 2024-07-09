@@ -17,12 +17,7 @@ import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../core/blitzkit/jsxTree';
 import { ShellType } from '../../../../core/blitzkit/tankDefinitions';
 import { useDuel } from '../../../../stores/duel';
-import {
-  Shot,
-  ShotLayerBase,
-  ShotLayerNonExternal,
-  useTankopediaTemporary,
-} from '../../../../stores/tankopedia';
+import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 import { ArmorType } from '../SpacedArmorScene';
 import { SpacedArmorSubExternal } from './components/SpacedArmorSubExternal';
 import { SpacedArmorSubSpaced } from './components/SpacedArmorSubSpaced';
@@ -77,6 +72,7 @@ export function SpacedArmorSceneComponent({
   clip,
   ...props
 }: SpacedArmorSceneComponentProps) {
+  const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
   const camera = useThree((state) => state.camera);
 
   async function shoot(
@@ -88,7 +84,7 @@ export function SpacedArmorSceneComponent({
     const { antagonist, protagonist } = useDuel.getState();
     const shell = antagonist!.shell;
     const cameraNormal = camera.position.clone().sub(point).normalize();
-    const shot: Shot = {
+    const shot: TankopediaEphemeral.Shot = {
       damage: -1,
       containsGaps: shell.type === ShellType.HEAT,
       in: {
@@ -150,7 +146,9 @@ export function SpacedArmorSceneComponent({
         );
 
       if (shell.type === ShellType.HEAT && index > 0) {
-        const lastLayer = shot.in.layers.at(-1) as ShotLayerBase;
+        const lastLayer = shot.in.layers.at(
+          -1,
+        ) as TankopediaEphemeral.ShotLayerBase;
         const distance = lastLayer.point.distanceTo(intersection.point);
         remainingPenetration -= 0.5 * remainingPenetration * distance;
         const blocked = remainingPenetration <= 0;
@@ -244,8 +242,12 @@ export function SpacedArmorSceneComponent({
       index++;
     }
 
-    const lastLayer = shot.in.layers.at(-1) as ShotLayerNonExternal | undefined;
-    const firstLayer = shot.in.layers[0] as ShotLayerBase | undefined;
+    const lastLayer = shot.in.layers.at(-1) as
+      | TankopediaEphemeral.ShotLayerNonExternal
+      | undefined;
+    const firstLayer = shot.in.layers[0] as
+      | TankopediaEphemeral.ShotLayerBase
+      | undefined;
 
     if (!lastLayer || !firstLayer) {
       return null;
@@ -370,7 +372,7 @@ export function SpacedArmorSceneComponent({
                 true,
               ))!;
 
-              useTankopediaTemporary.setState({ shot });
+              tankopediaEphemeralStore.setState({ shot });
             },
           },
           node.uuid,

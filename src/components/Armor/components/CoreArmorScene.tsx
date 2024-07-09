@@ -11,7 +11,7 @@ import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
 import { useArmor } from '../../../hooks/useArmor';
 import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
 import { useDuel } from '../../../stores/duel';
-import { useTankopediaPersistent } from '../../../stores/tankopedia';
+import * as TankopediaPersistent from '../../../stores/tankopediaPersistent';
 import { CoreArmorSceneComponent } from './CoreArmorSceneComponent';
 import { ShotDisplay } from './ShotDisplay';
 
@@ -20,7 +20,8 @@ export const CoreArmorScene = memo(() => {
   const modelDefinitions = useModelDefinitions();
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
-  const initialTankopediaState = useTankopediaPersistent.getState();
+  const tankopediaPersistentStore = TankopediaPersistent.useStore();
+  const initialTankopediaState = tankopediaPersistentStore.getState();
   const protagonist = useDuel((draft) => draft.protagonist!);
 
   useEffect(() => {
@@ -99,7 +100,7 @@ export const CoreArmorScene = memo(() => {
   });
 
   useEffect(() => {
-    const unsubscribe = useTankopediaPersistent.subscribe(
+    const unsubscribe = tankopediaPersistentStore.subscribe(
       (state) => state.mode,
       (mode) => {
         if (wrapper.current) wrapper.current.visible = mode === 'armor';

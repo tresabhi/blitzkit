@@ -1,5 +1,6 @@
 'use client';
 
+import { create } from 'zustand';
 import { TankClass, TreeType } from '../components/Tanks';
 import { Tier } from '../core/blitzkit/tankDefinitions';
 import { createNextSafeStore } from '../core/zustand/createNextSafeStore';
@@ -14,13 +15,15 @@ export interface TankFilters {
   searching: boolean;
 }
 
-export const { Provider, use, useMutation, useStore } =
-  createNextSafeStore<TankFilters>({
-    tiers: [],
-    nations: [],
-    classes: [],
-    types: [],
-    testing: 'include',
-    search: undefined,
-    searching: false,
-  });
+export const { Provider, use, useMutation, useStore } = createNextSafeStore(
+  () =>
+    create<TankFilters>()(() => ({
+      tiers: [],
+      nations: [],
+      classes: [],
+      types: [],
+      testing: 'include',
+      search: undefined,
+      searching: false,
+    })),
+);

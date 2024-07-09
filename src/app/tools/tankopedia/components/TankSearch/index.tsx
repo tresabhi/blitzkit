@@ -21,7 +21,10 @@ import {
 import { unionBoundingBox } from '../../../../../core/blitzkit/unionBoundingBox';
 import { useAdExempt } from '../../../../../hooks/useAdExempt';
 import * as TankFilters from '../../../../../stores/tankFilters';
-import { SORT_NAMES, SORT_UNITS } from '../../../../../stores/tankopedia';
+import {
+  SORT_NAMES,
+  SORT_UNITS,
+} from '../../../../../stores/tankopediaPersistent/constants';
 import * as TankopediaSort from '../../../../../stores/tankopediaSort';
 import { FilterControl } from '../FilterControl';
 import { NoResults } from '../NoResults';

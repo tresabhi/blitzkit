@@ -1,5 +1,6 @@
 'use client';
 
+import { create } from 'zustand';
 import { createNextSafeStore } from '../../core/zustand/createNextSafeStore';
 import { tankPerformanceSortTypeNames } from './constants';
 
@@ -10,8 +11,10 @@ export interface TankPerformanceSort {
   direction: -1 | 1;
 }
 
-export const { Provider, use, useMutation, useStore } =
-  createNextSafeStore<TankPerformanceSort>({
-    type: 'winrate',
-    direction: -1,
-  });
+export const { Provider, use, useMutation, useStore } = createNextSafeStore(
+  () =>
+    create<TankPerformanceSort>()(() => ({
+      type: 'winrate',
+      direction: -1,
+    })),
+);

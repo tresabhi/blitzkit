@@ -4,15 +4,11 @@ import { useFrame } from '@react-three/fiber';
 import { ComponentProps, useRef } from 'react';
 import { Euler, Mesh, Quaternion } from 'three';
 import { J_HAT } from '../../../constants/axis';
-import {
-  ShotLayerNonExternal,
-  ShotStatus,
-  useTankopediaTemporary,
-} from '../../../stores/tankopedia';
+import * as TankopediaEphemeral from '../../../stores/tankopediaEphemeral';
 import { ShotDisplayCard } from './ShotDisplayCard';
 
 export const shotStatusColors: Record<
-  ShotStatus,
+  TankopediaEphemeral.ShotStatus,
   ComponentProps<typeof Text>['color']
 > = {
   blocked: 'red',
@@ -27,7 +23,7 @@ const TRACER_THICK = 1 / 32;
 const TRACER_THIN = TRACER_THICK / 2;
 
 export function ShotDisplay() {
-  const shot = useTankopediaTemporary((state) => state.shot);
+  const shot = TankopediaEphemeral.use((state) => state.shot);
   const inTracer = useRef<Mesh>(null);
   const outTracer = useRef<Mesh>(null);
 
@@ -55,13 +51,16 @@ export function ShotDisplay() {
     }, 0) + SHOT_DISPLAY_LENGTH_INFINITY;
   const outLength =
     shot.out && shot.out.layers.length > 0
-      ? (shot.in.layers.at(-1) as ShotLayerNonExternal).point.distanceTo(
-          (shot.out.layers.at(-1) as ShotLayerNonExternal).point,
+      ? (
+          shot.in.layers.at(-1) as TankopediaEphemeral.ShotLayerNonExternal
+        ).point.distanceTo(
+          (shot.out.layers.at(-1) as TankopediaEphemeral.ShotLayerNonExternal)
+            .point,
         )
       : SHOT_DISPLAY_LENGTH_INFINITY;
   const inLast = shot.in.layers.findLast(
     (layer) => layer.type !== null,
-  ) as ShotLayerNonExternal;
+  ) as TankopediaEphemeral.ShotLayerNonExternal;
   const outTitleColor = shot.out
     ? shotStatusColors[shot.out.status]
     : undefined;

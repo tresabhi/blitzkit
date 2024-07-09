@@ -10,10 +10,7 @@ import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../core/blitzkit/jsxTree';
 import { ShellDefinition } from '../../../../core/blitzkit/tankDefinitions';
 import { EquipmentMatrix, useDuel } from '../../../../stores/duel';
-import {
-  TankopediaPersistent,
-  useTankopediaPersistent,
-} from '../../../../stores/tankopedia';
+import * as TankopediaPersistent from '../../../../stores/tankopediaPersistent';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
 import { spacedArmorRenderTarget } from './target';
@@ -31,6 +28,7 @@ export function CoreArmorSceneComponent({
   node,
   thickness,
 }: CoreArmorSceneComponentProps) {
+  const tankopediaPersistentStore = TankopediaPersistent.useStore();
   const material = new ShaderMaterial({
     fragmentShader,
     vertexShader,
@@ -77,7 +75,7 @@ export function CoreArmorSceneComponent({
       await handleAntagonistEquipmentChange(duel.antagonist!.equipmentMatrix);
     }
     function handleVisualChange(
-      visual: TankopediaPersistent['model']['visual'],
+      visual: TankopediaPersistent.TankopediaPersistent['model']['visual'],
     ) {
       material.uniforms.greenPenetration.value = visual.greenPenetration;
       material.uniforms.opaque.value = visual.opaque || visual.wireframe;
@@ -113,7 +111,7 @@ export function CoreArmorSceneComponent({
     }
 
     handleShellChange(useDuel.getState().antagonist!.shell);
-    handleVisualChange(useTankopediaPersistent.getState().model.visual);
+    handleVisualChange(tankopediaPersistentStore.getState().model.visual);
     handleProtagonistEquipmentChange(
       useDuel.getState().protagonist!.equipmentMatrix,
     );
@@ -123,7 +121,7 @@ export function CoreArmorSceneComponent({
 
     const unsubscribes = [
       useDuel.subscribe((state) => state.antagonist!.shell, handleShellChange),
-      useTankopediaPersistent.subscribe(
+      tankopediaPersistentStore.subscribe(
         (state) => state.model.visual,
         handleVisualChange,
       ),

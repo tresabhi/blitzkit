@@ -8,7 +8,7 @@ import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransf
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
-import { mutateTankopediaTemporary } from '../../../../../../stores/tankopedia';
+import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemeral';
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
 import { SceneProps } from '../SceneProps';
@@ -16,6 +16,7 @@ import { ModelLoader } from './components/ModelLoader';
 import { TankModel } from './components/TankModel';
 
 export function TankSandbox() {
+  const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const canvas = useRef<HTMLCanvasElement>(null);
   const hasImprovedVerticalStabilizer = useEquipment(122);
   const awaitedModelDefinitions = use(modelDefinitions);
@@ -126,7 +127,7 @@ export function TankSandbox() {
       ref={canvas}
       onPointerDown={handlePointerDown}
       onPointerMissed={() => {
-        mutateTankopediaTemporary((draft) => {
+        mutateTankopediaEphemeral((draft) => {
           draft.shot = undefined;
         });
       }}

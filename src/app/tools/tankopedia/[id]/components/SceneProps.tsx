@@ -2,10 +2,10 @@ import { useFrame, useLoader } from '@react-three/fiber';
 import { clamp } from 'lodash';
 import { useRef } from 'react';
 import { MeshStandardMaterial, TextureLoader } from 'three';
-import { useTankopediaPersistent } from '../../../../../stores/tankopedia';
+import * as TankopediaPersistent from '../../../../../stores/tankopediaPersistent';
 
 export function SceneProps() {
-  const show = useTankopediaPersistent(
+  const show = TankopediaPersistent.use(
     (state) =>
       state.model.visual.showGrid && !state.model.visual.showEnvironment,
   );

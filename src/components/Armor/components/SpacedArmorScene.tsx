@@ -12,7 +12,7 @@ import { useArmor } from '../../../hooks/useArmor';
 import { useModel } from '../../../hooks/useModel';
 import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
 import { useDuel } from '../../../stores/duel';
-import { useTankopediaPersistent } from '../../../stores/tankopedia';
+import * as TankopediaPersistent from '../../../stores/tankopediaPersistent';
 import { SpacedArmorSceneComponent } from './SpacedArmorSceneComponent';
 
 export enum ArmorType {
@@ -30,7 +30,8 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
   const modelDefinitions = useModelDefinitions();
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
-  const initialTankopediaState = useTankopediaPersistent.getState();
+  const tankopediaPersistentStore = TankopediaPersistent.useStore();
+  const initialTankopediaState = tankopediaPersistentStore.getState();
   const protagonist = useDuel((draft) => draft.protagonist!);
 
   useEffect(() => {
@@ -109,7 +110,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
   });
 
   useEffect(() => {
-    const unsubscribe = useTankopediaPersistent.subscribe(
+    const unsubscribe = tankopediaPersistentStore.subscribe(
       (state) => state.mode,
       (mode) => {
         if (wrapper.current) wrapper.current.visible = mode === 'armor';

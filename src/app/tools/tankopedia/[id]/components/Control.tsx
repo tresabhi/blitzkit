@@ -9,7 +9,7 @@ import { modelDefinitions } from '../../../../../core/blitzkit/modelDefinitions'
 import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
 import { useAwait } from '../../../../../hooks/useAwait';
 import { useDuel } from '../../../../../stores/duel';
-import { useTankopediaTemporary } from '../../../../../stores/tankopedia';
+import * as TankopediaEphemeral from '../../../../../stores/tankopediaEphemeral';
 
 const poseDistances: Record<Pose, number> = {
   [Pose.HullDown]: 15,
@@ -18,6 +18,7 @@ const poseDistances: Record<Pose, number> = {
 };
 
 export function Controls() {
+  const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
   const camera = useThree((state) => state.camera);
   const canvas = useThree((state) => state.gl.domElement);
   const orbitControls = useRef<OrbitControlsClass>(null);
@@ -62,7 +63,7 @@ export function Controls() {
   }, [camera]);
 
   useEffect(() => {
-    const unsubscribeTankopedia = useTankopediaTemporary.subscribe(
+    const unsubscribeTankopediaEphemeral = tankopediaEphemeralStore.subscribe(
       (state) => state.controlsEnabled,
       (enabled) => {
         if (orbitControls.current) orbitControls.current.enabled = enabled;
@@ -158,7 +159,7 @@ export function Controls() {
     poseEvent.on(handlePoseEvent);
 
     return () => {
-      unsubscribeTankopedia();
+      unsubscribeTankopediaEphemeral();
       poseEvent.off(handlePoseEvent);
     };
   }, [camera, protagonist.tank.id, antagonist.tank.id]);
@@ -182,7 +183,7 @@ export function Controls() {
       maxDistance={20}
       minDistance={5}
       ref={orbitControls}
-      enabled={useTankopediaTemporary.getState().controlsEnabled}
+      enabled={tankopediaEphemeralStore.getState().controlsEnabled}
       rotateSpeed={0.25}
       enableDamping={false}
       autoRotate={autoRotate}

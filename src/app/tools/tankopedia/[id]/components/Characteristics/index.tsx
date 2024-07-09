@@ -29,7 +29,7 @@ import {
 import { useAdExempt } from '../../../../../../hooks/useAdExempt';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { mutateDuel, useDuel } from '../../../../../../stores/duel';
-import { useTankopediaTemporary } from '../../../../../../stores/tankopedia';
+import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemeral';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
 
@@ -38,7 +38,7 @@ export function Characteristics() {
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const awaitedModelDefinitions = use(modelDefinitions);
   const awaitedProvisionDefinitions = use(provisionDefinitions);
-  const crewSkills = useTankopediaTemporary((state) => state.skills);
+  const crewSkills = TankopediaEphemeral.use((state) => state.skills);
   const penetrationDistanceInput = useRef<HTMLInputElement>(null);
   const hasImprovedVentilation = useEquipment(102);
   const crewMastery = useDuel((state) => state.protagonist!.crewMastery);

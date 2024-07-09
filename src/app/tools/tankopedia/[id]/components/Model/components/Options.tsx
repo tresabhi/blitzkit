@@ -33,36 +33,36 @@ import { useEquipment } from '../../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../../hooks/useFullScreen';
 import { useApp } from '../../../../../../../stores/app';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
-import mutateTankopediaPersistent, {
-  mutateTankopediaTemporary,
-  useTankopediaPersistent,
-} from '../../../../../../../stores/tankopedia';
+import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
+import * as TankopediaPersistent from '../../../../../../../stores/tankopediaPersistent';
 import { TankSearch } from '../../../../components/TankSearch';
 import { ENVIRONMENTS } from '../../Lighting';
 import { RotationInputs } from '../../QuickInputs';
 
 export function Options() {
-  const mode = useTankopediaPersistent((state) => state.mode);
+  const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
+  const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
+  const mode = TankopediaPersistent.use((state) => state.mode);
   const isFullScreen = useFullScreen();
-  const showGrid = useTankopediaPersistent(
+  const showGrid = TankopediaPersistent.use(
     (state) => state.model.visual.showGrid,
   );
-  const showEnvironment = useTankopediaPersistent(
+  const showEnvironment = TankopediaPersistent.use(
     (state) => state.model.visual.showEnvironment,
   );
-  const greenPenetration = useTankopediaPersistent(
+  const greenPenetration = TankopediaPersistent.use(
     (state) => state.model.visual.greenPenetration,
   );
-  const wireframe = useTankopediaPersistent(
+  const wireframe = TankopediaPersistent.use(
     (state) => state.model.visual.wireframe,
   );
-  const showSpacedArmor = useTankopediaPersistent(
+  const showSpacedArmor = TankopediaPersistent.use(
     (state) => state.model.visual.showSpacedArmor,
   );
-  const opaque = useTankopediaPersistent((state) => state.model.visual.opaque);
+  const opaque = TankopediaPersistent.use((state) => state.model.visual.opaque);
   const fullScreenAvailable =
     typeof document !== 'undefined' && document.fullscreenEnabled;
-  const environment = useTankopediaPersistent(
+  const environment = TankopediaPersistent.use(
     (state) => state.model.visual.environment,
   );
   const developerMode = useApp((state) => state.developerMode);
@@ -152,7 +152,7 @@ export function Options() {
                   mutateDuel((draft) => {
                     draft.antagonist!.shell = thisShell;
                   });
-                  mutateTankopediaTemporary((draft) => {
+                  mutateTankopediaEphemeral((draft) => {
                     draft.shot = undefined;
                   });
                 }}
@@ -186,7 +186,7 @@ export function Options() {
                     ? 0
                     : 1;
                 });
-                mutateTankopediaTemporary((draft) => {
+                mutateTankopediaEphemeral((draft) => {
                   draft.shot = undefined;
                 });
               }}
@@ -218,7 +218,7 @@ export function Options() {
                     ? 0
                     : -1;
                 });
-                mutateTankopediaTemporary((draft) => {
+                mutateTankopediaEphemeral((draft) => {
                   draft.shot = undefined;
                 });
               }}
@@ -337,7 +337,7 @@ export function Options() {
                                       draft.antagonist!.shell =
                                         draft.antagonist!.gun.shells[0];
                                     });
-                                    mutateTankopediaTemporary((draft) => {
+                                    mutateTankopediaEphemeral((draft) => {
                                       draft.shot = undefined;
                                     });
                                   }}
@@ -466,7 +466,7 @@ export function Options() {
                       mutateTankopediaPersistent((draft) => {
                         draft.model.visual.showSpacedArmor = checked;
                       });
-                      mutateTankopediaTemporary((draft) => {
+                      mutateTankopediaEphemeral((draft) => {
                         draft.shot = undefined;
                       });
                     }}

@@ -22,7 +22,7 @@ import { normalizeAngleRad } from '../../../../../../../core/math/normalizeAngle
 import { useAwait } from '../../../../../../../hooks/useAwait';
 import { useModel } from '../../../../../../../hooks/useModel';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
-import { mutateTankopediaTemporary } from '../../../../../../../stores/tankopedia';
+import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
 
 export const TankModel = memo(() => {
   const awaitedModelDefinitions = useAwait(modelDefinitions);
@@ -31,6 +31,7 @@ export const TankModel = memo(() => {
   const hullContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
+  const mutateTankopediaTemporary = TankopediaEphemeral.useMutation();
 
   useEffect(() => {
     const hullOrigin = new Vector3(

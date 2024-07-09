@@ -6,7 +6,7 @@ import PageWrapper from '../../../../components/PageWrapper';
 import { assignDuelMember } from '../../../../core/blitzkit/assignDuelMember';
 import { useAdExempt } from '../../../../hooks/useAdExempt';
 import { mutateDuel, useDuel } from '../../../../stores/duel';
-import { mutateTankopediaTemporary } from '../../../../stores/tankopedia';
+import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 import { HistorySection } from './components/HistorySection';
 import { CharacteristicsSection } from './components/Model/CharacteristicsSection';
 import { HeroSection } from './components/Model/HeroSection';
@@ -18,6 +18,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const initialId = parseInt(params.id);
   const assigned = useDuel((state) => state.assigned);
   const exempt = useAdExempt();
+  const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
 
   useEffect(() => {
     assignDuelMember('both', initialId);
@@ -26,7 +27,7 @@ export default function Page({ params }: { params: { id: string } }) {
       if (document.activeElement instanceof HTMLInputElement) return;
 
       function wipeShot() {
-        mutateTankopediaTemporary((draft) => {
+        mutateTankopediaEphemeral((draft) => {
           draft.shot = undefined;
         });
       }
@@ -64,7 +65,7 @@ export default function Page({ params }: { params: { id: string } }) {
     const unsubscribe = useDuel.subscribe(
       (state) => state.protagonist?.tank.id,
       () => {
-        mutateTankopediaTemporary((draft) => {
+        mutateTankopediaEphemeral((draft) => {
           draft.shot = undefined;
         });
       },
