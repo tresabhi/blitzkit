@@ -1,3 +1,5 @@
+'use client';
+
 import { merge } from 'lodash';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
