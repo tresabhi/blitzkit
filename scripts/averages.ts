@@ -95,7 +95,7 @@ times(THREADS, async () => {
     const players = await Promise.all(
       filteredIds.map((id) =>
         getTankStats(region, id, {
-          fields: 'last_battle_time,battle_life_time,all',
+          fields: 'last_battle_time,battle_life_time,all,tank_id',
         }),
       ),
     );
@@ -105,6 +105,9 @@ times(THREADS, async () => {
         if (tank.all.battles === 0) return;
 
         if (!tankIds.includes(tank.tank_id)) {
+          console.log(
+            `Found new tank: ${tank.tank_id} (${tankIds.length + 1})`,
+          );
           tankIds.push(tank.tank_id);
           tanksSorted[tank.tank_id] = [];
         }
