@@ -1,13 +1,11 @@
 import { CaretDownIcon } from '@radix-ui/react-icons';
 import { Button, DropdownMenu } from '@radix-ui/themes';
 import { TankopediaSortDirection } from '../../../../stores/tankopedia';
-import {
-  mutateTankopediaSort,
-  useTankopediaSort,
-} from '../../../../stores/tankopediaSort';
+import * as TankopediaSort from '../../../../stores/tankopediaSort';
 
 export function Sort() {
-  const sort = useTankopediaSort();
+  const sort = TankopediaSort.use();
+  const mutateTankopediaSort = TankopediaSort.useMutation();
 
   return (
     <DropdownMenu.Root modal={false}>

@@ -12,7 +12,7 @@ import { resolveReload } from '../../../../core/blitzkit/resolveReload';
 import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../../../../core/blitzkit/tankIcon';
 import { unionBoundingBox } from '../../../../core/blitzkit/unionBoundingBox';
-import { useTankopediaSort } from '../../../../stores/tankopediaSort';
+import * as TankopediaSort from '../../../../stores/tankopediaSort';
 import * as styles from './TankCard.css';
 
 interface TankCardProps {
@@ -23,7 +23,7 @@ interface TankCardProps {
 export function TankCard({ tank, onSelect }: TankCardProps) {
   const awaitedModelDefinitions = use(modelDefinitions);
   const Icon = classIcons[tank.class];
-  const sortBy = useTankopediaSort((state) => state.by);
+  const sortBy = TankopediaSort.use((state) => state.by);
   const discriminator = useMemo(() => {
     if (sortBy.startsWith('meta')) return undefined;
 

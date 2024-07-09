@@ -1,5 +1,6 @@
-import { produce } from 'immer';
-import { create } from 'zustand';
+'use client';
+
+import { createNextSafeStore } from '../core/zustand/createNextSafeStore';
 import { TankopediaSortBy, TankopediaSortDirection } from './tankopedia';
 
 export interface TankopediaSort {
@@ -7,11 +8,8 @@ export interface TankopediaSort {
   direction: TankopediaSortDirection;
 }
 
-export const useTankopediaSort = create<TankopediaSort>()(() => ({
-  by: 'meta.none',
-  direction: 'descending',
-}));
-
-export function mutateTankopediaSort(recipe: (draft: TankopediaSort) => void) {
-  useTankopediaSort.setState(produce(recipe));
-}
+export const { Provider, use, useMutation, useStore } =
+  createNextSafeStore<TankopediaSort>({
+    by: 'meta.none',
+    direction: 'descending',
+  });

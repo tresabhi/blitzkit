@@ -22,7 +22,7 @@ import { unionBoundingBox } from '../../../../../core/blitzkit/unionBoundingBox'
 import { useAdExempt } from '../../../../../hooks/useAdExempt';
 import * as TankFilters from '../../../../../stores/tankFilters';
 import { SORT_NAMES, SORT_UNITS } from '../../../../../stores/tankopedia';
-import { useTankopediaSort } from '../../../../../stores/tankopediaSort';
+import * as TankopediaSort from '../../../../../stores/tankopediaSort';
 import { FilterControl } from '../FilterControl';
 import { NoResults } from '../NoResults';
 import { SearchBar } from '../SearchBar';
@@ -46,7 +46,7 @@ export const TankSearch = memo<TankSearchProps>(
     const awaitedTanksDefinitionsArray = use(tanksDefinitionsArray);
     const awaitedTankNames = use(tankNames);
     const filters = TankFilters.use();
-    const sort = useTankopediaSort();
+    const sort = TankopediaSort.use();
     const tanks = useMemo(() => {
       if (filters.search === undefined) {
         const filtered = awaitedTanksDefinitionsArray.filter((tank) =>
