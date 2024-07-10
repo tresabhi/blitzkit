@@ -2,14 +2,20 @@
 
 import { CheckIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Link, Text } from '@radix-ui/themes';
+import { useLayoutEffect, useState } from 'react';
 import { patreonLoginUrl } from '../../core/blitzkit/patreonLoginUrl';
 import { useAdExempt } from '../../hooks/useAdExempt';
 import { PatreonIcon } from '../../icons/Patreon';
 import * as App from '../../stores/app';
 
 export function PatreonPlug() {
-  const patreon = App.use((state) => state.logins.patreon);
+  const [hasPatreon, setHasPatreon] = useState(false);
   const exempt = useAdExempt();
+  const patreon = App.use((state) => state.logins.patreon);
+
+  useLayoutEffect(() => {
+    setHasPatreon(patreon !== undefined);
+  }, [patreon]);
 
   return (
     <Flex
@@ -36,7 +42,7 @@ export function PatreonPlug() {
             {exempt ? 'Manage membership' : 'Support on Patreon'}
           </Button>
         </Link>
-        {!patreon && !exempt && (
+        {!hasPatreon && !exempt && (
           <Link href={patreonLoginUrl()}>
             <Button variant="outline">Log in with Patreon</Button>
           </Link>

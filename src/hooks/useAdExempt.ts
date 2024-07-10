@@ -1,30 +1,36 @@
-import { use, useMemo } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import * as App from '../stores/app';
 
-let cache: Record<string, boolean> = {};
+let cache: Record<string, boolean | Promise<boolean>> = {};
 
 export function useAdExempt() {
   const patreon = App.use((state) => state.logins.patreon);
-  const promise = useMemo(
-    () =>
-      new Promise<boolean>(async (resolve) => {
-        if (!patreon) return resolve(false);
-        if (patreon.token in cache) return resolve(cache[patreon.token]);
+  const [exempt, setExempt] = useState(false);
 
-        const response = await fetch(
-          `/api/patreon/membership/${patreon.token}`,
-          { cache: 'force-cache' },
-        );
+  useLayoutEffect(() => {
+    (async () => {
+      if (!patreon) return setExempt(false);
 
-        if (!response.ok) return resolve(false);
+      if (!(patreon.token in cache)) {
+        cache[patreon.token] = new Promise<boolean>(async (resolve) => {
+          const response = await fetch(
+            `/api/patreon/membership/${patreon.token}`,
+            { cache: 'force-cache' },
+          );
 
-        const json = await response.json();
-        const exempt = typeof json === 'boolean' && json;
-        cache[patreon.token] = exempt;
+          if (!response.ok) return resolve(false);
 
-        resolve(exempt);
-      }),
-    [patreon?.token],
-  );
-  return use(promise);
+          const json = await response.json();
+          const exempt = typeof json === 'boolean' && json;
+
+          cache[patreon.token] = exempt;
+          resolve(exempt);
+        });
+      }
+
+      setExempt(await cache[patreon.token]);
+    })();
+  }, []);
+
+  return exempt;
 }
