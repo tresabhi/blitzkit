@@ -440,6 +440,7 @@ export const TankSearch = memo<TankSearchProps>(
                   <>
                     <TankCard onSelect={onSelect} key={tank.id} tank={tank} />
                     {!exempt &&
+                      !compact &&
                       (index + 16) % 32 === 0 &&
                       index !== tanks.length - 1 && (
                         <AdMidSectionResponsive gridColumn="1 / -1" />
