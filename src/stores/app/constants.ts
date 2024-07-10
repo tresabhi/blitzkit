@@ -1,0 +1,1 @@
+export const CURRENT_POLICIES_AGREEMENT_INDEX = 0;

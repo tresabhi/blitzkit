@@ -31,7 +31,7 @@ import {
 } from '../../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useEquipment } from '../../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../../hooks/useFullScreen';
-import { useApp } from '../../../../../../../stores/app';
+import * as App from '../../../../../../../stores/app';
 import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
 import * as TankopediaPersistent from '../../../../../../../stores/tankopediaPersistent';
@@ -65,7 +65,7 @@ export function Options() {
   const environment = TankopediaPersistent.use(
     (state) => state.model.visual.environment,
   );
-  const developerMode = useApp((state) => state.developerMode);
+  const developerMode = App.use((state) => state.developerMode);
   const antagonistGun = useDuel((state) => state.antagonist!.gun);
   const antagonistShell = useDuel((state) => state.antagonist!.shell);
   const [antagonistSelectorOpen, setAntagonistSelectorOpen] = useState(false);

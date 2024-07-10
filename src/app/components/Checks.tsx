@@ -10,13 +10,21 @@ import {
 } from '@radix-ui/themes';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { extendAuthPatreon } from '../../core/blitz/extendAuthPatreon';
-import { extendAuthWargaming } from '../../core/blitz/extendAuthWargaming';
-import { logoutPatreon } from '../../core/blitz/logoutPatreon';
-import { logoutWargaming } from '../../core/blitz/logoutWargaming';
+import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
+import { idToRegion } from '../../core/blitz/idToRegion';
 import isDev from '../../core/blitzkit/isDev';
 import { isLocalhost } from '../../core/blitzkit/isLocalhost';
-import { CURRENT_POLICIES_AGREEMENT_INDEX, useApp } from '../../stores/app';
+import * as App from '../../stores/app';
+import { CURRENT_POLICIES_AGREEMENT_INDEX } from '../../stores/app/constants';
+import { PatreonAuthResponse } from '../auth/[provider]/page';
+
+interface Extension {
+  data: {
+    access_token: string;
+    account_id: number;
+    expires_at: number;
+  };
+}
 
 const DEV_BUILD_AGREEMENT_COOLDOWN = 8 * 24 * 60 * 60 * 1000;
 
@@ -27,8 +35,10 @@ const DEV_BUILD_AGREEMENT_COOLDOWN = 8 * 24 * 60 * 60 * 1000;
 
 export function Checks() {
   const [showDevBuildAlert, setShowDevBuildAlert] = useState(false);
-  const logins = useApp((state) => state.logins);
-  const policiesAgreementIndex = useApp(
+  const mutateApp = App.useMutation();
+  const logins = App.use((state) => state.logins);
+  const appStore = App.useStore();
+  const policiesAgreementIndex = App.use(
     (state) => state.policiesAgreementIndex,
   );
   const pathname = usePathname();
@@ -39,7 +49,7 @@ export function Checks() {
     setShowDevBuildAlert(
       isDev() &&
         !isLocalhost() &&
-        Date.now() - useApp.getState().devBuildAgreementTime >=
+        Date.now() - appStore.getState().devBuildAgreementTime >=
           DEV_BUILD_AGREEMENT_COOLDOWN,
     );
   }, []);
@@ -55,9 +65,31 @@ export function Checks() {
       const expiresInDays = expiresIn / 1000 / 60 / 60 / 24;
 
       if (expiresInDays < 0) {
-        logoutWargaming();
+        mutateApp((draft) => {
+          draft.logins.wargaming = undefined;
+        });
       } else if (expiresInDays < 7) {
-        extendAuthWargaming();
+        const { wargaming } = appStore.getState().logins;
+
+        if (!wargaming) return;
+
+        fetch(
+          `https://api.worldoftanks.${idToRegion(
+            wargaming.id,
+          )}/wot/auth/prolongate/?application_id=${WARGAMING_APPLICATION_ID}&access_token=${
+            wargaming.token
+          }`,
+        )
+          .then((response) => response.json() as Promise<Extension>)
+          .then((json) => {
+            mutateApp((draft) => {
+              draft.logins.wargaming = {
+                id: wargaming.id,
+                token: json.data.access_token,
+                expires: json.data.expires_at * 1000,
+              };
+            });
+          });
       }
     }
 
@@ -66,9 +98,25 @@ export function Checks() {
       const expiresInDays = expiresIn / 1000 / 60 / 60 / 24;
 
       if (expiresInDays < 0) {
-        logoutPatreon();
+        mutateApp((draft) => {
+          draft.logins.patreon = undefined;
+        });
       } else if (expiresInDays < 15) {
-        extendAuthPatreon();
+        const { patreon } = appStore.getState().logins;
+
+        if (!patreon) return;
+
+        fetch(`/api/patreon/refresh/${patreon.refreshToken}`)
+          .then((response) => response.json() as Promise<PatreonAuthResponse>)
+          .then((data) => {
+            mutateApp((draft) => {
+              draft.logins.patreon = {
+                token: data.access_token,
+                refreshToken: data.refresh_token,
+                expires: Date.now() + data.expires_in * 1000,
+              };
+            });
+          });
       }
     }
   });
@@ -93,7 +141,7 @@ export function Checks() {
               variant="solid"
               onClick={() => {
                 setShowDevBuildAlert(false);
-                useApp.setState({ devBuildAgreementTime: Date.now() });
+                appStore.setState({ devBuildAgreementTime: Date.now() });
               }}
             >
               Continue
@@ -158,7 +206,7 @@ export function Checks() {
 
               <Button
                 onClick={() => {
-                  useApp.setState({
+                  appStore.setState({
                     policiesAgreementIndex: CURRENT_POLICIES_AGREEMENT_INDEX,
                   });
                 }}

@@ -10,6 +10,7 @@ import { Footer } from '../components/Footer';
 import { Loader } from '../components/Loader';
 import Navbar, { NAVBAR_HEIGHT } from '../components/Navbar';
 import { Party3 } from '../components/Party3';
+import * as App from '../stores/app';
 import { Checks } from './components/Checks';
 import './layout.css';
 
@@ -31,62 +32,64 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const isRoot = pathname === '/';
 
   return (
-    <html lang="en" className={robotoFlex.className}>
-      <head>
-        {isRoot && (
-          <>
-            <title>BlitzKit</title>
-            <meta
-              name="description"
-              content="🎉 Tools for everything World of Tanks Blitz"
-            />
-          </>
-        )}
-        <meta property="og:site_name" content="BlitzKit" />
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <App.Provider>
+      <html lang="en" className={robotoFlex.className}>
+        <head>
+          {isRoot && (
+            <>
+              <title>BlitzKit</title>
+              <meta
+                name="description"
+                content="🎉 Tools for everything World of Tanks Blitz"
+              />
+            </>
+          )}
+          <meta property="og:site_name" content="BlitzKit" />
+          <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
-        <Party3 />
-      </head>
+          <Party3 />
+        </head>
 
-      <body
-        style={{
-          margin: 0,
-          backgroundColor: isEmbed ? 'transparent' : undefined,
-        }}
-      >
-        <Theme
-          appearance="dark"
-          panelBackground="solid"
-          radius="full"
-          accentColor="amber"
-          suppressHydrationWarning
-          suppressContentEditableWarning
+        <body
+          style={{
+            margin: 0,
+            backgroundColor: isEmbed ? 'transparent' : undefined,
+          }}
         >
-          <Flex
-            direction="column"
-            style={{
-              minHeight: '100vh',
-              paddingTop: isEmbed ? undefined : NAVBAR_HEIGHT,
-            }}
+          <Theme
+            appearance="dark"
+            panelBackground="solid"
+            radius="full"
+            accentColor="amber"
+            suppressHydrationWarning
+            suppressContentEditableWarning
           >
-            {!isEmbed && <Navbar />}
-
-            <Checks />
-
-            <Suspense
-              fallback={
-                <div style={{ flex: 1 }}>
-                  <Loader />
-                </div>
-              }
+            <Flex
+              direction="column"
+              style={{
+                minHeight: '100vh',
+                paddingTop: isEmbed ? undefined : NAVBAR_HEIGHT,
+              }}
             >
-              {children}
-            </Suspense>
+              {!isEmbed && <Navbar />}
 
-            {!isEmbed && <Footer />}
-          </Flex>
-        </Theme>
-      </body>
-    </html>
+              <Checks />
+
+              <Suspense
+                fallback={
+                  <div style={{ flex: 1 }}>
+                    <Loader />
+                  </div>
+                }
+              >
+                {children}
+              </Suspense>
+
+              {!isEmbed && <Footer />}
+            </Flex>
+          </Theme>
+        </body>
+      </html>
+    </App.Provider>
   );
 }

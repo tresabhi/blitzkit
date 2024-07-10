@@ -2,10 +2,11 @@
 
 import { Flex, Heading, Switch, Text } from '@radix-ui/themes';
 import PageWrapper from '../../components/PageWrapper';
-import { useApp } from '../../stores/app';
+import * as App from '../../stores/app';
 
 export default function Page() {
-  const developerMode = useApp((state) => state.developerMode);
+  const developerMode = App.use((state) => state.developerMode);
+  const appStore = App.useStore();
 
   return (
     <PageWrapper justify="center" align="center">
@@ -18,7 +19,7 @@ export default function Page() {
             <Switch
               checked={developerMode}
               onCheckedChange={(checked) =>
-                useApp.setState({ developerMode: checked })
+                appStore.setState({ developerMode: checked })
               }
             />
           </Flex>

@@ -1,10 +1,10 @@
 import { use, useMemo } from 'react';
-import { useApp } from '../stores/app';
+import * as App from '../stores/app';
 
 let cache: Record<string, boolean> = {};
 
 export function useAdExempt() {
-  const patreon = useApp((state) => state.logins.patreon);
+  const patreon = App.use((state) => state.logins.patreon);
   const promise = useMemo(
     () =>
       new Promise<boolean>(async (resolve) => {

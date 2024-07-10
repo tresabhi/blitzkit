@@ -23,8 +23,6 @@ import { useState } from 'react';
 import { REGIONS } from '../../constants/regions';
 import { TOOLS } from '../../constants/tools';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
-import { logoutPatreon } from '../../core/blitz/logoutPatreon';
-import { logoutWargaming } from '../../core/blitz/logoutWargaming';
 import { imgur, ImgurSize } from '../../core/blitzkit/imgur';
 import { patreonLoginUrl } from '../../core/blitzkit/patreonLoginUrl';
 import { BlitzkitWide } from '../../icons/BlitzkitWide';
@@ -32,7 +30,7 @@ import { PatreonIcon } from '../../icons/Patreon';
 import { WargamingIcon } from '../../icons/Wargaming';
 import strings from '../../lang/en-US.json';
 import { theme } from '../../stitches.config';
-import { useApp } from '../../stores/app';
+import * as App from '../../stores/app';
 import { Link } from '../Link';
 import * as styles from './index.css';
 
@@ -41,8 +39,9 @@ export const NAVBAR_HEIGHT = 64;
 export default function Navbar() {
   const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
   const pathname = usePathname();
-  const logins = useApp((state) => state.logins);
+  const logins = App.use((state) => state.logins);
   const filteredTools = TOOLS.filter((tool) => !tool.href);
+  const mutateApp = App.useMutation();
 
   return (
     <Box
@@ -162,7 +161,11 @@ export default function Navbar() {
                         <Button
                           color="red"
                           variant="ghost"
-                          onClick={logoutPatreon}
+                          onClick={() =>
+                            mutateApp((draft) => {
+                              draft.logins.patreon = undefined;
+                            })
+                          }
                         >
                           Logout
                         </Button>
@@ -176,7 +179,11 @@ export default function Navbar() {
                         <Button
                           color="red"
                           variant="ghost"
-                          onClick={logoutWargaming}
+                          onClick={() =>
+                            mutateApp((draft) => {
+                              draft.logins.wargaming = undefined;
+                            })
+                          }
                         >
                           Logout
                         </Button>

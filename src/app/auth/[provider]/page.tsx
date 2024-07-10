@@ -4,7 +4,7 @@ import { Flex, Heading, Text } from '@radix-ui/themes';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
-import { mutateApp } from '../../../stores/app';
+import * as App from '../../../stores/app';
 
 export interface PatreonAuthResponse {
   access_token: string;
@@ -23,6 +23,7 @@ export default function Page({
   searchParams: { [key: string]: string };
 }) {
   const router = useRouter();
+  const mutateApp = App.useMutation();
 
   useEffect(() => {
     switch (params.provider) {

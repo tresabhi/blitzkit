@@ -5,10 +5,10 @@ import { Button, Flex, Link, Text } from '@radix-ui/themes';
 import { patreonLoginUrl } from '../../core/blitzkit/patreonLoginUrl';
 import { useAdExempt } from '../../hooks/useAdExempt';
 import { PatreonIcon } from '../../icons/Patreon';
-import { useApp } from '../../stores/app';
+import * as App from '../../stores/app';
 
 export function PatreonPlug() {
-  const patreon = useApp((state) => state.logins.patreon);
+  const patreon = App.use((state) => state.logins.patreon);
   const exempt = useAdExempt();
 
   return (
