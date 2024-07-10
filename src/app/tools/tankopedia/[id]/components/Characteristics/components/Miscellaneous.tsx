@@ -3,18 +3,19 @@ import { clamp, debounce } from 'lodash';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GenericTankComponentButton } from '../../../../../../../components/ModuleButtons/GenericTankComponentButton';
 import { asset } from '../../../../../../../core/blitzkit/asset';
-import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
+import * as Duel from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Miscellaneous() {
-  const camouflage = useDuel((state) => state.protagonist!.camouflage);
-  const cooldownBooster = useDuel(
+  const mutateDuel = Duel.useMutation();
+  const camouflage = Duel.use((state) => state.protagonist!.camouflage);
+  const cooldownBooster = Duel.use(
     (state) => state.protagonist!.cooldownBooster,
   );
-  const crewMastery = useDuel((state) => state.protagonist!.crewMastery);
+  const crewMastery = Duel.use((state) => state.protagonist!.crewMastery);
   const crewInput = useRef<HTMLInputElement>(null);
   const [crewMasteryDraft, setCrewMasteryDraft] = useState(crewMastery);
-  const { tank } = useDuel((state) => state.protagonist!);
+  const { tank } = Duel.use((state) => state.protagonist!);
 
   const debouncedApplyDraft = useMemo(
     () =>

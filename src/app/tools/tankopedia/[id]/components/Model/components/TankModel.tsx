@@ -21,12 +21,14 @@ import {
 import { normalizeAngleRad } from '../../../../../../../core/math/normalizeAngleRad';
 import { useAwait } from '../../../../../../../hooks/useAwait';
 import { useModel } from '../../../../../../../hooks/useModel';
-import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
+import * as Duel from '../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
 
 export const TankModel = memo(() => {
+  const mutateDuel = Duel.useMutation();
+  const duelStore = Duel.useStore();
   const awaitedModelDefinitions = useAwait(modelDefinitions);
-  const protagonist = useDuel((draft) => draft.protagonist!);
+  const protagonist = Duel.use((draft) => draft.protagonist!);
   const canvas = useThree((state) => state.gl.domElement);
   const hullContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
@@ -216,7 +218,7 @@ export const TankModel = memo(() => {
             }
           }
           async function handlePointerMove(event: PointerEvent) {
-            const duel = useDuel.getState();
+            const duel = duelStore.getState();
             const hasImprovedVerticalStabilizer = await hasEquipment(
               122,
               duel.protagonist!.tank.equipment,
@@ -296,7 +298,7 @@ export const TankModel = memo(() => {
               window.addEventListener('pointerup', handlePointerUp);
             }
             async function handlePointerMove(event: PointerEvent) {
-              const duel = useDuel.getState();
+              const duel = duelStore.getState();
               const hasImprovedVerticalStabilizer = await hasEquipment(
                 122,
                 duel.protagonist!.tank.equipment,

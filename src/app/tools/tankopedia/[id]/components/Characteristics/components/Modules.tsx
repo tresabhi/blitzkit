@@ -19,7 +19,7 @@ import {
 } from '../../../../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../../core/blitzkit/tankDefinitions/constants';
 import { tankIcon } from '../../../../../../../core/blitzkit/tankIcon';
-import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
+import * as Duel from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 function ModuleButton({
@@ -116,17 +116,18 @@ function ModuleButton({
 }
 
 export function Modules() {
+  const mutateDuel = Duel.useMutation();
   const awaitedTankDefinitions = use(tankDefinitions);
-  const tank = useDuel((state) => state.protagonist!.tank);
+  const tank = Duel.use((state) => state.protagonist!.tank);
   const hasUpgrades =
     tank.turrets.length > 1 ||
     tank.turrets[0].guns.length > 1 ||
     tank.engines.length > 1 ||
     tank.tracks.length > 1;
-  const turret = useDuel((state) => state.protagonist!.turret);
-  const gun = useDuel((state) => state.protagonist!.gun);
-  const engine = useDuel((state) => state.protagonist!.engine);
-  const track = useDuel((state) => state.protagonist!.track);
+  const turret = Duel.use((state) => state.protagonist!.turret);
+  const gun = Duel.use((state) => state.protagonist!.gun);
+  const engine = Duel.use((state) => state.protagonist!.engine);
+  const track = Duel.use((state) => state.protagonist!.track);
   const turret0 = tank.turrets[0];
   const gun0 = turret0.guns[0];
   const engine0 = tank.engines[0];

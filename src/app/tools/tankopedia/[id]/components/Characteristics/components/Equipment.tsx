@@ -2,15 +2,16 @@ import { Button, Flex, Heading } from '@radix-ui/themes';
 import { use } from 'react';
 import { EquipmentManager } from '../../../../../../../components/EquipmentManager';
 import { equipmentDefinitions } from '../../../../../../../core/blitzkit/equipmentDefinitions';
-import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
+import * as Duel from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Equipment() {
-  const protagonist = useDuel((state) => state.protagonist!);
+  const mutateDuel = Duel.useMutation();
+  const protagonist = Duel.use((state) => state.protagonist!);
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const equipmentPreset =
     awaitedEquipmentDefinitions.presets[protagonist.tank.equipment];
-  const equipmentMatrix = useDuel(
+  const equipmentMatrix = Duel.use(
     (state) => state.protagonist!.equipmentMatrix,
   );
 

@@ -3,9 +3,8 @@
 import { useEffect } from 'react';
 import { AdMidSectionResponsive } from '../../../../components/AdMidSectionResponsive';
 import PageWrapper from '../../../../components/PageWrapper';
-import { assignDuelMember } from '../../../../core/blitzkit/assignDuelMember';
 import { useAdExempt } from '../../../../hooks/useAdExempt';
-import { mutateDuel, useDuel } from '../../../../stores/duel';
+import * as Duel from '../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 import { HistorySection } from './components/HistorySection';
 import { CharacteristicsSection } from './components/Model/CharacteristicsSection';
@@ -14,15 +13,14 @@ import { TechTreeSection } from './components/Model/TechTreeSection';
 import { ShotDisplaySection } from './components/ShotDisplaySection';
 import { VideoSection } from './components/VideoSection';
 
+// TODO: remove this param if not needed for duel assignment
 export default function Page({ params }: { params: { id: string } }) {
-  const initialId = parseInt(params.id);
-  const assigned = useDuel((state) => state.assigned);
   const exempt = useAdExempt();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
+  const mutateDuel = Duel.useMutation();
+  const duelStore = Duel.useStore();
 
   useEffect(() => {
-    assignDuelMember('both', initialId);
-
     function handleKeyDown(event: KeyboardEvent) {
       if (document.activeElement instanceof HTMLInputElement) return;
 
@@ -59,10 +57,10 @@ export default function Page({ params }: { params: { id: string } }) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [initialId, assigned]);
+  }, []);
 
   useEffect(() => {
-    const unsubscribe = useDuel.subscribe(
+    const unsubscribe = duelStore.subscribe(
       (state) => state.protagonist?.tank.id,
       () => {
         mutateTankopediaEphemeral((draft) => {
@@ -76,19 +74,15 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <PageWrapper p="0" noMaxWidth color="purple" size={1600}>
-      {assigned && (
-        <>
-          <HeroSection />
-          <ShotDisplaySection />
-          {!exempt && <AdMidSectionResponsive />}
-          <CharacteristicsSection />
-          {!exempt && <AdMidSectionResponsive />}
-          <TechTreeSection />
-          <VideoSection />
-          {!exempt && <AdMidSectionResponsive />}
-          <HistorySection />
-        </>
-      )}
+      <HeroSection />
+      <ShotDisplaySection />
+      {!exempt && <AdMidSectionResponsive />}
+      <CharacteristicsSection />
+      {!exempt && <AdMidSectionResponsive />}
+      <TechTreeSection />
+      <VideoSection />
+      {!exempt && <AdMidSectionResponsive />}
+      <HistorySection />
     </PageWrapper>
   );
 }

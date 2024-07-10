@@ -12,7 +12,7 @@ import { resolvePenetrationCoefficient } from '../../../../../../core/blitz/reso
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../../../core/blitzkit/jsxTree';
 import { ShellDefinition } from '../../../../../../core/blitzkit/tankDefinitions';
-import { EquipmentMatrix, useDuel } from '../../../../../../stores/duel';
+import * as Duel from '../../../../../../stores/duel';
 import { ArmorType } from '../../../SpacedArmorScene';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
@@ -30,6 +30,7 @@ export function SpacedArmorSubExternal({
   variant,
   clip,
 }: SpacedArmorSubExternalProps) {
+  const duelStore = Duel.useStore();
   const material = new ShaderMaterial({
     fragmentShader,
     vertexShader,
@@ -53,9 +54,9 @@ export function SpacedArmorSubExternal({
       );
     }
     async function handleProtagonistEquipmentChange(
-      equipment: EquipmentMatrix,
+      equipment: Duel.EquipmentMatrix,
     ) {
-      const duel = useDuel.getState();
+      const duel = duelStore.getState();
       const hasEnhancedArmor = await hasEquipment(
         110,
         duel.protagonist!.tank.equipment,
@@ -65,8 +66,10 @@ export function SpacedArmorSubExternal({
         ? thickness * 1.03
         : thickness;
     }
-    async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
-      const duel = useDuel.getState();
+    async function handleAntagonistEquipmentChange(
+      equipment: Duel.EquipmentMatrix,
+    ) {
+      const duel = duelStore.getState();
       const shell = duel.antagonist!.shell;
       const penetration = resolveNearPenetration(shell.penetration);
       const hasCalibratedShells = await hasEquipment(
@@ -80,21 +83,24 @@ export function SpacedArmorSubExternal({
         resolvePenetrationCoefficient(hasCalibratedShells, shell.type);
     }
 
-    handleShellChange(useDuel.getState().antagonist!.shell);
+    handleShellChange(duelStore.getState().antagonist!.shell);
     handleProtagonistEquipmentChange(
-      useDuel.getState().protagonist!.equipmentMatrix,
+      duelStore.getState().protagonist!.equipmentMatrix,
     );
     handleAntagonistEquipmentChange(
-      useDuel.getState().antagonist!.equipmentMatrix,
+      duelStore.getState().antagonist!.equipmentMatrix,
     );
 
     const unsubscribes = [
-      useDuel.subscribe((state) => state.antagonist!.shell, handleShellChange),
-      useDuel.subscribe(
+      duelStore.subscribe(
+        (state) => state.antagonist!.shell,
+        handleShellChange,
+      ),
+      duelStore.subscribe(
         (state) => state.protagonist!.equipmentMatrix,
         handleProtagonistEquipmentChange,
       ),
-      useDuel.subscribe(
+      duelStore.subscribe(
         (state) => state.antagonist!.equipmentMatrix,
         handleAntagonistEquipmentChange,
       ),

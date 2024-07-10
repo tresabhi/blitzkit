@@ -8,7 +8,7 @@ import { hasEquipment } from '../../../../../core/blitzkit/hasEquipment';
 import { modelDefinitions } from '../../../../../core/blitzkit/modelDefinitions';
 import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
 import { useAwait } from '../../../../../hooks/useAwait';
-import { useDuel } from '../../../../../stores/duel';
+import * as Duel from '../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../stores/tankopediaEphemeral';
 
 const poseDistances: Record<Pose, number> = {
@@ -18,13 +18,14 @@ const poseDistances: Record<Pose, number> = {
 };
 
 export function Controls() {
+  const duelStore = Duel.useStore();
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
   const camera = useThree((state) => state.camera);
   const canvas = useThree((state) => state.gl.domElement);
   const orbitControls = useRef<OrbitControlsClass>(null);
   const awaitedModelDefinitions = useAwait(modelDefinitions);
-  const protagonist = useDuel((state) => state.protagonist!);
-  const antagonist = useDuel((state) => state.antagonist!);
+  const protagonist = Duel.use((state) => state.protagonist!);
+  const antagonist = Duel.use((state) => state.antagonist!);
   const protagonistModelDefinition =
     awaitedModelDefinitions[protagonist.tank.id];
   const protagonistTrackModelDefinition =
@@ -71,7 +72,7 @@ export function Controls() {
     );
 
     async function handlePoseEvent(event: Pose) {
-      const duel = useDuel.getState();
+      const duel = duelStore.getState();
       const hasImprovedVerticalStabilizer = await hasEquipment(
         122,
         duel.protagonist!.tank.equipment,

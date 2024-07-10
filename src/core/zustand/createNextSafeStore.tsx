@@ -1,5 +1,13 @@
 import { Draft, produce } from 'immer';
-import { createContext, ReactNode, useContext, useRef } from 'react';
+import { usePathname } from 'next/navigation';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useMemo,
+  use as useReact,
+  useRef,
+} from 'react';
 import { StoreApi, useStore as useStoreZustand } from 'zustand';
 
 interface StoreProviderProps {
@@ -13,16 +21,24 @@ type ExtractState<S> = S extends {
   ? T
   : never;
 
+interface InitialContext {
+  pathName: string;
+}
+
 export function createNextSafeStore<Store extends StoreApi<unknown>>(
-  initial: () => Store,
+  initial: (context: InitialContext) => Store | Promise<Store>,
 ) {
   type Type = Store extends StoreApi<infer T> ? T : never;
 
   const Context = createContext<Store | undefined>(undefined);
 
   function Provider({ children }: StoreProviderProps) {
+    const pathName = usePathname();
     const storeRef = useRef<Store>();
-    if (!storeRef.current) storeRef.current = initial() as Store;
+    const context = { pathName };
+    const storePromise = useMemo(async () => await initial(context), []);
+    const awaitedStore = useReact(storePromise);
+    if (!storeRef.current) storeRef.current = awaitedStore;
 
     return (
       <Context.Provider value={storeRef.current}>{children}</Context.Provider>

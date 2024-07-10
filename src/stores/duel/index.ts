@@ -1,14 +1,19 @@
-import { produce } from 'immer';
+'use client';
+
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import { provisionDefinitions } from '../../core/blitzkit/provisionDefinitions';
 import {
   EngineDefinition,
   GunDefinition,
   ShellDefinition,
   TankDefinition,
+  tankDefinitions,
   TrackDefinition,
   TurretDefinition,
 } from '../../core/blitzkit/tankDefinitions';
+import { tankToDuelMember } from '../../core/blitzkit/tankToDuelMember';
+import { createNextSafeStore } from '../../core/zustand/createNextSafeStore';
 
 type EquipmentMatrixItem = -1 | 0 | 1;
 type EquipmentMatrixRow = [
@@ -40,17 +45,23 @@ export interface DuelMember {
 }
 
 export interface Duel {
-  assigned: boolean;
-  protagonist?: DuelMember;
-  antagonist?: DuelMember;
+  protagonist: DuelMember;
+  antagonist: DuelMember;
 }
 
-export const useDuel = create<Duel>()(
-  subscribeWithSelector<Duel>(() => ({
-    assigned: false,
-  })),
+export const { Provider, use, useMutation, useStore } = createNextSafeStore(
+  async ({ pathName }) => {
+    const id = Number(pathName.split('/')[3]);
+    const awaitedTankDefinitions = await tankDefinitions;
+    const awaitedProvisionDefinitions = await provisionDefinitions;
+    const tank = awaitedTankDefinitions[id];
+    const protagonist = tankToDuelMember(tank, awaitedProvisionDefinitions);
+
+    return create<Duel>()(
+      subscribeWithSelector<Duel>(() => ({
+        protagonist,
+        antagonist: protagonist,
+      })),
+    );
+  },
 );
-
-export function mutateDuel(recipe: (draft: Duel) => void) {
-  useDuel.setState(produce(recipe));
-}

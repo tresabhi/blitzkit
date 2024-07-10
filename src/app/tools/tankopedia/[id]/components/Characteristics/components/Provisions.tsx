@@ -3,12 +3,13 @@ import { use } from 'react';
 import { ProvisionsManager } from '../../../../../../../components/ProvisionsManager';
 import { availableProvisions } from '../../../../../../../core/blitzkit/availableProvisions';
 import { provisionDefinitions } from '../../../../../../../core/blitzkit/provisionDefinitions';
-import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
+import * as Duel from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Provisions() {
-  const { tank, gun } = useDuel((state) => state.protagonist!);
-  const provisions = useDuel((state) => state.protagonist!.provisions);
+  const mutateDuel = Duel.useMutation();
+  const { tank, gun } = Duel.use((state) => state.protagonist!);
+  const provisions = Duel.use((state) => state.protagonist!.provisions);
   const awaitedProvisionDefinitions = use(provisionDefinitions);
   const provisionsList = availableProvisions(
     tank,

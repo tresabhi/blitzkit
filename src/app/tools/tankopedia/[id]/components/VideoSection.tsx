@@ -2,10 +2,10 @@ import { Flex, Heading, Link, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import PageWrapper from '../../../../../components/PageWrapper';
 import { videoDefinitions } from '../../../../../core/blitzkit/videos';
-import { useDuel } from '../../../../../stores/duel';
+import * as Duel from '../../../../../stores/duel';
 
 export function VideoSection() {
-  const tank = useDuel((state) => state.protagonist!.tank);
+  const tank = Duel.use((state) => state.protagonist!.tank);
   const awaitedVideoDefinitions = use(videoDefinitions);
   const videos = awaitedVideoDefinitions[tank.id]?.videos ?? [];
 

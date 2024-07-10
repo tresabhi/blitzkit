@@ -1,15 +1,15 @@
 import { use, useMemo } from 'react';
 import { equipmentDefinitions } from '../core/blitzkit/equipmentDefinitions';
-import { useDuel } from '../stores/duel';
+import * as Duel from '../stores/duel';
 
 export function useEquipment(id: number, antagonist = false) {
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
-  const member = useDuel(
+  const member = Duel.use(
     (state) => state[antagonist ? 'antagonist' : 'protagonist']!,
   );
   const equipmentRows =
     awaitedEquipmentDefinitions.presets[member.tank.equipment];
-  const equipmentMatrix = useDuel(
+  const equipmentMatrix = Duel.use(
     (state) =>
       state[antagonist ? 'antagonist' : 'protagonist']!.equipmentMatrix,
   );

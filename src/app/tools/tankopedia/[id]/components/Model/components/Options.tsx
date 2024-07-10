@@ -32,7 +32,7 @@ import {
 import { useEquipment } from '../../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../../hooks/useFullScreen';
 import * as App from '../../../../../../../stores/app';
-import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
+import * as Duel from '../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
 import * as TankopediaPersistent from '../../../../../../../stores/tankopediaPersistent';
 import { TankSearch } from '../../../../components/TankSearch';
@@ -66,13 +66,14 @@ export function Options() {
     (state) => state.model.visual.environment,
   );
   const developerMode = App.use((state) => state.developerMode);
-  const antagonistGun = useDuel((state) => state.antagonist!.gun);
-  const antagonistShell = useDuel((state) => state.antagonist!.shell);
+  const antagonistGun = Duel.use((state) => state.antagonist!.gun);
+  const antagonistShell = Duel.use((state) => state.antagonist!.shell);
   const [antagonistSelectorOpen, setAntagonistSelectorOpen] = useState(false);
-  const antagonistTank = useDuel((state) => state.antagonist!.tank);
-  const antagonistTurret = useDuel((state) => state.antagonist!.turret);
+  const antagonistTank = Duel.use((state) => state.antagonist!.tank);
+  const antagonistTurret = Duel.use((state) => state.antagonist!.turret);
   const hasCalibratedShells = useEquipment(103, true);
   const [tab, setTab] = useState('search');
+  const mutateDuel = Duel.useMutation();
   const hasEnhancedArmor = useEquipment(110);
 
   return (

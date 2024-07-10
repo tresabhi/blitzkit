@@ -11,7 +11,7 @@ import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
 import { useArmor } from '../../../hooks/useArmor';
 import { useModel } from '../../../hooks/useModel';
 import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
-import { useDuel } from '../../../stores/duel';
+import * as Duel from '../../../stores/duel';
 import * as TankopediaPersistent from '../../../stores/tankopediaPersistent';
 import { SpacedArmorSceneComponent } from './SpacedArmorSceneComponent';
 
@@ -32,7 +32,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
   const gunContainer = useRef<Group>(null);
   const tankopediaPersistentStore = TankopediaPersistent.useStore();
   const initialTankopediaState = tankopediaPersistentStore.getState();
-  const protagonist = useDuel((draft) => draft.protagonist!);
+  const protagonist = Duel.use((draft) => draft.protagonist);
 
   useEffect(() => {
     if (!modelDefinitions) return;
@@ -120,10 +120,10 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
     return unsubscribe;
   });
 
-  const tank = useDuel((state) => state.protagonist!.tank);
-  const track = useDuel((state) => state.protagonist!.track);
-  const turret = useDuel((state) => state.protagonist!.turret);
-  const gun = useDuel((state) => state.protagonist!.gun);
+  const tank = Duel.use((state) => state.protagonist!.tank);
+  const track = Duel.use((state) => state.protagonist!.track);
+  const turret = Duel.use((state) => state.protagonist!.turret);
+  const gun = Duel.use((state) => state.protagonist!.gun);
   const armorGltf = useArmor(tank.id);
   const { gltf: modelGltf } = useModel(tank.id);
   const armorNodes = Object.values(armorGltf.nodes);

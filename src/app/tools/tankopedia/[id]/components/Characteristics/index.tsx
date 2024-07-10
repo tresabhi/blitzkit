@@ -28,12 +28,13 @@ import {
 } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useAdExempt } from '../../../../../../hooks/useAdExempt';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
-import { mutateDuel, useDuel } from '../../../../../../stores/duel';
+import * as Duel from '../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemeral';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
 
 export function Characteristics() {
+  const mutateDuel = Duel.useMutation();
   const exempt = useAdExempt();
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const awaitedModelDefinitions = use(modelDefinitions);
@@ -41,10 +42,10 @@ export function Characteristics() {
   const crewSkills = TankopediaEphemeral.use((state) => state.skills);
   const penetrationDistanceInput = useRef<HTMLInputElement>(null);
   const hasImprovedVentilation = useEquipment(102);
-  const crewMastery = useDuel((state) => state.protagonist!.crewMastery);
+  const crewMastery = Duel.use((state) => state.protagonist!.crewMastery);
   const [penetrationDistance, setPenetrationDistance] = useState(250);
 
-  const provisions = useDuel((state) => state.protagonist!.provisions);
+  const provisions = Duel.use((state) => state.protagonist!.provisions);
   const provisionCrewBonus =
     provisions.reduce(
       (total, provision) =>
@@ -55,12 +56,12 @@ export function Characteristics() {
     ) + (hasImprovedVentilation ? 0.08 : 0);
   const commanderMastery = crewMastery + provisionCrewBonus;
   const crewMemberMastery = commanderMastery * 1.1;
-  const consumables = useDuel((state) => state.protagonist!.consumables);
-  const camouflage = useDuel((state) => state.protagonist!.camouflage);
-  const equipmentMatrix = useDuel(
+  const consumables = Duel.use((state) => state.protagonist!.consumables);
+  const camouflage = Duel.use((state) => state.protagonist!.camouflage);
+  const equipmentMatrix = Duel.use(
     (state) => state.protagonist!.equipmentMatrix,
   );
-  const { tank, turret, gun, engine, track, shell } = useDuel(
+  const { tank, turret, gun, engine, track, shell } = Duel.use(
     (state) => state.protagonist!,
   );
   const stockEngine = tank.engines[0];

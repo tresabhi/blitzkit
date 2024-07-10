@@ -7,13 +7,13 @@ import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import strings from '../../../../../../lang/en-US.json';
 import { theme } from '../../../../../../stitches.config';
-import { useDuel } from '../../../../../../stores/duel';
+import * as Duel from '../../../../../../stores/duel';
 import { TankSandbox } from './TankSandbox';
 import { Options } from './components/Options';
 
 export function HeroSection() {
-  const protagonist = useDuel((state) => state.protagonist!.tank);
-  const antagonist = useDuel((state) => state.antagonist!.tank);
+  const protagonist = Duel.use((state) => state.protagonist!.tank);
+  const antagonist = Duel.use((state) => state.antagonist!.tank);
   const wideFormat = useWideFormat(880);
   const compareTanks =
     protagonist.id === antagonist.id

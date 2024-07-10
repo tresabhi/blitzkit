@@ -7,7 +7,7 @@ import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitio
 import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
-import { mutateDuel, useDuel } from '../../../../../../stores/duel';
+import * as Duel from '../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemeral';
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
@@ -20,7 +20,8 @@ export function TankSandbox() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const hasImprovedVerticalStabilizer = useEquipment(122);
   const awaitedModelDefinitions = use(modelDefinitions);
-  const protagonist = useDuel((state) => state.protagonist!);
+  const protagonist = Duel.use((state) => state.protagonist!);
+  const mutateDuel = Duel.useMutation();
   const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];

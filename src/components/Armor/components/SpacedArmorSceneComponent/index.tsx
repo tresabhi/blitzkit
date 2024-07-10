@@ -16,7 +16,7 @@ import { resolvePenetrationCoefficient } from '../../../../core/blitz/resolvePen
 import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../core/blitzkit/jsxTree';
 import { ShellType } from '../../../../core/blitzkit/tankDefinitions';
-import { useDuel } from '../../../../stores/duel';
+import * as Duel from '../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 import { ArmorType } from '../SpacedArmorScene';
 import { SpacedArmorSubExternal } from './components/SpacedArmorSubExternal';
@@ -74,6 +74,7 @@ export function SpacedArmorSceneComponent({
 }: SpacedArmorSceneComponentProps) {
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
   const camera = useThree((state) => state.camera);
+  const duelStore = Duel.useStore();
 
   async function shoot(
     point: Vector3,
@@ -81,7 +82,7 @@ export function SpacedArmorSceneComponent({
     allowRicochet: boolean,
     remainingPenetrationInput?: number,
   ) {
-    const { antagonist, protagonist } = useDuel.getState();
+    const { antagonist, protagonist } = duelStore.getState();
     const shell = antagonist!.shell;
     const cameraNormal = camera.position.clone().sub(point).normalize();
     const shot: TankopediaEphemeral.Shot = {

@@ -9,7 +9,7 @@ import { resolvePenetrationCoefficient } from '../../../../core/blitz/resolvePen
 import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../core/blitzkit/jsxTree';
 import { ShellDefinition } from '../../../../core/blitzkit/tankDefinitions';
-import { EquipmentMatrix, useDuel } from '../../../../stores/duel';
+import * as Duel from '../../../../stores/duel';
 import * as TankopediaPersistent from '../../../../stores/tankopediaPersistent';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
@@ -29,6 +29,7 @@ export function CoreArmorSceneComponent({
   thickness,
 }: CoreArmorSceneComponentProps) {
   const tankopediaPersistentStore = TankopediaPersistent.useStore();
+  const duelStore = Duel.useStore();
   const material = new ShaderMaterial({
     fragmentShader,
     vertexShader,
@@ -70,7 +71,7 @@ export function CoreArmorSceneComponent({
       material.uniforms.damage.value = shell.damage.armor;
       material.uniforms.explosionRadius.value = shell.explosionRadius;
 
-      const duel = useDuel.getState();
+      const duel = duelStore.getState();
       await handleProtagonistEquipmentChange(duel.protagonist!.equipmentMatrix);
       await handleAntagonistEquipmentChange(duel.antagonist!.equipmentMatrix);
     }
@@ -83,9 +84,9 @@ export function CoreArmorSceneComponent({
       material.wireframe = visual.wireframe;
     }
     async function handleProtagonistEquipmentChange(
-      equipment: EquipmentMatrix,
+      equipment: Duel.EquipmentMatrix,
     ) {
-      const duel = useDuel.getState();
+      const duel = duelStore.getState();
       const hasEnhancedArmor = await hasEquipment(
         110,
         duel.protagonist!.tank.equipment,
@@ -95,8 +96,10 @@ export function CoreArmorSceneComponent({
         ? thickness * 1.03
         : thickness;
     }
-    async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
-      const duel = useDuel.getState();
+    async function handleAntagonistEquipmentChange(
+      equipment: Duel.EquipmentMatrix,
+    ) {
+      const duel = duelStore.getState();
       const shell = duel.antagonist!.shell;
       const penetration = resolveNearPenetration(shell.penetration);
       const hasCalibratedShells = await hasEquipment(
@@ -110,26 +113,29 @@ export function CoreArmorSceneComponent({
         resolvePenetrationCoefficient(hasCalibratedShells, shell.type);
     }
 
-    handleShellChange(useDuel.getState().antagonist!.shell);
+    handleShellChange(duelStore.getState().antagonist!.shell);
     handleVisualChange(tankopediaPersistentStore.getState().model.visual);
     handleProtagonistEquipmentChange(
-      useDuel.getState().protagonist!.equipmentMatrix,
+      duelStore.getState().protagonist!.equipmentMatrix,
     );
     handleAntagonistEquipmentChange(
-      useDuel.getState().antagonist!.equipmentMatrix,
+      duelStore.getState().antagonist!.equipmentMatrix,
     );
 
     const unsubscribes = [
-      useDuel.subscribe((state) => state.antagonist!.shell, handleShellChange),
+      duelStore.subscribe(
+        (state) => state.antagonist!.shell,
+        handleShellChange,
+      ),
       tankopediaPersistentStore.subscribe(
         (state) => state.model.visual,
         handleVisualChange,
       ),
-      useDuel.subscribe(
+      duelStore.subscribe(
         (state) => state.protagonist!.equipmentMatrix,
         handleProtagonistEquipmentChange,
       ),
-      useDuel.subscribe(
+      duelStore.subscribe(
         (state) => state.antagonist!.equipmentMatrix,
         handleAntagonistEquipmentChange,
       ),

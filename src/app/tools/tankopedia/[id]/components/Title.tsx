@@ -1,21 +1,24 @@
 import { CaretRightIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, Heading } from '@radix-ui/themes';
 import Link from 'next/link';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { TREE_TYPE_ICONS } from '../../../../../components/Tanks/components/Item/constants';
-import { assignDuelMember } from '../../../../../core/blitzkit/assignDuelMember';
+import { provisionDefinitions } from '../../../../../core/blitzkit/provisionDefinitions';
 import { pushTankopediaPath } from '../../../../../core/blitzkit/pushTankopediaPath';
-import { useDuel } from '../../../../../stores/duel';
+import { tankToDuelMember } from '../../../../../core/blitzkit/tankToDuelMember';
+import * as Duel from '../../../../../stores/duel';
 import { TankSearch } from '../../components/TankSearch';
 
 export function Title() {
-  const protagonist = useDuel((state) => state.protagonist!);
-  const antagonist = useDuel((state) => state.antagonist!);
+  const awaitedProvisionDefinitions = use(provisionDefinitions);
+  const protagonist = Duel.use((state) => state.protagonist!);
+  const antagonist = Duel.use((state) => state.antagonist!);
   const compareTanks =
     protagonist.tank.id === antagonist.tank.id
       ? [protagonist.tank.id]
       : [protagonist.tank.id, antagonist.tank.id];
   const [changeTankDialogOpen, setChangeTankDialogOpen] = useState(false);
+  const mutateDuel = Duel.useMutation();
 
   return (
     <>
@@ -76,9 +79,15 @@ export function Title() {
                   <TankSearch
                     compact
                     onSelect={(tank) => {
-                      assignDuelMember('protagonist', tank.id);
                       setChangeTankDialogOpen(false);
                       pushTankopediaPath(tank.id);
+
+                      mutateDuel((draft) => {
+                        draft.protagonist = tankToDuelMember(
+                          tank,
+                          awaitedProvisionDefinitions,
+                        );
+                      });
                     }}
                   />
                 </Flex>

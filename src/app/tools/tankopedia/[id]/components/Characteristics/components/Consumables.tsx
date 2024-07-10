@@ -12,13 +12,14 @@ import { ConsumablesManager } from '../../../../../../../components/ConsumablesM
 import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkit/checkConsumableProvisionInclusivity';
 import { consumableDefinitions } from '../../../../../../../core/blitzkit/consumableDefinitions';
 import { useEquipment } from '../../../../../../../hooks/useEquipment';
-import { mutateDuel, useDuel } from '../../../../../../../stores/duel';
+import * as Duel from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Consumables() {
-  const protagonist = useDuel((state) => state.protagonist!);
+  const mutateDuel = Duel.useMutation();
+  const protagonist = Duel.use((state) => state.protagonist!);
   const awaitedConsumableDefinitions = use(consumableDefinitions);
-  const consumables = useDuel((state) => state.protagonist!.consumables);
+  const consumables = Duel.use((state) => state.protagonist!.consumables);
   const consumablesList = Object.values(awaitedConsumableDefinitions).filter(
     (consumable) =>
       checkConsumableProvisionInclusivity(
@@ -27,7 +28,7 @@ export function Consumables() {
         protagonist.gun,
       ),
   );
-  const cooldownBooster = useDuel(
+  const cooldownBooster = Duel.use(
     (state) => state.protagonist!.cooldownBooster,
   );
   const hasConsumableDeliverySystem = useEquipment(118);

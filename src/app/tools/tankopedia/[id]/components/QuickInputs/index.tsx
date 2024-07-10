@@ -10,11 +10,12 @@ import {
 } from '../../../../../../core/blitzkit/modelTransform';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
-import { mutateDuel, useDuel } from '../../../../../../stores/duel';
+import * as Duel from '../../../../../../stores/duel';
 import * as styles from './index.css';
 
 export function RotationInputs() {
-  const protagonist = useDuel((state) => state.protagonist!);
+  const mutateDuel = Duel.useMutation();
+  const protagonist = Duel.use((state) => state.protagonist!);
   const awaitedModelDefinitions = use(modelDefinitions);
   const yawInput = useRef<HTMLInputElement>(null);
   const pitchInput = useRef<HTMLInputElement>(null);

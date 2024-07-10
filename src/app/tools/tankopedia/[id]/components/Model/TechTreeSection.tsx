@@ -7,7 +7,7 @@ import { asset } from '../../../../../../core/blitzkit/asset';
 import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useWideFormat } from '../../../../../../hooks/useWideFormat';
-import { useDuel } from '../../../../../../stores/duel';
+import * as Duel from '../../../../../../stores/duel';
 
 export function TreeArrow({
   style,
@@ -53,7 +53,7 @@ export function TreeArrow({
 export function TechTreeSection() {
   const wideFormat = useWideFormat(720);
   const awaitedTankDefinitions = use(tankDefinitions);
-  const tank = useDuel((state) => state.protagonist!.tank);
+  const tank = Duel.use((state) => state.protagonist!.tank);
 
   if (tank.treeType !== 'researchable') return null;
 

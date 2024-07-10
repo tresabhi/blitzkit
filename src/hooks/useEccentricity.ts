@@ -4,7 +4,7 @@ import {
   TankDefinition,
   tankDefinitions,
 } from '../core/blitzkit/tankDefinitions';
-import { useDuel } from '../stores/duel';
+import * as Duel from '../stores/duel';
 
 export enum UseEccentricityMode {
   Tier,
@@ -13,7 +13,7 @@ export enum UseEccentricityMode {
 
 export function useEccentricity(mode: UseEccentricityMode) {
   const awaitedTankDefinitions = use(tankDefinitions);
-  const tank = useDuel((state) => state.protagonist!.tank);
+  const tank = Duel.use((state) => state.protagonist!.tank);
   const similarTanks = useMemo(
     () =>
       Object.values(awaitedTankDefinitions).filter(
