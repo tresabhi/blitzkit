@@ -213,6 +213,7 @@ export function Modules() {
 
           return (
             <Flex
+              key={unlock.id}
               align="center"
               direction="column"
               gap="2"

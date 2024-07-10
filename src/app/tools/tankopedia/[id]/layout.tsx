@@ -3,6 +3,7 @@ import { tankDefinitions } from '../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
 import { tankIcon } from '../../../../core/blitzkit/tankIcon';
 import strings from '../../../../lang/en-US.json';
+import * as Duel from '../../../../stores/duel';
 
 interface TankopediaLayoutProps {
   children: ReactNode;
@@ -22,7 +23,7 @@ export default async function TankopediaLayout({
   const description = `Statistics, armor profiles, and equipment for ${tank.name}`;
 
   return (
-    <>
+    <Duel.Provider>
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta property="og:title" content={title} />
@@ -30,6 +31,6 @@ export default async function TankopediaLayout({
       <meta property="og:description" content={description} />
 
       {children}
-    </>
+    </Duel.Provider>
   );
 }
