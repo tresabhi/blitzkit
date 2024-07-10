@@ -1,7 +1,6 @@
 'use client';
 
 import { Flex } from '@radix-ui/themes';
-import { Ad, AdType } from '../components/Ad';
 import { AdMidSectionResponsive } from '../components/AdMidSectionResponsive';
 import {
   compareTool,
@@ -26,48 +25,21 @@ export default function Page() {
 
       <PatreonPlug />
 
-      <Flex
-        p="4"
-        justify={
-          exempt
-            ? 'center'
-            : {
-                initial: 'center',
-                lg: 'between',
-              }
-        }
-        gap="4"
-      >
-        {!exempt && (
-          <Ad
-            type={AdType.WideSkyscraperVerticalPurple}
-            display={{
-              initial: 'none',
-              lg: 'block',
-            }}
-          />
-        )}
-
+      <Flex p="4" justify="center" gap="4">
         <Flex maxWidth="1024px" flexGrow="1" gap="4" direction="column">
           <ToolCard tool={tankopediaTool} />
-
-          {!exempt && (
-            <Flex
-              justify="center"
-              display={{
-                initial: 'flex',
-                lg: 'none',
-              }}
-            >
-              <AdMidSectionResponsive />
-            </Flex>
-          )}
 
           <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
             {/* <ToolCard tool={playerStatsTool} /> */}
             <ToolCard tool={compareTool} />
             <ToolCard tool={tankPerformanceTool} />
           </Flex>
+
+          {!exempt && (
+            <Flex justify="center">
+              <AdMidSectionResponsive />
+            </Flex>
+          )}
 
           <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
             <ToolCard tool={sessionTool} />
@@ -95,16 +67,6 @@ export default function Page() {
             <Box flexGrow="1" />
           </Flex> */}
         </Flex>
-
-        {!exempt && (
-          <Ad
-            type={AdType.WideSkyscraperVerticalPurple}
-            display={{
-              initial: 'none',
-              lg: 'block',
-            }}
-          />
-        )}
       </Flex>
 
       {!exempt && <AdMidSectionResponsive />}
