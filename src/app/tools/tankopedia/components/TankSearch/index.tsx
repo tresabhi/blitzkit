@@ -1,7 +1,9 @@
+'use client';
+
 import { Callout, Flex, FlexProps, Link, Text } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { times } from 'lodash';
-import { memo, use, useMemo } from 'react';
+import { memo, use, useEffect, useMemo, useState } from 'react';
 import { AdMidSectionResponsive } from '../../../../../components/AdMidSectionResponsive';
 import { ExperimentIcon } from '../../../../../components/ExperimentIcon';
 import { TANK_CLASSES } from '../../../../../components/Tanks/components/Item/constants';
@@ -40,6 +42,9 @@ type TankSearchProps = Omit<FlexProps, 'onSelect'> & {
   onSelectAll?: (tanks: TankDefinition[]) => void;
 };
 
+const PREVIEW_COUNT = 25;
+const DEFAULT_LOADED_CARDS = 75;
+
 export const TankSearch = memo<TankSearchProps>(
   ({ compact, onSelect, onSelectAll, ...props }) => {
     const exempt = useAdExempt();
@@ -50,7 +55,7 @@ export const TankSearch = memo<TankSearchProps>(
     const awaitedTankNames = use(tankNames);
     const filters = TankFilters.use();
     const sort = TankopediaSort.use();
-    const tanks = useMemo(() => {
+    const tanksFiltered = useMemo(() => {
       if (filters.search === undefined) {
         const filtered = awaitedTanksDefinitionsArray.filter((tank) =>
           filterTank(filters, tank),
@@ -379,6 +384,12 @@ export const TankSearch = memo<TankSearchProps>(
         return searchedTanks;
       }
     }, [filters]);
+    const [loadedRows, setLoadedRows] = useState(DEFAULT_LOADED_CARDS);
+    const tanks = tanksFiltered.slice(0, loadedRows);
+
+    useEffect(() => {
+      setLoadedRows(DEFAULT_LOADED_CARDS);
+    }, [filters, sort]);
 
     return (
       <Flex direction="column" gap="4" flexGrow="1" {...props}>
@@ -447,6 +458,22 @@ export const TankSearch = memo<TankSearchProps>(
                       )}
                   </>
                 ))}
+
+                {times(
+                  Math.min(PREVIEW_COUNT, tanksFiltered.length - loadedRows),
+                  (index) => {
+                    return (
+                      <SkeletonTankCard
+                        key={index}
+                        onIntersection={() => {
+                          setLoadedRows((state) =>
+                            Math.min(state + 2, tanksFiltered.length),
+                          );
+                        }}
+                      />
+                    );
+                  },
+                )}
               </TankCardWrapper>
             )}
 
