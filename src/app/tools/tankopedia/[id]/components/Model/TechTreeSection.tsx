@@ -1,12 +1,11 @@
 import { ChevronRightIcon } from '@radix-ui/react-icons';
-import { ChevronDownIcon, Flex, Text } from '@radix-ui/themes';
+import { Box, ChevronDownIcon, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { ComponentProps, use } from 'react';
 import PageWrapper from '../../../../../../components/PageWrapper';
 import { asset } from '../../../../../../core/blitzkit/asset';
 import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
-import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import * as Duel from '../../../../../../stores/duel';
 
 export function TreeArrow({
@@ -51,7 +50,6 @@ export function TreeArrow({
 }
 
 export function TechTreeSection() {
-  const wideFormat = useWideFormat(720);
   const awaitedTankDefinitions = use(tankDefinitions);
   const tank = Duel.use((state) => state.protagonist!.tank);
 
@@ -139,21 +137,23 @@ export function TechTreeSection() {
       size={tank.ancestors && tank.successors ? 880 : 480}
       gap="0"
     >
-      {/* <Flex justify="center">
+      <Flex justify="center" py="2" mb="4">
         <Heading>Tech tree</Heading>
-      </Flex> */}
+      </Flex>
+
+      {/* BIG TODO: use number format to shorten currencies */}
 
       <Flex
         align="center"
         gap="6"
         style={{}}
-        direction={wideFormat ? 'row' : 'column'}
+        direction={{ initial: 'column', sm: 'row' }}
       >
         {tank.ancestors && (
           <>
             <Flex
               wrap="wrap"
-              direction={wideFormat ? 'column' : 'row'}
+              direction={{ initial: 'column', sm: 'row' }}
               align="center"
               justify="center"
               style={{
@@ -166,7 +166,12 @@ export function TechTreeSection() {
               ))}
             </Flex>
 
-            <TreeArrow down={!wideFormat} />
+            <Box display={{ initial: 'block', sm: 'none' }}>
+              <TreeArrow down />
+            </Box>
+            <Box display={{ initial: 'none', sm: 'block' }}>
+              <TreeArrow />
+            </Box>
           </>
         )}
 
@@ -196,11 +201,16 @@ export function TechTreeSection() {
 
         {tank.successors && (
           <>
-            <TreeArrow down={!wideFormat} />
+            <Box display={{ initial: 'block', sm: 'none' }}>
+              <TreeArrow down />
+            </Box>
+            <Box display={{ initial: 'none', sm: 'block' }}>
+              <TreeArrow />
+            </Box>
 
             <Flex
               wrap="wrap"
-              direction={wideFormat ? 'column' : 'row'}
+              direction={{ initial: 'column', sm: 'row' }}
               align="center"
               justify="center"
               style={{

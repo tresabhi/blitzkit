@@ -1,12 +1,10 @@
 import { ChevronLeftIcon, MixIcon } from '@radix-ui/react-icons';
-import { Button, Flex, Heading, Text } from '@radix-ui/themes';
+import { Box, Button, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { classIcons } from '../../../../../../components/ClassIcon';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
-import { useWideFormat } from '../../../../../../hooks/useWideFormat';
 import strings from '../../../../../../lang/en-US.json';
-import { theme } from '../../../../../../stitches.config';
 import * as Duel from '../../../../../../stores/duel';
 import { TankSandbox } from './TankSandbox';
 import { Options } from './components/Options';
@@ -14,7 +12,6 @@ import { Options } from './components/Options';
 export function HeroSection() {
   const protagonist = Duel.use((state) => state.protagonist!.tank);
   const antagonist = Duel.use((state) => state.antagonist!.tank);
-  const wideFormat = useWideFormat(880);
   const compareTanks =
     protagonist.id === antagonist.id
       ? [protagonist.id]
@@ -25,41 +22,34 @@ export function HeroSection() {
   return (
     <Flex
       justify="center"
-      pt={wideFormat ? '0' : '6'}
-      style={{
-        background: 'var(--color-surface)',
-        position: 'relative',
-        height: wideFormat ? undefined : 'calc(75vh - 64px)',
-      }}
+      pt={{ initial: '6', md: '0' }}
+      style={{ background: 'var(--color-surface)', position: 'relative' }}
+      height={{ initial: 'calc(75vh - 64px)', md: undefined }}
       gap="4"
     >
       <Flex
-        direction={wideFormat ? 'row' : 'column'}
-        style={{
-          maxWidth: 1600,
-          flex: 1,
-        }}
+        direction={{ initial: 'column', md: 'row' }}
+        style={{ maxWidth: 1600, flex: 1 }}
       >
         <Flex
           align="center"
           justify="center"
-          style={{
-            flex: wideFormat ? 1 : undefined,
-          }}
+          flexGrow={{ initial: undefined, md: '1' }}
+          flexBasis="0"
         >
           <Flex
-            gap={wideFormat ? '4' : '2'}
+            gap={{ initial: '2', md: '4' }}
             direction="column"
-            ml={wideFormat ? '8' : undefined}
-            align={wideFormat ? undefined : 'center'}
+            ml={{ initial: '0', md: '8' }}
+            align={{ initial: 'center', md: undefined }}
             justify="center"
             style={{
               height: '100%',
             }}
           >
             <Heading
-              size={wideFormat ? '9' : '8'}
-              align={wideFormat ? undefined : 'center'}
+              size={{ initial: '8', md: '9' }}
+              align={{ initial: 'center', md: undefined }}
               color={
                 protagonist.treeType === 'collector'
                   ? 'blue'
@@ -100,17 +90,18 @@ export function HeroSection() {
           </Flex>
         </Flex>
 
-        <div
+        <Box
           className="tank-sandbox-container"
+          height={{ initial: undefined, md: '512px' }}
           style={{
             flex: 2,
             position: isFullScreen ? 'fixed' : 'relative',
             top: isFullScreen ? 0 : undefined,
             left: isFullScreen ? 0 : undefined,
             width: isFullScreen ? '100vw' : undefined,
-            height: isFullScreen ? '100vh' : wideFormat ? 512 : undefined,
+            height: isFullScreen ? '100vh' : 'auto',
             zIndex: isFullScreen ? 3 : undefined,
-            background: isFullScreen ? theme.colors.appBackground1 : undefined,
+            background: isFullScreen ? 'var(--color-background)' : undefined,
           }}
         >
           <div
@@ -131,7 +122,7 @@ export function HeroSection() {
 
             <Options />
           </div>
-        </div>
+        </Box>
       </Flex>
     </Flex>
   );

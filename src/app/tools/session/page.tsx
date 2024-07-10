@@ -44,7 +44,6 @@ import searchPlayersAcrossRegions, {
 import { tankDefinitions } from '../../../core/blitzkit/tankDefinitions';
 import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
-import { useWideFormat } from '../../../hooks/useWideFormat';
 import * as Session from '../../../stores/session';
 import { IndividualTankStats } from '../../../types/tanksStats';
 
@@ -54,7 +53,6 @@ export default function Page({
   searchParams: { id?: string };
 }) {
   const [loaded, setLoaded] = useState(false);
-  const wideFormat = useWideFormat(640);
   const awaitedTankDefinitions = use(tankDefinitions);
   const awaitedTankAvearges = use(tankAverages);
   const [showSearch, setShowSearch] = useState(false);
@@ -318,7 +316,7 @@ export default function Page({
         <Flex
           mt="2"
           mb="2"
-          direction={wideFormat ? 'row' : 'column'}
+          direction={{ initial: 'column', sm: 'row' }}
           align="center"
           justify="between"
           gap="2"
