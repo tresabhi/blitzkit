@@ -41,7 +41,7 @@ export function HeroSection() {
             gap={{ initial: '2', md: '4' }}
             direction="column"
             ml={{ initial: '0', md: '8' }}
-            align={{ initial: 'center', md: undefined }}
+            align={{ initial: 'center', md: 'start' }}
             justify="center"
             style={{
               height: '100%',
@@ -49,7 +49,7 @@ export function HeroSection() {
           >
             <Heading
               size={{ initial: '8', md: '9' }}
-              align={{ initial: 'center', md: undefined }}
+              align={{ initial: 'center', md: 'left' }}
               color={
                 protagonist.treeType === 'collector'
                   ? 'blue'
@@ -59,10 +59,10 @@ export function HeroSection() {
               }
             >
               <Icon style={{ width: '0.75em', height: '0.75em' }} />{' '}
-              {protagonist.nameFull ?? protagonist.name}
+              {protagonist.name}
             </Heading>
 
-            <Text color="gray">
+            <Text color="gray" ml={{ initial: '0', md: '9' }}>
               Tier {TIER_ROMAN_NUMERALS[protagonist.tier]}{' '}
               {
                 (strings.common.nations_adjectives as Record<string, string>)[
@@ -72,7 +72,7 @@ export function HeroSection() {
               {strings.common.tank_class_short[protagonist.class]}
             </Text>
 
-            <Flex gap="4" mt="-1">
+            <Flex gap="4" ml={{ initial: '0', md: '9' }} mt="-1">
               <Link href="/tools/tankopedia">
                 <Button variant="ghost" size="1" ml="-1">
                   <ChevronLeftIcon />
