@@ -45,10 +45,7 @@ import { tankDefinitions } from '../../../core/blitzkit/tankDefinitions';
 import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
 import { useWideFormat } from '../../../hooks/useWideFormat';
-import mutateSession, {
-  SessionTracking,
-  useSession,
-} from '../../../stores/session';
+import * as Session from '../../../stores/session';
 import { IndividualTankStats } from '../../../types/tanksStats';
 
 export default function Page({
@@ -66,7 +63,8 @@ export default function Page({
   const [showCCInaccessibilityPrompt, setShowCCInaccessibilityPrompt] =
     useState(false);
   const input = useRef<HTMLInputElement>(null);
-  const session = useSession();
+  const session = Session.use();
+  const mutateSession = Session.useMutation();
   const [tankStatsB, setTankStatsB] = useState<IndividualTankStats[] | null>(
     null,
   );
@@ -133,7 +131,7 @@ export default function Page({
       if (!input.current) return;
 
       draft.tracking = true;
-      (draft as SessionTracking).player = {
+      (draft as Session.SessionTracking).player = {
         id,
         region,
         since: Date.now(),
@@ -347,7 +345,7 @@ export default function Page({
                 }
 
                 mutateSession((draft) => {
-                  (draft as SessionTracking).player.stats = stats;
+                  (draft as Session.SessionTracking).player.stats = stats;
                 });
               }}
             >
@@ -405,9 +403,9 @@ export default function Page({
                             key={key}
                             onClick={() => {
                               mutateSession((draft) => {
-                                (draft as SessionTracking).columns.unshift(
-                                  key as Stat,
-                                );
+                                (
+                                  draft as Session.SessionTracking
+                                ).columns.unshift(key as Stat);
                               });
                             }}
                           >
@@ -423,9 +421,12 @@ export default function Page({
                     onValueChange={(value) => {
                       mutateSession((draft) => {
                         if (value === 'remove') {
-                          (draft as SessionTracking).columns.splice(index, 1);
+                          (draft as Session.SessionTracking).columns.splice(
+                            index,
+                            1,
+                          );
                         } else {
-                          (draft as SessionTracking).columns[index] =
+                          (draft as Session.SessionTracking).columns[index] =
                             value as Stat;
                         }
                       });
