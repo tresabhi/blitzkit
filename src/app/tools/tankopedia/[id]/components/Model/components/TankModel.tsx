@@ -28,7 +28,7 @@ export const TankModel = memo(() => {
   const mutateDuel = Duel.useMutation();
   const duelStore = Duel.useStore();
   const awaitedModelDefinitions = useAwait(modelDefinitions);
-  const protagonist = Duel.use((draft) => draft.protagonist!);
+  const protagonist = Duel.use((draft) => draft.protagonist);
   const canvas = useThree((state) => state.gl.domElement);
   const hullContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
@@ -221,8 +221,8 @@ export const TankModel = memo(() => {
             const duel = duelStore.getState();
             const hasImprovedVerticalStabilizer = await hasEquipment(
               122,
-              duel.protagonist!.tank.equipment,
-              duel.protagonist!.equipmentMatrix,
+              duel.protagonist.tank.equipment,
+              duel.protagonist.equipmentMatrix,
             );
             const boundingRect = canvas.getBoundingClientRect();
 
@@ -240,8 +240,8 @@ export const TankModel = memo(() => {
           }
           function handlePointerUp() {
             mutateDuel((draft) => {
-              draft.protagonist!.pitch = normalizeAngleRad(pitch);
-              draft.protagonist!.yaw = normalizeAngleRad(yaw);
+              draft.protagonist.pitch = normalizeAngleRad(pitch);
+              draft.protagonist.yaw = normalizeAngleRad(yaw);
             });
             mutateTankopediaTemporary((draft) => {
               draft.controlsEnabled = true;
@@ -301,8 +301,8 @@ export const TankModel = memo(() => {
               const duel = duelStore.getState();
               const hasImprovedVerticalStabilizer = await hasEquipment(
                 122,
-                duel.protagonist!.tank.equipment,
-                duel.protagonist!.equipmentMatrix,
+                duel.protagonist.tank.equipment,
+                duel.protagonist.equipmentMatrix,
               );
               const boundingRect = canvas.getBoundingClientRect();
               delta.set(event.clientX, event.clientY).sub(position);
@@ -322,8 +322,8 @@ export const TankModel = memo(() => {
                 draft.controlsEnabled = true;
               });
               mutateDuel((draft) => {
-                draft.protagonist!.pitch = normalizeAngleRad(pitch);
-                draft.protagonist!.yaw = normalizeAngleRad(yaw);
+                draft.protagonist.pitch = normalizeAngleRad(pitch);
+                draft.protagonist.yaw = normalizeAngleRad(yaw);
               });
               window.removeEventListener('pointermove', handlePointerMove);
               window.removeEventListener('pointerup', handlePointerUp);

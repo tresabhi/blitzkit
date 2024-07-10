@@ -83,7 +83,7 @@ export function SpacedArmorSceneComponent({
     remainingPenetrationInput?: number,
   ) {
     const { antagonist, protagonist } = duelStore.getState();
-    const shell = antagonist!.shell;
+    const shell = antagonist.shell;
     const cameraNormal = camera.position.clone().sub(point).normalize();
     const shot: TankopediaEphemeral.Shot = {
       damage: -1,
@@ -97,13 +97,13 @@ export function SpacedArmorSceneComponent({
 
     const hasCalibratedShells = await hasEquipment(
       103,
-      antagonist!.tank.equipment,
-      antagonist!.equipmentMatrix,
+      antagonist.tank.equipment,
+      antagonist.equipmentMatrix,
     );
     const hasEnhancedArmor = await hasEquipment(
       110,
-      protagonist!.tank.equipment,
-      protagonist!.equipmentMatrix,
+      protagonist.tank.equipment,
+      protagonist.equipmentMatrix,
     );
     const penetration =
       resolveNearPenetration(shell.penetration) *

@@ -59,7 +59,7 @@ export function SpacedArmorSubExternal({
       const duel = duelStore.getState();
       const hasEnhancedArmor = await hasEquipment(
         110,
-        duel.protagonist!.tank.equipment,
+        duel.protagonist.tank.equipment,
         equipment,
       );
       material.uniforms.thickness.value = hasEnhancedArmor
@@ -70,11 +70,11 @@ export function SpacedArmorSubExternal({
       equipment: Duel.EquipmentMatrix,
     ) {
       const duel = duelStore.getState();
-      const shell = duel.antagonist!.shell;
+      const shell = duel.antagonist.shell;
       const penetration = resolveNearPenetration(shell.penetration);
       const hasCalibratedShells = await hasEquipment(
         103,
-        duel.antagonist!.tank.equipment,
+        duel.antagonist.tank.equipment,
         equipment,
       );
 
@@ -83,25 +83,22 @@ export function SpacedArmorSubExternal({
         resolvePenetrationCoefficient(hasCalibratedShells, shell.type);
     }
 
-    handleShellChange(duelStore.getState().antagonist!.shell);
+    handleShellChange(duelStore.getState().antagonist.shell);
     handleProtagonistEquipmentChange(
-      duelStore.getState().protagonist!.equipmentMatrix,
+      duelStore.getState().protagonist.equipmentMatrix,
     );
     handleAntagonistEquipmentChange(
-      duelStore.getState().antagonist!.equipmentMatrix,
+      duelStore.getState().antagonist.equipmentMatrix,
     );
 
     const unsubscribes = [
+      duelStore.subscribe((state) => state.antagonist.shell, handleShellChange),
       duelStore.subscribe(
-        (state) => state.antagonist!.shell,
-        handleShellChange,
-      ),
-      duelStore.subscribe(
-        (state) => state.protagonist!.equipmentMatrix,
+        (state) => state.protagonist.equipmentMatrix,
         handleProtagonistEquipmentChange,
       ),
       duelStore.subscribe(
-        (state) => state.antagonist!.equipmentMatrix,
+        (state) => state.antagonist.equipmentMatrix,
         handleAntagonistEquipmentChange,
       ),
     ];

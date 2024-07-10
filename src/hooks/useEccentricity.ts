@@ -13,7 +13,7 @@ export enum UseEccentricityMode {
 
 export function useEccentricity(mode: UseEccentricityMode) {
   const awaitedTankDefinitions = use(tankDefinitions);
-  const tank = Duel.use((state) => state.protagonist!.tank);
+  const tank = Duel.use((state) => state.protagonist.tank);
   const similarTanks = useMemo(
     () =>
       Object.values(awaitedTankDefinitions).filter(

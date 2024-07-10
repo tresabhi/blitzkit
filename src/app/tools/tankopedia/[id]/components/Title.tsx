@@ -11,8 +11,8 @@ import { TankSearch } from '../../components/TankSearch';
 
 export function Title() {
   const awaitedProvisionDefinitions = use(provisionDefinitions);
-  const protagonist = Duel.use((state) => state.protagonist!);
-  const antagonist = Duel.use((state) => state.antagonist!);
+  const protagonist = Duel.use((state) => state.protagonist);
+  const antagonist = Duel.use((state) => state.antagonist);
   const compareTanks =
     protagonist.tank.id === antagonist.tank.id
       ? [protagonist.tank.id]

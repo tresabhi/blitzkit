@@ -15,7 +15,7 @@ import * as styles from './index.css';
 
 export function RotationInputs() {
   const mutateDuel = Duel.useMutation();
-  const protagonist = Duel.use((state) => state.protagonist!);
+  const protagonist = Duel.use((state) => state.protagonist);
   const awaitedModelDefinitions = use(modelDefinitions);
   const yawInput = useRef<HTMLInputElement>(null);
   const pitchInput = useRef<HTMLInputElement>(null);
@@ -90,8 +90,8 @@ export function RotationInputs() {
           );
           modelTransformEvent.emit({ pitch, yaw });
           mutateDuel((state) => {
-            state.protagonist!.pitch = pitch;
-            state.protagonist!.yaw = yaw;
+            state.protagonist.pitch = pitch;
+            state.protagonist.yaw = yaw;
           });
           yawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
         }}
@@ -137,8 +137,8 @@ export function RotationInputs() {
           );
           modelTransformEvent.emit({ pitch, yaw });
           mutateDuel((state) => {
-            state.protagonist!.pitch = pitch;
-            state.protagonist!.yaw = yaw;
+            state.protagonist.pitch = pitch;
+            state.protagonist.yaw = yaw;
           });
           pitchInput.current!.value = (
             -radToDeg(protagonist.pitch) + initialGunPitch

@@ -110,10 +110,10 @@ export const CoreArmorScene = memo(() => {
     return unsubscribe;
   });
 
-  const tank = Duel.use((state) => state.protagonist!.tank);
-  const track = Duel.use((state) => state.protagonist!.track);
-  const turret = Duel.use((state) => state.protagonist!.turret);
-  const gun = Duel.use((state) => state.protagonist!.gun);
+  const tank = Duel.use((state) => state.protagonist.tank);
+  const track = Duel.use((state) => state.protagonist.track);
+  const turret = Duel.use((state) => state.protagonist.turret);
+  const gun = Duel.use((state) => state.protagonist.gun);
   const armorGltf = useArmor(tank.id);
   const armorNodes = Object.values(armorGltf.nodes);
   const tankModelDefinition = modelDefinitions[tank.id];

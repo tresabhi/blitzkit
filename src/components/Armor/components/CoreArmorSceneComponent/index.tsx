@@ -72,8 +72,8 @@ export function CoreArmorSceneComponent({
       material.uniforms.explosionRadius.value = shell.explosionRadius;
 
       const duel = duelStore.getState();
-      await handleProtagonistEquipmentChange(duel.protagonist!.equipmentMatrix);
-      await handleAntagonistEquipmentChange(duel.antagonist!.equipmentMatrix);
+      await handleProtagonistEquipmentChange(duel.protagonist.equipmentMatrix);
+      await handleAntagonistEquipmentChange(duel.antagonist.equipmentMatrix);
     }
     function handleVisualChange(
       visual: TankopediaPersistent.TankopediaPersistent['model']['visual'],
@@ -89,7 +89,7 @@ export function CoreArmorSceneComponent({
       const duel = duelStore.getState();
       const hasEnhancedArmor = await hasEquipment(
         110,
-        duel.protagonist!.tank.equipment,
+        duel.protagonist.tank.equipment,
         equipment,
       );
       material.uniforms.thickness.value = hasEnhancedArmor
@@ -100,11 +100,11 @@ export function CoreArmorSceneComponent({
       equipment: Duel.EquipmentMatrix,
     ) {
       const duel = duelStore.getState();
-      const shell = duel.antagonist!.shell;
+      const shell = duel.antagonist.shell;
       const penetration = resolveNearPenetration(shell.penetration);
       const hasCalibratedShells = await hasEquipment(
         103,
-        duel.antagonist!.tank.equipment,
+        duel.antagonist.tank.equipment,
         equipment,
       );
 
@@ -113,30 +113,27 @@ export function CoreArmorSceneComponent({
         resolvePenetrationCoefficient(hasCalibratedShells, shell.type);
     }
 
-    handleShellChange(duelStore.getState().antagonist!.shell);
+    handleShellChange(duelStore.getState().antagonist.shell);
     handleVisualChange(tankopediaPersistentStore.getState().model.visual);
     handleProtagonistEquipmentChange(
-      duelStore.getState().protagonist!.equipmentMatrix,
+      duelStore.getState().protagonist.equipmentMatrix,
     );
     handleAntagonistEquipmentChange(
-      duelStore.getState().antagonist!.equipmentMatrix,
+      duelStore.getState().antagonist.equipmentMatrix,
     );
 
     const unsubscribes = [
-      duelStore.subscribe(
-        (state) => state.antagonist!.shell,
-        handleShellChange,
-      ),
+      duelStore.subscribe((state) => state.antagonist.shell, handleShellChange),
       tankopediaPersistentStore.subscribe(
         (state) => state.model.visual,
         handleVisualChange,
       ),
       duelStore.subscribe(
-        (state) => state.protagonist!.equipmentMatrix,
+        (state) => state.protagonist.equipmentMatrix,
         handleProtagonistEquipmentChange,
       ),
       duelStore.subscribe(
-        (state) => state.antagonist!.equipmentMatrix,
+        (state) => state.antagonist.equipmentMatrix,
         handleAntagonistEquipmentChange,
       ),
     ];

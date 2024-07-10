@@ -20,7 +20,7 @@ export function TankSandbox() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const hasImprovedVerticalStabilizer = useEquipment(122);
   const awaitedModelDefinitions = use(modelDefinitions);
-  const protagonist = Duel.use((state) => state.protagonist!);
+  const protagonist = Duel.use((state) => state.protagonist);
   const mutateDuel = Duel.useMutation();
   const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
   const turretModelDefinition =
@@ -55,8 +55,8 @@ export function TankSandbox() {
             );
 
             modelTransformEvent.emit({ pitch, yaw });
-            draft.protagonist!.pitch = pitch;
-            draft.protagonist!.yaw = yaw;
+            draft.protagonist.pitch = pitch;
+            draft.protagonist.yaw = yaw;
           });
 
           break;
@@ -73,8 +73,8 @@ export function TankSandbox() {
             );
 
             modelTransformEvent.emit({ pitch, yaw });
-            draft.protagonist!.pitch = pitch;
-            draft.protagonist!.yaw = yaw;
+            draft.protagonist.pitch = pitch;
+            draft.protagonist.yaw = yaw;
           });
 
           break;
@@ -91,8 +91,8 @@ export function TankSandbox() {
             );
 
             modelTransformEvent.emit({ pitch, yaw });
-            draft.protagonist!.pitch = pitch;
-            draft.protagonist!.yaw = yaw;
+            draft.protagonist.pitch = pitch;
+            draft.protagonist.yaw = yaw;
           });
 
           break;
@@ -108,9 +108,9 @@ export function TankSandbox() {
 
   useEffect(() => {
     mutateDuel((draft) => {
-      [draft.protagonist!.pitch, draft.protagonist!.yaw] = applyPitchYawLimits(
-        draft.protagonist!.pitch,
-        draft.protagonist!.yaw,
+      [draft.protagonist.pitch, draft.protagonist.yaw] = applyPitchYawLimits(
+        draft.protagonist.pitch,
+        draft.protagonist.yaw,
         gunModelDefinition.pitch,
         turretModelDefinition.yaw,
         hasImprovedVerticalStabilizer,

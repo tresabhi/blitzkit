@@ -32,20 +32,20 @@ export default function Page() {
       if (event.key === '1') {
         wipeShot();
         mutateDuel((draft) => {
-          draft.antagonist!.shell = draft.antagonist!.gun.shells[0];
+          draft.antagonist.shell = draft.antagonist.gun.shells[0];
         });
       } else if (event.key === '2') {
         wipeShot();
         mutateDuel((draft) => {
-          if (draft.antagonist!.gun.shells[1]) {
-            draft.antagonist!.shell = draft.antagonist!.gun.shells[1];
+          if (draft.antagonist.gun.shells[1]) {
+            draft.antagonist.shell = draft.antagonist.gun.shells[1];
           }
         });
       } else if (event.key === '3') {
         wipeShot();
         mutateDuel((draft) => {
-          if (draft.antagonist!.gun.shells[2]) {
-            draft.antagonist!.shell = draft.antagonist!.gun.shells[2];
+          if (draft.antagonist.gun.shells[2]) {
+            draft.antagonist.shell = draft.antagonist.gun.shells[2];
           }
         });
       }

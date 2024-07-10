@@ -118,16 +118,16 @@ function ModuleButton({
 export function Modules() {
   const mutateDuel = Duel.useMutation();
   const awaitedTankDefinitions = use(tankDefinitions);
-  const tank = Duel.use((state) => state.protagonist!.tank);
+  const tank = Duel.use((state) => state.protagonist.tank);
   const hasUpgrades =
     tank.turrets.length > 1 ||
     tank.turrets[0].guns.length > 1 ||
     tank.engines.length > 1 ||
     tank.tracks.length > 1;
-  const turret = Duel.use((state) => state.protagonist!.turret);
-  const gun = Duel.use((state) => state.protagonist!.gun);
-  const engine = Duel.use((state) => state.protagonist!.engine);
-  const track = Duel.use((state) => state.protagonist!.track);
+  const turret = Duel.use((state) => state.protagonist.turret);
+  const gun = Duel.use((state) => state.protagonist.gun);
+  const engine = Duel.use((state) => state.protagonist.engine);
+  const track = Duel.use((state) => state.protagonist.track);
   const turret0 = tank.turrets[0];
   const gun0 = turret0.guns[0];
   const engine0 = tank.engines[0];
@@ -140,44 +140,44 @@ export function Modules() {
   function setByUnlock(unlock: Unlock) {
     mutateDuel((draft) => {
       if (unlock.type === 'turret') {
-        draft.protagonist!.turret = draft.protagonist!.tank.turrets.find(
+        draft.protagonist.turret = draft.protagonist.tank.turrets.find(
           (turret) => turret.id === unlock.id,
         )!;
 
         if (
-          !draft.protagonist!.turret.guns.some(
-            (gun) => gun.id === draft.protagonist!.gun.id,
+          !draft.protagonist.turret.guns.some(
+            (gun) => gun.id === draft.protagonist.gun.id,
           )
         ) {
-          draft.protagonist!.gun = draft.protagonist!.turret.guns.at(-1)!;
-          draft.protagonist!.shell = draft.protagonist!.gun.shells[0];
+          draft.protagonist.gun = draft.protagonist.turret.guns.at(-1)!;
+          draft.protagonist.shell = draft.protagonist.gun.shells[0];
         }
       } else if (unlock.type === 'gun') {
-        const gunInTurret = draft.protagonist!.turret.guns.find(
+        const gunInTurret = draft.protagonist.turret.guns.find(
           (gun) => gun.id === unlock.id,
         );
         if (gunInTurret) {
-          draft.protagonist!.gun = gunInTurret;
-          draft.protagonist!.shell = gunInTurret.shells[0];
+          draft.protagonist.gun = gunInTurret;
+          draft.protagonist.shell = gunInTurret.shells[0];
         } else {
           // TODO: warn somehow?
-          const suitableTurret = draft.protagonist!.tank.turrets.find(
-            (turret) => turret.guns.some((gun) => gun.id === unlock.id),
+          const suitableTurret = draft.protagonist.tank.turrets.find((turret) =>
+            turret.guns.some((gun) => gun.id === unlock.id),
           )!;
           const gunInSuitableTurret = suitableTurret.guns.find(
             (gun) => gun.id === unlock.id,
           )!;
 
-          draft.protagonist!.turret = suitableTurret;
-          draft.protagonist!.gun = gunInSuitableTurret;
-          draft.protagonist!.shell = gunInSuitableTurret.shells[0];
+          draft.protagonist.turret = suitableTurret;
+          draft.protagonist.gun = gunInSuitableTurret;
+          draft.protagonist.shell = gunInSuitableTurret.shells[0];
         }
       } else if (unlock.type === 'engine') {
-        draft.protagonist!.engine = draft.protagonist!.tank.engines.find(
+        draft.protagonist.engine = draft.protagonist.tank.engines.find(
           (engine) => engine.id === unlock.id,
         )!;
       } else if (unlock.type === 'chassis') {
-        draft.protagonist!.track = draft.protagonist!.tank.tracks.find(
+        draft.protagonist.track = draft.protagonist.tank.tracks.find(
           (track) => track.id === unlock.id,
         )!;
       }
@@ -320,13 +320,11 @@ export function Modules() {
               color="red"
               onClick={() => {
                 mutateDuel((draft) => {
-                  draft.protagonist!.turret =
-                    draft.protagonist!.tank.turrets[0];
-                  draft.protagonist!.gun = draft.protagonist!.turret.guns[0];
-                  draft.protagonist!.shell = draft.protagonist!.gun.shells[0];
-                  draft.protagonist!.engine =
-                    draft.protagonist!.tank.engines[0];
-                  draft.protagonist!.track = draft.protagonist!.tank.tracks[0];
+                  draft.protagonist.turret = draft.protagonist.tank.turrets[0];
+                  draft.protagonist.gun = draft.protagonist.turret.guns[0];
+                  draft.protagonist.shell = draft.protagonist.gun.shells[0];
+                  draft.protagonist.engine = draft.protagonist.tank.engines[0];
+                  draft.protagonist.track = draft.protagonist.tank.tracks[0];
                 });
               }}
             >
@@ -336,15 +334,14 @@ export function Modules() {
               variant="ghost"
               onClick={() => {
                 mutateDuel((draft) => {
-                  draft.protagonist!.turret =
-                    draft.protagonist!.tank.turrets.at(-1)!;
-                  draft.protagonist!.gun =
-                    draft.protagonist!.turret.guns.at(-1)!;
-                  draft.protagonist!.shell = draft.protagonist!.gun.shells[0];
-                  draft.protagonist!.engine =
-                    draft.protagonist!.tank.engines.at(-1)!;
-                  draft.protagonist!.track =
-                    draft.protagonist!.tank.tracks.at(-1)!;
+                  draft.protagonist.turret =
+                    draft.protagonist.tank.turrets.at(-1)!;
+                  draft.protagonist.gun = draft.protagonist.turret.guns.at(-1)!;
+                  draft.protagonist.shell = draft.protagonist.gun.shells[0];
+                  draft.protagonist.engine =
+                    draft.protagonist.tank.engines.at(-1)!;
+                  draft.protagonist.track =
+                    draft.protagonist.tank.tracks.at(-1)!;
                 });
               }}
             >

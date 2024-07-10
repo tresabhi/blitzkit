@@ -8,20 +8,20 @@ import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Miscellaneous() {
   const mutateDuel = Duel.useMutation();
-  const camouflage = Duel.use((state) => state.protagonist!.camouflage);
+  const camouflage = Duel.use((state) => state.protagonist.camouflage);
   const cooldownBooster = Duel.use(
-    (state) => state.protagonist!.cooldownBooster,
+    (state) => state.protagonist.cooldownBooster,
   );
-  const crewMastery = Duel.use((state) => state.protagonist!.crewMastery);
+  const crewMastery = Duel.use((state) => state.protagonist.crewMastery);
   const crewInput = useRef<HTMLInputElement>(null);
   const [crewMasteryDraft, setCrewMasteryDraft] = useState(crewMastery);
-  const { tank } = Duel.use((state) => state.protagonist!);
+  const { tank } = Duel.use((state) => state.protagonist);
 
   const debouncedApplyDraft = useMemo(
     () =>
       debounce((value) => {
         mutateDuel((draft) => {
-          draft.protagonist!.crewMastery = value;
+          draft.protagonist.crewMastery = value;
         });
       }, 500),
     [],
@@ -51,7 +51,7 @@ export function Miscellaneous() {
             last
             onClick={() => {
               mutateDuel((draft) => {
-                draft.protagonist!.camouflage = !camouflage;
+                draft.protagonist.camouflage = !camouflage;
               });
             }}
           />
@@ -75,9 +75,9 @@ export function Miscellaneous() {
           }}
           onClick={() => {
             mutateDuel((draft) => {
-              draft.protagonist!.cooldownBooster++;
-              if (draft.protagonist!.cooldownBooster === 4)
-                draft.protagonist!.cooldownBooster = 0;
+              draft.protagonist.cooldownBooster++;
+              if (draft.protagonist.cooldownBooster === 4)
+                draft.protagonist.cooldownBooster = 0;
             });
           }}
         />
@@ -103,11 +103,7 @@ export function Miscellaneous() {
                 }
 
                 mutateDuel((draft) => {
-                  draft.protagonist!.crewMastery = clamp(
-                    newValue / 100,
-                    0.5,
-                    1,
-                  );
+                  draft.protagonist.crewMastery = clamp(newValue / 100, 0.5, 1);
                 });
               }}
               onKeyUp={(event) => {

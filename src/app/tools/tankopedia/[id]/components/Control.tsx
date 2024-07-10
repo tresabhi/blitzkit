@@ -24,8 +24,8 @@ export function Controls() {
   const canvas = useThree((state) => state.gl.domElement);
   const orbitControls = useRef<OrbitControlsClass>(null);
   const awaitedModelDefinitions = useAwait(modelDefinitions);
-  const protagonist = Duel.use((state) => state.protagonist!);
-  const antagonist = Duel.use((state) => state.antagonist!);
+  const protagonist = Duel.use((state) => state.protagonist);
+  const antagonist = Duel.use((state) => state.antagonist);
   const protagonistModelDefinition =
     awaitedModelDefinitions[protagonist.tank.id];
   const protagonistTrackModelDefinition =
@@ -75,8 +75,8 @@ export function Controls() {
       const duel = duelStore.getState();
       const hasImprovedVerticalStabilizer = await hasEquipment(
         122,
-        duel.protagonist!.tank.equipment,
-        duel.protagonist!.equipmentMatrix,
+        duel.protagonist.tank.equipment,
+        duel.protagonist.equipmentMatrix,
       );
 
       switch (event) {

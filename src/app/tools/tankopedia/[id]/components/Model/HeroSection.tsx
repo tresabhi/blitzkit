@@ -10,8 +10,8 @@ import { TankSandbox } from './TankSandbox';
 import { Options } from './components/Options';
 
 export function HeroSection() {
-  const protagonist = Duel.use((state) => state.protagonist!.tank);
-  const antagonist = Duel.use((state) => state.antagonist!.tank);
+  const protagonist = Duel.use((state) => state.protagonist.tank);
+  const antagonist = Duel.use((state) => state.antagonist.tank);
   const compareTanks =
     protagonist.id === antagonist.id
       ? [protagonist.id]

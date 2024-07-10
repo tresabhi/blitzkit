@@ -51,7 +51,7 @@ export function TreeArrow({
 
 export function TechTreeSection() {
   const awaitedTankDefinitions = use(tankDefinitions);
-  const tank = Duel.use((state) => state.protagonist!.tank);
+  const tank = Duel.use((state) => state.protagonist.tank);
 
   if (tank.treeType !== 'researchable') return null;
 

@@ -120,10 +120,10 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
     return unsubscribe;
   });
 
-  const tank = Duel.use((state) => state.protagonist!.tank);
-  const track = Duel.use((state) => state.protagonist!.track);
-  const turret = Duel.use((state) => state.protagonist!.turret);
-  const gun = Duel.use((state) => state.protagonist!.gun);
+  const tank = Duel.use((state) => state.protagonist.tank);
+  const track = Duel.use((state) => state.protagonist.track);
+  const turret = Duel.use((state) => state.protagonist.turret);
+  const gun = Duel.use((state) => state.protagonist.gun);
   const armorGltf = useArmor(tank.id);
   const { gltf: modelGltf } = useModel(tank.id);
   const armorNodes = Object.values(armorGltf.nodes);

@@ -42,10 +42,10 @@ export function Characteristics() {
   const crewSkills = TankopediaEphemeral.use((state) => state.skills);
   const penetrationDistanceInput = useRef<HTMLInputElement>(null);
   const hasImprovedVentilation = useEquipment(102);
-  const crewMastery = Duel.use((state) => state.protagonist!.crewMastery);
+  const crewMastery = Duel.use((state) => state.protagonist.crewMastery);
   const [penetrationDistance, setPenetrationDistance] = useState(250);
 
-  const provisions = Duel.use((state) => state.protagonist!.provisions);
+  const provisions = Duel.use((state) => state.protagonist.provisions);
   const provisionCrewBonus =
     provisions.reduce(
       (total, provision) =>
@@ -56,13 +56,13 @@ export function Characteristics() {
     ) + (hasImprovedVentilation ? 0.08 : 0);
   const commanderMastery = crewMastery + provisionCrewBonus;
   const crewMemberMastery = commanderMastery * 1.1;
-  const consumables = Duel.use((state) => state.protagonist!.consumables);
-  const camouflage = Duel.use((state) => state.protagonist!.camouflage);
+  const consumables = Duel.use((state) => state.protagonist.consumables);
+  const camouflage = Duel.use((state) => state.protagonist.camouflage);
   const equipmentMatrix = Duel.use(
-    (state) => state.protagonist!.equipmentMatrix,
+    (state) => state.protagonist.equipmentMatrix,
   );
   const { tank, turret, gun, engine, track, shell } = Duel.use(
-    (state) => state.protagonist!,
+    (state) => state.protagonist,
   );
   const stockEngine = tank.engines[0];
   const stockTrack = tank.tracks[0];
@@ -119,9 +119,9 @@ export function Characteristics() {
   }, [penetrationDistance]);
   useEffect(() => {
     mutateDuel((draft) => {
-      [draft.protagonist!.pitch, draft.protagonist!.yaw] = applyPitchYawLimits(
-        draft.protagonist!.pitch,
-        draft.protagonist!.yaw,
+      [draft.protagonist.pitch, draft.protagonist.yaw] = applyPitchYawLimits(
+        draft.protagonist.pitch,
+        draft.protagonist.yaw,
         gunModelDefinition.pitch,
         turretModelDefinition.yaw,
         hasImprovedVerticalStabilizer,
@@ -159,7 +159,7 @@ export function Characteristics() {
                   }}
                   onClick={() => {
                     mutateDuel((draft) => {
-                      draft.protagonist!.shell = thisShell;
+                      draft.protagonist.shell = thisShell;
                     });
                   }}
                 >

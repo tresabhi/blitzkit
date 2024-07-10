@@ -8,8 +8,8 @@ import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Provisions() {
   const mutateDuel = Duel.useMutation();
-  const { tank, gun } = Duel.use((state) => state.protagonist!);
-  const provisions = Duel.use((state) => state.protagonist!.provisions);
+  const { tank, gun } = Duel.use((state) => state.protagonist);
+  const provisions = Duel.use((state) => state.protagonist.provisions);
   const awaitedProvisionDefinitions = use(provisionDefinitions);
   const provisionsList = availableProvisions(
     tank,
@@ -26,7 +26,7 @@ export function Provisions() {
           color="red"
           onClick={() => {
             mutateDuel((draft) => {
-              draft.protagonist!.provisions = [];
+              draft.protagonist.provisions = [];
             });
           }}
         >
@@ -40,7 +40,7 @@ export function Provisions() {
         disabled={tank.provisions === provisions.length}
         onChange={(provisions) => {
           mutateDuel((draft) => {
-            draft.protagonist!.provisions = provisions;
+            draft.protagonist.provisions = provisions;
           });
         }}
       />

@@ -5,7 +5,7 @@ import { videoDefinitions } from '../../../../../core/blitzkit/videos';
 import * as Duel from '../../../../../stores/duel';
 
 export function VideoSection() {
-  const tank = Duel.use((state) => state.protagonist!.tank);
+  const tank = Duel.use((state) => state.protagonist.tank);
   const awaitedVideoDefinitions = use(videoDefinitions);
   const videos = awaitedVideoDefinitions[tank.id]?.videos ?? [];
 

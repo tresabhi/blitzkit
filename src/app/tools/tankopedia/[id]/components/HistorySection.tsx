@@ -3,7 +3,7 @@ import PageWrapper from '../../../../../components/PageWrapper';
 import * as Duel from '../../../../../stores/duel';
 
 export function HistorySection() {
-  const tank = Duel.use((state) => state.protagonist!.tank);
+  const tank = Duel.use((state) => state.protagonist.tank);
 
   if (!tank.description) return null;
 

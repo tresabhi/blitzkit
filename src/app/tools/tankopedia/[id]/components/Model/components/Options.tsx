@@ -66,11 +66,11 @@ export function Options() {
     (state) => state.model.visual.environment,
   );
   const developerMode = App.use((state) => state.developerMode);
-  const antagonistGun = Duel.use((state) => state.antagonist!.gun);
-  const antagonistShell = Duel.use((state) => state.antagonist!.shell);
+  const antagonistGun = Duel.use((state) => state.antagonist.gun);
+  const antagonistShell = Duel.use((state) => state.antagonist.shell);
   const [antagonistSelectorOpen, setAntagonistSelectorOpen] = useState(false);
-  const antagonistTank = Duel.use((state) => state.antagonist!.tank);
-  const antagonistTurret = Duel.use((state) => state.antagonist!.turret);
+  const antagonistTank = Duel.use((state) => state.antagonist.tank);
+  const antagonistTurret = Duel.use((state) => state.antagonist.turret);
   const hasCalibratedShells = useEquipment(103, true);
   const [tab, setTab] = useState('search');
   const mutateDuel = Duel.useMutation();
@@ -151,7 +151,7 @@ export function Options() {
                 }}
                 onClick={() => {
                   mutateDuel((draft) => {
-                    draft.antagonist!.shell = thisShell;
+                    draft.antagonist.shell = thisShell;
                   });
                   mutateTankopediaEphemeral((draft) => {
                     draft.shot = undefined;
@@ -183,7 +183,7 @@ export function Options() {
               }}
               onClick={() => {
                 mutateDuel((draft) => {
-                  draft.antagonist!.equipmentMatrix[0][0] = hasCalibratedShells
+                  draft.antagonist.equipmentMatrix[0][0] = hasCalibratedShells
                     ? 0
                     : 1;
                 });
@@ -215,7 +215,7 @@ export function Options() {
               }}
               onClick={() => {
                 mutateDuel((draft) => {
-                  draft.protagonist!.equipmentMatrix[1][1] = hasEnhancedArmor
+                  draft.protagonist.equipmentMatrix[1][1] = hasEnhancedArmor
                     ? 0
                     : -1;
                 });
@@ -298,14 +298,14 @@ export function Options() {
                           compact
                           onSelect={(tank) => {
                             mutateDuel((draft) => {
-                              draft.antagonist!.tank = tank;
-                              draft.antagonist!.engine = tank.engines.at(-1)!;
-                              draft.antagonist!.track = tank.tracks.at(-1)!;
-                              draft.antagonist!.turret = tank.turrets.at(-1)!;
-                              draft.antagonist!.gun =
-                                draft.antagonist!.turret.guns.at(-1)!;
-                              draft.antagonist!.shell =
-                                draft.antagonist!.gun.shells[0];
+                              draft.antagonist.tank = tank;
+                              draft.antagonist.engine = tank.engines.at(-1)!;
+                              draft.antagonist.track = tank.tracks.at(-1)!;
+                              draft.antagonist.turret = tank.turrets.at(-1)!;
+                              draft.antagonist.gun =
+                                draft.antagonist.turret.guns.at(-1)!;
+                              draft.antagonist.shell =
+                                draft.antagonist.gun.shells[0];
                             });
                             setAntagonistSelectorOpen(false);
                           }}
@@ -332,11 +332,11 @@ export function Options() {
                                   key={turret.id}
                                   onClick={() => {
                                     mutateDuel((draft) => {
-                                      draft.antagonist!.turret = turret;
-                                      draft.antagonist!.gun =
+                                      draft.antagonist.turret = turret;
+                                      draft.antagonist.gun =
                                         turret.guns.at(-1)!;
-                                      draft.antagonist!.shell =
-                                        draft.antagonist!.gun.shells[0];
+                                      draft.antagonist.shell =
+                                        draft.antagonist.gun.shells[0];
                                     });
                                     mutateTankopediaEphemeral((draft) => {
                                       draft.shot = undefined;
@@ -361,8 +361,8 @@ export function Options() {
                                   }
                                   onClick={() => {
                                     mutateDuel((draft) => {
-                                      draft.antagonist!.gun = gun;
-                                      draft.antagonist!.shell = gun.shells[0];
+                                      draft.antagonist.gun = gun;
+                                      draft.antagonist.shell = gun.shells[0];
                                     });
                                   }}
                                   selected={antagonistGun.id === gun.id}

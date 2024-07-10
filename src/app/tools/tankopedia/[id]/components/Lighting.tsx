@@ -12,7 +12,7 @@ export const ENVIRONMENTS = [
 ] as const;
 
 export function Lighting() {
-  const protagonist = Duel.use((state) => state.protagonist!);
+  const protagonist = Duel.use((state) => state.protagonist);
   const { hasPbr } = useModel(protagonist.tank.id);
   const showEnvironment = TankopediaPersistent.use(
     (state) => state.model.visual.showEnvironment,

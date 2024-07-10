@@ -7,12 +7,12 @@ import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Equipment() {
   const mutateDuel = Duel.useMutation();
-  const protagonist = Duel.use((state) => state.protagonist!);
+  const protagonist = Duel.use((state) => state.protagonist);
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const equipmentPreset =
     awaitedEquipmentDefinitions.presets[protagonist.tank.equipment];
   const equipmentMatrix = Duel.use(
-    (state) => state.protagonist!.equipmentMatrix,
+    (state) => state.protagonist.equipmentMatrix,
   );
 
   return (
@@ -24,7 +24,7 @@ export function Equipment() {
           color="red"
           onClick={() => {
             mutateDuel((draft) => {
-              draft.protagonist!.equipmentMatrix.forEach((row) => {
+              draft.protagonist.equipmentMatrix.forEach((row) => {
                 row.forEach((_, index) => {
                   row[index] = 0;
                 });
@@ -41,7 +41,7 @@ export function Equipment() {
         preset={equipmentPreset}
         onChange={(matrix) => {
           mutateDuel((draft) => {
-            draft.protagonist!.equipmentMatrix = matrix;
+            draft.protagonist.equipmentMatrix = matrix;
           });
         }}
       />

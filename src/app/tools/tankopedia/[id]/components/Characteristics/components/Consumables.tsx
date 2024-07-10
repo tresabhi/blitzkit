@@ -17,9 +17,9 @@ import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Consumables() {
   const mutateDuel = Duel.useMutation();
-  const protagonist = Duel.use((state) => state.protagonist!);
+  const protagonist = Duel.use((state) => state.protagonist);
   const awaitedConsumableDefinitions = use(consumableDefinitions);
-  const consumables = Duel.use((state) => state.protagonist!.consumables);
+  const consumables = Duel.use((state) => state.protagonist.consumables);
   const consumablesList = Object.values(awaitedConsumableDefinitions).filter(
     (consumable) =>
       checkConsumableProvisionInclusivity(
@@ -29,7 +29,7 @@ export function Consumables() {
       ),
   );
   const cooldownBooster = Duel.use(
-    (state) => state.protagonist!.cooldownBooster,
+    (state) => state.protagonist.cooldownBooster,
   );
   const hasConsumableDeliverySystem = useEquipment(118);
   const hasHighEndConsumables = useEquipment(101);
@@ -61,7 +61,7 @@ export function Consumables() {
           color="red"
           onClick={() => {
             mutateDuel((draft) => {
-              draft.protagonist!.consumables = [];
+              draft.protagonist.consumables = [];
             });
           }}
         >
@@ -79,7 +79,7 @@ export function Consumables() {
         timers
         onChange={(consumables) => {
           mutateDuel((draft) => {
-            draft.protagonist!.consumables = consumables;
+            draft.protagonist.consumables = consumables;
           });
         }}
       />
