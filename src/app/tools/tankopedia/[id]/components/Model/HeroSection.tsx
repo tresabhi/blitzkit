@@ -110,7 +110,6 @@ export function HeroSection({ id }: { id: number }) {
             <Box width="100%" height="100%">
               <Suspense fallback={<TankSandboxLoader id={id} />}>
                 <TankSandbox />
-                <TankSandboxLoader id={id} />
               </Suspense>
             </Box>
 
