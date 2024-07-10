@@ -15,27 +15,17 @@ export function CharacteristicsSection() {
   return (
     <Flex
       mt={exempt ? '4' : '0'}
-      // align="center"
       px="4"
-      style={{
-        boxSizing: 'border-box',
-      }}
+      style={{ boxSizing: 'border-box' }}
       gap="6"
     >
       {!exempt && (
         <Flex
           direction="column"
           gap="4"
-          display={{
-            initial: 'none',
-            lg: 'flex',
-          }}
-          pt={{
-            initial: '9',
-            md: '0',
-          }}
+          display={{ initial: 'none', lg: 'flex' }}
+          pt={{ initial: '9', md: '0' }}
         >
-          <Ad type={AdType.WideSkyscraperVerticalPurple} />
           <Ad type={AdType.WideSkyscraperVerticalPurple} />
         </Flex>
       )}
@@ -44,10 +34,7 @@ export function CharacteristicsSection() {
         flexGrow="1"
         gap="6"
         justify="center"
-        direction={{
-          initial: 'column',
-          sm: 'row',
-        }}
+        direction={{ initial: 'column', sm: 'row' }}
       >
         <Flex direction="column" gap="4">
           <Heading>Configuration</Heading>
@@ -79,16 +66,9 @@ export function CharacteristicsSection() {
           direction="column"
           gap="4"
           height="100%"
-          display={{
-            initial: 'none',
-            xs: 'flex',
-          }}
-          pt={{
-            initial: '9',
-            md: '0',
-          }}
+          display={{ initial: 'none', xs: 'flex' }}
+          pt={{ initial: '9', md: '0' }}
         >
-          <Ad type={AdType.WideSkyscraperVerticalPurple} />
           <Ad type={AdType.WideSkyscraperVerticalPurple} />
         </Flex>
       )}
