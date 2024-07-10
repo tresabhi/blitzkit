@@ -13,7 +13,7 @@ import { TechTreeSection } from './components/Model/TechTreeSection';
 import { ShotDisplaySection } from './components/ShotDisplaySection';
 import { VideoSection } from './components/VideoSection';
 
-export default function Page() {
+export default function Page({ params }: { params: { id: string } }) {
   const exempt = useAdExempt();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const mutateDuel = Duel.useMutation();
@@ -73,7 +73,7 @@ export default function Page() {
 
   return (
     <PageWrapper p="0" noMaxWidth color="purple" size={1600}>
-      <HeroSection />
+      <HeroSection id={Number(params.id)} />
       <ShotDisplaySection />
       {!exempt && <AdMidSectionResponsive />}
       <CharacteristicsSection />

@@ -59,7 +59,7 @@ export function Controls() {
   const [autoRotate, setAutoRotate] = useState(true);
 
   useEffect(() => {
-    camera.position.set(-4, 4, -16);
+    camera.position.set(-10, 12, -12);
     orbitControls.current?.target.set(0, 1.25, 0);
   }, [camera]);
 

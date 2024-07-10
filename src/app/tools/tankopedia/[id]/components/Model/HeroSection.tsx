@@ -1,15 +1,17 @@
 import { ChevronLeftIcon, MixIcon } from '@radix-ui/react-icons';
 import { Box, Button, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { classIcons } from '../../../../../../components/ClassIcon';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import strings from '../../../../../../lang/en-US.json';
 import * as Duel from '../../../../../../stores/duel';
-import { TankSandbox } from './TankSandbox';
 import { Options } from './components/Options';
+import { TankSandbox } from './TankSandbox';
+import { TankSandboxLoader } from './TankSandboxLoader';
 
-export function HeroSection() {
+export function HeroSection({ id }: { id: number }) {
   const protagonist = Duel.use((state) => state.protagonist.tank);
   const antagonist = Duel.use((state) => state.antagonist.tank);
   const compareTanks =
@@ -106,7 +108,10 @@ export function HeroSection() {
         >
           <Box width="100%" height="100%" position="absolute">
             <Box width="100%" height="100%">
-              <TankSandbox />
+              <Suspense fallback={<TankSandboxLoader id={id} />}>
+                <TankSandbox />
+                <TankSandboxLoader id={id} />
+              </Suspense>
             </Box>
 
             <Options />

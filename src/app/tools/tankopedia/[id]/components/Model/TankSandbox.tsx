@@ -1,6 +1,6 @@
 import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { Suspense, use, useEffect, useRef } from 'react';
+import { use, useEffect, useRef } from 'react';
 import { Armor } from '../../../../../../components/Armor';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitions';
@@ -12,7 +12,6 @@ import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemer
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
 import { SceneProps } from '../SceneProps';
-import { ModelLoader } from './components/ModelLoader';
 import { TankModel } from './components/TankModel';
 
 export function TankSandbox() {
@@ -140,11 +139,9 @@ export function TankSandbox() {
       <Controls />
       <SceneProps />
 
-      <Suspense fallback={<ModelLoader />}>
-        <Lighting />
-        <TankModel />
-        <Armor />
-      </Suspense>
+      <Lighting />
+      <TankModel />
+      <Armor />
     </Canvas>
   );
 }
