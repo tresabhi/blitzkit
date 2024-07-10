@@ -50,13 +50,8 @@ import { tankIcon } from '../../../core/blitzkit/tankIcon';
 import { tankToCompareMember } from '../../../core/blitzkit/tankToCompareMember';
 import { BlitzkitButtonWatermark } from '../../../icons/BlitzkitButtonWatermark';
 import { theme } from '../../../stitches.config';
-import {
-  DeltaMode,
-  mutateComparePersistent,
-  mutateCompareTemporary,
-  useComparePersistent,
-  useCompareTemporary,
-} from '../../../stores/compare';
+import * as CompareEphemeral from '../../../stores/compareEphemeral';
+import * as ComparePersistent from '../../../stores/comparePersistent';
 import { EquipmentMatrix } from '../../../stores/duel';
 import { permanentSkills } from '../tankopedia/[id]/components/Characteristics/components/Skills/constants';
 import { TankSearch } from '../tankopedia/components/TankSearch';
@@ -71,14 +66,16 @@ export default function Page() {
   const awaitedSkillDefinitions = use(skillDefinitions);
   const awaitedConsumableDefinitions = use(consumableDefinitions);
   const searchParams = useSearchParams();
-  const members = useCompareTemporary((state) => state.members);
+  const members = CompareEphemeral.use((state) => state.members);
   const [addTankDialogOpen, setAddTankDialogOpen] = useState(false);
-  const sorting = useCompareTemporary((state) => state.sorting);
+  const sorting = CompareEphemeral.use((state) => state.sorting);
   const awaitedModelDefinitions = use(modelDefinitions);
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const awaitedProvisionDefinitions = use(provisionDefinitions);
-  const deltaMode = useComparePersistent((state) => state.deltaMode);
-  const crewSkills = useCompareTemporary((state) => state.crewSkills);
+  const deltaMode = ComparePersistent.use((state) => state.deltaMode);
+  const crewSkills = CompareEphemeral.use((state) => state.crewSkills);
+  const mutateCompareEphemeral = CompareEphemeral.useMutation();
+  const mutateComparePersistent = ComparePersistent.useMutation();
   const haveReactive = members.some((member) =>
     member.consumables.includes(33),
   );
@@ -151,7 +148,7 @@ export default function Page() {
     const tanksParam = searchParams.get('tanks');
 
     if (tanksParam) {
-      mutateCompareTemporary((draft) => {
+      mutateCompareEphemeral((draft) => {
         draft.members = tanksParam
           .split(',')
           .map(Number)
@@ -165,7 +162,7 @@ export default function Page() {
     }
 
     if (Object.keys(crewSkills).length === 0) {
-      mutateCompareTemporary((draft) => {
+      mutateCompareEphemeral((draft) => {
         draft.crewSkills = createDefaultSkills(awaitedSkillDefinitions);
       });
     }
@@ -210,7 +207,7 @@ export default function Page() {
               color={sorting?.by === name ? undefined : 'gray'}
               variant="ghost"
               onClick={() => {
-                mutateCompareTemporary((draft) => {
+                mutateCompareEphemeral((draft) => {
                   draft.members.sort((memberA, memberB) => {
                     const indexA = draft.members.indexOf(memberA);
                     const indexB = draft.members.indexOf(memberB);
@@ -413,7 +410,7 @@ export default function Page() {
 
         if (dropIndex === -1) return;
 
-        mutateCompareTemporary((draft) => {
+        mutateCompareEphemeral((draft) => {
           const fromIndex = index;
           const toIndex = dropIndex > index ? dropIndex - 1 : dropIndex;
 
@@ -558,7 +555,7 @@ export default function Page() {
                   <TankSearch
                     compact
                     onSelect={(tank) => {
-                      mutateCompareTemporary((draft) => {
+                      mutateCompareEphemeral((draft) => {
                         draft.members.push(
                           tankToCompareMember(
                             tank,
@@ -570,7 +567,7 @@ export default function Page() {
                       setAddTankDialogOpen(false);
                     }}
                     onSelectAll={(tanks) => {
-                      mutateCompareTemporary((draft) => {
+                      mutateCompareEphemeral((draft) => {
                         draft.members.push(
                           ...tanks.map((tank) =>
                             tankToCompareMember(
@@ -593,7 +590,7 @@ export default function Page() {
             variant="soft"
             color="red"
             onClick={() => {
-              mutateCompareTemporary((draft) => {
+              mutateCompareEphemeral((draft) => {
                 draft.members = [];
                 draft.sorting = undefined;
               });
@@ -606,17 +603,23 @@ export default function Page() {
             value={deltaMode}
             onValueChange={(value) => {
               mutateComparePersistent((draft) => {
-                draft.deltaMode = value as DeltaMode;
+                draft.deltaMode = value as ComparePersistent.DeltaMode;
               });
             }}
           >
-            <SegmentedControl.Item value={'none' satisfies DeltaMode}>
+            <SegmentedControl.Item
+              value={'none' satisfies ComparePersistent.DeltaMode}
+            >
               No deltas
             </SegmentedControl.Item>
-            <SegmentedControl.Item value={'percentage' satisfies DeltaMode}>
+            <SegmentedControl.Item
+              value={'percentage' satisfies ComparePersistent.DeltaMode}
+            >
               Percentage
             </SegmentedControl.Item>
-            <SegmentedControl.Item value={'absolute' satisfies DeltaMode}>
+            <SegmentedControl.Item
+              value={'absolute' satisfies ComparePersistent.DeltaMode}
+            >
               Absolute
             </SegmentedControl.Item>
           </SegmentedControl.Root>
@@ -716,7 +719,7 @@ export default function Page() {
                           <CrewSkillManager
                             skillLevels={crewSkills}
                             onChange={(skills) => {
-                              mutateCompareTemporary((draft) => {
+                              mutateCompareEphemeral((draft) => {
                                 draft.crewSkills = skills;
                               });
                             }}
@@ -726,7 +729,7 @@ export default function Page() {
                             <Button
                               variant="ghost"
                               onClick={() => {
-                                mutateCompareTemporary((draft) => {
+                                mutateCompareEphemeral((draft) => {
                                   Object.keys(draft.crewSkills).forEach(
                                     (skill) => {
                                       draft.crewSkills[skill] = 0;
@@ -740,7 +743,7 @@ export default function Page() {
                             <Button
                               variant="ghost"
                               onClick={() => {
-                                mutateCompareTemporary((draft) => {
+                                mutateCompareEphemeral((draft) => {
                                   Object.keys(draft.crewSkills).forEach(
                                     (skill) => {
                                       draft.crewSkills[skill] = 7;
@@ -836,7 +839,7 @@ export default function Page() {
                                   engine={engine}
                                   track={track}
                                   onChange={(modules) => {
-                                    mutateCompareTemporary((draft) => {
+                                    mutateCompareEphemeral((draft) => {
                                       draft.members[index] = {
                                         ...draft.members[index],
                                         ...modules,
@@ -849,7 +852,7 @@ export default function Page() {
                                   <Button
                                     variant="ghost"
                                     onClick={() => {
-                                      mutateCompareTemporary((draft) => {
+                                      mutateCompareEphemeral((draft) => {
                                         const member = draft.members[index];
 
                                         member.turret = member.tank.turrets[0];
@@ -865,7 +868,7 @@ export default function Page() {
                                   <Button
                                     variant="ghost"
                                     onClick={() => {
-                                      mutateCompareTemporary((draft) => {
+                                      mutateCompareEphemeral((draft) => {
                                         const member = draft.members[index];
 
                                         member.turret =
@@ -952,7 +955,7 @@ export default function Page() {
                                       tank.provisions === provisions.length
                                     }
                                     onChange={(provisions) => {
-                                      mutateCompareTemporary((draft) => {
+                                      mutateCompareEphemeral((draft) => {
                                         draft.members[index].provisions =
                                           provisions;
                                       });
@@ -963,7 +966,7 @@ export default function Page() {
                                     <Button
                                       variant="ghost"
                                       onClick={() => {
-                                        mutateCompareTemporary((draft) => {
+                                        mutateCompareEphemeral((draft) => {
                                           draft.members[index].provisions = [];
                                         });
                                       }}
@@ -1036,7 +1039,7 @@ export default function Page() {
                                     matrix={equipmentMatrix}
                                     preset={equipmentPreset}
                                     onChange={(matrix) => {
-                                      mutateCompareTemporary((draft) => {
+                                      mutateCompareEphemeral((draft) => {
                                         draft.members[index].equipmentMatrix =
                                           matrix;
                                         draft.sorting = undefined;
@@ -1049,7 +1052,7 @@ export default function Page() {
                                       variant="ghost"
                                       color="red"
                                       onClick={() => {
-                                        mutateCompareTemporary((draft) => {
+                                        mutateCompareEphemeral((draft) => {
                                           draft.members[index].equipmentMatrix =
                                             times(3, () =>
                                               times(3, () => 0),
@@ -1063,7 +1066,7 @@ export default function Page() {
                                     <Button
                                       variant="ghost"
                                       onClick={() => {
-                                        mutateCompareTemporary((draft) => {
+                                        mutateCompareEphemeral((draft) => {
                                           draft.members.forEach((member) => {
                                             member.equipmentMatrix =
                                               draft.members[
@@ -1141,7 +1144,7 @@ export default function Page() {
                                     consumables={consumablesList}
                                     selected={consumables}
                                     onChange={(consumables) => {
-                                      mutateCompareTemporary((draft) => {
+                                      mutateCompareEphemeral((draft) => {
                                         draft.members[index].consumables =
                                           consumables;
                                       });
@@ -1155,7 +1158,7 @@ export default function Page() {
                                     <Button
                                       variant="ghost"
                                       onClick={() => {
-                                        mutateCompareTemporary((draft) => {
+                                        mutateCompareEphemeral((draft) => {
                                           draft.members[index].consumables = [];
                                         });
                                       }}
@@ -1209,7 +1212,7 @@ export default function Page() {
                                 marginLeft: shellIndex === 0 ? 0 : -1,
                               }}
                               onClick={() => {
-                                mutateCompareTemporary((draft) => {
+                                mutateCompareEphemeral((draft) => {
                                   draft.members[index].shell = thisShell;
                                 });
                               }}

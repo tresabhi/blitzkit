@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { use, useState } from 'react';
 import { provisionDefinitions } from '../../../../core/blitzkit/provisionDefinitions';
 import { tankToCompareMember } from '../../../../core/blitzkit/tankToCompareMember';
-import { mutateCompareTemporary } from '../../../../stores/compare';
+import * as CompareEphemeral from '../../../../stores/compareEphemeral';
 import { TankSearch } from '../../tankopedia/components/TankSearch';
 
 interface TankControlProps {
@@ -15,13 +15,14 @@ interface TankControlProps {
 export function TankControl({ index, id }: TankControlProps) {
   const awaitedProvisionDefinitions = use(provisionDefinitions);
   const [switchTankDialogOpen, setSwitchTankDialogOpen] = useState(false);
+  const mutateCompareEphemeral = CompareEphemeral.useMutation();
 
   return (
     <Flex gap="3" justify="center" style={{ width: '100%' }}>
       <IconButton
         variant="ghost"
         onClick={() => {
-          mutateCompareTemporary((draft) => {
+          mutateCompareEphemeral((draft) => {
             draft.members.splice(index, 1);
             draft.sorting = undefined;
           });
@@ -51,7 +52,7 @@ export function TankControl({ index, id }: TankControlProps) {
               <TankSearch
                 compact
                 onSelect={(tank) => {
-                  mutateCompareTemporary((draft) => {
+                  mutateCompareEphemeral((draft) => {
                     draft.members[index] = tankToCompareMember(
                       tank,
                       awaitedProvisionDefinitions,
