@@ -31,6 +31,7 @@ import {
 } from '../../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useEquipment } from '../../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../../hooks/useFullScreen';
+import { useFullscreenAvailability } from '../../../../../../../hooks/useFullscreenAvailability';
 import * as App from '../../../../../../../stores/app';
 import * as Duel from '../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
@@ -60,8 +61,7 @@ export function Options() {
     (state) => state.model.visual.showSpacedArmor,
   );
   const opaque = TankopediaPersistent.use((state) => state.model.visual.opaque);
-  const fullScreenAvailable =
-    typeof document !== 'undefined' && document.fullscreenEnabled;
+  const fullScreenAvailable = useFullscreenAvailability();
   const environment = TankopediaPersistent.use(
     (state) => state.model.visual.environment,
   );
@@ -533,7 +533,6 @@ export function Options() {
                   });
                 }}
               >
-                {/* TODO: consider removing this? */}
                 View environment
               </DropdownMenu.CheckboxItem>
 

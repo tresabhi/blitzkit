@@ -104,24 +104,13 @@ export function HeroSection() {
             background: isFullScreen ? 'var(--color-background)' : undefined,
           }}
         >
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              position: 'absolute',
-            }}
-          >
-            <div
-              style={{
-                width: '100%',
-                height: '100%',
-              }}
-            >
+          <Box width="100%" height="100%" position="absolute">
+            <Box width="100%" height="100%">
               <TankSandbox />
-            </div>
+            </Box>
 
             <Options />
-          </div>
+          </Box>
         </Box>
       </Flex>
     </Flex>
