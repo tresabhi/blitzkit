@@ -1,5 +1,4 @@
 import { Draft, produce } from 'immer';
-import { usePathname } from 'next/navigation';
 import {
   createContext,
   ReactNode,
@@ -10,9 +9,9 @@ import {
 } from 'react';
 import { StoreApi, useStore as useStoreZustand } from 'zustand';
 
-interface StoreProviderProps {
+type StoreProviderProps<InitData> = {
   children: ReactNode;
-}
+} & (InitData extends unknown ? { data?: InitData } : { data: InitData });
 
 // idk why zustand doesn't export this
 type ExtractState<S> = S extends {
@@ -21,27 +20,26 @@ type ExtractState<S> = S extends {
   ? T
   : never;
 
-interface InitialContext {
-  pathName: string;
-}
-
-export function createNextSafeStore<Store extends StoreApi<unknown>>(
-  initial: (context: InitialContext) => Store | Promise<Store>,
+export function createNextSafeStore<Store extends StoreApi<unknown>, InitData>(
+  initialize: (data: InitData) => Store | Promise<Store>,
 ) {
   type Type = Store extends StoreApi<infer T> ? T : never;
 
   const Context = createContext<Store | undefined>(undefined);
 
-  function Provider({ children }: StoreProviderProps) {
-    const pathName = usePathname();
+  function Provider(props: StoreProviderProps<InitData>) {
     const storeRef = useRef<Store>();
-    const context = { pathName };
-    const storePromise = useMemo(async () => await initial(context), []);
+    const storePromise = useMemo(
+      async () => await initialize((props as { data: InitData }).data),
+      [],
+    );
     const awaitedStore = useReact(storePromise);
     if (!storeRef.current) storeRef.current = awaitedStore;
 
     return (
-      <Context.Provider value={storeRef.current}>{children}</Context.Provider>
+      <Context.Provider value={storeRef.current}>
+        {props.children}
+      </Context.Provider>
     );
   }
 

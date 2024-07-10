@@ -50,8 +50,7 @@ export interface Duel {
 }
 
 export const { Provider, use, useMutation, useStore } = createNextSafeStore(
-  async ({ pathName }) => {
-    const id = Number(pathName.split('/')[3]);
+  async (id: number) => {
     const awaitedTankDefinitions = await tankDefinitions;
     const awaitedProvisionDefinitions = await provisionDefinitions;
     const tank = awaitedTankDefinitions[id];

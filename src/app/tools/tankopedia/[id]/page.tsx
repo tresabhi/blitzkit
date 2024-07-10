@@ -13,8 +13,7 @@ import { TechTreeSection } from './components/Model/TechTreeSection';
 import { ShotDisplaySection } from './components/ShotDisplaySection';
 import { VideoSection } from './components/VideoSection';
 
-// TODO: remove this param if not needed for duel assignment
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page() {
   const exempt = useAdExempt();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const mutateDuel = Duel.useMutation();

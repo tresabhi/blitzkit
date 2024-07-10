@@ -5,15 +5,13 @@ import { tankIcon } from '../../../../core/blitzkit/tankIcon';
 import strings from '../../../../lang/en-US.json';
 import * as Duel from '../../../../stores/duel';
 
-interface TankopediaLayoutProps {
-  children: ReactNode;
-  params: { id: string };
-}
-
-export default async function TankopediaLayout({
+export default async function Layout({
   children,
   params,
-}: TankopediaLayoutProps) {
+}: {
+  children: ReactNode;
+  params: { id: string };
+}) {
   const id = Number(params.id);
   const awaitedTankDefinitions = await tankDefinitions;
   const tank = awaitedTankDefinitions[id];
@@ -23,7 +21,7 @@ export default async function TankopediaLayout({
   const description = `Statistics, armor profiles, and equipment for ${tank.name}`;
 
   return (
-    <Duel.Provider>
+    <Duel.Provider data={id}>
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta property="og:title" content={title} />
