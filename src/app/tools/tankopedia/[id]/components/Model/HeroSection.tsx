@@ -1,7 +1,7 @@
 import { ChevronLeftIcon, MixIcon } from '@radix-ui/react-icons';
 import { Box, Button, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { classIcons } from '../../../../../../components/ClassIcon';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
@@ -20,6 +20,11 @@ export function HeroSection({ id }: { id: number }) {
       : [protagonist.id, antagonist.id];
   const isFullScreen = useFullScreen();
   const Icon = classIcons[protagonist.class];
+  const [dummyLoader, setDummyLoader] = useState(true);
+
+  useEffect(() => {
+    setDummyLoader(false);
+  }, []);
 
   return (
     <Flex
@@ -49,20 +54,24 @@ export function HeroSection({ id }: { id: number }) {
               height: '100%',
             }}
           >
-            <Heading
-              size={{ initial: '8', md: '9' }}
-              align={{ initial: 'center', md: 'left' }}
-              color={
-                protagonist.treeType === 'collector'
-                  ? 'blue'
-                  : protagonist.treeType === 'premium'
-                    ? 'amber'
-                    : undefined
-              }
-            >
-              <Icon style={{ width: '0.75em', height: '0.75em' }} />{' '}
-              {protagonist.name}
-            </Heading>
+            <Flex gap="4">
+              <Heading size={{ initial: '8', md: '9' }}>
+                <Icon style={{ width: '0.75em', height: '0.75em' }} />{' '}
+              </Heading>
+              <Heading
+                size={{ initial: '8', md: '9' }}
+                align={{ initial: 'center', md: 'left' }}
+                color={
+                  protagonist.treeType === 'collector'
+                    ? 'blue'
+                    : protagonist.treeType === 'premium'
+                      ? 'amber'
+                      : undefined
+                }
+              >
+                {protagonist.name}
+              </Heading>
+            </Flex>
 
             <Text color="gray" ml={{ initial: '0', md: '9' }}>
               Tier {TIER_ROMAN_NUMERALS[protagonist.tier]}{' '}
@@ -73,7 +82,6 @@ export function HeroSection({ id }: { id: number }) {
               }{' '}
               {strings.common.tank_class_short[protagonist.class]}
             </Text>
-
             <Flex gap="4" ml={{ initial: '0', md: '9' }} mt="-1">
               <Link href="/tools/tankopedia">
                 <Button variant="ghost" size="1" ml="-1">
@@ -108,7 +116,19 @@ export function HeroSection({ id }: { id: number }) {
         >
           <Box width="100%" height="100%" position="absolute">
             <Box width="100%" height="100%">
-              <Suspense fallback={<TankSandboxLoader id={id} />}>
+              <TankSandboxLoader
+                id={id}
+                display={dummyLoader ? 'flex' : 'none'}
+              />
+
+              <Suspense
+                fallback={
+                  <TankSandboxLoader
+                    id={id}
+                    display={dummyLoader ? 'none' : 'flex'}
+                  />
+                }
+              >
                 <TankSandbox />
               </Suspense>
             </Box>
