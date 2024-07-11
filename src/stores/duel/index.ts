@@ -2,13 +2,12 @@
 
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import { provisionDefinitions } from '../../core/blitzkit/provisionDefinitions';
+import { ProvisionDefinitions } from '../../core/blitzkit/provisionDefinitions';
 import {
   EngineDefinition,
   GunDefinition,
   ShellDefinition,
   TankDefinition,
-  tankDefinitions,
   TrackDefinition,
   TurretDefinition,
 } from '../../core/blitzkit/tankDefinitions';
@@ -50,11 +49,14 @@ export interface Duel {
 }
 
 export const { Provider, use, useMutation, useStore } = createNextSafeStore(
-  async (id: number) => {
-    const awaitedTankDefinitions = await tankDefinitions;
-    const awaitedProvisionDefinitions = await provisionDefinitions;
-    const tank = awaitedTankDefinitions[id];
-    const protagonist = tankToDuelMember(tank, awaitedProvisionDefinitions);
+  ({
+    tank,
+    provisionDefinitions,
+  }: {
+    tank: TankDefinition;
+    provisionDefinitions: ProvisionDefinitions;
+  }) => {
+    const protagonist = tankToDuelMember(tank, provisionDefinitions);
 
     return create<Duel>()(
       subscribeWithSelector<Duel>(() => ({

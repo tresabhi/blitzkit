@@ -7,11 +7,11 @@ import { Roboto_Flex } from 'next/font/google';
 import { usePathname } from 'next/navigation';
 import { ReactNode, Suspense } from 'react';
 import { Footer } from '../components/Footer';
-import { Loader } from '../components/Loader';
 import Navbar, { NAVBAR_HEIGHT } from '../components/Navbar';
 import { Party3 } from '../components/Party3';
 import * as App from '../stores/app';
 import { Checks } from './components/Checks';
+import { PageLoader } from './components/PageLoader';
 import './layout.css';
 
 config();
@@ -75,15 +75,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
               <Checks />
 
-              <Suspense
-                fallback={
-                  <div style={{ flex: 1 }}>
-                    <Loader />
-                  </div>
-                }
-              >
-                {children}
-              </Suspense>
+              <Suspense fallback={<PageLoader />}>{children}</Suspense>
 
               {!isEmbed && <Footer />}
             </Flex>

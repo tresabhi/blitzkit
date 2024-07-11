@@ -1,7 +1,9 @@
 import { ReactNode } from 'react';
+import { provisionDefinitions } from '../../../../core/blitzkit/provisionDefinitions';
 import { tankDefinitions } from '../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
 import { tankIcon } from '../../../../core/blitzkit/tankIcon';
+import { useAwait } from '../../../../hooks/useAwait';
 import strings from '../../../../lang/en-US.json';
 import * as Duel from '../../../../stores/duel';
 
@@ -18,10 +20,16 @@ export default async function Layout({
   const title = `${tank.name} - Tier ${TIER_ROMAN_NUMERALS[tank.tier]} ${
     (strings.common.nations_adjectives as Record<string, string>)[tank.nation]
   } ${strings.common.tank_class_short[tank.class]}`;
-  const description = `Statistics, armor profiles, and equipment for ${tank.name}`;
+  const description = `Statistics, armor, and equipment for ${tank.name}`;
+  const awaitedProvisionDefinitions = useAwait(provisionDefinitions);
 
   return (
-    <Duel.Provider data={id}>
+    <Duel.Provider
+      data={{
+        tank: awaitedTankDefinitions[id],
+        provisionDefinitions: awaitedProvisionDefinitions,
+      }}
+    >
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta property="og:title" content={title} />

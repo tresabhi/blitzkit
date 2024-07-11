@@ -1,12 +1,5 @@
 import { Draft, produce } from 'immer';
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useMemo,
-  use as useReact,
-  useRef,
-} from 'react';
+import { createContext, ReactNode, useContext, useRef } from 'react';
 import { StoreApi, useStore as useStoreZustand } from 'zustand';
 
 type StoreProviderProps<InitData> = {
@@ -21,7 +14,7 @@ type ExtractState<S> = S extends {
   : never;
 
 export function createNextSafeStore<Store extends StoreApi<unknown>, InitData>(
-  initialize: (data: InitData) => Store | Promise<Store>,
+  initialize: (data: InitData) => Store,
 ) {
   type Type = Store extends StoreApi<infer T> ? T : never;
 
@@ -29,12 +22,9 @@ export function createNextSafeStore<Store extends StoreApi<unknown>, InitData>(
 
   function Provider(props: StoreProviderProps<InitData>) {
     const storeRef = useRef<Store>();
-    const storePromise = useMemo(
-      async () => await initialize((props as { data: InitData }).data),
-      [],
-    );
-    const awaitedStore = useReact(storePromise);
-    if (!storeRef.current) storeRef.current = awaitedStore;
+    if (!storeRef.current) {
+      storeRef.current = initialize((props as { data: InitData }).data);
+    }
 
     return (
       <Context.Provider value={storeRef.current}>
