@@ -18,7 +18,6 @@ interface PatreonLogin {
 }
 
 export interface App {
-  devBuildAgreementTime: number;
   developerMode: boolean;
   logins: {
     wargaming?: WargamingLogin;
@@ -32,7 +31,6 @@ export const { Provider, use, useMutation, useStore } = createNextSafeStore(
     create<App>()(
       persist(
         (set) => ({
-          devBuildAgreementTime: 0,
           developerMode: false,
           policiesAgreementIndex: -1,
           logins: {},

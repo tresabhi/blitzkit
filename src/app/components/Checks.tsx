@@ -1,19 +1,10 @@
 'use client';
 
-import {
-  AlertDialog,
-  Button,
-  Flex,
-  Heading,
-  Link,
-  Text,
-} from '@radix-ui/themes';
+import { Button, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { idToRegion } from '../../core/blitz/idToRegion';
-import isDev from '../../core/blitzkit/isDev';
-import { isLocalhost } from '../../core/blitzkit/isLocalhost';
 import * as App from '../../stores/app';
 import { CURRENT_POLICIES_AGREEMENT_INDEX } from '../../stores/app/constants';
 import { PatreonAuthResponse } from '../auth/[provider]/page';
@@ -26,15 +17,11 @@ interface Extension {
   };
 }
 
-const DEV_BUILD_AGREEMENT_COOLDOWN = 8 * 24 * 60 * 60 * 1000;
-
 /**
  * Wargaming: 14 (refresh: 7)
  * Patreon: 31 (refresh: 15)
  */
-
 export function Checks() {
-  const [showDevBuildAlert, setShowDevBuildAlert] = useState(false);
   const mutateApp = App.useMutation();
   const logins = App.use((state) => state.logins);
   const appStore = App.useStore();
@@ -46,17 +33,27 @@ export function Checks() {
   const [showPoliciesAgreement, setShowPoliciesAgreement] = useState(false);
 
   useEffect(() => {
-    setShowDevBuildAlert(
-      isDev() &&
-        !isLocalhost() &&
-        Date.now() - appStore.getState().devBuildAgreementTime >=
-          DEV_BUILD_AGREEMENT_COOLDOWN,
-    );
-  }, []);
-  useEffect(() => {
-    setShowPoliciesAgreement(
-      policiesAgreementIndex !== CURRENT_POLICIES_AGREEMENT_INDEX && !isLegal,
-    );
+    function unsubscribe() {
+      window.removeEventListener('scroll', show);
+      window.removeEventListener('pointermove', show);
+      window.removeEventListener('pointerdown', show);
+    }
+
+    function show() {
+      setShowPoliciesAgreement(true);
+      unsubscribe();
+    }
+
+    if (
+      policiesAgreementIndex !== CURRENT_POLICIES_AGREEMENT_INDEX &&
+      !isLegal
+    ) {
+      window.addEventListener('scroll', show);
+      window.addEventListener('pointermove', show);
+      window.addEventListener('pointerdown', show);
+    }
+
+    return unsubscribe;
   }, [policiesAgreementIndex, isLegal]);
 
   useEffect(() => {
@@ -121,102 +118,68 @@ export function Checks() {
     }
   });
 
+  if (!showPoliciesAgreement) return null;
+
   return (
-    <>
-      <AlertDialog.Root open={showDevBuildAlert}>
-        <AlertDialog.Content>
-          <AlertDialog.Title>Experimental version!</AlertDialog.Title>
-          <AlertDialog.Description>
-            This version may have a lot of issues. Report issues to{' '}
-            <a href="https://discord.gg/nDt7AjGJQH" target="_blank">
-              the official Discord server
-            </a>
-            . Also consider using{' '}
-            <a href="https://blitzkit.app/">the more stable release version</a>.
-            You will be asked again in 8 days.
-          </AlertDialog.Description>
-
-          <Flex justify="end">
-            <Button
-              variant="solid"
-              onClick={() => {
-                setShowDevBuildAlert(false);
-                appStore.setState({ devBuildAgreementTime: Date.now() });
-              }}
-            >
-              Continue
-            </Button>
-          </Flex>
-        </AlertDialog.Content>
-      </AlertDialog.Root>
-
-      {showPoliciesAgreement && (
+    <Flex
+      align="end"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        background: 'var(--color-overlay)',
+        zIndex: 2,
+      }}
+    >
+      <Flex
+        p="8"
+        style={{
+          width: '100%',
+          background: 'var(--color-panel-solid)',
+        }}
+        justify="center"
+      >
         <Flex
-          align="end"
+          align="start"
+          gap="4"
           style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'var(--color-overlay)',
-            zIndex: 2,
+            maxWidth: 640 * 2,
           }}
+          direction="column"
         >
-          <Flex
-            p="8"
-            style={{
-              width: '100%',
-              background: 'var(--color-panel-solid)',
-            }}
-            justify="center"
-          >
-            <Flex
-              align="start"
-              gap="4"
-              style={{
-                maxWidth: 640 * 2,
-              }}
-              direction="column"
-            >
-              <Flex direction="column" gap="2">
-                <Heading>
-                  {policiesAgreementIndex === -1
-                    ? "BlitzKit's policies"
-                    : "BlitzKit's policies have changed"}
-                </Heading>
+          <Flex direction="column" gap="2">
+            <Heading>
+              {policiesAgreementIndex === -1
+                ? "BlitzKit's policies"
+                : "BlitzKit's policies have changed"}
+            </Heading>
 
-                <Text>
-                  This website utilizes cookies to perform analytics and
-                  personalize your experience. You can learn more through{' '}
-                  <Link href="/docs/legal/privacy-policy">
-                    our privacy policy
-                  </Link>
-                  . You may opt out of personalized advertizement by visiting{' '}
-                  <Link href="https://www.google.com/settings/ads">
-                    Google Ad Settings
-                  </Link>
-                  . By using BlitzKit, you also agree to our{' '}
-                  <Link href="/docs/legal/terms-of-service">
-                    terms of service
-                  </Link>
-                  .
-                </Text>
-              </Flex>
-
-              <Button
-                onClick={() => {
-                  appStore.setState({
-                    policiesAgreementIndex: CURRENT_POLICIES_AGREEMENT_INDEX,
-                  });
-                }}
-              >
-                I Agree
-              </Button>
-            </Flex>
+            <Text>
+              This website utilizes cookies to perform analytics and personalize
+              your experience. You can learn more through{' '}
+              <Link href="/docs/legal/privacy-policy">our privacy policy</Link>.
+              You may opt out of personalized advertizement by visiting{' '}
+              <Link href="https://optout.aboutads.info/">WebChoices</Link>. By
+              using BlitzKit, you also agree to our{' '}
+              <Link href="/docs/legal/terms-of-service">terms of service</Link>.
+            </Text>
           </Flex>
+
+          <Button
+            mt="2"
+            onClick={() => {
+              appStore.setState({
+                policiesAgreementIndex: CURRENT_POLICIES_AGREEMENT_INDEX,
+              });
+              setShowPoliciesAgreement(false);
+            }}
+          >
+            I agree
+          </Button>
         </Flex>
-      )}
-    </>
+      </Flex>
+    </Flex>
   );
 }
