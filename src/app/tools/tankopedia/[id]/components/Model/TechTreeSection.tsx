@@ -2,7 +2,6 @@ import { ChevronRightIcon } from '@radix-ui/react-icons';
 import { Box, ChevronDownIcon, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { ComponentProps, use } from 'react';
-import PageWrapper from '../../../../../../components/PageWrapper';
 import { asset } from '../../../../../../core/blitzkit/asset';
 import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
@@ -126,34 +125,40 @@ export function TechTreeSection() {
   }
 
   return (
-    <PageWrapper
-      noFlex1
-      containerProps={{
-        style: {
-          overflow: 'hidden',
-          marginTop: 16,
-          backgroundColor: 'var(--color-surface)',
-        },
+    <Flex
+      p="5"
+      style={{
+        overflow: 'hidden',
+        backgroundColor: 'var(--color-surface)',
       }}
-      size={tank.ancestors && tank.successors ? 880 : 480}
-      gap="0"
+      align="center"
+      direction="column"
+      position="relative"
     >
-      <Flex justify="center" py="2" mb="4">
-        <Heading>Tech tree</Heading>
-      </Flex>
+      <img
+        src={asset(`flags/scratched/${tank.nation}.webp`)}
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-40%, -50%)',
+          filter: 'blur(2px)',
+          opacity: 0.25,
+        }}
+      />
+
+      <Heading mb="4">Tech tree</Heading>
 
       <Flex align="center" gap="6" direction={{ initial: 'column', sm: 'row' }}>
         {tank.ancestors && (
           <>
             <Flex
               wrap="wrap"
-              direction={{ initial: 'column', sm: 'row' }}
+              direction={{ initial: 'row', sm: 'column' }}
+              maxHeight={{ initial: 'unset', sm: '320px' }}
               align="center"
               justify="center"
-              style={{
-                maxHeight: 360,
-              }}
-              gap="4"
+              gap="6"
             >
               {tank.ancestors.map((id) => (
                 <Card key={id} id={id} />
@@ -169,29 +174,7 @@ export function TechTreeSection() {
           </>
         )}
 
-        <Flex
-          direction="column"
-          style={{
-            position: 'relative',
-          }}
-        >
-          <img
-            alt={tank.nation}
-            src={asset(`flags/scratched/${tank.nation}.webp`)}
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              height: '200%',
-              transform: 'translate(-40%, -50%)',
-              backgroundRepeat: 'no-repeat',
-              opacity: 1 / 4,
-              filter: 'blur(4px)',
-            }}
-          />
-
-          <Card id={tank.id} />
-        </Flex>
+        <Card id={tank.id} />
 
         {tank.successors && (
           <>
@@ -204,13 +187,11 @@ export function TechTreeSection() {
 
             <Flex
               wrap="wrap"
-              direction={{ initial: 'column', sm: 'row' }}
+              direction={{ initial: 'row', sm: 'column' }}
+              maxHeight={{ initial: 'unset', sm: '320px' }}
               align="center"
               justify="center"
-              style={{
-                maxHeight: 360,
-              }}
-              gap="4"
+              gap="6"
             >
               {tank.successors.map((id) => (
                 <Card key={id} id={id} />
@@ -219,6 +200,6 @@ export function TechTreeSection() {
           </>
         )}
       </Flex>
-    </PageWrapper>
+    </Flex>
   );
 }
