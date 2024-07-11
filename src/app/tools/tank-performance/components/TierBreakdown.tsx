@@ -12,13 +12,13 @@ import {
   Tier,
 } from '../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
+import { formatCompact } from '../../../../core/math/formatCompact';
 import { nivoTheme } from '../../../../core/nivo/theme';
 import strings from '../../../../lang/en-US.json';
 
 export function TierBreakdown() {
   const awaitedAverageDefinitionsArray = use(averageDefinitionsArray);
   const awaitedTankDefinitions = use(tankDefinitions);
-  const numberFormat = Intl.NumberFormat(undefined, { notation: 'compact' });
 
   return (
     <Flex justify="center" py="6">
@@ -57,14 +57,14 @@ export function TierBreakdown() {
             keys={[...TANK_CLASSES].reverse()}
             indexBy="tier"
             colors={{ scheme: 'dark2' }}
-            label={(d) => numberFormat.format(d.value as number)}
+            label={(d) => formatCompact(d.value as number)}
             margin={{ right: 96, bottom: 20, left: 40 }}
             legendLabel={(d) =>
               strings.common.tank_class_short[d.id as TankClass]
             }
             axisLeft={{
               tickSize: 0,
-              format: (value) => numberFormat.format(value as number),
+              format: (value) => formatCompact(value as number),
             }}
             axisBottom={{ tickSize: 0 }}
             legends={[

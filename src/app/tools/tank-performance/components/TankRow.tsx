@@ -3,6 +3,7 @@ import { memo, use } from 'react';
 import { TankRowHeaderCell } from '../../../../components/TankRowHeaderCell';
 import { averageDefinitions } from '../../../../core/blitzkit/averageDefinitions';
 import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
+import { formatCompact } from '../../../../core/math/formatCompact';
 import { useAveragesExclusionRatio } from '../../../../hooks/useAveragesExclusionRatio';
 
 interface TankRowProps {
@@ -13,7 +14,6 @@ export const TankRow = memo<TankRowProps>(
   ({ tank }) => {
     const awaitedAverageDefinitions = use(averageDefinitions);
     const averages = awaitedAverageDefinitions.averages[tank.id];
-    const numberFormat = Intl.NumberFormat(undefined, { notation: 'compact' });
     const ratio = useAveragesExclusionRatio();
 
     return (
@@ -24,10 +24,10 @@ export const TankRow = memo<TankRowProps>(
           {((averages.mu.wins / averages.mu.battles) * 100).toFixed(1)}%
         </Table.Cell>
         <Table.Cell align="center">
-          {numberFormat.format(Math.round(ratio * averages.samples.d_30))}
+          {formatCompact(Math.round(ratio * averages.samples.d_30))}
         </Table.Cell>
         <Table.Cell align="center">
-          {numberFormat.format(
+          {formatCompact(
             Math.round(ratio * averages.mu.battles * averages.samples.total),
           )}
         </Table.Cell>

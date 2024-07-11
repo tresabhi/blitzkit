@@ -19,6 +19,7 @@ import {
 } from '../../../../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../../core/blitzkit/tankDefinitions/constants';
 import { tankIcon } from '../../../../../../../core/blitzkit/tankIcon';
+import { formatCompact } from '../../../../../../../core/math/formatCompact';
 import * as Duel from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
@@ -35,10 +36,6 @@ function ModuleButton({
   top: boolean;
   onClick: () => void;
 }) {
-  const numberFormat = Intl.NumberFormat(undefined, {
-    notation: 'compact',
-    maximumFractionDigits: 0,
-  });
   const isTank = unlock.type === 'vehicle';
   const button = (
     <IconButton
@@ -77,7 +74,7 @@ function ModuleButton({
           gap={isTank ? '1' : undefined}
         >
           <Text size="1" color="gray">
-            {numberFormat.format(unlock.cost.value)}
+            {formatCompact(unlock.cost.value)}
           </Text>
 
           <img

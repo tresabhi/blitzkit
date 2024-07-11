@@ -6,6 +6,7 @@ import PageWrapper from '../../../../../../components/PageWrapper';
 import { asset } from '../../../../../../core/blitzkit/asset';
 import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
+import { formatCompact } from '../../../../../../core/math/formatCompact';
 import * as Duel from '../../../../../../stores/duel';
 
 export function TreeArrow({
@@ -99,7 +100,7 @@ export function TechTreeSection() {
                   }}
                 />
                 <Text color="gray" size="1">
-                  {ancestor.xp?.toLocaleString()}
+                  {formatCompact(ancestor.xp!)}
                 </Text>
               </Flex>
 
@@ -114,7 +115,7 @@ export function TechTreeSection() {
                   }}
                 />
                 <Text color="gray" size="1">
-                  {ancestor.price.value?.toLocaleString()}
+                  {formatCompact(ancestor.price.value)}
                 </Text>
               </Flex>
             </Flex>
@@ -141,14 +142,7 @@ export function TechTreeSection() {
         <Heading>Tech tree</Heading>
       </Flex>
 
-      {/* BIG TODO: use number format to shorten currencies */}
-
-      <Flex
-        align="center"
-        gap="6"
-        style={{}}
-        direction={{ initial: 'column', sm: 'row' }}
-      >
+      <Flex align="center" gap="6" direction={{ initial: 'column', sm: 'row' }}>
         {tank.ancestors && (
           <>
             <Flex

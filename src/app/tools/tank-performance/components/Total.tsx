@@ -5,6 +5,7 @@ import {
   AverageDefinitionsAllStats,
   AverageDefinitionsEntryWithId,
 } from '../../../../core/blitzkit/averageDefinitions';
+import { formatCompact } from '../../../../core/math/formatCompact';
 import { useAveragesExclusionRatio } from '../../../../hooks/useAveragesExclusionRatio';
 
 interface TotalProps {
@@ -14,7 +15,6 @@ interface TotalProps {
 export const Total = memo<TotalProps>(
   ({ tanks }) => {
     const ratio = useAveragesExclusionRatio();
-    const numberFormat = Intl.NumberFormat(undefined, { notation: 'compact' });
     const sum = useCallback(
       (slice: (tank: AverageDefinitionsAllStats) => number) => {
         return tanks.reduce(
@@ -45,12 +45,8 @@ export const Total = memo<TotalProps>(
       <Table.Row>
         <StickyRowHeaderCell>Total</StickyRowHeaderCell>
         <Table.Cell align="center">{(winrate * 100).toFixed(1)}%</Table.Cell>
-        <Table.Cell align="center">
-          {numberFormat.format(ratio * players)}
-        </Table.Cell>
-        <Table.Cell align="center">
-          {numberFormat.format(ratio * battles)}
-        </Table.Cell>
+        <Table.Cell align="center">{formatCompact(ratio * players)}</Table.Cell>
+        <Table.Cell align="center">{formatCompact(ratio * battles)}</Table.Cell>
         <Table.Cell align="center">
           {Math.round(damage).toLocaleString()}
         </Table.Cell>
