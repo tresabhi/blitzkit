@@ -43,7 +43,12 @@ export const Total = memo<TotalProps>(
 
     return (
       <Table.Row>
-        <StickyRowHeaderCell>Total</StickyRowHeaderCell>
+        <StickyRowHeaderCell
+          // maxWidth={{ initial: '128px', sm: '240px' }}
+          style={{ overflow: 'hidden', display: 'flex' }}
+        >
+          Total
+        </StickyRowHeaderCell>
         <Table.Cell align="center">{(winrate * 100).toFixed(1)}%</Table.Cell>
         <Table.Cell align="center">{formatCompact(ratio * players)}</Table.Cell>
         <Table.Cell align="center">{formatCompact(ratio * battles)}</Table.Cell>

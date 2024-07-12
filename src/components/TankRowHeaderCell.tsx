@@ -14,14 +14,8 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
 
   return (
     <StickyRowHeaderCell
-      maxWidth={{
-        initial: '180px',
-        sm: '240px',
-      }}
-      style={{
-        overflow: 'hidden',
-        display: 'flex',
-      }}
+      maxWidth={{ initial: '144px', sm: '240px' }}
+      style={{ overflow: 'hidden', display: 'flex' }}
     >
       <Link href={`/tools/tankopedia/${tank.id}`} tabIndex={-1}>
         <img
@@ -58,14 +52,12 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
           overflow: 'hidden',
           textOverflow: 'ellipsis',
         }}
+        size={{ initial: '1', sm: '2' }}
       >
         <Icon
           width="1em"
           height="1em"
-          style={{
-            minWidth: '1em',
-            minHeight: '1em',
-          }}
+          style={{ minWidth: '1em', minHeight: '1em' }}
         />
 
         {tank.name}

@@ -213,7 +213,7 @@ export default function Page({ params }: { params: { id: string } }) {
                             {strings.common.bkni_percentile[percentile]}
                           </Text>
                           <Text size="1">
-                            {min} - {BKNI_PERCENTILES[index + 1]?.min ?? 200}
+                            {min}% - {BKNI_PERCENTILES[index + 1]?.min ?? 100}%
                           </Text>
                         </Flex>
                       </Button>

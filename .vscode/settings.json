@@ -118,6 +118,7 @@
     "POSITIVEX",
     "POSITIVEY",
     "POSITIVEZ",
+    "precompute",
     "Promisable",
     "protobuf",
     "protos",

@@ -6,6 +6,7 @@ import {
   CaretUpIcon,
 } from '@radix-ui/react-icons';
 import { Flex, IconButton, Table } from '@radix-ui/themes';
+import { StickyColumnHeaderCell } from '../../../../components/StickyColumnHeaderCell';
 import * as TankPerformanceSort from '../../../../stores/tankPerformanceSort';
 import {
   tankPerformanceSortTypeNames,
@@ -19,17 +20,16 @@ export function Header() {
   return (
     <Table.Header>
       <Table.Row align="center">
-        <Table.ColumnHeaderCell>Tank</Table.ColumnHeaderCell>
+        <StickyColumnHeaderCell>Tank</StickyColumnHeaderCell>
         {tankPerformanceSortTypeNamesArray.map((type) => {
           const isSelected = sort.type === type;
 
           return (
-            <Table.ColumnHeaderCell
+            <StickyColumnHeaderCell
               px="2"
               key={type}
               width="0"
               justify="center"
-              minWidth="0px"
             >
               <Flex align="center" gap="1">
                 {tankPerformanceSortTypeNames[type]}
@@ -56,7 +56,7 @@ export function Header() {
                   )}
                 </IconButton>
               </Flex>
-            </Table.ColumnHeaderCell>
+            </StickyColumnHeaderCell>
           );
         })}
       </Table.Row>
