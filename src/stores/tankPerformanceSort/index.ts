@@ -2,9 +2,9 @@
 
 import { create } from 'zustand';
 import { createNextSafeStore } from '../../core/zustand/createNextSafeStore';
-import { tankPerformanceSortTypeNames } from './constants';
+import { TankPerformanceSortTypeNames } from './constants';
 
-export type TankPerformanceSortType = keyof typeof tankPerformanceSortTypeNames;
+export type TankPerformanceSortType = keyof typeof TankPerformanceSortTypeNames;
 
 export interface TankPerformanceSort {
   type: TankPerformanceSortType;

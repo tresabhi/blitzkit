@@ -1,12 +1,14 @@
 import { Table } from '@radix-ui/themes';
-import { memo, useCallback } from 'react';
+import { memo, use, useCallback } from 'react';
 import { StickyRowHeaderCell } from '../../../../components/StickyRowHeaderCell';
 import {
+  averageDefinitions,
   AverageDefinitionsAllStats,
   AverageDefinitionsEntryWithId,
 } from '../../../../core/blitzkit/averageDefinitions';
 import { formatCompact } from '../../../../core/math/formatCompact';
 import { useAveragesExclusionRatio } from '../../../../hooks/useAveragesExclusionRatio';
+import * as TankPerformancePersistent from '../../../../stores/tankPerformancePersistent';
 
 interface TotalProps {
   tanks: AverageDefinitionsEntryWithId[];
@@ -14,6 +16,10 @@ interface TotalProps {
 
 export const Total = memo<TotalProps>(
   ({ tanks }) => {
+    const awaitedAverageDefinitions = use(averageDefinitions);
+    const playerCountPeriod = TankPerformancePersistent.use(
+      (state) => state.playerCountPeriod,
+    );
     const ratio = useAveragesExclusionRatio();
     const sum = useCallback(
       (slice: (tank: AverageDefinitionsAllStats) => number) => {
@@ -25,7 +31,6 @@ export const Total = memo<TotalProps>(
       [tanks],
     );
 
-    const players = sum(() => 1);
     const battles = sum(({ battles }) => battles);
     const winrate = sum(({ wins }) => wins) / battles;
     const damage = sum(({ damage_dealt }) => damage_dealt) / battles;
@@ -43,14 +48,15 @@ export const Total = memo<TotalProps>(
 
     return (
       <Table.Row>
-        <StickyRowHeaderCell
-          // maxWidth={{ initial: '128px', sm: '240px' }}
-          style={{ overflow: 'hidden', display: 'flex' }}
-        >
+        <StickyRowHeaderCell style={{ overflow: 'hidden', display: 'flex' }}>
           Total
         </StickyRowHeaderCell>
         <Table.Cell align="center">{(winrate * 100).toFixed(1)}%</Table.Cell>
-        <Table.Cell align="center">{formatCompact(ratio * players)}</Table.Cell>
+        <Table.Cell align="center">
+          {formatCompact(
+            ratio * awaitedAverageDefinitions.samples[playerCountPeriod],
+          )}
+        </Table.Cell>
         <Table.Cell align="center">{formatCompact(ratio * battles)}</Table.Cell>
         <Table.Cell align="center">
           {Math.round(damage).toLocaleString()}

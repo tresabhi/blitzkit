@@ -1,9 +1,9 @@
 import { TankPerformanceSortType } from '.';
 
-export const tankPerformanceSortTypeNames = {
+export const TankPerformanceSortTypeNames = {
   winrate: 'Winrate',
-  players: 'Players (30d)',
-  battles: 'Battles (career)',
+  players: 'Players',
+  battles: 'Battles (total)',
   damage: 'Damage',
   survival: 'Survival',
   xp: 'XP',
@@ -16,6 +16,7 @@ export const tankPerformanceSortTypeNames = {
   damageTaken: 'Dmg. taken',
   capturePoints: 'Cap points',
 } as const;
-export const tankPerformanceSortTypeNamesArray = Object.keys(
-  tankPerformanceSortTypeNames,
+
+export const TankPerformanceSortTypeNamesArray = Object.keys(
+  TankPerformanceSortTypeNames,
 ) as TankPerformanceSortType[];

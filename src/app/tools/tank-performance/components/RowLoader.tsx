@@ -2,7 +2,7 @@ import { Skeleton, Table } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { memo, useRef } from 'react';
 import { useIntersection } from '../../../../hooks/useIntersection';
-import { tankPerformanceSortTypeNamesArray } from '../../../../stores/tankPerformanceSort/constants';
+import { TankPerformanceSortTypeNamesArray } from '../../../../stores/tankPerformanceSort/constants';
 
 interface RowLoaderProps {
   onIntersection?: () => void;
@@ -21,7 +21,7 @@ export const RowLoader = memo<RowLoaderProps>(({ onIntersection }) => {
         <Skeleton height="100%" width="128px" />
       </Table.RowHeaderCell>
 
-      {times(tankPerformanceSortTypeNamesArray.length, (index) => (
+      {times(TankPerformanceSortTypeNamesArray.length, (index) => (
         <Table.Cell key={index} align="center">
           <Skeleton height="1em" width="32px" />
         </Table.Cell>

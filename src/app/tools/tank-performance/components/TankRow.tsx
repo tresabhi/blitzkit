@@ -5,6 +5,7 @@ import { averageDefinitions } from '../../../../core/blitzkit/averageDefinitions
 import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
 import { formatCompact } from '../../../../core/math/formatCompact';
 import { useAveragesExclusionRatio } from '../../../../hooks/useAveragesExclusionRatio';
+import * as TankPerformancePersistent from '../../../../stores/tankPerformancePersistent';
 
 interface TankRowProps {
   tank: TankDefinition;
@@ -15,6 +16,9 @@ export const TankRow = memo<TankRowProps>(
     const awaitedAverageDefinitions = use(averageDefinitions);
     const averages = awaitedAverageDefinitions.averages[tank.id];
     const ratio = useAveragesExclusionRatio();
+    const playerCountPeriod = TankPerformancePersistent.use(
+      (state) => state.playerCountPeriod,
+    );
 
     return (
       <Table.Row>
@@ -24,7 +28,9 @@ export const TankRow = memo<TankRowProps>(
           {((averages.mu.wins / averages.mu.battles) * 100).toFixed(1)}%
         </Table.Cell>
         <Table.Cell align="center">
-          {formatCompact(Math.round(ratio * averages.samples.d_30))}
+          {formatCompact(
+            Math.round(ratio * averages.samples[playerCountPeriod]),
+          )}
         </Table.Cell>
         <Table.Cell align="center">
           {formatCompact(

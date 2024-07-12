@@ -9,8 +9,8 @@ import { Flex, IconButton, Table } from '@radix-ui/themes';
 import { StickyColumnHeaderCell } from '../../../../components/StickyColumnHeaderCell';
 import * as TankPerformanceSort from '../../../../stores/tankPerformanceSort';
 import {
-  tankPerformanceSortTypeNames,
-  tankPerformanceSortTypeNamesArray,
+  TankPerformanceSortTypeNames,
+  TankPerformanceSortTypeNamesArray,
 } from '../../../../stores/tankPerformanceSort/constants';
 
 export function Header() {
@@ -21,7 +21,7 @@ export function Header() {
     <Table.Header>
       <Table.Row align="center">
         <StickyColumnHeaderCell>Tank</StickyColumnHeaderCell>
-        {tankPerformanceSortTypeNamesArray.map((type) => {
+        {TankPerformanceSortTypeNamesArray.map((type) => {
           const isSelected = sort.type === type;
 
           return (
@@ -32,7 +32,7 @@ export function Header() {
               justify="center"
             >
               <Flex align="center" gap="1">
-                {tankPerformanceSortTypeNames[type]}
+                {TankPerformanceSortTypeNames[type]}
 
                 <IconButton
                   size={isSelected ? '1' : '2'}
