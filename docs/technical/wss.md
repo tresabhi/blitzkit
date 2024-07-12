@@ -4,7 +4,7 @@ A next generation metric in judging player performance.
 
 ## Pre-requisites
 
-This paper delves deep into mathematics and statistics which most may not be familiar with. You will need some basic understanding of normal distributions, correlation analysis, regressions, summation, and set builder notation.
+This paper delves deep into mathematics and statistics which most may not be familiar with. You will need some basic understanding of normal distributions, correlation analysis, regressions, summation, set builder notation, and calculus.
 
 ## Preface
 
@@ -14,15 +14,15 @@ The mathematics behind this metric has been intentionally generalized such that 
 
 ## Understanding The Metric
 
-On average, the score across all players will be $0$. This is because the metric is essentially a convolution of multiple standard scores and their corresponding weights. A standard score of $z=\pm1$ implies an offset by $\pm\sigma$ ($1$ standard deviation) from $\mu$ (the mean). And since the scalar of WSS is $C=100$, $z=\pm1\iff M=\pm 1C=\pm100$.
+On average, the score across all players will be $0$. This is because the metric is essentially a convolution of multiple standard scores and their corresponding weights. A standard score of $z=\pm1$ implies an offset by $\pm\sigma$ ($1$ standard deviation) from $\mu$ (the mean). And since the scalar of WSS is $C=1000$, $z=\pm1\iff M=\pm 1C=\pm1000$.
 
-About $68.3\%$ of players lie within $\pm1\sigma\implies M=\pm100$, about $95.4\%$ of players lie within $\pm2\sigma\implies M=\pm200$, and about $99.7\%$ of players lie within $\pm3\sigma\implies M=\pm300$.
+About $68.3\%$ of players lie within $\pm1\sigma\implies M=\pm1000$, about $95.4\%$ of players lie within $\pm2\sigma\implies M=\pm200$, and about $99.7\%$ of players lie within $\pm3\sigma\implies M=\pm300$.
 
 ## Computation
 
-The final metric, $M$, is an integer where $0$ is the average score across all players, $-100$ is $-\sigma$ away from $\mu$, and $100$ is $\sigma$. This allows for a clear distinction between players that are hurting the team and who are actually helping since players with a negative score have a negative standard score, tied tightly with basic distributional statistics.
+The final metric, $M$, is an integer where $0$ is the average score across all players, $-1000$ is $-\sigma$ away from $\mu$, and $1000$ is $\sigma$. This allows for a clear distinction between players that are hurting the team and who are actually helping since players with a negative score have a negative standard score, tied tightly with basic distributional statistics.
 
-$M$, the human-readable metric, is a function of $Z$, the raw score where $C=100$ is an arbitrary scaling factor.
+$M$, the human-readable metric, is a function of $Z$, the raw score where $C=1000$ is an arbitrary scaling factor.
 
 $$
 M=\text{round}\left(CZ\right)
@@ -63,6 +63,61 @@ $z$ is the standard score which uses the precomputed values of $\mu$ and $\sigma
 $$
 z=\frac{x-\mu}{\sigma}
 $$
+
+## Human-Readability
+
+### Bar Size and Position
+
+> [!NOTE]
+> The bar colors in the example graphics below may not be representative of the real scale. Read "Bar Color" for more details.
+
+Presenting $M$ may not be sufficient in conveying the metric. It is convention to display a "progress bar" that directly represents the percentile of the player which can be derived directly from the raw score, $Z$, since its a weighted average of standard scores.
+
+A standard score of $z=0.65\implies Z=650$ corresponds to the $75\%$ percentile. That is $25\%$ above the average $50\%$. This is visualized by a green bar halfway full.
+
+![](https://i.imgur.com/MdKZj36.png)
+
+$z=1.20\implies Z=1200$ is the $88\%$ percentile. The bar is now three quarters full.
+
+![](https://i.imgur.com/p1vG7B2.png)
+
+Thus, by extension, negative scores are red bars originating from the right. $z=-1.20\implies Z=-1200$ is the $12\%$ percentile.
+
+![](https://i.imgur.com/0ncSOn4.png)
+
+Generalizing this, for any given raw score $Z$, the percentile can be calculated as follows.
+
+$P=\Phi\left(Z\right)$
+
+And $\Phi$ is the cumulative distribution function. That being said, most languages will offer some library or built-in function to compute $\Phi$.
+
+$\Phi\left(x\right)=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{x}e^{-\frac{t^{2}}{2}}dt$
+
+For any given value of $P$, the size of the bar is $B$.
+
+$B=\left|2P-1\right|$
+
+The bar originates from the left if $P>0.5=50\%\iff Z>0\implies M\ge0$ ($M$ may still be $0$ due to rounding). It originates from the right if $P<0.5=50\%\iff Z=0\implies M\le0$. And when $P=0.5=50\%\iff Z=0\implies M=0$, it is completely empty.
+
+### Bar Color
+
+The color of the bar is also a function of the percentile. $\Phi$ isn't a cheap function, so I would recommend computing these on-demand and memoize the results. Or, alternatively, you could precompute the associated $Z$ values for $P$ and use those to determine the colors. The colors that [BlitzKit](https://blitzkit.app/) uses are shown in the image below.
+
+![](https://i.imgur.com/3T4BchO.png)
+
+BlitzKit uses [Radix Colors](https://www.radix-ui.com/colors/docs/palette-composition/scales) and the scales used in the image above are as follows respectively.
+
+- tomato
+- orange
+- amber
+- yellow
+- lime
+- green
+- teal
+- cyan
+- pink
+- plum
+- purple
 
 ## FAQ
 
