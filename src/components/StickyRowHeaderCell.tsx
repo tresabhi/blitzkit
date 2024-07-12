@@ -8,6 +8,7 @@ export function StickyRowHeaderCell({ style, ...props }: RowHeaderCellProps) {
         position: 'sticky',
         left: 0,
         backgroundColor: 'var(--color-panel)',
+        boxShadow: 'var(--shadow-6)',
         ...style,
       }}
       {...props}
