@@ -421,9 +421,9 @@ export const TankSearch = memo<TankSearchProps>(
               <Link
                 underline="always"
                 href="#"
-                onClick={() => onSelectAll(tanks)}
+                onClick={() => onSelectAll(tanksFiltered)}
               >
-                Select all {tanks.length} tanks
+                Select all {tanksFiltered.length} tanks
               </Link>
             )}
           </Flex>
