@@ -58,7 +58,7 @@ export function Info({
 
       {children !== undefined && (
         <Flex align="center" gap="1">
-          {delta !== undefined && delta !== 0 && (
+          {delta !== undefined && delta !== 0 && !isNaN(delta) && (
             <>
               <Text
                 color={
