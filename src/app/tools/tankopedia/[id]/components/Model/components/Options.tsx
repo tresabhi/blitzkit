@@ -18,7 +18,7 @@ import {
   Tabs,
   Text,
 } from '@radix-ui/themes';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ModuleButton } from '../../../../../../../components/ModuleButtons/ModuleButton';
 import { SmallTankIcon } from '../../../../../../../components/SmallTankIcon';
 import { resolveNearPenetration } from '../../../../../../../core/blitz/resolveNearPenetration';
@@ -43,7 +43,9 @@ import { RotationInputs } from '../../QuickInputs';
 export function Options() {
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
-  const mode = TankopediaPersistent.use((state) => state.mode);
+  const modeRaw = TankopediaPersistent.use((state) => state.mode);
+  const [mode, setMode] =
+    useState<TankopediaPersistent.TankopediaMode>('model');
   const isFullScreen = useFullScreen();
   const showGrid = TankopediaPersistent.use(
     (state) => state.model.visual.showGrid,
@@ -75,6 +77,8 @@ export function Options() {
   const [tab, setTab] = useState('search');
   const mutateDuel = Duel.useMutation();
   const hasEnhancedArmor = useEquipment(110);
+
+  useEffect(() => setMode(modeRaw), [modeRaw]);
 
   return (
     <>
