@@ -409,11 +409,11 @@ export function tankCharacteristics(
   const speedBackwards = tank.speed.backwards + speedBackwardsSum;
   const enginePower = resolvedEnginePower;
   const hardTerrainCoefficient =
-    track.resistance.hard * resistanceHardCoefficient;
+    100 / (track.resistance.hard * resistanceHardCoefficient);
   const mediumTerrainCoefficient =
-    track.resistance.medium * resistanceMediumCoefficient;
+    100 / (track.resistance.medium * resistanceMediumCoefficient);
   const softTerrainCoefficient =
-    track.resistance.soft * resistanceSoftCoefficient;
+    100 / (track.resistance.soft * resistanceSoftCoefficient);
   const powerToWeightRatioHardTerrain =
     resolvedEnginePower / weightTons / hardTerrainCoefficient;
   const powerToWeightRatioMediumTerrain =

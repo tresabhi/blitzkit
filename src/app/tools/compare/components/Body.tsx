@@ -243,21 +243,21 @@ export function Body({ stats }: BodyProps) {
           stats={stats}
           name="Terrain coefficient"
           value="hardTerrainCoefficient"
-          decimals={1}
+          decimals={0}
         />
         <CompareRow
           stats={stats}
           name="medium terrain"
           indent
           value="mediumTerrainCoefficient"
-          decimals={1}
+          decimals={0}
         />
         <CompareRow
           stats={stats}
           name="soft terrain"
           indent
           value="softTerrainCoefficient"
-          decimals={1}
+          decimals={0}
         />
         <CompareRow
           stats={stats}
