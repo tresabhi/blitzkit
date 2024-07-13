@@ -10,6 +10,10 @@ const PROVISION_PREFERENCES = [
   22, // protective kit
 ];
 
+function infinityFallback(value: number) {
+  return value === -1 ? Infinity : value;
+}
+
 export function tankToDuelMember(
   tank: TankDefinition,
   provisionDefinitions: ProvisionDefinitions,
@@ -27,8 +31,8 @@ export function tankToDuelMember(
     provisions: provisionsList
       .sort(
         (a, b) =>
-          PROVISION_PREFERENCES.indexOf(a.id) -
-          PROVISION_PREFERENCES.indexOf(b.id),
+          infinityFallback(PROVISION_PREFERENCES.indexOf(a.id)) -
+          infinityFallback(PROVISION_PREFERENCES.indexOf(b.id)),
       )
       .sort((a, b) => (b.crew ?? 0) - (a.crew ?? 0))
       .slice(0, tank.provisions)
