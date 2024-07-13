@@ -20,8 +20,12 @@ export function Info() {
         </Callout.Icon>
         <Callout.Text>
           Career stats based on {formatCompact(Math.round(samples))} players
-          with at least 5K career battles and 1 battle in the past 120 days;
-          updated daily.
+          with at least 5K career battles and 1 battle in the past 120 days.
+          Updated{' '}
+          {Math.floor(
+            (Date.now() - awaitedAverageDefinitions.time) / (1000 * 60 * 60),
+          )}{' '}
+          hours ago.
         </Callout.Text>
       </Callout.Root>
     </Flex>

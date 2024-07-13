@@ -1,8 +1,8 @@
 import { Flex, Text } from '@radix-ui/themes';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
+import Link from 'next/link';
 import { use, useMemo } from 'react';
 import { classIcons } from '../../../../components/ClassIcon';
-import { Link } from '../../../../components/Link';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { asset } from '../../../../core/blitzkit/asset';
 import { modelDefinitions } from '../../../../core/blitzkit/modelDefinitions';
@@ -132,7 +132,7 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
   }, [sortBy]);
 
   return (
-    <Link
+    <Text
       tabIndex={onSelect ? 0 : undefined}
       size="1"
       color={
@@ -143,44 +143,47 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
             : 'gray'
       }
       highContrast={tank.treeType === 'researchable'}
-      underline="hover"
-      href={onSelect ? undefined : `/tools/tankopedia/${tank.id}`}
       onClick={onSelect ? () => onSelect(tank) : undefined}
       className={styles.card}
       style={assignInlineVars({
         [styles.cardBackgroundVar]: `top left / contain no-repeat url(${asset(`flags/scratched/${tank.nation}.webp`)})`,
       })}
     >
-      <img alt={tank.name} src={tankIcon(tank.id)} className={styles.image} />
-
-      <Flex
-        justify="center"
-        gap="1"
-        align="center"
-        overflow="hidden"
-        width="100%"
-        maxWidth="100%"
+      <Link
+        className={styles.link}
+        href={onSelect ? '#' : `/tools/tankopedia/${tank.id}`}
       >
-        <Icon className={styles.classIcon} />
-        <Text align="center" className={styles.name}>
-          {tank.name}
-        </Text>
-      </Flex>
+        <img alt={tank.name} src={tankIcon(tank.id)} className={styles.image} />
 
-      {discriminator && (
-        <Text
-          mt="-2"
-          color="gray"
+        <Flex
+          justify="center"
+          gap="1"
           align="center"
-          style={{
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
+          overflow="hidden"
+          width="100%"
+          maxWidth="100%"
         >
-          {discriminator}
-        </Text>
-      )}
-    </Link>
+          <Icon className={styles.classIcon} />
+          <Text align="center" className={styles.name}>
+            {tank.name}
+          </Text>
+        </Flex>
+
+        {discriminator && (
+          <Text
+            mt="-2"
+            color="gray"
+            align="center"
+            style={{
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {discriminator}
+          </Text>
+        )}
+      </Link>
+    </Text>
   );
 }

@@ -30,3 +30,12 @@ export const name = style({
   overflow: 'hidden',
   textOverflow: 'ellipsis',
 });
+
+export const link = style({
+  color: 'inherit',
+  textDecoration: 'none',
+
+  ':hover': {
+    textDecoration: 'underline',
+  },
+});
