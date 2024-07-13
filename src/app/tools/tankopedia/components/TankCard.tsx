@@ -152,6 +152,7 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
       <Link
         className={styles.link}
         href={onSelect ? '#' : `/tools/tankopedia/${tank.id}`}
+        prefetch={false}
       >
         <img alt={tank.name} src={tankIcon(tank.id)} className={styles.image} />
 

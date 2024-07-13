@@ -3,7 +3,6 @@ import { provisionDefinitions } from '../../../../core/blitzkit/provisionDefinit
 import { tankDefinitions } from '../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
 import { tankIcon } from '../../../../core/blitzkit/tankIcon';
-import { useAwait } from '../../../../hooks/useAwait';
 import strings from '../../../../lang/en-US.json';
 import * as Duel from '../../../../stores/duel';
 
@@ -16,12 +15,12 @@ export default async function Layout({
 }) {
   const id = Number(params.id);
   const awaitedTankDefinitions = await tankDefinitions;
+  const awaitedProvisionDefinitions = await provisionDefinitions;
   const tank = awaitedTankDefinitions[id];
   const title = `${tank.name} - Tier ${TIER_ROMAN_NUMERALS[tank.tier]} ${
     (strings.common.nations_adjectives as Record<string, string>)[tank.nation]
   } ${strings.common.tank_class_short[tank.class]}`;
   const description = `Statistics, armor, and equipment for ${tank.name}`;
-  const awaitedProvisionDefinitions = useAwait(provisionDefinitions);
 
   return (
     <Duel.Provider

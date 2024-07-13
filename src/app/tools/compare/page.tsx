@@ -77,7 +77,6 @@ export default function Page() {
     [searchParams],
   );
 
-
   useEffect(() => {
     router.push(
       pathname +
@@ -132,7 +131,7 @@ export default function Page() {
               style={{
                 position: 'absolute',
                 right: 0,
-                top: 73, // lol nobody complain pls :)
+                top: 73,
                 transform: 'translate(50%, -50%)',
                 zIndex: 1,
               }}
