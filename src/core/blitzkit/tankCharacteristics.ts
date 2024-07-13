@@ -21,6 +21,8 @@ import {
 } from './tankDefinitions';
 import { unionBoundingBox } from './unionBoundingBox';
 
+export type TankCharacteristics = ReturnType<typeof tankCharacteristics>;
+
 export function tankCharacteristics(
   {
     tank,
