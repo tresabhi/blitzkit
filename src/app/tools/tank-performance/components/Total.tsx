@@ -57,7 +57,6 @@ export const Total = memo<TotalProps>(
             ratio * awaitedAverageDefinitions.samples[playerCountPeriod],
           )}
         </Table.Cell>
-        <Table.Cell align="center">{formatCompact(ratio * battles)}</Table.Cell>
         <Table.Cell align="center">
           {Math.round(damage).toLocaleString()}
         </Table.Cell>

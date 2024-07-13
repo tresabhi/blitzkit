@@ -33,11 +33,6 @@ export const TankRow = memo<TankRowProps>(
           )}
         </Table.Cell>
         <Table.Cell align="center">
-          {formatCompact(
-            Math.round(ratio * averages.mu.battles * averages.samples.total),
-          )}
-        </Table.Cell>
-        <Table.Cell align="center">
           {Math.round(
             averages.mu.damage_dealt / averages.mu.battles,
           ).toLocaleString()}

@@ -3,7 +3,6 @@ import { TankPerformanceSortType } from '.';
 export const TankPerformanceSortTypeNames = {
   winrate: 'Winrate',
   players: 'Players',
-  battles: 'Battles (total)',
   damage: 'Damage',
   survival: 'Survival',
   xp: 'XP',

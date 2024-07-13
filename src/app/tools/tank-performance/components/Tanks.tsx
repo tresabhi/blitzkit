@@ -7,6 +7,7 @@ import { averageDefinitionsArray } from '../../../../core/blitzkit/averageDefini
 import { filterTank } from '../../../../core/blitzkit/filterTank';
 import { tankDefinitions } from '../../../../core/blitzkit/tankDefinitions';
 import * as TankFilters from '../../../../stores/tankFilters';
+import * as TankPerformancePersistent from '../../../../stores/tankPerformancePersistent';
 import * as TankPerformanceSort from '../../../../stores/tankPerformanceSort';
 import { RowLoader } from './RowLoader';
 import { TankRow } from './TankRow';
@@ -20,18 +21,15 @@ export function Tanks() {
   const awaitedAverageDefinitionsArray = use(averageDefinitionsArray);
   const filters = TankFilters.use();
   const sort = TankPerformanceSort.use();
+  const tankPerformancePersistentStore = TankPerformancePersistent.useStore();
   const tanksSorted = useMemo(() => {
+    const { playerCountPeriod } = tankPerformancePersistentStore.getState();
+
     switch (sort.type) {
       case 'accuracy':
         return awaitedAverageDefinitionsArray.sort(
           (a, b) =>
             sort.direction * (a.mu.hits / a.mu.shots - b.mu.hits / b.mu.shots),
-        );
-      case 'battles':
-        return awaitedAverageDefinitionsArray.sort(
-          (a, b) =>
-            sort.direction *
-            (a.samples.total * a.mu.battles - b.samples.total * b.mu.battles),
         );
       case 'capturePoints':
         return awaitedAverageDefinitionsArray.sort(
@@ -81,7 +79,9 @@ export function Tanks() {
         );
       case 'players':
         return awaitedAverageDefinitionsArray.sort(
-          (a, b) => sort.direction * (a.samples.d_30 - b.samples.d_30),
+          (a, b) =>
+            sort.direction *
+            (a.samples[playerCountPeriod] - b.samples[playerCountPeriod]),
         );
       case 'spots':
         return awaitedAverageDefinitionsArray.sort(
