@@ -144,17 +144,19 @@ export const TankModel = memo(() => {
         }
 
         function onPointerDown(event: ThreeEvent<PointerEvent>) {
-          if (!isTrack) return;
+          if (isTrack) {
+            position.set(event.clientX, event.clientY);
+            event.stopPropagation();
 
-          position.set(event.clientX, event.clientY);
-          event.stopPropagation();
+            mutateTankopediaTemporary((draft) => {
+              draft.controlsEnabled = false;
+            });
 
-          mutateTankopediaTemporary((draft) => {
-            draft.controlsEnabled = false;
-          });
-
-          window.addEventListener('pointermove', handlePointerMove);
-          window.addEventListener('pointerup', handlePointerUp);
+            window.addEventListener('pointermove', handlePointerMove);
+            window.addEventListener('pointerup', handlePointerUp);
+          } else {
+            event.stopPropagation();
+          }
         }
         function handlePointerMove(event: PointerEvent) {
           delta.set(event.clientX, event.clientY).sub(position);
