@@ -32,6 +32,9 @@ import { EquipmentManager } from '../../../components/EquipmentManager';
 import { ModuleManager } from '../../../components/ModuleManager';
 import PageWrapper from '../../../components/PageWrapper';
 import { ProvisionsManager } from '../../../components/ProvisionsManager';
+import { StickyColumnHeaderCell } from '../../../components/StickyColumnHeaderCell';
+import { StickyRowHeaderCell } from '../../../components/StickyRowHeaderCell';
+import { StickyTableRoot } from '../../../components/StickyTableRoot';
 import { asset } from '../../../core/blitzkit/asset';
 import { availableProvisions } from '../../../core/blitzkit/availableProvisions';
 import { checkConsumableProvisionInclusivity } from '../../../core/blitzkit/checkConsumableProvisionInclusivity';
@@ -197,11 +200,11 @@ export default function Page() {
 
     return (
       <Table.Row>
-        <Table.RowHeaderCell>
+        <StickyRowHeaderCell>
           <Flex
             align="center"
             style={{ whiteSpace: 'nowrap' }}
-            gap={indent ? '6' : '2'}
+            gap={indent ? { initial: '4', sm: '6' } : { initial: '1', sm: '2' }}
           >
             <IconButton
               color={sorting?.by === name ? undefined : 'gray'}
@@ -242,9 +245,9 @@ export default function Page() {
               )}
             </IconButton>
 
-            {name}
+            <Text size={{ initial: '1', sm: '2' }}>{name}</Text>
           </Flex>
-        </Table.RowHeaderCell>
+        </StickyRowHeaderCell>
 
         {values.map((value, index) => {
           const delta = value - values[0];
@@ -329,14 +332,14 @@ export default function Page() {
 
   function Title({ children }: { children: string }) {
     return (
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeaderCell>
+      <Table.Header style={{ height: 48 }}>
+        <Table.Row align="center">
+          <StickyColumnHeaderCell top={137} style={{ left: 0, zIndex: 2 }}>
             <Heading size="4">{children}</Heading>
-          </Table.ColumnHeaderCell>
+          </StickyColumnHeaderCell>
 
           {members.map(({ key }) => (
-            <Table.ColumnHeaderCell key={key} />
+            <StickyColumnHeaderCell key={key} top={137} />
           ))}
         </Table.Row>
       </Table.Header>
@@ -433,10 +436,7 @@ export default function Page() {
     }, []);
 
     return (
-      <Table.ColumnHeaderCell
-        width="0"
-        style={{ left: 0, position: 'relative' }}
-      >
+      <StickyColumnHeaderCell>
         <Flex direction="column" align="center" justify="between" gap="2">
           <TankControl index={index} key={tank.id} id={tank.id} />
 
@@ -477,7 +477,7 @@ export default function Page() {
         </Flex>
 
         <InsertionMarker index={index + 1} />
-      </Table.ColumnHeaderCell>
+      </StickyColumnHeaderCell>
     );
   }
 
@@ -520,7 +520,7 @@ export default function Page() {
 
   return (
     <PageWrapper color="crimson" size="100%">
-      <Flex justify="center" gap="4" align="center" mt="4" direction="column">
+      <Flex justify="center" gap="4" align="center" direction="column">
         {(haveReactive || haveDynamicArmor || haveSpallLiner) && (
           <Callout.Root>
             <Callout.Icon>
@@ -629,16 +629,14 @@ export default function Page() {
       {members.length > 0 && (
         <Flex justify="center">
           <Box maxWidth="100%" position="relative">
-            <Table.Root size="1" variant="surface" style={{ maxWidth: '100%' }}>
+            <StickyTableRoot
+              size="1"
+              variant="surface"
+              style={{ maxWidth: '100%', height: 'calc(100vh - 128px)' }}
+            >
               <Table.Header>
                 <Table.Row>
-                  <Table.ColumnHeaderCell
-                    width="0"
-                    style={{
-                      position: 'relative',
-                      height: '100%',
-                    }}
-                  >
+                  <StickyColumnHeaderCell width="0" style={{ height: '100%' }}>
                     <Flex
                       style={{
                         width: '100%',
@@ -650,7 +648,7 @@ export default function Page() {
                       <BlitzkitButtonWatermark width={64} height={64} />
                       <InsertionMarker index={0} />
                     </Flex>
-                  </Table.ColumnHeaderCell>
+                  </StickyColumnHeaderCell>
 
                   {members.map(({ tank, key }, index) => {
                     return <TankCard index={index} key={key} tank={tank} />;
@@ -660,11 +658,7 @@ export default function Page() {
 
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell
-                    style={{
-                      height: '100%',
-                    }}
-                  >
+                  <Table.Cell style={{ height: '100%' }}>
                     <Flex
                       style={{
                         width: '100%',
@@ -685,12 +679,7 @@ export default function Page() {
                               {Object.entries(
                                 awaitedSkillDefinitions.classes,
                               ).map(([tankClass, skills]) => (
-                                <Flex
-                                  key={tankClass}
-                                  style={{
-                                    gap: 2,
-                                  }}
-                                >
+                                <Flex key={tankClass} style={{ gap: 2 }}>
                                   {skills.map((skill) => (
                                     <div
                                       key={skill}
@@ -1179,14 +1168,17 @@ export default function Page() {
 
               <Table.Header>
                 <Table.Row>
-                  <Table.ColumnHeaderCell>
+                  <StickyColumnHeaderCell
+                    top={137}
+                    style={{ left: 0, zIndex: 2 }}
+                  >
                     <Flex height="100%" align="center">
                       <Heading size="4">Firepower</Heading>
                     </Flex>
-                  </Table.ColumnHeaderCell>
+                  </StickyColumnHeaderCell>
 
                   {members.map(({ gun, shell, key }, index) => (
-                    <Table.ColumnHeaderCell key={key}>
+                    <StickyColumnHeaderCell key={key} top={137}>
                       <Flex justify="center">
                         <Flex>
                           {gun.shells.map((thisShell, shellIndex) => (
@@ -1229,7 +1221,7 @@ export default function Page() {
                           ))}
                         </Flex>
                       </Flex>
-                    </Table.ColumnHeaderCell>
+                    </StickyColumnHeaderCell>
                   ))}
                 </Table.Row>
               </Table.Header>
@@ -1497,7 +1489,7 @@ export default function Page() {
                   decimals={1}
                 />
               </Table.Body>
-            </Table.Root>
+            </StickyTableRoot>
 
             <IconButton
               style={{
@@ -1505,6 +1497,7 @@ export default function Page() {
                 right: 0,
                 top: 73, // lol nobody complain pls :)
                 transform: 'translate(50%, -50%)',
+                zIndex: 1,
               }}
               onClick={() => setAddTankDialogOpen(true)}
             >

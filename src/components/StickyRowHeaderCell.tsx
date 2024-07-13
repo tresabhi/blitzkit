@@ -5,6 +5,7 @@ export function StickyRowHeaderCell({ style, ...props }: RowHeaderCellProps) {
   return (
     <Table.RowHeaderCell
       style={{
+        display: 'flex',
         position: 'sticky',
         left: 0,
         backgroundColor: 'var(--color-panel)',

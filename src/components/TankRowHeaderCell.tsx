@@ -15,7 +15,7 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
   return (
     <StickyRowHeaderCell
       maxWidth={{ initial: '144px', sm: '240px' }}
-      style={{ overflow: 'hidden', display: 'flex' }}
+      style={{ overflow: 'hidden' }}
     >
       <Link href={`/tools/tankopedia/${tank.id}`} tabIndex={-1}>
         <img

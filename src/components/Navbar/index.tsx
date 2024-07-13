@@ -46,6 +46,7 @@ export default function Navbar() {
   return (
     <Box
       className={styles.navbar[showHamburgerMenu ? 'expanded' : 'collapsed']}
+      style={{ zIndex: 3 }}
     >
       <Flex direction="column" align="center" pt="2">
         <Flex
