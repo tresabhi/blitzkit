@@ -21,6 +21,12 @@ export function HeroSection({ id }: { id: number }) {
   const isFullScreen = useFullScreen();
   const Icon = classIcons[protagonist.class];
   const [dummyLoader, setDummyLoader] = useState(true);
+  const treeColor =
+    protagonist.treeType === 'collector'
+      ? 'blue'
+      : protagonist.treeType === 'premium'
+        ? 'amber'
+        : undefined;
 
   useEffect(() => {
     setDummyLoader(false);
@@ -55,19 +61,13 @@ export function HeroSection({ id }: { id: number }) {
             }}
           >
             <Flex gap="4">
-              <Heading size={{ initial: '8', md: '9' }}>
+              <Heading size={{ initial: '8', md: '9' }} color={treeColor}>
                 <Icon style={{ width: '0.75em', height: '0.75em' }} />{' '}
               </Heading>
               <Heading
                 size={{ initial: '8', md: '9' }}
                 align={{ initial: 'center', md: 'left' }}
-                color={
-                  protagonist.treeType === 'collector'
-                    ? 'blue'
-                    : protagonist.treeType === 'premium'
-                      ? 'amber'
-                      : undefined
-                }
+                color={treeColor}
               >
                 {protagonist.name}
               </Heading>
