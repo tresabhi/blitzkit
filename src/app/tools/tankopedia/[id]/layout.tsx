@@ -5,6 +5,7 @@ import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/c
 import { tankIcon } from '../../../../core/blitzkit/tankIcon';
 import strings from '../../../../lang/en-US.json';
 import * as Duel from '../../../../stores/duel';
+import * as TankFilters from '../../../../stores/tankFilters';
 
 export default async function Layout({
   children,
@@ -23,19 +24,21 @@ export default async function Layout({
   const description = `Statistics, armor, and equipment for ${tank.name}`;
 
   return (
-    <Duel.Provider
-      data={{
-        tank: awaitedTankDefinitions[id],
-        provisionDefinitions: awaitedProvisionDefinitions,
-      }}
-    >
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta property="og:title" content={title} />
-      <meta property="og:image" content={tankIcon(id)} />
-      <meta property="og:description" content={description} />
+    <TankFilters.Provider>
+      <Duel.Provider
+        data={{
+          tank: awaitedTankDefinitions[id],
+          provisionDefinitions: awaitedProvisionDefinitions,
+        }}
+      >
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:image" content={tankIcon(id)} />
+        <meta property="og:description" content={description} />
 
-      {children}
-    </Duel.Provider>
+        {children}
+      </Duel.Provider>
+    </TankFilters.Provider>
   );
 }
