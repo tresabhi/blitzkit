@@ -130,13 +130,16 @@ times(THREADS, async () => {
 
 async function postWork() {
   console.log(
-    `Generating statistics based off ${samples.d_120.toLocaleString()} players (${samples.total.toLocaleString()} checked in total) and ${tankIds.length} tanks...`,
+    `Generating statistics based on ${samples.d_120.toLocaleString()} players (${samples.total.toLocaleString()} checked in total) and ${tankIds.length} tanks...`,
   );
 
   const averages: Record<number, AverageDefinitionsEntry> = {};
 
   tankIds.forEach((id) => {
-    const tanks = tanksSorted[id];
+    const tanksSortedEntry = tanksSorted[id];
+    const tanks = tanksSortedEntry.filter(
+      (tank) => Date.now() - tank.last_battle_time * 1000 <= MAX_ACTIVITY_TIME,
+    );
     const entry: AverageDefinitionsEntrySubPartial = {
       mu: {},
       sigma: {},
