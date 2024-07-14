@@ -82,7 +82,7 @@ export function ShotDisplay() {
             sm: 'block',
           }}
         >
-          <ShotDisplayCard />
+          <ShotDisplayCard shot={shot} />
         </Box>
       </Html>
 

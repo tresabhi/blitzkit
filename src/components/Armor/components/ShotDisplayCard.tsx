@@ -108,9 +108,11 @@ function LayerEntry({
   );
 }
 
-export function ShotDisplayCard() {
-  const shot = TankopediaEphemeral.use((state) => state.shot);
+interface ShotDisplayCardProps {
+  shot: TankopediaEphemeral.Shot;
+}
 
+export function ShotDisplayCard({ shot }: ShotDisplayCardProps) {
   if (!shot) return null;
 
   const outTitleColor = shot.out
