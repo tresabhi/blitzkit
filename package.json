@@ -1,6 +1,6 @@
 {
   "name": "blitzkit",
-  "version": "1.21.0",
+  "version": "1.21.1",
   "description": "🎉 Tools for everything World of Tanks Blitz",
   "main": "src/server.ts",
   "type": "module",
