@@ -1,7 +1,12 @@
 import { Flex } from '@radix-ui/themes';
 import { ShotDisplayCard } from '../../../../../components/Armor/components/ShotDisplayCard';
+import * as TankEphemeral from '../../../../../stores/tankopediaEphemeral';
 
 export function ShotDisplaySection() {
+  const shot = TankEphemeral.use((state) => state.shot);
+
+  if (!shot) return null;
+
   return (
     <Flex
       justify="center"
@@ -10,7 +15,7 @@ export function ShotDisplaySection() {
         sm: 'none',
       }}
     >
-      <ShotDisplayCard />
+      <ShotDisplayCard shot={shot} />
     </Flex>
   );
 }
