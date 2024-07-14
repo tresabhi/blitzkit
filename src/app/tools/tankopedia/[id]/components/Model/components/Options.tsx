@@ -13,6 +13,7 @@ import {
   Flex,
   Heading,
   IconButton,
+  Popover,
   Strong,
   Switch,
   Tabs,
@@ -29,6 +30,7 @@ import {
   SHELL_NAMES,
   TIER_ROMAN_NUMERALS,
 } from '../../../../../../../core/blitzkit/tankDefinitions/constants';
+import { uniqueGuns } from '../../../../../../../core/blitzkit/uniqueGuns';
 import { useEquipment } from '../../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../../hooks/useFullScreen';
 import { useFullscreenAvailability } from '../../../../../../../hooks/useFullscreenAvailability';
@@ -77,6 +79,7 @@ export function Options() {
   const [tab, setTab] = useState('search');
   const mutateDuel = Duel.useMutation();
   const hasEnhancedArmor = useEquipment(110);
+  const antagonistUniqueGuns = uniqueGuns(antagonistTank.turrets);
 
   useEffect(() => setMode(modeRaw), [modeRaw]);
 
@@ -130,27 +133,85 @@ export function Options() {
             ).toFixed(0)}
             mm
           </Text>
-          <Flex direction="column">
+
+          {antagonistUniqueGuns.length > 1 && (
+            <Popover.Root>
+              <Popover.Trigger>
+                <IconButton
+                  radius="full"
+                  variant="soft"
+                  color="gray"
+                  size={{ initial: '2', sm: '3' }}
+                  style={{ position: 'relative' }}
+                >
+                  <Text
+                    size="1"
+                    color="gray"
+                    style={{
+                      position: 'absolute',
+                      right: 0,
+                      bottom: 0,
+                    }}
+                    mr="2"
+                    mb="1"
+                  >
+                    {TIER_ROMAN_NUMERALS[antagonistGun.tier]}
+                  </Text>
+
+                  <img
+                    alt="Antagonist Gun"
+                    src={asset('icons/modules/gun.webp')}
+                    style={{
+                      width: '65%',
+                      height: '65%',
+                      objectFit: 'contain',
+                    }}
+                  />
+                </IconButton>
+              </Popover.Trigger>
+
+              <Popover.Content side="left" align="center">
+                <Flex>
+                  {[...antagonistUniqueGuns]
+                    .reverse()
+                    .map(({ gun, turret }, index) => (
+                      <ModuleButton
+                        rowChild
+                        module="gun"
+                        key={gun.id}
+                        onClick={() =>
+                          mutateDuel((draft) => {
+                            draft.antagonist.turret = turret;
+                            draft.antagonist.gun = gun;
+                            draft.antagonist.shell = gun.shells[0];
+                          })
+                        }
+                        first={index === 0}
+                        last={index === antagonistUniqueGuns.length - 1}
+                        selected={gun.id === antagonistGun.id}
+                        discriminator={TIER_ROMAN_NUMERALS[gun.tier]}
+                      />
+                    ))}
+                </Flex>
+              </Popover.Content>
+            </Popover.Root>
+          )}
+
+          <Flex
+            direction="column"
+            style={{
+              borderRadius: 'var(--radius-full)',
+            }}
+            overflow="hidden"
+          >
             {antagonistGun.shells.map((thisShell, shellIndex) => (
               <IconButton
                 color={thisShell.id === antagonistShell.id ? undefined : 'gray'}
                 variant="soft"
                 key={thisShell.id}
-                size={{
-                  initial: '2',
-                  sm: '3',
-                }}
+                size={{ initial: '2', sm: '3' }}
+                radius="none"
                 style={{
-                  borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
-                  borderTopRightRadius: shellIndex === 0 ? undefined : 0,
-                  borderBottomRightRadius:
-                    shellIndex === antagonistGun.shells.length - 1
-                      ? undefined
-                      : 0,
-                  borderBottomLeftRadius:
-                    shellIndex === antagonistGun.shells.length - 1
-                      ? undefined
-                      : 0,
                   marginTop: shellIndex === 0 ? 0 : -1,
                 }}
                 onClick={() => {
@@ -173,18 +234,20 @@ export function Options() {
               </IconButton>
             ))}
           </Flex>
-          <Flex direction="column" style={{ pointerEvents: 'auto' }}>
+
+          <Flex
+            direction="column"
+            style={{
+              pointerEvents: 'auto',
+              borderRadius: 'var(--radius-full)',
+            }}
+            overflow="hidden"
+          >
             <IconButton
               color={hasCalibratedShells ? undefined : 'gray'}
               variant="soft"
-              style={{
-                borderBottomRightRadius: 0,
-                borderBottomLeftRadius: 0,
-              }}
-              size={{
-                initial: '2',
-                sm: '3',
-              }}
+              size={{ initial: '2', sm: '3' }}
+              radius="none"
               onClick={() => {
                 mutateDuel((draft) => {
                   draft.antagonist.equipmentMatrix[0][0] = hasCalibratedShells
@@ -208,15 +271,9 @@ export function Options() {
             <IconButton
               color={hasEnhancedArmor ? undefined : 'gray'}
               variant="soft"
-              size={{
-                initial: '2',
-                sm: '3',
-              }}
-              style={{
-                borderTopRightRadius: 0,
-                borderTopLeftRadius: 0,
-                marginTop: -1,
-              }}
+              size={{ initial: '2', sm: '3' }}
+              style={{ marginTop: -1 }}
+              radius="none"
               onClick={() => {
                 mutateDuel((draft) => {
                   draft.protagonist.equipmentMatrix[1][1] = hasEnhancedArmor
