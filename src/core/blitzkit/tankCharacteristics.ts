@@ -418,11 +418,11 @@ export function tankCharacteristics(
     track.resistance.soft * resistanceSoftCoefficient;
   const softTerrainCoefficient = 100 / softTerrainCoefficientRaw;
   const powerToWeightRatioHardTerrain =
-    resolvedEnginePower / weightTons / hardTerrainCoefficient;
+    resolvedEnginePower / weightTons / hardTerrainCoefficientRaw;
   const powerToWeightRatioMediumTerrain =
-    resolvedEnginePower / weightTons / mediumTerrainCoefficient;
+    resolvedEnginePower / weightTons / mediumTerrainCoefficientRaw;
   const powerToWeightRatioSoftTerrain =
-    resolvedEnginePower / weightTons / softTerrainCoefficient;
+    resolvedEnginePower / weightTons / softTerrainCoefficientRaw;
   const weight = weightTons;
   const turretTraverseSpeed = turret.traverseSpeed * turretTraverseCoefficient;
   const hullTraverseHardTerrain =
