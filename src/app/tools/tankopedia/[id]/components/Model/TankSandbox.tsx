@@ -1,6 +1,6 @@
 import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { use, useEffect, useRef } from 'react';
+import { Suspense, use, useEffect, useRef } from 'react';
 import { Armor } from '../../../../../../components/Armor';
 import { ShotDisplay } from '../../../../../../components/Armor/components/ShotDisplay';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
@@ -13,6 +13,7 @@ import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemer
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
 import { SceneProps } from '../SceneProps';
+import { ModelLoader } from './components/ModelLoader';
 import { TankModel } from './components/TankModel';
 
 export function TankSandbox() {
@@ -140,9 +141,14 @@ export function TankSandbox() {
       <Controls />
       <SceneProps />
 
-      <Lighting />
       <TankModel />
-      <Armor />
+
+      {/* idk why the shot display doesn't work without suspense here lol */}
+      <Suspense fallback={<ModelLoader />}>
+        <Armor />
+        <Lighting />
+      </Suspense>
+
       <ShotDisplay />
     </Canvas>
   );
