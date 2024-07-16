@@ -13,6 +13,7 @@ import {
 } from '@radix-ui/themes';
 import { use, useMemo, useState } from 'react';
 import { DatePicker } from '../../../../components/DatePicker';
+import { PERCENTILE_COLORS } from '../../../../components/PercentileIndicator/constants';
 import { getAccountInfo } from '../../../../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../../core/blitz/getClanAccountInfo';
 import getTankStats from '../../../../core/blitz/getTankStats';
@@ -23,6 +24,10 @@ import { tankDefinitions } from '../../../../core/blitzkit/tankDefinitions';
 import { PeriodType } from '../../../../core/discord/addPeriodSubCommands';
 import calculateWN8 from '../../../../core/statistics/calculateWN8';
 import { calculateWSS } from '../../../../core/statistics/calculateWSS';
+import getWN8Percentile from '../../../../core/statistics/getWN8Percentile';
+import getWssPercentile, {
+  WSS_COLORS,
+} from '../../../../core/statistics/getWssPercentile';
 import { useAwait } from '../../../../hooks/useAwait';
 import strings from '../../../../lang/en-US.json';
 
@@ -175,6 +180,9 @@ export default function Page({ params }: { params: { id: string } }) {
                 <Table.RowHeaderCell>Tank</Table.RowHeaderCell>
                 <Table.RowHeaderCell>WN8</Table.RowHeaderCell>
                 <Table.RowHeaderCell>WSS</Table.RowHeaderCell>
+                <Table.RowHeaderCell>Games</Table.RowHeaderCell>
+                <Table.RowHeaderCell>Damage</Table.RowHeaderCell>
+                <Table.RowHeaderCell>XP</Table.RowHeaderCell>
               </Table.Row>
             </Table.Header>
 
@@ -183,7 +191,8 @@ export default function Page({ params }: { params: { id: string } }) {
                 ?.filter(
                   (stats) =>
                     awaitedTankDefinitions[stats.tank_id] &&
-                    awaitedAverageDefinitions.averages[stats.tank_id],
+                    awaitedAverageDefinitions.averages[stats.tank_id] &&
+                    stats.all.battles > 0,
                 )
                 .sort(
                   (a, b) =>
@@ -201,12 +210,46 @@ export default function Page({ params }: { params: { id: string } }) {
                     averages.r,
                     { ...stats.all, battle_life_time: stats.battle_life_time },
                   );
+                  const wn8Percentile = getWN8Percentile(wn8);
+                  const wn8Color = PERCENTILE_COLORS[wn8Percentile];
+                  const wssPercentile = getWssPercentile(wss);
+                  const wssColor = WSS_COLORS[wssPercentile];
 
                   return (
                     <Table.Row>
-                      <Table.Cell>{tank.name}</Table.Cell>
-                      <Table.Cell>{wn8.toFixed(0)}</Table.Cell>
-                      <Table.Cell>{(wss * 100).toFixed(0)}</Table.Cell>
+                      <Table.Cell>
+                        ({tank.tier}) {tank.name}
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Box
+                          width="1em"
+                          height="1em"
+                          display="inline-block"
+                          style={{ backgroundColor: wn8Color }}
+                        />{' '}
+                        {Math.round(wn8).toLocaleString()}
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Box
+                          width="1em"
+                          height="1em"
+                          display="inline-block"
+                          style={{ backgroundColor: `var(--${wssColor}-9)` }}
+                        />{' '}
+                        {Math.round(wss * 1000).toLocaleString()}
+                      </Table.Cell>
+
+                      <Table.Cell>{stats.all.battles}</Table.Cell>
+                      <Table.Cell>
+                        {Math.round(
+                          stats.all.damage_dealt / stats.all.battles,
+                        ).toLocaleString()}
+                      </Table.Cell>
+                      <Table.Cell>
+                        {Math.round(
+                          stats.all.xp / stats.all.battles,
+                        ).toLocaleString()}
+                      </Table.Cell>
                     </Table.Row>
                   );
                 })}
