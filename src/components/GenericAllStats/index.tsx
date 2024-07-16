@@ -2,7 +2,7 @@ import { Locale } from 'discord.js';
 import { AllStats, SupplementaryStats } from '../../core/blitz/getAccountInfo';
 import { translator } from '../../core/localization/translator';
 import isNumber from '../../core/math/isNumber';
-import getWN8Percentile from '../../core/statistics/getWN8Percentile';
+import getWN8Interpretation from '../../core/statistics/getWN8Percentile';
 import { Card } from './components/Card';
 import { Root } from './components/Root';
 import { Row } from './components/Row';
@@ -53,7 +53,7 @@ export default function GenericAllStats({
                   ? supplementaryStats.WN8!.toFixed(0)
                   : undefined,
               percentile: isNumber(supplementaryStats?.WN8)
-                ? getWN8Percentile(supplementaryStats!.WN8!)
+                ? getWN8Interpretation(supplementaryStats!.WN8!)
                 : undefined,
             },
             {

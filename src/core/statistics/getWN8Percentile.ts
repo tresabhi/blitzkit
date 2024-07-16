@@ -1,7 +1,7 @@
 import { Percentile } from '../../constants/percentiles';
 
 const WN8_PERCENTILES: [number, Percentile][] = [
-  [0, Percentile.VeryBad],
+  [-Infinity, Percentile.VeryBad],
   [300, Percentile.Bad],
   [450, Percentile.BelowAverage],
   [650, Percentile.Average],
@@ -17,5 +17,5 @@ export default function getWN8Percentile(WN8: number) {
   const lastIndex = WN8_PERCENTILES.findLastIndex(
     ([WN8Listing]) => WN8Listing <= WN8,
   );
-  return WN8_PERCENTILES[lastIndex === -1 ? 0 : lastIndex][1];
+  return WN8_PERCENTILES[lastIndex][1];
 }

@@ -19,7 +19,7 @@ import { ResolvedPlayer } from '../../core/discord/resolvePlayerFromCommand';
 import { translator } from '../../core/localization/translator';
 import calculateWN8 from '../../core/statistics/calculateWN8';
 import { StatFilters, filterStats } from '../../core/statistics/filterStats';
-import getWN8Percentile from '../../core/statistics/getWN8Percentile';
+import getWN8Interpretation from '../../core/statistics/getWN8Percentile';
 import { UserError } from '../../hooks/userError';
 
 const ROWS_PER_PAGE = 8;
@@ -161,7 +161,7 @@ export async function renderBreakdown(
             percentile:
               currentWN8 === undefined
                 ? undefined
-                : getWN8Percentile(currentWN8),
+                : getWN8Interpretation(currentWN8),
           },
           {
             title: t`bot.commands.breakdown.body.damage`,
@@ -220,7 +220,7 @@ export async function renderBreakdown(
               percentile:
                 currentWN8 === undefined
                   ? undefined
-                  : getWN8Percentile(currentWN8),
+                  : getWN8Interpretation(currentWN8),
             },
             {
               title: t`bot.commands.breakdown.body.damage`,

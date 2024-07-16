@@ -2,6 +2,7 @@
 
 import {
   Box,
+  Button,
   Flex,
   Heading,
   Link,
@@ -19,14 +20,14 @@ import { getClanAccountInfo } from '../../../../core/blitz/getClanAccountInfo';
 import getTankStats from '../../../../core/blitz/getTankStats';
 import { idToRegion } from '../../../../core/blitz/idToRegion';
 import { averageDefinitions } from '../../../../core/blitzkit/averageDefinitions';
-import { parseBkni } from '../../../../core/blitzkit/parseBkni';
 import { tankDefinitions } from '../../../../core/blitzkit/tankDefinitions';
 import { PeriodType } from '../../../../core/discord/addPeriodSubCommands';
 import calculateWN8 from '../../../../core/statistics/calculateWN8';
 import { calculateWSS } from '../../../../core/statistics/calculateWSS';
 import getWN8Percentile from '../../../../core/statistics/getWN8Percentile';
-import getWssPercentile, {
+import getWssInterpretation, {
   WSS_COLORS,
+  WSS_INTERPRETATIONS,
 } from '../../../../core/statistics/getWssPercentile';
 import { useAwait } from '../../../../hooks/useAwait';
 import strings from '../../../../lang/en-US.json';
@@ -36,23 +37,10 @@ export default function Page({ params }: { params: { id: string } }) {
   const region = idToRegion(id);
   const accountInfo = useAwait(getAccountInfo(region, id));
   const clanAccountInfo = useAwait(getClanAccountInfo(region, id, ['clan']));
-  // const bkni = ((Math.round(Date.now() / 1000 / 60) / 100) % 2) - 1;
-  const bkni = 0.81;
-  const winrate = 0.6;
   const [period, setPeriod] = useState<PeriodType>('30');
-  const { bkniColor, bkniMetric, bkniFraction, bkniPercentile } =
-    parseBkni(bkni);
   const [customFrom, setCustomFrom] = useState<Date>(
     new Date(Date.now() - 29 * 24 * 60 * 60 * 1000),
   );
-  const stats = [
-    ['Damage', '3,203'],
-    ['Tier', '9.83'],
-    ['Survival', '70%'],
-    ['Kills', '1.54'],
-    ['Damage ratio', '2.45'],
-    ['Accuracy', '91%'],
-  ];
   const [customTo, setCustomTo] = useState<Date>(new Date());
   const [fromSelectorOpen, setFromSelectorOpen] = useState(false);
   const [toSelectorOpen, setToSelectorOpen] = useState(false);
@@ -64,9 +52,11 @@ export default function Page({ params }: { params: { id: string } }) {
   const awaitedTankDefinitions = use(tankDefinitions);
   const awaitedAverageDefinitions = use(averageDefinitions);
 
+  const theme = 'purple';
+
   return (
     <>
-      <Theme accentColor={bkniColor}>
+      <Theme accentColor={theme}>
         <Flex
           direction="column"
           align="center"
@@ -74,7 +64,7 @@ export default function Page({ params }: { params: { id: string } }) {
           py="8"
           gap="6"
           style={{
-            background: `linear-gradient(var(--${bkniColor}-a3), var(--${bkniColor}-a1))`,
+            background: `linear-gradient(var(--${theme}-a3), var(--${theme}-a1))`,
           }}
         >
           <Flex direction="column" align="center">
@@ -173,6 +163,28 @@ export default function Page({ params }: { params: { id: string } }) {
           </Flex>
         </Flex>
 
+        <Flex justify="center" py="9">
+          <Flex direction="column" width="fit-content">
+            {WSS_INTERPRETATIONS.map(
+              ({ interpretation, minPercentile }, index) => {
+                const color = WSS_COLORS[interpretation];
+                const name = strings.common.wss_interpretations[interpretation];
+                const nextInterpretation = WSS_INTERPRETATIONS[index + 1];
+
+                return (
+                  <Button radius="none" color={color}>
+                    {name} ({minPercentile * 100}% to{' '}
+                    {(nextInterpretation
+                      ? nextInterpretation.minPercentile
+                      : 1) * 100}
+                    %)
+                  </Button>
+                );
+              },
+            )}
+          </Flex>
+        </Flex>
+
         <Flex justify="center">
           <Table.Root variant="surface">
             <Table.Header>
@@ -213,8 +225,8 @@ export default function Page({ params }: { params: { id: string } }) {
                   );
                   const wn8Percentile = getWN8Percentile(wn8);
                   const wn8Color = PERCENTILE_COLORS[wn8Percentile];
-                  const wssPercentile = getWssPercentile(wss);
-                  const wssColor = WSS_COLORS[wssPercentile];
+                  const wssInterpretation = getWssInterpretation(wss);
+                  const wssColor = WSS_COLORS[wssInterpretation];
 
                   return (
                     <Table.Row>
@@ -222,27 +234,33 @@ export default function Page({ params }: { params: { id: string } }) {
                         ({tank.tier}) {tank.name}
                       </Table.Cell>
                       <Table.Cell>
-                        <Flex width="100%" justify="between">
-                          {Math.round(wn8).toLocaleString()}{' '}
+                        <Flex>
                           <Box
                             width="1em"
                             height="1em"
                             display="inline-block"
                             style={{ backgroundColor: wn8Color }}
-                          />{' '}
+                          />
+                          {Math.round(wn8).toLocaleString()}{' '}
                           {strings.common.wn8_percentile[wn8Percentile]}
                         </Flex>
                       </Table.Cell>
                       <Table.Cell>
-                        <Flex width="100%" justify="between">
-                          {Math.round(wss * 1000).toLocaleString()}{' '}
+                        <Flex>
                           <Box
                             width="1em"
                             height="1em"
                             display="inline-block"
-                            style={{ backgroundColor: `var(--${wssColor}-9)` }}
-                          />{' '}
-                          {strings.common.wss_percentile[wssPercentile]}
+                            style={{
+                              backgroundColor: `var(--${wssColor}-9)`,
+                            }}
+                          />
+                          {Math.round(wss * 1000).toLocaleString()}{' '}
+                          {
+                            strings.common.wss_interpretations[
+                              wssInterpretation
+                            ]
+                          }
                         </Flex>
                       </Table.Cell>
 
@@ -269,162 +287,9 @@ export default function Page({ params }: { params: { id: string } }) {
             </Table.Body>
           </Table.Root>
         </Flex>
-
-        {/* <Flex justify="center" py="8" gap="6">
-          <Speedometer
-            value={`${bkniMetric}`}
-            color={bkniColor}
-            fill={bkniFraction}
-            label={
-              <Popover.Root>
-                <Popover.Trigger>
-                  <Button
-                    style={{ position: 'relative' }}
-                    color="gray"
-                    size="2"
-                    variant="ghost"
-                  >
-                    <TimerIcon />
-                    {strings.common.bkni_percentile[bkniPercentile]}
-                  </Button>
-                </Popover.Trigger>
-
-                <Popover.Content align="center">
-                  <Flex
-                    direction="column"
-                    style={{
-                      width: 'fit-content',
-                    }}
-                  >
-                    <Flex direction="column" mb="3" align="center">
-                      <Heading weight="bold" size="5">
-                        BkNI
-                      </Heading>
-                      <Text size="2" color="gray" wrap="wrap">
-                        A next generation performance metric
-                      </Text>
-                    </Flex>
-
-                    {BKNI_PERCENTILES.map(({ percentile, min }, index) => (
-                      <Button
-                        radius="none"
-                        color={BKNI_COLORS[percentile]}
-                        key={percentile}
-                      >
-                        <Flex
-                          align="center"
-                          justify="between"
-                          width="100%"
-                          gap="2"
-                        >
-                          <Text>
-                            {strings.common.bkni_percentile[percentile]}
-                          </Text>
-                          <Text size="1">
-                            {min}% - {BKNI_PERCENTILES[index + 1]?.min ?? 100}%
-                          </Text>
-                        </Flex>
-                      </Button>
-                    ))}
-                  </Flex>
-                </Popover.Content>
-              </Popover.Root>
-            }
-          />
-
-          <Speedometer
-            value={
-              <Flex align="center" gap="1">
-                {(winrate * 100).toFixed(0)}
-                <Text size="3" color="gray">
-                  %
-                </Text>
-              </Flex>
-            }
-            color="green"
-            fill={0.5 * (Math.cbrt(2 * winrate - 1) + 1)}
-            label={<Text color="gray">Winrate</Text>}
-          />
-        </Flex>
-
-        <Flex style={{ flex: 1 }} wrap="wrap" gap="2" justify="center">
-          {stats.map((stat) => (
-            <Flex minWidth="96px" direction="column" align="center">
-              <Text size="6">{stat[1]}</Text>
-              <Text color="gray" size="2">
-                {stat[0]}
-              </Text>
-            </Flex>
-          ))}
-        </Flex> */}
       </Theme>
 
       <Box flexGrow="1" />
-
-      {/* <Flex gap="4">
-            <Link href="/tools/tankopedia">
-              <Button variant="ghost" size="1" ml="-1">
-                <ChevronLeftIcon />
-                Back
-              </Button>
-            </Link>
-          </Flex> */}
-      {/* <Flex style={{ flex: 1 }} justify="center">
-            </Flex>
-
-            */}
-
-      {/* <PageWrapper
-        p="6"
-        pt="9"
-        size={1600}
-        noFlex1
-        position="relative"
-        color={bkniColor}
-        containerProps={{
-          style: {
-            background: `linear-gradient(var(--${bkniColor}-a2), var(--${bkniColor}-a1))`,
-          },
-        }}
-      >
-        <Tabs.Root
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: '50%',
-            transform: 'scaleY(-1) translateX(-50%)',
-          }}
-          value={`${period}`}
-          onValueChange={(value) => {
-            setPeriod(value === 'custom' ? 'custom' : Number(value));
-          }}
-        >
-          <Tabs.List justify="center">
-            <FlippedTrigger value="1">Today</FlippedTrigger>
-            <FlippedTrigger value="30">30 days</FlippedTrigger>
-            <FlippedTrigger value="Infinity">Career</FlippedTrigger>
-            <FlippedTrigger value="custom">Custom</FlippedTrigger>
-          </Tabs.List>
-        </Tabs.Root>
-
-       
-
-        
-      </PageWrapper>
-
-      <Flex flexGrow="1" justify="center" align="center" p="4">
-        <Callout.Root color="red" mt="4">
-          <Callout.Icon>
-            <ExclamationTriangleIcon />
-          </Callout.Icon>
-          <Callout.Text>
-            We haven't tracked long enough to provide statistics. Please check
-            back after a few days.
-          </Callout.Text>
-        </Callout.Root>
-      </Flex>
-
-      {isTracking && <Box flexGrow="1" />} */}
     </>
   );
 }

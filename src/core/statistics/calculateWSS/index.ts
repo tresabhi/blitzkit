@@ -11,7 +11,7 @@ export function calculateWSS(
     const normalizedX = x[key] / x.battles;
     const normalizedMu = mu[key] / mu.battles;
     const z = (normalizedX - normalizedMu) / sigma[key];
-    return { z, w: r[key] };
+    return { z, w: Math.sign(z) * r[key] ** 2 };
   });
   const moment = atoms.reduce(
     (accumulator, { z, w }) => accumulator + z * w,

@@ -2,7 +2,7 @@ import { Locale } from 'discord.js';
 import { Percentile } from '../../constants/percentiles';
 import { SupplementaryStats } from '../../core/blitz/getAccountInfo';
 import { translator } from '../../core/localization/translator';
-import getWN8Percentile from '../../core/statistics/getWN8Percentile';
+import getWN8Interpretation from '../../core/statistics/getWN8Percentile';
 import { PERCENTILE_COLORS } from '../PercentileIndicator/constants';
 import { HeroStat } from './components/HeroStat';
 import {
@@ -33,7 +33,7 @@ export default function AllStatsOverview({
   const { t, translate } = translator(locale);
   const percentile =
     typeof supplementaryStats.WN8 === 'number'
-      ? getWN8Percentile(supplementaryStats.WN8)
+      ? getWN8Interpretation(supplementaryStats.WN8)
       : Percentile.VeryBad;
   const color = PERCENTILE_COLORS[percentile];
 

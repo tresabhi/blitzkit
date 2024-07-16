@@ -34,10 +34,16 @@ $$
 Z=\frac{\sum wz}{\sum w}
 $$
 
-$w$, the weight of each standard score is just $r$, the correlation coefficient. This value must be determined for each standard scores through corelation analysis. $r$ is allowed to be negative so that standard scores that actually harm the player's winrate will have a negative effect on the weighted average. We will be using the weighted variant of $r$ where $w_i$, the weight of the sample, is the number of battles, $\overline{x}$ the weighted average of the samples' $x$ components and $\overline{y}$ the weighted average of the samples' $y$ components (usually the winrate).
+$w$, the weight of each standard score is a function of $r$, the correlation coefficient. This value must be determined for each standard scores through corelation analysis. $r$ is allowed to be negative so that standard scores that actually harm the player's winrate will have a negative effect on the weighted average. We will be using the weighted variant of $r$ where $w_i$, the weight of the sample, is the number of battles, $\overline{x}$ the weighted average of the samples' $x$ components and $\overline{y}$ the weighted average of the samples' $y$ components (usually the winrate). Here, $r^{2}$ represents the proportion of variance and $\text{sign}\left(r\right)$ represents the direction of the correlation (or just a preservation of the sign).
 
 $$
-w=r=\frac{\sum w_{i}\left(x_{i}-\overline{x}\right)\left(y_{i}-\overline{y}\right)}{\sqrt{\sum w_{i}\left(x_{i}-\overline{x}\right)^{2}\sum w_{i}\left(y_{i}-\overline{y}\right)^{2}}}
+w=r^{2}\text{sign}\left(r\right)
+$$
+
+Here is a refresher of the formula of the correlation coefficient $r$:
+
+$$
+r=\frac{\sum w_{i}\left(x_{i}-\overline{x}\right)\left(y_{i}-\overline{y}\right)}{\sqrt{\sum w_{i}\left(x_{i}-\overline{x}\right)^{2}\sum w_{i}\left(y_{i}-\overline{y}\right)^{2}}}
 $$
 
 Calculating $\overline{x}$ and $\overline{y}$ is straightforward. Do note that $\mu=\overline{x}$.
