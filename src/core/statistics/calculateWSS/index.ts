@@ -7,12 +7,6 @@ export function calculateWSS(
   r: AverageDefinitionsAllStats,
   x: AverageDefinitionsAllStats,
 ) {
-  //   const moment = WSS_INCLUDE_KEYS.reduce((accumulator, key) => {
-  // const z =
-
-  //     return accumulator;
-  //   }, 0);
-
   const atoms = WSS_INCLUDE_KEYS.map((key) => {
     const normalizedX = x[key] / x.battles;
     const normalizedMu = mu[key] / mu.battles;

@@ -180,6 +180,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 <Table.RowHeaderCell>Tank</Table.RowHeaderCell>
                 <Table.RowHeaderCell>WN8</Table.RowHeaderCell>
                 <Table.RowHeaderCell>WSS</Table.RowHeaderCell>
+                <Table.RowHeaderCell>Winrate</Table.RowHeaderCell>
                 <Table.RowHeaderCell>Games</Table.RowHeaderCell>
                 <Table.RowHeaderCell>Damage</Table.RowHeaderCell>
                 <Table.RowHeaderCell>XP</Table.RowHeaderCell>
@@ -221,24 +222,32 @@ export default function Page({ params }: { params: { id: string } }) {
                         ({tank.tier}) {tank.name}
                       </Table.Cell>
                       <Table.Cell>
+                        {Math.round(wn8).toLocaleString()}{' '}
                         <Box
                           width="1em"
                           height="1em"
                           display="inline-block"
                           style={{ backgroundColor: wn8Color }}
                         />{' '}
-                        {Math.round(wn8).toLocaleString()}
+                        {strings.common.wn8_percentile[wn8Percentile]}
                       </Table.Cell>
                       <Table.Cell>
+                        {Math.round(wss * 1000).toLocaleString()}{' '}
                         <Box
                           width="1em"
                           height="1em"
                           display="inline-block"
                           style={{ backgroundColor: `var(--${wssColor}-9)` }}
                         />{' '}
-                        {Math.round(wss * 1000).toLocaleString()}
+                        {strings.common.wss_percentile[wssPercentile]}
                       </Table.Cell>
 
+                      <Table.Cell>
+                        {(100 * (stats.all.wins / stats.all.battles)).toFixed(
+                          1,
+                        )}
+                        %
+                      </Table.Cell>
                       <Table.Cell>{stats.all.battles}</Table.Cell>
                       <Table.Cell>
                         {Math.round(
