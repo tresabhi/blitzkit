@@ -222,24 +222,28 @@ export default function Page({ params }: { params: { id: string } }) {
                         ({tank.tier}) {tank.name}
                       </Table.Cell>
                       <Table.Cell>
-                        {Math.round(wn8).toLocaleString()}{' '}
-                        <Box
-                          width="1em"
-                          height="1em"
-                          display="inline-block"
-                          style={{ backgroundColor: wn8Color }}
-                        />{' '}
-                        {strings.common.wn8_percentile[wn8Percentile]}
+                        <Flex width="100%" justify="between">
+                          {Math.round(wn8).toLocaleString()}{' '}
+                          <Box
+                            width="1em"
+                            height="1em"
+                            display="inline-block"
+                            style={{ backgroundColor: wn8Color }}
+                          />{' '}
+                          {strings.common.wn8_percentile[wn8Percentile]}
+                        </Flex>
                       </Table.Cell>
                       <Table.Cell>
-                        {Math.round(wss * 1000).toLocaleString()}{' '}
-                        <Box
-                          width="1em"
-                          height="1em"
-                          display="inline-block"
-                          style={{ backgroundColor: `var(--${wssColor}-9)` }}
-                        />{' '}
-                        {strings.common.wss_percentile[wssPercentile]}
+                        <Flex width="100%" justify="between">
+                          {Math.round(wss * 1000).toLocaleString()}{' '}
+                          <Box
+                            width="1em"
+                            height="1em"
+                            display="inline-block"
+                            style={{ backgroundColor: `var(--${wssColor}-9)` }}
+                          />{' '}
+                          {strings.common.wss_percentile[wssPercentile]}
+                        </Flex>
                       </Table.Cell>
 
                       <Table.Cell>
