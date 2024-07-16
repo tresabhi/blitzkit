@@ -1,29 +1,28 @@
 'use client';
 
-import { TimerIcon } from '@radix-ui/react-icons';
 import {
   Box,
-  Button,
   Flex,
   Heading,
   Link,
   Popover,
   SegmentedControl,
+  Table,
   Text,
   Theme,
 } from '@radix-ui/themes';
-import { useState } from 'react';
+import { use, useMemo, useState } from 'react';
 import { DatePicker } from '../../../../components/DatePicker';
-import { Speedometer } from '../../../../components/Speedometer';
 import { getAccountInfo } from '../../../../core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../../core/blitz/getClanAccountInfo';
+import getTankStats from '../../../../core/blitz/getTankStats';
 import { idToRegion } from '../../../../core/blitz/idToRegion';
+import { averageDefinitions } from '../../../../core/blitzkit/averageDefinitions';
 import { parseBkni } from '../../../../core/blitzkit/parseBkni';
+import { tankDefinitions } from '../../../../core/blitzkit/tankDefinitions';
 import { PeriodType } from '../../../../core/discord/addPeriodSubCommands';
-import {
-  BKNI_COLORS,
-  BKNI_PERCENTILES,
-} from '../../../../core/statistics/getBkniPercentile';
+import calculateWN8 from '../../../../core/statistics/calculateWN8';
+import { calculateWSS } from '../../../../core/statistics/calculateWSS';
 import { useAwait } from '../../../../hooks/useAwait';
 import strings from '../../../../lang/en-US.json';
 
@@ -52,6 +51,13 @@ export default function Page({ params }: { params: { id: string } }) {
   const [customTo, setCustomTo] = useState<Date>(new Date());
   const [fromSelectorOpen, setFromSelectorOpen] = useState(false);
   const [toSelectorOpen, setToSelectorOpen] = useState(false);
+  const tanksStatsPromise = useMemo(
+    () => getTankStats(region, id),
+    [region, id],
+  );
+  const tankStats = use(tanksStatsPromise);
+  const awaitedTankDefinitions = use(tankDefinitions);
+  const awaitedAverageDefinitions = use(averageDefinitions);
 
   return (
     <>
@@ -162,7 +168,53 @@ export default function Page({ params }: { params: { id: string } }) {
           </Flex>
         </Flex>
 
-        <Flex justify="center" py="8" gap="6">
+        <Flex justify="center">
+          <Table.Root variant="surface">
+            <Table.Header>
+              <Table.Row>
+                <Table.RowHeaderCell>Tank</Table.RowHeaderCell>
+                <Table.RowHeaderCell>WN8</Table.RowHeaderCell>
+                <Table.RowHeaderCell>WSS</Table.RowHeaderCell>
+              </Table.Row>
+            </Table.Header>
+
+            <Table.Body>
+              {tankStats
+                ?.filter(
+                  (stats) =>
+                    awaitedTankDefinitions[stats.tank_id] &&
+                    awaitedAverageDefinitions.averages[stats.tank_id],
+                )
+                .sort(
+                  (a, b) =>
+                    awaitedTankDefinitions[b.tank_id].tier -
+                    awaitedTankDefinitions[a.tank_id].tier,
+                )
+                .map((stats) => {
+                  const tank = awaitedTankDefinitions[stats.tank_id];
+                  const averages =
+                    awaitedAverageDefinitions.averages[stats.tank_id];
+                  const wn8 = calculateWN8(averages.mu, stats.all);
+                  const wss = calculateWSS(
+                    averages.sigma,
+                    averages.mu,
+                    averages.r,
+                    { ...stats.all, battle_life_time: stats.battle_life_time },
+                  );
+
+                  return (
+                    <Table.Row>
+                      <Table.Cell>{tank.name}</Table.Cell>
+                      <Table.Cell>{wn8.toFixed(0)}</Table.Cell>
+                      <Table.Cell>{(wss * 100).toFixed(0)}</Table.Cell>
+                    </Table.Row>
+                  );
+                })}
+            </Table.Body>
+          </Table.Root>
+        </Flex>
+
+        {/* <Flex justify="center" py="8" gap="6">
           <Speedometer
             value={`${bkniMetric}`}
             color={bkniColor}
@@ -248,7 +300,7 @@ export default function Page({ params }: { params: { id: string } }) {
               </Text>
             </Flex>
           ))}
-        </Flex>
+        </Flex> */}
       </Theme>
 
       <Box flexGrow="1" />
