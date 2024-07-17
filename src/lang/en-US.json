@@ -16,15 +16,13 @@
     "wss_interpretations": {
       "0": "Super malum",
       "1": "Malum",
-      "2": "Very bad",
-      "3": "Bad",
-      "4": "Below average",
-      "5": "Average",
-      "6": "Above average",
-      "7": "Good",
-      "8": "Very good",
-      "9": "Unicum",
-      "10": "Super unicum"
+      "2": "Bad",
+      "3": "Below average",
+      "4": "Average",
+      "5": "Above average",
+      "6": "Good",
+      "7": "Unicum",
+      "8": "Super unicum"
     },
 
     "nations": {

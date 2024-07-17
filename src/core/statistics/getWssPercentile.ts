@@ -1,13 +1,11 @@
 export enum WssInterpretation {
   SuperMalum,
   Malum,
-  VeryBad,
   Bad,
   BelowAverage,
   Average,
   AboveAverage,
   Good,
-  VeryGood,
   Unicum,
   SuperUnicum,
 }
@@ -25,23 +23,18 @@ export const WSS_INTERPRETATIONS: WssPercentileEntry[] = [
     interpretation: WssInterpretation.SuperMalum,
   },
   {
-    minZ: -2.33,
+    minZ: -2.38,
     minPercentile: 0.01,
     interpretation: WssInterpretation.Malum,
   },
   {
     minZ: -1.28,
     minPercentile: 0.1,
-    interpretation: WssInterpretation.VeryBad,
+    interpretation: WssInterpretation.Bad,
   },
   {
     minZ: -0.83,
     minPercentile: 0.2,
-    interpretation: WssInterpretation.Bad,
-  },
-  {
-    minZ: -0.55,
-    minPercentile: 0.3,
     interpretation: WssInterpretation.BelowAverage,
   },
   {
@@ -55,22 +48,17 @@ export const WSS_INTERPRETATIONS: WssPercentileEntry[] = [
     interpretation: WssInterpretation.AboveAverage,
   },
   {
-    minZ: 0.53,
-    minPercentile: 0.7,
+    minZ: 0.83,
+    minPercentile: 0.8,
     interpretation: WssInterpretation.Good,
   },
   {
-    minZ: 0.83,
-    minPercentile: 0.8,
-    interpretation: WssInterpretation.VeryGood,
-  },
-  {
-    minZ: 1.23,
+    minZ: 1.25,
     minPercentile: 0.9,
     interpretation: WssInterpretation.Unicum,
   },
   {
-    minZ: 2.35,
+    minZ: 2.38,
     minPercentile: 0.99,
     interpretation: WssInterpretation.SuperUnicum,
   },
@@ -79,14 +67,12 @@ export const WSS_INTERPRETATIONS: WssPercentileEntry[] = [
 export const WSS_COLORS = {
   [WssInterpretation.SuperMalum]: 'tomato',
   [WssInterpretation.Malum]: 'orange',
-  [WssInterpretation.VeryBad]: 'amber',
-  [WssInterpretation.Bad]: 'yellow',
+  [WssInterpretation.Bad]: 'amber',
   [WssInterpretation.BelowAverage]: 'lime',
   [WssInterpretation.Average]: 'green',
   [WssInterpretation.AboveAverage]: 'teal',
   [WssInterpretation.Good]: 'cyan',
-  [WssInterpretation.VeryGood]: 'pink',
-  [WssInterpretation.Unicum]: 'plum',
+  [WssInterpretation.Unicum]: 'pink',
   [WssInterpretation.SuperUnicum]: 'purple',
 } as const;
 
