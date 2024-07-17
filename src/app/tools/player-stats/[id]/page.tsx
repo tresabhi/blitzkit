@@ -54,11 +54,11 @@ export default function Page({ params }: { params: { id: string } }) {
   const awaitedTankDefinitions = use(tankDefinitions);
   const awaitedAverageDefinitions = use(averageDefinitions);
 
-  const [theme, setTheme] = useState('green');
+  const theme = 'purple';
 
   return (
     <>
-      <Theme accentColor={theme as any}>
+      <Theme accentColor={theme}>
         <Flex
           direction="column"
           align="center"
@@ -168,14 +168,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 const nextInterpretation = WSS_INTERPRETATIONS[index + 1];
 
                 return (
-                  <Button
-                    radius="none"
-                    color={color}
-                    key={interpretation}
-                    onClick={() => {
-                      setTheme(color);
-                    }}
-                  >
+                  <Button radius="none" color={color} key={interpretation}>
                     {name} ({minPercentile * 100}% to{' '}
                     {(nextInterpretation
                       ? nextInterpretation.minPercentile
@@ -229,6 +222,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     averages.mu,
                     averages.r,
                     { ...stats.all, battle_life_time: stats.battle_life_time },
+                    tank.id === 20257,
                   );
                   const wn8Percentile = getWN8Percentile(wn8);
                   const wn8Color = PERCENTILE_COLORS[wn8Percentile];
@@ -238,7 +232,7 @@ export default function Page({ params }: { params: { id: string } }) {
                   return (
                     <Table.Row>
                       <Table.Cell>
-                        ({tank.tier}) {tank.name}
+                        ({tank.tier}) {tank.name} ({tank.id})
                       </Table.Cell>
                       <Table.Cell>
                         <Flex>

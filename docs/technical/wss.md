@@ -146,6 +146,12 @@ And this is what real data **DOES NOT** look like where $r$ remains constant as 
 
 ![](https://i.imgur.com/iCbuun3.gif)
 
+### Why skewed normal distribution instead of the easier symmetrical kind?
+
+The symmetrical nature of the normal distribution when not skewed allows for the rewarding of stats in inappropriate cases. For example, a player with $0$ frags would often be rewarded due to the distribution not falling off the left side of the distribution. A skewed normal distribution solves this.
+
+![](https://i.imgur.com/VeThkOh.png)
+
 ## WoTB Specific Notes
 
 Corelation analysis must be performed on a per-tank basis. If the goal is to evaluate the performance of a player instead of the player's performance in a tank, analysis should still be done on all played tanks severalty and must be averages with weights being the number of battles played by the player in each tank.
