@@ -168,7 +168,7 @@ export default function Page({ params }: { params: { id: string } }) {
             {WSS_INTERPRETATIONS.map(
               ({ interpretation, minPercentile }, index) => {
                 const color = WSS_COLORS[interpretation];
-                const name = strings.common.wss_interprGetations[interpretation];
+                const name = strings.common.wss_interpretations[interpretation];
                 const nextInterpretation = WSS_INTERPRETATIONS[index + 1];
 
                 return (
