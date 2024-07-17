@@ -1,6 +1,6 @@
 export enum WssInterpretation {
-  SuperMalum,
-  Malum,
+  SuperAbysmal,
+  Abysmal,
   Bad,
   BelowAverage,
   Average,
@@ -20,12 +20,12 @@ export const WSS_INTERPRETATIONS: WssPercentileEntry[] = [
   {
     minZ: -Infinity,
     minPercentile: 0,
-    interpretation: WssInterpretation.SuperMalum,
+    interpretation: WssInterpretation.SuperAbysmal,
   },
   {
     minZ: -2.38,
     minPercentile: 0.01,
-    interpretation: WssInterpretation.Malum,
+    interpretation: WssInterpretation.Abysmal,
   },
   {
     minZ: -1.28,
@@ -65,13 +65,13 @@ export const WSS_INTERPRETATIONS: WssPercentileEntry[] = [
 ];
 
 export const WSS_COLORS = {
-  [WssInterpretation.SuperMalum]: 'tomato',
-  [WssInterpretation.Malum]: 'orange',
-  [WssInterpretation.Bad]: 'amber',
+  [WssInterpretation.SuperAbysmal]: 'red',
+  [WssInterpretation.Abysmal]: 'orange',
+  [WssInterpretation.Bad]: 'yellow',
   [WssInterpretation.BelowAverage]: 'lime',
   [WssInterpretation.Average]: 'green',
-  [WssInterpretation.AboveAverage]: 'teal',
-  [WssInterpretation.Good]: 'cyan',
+  [WssInterpretation.AboveAverage]: 'cyan',
+  [WssInterpretation.Good]: 'blue',
   [WssInterpretation.Unicum]: 'pink',
   [WssInterpretation.SuperUnicum]: 'purple',
 } as const;

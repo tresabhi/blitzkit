@@ -12,7 +12,7 @@ import {
   Text,
   Theme,
 } from '@radix-ui/themes';
-import { use, useMemo, useState } from 'react';
+import { use, useState } from 'react';
 import { DatePicker } from '../../../../components/DatePicker';
 import { PERCENTILE_COLORS } from '../../../../components/PercentileIndicator/constants';
 import { getAccountInfo } from '../../../../core/blitz/getAccountInfo';
@@ -29,14 +29,20 @@ import getWssInterpretation, {
   WSS_COLORS,
   WSS_INTERPRETATIONS,
 } from '../../../../core/statistics/getWssPercentile';
-import { useAwait } from '../../../../hooks/useAwait';
+import { useWithDependencies } from '../../../../hooks/useWithDependencies';
 import strings from '../../../../lang/en-US.json';
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = parseInt(params.id);
   const region = idToRegion(id);
-  const accountInfo = useAwait(getAccountInfo(region, id));
-  const clanAccountInfo = useAwait(getClanAccountInfo(region, id, ['clan']));
+  const accountInfo = useWithDependencies(
+    () => getAccountInfo(region, id),
+    [id],
+  );
+  const clanAccountInfo = useWithDependencies(
+    () => getClanAccountInfo(region, id, ['clan']),
+    [id],
+  );
   const [period, setPeriod] = useState<PeriodType>('30');
   const [customFrom, setCustomFrom] = useState<Date>(
     new Date(Date.now() - 29 * 24 * 60 * 60 * 1000),
@@ -44,15 +50,11 @@ export default function Page({ params }: { params: { id: string } }) {
   const [customTo, setCustomTo] = useState<Date>(new Date());
   const [fromSelectorOpen, setFromSelectorOpen] = useState(false);
   const [toSelectorOpen, setToSelectorOpen] = useState(false);
-  const tanksStatsPromise = useMemo(
-    () => getTankStats(region, id),
-    [region, id],
-  );
-  const tankStats = use(tanksStatsPromise);
+  const tankStats = useWithDependencies(() => getTankStats(region, id), [id]);
   const awaitedTankDefinitions = use(tankDefinitions);
   const awaitedAverageDefinitions = use(averageDefinitions);
 
-  const theme = 'purple';
+  const [theme, setTheme] = useState('green');
 
   return (
     <>
@@ -64,17 +66,11 @@ export default function Page({ params }: { params: { id: string } }) {
           py="8"
           gap="6"
           style={{
-            background: `linear-gradient(var(--${theme}-a3), var(--${theme}-a1))`,
+            background: `linear-gradient(var(--${theme}-7), var(--${theme}-3))`,
           }}
         >
           <Flex direction="column" align="center">
-            <Heading
-              size={{
-                initial: '8',
-                sm: '9',
-              }}
-              align="center"
-            >
+            <Heading size={{ initial: '8', sm: '9' }} align="center">
               {accountInfo.nickname}
             </Heading>
             <Text color="gray" align="center">
@@ -172,7 +168,14 @@ export default function Page({ params }: { params: { id: string } }) {
                 const nextInterpretation = WSS_INTERPRETATIONS[index + 1];
 
                 return (
-                  <Button radius="none" color={color}>
+                  <Button
+                    radius="none"
+                    color={color}
+                    key={interpretation}
+                    onClick={() => {
+                      setTheme(color);
+                    }}
+                  >
                     {name} ({minPercentile * 100}% to{' '}
                     {(nextInterpretation
                       ? nextInterpretation.minPercentile
