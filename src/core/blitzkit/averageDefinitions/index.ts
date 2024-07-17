@@ -48,9 +48,13 @@ export interface AverageDefinitionsManifest {
   latest: number;
 }
 
-export const averageDefinitions = fetch(asset('averages/manifest.json'))
+export const averageDefinitions = fetch(asset('averages/manifest.json'), {
+  cache: 'no-store',
+})
   .then((response) => response.json() as Promise<AverageDefinitionsManifest>)
-  .then((manifest) => fetch(asset(`averages/${manifest.latest}.pb`)))
+  .then((manifest) =>
+    fetch(asset(`averages/${manifest.latest}.pb`), { cache: 'no-store' }),
+  )
   .then((response) => response.arrayBuffer())
   .then((buffer) =>
     decode<AverageDefinitions>(
