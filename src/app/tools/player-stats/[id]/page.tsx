@@ -58,7 +58,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <Theme accentColor={theme}>
+      <Theme accentColor={theme as any}>
         <Flex
           direction="column"
           align="center"
@@ -162,7 +162,7 @@ export default function Page({ params }: { params: { id: string } }) {
         <Flex justify="center" py="9">
           <Flex direction="column" width="fit-content">
             {WSS_INTERPRETATIONS.map(
-              ({ interpretation, minPercentile }, index) => {
+              ({ interpretation, minPercentile, minZ }, index) => {
                 const color = WSS_COLORS[interpretation];
                 const name = strings.common.wss_interpretations[interpretation];
                 const nextInterpretation = WSS_INTERPRETATIONS[index + 1];
@@ -180,7 +180,11 @@ export default function Page({ params }: { params: { id: string } }) {
                     {(nextInterpretation
                       ? nextInterpretation.minPercentile
                       : 1) * 100}
-                    %)
+                    %) ({minZ === -Infinity ? '-∞' : Math.round(minZ * 1000)} to{' '}
+                    {nextInterpretation
+                      ? Math.round(nextInterpretation.minZ * 1000)
+                      : '∞'}
+                    )
                   </Button>
                 );
               },

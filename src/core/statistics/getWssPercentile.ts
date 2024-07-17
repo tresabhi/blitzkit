@@ -28,7 +28,7 @@ export const WSS_INTERPRETATIONS: WssPercentileEntry[] = [
     interpretation: WssInterpretation.Abysmal,
   },
   {
-    minZ: -1.28,
+    minZ: -1.25,
     minPercentile: 0.1,
     interpretation: WssInterpretation.Bad,
   },
