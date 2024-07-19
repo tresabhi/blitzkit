@@ -1,8 +1,8 @@
 import { TankDefinition } from '../core/blitzkit/tankDefinitions';
 import { tankIcon } from '../core/blitzkit/tankIcon';
 import { classIcons } from './ClassIcon';
+import { ExperimentIcon } from './ExperimentIcon';
 import { Link } from './Link';
-import { ScienceIcon } from './ScienceIcon';
 import { StickyRowHeaderCell } from './StickyRowHeaderCell';
 
 interface TankRowHeaderCellProps {
@@ -60,11 +60,11 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
           style={{ minWidth: '1em', minHeight: '1em' }}
         />
 
-        {tank.name}
-
         {tank.testing && (
-          <ScienceIcon style={{ width: '1em', height: '1em' }} />
+          <ExperimentIcon style={{ width: '1em', height: '1em' }} />
         )}
+
+        {tank.name}
       </Link>
     </StickyRowHeaderCell>
   );
