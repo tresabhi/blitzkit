@@ -29,8 +29,8 @@ interface DataPoint {
 const MINUTE = 60 * 1000;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
-const MAX_ACTIVITY_TIME = 120 * DAY;
-const MIN_BATTLES = 5000;
+// const MAX_ACTIVITY_TIME = 120 * DAY;
+// const MIN_BATTLES = 5000;
 const RUN_TIME = 5 * HOUR + 55 * MINUTE;
 const THREADS = 10;
 const PLAYER_IDS_PER_CALL = 100;
@@ -86,10 +86,10 @@ times(THREADS, async () => {
       if (timeSinceLastActivity <= 7 * DAY) samples.d_7++;
       if (timeSinceLastActivity <= 1 * DAY) samples.d_1++;
 
-      return (
-        timeSinceLastActivity <= MAX_ACTIVITY_TIME &&
-        info.statistics.all.battles > MIN_BATTLES
-      );
+      // return (
+      //   timeSinceLastActivity <= MAX_ACTIVITY_TIME &&
+      //   info.statistics.all.battles > MIN_BATTLES
+      // );
     });
 
     const players = await Promise.all(
@@ -137,9 +137,10 @@ async function postWork() {
 
   tankIds.forEach((id) => {
     const tanksSortedEntry = tanksSorted[id];
-    const tanks = tanksSortedEntry.filter(
-      (tank) => Date.now() - tank.last_battle_time * 1000 <= MAX_ACTIVITY_TIME,
-    );
+    // const tanks = tanksSortedEntry.filter(
+    //   (tank) => Date.now() - tank.last_battle_time * 1000 <= MAX_ACTIVITY_TIME,
+    // );
+    const tanks = tanksSortedEntry;
     const entry: AverageDefinitionsEntrySubPartial = {
       mu: {},
       sigma: {},
