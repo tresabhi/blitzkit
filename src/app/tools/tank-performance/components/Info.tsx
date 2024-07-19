@@ -10,7 +10,11 @@ import { useAveragesExclusionRatio } from '../../../../hooks/useAveragesExclusio
 export function Info() {
   const awaitedAverageDefinitions = use(averageDefinitions);
   const ratio = useAveragesExclusionRatio();
-  const samples = ratio * awaitedAverageDefinitions.samples.d_120;
+  const samples = ratio * awaitedAverageDefinitions.samples.total;
+  const minutesAgo = Math.floor(
+    (Date.now() - awaitedAverageDefinitions.time) / (1000 * 60),
+  );
+  const hoursAgo = Math.floor(minutesAgo / 60);
 
   return (
     <Flex justify="center">
@@ -19,13 +23,9 @@ export function Info() {
           <InfoCircledIcon />
         </Callout.Icon>
         <Callout.Text>
-          Career stats based on {formatCompact(Math.round(samples))} players
-          with at least 5K career battles and 1 battle in the past 120 days.
-          Updated{' '}
-          {Math.floor(
-            (Date.now() - awaitedAverageDefinitions.time) / (1000 * 60 * 60),
-          )}{' '}
-          hours ago.
+          Career stats based on {formatCompact(Math.round(samples))} players.
+          Updated {hoursAgo === 0 ? minutesAgo : hoursAgo}{' '}
+          {hoursAgo === 0 ? 'minutes' : 'hours'} ago.
         </Callout.Text>
       </Callout.Root>
     </Flex>
