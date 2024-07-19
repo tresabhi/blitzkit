@@ -62,11 +62,13 @@ export const averageDefinitions = fetch(asset('averages/manifest.json'), {
   );
 
 export const averageDefinitionsArray = averageDefinitions.then((data) =>
-  Object.entries(data.averages).map(
-    ([key, value]) =>
-      ({
-        id: Number(key),
-        ...(value as AverageDefinitionsEntry),
-      }) satisfies AverageDefinitionsEntryWithId,
-  ),
+  Object.entries(data.averages)
+    .map(
+      ([key, value]) =>
+        ({
+          id: Number(key),
+          ...(value as AverageDefinitionsEntry),
+        }) satisfies AverageDefinitionsEntryWithId,
+    )
+    .filter((tank) => tank.mu.battles > 0),
 );
