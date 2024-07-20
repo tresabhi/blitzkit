@@ -86,6 +86,8 @@ times(THREADS, async () => {
       if (timeSinceLastActivity <= 7 * DAY) samples.d_7++;
       if (timeSinceLastActivity <= 1 * DAY) samples.d_1++;
 
+      return true;
+
       // return (
       //   timeSinceLastActivity <= MAX_ACTIVITY_TIME &&
       //   info.statistics.all.battles > MIN_BATTLES
