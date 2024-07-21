@@ -23,14 +23,12 @@ export function translator(localeRaw: Locale) {
         fragment = fragment[pathItem];
 
         if (typeof fragment === 'undefined') {
+          const message = `Undefined translation at "${pathItem}" in "${path}" for locale "${locale}"`;
+
           if (locale === Locale.EnglishUS) {
-            throw new Error(
-              `Undefined translation at "${pathItem}" in "${path}" for locale "${locale}"`,
-            );
+            throw new Error(message);
           } else {
-            console.warn(
-              `Undefined translation at "${pathItem}" in "${path}" for locale "${locale}"; falling back to en-US`,
-            );
+            console.warn(`${message} falling back to en-US`);
             return translator(Locale.EnglishUS).translate(path, literals);
           }
         }

@@ -20,3 +20,4 @@ temp/
 depots
 public/sitemap*
 /firebase.json
+target
