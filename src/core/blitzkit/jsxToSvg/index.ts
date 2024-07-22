@@ -1,26 +1,23 @@
-import { readFileSync } from 'fs';
+import { readFile } from 'fs/promises';
 import satori from 'satori';
 import { RenderConfiguration } from '../renderConfiguration';
 import robotoBlack from './Roboto-Black.ttf';
 import robotoBold from './Roboto-Bold.ttf';
 import roboto from './Roboto.ttf';
 
-const fonts = [
+const fontsPromise = [
   { file: roboto, weight: 400 as const },
   { file: robotoBold, weight: 700 as const },
   { file: robotoBlack, weight: 900 as const },
-];
+].map(async ({ file, weight }) => {
+  const data = await readFile(`dist/bot/workers/${file}`);
+  return { name: 'Roboto', weight, data };
+});
 
 export default async function jsxToSvg(
   jsx: JSX.Element,
   renderConfiguration = new RenderConfiguration(),
 ) {
-  return await satori(jsx, {
-    width: renderConfiguration.width,
-    fonts: fonts.map(({ file, weight }) => ({
-      weight,
-      name: 'Roboto',
-      data: readFileSync(`${__dirname}/${file}`),
-    })),
-  });
+  const fonts = await Promise.all(fontsPromise);
+  return await satori(jsx, { width: renderConfiguration.width, fonts });
 }
