@@ -17,9 +17,6 @@ const DEFAULT_THRESHOLD = 7;
 
 export const inactiveCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
-    inProduction: true,
-    inPublic: true,
-
     command: createLocalizedCommand('inactive')
       .addStringOption(addClanChoices)
       .addNumberOption((option) => {

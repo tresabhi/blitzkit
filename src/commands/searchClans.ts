@@ -15,9 +15,6 @@ const DEFAULT_LIMIT = 25;
 
 export const searchClansCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
-    inProduction: true,
-    inPublic: true,
-
     command: createLocalizedCommand('search-clans')
       .addStringOption(addRegionChoices)
       .addStringOption((option) =>

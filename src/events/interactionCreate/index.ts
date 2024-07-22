@@ -8,13 +8,11 @@ import {
   EmbedBuilder,
   Interaction,
   REST,
-  RESTPostAPIChatInputApplicationCommandsJSONBody,
   Routes,
   SlashCommandBuilder,
   SlashCommandOptionsOnlyBuilder,
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
-import discord from '../../../discord.json' assert { type: 'json' };
 import { aboutCommand } from '../../commands/about';
 import { breakdownCommand } from '../../commands/breakdown';
 import { debugCommand } from '../../commands/debug';
@@ -58,10 +56,6 @@ export type InteractionReturnable =
   | Promise<InteractionIterableReturnable>;
 
 interface CommandRegistryBase {
-  inProduction: boolean;
-  inPublic: boolean;
-  inPreview?: boolean;
-
   command:
     | SlashCommandBuilder
     | SlashCommandSubcommandsOnlyBuilder
@@ -124,38 +118,13 @@ export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {
 });
 
 const rest = new REST().setToken(secrets.DISCORD_TOKEN);
-export const guildCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
-  [];
-export const publicCommands: RESTPostAPIChatInputApplicationCommandsJSONBody[] =
-  [];
 
 commands.then((awaitedCommands) => {
-  Object.values(awaitedCommands).forEach((registry) => {
-    const json = registry.command.toJSON();
+  const body = Object.values(awaitedCommands).map((registry) =>
+    registry.command.toJSON(),
+  );
 
-    if (registry.inPublic) {
-      publicCommands.push(json);
-    } else {
-      guildCommands.push(json);
-    }
-  });
-
-  try {
-    rest.put(Routes.applicationCommands(getClientId()), {
-      body: publicCommands,
-    });
-
-    (isDev()
-      ? [discord.test_guild_id]
-      : [discord.tres_guild_id, discord.sklld_guild_id]
-    ).forEach((guildId) =>
-      rest.put(Routes.applicationGuildCommands(getClientId(), guildId), {
-        body: guildCommands,
-      }),
-    );
-  } catch (error) {
-    console.error(error);
-  }
+  rest.put(Routes.applicationCommands(getClientId()), { body });
 });
 
 export default async function interactionCreate(

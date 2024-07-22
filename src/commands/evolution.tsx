@@ -110,9 +110,6 @@ async function render(
 export const evolutionCommand = new Promise<CommandRegistry>(
   async (resolve) => {
     resolve({
-      inProduction: true,
-      inPublic: true,
-
       command: createLocalizedCommand('evolution', [
         {
           group: 'player',

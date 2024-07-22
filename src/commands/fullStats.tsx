@@ -81,9 +81,6 @@ async function render(
 export const fullStatsCommand = new Promise<CommandRegistry>(
   async (resolve) => {
     resolve({
-      inProduction: true,
-      inPublic: true,
-
       command: await addPeriodicFilterOptions(
         createLocalizedCommand('full-stats'),
         (option) => option.addStringOption(addUsernameChoices),

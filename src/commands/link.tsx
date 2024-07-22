@@ -1,7 +1,4 @@
 import { teal } from '@radix-ui/colors';
-import { GuildMemberRoleManager } from 'discord.js';
-import markdownEscape from 'markdown-escape';
-import discord from '../../discord.json' assert { type: 'json' };
 import { Glow } from '../components/AllStatsOverview/components/HeroStat/components/Glow';
 import CommandWrapper from '../components/CommandWrapper';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
@@ -11,7 +8,6 @@ import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import embedInfo from '../core/discord/embedInfo';
-import embedNegative from '../core/discord/embedNegative';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
@@ -19,9 +15,6 @@ import { theme } from '../stitches.config';
 
 export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
-    inProduction: true,
-    inPublic: true,
-
     command: createLocalizedCommand('link').addStringOption((option) =>
       addUsernameChoices(option).setRequired(true),
     ),
@@ -34,28 +27,6 @@ export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
       const clanAccountInfo = await getClanAccountInfo(region, id, ['clan']);
 
       await linkBlitzAndDiscord(discordId, id);
-
-      if (interaction.guildId === discord.sklld_guild_id) {
-        if (!interaction.guild?.members.me?.permissions.has('ManageRoles')) {
-          return embedNegative(
-            translate(translate('bot.commands.link.body.no_role_permissions'), [
-              markdownEscape(interaction.user.username),
-            ]),
-            translate(
-              translate(
-                'bot.commands.link.body.no_role_permissions.description',
-              ),
-            ),
-          );
-        }
-
-        await (interaction.member!.roles as GuildMemberRoleManager).remove(
-          discord.sklld_verify_role,
-        );
-        await (interaction.member!.roles as GuildMemberRoleManager).add(
-          discord.sklld_peasant_role,
-        );
-      }
 
       return [
         <CommandWrapper fat>

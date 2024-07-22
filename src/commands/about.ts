@@ -21,9 +21,6 @@ const DOCS: Record<Subcommand, string> = {
 
 export const aboutCommand = new Promise<CommandRegistry>(async (resolve) => {
   resolve({
-    inProduction: true,
-    inPublic: true,
-
     command: createLocalizedCommand('about', [
       { subcommand: 'commands' },
       ...subcommands.map((subcommand) => ({ subcommand })),
@@ -37,7 +34,6 @@ export const aboutCommand = new Promise<CommandRegistry>(async (resolve) => {
         return t`bot.commands.about.subcommands.commands.body${(
           await Promise.all(COMMANDS_RAW)
         )
-          .filter((registry) => registry.inPublic && registry.inProduction)
           .sort((a, b) =>
             (a.command.name_localizations?.[interaction.locale] ??
               a.command.name) <

@@ -4,8 +4,6 @@ import { CommandRegistry } from '../events/interactionCreate';
 
 export const pingCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
-    inProduction: true,
-    inPublic: true,
     handlesInteraction: true,
 
     command: createLocalizedCommand('ping', [

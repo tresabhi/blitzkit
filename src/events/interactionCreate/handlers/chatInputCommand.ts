@@ -16,11 +16,6 @@ import { translator } from '../../../core/localization/translator';
 import { UserError } from '../../../hooks/userError';
 import { Writeable } from '../../../types/writable';
 
-const previewServers = [
-  '734786591205359697', // abhi
-  '460165161156870161', // optml
-];
-
 export default async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
@@ -30,16 +25,6 @@ export default async function handleChatInputCommand(
   await interaction.deferReply();
 
   try {
-    if (
-      registry.inPreview &&
-      !previewServers.includes(`${interaction.guildId}`)
-    ) {
-      const { t } = translator(interaction.locale);
-      interaction.editReply(t`bot.common.errors.preview`);
-
-      return;
-    }
-
     const returnable = await registry.handler(interaction);
 
     if (registry.handlesInteraction) return;

@@ -11,9 +11,6 @@ import { CommandRegistry } from '../events/interactionCreate';
 
 export const playerInfoCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
-    inProduction: true,
-    inPublic: true,
-
     command:
       createLocalizedCommand('player-info').addStringOption(addUsernameChoices),
 

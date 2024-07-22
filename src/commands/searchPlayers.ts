@@ -18,9 +18,6 @@ export const searchPlayersCommand = new Promise<CommandRegistry>((resolve) => {
   const { t, translate } = translator(Locale.EnglishUS);
 
   resolve({
-    inProduction: true,
-    inPublic: true,
-
     command: createLocalizedCommand('search-players')
       .addStringOption(addRegionChoices)
       .addStringOption((option) =>

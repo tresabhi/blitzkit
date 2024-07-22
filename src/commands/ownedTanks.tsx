@@ -23,9 +23,6 @@ const TANKS_PER_MESSAGE = 64;
 
 export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
-    inProduction: true,
-    inPublic: true,
-
     command: createLocalizedCommand('owned-tanks')
       .addStringOption(addTierChoices)
       .addStringOption(addUsernameChoices),

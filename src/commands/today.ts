@@ -21,9 +21,6 @@ export const todayCommand = new Promise<CommandRegistry>(async (resolve) => {
   const awaitedGameDefinitions = await gameDefinitions;
 
   resolve({
-    inProduction: true,
-    inPublic: true,
-
     command: addFilterOptions(
       createLocalizedCommand('today'),
       awaitedGameDefinitions.nations,

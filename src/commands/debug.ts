@@ -8,9 +8,6 @@ const executionStart = new Date().getTime();
 
 export const debugCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
-    inProduction: true,
-    inPublic: true,
-
     command: createLocalizedCommand('debug'),
 
     async handler(interaction) {

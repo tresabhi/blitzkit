@@ -213,9 +213,6 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
     }
 
     resolve({
-      inProduction: true,
-      inPublic: true,
-
       command: createLocalizedCommand('rating-leaderboard', [
         {
           subcommand: 'neighbors',

@@ -47,9 +47,6 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
       },
     ]),
 
-    inProduction: true,
-    inPublic: true,
-
     async handler(interaction) {
       const subcommand = interaction.options.getSubcommand(true) as
         | 'season'

@@ -453,8 +453,6 @@ function Header() {
 
 export const replayCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
-    inProduction: true,
-    inPublic: true,
     command: createLocalizedCommand('replay').addAttachmentOption((option) =>
       option.setName('file').setDescription('Replay file').setRequired(true),
     ),

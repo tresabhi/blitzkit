@@ -4,9 +4,6 @@ import { CommandRegistry } from '../events/interactionCreate';
 
 export const permissionsCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
-    inProduction: true,
-    inPublic: true,
-
     command: createLocalizedCommand('permissions'),
 
     async handler(interaction) {

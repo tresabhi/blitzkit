@@ -19,9 +19,6 @@ import { renderBreakdown } from './render';
 export const breakdownCommand = new Promise<CommandRegistry>(
   async (resolve) => {
     resolve({
-      inProduction: true,
-      inPublic: true,
-
       command: await addPeriodicFilterOptions(
         createLocalizedCommand('breakdown'),
         (option) => option.addStringOption(addUsernameChoices),

@@ -30,9 +30,6 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
   const { t } = translator(Locale.EnglishUS);
 
   resolve({
-    inProduction: true,
-    inPublic: true,
-
     command: createLocalizedCommand('research')
       .addStringOption((option) =>
         option
