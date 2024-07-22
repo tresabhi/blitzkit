@@ -27,6 +27,7 @@ jobs:
             | cut -d : -f 2,3 \
             | tr -d \")
           curl -L -o bot.zip $DOWNLOAD_URL
+          mkdir -p dist/bot
           unzip bot.zip -d dist/bot
 
       - name: Run bot
