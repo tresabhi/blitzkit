@@ -31,4 +31,4 @@ jobs:
           unzip bot.zip -d dist/bot
 
       - name: Run bot
-        run: mv dist/bot/prisma . && NODE_ENV=production GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} bun dist/bot/index.js
+        run: mv dist/bot/prisma . && mv dist/bot/node_modules . && NODE_ENV=production GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} bun dist/bot/index.js
