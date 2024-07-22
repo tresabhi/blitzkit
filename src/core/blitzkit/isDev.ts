@@ -14,8 +14,6 @@ const devHostStartNames = [
 ];
 
 export default function isDev() {
-  if (process.argv.includes('--production')) return false;
-
   return (
     process.env.NODE_ENV === 'development' ||
     process.env.VERCEL_ENV === 'preview' ||
