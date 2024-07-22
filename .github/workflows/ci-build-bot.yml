@@ -22,7 +22,7 @@ jobs:
         run: bun prisma generate
 
       - name: Build
-        run: bun build:bot --production
+        run: bun build:bot
 
       - name: Archive build
         uses: actions/upload-artifact@v4

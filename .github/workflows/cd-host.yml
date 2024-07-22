@@ -18,10 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Use node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
+      - uses: oven-sh/setup-bun@v1
 
       - name: Download release assets
         run: |
@@ -30,7 +27,7 @@ jobs:
             | cut -d : -f 2,3 \
             | tr -d \")
           curl -L -o bot.zip $DOWNLOAD_URL
-          unzip bot.zip
+          unzip bot.zip -d dist/bot
 
       - name: Run bot
-        run: NODE_ENV=production GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} node --enable-source-maps index.cjs
+        run: NODE_ENV=production GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} bun start:bot
