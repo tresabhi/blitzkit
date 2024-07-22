@@ -21,5 +21,5 @@
     ]
   },
   "include": ["src/**/*", "scripts/**/*", "dist/website/types/**/*.ts"],
-  "exclude": ["node_modules", "dist", "scripts"]
+  "exclude": ["_node_modules", "dist", "scripts"]
 }
