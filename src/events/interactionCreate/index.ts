@@ -32,7 +32,6 @@ import { searchClansCommand } from '../../commands/searchClans';
 import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { statsCommand } from '../../commands/stats';
 import { todayCommand } from '../../commands/today';
-import getClientId from '../../core/blitzkit/getClientId';
 import isDev from '../../core/blitzkit/isDev';
 import { RenderConfiguration } from '../../core/blitzkit/renderConfiguration';
 import { secrets } from '../../core/blitzkit/secrets';
@@ -124,7 +123,7 @@ commands.then((awaitedCommands) => {
     registry.command.toJSON(),
   );
 
-  rest.put(Routes.applicationCommands(getClientId()), { body });
+  rest.put(Routes.applicationCommands(secrets.DISCORD_CLIENT_ID), { body });
 });
 
 export default async function interactionCreate(
