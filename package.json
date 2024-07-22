@@ -7,7 +7,7 @@
   "scripts": {
     "build:assets": "bun scripts/buildAssets/index.ts",
     "build:averages": "bun scripts/averages",
-    "build:bot": "rm -rf dist/bot && bun build src/index.ts src/workers/bot.ts src/workers/render.ts --outdir dist/bot --target=bun --splitting --sourcemap=inline && cp -R src/lang dist/bot/lang && prisma generate && cp prisma/schema.prisma dist/bot/schema.prisma",
+    "build:bot": "rm -rf dist/bot && mkdir -p dist/bot/node_modules/prisma && bun build src/index.ts src/workers/bot.ts src/workers/render.ts --outdir dist/bot --target=bun --splitting --sourcemap=inline && cp -R src/lang dist/bot/lang && prisma generate && cp prisma/schema.prisma dist/bot/schema.prisma && cp -R node_modules/prisma/*.node dist/bot/node_modules/prisma",
     "build:website": "bun build:sitemap && next build",
     "build:sitemap": "bun scripts/sitemap.ts",
     "build:docs": "vitepress build docs",
