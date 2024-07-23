@@ -25,7 +25,6 @@ import { TOOLS } from '../../constants/tools';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { imgur, ImgurSize } from '../../core/blitzkit/imgur';
 import { patreonLoginUrl } from '../../core/blitzkit/patreonLoginUrl';
-import { BlitzkitWide } from '../../icons/BlitzkitWide';
 import { PatreonIcon } from '../../icons/Patreon';
 import { WargamingIcon } from '../../icons/Wargaming';
 import strings from '../../lang/en-US.json';
@@ -48,11 +47,18 @@ export default function Navbar() {
       className={styles.navbar[showHamburgerMenu ? 'expanded' : 'collapsed']}
       style={{ zIndex: 3 }}
     >
-      <Flex direction="column" align="center" pt="2">
+      <Flex direction="column" align="center">
         <Flex
+          position="absolute"
+          top="34px"
           justify="between"
           align="center"
-          style={{ maxWidth: 1024, width: '100%', padding: '0 16px' }}
+          style={{
+            maxWidth: 1024,
+            width: '100%',
+            padding: '0 16px',
+            transform: 'translateY(-50%)',
+          }}
           gap="8"
         >
           <Flex align="center" gap="4">
@@ -75,8 +81,9 @@ export default function Navbar() {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
+              weight="bold"
             >
-              <BlitzkitWide />
+              BlitzKit
             </Link>
           </Flex>
 
@@ -255,7 +262,7 @@ export default function Navbar() {
           </Flex>
         </Flex>
 
-        <Flex mt="6" gap="3" justify="center" wrap="wrap">
+        <Flex mt="9" gap="3" justify="center" wrap="wrap">
           {filteredTools.map((tool) => (
             <Link
               key={tool.id}
