@@ -33,6 +33,37 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
   const tankopediaPersistentStore = TankopediaPersistent.useStore();
   const initialTankopediaState = tankopediaPersistentStore.getState();
   const protagonist = Duel.use((draft) => draft.protagonist);
+  const tank = Duel.use((state) => state.protagonist.tank);
+  const track = Duel.use((state) => state.protagonist.track);
+  const turret = Duel.use((state) => state.protagonist.turret);
+  const gun = Duel.use((state) => state.protagonist.gun);
+  const armorGltf = useArmor(tank.id);
+  const { gltf: modelGltf } = useModel(tank.id);
+  const armorNodes = Object.values(armorGltf.nodes);
+  const modelNodes = Object.values(modelGltf.nodes);
+  const tankModelDefinition = modelDefinitions[tank.id];
+  const trackModelDefinition = tankModelDefinition.tracks[track.id];
+  const turretModelDefinition = tankModelDefinition.turrets[turret.id];
+  const gunModelDefinition = turretModelDefinition.guns[gun.id];
+  const hullOrigin = new Vector3(
+    trackModelDefinition.origin[0],
+    trackModelDefinition.origin[1],
+    -trackModelDefinition.origin[2],
+  ).applyAxisAngle(I_HAT, Math.PI / 2);
+  const turretOrigin = new Vector3(
+    tankModelDefinition.turretOrigin[0],
+    tankModelDefinition.turretOrigin[1],
+    -tankModelDefinition.turretOrigin[2],
+  ).applyAxisAngle(I_HAT, Math.PI / 2);
+  const gunOrigin = new Vector3(
+    turretModelDefinition.gunOrigin[0],
+    turretModelDefinition.gunOrigin[1],
+    -turretModelDefinition.gunOrigin[2],
+  ).applyAxisAngle(I_HAT, Math.PI / 2);
+  const maskOrigin =
+    gunModelDefinition.mask === undefined
+      ? undefined
+      : gunModelDefinition.mask + hullOrigin.y + turretOrigin.y + gunOrigin.y;
 
   useEffect(() => {
     if (!modelDefinitions) return;
@@ -119,38 +150,6 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
 
     return unsubscribe;
   });
-
-  const tank = Duel.use((state) => state.protagonist.tank);
-  const track = Duel.use((state) => state.protagonist.track);
-  const turret = Duel.use((state) => state.protagonist.turret);
-  const gun = Duel.use((state) => state.protagonist.gun);
-  const armorGltf = useArmor(tank.id);
-  const { gltf: modelGltf } = useModel(tank.id);
-  const armorNodes = Object.values(armorGltf.nodes);
-  const modelNodes = Object.values(modelGltf.nodes);
-  const tankModelDefinition = modelDefinitions[tank.id];
-  const trackModelDefinition = tankModelDefinition.tracks[track.id];
-  const turretModelDefinition = tankModelDefinition.turrets[turret.id];
-  const gunModelDefinition = turretModelDefinition.guns[gun.id];
-  const hullOrigin = new Vector3(
-    trackModelDefinition.origin[0],
-    trackModelDefinition.origin[1],
-    -trackModelDefinition.origin[2],
-  ).applyAxisAngle(I_HAT, Math.PI / 2);
-  const turretOrigin = new Vector3(
-    tankModelDefinition.turretOrigin[0],
-    tankModelDefinition.turretOrigin[1],
-    -tankModelDefinition.turretOrigin[2],
-  ).applyAxisAngle(I_HAT, Math.PI / 2);
-  const gunOrigin = new Vector3(
-    turretModelDefinition.gunOrigin[0],
-    turretModelDefinition.gunOrigin[1],
-    -turretModelDefinition.gunOrigin[2],
-  ).applyAxisAngle(I_HAT, Math.PI / 2);
-  const maskOrigin =
-    gunModelDefinition.mask === undefined
-      ? undefined
-      : gunModelDefinition.mask + hullOrigin.y + turretOrigin.y + gunOrigin.y;
 
   return (
     <group

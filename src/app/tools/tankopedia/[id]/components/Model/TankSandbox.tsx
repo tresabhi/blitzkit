@@ -1,4 +1,3 @@
-import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef } from 'react';
 import { Armor } from '../../../../../../components/Armor';
@@ -121,10 +120,7 @@ export function TankSandbox() {
 
   return (
     <Canvas
-      gl={{
-        clippingPlanes: Object.freeze([]),
-        localClippingEnabled: true,
-      }}
+      gl={{ clippingPlanes: Object.freeze([]), localClippingEnabled: true }}
       shadows
       ref={canvas}
       onPointerDown={handlePointerDown}
@@ -133,11 +129,9 @@ export function TankSandbox() {
           draft.shot = undefined;
         });
       }}
-      style={{
-        userSelect: 'none',
-      }}
+      style={{ userSelect: 'none' }}
+      camera={{ fov: 25, far: 32 }}
     >
-      <PerspectiveCamera makeDefault fov={25} far={32} />
       <Controls />
       <SceneProps />
 
