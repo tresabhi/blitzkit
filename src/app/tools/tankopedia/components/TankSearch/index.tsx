@@ -3,7 +3,7 @@
 import { Callout, Flex, FlexProps, Link, Text } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { times } from 'lodash';
-import { memo, use, useEffect, useMemo, useState } from 'react';
+import { Fragment, memo, use, useEffect, useMemo, useState } from 'react';
 import { AdMidSectionResponsive } from '../../../../../components/AdMidSectionResponsive';
 import { ExperimentIcon } from '../../../../../components/ExperimentIcon';
 import { TANK_CLASSES } from '../../../../../components/Tanks/components/Item/constants';
@@ -453,15 +453,16 @@ export const TankSearch = memo<TankSearchProps>(
             {tanks.length > 0 && (
               <TankCardWrapper>
                 {tanks.map((tank, index) => (
-                  <>
-                    <TankCard onSelect={onSelect} key={tank.id} tank={tank} />
+                  <Fragment key={tank.id}>
+                    <TankCard onSelect={onSelect} tank={tank} />
+
                     {!exempt &&
                       !compact &&
                       (index + 16) % 32 === 0 &&
                       index !== tanks.length - 1 && (
                         <AdMidSectionResponsive gridColumn="1 / -1" />
                       )}
-                  </>
+                  </Fragment>
                 ))}
 
                 {times(
