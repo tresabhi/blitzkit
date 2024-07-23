@@ -8,7 +8,6 @@ import {
 import {
   AlertDialog,
   Button,
-  Card,
   DropdownMenu,
   Flex,
   Heading,
@@ -110,7 +109,7 @@ export default function Page({
   const search = debounce(async () => {
     if (!input.current) return;
 
-    setSearchResults(await searchPlayersAcrossRegions(input.current.value, 9));
+    setSearchResults(await searchPlayersAcrossRegions(input.current.value, 15));
     setSearching(false);
   }, 500);
 
@@ -269,46 +268,38 @@ export default function Page({
             <TextField.Slot>
               <MagnifyingGlassIcon />
             </TextField.Slot>
-
-            {showSearch && (
-              <Card
-                mt="2"
-                style={{
-                  position: 'absolute',
-                  top: '100%',
-                  left: 0,
-                  width: '100%',
-                }}
-              >
-                {searching && (
-                  <Flex justify="center">
-                    <Text color="gray">Searching...</Text>
-                  </Flex>
-                )}
-
-                {!searching && searchResults.length === 0 && (
-                  <Flex justify="center">
-                    <Text color="gray">No players found</Text>
-                  </Flex>
-                )}
-
-                {!searching && searchResults.length > 0 && (
-                  <Flex direction="column" gap="2">
-                    {searchResults.map((player) => (
-                      <Button
-                        key={player.account_id}
-                        variant="ghost"
-                        onClick={() => track(player.account_id)}
-                      >
-                        {player.nickname} (
-                        {UNLOCALIZED_REGION_NAMES_SHORT[player.region]})
-                      </Button>
-                    ))}
-                  </Flex>
-                )}
-              </Card>
-            )}
           </TextField.Root>
+
+          {showSearch && (
+            <Flex mt="2">
+              {searching && (
+                <Flex justify="center">
+                  <Text color="gray">Searching...</Text>
+                </Flex>
+              )}
+
+              {!searching && searchResults.length === 0 && (
+                <Flex justify="center">
+                  <Text color="gray">No players found</Text>
+                </Flex>
+              )}
+
+              {!searching && searchResults.length > 0 && (
+                <Flex direction="column" gap="2">
+                  {searchResults.map((player) => (
+                    <Button
+                      key={player.account_id}
+                      variant="ghost"
+                      onClick={() => track(player.account_id)}
+                    >
+                      {player.nickname} (
+                      {UNLOCALIZED_REGION_NAMES_SHORT[player.region]})
+                    </Button>
+                  ))}
+                </Flex>
+              )}
+            </Flex>
+          )}
         </Flex>
       )}
 
