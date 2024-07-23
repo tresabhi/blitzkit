@@ -399,23 +399,18 @@ export const TankSearch = memo<TankSearchProps>(
           <FilterControl compact={compact} />
         )}
 
-        {(sort.by !== 'meta.none' || onSelectAll) && (
-          <Flex
-            py="2"
-            mt="2"
-            direction="column"
-            align="center"
-            justify="center"
-          >
-            {sort.by !== 'meta.none' && (
-              <Text color="gray">
-                Sorting by {SORT_NAMES[sort.by]}
-                {SORT_UNITS[sort.by] === undefined
-                  ? ''
-                  : ` (${SORT_UNITS[sort.by]})`}
-                , {sort.direction}
-              </Text>
-            )}
+        <Flex
+          py="2"
+          mt="2"
+          gap="1"
+          align="center"
+          justify="center"
+          direction="column"
+        >
+          <Flex gap="2">
+            <Text color="gray">
+              {tanksFiltered.length} tank{tanksFiltered.length === 1 ? '' : 's'}
+            </Text>
 
             {onSelectAll && (
               <Link
@@ -423,11 +418,21 @@ export const TankSearch = memo<TankSearchProps>(
                 href="#"
                 onClick={() => onSelectAll(tanksFiltered)}
               >
-                Select all {tanksFiltered.length} tanks
+                Select all
               </Link>
             )}
           </Flex>
-        )}
+
+          {sort.by !== 'meta.none' && (
+            <Text color="gray">
+              Sorting by {SORT_NAMES[sort.by]}
+              {SORT_UNITS[sort.by] === undefined
+                ? ''
+                : ` (${SORT_UNITS[sort.by]})`}
+              , {sort.direction}
+            </Text>
+          )}
+        </Flex>
 
         {filters.testing === 'only' && (
           <Flex justify="center" mt="4">
