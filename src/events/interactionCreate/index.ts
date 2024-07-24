@@ -32,7 +32,6 @@ import { searchClansCommand } from '../../commands/searchClans';
 import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { statsCommand } from '../../commands/stats';
 import { todayCommand } from '../../commands/today';
-import isDev from '../../core/blitzkit/isDev';
 import { RenderConfiguration } from '../../core/blitzkit/renderConfiguration';
 import { secrets } from '../../core/blitzkit/secrets';
 import handleAutocomplete from './handlers/autocomplete';
@@ -109,7 +108,7 @@ export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {
 
         return commands;
       }
-      if (isDev()) registry.value.command.setDefaultMemberPermissions(0);
+
       return { ...commands, [registry.value.command.name]: registry.value };
     },
     {},
