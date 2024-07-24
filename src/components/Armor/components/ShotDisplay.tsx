@@ -66,7 +66,14 @@ export function ShotDisplay() {
   });
 
   useEffect(() => {
-    if (shot?.splashRadius !== undefined && shot.in.status === 'penetration') {
+    const data = new Date();
+    const isHalloween = data.getMonth() === 9 && data.getDate() === 31;
+
+    if (
+      isHalloween &&
+      shot?.splashRadius !== undefined &&
+      shot.in.status === 'penetration'
+    ) {
       const audio = new Audio('/assets/audio/lotta-damage.mp3');
 
       audio.currentTime = 0.7;
