@@ -43,6 +43,7 @@ export type ShotLayer = ShotLayerExternal | ShotLayerNonExternal | ShotLayerGap;
 export type Shot = {
   containsGaps: boolean;
   damage: number;
+  splashRadius?: number;
 
   in: {
     surfaceNormal: Vector3;

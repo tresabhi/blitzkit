@@ -85,6 +85,7 @@ export function SpacedArmorSceneComponent({
       const shell = antagonist.shell;
       const cameraNormal = camera.position.clone().sub(point).normalize();
       const shot: TankopediaEphemeral.Shot = {
+        splashRadius: shell.explosionRadius,
         damage: -1,
         containsGaps: shell.type === ShellType.HEAT,
         in: {
