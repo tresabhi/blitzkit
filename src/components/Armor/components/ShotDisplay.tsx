@@ -43,7 +43,7 @@ export function ShotDisplay() {
   let animationStartTime: number | null = null;
 
   useEffect(() => {
-    if (shot && shot.splashRadius !== undefined) {
+    if (shot?.splashRadius !== undefined) {
       const outlineGeometry = new BufferGeometry().setFromPoints(
         new Path().absarc(0, 0, 1, 0, Math.PI * 2).getSpacedPoints(50),
       );
@@ -64,6 +64,16 @@ export function ShotDisplay() {
       };
     }
   });
+
+  useEffect(() => {
+    if (shot?.splashRadius !== undefined && shot.in.status === 'penetration') {
+      const audio = new Audio('/assets/audio/lotta-damage.mp3');
+
+      audio.currentTime = 0.7;
+      audio.volume = 0.25;
+      audio.play();
+    }
+  }, [shot]);
 
   useFrame(({ clock }) => {
     if (!shot) return;
