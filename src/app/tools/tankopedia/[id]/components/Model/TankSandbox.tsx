@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef } from 'react';
 import { Armor } from '../../../../../../components/Armor';
 import { ShotDisplay } from '../../../../../../components/Armor/components/ShotDisplay';
+import { StaticArmor } from '../../../../../../components/StaticArmor';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
@@ -9,6 +10,7 @@ import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import * as Duel from '../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemeral';
+import * as TankopediaPersistent from '../../../../../../stores/tankopediaPersistent';
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
 import { SceneProps } from '../SceneProps';
@@ -26,6 +28,7 @@ export function TankSandbox() {
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
+  const armorMode = TankopediaPersistent.use((state) => state.armorMode);
 
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);
@@ -139,7 +142,8 @@ export function TankSandbox() {
 
       {/* idk why the shot display doesn't work without suspense here lol */}
       <Suspense fallback={<ModelLoader />}>
-        <Armor />
+        {armorMode === 'blitz' && <Armor />}
+        {armorMode === 'static' && <StaticArmor />}
         <Lighting />
       </Suspense>
 

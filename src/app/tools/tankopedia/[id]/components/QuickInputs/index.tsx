@@ -11,6 +11,7 @@ import {
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import * as Duel from '../../../../../../stores/duel';
+import * as TankopediaPersistent from '../../../../../../stores/tankopediaPersistent';
 import * as styles from './index.css';
 
 export function RotationInputs() {
@@ -26,6 +27,9 @@ export function RotationInputs() {
   const initialGunPitch = tankModelDefinition.turretRotation?.pitch ?? 0;
   const hasImprovedVerticalStabilizer = useEquipment(122);
   const isFullScreen = useFullScreen();
+  const mode = TankopediaPersistent.use((state) => state.mode);
+  const armorMode = TankopediaPersistent.use((state) => state.armorMode);
+  const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
 
   useEffect(() => {
     yawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
@@ -57,8 +61,9 @@ export function RotationInputs() {
 
   return (
     <Flex
-      className={isFullScreen ? undefined : styles.container}
-      gap="2"
+      className={
+        isFullScreen || mode === 'armor' ? undefined : styles.container
+      }
       style={{
         width: 128 + 32,
         pointerEvents: 'auto',
@@ -67,106 +72,145 @@ export function RotationInputs() {
         top: 16,
         transform: 'translateX(-50%)',
       }}
+      direction="column"
+      align="center"
+      gap="2"
     >
-      <TextField.Root
-        size="1"
-        radius="full"
-        style={{
-          flex: 1,
-          textAlign: 'right',
-        }}
-        onBlur={() => {
-          const value = Number(yawInput.current!.value);
-          if (isNaN(value)) {
-            yawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
-            return;
-          }
-          const [pitch, yaw] = applyPitchYawLimits(
-            protagonist.pitch,
-            degToRad(value),
-            gunModelDefinition.pitch,
-            turretModelDefinition.yaw,
-            hasImprovedVerticalStabilizer,
-          );
-          modelTransformEvent.emit({ pitch, yaw });
-          mutateDuel((state) => {
-            state.protagonist.pitch = pitch;
-            state.protagonist.yaw = yaw;
-          });
-          yawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
-        }}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') {
-            yawInput.current?.blur();
-          }
-        }}
-        onFocus={() => yawInput.current?.focus()}
-        ref={yawInput}
-      >
-        <TextField.Slot
+      <Flex gap="2">
+        <TextField.Root
+          size="1"
+          radius="full"
           style={{
-            userSelect: 'none',
+            flex: 1,
+            textAlign: 'right',
           }}
+          onBlur={() => {
+            const value = Number(yawInput.current!.value);
+            if (isNaN(value)) {
+              yawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
+              return;
+            }
+            const [pitch, yaw] = applyPitchYawLimits(
+              protagonist.pitch,
+              degToRad(value),
+              gunModelDefinition.pitch,
+              turretModelDefinition.yaw,
+              hasImprovedVerticalStabilizer,
+            );
+            modelTransformEvent.emit({ pitch, yaw });
+            mutateDuel((state) => {
+              state.protagonist.pitch = pitch;
+              state.protagonist.yaw = yaw;
+            });
+            yawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              yawInput.current?.blur();
+            }
+          }}
+          onFocus={() => yawInput.current?.focus()}
+          ref={yawInput}
         >
-          <WidthIcon />
-        </TextField.Slot>
-        <TextField.Slot style={{ userSelect: 'none' }}>°</TextField.Slot>
-      </TextField.Root>
+          <TextField.Slot
+            style={{
+              userSelect: 'none',
+            }}
+          >
+            <WidthIcon />
+          </TextField.Slot>
+          <TextField.Slot style={{ userSelect: 'none' }}>°</TextField.Slot>
+        </TextField.Root>
 
-      <TextField.Root
-        size="1"
-        radius="full"
-        style={{
-          flex: 1,
-          textAlign: 'right',
-        }}
-        onBlur={() => {
-          const value = Number(pitchInput.current!.value);
-          if (isNaN(value)) {
+        <TextField.Root
+          size="1"
+          radius="full"
+          style={{
+            flex: 1,
+            textAlign: 'right',
+          }}
+          onBlur={() => {
+            const value = Number(pitchInput.current!.value);
+            if (isNaN(value)) {
+              pitchInput.current!.value = (
+                -radToDeg(protagonist.pitch) + initialGunPitch
+              ).toFixed(1);
+              return;
+            }
+            const [pitch, yaw] = applyPitchYawLimits(
+              degToRad(-value + initialGunPitch),
+              protagonist.yaw,
+              gunModelDefinition.pitch,
+              turretModelDefinition.yaw,
+              hasImprovedVerticalStabilizer,
+            );
+            modelTransformEvent.emit({ pitch, yaw });
+            mutateDuel((state) => {
+              state.protagonist.pitch = pitch;
+              state.protagonist.yaw = yaw;
+            });
             pitchInput.current!.value = (
               -radToDeg(protagonist.pitch) + initialGunPitch
             ).toFixed(1);
-            return;
-          }
-          const [pitch, yaw] = applyPitchYawLimits(
-            degToRad(-value + initialGunPitch),
-            protagonist.yaw,
-            gunModelDefinition.pitch,
-            turretModelDefinition.yaw,
-            hasImprovedVerticalStabilizer,
-          );
-          modelTransformEvent.emit({ pitch, yaw });
-          mutateDuel((state) => {
-            state.protagonist.pitch = pitch;
-            state.protagonist.yaw = yaw;
-          });
-          pitchInput.current!.value = (
-            -radToDeg(protagonist.pitch) + initialGunPitch
-          ).toFixed(1);
-        }}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') {
-            pitchInput.current?.blur();
-          }
-        }}
-        onFocus={() => pitchInput.current?.focus()}
-        ref={pitchInput}
-      >
-        <TextField.Slot
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              pitchInput.current?.blur();
+            }
+          }}
+          onFocus={() => pitchInput.current?.focus()}
+          ref={pitchInput}
+        >
+          <TextField.Slot
+            style={{
+              userSelect: 'none',
+            }}
+          >
+            <HeightIcon />
+          </TextField.Slot>
+          <TextField.Slot
+            style={{
+              userSelect: 'none',
+            }}
+          >
+            °
+          </TextField.Slot>
+        </TextField.Root>
+      </Flex>
+
+      {/* <Flex gap="2">
+        <Box
+          width="var(--space-6)"
+          height="var(--space-4)"
           style={{
-            userSelect: 'none',
+            borderRadius: 'var(--radius-1)',
+            background: 'linear-gradient(90deg, #FF2020, #FF8080)',
+            opacity: armorMode === 'blitz' ? 1 : 0.5,
+          }}
+          onClick={() => {
+            mutateTankopediaPersistent((draft) => {
+              draft.armorMode = 'blitz';
+            });
+          }}
+        />
+        <Flex
+          width="var(--space-6)"
+          height="var(--space-4)"
+          style={{
+            borderRadius: 'var(--radius-1)',
+            overflow: 'hidden',
+            opacity: armorMode === 'static' ? 1 : 0.5,
+          }}
+          onClick={() => {
+            mutateTankopediaPersistent((draft) => {
+              draft.armorMode = 'static';
+            });
           }}
         >
-          <HeightIcon />
-        </TextField.Slot>
-        <TextField.Slot
-          style={{
-            userSelect: 'none',
-          }}
-        >
-          °
-        </TextField.Slot>
-      </TextField.Root>
+          <Box flexGrow="1" style={{ backgroundColor: '#8000FF' }} />
+          <Box flexGrow="1" style={{ backgroundColor: '#FF0080' }} />
+        </Flex>
+      </Flex> */}
     </Flex>
   );
 }

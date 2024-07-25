@@ -485,7 +485,9 @@ export function Options() {
             mr="1"
           >
             <Switch size="1" checked={mode === 'armor'} />
-            Armor
+            <Text color="gray" size="2">
+              Armor
+            </Text>
           </Flex>
 
           <DropdownMenu.Root>

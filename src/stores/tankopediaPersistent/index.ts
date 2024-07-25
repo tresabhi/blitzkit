@@ -13,6 +13,7 @@ export type TankopediaSortBy = keyof typeof SORT_NAMES;
 export type TankopediaSortDirection = 'ascending' | 'descending';
 export type TankopediaTestTankDisplay = 'include' | 'exclude' | 'only';
 export type TankopediaMode = 'model' | 'armor';
+export type TankopediaArmorMode = 'blitz' | 'static';
 
 export interface TankopediaPersistent {
   model: {
@@ -39,6 +40,7 @@ export interface TankopediaPersistent {
     page: number;
   };
   mode: TankopediaMode;
+  armorMode: TankopediaArmorMode;
 }
 
 export const { Provider, use, useMutation, useStore } = createNextSafeStore(
@@ -70,6 +72,7 @@ export const { Provider, use, useMutation, useStore } = createNextSafeStore(
             page: 0,
           },
           mode: 'model',
+          armorMode: 'blitz',
         })),
         { name: 'tankopedia', merge: (a, b) => merge(b, a) },
       ),
