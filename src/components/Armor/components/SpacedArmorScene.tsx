@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from 'react';
+import { memo, useRef } from 'react';
 import { Group, Plane, Scene, Vector3 } from 'three';
 import { correctZYTuple } from '../../../core/blitz/correctZYTuple';
 import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
@@ -8,7 +8,7 @@ import { useModel } from '../../../hooks/useModel';
 import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
 import { useTankTransform } from '../../../hooks/useTankTransform';
 import * as Duel from '../../../stores/duel';
-import * as TankopediaPersistent from '../../../stores/tankopediaPersistent';
+import { ModelTankWrapper } from './ModelTankWrapper';
 import { SpacedArmorSceneComponent } from './SpacedArmorSceneComponent';
 
 export enum ArmorType {
@@ -26,8 +26,6 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
   const modelDefinitions = useModelDefinitions();
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
-  const tankopediaPersistentStore = TankopediaPersistent.useStore();
-  const initialTankopediaState = tankopediaPersistentStore.getState();
   const protagonist = Duel.use((draft) => draft.protagonist);
   const tank = Duel.use((state) => state.protagonist.tank);
   const track = Duel.use((state) => state.protagonist.track);
@@ -51,23 +49,8 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
 
   useTankTransform(protagonist, turretContainer, gunContainer);
 
-  useEffect(() => {
-    const unsubscribe = tankopediaPersistentStore.subscribe(
-      (state) => state.mode,
-      (mode) => {
-        if (wrapper.current) wrapper.current.visible = mode === 'armor';
-      },
-    );
-
-    return unsubscribe;
-  });
-
   return (
-    <group
-      ref={wrapper}
-      rotation={[-Math.PI / 2, 0, 0]}
-      visible={initialTankopediaState.mode === 'armor'}
-    >
+    <ModelTankWrapper ref={wrapper}>
       <group position={hullOrigin}>
         {armorNodes.map((node) => {
           const isHull = node.name.startsWith('hull_');
@@ -91,6 +74,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
           );
         })}
       </group>
+
       {modelNodes.map((node) => {
         const isWheel = node.name.startsWith('chassis_wheel_');
         const isTrack = node.name.startsWith('chassis_track_');
@@ -111,25 +95,53 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
       })}
 
       <group ref={turretContainer}>
-        <group position={hullOrigin}>
+        {armorNodes.map((node) => {
+          const isCurrentTurret = node.name.startsWith(
+            `turret_${turretModelDefinition.model.toString().padStart(2, '0')}`,
+          );
+          const isVisible = isCurrentTurret;
+          const armorId = nameToArmorId(node.name);
+          const { spaced, thickness } = resolveArmor(
+            turretModelDefinition.armor,
+            armorId,
+          );
+
+          if (!isVisible || thickness === undefined) return null;
+
+          return (
+            <group key={node.uuid} position={turretOrigin}>
+              <SpacedArmorSceneComponent
+                scene={scene}
+                key={node.uuid}
+                type={spaced ? ArmorType.Spaced : ArmorType.Core}
+                thickness={thickness}
+                node={node}
+              />
+            </group>
+          );
+        })}
+
+        <group ref={gunContainer}>
           {armorNodes.map((node) => {
-            const isCurrentTurret = node.name.startsWith(
-              `turret_${turretModelDefinition.model.toString().padStart(2, '0')}`,
+            const isCurrentGun = node.name.startsWith(
+              `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
             );
-            const isVisible = isCurrentTurret;
+            const isVisible = isCurrentGun;
             const armorId = nameToArmorId(node.name);
             const { spaced, thickness } = resolveArmor(
-              turretModelDefinition.armor,
+              gunModelDefinition.armor,
               armorId,
             );
 
             if (!isVisible || thickness === undefined) return null;
 
             return (
-              <group key={node.uuid} position={turretOrigin}>
+              <group
+                key={node.uuid}
+                position={turretOrigin.clone().add(gunOrigin)}
+              >
                 <SpacedArmorSceneComponent
                   scene={scene}
-                  key={node.uuid}
                   type={spaced ? ArmorType.Spaced : ArmorType.Core}
                   thickness={thickness}
                   node={node}
@@ -137,37 +149,6 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
               </group>
             );
           })}
-        </group>
-        <group ref={gunContainer}>
-          <group position={hullOrigin}>
-            {armorNodes.map((node) => {
-              const isCurrentGun = node.name.startsWith(
-                `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
-              );
-              const isVisible = isCurrentGun;
-              const armorId = nameToArmorId(node.name);
-              const { spaced, thickness } = resolveArmor(
-                gunModelDefinition.armor,
-                armorId,
-              );
-
-              if (!isVisible || thickness === undefined) return null;
-
-              return (
-                <group
-                  key={node.uuid}
-                  position={turretOrigin.clone().add(gunOrigin)}
-                >
-                  <SpacedArmorSceneComponent
-                    scene={scene}
-                    type={spaced ? ArmorType.Spaced : ArmorType.Core}
-                    thickness={thickness}
-                    node={node}
-                  />
-                </group>
-              );
-            })}
-          </group>
 
           {modelNodes.map((node) => {
             const gunString = `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`;
@@ -196,6 +177,6 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
           })}
         </group>
       </group>
-    </group>
+    </ModelTankWrapper>
   );
 });

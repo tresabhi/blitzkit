@@ -1,6 +1,7 @@
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { memo, useRef } from 'react';
 import { Group, Mesh, MeshStandardMaterial, Vector2 } from 'three';
+import { ModelTankWrapper } from '../../../../../../../components/Armor/components/ModelTankWrapper';
 import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
 import { hasEquipment } from '../../../../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../../../../core/blitzkit/jsxTree';
@@ -36,7 +37,7 @@ export const TankModel = memo(() => {
   const nodes = Object.values(gltf.nodes);
 
   return (
-    <group ref={hullContainer} rotation={[-Math.PI / 2, 0, 0]}>
+    <ModelTankWrapper ref={hullContainer}>
       {nodes.map((node) => {
         const isHull = node.name === 'hull';
         const isWheel = node.name.startsWith('chassis_wheel_');
@@ -260,6 +261,6 @@ export const TankModel = memo(() => {
           })}
         </group>
       </group>
-    </group>
+    </ModelTankWrapper>
   );
 });
