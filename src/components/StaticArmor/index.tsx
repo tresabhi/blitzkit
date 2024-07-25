@@ -1,3 +1,5 @@
+import { StaticArmorScene } from './components/StaticArmorScene';
+
 export function StaticArmor() {
-  return null;
+  return <StaticArmorScene />;
 }

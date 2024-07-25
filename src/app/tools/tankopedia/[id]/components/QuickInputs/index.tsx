@@ -1,5 +1,5 @@
 import { HeightIcon, WidthIcon } from '@radix-ui/react-icons';
-import { Flex, TextField } from '@radix-ui/themes';
+import { Box, Flex, TextField } from '@radix-ui/themes';
 import { use, useEffect, useRef } from 'react';
 import { degToRad, radToDeg } from 'three/src/math/MathUtils';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
@@ -178,7 +178,7 @@ export function RotationInputs() {
         </TextField.Root>
       </Flex>
 
-      {/* <Flex gap="2">
+      <Flex gap="2">
         <Box
           width="var(--space-6)"
           height="var(--space-4)"
@@ -210,7 +210,7 @@ export function RotationInputs() {
           <Box flexGrow="1" style={{ backgroundColor: '#8000FF' }} />
           <Box flexGrow="1" style={{ backgroundColor: '#FF0080' }} />
         </Flex>
-      </Flex> */}
+      </Flex>
     </Flex>
   );
 }

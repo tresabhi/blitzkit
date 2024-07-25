@@ -2,6 +2,7 @@ import { memo, useEffect, useRef } from 'react';
 import { Euler, Group, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { I_HAT, J_HAT, K_HAT } from '../../../constants/axis';
+import { correctZYTuple } from '../../../core/blitz/correctZYTuple';
 import {
   ModelTransformEventData,
   modelTransformEvent,
@@ -26,21 +27,9 @@ export const CoreArmorScene = memo(() => {
   useEffect(() => {
     if (!modelDefinitions) return;
 
-    const hullOrigin = new Vector3(
-      trackModelDefinition.origin[0],
-      trackModelDefinition.origin[1],
-      -trackModelDefinition.origin[2],
-    ).applyAxisAngle(I_HAT, Math.PI / 2);
-    const turretOrigin = new Vector3(
-      tankModelDefinition.turretOrigin[0],
-      tankModelDefinition.turretOrigin[1],
-      -tankModelDefinition.turretOrigin[2],
-    ).applyAxisAngle(I_HAT, Math.PI / 2);
-    const gunOrigin = new Vector3(
-      turretModelDefinition.gunOrigin[0],
-      turretModelDefinition.gunOrigin[1],
-      -turretModelDefinition.gunOrigin[2],
-    ).applyAxisAngle(I_HAT, Math.PI / 2);
+    const hullOrigin = correctZYTuple(trackModelDefinition.origin);
+    const turretOrigin = correctZYTuple(tankModelDefinition.turretOrigin);
+    const gunOrigin = correctZYTuple(turretModelDefinition.gunOrigin);
     const turretPosition = new Vector3();
     const turretRotation = new Euler();
     const gunPosition = new Vector3();
@@ -119,21 +108,9 @@ export const CoreArmorScene = memo(() => {
   const trackModelDefinition = tankModelDefinition.tracks[track.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];
-  const hullOrigin = new Vector3(
-    trackModelDefinition.origin[0],
-    trackModelDefinition.origin[1],
-    -trackModelDefinition.origin[2],
-  ).applyAxisAngle(I_HAT, Math.PI / 2);
-  const turretOrigin = new Vector3(
-    tankModelDefinition.turretOrigin[0],
-    tankModelDefinition.turretOrigin[1],
-    -tankModelDefinition.turretOrigin[2],
-  ).applyAxisAngle(I_HAT, Math.PI / 2);
-  const gunOrigin = new Vector3(
-    turretModelDefinition.gunOrigin[0],
-    turretModelDefinition.gunOrigin[1],
-    -turretModelDefinition.gunOrigin[2],
-  ).applyAxisAngle(I_HAT, Math.PI / 2);
+  const hullOrigin = correctZYTuple(trackModelDefinition.origin);
+  const turretOrigin = correctZYTuple(tankModelDefinition.turretOrigin);
+  const gunOrigin = correctZYTuple(turretModelDefinition.gunOrigin);
 
   return (
     <group
