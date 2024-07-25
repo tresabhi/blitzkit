@@ -1,17 +1,12 @@
 import { memo, useEffect, useRef } from 'react';
-import { Euler, Group, Plane, Scene, Vector3 } from 'three';
-import { degToRad } from 'three/src/math/MathUtils';
-import { I_HAT, J_HAT, K_HAT } from '../../../constants/axis';
+import { Group, Plane, Scene, Vector3 } from 'three';
 import { correctZYTuple } from '../../../core/blitz/correctZYTuple';
-import {
-  ModelTransformEventData,
-  modelTransformEvent,
-} from '../../../core/blitzkit/modelTransform';
 import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
 import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
 import { useArmor } from '../../../hooks/useArmor';
 import { useModel } from '../../../hooks/useModel';
 import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
+import { useTankTransform } from '../../../hooks/useTankTransform';
 import * as Duel from '../../../stores/duel';
 import * as TankopediaPersistent from '../../../stores/tankopediaPersistent';
 import { SpacedArmorSceneComponent } from './SpacedArmorSceneComponent';
@@ -54,69 +49,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
       ? undefined
       : gunModelDefinition.mask + hullOrigin.y + turretOrigin.y + gunOrigin.y;
 
-  useEffect(() => {
-    if (!modelDefinitions) return;
-
-    // BIG TODO: work out this repeat
-    const hullOrigin = correctZYTuple(trackModelDefinition.origin);
-    const turretOrigin = correctZYTuple(tankModelDefinition.turretOrigin);
-    const gunOrigin = correctZYTuple(turretModelDefinition.gunOrigin);
-    const turretPosition = new Vector3();
-    const turretRotation = new Euler();
-    const gunPosition = new Vector3();
-    const gunRotation = new Euler();
-
-    function handleModelTransform({ yaw, pitch }: ModelTransformEventData) {
-      gunPosition
-        .set(0, 0, 0)
-        .sub(hullOrigin)
-        .sub(turretOrigin)
-        .sub(gunOrigin)
-        .applyAxisAngle(I_HAT, pitch)
-        .add(gunOrigin)
-        .add(turretOrigin)
-        .add(hullOrigin);
-      gunRotation.set(pitch, 0, 0);
-      gunContainer.current?.position.copy(gunPosition);
-      gunContainer.current?.rotation.copy(gunRotation);
-
-      if (yaw === undefined) return;
-
-      turretPosition
-        .set(0, 0, 0)
-        .sub(hullOrigin)
-        .sub(turretOrigin)
-        .applyAxisAngle(new Vector3(0, 0, 1), yaw);
-      turretRotation.set(0, 0, yaw);
-
-      if (tankModelDefinition.turretRotation) {
-        const initialPitch = -degToRad(
-          tankModelDefinition.turretRotation.pitch,
-        );
-        const initialYaw = -degToRad(tankModelDefinition.turretRotation.yaw);
-        const initialRoll = -degToRad(tankModelDefinition.turretRotation.roll);
-
-        turretPosition
-          .applyAxisAngle(I_HAT, initialPitch)
-          .applyAxisAngle(J_HAT, initialRoll)
-          .applyAxisAngle(K_HAT, initialYaw);
-        turretRotation.x += initialPitch;
-        turretRotation.y += initialRoll;
-        turretRotation.z += initialYaw;
-      }
-
-      turretPosition.add(turretOrigin).add(hullOrigin);
-      turretContainer.current?.position.copy(turretPosition);
-      turretContainer.current?.rotation.copy(turretRotation);
-    }
-
-    handleModelTransform(protagonist);
-    modelTransformEvent.on(handleModelTransform);
-
-    return () => {
-      modelTransformEvent.off(handleModelTransform);
-    };
-  });
+  useTankTransform(protagonist, turretContainer, gunContainer);
 
   useEffect(() => {
     const unsubscribe = tankopediaPersistentStore.subscribe(
