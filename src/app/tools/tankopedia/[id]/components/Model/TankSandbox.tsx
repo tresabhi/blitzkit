@@ -7,6 +7,7 @@ import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawL
 import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
+import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import * as Duel from '../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemeral';
@@ -22,6 +23,7 @@ export function TankSandbox() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const hasImprovedVerticalStabilizer = useEquipment(122);
   const awaitedModelDefinitions = use(modelDefinitions);
+  const awaitedTankDefinitions = use(tankDefinitions);
   const protagonist = Duel.use((state) => state.protagonist);
   const mutateDuel = Duel.useMutation();
   const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
@@ -137,13 +139,14 @@ export function TankSandbox() {
     >
       <Controls />
       <SceneProps />
-
       <TankModel />
 
       {/* idk why the shot display doesn't work without suspense here lol */}
       <Suspense fallback={<ModelLoader />}>
         {armorMode === 'blitz' && <Armor />}
-        {armorMode === 'static' && <StaticArmor />}
+        {armorMode === 'static' && (
+          <StaticArmor awaitedTankDefinitions={awaitedTankDefinitions} />
+        )}
         <Lighting />
       </Suspense>
 

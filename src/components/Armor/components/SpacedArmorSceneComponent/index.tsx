@@ -1,8 +1,10 @@
-import { useThree } from '@react-three/fiber';
+import { ThreeEvent, useThree } from '@react-three/fiber';
+import { clamp } from 'lodash';
 import { useCallback } from 'react';
 import {
   Intersection,
   MeshBasicMaterial,
+  MeshStandardMaterial,
   Object3D,
   Plane,
   Quaternion,
@@ -19,15 +21,22 @@ import { jsxTree } from '../../../../core/blitzkit/jsxTree';
 import { ShellType } from '../../../../core/blitzkit/tankDefinitions';
 import * as Duel from '../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
+import { ThicknessRange } from '../../../StaticArmor/components/StaticArmorScene';
 import { ArmorType } from '../SpacedArmorScene';
 import { SpacedArmorSubExternal } from './components/SpacedArmorSubExternal';
 import { SpacedArmorSubSpaced } from './components/SpacedArmorSubSpaced';
 
+function to255(value: number) {
+  return Math.round(255 * value);
+}
+
 type SpacedArmorSceneComponentProps = {
+  static?: boolean;
   node: Object3D;
   thickness: number;
   scene: Scene;
   clip?: Plane;
+  thicknessRange: ThicknessRange;
 } & (
   | {
       type: Exclude<ArmorType, ArmorType.External>;
@@ -68,6 +77,8 @@ export function SpacedArmorSceneComponent({
   thickness,
   scene,
   clip,
+  static: staticMode,
+  thicknessRange,
   ...props
 }: SpacedArmorSceneComponentProps) {
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
@@ -354,6 +365,41 @@ export function SpacedArmorSceneComponent({
     [camera],
   );
 
+  const onClick = useCallback(
+    async (event: ThreeEvent<MouseEvent>) => {
+      event.stopPropagation();
+      const shot = (await shoot(event.point, event.intersections, true))!;
+      tankopediaEphemeralStore.setState({ shot });
+    },
+    [camera],
+  );
+
+  if (staticMode) {
+    const x = clamp(thickness / thicknessRange.max, 0, 1);
+    const r = -((1 - x) ** 2) + 1;
+    const g = -(x ** 2) + 1;
+
+    return jsxTree(node, {
+      material: new MeshStandardMaterial({
+        color:
+          props.type === ArmorType.Core
+            ? `rgb(${to255(r)}, ${to255(g)}, 0)`
+            : props.type === ArmorType.Spaced
+              ? `rgb(${to255(1 - x)}, 0, ${to255(1 - x)})`
+              : `rgb(0, 255, 255)`,
+        opacity: props.type === ArmorType.External ? 0.25 : 1,
+        transparent: props.type === ArmorType.External,
+      }),
+
+      userData: {
+        type: props.type,
+        variant: props.type === ArmorType.External ? props.variant : 'gun',
+        thickness,
+      } satisfies ArmorUserData,
+      onClick: props.type === ArmorType.Core ? onClick : () => {},
+    });
+  }
+
   return (
     <>
       {props.type === ArmorType.Core &&
@@ -366,18 +412,7 @@ export function SpacedArmorSceneComponent({
               type: ArmorType.Core,
               thickness,
             } satisfies ArmorUserData,
-
-            async onClick(event) {
-              event.stopPropagation();
-
-              const shot = (await shoot(
-                event.point,
-                event.intersections,
-                true,
-              ))!;
-
-              tankopediaEphemeralStore.setState({ shot });
-            },
+            onClick,
           },
           node.uuid,
         )}

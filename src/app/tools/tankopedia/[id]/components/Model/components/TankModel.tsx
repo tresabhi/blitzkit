@@ -1,5 +1,5 @@
 import { ThreeEvent, useThree } from '@react-three/fiber';
-import { memo, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { Group, Mesh, MeshStandardMaterial, Vector2 } from 'three';
 import { ModelTankWrapper } from '../../../../../../../components/Armor/components/ModelTankWrapper';
 import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
@@ -13,12 +13,14 @@ import { useModel } from '../../../../../../../hooks/useModel';
 import { useTankTransform } from '../../../../../../../hooks/useTankTransform';
 import * as Duel from '../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
+import * as TankopediaPersistent from '../../../../../../../stores/tankopediaPersistent';
 
 export const TankModel = memo(() => {
   const mutateDuel = Duel.useMutation();
   const duelStore = Duel.useStore();
   const awaitedModelDefinitions = useAwait(modelDefinitions);
   const protagonist = Duel.use((draft) => draft.protagonist);
+  const tankopediaPersistentStore = TankopediaPersistent.useStore();
   const canvas = useThree((state) => state.gl.domElement);
   const hullContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
@@ -35,6 +37,32 @@ export const TankModel = memo(() => {
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
   const { gltf } = useModel(protagonist.tank.id);
   const nodes = Object.values(gltf.nodes);
+
+  useEffect(() => {
+    function handleVisibility() {
+      if (!hullContainer.current) return;
+
+      const state = tankopediaPersistentStore.getState();
+
+      hullContainer.current.visible =
+        state.mode === 'model' || state.armorMode === 'blitz';
+    }
+
+    const unsubscribes = [
+      tankopediaPersistentStore.subscribe(
+        (state) => state.mode,
+        handleVisibility,
+      ),
+      tankopediaPersistentStore.subscribe(
+        (state) => state.armorMode,
+        handleVisibility,
+      ),
+    ];
+
+    handleVisibility();
+
+    return () => unsubscribes.forEach((unsubscribe) => unsubscribe());
+  }, []);
 
   return (
     <ModelTankWrapper ref={hullContainer}>

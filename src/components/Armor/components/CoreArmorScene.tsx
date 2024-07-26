@@ -16,23 +16,7 @@ export const CoreArmorScene = memo(() => {
   const modelDefinitions = useModelDefinitions();
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
-  const tankopediaPersistentStore = TankopediaPersistent.useStore();
-  const initialTankopediaState = tankopediaPersistentStore.getState();
   const protagonist = Duel.use((draft) => draft.protagonist);
-
-  useTankTransform(protagonist, turretContainer, gunContainer);
-
-  useEffect(() => {
-    const unsubscribe = tankopediaPersistentStore.subscribe(
-      (state) => state.mode,
-      (mode) => {
-        if (wrapper.current) wrapper.current.visible = mode === 'armor';
-      },
-    );
-
-    return unsubscribe;
-  });
-
   const tank = Duel.use((state) => state.protagonist.tank);
   const track = Duel.use((state) => state.protagonist.track);
   const turret = Duel.use((state) => state.protagonist.turret);
@@ -46,6 +30,21 @@ export const CoreArmorScene = memo(() => {
   const hullOrigin = correctZYTuple(trackModelDefinition.origin);
   const turretOrigin = correctZYTuple(tankModelDefinition.turretOrigin);
   const gunOrigin = correctZYTuple(turretModelDefinition.gunOrigin);
+  const tankopediaPersistentStore = TankopediaPersistent.useStore();
+  const initialTankopediaState = tankopediaPersistentStore.getState();
+
+  useTankTransform(protagonist, turretContainer, gunContainer);
+
+  useEffect(() => {
+    const unsubscribe = tankopediaPersistentStore.subscribe(
+      (state) => state.mode,
+      (mode) => {
+        if (wrapper.current) wrapper.current.visible = mode === 'armor';
+      },
+    );
+
+    return unsubscribe;
+  });
 
   return (
     <ModelTankWrapper
