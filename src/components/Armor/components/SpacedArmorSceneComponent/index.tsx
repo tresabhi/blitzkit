@@ -5,6 +5,7 @@ import {
   Intersection,
   MeshBasicMaterial,
   MeshStandardMaterial,
+  NormalBlending,
   Object3D,
   Plane,
   Quaternion,
@@ -385,10 +386,17 @@ export function SpacedArmorSceneComponent({
           props.type === ArmorType.Core
             ? `rgb(${to255(r)}, ${to255(g)}, 0)`
             : props.type === ArmorType.Spaced
-              ? `rgb(${to255(1 - x)}, 0, ${to255(1 - x)})`
+              ? `rgb(${to255(1 - x)}, 0, ${to255(1 - 0.75 * x)})`
               : `rgb(0, 255, 255)`,
-        opacity: props.type === ArmorType.External ? 0.25 : 1,
-        transparent: props.type === ArmorType.External,
+        opacity:
+          props.type === ArmorType.External
+            ? 1 / 8
+            : props.type === ArmorType.Spaced
+              ? 7 / 8
+              : 1,
+        transparent: props.type !== ArmorType.Core,
+        blending:
+          props.type === ArmorType.Core ? NormalBlending : NormalBlending,
       }),
 
       userData: {
