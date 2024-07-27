@@ -5,7 +5,6 @@ import {
   Intersection,
   MeshBasicMaterial,
   MeshStandardMaterial,
-  NormalBlending,
   Object3D,
   Plane,
   Quaternion,
@@ -377,26 +376,35 @@ export function SpacedArmorSceneComponent({
 
   if (staticMode) {
     const x = clamp(thickness / thicknessRange.max, 0, 1);
-    const r = -((1 - x) ** 2) + 1;
-    const g = -(x ** 2) + 1;
+    const y = Math.sqrt(x);
+    const r = -((1 - y) ** 2) + 1;
+    const g = -(y ** 2) + 1;
+
+    let color: string;
+    let opacity: number;
+
+    switch (props.type) {
+      case ArmorType.Core:
+        color = `rgb(${to255(r)}, ${to255(g)}, 0)`;
+        opacity = 1;
+        break;
+
+      case ArmorType.Spaced:
+        color = `rgb(${to255(1 - y)}, 0, ${to255(0.75 * (1 - y))})`;
+        opacity = x + 0.5;
+        break;
+
+      case ArmorType.External:
+        color = `rgb(0, 255, 255)`;
+        opacity = 1 / 8;
+        break;
+    }
 
     return jsxTree(node, {
       material: new MeshStandardMaterial({
-        color:
-          props.type === ArmorType.Core
-            ? `rgb(${to255(r)}, ${to255(g)}, 0)`
-            : props.type === ArmorType.Spaced
-              ? `rgb(${to255(1 - x)}, 0, ${to255(1 - 0.75 * x)})`
-              : `rgb(0, 255, 255)`,
-        opacity:
-          props.type === ArmorType.External
-            ? 1 / 8
-            : props.type === ArmorType.Spaced
-              ? 7 / 8
-              : 1,
-        transparent: props.type !== ArmorType.Core,
-        blending:
-          props.type === ArmorType.Core ? NormalBlending : NormalBlending,
+        color,
+        opacity,
+        transparent: opacity !== 1,
       }),
 
       userData: {

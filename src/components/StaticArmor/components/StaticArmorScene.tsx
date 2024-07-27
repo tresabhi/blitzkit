@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import { Group, Plane, Scene, Vector3 } from 'three';
 import { correctZYTuple } from '../../../core/blitz/correctZYTuple';
 import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
@@ -9,6 +9,7 @@ import { useModel } from '../../../hooks/useModel';
 import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
 import { useTankTransform } from '../../../hooks/useTankTransform';
 import * as Duel from '../../../stores/duel';
+import * as TankopediaPersistent from '../../../stores/tankopediaPersistent';
 import { ModelTankWrapper } from '../../Armor/components/ModelTankWrapper';
 import { ArmorType } from '../../Armor/components/SpacedArmorScene';
 import { SpacedArmorSceneComponent } from '../../Armor/components/SpacedArmorSceneComponent';
@@ -25,6 +26,7 @@ export interface ThicknessRange {
 export const StaticArmorScene = memo<StaticArmorSceneProps>(
   ({ scene, awaitedTankDefinitions }) => {
     const wrapper = useRef<Group>(null);
+    const tankopediaPersistentStore = TankopediaPersistent.useStore();
     const awaitedTankModelDefinitions = useModelDefinitions();
     const turretContainer = useRef<Group>(null);
     const gunContainer = useRef<Group>(null);
@@ -48,12 +50,16 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
       gunModelDefinition.mask === undefined
         ? undefined
         : gunModelDefinition.mask + hullOrigin.y + turretOrigin.y + gunOrigin.y;
+    let thisTankThicknesses: number[] = [];
     const thicknessRange = useMemo(() => {
       const thicknesses = Object.values(awaitedTankDefinitions)
         .filter((thisTank) => thisTank.tier === tank.tier)
-        .map((tank) => awaitedTankModelDefinitions[tank.id])
+        .map((tank) => ({
+          model: awaitedTankModelDefinitions[tank.id],
+          id: tank.id,
+        }))
         .filter(Boolean)
-        .map((model) => {
+        .map(({ model, id }) => {
           const tankThicknesses = Object.values(model.armor.thickness);
           const trackThicknesses = Object.values(model.tracks)
             .map((track) => track.thickness)
@@ -71,20 +77,43 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
             })
             .flat();
 
-          return [
+          const totalThicknesses = [
             ...tankThicknesses,
             ...trackThicknesses,
             ...turretThicknesses,
           ];
+
+          if (id === tank.id) thisTankThicknesses = totalThicknesses;
+
+          return totalThicknesses;
         })
         .flat();
 
-      const max = Math.max(...thicknesses) * 0.75;
+      // const maxOfAll = Math.max(...thicknesses) * 0.75;
+      // const max = Math.max(...thisTankThicknesses, maxOfAll);
+
+      const max = Math.max(...thicknesses);
 
       return { max } satisfies ThicknessRange;
     }, [tank.tier]);
 
     useTankTransform(protagonist, turretContainer, gunContainer);
+
+    useEffect(() => {
+      function handleMode(mode: TankopediaPersistent.TankopediaMode) {
+        if (!wrapper.current) return;
+        wrapper.current.visible = mode === 'armor';
+      }
+
+      const unsubscribe = tankopediaPersistentStore.subscribe(
+        (state) => state.mode,
+        handleMode,
+      );
+
+      handleMode(tankopediaPersistentStore.getState().mode);
+
+      return unsubscribe;
+    }, []);
 
     return (
       <ModelTankWrapper ref={wrapper}>
