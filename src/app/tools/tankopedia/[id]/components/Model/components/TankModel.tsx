@@ -90,7 +90,10 @@ export const TankModel = memo(() => {
         }
 
         function onPointerDown(event: ThreeEvent<PointerEvent>) {
-          if (isTrack) {
+          if (
+            isTrack &&
+            tankopediaPersistentStore.getState().mode === 'model'
+          ) {
             position.set(event.clientX, event.clientY);
             event.stopPropagation();
 
