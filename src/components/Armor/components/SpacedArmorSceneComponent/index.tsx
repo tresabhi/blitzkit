@@ -32,7 +32,6 @@ function to255(value: number) {
 }
 
 type SpacedArmorSceneComponentProps = {
-  name: string;
   node: Object3D;
   thickness: number;
   scene: Scene;
@@ -52,6 +51,7 @@ type SpacedArmorSceneComponentProps = {
       }
     | {
         static: true;
+        name: string;
         thicknessRange: ThicknessRange;
       }
   );
@@ -84,7 +84,6 @@ const unselectedColor = new Color(0x404040);
  */
 export function SpacedArmorSceneComponent({
   node,
-  name,
   thickness,
   scene,
   clip,
@@ -421,11 +420,13 @@ export function SpacedArmorSceneComponent({
      */
     useEffect(() => {
       function handleHighlightArmor(thisName?: string) {
+        if (!props.static) return;
+
         if (thisName === undefined) {
           // nothing selected, go back to defaults
           material.opacity = opacity;
           material.color = color;
-        } else if (thisName === name) {
+        } else if (thisName === props.name) {
           // this selected, stand out!
           material.opacity = 1;
           material.color = color;
@@ -459,7 +460,7 @@ export function SpacedArmorSceneComponent({
           : (event) => {
               event.stopPropagation();
               mutateTankopediaEphemeralStore((draft) => {
-                draft.highlightArmor = name;
+                draft.highlightArmor = props.name;
               });
             },
     });
