@@ -5,6 +5,7 @@ import {
   Color,
   Intersection,
   MeshBasicMaterial,
+  MeshStandardMaterial,
   Object3D,
   Plane,
   Quaternion,
@@ -406,7 +407,7 @@ export function SpacedArmorSceneComponent({
 
     opacity = clamp(opacity, 0, 1);
 
-    const material = new MeshBasicMaterial({
+    const material = new MeshStandardMaterial({
       color,
       opacity,
       transparent: true,
