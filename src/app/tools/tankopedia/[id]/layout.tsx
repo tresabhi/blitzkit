@@ -6,6 +6,7 @@ import { tankIcon } from '../../../../core/blitzkit/tankIcon';
 import strings from '../../../../lang/en-US.json';
 import * as Duel from '../../../../stores/duel';
 import * as TankFilters from '../../../../stores/tankFilters';
+import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 
 export default async function Layout({
   children,
@@ -24,21 +25,23 @@ export default async function Layout({
   const description = `Statistics, armor, and equipment for ${tank.name}`;
 
   return (
-    <TankFilters.Provider>
-      <Duel.Provider
-        data={{
-          tank: awaitedTankDefinitions[id],
-          provisionDefinitions: awaitedProvisionDefinitions,
-        }}
-      >
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta property="og:title" content={title} />
-        <meta property="og:image" content={tankIcon(id)} />
-        <meta property="og:description" content={description} />
+    <TankopediaEphemeral.Provider>
+      <TankFilters.Provider>
+        <Duel.Provider
+          data={{
+            tank: awaitedTankDefinitions[id],
+            provisionDefinitions: awaitedProvisionDefinitions,
+          }}
+        >
+          <title>{title}</title>
+          <meta name="description" content={description} />
+          <meta property="og:title" content={title} />
+          <meta property="og:image" content={tankIcon(id)} />
+          <meta property="og:description" content={description} />
 
-        {children}
-      </Duel.Provider>
-    </TankFilters.Provider>
+          {children}
+        </Duel.Provider>
+      </TankFilters.Provider>
+    </TankopediaEphemeral.Provider>
   );
 }
