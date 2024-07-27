@@ -109,14 +109,16 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
           if (!isVisible || thickness === undefined) return null;
 
           return (
-            <group key={node.uuid} position={turretOrigin}>
-              <SpacedArmorSceneComponent
-                scene={scene}
-                key={node.uuid}
-                type={spaced ? ArmorType.Spaced : ArmorType.Core}
-                thickness={thickness}
-                node={node}
-              />
+            <group position={hullOrigin}>
+              <group key={node.uuid} position={turretOrigin}>
+                <SpacedArmorSceneComponent
+                  scene={scene}
+                  key={node.uuid}
+                  type={spaced ? ArmorType.Spaced : ArmorType.Core}
+                  thickness={thickness}
+                  node={node}
+                />
+              </group>
             </group>
           );
         })}
@@ -136,16 +138,18 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
             if (!isVisible || thickness === undefined) return null;
 
             return (
-              <group
-                key={node.uuid}
-                position={turretOrigin.clone().add(gunOrigin)}
-              >
-                <SpacedArmorSceneComponent
-                  scene={scene}
-                  type={spaced ? ArmorType.Spaced : ArmorType.Core}
-                  thickness={thickness}
-                  node={node}
-                />
+              <group position={hullOrigin}>
+                <group
+                  key={node.uuid}
+                  position={turretOrigin.clone().add(gunOrigin)}
+                >
+                  <SpacedArmorSceneComponent
+                    scene={scene}
+                    type={spaced ? ArmorType.Spaced : ArmorType.Core}
+                    thickness={thickness}
+                    node={node}
+                  />
+                </group>
               </group>
             );
           })}

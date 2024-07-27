@@ -88,12 +88,14 @@ export const CoreArmorScene = memo(() => {
           if (!isVisible || spaced || thickness === undefined) return null;
 
           return (
-            <group key={node.uuid} position={turretOrigin}>
-              <CoreArmorSceneComponent
-                key={node.uuid}
-                thickness={thickness}
-                node={node}
-              />
+            <group position={hullOrigin}>
+              <group key={node.uuid} position={turretOrigin}>
+                <CoreArmorSceneComponent
+                  key={node.uuid}
+                  thickness={thickness}
+                  node={node}
+                />
+              </group>
             </group>
           );
         })}
@@ -113,11 +115,13 @@ export const CoreArmorScene = memo(() => {
             if (!isVisible || spaced || thickness === undefined) return null;
 
             return (
-              <group
-                key={node.uuid}
-                position={turretOrigin.clone().add(gunOrigin)}
-              >
-                <CoreArmorSceneComponent thickness={thickness} node={node} />
+              <group position={hullOrigin}>
+                <group
+                  key={node.uuid}
+                  position={turretOrigin.clone().add(gunOrigin)}
+                >
+                  <CoreArmorSceneComponent thickness={thickness} node={node} />
+                </group>
               </group>
             );
           })}
