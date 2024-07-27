@@ -4,7 +4,6 @@ import { useCallback } from 'react';
 import {
   Intersection,
   MeshBasicMaterial,
-  MeshStandardMaterial,
   Object3D,
   Plane,
   Quaternion,
@@ -31,12 +30,10 @@ function to255(value: number) {
 }
 
 type SpacedArmorSceneComponentProps = {
-  static?: boolean;
   node: Object3D;
   thickness: number;
   scene: Scene;
   clip?: Plane;
-  thicknessRange: ThicknessRange;
 } & (
   | {
       type: Exclude<ArmorType, ArmorType.External>;
@@ -45,7 +42,16 @@ type SpacedArmorSceneComponentProps = {
       type: ArmorType.External;
       variant: ExternalModuleVariant;
     }
-);
+) &
+  (
+    | {
+        static?: false;
+      }
+    | {
+        static: true;
+        thicknessRange: ThicknessRange;
+      }
+  );
 
 export type ExternalModuleVariant = 'gun' | 'track';
 export type ArmorUserData = {
@@ -77,8 +83,6 @@ export function SpacedArmorSceneComponent({
   thickness,
   scene,
   clip,
-  static: staticMode,
-  thicknessRange,
   ...props
 }: SpacedArmorSceneComponentProps) {
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
@@ -374,14 +378,16 @@ export function SpacedArmorSceneComponent({
     [camera],
   );
 
-  if (staticMode) {
-    const x = clamp(thickness / thicknessRange.quartile, 0, 1);
+  if (props.static) {
+    const x = clamp(thickness / props.thicknessRange.quartile, 0, 1);
     const y = Math.sqrt(x);
     const r = -((1 - y) ** 2) + 1;
     const g = -(y ** 2) + 1;
 
     let color: string;
     let opacity: number;
+    let renderOrder = 1;
+    let depthWrite = true;
 
     switch (props.type) {
       case ArmorType.Core:
@@ -397,15 +403,20 @@ export function SpacedArmorSceneComponent({
       case ArmorType.External:
         color = `rgb(0, 255, 255)`;
         opacity = 1 / 8;
+        renderOrder = 0;
+        depthWrite = false;
         break;
     }
 
     return jsxTree(node, {
-      material: new MeshStandardMaterial({
+      material: new MeshBasicMaterial({
         color,
         opacity,
-        transparent: opacity !== 1,
+        transparent: opacity < 1,
+        depthWrite,
       }),
+
+      renderOrder,
 
       userData: {
         type: props.type,
