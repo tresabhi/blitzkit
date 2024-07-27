@@ -375,7 +375,7 @@ export function SpacedArmorSceneComponent({
   );
 
   if (staticMode) {
-    const x = clamp(thickness / thicknessRange.max, 0, 1);
+    const x = clamp(thickness / thicknessRange.quartile, 0, 1);
     const y = Math.sqrt(x);
     const r = -((1 - y) ** 2) + 1;
     const g = -(y ** 2) + 1;

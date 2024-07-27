@@ -20,7 +20,8 @@ interface StaticArmorSceneProps {
 }
 
 export interface ThicknessRange {
-  max: number;
+  // max: number;
+  quartile: number;
 }
 
 export const StaticArmorScene = memo<StaticArmorSceneProps>(
@@ -61,27 +62,17 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
         .filter(Boolean)
         .map(({ model, id }) => {
           const tankThicknesses = Object.values(model.armor.thickness);
-          const trackThicknesses = Object.values(model.tracks)
-            .map((track) => track.thickness)
-            .flat();
           const turretThicknesses = Object.values(model.turrets)
             .map((turret) => {
               const turretThicknesses = Object.values(turret.armor.thickness);
               const gunThicknesses = Object.values(turret.guns)
-                .map((gun) => {
-                  return Object.values(gun.armor.thickness);
-                })
+                .map((gun) => Object.values(gun.armor.thickness))
                 .flat();
 
               return [...turretThicknesses, ...gunThicknesses];
             })
             .flat();
-
-          const totalThicknesses = [
-            ...tankThicknesses,
-            ...trackThicknesses,
-            ...turretThicknesses,
-          ];
+          const totalThicknesses = [...tankThicknesses, ...turretThicknesses];
 
           if (id === tank.id) thisTankThicknesses = totalThicknesses;
 
@@ -89,12 +80,22 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
         })
         .flat();
 
-      // const maxOfAll = Math.max(...thicknesses) * 0.75;
-      // const max = Math.max(...thisTankThicknesses, maxOfAll);
+      const sortedThicknesses = thicknesses.sort((a, b) => a - b);
+      const quartileIndex = (1 - 2 ** -6) * (sortedThicknesses.length + 1) - 1;
+      let quartile: number;
 
-      const max = Math.max(...thicknesses);
+      if (Number.isInteger(quartileIndex)) {
+        quartile = sortedThicknesses[quartileIndex];
+      } else {
+        quartile =
+          (sortedThicknesses[Math.floor(quartileIndex)] +
+            sortedThicknesses[Math.ceil(quartileIndex)]) /
+          2;
+      }
 
-      return { max } satisfies ThicknessRange;
+      console.log('quartile', quartile);
+
+      return { quartile } satisfies ThicknessRange;
     }, [tank.tier]);
 
     useTankTransform(protagonist, turretContainer, gunContainer);
