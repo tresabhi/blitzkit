@@ -1,6 +1,6 @@
 import { useThree } from '@react-three/fiber';
 import { clamp } from 'lodash';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import {
   Color,
   Intersection,
@@ -377,8 +377,6 @@ export function SpacedArmorSceneComponent({
   if (props.static) {
     const x = clamp(thickness / props.thicknessRange.quartile, 0, 1);
     const y = Math.sqrt(x);
-    const r = -((1 - y) ** 2) + 1;
-    const g = -(y ** 2) + 1;
 
     let color: Color;
     let opacity: number;
@@ -387,7 +385,7 @@ export function SpacedArmorSceneComponent({
 
     switch (props.type) {
       case ArmorType.Core:
-        color = new Color(r, g, 0);
+        color = new Color(-((1 - y) ** 2) + 1, -(y ** 2) + 1, 0);
         opacity = 1;
         break;
 
@@ -406,13 +404,17 @@ export function SpacedArmorSceneComponent({
 
     opacity = clamp(opacity, 0, 1);
 
-    const material = new MeshStandardMaterial({
-      color,
-      opacity,
-      transparent: true,
-      depthWrite,
-      ...(clip ? { clippingPlanes: [clip] } : {}),
-    });
+    const material = useMemo(
+      () =>
+        new MeshStandardMaterial({
+          color,
+          opacity,
+          transparent: true,
+          depthWrite,
+          ...(clip ? { clippingPlanes: [clip] } : {}),
+        }),
+      [],
+    );
 
     /**
      * hook inside an if statement?? don't panic! I assure you the static prop
@@ -425,14 +427,17 @@ export function SpacedArmorSceneComponent({
         if (thisName === undefined) {
           // nothing selected, go back to defaults
           material.opacity = opacity;
+          material.transparent = true;
           material.color = color;
         } else if (thisName === props.name) {
           // this selected, stand out!
           material.opacity = 1;
+          material.transparent = false;
           material.color = color;
         } else {
           // something else selected, become background
           material.opacity = 1 / 4;
+          material.transparent = true;
           material.color = unselectedColor;
         }
       }
@@ -443,9 +448,11 @@ export function SpacedArmorSceneComponent({
       );
 
       return unsubscribe;
-    });
+    }, []);
 
     return jsxTree(node, {
+      castShadow: true,
+      receiveShadow: true,
       material,
       renderOrder,
       userData: {

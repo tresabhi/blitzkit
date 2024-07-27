@@ -163,6 +163,7 @@ export const TankModel = memo(() => {
               });
               mutateTankopediaTemporary((draft) => {
                 draft.shot = undefined;
+                draft.highlightArmor = undefined;
               });
               window.addEventListener('pointermove', handlePointerMove);
               window.addEventListener('pointerup', handlePointerUp);
@@ -239,6 +240,7 @@ export const TankModel = memo(() => {
               });
               mutateTankopediaTemporary((draft) => {
                 draft.shot = undefined;
+                draft.highlightArmor = undefined;
               });
 
               position.set(event.clientX, event.clientY);
