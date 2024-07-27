@@ -93,8 +93,6 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
           2;
       }
 
-      console.log('quartile', quartile);
-
       return { quartile } satisfies ThicknessRange;
     }, [tank.tier]);
 
