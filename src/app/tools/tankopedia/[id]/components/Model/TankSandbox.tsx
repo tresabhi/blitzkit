@@ -132,6 +132,7 @@ export function TankSandbox() {
       onPointerMissed={() => {
         mutateTankopediaEphemeral((draft) => {
           draft.shot = undefined;
+          draft.highlightArmor = undefined;
         });
       }}
       style={{ userSelect: 'none' }}

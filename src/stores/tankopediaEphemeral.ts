@@ -11,6 +11,7 @@ interface TankopediaEphemeral {
   shot?: Shot;
   skills: Record<string, number>;
   controlsEnabled: boolean;
+  highlightArmor?: string;
 }
 
 export interface ShotLayerBase {

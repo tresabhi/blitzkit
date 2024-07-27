@@ -1,7 +1,8 @@
-import { ThreeEvent, useThree } from '@react-three/fiber';
+import { useThree } from '@react-three/fiber';
 import { clamp } from 'lodash';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
+  Color,
   Intersection,
   MeshBasicMaterial,
   Object3D,
@@ -30,6 +31,7 @@ function to255(value: number) {
 }
 
 type SpacedArmorSceneComponentProps = {
+  name: string;
   node: Object3D;
   thickness: number;
   scene: Scene;
@@ -70,6 +72,7 @@ const omitMaterial = new MeshBasicMaterial({
   colorWrite: false,
   depthWrite: true,
 });
+const unselectedColor = new Color(0x404040);
 
 /**
  * Render orders allocations:
@@ -80,12 +83,14 @@ const omitMaterial = new MeshBasicMaterial({
  */
 export function SpacedArmorSceneComponent({
   node,
+  name,
   thickness,
   scene,
   clip,
   ...props
 }: SpacedArmorSceneComponentProps) {
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
+  const mutateTankopediaEphemeralStore = TankopediaEphemeral.useMutation();
   const camera = useThree((state) => state.camera);
   const duelStore = Duel.useStore();
 
@@ -369,61 +374,93 @@ export function SpacedArmorSceneComponent({
     [camera],
   );
 
-  const onClick = useCallback(
-    async (event: ThreeEvent<MouseEvent>) => {
-      event.stopPropagation();
-      const shot = (await shoot(event.point, event.intersections, true))!;
-      tankopediaEphemeralStore.setState({ shot });
-    },
-    [camera],
-  );
-
   if (props.static) {
     const x = clamp(thickness / props.thicknessRange.quartile, 0, 1);
     const y = Math.sqrt(x);
     const r = -((1 - y) ** 2) + 1;
     const g = -(y ** 2) + 1;
 
-    let color: string;
+    let color: Color;
     let opacity: number;
     let renderOrder = 1;
     let depthWrite = true;
 
     switch (props.type) {
       case ArmorType.Core:
-        color = `rgb(${to255(r)}, ${to255(g)}, 0)`;
+        color = new Color(r, g, 0);
         opacity = 1;
         break;
 
       case ArmorType.Spaced:
-        color = `rgb(${to255(1 - y)}, 0, ${to255(0.75 * (1 - y))})`;
+        color = new Color(1 - y, 0, 0.75 * (1 - y));
         opacity = x + 0.5;
         break;
 
       case ArmorType.External:
-        color = `rgb(0, 255, 255)`;
+        color = unselectedColor;
         opacity = 1 / 8;
         renderOrder = 0;
         depthWrite = false;
         break;
     }
 
+    opacity = clamp(opacity, 0, 1);
+
+    const material = new MeshBasicMaterial({
+      color,
+      opacity,
+      transparent: true,
+      depthWrite,
+      ...(clip ? { clippingPlanes: [clip] } : {}),
+    });
+
+    /**
+     * hook inside an if statement?? don't panic! I assure you the static prop
+     * never mutates :)
+     */
+    useEffect(() => {
+      function handleHighlightArmor(thisName?: string) {
+        if (thisName === undefined) {
+          // nothing selected, go back to defaults
+          material.opacity = opacity;
+          material.color = color;
+        } else if (thisName === name) {
+          // this selected, stand out!
+          material.opacity = 1;
+          material.color = color;
+        } else {
+          // something else selected, become background
+          material.opacity = 1 / 4;
+          material.color = unselectedColor;
+        }
+      }
+
+      const unsubscribe = tankopediaEphemeralStore.subscribe(
+        (state) => state.highlightArmor,
+        handleHighlightArmor,
+      );
+
+      return unsubscribe;
+    });
+
     return jsxTree(node, {
-      material: new MeshBasicMaterial({
-        color,
-        opacity,
-        transparent: opacity < 1,
-        depthWrite,
-      }),
-
+      material,
       renderOrder,
-
       userData: {
         type: props.type,
         variant: props.type === ArmorType.External ? props.variant : 'gun',
         thickness,
       } satisfies ArmorUserData,
-      onClick: props.type === ArmorType.Core ? onClick : () => {},
+
+      onClick:
+        props.type === ArmorType.External
+          ? undefined
+          : (event) => {
+              event.stopPropagation();
+              mutateTankopediaEphemeralStore((draft) => {
+                draft.highlightArmor = name;
+              });
+            },
     });
   }
 
@@ -439,7 +476,15 @@ export function SpacedArmorSceneComponent({
               type: ArmorType.Core,
               thickness,
             } satisfies ArmorUserData,
-            onClick,
+            async onClick(event) {
+              event.stopPropagation();
+              const shot = (await shoot(
+                event.point,
+                event.intersections,
+                true,
+              ))!;
+              tankopediaEphemeralStore.setState({ shot });
+            },
           },
           node.uuid,
         )}

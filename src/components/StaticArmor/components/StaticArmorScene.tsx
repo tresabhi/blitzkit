@@ -130,6 +130,7 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
 
             return (
               <SpacedArmorSceneComponent
+                name={node.name}
                 thicknessRange={thicknessRange}
                 static
                 scene={scene}
@@ -151,6 +152,7 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
 
           return (
             <SpacedArmorSceneComponent
+              name={node.name}
               thicknessRange={thicknessRange}
               static
               scene={scene}
@@ -181,6 +183,7 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
               <group position={hullOrigin}>
                 <group key={node.uuid} position={turretOrigin}>
                   <SpacedArmorSceneComponent
+                    name={node.name}
                     thicknessRange={thicknessRange}
                     static
                     scene={scene}
@@ -215,6 +218,7 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
                     position={turretOrigin.clone().add(gunOrigin)}
                   >
                     <SpacedArmorSceneComponent
+                      name={node.name}
                       thicknessRange={thicknessRange}
                       static
                       scene={scene}
@@ -238,6 +242,7 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
 
               return (
                 <SpacedArmorSceneComponent
+                  name={node.name}
                   thicknessRange={thicknessRange}
                   static
                   scene={scene}
