@@ -399,14 +399,7 @@ export const TankSearch = memo<TankSearchProps>(
           <FilterControl compact={compact} />
         )}
 
-        <Flex
-          py="2"
-          mt="2"
-          gap="1"
-          align="center"
-          justify="center"
-          direction="column"
-        >
+        <Flex mt="2" gap="1" align="center" justify="center" direction="column">
           <Flex gap="2">
             <Text color="gray">
               {tanksFiltered.length} tank{tanksFiltered.length === 1 ? '' : 's'}
