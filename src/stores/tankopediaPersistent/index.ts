@@ -7,14 +7,11 @@ import { ENVIRONMENTS } from '../../app/tools/tankopedia/[id]/components/Lightin
 import { TankClass, TreeType } from '../../components/Tanks';
 import { Tier } from '../../core/blitzkit/tankDefinitions';
 import { createNextSafeStore } from '../../core/zustand/createNextSafeStore';
-import { SORT_NAMES } from './constants';
+import { SORT_NAMES, TankopediaDisplay } from './constants';
 
 export type TankopediaSortBy = keyof typeof SORT_NAMES;
 export type TankopediaSortDirection = 'ascending' | 'descending';
 export type TankopediaTestTankDisplay = 'include' | 'exclude' | 'only';
-export type TankopediaMode = 'model' | 'armor';
-export type TankopediaArmorMode = 'blitz' | 'static';
-
 export interface TankopediaPersistent {
   model: {
     visual: {
@@ -39,8 +36,7 @@ export interface TankopediaPersistent {
     test: TankopediaTestTankDisplay;
     page: number;
   };
-  mode: TankopediaMode;
-  armorMode: TankopediaArmorMode;
+  display: TankopediaDisplay;
 }
 
 export const { Provider, use, useMutation, useStore } = createNextSafeStore(
@@ -71,8 +67,7 @@ export const { Provider, use, useMutation, useStore } = createNextSafeStore(
             test: 'include',
             page: 0,
           },
-          mode: 'model',
-          armorMode: 'blitz',
+          display: TankopediaDisplay.Model,
         })),
         { name: 'tankopedia', merge: (a, b) => merge(b, a) },
       ),

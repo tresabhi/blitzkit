@@ -58,3 +58,8 @@ export const SORT_NAMES = {
   'maneuverability.weight': 'weight',
   'maneuverability.traverseSpeed': 'traverse speed',
 } as const;
+export enum TankopediaDisplay {
+  Model,
+  DynamicArmor,
+  StaticArmor,
+}

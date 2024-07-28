@@ -18,7 +18,7 @@
     "start:bot": "bun dist/bot/index.js",
     "start:website": "next start",
     "host:docs": "vitepress preview docs",
-    "lint": "npx tsc",
+    "lint": "tsc",
     "lint:website": "next lint",
     "format": "prettier --write \"**/*.@(json|js|jsx|css|md|ts|tsx|html|xml|yml|gltf)\"",
     "knip": "knip",
@@ -103,7 +103,7 @@
     "knip": "^3.13.2",
     "prettier": "^3.3.2",
     "prisma": "^5.16.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   },
   "packageManager": "yarn@1.22.1",
   "trustedDependencies": [

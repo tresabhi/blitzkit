@@ -14,8 +14,8 @@ import {
   Heading,
   IconButton,
   Popover,
+  SegmentedControl,
   Strong,
-  Switch,
   Tabs,
   Text,
 } from '@radix-ui/themes';
@@ -25,6 +25,7 @@ import { SmallTankIcon } from '../../../../../../../components/SmallTankIcon';
 import { resolveNearPenetration } from '../../../../../../../core/blitz/resolveNearPenetration';
 import { resolvePenetrationCoefficient } from '../../../../../../../core/blitz/resolvePenetrationCoefficient';
 import { asset } from '../../../../../../../core/blitzkit/asset';
+import { imgur } from '../../../../../../../core/blitzkit/imgur';
 import { Pose, poseEvent } from '../../../../../../../core/blitzkit/pose';
 import {
   SHELL_NAMES,
@@ -38,6 +39,7 @@ import * as App from '../../../../../../../stores/app';
 import * as Duel from '../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
 import * as TankopediaPersistent from '../../../../../../../stores/tankopediaPersistent';
+import { TankopediaDisplay } from '../../../../../../../stores/tankopediaPersistent/constants';
 import { TankSearch } from '../../../../components/TankSearch';
 import { ENVIRONMENTS } from '../../Lighting';
 import { RotationInputs } from '../../QuickInputs';
@@ -45,9 +47,10 @@ import { RotationInputs } from '../../QuickInputs';
 export function Options() {
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
-  const modeRaw = TankopediaPersistent.use((state) => state.mode);
-  const [mode, setMode] =
-    useState<TankopediaPersistent.TankopediaMode>('model');
+  const displayRaw = TankopediaPersistent.use((state) => state.display);
+  const [display, setDisplay] = useState<TankopediaDisplay>(
+    TankopediaDisplay.Model,
+  );
   const isFullScreen = useFullScreen();
   const showGrid = TankopediaPersistent.use(
     (state) => state.model.visual.showGrid,
@@ -81,7 +84,7 @@ export function Options() {
   const hasEnhancedArmor = useEquipment(110);
   const antagonistUniqueGuns = uniqueGuns(antagonistTank.turrets);
 
-  useEffect(() => setMode(modeRaw), [modeRaw]);
+  useEffect(() => setDisplay(displayRaw), [displayRaw]);
 
   return (
     <>
@@ -112,7 +115,7 @@ export function Options() {
 
       <RotationInputs />
 
-      {mode === 'armor' && (
+      {display === TankopediaDisplay.DynamicArmor && (
         <Flex
           gap="2"
           direction="column"
@@ -309,7 +312,7 @@ export function Options() {
         align="center"
         gap="2"
       >
-        {mode === 'armor' && (
+        {display === TankopediaDisplay.DynamicArmor && (
           <Flex align="center" gap="2">
             <Text color="gray" size="2">
               Shooter:
@@ -470,25 +473,30 @@ export function Options() {
         )}
 
         <Flex gap="3" align="center">
-          <Flex
-            style={{
-              cursor: 'default',
-              userSelect: 'none',
-            }}
-            align="center"
-            gap="2"
-            onClick={() => {
+          <SegmentedControl.Root
+            value={`${display}`}
+            onValueChange={(value) => {
               mutateTankopediaPersistent((draft) => {
-                draft.mode = draft.mode === 'armor' ? 'model' : 'armor';
+                draft.display = Number(value);
               });
             }}
-            mr="1"
           >
-            <Switch size="1" checked={mode === 'armor'} />
-            <Text color="gray" size="2">
-              Armor
-            </Text>
-          </Flex>
+            <SegmentedControl.Item value={`${TankopediaDisplay.Model}`}>
+              <Flex height="100%" align="center">
+                <img src={imgur('jAdYf0m')} style={{ height: '1.5em' }} />
+              </Flex>
+            </SegmentedControl.Item>
+            <SegmentedControl.Item value={`${TankopediaDisplay.DynamicArmor}`}>
+              <Flex height="100%" align="center">
+                <img src={imgur('oe4Cq0g')} style={{ height: '1.5em' }} />
+              </Flex>
+            </SegmentedControl.Item>
+            <SegmentedControl.Item value={`${TankopediaDisplay.StaticArmor}`}>
+              <Flex height="100%" align="center">
+                <img src={imgur('VQ4uDno')} style={{ height: '1.5em' }} />
+              </Flex>
+            </SegmentedControl.Item>
+          </SegmentedControl.Root>
 
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
@@ -511,7 +519,6 @@ export function Options() {
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
-
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
               <IconButton variant="ghost" color="gray">
@@ -520,7 +527,7 @@ export function Options() {
             </DropdownMenu.Trigger>
 
             <DropdownMenu.Content>
-              {mode === 'armor' && (
+              {display !== TankopediaDisplay.Model && (
                 <>
                   <DropdownMenu.Label>Armor</DropdownMenu.Label>
 
@@ -622,7 +629,6 @@ export function Options() {
               </DropdownMenu.Sub>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
-
           {fullScreenAvailable && (
             <IconButton
               color="gray"

@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef } from 'react';
+import { memo, useMemo, useRef } from 'react';
 import { Group, Plane, Scene, Vector3 } from 'three';
 import { correctZYTuple } from '../../../core/blitz/correctZYTuple';
 import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
@@ -9,7 +9,6 @@ import { useModel } from '../../../hooks/useModel';
 import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
 import { useTankTransform } from '../../../hooks/useTankTransform';
 import * as Duel from '../../../stores/duel';
-import * as TankopediaPersistent from '../../../stores/tankopediaPersistent';
 import { ModelTankWrapper } from '../../Armor/components/ModelTankWrapper';
 import { ArmorType } from '../../Armor/components/SpacedArmorScene';
 import { SpacedArmorSceneComponent } from '../../Armor/components/SpacedArmorSceneComponent';
@@ -27,7 +26,6 @@ export interface ThicknessRange {
 export const StaticArmorScene = memo<StaticArmorSceneProps>(
   ({ scene, awaitedTankDefinitions }) => {
     const wrapper = useRef<Group>(null);
-    const tankopediaPersistentStore = TankopediaPersistent.useStore();
     const awaitedTankModelDefinitions = useModelDefinitions();
     const turretContainer = useRef<Group>(null);
     const gunContainer = useRef<Group>(null);
@@ -97,22 +95,6 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
     }, [tank.tier]);
 
     useTankTransform(protagonist, turretContainer, gunContainer);
-
-    useEffect(() => {
-      function handleMode(mode: TankopediaPersistent.TankopediaMode) {
-        if (!wrapper.current) return;
-        wrapper.current.visible = mode === 'armor';
-      }
-
-      const unsubscribe = tankopediaPersistentStore.subscribe(
-        (state) => state.mode,
-        handleMode,
-      );
-
-      handleMode(tankopediaPersistentStore.getState().mode);
-
-      return unsubscribe;
-    }, []);
 
     return (
       <ModelTankWrapper ref={wrapper}>

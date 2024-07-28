@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from 'react';
+import { memo, useRef } from 'react';
 import { Group } from 'three';
 import { correctZYTuple } from '../../../core/blitz/correctZYTuple';
 import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
@@ -31,26 +31,11 @@ export const CoreArmorScene = memo(() => {
   const turretOrigin = correctZYTuple(tankModelDefinition.turretOrigin);
   const gunOrigin = correctZYTuple(turretModelDefinition.gunOrigin);
   const tankopediaPersistentStore = TankopediaPersistent.useStore();
-  const initialTankopediaState = tankopediaPersistentStore.getState();
 
   useTankTransform(protagonist, turretContainer, gunContainer);
 
-  useEffect(() => {
-    const unsubscribe = tankopediaPersistentStore.subscribe(
-      (state) => state.mode,
-      (mode) => {
-        if (wrapper.current) wrapper.current.visible = mode === 'armor';
-      },
-    );
-
-    return unsubscribe;
-  });
-
   return (
-    <ModelTankWrapper
-      ref={wrapper}
-      visible={initialTankopediaState.mode === 'armor'}
-    >
+    <ModelTankWrapper ref={wrapper}>
       <group position={hullOrigin}>
         {armorNodes.map((node) => {
           const isHull = node.name.startsWith('hull_');

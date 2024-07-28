@@ -1,5 +1,5 @@
 import { ThreeEvent, useThree } from '@react-three/fiber';
-import { memo, useEffect, useRef } from 'react';
+import { memo, useRef } from 'react';
 import { Group, Mesh, MeshStandardMaterial, Vector2 } from 'three';
 import { ModelTankWrapper } from '../../../../../../../components/Armor/components/ModelTankWrapper';
 import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
@@ -14,6 +14,7 @@ import { useTankTransform } from '../../../../../../../hooks/useTankTransform';
 import * as Duel from '../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
 import * as TankopediaPersistent from '../../../../../../../stores/tankopediaPersistent';
+import { TankopediaDisplay } from '../../../../../../../stores/tankopediaPersistent/constants';
 
 export const TankModel = memo(() => {
   const mutateDuel = Duel.useMutation();
@@ -37,32 +38,6 @@ export const TankModel = memo(() => {
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
   const { gltf } = useModel(protagonist.tank.id);
   const nodes = Object.values(gltf.nodes);
-
-  useEffect(() => {
-    function handleVisibility() {
-      if (!hullContainer.current) return;
-
-      const state = tankopediaPersistentStore.getState();
-
-      hullContainer.current.visible =
-        state.mode === 'model' || state.armorMode === 'blitz';
-    }
-
-    const unsubscribes = [
-      tankopediaPersistentStore.subscribe(
-        (state) => state.mode,
-        handleVisibility,
-      ),
-      tankopediaPersistentStore.subscribe(
-        (state) => state.armorMode,
-        handleVisibility,
-      ),
-    ];
-
-    handleVisibility();
-
-    return () => unsubscribes.forEach((unsubscribe) => unsubscribe());
-  }, []);
 
   return (
     <ModelTankWrapper ref={hullContainer}>
@@ -92,7 +67,8 @@ export const TankModel = memo(() => {
         function onPointerDown(event: ThreeEvent<PointerEvent>) {
           if (
             isTrack &&
-            tankopediaPersistentStore.getState().mode === 'model'
+            tankopediaPersistentStore.getState().display ===
+              TankopediaDisplay.Model
           ) {
             position.set(event.clientX, event.clientY);
             event.stopPropagation();

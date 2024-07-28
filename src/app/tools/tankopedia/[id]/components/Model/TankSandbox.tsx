@@ -12,6 +12,7 @@ import { useEquipment } from '../../../../../../hooks/useEquipment';
 import * as Duel from '../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemeral';
 import * as TankopediaPersistent from '../../../../../../stores/tankopediaPersistent';
+import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
 import { SceneProps } from '../SceneProps';
@@ -30,7 +31,7 @@ export function TankSandbox() {
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
-  const armorMode = TankopediaPersistent.use((state) => state.armorMode);
+  const display = TankopediaPersistent.use((state) => state.display);
 
   function handlePointerDown() {
     window.addEventListener('pointermove', handlePointerMove);
@@ -123,6 +124,20 @@ export function TankSandbox() {
     });
   }, [protagonist.gun, protagonist.turret]);
 
+  useEffect(() => {
+    if (display !== TankopediaDisplay.DynamicArmor) {
+      mutateTankopediaEphemeral((draft) => {
+        draft.shot = undefined;
+      });
+    }
+
+    if (display !== TankopediaDisplay.StaticArmor) {
+      mutateTankopediaEphemeral((draft) => {
+        draft.highlightArmor = undefined;
+      });
+    }
+  }, [display]);
+
   return (
     <Canvas
       gl={{ clippingPlanes: Object.freeze([]), localClippingEnabled: true }}
@@ -140,12 +155,12 @@ export function TankSandbox() {
     >
       <Controls />
       <SceneProps />
-      <TankModel />
+      {display !== TankopediaDisplay.StaticArmor && <TankModel />}
 
       {/* idk why the shot display doesn't work without suspense here lol */}
       <Suspense fallback={<ModelLoader />}>
-        {armorMode === 'blitz' && <Armor />}
-        {armorMode === 'static' && (
+        {display === TankopediaDisplay.DynamicArmor && <Armor />}
+        {display === TankopediaDisplay.StaticArmor && (
           <StaticArmor awaitedTankDefinitions={awaitedTankDefinitions} />
         )}
         <Lighting />
