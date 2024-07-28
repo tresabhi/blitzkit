@@ -395,7 +395,7 @@ export function SpacedArmorSceneComponent({
         break;
 
       case ArmorType.External:
-        color = unselectedColor;
+        color = new Color(0, 1, 1);
         opacity = 1 / 8;
         renderOrder = 0;
         depthWrite = false;
@@ -421,24 +421,35 @@ export function SpacedArmorSceneComponent({
      * never mutates :)
      */
     useEffect(() => {
-      function handleHighlightArmor(thisName?: string) {
+      function handleHighlightArmor(selectedName?: string) {
         if (!props.static) return;
 
-        if (thisName === undefined) {
+        if (selectedName === undefined) {
           // nothing selected, go back to defaults
           material.opacity = opacity;
           material.transparent = true;
           material.color = color;
-        } else if (thisName === props.name) {
+          material.depthWrite = props.type !== ArmorType.External;
+        } else if (
+          selectedName === props.name ||
+          (props.name.startsWith('chassis_') &&
+            selectedName.startsWith('chassis_')) ||
+          (props.name.startsWith('gun_') &&
+            selectedName.startsWith('gun_') &&
+            !props.name.includes('_armor_') &&
+            !selectedName.includes('_armor_'))
+        ) {
           // this selected, stand out!
           material.opacity = 1;
           material.transparent = false;
           material.color = color;
+          material.depthWrite = true;
         } else {
           // something else selected, become background
           material.opacity = 1 / 4;
           material.transparent = true;
           material.color = unselectedColor;
+          material.depthWrite = props.type !== ArmorType.External;
         }
       }
 
@@ -461,15 +472,12 @@ export function SpacedArmorSceneComponent({
         thickness,
       } satisfies ArmorUserData,
 
-      onClick:
-        props.type === ArmorType.External
-          ? undefined
-          : (event) => {
-              event.stopPropagation();
-              mutateTankopediaEphemeralStore((draft) => {
-                draft.highlightArmor = props.name;
-              });
-            },
+      onClick(event) {
+        event.stopPropagation();
+        mutateTankopediaEphemeralStore((draft) => {
+          draft.highlightArmor = props.name;
+        });
+      },
     });
   }
 
