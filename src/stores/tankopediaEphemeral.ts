@@ -11,7 +11,19 @@ interface TankopediaEphemeral {
   shot?: Shot;
   skills: Record<string, number>;
   controlsEnabled: boolean;
-  highlightArmor?: string;
+  highlightArmor?: {
+    name: string;
+    point: Vector3;
+    thickness: number;
+    color: string;
+  } & (
+    | {
+        type: ArmorType.Core | ArmorType.Spaced;
+        thicknessAngled: number;
+        angle: number;
+      }
+    | { type: ArmorType.External }
+  );
 }
 
 export interface ShotLayerBase {

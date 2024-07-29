@@ -1,6 +1,7 @@
 import { Canvas } from '@react-three/fiber';
 import { Suspense, use, useEffect, useRef } from 'react';
 import { Armor } from '../../../../../../components/Armor';
+import { ArmorPlateDisplay } from '../../../../../../components/Armor/components/ArmorPlateDisplay';
 import { ShotDisplay } from '../../../../../../components/Armor/components/ShotDisplay';
 import { StaticArmor } from '../../../../../../components/StaticArmor';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
@@ -157,6 +158,9 @@ export function TankSandbox() {
       <SceneProps />
       {display !== TankopediaDisplay.StaticArmor && <TankModel />}
 
+      <ShotDisplay />
+      <ArmorPlateDisplay />
+
       {/* idk why the shot display doesn't work without suspense here lol */}
       <Suspense fallback={<ModelLoader />}>
         {display === TankopediaDisplay.DynamicArmor && <Armor />}
@@ -165,8 +169,6 @@ export function TankSandbox() {
         )}
         <Lighting />
       </Suspense>
-
-      <ShotDisplay />
     </Canvas>
   );
 }

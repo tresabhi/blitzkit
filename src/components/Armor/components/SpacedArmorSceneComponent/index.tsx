@@ -3,6 +3,8 @@ import { clamp } from 'lodash';
 import { useCallback, useEffect, useMemo } from 'react';
 import {
   Color,
+  DoubleSide,
+  FrontSide,
   Intersection,
   MeshBasicMaterial,
   MeshStandardMaterial,
@@ -74,6 +76,7 @@ const omitMaterial = new MeshBasicMaterial({
   depthWrite: true,
 });
 const unselectedColor = new Color(0x404040);
+const externalModuleColor = new Color(0, 1 / 4, 1 / 2);
 
 /**
  * Render orders allocations:
@@ -395,7 +398,7 @@ export function SpacedArmorSceneComponent({
         break;
 
       case ArmorType.External:
-        color = new Color(0, 1, 1);
+        color = externalModuleColor;
         opacity = 1 / 8;
         renderOrder = 0;
         depthWrite = false;
@@ -427,9 +430,10 @@ export function SpacedArmorSceneComponent({
         if (selectedName === undefined) {
           // nothing selected, go back to defaults
           material.opacity = opacity;
-          material.transparent = true;
+          material.transparent = opacity < 1;
           material.color = color;
           material.depthWrite = props.type !== ArmorType.External;
+          material.side = FrontSide;
         } else if (
           selectedName === props.name ||
           (props.name.startsWith('chassis_') &&
@@ -444,17 +448,19 @@ export function SpacedArmorSceneComponent({
           material.transparent = false;
           material.color = color;
           material.depthWrite = true;
+          material.side = DoubleSide;
         } else {
           // something else selected, become background
           material.opacity = 1 / 4;
           material.transparent = true;
           material.color = unselectedColor;
           material.depthWrite = props.type !== ArmorType.External;
+          material.side = FrontSide;
         }
       }
 
       const unsubscribe = tankopediaEphemeralStore.subscribe(
-        (state) => state.highlightArmor,
+        (state) => state.highlightArmor?.name,
         handleHighlightArmor,
       );
 
@@ -474,8 +480,25 @@ export function SpacedArmorSceneComponent({
 
       onClick(event) {
         event.stopPropagation();
+
+        const { point } = event;
+        const cameraNormal = camera.position.clone().sub(point).normalize();
+        const surfaceNormal = event
+          .normal!.clone()
+          .applyQuaternion(event.object.getWorldQuaternion(new Quaternion()));
+        const angle = surfaceNormal.angleTo(cameraNormal);
+        const thicknessAngled = thickness / Math.sin(Math.PI / 2 - angle);
+
         mutateTankopediaEphemeralStore((draft) => {
-          draft.highlightArmor = props.name;
+          draft.highlightArmor = {
+            type: props.type,
+            name: props.name,
+            point,
+            thickness,
+            thicknessAngled,
+            angle,
+            color: `#${color.getHexString()}`,
+          };
         });
       },
     });

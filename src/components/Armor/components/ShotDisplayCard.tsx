@@ -6,7 +6,7 @@ import { shotStatusColors } from './ShotDisplay';
 import { ArmorType } from './SpacedArmorScene';
 import { ExternalModuleVariant } from './SpacedArmorSceneComponent';
 
-const layerTypeNames: Record<ArmorType | 'null', string> = {
+export const layerTypeNames: Record<ArmorType | 'null', string> = {
   [ArmorType.Core]: 'Core',
   [ArmorType.Spaced]: 'Spaced',
   [ArmorType.External]: 'External',
