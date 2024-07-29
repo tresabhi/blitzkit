@@ -22,6 +22,8 @@ export interface TankopediaPersistent {
       greenPenetration: boolean;
       showEnvironment: boolean;
       showSpacedArmor: boolean;
+      showExternalModules: boolean;
+      showCoreArmor: boolean;
     };
   };
   sort: {
@@ -47,6 +49,8 @@ export const { Provider, use, useMutation, useStore } = createNextSafeStore(
           model: {
             visual: {
               showSpacedArmor: true,
+              showExternalModules: true,
+              showCoreArmor: true,
               wireframe: false,
               opaque: false,
               environment: ENVIRONMENTS[0],

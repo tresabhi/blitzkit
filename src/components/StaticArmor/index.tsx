@@ -1,18 +1,12 @@
-import { useThree } from '@react-three/fiber';
-import { TankDefinitions } from '../../core/blitzkit/tankDefinitions';
-import { StaticArmorScene } from './components/StaticArmorScene';
+import {
+  StaticArmorScene,
+  ThicknessRange,
+} from './components/StaticArmorScene';
 
-export function StaticArmor({
-  awaitedTankDefinitions,
-}: {
-  awaitedTankDefinitions: TankDefinitions;
-}) {
-  const scene = useThree((state) => state.scene);
+interface StaticArmorProps {
+  thicknessRange: ThicknessRange;
+}
 
-  return (
-    <StaticArmorScene
-      awaitedTankDefinitions={awaitedTankDefinitions}
-      scene={scene}
-    />
-  );
+export function StaticArmor({ thicknessRange }: StaticArmorProps) {
+  return <StaticArmorScene thicknessRange={thicknessRange} />;
 }

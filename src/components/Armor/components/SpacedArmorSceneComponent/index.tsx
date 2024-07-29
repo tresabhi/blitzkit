@@ -36,7 +36,6 @@ function to255(value: number) {
 type SpacedArmorSceneComponentProps = {
   node: Object3D;
   thickness: number;
-  scene: Scene;
   clip?: Plane;
 } & (
   | {
@@ -50,6 +49,7 @@ type SpacedArmorSceneComponentProps = {
   (
     | {
         static?: false;
+        scene: Scene;
       }
     | {
         static: true;
@@ -88,7 +88,6 @@ const externalModuleColor = new Color(0, 1 / 4, 1 / 2);
 export function SpacedArmorSceneComponent({
   node,
   thickness,
-  scene,
   clip,
   ...props
 }: SpacedArmorSceneComponentProps) {
@@ -96,6 +95,131 @@ export function SpacedArmorSceneComponent({
   const mutateTankopediaEphemeralStore = TankopediaEphemeral.useMutation();
   const camera = useThree((state) => state.camera);
   const duelStore = Duel.useStore();
+
+  if (props.static) {
+    const x = clamp(thickness / props.thicknessRange.quartile, 0, 1);
+    const y = Math.sqrt(x);
+
+    let color: Color;
+    let opacity: number;
+    let renderOrder = 1;
+    let depthWrite = true;
+
+    switch (props.type) {
+      case ArmorType.Core:
+        color = new Color(-((1 - y) ** 2) + 1, -(y ** 2) + 1, 0);
+        opacity = 1;
+        break;
+
+      case ArmorType.Spaced:
+        color = new Color(1 - (7 / 8) * y, 0, 1 - (1 / 8) * y);
+        opacity = x + 1 / 2;
+        break;
+
+      case ArmorType.External:
+        color = externalModuleColor;
+        opacity = 1 / 8;
+        renderOrder = 0;
+        depthWrite = false;
+        break;
+    }
+
+    opacity = clamp(opacity, 0, 1);
+
+    const material = useMemo(
+      () =>
+        new MeshStandardMaterial({
+          color,
+          opacity,
+          transparent: true,
+          depthWrite,
+          ...(clip ? { clippingPlanes: [clip] } : {}),
+        }),
+      [],
+    );
+
+    /**
+     * hook inside an if statement?? don't panic! I assure you the static prop
+     * never mutates :)
+     */
+    useEffect(() => {
+      function handleHighlightArmor(selectedName?: string) {
+        if (!props.static) return;
+
+        if (selectedName === undefined) {
+          // nothing selected, go back to defaults
+          material.opacity = opacity;
+          material.transparent = opacity < 1;
+          material.color = color;
+          material.depthWrite = props.type !== ArmorType.External;
+          material.side = FrontSide;
+        } else if (
+          selectedName === props.name ||
+          (props.name.startsWith('chassis_') &&
+            selectedName.startsWith('chassis_')) ||
+          (props.name.startsWith('gun_') &&
+            selectedName.startsWith('gun_') &&
+            !props.name.includes('_armor_') &&
+            !selectedName.includes('_armor_'))
+        ) {
+          // this selected, stand out!
+          material.opacity = 1;
+          material.transparent = false;
+          material.color = color;
+          material.depthWrite = true;
+          material.side = DoubleSide;
+        } else {
+          // something else selected, become background
+          material.opacity = 1 / 4;
+          material.transparent = true;
+          material.color = unselectedColor;
+          material.depthWrite = props.type !== ArmorType.External;
+          material.side = FrontSide;
+        }
+      }
+
+      const unsubscribe = tankopediaEphemeralStore.subscribe(
+        (state) => state.highlightArmor?.name,
+        handleHighlightArmor,
+      );
+
+      return unsubscribe;
+    }, []);
+
+    return jsxTree(node, {
+      material,
+      renderOrder,
+      userData: {
+        type: props.type,
+        variant: props.type === ArmorType.External ? props.variant : 'gun',
+        thickness,
+      } satisfies ArmorUserData,
+
+      onClick(event) {
+        event.stopPropagation();
+
+        const { point } = event;
+        const cameraNormal = camera.position.clone().sub(point).normalize();
+        const surfaceNormal = event
+          .normal!.clone()
+          .applyQuaternion(event.object.getWorldQuaternion(new Quaternion()));
+        const angle = surfaceNormal.angleTo(cameraNormal);
+        const thicknessAngled = thickness / Math.sin(Math.PI / 2 - angle);
+
+        mutateTankopediaEphemeralStore((draft) => {
+          draft.highlightArmor = {
+            type: props.type,
+            name: props.name,
+            point,
+            thickness,
+            thicknessAngled,
+            angle,
+            color: `#${color.getHexString()}`,
+          };
+        });
+      },
+    });
+  }
 
   const shoot = useCallback(
     async (
@@ -345,7 +469,7 @@ export function SpacedArmorSceneComponent({
             caster.set(lastLayer.point, ricochetNormal);
 
             const ricochetIntersections = caster.intersectObjects(
-              scene.children,
+              props.scene.children,
               true,
             );
             const outShot = await shoot(
@@ -376,131 +500,6 @@ export function SpacedArmorSceneComponent({
     },
     [camera],
   );
-
-  if (props.static) {
-    const x = clamp(thickness / props.thicknessRange.quartile, 0, 1);
-    const y = Math.sqrt(x);
-
-    let color: Color;
-    let opacity: number;
-    let renderOrder = 1;
-    let depthWrite = true;
-
-    switch (props.type) {
-      case ArmorType.Core:
-        color = new Color(-((1 - y) ** 2) + 1, -(y ** 2) + 1, 0);
-        opacity = 1;
-        break;
-
-      case ArmorType.Spaced:
-        color = new Color(1 - (7 / 8) * y, 0, 1 - (1 / 8) * y);
-        opacity = x + 1 / 2;
-        break;
-
-      case ArmorType.External:
-        color = externalModuleColor;
-        opacity = 1 / 8;
-        renderOrder = 0;
-        depthWrite = false;
-        break;
-    }
-
-    opacity = clamp(opacity, 0, 1);
-
-    const material = useMemo(
-      () =>
-        new MeshStandardMaterial({
-          color,
-          opacity,
-          transparent: true,
-          depthWrite,
-          ...(clip ? { clippingPlanes: [clip] } : {}),
-        }),
-      [],
-    );
-
-    /**
-     * hook inside an if statement?? don't panic! I assure you the static prop
-     * never mutates :)
-     */
-    useEffect(() => {
-      function handleHighlightArmor(selectedName?: string) {
-        if (!props.static) return;
-
-        if (selectedName === undefined) {
-          // nothing selected, go back to defaults
-          material.opacity = opacity;
-          material.transparent = opacity < 1;
-          material.color = color;
-          material.depthWrite = props.type !== ArmorType.External;
-          material.side = FrontSide;
-        } else if (
-          selectedName === props.name ||
-          (props.name.startsWith('chassis_') &&
-            selectedName.startsWith('chassis_')) ||
-          (props.name.startsWith('gun_') &&
-            selectedName.startsWith('gun_') &&
-            !props.name.includes('_armor_') &&
-            !selectedName.includes('_armor_'))
-        ) {
-          // this selected, stand out!
-          material.opacity = 1;
-          material.transparent = false;
-          material.color = color;
-          material.depthWrite = true;
-          material.side = DoubleSide;
-        } else {
-          // something else selected, become background
-          material.opacity = 1 / 4;
-          material.transparent = true;
-          material.color = unselectedColor;
-          material.depthWrite = props.type !== ArmorType.External;
-          material.side = FrontSide;
-        }
-      }
-
-      const unsubscribe = tankopediaEphemeralStore.subscribe(
-        (state) => state.highlightArmor?.name,
-        handleHighlightArmor,
-      );
-
-      return unsubscribe;
-    }, []);
-
-    return jsxTree(node, {
-      material,
-      renderOrder,
-      userData: {
-        type: props.type,
-        variant: props.type === ArmorType.External ? props.variant : 'gun',
-        thickness,
-      } satisfies ArmorUserData,
-
-      onClick(event) {
-        event.stopPropagation();
-
-        const { point } = event;
-        const cameraNormal = camera.position.clone().sub(point).normalize();
-        const surfaceNormal = event
-          .normal!.clone()
-          .applyQuaternion(event.object.getWorldQuaternion(new Quaternion()));
-        const angle = surfaceNormal.angleTo(cameraNormal);
-        const thicknessAngled = thickness / Math.sin(Math.PI / 2 - angle);
-
-        mutateTankopediaEphemeralStore((draft) => {
-          draft.highlightArmor = {
-            type: props.type,
-            name: props.name,
-            point,
-            thickness,
-            thicknessAngled,
-            angle,
-            color: `#${color.getHexString()}`,
-          };
-        });
-      },
-    });
-  }
 
   return (
     <>

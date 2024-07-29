@@ -22,6 +22,7 @@ import {
 import { useEffect, useState } from 'react';
 import { ModuleButton } from '../../../../../../../components/ModuleButtons/ModuleButton';
 import { SmallTankIcon } from '../../../../../../../components/SmallTankIcon';
+import { ThicknessRange } from '../../../../../../../components/StaticArmor/components/StaticArmorScene';
 import { resolveNearPenetration } from '../../../../../../../core/blitz/resolveNearPenetration';
 import { resolvePenetrationCoefficient } from '../../../../../../../core/blitz/resolvePenetrationCoefficient';
 import { asset } from '../../../../../../../core/blitzkit/asset';
@@ -42,9 +43,14 @@ import * as TankopediaPersistent from '../../../../../../../stores/tankopediaPer
 import { TankopediaDisplay } from '../../../../../../../stores/tankopediaPersistent/constants';
 import { TankSearch } from '../../../../components/TankSearch';
 import { ENVIRONMENTS } from '../../Lighting';
-import { RotationInputs } from '../../QuickInputs';
+import { QuickInputs } from '../../QuickInputs';
+import { Thicknesses } from '../../Thicknesses';
 
-export function Options() {
+interface OptionsProps {
+  thicknessRange: ThicknessRange;
+}
+
+export function Options({ thicknessRange }: OptionsProps) {
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
   const displayRaw = TankopediaPersistent.use((state) => state.display);
@@ -113,7 +119,11 @@ export function Options() {
         </Box>
       )}
 
-      <RotationInputs />
+      <QuickInputs />
+
+      {display === TankopediaDisplay.StaticArmor && (
+        <Thicknesses thicknessRange={thicknessRange} />
+      )}
 
       {display === TankopediaDisplay.DynamicArmor && (
         <Flex
@@ -483,17 +493,17 @@ export function Options() {
           >
             <SegmentedControl.Item value={`${TankopediaDisplay.Model}`}>
               <Flex height="100%" align="center">
-                <img src={imgur('jAdYf0m')} style={{ height: '1.5em' }} />
+                <img src={imgur('jAdYf0m')} style={{ height: '1.25em' }} />
               </Flex>
             </SegmentedControl.Item>
             <SegmentedControl.Item value={`${TankopediaDisplay.DynamicArmor}`}>
               <Flex height="100%" align="center">
-                <img src={imgur('oe4Cq0g')} style={{ height: '1.5em' }} />
+                <img src={imgur('oe4Cq0g')} style={{ height: '1.25em' }} />
               </Flex>
             </SegmentedControl.Item>
             <SegmentedControl.Item value={`${TankopediaDisplay.StaticArmor}`}>
               <Flex height="100%" align="center">
-                <img src={imgur('VQ4uDno')} style={{ height: '1.5em' }} />
+                <img src={imgur('VQ4uDno')} style={{ height: '1.25em' }} />
               </Flex>
             </SegmentedControl.Item>
           </SegmentedControl.Root>

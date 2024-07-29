@@ -9,12 +9,10 @@ import {
   ModelTransformEventData,
 } from '../../../../../../core/blitzkit/modelTransform';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
-import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import * as Duel from '../../../../../../stores/duel';
-import * as TankopediaPersistent from '../../../../../../stores/tankopediaPersistent';
 import * as styles from './index.css';
 
-export function RotationInputs() {
+export function QuickInputs() {
   const mutateDuel = Duel.useMutation();
   const protagonist = Duel.use((state) => state.protagonist);
   const awaitedModelDefinitions = use(modelDefinitions);
@@ -26,8 +24,6 @@ export function RotationInputs() {
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
   const initialGunPitch = tankModelDefinition.turretRotation?.pitch ?? 0;
   const hasImprovedVerticalStabilizer = useEquipment(122);
-  const isFullScreen = useFullScreen();
-  const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
 
   useEffect(() => {
     yawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);

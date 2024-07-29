@@ -4,6 +4,7 @@ import { Armor } from '../../../../../../components/Armor';
 import { ArmorPlateDisplay } from '../../../../../../components/Armor/components/ArmorPlateDisplay';
 import { ShotDisplay } from '../../../../../../components/Armor/components/ShotDisplay';
 import { StaticArmor } from '../../../../../../components/StaticArmor';
+import { ThicknessRange } from '../../../../../../components/StaticArmor/components/StaticArmorScene';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
@@ -20,7 +21,11 @@ import { SceneProps } from '../SceneProps';
 import { ModelLoader } from './components/ModelLoader';
 import { TankModel } from './components/TankModel';
 
-export function TankSandbox() {
+interface TankSandboxProps {
+  thicknessRange: ThicknessRange;
+}
+
+export function TankSandbox({ thicknessRange }: TankSandboxProps) {
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const canvas = useRef<HTMLCanvasElement>(null);
   const hasImprovedVerticalStabilizer = useEquipment(122);
@@ -165,7 +170,7 @@ export function TankSandbox() {
       <Suspense fallback={<ModelLoader />}>
         {display === TankopediaDisplay.DynamicArmor && <Armor />}
         {display === TankopediaDisplay.StaticArmor && (
-          <StaticArmor awaitedTankDefinitions={awaitedTankDefinitions} />
+          <StaticArmor thicknessRange={thicknessRange} />
         )}
         <Lighting />
       </Suspense>

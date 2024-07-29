@@ -1,9 +1,8 @@
-import { memo, useMemo, useRef } from 'react';
-import { Group, Plane, Scene, Vector3 } from 'three';
+import { memo, useRef } from 'react';
+import { Group, Plane, Vector3 } from 'three';
 import { correctZYTuple } from '../../../core/blitz/correctZYTuple';
 import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
 import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
-import { TankDefinitions } from '../../../core/blitzkit/tankDefinitions';
 import { useArmor } from '../../../hooks/useArmor';
 import { useModel } from '../../../hooks/useModel';
 import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
@@ -14,8 +13,7 @@ import { ArmorType } from '../../Armor/components/SpacedArmorScene';
 import { SpacedArmorSceneComponent } from '../../Armor/components/SpacedArmorSceneComponent';
 
 interface StaticArmorSceneProps {
-  scene: Scene;
-  awaitedTankDefinitions: TankDefinitions;
+  thicknessRange: ThicknessRange;
 }
 
 export interface ThicknessRange {
@@ -24,7 +22,7 @@ export interface ThicknessRange {
 }
 
 export const StaticArmorScene = memo<StaticArmorSceneProps>(
-  ({ scene, awaitedTankDefinitions }) => {
+  ({ thicknessRange }) => {
     const wrapper = useRef<Group>(null);
     const awaitedTankModelDefinitions = useModelDefinitions();
     const turretContainer = useRef<Group>(null);
@@ -49,50 +47,6 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
       gunModelDefinition.mask === undefined
         ? undefined
         : gunModelDefinition.mask + hullOrigin.y + turretOrigin.y + gunOrigin.y;
-    let thisTankThicknesses: number[] = [];
-    const thicknessRange = useMemo(() => {
-      const thicknesses = Object.values(awaitedTankDefinitions)
-        .filter((thisTank) => thisTank.tier === tank.tier)
-        .map((tank) => ({
-          model: awaitedTankModelDefinitions[tank.id],
-          id: tank.id,
-        }))
-        .filter(Boolean)
-        .map(({ model, id }) => {
-          const tankThicknesses = Object.values(model.armor.thickness);
-          const turretThicknesses = Object.values(model.turrets)
-            .map((turret) => {
-              const turretThicknesses = Object.values(turret.armor.thickness);
-              const gunThicknesses = Object.values(turret.guns)
-                .map((gun) => Object.values(gun.armor.thickness))
-                .flat();
-
-              return [...turretThicknesses, ...gunThicknesses];
-            })
-            .flat();
-          const totalThicknesses = [...tankThicknesses, ...turretThicknesses];
-
-          if (id === tank.id) thisTankThicknesses = totalThicknesses;
-
-          return totalThicknesses;
-        })
-        .flat();
-
-      const sortedThicknesses = thicknesses.sort((a, b) => a - b);
-      const quartileIndex = (1 - 2 ** -6) * (sortedThicknesses.length + 1) - 1;
-      let quartile: number;
-
-      if (Number.isInteger(quartileIndex)) {
-        quartile = sortedThicknesses[quartileIndex];
-      } else {
-        quartile =
-          (sortedThicknesses[Math.floor(quartileIndex)] +
-            sortedThicknesses[Math.ceil(quartileIndex)]) /
-          2;
-      }
-
-      return { quartile } satisfies ThicknessRange;
-    }, [tank.tier]);
 
     useTankTransform(protagonist, turretContainer, gunContainer);
 
@@ -115,7 +69,6 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
                 name={node.name}
                 thicknessRange={thicknessRange}
                 static
-                scene={scene}
                 key={node.uuid}
                 type={spaced ? ArmorType.Spaced : ArmorType.Core}
                 thickness={thickness}
@@ -137,7 +90,6 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
               name={node.name}
               thicknessRange={thicknessRange}
               static
-              scene={scene}
               key={node.uuid}
               type={ArmorType.External}
               thickness={trackModelDefinition.thickness}
@@ -168,7 +120,6 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
                     name={node.name}
                     thicknessRange={thicknessRange}
                     static
-                    scene={scene}
                     key={node.uuid}
                     type={spaced ? ArmorType.Spaced : ArmorType.Core}
                     thickness={thickness}
@@ -203,7 +154,6 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
                       name={node.name}
                       thicknessRange={thicknessRange}
                       static
-                      scene={scene}
                       type={spaced ? ArmorType.Spaced : ArmorType.Core}
                       thickness={thickness}
                       node={node}
@@ -227,7 +177,6 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
                   name={node.name}
                   thicknessRange={thicknessRange}
                   static
-                  scene={scene}
                   key={node.uuid}
                   type={ArmorType.External}
                   thickness={gunModelDefinition.thickness}

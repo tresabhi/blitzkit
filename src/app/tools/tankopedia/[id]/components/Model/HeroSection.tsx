@@ -1,8 +1,11 @@
 import { ChevronLeftIcon, MixIcon } from '@radix-ui/react-icons';
 import { Box, Button, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, use, useEffect, useMemo, useState } from 'react';
 import { classIcons } from '../../../../../../components/ClassIcon';
+import { ThicknessRange } from '../../../../../../components/StaticArmor/components/StaticArmorScene';
+import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitions';
+import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import strings from '../../../../../../lang/en-US.json';
@@ -11,7 +14,11 @@ import { Options } from './components/Options';
 import { TankSandbox } from './TankSandbox';
 import { TankSandboxLoader } from './TankSandboxLoader';
 
-export function HeroSection({ id }: { id: number }) {
+interface HeroSectionProps {
+  id: number;
+}
+
+export function HeroSection({ id }: HeroSectionProps) {
   const protagonist = Duel.use((state) => state.protagonist.tank);
   const antagonist = Duel.use((state) => state.antagonist.tank);
   const compareTanks =
@@ -27,6 +34,50 @@ export function HeroSection({ id }: { id: number }) {
       : protagonist.treeType === 'premium'
         ? 'amber'
         : undefined;
+  const awaitedTankDefinitions = use(tankDefinitions);
+  const awaitedModelDefinitions = use(modelDefinitions);
+  const tank = awaitedTankDefinitions[id];
+  const thicknessRange = useMemo(() => {
+    const thicknesses = Object.values(awaitedTankDefinitions)
+      .filter((thisTank) => thisTank.tier === tank.tier)
+      .map((tank) => ({
+        model: awaitedModelDefinitions[tank.id],
+        id: tank.id,
+      }))
+      .filter(Boolean)
+      .map(({ model, id }) => {
+        const tankThicknesses = Object.values(model.armor.thickness);
+        const turretThicknesses = Object.values(model.turrets)
+          .map((turret) => {
+            const turretThicknesses = Object.values(turret.armor.thickness);
+            const gunThicknesses = Object.values(turret.guns)
+              .map((gun) => Object.values(gun.armor.thickness))
+              .flat();
+
+            return [...turretThicknesses, ...gunThicknesses];
+          })
+          .flat();
+        const totalThicknesses = [...tankThicknesses, ...turretThicknesses];
+
+        return totalThicknesses;
+      })
+      .flat();
+
+    const sortedThicknesses = thicknesses.sort((a, b) => a - b);
+    const quartileIndex = (1 - 2 ** -6) * (sortedThicknesses.length + 1) - 1;
+    let quartile: number;
+
+    if (Number.isInteger(quartileIndex)) {
+      quartile = sortedThicknesses[quartileIndex];
+    } else {
+      quartile =
+        (sortedThicknesses[Math.floor(quartileIndex)] +
+          sortedThicknesses[Math.ceil(quartileIndex)]) /
+        2;
+    }
+
+    return { quartile } satisfies ThicknessRange;
+  }, [tank.tier]);
 
   useEffect(() => {
     setDummyLoader(false);
@@ -129,11 +180,11 @@ export function HeroSection({ id }: { id: number }) {
                   />
                 }
               >
-                <TankSandbox />
+                <TankSandbox thicknessRange={thicknessRange} />
               </Suspense>
             </Box>
 
-            <Options />
+            <Options thicknessRange={thicknessRange} />
           </Box>
         </Box>
       </Flex>
