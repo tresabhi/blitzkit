@@ -393,8 +393,8 @@ export function SpacedArmorSceneComponent({
         break;
 
       case ArmorType.Spaced:
-        color = new Color(1 - y, 0, 0.75 * (1 - y));
-        opacity = x + 0.5;
+        color = new Color(1 - (7 / 8) * y, 0, 1 - (1 / 8) * y);
+        opacity = x + 1 / 2;
         break;
 
       case ArmorType.External:
@@ -468,8 +468,6 @@ export function SpacedArmorSceneComponent({
     }, []);
 
     return jsxTree(node, {
-      castShadow: true,
-      receiveShadow: true,
       material,
       renderOrder,
       userData: {
