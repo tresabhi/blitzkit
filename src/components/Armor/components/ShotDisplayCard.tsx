@@ -1,4 +1,11 @@
-import { Card, Flex, Inset, Separator, Text } from '@radix-ui/themes';
+import {
+  Card,
+  CardProps,
+  Flex,
+  Inset,
+  Separator,
+  Text,
+} from '@radix-ui/themes';
 import { ComponentProps } from 'react';
 import { radToDeg } from 'three/src/math/MathUtils';
 import * as TankopediaEphemeral from '../../../stores/tankopediaEphemeral';
@@ -40,13 +47,7 @@ function LayerEntry({
 }) {
   return (
     <Flex align="center" gap="2">
-      <Text
-        size="1"
-        color="gray"
-        style={{
-          width: 12,
-        }}
-      >
+      <Text size="1" color="gray" style={{ width: 12 }}>
         {layerIndex}
       </Text>
       <Text size="2" color={shotStatusColor} style={{ width: 47 }}>
@@ -55,13 +56,7 @@ function LayerEntry({
 
       {layer.type === null && (
         <>
-          <Text
-            size="2"
-            color={shotStatusColor}
-            style={{
-              width: 64,
-            }}
-          >
+          <Text size="2" color={shotStatusColor} style={{ width: 64 }}>
             {Math.round(layer.distance * 1000).toLocaleString()}
             <Text size="1">mm</Text>
           </Text>
@@ -73,13 +68,7 @@ function LayerEntry({
       )}
 
       {layer.type === ArmorType.External && (
-        <Text
-          size="2"
-          color={shotStatusColor}
-          style={{
-            width: 64,
-          }}
-        >
+        <Text size="2" color={shotStatusColor} style={{ width: 64 }}>
           {Math.round(layer.thickness).toLocaleString()}
           <Text size="1">mm</Text>
         </Text>
@@ -87,13 +76,7 @@ function LayerEntry({
 
       {(layer.type === ArmorType.Core || layer.type === ArmorType.Spaced) && (
         <>
-          <Text
-            size="2"
-            color={shotStatusColor}
-            style={{
-              width: 80,
-            }}
-          >
+          <Text size="2" color={shotStatusColor} style={{ width: 80 }}>
             {Math.round(layer.thicknessAngled).toLocaleString()}
             <Text size="1">{`mm${angle === undefined ? '' : ` ${Math.round(radToDeg(angle))}°`}`}</Text>
           </Text>
@@ -108,11 +91,11 @@ function LayerEntry({
   );
 }
 
-interface ShotDisplayCardProps {
+interface ShotDisplayCardProps extends CardProps {
   shot: TankopediaEphemeral.Shot;
 }
 
-export function ShotDisplayCard({ shot }: ShotDisplayCardProps) {
+export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {
   if (!shot) return null;
 
   const outTitleColor = shot.out
@@ -121,7 +104,7 @@ export function ShotDisplayCard({ shot }: ShotDisplayCardProps) {
   const inTitleColor = shotStatusColors[shot.in.status];
 
   return (
-    <Card style={{ width: 300 }}>
+    <Card style={{ width: 300 }} {...props}>
       <Flex direction="column" gap="2">
         <Flex direction="column" gap="1">
           <Text color={inTitleColor} weight="bold">

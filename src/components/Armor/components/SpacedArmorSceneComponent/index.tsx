@@ -2,6 +2,7 @@ import { useThree } from '@react-three/fiber';
 import { clamp } from 'lodash';
 import { useCallback, useEffect, useMemo } from 'react';
 import {
+  Box3,
   Color,
   DoubleSide,
   FrontSide,
@@ -149,7 +150,6 @@ export function SpacedArmorSceneComponent({
         if (selectedName === undefined) {
           // nothing selected, go back to defaults
           material.opacity = opacity;
-          // material.transparent = opacity < 1;
           material.color = color;
           material.depthWrite = props.type !== ArmorType.External;
           material.side = FrontSide;
@@ -164,18 +164,18 @@ export function SpacedArmorSceneComponent({
         ) {
           // this selected, stand out!
           material.opacity = 1;
-          // material.transparent = false;
           material.color = color;
           material.depthWrite = true;
           material.side = DoubleSide;
         } else {
           // something else selected, become background
           material.opacity = 1 / 4;
-          // material.transparent = true;
           material.color = unselectedColor;
           material.depthWrite = props.type !== ArmorType.External;
           material.side = FrontSide;
         }
+
+        material.transparent = material.opacity < 1;
       }
 
       const unsubscribe = tankopediaEphemeralStore.subscribe(
@@ -198,7 +198,12 @@ export function SpacedArmorSceneComponent({
       onClick(event) {
         event.stopPropagation();
 
-        const { point } = event;
+        const bounds = new Box3().setFromObject(event.object);
+        const point = bounds.min
+          .clone()
+          .add(bounds.max)
+          .divideScalar(2)
+          .setY(bounds.max.y);
         const cameraNormal = camera.position.clone().sub(point).normalize();
         const surfaceNormal = event
           .normal!.clone()

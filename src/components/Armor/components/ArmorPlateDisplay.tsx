@@ -14,10 +14,14 @@ export function ArmorPlateDisplay() {
 
   return (
     <group position={highlightArmor.point}>
-      <Html>
+      <Html center>
         <Card
-          ml="9"
-          style={{ whiteSpace: 'nowrap', color: highlightArmor.color }}
+          mb="4"
+          style={{
+            whiteSpace: 'nowrap',
+            color: highlightArmor.color,
+            transform: 'translateY(-50%)',
+          }}
         >
           <Flex direction="column">
             <Text weight="bold">

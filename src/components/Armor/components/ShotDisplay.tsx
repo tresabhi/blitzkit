@@ -16,6 +16,7 @@ import {
   Quaternion,
 } from 'three';
 import { J_HAT, K_HAT } from '../../../constants/axis';
+import { useFullScreen } from '../../../hooks/useFullScreen';
 import * as TankopediaEphemeral from '../../../stores/tankopediaEphemeral';
 import { ShotDisplayCard } from './ShotDisplayCard';
 
@@ -35,6 +36,7 @@ const TRACER_THICK = 1 / 32;
 const TRACER_THIN = TRACER_THICK / 2;
 
 export function ShotDisplay() {
+  const isFullscreen = useFullScreen();
   const shot = TankopediaEphemeral.use((state) => state.shot);
   const inTracer = useRef<Mesh>(null);
   const outTracer = useRef<Mesh>(null);
@@ -139,6 +141,8 @@ export function ShotDisplay() {
     ? shotStatusColors[shot.out.status]
     : undefined;
   const inTitleColor = shotStatusColors[shot.in.status];
+  const tracerGoingUp =
+    shot.in.surfaceNormal.y + (shot.out?.surfaceNormal.y ?? 0) > 0;
 
   return (
     <group>
@@ -162,19 +166,17 @@ export function ShotDisplay() {
         </group>
       )}
 
-      <Html
-        position={inLast.point}
-        style={{
-          pointerEvents: 'none',
-          transform: 'translateY(-50%)',
-        }}
-      >
+      <Html position={inLast.point} center>
         <Box
-          pl="9"
-          display={{
-            initial: 'none',
-            sm: 'block',
+          display={isFullscreen ? undefined : { initial: 'none', sm: 'block' }}
+          style={{
+            pointerEvents: 'none',
+            transform: `translateY(${tracerGoingUp ? 50 : -50}%)`,
           }}
+          mb={tracerGoingUp ? '0' : '9'}
+          pb={tracerGoingUp ? '0' : '4'}
+          mt={tracerGoingUp ? '9' : '0'}
+          pt={tracerGoingUp ? '4' : '0'}
         >
           <ShotDisplayCard shot={shot} />
         </Box>

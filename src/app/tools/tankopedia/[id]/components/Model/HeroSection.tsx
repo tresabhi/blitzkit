@@ -109,6 +109,7 @@ export function HeroSection({ id }: HeroSectionProps) {
             justify="center"
             style={{
               height: '100%',
+              userSelect: 'none',
             }}
           >
             <Flex gap="4">
