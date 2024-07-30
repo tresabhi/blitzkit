@@ -16,4 +16,4 @@ jobs:
         run: bun install
 
       - name: Generate leaderboard
-        run: GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} bun scripts/buildRatingLeaderboard.ts --region=eu --target=midnight --production
+        run: DISCORD_CLIENT_ID=${{ secrets.DISCORD_CLIENT_ID }} GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} bun scripts/buildRatingLeaderboard.ts --region=eu --target=midnight --production
