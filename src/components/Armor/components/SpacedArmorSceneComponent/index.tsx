@@ -92,9 +92,9 @@ export function SpacedArmorSceneComponent({
   ...props
 }: SpacedArmorSceneComponentProps) {
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
+  const duelStore = Duel.useStore();
   const mutateTankopediaEphemeralStore = TankopediaEphemeral.useMutation();
   const camera = useThree((state) => state.camera);
-  const duelStore = Duel.useStore();
 
   if (props.static) {
     const x = clamp(thickness / props.thicknessRange.quartile, 0, 1);
@@ -134,7 +134,7 @@ export function SpacedArmorSceneComponent({
           depthWrite,
           ...(clip ? { clippingPlanes: [clip] } : {}),
         }),
-      [],
+      [thickness],
     );
 
     /**
@@ -182,7 +182,7 @@ export function SpacedArmorSceneComponent({
       );
 
       return unsubscribe;
-    }, []);
+    }, [thickness]);
 
     return jsxTree(node, {
       material,

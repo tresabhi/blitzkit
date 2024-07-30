@@ -1,24 +1,23 @@
 import { HeightIcon, WidthIcon } from '@radix-ui/react-icons';
 import { Flex, TextField } from '@radix-ui/themes';
-import { use, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { degToRad, radToDeg } from 'three/src/math/MathUtils';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
-import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitions';
 import {
   modelTransformEvent,
   ModelTransformEventData,
 } from '../../../../../../core/blitzkit/modelTransform';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
+import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefinition';
 import * as Duel from '../../../../../../stores/duel';
 import * as styles from './index.css';
 
 export function QuickInputs() {
   const mutateDuel = Duel.useMutation();
   const protagonist = Duel.use((state) => state.protagonist);
-  const awaitedModelDefinitions = use(modelDefinitions);
   const yawInput = useRef<HTMLInputElement>(null);
   const pitchInput = useRef<HTMLInputElement>(null);
-  const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
+  const tankModelDefinition = useTankModelDefinition();
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];

@@ -14,6 +14,7 @@ import { ShotDisplaySection } from './components/ShotDisplaySection';
 import { VideoSection } from './components/VideoSection';
 
 export default function Page({ params }: { params: { id: string } }) {
+  const id = Number(params.id);
   const exempt = useAdExempt();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const mutateDuel = Duel.useMutation();
@@ -73,7 +74,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <PageWrapper p="0" noMaxWidth color="purple" size={1600}>
-      <HeroSection id={Number(params.id)} />
+      <HeroSection id={id} />
       <ShotDisplaySection />
       {!exempt && <AdMidSectionResponsive />}
       <CharacteristicsSection />

@@ -13,7 +13,7 @@ export interface BoundingBox {
   min: Vector3Tuple;
   max: Vector3Tuple;
 }
-interface ModelDefinition {
+export interface ModelDefinition {
   armor: ModelArmor;
   turretOrigin: Vector3Tuple;
   turretRotation?: InitialTurretRotation;

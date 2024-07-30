@@ -5,11 +5,10 @@ import { ModelTankWrapper } from '../../../../../../../components/Armor/componen
 import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
 import { hasEquipment } from '../../../../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../../../../core/blitzkit/jsxTree';
-import { modelDefinitions } from '../../../../../../../core/blitzkit/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../../core/blitzkit/modelTransform';
 import { normalizeAngleRad } from '../../../../../../../core/math/normalizeAngleRad';
-import { useAwait } from '../../../../../../../hooks/useAwait';
 import { useModel } from '../../../../../../../hooks/useModel';
+import { useTankModelDefinition } from '../../../../../../../hooks/useTankModelDefinition';
 import { useTankTransform } from '../../../../../../../hooks/useTankTransform';
 import * as Duel from '../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
@@ -19,7 +18,6 @@ import { TankopediaDisplay } from '../../../../../../../stores/tankopediaPersist
 export const TankModel = memo(() => {
   const mutateDuel = Duel.useMutation();
   const duelStore = Duel.useStore();
-  const awaitedModelDefinitions = useAwait(modelDefinitions);
   const protagonist = Duel.use((draft) => draft.protagonist);
   const tankopediaPersistentStore = TankopediaPersistent.useStore();
   const canvas = useThree((state) => state.gl.domElement);
@@ -27,17 +25,14 @@ export const TankModel = memo(() => {
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
   const mutateTankopediaTemporary = TankopediaEphemeral.useMutation();
-
-  useTankTransform(protagonist, turretContainer, gunContainer);
-
-  if (!awaitedModelDefinitions) return;
-
-  const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
+  const tankModelDefinition = useTankModelDefinition();
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
   const { gltf } = useModel(protagonist.tank.id);
   const nodes = Object.values(gltf.nodes);
+
+  useTankTransform(protagonist, turretContainer, gunContainer);
 
   return (
     <ModelTankWrapper ref={hullContainer}>

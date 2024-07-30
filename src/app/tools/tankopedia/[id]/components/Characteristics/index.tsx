@@ -28,6 +28,7 @@ import {
 } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useAdExempt } from '../../../../../../hooks/useAdExempt';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
+import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefinition';
 import * as Duel from '../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemeral';
 import { Info } from './components/Info';
@@ -37,7 +38,6 @@ export function Characteristics() {
   const mutateDuel = Duel.useMutation();
   const exempt = useAdExempt();
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);
-  const awaitedModelDefinitions = use(modelDefinitions);
   const awaitedProvisionDefinitions = use(provisionDefinitions);
   const crewSkills = TankopediaEphemeral.use((state) => state.skills);
   const penetrationDistanceInput = useRef<HTMLInputElement>(null);
@@ -68,7 +68,8 @@ export function Characteristics() {
   const stockTrack = tank.tracks[0];
   const stockTurret = tank.turrets[0];
   const stockGun = stockTurret.guns[0];
-  const tankModelDefinition = awaitedModelDefinitions[tank.id];
+  const awaitedModelDefinitions = use(modelDefinitions);
+  const tankModelDefinition = useTankModelDefinition();
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];
   const stats = tankCharacteristics(
@@ -94,8 +95,8 @@ export function Characteristics() {
       applySpallLiner: false,
     },
     {
+      tankModelDefinition,
       equipmentDefinitions: awaitedEquipmentDefinitions,
-      modelDefinitions: awaitedModelDefinitions,
       provisionDefinitions: awaitedProvisionDefinitions,
     },
   );

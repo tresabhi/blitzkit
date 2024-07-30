@@ -1,16 +1,15 @@
 import { Canvas } from '@react-three/fiber';
-import { Suspense, use, useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { Armor } from '../../../../../../components/Armor';
 import { ArmorPlateDisplay } from '../../../../../../components/Armor/components/ArmorPlateDisplay';
 import { ShotDisplay } from '../../../../../../components/Armor/components/ShotDisplay';
 import { StaticArmor } from '../../../../../../components/StaticArmor';
 import { ThicknessRange } from '../../../../../../components/StaticArmor/components/StaticArmorScene';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
-import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitions';
 import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
-import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
+import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefinition';
 import * as Duel from '../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemeral';
 import * as TankopediaPersistent from '../../../../../../stores/tankopediaPersistent';
@@ -29,11 +28,9 @@ export function TankSandbox({ thicknessRange }: TankSandboxProps) {
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const canvas = useRef<HTMLCanvasElement>(null);
   const hasImprovedVerticalStabilizer = useEquipment(122);
-  const awaitedModelDefinitions = use(modelDefinitions);
-  const awaitedTankDefinitions = use(tankDefinitions);
   const protagonist = Duel.use((state) => state.protagonist);
   const mutateDuel = Duel.useMutation();
-  const tankModelDefinition = awaitedModelDefinitions[protagonist.tank.id];
+  const tankModelDefinition = useTankModelDefinition();
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];

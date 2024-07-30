@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { modelDefinitions } from '../../../../core/blitzkit/modelDefinitions';
 import { provisionDefinitions } from '../../../../core/blitzkit/provisionDefinitions';
 import { tankDefinitions } from '../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
@@ -17,6 +18,8 @@ export default async function Layout({
 }) {
   const id = Number(params.id);
   const awaitedTankDefinitions = await tankDefinitions;
+  const awaitedModelDefinitions = await modelDefinitions;
+  const tankModelDefinition = awaitedModelDefinitions[id];
   const awaitedProvisionDefinitions = await provisionDefinitions;
   const tank = awaitedTankDefinitions[id];
   const title = `${tank.name} - Tier ${TIER_ROMAN_NUMERALS[tank.tier]} ${
@@ -25,7 +28,7 @@ export default async function Layout({
   const description = `Statistics, armor, and equipment for ${tank.name}`;
 
   return (
-    <TankopediaEphemeral.Provider>
+    <TankopediaEphemeral.Provider data={tankModelDefinition}>
       <TankFilters.Provider>
         <Duel.Provider
           data={{

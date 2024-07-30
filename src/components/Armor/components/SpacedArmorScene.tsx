@@ -5,7 +5,7 @@ import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
 import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
 import { useArmor } from '../../../hooks/useArmor';
 import { useModel } from '../../../hooks/useModel';
-import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
+import { useTankModelDefinition } from '../../../hooks/useTankModelDefinition';
 import { useTankTransform } from '../../../hooks/useTankTransform';
 import * as Duel from '../../../stores/duel';
 import { ModelTankWrapper } from './ModelTankWrapper';
@@ -23,7 +23,6 @@ interface SpacedArmorSceneProps {
 
 export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
   const wrapper = useRef<Group>(null);
-  const modelDefinitions = useModelDefinitions();
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
   const protagonist = Duel.use((draft) => draft.protagonist);
@@ -35,7 +34,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
   const { gltf: modelGltf } = useModel(tank.id);
   const armorNodes = Object.values(armorGltf.nodes);
   const modelNodes = Object.values(modelGltf.nodes);
-  const tankModelDefinition = modelDefinitions[tank.id];
+  const tankModelDefinition = useTankModelDefinition();
   const trackModelDefinition = tankModelDefinition.tracks[track.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];

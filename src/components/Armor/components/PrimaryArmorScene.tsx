@@ -4,7 +4,7 @@ import { correctZYTuple } from '../../../core/blitz/correctZYTuple';
 import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
 import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
 import { useArmor } from '../../../hooks/useArmor';
-import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
+import { useTankModelDefinition } from '../../../hooks/useTankModelDefinition';
 import { useTankTransform } from '../../../hooks/useTankTransform';
 import * as Duel from '../../../stores/duel';
 import * as TankopediaPersistent from '../../../stores/tankopediaPersistent';
@@ -13,7 +13,6 @@ import { PrimaryArmorSceneComponent } from './PrimaryArmorSceneComponent';
 
 export const PrimaryArmorScene = memo(() => {
   const wrapper = useRef<Group>(null);
-  const modelDefinitions = useModelDefinitions();
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
   const protagonist = Duel.use((draft) => draft.protagonist);
@@ -23,7 +22,7 @@ export const PrimaryArmorScene = memo(() => {
   const gun = Duel.use((state) => state.protagonist.gun);
   const armorGltf = useArmor(tank.id);
   const armorNodes = Object.values(armorGltf.nodes);
-  const tankModelDefinition = modelDefinitions[tank.id];
+  const tankModelDefinition = useTankModelDefinition();
   const trackModelDefinition = tankModelDefinition.tracks[track.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];
@@ -31,6 +30,12 @@ export const PrimaryArmorScene = memo(() => {
   const turretOrigin = correctZYTuple(tankModelDefinition.turretOrigin);
   const gunOrigin = correctZYTuple(turretModelDefinition.gunOrigin);
   const tankopediaPersistentStore = TankopediaPersistent.useStore();
+
+  console.log(
+    tankModelDefinition.armor,
+    turretModelDefinition.armor,
+    gunModelDefinition.armor,
+  );
 
   useTankTransform(protagonist, turretContainer, gunContainer);
 

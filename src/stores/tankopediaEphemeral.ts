@@ -5,12 +5,14 @@ import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { ArmorType } from '../components/Armor/components/SpacedArmorScene';
 import { ExternalModuleVariant } from '../components/Armor/components/SpacedArmorSceneComponent';
+import { ModelDefinition } from '../core/blitzkit/modelDefinitions';
 import { createNextSafeStore } from '../core/zustand/createNextSafeStore';
 
 interface TankopediaEphemeral {
   shot?: Shot;
   skills: Record<string, number>;
   controlsEnabled: boolean;
+  model: ModelDefinition;
   highlightArmor?: {
     name: string;
     point: Vector3;
@@ -86,10 +88,11 @@ export type ArmorPiercingLayer =
     };
 
 export const { Provider, use, useMutation, useStore } = createNextSafeStore(
-  () =>
+  (model: ModelDefinition) =>
     create<TankopediaEphemeral>()(
       subscribeWithSelector<TankopediaEphemeral>(() => ({
         skills: {},
+        model,
         controlsEnabled: true,
       })),
     ),

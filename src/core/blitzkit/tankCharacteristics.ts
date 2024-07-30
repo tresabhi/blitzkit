@@ -5,7 +5,7 @@ import { resolvePenetrationCoefficient } from '../blitz/resolvePenetrationCoeffi
 import { coefficient } from './coefficient';
 import { degressiveStat } from './degressiveStat';
 import { EquipmentDefinitions } from './equipmentDefinitions';
-import { ModelDefinitions } from './modelDefinitions';
+import { ModelDefinition, ModelDefinitions } from './modelDefinitions';
 import { normalizeBoundingBox } from './normalizeBoundingBox';
 import { progressiveStat } from './progressiveStat';
 import { ProvisionDefinitions } from './provisionDefinitions';
@@ -66,17 +66,16 @@ export function tankCharacteristics(
     applySpallLiner: boolean;
   },
   {
-    modelDefinitions,
+    tankModelDefinition,
     equipmentDefinitions,
     provisionDefinitions,
   }: {
-    modelDefinitions: ModelDefinitions;
+    tankModelDefinition: ModelDefinition;
     equipmentDefinitions: EquipmentDefinitions;
     provisionDefinitions: ProvisionDefinitions;
   },
 ) {
-  const presetRows = equipmentDefinitions.presets[tank.equipment];
-  const tankModelDefinition = modelDefinitions[tank.id];
+  const presetRows = equipmentDefinitions.presets[tank.equipment]; 
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];
 

@@ -3,23 +3,21 @@ import { Euler, Group, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { I_HAT, J_HAT, K_HAT } from '../constants/axis';
 import { correctZYTuple } from '../core/blitz/correctZYTuple';
-import { modelDefinitions } from '../core/blitzkit/modelDefinitions';
 import {
   ModelTransformEventData,
   modelTransformEvent,
 } from '../core/blitzkit/modelTransform';
 import { DuelMember } from '../stores/duel';
-import { useAwait } from './useAwait';
+import { useTankModelDefinition } from './useTankModelDefinition';
 
 export function useTankTransform(
   member: DuelMember,
   turretContainer: RefObject<Group>,
   gunContainer: RefObject<Group>,
 ) {
-  const awaitedModelDefinitions = useAwait(modelDefinitions);
+  const tankModelDefinition = useTankModelDefinition();
 
   useEffect(() => {
-    const tankModelDefinition = awaitedModelDefinitions[member.tank.id];
     const trackModelDefinition = tankModelDefinition.tracks[member.track.id];
     const turretModelDefinition = tankModelDefinition.turrets[member.turret.id];
 

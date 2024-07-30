@@ -5,7 +5,7 @@ import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
 import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
 import { useArmor } from '../../../hooks/useArmor';
 import { useModel } from '../../../hooks/useModel';
-import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
+import { useTankModelDefinition } from '../../../hooks/useTankModelDefinition';
 import { useTankTransform } from '../../../hooks/useTankTransform';
 import * as Duel from '../../../stores/duel';
 import * as TankopediaPersistent from '../../../stores/tankopediaPersistent';
@@ -25,7 +25,6 @@ export interface ThicknessRange {
 export const StaticArmorScene = memo<StaticArmorSceneProps>(
   ({ thicknessRange }) => {
     const wrapper = useRef<Group>(null);
-    const awaitedTankModelDefinitions = useModelDefinitions();
     const turretContainer = useRef<Group>(null);
     const gunContainer = useRef<Group>(null);
     const protagonist = Duel.use((draft) => draft.protagonist);
@@ -37,7 +36,7 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
     const { gltf: modelGltf } = useModel(tank.id);
     const armorNodes = Object.values(armorGltf.nodes);
     const modelNodes = Object.values(modelGltf.nodes);
-    const tankModelDefinition = awaitedTankModelDefinitions[tank.id];
+    const tankModelDefinition = useTankModelDefinition();
     const trackModelDefinition = tankModelDefinition.tracks[track.id];
     const turretModelDefinition = tankModelDefinition.turrets[turret.id];
     const gunModelDefinition = turretModelDefinition.guns[gun.id];
@@ -57,6 +56,8 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
     const showExternalModules = TankopediaPersistent.use(
       (state) => state.model.visual.showExternalModules,
     );
+
+    console.log('yeah');
 
     useTankTransform(protagonist, turretContainer, gunContainer);
 
