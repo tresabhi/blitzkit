@@ -149,7 +149,7 @@ export function SpacedArmorSceneComponent({
         if (selectedName === undefined) {
           // nothing selected, go back to defaults
           material.opacity = opacity;
-          material.transparent = opacity < 1;
+          // material.transparent = opacity < 1;
           material.color = color;
           material.depthWrite = props.type !== ArmorType.External;
           material.side = FrontSide;
@@ -164,14 +164,14 @@ export function SpacedArmorSceneComponent({
         ) {
           // this selected, stand out!
           material.opacity = 1;
-          material.transparent = false;
+          // material.transparent = false;
           material.color = color;
           material.depthWrite = true;
           material.side = DoubleSide;
         } else {
           // something else selected, become background
           material.opacity = 1 / 4;
-          material.transparent = true;
+          // material.transparent = true;
           material.color = unselectedColor;
           material.depthWrite = props.type !== ArmorType.External;
           material.side = FrontSide;
@@ -188,7 +188,7 @@ export function SpacedArmorSceneComponent({
 
     return jsxTree(node, {
       material,
-      renderOrder,
+      // renderOrder,
       userData: {
         type: props.type,
         variant: props.type === ArmorType.External ? props.variant : 'gun',

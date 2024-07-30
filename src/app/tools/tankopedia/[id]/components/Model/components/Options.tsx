@@ -70,9 +70,6 @@ export function Options({ thicknessRange }: OptionsProps) {
   const wireframe = TankopediaPersistent.use(
     (state) => state.model.visual.wireframe,
   );
-  const showSpacedArmor = TankopediaPersistent.use(
-    (state) => state.model.visual.showSpacedArmor,
-  );
   const opaque = TankopediaPersistent.use((state) => state.model.visual.opaque);
   const fullScreenAvailable = useFullscreenAvailability();
   const environment = TankopediaPersistent.use(
@@ -537,23 +534,9 @@ export function Options({ thicknessRange }: OptionsProps) {
             </DropdownMenu.Trigger>
 
             <DropdownMenu.Content>
-              {display !== TankopediaDisplay.Model && (
+              {display === TankopediaDisplay.DynamicArmor && (
                 <>
                   <DropdownMenu.Label>Armor</DropdownMenu.Label>
-
-                  <DropdownMenu.CheckboxItem
-                    checked={showSpacedArmor}
-                    onCheckedChange={(checked) => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.model.visual.showSpacedArmor = checked;
-                      });
-                      mutateTankopediaEphemeral((draft) => {
-                        draft.shot = undefined;
-                      });
-                    }}
-                  >
-                    Spaced armor
-                  </DropdownMenu.CheckboxItem>
 
                   <DropdownMenu.CheckboxItem
                     checked={greenPenetration}

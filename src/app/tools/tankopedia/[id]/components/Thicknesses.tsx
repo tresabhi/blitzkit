@@ -1,6 +1,7 @@
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Text } from '@radix-ui/themes';
 import { ThicknessRange } from '../../../../../components/StaticArmor/components/StaticArmorScene';
+import * as TankopediaEphemeral from '../../../../../stores/tankopediaEphemeral';
 import * as TankopediaPersistent from '../../../../../stores/tankopediaPersistent';
 
 interface ThicknessesProps {
@@ -18,6 +19,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
     (state) => state.model.visual.showCoreArmor,
   );
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
+  const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
 
   return (
     <Flex
@@ -25,7 +27,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
       right="0"
       top="50%"
       mr="4"
-      style={{ transform: 'translateY(-50%)' }}
+      style={{ transform: 'translateY(-50%)', userSelect: 'none' }}
       direction="column"
       gap="2"
       align="end"
@@ -38,6 +40,9 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
           mutateTankopediaPersistent((draft) => {
             draft.model.visual.showCoreArmor =
               !draft.model.visual.showCoreArmor;
+          });
+          mutateTankopediaEphemeral((draft) => {
+            draft.highlightArmor = undefined;
           });
         }}
       >
@@ -73,6 +78,9 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
             draft.model.visual.showSpacedArmor =
               !draft.model.visual.showSpacedArmor;
           });
+          mutateTankopediaEphemeral((draft) => {
+            draft.highlightArmor = undefined;
+          });
         }}
       >
         <Flex direction="column" align="end" justify="between">
@@ -105,6 +113,9 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
           mutateTankopediaPersistent((draft) => {
             draft.model.visual.showExternalModules =
               !draft.model.visual.showExternalModules;
+          });
+          mutateTankopediaEphemeral((draft) => {
+            draft.highlightArmor = undefined;
           });
         }}
       >

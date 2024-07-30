@@ -8,6 +8,7 @@ import { useModel } from '../../../hooks/useModel';
 import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
 import { useTankTransform } from '../../../hooks/useTankTransform';
 import * as Duel from '../../../stores/duel';
+import * as TankopediaPersistent from '../../../stores/tankopediaPersistent';
 import { ModelTankWrapper } from '../../Armor/components/ModelTankWrapper';
 import { ArmorType } from '../../Armor/components/SpacedArmorScene';
 import { SpacedArmorSceneComponent } from '../../Armor/components/SpacedArmorSceneComponent';
@@ -47,6 +48,15 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
       gunModelDefinition.mask === undefined
         ? undefined
         : gunModelDefinition.mask + hullOrigin.y + turretOrigin.y + gunOrigin.y;
+    const showCoreArmor = TankopediaPersistent.use(
+      (state) => state.model.visual.showCoreArmor,
+    );
+    const showSpacedArmor = TankopediaPersistent.use(
+      (state) => state.model.visual.showSpacedArmor,
+    );
+    const showExternalModules = TankopediaPersistent.use(
+      (state) => state.model.visual.showExternalModules,
+    );
 
     useTankTransform(protagonist, turretContainer, gunContainer);
 
@@ -62,7 +72,13 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
               armorId,
             );
 
-            if (!isVisible || thickness === undefined) return null;
+            if (
+              !isVisible ||
+              thickness === undefined ||
+              (!showCoreArmor && !spaced) ||
+              (!showSpacedArmor && spaced)
+            )
+              return null;
 
             return (
               <SpacedArmorSceneComponent
@@ -83,7 +99,7 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
           const isTrack = node.name.startsWith('chassis_track_');
           const isVisible = isWheel || isTrack;
 
-          if (!isVisible) return null;
+          if (!isVisible || !showExternalModules) return null;
 
           return (
             <SpacedArmorSceneComponent
@@ -111,7 +127,13 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
               armorId,
             );
 
-            if (!isVisible || thickness === undefined) return null;
+            if (
+              !isVisible ||
+              thickness === undefined ||
+              (!showCoreArmor && !spaced) ||
+              (!showSpacedArmor && spaced)
+            )
+              return null;
 
             return (
               <group position={hullOrigin}>
@@ -142,7 +164,13 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
                 armorId,
               );
 
-              if (!isVisible || thickness === undefined) return null;
+              if (
+                !isVisible ||
+                thickness === undefined ||
+                (!showCoreArmor && !spaced) ||
+                (!showSpacedArmor && spaced)
+              )
+                return null;
 
               return (
                 <group position={hullOrigin}>
@@ -170,7 +198,7 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
                 : node.name === gunString;
               const isVisible = isCurrentGun;
 
-              if (!isVisible) return null;
+              if (!isVisible || !showExternalModules) return null;
 
               return (
                 <SpacedArmorSceneComponent
