@@ -8,7 +8,6 @@ import {
   FrontSide,
   Intersection,
   MeshBasicMaterial,
-  MeshStandardMaterial,
   Object3D,
   Plane,
   Quaternion,
@@ -128,7 +127,7 @@ export function SpacedArmorSceneComponent({
 
     const material = useMemo(
       () =>
-        new MeshStandardMaterial({
+        new MeshBasicMaterial({
           color,
           opacity,
           transparent: true,
