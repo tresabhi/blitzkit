@@ -549,19 +549,6 @@ export function Options({ thicknessRange }: OptionsProps) {
                     Green penetration
                   </DropdownMenu.CheckboxItem>
 
-                  {developerMode && (
-                    <DropdownMenu.CheckboxItem
-                      checked={wireframe}
-                      onCheckedChange={(checked) => {
-                        mutateTankopediaPersistent((draft) => {
-                          draft.model.visual.wireframe = checked;
-                        });
-                      }}
-                    >
-                      Wireframe
-                    </DropdownMenu.CheckboxItem>
-                  )}
-
                   <DropdownMenu.CheckboxItem
                     checked={opaque}
                     onCheckedChange={(checked) => {
@@ -572,6 +559,19 @@ export function Options({ thicknessRange }: OptionsProps) {
                   >
                     Opaque
                   </DropdownMenu.CheckboxItem>
+
+                  {developerMode && (
+                    <DropdownMenu.CheckboxItem
+                      checked={wireframe}
+                      onCheckedChange={(checked) => {
+                        mutateTankopediaPersistent((draft) => {
+                          draft.model.visual.wireframe = checked;
+                        });
+                      }}
+                    >
+                      <b>DEV:</b> Wireframe
+                    </DropdownMenu.CheckboxItem>
+                  )}
                 </>
               )}
 
