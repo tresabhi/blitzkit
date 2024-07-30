@@ -18,8 +18,7 @@ interface StaticArmorSceneProps {
 }
 
 export interface ThicknessRange {
-  // max: number;
-  quartile: number;
+  value: number;
 }
 
 export const StaticArmorScene = memo<StaticArmorSceneProps>(
@@ -56,8 +55,6 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
     const showExternalModules = TankopediaPersistent.use(
       (state) => state.model.visual.showExternalModules,
     );
-
-    console.log('yeah');
 
     useTankTransform(protagonist, turretContainer, gunContainer);
 

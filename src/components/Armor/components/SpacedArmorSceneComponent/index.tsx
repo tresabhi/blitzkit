@@ -7,7 +7,10 @@ import {
   DoubleSide,
   FrontSide,
   Intersection,
+  LineBasicMaterial,
+  Mesh,
   MeshBasicMaterial,
+  MeshStandardMaterial,
   Object3D,
   Plane,
   Quaternion,
@@ -97,7 +100,7 @@ export function SpacedArmorSceneComponent({
   const camera = useThree((state) => state.camera);
 
   if (props.static) {
-    const x = clamp(thickness / props.thicknessRange.quartile, 0, 1);
+    const x = clamp(thickness / props.thicknessRange.value, 0, 1);
 
     let color: Color;
     let opacity: number;
@@ -125,14 +128,21 @@ export function SpacedArmorSceneComponent({
 
     opacity = clamp(opacity, 0, 1);
 
-    const material = useMemo(
+    const surfaceMaterial = useMemo(
       () =>
-        new MeshBasicMaterial({
+        new MeshStandardMaterial({
           color,
           opacity,
           transparent: true,
           depthWrite,
           ...(clip ? { clippingPlanes: [clip] } : {}),
+        }),
+      [thickness],
+    );
+    const outlineMaterial = useMemo(
+      () =>
+        new LineBasicMaterial({
+          color: color.clone().multiplyScalar(1 - 2 ** -3),
         }),
       [thickness],
     );
@@ -147,10 +157,11 @@ export function SpacedArmorSceneComponent({
 
         if (selectedName === undefined) {
           // nothing selected, go back to defaults
-          material.opacity = opacity;
-          material.color = color;
-          material.depthWrite = props.type !== ArmorType.External;
-          material.side = FrontSide;
+          surfaceMaterial.opacity = opacity;
+          surfaceMaterial.color = color;
+          surfaceMaterial.depthWrite = props.type !== ArmorType.External;
+          surfaceMaterial.side = FrontSide;
+          outlineMaterial.visible = true;
         } else if (
           selectedName === props.name ||
           (props.name.startsWith('chassis_') &&
@@ -161,19 +172,21 @@ export function SpacedArmorSceneComponent({
             !selectedName.includes('_armor_'))
         ) {
           // this selected, stand out!
-          material.opacity = 1;
-          material.color = color;
-          material.depthWrite = true;
-          material.side = DoubleSide;
+          surfaceMaterial.opacity = 1;
+          surfaceMaterial.color = color;
+          surfaceMaterial.depthWrite = true;
+          surfaceMaterial.side = DoubleSide;
+          outlineMaterial.visible = true;
         } else {
           // something else selected, become background
-          material.opacity = 1 / 4;
-          material.color = unselectedColor;
-          material.depthWrite = props.type !== ArmorType.External;
-          material.side = FrontSide;
+          surfaceMaterial.opacity = 1 / 4;
+          surfaceMaterial.color = unselectedColor;
+          surfaceMaterial.depthWrite = props.type !== ArmorType.External;
+          surfaceMaterial.side = FrontSide;
+          outlineMaterial.visible = false;
         }
 
-        material.transparent = material.opacity < 1;
+        surfaceMaterial.transparent = surfaceMaterial.opacity < 1;
       }
 
       const unsubscribe = tankopediaEphemeralStore.subscribe(
@@ -184,44 +197,53 @@ export function SpacedArmorSceneComponent({
       return unsubscribe;
     }, [thickness]);
 
-    return jsxTree(node, {
-      material,
-      // renderOrder,
-      userData: {
-        type: props.type,
-        variant: props.type === ArmorType.External ? props.variant : 'gun',
-        thickness,
-      } satisfies ArmorUserData,
-
-      onClick(event) {
-        event.stopPropagation();
-
-        const bounds = new Box3().setFromObject(event.object);
-        const point = bounds.min
-          .clone()
-          .add(bounds.max)
-          .divideScalar(2)
-          .setY(bounds.max.y);
-        const cameraNormal = camera.position.clone().sub(point).normalize();
-        const surfaceNormal = event
-          .normal!.clone()
-          .applyQuaternion(event.object.getWorldQuaternion(new Quaternion()));
-        const angle = surfaceNormal.angleTo(cameraNormal);
-        const thicknessAngled = thickness / Math.sin(Math.PI / 2 - angle);
-
-        mutateTankopediaEphemeralStore((draft) => {
-          draft.highlightArmor = {
+    return (
+      <>
+        {jsxTree(node, {
+          material: surfaceMaterial,
+          userData: {
             type: props.type,
-            name: props.name,
-            point,
+            variant: props.type === ArmorType.External ? props.variant : 'gun',
             thickness,
-            thicknessAngled,
-            angle,
-            color: `#${color.getHexString()}`,
-          };
-        });
-      },
-    });
+          } satisfies ArmorUserData,
+
+          onClick(event) {
+            event.stopPropagation();
+
+            const bounds = new Box3().setFromObject(event.object);
+            const point = bounds.min
+              .clone()
+              .add(bounds.max)
+              .divideScalar(2)
+              .setY(bounds.max.y);
+            const cameraNormal = camera.position.clone().sub(point).normalize();
+            const surfaceNormal = event
+              .normal!.clone()
+              .applyQuaternion(
+                event.object.getWorldQuaternion(new Quaternion()),
+              );
+            const angle = surfaceNormal.angleTo(cameraNormal);
+            const thicknessAngled = thickness / Math.sin(Math.PI / 2 - angle);
+
+            mutateTankopediaEphemeralStore((draft) => {
+              draft.highlightArmor = {
+                type: props.type,
+                name: props.name,
+                point,
+                thickness,
+                thicknessAngled,
+                angle,
+                color: `#${color.getHexString()}`,
+              };
+            });
+          },
+        })}
+
+        <lineSegments material={outlineMaterial}>
+          <edgesGeometry args={[(node as Mesh).geometry]} />
+        </lineSegments>
+      </>
+    );
   }
 
   const shoot = useCallback(

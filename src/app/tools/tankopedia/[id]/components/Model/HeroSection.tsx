@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Suspense, use, useEffect, useMemo, useState } from 'react';
 import { classIcons } from '../../../../../../components/ClassIcon';
 import { ThicknessRange } from '../../../../../../components/StaticArmor/components/StaticArmorScene';
-import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitions';
+import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
@@ -35,48 +35,22 @@ export function HeroSection({ id }: HeroSectionProps) {
         ? 'amber'
         : undefined;
   const awaitedTankDefinitions = use(tankDefinitions);
-  const awaitedModelDefinitions = use(modelDefinitions);
   const tank = awaitedTankDefinitions[id];
   const thicknessRange = useMemo(() => {
-    const thicknesses = Object.values(awaitedTankDefinitions)
-      .filter((thisTank) => thisTank.tier === tank.tier)
-      .map((tank) => ({
-        model: awaitedModelDefinitions[tank.id],
-        id: tank.id,
-      }))
-      .filter(Boolean)
-      .map(({ model, id }) => {
-        const tankThicknesses = Object.values(model.armor.thickness);
-        const turretThicknesses = Object.values(model.turrets)
-          .map((turret) => {
-            const turretThicknesses = Object.values(turret.armor.thickness);
-            const gunThicknesses = Object.values(turret.guns)
-              .map((gun) => Object.values(gun.armor.thickness))
-              .flat();
+    const entries = Object.values(awaitedTankDefinitions);
+    const filtered = entries.filter((thisTank) => thisTank.tier === tank.tier);
+    const value =
+      filtered.reduce((accumulator, thisTank) => {
+        return (
+          accumulator +
+          resolveNearPenetration(
+            thisTank.turrets.at(-1)!.guns.at(-1)!.shells[0].penetration,
+          )
+        );
+      }, 0) /
+      ((4 / 3) * filtered.length);
 
-            return [...turretThicknesses, ...gunThicknesses];
-          })
-          .flat();
-        const totalThicknesses = [...tankThicknesses, ...turretThicknesses];
-
-        return totalThicknesses;
-      })
-      .flat();
-
-    const sortedThicknesses = thicknesses.sort((a, b) => a - b);
-    const quartileIndex = (1 - 2 ** -6) * (sortedThicknesses.length + 1) - 1;
-    let quartile: number;
-
-    if (Number.isInteger(quartileIndex)) {
-      quartile = sortedThicknesses[quartileIndex];
-    } else {
-      quartile =
-        (sortedThicknesses[Math.floor(quartileIndex)] +
-          sortedThicknesses[Math.ceil(quartileIndex)]) /
-        2;
-    }
-
-    return { quartile } satisfies ThicknessRange;
+    return { value } satisfies ThicknessRange;
   }, [tank.tier]);
 
   useEffect(() => {

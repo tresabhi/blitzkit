@@ -48,7 +48,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
       >
         <Flex direction="column" align="end" justify="between">
           <Text color="gray" size="1">
-            {thicknessRange.quartile.toFixed(0)}
+            {thicknessRange.value.toFixed(0)}
           </Text>
           <Flex gap="1">
             {showPrimaryArmor ? <EyeOpenIcon /> : <EyeClosedIcon />}
@@ -85,7 +85,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
       >
         <Flex direction="column" align="end" justify="between">
           <Text color="gray" size="1">
-            {thicknessRange.quartile.toFixed(0)}
+            {thicknessRange.value.toFixed(0)}
           </Text>
           <Flex gap="1">
             {showSpacedArmor ? <EyeOpenIcon /> : <EyeClosedIcon />}
