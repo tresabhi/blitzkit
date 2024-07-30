@@ -288,6 +288,15 @@ export function SpacedArmorSceneComponent({
         }
       }
 
+      if (
+        !allowRicochet &&
+        !noDuplicateIntersections.some((intersection) => {
+          intersection.object.userData.type === ArmorType.Core;
+        })
+      ) {
+        return null;
+      }
+
       let remainingPenetration = remainingPenetrationInput ?? penetration;
       let index = 0;
       for (const intersection of noDuplicateIntersections) {
