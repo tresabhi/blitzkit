@@ -105,7 +105,7 @@ export function SpacedArmorSceneComponent({
     let depthWrite = true;
 
     switch (props.type) {
-      case ArmorType.Core:
+      case ArmorType.Primary:
         color = new Color(-((1 - x) ** 2) + 1, -(x ** 2) + 1, 0);
         opacity = 1;
         break;
@@ -280,7 +280,7 @@ export function SpacedArmorSceneComponent({
         } else {
           noDuplicateIntersections.push(intersection);
 
-          if (intersection.object.userData.type === ArmorType.Core) {
+          if (intersection.object.userData.type === ArmorType.Primary) {
             break;
           }
         }
@@ -289,7 +289,7 @@ export function SpacedArmorSceneComponent({
       if (
         !allowRicochet &&
         !noDuplicateIntersections.some((intersection) => {
-          intersection.object.userData.type === ArmorType.Core;
+          intersection.object.userData.type === ArmorType.Primary;
         })
       ) {
         return null;
@@ -386,7 +386,7 @@ export function SpacedArmorSceneComponent({
               point: intersection.point,
               surfaceNormal: intersection.face!.normal,
               status:
-                shell.type === ShellType.HE && layer.type !== ArmorType.Core
+                shell.type === ShellType.HE && layer.type !== ArmorType.Primary
                   ? 'blocked'
                   : blocked
                     ? 'blocked'
@@ -416,7 +416,7 @@ export function SpacedArmorSceneComponent({
         if (shell.type === ShellType.HE) {
           const totalSpacedArmorThickness = shot.in.layers.reduce(
             (acc, layer) => {
-              if (layer.type === null || layer.type === ArmorType.Core) {
+              if (layer.type === null || layer.type === ArmorType.Primary) {
                 return acc;
               }
 
@@ -515,14 +515,14 @@ export function SpacedArmorSceneComponent({
 
   return (
     <>
-      {props.type === ArmorType.Core &&
+      {props.type === ArmorType.Primary &&
         jsxTree(
           node,
           {
             renderOrder: 0,
             material: omitMaterial,
             userData: {
-              type: ArmorType.Core,
+              type: ArmorType.Primary,
               thickness,
             } satisfies ArmorUserData,
             async onClick(event) {

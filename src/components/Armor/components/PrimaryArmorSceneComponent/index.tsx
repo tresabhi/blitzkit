@@ -15,7 +15,7 @@ import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
 import { spacedArmorRenderTarget } from './target';
 
-interface CoreArmorSceneComponentProps {
+interface PrimaryArmorSceneComponentProps {
   thickness: number;
   node: Object3D;
 }
@@ -24,10 +24,10 @@ const excludeMaterial = new MeshBasicMaterial({
   colorWrite: false,
 });
 
-export function CoreArmorSceneComponent({
+export function PrimaryArmorSceneComponent({
   node,
   thickness,
-}: CoreArmorSceneComponentProps) {
+}: PrimaryArmorSceneComponentProps) {
   const tankopediaPersistentStore = TankopediaPersistent.useStore();
   const duelStore = Duel.useStore();
   const material = new ShaderMaterial({

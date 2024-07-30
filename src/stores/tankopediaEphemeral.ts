@@ -18,7 +18,7 @@ interface TankopediaEphemeral {
     color: string;
   } & (
     | {
-        type: ArmorType.Core | ArmorType.Spaced;
+        type: ArmorType.Primary | ArmorType.Spaced;
         thicknessAngled: number;
         angle: number;
       }

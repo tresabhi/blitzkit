@@ -48,8 +48,8 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
       gunModelDefinition.mask === undefined
         ? undefined
         : gunModelDefinition.mask + hullOrigin.y + turretOrigin.y + gunOrigin.y;
-    const showCoreArmor = TankopediaPersistent.use(
-      (state) => state.model.visual.showCoreArmor,
+    const showPrimaryArmor = TankopediaPersistent.use(
+      (state) => state.model.visual.showPrimaryArmor,
     );
     const showSpacedArmor = TankopediaPersistent.use(
       (state) => state.model.visual.showSpacedArmor,
@@ -75,7 +75,7 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
             if (
               !isVisible ||
               thickness === undefined ||
-              (!showCoreArmor && !spaced) ||
+              (!showPrimaryArmor && !spaced) ||
               (!showSpacedArmor && spaced)
             )
               return null;
@@ -86,7 +86,7 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
                 thicknessRange={thicknessRange}
                 static
                 key={node.uuid}
-                type={spaced ? ArmorType.Spaced : ArmorType.Core}
+                type={spaced ? ArmorType.Spaced : ArmorType.Primary}
                 thickness={thickness}
                 node={node}
               />
@@ -130,7 +130,7 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
             if (
               !isVisible ||
               thickness === undefined ||
-              (!showCoreArmor && !spaced) ||
+              (!showPrimaryArmor && !spaced) ||
               (!showSpacedArmor && spaced)
             )
               return null;
@@ -143,7 +143,7 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
                     thicknessRange={thicknessRange}
                     static
                     key={node.uuid}
-                    type={spaced ? ArmorType.Spaced : ArmorType.Core}
+                    type={spaced ? ArmorType.Spaced : ArmorType.Primary}
                     thickness={thickness}
                     node={node}
                   />
@@ -167,7 +167,7 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
               if (
                 !isVisible ||
                 thickness === undefined ||
-                (!showCoreArmor && !spaced) ||
+                (!showPrimaryArmor && !spaced) ||
                 (!showSpacedArmor && spaced)
               )
                 return null;
@@ -182,7 +182,7 @@ export const StaticArmorScene = memo<StaticArmorSceneProps>(
                       name={node.name}
                       thicknessRange={thicknessRange}
                       static
-                      type={spaced ? ArmorType.Spaced : ArmorType.Core}
+                      type={spaced ? ArmorType.Spaced : ArmorType.Primary}
                       thickness={thickness}
                       node={node}
                     />

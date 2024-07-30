@@ -15,8 +15,8 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
   const showSpacedArmor = TankopediaPersistent.use(
     (state) => state.model.visual.showSpacedArmor,
   );
-  const showCoreArmor = TankopediaPersistent.use(
-    (state) => state.model.visual.showCoreArmor,
+  const showPrimaryArmor = TankopediaPersistent.use(
+    (state) => state.model.visual.showPrimaryArmor,
   );
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
@@ -35,11 +35,11 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
       <Flex
         height="64px"
         gap="2"
-        style={{ opacity: showCoreArmor ? 1 : 0.5, cursor: 'pointer' }}
+        style={{ opacity: showPrimaryArmor ? 1 : 0.5, cursor: 'pointer' }}
         onClick={() => {
           mutateTankopediaPersistent((draft) => {
-            draft.model.visual.showCoreArmor =
-              !draft.model.visual.showCoreArmor;
+            draft.model.visual.showPrimaryArmor =
+              !draft.model.visual.showPrimaryArmor;
           });
           mutateTankopediaEphemeral((draft) => {
             draft.highlightArmor = undefined;
@@ -51,8 +51,8 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
             {thicknessRange.quartile.toFixed(0)}
           </Text>
           <Flex gap="1">
-            {showCoreArmor ? <EyeOpenIcon /> : <EyeClosedIcon />}
-            <Text size="1">Core</Text>
+            {showPrimaryArmor ? <EyeOpenIcon /> : <EyeClosedIcon />}
+            <Text size="1">Primary</Text>
           </Flex>
           <Text color="gray" size="1">
             0

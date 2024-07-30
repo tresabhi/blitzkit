@@ -12,7 +12,7 @@ import { ModelTankWrapper } from './ModelTankWrapper';
 import { SpacedArmorSceneComponent } from './SpacedArmorSceneComponent';
 
 export enum ArmorType {
-  Core,
+  Primary,
   Spaced,
   External,
 }
@@ -67,7 +67,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
             <SpacedArmorSceneComponent
               scene={scene}
               key={node.uuid}
-              type={spaced ? ArmorType.Spaced : ArmorType.Core}
+              type={spaced ? ArmorType.Spaced : ArmorType.Primary}
               thickness={thickness}
               node={node}
             />
@@ -114,7 +114,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
                 <SpacedArmorSceneComponent
                   scene={scene}
                   key={node.uuid}
-                  type={spaced ? ArmorType.Spaced : ArmorType.Core}
+                  type={spaced ? ArmorType.Spaced : ArmorType.Primary}
                   thickness={thickness}
                   node={node}
                 />
@@ -145,7 +145,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
                 >
                   <SpacedArmorSceneComponent
                     scene={scene}
-                    type={spaced ? ArmorType.Spaced : ArmorType.Core}
+                    type={spaced ? ArmorType.Spaced : ArmorType.Primary}
                     thickness={thickness}
                     node={node}
                   />

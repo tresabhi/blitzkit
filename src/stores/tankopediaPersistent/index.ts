@@ -23,7 +23,7 @@ export interface TankopediaPersistent {
       showEnvironment: boolean;
       showSpacedArmor: boolean;
       showExternalModules: boolean;
-      showCoreArmor: boolean;
+      showPrimaryArmor: boolean;
     };
   };
   sort: {
@@ -50,7 +50,7 @@ export const { Provider, use, useMutation, useStore } = createNextSafeStore(
             visual: {
               showSpacedArmor: true,
               showExternalModules: true,
-              showCoreArmor: true,
+              showPrimaryArmor: true,
               wireframe: false,
               opaque: false,
               environment: ENVIRONMENTS[0],

@@ -14,7 +14,7 @@ import { ArmorType } from './SpacedArmorScene';
 import { ExternalModuleVariant } from './SpacedArmorSceneComponent';
 
 export const layerTypeNames: Record<ArmorType | 'null', string> = {
-  [ArmorType.Core]: 'Core',
+  [ArmorType.Primary]: 'Primary',
   [ArmorType.Spaced]: 'Spaced',
   [ArmorType.External]: 'External',
   null: 'Gap',
@@ -50,7 +50,7 @@ function LayerEntry({
       <Text size="1" color="gray" style={{ width: 12 }}>
         {layerIndex}
       </Text>
-      <Text size="2" color={shotStatusColor} style={{ width: 47 }}>
+      <Text size="2" color={shotStatusColor} style={{ width: 48 }}>
         {layerName}
       </Text>
 
@@ -74,7 +74,8 @@ function LayerEntry({
         </Text>
       )}
 
-      {(layer.type === ArmorType.Core || layer.type === ArmorType.Spaced) && (
+      {(layer.type === ArmorType.Primary ||
+        layer.type === ArmorType.Spaced) && (
         <>
           <Text size="2" color={shotStatusColor} style={{ width: 80 }}>
             {Math.round(layer.thicknessAngled).toLocaleString()}
@@ -140,7 +141,7 @@ export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {
                   layerName={layerName}
                   shotStatusColor={shotStatusColor}
                   angle={
-                    layer.type === ArmorType.Core ||
+                    layer.type === ArmorType.Primary ||
                     layer.type === ArmorType.Spaced
                       ? layer.angle
                       : undefined
@@ -206,7 +207,7 @@ export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {
                     layerName={layerName}
                     shotStatusColor={shotStatusColor}
                     angle={
-                      layer.type === ArmorType.Core ||
+                      layer.type === ArmorType.Primary ||
                       layer.type === ArmorType.Spaced
                         ? layer.angle
                         : undefined

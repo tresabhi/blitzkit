@@ -8,10 +8,10 @@ import { useModelDefinitions } from '../../../hooks/useModelDefinitions';
 import { useTankTransform } from '../../../hooks/useTankTransform';
 import * as Duel from '../../../stores/duel';
 import * as TankopediaPersistent from '../../../stores/tankopediaPersistent';
-import { CoreArmorSceneComponent } from './CoreArmorSceneComponent';
 import { ModelTankWrapper } from './ModelTankWrapper';
+import { PrimaryArmorSceneComponent } from './PrimaryArmorSceneComponent';
 
-export const CoreArmorScene = memo(() => {
+export const PrimaryArmorScene = memo(() => {
   const wrapper = useRef<Group>(null);
   const modelDefinitions = useModelDefinitions();
   const turretContainer = useRef<Group>(null);
@@ -49,7 +49,7 @@ export const CoreArmorScene = memo(() => {
           if (!isVisible || spaced || thickness === undefined) return null;
 
           return (
-            <CoreArmorSceneComponent
+            <PrimaryArmorSceneComponent
               key={node.uuid}
               thickness={thickness}
               node={node}
@@ -75,7 +75,7 @@ export const CoreArmorScene = memo(() => {
           return (
             <group position={hullOrigin}>
               <group key={node.uuid} position={turretOrigin}>
-                <CoreArmorSceneComponent
+                <PrimaryArmorSceneComponent
                   key={node.uuid}
                   thickness={thickness}
                   node={node}
@@ -105,7 +105,10 @@ export const CoreArmorScene = memo(() => {
                   key={node.uuid}
                   position={turretOrigin.clone().add(gunOrigin)}
                 >
-                  <CoreArmorSceneComponent thickness={thickness} node={node} />
+                  <PrimaryArmorSceneComponent
+                    thickness={thickness}
+                    node={node}
+                  />
                 </group>
               </group>
             );

@@ -45,8 +45,8 @@ void main() {
     // world space in meters
     vec4 spacedArmorDepthFragment = texture2D(spacedArmorDepth, screenCoordinates);
     float spacedArmorDistance = depthToDistance(spacedArmorDepthFragment.r);
-    float coreArmorDistance = depthToDistance(gl_FragCoord.z);
-    float distanceFromSpacedArmor = coreArmorDistance - spacedArmorDistance;
+    float primaryArmorDistance = depthToDistance(gl_FragCoord.z);
+    float distanceFromSpacedArmor = primaryArmorDistance - spacedArmorDistance;
 
     if (canSplash && isUnderSpacedArmor) {
       float spacedArmorThickness = spacedArmorBufferFragment.r * penetration;

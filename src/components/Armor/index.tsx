@@ -1,18 +1,21 @@
 import { createPortal, useFrame } from '@react-three/fiber';
 import { memo, useState } from 'react';
 import { DepthTexture, Scene, Vector2 } from 'three';
-import { CoreArmorScene } from './components/CoreArmorScene';
-import { spacedArmorRenderTarget } from './components/CoreArmorSceneComponent/target';
+import { PrimaryArmorScene } from './components/PrimaryArmorScene';
+import { spacedArmorRenderTarget } from './components/PrimaryArmorSceneComponent/target';
 import { SpacedArmorScene } from './components/SpacedArmorScene';
 
 export const Armor = memo(() => {
   const [spacedArmorScene] = useState(() => new Scene());
-  const [coreArmorScene] = useState(() => new Scene());
+  const [primaryArmorScene] = useState(() => new Scene());
   const spacedArmorPortal = createPortal(
     <SpacedArmorScene scene={spacedArmorScene} />,
     spacedArmorScene,
   );
-  const coreArmorPortal = createPortal(<CoreArmorScene />, coreArmorScene);
+  const primaryArmorPortal = createPortal(
+    <PrimaryArmorScene />,
+    primaryArmorScene,
+  );
 
   const renderSize = new Vector2();
   const newRenderSize = new Vector2();
@@ -40,13 +43,13 @@ export const Armor = memo(() => {
     gl.render(scene, camera);
 
     gl.clearDepth();
-    gl.render(coreArmorScene, camera);
+    gl.render(primaryArmorScene, camera);
   }, 1);
 
   return (
     <>
       {spacedArmorPortal}
-      {coreArmorPortal}
+      {primaryArmorPortal}
     </>
   );
 });
