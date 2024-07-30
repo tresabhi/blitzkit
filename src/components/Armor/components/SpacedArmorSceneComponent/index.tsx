@@ -99,7 +99,6 @@ export function SpacedArmorSceneComponent({
 
   if (props.static) {
     const x = clamp(thickness / props.thicknessRange.quartile, 0, 1);
-    const y = Math.sqrt(x);
 
     let color: Color;
     let opacity: number;
@@ -108,12 +107,12 @@ export function SpacedArmorSceneComponent({
 
     switch (props.type) {
       case ArmorType.Core:
-        color = new Color(-((1 - y) ** 2) + 1, -(y ** 2) + 1, 0);
+        color = new Color(-((1 - x) ** 2) + 1, -(x ** 2) + 1, 0);
         opacity = 1;
         break;
 
       case ArmorType.Spaced:
-        color = new Color(1 - (7 / 8) * y, 0, 1 - (1 / 8) * y);
+        color = new Color(1 - (7 / 8) * x, 0, 1 - (1 / 8) * x);
         opacity = x + 1 / 2;
         break;
 
