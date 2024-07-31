@@ -73,7 +73,7 @@ export function Options({ thicknessRange }: OptionsProps) {
   const opaque = TankopediaPersistent.use((state) => state.model.visual.opaque);
   const fullScreenAvailable = useFullscreenAvailability();
   const environment = TankopediaPersistent.use(
-    (state) => state.model.visual.environment,
+    (state) => state.model.visual.environmentV2,
   );
   const developerMode = App.use((state) => state.developerMode);
   const antagonistGun = Duel.use((state) => state.antagonist.gun);
@@ -610,7 +610,7 @@ export function Options({ thicknessRange }: OptionsProps) {
                         value={environment}
                         onClick={() => {
                           mutateTankopediaPersistent((draft) => {
-                            draft.model.visual.environment = environment;
+                            draft.model.visual.environmentV2 = environment;
                           });
                         }}
                       >
