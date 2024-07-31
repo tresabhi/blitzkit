@@ -32,10 +32,6 @@ import { ArmorType } from '../SpacedArmorScene';
 import { SpacedArmorSubExternal } from './components/SpacedArmorSubExternal';
 import { SpacedArmorSubSpaced } from './components/SpacedArmorSubSpaced';
 
-function to255(value: number) {
-  return Math.round(255 * value);
-}
-
 type SpacedArmorSceneComponentProps = {
   node: Object3D;
   thickness: number;
@@ -100,7 +96,7 @@ export function SpacedArmorSceneComponent({
   const camera = useThree((state) => state.camera);
 
   if (props.static) {
-    const x = clamp(thickness / props.thicknessRange.value, 0, 1);
+    const x = thickness / props.thicknessRange.value;
 
     let color: Color;
     let opacity: number;
@@ -108,13 +104,21 @@ export function SpacedArmorSceneComponent({
 
     switch (props.type) {
       case ArmorType.Primary:
-        color = new Color(-((1 - x) ** 2) + 1, -(x ** 2) + 1, 0);
+        if (x > 1) {
+          color = new Color(Math.max(2 - x, 0.5), 0, 0);
+        } else {
+          color = new Color(-((1 - x) ** 2) + 1, -(x ** 2) + 1, 0);
+        }
         opacity = 1;
         break;
 
       case ArmorType.Spaced:
-        color = new Color(1 - (7 / 8) * x, 0, 1 - (1 / 8) * x);
-        opacity = x + 1 / 2;
+        color = new Color(
+          clamp(1 - (7 / 8) * x, 0, 1),
+          0,
+          clamp(1 - (1 / 8) * x, 0, 1),
+        );
+        opacity = clamp(x + 1 / 2, 0, 1);
         break;
 
       case ArmorType.External:

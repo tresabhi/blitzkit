@@ -50,7 +50,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
       >
         <Flex direction="column" align="end" justify="between">
           <Text color="gray" size="1">
-            {thicknessRange.value.toFixed(0)}
+            {(thicknessRange.value * 1.5).toFixed(0)}
           </Text>
           <Flex gap="1">
             {showPrimaryArmor ? <EyeOpenIcon /> : <EyeClosedIcon />}
@@ -66,7 +66,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
           style={{
             borderRadius: 'var(--radius-full)',
             overflow: 'hidden',
-            background: `linear-gradient(rgb(255, 0, 0), rgb(0, 255, 0))`,
+            background: `linear-gradient(rgb(128, 0, 0), rgb(255, 0, 0) 33%, rgb(0, 255, 0))`,
           }}
         />
       </Flex>

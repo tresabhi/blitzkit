@@ -40,7 +40,7 @@ export function HeroSection({ id }: HeroSectionProps) {
     const entries = Object.values(awaitedTankDefinitions);
     const filtered = entries.filter((thisTank) => thisTank.tier === tank.tier);
     const value =
-      filtered.reduce((accumulator, thisTank) => {
+      (filtered.reduce((accumulator, thisTank) => {
         return (
           accumulator +
           resolveNearPenetration(
@@ -48,7 +48,8 @@ export function HeroSection({ id }: HeroSectionProps) {
           )
         );
       }, 0) /
-      ((4 / 3) * filtered.length);
+        filtered.length) *
+      (3 / 4);
 
     return { value } satisfies ThicknessRange;
   }, [tank.tier]);
