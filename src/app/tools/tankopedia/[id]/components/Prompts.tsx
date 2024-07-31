@@ -59,9 +59,9 @@ export function Prompts() {
 
                   const input = event.currentTarget.valueAsNumber;
 
-                  if (!isNaN(input)) {
-                    armor.thickness[index] = input;
-                  }
+                  if (isNaN(input) || input < 0) return;
+
+                  armor.thickness[index] = input;
                 });
               } else if (event.key === 'Escape') {
                 input.current?.blur();

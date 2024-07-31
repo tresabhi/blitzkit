@@ -14,7 +14,6 @@ import {
   Quaternion,
 } from 'three';
 import { jsxTree } from '../../../core/blitzkit/jsxTree';
-import * as Duel from '../../../stores/duel';
 import * as TankopediaEphemeral from '../../../stores/tankopediaEphemeral';
 import { ThicknessRange } from '../../StaticArmor';
 import { ArmorType } from './SpacedArmorScene';
@@ -52,10 +51,10 @@ export function StaticArmorSceneComponent({
 }: StaticArmorSceneComponentProps) {
   const mutateTankopediaEphemeralStore = TankopediaEphemeral.useMutation();
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
-  const duelStore = Duel.useStore();
   const camera = useThree((state) => state.camera);
 
   const x = thickness / thicknessRange.value;
+  const xClamped = clamp(x, 0, 1);
   let color: Color;
   let opacity: number;
   let depthWrite = true;
@@ -63,7 +62,7 @@ export function StaticArmorSceneComponent({
   switch (props.type) {
     case ArmorType.Primary:
       if (x > 1) {
-        color = new Color(Math.max(2 - x, 0.5), 0, 0);
+        color = new Color(clamp(2 - x, 0.5, 1), 0, 0);
       } else {
         color = new Color(-((1 - x) ** 2) + 1, -(x ** 2) + 1, 0);
       }
@@ -72,9 +71,9 @@ export function StaticArmorSceneComponent({
 
     case ArmorType.Spaced:
       color = new Color(
-        clamp(1 - (7 / 8) * x, 0, 1),
+        clamp(1 - (7 / 8) * xClamped, 0, 1),
         0,
-        clamp(1 - (1 / 8) * x, 0, 1),
+        clamp(1 - (1 / 8) * xClamped, 0, 1),
       );
       opacity = clamp(x + 1 / 2, 0, 1);
       break;
@@ -102,7 +101,9 @@ export function StaticArmorSceneComponent({
   const outlineMaterial = useMemo(
     () =>
       new LineBasicMaterial({
-        color: color.clone().multiplyScalar(2 ** 2),
+        color: color
+          .clone()
+          .multiplyScalar(props.type === ArmorType.Spaced ? 2 ** 2 : 2 ** -2),
       }),
     [thickness],
   );
