@@ -13,6 +13,8 @@ interface TankopediaEphemeral {
   skills: Record<string, number>;
   controlsEnabled: boolean;
   model: ModelDefinition;
+  editStatic: boolean;
+  editingPlate?: { name: string; default: number };
   highlightArmor?: {
     name: string;
     point: Vector3;
@@ -91,6 +93,7 @@ export const { Provider, use, useMutation, useStore } = createNextSafeStore(
   (model: ModelDefinition) =>
     create<TankopediaEphemeral>()(
       subscribeWithSelector<TankopediaEphemeral>(() => ({
+        editStatic: false,
         skills: {},
         model,
         controlsEnabled: true,

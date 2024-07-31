@@ -10,6 +10,7 @@ import { HistorySection } from './components/HistorySection';
 import { CharacteristicsSection } from './components/Model/CharacteristicsSection';
 import { HeroSection } from './components/Model/HeroSection';
 import { TechTreeSection } from './components/Model/TechTreeSection';
+import { Prompts } from './components/Prompts';
 import { ShotDisplaySection } from './components/ShotDisplaySection';
 import { VideoSection } from './components/VideoSection';
 
@@ -74,6 +75,8 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <PageWrapper p="0" noMaxWidth color="purple" size={1600}>
+      <Prompts />
+
       <HeroSection id={id} />
       <ShotDisplaySection />
       {!exempt && <AdMidSectionResponsive />}

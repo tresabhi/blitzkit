@@ -1,5 +1,5 @@
-import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
-import { Box, Flex, Text } from '@radix-ui/themes';
+import { EyeClosedIcon, EyeOpenIcon, ReloadIcon } from '@radix-ui/react-icons';
+import { Box, Button, Checkbox, Flex, Text } from '@radix-ui/themes';
 import { ThicknessRange } from '../../../../../components/StaticArmor/components/StaticArmorScene';
 import * as TankopediaEphemeral from '../../../../../stores/tankopediaEphemeral';
 import * as TankopediaPersistent from '../../../../../stores/tankopediaPersistent';
@@ -20,6 +20,8 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
   );
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
+  const editStatic = TankopediaEphemeral.use((state) => state.editStatic);
+  const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
 
   return (
     <Flex
@@ -135,6 +137,37 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
             backgroundColor: 'rgb(0, 64, 128)',
           }}
         />
+      </Flex>
+
+      <Flex align="center" gap="2" mt="2">
+        <Button
+          color="red"
+          size="1"
+          variant="ghost"
+          onClick={() => {
+            mutateTankopediaEphemeral((draft) => {
+              draft.editStatic = false;
+              draft.model = tankopediaEphemeralStore.getInitialState().model;
+            });
+          }}
+        >
+          <ReloadIcon />
+          Reset
+        </Button>
+
+        <Flex
+          gap="2"
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            mutateTankopediaEphemeral((draft) => {
+              draft.editStatic = !draft.editStatic;
+              draft.highlightArmor = undefined;
+            });
+          }}
+        >
+          <Text size="1">Edit</Text>
+          <Checkbox size="2" checked={editStatic} />
+        </Flex>
       </Flex>
     </Flex>
   );

@@ -104,7 +104,6 @@ export function SpacedArmorSceneComponent({
 
     let color: Color;
     let opacity: number;
-    let renderOrder = 1;
     let depthWrite = true;
 
     switch (props.type) {
@@ -121,7 +120,6 @@ export function SpacedArmorSceneComponent({
       case ArmorType.External:
         color = externalModuleColor;
         opacity = 1 / 8;
-        renderOrder = 0;
         depthWrite = false;
         break;
     }
@@ -142,7 +140,7 @@ export function SpacedArmorSceneComponent({
     const outlineMaterial = useMemo(
       () =>
         new LineBasicMaterial({
-          color: color.clone().multiplyScalar(1 - 2 ** -3),
+          color: color.clone().multiplyScalar(2 ** 2),
         }),
       [thickness],
     );
@@ -210,37 +208,51 @@ export function SpacedArmorSceneComponent({
           onClick(event) {
             event.stopPropagation();
 
-            const bounds = new Box3().setFromObject(event.object);
-            const point = bounds.min
-              .clone()
-              .add(bounds.max)
-              .divideScalar(2)
-              .setY(bounds.max.y);
-            const cameraNormal = camera.position.clone().sub(point).normalize();
-            const surfaceNormal = event
-              .normal!.clone()
-              .applyQuaternion(
-                event.object.getWorldQuaternion(new Quaternion()),
-              );
-            const angle = surfaceNormal.angleTo(cameraNormal);
-            const thicknessAngled = thickness / Math.sin(Math.PI / 2 - angle);
+            const { editStatic } = tankopediaEphemeralStore.getState();
 
-            mutateTankopediaEphemeralStore((draft) => {
-              draft.highlightArmor = {
-                type: props.type,
-                name: props.name,
-                point,
-                thickness,
-                thicknessAngled,
-                angle,
-                color: `#${color.getHexString()}`,
-              };
-            });
+            if (editStatic) {
+              mutateTankopediaEphemeralStore((draft) => {
+                draft.editingPlate = {
+                  name: props.name,
+                  default: thickness,
+                };
+              });
+            } else {
+              const bounds = new Box3().setFromObject(event.object);
+              const point = bounds.min
+                .clone()
+                .add(bounds.max)
+                .divideScalar(2)
+                .setY(bounds.max.y);
+              const cameraNormal = camera.position
+                .clone()
+                .sub(point)
+                .normalize();
+              const surfaceNormal = event
+                .normal!.clone()
+                .applyQuaternion(
+                  event.object.getWorldQuaternion(new Quaternion()),
+                );
+              const angle = surfaceNormal.angleTo(cameraNormal);
+              const thicknessAngled = thickness / Math.sin(Math.PI / 2 - angle);
+
+              mutateTankopediaEphemeralStore((draft) => {
+                draft.highlightArmor = {
+                  type: props.type,
+                  name: props.name,
+                  point,
+                  thickness,
+                  thicknessAngled,
+                  angle,
+                  color: `#${color.getHexString()}`,
+                };
+              });
+            }
           },
         })}
 
         <lineSegments material={outlineMaterial}>
-          <edgesGeometry args={[(node as Mesh).geometry]} />
+          <edgesGeometry args={[(node as Mesh).geometry, 45]} />
         </lineSegments>
       </>
     );
