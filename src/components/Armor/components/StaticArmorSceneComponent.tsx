@@ -14,6 +14,7 @@ import {
   Quaternion,
 } from 'three';
 import { jsxTree } from '../../../core/blitzkit/jsxTree';
+import { discardClippingPlane } from '../../../core/three/discardClippingPlane';
 import * as TankopediaEphemeral from '../../../stores/tankopediaEphemeral';
 import { ThicknessRange } from '../../StaticArmor';
 import { ArmorType } from './SpacedArmorScene';
@@ -166,6 +167,8 @@ export function StaticArmorSceneComponent({
         } satisfies ArmorUserData,
 
         onClick(event) {
+          if (discardClippingPlane(event.object, event.point)) return;
+
           event.stopPropagation();
 
           const { editStatic } = tankopediaEphemeralStore.getState();

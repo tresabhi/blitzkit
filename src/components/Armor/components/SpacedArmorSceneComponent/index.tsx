@@ -17,6 +17,7 @@ import { resolvePenetrationCoefficient } from '../../../../core/blitz/resolvePen
 import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../core/blitzkit/jsxTree';
 import { ShellType } from '../../../../core/blitzkit/tankDefinitions';
+import { discardClippingPlane } from '../../../../core/three/discardClippingPlane';
 import * as Duel from '../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 import { ArmorType } from '../SpacedArmorScene';
@@ -109,7 +110,9 @@ export function SpacedArmorSceneComponent({
         resolvePenetrationCoefficient(hasCalibratedShells, shell.type);
       const thicknessCoefficient = hasEnhancedArmor ? 1.03 : 1;
       const filteredIntersections = intersections.filter(
-        (intersection) => 'type' in intersection.object.userData,
+        (intersection) =>
+          'type' in intersection.object.userData &&
+          !discardClippingPlane(intersection.object, intersection.point),
       ) as unknown as Intersection<Object3D & { userData: ArmorUserData }>[];
       const encounteredExternalModuleVariants: ExternalModuleVariant[] = [];
       const noDuplicateIntersections: typeof filteredIntersections = [];
