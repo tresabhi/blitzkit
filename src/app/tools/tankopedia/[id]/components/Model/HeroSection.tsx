@@ -3,7 +3,7 @@ import { Box, Button, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { Suspense, use, useEffect, useMemo, useState } from 'react';
 import { classIcons } from '../../../../../../components/ClassIcon';
-import { ThicknessRange } from '../../../../../../components/StaticArmor/components/StaticArmorScene';
+import { ThicknessRange } from '../../../../../../components/StaticArmor';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinitions/constants';

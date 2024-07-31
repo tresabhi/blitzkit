@@ -22,7 +22,7 @@ import {
 import { useEffect, useState } from 'react';
 import { ModuleButton } from '../../../../../../../components/ModuleButtons/ModuleButton';
 import { SmallTankIcon } from '../../../../../../../components/SmallTankIcon';
-import { ThicknessRange } from '../../../../../../../components/StaticArmor/components/StaticArmorScene';
+import { ThicknessRange } from '../../../../../../../components/StaticArmor';
 import { resolveNearPenetration } from '../../../../../../../core/blitz/resolveNearPenetration';
 import { resolvePenetrationCoefficient } from '../../../../../../../core/blitz/resolvePenetrationCoefficient';
 import { asset } from '../../../../../../../core/blitzkit/asset';

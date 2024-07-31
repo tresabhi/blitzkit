@@ -3,8 +3,10 @@ import { Suspense, useEffect, useRef } from 'react';
 import { Armor } from '../../../../../../components/Armor';
 import { ArmorPlateDisplay } from '../../../../../../components/Armor/components/ArmorPlateDisplay';
 import { ShotDisplay } from '../../../../../../components/Armor/components/ShotDisplay';
-import { StaticArmor } from '../../../../../../components/StaticArmor';
-import { ThicknessRange } from '../../../../../../components/StaticArmor/components/StaticArmorScene';
+import {
+  StaticArmor,
+  ThicknessRange,
+} from '../../../../../../components/StaticArmor';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';

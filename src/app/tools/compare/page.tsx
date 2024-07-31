@@ -60,8 +60,8 @@ export default function Page() {
           },
           {
             equipmentDefinitions: awaitedEquipmentDefinitions,
-            modelDefinitions: awaitedModelDefinitions,
             provisionDefinitions: awaitedProvisionDefinitions,
+            tankModelDefinition: awaitedModelDefinitions[thisMember.tank.id],
           },
         ),
       ),

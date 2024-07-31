@@ -1,6 +1,6 @@
 import { EyeClosedIcon, EyeOpenIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Box, Button, Checkbox, Flex, Text } from '@radix-ui/themes';
-import { ThicknessRange } from '../../../../../components/StaticArmor/components/StaticArmorScene';
+import { ThicknessRange } from '../../../../../components/StaticArmor';
 import * as TankopediaEphemeral from '../../../../../stores/tankopediaEphemeral';
 import * as TankopediaPersistent from '../../../../../stores/tankopediaPersistent';
 
