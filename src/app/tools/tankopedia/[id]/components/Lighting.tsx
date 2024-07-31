@@ -4,8 +4,8 @@ import * as Duel from '../../../../../stores/duel';
 import * as TankopediaPersistent from '../../../../../stores/tankopediaPersistent';
 
 export const ENVIRONMENTS = [
-  'apartment',
   'lobby',
+  'apartment',
   'warehouse',
   'dawn',
   'sunset',
@@ -18,7 +18,7 @@ export function Lighting() {
     (state) => state.model.visual.showEnvironment,
   );
   const environment = TankopediaPersistent.use(
-    (state) => state.model.visual.environmentV2,
+    (state) => state.model.visual.environment,
   );
 
   return (

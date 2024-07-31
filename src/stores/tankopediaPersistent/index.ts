@@ -17,7 +17,7 @@ export interface TankopediaPersistent {
     visual: {
       wireframe: boolean;
       opaque: boolean;
-      environmentV2: (typeof ENVIRONMENTS)[number];
+      environment: (typeof ENVIRONMENTS)[number];
       showGrid: boolean;
       greenPenetration: boolean;
       showEnvironment: boolean;
@@ -53,7 +53,7 @@ export const { Provider, use, useMutation, useStore } = createNextSafeStore(
               showPrimaryArmor: true,
               wireframe: false,
               opaque: false,
-              environmentV2: ENVIRONMENTS[0],
+              environment: ENVIRONMENTS[0],
               showGrid: true,
               greenPenetration: false,
               showEnvironment: false,
