@@ -105,7 +105,7 @@ export function StaticArmorSceneComponent({
       new LineBasicMaterial({
         color: color
           .clone()
-          .multiplyScalar(props.type === ArmorType.Spaced ? 2 ** 2 : 2 ** -2),
+          .multiplyScalar(props.type === ArmorType.Spaced ? 2 ** 2 : 2 ** -1),
       }),
     [thickness],
   );
@@ -189,7 +189,7 @@ export function StaticArmorSceneComponent({
             .applyQuaternion(event.object.getWorldQuaternion(new Quaternion()));
           const angle = surfaceNormal.angleTo(cameraNormal);
           const thicknessAngled = thickness / Math.sin(Math.PI / 2 - angle);
-          console.log(name);
+
           mutateTankopediaEphemeralStore((draft) => {
             draft.highlightArmor = {
               type: props.type,
@@ -207,7 +207,7 @@ export function StaticArmorSceneComponent({
 
       {node instanceof Mesh && (
         <lineSegments material={outlineMaterial}>
-          <edgesGeometry args={[node.geometry, 90 / 6]} />
+          <edgesGeometry args={[node.geometry, 45]} />
         </lineSegments>
       )}
     </>
