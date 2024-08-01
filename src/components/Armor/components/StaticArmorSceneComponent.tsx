@@ -205,9 +205,11 @@ export function StaticArmorSceneComponent({
         },
       })}
 
-      <lineSegments material={outlineMaterial}>
-        <edgesGeometry args={[(node as Mesh).geometry, 45]} />
-      </lineSegments>
+      {node instanceof Mesh && (
+        <lineSegments material={outlineMaterial}>
+          <edgesGeometry args={[node.geometry, 90 / 6]} />
+        </lineSegments>
+      )}
     </>
   );
 }
