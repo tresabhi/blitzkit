@@ -93,12 +93,13 @@ export function StaticArmorSceneComponent({
       new MeshStandardMaterial({
         color,
         opacity,
-        transparent: true,
+        transparent: opacity < 1,
         depthWrite,
         ...(clip ? { clippingPlanes: [clip] } : {}),
       }),
     [thickness],
   );
+
   const outlineMaterial = useMemo(
     () =>
       new LineBasicMaterial({
@@ -118,6 +119,7 @@ export function StaticArmorSceneComponent({
       if (selectedName === undefined) {
         // nothing selected, go back to defaults
         surfaceMaterial.opacity = opacity;
+        surfaceMaterial.transparent = opacity < 1;
         surfaceMaterial.color = color;
         surfaceMaterial.depthWrite = props.type !== ArmorType.External;
         surfaceMaterial.side = FrontSide;
@@ -132,6 +134,7 @@ export function StaticArmorSceneComponent({
       ) {
         // this selected, stand out!
         surfaceMaterial.opacity = 1;
+        surfaceMaterial.transparent = false;
         surfaceMaterial.color = color;
         surfaceMaterial.depthWrite = true;
         surfaceMaterial.side = DoubleSide;
@@ -139,13 +142,14 @@ export function StaticArmorSceneComponent({
       } else {
         // something else selected, become background
         surfaceMaterial.opacity = 1 / 4;
+        surfaceMaterial.transparent = true;
         surfaceMaterial.color = unselectedColor;
         surfaceMaterial.depthWrite = props.type !== ArmorType.External;
         surfaceMaterial.side = FrontSide;
         outlineMaterial.visible = false;
       }
 
-      surfaceMaterial.transparent = surfaceMaterial.opacity < 1;
+      surfaceMaterial.needsUpdate = true;
     }
 
     const unsubscribe = tankopediaEphemeralStore.subscribe(
