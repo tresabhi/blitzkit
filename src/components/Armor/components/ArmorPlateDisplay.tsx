@@ -1,4 +1,12 @@
-import { Card, Code, Flex, Text, TextField } from '@radix-ui/themes';
+import { ReloadIcon } from '@radix-ui/react-icons';
+import {
+  Card,
+  Code,
+  Flex,
+  IconButton,
+  Text,
+  TextField,
+} from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { useRef } from 'react';
 import { radToDeg } from 'three/src/math/MathUtils';
@@ -18,6 +26,7 @@ export function ArmorPlateDisplay() {
   const devThicknessInput = useRef<HTMLInputElement>(null);
   const duelStore = Duel.useStore();
   const input = useRef<HTMLInputElement>(null);
+  const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
 
   if (highlightArmor === undefined) return null;
 
@@ -62,64 +71,117 @@ export function ArmorPlateDisplay() {
             )}
 
             {highlightArmor.editingPlate && (
-              <TextField.Root
-                mt="2"
-                ref={input}
-                type="number"
-                autoFocus
-                onFocus={(event) => event.target.select()}
-                onKeyDown={(event) => {
-                  if (!highlightArmor.editingPlate) return;
+              <Flex gap="2" align="center">
+                <TextField.Root
+                  style={{ width: 96 }}
+                  mt="2"
+                  ref={input}
+                  key={highlightArmor.name}
+                  type="number"
+                  autoFocus
+                  onFocus={(event) => event.target.select()}
+                  onKeyDown={(event) => {
+                    if (!highlightArmor.editingPlate) return;
 
-                  const index = resolveArmorIndex(highlightArmor.name);
+                    const index = resolveArmorIndex(highlightArmor.name);
 
-                  if (index === undefined) return;
+                    if (index === undefined) return;
 
-                  const thickness = event.currentTarget.valueAsNumber;
+                    const thickness = event.currentTarget.valueAsNumber;
 
-                  if (isNaN(thickness) || thickness < 0) return;
+                    if (isNaN(thickness) || thickness < 0) return;
 
-                  if (event.key === 'Enter') {
-                    input.current?.blur();
+                    if (event.key === 'Enter') {
+                      input.current?.blur();
 
+                      mutateTankopediaEphemeral((draft) => {
+                        draft.highlightArmor = undefined;
+                        const { protagonist } = duelStore.getState();
+                        const tank = draft.model;
+                        const turret = tank.turrets[protagonist.turret.id];
+                        const gun = turret.guns[protagonist.gun.id];
+                        const track = tank.tracks[protagonist.track.id];
+
+                        console.log(highlightArmor.name);
+                        if (highlightArmor.name.startsWith('hull_')) {
+                          tank.armor.thickness[index] = thickness;
+                        } else if (highlightArmor.name.startsWith('turret_')) {
+                          turret.armor.thickness[index] = thickness;
+                        } else if (highlightArmor.name.startsWith('gun_')) {
+                          if (highlightArmor.name.includes('_armor_')) {
+                            gun.armor.thickness[index] = thickness;
+                          } else {
+                            gun.thickness = thickness;
+                          }
+                        } else if (highlightArmor.name.startsWith('chassis_')) {
+                          track.thickness = thickness;
+                        }
+                      });
+                    } else if (event.key === 'Escape') {
+                      input.current?.blur();
+                      mutateTankopediaEphemeral((draft) => {
+                        draft.highlightArmor = undefined;
+                      });
+                    }
+                  }}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                  }}
+                  defaultValue={highlightArmor.thickness.toFixed(0)}
+                >
+                  <TextField.Slot side="right">mm</TextField.Slot>
+                </TextField.Root>
+
+                <IconButton
+                  mt="2"
+                  color="red"
+                  onClick={() => {
                     mutateTankopediaEphemeral((draft) => {
+                      if (!highlightArmor.editingPlate) return;
+
+                      const index = resolveArmorIndex(highlightArmor.name);
+
+                      if (index === undefined) return;
+
                       draft.highlightArmor = undefined;
+                      const initialState =
+                        tankopediaEphemeralStore.getInitialState();
                       const { protagonist } = duelStore.getState();
                       const tank = draft.model;
+                      const initialTank = initialState.model;
                       const turret = tank.turrets[protagonist.turret.id];
+                      const initialTurret =
+                        initialTank.turrets[protagonist.turret.id];
                       const gun = turret.guns[protagonist.gun.id];
+                      const initialGun = initialTurret.guns[protagonist.gun.id];
                       const track = tank.tracks[protagonist.track.id];
+                      const initialTrack =
+                        initialTank.tracks[protagonist.track.id];
 
                       console.log(highlightArmor.name);
                       if (highlightArmor.name.startsWith('hull_')) {
-                        tank.armor.thickness[index] = thickness;
+                        tank.armor.thickness[index] =
+                          initialTank.armor.thickness[index];
                       } else if (highlightArmor.name.startsWith('turret_')) {
-                        turret.armor.thickness[index] = thickness;
+                        turret.armor.thickness[index] =
+                          initialTurret.armor.thickness[index];
                       } else if (highlightArmor.name.startsWith('gun_')) {
                         if (highlightArmor.name.includes('_armor_')) {
-                          gun.armor.thickness[index] = thickness;
+                          gun.armor.thickness[index] =
+                            initialGun.armor.thickness[index];
                         } else {
-                          gun.thickness = thickness;
+                          gun.thickness = initialGun.thickness;
                         }
                       } else if (highlightArmor.name.startsWith('chassis_')) {
-                        track.thickness = thickness;
+                        track.thickness = initialTrack.thickness;
                       }
                     });
-                  } else if (event.key === 'Escape') {
-                    input.current?.blur();
-                    mutateTankopediaEphemeral((draft) => {
-                      draft.highlightArmor = undefined;
-                    });
-                  }
-                }}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  event.preventDefault();
-                }}
-                defaultValue={highlightArmor.thickness.toFixed(0)}
-              >
-                <TextField.Slot side="right">mm</TextField.Slot>
-              </TextField.Root>
+                  }}
+                >
+                  <ReloadIcon />
+                </IconButton>
+              </Flex>
             )}
           </Flex>
         </Card>
