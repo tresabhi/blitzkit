@@ -103,7 +103,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
           style={{
             borderRadius: 'var(--radius-full)',
             overflow: 'hidden',
-            background: `linear-gradient(rgb(32, 0, 223), rgb(255, 0, 255))`,
+            background: `linear-gradient(rgb(32, 0, 225), rgb(255, 0, 255))`,
           }}
         />
       </Flex>
