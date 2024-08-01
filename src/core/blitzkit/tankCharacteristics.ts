@@ -5,7 +5,7 @@ import { resolvePenetrationCoefficient } from '../blitz/resolvePenetrationCoeffi
 import { coefficient } from './coefficient';
 import { degressiveStat } from './degressiveStat';
 import { EquipmentDefinitions } from './equipmentDefinitions';
-import { ModelDefinition, ModelDefinitions } from './modelDefinitions';
+import { ModelDefinition } from './modelDefinitions';
 import { normalizeBoundingBox } from './normalizeBoundingBox';
 import { progressiveStat } from './progressiveStat';
 import { ProvisionDefinitions } from './provisionDefinitions';
@@ -75,7 +75,7 @@ export function tankCharacteristics(
     provisionDefinitions: ProvisionDefinitions;
   },
 ) {
-  const presetRows = equipmentDefinitions.presets[tank.equipment]; 
+  const presetRows = equipmentDefinitions.presets[tank.equipment];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];
 
@@ -387,11 +387,11 @@ export function tankCharacteristics(
   const gunDepression =
     gunModelDefinition.pitch.max +
     gunDefaultPitch +
-    (hasImprovedVerticalStabilizer ? 4 : 0);
+    (hasImprovedVerticalStabilizer ? 3 : 0);
   const gunElevation =
     -gunModelDefinition.pitch.min -
     gunDefaultPitch +
-    (hasImprovedVerticalStabilizer ? 3 : 0);
+    (hasImprovedVerticalStabilizer ? 4 : 0);
   const gunFrontalDepression = gunModelDefinition.pitch.front?.max;
   const gunFrontalElevation = gunModelDefinition.pitch.front
     ? -gunModelDefinition.pitch.front.min
