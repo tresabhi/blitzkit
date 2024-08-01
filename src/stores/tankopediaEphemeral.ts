@@ -14,8 +14,8 @@ interface TankopediaEphemeral {
   controlsEnabled: boolean;
   model: ModelDefinition;
   editStatic: boolean;
-  editingPlate?: { name: string; default: number };
   highlightArmor?: {
+    editingPlate: boolean;
     name: string;
     point: Vector3;
     thickness: number;

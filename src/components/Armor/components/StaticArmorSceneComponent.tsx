@@ -173,41 +173,31 @@ export function StaticArmorSceneComponent({
 
           const { editStatic } = tankopediaEphemeralStore.getState();
 
-          if (editStatic) {
-            mutateTankopediaEphemeralStore((draft) => {
-              draft.editingPlate = {
-                name: name,
-                default: thickness,
-              };
-            });
-          } else {
-            const bounds = new Box3().setFromObject(event.object);
-            const point = bounds.min
-              .clone()
-              .add(bounds.max)
-              .divideScalar(2)
-              .setY(bounds.max.y);
-            const cameraNormal = camera.position.clone().sub(point).normalize();
-            const surfaceNormal = event
-              .normal!.clone()
-              .applyQuaternion(
-                event.object.getWorldQuaternion(new Quaternion()),
-              );
-            const angle = surfaceNormal.angleTo(cameraNormal);
-            const thicknessAngled = thickness / Math.sin(Math.PI / 2 - angle);
-
-            mutateTankopediaEphemeralStore((draft) => {
-              draft.highlightArmor = {
-                type: props.type,
-                name,
-                point,
-                thickness,
-                thicknessAngled,
-                angle,
-                color: `#${color.getHexString()}`,
-              };
-            });
-          }
+          const bounds = new Box3().setFromObject(event.object);
+          const point = bounds.min
+            .clone()
+            .add(bounds.max)
+            .divideScalar(2)
+            .setY(bounds.max.y);
+          const cameraNormal = camera.position.clone().sub(point).normalize();
+          const surfaceNormal = event
+            .normal!.clone()
+            .applyQuaternion(event.object.getWorldQuaternion(new Quaternion()));
+          const angle = surfaceNormal.angleTo(cameraNormal);
+          const thicknessAngled = thickness / Math.sin(Math.PI / 2 - angle);
+          console.log(name);
+          mutateTankopediaEphemeralStore((draft) => {
+            draft.highlightArmor = {
+              type: props.type,
+              name,
+              point,
+              thickness,
+              thicknessAngled,
+              angle,
+              color: `#${color.getHexString()}`,
+              editingPlate: editStatic,
+            };
+          });
         },
       })}
 
