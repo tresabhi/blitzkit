@@ -99,7 +99,6 @@ export function StaticArmorSceneComponent({
       }),
     [thickness],
   );
-
   const outlineMaterial = useMemo(
     () =>
       new LineBasicMaterial({
@@ -110,10 +109,19 @@ export function StaticArmorSceneComponent({
     [thickness],
   );
 
-  /**
-   * hook inside an if statement?? don't panic! I assure you the static prop
-   * never mutates :)
-   */
+  // if (clip) {
+  //   /**
+  //    * hook inside an if statement?? don't panic! I assure you the clip prop
+  //    * never mutates :)
+  //    */
+  //   useFrame(() => {
+  //     surfaceMaterial.clippingPlanes!.forEach((plane) => {
+  //       // console.log(plane.normal);
+  //       plane.applyMatrix4(node.matrix);
+  //     });
+  //   });
+  // }
+
   useEffect(() => {
     function handleHighlightArmor(selectedName?: string) {
       if (selectedName === undefined) {

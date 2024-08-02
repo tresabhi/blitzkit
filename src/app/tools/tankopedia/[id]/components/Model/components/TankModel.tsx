@@ -24,7 +24,7 @@ export const TankModel = memo(() => {
   const hullContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
-  const mutateTankopediaTemporary = TankopediaEphemeral.useMutation();
+  const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const tankModelDefinition = useTankModelDefinition();
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
@@ -68,7 +68,7 @@ export const TankModel = memo(() => {
             position.set(event.clientX, event.clientY);
             event.stopPropagation();
 
-            mutateTankopediaTemporary((draft) => {
+            mutateTankopediaEphemeral((draft) => {
               draft.controlsEnabled = false;
             });
 
@@ -87,7 +87,7 @@ export const TankModel = memo(() => {
           translateTexture(deltaX + deltaY);
         }
         function handlePointerUp() {
-          mutateTankopediaTemporary((draft) => {
+          mutateTankopediaEphemeral((draft) => {
             draft.controlsEnabled = true;
           });
 
@@ -124,21 +124,21 @@ export const TankModel = memo(() => {
           function onPointerDown(event: ThreeEvent<PointerEvent>) {
             event.stopPropagation();
 
-            if (isTurret) {
-              position.set(event.clientX, event.clientY);
-              yaw = protagonist.yaw;
-              pitch = protagonist.pitch;
+            if (!isTurret) return;
 
-              mutateTankopediaTemporary((draft) => {
-                draft.controlsEnabled = false;
-              });
-              mutateTankopediaTemporary((draft) => {
-                draft.shot = undefined;
-                draft.highlightArmor = undefined;
-              });
-              window.addEventListener('pointermove', handlePointerMove);
-              window.addEventListener('pointerup', handlePointerUp);
-            }
+            position.set(event.clientX, event.clientY);
+            yaw = protagonist.yaw;
+            pitch = protagonist.pitch;
+
+            mutateTankopediaEphemeral((draft) => {
+              draft.controlsEnabled = false;
+            });
+            mutateTankopediaEphemeral((draft) => {
+              draft.shot = undefined;
+              draft.highlightArmor = undefined;
+            });
+            window.addEventListener('pointermove', handlePointerMove);
+            window.addEventListener('pointerup', handlePointerUp);
           }
           async function handlePointerMove(event: PointerEvent) {
             const duel = duelStore.getState();
@@ -166,7 +166,7 @@ export const TankModel = memo(() => {
               draft.protagonist.pitch = normalizeAngleRad(pitch);
               draft.protagonist.yaw = normalizeAngleRad(yaw);
             });
-            mutateTankopediaTemporary((draft) => {
+            mutateTankopediaEphemeral((draft) => {
               draft.controlsEnabled = true;
             });
             window.removeEventListener('pointermove', handlePointerMove);
@@ -206,10 +206,10 @@ export const TankModel = memo(() => {
             function onPointerDown(event: ThreeEvent<PointerEvent>) {
               event.stopPropagation();
 
-              mutateTankopediaTemporary((draft) => {
+              mutateTankopediaEphemeral((draft) => {
                 draft.controlsEnabled = false;
               });
-              mutateTankopediaTemporary((draft) => {
+              mutateTankopediaEphemeral((draft) => {
                 draft.shot = undefined;
                 draft.highlightArmor = undefined;
               });
@@ -242,7 +242,7 @@ export const TankModel = memo(() => {
               modelTransformEvent.emit({ pitch, yaw });
             }
             function handlePointerUp() {
-              mutateTankopediaTemporary((draft) => {
+              mutateTankopediaEphemeral((draft) => {
                 draft.controlsEnabled = true;
               });
               mutateDuel((draft) => {

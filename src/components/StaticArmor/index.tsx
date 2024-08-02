@@ -1,13 +1,19 @@
+import { ThreeEvent, useThree } from '@react-three/fiber';
 import { memo, useRef } from 'react';
-import { Group, Plane, Vector3 } from 'three';
+import { Group, Plane, Vector2, Vector3 } from 'three';
+import { applyPitchYawLimits } from '../../core/blitz/applyPitchYawLimits';
 import { correctZYTuple } from '../../core/blitz/correctZYTuple';
+import { hasEquipment } from '../../core/blitzkit/hasEquipment';
+import { modelTransformEvent } from '../../core/blitzkit/modelTransform';
 import { nameToArmorId } from '../../core/blitzkit/nameToArmorId';
 import { resolveArmor } from '../../core/blitzkit/resolveThickness';
+import { normalizeAngleRad } from '../../core/math/normalizeAngleRad';
 import { useArmor } from '../../hooks/useArmor';
 import { useModel } from '../../hooks/useModel';
 import { useTankModelDefinition } from '../../hooks/useTankModelDefinition';
 import { useTankTransform } from '../../hooks/useTankTransform';
 import * as Duel from '../../stores/duel';
+import * as TankopediaEphemeral from '../../stores/tankopediaEphemeral';
 import * as TankopediaPersistent from '../../stores/tankopediaPersistent';
 import { ModelTankWrapper } from '../Armor/components/ModelTankWrapper';
 import { ArmorType } from '../Armor/components/SpacedArmorScene';
@@ -41,6 +47,10 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
   const hullOrigin = correctZYTuple(trackModelDefinition.origin);
   const turretOrigin = correctZYTuple(tankModelDefinition.turretOrigin);
   const gunOrigin = correctZYTuple(turretModelDefinition.gunOrigin);
+  const mutateDuel = Duel.useMutation();
+  const canvas = useThree((state) => state.gl.domElement);
+  const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
+  const duelStore = Duel.useStore();
   const maskOrigin =
     gunModelDefinition.mask === undefined
       ? undefined
@@ -127,11 +137,67 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
             thickness === undefined ||
             (!showPrimaryArmor && !spaced) ||
             (!showSpacedArmor && spaced)
-          )
+          ) {
             return null;
+          }
+
+          const position = new Vector2();
+          const delta = new Vector2();
+          let pitch = 0;
+          let yaw = 0;
+
+          function onPointerDown(event: ThreeEvent<PointerEvent>) {
+            event.stopPropagation();
+
+            position.set(event.clientX, event.clientY);
+            yaw = protagonist.yaw;
+            pitch = protagonist.pitch;
+
+            mutateTankopediaEphemeral((draft) => {
+              draft.controlsEnabled = false;
+            });
+            mutateTankopediaEphemeral((draft) => {
+              draft.shot = undefined;
+              draft.highlightArmor = undefined;
+            });
+            window.addEventListener('pointermove', handlePointerMove);
+            window.addEventListener('pointerup', handlePointerUp);
+          }
+          async function handlePointerMove(event: PointerEvent) {
+            const duel = duelStore.getState();
+            const hasImprovedVerticalStabilizer = await hasEquipment(
+              122,
+              duel.protagonist.tank.equipment,
+              duel.protagonist.equipmentMatrix,
+            );
+            const boundingRect = canvas.getBoundingClientRect();
+
+            delta.set(event.clientX, event.clientY).sub(position);
+            position.set(event.clientX, event.clientY);
+
+            [pitch, yaw] = applyPitchYawLimits(
+              pitch,
+              yaw + delta.x * (Math.PI / boundingRect.width),
+              gunModelDefinition.pitch,
+              turretModelDefinition.yaw,
+              hasImprovedVerticalStabilizer,
+            );
+            modelTransformEvent.emit({ pitch, yaw });
+          }
+          function handlePointerUp() {
+            mutateDuel((draft) => {
+              draft.protagonist.pitch = normalizeAngleRad(pitch);
+              draft.protagonist.yaw = normalizeAngleRad(yaw);
+            });
+            mutateTankopediaEphemeral((draft) => {
+              draft.controlsEnabled = true;
+            });
+            window.removeEventListener('pointermove', handlePointerMove);
+            window.removeEventListener('pointerup', handlePointerUp);
+          }
 
           return (
-            <group position={hullOrigin}>
+            <group position={hullOrigin} onPointerDown={onPointerDown}>
               <group key={node.uuid} position={turretOrigin}>
                 <StaticArmorSceneComponent
                   name={node.name}
@@ -163,11 +229,67 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
               thickness === undefined ||
               (!showPrimaryArmor && !spaced) ||
               (!showSpacedArmor && spaced)
-            )
+            ) {
               return null;
+            }
+
+            const position = new Vector2();
+            const delta = new Vector2();
+            let pitch = 0;
+            let yaw = 0;
+
+            function onPointerDown(event: ThreeEvent<PointerEvent>) {
+              event.stopPropagation();
+
+              mutateTankopediaEphemeral((draft) => {
+                draft.controlsEnabled = false;
+              });
+              mutateTankopediaEphemeral((draft) => {
+                draft.shot = undefined;
+                draft.highlightArmor = undefined;
+              });
+
+              position.set(event.clientX, event.clientY);
+              pitch = protagonist.pitch;
+              yaw = protagonist.yaw;
+
+              window.addEventListener('pointermove', handlePointerMove);
+              window.addEventListener('pointerup', handlePointerUp);
+            }
+            async function handlePointerMove(event: PointerEvent) {
+              const duel = duelStore.getState();
+              const hasImprovedVerticalStabilizer = await hasEquipment(
+                122,
+                duel.protagonist.tank.equipment,
+                duel.protagonist.equipmentMatrix,
+              );
+              const boundingRect = canvas.getBoundingClientRect();
+              delta.set(event.clientX, event.clientY).sub(position);
+              position.set(event.clientX, event.clientY);
+
+              [pitch, yaw] = applyPitchYawLimits(
+                pitch - delta.y * (Math.PI / boundingRect.height),
+                yaw + delta.x * (Math.PI / boundingRect.width),
+                gunModelDefinition.pitch,
+                turretModelDefinition.yaw,
+                hasImprovedVerticalStabilizer,
+              );
+              modelTransformEvent.emit({ pitch, yaw });
+            }
+            function handlePointerUp() {
+              mutateTankopediaEphemeral((draft) => {
+                draft.controlsEnabled = true;
+              });
+              mutateDuel((draft) => {
+                draft.protagonist.pitch = normalizeAngleRad(pitch);
+                draft.protagonist.yaw = normalizeAngleRad(yaw);
+              });
+              window.removeEventListener('pointermove', handlePointerMove);
+              window.removeEventListener('pointerup', handlePointerUp);
+            }
 
             return (
-              <group position={hullOrigin}>
+              <group position={hullOrigin} onPointerDown={onPointerDown}>
                 <group
                   key={node.uuid}
                   position={turretOrigin.clone().add(gunOrigin)}
