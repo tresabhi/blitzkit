@@ -1,4 +1,4 @@
-import { useThree } from '@react-three/fiber';
+import { MeshProps, useThree } from '@react-three/fiber';
 import { clamp } from 'lodash';
 import { useEffect, useMemo } from 'react';
 import {
@@ -12,8 +12,15 @@ import {
   Object3D,
   Plane,
   Quaternion,
+  Vector3,
 } from 'three';
+import { I_HAT, J_HAT } from '../../../constants/axis';
+import { unrotateDavaVector } from '../../../core/blitz/unrotateDavaVector';
 import { jsxTree } from '../../../core/blitzkit/jsxTree';
+import {
+  modelTransformEvent,
+  ModelTransformEventData,
+} from '../../../core/blitzkit/modelTransform';
 import { discardClippingPlane } from '../../../core/three/discardClippingPlane';
 import * as TankopediaEphemeral from '../../../stores/tankopediaEphemeral';
 import { ThicknessRange } from '../../StaticArmor';
@@ -25,10 +32,10 @@ import {
 
 type StaticArmorSceneComponentProps = {
   name: string;
-  clip?: Plane;
   thickness: number;
   thicknessRange: ThicknessRange;
   node: Object3D;
+  onPointerDown?: MeshProps['onPointerDown'];
 } & (
   | {
       type: Exclude<ArmorType, ArmorType.External>;
@@ -37,7 +44,18 @@ type StaticArmorSceneComponentProps = {
       type: ArmorType.External;
       variant: ExternalModuleVariant;
     }
-);
+) &
+  (
+    | {
+        clip?: undefined;
+      }
+    | {
+        clip: Plane;
+        hullOrigin: Vector3;
+        turretOrigin: Vector3;
+        gunOrigin: Vector3;
+      }
+  );
 
 const unselectedColor = new Color(0x404040);
 const externalModuleColor = new Color(0, 1 / 4, 1 / 2);
@@ -47,13 +65,13 @@ export function StaticArmorSceneComponent({
   thickness,
   thicknessRange,
   node,
-  clip,
+  onPointerDown,
   ...props
 }: StaticArmorSceneComponentProps) {
   const mutateTankopediaEphemeralStore = TankopediaEphemeral.useMutation();
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
   const camera = useThree((state) => state.camera);
-
+  const scene = useThree((state) => state.scene);
   const x = thickness / thicknessRange.value;
   const xClamped = clamp(x, 0, 1);
   let color: Color;
@@ -95,7 +113,7 @@ export function StaticArmorSceneComponent({
         opacity,
         transparent: opacity < 1,
         depthWrite,
-        ...(clip ? { clippingPlanes: [clip] } : {}),
+        ...(props.clip ? { clippingPlanes: [props.clip] } : {}),
       }),
     [thickness],
   );
@@ -108,19 +126,6 @@ export function StaticArmorSceneComponent({
       }),
     [thickness],
   );
-
-  // if (clip) {
-  //   /**
-  //    * hook inside an if statement?? don't panic! I assure you the clip prop
-  //    * never mutates :)
-  //    */
-  //   useFrame(() => {
-  //     surfaceMaterial.clippingPlanes!.forEach((plane) => {
-  //       // console.log(plane.normal);
-  //       plane.applyMatrix4(node.matrix);
-  //     });
-  //   });
-  // }
 
   useEffect(() => {
     function handleHighlightArmor(selectedName?: string) {
@@ -160,18 +165,59 @@ export function StaticArmorSceneComponent({
       surfaceMaterial.needsUpdate = true;
     }
 
-    const unsubscribe = tankopediaEphemeralStore.subscribe(
-      (state) => state.highlightArmor?.name,
-      handleHighlightArmor,
-    );
+    const unsubscribes = [
+      tankopediaEphemeralStore.subscribe(
+        (state) => state.highlightArmor?.name,
+        handleHighlightArmor,
+      ),
+    ];
 
-    return unsubscribe;
+    if (props.clip) {
+      /**
+       * hook inside an if statement?? don't panic! I assure you the clip prop
+       * never mutates :)
+       */
+
+      const { clip } = props;
+      const gunOrigin = unrotateDavaVector(props.gunOrigin.clone());
+      const neckOrigin = unrotateDavaVector(props.hullOrigin.clone()).add(
+        unrotateDavaVector(props.turretOrigin.clone()),
+      );
+      const barrelOrigin = neckOrigin.clone().add(gunOrigin);
+      const distanceToBarrel = clip.distanceToPoint(barrelOrigin);
+      const point = new Vector3();
+
+      function handleModelTransform(data: ModelTransformEventData) {
+        clip.normal
+          .set(0, 0, -1)
+          .applyAxisAngle(I_HAT, data.pitch)
+          .applyAxisAngle(J_HAT, data.yaw ?? 0);
+        clip.constant = 0;
+
+        point
+          .copy(gunOrigin)
+          .applyAxisAngle(J_HAT, data.yaw ?? 0)
+          .add(clip.normal.multiplyScalar(-distanceToBarrel))
+          .add(neckOrigin);
+        clip.normal.normalize();
+        clip.constant -= clip.distanceToPoint(point);
+      }
+
+      modelTransformEvent.on(handleModelTransform);
+
+      unsubscribes.push(() => modelTransformEvent.off(handleModelTransform));
+    }
+
+    return () => {
+      unsubscribes.forEach((unsubscribe) => unsubscribe());
+    };
   }, [thickness]);
 
   return (
     <>
       {jsxTree(node, {
         material: surfaceMaterial,
+        onPointerDown,
         userData: {
           type: props.type,
           variant: props.type === ArmorType.External ? props.variant : 'gun',

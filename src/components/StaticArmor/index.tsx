@@ -197,7 +197,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
           }
 
           return (
-            <group position={hullOrigin} onPointerDown={onPointerDown}>
+            <group position={hullOrigin}>
               <group key={node.uuid} position={turretOrigin}>
                 <StaticArmorSceneComponent
                   name={node.name}
@@ -206,6 +206,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
                   type={spaced ? ArmorType.Spaced : ArmorType.Primary}
                   thickness={thickness}
                   node={node}
+                  onPointerDown={onPointerDown}
                 />
               </group>
             </group>
@@ -289,7 +290,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
             }
 
             return (
-              <group position={hullOrigin} onPointerDown={onPointerDown}>
+              <group position={hullOrigin}>
                 <group
                   key={node.uuid}
                   position={turretOrigin.clone().add(gunOrigin)}
@@ -300,6 +301,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
                     type={spaced ? ArmorType.Spaced : ArmorType.Primary}
                     thickness={thickness}
                     node={node}
+                    onPointerDown={onPointerDown}
                   />
                 </group>
               </group>
@@ -315,6 +317,61 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
 
             if (!isVisible || !showExternalModules) return null;
 
+            const position = new Vector2();
+            const delta = new Vector2();
+            let pitch = 0;
+            let yaw = 0;
+
+            function onPointerDown(event: ThreeEvent<PointerEvent>) {
+              event.stopPropagation();
+
+              mutateTankopediaEphemeral((draft) => {
+                draft.controlsEnabled = false;
+              });
+              mutateTankopediaEphemeral((draft) => {
+                draft.shot = undefined;
+                draft.highlightArmor = undefined;
+              });
+
+              position.set(event.clientX, event.clientY);
+              pitch = protagonist.pitch;
+              yaw = protagonist.yaw;
+
+              window.addEventListener('pointermove', handlePointerMove);
+              window.addEventListener('pointerup', handlePointerUp);
+            }
+            async function handlePointerMove(event: PointerEvent) {
+              const duel = duelStore.getState();
+              const hasImprovedVerticalStabilizer = await hasEquipment(
+                122,
+                duel.protagonist.tank.equipment,
+                duel.protagonist.equipmentMatrix,
+              );
+              const boundingRect = canvas.getBoundingClientRect();
+              delta.set(event.clientX, event.clientY).sub(position);
+              position.set(event.clientX, event.clientY);
+
+              [pitch, yaw] = applyPitchYawLimits(
+                pitch - delta.y * (Math.PI / boundingRect.height),
+                yaw + delta.x * (Math.PI / boundingRect.width),
+                gunModelDefinition.pitch,
+                turretModelDefinition.yaw,
+                hasImprovedVerticalStabilizer,
+              );
+              modelTransformEvent.emit({ pitch, yaw });
+            }
+            function handlePointerUp() {
+              mutateTankopediaEphemeral((draft) => {
+                draft.controlsEnabled = true;
+              });
+              mutateDuel((draft) => {
+                draft.protagonist.pitch = normalizeAngleRad(pitch);
+                draft.protagonist.yaw = normalizeAngleRad(yaw);
+              });
+              window.removeEventListener('pointermove', handlePointerMove);
+              window.removeEventListener('pointerup', handlePointerUp);
+            }
+
             return (
               <StaticArmorSceneComponent
                 name={node.name}
@@ -329,6 +386,10 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
                     ? undefined
                     : new Plane(new Vector3(0, 0, -1), -maskOrigin)
                 }
+                hullOrigin={hullOrigin}
+                turretOrigin={turretOrigin}
+                gunOrigin={gunOrigin}
+                onPointerDown={onPointerDown}
               />
             );
           })}
