@@ -11,7 +11,7 @@ export const blitzFetchQueueAvailableEvent = new EventManager();
 type BlitzResponse<Data extends object> =
   | {
       status: 'error';
-      error: { field: string; message: string; code: 402; value: null };
+      error: { field: string; message: string; code: number; value: null };
     }
   | {
       status: 'ok';
