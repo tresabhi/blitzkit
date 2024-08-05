@@ -34,11 +34,11 @@ export function Party3() {
       /> */}
 
       {/* pub center */}
-      <script
+      {/* <script
         async
         src="https://adsdk.microsoft.com/mmnow/sdk.js?siteId=364645&publisherId=253617120"
         crossOrigin="anonymous"
-      />
+      /> */}
     </>
   );
 }

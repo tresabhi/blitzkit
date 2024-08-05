@@ -1,10 +1,11 @@
 'use client';
 
-import { Flex } from '@radix-ui/themes';
+import { Box, Flex } from '@radix-ui/themes';
 import { AdMidSectionResponsive } from '../components/AdMidSectionResponsive';
 import {
   compareTool,
   discordTool,
+  embedTool,
   moreTool,
   ratingTool,
   sessionTool,
@@ -43,7 +44,7 @@ export default function Page() {
 
           <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
             <ToolCard tool={sessionTool} />
-            <ToolCard tool={ratingTool} />
+            <ToolCard tool={embedTool} />
           </Flex>
 
           {!exempt && (
@@ -59,13 +60,14 @@ export default function Page() {
           )}
 
           <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+            <ToolCard tool={ratingTool} />
             <ToolCard tool={discordTool} />
-            <ToolCard tool={moreTool} />
           </Flex>
 
-          {/* <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+          <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+            <ToolCard tool={moreTool} />
             <Box flexGrow="1" />
-          </Flex> */}
+          </Flex>
         </Flex>
       </Flex>
 

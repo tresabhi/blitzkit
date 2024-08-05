@@ -28,7 +28,7 @@ const robotoFlex = Roboto_Flex({
 
 export default function RootLayout({ children }: RootLayoutProps) {
   const pathname = usePathname();
-  const isEmbed = pathname.split('/')[1] === 'embeds';
+  const isEmbed = pathname.startsWith('/tools/embed/host');
   const isRoot = pathname === '/';
 
   return (
@@ -56,30 +56,34 @@ export default function RootLayout({ children }: RootLayoutProps) {
             backgroundColor: isEmbed ? 'transparent' : undefined,
           }}
         >
-          <Theme
-            appearance="dark"
-            panelBackground="solid"
-            radius="full"
-            accentColor="amber"
-            suppressHydrationWarning
-            suppressContentEditableWarning
-          >
-            <Flex
-              direction="column"
-              style={{
-                minHeight: '100vh',
-                paddingTop: isEmbed ? undefined : NAVBAR_HEIGHT,
-              }}
+          {!isEmbed && (
+            <Theme
+              appearance="dark"
+              panelBackground="solid"
+              radius="full"
+              accentColor="amber"
+              suppressHydrationWarning
+              suppressContentEditableWarning
             >
-              {!isEmbed && <Navbar />}
+              <Flex
+                direction="column"
+                style={{
+                  minHeight: '100vh',
+                  paddingTop: isEmbed ? undefined : NAVBAR_HEIGHT,
+                }}
+              >
+                {!isEmbed && <Navbar />}
 
-              <Checks />
+                <Checks />
 
-              <Suspense fallback={<PageLoader />}>{children}</Suspense>
+                <Suspense fallback={<PageLoader />}>{children}</Suspense>
 
-              {!isEmbed && <Footer />}
-            </Flex>
-          </Theme>
+                {!isEmbed && <Footer />}
+              </Flex>
+            </Theme>
+          )}
+
+          {isEmbed && children}
         </body>
       </html>
     </App.Provider>

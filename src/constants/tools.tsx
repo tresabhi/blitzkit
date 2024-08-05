@@ -108,8 +108,8 @@ export const playerStatsTool: Tool = {
 };
 
 export const tankPerformanceTool: Tool = {
-  id: 'tank-performance',
-  title: 'Tank performance',
+  id: 'performance',
+  title: 'Performance',
   description: 'Tank performance statistics',
   pageDescription: 'Best tanks and their performances in World of Tanks Blitz',
   button: {
@@ -119,12 +119,26 @@ export const tankPerformanceTool: Tool = {
   image: 'vOKFB03',
 };
 
+export const embedTool: Tool = {
+  id: 'embed',
+  title: 'Embed',
+  description: 'Embeds for streaming',
+  pageDescription:
+    'Create embeds for streaming World of Tanks Blitz with extreme customization',
+  button: {
+    text: 'Create',
+    color: 'red',
+  },
+  image: 'Q0faRYg',
+};
+
 export const TOOLS: Tool[] = [
   tankopediaTool,
   compareTool,
   tankPerformanceTool,
   playerStatsTool,
   sessionTool,
+  embedTool,
   ratingTool,
   discordTool,
   moreTool,
