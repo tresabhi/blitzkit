@@ -28,7 +28,9 @@ const robotoFlex = Roboto_Flex({
 
 export default function RootLayout({ children }: RootLayoutProps) {
   const pathname = usePathname();
-  const isEmbed = pathname.startsWith('/tools/embed/host');
+  const hideNav =
+    pathname.startsWith('/tools/embed/host') ||
+    pathname.startsWith('/tools/embed/customize');
   const isRoot = pathname === '/';
 
   return (
@@ -53,37 +55,33 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <body
           style={{
             margin: 0,
-            backgroundColor: isEmbed ? 'transparent' : undefined,
+            backgroundColor: hideNav ? 'transparent' : undefined,
           }}
         >
-          {!isEmbed && (
-            <Theme
-              appearance="dark"
-              panelBackground="solid"
-              radius="full"
-              accentColor="amber"
-              suppressHydrationWarning
-              suppressContentEditableWarning
+          <Theme
+            appearance="dark"
+            panelBackground="solid"
+            radius="full"
+            accentColor="amber"
+            suppressHydrationWarning
+            suppressContentEditableWarning
+          >
+            <Flex
+              direction="column"
+              style={{
+                minHeight: '100vh',
+                paddingTop: hideNav ? undefined : NAVBAR_HEIGHT,
+              }}
             >
-              <Flex
-                direction="column"
-                style={{
-                  minHeight: '100vh',
-                  paddingTop: isEmbed ? undefined : NAVBAR_HEIGHT,
-                }}
-              >
-                {!isEmbed && <Navbar />}
+              {!hideNav && <Navbar />}
 
-                <Checks />
+              <Checks />
 
-                <Suspense fallback={<PageLoader />}>{children}</Suspense>
+              <Suspense fallback={<PageLoader />}>{children}</Suspense>
 
-                {!isEmbed && <Footer />}
-              </Flex>
-            </Theme>
-          )}
-
-          {isEmbed && children}
+              {!hideNav && <Footer />}
+            </Flex>
+          </Theme>
         </body>
       </html>
     </App.Provider>
