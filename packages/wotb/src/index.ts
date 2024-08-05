@@ -1,21 +1,21 @@
 import { GameAPI } from '../../wg/src/classes/GameAPI';
 import { WGApp } from '../../wg/src/classes/WGApp';
-import { WOTBRealm } from './enums/wotb';
+import {
+  PlayerPersonalData,
+  PlayerPersonalDataParams,
+} from './types/playerPersonalData';
 import {
   PlayerParams,
   Players,
-  PlayersEntryBase,
+  PlayersEntry,
   PlayersEntryDefaultFields,
 } from './types/players';
-import { WOTBAPIConstructorOptions } from './types/wotb';
-import { resolveIncludeField } from './utils/resolveIncludeField';
+import { WOTBAPIConstructorOptions, WOTBRealm } from './types/wotb';
+import { resolveParams } from './utils/resolveParams';
 
-export * from './enums';
 export * from './types';
 
-/**
- * World of Tanks Blitz API.
- */
+/** World of Tanks Blitz API. */
 export class WOTBAPI extends GameAPI implements WOTBAPIConstructorOptions {
   realm: WOTBRealm;
 
@@ -32,8 +32,8 @@ export class WOTBAPI extends GameAPI implements WOTBAPIConstructorOptions {
    * characters of user name and sorted alphabetically.
    */
   players<
-    IncludeFields extends keyof PlayersEntryBase = PlayersEntryDefaultFields,
-    ExcludeFields extends keyof PlayersEntryBase = never,
+    IncludeFields extends keyof PlayersEntry = PlayersEntryDefaultFields,
+    ExcludeFields extends keyof PlayersEntry = never,
   >(
     params: PlayerParams,
     include?: IncludeFields[],
@@ -41,15 +41,16 @@ export class WOTBAPI extends GameAPI implements WOTBAPIConstructorOptions {
   ) {
     return this.fetchPath<Players<IncludeFields, ExcludeFields>>(
       'account/list',
-      { fields: resolveIncludeField(include, exclude), ...params },
+      resolveParams(params, include, exclude),
     );
+  }
+
+  playerPersonalData(params: PlayerPersonalDataParams) {
+    return this.fetchPath<PlayerPersonalData>('account/info', params);
   }
 }
 
-const test = new WOTBAPI(new WGApp({ id: Bun.env.WARGAMING_APPLICATION_ID! }), {
-  realm: WOTBRealm.NorthAmerica,
-});
+const app = new WGApp({ id: Bun.env.WARGAMING_APPLICATION_ID! });
+const api = new WOTBAPI(app, { realm: WOTBRealm.NorthAmerica });
 
-const a = await test.players();
-
-console.log(a);
+console.log(await api.playerPersonalData({ account_id: 1041988373 }));

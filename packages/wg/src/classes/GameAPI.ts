@@ -2,9 +2,7 @@ import { WGResponseStatus } from '../enums';
 import { WGApp } from './WGApp';
 
 interface GameAPIConstructorOptions {
-  /**
-   * The root URL to which the API slugs and parameters are appended.
-   */
+  /** The root URL to which the API slugs and parameters are appended. */
   root: string;
 }
 
@@ -26,9 +24,7 @@ export type WGResponse<Data> =
       data: Data;
     };
 
-/**
- * Bare-bones tools for working with any Wargaming game API.
- */
+/** Bare-bones tools for working with any Wargaming game API. */
 export class GameAPI implements GameAPIConstructorOptions {
   root: string;
 
@@ -39,10 +35,7 @@ export class GameAPI implements GameAPIConstructorOptions {
     this.root = options.root;
   }
 
-  /**
-   * Fetches any path of the root URL, expecting data to be returned in the
-   * Wargaming response format.
-   */
+  /** Fetches any path of the root URL. */
   async fetchPath<Type>(path: string, params?: {}) {
     return this.app.fetchURL<Type>(`${this.root}${path}/`, params);
   }

@@ -8,17 +8,13 @@ export enum WGAppType {
   Mobile,
 }
 
-/**
- * The default rate limit of the Wargaming Application.
- */
+/** The default rate limit of the Wargaming Application. */
 export const WGAppTypeDefaultRateLimits: Record<WGAppType, number> = {
   [WGAppType.Server]: 20,
   [WGAppType.Mobile]: 10,
 };
 
-/**
- * The response status of the Wargaming API.
- */
+/** The response status of the Wargaming API. */
 export enum WGResponseStatus {
   Success = 'ok',
   Error = 'error',
