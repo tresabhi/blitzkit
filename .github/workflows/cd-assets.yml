@@ -33,6 +33,7 @@ jobs:
 
       - name: Apply patches
         run: |
+          $env:DISCORD_CLIENT_ID = "${{ secrets.DISCORD_CLIENT_ID }}"
           $env:GH_TOKEN = "${{ secrets.GH_TOKEN }}" 
           $env:DISCORD_TOKEN = "${{ secrets.DISCORD_TOKEN }}" 
           $env:DATABASE_URL = "${{ secrets.DATABASE_URL }}" 
