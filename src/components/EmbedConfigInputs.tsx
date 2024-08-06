@@ -10,10 +10,12 @@ import {
   Button,
   Card,
   Flex,
+  Heading,
   IconButton,
   Inset,
   ScrollArea,
   Select,
+  Separator,
   Switch,
   Text,
   TextField,
@@ -106,6 +108,8 @@ export function EmbedConfigInputs({
           style={{ height: '100%', maxWidth: 320 }}
         >
           <Flex direction="column" gap="2" p="4">
+            <Heading mb="4">Customize</Heading>
+
             <Button
               variant="outline"
               color="gray"
@@ -137,7 +141,6 @@ export function EmbedConfigInputs({
                   control = (
                     <>
                       <Select.Root
-                        size="1"
                         value={`${(state[key] as EmbedConfigItemType<EmbedConfigType.FullTextControl>).color}`}
                         onValueChange={(value) => {
                           mutateState((draft) => {
@@ -206,7 +209,6 @@ export function EmbedConfigInputs({
                         </Select.Content>
                       </Select.Root>
                       <Select.Root
-                        size="1"
                         value={
                           (
                             state[
@@ -234,7 +236,6 @@ export function EmbedConfigInputs({
                         </Select.Content>
                       </Select.Root>
                       <Select.Root
-                        size="1"
                         value={
                           (
                             state[
@@ -269,7 +270,6 @@ export function EmbedConfigInputs({
                 case EmbedConfigType.Number: {
                   control = (
                     <TextField.Root
-                      size="1"
                       style={{ width: 64 }}
                       type="number"
                       value={state[key] as number}
@@ -293,7 +293,6 @@ export function EmbedConfigInputs({
                   control = (
                     <TextField.Root
                       placeholder="Empty"
-                      size="1"
                       style={{ width: 64 }}
                       value={state[key] as string}
                       onChange={(event) => {
@@ -310,7 +309,6 @@ export function EmbedConfigInputs({
                 case EmbedConfigType.Size: {
                   control = (
                     <Select.Root
-                      size="1"
                       value={state[key] as RadixSize}
                       onValueChange={(value) => {
                         mutateState((draft) => {
@@ -337,7 +335,6 @@ export function EmbedConfigInputs({
                 case EmbedConfigType.Radius: {
                   control = (
                     <Select.Root
-                      size="1"
                       value={state[key] as RadixRadius}
                       onValueChange={(value) => {
                         mutateState((draft) => {
@@ -363,7 +360,6 @@ export function EmbedConfigInputs({
                   control = (
                     <>
                       <Select.Root
-                        size="1"
                         value={(state[key] as RadixColor).base}
                         onValueChange={(value) => {
                           mutateState((draft) => {
@@ -403,7 +399,6 @@ export function EmbedConfigInputs({
                       </Select.Root>
 
                       <Select.Root
-                        size="1"
                         value={(state[key] as RadixColor).variant}
                         onValueChange={(value) => {
                           mutateState((draft) => {
@@ -477,7 +472,6 @@ export function EmbedConfigInputs({
                 case EmbedConfigType.TextColor: {
                   control = (
                     <Select.Root
-                      size="1"
                       value={`${state[key]}`}
                       onValueChange={(value) => {
                         mutateState((draft) => {
@@ -553,15 +547,14 @@ export function EmbedConfigInputs({
                   mb="1"
                   pb={setting.pad ? '6' : undefined}
                 >
-                  <Text color="gray" size="2">
-                    {capitalize(startCase(key))}
-                  </Text>
+                  <Flex align="center" gap="4">
+                    <Text>{capitalize(startCase(key))}</Text>
+
+                    <Separator style={{ flex: 1 }} />
+                  </Flex>
+
                   {control && <Flex gap="1">{control}</Flex>}
-                  {!control && (
-                    <Text color="red" size="1">
-                      Immutable
-                    </Text>
-                  )}
+                  {!control && <Text color="red">Immutable</Text>}
                 </Flex>
               );
             })}
