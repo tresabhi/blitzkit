@@ -172,13 +172,8 @@ export const tankDefinitions = fetchCdonLz4<TankDefinitions>(
   asset('definitions/tanks.cdon.lz4'),
 );
 
-const entries = new Promise<TankDefinition[]>(async (resolve) => {
-  resolve(Object.entries(await tankDefinitions).map(([, entry]) => entry));
-});
-export const tanksDefinitionsArray = new Promise<TankDefinition[]>(
-  async (resolve) => {
-    resolve((await entries).map((entry) => entry)); // TODO: wtf?
-  },
+export const tanksDefinitionsArray = tankDefinitions.then((tanks) =>
+  Object.values(tanks).map((tank) => tank),
 );
 export const tankNames = tanksDefinitionsArray.then((tanks) =>
   Promise.all(

@@ -64,6 +64,7 @@ export type TanksEmbedState = ExtractEmbedConfigType<typeof tankEmbedConfig>;
 
 export default function Page() {
   const tanks = use(tanksDefinitionsArray);
+  return null;
   const [state, setState] = useState(
     extractEmbedConfigDefaults(tankEmbedConfig),
   );
