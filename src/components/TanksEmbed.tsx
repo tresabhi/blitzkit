@@ -8,6 +8,10 @@ import {
   toWidthVar,
 } from '../app/tools/embed/utilities';
 import { TankDefinition } from '../core/blitzkit/tankDefinitions';
+import { ClassHeavy } from './ClassIcon/components/ClassHeavy';
+import { ClassLight } from './ClassIcon/components/ClassLight';
+import { ClassMedium } from './ClassIcon/components/ClassMedium';
+import { ClassTankDestroyer } from './ClassIcon/components/ClassTankDestroyer';
 
 interface TanksEmbedWrapperProps {
   children: ReactNode;
@@ -27,11 +31,12 @@ export function TanksEmbedWrapper({ children, state }: TanksEmbedWrapperProps) {
 }
 
 interface TanksEmbedCardProps {
-  tank: TankDefinition;
+  tank: TankDefinition | null;
   state: TanksEmbedState;
 }
 
 export function TanksEmbedCard({ tank, state }: TanksEmbedCardProps) {
+  const { color: cardTitleColor, ...restCardTitleProps } = state.cardTitle;
   return (
     <Flex
       direction="column"
@@ -48,7 +53,40 @@ export function TanksEmbedCard({ tank, state }: TanksEmbedCardProps) {
         }}
         p={state.cardHeaderPadding}
       >
-        {tank.name}
+        <Text
+          color={
+            state.cardTitleAutoColor
+              ? tank === null
+                ? cardTitleColor
+                : tank.treeType === 'collector'
+                  ? 'blue'
+                  : tank.treeType === 'premium'
+                    ? 'amber'
+                    : cardTitleColor
+              : cardTitleColor
+          }
+          {...restCardTitleProps}
+        >
+          <Flex align="center" gap="1">
+            {tank !== null && state.cardTitleAutoIcon && (
+              <>
+                {tank.class === 'lightTank' && (
+                  <ClassLight width="1em" height="1em" />
+                )}
+                {tank.class === 'mediumTank' && (
+                  <ClassMedium width="1em" height="1em" />
+                )}
+                {tank.class === 'heavyTank' && (
+                  <ClassHeavy width="1em" height="1em" />
+                )}
+                {tank.class === 'AT-SPG' && (
+                  <ClassTankDestroyer width="1em" height="1em" />
+                )}
+              </>
+            )}{' '}
+            {tank === null ? 'Total' : tank.name}
+          </Flex>
+        </Text>
       </Flex>
 
       <Flex p={state.cardBodyPadding}>
@@ -62,10 +100,10 @@ export function TanksEmbedCard({ tank, state }: TanksEmbedCardProps) {
               gap={state.columnGap}
               flexGrow="1"
             >
-              <Text size={state.columnValueSize} color={state.columnValueColor}>
+              <Text {...state.columnValue}>
                 70{state[`column${column}Unit`]}
               </Text>
-              <Text size={state.columnLabelSize} color={state.columnLabelColor}>
+              <Text {...state.columnLabel}>
                 {state[`column${column}Label`]}
               </Text>
             </Flex>

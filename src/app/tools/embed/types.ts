@@ -8,6 +8,8 @@ export enum EmbedConfigType {
   SizeNo0,
   TextColor,
   String,
+  FullTextControl,
+  Boolean,
 }
 
 export const radixGrays = [
@@ -19,9 +21,15 @@ export const radixGrays = [
   'sand',
 ] as const;
 
+export const radixTextWeights = ['light', 'regular', 'medium', 'bold'] as const;
+
 export type EmbedConfig = Record<string, EmbedConfigItem>;
 
 export type EmbedConfigItem = (
+  | {
+      type: EmbedConfigType.Boolean;
+      default: boolean;
+    }
   | {
       type: EmbedConfigType.Number;
       default: number;
@@ -51,12 +59,24 @@ export type EmbedConfigItem = (
       type: EmbedConfigType.TextColor;
       default: RadixTextColor;
     }
+  | {
+      type: EmbedConfigType.FullTextControl;
+      default: {
+        color: RadixTextColor;
+        size: RadixSizeNo0;
+        weight: RadixTextWeight;
+      };
+    }
 ) & {
   pad?: boolean;
 };
 
+export type EmbedConfigItemType<Type extends EmbedConfigType> =
+  (EmbedConfigItem & { type: Type })['default'];
+
 export type RadixRadius = `${1 | 2 | 3 | 4}` | 'full';
 export type RadixSize = `${0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`;
+export type RadixTextWeight = (typeof radixTextWeights)[number];
 export type RadixSizeNo0 = Exclude<RadixSize, '0'>;
 export type RadixColor = { base: RadixColorBase; variant: RadixColorVariant };
 export type RadixColorBase = Exclude<

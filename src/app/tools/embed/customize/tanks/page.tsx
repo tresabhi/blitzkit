@@ -1,13 +1,11 @@
 'use client';
 
-import { Box } from '@radix-ui/themes';
 import { Dispatch, SetStateAction, use, useState } from 'react';
 import { EmbedConfigInputs } from '../../../../../components/EmbedConfigInputs';
 import {
   TanksEmbedCard,
   TanksEmbedWrapper,
 } from '../../../../../components/TanksEmbed';
-import { imgur } from '../../../../../core/blitzkit/imgur';
 import { tanksDefinitionsArray } from '../../../../../core/blitzkit/tankDefinitions';
 import {
   EmbedConfig,
@@ -17,9 +15,11 @@ import {
 import { extractEmbedConfigDefaults } from '../../utilities';
 
 const tankEmbedConfig = {
+  showTotal: { type: EmbedConfigType.Boolean, default: true },
+
   listWidth: { type: EmbedConfigType.Number, default: 320, unit: 'px' },
   listGap: { type: EmbedConfigType.Size, default: '2' },
-  listMaxTanks: { type: EmbedConfigType.Number, default: 8, pad: true },
+  listMaxTanks: { type: EmbedConfigType.Number, default: 4, pad: true },
 
   cardRadius: { type: EmbedConfigType.Radius, default: '2' },
   cardHeaderBackgroundColor: {
@@ -27,6 +27,12 @@ const tankEmbedConfig = {
     default: { base: 'gray', variant: '3' },
   },
   cardHeaderPadding: { type: EmbedConfigType.Size, default: '1' },
+  cardTitle: {
+    type: EmbedConfigType.FullTextControl,
+    default: { color: undefined, weight: 'bold', size: '3' },
+  },
+  cardTitleAutoColor: { type: EmbedConfigType.Boolean, default: true },
+  cardTitleAutoIcon: { type: EmbedConfigType.Boolean, default: true },
   cardBodyBackgroundColor: {
     type: EmbedConfigType.Color,
     default: { base: 'gray', variant: '2' },
@@ -34,12 +40,13 @@ const tankEmbedConfig = {
   cardBodyPadding: { type: EmbedConfigType.Size, default: '2', pad: true },
 
   columnGap: { type: EmbedConfigType.Size, default: '0' },
-  columnValueSize: { type: EmbedConfigType.SizeNo0, default: '3' },
-  columnValueColor: { type: EmbedConfigType.TextColor, default: undefined },
-  columnLabelSize: { type: EmbedConfigType.SizeNo0, default: '2' },
-  columnLabelColor: {
-    type: EmbedConfigType.TextColor,
-    default: 'gray',
+  columnValue: {
+    type: EmbedConfigType.FullTextControl,
+    default: { color: undefined, size: '3', weight: 'regular' },
+  },
+  columnLabel: {
+    type: EmbedConfigType.FullTextControl,
+    default: { color: 'gray', size: '2', weight: 'regular' },
     pad: true,
   },
 
@@ -62,29 +69,22 @@ export default function Page() {
   );
 
   return (
-    <Box
-      width="100vw"
-      height="100vh"
-      style={{
-        background: `url(${imgur('pAidayf')})`,
-        backgroundSize: 'cover',
-      }}
+    <EmbedConfigInputs
+      config={tankEmbedConfig}
+      state={state}
+      setState={
+        setState as Dispatch<
+          SetStateAction<ExtractEmbedConfigType<EmbedConfig>>
+        >
+      }
     >
       <TanksEmbedWrapper state={state}>
+        {state.showTotal && <TanksEmbedCard state={state} tank={null} />}
+
         {tanks.slice(0, state.listMaxTanks).map((tank) => (
           <TanksEmbedCard key={tank.id} tank={tank} state={state} />
         ))}
       </TanksEmbedWrapper>
-
-      <EmbedConfigInputs
-        config={tankEmbedConfig}
-        state={state}
-        setState={
-          setState as Dispatch<
-            SetStateAction<ExtractEmbedConfigType<EmbedConfig>>
-          >
-        }
-      />
-    </Box>
+    </EmbedConfigInputs>
   );
 }
