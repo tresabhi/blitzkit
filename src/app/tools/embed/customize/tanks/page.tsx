@@ -31,8 +31,8 @@ const tankEmbedConfig = {
     type: EmbedConfigType.FullTextControl,
     default: { color: undefined, weight: 'bold', size: '3' },
   },
-  cardTitleAutoColor: { type: EmbedConfigType.Boolean, default: true },
-  cardTitleAutoIcon: { type: EmbedConfigType.Boolean, default: true },
+  cardTitleTypeColor: { type: EmbedConfigType.Boolean, default: true },
+  cardTitleClassIcon: { type: EmbedConfigType.Boolean, default: true },
   cardBodyBackgroundColor: {
     type: EmbedConfigType.Color,
     default: { base: 'gray', variant: '2' },

@@ -55,7 +55,7 @@ export function TanksEmbedCard({ tank, state }: TanksEmbedCardProps) {
       >
         <Text
           color={
-            state.cardTitleAutoColor
+            state.cardTitleTypeColor
               ? tank === null
                 ? cardTitleColor
                 : tank.treeType === 'collector'
@@ -68,7 +68,7 @@ export function TanksEmbedCard({ tank, state }: TanksEmbedCardProps) {
           {...restCardTitleProps}
         >
           <Flex align="center" gap="1">
-            {tank !== null && state.cardTitleAutoIcon && (
+            {tank !== null && state.cardTitleClassIcon && (
               <>
                 {tank.class === 'lightTank' && (
                   <ClassLight width="1em" height="1em" />

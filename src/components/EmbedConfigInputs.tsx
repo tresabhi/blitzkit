@@ -21,7 +21,7 @@ import {
   TextField,
 } from '@radix-ui/themes';
 import { produce } from 'immer';
-import { capitalize, clamp, startCase, times } from 'lodash';
+import { capitalize, startCase, times } from 'lodash';
 import {
   Dispatch,
   ReactNode,
@@ -73,19 +73,7 @@ export function EmbedConfigInputs({
     },
     [],
   );
-  const wrapper = useRef<HTMLDivElement>(null);
-  const handlePointerMove = useCallback((event: PointerEvent) => {
-    event.preventDefault();
 
-    if (!wrapper.current) return;
-
-    wrapper.current.style.top = `${clamp(parseFloat(wrapper.current.style.top) + event.movementY, 32, window.innerHeight - 32 - 32)}px`;
-    wrapper.current.style.right = `${clamp(parseFloat(wrapper.current.style.right) - event.movementX, 32, window.innerWidth - 32 - 320)}px`;
-  }, []);
-  const handlePointerUp = useCallback(() => {
-    window.removeEventListener('pointermove', handlePointerMove);
-    window.removeEventListener('pointerup', handlePointerUp);
-  }, []);
   const fileInput = useRef<HTMLInputElement>();
 
   useEffect(() => {
