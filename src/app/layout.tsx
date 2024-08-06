@@ -28,9 +28,10 @@ const robotoFlex = Roboto_Flex({
 
 export default function RootLayout({ children }: RootLayoutProps) {
   const pathname = usePathname();
-  const hideNav =
-    pathname.startsWith('/tools/embed/host') ||
-    pathname.startsWith('/tools/embed/customize');
+  // const hideNav =
+  //   pathname.startsWith('/tools/embed/host') ||
+  //   pathname.startsWith('/tools/embed/customize');
+  const hideNav = false;
   const isRoot = pathname === '/';
 
   return (

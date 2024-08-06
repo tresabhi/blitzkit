@@ -1,5 +1,6 @@
 import { Flex, FlexProps, Theme } from '@radix-ui/themes';
 import { ComponentProps } from 'react';
+import { RadixSize } from '../app/tools/embed/types';
 
 type PageWrapperProps = FlexProps & {
   color?: ComponentProps<typeof Theme>['accentColor'];
@@ -7,6 +8,7 @@ type PageWrapperProps = FlexProps & {
   noMaxWidth?: boolean;
   containerProps?: ComponentProps<typeof Theme>;
   noFlex1?: boolean;
+  padding?: RadixSize;
 };
 
 export default function PageWrapper({
@@ -17,6 +19,7 @@ export default function PageWrapper({
   noMaxWidth = false,
   noFlex1 = false,
   containerProps,
+  padding = '4',
   ...props
 }: PageWrapperProps) {
   return (
@@ -33,7 +36,7 @@ export default function PageWrapper({
       <Flex
         direction="column"
         gap="4"
-        p="4"
+        p={padding}
         style={{
           width: '100%',
           maxWidth: noMaxWidth ? undefined : size,
