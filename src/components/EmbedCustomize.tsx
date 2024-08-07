@@ -8,11 +8,9 @@ import {
 import {
   Box,
   Button,
-  Card,
   Flex,
   Heading,
   IconButton,
-  Inset,
   ScrollArea,
   Select,
   Slider,
@@ -568,48 +566,49 @@ export function EmbedCustomize<Config extends EmbedConfig>({
           top={`${NAVBAR_HEIGHT}px`}
           height={`calc(100vh - ${NAVBAR_HEIGHT}px)`}
         >
-          <Card style={{ height: '100%' }}>
-            <Flex direction="column" gap="2" height="100%">
-              <Inset style={{ borderRadius: 0 }}>
-                <Flex
-                  justify="between"
-                  p="2"
-                  px="3"
-                  style={{
-                    backgroundColor: 'var(--color-panel-translucent)',
-                  }}
-                >
-                  <Text color="gray">Example preview</Text>
+          <Flex
+            direction="column"
+            height="100%"
+            style={{
+              borderRadius: 'var(--radius-3)',
+              overflow: 'hidden',
+              boxShadow: 'var(--shadow-3)',
+            }}
+          >
+            <Flex
+              justify="between"
+              p="2"
+              px="3"
+              style={{
+                backgroundColor: 'var(--color-panel-solid)',
+              }}
+            >
+              <Text color="gray">Example preview</Text>
 
-                  <Flex align="center" gap="3">
-                    <IconButton color="gray" disabled size="1" variant="ghost">
-                      <BorderSolidIcon />
-                    </IconButton>
-                    <IconButton color="gray" disabled size="1" variant="ghost">
-                      <SquareIcon />
-                    </IconButton>
-                    <IconButton color="gray" disabled size="1" variant="ghost">
-                      <Cross1Icon />
-                    </IconButton>
-                  </Flex>
-                </Flex>
-              </Inset>
-
-              <Flex
-                mt="4"
-                flexGrow="1"
-                style={{
-                  borderRadius: toRadiusVar('3'),
-                  overflow: 'hidden',
-                  background: `url(${backgroundImage}) center / cover no-repeat`,
-                }}
-                align="center"
-                justify="center"
-              >
-                {preview(state)}
+              <Flex align="center" gap="3">
+                <IconButton color="gray" disabled size="1" variant="ghost">
+                  <BorderSolidIcon />
+                </IconButton>
+                <IconButton color="gray" disabled size="1" variant="ghost">
+                  <SquareIcon />
+                </IconButton>
+                <IconButton color="gray" disabled size="1" variant="ghost">
+                  <Cross1Icon />
+                </IconButton>
               </Flex>
             </Flex>
-          </Card>
+
+            <Flex
+              flexGrow="1"
+              style={{
+                background: `url(${backgroundImage}) center / cover no-repeat`,
+              }}
+              align="center"
+              justify="center"
+            >
+              {preview(state)}
+            </Flex>
+          </Flex>
         </Box>
       </Flex>
     </PageWrapper>
