@@ -1,16 +1,10 @@
 import * as radixColors from '@radix-ui/colors';
-import {
-  BorderSolidIcon,
-  Cross1Icon,
-  ImageIcon,
-  SquareIcon,
-} from '@radix-ui/react-icons';
+import { ImageIcon } from '@radix-ui/react-icons';
 import {
   Box,
   Button,
   Flex,
   Heading,
-  IconButton,
   ScrollArea,
   Select,
   Slider,
@@ -88,15 +82,6 @@ export function EmbedCustomize<Config extends EmbedConfig>({
         >
           <Flex direction="column" gap="2" p="4">
             <Heading mb="4">Customize</Heading>
-
-            <Button
-              variant="outline"
-              color="gray"
-              mb="6"
-              onClick={() => fileInput.current?.click()}
-            >
-              <ImageIcon /> Upload test background
-            </Button>
 
             {Object.entries(config).map(([keyUntyped, setting]) => {
               const key = keyUntyped as keyof (
@@ -577,25 +562,22 @@ export function EmbedCustomize<Config extends EmbedConfig>({
           >
             <Flex
               justify="between"
+              align="center"
               p="2"
-              px="3"
+              pl="3"
               style={{
                 backgroundColor: 'var(--color-panel-solid)',
               }}
             >
               <Text color="gray">Example preview</Text>
 
-              <Flex align="center" gap="3">
-                <IconButton color="gray" disabled size="1" variant="ghost">
-                  <BorderSolidIcon />
-                </IconButton>
-                <IconButton color="gray" disabled size="1" variant="ghost">
-                  <SquareIcon />
-                </IconButton>
-                <IconButton color="gray" disabled size="1" variant="ghost">
-                  <Cross1Icon />
-                </IconButton>
-              </Flex>
+              <Button
+                variant="outline"
+                color="gray"
+                onClick={() => fileInput.current?.click()}
+              >
+                <ImageIcon /> Upload test background
+              </Button>
             </Flex>
 
             <Flex

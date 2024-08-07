@@ -3,8 +3,8 @@
 import { use } from 'react';
 import { EmbedCustomize } from '../../../../../components/EmbedCustomize';
 import {
-  TanksEmbedCard,
-  TanksEmbedWrapper,
+  BreakdownEmbedCard,
+  BreakdownEmbedWrapper,
 } from '../../../../../components/TanksEmbed';
 import { tanksDefinitionsArray } from '../../../../../core/blitzkit/tankDefinitions';
 import {
@@ -13,12 +13,18 @@ import {
   ExtractEmbedConfigType,
 } from '../../types';
 
-const tankEmbedConfig = {
+const breakdownEmbedConfig = {
   showTotal: { type: EmbedConfigType.Boolean, default: true },
 
   listWidth: { type: EmbedConfigType.Slider, default: 320, min: 128, max: 640 },
   listGap: { type: EmbedConfigType.Size, default: '2' },
-  listMaxTanks: { type: EmbedConfigType.Number, default: 4, pad: true },
+  listMaxTanks: {
+    type: EmbedConfigType.Slider,
+    default: 4,
+    min: 0,
+    max: 8,
+    pad: true,
+  },
 
   cardRadius: { type: EmbedConfigType.Radius, default: '2' },
   cardHeaderBackgroundColor: {
@@ -59,22 +65,24 @@ const tankEmbedConfig = {
   column4Label: { type: EmbedConfigType.String, default: 'Damage' },
 } satisfies EmbedConfig;
 
-export type TanksEmbedState = ExtractEmbedConfigType<typeof tankEmbedConfig>;
+export type BreakdownEmbedState = ExtractEmbedConfigType<
+  typeof breakdownEmbedConfig
+>;
 
 export default function Page() {
   const tanks = use(tanksDefinitionsArray);
 
   return (
     <EmbedCustomize
-      config={tankEmbedConfig}
+      config={breakdownEmbedConfig}
       preview={(state) => (
-        <TanksEmbedWrapper state={state}>
-          {state.showTotal && <TanksEmbedCard state={state} tank={null} />}
+        <BreakdownEmbedWrapper state={state}>
+          {state.showTotal && <BreakdownEmbedCard state={state} tank={null} />}
 
           {tanks.slice(0, state.listMaxTanks).map((tank) => (
-            <TanksEmbedCard key={tank.id} tank={tank} state={state} />
+            <BreakdownEmbedCard key={tank.id} tank={tank} state={state} />
           ))}
-        </TanksEmbedWrapper>
+        </BreakdownEmbedWrapper>
       )}
     />
   );

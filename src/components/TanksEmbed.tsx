@@ -1,7 +1,7 @@
 import { Flex, Text } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { ReactNode } from 'react';
-import { TanksEmbedState } from '../app/tools/embed/customize/tanks/page';
+import { BreakdownEmbedState } from '../app/tools/embed/customize/breakdown/page';
 import {
   toColorVar,
   toRadiusVar,
@@ -13,12 +13,15 @@ import { ClassLight } from './ClassIcon/components/ClassLight';
 import { ClassMedium } from './ClassIcon/components/ClassMedium';
 import { ClassTankDestroyer } from './ClassIcon/components/ClassTankDestroyer';
 
-interface TanksEmbedWrapperProps {
+interface BreakdownEmbedWrapperProps {
   children: ReactNode;
-  state: TanksEmbedState;
+  state: BreakdownEmbedState;
 }
 
-export function TanksEmbedWrapper({ children, state }: TanksEmbedWrapperProps) {
+export function BreakdownEmbedWrapper({
+  children,
+  state,
+}: BreakdownEmbedWrapperProps) {
   return (
     <Flex
       direction="column"
@@ -30,12 +33,12 @@ export function TanksEmbedWrapper({ children, state }: TanksEmbedWrapperProps) {
   );
 }
 
-interface TanksEmbedCardProps {
+interface BreakdownEmbedCardProps {
   tank: TankDefinition | null;
-  state: TanksEmbedState;
+  state: BreakdownEmbedState;
 }
 
-export function TanksEmbedCard({ tank, state }: TanksEmbedCardProps) {
+export function BreakdownEmbedCard({ tank, state }: BreakdownEmbedCardProps) {
   const { color: cardTitleColor, ...restCardTitleProps } = state.cardTitle;
   return (
     <Flex
