@@ -10,6 +10,7 @@ export enum EmbedConfigType {
   String,
   FullTextControl,
   Boolean,
+  Slider,
 }
 
 export const radixGrays = [
@@ -26,6 +27,12 @@ export const radixTextWeights = ['light', 'regular', 'medium', 'bold'] as const;
 export type EmbedConfig = Record<string, EmbedConfigItem>;
 
 export type EmbedConfigItem = (
+  | {
+      type: EmbedConfigType.Slider;
+      default: number;
+      min: number;
+      max: number;
+    }
   | {
       type: EmbedConfigType.Boolean;
       default: boolean;
@@ -71,9 +78,6 @@ export type EmbedConfigItem = (
   pad?: boolean;
 };
 
-export type EmbedConfigItemType<Type extends EmbedConfigType> =
-  (EmbedConfigItem & { type: Type })['default'];
-
 export type RadixRadius = `${1 | 2 | 3 | 4}` | 'full';
 export type RadixSize = `${0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`;
 export type RadixTextWeight = (typeof radixTextWeights)[number];
@@ -97,3 +101,6 @@ export type ExtractEmbedConfigType<Config extends EmbedConfig> = {
     type: Config[Key]['type'];
   } & EmbedConfigItem)['default'];
 };
+
+export type EmbedConfigItemType<Type extends EmbedConfigType> =
+  (EmbedConfigItem & { type: Type })

@@ -1,7 +1,7 @@
 'use client';
 
-import { Dispatch, SetStateAction, use, useState } from 'react';
-import { EmbedConfigInputs } from '../../../../../components/EmbedConfigInputs';
+import { use } from 'react';
+import { EmbedCustomize } from '../../../../../components/EmbedCustomize';
 import {
   TanksEmbedCard,
   TanksEmbedWrapper,
@@ -12,12 +12,11 @@ import {
   EmbedConfigType,
   ExtractEmbedConfigType,
 } from '../../types';
-import { extractEmbedConfigDefaults } from '../../utilities';
 
 const tankEmbedConfig = {
   showTotal: { type: EmbedConfigType.Boolean, default: true },
 
-  listWidth: { type: EmbedConfigType.Number, default: 320, unit: 'px' },
+  listWidth: { type: EmbedConfigType.Slider, default: 320, min: 128, max: 640 },
   listGap: { type: EmbedConfigType.Size, default: '2' },
   listMaxTanks: { type: EmbedConfigType.Number, default: 4, pad: true },
 
@@ -64,27 +63,19 @@ export type TanksEmbedState = ExtractEmbedConfigType<typeof tankEmbedConfig>;
 
 export default function Page() {
   const tanks = use(tanksDefinitionsArray);
-  const [state, setState] = useState(
-    extractEmbedConfigDefaults(tankEmbedConfig),
-  );
 
   return (
-    <EmbedConfigInputs
+    <EmbedCustomize
       config={tankEmbedConfig}
-      state={state}
-      setState={
-        setState as Dispatch<
-          SetStateAction<ExtractEmbedConfigType<EmbedConfig>>
-        >
-      }
-    >
-      <TanksEmbedWrapper state={state}>
-        {state.showTotal && <TanksEmbedCard state={state} tank={null} />}
+      preview={(state) => (
+        <TanksEmbedWrapper state={state}>
+          {state.showTotal && <TanksEmbedCard state={state} tank={null} />}
 
-        {tanks.slice(0, state.listMaxTanks).map((tank) => (
-          <TanksEmbedCard key={tank.id} tank={tank} state={state} />
-        ))}
-      </TanksEmbedWrapper>
-    </EmbedConfigInputs>
+          {tanks.slice(0, state.listMaxTanks).map((tank) => (
+            <TanksEmbedCard key={tank.id} tank={tank} state={state} />
+          ))}
+        </TanksEmbedWrapper>
+      )}
+    />
   );
 }

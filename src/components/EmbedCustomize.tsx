@@ -15,22 +15,14 @@ import {
   Inset,
   ScrollArea,
   Select,
-  Separator,
+  Slider,
   Switch,
   Text,
   TextField,
 } from '@radix-ui/themes';
-import { produce } from 'immer';
+import { Immutable, produce } from 'immer';
 import { capitalize, startCase, times } from 'lodash';
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import {
   EmbedConfig,
   EmbedConfigItemType,
@@ -48,27 +40,28 @@ import {
   RadixTextWeight,
   radixTextWeights,
 } from '../app/tools/embed/types';
-import { toColorVar, toRadiusVar } from '../app/tools/embed/utilities';
+import {
+  extractEmbedConfigDefaults,
+  toColorVar,
+  toRadiusVar,
+} from '../app/tools/embed/utilities';
 import { imgur } from '../core/blitzkit/imgur';
 import { NAVBAR_HEIGHT } from './Navbar';
 import PageWrapper from './PageWrapper';
 
-interface EmbedConfigInputsProps {
-  config: EmbedConfig;
-  state: ExtractEmbedConfigType<EmbedConfig>;
-  setState: Dispatch<SetStateAction<ExtractEmbedConfigType<EmbedConfig>>>;
-  children: ReactNode;
+interface EmbedConfigInputsProps<Config extends EmbedConfig> {
+  config: Config;
+  preview: (state: ExtractEmbedConfigType<Config>) => ReactNode;
 }
 
-export function EmbedConfigInputs({
+export function EmbedCustomize<Config extends EmbedConfig>({
   config,
-  state,
-  setState,
-  children,
-}: EmbedConfigInputsProps) {
+  preview,
+}: EmbedConfigInputsProps<Config>) {
+  const [state, setState] = useState(extractEmbedConfigDefaults(config));
   const [backgroundImage, setBackgroundImage] = useState(imgur('SO13zur'));
   const mutateState = useCallback(
-    (recipe: (draft: ExtractEmbedConfigType<EmbedConfig>) => void) => {
+    (recipe: (draft: Immutable<ExtractEmbedConfigType<Config>>) => void) => {
       setState(produce(recipe));
     },
     [],
@@ -107,17 +100,49 @@ export function EmbedConfigInputs({
               <ImageIcon /> Upload test background
             </Button>
 
-            {Object.entries(config).map(([key, setting]) => {
+            {Object.entries(config).map(([keyUntyped, setting]) => {
+              const key = keyUntyped as keyof (
+                | Immutable<ExtractEmbedConfigType<Config>>
+                | ExtractEmbedConfigType<Config>
+              );
               let control: ReactNode;
 
               switch (setting.type) {
+                case EmbedConfigType.Slider: {
+                  control = (
+                    <Slider
+                      value={[state[key] as number]}
+                      min={
+                        (
+                          config[
+                            key
+                          ] as EmbedConfigItemType<EmbedConfigType.Slider>
+                        ).min
+                      }
+                      max={
+                        (
+                          config[
+                            key
+                          ] as EmbedConfigItemType<EmbedConfigType.Slider>
+                        ).max
+                      }
+                      onValueChange={([value]) =>
+                        mutateState((draft) => {
+                          (draft[key] as number) = value;
+                        })
+                      }
+                    />
+                  );
+                  break;
+                }
+
                 case EmbedConfigType.Boolean: {
                   control = (
                     <Switch
                       checked={state[key] as boolean}
                       onCheckedChange={(checked) =>
                         mutateState((draft) => {
-                          draft[key] = checked;
+                          (draft[key] as boolean) = checked;
                         })
                       }
                     />
@@ -129,13 +154,13 @@ export function EmbedConfigInputs({
                   control = (
                     <>
                       <Select.Root
-                        value={`${(state[key] as EmbedConfigItemType<EmbedConfigType.FullTextControl>).color}`}
+                        value={`${(state[key] as EmbedConfigItemType<EmbedConfigType.FullTextControl>['default']).color}`}
                         onValueChange={(value) => {
                           mutateState((draft) => {
                             (
                               draft[
                                 key
-                              ] as EmbedConfigItemType<EmbedConfigType.FullTextControl>
+                              ] as EmbedConfigItemType<EmbedConfigType.FullTextControl>['default']
                             ).color = value as RadixTextColor;
                           });
                         }}
@@ -201,7 +226,7 @@ export function EmbedConfigInputs({
                           (
                             state[
                               key
-                            ] as EmbedConfigItemType<EmbedConfigType.FullTextControl>
+                            ] as EmbedConfigItemType<EmbedConfigType.FullTextControl>['default']
                           ).size
                         }
                         onValueChange={(value) => {
@@ -209,7 +234,7 @@ export function EmbedConfigInputs({
                             (
                               draft[
                                 key
-                              ] as EmbedConfigItemType<EmbedConfigType.FullTextControl>
+                              ] as EmbedConfigItemType<EmbedConfigType.FullTextControl>['default']
                             ).size = value as RadixSizeNo0;
                           });
                         }}
@@ -228,7 +253,7 @@ export function EmbedConfigInputs({
                           (
                             state[
                               key
-                            ] as EmbedConfigItemType<EmbedConfigType.FullTextControl>
+                            ] as EmbedConfigItemType<EmbedConfigType.FullTextControl>['default']
                           ).weight
                         }
                         onValueChange={(value) => {
@@ -236,7 +261,7 @@ export function EmbedConfigInputs({
                             (
                               draft[
                                 key
-                              ] as EmbedConfigItemType<EmbedConfigType.FullTextControl>
+                              ] as EmbedConfigItemType<EmbedConfigType.FullTextControl>['default']
                             ).weight = value as RadixTextWeight;
                           });
                         }}
@@ -263,7 +288,7 @@ export function EmbedConfigInputs({
                       value={state[key] as number}
                       onChange={(event) => {
                         mutateState((draft) => {
-                          draft[key] = (
+                          (draft[key] as number) = (
                             event.target as HTMLInputElement
                           ).valueAsNumber;
                         });
@@ -285,7 +310,9 @@ export function EmbedConfigInputs({
                       value={state[key] as string}
                       onChange={(event) => {
                         mutateState((draft) => {
-                          draft[key] = (event.target as HTMLInputElement).value;
+                          (draft[key] as string) = (
+                            event.target as HTMLInputElement
+                          ).value;
                         });
                       }}
                     />
@@ -296,50 +323,38 @@ export function EmbedConfigInputs({
                 case EmbedConfigType.SizeNo0:
                 case EmbedConfigType.Size: {
                   control = (
-                    <Select.Root
-                      value={state[key] as RadixSize}
-                      onValueChange={(value) => {
+                    <Slider
+                      value={[Number(state[key])]}
+                      min={setting.type === EmbedConfigType.SizeNo0 ? 1 : 0}
+                      max={9}
+                      onValueChange={([value]) =>
                         mutateState((draft) => {
-                          draft[key] = value as RadixSize;
-                        });
-                      }}
-                    >
-                      <Select.Trigger />
-                      <Select.Content>
-                        {times(10, (index) =>
-                          setting.type === EmbedConfigType.SizeNo0 &&
-                          index === 0 ? null : (
-                            <Select.Item key={index} value={`${index}`}>
-                              {index}
-                            </Select.Item>
-                          ),
-                        )}
-                      </Select.Content>
-                    </Select.Root>
+                          (draft[key] as RadixSize) = `${value}` as RadixSize;
+                        })
+                      }
+                    />
                   );
                   break;
                 }
 
                 case EmbedConfigType.Radius: {
                   control = (
-                    <Select.Root
-                      value={state[key] as RadixRadius}
-                      onValueChange={(value) => {
+                    <Slider
+                      value={[
+                        (state[key] as RadixRadius) === 'full'
+                          ? 5
+                          : Number(state[key]),
+                      ]}
+                      min={0}
+                      max={5}
+                      onValueChange={([value]) =>
                         mutateState((draft) => {
-                          draft[key] = value as RadixRadius;
-                        });
-                      }}
-                    >
-                      <Select.Trigger />
-                      <Select.Content>
-                        {times(5, (index) => (
-                          <Select.Item key={index} value={`${index}`}>
-                            {index}
-                          </Select.Item>
-                        ))}
-                        <Select.Item value="full">Full</Select.Item>
-                      </Select.Content>
-                    </Select.Root>
+                          (draft[key] as RadixRadius) = (
+                            value === 5 ? 'full' : `${value}`
+                          ) as RadixRadius;
+                        })
+                      }
+                    />
                   );
                   break;
                 }
@@ -403,7 +418,7 @@ export function EmbedConfigInputs({
 
                             return (
                               <>
-                                <Select.Item key={key} value={variant}>
+                                <Select.Item value={variant}>
                                   <Box
                                     style={{
                                       display: 'inline-block',
@@ -419,7 +434,7 @@ export function EmbedConfigInputs({
                                   />{' '}
                                   {variant}
                                 </Select.Item>
-                                <Select.Item key={key} value={`a${variant}`}>
+                                <Select.Item value={`a${variant}`}>
                                   <Box
                                     style={{
                                       display: 'inline-block',
@@ -463,7 +478,8 @@ export function EmbedConfigInputs({
                       value={`${state[key]}`}
                       onValueChange={(value) => {
                         mutateState((draft) => {
-                          draft[key] = value as RadixTextColor;
+                          (draft[key] as RadixTextColor) =
+                            value as RadixTextColor;
                         });
                       }}
                     >
@@ -535,11 +551,7 @@ export function EmbedConfigInputs({
                   mb="1"
                   pb={setting.pad ? '6' : undefined}
                 >
-                  <Flex align="center" gap="4">
-                    <Text>{capitalize(startCase(key))}</Text>
-
-                    <Separator style={{ flex: 1 }} />
-                  </Flex>
+                  <Text>{capitalize(startCase(key as string))}</Text>
 
                   {control && <Flex gap="1">{control}</Flex>}
                   {!control && <Text color="red">Immutable</Text>}
@@ -567,7 +579,7 @@ export function EmbedConfigInputs({
                     backgroundColor: 'var(--color-panel-translucent)',
                   }}
                 >
-                  <Text color="gray">Streaming software</Text>
+                  <Text color="gray">Example preview</Text>
 
                   <Flex align="center" gap="3">
                     <IconButton color="gray" disabled size="1" variant="ghost">
@@ -594,7 +606,7 @@ export function EmbedConfigInputs({
                 align="center"
                 justify="center"
               >
-                {children}
+                {preview(state)}
               </Flex>
             </Flex>
           </Card>
