@@ -17,8 +17,8 @@ import { resolveReload } from '../../../../../core/blitzkit/resolveReload';
 import {
   TankDefinition,
   tankDefinitions,
+  tankDefinitionsArray,
   tankNames,
-  tanksDefinitionsArray,
 } from '../../../../../core/blitzkit/tankDefinitions';
 import { unionBoundingBox } from '../../../../../core/blitzkit/unionBoundingBox';
 import { useAdExempt } from '../../../../../hooks/useAdExempt';
@@ -51,7 +51,7 @@ export const TankSearch = memo<TankSearchProps>(
     const awaitedGameDefinitions = use(gameDefinitions);
     const awaitedModelDefinitions = use(modelDefinitions);
     const awaitedTankDefinitions = use(tankDefinitions);
-    const awaitedTanksDefinitionsArray = use(tanksDefinitionsArray);
+    const awaitedTanksDefinitionsArray = use(tankDefinitionsArray);
     const awaitedTankNames = use(tankNames);
     const filters = TankFilters.use();
     const sort = TankopediaSort.use();

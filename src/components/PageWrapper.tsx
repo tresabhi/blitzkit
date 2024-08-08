@@ -1,6 +1,6 @@
 import { Flex, FlexProps, Theme } from '@radix-ui/themes';
 import { ComponentProps } from 'react';
-import { RadixSize } from '../app/tools/embed/types';
+import { RadixSize } from '../stores/embedState/constants';
 
 type PageWrapperProps = FlexProps & {
   color?: ComponentProps<typeof Theme>['accentColor'];

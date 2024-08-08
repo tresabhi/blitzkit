@@ -172,13 +172,13 @@ export const tankDefinitions = fetchCdonLz4<TankDefinitions>(
   asset('definitions/tanks.cdon.lz4'),
 );
 
-export const tanksDefinitionsArray = tankDefinitions.then((tanks) =>
+export const tankDefinitionsArray = tankDefinitions.then((tanks) =>
   Object.values(tanks).map((tank) => tank),
 );
-export const tankNames = tanksDefinitionsArray.then((tanks) =>
+export const tankNames = tankDefinitionsArray.then((tanks) =>
   Promise.all(
     tanks.map(async (tank, index) => {
-      const { id } = (await tanksDefinitionsArray)[index];
+      const { id } = (await tankDefinitionsArray)[index];
 
       return {
         id,
