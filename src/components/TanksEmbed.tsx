@@ -1,3 +1,4 @@
+import { amberDark, blueDark } from '@radix-ui/colors';
 import { Flex, Text } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { ReactNode } from 'react';
@@ -37,8 +38,6 @@ interface BreakdownEmbedCardProps {
 export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
   const { useState, useRichText } =
     useEmbedStateCurry<typeof breakdownConfig>();
-  const { color: cardTitleColor, ...restCardTitleProps } =
-    useState('cardTitle');
 
   return (
     <Flex
@@ -57,18 +56,21 @@ export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
         p={useState('cardHeaderPadding')}
       >
         <Text
-          style={{
-            color: useState('cardTitleTypeColor')
-              ? tank === null
-                ? cardTitleColor
-                : tank.treeType === 'collector'
-                  ? 'blue'
-                  : tank.treeType === 'premium'
-                    ? 'amber'
-                    : cardTitleColor
-              : cardTitleColor,
+          {...{
+            ...useRichText('cardTitle'),
+            style:
+              tank === null
+                ? undefined
+                : tank.treeType === 'researchable' ||
+                    !useState('cardTitleTypeColor')
+                  ? undefined
+                  : {
+                      color:
+                        tank.treeType === 'premium'
+                          ? amberDark.amber11
+                          : blueDark.blue11,
+                    },
           }}
-          {...restCardTitleProps}
         >
           <Flex align="center" gap="1">
             {useState('cardTitleClassIcon') && tank !== null && (
