@@ -13,6 +13,10 @@ import { configurations, previews } from '../../configurations';
 import { Boolean } from './components/Boolean';
 import { Color } from './components/Color';
 import { Radius } from './components/Radius';
+import { Size } from './components/Size';
+import { SizeWithout0 } from './components/SizeWithout0';
+import { Slider } from './components/Slider';
+import { Text as TextController } from './components/Text';
 
 export interface EmbedPreviewControllerProps {
   configKey: string;
@@ -71,6 +75,26 @@ export default function Page({
                   control = <Radius configKey={configKey} />;
                   break;
                 }
+
+                case EmbedItemType.Size: {
+                  control = <Size configKey={configKey} />;
+                  break;
+                }
+
+                case EmbedItemType.SizeWithout0: {
+                  control = <SizeWithout0 configKey={configKey} />;
+                  break;
+                }
+
+                case EmbedItemType.Slider: {
+                  control = <Slider configKey={configKey} config={item} />;
+                  break;
+                }
+
+                case EmbedItemType.String: {
+                  control = <TextController configKey={configKey} />;
+                  break;
+                }
               }
 
               return (
@@ -78,7 +102,7 @@ export default function Page({
                   direction={oneLiner ? undefined : 'column'}
                   gap={oneLiner ? '2' : '1'}
                   justify={oneLiner ? 'between' : undefined}
-                  mb="2"
+                  mb={oneLiner ? '2' : '4'}
                   pb={item.pad ? '6' : undefined}
                 >
                   <Text>{capitalize(startCase(configKey as string))}</Text>
