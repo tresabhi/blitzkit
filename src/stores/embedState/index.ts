@@ -46,11 +46,6 @@ export type EmbedConfigItem = (
       default: boolean;
     }
   | {
-      type: EmbedItemType.Number;
-      default: number;
-      unit?: string;
-    }
-  | {
       type: EmbedItemType.String;
       default: string;
     }

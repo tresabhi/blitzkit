@@ -1,7 +1,6 @@
 import { EmbedConfigItem } from '.';
 
 export enum EmbedItemType {
-  Number,
   Radius,
   Size,
   SizeWithout0,

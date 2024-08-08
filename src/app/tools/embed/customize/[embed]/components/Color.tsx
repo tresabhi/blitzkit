@@ -5,7 +5,6 @@ import { EmbedPreviewControllerProps } from '../page';
 
 export function Color({ configKey }: EmbedPreviewControllerProps) {
   const mutateEmbedState = EmbedState.useMutation();
-  const embedStore = EmbedState.useStore();
   const input = useRef<HTMLInputElement>(null);
 
   return (
