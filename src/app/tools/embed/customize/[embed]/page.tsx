@@ -13,6 +13,7 @@ import { configurations, previews } from '../../configurations';
 import { Boolean } from './components/Boolean';
 import { Color } from './components/Color';
 import { Radius } from './components/Radius';
+import { RichText } from './components/RichText';
 import { Size } from './components/Size';
 import { SizeWithout0 } from './components/SizeWithout0';
 import { Slider } from './components/Slider';
@@ -94,6 +95,10 @@ export default function Page({
                 case EmbedItemType.String: {
                   control = <TextController configKey={configKey} />;
                   break;
+                }
+
+                case EmbedItemType.RichText: {
+                  control = <RichText configKey={configKey} />;
                 }
               }
 

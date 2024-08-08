@@ -56,7 +56,7 @@ export const breakdownConfig = {
   },
   columnLabel: {
     type: EmbedItemType.RichText,
-    default: { color: 'gray', size: '2', weight: 'regular' },
+    default: { color: grayDark.gray11, size: '2', weight: 'regular' },
     pad: true,
   },
 
