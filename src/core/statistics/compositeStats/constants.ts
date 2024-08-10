@@ -18,6 +18,11 @@ export const blitzStatsKeys = [
   'xp',
 ] as const;
 
+export const blitzkitStatsKeys = [
+  ...blitzStatsKeys,
+  'battle_life_time',
+] as const;
+
 export const blitzPlayerStatsKeys = [
   ...blitzStatsKeys,
   'max_frags_tank_id',
@@ -25,7 +30,7 @@ export const blitzPlayerStatsKeys = [
 ] as const;
 
 export const compositeStatsKeysBase = [
-  ...blitzStatsKeys,
+  ...blitzkitStatsKeys,
   'damage_ratio',
   'kills_to_death_ratio',
   'accuracy',
@@ -55,6 +60,11 @@ const normalizedBlitzStatsKeys = [
   'xp',
 ] satisfies (typeof blitzStatsKeys)[number][];
 
+const normalizedBlitzkitStatsKeys = [
+  ...normalizedBlitzStatsKeys,
+  'battle_life_time',
+] satisfies (typeof blitzkitStatsKeys)[number][];
+
 const cumulativeBlitzStatsKeys = [
   'battles',
   'capture_points',
@@ -75,8 +85,13 @@ const cumulativeBlitzStatsKeys = [
   'xp',
 ] satisfies (typeof blitzStatsKeys)[number][];
 
+const cumulativeBlitzkitStatsKeys = [
+  ...cumulativeBlitzStatsKeys,
+  'battle_life_time',
+] satisfies (typeof blitzkitStatsKeys)[number][];
+
 const normalizedCompositeStatsKeys = [
-  ...normalizedBlitzStatsKeys,
+  ...normalizedBlitzkitStatsKeys,
   // 'damage_ratio', is a dimensionless ratio
   // 'kills_to_death_ratio', also a dimensionless ratio
   // 'accuracy', dimensionless ratio
@@ -87,7 +102,7 @@ const normalizedCompositeStatsKeys = [
 ] satisfies (typeof compositeStatsKeysBase)[number][];
 
 const cumulativeCompositeStatsKeys = [
-  ...cumulativeBlitzStatsKeys,
+  ...cumulativeBlitzkitStatsKeys,
   'damage_ratio',
   'kills_to_death_ratio',
   'accuracy',
@@ -104,6 +119,9 @@ export const compositeStatsKeys = [
 
 type BlitzStatsKey = (typeof blitzStatsKeys)[number];
 export type BlitzStats = Record<BlitzStatsKey, number>;
+
+type BlitzkitStatsKey = (typeof blitzkitStatsKeys)[number];
+export type BlitzkitStats = Record<BlitzkitStatsKey, number>;
 
 type BlitzPlayerStatsKey = (typeof blitzPlayerStatsKeys)[number];
 export type BlitzPlayerStats = Record<BlitzPlayerStatsKey, number>;
@@ -145,6 +163,7 @@ export const compositeStatsFormatting: {
   },
   normalized_wins: { fixed: 0, unit: '%', coefficient: 100, preview: 0.72 },
   normalized_xp: { fixed: 0, preview: 982, localeFormat: true },
+  normalized_battle_life_time: { fixed: 1, preview: 4.6, coefficient: 1 / 60 },
 
   cumulative_accuracy: { fixed: 0, unit: '%', coefficient: 100, preview: 0.91 },
   cumulative_battles: { fixed: 0, preview: 12 },
@@ -172,4 +191,10 @@ export const compositeStatsFormatting: {
   cumulative_wins: { fixed: 0, preview: 8 },
   cumulative_xp: { fixed: 0, preview: 19403, localeFormat: true },
   cumulative_wn8: { fixed: 0, preview: 3103, localeFormat: true },
+  cumulative_battle_life_time: {
+    fixed: 0,
+    preview: 109,
+    coefficient: 1 / 60,
+    localeFormat: true,
+  },
 };

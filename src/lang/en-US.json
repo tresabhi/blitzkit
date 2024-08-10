@@ -99,6 +99,7 @@
       "normalized_win_and_survived": "Winning and surviving rate",
       "normalized_wins": "Winrate",
       "normalized_xp": "XP",
+      "normalized_battle_life_time": "Battle time",
 
       "cumulative_accuracy": "Accuracy",
       "cumulative_battles": "Battles",
@@ -120,7 +121,8 @@
       "cumulative_win_and_survived": "Won and survived battles",
       "cumulative_wins": "Wins",
       "cumulative_xp": "Total XP",
-      "cumulative_wn8": "WN8"
+      "cumulative_wn8": "WN8",
+      "cumulative_battle_life_time": "Total battle time"
     }
   },
 

@@ -1,12 +1,12 @@
 import calculateWN8 from '../calculateWN8';
 import {
-  BlitzStats,
+  BlitzkitStats,
   CompositeStats,
   compositeStatsFormatting,
   CompositeStatsKey,
 } from './constants';
 
-export function compositeStats(stats: BlitzStats, average: BlitzStats) {
+export function compositeStats(stats: BlitzkitStats, average: BlitzkitStats) {
   return {
     normalized_damage_dealt: stats.damage_dealt / stats.battles,
     normalized_damage_received: stats.damage_received / stats.battles,
@@ -21,6 +21,7 @@ export function compositeStats(stats: BlitzStats, average: BlitzStats) {
     normalized_win_and_survived: stats.win_and_survived / stats.battles,
     normalized_wins: stats.wins / stats.battles,
     normalized_xp: stats.xp / stats.battles,
+    normalized_battle_life_time: stats.battle_life_time / stats.battles,
 
     cumulative_accuracy: stats.hits / stats.shots,
     cumulative_battles: stats.battles,
@@ -44,6 +45,7 @@ export function compositeStats(stats: BlitzStats, average: BlitzStats) {
     cumulative_wins: stats.wins,
     cumulative_xp: stats.xp,
     cumulative_wn8: calculateWN8(average, stats),
+    cumulative_battle_life_time: stats.battle_life_time,
   } satisfies CompositeStats;
 }
 

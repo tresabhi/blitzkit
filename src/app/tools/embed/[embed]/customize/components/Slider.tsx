@@ -26,7 +26,7 @@ export function Slider({
       ]}
       onValueChange={([value]) => {
         mutateEmbedState((draft) => {
-          draft[configKey] = `${value}`;
+          draft[configKey] = value;
         });
       }}
     />

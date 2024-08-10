@@ -7,6 +7,8 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { NAVBAR_HEIGHT } from '../../../../../components/Navbar';
 import PageWrapper from '../../../../../components/PageWrapper';
 import { imgur } from '../../../../../core/blitzkit/imgur';
+import * as App from '../../../../../stores/app';
+import * as EmbedState from '../../../../../stores/embedState';
 import { EmbedConfig } from '../../../../../stores/embedState';
 import { EmbedItemType } from '../../../../../stores/embedState/constants';
 import { configurations, previews } from '../../configurations';
@@ -29,6 +31,8 @@ export default function Page({
 }: {
   params: { embed: keyof typeof configurations };
 }) {
+  const embedStateStore = EmbedState.useStore();
+  const appStore = App.useStore();
   const config = configurations[params.embed] as EmbedConfig;
   const Preview = previews[params.embed];
   const [backgroundImage, setBackgroundImage] = useState(imgur('SO13zur'));
@@ -59,13 +63,41 @@ export default function Page({
             <Flex mb="4" gap="2">
               <Button
                 onClick={() => {
-                  console.log(`${location.origin}/embed/${params.embed}/host`);
+                  const { wargaming } = appStore.getState().logins;
+
+                  if (!wargaming) return;
+
+                  const state = embedStateStore.getState();
+                  const initial = embedStateStore.getInitialState();
+                  const shallowState: EmbedState.EmbedState = {};
+
+                  Object.entries(state).forEach(([key, value]) => {
+                    if (value !== initial[key]) {
+                      shallowState[key] = value;
+                    }
+                  });
+
+                  const searchParams = new URLSearchParams({
+                    id: `${wargaming.id}`,
+                    state: JSON.stringify(shallowState),
+                  });
+
+                  navigator.clipboard.writeText(
+                    `${location.origin}/tools/embed/${params.embed}/host?${searchParams.toString()}`,
+                  );
                 }}
               >
                 <CopyIcon />
                 Copy URL
               </Button>
-              <Button variant="outline">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    'body { margin: 0; background-color: transparent; overflow: hidden; }',
+                  );
+                }}
+              >
                 <CopyIcon />
                 Copy CSS
               </Button>
