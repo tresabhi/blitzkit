@@ -7,6 +7,7 @@ export function Size({ configKey }: EmbedPreviewControllerProps) {
 
   return (
     <Slider
+      variant="soft"
       min={0}
       max={9}
       value={[

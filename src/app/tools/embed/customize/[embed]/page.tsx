@@ -1,6 +1,6 @@
 'use client';
 
-import { ImageIcon } from '@radix-ui/react-icons';
+import { CopyIcon, ImageIcon } from '@radix-ui/react-icons';
 import { Box, Button, Flex, Heading, ScrollArea, Text } from '@radix-ui/themes';
 import { capitalize, startCase } from 'lodash';
 import { ReactNode, useEffect, useRef, useState } from 'react';
@@ -54,7 +54,22 @@ export default function Page({
           style={{ height: '100%', maxWidth: 320 }}
         >
           <Flex direction="column" gap="2" p="4">
-            <Heading mb="4">Customize</Heading>
+            <Heading>Customize</Heading>
+
+            <Flex mb="4" gap="2">
+              <Button
+                onClick={() => {
+                  console.log(`${location.origin}/embed/${params.embed}/host`);
+                }}
+              >
+                <CopyIcon />
+                Copy URL
+              </Button>
+              <Button variant="outline">
+                <CopyIcon />
+                Copy CSS
+              </Button>
+            </Flex>
 
             {Object.keys(config).map((configKey) => {
               const item = config[configKey];

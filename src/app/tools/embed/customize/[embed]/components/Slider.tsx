@@ -16,6 +16,7 @@ export function Slider({
 
   return (
     <RadixSlider
+      variant="soft"
       min={config.min}
       max={config.max}
       value={[
