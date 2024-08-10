@@ -1,9 +1,9 @@
 import { TierWeightsRecord } from '../../components/TierWeights';
-import { AllStats } from '../blitz/getAccountInfo';
 import { tankDefinitions } from '../blitzkit/tankDefinitions';
+import { BlitzStats } from './compositeStats/constants';
 
 export async function getTierWeights(
-  stats: Record<number, AllStats>,
+  stats: Record<number, BlitzStats>,
   order: number[] = Object.keys(stats).map(parseInt),
 ) {
   const awaitedTankDefinitions = await tankDefinitions;

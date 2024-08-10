@@ -1,5 +1,5 @@
 import calculateWN8 from '../statistics/calculateWN8';
-import { AllStats } from './getAccountInfo';
+import { BlitzStats } from '../statistics/compositeStats/constants';
 
 export type Stat = keyof ReturnType<typeof generateStats>;
 
@@ -14,7 +14,7 @@ export const STAT_NAMES: Record<Stat, string> = {
 
 export const STAT_KEYS = Object.keys(STAT_NAMES) as Stat[];
 
-export function generateStats(s: AllStats, e?: AllStats) {
+export function generateStats(s: BlitzStats, e?: BlitzStats) {
   return {
     battles: s.battles,
     wins: s.wins,

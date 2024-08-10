@@ -1,6 +1,6 @@
-import { AllStats } from '../../blitz/getAccountInfo';
+import { BlitzStats } from '../../statistics/compositeStats/constants';
 
-export const emptyAllStats: AllStats = {
+export const emptyAllStats: BlitzStats = {
   battles: 0,
   capture_points: 0,
   damage_dealt: 0,

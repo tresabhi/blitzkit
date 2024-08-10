@@ -9,6 +9,7 @@ export enum EmbedItemType {
   RichText,
   Boolean,
   Slider,
+  Enum,
 }
 
 export const radixGrays = [

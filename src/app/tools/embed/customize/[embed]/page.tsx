@@ -12,6 +12,7 @@ import { EmbedItemType } from '../../../../../stores/embedState/constants';
 import { configurations, previews } from '../../configurations';
 import { Boolean } from './components/Boolean';
 import { Color } from './components/Color';
+import { Enum } from './components/Enum';
 import { Radius } from './components/Radius';
 import { RichText } from './components/RichText';
 import { Size } from './components/Size';
@@ -99,6 +100,12 @@ export default function Page({
 
                 case EmbedItemType.RichText: {
                   control = <RichText configKey={configKey} />;
+                  break;
+                }
+
+                case EmbedItemType.Enum: {
+                  control = <Enum configKey={configKey} config={item} />;
+                  break;
                 }
               }
 

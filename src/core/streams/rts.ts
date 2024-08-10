@@ -1,9 +1,9 @@
 import { times } from 'lodash';
 import { IndividualTankStats } from '../../types/tanksStats';
-import { AllStats } from '../blitz/getAccountInfo';
+import { BlitzStats } from '../statistics/compositeStats/constants';
 import { ReadStream, WriteStream } from './buffer';
 
-export interface BlitzkitTankStats extends AllStats {
+export interface BlitzkitTankStats extends BlitzStats {
   id: number;
   battle_life_time: number;
   last_battle_time: number;

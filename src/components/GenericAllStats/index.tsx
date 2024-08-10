@@ -1,14 +1,15 @@
 import { Locale } from 'discord.js';
-import { AllStats, SupplementaryStats } from '../../core/blitz/getAccountInfo';
+import { SupplementaryStats } from '../../core/blitz/getAccountInfo';
 import { translator } from '../../core/localization/translator';
 import isNumber from '../../core/math/isNumber';
+import { BlitzStats } from '../../core/statistics/compositeStats/constants';
 import getWN8Percentile from '../../core/statistics/getWN8Percentile';
 import { Card } from './components/Card';
 import { Root } from './components/Root';
 import { Row } from './components/Row';
 
 interface GenericAllStatsProps {
-  stats: AllStats;
+  stats: BlitzStats;
   supplementaryStats?: SupplementaryStats;
   locale: Locale;
 }

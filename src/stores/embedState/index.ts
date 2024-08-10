@@ -73,6 +73,14 @@ export type EmbedConfigItem = (
         weight: RadixTextWeight;
       };
     }
+  | {
+      type: EmbedItemType.Enum;
+      default: string;
+      options: {
+        label: string;
+        value: string;
+      }[];
+    }
 ) & {
   pad?: boolean;
 };

@@ -5,9 +5,19 @@ import {
   BreakdownEmbedWrapper,
 } from '../../../../components/TanksEmbed';
 import { tankDefinitionsArray } from '../../../../core/blitzkit/tankDefinitions';
+import {
+  CompositeStatsKey,
+  compositeStatsKeys,
+} from '../../../../core/statistics/compositeStats/constants';
+import strings from '../../../../lang/en-US.json';
 import { EmbedConfig } from '../../../../stores/embedState';
 import { EmbedItemType } from '../../../../stores/embedState/constants';
 import { useEmbedStateCurry } from '../../../../stores/embedState/utilities';
+
+const compositeStatsKeysOptions = compositeStatsKeys.map((value) => ({
+  label: strings.common.composite_stats[value],
+  value,
+}));
 
 export const breakdownConfig = {
   showTotal: { type: EmbedItemType.Boolean, default: true, pad: true },
@@ -60,14 +70,30 @@ export const breakdownConfig = {
     pad: true,
   },
 
-  column1Unit: { type: EmbedItemType.String, default: '' },
-  column2Unit: { type: EmbedItemType.String, default: '%' },
-  column3Unit: { type: EmbedItemType.String, default: '' },
-  column4Unit: { type: EmbedItemType.String, default: '' },
-  column1Label: { type: EmbedItemType.String, default: 'Battles' },
-  column2Label: { type: EmbedItemType.String, default: 'Winrate' },
-  column3Label: { type: EmbedItemType.String, default: 'WN8' },
-  column4Label: { type: EmbedItemType.String, default: 'Damage' },
+  column1: {
+    type: EmbedItemType.Enum,
+    default: 'cumulative_battles' satisfies CompositeStatsKey,
+    options: compositeStatsKeysOptions,
+  },
+  column2: {
+    type: EmbedItemType.Enum,
+    default: 'normalized_wins' satisfies CompositeStatsKey,
+    options: compositeStatsKeysOptions,
+  },
+  column3: {
+    type: EmbedItemType.Enum,
+    default: 'cumulative_wn8' satisfies CompositeStatsKey,
+    options: compositeStatsKeysOptions,
+  },
+  column4: {
+    type: EmbedItemType.Enum,
+    default: 'normalized_damage_dealt' satisfies CompositeStatsKey,
+    options: compositeStatsKeysOptions,
+  },
+  column1CustomLabel: { type: EmbedItemType.String, default: '' },
+  column2CustomLabel: { type: EmbedItemType.String, default: '' },
+  column3CustomLabel: { type: EmbedItemType.String, default: '' },
+  column4CustomLabel: { type: EmbedItemType.String, default: '' },
 } satisfies EmbedConfig;
 
 export function BreakdownPreview() {

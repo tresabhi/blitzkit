@@ -5,6 +5,9 @@ import { ReactNode } from 'react';
 import { breakdownConfig } from '../app/tools/embed/configurations/breakdown';
 import { toRadiusVar } from '../app/tools/embed/utilities';
 import { TankDefinition } from '../core/blitzkit/tankDefinitions';
+import { previewCompositeStat } from '../core/statistics/compositeStats';
+import { CompositeStatsKey } from '../core/statistics/compositeStats/constants';
+import strings from '../lang/en-US.json';
 import { useEmbedStateCurry } from '../stores/embedState/utilities';
 import { ClassHeavy } from './ClassIcon/components/ClassHeavy';
 import { ClassLight } from './ClassIcon/components/ClassLight';
@@ -97,6 +100,8 @@ export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
       <Flex p={useState('cardBodyPadding')}>
         {times(4, (index) => {
           const column = (index + 1) as 1 | 2 | 3 | 4;
+          const columnState = useState(`column${column}`) as CompositeStatsKey;
+          const customLabel = useState(`column${column}CustomLabel`);
 
           return (
             <Flex
@@ -106,10 +111,12 @@ export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
               flexGrow="1"
             >
               <Text {...useRichText('columnValue')}>
-                70{useState(`column${column}Unit`)}
+                {previewCompositeStat(columnState)}
               </Text>
               <Text {...useRichText('columnLabel')}>
-                {useState(`column${column}Label`)}
+                {customLabel.length === 0
+                  ? strings.common.composite_stats[columnState]
+                  : customLabel}
               </Text>
             </Flex>
           );

@@ -1,22 +1,18 @@
-import { AllStats } from '../../blitz/getAccountInfo';
 import { decode } from '../../protobuf/decode';
+import { BlitzkitStats } from '../../statistics/compositeStats/constants';
 import { asset } from '../asset';
 
-export interface AverageDefinitionsAllStats extends AllStats {
-  battle_life_time: number;
-}
-
 export interface AverageDefinitionsEntry {
-  mu: AverageDefinitionsAllStats;
-  sigma: AverageDefinitionsAllStats;
-  r: AverageDefinitionsAllStats;
+  mu: BlitzkitStats;
+  sigma: BlitzkitStats;
+  r: BlitzkitStats;
   samples: Samples;
 }
 
 export interface AverageDefinitionsEntrySubPartial {
-  mu: Partial<AverageDefinitionsAllStats>;
-  sigma: Partial<AverageDefinitionsAllStats>;
-  r: Partial<AverageDefinitionsAllStats>;
+  mu: Partial<BlitzkitStats>;
+  sigma: Partial<BlitzkitStats>;
+  r: Partial<BlitzkitStats>;
   samples: Samples;
 }
 

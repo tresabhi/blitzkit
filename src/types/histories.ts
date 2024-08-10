@@ -1,9 +1,9 @@
 // a cleaner simplification of Blitz Stars' histories because it's a mess there
 
-import { AllStats } from '../core/blitz/getAccountInfo';
+import { BlitzStats } from '../core/statistics/compositeStats/constants';
 
 export interface History {
-  all: AllStats;
+  all: BlitzStats;
   last_battle_time: number;
 }
 

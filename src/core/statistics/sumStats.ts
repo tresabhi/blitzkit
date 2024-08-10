@@ -1,12 +1,12 @@
-import { AllStats } from '../blitz/getAccountInfo';
 import { emptyAllStats } from '../blitzstars/getStatsInPeriod/constants';
+import { BlitzStats } from './compositeStats/constants';
 
-export default function sumStats(allStatsCollection: AllStats[]) {
+export default function sumStats(allStatsCollection: BlitzStats[]) {
   return allStatsCollection.reduce((accumulated, current) => {
-    function sum(value: (allStats: AllStats) => number) {
+    function sum(value: (allStats: BlitzStats) => number) {
       return value(accumulated) + value(current);
     }
-    function max(value: (allStats: AllStats) => number) {
+    function max(value: (allStats: BlitzStats) => number) {
       return Math.max(value(accumulated), value(current));
     }
 
@@ -28,6 +28,6 @@ export default function sumStats(allStatsCollection: AllStats[]) {
       survived_battles: sum((a) => a.survived_battles),
       win_and_survived: sum((a) => a.win_and_survived),
       xp: sum((a) => a.xp),
-    } satisfies AllStats;
+    } satisfies BlitzStats;
   }, emptyAllStats);
 }

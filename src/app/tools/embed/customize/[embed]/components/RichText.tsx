@@ -15,8 +15,6 @@ export function RichText({ configKey }: EmbedPreviewControllerProps) {
       ] as EmbedConfigItemType<EmbedItemType.RichText>['default'],
   );
 
-  console.log(state);
-
   return (
     <ColorControllerRaw
       value={state.color}

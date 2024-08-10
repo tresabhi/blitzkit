@@ -1,8 +1,8 @@
-import { AllStats } from '../core/blitz/getAccountInfo';
 import { emptyAllStats } from '../core/blitzstars/getStatsInPeriod/constants';
+import { BlitzStats } from '../core/statistics/compositeStats/constants';
 
 export interface IndividualTankStats {
-  all: AllStats;
+  all: BlitzStats;
   last_battle_time: number;
   account_id: number;
   max_xp: number;

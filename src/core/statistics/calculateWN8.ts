@@ -1,4 +1,4 @@
-import { AllStats } from '../blitz/getAccountInfo';
+import { BlitzStats } from './compositeStats/constants';
 
 /**
  * Formula from https://web.archive.org/web/20190105064817/http://wiki.wnefficiency.net/pages/WN8
@@ -7,7 +7,7 @@ import { AllStats } from '../blitz/getAccountInfo';
  * @param average what the player in question performs like
  */
 export default function calculateWN8(
-  expected: AllStats,
+  expected: BlitzStats,
   average: {
     damage_dealt: number;
     battles: number;

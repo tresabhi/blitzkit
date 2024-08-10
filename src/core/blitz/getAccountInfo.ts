@@ -1,26 +1,7 @@
 import { Region } from '../../constants/regions';
+import { BlitzStats } from '../statistics/compositeStats/constants';
 import fetchBlitz, { FetchBlitzParams } from './fetchBlitz';
 import { normalizeIds } from './normalizeIds';
-
-export interface AllStats {
-  spotted: number;
-  hits: number;
-  frags: number;
-  max_xp: number;
-  wins: number;
-  losses: number;
-  capture_points: number;
-  battles: number;
-  damage_dealt: number;
-  damage_received: number;
-  max_frags: number;
-  shots: number;
-  frags8p: number;
-  xp: number;
-  win_and_survived: number;
-  survived_battles: number;
-  dropped_capture_points: number;
-}
 
 export interface SupplementaryStats {
   WN8?: number;
@@ -79,7 +60,7 @@ export interface IndividualAccountInfo {
   last_battle_time: number;
   nickname: string;
   statistics: {
-    all: AllStats;
+    all: BlitzStats;
     clan: ClanStats;
     rating?: RatingStats;
     frags: null | number;

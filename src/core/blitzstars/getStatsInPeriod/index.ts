@@ -1,10 +1,10 @@
 import { Locale } from 'discord.js';
 import { Region } from '../../../constants/regions';
-import { AllStats } from '../../blitz/getAccountInfo';
 import getTankHistories, {
   TankHistories,
   TankHistoryRaw,
 } from '../../blitzkit/getTankHistories';
+import { BlitzStats } from '../../statistics/compositeStats/constants';
 import { emptyAllStats } from './constants';
 
 const emptyTankHistoryNode: TankHistoryRaw = {
@@ -17,7 +17,7 @@ const emptyTankHistoryNode: TankHistoryRaw = {
 };
 
 export interface DiffedTankStats {
-  diff: Record<number, AllStats>;
+  diff: Record<number, BlitzStats>;
   order: number[];
 }
 
@@ -54,7 +54,7 @@ export default async function getStatsInPeriod(
   const playedTanks: number[] = [];
 
   // fetch history node right before "start" and right before "end"
-  const diff: Record<number, AllStats> = {};
+  const diff: Record<number, BlitzStats> = {};
   inRangeTanks.forEach((tankId) => {
     const sortedHistory = tankSortedHistory[tankId];
     const previousIndex =
@@ -65,7 +65,7 @@ export default async function getStatsInPeriod(
     const latest =
       sortedHistory[latestIndex] ?? sortedHistory[sortedHistory.length - 1];
 
-    function d(get: (allStats: AllStats) => number) {
+    function d(get: (allStats: BlitzStats) => number) {
       return get(latest.all) - get(previous.all);
     }
 

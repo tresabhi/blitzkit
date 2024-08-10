@@ -3,10 +3,10 @@ import { memo, use, useCallback } from 'react';
 import { StickyRowHeaderCell } from '../../../../components/StickyRowHeaderCell';
 import {
   averageDefinitions,
-  AverageDefinitionsAllStats,
   AverageDefinitionsEntryWithId,
 } from '../../../../core/blitzkit/averageDefinitions';
 import { formatCompact } from '../../../../core/math/formatCompact';
+import { BlitzkitStats } from '../../../../core/statistics/compositeStats/constants';
 import { useAveragesExclusionRatio } from '../../../../hooks/useAveragesExclusionRatio';
 import * as TankPerformancePersistent from '../../../../stores/tankPerformancePersistent';
 
@@ -22,7 +22,7 @@ export const Total = memo<TotalProps>(
     );
     const ratio = useAveragesExclusionRatio();
     const sum = useCallback(
-      (slice: (tank: AverageDefinitionsAllStats) => number) => {
+      (slice: (tank: BlitzkitStats) => number) => {
         return tanks.reduce(
           (acc, tank) => acc + tank.samples.total * slice(tank.mu),
           0,

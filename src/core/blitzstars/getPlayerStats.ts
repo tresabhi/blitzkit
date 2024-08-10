@@ -1,10 +1,10 @@
 import { Region } from '../../constants/regions';
-import { AllStats } from '../blitz/getAccountInfo';
+import { BlitzStats } from '../statistics/compositeStats/constants';
 
 interface IndividualPlayerStats {
   clan: { clan_id: number; name: string; tag: string };
   statistics: {
-    all: AllStats;
+    all: BlitzStats;
     wn8: number;
     wn7: number;
     average_tier: number;

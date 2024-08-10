@@ -1,6 +1,6 @@
-import { AllStats } from '../blitz/getAccountInfo';
 import { context } from '../blitzkit/context';
 import { tankDefinitions } from '../blitzkit/tankDefinitions';
+import { BlitzStats } from '../statistics/compositeStats/constants';
 
 interface SpecialStats {
   winrate: number;
@@ -71,7 +71,7 @@ export interface IndividualTankAverage {
   total_battle_life_time: number;
   number_of_players: number;
   tank_id: number;
-  all: AllStats;
+  all: BlitzStats;
   special: SpecialStats;
   percentiles: SpecialPercentiles;
   percentiles_player_count: number;
