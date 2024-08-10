@@ -1,8 +1,11 @@
 'use client';
 
-import { Code, Text } from '@radix-ui/themes';
+import { Code, Heading } from '@radix-ui/themes';
+import { useMemo } from 'react';
 import PageWrapper from '../../../../../components/PageWrapper';
+import * as EmbedState from '../../../../../stores/embedState';
 import { configurations } from '../../configurations';
+import { extractEmbedConfigDefaults } from '../../utilities';
 
 export interface EmbedPreviewControllerProps {
   configKey: string;
@@ -15,14 +18,26 @@ export default function Page({
   params: { embed: keyof typeof configurations };
   searchParams: { state: string };
 }) {
-  return (
-    <PageWrapper>
-      <Text>{params.embed}</Text>
+  const config = configurations[params.embed];
+  const initialState = useMemo(
+    () => ({
+      ...extractEmbedConfigDefaults(config),
+      ...(JSON.parse(searchParams.state) as EmbedState.EmbedState),
+    }),
+    [params.embed],
+  );
 
-      <Text></Text>
-      <Code color="gray">
-        <pre>{JSON.stringify(JSON.parse(searchParams['state']), null, 2)}</pre>
-      </Code>
-    </PageWrapper>
+  return (
+    <EmbedState.Provider data={initialState}>
+      <PageWrapper>
+        <Heading>
+          <Code>{params.embed}</Code>
+        </Heading>
+
+        <Code color="gray">
+          <pre>{JSON.stringify(initialState, null, 2)}</pre>
+        </Code>
+      </PageWrapper>
+    </EmbedState.Provider>
   );
 }
