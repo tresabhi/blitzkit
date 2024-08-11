@@ -5,19 +5,11 @@ import {
   HeightIcon,
   ImageIcon,
   Link2Icon,
+  ResetIcon,
   TimerIcon,
   WidthIcon,
 } from '@radix-ui/react-icons';
-import {
-  AlertDialog,
-  Box,
-  Button,
-  Flex,
-  Heading,
-  ScrollArea,
-  Text,
-  TextField,
-} from '@radix-ui/themes';
+import { Box, Button, Flex, Heading, ScrollArea, Text } from '@radix-ui/themes';
 import { capitalize, startCase } from 'lodash';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { CopyButton } from '../../../../../components/CopyButton';
@@ -32,6 +24,7 @@ import { configurations } from '../../configurations';
 import { Boolean } from './components/Boolean';
 import { Color } from './components/Color';
 import { Enum } from './components/Enum';
+import { Import } from './components/Import';
 import { PreviewWrapper } from './components/PreviewWrapper';
 import { Radius } from './components/Radius';
 import { RichText } from './components/RichText';
@@ -39,7 +32,6 @@ import { Size } from './components/Size';
 import { SizeWithout0 } from './components/SizeWithout0';
 import { Slider } from './components/Slider';
 import { Text as TextController } from './components/Text';
-import { Import } from './components/Import';
 
 export interface EmbedPreviewControllerProps {
   configKey: string;
@@ -76,7 +68,7 @@ export default function Page({
           style={{ height: '100%', maxWidth: 320 }}
         >
           <Flex direction="column" gap="2" p="4">
-          <Import/>
+            <Import />
 
             <Heading>Export</Heading>
             <Text size="2" color="gray" mb="2">
@@ -140,7 +132,21 @@ export default function Page({
               </CopyButton>
             </Flex>
 
-            <Heading>Customize</Heading>
+            <Flex justify="between" align="center">
+              <Heading>Customize</Heading>
+              <Button
+                color="red"
+                variant="ghost"
+                onClick={() => {
+                  embedStateStore.setState(
+                    embedStateStore.getInitialState(),
+                    true,
+                  );
+                }}
+              >
+                <ResetIcon /> Reset
+              </Button>
+            </Flex>
             <Text size="2" color="gray" mb="2">
               Bells and whistles of your embed
             </Text>
