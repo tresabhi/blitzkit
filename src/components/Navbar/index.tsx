@@ -81,9 +81,11 @@ export default function Navbar() {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
-              weight="bold"
             >
-              BlitzKit
+              <b>BlitzKit</b>
+              <Text color="gray" size="2" trim="both">
+                .app
+              </Text>
             </Link>
           </Flex>
 
