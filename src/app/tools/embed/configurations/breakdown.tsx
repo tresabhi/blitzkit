@@ -21,7 +21,7 @@ const compositeStatsKeysOptions = compositeStatsKeys.map((value) => ({
 
 export const breakdownConfig = {
   width: { type: EmbedItemType.Slider, default: 320, min: 128, max: 640 },
-  height: { type: EmbedItemType.Slider, default: 640, min: 128, max: 1024 },
+  height: { type: EmbedItemType.Slider, default: 492, min: 128, max: 1024 },
 
   showTotal: { type: EmbedItemType.Boolean, default: true, pad: true },
 

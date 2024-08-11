@@ -24,12 +24,7 @@ export function BreakdownEmbedWrapper({
   const { useState } = useEmbedStateCurry<typeof breakdownConfig>();
 
   return (
-    <Flex
-      direction="column"
-      gap={useState('listGap')}
-      justify="center"
-      height="100%"
-    >
+    <Flex direction="column" gap={useState('listGap')} height="100%">
       {children}
     </Flex>
   );
@@ -45,6 +40,7 @@ export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
 
   return (
     <Flex
+      flexShrink="0"
       direction="column"
       style={{
         borderRadius: toRadiusVar(useState('cardRadius')),

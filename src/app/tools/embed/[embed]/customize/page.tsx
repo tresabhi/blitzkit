@@ -8,7 +8,16 @@ import {
   TimerIcon,
   WidthIcon,
 } from '@radix-ui/react-icons';
-import { Box, Button, Flex, Heading, ScrollArea, Text } from '@radix-ui/themes';
+import {
+  AlertDialog,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  ScrollArea,
+  Text,
+  TextField,
+} from '@radix-ui/themes';
 import { capitalize, startCase } from 'lodash';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { CopyButton } from '../../../../../components/CopyButton';
@@ -30,6 +39,7 @@ import { Size } from './components/Size';
 import { SizeWithout0 } from './components/SizeWithout0';
 import { Slider } from './components/Slider';
 import { Text as TextController } from './components/Text';
+import { Import } from './components/Import';
 
 export interface EmbedPreviewControllerProps {
   configKey: string;
@@ -66,7 +76,12 @@ export default function Page({
           style={{ height: '100%', maxWidth: 320 }}
         >
           <Flex direction="column" gap="2" p="4">
+          <Import/>
+
             <Heading>Export</Heading>
+            <Text size="2" color="gray" mb="2">
+              Copy all properties for you streaming software
+            </Text>
 
             <Flex mb="6" gap="2" wrap="wrap">
               <CopyButton
@@ -126,6 +141,9 @@ export default function Page({
             </Flex>
 
             <Heading>Customize</Heading>
+            <Text size="2" color="gray" mb="2">
+              Bells and whistles of your embed
+            </Text>
 
             {Object.keys(config).map((configKey) => {
               const item = config[configKey];
