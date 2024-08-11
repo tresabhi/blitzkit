@@ -1,8 +1,8 @@
-import * as EmbedState from '../../../../../../stores/embedState';
+import * as EmbedState from '../../../../../stores/embedState';
 import {
   EmbedConfigItemType,
   EmbedItemType,
-} from '../../../../../../stores/embedState/constants';
+} from '../../../../../stores/embedState/constants';
 import { EmbedPreviewControllerProps } from '../page';
 import { ColorControllerRaw } from './Color/components/ColorControllerRaw';
 

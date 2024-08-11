@@ -1,9 +1,9 @@
 import { Slider as RadixSlider } from '@radix-ui/themes';
-import * as EmbedState from '../../../../../../stores/embedState';
+import * as EmbedState from '../../../../../stores/embedState';
 import {
   EmbedConfigItemType,
   EmbedItemType,
-} from '../../../../../../stores/embedState/constants';
+} from '../../../../../stores/embedState/constants';
 import { EmbedPreviewControllerProps } from '../page';
 
 export function Slider({

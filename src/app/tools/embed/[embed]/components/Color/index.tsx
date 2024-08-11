@@ -1,4 +1,4 @@
-import * as EmbedState from '../../../../../../../stores/embedState';
+import * as EmbedState from '../../../../../../stores/embedState';
 import { EmbedPreviewControllerProps } from '../../page';
 import { ColorControllerRaw } from './components/ColorControllerRaw';
 

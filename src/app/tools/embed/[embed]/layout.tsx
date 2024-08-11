@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import * as EmbedState from '../../../../../stores/embedState';
-import { configurations } from '../../configurations';
-import { extractEmbedConfigDefaults } from '../../utilities';
+import * as EmbedState from '../../../../stores/embedState';
+import { configurations } from '../configurations';
+import { extractEmbedConfigDefaults } from '../utilities';
 
 export default function Layout({
   params,

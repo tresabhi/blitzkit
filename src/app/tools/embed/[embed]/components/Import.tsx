@@ -8,7 +8,7 @@ import {
   Tooltip,
 } from '@radix-ui/themes';
 import { useRef, useState } from 'react';
-import * as EmbedState from '../../../../../../stores/embedState';
+import * as EmbedState from '../../../../../stores/embedState';
 
 export function Import() {
   const importInput = useRef<HTMLInputElement>(null);

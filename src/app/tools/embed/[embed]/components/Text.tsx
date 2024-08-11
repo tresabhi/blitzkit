@@ -1,5 +1,5 @@
 import { TextField } from '@radix-ui/themes';
-import * as EmbedState from '../../../../../../stores/embedState';
+import * as EmbedState from '../../../../../stores/embedState';
 import { EmbedPreviewControllerProps } from '../page';
 
 export function Text({ configKey }: EmbedPreviewControllerProps) {
