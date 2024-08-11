@@ -1,9 +1,17 @@
 'use client';
 
-import { CopyIcon, ImageIcon } from '@radix-ui/react-icons';
+import {
+  CodeIcon,
+  HeightIcon,
+  ImageIcon,
+  Link2Icon,
+  TimerIcon,
+  WidthIcon,
+} from '@radix-ui/react-icons';
 import { Box, Button, Flex, Heading, ScrollArea, Text } from '@radix-ui/themes';
 import { capitalize, startCase } from 'lodash';
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import { CopyButton } from '../../../../../components/CopyButton';
 import { NAVBAR_HEIGHT } from '../../../../../components/Navbar';
 import PageWrapper from '../../../../../components/PageWrapper';
 import { imgur } from '../../../../../core/blitzkit/imgur';
@@ -58,11 +66,11 @@ export default function Page({
           style={{ height: '100%', maxWidth: 320 }}
         >
           <Flex direction="column" gap="2" p="4">
-            <Heading>Customize</Heading>
+            <Heading>Export</Heading>
 
-            <Flex mb="4" gap="2">
-              <Button
-                onClick={() => {
+            <Flex mb="6" gap="2" wrap="wrap">
+              <CopyButton
+                copy={() => {
                   const { wargaming } = appStore.getState().logins;
 
                   if (!wargaming) return;
@@ -82,26 +90,42 @@ export default function Page({
                     state: JSON.stringify(shallowState),
                   });
 
-                  navigator.clipboard.writeText(
-                    `${location.origin}/tools/embed/${params.embed}/host?${searchParams.toString()}`,
-                  );
+                  return `${location.origin}/tools/embed/${params.embed}/host?${searchParams.toString()}`;
                 }}
               >
-                <CopyIcon />
+                <Link2Icon />
                 Copy URL
-              </Button>
-              <Button
+              </CopyButton>
+              <CopyButton
                 variant="outline"
-                onClick={() => {
-                  navigator.clipboard.writeText(
-                    'body { margin: 0; background-color: transparent; overflow: hidden; }',
-                  );
-                }}
+                copy={() =>
+                  'body { margin: 0; background-color: transparent; overflow: hidden; }'
+                }
               >
-                <CopyIcon />
+                <CodeIcon />
                 Copy CSS
-              </Button>
+              </CopyButton>
+              <CopyButton
+                variant="outline"
+                copy={() => `${embedStateStore.getState().width}`}
+              >
+                <WidthIcon />
+                Copy width
+              </CopyButton>
+              <CopyButton
+                variant="outline"
+                copy={() => `${embedStateStore.getState().height}`}
+              >
+                <HeightIcon />
+                Copy height
+              </CopyButton>
+              <CopyButton variant="outline" copy={() => '`'}>
+                <TimerIcon />
+                Copy framerate
+              </CopyButton>
             </Flex>
+
+            <Heading>Customize</Heading>
 
             {Object.keys(config).map((configKey) => {
               const item = config[configKey];
@@ -122,21 +146,25 @@ export default function Page({
 
                 case EmbedItemType.Radius: {
                   control = <Radius configKey={configKey} />;
+                  oneLiner = true;
                   break;
                 }
 
                 case EmbedItemType.Size: {
                   control = <Size configKey={configKey} />;
+                  oneLiner = true;
                   break;
                 }
 
                 case EmbedItemType.SizeWithout0: {
                   control = <SizeWithout0 configKey={configKey} />;
+                  oneLiner = true;
                   break;
                 }
 
                 case EmbedItemType.Slider: {
                   control = <Slider configKey={configKey} config={item} />;
+                  oneLiner = true;
                   break;
                 }
 
@@ -152,6 +180,7 @@ export default function Page({
 
                 case EmbedItemType.Enum: {
                   control = <Enum configKey={configKey} config={item} />;
+                  oneLiner = true;
                   break;
                 }
               }
@@ -165,7 +194,12 @@ export default function Page({
                   pb={item.pad ? '6' : undefined}
                 >
                   <Text>{capitalize(startCase(configKey as string))}</Text>
-                  <Flex gap="2" align="center">
+                  <Flex
+                    gap="2"
+                    align="center"
+                    flexGrow="1"
+                    justify={oneLiner ? 'end' : undefined}
+                  >
                     {control}
                   </Flex>
                 </Flex>
