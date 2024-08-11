@@ -11,10 +11,11 @@ import * as App from '../../../../../stores/app';
 import * as EmbedState from '../../../../../stores/embedState';
 import { EmbedConfig } from '../../../../../stores/embedState';
 import { EmbedItemType } from '../../../../../stores/embedState/constants';
-import { configurations, previews } from '../../configurations';
+import { configurations } from '../../configurations';
 import { Boolean } from './components/Boolean';
 import { Color } from './components/Color';
 import { Enum } from './components/Enum';
+import { PreviewWrapper } from './components/PreviewWrapper';
 import { Radius } from './components/Radius';
 import { RichText } from './components/RichText';
 import { Size } from './components/Size';
@@ -34,7 +35,6 @@ export default function Page({
   const embedStateStore = EmbedState.useStore();
   const appStore = App.useStore();
   const config = configurations[params.embed] as EmbedConfig;
-  const Preview = previews[params.embed];
   const [backgroundImage, setBackgroundImage] = useState(imgur('SO13zur'));
   const fileInput = useRef<HTMLInputElement>();
 
@@ -210,16 +210,16 @@ export default function Page({
               </Button>
             </Flex>
 
-            <Flex
+            <Box
               flexGrow="1"
               style={{
                 background: `url(${backgroundImage}) center / cover no-repeat`,
               }}
-              align="center"
-              justify="center"
+              position="relative"
+              overflow="hidden"
             >
-              <Preview />
-            </Flex>
+              <PreviewWrapper name={params.embed} />
+            </Box>
           </Flex>
         </Box>
       </Flex>

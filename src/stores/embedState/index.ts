@@ -3,7 +3,12 @@
 import * as radixColors from '@radix-ui/colors';
 import { create } from 'zustand';
 import { createNextSafeStore } from '../../core/zustand/createNextSafeStore';
-import { EmbedItemType, radixGrays, radixTextWeights } from './constants';
+import {
+  EmbedConfigItemType,
+  EmbedItemType,
+  radixGrays,
+  radixTextWeights,
+} from './constants';
 
 export type RadixSize = `${0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`;
 export type RadixSizeWithout0 = Exclude<RadixSize, '0'>;
@@ -32,7 +37,10 @@ export type ExtractEmbedConfigTypes<Config extends EmbedConfig> = {
   } & EmbedConfigItem)['default'];
 };
 
-export type EmbedConfig = Record<string, EmbedConfigItem>;
+export type EmbedConfig = {
+  width: EmbedConfigItemType<EmbedItemType.Slider>;
+  height: EmbedConfigItemType<EmbedItemType.Slider>;
+} & Record<string, EmbedConfigItem>;
 
 export type EmbedConfigItem = (
   | {

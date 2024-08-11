@@ -27,7 +27,8 @@ export function BreakdownEmbedWrapper({
     <Flex
       direction="column"
       gap={useState('listGap')}
-      width={`${useState('listWidth')}px`}
+      justify="center"
+      height="100%"
     >
       {children}
     </Flex>

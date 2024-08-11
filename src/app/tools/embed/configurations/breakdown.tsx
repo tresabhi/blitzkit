@@ -20,14 +20,11 @@ const compositeStatsKeysOptions = compositeStatsKeys.map((value) => ({
 }));
 
 export const breakdownConfig = {
+  width: { type: EmbedItemType.Slider, default: 320, min: 128, max: 640 },
+  height: { type: EmbedItemType.Slider, default: 640, min: 128, max: 1024 },
+
   showTotal: { type: EmbedItemType.Boolean, default: true, pad: true },
 
-  listWidth: {
-    type: EmbedItemType.Slider,
-    default: 320,
-    min: 128,
-    max: 640,
-  },
   listGap: { type: EmbedItemType.Size, default: '2' },
   listMaxTanks: {
     type: EmbedItemType.Slider,
