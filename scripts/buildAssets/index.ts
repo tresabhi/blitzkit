@@ -41,7 +41,7 @@ const methods = [
   consumableProvisionIcons,
   camouflageIcons,
   boosterIcons,
-  tankIcons,
+  // tankIcons,
   tankModels,
   tankArmors,
 ];
