@@ -10,12 +10,11 @@ import { dvp } from '../submodules/blitzkit-closed/src/dvp';
 import { DATA } from './buildAssets/constants';
 
 const versionTextFile = await readStringDVPL(`${DATA}/version.txt.dvpl`);
-// const currentVersion = versionTextFile
-//   .split(' ')[0]
-//   .split('.')
-//   .slice(0, 3)
-//   .join('.');
-const currentVersion = '11.1.0';
+const currentVersion = versionTextFile
+  .split(' ')[0]
+  .split('.')
+  .slice(0, 3)
+  .join('.');
 
 console.log(`Installing patches for ${currentVersion}...`);
 
