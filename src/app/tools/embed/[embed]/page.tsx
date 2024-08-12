@@ -12,6 +12,7 @@ import {
 import { Box, Button, Flex, Heading, ScrollArea, Text } from '@radix-ui/themes';
 import { capitalize, startCase } from 'lodash';
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import { stringify } from 'urlon';
 import { CopyButton } from '../../../../components/CopyButton';
 import { NAVBAR_HEIGHT } from '../../../../components/Navbar';
 import PageWrapper from '../../../../components/PageWrapper';
@@ -94,7 +95,7 @@ export default function Page({
 
                   const searchParams = new URLSearchParams({
                     id: `${wargaming.id}`,
-                    state: JSON.stringify(shallowState),
+                    state: stringify(shallowState),
                   });
 
                   return `${location.origin}/tools/embed/${params.embed}/host?${searchParams.toString()}`;
