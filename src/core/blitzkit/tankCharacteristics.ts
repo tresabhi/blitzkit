@@ -323,7 +323,7 @@ export function tankCharacteristics(
   const damage = shell.damage.armor * damageCoefficient;
   const dpmEffective =
     gun.type === 'autoReloader'
-      ? gun.reload.at(-1)! < gun.reload.at(-2)!
+      ? gun.reload[0] > gun.reload[1] + gun.intraClip
         ? ((damageCoefficient * shell.damage.armor) /
             (gun.reload.at(-1)! * reloadCoefficient +
               gun.intraClip * intraClipCoefficient)) *
