@@ -187,8 +187,10 @@ export const tankNames = tanksDefinitionsArray.then((tanks) =>
 
       return {
         id,
-        original: tank.name,
-        combined: `${tank.name}${deburr(tank.name)}${tank.nameFull ? `${tank.nameFull}${deburr(tank.nameFull)}` : ''}`,
+        name: tank.name,
+        nameFull: tank.nameFull,
+        searchableName: tank.nameFull ?? tank.name,
+        searchableNameDeburr: deburr(tank.nameFull ?? tank.name),
         treeType: tank.treeType,
       };
     }),

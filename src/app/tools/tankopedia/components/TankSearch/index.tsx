@@ -375,8 +375,7 @@ export const TankSearch = memo<TankSearchProps>(
         return sort.direction === 'ascending' ? sorted : sorted.reverse();
       } else {
         const searchedRaw = go(filters.search, awaitedTankNames, {
-          key: 'combined',
-          limit: 25,
+          keys: ['searchableName', 'searchableNameDeburr'],
         });
         const searchedTanks = searchedRaw.map(
           (result) => awaitedTankDefinitions[result.obj.id],

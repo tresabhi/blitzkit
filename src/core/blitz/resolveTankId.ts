@@ -19,7 +19,7 @@ export default async function resolveTankId(
       `${tank}`,
       await (techTreeOnly ? tankNamesTechTreeOnly : tankNames),
       {
-        keys: ['combined'],
+        keys: ['searchableName', 'searchableNameDeburr'],
         limit: 1,
       },
     );

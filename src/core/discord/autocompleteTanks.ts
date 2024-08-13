@@ -29,18 +29,20 @@ export default async function autocompleteTanks(
             focusedOption.value,
             await (techTreeOnly ? tankNamesTechTreeOnly : tankNames),
             {
-              keys: ['combined'],
+              keys: ['searchableName', 'searchableNameDeburr'],
               limit: 10,
             },
           ).map(async (item) => {
-            let name = item.obj.original;
+            let name = item.obj.searchableName;
 
             if (name.length > DISCORD_CHOICES_MAX_NAME_SIZE) {
               const overSize = name.length - DISCORD_CHOICES_MAX_NAME_SIZE;
 
-              name = `${item.obj.original.slice(
+              name = `${item.obj.searchableName.slice(
                 0,
-                item.obj.original.length - overSize - OVERFLOW_SUFFIX.length,
+                item.obj.searchableName.length -
+                  overSize -
+                  OVERFLOW_SUFFIX.length,
               )}${OVERFLOW_SUFFIX}`;
             }
 
