@@ -12,7 +12,6 @@ import { debounce } from 'lodash';
 import { Fragment, use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
 import { Ad, AdType } from '../../../../../../components/Ad';
-import { Link } from '../../../../../../components/Link';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolvePenetrationCoefficient } from '../../../../../../core/blitz/resolvePenetrationCoefficient';
@@ -179,27 +178,14 @@ export function Characteristics() {
             {stats.dpm}
           </InfoWithDelta>
           {gun.type === 'autoReloader' && (
-            <>
-              <InfoWithDelta decimals={0} indent name="Maximum" unit="hp / min">
-                {stats.dpmMaximum!}
-              </InfoWithDelta>
-              <InfoWithDelta
-                decimals={0}
-                indent
-                name="Effective at 60s"
-                unit="hp / min"
-              >
-                {stats.dpmEffective!}
-              </InfoWithDelta>
-              <Info
-                indent
-                name={
-                  <Link target="_blank" href="/docs/guide/dpm">
-                    What's the difference?
-                  </Link>
-                }
-              />
-            </>
+            <InfoWithDelta
+              decimals={0}
+              indent
+              name="Effective at 60s"
+              unit="hp / min"
+            >
+              {stats.dpmEffective!}
+            </InfoWithDelta>
           )}
           {gun.type !== 'regular' && (
             <InfoWithDelta name="Shells">{stats.shells}</InfoWithDelta>
@@ -477,15 +463,18 @@ export function Characteristics() {
                 >
                   {(member.type === 'commander'
                     ? commanderMastery
-                    : crewMemberMastery) * 100}
+                    : commanderMastery * 1.1) * 100}
                 </InfoWithDelta>
+
                 {member.substitute && (
-                  <Info
+                  <InfoWithDelta
                     key={`${member.type}-substitute`}
+                    decimals={0}
+                    unit="%"
                     indent
                     name={
                       <>
-                        <Flex align="center" gap="1">
+                        <Flex align="center" gap="1" display="inline-flex">
                           <AccessibilityIcon />
                           {member.substitute
                             .map((sub, index) =>
@@ -495,7 +484,9 @@ export function Characteristics() {
                         </Flex>
                       </>
                     }
-                  />
+                  >
+                    {commanderMastery * 1.05 * 100}
+                  </InfoWithDelta>
                 )}
               </Fragment>
             );

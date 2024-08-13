@@ -8,21 +8,26 @@ export function resolveDpm(
   intraClipCoefficient = 1,
 ) {
   const alpha = shell.damage.armor * damageCoefficient;
+  let dps: number;
 
   if (gun.type === 'regular') {
-    return (alpha / (reloadCoefficient * gun.reload)) * 60;
+    dps = alpha / (reloadCoefficient * gun.reload);
   } else if (gun.type === 'autoLoader') {
-    return (
-      ((alpha * gun.count) /
-        (gun.reload + (gun.count - 1) * gun.intraClip * intraClipCoefficient)) *
-      60
-    );
+    dps =
+      (alpha * gun.count) /
+      (gun.reload * reloadCoefficient +
+        (gun.count - 1) * gun.intraClip * intraClipCoefficient);
   } else {
-    return (
-      ((alpha * gun.count) /
-        (reloadCoefficient * gun.reload.reduce((a, b) => a + b, 0) +
-          (gun.count - 1) * gun.intraClip * intraClipCoefficient)) *
-      60
-    );
+    if (gun.reload[0] < gun.reload[1] + gun.intraClip) {
+      // first shell's the best
+      dps = alpha / (gun.reload[0] * reloadCoefficient);
+    } else {
+      dps =
+        alpha /
+        (gun.reload.at(-1)! * reloadCoefficient +
+          gun.intraClip * intraClipCoefficient);
+    }
   }
+
+  return dps * 60;
 }
