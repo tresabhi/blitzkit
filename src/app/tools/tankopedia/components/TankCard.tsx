@@ -162,7 +162,6 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
           align="center"
           overflow="hidden"
           width="100%"
-          maxWidth="100%"
         >
           <Icon className={styles.classIcon} />
           <Text align="center" className={styles.name}>
