@@ -206,7 +206,7 @@ export function Characteristics() {
           )}
           {gun.type === 'autoReloader' ? (
             <>
-              <Info indent name="Most optimal">
+              <Info indent name="Most optimal shell index">
                 {stats.mostOptimalShellIndex}
               </Info>
               <Info name="Shell reloads" unit="s" />
