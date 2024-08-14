@@ -7,7 +7,7 @@ import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { VideoDefinitions } from '../../src/core/blitzkit/videos';
-import { DATA, POI } from './constants';
+import { DATA } from './constants';
 import { BlitzStrings, botPattern, VehicleDefinitionList } from './definitions';
 
 const youtubers = [
@@ -45,13 +45,15 @@ export async function videos(production: boolean) {
   });
   const youtube = google.youtube({ version: 'v3', auth });
 
-  const nations = await readdir(`${DATA}/${POI.vehicleDefinitions}`).then(
+  const nations = await readdir(`${DATA}/XML/item_defs/vehicles`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
   const stringsPreInstalled = await readYAMLDVPL<BlitzStrings>(
-    `${DATA}/${POI.strings}/en.yaml.dvpl`,
+    `${DATA}/Strings/en.yaml.dvpl`,
   );
-  const stringsCache = await fetch(POI.cachedStrings)
+  const stringsCache = await fetch(
+    'https://stufficons.wgcdn.co/localizations/en.yaml',
+  )
     .then((response) => response.text())
     .then((string) => parseYaml(string) as BlitzStrings);
   const strings = {
@@ -62,7 +64,7 @@ export async function videos(production: boolean) {
   await Promise.all(
     nations.map(async (nation) => {
       const tankList = await readXMLDVPL<{ root: VehicleDefinitionList }>(
-        `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
+        `${DATA}/XML/item_defs/vehicles/${nation}/list.xml.dvpl`,
       );
 
       await Promise.all(

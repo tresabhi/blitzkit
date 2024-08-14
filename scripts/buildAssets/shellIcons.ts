@@ -4,24 +4,26 @@ import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
 import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
-import { DATA, POI } from './constants';
+import { DATA } from './constants';
 
 export async function shellIcons(production: boolean) {
   console.log('Building shell icons...');
 
   const image = sharp(
     await readDVPLFile(
-      `${DATA}/${POI.bigShellIcons}/texture0.packed.webp.dvpl`,
+      `${DATA}/Gfx/Shared/tank-supply/ammunition/big/texture0.packed.webp.dvpl`,
     ),
   );
 
   const changes = await Promise.all(
-    (await readdir(`${DATA}/${POI.bigShellIcons}`))
+    (await readdir(`${DATA}/Gfx/Shared/tank-supply/ammunition/big`))
       .filter((file) => file.endsWith('_l.txt.dvpl'))
       .map(async (file) => {
         const name = file.match(/(.+)_l\.txt\.dvpl/)![1];
         const sizes = (
-          await readStringDVPL(`${DATA}/${POI.bigShellIcons}/${file}`)
+          await readStringDVPL(
+            `${DATA}/Gfx/Shared/tank-supply/ammunition/big/${file}`,
+          )
         )
           .split('\n')[4]
           .split(' ')

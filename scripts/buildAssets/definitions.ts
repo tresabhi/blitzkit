@@ -38,7 +38,7 @@ import {
   Tier,
   Unlock,
 } from '../../src/core/blitzkit/tankDefinitions';
-import { DATA, POI } from './constants';
+import { DATA } from './constants';
 import { Avatar } from './skillIcons';
 import { TankParameters } from './tankIcons';
 
@@ -444,18 +444,20 @@ export async function definitions(production: boolean) {
   const skillDefinitions: SkillDefinitions = {
     classes: { lightTank: [], mediumTank: [], heavyTank: [], 'AT-SPG': [] },
   };
-  const nations = await readdir(`${DATA}/${POI.vehicleDefinitions}`).then(
+  const nations = await readdir(`${DATA}/XML/item_defs/vehicles`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
   const tankStringIdMap: Record<string, number> = {};
   const stringsPreInstalled = await readYAMLDVPL<BlitzStrings>(
-    `${DATA}/${POI.strings}/en.yaml.dvpl`,
+    `${DATA}/Strings/en.yaml.dvpl`,
   );
-  const stringsCache = await fetch(POI.cachedStrings)
+  const stringsCache = await fetch(
+    'https://stufficons.wgcdn.co/localizations/en.yaml',
+  )
     .then((response) => response.text())
     .then((string) => parseYaml(string) as BlitzStrings);
   const optionalDevices = await readXMLDVPL<{ root: OptionalDevices }>(
-    `${DATA}/${POI.optionalDevices}.dvpl`,
+    `${DATA}/XML/item_defs/vehicles/common/optional_devices.xml.dvpl`,
   );
   const strings = {
     ...stringsPreInstalled,
@@ -463,12 +465,12 @@ export async function definitions(production: boolean) {
   };
   const optionalDeviceSlots = await readXMLDVPL<{
     root: OptionalDeviceSlots;
-  }>(`${DATA}/${POI.optionalDeviceSlots}.dvpl`);
+  }>(`${DATA}/XML/item_defs/vehicles/common/optional_device_slots.xml.dvpl`);
   const consumables = await readXMLDVPL<{ root: ConsumablesCommon }>(
-    `${DATA}/${POI.consumablesCommon}.dvpl`,
+    `${DATA}/XML/item_defs/vehicles/common/consumables/common.xml.dvpl`,
   );
   const provisions = await readXMLDVPL<{ root: ProvisionsCommon }>(
-    `${DATA}/${POI.provisionsCommon}.dvpl`,
+    `${DATA}/XML/item_defs/vehicles/common/provisions/common.xml.dvpl`,
   );
   const avatar = await readXMLDVPL<{ root: Avatar }>(
     `${DATA}/XML/item_defs/tankmen/avatar.xml.dvpl`,
@@ -506,32 +508,28 @@ export async function definitions(production: boolean) {
   await Promise.all(
     nations.map(async (nation) => {
       const tankList = await readXMLDVPL<{ root: VehicleDefinitionList }>(
-        `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
+        `${DATA}/XML/item_defs/vehicles/${nation}/list.xml.dvpl`,
       );
       const turretList = await readXMLDVPL<{
         root: TurretDefinitionsList;
       }>(
-        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/turrets.xml.dvpl`,
+        `${DATA}/XML/item_defs/vehicles/${nation}/components/turrets.xml.dvpl`,
       );
       const gunList = await readXMLDVPL<{
         root: GunDefinitionsList;
-      }>(
-        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/guns.xml.dvpl`,
-      );
+      }>(`${DATA}/XML/item_defs/vehicles/${nation}/components/guns.xml.dvpl`);
       const shellList = await readXMLDVPL<{
         root: ShellDefinitionsList;
-      }>(
-        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/shells.xml.dvpl`,
-      );
+      }>(`${DATA}/XML/item_defs/vehicles/${nation}/components/shells.xml.dvpl`);
       const enginesList = await readXMLDVPL<{
         root: EngineDefinitionsList;
       }>(
-        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/engines.xml.dvpl`,
+        `${DATA}/XML/item_defs/vehicles/${nation}/components/engines.xml.dvpl`,
       );
       const chassisList = await readXMLDVPL<{
         root: ChassisDefinitionsList;
       }>(
-        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/chassis.xml.dvpl`,
+        `${DATA}/XML/item_defs/vehicles/${nation}/components/chassis.xml.dvpl`,
       );
 
       function resolveUnlocks(unlocks?: Unlocks) {
@@ -587,10 +585,10 @@ export async function definitions(production: boolean) {
             ? { type: 'credits', value: tank.price }
             : { type: 'gold', value: tank.price['#text'] };
         const tankDefinition = await readXMLDVPL<{ root: VehicleDefinitions }>(
-          `${DATA}/${POI.vehicleDefinitions}/${nation}/${tankKey}.xml.dvpl`,
+          `${DATA}/XML/item_defs/vehicles/${nation}/${tankKey}.xml.dvpl`,
         );
         const tankParameters = await readYAMLDVPL<TankParameters>(
-          `${DATA}/${POI.tankParameters}/${nation}/${tankKey}.yaml.dvpl`,
+          `${DATA}/3d/Tanks/Parameters/${nation}/${tankKey}.yaml.dvpl`,
         );
         const turretOrigin = tankDefinition.root.hull.turretPositions.turret
           .split(' ')

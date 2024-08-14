@@ -3,10 +3,10 @@ import sharp from 'sharp';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
-import { DATA, POI } from './constants';
+import { DATA } from './constants';
 
 export async function circleFlags(production: boolean) {
-  const flags = await readdir(`${DATA}/${POI.flags}`);
+  const flags = await readdir(`${DATA}/Gfx/Lobby/flags`);
   const changes = await Promise.all(
     flags
       .filter(
@@ -15,7 +15,9 @@ export async function circleFlags(production: boolean) {
           !flag.endsWith('@2x.packed.webp.dvpl'),
       )
       .map(async (flag) => {
-        const image = sharp(await readDVPLFile(`${DATA}/${POI.flags}/${flag}`));
+        const image = sharp(
+          await readDVPLFile(`${DATA}/Gfx/Lobby/flags/${flag}`),
+        );
         const content = (
           await image.trim({ threshold: 100 }).toBuffer()
         ).toString('base64');

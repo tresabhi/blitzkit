@@ -2,12 +2,12 @@ import { readdir } from 'fs/promises';
 import { readBase64DVPL } from '../../src/core/blitz/readBase64DVPL';
 import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
-import { DATA, POI } from './constants';
+import { DATA } from './constants';
 
 export async function scratchedFlags(production: boolean) {
   console.log('Building scratched flags...');
 
-  const flags = await readdir(`${DATA}/${POI.flags}`);
+  const flags = await readdir(`${DATA}/Gfx/Lobby/flags`);
   const changes = await Promise.all(
     flags
       .filter(
@@ -16,7 +16,7 @@ export async function scratchedFlags(production: boolean) {
           !flag.endsWith('@2x.packed.webp.dvpl'),
       )
       .map(async (flag) => {
-        const content = await readBase64DVPL(`${DATA}/${POI.flags}/${flag}`);
+        const content = await readBase64DVPL(`${DATA}/Gfx/Lobby/flags/${flag}`);
         const name = flag.match(/flag_tutor-tank_(.+)\.packed\.webp/)![1];
 
         return {

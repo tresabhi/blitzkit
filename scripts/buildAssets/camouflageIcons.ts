@@ -1,12 +1,12 @@
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
-import { DATA, POI } from './constants';
+import { DATA } from './constants';
 
 export async function camouflageIcons(production: boolean) {
   console.log('Building camouflage icons...');
   const content = await readDVPLFile(
-    `${DATA}/${POI.defaultCamoIcon.replace('.webp', '.packed.webp.dvpl')}`,
+    `${DATA}/Gfx/UI/Hangar/IconCamouflage.packed.webp.dvpl`,
   ).then((content) => content.toString('base64'));
   const changes: FileChange[] = [
     {
