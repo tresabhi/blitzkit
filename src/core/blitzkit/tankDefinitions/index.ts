@@ -43,6 +43,7 @@ export interface TankDefinition {
   id: number;
   description?: string;
   fixedCamouflage?: boolean;
+  camouflages?: number[];
   ancestors?: number[];
   successors?: number[];
   crew: Crew[];

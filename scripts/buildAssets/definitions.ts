@@ -8,6 +8,7 @@ import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
+import { CamouflageDefinitions } from '../../src/core/blitzkit/camouflageDefinitions';
 import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import {
   ConsumableDefinitions,
@@ -323,6 +324,48 @@ export interface ProvisionsCommon {
   };
 }
 
+type CamouflagesInclude =
+  | {
+      nations?: string;
+    }
+  | {
+      vehicle?: { name?: string; minLevel?: number; maxLevel?: number };
+    };
+
+interface CamouflagesXML {
+  camouflages: Record<
+    string,
+    {
+      id: number;
+      userString: string;
+      description: string;
+      category: string;
+      group: string;
+      kind: string;
+      notInShop: boolean;
+      unlockCostCategory?: string;
+      vehicleFilter: {
+        include?: CamouflagesInclude | CamouflagesInclude[];
+      };
+      script: string[] | string;
+      icon?: string;
+      unlockPremium?: string;
+      unlockQuest?: string;
+      unlockClanLevel?: number;
+      unlockShopBundle?: string;
+      unlockTankRank?: number;
+    }
+  >;
+}
+
+type CamouflagesYaml = Record<
+  string,
+  {
+    userString?: string;
+    shortUserString?: string;
+  }
+>;
+
 type ConsumablesVehicleFilter =
   | { minLevel: number; maxLevel: number }
   | { name: string }
@@ -389,6 +432,7 @@ export async function definitions(production: boolean) {
     ).available_nations,
   };
   const tankDefinitions: TankDefinitions = {};
+  const camouflageDefinitions: CamouflageDefinitions = {};
   const modelDefinitions: ModelDefinitions = {};
   const mapDefinitions: MapDefinitions = {};
   const equipmentDefinitions: EquipmentDefinitions = {
@@ -431,6 +475,33 @@ export async function definitions(production: boolean) {
   );
   const maps = await readYAMLDVPL<Maps>(`${DATA}/maps.yaml.dvpl`);
   const tankXps = new Map<number, number>();
+  const camouflagesXml = await readXMLDVPL<{ root: CamouflagesXML }>(
+    `${DATA}/XML/item_defs/vehicles/common/camouflages.xml.dvpl`,
+  );
+  const camouflagesYaml = await readYAMLDVPL<CamouflagesYaml>(
+    `${DATA}/camouflages.yaml.dvpl`,
+  );
+  const camouflagesXmlEntries = Object.entries(camouflagesXml.root.camouflages);
+
+  camouflagesXmlEntries.forEach(([camoKey, camo]) => {
+    const yamlEntry = camouflagesYaml[camoKey];
+    const fullName = yamlEntry.userString
+      ? strings[yamlEntry.userString]
+      : undefined;
+    const shortName = yamlEntry.shortUserString
+      ? strings[yamlEntry.shortUserString]
+      : undefined;
+    const resolvedTankName = shortName ?? fullName;
+    const resolvedTankNameFull =
+      resolvedTankName === fullName ? undefined : fullName;
+
+    camouflageDefinitions[camo.id] = {
+      id: camo.id,
+      name: strings[camo.userString],
+      tankName: resolvedTankName,
+      tankNameFull: resolvedTankNameFull,
+    };
+  });
 
   await Promise.all(
     nations.map(async (nation) => {
@@ -554,11 +625,11 @@ export async function definitions(production: boolean) {
         const fixedCamouflage = tankTags.includes('eventCamouflage_user');
         const totalUnlocks: UnlocksListing[] = [];
 
-        Object.entries(tankDefinition.root.crew).forEach(([key, value]) => {
+        Object.entries(tankDefinition.root.crew).forEach(([crewKey, value]) => {
           let entry: Crew;
-          const index = crew.findIndex(({ type }) => type === key);
+          const index = crew.findIndex(({ type }) => type === crewKey);
           if (index === -1) {
-            entry = { type: key as CrewMember };
+            entry = { type: crewKey as CrewMember };
             crew.push(entry);
           } else {
             entry = crew[index];
@@ -589,8 +660,29 @@ export async function definitions(production: boolean) {
           }
         });
 
+        const camouflages = camouflagesXmlEntries
+          .filter(([, camo]) => {
+            if (!camo.vehicleFilter.include) return false;
+            if (camo.unlockCostCategory !== 'legendary-skins-gold')
+              return false;
+
+            const includeArray = Array.isArray(camo.vehicleFilter.include)
+              ? camo.vehicleFilter.include
+              : [camo.vehicleFilter.include];
+
+            return includeArray.some((filter) => {
+              if ('vehicle' in filter && filter.vehicle?.name) {
+                return filter.vehicle.name === `${nation}:${tankKey}`;
+              }
+
+              return false;
+            });
+          })
+          .map(([, camo]) => camo.id);
+
         tankDefinitions[tankId] = {
           id: tankId,
+          camouflages: camouflages.length === 0 ? undefined : camouflages,
           description:
             wargamingTankopedia.data[tankId]?.description ?? undefined,
           fixedCamouflage: fixedCamouflage ? true : undefined,
@@ -1261,6 +1353,11 @@ export async function definitions(production: boolean) {
         content: superCompress(mapDefinitions),
         encoding: 'base64',
         path: 'definitions/maps.cdon.lz4',
+      },
+      {
+        content: superCompress(camouflageDefinitions),
+        encoding: 'base64',
+        path: 'definitions/camouflages.cdon.lz4',
       },
     ],
     production,
