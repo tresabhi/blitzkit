@@ -2,7 +2,8 @@ import { Locale } from 'discord.js';
 import { go } from 'fuzzysort';
 import markdownEscape from 'markdown-escape';
 import { UserError } from '../../hooks/userError';
-import { tankDefinitions, tankNames } from '../blitzkit/tankDefinitions';
+import { tankDefinitions } from '../blitzkit/tankDefinitions';
+import { tankNames } from '../blitzkit/tankDefinitions/tankNames';
 import { tankNamesTechTreeOnly } from '../discord/autocompleteTanks';
 import { translator } from '../localization/translator';
 
@@ -19,7 +20,7 @@ export default async function resolveTankId(
       `${tank}`,
       await (techTreeOnly ? tankNamesTechTreeOnly : tankNames),
       {
-        keys: ['searchableName', 'searchableNameDeburr'],
+        keys: ['searchableName', 'searchableNameDeburr', 'camouflages'],
         limit: 1,
       },
     );

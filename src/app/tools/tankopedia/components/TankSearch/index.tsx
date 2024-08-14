@@ -17,9 +17,9 @@ import { resolveReload } from '../../../../../core/blitzkit/resolveReload';
 import {
   TankDefinition,
   tankDefinitions,
-  tankNames,
   tanksDefinitionsArray,
 } from '../../../../../core/blitzkit/tankDefinitions';
+import { tankNames } from '../../../../../core/blitzkit/tankDefinitions/tankNames';
 import { unionBoundingBox } from '../../../../../core/blitzkit/unionBoundingBox';
 import { useAdExempt } from '../../../../../hooks/useAdExempt';
 import * as TankFilters from '../../../../../stores/tankFilters';
@@ -375,7 +375,7 @@ export const TankSearch = memo<TankSearchProps>(
         return sort.direction === 'ascending' ? sorted : sorted.reverse();
       } else {
         const searchedRaw = go(filters.search, awaitedTankNames, {
-          keys: ['searchableName', 'searchableNameDeburr'],
+          keys: ['searchableName', 'searchableNameDeburr', 'camouflages'],
         });
         const searchedTanks = searchedRaw.map(
           (result) => awaitedTankDefinitions[result.obj.id],

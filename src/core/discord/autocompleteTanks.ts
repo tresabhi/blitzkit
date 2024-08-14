@@ -4,7 +4,7 @@ import {
   CacheType,
 } from 'discord.js';
 import { go } from 'fuzzysort';
-import { tankNames } from '../blitzkit/tankDefinitions';
+import { tankNames } from '../blitzkit/tankDefinitions/tankNames';
 import {
   DISCORD_CHOICES_MAX_NAME_SIZE,
   OVERFLOW_SUFFIX,
@@ -29,7 +29,7 @@ export default async function autocompleteTanks(
             focusedOption.value,
             await (techTreeOnly ? tankNamesTechTreeOnly : tankNames),
             {
-              keys: ['searchableName', 'searchableNameDeburr'],
+              keys: ['searchableName', 'searchableNameDeburr', 'camouflages'],
               limit: 10,
             },
           ).map(async (item) => {

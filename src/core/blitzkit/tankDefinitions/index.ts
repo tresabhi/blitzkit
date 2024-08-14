@@ -1,4 +1,3 @@
-import { deburr } from 'lodash';
 import { Vector2Tuple } from 'three';
 import { TankClass, TreeType } from '../../../components/Tanks';
 import { asset } from '../asset';
@@ -181,23 +180,6 @@ export const tanksDefinitionsArray = new Promise<TankDefinition[]>(
     resolve((await entries).map((entry) => entry)); // TODO: wtf?
   },
 );
-export const tankNames = tanksDefinitionsArray.then((tanks) =>
-  Promise.all(
-    tanks.map(async (tank, index) => {
-      const { id } = (await tanksDefinitionsArray)[index];
-
-      return {
-        id,
-        name: tank.name,
-        nameFull: tank.nameFull,
-        searchableName: tank.nameFull ?? tank.name,
-        searchableNameDeburr: deburr(tank.nameFull ?? tank.name),
-        treeType: tank.treeType,
-      };
-    }),
-  ),
-);
-
 export type Tier = (typeof TIERS)[number];
 
 export const flags: Record<string, string> = {
