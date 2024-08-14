@@ -257,7 +257,18 @@ export function tankCharacteristics(
     [hasGearOil, 2],
     [hasImprovedGearOil, 4],
   );
-  const camouflageCoefficientMoving = coefficient(
+  const camouflageCoefficientMoving = sum(
+    [
+      true,
+      coefficient([
+        camouflage,
+        tank.class === 'AT-SPG'
+          ? 0.04
+          : tank.class === 'heavyTank'
+            ? 0.03
+            : 0.02,
+      ]),
+    ],
     [
       hasCamouflageNet,
       tank.class === 'heavyTank'
@@ -268,12 +279,22 @@ export function tankCharacteristics(
             ? 0.07
             : 0.1,
     ],
-    [
-      camouflage,
-      tank.class === 'AT-SPG' ? 0.04 : tank.class === 'heavyTank' ? 0.03 : 0.02,
-    ],
   );
-  const camouflageCoefficientStill = coefficient(
+  const camouflageCoefficientStill = sum(
+    [
+      true,
+      coefficient(
+        [
+          camouflage,
+          tank.class === 'AT-SPG'
+            ? 0.04
+            : tank.class === 'heavyTank'
+              ? 0.03
+              : 0.02,
+        ],
+        [true, crewSkills.camouflage * (3 / 100)],
+      ),
+    ],
     [
       hasCamouflageNet,
       tank.class === 'heavyTank'
@@ -284,11 +305,6 @@ export function tankCharacteristics(
             ? 0.14
             : 0.2,
     ],
-    [
-      camouflage,
-      tank.class === 'AT-SPG' ? 0.04 : tank.class === 'heavyTank' ? 0.03 : 0.02,
-    ],
-    [true, crewSkills.camouflage * (3 / 100)],
   );
 
   const size = normalizeBoundingBox(
