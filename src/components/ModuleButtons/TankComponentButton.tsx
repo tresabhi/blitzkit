@@ -4,9 +4,6 @@ import { ComponentProps, ReactNode } from 'react';
 export interface TankComponentButtonProps
   extends ComponentProps<typeof Button> {
   selected?: boolean;
-  first?: boolean;
-  last?: boolean;
-  rowChild?: boolean;
   children?: ReactNode;
   discriminator?: ReactNode;
   disabled?: boolean;
@@ -17,9 +14,6 @@ export interface TankComponentButtonProps
 export function TankComponentButton({
   variant,
   selected,
-  first = false,
-  last = false,
-  rowChild,
   discriminator,
   special,
   children,
@@ -38,11 +32,6 @@ export function TankComponentButton({
         minWidth: 48,
         height: 40,
         position: 'relative',
-        borderTopLeftRadius: first ? undefined : 0,
-        borderTopRightRadius: last ? undefined : 0,
-        borderBottomLeftRadius: first ? undefined : 0,
-        borderBottomRightRadius: last ? undefined : 0,
-        margin: rowChild ? -0.5 : 'unset',
         overflow: 'hidden',
         cursor: 'unset',
         pointerEvents: variant === 'ghost' ? 'none' : undefined,

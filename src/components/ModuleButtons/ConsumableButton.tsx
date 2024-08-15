@@ -23,17 +23,13 @@ export function ConsumableButton({
   return (
     <GenericTankComponentButton
       icon={asset(`icons/consumables/${consumable}.webp`)}
-      style={{
-        flex: 1,
-        minWidth: 'fit-content',
-        borderRadius: 0,
-      }}
       {...props}
     >
       {(cooldown || duration) && (
-        <Flex direction="column" style={{ transform: 'translateX(-10px)' }}>
+        <Flex direction="column" gap="1" ml="-2" mr="2">
           {duration && (
             <Text
+              size="1"
               color={
                 durationDelta > 0
                   ? 'green'
@@ -50,6 +46,7 @@ export function ConsumableButton({
           )}
           {cooldown && (
             <Text
+              size="1"
               color={
                 cooldownDelta < 0
                   ? 'green'

@@ -15,16 +15,13 @@ export function ProvisionsManager({
   disabled,
 }: ProvisionsManagerProps) {
   return (
-    <Flex wrap="wrap">
+    <Flex wrap="wrap" gap="2">
       {provisions.map((provision, index) => {
         const isSelected = selected.includes(provision);
 
         return (
           <ProvisionButton
             key={provision}
-            first={index === 0}
-            last={index === provisions.length - 1}
-            rowChild
             disabled={disabled && !isSelected}
             provision={provision}
             selected={isSelected}

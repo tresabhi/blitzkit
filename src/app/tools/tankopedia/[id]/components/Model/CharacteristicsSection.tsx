@@ -36,7 +36,7 @@ export function CharacteristicsSection() {
         justify="center"
         direction={{ initial: 'column', sm: 'row' }}
       >
-        <Flex direction="column" gap="4">
+        <Flex direction="column" gap="4" maxWidth="21rem">
           <Heading>Configuration</Heading>
           <Modules />
           <Equipment />
@@ -45,7 +45,6 @@ export function CharacteristicsSection() {
           <Skills />
           <Miscellaneous />
         </Flex>
-
         <Flex
           flexGrow="1"
           maxWidth={{

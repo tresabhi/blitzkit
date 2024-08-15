@@ -23,8 +23,10 @@ export function EquipmentManager({
             <Flex key={columnIndex}>
               <EquipmentButton
                 equipment={equipment[0]}
-                first
-                rowChild
+                style={{
+                  borderTopRightRadius: 0,
+                  borderBottomRightRadius: 0,
+                }}
                 selected={matrix[rowIndex][columnIndex] === -1}
                 onClick={() => {
                   const draft = cloneDeep(matrix);
@@ -40,8 +42,10 @@ export function EquipmentManager({
               />
               <EquipmentButton
                 equipment={equipment[1]}
-                last
-                rowChild
+                style={{
+                  borderTopLeftRadius: 0,
+                  borderBottomLeftRadius: 0,
+                }}
                 selected={matrix[rowIndex][columnIndex] === 1}
                 onClick={() => {
                   const draft = cloneDeep(matrix);

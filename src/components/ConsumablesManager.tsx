@@ -24,14 +24,7 @@ export function ConsumablesManager({
   hasHighEndConsumables,
 }: ConsumablesManagerProps) {
   return (
-    <Flex
-      wrap="wrap"
-      style={{
-        maxWidth: 288,
-        borderRadius: 4,
-        overflow: 'hidden',
-      }}
-    >
+    <Flex wrap="wrap" gap="2">
       {consumables.map((consumable, index) => {
         const isSelected = selected.some((id) => id === consumable.id);
 
@@ -53,9 +46,6 @@ export function ConsumablesManager({
                 : undefined
             }
             key={consumable.id}
-            first={index === 0}
-            last={index === consumables.length - 1}
-            rowChild
             disabled={disabled && !isSelected}
             consumable={consumable.id}
             selected={isSelected}

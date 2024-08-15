@@ -41,9 +41,6 @@ export function ModuleManager({
       <ModuleButton
         module="turret"
         discriminator={TIER_ROMAN_NUMERALS[modules.turret.tier]}
-        first
-        last
-        rowChild
         onClick={() => setTurretMenuOpen(true)}
       />
 
@@ -85,9 +82,6 @@ export function ModuleManager({
       <ModuleButton
         module="gun"
         discriminator={TIER_ROMAN_NUMERALS[modules.gun.tier]}
-        first
-        last
-        rowChild
         onClick={() => setGunMenuOpen(true)}
       />
 
@@ -128,9 +122,6 @@ export function ModuleManager({
       <ModuleButton
         module="engine"
         discriminator={TIER_ROMAN_NUMERALS[modules.engine.tier]}
-        first
-        last
-        rowChild
         onClick={() => setEngineMenuOpen(true)}
       />
 
@@ -170,9 +161,6 @@ export function ModuleManager({
       <ModuleButton
         module="chassis"
         discriminator={TIER_ROMAN_NUMERALS[modules.track.tier]}
-        first
-        last
-        rowChild
         onClick={() => setTrackMenuOpen(true)}
       />
 

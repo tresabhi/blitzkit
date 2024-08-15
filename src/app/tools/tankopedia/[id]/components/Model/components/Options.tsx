@@ -1,5 +1,4 @@
 import {
-  Cross1Icon,
   EnterFullScreenIcon,
   ExitFullScreenIcon,
   EyeOpenIcon,
@@ -11,7 +10,6 @@ import {
   Dialog,
   DropdownMenu,
   Flex,
-  Heading,
   IconButton,
   Popover,
   SegmentedControl,
@@ -28,10 +26,7 @@ import { resolvePenetrationCoefficient } from '../../../../../../../core/blitz/r
 import { asset } from '../../../../../../../core/blitzkit/asset';
 import { imgur } from '../../../../../../../core/blitzkit/imgur';
 import { Pose, poseEvent } from '../../../../../../../core/blitzkit/pose';
-import {
-  SHELL_NAMES,
-  TIER_ROMAN_NUMERALS,
-} from '../../../../../../../core/blitzkit/tankDefinitions/constants';
+import { TIER_ROMAN_NUMERALS } from '../../../../../../../core/blitzkit/tankDefinitions/constants';
 import { uniqueGuns } from '../../../../../../../core/blitzkit/uniqueGuns';
 import { useEquipment } from '../../../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../../../hooks/useFullScreen';
@@ -181,12 +176,11 @@ export function Options({ thicknessRange }: OptionsProps) {
               </Popover.Trigger>
 
               <Popover.Content side="left" align="center">
-                <Flex>
+                <Flex gap="2">
                   {[...antagonistUniqueGuns]
                     .reverse()
                     .map(({ gun, turret }, index) => (
                       <ModuleButton
-                        rowChild
                         module="gun"
                         key={gun.id}
                         onClick={() =>
@@ -196,8 +190,6 @@ export function Options({ thicknessRange }: OptionsProps) {
                             draft.antagonist.shell = gun.shells[0];
                           })
                         }
-                        first={index === 0}
-                        last={index === antagonistUniqueGuns.length - 1}
                         selected={gun.id === antagonistGun.id}
                         discriminator={TIER_ROMAN_NUMERALS[gun.tier]}
                       />
@@ -343,136 +335,21 @@ export function Options({ thicknessRange }: OptionsProps) {
                   onValueChange={setTab}
                   style={{ position: 'relative' }}
                 >
-                  <Dialog.Close>
-                    <Button
-                      variant="ghost"
-                      style={{ position: 'absolute', right: 0, top: 8 }}
-                    >
-                      <Cross1Icon />
-                    </Button>
-                  </Dialog.Close>
-
-                  <Flex gap="4" direction="column">
-                    <Tabs.List>
-                      <Tabs.Trigger value="search">Search</Tabs.Trigger>
-                      <Tabs.Trigger value="configure">Configure</Tabs.Trigger>
-                    </Tabs.List>
-
-                    <Tabs.Content value="search">
-                      <Flex
-                        direction="column"
-                        gap="4"
-                        style={{ flex: 1 }}
-                        justify="center"
-                      >
-                        <TankSearch
-                          compact
-                          onSelect={(tank) => {
-                            mutateDuel((draft) => {
-                              draft.antagonist.tank = tank;
-                              draft.antagonist.engine = tank.engines.at(-1)!;
-                              draft.antagonist.track = tank.tracks.at(-1)!;
-                              draft.antagonist.turret = tank.turrets.at(-1)!;
-                              draft.antagonist.gun =
-                                draft.antagonist.turret.guns.at(-1)!;
-                              draft.antagonist.shell =
-                                draft.antagonist.gun.shells[0];
-                            });
-                            setAntagonistSelectorOpen(false);
-                          }}
-                        />
-                      </Flex>
-                    </Tabs.Content>
-
-                    <Tabs.Content value="configure">
-                      <Flex direction="column" gap="4">
-                        <Flex direction="column" gap="2" style={{ flex: 1 }}>
-                          <Heading size="4">
-                            {antagonistTank.name} modules
-                          </Heading>
-
-                          <Flex gap="2" wrap="wrap">
-                            <Flex>
-                              {antagonistTank.turrets.map((turret, index) => (
-                                <ModuleButton
-                                  rowChild
-                                  first={index === 0}
-                                  last={
-                                    index === antagonistTank.turrets.length - 1
-                                  }
-                                  key={turret.id}
-                                  onClick={() => {
-                                    mutateDuel((draft) => {
-                                      draft.antagonist.turret = turret;
-                                      draft.antagonist.gun =
-                                        turret.guns.at(-1)!;
-                                      draft.antagonist.shell =
-                                        draft.antagonist.gun.shells[0];
-                                    });
-                                    mutateTankopediaEphemeral((draft) => {
-                                      draft.shot = undefined;
-                                    });
-                                  }}
-                                  selected={antagonistTurret.id === turret.id}
-                                  discriminator={
-                                    TIER_ROMAN_NUMERALS[turret.tier]
-                                  }
-                                  module="turret"
-                                />
-                              ))}
-                            </Flex>
-                            <Flex>
-                              {antagonistTurret.guns.map((gun, index) => (
-                                <ModuleButton
-                                  key={gun.id}
-                                  rowChild
-                                  first={index === 0}
-                                  last={
-                                    index === antagonistTurret.guns.length - 1
-                                  }
-                                  onClick={() => {
-                                    mutateDuel((draft) => {
-                                      draft.antagonist.gun = gun;
-                                      draft.antagonist.shell = gun.shells[0];
-                                    });
-                                  }}
-                                  selected={antagonistGun.id === gun.id}
-                                  discriminator={TIER_ROMAN_NUMERALS[gun.tier]}
-                                  module="gun"
-                                />
-                              ))}
-                            </Flex>
-                          </Flex>
-                        </Flex>
-
-                        <Flex direction="column" style={{ flex: 1 }}>
-                          <Heading size="4">Properties</Heading>
-
-                          <ul>
-                            <li>
-                              Turret: <b>{antagonistTurret.name}</b>
-                            </li>
-                            <li>
-                              Gun: <b>{antagonistGun.name}</b>
-                            </li>
-                            <li>Shells:</li>
-                            <ul>
-                              {antagonistGun.shells.map((shell) => (
-                                <li key={shell.id}>
-                                  {SHELL_NAMES[shell.type]}:{' '}
-                                  <b>
-                                    {resolveNearPenetration(shell.penetration)}
-                                    mm
-                                  </b>
-                                  , {shell.damage.armor}HP
-                                </li>
-                              ))}
-                            </ul>
-                          </ul>
-                        </Flex>
-                      </Flex>
-                    </Tabs.Content>
-                  </Flex>
+                  <TankSearch
+                    compact
+                    onSelect={(tank) => {
+                      mutateDuel((draft) => {
+                        draft.antagonist.tank = tank;
+                        draft.antagonist.engine = tank.engines.at(-1)!;
+                        draft.antagonist.track = tank.tracks.at(-1)!;
+                        draft.antagonist.turret = tank.turrets.at(-1)!;
+                        draft.antagonist.gun =
+                          draft.antagonist.turret.guns.at(-1)!;
+                        draft.antagonist.shell = draft.antagonist.gun.shells[0];
+                      });
+                      setAntagonistSelectorOpen(false);
+                    }}
+                  />
                 </Tabs.Root>
               </Dialog.Content>
             </Dialog.Root>
