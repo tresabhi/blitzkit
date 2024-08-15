@@ -193,7 +193,7 @@ export function Characteristics() {
           {gun.type === 'autoReloader' ? (
             <>
               <Info indent name="Most optimal shell index">
-                {stats.mostOptimalShellIndex}
+                {stats.mostOptimalShellIndex! + 1}
               </Info>
               <Info name="Shell reloads" unit="s" />
               {stats.shellReloads!.map((reload, index) => (

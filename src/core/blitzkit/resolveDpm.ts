@@ -18,15 +18,21 @@ export function resolveDpm(
       (gun.reload * reloadCoefficient +
         (gun.count - 1) * gun.intraClip * intraClipCoefficient);
   } else {
-    if (gun.reload[0] < gun.reload[1] + gun.intraClip) {
-      // first shell's the best
-      dps = alpha / (gun.reload[0] * reloadCoefficient);
-    } else {
-      dps =
-        alpha /
-        (gun.reload.at(-1)! * reloadCoefficient +
-          gun.intraClip * intraClipCoefficient);
-    }
+    const mostOptimalShell = gun.reload.reduce<null | {
+      index: number;
+      reload: number;
+    }>((current, reloadRaw, index) => {
+      const reload =
+        reloadRaw * reloadCoefficient +
+        (index > 0 ? gun.intraClip * intraClipCoefficient : 0);
+
+      if (current === null || reload < current.reload) {
+        return { index, reload };
+      }
+      return current;
+    }, null)!;
+
+    dps = alpha / mostOptimalShell?.reload;
   }
 
   return dps * 60;

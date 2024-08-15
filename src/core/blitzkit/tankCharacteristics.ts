@@ -330,11 +330,22 @@ export function tankCharacteristics(
     reloadCoefficient,
     intraClipCoefficient,
   );
+  const intraClip =
+    gun.type === 'regular' ? undefined : gun.intraClip * intraClipCoefficient;
   const mostOptimalShellIndex =
     gun.type === 'autoReloader'
-      ? gun.reload[0] + gun.intraClip < gun.reload[1]
-        ? 1
-        : gun.reload.length
+      ? gun.reload.reduce<null | { index: number; reload: number }>(
+          (current, reloadRaw, index) => {
+            const reload =
+              reloadRaw * reloadCoefficient + (index > 0 ? intraClip! : 0);
+
+            if (current === null || reload < current.reload) {
+              return { index, reload };
+            }
+            return current;
+          },
+          null,
+        )!.index
       : undefined;
   const damage = shell.damage.armor * damageCoefficient;
   const dpmEffective =
@@ -366,8 +377,6 @@ export function tankCharacteristics(
       : undefined;
   const shellReload =
     gun.type === 'autoReloader' ? undefined : gun.reload * reloadCoefficient;
-  const intraClip =
-    gun.type === 'regular' ? undefined : gun.intraClip * intraClipCoefficient;
   const caliber = shell.caliber;
   const penetration =
     resolveNearPenetration(shell.penetration) * penetrationCoefficient;
