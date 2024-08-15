@@ -400,6 +400,16 @@ interface AvailableNationsYaml {
   available_nations: string[];
 }
 
+export interface SquadBattleTypeUI {
+  Prototypes: {
+    components: {
+      UIDataLocalBindingsComponent: {
+        data: [string, string, string][];
+      };
+    };
+  }[];
+}
+
 const blitzShellKindToBlitzkit: Record<ShellKind, ShellType> = {
   ARMOR_PIERCING: ShellType.AP,
   ARMOR_PIERCING_CR: ShellType.APCR,
@@ -486,33 +496,18 @@ export async function definitions(production: boolean) {
     `${DATA}/camouflages.yaml.dvpl`,
   );
   const camouflagesXmlEntries = Object.entries(camouflagesXml.root.camouflages);
+  const squadBattleTypeUI = await readYAMLDVPL<SquadBattleTypeUI>(
+    `${DATA}/UI/Screens3/Lobby/Hangar/Squad/SquadBattleType.yaml.dvpl`,
+  );
 
-  for (const match of (
-    await readYAMLDVPL<{
-      Prototypes: {
-        components: {
-          UIDataLocalBindingsComponent: {
-            data: string[][];
-          };
-        };
-      }[];
-    }>(`${DATA}/UI/Screens3/Lobby/Hangar/Squad/SquadBattleType.yaml.dvpl`)
-  ).Prototypes[0].components.UIDataLocalBindingsComponent.data[1][2].matchAll(
-    /battleType\/([a-zA-Z]+)/g,
+  for (const match of squadBattleTypeUI.Prototypes[0].components.UIDataLocalBindingsComponent.data[1][2].matchAll(
+    /"(\d+)" -> "(battleType\/[a-zA-Z]+)"/g,
   )) {
-    const id = match[1];
-    const name = strings[`battleType/${id}`];
-    const description = (
-      strings[`hangar/battleType/${id}ShortDescription`] ??
-      strings[
-        `hangar/battleType/${id.slice(0, 1).toUpperCase() + id.slice(1)}ShortDescription`
-      ] ??
-      strings[`hangar/battleType/${id}Description`]
-    ).split('\n')[0];
+    const id = Number(match[1]);
+    const name = strings[match[2]];
 
     gameDefinitions.gameModes[id] = {
       name,
-      description,
     };
   }
 

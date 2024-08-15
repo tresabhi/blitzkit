@@ -29,6 +29,7 @@ import { videos } from './videos';
 if (!targets && !allTargets) throw new Error('No target(s) specified');
 
 const methods = [
+  // gameModeIcons,
   definitions,
   tankIcons,
   videos,

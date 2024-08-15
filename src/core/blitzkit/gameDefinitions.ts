@@ -3,13 +3,12 @@ import { fetchCdonLz4 } from './fetchCdonLz4';
 
 interface GameMode {
   name: string;
-  description: string;
 }
 
 export interface GameDefinitions {
   version: string;
   nations: string[];
-  gameModes: Record<string, GameMode>;
+  gameModes: Record<number, GameMode>;
 }
 
 export const gameDefinitions = fetchCdonLz4<GameDefinitions>(
