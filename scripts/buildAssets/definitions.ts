@@ -419,6 +419,7 @@ export async function definitions(production: boolean) {
   ).then((response) => response.json())) as {
     data: { [key: number]: { description: null | string } };
   };
+
   const gameDefinitions: GameDefinitions = {
     version: (await readStringDVPL(`${DATA}/version.txt.dvpl`))
       .split(' ')[0]
@@ -430,6 +431,7 @@ export async function definitions(production: boolean) {
         `${DATA}/available_nations.yaml.dvpl`,
       )
     ).available_nations,
+    gameModes: {},
   };
   const tankDefinitions: TankDefinitions = {};
   const camouflageDefinitions: CamouflageDefinitions = {};
@@ -484,6 +486,35 @@ export async function definitions(production: boolean) {
     `${DATA}/camouflages.yaml.dvpl`,
   );
   const camouflagesXmlEntries = Object.entries(camouflagesXml.root.camouflages);
+
+  for (const match of (
+    await readYAMLDVPL<{
+      Prototypes: {
+        components: {
+          UIDataLocalBindingsComponent: {
+            data: string[][];
+          };
+        };
+      }[];
+    }>(`${DATA}/UI/Screens3/Lobby/Hangar/Squad/SquadBattleType.yaml.dvpl`)
+  ).Prototypes[0].components.UIDataLocalBindingsComponent.data[1][2].matchAll(
+    /battleType\/([a-zA-Z]+)/g,
+  )) {
+    const id = match[1];
+    const name = strings[`battleType/${id}`];
+    const description = (
+      strings[`hangar/battleType/${id}ShortDescription`] ??
+      strings[
+        `hangar/battleType/${id.slice(0, 1).toUpperCase() + id.slice(1)}ShortDescription`
+      ] ??
+      strings[`hangar/battleType/${id}Description`]
+    ).split('\n')[0];
+
+    gameDefinitions.gameModes[id] = {
+      name,
+      description,
+    };
+  }
 
   camouflagesXmlEntries.forEach(([camoKey, camo]) => {
     const yamlEntry = camouflagesYaml[camoKey];
