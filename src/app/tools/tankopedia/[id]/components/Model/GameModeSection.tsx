@@ -1,12 +1,16 @@
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import { asset } from '../../../../../../core/blitzkit/asset';
+import { consumableDefinitions } from '../../../../../../core/blitzkit/consumableDefinitions';
 import { gameDefinitions } from '../../../../../../core/blitzkit/gameDefinitions';
+import { provisionDefinitions } from '../../../../../../core/blitzkit/provisionDefinitions';
 import * as Duel from '../../../../../../stores/duel';
 
 export function GameModeSection() {
   const tank = Duel.use((state) => state.protagonist.tank);
   const awaitedGameDefinitions = use(gameDefinitions);
+  const awaitedConsumableDefinitions = use(consumableDefinitions);
+  const awaitedProvisionDefinitions = use(provisionDefinitions);
 
   return (
     <Flex direction="column" gap="4" align="center">
@@ -19,10 +23,9 @@ export function GameModeSection() {
 
           return (
             <Flex
-              width="256px"
+              height="calc(256px - 64px)"
               overflow="hidden"
               style={{
-                aspectRatio: '4 / 3',
                 borderRadius: 'var(--radius-3)',
                 background: `url(${asset(`icons/game_mode_banners/${id}.webp`)})`,
                 backgroundSize: 'cover',
@@ -46,8 +49,56 @@ export function GameModeSection() {
                   backdropFilter: 'blur(4rem)',
                   WebkitBackdropFilter: 'blur(4rem)',
                 }}
+                align="center"
+                justify="center"
+                gap="2"
               >
-                <Text align="center">{gameMode.name}</Text>
+                <Text size="4" weight="bold">
+                  {gameMode.name}
+                </Text>
+
+                <Flex direction="column">
+                  {awaitedGameDefinitions.roles[value].provisions.map((id) => {
+                    const provisions = awaitedProvisionDefinitions[id];
+
+                    return (
+                      <Text color="gray" wrap="nowrap">
+                        <Flex align="center" gap="1">
+                          <img
+                            style={{
+                              width: '2em',
+                              height: '2em',
+                              objectFit: 'contain',
+                            }}
+                            src={asset(`icons/provisions/${id}.webp`)}
+                            alt={provisions.name}
+                          />
+                          {provisions.name}
+                        </Flex>
+                      </Text>
+                    );
+                  })}
+                  {awaitedGameDefinitions.roles[value].consumables.map((id) => {
+                    const consumable = awaitedConsumableDefinitions[id];
+
+                    return (
+                      <Text color="gray" wrap="nowrap">
+                        <Flex align="center" gap="1">
+                          <img
+                            style={{
+                              width: '2em',
+                              height: '2em',
+                              objectFit: 'contain',
+                            }}
+                            src={asset(`icons/consumables/${id}.webp`)}
+                            alt={consumable.name}
+                          />
+                          {consumable.name}
+                        </Flex>
+                      </Text>
+                    );
+                  })}
+                </Flex>
               </Flex>
             </Flex>
           );
