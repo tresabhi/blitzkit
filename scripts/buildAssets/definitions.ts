@@ -400,7 +400,7 @@ interface AvailableNationsYaml {
   available_nations: string[];
 }
 
-export interface SquadBattleTypeUI {
+export interface SquadBattleTypeStyles {
   Prototypes: {
     components: {
       UIDataLocalBindingsComponent: {
@@ -496,11 +496,11 @@ export async function definitions(production: boolean) {
     `${DATA}/camouflages.yaml.dvpl`,
   );
   const camouflagesXmlEntries = Object.entries(camouflagesXml.root.camouflages);
-  const squadBattleTypeUI = await readYAMLDVPL<SquadBattleTypeUI>(
+  const squadBattleTypeStyles = await readYAMLDVPL<SquadBattleTypeStyles>(
     `${DATA}/UI/Screens3/Lobby/Hangar/Squad/SquadBattleType.yaml.dvpl`,
   );
 
-  for (const match of squadBattleTypeUI.Prototypes[0].components.UIDataLocalBindingsComponent.data[1][2].matchAll(
+  for (const match of squadBattleTypeStyles.Prototypes[0].components.UIDataLocalBindingsComponent.data[1][2].matchAll(
     /"(\d+)" -> "(battleType\/[a-zA-Z]+)"/g,
   )) {
     const id = Number(match[1]);
@@ -1336,6 +1336,7 @@ export async function definitions(production: boolean) {
     };
   });
 
+  return;
   await commitAssets(
     'definitions',
     [
