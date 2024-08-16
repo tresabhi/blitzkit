@@ -22,14 +22,21 @@ export type TankFilterDefinition =
       nations: string[];
     };
 
-export interface ConsumableEntry {
+export type ConsumableEntry = {
   id: number;
   name: string;
   cooldown: number;
   duration?: number;
-  include: TankFilterDefinition[];
-  exclude?: TankFilterDefinition[];
-}
+} & (
+  | {
+      gameMode: false;
+      include: TankFilterDefinition[];
+      exclude?: TankFilterDefinition[];
+    }
+  | {
+      gameMode: true;
+    }
+);
 
 export interface ConsumableDefinitions {
   [key: string]: ConsumableEntry;
