@@ -40,7 +40,7 @@ export type ModuleDefinition =
   | GunDefinition;
 export interface TankDefinition {
   id: number;
-  roles: Record<number, string>;
+  roles: Record<number, number>;
   description?: string;
   fixedCamouflage?: boolean;
   camouflages?: number[];

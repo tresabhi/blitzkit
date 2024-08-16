@@ -410,6 +410,14 @@ export interface SquadBattleTypeStyles {
   }[];
 }
 
+type CombatRolesYaml = Record<
+  string,
+  {
+    id: number;
+    default_abilities: string[];
+  }
+>;
+
 const blitzShellKindToBlitzkit: Record<ShellKind, ShellType> = {
   ARMOR_PIERCING: ShellType.AP,
   ARMOR_PIERCING_CR: ShellType.APCR,
@@ -503,6 +511,9 @@ export async function definitions(production: boolean) {
     `${DATA}/UI/Screens/Lobby/Hangar/GameTypeSelector.yaml.dvpl`,
   );
   const gameModeNativeNames: Record<string, number> = {};
+  const combatRoles = await readYAMLDVPL<CombatRolesYaml>(
+    `${DATA}/XML/item_defs/vehicles/common/combat_roles.yaml.dvpl`,
+  );
 
   for (const match of squadBattleTypeStyles.Prototypes[0].components.UIDataLocalBindingsComponent.data[1][2].matchAll(
     /"(\d+)" -> "(battleType\/([a-zA-Z]+))"/g,
@@ -774,7 +785,9 @@ export async function definitions(production: boolean) {
               );
             }
 
-            tankDefinitions[tankId].roles[id] = role;
+            console.log(combatRoles[role].id);
+
+            tankDefinitions[tankId].roles[id] = combatRoles[role].id;
           });
         }
 
@@ -1367,6 +1380,7 @@ export async function definitions(production: boolean) {
     };
   });
 
+  return;
   await commitAssets(
     'definitions',
     [
