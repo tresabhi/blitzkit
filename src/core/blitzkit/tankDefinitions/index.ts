@@ -40,7 +40,7 @@ export type ModuleDefinition =
   | GunDefinition;
 export interface TankDefinition {
   id: number;
-  roles: Record<string, string>;
+  roles: Record<number, string>;
   description?: string;
   fixedCamouflage?: boolean;
   camouflages?: number[];
@@ -173,13 +173,8 @@ export const tankDefinitions = fetchCdonLz4<TankDefinitions>(
   asset('definitions/tanks.cdon.lz4'),
 );
 
-const entries = new Promise<TankDefinition[]>(async (resolve) => {
-  resolve(Object.entries(await tankDefinitions).map(([, entry]) => entry));
-});
-export const tanksDefinitionsArray = new Promise<TankDefinition[]>(
-  async (resolve) => {
-    resolve((await entries).map((entry) => entry)); // TODO: wtf?
-  },
+export const tanksDefinitionsArray = tankDefinitions.then((tanks) =>
+  Object.values(tanks),
 );
 export type Tier = (typeof TIERS)[number];
 

@@ -499,16 +499,31 @@ export async function definitions(production: boolean) {
   const squadBattleTypeStyles = await readYAMLDVPL<SquadBattleTypeStyles>(
     `${DATA}/UI/Screens3/Lobby/Hangar/Squad/SquadBattleType.yaml.dvpl`,
   );
+  const gameTypeSelectorStyles = await readYAMLDVPL<SquadBattleTypeStyles>(
+    `${DATA}/UI/Screens/Lobby/Hangar/GameTypeSelector.yaml.dvpl`,
+  );
+  const gameModeNativeNames: Record<string, number> = {};
 
   for (const match of squadBattleTypeStyles.Prototypes[0].components.UIDataLocalBindingsComponent.data[1][2].matchAll(
-    /"(\d+)" -> "(battleType\/[a-zA-Z]+)"/g,
+    /"(\d+)" -> "(battleType\/([a-zA-Z]+))"/g,
   )) {
     const id = Number(match[1]);
     const name = strings[match[2]];
 
+    gameModeNativeNames[match[3]] = id;
     gameDefinitions.gameModes[id] = {
       name,
     };
+  }
+
+  for (const match of gameTypeSelectorStyles.Prototypes[0].components.UIDataLocalBindingsComponent.data[1][2].matchAll(
+    /eGameMode\.([a-zA-Z]+) -> "~res:\/Gfx\/UI\/Hangar\/GameTypes\/battle-type_([^"]+)"/g,
+  )) {
+    Object.entries(gameModeNativeNames).forEach(([key, value]) => {
+      if (key.toLowerCase() === match[2].toLowerCase()) {
+        gameModeNativeNames[match[1]] = value;
+      }
+    });
   }
 
   camouflagesXmlEntries.forEach(([camoKey, camo]) => {
@@ -706,7 +721,7 @@ export async function definitions(production: boolean) {
 
         tankDefinitions[tankId] = {
           id: tankId,
-          roles: tank.combatRole ?? {},
+          roles: {},
           camouflages: camouflages.length === 0 ? undefined : camouflages,
           description:
             wargamingTankopedia.data[tankId]?.description ?? undefined,
@@ -746,6 +761,22 @@ export async function definitions(production: boolean) {
           engines: [],
           tracks: [],
         };
+
+        if (tank.combatRole) {
+          Object.entries(tank.combatRole).forEach(([gameMode, role]) => {
+            const id = Object.entries(gameModeNativeNames).find(
+              ([key]) => key.toLowerCase() === gameMode.toLowerCase(),
+            )?.[1];
+
+            if (id === undefined) {
+              throw new Error(
+                `Unknown game mode in tank ${tankKey}: ${gameMode}`,
+              );
+            }
+
+            tankDefinitions[tankId].roles[id] = role;
+          });
+        }
 
         if (tankDefinitions[tankId].name === tankDefinitions[tankId].nameFull) {
           delete tankDefinitions[tankId].nameFull;
@@ -1336,7 +1367,6 @@ export async function definitions(production: boolean) {
     };
   });
 
-  return;
   await commitAssets(
     'definitions',
     [

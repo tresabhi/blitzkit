@@ -126,6 +126,7 @@ export function TechTreeSection() {
 
   return (
     <Flex
+      my="6"
       p="5"
       style={{
         overflow: 'hidden',

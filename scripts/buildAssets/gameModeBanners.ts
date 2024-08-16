@@ -6,7 +6,9 @@ import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
 import { DATA } from './constants';
 import { SquadBattleTypeStyles } from './definitions';
 
-export async function gameModeIcons(production: boolean) {
+export async function gameModeBanners(production: boolean) {
+  console.log('Building game mode banners...');
+
   const changes: FileChange[] = [];
   const gameTypeSelectorStyles = await readYAMLDVPL<SquadBattleTypeStyles>(
     `${DATA}/UI/Screens/Lobby/Hangar/GameTypeSelector.yaml.dvpl`,
@@ -48,5 +50,5 @@ export async function gameModeIcons(production: boolean) {
     });
   }
 
-  await commitAssets('game mode icons', changes, production);
+  await commitAssets('game mode banners', changes, production);
 }

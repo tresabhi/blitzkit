@@ -75,8 +75,6 @@ export function tankCharacteristics(
     provisionDefinitions: ProvisionDefinitions;
   },
 ) {
-  console.log(tank.crew);
-
   const presetRows = equipmentDefinitions.presets[tank.equipment];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];

@@ -17,7 +17,7 @@ import { consumableProvisionIcons } from './consumableProvisionIcons';
 import { currencies } from './currencies';
 import { definitions } from './definitions';
 import { equipmentIcons } from './equipmentIcons';
-import { gameModeIcons } from './gameModeIcons';
+import { gameModeBanners } from './gameModeBanners';
 import { moduleIcons } from './moduleIcons';
 import { scratchedFlags } from './scratchedFlags';
 import { shellIcons } from './shellIcons';
@@ -30,7 +30,7 @@ import { videos } from './videos';
 if (!targets && !allTargets) throw new Error('No target(s) specified');
 
 const methods = [
-  gameModeIcons,
+  gameModeBanners,
   definitions,
   tankIcons,
   videos,
