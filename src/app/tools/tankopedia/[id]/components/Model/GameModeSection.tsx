@@ -1,4 +1,4 @@
-import { Box, Flex, Heading } from '@radix-ui/themes';
+import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import { asset } from '../../../../../../core/blitzkit/asset';
 import { gameDefinitions } from '../../../../../../core/blitzkit/gameDefinitions';
@@ -12,17 +12,17 @@ export function GameModeSection() {
     <Flex direction="column" gap="4" align="center">
       <Heading size="6">Game mode abilities</Heading>
 
-      <Flex justify="center" gap="4" wrap="wrap">
+      <Flex justify="center" gap="4" wrap="wrap" px="4">
         {Object.entries(tank.roles).map(([key, value]) => {
           const id = Number(key);
           const gameMode = awaitedGameDefinitions.gameModes[id];
 
           return (
             <Flex
-              // width="256px"
-              height="256px"
+              width="256px"
               overflow="hidden"
               style={{
+                aspectRatio: '4 / 3',
                 borderRadius: 'var(--radius-3)',
                 background: `url(${asset(`icons/game_mode_banners/${id}.webp`)})`,
                 backgroundSize: 'cover',
@@ -41,11 +41,13 @@ export function GameModeSection() {
               <Flex
                 flexGrow="1"
                 p="3"
+                direction="column"
                 style={{
                   backdropFilter: 'blur(4rem)',
+                  WebkitBackdropFilter: 'blur(4rem)',
                 }}
               >
-                <Heading size="4">{gameMode.name}</Heading>
+                <Text align="center">{gameMode.name}</Text>
               </Flex>
             </Flex>
           );
