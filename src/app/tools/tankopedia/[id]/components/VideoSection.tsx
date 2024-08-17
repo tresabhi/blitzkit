@@ -1,4 +1,5 @@
-import { Flex, Heading, Link, Text } from '@radix-ui/themes';
+import { InfoCircledIcon } from '@radix-ui/react-icons';
+import { Callout, Flex, Heading, Link } from '@radix-ui/themes';
 import { use } from 'react';
 import PageWrapper from '../../../../../components/PageWrapper';
 import { videoDefinitions } from '../../../../../core/blitzkit/videos';
@@ -11,10 +12,18 @@ export function VideoSection() {
 
   return (
     <PageWrapper noFlex1>
-      <Flex direction="column" gap="4" align="start">
-        <Flex direction="column">
+      <Flex direction="column" gap="6" align="center">
+        <Flex direction="column" gap="2" align="center">
           <Heading size="6">Review videos</Heading>
-          <Text color="gray">BlitzKit does not endorse any review videos.</Text>
+
+          <Callout.Root size="1">
+            <Callout.Icon>
+              <InfoCircledIcon />
+            </Callout.Icon>
+            <Callout.Text>
+              BlitzKit does not endorse any review videos.
+            </Callout.Text>
+          </Callout.Root>
         </Flex>
 
         <Flex gap="3" wrap="wrap">

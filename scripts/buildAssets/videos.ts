@@ -2,6 +2,7 @@ import { readdir } from 'fs/promises';
 import { google } from 'googleapis';
 import { cloneDeep, uniqBy } from 'lodash';
 import { parse as parseYaml } from 'yaml';
+import { youtubers } from '../../src/constants/youtubers';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
@@ -9,12 +10,6 @@ import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { VideoDefinitions } from '../../src/core/blitzkit/videos';
 import { DATA } from './constants';
 import { BlitzStrings, botPattern, VehicleDefinitionList } from './definitions';
-
-const youtubers = [
-  'UCKBYXp4Xn2I2tL1UL4fpbhw', // droodles
-  'UCrQ-Dy8lVsm11u8pCJ8W7Tw', // fatness
-  'UCxRpZqMElssTdPYDK3x7wyg', // n90
-];
 
 export async function videos(production: boolean) {
   console.log('Building videos...');
@@ -108,7 +103,7 @@ export async function videos(production: boolean) {
           (item) =>
             item.snippet?.channelId &&
             item.id?.videoId &&
-            youtubers.includes(item.snippet.channelId),
+            youtubers.some(({ id }) => id === item.snippet?.channelId),
         ),
         (item) => item.snippet!.channelId,
       );

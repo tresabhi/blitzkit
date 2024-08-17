@@ -8,7 +8,7 @@ export function HistorySection() {
   if (!tank.description) return null;
 
   return (
-    <PageWrapper noFlex1>
+    <PageWrapper noFlex1 align="center">
       <Heading>History of the {tank.name}</Heading>
       <Text>{tank.description}</Text>
     </PageWrapper>

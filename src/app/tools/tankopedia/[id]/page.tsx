@@ -84,7 +84,7 @@ export default function Page({ params }: { params: { id: string } }) {
       <TechTreeSection />
       <VideoSection />
       <HistorySection />
-      {!exempt && <AdMidSectionResponsive />}
+      {!exempt && <AdMidSectionResponsive mb="6" />}
     </PageWrapper>
   );
 }
