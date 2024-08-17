@@ -23,8 +23,10 @@ export function GameModeSection() {
 
           return (
             <Flex
-              height="calc(256px - 64px)"
+              width="256px"
+              height="256px"
               overflow="hidden"
+              direction="column"
               style={{
                 borderRadius: 'var(--radius-3)',
                 background: `url(${asset(`icons/game_mode_banners/${id}.webp`)})`,
@@ -51,7 +53,6 @@ export function GameModeSection() {
                 }}
                 align="center"
                 justify="center"
-                gap="2"
               >
                 <Text size="4" weight="bold">
                   {gameMode.name}
@@ -66,8 +67,8 @@ export function GameModeSection() {
                         <Flex align="center" gap="1">
                           <img
                             style={{
-                              width: '2em',
-                              height: '2em',
+                              width: '1.5em',
+                              height: '1.5em',
                               objectFit: 'contain',
                             }}
                             src={asset(`icons/provisions/${id}.webp`)}
@@ -86,8 +87,8 @@ export function GameModeSection() {
                         <Flex align="center" gap="1">
                           <img
                             style={{
-                              width: '2em',
-                              height: '2em',
+                              width: '1.5em',
+                              height: '1.5em',
                               objectFit: 'contain',
                             }}
                             src={asset(`icons/consumables/${id}.webp`)}
