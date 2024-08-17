@@ -11,13 +11,16 @@ export function GameModeSection() {
   const awaitedGameDefinitions = use(gameDefinitions);
   const awaitedConsumableDefinitions = use(consumableDefinitions);
   const awaitedProvisionDefinitions = use(provisionDefinitions);
+  const roles = Object.entries(tank.roles);
+
+  if (roles.length === 0) return null;
 
   return (
     <Flex direction="column" gap="4" align="center">
       <Heading size="6">Game mode abilities</Heading>
 
       <Flex justify="center" gap="4" wrap="wrap" px="4">
-        {Object.entries(tank.roles).map(([key, value]) => {
+        {roles.map(([key, value]) => {
           const id = Number(key);
           const gameMode = awaitedGameDefinitions.gameModes[id];
 
