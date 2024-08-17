@@ -29,11 +29,10 @@ function Card({ id, highlight }: { id: number; highlight?: boolean }) {
         mx={highlight ? '2' : '0'}
         style={{
           background: highlight
-            ? `url(${asset(`flags/scratched/${tank.nation}.webp`)})`
+            ? `url(${asset(`flags/fade_small/${tank.nation}.webp`)})`
             : undefined,
-          backgroundPosition: '25% center',
+          backgroundPosition: 'center',
           backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
           boxShadow: highlight ? 'var(--shadow-4)' : undefined,
           borderRadius: 'var(--radius-4)',
           overflow: 'hidden',
