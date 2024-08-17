@@ -126,6 +126,4 @@ export const TOOLS: Tool[] = [
   playerStatsTool,
   sessionTool,
   ratingTool,
-  discordTool,
-  moreTool,
 ];
