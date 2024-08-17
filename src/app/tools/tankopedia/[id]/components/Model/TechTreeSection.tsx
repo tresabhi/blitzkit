@@ -1,13 +1,7 @@
-import { CaretRightIcon, ChevronRightIcon } from '@radix-ui/react-icons';
-import {
-  ChevronDownIcon,
-  Flex,
-  Heading,
-  ScrollArea,
-  Text,
-} from '@radix-ui/themes';
+import { CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
+import { Flex, Heading, ScrollArea, Text } from '@radix-ui/themes';
 import Link from 'next/link';
-import { ComponentProps, use, useMemo } from 'react';
+import { use, useEffect, useMemo, useRef } from 'react';
 import { asset } from '../../../../../../core/blitzkit/asset';
 import {
   TankDefinition,
@@ -17,48 +11,7 @@ import { TIER_ROMAN_NUMERALS } from '../../../../../../core/blitzkit/tankDefinit
 import { formatCompact } from '../../../../../../core/math/formatCompact';
 import * as Duel from '../../../../../../stores/duel';
 
-export function TreeArrow({
-  style,
-  down = false,
-  ...props
-}: ComponentProps<typeof Text> & { down?: boolean }) {
-  const Icon = down ? ChevronDownIcon : ChevronRightIcon;
-
-  return (
-    <Text
-      color="gray"
-      style={{
-        flex: 1,
-        ...style,
-      }}
-      {...props}
-    >
-      <Flex
-        style={{
-          backgroundColor: 'currentcolor',
-          height: down ? '100%' : 1,
-          width: down ? 1 : '100%',
-          position: 'relative',
-        }}
-        direction={down ? 'column' : 'row'}
-        justify="end"
-      >
-        <Icon
-          style={{
-            position: 'absolute',
-            right: down ? undefined : 0,
-            top: down ? undefined : '50%',
-            bottom: down ? 0 : undefined,
-            left: down ? '50%' : undefined,
-            transform: down ? 'translate(-50%, 2px)' : 'translate(5px, -50%)',
-          }}
-        />
-      </Flex>
-    </Text>
-  );
-}
-
-function Card({ id }: { id: number }) {
+function Card({ id, highlight }: { id: number; highlight?: boolean }) {
   const awaitedTankDefinitions = use(tankDefinitions);
   const ancestor = awaitedTankDefinitions[id];
 
@@ -72,7 +25,20 @@ function Card({ id }: { id: number }) {
         position: 'relative',
       }}
     >
-      <Flex direction="column" align="center">
+      <Flex
+        direction="column"
+        align="center"
+        py="4"
+        px={highlight ? '4' : '2'}
+        mx={highlight ? '2' : '0'}
+        style={{
+          backgroundColor: highlight
+            ? 'var(--color-panel-translucent)'
+            : undefined,
+          boxShadow: highlight ? 'var(--shadow-4)' : undefined,
+          borderRadius: 'var(--radius-4)',
+        }}
+      >
         <img
           alt={ancestor.name}
           src={asset(`icons/tanks/big/${id}.webp`)}
@@ -92,35 +58,39 @@ function Card({ id }: { id: number }) {
           </Flex>
 
           <Flex gap="2" align="center">
-            <Flex gap="1" align="center">
-              <img
-                alt="XP"
-                src={asset('icons/currencies/xp.webp')}
-                width={16}
-                height={16}
-                style={{
-                  objectFit: 'contain',
-                }}
-              />
-              <Text color="gray" size="1" wrap="nowrap">
-                {ancestor.xp === undefined ? 0 : formatCompact(ancestor.xp!)}
-              </Text>
-            </Flex>
+            <Text color="gray" size="1" wrap="nowrap">
+              <Flex gap="1" align="center">
+                <img
+                  alt="XP"
+                  src={asset('icons/currencies/xp.webp')}
+                  style={{
+                    width: '1em',
+                    height: '1em',
+                    objectFit: 'contain',
+                    objectPosition: 'center',
+                  }}
+                />
+                {ancestor.xp === undefined || ancestor.tier === 1
+                  ? 0
+                  : formatCompact(ancestor.xp!)}
+              </Flex>
+            </Text>
 
-            <Flex gap="1" align="center">
-              <img
-                alt="Silver"
-                src={asset('icons/currencies/silver.webp')}
-                width={16}
-                height={16}
-                style={{
-                  objectFit: 'contain',
-                }}
-              />
-              <Text color="gray" size="1" wrap="nowrap">
+            <Text color="gray" size="1" wrap="nowrap">
+              <Flex gap="1" align="center">
+                <img
+                  alt="Silver"
+                  src={asset('icons/currencies/silver.webp')}
+                  style={{
+                    width: '1em',
+                    height: '1em',
+                    objectFit: 'contain',
+                    objectPosition: 'center',
+                  }}
+                />
                 {formatCompact(ancestor.price.value)}
-              </Text>
-            </Flex>
+              </Flex>
+            </Text>
           </Flex>
         </Flex>
       </Flex>
@@ -128,9 +98,18 @@ function Card({ id }: { id: number }) {
   );
 }
 
+function Arrow() {
+  return (
+    <Text color="gray">
+      <CaretRightIcon />
+    </Text>
+  );
+}
+
 export function TechTreeSection() {
   const tank = Duel.use((state) => state.protagonist.tank);
   const awaitedTankDefinitions = use(tankDefinitions);
+  const container = useRef<HTMLDivElement>(null);
 
   if (
     tank.treeType !== 'researchable' ||
@@ -145,7 +124,11 @@ export function TechTreeSection() {
     let ancestor: TankDefinition | undefined = tank;
 
     while (ancestor !== undefined) {
-      if (ancestor.ancestors === undefined || ancestor.ancestors.length === 0) {
+      if (
+        ancestor.tier === 1 ||
+        ancestor.ancestors === undefined ||
+        ancestor.ancestors.length === 0
+      ) {
         ancestor = undefined;
         break;
       } else if (ancestor.ancestors.length === 1) {
@@ -170,33 +153,54 @@ export function TechTreeSection() {
     return treeBackwards.reverse();
   }, []);
 
-  console.log(ancestors);
+  useEffect(() => {
+    if (!container.current) return;
+
+    container.current.scrollLeft = container.current.scrollWidth;
+  });
 
   return (
     <Flex
       my="6"
-      py="6"
       direction="column"
       align="center"
       gap="4"
       style={{
         backgroundColor: 'var(--color-surface)',
       }}
+      py="4"
     >
-      <Heading size="6">Tech tree</Heading>
+      <Heading size="6" style={{ position: 'absolute' }} mt="3">
+        Tech tree
+      </Heading>
 
-      <ScrollArea>
-        <Flex align="center" gap="4" justify="center" p="4">
+      <ScrollArea type="hover" scrollbars="horizontal" ref={container}>
+        <Flex align="center" gap="2" justify="center" p="6" pt="9">
           {ancestors.map((id, index) => (
             <>
-              {index > 0 && (
-                <Text color="gray">
-                  <CaretRightIcon />
-                </Text>
-              )}
+              {index > 0 && <Arrow />}
               <Card key={id} id={id} />
             </>
           ))}
+
+          <Arrow />
+          <Card highlight id={tank.id} />
+
+          {tank.tier < 10 && (
+            <>
+              <Arrow />
+              {tank.successors!.map((id, index) => (
+                <>
+                  {index > 0 && (
+                    <Text color="gray">
+                      <PlusIcon />
+                    </Text>
+                  )}
+                  <Card key={id} id={id} />
+                </>
+              ))}
+            </>
+          )}
         </Flex>
       </ScrollArea>
     </Flex>
