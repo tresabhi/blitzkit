@@ -1,5 +1,5 @@
 import { CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
-import { Flex, Heading, ScrollArea, Text } from '@radix-ui/themes';
+import { Box, Flex, Heading, ScrollArea, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { use, useEffect, useMemo, useRef } from 'react';
 import { asset } from '../../../../../../core/blitzkit/asset';
@@ -13,7 +13,7 @@ import * as Duel from '../../../../../../stores/duel';
 
 function Card({ id, highlight }: { id: number; highlight?: boolean }) {
   const awaitedTankDefinitions = use(tankDefinitions);
-  const ancestor = awaitedTankDefinitions[id];
+  const tank = awaitedTankDefinitions[id];
 
   return (
     <Link
@@ -25,75 +25,85 @@ function Card({ id, highlight }: { id: number; highlight?: boolean }) {
         position: 'relative',
       }}
     >
-      <Flex
-        direction="column"
-        align="center"
-        py="4"
-        px={highlight ? '4' : '2'}
+      <Box
         mx={highlight ? '2' : '0'}
         style={{
-          backgroundColor: highlight
-            ? 'var(--color-panel-translucent)'
+          background: highlight
+            ? `url(${asset(`flags/scratched/${tank.nation}.webp`)})`
             : undefined,
+          backgroundPosition: '25% center',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
           boxShadow: highlight ? 'var(--shadow-4)' : undefined,
           borderRadius: 'var(--radius-4)',
+          overflow: 'hidden',
         }}
       >
-        <img
-          alt={ancestor.name}
-          src={asset(`icons/tanks/big/${id}.webp`)}
-          width={64}
-          height={64}
+        <Flex
+          direction="column"
+          align="center"
+          py="4"
+          px={highlight ? '4' : '2'}
           style={{
-            objectFit: 'contain',
+            backdropFilter: highlight ? 'brightness(0.25)' : undefined,
           }}
-        />
+        >
+          <img
+            alt={tank.name}
+            src={asset(`icons/tanks/big/${id}.webp`)}
+            width={64}
+            height={64}
+            style={{
+              objectFit: 'contain',
+            }}
+          />
 
-        <Flex direction="column" align="center">
-          <Flex gap="2" align="center">
-            <Text color="gray" size="1">
-              {TIER_ROMAN_NUMERALS[ancestor.tier]}
-            </Text>
-            <Text wrap="nowrap">{ancestor.name}</Text>
-          </Flex>
+          <Flex direction="column" align="center">
+            <Flex gap="2" align="center">
+              <Text color="gray" size="1">
+                {TIER_ROMAN_NUMERALS[tank.tier]}
+              </Text>
+              <Text wrap="nowrap">{tank.name}</Text>
+            </Flex>
 
-          <Flex gap="2" align="center">
-            <Text color="gray" size="1" wrap="nowrap">
-              <Flex gap="1" align="center">
-                <img
-                  alt="XP"
-                  src={asset('icons/currencies/xp.webp')}
-                  style={{
-                    width: '1em',
-                    height: '1em',
-                    objectFit: 'contain',
-                    objectPosition: 'center',
-                  }}
-                />
-                {ancestor.xp === undefined || ancestor.tier === 1
-                  ? 0
-                  : formatCompact(ancestor.xp!)}
-              </Flex>
-            </Text>
+            <Flex gap="2" align="center">
+              <Text color="gray" size="1" wrap="nowrap">
+                <Flex gap="1" align="center">
+                  <img
+                    alt="XP"
+                    src={asset('icons/currencies/xp.webp')}
+                    style={{
+                      width: '1em',
+                      height: '1em',
+                      objectFit: 'contain',
+                      objectPosition: 'center',
+                    }}
+                  />
+                  {tank.xp === undefined || tank.tier === 1
+                    ? 0
+                    : formatCompact(tank.xp!)}
+                </Flex>
+              </Text>
 
-            <Text color="gray" size="1" wrap="nowrap">
-              <Flex gap="1" align="center">
-                <img
-                  alt="Silver"
-                  src={asset('icons/currencies/silver.webp')}
-                  style={{
-                    width: '1em',
-                    height: '1em',
-                    objectFit: 'contain',
-                    objectPosition: 'center',
-                  }}
-                />
-                {formatCompact(ancestor.price.value)}
-              </Flex>
-            </Text>
+              <Text color="gray" size="1" wrap="nowrap">
+                <Flex gap="1" align="center">
+                  <img
+                    alt="Silver"
+                    src={asset('icons/currencies/silver.webp')}
+                    style={{
+                      width: '1em',
+                      height: '1em',
+                      objectFit: 'contain',
+                      objectPosition: 'center',
+                    }}
+                  />
+                  {formatCompact(tank.price.value)}
+                </Flex>
+              </Text>
+            </Flex>
           </Flex>
         </Flex>
-      </Flex>
+      </Box>
     </Link>
   );
 }
