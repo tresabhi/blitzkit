@@ -302,10 +302,6 @@ export default function Navbar() {
                     p="2"
                     align="center"
                     width="100%"
-                    direction={{
-                      initial: 'column',
-                      sm: 'row',
-                    }}
                     style={{
                       backgroundColor: 'var(--color-panel-translucent)',
                       backdropFilter: 'blur(4rem)',

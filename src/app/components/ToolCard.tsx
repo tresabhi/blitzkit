@@ -78,7 +78,7 @@ export function ToolCard({ tool, style, ...props }: ToolCardProps) {
           width="100%"
           direction={{
             initial: 'column',
-            sm: 'row',
+            xs: 'row',
           }}
           style={{
             backgroundColor: 'var(--color-panel-translucent)',
@@ -91,7 +91,7 @@ export function ToolCard({ tool, style, ...props }: ToolCardProps) {
             justify="center"
             align={{
               initial: 'center',
-              sm: 'start',
+              xs: 'start',
             }}
           >
             <Heading
