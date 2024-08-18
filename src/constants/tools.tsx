@@ -119,11 +119,18 @@ export const tankPerformanceTool: Tool = {
   image: 'vOKFB03',
 };
 
+export const homeTool: Tool = {
+  id: '',
+  title: 'Home',
+  button: { color: 'blue', text: '' },
+  description: '',
+  image: 'rUPie9G',
+};
+
 export const TOOLS: Tool[] = [
   tankopediaTool,
   compareTool,
   tankPerformanceTool,
-  playerStatsTool,
   sessionTool,
   ratingTool,
 ];

@@ -23,7 +23,7 @@ import {
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { REGIONS } from '../../constants/regions';
-import { TOOLS } from '../../constants/tools';
+import { homeTool, TOOLS } from '../../constants/tools';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { imgur, ImgurSize } from '../../core/blitzkit/imgur';
 import { patreonLoginUrl } from '../../core/blitzkit/patreonLoginUrl';
@@ -39,6 +39,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const logins = App.use((state) => state.logins);
   const mutateApp = App.useMutation();
+  const tools = [homeTool, ...TOOLS];
 
   return (
     <Flex
@@ -56,6 +57,7 @@ export default function Navbar() {
               color="gray"
               className={styles.hamburger}
               onClick={() => setShowHamburgerMenu((state) => !state)}
+              onBlur={() => setShowHamburgerMenu(false)}
             >
               {showHamburgerMenu ? <Cross1Icon /> : <HamburgerMenuIcon />}
             </IconButton>
@@ -256,14 +258,14 @@ export default function Navbar() {
       <ScrollArea>
         <Flex justify="center">
           <Grid
-            columns="repeat(auto-fill, minmax(128px, 1fr))"
+            columns="repeat(auto-fill, minmax(192px, 1fr))"
             flow="dense"
             gap="2"
             width="100%"
-            p="4"
+            p="3"
             pt="0"
           >
-            {TOOLS.map((tool) => (
+            {tools.map((tool) => (
               <Flex
                 style={{
                   position: 'relative',
@@ -272,12 +274,12 @@ export default function Navbar() {
                   backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size: ImgurSize.LargeThumbnail })})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
-                  aspectRatio: '4 / 3',
+                  aspectRatio: '2 / 1',
                 }}
                 onClick={() => setShowHamburgerMenu(false)}
               >
                 <Link
-                  href={`/tools/${tool.id}`}
+                  href={tool.id.length === 0 ? '/' : `/tools/${tool.id}`}
                   style={{
                     display: 'flex',
                     width: '100%',
