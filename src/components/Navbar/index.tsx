@@ -271,7 +271,7 @@ export default function Navbar() {
                   position: 'relative',
                   borderRadius: 'var(--radius-2)',
                   overflow: 'hidden',
-                  backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size: ImgurSize.LargeThumbnail })})`,
+                  backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size: ImgurSize.MediumThumbnail })})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   aspectRatio: '2 / 1',
@@ -292,7 +292,7 @@ export default function Navbar() {
                   <Box
                     flexGrow="1"
                     style={{
-                      backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size: ImgurSize.LargeThumbnail })})`,
+                      backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size: ImgurSize.MediumThumbnail })})`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                     }}
