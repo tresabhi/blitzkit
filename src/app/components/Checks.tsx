@@ -9,13 +9,18 @@ import * as App from '../../stores/app';
 import { CURRENT_POLICIES_AGREEMENT_INDEX } from '../../stores/app/constants';
 import { PatreonAuthResponse } from '../auth/[provider]/page';
 
-interface Extension {
-  data: {
-    access_token: string;
-    account_id: number;
-    expires_at: number;
-  };
-}
+type Extension =
+  | {
+      status: 'ok';
+      data: {
+        access_token: string;
+        account_id: number;
+        expires_at: number;
+      };
+    }
+  | {
+      status: 'error';
+    };
 
 /**
  * Wargaming: 14 (refresh: 7)
@@ -80,11 +85,15 @@ export function Checks() {
           .then((response) => response.json() as Promise<Extension>)
           .then((json) => {
             mutateApp((draft) => {
-              draft.logins.wargaming = {
-                id: wargaming.id,
-                token: json.data.access_token,
-                expires: json.data.expires_at * 1000,
-              };
+              if (json.status === 'error') {
+                draft.logins.wargaming = undefined;
+              } else {
+                draft.logins.wargaming = {
+                  id: wargaming.id,
+                  token: json.data.access_token,
+                  expires: json.data.expires_at * 1000,
+                };
+              }
             });
           });
       }
