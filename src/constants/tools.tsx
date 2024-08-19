@@ -90,7 +90,7 @@ export const moreTool: Tool = {
   image: '1nPm6VI',
   button: {
     text: 'Join Discord',
-    color: 'indigo',
+    color: 'plum',
   },
 };
 
