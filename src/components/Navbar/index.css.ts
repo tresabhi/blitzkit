@@ -58,6 +58,7 @@ export const navbarExpander = styleVariants({
     navbarExpanderBase,
     {
       maxHeight: '100vh',
+      overscrollBehavior: 'contain',
     },
   ],
 });
