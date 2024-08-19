@@ -45,7 +45,7 @@ export default function Navbar() {
     <Flex className={styles.navbar}>
       <Flex
         className={styles.navbarExpander[`${showHamburgerMenu}`]}
-        onClick={() => setShowHamburgerMenu((state) => !state)}
+        onClick={() => setShowHamburgerMenu(false)}
         direction="column"
         gap="2"
       >
