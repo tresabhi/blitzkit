@@ -1,4 +1,4 @@
-import { Button, Text } from '@radix-ui/themes';
+import { Button, Text, Tooltip } from '@radix-ui/themes';
 import { ComponentProps, ReactNode } from 'react';
 
 export interface TankComponentButtonProps
@@ -9,6 +9,7 @@ export interface TankComponentButtonProps
   disabled?: boolean;
   banner?: string;
   special?: boolean;
+  tooltip?: string;
 }
 
 export function TankComponentButton({
@@ -20,9 +21,10 @@ export function TankComponentButton({
   banner,
   disabled,
   style,
+  tooltip,
   ...props
 }: TankComponentButtonProps) {
-  return (
+  const button = (
     <Button
       radius="medium"
       color={selected ? (special ? 'amber' : undefined) : 'gray'}
@@ -73,4 +75,7 @@ export function TankComponentButton({
       )}
     </Button>
   );
+
+  if (tooltip) return <Tooltip content={tooltip}>{button}</Tooltip>;
+  return button;
 }
