@@ -23,13 +23,22 @@ export const tools = style({
   },
 });
 
-const navbarBase = style({
-  // 1px overlap with content to bleed color
-  marginBottom: -1,
+export const navbar = style({
+  height: HEIGHT,
+  marginBottom: -1, // 1px overlap with content to bleed color
+  position: 'sticky',
+  top: 0,
+  zIndex: 1,
+});
+
+const navbarExpanderBase = style({
+  transitionDuration: '250ms',
+  height: '1000px',
+  width: '100%',
+  overflow: 'hidden',
+
   backdropFilter: 'blur(4rem) brightness(0.75)',
   WebkitBackdropFilter: 'blur(4rem) brightness(0.75)',
-  zIndex: 1,
-  transitionDuration: '250ms',
 
   '@media': {
     [`screen and (min-width: ${MIN_WIDTH}px)`]: {
@@ -38,17 +47,22 @@ const navbarBase = style({
   },
 });
 
-export const navbar = styleVariants({
+export const navbarExpander = styleVariants({
   false: [
-    navbarBase,
+    navbarExpanderBase,
     {
       maxHeight: HEIGHT,
     },
   ],
   true: [
-    navbarBase,
+    navbarExpanderBase,
     {
       maxHeight: '100vh',
     },
   ],
+});
+
+export const navbarContent = style({
+  width: '100%',
+  maxHeight: '100vh',
 });
