@@ -145,6 +145,7 @@ export function TankSandbox({ thicknessRange }: TankSandboxProps) {
 
   return (
     <Canvas
+      frameloop="demand"
       gl={{ clippingPlanes: Object.freeze([]), localClippingEnabled: true }}
       shadows
       ref={canvas}
