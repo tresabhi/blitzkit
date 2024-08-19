@@ -45,6 +45,7 @@ function Card({ id, highlight }: { id: number; highlight?: boolean }) {
           px={highlight ? '4' : '2'}
           style={{
             backdropFilter: highlight ? 'brightness(0.25)' : undefined,
+            WebkitBackdropFilter: highlight ? 'brightness(0.25)' : undefined,
           }}
         >
           <img
