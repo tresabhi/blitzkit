@@ -26,8 +26,8 @@ export function GameModeSection() {
 
           return (
             <Flex
-              width="256px"
-              height="256px"
+              width="14rem"
+              height="20rem"
               overflow="hidden"
               direction="column"
               style={{
@@ -47,9 +47,10 @@ export function GameModeSection() {
               />
 
               <Flex
-                flexGrow="1"
                 p="3"
                 direction="column"
+                height="98px"
+                flexShrink="0"
                 style={{
                   backdropFilter: 'blur(4rem)',
                   WebkitBackdropFilter: 'blur(4rem)',
