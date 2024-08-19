@@ -433,8 +433,8 @@ export const TankSearch = memo<TankSearchProps>(
                 <ExperimentIcon style={{ width: '1em', height: '1em' }} />
               </Callout.Icon>
               <Callout.Text>
-                Tanks in testing are subject to change and many not represent
-                the final product.
+                Tanks in testing are subject to change and may not represent the
+                final product.
               </Callout.Text>
             </Callout.Root>
           </Flex>

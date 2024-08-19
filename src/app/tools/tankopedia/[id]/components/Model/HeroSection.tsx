@@ -3,6 +3,7 @@ import { Box, Button, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { Suspense, use, useEffect, useMemo, useState } from 'react';
 import { classIcons } from '../../../../../../components/ClassIcon';
+import { ScienceIcon } from '../../../../../../components/ScienceIcon';
 import { ThicknessRange } from '../../../../../../components/StaticArmor';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions';
@@ -100,15 +101,27 @@ export function HeroSection({ id }: HeroSectionProps) {
               </Heading>
             </Flex>
 
-            <Text color="gray" ml={{ initial: '0', md: '9' }}>
-              Tier {TIER_ROMAN_NUMERALS[protagonist.tier]}{' '}
-              {
-                (strings.common.nations_adjectives as Record<string, string>)[
-                  protagonist.nation
-                ]
-              }{' '}
-              {strings.common.tank_class_short[protagonist.class]}
-            </Text>
+            <Flex direction="column" ml={{ initial: '0', md: '9' }}>
+              {tank.testing && (
+                <Text color="red">
+                  <Flex align="center" gap="1">
+                    Tank in testing
+                    <ScienceIcon width="1em" height="1em" />
+                  </Flex>
+                </Text>
+              )}
+
+              <Text color="gray">
+                Tier {TIER_ROMAN_NUMERALS[protagonist.tier]}{' '}
+                {
+                  (strings.common.nations_adjectives as Record<string, string>)[
+                    protagonist.nation
+                  ]
+                }{' '}
+                {strings.common.tank_class_short[protagonist.class]}
+              </Text>
+            </Flex>
+
             <Flex gap="4" ml={{ initial: '0', md: '9' }} mt="-1">
               <Link href="/tools/tankopedia">
                 <Button variant="ghost" size="1" ml="-1">

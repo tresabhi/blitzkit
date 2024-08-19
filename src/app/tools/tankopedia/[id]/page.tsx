@@ -12,6 +12,7 @@ import { GameModeSection } from './components/Model/GameModeSection';
 import { HeroSection } from './components/Model/HeroSection';
 import { TechTreeSection } from './components/Model/TechTreeSection';
 import { ShotDisplaySection } from './components/ShotDisplaySection';
+import { TestingSection } from './components/TestingSection';
 import { VideoSection } from './components/VideoSection';
 
 export default function Page({ params }: { params: { id: string } }) {
@@ -78,6 +79,7 @@ export default function Page({ params }: { params: { id: string } }) {
       <HeroSection id={id} />
       <ShotDisplaySection />
       {!exempt && <AdMidSectionResponsive />}
+      <TestingSection />
       <CharacteristicsSection />
       {!exempt && <AdMidSectionResponsive />}
       <GameModeSection />
