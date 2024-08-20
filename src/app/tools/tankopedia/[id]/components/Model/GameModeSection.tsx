@@ -26,6 +26,7 @@ export function GameModeSection() {
 
           return (
             <Flex
+              key={id}
               width="14rem"
               height="20rem"
               overflow="hidden"
