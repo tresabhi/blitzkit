@@ -1,4 +1,3 @@
-import { CheckIcon, Cross1Icon } from '@radix-ui/react-icons';
 import { Code, Flex, Heading, Text } from '@radix-ui/themes';
 import { classIcons } from '../../../../../../components/ClassIcon';
 import { asset } from '../../../../../../core/blitzkit/asset';
@@ -10,20 +9,7 @@ import * as Duel from '../../../../../../stores/duel';
 export function MetaSection() {
   const developerMode = App.useDeferred(false, (state) => state.developerMode);
   const tank = Duel.use((state) => state.protagonist.tank);
-  const rawPrice =
-    typeof tank.price === 'number' ? tank.price : tank.price.value;
-  const priceType =
-    typeof tank.price === 'number' ? 'credits' : tank.price.type;
-  const salePrice = 0.5 * rawPrice;
-  const purchasePrice = rawPrice;
   const ClassIcon = classIcons[tank.class];
-  let worthSelling: boolean;
-
-  if (priceType === 'gold') {
-    worthSelling = tank.tier <= 6 || purchasePrice - salePrice <= 500;
-  } else {
-    worthSelling = tank.tier <= 7;
-  }
 
   return (
     <Flex justify="center" align="center" py="8" px="4">
@@ -95,21 +81,32 @@ export function MetaSection() {
             <Flex gap="6">
               <Flex direction="column">
                 <Text color="gray">
-                  {priceType === 'credits' ? 'Purchase' : 'Restoration'} price
+                  {tank.price.type === 'credits' ? 'Purchase' : 'Restoration'}{' '}
+                  price
                 </Text>
-                {tank.xp && <Text color="gray">Research XP</Text>}
                 <Text color="gray">Sale price</Text>
-                <Text color="gray">Worth selling</Text>
+                {tank.xp && <Text color="gray">Research XP</Text>}
               </Flex>
 
               <Flex direction="column" align="end">
                 <Flex align="center" gap="2">
-                  <Text>{purchasePrice.toLocaleString()}</Text>
+                  <Text>{tank.price.value.toLocaleString()}</Text>
                   <img
                     style={{ width: '1em', height: '1em' }}
-                    alt={priceType}
+                    alt={tank.price.type}
                     src={asset(
-                      `icons/currencies/${priceType === 'gold' ? 'gold' : 'silver'}.webp`,
+                      `icons/currencies/${tank.price.type === 'gold' ? 'gold' : 'silver'}.webp`,
+                    )}
+                  />
+                </Flex>
+
+                <Flex align="center" gap="2">
+                  <Text>{(tank.price.value / 2).toLocaleString()}</Text>
+                  <img
+                    style={{ width: '1em', height: '1em' }}
+                    alt={tank.price.type}
+                    src={asset(
+                      `icons/currencies/${tank.price.type === 'gold' ? 'gold' : 'silver'}.webp`,
                     )}
                   />
                 </Flex>
@@ -124,25 +121,6 @@ export function MetaSection() {
                     />
                   </Flex>
                 )}
-
-                <Flex align="center" gap="2">
-                  <Text>{salePrice.toLocaleString()}</Text>
-                  <img
-                    style={{ width: '1em', height: '1em' }}
-                    alt={priceType}
-                    src={asset(
-                      `icons/currencies/${priceType === 'gold' ? 'gold' : 'silver'}.webp`,
-                    )}
-                  />
-                </Flex>
-
-                <Text color={worthSelling ? 'green' : 'red'}>
-                  <Flex align="center" gap="1">
-                    {worthSelling ? 'Yes' : 'No'}
-                    {worthSelling && <CheckIcon />}
-                    {!worthSelling && <Cross1Icon />}
-                  </Flex>
-                </Text>
               </Flex>
             </Flex>
           </Flex>

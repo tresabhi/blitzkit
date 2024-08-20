@@ -37,8 +37,8 @@ import {
   CrewMember,
   GunDefinition,
   ShellType,
-  TankDefinitionPrice,
   TankDefinitions,
+  TankPrice,
   Tier,
   Unlock,
 } from '../../src/core/blitzkit/tankDefinitions';
@@ -670,10 +670,7 @@ export async function definitions(production: boolean) {
         const engineXps = new Map<number, number>();
         const trackXps = new Map<number, number>();
         const tank = tankList.root[tankKey];
-        const tankPrice: TankDefinitionPrice =
-          typeof tank.price === 'number'
-            ? { type: 'credits', value: tank.price }
-            : { type: 'gold', value: tank.price['#text'] };
+        let tankPrice: TankPrice;
         const tankDefinition = await readXMLDVPL<{ root: VehicleDefinitions }>(
           `${DATA}/XML/item_defs/vehicles/${nation}/${tankKey}.xml.dvpl`,
         );
@@ -688,6 +685,23 @@ export async function definitions(production: boolean) {
         const hullArmor: ModelArmor = { thickness: {} };
         const equipment = tankDefinition.root.optDevicePreset;
         tankStringIdMap[`${nation}:${tankKey}`] = tankId;
+
+        if (tank.sellPrice) {
+          tankPrice = {
+            type: 'gold',
+            value: tank.sellPrice['#text'] * 2,
+          };
+        } else if (typeof tank.price === 'number') {
+          tankPrice = {
+            type: 'credits',
+            value: tank.price,
+          };
+        } else {
+          tankPrice = {
+            type: 'credits',
+            value: tank.price['#text'] * 400,
+          };
+        }
 
         Object.keys(tankDefinition.root.hull.armor)
           .filter((name) => name.startsWith('armor_'))

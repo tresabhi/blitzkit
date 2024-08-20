@@ -60,7 +60,7 @@ export interface TankDefinition {
   turrets: TurretDefinition[];
   engines: EngineDefinition[];
   tracks: TrackDefinition[];
-  price: TankDefinitionPrice;
+  price: TankPrice;
   xp?: number;
   speed: {
     forwards: number;
@@ -102,7 +102,7 @@ export interface EngineDefinition {
   weight: number;
   unlocks?: Unlock[];
 }
-export type TankDefinitionPrice =
+export type TankPrice =
   | { type: 'credits'; value: number }
   | { type: 'gold'; value: number };
 export interface TurretDefinition {
