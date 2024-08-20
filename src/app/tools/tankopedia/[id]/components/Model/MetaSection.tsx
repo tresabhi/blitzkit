@@ -16,8 +16,8 @@ export function MetaSection() {
     typeof tank.price === 'number' ? 'credits' : tank.price.type;
   const salePrice = 0.5 * rawPrice;
   const purchasePrice = rawPrice;
-  let worthSelling: boolean;
   const ClassIcon = classIcons[tank.class];
+  let worthSelling: boolean;
 
   if (priceType === 'gold') {
     worthSelling = tank.tier <= 6 || purchasePrice - salePrice <= 500;

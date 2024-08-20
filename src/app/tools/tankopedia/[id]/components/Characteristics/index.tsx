@@ -7,6 +7,7 @@ import {
   Slider,
   Text,
   TextField,
+  Tooltip,
 } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { Fragment, use, useEffect, useRef, useState } from 'react';
@@ -144,32 +145,34 @@ export function Characteristics() {
 
             <Flex>
               {gun.shells.map((thisShell, shellIndex) => (
-                <IconButton
-                  color={thisShell.id === shell.id ? undefined : 'gray'}
-                  variant="soft"
-                  key={thisShell.id}
-                  style={{
-                    borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
-                    borderBottomLeftRadius: shellIndex === 0 ? undefined : 0,
-                    borderTopRightRadius:
-                      shellIndex === gun.shells.length - 1 ? undefined : 0,
-                    borderBottomRightRadius:
-                      shellIndex === gun.shells.length - 1 ? undefined : 0,
-                    marginLeft: shellIndex === 0 ? 0 : -1,
-                  }}
-                  onClick={() => {
-                    mutateDuel((draft) => {
-                      draft.protagonist.shell = thisShell;
-                    });
-                  }}
-                >
-                  <img
-                    alt={thisShell.name}
-                    width={16}
-                    height={16}
-                    src={asset(`icons/shells/${thisShell.icon}.webp`)}
-                  />
-                </IconButton>
+                <Tooltip content={thisShell.name}>
+                  <IconButton
+                    color={thisShell.id === shell.id ? undefined : 'gray'}
+                    variant="soft"
+                    key={thisShell.id}
+                    style={{
+                      borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
+                      borderBottomLeftRadius: shellIndex === 0 ? undefined : 0,
+                      borderTopRightRadius:
+                        shellIndex === gun.shells.length - 1 ? undefined : 0,
+                      borderBottomRightRadius:
+                        shellIndex === gun.shells.length - 1 ? undefined : 0,
+                      marginLeft: shellIndex === 0 ? 0 : -1,
+                    }}
+                    onClick={() => {
+                      mutateDuel((draft) => {
+                        draft.protagonist.shell = thisShell;
+                      });
+                    }}
+                  >
+                    <img
+                      alt={thisShell.name}
+                      width={16}
+                      height={16}
+                      src={asset(`icons/shells/${thisShell.icon}.webp`)}
+                    />
+                  </IconButton>
+                </Tooltip>
               ))}
             </Flex>
           </Flex>
