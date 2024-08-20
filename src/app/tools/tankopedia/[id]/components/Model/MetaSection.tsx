@@ -26,11 +26,11 @@ export function MetaSection() {
   }
 
   return (
-    <Flex justify="center" py="8" px="4">
-      <Flex align="center" gap="8">
+    <Flex justify="center" align="center" py="8" px="4">
+      <Flex align="center" justify="center" gap="8" wrap="wrap">
         <img alt="Economics" src={tankIcon(tank.id)} />
 
-        <Flex gap="6" wrap="wrap">
+        <Flex gap="6" wrap="wrap" align="start" justify="center">
           <Flex direction="column" gap="2">
             <Heading>Overview</Heading>
 
@@ -38,6 +38,7 @@ export function MetaSection() {
               <Flex direction="column">
                 <Text color="gray">Name</Text>
                 {tank.nameFull && <Text color="gray">Full-name</Text>}
+                <Text color="gray">Nation</Text>
                 <Text color="gray">Tier</Text>
                 <Text color="gray">Class</Text>
                 <Text color="gray">Type</Text>
@@ -51,6 +52,20 @@ export function MetaSection() {
               <Flex direction="column" align="end">
                 <Text>{tank.name}</Text>
                 {tank.nameFull && <Text>{tank.nameFull}</Text>}
+                <Text>
+                  <Flex align="center" gap="1">
+                    <img
+                      style={{ width: '1em', height: '1em' }}
+                      alt={tank.nation}
+                      src={asset(`flags/circle/${tank.nation}.webp`)}
+                    />
+                    {
+                      strings.common.nations[
+                        tank.nation as keyof typeof strings.common.nations
+                      ]
+                    }
+                  </Flex>
+                </Text>
                 <Text>{tank.tier}</Text>
                 <Text>
                   <Flex align="center" gap="1">
