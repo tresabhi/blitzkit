@@ -8,6 +8,7 @@ import * as Duel from '../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 import { HistorySection } from './components/HistorySection';
 import { CharacteristicsSection } from './components/Model/CharacteristicsSection';
+import { MetaSection } from './components/Model/MetaSection';
 import { GameModeSection } from './components/Model/GameModeSection';
 import { HeroSection } from './components/Model/HeroSection';
 import { TechTreeSection } from './components/Model/TechTreeSection';
@@ -77,6 +78,7 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <PageWrapper p="0" noMaxWidth color="purple" size={1600}>
       <HeroSection id={id} />
+      <MetaSection />
       <ShotDisplaySection />
       {!exempt && <AdMidSectionResponsive />}
       <TestingSection />
