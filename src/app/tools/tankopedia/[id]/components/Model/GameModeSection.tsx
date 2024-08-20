@@ -87,7 +87,7 @@ export function GameModeSection() {
                     const consumable = awaitedConsumableDefinitions[id];
 
                     return (
-                      <Text color="gray" wrap="nowrap">
+                      <Text color="gray" wrap="nowrap" key={id}>
                         <Flex align="center" gap="1">
                           <img
                             style={{
