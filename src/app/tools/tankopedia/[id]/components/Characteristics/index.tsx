@@ -145,11 +145,10 @@ export function Characteristics() {
 
             <Flex>
               {gun.shells.map((thisShell, shellIndex) => (
-                <Tooltip content={thisShell.name}>
+                <Tooltip content={thisShell.name} key={thisShell.id}>
                   <IconButton
                     color={thisShell.id === shell.id ? undefined : 'gray'}
                     variant="soft"
-                    key={thisShell.id}
                     style={{
                       borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
                       borderBottomLeftRadius: shellIndex === 0 ? undefined : 0,
