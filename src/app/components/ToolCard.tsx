@@ -44,7 +44,8 @@ export function ToolCard({ tool, style, ...props }: ToolCardProps) {
       {...props}
     >
       <Link
-        href={`/tools/${tool.id}`}
+        href={tool.href ?? `/tools/${tool.id}`}
+        target={tool.href ? '_blank' : undefined}
         style={{
           display: 'flex',
           width: '100%',
