@@ -1,6 +1,7 @@
 import { CaretLeftIcon, CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, IconButton, ScrollArea, Text } from '@radix-ui/themes';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
+import { asset } from '../../../../../../../core/blitzkit/asset';
 import { tankDefinitions } from '../../../../../../../core/blitzkit/tankDefinitions';
 import * as Duel from '../../../../../../../stores/duel';
 import { Arrow } from './components/Arrow';
@@ -62,6 +63,14 @@ export function TechTreeSection() {
     () => [...lines[lineIndex]].toReversed(),
     [master, lineIndex],
   );
+  const totalXp = line.reduce(
+    (xp, id) => xp + (awaitedTankDefinitions[id].xp ?? 0),
+    0,
+  );
+  const totalCredits = line.reduce(
+    (credits, id) => credits + awaitedTankDefinitions[id].price.value,
+    0,
+  );
 
   if (
     master.treeType !== 'researchable' ||
@@ -82,36 +91,48 @@ export function TechTreeSection() {
       my="6"
       direction="column"
       align="center"
-      gap="4"
+      gap="0"
       style={{
         backgroundColor: 'var(--color-surface)',
       }}
       py="6"
     >
-      <Flex gap="0" direction="column" align="center">
+      <Flex direction="column" align="center">
         <Heading size="6">Tech tree</Heading>
 
-        {lines.length > 1 && (
-          <Flex align="center" gap="2">
-            <IconButton
-              variant="soft"
-              onClick={() =>
-                setLineIndex((lines.length + lineIndex - 1) % lines.length)
-              }
-            >
-              <CaretLeftIcon />
-            </IconButton>
-            <Text>
-              Route {lineIndex + 1} of {lines.length}
-            </Text>
-            <IconButton
-              variant="soft"
-              onClick={() => setLineIndex((lineIndex + 1) % lines.length)}
-            >
-              <CaretRightIcon />
-            </IconButton>
-          </Flex>
-        )}
+        <Flex gap="4" align="center">
+          <Text color="gray" wrap="nowrap">
+            <Flex gap="1" align="center">
+              <img
+                alt="XP"
+                src={asset('icons/currencies/xp.webp')}
+                style={{
+                  width: '1em',
+                  height: '1em',
+                  objectFit: 'contain',
+                  objectPosition: 'center',
+                }}
+              />
+              {totalXp.toLocaleString()}
+            </Flex>
+          </Text>
+
+          <Text color="gray" wrap="nowrap">
+            <Flex gap="1" align="center">
+              <img
+                alt="Silver"
+                src={asset('icons/currencies/silver.webp')}
+                style={{
+                  width: '1em',
+                  height: '1em',
+                  objectFit: 'contain',
+                  objectPosition: 'center',
+                }}
+              />
+              {totalCredits.toLocaleString()}
+            </Flex>
+          </Text>
+        </Flex>
       </Flex>
 
       <ScrollArea type="hover" scrollbars="horizontal" ref={container}>
@@ -140,6 +161,32 @@ export function TechTreeSection() {
           )}
         </Flex>
       </ScrollArea>
+
+      <Flex>
+        {lines.length > 1 && (
+          <Flex align="center" gap="2">
+            <IconButton
+              size="2"
+              variant="soft"
+              onClick={() =>
+                setLineIndex((lines.length + lineIndex - 1) % lines.length)
+              }
+            >
+              <CaretLeftIcon />
+            </IconButton>
+            <Text>
+              Route {lineIndex + 1} of {lines.length}
+            </Text>
+            <IconButton
+              size="2"
+              variant="soft"
+              onClick={() => setLineIndex((lineIndex + 1) % lines.length)}
+            >
+              <CaretRightIcon />
+            </IconButton>
+          </Flex>
+        )}
+      </Flex>
     </Flex>
   );
 }
