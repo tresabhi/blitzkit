@@ -8,7 +8,7 @@ import * as App from '../../../../../../stores/app';
 import * as Duel from '../../../../../../stores/duel';
 
 export function MetaSection() {
-  const developerMode = App.use((state) => state.developerMode);
+  const developerMode = App.useDeferred(false, (state) => state.developerMode);
   const tank = Duel.use((state) => state.protagonist.tank);
   const rawPrice =
     typeof tank.price === 'number' ? tank.price : tank.price.value;

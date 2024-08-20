@@ -26,8 +26,8 @@ export interface App {
   policiesAgreementIndex: number;
 }
 
-export const { Provider, use, useMutation, useStore } = createNextSafeStore(
-  () =>
+export const { Provider, use, useMutation, useStore, useDeferred } =
+  createNextSafeStore(() =>
     create<App>()(
       persist(
         (set) => ({
@@ -38,4 +38,4 @@ export const { Provider, use, useMutation, useStore } = createNextSafeStore(
         { name: 'app', merge: (a, b) => merge(b, a) },
       ),
     ),
-);
+  );

@@ -70,12 +70,11 @@ export function Options({ thicknessRange }: OptionsProps) {
   const environment = TankopediaPersistent.use(
     (state) => state.model.visual.environment,
   );
-  const developerMode = App.use((state) => state.developerMode);
+  const developerMode = App.useDeferred(false, (state) => state.developerMode);
   const antagonistGun = Duel.use((state) => state.antagonist.gun);
   const antagonistShell = Duel.use((state) => state.antagonist.shell);
   const [antagonistSelectorOpen, setAntagonistSelectorOpen] = useState(false);
   const antagonistTank = Duel.use((state) => state.antagonist.tank);
-  const antagonistTurret = Duel.use((state) => state.antagonist.turret);
   const hasCalibratedShells = useEquipment(103, true);
   const [tab, setTab] = useState('search');
   const mutateDuel = Duel.useMutation();
