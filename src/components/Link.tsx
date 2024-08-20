@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { forwardRef } from 'react';
 
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
-  ({ href, onClick, ...props }, ref) => {
+  ({ href, onClick, target, ...props }, ref) => {
     const router = useRouter();
 
     return (
@@ -15,7 +15,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
         onClick={(event) => {
           event.preventDefault();
           if (href) {
-            if (event.ctrlKey || event.metaKey) {
+            if (event.ctrlKey || event.metaKey || target === '_blank') {
               window.open(href);
             } else {
               router.push(href);

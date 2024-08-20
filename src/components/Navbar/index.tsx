@@ -95,7 +95,7 @@ export default function Navbar() {
                       color="gray"
                       highContrast={selected}
                       size="2"
-                      href={`tools/${tool.id}`}
+                      href={`/tools/${tool.id}`}
                       underline={selected ? 'always' : 'hover'}
                     >
                       {tool.title}
@@ -121,7 +121,7 @@ export default function Navbar() {
               <Link
                 style={{ display: 'flex', alignContent: 'center' }}
                 color="gray"
-                href="https://discord.gg/nDt7AjGJQH"
+                href="https://www.patreon.com/tresabhi"
                 underline="none"
                 target="_blank"
                 onClick={() => setShowHamburgerMenu(false)}
