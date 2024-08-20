@@ -21,7 +21,7 @@ import {
   Text,
 } from '@radix-ui/themes';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { REGIONS } from '../../constants/regions';
 import { homeTool, TOOLS } from '../../constants/tools';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
@@ -88,7 +88,7 @@ export default function Navbar() {
                 const selected = pathname.startsWith(`/tools/${tool.id}`);
 
                 return (
-                  <>
+                  <Fragment key={tool.title}>
                     {index > 0 && <Separator orientation="vertical" size="1" />}
                     <Link
                       onClick={() => setShowHamburgerMenu(false)}
@@ -96,12 +96,11 @@ export default function Navbar() {
                       highContrast={selected}
                       size="2"
                       href={`tools/${tool.id}`}
-                      key={tool.title}
                       underline={selected ? 'always' : 'hover'}
                     >
                       {tool.title}
                     </Link>
-                  </>
+                  </Fragment>
                 );
               })}
             </Flex>
@@ -272,6 +271,7 @@ export default function Navbar() {
           >
             {tools.map((tool) => (
               <Flex
+                key={tool.id}
                 onClick={() => setShowHamburgerMenu(false)}
                 style={{
                   position: 'relative',
