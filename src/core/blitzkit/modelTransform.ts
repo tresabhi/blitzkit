@@ -1,3 +1,4 @@
+import { invalidate } from '@react-three/fiber';
 import { EventManager } from './eventManager';
 
 export interface ModelTransformEventData {
@@ -6,3 +7,4 @@ export interface ModelTransformEventData {
 }
 
 export const modelTransformEvent = new EventManager<ModelTransformEventData>();
+modelTransformEvent.on(() => invalidate());
