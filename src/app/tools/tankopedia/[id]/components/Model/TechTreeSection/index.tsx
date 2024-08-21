@@ -64,7 +64,12 @@ export function TechTreeSection() {
     [master, lineIndex],
   );
   const totalXp = line.reduce(
-    (xp, id) => xp + (awaitedTankDefinitions[id].xp ?? 0),
+    (xp, id) =>
+      xp +
+      (awaitedTankDefinitions[id].xp === undefined ||
+      awaitedTankDefinitions[id].tier === 1
+        ? 0
+        : awaitedTankDefinitions[id].xp),
     0,
   );
   const totalCredits = line.reduce(
@@ -100,39 +105,41 @@ export function TechTreeSection() {
       <Flex direction="column" align="center">
         <Heading size="6">Tech tree</Heading>
 
-        <Flex gap="4" align="center">
-          <Text color="gray" wrap="nowrap">
-            <Flex gap="1" align="center">
-              <img
-                alt="XP"
-                src={asset('icons/currencies/xp.webp')}
-                style={{
-                  width: '1em',
-                  height: '1em',
-                  objectFit: 'contain',
-                  objectPosition: 'center',
-                }}
-              />
-              {totalXp.toLocaleString()}
-            </Flex>
-          </Text>
+        {master.tier > 1 && (
+          <Flex gap="4" align="center">
+            <Text color="gray" wrap="nowrap">
+              <Flex gap="1" align="center">
+                <img
+                  alt="XP"
+                  src={asset('icons/currencies/xp.webp')}
+                  style={{
+                    width: '1em',
+                    height: '1em',
+                    objectFit: 'contain',
+                    objectPosition: 'center',
+                  }}
+                />
+                {totalXp.toLocaleString()}
+              </Flex>
+            </Text>
 
-          <Text color="gray" wrap="nowrap">
-            <Flex gap="1" align="center">
-              <img
-                alt="Silver"
-                src={asset('icons/currencies/silver.webp')}
-                style={{
-                  width: '1em',
-                  height: '1em',
-                  objectFit: 'contain',
-                  objectPosition: 'center',
-                }}
-              />
-              {totalCredits.toLocaleString()}
-            </Flex>
-          </Text>
-        </Flex>
+            <Text color="gray" wrap="nowrap">
+              <Flex gap="1" align="center">
+                <img
+                  alt="Silver"
+                  src={asset('icons/currencies/silver.webp')}
+                  style={{
+                    width: '1em',
+                    height: '1em',
+                    objectFit: 'contain',
+                    objectPosition: 'center',
+                  }}
+                />
+                {totalCredits.toLocaleString()}
+              </Flex>
+            </Text>
+          </Flex>
+        )}
       </Flex>
 
       <ScrollArea type="hover" scrollbars="horizontal" ref={container}>
