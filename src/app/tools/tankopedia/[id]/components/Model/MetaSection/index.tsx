@@ -32,7 +32,6 @@ export function MetaSection() {
               Overview
             </Heading>
 
-            <Listing label="Name">{tank.name}</Listing>
             {tank.nameFull && (
               <Listing label="Full-name">{tank.nameFull}</Listing>
             )}
