@@ -17,6 +17,7 @@ import {
   Tabs,
   Text,
 } from '@radix-ui/themes';
+import { invalidate } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
 import { ModuleButton } from '../../../../../../../components/ModuleButtons/ModuleButton';
 import { SmallTankIcon } from '../../../../../../../components/SmallTankIcon';
@@ -216,6 +217,7 @@ export function Options({ thicknessRange }: OptionsProps) {
                   marginTop: shellIndex === 0 ? 0 : -1,
                 }}
                 onClick={() => {
+                  invalidate();
                   mutateDuel((draft) => {
                     draft.antagonist.shell = thisShell;
                   });
