@@ -82,7 +82,7 @@ export function MetaSection() {
             </Heading>
 
             <Listing
-              label={`${tank.price.type === 'credits' ? 'Purchase' : 'Restoration'} price`}
+              label={`${tank.treeType === 'researchable' ? 'Purchase' : 'Restoration'} price`}
             >
               <Flex align="center" gap="1">
                 {tank.price.value.toLocaleString()}
