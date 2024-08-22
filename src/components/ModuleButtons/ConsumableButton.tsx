@@ -25,6 +25,7 @@ export function ConsumableButton({
 
   return (
     <GenericTankComponentButton
+      style={{ width: '6rem' }}
       tooltip={awaitedConsumableDefinitions[consumable].name}
       icon={asset(`icons/consumables/${consumable}.webp`)}
       {...props}

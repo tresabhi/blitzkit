@@ -27,7 +27,7 @@ export function MetaSection() {
           justify="center"
           direction={{ initial: 'column', sm: 'row' }}
         >
-          <Flex direction="column" minWidth="12rem">
+          <Flex direction="column" minWidth="15rem">
             <Heading mb="2" align={{ initial: 'center', sm: 'left' }}>
               Overview
             </Heading>

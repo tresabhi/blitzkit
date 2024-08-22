@@ -10,7 +10,12 @@ export function ConfigurationChildWrapper({
   ...props
 }: ConfigurationChildWrapperProps) {
   return (
-    <Flex gap="2" direction="column" {...props}>
+    <Flex
+      gap="2"
+      direction="column"
+      align={{ initial: 'center', sm: 'start' }}
+      {...props}
+    >
       {children}
     </Flex>
   );

@@ -509,7 +509,7 @@ export function CompareTable({ stats }: CompareTableProps) {
                           <ConsumablesManager
                             consumables={consumablesList}
                             selected={consumables}
-                            onChange={(consumables) => {
+                            onConsumablesChange={(consumables) => {
                               mutateCompareEphemeral((draft) => {
                                 draft.members[index].consumables = consumables;
                               });

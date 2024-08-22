@@ -1,30 +1,31 @@
-import { Flex } from '@radix-ui/themes';
+import { Flex, FlexProps } from '@radix-ui/themes';
 import { ConsumableEntry } from '../core/blitzkit/consumableDefinitions';
 import { ConsumableButton } from './ModuleButtons/ConsumableButton';
 
-interface ConsumablesManagerProps {
+type ConsumablesManagerProps = FlexProps & {
   consumables: ConsumableEntry[];
   selected: number[];
-  onChange?: (consumables: number[]) => void;
+  onConsumablesChange?: (consumables: number[]) => void;
   disabled?: boolean;
   timers?: boolean;
   hasHighEndConsumables?: boolean;
   hasConsumableDeliverySystem?: boolean;
   cooldownBooster?: number;
-}
+};
 
 export function ConsumablesManager({
   consumables,
   selected,
-  onChange,
+  onConsumablesChange,
   disabled,
   timers,
   hasConsumableDeliverySystem,
   cooldownBooster,
   hasHighEndConsumables,
+  ...props
 }: ConsumablesManagerProps) {
   return (
-    <Flex wrap="wrap" gap="2">
+    <Flex wrap="wrap" gap="2" {...props}>
       {consumables.map((consumable, index) => {
         const isSelected = selected.some((id) => id === consumable.id);
 
@@ -50,7 +51,7 @@ export function ConsumablesManager({
             consumable={consumable.id}
             selected={isSelected}
             onClick={() => {
-              if (!onChange) return;
+              if (!onConsumablesChange) return;
 
               const draft = [...selected];
 
@@ -60,7 +61,7 @@ export function ConsumablesManager({
                 draft.push(consumable.id);
               }
 
-              onChange(draft);
+              onConsumablesChange(draft);
             }}
           />
         );

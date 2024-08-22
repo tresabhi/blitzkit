@@ -214,9 +214,7 @@ export function Modules() {
               align="center"
               direction="column"
               gap="2"
-              style={{
-                position: 'relative',
-              }}
+              position="relative"
             >
               {unlock.cost.value > 0 && (
                 <>

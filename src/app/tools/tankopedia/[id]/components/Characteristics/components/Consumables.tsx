@@ -77,11 +77,12 @@ export function Consumables() {
         hasConsumableDeliverySystem={hasConsumableDeliverySystem}
         hasHighEndConsumables={hasHighEndConsumables}
         timers
-        onChange={(consumables) => {
+        onConsumablesChange={(consumables) => {
           mutateDuel((draft) => {
             draft.protagonist.consumables = consumables;
           });
         }}
+        justify={{ initial: 'center', sm: 'start' }}
       />
     </ConfigurationChildWrapper>
   );
