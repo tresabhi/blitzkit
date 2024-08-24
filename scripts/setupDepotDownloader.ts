@@ -18,13 +18,13 @@ await fetch(
       }>,
   )
   .then(({ assets }) => {
-    const asset = assets.find(({ name }) => name.includes('windows-x64'));
+    const asset = assets.find(({ name }) => name.includes('linux-x64'));
     if (!asset) throw new Error('No asset found');
     return fetch(asset.browser_download_url);
   })
   .then((response) => response.arrayBuffer())
   .then((arrayBuffer) =>
-    writeFile('temp/depotDownloader.zip', Buffer.from(arrayBuffer)),
+    writeFile('temp/depotDownloader.zip', new Uint8Array(arrayBuffer)),
   );
 
 console.log('Unzipping...');
