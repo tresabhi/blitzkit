@@ -29,11 +29,12 @@ jobs:
         run: bun scripts/setupDepotDownloader.ts
 
       - name: Run DepotDownloader
-        run: ./temp/depotDownloader/DepotDownloader -os windows -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
+        run: |
+          git update-index --chmod=+x ./temp/depotDownloader/DepotDownloader
+          ./temp/depotDownloader/DepotDownloader -os windows -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
 
       - name: Apply patches
         run: DISCORD_CLIENT_ID=${{ secrets.DISCORD_CLIENT_ID }} GH_TOKEN=${{ secrets.GH_TOKEN }}  DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}  DATABASE_URL=${{ secrets.DATABASE_URL }}  WOTB_DLC_CDN=${{ secrets.WOTB_DLC_CDN }} bun scripts/applyPatches.ts --depot
 
       - name: Build assets
-        run: |
-          DISCORD_CLIENT_ID=${{ secrets.DISCORD_CLIENT_ID }} GH_TOKEN=${{ secrets.GH_TOKEN }}  DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}  DATABASE_URL=${{ secrets.DATABASE_URL }}  VIDEOS_SHEET=${{ secrets.VIDEOS_SHEET }}  GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} bun build:assets --all-targets --depot --production
+        run: DISCORD_CLIENT_ID=${{ secrets.DISCORD_CLIENT_ID }} GH_TOKEN=${{ secrets.GH_TOKEN }}  DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}  DATABASE_URL=${{ secrets.DATABASE_URL }}  VIDEOS_SHEET=${{ secrets.VIDEOS_SHEET }}  GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} bun build:assets --all-targets --depot --production
