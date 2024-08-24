@@ -30,8 +30,7 @@ jobs:
 
       - name: Run DepotDownloader
         run: |
-          git add temp -f
-          git update-index --chmod=+x ./temp/depotDownloader/DepotDownloader
+          chmod +x ./temp/depotDownloader/DepotDownloader
           ./temp/depotDownloader/DepotDownloader -os windows -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
 
       - name: Apply patches
