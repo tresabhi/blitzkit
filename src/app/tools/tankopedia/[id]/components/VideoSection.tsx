@@ -49,6 +49,7 @@ export function VideoSection() {
                     borderRadius: 'var(--radius-3)',
                     overflow: 'hidden',
                     background: `url(${image})`,
+                    backgroundPosition: '0 18px',
                     backgroundSize: 'cover',
                   }}
                 >
@@ -63,6 +64,7 @@ export function VideoSection() {
                   />
                   <Flex
                     p="2"
+                    width="100%"
                     justify="center"
                     style={{
                       backdropFilter: 'blur(4rem)',
