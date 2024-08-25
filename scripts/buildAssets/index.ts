@@ -24,7 +24,6 @@ import { skillIcons } from './skillIcons';
 import { tankArmors } from './tankArmors';
 import { tankIcons } from './tankIcons';
 import { tankModels } from './tankModels';
-import { videos } from './videos';
 
 if (!targets && !allTargets) throw new Error('No target(s) specified');
 
@@ -32,7 +31,6 @@ const methods = [
   gameModeBanners,
   definitions,
   tankIcons,
-  videos,
   currencies,
   skillIcons,
   flags,

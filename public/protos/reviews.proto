@@ -7,7 +7,8 @@ message Reviews {
 }
 
 message Review {
-  repeated Video video = 1;
+  float last_updated = 1;
+  repeated Video videos = 2;
 }
 
 message Video {

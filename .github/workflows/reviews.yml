@@ -1,0 +1,24 @@
+name: Reviews
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * 2
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Find reviews
+        run: DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} GH_TOKEN=${{ secrets.GH_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} bun scripts/reviews.ts

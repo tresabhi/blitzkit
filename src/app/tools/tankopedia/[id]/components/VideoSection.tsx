@@ -2,13 +2,15 @@ import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { Callout, Flex, Heading, Link } from '@radix-ui/themes';
 import { use } from 'react';
 import PageWrapper from '../../../../../components/PageWrapper';
-import { videoDefinitions } from '../../../../../core/blitzkit/videos';
+import { reviews } from '../../../../../core/blitzkit/reviews';
 import * as Duel from '../../../../../stores/duel';
 
 export function VideoSection() {
   const tank = Duel.use((state) => state.protagonist.tank);
-  const awaitedVideoDefinitions = use(videoDefinitions);
-  const videos = awaitedVideoDefinitions[tank.id]?.videos ?? [];
+  const awaitedReviews = use(reviews);
+  const videos = awaitedReviews.reviews[tank.id]?.videos;
+
+  if (!videos) return null;
 
   return (
     <PageWrapper noFlex1>
@@ -29,13 +31,13 @@ export function VideoSection() {
         <Flex gap="3" wrap="wrap">
           {videos.map((video) => (
             <Link
-              key={video}
-              href={`https://www.youtube.com/watch?v=${video}`}
+              key={video.id}
+              href={`https://www.youtube.com/watch?v=${video.id}`}
               target="_blank"
             >
               <img
                 alt="Video thumbnail"
-                src={`https://i.ytimg.com/vi/${video}/hqdefault.jpg`}
+                src={`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`}
                 style={{
                   aspectRatio: '16 / 9',
                   objectFit: 'cover',
