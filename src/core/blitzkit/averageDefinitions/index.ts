@@ -56,7 +56,7 @@ export const averageDefinitions = fetch(asset('averages/manifest.json'), {
   .then((response) => response.arrayBuffer())
   .then((buffer) =>
     decode<AverageDefinitions>(
-      'blitzkit.AverageDefinitions',
+      'blitzkit/blitzkit.AverageDefinitions',
       new Uint8Array(buffer),
     ),
   );

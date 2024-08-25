@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package blitzkit;
+
+message Reviews {
+  map<uint32, Review> reviews = 1;
+}
+
+message Review {
+  repeated Video video = 1;
+}
+
+message Video {
+  string id = 1;
+  string author = 2;
+}
