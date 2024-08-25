@@ -16,6 +16,7 @@ import {
   Strong,
   Tabs,
   Text,
+  Tooltip,
 } from '@radix-ui/themes';
 import { invalidate } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
@@ -366,21 +367,29 @@ export function Options({ thicknessRange }: OptionsProps) {
               });
             }}
           >
-            <SegmentedControl.Item value={`${TankopediaDisplay.Model}`}>
-              <Flex height="100%" align="center">
-                <img src={imgur('jAdYf0m')} style={{ height: '1.25em' }} />
-              </Flex>
-            </SegmentedControl.Item>
-            <SegmentedControl.Item value={`${TankopediaDisplay.DynamicArmor}`}>
-              <Flex height="100%" align="center">
-                <img src={imgur('oe4Cq0g')} style={{ height: '1.25em' }} />
-              </Flex>
-            </SegmentedControl.Item>
-            <SegmentedControl.Item value={`${TankopediaDisplay.StaticArmor}`}>
-              <Flex height="100%" align="center">
-                <img src={imgur('VQ4uDno')} style={{ height: '1.25em' }} />
-              </Flex>
-            </SegmentedControl.Item>
+            <Tooltip content="Model">
+              <SegmentedControl.Item value={`${TankopediaDisplay.Model}`}>
+                <Flex height="100%" align="center">
+                  <img src={imgur('jAdYf0m')} style={{ height: '1.25em' }} />
+                </Flex>
+              </SegmentedControl.Item>
+            </Tooltip>
+            <Tooltip content="Dynamic armor">
+              <SegmentedControl.Item
+                value={`${TankopediaDisplay.DynamicArmor}`}
+              >
+                <Flex height="100%" align="center">
+                  <img src={imgur('oe4Cq0g')} style={{ height: '1.25em' }} />
+                </Flex>
+              </SegmentedControl.Item>
+            </Tooltip>
+            <Tooltip content="Static armor">
+              <SegmentedControl.Item value={`${TankopediaDisplay.StaticArmor}`}>
+                <Flex height="100%" align="center">
+                  <img src={imgur('VQ4uDno')} style={{ height: '1.25em' }} />
+                </Flex>
+              </SegmentedControl.Item>
+            </Tooltip>
           </SegmentedControl.Root>
 
           <DropdownMenu.Root>
