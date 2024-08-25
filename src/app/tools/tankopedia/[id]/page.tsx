@@ -82,14 +82,14 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <PageWrapper p="0" noMaxWidth color="purple" size={1600} gap="9">
       <HeroSection id={id} />
-      <MetaSection />
       <ShotDisplaySection />
+      <MetaSection />
       {!exempt && <AdMidSectionResponsive />}
+      <TechTreeSection />
       <TestingSection />
       <CharacteristicsSection />
       {!exempt && <AdMidSectionResponsive />}
       <GameModeSection />
-      <TechTreeSection />
       <VideoSection />
       <HistorySection />
       {!exempt && <AdMidSectionResponsive mb="6" />}

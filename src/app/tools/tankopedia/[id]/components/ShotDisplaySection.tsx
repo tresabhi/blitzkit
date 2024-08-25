@@ -8,13 +8,7 @@ export function ShotDisplaySection() {
   if (!shot) return null;
 
   return (
-    <Flex
-      justify="center"
-      display={{
-        initial: 'flex',
-        sm: 'none',
-      }}
-    >
+    <Flex justify="center" display={{ initial: 'flex', sm: 'none' }}>
       <ShotDisplayCard shot={shot} />
     </Flex>
   );

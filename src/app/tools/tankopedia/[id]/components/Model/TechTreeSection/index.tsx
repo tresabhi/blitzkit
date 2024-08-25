@@ -7,28 +7,6 @@ import * as Duel from '../../../../../../../stores/duel';
 import { Arrow } from './components/Arrow';
 import { Node } from './components/Node';
 
-// function Ancestry({ line }: { line: Line }) {
-//   return (
-//     <Card>
-//       <Flex align="center">
-//         {line.map((node) => {
-//           if (typeof node === 'number') {
-//             return <Node key={node} id={node} />;
-//           } else {
-//             return (
-//               <Flex direction="column">
-//                 {node.map((line) => (
-//                   <Ancestry line={line} />
-//                 ))}
-//               </Flex>
-//             );
-//           }
-//         })}
-//       </Flex>
-//     </Card>
-//   );
-// }
-
 type Line = number[];
 
 export function TechTreeSection() {
@@ -93,13 +71,10 @@ export function TechTreeSection() {
 
   return (
     <Flex
-      my="6"
       direction="column"
       align="center"
       gap="0"
-      style={{
-        backgroundColor: 'var(--color-surface)',
-      }}
+      style={{ backgroundColor: 'var(--color-surface)' }}
       py="6"
     >
       <Flex direction="column" align="center">
