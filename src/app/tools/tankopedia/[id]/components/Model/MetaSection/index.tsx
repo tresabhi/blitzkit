@@ -13,7 +13,7 @@ export function MetaSection() {
   const ClassIcon = classIcons[tank.class];
 
   return (
-    <Flex justify="center" align="center" py="8" px="4">
+    <Flex justify="center" align="center" px="4">
       <Flex
         align="center"
         justify="center"
@@ -80,6 +80,18 @@ export function MetaSection() {
               Economics
             </Heading>
 
+            {tank.treeType === 'premium' && (
+              <Listing label="Purchase price">
+                <Flex align="center" gap="1">
+                  {tank.price.value / 400}
+                  <img
+                    style={{ width: '1em', height: '1em' }}
+                    alt="gold"
+                    src={asset('icons/currencies/gold.webp')}
+                  />
+                </Flex>
+              </Listing>
+            )}
             <Listing
               label={`${tank.treeType === 'researchable' ? 'Purchase' : 'Restoration'} price`}
             >
