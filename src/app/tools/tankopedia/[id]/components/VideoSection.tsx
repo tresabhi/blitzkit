@@ -81,7 +81,11 @@ export function VideoSection() {
             );
           })}
 
-          <Link href="discord.gg/nDt7AjGJQH" target="_blank" color="gray">
+          <Link
+            href="https://discord.gg/nDt7AjGJQH"
+            target="_blank"
+            color="gray"
+          >
             <Flex
               align="center"
               justify="center"
