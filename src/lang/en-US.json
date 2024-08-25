@@ -58,6 +58,13 @@
       "AT-SPG": "TD"
     },
 
+    "tank_class_medium": {
+      "lightTank": "Light",
+      "mediumTank": "Medium",
+      "heavyTank": "Heavy",
+      "AT-SPG": "Tank destroyer"
+    },
+
     "tree_type": {
       "researchable": "Tech tree",
       "premium": "Premium",

@@ -1,7 +1,7 @@
 'use client';
 
 import { ReloadIcon } from '@radix-ui/react-icons';
-import { Box, Flex, IconButton, Text } from '@radix-ui/themes';
+import { Box, Flex, IconButton, Text, Tooltip } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { use } from 'react';
 import { classIcons } from '../../../../components/ClassIcon';
@@ -14,6 +14,7 @@ import { asset } from '../../../../core/blitzkit/asset';
 import { gameDefinitions } from '../../../../core/blitzkit/gameDefinitions';
 import { Tier } from '../../../../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
+import strings from '../../../../lang/en-US.json';
 import * as TankFilters from '../../../../stores/tankFilters';
 
 interface FilterControlProps {
@@ -39,24 +40,26 @@ export function FilterControl({ compact }: FilterControlProps) {
             const selected = filters.tiers?.includes(tier);
 
             return (
-              <IconButton
-                key={tier}
-                variant={selected ? 'solid' : 'soft'}
-                radius="none"
-                color={selected ? undefined : 'gray'}
-                highContrast
-                onClick={() =>
-                  mutateTankFilters((draft) => {
-                    if (draft.tiers?.includes(tier)) {
-                      draft.tiers = draft.tiers?.filter((t) => t !== tier);
-                    } else {
-                      draft.tiers = [...(draft.tiers ?? []), tier];
-                    }
-                  })
-                }
-              >
-                <Text size="2">{TIER_ROMAN_NUMERALS[tier]}</Text>
-              </IconButton>
+              <Tooltip key={tier} content={`Tier ${tier}`}>
+                <IconButton
+                  key={tier}
+                  variant={selected ? 'solid' : 'soft'}
+                  radius="none"
+                  color={selected ? undefined : 'gray'}
+                  highContrast
+                  onClick={() =>
+                    mutateTankFilters((draft) => {
+                      if (draft.tiers?.includes(tier)) {
+                        draft.tiers = draft.tiers?.filter((t) => t !== tier);
+                      } else {
+                        draft.tiers = [...(draft.tiers ?? []), tier];
+                      }
+                    })
+                  }
+                >
+                  <Text size="2">{TIER_ROMAN_NUMERALS[tier]}</Text>
+                </IconButton>
+              </Tooltip>
             );
           })}
         </Flex>
@@ -66,24 +69,26 @@ export function FilterControl({ compact }: FilterControlProps) {
             const selected = filters.tiers?.includes(tier);
 
             return (
-              <IconButton
-                key={tier}
-                variant={selected ? 'solid' : 'soft'}
-                radius="none"
-                color={selected ? undefined : 'gray'}
-                highContrast
-                onClick={() =>
-                  mutateTankFilters((draft) => {
-                    if (draft.tiers?.includes(tier)) {
-                      draft.tiers = draft.tiers?.filter((t) => t !== tier);
-                    } else {
-                      draft.tiers = [...(draft.tiers ?? []), tier];
-                    }
-                  })
-                }
-              >
-                <Text size="2">{TIER_ROMAN_NUMERALS[tier]}</Text>
-              </IconButton>
+              <Tooltip key={tier} content={`Tier ${tier}`}>
+                <IconButton
+                  key={tier}
+                  variant={selected ? 'solid' : 'soft'}
+                  radius="none"
+                  color={selected ? undefined : 'gray'}
+                  highContrast
+                  onClick={() =>
+                    mutateTankFilters((draft) => {
+                      if (draft.tiers?.includes(tier)) {
+                        draft.tiers = draft.tiers?.filter((t) => t !== tier);
+                      } else {
+                        draft.tiers = [...(draft.tiers ?? []), tier];
+                      }
+                    })
+                  }
+                >
+                  <Text size="2">{TIER_ROMAN_NUMERALS[tier]}</Text>
+                </IconButton>
+              </Tooltip>
             );
           })}
         </Flex>
@@ -101,29 +106,37 @@ export function FilterControl({ compact }: FilterControlProps) {
               const selected = filters.nations?.includes(nation);
 
               return (
-                <IconButton
-                  key={nation}
-                  variant={selected ? 'solid' : 'soft'}
-                  color={selected ? undefined : 'gray'}
-                  highContrast
-                  radius="none"
-                  onClick={() =>
-                    mutateTankFilters((draft) => {
-                      if (draft.nations?.includes(nation)) {
-                        draft.nations = draft.nations?.filter(
-                          (n) => n !== nation,
-                        );
-                      } else {
-                        draft.nations = [...(draft.nations ?? []), nation];
-                      }
-                    })
+                <Tooltip
+                  content={
+                    strings.common.nations[
+                      nation as keyof typeof strings.common.nations
+                    ]
                   }
+                  key={nation}
                 >
-                  <img
-                    style={{ width: '1em', height: '1em' }}
-                    src={asset(`flags/circle/${nation}.webp`)}
-                  />
-                </IconButton>
+                  <IconButton
+                    variant={selected ? 'solid' : 'soft'}
+                    color={selected ? undefined : 'gray'}
+                    highContrast
+                    radius="none"
+                    onClick={() =>
+                      mutateTankFilters((draft) => {
+                        if (draft.nations?.includes(nation)) {
+                          draft.nations = draft.nations?.filter(
+                            (n) => n !== nation,
+                          );
+                        } else {
+                          draft.nations = [...(draft.nations ?? []), nation];
+                        }
+                      })
+                    }
+                  >
+                    <img
+                      style={{ width: '1em', height: '1em' }}
+                      src={asset(`flags/circle/${nation}.webp`)}
+                    />
+                  </IconButton>
+                </Tooltip>
               );
             })}
         </Flex>
@@ -134,30 +147,39 @@ export function FilterControl({ compact }: FilterControlProps) {
               const selected = filters.nations?.includes(nation);
 
               return (
-                <IconButton
-                  key={nation}
-                  style={{ flex: 1 }}
-                  variant={selected ? 'solid' : 'soft'}
-                  color={selected ? undefined : 'gray'}
-                  highContrast
-                  radius="none"
-                  onClick={() =>
-                    mutateTankFilters((draft) => {
-                      if (draft.nations?.includes(nation)) {
-                        draft.nations = draft.nations?.filter(
-                          (n) => n !== nation,
-                        );
-                      } else {
-                        draft.nations = [...(draft.nations ?? []), nation];
-                      }
-                    })
+                <Tooltip
+                  content={
+                    strings.common.nations[
+                      nation as keyof typeof strings.common.nations
+                    ]
                   }
+                  key={nation}
                 >
-                  <img
-                    style={{ width: '1em', height: '1em' }}
-                    src={asset(`flags/circle/${nation}.webp`)}
-                  />
-                </IconButton>
+                  <IconButton
+                    key={nation}
+                    style={{ flex: 1 }}
+                    variant={selected ? 'solid' : 'soft'}
+                    color={selected ? undefined : 'gray'}
+                    highContrast
+                    radius="none"
+                    onClick={() =>
+                      mutateTankFilters((draft) => {
+                        if (draft.nations?.includes(nation)) {
+                          draft.nations = draft.nations?.filter(
+                            (n) => n !== nation,
+                          );
+                        } else {
+                          draft.nations = [...(draft.nations ?? []), nation];
+                        }
+                      })
+                    }
+                  >
+                    <img
+                      style={{ width: '1em', height: '1em' }}
+                      src={asset(`flags/circle/${nation}.webp`)}
+                    />
+                  </IconButton>
+                </Tooltip>
               );
             })}
         </Flex>
@@ -173,26 +195,30 @@ export function FilterControl({ compact }: FilterControlProps) {
           const selected = filters.classes?.includes(tankClass);
 
           return (
-            <IconButton
+            <Tooltip
+              content={strings.common.tank_class_medium[tankClass]}
               key={tankClass}
-              variant={selected ? 'solid' : 'soft'}
-              radius="none"
-              color={selected ? undefined : 'gray'}
-              highContrast
-              onClick={() =>
-                mutateTankFilters((draft) => {
-                  if (draft.classes?.includes(tankClass)) {
-                    draft.classes = draft.classes?.filter(
-                      (c) => c !== tankClass,
-                    );
-                  } else {
-                    draft.classes = [...(draft.classes ?? []), tankClass];
-                  }
-                })
-              }
             >
-              <Icon style={{ width: '1em', height: '1em' }} />
-            </IconButton>
+              <IconButton
+                variant={selected ? 'solid' : 'soft'}
+                radius="none"
+                color={selected ? undefined : 'gray'}
+                highContrast
+                onClick={() =>
+                  mutateTankFilters((draft) => {
+                    if (draft.classes?.includes(tankClass)) {
+                      draft.classes = draft.classes?.filter(
+                        (c) => c !== tankClass,
+                      );
+                    } else {
+                      draft.classes = [...(draft.classes ?? []), tankClass];
+                    }
+                  })
+                }
+              >
+                <Icon style={{ width: '1em', height: '1em' }} />
+              </IconButton>
+            </Tooltip>
           );
         })}
       </Flex>
@@ -202,67 +228,75 @@ export function FilterControl({ compact }: FilterControlProps) {
         style={{ borderRadius: 'var(--radius-full)' }}
         direction={compact ? 'column' : { sm: 'row', initial: 'column' }}
       >
-        <IconButton
-          variant={filters.types?.includes('researchable') ? 'solid' : 'soft'}
-          radius="none"
-          color={filters.types?.includes('researchable') ? undefined : 'gray'}
-          highContrast
-          onClick={() =>
-            mutateTankFilters((draft) => {
-              if (draft.types?.includes('researchable')) {
-                draft.types = draft.types?.filter((t) => t !== 'researchable');
-              } else {
-                draft.types = [...(draft.types ?? []), 'researchable'];
-              }
-            })
-          }
-        >
-          <ResearchedIcon style={{ width: '1em', height: '1em' }} />
-        </IconButton>
-        <IconButton
-          variant={filters.types?.includes('premium') ? 'solid' : 'soft'}
-          radius="none"
-          color={filters.types?.includes('premium') ? 'amber' : 'gray'}
-          highContrast
-          onClick={() =>
-            mutateTankFilters((draft) => {
-              if (draft.types?.includes('premium')) {
-                draft.types = draft.types?.filter((t) => t !== 'premium');
-              } else {
-                draft.types = [...(draft.types ?? []), 'premium'];
-              }
-            })
-          }
-        >
-          <Text
-            color={filters.types?.includes('premium') ? undefined : 'amber'}
-            style={{ display: 'flex', justifyContent: 'center' }}
+        <Tooltip content="Researchable">
+          <IconButton
+            variant={filters.types?.includes('researchable') ? 'solid' : 'soft'}
+            radius="none"
+            color={filters.types?.includes('researchable') ? undefined : 'gray'}
+            highContrast
+            onClick={() =>
+              mutateTankFilters((draft) => {
+                if (draft.types?.includes('researchable')) {
+                  draft.types = draft.types?.filter(
+                    (t) => t !== 'researchable',
+                  );
+                } else {
+                  draft.types = [...(draft.types ?? []), 'researchable'];
+                }
+              })
+            }
           >
             <ResearchedIcon style={{ width: '1em', height: '1em' }} />
-          </Text>
-        </IconButton>
-        <IconButton
-          variant={filters.types?.includes('collector') ? 'solid' : 'soft'}
-          radius="none"
-          color={filters.types?.includes('collector') ? 'blue' : 'gray'}
-          highContrast
-          onClick={() =>
-            mutateTankFilters((draft) => {
-              if (draft.types?.includes('collector')) {
-                draft.types = draft.types?.filter((t) => t !== 'collector');
-              } else {
-                draft.types = [...(draft.types ?? []), 'collector'];
-              }
-            })
-          }
-        >
-          <Text
-            color={filters.types?.includes('collector') ? undefined : 'blue'}
-            style={{ display: 'flex', justifyContent: 'center' }}
+          </IconButton>
+        </Tooltip>
+        <Tooltip content="Premium">
+          <IconButton
+            variant={filters.types?.includes('premium') ? 'solid' : 'soft'}
+            radius="none"
+            color={filters.types?.includes('premium') ? 'amber' : 'gray'}
+            highContrast
+            onClick={() =>
+              mutateTankFilters((draft) => {
+                if (draft.types?.includes('premium')) {
+                  draft.types = draft.types?.filter((t) => t !== 'premium');
+                } else {
+                  draft.types = [...(draft.types ?? []), 'premium'];
+                }
+              })
+            }
           >
-            <ResearchedIcon style={{ width: '1em', height: '1em' }} />
-          </Text>
-        </IconButton>
+            <Text
+              color={filters.types?.includes('premium') ? undefined : 'amber'}
+              style={{ display: 'flex', justifyContent: 'center' }}
+            >
+              <ResearchedIcon style={{ width: '1em', height: '1em' }} />
+            </Text>
+          </IconButton>
+        </Tooltip>
+        <Tooltip content="Collector">
+          <IconButton
+            variant={filters.types?.includes('collector') ? 'solid' : 'soft'}
+            radius="none"
+            color={filters.types?.includes('collector') ? 'blue' : 'gray'}
+            highContrast
+            onClick={() =>
+              mutateTankFilters((draft) => {
+                if (draft.types?.includes('collector')) {
+                  draft.types = draft.types?.filter((t) => t !== 'collector');
+                } else {
+                  draft.types = [...(draft.types ?? []), 'collector'];
+                }
+              })
+            }
+          >
+            <Text
+              color={filters.types?.includes('collector') ? undefined : 'blue'}
+              style={{ display: 'flex', justifyContent: 'center' }}
+            >
+              <ResearchedIcon style={{ width: '1em', height: '1em' }} />
+            </Text>
+          </IconButton>
+        </Tooltip>
       </Flex>
 
       <Flex
@@ -270,51 +304,57 @@ export function FilterControl({ compact }: FilterControlProps) {
         style={{ borderRadius: 'var(--radius-full)' }}
         direction={compact ? 'column' : { sm: 'row', initial: 'column' }}
       >
-        <IconButton
-          variant={filters.testing === 'include' ? 'solid' : 'soft'}
-          radius="none"
-          color={filters.testing === 'include' ? undefined : 'gray'}
-          highContrast
-          onClick={() =>
-            mutateTankFilters((draft) => {
-              draft.testing = 'include';
-            })
-          }
-        >
-          <ExperimentIcon
-            style={{ width: '1em', height: '1em', color: 'currentColor' }}
-          />
-        </IconButton>
-        <IconButton
-          variant={filters.testing === 'exclude' ? 'solid' : 'soft'}
-          radius="none"
-          color={filters.testing === 'exclude' ? undefined : 'gray'}
-          highContrast
-          onClick={() =>
-            mutateTankFilters((draft) => {
-              draft.testing = 'exclude';
-            })
-          }
-        >
-          <ScienceOffIcon
-            style={{ width: '1em', height: '1em', color: 'currentColor' }}
-          />
-        </IconButton>
-        <IconButton
-          variant={filters.testing === 'only' ? 'solid' : 'soft'}
-          radius="none"
-          color={filters.testing === 'only' ? undefined : 'gray'}
-          highContrast
-          onClick={() =>
-            mutateTankFilters((draft) => {
-              draft.testing = 'only';
-            })
-          }
-        >
-          <ScienceIcon
-            style={{ width: '1em', height: '1em', color: 'currentColor' }}
-          />
-        </IconButton>
+        <Tooltip content="Include test tank">
+          <IconButton
+            variant={filters.testing === 'include' ? 'solid' : 'soft'}
+            radius="none"
+            color={filters.testing === 'include' ? undefined : 'gray'}
+            highContrast
+            onClick={() =>
+              mutateTankFilters((draft) => {
+                draft.testing = 'include';
+              })
+            }
+          >
+            <ExperimentIcon
+              style={{ width: '1em', height: '1em', color: 'currentColor' }}
+            />
+          </IconButton>
+        </Tooltip>
+        <Tooltip content="Exclude test tank">
+          <IconButton
+            variant={filters.testing === 'exclude' ? 'solid' : 'soft'}
+            radius="none"
+            color={filters.testing === 'exclude' ? undefined : 'gray'}
+            highContrast
+            onClick={() =>
+              mutateTankFilters((draft) => {
+                draft.testing = 'exclude';
+              })
+            }
+          >
+            <ScienceOffIcon
+              style={{ width: '1em', height: '1em', color: 'currentColor' }}
+            />
+          </IconButton>
+        </Tooltip>
+        <Tooltip content="Only test tank">
+          <IconButton
+            variant={filters.testing === 'only' ? 'solid' : 'soft'}
+            radius="none"
+            color={filters.testing === 'only' ? undefined : 'gray'}
+            highContrast
+            onClick={() =>
+              mutateTankFilters((draft) => {
+                draft.testing = 'only';
+              })
+            }
+          >
+            <ScienceIcon
+              style={{ width: '1em', height: '1em', color: 'currentColor' }}
+            />
+          </IconButton>
+        </Tooltip>
       </Flex>
 
       <Box>
