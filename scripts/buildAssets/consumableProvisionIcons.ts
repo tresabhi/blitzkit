@@ -25,11 +25,11 @@ export async function consumableProvisionIcons(production: boolean) {
   const changes: FileChange[] = [];
 
   const styles = [
+    'UI/Styles/Lobby/Inventory/Event/InventoryBigStyles.yaml',
+    'UI/Styles/Lobby/Inventory/Event/InventoryNormalStyles.yaml',
     'UI/Styles/Lobby/Inventory/InventoryNormalStyles.yaml',
     'UI/Screens3/Lobby/Inventory/Equipment/EquipmentItemImage.style.yaml',
-    'UI/Styles/Lobby/Inventory/Event/InventoryNormalStyles.yaml',
     'UI/Screens/Battle/Styles/BattleEquipmentStyles.yaml',
-    'UI/Styles/Lobby/Inventory/Event/InventoryBigStyles.yaml',
   ];
   const styleSheets = await Promise.all(
     styles.map(async (path) =>
@@ -54,7 +54,7 @@ export async function consumableProvisionIcons(production: boolean) {
       Object.values(consumablesCommon.root).map(async (consumable) => {
         const styleSheet = styleSheets.find((styleSheet) =>
           styleSheet.selectors.some((selector) =>
-            selector.includes(consumable.icon),
+            selector.includes(`${consumable.icon} `),
           ),
         );
 
@@ -127,7 +127,7 @@ export async function consumableProvisionIcons(production: boolean) {
       Object.values(provisionsCommon.root).map(async (provision) => {
         const styleSheet = styleSheets.find((styleSheet) =>
           styleSheet.selectors.some((selector) =>
-            selector.includes(provision.icon),
+            selector.includes(`${provision.icon} `),
           ),
         );
 
