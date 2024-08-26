@@ -6,7 +6,7 @@ type ListingProps = TextProps & {
 
 export function Listing({ label, ...props }: ListingProps) {
   return (
-    <Flex justify="between" gap="4">
+    <Flex minWidth="15rem" justify="between" gap="4">
       <Text color="gray">{label}</Text>
       <Text {...props} />
     </Flex>
