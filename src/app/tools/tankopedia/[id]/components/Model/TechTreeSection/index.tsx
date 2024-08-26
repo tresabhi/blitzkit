@@ -148,7 +148,9 @@ export function TechTreeSection() {
                 pt="1"
                 pl="1"
               >
-                <Text size="2">x{multiplier}</Text>
+                <Text size="2" weight="bold">
+                  x{multiplier}
+                </Text>
               </Flex>
             );
           })}
