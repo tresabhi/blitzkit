@@ -44,6 +44,9 @@ export function Characteristics() {
   const hasImprovedVentilation = useEquipment(102);
   const crewMastery = Duel.use((state) => state.protagonist.crewMastery);
   const [penetrationDistance, setPenetrationDistance] = useState(250);
+  const setPenetrationDistanceDebounced = debounce((value: number) => {
+    setPenetrationDistance(value);
+  }, 500);
 
   const provisions = Duel.use((state) => state.protagonist.provisions);
   const provisionCrewBonus =
@@ -257,9 +260,13 @@ export function Characteristics() {
                   max={500}
                   style={{ flex: 1 }}
                   defaultValue={[penetrationDistance]}
-                  onValueChange={debounce(([value]) => {
-                    setPenetrationDistance(value);
-                  }, 500)}
+                  onValueChange={([value]) => {
+                    setPenetrationDistanceDebounced(value);
+
+                    if (!penetrationDistanceInput.current) return;
+
+                    penetrationDistanceInput.current.value = value.toString();
+                  }}
                 />
                 <TextField.Root
                   style={{ width: 64 }}
