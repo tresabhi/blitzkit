@@ -25,7 +25,7 @@ export function VideoSection() {
           <Text color="gray">BlitzKit does not endorse any review videos.</Text>
         </Flex>
 
-        <Flex gap="3" wrap="wrap">
+        <Flex gap="3" wrap="wrap" justify="center">
           {videos.map((video) => {
             const image = `https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`;
             const youtuber = youtubers.find(
