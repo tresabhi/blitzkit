@@ -65,7 +65,8 @@ export function HeroSection({ id }: HeroSectionProps) {
       justify="center"
       pt={{ initial: '6', md: '0' }}
       style={{ background: 'var(--color-surface)', position: 'relative' }}
-      height={{ initial: 'calc(75vh - 64px)', md: undefined }}
+      height={{ initial: 'calc(75vh - 4rem)', md: undefined }}
+      minHeight="30rem"
       gap="4"
     >
       <Flex

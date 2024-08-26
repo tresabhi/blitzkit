@@ -302,9 +302,9 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
         </Flex>
       )}
 
-      <Box position="absolute" bottom="3" right="3">
+      <Box position="absolute" top="3" right="3">
         <IconButton
-          size="3"
+          size={{ initial: '2', sm: '3' }}
           variant="soft"
           onClick={() => {
             if (!canvas.current) return;
