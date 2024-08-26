@@ -1,4 +1,5 @@
 import {
+  CameraIcon,
   EnterFullScreenIcon,
   ExitFullScreenIcon,
   EyeOpenIcon,
@@ -19,7 +20,7 @@ import {
   Tooltip,
 } from '@radix-ui/themes';
 import { invalidate } from '@react-three/fiber';
-import { useEffect, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 import { ModuleButton } from '../../../../../../../components/ModuleButtons/ModuleButton';
 import { SmallTankIcon } from '../../../../../../../components/SmallTankIcon';
 import { ThicknessRange } from '../../../../../../../components/StaticArmor';
@@ -45,9 +46,10 @@ import { Thicknesses } from '../../Thicknesses';
 
 interface OptionsProps {
   thicknessRange: ThicknessRange;
+  canvas: RefObject<HTMLCanvasElement>;
 }
 
-export function Options({ thicknessRange }: OptionsProps) {
+export function Options({ thicknessRange, canvas }: OptionsProps) {
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
   const displayRaw = TankopediaPersistent.use((state) => state.display);
@@ -73,6 +75,7 @@ export function Options({ thicknessRange }: OptionsProps) {
     (state) => state.model.visual.environment,
   );
   const developerMode = App.useDeferred(false, (state) => state.developerMode);
+  const protagonist = Duel.use((state) => state.protagonist.tank);
   const antagonistGun = Duel.use((state) => state.antagonist.gun);
   const antagonistShell = Duel.use((state) => state.antagonist.shell);
   const [antagonistSelectorOpen, setAntagonistSelectorOpen] = useState(false);
@@ -122,12 +125,9 @@ export function Options({ thicknessRange }: OptionsProps) {
         <Flex
           gap="2"
           direction="column"
-          style={{
-            position: 'absolute',
-            right: 16,
-            top: '50%',
-            transform: 'translateY(-50%)',
-          }}
+          top="50%"
+          right="3"
+          style={{ position: 'absolute', transform: 'translateY(-50%)' }}
           align="end"
         >
           <Text color="gray" size={{ initial: '1', sm: '2' }}>
@@ -301,6 +301,24 @@ export function Options({ thicknessRange }: OptionsProps) {
           </Flex>
         </Flex>
       )}
+
+      <Box position="absolute" bottom="3" right="3">
+        <IconButton
+          size="3"
+          variant="soft"
+          onClick={() => {
+            if (!canvas.current) return;
+
+            const anchor = document.createElement('a');
+
+            anchor.setAttribute('download', `${protagonist.name}.png`);
+            anchor.setAttribute('href', canvas.current.toDataURL('image/png'));
+            anchor.click();
+          }}
+        >
+          <CameraIcon />
+        </IconButton>
+      </Box>
 
       <Flex
         style={{

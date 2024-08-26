@@ -1,7 +1,7 @@
 import { ChevronLeftIcon, MixIcon } from '@radix-ui/react-icons';
 import { Box, Button, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';
-import { Suspense, use, useEffect, useMemo, useState } from 'react';
+import { Suspense, use, useEffect, useMemo, useRef, useState } from 'react';
 import { classIcons } from '../../../../../../components/ClassIcon';
 import { ScienceIcon } from '../../../../../../components/ScienceIcon';
 import { ThicknessRange } from '../../../../../../components/StaticArmor';
@@ -20,6 +20,7 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ id }: HeroSectionProps) {
+  const canvas = useRef<HTMLCanvasElement>(null);
   const protagonist = Duel.use((state) => state.protagonist.tank);
   const antagonist = Duel.use((state) => state.antagonist.tank);
   const compareTanks =
@@ -169,11 +170,11 @@ export function HeroSection({ id }: HeroSectionProps) {
                   />
                 }
               >
-                <TankSandbox thicknessRange={thicknessRange} />
+                <TankSandbox ref={canvas} thicknessRange={thicknessRange} />
               </Suspense>
             </Box>
 
-            <Options thicknessRange={thicknessRange} />
+            <Options canvas={canvas} thicknessRange={thicknessRange} />
           </Box>
         </Box>
       </Flex>
