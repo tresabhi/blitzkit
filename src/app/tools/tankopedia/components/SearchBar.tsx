@@ -15,6 +15,7 @@ interface SearchBarProps {
 
 export function SearchBar({ topResult, onSelect }: SearchBarProps) {
   const tankFiltersStore = TankFilters.useStore();
+  const lastSearch = tankFiltersStore.getState().search;
   const router = useRouter();
   const input = useRef<HTMLInputElement>(null);
   const searching = TankFilters.use((state) => state.searching);
@@ -58,6 +59,7 @@ export function SearchBar({ topResult, onSelect }: SearchBarProps) {
     <Flex justify="center" mt="4">
       <Flex gap="2" flexGrow="1">
         <TextField.Root
+          defaultValue={lastSearch}
           style={{ flex: 1 }}
           ref={input}
           placeholder="Search tanks..."
