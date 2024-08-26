@@ -2,14 +2,20 @@ import { CaretLeftIcon, CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, IconButton, ScrollArea, Text } from '@radix-ui/themes';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
 import { asset } from '../../../../../../../core/blitzkit/asset';
+import { imgur } from '../../../../../../../core/blitzkit/imgur';
 import { tankDefinitions } from '../../../../../../../core/blitzkit/tankDefinitions';
 import * as Duel from '../../../../../../../stores/duel';
+import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
 import { Arrow } from './components/Arrow';
 import { Node } from './components/Node';
 
 type Line = number[];
 
+export const XP_MULTIPLIERS = [1, 2, 3, 4, 5, 10];
+
 export function TechTreeSection() {
+  const xpMultiplier = TankopediaEphemeral.use((state) => state.xpMultiplier);
+  const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const master = Duel.use((state) => state.protagonist.tank);
   const awaitedTankDefinitions = use(tankDefinitions);
   const container = useRef<HTMLDivElement>(null);
@@ -94,7 +100,7 @@ export function TechTreeSection() {
                     objectPosition: 'center',
                   }}
                 />
-                {totalXp.toLocaleString()}
+                {Math.round(totalXp / xpMultiplier).toLocaleString()}
               </Flex>
             </Text>
 
@@ -115,16 +121,58 @@ export function TechTreeSection() {
             </Text>
           </Flex>
         )}
+
+        <Flex gap="1" mt="2">
+          {XP_MULTIPLIERS.map((multiplier) => {
+            const selected = xpMultiplier === multiplier;
+
+            return (
+              <Flex
+                style={{
+                  background: `url(${imgur('7hDltb4')})`,
+                  backgroundSize: 'contain',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                  opacity: selected ? 1 : 0.5,
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  mutateTankopediaEphemeral((draft) => {
+                    draft.xpMultiplier = multiplier;
+                  });
+                }}
+                key={multiplier}
+                width="2.5rem"
+                justify="center"
+                align="center"
+                pt="1"
+                pl="1"
+              >
+                <Text size="2">x{multiplier}</Text>
+              </Flex>
+            );
+          })}
+        </Flex>
       </Flex>
 
       <ScrollArea type="hover" scrollbars="horizontal" ref={container}>
         <Flex align="center" gap="2" justify="center" p="4">
-          {line.map((id, index) => (
-            <>
-              {index > 0 && <Arrow />}
-              <Node key={id} id={id} highlight={index === line.length - 1} />
-            </>
-          ))}
+          {line.map((id, index) => {
+            const last = index === line.length - 1;
+            const tank = awaitedTankDefinitions[id];
+
+            return (
+              <>
+                {index > 0 && <Arrow />}
+                <Node
+                  key={id}
+                  id={id}
+                  nextIds={last ? tank.successors : [line[index + 1]]}
+                  highlight={last}
+                />
+              </>
+            );
+          })}
 
           {master.tier < 10 && (
             <>
