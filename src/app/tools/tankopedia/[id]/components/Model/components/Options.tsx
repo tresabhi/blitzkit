@@ -385,29 +385,27 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               });
             }}
           >
-            <Tooltip content="Model">
-              <SegmentedControl.Item value={`${TankopediaDisplay.Model}`}>
+            <SegmentedControl.Item value={`${TankopediaDisplay.Model}`}>
+              <Tooltip content="Model">
                 <Flex height="100%" align="center">
                   <img src={imgur('jAdYf0m')} style={{ height: '1.25em' }} />
                 </Flex>
-              </SegmentedControl.Item>
-            </Tooltip>
-            <Tooltip content="Dynamic armor">
-              <SegmentedControl.Item
-                value={`${TankopediaDisplay.DynamicArmor}`}
-              >
+              </Tooltip>
+            </SegmentedControl.Item>
+            <SegmentedControl.Item value={`${TankopediaDisplay.DynamicArmor}`}>
+              <Tooltip content="Dynamic armor">
                 <Flex height="100%" align="center">
                   <img src={imgur('oe4Cq0g')} style={{ height: '1.25em' }} />
                 </Flex>
-              </SegmentedControl.Item>
-            </Tooltip>
-            <Tooltip content="Static armor">
-              <SegmentedControl.Item value={`${TankopediaDisplay.StaticArmor}`}>
+              </Tooltip>
+            </SegmentedControl.Item>
+            <SegmentedControl.Item value={`${TankopediaDisplay.StaticArmor}`}>
+              <Tooltip content="Static armor">
                 <Flex height="100%" align="center">
                   <img src={imgur('VQ4uDno')} style={{ height: '1.25em' }} />
                 </Flex>
-              </SegmentedControl.Item>
-            </Tooltip>
+              </Tooltip>
+            </SegmentedControl.Item>
           </SegmentedControl.Root>
 
           <DropdownMenu.Root>
