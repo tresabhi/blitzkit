@@ -39,8 +39,8 @@ export function GameModeSection() {
               }}
             >
               <Box
+                flexGrow="1"
                 style={{
-                  aspectRatio: '1 / 2',
                   background: `url(${asset(`icons/game_mode_banners/${id}.webp`)})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
