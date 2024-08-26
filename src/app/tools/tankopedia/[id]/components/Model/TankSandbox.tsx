@@ -25,6 +25,7 @@ import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent
 import { Controls } from '../Control';
 import { Lighting } from '../Lighting';
 import { SceneProps } from '../SceneProps';
+import { AutoClear } from './AutoClear';
 import { ModelLoader } from './components/ModelLoader';
 import { TankModel } from './components/TankModel';
 
@@ -178,6 +179,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
 
         <ShotDisplay />
         <ArmorPlateDisplay />
+        <AutoClear />
 
         {/* idk why the shot display doesn't work without suspense here lol */}
         <Suspense fallback={<ModelLoader />}>
