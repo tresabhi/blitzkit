@@ -1,34 +1,30 @@
-import { Button, Text } from '@radix-ui/themes';
+import { Button, Text, Tooltip } from '@radix-ui/themes';
 import { ComponentProps, ReactNode } from 'react';
 
 export interface TankComponentButtonProps
   extends ComponentProps<typeof Button> {
   selected?: boolean;
-  first?: boolean;
-  last?: boolean;
-  rowChild?: boolean;
   children?: ReactNode;
   discriminator?: ReactNode;
   disabled?: boolean;
   banner?: string;
   special?: boolean;
+  tooltip?: string;
 }
 
 export function TankComponentButton({
   variant,
   selected,
-  first = false,
-  last = false,
-  rowChild,
   discriminator,
   special,
   children,
   banner,
   disabled,
   style,
+  tooltip,
   ...props
 }: TankComponentButtonProps) {
-  return (
+  const button = (
     <Button
       radius="medium"
       color={selected ? (special ? 'amber' : undefined) : 'gray'}
@@ -38,11 +34,6 @@ export function TankComponentButton({
         minWidth: 48,
         height: 40,
         position: 'relative',
-        borderTopLeftRadius: first ? undefined : 0,
-        borderTopRightRadius: last ? undefined : 0,
-        borderBottomLeftRadius: first ? undefined : 0,
-        borderBottomRightRadius: last ? undefined : 0,
-        margin: rowChild ? -0.5 : 'unset',
         overflow: 'hidden',
         cursor: 'unset',
         pointerEvents: variant === 'ghost' ? 'none' : undefined,
@@ -84,4 +75,7 @@ export function TankComponentButton({
       )}
     </Button>
   );
+
+  if (tooltip) return <Tooltip content={tooltip}>{button}</Tooltip>;
+  return button;
 }

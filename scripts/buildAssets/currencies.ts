@@ -14,10 +14,19 @@ const ICONS = [
   ['currency_battle-xp_xl.packed.webp', 'xp'],
 ];
 
+type BlitzGlossary = Record<
+  string,
+  {
+    image_url: null | string;
+  }
+>;
+
 export async function currencies(production: boolean) {
   console.log('Building currency icons...');
 
-  const changes = await Promise.all(
+  const changes: FileChange[] = [];
+
+  await Promise.all(
     ICONS.map(async ([file, name]) => {
       const content = (
         await sharp(
@@ -27,12 +36,42 @@ export async function currencies(production: boolean) {
           .toBuffer()
       ).toString('base64');
 
-      return {
+      changes.push({
         content,
         encoding: 'base64',
         path: `icons/currencies/${name}.webp`,
-      } satisfies FileChange;
+      });
     }),
+  );
+
+  const glossary = await fetch(process.env.WOTB_GLOSSARY!).then(
+    (response) => response.json() as Promise<BlitzGlossary>,
+  );
+
+  await Promise.all(
+    Object.entries(glossary)
+      .filter(([key]) => /^prx_season_\d+$/.test(key))
+      .map(async ([key, item]) => {
+        if (item.image_url === null) throw new Error(`No image_url for ${key}`);
+
+        const imageRaw = await fetch(item.image_url).then((response) =>
+          response.arrayBuffer(),
+        );
+        const content = (
+          await sharp(imageRaw)
+            .trim({
+              threshold: 100,
+              background: { r: 0, g: 0, b: 0, alpha: 0 },
+            })
+            .toBuffer()
+        ).toString('base64');
+
+        changes.push({
+          content,
+          encoding: 'base64',
+          path: `icons/currencies/${key}.webp`,
+        });
+      }),
   );
 
   await commitAssets('currency icons', changes, production);

@@ -8,21 +8,32 @@ export function resolveDpm(
   intraClipCoefficient = 1,
 ) {
   const alpha = shell.damage.armor * damageCoefficient;
+  let dps: number;
 
   if (gun.type === 'regular') {
-    return (alpha / (reloadCoefficient * gun.reload)) * 60;
+    dps = alpha / (reloadCoefficient * gun.reload);
   } else if (gun.type === 'autoLoader') {
-    return (
-      ((alpha * gun.count) /
-        (gun.reload + (gun.count - 1) * gun.intraClip * intraClipCoefficient)) *
-      60
-    );
+    dps =
+      (alpha * gun.count) /
+      (gun.reload * reloadCoefficient +
+        (gun.count - 1) * gun.intraClip * intraClipCoefficient);
   } else {
-    return (
-      ((alpha * gun.count) /
-        (reloadCoefficient * gun.reload.reduce((a, b) => a + b, 0) +
-          (gun.count - 1) * gun.intraClip * intraClipCoefficient)) *
-      60
-    );
+    const mostOptimalShell = gun.reload.reduce<null | {
+      index: number;
+      reload: number;
+    }>((current, reloadRaw, index) => {
+      const reload =
+        reloadRaw * reloadCoefficient +
+        (index > 0 ? gun.intraClip * intraClipCoefficient : 0);
+
+      if (current === null || reload < current.reload) {
+        return { index, reload };
+      }
+      return current;
+    }, null)!;
+
+    dps = alpha / mostOptimalShell?.reload;
   }
+
+  return dps * 60;
 }

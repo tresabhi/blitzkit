@@ -3,6 +3,7 @@
 import { Vector3 } from 'three';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import { XP_MULTIPLIERS } from '../app/tools/tankopedia/[id]/components/Model/TechTreeSection';
 import { ArmorType } from '../components/Armor/components/SpacedArmorScene';
 import { ExternalModuleVariant } from '../components/Armor/components/SpacedArmorSceneComponent';
 import { ModelDefinition } from '../core/blitzkit/modelDefinitions';
@@ -28,6 +29,7 @@ interface TankopediaEphemeral {
       }
     | { type: ArmorType.External }
   );
+  xpMultiplier: (typeof XP_MULTIPLIERS)[number];
 }
 
 export interface ShotLayerBase {
@@ -97,6 +99,7 @@ export const { Provider, use, useMutation, useStore } = createNextSafeStore(
         skills: {},
         model,
         controlsEnabled: true,
+        xpMultiplier: 1,
       })),
     ),
 );

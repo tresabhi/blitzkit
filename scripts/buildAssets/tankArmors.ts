@@ -5,7 +5,7 @@ import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
 import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
-import { DATA, POI } from './constants';
+import { DATA } from './constants';
 import { VehicleDefinitionList } from './definitions';
 
 export async function tankArmors(production: boolean) {
@@ -13,14 +13,14 @@ export async function tankArmors(production: boolean) {
 
   const changes: FileChange[] = [];
   const nodeIO = new NodeIO();
-  const nations = await readdir(`${DATA}/${POI.vehicleDefinitions}`).then(
+  const nations = await readdir(`${DATA}/XML/item_defs/vehicles`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
 
   await Promise.all(
     nations.map(async (nation) => {
       const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
-        `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
+        `${DATA}/XML/item_defs/vehicles/${nation}/list.xml.dvpl`,
       );
 
       await Promise.all(

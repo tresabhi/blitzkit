@@ -1,5 +1,6 @@
 'use client';
 
+import { invalidate } from '@react-three/fiber';
 import { useEffect } from 'react';
 import { AdMidSectionResponsive } from '../../../../components/AdMidSectionResponsive';
 import PageWrapper from '../../../../components/PageWrapper';
@@ -8,9 +9,12 @@ import * as Duel from '../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 import { HistorySection } from './components/HistorySection';
 import { CharacteristicsSection } from './components/Model/CharacteristicsSection';
+import { GameModeSection } from './components/Model/GameModeSection';
 import { HeroSection } from './components/Model/HeroSection';
+import { MetaSection } from './components/Model/MetaSection';
 import { TechTreeSection } from './components/Model/TechTreeSection';
 import { ShotDisplaySection } from './components/ShotDisplaySection';
+import { TestingSection } from './components/TestingSection';
 import { VideoSection } from './components/VideoSection';
 
 export default function Page({ params }: { params: { id: string } }) {
@@ -31,11 +35,13 @@ export default function Page({ params }: { params: { id: string } }) {
       }
 
       if (event.key === '1') {
+        invalidate();
         wipeShot();
         mutateDuel((draft) => {
           draft.antagonist.shell = draft.antagonist.gun.shells[0];
         });
       } else if (event.key === '2') {
+        invalidate();
         wipeShot();
         mutateDuel((draft) => {
           if (draft.antagonist.gun.shells[1]) {
@@ -43,6 +49,7 @@ export default function Page({ params }: { params: { id: string } }) {
           }
         });
       } else if (event.key === '3') {
+        invalidate();
         wipeShot();
         mutateDuel((draft) => {
           if (draft.antagonist.gun.shells[2]) {
@@ -73,16 +80,19 @@ export default function Page({ params }: { params: { id: string } }) {
   }, []);
 
   return (
-    <PageWrapper p="0" noMaxWidth color="purple" size={1600}>
+    <PageWrapper p="0" noMaxWidth color="purple" size={1600} gap="9">
       <HeroSection id={id} />
       <ShotDisplaySection />
-      {!exempt && <AdMidSectionResponsive />}
-      <CharacteristicsSection />
+      <MetaSection />
       {!exempt && <AdMidSectionResponsive />}
       <TechTreeSection />
+      <TestingSection />
+      <CharacteristicsSection />
+      {!exempt && <AdMidSectionResponsive />}
+      <GameModeSection />
       <VideoSection />
       <HistorySection />
-      {!exempt && <AdMidSectionResponsive />}
+      {!exempt && <AdMidSectionResponsive mb="6" />}
     </PageWrapper>
   );
 }

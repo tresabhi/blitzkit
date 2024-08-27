@@ -4,14 +4,14 @@ import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
 import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
-import { DATA, POI } from './constants';
+import { DATA } from './constants';
 
 export async function boosterIcons(production: boolean) {
-  const boosterFiles = (await readdir(`${DATA}/${POI.boosterIcons}`)).filter(
+  const boosterFiles = (await readdir(`${DATA}/Gfx/Shared/boosters`)).filter(
     (file) => !file.endsWith('@2x.txt.dvpl') && !file.startsWith('texture0'),
   );
   const image = sharp(
-    await readDVPLFile(`${DATA}/${POI.boosterIcons}/texture0.packed.webp.dvpl`),
+    await readDVPLFile(`${DATA}/Gfx/Shared/boosters/texture0.packed.webp.dvpl`),
   );
   const changes: FileChange[] = [];
 
@@ -22,7 +22,7 @@ export async function boosterIcons(production: boolean) {
       if (name === undefined) return;
 
       const sizes = (
-        await readStringDVPL(`${DATA}/${POI.boosterIcons}/${file}`)
+        await readStringDVPL(`${DATA}/Gfx/Shared/boosters/${file}`)
       )
         .split('\n')[4]
         .split(' ')

@@ -138,8 +138,15 @@ export function tankCharacteristics(
       0,
     ) + (hasImprovedVentilation ? 0.08 : 0);
   const commanderMastery = crewMastery + provisionCrewBonus;
-  const crewMemberMastery = commanderMastery * 1.1;
-
+  const loaderMastery =
+    commanderMastery *
+    (tank.crew.some(({ type }) => type === 'loader') ? 1.1 : 1.05);
+  const gunnerMastery =
+    commanderMastery *
+    (tank.crew.some(({ type }) => type === 'gunner') ? 1.1 : 1.05);
+  const driverMastery =
+    commanderMastery *
+    (tank.crew.some(({ type }) => type === 'driver') ? 1.1 : 1.05);
   const intraClipCoefficient = coefficient([hasShellReloadBoost, -0.3]);
   const damageCoefficient =
     coefficient([hasTungsten, 0.15]) *
@@ -150,7 +157,7 @@ export function tankCharacteristics(
     );
   const reloadCoefficient =
     (coefficient([hasGunRammer, -0.05]) *
-      coefficient([true, degressiveStat(crewMemberMastery)])) /
+      coefficient([true, degressiveStat(loaderMastery)])) /
     coefficient([hasAdrenaline && gun.type === 'regular', 0.17]);
   const penetrationCoefficient = coefficient([
     hasCalibratedShells,
@@ -173,10 +180,10 @@ export function tankCharacteristics(
     coefficient(
       [hasEnhancedGunLayingDrive, -0.15],
       [hasReticleCalibration, -0.3],
-    ) * coefficient([true, degressiveStat(crewMemberMastery)]);
+    ) * coefficient([true, degressiveStat(gunnerMastery)]);
   const dispersionStillCoefficient =
     coefficient([hasRefinedGun, -0.15], [hasReticleCalibration, -0.3]) *
-    coefficient([true, degressiveStat(crewMemberMastery)]);
+    coefficient([true, degressiveStat(gunnerMastery)]);
   const dispersionDamagedCoefficient = coefficient([
     hasVerticalStabilizer,
     -0.12,
@@ -212,13 +219,13 @@ export function tankCharacteristics(
   );
   const turretTraverseCoefficient =
     coefficient([hasStandardFuel, 0.03], [hasImprovedFuel, 0.1]) *
-    coefficient([true, progressiveStat(crewMemberMastery)]);
+    coefficient([true, progressiveStat(gunnerMastery)]);
   const hullTraverseCoefficient =
     coefficient(
       [hasImprovedControl, 0.11],
       [hasImprovedEnginePowerBoost, 0.01],
       [true, crewSkills.virtuoso / 100],
-    ) * coefficient([true, progressiveStat(crewMemberMastery)]);
+    ) * coefficient([true, progressiveStat(driverMastery)]);
   const resistanceHardCoefficient = coefficient([hasImprovedSuspension, -0.2]);
   const resistanceMediumCoefficient = coefficient([
     hasImprovedSuspension,
@@ -248,7 +255,18 @@ export function tankCharacteristics(
     [hasGearOil, 2],
     [hasImprovedGearOil, 4],
   );
-  const camouflageCoefficientMoving = coefficient(
+  const camouflageCoefficientMoving = sum(
+    [
+      true,
+      coefficient([
+        camouflage,
+        tank.class === 'AT-SPG'
+          ? 0.04
+          : tank.class === 'heavyTank'
+            ? 0.03
+            : 0.02,
+      ]),
+    ],
     [
       hasCamouflageNet,
       tank.class === 'heavyTank'
@@ -259,12 +277,22 @@ export function tankCharacteristics(
             ? 0.07
             : 0.1,
     ],
-    [
-      camouflage,
-      tank.class === 'AT-SPG' ? 0.04 : tank.class === 'heavyTank' ? 0.03 : 0.02,
-    ],
   );
-  const camouflageCoefficientStill = coefficient(
+  const camouflageCoefficientStill = sum(
+    [
+      true,
+      coefficient(
+        [
+          camouflage,
+          tank.class === 'AT-SPG'
+            ? 0.04
+            : tank.class === 'heavyTank'
+              ? 0.03
+              : 0.02,
+        ],
+        [true, crewSkills.camouflage * (3 / 100)],
+      ),
+    ],
     [
       hasCamouflageNet,
       tank.class === 'heavyTank'
@@ -275,11 +303,6 @@ export function tankCharacteristics(
             ? 0.14
             : 0.2,
     ],
-    [
-      camouflage,
-      tank.class === 'AT-SPG' ? 0.04 : tank.class === 'heavyTank' ? 0.03 : 0.02,
-    ],
-    [true, crewSkills.camouflage * (3 / 100)],
   );
 
   const size = normalizeBoundingBox(
@@ -305,24 +328,27 @@ export function tankCharacteristics(
     reloadCoefficient,
     intraClipCoefficient,
   );
-  const dpmMaximum =
+  const intraClip =
+    gun.type === 'regular' ? undefined : gun.intraClip * intraClipCoefficient;
+  const mostOptimalShellIndex =
     gun.type === 'autoReloader'
-      ? (
-          gun.count > 2
-            ? gun.reload.at(-1)! < gun.reload.at(-2)!
-            : gun.reload.at(-1)! + gun.intraClip < gun.reload.at(-2)!
-        )
-        ? ((damageCoefficient * shell.damage.armor) /
-            (gun.reload.at(-1)! * reloadCoefficient +
-              gun.intraClip * intraClipCoefficient)) *
-          60
-        : ((damageCoefficient * shell.damage.armor) /
-            (gun.reload[0] * reloadCoefficient)) *
-          60
+      ? gun.reload.reduce<null | { index: number; reload: number }>(
+          (current, reloadRaw, index) => {
+            const reload =
+              reloadRaw * reloadCoefficient + (index > 0 ? intraClip! : 0);
+
+            if (current === null || reload < current.reload) {
+              return { index, reload };
+            }
+            return current;
+          },
+          null,
+        )!.index
       : undefined;
+  const damage = shell.damage.armor * damageCoefficient;
   const dpmEffective =
     gun.type === 'autoReloader'
-      ? gun.reload.at(-1)! < gun.reload.at(-2)!
+      ? gun.reload[0] > gun.reload[1] + gun.intraClip
         ? ((damageCoefficient * shell.damage.armor) /
             (gun.reload.at(-1)! * reloadCoefficient +
               gun.intraClip * intraClipCoefficient)) *
@@ -343,24 +369,15 @@ export function tankCharacteristics(
           damageCoefficient * shell.damage.armor * gun.reload.slice(1).length
       : undefined;
   const shells = gun.type === 'regular' ? 1 : gun.count;
-  const mostOptimalShellIndex =
-    gun.type === 'autoReloader'
-      ? gun.reload.at(-1)! < gun.reload.at(-2)!
-        ? gun.reload.length
-        : 1
-      : undefined;
   const shellReloads =
     gun.type === 'autoReloader'
       ? gun.reload.map((reload) => reload * reloadCoefficient)
       : undefined;
   const shellReload =
     gun.type === 'autoReloader' ? undefined : gun.reload * reloadCoefficient;
-  const intraClip =
-    gun.type === 'regular' ? undefined : gun.intraClip * intraClipCoefficient;
   const caliber = shell.caliber;
   const penetration =
     resolveNearPenetration(shell.penetration) * penetrationCoefficient;
-  const damage = shell.damage.armor * damageCoefficient;
   const clipDamage = gun.type === 'regular' ? undefined : gun.count * damage;
   const moduleDamage = shell.damage.module * damageCoefficient;
   const explosionRadius = shell.explosionRadius;
@@ -470,7 +487,6 @@ export function tankCharacteristics(
     shellNormalization,
     shellRicochet,
     dpm,
-    dpmMaximum,
     dpmEffective,
     shells,
     mostOptimalShellIndex,

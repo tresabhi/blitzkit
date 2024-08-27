@@ -8,9 +8,11 @@ import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
 import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { toUniqueId } from '../../src/core/blitz/toUniqueId';
+import { CamouflageDefinitions } from '../../src/core/blitzkit/camouflageDefinitions';
 import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import {
   ConsumableDefinitions,
+  ConsumableEntry,
   TankFilterDefinitionCategory,
 } from '../../src/core/blitzkit/consumableDefinitions';
 import {
@@ -24,7 +26,10 @@ import {
   ModelArmor,
   ModelDefinitions,
 } from '../../src/core/blitzkit/modelDefinitions';
-import { ProvisionDefinitions } from '../../src/core/blitzkit/provisionDefinitions';
+import {
+  ProvisionDefinitions,
+  ProvisionEntry,
+} from '../../src/core/blitzkit/provisionDefinitions';
 import { SkillDefinitions } from '../../src/core/blitzkit/skillDefinitions';
 import { superCompress } from '../../src/core/blitzkit/superCompress';
 import {
@@ -32,12 +37,12 @@ import {
   CrewMember,
   GunDefinition,
   ShellType,
-  TankDefinitionPrice,
   TankDefinitions,
+  TankPrice,
   Tier,
   Unlock,
 } from '../../src/core/blitzkit/tankDefinitions';
-import { DATA, POI } from './constants';
+import { DATA } from './constants';
 import { Avatar } from './skillIcons';
 import { TankParameters } from './tankIcons';
 
@@ -323,6 +328,48 @@ export interface ProvisionsCommon {
   };
 }
 
+type CamouflagesInclude =
+  | {
+      nations?: string;
+    }
+  | {
+      vehicle?: { name?: string; minLevel?: number; maxLevel?: number };
+    };
+
+interface CamouflagesXML {
+  camouflages: Record<
+    string,
+    {
+      id: number;
+      userString: string;
+      description: string;
+      category: string;
+      group: string;
+      kind: string;
+      notInShop: boolean;
+      unlockCostCategory?: string;
+      vehicleFilter: {
+        include?: CamouflagesInclude | CamouflagesInclude[];
+      };
+      script: string[] | string;
+      icon?: string;
+      unlockPremium?: string;
+      unlockQuest?: string;
+      unlockClanLevel?: number;
+      unlockShopBundle?: string;
+      unlockTankRank?: number;
+    }
+  >;
+}
+
+type CamouflagesYaml = Record<
+  string,
+  {
+    userString?: string;
+    shortUserString?: string;
+  }
+>;
+
 type ConsumablesVehicleFilter =
   | { minLevel: number; maxLevel: number }
   | { name: string }
@@ -357,6 +404,24 @@ interface AvailableNationsYaml {
   available_nations: string[];
 }
 
+export interface SquadBattleTypeStyles {
+  Prototypes: {
+    components: {
+      UIDataLocalBindingsComponent: {
+        data: [string, string, string][];
+      };
+    };
+  }[];
+}
+
+type CombatRolesYaml = Record<
+  string,
+  {
+    id: number;
+    default_abilities: string[];
+  }
+>;
+
 const blitzShellKindToBlitzkit: Record<ShellKind, ShellType> = {
   ARMOR_PIERCING: ShellType.AP,
   ARMOR_PIERCING_CR: ShellType.APCR,
@@ -376,6 +441,7 @@ export async function definitions(production: boolean) {
   ).then((response) => response.json())) as {
     data: { [key: number]: { description: null | string } };
   };
+
   const gameDefinitions: GameDefinitions = {
     version: (await readStringDVPL(`${DATA}/version.txt.dvpl`))
       .split(' ')[0]
@@ -387,8 +453,11 @@ export async function definitions(production: boolean) {
         `${DATA}/available_nations.yaml.dvpl`,
       )
     ).available_nations,
+    gameModes: {},
+    roles: {},
   };
   const tankDefinitions: TankDefinitions = {};
+  const camouflageDefinitions: CamouflageDefinitions = {};
   const modelDefinitions: ModelDefinitions = {};
   const mapDefinitions: MapDefinitions = {};
   const equipmentDefinitions: EquipmentDefinitions = {
@@ -400,18 +469,20 @@ export async function definitions(production: boolean) {
   const skillDefinitions: SkillDefinitions = {
     classes: { lightTank: [], mediumTank: [], heavyTank: [], 'AT-SPG': [] },
   };
-  const nations = await readdir(`${DATA}/${POI.vehicleDefinitions}`).then(
+  const nations = await readdir(`${DATA}/XML/item_defs/vehicles`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
   const tankStringIdMap: Record<string, number> = {};
   const stringsPreInstalled = await readYAMLDVPL<BlitzStrings>(
-    `${DATA}/${POI.strings}/en.yaml.dvpl`,
+    `${DATA}/Strings/en.yaml.dvpl`,
   );
-  const stringsCache = await fetch(POI.cachedStrings)
+  const stringsCache = await fetch(
+    'https://stufficons.wgcdn.co/localizations/en.yaml',
+  )
     .then((response) => response.text())
     .then((string) => parseYaml(string) as BlitzStrings);
   const optionalDevices = await readXMLDVPL<{ root: OptionalDevices }>(
-    `${DATA}/${POI.optionalDevices}.dvpl`,
+    `${DATA}/XML/item_defs/vehicles/common/optional_devices.xml.dvpl`,
   );
   const strings = {
     ...stringsPreInstalled,
@@ -419,48 +490,136 @@ export async function definitions(production: boolean) {
   };
   const optionalDeviceSlots = await readXMLDVPL<{
     root: OptionalDeviceSlots;
-  }>(`${DATA}/${POI.optionalDeviceSlots}.dvpl`);
-  const consumables = await readXMLDVPL<{ root: ConsumablesCommon }>(
-    `${DATA}/${POI.consumablesCommon}.dvpl`,
-  );
-  const provisions = await readXMLDVPL<{ root: ProvisionsCommon }>(
-    `${DATA}/${POI.provisionsCommon}.dvpl`,
-  );
+  }>(`${DATA}/XML/item_defs/vehicles/common/optional_device_slots.xml.dvpl`);
+  const consumables: ConsumablesCommon = {};
+  const provisions: ProvisionsCommon = {};
+
+  for (const match of (
+    await readStringDVPL(
+      `${DATA}/XML/item_defs/vehicles/common/consumables/list.xml.dvpl`,
+    )
+  ).matchAll(/<items path="(.+)\.xml"\/>/g)) {
+    if (match[1] === 'prototypes') continue;
+
+    Object.assign(
+      consumables,
+      (
+        await readXMLDVPL<{ root: ConsumablesCommon }>(
+          `${DATA}/XML/item_defs/vehicles/common/consumables/${match[1]}.xml.dvpl`,
+        )
+      ).root,
+    );
+  }
+
+  for (const match of (
+    await readStringDVPL(
+      `${DATA}/XML/item_defs/vehicles/common/provisions/list.xml.dvpl`,
+    )
+  ).matchAll(/<items path="(.+)\.xml"\/>/g)) {
+    if (match[1] === 'prototypes') continue;
+
+    Object.assign(
+      provisions,
+      (
+        await readXMLDVPL<{ root: ConsumablesCommon }>(
+          `${DATA}/XML/item_defs/vehicles/common/provisions/${match[1]}.xml.dvpl`,
+        )
+      ).root,
+    );
+  }
+
   const avatar = await readXMLDVPL<{ root: Avatar }>(
     `${DATA}/XML/item_defs/tankmen/avatar.xml.dvpl`,
   );
   const maps = await readYAMLDVPL<Maps>(`${DATA}/maps.yaml.dvpl`);
   const tankXps = new Map<number, number>();
+  const camouflagesXml = await readXMLDVPL<{ root: CamouflagesXML }>(
+    `${DATA}/XML/item_defs/vehicles/common/camouflages.xml.dvpl`,
+  );
+  const camouflagesYaml = await readYAMLDVPL<CamouflagesYaml>(
+    `${DATA}/camouflages.yaml.dvpl`,
+  );
+  const camouflagesXmlEntries = Object.entries(camouflagesXml.root.camouflages);
+  const squadBattleTypeStyles = await readYAMLDVPL<SquadBattleTypeStyles>(
+    `${DATA}/UI/Screens3/Lobby/Hangar/Squad/SquadBattleType.yaml.dvpl`,
+  );
+  const gameTypeSelectorStyles = await readYAMLDVPL<SquadBattleTypeStyles>(
+    `${DATA}/UI/Screens/Lobby/Hangar/GameTypeSelector.yaml.dvpl`,
+  );
+  const gameModeNativeNames: Record<string, number> = {};
+  const combatRoles = await readYAMLDVPL<CombatRolesYaml>(
+    `${DATA}/XML/item_defs/vehicles/common/combat_roles.yaml.dvpl`,
+  );
+  const consumableNativeNames: Record<string, number> = {};
+  const provisionNativeNames: Record<string, number> = {};
+
+  for (const match of squadBattleTypeStyles.Prototypes[0].components.UIDataLocalBindingsComponent.data[1][2].matchAll(
+    /"(\d+)" -> "(battleType\/([a-zA-Z]+))"/g,
+  )) {
+    const id = Number(match[1]);
+    const name = strings[match[2]];
+
+    gameModeNativeNames[match[3]] = id;
+    gameDefinitions.gameModes[id] = {
+      name,
+    };
+  }
+
+  for (const match of gameTypeSelectorStyles.Prototypes[0].components.UIDataLocalBindingsComponent.data[1][2].matchAll(
+    /eGameMode\.([a-zA-Z]+) -> "~res:\/Gfx\/UI\/Hangar\/GameTypes\/battle-type_([^"]+)"/g,
+  )) {
+    Object.entries(gameModeNativeNames).forEach(([key, value]) => {
+      if (key.toLowerCase() === match[2].toLowerCase()) {
+        gameModeNativeNames[match[1]] = value;
+      }
+    });
+  }
+
+  camouflagesXmlEntries.forEach(([camoKey, camo]) => {
+    const yamlEntry = camouflagesYaml[camoKey];
+    const fullName = yamlEntry.userString
+      ? strings[yamlEntry.userString]
+      : undefined;
+    const shortName = yamlEntry.shortUserString
+      ? strings[yamlEntry.shortUserString]
+      : undefined;
+    const resolvedTankName = shortName ?? fullName;
+    const resolvedTankNameFull =
+      resolvedTankName === fullName ? undefined : fullName;
+
+    camouflageDefinitions[camo.id] = {
+      id: camo.id,
+      name: strings[camo.userString],
+      tankName: resolvedTankName,
+      tankNameFull: resolvedTankNameFull,
+    };
+  });
 
   await Promise.all(
     nations.map(async (nation) => {
       const tankList = await readXMLDVPL<{ root: VehicleDefinitionList }>(
-        `${DATA}/${POI.vehicleDefinitions}/${nation}/list.xml.dvpl`,
+        `${DATA}/XML/item_defs/vehicles/${nation}/list.xml.dvpl`,
       );
       const turretList = await readXMLDVPL<{
         root: TurretDefinitionsList;
       }>(
-        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/turrets.xml.dvpl`,
+        `${DATA}/XML/item_defs/vehicles/${nation}/components/turrets.xml.dvpl`,
       );
       const gunList = await readXMLDVPL<{
         root: GunDefinitionsList;
-      }>(
-        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/guns.xml.dvpl`,
-      );
+      }>(`${DATA}/XML/item_defs/vehicles/${nation}/components/guns.xml.dvpl`);
       const shellList = await readXMLDVPL<{
         root: ShellDefinitionsList;
-      }>(
-        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/shells.xml.dvpl`,
-      );
+      }>(`${DATA}/XML/item_defs/vehicles/${nation}/components/shells.xml.dvpl`);
       const enginesList = await readXMLDVPL<{
         root: EngineDefinitionsList;
       }>(
-        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/engines.xml.dvpl`,
+        `${DATA}/XML/item_defs/vehicles/${nation}/components/engines.xml.dvpl`,
       );
       const chassisList = await readXMLDVPL<{
         root: ChassisDefinitionsList;
       }>(
-        `${DATA}/${POI.vehicleDefinitions}/${nation}/components/chassis.xml.dvpl`,
+        `${DATA}/XML/item_defs/vehicles/${nation}/components/chassis.xml.dvpl`,
       );
 
       function resolveUnlocks(unlocks?: Unlocks) {
@@ -511,15 +670,12 @@ export async function definitions(production: boolean) {
         const engineXps = new Map<number, number>();
         const trackXps = new Map<number, number>();
         const tank = tankList.root[tankKey];
-        const tankPrice: TankDefinitionPrice =
-          typeof tank.price === 'number'
-            ? { type: 'credits', value: tank.price }
-            : { type: 'gold', value: tank.price['#text'] };
+        let tankPrice: TankPrice;
         const tankDefinition = await readXMLDVPL<{ root: VehicleDefinitions }>(
-          `${DATA}/${POI.vehicleDefinitions}/${nation}/${tankKey}.xml.dvpl`,
+          `${DATA}/XML/item_defs/vehicles/${nation}/${tankKey}.xml.dvpl`,
         );
         const tankParameters = await readYAMLDVPL<TankParameters>(
-          `${DATA}/${POI.tankParameters}/${nation}/${tankKey}.yaml.dvpl`,
+          `${DATA}/3d/Tanks/Parameters/${nation}/${tankKey}.yaml.dvpl`,
         );
         const turretOrigin = tankDefinition.root.hull.turretPositions.turret
           .split(' ')
@@ -529,6 +685,23 @@ export async function definitions(production: boolean) {
         const hullArmor: ModelArmor = { thickness: {} };
         const equipment = tankDefinition.root.optDevicePreset;
         tankStringIdMap[`${nation}:${tankKey}`] = tankId;
+
+        if (tank.sellPrice) {
+          tankPrice = {
+            type: 'gold',
+            value: tank.sellPrice['#text'] * 2,
+          };
+        } else if (typeof tank.price === 'number') {
+          tankPrice = {
+            type: 'credits',
+            value: tank.price,
+          };
+        } else {
+          tankPrice = {
+            type: 'credits',
+            value: tank.price['#text'] * 400,
+          };
+        }
 
         Object.keys(tankDefinition.root.hull.armor)
           .filter((name) => name.startsWith('armor_'))
@@ -554,11 +727,11 @@ export async function definitions(production: boolean) {
         const fixedCamouflage = tankTags.includes('eventCamouflage_user');
         const totalUnlocks: UnlocksListing[] = [];
 
-        Object.entries(tankDefinition.root.crew).forEach(([key, value]) => {
+        Object.entries(tankDefinition.root.crew).forEach(([crewKey, value]) => {
           let entry: Crew;
-          const index = crew.findIndex(({ type }) => type === key);
+          const index = crew.findIndex(({ type }) => type === crewKey);
           if (index === -1) {
-            entry = { type: key as CrewMember };
+            entry = { type: crewKey as CrewMember };
             crew.push(entry);
           } else {
             entry = crew[index];
@@ -589,8 +762,30 @@ export async function definitions(production: boolean) {
           }
         });
 
+        const camouflages = camouflagesXmlEntries
+          .filter(([, camo]) => {
+            if (!camo.vehicleFilter.include) return false;
+            if (camo.unlockCostCategory !== 'legendary-skins-gold')
+              return false;
+
+            const includeArray = Array.isArray(camo.vehicleFilter.include)
+              ? camo.vehicleFilter.include
+              : [camo.vehicleFilter.include];
+
+            return includeArray.some((filter) => {
+              if ('vehicle' in filter && filter.vehicle?.name) {
+                return filter.vehicle.name === `${nation}:${tankKey}`;
+              }
+
+              return false;
+            });
+          })
+          .map(([, camo]) => camo.id);
+
         tankDefinitions[tankId] = {
           id: tankId,
+          roles: {},
+          camouflages: camouflages.length === 0 ? undefined : camouflages,
           description:
             wargamingTankopedia.data[tankId]?.description ?? undefined,
           fixedCamouflage: fixedCamouflage ? true : undefined,
@@ -629,6 +824,22 @@ export async function definitions(production: boolean) {
           engines: [],
           tracks: [],
         };
+
+        if (tank.combatRole) {
+          Object.entries(tank.combatRole).forEach(([gameMode, role]) => {
+            const id = Object.entries(gameModeNativeNames).find(
+              ([key]) => key.toLowerCase() === gameMode.toLowerCase(),
+            )?.[1];
+
+            if (id === undefined) {
+              throw new Error(
+                `Unknown game mode in tank ${tankKey}: ${gameMode}`,
+              );
+            }
+
+            tankDefinitions[tankId].roles[id] = combatRoles[role].id;
+          });
+        }
 
         if (tankDefinitions[tankId].name === tankDefinitions[tankId].nameFull) {
           delete tankDefinitions[tankId].nameFull;
@@ -1079,126 +1290,140 @@ export async function definitions(production: boolean) {
     },
   );
 
-  Object.values(consumables.root).forEach((consumable) => {
-    consumableDefinitions[consumable.id] = {
+  Object.entries(consumables).forEach(([key, consumable]) => {
+    consumableNativeNames[key] = consumable.id;
+
+    const entry = {
       id: consumable.id,
+      gameMode: 'gameModeFilter' in consumable,
       cooldown: consumable.script.cooldown,
       duration: consumable.script.duration,
       name:
         strings[consumable.userString] ??
         missingStrings[consumable.userString] ??
         `Unknown ${consumable.id}`,
-      include: [],
-    };
+    } as ConsumableEntry;
+    consumableDefinitions[consumable.id] = entry;
 
     const includeRaw = consumable.vehicleFilter?.include.vehicle;
     const excludeRaw = consumable.vehicleFilter?.exclude?.vehicle;
 
-    if (includeRaw) {
-      if ('minLevel' in includeRaw) {
-        consumableDefinitions[consumable.id].include.push({
-          type: 'tier',
-          min: includeRaw.minLevel,
-          max: includeRaw.maxLevel,
-        });
-      } else if ('name' in includeRaw) {
-        consumableDefinitions[consumable.id].include.push({
-          type: 'ids',
-          ids: includeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
-        });
-      } else throw new SyntaxError('Unhandled include type');
+    if (!entry.gameMode) {
+      if (includeRaw) {
+        entry.include = [];
 
-      if (consumable.vehicleFilter?.include.nations) {
-        consumableDefinitions[consumable.id].include.push({
-          type: 'nation',
-          nations: consumable.vehicleFilter.include.nations.split(' '),
-        });
+        if ('minLevel' in includeRaw) {
+          entry.include.push({
+            type: 'tier',
+            min: includeRaw.minLevel,
+            max: includeRaw.maxLevel,
+          });
+        } else if ('name' in includeRaw) {
+          entry.include.push({
+            type: 'ids',
+            ids: includeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
+          });
+        } else throw new SyntaxError('Unhandled include type');
+
+        if (consumable.vehicleFilter?.include.nations) {
+          entry.include.push({
+            type: 'nation',
+            nations: consumable.vehicleFilter.include.nations.split(' '),
+          });
+        }
       }
-    }
 
-    if (excludeRaw) {
-      consumableDefinitions[consumable.id].exclude = [];
+      if (excludeRaw) {
+        entry.exclude = [];
 
-      if ('name' in excludeRaw) {
-        consumableDefinitions[consumable.id].exclude!.push({
-          type: 'ids',
-          ids: excludeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
-        });
-      } else if ('extendedTags' in excludeRaw) {
-        consumableDefinitions[consumable.id].exclude!.push({
-          type: 'category',
-          categories: excludeRaw.extendedTags.split(
-            ' ',
-          ) as TankFilterDefinitionCategory[],
-        });
-      } else throw new SyntaxError('Unhandled exclude type');
+        if ('name' in excludeRaw) {
+          entry.exclude!.push({
+            type: 'ids',
+            ids: excludeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
+          });
+        } else if ('extendedTags' in excludeRaw) {
+          entry.exclude!.push({
+            type: 'category',
+            categories: excludeRaw.extendedTags.split(
+              ' ',
+            ) as TankFilterDefinitionCategory[],
+          });
+        } else throw new SyntaxError('Unhandled exclude type');
 
-      if (consumable.vehicleFilter?.exclude?.nations) {
-        consumableDefinitions[consumable.id].exclude!.push({
-          type: 'nation',
-          nations: consumable.vehicleFilter.exclude.nations.split(' '),
-        });
+        if (consumable.vehicleFilter?.exclude?.nations) {
+          entry.exclude!.push({
+            type: 'nation',
+            nations: consumable.vehicleFilter.exclude.nations.split(' '),
+          });
+        }
       }
     }
   });
 
-  Object.values(provisions.root).forEach((provision) => {
-    provisionDefinitions[provision.id] = {
+  Object.entries(provisions).forEach(([key, provision]) => {
+    provisionNativeNames[key] = provision.id;
+
+    const entry = {
       id: provision.id,
+      gameMode: 'gameModeFilter' in provision,
       name:
         strings[provision.userString] ??
         missingStrings[provision.userString] ??
         `Unknown ${provision.id}`,
-      include: [],
-    };
+    } as ProvisionEntry;
+    provisionDefinitions[provision.id] = entry;
 
     const includeRaw = provision.vehicleFilter?.include.vehicle;
     const excludeRaw = provision.vehicleFilter?.exclude?.vehicle;
 
-    if (includeRaw) {
-      if ('minLevel' in includeRaw) {
-        provisionDefinitions[provision.id].include.push({
-          type: 'tier',
-          min: includeRaw.minLevel,
-          max: includeRaw.maxLevel,
-        });
-      } else if ('name' in includeRaw) {
-        provisionDefinitions[provision.id].include.push({
-          type: 'ids',
-          ids: includeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
-        });
-      } else throw new SyntaxError('Unhandled include type');
+    if (!entry.gameMode) {
+      if (includeRaw) {
+        entry.include = [];
 
-      if (provision.vehicleFilter?.include.nations) {
-        provisionDefinitions[provision.id].include.push({
-          type: 'nation',
-          nations: provision.vehicleFilter.include.nations.split(' '),
-        });
+        if ('minLevel' in includeRaw) {
+          entry.include.push({
+            type: 'tier',
+            min: includeRaw.minLevel,
+            max: includeRaw.maxLevel,
+          });
+        } else if ('name' in includeRaw) {
+          entry.include.push({
+            type: 'ids',
+            ids: includeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
+          });
+        } else throw new SyntaxError('Unhandled include type');
+
+        if (provision.vehicleFilter?.include.nations) {
+          entry.include.push({
+            type: 'nation',
+            nations: provision.vehicleFilter.include.nations.split(' '),
+          });
+        }
       }
-    }
 
-    if (excludeRaw) {
-      provisionDefinitions[provision.id].exclude = [];
+      if (excludeRaw) {
+        entry.exclude = [];
 
-      if ('name' in excludeRaw) {
-        provisionDefinitions[provision.id].exclude!.push({
-          type: 'ids',
-          ids: excludeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
-        });
-      } else if ('extendedTags' in excludeRaw) {
-        provisionDefinitions[provision.id].exclude!.push({
-          type: 'category',
-          categories: excludeRaw.extendedTags.split(
-            ' ',
-          ) as TankFilterDefinitionCategory[],
-        });
-      } else throw new SyntaxError('Unhandled exclude type');
+        if ('name' in excludeRaw) {
+          entry.exclude!.push({
+            type: 'ids',
+            ids: excludeRaw.name.split(' ').map((key) => tankStringIdMap[key]),
+          });
+        } else if ('extendedTags' in excludeRaw) {
+          entry.exclude!.push({
+            type: 'category',
+            categories: excludeRaw.extendedTags.split(
+              ' ',
+            ) as TankFilterDefinitionCategory[],
+          });
+        } else throw new SyntaxError('Unhandled exclude type');
 
-      if (provision.vehicleFilter?.exclude?.nations) {
-        provisionDefinitions[provision.id].exclude!.push({
-          type: 'nation',
-          nations: provision.vehicleFilter.exclude.nations.split(' '),
-        });
+        if (provision.vehicleFilter?.exclude?.nations) {
+          entry.exclude!.push({
+            type: 'nation',
+            nations: provision.vehicleFilter.exclude.nations.split(' '),
+          });
+        }
       }
     }
 
@@ -1206,6 +1431,22 @@ export async function definitions(production: boolean) {
       provisionDefinitions[provision.id].crew =
         provision.script.bonusValues?.crewLevelIncrease;
     }
+  });
+
+  Object.entries(combatRoles).forEach(([, value]) => {
+    gameDefinitions.roles[value.id] = { provisions: [], consumables: [] };
+
+    value.default_abilities.forEach((ability) => {
+      if (ability in consumableNativeNames) {
+        gameDefinitions.roles[value.id].consumables.push(
+          consumableNativeNames[ability],
+        );
+      } else if (ability in provisionNativeNames) {
+        gameDefinitions.roles[value.id].provisions.push(
+          provisionNativeNames[ability],
+        );
+      } else throw new Error(`Unknown ability ${ability}`);
+    });
   });
 
   Object.entries(avatar.root.skillsByClasses).forEach(([tankClass, skills]) => {
@@ -1261,6 +1502,11 @@ export async function definitions(production: boolean) {
         content: superCompress(mapDefinitions),
         encoding: 'base64',
         path: 'definitions/maps.cdon.lz4',
+      },
+      {
+        content: superCompress(camouflageDefinitions),
+        encoding: 'base64',
+        path: 'definitions/camouflages.cdon.lz4',
       },
     ],
     production,

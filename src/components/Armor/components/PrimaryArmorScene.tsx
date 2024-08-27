@@ -7,7 +7,6 @@ import { useArmor } from '../../../hooks/useArmor';
 import { useTankModelDefinition } from '../../../hooks/useTankModelDefinition';
 import { useTankTransform } from '../../../hooks/useTankTransform';
 import * as Duel from '../../../stores/duel';
-import * as TankopediaPersistent from '../../../stores/tankopediaPersistent';
 import { ModelTankWrapper } from './ModelTankWrapper';
 import { PrimaryArmorSceneComponent } from './PrimaryArmorSceneComponent';
 
@@ -29,13 +28,6 @@ export const PrimaryArmorScene = memo(() => {
   const hullOrigin = correctZYTuple(trackModelDefinition.origin);
   const turretOrigin = correctZYTuple(tankModelDefinition.turretOrigin);
   const gunOrigin = correctZYTuple(turretModelDefinition.gunOrigin);
-  const tankopediaPersistentStore = TankopediaPersistent.useStore();
-
-  console.log(
-    tankModelDefinition.armor,
-    turretModelDefinition.armor,
-    gunModelDefinition.armor,
-  );
 
   useTankTransform(protagonist, turretContainer, gunContainer);
 

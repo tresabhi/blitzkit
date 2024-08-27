@@ -9,6 +9,7 @@ export const card = style({
   alignItems: 'center',
   gap: 'var(--space-2)',
   background: cardBackgroundVar,
+  overflow: 'hidden',
 });
 
 export const image = style({
@@ -34,6 +35,7 @@ export const name = style({
 export const link = style({
   color: 'inherit',
   textDecoration: 'none',
+  width: '100%',
 
   ':hover': {
     textDecoration: 'underline',

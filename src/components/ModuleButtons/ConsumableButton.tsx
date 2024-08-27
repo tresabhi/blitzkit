@@ -1,6 +1,8 @@
 import { ClockIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Flex, Text } from '@radix-ui/themes';
+import { use } from 'react';
 import { asset } from '../../core/blitzkit/asset';
+import { consumableDefinitions } from '../../core/blitzkit/consumableDefinitions';
 import { useDelta } from '../../hooks/useDelta';
 import { GenericTankComponentButton } from './GenericTankComponentButton';
 import { TankComponentButtonProps } from './TankComponentButton';
@@ -17,23 +19,22 @@ export function ConsumableButton({
   duration,
   ...props
 }: ConsumableButtonProps) {
+  const awaitedConsumableDefinitions = use(consumableDefinitions);
   const cooldownDelta = useDelta(cooldown ?? 0);
   const durationDelta = useDelta(duration ?? 0);
 
   return (
     <GenericTankComponentButton
+      style={{ width: '6rem' }}
+      tooltip={awaitedConsumableDefinitions[consumable].name}
       icon={asset(`icons/consumables/${consumable}.webp`)}
-      style={{
-        flex: 1,
-        minWidth: 'fit-content',
-        borderRadius: 0,
-      }}
       {...props}
     >
       {(cooldown || duration) && (
-        <Flex direction="column" style={{ transform: 'translateX(-10px)' }}>
+        <Flex direction="column" gap="1" ml="-2" mr="2">
           {duration && (
             <Text
+              size="1"
               color={
                 durationDelta > 0
                   ? 'green'
@@ -50,6 +51,7 @@ export function ConsumableButton({
           )}
           {cooldown && (
             <Text
+              size="1"
               color={
                 cooldownDelta < 0
                   ? 'green'

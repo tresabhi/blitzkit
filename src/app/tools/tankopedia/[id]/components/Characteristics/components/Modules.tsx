@@ -214,9 +214,7 @@ export function Modules() {
               align="center"
               direction="column"
               gap="2"
-              style={{
-                position: 'relative',
-              }}
+              position="relative"
             >
               {unlock.cost.value > 0 && (
                 <>
@@ -310,6 +308,7 @@ export function Modules() {
     <ConfigurationChildWrapper>
       <Flex gap="4" align="center">
         <Heading size="4">Modules</Heading>
+
         {hasUpgrades && (
           <>
             <Button
@@ -348,7 +347,7 @@ export function Modules() {
         )}
       </Flex>
 
-      <Flex gap="2">
+      <Flex gap="2" wrap="wrap" gapY="6">
         {tree('engine', [
           {
             cost: { type: 'xp', value: 0 },

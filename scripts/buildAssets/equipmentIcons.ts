@@ -5,7 +5,7 @@ import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
 import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
-import { DATA, POI } from './constants';
+import { DATA } from './constants';
 import { OptionalDevices } from './definitions';
 
 interface Mappings {
@@ -22,13 +22,15 @@ export async function equipmentIcons(production: boolean) {
 
   const changes: FileChange[] = [];
   const optionalDevices = await readXMLDVPL<{ root: OptionalDevices }>(
-    `${DATA}/${POI.optionalDevices}.dvpl`,
+    `${DATA}/XML/item_defs/vehicles/common/optional_devices.xml.dvpl`,
   );
   const mappings = await readYAMLDVPL<Mappings>(
-    `${DATA}/${POI.optionalDeviceImageMappings}.dvpl`,
+    `${DATA}/UI/Screens3/Lobby/Inventory/OptionalDevices/OptionalDevicesItemImage.style.yaml.dvpl`,
   );
   const image = sharp(
-    await readDVPLFile(`${DATA}/${POI.optionalDevicesImage}.dvpl`),
+    await readDVPLFile(
+      `${DATA}/Gfx/UI/InventoryIcons/Big/OptionalDevices/texture0.packed.webp.dvpl`,
+    ),
   );
 
   await Promise.all(

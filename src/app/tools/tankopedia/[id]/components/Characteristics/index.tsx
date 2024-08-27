@@ -7,12 +7,12 @@ import {
   Slider,
   Text,
   TextField,
+  Tooltip,
 } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { Fragment, use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
 import { Ad, AdType } from '../../../../../../components/Ad';
-import { Link } from '../../../../../../components/Link';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolvePenetrationCoefficient } from '../../../../../../core/blitz/resolvePenetrationCoefficient';
@@ -44,6 +44,9 @@ export function Characteristics() {
   const hasImprovedVentilation = useEquipment(102);
   const crewMastery = Duel.use((state) => state.protagonist.crewMastery);
   const [penetrationDistance, setPenetrationDistance] = useState(250);
+  const setPenetrationDistanceDebounced = debounce((value: number) => {
+    setPenetrationDistance(value);
+  }, 500);
 
   const provisions = Duel.use((state) => state.protagonist.provisions);
   const provisionCrewBonus =
@@ -145,32 +148,33 @@ export function Characteristics() {
 
             <Flex>
               {gun.shells.map((thisShell, shellIndex) => (
-                <IconButton
-                  color={thisShell.id === shell.id ? undefined : 'gray'}
-                  variant="soft"
-                  key={thisShell.id}
-                  style={{
-                    borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
-                    borderBottomLeftRadius: shellIndex === 0 ? undefined : 0,
-                    borderTopRightRadius:
-                      shellIndex === gun.shells.length - 1 ? undefined : 0,
-                    borderBottomRightRadius:
-                      shellIndex === gun.shells.length - 1 ? undefined : 0,
-                    marginLeft: shellIndex === 0 ? 0 : -1,
-                  }}
-                  onClick={() => {
-                    mutateDuel((draft) => {
-                      draft.protagonist.shell = thisShell;
-                    });
-                  }}
-                >
-                  <img
-                    alt={thisShell.name}
-                    width={16}
-                    height={16}
-                    src={asset(`icons/shells/${thisShell.icon}.webp`)}
-                  />
-                </IconButton>
+                <Tooltip content={thisShell.name} key={thisShell.id}>
+                  <IconButton
+                    color={thisShell.id === shell.id ? undefined : 'gray'}
+                    variant="soft"
+                    style={{
+                      borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
+                      borderBottomLeftRadius: shellIndex === 0 ? undefined : 0,
+                      borderTopRightRadius:
+                        shellIndex === gun.shells.length - 1 ? undefined : 0,
+                      borderBottomRightRadius:
+                        shellIndex === gun.shells.length - 1 ? undefined : 0,
+                      marginLeft: shellIndex === 0 ? 0 : -1,
+                    }}
+                    onClick={() => {
+                      mutateDuel((draft) => {
+                        draft.protagonist.shell = thisShell;
+                      });
+                    }}
+                  >
+                    <img
+                      alt={thisShell.name}
+                      width={16}
+                      height={16}
+                      src={asset(`icons/shells/${thisShell.icon}.webp`)}
+                    />
+                  </IconButton>
+                </Tooltip>
               ))}
             </Flex>
           </Flex>
@@ -179,35 +183,22 @@ export function Characteristics() {
             {stats.dpm}
           </InfoWithDelta>
           {gun.type === 'autoReloader' && (
-            <>
-              <InfoWithDelta decimals={0} indent name="Maximum" unit="hp / min">
-                {stats.dpmMaximum!}
-              </InfoWithDelta>
-              <InfoWithDelta
-                decimals={0}
-                indent
-                name="Effective at 60s"
-                unit="hp / min"
-              >
-                {stats.dpmEffective!}
-              </InfoWithDelta>
-              <Info
-                indent
-                name={
-                  <Link target="_blank" href="/docs/guide/dpm">
-                    What's the difference?
-                  </Link>
-                }
-              />
-            </>
+            <InfoWithDelta
+              decimals={0}
+              indent
+              name="Effective at 60s"
+              unit="hp / min"
+            >
+              {stats.dpmEffective!}
+            </InfoWithDelta>
           )}
           {gun.type !== 'regular' && (
             <InfoWithDelta name="Shells">{stats.shells}</InfoWithDelta>
           )}
           {gun.type === 'autoReloader' ? (
             <>
-              <Info indent name="Most optimal">
-                {stats.mostOptimalShellIndex}
+              <Info indent name="Most optimal shell index">
+                {stats.mostOptimalShellIndex! + 1}
               </Info>
               <Info name="Shell reloads" unit="s" />
               {stats.shellReloads!.map((reload, index) => (
@@ -269,9 +260,13 @@ export function Characteristics() {
                   max={500}
                   style={{ flex: 1 }}
                   defaultValue={[penetrationDistance]}
-                  onValueChange={debounce(([value]) => {
-                    setPenetrationDistance(value);
-                  }, 500)}
+                  onValueChange={([value]) => {
+                    setPenetrationDistanceDebounced(value);
+
+                    if (!penetrationDistanceInput.current) return;
+
+                    penetrationDistanceInput.current.value = value.toString();
+                  }}
                 />
                 <TextField.Root
                   style={{ width: 64 }}
@@ -477,15 +472,18 @@ export function Characteristics() {
                 >
                   {(member.type === 'commander'
                     ? commanderMastery
-                    : crewMemberMastery) * 100}
+                    : commanderMastery * 1.1) * 100}
                 </InfoWithDelta>
+
                 {member.substitute && (
-                  <Info
+                  <InfoWithDelta
                     key={`${member.type}-substitute`}
+                    decimals={0}
+                    unit="%"
                     indent
                     name={
                       <>
-                        <Flex align="center" gap="1">
+                        <Flex align="center" gap="1" display="inline-flex">
                           <AccessibilityIcon />
                           {member.substitute
                             .map((sub, index) =>
@@ -495,7 +493,9 @@ export function Characteristics() {
                         </Flex>
                       </>
                     }
-                  />
+                  >
+                    {commanderMastery * 1.05 * 100}
+                  </InfoWithDelta>
                 )}
               </Fragment>
             );

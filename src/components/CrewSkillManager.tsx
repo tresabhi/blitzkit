@@ -30,8 +30,6 @@ export function CrewSkillManager({
                 <GenericTankComponentButton
                   key={skill}
                   special={!permanentSkills.includes(skill)}
-                  first
-                  last
                   selected={level > 0}
                   discriminator={
                     level === 0 ? undefined : TIER_ROMAN_NUMERALS[level as Tier]

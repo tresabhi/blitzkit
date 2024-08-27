@@ -1,56 +1,69 @@
 import { style, styleVariants } from '@vanilla-extract/css';
 
-const MIN_EXPANDED_TOOLS = 752;
+const MIN_WIDTH = 640 + 128;
+const HEIGHT = 48;
 
-export const hamburgerButton = style({
+export const hamburger = style({
+  display: 'inline-flex',
+
   '@media': {
-    [`screen and (min-width: ${MIN_EXPANDED_TOOLS}px)`]: {
+    [`screen and (min-width: ${MIN_WIDTH}px)`]: {
       display: 'none',
     },
   },
 });
 
-const navbarBase = style({
-  position: 'fixed',
+export const tools = style({
+  display: 'none',
+
+  '@media': {
+    [`screen and (min-width: ${MIN_WIDTH}px)`]: {
+      display: 'flex',
+    },
+  },
+});
+
+export const navbar = style({
+  height: HEIGHT,
+  marginBottom: -1, // 1px overlap with content to bleed color
+  position: 'sticky',
   top: 0,
-  left: 0,
+  zIndex: 1,
+});
+
+const navbarExpanderBase = style({
+  transitionDuration: '250ms',
+  height: '1000px',
   width: '100%',
-  zIndex: 2,
-  padding: '1rem',
-  backgroundColor: 'var(--color-panel-translucent)',
-  backdropFilter: 'blur(4rem)',
-  WebkitBackdropFilter: 'blur(4rem)',
-  boxSizing: 'border-box',
-  transition: 'max-height 0.2s ease-in-out',
   overflow: 'hidden',
-});
-export const navbar = styleVariants({
-  expanded: [
-    navbarBase,
-    {
-      maxHeight: '100%',
-    },
-  ],
-  collapsed: [
-    navbarBase,
-    {
-      maxHeight: 65,
-    },
-  ],
-});
 
-export const toolCard = style({
-  boxShadow: `inset 0 -200px 128px -128px var(--color-overlay)`,
+  backdropFilter: 'blur(4rem) brightness(0.75)',
+  WebkitBackdropFilter: 'blur(4rem) brightness(0.75)',
 
-  ':hover': {
-    boxShadow: `inset 0 -160px 128px -128px #ffffff00`,
-  },
-});
-
-export const toolTexts = style({
   '@media': {
-    [`screen and (max-width: ${MIN_EXPANDED_TOOLS}px)`]: {
-      display: 'none',
+    [`screen and (min-width: ${MIN_WIDTH}px)`]: {
+      maxHeight: HEIGHT,
     },
   },
+});
+
+export const navbarExpander = styleVariants({
+  false: [
+    navbarExpanderBase,
+    {
+      maxHeight: HEIGHT,
+    },
+  ],
+  true: [
+    navbarExpanderBase,
+    {
+      maxHeight: '100vh',
+      overscrollBehavior: 'contain',
+    },
+  ],
+});
+
+export const navbarContent = style({
+  width: '100%',
+  maxHeight: '100vh',
 });

@@ -140,8 +140,8 @@ export function SpacedArmorSceneComponent({
 
       if (
         !allowRicochet &&
-        !noDuplicateIntersections.some((intersection) => {
-          intersection.object.userData.type === ArmorType.Primary;
+        noDuplicateIntersections.every((intersection) => {
+          intersection.object.userData.type !== ArmorType.Primary;
         })
       ) {
         return null;

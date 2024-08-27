@@ -47,8 +47,6 @@ export function Miscellaneous() {
               left: '50%',
               transform: 'translate(calc(-50% + 4px), calc(-50% + 4px))',
             }}
-            first
-            last
             onClick={() => {
               mutateDuel((draft) => {
                 draft.protagonist.camouflage = !camouflage;
@@ -59,8 +57,6 @@ export function Miscellaneous() {
         <GenericTankComponentButton
           icon={asset('icons/boosters/equipment.webp')}
           selected={cooldownBooster > 0}
-          first
-          last
           banner={
             cooldownBooster === 0
               ? undefined

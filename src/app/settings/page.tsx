@@ -5,7 +5,7 @@ import PageWrapper from '../../components/PageWrapper';
 import * as App from '../../stores/app';
 
 export default function Page() {
-  const developerMode = App.use((state) => state.developerMode);
+  const developerMode = App.useDeferred(false, (state) => state.developerMode);
   const appStore = App.useStore();
 
   return (

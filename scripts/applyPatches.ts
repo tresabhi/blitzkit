@@ -1,7 +1,9 @@
 import { mkdir, writeFile } from 'fs/promises';
 import { parse as parsePath } from 'path';
-import { parse as parseYaml } from 'yaml';
+import ProgressBar from 'progress';
+import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import { readStringDVPL } from '../src/core/blitz/readStringDVPL';
+import { readYAMLDVPL } from '../src/core/blitz/readYAMLDVPL';
 import { writeDVPL } from '../src/core/blitz/writeDVPL';
 import { secrets } from '../src/core/blitzkit/secrets';
 import { dvp } from '../submodules/blitzkit-closed/src/dvp';
@@ -33,6 +35,10 @@ while (true) {
       `${secrets.WOTB_DLC_CDN}/dlc/${data.dx11.replace('.dvpm', '.dvpd')}`,
     ).then((response) => response.arrayBuffer());
     const files = await dvp(dvpm, dvpd);
+    const bar = new ProgressBar(
+      `Patching ${files.length} files :bar`,
+      files.length,
+    );
 
     await Promise.all(
       files.map(async ({ path, data }) => {
@@ -40,8 +46,29 @@ while (true) {
 
         await mkdir(`${DATA}/${dir}`, { recursive: true });
         await writeFile(`${DATA}/${path}.dvpl`, writeDVPL(Buffer.from(data)));
+
+        bar.tick();
       }),
     );
+
+    if ('dynamicContentLocalizationsDir' in data) {
+      console.log('Found dynamic content localizations; patching...');
+
+      const localizationsResponse = await fetch(
+        `${secrets.WOTB_DLC_CDN}/dlc/${data.dynamicContentLocalizationsDir}/en.yaml`,
+      );
+      const newStrings = parseYaml(await localizationsResponse.text());
+      const oldStrings = await readYAMLDVPL<Record<string, string>>(
+        `${DATA}/Strings/en.yaml.dvpl`,
+      );
+      const patchedStrings = { ...oldStrings, ...newStrings };
+      const patchedContent = stringifyYaml(patchedStrings);
+
+      await writeFile(
+        `${DATA}/Strings/en.yaml.dvpl`,
+        writeDVPL(Buffer.from(patchedContent)),
+      );
+    }
 
     patchIndex++;
   } else break;

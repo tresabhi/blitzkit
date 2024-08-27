@@ -12,7 +12,7 @@ BlitzKit is a one man band **TrèsAbhi** but I am far from solo.
 | Game file layout               | Aeson                          |
 | 3-caliber rule edge cases      | Minitelrose, ChickenMan7777    |
 | Embed UX                       | \_34, HisRoyalFatness, Synx    |
-| Tankopedia pre-release testing | [OPTML], Aeson, \_34, Droodles |
-| Website advertisement platform | Aeson, Droodles                |
-| Compare pre-release testing    | [OPTML], Droodles              |
+| Tankopedia pre-release testing | [OPTML], Aeson, \_34 |
+| Website advertisement platform | Aeson                |
+| Compare pre-release testing    | [OPTML]              |
 | Redacted                       | GonnaHetzMe                    |

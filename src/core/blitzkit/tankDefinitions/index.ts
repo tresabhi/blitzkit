@@ -1,4 +1,3 @@
-import { deburr } from 'lodash';
 import { Vector2Tuple } from 'three';
 import { TankClass, TreeType } from '../../../components/Tanks';
 import { asset } from '../asset';
@@ -41,8 +40,10 @@ export type ModuleDefinition =
   | GunDefinition;
 export interface TankDefinition {
   id: number;
+  roles: Record<number, number>;
   description?: string;
   fixedCamouflage?: boolean;
+  camouflages?: number[];
   ancestors?: number[];
   successors?: number[];
   crew: Crew[];
@@ -59,7 +60,7 @@ export interface TankDefinition {
   turrets: TurretDefinition[];
   engines: EngineDefinition[];
   tracks: TrackDefinition[];
-  price: TankDefinitionPrice;
+  price: TankPrice;
   xp?: number;
   speed: {
     forwards: number;
@@ -101,7 +102,7 @@ export interface EngineDefinition {
   weight: number;
   unlocks?: Unlock[];
 }
-export type TankDefinitionPrice =
+export type TankPrice =
   | { type: 'credits'; value: number }
   | { type: 'gold'; value: number };
 export interface TurretDefinition {
@@ -172,24 +173,9 @@ export const tankDefinitions = fetchCdonLz4<TankDefinitions>(
   asset('definitions/tanks.cdon.lz4'),
 );
 
-export const tankDefinitionsArray = tankDefinitions.then((tanks) =>
-  Object.values(tanks).map((tank) => tank),
+export const tanksDefinitionsArray = tankDefinitions.then((tanks) =>
+  Object.values(tanks),
 );
-export const tankNames = tankDefinitionsArray.then((tanks) =>
-  Promise.all(
-    tanks.map(async (tank, index) => {
-      const { id } = (await tankDefinitionsArray)[index];
-
-      return {
-        id,
-        original: tank.name,
-        combined: `${tank.name}${deburr(tank.name)}${tank.nameFull ? `${tank.nameFull}${deburr(tank.nameFull)}` : ''}`,
-        treeType: tank.treeType,
-      };
-    }),
-  ),
-);
-
 export type Tier = (typeof TIERS)[number];
 
 export const flags: Record<string, string> = {

@@ -7,7 +7,7 @@ import { Roboto_Flex } from 'next/font/google';
 import { usePathname } from 'next/navigation';
 import { ReactNode, Suspense } from 'react';
 import { Footer } from '../components/Footer';
-import Navbar, { NAVBAR_HEIGHT } from '../components/Navbar';
+import Navbar from '../components/Navbar';
 import { Party3 } from '../components/Party3';
 import * as App from '../stores/app';
 import { Checks } from './components/Checks';
@@ -48,7 +48,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             </>
           )}
           <meta property="og:site_name" content="BlitzKit" />
-          <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+          <link rel="icon" type="image/x-icon" href="/favicon.png" />
 
           <Party3 />
         </head>
@@ -71,7 +71,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               direction="column"
               style={{
                 minHeight: '100vh',
-                paddingTop: hideNav ? undefined : NAVBAR_HEIGHT,
+                // paddingTop: isEmbed ? undefined : NAVBAR_HEIGHT,
               }}
             >
               {!hideNav && <Navbar />}

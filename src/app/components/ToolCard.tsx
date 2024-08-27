@@ -44,7 +44,8 @@ export function ToolCard({ tool, style, ...props }: ToolCardProps) {
       {...props}
     >
       <Link
-        href={`/tools/${tool.id}`}
+        href={tool.href ?? `/tools/${tool.id}`}
+        target={tool.href ? '_blank' : undefined}
         style={{
           display: 'flex',
           width: '100%',
@@ -78,7 +79,7 @@ export function ToolCard({ tool, style, ...props }: ToolCardProps) {
           width="100%"
           direction={{
             initial: 'column',
-            sm: 'row',
+            xs: 'row',
           }}
           style={{
             backgroundColor: 'var(--color-panel-translucent)',
@@ -91,7 +92,7 @@ export function ToolCard({ tool, style, ...props }: ToolCardProps) {
             justify="center"
             align={{
               initial: 'center',
-              sm: 'start',
+              xs: 'start',
             }}
           >
             <Heading

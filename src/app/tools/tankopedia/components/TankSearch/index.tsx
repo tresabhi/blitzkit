@@ -18,8 +18,8 @@ import {
   TankDefinition,
   tankDefinitions,
   tankDefinitionsArray,
-  tankNames,
 } from '../../../../../core/blitzkit/tankDefinitions';
+import { tankNames } from '../../../../../core/blitzkit/tankDefinitions/tankNames';
 import { unionBoundingBox } from '../../../../../core/blitzkit/unionBoundingBox';
 import { useAdExempt } from '../../../../../hooks/useAdExempt';
 import * as TankFilters from '../../../../../stores/tankFilters';
@@ -375,8 +375,7 @@ export const TankSearch = memo<TankSearchProps>(
         return sort.direction === 'ascending' ? sorted : sorted.reverse();
       } else {
         const searchedRaw = go(filters.search, awaitedTankNames, {
-          key: 'combined',
-          limit: 25,
+          keys: ['searchableName', 'searchableNameDeburr', 'camouflages'],
         });
         const searchedTanks = searchedRaw.map(
           (result) => awaitedTankDefinitions[result.obj.id],
@@ -434,8 +433,8 @@ export const TankSearch = memo<TankSearchProps>(
                 <ExperimentIcon style={{ width: '1em', height: '1em' }} />
               </Callout.Icon>
               <Callout.Text>
-                Tanks in testing are subject to change and many not represent
-                the final product.
+                Tanks in testing are subject to change and may not represent the
+                final product.
               </Callout.Text>
             </Callout.Root>
           </Flex>

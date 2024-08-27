@@ -90,7 +90,7 @@ export const moreTool: Tool = {
   image: '1nPm6VI',
   button: {
     text: 'Join Discord',
-    color: 'indigo',
+    color: 'plum',
   },
 };
 
@@ -119,27 +119,19 @@ export const tankPerformanceTool: Tool = {
   image: 'vOKFB03',
 };
 
-export const embedTool: Tool = {
-  id: 'embed',
-  title: 'Embed',
-  description: 'Embeds for streaming',
-  pageDescription:
-    'Create embeds for streaming World of Tanks Blitz with extreme customization',
-  button: {
-    text: 'Create',
-    color: 'red',
-  },
-  image: 'Q0faRYg',
+export const homeTool: Tool = {
+  id: '',
+  title: 'Home',
+  button: { color: 'blue', text: '' },
+  description: '',
+  image: 'rUPie9G',
 };
 
 export const TOOLS: Tool[] = [
   tankopediaTool,
   compareTool,
   tankPerformanceTool,
-  playerStatsTool,
   sessionTool,
   embedTool,
   ratingTool,
-  discordTool,
-  moreTool,
 ];

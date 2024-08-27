@@ -1,5 +1,12 @@
 import { Draft, produce } from 'immer';
-import { createContext, ReactNode, useContext, useRef } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { StoreApi, useStore as useStoreZustand } from 'zustand';
 
 type StoreProviderProps<InitData> = {
@@ -49,6 +56,20 @@ export function createNextSafeStore<Store extends StoreApi<unknown>, InitData>(
     );
   }
 
+  function useDeferred<Slice = Type>(
+    initial: Slice,
+    selector: (store: Type) => Slice = (state) => state as Slice,
+  ) {
+    const [state, setState] = useState(initial);
+    const trueState = use(selector);
+
+    useEffect(() => {
+      setState(trueState);
+    }, [trueState]);
+
+    return state;
+  }
+
   function useMutation() {
     const counterStoreContext = useStore();
 
@@ -61,5 +82,5 @@ export function createNextSafeStore<Store extends StoreApi<unknown>, InitData>(
     };
   }
 
-  return { Provider, use, useMutation, useStore };
+  return { Provider, use, useMutation, useStore, useDeferred };
 }

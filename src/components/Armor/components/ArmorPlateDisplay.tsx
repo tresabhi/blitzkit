@@ -22,8 +22,7 @@ export function ArmorPlateDisplay() {
     (state) => state.highlightArmor,
   );
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
-  const developerMode = App.use((state) => state.developerMode);
-  const devThicknessInput = useRef<HTMLInputElement>(null);
+  const developerMode = App.useDeferred(false, (state) => state.developerMode);
   const duelStore = Duel.useStore();
   const input = useRef<HTMLInputElement>(null);
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();

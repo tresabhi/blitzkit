@@ -6,7 +6,6 @@ import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/c
 import { tankIcon } from '../../../../core/blitzkit/tankIcon';
 import strings from '../../../../lang/en-US.json';
 import * as Duel from '../../../../stores/duel';
-import * as TankFilters from '../../../../stores/tankFilters';
 import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 
 export default async function Layout({
@@ -25,26 +24,24 @@ export default async function Layout({
   const title = `${tank.name} - Tier ${TIER_ROMAN_NUMERALS[tank.tier]} ${
     (strings.common.nations_adjectives as Record<string, string>)[tank.nation]
   } ${strings.common.tank_class_short[tank.class]}`;
-  const description = `Statistics, armor, and equipment for ${tank.name}`;
+  const description = `Statistics, armor, and equipment for ${tank.name} in World of Tanks Blitz (WoTB)`;
 
   return (
     <TankopediaEphemeral.Provider data={tankModelDefinition}>
-      <TankFilters.Provider>
-        <Duel.Provider
-          data={{
-            tank: awaitedTankDefinitions[id],
-            provisionDefinitions: awaitedProvisionDefinitions,
-          }}
-        >
-          <title>{title}</title>
-          <meta name="description" content={description} />
-          <meta property="og:title" content={title} />
-          <meta property="og:image" content={tankIcon(id)} />
-          <meta property="og:description" content={description} />
+      <Duel.Provider
+        data={{
+          tank: awaitedTankDefinitions[id],
+          provisionDefinitions: awaitedProvisionDefinitions,
+        }}
+      >
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:image" content={tankIcon(id)} />
+        <meta property="og:description" content={description} />
 
-          {children}
-        </Duel.Provider>
-      </TankFilters.Provider>
+        {children}
+      </Duel.Provider>
     </TankopediaEphemeral.Provider>
   );
 }

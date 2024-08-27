@@ -95,6 +95,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
               type={spaced ? ArmorType.Spaced : ArmorType.Primary}
               thickness={thickness}
               node={node}
+              onPointerDown={(event) => event.stopPropagation()}
             />
           );
         })}
@@ -116,6 +117,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
             thickness={trackModelDefinition.thickness}
             variant="track"
             node={node}
+            onPointerDown={(event) => event.stopPropagation()}
           />
         );
       })}
