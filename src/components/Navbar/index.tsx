@@ -29,6 +29,7 @@ import { homeTool, TOOLS } from '../../constants/tools';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { imgur, ImgurSize } from '../../core/blitzkit/imgur';
 import { patreonLoginUrl } from '../../core/blitzkit/patreonLoginUrl';
+import { assertSecret } from '../../core/blitzkit/secret';
 import { PatreonIcon } from '../../icons/Patreon';
 import { WargamingIcon } from '../../icons/Wargaming';
 import strings from '../../lang/en-US.json';
@@ -98,7 +99,14 @@ export default function Navbar() {
               className={styles.tools}
             >
               {TOOLS.map((tool, index) => {
+                const unavailableOnBranch = tool.branches?.every(
+                  (branch) =>
+                    branch !==
+                    assertSecret(process.env.NEXT_PUBLIC_ASSET_BRANCH),
+                );
                 const selected = pathname.startsWith(`/tools/${tool.id}`);
+
+                if (unavailableOnBranch) return null;
 
                 return (
                   <Fragment key={tool.title}>
@@ -282,55 +290,64 @@ export default function Navbar() {
             p="3"
             pt="0"
           >
-            {tools.map((tool) => (
-              <Flex
-                key={tool.id}
-                onClick={() => setShowHamburgerMenu(false)}
-                style={{
-                  position: 'relative',
-                  borderRadius: 'var(--radius-2)',
-                  overflow: 'hidden',
-                  backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size: ImgurSize.MediumThumbnail })})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  aspectRatio: '2 / 1',
-                }}
-              >
-                <Link
-                  href={tool.id.length === 0 ? '/' : `/tools/${tool.id}`}
+            {tools.map((tool) => {
+              const unavailableOnBranch = tool.branches?.every(
+                (branch) =>
+                  branch !== assertSecret(process.env.NEXT_PUBLIC_ASSET_BRANCH),
+              );
+
+              if (unavailableOnBranch) return null;
+
+              return (
+                <Flex
+                  key={tool.id}
+                  onClick={() => setShowHamburgerMenu(false)}
                   style={{
-                    display: 'flex',
-                    width: '100%',
-                    height: '100%',
-                    flexDirection: 'column',
-                    textDecoration: 'none',
-                    color: 'inherit',
+                    position: 'relative',
+                    borderRadius: 'var(--radius-2)',
+                    overflow: 'hidden',
+                    backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size: ImgurSize.MediumThumbnail })})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    aspectRatio: '2 / 1',
                   }}
                 >
-                  <Box
-                    flexGrow="1"
+                  <Link
+                    href={tool.id.length === 0 ? '/' : `/tools/${tool.id}`}
                     style={{
-                      backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size: ImgurSize.MediumThumbnail })})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
-                  />
-
-                  <Flex
-                    p="2"
-                    align="center"
-                    width="100%"
-                    style={{
-                      backgroundColor: 'var(--color-panel-translucent)',
-                      backdropFilter: 'blur(4rem)',
-                      WebkitBackdropFilter: 'blur(4rem)',
+                      display: 'flex',
+                      width: '100%',
+                      height: '100%',
+                      flexDirection: 'column',
+                      textDecoration: 'none',
+                      color: 'inherit',
                     }}
                   >
-                    <Text weight="medium">{tool.title}</Text>
-                  </Flex>
-                </Link>
-              </Flex>
-            ))}
+                    <Box
+                      flexGrow="1"
+                      style={{
+                        backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size: ImgurSize.MediumThumbnail })})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                      }}
+                    />
+
+                    <Flex
+                      p="2"
+                      align="center"
+                      width="100%"
+                      style={{
+                        backgroundColor: 'var(--color-panel-translucent)',
+                        backdropFilter: 'blur(4rem)',
+                        WebkitBackdropFilter: 'blur(4rem)',
+                      }}
+                    >
+                      <Text weight="medium">{tool.title}</Text>
+                    </Flex>
+                  </Link>
+                </Flex>
+              );
+            })}
           </Grid>
         </ScrollArea>
       </Flex>
