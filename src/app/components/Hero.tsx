@@ -1,7 +1,16 @@
-import { Flex, Heading, Text } from '@radix-ui/themes';
+import { Code, Flex, Heading, Text } from '@radix-ui/themes';
 import { imgur } from '../../core/blitzkit/imgur';
 
+const BRANCH_NAMES: Record<string, string> = {
+  dev: 'Beta',
+  opentest: 'Opentest',
+};
+
 export function Hero() {
+  const isBranchNamed =
+    process.env.NEXT_PUBLIC_ASSET_BRANCH &&
+    BRANCH_NAMES[process.env.NEXT_PUBLIC_ASSET_BRANCH];
+
   return (
     <Flex
       align="center"
@@ -30,19 +39,30 @@ export function Hero() {
 
       <Flex
         direction="column"
-        gap="4"
+        gap="6"
         align="center"
         justify="center"
         position="relative"
         width="100%"
       >
-        <Flex direction="column" align="center">
+        <Flex direction="column" align="center" gap="1">
           <Heading size="9" weight="bold" align="center">
             BlitzKit
+            {isBranchNamed && (
+              <>
+                {' '}
+                <Code color="gray" highContrast variant="solid">
+                  {BRANCH_NAMES[process.env.NEXT_PUBLIC_ASSET_BRANCH!]}
+                </Code>
+              </>
+            )}
           </Heading>
-          <Text color="gray" align="center" size="4">
-            Everything World of Tanks Blitz
-          </Text>
+
+          {!isBranchNamed && (
+            <Text color="gray" align="center" size="4">
+              Everything World of Tanks Blitz
+            </Text>
+          )}
         </Flex>
       </Flex>
     </Flex>
