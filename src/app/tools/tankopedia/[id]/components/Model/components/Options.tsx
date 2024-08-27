@@ -1,5 +1,7 @@
 import {
   CameraIcon,
+  CopyIcon,
+  DownloadIcon,
   EnterFullScreenIcon,
   ExitFullScreenIcon,
   EyeOpenIcon,
@@ -303,21 +305,56 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
       )}
 
       <Box position="absolute" top="3" right="3">
-        <IconButton
-          size={{ initial: '2', sm: '3' }}
-          variant="soft"
-          onClick={() => {
-            if (!canvas.current) return;
+        <Popover.Root>
+          <Popover.Trigger>
+            <IconButton size={{ initial: '2', sm: '3' }} variant="soft">
+              <CameraIcon />
+            </IconButton>
+          </Popover.Trigger>
 
-            const anchor = document.createElement('a');
+          <Popover.Content>
+            <Flex direction="column" gap="2">
+              <Popover.Close>
+                <Button
+                  onClick={() => {
+                    if (!canvas.current) return;
 
-            anchor.setAttribute('download', `${protagonist.name}.png`);
-            anchor.setAttribute('href', canvas.current.toDataURL('image/png'));
-            anchor.click();
-          }}
-        >
-          <CameraIcon />
-        </IconButton>
+                    const anchor = document.createElement('a');
+
+                    anchor.setAttribute('download', `${protagonist.name}.png`);
+                    anchor.setAttribute(
+                      'href',
+                      canvas.current.toDataURL('image/png'),
+                    );
+                    anchor.click();
+                  }}
+                >
+                  <DownloadIcon />
+                  Download
+                </Button>
+              </Popover.Close>
+              <Popover.Close>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    if (!canvas.current) return;
+
+                    canvas.current.toBlob((blob) => {
+                      if (!blob) return;
+
+                      navigator.clipboard.write([
+                        new ClipboardItem({ 'image/png': blob }),
+                      ]);
+                    });
+                  }}
+                >
+                  <CopyIcon />
+                  Copy
+                </Button>
+              </Popover.Close>
+            </Flex>
+          </Popover.Content>
+        </Popover.Root>
       </Box>
 
       <Flex

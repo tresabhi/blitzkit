@@ -24,7 +24,7 @@ export default async function Layout({
   const title = `${tank.name} - Tier ${TIER_ROMAN_NUMERALS[tank.tier]} ${
     (strings.common.nations_adjectives as Record<string, string>)[tank.nation]
   } ${strings.common.tank_class_short[tank.class]}`;
-  const description = `Statistics, armor, and equipment for ${tank.name} in World of Tanks Blitz | WoTB`;
+  const description = `Statistics, armor, and equipment for ${tank.name} in World of Tanks Blitz (WoTB)`;
 
   return (
     <TankopediaEphemeral.Provider data={tankModelDefinition}>
