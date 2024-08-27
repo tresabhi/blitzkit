@@ -24,7 +24,7 @@ on:
     - cron: '0 2 * * *'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event.inputs.cdn_branch }}
   cancel-in-progress: true
 
 jobs:
