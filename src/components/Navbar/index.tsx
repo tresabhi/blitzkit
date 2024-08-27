@@ -10,6 +10,7 @@ import {
 import {
   Box,
   Button,
+  Code,
   Dialog,
   Flex,
   Grid,
@@ -22,6 +23,7 @@ import {
 } from '@radix-ui/themes';
 import { usePathname } from 'next/navigation';
 import { Fragment, useState } from 'react';
+import { BRANCH_NAMES } from '../../app/components/Hero/constants';
 import { REGIONS } from '../../constants/regions';
 import { homeTool, TOOLS } from '../../constants/tools';
 import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
@@ -40,6 +42,9 @@ export default function Navbar() {
   const logins = App.use((state) => state.logins);
   const mutateApp = App.useMutation();
   const tools = [homeTool, ...TOOLS];
+  const isBranchNamed =
+    process.env.NEXT_PUBLIC_ASSET_BRANCH &&
+    BRANCH_NAMES[process.env.NEXT_PUBLIC_ASSET_BRANCH];
 
   return (
     <Flex className={styles.navbar}>
@@ -73,6 +78,14 @@ export default function Navbar() {
                 onClick={() => setShowHamburgerMenu(false)}
               >
                 BlitzKit
+                {isBranchNamed && (
+                  <>
+                    {' '}
+                    <Code color="gray" highContrast variant="solid">
+                      {BRANCH_NAMES[process.env.NEXT_PUBLIC_ASSET_BRANCH!]}
+                    </Code>
+                  </>
+                )}
               </Link>
             </Flex>
 

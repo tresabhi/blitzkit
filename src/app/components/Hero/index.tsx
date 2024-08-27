@@ -1,10 +1,6 @@
 import { Code, Flex, Heading, Text } from '@radix-ui/themes';
-import { imgur } from '../../core/blitzkit/imgur';
-
-const BRANCH_NAMES: Record<string, string> = {
-  dev: 'Beta',
-  opentest: 'Opentest',
-};
+import { imgur } from '../../../core/blitzkit/imgur';
+import { BRANCH_NAMES } from './constants';
 
 export function Hero() {
   const isBranchNamed =
