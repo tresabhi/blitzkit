@@ -67,7 +67,7 @@ jobs:
           ZIP_URL: ${{ github.event.inputs.zip_url }}
           ZIP_ROOT: ${{ github.event.inputs.zip_root }}
         run: |
-          curl --retry 5 --retry-delay 10 --max-time 3600 -o client.zip $ZIP_URL
+          wget -O client.zip $ZIP_URL
           unzip client.zip
           rm client.zip
           mv $ZIP_ROOT depots/444202/0
