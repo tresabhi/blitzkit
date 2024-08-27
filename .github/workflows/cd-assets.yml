@@ -3,7 +3,22 @@ name: CD Build Assets
 on:
   push:
     branches: main
+
   workflow_dispatch:
+    inputs:
+      zip_url:
+        type: string
+        required: false
+        description: ZIP URL to download instead of Steam client
+      zip_root:
+        type: string
+        required: false
+        description: Root dir of ZIP which houses the executable and Data dir
+      zip_branch:
+        type: string
+        required: false
+        description: What CDN branch must the ZIP be written to
+
   schedule:
     - cron: '0 2 * * *'
 
