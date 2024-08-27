@@ -1,14 +1,14 @@
 import { deburr } from 'lodash';
-import { tanksDefinitionsArray } from '.';
+import { tankDefinitionsArray } from '.';
 import { camouflageDefinitions } from '../camouflageDefinitions';
 
 export const tankNames = Promise.all([
-  tanksDefinitionsArray,
+  tankDefinitionsArray,
   camouflageDefinitions,
 ]).then(([tanks, camouflages]) =>
   Promise.all(
     tanks.map(async (tank, index) => {
-      const { id } = (await tanksDefinitionsArray)[index];
+      const { id } = (await tankDefinitionsArray)[index];
 
       return {
         id,

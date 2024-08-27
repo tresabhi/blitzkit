@@ -14,7 +14,6 @@ import { capitalize, startCase } from 'lodash';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { stringify } from 'urlon';
 import { CopyButton } from '../../../../components/CopyButton';
-import { NAVBAR_HEIGHT } from '../../../../components/Navbar';
 import PageWrapper from '../../../../components/PageWrapper';
 import { imgur } from '../../../../core/blitzkit/imgur';
 import * as App from '../../../../stores/app';
@@ -237,8 +236,9 @@ export default function Page({
           p="4"
           flexGrow="1"
           position="sticky"
-          top={`${NAVBAR_HEIGHT}px`}
-          height={`calc(100vh - ${NAVBAR_HEIGHT}px)`}
+          // TODO: re-implement this sticky preview
+          // top={`${NAVBAR_HEIGHT}px`}
+          // height={`calc(100vh - ${NAVBAR_HEIGHT}px)`}
         >
           <Flex
             direction="column"

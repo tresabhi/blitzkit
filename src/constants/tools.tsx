@@ -119,6 +119,19 @@ export const tankPerformanceTool: Tool = {
   image: 'vOKFB03',
 };
 
+export const embedTool: Tool = {
+  id: 'embed',
+  title: 'Embed',
+  description: 'Embeds for streaming',
+  pageDescription:
+    'Create embeds for streaming World of Tanks Blitz with extreme customization',
+  button: {
+    text: 'Create',
+    color: 'red',
+  },
+  image: 'Q0faRYg',
+};
+
 export const homeTool: Tool = {
   id: '',
   title: 'Home',

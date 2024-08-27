@@ -173,7 +173,7 @@ export const tankDefinitions = fetchCdonLz4<TankDefinitions>(
   asset('definitions/tanks.cdon.lz4'),
 );
 
-export const tanksDefinitionsArray = tankDefinitions.then((tanks) =>
+export const tankDefinitionsArray = tankDefinitions.then((tanks) =>
   Object.values(tanks),
 );
 export type Tier = (typeof TIERS)[number];
