@@ -45,7 +45,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             </>
           )}
           <meta property="og:site_name" content="BlitzKit" />
-          <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+          <link rel="icon" type="image/x-icon" href="/favicon.png" />
 
           <Party3 />
         </head>

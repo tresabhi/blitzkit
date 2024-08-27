@@ -17,7 +17,7 @@ import { equipmentDefinitions } from '../../../../core/blitzkit/equipmentDefinit
 import { provisionDefinitions } from '../../../../core/blitzkit/provisionDefinitions';
 import { skillDefinitions } from '../../../../core/blitzkit/skillDefinitions';
 import { TankCharacteristics } from '../../../../core/blitzkit/tankCharacteristics';
-import { BlitzkitButtonWatermark } from '../../../../icons/BlitzkitButtonWatermark';
+import { BlitzkitButtonGray } from '../../../../icons/BlitzkitButtonGray';
 import { theme } from '../../../../stitches.config';
 import * as CompareEphemeral from '../../../../stores/compareEphemeral';
 import { EquipmentMatrix } from '../../../../stores/duel';
@@ -56,7 +56,7 @@ export function CompareTable({ stats }: CompareTableProps) {
               align="center"
               justify="center"
             >
-              <BlitzkitButtonWatermark width={64} height={64} />
+              <BlitzkitButtonGray opacity="0.25" width={64} height={64} />
               <InsertionMarker index={0} />
             </Flex>
           </StickyColumnHeaderCell>
