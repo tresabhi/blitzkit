@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { assertSecrete } from '../../../../../core/blitzkit/secrete';
 
 interface PatreonMembershipResponse {
   data: {
@@ -68,7 +69,7 @@ export async function GET(
       (item) =>
         item.type === 'member' &&
         item.relationships.campaign.data.id ===
-          process.env.PATREON_CAMPAIGN_ID &&
+          assertSecrete(process.env.PATREON_CAMPAIGN_ID) &&
         item.attributes.patron_status === 'active_patron',
     ),
   );

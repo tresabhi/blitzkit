@@ -2,6 +2,7 @@ import sharp from 'sharp';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
+import { assertSecrete } from '../../src/core/blitzkit/secrete';
 import { DATA } from './constants';
 
 const ICONS = [
@@ -21,7 +22,7 @@ type BlitzGlossary = Record<
   }
 >;
 
-export async function currencies(production: boolean) {
+export async function currencies() {
   console.log('Building currency icons...');
 
   const changes: FileChange[] = [];
@@ -44,7 +45,7 @@ export async function currencies(production: boolean) {
     }),
   );
 
-  const glossary = await fetch(process.env.WOTB_GLOSSARY!).then(
+  const glossary = await fetch(assertSecrete(process.env.WOTB_GLOSSARY)).then(
     (response) => response.json() as Promise<BlitzGlossary>,
   );
 
@@ -74,5 +75,5 @@ export async function currencies(production: boolean) {
       }),
   );
 
-  await commitAssets('currency icons', changes, production);
+  await commitAssets('currency icons', changes);
 }

@@ -433,7 +433,7 @@ const missingStrings: Record<string, string> = {
 };
 export const botPattern = /^.+((tutorial_bot(\d+)?)|(TU(R?)))$/;
 
-export async function definitions(production: boolean) {
+export async function definitions() {
   console.log('Building definitions...');
 
   const wargamingTankopedia = (await fetch(
@@ -1460,55 +1460,51 @@ export async function definitions(production: boolean) {
     };
   });
 
-  await commitAssets(
-    'definitions',
-    [
-      {
-        content: superCompress(gameDefinitions),
-        encoding: 'base64',
-        path: 'definitions/game.cdon.lz4',
-      },
-      {
-        content: superCompress(tankDefinitions),
-        encoding: 'base64',
-        path: 'definitions/tanks.cdon.lz4',
-      },
-      {
-        content: superCompress(modelDefinitions),
-        encoding: 'base64',
-        path: 'definitions/models.cdon.lz4',
-      },
-      {
-        content: superCompress(equipmentDefinitions),
-        encoding: 'base64',
-        path: 'definitions/equipment.cdon.lz4',
-      },
-      {
-        content: superCompress(consumableDefinitions),
-        encoding: 'base64',
-        path: 'definitions/consumables.cdon.lz4',
-      },
-      {
-        content: superCompress(provisionDefinitions),
-        encoding: 'base64',
-        path: 'definitions/provisions.cdon.lz4',
-      },
-      {
-        content: superCompress(skillDefinitions),
-        encoding: 'base64',
-        path: 'definitions/skills.cdon.lz4',
-      },
-      {
-        content: superCompress(mapDefinitions),
-        encoding: 'base64',
-        path: 'definitions/maps.cdon.lz4',
-      },
-      {
-        content: superCompress(camouflageDefinitions),
-        encoding: 'base64',
-        path: 'definitions/camouflages.cdon.lz4',
-      },
-    ],
-    production,
-  );
+  await commitAssets('definitions', [
+    {
+      content: superCompress(gameDefinitions),
+      encoding: 'base64',
+      path: 'definitions/game.cdon.lz4',
+    },
+    {
+      content: superCompress(tankDefinitions),
+      encoding: 'base64',
+      path: 'definitions/tanks.cdon.lz4',
+    },
+    {
+      content: superCompress(modelDefinitions),
+      encoding: 'base64',
+      path: 'definitions/models.cdon.lz4',
+    },
+    {
+      content: superCompress(equipmentDefinitions),
+      encoding: 'base64',
+      path: 'definitions/equipment.cdon.lz4',
+    },
+    {
+      content: superCompress(consumableDefinitions),
+      encoding: 'base64',
+      path: 'definitions/consumables.cdon.lz4',
+    },
+    {
+      content: superCompress(provisionDefinitions),
+      encoding: 'base64',
+      path: 'definitions/provisions.cdon.lz4',
+    },
+    {
+      content: superCompress(skillDefinitions),
+      encoding: 'base64',
+      path: 'definitions/skills.cdon.lz4',
+    },
+    {
+      content: superCompress(mapDefinitions),
+      encoding: 'base64',
+      path: 'definitions/maps.cdon.lz4',
+    },
+    {
+      content: superCompress(camouflageDefinitions),
+      encoding: 'base64',
+      path: 'definitions/camouflages.cdon.lz4',
+    },
+  ]);
 }

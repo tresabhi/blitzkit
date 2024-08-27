@@ -3,7 +3,7 @@ import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
 import { DATA } from './constants';
 
-export async function camouflageIcons(production: boolean) {
+export async function camouflageIcons() {
   console.log('Building camouflage icons...');
   const content = await readDVPLFile(
     `${DATA}/Gfx/UI/Hangar/IconCamouflage.packed.webp.dvpl`,
@@ -16,5 +16,5 @@ export async function camouflageIcons(production: boolean) {
     },
   ];
 
-  await commitAssets('camo icons', changes, production);
+  await commitAssets('camo icons', changes);
 }

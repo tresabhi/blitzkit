@@ -5,10 +5,10 @@ import { DidsReadStream } from '../streams/dids';
 import { asset } from './asset';
 import { DiscoveredIdsDefinitions } from './discoveredIdDefinitions';
 
-export async function fetchPreDiscoveredIds(dev: boolean) {
+export async function fetchPreDiscoveredIds() {
   const idChunks: number[][] = [];
-  const manifest = (await fetch(asset('ids/manifest.json', dev)).then(
-    (response) => response.json(),
+  const manifest = (await fetch(asset('ids/manifest.json')).then((response) =>
+    response.json(),
   )) as DiscoveredIdsDefinitions;
   const bar = new ProgressBar(
     `Fetching ${manifest.count.toLocaleString()} ids in ${manifest.chunks} chunks :bar`,
@@ -19,7 +19,7 @@ export async function fetchPreDiscoveredIds(dev: boolean) {
   await Promise.all(
     times(manifest.chunks, async (chunkIndex) => {
       const preDiscovered = await fetch(
-        asset(`ids/${chunkIndex}.dids.lz4`, dev),
+        asset(`ids/${chunkIndex}.dids.lz4`),
       ).then(async (response) => {
         const buffer = await response.arrayBuffer();
         const decompressed = decompress(new Uint8Array(buffer)).buffer;

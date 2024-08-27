@@ -6,7 +6,7 @@ import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
 import { DATA } from './constants';
 
-export async function shellIcons(production: boolean) {
+export async function shellIcons() {
   console.log('Building shell icons...');
 
   const image = sharp(
@@ -47,5 +47,5 @@ export async function shellIcons(production: boolean) {
       }),
   );
 
-  await commitAssets('shell icons', changes, production);
+  await commitAssets('shell icons', changes);
 }

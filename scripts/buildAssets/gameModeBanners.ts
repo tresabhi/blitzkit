@@ -6,7 +6,7 @@ import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
 import { DATA } from './constants';
 import { SquadBattleTypeStyles } from './definitions';
 
-export async function gameModeBanners(production: boolean) {
+export async function gameModeBanners() {
   console.log('Building game mode banners...');
 
   const changes: FileChange[] = [];
@@ -50,5 +50,5 @@ export async function gameModeBanners(production: boolean) {
     });
   }
 
-  await commitAssets('game mode banners', changes, production);
+  await commitAssets('game mode banners', changes);
 }

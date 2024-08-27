@@ -191,9 +191,5 @@ regionSubdomains.split(',').forEach(async (regionSubdomain) => {
     },
   ];
 
-  commitAssets(
-    `rating leaderboard ${regionSubdomain} ${target}`,
-    changes,
-    production,
-  );
+  commitAssets(`rating leaderboard ${regionSubdomain} ${target}`, changes);
 });

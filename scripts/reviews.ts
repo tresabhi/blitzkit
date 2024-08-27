@@ -22,7 +22,7 @@ const MAX_QUERIES = 128;
 
 console.log('Finding reviews...');
 
-const currentReviews = await fetch(asset('definitions/reviews.pb', false))
+const currentReviews = await fetch(asset('definitions/reviews.pb'))
   .then((response) => response.arrayBuffer())
   .then((buffer) =>
     decode<Reviews>('reviews/blitzkit.Reviews', new Uint8Array(buffer)),
@@ -128,8 +128,6 @@ const content = await encode('reviews/blitzkit.Reviews', reviews).then(
   (array) => Buffer.from(array).toString('base64'),
 );
 
-await commitAssets(
-  'reviews',
-  [{ content, encoding: 'base64', path: 'definitions/reviews.pb' }],
-  true,
-);
+await commitAssets('reviews', [
+  { content, encoding: 'base64', path: 'definitions/reviews.pb' },
+]);

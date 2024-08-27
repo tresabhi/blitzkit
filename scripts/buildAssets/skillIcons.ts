@@ -25,7 +25,7 @@ export interface Avatar {
   };
 }
 
-export async function skillIcons(production: boolean) {
+export async function skillIcons() {
   console.log('Building skill icons...');
 
   const avatar = await readXMLDVPL<{ root: Avatar }>(
@@ -47,5 +47,5 @@ export async function skillIcons(production: boolean) {
     }),
   );
 
-  commitAssets('skill icons', changes, production);
+  commitAssets('skill icons', changes);
 }

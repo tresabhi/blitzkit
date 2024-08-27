@@ -1,31 +1,32 @@
 'use client';
 
-import { Flex, Heading, Text, Theme } from '@radix-ui/themes';
+import { Code, Flex, Heading, Text, Theme } from '@radix-ui/themes';
+import { use } from 'react';
 import packageJson from '../../../package.json';
+import { gameDefinitions } from '../../core/blitzkit/gameDefinitions';
 import { Link } from '../Link';
 
 export function Footer() {
+  const awaitedGameDefinitions = use(gameDefinitions);
+
   return (
     <Theme radius="none">
       <Flex
-        justify="center"
-        gap="3"
+        gap="6"
         p="6"
-        style={{
-          backgroundColor: 'var(--color-panel)',
-        }}
+        direction="column"
+        align="center"
+        style={{ backgroundColor: 'var(--color-panel)' }}
       >
         <Flex
           align="center"
           justify="between"
-          maxWidth="640px"
+          maxWidth="40rem"
+          width="100%"
           flexGrow="1"
           gap="5"
           position="relative"
-          direction={{
-            initial: 'column',
-            sm: 'row',
-          }}
+          direction={{ initial: 'column', sm: 'row' }}
         >
           <Flex
             direction="column"
@@ -34,12 +35,7 @@ export function Footer() {
               sm: 'start',
             }}
           >
-            <Heading>
-              BlitzKit{' '}
-              <Text color="gray" size="1" weight="regular">
-                {packageJson.version}
-              </Text>
-            </Heading>
+            <Heading>BlitzKit </Heading>
 
             <Text color="gray">Everything World of Tanks Blitz</Text>
           </Flex>
@@ -130,6 +126,53 @@ export function Footer() {
               </Flex>
             </Flex>
           </Flex>
+        </Flex>
+
+        <Flex gap="5" display={{ initial: 'flex', sm: 'none' }}>
+          <Flex direction="column" justify="between" align="end">
+            <Text size="2" color="gray">
+              BlitzKit
+            </Text>
+            <Text size="2" color="gray">
+              WoT Blitz
+            </Text>
+            <Text size="2" color="gray">
+              CDN
+            </Text>
+          </Flex>
+
+          <Flex direction="column" justify="between" align="start">
+            <Code size="2" color="gray">
+              {packageJson.version}
+            </Code>
+            <Code size="2" color="gray">
+              {awaitedGameDefinitions.version}
+            </Code>
+            <Code size="2" color="gray">
+              {process.env.NEXT_PUBLIC_ASSET_BRANCH}
+            </Code>
+          </Flex>
+        </Flex>
+
+        <Flex gap="2" align="center" display={{ initial: 'none', sm: 'flex' }}>
+          <Text size="2" color="gray">
+            BlitzKit
+          </Text>
+          <Code size="2" color="gray">
+            {packageJson.version}
+          </Code>
+          <Text size="2" color="gray">
+            WoT Blitz
+          </Text>
+          <Code size="2" color="gray">
+            {awaitedGameDefinitions.version}
+          </Code>
+          <Text size="2" color="gray">
+            CDN
+          </Text>
+          <Code size="2" color="gray">
+            {process.env.NEXT_PUBLIC_ASSET_BRANCH}
+          </Code>
         </Flex>
       </Flex>
     </Theme>

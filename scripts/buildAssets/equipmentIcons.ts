@@ -17,7 +17,7 @@ interface Mappings {
   }[];
 }
 
-export async function equipmentIcons(production: boolean) {
+export async function equipmentIcons() {
   console.log('Building equipment icons...');
 
   const changes: FileChange[] = [];
@@ -91,5 +91,5 @@ export async function equipmentIcons(production: boolean) {
     ),
   );
 
-  await commitAssets('equipment icons', changes, production);
+  await commitAssets('equipment icons', changes);
 }

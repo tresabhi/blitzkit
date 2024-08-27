@@ -42,7 +42,7 @@ export interface TankParameters {
   };
 }
 
-export async function tankIcons(production: boolean) {
+export async function tankIcons() {
   console.log('Building tank icons...');
 
   const changes: FileChange[] = [];
@@ -97,5 +97,5 @@ export async function tankIcons(production: boolean) {
     }),
   );
 
-  await commitAssets('tank icons', changes, production);
+  await commitAssets('tank icons', changes);
 }

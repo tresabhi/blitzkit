@@ -5,7 +5,7 @@ import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import { readStringDVPL } from '../src/core/blitz/readStringDVPL';
 import { readYAMLDVPL } from '../src/core/blitz/readYAMLDVPL';
 import { writeDVPL } from '../src/core/blitz/writeDVPL';
-import { secrets } from '../src/core/blitzkit/secrets';
+import { assertSecrete } from '../src/core/blitzkit/secrete';
 import { dvp } from '../submodules/blitzkit-closed/src/dvp';
 import { DATA } from './buildAssets/constants';
 
@@ -21,18 +21,18 @@ console.log(`Installing patches for ${currentVersion}...`);
 let patchIndex = 1;
 while (true) {
   const response = await fetch(
-    `${secrets.WOTB_DLC_CDN}/dlc/s${currentVersion}_${patchIndex}.yaml`,
+    `${assertSecrete(process.env.WOTB_DLC_CDN)}/dlc/s${currentVersion}_${patchIndex}.yaml`,
   );
 
   if (response.status === 200) {
     console.log(`Applying patch ${patchIndex}...`);
 
     const data = parseYaml(await response.text());
-    const dvpm = await fetch(`${secrets.WOTB_DLC_CDN}/dlc/${data.dx11}`).then(
-      (response) => response.arrayBuffer(),
-    );
+    const dvpm = await fetch(
+      `${assertSecrete(process.env.WOTB_DLC_CDN)}/dlc/${data.dx11}`,
+    ).then((response) => response.arrayBuffer());
     const dvpd = await fetch(
-      `${secrets.WOTB_DLC_CDN}/dlc/${data.dx11.replace('.dvpm', '.dvpd')}`,
+      `${assertSecrete(process.env.WOTB_DLC_CDN)}/dlc/${data.dx11.replace('.dvpm', '.dvpd')}`,
     ).then((response) => response.arrayBuffer());
     const files = await dvp(dvpm, dvpd);
     const bar = new ProgressBar(
@@ -45,7 +45,10 @@ while (true) {
         const { dir } = parsePath(path);
 
         await mkdir(`${DATA}/${dir}`, { recursive: true });
-        await writeFile(`${DATA}/${path}.dvpl`, writeDVPL(Buffer.from(data)));
+        await writeFile(
+          `${DATA}/${path}.dvpl`,
+          new Uint8Array(writeDVPL(Buffer.from(data))),
+        );
 
         bar.tick();
       }),
@@ -55,7 +58,7 @@ while (true) {
       console.log('Found dynamic content localizations; patching...');
 
       const localizationsResponse = await fetch(
-        `${secrets.WOTB_DLC_CDN}/dlc/${data.dynamicContentLocalizationsDir}/en.yaml`,
+        `${assertSecrete(process.env.WOTB_DLC_CDN)}/dlc/${data.dynamicContentLocalizationsDir}/en.yaml`,
       );
       const newStrings = parseYaml(await localizationsResponse.text());
       const oldStrings = await readYAMLDVPL<Record<string, string>>(
@@ -66,7 +69,7 @@ while (true) {
 
       await writeFile(
         `${DATA}/Strings/en.yaml.dvpl`,
-        writeDVPL(Buffer.from(patchedContent)),
+        new Uint8Array(writeDVPL(Buffer.from(patchedContent))),
       );
     }
 

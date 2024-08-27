@@ -1,13 +1,12 @@
 import { chunk, times, uniq } from 'lodash';
 import { compress, decompress } from 'lz4js';
-import { argv } from 'process';
 import { REGIONS, Region } from '../src/constants/regions';
 import { retryAbleBlitzFetchEvent } from '../src/core/blitz/fetchBlitz';
 import { getAccountInfo } from '../src/core/blitz/getAccountInfo';
 import { MIN_IDS, idToRegion } from '../src/core/blitz/idToRegion';
 import { asset } from '../src/core/blitzkit/asset';
 import { commitAssets } from '../src/core/blitzkit/commitAssets';
-import { DiscoverIdsDefinitions } from '../src/core/blitzkit/discoveredIdDefinitions';
+import { DiscoveredIdsDefinitions } from '../src/core/blitzkit/discoveredIdDefinitions';
 import { DidsReadStream, DidsWriteStream } from '../src/core/streams/dids';
 
 const CHUNK_SIZE = 2 ** 21;
@@ -16,17 +15,12 @@ const PROGRESS_UPDATE_FREQUENCY = 1000 * 60;
 const MAX_REQUESTS = 10;
 const ACCOUNTS_PER_CALL = 100;
 const TERMINATION_THRESHOLD = 1000;
-
-const production = argv.includes('--production');
-
-console.log(`Running in ${production ? 'production' : 'development'} mode`);
-
 const startTime = Date.now();
 const indexableRegions = [...REGIONS];
 let ids: number[] = [];
-const preDiscoveredManifest = (await fetch(
-  asset('ids/manifest.json', !production),
-).then((response) => response.json())) as DiscoverIdsDefinitions;
+const preDiscoveredManifest = (await fetch(asset('ids/manifest.json')).then(
+  (response) => response.json(),
+)) as DiscoveredIdsDefinitions;
 
 console.log(
   `Fetching ${preDiscoveredManifest.chunks} pre-discovered chunks...`,
@@ -34,13 +28,13 @@ console.log(
 
 let chunkIndex = 0;
 while (chunkIndex < preDiscoveredManifest.chunks) {
-  const preDiscovered = await fetch(
-    asset(`ids/${chunkIndex}.dids.lz4`, !production),
-  ).then(async (response) => {
-    const buffer = await response.arrayBuffer();
-    const decompressed = decompress(new Uint8Array(buffer)).buffer;
-    return new DidsReadStream(decompressed as ArrayBuffer).dids();
-  });
+  const preDiscovered = await fetch(asset(`ids/${chunkIndex}.dids.lz4`)).then(
+    async (response) => {
+      const buffer = await response.arrayBuffer();
+      const decompressed = decompress(new Uint8Array(buffer)).buffer;
+      return new DidsReadStream(decompressed as ArrayBuffer).dids();
+    },
+  );
 
   // no spread syntax: https://github.com/oven-sh/bun/issues/11734
   ids = ids.concat(preDiscovered);
@@ -149,20 +143,16 @@ function post() {
     };
   });
 
-  commitAssets(
-    'discovered ids',
-    [
-      ...files,
-      {
-        content: JSON.stringify({
-          chunks: idsChunked.length,
-          count: ids.length,
-          time: Date.now(),
-        } satisfies DiscoverIdsDefinitions),
-        encoding: 'utf-8',
-        path: 'ids/manifest.json',
-      },
-    ],
-    production,
-  );
+  commitAssets('discovered ids', [
+    ...files,
+    {
+      content: JSON.stringify({
+        chunks: idsChunked.length,
+        count: ids.length,
+        time: Date.now(),
+      } satisfies DiscoveredIdsDefinitions),
+      encoding: 'utf-8',
+      path: 'ids/manifest.json',
+    },
+  ]);
 }

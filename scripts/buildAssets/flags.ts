@@ -6,7 +6,7 @@ import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
 import { DATA } from './constants';
 
-export async function flags(production: boolean) {
+export async function flags() {
   console.log('Building flags...');
 
   const changes = [
@@ -82,5 +82,5 @@ export async function flags(production: boolean) {
     )),
   ];
 
-  await commitAssets('flags', changes, production);
+  await commitAssets('flags', changes);
 }

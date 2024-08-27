@@ -26,7 +26,10 @@ export function writeDVPL(buffer: Buffer) {
       0,
     );
 
-    return Buffer.concat([buffer, footerBuffer], buffer.length + 20);
+    return Buffer.concat(
+      [new Uint8Array(buffer), new Uint8Array(footerBuffer)],
+      buffer.length + 20,
+    );
   } else {
     output = output.subarray(0, compressedBlockSize);
     const footerBuffer = toDVPLFooter(
@@ -36,7 +39,10 @@ export function writeDVPL(buffer: Buffer) {
       2,
     );
 
-    return Buffer.concat([output, footerBuffer], compressedBlockSize + 20);
+    return Buffer.concat(
+      [new Uint8Array(output), new Uint8Array(footerBuffer)],
+      compressedBlockSize + 20,
+    );
   }
 }
 

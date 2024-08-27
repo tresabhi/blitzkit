@@ -1,5 +1,4 @@
 import { chunk, times } from 'lodash';
-import { argv } from 'process';
 import { Region, REGIONS } from '../src/constants/regions';
 import { getAccountInfo } from '../src/core/blitz/getAccountInfo';
 import getTankStats from '../src/core/blitz/getTankStats';
@@ -36,8 +35,7 @@ const THREADS = 10;
 const PLAYER_IDS_PER_CALL = 100;
 
 const startTime = Date.now();
-const production = argv.includes('--production');
-const preDiscoveredIds = await fetchPreDiscoveredIds(!production);
+const preDiscoveredIds = await fetchPreDiscoveredIds();
 const playerIds: Record<Region, number[][]> = {
   asia: chunk(
     preDiscoveredIds.filter((id) => idToRegion(id) === 'asia'),
@@ -223,23 +221,19 @@ async function postWork() {
     latest,
   };
 
-  commitAssets(
-    'averages',
-    [
-      {
-        path: `averages/${latest}.pb`,
-        content: await encodeToBase64(
-          'blitzkit/blitzkit.AverageDefinitions',
-          averageDefinitions,
-        ),
-        encoding: 'base64',
-      },
-      {
-        path: 'averages/manifest.json',
-        content: JSON.stringify(manifest),
-        encoding: 'utf-8',
-      },
-    ],
-    production,
-  );
+  commitAssets('averages', [
+    {
+      path: `averages/${latest}.pb`,
+      content: await encodeToBase64(
+        'blitzkit/blitzkit.AverageDefinitions',
+        averageDefinitions,
+      ),
+      encoding: 'base64',
+    },
+    {
+      path: 'averages/manifest.json',
+      content: JSON.stringify(manifest),
+      encoding: 'utf-8',
+    },
+  ]);
 }

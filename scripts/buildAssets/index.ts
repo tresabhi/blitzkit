@@ -8,7 +8,6 @@ const targets = argv
   .find((argument) => argument.startsWith('--target'))
   ?.split('=')[1]
   .split(',');
-const production = argv.includes('--production');
 
 import { boosterIcons } from './boosterIcons';
 import { camouflageIcons } from './camouflageIcons';
@@ -45,5 +44,5 @@ const methods = [
 ];
 
 for (const method of methods) {
-  if (allTargets || targets?.includes(method.name)) await method(production);
+  if (allTargets || targets?.includes(method.name)) await method();
 }

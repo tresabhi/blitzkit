@@ -19,7 +19,7 @@ interface Mappings {
 
 const listItemsPattern = /<items path="(.+)\.xml"\/>/g;
 
-export async function consumableProvisionIcons(production: boolean) {
+export async function consumableProvisionIcons() {
   console.log('Building consumable and provision icons...');
 
   const changes: FileChange[] = [];
@@ -188,5 +188,5 @@ export async function consumableProvisionIcons(production: boolean) {
     );
   }
 
-  await commitAssets('consumable and provision icons', changes, production);
+  await commitAssets('consumable and provision icons', changes);
 }

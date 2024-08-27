@@ -10,7 +10,7 @@ import { DATA } from './constants';
 import { VehicleDefinitionList } from './definitions';
 import { TankParameters } from './tankIcons';
 
-export async function tankModels(production: boolean) {
+export async function tankModels() {
   console.log('Building tank models...');
 
   const nodeIO = new NodeIO();
@@ -50,6 +50,6 @@ export async function tankModels(production: boolean) {
       }),
     );
 
-    await commitAssets(`tank models ${nation}`, changes, production);
+    await commitAssets(`tank models ${nation}`, changes);
   }
 }

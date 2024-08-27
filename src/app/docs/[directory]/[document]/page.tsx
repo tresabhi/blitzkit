@@ -3,7 +3,7 @@ import Markdown from 'markdown-to-jsx';
 import { use } from 'react';
 import { Link } from '../../../../components/Link';
 import PageWrapper from '../../../../components/PageWrapper';
-import isDev from '../../../../core/blitzkit/isDev';
+import { assertSecrete } from '../../../../core/blitzkit/secrete';
 
 export default function Page({
   params,
@@ -12,7 +12,9 @@ export default function Page({
 }) {
   const markdown = use(
     fetch(
-      `https://raw.githubusercontent.com/tresabhi/blitzkit/${isDev() ? 'dev' : 'main'}/docs/${params.directory}/${params.document}.md`,
+      `https://raw.githubusercontent.com/tresabhi/blitzkit/${assertSecrete(
+        process.env.NEXT_PUBLIC_ASSET_BRANCH,
+      )}/docs/${params.directory}/${params.document}.md`,
     ).then((response) => response.text()),
   );
 

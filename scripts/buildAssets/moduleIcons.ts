@@ -5,7 +5,7 @@ import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
 import { DATA } from './constants';
 
-export async function moduleIcons(production: boolean) {
+export async function moduleIcons() {
   console.log('Building module icons...');
 
   const changes = await Promise.all(
@@ -33,5 +33,5 @@ export async function moduleIcons(production: boolean) {
       }),
   );
 
-  await commitAssets('module icons', changes, production);
+  await commitAssets('module icons', changes);
 }

@@ -8,7 +8,7 @@ import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
 import { DATA } from './constants';
 import { VehicleDefinitionList } from './definitions';
 
-export async function tankArmors(production: boolean) {
+export async function tankArmors() {
   console.log('Building tank armors...');
 
   const changes: FileChange[] = [];
@@ -42,5 +42,5 @@ export async function tankArmors(production: boolean) {
     }),
   );
 
-  await commitAssets('tank armor', changes, production);
+  await commitAssets('tank armor', changes);
 }

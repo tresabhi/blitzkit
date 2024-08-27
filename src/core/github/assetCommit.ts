@@ -1,12 +1,10 @@
 import { ASSETS_REPO } from '../../constants/assets';
 import { GithubChangeBlob, createBlob } from '../blitzkit/createBlob';
 import { octokit } from '../blitzkit/octokit';
+import { assertSecrete } from '../blitzkit/secrete';
 
 export class AssetCommit {
-  constructor(
-    public message: string,
-    public production: boolean,
-  ) {}
+  constructor(public message: string) {}
   private blobs: GithubChangeBlob[] = [];
 
   async add(path: string, content: string, encoding: 'utf-8' | 'base64') {
@@ -28,7 +26,7 @@ export class AssetCommit {
       await octokit.git.getRef({
         owner: 'tresabhi',
         repo: ASSETS_REPO,
-        ref: `heads/${this.production ? 'main' : 'dev'}`,
+        ref: `heads/${assertSecrete(process.env.NEXT_PUBLIC_ASSET_BRANCH)}`,
       })
     ).data.object.sha;
     const treeSha = (
@@ -56,7 +54,7 @@ export class AssetCommit {
     await octokit.git.updateRef({
       owner: 'tresabhi',
       repo: ASSETS_REPO,
-      ref: `heads/${this.production ? 'main' : 'dev'}`,
+      ref: `heads/${assertSecrete(process.env.NEXT_PUBLIC_ASSET_BRANCH)}`,
       sha: newCommitData.sha,
     });
   }

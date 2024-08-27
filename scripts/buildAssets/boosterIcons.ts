@@ -6,7 +6,7 @@ import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
 import { DATA } from './constants';
 
-export async function boosterIcons(production: boolean) {
+export async function boosterIcons() {
   const boosterFiles = (await readdir(`${DATA}/Gfx/Shared/boosters`)).filter(
     (file) => !file.endsWith('@2x.txt.dvpl') && !file.startsWith('texture0'),
   );
@@ -47,5 +47,5 @@ export async function boosterIcons(production: boolean) {
     }),
   );
 
-  await commitAssets('booster icons', changes, production);
+  await commitAssets('booster icons', changes);
 }
