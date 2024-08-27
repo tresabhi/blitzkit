@@ -145,6 +145,6 @@ export const TOOLS: Tool[] = [
   compareTool,
   tankPerformanceTool,
   sessionTool,
-  embedTool,
+  // embedTool,
   ratingTool,
 ];
