@@ -71,8 +71,8 @@ jobs:
           ZIP_URL: ${{ github.event.inputs.zip_url }}
           ZIP_ROOT: ${{ github.event.inputs.zip_root }}
         run: |
-          wget -O client.zip $ZIP_URL
-          unzip client.zip
+          wget -q -O client.zip $ZIP_URL
+          unzip -q client.zip
           rm client.zip
           mv $ZIP_ROOT depots/444202/0
 
