@@ -7,10 +7,8 @@ import { ThicknessRange } from '../../../../../../components/StaticArmor';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
-import * as App from '../../../../../../stores/app';
 import * as Duel from '../../../../../../stores/duel';
 import { Options } from './components/Options';
-import { MetaSection } from './MetaSection';
 import { TankSandbox } from './TankSandbox';
 import { TankSandboxLoader } from './TankSandboxLoader';
 
@@ -19,7 +17,6 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ id }: HeroSectionProps) {
-  const developerMode = App.useDeferred(false, (state) => state.developerMode);
   const canvas = useRef<HTMLCanvasElement>(null);
   const protagonist = Duel.use((state) => state.protagonist.tank);
   const antagonist = Duel.use((state) => state.antagonist.tank);
@@ -38,7 +35,6 @@ export function HeroSection({ id }: HeroSectionProps) {
         : undefined;
   const awaitedTankDefinitions = use(tankDefinitions);
   const tank = awaitedTankDefinitions[id];
-  const ClassIcon = classIcons[tank.class];
   const thicknessRange = useMemo(() => {
     const entries = Object.values(awaitedTankDefinitions);
     const filtered = entries.filter((thisTank) => thisTank.tier === tank.tier);
@@ -67,7 +63,7 @@ export function HeroSection({ id }: HeroSectionProps) {
       pt={{ initial: '6', md: '0' }}
       style={{ background: 'var(--color-surface)', position: 'relative' }}
       height={{ initial: 'calc(75vh - 4rem)', md: undefined }}
-      minHeight={{ initial: '30rem' }}
+      minHeight={{ initial: '40rem' }}
       gap="4"
     >
       <Flex
@@ -90,6 +86,20 @@ export function HeroSection({ id }: HeroSectionProps) {
             style={{ height: '100%', userSelect: 'none' }}
           >
             <Flex gap="4">
+              <Heading size={{ initial: '8', sm: '9' }} color={treeColor}>
+                <Icon style={{ width: '0.75em', height: '0.75em' }} />{' '}
+              </Heading>
+
+              <Heading
+                size={{ initial: '8', sm: '9' }}
+                align={{ initial: 'center', md: 'left' }}
+                color={treeColor}
+              >
+                {protagonist.name}
+              </Heading>
+            </Flex>
+
+            <Flex gap="4" mt="2" pl="8">
               <Link href="/tools/tankopedia">
                 <Button variant="ghost" size="1" ml="-1">
                   <ChevronLeftIcon />
@@ -104,22 +114,6 @@ export function HeroSection({ id }: HeroSectionProps) {
                 </Button>
               </Link>
             </Flex>
-
-            <Flex gap="4">
-              <Heading size={{ initial: '8', sm: '9' }} color={treeColor}>
-                <Icon style={{ width: '0.75em', height: '0.75em' }} />{' '}
-              </Heading>
-
-              <Heading
-                size={{ initial: '8', sm: '9' }}
-                align={{ initial: 'center', md: 'left' }}
-                color={treeColor}
-              >
-                {protagonist.name}
-              </Heading>
-            </Flex>
-
-            <MetaSection naked />
           </Flex>
         </Flex>
 
