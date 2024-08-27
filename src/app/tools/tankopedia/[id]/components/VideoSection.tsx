@@ -1,4 +1,3 @@
-import { ClipboardIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import { Link } from '../../../../../components/Link';
@@ -99,7 +98,7 @@ export function VideoSection() {
                 borderRadius: Var('radius-3'),
               }}
             >
-              <ClipboardIcon />
+              <VerifiedIcon />
               <Text
                 align="center"
                 style={{
