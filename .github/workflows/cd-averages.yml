@@ -21,4 +21,11 @@ jobs:
         run: bun install
 
       - name: Build averages
-        run: DISCORD_CLIENT_ID=${{ secrets.DISCORD_CLIENT_ID }} GH_TOKEN=${{ secrets.GH_TOKEN }} DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} VIDEOS_SHEET=${{ secrets.VIDEOS_SHEET }} GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} bun scripts/averages.ts --production
+        env:
+          DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          VIDEOS_SHEET: ${{ secrets.VIDEOS_SHEET }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        run: bun scripts/averages.ts --production

@@ -21,4 +21,8 @@ jobs:
         run: bun install
 
       - name: Find reviews
-        run: DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} GH_TOKEN=${{ secrets.GH_TOKEN }} DATABASE_URL=${{ secrets.DATABASE_URL }} bun scripts/reviews.ts
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: bun scripts/reviews.ts
