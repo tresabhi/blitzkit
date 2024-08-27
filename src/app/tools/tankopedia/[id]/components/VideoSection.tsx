@@ -1,4 +1,4 @@
-import { PlusIcon } from '@radix-ui/react-icons';
+import { ClipboardIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import { Link } from '../../../../../components/Link';
@@ -85,6 +85,7 @@ export function VideoSection() {
             href="https://discord.gg/nDt7AjGJQH"
             target="_blank"
             color="gray"
+            highContrast
           >
             <Flex
               align="center"
@@ -96,11 +97,17 @@ export function VideoSection() {
               style={{
                 backgroundColor: Var('color-panel-solid'),
                 borderRadius: Var('radius-3'),
-                width: '9rem',
               }}
             >
-              <PlusIcon />
-              <Text align="center">Apply to feature your video</Text>
+              <ClipboardIcon />
+              <Text
+                align="center"
+                style={{
+                  width: '9rem',
+                }}
+              >
+                Apply to BlitzKit YouTuber program
+              </Text>
             </Flex>
           </Link>
         </Flex>
