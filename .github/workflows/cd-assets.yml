@@ -68,7 +68,7 @@ jobs:
           ZIP_ROOT: ${{ github.event.inputs.zip_root }}
         run: |
           wget -q -O client.zip $ZIP_URL
-          unzip client.zip
+          unzip -q client.zip
           rm client.zip
           mv $ZIP_ROOT depots/444202/0
 
