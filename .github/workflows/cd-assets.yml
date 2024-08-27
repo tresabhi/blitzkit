@@ -36,22 +36,26 @@ jobs:
         with:
           submodules: recursive
           token: ${{ secrets.GH_TOKEN }}
-      - uses: oven-sh/setup-bun@v1
 
-      - name: Install dependencies
+      - name: (Steam) Setup bun
+        uses: oven-sh/setup-bun@v1
+        if: github.event.inputs.zip_url == ''
+
+      - name: (Steam) Install dependencies
+        if: github.event.inputs.zip_url == ''
         run: bun install
 
-      - name: Setup DepotDownloader
+      - name: (Steam) Setup DepotDownloader
         if: github.event.inputs.zip_url == ''
         run: bun scripts/setupDepotDownloader.ts
 
-      - name: Download Steam client
+      - name: (Steam) Download client
         if: github.event.inputs.zip_url == ''
         run: |
           chmod +x ./temp/depotDownloader/DepotDownloader
           ./temp/depotDownloader/DepotDownloader -os windows -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
 
-      - name: Apply patches
+      - name: (Steam) Apply patches
         if: github.event.inputs.zip_url == ''
         env:
           DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
@@ -61,7 +65,7 @@ jobs:
           WOTB_DLC_CDN: ${{ secrets.WOTB_DLC_CDN }}
         run: bun scripts/applyPatches.ts --depot
 
-      - name: Download ZIP client
+      - name: (ZIP) Download client
         if: github.event.inputs.zip_url != ''
         env:
           ZIP_URL: ${{ github.event.inputs.zip_url }}
@@ -71,6 +75,14 @@ jobs:
           unzip client.zip
           rm client.zip
           mv $ZIP_ROOT depots/444202/0
+
+      - name: (ZIP) Setup bun
+        uses: oven-sh/setup-bun@v1
+        if: github.event.inputs.zip_url != ''
+
+      - name: (ZIP) Install dependencies
+        if: github.event.inputs.zip_url != ''
+        run: bun install
 
       - name: Build assets
         env:
