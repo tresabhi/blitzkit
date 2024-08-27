@@ -5,7 +5,7 @@ import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import { readStringDVPL } from '../src/core/blitz/readStringDVPL';
 import { readYAMLDVPL } from '../src/core/blitz/readYAMLDVPL';
 import { writeDVPL } from '../src/core/blitz/writeDVPL';
-import { assertSecrete } from '../src/core/blitzkit/secrete';
+import { assertSecret } from '../src/core/blitzkit/secret';
 import { dvp } from '../submodules/blitzkit-closed/src/dvp';
 import { DATA } from './buildAssets/constants';
 
@@ -21,7 +21,7 @@ console.log(`Installing patches for ${currentVersion}...`);
 let patchIndex = 1;
 while (true) {
   const response = await fetch(
-    `${assertSecrete(process.env.WOTB_DLC_CDN)}/dlc/s${currentVersion}_${patchIndex}.yaml`,
+    `${assertSecret(process.env.WOTB_DLC_CDN)}/dlc/s${currentVersion}_${patchIndex}.yaml`,
   );
 
   if (response.status === 200) {
@@ -29,10 +29,10 @@ while (true) {
 
     const data = parseYaml(await response.text());
     const dvpm = await fetch(
-      `${assertSecrete(process.env.WOTB_DLC_CDN)}/dlc/${data.dx11}`,
+      `${assertSecret(process.env.WOTB_DLC_CDN)}/dlc/${data.dx11}`,
     ).then((response) => response.arrayBuffer());
     const dvpd = await fetch(
-      `${assertSecrete(process.env.WOTB_DLC_CDN)}/dlc/${data.dx11.replace('.dvpm', '.dvpd')}`,
+      `${assertSecret(process.env.WOTB_DLC_CDN)}/dlc/${data.dx11.replace('.dvpm', '.dvpd')}`,
     ).then((response) => response.arrayBuffer());
     const files = await dvp(dvpm, dvpd);
     const bar = new ProgressBar(
@@ -58,7 +58,7 @@ while (true) {
       console.log('Found dynamic content localizations; patching...');
 
       const localizationsResponse = await fetch(
-        `${assertSecrete(process.env.WOTB_DLC_CDN)}/dlc/${data.dynamicContentLocalizationsDir}/en.yaml`,
+        `${assertSecret(process.env.WOTB_DLC_CDN)}/dlc/${data.dynamicContentLocalizationsDir}/en.yaml`,
       );
       const newStrings = parseYaml(await localizationsResponse.text());
       const oldStrings = await readYAMLDVPL<Record<string, string>>(

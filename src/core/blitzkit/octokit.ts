@@ -1,9 +1,9 @@
 import { throttling } from '@octokit/plugin-throttling';
 import { Octokit } from '@octokit/rest';
-import { assertSecrete } from './secrete';
+import { assertSecret } from './secret';
 
 Octokit.plugin(throttling);
 
 export const octokit = new Octokit({
-  auth: assertSecrete(process.env.GH_TOKEN),
+  auth: assertSecret(process.env.GH_TOKEN),
 });

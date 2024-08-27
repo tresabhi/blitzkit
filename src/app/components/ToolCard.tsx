@@ -2,14 +2,16 @@ import { CaretRightIcon } from '@radix-ui/react-icons';
 import {
   Box,
   Button,
+  Code,
   Flex,
   FlexProps,
   Heading,
-  Link,
   Text,
 } from '@radix-ui/themes';
+import { Link } from '../../components/Link';
 import { Tool } from '../../constants/tools';
 import { ImgurSize, imgur } from '../../core/blitzkit/imgur';
+import { assertSecret } from '../../core/blitzkit/secret';
 
 type ToolCardProps = FlexProps & {
   tool: Tool;
@@ -19,10 +21,14 @@ export function ToolCard({ tool, style, ...props }: ToolCardProps) {
   const size = tool.significant
     ? ImgurSize.HugeThumbnail
     : ImgurSize.LargeThumbnail;
+  const unavailableOnBranch = tool.branches?.every(
+    (branch) => branch !== assertSecret(process.env.NEXT_PUBLIC_ASSET_BRANCH),
+  );
 
   return (
     <Flex
       style={{
+        opacity: unavailableOnBranch ? 0.25 : 1,
         position: 'relative',
         borderRadius: 'var(--radius-2)',
         overflow: 'hidden',
@@ -33,17 +39,11 @@ export function ToolCard({ tool, style, ...props }: ToolCardProps) {
         ...style,
       }}
       flexGrow={tool.significant ? undefined : '1'}
-      flexBasis={
-        tool.significant
-          ? undefined
-          : {
-              initial: undefined,
-              sm: '0',
-            }
-      }
+      flexBasis={tool.significant ? undefined : { initial: undefined, sm: '0' }}
       {...props}
     >
       <Link
+        disabled={unavailableOnBranch}
         href={tool.href ?? `/tools/${tool.id}`}
         target={tool.href ? '_blank' : undefined}
         style={{
@@ -65,22 +65,13 @@ export function ToolCard({ tool, style, ...props }: ToolCardProps) {
         />
 
         <Flex
-          px={{
-            initial: '6',
-            md: tool.significant ? '8' : '6',
-          }}
-          py={{
-            initial: '4',
-            sm: tool.significant ? '6' : '4',
-          }}
+          px={{ initial: '6', md: tool.significant ? '8' : '6' }}
+          py={{ initial: '4', sm: tool.significant ? '6' : '4' }}
           gap="4"
           align="center"
           justify="between"
           width="100%"
-          direction={{
-            initial: 'column',
-            xs: 'row',
-          }}
+          direction={{ initial: 'column', xs: 'row' }}
           style={{
             backgroundColor: 'var(--color-panel-translucent)',
             backdropFilter: 'blur(64px)',
@@ -90,52 +81,46 @@ export function ToolCard({ tool, style, ...props }: ToolCardProps) {
           <Flex
             direction="column"
             justify="center"
-            align={{
-              initial: 'center',
-              xs: 'start',
-            }}
+            align={{ initial: 'center', xs: 'start' }}
           >
             <Heading
-              align={{
-                initial: 'center',
-                sm: 'left',
-              }}
-              size={{
-                initial: '6',
-                sm: tool.significant ? '7' : '5',
-              }}
+              align={{ initial: 'center', sm: 'left' }}
+              size={{ initial: '6', sm: tool.significant ? '7' : '5' }}
               weight="medium"
             >
               {tool.title}
             </Heading>
             <Text
-              align={{
-                initial: 'center',
-                sm: 'left',
-              }}
-              size={{
-                initial: '3',
-                sm: tool.significant ? '4' : '3',
-              }}
+              align={{ initial: 'center', sm: 'left' }}
+              size={{ initial: '3', sm: tool.significant ? '4' : '3' }}
               color="gray"
             >
-              {tool.description}
+              {unavailableOnBranch ? (
+                <>
+                  Unavailable on{' '}
+                  <Code>
+                    {assertSecret(process.env.NEXT_PUBLIC_ASSET_BRANCH)}
+                  </Code>
+                </>
+              ) : (
+                tool.description
+              )}
             </Text>
           </Flex>
 
-          <Button
-            size={{
-              initial: undefined,
-              sm: tool.significant ? '3' : undefined,
-            }}
-            color={tool.button.color}
-            style={{
-              cursor: 'inherit',
-            }}
-          >
-            {tool.button.text}
-            <CaretRightIcon />
-          </Button>
+          {!unavailableOnBranch && (
+            <Button
+              size={{
+                initial: undefined,
+                sm: tool.significant ? '3' : undefined,
+              }}
+              color={tool.button.color}
+              style={{ cursor: 'inherit' }}
+            >
+              {tool.button.text}
+              <CaretRightIcon />
+            </Button>
+          )}
         </Flex>
       </Link>
     </Flex>

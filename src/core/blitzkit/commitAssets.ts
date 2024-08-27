@@ -1,6 +1,6 @@
 import { ASSETS_REPO } from '../../constants/assets';
 import commitMultipleFiles, { FileChange } from './commitMultipleFiles';
-import { assertSecrete } from './secrete';
+import { assertSecret } from './secret';
 
 export async function commitAssets(message: string, changes: FileChange[]) {
   console.log(`Committing ${message}...`);
@@ -10,7 +10,7 @@ export async function commitAssets(message: string, changes: FileChange[]) {
   await commitMultipleFiles(
     'tresabhi',
     ASSETS_REPO,
-    assertSecrete(process.env.NEXT_PUBLIC_ASSET_BRANCH),
+    assertSecret(process.env.NEXT_PUBLIC_ASSET_BRANCH),
     `${message} - ${new Date().toDateString()}`,
     changes,
   );

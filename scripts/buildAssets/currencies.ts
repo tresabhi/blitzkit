@@ -2,7 +2,7 @@ import sharp from 'sharp';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { commitAssets } from '../../src/core/blitzkit/commitAssets';
 import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
-import { assertSecrete } from '../../src/core/blitzkit/secrete';
+import { assertSecret } from '../../src/core/blitzkit/secret';
 import { DATA } from './constants';
 
 const ICONS = [
@@ -45,7 +45,7 @@ export async function currencies() {
     }),
   );
 
-  const glossary = await fetch(assertSecrete(process.env.WOTB_GLOSSARY)).then(
+  const glossary = await fetch(assertSecret(process.env.WOTB_GLOSSARY)).then(
     (response) => response.json() as Promise<BlitzGlossary>,
   );
 

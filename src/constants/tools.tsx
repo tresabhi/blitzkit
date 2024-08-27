@@ -14,6 +14,7 @@ export interface Tool {
     color: ComponentProps<typeof Button>['color'];
   };
   significant?: boolean;
+  branches?: string[];
 }
 
 export const tankopediaTool: Tool = {
@@ -28,6 +29,7 @@ export const tankopediaTool: Tool = {
     color: 'purple',
   },
   significant: true,
+  branches: ['main', 'dev', 'opentest'],
 };
 
 export const ratingTool: Tool = {
@@ -41,6 +43,7 @@ export const ratingTool: Tool = {
     text: 'View leaderboard',
     color: 'orange',
   },
+  branches: ['main', 'dev'],
 };
 
 export const compareTool: Tool = {
@@ -54,6 +57,7 @@ export const compareTool: Tool = {
     text: 'Compare tanks',
     color: 'crimson',
   },
+  branches: ['main', 'dev', 'opentest'],
 };
 
 export const sessionTool: Tool = {
@@ -68,6 +72,7 @@ export const sessionTool: Tool = {
     text: 'Start tracking',
     color: 'blue',
   },
+  branches: ['main', 'dev'],
 };
 
 export const discordTool: Tool = {
@@ -105,6 +110,7 @@ export const playerStatsTool: Tool = {
   },
   image: 'YelSOfT',
   href: '_', // TODO: remove this to re-enable link
+  branches: ['main', 'dev'],
 };
 
 export const tankPerformanceTool: Tool = {
@@ -117,6 +123,7 @@ export const tankPerformanceTool: Tool = {
     color: 'jade',
   },
   image: 'vOKFB03',
+  branches: ['main', 'dev'],
 };
 
 export const embedTool: Tool = {
@@ -130,6 +137,7 @@ export const embedTool: Tool = {
     color: 'red',
   },
   image: 'Q0faRYg',
+  branches: ['main', 'dev', 'opentest'],
 };
 
 export const homeTool: Tool = {

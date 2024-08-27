@@ -33,7 +33,7 @@ import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { statsCommand } from '../../commands/stats';
 import { todayCommand } from '../../commands/today';
 import { RenderConfiguration } from '../../core/blitzkit/renderConfiguration';
-import { assertSecrete } from '../../core/blitzkit/secrete';
+import { assertSecret } from '../../core/blitzkit/secret';
 import handleAutocomplete from './handlers/autocomplete';
 import handleButton from './handlers/button';
 import handleChatInputCommand from './handlers/chatInputCommand';
@@ -115,7 +115,7 @@ export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {
   );
 });
 
-const rest = new REST().setToken(assertSecrete(process.env.DISCORD_TOKEN));
+const rest = new REST().setToken(assertSecret(process.env.DISCORD_TOKEN));
 
 commands.then((awaitedCommands) => {
   const body = Object.values(awaitedCommands).map((registry) =>
@@ -123,7 +123,7 @@ commands.then((awaitedCommands) => {
   );
 
   rest.put(
-    Routes.applicationCommands(assertSecrete(process.env.DISCORD_CLIENT_ID)),
+    Routes.applicationCommands(assertSecret(process.env.DISCORD_CLIENT_ID)),
     {
       body,
     },

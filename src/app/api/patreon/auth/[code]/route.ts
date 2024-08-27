@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { assertSecrete } from '../../../../../core/blitzkit/secrete';
+import { assertSecret } from '../../../../../core/blitzkit/secret';
 
 export async function GET(
   request: Request,
@@ -8,11 +8,11 @@ export async function GET(
   const response = await fetch(
     `https://www.patreon.com/api/oauth2/token?code=${
       params.code
-    }&grant_type=authorization_code&client_id=${assertSecrete(
+    }&grant_type=authorization_code&client_id=${assertSecret(
       process.env.NEXT_PUBLIC_PATREON_CLIENT_ID,
-    )}&client_secret=${assertSecrete(
+    )}&client_secret=${assertSecret(
       process.env.PATREON_CLIENT_SECRET,
-    )}&redirect_uri=${assertSecrete(process.env.NEXT_PUBLIC_PATREON_REDIRECT_URI)}`,
+    )}&redirect_uri=${assertSecret(process.env.NEXT_PUBLIC_PATREON_REDIRECT_URI)}`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
