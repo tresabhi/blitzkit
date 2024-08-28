@@ -7,6 +7,7 @@ import PageWrapper from '../../../../components/PageWrapper';
 import { useAdExempt } from '../../../../hooks/useAdExempt';
 import * as Duel from '../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
+import { CalloutsSection } from './components/CalloutsSection';
 import { HistorySection } from './components/HistorySection';
 import { CharacteristicsSection } from './components/Model/CharacteristicsSection';
 import { GameModeSection } from './components/Model/GameModeSection';
@@ -14,7 +15,6 @@ import { HeroSection } from './components/Model/HeroSection';
 import { MetaSection } from './components/Model/MetaSection';
 import { TechTreeSection } from './components/Model/TechTreeSection';
 import { ShotDisplaySection } from './components/ShotDisplaySection';
-import { TestingSection } from './components/TestingSection';
 import { VideoSection } from './components/VideoSection';
 
 export default function Page({ params }: { params: { id: string } }) {
@@ -83,10 +83,10 @@ export default function Page({ params }: { params: { id: string } }) {
     <PageWrapper p="0" noMaxWidth color="purple" size={1600} gap="9">
       <HeroSection id={id} />
       <ShotDisplaySection />
+      <CalloutsSection />
       <MetaSection />
       {!exempt && <AdMidSectionResponsive />}
       <TechTreeSection />
-      <TestingSection />
       <CharacteristicsSection />
       {!exempt && <AdMidSectionResponsive />}
       <GameModeSection />

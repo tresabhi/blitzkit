@@ -813,7 +813,8 @@ export async function definitions() {
               : 'researchable',
           tier: tank.level as Tier,
           class: tankTags[0] as TankClass,
-          testing: tankTags.includes('testTank') ? true : undefined,
+          testing: tankTags.includes('testTank'),
+          deprecated: tankTags.includes('deprecated'),
           price: tankPrice,
           camouflage: {
             still: tankDefinition.root.invisibility.still,

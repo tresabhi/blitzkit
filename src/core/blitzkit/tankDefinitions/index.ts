@@ -56,7 +56,8 @@ export interface TankDefinition {
   provisions: number;
   tier: Tier;
   class: TankClass;
-  testing?: boolean;
+  testing: boolean;
+  deprecated: boolean;
   turrets: TurretDefinition[];
   engines: EngineDefinition[];
   tracks: TrackDefinition[];
