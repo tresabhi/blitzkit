@@ -43,15 +43,18 @@ export function Hero() {
       >
         <Flex direction="column" align="center" gap="1">
           <Heading size="9" weight="bold" align="center">
-            BlitzKit
-            {isBranchNamed && (
-              <>
-                {' '}
-                <Code color="gray" highContrast variant="solid">
+            <Flex
+              align="center"
+              gap={{ initial: '1', xs: '4' }}
+              direction={{ initial: 'column', xs: 'row' }}
+            >
+              BlitzKit
+              {isBranchNamed && (
+                <Code size="8" color="gray" highContrast variant="outline">
                   {BRANCH_NAMES[process.env.NEXT_PUBLIC_ASSET_BRANCH!]}
                 </Code>
-              </>
-            )}
+              )}
+            </Flex>
           </Heading>
 
           {!isBranchNamed && (

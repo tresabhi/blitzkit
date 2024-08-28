@@ -78,15 +78,14 @@ export default function Navbar() {
                 weight="bold"
                 onClick={() => setShowHamburgerMenu(false)}
               >
-                BlitzKit
-                {isBranchNamed && (
-                  <>
-                    {' '}
-                    <Code color="gray" highContrast variant="solid">
+                <Flex align="center" gap="1">
+                  BlitzKit
+                  {isBranchNamed && (
+                    <Code color="gray" size="1" highContrast variant="outline">
                       {BRANCH_NAMES[process.env.NEXT_PUBLIC_ASSET_BRANCH!]}
                     </Code>
-                  </>
-                )}
+                  )}
+                </Flex>
               </Link>
             </Flex>
 
