@@ -36,8 +36,10 @@ export function Footer() {
             }}
           >
             <Heading>BlitzKit </Heading>
-
             <Text color="gray">Everything World of Tanks Blitz</Text>
+            <Text size="1" color="gray">
+              Unaffiliated with Wargaming or any service
+            </Text>
           </Flex>
 
           <Flex
