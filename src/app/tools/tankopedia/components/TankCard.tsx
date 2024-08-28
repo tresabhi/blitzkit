@@ -171,7 +171,6 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
 
         {discriminator && (
           <Text
-            mt="-2"
             color="gray"
             align="center"
             style={{

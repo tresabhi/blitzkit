@@ -36,6 +36,8 @@ export const link = style({
   color: 'inherit',
   textDecoration: 'none',
   width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
 
   ':hover': {
     textDecoration: 'underline',
