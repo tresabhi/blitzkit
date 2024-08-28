@@ -74,6 +74,10 @@ const useScoreCache = create<ScoreCache>(() => ({
   eu: {},
 }));
 
+function toLatestURL(url: string) {
+  return url.replace(/(\d+\.)+\d+/, 'latest');
+}
+
 export default function Page() {
   const [region, setRegion] = useState<Region>('com');
   const [season, setSeason] = useState<number>(0);
@@ -958,9 +962,7 @@ export default function Page() {
           <Table.Row>
             <Table.ColumnHeaderCell width="0">Position</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Player</Table.ColumnHeaderCell>
-            {season === 0 && (
-              <Table.ColumnHeaderCell width="0">Reward</Table.ColumnHeaderCell>
-            )}
+            <Table.ColumnHeaderCell width="0">Reward</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell width="0">
               Percentile
             </Table.ColumnHeaderCell>
@@ -1030,34 +1032,30 @@ export default function Page() {
                   )}
                 </Flex>
               </Table.Cell>
-              {season === 0 && (
-                <Table.Cell align="center" justify="center">
-                  {reward ? (
-                    <Flex align="center" justify="center" gap="1">
-                      <img
-                        style={{
-                          objectFit: 'contain',
-                        }}
-                        width={32}
-                        height={32}
-                        src={
-                          reward.type === 'stuff'
-                            ? reward.stuff.image_url
-                            : reward.vehicle.image_url
-                        }
-                        alt={
-                          reward.type === 'stuff'
-                            ? reward.stuff.title
-                            : reward.vehicle.user_string
-                        }
-                      />
-                      <Text style={{ whiteSpace: 'nowrap' }} color="gray">
-                        {reward.count === 1 ? '' : `x ${reward.count}`}
-                      </Text>
-                    </Flex>
-                  ) : null}
-                </Table.Cell>
-              )}
+              <Table.Cell align="center" justify="center">
+                {reward ? (
+                  <Flex align="center" justify="center" gap="1">
+                    <img
+                      style={{ objectFit: 'contain' }}
+                      width={32}
+                      height={32}
+                      src={toLatestURL(
+                        reward.type === 'stuff'
+                          ? reward.stuff.image_url
+                          : reward.vehicle.image_url,
+                      )}
+                      alt={toLatestURL(
+                        reward.type === 'stuff'
+                          ? reward.stuff.title
+                          : reward.vehicle.user_string,
+                      )}
+                    />
+                    <Text style={{ whiteSpace: 'nowrap' }} color="gray">
+                      {reward.count === 1 ? '' : `x ${reward.count}`}
+                    </Text>
+                  </Flex>
+                ) : null}
+              </Table.Cell>
               <Table.Cell align="right" justify="center">
                 {totalPlayers ? (
                   `${Math.ceil(((index + 1) / totalPlayers) * 100)}%`
