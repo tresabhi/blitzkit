@@ -81,11 +81,8 @@ jobs:
           wget -q -O client.zip $ZIP_URL
           unzip -q client.zip -d client
           rm client.zip
-          ls
-          cd client
-          ls
-          cd ..
-          mv client/$ZIP_ROOT depots/444202/0
+          mkdir -p depots/444202/0
+          mv client/$ZIP_ROOT/* depots/444202/0
 
       - name: (ZIP) Setup bun
         uses: oven-sh/setup-bun@v1
