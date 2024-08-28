@@ -81,6 +81,7 @@ jobs:
           wget -q -O client.zip $ZIP_URL
           unzip -q client.zip -d client
           rm client.zip
+          ls
           mv client/$ZIP_ROOT depots/444202/0
 
       - name: (ZIP) Setup bun
