@@ -1,4 +1,4 @@
-import { ThreeEvent, useThree } from '@react-three/fiber';
+import { invalidate, ThreeEvent, useThree } from '@react-three/fiber';
 import { memo, useRef } from 'react';
 import { Group, Mesh, MeshStandardMaterial, Vector2 } from 'three';
 import { ModelTankWrapper } from '../../../../../../../components/Armor/components/ModelTankWrapper';
@@ -51,6 +51,8 @@ export const TankModel = memo(() => {
           const material = mesh?.material as MeshStandardMaterial;
 
           if (!material) return;
+
+          invalidate();
 
           if (material.map) material.map.offset.y += offset;
           if (material.aoMap) material.aoMap.offset.y += offset;
