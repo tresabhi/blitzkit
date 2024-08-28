@@ -17,24 +17,29 @@ export default function Page({
       )}/docs/${params.directory}/${params.document}.md`,
     ).then((response) => response.text()),
   );
+  const title = markdown.split('\n')[0].replaceAll(/[^a-zA-Z0-9 \.&]/g, '');
 
   return (
-    <PageWrapper>
-      <Markdown
-        options={{
-          overrides: {
-            a: { component: Link },
-            table: { component: Table.Root },
-            thead: { component: Table.Header },
-            tbody: { component: Table.Body },
-            tr: { component: Table.Row },
-            th: { component: Table.ColumnHeaderCell },
-            td: { component: Table.Cell },
-          },
-        }}
-      >
-        {markdown}
-      </Markdown>
-    </PageWrapper>
+    <>
+      <title>{title}</title>
+
+      <PageWrapper>
+        <Markdown
+          options={{
+            overrides: {
+              a: { component: Link },
+              table: { component: Table.Root },
+              thead: { component: Table.Header },
+              tbody: { component: Table.Body },
+              tr: { component: Table.Row },
+              th: { component: Table.ColumnHeaderCell },
+              td: { component: Table.Cell },
+            },
+          }}
+        >
+          {markdown}
+        </Markdown>
+      </PageWrapper>
+    </>
   );
 }

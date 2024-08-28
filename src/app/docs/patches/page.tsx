@@ -6,21 +6,24 @@ import PageWrapper from '../../../components/PageWrapper';
 
 export default async function Page() {
   return (
-    <PageWrapper>
-      <Heading>BlitzKit patch notes</Heading>
+    <>
+      <title>BlitzKit - Patch Notes</title>
+      <PageWrapper>
+        <Heading>BlitzKit patch notes</Heading>
 
-      <Flex wrap="wrap" gap="4">
-        {versions
-          .sort(compareVersions)
-          .reverse()
-          .map((version) => {
-            return (
-              <Link key={version} href={`/docs/changelogs/${version}`}>
-                {version}
-              </Link>
-            );
-          })}
-      </Flex>
-    </PageWrapper>
+        <Flex wrap="wrap" gap="4">
+          {versions
+            .sort(compareVersions)
+            .reverse()
+            .map((version) => {
+              return (
+                <Link key={version} href={`/docs/changelogs/${version}`}>
+                  {version}
+                </Link>
+              );
+            })}
+        </Flex>
+      </PageWrapper>{' '}
+    </>
   );
 }
