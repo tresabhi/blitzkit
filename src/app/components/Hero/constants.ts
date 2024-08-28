@@ -1,4 +1,4 @@
 export const BRANCH_NAMES: Record<string, string> = {
-  dev: 'Beta',
-  opentest: 'Opentest',
+  dev: 'dev',
+  opentest: 'opentest',
 };
