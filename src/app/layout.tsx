@@ -11,6 +11,7 @@ import Navbar from '../components/Navbar';
 import { Party3 } from '../components/Party3';
 import * as App from '../stores/app';
 import { Checks } from './components/Checks';
+import { BRANCH_NAMES } from './components/Hero/constants';
 import { PageLoader } from './components/PageLoader';
 import './layout.css';
 
@@ -28,11 +29,11 @@ const robotoFlex = Roboto_Flex({
 
 export default function RootLayout({ children }: RootLayoutProps) {
   const pathname = usePathname();
-  // const hideNav =
-  //   pathname.startsWith('/tools/embed/host') ||
-  //   pathname.startsWith('/tools/embed/customize');
   const hideNav = false;
   const isRoot = pathname === '/';
+  const isBranchNamed =
+    process.env.NEXT_PUBLIC_ASSET_BRANCH &&
+    BRANCH_NAMES[process.env.NEXT_PUBLIC_ASSET_BRANCH];
 
   return (
     <App.Provider>
@@ -40,7 +41,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head>
           {isRoot && (
             <>
-              <title>BlitzKit</title>
+              <title>
+                BlitzKit
+                {isBranchNamed
+                  ? ` ${BRANCH_NAMES[process.env.NEXT_PUBLIC_ASSET_BRANCH!]}`
+                  : ''}
+              </title>
               <meta
                 name="description"
                 content="🎉 Tools for everything World of Tanks Blitz"
