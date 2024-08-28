@@ -79,9 +79,9 @@ jobs:
           ZIP_ROOT: ${{ github.event.inputs.zip_root }}
         run: |
           wget -q -O client.zip $ZIP_URL
-          unzip -q client.zip
+          unzip -q client.zip -d client
           rm client.zip
-          mv $ZIP_ROOT depots/444202/0
+          mv client/$ZIP_ROOT depots/444202/0
 
       - name: (ZIP) Setup bun
         uses: oven-sh/setup-bun@v1
