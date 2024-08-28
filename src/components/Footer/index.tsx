@@ -88,7 +88,7 @@ export function Footer() {
                 >
                   GitHub
                 </Link>
-                <Link href="/docs/patches" target="_blank" color="gray">
+                <Link href="/docs/patches" color="gray">
                   Patches
                 </Link>
 
