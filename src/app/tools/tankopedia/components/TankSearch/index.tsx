@@ -382,7 +382,7 @@ export const TankSearch = memo<TankSearchProps>(
         );
         return searchedTanks;
       }
-    }, [filters]);
+    }, [filters, sort]);
     const [loadedRows, setLoadedRows] = useState(DEFAULT_LOADED_CARDS);
     const tanks = tanksFiltered.slice(0, loadedRows);
 
