@@ -44,5 +44,11 @@ const methods = [
 ];
 
 for (const method of methods) {
-  if (allTargets || targets?.includes(method.name)) await method();
+  if (allTargets || targets?.includes(method.name)) {
+    try {
+      await method();
+    } catch (error) {
+      console.warn(`Failed method ${method.name}; skipping...`, error);
+    }
+  }
 }
