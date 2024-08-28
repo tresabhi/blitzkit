@@ -82,6 +82,9 @@ jobs:
           unzip -q client.zip -d client
           rm client.zip
           ls
+          cd client
+          ls
+          cd ..
           mv client/$ZIP_ROOT depots/444202/0
 
       - name: (ZIP) Setup bun
