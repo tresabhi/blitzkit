@@ -41,12 +41,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head>
           {isRoot && (
             <>
-              <title>
-                BlitzKit
-                {isBranchNamed
-                  ? ` ${BRANCH_NAMES[process.env.NEXT_PUBLIC_ASSET_BRANCH!]}`
-                  : ''}
-              </title>
+              <title>BlitzKit</title>
               <meta
                 name="description"
                 content="🎉 Tools for everything World of Tanks Blitz"
