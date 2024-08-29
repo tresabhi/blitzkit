@@ -12,7 +12,7 @@ import { ShotDisplay } from '../../../../../../components/Armor/components/ShotD
 import {
   StaticArmor,
   ThicknessRange,
-} from '../../../../../../components/StaticArmor';
+} from '../../../../../../components/Armor/components/StaticArmor';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
@@ -47,8 +47,6 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
     const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
     const display = TankopediaPersistent.use((state) => state.display);
     const onScreen = useOnScreen(canvas);
-
-    console.log(onScreen);
 
     useImperativeHandle(ref, () => canvas.current!, []);
 

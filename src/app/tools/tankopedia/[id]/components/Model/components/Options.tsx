@@ -22,13 +22,15 @@ import {
   Tooltip,
 } from '@radix-ui/themes';
 import { invalidate } from '@react-three/fiber';
-import { RefObject, useEffect, useState } from 'react';
+import { RefObject, use, useEffect, useState } from 'react';
+import { ThicknessRange } from '../../../../../../../components/Armor/components/StaticArmor';
 import { ModuleButton } from '../../../../../../../components/ModuleButtons/ModuleButton';
 import { SmallTankIcon } from '../../../../../../../components/SmallTankIcon';
-import { ThicknessRange } from '../../../../../../../components/StaticArmor';
 import { resolveNearPenetration } from '../../../../../../../core/blitz/resolveNearPenetration';
 import { resolvePenetrationCoefficient } from '../../../../../../../core/blitz/resolvePenetrationCoefficient';
 import { asset } from '../../../../../../../core/blitzkit/asset';
+import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkit/checkConsumableProvisionInclusivity';
+import { consumableDefinitions } from '../../../../../../../core/blitzkit/consumableDefinitions';
 import { imgur } from '../../../../../../../core/blitzkit/imgur';
 import { Pose, poseEvent } from '../../../../../../../core/blitzkit/pose';
 import { TIER_ROMAN_NUMERALS } from '../../../../../../../core/blitzkit/tankDefinitions/constants';
@@ -77,15 +79,29 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
     (state) => state.model.visual.environment,
   );
   const developerMode = App.useDeferred(false, (state) => state.developerMode);
-  const protagonist = Duel.use((state) => state.protagonist.tank);
+  const protagonistTank = Duel.use((state) => state.protagonist.tank);
+  const protagonistGun = Duel.use((state) => state.protagonist.gun);
+  const protagonistConsumables = Duel.use(
+    (state) => state.protagonist.consumables,
+  );
   const antagonistGun = Duel.use((state) => state.antagonist.gun);
   const antagonistShell = Duel.use((state) => state.antagonist.shell);
   const [antagonistSelectorOpen, setAntagonistSelectorOpen] = useState(false);
   const antagonistTank = Duel.use((state) => state.antagonist.tank);
   const hasCalibratedShells = useEquipment(103, true);
+  const hasDynamicArmor = protagonistConsumables.includes(73);
   const [tab, setTab] = useState('search');
   const mutateDuel = Duel.useMutation();
   const hasEnhancedArmor = useEquipment(110);
+  const awaitedConsumableDefinitions = use(consumableDefinitions);
+  const consumablesList = Object.values(awaitedConsumableDefinitions).filter(
+    (consumable) =>
+      checkConsumableProvisionInclusivity(
+        consumable,
+        protagonistTank,
+        protagonistGun,
+      ),
+  );
   const antagonistUniqueGuns = uniqueGuns(antagonistTank.turrets);
 
   useEffect(() => setDisplay(displayRaw), [displayRaw]);
@@ -141,7 +157,6 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             ).toFixed(0)}
             mm
           </Text>
-
           {antagonistUniqueGuns.length > 1 && (
             <Popover.Root>
               <Popover.Trigger>
@@ -201,7 +216,6 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               </Popover.Content>
             </Popover.Root>
           )}
-
           <Flex
             direction="column"
             style={{
@@ -303,6 +317,46 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               />
             </IconButton>
           </Flex>
+
+          {consumablesList.some((consumable) => consumable.id === 73) && (
+            <IconButton
+              color={hasDynamicArmor ? undefined : 'gray'}
+              variant="soft"
+              size={{ initial: '2', sm: '3' }}
+              onClick={() => {
+                invalidate();
+                mutateDuel((draft) => {
+                  if (draft.protagonist.consumables.includes(73)) {
+                    draft.protagonist.consumables =
+                      draft.protagonist.consumables.filter((id) => id !== 73);
+                  } else {
+                    if (
+                      draft.protagonist.consumables.length ===
+                      protagonistTank.consumables
+                    ) {
+                      draft.protagonist.consumables[
+                        protagonistTank.consumables - 1
+                      ] = 73;
+                    } else {
+                      draft.protagonist.consumables.push(73);
+                    }
+                  }
+                });
+                mutateTankopediaEphemeral((draft) => {
+                  draft.shot = undefined;
+                });
+              }}
+            >
+              <img
+                alt="Calibrated Shells"
+                src={asset('icons/consumables/73.webp')}
+                style={{
+                  width: '50%',
+                  height: '50%',
+                }}
+              />
+            </IconButton>
+          )}
         </Flex>
       )}
 
@@ -323,7 +377,10 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
 
                     const anchor = document.createElement('a');
 
-                    anchor.setAttribute('download', `${protagonist.name}.png`);
+                    anchor.setAttribute(
+                      'download',
+                      `${protagonistTank.name}.png`,
+                    );
                     anchor.setAttribute(
                       'href',
                       canvas.current.toDataURL('image/png'),

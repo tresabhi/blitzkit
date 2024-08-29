@@ -45,6 +45,10 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
     gunModelDefinition.mask === undefined
       ? undefined
       : gunModelDefinition.mask + hullOrigin.y + turretOrigin.y + gunOrigin.y;
+  const protagonistConsumables = Duel.use(
+    (state) => state.protagonist.consumables,
+  );
+  const hasDynamicArmor = protagonistConsumables.includes(73);
 
   useTankTransform(protagonist, turretContainer, gunContainer);
 
@@ -60,7 +64,13 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
             armorId,
           );
 
-          if (!isVisible || thickness === undefined) return null;
+          if (
+            !isVisible ||
+            thickness === undefined ||
+            (hasDynamicArmor && node.name.includes('state_01')) ||
+            (!hasDynamicArmor && node.name.includes('state_00'))
+          )
+            return null;
 
           return (
             <SpacedArmorSceneComponent
@@ -105,7 +115,13 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
             armorId,
           );
 
-          if (!isVisible || thickness === undefined) return null;
+          if (
+            !isVisible ||
+            thickness === undefined ||
+            (hasDynamicArmor && node.name.includes('state_01')) ||
+            (!hasDynamicArmor && node.name.includes('state_00'))
+          )
+            return null;
 
           return (
             <group position={hullOrigin}>
@@ -134,7 +150,13 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
               armorId,
             );
 
-            if (!isVisible || thickness === undefined) return null;
+            if (
+              !isVisible ||
+              thickness === undefined ||
+              (hasDynamicArmor && node.name.includes('state_01')) ||
+              (!hasDynamicArmor && node.name.includes('state_00'))
+            )
+              return null;
 
             return (
               <group position={hullOrigin}>

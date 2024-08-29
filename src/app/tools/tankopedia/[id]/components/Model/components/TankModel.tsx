@@ -46,6 +46,8 @@ export const TankModel = memo(() => {
 
         if (!isVisible) return null;
 
+        console.log(node.name);
+
         function translateTexture(offset: number) {
           const mesh = node.children[0] as Mesh;
           const material = mesh?.material as MeshStandardMaterial;

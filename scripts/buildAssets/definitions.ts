@@ -46,6 +46,11 @@ import { DATA } from './constants';
 import { Avatar } from './skillIcons';
 import { TankParameters } from './tankIcons';
 
+function ensureDynamicArmor(armor: ModelArmor) {
+  if (!armor.dynamic) armor.dynamic = { false: [], true: [] };
+  return armor as ModelArmor & Required<Pick<ModelArmor, 'dynamic'>>;
+}
+
 export interface BlitzStrings {
   [key: string]: string;
 }
@@ -208,6 +213,27 @@ interface VehicleDefinitions {
           models: { undamaged: string };
         };
       };
+    };
+  };
+  extras?: {
+    armorsStatesController?: {
+      state: [
+        {
+          id: 0;
+          armors: string;
+          type: 'default';
+          enabled: true;
+          factorsModifiers: '';
+          default: '';
+        },
+        {
+          id: 1;
+          armors: string;
+          type: 'default';
+          enabled: false;
+          factorsModifiers: '';
+        },
+      ];
     };
   };
 }
@@ -1242,6 +1268,55 @@ export async function definitions() {
         Object.values(tankDefinitions[tankId].tracks).forEach((track) => {
           track.xp = trackXps.get(track.id);
         });
+
+        if (tankDefinition.root.extras?.armorsStatesController) {
+          const [falsePlates, truePlates] =
+            tankDefinition.root.extras.armorsStatesController.state.map(
+              (state) => state.armors.split(' '),
+            );
+
+          function applyDynamicArmor(plates: string[], type: `${boolean}`) {
+            plates.forEach((plate) => {
+              const [name, armorIndexString] = plate.split('.');
+              const armorIndex = Number(armorIndexString.split('_')[1]);
+
+              if (name === 'hull') {
+                ensureDynamicArmor(modelDefinitions[tankId].armor).dynamic[
+                  type
+                ].push(armorIndex);
+              } else {
+                const [module, moduleIndexString] = name.split('_');
+                const moduleIndex = Number(moduleIndexString);
+
+                if (module === 'turret') {
+                  const turret = Object.values(
+                    modelDefinitions[tankId].turrets,
+                  ).find((turret) => turret.model === moduleIndex);
+                  if (!turret) throw new Error('Turret not found');
+                  ensureDynamicArmor(turret.armor).dynamic[type].push(
+                    armorIndex,
+                  );
+                } else if (module === 'gun') {
+                  Object.values(modelDefinitions[tankId].turrets).forEach(
+                    (turret) => {
+                      const gun = Object.values(turret.guns).find(
+                        (gun) => gun.model === moduleIndex,
+                      );
+                      if (!gun) throw new Error('Gun not found');
+                      ensureDynamicArmor(gun.armor).dynamic[type].push(
+                        armorIndex,
+                      );
+                    },
+                  );
+                } else
+                  throw new Error(`Unknown dynamic armor module ${module}`);
+              }
+            });
+          }
+
+          applyDynamicArmor(falsePlates, 'false');
+          applyDynamicArmor(truePlates, 'true');
+        }
       }
     }),
   );

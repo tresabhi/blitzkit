@@ -28,6 +28,10 @@ export const PrimaryArmorScene = memo(() => {
   const hullOrigin = correctZYTuple(trackModelDefinition.origin);
   const turretOrigin = correctZYTuple(tankModelDefinition.turretOrigin);
   const gunOrigin = correctZYTuple(turretModelDefinition.gunOrigin);
+  const protagonistConsumables = Duel.use(
+    (state) => state.protagonist.consumables,
+  );
+  const hasDynamicArmor = protagonistConsumables.includes(73);
 
   useTankTransform(protagonist, turretContainer, gunContainer);
 
@@ -43,7 +47,14 @@ export const PrimaryArmorScene = memo(() => {
             armorId,
           );
 
-          if (!isVisible || spaced || thickness === undefined) return null;
+          if (
+            !isVisible ||
+            spaced ||
+            thickness === undefined ||
+            (hasDynamicArmor && node.name.includes('state_01')) ||
+            (!hasDynamicArmor && node.name.includes('state_00'))
+          )
+            return null;
 
           return (
             <PrimaryArmorSceneComponent
@@ -67,7 +78,14 @@ export const PrimaryArmorScene = memo(() => {
             armorId,
           );
 
-          if (!isVisible || spaced || thickness === undefined) return null;
+          if (
+            !isVisible ||
+            spaced ||
+            thickness === undefined ||
+            (hasDynamicArmor && node.name.includes('state_01')) ||
+            (!hasDynamicArmor && node.name.includes('state_00'))
+          )
+            return null;
 
           return (
             <group position={hullOrigin}>
@@ -94,7 +112,14 @@ export const PrimaryArmorScene = memo(() => {
               armorId,
             );
 
-            if (!isVisible || spaced || thickness === undefined) return null;
+            if (
+              !isVisible ||
+              spaced ||
+              thickness === undefined ||
+              (hasDynamicArmor && node.name.includes('state_01')) ||
+              (!hasDynamicArmor && node.name.includes('state_00'))
+            )
+              return null;
 
             return (
               <group position={hullOrigin}>

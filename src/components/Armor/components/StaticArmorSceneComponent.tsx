@@ -23,12 +23,12 @@ import {
 } from '../../../core/blitzkit/modelTransform';
 import { discardClippingPlane } from '../../../core/three/discardClippingPlane';
 import * as TankopediaEphemeral from '../../../stores/tankopediaEphemeral';
-import { ThicknessRange } from '../../StaticArmor';
 import { ArmorType } from './SpacedArmorScene';
 import {
   ArmorUserData,
   ExternalModuleVariant,
 } from './SpacedArmorSceneComponent';
+import { ThicknessRange } from './StaticArmor';
 
 type StaticArmorSceneComponentProps = {
   name: string;

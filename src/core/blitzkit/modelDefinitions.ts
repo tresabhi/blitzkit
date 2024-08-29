@@ -7,6 +7,7 @@ export type ModelDefinitions = Record<number, ModelDefinition>;
 export interface ModelArmor {
   thickness: Record<number, number>;
   spaced?: number[];
+  // dynamic?: Record<`${boolean}`, number[]>;
 }
 
 export interface BoundingBox {

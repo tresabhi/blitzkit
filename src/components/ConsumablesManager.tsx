@@ -26,7 +26,7 @@ export function ConsumablesManager({
 }: ConsumablesManagerProps) {
   return (
     <Flex wrap="wrap" gap="2" {...props}>
-      {consumables.map((consumable, index) => {
+      {consumables.map((consumable) => {
         const isSelected = selected.some((id) => id === consumable.id);
 
         return (

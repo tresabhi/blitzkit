@@ -1,23 +1,23 @@
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { memo, useRef } from 'react';
 import { Group, Plane, Vector2, Vector3 } from 'three';
-import { applyPitchYawLimits } from '../../core/blitz/applyPitchYawLimits';
-import { correctZYTuple } from '../../core/blitz/correctZYTuple';
-import { hasEquipment } from '../../core/blitzkit/hasEquipment';
-import { modelTransformEvent } from '../../core/blitzkit/modelTransform';
-import { nameToArmorId } from '../../core/blitzkit/nameToArmorId';
-import { resolveArmor } from '../../core/blitzkit/resolveThickness';
-import { normalizeAngleRad } from '../../core/math/normalizeAngleRad';
-import { useArmor } from '../../hooks/useArmor';
-import { useModel } from '../../hooks/useModel';
-import { useTankModelDefinition } from '../../hooks/useTankModelDefinition';
-import { useTankTransform } from '../../hooks/useTankTransform';
-import * as Duel from '../../stores/duel';
-import * as TankopediaEphemeral from '../../stores/tankopediaEphemeral';
-import * as TankopediaPersistent from '../../stores/tankopediaPersistent';
-import { ModelTankWrapper } from '../Armor/components/ModelTankWrapper';
-import { ArmorType } from '../Armor/components/SpacedArmorScene';
-import { StaticArmorSceneComponent } from '../Armor/components/StaticArmorSceneComponent';
+import { applyPitchYawLimits } from '../../../core/blitz/applyPitchYawLimits';
+import { correctZYTuple } from '../../../core/blitz/correctZYTuple';
+import { hasEquipment } from '../../../core/blitzkit/hasEquipment';
+import { modelTransformEvent } from '../../../core/blitzkit/modelTransform';
+import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
+import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
+import { normalizeAngleRad } from '../../../core/math/normalizeAngleRad';
+import { useArmor } from '../../../hooks/useArmor';
+import { useModel } from '../../../hooks/useModel';
+import { useTankModelDefinition } from '../../../hooks/useTankModelDefinition';
+import { useTankTransform } from '../../../hooks/useTankTransform';
+import * as Duel from '../../../stores/duel';
+import * as TankopediaEphemeral from '../../../stores/tankopediaEphemeral';
+import * as TankopediaPersistent from '../../../stores/tankopediaPersistent';
+import { ModelTankWrapper } from './ModelTankWrapper';
+import { ArmorType } from './SpacedArmorScene';
+import { StaticArmorSceneComponent } from './StaticArmorSceneComponent';
 
 interface ArmorSceneProps {
   thicknessRange: ThicknessRange;
@@ -64,6 +64,10 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
   const showExternalModules = TankopediaPersistent.use(
     (state) => state.model.visual.showExternalModules,
   );
+  const protagonistConsumables = Duel.use(
+    (state) => state.protagonist.consumables,
+  );
+  const hasDynamicArmor = protagonistConsumables.includes(73);
 
   useTankTransform(protagonist, turretContainer, gunContainer);
 
@@ -83,7 +87,9 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
             !isVisible ||
             thickness === undefined ||
             (!showPrimaryArmor && !spaced) ||
-            (!showSpacedArmor && spaced)
+            (!showSpacedArmor && spaced) ||
+            (hasDynamicArmor && node.name.includes('state_01')) ||
+            (!hasDynamicArmor && node.name.includes('state_00'))
           )
             return null;
 
@@ -138,7 +144,9 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
             !isVisible ||
             thickness === undefined ||
             (!showPrimaryArmor && !spaced) ||
-            (!showSpacedArmor && spaced)
+            (!showSpacedArmor && spaced) ||
+            (hasDynamicArmor && node.name.includes('state_01')) ||
+            (!hasDynamicArmor && node.name.includes('state_00'))
           ) {
             return null;
           }
@@ -231,10 +239,11 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
               !isVisible ||
               thickness === undefined ||
               (!showPrimaryArmor && !spaced) ||
-              (!showSpacedArmor && spaced)
-            ) {
+              (!showSpacedArmor && spaced) ||
+              (hasDynamicArmor && node.name.includes('state_01')) ||
+              (!hasDynamicArmor && node.name.includes('state_00'))
+            )
               return null;
-            }
 
             const position = new Vector2();
             const delta = new Vector2();
