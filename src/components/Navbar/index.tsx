@@ -11,7 +11,6 @@ import {
   Box,
   Button,
   Code,
-  Dialog,
   Flex,
   Grid,
   IconButton,
@@ -24,17 +23,15 @@ import {
 import { usePathname } from 'next/navigation';
 import { Fragment, useState } from 'react';
 import { BRANCH_NAMES } from '../../app/components/Hero/constants';
-import { REGIONS } from '../../constants/regions';
 import { homeTool, TOOLS } from '../../constants/tools';
-import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { imgur, ImgurSize } from '../../core/blitzkit/imgur';
 import { patreonLoginUrl } from '../../core/blitzkit/patreonLoginUrl';
 import { assertSecret } from '../../core/blitzkit/secret';
 import { PatreonIcon } from '../../icons/Patreon';
 import { WargamingIcon } from '../../icons/Wargaming';
-import strings from '../../lang/en-US.json';
 import * as App from '../../stores/app';
 import { Link } from '../Link';
+import { WargamingLoginButton } from './components/WargamingLoginButton';
 import * as styles from './index.css';
 
 export default function Navbar() {
@@ -237,41 +234,7 @@ export default function Navbar() {
                         </Link>
                       )}
 
-                      {!logins.wargaming && (
-                        <Dialog.Root>
-                          <Dialog.Trigger>
-                            <Button color="red">
-                              <WargamingIcon width={15} height={15} /> Wargaming
-                            </Button>
-                          </Dialog.Trigger>
-
-                          <Dialog.Content width="fit-content">
-                            <Flex direction="column" gap="4" align="center">
-                              <Text color="gray">Choose your region</Text>
-
-                              <Flex gap="2" wrap="wrap">
-                                {REGIONS.map((region) => (
-                                  <Dialog.Close key={region}>
-                                    <Link
-                                      href={
-                                        typeof window !== 'undefined'
-                                          ? `https://api.worldoftanks.${region}/wot/auth/login/?application_id=${WARGAMING_APPLICATION_ID}&redirect_uri=${encodeURIComponent(
-                                              `${location.origin}/auth/wargaming?return=${location.origin}${location.pathname}`,
-                                            )}`
-                                          : undefined
-                                      }
-                                    >
-                                      <Button color="red">
-                                        {strings.common.regions.normal[region]}
-                                      </Button>
-                                    </Link>
-                                  </Dialog.Close>
-                                ))}
-                              </Flex>
-                            </Flex>
-                          </Dialog.Content>
-                        </Dialog.Root>
-                      )}
+                      {!logins.wargaming && <WargamingLoginButton />}
                     </Flex>
                   )}
                 </Popover.Content>

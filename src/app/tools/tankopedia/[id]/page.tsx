@@ -15,6 +15,7 @@ import { HeroSection } from './components/Model/HeroSection';
 import { MetaSection } from './components/Model/MetaSection';
 import { TechTreeSection } from './components/Model/TechTreeSection';
 import { VideoSection } from './components/VideoSection';
+import { VotingSection } from './components/VotingSection';
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = Number(params.id);
@@ -82,6 +83,7 @@ export default function Page({ params }: { params: { id: string } }) {
     <PageWrapper p="0" noMaxWidth color="purple" size={1600} gap="9">
       <HeroSection id={id} />
       <CalloutsSection />
+      <VotingSection />
       {/* <ShotDisplaySection /> */}
       <TechTreeSection />
       {!exempt && <AdMidSectionResponsive />}
