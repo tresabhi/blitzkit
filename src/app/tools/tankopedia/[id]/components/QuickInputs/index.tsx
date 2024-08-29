@@ -23,6 +23,11 @@ export function QuickInputs() {
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
   const initialGunPitch = tankModelDefinition.turretRotation?.pitch ?? 0;
   const hasImprovedVerticalStabilizer = useEquipment(122);
+  const antagonist = Duel.use((state) => state.antagonist.tank);
+  const compareTanks =
+    protagonist.tank.id === antagonist.id
+      ? [protagonist.tank.id]
+      : [protagonist.tank.id, antagonist.id];
 
   useEffect(() => {
     yawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
@@ -54,17 +59,17 @@ export function QuickInputs() {
 
   return (
     <Flex
-      className={styles.container}
+      align="center"
+      gap="2"
+      width="10rem"
       style={{
-        width: 128 + 32,
         pointerEvents: 'auto',
         position: 'absolute',
         left: '50%',
         top: 16,
         transform: 'translateX(-50%)',
       }}
-      align="center"
-      gap="2"
+      className={styles.container}
     >
       <TextField.Root
         size="1"

@@ -1,14 +1,15 @@
 import {
   CameraIcon,
+  ChevronLeftIcon,
   CopyIcon,
   DownloadIcon,
   EnterFullScreenIcon,
   ExitFullScreenIcon,
   EyeOpenIcon,
   GearIcon,
+  MixIcon,
 } from '@radix-ui/react-icons';
 import {
-  Box,
   Button,
   Dialog,
   DropdownMenu,
@@ -16,7 +17,6 @@ import {
   IconButton,
   Popover,
   SegmentedControl,
-  Strong,
   Tabs,
   Text,
   Tooltip,
@@ -24,6 +24,7 @@ import {
 import { invalidate } from '@react-three/fiber';
 import { RefObject, use, useEffect, useState } from 'react';
 import { ThicknessRange } from '../../../../../../../components/Armor/components/StaticArmor';
+import { Link } from '../../../../../../../components/Link';
 import { ModuleButton } from '../../../../../../../components/ModuleButtons/ModuleButton';
 import { SmallTankIcon } from '../../../../../../../components/SmallTankIcon';
 import { resolveNearPenetration } from '../../../../../../../core/blitz/resolveNearPenetration';
@@ -60,6 +61,12 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
   const [display, setDisplay] = useState<TankopediaDisplay>(
     TankopediaDisplay.Model,
   );
+  const antagonist = Duel.use((state) => state.antagonist.tank);
+  const protagonist = Duel.use((state) => state.protagonist.tank);
+  const compareTanks =
+    protagonist.id === antagonist.id
+      ? [protagonist.id]
+      : [protagonist.id, antagonist.id];
   const isFullScreen = useFullScreen();
   const showGrid = TankopediaPersistent.use(
     (state) => state.model.visual.showGrid,
@@ -108,31 +115,6 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
 
   return (
     <>
-      {isFullScreen && (
-        <Box
-          pl="4"
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: '50%',
-            transform: 'translateY(-50%)',
-          }}
-        >
-          <Text
-            size={{
-              initial: '3',
-              xs: '5',
-            }}
-            color="gray"
-            style={{
-              writingMode: 'vertical-lr',
-            }}
-          >
-            <Strong>BlitzKit</Strong> Tankopedia
-          </Text>
-        </Box>
-      )}
-
       <QuickInputs />
 
       {display === TankopediaDisplay.StaticArmor && (
@@ -360,73 +342,30 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
         </Flex>
       )}
 
-      <Box position="absolute" top="3" right="3">
-        <Popover.Root>
-          <Popover.Trigger>
-            <IconButton size={{ initial: '2', sm: '3' }} variant="soft">
-              <CameraIcon />
-            </IconButton>
-          </Popover.Trigger>
-
-          <Popover.Content>
-            <Flex direction="column" gap="2">
-              <Popover.Close>
-                <Button
-                  onClick={() => {
-                    if (!canvas.current) return;
-
-                    const anchor = document.createElement('a');
-
-                    anchor.setAttribute(
-                      'download',
-                      `${protagonistTank.name}.png`,
-                    );
-                    anchor.setAttribute(
-                      'href',
-                      canvas.current.toDataURL('image/png'),
-                    );
-                    anchor.click();
-                  }}
-                >
-                  <DownloadIcon />
-                  Download
-                </Button>
-              </Popover.Close>
-              <Popover.Close>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    if (!canvas.current) return;
-
-                    canvas.current.toBlob((blob) => {
-                      if (!blob) return;
-
-                      navigator.clipboard.write([
-                        new ClipboardItem({ 'image/png': blob }),
-                      ]);
-                    });
-                  }}
-                >
-                  <CopyIcon />
-                  Copy
-                </Button>
-              </Popover.Close>
-            </Flex>
-          </Popover.Content>
-        </Popover.Root>
-      </Box>
-
       <Flex
-        style={{
-          position: 'absolute',
-          bottom: 16,
-          left: '50%',
-          transform: 'translateX(-50%)',
-        }}
         direction="column"
         align="center"
-        gap="2"
+        position="absolute"
+        bottom="2"
+        left="50%"
+        style={{ transform: 'translateX(-50%)' }}
       >
+        <Flex gap="4">
+          <Link href="/tools/tankopedia">
+            <Button variant="ghost" size="1">
+              <ChevronLeftIcon />
+              Back
+            </Button>
+          </Link>
+
+          <Link href={`/tools/compare?tanks=${compareTanks.join('%2C')}`}>
+            <Button variant="ghost" size="1">
+              <MixIcon />
+              Compare
+            </Button>
+          </Link>
+        </Flex>
+
         {display === TankopediaDisplay.DynamicArmor && (
           <Flex align="center" gap="2">
             <Text color="gray" size="2">
@@ -472,7 +411,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
           </Flex>
         )}
 
-        <Flex gap="3" align="center">
+        <Flex gap="3" align="center" mt="2">
           <SegmentedControl.Root
             value={`${display}`}
             onValueChange={(value) => {
@@ -525,6 +464,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
+
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
               <IconButton variant="ghost" color="gray">
@@ -621,6 +561,61 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               </DropdownMenu.Sub>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
+
+          <Popover.Root>
+            <Popover.Trigger>
+              <IconButton color="gray" variant="ghost">
+                <CameraIcon />
+              </IconButton>
+            </Popover.Trigger>
+
+            <Popover.Content>
+              <Flex direction="column" gap="2">
+                <Popover.Close>
+                  <Button
+                    onClick={() => {
+                      if (!canvas.current) return;
+
+                      const anchor = document.createElement('a');
+
+                      anchor.setAttribute(
+                        'download',
+                        `${protagonistTank.name}.png`,
+                      );
+                      anchor.setAttribute(
+                        'href',
+                        canvas.current.toDataURL('image/png'),
+                      );
+                      anchor.click();
+                    }}
+                  >
+                    <DownloadIcon />
+                    Download
+                  </Button>
+                </Popover.Close>
+                <Popover.Close>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      if (!canvas.current) return;
+
+                      canvas.current.toBlob((blob) => {
+                        if (!blob) return;
+
+                        navigator.clipboard.write([
+                          new ClipboardItem({ 'image/png': blob }),
+                        ]);
+                      });
+                    }}
+                  >
+                    <CopyIcon />
+                    Copy
+                  </Button>
+                </Popover.Close>
+              </Flex>
+            </Popover.Content>
+          </Popover.Root>
+
           {fullScreenAvailable && (
             <IconButton
               color="gray"

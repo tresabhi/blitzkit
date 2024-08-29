@@ -1,7 +1,7 @@
 import { style, styleVariants } from '@vanilla-extract/css';
 
 const MIN_WIDTH = 640 + 128;
-const HEIGHT = 48;
+export const NAVBAR_HEIGHT = 48;
 
 export const hamburger = style({
   display: 'inline-flex',
@@ -24,7 +24,7 @@ export const tools = style({
 });
 
 export const navbar = style({
-  height: HEIGHT,
+  height: NAVBAR_HEIGHT,
   marginBottom: -1, // 1px overlap with content to bleed color
   position: 'sticky',
   top: 0,
@@ -42,7 +42,7 @@ const navbarExpanderBase = style({
 
   '@media': {
     [`screen and (min-width: ${MIN_WIDTH}px)`]: {
-      maxHeight: HEIGHT,
+      maxHeight: NAVBAR_HEIGHT,
     },
   },
 });
@@ -51,7 +51,7 @@ export const navbarExpander = styleVariants({
   false: [
     navbarExpanderBase,
     {
-      maxHeight: HEIGHT,
+      maxHeight: NAVBAR_HEIGHT,
     },
   ],
   true: [

@@ -11,6 +11,7 @@ import { useAwait } from '../../../../../hooks/useAwait';
 import * as Duel from '../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../stores/tankopediaEphemeral';
 
+const initialPosition = [0, 5, -16] as const;
 const poseDistances: Record<Pose, number> = {
   [Pose.HullDown]: 15,
   [Pose.FaceHug]: 5,
@@ -59,7 +60,7 @@ export function Controls() {
   const [autoRotate, setAutoRotate] = useState(true);
 
   useEffect(() => {
-    camera.position.set(-10, 5, -12);
+    camera.position.set(...initialPosition);
     orbitControls.current?.target.set(0, 1.25, 0);
   }, [camera]);
 
@@ -150,7 +151,7 @@ export function Controls() {
         }
 
         case Pose.Default: {
-          camera.position.set(-4, 4, -16);
+          camera.position.set(...initialPosition);
           orbitControls.current?.target.set(0, 1.25, 0);
           break;
         }

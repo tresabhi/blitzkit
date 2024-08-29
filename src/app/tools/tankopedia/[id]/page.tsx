@@ -14,7 +14,6 @@ import { GameModeSection } from './components/Model/GameModeSection';
 import { HeroSection } from './components/Model/HeroSection';
 import { MetaSection } from './components/Model/MetaSection';
 import { TechTreeSection } from './components/Model/TechTreeSection';
-import { ShotDisplaySection } from './components/ShotDisplaySection';
 import { VideoSection } from './components/VideoSection';
 
 export default function Page({ params }: { params: { id: string } }) {
@@ -82,11 +81,11 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <PageWrapper p="0" noMaxWidth color="purple" size={1600} gap="9">
       <HeroSection id={id} />
-      <ShotDisplaySection />
       <CalloutsSection />
-      <MetaSection />
-      {!exempt && <AdMidSectionResponsive />}
+      {/* <ShotDisplaySection /> */}
       <TechTreeSection />
+      {!exempt && <AdMidSectionResponsive />}
+      <MetaSection />
       <CharacteristicsSection />
       {!exempt && <AdMidSectionResponsive />}
       <GameModeSection />

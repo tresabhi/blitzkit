@@ -24,6 +24,7 @@ export function Lighting() {
   return (
     <>
       <Environment preset={environment} background={showEnvironment} blur={0} />
+
       <directionalLight
         position={[1, 1, -1]}
         intensity={hasPbr ? 1 : 5}
