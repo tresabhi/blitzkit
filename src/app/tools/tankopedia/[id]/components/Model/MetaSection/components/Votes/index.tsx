@@ -1,4 +1,4 @@
-import { Flex, Heading, Text } from '@radix-ui/themes';
+import { Flex, Heading, Skeleton, Text } from '@radix-ui/themes';
 import { memo } from 'react';
 import { WargamingLoginButton } from '../../../../../../../../../components/Navbar/components/WargamingLoginButton';
 import { formatCompact } from '../../../../../../../../../core/math/formatCompact';
@@ -19,9 +19,11 @@ export const Votes = memo(
 
     return (
       <Flex direction="column" gap="3">
-        <Flex justify="between" align="end">
+        <Flex justify="between" align="center">
           <Heading size="4">
-            {formatCompact(votes.votes)} {votes.votes === 1 ? 'vote' : 'votes'}
+            {!votes && <Skeleton height="1em" width="4rem" />}
+            {votes && formatCompact(votes.votes)}{' '}
+            {votes && (votes.votes > 1 ? 'votes' : 'vote')}
           </Heading>
 
           {!wargaming && (
@@ -37,8 +39,14 @@ export const Votes = memo(
             gap={{ initial: '0', sm: '6' }}
             direction={{ initial: 'column', sm: 'row' }}
           >
-            <StarRow stars={votes.categories.easiness} children="Easiness" />
-            <StarRow stars={votes.categories.firepower} children="Firepower" />
+            <StarRow
+              stars={votes?.categories.easiness ?? null}
+              children="Easiness"
+            />
+            <StarRow
+              stars={votes?.categories.firepower ?? null}
+              children="Firepower"
+            />
           </Flex>
 
           <Flex
@@ -46,24 +54,34 @@ export const Votes = memo(
             direction={{ initial: 'column', sm: 'row' }}
           >
             <StarRow
-              stars={votes.categories.maneuverability}
+              stars={votes?.categories.maneuverability ?? null}
               children="Maneuverability"
             />
             <StarRow
-              stars={votes.categories.survivability}
+              stars={votes?.categories.survivability ?? null}
               children="Survivability"
             />
           </Flex>
 
-          {wargaming && (
-            <Text align="center" size="2" color="gray" mt="2">
+          <Flex justify="center">
+            <Text size="2" color="gray" mt="2">
               <>
-                {votes.last_updated
-                  ? `You voted on ${new Date(votes.last_updated).toLocaleDateString()}`
-                  : `You haven't voted yet`}
+                {votes ? (
+                  wargaming ? (
+                    votes.last_updated ? (
+                      `You voted on ${new Date(votes.last_updated).toLocaleDateString()}`
+                    ) : (
+                      `You haven't voted yet`
+                    )
+                  ) : (
+                    'Login to vote'
+                  )
+                ) : (
+                  <Skeleton height="1em" width="5rem" />
+                )}
               </>
             </Text>
-          )}
+          </Flex>
         </Flex>
       </Flex>
     );

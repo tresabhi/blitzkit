@@ -1,6 +1,5 @@
 import { ChevronLeftIcon, MixIcon } from '@radix-ui/react-icons';
 import { Button, Code, Flex } from '@radix-ui/themes';
-import { Suspense } from 'react';
 import { classIcons } from '../../../../../../../components/ClassIcon';
 import { Link } from '../../../../../../../components/Link';
 import { asset } from '../../../../../../../core/blitzkit/asset';
@@ -9,7 +8,6 @@ import * as App from '../../../../../../../stores/app';
 import * as Duel from '../../../../../../../stores/duel';
 import { Listing } from './components/Listing';
 import { Votes } from './components/Votes';
-import { VotesSkeleton } from './components/VotesSkeleton';
 
 export function MetaSection() {
   const developerMode = App.useDeferred(false, (state) => state.developerMode);
@@ -40,7 +38,10 @@ export function MetaSection() {
           </Link>
         </Flex>
 
-        <Flex gap="6">
+        <Flex
+          gap={{ initial: '0', sm: '6' }}
+          direction={{ initial: 'column', sm: 'row' }}
+        >
           <Flex direction="column" width="100%">
             {protagonist.nameFull && (
               <Listing label="Full-name">{protagonist.nameFull}</Listing>
@@ -139,9 +140,7 @@ export function MetaSection() {
           </Flex>
         </Flex>
 
-        <Suspense fallback={<VotesSkeleton />}>
-          <Votes />
-        </Suspense>
+        <Votes />
       </Flex>
     </Flex>
   );

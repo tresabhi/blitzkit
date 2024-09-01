@@ -1,6 +1,6 @@
 import { CaretLeftIcon, CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, IconButton, ScrollArea, Text } from '@radix-ui/themes';
-import { use, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, use, useEffect, useMemo, useRef, useState } from 'react';
 import { asset } from '../../../../../../../core/blitzkit/asset';
 import { imgur } from '../../../../../../../core/blitzkit/imgur';
 import { tankDefinitions } from '../../../../../../../core/blitzkit/tankDefinitions';
@@ -128,6 +128,7 @@ export function TechTreeSection() {
 
             return (
               <Flex
+                key={multiplier}
                 style={{
                   background: `url(${imgur('7hDltb4')})`,
                   backgroundSize: 'contain',
@@ -141,7 +142,6 @@ export function TechTreeSection() {
                     draft.xpMultiplier = multiplier;
                   });
                 }}
-                key={multiplier}
                 width="2.5rem"
                 justify="center"
                 align="center"
@@ -164,15 +164,15 @@ export function TechTreeSection() {
             const tank = awaitedTankDefinitions[id];
 
             return (
-              <>
-                {index > 0 && <Arrow />}
+              <Fragment key={id}>
+                {index > 0 && <Arrow key={`${id}-arrow`} />}
                 <Node
-                  key={id}
+                  key={`${id}-node`}
                   id={id}
                   nextIds={last ? tank.successors : [line[index + 1]]}
                   highlight={last}
                 />
-              </>
+              </Fragment>
             );
           })}
 
@@ -180,14 +180,14 @@ export function TechTreeSection() {
             <>
               <Arrow />
               {master.successors!.map((id, index) => (
-                <>
+                <Fragment key={id}>
                   {index > 0 && (
-                    <Text color="gray">
+                    <Text color="gray" key={`${id}-plus`}>
                       <PlusIcon />
                     </Text>
                   )}
-                  <Node key={id} id={id} />
-                </>
+                  <Node key={`${id}-node}`} id={id} />
+                </Fragment>
               ))}
             </>
           )}
