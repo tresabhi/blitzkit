@@ -64,8 +64,8 @@ export function HeroSection({ id }: HeroSectionProps) {
         height={
           isFullScreen ? '100vh' : `calc(100vh - ${NAVBAR_HEIGHT}px - 8rem)`
         }
-        maxHeight="40rem"
-        maxWidth="120rem"
+        maxHeight={isFullScreen ? undefined : '40rem'}
+        maxWidth={isFullScreen ? undefined : '120rem'}
         flexGrow="1"
         width={isFullScreen ? '100vw' : undefined}
         position={isFullScreen ? 'fixed' : 'relative'}
