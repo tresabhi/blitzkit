@@ -3,7 +3,7 @@ import markdownEscape from 'markdown-escape';
 import { Region } from '../../../constants/regions';
 import { UserError } from '../../../hooks/userError';
 import searchPlayersAcrossRegions from '../../blitz/searchPlayersAcrossRegions';
-import { getBlitzFromDiscord } from '../../blitzkit/discordBlitzLink';
+import { getBlitzFromDiscord } from '../../blitzkit/getBlitzFromDiscord';
 import { translator } from '../../localization/translator';
 import { serverAndIdPattern } from './constants';
 

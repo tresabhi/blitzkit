@@ -8,12 +8,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
-  blitz     Int       @id
-  last_used DateTime? @default(now())
+model User {
+  blitz_id   Int        @id @map("blitz") // map: "blitz" was too vague
+  last_used  DateTime?  @default(now())
+  tank_votes TankVote[]
+
+  @@map("Users") // map: "Users" was mistakenly plural
 }
 
-model DiscordUsers {
-  discord BigInt @id
-  blitz   Int
+model TankVote {
+  id              Int      @id
+  last_updated    DateTime @default(now())
+  easiness        Int?
+  firepower       Int?
+  maneuverability Int?
+  survivability   Int?
+
+  user          User @relation(fields: [user_blitz_id], references: [blitz_id])
+  user_blitz_id Int
+}
+
+model DiscordUser {
+  discord_id BigInt @id @map("discord") // map: "discord" was too vague
+  blitz_id   Int    @map("blitz") // map: "blitz" was too vague
+
+  @@map("DiscordUsers") // map: "DiscordUsers" was mistakenly plural
 }

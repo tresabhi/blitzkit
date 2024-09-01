@@ -5,13 +5,19 @@ import { WargamingIcon } from '../../../icons/Wargaming';
 import strings from '../../../lang/en-US.json';
 import { Link } from '../../Link';
 
-export function WargamingLoginButton(props: ButtonProps) {
+export function WargamingLoginButton({ children, ...props }: ButtonProps) {
   return (
     <Dialog.Root>
       <Dialog.Trigger>
-        <Button color="red" {...props}>
-          <WargamingIcon width={15} height={15} /> Wargaming
-        </Button>
+        <Button
+          color="red"
+          {...props}
+          children={
+            <>
+              <WargamingIcon width={15} height={15} /> {children ?? 'Wargaming'}
+            </>
+          }
+        />
       </Dialog.Trigger>
 
       <Dialog.Content width="fit-content">
