@@ -12,11 +12,7 @@ import { TankSandbox } from './TankSandbox';
 import { TankSandboxLoader } from './TankSandboxLoader';
 import { Options } from './components/Options';
 
-interface HeroSectionProps {
-  id: number;
-}
-
-export function HeroSection({ id }: HeroSectionProps) {
+export function HeroSection() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const isFullScreen = useFullScreen();
   const protagonist = Duel.use((state) => state.protagonist.tank);
@@ -29,10 +25,11 @@ export function HeroSection({ id }: HeroSectionProps) {
         ? 'amber'
         : undefined;
   const awaitedTankDefinitions = use(tankDefinitions);
-  const tank = awaitedTankDefinitions[id];
   const thicknessRange = useMemo(() => {
     const entries = Object.values(awaitedTankDefinitions);
-    const filtered = entries.filter((thisTank) => thisTank.tier === tank.tier);
+    const filtered = entries.filter(
+      (thisTank) => thisTank.tier === protagonist.tier,
+    );
     const value =
       (filtered.reduce((accumulator, thisTank) => {
         return (
@@ -46,7 +43,7 @@ export function HeroSection({ id }: HeroSectionProps) {
       (3 / 4);
 
     return { value } satisfies ThicknessRange;
-  }, [tank.tier]);
+  }, [protagonist]);
 
   useEffect(() => {
     setDummyLoader(false);
@@ -90,7 +87,7 @@ export function HeroSection({ id }: HeroSectionProps) {
             >
               <Flex align="center" gap="3">
                 <Icon width="0.8em" height="0.8em" />
-                {tank.name}
+                {protagonist.name}
               </Flex>
             </Heading>
 
@@ -114,14 +111,14 @@ export function HeroSection({ id }: HeroSectionProps) {
           <Box width="100%" height="100%" position="absolute">
             <Box width="100%" height="100%">
               <TankSandboxLoader
-                id={id}
+                id={protagonist.id}
                 display={dummyLoader ? 'flex' : 'none'}
               />
 
               <Suspense
                 fallback={
                   <TankSandboxLoader
-                    id={id}
+                    id={protagonist.id}
                     display={dummyLoader ? 'none' : 'flex'}
                   />
                 }

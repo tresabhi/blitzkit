@@ -1,11 +1,17 @@
-import { ChevronLeftIcon, MixIcon } from '@radix-ui/react-icons';
-import { Button, Code, Flex } from '@radix-ui/themes';
+import { ChevronLeftIcon, MixIcon, UpdateIcon } from '@radix-ui/react-icons';
+import { Button, Code, Dialog, Flex } from '@radix-ui/themes';
+import { use, useState } from 'react';
 import { classIcons } from '../../../../../../../components/ClassIcon';
 import { Link } from '../../../../../../../components/Link';
 import { asset } from '../../../../../../../core/blitzkit/asset';
+import { modelDefinitions } from '../../../../../../../core/blitzkit/modelDefinitions';
+import { provisionDefinitions } from '../../../../../../../core/blitzkit/provisionDefinitions';
+import { tankToDuelMember } from '../../../../../../../core/blitzkit/tankToDuelMember';
 import strings from '../../../../../../../lang/en-US.json';
 import * as App from '../../../../../../../stores/app';
 import * as Duel from '../../../../../../../stores/duel';
+import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
+import { TankSearch } from '../../../../components/TankSearch';
 import { Listing } from './components/Listing';
 import { Votes } from './components/Votes';
 
@@ -18,6 +24,11 @@ export function MetaSection() {
     protagonist.id === antagonist.id
       ? [protagonist.id]
       : [protagonist.id, antagonist.id];
+  const mutateDuel = Duel.useMutation();
+  const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
+  const awaitedProvisionDefinitions = use(provisionDefinitions);
+  const [showSwapDialog, setShowSwapDialog] = useState(false);
+  const awaitedModelDefinitions = use(modelDefinitions);
 
   return (
     <Flex justify="center" align="center">
@@ -31,11 +42,44 @@ export function MetaSection() {
           </Link>
 
           <Link href={`/tools/compare?tanks=${compareTanks.join('%2C')}`}>
-            <Button>
+            <Button variant="outline">
               <MixIcon />
               Compare
             </Button>
           </Link>
+
+          <Dialog.Root open={showSwapDialog} onOpenChange={setShowSwapDialog}>
+            <Dialog.Trigger>
+              <Button>
+                <UpdateIcon />
+                Swap
+              </Button>
+            </Dialog.Trigger>
+
+            <Dialog.Content>
+              <TankSearch
+                compact
+                onSelect={(tank) => {
+                  setShowSwapDialog(false);
+                  mutateTankopediaEphemeral((draft) => {
+                    draft.model = awaitedModelDefinitions[tank.id];
+                  });
+                  mutateDuel((draft) => {
+                    draft.protagonist = tankToDuelMember(
+                      tank,
+                      awaitedProvisionDefinitions,
+                    );
+                  });
+
+                  window.history.replaceState(
+                    null,
+                    '',
+                    `/tools/tankopedia/${tank.id}`,
+                  );
+                }}
+              />
+            </Dialog.Content>
+          </Dialog.Root>
         </Flex>
 
         <Flex

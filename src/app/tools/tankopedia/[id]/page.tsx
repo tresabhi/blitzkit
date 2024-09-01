@@ -4,7 +4,9 @@ import { invalidate } from '@react-three/fiber';
 import { useEffect } from 'react';
 import { AdMidSectionResponsive } from '../../../../components/AdMidSectionResponsive';
 import PageWrapper from '../../../../components/PageWrapper';
+import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
 import { useAdExempt } from '../../../../hooks/useAdExempt';
+import strings from '../../../../lang/en-US.json';
 import * as Duel from '../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 import { CalloutsSection } from './components/CalloutsSection';
@@ -14,14 +16,18 @@ import { GameModeSection } from './components/Model/GameModeSection';
 import { HeroSection } from './components/Model/HeroSection';
 import { MetaSection } from './components/Model/MetaSection';
 import { TechTreeSection } from './components/Model/TechTreeSection';
+import { ShotDisplaySection } from './components/ShotDisplaySection';
 import { VideoSection } from './components/VideoSection';
 
-export default function Page({ params }: { params: { id: string } }) {
-  const id = Number(params.id);
+export default function Page() {
   const exempt = useAdExempt();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const mutateDuel = Duel.useMutation();
   const duelStore = Duel.useStore();
+  const tank = Duel.use((state) => state.protagonist.tank);
+  const title = `${tank.name} - Tier ${TIER_ROMAN_NUMERALS[tank.tier]} ${
+    (strings.common.nations_adjectives as Record<string, string>)[tank.nation]
+  } ${strings.common.tank_class_short[tank.class]}`;
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -79,20 +85,23 @@ export default function Page({ params }: { params: { id: string } }) {
   }, []);
 
   return (
-    <PageWrapper p="0" noMaxWidth color="purple" size={1600} gap="9">
-      <HeroSection id={id} />
-      <CalloutsSection />
-      <MetaSection />
-      {/* <VotingSection /> */}
-      {/* <ShotDisplaySection /> */}
-      <TechTreeSection />
-      {!exempt && <AdMidSectionResponsive />}
-      <CharacteristicsSection />
-      {!exempt && <AdMidSectionResponsive />}
-      <GameModeSection />
-      <VideoSection />
-      <HistorySection />
-      {!exempt && <AdMidSectionResponsive mb="6" />}
-    </PageWrapper>
+    <>
+      <title>{title}</title>
+
+      <PageWrapper p="0" noMaxWidth color="purple" size={1600} gap="9">
+        <HeroSection />
+        <MetaSection />
+        <ShotDisplaySection />
+        <TechTreeSection />
+        {!exempt && <AdMidSectionResponsive />}
+        <CalloutsSection />
+        <CharacteristicsSection />
+        {!exempt && <AdMidSectionResponsive />}
+        <GameModeSection />
+        <VideoSection />
+        <HistorySection />
+        {!exempt && <AdMidSectionResponsive mb="6" />}
+      </PageWrapper>
+    </>
   );
 }
