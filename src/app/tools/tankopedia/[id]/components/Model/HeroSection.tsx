@@ -53,72 +53,87 @@ export function HeroSection({ id }: HeroSectionProps) {
   }, []);
 
   return (
-    <Box
-      style={{
-        background: isFullScreen
-          ? Var('color-background')
-          : Var('color-surface'),
-        zIndex: isFullScreen ? 2 : undefined,
-      }}
-      height={
-        isFullScreen ? '100vh' : `calc(100vh - ${NAVBAR_HEIGHT}px - 8rem)`
-      }
-      width={isFullScreen ? '100vw' : undefined}
-      position={isFullScreen ? 'fixed' : 'relative'}
-      top={isFullScreen ? '0' : undefined}
-      left={isFullScreen ? '0' : undefined}
-    >
-      <Flex
-        position="absolute"
-        width="100%"
-        height="100%"
-        align="center"
-        direction="column"
-        mt="7"
-      >
-        <Heading
-          weight="bold"
-          size={{ initial: '8', xs: '9' }}
-          color={treeColor}
-        >
-          <Flex align="center" gap="3">
-            <Icon width="0.75em" height="0.75em" />
-            {tank.name}
-          </Flex>
-        </Heading>
-        <Text color="gray" weight="light" mt="1">
-          BlitzKit Tankopedia
-        </Text>
-      </Flex>
-
+    <Flex justify="center" style={{ backgroundColor: Var('color-surface') }}>
       <Box
-        position="absolute"
-        width="100%"
-        height="100%"
-        className="tank-sandbox-container"
+        style={{
+          backgroundColor: isFullScreen
+            ? Var('color-background')
+            : Var('color-surface'),
+          zIndex: isFullScreen ? 2 : undefined,
+        }}
+        height={
+          isFullScreen ? '100vh' : `calc(100vh - ${NAVBAR_HEIGHT}px - 8rem)`
+        }
+        maxHeight="40rem"
+        maxWidth="120rem"
+        flexGrow="1"
+        width={isFullScreen ? '100vw' : undefined}
+        position={isFullScreen ? 'fixed' : 'relative'}
+        top={isFullScreen ? '0' : undefined}
+        left={isFullScreen ? '0' : undefined}
       >
-        <Box width="100%" height="100%" position="absolute">
-          <Box width="100%" height="100%">
-            <TankSandboxLoader
-              id={id}
-              display={dummyLoader ? 'flex' : 'none'}
-            />
-
-            <Suspense
-              fallback={
-                <TankSandboxLoader
-                  id={id}
-                  display={dummyLoader ? 'none' : 'flex'}
-                />
-              }
+        <Flex
+          position="absolute"
+          justify={{ initial: 'center', md: 'start' }}
+          width="100%"
+          mt={{ initial: '6', md: '-8' }}
+          top={{ initial: '0', md: '50%' }}
+          left={{ initial: '-4', md: '0' }}
+          pl={{ initial: '0', md: '8' }}
+        >
+          <Flex direction="column" align={{ initial: 'center', md: 'start' }}>
+            <Heading
+              weight="bold"
+              size={{ initial: '8', xl: '9' }}
+              wrap="nowrap"
+              color={treeColor}
             >
-              <TankSandbox ref={canvas} thicknessRange={thicknessRange} />
-            </Suspense>
-          </Box>
+              <Flex align="center" gap="3">
+                <Icon width="0.8em" height="0.8em" />
+                {tank.name}
+              </Flex>
+            </Heading>
 
-          <Options canvas={canvas} thicknessRange={thicknessRange} />
+            <Text
+              color="gray"
+              size="3"
+              weight="light"
+              ml={{ initial: '0', md: '7', xl: '9' }}
+            >
+              BlitzKit Tankopedia
+            </Text>
+          </Flex>
+        </Flex>
+
+        <Box
+          position="absolute"
+          width="100%"
+          height="100%"
+          className="tank-sandbox-container"
+        >
+          <Box width="100%" height="100%" position="absolute">
+            <Box width="100%" height="100%">
+              <TankSandboxLoader
+                id={id}
+                display={dummyLoader ? 'flex' : 'none'}
+              />
+
+              <Suspense
+                fallback={
+                  <TankSandboxLoader
+                    id={id}
+                    display={dummyLoader ? 'none' : 'flex'}
+                  />
+                }
+              >
+                <TankSandbox ref={canvas} thicknessRange={thicknessRange} />
+              </Suspense>
+            </Box>
+
+            <Options canvas={canvas} thicknessRange={thicknessRange} />
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </Flex>
   );
 }

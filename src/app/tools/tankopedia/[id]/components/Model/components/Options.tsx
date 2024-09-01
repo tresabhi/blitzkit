@@ -1,13 +1,11 @@
 import {
   CameraIcon,
-  ChevronLeftIcon,
   CopyIcon,
   DownloadIcon,
   EnterFullScreenIcon,
   ExitFullScreenIcon,
   EyeOpenIcon,
   GearIcon,
-  MixIcon,
 } from '@radix-ui/react-icons';
 import {
   Button,
@@ -24,7 +22,6 @@ import {
 import { invalidate } from '@react-three/fiber';
 import { RefObject, use, useEffect, useState } from 'react';
 import { ThicknessRange } from '../../../../../../../components/Armor/components/StaticArmor';
-import { Link } from '../../../../../../../components/Link';
 import { ModuleButton } from '../../../../../../../components/ModuleButtons/ModuleButton';
 import { SmallTankIcon } from '../../../../../../../components/SmallTankIcon';
 import { resolveNearPenetration } from '../../../../../../../core/blitz/resolveNearPenetration';
@@ -61,12 +58,6 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
   const [display, setDisplay] = useState<TankopediaDisplay>(
     TankopediaDisplay.Model,
   );
-  const antagonist = Duel.use((state) => state.antagonist.tank);
-  const protagonist = Duel.use((state) => state.protagonist.tank);
-  const compareTanks =
-    protagonist.id === antagonist.id
-      ? [protagonist.id]
-      : [protagonist.id, antagonist.id];
   const isFullScreen = useFullScreen();
   const showGrid = TankopediaPersistent.use(
     (state) => state.model.visual.showGrid,
@@ -346,26 +337,10 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
         direction="column"
         align="center"
         position="absolute"
-        bottom="2"
+        bottom="4"
         left="50%"
         style={{ transform: 'translateX(-50%)' }}
       >
-        <Flex gap="4">
-          <Link href="/tools/tankopedia">
-            <Button variant="ghost" size="1">
-              <ChevronLeftIcon />
-              Back
-            </Button>
-          </Link>
-
-          <Link href={`/tools/compare?tanks=${compareTanks.join('%2C')}`}>
-            <Button variant="ghost" size="1">
-              <MixIcon />
-              Compare
-            </Button>
-          </Link>
-        </Flex>
-
         {display === TankopediaDisplay.DynamicArmor && (
           <Flex align="center" gap="2">
             <Text color="gray" size="2">
