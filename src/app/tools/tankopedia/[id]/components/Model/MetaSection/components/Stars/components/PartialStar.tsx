@@ -1,13 +1,13 @@
 import { StarFilledIcon, StarIcon } from '@radix-ui/react-icons';
-import { Box } from '@radix-ui/themes';
+import { Box, BoxProps } from '@radix-ui/themes';
 
-interface PartialStarProps {
+type PartialStarProps = BoxProps & {
   fill: number;
-}
+};
 
-export function PartialStar({ fill }: PartialStarProps) {
+export function PartialStar({ fill, ...props }: PartialStarProps) {
   return (
-    <Box height="1em" width="1em" position="relative">
+    <Box height="1em" width="1em" position="relative" {...props}>
       <StarIcon width="1em" height="1em" />
       {fill > 0 && (
         <Box

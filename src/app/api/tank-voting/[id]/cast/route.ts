@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { isValidBlitzId } from '../../../../../core/blitz/isValidBlitzId';
 import { tankDefinitions } from '../../../../../core/blitzkit/tankDefinitions';
 import { usersDatabase } from '../../../../../databases/users';
-import { BlitzkitResponse } from '../../../../../hooks/useTankVotes';
+import {
+  BlitzkitResponse,
+  BlitzkitResponseError,
+} from '../../../../../hooks/useTankVotes';
 import { StarsInt } from '../../../../tools/tankopedia/[id]/components/Model/MetaSection/components/Stars';
 
 export const TANK_VOTE_CATEGORIES = [
@@ -25,16 +28,29 @@ export async function GET(
     return NextResponse.json({
       status: 'error',
       error: 'INVALID_TANK_ID',
-    } satisfies BlitzkitResponse);
+    } satisfies BlitzkitResponseError);
   }
 
-  const blitzId = Number(request.nextUrl.searchParams.get('player'));
+  const blitzIdString = request.nextUrl.searchParams.get('player');
+  const blitzId = Number(blitzIdString);
+  const blitzToken = request.nextUrl.searchParams.get('token');
 
-  if (isNaN(blitzId) || !(await isValidBlitzId(blitzId))) {
+  if (blitzIdString === null || blitzToken === null) {
     return NextResponse.json({
       status: 'error',
-      error: 'INVALID_PLAYER_ID',
-    } satisfies BlitzkitResponse);
+      error: 'UNDEFINED_TOKEN_OR_PLAYER_ID',
+    } satisfies BlitzkitResponseError);
+  }
+
+  if (
+    blitzIdString !== null &&
+    (!(await isValidBlitzId(blitzId, blitzToken ?? undefined)) ||
+      isNaN(blitzId))
+  ) {
+    return NextResponse.json({
+      status: 'error',
+      error: 'INVALID_TOKEN_OR_PLAYER_ID',
+    } satisfies BlitzkitResponseError);
   }
 
   const votes: Partial<Record<TankVoteCategory, StarsInt>> = {};
@@ -51,7 +67,7 @@ export async function GET(
       return NextResponse.json({
         status: 'error',
         error: 'INVALID_VOTE',
-      } satisfies BlitzkitResponse);
+      } satisfies BlitzkitResponseError);
     }
 
     votes[category] = vote as StarsInt;
@@ -62,7 +78,7 @@ export async function GET(
     return NextResponse.json({
       status: 'error',
       error: 'NO_VOTES',
-    } satisfies BlitzkitResponse);
+    } satisfies BlitzkitResponseError);
   }
 
   try {
@@ -90,12 +106,12 @@ export async function GET(
     return NextResponse.json({
       status: 'ok',
       data: undefined,
-    } satisfies BlitzkitResponse<undefined>);
+    } satisfies BlitzkitResponse);
   } catch (message) {
     return NextResponse.json({
       status: 'error',
       error: 'DATABASE_ERROR',
       message,
-    } satisfies BlitzkitResponse);
+    } satisfies BlitzkitResponseError);
   }
 }

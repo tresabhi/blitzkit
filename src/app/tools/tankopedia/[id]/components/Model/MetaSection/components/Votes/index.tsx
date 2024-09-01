@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Text } from '@radix-ui/themes';
+import { Flex, Heading, Text } from '@radix-ui/themes';
 import { memo } from 'react';
 import { WargamingLoginButton } from '../../../../../../../../../components/Navbar/components/WargamingLoginButton';
 import { formatCompact } from '../../../../../../../../../core/math/formatCompact';
@@ -6,6 +6,7 @@ import { useTankVotes } from '../../../../../../../../../hooks/useTankVotes';
 import * as App from '../../../../../../../../../stores/app';
 import * as Duel from '../../../../../../../../../stores/duel';
 import { StarRow } from './components/StarRow';
+import { VoteCaster } from './components/VoteCaster';
 
 export const Votes = memo(
   () => {
@@ -24,11 +25,11 @@ export const Votes = memo(
           </Heading>
 
           {!wargaming && (
-            <WargamingLoginButton variant="outline">
+            <WargamingLoginButton variant="surface">
               Login to vote
             </WargamingLoginButton>
           )}
-          {wargaming && <Button>Vote</Button>}
+          {wargaming && <VoteCaster />}
         </Flex>
 
         <Flex gap="0" direction="column">
@@ -54,9 +55,13 @@ export const Votes = memo(
             />
           </Flex>
 
-          {votes.last_updated && (
+          {wargaming && (
             <Text align="center" size="2" color="gray" mt="2">
-              You voted on {new Date(votes.last_updated).toLocaleDateString()}
+              <>
+                {votes.last_updated
+                  ? `You voted on ${new Date(votes.last_updated).toLocaleDateString()}`
+                  : `You haven't voted yet`}
+              </>
             </Text>
           )}
         </Flex>

@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { isValidBlitzId } from '../../../../../core/blitz/isValidBlitzId';
 import { tankDefinitions } from '../../../../../core/blitzkit/tankDefinitions';
 import { usersDatabase } from '../../../../../databases/users';
-import { BlitzkitResponse } from '../../../../../hooks/useTankVotes';
+import {
+  BlitzkitResponse,
+  BlitzkitResponseError,
+} from '../../../../../hooks/useTankVotes';
 import { TankVoteCategory } from '../cast/route';
 
 export interface TankVotes {
@@ -22,7 +25,7 @@ export async function GET(
     return NextResponse.json({
       status: 'error',
       error: 'INVALID_TANK_ID',
-    } satisfies BlitzkitResponse<TankVotes>);
+    } satisfies BlitzkitResponseError);
   }
 
   const blitzIdString = request.nextUrl.searchParams.get('player');
@@ -33,7 +36,7 @@ export async function GET(
     return NextResponse.json({
       status: 'error',
       error: 'UNDEFINED_TOKEN_OR_PLAYER_ID',
-    } satisfies BlitzkitResponse<TankVotes>);
+    } satisfies BlitzkitResponseError);
   }
 
   if (
@@ -44,7 +47,7 @@ export async function GET(
     return NextResponse.json({
       status: 'error',
       error: 'INVALID_TOKEN_OR_PLAYER_ID',
-    } satisfies BlitzkitResponse);
+    } satisfies BlitzkitResponseError);
   }
 
   try {
@@ -76,6 +79,6 @@ export async function GET(
       status: 'error',
       error: 'DATABASE_ERROR',
       message,
-    } satisfies BlitzkitResponse<TankVotes>);
+    } satisfies BlitzkitResponseError);
   }
 }

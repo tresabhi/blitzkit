@@ -3,12 +3,14 @@ import { TankVotes } from '../app/api/tank-voting/[id]/average/route';
 import { unwrapBlitzkitResponse } from '../core/blitzkit/unwrapBlitzkitResponse';
 import * as App from '../stores/app';
 
+export interface BlitzkitResponseError {
+  status: 'error';
+  error: string;
+  message?: unknown;
+}
+
 export type BlitzkitResponse<Data = undefined> =
-  | {
-      status: 'error';
-      error: string;
-      message?: unknown;
-    }
+  | BlitzkitResponseError
   | {
       status: 'ok';
       data: Data;

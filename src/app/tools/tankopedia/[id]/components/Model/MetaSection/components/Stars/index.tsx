@@ -4,11 +4,12 @@ import { PartialStar } from './components/PartialStar';
 
 export type StarsInt = 1 | 2 | 3 | 4 | 5;
 
-interface StarsProps {
+type StarsProps = TextProps & {
   stars: number | null;
-}
+  onCast?: (value: StarsInt) => void;
+};
 
-export function Stars({ stars }: StarsProps) {
+export function Stars({ stars, onCast, ...props }: StarsProps) {
   let color: TextProps['color'] = 'green';
 
   if (stars === null) color = 'gray';
@@ -18,15 +19,25 @@ export function Stars({ stars }: StarsProps) {
   else if (stars < 4.5) color = 'blue';
 
   return (
-    <Text color={color}>
-      <Flex>
+    <Text color={color} {...props}>
+      <Flex style={{ cursor: onCast ? 'pointer' : 'unset' }}>
         {stars !== null &&
           times(Math.floor(stars), (index) => (
-            <PartialStar fill={1} key={index} />
+            <PartialStar
+              fill={1}
+              key={index}
+              onClick={() => onCast?.((index + 1) as StarsInt)}
+            />
           ))}
         {stars !== null && stars % 1 !== 0 && <PartialStar fill={stars % 1} />}
         {times(5 - Math.ceil(stars ?? 0), (index) => (
-          <PartialStar fill={0} key={index} />
+          <PartialStar
+            fill={0}
+            key={index}
+            onClick={() =>
+              onCast?.((Math.floor(stars ?? 0) + index + 1) as StarsInt)
+            }
+          />
         ))}
       </Flex>
     </Text>
