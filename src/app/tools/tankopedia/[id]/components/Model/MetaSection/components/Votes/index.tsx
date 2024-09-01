@@ -1,3 +1,5 @@
+'use client';
+
 import { Flex, Heading, Skeleton, Text } from '@radix-ui/themes';
 import { memo } from 'react';
 import { WargamingLoginButton } from '../../../../../../../../../components/Navbar/components/WargamingLoginButton';
