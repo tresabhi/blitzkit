@@ -1,3 +1,4 @@
+import { PaperPlaneIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Heading, Skeleton, Text } from '@radix-ui/themes';
 import { WargamingLoginButton } from '../../../../../../../../components/Navbar/components/WargamingLoginButton';
 import * as App from '../../../../../../../../stores/app';
@@ -20,7 +21,11 @@ export function VotesSkeleton() {
             Login to vote
           </WargamingLoginButton>
         )}
-        {wargaming && <Button>Vote</Button>}
+        {wargaming && (
+          <Button variant="surface">
+            <PaperPlaneIcon /> Vote
+          </Button>
+        )}
       </Flex>
 
       <Flex gap="0" direction="column">
