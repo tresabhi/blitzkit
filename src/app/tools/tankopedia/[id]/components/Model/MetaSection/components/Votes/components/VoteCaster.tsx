@@ -145,7 +145,7 @@ export function VoteCaster() {
       >
         {postVote === true && (
           <AlertDialog.Content maxWidth="20rem">
-            <AlertDialog.Title>Vote cased</AlertDialog.Title>
+            <AlertDialog.Title>Vote casted</AlertDialog.Title>
             <AlertDialog.Description>
               It may take a few minutes for it to show up.
             </AlertDialog.Description>

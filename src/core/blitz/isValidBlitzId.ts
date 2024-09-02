@@ -12,7 +12,7 @@ export async function isValidBlitzId(id: number, token?: string) {
   }
 
   const json = await fetch(
-    `https://api.wotblitz.com/wotb/account/info/?account_id=${
+    `https://api.wotblitz.${region}/wotb/account/info/?account_id=${
       id
     }&application_id=${WARGAMING_APPLICATION_ID}${
       token === undefined ? '' : `&access_token=${token}`
