@@ -11,7 +11,7 @@ import { useAwait } from '../../../../../hooks/useAwait';
 import * as Duel from '../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../stores/tankopediaEphemeral';
 
-const initialPosition = [0, 6, -32] as const;
+const initialPosition = [0, 4, -18] as const;
 const poseDistances: Record<Pose, number> = {
   [Pose.HullDown]: 15,
   [Pose.FaceHug]: 5,

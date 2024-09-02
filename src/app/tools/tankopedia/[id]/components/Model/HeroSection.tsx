@@ -51,7 +51,8 @@ export function HeroSection() {
 
   return (
     <Flex justify="center" style={{ backgroundColor: Var('color-surface') }}>
-      <Box
+      <Flex
+        direction={{ initial: 'column', md: 'row' }}
         style={{
           backgroundColor: isFullScreen
             ? Var('color-background')
@@ -70,45 +71,43 @@ export function HeroSection() {
         left={isFullScreen ? '0' : undefined}
       >
         <Flex
-          position="absolute"
-          justify={{ initial: 'center', md: 'start' }}
-          width="100%"
-          mt={{ initial: '6', md: '-8' }}
-          top={{ initial: '0', md: '50%' }}
-          left={{ initial: '-4', md: '0' }}
-          pl={{ initial: '0', md: '8' }}
+          style={{ userSelect: 'none' }}
+          direction="column"
+          align={{ initial: 'center', md: 'start' }}
+          justify="center"
+          pl={{ initial: '0', md: '9' }}
+          pt={{ initial: '5', md: '0' }}
         >
-          <Flex direction="column" align={{ initial: 'center', md: 'start' }}>
-            <Heading
-              weight="bold"
-              size={{ initial: '8', xl: '9' }}
-              wrap="nowrap"
-              color={treeColor}
-            >
-              <Flex align="center" gap="3">
-                <Icon width="0.8em" height="0.8em" />
-                {protagonist.name}
-              </Flex>
-            </Heading>
+          <Heading
+            weight="bold"
+            size={{ initial: '8', lg: '9' }}
+            wrap="nowrap"
+            color={treeColor}
+          >
+            <Flex align="center" gap="3">
+              <Icon width="0.8em" height="0.8em" />
+              {protagonist.name}
+            </Flex>
+          </Heading>
 
-            <Text
-              color="gray"
-              size="3"
-              weight="light"
-              ml={{ initial: '0', md: '7', xl: '9' }}
-            >
-              BlitzKit Tankopedia
-            </Text>
-          </Flex>
+          <Text
+            color="gray"
+            size="3"
+            weight="light"
+            ml={{ initial: '0', md: '9' }}
+          >
+            BlitzKit Tankopedia
+          </Text>
         </Flex>
 
         <Box
-          position="absolute"
-          width="100%"
-          height="100%"
           className="tank-sandbox-container"
+          flexGrow="1"
+          flexBasis="0"
+          flexShrink="0"
+          position="relative"
         >
-          <Box width="100%" height="100%" position="absolute">
+          <Box position="absolute" width="100%" height="100%">
             <Box width="100%" height="100%">
               <TankSandboxLoader
                 id={protagonist.id}
@@ -130,7 +129,7 @@ export function HeroSection() {
             <Options canvas={canvas} thicknessRange={thicknessRange} />
           </Box>
         </Box>
-      </Box>
+      </Flex>
     </Flex>
   );
 }
