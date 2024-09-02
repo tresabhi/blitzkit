@@ -13,7 +13,6 @@ import * as Duel from '../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
 import { TankSearch } from '../../../../components/TankSearch';
 import { Listing } from './components/Listing';
-import { Votes } from './components/Votes';
 
 export function MetaSection() {
   const developerMode = App.useDeferred(false, (state) => state.developerMode);
@@ -186,7 +185,7 @@ export function MetaSection() {
           </Flex>
         </Flex>
 
-        <Votes />
+        {/* <Votes /> */}
       </Flex>
     </Flex>
   );
