@@ -1,4 +1,4 @@
-import { readdir, writeFile } from 'fs/promises';
+import { readdir } from 'fs/promises';
 import sharp from 'sharp';
 import { readBase64DVPL } from '../../src/core/blitz/readBase64DVPL';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
@@ -70,8 +70,6 @@ export async function flags() {
               .toBuffer()
           ).toString('base64');
           const name = flag.match(/flag_filter_(.+)@2x\.packed\.webp/)![1];
-
-          writeFile(`temp/icons/${name}.webp`, content, { encoding: 'base64' });
 
           return {
             content,
