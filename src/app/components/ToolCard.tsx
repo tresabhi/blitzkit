@@ -110,6 +110,7 @@ export function ToolCard({ tool, style, ...props }: ToolCardProps) {
 
           {!unavailableOnBranch && (
             <Button
+              highContrast={tool.button.highContrast}
               size={{
                 initial: undefined,
                 sm: tool.significant ? '3' : undefined,

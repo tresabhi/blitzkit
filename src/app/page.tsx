@@ -1,6 +1,6 @@
 'use client';
 
-import { Flex } from '@radix-ui/themes';
+import { Flex, Heading } from '@radix-ui/themes';
 import { AdMidSectionResponsive } from '../components/AdMidSectionResponsive';
 import {
   compareTool,
@@ -63,10 +63,41 @@ export default function Page() {
             <ToolCard tool={discordTool} />
             <ToolCard tool={moreTool} />
           </Flex>
+
+          {!exempt && <AdMidSectionResponsive />}
+
+          <Heading>Other cool projects</Heading>
+
+          <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+            <ToolCard
+              tool={{
+                button: {
+                  text: 'Analyze',
+                  color: 'blue',
+                },
+                description: 'Rich historic average stats',
+                id: 'blitz-analysis',
+                image: 'j76YXGl',
+                title: 'BlitzAnalysis[]',
+                href: 'https://blitzanalysiz.com/',
+              }}
+            />
+            <ToolCard
+              tool={{
+                button: {
+                  color: 'purple',
+                  text: 'Install',
+                  highContrast: true,
+                },
+                image: 'zYrrYbR',
+                description: 'In-game session stats',
+                id: 'blitz-insider',
+                title: 'Blitz Insider',
+              }}
+            />
+          </Flex>
         </Flex>
       </Flex>
-
-      {!exempt && <AdMidSectionResponsive />}
 
       <div style={{ flex: 1 }} />
     </>

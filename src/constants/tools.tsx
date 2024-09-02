@@ -10,6 +10,7 @@ export interface Tool {
   href?: string;
   pageDescription?: string;
   button: {
+    highContrast?: boolean;
     text: string;
     color: ComponentProps<typeof Button>['color'];
   };
