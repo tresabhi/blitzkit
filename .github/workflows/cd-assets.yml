@@ -33,7 +33,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Maximize build space
+      - name: (ZIP) Maximize build space
+        if: github.event.inputs.zip_url != ''
         uses: easimon/maximize-build-space@master
         with:
           root-reserve-mb: 512
