@@ -61,6 +61,11 @@ export function TechTreeSection() {
     0,
   );
 
+  useEffect(() => {
+    if (!container.current) return;
+    container.current.scrollLeft = container.current.scrollWidth;
+  });
+
   if (
     master.treeType !== 'researchable' ||
     master.ancestors === undefined ||
@@ -68,12 +73,6 @@ export function TechTreeSection() {
   ) {
     return null;
   }
-
-  useEffect(() => {
-    if (!container.current) return;
-
-    container.current.scrollLeft = container.current.scrollWidth;
-  });
 
   return (
     <Flex
