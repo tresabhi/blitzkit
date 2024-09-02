@@ -4,7 +4,6 @@ import {
   Button,
   Dialog,
   Flex,
-  Heading,
   Spinner,
   Text,
 } from '@radix-ui/themes';
@@ -36,7 +35,7 @@ export function VoteCaster() {
         </Dialog.Trigger>
 
         <Dialog.Content maxWidth="23rem">
-          <Heading>Voting for {tank.name}</Heading>
+          <Dialog.Title>Voting for {tank.name}</Dialog.Title>
 
           <Flex direction="column" mt="4">
             <Flex align="center" justify="between">

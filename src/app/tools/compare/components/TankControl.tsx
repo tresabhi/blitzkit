@@ -42,6 +42,8 @@ export function TankControl({ index, id }: TankControlProps) {
         </Dialog.Trigger>
 
         <Dialog.Content>
+          <Dialog.Title align="center">Switch tanks</Dialog.Title>
+
           <Flex gap="4" direction="column">
             <Flex
               direction="column"

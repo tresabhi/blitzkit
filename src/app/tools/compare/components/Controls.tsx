@@ -34,6 +34,8 @@ export function Controls({
         </Dialog.Trigger>
 
         <Dialog.Content>
+          <Dialog.Title align="center">Add tanks</Dialog.Title>
+
           <Flex gap="4" direction="column">
             <Flex
               direction="column"

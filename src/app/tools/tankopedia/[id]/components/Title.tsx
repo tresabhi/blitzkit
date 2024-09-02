@@ -69,6 +69,8 @@ export function Title() {
             </Dialog.Trigger>
 
             <Dialog.Content>
+              <Dialog.Title align="center">Change tank</Dialog.Title>
+
               <Flex gap="4" direction="column">
                 <Flex
                   direction="column"

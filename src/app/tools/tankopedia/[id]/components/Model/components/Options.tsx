@@ -360,6 +360,8 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               </Dialog.Trigger>
 
               <Dialog.Content>
+                <Dialog.Title align="center">Select tank</Dialog.Title>
+
                 <Tabs.Root
                   value={tab}
                   onValueChange={setTab}

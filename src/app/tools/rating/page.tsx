@@ -607,6 +607,8 @@ export default function Page() {
             </Dialog.Trigger>
 
             <Dialog.Content>
+              <Dialog.Title>Jump to score</Dialog.Title>
+
               <Flex gap="4" justify="center">
                 <TextField.Root
                   ref={scoreInput}
@@ -640,6 +642,8 @@ export default function Page() {
             </Dialog.Trigger>
 
             <Dialog.Content>
+              <Dialog.Title>Jump to position</Dialog.Title>
+
               <Flex gap="4" justify="center">
                 <TextField.Root
                   ref={positionInput}
@@ -676,6 +680,8 @@ export default function Page() {
             </Dialog.Trigger>
 
             <Dialog.Content>
+              <Dialog.Title>Jump to league</Dialog.Title>
+
               <Flex gap="2" justify="center">
                 <Select.Root
                   value={`${jumpToLeague}`}
@@ -761,6 +767,8 @@ export default function Page() {
             </Dialog.Trigger>
 
             <Dialog.Content>
+              <Dialog.Title>Jump to player</Dialog.Title>
+
               <Flex gap="4" direction="column">
                 <TextField.Root
                   onChange={debounce(

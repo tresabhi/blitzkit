@@ -57,6 +57,8 @@ export function MetaSection() {
             </Dialog.Trigger>
 
             <Dialog.Content>
+              <Dialog.Title>Swap tanks</Dialog.Title>
+
               <TankSearch
                 compact
                 onSelect={(tank) => {
