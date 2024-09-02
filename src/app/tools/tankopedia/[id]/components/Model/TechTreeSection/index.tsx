@@ -27,7 +27,11 @@ export function TechTreeSection() {
         return [line];
       } else {
         if (root.ancestors.length === 1 || root.tier === 2) {
-          line.push(root.ancestors[0]);
+          line.push(
+            root.ancestors.find(
+              (ancestor) => !awaitedTankDefinitions[ancestor].deprecated,
+            ) ?? root.ancestors[0],
+          );
           return extend(line);
         } else {
           return root.ancestors
