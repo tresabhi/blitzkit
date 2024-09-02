@@ -13,7 +13,7 @@ import {
 } from '../constants/tools';
 import { useAdExempt } from '../hooks/useAdExempt';
 import { Hero } from './components/Hero';
-import { PatreonPlug } from './components/PatreonPlug';
+import { Plugs } from './components/Plugs';
 import { ToolCard } from './components/ToolCard';
 
 export default function Page() {
@@ -23,7 +23,7 @@ export default function Page() {
     <>
       <Hero />
 
-      <PatreonPlug />
+      <Plugs />
 
       <Flex p="4" justify="center" gap="4">
         <Flex maxWidth="1024px" flexGrow="1" gap="4" direction="column">
