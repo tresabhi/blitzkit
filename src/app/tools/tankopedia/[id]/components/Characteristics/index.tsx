@@ -19,7 +19,6 @@ import { resolvePenetrationCoefficient } from '../../../../../../core/blitz/reso
 import { asset } from '../../../../../../core/blitzkit/asset';
 import { coefficient } from '../../../../../../core/blitzkit/coefficient';
 import { equipmentDefinitions } from '../../../../../../core/blitzkit/equipmentDefinitions';
-import { modelDefinitions } from '../../../../../../core/blitzkit/modelDefinitions';
 import { provisionDefinitions } from '../../../../../../core/blitzkit/provisionDefinitions';
 import { tankCharacteristics } from '../../../../../../core/blitzkit/tankCharacteristics';
 import {
@@ -58,7 +57,6 @@ export function Characteristics() {
       0,
     ) + (hasImprovedVentilation ? 0.08 : 0);
   const commanderMastery = crewMastery + provisionCrewBonus;
-  const crewMemberMastery = commanderMastery * 1.1;
   const consumables = Duel.use((state) => state.protagonist.consumables);
   const camouflage = Duel.use((state) => state.protagonist.camouflage);
   const equipmentMatrix = Duel.use(
@@ -71,7 +69,6 @@ export function Characteristics() {
   const stockTrack = tank.tracks[0];
   const stockTurret = tank.turrets[0];
   const stockGun = stockTurret.guns[0];
-  const awaitedModelDefinitions = use(modelDefinitions);
   const tankModelDefinition = useTankModelDefinition();
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition = turretModelDefinition.guns[gun.id];
@@ -545,6 +542,16 @@ export function Characteristics() {
           </InfoWithDelta>
           <InfoWithDelta decimals={0} unit="%" indent name="Soft">
             {stats.softTerrainCoefficient}
+          </InfoWithDelta>
+          <Info name="Raw terrain coefficients" />
+          <InfoWithDelta decimals={2} unit="%" indent name="Hard">
+            {stats.hardTerrainCoefficientRaw}
+          </InfoWithDelta>
+          <InfoWithDelta decimals={2} unit="%" indent name="Medium">
+            {stats.mediumTerrainCoefficientRaw}
+          </InfoWithDelta>
+          <InfoWithDelta decimals={2} unit="%" indent name="Soft">
+            {stats.softTerrainCoefficientRaw}
           </InfoWithDelta>
           <Info name="Power to weight ratio" unit="hp/tn" />
           <InfoWithDelta decimals={1} indent name="On hard terrain">

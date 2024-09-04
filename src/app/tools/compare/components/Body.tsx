@@ -261,6 +261,26 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
+          name="Raw terrain coefficient"
+          value="hardTerrainCoefficientRaw"
+          decimals={2}
+        />
+        <CompareRow
+          stats={stats}
+          name="medium terrain"
+          indent
+          value="mediumTerrainCoefficientRaw"
+          decimals={2}
+        />
+        <CompareRow
+          stats={stats}
+          name="soft terrain"
+          indent
+          value="softTerrainCoefficientRaw"
+          decimals={2}
+        />
+        <CompareRow
+          stats={stats}
           name="Power to weight ratio"
           value="powerToWeightRatioHardTerrain"
           decimals={1}
