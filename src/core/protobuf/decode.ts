@@ -1,6 +1,9 @@
-import { lookup } from './lookup';
+import { lookup, ProtoSource } from './lookup';
 
-export async function decode<Type>(proto: string, data: Uint8Array) {
-  const Message = await lookup(proto);
-  return Message.decode(data).toJSON() as Type;
+export function decode<Type>(
+  source: ProtoSource,
+  type: string,
+  data: Uint8Array,
+) {
+  return lookup(source, type).decode(data).toJSON() as Type;
 }

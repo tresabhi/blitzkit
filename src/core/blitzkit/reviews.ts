@@ -18,5 +18,5 @@ export interface Video {
 export const reviews = fetch(asset('definitions/reviews.pb'))
   .then((response) => response.arrayBuffer())
   .then((buffer) =>
-    decode<Reviews>('reviews/blitzkit.Reviews', new Uint8Array(buffer)),
+    decode<Reviews>('reviews', 'blitzkit.Reviews', new Uint8Array(buffer)),
   );

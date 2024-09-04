@@ -1,10 +1,14 @@
-import { lookup } from './lookup';
+import { lookup, ProtoSource } from './lookup';
 
-export async function encode(proto: string, data: any) {
-  const Message = await lookup(proto);
-  const verification = Message.verify(data);
+export function encode(
+  source: ProtoSource,
+  type: string,
+  data: Record<string, any>,
+) {
+  const message = lookup(source, type);
+  const verification = message.verify(data);
 
   if (verification !== null) throw new Error(verification);
 
-  return Message.encode(Message.create(data)).finish();
+  return message.encode(message.create(data)).finish();
 }

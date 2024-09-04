@@ -7,10 +7,16 @@ const withVanillaExtract = createVanillaExtractPlugin({ tests: /\.css$/ });
 const nextConfig = {
   ...withVanillaExtract({
     webpack: (config, { isServer }) => {
-      config.module.rules.push({
-        test: /\.glsl$/,
-        type: 'asset/source',
-      });
+      config.module.rules.push(
+        {
+          test: /\.glsl$/,
+          type: 'asset/source',
+        },
+        {
+          test: /\.proto$/,
+          type: 'asset/source',
+        },
+      );
 
       if (isServer) {
         writeFileSync(

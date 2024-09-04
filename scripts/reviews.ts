@@ -10,7 +10,7 @@ import { asset } from '../src/core/blitzkit/asset';
 import { commitAssets } from '../src/core/blitzkit/commitAssets';
 import { Reviews, Video } from '../src/core/blitzkit/reviews';
 import { decode } from '../src/core/protobuf/decode';
-import { encode } from '../src/core/protobuf/encode';
+import { encodeToBase64 } from '../src/core/protobuf/encodeToBase64';
 import { DATA } from './buildAssets/constants';
 import {
   BlitzStrings,
@@ -25,7 +25,7 @@ console.log('Finding reviews...');
 const currentReviews = await fetch(asset('definitions/reviews.pb'))
   .then((response) => response.arrayBuffer())
   .then((buffer) =>
-    decode<Reviews>('reviews/blitzkit.Reviews', new Uint8Array(buffer)),
+    decode<Reviews>('reviews', 'blitzkit.Reviews', new Uint8Array(buffer)),
   );
 const auth = await google.auth.getClient({
   scopes: ['https://www.googleapis.com/auth/youtube.readonly'],
@@ -124,9 +124,7 @@ for (const tank of tanksSanitized) {
   }
 }
 
-const content = await encode('reviews/blitzkit.Reviews', reviews).then(
-  (array) => Buffer.from(array).toString('base64'),
-);
+const content = await encodeToBase64('reviews', 'blitzkit.Reviews', reviews);
 
 await commitAssets('reviews', [
   { content, encoding: 'base64', path: 'definitions/reviews.pb' },

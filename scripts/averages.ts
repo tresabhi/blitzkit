@@ -225,7 +225,8 @@ async function postWork() {
     {
       path: `averages/${latest}.pb`,
       content: await encodeToBase64(
-        'blitzkit/blitzkit.AverageDefinitions',
+        'average_definitions',
+        'blitzkit.AverageDefinitions',
         averageDefinitions,
       ),
       encoding: 'base64',

@@ -1,14 +1,11 @@
-import { Root } from 'protobufjs';
-import { context } from '../blitzkit/context';
+import { parse } from 'protobufjs';
+import average_definitions from '../../../public/protos/average_definitions.proto';
+import reviews from '../../../public/protos/reviews.proto';
 
-export async function lookup(proto: string) {
-  const [file, message] = proto.split('/');
-  const root = await new Root().load(
-    context === 'server'
-      ? `public/protos/${file}.proto`
-      : `/protos/${file}.proto`,
-    { keepCase: true },
-  );
+export type ProtoSource = keyof typeof protos;
 
-  return root.lookupType(message);
+const protos = { reviews, average_definitions };
+
+export function lookup(source: ProtoSource, type: string) {
+  return parse(protos[source]).root.lookupType(type);
 }
