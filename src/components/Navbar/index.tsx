@@ -18,10 +18,11 @@ import {
   Popover,
   ScrollArea,
   Separator,
+  Skeleton,
   Text,
 } from '@radix-ui/themes';
 import { usePathname } from 'next/navigation';
-import { Fragment, useState } from 'react';
+import { Fragment, Suspense, useState } from 'react';
 import { BRANCH_NAMES } from '../../app/components/Hero/constants';
 import { homeTool, TOOLS } from '../../constants/tools';
 import { imgur, ImgurSize } from '../../core/blitzkit/imgur';
@@ -31,6 +32,7 @@ import { PatreonIcon } from '../../icons/Patreon';
 import { WargamingIcon } from '../../icons/Wargaming';
 import * as App from '../../stores/app';
 import { Link } from '../Link';
+import { WargamingAccountName } from './components/WargamingAccountName';
 import { WargamingLoginButton } from './components/WargamingLoginButton';
 import * as styles from './index.css';
 
@@ -194,7 +196,13 @@ export default function Navbar() {
                       {logins.wargaming && (
                         <Flex align="center" gap="2" justify="center">
                           <WargamingIcon width={15} height={15} />
-                          <Text>Wargaming</Text>
+                          <Text>
+                            <Suspense
+                              fallback={<Skeleton height="1em" width="5rem" />}
+                            >
+                              <WargamingAccountName />
+                            </Suspense>
+                          </Text>
                           <Button
                             color="red"
                             variant="ghost"
