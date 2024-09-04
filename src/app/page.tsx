@@ -93,6 +93,7 @@ export default function Page() {
                 description: 'In-game session stats',
                 id: 'blitz-insider',
                 title: 'Blitz Insider',
+                href: 'https://discord.gg/UjWf9eGgtR',
               }}
             />
           </Flex>
