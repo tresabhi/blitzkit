@@ -90,8 +90,8 @@ export default function Page() {
 
       <PageWrapper p="0" noMaxWidth color="purple" size={1600} gap="9">
         <HeroSection />
-        <MetaSection />
         <ShotDisplaySection />
+        <MetaSection />
         <TechTreeSection />
         {!exempt && <AdMidSectionResponsive />}
         <CalloutsSection />
