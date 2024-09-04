@@ -23,7 +23,7 @@ export function WargamingLoginButton({ children, ...props }: ButtonProps) {
       <Dialog.Content width="fit-content">
         <Dialog.Title align="center">Choose your region</Dialog.Title>
 
-        <Flex gap="2" wrap="wrap">
+        <Flex gap="2" wrap="wrap" justify="center" align="center">
           {REGIONS.map((region) => (
             <Dialog.Close key={region}>
               <Link
