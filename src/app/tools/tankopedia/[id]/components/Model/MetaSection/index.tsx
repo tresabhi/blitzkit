@@ -3,9 +3,11 @@ import { Button, Code, Dialog, Flex } from '@radix-ui/themes';
 import { use, useState } from 'react';
 import { classIcons } from '../../../../../../../components/ClassIcon';
 import { Link } from '../../../../../../../components/Link';
+import { ScienceIcon } from '../../../../../../../components/ScienceIcon';
 import { asset } from '../../../../../../../core/blitzkit/asset';
 import { modelDefinitions } from '../../../../../../../core/blitzkit/modelDefinitions';
 import { provisionDefinitions } from '../../../../../../../core/blitzkit/provisionDefinitions';
+import { assertSecret } from '../../../../../../../core/blitzkit/secret';
 import { tankToDuelMember } from '../../../../../../../core/blitzkit/tankToDuelMember';
 import strings from '../../../../../../../lang/en-US.json';
 import * as App from '../../../../../../../stores/app';
@@ -32,7 +34,7 @@ export function MetaSection() {
   return (
     <Flex justify="center" align="center">
       <Flex direction="column" align="center" gap="6">
-        <Flex gap="2">
+        <Flex gap="2" wrap="wrap" justify="center" align="center">
           <Link href="/tools/tankopedia">
             <Button variant="outline">
               <ChevronLeftIcon />
@@ -46,6 +48,18 @@ export function MetaSection() {
               Compare
             </Button>
           </Link>
+
+          {assertSecret(process.env.NEXT_PUBLIC_PROMOTE_OPENTEST) ===
+            'true' && (
+            <Link
+              href={`https://opentest.blitzkit.app/tools/tankopedia/${protagonist.id}`}
+            >
+              <Button variant="outline" color="green">
+                <ScienceIcon height="1.25em" width="1.25em" />
+                OpenTest
+              </Button>
+            </Link>
+          )}
 
           <Dialog.Root open={showSwapDialog} onOpenChange={setShowSwapDialog}>
             <Dialog.Trigger>
