@@ -152,7 +152,6 @@ export default function Navbar() {
                 color="gray"
                 href="/settings"
                 underline="none"
-                target="_blank"
                 onClick={() => setShowHamburgerMenu(false)}
               >
                 <GearIcon />
