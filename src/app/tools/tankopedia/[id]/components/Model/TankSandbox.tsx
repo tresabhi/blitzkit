@@ -6,7 +6,6 @@ import {
   useImperativeHandle,
   useRef,
 } from 'react';
-import { Armor } from '../../../../../../components/Armor';
 import { ArmorPlateDisplay } from '../../../../../../components/Armor/components/ArmorPlateDisplay';
 import { ShotDisplay } from '../../../../../../components/Armor/components/ShotDisplay';
 import {
@@ -185,7 +184,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
 
         {/* idk why the shot display doesn't work without suspense here lol */}
         <Suspense fallback={<ModelLoader />}>
-          {display === TankopediaDisplay.DynamicArmor && <Armor />}
+          {/* {display === TankopediaDisplay.DynamicArmor && <Armor />} */}
           {display === TankopediaDisplay.StaticArmor && (
             <StaticArmor thicknessRange={thicknessRange} />
           )}

@@ -9,9 +9,6 @@ const cache: Record<
 
 export function useArmor(id: number) {
   const gltf = useLoader(GLTFLoader, asset(`3d/tanks/armor/${id}.glb`));
-
-  console.log(Object.values(gltf.nodes).map((node) => node.name));
-
   if (!cache[id]) {
     cache[id] = {
       gltf,

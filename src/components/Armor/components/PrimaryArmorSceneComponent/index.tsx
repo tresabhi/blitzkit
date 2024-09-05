@@ -156,10 +156,14 @@ export function PrimaryArmorSceneComponent({
     <>
       {jsxTree(
         node,
-        { renderOrder: 0, material: excludeMaterial },
+        { mesh: { renderOrder: 0, material: excludeMaterial } },
         `${node.uuid}-exclude`,
       )}
-      {jsxTree(node, { renderOrder: 1, material }, `${node.uuid}-include`)}
+      {jsxTree(
+        node,
+        { mesh: { renderOrder: 1, material } },
+        `${node.uuid}-include`,
+      )}
     </>
   );
 }

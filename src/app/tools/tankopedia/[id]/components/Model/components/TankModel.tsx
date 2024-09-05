@@ -31,6 +31,9 @@ export const TankModel = memo(() => {
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
   const { gltf } = useModel(protagonist.tank.id);
   const nodes = Object.values(gltf.nodes);
+  const isDynamicArmorActive = Duel.use((state) =>
+    state.protagonist.consumables.includes(73),
+  );
 
   useTankTransform(protagonist, turretContainer, gunContainer);
 
@@ -100,9 +103,28 @@ export const TankModel = memo(() => {
         return jsxTree(
           node,
           {
-            castShadow: true,
-            receiveShadow: true,
-            onPointerDown,
+            mesh: {
+              castShadow: true,
+              receiveShadow: true,
+              onPointerDown,
+            },
+            // group(group) {
+            //   console.log(group.name);
+            //   return {
+            //     visible:
+            //       group.name !== 'ST_base' &&
+            //       group.name !== 'MR_Base2' &&
+            //       (!group.name.includes('state_entity') ||
+            //         (isDynamicArmorActive &&
+            //           group.name.includes('state_entity_01')) ||
+            //         (!isDynamicArmorActive &&
+            //           group.name.includes('state_entity_00'))) &&
+            //       (!group.name.includes('shields') ||
+            //         (isDynamicArmorActive &&
+            //           group.name.includes('shields_rev')) ||
+            //         (!isDynamicArmorActive && group.name.endsWith('shields'))),
+            //   };
+            // },
           },
           node.uuid,
         );
@@ -178,9 +200,28 @@ export const TankModel = memo(() => {
           return jsxTree(
             node,
             {
-              castShadow: true,
-              receiveShadow: true,
-              onPointerDown,
+              mesh: {
+                castShadow: true,
+                receiveShadow: true,
+                onPointerDown,
+              },
+              // group(group) {
+              //   return {
+              //     visible:
+              //       group.name !== 'ST_base' &&
+              //       group.name !== 'MR_Base2' &&
+              //       (!group.name.includes('state_entity') ||
+              //         (isDynamicArmorActive &&
+              //           group.name.includes('state_entity_01')) ||
+              //         (!isDynamicArmorActive &&
+              //           group.name.includes('state_entity_00'))) &&
+              //       (!group.name.includes('shields') ||
+              //         (isDynamicArmorActive &&
+              //           group.name.includes('shields_rev')) ||
+              //         (!isDynamicArmorActive &&
+              //           group.name.endsWith('shields'))),
+              //   };
+              // },
             },
             node.uuid,
           );
@@ -258,9 +299,28 @@ export const TankModel = memo(() => {
             return jsxTree(
               node,
               {
-                castShadow: true,
-                receiveShadow: true,
-                onPointerDown,
+                mesh: {
+                  castShadow: true,
+                  receiveShadow: true,
+                  onPointerDown,
+                },
+                // group(group) {
+                //   return {
+                //     visible:
+                //       group.name !== 'ST_base' &&
+                //       group.name !== 'MR_Base2' &&
+                //       (!group.name.includes('state_entity') ||
+                //         (isDynamicArmorActive &&
+                //           group.name.includes('state_entity_01')) ||
+                //         (!isDynamicArmorActive &&
+                //           group.name.includes('state_entity_00'))) &&
+                //       (!group.name.includes('shields') ||
+                //         (isDynamicArmorActive &&
+                //           group.name.includes('shields_rev')) ||
+                //         (!isDynamicArmorActive &&
+                //           group.name.endsWith('shields'))),
+                //   };
+                // },
               },
               node.uuid,
             );

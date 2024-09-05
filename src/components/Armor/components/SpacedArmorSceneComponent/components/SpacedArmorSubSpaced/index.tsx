@@ -123,13 +123,15 @@ export function SpacedArmorSubSpaced({
       {jsxTree(
         node,
         {
-          renderOrder: 2,
-          material,
-          onClick() {},
-          userData: {
-            type: ArmorType.Spaced,
-            thickness,
-          } satisfies ArmorUserData,
+          mesh: {
+            renderOrder: 2,
+            material,
+            onClick() {},
+            userData: {
+              type: ArmorType.Spaced,
+              thickness,
+            } satisfies ArmorUserData,
+          },
         },
         `${node.uuid}-exclude`,
       )}
@@ -137,8 +139,10 @@ export function SpacedArmorSubSpaced({
       {jsxTree(
         node,
         {
-          renderOrder: 5,
-          material: depthWriteMaterial,
+          mesh: {
+            renderOrder: 5,
+            material: depthWriteMaterial,
+          },
         },
         `${node.uuid}-include`,
       )}
