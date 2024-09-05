@@ -48,7 +48,7 @@ export function TechTreeSection() {
   }, [master]);
   const [lineIndex, setLineIndex] = useState(0);
   const line = useMemo(
-    () => [...lines[lineIndex]].toReversed(),
+    () => [...lines[lineIndex]].reverse(),
     [master, lineIndex],
   );
   const totalXp = line.reduce(
