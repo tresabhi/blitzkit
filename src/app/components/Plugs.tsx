@@ -35,30 +35,31 @@ export function Plugs() {
       py="8"
       gap="6"
     >
-      {assertSecret(process.env.NEXT_PUBLIC_PROMOTE_OPENTEST) === 'true' && (
-        <>
-          <Flex direction="column" gap="3" align="center">
-            <Flex align="center" gap="2">
-              <Badge color="green">NEW</Badge>
-              <Text size="5">
-                BlitzKit{' '}
-                <Code variant="outline" size="4" color="gray" highContrast>
-                  opentest
-                </Code>{' '}
-                is available now{' '}
-              </Text>
+      {assertSecret(process.env.NEXT_PUBLIC_PROMOTE_OPENTEST) === 'true' &&
+        assertSecret(process.env.NEXT_PUBLIC_ASSET_BRANCH) !== 'opentest' && (
+          <>
+            <Flex direction="column" gap="3" align="center">
+              <Flex align="center" gap="2">
+                <Badge color="green">NEW</Badge>
+                <Text size="5">
+                  BlitzKit{' '}
+                  <Code variant="outline" size="4" color="gray" highContrast>
+                    opentest
+                  </Code>{' '}
+                  is available now{' '}
+                </Text>
+              </Flex>
+
+              <Link href="https://opentest.blitzkit.app/" target="_blank">
+                <Button color="green">
+                  BlitzKit opentest <ArrowRightIcon />
+                </Button>
+              </Link>
             </Flex>
 
-            <Link href="https://opentest.blitzkit.app/" target="_blank">
-              <Button color="green">
-                BlitzKit opentest <ArrowRightIcon />
-              </Button>
-            </Link>
-          </Flex>
-
-          <Separator size="3" />
-        </>
-      )}
+            <Separator size="3" />
+          </>
+        )}
 
       <Flex direction="column" gap="3" align="center">
         <Flex gap="1" align="center">
