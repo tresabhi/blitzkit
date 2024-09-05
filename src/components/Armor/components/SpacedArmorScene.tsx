@@ -30,7 +30,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
   const track = Duel.use((state) => state.protagonist.track);
   const turret = Duel.use((state) => state.protagonist.turret);
   const gun = Duel.use((state) => state.protagonist.gun);
-  const armorGltf = useArmor(tank.id);
+  const { gltf: armorGltf } = useArmor(tank.id);
   const { gltf: modelGltf } = useModel(tank.id);
   const armorNodes = Object.values(armorGltf.nodes);
   const modelNodes = Object.values(modelGltf.nodes);
@@ -45,10 +45,9 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
     gunModelDefinition.mask === undefined
       ? undefined
       : gunModelDefinition.mask + hullOrigin.y + turretOrigin.y + gunOrigin.y;
-  const protagonistConsumables = Duel.use(
-    (state) => state.protagonist.consumables,
+  const isDynamicArmorActive = Duel.use((state) =>
+    state.protagonist.consumables.includes(73),
   );
-  const hasDynamicArmor = protagonistConsumables.includes(73);
 
   useTankTransform(protagonist, turretContainer, gunContainer);
 
@@ -67,8 +66,8 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
           if (
             !isVisible ||
             thickness === undefined ||
-            (hasDynamicArmor && node.name.includes('state_01')) ||
-            (!hasDynamicArmor && node.name.includes('state_00'))
+            (isDynamicArmorActive && node.name.includes('state_00')) ||
+            (!isDynamicArmorActive && node.name.includes('state_01'))
           )
             return null;
 
@@ -118,8 +117,8 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
           if (
             !isVisible ||
             thickness === undefined ||
-            (hasDynamicArmor && node.name.includes('state_01')) ||
-            (!hasDynamicArmor && node.name.includes('state_00'))
+            (isDynamicArmorActive && node.name.includes('state_00')) ||
+            (!isDynamicArmorActive && node.name.includes('state_01'))
           )
             return null;
 
@@ -153,8 +152,8 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
             if (
               !isVisible ||
               thickness === undefined ||
-              (hasDynamicArmor && node.name.includes('state_01')) ||
-              (!hasDynamicArmor && node.name.includes('state_00'))
+              (isDynamicArmorActive && node.name.includes('state_00')) ||
+              (!isDynamicArmorActive && node.name.includes('state_01'))
             )
               return null;
 

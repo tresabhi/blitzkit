@@ -71,7 +71,6 @@ export function StaticArmorSceneComponent({
   const mutateTankopediaEphemeralStore = TankopediaEphemeral.useMutation();
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
   const camera = useThree((state) => state.camera);
-  const scene = useThree((state) => state.scene);
   const x = thickness / thicknessRange.value;
   const xClamped = clamp(x, 0, 1);
   let color: Color;

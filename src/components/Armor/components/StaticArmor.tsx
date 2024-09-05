@@ -36,7 +36,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
   const track = Duel.use((state) => state.protagonist.track);
   const turret = Duel.use((state) => state.protagonist.turret);
   const gun = Duel.use((state) => state.protagonist.gun);
-  const armorGltf = useArmor(tank.id);
+  const { gltf: armorGltf } = useArmor(tank.id);
   const { gltf: modelGltf } = useModel(tank.id);
   const armorNodes = Object.values(armorGltf.nodes);
   const modelNodes = Object.values(modelGltf.nodes);
@@ -64,10 +64,9 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
   const showExternalModules = TankopediaPersistent.use(
     (state) => state.model.visual.showExternalModules,
   );
-  const protagonistConsumables = Duel.use(
-    (state) => state.protagonist.consumables,
+  const isDynamicArmorActive = Duel.use((state) =>
+    state.protagonist.consumables.includes(73),
   );
-  const hasDynamicArmor = protagonistConsumables.includes(73);
 
   useTankTransform(protagonist, turretContainer, gunContainer);
 
@@ -88,8 +87,8 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
             thickness === undefined ||
             (!showPrimaryArmor && !spaced) ||
             (!showSpacedArmor && spaced) ||
-            (hasDynamicArmor && node.name.includes('state_01')) ||
-            (!hasDynamicArmor && node.name.includes('state_00'))
+            (isDynamicArmorActive && node.name.includes('state_00')) ||
+            (!isDynamicArmorActive && node.name.includes('state_01'))
           )
             return null;
 
@@ -145,8 +144,8 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
             thickness === undefined ||
             (!showPrimaryArmor && !spaced) ||
             (!showSpacedArmor && spaced) ||
-            (hasDynamicArmor && node.name.includes('state_01')) ||
-            (!hasDynamicArmor && node.name.includes('state_00'))
+            (isDynamicArmorActive && node.name.includes('state_00')) ||
+            (!isDynamicArmorActive && node.name.includes('state_01'))
           ) {
             return null;
           }
@@ -240,8 +239,8 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
               thickness === undefined ||
               (!showPrimaryArmor && !spaced) ||
               (!showSpacedArmor && spaced) ||
-              (hasDynamicArmor && node.name.includes('state_01')) ||
-              (!hasDynamicArmor && node.name.includes('state_00'))
+              (isDynamicArmorActive && node.name.includes('state_00')) ||
+              (!isDynamicArmorActive && node.name.includes('state_01'))
             )
               return null;
 
