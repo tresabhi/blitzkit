@@ -1,4 +1,4 @@
-import { EquipmentMatrix } from '../../stores/duel';
+import { EquipmentMatrix } from '../../../packages/website/src/stores/duel';
 import { isExplosive } from '../blitz/isExplosive';
 import { resolveNearPenetration } from '../blitz/resolveNearPenetration';
 import { resolvePenetrationCoefficient } from '../blitz/resolvePenetrationCoefficient';

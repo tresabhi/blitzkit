@@ -14,6 +14,7 @@ import {
   Quaternion,
   Vector3,
 } from 'three';
+import * as TankopediaEphemeral from '../../../../packages/website/src/stores/tankopediaEphemeral';
 import { I_HAT, J_HAT } from '../../../constants/axis';
 import { unrotateDavaVector } from '../../../core/blitz/unrotateDavaVector';
 import { jsxTree } from '../../../core/blitzkit/jsxTree';
@@ -22,7 +23,6 @@ import {
   ModelTransformEventData,
 } from '../../../core/blitzkit/modelTransform';
 import { discardClippingPlane } from '../../../core/three/discardClippingPlane';
-import * as TankopediaEphemeral from '../../../stores/tankopediaEphemeral';
 import { ArmorType } from './SpacedArmorScene';
 import {
   ArmorUserData,

@@ -10,10 +10,10 @@ import {
 import { Html } from '@react-three/drei';
 import { useRef } from 'react';
 import { radToDeg } from 'three/src/math/MathUtils';
+import * as App from '../../../../packages/website/src/stores/app';
+import * as Duel from '../../../../packages/website/src/stores/duel';
+import * as TankopediaEphemeral from '../../../../packages/website/src/stores/tankopediaEphemeral';
 import { resolveArmorIndex } from '../../../core/blitzkit/resolveArmorIndex';
-import * as App from '../../../stores/app';
-import * as Duel from '../../../stores/duel';
-import * as TankopediaEphemeral from '../../../stores/tankopediaEphemeral';
 import { layerTypeNames } from './ShotDisplayCard';
 import { ArmorType } from './SpacedArmorScene';
 

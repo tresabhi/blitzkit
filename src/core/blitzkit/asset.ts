@@ -1,5 +1,5 @@
+import { assertSecret } from '@blitzkit/core/src/blitzkit/assertSecret';
 import { ASSETS_REPO } from '../../constants/assets';
-import { assertSecret } from './secret';
 
 export function asset(path: string) {
   return `https://raw.githubusercontent.com/tresabhi/${ASSETS_REPO}/${assertSecret(

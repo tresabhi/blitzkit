@@ -13,6 +13,7 @@ import {
   SlashCommandOptionsOnlyBuilder,
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
+import { assertSecret } from '../../../packages/core/src/blitzkit/assertSecret';
 import { aboutCommand } from '../../commands/about';
 import { breakdownCommand } from '../../commands/breakdown';
 import { debugCommand } from '../../commands/debug';
@@ -33,7 +34,6 @@ import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { statsCommand } from '../../commands/stats';
 import { todayCommand } from '../../commands/today';
 import { RenderConfiguration } from '../../core/blitzkit/renderConfiguration';
-import { assertSecret } from '../../core/blitzkit/secret';
 import handleAutocomplete from './handlers/autocomplete';
 import handleButton from './handlers/button';
 import handleChatInputCommand from './handlers/chatInputCommand';

@@ -1,4 +1,4 @@
-import { EquipmentMatrix } from '../../stores/duel';
+import { EquipmentMatrix } from '../../../packages/website/src/stores/duel';
 import { equipmentDefinitions } from './equipmentDefinitions';
 
 export async function hasEquipment(

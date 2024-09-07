@@ -1,9 +1,9 @@
+import { gameDefinitions } from '@blitzkit/core/src/blitzkit/gameDefinitions';
 import { chunk } from 'lodash';
 import markdownEscape from 'markdown-escape';
 import { TANK_CLASSES } from '../components/Tanks/components/Item/constants';
 import { getAccountInfo } from '../core/blitz/getAccountInfo';
 import getTankStats from '../core/blitz/getTankStats';
-import { gameDefinitions } from '../core/blitzkit/gameDefinitions';
 import {
   TankDefinition,
   Tier,

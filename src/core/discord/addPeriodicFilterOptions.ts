@@ -1,9 +1,9 @@
+import { gameDefinitions } from '@blitzkit/core/src/blitzkit/gameDefinitions';
 import {
   SlashCommandBuilder,
   SlashCommandSubcommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
-import { gameDefinitions } from '../blitzkit/gameDefinitions';
 import { addFilterOptions } from './addFilterOptions';
 import { addPeriodSubCommands } from './addPeriodSubCommands';
 

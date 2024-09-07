@@ -7,12 +7,12 @@ import {
   ShaderMaterial,
 } from 'three';
 import { ArmorUserData, ExternalModuleVariant } from '../..';
+import * as Duel from '../../../../../../../packages/website/src/stores/duel';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { resolvePenetrationCoefficient } from '../../../../../../core/blitz/resolvePenetrationCoefficient';
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../../../core/blitzkit/jsxTree';
 import { ShellDefinition } from '../../../../../../core/blitzkit/tankDefinitions';
-import * as Duel from '../../../../../../stores/duel';
 import { ArmorType } from '../../../SpacedArmorScene';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';

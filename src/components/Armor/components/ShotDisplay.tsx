@@ -15,9 +15,9 @@ import {
   Path,
   Quaternion,
 } from 'three';
+import * as TankopediaEphemeral from '../../../../packages/website/src/stores/tankopediaEphemeral';
 import { J_HAT, K_HAT } from '../../../constants/axis';
 import { useFullScreen } from '../../../hooks/useFullScreen';
-import * as TankopediaEphemeral from '../../../stores/tankopediaEphemeral';
 import { ShotDisplayCard } from './ShotDisplayCard';
 
 export const shotStatusColors: Record<

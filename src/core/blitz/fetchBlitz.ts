@@ -1,5 +1,5 @@
+import { assertSecret } from '@blitzkit/core';
 import { Region } from '../../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
 import { EventManager } from '../blitzkit/eventManager';
 import { patientFetch } from '../blitzkit/patientFetch';
 
@@ -73,7 +73,7 @@ export default function fetchBlitz<Data extends object>(
   return new Promise<Data>((resolve) => {
     queue.push({
       url: `https://api.wotblitz.${region}/wotb/${path}/?${Object.entries({
-        application_id: WARGAMING_APPLICATION_ID,
+        application_id: assertSecret(process.env.WARGAMING_APPLICATION_ID),
         ...params,
       })
         .filter(([_, value]) => value !== undefined)

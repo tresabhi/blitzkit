@@ -11,6 +11,8 @@ import {
   Vector3,
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
+import * as Duel from '../../../../../packages/website/src/stores/duel';
+import * as TankopediaEphemeral from '../../../../../packages/website/src/stores/tankopediaEphemeral';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { resolvePenetrationCoefficient } from '../../../../core/blitz/resolvePenetrationCoefficient';
@@ -18,8 +20,6 @@ import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../core/blitzkit/jsxTree';
 import { ShellType } from '../../../../core/blitzkit/tankDefinitions';
 import { discardClippingPlane } from '../../../../core/three/discardClippingPlane';
-import * as Duel from '../../../../stores/duel';
-import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 import { ArmorType } from '../SpacedArmorScene';
 import { SpacedArmorSubExternal } from './components/SpacedArmorSubExternal';
 import { SpacedArmorSubSpaced } from './components/SpacedArmorSubSpaced';

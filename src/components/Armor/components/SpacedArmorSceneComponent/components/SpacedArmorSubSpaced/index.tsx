@@ -7,13 +7,13 @@ import {
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { ArmorUserData } from '../..';
+import * as Duel from '../../../../../../../packages/website/src/stores/duel';
 import { isExplosive } from '../../../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { resolvePenetrationCoefficient } from '../../../../../../core/blitz/resolvePenetrationCoefficient';
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../../../core/blitzkit/jsxTree';
 import { ShellDefinition } from '../../../../../../core/blitzkit/tankDefinitions';
-import * as Duel from '../../../../../../stores/duel';
 import { ArmorType } from '../../../SpacedArmorScene';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';

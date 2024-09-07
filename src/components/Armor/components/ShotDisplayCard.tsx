@@ -8,7 +8,7 @@ import {
 } from '@radix-ui/themes';
 import { ComponentProps } from 'react';
 import { radToDeg } from 'three/src/math/MathUtils';
-import * as TankopediaEphemeral from '../../../stores/tankopediaEphemeral';
+import * as TankopediaEphemeral from '../../../../packages/website/src/stores/tankopediaEphemeral';
 import { shotStatusColors } from './ShotDisplay';
 import { ArmorType } from './SpacedArmorScene';
 import { ExternalModuleVariant } from './SpacedArmorSceneComponent';

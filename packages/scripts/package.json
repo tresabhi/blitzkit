@@ -1,0 +1,12 @@
+{
+  "name": "@blitzkit/scripts",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@gltf-transform/core": "^3.10.1",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.7"
+  }
+}

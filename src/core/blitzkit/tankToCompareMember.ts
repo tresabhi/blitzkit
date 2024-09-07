@@ -1,5 +1,5 @@
 import { uniqueId } from 'lodash';
-import { CompareMember } from '../../stores/compareEphemeral';
+import { CompareMember } from '../../../packages/website/src/stores/compareEphemeral';
 import { ProvisionDefinitions } from './provisionDefinitions';
 import { TankDefinition } from './tankDefinitions';
 import { tankToDuelMember } from './tankToDuelMember';

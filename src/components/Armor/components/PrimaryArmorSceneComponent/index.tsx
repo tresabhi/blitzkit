@@ -2,6 +2,8 @@ import { useFrame } from '@react-three/fiber';
 import { useEffect } from 'react';
 import { MeshBasicMaterial, Object3D, ShaderMaterial, Vector2 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
+import * as Duel from '../../../../../packages/website/src/stores/duel';
+import * as TankopediaPersistent from '../../../../../packages/website/src/stores/tankopediaPersistent';
 import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
 import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
@@ -9,8 +11,6 @@ import { resolvePenetrationCoefficient } from '../../../../core/blitz/resolvePen
 import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../core/blitzkit/jsxTree';
 import { ShellDefinition } from '../../../../core/blitzkit/tankDefinitions';
-import * as Duel from '../../../../stores/duel';
-import * as TankopediaPersistent from '../../../../stores/tankopediaPersistent';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
 import { spacedArmorRenderTarget } from './target';

@@ -1,6 +1,6 @@
+import { assertSecret } from '../../../packages/core/src/blitzkit/assertSecret';
 import { ASSETS_REPO } from '../../constants/assets';
 import commitMultipleFiles, { FileChange } from './commitMultipleFiles';
-import { assertSecret } from './secret';
 
 export async function commitAssets(message: string, changes: FileChange[]) {
   console.log(`Committing ${message}...`);

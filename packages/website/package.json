@@ -1,0 +1,31 @@
+{
+  "name": "@blitzkit/website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev"
+  },
+  "dependencies": {
+    "@radix-ui/themes": "^3.1.3",
+    "@blitzkit/core": "workspace:*",
+    "@nivo/bar": "^0.87.0",
+    "three": "0.159.0",
+    "lodash": "^4.17.21",
+    "next": "^14.2.7",
+    "@radix-ui/react-icons": "^1.3.0",
+    "@react-three/drei": "^9.111.5",
+    "@react-three/fiber": "^8.17.6",
+    "react": "^18.3.1",
+    "react-device-detect": "^2.2.3",
+    "react-dom": "^18.3.1",
+    "react-fuzzysort": "^1.0.1",
+    "immer": "^10.1.1",
+    "zustand": "^4.5.5",
+    "react-promise-suspense": "^0.3.4"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.7",
+    "@vanilla-extract/next-plugin": "^2.4.5",
+    "@types/react": "^18.3.5"
+  }
+}

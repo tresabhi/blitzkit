@@ -1,0 +1,17 @@
+{
+  "name": "@blitzkit/core",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "@octokit/rest": "^20.1.1",
+    "lodash": "^4.17.21",
+    "@prisma/client": "^5.19.1",
+    "@octokit/plugin-throttling": "^8.2.0",
+    "lz4js": "^0.2.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.7",
+    "@types/lz4js": "^0.2.1"
+  }
+}

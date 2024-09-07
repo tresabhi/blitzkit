@@ -1,5 +1,6 @@
 import { memo, useRef } from 'react';
 import { Group, Plane, Scene, Vector3 } from 'three';
+import * as Duel from '../../../../packages/website/src/stores/duel';
 import { correctZYTuple } from '../../../core/blitz/correctZYTuple';
 import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
 import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
@@ -7,7 +8,6 @@ import { useArmor } from '../../../hooks/useArmor';
 import { useModel } from '../../../hooks/useModel';
 import { useTankModelDefinition } from '../../../hooks/useTankModelDefinition';
 import { useTankTransform } from '../../../hooks/useTankTransform';
-import * as Duel from '../../../stores/duel';
 import { ModelTankWrapper } from './ModelTankWrapper';
 import { SpacedArmorSceneComponent } from './SpacedArmorSceneComponent';
 

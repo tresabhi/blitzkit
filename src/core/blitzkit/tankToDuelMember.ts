@@ -1,5 +1,5 @@
-import { DuelMember } from '../../stores/duel';
-import { genericDefaultEquipmentMatrix } from '../../stores/duel/constants';
+import { DuelMember } from '../../../packages/website/src/stores/duel';
+import { genericDefaultEquipmentMatrix } from '../../../packages/website/src/stores/duel/constants';
 import { availableProvisions } from './availableProvisions';
 import { ProvisionDefinitions } from './provisionDefinitions';
 import { TankDefinition } from './tankDefinitions';
