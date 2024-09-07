@@ -179,14 +179,4 @@ export const tankDefinitionsArray = tankDefinitions.then((tanks) =>
 );
 export type Tier = (typeof TIERS)[number];
 
-export const flags: Record<string, string> = {
-  ussr: '<:ussr:1218421042033197197>',
-  germany: '🇩🇪',
-  usa: '🇺🇸',
-  china: '🇨🇳',
-  uk: '🇬🇧',
-  france: '🇫🇷',
-  japan: '🇯🇵',
-  european: '🇪🇺',
-  other: '<:other:1218421572243558482>',
-};
+export * from './constants';

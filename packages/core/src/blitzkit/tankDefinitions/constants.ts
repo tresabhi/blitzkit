@@ -1,5 +1,4 @@
 import { CrewMember, GunDefinition, ShellType, Tier } from '.';
-import { TankClass } from '../../../components/Tanks';
 
 export const SHELL_NAMES: Record<ShellType, string> = {
   ap: 'AP',
@@ -58,4 +57,16 @@ export const TIER_ROMAN_NUMERALS: Record<Tier, string> = {
   8: 'VIII',
   9: 'IX',
   10: 'X',
+};
+
+export const flags: Record<string, string> = {
+  ussr: '<:ussr:1218421042033197197>',
+  germany: '🇩🇪',
+  usa: '🇺🇸',
+  china: '🇨🇳',
+  uk: '🇬🇧',
+  france: '🇫🇷',
+  japan: '🇯🇵',
+  european: '🇪🇺',
+  other: '<:other:1218421572243558482>',
 };

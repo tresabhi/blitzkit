@@ -1,26 +1,22 @@
 'use client';
 
+import {
+  TANK_CLASSES,
+  TankDefinition,
+  filterTank,
+  gameDefinitions,
+  modelDefinitions,
+  resolveNearPenetration,
+  tankDefinitions,
+  tankDefinitionsArray,
+  tankNames,
+} from '@blitzkit/core';
 import { Callout, Flex, FlexProps, Link, Text } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
 import { times } from 'lodash';
 import { Fragment, memo, use, useEffect, useMemo, useState } from 'react';
 import { AdMidSectionResponsive } from '../../../../../components/AdMidSectionResponsive';
 import { ExperimentIcon } from '../../../../../components/ExperimentIcon';
-import { TANK_CLASSES } from '../../../../../components/Tanks/components/Item/constants';
-import { resolveNearPenetration } from '../../../../../core/blitz/resolveNearPenetration';
-import { filterTank } from '../../../../../core/blitzkit/filterTank';
-import { gameDefinitions } from '../../../../../core/blitzkit/gameDefinitions';
-import { modelDefinitions } from '../../../../../core/blitzkit/modelDefinitions';
-import { normalizeBoundingBox } from '../../../../../core/blitzkit/normalizeBoundingBox';
-import { resolveDpm } from '../../../../../core/blitzkit/resolveDpm';
-import { resolveReload } from '../../../../../core/blitzkit/resolveReload';
-import {
-  TankDefinition,
-  tankDefinitions,
-  tankDefinitionsArray,
-} from '../../../../../core/blitzkit/tankDefinitions';
-import { tankNames } from '../../../../../core/blitzkit/tankDefinitions/tankNames';
-import { unionBoundingBox } from '../../../../../core/blitzkit/unionBoundingBox';
 import { useAdExempt } from '../../../../../hooks/useAdExempt';
 import * as TankFilters from '../../../../../stores/tankFilters';
 import {

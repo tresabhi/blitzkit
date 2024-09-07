@@ -1,3 +1,4 @@
+import { resolveNearPenetration } from '@blitzkit/core/src/blitzkit/resolveNearPenetration';
 import { useThree } from '@react-three/fiber';
 import { useCallback } from 'react';
 import {
@@ -14,7 +15,6 @@ import { degToRad } from 'three/src/math/MathUtils';
 import * as Duel from '../../../../../packages/website/src/stores/duel';
 import * as TankopediaEphemeral from '../../../../../packages/website/src/stores/tankopediaEphemeral';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
-import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { resolvePenetrationCoefficient } from '../../../../core/blitz/resolvePenetrationCoefficient';
 import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../core/blitzkit/jsxTree';
@@ -190,8 +190,8 @@ export function SpacedArmorSceneComponent({
               shell.type === ShellType.HE
                 ? 'blocked'
                 : blocked
-                  ? 'blocked'
-                  : 'penetration',
+                ? 'blocked'
+                : 'penetration',
             variant: layer.variant,
           });
         } else {
@@ -241,8 +241,8 @@ export function SpacedArmorSceneComponent({
                 shell.type === ShellType.HE && layer.type !== ArmorType.Primary
                   ? 'blocked'
                   : blocked
-                    ? 'blocked'
-                    : 'penetration',
+                  ? 'blocked'
+                  : 'penetration',
               angle,
             });
           }

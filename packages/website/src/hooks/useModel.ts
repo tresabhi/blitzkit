@@ -1,7 +1,6 @@
 import { ObjectMap, useLoader } from '@react-three/fiber';
 import { Mesh, MeshStandardMaterial } from 'three';
 import { GLTF, GLTFLoader } from 'three-stdlib';
-import { asset } from '../core/blitzkit/asset';
 
 const cache: Record<
   number,

@@ -1,3 +1,4 @@
+import { resolveNearPenetration } from '@blitzkit/core/src/blitzkit/resolveNearPenetration';
 import { useFrame } from '@react-three/fiber';
 import { useEffect } from 'react';
 import { MeshBasicMaterial, Object3D, ShaderMaterial, Vector2 } from 'three';
@@ -6,7 +7,6 @@ import * as Duel from '../../../../../packages/website/src/stores/duel';
 import * as TankopediaPersistent from '../../../../../packages/website/src/stores/tankopediaPersistent';
 import { canSplash } from '../../../../core/blitz/canSplash';
 import { isExplosive } from '../../../../core/blitz/isExplosive';
-import { resolveNearPenetration } from '../../../../core/blitz/resolveNearPenetration';
 import { resolvePenetrationCoefficient } from '../../../../core/blitz/resolvePenetrationCoefficient';
 import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../core/blitzkit/jsxTree';

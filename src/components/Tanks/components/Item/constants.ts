@@ -5,15 +5,6 @@ import {
   TANK_ICONS_PREMIUM,
 } from '../../../../core/blitzkit/tankDefinitions/constants';
 
-export const TREE_TYPES = ['researchable', 'premium', 'collector'] as const; // BIG TODO: REMOVE THIS AFTER LOCALIZATION
-
-export const TANK_CLASSES = [
-  'lightTank',
-  'mediumTank',
-  'heavyTank',
-  'AT-SPG',
-] as const;
-
 export const TREE_TYPE_NAMES: Record<TreeType, string> = {
   researchable: 'Tech tree',
   premium: 'Premium',

@@ -1,6 +1,6 @@
 import { TankClass } from '../../components/Tanks';
-import { asset } from './asset';
-import { fetchCdonLz4 } from './fetchCdonLz4';
+import { asset } from '@blitzkit/core/src/blitzkit/asset';
+import { fetchCdonLz4 } from '@blitzkit/core/src/blitzkit/fetchCdonLz4';
 
 export interface SkillDefinitions {
   classes: Record<TankClass, string[]>;

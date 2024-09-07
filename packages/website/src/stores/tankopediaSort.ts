@@ -1,7 +1,7 @@
 'use client';
 
+import { createNextSafeStore } from '@blitzkit/core';
 import { create } from 'zustand';
-import { createNextSafeStore } from '../core/zustand/createNextSafeStore';
 import {
   TankopediaSortBy,
   TankopediaSortDirection,

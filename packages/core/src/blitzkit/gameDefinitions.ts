@@ -1,5 +1,5 @@
-import { asset } from '../../../../src/core/blitzkit/asset';
-import { fetchCdonLz4 } from '../../../../src/core/blitzkit/fetchCdonLz4';
+import { asset } from './asset';
+import { fetchCdonLz4 } from './fetchCdonLz4';
 
 interface GameMode {
   name: string;

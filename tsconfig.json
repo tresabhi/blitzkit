@@ -37,7 +37,17 @@
     "packages/website/src/components/Party3.tsx",
     "packages/website/src/components/PageWrapper.tsx",
     "packages/core/src/blitzkit/gameDefinitions.ts",
-    "packages/core/src/zustand/createNextSafeStore.tsx"
-, "packages/core/src/blitzkit/superDecompress.ts", "packages/core/src/blitzkit/superCompress.ts"  ],
+    "packages/core/src/zustand/createNextSafeStore.tsx",
+    "packages/core/src/blitzkit/superDecompress.ts",
+    "packages/core/src/blitzkit/superCompress.ts",
+    "packages/website/src/components/ClassIcon",
+    "packages/core/src/blitzkit/asset.ts",
+    "packages/core/src/blitzkit/fetchCdonLz4.ts",
+    "packages/core/src/blitz/resolveNearPenetration.ts",
+    "packages/core/src/blitzkit/modelDefinitions.ts",
+    "packages/core/src/blitzkit/camouflageDefinitions.ts",
+    "packages/core/src/blitzkit/filterTank.ts",
+    "packages/core/src/blitzkit/tankIcon.ts"
+  ],
   "exclude": ["node_modules/**/*", "dist", "scripts"]
 }

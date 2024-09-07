@@ -1,4 +1,4 @@
-import { TankFilters } from '../../../packages/website/src/stores/tankFilters';
+import { TankFilters } from '../../../website/src/stores/tankFilters';
 import { TankDefinition } from './tankDefinitions';
 
 export function filterTank(filters: TankFilters, tank: TankDefinition) {

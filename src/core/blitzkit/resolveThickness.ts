@@ -1,4 +1,4 @@
-import { ModelArmor } from './modelDefinitions';
+import { ModelArmor } from '@blitzkit/core/src/blitzkit/modelDefinitions';
 
 export function resolveArmor(armor: ModelArmor, index: number) {
   const spaced = armor.spaced?.includes(index) ?? false;

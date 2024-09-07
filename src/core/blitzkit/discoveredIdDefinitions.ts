@@ -1,4 +1,4 @@
-import { asset } from './asset';
+import { asset } from '@blitzkit/core/src/blitzkit/asset';
 
 export interface DiscoveredIdsDefinitions {
   time: number;

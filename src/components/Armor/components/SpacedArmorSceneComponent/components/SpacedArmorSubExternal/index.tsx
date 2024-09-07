@@ -1,3 +1,4 @@
+import { resolveNearPenetration } from '@blitzkit/core/src/blitzkit/resolveNearPenetration';
 import { useEffect } from 'react';
 import {
   AdditiveBlending,
@@ -8,7 +9,6 @@ import {
 } from 'three';
 import { ArmorUserData, ExternalModuleVariant } from '../..';
 import * as Duel from '../../../../../../../packages/website/src/stores/duel';
-import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
 import { resolvePenetrationCoefficient } from '../../../../../../core/blitz/resolvePenetrationCoefficient';
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../../../core/blitzkit/jsxTree';

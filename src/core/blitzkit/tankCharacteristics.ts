@@ -1,11 +1,11 @@
+import { ModelDefinition } from '@blitzkit/core/src/blitzkit/modelDefinitions';
+import { resolveNearPenetration } from '@blitzkit/core/src/blitzkit/resolveNearPenetration';
 import { EquipmentMatrix } from '../../../packages/website/src/stores/duel';
 import { isExplosive } from '../blitz/isExplosive';
-import { resolveNearPenetration } from '../blitz/resolveNearPenetration';
 import { resolvePenetrationCoefficient } from '../blitz/resolvePenetrationCoefficient';
 import { coefficient } from './coefficient';
 import { degressiveStat } from './degressiveStat';
 import { EquipmentDefinitions } from './equipmentDefinitions';
-import { ModelDefinition } from './modelDefinitions';
 import { normalizeBoundingBox } from './normalizeBoundingBox';
 import { progressiveStat } from './progressiveStat';
 import { ProvisionDefinitions } from './provisionDefinitions';
@@ -238,10 +238,10 @@ export function tankCharacteristics(
       tank.class === 'heavyTank'
         ? 0.06
         : tank.class === 'mediumTank'
-          ? 0.08
-          : tank.class === 'lightTank'
-            ? 0.11
-            : 0.04,
+        ? 0.08
+        : tank.class === 'lightTank'
+        ? 0.11
+        : 0.04,
     ]) * coefficient([true, progressiveStat(commanderMastery)]);
   const fireChanceCoefficient = coefficient([hasProtectiveKit, -0.2]);
 
@@ -263,8 +263,8 @@ export function tankCharacteristics(
         tank.class === 'AT-SPG'
           ? 0.04
           : tank.class === 'heavyTank'
-            ? 0.03
-            : 0.02,
+          ? 0.03
+          : 0.02,
       ]),
     ],
     [
@@ -272,10 +272,10 @@ export function tankCharacteristics(
       tank.class === 'heavyTank'
         ? 0.02
         : tank.class === 'mediumTank'
-          ? 0.04
-          : tank.class === 'lightTank'
-            ? 0.07
-            : 0.1,
+        ? 0.04
+        : tank.class === 'lightTank'
+        ? 0.07
+        : 0.1,
     ],
   );
   const camouflageCoefficientStill = sum(
@@ -287,8 +287,8 @@ export function tankCharacteristics(
           tank.class === 'AT-SPG'
             ? 0.04
             : tank.class === 'heavyTank'
-              ? 0.03
-              : 0.02,
+            ? 0.03
+            : 0.02,
         ],
         [true, crewSkills.camouflage * (3 / 100)],
       ),
@@ -298,10 +298,10 @@ export function tankCharacteristics(
       tank.class === 'heavyTank'
         ? 0.04
         : tank.class === 'mediumTank'
-          ? 0.08
-          : tank.class === 'lightTank'
-            ? 0.14
-            : 0.2,
+        ? 0.08
+        : tank.class === 'lightTank'
+        ? 0.14
+        : 0.2,
     ],
   );
 

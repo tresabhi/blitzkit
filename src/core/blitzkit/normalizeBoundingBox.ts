@@ -1,5 +1,5 @@
+import { BoundingBox } from '@blitzkit/core/src/blitzkit/modelDefinitions';
 import { Vector3Tuple } from 'three';
-import { BoundingBox } from './modelDefinitions';
 
 export function normalizeBoundingBox(boundingBox: BoundingBox) {
   return boundingBox.max.map(

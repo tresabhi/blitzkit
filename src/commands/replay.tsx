@@ -1,3 +1,4 @@
+import { tankIcon } from '@blitzkit/core/src/blitzkit/tankIcon';
 import { clamp } from 'lodash';
 import CommandWrapper from '../components/CommandWrapper';
 import TitleBar from '../components/TitleBar';
@@ -9,7 +10,6 @@ import { mapDefinitions } from '../core/blitzkit/mapDefinitions';
 import { RenderConfiguration } from '../core/blitzkit/renderConfiguration';
 import { tankDefinitions } from '../core/blitzkit/tankDefinitions';
 import { TIER_ROMAN_NUMERALS } from '../core/blitzkit/tankDefinitions/constants';
-import { tankIcon } from '../core/blitzkit/tankIcon';
 import { tankAverages } from '../core/blitzstars/tankAverages';
 import buttonLink from '../core/discord/buttonLink';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';

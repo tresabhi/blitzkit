@@ -1,5 +1,5 @@
+import { tankIcon } from '@blitzkit/core/src/blitzkit/tankIcon';
 import { iconPng } from './iconPng';
-import { tankIcon } from './tankIcon';
 
 export function tankIconPng(id: number) {
   return iconPng(tankIcon(id));
