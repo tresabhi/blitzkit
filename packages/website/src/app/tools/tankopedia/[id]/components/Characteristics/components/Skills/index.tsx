@@ -1,3 +1,4 @@
+import { createDefaultSkills, skillDefinitions } from '@blitzkit/core';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import {
   Button,
@@ -10,8 +11,6 @@ import {
 } from '@radix-ui/themes';
 import { use } from 'react';
 import { CrewSkillManager } from '../../../../../../../../components/CrewSkillManager';
-import { createDefaultSkills } from '../../../../../../../../core/blitzkit/createDefaultSkills';
-import { skillDefinitions } from '../../../../../../../../core/blitzkit/skillDefinitions';
 import * as TankopediaEphemeral from '../../../../../../../../stores/tankopediaEphemeral';
 import { ConfigurationChildWrapper } from '../ConfigurationChildWrapper';
 

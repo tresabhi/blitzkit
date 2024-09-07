@@ -1,5 +1,5 @@
 import { compress } from 'lz4js';
-import { CdonWriteStream } from '../../../../src/core/streams/cdon';
+import { CdonWriteStream } from '../streams';
 
 export function superCompress(object: any) {
   const write = new CdonWriteStream().cdon(object);

@@ -1,9 +1,7 @@
+import { asset, imgur, tankDefinitions } from '@blitzkit/core';
 import { CaretLeftIcon, CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, IconButton, ScrollArea, Text } from '@radix-ui/themes';
 import { Fragment, use, useEffect, useMemo, useRef, useState } from 'react';
-import { asset } from '../../../../../../../core/blitzkit/asset';
-import { imgur } from '../../../../../../../core/blitzkit/imgur';
-import { tankDefinitions } from '../../../../../../../core/blitzkit/tankDefinitions';
 import * as Duel from '../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
 import { Arrow } from './components/Arrow';

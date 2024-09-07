@@ -1,5 +1,5 @@
+import { Percentile } from '@blitzkit/core/src/statistics/percentiles';
 import { createColors } from 'bepaint';
-import { Percentile } from '../../../constants/percentiles';
 import {
   AccentColor,
   GrayColor,

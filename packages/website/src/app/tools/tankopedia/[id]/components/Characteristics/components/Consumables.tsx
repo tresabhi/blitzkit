@@ -1,3 +1,7 @@
+import {
+  checkConsumableProvisionInclusivity,
+  consumableDefinitions,
+} from '@blitzkit/core';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import {
   Button,
@@ -9,8 +13,6 @@ import {
 } from '@radix-ui/themes';
 import { use } from 'react';
 import { ConsumablesManager } from '../../../../../../../components/ConsumablesManager';
-import { checkConsumableProvisionInclusivity } from '../../../../../../../core/blitzkit/checkConsumableProvisionInclusivity';
-import { consumableDefinitions } from '../../../../../../../core/blitzkit/consumableDefinitions';
 import { useEquipment } from '../../../../../../../hooks/useEquipment';
 import * as Duel from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';

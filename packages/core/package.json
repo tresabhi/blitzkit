@@ -8,9 +8,13 @@
     "lodash": "^4.17.21",
     "@prisma/client": "^5.19.1",
     "@octokit/plugin-throttling": "^8.2.0",
-    "lz4js": "^0.2.0"
+    "protobufjs": "^7.4.0",
+    "lz4js": "^0.2.0",
+    "pickleparser": "^0.2.1",
+    "adm-zip": "^0.5.16"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.5",
     "@types/lodash": "^4.17.7",
     "@types/lz4js": "^0.2.1"
   }

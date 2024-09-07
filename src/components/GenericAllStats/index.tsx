@@ -1,7 +1,7 @@
+import isNumber from '@blitzkit/core/src/math/isNumber';
 import { Locale } from 'discord.js';
 import { SupplementaryStats } from '../../core/blitz/getAccountInfo';
 import { translator } from '../../core/localization/translator';
-import isNumber from '../../core/math/isNumber';
 import { BlitzStats } from '../../core/statistics/compositeStats/constants';
 import getWN8Percentile from '../../core/statistics/getWN8Percentile';
 import { Card } from './components/Card';

@@ -1,5 +1,5 @@
+import { Percentile } from '@blitzkit/core/src/statistics/percentiles';
 import { Locale } from 'discord.js';
-import { Percentile } from '../../constants/percentiles';
 import { SupplementaryStats } from '../../core/blitz/getAccountInfo';
 import { translator } from '../../core/localization/translator';
 import getWN8Percentile from '../../core/statistics/getWN8Percentile';

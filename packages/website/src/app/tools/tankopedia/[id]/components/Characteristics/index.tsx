@@ -1,3 +1,14 @@
+import {
+  asset,
+  coefficient,
+  CREW_MEMBER_NAMES,
+  equipmentDefinitions,
+  GUN_TYPE_NAMES,
+  isExplosive,
+  provisionDefinitions,
+  resolvePenetrationCoefficient,
+  tankCharacteristics,
+} from '@blitzkit/core';
 import { AccessibilityIcon, InfoCircledIcon } from '@radix-ui/react-icons';
 import {
   Flex,
@@ -13,18 +24,6 @@ import { debounce } from 'lodash';
 import { Fragment, use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
 import { Ad, AdType } from '../../../../../../components/Ad';
-import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
-import { isExplosive } from '../../../../../../core/blitz/isExplosive';
-import { resolvePenetrationCoefficient } from '../../../../../../core/blitz/resolvePenetrationCoefficient';
-import { asset } from '../../../../../../core/blitzkit/asset';
-import { coefficient } from '../../../../../../core/blitzkit/coefficient';
-import { equipmentDefinitions } from '../../../../../../core/blitzkit/equipmentDefinitions';
-import { provisionDefinitions } from '../../../../../../core/blitzkit/provisionDefinitions';
-import { tankCharacteristics } from '../../../../../../core/blitzkit/tankCharacteristics';
-import {
-  CREW_MEMBER_NAMES,
-  GUN_TYPE_NAMES,
-} from '../../../../../../core/blitzkit/tankDefinitions/constants';
 import { useAdExempt } from '../../../../../../hooks/useAdExempt';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefinition';
@@ -463,7 +462,9 @@ export function Characteristics() {
               <Fragment key={member.type}>
                 <InfoWithDelta
                   key={`${member.type}-root`}
-                  name={`${CREW_MEMBER_NAMES[member.type]}${count > 1 ? ` x ${count}` : ''}`}
+                  name={`${CREW_MEMBER_NAMES[member.type]}${
+                    count > 1 ? ` x ${count}` : ''
+                  }`}
                   unit="%"
                   decimals={0}
                 >

@@ -9,13 +9,7 @@ import {
 import { Armor } from '../../../../../../components/Armor';
 import { ArmorPlateDisplay } from '../../../../../../components/Armor/components/ArmorPlateDisplay';
 import { ShotDisplay } from '../../../../../../components/Armor/components/ShotDisplay';
-import {
-  StaticArmor,
-  ThicknessRange,
-} from '../../../../../../components/Armor/components/StaticArmor';
-import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
-import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
-import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
+import { StaticArmor } from '../../../../../../components/Armor/components/StaticArmor';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import useOnScreen from '../../../../../../hooks/useOnScreen';
 import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefinition';

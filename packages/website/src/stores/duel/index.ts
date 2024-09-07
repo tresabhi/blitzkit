@@ -1,9 +1,5 @@
 'use client';
 
-import { createNextSafeStore } from '@blitzkit/core/src/zustand/createNextSafeStore';
-import { create } from 'zustand';
-import { subscribeWithSelector } from 'zustand/middleware';
-import { ProvisionDefinitions } from '../../../../../src/core/blitzkit/provisionDefinitions';
 import {
   EngineDefinition,
   GunDefinition,
@@ -11,8 +7,12 @@ import {
   TankDefinition,
   TrackDefinition,
   TurretDefinition,
-} from '../../../../../src/core/blitzkit/tankDefinitions';
-import { tankToDuelMember } from '../../../../../src/core/blitzkit/tankToDuelMember';
+} from '@blitzkit/core';
+import { ProvisionDefinitions } from '@blitzkit/core/src/blitzkit/provisionDefinitions';
+import { createNextSafeStore } from '@blitzkit/core/src/zustand/createNextSafeStore';
+import { create } from 'zustand';
+import { subscribeWithSelector } from 'zustand/middleware';
+import { tankToDuelMember } from '../../core/blitzkit/tankToDuelMember';
 
 type EquipmentMatrixItem = -1 | 0 | 1;
 type EquipmentMatrixRow = [

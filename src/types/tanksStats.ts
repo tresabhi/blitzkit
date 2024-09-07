@@ -1,4 +1,4 @@
-import { emptyAllStats } from '../core/blitzstars/getStatsInPeriod/constants';
+import { emptyAllStats } from '@blitzkit/core/src/blitzstars/getStatsInPeriod/constants';
 import { BlitzStats } from '../core/statistics/compositeStats/constants';
 
 export interface IndividualTankStats {

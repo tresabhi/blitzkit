@@ -1,9 +1,11 @@
+import {
+  asset,
+  consumableDefinitions,
+  gameDefinitions,
+  provisionDefinitions,
+} from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { use } from 'react';
-import { asset } from '../../../../../../core/blitzkit/asset';
-import { consumableDefinitions } from '../../../../../../core/blitzkit/consumableDefinitions';
-import { gameDefinitions } from '../../../../../../core/blitzkit/gameDefinitions';
-import { provisionDefinitions } from '../../../../../../core/blitzkit/provisionDefinitions';
 import * as Duel from '../../../../../../stores/duel';
 
 export function GameModeSection() {
@@ -33,7 +35,9 @@ export function GameModeSection() {
               direction="column"
               style={{
                 borderRadius: 'var(--radius-3)',
-                background: `url(${asset(`icons/game_mode_banners/${id}.webp`)})`,
+                background: `url(${asset(
+                  `icons/game_mode_banners/${id}.webp`,
+                )})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
@@ -41,7 +45,9 @@ export function GameModeSection() {
               <Box
                 flexGrow="1"
                 style={{
-                  background: `url(${asset(`icons/game_mode_banners/${id}.webp`)})`,
+                  background: `url(${asset(
+                    `icons/game_mode_banners/${id}.webp`,
+                  )})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }}

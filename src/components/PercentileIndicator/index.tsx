@@ -1,4 +1,4 @@
-import { Percentile } from '../../constants/percentiles';
+import { Percentile } from '@blitzkit/core/src/statistics/percentiles';
 import { PERCENTILE_COLORS } from './constants';
 
 interface PercentileIndicatorProps {

@@ -1,10 +1,12 @@
+import {
+  modelDefinitions,
+  provisionDefinitions,
+  tankDefinitions,
+  tankIcon,
+  TIER_ROMAN_NUMERALS,
+} from '@blitzkit/core';
+import strings from '@blitzkit/core/lang/en-US.json';
 import { ReactNode } from 'react';
-import { modelDefinitions } from '../../../../core/blitzkit/modelDefinitions';
-import { provisionDefinitions } from '../../../../core/blitzkit/provisionDefinitions';
-import { tankDefinitions } from '../../../../core/blitzkit/tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
-import { tankIcon } from '../../../../core/blitzkit/tankIcon';
-import strings from '../../../../lang/en-US.json';
 import * as Duel from '../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 

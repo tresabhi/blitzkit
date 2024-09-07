@@ -1,6 +1,5 @@
 import { IconButton } from '@radix-ui/themes';
 import { invalidate } from '@react-three/fiber';
-import { asset } from '../../../../../../../../../core/blitzkit/asset';
 import { useArmor } from '../../../../../../../../../hooks/useArmor';
 import * as Duel from '../../../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../../../stores/tankopediaEphemeral';

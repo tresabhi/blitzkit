@@ -1,11 +1,8 @@
+import { resolveNearPenetration, tankDefinitions, Var } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { Suspense, use, useEffect, useMemo, useRef, useState } from 'react';
-import { ThicknessRange } from '../../../../../../components/Armor/components/StaticArmor';
 import { classIcons } from '../../../../../../components/ClassIcon';
 import { NAVBAR_HEIGHT } from '../../../../../../components/Navbar/index.css';
-import { resolveNearPenetration } from '../../../../../../core/blitz/resolveNearPenetration';
-import { tankDefinitions } from '../../../../../../core/blitzkit/tankDefinitions';
-import { Var } from '../../../../../../core/blitzkit/var';
 import { useFullScreen } from '../../../../../../hooks/useFullScreen';
 import * as Duel from '../../../../../../stores/duel';
 import { TankSandbox } from './TankSandbox';
@@ -22,8 +19,8 @@ export function HeroSection() {
     protagonist.treeType === 'collector'
       ? 'blue'
       : protagonist.treeType === 'premium'
-        ? 'amber'
-        : undefined;
+      ? 'amber'
+      : undefined;
   const awaitedTankDefinitions = use(tankDefinitions);
   const thicknessRange = useMemo(() => {
     const entries = Object.values(awaitedTankDefinitions);

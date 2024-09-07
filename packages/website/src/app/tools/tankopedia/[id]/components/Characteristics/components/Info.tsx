@@ -1,14 +1,12 @@
 import { CaretDownIcon, CaretUpIcon } from '@radix-ui/react-icons';
 import { Flex, Text } from '@radix-ui/themes';
 import { ReactNode } from 'react';
-import { theme } from '../../../../../../../stitches.config';
 
 export interface InfoProps {
   name: ReactNode;
   children?: ReactNode;
   unit?: string;
   indent?: boolean;
-  highlight?: boolean;
   delta?: number;
   decimals?: number;
   prefix?: string;
@@ -20,7 +18,6 @@ export function Info({
   children,
   unit,
   indent = false,
-  highlight,
   delta,
   decimals,
   prefix,
@@ -32,7 +29,7 @@ export function Info({
       style={{ width: '100%', paddingLeft: indent ? 24 : 0 }}
       gap="4"
     >
-      <Text color={highlight ? 'amber' : 'gray'}>
+      <Text color="gray">
         {name}
         {unit != undefined && (
           <>
@@ -49,9 +46,7 @@ export function Info({
           style={{
             flex: 1,
             height: 1,
-            backgroundColor: highlight
-              ? theme.colors.componentCallToActionInteractive_amberAlpha
-              : theme.colors.componentCallToActionInteractive_alpha,
+            backgroundColor: 'red',
           }}
         />
       )}
@@ -82,7 +77,7 @@ export function Info({
               </Text>
             </>
           )}
-          <Text color={highlight ? 'amber' : undefined}>
+          <Text>
             {prefix}
             {decimals !== undefined && typeof children === 'number'
               ? children.toFixed(decimals)

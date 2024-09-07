@@ -1,7 +1,6 @@
 import { idToRegion } from '@blitzkit/core';
 import { Text } from '@radix-ui/themes';
 import { use, useMemo } from 'react';
-import { getAccountInfo } from '../../../../../../src/core/blitz/getAccountInfo';
 import * as App from '../../../stores/app';
 
 export function WargamingAccountName() {

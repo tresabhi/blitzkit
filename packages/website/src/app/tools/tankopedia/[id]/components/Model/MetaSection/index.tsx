@@ -1,15 +1,16 @@
+import {
+  assertSecret,
+  asset,
+  modelDefinitions,
+  provisionDefinitions,
+} from '@blitzkit/core';
+import strings from '@blitzkit/core/lang/en-US.json';
 import { ChevronLeftIcon, MixIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { Button, Code, Dialog, Flex } from '@radix-ui/themes';
 import { use, useState } from 'react';
 import { classIcons } from '../../../../../../../components/ClassIcon';
 import { Link } from '../../../../../../../components/Link';
 import { ScienceIcon } from '../../../../../../../components/ScienceIcon';
-import { asset } from '../../../../../../../core/blitzkit/asset';
-import { modelDefinitions } from '../../../../../../../core/blitzkit/modelDefinitions';
-import { provisionDefinitions } from '../../../../../../../core/blitzkit/provisionDefinitions';
-import { assertSecret } from '../../../../../../../core/blitzkit/secret';
-import { tankToDuelMember } from '../../../../../../../core/blitzkit/tankToDuelMember';
-import strings from '../../../../../../../lang/en-US.json';
 import * as App from '../../../../../../../stores/app';
 import * as Duel from '../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
@@ -132,8 +133,8 @@ export function MetaSection() {
                 protagonist.treeType === 'collector'
                   ? 'blue'
                   : protagonist.treeType === 'premium'
-                    ? 'amber'
-                    : undefined
+                  ? 'amber'
+                  : undefined
               }
             >
               {strings.common.tree_type[protagonist.treeType]}
@@ -159,7 +160,11 @@ export function MetaSection() {
               </Listing>
             )}
             <Listing
-              label={`${protagonist.treeType === 'researchable' ? 'Purchase' : 'Restoration'} price`}
+              label={`${
+                protagonist.treeType === 'researchable'
+                  ? 'Purchase'
+                  : 'Restoration'
+              } price`}
             >
               <Flex align="center" gap="1">
                 {protagonist.price.value.toLocaleString()}
@@ -167,7 +172,9 @@ export function MetaSection() {
                   style={{ width: '1em', height: '1em' }}
                   alt={protagonist.price.type}
                   src={asset(
-                    `icons/currencies/${protagonist.price.type === 'gold' ? 'gold' : 'silver'}.webp`,
+                    `icons/currencies/${
+                      protagonist.price.type === 'gold' ? 'gold' : 'silver'
+                    }.webp`,
                   )}
                 />
               </Flex>
@@ -179,7 +186,9 @@ export function MetaSection() {
                   style={{ width: '1em', height: '1em' }}
                   alt={protagonist.price.type}
                   src={asset(
-                    `icons/currencies/${protagonist.price.type === 'gold' ? 'gold' : 'silver'}.webp`,
+                    `icons/currencies/${
+                      protagonist.price.type === 'gold' ? 'gold' : 'silver'
+                    }.webp`,
                   )}
                 />
               </Flex>

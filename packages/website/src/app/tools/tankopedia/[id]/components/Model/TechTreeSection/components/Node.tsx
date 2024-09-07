@@ -1,11 +1,13 @@
+import {
+  asset,
+  averageDefinitions,
+  formatCompact,
+  tankDefinitions,
+  TIER_ROMAN_NUMERALS,
+} from '@blitzkit/core';
 import { Box, Flex, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { use } from 'react';
-import { asset } from '../../../../../../../../core/blitzkit/asset';
-import { averageDefinitions } from '../../../../../../../../core/blitzkit/averageDefinitions';
-import { tankDefinitions } from '../../../../../../../../core/blitzkit/tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from '../../../../../../../../core/blitzkit/tankDefinitions/constants';
-import { formatCompact } from '../../../../../../../../core/math/formatCompact';
 import * as TankopediaEphemeral from '../../../../../../../../stores/tankopediaEphemeral';
 
 interface NodeProps {

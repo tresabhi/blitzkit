@@ -1,11 +1,9 @@
+import { reviews, Var, youtubers } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import { Link } from '../../../../../components/Link';
 import PageWrapper from '../../../../../components/PageWrapper';
 import { VerifiedIcon } from '../../../../../components/VerifiedIcon';
-import { youtubers } from '../../../../../constants/youtubers';
-import { reviews } from '../../../../../core/blitzkit/reviews';
-import { Var } from '../../../../../core/blitzkit/var';
 import * as Duel from '../../../../../stores/duel';
 
 export function VideoSection() {

@@ -1,3 +1,4 @@
+import { permanentSkills } from '@blitzkit/core/src/blitz/permanentSkills';
 import { ComponentPlaceholderIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Popover, Slider, Table, Text } from '@radix-ui/themes';
 import { debounce, times } from 'lodash';
@@ -21,7 +22,6 @@ import { BlitzkitButtonGray } from '../../../../icons/BlitzkitButtonGray';
 import { theme } from '../../../../stitches.config';
 import * as CompareEphemeral from '../../../../stores/compareEphemeral';
 import { EquipmentMatrix } from '../../../../stores/duel';
-import { permanentSkills } from '../../tankopedia/[id]/components/Characteristics/components/Skills/constants';
 import { Body } from './Body';
 import { InsertionMarker } from './IntersectionMarker';
 import { TankCard } from './TankCard';
@@ -101,8 +101,8 @@ export function CompareTable({ stats }: CompareTableProps) {
                                     crewSkills[skill] === 0
                                       ? theme.colors.textLowContrast
                                       : permanentSkills.includes(skill)
-                                        ? theme.colors.textLowContrast_crimson
-                                        : theme.colors.textLowContrast_amber,
+                                      ? theme.colors.textLowContrast_crimson
+                                      : theme.colors.textLowContrast_amber,
                                 }}
                               />
                             ))}

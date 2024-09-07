@@ -1,3 +1,4 @@
+import getStatsInPeriod from '@blitzkit/core/src/blitzstars/getStatsInPeriod';
 import { Locale } from 'discord.js';
 import { chunk } from 'lodash';
 import * as Breakdown from '../../components/Breakdown';
@@ -12,7 +13,6 @@ import {
   TankDefinition,
   tankDefinitions,
 } from '../../core/blitzkit/tankDefinitions';
-import getStatsInPeriod from '../../core/blitzstars/getStatsInPeriod';
 import { tankAverages } from '../../core/blitzstars/tankAverages';
 import { ResolvedPeriod } from '../../core/discord/resolvePeriodFromCommand';
 import { ResolvedPlayer } from '../../core/discord/resolvePlayerFromCommand';

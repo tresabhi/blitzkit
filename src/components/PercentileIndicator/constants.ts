@@ -1,3 +1,4 @@
+import { Percentile } from '@blitzkit/core/src/statistics/percentiles';
 import {
   amber,
   blue,
@@ -10,7 +11,6 @@ import {
   slate,
   teal,
 } from '@radix-ui/colors';
-import { Percentile } from '../../constants/percentiles';
 
 export const PERCENTILE_COLORS = {
   [Percentile.VeryBad]: slate.slate9,

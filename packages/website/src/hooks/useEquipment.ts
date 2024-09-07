@@ -1,6 +1,6 @@
+import { equipmentDefinitions } from '@blitzkit/core';
 import { use, useMemo } from 'react';
-import * as Duel from '../../packages/website/src/stores/duel';
-import { equipmentDefinitions } from '../core/blitzkit/equipmentDefinitions';
+import * as Duel from '../stores/duel';
 
 export function useEquipment(id: number, antagonist = false) {
   const awaitedEquipmentDefinitions = use(equipmentDefinitions);

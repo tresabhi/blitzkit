@@ -1,3 +1,4 @@
+import getStatsInPeriod from '@blitzkit/core/src/blitzstars/getStatsInPeriod';
 import { Locale } from 'discord.js';
 import AllStatsOverview from '../components/AllStatsOverview';
 import CommandWrapper from '../components/CommandWrapper';
@@ -8,7 +9,6 @@ import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
 import { emblemURL } from '../core/blitzkit/emblemURL';
 import { filtersToDescription } from '../core/blitzkit/filtersToDescription';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
-import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
 import addPeriodicFilterOptions from '../core/discord/addPeriodicFilterOptions';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';

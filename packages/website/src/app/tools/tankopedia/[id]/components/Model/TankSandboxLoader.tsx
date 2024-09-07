@@ -1,6 +1,6 @@
+import { tankIcon } from '@blitzkit/core';
 import { Flex, FlexProps, Progress } from '@radix-ui/themes';
 import { useProgress } from '@react-three/drei';
-import { tankIcon } from '../../../../../../core/blitzkit/tankIcon';
 
 type TankSandboxLoaderProps = Omit<FlexProps, 'id'> & {
   id: number;

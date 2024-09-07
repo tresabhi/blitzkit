@@ -1,12 +1,8 @@
+import { modelTransformEvent, ModelTransformEventData } from '@blitzkit/core';
 import { HeightIcon, WidthIcon } from '@radix-ui/react-icons';
 import { Flex, TextField } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
 import { degToRad, radToDeg } from 'three/src/math/MathUtils';
-import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
-import {
-  modelTransformEvent,
-  ModelTransformEventData,
-} from '../../../../../../core/blitzkit/modelTransform';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefinition';
 import * as Duel from '../../../../../../stores/duel';
@@ -23,11 +19,6 @@ export function QuickInputs() {
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
   const initialGunPitch = tankModelDefinition.turretRotation?.pitch ?? 0;
   const hasImprovedVerticalStabilizer = useEquipment(122);
-  const antagonist = Duel.use((state) => state.antagonist.tank);
-  const compareTanks =
-    protagonist.tank.id === antagonist.id
-      ? [protagonist.tank.id]
-      : [protagonist.tank.id, antagonist.id];
 
   useEffect(() => {
     yawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);

@@ -1,5 +1,5 @@
+import { Percentile } from '@blitzkit/core/src/statistics/percentiles';
 import { createColors } from 'bepaint';
-import { Percentile } from '../../../constants/percentiles';
 import {
   AccentColor,
   GrayColor,
@@ -82,8 +82,8 @@ export function Row({
                 ? treeType === 'collector'
                   ? theme.textLowContrast_blue
                   : treeType === 'premium'
-                    ? theme.textLowContrast_amber
-                    : theme.textHighContrast
+                  ? theme.textLowContrast_amber
+                  : theme.textHighContrast
                 : theme.textLowContrast,
             fontWeight: 900,
             fontSize: 16,
