@@ -23,7 +23,8 @@
     "dist/website/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
-    "../core/src/blitz/permanentSkills.tsx"
+    "../core/src/blitz/permanentSkills.tsx",
+    "../core/src/types/proto.d.ts"
   ],
   "exclude": ["node_modules"]
 }

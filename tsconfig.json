@@ -78,7 +78,19 @@
     "packages/core/src/blitzkit/isExplosive.ts",
     "packages/core/src/blitzkit/reviews.ts",
     "packages/core/src/blitzkit/youtubers.ts",
-    "packages/core/src/blitzkit/modelTransform.ts"
-  ],
+    "packages/core/src/blitzkit/modelTransform.ts",
+    "packages/core/src/databases",
+    "packages/bot/src/index.ts",
+    "packages/bot/src/stitches.config.ts",
+    "packages/bot/src/types/writable.ts",
+    "packages/website/types/urlon.d.ts",
+    "packages/core/src/types/tanksStats.ts",
+    "packages/core/src/types/proto.d.ts",
+    "packages/bot/src/types/possiblyPromise.ts",
+    "packages/bot/src/types/histories.ts",
+    "packages/bot/src/types/ttf.d.ts",
+    "packages/bot/src/types/clanList.ts",
+    "packages/core/src/blitz/regions.ts"
+, "packages/bot/src/core/radix/radixColors.ts", "packages/bot/src/core/discord/colors.ts", "packages/core/src/blitz/equipmentPrice.ts", "packages/core/src/blitz/leagues.ts", "packages/core/src/blitz/rating.ts", "packages/core/src/blitz/nations.ts"  ],
   "exclude": ["node_modules/**/*", "dist", "scripts"]
 }
