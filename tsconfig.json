@@ -91,6 +91,6 @@
     "packages/bot/src/types/ttf.d.ts",
     "packages/bot/src/types/clanList.ts",
     "packages/core/src/blitz/regions.ts"
-, "packages/bot/src/core/radix/radixColors.ts", "packages/bot/src/core/discord/colors.ts", "packages/core/src/blitz/equipmentPrice.ts", "packages/core/src/blitz/leagues.ts", "packages/core/src/blitz/rating.ts", "packages/core/src/blitz/nations.ts"  ],
+, "packages/bot/src/core/radix/radixColors.ts", "packages/bot/src/core/discord/colors.ts", "packages/core/src/blitz/equipmentPrice.ts", "packages/core/src/blitz/leagues.ts", "packages/core/src/blitz/rating.ts", "packages/core/src/blitz/nations.ts", "packages/scripts/src/buildAssets", "packages/scripts/src/applyPatches.ts", "packages/scripts/src/averages.ts", "packages/scripts/src/buildRatingLeaderboard.ts", "packages/scripts/src/discoverIds.ts", "packages/scripts/src/downloadZipClient.ts", "packages/scripts/src/reviews.ts", "packages/scripts/src/setupDepotDownloader.ts", "packages/scripts/src/sitemap.ts"  ],
   "exclude": ["node_modules/**/*", "dist", "scripts"]
 }
