@@ -1,4 +1,4 @@
-import { EventManager } from './eventManager';
+import { EventManager } from '@blitzkit/core/src/blitzkit/eventManager';
 
 export enum Pose {
   HullDown,

@@ -1,8 +1,9 @@
-import { modelTransformEvent, ModelTransformEventData } from '@blitzkit/core';
 import { HeightIcon, WidthIcon } from '@radix-ui/react-icons';
 import { Flex, TextField } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
 import { degToRad, radToDeg } from 'three/src/math/MathUtils';
+import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
+import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefinition';
 import * as Duel from '../../../../../../stores/duel';

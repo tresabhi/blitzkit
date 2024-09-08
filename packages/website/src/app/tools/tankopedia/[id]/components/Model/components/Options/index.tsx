@@ -1,4 +1,4 @@
-import { imgur, uniqueGuns } from '@blitzkit/core';
+import { asset, imgur, resolveNearPenetration, resolvePenetrationCoefficient, TIER_ROMAN_NUMERALS, uniqueGuns } from '@blitzkit/core';
 import {
   CameraIcon,
   CopyIcon,
@@ -35,6 +35,10 @@ import { ENVIRONMENTS } from '../../../Lighting';
 import { QuickInputs } from '../../../QuickInputs';
 import { Thicknesses } from '../../../Thicknesses';
 import { DynamicArmorSwitcher } from './components/DynamicArmorSwitcher';
+import { ThicknessRange } from '../../../../../../../../components/Armor/components/StaticArmor';
+import { ModuleButton } from '../../../../../../../../components/ModuleButtons/ModuleButton';
+import { SmallTankIcon } from '../../../../../../../../components/SmallTankIcon';
+import { poseEvent, Pose } from '../../../../../../../../core/blitzkit/pose';
 
 interface OptionsProps {
   thicknessRange: ThicknessRange;

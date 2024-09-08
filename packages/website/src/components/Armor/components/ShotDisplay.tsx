@@ -16,6 +16,7 @@ import {
   Quaternion,
 } from 'three';
 import { useFullScreen } from '../../../hooks/useFullScreen';
+import * as TankopediaEphemeral from '../../../stores/tankopediaEphemeral';
 import { ShotDisplayCard } from './ShotDisplayCard';
 
 export const shotStatusColors: Record<

@@ -1,3 +1,4 @@
+import { asset } from '@blitzkit/core';
 import { ObjectMap, useLoader } from '@react-three/fiber';
 import { GLTF, GLTFLoader } from 'three-stdlib';
 

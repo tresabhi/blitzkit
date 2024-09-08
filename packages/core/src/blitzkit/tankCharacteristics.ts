@@ -4,7 +4,11 @@ import { ProvisionDefinitions } from '@blitzkit/core/src/blitzkit/provisionDefin
 import { EquipmentMatrix } from '../../../website/src/stores/duel';
 import { resolveNearPenetration } from '../blitz/resolveNearPenetration';
 import { coefficient } from './coefficient';
+import { degressiveStat } from './degressiveStat';
 import { isExplosive } from './isExplosive';
+import { normalizeBoundingBox } from './normalizeBoundingBox';
+import { progressiveStat } from './progressiveStat';
+import { resolveDpm } from './resolveDpm';
 import { resolvePenetrationCoefficient } from './resolvePenetrationCoefficient';
 import { sum } from './sum';
 import {
@@ -15,6 +19,7 @@ import {
   TrackDefinition,
   TurretDefinition,
 } from './tankDefinitions';
+import { unionBoundingBox } from './unionBoundingBox';
 
 export type TankCharacteristics = ReturnType<typeof tankCharacteristics>;
 

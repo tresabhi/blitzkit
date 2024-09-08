@@ -1,9 +1,12 @@
-import { Pose } from '@blitzkit/core';
+import { modelDefinitions } from '@blitzkit/core';
 import { OrbitControls } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { useEffect, useRef, useState } from 'react';
 import { Vector3 } from 'three';
 import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
+import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
+import { hasEquipment } from '../../../../../core/blitzkit/hasEquipment';
+import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
 import { useAwait } from '../../../../../hooks/useAwait';
 import * as Duel from '../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../stores/tankopediaEphemeral';

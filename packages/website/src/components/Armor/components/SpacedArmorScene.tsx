@@ -1,5 +1,8 @@
 import { memo, useRef } from 'react';
 import { Group, Plane, Scene, Vector3 } from 'three';
+import { correctZYTuple } from '../../../core/blitz/correctZYTuple';
+import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
+import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
 import { useArmor } from '../../../hooks/useArmor';
 import { useModel } from '../../../hooks/useModel';
 import { useTankModelDefinition } from '../../../hooks/useTankModelDefinition';

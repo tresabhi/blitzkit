@@ -1,3 +1,4 @@
+import { ShellType, resolveNearPenetration } from '@blitzkit/core';
 import { isExplosive } from '@blitzkit/core/src/blitzkit/isExplosive';
 import { resolvePenetrationCoefficient } from '@blitzkit/core/src/blitzkit/resolvePenetrationCoefficient';
 import { useThree } from '@react-three/fiber';
@@ -13,6 +14,9 @@ import {
   Vector3,
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
+import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
+import { jsxTree } from '../../../../core/blitzkit/jsxTree';
+import { discardClippingPlane } from '../../../../core/three/discardClippingPlane';
 import * as Duel from '../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 import { ArmorType } from '../SpacedArmorScene';

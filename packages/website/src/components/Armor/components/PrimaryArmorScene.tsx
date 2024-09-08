@@ -1,5 +1,8 @@
 import { memo, useRef } from 'react';
 import { Group } from 'three';
+import { correctZYTuple } from '../../../core/blitz/correctZYTuple';
+import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
+import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
 import { useArmor } from '../../../hooks/useArmor';
 import { useTankModelDefinition } from '../../../hooks/useTankModelDefinition';
 import { useTankTransform } from '../../../hooks/useTankTransform';

@@ -1,6 +1,5 @@
-import { assertSecret } from '@blitzkit/core';
+import { assertSecret, REGIONS } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
-import { REGIONS } from '@blitzkit/core/src/blitzkit/regions';
 import { Button, ButtonProps, Dialog, Flex } from '@radix-ui/themes';
 import { Link } from '../../Link';
 import { WargamingIcon } from '../../WargamingIcon';

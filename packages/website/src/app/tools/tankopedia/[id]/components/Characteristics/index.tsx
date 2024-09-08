@@ -24,6 +24,7 @@ import { debounce } from 'lodash';
 import { Fragment, use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
 import { Ad, AdType } from '../../../../../../components/Ad';
+import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { useAdExempt } from '../../../../../../hooks/useAdExempt';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefinition';

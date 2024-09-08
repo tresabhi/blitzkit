@@ -1,3 +1,4 @@
+import { ShellDefinition, resolveNearPenetration } from '@blitzkit/core';
 import { isExplosive } from '@blitzkit/core/src/blitzkit/isExplosive';
 import { resolvePenetrationCoefficient } from '@blitzkit/core/src/blitzkit/resolvePenetrationCoefficient';
 import { useEffect } from 'react';
@@ -9,6 +10,8 @@ import {
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { ArmorUserData } from '../..';
+import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
+import { jsxTree } from '../../../../../../core/blitzkit/jsxTree';
 import * as Duel from '../../../../../../stores/duel';
 import { ArmorType } from '../../../SpacedArmorScene';
 import fragmentShader from './shaders/fragment.glsl';

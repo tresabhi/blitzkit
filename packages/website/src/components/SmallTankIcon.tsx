@@ -1,4 +1,4 @@
-import { asset } from '../core/blitzkit/asset';
+import { asset } from '@blitzkit/core';
 
 interface SmallTankIconProps {
   id: number;

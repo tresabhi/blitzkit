@@ -25,6 +25,6 @@
     "**/*.tsx",
     "../core/src/blitz/permanentSkills.tsx",
     "../core/src/types/proto.d.ts"
-  ],
+, "../core/src/blitzkit/degressiveStat.ts", "../core/src/blitzkit/progressiveStat.ts", "../core/src/blitzkit/normalizeBoundingBox.ts", "../core/src/blitzkit/unionBoundingBox.ts", "../core/src/blitzkit/resolveDpm.ts"  ],
   "exclude": ["node_modules"]
 }
