@@ -1,7 +1,7 @@
 import { Region } from '@blitzkit/core';
+import searchClansAcrossRegions from '@blitzkit/core/src/blitz/searchClansAcrossRegions';
 import { ChatInputCommandInteraction } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import searchClansAcrossRegions from '../../../../website/src/core/blitz/searchClansAcrossRegions';
 import { UserError } from '../../../../website/src/hooks/userError';
 import { translator } from '../localization/translator';
 import { serverAndIdPattern } from './resolvePlayerFromCommand/constants';

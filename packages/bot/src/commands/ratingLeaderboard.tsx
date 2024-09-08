@@ -2,6 +2,7 @@ import {
   BkrlDiscriminatedEntries,
   FIRST_MINIMAL_ARCHIVED_RATING_SEASON,
   LEAGUES,
+  RatingInfo,
   Region,
 } from '@blitzkit/core';
 import {
@@ -33,93 +34,6 @@ import { localizationObject } from '../core/discord/localizationObject';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
-
-export interface RatingPlayer {
-  spa_id: number;
-  mmr: number;
-  season_number: number;
-  calibrationBattlesLeft: number;
-  number: number;
-  percentile: number;
-  skip: boolean;
-  updated_at: string;
-  score: number;
-  nickname: string;
-  clan_tag: string;
-}
-
-export interface LeagueTop {
-  result: RatingPlayer[];
-}
-
-export type RatingReward = {
-  from_position: number;
-  to_position: number;
-  count: number;
-} & (
-  | {
-      type: 'vehicle';
-
-      vehicle: {
-        id: number;
-        name: string;
-        nation: string;
-        subnation: string;
-        use_subnation_flag: boolean;
-        type_slug: string;
-        level: number;
-        roman_level: string;
-        user_string: string;
-        image_url: string;
-        preview_image_url: string;
-        is_premium: boolean;
-        is_collectible: boolean;
-      };
-    }
-  | {
-      type: 'stuff';
-
-      stuff: {
-        name: string;
-        count: number;
-        title: string;
-        image_url: string;
-        type: string;
-
-        sizes: {};
-      };
-    }
-);
-
-export interface RatingLeague {
-  title: string;
-  small_icon: string;
-  big_icon: string;
-  background: string;
-  index: number;
-  percentile: number;
-}
-
-export type RatingInfo =
-  | {
-      detail: undefined;
-
-      title: string;
-      icon: string | null;
-      start_at: string;
-      finish_at: string;
-      current_season: number;
-      updated_at: string;
-      count: number;
-
-      rewards: RatingReward[];
-      leagues: RatingLeague[];
-    }
-  | { detail: { error: string } };
-
-export interface RatingNeighbors {
-  neighbors: RatingPlayer[];
-}
 
 interface SimplifiedPlayer {
   id: number;
@@ -256,7 +170,7 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                           name_localizations: localizationObject(
                             `common.leagues.${name}`,
                           ),
-                        } satisfies APIApplicationCommandOptionChoice<string>),
+                        }) satisfies APIApplicationCommandOptionChoice<string>,
                     ),
                   )
                   .setRequired(true);
@@ -279,8 +193,8 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
         const season = seasonOption
           ? parseInt(seasonOption)
           : onGoingSeason
-          ? latestArchivedSeasonNumber + 1
-          : latestArchivedSeasonNumber;
+            ? latestArchivedSeasonNumber + 1
+            : latestArchivedSeasonNumber;
         const isCurrentSeason = season === latestArchivedSeasonNumber + 1;
         let titleName: string;
         let titleImage: string | undefined;
@@ -313,7 +227,7 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                       position: player.number,
                       clan: player.clan_tag,
                       nickname: player.nickname,
-                    } satisfies SimplifiedPlayer),
+                    }) satisfies SimplifiedPlayer,
                 ),
               )
             : await getArchivedRatingLeaderboard(region, season!).then(
@@ -349,7 +263,7 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                             'bot.commands.rating_leaderboard.body.deleted_player',
                             [`${player.id}`],
                           ),
-                      } satisfies SimplifiedPlayer),
+                      }) satisfies SimplifiedPlayer,
                   );
                 },
               );
@@ -398,7 +312,7 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                         score: player.score,
                         clan: player.clan_tag,
                         nickname: player.nickname,
-                      } satisfies SimplifiedPlayer),
+                      }) satisfies SimplifiedPlayer,
                   ),
               )
             : await getArchivedRatingLeaderboard(region, season!).then(

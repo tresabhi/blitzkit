@@ -1,8 +1,6 @@
 import { Region } from '@blitzkit/core';
-import {
-  LeagueTop,
-  RatingPlayer,
-} from '../../../../bot/src/commands/ratingLeaderboard';
+import { LeagueTop } from '@blitzkit/core/src/blitz/rating';
+import { RatingPlayer } from '@blitzkit/core/src/statistics/deltaBkrlBlitzStats';
 import { context } from '../blitzkit/context';
 import { patientFetch } from '../blitzkit/patientFetch';
 import regionToRegionSubdomain from './regionToRegionSubdomain';

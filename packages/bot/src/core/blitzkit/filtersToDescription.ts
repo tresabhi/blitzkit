@@ -5,7 +5,7 @@ import {
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
 import { Locale } from 'discord.js';
-import { translator } from '../../../../bot/src/core/localization/translator';
+import { translator } from '../localization/translator';
 
 export async function filtersToDescription(
   { nation, tier, tankType, treeType, tank }: StatFilters,

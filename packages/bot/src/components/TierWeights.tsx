@@ -1,7 +1,5 @@
-import { Tier } from '@blitzkit/core';
+import { TierWeightsRecord } from '@blitzkit/core/src/statistics/getTierWeights';
 import { theme } from '../stitches.config';
-
-export type TierWeightsRecord = Partial<Record<Tier, number>>;
 
 interface TierWeightsProps {
   weights: TierWeightsRecord;

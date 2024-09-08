@@ -4,6 +4,7 @@ import {
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
 import { tankIcon } from '@blitzkit/core/src/blitzkit/tankIcon';
+import { blitzStarsTankAverages } from '@blitzkit/core/src/blitzstars/tankAverages';
 import calculateWN8 from '@blitzkit/core/src/statistics/calculateWN8';
 import { clamp } from 'lodash';
 import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
@@ -11,7 +12,6 @@ import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
 import { iconPng } from '../../../website/src/core/blitzkit/iconPng';
 import { mapDefinitions } from '../../../website/src/core/blitzkit/mapDefinitions';
 import { RenderConfiguration } from '../../../website/src/core/blitzkit/renderConfiguration';
-import { tankAverages } from '../../../website/src/core/blitzstars/tankAverages';
 import CommandWrapper from '../components/CommandWrapper';
 import TitleBar from '../components/TitleBar';
 import buttonLink from '../core/discord/buttonLink';
@@ -221,7 +221,7 @@ async function playerListing(
   winningTeam: number,
   recordingPlayer = false,
 ) {
-  const awaitedTankAverages = await tankAverages;
+  const awaitedTankAverages = await blitzStarsTankAverages;
   const awaitedTankDefinitions = await tankDefinitions;
   const tank = awaitedTankDefinitions[player.vehicle_descr];
   const blockAccent = recordingPlayer ? '_amber' : '';

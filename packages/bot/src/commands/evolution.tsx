@@ -1,15 +1,15 @@
 import { Locale, SlashCommandSubcommandGroupBuilder } from 'discord.js';
 import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
-import resolveTankId from '../../../website/src/core/blitz/resolveTankId';
 import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
-import { getBlitzStarsLinkButton } from '../../../website/src/core/blitzstars/getBlitzStarsLinkButton';
-import getPlayerHistories from '../../../website/src/core/blitzstars/getPlayerHistories';
 import CommandWrapper from '../components/CommandWrapper';
 import * as Graph from '../components/Graph';
 import { LineColor } from '../components/Graph/components/Line/constants';
 import NoData from '../components/NoData';
 import TitleBar from '../components/TitleBar';
+import resolveTankId from '../core/blitz/resolveTankId';
+import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
+import getPlayerHistories from '../core/blitzstars/getPlayerHistories';
 import getTankHistories from '../core/blitzstars/getTankHistories';
 import { addPeriodSubCommands } from '../core/discord/addPeriodSubCommands';
 import addTankChoices from '../core/discord/addTankChoices';

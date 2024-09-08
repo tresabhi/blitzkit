@@ -1,8 +1,8 @@
-import { DiffedTankStats } from '../../../bot/src/core/blitzstars/getStatsInPeriod';
 import { SupplementaryStats } from '../../../website/src/core/blitz/getAccountInfo';
-import { tankAverages } from '../../../website/src/core/blitzstars/tankAverages';
 import { tankDefinitions, TreeType } from '../blitzkit/tankDefinitions';
+import { blitzStarsTankAverages } from '../blitzstars/tankAverages';
 import calculateWN8 from './calculateWN8';
+import { BlitzStats } from './compositeStats';
 import sumStats from './sumStats';
 
 export interface StatFilters {
@@ -21,7 +21,7 @@ export async function filterStats(
   if (filters.tank) filters = { tank: filters.tank };
 
   const awaitedTankDefinitions = await tankDefinitions;
-  const awaitedTankAverages = await tankAverages;
+  const awaitedTankAverages = await blitzStarsTankAverages;
   const filteredOrder = order.filter((id) => {
     const entry = awaitedTankDefinitions[id];
 
@@ -71,4 +71,9 @@ export async function filterStats(
   } satisfies SupplementaryStats;
 
   return { stats, supplementary, filteredOrder };
+}
+
+export interface DiffedTankStats {
+  diff: Record<number, BlitzStats>;
+  order: number[];
 }

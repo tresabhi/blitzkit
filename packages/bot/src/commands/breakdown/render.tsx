@@ -5,6 +5,7 @@ import {
   TankDefinition,
   tankDefinitions,
 } from '@blitzkit/core';
+import { blitzStarsTankAverages } from '@blitzkit/core/src/blitzstars/tankAverages';
 import calculateWN8 from '@blitzkit/core/src/statistics/calculateWN8';
 import getWN8Percentile from '@blitzkit/core/src/statistics/getWN8Percentile';
 import { Locale } from 'discord.js';
@@ -12,13 +13,12 @@ import { chunk } from 'lodash';
 import { getAccountInfo } from '../../../../website/src/core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../../website/src/core/blitz/getClanAccountInfo';
 import getTankStats from '../../../../website/src/core/blitz/getTankStats';
-import { filtersToDescription } from '../../../../website/src/core/blitzkit/filtersToDescription';
-import { tankAverages } from '../../../../website/src/core/blitzstars/tankAverages';
 import { UserError } from '../../../../website/src/hooks/userError';
 import * as Breakdown from '../../components/Breakdown';
 import CommandWrapper from '../../components/CommandWrapper';
 import NoData from '../../components/NoData';
 import TitleBar from '../../components/TitleBar';
+import { filtersToDescription } from '../../core/blitzkit/filtersToDescription';
 import getStatsInPeriod from '../../core/blitzstars/getStatsInPeriod';
 import { ResolvedPeriod } from '../../core/discord/resolvePeriodFromCommand';
 import { ResolvedPlayer } from '../../core/discord/resolvePlayerFromCommand';
@@ -35,7 +35,7 @@ export async function renderBreakdown(
 ) {
   const { t, translate } = translator(locale);
   const awaitedTankDefinitions = await tankDefinitions;
-  const awaitedTankAverages = await tankAverages;
+  const awaitedTankAverages = await blitzStarsTankAverages;
   const statsInPeriod = await getStatsInPeriod(region, id, start, end, locale);
   const { filteredOrder } = await filterStats(statsInPeriod, filters);
   const accountInfo = await getAccountInfo(region, id);

@@ -1,9 +1,9 @@
+import searchClansAcrossRegions from '@blitzkit/core/src/blitz/searchClansAcrossRegions';
 import {
   ApplicationCommandOptionChoiceData,
   AutocompleteInteraction,
   CacheType,
 } from 'discord.js';
-import searchClansAcrossRegions from '../../../../../website/src/core/blitz/searchClansAcrossRegions';
 import { translator } from '../../localization/translator';
 import { DISCORD_CHOICES_MAX_NAME_SIZE, OVERFLOW_SUFFIX } from './constants';
 

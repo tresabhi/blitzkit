@@ -1,4 +1,5 @@
 import { Region } from '@blitzkit/core';
+import { ClanList } from '@blitzkit/core/src/blitz/clanList';
 import { Locale } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import fetchBlitz from '../../../website/src/core/blitz/fetchBlitz';
@@ -9,7 +10,6 @@ import embedInfo from '../core/discord/embedInfo';
 import { localizationObject } from '../core/discord/localizationObject';
 import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
-import { ClanList } from '../types/clanList';
 
 const DEFAULT_LIMIT = 25;
 

@@ -1,3 +1,5 @@
+import { provisionDefinitions } from '@blitzkit/core';
+import { TREE_TYPE_ICONS } from '@blitzkit/core/src/blitzkit/tankDefinitions/constants';
 import { CaretRightIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, Heading } from '@radix-ui/themes';
 import Link from 'next/link';
@@ -6,8 +8,6 @@ import { pushTankopediaPath } from '../../../../../core/blitzkit/pushTankopediaP
 import { tankToDuelMember } from '../../../../../core/blitzkit/tankToDuelMember';
 import * as Duel from '../../../../../stores/duel';
 import { TankSearch } from '../../components/TankSearch';
-import { provisionDefinitions } from '@blitzkit/core';
-import { TREE_TYPE_ICONS } from '../../../../../../../bot/src/components/Tanks/components/Item/constants';
 
 export function Title() {
   const awaitedProvisionDefinitions = use(provisionDefinitions);

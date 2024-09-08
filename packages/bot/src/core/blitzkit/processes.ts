@@ -1,5 +1,5 @@
 import { usersDatabase } from '@blitzkit/core';
-import { client } from '../../../../bot/src/core/discord/client';
+import { client } from '../discord/client';
 
 const EXIT_EVENTS = [
   'beforeExit',

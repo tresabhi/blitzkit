@@ -1,4 +1,5 @@
 import { TankClass, TreeType } from '@blitzkit/core';
+import { TREE_TYPE_ICONS } from '@blitzkit/core/src/blitzkit/tankDefinitions/constants';
 import { Percentile } from '@blitzkit/core/src/statistics/percentiles';
 import { createColors } from 'bepaint';
 import {
@@ -6,7 +7,6 @@ import {
   GrayColor,
   PALETTES,
 } from '../../../core/radix/radixColors';
-import { TREE_TYPE_ICONS } from '../../Tanks/components/Item/constants';
 import { RowStat } from './RowStat';
 
 export interface RowStatItem {
@@ -82,8 +82,8 @@ export function Row({
                 ? treeType === 'collector'
                   ? theme.textLowContrast_blue
                   : treeType === 'premium'
-                  ? theme.textLowContrast_amber
-                  : theme.textHighContrast
+                    ? theme.textLowContrast_amber
+                    : theme.textHighContrast
                 : theme.textLowContrast,
             fontWeight: 900,
             fontSize: 16,

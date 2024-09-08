@@ -1,4 +1,11 @@
-import { CrewMember, GunDefinition, ShellType, TankClass, Tier } from '.';
+import {
+  CrewMember,
+  GunDefinition,
+  ShellType,
+  TankClass,
+  Tier,
+  TreeType,
+} from '.';
 
 export const SHELL_NAMES: Record<ShellType, string> = {
   ap: 'AP',
@@ -69,4 +76,9 @@ export const flags: Record<string, string> = {
   japan: '🇯🇵',
   european: '🇪🇺',
   other: '<:other:1218421572243558482>',
+};
+export const TREE_TYPE_ICONS: Record<TreeType, Record<TankClass, string>> = {
+  researchable: TANK_ICONS,
+  premium: TANK_ICONS_PREMIUM,
+  collector: TANK_ICONS_COLLECTOR,
 };

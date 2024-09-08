@@ -1,6 +1,6 @@
 import { StatFilters, TreeType } from '@blitzkit/core';
 import { ChatInputCommandInteraction } from 'discord.js';
-import resolveTankId from '../../../../website/src/core/blitz/resolveTankId';
+import resolveTankId from '../blitz/resolveTankId';
 
 export async function getFiltersFromCommand(
   interaction: ChatInputCommandInteraction,

@@ -1,11 +1,10 @@
-import { TankCharacteristics } from '@blitzkit/core';
+import { TankCharacteristics, Var } from '@blitzkit/core';
 import {
   CaretLeftIcon,
   CaretRightIcon,
   CaretSortIcon,
 } from '@radix-ui/react-icons';
 import { Flex, IconButton, Table, Text } from '@radix-ui/themes';
-import { theme } from '../../../../../../bot/src/stitches.config';
 import { StickyRowHeaderCell } from '../../../../components/StickyRowHeaderCell';
 import * as CompareEphemeral from '../../../../stores/compareEphemeral';
 import * as ComparePersistent from '../../../../stores/comparePersistent';
@@ -103,8 +102,8 @@ export function CompareRow({
         const resolvedDisplayValue = display
           ? display(stats[index])
           : decimals === undefined
-          ? value
-          : value?.toFixed(decimals);
+            ? value
+            : value?.toFixed(decimals);
 
         return (
           <Table.Cell
@@ -117,12 +116,12 @@ export function CompareRow({
                 value === values[0]
                   ? undefined
                   : (
-                      deltaType === 'higherIsBetter'
-                        ? value > values[0]
-                        : value < values[0]
-                    )
-                  ? `color-mix(in srgb, ${theme.colors.componentCallToActionInteractive_green} ${normalizedDeltaPercentage}%, ${theme.colors.componentCallToActionInteractive_green}00)`
-                  : `color-mix(in srgb, ${theme.colors.componentCallToActionInteractive_red} ${normalizedDeltaPercentage}%, ${theme.colors.componentCallToActionInteractive_red}00)`,
+                        deltaType === 'higherIsBetter'
+                          ? value > values[0]
+                          : value < values[0]
+                      )
+                    ? `color-mix(in srgb, ${Var('green-7')} ${normalizedDeltaPercentage}%, ${Var('green-3')})`
+                    : `color-mix(in srgb, ${Var('red-7')} ${normalizedDeltaPercentage}%, ${Var('red-3')})`,
             }}
           >
             <Flex
@@ -149,8 +148,8 @@ export function CompareRow({
                           deltaNominalDisplay
                             ? deltaNominalDisplay(delta)
                             : decimals === undefined
-                            ? delta
-                            : delta.toFixed(decimals)
+                              ? delta
+                              : delta.toFixed(decimals)
                         }`}
                         )
                       </Text>

@@ -1,5 +1,5 @@
 import { BlitzStats, tankDefinitions } from '@blitzkit/core';
-import { context } from '../blitzkit/context';
+import { context } from '../../../website/src/core/blitzkit/context';
 
 interface SpecialStats {
   winrate: number;
@@ -81,9 +81,9 @@ export interface IndividualTankAverage {
 
 tankDefinitions;
 
-export type TankAverages = Record<number, IndividualTankAverage>;
+export type BlitzStarsTankAverages = Record<number, IndividualTankAverage>;
 
-export const tankAverages = fetch(
+export const blitzStarsTankAverages = fetch(
   context === 'website'
     ? '/api/tank-averages'
     : 'https://www.blitzstars.com/api/tankaverages.json',
@@ -91,7 +91,7 @@ export const tankAverages = fetch(
   .then((response) => response.json())
   .then((json) => {
     if (context === 'server') {
-      const partialTankAverages: TankAverages = {};
+      const partialTankAverages: BlitzStarsTankAverages = {};
 
       (json as IndividualTankAverage[]).forEach((individualTankAverage) => {
         partialTankAverages[individualTankAverage.tank_id] =
@@ -100,6 +100,6 @@ export const tankAverages = fetch(
 
       return partialTankAverages;
     } else {
-      return json as TankAverages;
+      return json as BlitzStarsTankAverages;
     }
   });

@@ -1,5 +1,5 @@
+import { Var } from '@blitzkit/core';
 import { useEffect, useRef } from 'react';
-import { theme } from '../../../../../../../bot/src/stitches.config';
 import { insertionMarkers } from './constants';
 
 export function InsertionMarker({ index }: { index: number }) {
@@ -28,7 +28,7 @@ export function InsertionMarker({ index }: { index: number }) {
         height: '75%',
         width: 2,
         borderRadius: 1,
-        backgroundColor: theme.colors.textLowContrast_crimson,
+        backgroundColor: Var('crimson-11'),
         position: 'absolute',
         right: 0,
         top: '50%',

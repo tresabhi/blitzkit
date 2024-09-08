@@ -1,5 +1,4 @@
-import { TierWeightsRecord } from '../../../bot/src/components/TierWeights';
-import { tankDefinitions } from '../blitzkit/tankDefinitions';
+import { tankDefinitions, Tier } from '../blitzkit/tankDefinitions';
 import { BlitzStats } from './compositeStats/constants';
 
 export async function getTierWeights(
@@ -20,3 +19,4 @@ export async function getTierWeights(
 
   return tierWeights;
 }
+export type TierWeightsRecord = Partial<Record<Tier, number>>;

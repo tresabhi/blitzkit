@@ -1,5 +1,4 @@
-import { Region } from '@blitzkit/core';
-import { RatingInfo } from '../../../../bot/src/commands/ratingLeaderboard';
+import { RatingInfo, Region } from '@blitzkit/core';
 import { context } from '../blitzkit/context';
 import { patientFetch } from '../blitzkit/patientFetch';
 import regionToRegionSubdomain from './regionToRegionSubdomain';

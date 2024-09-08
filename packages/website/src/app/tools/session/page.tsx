@@ -7,6 +7,7 @@ import {
   idToRegion,
   tankDefinitions,
 } from '@blitzkit/core';
+import { blitzStarsTankAverages } from '@blitzkit/core/src/blitzstars/tankAverages';
 import {
   ArrowDownIcon,
   MagnifyingGlassIcon,
@@ -45,7 +46,6 @@ import getTankStats from '../../../core/blitz/getTankStats';
 import searchPlayersAcrossRegions, {
   AccountListWithServer,
 } from '../../../core/blitz/searchPlayersAcrossRegions';
-import { tankAverages } from '../../../core/blitzstars/tankAverages';
 import * as Session from '../../../stores/session';
 
 export default function Page({
@@ -55,7 +55,7 @@ export default function Page({
 }) {
   const [loaded, setLoaded] = useState(false);
   const awaitedTankDefinitions = use(tankDefinitions);
-  const awaitedTankAvearges = use(tankAverages);
+  const awaitedTankAvearges = use(blitzStarsTankAverages);
   const [showSearch, setShowSearch] = useState(false);
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<AccountListWithServer>([]);

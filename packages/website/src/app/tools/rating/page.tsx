@@ -6,7 +6,10 @@ import {
   Region,
   REGIONS,
   UNLOCALIZED_REGION_NAMES,
+  Var,
 } from '@blitzkit/core';
+import { RatingInfo } from '@blitzkit/core/src/blitz/leagues';
+import { RatingPlayer } from '@blitzkit/core/src/statistics/deltaBkrlBlitzStats';
 import { blackA, orangeDark } from '@radix-ui/colors';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import {
@@ -22,11 +25,6 @@ import { produce } from 'immer';
 import { debounce, range } from 'lodash';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
-import {
-  RatingInfo,
-  RatingPlayer,
-} from '../../../../../bot/src/commands/ratingLeaderboard';
-import { theme } from '../../../../../bot/src/stitches.config';
 import PageWrapper from '../../../components/PageWrapper';
 import { Skeleton } from '../../../components/Skeleton';
 import fetchBlitz from '../../../core/blitz/fetchBlitz';
@@ -1008,9 +1006,7 @@ export default function Page() {
           return (
             <Table.Row
               style={{
-                backgroundColor: highlight
-                  ? theme.colors.componentInteractiveActive_orange
-                  : 'unset',
+                backgroundColor: highlight ? Var('orange-9') : 'unset',
                 cursor: 'pointer',
               }}
               key={`${region}${season}${index}`}
@@ -1023,14 +1019,14 @@ export default function Page() {
                 <Flex gap="2">
                   {names[region][id] === null
                     ? `Deleted player ${id}`
-                    : names[region][id]?.nickname ?? (
+                    : (names[region][id]?.nickname ?? (
                         <Skeleton
                           style={{
                             height: 16,
                             width: Math.random() * 128 + 128,
                           }}
                         />
-                      )}
+                      ))}
                   {clan ? (
                     <Text color="gray">{`[${clan}]`}</Text>
                   ) : (

@@ -1,11 +1,11 @@
 import { Region, emptyAllStats } from '@blitzkit/core';
+import { getAccountInfo } from '../../../../website/src/core/blitz/getAccountInfo';
 import {
   GetHistoriesOptions,
   Histories,
   History,
   getHistoriesDefaultOptions,
-} from '../../../../bot/src/types/histories';
-import { getAccountInfo } from '../blitz/getAccountInfo';
+} from '../../types/histories';
 import { PlayerStats } from './getPlayerStats';
 
 export default async function getPlayerHistories(
@@ -22,7 +22,7 @@ export default async function getPlayerHistories(
       ({
         all: history.statistics.all,
         last_battle_time: history.last_battle_time,
-      } satisfies History),
+      }) satisfies History,
   );
   let lastNonCompliantIndex = -1;
   let hasCompliedOnce = false;

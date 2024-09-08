@@ -9,7 +9,6 @@ import { escapeMarkdown, Locale } from 'discord.js';
 import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
 import getTankStats from '../../../website/src/core/blitz/getTankStats';
-import resolveTankId from '../../../website/src/core/blitz/resolveTankId';
 import { buildTechTreeLine } from '../../../website/src/core/blitzkit/buildTechTreeLine';
 import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
 import { iconPng } from '../../../website/src/core/blitzkit/iconPng';
@@ -17,6 +16,7 @@ import { resolveAncestry } from '../../../website/src/core/blitzkit/resolveAnces
 import { tankIconPng } from '../../../website/src/core/blitzkit/tankIconPng';
 import CommandWrapper from '../components/CommandWrapper';
 import TitleBar from '../components/TitleBar';
+import resolveTankId from '../core/blitz/resolveTankId';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';

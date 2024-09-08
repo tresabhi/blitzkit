@@ -20,6 +20,6 @@
       }
     ]
   },
-  "include": ["packages/**/*"],
+  "include": ["packages/**/*", "types.d.ts"],
   "exclude": ["node_modules/**/*", "dist"]
 }

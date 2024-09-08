@@ -1,5 +1,6 @@
 import {
   TankCharacteristics,
+  Var,
   asset,
   availableProvisions,
   checkConsumableProvisionInclusivity,
@@ -13,7 +14,6 @@ import { ComponentPlaceholderIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Popover, Slider, Table, Text } from '@radix-ui/themes';
 import { debounce, times } from 'lodash';
 import { use } from 'react';
-import { theme } from '../../../../../../bot/src/stitches.config';
 import { BlitzkitButtonGrayIcon } from '../../../../components/BlitzkitButtonGrayIcon';
 import { ConsumablesManager } from '../../../../components/ConsumablesManager';
 import { CrewSkillManager } from '../../../../components/CrewSkillManager';
@@ -83,12 +83,7 @@ export function CompareTable({ stats }: CompareTableProps) {
               <Popover.Root>
                 <Popover.Trigger>
                   <Button variant="ghost" radius="large">
-                    <Flex
-                      direction="column"
-                      style={{
-                        gap: 2,
-                      }}
-                    >
+                    <Flex direction="column" style={{ gap: 2 }}>
                       {Object.entries(awaitedSkillDefinitions.classes).map(
                         ([tankClass, skills]) => (
                           <Flex key={tankClass} style={{ gap: 2 }}>
@@ -101,10 +96,10 @@ export function CompareTable({ stats }: CompareTableProps) {
                                   borderRadius: 2,
                                   backgroundColor:
                                     crewSkills[skill] === 0
-                                      ? theme.colors.textLowContrast
+                                      ? Var('gray-11')
                                       : permanentSkills.includes(skill)
-                                      ? theme.colors.textLowContrast_crimson
-                                      : theme.colors.textLowContrast_amber,
+                                        ? Var('crimson-11')
+                                        : Var('amber-11'),
                                 }}
                               />
                             ))}
@@ -381,9 +376,8 @@ export function CompareTable({ stats }: CompareTableProps) {
                                             height: 8,
                                             backgroundColor:
                                               equipment === -1
-                                                ? theme.colors
-                                                    .textLowContrast_crimson
-                                                : theme.colors.textLowContrast,
+                                                ? Var('crimson-11')
+                                                : Var('gray-11'),
                                             borderRadius: 2,
                                           }}
                                         />
@@ -393,9 +387,8 @@ export function CompareTable({ stats }: CompareTableProps) {
                                             height: 8,
                                             backgroundColor:
                                               equipment === 1
-                                                ? theme.colors
-                                                    .textLowContrast_crimson
-                                                : theme.colors.textLowContrast,
+                                                ? Var('crimson-11')
+                                                : Var('gray-11'),
                                             borderRadius: 2,
                                           }}
                                         />

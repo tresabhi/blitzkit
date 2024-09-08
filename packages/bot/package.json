@@ -2,6 +2,7 @@
   "name": "@blitzkit/bot",
   "private": true,
   "type": "module",
+  "types": "src/types.d.ts",
   "dependencies": {
     "@blitzkit/core": "workspace:*",
     "satori": "^0.10.14",
