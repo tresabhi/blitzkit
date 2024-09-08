@@ -1,5 +1,5 @@
-import { BlitzkitStats } from '../../../../../src/core/statistics/compositeStats/constants';
 import { decodeProtobuf } from '../../protobuf/decodeProtobuf';
+import { BlitzkitStats } from '../../statistics';
 import { asset } from '../asset';
 
 export interface AverageDefinitionsEntry {

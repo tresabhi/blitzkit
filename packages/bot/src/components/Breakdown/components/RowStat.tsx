@@ -4,7 +4,7 @@ import {
   AccentColor,
   GrayColor,
   PALETTES,
-} from '../../../constants/radixColors';
+} from '../../../core/radix/radixColors';
 import PercentileIndicator from '../../PercentileIndicator';
 
 interface RowStatProps {

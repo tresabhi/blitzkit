@@ -1,6 +1,9 @@
-import { Region } from '../../constants/regions';
-import { BkrlDiscriminatedEntries, BkrlReadStream } from '../streams/bkrl';
-import { asset } from './asset';
+import {
+  asset,
+  BkrlDiscriminatedEntries,
+  BkrlReadStream,
+  Region,
+} from '@blitzkit/core';
 
 const cache: Record<Region, Record<number, BkrlDiscriminatedEntries>> = {
   asia: {},

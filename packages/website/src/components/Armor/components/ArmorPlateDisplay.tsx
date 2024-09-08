@@ -10,6 +10,7 @@ import {
 import { Html } from '@react-three/drei';
 import { useRef } from 'react';
 import { radToDeg } from 'three/src/math/MathUtils';
+import { resolveArmorIndex } from '../../../core/blitzkit/resolveArmorIndex';
 import * as App from '../../../stores/app';
 import * as Duel from '../../../stores/duel';
 import * as TankopediaEphemeral from '../../../stores/tankopediaEphemeral';

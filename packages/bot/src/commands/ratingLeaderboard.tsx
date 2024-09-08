@@ -1,26 +1,30 @@
 import {
+  BkrlDiscriminatedEntries,
+  FIRST_MINIMAL_ARCHIVED_RATING_SEASON,
+  LEAGUES,
+  Region,
+} from '@blitzkit/core';
+import {
   APIApplicationCommandOptionChoice,
   Locale,
   SlashCommandSubcommandBuilder,
 } from 'discord.js';
 import { range } from 'lodash';
 import markdownEscape from 'markdown-escape';
+import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
+import getRatingInfo from '../../../website/src/core/blitz/getRatingInfo';
+import { getRatingLeague } from '../../../website/src/core/blitz/getRatingLeague';
+import { getRatingNeighbors } from '../../../website/src/core/blitz/getRatingNeighbors';
+import { isOnGoingRatingSeason } from '../../../website/src/core/blitz/isOnGoingRatingSeason';
+import { getArchivedLatestSeasonNumber } from '../../../website/src/core/blitzkit/getArchivedLatestSeasonNumber';
+import getArchivedRatingInfo from '../../../website/src/core/blitzkit/getArchivedRatingInfo';
+import { getArchivedRatingLeaderboard } from '../../../website/src/core/blitzkit/getArchivedRatingLeaderboard';
+import getArchivedRatingMidnightLeaderboard from '../../../website/src/core/blitzkit/getArchivedRatingMidnightLeaderboard';
+import { UserError } from '../../../website/src/hooks/userError';
 import CommandWrapper from '../components/CommandWrapper';
 import * as Leaderboard from '../components/Leaderboard';
 import TitleBar from '../components/TitleBar';
-import { LEAGUES } from '../constants/leagues';
-import { FIRST_MINIMAL_ARCHIVED_RATING_SEASON } from '../constants/rating';
-import { Region } from '../constants/regions';
-import { getAccountInfo } from '../core/blitz/getAccountInfo';
-import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
-import getRatingInfo from '../core/blitz/getRatingInfo';
-import { getRatingLeague } from '../core/blitz/getRatingLeague';
-import { getRatingNeighbors } from '../core/blitz/getRatingNeighbors';
-import { isOnGoingRatingSeason } from '../core/blitz/isOnGoingRatingSeason';
-import { getArchivedLatestSeasonNumber } from '../core/blitzkit/getArchivedLatestSeasonNumber';
-import getArchivedRatingInfo from '../core/blitzkit/getArchivedRatingInfo';
-import { getArchivedRatingLeaderboard } from '../core/blitzkit/getArchivedRatingLeaderboard';
-import getArchivedRatingMidnightLeaderboard from '../core/blitzkit/getArchivedRatingMidnightLeaderboard';
 import addRegionChoices from '../core/discord/addRegionChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';
@@ -28,9 +32,7 @@ import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { localizationObject } from '../core/discord/localizationObject';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { translator } from '../core/localization/translator';
-import { BkrlDiscriminatedEntries } from '../core/streams/bkrl';
 import { CommandRegistry } from '../events/interactionCreate';
-import { UserError } from '../hooks/userError';
 
 export interface RatingPlayer {
   spa_id: number;
@@ -254,7 +256,7 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                           name_localizations: localizationObject(
                             `common.leagues.${name}`,
                           ),
-                        }) satisfies APIApplicationCommandOptionChoice<string>,
+                        } satisfies APIApplicationCommandOptionChoice<string>),
                     ),
                   )
                   .setRequired(true);
@@ -277,8 +279,8 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
         const season = seasonOption
           ? parseInt(seasonOption)
           : onGoingSeason
-            ? latestArchivedSeasonNumber + 1
-            : latestArchivedSeasonNumber;
+          ? latestArchivedSeasonNumber + 1
+          : latestArchivedSeasonNumber;
         const isCurrentSeason = season === latestArchivedSeasonNumber + 1;
         let titleName: string;
         let titleImage: string | undefined;
@@ -311,7 +313,7 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                       position: player.number,
                       clan: player.clan_tag,
                       nickname: player.nickname,
-                    }) satisfies SimplifiedPlayer,
+                    } satisfies SimplifiedPlayer),
                 ),
               )
             : await getArchivedRatingLeaderboard(region, season!).then(
@@ -347,7 +349,7 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                             'bot.commands.rating_leaderboard.body.deleted_player',
                             [`${player.id}`],
                           ),
-                      }) satisfies SimplifiedPlayer,
+                      } satisfies SimplifiedPlayer),
                   );
                 },
               );
@@ -396,7 +398,7 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                         score: player.score,
                         clan: player.clan_tag,
                         nickname: player.nickname,
-                      }) satisfies SimplifiedPlayer,
+                      } satisfies SimplifiedPlayer),
                   ),
               )
             : await getArchivedRatingLeaderboard(region, season!).then(

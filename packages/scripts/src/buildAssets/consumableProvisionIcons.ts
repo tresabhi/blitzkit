@@ -2,12 +2,12 @@ import { existsSync } from 'fs';
 import sharp from 'sharp';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
-import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
-import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
-import { commitAssets } from '../../src/core/blitzkit/commitAssets';
-import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
 import { DATA } from './constants';
 import { ConsumablesCommon, ProvisionsCommon } from './definitions';
+import { readXMLDVPL } from '../core/blitz/readXMLDVPL';
+import { readYAMLDVPL } from '../core/blitz/readYAMLDVPL';
+import { commitAssets } from '../core/github/commitAssets';
+import { FileChange } from '../core/github/commitMultipleFiles';
 
 interface Mappings {
   Header: { version: number };

@@ -1,5 +1,5 @@
-import { EquipmentMatrix } from '../../packages/website/src/stores/duel';
-import { EquipmentPreset } from '../core/blitzkit/equipmentDefinitions';
+import { EquipmentPreset } from '@blitzkit/core';
+import { EquipmentMatrix } from '../stores/duel';
 
 export function useAppliedEquipments(
   matrix: EquipmentMatrix,

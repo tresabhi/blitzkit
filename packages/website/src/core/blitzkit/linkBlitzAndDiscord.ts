@@ -1,4 +1,4 @@
-import { usersDatabase } from '../../databases/users';
+import { usersDatabase } from '@blitzkit/core';
 import { flagUserActivity } from './flagUserActivity';
 
 export async function linkBlitzAndDiscord(discordId: bigint, blitzId: number) {

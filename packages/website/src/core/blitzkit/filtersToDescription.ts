@@ -1,8 +1,11 @@
+import {
+  StatFilters,
+  tankDefinitions,
+  Tier,
+  TIER_ROMAN_NUMERALS,
+} from '@blitzkit/core';
 import { Locale } from 'discord.js';
-import { translator } from '../localization/translator';
-import { StatFilters } from '../statistics/filterStats';
-import { Tier, tankDefinitions } from './tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from './tankDefinitions/constants';
+import { translator } from '../../../../bot/src/core/localization/translator';
 
 export async function filtersToDescription(
   { nation, tier, tankType, treeType, tank }: StatFilters,

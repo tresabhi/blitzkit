@@ -1,9 +1,9 @@
+import { BlitzStats } from '@blitzkit/core';
 import isNumber from '@blitzkit/core/src/math/isNumber';
+import getWN8Percentile from '@blitzkit/core/src/statistics/getWN8Percentile';
 import { Locale } from 'discord.js';
-import { SupplementaryStats } from '../../core/blitz/getAccountInfo';
+import { SupplementaryStats } from '../../../../website/src/core/blitz/getAccountInfo';
 import { translator } from '../../core/localization/translator';
-import { BlitzStats } from '../../core/statistics/compositeStats/constants';
-import getWN8Percentile from '../../core/statistics/getWN8Percentile';
 import { Card } from './components/Card';
 import { Root } from './components/Root';
 import { Row } from './components/Row';

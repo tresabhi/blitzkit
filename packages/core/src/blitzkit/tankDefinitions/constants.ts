@@ -1,4 +1,4 @@
-import { CrewMember, GunDefinition, ShellType, Tier } from '.';
+import { CrewMember, GunDefinition, ShellType, TankClass, Tier } from '.';
 
 export const SHELL_NAMES: Record<ShellType, string> = {
   ap: 'AP',

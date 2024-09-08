@@ -1,6 +1,13 @@
 'use client';
 
 import {
+  IndividualTankStats,
+  UNLOCALIZED_REGION_NAMES_SHORT,
+  deltaTankStats,
+  idToRegion,
+  tankDefinitions,
+} from '@blitzkit/core';
+import {
   ArrowDownIcon,
   MagnifyingGlassIcon,
   PlusIcon,
@@ -22,7 +29,6 @@ import { debounce } from 'lodash';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
 import { TankRowHeaderCell } from '../../../components/TankRowHeaderCell';
-import { UNLOCALIZED_REGION_NAMES_SHORT } from '../../../constants/regions';
 import {
   STAT_KEYS,
   STAT_NAMES,
@@ -36,15 +42,11 @@ import {
   getAccountInfo,
 } from '../../../core/blitz/getAccountInfo';
 import getTankStats from '../../../core/blitz/getTankStats';
-import { idToRegion } from '../../../core/blitz/idToRegion';
 import searchPlayersAcrossRegions, {
   AccountListWithServer,
 } from '../../../core/blitz/searchPlayersAcrossRegions';
-import { tankDefinitions } from '../../../core/blitzkit/tankDefinitions';
 import { tankAverages } from '../../../core/blitzstars/tankAverages';
-import { deltaTankStats } from '../../../core/statistics/deltaTankStats';
 import * as Session from '../../../stores/session';
-import { IndividualTankStats } from '../../../types/tanksStats';
 
 export default function Page({
   searchParams,

@@ -1,20 +1,20 @@
 'use client';
 
+import {
+  averageDefinitionsArray,
+  formatCompact,
+  TANK_CLASSES,
+  TankClass,
+  tankDefinitions,
+  Tier,
+  TIER_ROMAN_NUMERALS,
+} from '@blitzkit/core';
+import strings from '@blitzkit/core/lang/en-US.json';
 import { ResponsiveBar } from '@nivo/bar';
 import { Box, Flex, Heading } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { use } from 'react';
-import { TankClass } from '../../../../components/Tanks';
-import { TANK_CLASSES } from '../../../../components/Tanks/components/Item/constants';
-import { averageDefinitionsArray } from '../../../../core/blitzkit/averageDefinitions';
-import {
-  tankDefinitions,
-  Tier,
-} from '../../../../core/blitzkit/tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
-import { formatCompact } from '../../../../core/math/formatCompact';
 import { nivoTheme } from '../../../../core/nivo/theme';
-import strings from '../../../../lang/en-US.json';
 
 export function TierBreakdown() {
   const awaitedAverageDefinitionsArray = use(averageDefinitionsArray);

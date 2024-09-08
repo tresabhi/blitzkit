@@ -1,5 +1,5 @@
+import { assertSecret } from '@blitzkit/core';
 import { NextResponse } from 'next/server';
-import { assertSecret } from '../../../../../core/blitzkit/secret';
 
 export async function GET(
   request: Request,

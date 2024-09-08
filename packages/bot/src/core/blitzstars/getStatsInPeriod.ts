@@ -1,11 +1,9 @@
+import { BlitzStats, emptyAllStats, Region } from '@blitzkit/core';
 import { Locale } from 'discord.js';
-import { Region } from '../../../../../src/constants/regions';
 import getTankHistories, {
   TankHistories,
   TankHistoryRaw,
-} from '../../../../../src/core/blitzkit/getTankHistories';
-import { BlitzStats } from '../../../../../src/core/statistics/compositeStats/constants';
-import { emptyAllStats } from './constants';
+} from './getTankHistories';
 
 const emptyTankHistoryNode: TankHistoryRaw = {
   account_id: 0,
@@ -106,5 +104,3 @@ export default async function getStatsInPeriod(
 
   return { diff, order } satisfies DiffedTankStats;
 }
-
-export * from './constants';

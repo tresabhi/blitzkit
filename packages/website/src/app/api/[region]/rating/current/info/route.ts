@@ -1,5 +1,5 @@
+import { Region } from '@blitzkit/core';
 import { NextResponse } from 'next/server';
-import { Region } from '../../../../../../constants/regions';
 import getRatingInfo from '../../../../../../core/blitz/getRatingInfo';
 
 export async function GET(

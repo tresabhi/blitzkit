@@ -1,6 +1,4 @@
-import { Region } from '../../constants/regions';
-import { WARGAMING_APPLICATION_ID } from '../../constants/wargamingApplicationID';
-import { idToRegion } from './idToRegion';
+import { Region, assertSecret, idToRegion } from '@blitzkit/core';
 
 export async function isValidBlitzId(id: number, token?: string) {
   let region: Region;
@@ -12,9 +10,9 @@ export async function isValidBlitzId(id: number, token?: string) {
   }
 
   const json = await fetch(
-    `https://api.wotblitz.${region}/wotb/account/info/?account_id=${
-      id
-    }&application_id=${WARGAMING_APPLICATION_ID}${
+    `https://api.wotblitz.${region}/wotb/account/info/?account_id=${id}&application_id=${assertSecret(
+      process.env.NEXT_PUBLIC_WARGAMING_APPLICATION_ID,
+    )}${
       token === undefined ? '' : `&access_token=${token}`
     }&fields=account_id%2C-account_id`,
   ).then(

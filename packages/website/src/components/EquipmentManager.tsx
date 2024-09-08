@@ -1,6 +1,7 @@
 import { EquipmentPreset } from '@blitzkit/core/src/blitzkit/equipmentDefinitions';
 import { Flex } from '@radix-ui/themes';
 import { cloneDeep } from 'lodash';
+import { EquipmentMatrix } from '../stores/duel';
 import { EquipmentButton } from './ModuleButtons/EquipmentButton';
 
 interface EquipmentManagerProps {

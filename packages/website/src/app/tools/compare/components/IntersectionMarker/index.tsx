@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { theme } from '../../../../../stitches.config';
+import { theme } from '../../../../../../../bot/src/stitches.config';
 import { insertionMarkers } from './constants';
 
 export function InsertionMarker({ index }: { index: number }) {

@@ -1,11 +1,10 @@
 'use client';
 
+import { averageDefinitions, formatCompact } from '@blitzkit/core';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { Callout, Flex } from '@radix-ui/themes';
 import { use } from 'react';
-import { averageDefinitions } from '../../../../core/blitzkit/averageDefinitions';
 import { discoveredIdsDefinitions } from '../../../../core/blitzkit/discoveredIdDefinitions';
-import { formatCompact } from '../../../../core/math/formatCompact';
 
 export function Info() {
   const awaitedDiscoveredIdsDefinitions = use(discoveredIdsDefinitions);

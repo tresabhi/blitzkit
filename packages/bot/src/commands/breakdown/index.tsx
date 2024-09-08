@@ -1,4 +1,4 @@
-import { getBlitzStarsLinkButton } from '../../core/blitzstars/getBlitzStarsLinkButton';
+import { getBlitzStarsLinkButton } from '../../../../website/src/core/blitzstars/getBlitzStarsLinkButton';
 import addPeriodicFilterOptions from '../../core/discord/addPeriodicFilterOptions';
 import addUsernameChoices from '../../core/discord/addUsernameChoices';
 import autocompleteTanks from '../../core/discord/autocompleteTanks';

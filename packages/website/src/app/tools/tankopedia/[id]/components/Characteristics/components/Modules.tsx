@@ -1,9 +1,14 @@
 import {
   asset,
   formatCompact,
+  ModuleDefinition,
+  ModuleType,
+  TankDefinition,
   tankDefinitions,
   tankIcon,
+  Tier,
   TIER_ROMAN_NUMERALS,
+  Unlock,
 } from '@blitzkit/core';
 import {
   Button,

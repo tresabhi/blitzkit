@@ -1,8 +1,8 @@
 import { CaretLeftIcon, CaretRightIcon } from '@radix-ui/react-icons';
 import { Flex, IconButton, TextField } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
-import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
 import * as TankopediaPersistent from '../../../../stores/tankopediaPersistent';
+import { TankDefinition } from '@blitzkit/core';
 
 interface PageTurnerProps {
   searchedList: TankDefinition[];

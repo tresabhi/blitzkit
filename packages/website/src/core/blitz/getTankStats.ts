@@ -1,5 +1,4 @@
-import { Region } from '../../constants/regions';
-import { TanksStats } from '../../types/tanksStats';
+import { Region, TanksStats } from '@blitzkit/core';
 import fetchBlitz, { FetchBlitzParams } from './fetchBlitz';
 
 export default async function getTankStats(

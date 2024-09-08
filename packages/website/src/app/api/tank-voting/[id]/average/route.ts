@@ -1,7 +1,6 @@
+import { tankDefinitions, usersDatabase } from '@blitzkit/core';
 import { NextRequest, NextResponse } from 'next/server';
 import { isValidBlitzId } from '../../../../../core/blitz/isValidBlitzId';
-import { tankDefinitions } from '../../../../../core/blitzkit/tankDefinitions';
-import { usersDatabase } from '../../../../../databases/users';
 import {
   BlitzkitResponse,
   BlitzkitResponseError,

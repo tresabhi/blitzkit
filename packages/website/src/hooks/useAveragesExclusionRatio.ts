@@ -1,5 +1,5 @@
+import { averageDefinitions } from '@blitzkit/core';
 import { use } from 'react';
-import { averageDefinitions } from '../core/blitzkit/averageDefinitions';
 import { discoveredIdsDefinitions } from '../core/blitzkit/discoveredIdDefinitions';
 
 export function useAveragesExclusionRatio() {

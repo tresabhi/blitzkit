@@ -1,4 +1,4 @@
-import { Tier } from '../core/blitzkit/tankDefinitions';
+import { Tier } from '@blitzkit/core';
 import { theme } from '../stitches.config';
 
 export type TierWeightsRecord = Partial<Record<Tier, number>>;

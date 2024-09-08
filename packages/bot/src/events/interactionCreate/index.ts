@@ -1,3 +1,4 @@
+import { assertSecret } from '@blitzkit/core';
 import {
   AttachmentBuilder,
   AutocompleteInteraction,
@@ -13,7 +14,7 @@ import {
   SlashCommandOptionsOnlyBuilder,
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
-import { assertSecret } from '../../../packages/core/src/blitzkit/assertSecret';
+import { RenderConfiguration } from '../../../../website/src/core/blitzkit/renderConfiguration';
 import { aboutCommand } from '../../commands/about';
 import { breakdownCommand } from '../../commands/breakdown';
 import { debugCommand } from '../../commands/debug';
@@ -33,7 +34,6 @@ import { searchClansCommand } from '../../commands/searchClans';
 import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { statsCommand } from '../../commands/stats';
 import { todayCommand } from '../../commands/today';
-import { RenderConfiguration } from '../../core/blitzkit/renderConfiguration';
 import handleAutocomplete from './handlers/autocomplete';
 import handleButton from './handlers/button';
 import handleChatInputCommand from './handlers/chatInputCommand';

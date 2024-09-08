@@ -1,10 +1,10 @@
 import { Locale } from 'discord.js';
+import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
+import { getClanInfo } from '../../../website/src/core/blitz/getClanInfo';
 import CommandWrapper from '../components/CommandWrapper';
 import GenericStats from '../components/GenericStats';
 import NoData from '../components/NoData';
 import TitleBar from '../components/TitleBar';
-import { getAccountInfo } from '../core/blitz/getAccountInfo';
-import { getClanInfo } from '../core/blitz/getClanInfo';
 import addClanChoices from '../core/discord/addClanChoices';
 import autocompleteClan from '../core/discord/autocompleteClan';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
@@ -72,7 +72,9 @@ export const inactiveCommand = new Promise<CommandRegistry>((resolve) => {
           <TitleBar
             title={clanInfo.name}
             image={`https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanInfo.emblem_set_id}.png`}
-            description={`${translate('bot.commands.inactive.body.subtitle', [`${threshold}`])} • ${new Date().toLocaleDateString(interaction.locale)}`}
+            description={`${translate('bot.commands.inactive.body.subtitle', [
+              `${threshold}`,
+            ])} • ${new Date().toLocaleDateString(interaction.locale)}`}
           />
 
           {!hasInactiveMembers && (

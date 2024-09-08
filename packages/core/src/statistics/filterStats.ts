@@ -1,4 +1,7 @@
-import { tankDefinitions } from '../blitzkit/tankDefinitions';
+import { DiffedTankStats } from '../../../bot/src/core/blitzstars/getStatsInPeriod';
+import { SupplementaryStats } from '../../../website/src/core/blitz/getAccountInfo';
+import { tankAverages } from '../../../website/src/core/blitzstars/tankAverages';
+import { tankDefinitions, TreeType } from '../blitzkit/tankDefinitions';
 import calculateWN8 from './calculateWN8';
 import sumStats from './sumStats';
 

@@ -1,12 +1,12 @@
+import { NATION_IDS } from '@blitzkit/core';
 import { readdir } from 'fs/promises';
 import sharp from 'sharp';
 import { Vector3Tuple } from 'three';
-import { NATION_IDS } from '../../src/constants/nations';
-import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
-import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
-import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
-import { commitAssets } from '../../src/core/blitzkit/commitAssets';
-import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
+import { readDVPLFile } from '../core/blitz/readDVPLFile';
+import { readXMLDVPL } from '../core/blitz/readXMLDVPL';
+import { readYAMLDVPL } from '../core/blitz/readYAMLDVPL';
+import { commitAssets } from '../core/github/commitAssets';
+import { FileChange } from '../core/github/commitMultipleFiles';
 import { DATA } from './constants';
 import { VehicleDefinitionList } from './definitions';
 

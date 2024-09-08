@@ -1,22 +1,22 @@
-import { Locale, escapeMarkdown } from 'discord.js';
+import {
+  asset,
+  equipmentPriceMatrix,
+  TANK_ICONS,
+  tankDefinitions,
+  TIER_ROMAN_NUMERALS,
+} from '@blitzkit/core';
+import { escapeMarkdown, Locale } from 'discord.js';
+import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
+import getTankStats from '../../../website/src/core/blitz/getTankStats';
+import resolveTankId from '../../../website/src/core/blitz/resolveTankId';
+import { buildTechTreeLine } from '../../../website/src/core/blitzkit/buildTechTreeLine';
+import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
+import { iconPng } from '../../../website/src/core/blitzkit/iconPng';
+import { resolveAncestry } from '../../../website/src/core/blitzkit/resolveAncestry';
+import { tankIconPng } from '../../../website/src/core/blitzkit/tankIconPng';
 import CommandWrapper from '../components/CommandWrapper';
 import TitleBar from '../components/TitleBar';
-import { equipmentPriceMatrix } from '../constants/equipmentPrice';
-import { getAccountInfo } from '../core/blitz/getAccountInfo';
-import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
-import getTankStats from '../core/blitz/getTankStats';
-import resolveTankId from '../core/blitz/resolveTankId';
-import { asset } from '../core/blitzkit/asset';
-import { buildTechTreeLine } from '../core/blitzkit/buildTechTreeLine';
-import { emblemURL } from '../core/blitzkit/emblemURL';
-import { iconPng } from '../core/blitzkit/iconPng';
-import { resolveAncestry } from '../core/blitzkit/resolveAncestry';
-import { tankDefinitions } from '../core/blitzkit/tankDefinitions';
-import {
-  TANK_ICONS,
-  TIER_ROMAN_NUMERALS,
-} from '../core/blitzkit/tankDefinitions/constants';
-import { tankIconPng } from '../core/blitzkit/tankIconPng';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
@@ -220,7 +220,9 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
           <TitleBar
             title={nickname}
             image={clanImage}
-            description={`${t`bot.commands.research.body.subtitle`} • ${targetTank.name}`}
+            description={`${t`bot.commands.research.body.subtitle`} • ${
+              targetTank.name
+            }`}
           />
 
           <div

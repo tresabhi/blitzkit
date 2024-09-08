@@ -1,15 +1,17 @@
 import { readdir } from 'fs/promises';
 import sharp from 'sharp';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
-import { commitAssets } from '../../src/core/blitzkit/commitAssets';
-import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
+import { commitAssets } from '../core/github/commitAssets';
+import { FileChange } from '../core/github/commitMultipleFiles';
 import { DATA } from './constants';
 
 export async function moduleIcons() {
   console.log('Building module icons...');
 
   const changes = await Promise.all(
-    (await readdir(`${DATA}/Gfx/UI/ModulesTechTree`))
+    (
+      await readdir(`${DATA}/Gfx/UI/ModulesTechTree`)
+    )
       .filter(
         (file) =>
           !file.endsWith('@2x.packed.webp.dvpl') && file.startsWith('vehicle'),

@@ -1,5 +1,5 @@
+import { assertSecret } from '@blitzkit/core';
 import { NextResponse } from 'next/server';
-import { assertSecret } from '../../../../../core/blitzkit/secret';
 
 interface PatreonMembershipResponse {
   data: {

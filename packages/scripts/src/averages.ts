@@ -1,23 +1,22 @@
-import { chunk, times } from 'lodash';
-import { Region, REGIONS } from '../src/constants/regions';
-import { getAccountInfo } from '../src/core/blitz/getAccountInfo';
-import getTankStats from '../src/core/blitz/getTankStats';
-import { idToRegion } from '../src/core/blitz/idToRegion';
 import {
   AverageDefinitions,
   AverageDefinitionsEntry,
   AverageDefinitionsEntrySubPartial,
   AverageDefinitionsManifest,
+  IndividualTankStats,
+  REGIONS,
+  Region,
   Samples,
-} from '../src/core/blitzkit/averageDefinitions';
-import {
   averageDefinitionsAllStatsKeys,
   emptySamples,
-} from '../src/core/blitzkit/averageDefinitions/constants';
-import { commitAssets } from '../src/core/blitzkit/commitAssets';
-import { fetchPreDiscoveredIds } from '../src/core/blitzkit/fetchPreDiscoveredIds';
-import { encodeToBase64 } from '../src/core/protobuf/encodeToBase64';
-import { IndividualTankStats } from '../src/types/tanksStats';
+  encodeProtobufToBase64,
+  idToRegion,
+} from '@blitzkit/core';
+import { chunk, times } from 'lodash';
+import { getAccountInfo } from '../../website/src/core/blitz/getAccountInfo';
+import getTankStats from '../../website/src/core/blitz/getTankStats';
+import { commitAssets } from './core/github/commitAssets';
+import { fetchPreDiscoveredIds } from './core/github/fetchPreDiscoveredIds';
 
 interface DataPoint {
   x: number;
@@ -130,7 +129,9 @@ times(THREADS, async () => {
 
 async function postWork() {
   console.log(
-    `Generating statistics based on ${samples.d_120.toLocaleString()} players (${samples.total.toLocaleString()} checked in total) and ${tankIds.length} tanks...`,
+    `Generating statistics based on ${samples.d_120.toLocaleString()} players (${samples.total.toLocaleString()} checked in total) and ${
+      tankIds.length
+    } tanks...`,
   );
 
   const averages: Record<number, AverageDefinitionsEntry> = {};
@@ -224,7 +225,7 @@ async function postWork() {
   commitAssets('averages', [
     {
       path: `averages/${latest}.pb`,
-      content: await encodeToBase64(
+      content: await encodeProtobufToBase64(
         'average_definitions',
         'blitzkit.AverageDefinitions',
         averageDefinitions,

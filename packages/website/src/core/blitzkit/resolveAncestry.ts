@@ -1,4 +1,4 @@
-import { tankDefinitions } from './tankDefinitions';
+import { tankDefinitions } from '@blitzkit/core';
 
 export async function resolveAncestry(id: number) {
   const awaitedTankDefinitions = await tankDefinitions;

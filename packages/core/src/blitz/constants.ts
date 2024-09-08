@@ -1,3 +1,5 @@
+import { BlitzStats } from '../statistics';
+
 export const TREE_TYPES = ['researchable', 'premium', 'collector'] as const;
 
 export const TANK_CLASSES = [

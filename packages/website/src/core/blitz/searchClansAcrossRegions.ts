@@ -1,5 +1,5 @@
-import { Region } from '../../constants/regions';
-import { ClanList } from '../../types/clanList';
+import { Region } from '@blitzkit/core';
+import { ClanList } from '../../../../bot/src/types/clanList';
 import fetchBlitz from './fetchBlitz';
 
 export default async function searchClansAcrossRegions(

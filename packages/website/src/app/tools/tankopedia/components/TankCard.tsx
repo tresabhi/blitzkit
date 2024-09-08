@@ -1,15 +1,19 @@
 import {
   asset,
   modelDefinitions,
+  normalizeBoundingBox,
+  resolveDpm,
   resolveNearPenetration,
   TankDefinition,
   tankIcon,
+  unionBoundingBox,
 } from '@blitzkit/core';
 import { Flex, Text } from '@radix-ui/themes';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import Link from 'next/link';
 import { use, useMemo } from 'react';
 import { classIcons } from '../../../../components/ClassIcon';
+import { resolveReload } from '../../../../core/blitzkit/resolveReload';
 import * as TankopediaSort from '../../../../stores/tankopediaSort';
 import * as styles from './TankCard.css';
 

@@ -1,12 +1,14 @@
 'use client';
 
+import {
+  IndividualTankStats,
+  Region,
+  createNextSafeStore,
+} from '@blitzkit/core';
 import { merge } from 'lodash';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Region } from '../constants/regions';
 import { Stat } from '../core/blitz/generateStats';
-import { createNextSafeStore } from '../core/zustand/createNextSafeStore';
-import { IndividualTankStats } from '../types/tanksStats';
 
 interface SessionBase {
   columns: Stat[];

@@ -1,24 +1,25 @@
+import {
+  BkrlBaseEntry,
+  BkrlFormat,
+  BkrlSuperset1Entry,
+  BkrlWriteStream,
+  CdonValue,
+  CdonWriteStream,
+  RegionSubdomain,
+  superCompress,
+} from '@blitzkit/core';
 import { chunk } from 'lodash';
 import { argv } from 'process';
 import {
   RatingInfo,
   RatingNeighbors,
   RatingPlayer,
-} from '../src/commands/ratingLeaderboard';
-import { RegionSubdomain } from '../src/constants/regions';
-import { getAccountInfo } from '../src/core/blitz/getAccountInfo';
-import regionSubdomainToRegion from '../src/core/blitz/regionSubdomainToRegion';
-import { commitAssets } from '../src/core/blitzkit/commitAssets';
-import { FileChange } from '../src/core/blitzkit/commitMultipleFiles.js';
-import { patientFetchJSON } from '../src/core/blitzkit/patientFetchJSON';
-import { superCompress } from '../src/core/blitzkit/superCompress';
-import {
-  BkrlBaseEntry,
-  BkrlFormat,
-  BkrlSuperset1Entry,
-  BkrlWriteStream,
-} from '../src/core/streams/bkrl';
-import { CdonValue, CdonWriteStream } from '../src/core/streams/cdon';
+} from '../../bot/src/commands/ratingLeaderboard';
+import { getAccountInfo } from '../../website/src/core/blitz/getAccountInfo';
+import regionSubdomainToRegion from '../../website/src/core/blitz/regionSubdomainToRegion';
+import { patientFetchJSON } from '../../website/src/core/blitzkit/patientFetchJSON';
+import { commitAssets } from './core/github/commitAssets';
+import { FileChange } from './core/github/commitMultipleFiles';
 
 /*
  * Central North American Time (UTC-5): use 0 5 * * *.

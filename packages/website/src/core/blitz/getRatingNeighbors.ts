@@ -1,5 +1,5 @@
-import { RatingNeighbors } from '../../commands/ratingLeaderboard';
-import { Region } from '../../constants/regions';
+import { Region } from '@blitzkit/core';
+import { RatingNeighbors } from '../../../../bot/src/commands/ratingLeaderboard';
 import { patientFetch } from '../blitzkit/patientFetch';
 import { withCORSProxy } from '../blitzkit/withCORSProxy';
 import regionToRegionSubdomain from './regionToRegionSubdomain';

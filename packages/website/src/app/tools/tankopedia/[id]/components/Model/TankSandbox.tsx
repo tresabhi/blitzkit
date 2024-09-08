@@ -159,7 +159,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
       <Canvas
         frameloop={onScreen ? 'demand' : 'never'}
         gl={{
-          clippingPlanes: Object.freeze([]),
+          clippingPlanes: [],
           localClippingEnabled: true,
           preserveDrawingBuffer: true,
         }}

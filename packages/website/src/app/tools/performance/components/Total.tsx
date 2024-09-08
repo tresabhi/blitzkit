@@ -1,12 +1,12 @@
-import { Table } from '@radix-ui/themes';
-import { memo, use, useCallback } from 'react';
-import { StickyRowHeaderCell } from '../../../../components/StickyRowHeaderCell';
 import {
   averageDefinitions,
   AverageDefinitionsEntryWithId,
-} from '../../../../core/blitzkit/averageDefinitions';
-import { formatCompact } from '../../../../core/math/formatCompact';
-import { BlitzkitStats } from '../../../../core/statistics/compositeStats/constants';
+  BlitzkitStats,
+  formatCompact,
+} from '@blitzkit/core';
+import { Table } from '@radix-ui/themes';
+import { memo, use, useCallback } from 'react';
+import { StickyRowHeaderCell } from '../../../../components/StickyRowHeaderCell';
 import { useAveragesExclusionRatio } from '../../../../hooks/useAveragesExclusionRatio';
 import * as TankPerformancePersistent from '../../../../stores/tankPerformancePersistent';
 

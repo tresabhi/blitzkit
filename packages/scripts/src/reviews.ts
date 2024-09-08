@@ -1,22 +1,25 @@
+import {
+  asset,
+  decodeProtobuf,
+  encodeProtobufToBase64,
+  Reviews,
+  Video,
+  youtubers,
+} from '@blitzkit/core';
 import { readdir } from 'fs/promises';
 import { google } from 'googleapis';
 import { cloneDeep, uniqBy } from 'lodash';
 import { parse as parseYaml } from 'yaml';
-import { youtubers } from '../src/constants/youtubers';
-import { readXMLDVPL } from '../src/core/blitz/readXMLDVPL';
-import { readYAMLDVPL } from '../src/core/blitz/readYAMLDVPL';
-import { toUniqueId } from '../src/core/blitz/toUniqueId';
-import { asset } from '../src/core/blitzkit/asset';
-import { commitAssets } from '../src/core/blitzkit/commitAssets';
-import { Reviews, Video } from '../src/core/blitzkit/reviews';
-import { decode } from '../src/core/protobuf/decode';
-import { encodeToBase64 } from '../src/core/protobuf/encodeToBase64';
+import { toUniqueId } from '../../website/src/core/blitz/toUniqueId';
 import { DATA } from './buildAssets/constants';
 import {
   BlitzStrings,
   botPattern,
   VehicleDefinitionList,
 } from './buildAssets/definitions';
+import { readXMLDVPL } from './core/blitz/readXMLDVPL';
+import { readYAMLDVPL } from './core/blitz/readYAMLDVPL';
+import { commitAssets } from './core/github/commitAssets';
 
 const MAX_QUERIES = 128;
 
@@ -25,7 +28,11 @@ console.log('Finding reviews...');
 const currentReviews = await fetch(asset('definitions/reviews.pb'))
   .then((response) => response.arrayBuffer())
   .then((buffer) =>
-    decode<Reviews>('reviews', 'blitzkit.Reviews', new Uint8Array(buffer)),
+    decodeProtobuf<Reviews>(
+      'reviews',
+      'blitzkit.Reviews',
+      new Uint8Array(buffer),
+    ),
   );
 const auth = await google.auth.getClient({
   scopes: ['https://www.googleapis.com/auth/youtube.readonly'],
@@ -111,7 +118,7 @@ for (const tank of tanksSanitized) {
           ({
             id: item.id!.videoId!,
             author: item.snippet!.channelId!,
-          }) satisfies Video,
+          } satisfies Video),
       ),
     };
 
@@ -124,7 +131,11 @@ for (const tank of tanksSanitized) {
   }
 }
 
-const content = await encodeToBase64('reviews', 'blitzkit.Reviews', reviews);
+const content = await encodeProtobufToBase64(
+  'reviews',
+  'blitzkit.Reviews',
+  reviews,
+);
 
 await commitAssets('reviews', [
   { content, encoding: 'base64', path: 'definitions/reviews.pb' },

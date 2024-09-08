@@ -1,9 +1,9 @@
+import { TankDefinition } from '@blitzkit/core';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Flex, Spinner, TextField } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { KeyboardEventHandler, useCallback, useRef } from 'react';
-import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
 import * as TankFilters from '../../../../stores/tankFilters';
 import { QuickLink } from './QuickLink';
 import { Sort } from './Sort';

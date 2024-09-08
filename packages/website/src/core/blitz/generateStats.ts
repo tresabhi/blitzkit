@@ -1,5 +1,5 @@
-import calculateWN8 from '../statistics/calculateWN8';
-import { BlitzStats } from '../statistics/compositeStats/constants';
+import { BlitzStats } from '@blitzkit/core';
+import calculateWN8 from '@blitzkit/core/src/statistics/calculateWN8';
 
 export type Stat = keyof ReturnType<typeof generateStats>;
 

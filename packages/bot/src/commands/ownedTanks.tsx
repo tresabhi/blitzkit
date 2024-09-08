@@ -1,16 +1,16 @@
-import { gameDefinitions } from '@blitzkit/core/src/blitzkit/gameDefinitions';
-import { chunk } from 'lodash';
-import markdownEscape from 'markdown-escape';
-import { TANK_CLASSES } from '../components/Tanks/components/Item/constants';
-import { getAccountInfo } from '../core/blitz/getAccountInfo';
-import getTankStats from '../core/blitz/getTankStats';
 import {
+  TANK_CLASSES,
+  TIER_ROMAN_NUMERALS,
   TankDefinition,
   Tier,
   flags,
   tankDefinitions,
-} from '../core/blitzkit/tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from '../core/blitzkit/tankDefinitions/constants';
+} from '@blitzkit/core';
+import { gameDefinitions } from '@blitzkit/core/src/blitzkit/gameDefinitions';
+import { chunk } from 'lodash';
+import markdownEscape from 'markdown-escape';
+import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
+import getTankStats from '../../../website/src/core/blitz/getTankStats';
 import addTierChoices from '../core/discord/addTierChoices';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteUsername from '../core/discord/autocompleteUsername';

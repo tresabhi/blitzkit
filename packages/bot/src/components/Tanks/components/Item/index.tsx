@@ -1,8 +1,6 @@
+import { TankClass, TreeType } from '@blitzkit/core';
 import { theme } from '../../../../stitches.config';
-import { TANK_CLASSES, TREE_TYPES, TREE_TYPE_ICONS } from './constants';
-
-export type TankClass = (typeof TANK_CLASSES)[number];
-export type TreeType = (typeof TREE_TYPES)[number];
+import { TREE_TYPE_ICONS } from './constants';
 
 export interface ItemProps {
   tankType?: TankClass;

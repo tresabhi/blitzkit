@@ -1,5 +1,5 @@
-import { RatingPlayer } from '../../commands/ratingLeaderboard';
-import { RatingStats } from '../blitz/getAccountInfo';
+import { RatingPlayer } from '../../../bot/src/commands/ratingLeaderboard';
+import { RatingStats } from '../../../website/src/core/blitz/getAccountInfo';
 import { BkrlSuperset1Entry } from '../streams/bkrl';
 
 export function deltaBkrlBlitzStats(

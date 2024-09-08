@@ -1,6 +1,6 @@
 // a cleaner simplification of Blitz Stars' histories because it's a mess there
 
-import { BlitzStats } from '../core/statistics/compositeStats/constants';
+import { BlitzStats } from '@blitzkit/core';
 
 export interface History {
   all: BlitzStats;

@@ -1,11 +1,11 @@
 import { NodeIO } from '@gltf-transform/core';
 import { readdir } from 'fs/promises';
-import { extractModel } from '../../src/core/blitz/extractModel';
-import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
-import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
-import { toUniqueId } from '../../src/core/blitz/toUniqueId';
-import { commitAssets } from '../../src/core/blitzkit/commitAssets';
-import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
+import { extractModel } from '../../../website/src/core/blitz/extractModel';
+import { toUniqueId } from '../../../website/src/core/blitz/toUniqueId';
+import { readXMLDVPL } from '../core/blitz/readXMLDVPL';
+import { readYAMLDVPL } from '../core/blitz/readYAMLDVPL';
+import { commitAssets } from '../core/github/commitAssets';
+import { FileChange } from '../core/github/commitMultipleFiles';
 import { DATA } from './constants';
 import { VehicleDefinitionList } from './definitions';
 import { TankParameters } from './tankIcons';

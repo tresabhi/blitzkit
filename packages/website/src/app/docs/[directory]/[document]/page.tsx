@@ -1,9 +1,9 @@
+import { assertSecret } from '@blitzkit/core';
 import { Table } from '@radix-ui/themes';
 import Markdown from 'markdown-to-jsx';
 import { use } from 'react';
 import { Link } from '../../../../components/Link';
 import PageWrapper from '../../../../components/PageWrapper';
-import { assertSecret } from '../../../../core/blitzkit/secret';
 
 export default function Page({
   params,

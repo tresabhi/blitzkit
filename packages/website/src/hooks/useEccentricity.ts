@@ -1,10 +1,7 @@
+import { TankDefinition, tankDefinitions } from '@blitzkit/core';
 import { sumBy } from 'lodash';
 import { use, useMemo } from 'react';
-import * as Duel from '../../packages/website/src/stores/duel';
-import {
-  TankDefinition,
-  tankDefinitions,
-} from '../core/blitzkit/tankDefinitions';
+import * as Duel from '../stores/duel';
 
 export enum UseEccentricityMode {
   Tier,

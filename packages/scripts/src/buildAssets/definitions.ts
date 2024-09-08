@@ -1,47 +1,39 @@
+import {
+  assertSecret,
+  CamouflageDefinitions,
+  ConsumableDefinitions,
+  ConsumableEntry,
+  Crew,
+  CrewMember,
+  EquipmentDefinitions,
+  EquipmentPreset,
+  EquipmentRow,
+  GameDefinitions,
+  GunDefinition,
+  ModelArmor,
+  ModelDefinitions,
+  ProvisionDefinitions,
+  ProvisionEntry,
+  ShellType,
+  superCompress,
+  TankClass,
+  TankDefinitions,
+  TankFilterDefinitionCategory,
+  TankPrice,
+  Tier,
+  Unlock,
+} from '@blitzkit/core';
 import { SkillDefinitions } from '@blitzkit/core/src/blitzkit/skillDefinitions';
 import { readdir } from 'fs/promises';
 import { parse as parsePath } from 'path';
 import { Vector3Tuple } from 'three';
 import { parse as parseYaml } from 'yaml';
-import { TankClass } from '../../src/components/Tanks';
-import { WARGAMING_APPLICATION_ID } from '../../src/constants/wargamingApplicationID';
-import { readStringDVPL } from '../../src/core/blitz/readStringDVPL';
-import { readXMLDVPL } from '../../src/core/blitz/readXMLDVPL';
-import { readYAMLDVPL } from '../../src/core/blitz/readYAMLDVPL';
-import { toUniqueId } from '../../src/core/blitz/toUniqueId';
-import { CamouflageDefinitions } from '../../src/core/blitzkit/camouflageDefinitions';
-import { commitAssets } from '../../src/core/blitzkit/commitAssets';
-import {
-  ConsumableDefinitions,
-  ConsumableEntry,
-  TankFilterDefinitionCategory,
-} from '../../src/core/blitzkit/consumableDefinitions';
-import {
-  EquipmentDefinitions,
-  EquipmentPreset,
-  EquipmentRow,
-} from '../../src/core/blitzkit/equipmentDefinitions';
-import { GameDefinitions } from '../../src/core/blitzkit/gameDefinitions';
-import { MapDefinitions } from '../../src/core/blitzkit/mapDefinitions';
-import {
-  ModelArmor,
-  ModelDefinitions,
-} from '../../src/core/blitzkit/modelDefinitions';
-import {
-  ProvisionDefinitions,
-  ProvisionEntry,
-} from '../../src/core/blitzkit/provisionDefinitions';
-import { superCompress } from '../../src/core/blitzkit/superCompress';
-import {
-  Crew,
-  CrewMember,
-  GunDefinition,
-  ShellType,
-  TankDefinitions,
-  TankPrice,
-  Tier,
-  Unlock,
-} from '../../src/core/blitzkit/tankDefinitions';
+import { toUniqueId } from '../../../website/src/core/blitz/toUniqueId';
+import { MapDefinitions } from '../../../website/src/core/blitzkit/mapDefinitions';
+import { readStringDVPL } from '../core/blitz/readStringDVPL';
+import { readXMLDVPL } from '../core/blitz/readXMLDVPL';
+import { readYAMLDVPL } from '../core/blitz/readYAMLDVPL';
+import { commitAssets } from '../core/github/commitAssets';
 import { DATA } from './constants';
 import { Avatar } from './skillIcons';
 import { TankParameters } from './tankIcons';
@@ -458,7 +450,9 @@ export async function definitions() {
   console.log('Building definitions...');
 
   const wargamingTankopedia = (await fetch(
-    `https://api.wotblitz.com/wotb/encyclopedia/vehicles/?application_id=${WARGAMING_APPLICATION_ID}&fields=description`,
+    `https://api.wotblitz.com/wotb/encyclopedia/vehicles/?application_id=${assertSecret(
+      process.env.NEXT_PUBLIC_WARGAMING_APPLICATION_ID,
+    )}&fields=description`,
   ).then((response) => response.json())) as {
     data: { [key: number]: { description: null | string } };
   };

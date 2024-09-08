@@ -1,7 +1,7 @@
+import { provisionDefinitions } from '@blitzkit/core';
 import { PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, SegmentedControl } from '@radix-ui/themes';
 import { use } from 'react';
-import { provisionDefinitions } from '../../../../core/blitzkit/provisionDefinitions';
 import { tankToCompareMember } from '../../../../core/blitzkit/tankToCompareMember';
 import * as CompareEphemeral from '../../../../stores/compareEphemeral';
 import * as ComparePersistent from '../../../../stores/comparePersistent';

@@ -1,6 +1,6 @@
+import { TankDefinition } from '@blitzkit/core';
 import { tankIcon } from '@blitzkit/core/src/blitzkit/tankIcon';
-import { classIcons } from '../../packages/website/src/components/ClassIcon';
-import { TankDefinition } from '../core/blitzkit/tankDefinitions';
+import { classIcons } from './ClassIcon';
 import { ExperimentIcon } from './ExperimentIcon';
 import { Link } from './Link';
 import { StickyRowHeaderCell } from './StickyRowHeaderCell';

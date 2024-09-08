@@ -1,5 +1,12 @@
 'use client';
 
+import {
+  FIRST_MINIMAL_ARCHIVED_RATING_SEASON,
+  LEAGUES,
+  Region,
+  REGIONS,
+  UNLOCALIZED_REGION_NAMES,
+} from '@blitzkit/core';
 import { blackA, orangeDark } from '@radix-ui/colors';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import {
@@ -15,16 +22,13 @@ import { produce } from 'immer';
 import { debounce, range } from 'lodash';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
-import { RatingInfo, RatingPlayer } from '../../../commands/ratingLeaderboard';
+import {
+  RatingInfo,
+  RatingPlayer,
+} from '../../../../../bot/src/commands/ratingLeaderboard';
+import { theme } from '../../../../../bot/src/stitches.config';
 import PageWrapper from '../../../components/PageWrapper';
 import { Skeleton } from '../../../components/Skeleton';
-import { LEAGUES } from '../../../constants/leagues';
-import { FIRST_MINIMAL_ARCHIVED_RATING_SEASON } from '../../../constants/rating';
-import {
-  REGIONS,
-  Region,
-  UNLOCALIZED_REGION_NAMES,
-} from '../../../constants/regions';
 import fetchBlitz from '../../../core/blitz/fetchBlitz';
 import { getClanAccountInfo } from '../../../core/blitz/getClanAccountInfo';
 import getRatingInfo from '../../../core/blitz/getRatingInfo';
@@ -38,7 +42,6 @@ import {
 import { getArchivedLatestSeasonNumber } from '../../../core/blitzkit/getArchivedLatestSeasonNumber';
 import getArchivedRatingInfo from '../../../core/blitzkit/getArchivedRatingInfo';
 import { getArchivedRatingLeaderboard } from '../../../core/blitzkit/getArchivedRatingLeaderboard';
-import { theme } from '../../../stitches.config';
 import { PageTurner } from './components/PageTurner';
 
 const ROWS_PER_PAGE = Math.floor(100 / 3);

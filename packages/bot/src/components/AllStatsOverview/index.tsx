@@ -1,14 +1,14 @@
 import { Percentile } from '@blitzkit/core/src/statistics/percentiles';
 import { Locale } from 'discord.js';
-import { SupplementaryStats } from '../../core/blitz/getAccountInfo';
-import { translator } from '../../core/localization/translator';
-import getWN8Percentile from '../../core/statistics/getWN8Percentile';
+import { SupplementaryStats } from '../../../../website/src/core/blitz/getAccountInfo';
 import { PERCENTILE_COLORS } from '../PercentileIndicator/constants';
 import { HeroStat } from './components/HeroStat';
 import {
   WN8SurroundingStat,
   WN8SurroundingStatAlign,
 } from './components/WN8SurroundingStat';
+import { translator } from '../../core/localization/translator';
+import getWN8Percentile from '@blitzkit/core/src/statistics/getWN8Percentile';
 
 export interface AllStatsOverviewProps {
   stats: {

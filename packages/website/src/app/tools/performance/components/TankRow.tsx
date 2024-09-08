@@ -1,9 +1,11 @@
+import {
+  TankDefinition,
+  averageDefinitions,
+  formatCompact,
+} from '@blitzkit/core';
 import { Table } from '@radix-ui/themes';
 import { memo, use } from 'react';
 import { TankRowHeaderCell } from '../../../../components/TankRowHeaderCell';
-import { averageDefinitions } from '../../../../core/blitzkit/averageDefinitions';
-import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
-import { formatCompact } from '../../../../core/math/formatCompact';
 import { useAveragesExclusionRatio } from '../../../../hooks/useAveragesExclusionRatio';
 import * as TankPerformancePersistent from '../../../../stores/tankPerformancePersistent';
 

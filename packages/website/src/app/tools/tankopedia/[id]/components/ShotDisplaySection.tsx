@@ -1,4 +1,5 @@
 import { Flex } from '@radix-ui/themes';
+import { ShotDisplayCard } from '../../../../../components/Armor/components/ShotDisplayCard';
 import * as TankEphemeral from '../../../../../stores/tankopediaEphemeral';
 
 export function ShotDisplaySection() {

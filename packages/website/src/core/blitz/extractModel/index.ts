@@ -1,13 +1,17 @@
+import {
+  Hierarchy,
+  Sc2ReadStream,
+  ScgReadStream,
+  Textures,
+  VertexAttribute,
+} from '@blitzkit/core';
 import { Document, Material, Node, Scene } from '@gltf-transform/core';
 import { times } from 'lodash';
 import { dirname } from 'path';
 import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
+import { readDVPLFile } from '../../../../../scripts/src/core/blitz/readDVPLFile';
 import { readTexture } from '../../blitzkit/readTexture';
 import { TextureMutation } from '../../blitzkit/readTexture/constants';
-import { Hierarchy, Sc2ReadStream, Textures } from '../../streams/sc2';
-import { ScgReadStream } from '../../streams/scg';
-import { VertexAttribute } from '../../streams/scpg';
-import { readDVPLFile } from '../readDVPLFile';
 import {
   vertexAttributeGLTFName,
   vertexAttributeGltfVectorSizes,

@@ -1,8 +1,11 @@
 import { Vector2Tuple } from 'three';
-import { TankClass, TreeType } from '../../../components/Tanks';
+import { TANK_CLASSES, TREE_TYPES } from '../../blitz/constants';
 import { asset } from '../asset';
 import { fetchCdonLz4 } from '../fetchCdonLz4';
 import { TIERS } from './constants';
+
+export type TankClass = (typeof TANK_CLASSES)[number];
+export type TreeType = (typeof TREE_TYPES)[number];
 
 export enum ShellType {
   AP = 'ap',

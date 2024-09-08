@@ -1,4 +1,4 @@
-import { usersDatabase } from '../../databases/users';
+import { usersDatabase } from '@blitzkit/core';
 
 export async function flagUserActivity(blitzId: number) {
   await usersDatabase.user.upsert({

@@ -16,6 +16,8 @@
     "@react-three/drei": "^9.111.5",
     "@react-three/fiber": "^8.17.6",
     "react": "^18.3.1",
+    "markdown-to-jsx": "^7.5.0",
+    "compare-versions": "^6.1.1",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.3.1",
     "react-fuzzysort": "^1.0.1",

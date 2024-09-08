@@ -1,4 +1,3 @@
-// MIGRATION TODO: i added this use client, it makes stuff work again?
 'use client';
 
 import { Draft, produce } from 'immer';

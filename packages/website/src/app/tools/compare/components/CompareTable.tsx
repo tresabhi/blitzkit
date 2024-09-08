@@ -1,8 +1,20 @@
+import {
+  TankCharacteristics,
+  asset,
+  availableProvisions,
+  checkConsumableProvisionInclusivity,
+  consumableDefinitions,
+  equipmentDefinitions,
+  provisionDefinitions,
+  skillDefinitions,
+} from '@blitzkit/core';
 import { permanentSkills } from '@blitzkit/core/src/blitz/permanentSkills';
 import { ComponentPlaceholderIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Popover, Slider, Table, Text } from '@radix-ui/themes';
 import { debounce, times } from 'lodash';
 import { use } from 'react';
+import { theme } from '../../../../../../bot/src/stitches.config';
+import { BlitzkitButtonGrayIcon } from '../../../../components/BlitzkitButtonGrayIcon';
 import { ConsumablesManager } from '../../../../components/ConsumablesManager';
 import { CrewSkillManager } from '../../../../components/CrewSkillManager';
 import { EquipmentManager } from '../../../../components/EquipmentManager';
@@ -10,16 +22,6 @@ import { ModuleManager } from '../../../../components/ModuleManager';
 import { ProvisionsManager } from '../../../../components/ProvisionsManager';
 import { StickyColumnHeaderCell } from '../../../../components/StickyColumnHeaderCell';
 import { StickyTableRoot } from '../../../../components/StickyTableRoot';
-import { asset } from '../../../../core/blitzkit/asset';
-import { availableProvisions } from '../../../../core/blitzkit/availableProvisions';
-import { checkConsumableProvisionInclusivity } from '../../../../core/blitzkit/checkConsumableProvisionInclusivity';
-import { consumableDefinitions } from '../../../../core/blitzkit/consumableDefinitions';
-import { equipmentDefinitions } from '../../../../core/blitzkit/equipmentDefinitions';
-import { provisionDefinitions } from '../../../../core/blitzkit/provisionDefinitions';
-import { skillDefinitions } from '../../../../core/blitzkit/skillDefinitions';
-import { TankCharacteristics } from '../../../../core/blitzkit/tankCharacteristics';
-import { BlitzkitButtonGray } from '../../../../icons/BlitzkitButtonGray';
-import { theme } from '../../../../stitches.config';
 import * as CompareEphemeral from '../../../../stores/compareEphemeral';
 import { EquipmentMatrix } from '../../../../stores/duel';
 import { Body } from './Body';
@@ -56,7 +58,7 @@ export function CompareTable({ stats }: CompareTableProps) {
               align="center"
               justify="center"
             >
-              <BlitzkitButtonGray opacity="0.25" width={64} height={64} />
+              <BlitzkitButtonGrayIcon opacity="0.25" width={64} height={64} />
               <InsertionMarker index={0} />
             </Flex>
           </StickyColumnHeaderCell>

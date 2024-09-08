@@ -1,5 +1,4 @@
-import { Region } from '../../constants/regions';
-import { BlitzStats } from '../statistics/compositeStats/constants';
+import { BlitzStats, Region } from '@blitzkit/core';
 import fetchBlitz, { FetchBlitzParams } from './fetchBlitz';
 import { normalizeIds } from './normalizeIds';
 

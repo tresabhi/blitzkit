@@ -1,24 +1,23 @@
+import { BkrlFormat, deltaBkrlBlitzStats } from '@blitzkit/core';
 import { SlashCommandSubcommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
+import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
+import { getLeagueFromScore } from '../../../website/src/core/blitz/getLeagueFromScore';
+import getRatingInfo from '../../../website/src/core/blitz/getRatingInfo';
+import { getRatingNeighbors } from '../../../website/src/core/blitz/getRatingNeighbors';
+import { normalizeLeagueIcon } from '../../../website/src/core/blitz/normalizeLeagueIcon';
+import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
+import getArchivedRatingMidnightLeaderboard from '../../../website/src/core/blitzkit/getArchivedRatingMidnightLeaderboard';
+import { iconPng } from '../../../website/src/core/blitzkit/iconPng';
 import { Glow } from '../components/AllStatsOverview/components/HeroStat/components/Glow';
 import CommandWrapper from '../components/CommandWrapper';
 import { DeltaCaret } from '../components/DeltaCaret';
 import TitleBar from '../components/TitleBar';
-import { getAccountInfo } from '../core/blitz/getAccountInfo';
-import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
-import { getLeagueFromScore } from '../core/blitz/getLeagueFromScore';
-import getRatingInfo from '../core/blitz/getRatingInfo';
-import { getRatingNeighbors } from '../core/blitz/getRatingNeighbors';
-import { normalizeLeagueIcon } from '../core/blitz/normalizeLeagueIcon';
-import { emblemURL } from '../core/blitzkit/emblemURL';
-import getArchivedRatingMidnightLeaderboard from '../core/blitzkit/getArchivedRatingMidnightLeaderboard';
-import { iconPng } from '../core/blitzkit/iconPng';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import resolvePlayerFromCommand from '../core/discord/resolvePlayerFromCommand';
 import { translator } from '../core/localization/translator';
-import { deltaBkrlBlitzStats } from '../core/statistics/deltaBkrlBlitzStats';
-import { BkrlFormat } from '../core/streams/bkrl';
 import { CommandRegistry } from '../events/interactionCreate';
 import { theme } from '../stitches.config';
 
@@ -122,9 +121,9 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
           <TitleBar
             title={accountInfo.nickname}
             image={clanImage}
-            description={`${translate(`bot.commands.rating.body.subtitle.${subcommand}`)} • ${new Date().toLocaleDateString(
-              interaction.locale,
-            )}`}
+            description={`${translate(
+              `bot.commands.rating.body.subtitle.${subcommand}`,
+            )} • ${new Date().toLocaleDateString(interaction.locale)}`}
           />
 
           <div
@@ -140,7 +139,9 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
                 padding: 16,
                 backgroundColor: theme.colors[`appBackground2${leagueTheme}`],
                 borderRadius: 4,
-                border: `1px solid ${theme.colors[`componentInteractive${leagueTheme}`]}`,
+                border: `1px solid ${
+                  theme.colors[`componentInteractive${leagueTheme}`]
+                }`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',

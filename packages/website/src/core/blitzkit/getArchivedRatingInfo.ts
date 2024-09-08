@@ -1,7 +1,6 @@
+import { Region, asset } from '@blitzkit/core';
 import { superDecompress } from '@blitzkit/core/src/blitzkit/superDecompress';
-import { RatingInfo } from '../../commands/ratingLeaderboard';
-import { Region } from '../../constants/regions';
-import { asset } from './asset';
+import { RatingInfo } from '../../../../bot/src/commands/ratingLeaderboard';
 
 const cache: Record<
   Region,

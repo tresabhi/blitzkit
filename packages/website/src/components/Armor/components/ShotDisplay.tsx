@@ -1,3 +1,4 @@
+import { J_HAT, K_HAT } from '@blitzkit/core';
 import { Box, Flex, Text } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';

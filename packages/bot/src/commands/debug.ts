@@ -1,4 +1,4 @@
-import packageJSON from '../../package.json' assert { type: 'json' };
+import packageJSON from '../../../../package.json' assert { type: 'json' };
 import { client } from '../core/discord/client';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { translator } from '../core/localization/translator';

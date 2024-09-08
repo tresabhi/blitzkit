@@ -11,6 +11,7 @@ import { use, useState } from 'react';
 import { classIcons } from '../../../../../../../components/ClassIcon';
 import { Link } from '../../../../../../../components/Link';
 import { ScienceIcon } from '../../../../../../../components/ScienceIcon';
+import { tankToDuelMember } from '../../../../../../../core/blitzkit/tankToDuelMember';
 import * as App from '../../../../../../../stores/app';
 import * as Duel from '../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';

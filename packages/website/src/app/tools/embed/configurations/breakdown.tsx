@@ -1,15 +1,15 @@
+import {
+  CompositeStatsKey,
+  compositeStatsKeys,
+  tankDefinitionsArray,
+} from '@blitzkit/core';
+import strings from '@blitzkit/core/lang/en-US.json';
 import { grayA, grayDark, grayDarkA } from '@radix-ui/colors';
 import { use } from 'react';
 import {
   BreakdownEmbedCard,
   BreakdownEmbedWrapper,
 } from '../../../../components/TanksEmbed';
-import { tankDefinitionsArray } from '../../../../core/blitzkit/tankDefinitions';
-import {
-  CompositeStatsKey,
-  compositeStatsKeys,
-} from '../../../../core/statistics/compositeStats/constants';
-import strings from '../../../../lang/en-US.json';
 import { EmbedConfig } from '../../../../stores/embedState';
 import { EmbedItemType } from '../../../../stores/embedState/constants';
 import { useEmbedStateCurry } from '../../../../stores/embedState/utilities';

@@ -1,11 +1,11 @@
+import { TankClass, TreeType } from '@blitzkit/core';
 import { Percentile } from '@blitzkit/core/src/statistics/percentiles';
 import { createColors } from 'bepaint';
 import {
   AccentColor,
   GrayColor,
   PALETTES,
-} from '../../../constants/radixColors';
-import { TankClass, TreeType } from '../../Tanks';
+} from '../../../core/radix/radixColors';
 import { TREE_TYPE_ICONS } from '../../Tanks/components/Item/constants';
 import { RowStat } from './RowStat';
 

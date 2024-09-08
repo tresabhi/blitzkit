@@ -1,5 +1,6 @@
 'use client';
 
+import { imgur } from '@blitzkit/core';
 import {
   CodeIcon,
   HeightIcon,
@@ -15,7 +16,6 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { stringify } from 'urlon';
 import { CopyButton } from '../../../../components/CopyButton';
 import PageWrapper from '../../../../components/PageWrapper';
-import { imgur } from '../../../../core/blitzkit/imgur';
 import * as App from '../../../../stores/app';
 import * as EmbedState from '../../../../stores/embedState';
 import { EmbedConfig } from '../../../../stores/embedState';
@@ -97,7 +97,9 @@ export default function Page({
                     state: stringify(shallowState),
                   });
 
-                  return `${location.origin}/tools/embed/${params.embed}/host?${searchParams.toString()}`;
+                  return `${location.origin}/tools/embed/${
+                    params.embed
+                  }/host?${searchParams.toString()}`;
                 }}
               >
                 <Link2Icon />

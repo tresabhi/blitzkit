@@ -1,13 +1,16 @@
+import {
+  Hierarchy,
+  Sc2ReadStream,
+  ScgReadStream,
+  VertexAttribute,
+} from '@blitzkit/core';
 import { Accessor, Document, Node, Scene } from '@gltf-transform/core';
 import { times } from 'lodash';
-import { Hierarchy, Sc2ReadStream } from '../streams/sc2';
-import { ScgReadStream } from '../streams/scg';
-import { VertexAttribute } from '../streams/scpg';
+import { readDVPLFile } from '../../../../scripts/src/core/blitz/readDVPLFile';
 import {
   vertexAttributeGLTFName,
   vertexAttributeGltfVectorSizes,
 } from './extractModel/constants';
-import { readDVPLFile } from './readDVPLFile';
 
 export async function extractArmor(data: string, fileName: string) {
   const sc2Path = `${data}/3d/Tanks/CollisionMeshes/${fileName}.sc2.dvpl`;

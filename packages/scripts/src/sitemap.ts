@@ -1,4 +1,4 @@
-import { tankDefinitions } from '../src/core/blitzkit/tankDefinitions';
+import { tankDefinitions } from '@blitzkit/core';
 
 // random vercel bug forces require import
 const { writeFileSync } = require('fs');

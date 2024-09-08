@@ -1,9 +1,9 @@
 'use client';
 
+import { formatCompact } from '@blitzkit/core';
 import { Flex, Heading, Skeleton, Text } from '@radix-ui/themes';
 import { memo } from 'react';
 import { WargamingLoginButton } from '../../../../../../../../../components/Navbar/components/WargamingLoginButton';
-import { formatCompact } from '../../../../../../../../../core/math/formatCompact';
 import { useTankVotes } from '../../../../../../../../../hooks/useTankVotes';
 import * as App from '../../../../../../../../../stores/app';
 import * as Duel from '../../../../../../../../../stores/duel';
@@ -71,7 +71,9 @@ export const Votes = memo(
                 {votes ? (
                   wargaming ? (
                     votes.last_updated ? (
-                      `You voted on ${new Date(votes.last_updated).toLocaleDateString()}`
+                      `You voted on ${new Date(
+                        votes.last_updated,
+                      ).toLocaleDateString()}`
                     ) : (
                       `You haven't voted yet`
                     )

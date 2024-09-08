@@ -1,15 +1,16 @@
-import getStatsInPeriod from '@blitzkit/core/src/blitzstars/getStatsInPeriod';
+import { StatFilters, filterStats, getTierWeights } from '@blitzkit/core';
 import { Locale } from 'discord.js';
+import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
+import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
+import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
+import { filtersToDescription } from '../../../website/src/core/blitzkit/filtersToDescription';
+import { getBlitzStarsLinkButton } from '../../../website/src/core/blitzstars/getBlitzStarsLinkButton';
 import CommandWrapper from '../components/CommandWrapper';
 import GenericAllStats from '../components/GenericAllStats';
 import NoData from '../components/NoData';
 import TierWeights from '../components/TierWeights';
 import TitleBar from '../components/TitleBar';
-import { getAccountInfo } from '../core/blitz/getAccountInfo';
-import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
-import { emblemURL } from '../core/blitzkit/emblemURL';
-import { filtersToDescription } from '../core/blitzkit/filtersToDescription';
-import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
+import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
 import addPeriodicFilterOptions from '../core/discord/addPeriodicFilterOptions';
 import addUsernameChoices from '../core/discord/addUsernameChoices';
 import autocompleteTanks from '../core/discord/autocompleteTanks';
@@ -28,8 +29,6 @@ import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
 import resolvePlayerFromCommand, {
   ResolvedPlayer,
 } from '../core/discord/resolvePlayerFromCommand';
-import { StatFilters, filterStats } from '../core/statistics/filterStats';
-import { getTierWeights } from '../core/statistics/getTierWeights';
 import { CommandRegistry } from '../events/interactionCreate';
 
 async function render(

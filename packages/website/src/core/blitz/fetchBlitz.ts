@@ -1,6 +1,5 @@
-import { assertSecret } from '@blitzkit/core';
+import { assertSecret, Region } from '@blitzkit/core';
 import { EventManager } from '@blitzkit/core/src/blitzkit/eventManager';
-import { Region } from '../../constants/regions';
 import { patientFetch } from '../blitzkit/patientFetch';
 
 const RETRY_ERRORS = ['REQUEST_LIMIT_EXCEEDED', 'SOURCE_NOT_AVAILABLE'];
@@ -73,7 +72,9 @@ export default function fetchBlitz<Data extends object>(
   return new Promise<Data>((resolve) => {
     queue.push({
       url: `https://api.wotblitz.${region}/wotb/${path}/?${Object.entries({
-        application_id: assertSecret(process.env.WARGAMING_APPLICATION_ID),
+        application_id: assertSecret(
+          process.env.NEXT_PUBLIC_WARGAMING_APPLICATION_ID,
+        ),
         ...params,
       })
         .filter(([_, value]) => value !== undefined)

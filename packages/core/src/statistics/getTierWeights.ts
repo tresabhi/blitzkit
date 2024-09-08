@@ -1,4 +1,4 @@
-import { TierWeightsRecord } from '../../components/TierWeights';
+import { TierWeightsRecord } from '../../../bot/src/components/TierWeights';
 import { tankDefinitions } from '../blitzkit/tankDefinitions';
 import { BlitzStats } from './compositeStats/constants';
 

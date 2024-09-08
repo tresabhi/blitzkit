@@ -1,4 +1,4 @@
-import { ASSETS_REPO } from '../../constants/assets';
+import { assertSecret } from '@blitzkit/core';
 import getRatingInfo from '../blitz/getRatingInfo';
 
 interface GitHubTrees {
@@ -17,7 +17,9 @@ export async function getArchivedLatestSeasonNumber() {
   if (ratingInfo.detail) {
     const regionsURL = (
       (await fetch(
-        `https://api.github.com/repos/tresabhi/${ASSETS_REPO}/git/trees/main`,
+        `https://api.github.com/repos/tresabhi/${assertSecret(
+          process.env.NEXT_PUBLIC_ASSET_REPO,
+        )}/git/trees/main`,
       ).then((response) => response.json())) as GitHubTrees
     ).tree.find(({ path }) => path === 'regions')!.url;
     const comURL = (

@@ -1,4 +1,4 @@
-import { Region, RegionSubdomain } from '../../constants/regions';
+import { Region, RegionSubdomain } from "@blitzkit/core";
 
 export default function regionToRegionSubdomain(
   regionDomain: Region,

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import * as App from '../../packages/website/src/stores/app';
 import { TankVotes } from '../app/api/tank-voting/[id]/average/route';
 import { unwrapBlitzkitResponse } from '../core/blitzkit/unwrapBlitzkitResponse';
+import * as App from '../stores/app';
 
 export interface BlitzkitResponseError {
   status: 'error';

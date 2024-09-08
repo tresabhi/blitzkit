@@ -1,14 +1,14 @@
-import { DropdownMenu, Flex } from '@radix-ui/themes';
-import { useState } from 'react';
 import {
   EngineDefinition,
   GunDefinition,
   ShellDefinition,
   TankDefinition,
+  TIER_ROMAN_NUMERALS,
   TrackDefinition,
   TurretDefinition,
-} from '../core/blitzkit/tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from '../core/blitzkit/tankDefinitions/constants';
+} from '@blitzkit/core';
+import { DropdownMenu, Flex } from '@radix-ui/themes';
+import { useState } from 'react';
 import { ModuleButton } from './ModuleButtons/ModuleButton';
 
 interface ModuleManagerProps {

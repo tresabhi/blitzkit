@@ -1,8 +1,8 @@
+import { assertSecret } from '@blitzkit/core';
 import sharp from 'sharp';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
-import { commitAssets } from '../../src/core/blitzkit/commitAssets';
-import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
-import { assertSecret } from '../../src/core/blitzkit/secret';
+import { commitAssets } from '../core/github/commitAssets';
+import { FileChange } from '../core/github/commitMultipleFiles';
 import { DATA } from './constants';
 
 const ICONS = [

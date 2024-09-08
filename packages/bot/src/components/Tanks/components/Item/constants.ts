@@ -1,9 +1,10 @@
-import { TankClass, TreeType } from '.';
 import {
   TANK_ICONS,
   TANK_ICONS_COLLECTOR,
   TANK_ICONS_PREMIUM,
-} from '../../../../core/blitzkit/tankDefinitions/constants';
+  TankClass,
+  TreeType,
+} from '@blitzkit/core';
 
 export const TREE_TYPE_NAMES: Record<TreeType, string> = {
   researchable: 'Tech tree',

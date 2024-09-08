@@ -1,6 +1,6 @@
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
-import { commitAssets } from '../../src/core/blitzkit/commitAssets';
-import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
+import { commitAssets } from '../core/github/commitAssets';
+import { FileChange } from '../core/github/commitMultipleFiles';
 import { DATA } from './constants';
 
 export async function camouflageIcons() {

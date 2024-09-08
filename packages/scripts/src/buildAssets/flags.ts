@@ -1,9 +1,9 @@
 import { readdir } from 'fs/promises';
 import sharp from 'sharp';
-import { readBase64DVPL } from '../../src/core/blitz/readBase64DVPL';
-import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
-import { commitAssets } from '../../src/core/blitzkit/commitAssets';
-import { FileChange } from '../../src/core/blitzkit/commitMultipleFiles';
+import { readBase64DVPL } from '../core/blitz/readBase64DVPL';
+import { readDVPLFile } from '../core/blitz/readDVPLFile';
+import { commitAssets } from '../core/github/commitAssets';
+import { FileChange } from '../core/github/commitMultipleFiles';
 import { DATA } from './constants';
 
 export async function flags() {
@@ -11,7 +11,9 @@ export async function flags() {
 
   const changes = [
     ...(await Promise.all(
-      (await readdir(`${DATA}/Gfx/Lobby/flags`))
+      (
+        await readdir(`${DATA}/Gfx/Lobby/flags`)
+      )
         .filter(
           (flag) =>
             flag.startsWith('flag_profile-stat_') &&
@@ -34,7 +36,9 @@ export async function flags() {
         }),
     )),
     ...(await Promise.all(
-      (await readdir(`${DATA}/Gfx/Lobby/flags`))
+      (
+        await readdir(`${DATA}/Gfx/Lobby/flags`)
+      )
         .filter(
           (flag) =>
             flag.startsWith('flag_tutor-tank_') &&
@@ -54,7 +58,9 @@ export async function flags() {
         }),
     )),
     ...(await Promise.all(
-      (await readdir(`${DATA}/Gfx/Lobby/flags`))
+      (
+        await readdir(`${DATA}/Gfx/Lobby/flags`)
+      )
         .filter(
           (flag) =>
             flag.startsWith('flag_filter_') &&

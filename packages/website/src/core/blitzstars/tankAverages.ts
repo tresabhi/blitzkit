@@ -1,6 +1,5 @@
+import { BlitzStats, tankDefinitions } from '@blitzkit/core';
 import { context } from '../blitzkit/context';
-import { tankDefinitions } from '../blitzkit/tankDefinitions';
-import { BlitzStats } from '../statistics/compositeStats/constants';
 
 interface SpecialStats {
   winrate: number;

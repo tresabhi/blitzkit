@@ -1,8 +1,8 @@
 'use client';
 
+import { createNextSafeStore } from '@blitzkit/core';
 import * as radixColors from '@radix-ui/colors';
 import { create } from 'zustand';
-import { createNextSafeStore } from '../../core/zustand/createNextSafeStore';
 import {
   EmbedConfigItemType,
   EmbedItemType,
@@ -22,8 +22,19 @@ export type RadixTextColor =
   | Exclude<RadixColor, RadixColorGrays>
   | 'gray'
   | undefined;
-export type RadixColorVariantRaw =
-  `${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12}`;
+export type RadixColorVariantRaw = `${
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12}`;
 export type RadixColorVariant = `${'' | 'a'}${RadixColorVariantRaw}`;
 export type RadixColor = Exclude<
   keyof typeof radixColors,

@@ -1,13 +1,18 @@
+import {
+  DidsReadStream,
+  DidsWriteStream,
+  MIN_REGION_IDS,
+  REGIONS,
+  Region,
+  asset,
+  idToRegion,
+} from '@blitzkit/core';
 import { chunk, times, uniq } from 'lodash';
 import { compress, decompress } from 'lz4js';
-import { REGIONS, Region } from '../src/constants/regions';
-import { retryAbleBlitzFetchEvent } from '../src/core/blitz/fetchBlitz';
-import { getAccountInfo } from '../src/core/blitz/getAccountInfo';
-import { MIN_IDS, idToRegion } from '../src/core/blitz/idToRegion';
-import { asset } from '../src/core/blitzkit/asset';
-import { commitAssets } from '../src/core/blitzkit/commitAssets';
-import { DiscoveredIdsDefinitions } from '../src/core/blitzkit/discoveredIdDefinitions';
-import { DidsReadStream, DidsWriteStream } from '../src/core/streams/dids';
+import { retryAbleBlitzFetchEvent } from '../../website/src/core/blitz/fetchBlitz';
+import { getAccountInfo } from '../../website/src/core/blitz/getAccountInfo';
+import { DiscoveredIdsDefinitions } from '../../website/src/core/blitzkit/discoveredIdDefinitions';
+import { commitAssets } from './core/github/commitAssets';
 
 const CHUNK_SIZE = 2 ** 21;
 const RUN_TIME = 1000 * 60 * 60 * 5.5;
@@ -47,9 +52,9 @@ while (chunkIndex < preDiscoveredManifest.chunks) {
 }
 
 const regionalIdIndex: Record<Region, number> = {
-  asia: ids.findLast((id) => idToRegion(id) === 'asia') ?? MIN_IDS.asia,
-  com: ids.findLast((id) => idToRegion(id) === 'com') ?? MIN_IDS.com,
-  eu: ids.findLast((id) => idToRegion(id) === 'eu') ?? MIN_IDS.eu,
+  asia: ids.findLast((id) => idToRegion(id) === 'asia') ?? MIN_REGION_IDS.asia,
+  com: ids.findLast((id) => idToRegion(id) === 'com') ?? MIN_REGION_IDS.com,
+  eu: ids.findLast((id) => idToRegion(id) === 'eu') ?? MIN_REGION_IDS.eu,
 };
 const zeroStreak: Record<Region, number> = { asia: 0, com: 0, eu: 0 };
 let regionIndex = 0;

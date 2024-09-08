@@ -1,17 +1,19 @@
 'use client';
 
+import {
+  createDefaultSkills,
+  equipmentDefinitions,
+  modelDefinitions,
+  provisionDefinitions,
+  skillDefinitions,
+  tankCharacteristics,
+  tankDefinitions,
+} from '@blitzkit/core';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, IconButton, Text } from '@radix-ui/themes';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
-import { createDefaultSkills } from '../../../core/blitzkit/createDefaultSkills';
-import { equipmentDefinitions } from '../../../core/blitzkit/equipmentDefinitions';
-import { modelDefinitions } from '../../../core/blitzkit/modelDefinitions';
-import { provisionDefinitions } from '../../../core/blitzkit/provisionDefinitions';
-import { skillDefinitions } from '../../../core/blitzkit/skillDefinitions';
-import { tankCharacteristics } from '../../../core/blitzkit/tankCharacteristics';
-import { tankDefinitions } from '../../../core/blitzkit/tankDefinitions';
 import { tankToCompareMember } from '../../../core/blitzkit/tankToCompareMember';
 import * as CompareEphemeral from '../../../stores/compareEphemeral';
 import { CompareTable } from './components/CompareTable';

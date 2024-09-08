@@ -1,19 +1,21 @@
+import {
+  idToRegion,
+  tankDefinitions,
+  TIER_ROMAN_NUMERALS,
+} from '@blitzkit/core';
 import { tankIcon } from '@blitzkit/core/src/blitzkit/tankIcon';
+import calculateWN8 from '@blitzkit/core/src/statistics/calculateWN8';
 import { clamp } from 'lodash';
+import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
+import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
+import { iconPng } from '../../../website/src/core/blitzkit/iconPng';
+import { mapDefinitions } from '../../../website/src/core/blitzkit/mapDefinitions';
+import { RenderConfiguration } from '../../../website/src/core/blitzkit/renderConfiguration';
+import { tankAverages } from '../../../website/src/core/blitzstars/tankAverages';
 import CommandWrapper from '../components/CommandWrapper';
 import TitleBar from '../components/TitleBar';
-import { getClanAccountInfo } from '../core/blitz/getClanAccountInfo';
-import { idToRegion } from '../core/blitz/idToRegion';
-import { emblemURL } from '../core/blitzkit/emblemURL';
-import { iconPng } from '../core/blitzkit/iconPng';
-import { mapDefinitions } from '../core/blitzkit/mapDefinitions';
-import { RenderConfiguration } from '../core/blitzkit/renderConfiguration';
-import { tankDefinitions } from '../core/blitzkit/tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from '../core/blitzkit/tankDefinitions/constants';
-import { tankAverages } from '../core/blitzstars/tankAverages';
 import buttonLink from '../core/discord/buttonLink';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
-import calculateWN8 from '../core/statistics/calculateWN8';
 import { CommandRegistry } from '../events/interactionCreate';
 import { theme } from '../stitches.config';
 

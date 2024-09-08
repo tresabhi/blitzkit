@@ -1,3 +1,5 @@
+import { IndividualTankStats, emptyIndividualTankStats } from '../types';
+
 export function deltaTankStats(
   tanksA: IndividualTankStats[],
   tanksB: IndividualTankStats[],

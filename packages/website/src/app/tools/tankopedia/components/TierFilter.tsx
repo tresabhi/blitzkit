@@ -1,8 +1,7 @@
+import { Tier, TIER_ROMAN_NUMERALS } from '@blitzkit/core';
 import { Flex, IconButton, Text } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { memo } from 'react';
-import { Tier } from '../../../../core/blitzkit/tankDefinitions';
-import { TIER_ROMAN_NUMERALS } from '../../../../core/blitzkit/tankDefinitions/constants';
 import * as TankFilters from '../../../../stores/tankFilters';
 import * as TankopediaSort from '../../../../stores/tankopediaSort';
 

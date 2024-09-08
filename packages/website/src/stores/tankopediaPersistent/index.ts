@@ -1,6 +1,6 @@
 'use client';
 
-import { createNextSafeStore } from '@blitzkit/core';
+import { createNextSafeStore, TankClass, Tier, TreeType } from '@blitzkit/core';
 import { merge } from 'lodash';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';

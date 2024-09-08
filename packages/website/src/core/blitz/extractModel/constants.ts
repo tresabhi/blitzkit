@@ -1,5 +1,4 @@
-import { vertexAttributeVectorSizes } from '../../streams/scg';
-import { VertexAttribute } from '../../streams/scpg';
+import { VertexAttribute, vertexAttributeVectorSizes } from '@blitzkit/core';
 
 export const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> =
   {

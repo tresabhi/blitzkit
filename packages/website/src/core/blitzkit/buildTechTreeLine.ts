@@ -1,5 +1,5 @@
+import { tankDefinitions } from '@blitzkit/core';
 import { resolveAncestry } from './resolveAncestry';
-import { tankDefinitions } from './tankDefinitions';
 
 export async function buildTechTreeLine(start: number, end: number) {
   const awaitedTankDefinitions = await tankDefinitions;

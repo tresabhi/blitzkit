@@ -1,11 +1,10 @@
+import { tankDefinitions, tankNames } from '@blitzkit/core';
 import { Locale } from 'discord.js';
 import { go } from 'fuzzysort';
 import markdownEscape from 'markdown-escape';
+import { tankNamesTechTreeOnly } from '../../../../bot/src/core/discord/autocompleteTanks';
+import { translator } from '../../../../bot/src/core/localization/translator';
 import { UserError } from '../../hooks/userError';
-import { tankDefinitions } from '../blitzkit/tankDefinitions';
-import { tankNames } from '../blitzkit/tankDefinitions/tankNames';
-import { tankNamesTechTreeOnly } from '../discord/autocompleteTanks';
-import { translator } from '../localization/translator';
 
 export default async function resolveTankId(
   tank: string | number,

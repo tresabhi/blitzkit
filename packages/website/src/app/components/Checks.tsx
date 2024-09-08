@@ -1,9 +1,9 @@
 'use client';
 
+import { assertSecret, idToRegion } from '@blitzkit/core';
 import { Button, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { idToRegion } from '@blitzkit/core';
 import * as App from '../../stores/app';
 import { CURRENT_POLICIES_AGREEMENT_INDEX } from '../../stores/app/constants';
 import { PatreonAuthResponse } from '../auth/[provider]/page';
@@ -77,9 +77,9 @@ export function Checks() {
         fetch(
           `https://api.worldoftanks.${idToRegion(
             wargaming.id,
-          )}/wot/auth/prolongate/?application_id=${assertSecret(process.env.WARGAMING_APPLICATION_ID)}&access_token=${
-            wargaming.token
-          }`,
+          )}/wot/auth/prolongate/?application_id=${assertSecret(
+            process.env.NEXT_PUBLIC_WARGAMING_APPLICATION_ID,
+          )}&access_token=${wargaming.token}`,
         )
           .then((response) => response.json() as Promise<Extension>)
           .then((json) => {

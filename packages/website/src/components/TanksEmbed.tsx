@@ -1,18 +1,20 @@
+import {
+  CompositeStatsKey,
+  previewCompositeStat,
+  TankDefinition,
+} from '@blitzkit/core';
+import strings from '@blitzkit/core/lang/en-US.json';
 import { amberDark, blueDark } from '@radix-ui/colors';
 import { Flex, Text } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { ReactNode } from 'react';
-import { ClassHeavy } from '../../packages/website/src/components/ClassIcon/components/ClassHeavy';
-import { ClassLight } from '../../packages/website/src/components/ClassIcon/components/ClassLight';
-import { ClassMedium } from '../../packages/website/src/components/ClassIcon/components/ClassMedium';
-import { ClassTankDestroyer } from '../../packages/website/src/components/ClassIcon/components/ClassTankDestroyer';
-import { useEmbedStateCurry } from '../../packages/website/src/stores/embedState/utilities';
 import { breakdownConfig } from '../app/tools/embed/configurations/breakdown';
 import { toRadiusVar } from '../app/tools/embed/utilities';
-import { TankDefinition } from '../core/blitzkit/tankDefinitions';
-import { previewCompositeStat } from '../core/statistics/compositeStats';
-import { CompositeStatsKey } from '../core/statistics/compositeStats/constants';
-import strings from '../lang/en-US.json';
+import { useEmbedStateCurry } from '../stores/embedState/utilities';
+import { ClassHeavy } from './ClassIcon/components/ClassHeavy';
+import { ClassLight } from './ClassIcon/components/ClassLight';
+import { ClassMedium } from './ClassIcon/components/ClassMedium';
+import { ClassTankDestroyer } from './ClassIcon/components/ClassTankDestroyer';
 
 interface BreakdownEmbedWrapperProps {
   children: ReactNode;

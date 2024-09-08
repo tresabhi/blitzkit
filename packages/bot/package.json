@@ -1,0 +1,17 @@
+{
+  "name": "@blitzkit/bot",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@blitzkit/core": "workspace:*",
+    "satori": "^0.10.14",
+    "@resvg/resvg-js": "^2.6.2",
+    "discord.js": "^14.15.3",
+    "bepaint": "^0.1.0-beta.3",
+    "dotenv": "^16.4.5",
+    "markdown-escape": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/markdown-escape": "^1.1.3"
+  }
+}

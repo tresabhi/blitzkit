@@ -1,9 +1,8 @@
+import { TankDefinition, tankIcon } from '@blitzkit/core';
 import { Flex, Text } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
 import { Vector2 } from 'three';
 import { StickyColumnHeaderCell } from '../../../../components/StickyColumnHeaderCell';
-import { TankDefinition } from '../../../../core/blitzkit/tankDefinitions';
-import { tankIcon } from '../../../../core/blitzkit/tankIcon';
 import * as CompareEphemeral from '../../../../stores/compareEphemeral';
 import { InsertionMarker } from './IntersectionMarker';
 import { insertionMarkers } from './IntersectionMarker/constants';

@@ -1,3 +1,4 @@
+import { emptyAllStats } from '..';
 import { BlitzStats } from './compositeStats/constants';
 
 export default function sumStats(allStatsCollection: BlitzStats[]) {

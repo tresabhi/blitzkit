@@ -1,5 +1,4 @@
-import { Region } from '../../constants/regions';
-import { BlitzStats } from '../statistics/compositeStats/constants';
+import { BlitzStats, Region } from '@blitzkit/core';
 
 interface IndividualPlayerStats {
   clan: { clan_id: number; name: string; tag: string };

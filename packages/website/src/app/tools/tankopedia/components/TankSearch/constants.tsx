@@ -1,4 +1,4 @@
-import { TreeType } from '../../../../../components/Tanks';
+import { TreeType } from '@blitzkit/core';
 
 export const treeTypeOrder: TreeType[] = [
   'researchable',
