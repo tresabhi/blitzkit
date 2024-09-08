@@ -5,7 +5,7 @@ const withVanillaExtract = createVanillaExtractPlugin({ tests: /\.css$/ });
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   ...withVanillaExtract({
-    webpack: (config, { isServer }) => {
+    webpack: (config) => {
       config.module.rules.push(
         {
           test: /\.glsl$/,
@@ -16,17 +16,6 @@ const nextConfig = {
           type: 'asset/source',
         },
       );
-
-      // if (isServer) {
-      //   writeFileSync(
-      //     'public/assets/versions.json',
-      //     JSON.stringify(
-      //       readdirSync('docs/changelogs').map((file) =>
-      //         file.replace('.md', ''),
-      //       ),
-      //     ),
-      //   );
-      // }
 
       return config;
     },
