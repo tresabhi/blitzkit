@@ -1,7 +1,7 @@
 import { DdsReadStream, PvrReadStream } from '@blitzkit/core';
 import { existsSync } from 'fs';
 import sharp from 'sharp';
-import { readDVPLFile } from '../../../../../scripts/src/core/blitz/readDVPLFile';
+import { readDVPLFile } from '../readDVPLFile';
 import { TextureMutation } from './constants';
 
 export async function readTexture(path: string, mutation?: TextureMutation) {

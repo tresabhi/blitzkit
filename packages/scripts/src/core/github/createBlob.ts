@@ -1,6 +1,6 @@
 import { throttle } from 'lodash';
-import { FileChange } from '../../../../scripts/src/core/github/commitMultipleFiles';
-import { octokit } from './octokit';
+import { octokit } from '../../../../website/src/core/blitzkit/octokit';
+import { FileChange } from './commitMultipleFiles';
 
 export interface GithubChangeBlob {
   sha: string;

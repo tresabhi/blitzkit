@@ -1,6 +1,6 @@
 import { assertSecret } from '@blitzkit/core';
-import { GithubChangeBlob, createBlob } from '../blitzkit/createBlob';
-import { octokit } from '../blitzkit/octokit';
+import { octokit } from '../../../../website/src/core/blitzkit/octokit';
+import { GithubChangeBlob, createBlob } from './createBlob';
 
 export class AssetCommit {
   constructor(public message: string) {}

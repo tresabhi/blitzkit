@@ -9,9 +9,9 @@ import { Document, Material, Node, Scene } from '@gltf-transform/core';
 import { times } from 'lodash';
 import { dirname } from 'path';
 import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
-import { readDVPLFile } from '../../../../../scripts/src/core/blitz/readDVPLFile';
-import { readTexture } from '../../blitzkit/readTexture';
-import { TextureMutation } from '../../blitzkit/readTexture/constants';
+import { readDVPLFile } from '../readDVPLFile';
+import { readTexture } from '../readTexture';
+import { TextureMutation } from '../readTexture/constants';
 import {
   vertexAttributeGLTFName,
   vertexAttributeGltfVectorSizes,

@@ -1,7 +1,7 @@
 import { NodeIO } from '@gltf-transform/core';
 import { readdir } from 'fs/promises';
-import { extractArmor } from '../../../website/src/core/blitz/extractArmor';
 import { toUniqueId } from '../../../website/src/core/blitz/toUniqueId';
+import { extractArmor } from '../core/blitz/extractArmor';
 import { readXMLDVPL } from '../core/blitz/readXMLDVPL';
 import { commitAssets } from '../core/github/commitAssets';
 import { FileChange } from '../core/github/commitMultipleFiles';
