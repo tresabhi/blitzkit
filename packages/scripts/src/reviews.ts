@@ -3,6 +3,7 @@ import {
   decodeProtobuf,
   encodeProtobufToBase64,
   Reviews,
+  toUniqueId,
   Video,
   youtubers,
 } from '@blitzkit/core';
@@ -10,7 +11,6 @@ import { readdir } from 'fs/promises';
 import { google } from 'googleapis';
 import { cloneDeep, uniqBy } from 'lodash';
 import { parse as parseYaml } from 'yaml';
-import { toUniqueId } from '../../website/src/core/blitz/toUniqueId';
 import { DATA } from './buildAssets/constants';
 import {
   BlitzStrings,

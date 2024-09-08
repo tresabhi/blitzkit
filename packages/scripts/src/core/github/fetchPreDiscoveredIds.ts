@@ -1,8 +1,11 @@
-import { asset, DidsReadStream } from '@blitzkit/core';
+import {
+  asset,
+  DidsReadStream,
+  DiscoveredIdsDefinitions,
+} from '@blitzkit/core';
 import { times } from 'lodash';
 import { decompress } from 'lz4js';
 import ProgressBar from 'progress';
-import { DiscoveredIdsDefinitions } from '../../../../website/src/core/blitzkit/discoveredIdDefinitions';
 
 export async function fetchPreDiscoveredIds() {
   const idChunks: number[][] = [];

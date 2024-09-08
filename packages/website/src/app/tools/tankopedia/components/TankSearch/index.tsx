@@ -3,7 +3,6 @@
 import {
   TANK_CLASSES,
   TankDefinition,
-  filterTank,
   gameDefinitions,
   modelDefinitions,
   normalizeBoundingBox,
@@ -20,6 +19,7 @@ import { times } from 'lodash';
 import { Fragment, memo, use, useEffect, useMemo, useState } from 'react';
 import { AdMidSectionResponsive } from '../../../../../components/AdMidSectionResponsive';
 import { ExperimentIcon } from '../../../../../components/ExperimentIcon';
+import { filterTank } from '../../../../../core/blitzkit/filterTank';
 import { resolveReload } from '../../../../../core/blitzkit/resolveReload';
 import { useAdExempt } from '../../../../../hooks/useAdExempt';
 import * as TankFilters from '../../../../../stores/tankFilters';

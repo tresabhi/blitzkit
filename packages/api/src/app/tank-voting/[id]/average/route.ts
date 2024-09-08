@@ -1,10 +1,12 @@
-import { tankDefinitions, TankVotes, usersDatabase } from '@blitzkit/core';
-import { isValidBlitzId } from '@blitzkit/core/src/blitz/isValidBlitzId';
-import { NextRequest, NextResponse } from 'next/server';
 import {
   BlitzkitResponse,
   BlitzkitResponseError,
-} from '../../../../../../website/src/hooks/useTankVotes';
+  tankDefinitions,
+  TankVotes,
+  usersDatabase,
+} from '@blitzkit/core';
+import { isValidBlitzId } from '@blitzkit/core/src/blitz/isValidBlitzId';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   request: NextRequest,

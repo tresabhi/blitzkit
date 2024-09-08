@@ -13,12 +13,12 @@ import {
 } from '@blitzkit/core';
 import { Locale } from 'discord.js';
 import { chunk } from 'lodash';
-import { UserError } from '../../../../website/src/hooks/userError';
 import * as Breakdown from '../../components/Breakdown';
 import { CommandWrapper } from '../../components/CommandWrapper';
 import { NoData } from '../../components/NoData';
 import { TitleBar } from '../../components/TitleBar';
 import { filtersToDescription } from '../../core/blitzkit/filtersToDescription';
+import { UserError } from '../../core/blitzkit/userError';
 import { getStatsInPeriod } from '../../core/blitzstars/getStatsInPeriod';
 import { ResolvedPeriod } from '../../core/discord/resolvePeriodFromCommand';
 import { ResolvedPlayer } from '../../core/discord/resolvePlayerFromCommand';

@@ -10,3 +10,4 @@ export const TANK_VOTE_CATEGORIES = [
   'survivability',
 ];
 export type TankVoteCategory = (typeof TANK_VOTE_CATEGORIES)[number];
+export type StarsInt = 1 | 2 | 3 | 4 | 5;

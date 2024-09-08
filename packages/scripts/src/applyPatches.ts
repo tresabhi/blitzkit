@@ -1,13 +1,13 @@
-import { assertSecret } from '@blitzkit/core';
 import { mkdir, writeFile } from 'fs/promises';
 import { parse as parsePath } from 'path';
 import ProgressBar from 'progress';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import { dvp } from '../../../submodules/blitzkit-closed/src/dvp';
-import { writeDVPL } from '../../website/src/core/blitz/writeDVPL';
 import { readStringDVPL } from '../src/core/blitz/readStringDVPL';
 import { DATA } from './buildAssets/constants';
 import { readYAMLDVPL } from './core/blitz/readYAMLDVPL';
+import { assertSecret } from '@blitzkit/core';
+import { writeDVPL } from './core/blitz/writeDVPL';
 
 const versionTextFile = await readStringDVPL(`${DATA}/version.txt.dvpl`);
 const currentVersion = versionTextFile

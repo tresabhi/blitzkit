@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  createNextSafeStore,
   EngineDefinition,
   GunDefinition,
   ProvisionDefinitions,
@@ -13,6 +12,7 @@ import {
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { tankToDuelMember } from '../../core/blitzkit/tankToDuelMember';
+import { createNextSafeStore } from '../../core/zustand/createNextSafeStore';
 
 type EquipmentMatrixItem = -1 | 0 | 1;
 type EquipmentMatrixRow = [

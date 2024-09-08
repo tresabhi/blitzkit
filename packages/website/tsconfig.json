@@ -7,5 +7,10 @@
       }
     ]
   },
-  "include": ["src/**/*", ".next/types/**/*.ts"]
+  "include": [
+    "src/**/*",
+    ".next/types/**/*.ts",
+    "../bot/src/core/blitzkit/resolveAncestry.ts",
+    "../bot/src/core/blitzkit/buildTechTreeLine.ts"
+  ]
 }

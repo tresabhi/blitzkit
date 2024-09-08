@@ -1,6 +1,7 @@
 import {
   DidsReadStream,
   DidsWriteStream,
+  DiscoveredIdsDefinitions,
   MIN_REGION_IDS,
   REGIONS,
   Region,
@@ -11,7 +12,6 @@ import {
 } from '@blitzkit/core';
 import { chunk, times, uniq } from 'lodash';
 import { compress, decompress } from 'lz4js';
-import { DiscoveredIdsDefinitions } from '../../website/src/core/blitzkit/discoveredIdDefinitions';
 import { commitAssets } from './core/github/commitAssets';
 
 const CHUNK_SIZE = 2 ** 21;

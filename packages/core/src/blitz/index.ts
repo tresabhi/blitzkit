@@ -28,5 +28,4 @@ export * from './resolveNearPenetration';
 export * from './searchClansAcrossRegions';
 export * from './searchCurrentRatingPlayers';
 export * from './searchPlayersAcrossRegions';
-export * from './toUniqueId';
-export * from './writeDVPL';
+export * from './toUniqueId'; 

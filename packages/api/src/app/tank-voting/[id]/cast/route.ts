@@ -1,4 +1,7 @@
 import {
+  BlitzkitResponse,
+  BlitzkitResponseError,
+  StarsInt,
   TANK_VOTE_CATEGORIES,
   tankDefinitions,
   TankVoteCategory,
@@ -6,11 +9,6 @@ import {
 } from '@blitzkit/core';
 import { isValidBlitzId } from '@blitzkit/core/src/blitz/isValidBlitzId';
 import { NextRequest, NextResponse } from 'next/server';
-import { StarsInt } from '../../../../../../website/src/app/tools/tankopedia/[id]/components/Model/MetaSection/components/Stars';
-import {
-  BlitzkitResponse,
-  BlitzkitResponseError,
-} from '../../../../../../website/src/hooks/useTankVotes';
 
 export async function GET(
   request: NextRequest,

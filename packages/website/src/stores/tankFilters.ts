@@ -1,7 +1,8 @@
 'use client';
 
-import { TankClass, Tier, TreeType, createNextSafeStore } from '@blitzkit/core';
+import { TankClass, Tier, TreeType } from '@blitzkit/core';
 import { create } from 'zustand';
+import { createNextSafeStore } from '../core/zustand/createNextSafeStore';
 
 export interface TankFilters {
   tiers: Tier[];

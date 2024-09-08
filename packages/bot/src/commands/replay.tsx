@@ -1,15 +1,15 @@
 import {
   blitzStarsTankAverages,
   calculateWN8,
+  emblemURL,
   getClanAccountInfo,
   idToRegion,
+  mapDefinitions,
   tankDefinitions,
   tankIcon,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
 import { clamp } from 'lodash';
-import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
-import { mapDefinitions } from '../../../website/src/core/blitzkit/mapDefinitions';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { TitleBar } from '../components/TitleBar';
 import { iconPng } from '../core/blitzkit/iconPng';

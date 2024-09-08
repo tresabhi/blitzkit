@@ -1,12 +1,13 @@
 'use client';
 
-import { createNextSafeStore, ModelDefinition } from '@blitzkit/core';
+import { ModelDefinition } from '@blitzkit/core';
 import { Vector3 } from 'three';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { XP_MULTIPLIERS } from '../app/tools/tankopedia/[id]/components/Model/TechTreeSection';
 import { ArmorType } from '../components/Armor/components/SpacedArmorScene';
 import { ExternalModuleVariant } from '../components/Armor/components/SpacedArmorSceneComponent';
+import { createNextSafeStore } from '../core/zustand/createNextSafeStore';
 
 interface TankopediaEphemeral {
   shot?: Shot;

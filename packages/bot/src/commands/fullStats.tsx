@@ -1,12 +1,12 @@
 import {
   StatFilters,
+  emblemURL,
   filterStats,
   getAccountInfo,
   getClanAccountInfo,
   getTierWeights,
 } from '@blitzkit/core';
 import { Locale } from 'discord.js';
-import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { GenericAllStats } from '../components/GenericAllStats';
 import { NoData } from '../components/NoData';

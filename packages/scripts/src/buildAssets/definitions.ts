@@ -10,6 +10,7 @@ import {
   EquipmentRow,
   GameDefinitions,
   GunDefinition,
+  MapDefinitions,
   ModelArmor,
   ModelDefinitions,
   ProvisionDefinitions,
@@ -22,14 +23,13 @@ import {
   TankFilterDefinitionCategory,
   TankPrice,
   Tier,
+  toUniqueId,
   Unlock,
 } from '@blitzkit/core';
 import { readdir } from 'fs/promises';
 import { parse as parsePath } from 'path';
 import { Vector3Tuple } from 'three';
 import { parse as parseYaml } from 'yaml';
-import { toUniqueId } from '../../../website/src/core/blitz/toUniqueId';
-import { MapDefinitions } from '../../../website/src/core/blitzkit/mapDefinitions';
 import { readStringDVPL } from '../core/blitz/readStringDVPL';
 import { readXMLDVPL } from '../core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../core/blitz/readYAMLDVPL';

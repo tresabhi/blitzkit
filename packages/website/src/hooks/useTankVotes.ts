@@ -1,20 +1,10 @@
 import { TankVotes } from '@blitzkit/core';
+import {
+  BlitzkitResponse,
+  unwrapBlitzkitResponse,
+} from '@blitzkit/core/src/blitzkit/unwrapBlitzkitResponse';
 import { useEffect, useState } from 'react';
-import { unwrapBlitzkitResponse } from '../core/blitzkit/unwrapBlitzkitResponse';
 import * as App from '../stores/app';
-
-export interface BlitzkitResponseError {
-  status: 'error';
-  error: string;
-  message?: unknown;
-}
-
-export type BlitzkitResponse<Data = undefined> =
-  | BlitzkitResponseError
-  | {
-      status: 'ok';
-      data: Data;
-    };
 
 const cache: Record<string, Promise<TankVotes> | TankVotes> = {};
 

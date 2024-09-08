@@ -3,16 +3,15 @@ import {
   ModelDefinition,
   ProvisionDefinitions,
 } from '@blitzkit/core';
-import { EquipmentMatrix } from '../../../website/src/stores/duel';
-import { resolveNearPenetration } from '../blitz/resolveNearPenetration';
-import { coefficient } from './coefficient';
-import { degressiveStat } from './degressiveStat';
-import { isExplosive } from './isExplosive';
-import { normalizeBoundingBox } from './normalizeBoundingBox';
-import { progressiveStat } from './progressiveStat';
-import { resolveDpm } from './resolveDpm';
-import { resolvePenetrationCoefficient } from './resolvePenetrationCoefficient';
-import { sum } from './sum';
+import { resolveNearPenetration } from '@blitzkit/core/src/blitz/resolveNearPenetration';
+import { coefficient } from '@blitzkit/core/src/blitzkit/coefficient';
+import { degressiveStat } from '@blitzkit/core/src/blitzkit/degressiveStat';
+import { isExplosive } from '@blitzkit/core/src/blitzkit/isExplosive';
+import { normalizeBoundingBox } from '@blitzkit/core/src/blitzkit/normalizeBoundingBox';
+import { progressiveStat } from '@blitzkit/core/src/blitzkit/progressiveStat';
+import { resolveDpm } from '@blitzkit/core/src/blitzkit/resolveDpm';
+import { resolvePenetrationCoefficient } from '@blitzkit/core/src/blitzkit/resolvePenetrationCoefficient';
+import { sum } from '@blitzkit/core/src/blitzkit/sum';
 import {
   EngineDefinition,
   GunDefinition,
@@ -20,8 +19,9 @@ import {
   TankDefinition,
   TrackDefinition,
   TurretDefinition,
-} from './tankDefinitions';
-import { unionBoundingBox } from './unionBoundingBox';
+} from '@blitzkit/core/src/blitzkit/tankDefinitions';
+import { unionBoundingBox } from '@blitzkit/core/src/blitzkit/unionBoundingBox';
+import { EquipmentMatrix } from '../../stores/duel';
 
 export type TankCharacteristics = ReturnType<typeof tankCharacteristics>;
 

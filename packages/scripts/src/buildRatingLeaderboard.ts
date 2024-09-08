@@ -6,6 +6,7 @@ import {
   CdonValue,
   CdonWriteStream,
   getAccountInfo,
+  patientFetchJSON,
   RatingInfo,
   RatingNeighbors,
   RatingPlayer,
@@ -15,7 +16,6 @@ import {
 } from '@blitzkit/core';
 import { chunk } from 'lodash';
 import { argv } from 'process';
-import { patientFetchJSON } from '../../website/src/core/blitzkit/patientFetchJSON';
 import { commitAssets } from './core/github/commitAssets';
 import { FileChange } from './core/github/commitMultipleFiles';
 

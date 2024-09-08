@@ -10,6 +10,7 @@ import {
   getRatingInfo,
   getRatingLeague,
   getRatingNeighbors,
+  isOnGoingRatingSeason,
   LEAGUES,
   RatingInfo,
   Region,
@@ -21,11 +22,10 @@ import {
 } from 'discord.js';
 import { range } from 'lodash';
 import markdownEscape from 'markdown-escape';
-import { isOnGoingRatingSeason } from '../../../website/src/core/blitz/isOnGoingRatingSeason';
-import { UserError } from '../../../website/src/hooks/userError';
 import { CommandWrapper } from '../components/CommandWrapper';
 import * as Leaderboard from '../components/Leaderboard';
 import { TitleBar } from '../components/TitleBar';
+import { UserError } from '../core/blitzkit/userError';
 import { addRegionChoices } from '../core/discord/addRegionChoices';
 import { addUsernameChoices } from '../core/discord/addUsernameChoices';
 import { autocompleteUsername } from '../core/discord/autocompleteUsername';

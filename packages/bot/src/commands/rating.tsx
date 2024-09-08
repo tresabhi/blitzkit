@@ -1,6 +1,7 @@
 import {
   BkrlFormat,
   deltaBkrlBlitzStats,
+  emblemURL,
   getAccountInfo,
   getArchivedRatingMidnightLeaderboard,
   getClanAccountInfo,
@@ -10,7 +11,6 @@ import {
 } from '@blitzkit/core';
 import { SlashCommandSubcommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
 import { Glow } from '../components/AllStatsOverview/components/HeroStat/components/Glow';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { DeltaCaret } from '../components/DeltaCaret';

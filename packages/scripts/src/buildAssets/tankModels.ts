@@ -1,6 +1,6 @@
+import { toUniqueId } from '@blitzkit/core';
 import { NodeIO } from '@gltf-transform/core';
 import { readdir } from 'fs/promises';
-import { toUniqueId } from '../../../website/src/core/blitz/toUniqueId';
 import { extractModel } from '../core/blitz/extractModel';
 import { readXMLDVPL } from '../core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../core/blitz/readYAMLDVPL';

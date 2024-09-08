@@ -1,6 +1,6 @@
 import ProgressBar from 'progress';
-import { octokit } from '../../../../website/src/core/blitzkit/octokit';
 import { GithubChangeBlob, createBlob } from './createBlob';
+import { octokit } from './octokit';
 
 export interface FileChange {
   path: string;

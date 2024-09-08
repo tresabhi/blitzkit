@@ -1,6 +1,9 @@
-import { getAccountInfo, getClanAccountInfo } from '@blitzkit/core';
+import {
+  getAccountInfo,
+  getClanAccountInfo,
+  linkBlitzAndDiscord,
+} from '@blitzkit/core';
 import { teal } from '@radix-ui/colors';
-import { linkBlitzAndDiscord } from '../../../website/src/core/blitzkit/linkBlitzAndDiscord';
 import { Glow } from '../components/AllStatsOverview/components/HeroStat/components/Glow';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { addUsernameChoices } from '../core/discord/addUsernameChoices';

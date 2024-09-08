@@ -1,4 +1,3 @@
-import { BlitzkitResponse } from '../../../website/src/hooks/useTankVotes';
 
 export function unwrapBlitzkitResponse<Data>(response: BlitzkitResponse<Data>) {
   if (response.status === 'error') {
@@ -7,3 +6,14 @@ export function unwrapBlitzkitResponse<Data>(response: BlitzkitResponse<Data>) {
 
   return response.data;
 }
+export interface BlitzkitResponseError {
+  status: 'error';
+  error: string;
+  message?: unknown;
+}
+export type BlitzkitResponse<Data = undefined> =
+  | BlitzkitResponseError
+  | {
+      status: 'ok';
+      data: Data;
+    };

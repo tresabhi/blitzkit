@@ -1,10 +1,10 @@
 import { Region, searchPlayersAcrossRegions } from '@blitzkit/core';
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { UserError } from '../../../../../website/src/hooks/userError';
 import { getBlitzFromDiscord } from '../../blitzkit/getBlitzFromDiscord';
 import { translator } from '../../localization/translator';
 import { serverAndIdPattern } from './constants';
+import { UserError } from '../../blitzkit/userError';
 
 export interface ResolvedPlayer {
   region: Region;

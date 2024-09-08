@@ -2,7 +2,6 @@
 
 import {
   averageDefinitionsArray,
-  filterTank,
   tankDefinitions,
 } from '@blitzkit/core';
 import { Table } from '@radix-ui/themes';
@@ -14,6 +13,7 @@ import * as TankPerformanceSort from '../../../../stores/tankPerformanceSort';
 import { RowLoader } from './RowLoader';
 import { TankRow } from './TankRow';
 import { Total } from './Total';
+import { filterTank } from '../../../../core/blitzkit/filterTank';
 
 const PREVIEW_COUNT = 10;
 const DEFAULT_LOADED_ROWS = 25;

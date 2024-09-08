@@ -1,6 +1,5 @@
-import { Region } from '@blitzkit/core';
+import { getTimeDaysAgo, Region } from '@blitzkit/core';
 import { ButtonInteraction } from 'discord.js';
-import { getTimeDaysAgo } from '../../../../website/src/core/blitzkit/getTimeDaysAgo';
 import { getPeriodNow } from '../blitzkit/getPeriodNow';
 import { getPeriodStart } from '../blitzkit/getPeriodStart';
 import { PeriodType } from './addPeriodSubCommands';

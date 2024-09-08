@@ -1,9 +1,9 @@
 'use client';
 
-import { createNextSafeStore } from '@blitzkit/core';
 import { merge } from 'lodash';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
+import { createNextSafeStore } from '../core/zustand/createNextSafeStore';
 
 export type DeltaMode = 'none' | 'percentage' | 'absolute';
 export interface ComparePersistent {

@@ -1,8 +1,7 @@
+import { StarsInt } from '@blitzkit/core/src/blitzkit/votes';
 import { Flex, Text, TextProps } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { PartialStar } from './components/PartialStar';
-
-export type StarsInt = 1 | 2 | 3 | 4 | 5;
 
 type StarsProps = TextProps & {
   stars: number | null;

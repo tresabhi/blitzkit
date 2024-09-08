@@ -8,13 +8,13 @@ import {
   InteractionReplyOptions,
 } from 'discord.js';
 import { InteractionRawReturnable, commands } from '..';
-import { UserError } from '../../../../../website/src/hooks/userError';
 import { buttonLink } from '../../../core/discord/buttonLink';
 import { embedWarning } from '../../../core/discord/embedWarning';
 import { normalizeInteractionReturnable } from '../../../core/discord/normalizeInteractionReturnable';
 import { psa } from '../../../core/discord/psa';
 import { translator } from '../../../core/localization/translator';
 import { Writeable } from '../../../types/writable';
+import { UserError } from '../../../core/blitzkit/userError';
 
 export async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,

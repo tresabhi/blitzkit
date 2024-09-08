@@ -1,3 +1,5 @@
+import { BlitzkitResponse } from '@blitzkit/core/src/blitzkit/unwrapBlitzkitResponse';
+import { StarsInt } from '@blitzkit/core/src/blitzkit/votes';
 import { PaperPlaneIcon } from '@radix-ui/react-icons';
 import {
   AlertDialog,
@@ -8,10 +10,9 @@ import {
   Text,
 } from '@radix-ui/themes';
 import { useState } from 'react';
-import { BlitzkitResponse } from '../../../../../../../../../../hooks/useTankVotes';
 import * as App from '../../../../../../../../../../stores/app';
 import * as Duel from '../../../../../../../../../../stores/duel';
-import { Stars, StarsInt } from '../../Stars';
+import { Stars } from '../../Stars';
 
 export function VoteCaster() {
   const tank = Duel.use((state) => state.protagonist.tank);

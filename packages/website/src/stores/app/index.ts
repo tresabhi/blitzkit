@@ -1,9 +1,9 @@
 'use client';
 
-import { createNextSafeStore } from '@blitzkit/core';
 import { merge } from 'lodash';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { createNextSafeStore } from '../../core/zustand/createNextSafeStore';
 
 interface WargamingLogin {
   id: number;

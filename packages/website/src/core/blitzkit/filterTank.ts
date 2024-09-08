@@ -1,5 +1,5 @@
-import { TankFilters } from '../../../website/src/stores/tankFilters';
-import { TankDefinition } from './tankDefinitions';
+import { TankDefinition } from '@blitzkit/core/src/blitzkit/tankDefinitions';
+import { TankFilters } from '../../stores/tankFilters';
 
 export function filterTank(filters: TankFilters, tank: TankDefinition) {
   return (

@@ -1,11 +1,11 @@
 import {
   StatFilters,
+  emblemURL,
   filterStats,
   getAccountInfo,
   getClanAccountInfo,
 } from '@blitzkit/core';
 import { Locale } from 'discord.js';
-import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
 import { AllStatsOverview } from '../components/AllStatsOverview';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { NoData } from '../components/NoData';

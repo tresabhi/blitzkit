@@ -1,8 +1,8 @@
 'use client';
 
-import { createNextSafeStore } from '@blitzkit/core';
 import * as radixColors from '@radix-ui/colors';
 import { create } from 'zustand';
+import { createNextSafeStore } from '../../core/zustand/createNextSafeStore';
 import {
   EmbedConfigItemType,
   EmbedItemType,
