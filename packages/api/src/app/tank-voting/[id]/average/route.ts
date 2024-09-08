@@ -1,6 +1,6 @@
 import { tankDefinitions, TankVotes, usersDatabase } from '@blitzkit/core';
+import { isValidBlitzId } from '@blitzkit/core/src/blitz/isValidBlitzId';
 import { NextRequest, NextResponse } from 'next/server';
-import { isValidBlitzId } from '../../../../../../website/src/core/blitz/isValidBlitzId';
 import {
   BlitzkitResponse,
   BlitzkitResponseError,

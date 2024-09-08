@@ -1,4 +1,4 @@
-import { context } from './context';
+import { context } from '@blitzkit/core/src/blitzkit/context';
 
 export function withCORSProxy(url: string) {
   return context === 'website'

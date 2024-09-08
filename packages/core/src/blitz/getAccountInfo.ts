@@ -4,7 +4,7 @@ import {
   Region,
   fetchBlitz,
 } from '@blitzkit/core';
-import { normalizeIds } from '../../../website/src/core/blitz/normalizeIds';
+import { normalizeIds } from './normalizeIds';
 
 export interface SupplementaryStats {
   WN8?: number;

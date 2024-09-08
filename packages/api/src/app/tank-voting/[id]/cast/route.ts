@@ -4,9 +4,9 @@ import {
   TankVoteCategory,
   usersDatabase,
 } from '@blitzkit/core';
+import { isValidBlitzId } from '@blitzkit/core/src/blitz/isValidBlitzId';
 import { NextRequest, NextResponse } from 'next/server';
 import { StarsInt } from '../../../../../../website/src/app/tools/tankopedia/[id]/components/Model/MetaSection/components/Stars';
-import { isValidBlitzId } from '../../../../../../website/src/core/blitz/isValidBlitzId';
 import {
   BlitzkitResponse,
   BlitzkitResponseError,
