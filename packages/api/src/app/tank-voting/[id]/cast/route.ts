@@ -1,4 +1,8 @@
 import { tankDefinitions, usersDatabase } from '@blitzkit/core';
+import {
+  TANK_VOTE_CATEGORIES,
+  TankVoteCategory,
+} from '@blitzkit/core/src/blitzkit/votes';
 import { NextRequest, NextResponse } from 'next/server';
 import { StarsInt } from '../../../../../../website/src/app/tools/tankopedia/[id]/components/Model/MetaSection/components/Stars';
 import { isValidBlitzId } from '../../../../../../website/src/core/blitz/isValidBlitzId';
@@ -6,15 +10,6 @@ import {
   BlitzkitResponse,
   BlitzkitResponseError,
 } from '../../../../../../website/src/hooks/useTankVotes';
-
-export const TANK_VOTE_CATEGORIES = [
-  'easiness',
-  'firepower',
-  'maneuverability',
-  'survivability',
-];
-
-export type TankVoteCategory = (typeof TANK_VOTE_CATEGORIES)[number];
 
 export async function GET(
   request: NextRequest,
