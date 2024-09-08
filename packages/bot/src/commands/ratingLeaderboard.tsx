@@ -9,6 +9,10 @@ import {
   RatingInfo,
   Region,
 } from '@blitzkit/core';
+import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
+import { getClanAccountInfo } from '@blitzkit/core/src/blitz/getClanAccountInfo';
+import { getRatingLeague } from '@blitzkit/core/src/blitz/getRatingLeague';
+import { getRatingNeighbors } from '@blitzkit/core/src/blitz/getRatingNeighbors';
 import { getArchivedRatingMidnightLeaderboard } from '@blitzkit/core/src/blitzkit/getArchivedRatingMidnightLeaderboard';
 import {
   APIApplicationCommandOptionChoice,
@@ -17,10 +21,6 @@ import {
 } from 'discord.js';
 import { range } from 'lodash';
 import markdownEscape from 'markdown-escape';
-import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
-import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
-import { getRatingLeague } from '../../../website/src/core/blitz/getRatingLeague';
-import { getRatingNeighbors } from '../../../website/src/core/blitz/getRatingNeighbors';
 import { isOnGoingRatingSeason } from '../../../website/src/core/blitz/isOnGoingRatingSeason';
 import { UserError } from '../../../website/src/hooks/userError';
 import { CommandWrapper } from '../components/CommandWrapper';

@@ -7,4 +7,4 @@ export * from './getBkniPercentile';
 export * from './getTierWeights';
 export * from './getWN8Percentile';
 export * from './percentiles';
-export * from './sumStats';
+export * from './sumAllStats';

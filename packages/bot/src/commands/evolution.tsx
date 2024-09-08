@@ -1,6 +1,6 @@
+import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
+import { getClanAccountInfo } from '@blitzkit/core/src/blitz/getClanAccountInfo';
 import { Locale, SlashCommandSubcommandGroupBuilder } from 'discord.js';
-import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
-import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
 import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
 import { CommandWrapper } from '../components/CommandWrapper';
 import * as Graph from '../components/Graph';

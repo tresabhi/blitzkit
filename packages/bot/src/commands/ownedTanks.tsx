@@ -7,10 +7,10 @@ import {
   gameDefinitions,
   tankDefinitions,
 } from '@blitzkit/core';
+import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
+import { getTankStats } from '@blitzkit/core/src/blitz/getTankStats';
 import { chunk } from 'lodash';
 import markdownEscape from 'markdown-escape';
-import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
-import { getTankStats } from '../../../website/src/core/blitz/getTankStats';
 import { addTierChoices } from '../core/discord/addTierChoices';
 import { addUsernameChoices } from '../core/discord/addUsernameChoices';
 import { autocompleteUsername } from '../core/discord/autocompleteUsername';

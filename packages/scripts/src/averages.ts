@@ -10,10 +10,11 @@ import {
   averageDefinitionsAllStatsKeys,
   emptySamples,
   encodeProtobufToBase64,
+  getTankStats,
   idToRegion,
 } from '@blitzkit/core';
+import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
 import { chunk, times } from 'lodash';
-import { getAccountInfo } from '../../website/src/core/blitz/getAccountInfo';
 import { commitAssets } from './core/github/commitAssets';
 import { fetchPreDiscoveredIds } from './core/github/fetchPreDiscoveredIds';
 

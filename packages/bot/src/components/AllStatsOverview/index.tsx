@@ -1,6 +1,6 @@
 import { getWN8Percentile, Percentile } from '@blitzkit/core';
+import { SupplementaryStats } from '@blitzkit/core/src/blitz/getAccountInfo';
 import { Locale } from 'discord.js';
-import { SupplementaryStats } from '../../../../website/src/core/blitz/getAccountInfo';
 import { translator } from '../../core/localization/translator';
 import { PERCENTILE_COLORS } from '../PercentileIndicator/constants';
 import { HeroStat } from './components/HeroStat';

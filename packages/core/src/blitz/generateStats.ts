@@ -35,7 +35,7 @@ export function prettifyStats(s: ReturnType<typeof generateStats>) {
   } satisfies Record<Stat, string>;
 }
 
-export function sumStats(s: ReturnType<typeof generateStats>[]) {
+export function sumBlitzStarsStats(s: ReturnType<typeof generateStats>[]) {
   function sum(slice: (stat: ReturnType<typeof generateStats>) => number) {
     return s.reduce((a, b) => a + slice(b), 0);
   }

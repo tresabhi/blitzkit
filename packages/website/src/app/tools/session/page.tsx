@@ -1,13 +1,28 @@
 'use client';
 
 import {
+  AccountListWithServer,
   IndividualTankStats,
   UNLOCALIZED_REGION_NAMES_SHORT,
   blitzStarsTankAverages,
   deltaTankStats,
   idToRegion,
+  searchPlayersAcrossRegions,
   tankDefinitions,
 } from '@blitzkit/core';
+import {
+  STAT_KEYS,
+  STAT_NAMES,
+  Stat,
+  generateStats,
+  prettifyStats,
+  sumBlitzStarsStats,
+} from '@blitzkit/core/src/blitz/generateStats';
+import {
+  IndividualAccountInfo,
+  getAccountInfo,
+} from '@blitzkit/core/src/blitz/getAccountInfo';
+import { getTankStats } from '@blitzkit/core/src/blitz/getTankStats';
 import {
   ArrowDownIcon,
   MagnifyingGlassIcon,
@@ -30,23 +45,6 @@ import { debounce } from 'lodash';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
 import { PageWrapper } from '../../../components/PageWrapper';
 import { TankRowHeaderCell } from '../../../components/TankRowHeaderCell';
-import {
-  STAT_KEYS,
-  STAT_NAMES,
-  Stat,
-  generateStats,
-  prettifyStats,
-  sumStats,
-} from '../../../core/blitz/generateStats';
-import {
-  IndividualAccountInfo,
-  getAccountInfo,
-} from '../../../core/blitz/getAccountInfo';
-import { getTankStats } from '../../../core/blitz/getTankStats';
-import {
-  AccountListWithServer,
-  searchPlayersAcrossRegions,
-} from '../../../core/blitz/searchPlayersAcrossRegions';
 import * as Session from '../../../stores/session';
 
 export default function Page({
@@ -103,7 +101,7 @@ export default function Page({
   const total = useMemo(
     () =>
       delta
-        ? prettifyStats(sumStats(delta.map(({ stats }) => stats)))
+        ? prettifyStats(sumBlitzStarsStats(delta.map(({ stats }) => stats)))
         : undefined,
     [delta],
   );

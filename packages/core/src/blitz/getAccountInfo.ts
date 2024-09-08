@@ -3,7 +3,7 @@ import {
   FetchBlitzParams,
   fetchBlitz,
 } from '@blitzkit/core/src/blitz/fetchBlitz';
-import { normalizeIds } from './normalizeIds';
+import { normalizeIds } from '../../../website/src/core/blitz/normalizeIds';
 
 export interface SupplementaryStats {
   WN8?: number;

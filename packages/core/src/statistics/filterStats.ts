@@ -1,9 +1,9 @@
-import { SupplementaryStats } from '../../../website/src/core/blitz/getAccountInfo';
+import { SupplementaryStats } from '../blitz/getAccountInfo';
 import { tankDefinitions, TreeType } from '../blitzkit/tankDefinitions';
 import { blitzStarsTankAverages } from '../blitzstars/tankAverages';
 import { calculateWN8 } from './calculateWN8';
 import { BlitzStats } from './compositeStats';
-import { sumStats } from './sumStats';
+import { sumAllStats } from './sumAllStats';
 
 export interface StatFilters {
   nation?: string;
@@ -38,7 +38,7 @@ export async function filterStats(
       (filters.tank === undefined || entry.id === filters.tank)
     );
   });
-  const stats = sumStats(filteredOrder.map((id) => diff[id]));
+  const stats = sumAllStats(filteredOrder.map((id) => diff[id]));
   const battlesOfTanksWithAverages = filteredOrder.reduce<number>(
     (accumulator, id) =>
       awaitedTankAverages[id] ? accumulator + diff[id].battles : accumulator,

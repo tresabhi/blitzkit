@@ -1,7 +1,7 @@
 'use client';
 
 import { Flex, Heading, Switch, Text } from '@radix-ui/themes';
-import PageWrapper from '../../components/PageWrapper';
+import { PageWrapper } from '../../components/PageWrapper';
 import * as App from '../../stores/app';
 
 export default function Page() {

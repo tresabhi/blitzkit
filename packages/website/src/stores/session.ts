@@ -5,10 +5,10 @@ import {
   Region,
   createNextSafeStore,
 } from '@blitzkit/core';
+import { Stat } from '@blitzkit/core/src/blitz/generateStats';
 import { merge } from 'lodash';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Stat } from '../core/blitz/generateStats';
 
 interface SessionBase {
   columns: Stat[];

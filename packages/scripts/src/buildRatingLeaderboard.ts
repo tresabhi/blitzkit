@@ -9,11 +9,12 @@ import {
   RatingNeighbors,
   RatingPlayer,
   RegionSubdomain,
+  regionSubdomainToRegion,
   superCompress,
 } from '@blitzkit/core';
+import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
 import { chunk } from 'lodash';
 import { argv } from 'process';
-import { getAccountInfo } from '../../website/src/core/blitz/getAccountInfo';
 import { patientFetchJSON } from '../../website/src/core/blitzkit/patientFetchJSON';
 import { commitAssets } from './core/github/commitAssets';
 import { FileChange } from './core/github/commitMultipleFiles';

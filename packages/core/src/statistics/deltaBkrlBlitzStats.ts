@@ -1,4 +1,4 @@
-import { RatingStats } from '../../../website/src/core/blitz/getAccountInfo';
+import { RatingStats } from '../blitz/getAccountInfo';
 import { BkrlSuperset1Entry } from '../streams/bkrl';
 
 export function deltaBkrlBlitzStats(

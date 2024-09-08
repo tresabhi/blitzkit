@@ -1,5 +1,5 @@
 import { Region } from '@blitzkit/core';
-import getTimeDaysAgo from '../../../../website/src/core/blitzkit/getTimeDaysAgo';
+import { getTimeDaysAgo } from '../../../../website/src/core/blitzkit/getTimeDaysAgo';
 import { PeriodSize } from '../discord/addPeriodSubCommands';
 
 export function getPeriodStart(region: Region, period: PeriodSize) {

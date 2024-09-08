@@ -1,5 +1,5 @@
 import { Region, emptyAllStats } from '@blitzkit/core';
-import { getAccountInfo } from '../../../../website/src/core/blitz/getAccountInfo';
+import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
 import {
   GetHistoriesOptions,
   Histories,

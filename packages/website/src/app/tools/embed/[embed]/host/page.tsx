@@ -2,7 +2,7 @@
 
 import { Code, Heading } from '@radix-ui/themes';
 import { useMemo } from 'react';
-import PageWrapper from '../../../../../components/PageWrapper';
+import { PageWrapper } from '../../../../../components/PageWrapper';
 import * as EmbedState from '../../../../../stores/embedState';
 import { configurations } from '../../configurations';
 import { extractEmbedConfigDefaults } from '../../utilities';

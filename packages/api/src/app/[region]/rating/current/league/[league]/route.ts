@@ -1,6 +1,6 @@
 import { Region } from '@blitzkit/core';
+import { getRatingLeague } from '@blitzkit/core/src/blitz/getRatingLeague';
 import { NextResponse } from 'next/server';
-import { getRatingLeague } from '../../../../../../../../website/src/core/blitz/getRatingLeague';
 
 export async function GET(
   request: Request,

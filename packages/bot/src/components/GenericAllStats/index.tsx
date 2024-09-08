@@ -1,6 +1,6 @@
 import { BlitzStats, getWN8Percentile, isNumber } from '@blitzkit/core';
+import { SupplementaryStats } from '@blitzkit/core/src/blitz/getAccountInfo';
 import { Locale } from 'discord.js';
-import { SupplementaryStats } from '../../../../website/src/core/blitz/getAccountInfo';
 import { translator } from '../../core/localization/translator';
 import { Card } from './components/Card';
 import { Root } from './components/Root';

@@ -1,5 +1,5 @@
+import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
 import markdownEscape from 'markdown-escape';
-import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
 import { addUsernameChoices } from '../core/discord/addUsernameChoices';
 import { autocompleteUsername } from '../core/discord/autocompleteUsername';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';

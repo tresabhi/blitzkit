@@ -8,11 +8,11 @@ import {
   TankDefinition,
   tankDefinitions,
 } from '@blitzkit/core';
+import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
+import { getClanAccountInfo } from '@blitzkit/core/src/blitz/getClanAccountInfo';
+import { getTankStats } from '@blitzkit/core/src/blitz/getTankStats';
 import { Locale } from 'discord.js';
 import { chunk } from 'lodash';
-import { getAccountInfo } from '../../../../website/src/core/blitz/getAccountInfo';
-import { getClanAccountInfo } from '../../../../website/src/core/blitz/getClanAccountInfo';
-import { getTankStats } from '../../../../website/src/core/blitz/getTankStats';
 import { UserError } from '../../../../website/src/hooks/userError';
 import * as Breakdown from '../../components/Breakdown';
 import { CommandWrapper } from '../../components/CommandWrapper';

@@ -6,8 +6,8 @@ import {
   tankIcon,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
+import { getClanAccountInfo } from '@blitzkit/core/src/blitz/getClanAccountInfo';
 import { clamp } from 'lodash';
-import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
 import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
 import { iconPng } from '../../../website/src/core/blitzkit/iconPng';
 import { mapDefinitions } from '../../../website/src/core/blitzkit/mapDefinitions';

@@ -4,12 +4,12 @@ import {
   getLeagueFromScore,
   getRatingInfo,
 } from '@blitzkit/core';
+import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
+import { getClanAccountInfo } from '@blitzkit/core/src/blitz/getClanAccountInfo';
+import { getRatingNeighbors } from '@blitzkit/core/src/blitz/getRatingNeighbors';
 import { getArchivedRatingMidnightLeaderboard } from '@blitzkit/core/src/blitzkit/getArchivedRatingMidnightLeaderboard';
 import { SlashCommandSubcommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
-import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
-import { getRatingNeighbors } from '../../../website/src/core/blitz/getRatingNeighbors';
 import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
 import { iconPng } from '../../../website/src/core/blitzkit/iconPng';
 import { Glow } from '../components/AllStatsOverview/components/HeroStat/components/Glow';

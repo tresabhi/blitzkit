@@ -17,6 +17,15 @@
     "../core/src/blitzkit/getArchivedRatingInfo.ts",
     "../core/src/blitzkit/getArchivedRatingLeaderboard.ts",
     "../core/src/blitzkit/getArchivedRatingMidnightLeaderboard.ts",
-    "../core/src/blitz/fetchBlitz.ts"
-, "../core/src/blitz/regionSubdomainToRegion.ts"  ]
+    "../core/src/blitz/fetchBlitz.ts",
+    "../core/src/blitz/regionSubdomainToRegion.ts",
+    "../core/src/blitz/generateStats.ts",
+    "../core/src/blitz/getAccountAchievements.ts",
+    "../core/src/blitz/getAccountInfo.ts",
+    "../core/src/blitz/getClanAccountInfo.ts",
+    "../core/src/blitz/getClanInfo.ts",
+    "../core/src/blitz/getRatingLeague.ts",
+    "../core/src/blitz/getRatingNeighbors.ts",
+    "../core/src/blitz/getTankStats.ts"
+  ]
 }

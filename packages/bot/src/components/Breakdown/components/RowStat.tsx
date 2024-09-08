@@ -5,7 +5,7 @@ import {
   GrayColor,
   PALETTES,
 } from '../../../core/radix/radixColors';
-import PercentileIndicator from '../../PercentileIndicator';
+import { PercentileIndicator } from '../../PercentileIndicator';
 
 interface RowStatProps {
   name: string;

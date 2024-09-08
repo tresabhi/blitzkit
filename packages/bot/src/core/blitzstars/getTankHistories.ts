@@ -1,6 +1,6 @@
 import { Region, emptyAllStats } from '@blitzkit/core';
+import { getTankStats } from '@blitzkit/core/src/blitz/getTankStats';
 import { Locale } from 'discord.js';
-import { getTankStats } from '../../../../website/src/core/blitz/getTankStats';
 import { UserError } from '../../../../website/src/hooks/userError';
 import {
   GetHistoriesOptions,

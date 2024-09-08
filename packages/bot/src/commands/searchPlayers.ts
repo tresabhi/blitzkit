@@ -1,13 +1,11 @@
-import { Region } from '@blitzkit/core';
-import fetchBlitz from '@blitzkit/core/src/blitz/fetchBlitz';
+import { AccountList, fetchBlitz, Region } from '@blitzkit/core';
+import { usernamePattern } from '@blitzkit/core/src/blitz/searchPlayersAcrossRegions/constants';
 import { Locale } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { AccountList } from '../../../website/src/core/blitz/searchPlayersAcrossRegions';
-import { usernamePattern } from '../../../website/src/core/blitz/searchPlayersAcrossRegions/constants';
-import addRegionChoices from '../core/discord/addRegionChoices';
-import addUsernameChoices from '../core/discord/addUsernameChoices';
+import { addRegionChoices } from '../core/discord/addRegionChoices';
+import { addUsernameChoices } from '../core/discord/addUsernameChoices';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
-import embedInfo from '../core/discord/embedInfo';
+import { embedInfo } from '../core/discord/embedInfo';
 import { localizationObject } from '../core/discord/localizationObject';
 import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';

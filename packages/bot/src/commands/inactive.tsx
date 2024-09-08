@@ -1,15 +1,15 @@
+import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
+import { getClanInfo } from '@blitzkit/core/src/blitz/getClanInfo';
 import { Locale } from 'discord.js';
-import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
-import { getClanInfo } from '../../../website/src/core/blitz/getClanInfo';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { GenericStats } from '../components/GenericStats';
 import { NoData } from '../components/NoData';
 import { TitleBar } from '../components/TitleBar';
 import { addClanChoices } from '../core/discord/addClanChoices';
-import autocompleteClan from '../core/discord/autocompleteClan';
+import { autocompleteClan } from '../core/discord/autocompleteClan';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { localizationObject } from '../core/discord/localizationObject';
-import resolveClanFromCommand from '../core/discord/resolveClanFromCommand';
+import { resolveClanFromCommand } from '../core/discord/resolveClanFromCommand';
 import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
 

@@ -3,7 +3,7 @@ import { Table } from '@radix-ui/themes';
 import Markdown from 'markdown-to-jsx';
 import { use } from 'react';
 import { Link } from '../../../../components/Link';
-import PageWrapper from '../../../../components/PageWrapper';
+import { PageWrapper } from '../../../../components/PageWrapper';
 
 export default function Page({
   params,

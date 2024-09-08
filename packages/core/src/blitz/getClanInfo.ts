@@ -1,6 +1,6 @@
 import { Region } from '@blitzkit/core';
 import { fetchBlitz } from '@blitzkit/core/src/blitz/fetchBlitz';
-import { normalizeIds } from './normalizeIds';
+import { normalizeIds } from '../../../website/src/core/blitz/normalizeIds';
 
 interface IndividualClanInfo {
   recruiting_options: {

@@ -5,10 +5,10 @@ import {
   tankDefinitions,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
+import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
+import { getClanAccountInfo } from '@blitzkit/core/src/blitz/getClanAccountInfo';
+import { getTankStats } from '@blitzkit/core/src/blitz/getTankStats';
 import { escapeMarkdown, Locale } from 'discord.js';
-import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
-import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
-import { getTankStats } from '../../../website/src/core/blitz/getTankStats';
 import { buildTechTreeLine } from '../../../website/src/core/blitzkit/buildTechTreeLine';
 import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
 import { iconPng } from '../../../website/src/core/blitzkit/iconPng';
