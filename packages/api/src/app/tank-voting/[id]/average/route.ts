@@ -1,10 +1,10 @@
 import { tankDefinitions, usersDatabase } from '@blitzkit/core';
 import { NextRequest, NextResponse } from 'next/server';
-import { isValidBlitzId } from '../../../../../core/blitz/isValidBlitzId';
+import { isValidBlitzId } from '../../../../../../../website/src/core/blitz/isValidBlitzId';
 import {
   BlitzkitResponse,
   BlitzkitResponseError,
-} from '../../../../../hooks/useTankVotes';
+} from '../../../../../../../website/src/hooks/useTankVotes';
 import { TankVoteCategory } from '../cast/route';
 
 export interface TankVotes {

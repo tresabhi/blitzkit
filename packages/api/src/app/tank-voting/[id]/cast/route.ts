@@ -1,11 +1,11 @@
 import { tankDefinitions, usersDatabase } from '@blitzkit/core';
 import { NextRequest, NextResponse } from 'next/server';
-import { isValidBlitzId } from '../../../../../core/blitz/isValidBlitzId';
+import { StarsInt } from '../../../../../../../website/src/app/tools/tankopedia/[id]/components/Model/MetaSection/components/Stars';
+import { isValidBlitzId } from '../../../../../../../website/src/core/blitz/isValidBlitzId';
 import {
   BlitzkitResponse,
   BlitzkitResponseError,
-} from '../../../../../hooks/useTankVotes';
-import { StarsInt } from '../../../../tools/tankopedia/[id]/components/Model/MetaSection/components/Stars';
+} from '../../../../../../../website/src/hooks/useTankVotes';
 
 export const TANK_VOTE_CATEGORIES = [
   'easiness',

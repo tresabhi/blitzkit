@@ -5,10 +5,11 @@ import {
   BkrlWriteStream,
   CdonValue,
   CdonWriteStream,
+  RatingInfo,
+  RatingNeighbors,
   RegionSubdomain,
   superCompress,
 } from '@blitzkit/core';
-import { RatingInfo, RatingNeighbors } from '@blitzkit/core/src/blitz/leagues';
 import { RatingPlayer } from '@blitzkit/core/src/statistics/deltaBkrlBlitzStats';
 import { chunk } from 'lodash';
 import { argv } from 'process';

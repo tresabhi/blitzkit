@@ -3,5 +3,5 @@
   "compilerOptions": {
     "plugins": [{ "name": "next" }]
   },
-  "include": ["src/**/*", "dist/website/types/**/*.ts"]
+  "include": ["src/**/*"]
 }

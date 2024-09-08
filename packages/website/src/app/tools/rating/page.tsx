@@ -3,12 +3,12 @@
 import {
   FIRST_MINIMAL_ARCHIVED_RATING_SEASON,
   LEAGUES,
+  RatingInfo,
   Region,
   REGIONS,
   UNLOCALIZED_REGION_NAMES,
   Var,
 } from '@blitzkit/core';
-import { RatingInfo } from '@blitzkit/core/src/blitz/leagues';
 import { RatingPlayer } from '@blitzkit/core/src/statistics/deltaBkrlBlitzStats';
 import { blackA, orangeDark } from '@radix-ui/colors';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';

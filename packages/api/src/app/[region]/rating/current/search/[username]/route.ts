@@ -1,6 +1,6 @@
 import { Region } from '@blitzkit/core';
 import { NextResponse } from 'next/server';
-import { searchCurrentRatingPlayers } from '../../../../../../../core/blitz/searchCurrentRatingPlayers';
+import { searchCurrentRatingPlayers } from '../../../../../../../../../website/src/core/blitz/searchCurrentRatingPlayers';
 
 export async function GET(
   request: Request,

@@ -5,7 +5,6 @@ import {
   SlashCommandBuilder,
   SlashCommandSubcommandBuilder,
 } from 'discord.js';
-import {} from '../../components/Tanks/components/Item/constants';
 import { translator } from '../localization/translator';
 import addTankChoices from './addTankChoices';
 import addTierChoices from './addTierChoices';

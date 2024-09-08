@@ -1,5 +1,4 @@
-import { Region, asset } from '@blitzkit/core';
-import { RatingInfo } from '@blitzkit/core/src/blitz/leagues';
+import { RatingInfo, Region, asset } from '@blitzkit/core';
 import { superDecompress } from '@blitzkit/core/src/blitzkit/superDecompress';
 
 const cache: Record<
