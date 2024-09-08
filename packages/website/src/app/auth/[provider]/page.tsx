@@ -6,6 +6,8 @@ import { useEffect } from 'react';
 import PageWrapper from '../../../components/PageWrapper';
 import * as App from '../../../stores/app';
 
+export const PROVIDERS = ['wargaming', 'patreon'];
+
 export interface PatreonAuthResponse {
   access_token: string;
   expires_in: number;

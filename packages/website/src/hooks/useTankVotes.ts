@@ -1,5 +1,5 @@
+import { TankVotes } from '@blitzkit/core';
 import { useEffect, useState } from 'react';
-import { TankVotes } from '../app/api/tank-voting/[id]/average/route';
 import { unwrapBlitzkitResponse } from '../core/blitzkit/unwrapBlitzkitResponse';
 import * as App from '../stores/app';
 

@@ -1,6 +1,7 @@
 {
   "name": "@blitzkit/api",
   "private": true,
+  "main": "src/index.ts",
   "scripts": {
     "dev": "next dev",
     "build": "next build"

@@ -31,4 +31,5 @@ export * from './tankIcon';
 export * from './tankNames';
 export * from './unionBoundingBox';
 export * from './uniqueGuns';
+export * from './votes';
 export * from './youtubers';

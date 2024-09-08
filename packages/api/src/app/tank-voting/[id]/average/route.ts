@@ -1,17 +1,11 @@
 import { tankDefinitions, usersDatabase } from '@blitzkit/core';
 import { NextRequest, NextResponse } from 'next/server';
+import { TankVotes } from '../../../../../../core/src/blitzkit/votes';
 import { isValidBlitzId } from '../../../../../../website/src/core/blitz/isValidBlitzId';
 import {
   BlitzkitResponse,
   BlitzkitResponseError,
 } from '../../../../../../website/src/hooks/useTankVotes';
-import { TankVoteCategory } from '../cast/route';
-
-export interface TankVotes {
-  categories: Record<TankVoteCategory, number | null>;
-  votes: number;
-  last_updated?: number;
-}
 
 export async function GET(
   request: NextRequest,
