@@ -2,6 +2,10 @@
   "name": "@blitzkit/scripts",
   "private": true,
   "type": "module",
+  "scripts": {
+    "build:assets": "bun src/buildAssets/index.ts",
+    "build:averages": "bun src/averages.ts"
+  },
   "dependencies": {
     "progress": "^2.0.3",
     "@gltf-transform/core": "^3.10.1",

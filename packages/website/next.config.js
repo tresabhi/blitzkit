@@ -4,6 +4,8 @@ const withVanillaExtract = createVanillaExtractPlugin({ tests: /\.css$/ });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
+
   ...withVanillaExtract({
     webpack: (config) => {
       config.module.rules.push(
@@ -20,15 +22,6 @@ const nextConfig = {
       return config;
     },
   }),
-
-  async headers() {
-    return [
-      {
-        source: '/(.*)?',
-        headers: [{ key: 'X-Frame-Options', value: 'DENY' }],
-      },
-    ];
-  },
 
   distDir: 'dist/website',
   reactStrictMode: true,

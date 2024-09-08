@@ -2,6 +2,7 @@ import {
   modelDefinitions,
   provisionDefinitions,
   tankDefinitions,
+  tankDefinitionsArray,
   tankIcon,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
@@ -9,6 +10,11 @@ import strings from '@blitzkit/core/lang/en-US.json';
 import { ReactNode } from 'react';
 import * as Duel from '../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
+
+export async function generateStaticParams() {
+  const tanks = await tankDefinitionsArray;
+  return tanks.map((tank) => ({ id: `${tank.id}` }));
+}
 
 export default async function Layout({
   children,

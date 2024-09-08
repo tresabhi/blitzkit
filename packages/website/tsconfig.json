@@ -9,6 +9,7 @@
   },
   "include": [
     "src/**/*",
-    "dist/website/types/**/*.ts"
+    "dist/website/types/**/*.ts",
+    ".next/types/**/*.ts"
   ]
 }
