@@ -1,26 +1,24 @@
 import {
-  EquipmentDefinitions,
-  ModelDefinition,
-  ProvisionDefinitions,
-} from '@blitzkit/core';
-import { resolveNearPenetration } from '@blitzkit/core/src/blitz/resolveNearPenetration';
-import { coefficient } from '@blitzkit/core/src/blitzkit/coefficient';
-import { degressiveStat } from '@blitzkit/core/src/blitzkit/degressiveStat';
-import { isExplosive } from '@blitzkit/core/src/blitzkit/isExplosive';
-import { normalizeBoundingBox } from '@blitzkit/core/src/blitzkit/normalizeBoundingBox';
-import { progressiveStat } from '@blitzkit/core/src/blitzkit/progressiveStat';
-import { resolveDpm } from '@blitzkit/core/src/blitzkit/resolveDpm';
-import { resolvePenetrationCoefficient } from '@blitzkit/core/src/blitzkit/resolvePenetrationCoefficient';
-import { sum } from '@blitzkit/core/src/blitzkit/sum';
-import {
+  coefficient,
+  degressiveStat,
   EngineDefinition,
+  EquipmentDefinitions,
   GunDefinition,
+  isExplosive,
+  ModelDefinition,
+  normalizeBoundingBox,
+  progressiveStat,
+  ProvisionDefinitions,
+  resolveDpm,
+  resolveNearPenetration,
+  resolvePenetrationCoefficient,
   ShellDefinition,
+  sum,
   TankDefinition,
   TrackDefinition,
   TurretDefinition,
-} from '@blitzkit/core/src/blitzkit/tankDefinitions';
-import { unionBoundingBox } from '@blitzkit/core/src/blitzkit/unionBoundingBox';
+  unionBoundingBox,
+} from '@blitzkit/core';
 import { EquipmentMatrix } from '../../stores/duel';
 
 export type TankCharacteristics = ReturnType<typeof tankCharacteristics>;

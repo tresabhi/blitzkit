@@ -1,6 +1,4 @@
 import {
-  TankCharacteristics,
-  Var,
   asset,
   availableProvisions,
   checkConsumableProvisionInclusivity,
@@ -22,6 +20,8 @@ import { ModuleManager } from '../../../../components/ModuleManager';
 import { ProvisionsManager } from '../../../../components/ProvisionsManager';
 import { StickyColumnHeaderCell } from '../../../../components/StickyColumnHeaderCell';
 import { StickyTableRoot } from '../../../../components/StickyTableRoot';
+import { TankCharacteristics } from '../../../../core/blitzkit/tankCharacteristics';
+import { Var } from '../../../../core/radix/var';
 import * as CompareEphemeral from '../../../../stores/compareEphemeral';
 import { EquipmentMatrix } from '../../../../stores/duel';
 import { Body } from './Body';

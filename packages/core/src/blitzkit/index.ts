@@ -1,4 +1,3 @@
-export * from '../../../website/src/core/blitzkit/tankCharacteristics';
 export * from './assertSecret';
 export * from './asset';
 export * from './availableProvisions';

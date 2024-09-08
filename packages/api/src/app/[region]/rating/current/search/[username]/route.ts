@@ -1,5 +1,4 @@
-import { Region } from '@blitzkit/core';
-import { searchCurrentRatingPlayers } from '@blitzkit/core/src/blitz/searchCurrentRatingPlayers';
+import { Region, searchCurrentRatingPlayers } from '@blitzkit/core';
 import { NextResponse } from 'next/server';
 
 export async function GET(

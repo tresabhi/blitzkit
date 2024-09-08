@@ -1,8 +1,8 @@
-import { TankVotes } from '@blitzkit/core';
 import {
   BlitzkitResponse,
+  TankVotes,
   unwrapBlitzkitResponse,
-} from '@blitzkit/core/src/blitzkit/unwrapBlitzkitResponse';
+} from '@blitzkit/core';
 import { useEffect, useState } from 'react';
 import * as App from '../stores/app';
 

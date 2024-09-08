@@ -1,4 +1,4 @@
-import { StarsInt } from '@blitzkit/core/src/blitzkit/votes';
+import { StarsInt } from '@blitzkit/core';
 import { Flex, Text, TextProps } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { PartialStar } from './components/PartialStar';

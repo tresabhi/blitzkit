@@ -1,13 +1,13 @@
 import {
   BlitzkitResponse,
   BlitzkitResponseError,
+  isValidBlitzId,
   StarsInt,
   TANK_VOTE_CATEGORIES,
   tankDefinitions,
   TankVoteCategory,
   usersDatabase,
 } from '@blitzkit/core';
-import { isValidBlitzId } from '@blitzkit/core/src/blitz/isValidBlitzId';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(

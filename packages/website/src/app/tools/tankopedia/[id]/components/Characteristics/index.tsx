@@ -7,7 +7,6 @@ import {
   isExplosive,
   provisionDefinitions,
   resolvePenetrationCoefficient,
-  tankCharacteristics,
 } from '@blitzkit/core';
 import { AccessibilityIcon, InfoCircledIcon } from '@radix-ui/react-icons';
 import {
@@ -25,6 +24,7 @@ import { Fragment, use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
 import { Ad, AdType } from '../../../../../../components/Ad';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
+import { tankCharacteristics } from '../../../../../../core/blitzkit/tankCharacteristics';
 import { useAdExempt } from '../../../../../../hooks/useAdExempt';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefinition';

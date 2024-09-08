@@ -1,6 +1,7 @@
-import { asset, TankCharacteristics } from '@blitzkit/core';
+import { asset } from '@blitzkit/core';
 import { Flex, Heading, IconButton, Table } from '@radix-ui/themes';
 import { StickyColumnHeaderCell } from '../../../../components/StickyColumnHeaderCell';
+import { TankCharacteristics } from '../../../../core/blitzkit/tankCharacteristics';
 import * as CompareEphemeral from '../../../../stores/compareEphemeral';
 import { CompareRow } from './CompareRow';
 import { CompareSectionTitle } from './CompareSectionTitle';

@@ -1,4 +1,4 @@
-import { TankDefinition } from '@blitzkit/core/src/blitzkit/tankDefinitions';
+import { TankDefinition } from '@blitzkit/core';
 import { TankFilters } from '../../stores/tankFilters';
 
 export function filterTank(filters: TankFilters, tank: TankDefinition) {

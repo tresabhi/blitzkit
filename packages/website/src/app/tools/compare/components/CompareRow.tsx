@@ -1,4 +1,3 @@
-import { TankCharacteristics, Var } from '@blitzkit/core';
 import {
   CaretLeftIcon,
   CaretRightIcon,
@@ -6,6 +5,8 @@ import {
 } from '@radix-ui/react-icons';
 import { Flex, IconButton, Table, Text } from '@radix-ui/themes';
 import { StickyRowHeaderCell } from '../../../../components/StickyRowHeaderCell';
+import { TankCharacteristics } from '../../../../core/blitzkit/tankCharacteristics';
+import { Var } from '../../../../core/radix/var';
 import * as CompareEphemeral from '../../../../stores/compareEphemeral';
 import * as ComparePersistent from '../../../../stores/comparePersistent';
 

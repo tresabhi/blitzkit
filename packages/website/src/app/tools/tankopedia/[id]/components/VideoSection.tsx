@@ -1,9 +1,10 @@
-import { reviews, Var, youtubers } from '@blitzkit/core';
+import { reviews, youtubers } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import { Link } from '../../../../../components/Link';
 import { PageWrapper } from '../../../../../components/PageWrapper';
 import { VerifiedIcon } from '../../../../../components/VerifiedIcon';
+import { Var } from '../../../../../core/radix/var';
 import * as Duel from '../../../../../stores/duel';
 
 export function VideoSection() {

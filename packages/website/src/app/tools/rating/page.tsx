@@ -19,7 +19,6 @@ import {
   REGIONS,
   searchCurrentRatingPlayers,
   UNLOCALIZED_REGION_NAMES,
-  Var,
 } from '@blitzkit/core';
 import { blackA, orangeDark } from '@radix-ui/colors';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
@@ -38,6 +37,7 @@ import { debounce, range } from 'lodash';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
 import { PageWrapper } from '../../../components/PageWrapper';
+import { Var } from '../../../core/radix/var';
 import { PageTurner } from './components/PageTurner';
 
 const ROWS_PER_PAGE = Math.floor(100 / 3);

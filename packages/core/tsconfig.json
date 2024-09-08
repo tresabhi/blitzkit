@@ -1,8 +1,4 @@
 {
   "extends": "../../tsconfig.json",
-  "include": [
-    "src/**/*",
-    "../website/src/core/blitzkit/filterTank.ts",
-    "../website/src/core/blitzkit/tankCharacteristics.ts"
-, "../scripts/src/core/blitz/writeDVPL.ts"  ]
+  "include": ["src/**/*", "../website/src/core/radix/var.ts"]
 }

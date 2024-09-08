@@ -6,7 +6,6 @@ import {
   modelDefinitions,
   provisionDefinitions,
   skillDefinitions,
-  tankCharacteristics,
   tankDefinitions,
 } from '@blitzkit/core';
 import { PlusIcon } from '@radix-ui/react-icons';
@@ -14,6 +13,7 @@ import { Box, Flex, Heading, IconButton, Text } from '@radix-ui/themes';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
 import { PageWrapper } from '../../../components/PageWrapper';
+import { tankCharacteristics } from '../../../core/blitzkit/tankCharacteristics';
 import { tankToCompareMember } from '../../../core/blitzkit/tankToCompareMember';
 import * as CompareEphemeral from '../../../stores/compareEphemeral';
 import { CompareTable } from './components/CompareTable';

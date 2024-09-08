@@ -1,5 +1,4 @@
-import { BlitzkitResponse } from '@blitzkit/core/src/blitzkit/unwrapBlitzkitResponse';
-import { StarsInt } from '@blitzkit/core/src/blitzkit/votes';
+import { BlitzkitResponse, StarsInt } from '@blitzkit/core';
 import { PaperPlaneIcon } from '@radix-ui/react-icons';
 import {
   AlertDialog,
