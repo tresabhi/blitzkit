@@ -1,5 +1,5 @@
-import { asset } from '@blitzkit/core';
 import { decodeProtobuf } from '../protobuf';
+import { asset } from './asset';
 
 export interface Reviews {
   reviews: Record<number, Review>;

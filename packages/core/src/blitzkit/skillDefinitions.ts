@@ -1,4 +1,5 @@
-import { asset, fetchCdonLz4 } from '@blitzkit/core';
+import { asset } from './asset';
+import { fetchCdonLz4 } from './fetchCdonLz4';
 import { TankClass } from './tankDefinitions';
 
 export interface SkillDefinitions {

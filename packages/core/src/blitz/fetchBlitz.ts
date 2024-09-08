@@ -1,5 +1,6 @@
-import { assertSecret, EventManager, Region } from '@blitzkit/core';
+import { assertSecret, EventManager } from '../blitzkit';
 import { patientFetch } from '../blitzkit/patientFetch';
+import { Region } from './regions';
 
 const RETRY_ERRORS = ['REQUEST_LIMIT_EXCEEDED', 'SOURCE_NOT_AVAILABLE'];
 

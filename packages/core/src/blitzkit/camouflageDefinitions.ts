@@ -1,4 +1,5 @@
-import { asset, fetchCdonLz4 } from '@blitzkit/core';
+import { asset } from './asset';
+import { fetchCdonLz4 } from './fetchCdonLz4';
 
 export type CamouflageDefinitions = Record<
   number,
