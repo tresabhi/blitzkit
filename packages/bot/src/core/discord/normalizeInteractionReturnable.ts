@@ -7,10 +7,10 @@ import {
   InteractionReplyOptions,
   MessageEditOptions,
 } from 'discord.js';
-import { RenderConfiguration } from '../../../../website/src/core/blitzkit/renderConfiguration';
 import { InteractionReturnable } from '../../events/interactionCreate';
 import { Writeable } from '../../types/writable';
 import { jsxToPngThreaded } from '../blitzkit/jsxToPngThreaded';
+import { RenderConfiguration } from '../blitzkit/renderConfiguration';
 
 export async function normalizeInteractionReturnable(
   returnable: InteractionReturnable,

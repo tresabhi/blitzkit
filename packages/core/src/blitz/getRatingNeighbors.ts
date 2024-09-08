@@ -1,6 +1,6 @@
 import { RatingNeighbors, Region } from '@blitzkit/core';
-import { patientFetch } from '../../../website/src/core/blitzkit/patientFetch';
-import { withCORSProxy } from '../../../website/src/core/blitzkit/withCORSProxy';
+import { patientFetch } from '../blitzkit/patientFetch';
+import { withCORSProxy } from '../blitzkit/withCORSProxy';
 import { regionToRegionSubdomain } from './regionToRegionSubdomain';
 
 export async function getRatingNeighbors(

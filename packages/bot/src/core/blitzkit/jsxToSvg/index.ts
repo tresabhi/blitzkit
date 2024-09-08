@@ -1,6 +1,6 @@
 import { readFile } from 'fs/promises';
 import satori from 'satori';
-import { RenderConfiguration } from '../../../../../website/src/core/blitzkit/renderConfiguration';
+import { RenderConfiguration } from '../renderConfiguration';
 import robotoBlack from './Roboto-Black.ttf';
 import robotoBold from './Roboto-Bold.ttf';
 import roboto from './Roboto.ttf';

@@ -11,12 +11,12 @@ import {
 import { escapeMarkdown, Locale } from 'discord.js';
 import { buildTechTreeLine } from '../../../website/src/core/blitzkit/buildTechTreeLine';
 import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
-import { iconPng } from '../../../website/src/core/blitzkit/iconPng';
 import { resolveAncestry } from '../../../website/src/core/blitzkit/resolveAncestry';
 import { tankIconPng } from '../../../website/src/core/blitzkit/tankIconPng';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { TitleBar } from '../components/TitleBar';
 import { resolveTankId } from '../core/blitz/resolveTankId';
+import { iconPng } from '../core/blitzkit/iconPng';
 import { addUsernameChoices } from '../core/discord/addUsernameChoices';
 import { autocompleteTanks } from '../core/discord/autocompleteTanks';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';

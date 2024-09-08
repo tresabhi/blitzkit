@@ -11,12 +11,12 @@ import {
 import { SlashCommandSubcommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
-import { iconPng } from '../../../website/src/core/blitzkit/iconPng';
 import { Glow } from '../components/AllStatsOverview/components/HeroStat/components/Glow';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { DeltaCaret } from '../components/DeltaCaret';
 import { TitleBar } from '../components/TitleBar';
 import { normalizeLeagueIcon } from '../core/blitz/normalizeLeagueIcon';
+import { iconPng } from '../core/blitzkit/iconPng';
 import { addUsernameChoices } from '../core/discord/addUsernameChoices';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { resolvePlayerFromCommand } from '../core/discord/resolvePlayerFromCommand';

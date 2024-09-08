@@ -9,11 +9,11 @@ import {
 } from '@blitzkit/core';
 import { clamp } from 'lodash';
 import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
-import { iconPng } from '../../../website/src/core/blitzkit/iconPng';
 import { mapDefinitions } from '../../../website/src/core/blitzkit/mapDefinitions';
-import { RenderConfiguration } from '../../../website/src/core/blitzkit/renderConfiguration';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { TitleBar } from '../components/TitleBar';
+import { iconPng } from '../core/blitzkit/iconPng';
+import { RenderConfiguration } from '../core/blitzkit/renderConfiguration';
 import { buttonLink } from '../core/discord/buttonLink';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { CommandRegistry } from '../events/interactionCreate';

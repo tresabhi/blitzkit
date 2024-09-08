@@ -1,6 +1,6 @@
 import { RatingInfo, Region } from '@blitzkit/core';
-import { patientFetch } from '../../../website/src/core/blitzkit/patientFetch';
 import { context } from '../blitzkit/context';
+import { patientFetch } from '../blitzkit/patientFetch';
 import { regionToRegionSubdomain } from './regionToRegionSubdomain';
 
 const cache: Partial<Record<Region, RatingInfo>> = {};
