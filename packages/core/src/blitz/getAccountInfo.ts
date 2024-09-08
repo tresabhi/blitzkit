@@ -1,8 +1,9 @@
-import { BlitzStats, Region } from '@blitzkit/core';
 import {
+  BlitzStats,
   FetchBlitzParams,
+  Region,
   fetchBlitz,
-} from '@blitzkit/core/src/blitz/fetchBlitz';
+} from '@blitzkit/core';
 import { normalizeIds } from '../../../website/src/core/blitz/normalizeIds';
 
 export interface SupplementaryStats {

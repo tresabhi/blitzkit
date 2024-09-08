@@ -5,6 +5,7 @@ import {
   BkrlWriteStream,
   CdonValue,
   CdonWriteStream,
+  getAccountInfo,
   RatingInfo,
   RatingNeighbors,
   RatingPlayer,
@@ -12,7 +13,6 @@ import {
   regionSubdomainToRegion,
   superCompress,
 } from '@blitzkit/core';
-import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
 import { chunk } from 'lodash';
 import { argv } from 'process';
 import { patientFetchJSON } from '../../website/src/core/blitzkit/patientFetchJSON';

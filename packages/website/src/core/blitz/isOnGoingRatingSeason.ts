@@ -1,4 +1,4 @@
-import { getRatingInfo } from '@blitzkit/core/src/blitz/getRatingInfo';
+import { getRatingInfo } from '@blitzkit/core';
 
 export async function isOnGoingRatingSeason() {
   const ratingInfo = await getRatingInfo('com');

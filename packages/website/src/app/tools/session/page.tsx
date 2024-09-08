@@ -2,27 +2,23 @@
 
 import {
   AccountListWithServer,
+  IndividualAccountInfo,
   IndividualTankStats,
-  UNLOCALIZED_REGION_NAMES_SHORT,
-  blitzStarsTankAverages,
-  deltaTankStats,
-  idToRegion,
-  searchPlayersAcrossRegions,
-  tankDefinitions,
-} from '@blitzkit/core';
-import {
   STAT_KEYS,
   STAT_NAMES,
   Stat,
+  UNLOCALIZED_REGION_NAMES_SHORT,
+  blitzStarsTankAverages,
+  deltaTankStats,
   generateStats,
-  prettifyStats,
-  sumBlitzStarsStats,
-} from '@blitzkit/core/src/blitz/generateStats';
-import {
-  IndividualAccountInfo,
   getAccountInfo,
-} from '@blitzkit/core/src/blitz/getAccountInfo';
-import { getTankStats } from '@blitzkit/core/src/blitz/getTankStats';
+  getTankStats,
+  idToRegion,
+  prettifyStats,
+  searchPlayersAcrossRegions,
+  sumBlitzStarsStats,
+  tankDefinitions,
+} from '@blitzkit/core';
 import {
   ArrowDownIcon,
   MagnifyingGlassIcon,

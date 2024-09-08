@@ -3,14 +3,14 @@ import {
   BlitzStats,
   calculateWN8,
   filterStats,
+  getAccountInfo,
+  getClanAccountInfo,
+  getTankStats,
   getWN8Percentile,
   StatFilters,
   TankDefinition,
   tankDefinitions,
 } from '@blitzkit/core';
-import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
-import { getClanAccountInfo } from '@blitzkit/core/src/blitz/getClanAccountInfo';
-import { getTankStats } from '@blitzkit/core/src/blitz/getTankStats';
 import { Locale } from 'discord.js';
 import { chunk } from 'lodash';
 import { UserError } from '../../../../website/src/hooks/userError';

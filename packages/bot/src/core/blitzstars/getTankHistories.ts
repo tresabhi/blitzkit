@@ -1,5 +1,4 @@
-import { Region, emptyAllStats } from '@blitzkit/core';
-import { getTankStats } from '@blitzkit/core/src/blitz/getTankStats';
+import { Region, emptyAllStats, getTankStats } from '@blitzkit/core';
 import { Locale } from 'discord.js';
 import { UserError } from '../../../../website/src/hooks/userError';
 import {

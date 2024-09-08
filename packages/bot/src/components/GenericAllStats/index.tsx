@@ -1,5 +1,9 @@
-import { BlitzStats, getWN8Percentile, isNumber } from '@blitzkit/core';
-import { SupplementaryStats } from '@blitzkit/core/src/blitz/getAccountInfo';
+import {
+  BlitzStats,
+  getWN8Percentile,
+  isNumber,
+  SupplementaryStats,
+} from '@blitzkit/core';
 import { Locale } from 'discord.js';
 import { translator } from '../../core/localization/translator';
 import { Card } from './components/Card';

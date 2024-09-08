@@ -1,5 +1,4 @@
-import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
-import { getClanAccountInfo } from '@blitzkit/core/src/blitz/getClanAccountInfo';
+import { getAccountInfo, getClanAccountInfo } from '@blitzkit/core';
 import { teal } from '@radix-ui/colors';
 import { linkBlitzAndDiscord } from '../../../website/src/core/blitzkit/linkBlitzAndDiscord';
 import { Glow } from '../components/AllStatsOverview/components/HeroStat/components/Glow';

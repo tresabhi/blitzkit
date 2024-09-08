@@ -1,5 +1,9 @@
-import { AccountList, fetchBlitz, Region } from '@blitzkit/core';
-import { usernamePattern } from '@blitzkit/core/src/blitz/searchPlayersAcrossRegions/constants';
+import {
+  AccountList,
+  fetchBlitz,
+  Region,
+  usernamePattern,
+} from '@blitzkit/core';
 import { Locale } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { addRegionChoices } from '../core/discord/addRegionChoices';

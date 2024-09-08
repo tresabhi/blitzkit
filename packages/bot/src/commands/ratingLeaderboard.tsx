@@ -1,19 +1,19 @@
 import {
   BkrlDiscriminatedEntries,
   FIRST_MINIMAL_ARCHIVED_RATING_SEASON,
+  getAccountInfo,
   getArchivedLatestSeasonNumber,
   getArchivedRatingInfo,
   getArchivedRatingLeaderboard,
+  getArchivedRatingMidnightLeaderboard,
+  getClanAccountInfo,
   getRatingInfo,
+  getRatingLeague,
+  getRatingNeighbors,
   LEAGUES,
   RatingInfo,
   Region,
 } from '@blitzkit/core';
-import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
-import { getClanAccountInfo } from '@blitzkit/core/src/blitz/getClanAccountInfo';
-import { getRatingLeague } from '@blitzkit/core/src/blitz/getRatingLeague';
-import { getRatingNeighbors } from '@blitzkit/core/src/blitz/getRatingNeighbors';
-import { getArchivedRatingMidnightLeaderboard } from '@blitzkit/core/src/blitzkit/getArchivedRatingMidnightLeaderboard';
 import {
   APIApplicationCommandOptionChoice,
   Locale,

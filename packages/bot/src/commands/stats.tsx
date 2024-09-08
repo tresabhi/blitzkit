@@ -1,6 +1,9 @@
-import { StatFilters, filterStats } from '@blitzkit/core';
-import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
-import { getClanAccountInfo } from '@blitzkit/core/src/blitz/getClanAccountInfo';
+import {
+  StatFilters,
+  filterStats,
+  getAccountInfo,
+  getClanAccountInfo,
+} from '@blitzkit/core';
 import { Locale } from 'discord.js';
 import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
 import { AllStatsOverview } from '../components/AllStatsOverview';

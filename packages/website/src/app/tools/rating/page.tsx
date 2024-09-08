@@ -3,8 +3,15 @@
 import {
   AccountList,
   AccountListItem,
+  fetchBlitz,
   FIRST_MINIMAL_ARCHIVED_RATING_SEASON,
   getArchivedLatestSeasonNumber,
+  getArchivedRatingInfo,
+  getArchivedRatingLeaderboard,
+  getClanAccountInfo,
+  getRatingInfo,
+  getRatingLeague,
+  getRatingNeighbors,
   LEAGUES,
   RatingInfo,
   RatingPlayer,
@@ -13,13 +20,6 @@ import {
   UNLOCALIZED_REGION_NAMES,
   Var,
 } from '@blitzkit/core';
-import { fetchBlitz } from '@blitzkit/core/src/blitz/fetchBlitz';
-import { getClanAccountInfo } from '@blitzkit/core/src/blitz/getClanAccountInfo';
-import { getRatingInfo } from '@blitzkit/core/src/blitz/getRatingInfo';
-import { getRatingLeague } from '@blitzkit/core/src/blitz/getRatingLeague';
-import { getRatingNeighbors } from '@blitzkit/core/src/blitz/getRatingNeighbors';
-import { getArchivedRatingInfo } from '@blitzkit/core/src/blitzkit/getArchivedRatingInfo';
-import { getArchivedRatingLeaderboard } from '@blitzkit/core/src/blitzkit/getArchivedRatingLeaderboard';
 import { blackA, orangeDark } from '@radix-ui/colors';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import {

@@ -1,4 +1,4 @@
-import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
+import { getAccountInfo } from '@blitzkit/core';
 import markdownEscape from 'markdown-escape';
 import { addUsernameChoices } from '../core/discord/addUsernameChoices';
 import { autocompleteUsername } from '../core/discord/autocompleteUsername';

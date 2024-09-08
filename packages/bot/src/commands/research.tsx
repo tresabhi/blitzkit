@@ -1,13 +1,13 @@
 import {
   asset,
   equipmentPriceMatrix,
+  getAccountInfo,
+  getClanAccountInfo,
+  getTankStats,
   TANK_ICONS,
   tankDefinitions,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
-import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
-import { getClanAccountInfo } from '@blitzkit/core/src/blitz/getClanAccountInfo';
-import { getTankStats } from '@blitzkit/core/src/blitz/getTankStats';
 import { escapeMarkdown, Locale } from 'discord.js';
 import { buildTechTreeLine } from '../../../website/src/core/blitzkit/buildTechTreeLine';
 import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';

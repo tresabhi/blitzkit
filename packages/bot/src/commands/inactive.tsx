@@ -1,5 +1,4 @@
-import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
-import { getClanInfo } from '@blitzkit/core/src/blitz/getClanInfo';
+import { getAccountInfo, getClanInfo } from '@blitzkit/core';
 import { Locale } from 'discord.js';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { GenericStats } from '../components/GenericStats';

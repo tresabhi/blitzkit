@@ -1,13 +1,13 @@
 import {
   BkrlFormat,
   deltaBkrlBlitzStats,
+  getAccountInfo,
+  getArchivedRatingMidnightLeaderboard,
+  getClanAccountInfo,
   getLeagueFromScore,
   getRatingInfo,
+  getRatingNeighbors,
 } from '@blitzkit/core';
-import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
-import { getClanAccountInfo } from '@blitzkit/core/src/blitz/getClanAccountInfo';
-import { getRatingNeighbors } from '@blitzkit/core/src/blitz/getRatingNeighbors';
-import { getArchivedRatingMidnightLeaderboard } from '@blitzkit/core/src/blitzkit/getArchivedRatingMidnightLeaderboard';
 import { SlashCommandSubcommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';

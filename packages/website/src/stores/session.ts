@@ -3,9 +3,9 @@
 import {
   IndividualTankStats,
   Region,
+  Stat,
   createNextSafeStore,
 } from '@blitzkit/core';
-import { Stat } from '@blitzkit/core/src/blitz/generateStats';
 import { merge } from 'lodash';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';

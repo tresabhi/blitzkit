@@ -1,5 +1,4 @@
-import { Region } from '@blitzkit/core';
-import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
+import { getAccountInfo, Region } from '@blitzkit/core';
 import { buttonLink } from '../discord/buttonLink';
 
 export async function getBlitzStarsLinkButton(

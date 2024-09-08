@@ -1,5 +1,4 @@
-import { Region } from '@blitzkit/core';
-import { fetchBlitz } from '@blitzkit/core/src/blitz/fetchBlitz';
+import { fetchBlitz, Region } from '@blitzkit/core';
 import { normalizeIds } from '../../../website/src/core/blitz/normalizeIds';
 
 type IndividualClanAccountInfo = {

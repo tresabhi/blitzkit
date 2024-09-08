@@ -1,5 +1,4 @@
-import { idToRegion } from '@blitzkit/core';
-import { getAccountInfo } from '@blitzkit/core/src/blitz/getAccountInfo';
+import { getAccountInfo, idToRegion } from '@blitzkit/core';
 import { Text } from '@radix-ui/themes';
 import { use, useMemo } from 'react';
 import * as App from '../../../stores/app';

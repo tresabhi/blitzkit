@@ -1,5 +1,4 @@
-import { ClanList, Region } from '@blitzkit/core';
-import { fetchBlitz } from '@blitzkit/core/src/blitz/fetchBlitz';
+import { ClanList, fetchBlitz, Region } from '@blitzkit/core';
 import { Locale } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { addClanChoices } from '../core/discord/addClanChoices';
