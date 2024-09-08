@@ -6,6 +6,7 @@
     "progress": "^2.0.3",
     "@gltf-transform/core": "^3.10.1",
     "decompress": "^4.2.1",
+    "csv-parse": "^5.5.6",
     "googleapis": "^134.0.0",
     "fast-xml-parser": "^4.4.1"
   },
