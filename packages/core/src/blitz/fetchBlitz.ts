@@ -1,6 +1,5 @@
-import { assertSecret, Region } from '@blitzkit/core';
-import { EventManager } from '@blitzkit/core/src/blitzkit/eventManager';
-import { patientFetch } from '../blitzkit/patientFetch';
+import { assertSecret, EventManager, Region } from '@blitzkit/core';
+import { patientFetch } from '../../../website/src/core/blitzkit/patientFetch';
 
 const RETRY_ERRORS = ['REQUEST_LIMIT_EXCEEDED', 'SOURCE_NOT_AVAILABLE'];
 
@@ -64,7 +63,7 @@ async function manageQueue() {
 
 export type FetchBlitzParams = Record<string, string | number | undefined>;
 
-export default function fetchBlitz<Data extends object>(
+export function fetchBlitz<Data extends object>(
   region: Region,
   path: string,
   params: FetchBlitzParams = {},

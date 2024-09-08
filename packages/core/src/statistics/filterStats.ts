@@ -1,9 +1,9 @@
 import { SupplementaryStats } from '../../../website/src/core/blitz/getAccountInfo';
 import { tankDefinitions, TreeType } from '../blitzkit/tankDefinitions';
 import { blitzStarsTankAverages } from '../blitzstars/tankAverages';
-import calculateWN8 from './calculateWN8';
+import { calculateWN8 } from './calculateWN8';
 import { BlitzStats } from './compositeStats';
-import sumStats from './sumStats';
+import { sumStats } from './sumStats';
 
 export interface StatFilters {
   nation?: string;

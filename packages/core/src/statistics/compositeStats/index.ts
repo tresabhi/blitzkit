@@ -1,4 +1,4 @@
-import calculateWN8 from '../calculateWN8';
+import { calculateWN8 } from '../calculateWN8';
 import {
   BlitzkitStats,
   CompositeStats,

@@ -1,4 +1,4 @@
-import { TankFilterDefinition } from '@blitzkit/core/src/blitzkit/consumableDefinitions';
+import { TankFilterDefinition } from '@blitzkit/core';
 import { asset } from './asset';
 import { fetchCdonLz4 } from './fetchCdonLz4';
 

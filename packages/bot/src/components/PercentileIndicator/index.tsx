@@ -1,13 +1,11 @@
-import { Percentile } from '@blitzkit/core/src/statistics/percentiles';
+import { Percentile } from '@blitzkit/core';
 import { PERCENTILE_COLORS } from './constants';
 
 interface PercentileIndicatorProps {
   percentile: Percentile;
 }
 
-export default function PercentileIndicator({
-  percentile,
-}: PercentileIndicatorProps) {
+export function PercentileIndicator({ percentile }: PercentileIndicatorProps) {
   return (
     <div
       style={{

@@ -1,7 +1,6 @@
-import { Region } from '@blitzkit/core';
+import { Region, searchPlayersAcrossRegions } from '@blitzkit/core';
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import searchPlayersAcrossRegions from '../../../../../website/src/core/blitz/searchPlayersAcrossRegions';
 import { UserError } from '../../../../../website/src/hooks/userError';
 import { getBlitzFromDiscord } from '../../blitzkit/getBlitzFromDiscord';
 import { translator } from '../../localization/translator';
@@ -12,7 +11,7 @@ export interface ResolvedPlayer {
   id: number;
 }
 
-export default async function resolvePlayerFromCommand(
+export async function resolvePlayerFromCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
   const { t, translate } = translator(interaction.locale);

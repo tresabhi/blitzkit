@@ -1,6 +1,9 @@
-import { ShellType, resolveNearPenetration } from '@blitzkit/core';
-import { isExplosive } from '@blitzkit/core/src/blitzkit/isExplosive';
-import { resolvePenetrationCoefficient } from '@blitzkit/core/src/blitzkit/resolvePenetrationCoefficient';
+import {
+  ShellType,
+  isExplosive,
+  resolveNearPenetration,
+  resolvePenetrationCoefficient,
+} from '@blitzkit/core';
 import { useThree } from '@react-three/fiber';
 import { useCallback } from 'react';
 import {
@@ -189,8 +192,8 @@ export function SpacedArmorSceneComponent({
               shell.type === ShellType.HE
                 ? 'blocked'
                 : blocked
-                ? 'blocked'
-                : 'penetration',
+                  ? 'blocked'
+                  : 'penetration',
             variant: layer.variant,
           });
         } else {
@@ -240,8 +243,8 @@ export function SpacedArmorSceneComponent({
                 shell.type === ShellType.HE && layer.type !== ArmorType.Primary
                   ? 'blocked'
                   : blocked
-                  ? 'blocked'
-                  : 'penetration',
+                    ? 'blocked'
+                    : 'penetration',
               angle,
             });
           }

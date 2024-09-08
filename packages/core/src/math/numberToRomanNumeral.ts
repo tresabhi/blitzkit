@@ -19,7 +19,7 @@ const ROMAN = {
 };
 const ROMAN_KEYS = Object.keys(ROMAN) as (keyof typeof ROMAN)[];
 
-export default function numberToRomanNumeral(value: number) {
+export function numberToRomanNumeral(value: number) {
   let string = '';
 
   ROMAN_KEYS.forEach((index) => {

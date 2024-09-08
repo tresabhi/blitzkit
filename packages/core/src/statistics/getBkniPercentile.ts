@@ -40,7 +40,7 @@ export const BKNI_COLORS = {
   [BkniPercentile.SuperUnicum]: 'purple',
 } as const;
 
-export default function getBkniPercentile(wn8: number) {
+export function getBkniPercentile(wn8: number) {
   const lastIndex = BKNI_PERCENTILES.findLastIndex(({ min }) => min <= wn8);
   return BKNI_PERCENTILES[lastIndex === -1 ? 0 : lastIndex].percentile;
 }

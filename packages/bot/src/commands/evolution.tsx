@@ -2,31 +2,33 @@ import { Locale, SlashCommandSubcommandGroupBuilder } from 'discord.js';
 import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
 import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
-import CommandWrapper from '../components/CommandWrapper';
+import { CommandWrapper } from '../components/CommandWrapper';
 import * as Graph from '../components/Graph';
 import { LineColor } from '../components/Graph/components/Line/constants';
-import NoData from '../components/NoData';
-import TitleBar from '../components/TitleBar';
-import resolveTankId from '../core/blitz/resolveTankId';
+import { NoData } from '../components/NoData';
+import { TitleBar } from '../components/TitleBar';
+import { resolveTankId } from '../core/blitz/resolveTankId';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
-import getPlayerHistories from '../core/blitzstars/getPlayerHistories';
-import getTankHistories from '../core/blitzstars/getTankHistories';
+import { getPlayerHistories } from '../core/blitzstars/getPlayerHistories';
+import { getTankHistories } from '../core/blitzstars/getTankHistories';
 import { addPeriodSubCommands } from '../core/discord/addPeriodSubCommands';
-import addTankChoices from '../core/discord/addTankChoices';
-import addUsernameChoices from '../core/discord/addUsernameChoices';
-import autocompleteTanks from '../core/discord/autocompleteTanks';
-import autocompleteUsername from '../core/discord/autocompleteUsername';
+import { addTankChoices } from '../core/discord/addTankChoices';
+import { addUsernameChoices } from '../core/discord/addUsernameChoices';
+import { autocompleteTanks } from '../core/discord/autocompleteTanks';
+import { autocompleteUsername } from '../core/discord/autocompleteUsername';
 import { buttonRefresh } from '../core/discord/buttonRefresh';
-import commandToURL from '../core/discord/commandToURL';
+import { commandToURL } from '../core/discord/commandToURL';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
-import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
-import resolvePeriodFromCommand, {
+import { resolvePeriodFromButton } from '../core/discord/resolvePeriodFromButton';
+import {
   ResolvedPeriod,
+  resolvePeriodFromCommand,
 } from '../core/discord/resolvePeriodFromCommand';
-import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
-import resolvePlayerFromCommand, {
+import { resolvePlayerFromButton } from '../core/discord/resolvePlayerFromButton';
+import {
   ResolvedPlayer,
+  resolvePlayerFromCommand,
 } from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistry } from '../events/interactionCreate';
 

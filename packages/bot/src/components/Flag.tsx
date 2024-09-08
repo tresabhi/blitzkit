@@ -1,4 +1,4 @@
-import { asset } from '@blitzkit/core/src/blitzkit/asset';
+import { asset } from '@blitzkit/core';
 
 interface FlagProps {
   nation: string;

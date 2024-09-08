@@ -1,5 +1,5 @@
 import { Heading, Text } from '@radix-ui/themes';
-import PageWrapper from '../../../../../components/PageWrapper';
+import { PageWrapper } from '../../../../../components/PageWrapper';
 import * as Duel from '../../../../../stores/duel';
 
 export function HistorySection() {

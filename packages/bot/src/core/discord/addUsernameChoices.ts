@@ -2,7 +2,7 @@ import { Locale, SlashCommandStringOption } from 'discord.js';
 import { translator } from '../localization/translator';
 import { localizationObject } from './localizationObject';
 
-export default function addUsernameChoices(option: SlashCommandStringOption) {
+export function addUsernameChoices(option: SlashCommandStringOption) {
   const { t } = translator(Locale.EnglishUS);
 
   return option

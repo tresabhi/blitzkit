@@ -11,7 +11,7 @@ const cache: Record<Region, Record<number, BkrlDiscriminatedEntries | null>> = {
   asia: {},
 };
 
-export default async function getArchivedRatingMidnightLeaderboard(
+export async function getArchivedRatingMidnightLeaderboard(
   region: Region,
   season: number,
 ) {

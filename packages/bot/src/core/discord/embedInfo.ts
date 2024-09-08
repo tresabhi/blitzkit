@@ -1,7 +1,7 @@
 import { EmbedBuilder } from 'discord.js';
 import { ACCENT_COLOR } from './colors';
 
-export default function embedInfo(title: string, description: string) {
+export function embedInfo(title: string, description: string) {
   const embed = new EmbedBuilder()
     .setColor(ACCENT_COLOR)
     .setDescription(description);

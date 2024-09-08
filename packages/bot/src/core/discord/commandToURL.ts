@@ -7,7 +7,7 @@ export interface Parameters {
 // TODO: automatically infer command options???
 // but how would that work with the region and id options?
 
-export default function commandToURL(
+export function commandToURL(
   interaction: ChatInputCommandInteraction<CacheType>,
   parameters?: Parameters,
 ) {

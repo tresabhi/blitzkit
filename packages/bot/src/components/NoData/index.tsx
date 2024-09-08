@@ -11,7 +11,7 @@ interface NoDataProps {
   locale: Locale;
 }
 
-export default function NoData({ type, locale }: NoDataProps) {
+export function NoData({ type, locale }: NoDataProps) {
   const { translate } = translator(locale);
 
   return (

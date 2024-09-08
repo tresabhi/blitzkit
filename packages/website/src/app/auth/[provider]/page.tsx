@@ -3,7 +3,7 @@
 import { Flex, Heading, Text } from '@radix-ui/themes';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import PageWrapper from '../../../components/PageWrapper';
+import { PageWrapper } from '../../../components/PageWrapper';
 import * as App from '../../../stores/app';
 
 export const PROVIDERS = ['wargaming', 'patreon'];

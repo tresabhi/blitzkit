@@ -6,8 +6,8 @@ import {
   SlashCommandSubcommandBuilder,
 } from 'discord.js';
 import { translator } from '../localization/translator';
-import addTankChoices from './addTankChoices';
-import addTierChoices from './addTierChoices';
+import { addTankChoices } from './addTankChoices';
+import { addTierChoices } from './addTierChoices';
 import { localizationObject } from './localizationObject';
 
 export function addFilterOptions<
@@ -38,7 +38,7 @@ export function addFilterOptions<
                   name_localizations: localizationObject(
                     `common.nations.${nation}`,
                   ),
-                } satisfies APIApplicationCommandOptionChoice),
+                }) satisfies APIApplicationCommandOptionChoice,
             ),
           )
           .setRequired(false),
@@ -67,7 +67,7 @@ export function addFilterOptions<
                   name_localizations: localizationObject(
                     `common.tank_class_short.${tankType}`,
                   ),
-                } satisfies APIApplicationCommandOptionChoice),
+                }) satisfies APIApplicationCommandOptionChoice,
             ),
           )
           .setRequired(false),
@@ -95,7 +95,7 @@ export function addFilterOptions<
                   name_localizations: localizationObject(
                     `common.tree_type.${treeType}`,
                   ),
-                } satisfies APIApplicationCommandOptionChoice),
+                }) satisfies APIApplicationCommandOptionChoice,
             ),
           )
           .setRequired(false),

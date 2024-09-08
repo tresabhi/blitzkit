@@ -8,7 +8,7 @@ import {
 } from '../../types/histories';
 import { PlayerStats } from './getPlayerStats';
 
-export default async function getPlayerHistories(
+export async function getPlayerHistories(
   server: Region,
   id: number,
   options?: Partial<GetHistoriesOptions>,

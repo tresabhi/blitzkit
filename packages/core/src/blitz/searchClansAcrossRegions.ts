@@ -1,11 +1,7 @@
-import { Region } from '@blitzkit/core';
-import fetchBlitz from '../../../website/src/core/blitz/fetchBlitz';
+import { fetchBlitz, Region } from '@blitzkit/core';
 import { ClanList } from './clans';
 
-export default async function searchClansAcrossRegions(
-  search: string,
-  limit = 25,
-) {
+export async function searchClansAcrossRegions(search: string, limit = 25) {
   const trimmed = search.trim();
   if (trimmed.length < 3 && trimmed.length > 100) return [];
   const normalizedLimit = Math.floor(limit / 3);

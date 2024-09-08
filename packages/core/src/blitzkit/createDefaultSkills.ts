@@ -1,4 +1,4 @@
-import { SkillDefinitions } from '@blitzkit/core/src/blitzkit/skillDefinitions';
+import { SkillDefinitions } from '@blitzkit/core';
 import { permanentSkills } from '../blitz/permanentSkills';
 
 export function createDefaultSkills(skillDefinitions: SkillDefinitions) {

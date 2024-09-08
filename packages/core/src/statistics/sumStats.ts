@@ -1,7 +1,7 @@
 import { emptyAllStats } from '..';
 import { BlitzStats } from './compositeStats/constants';
 
-export default function sumStats(allStatsCollection: BlitzStats[]) {
+export function sumStats(allStatsCollection: BlitzStats[]) {
   return allStatsCollection.reduce((accumulated, current) => {
     function sum(value: (allStats: BlitzStats) => number) {
       return value(accumulated) + value(current);

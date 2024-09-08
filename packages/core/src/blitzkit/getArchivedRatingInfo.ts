@@ -1,5 +1,4 @@
-import { RatingInfo, Region, asset } from '@blitzkit/core';
-import { superDecompress } from '@blitzkit/core/src/blitzkit/superDecompress';
+import { RatingInfo, Region, asset, superDecompress } from '@blitzkit/core';
 
 const cache: Record<
   Region,
@@ -15,10 +14,7 @@ const cache: Record<
   asia: {},
 };
 
-export default async function getArchivedRatingInfo(
-  region: Region,
-  season: number,
-) {
+export async function getArchivedRatingInfo(region: Region, season: number) {
   if (!cache[region][season]) {
     const info = await fetch(
       asset(`regions/${region}/rating/${season}/info.cdon.lz4`),

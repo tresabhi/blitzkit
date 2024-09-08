@@ -13,7 +13,7 @@ import { PlusIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, IconButton, Text } from '@radix-ui/themes';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
-import PageWrapper from '../../../components/PageWrapper';
+import { PageWrapper } from '../../../components/PageWrapper';
 import { tankToCompareMember } from '../../../core/blitzkit/tankToCompareMember';
 import * as CompareEphemeral from '../../../stores/compareEphemeral';
 import { CompareTable } from './components/CompareTable';

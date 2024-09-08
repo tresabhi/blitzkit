@@ -6,7 +6,7 @@ interface TitleBarProps {
   description?: string;
 }
 
-export default function TitleBar({ title, image, description }: TitleBarProps) {
+export function TitleBar({ title, image, description }: TitleBarProps) {
   return (
     <div
       style={{

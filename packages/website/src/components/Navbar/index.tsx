@@ -1,8 +1,11 @@
 'use client';
 
-import { assertSecret } from '@blitzkit/core/src/blitzkit/assertSecret';
-import { imgur, ImgurSize } from '@blitzkit/core/src/imgur/imgur';
-import { patreonLoginUrl } from '@blitzkit/core/src/patreon/patreonLoginUrl';
+import {
+  assertSecret,
+  imgur,
+  ImgurSize,
+  patreonLoginUrl,
+} from '@blitzkit/core';
 import {
   Cross1Icon,
   DiscordLogoIcon,

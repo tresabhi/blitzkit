@@ -2,9 +2,7 @@ import { Region } from '@blitzkit/core';
 import { ButtonInteraction } from 'discord.js';
 import { ResolvedPlayer } from './resolvePlayerFromCommand';
 
-export default async function resolvePlayerFromButton(
-  interaction: ButtonInteraction,
-) {
+export async function resolvePlayerFromButton(interaction: ButtonInteraction) {
   const url = new URL(`https://exmaple.com/${interaction.customId}`);
 
   return {

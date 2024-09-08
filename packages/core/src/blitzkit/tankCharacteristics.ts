@@ -1,6 +1,8 @@
-import { EquipmentDefinitions } from '@blitzkit/core/src/blitzkit/equipmentDefinitions';
-import { ModelDefinition } from '@blitzkit/core/src/blitzkit/modelDefinitions';
-import { ProvisionDefinitions } from '@blitzkit/core/src/blitzkit/provisionDefinitions';
+import {
+  EquipmentDefinitions,
+  ModelDefinition,
+  ProvisionDefinitions,
+} from '@blitzkit/core';
 import { EquipmentMatrix } from '../../../website/src/stores/duel';
 import { resolveNearPenetration } from '../blitz/resolveNearPenetration';
 import { coefficient } from './coefficient';
@@ -238,10 +240,10 @@ export function tankCharacteristics(
       tank.class === 'heavyTank'
         ? 0.06
         : tank.class === 'mediumTank'
-        ? 0.08
-        : tank.class === 'lightTank'
-        ? 0.11
-        : 0.04,
+          ? 0.08
+          : tank.class === 'lightTank'
+            ? 0.11
+            : 0.04,
     ]) * coefficient([true, progressiveStat(commanderMastery)]);
   const fireChanceCoefficient = coefficient([hasProtectiveKit, -0.2]);
 
@@ -263,8 +265,8 @@ export function tankCharacteristics(
         tank.class === 'AT-SPG'
           ? 0.04
           : tank.class === 'heavyTank'
-          ? 0.03
-          : 0.02,
+            ? 0.03
+            : 0.02,
       ]),
     ],
     [
@@ -272,10 +274,10 @@ export function tankCharacteristics(
       tank.class === 'heavyTank'
         ? 0.02
         : tank.class === 'mediumTank'
-        ? 0.04
-        : tank.class === 'lightTank'
-        ? 0.07
-        : 0.1,
+          ? 0.04
+          : tank.class === 'lightTank'
+            ? 0.07
+            : 0.1,
     ],
   );
   const camouflageCoefficientStill = sum(
@@ -287,8 +289,8 @@ export function tankCharacteristics(
           tank.class === 'AT-SPG'
             ? 0.04
             : tank.class === 'heavyTank'
-            ? 0.03
-            : 0.02,
+              ? 0.03
+              : 0.02,
         ],
         [true, crewSkills.camouflage * (3 / 100)],
       ),
@@ -298,10 +300,10 @@ export function tankCharacteristics(
       tank.class === 'heavyTank'
         ? 0.04
         : tank.class === 'mediumTank'
-        ? 0.08
-        : tank.class === 'lightTank'
-        ? 0.14
-        : 0.2,
+          ? 0.08
+          : tank.class === 'lightTank'
+            ? 0.14
+            : 0.2,
     ],
   );
 

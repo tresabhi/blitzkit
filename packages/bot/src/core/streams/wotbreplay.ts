@@ -1,8 +1,8 @@
+import { ReadStream } from '@blitzkit/core';
 import AdmZip from 'adm-zip';
 import { readFile, writeFile } from 'fs/promises';
 import { Parser } from 'pickleparser';
 import protobuf from 'protobufjs';
-import { ReadStream } from '../../../../core/src/streams/buffer';
 
 interface WotbReplayMetaJson {
   version: string;

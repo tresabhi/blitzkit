@@ -6,7 +6,7 @@ interface CommandWrapperProps {
   fat?: boolean;
 }
 
-export default function CommandWrapper({ children, fat }: CommandWrapperProps) {
+export function CommandWrapper({ children, fat }: CommandWrapperProps) {
   return (
     <div
       style={{

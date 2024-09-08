@@ -1,8 +1,8 @@
 import { RenderConfiguration } from '../../../../website/src/core/blitzkit/renderConfiguration';
-import jsxToSvg from './jsxToSvg';
+import { jsxToSvg } from './jsxToSvg';
 import { svgToPngThreaded } from './svgToPngThreaded';
 
-export default async function jsxToPngThreaded(
+export async function jsxToPngThreaded(
   jsx: JSX.Element,
   renderConfiguration: RenderConfiguration,
 ) {

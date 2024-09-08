@@ -11,7 +11,7 @@ export interface FileChange {
   encoding: 'utf-8' | 'base64';
 }
 
-export default async function commitMultipleFiles(
+export async function commitMultipleFiles(
   owner: string,
   repo: string,
   branch: string,

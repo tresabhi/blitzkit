@@ -1,4 +1,4 @@
-import { gameDefinitions } from '@blitzkit/core/src/blitzkit/gameDefinitions';
+import { gameDefinitions } from '@blitzkit/core';
 import {
   SlashCommandBuilder,
   SlashCommandSubcommandBuilder,
@@ -7,7 +7,7 @@ import {
 import { addFilterOptions } from './addFilterOptions';
 import { addPeriodSubCommands } from './addPeriodSubCommands';
 
-export default async function addPeriodicFilterOptions<
+export async function addPeriodicFilterOptions<
   OptionType extends SlashCommandBuilder | SlashCommandSubcommandGroupBuilder,
 >(
   option: OptionType,

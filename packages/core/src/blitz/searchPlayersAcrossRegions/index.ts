@@ -1,5 +1,5 @@
 import { Region } from '@blitzkit/core';
-import fetchBlitz from '../fetchBlitz';
+import { fetchBlitz } from '@blitzkit/core/src/blitz/fetchBlitz';
 import { usernamePattern } from './constants';
 
 export interface AccountListItem {
@@ -11,10 +11,7 @@ export type AccountListWithServer = (AccountListItem & {
   region: Region;
 })[];
 
-export default async function searchPlayersAcrossRegions(
-  search: string,
-  limit = 25,
-) {
+export async function searchPlayersAcrossRegions(search: string, limit = 25) {
   const trimmedSearch = search.trim();
   const normalizedLimit = Math.floor(limit / 3);
 

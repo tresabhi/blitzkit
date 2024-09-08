@@ -6,7 +6,7 @@ const TIME_ZONE_MAPPINGS: Record<Region, number> = {
   asia: +7, // Central Asia Standard Time
 };
 
-export default function getTimeDaysAgo(region: Region, daysAgo: number) {
+export function getTimeDaysAgo(region: Region, daysAgo: number) {
   const now = new Date();
   if (daysAgo === 0) now.getTime() / 1000;
 

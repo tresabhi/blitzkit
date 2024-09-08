@@ -2,7 +2,7 @@ import { Flex, Heading } from '@radix-ui/themes';
 import { compareVersions } from 'compare-versions';
 import versions from '../../../../public/assets/versions.json';
 import { Link } from '../../../components/Link';
-import PageWrapper from '../../../components/PageWrapper';
+import { PageWrapper } from '../../../components/PageWrapper';
 
 export default async function Page() {
   return (

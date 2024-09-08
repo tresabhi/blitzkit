@@ -1,5 +1,5 @@
-import { Percentile } from '@blitzkit/core/src/statistics/percentiles';
-import GenericStatsColumn from './components/GenericStatsColumn';
+import { Percentile } from '@blitzkit/core';
+import { GenericStatsColumn } from './components/GenericStatsColumn';
 
 export type GenericStat =
   | [string, string | number | undefined]
@@ -10,10 +10,7 @@ export interface GenericStatsProps {
   columnCount?: number;
 }
 
-export default function GenericStats({
-  stats,
-  columnCount = 2,
-}: GenericStatsProps) {
+export function GenericStats({ stats, columnCount = 2 }: GenericStatsProps) {
   const filteredStats = stats.filter(([, value]) => value !== undefined);
   const itemsPerRow = Math.ceil(filteredStats.length / columnCount);
   const columns: GenericStat[][] = [];

@@ -7,14 +7,13 @@ import {
   CdonWriteStream,
   RatingInfo,
   RatingNeighbors,
+  RatingPlayer,
   RegionSubdomain,
   superCompress,
 } from '@blitzkit/core';
-import { RatingPlayer } from '@blitzkit/core/src/statistics/deltaBkrlBlitzStats';
 import { chunk } from 'lodash';
 import { argv } from 'process';
 import { getAccountInfo } from '../../website/src/core/blitz/getAccountInfo';
-import regionSubdomainToRegion from '../../website/src/core/blitz/regionSubdomainToRegion';
 import { patientFetchJSON } from '../../website/src/core/blitzkit/patientFetchJSON';
 import { commitAssets } from './core/github/commitAssets';
 import { FileChange } from './core/github/commitMultipleFiles';

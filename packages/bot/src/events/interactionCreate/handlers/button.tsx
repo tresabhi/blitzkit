@@ -2,9 +2,7 @@ import { ButtonInteraction, CacheType } from 'discord.js';
 import { commands } from '..';
 import normalizeInteractionReturnable from '../../../core/discord/normalizeInteractionReturnable';
 
-export default async function handleButton(
-  interaction: ButtonInteraction<CacheType>,
-) {
+export async function handleButton(interaction: ButtonInteraction<CacheType>) {
   await interaction.deferUpdate();
 
   const url = new URL(`https://example.com/${interaction.customId}`);

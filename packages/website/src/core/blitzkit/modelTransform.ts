@@ -1,4 +1,4 @@
-import { EventManager } from '@blitzkit/core/src/blitzkit/eventManager';
+import { EventManager } from '@blitzkit/core';
 import { invalidate } from '@react-three/fiber';
 
 export interface ModelTransformEventData {

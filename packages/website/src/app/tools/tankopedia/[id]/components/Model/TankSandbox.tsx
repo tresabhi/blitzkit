@@ -17,7 +17,7 @@ import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawL
 import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
 import { useEquipment } from '../../../../../../hooks/useEquipment';
-import useOnScreen from '../../../../../../hooks/useOnScreen';
+import { useOnScreen } from '../../../../../../hooks/useOnScreen';
 import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefinition';
 import * as Duel from '../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemeral';

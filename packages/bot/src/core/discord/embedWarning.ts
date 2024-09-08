@@ -1,7 +1,7 @@
 import { EmbedBuilder } from 'discord.js';
 import { WARNING_COLOR } from './colors';
 
-export default function embedWarning(title: string, description: string) {
+export function embedWarning(title: string, description: string) {
   return new EmbedBuilder()
     .setColor(WARNING_COLOR)
     .setTitle(title)

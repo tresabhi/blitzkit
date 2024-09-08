@@ -1,4 +1,4 @@
-import { Percentile } from '@blitzkit/core/src/statistics/percentiles';
+import { Percentile } from '@blitzkit/core';
 import {
   amber,
   blue,

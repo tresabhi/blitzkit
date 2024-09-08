@@ -1,7 +1,7 @@
 import { EmbedBuilder } from 'discord.js';
 import { NEGATIVE_COLOR } from './colors';
 
-export default function embedNegative(title: string, description: string) {
+export function embedNegative(title: string, description: string) {
   return new EmbedBuilder()
     .setColor(NEGATIVE_COLOR)
     .setTitle(title)

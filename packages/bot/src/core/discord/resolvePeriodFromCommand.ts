@@ -1,8 +1,8 @@
 import { Region } from '@blitzkit/core';
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
-import getTimeDaysAgo from '../../../../website/src/core/blitzkit/getTimeDaysAgo';
-import getPeriodNow from '../blitzkit/getPeriodNow';
-import getPeriodStart from '../blitzkit/getPeriodStart';
+import { getTimeDaysAgo } from '../../../../website/src/core/blitzkit/getTimeDaysAgo';
+import { getPeriodNow } from '../blitzkit/getPeriodNow';
+import { getPeriodStart } from '../blitzkit/getPeriodStart';
 import { translator } from '../localization/translator';
 import { PeriodType } from './addPeriodSubCommands';
 import { getPeriodOptionName } from './getPeriodOptionName';
@@ -13,7 +13,7 @@ export interface ResolvedPeriod {
   end: number;
 }
 
-export default function resolvePeriodFromCommand(
+export function resolvePeriodFromCommand(
   region: Region,
   interaction: ChatInputCommandInteraction<CacheType>,
   forcedPeriod?: PeriodType,

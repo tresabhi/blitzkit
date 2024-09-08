@@ -7,9 +7,9 @@ import {
   asset,
   idToRegion,
 } from '@blitzkit/core';
+import { retryAbleBlitzFetchEvent } from '@blitzkit/core/src/blitz/fetchBlitz';
 import { chunk, times, uniq } from 'lodash';
 import { compress, decompress } from 'lz4js';
-import { retryAbleBlitzFetchEvent } from '../../website/src/core/blitz/fetchBlitz';
 import { getAccountInfo } from '../../website/src/core/blitz/getAccountInfo';
 import { DiscoveredIdsDefinitions } from '../../website/src/core/blitzkit/discoveredIdDefinitions';
 import { commitAssets } from './core/github/commitAssets';

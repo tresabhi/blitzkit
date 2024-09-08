@@ -1,11 +1,11 @@
 import { Locale } from 'discord.js';
 import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
 import { getClanInfo } from '../../../website/src/core/blitz/getClanInfo';
-import CommandWrapper from '../components/CommandWrapper';
-import GenericStats from '../components/GenericStats';
-import NoData from '../components/NoData';
-import TitleBar from '../components/TitleBar';
-import addClanChoices from '../core/discord/addClanChoices';
+import { CommandWrapper } from '../components/CommandWrapper';
+import { GenericStats } from '../components/GenericStats';
+import { NoData } from '../components/NoData';
+import { TitleBar } from '../components/TitleBar';
+import { addClanChoices } from '../core/discord/addClanChoices';
 import autocompleteClan from '../core/discord/autocompleteClan';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { localizationObject } from '../core/discord/localizationObject';

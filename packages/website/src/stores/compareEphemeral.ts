@@ -1,6 +1,6 @@
 'use client';
 
-import { createNextSafeStore } from '@blitzkit/core/src/zustand/createNextSafeStore';
+import { createNextSafeStore } from '@blitzkit/core';
 import { create } from 'zustand';
 import { DuelMember } from './duel';
 

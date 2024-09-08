@@ -1,6 +1,8 @@
-import { TankDefinition } from '@blitzkit/core';
-import { availableProvisions } from '@blitzkit/core/src/blitzkit/availableProvisions';
-import { ProvisionDefinitions } from '@blitzkit/core/src/blitzkit/provisionDefinitions';
+import {
+  availableProvisions,
+  ProvisionDefinitions,
+  TankDefinition,
+} from '@blitzkit/core';
 import { DuelMember } from '../../stores/duel';
 import { genericDefaultEquipmentMatrix } from '../../stores/duel/constants';
 

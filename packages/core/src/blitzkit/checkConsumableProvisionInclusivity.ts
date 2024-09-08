@@ -1,5 +1,4 @@
-import { ConsumableEntry } from '@blitzkit/core/src/blitzkit/consumableDefinitions';
-import { ProvisionEntry } from '@blitzkit/core/src/blitzkit/provisionDefinitions';
+import { ConsumableEntry, ProvisionEntry } from '@blitzkit/core';
 import { GunDefinition, TankDefinition } from './tankDefinitions';
 
 export function checkConsumableProvisionInclusivity(

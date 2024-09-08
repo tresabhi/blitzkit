@@ -1,13 +1,13 @@
 import { Region } from '@blitzkit/core';
 import { ButtonInteraction } from 'discord.js';
-import getTimeDaysAgo from '../../../../website/src/core/blitzkit/getTimeDaysAgo';
-import getPeriodNow from '../blitzkit/getPeriodNow';
-import getPeriodStart from '../blitzkit/getPeriodStart';
+import { getTimeDaysAgo } from '../../../../website/src/core/blitzkit/getTimeDaysAgo';
+import { getPeriodNow } from '../blitzkit/getPeriodNow';
+import { getPeriodStart } from '../blitzkit/getPeriodStart';
 import { PeriodType } from './addPeriodSubCommands';
 import { getPeriodOptionName } from './getPeriodOptionName';
 import { ResolvedPeriod } from './resolvePeriodFromCommand';
 
-export default function resolvePeriodFromButton(
+export function resolvePeriodFromButton(
   region: Region,
   interaction: ButtonInteraction,
 ) {

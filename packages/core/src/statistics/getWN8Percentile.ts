@@ -13,7 +13,7 @@ const WN8_PERCENTILES: [number, Percentile][] = [
   [2900, Percentile.SuperUnicum],
 ];
 
-export default function getWN8Percentile(WN8: number) {
+export function getWN8Percentile(WN8: number) {
   const lastIndex = WN8_PERCENTILES.findLastIndex(
     ([WN8Listing]) => WN8Listing <= WN8,
   );

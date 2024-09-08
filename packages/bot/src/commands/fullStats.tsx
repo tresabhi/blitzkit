@@ -3,31 +3,33 @@ import { Locale } from 'discord.js';
 import { getAccountInfo } from '../../../website/src/core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../website/src/core/blitz/getClanAccountInfo';
 import { emblemURL } from '../../../website/src/core/blitzkit/emblemURL';
-import CommandWrapper from '../components/CommandWrapper';
-import GenericAllStats from '../components/GenericAllStats';
-import NoData from '../components/NoData';
-import TierWeights from '../components/TierWeights';
-import TitleBar from '../components/TitleBar';
+import { CommandWrapper } from '../components/CommandWrapper';
+import { GenericAllStats } from '../components/GenericAllStats';
+import { NoData } from '../components/NoData';
+import { TierWeights } from '../components/TierWeights';
+import { TitleBar } from '../components/TitleBar';
 import { filtersToDescription } from '../core/blitzkit/filtersToDescription';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
-import getStatsInPeriod from '../core/blitzstars/getStatsInPeriod';
-import addPeriodicFilterOptions from '../core/discord/addPeriodicFilterOptions';
-import addUsernameChoices from '../core/discord/addUsernameChoices';
-import autocompleteTanks from '../core/discord/autocompleteTanks';
-import autocompleteUsername from '../core/discord/autocompleteUsername';
+import { getStatsInPeriod } from '../core/blitzstars/getStatsInPeriod';
+import { addPeriodicFilterOptions } from '../core/discord/addPeriodicFilterOptions';
+import { addUsernameChoices } from '../core/discord/addUsernameChoices';
+import { autocompleteTanks } from '../core/discord/autocompleteTanks';
+import { autocompleteUsername } from '../core/discord/autocompleteUsername';
 import { buttonRefresh } from '../core/discord/buttonRefresh';
-import commandToURL from '../core/discord/commandToURL';
+import { commandToURL } from '../core/discord/commandToURL';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { getCustomPeriodParams } from '../core/discord/getCustomPeriodParams';
 import { getFiltersFromButton } from '../core/discord/getFiltersFromButton';
 import { getFiltersFromCommand } from '../core/discord/getFiltersFromCommand';
-import resolvePeriodFromButton from '../core/discord/resolvePeriodFromButton';
-import resolvePeriodFromCommand, {
+import { resolvePeriodFromButton } from '../core/discord/resolvePeriodFromButton';
+import {
   ResolvedPeriod,
+  resolvePeriodFromCommand,
 } from '../core/discord/resolvePeriodFromCommand';
-import resolvePlayerFromButton from '../core/discord/resolvePlayerFromButton';
-import resolvePlayerFromCommand, {
+import { resolvePlayerFromButton } from '../core/discord/resolvePlayerFromButton';
+import {
   ResolvedPlayer,
+  resolvePlayerFromCommand,
 } from '../core/discord/resolvePlayerFromCommand';
 import { CommandRegistry } from '../events/interactionCreate';
 

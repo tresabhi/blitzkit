@@ -1,5 +1,4 @@
-import { TankDefinition } from '@blitzkit/core';
-import { tankIcon } from '@blitzkit/core/src/blitzkit/tankIcon';
+import { TankDefinition, tankIcon } from '@blitzkit/core';
 import { classIcons } from './ClassIcon';
 import { ExperimentIcon } from './ExperimentIcon';
 import { Link } from './Link';
@@ -36,8 +35,8 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
           tank.treeType === 'collector'
             ? 'blue'
             : tank.treeType === 'premium'
-            ? 'amber'
-            : 'gray'
+              ? 'amber'
+              : 'gray'
         }
         highContrast={tank.treeType === 'researchable'}
         underline="hover"

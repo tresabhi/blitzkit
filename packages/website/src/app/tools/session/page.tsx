@@ -3,11 +3,11 @@
 import {
   IndividualTankStats,
   UNLOCALIZED_REGION_NAMES_SHORT,
+  blitzStarsTankAverages,
   deltaTankStats,
   idToRegion,
   tankDefinitions,
 } from '@blitzkit/core';
-import { blitzStarsTankAverages } from '@blitzkit/core/src/blitzstars/tankAverages';
 import {
   ArrowDownIcon,
   MagnifyingGlassIcon,
@@ -28,7 +28,7 @@ import {
 } from '@radix-ui/themes';
 import { debounce } from 'lodash';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
-import PageWrapper from '../../../components/PageWrapper';
+import { PageWrapper } from '../../../components/PageWrapper';
 import { TankRowHeaderCell } from '../../../components/TankRowHeaderCell';
 import {
   STAT_KEYS,
@@ -42,9 +42,10 @@ import {
   IndividualAccountInfo,
   getAccountInfo,
 } from '../../../core/blitz/getAccountInfo';
-import getTankStats from '../../../core/blitz/getTankStats';
-import searchPlayersAcrossRegions, {
+import { getTankStats } from '../../../core/blitz/getTankStats';
+import {
   AccountListWithServer,
+  searchPlayersAcrossRegions,
 } from '../../../core/blitz/searchPlayersAcrossRegions';
 import * as Session from '../../../stores/session';
 

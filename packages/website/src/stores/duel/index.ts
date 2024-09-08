@@ -1,15 +1,15 @@
 'use client';
 
 import {
+  createNextSafeStore,
   EngineDefinition,
   GunDefinition,
+  ProvisionDefinitions,
   ShellDefinition,
   TankDefinition,
   TrackDefinition,
   TurretDefinition,
 } from '@blitzkit/core';
-import { ProvisionDefinitions } from '@blitzkit/core/src/blitzkit/provisionDefinitions';
-import { createNextSafeStore } from '@blitzkit/core/src/zustand/createNextSafeStore';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { tankToDuelMember } from '../../core/blitzkit/tankToDuelMember';

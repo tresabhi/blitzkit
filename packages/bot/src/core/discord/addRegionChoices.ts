@@ -7,7 +7,7 @@ import {
 import { translator } from '../localization/translator';
 import { localizationObject } from './localizationObject';
 
-export default function addRegionChoices(option: SlashCommandStringOption) {
+export function addRegionChoices(option: SlashCommandStringOption) {
   const { t, translate } = translator(Locale.EnglishUS);
 
   return option
@@ -26,7 +26,7 @@ export default function addRegionChoices(option: SlashCommandStringOption) {
             name_localizations: localizationObject(
               `common.regions.normal.${region}`,
             ),
-          } satisfies APIApplicationCommandOptionChoice),
+          }) satisfies APIApplicationCommandOptionChoice,
       ),
     )
     .setRequired(true);

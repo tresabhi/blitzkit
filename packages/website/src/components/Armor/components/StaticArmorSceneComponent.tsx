@@ -1,4 +1,4 @@
-import { I_HAT, J_HAT } from '@blitzkit/core/src/math/axis';
+import { I_HAT, J_HAT } from '@blitzkit/core';
 import { MeshProps, useThree } from '@react-three/fiber';
 import { clamp } from 'lodash';
 import { useEffect, useMemo } from 'react';

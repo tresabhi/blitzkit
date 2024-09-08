@@ -1,4 +1,4 @@
-import PageWrapper from '../../../components/PageWrapper';
+import { PageWrapper } from '../../../components/PageWrapper';
 import { Controls } from './components/Controls';
 import { Info } from './components/Info';
 import { TankTable } from './components/Table';

@@ -1,5 +1,5 @@
 import { assertSecret } from '@blitzkit/core';
-import getRatingInfo from '../blitz/getRatingInfo';
+import { getRatingInfo } from '@blitzkit/core/src/blitz/getRatingInfo';
 
 interface GitHubTrees {
   tree: { path: string; url: string }[];

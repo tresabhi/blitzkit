@@ -1,25 +1,25 @@
 import {
+  blitzStarsTankAverages,
   BlitzStats,
+  calculateWN8,
   filterStats,
+  getWN8Percentile,
   StatFilters,
   TankDefinition,
   tankDefinitions,
 } from '@blitzkit/core';
-import { blitzStarsTankAverages } from '@blitzkit/core/src/blitzstars/tankAverages';
-import calculateWN8 from '@blitzkit/core/src/statistics/calculateWN8';
-import getWN8Percentile from '@blitzkit/core/src/statistics/getWN8Percentile';
 import { Locale } from 'discord.js';
 import { chunk } from 'lodash';
 import { getAccountInfo } from '../../../../website/src/core/blitz/getAccountInfo';
 import { getClanAccountInfo } from '../../../../website/src/core/blitz/getClanAccountInfo';
-import getTankStats from '../../../../website/src/core/blitz/getTankStats';
+import { getTankStats } from '../../../../website/src/core/blitz/getTankStats';
 import { UserError } from '../../../../website/src/hooks/userError';
 import * as Breakdown from '../../components/Breakdown';
-import CommandWrapper from '../../components/CommandWrapper';
-import NoData from '../../components/NoData';
-import TitleBar from '../../components/TitleBar';
+import { CommandWrapper } from '../../components/CommandWrapper';
+import { NoData } from '../../components/NoData';
+import { TitleBar } from '../../components/TitleBar';
 import { filtersToDescription } from '../../core/blitzkit/filtersToDescription';
-import getStatsInPeriod from '../../core/blitzstars/getStatsInPeriod';
+import { getStatsInPeriod } from '../../core/blitzstars/getStatsInPeriod';
 import { ResolvedPeriod } from '../../core/discord/resolvePeriodFromCommand';
 import { ResolvedPlayer } from '../../core/discord/resolvePlayerFromCommand';
 import { translator } from '../../core/localization/translator';

@@ -1,4 +1,4 @@
-import { I_HAT } from '@blitzkit/core/src/math/axis';
+import { I_HAT } from '@blitzkit/core';
 import { Vector3 } from 'three';
 
 export function rotateDavaVector(vector: Vector3) {

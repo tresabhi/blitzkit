@@ -1,16 +1,16 @@
+import { searchPlayersAcrossRegions } from '@blitzkit/core';
 import {
   ApplicationCommandOptionChoiceData,
   AutocompleteInteraction,
   CacheType,
 } from 'discord.js';
-import searchPlayersAcrossRegions from '../../../../website/src/core/blitz/searchPlayersAcrossRegions';
 import { translator } from '../localization/translator';
 import {
   DISCORD_CHOICES_MAX_NAME_SIZE,
   OVERFLOW_SUFFIX,
 } from './autocompleteClan/constants';
 
-export default async function autocompleteUsername(
+export async function autocompleteUsername(
   interaction: AutocompleteInteraction<CacheType>,
 ) {
   const { translate } = translator(interaction.locale);

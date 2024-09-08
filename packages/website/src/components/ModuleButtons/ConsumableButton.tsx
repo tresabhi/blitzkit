@@ -1,5 +1,4 @@
-import { asset } from '@blitzkit/core';
-import { consumableDefinitions } from '@blitzkit/core/src/blitzkit/consumableDefinitions';
+import { asset, consumableDefinitions } from '@blitzkit/core';
 import { ClockIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Flex, Text } from '@radix-ui/themes';
 import { use } from 'react';
@@ -39,8 +38,8 @@ export function ConsumableButton({
                 durationDelta > 0
                   ? 'green'
                   : durationDelta < 0
-                  ? 'tomato'
-                  : undefined
+                    ? 'tomato'
+                    : undefined
               }
             >
               <Flex align="center" gap="1" style={{ marginBottom: -4 }}>
@@ -56,8 +55,8 @@ export function ConsumableButton({
                 cooldownDelta < 0
                   ? 'green'
                   : cooldownDelta > 0
-                  ? 'tomato'
-                  : undefined
+                    ? 'tomato'
+                    : undefined
               }
             >
               <Flex align="center" gap="1">

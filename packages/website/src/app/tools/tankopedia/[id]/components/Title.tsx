@@ -1,5 +1,4 @@
-import { provisionDefinitions } from '@blitzkit/core';
-import { TREE_TYPE_ICONS } from '@blitzkit/core/src/blitzkit/tankDefinitions/constants';
+import { provisionDefinitions, TREE_TYPE_ICONS } from '@blitzkit/core';
 import { CaretRightIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, Heading } from '@radix-ui/themes';
 import Link from 'next/link';

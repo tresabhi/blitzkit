@@ -1,4 +1,4 @@
-import searchClansAcrossRegions from '@blitzkit/core/src/blitz/searchClansAcrossRegions';
+import { searchClansAcrossRegions } from '@blitzkit/core';
 import {
   ApplicationCommandOptionChoiceData,
   AutocompleteInteraction,
@@ -7,7 +7,7 @@ import {
 import { translator } from '../../localization/translator';
 import { DISCORD_CHOICES_MAX_NAME_SIZE, OVERFLOW_SUFFIX } from './constants';
 
-export default async function autocompleteClan(
+export async function autocompleteClan(
   interaction: AutocompleteInteraction<CacheType>,
 ) {
   const { translate } = translator(interaction.locale);

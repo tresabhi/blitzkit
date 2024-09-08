@@ -10,9 +10,9 @@ import {
 import { RenderConfiguration } from '../../../../website/src/core/blitzkit/renderConfiguration';
 import { InteractionReturnable } from '../../events/interactionCreate';
 import { Writeable } from '../../types/writable';
-import jsxToPngThreaded from '../blitzkit/jsxToPngThreaded';
+import { jsxToPngThreaded } from '../blitzkit/jsxToPngThreaded';
 
-export default async function normalizeInteractionReturnable(
+export async function normalizeInteractionReturnable(
   returnable: InteractionReturnable,
 ) {
   const images: [number, Buffer][] = [];

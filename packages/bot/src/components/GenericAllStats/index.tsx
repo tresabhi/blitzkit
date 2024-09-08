@@ -1,6 +1,4 @@
-import { BlitzStats } from '@blitzkit/core';
-import isNumber from '@blitzkit/core/src/math/isNumber';
-import getWN8Percentile from '@blitzkit/core/src/statistics/getWN8Percentile';
+import { BlitzStats, getWN8Percentile, isNumber } from '@blitzkit/core';
 import { Locale } from 'discord.js';
 import { SupplementaryStats } from '../../../../website/src/core/blitz/getAccountInfo';
 import { translator } from '../../core/localization/translator';
@@ -14,7 +12,7 @@ interface GenericAllStatsProps {
   locale: Locale;
 }
 
-export default function GenericAllStats({
+export function GenericAllStats({
   stats,
   supplementaryStats,
   locale,

@@ -1,6 +1,9 @@
-import { ShellDefinition, resolveNearPenetration } from '@blitzkit/core';
-import { isExplosive } from '@blitzkit/core/src/blitzkit/isExplosive';
-import { resolvePenetrationCoefficient } from '@blitzkit/core/src/blitzkit/resolvePenetrationCoefficient';
+import {
+  ShellDefinition,
+  isExplosive,
+  resolveNearPenetration,
+  resolvePenetrationCoefficient,
+} from '@blitzkit/core';
 import { useEffect } from 'react';
 import {
   AdditiveBlending,

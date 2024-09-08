@@ -4,7 +4,7 @@ import {
   ComponentEmojiResolvable,
 } from 'discord.js';
 
-export default function buttonPrimary(
+export function buttonPrimary(
   id: string,
   label: string,
   emoji?: ComponentEmojiResolvable,

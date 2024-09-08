@@ -1,6 +1,9 @@
-import { TankClass, TreeType } from '@blitzkit/core';
-import { TREE_TYPE_ICONS } from '@blitzkit/core/src/blitzkit/tankDefinitions/constants';
-import { Percentile } from '@blitzkit/core/src/statistics/percentiles';
+import {
+  Percentile,
+  TankClass,
+  TREE_TYPE_ICONS,
+  TreeType,
+} from '@blitzkit/core';
 import { createColors } from 'bepaint';
 import {
   AccentColor,

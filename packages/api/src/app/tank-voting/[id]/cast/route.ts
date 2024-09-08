@@ -1,8 +1,9 @@
-import { tankDefinitions, usersDatabase } from '@blitzkit/core';
 import {
   TANK_VOTE_CATEGORIES,
+  tankDefinitions,
   TankVoteCategory,
-} from '@blitzkit/core/src/blitzkit/votes';
+  usersDatabase,
+} from '@blitzkit/core';
 import { NextRequest, NextResponse } from 'next/server';
 import { StarsInt } from '../../../../../../website/src/app/tools/tankopedia/[id]/components/Model/MetaSection/components/Stars';
 import { isValidBlitzId } from '../../../../../../website/src/core/blitz/isValidBlitzId';

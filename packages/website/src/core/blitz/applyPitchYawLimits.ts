@@ -1,8 +1,4 @@
-import {
-  PitchLimits,
-  YawLimits,
-} from '@blitzkit/core/src/blitzkit/modelDefinitions';
-import { normalizeAngleRad } from '@blitzkit/core/src/math/normalizeAngleRad';
+import { normalizeAngleRad, PitchLimits, YawLimits } from '@blitzkit/core';
 import { clamp } from 'lodash';
 import { degToRad } from 'three/src/math/MathUtils';
 

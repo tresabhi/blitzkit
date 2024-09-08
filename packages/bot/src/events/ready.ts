@@ -1,6 +1,6 @@
 import { ActivityType, Client } from 'discord.js';
 
-export default function ready(client: Client<true>) {
+export function ready(client: Client<true>) {
   console.log(`🟢 Launched bot ${client.shard?.ids[0] ?? 'default'}`);
 
   const activities: (() => string)[] = [

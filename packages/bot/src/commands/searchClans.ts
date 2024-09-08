@@ -1,11 +1,11 @@
 import { ClanList, Region } from '@blitzkit/core';
+import { fetchBlitz } from '@blitzkit/core/src/blitz/fetchBlitz';
 import { Locale } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import fetchBlitz from '../../../website/src/core/blitz/fetchBlitz';
-import addClanChoices from '../core/discord/addClanChoices';
-import addRegionChoices from '../core/discord/addRegionChoices';
+import { addClanChoices } from '../core/discord/addClanChoices';
+import { addRegionChoices } from '../core/discord/addRegionChoices';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
-import embedInfo from '../core/discord/embedInfo';
+import { embedInfo } from '../core/discord/embedInfo';
 import { localizationObject } from '../core/discord/localizationObject';
 import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';

@@ -14,7 +14,6 @@ import {
 } from '@blitzkit/core';
 import { chunk, times } from 'lodash';
 import { getAccountInfo } from '../../website/src/core/blitz/getAccountInfo';
-import getTankStats from '../../website/src/core/blitz/getTankStats';
 import { commitAssets } from './core/github/commitAssets';
 import { fetchPreDiscoveredIds } from './core/github/fetchPreDiscoveredIds';
 

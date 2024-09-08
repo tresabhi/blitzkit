@@ -1,4 +1,4 @@
-import numberToRomanNumeral from '@blitzkit/core/src/math/numberToRomanNumeral';
+import { numberToRomanNumeral } from '@blitzkit/core';
 import {
   APIApplicationCommandOptionChoice,
   Locale,
@@ -8,7 +8,7 @@ import { range } from 'lodash';
 import { translator } from '../localization/translator';
 import { localizationObject } from './localizationObject';
 
-export default function addTierChoices(option: SlashCommandStringOption) {
+export function addTierChoices(option: SlashCommandStringOption) {
   const { t, translate } = translator(Locale.EnglishUS);
 
   return option
@@ -31,7 +31,7 @@ export default function addTierChoices(option: SlashCommandStringOption) {
               'bot.common.options.tier.choices.tier',
               [`${tier}`, numberToRomanNumeral(tier)],
             ),
-          } satisfies APIApplicationCommandOptionChoice),
+          }) satisfies APIApplicationCommandOptionChoice,
       ),
     )
     .setRequired(true);

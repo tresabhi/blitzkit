@@ -1,5 +1,4 @@
-import { asset } from '@blitzkit/core';
-import { equipmentDefinitions } from '@blitzkit/core/src/blitzkit/equipmentDefinitions';
+import { asset, equipmentDefinitions } from '@blitzkit/core';
 import { use } from 'react';
 import { GenericTankComponentButton } from './GenericTankComponentButton';
 import { TankComponentButtonProps } from './TankComponentButton';

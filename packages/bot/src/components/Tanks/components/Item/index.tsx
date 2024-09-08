@@ -1,5 +1,4 @@
-import { TankClass, TreeType } from '@blitzkit/core';
-import { TREE_TYPE_ICONS } from '@blitzkit/core/src/blitzkit/tankDefinitions/constants';
+import { TankClass, TREE_TYPE_ICONS, TreeType } from '@blitzkit/core';
 import { theme } from '../../../../stitches.config';
 
 export interface ItemProps {

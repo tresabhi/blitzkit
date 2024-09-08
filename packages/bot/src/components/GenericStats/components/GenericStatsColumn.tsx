@@ -1,11 +1,11 @@
 import { GenericStat } from '..';
-import GenericStatsRow from './GenericStatsRow';
+import { GenericStatsRow } from './GenericStatsRow';
 
 interface GenericStatsColumnProps {
   stats: GenericStat[];
 }
 
-export default function GenericStatsColumn({ stats }: GenericStatsColumnProps) {
+export function GenericStatsColumn({ stats }: GenericStatsColumnProps) {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
       {stats.map((stat) => (

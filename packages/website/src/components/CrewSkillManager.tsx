@@ -1,6 +1,10 @@
-import { asset, Tier, TIER_ROMAN_NUMERALS } from '@blitzkit/core';
-import { permanentSkills } from '@blitzkit/core/src/blitz/permanentSkills';
-import { skillDefinitions } from '@blitzkit/core/src/blitzkit/skillDefinitions';
+import {
+  asset,
+  permanentSkills,
+  skillDefinitions,
+  Tier,
+  TIER_ROMAN_NUMERALS,
+} from '@blitzkit/core';
 import { Flex } from '@radix-ui/themes';
 import { use } from 'react';
 import { GenericTankComponentButton } from './ModuleButtons/GenericTankComponentButton';

@@ -1,5 +1,5 @@
-import PageWrapper from '../../../components/PageWrapper';
+import { PageWrapper } from '../../../components/PageWrapper';
 
-export default function Page() {
+export function Page() {
   return <PageWrapper></PageWrapper>;
 }

@@ -14,7 +14,7 @@ const fontsPromise = [
   return { name: 'Roboto', weight, data };
 });
 
-export default async function jsxToSvg(
+export async function jsxToSvg(
   jsx: JSX.Element,
   renderConfiguration = new RenderConfiguration(),
 ) {

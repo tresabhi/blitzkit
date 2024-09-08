@@ -1,5 +1,4 @@
-import { TankDefinition } from '@blitzkit/core';
-import { ProvisionDefinitions } from '@blitzkit/core/src/blitzkit/provisionDefinitions';
+import { ProvisionDefinitions, TankDefinition } from '@blitzkit/core';
 import { uniqueId } from 'lodash';
 import { CompareMember } from '../../stores/compareEphemeral';
 import { tankToDuelMember } from './tankToDuelMember';

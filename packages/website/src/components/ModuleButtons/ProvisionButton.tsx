@@ -1,5 +1,4 @@
-import { asset } from '@blitzkit/core';
-import { provisionDefinitions } from '@blitzkit/core/src/blitzkit/provisionDefinitions';
+import { asset, provisionDefinitions } from '@blitzkit/core';
 import { use } from 'react';
 import { GenericTankComponentButton } from './GenericTankComponentButton';
 import { TankComponentButtonProps } from './TankComponentButton';

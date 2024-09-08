@@ -1,5 +1,4 @@
-import { BKNI_COLORS, BkniPercentile } from '@blitzkit/core';
-import getBkniPercentile from '@blitzkit/core/src/statistics/getBkniPercentile';
+import { BKNI_COLORS, BkniPercentile, getBkniPercentile } from '@blitzkit/core';
 
 export function parseBkni(bkni: number) {
   const bkniFraction = (bkni + 1) / 2;

@@ -6,7 +6,7 @@ import { BlitzStats } from './compositeStats/constants';
  * @param expected what all players on average perform like
  * @param average what the player in question performs like
  */
-export default function calculateWN8(
+export function calculateWN8(
   expected: BlitzStats,
   average: {
     damage_dealt: number;

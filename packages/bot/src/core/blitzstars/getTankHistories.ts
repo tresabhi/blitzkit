@@ -1,6 +1,6 @@
 import { Region, emptyAllStats } from '@blitzkit/core';
 import { Locale } from 'discord.js';
-import getTankStats from '../../../../website/src/core/blitz/getTankStats';
+import { getTankStats } from '../../../../website/src/core/blitz/getTankStats';
 import { UserError } from '../../../../website/src/hooks/userError';
 import {
   GetHistoriesOptions,
@@ -33,7 +33,7 @@ const getTankHistoriesDefaultOptions: GetTankHistoriesOptions = {
   tankId: undefined,
 };
 
-export default async function getTankHistories(
+export async function getTankHistories(
   server: Region,
   id: number,
   locale: Locale,
@@ -52,7 +52,7 @@ export default async function getTankHistories(
         all: history.all,
         last_battle_time: history.last_battle_time,
         tank_id: history.tank_id,
-      } satisfies TankHistory),
+      }) satisfies TankHistory,
   );
   const compliantTanks: number[] = [];
   const lastBattles: Record<number, number> = {};

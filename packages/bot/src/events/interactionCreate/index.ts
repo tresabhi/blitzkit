@@ -34,9 +34,9 @@ import { searchClansCommand } from '../../commands/searchClans';
 import { searchPlayersCommand } from '../../commands/searchPlayers';
 import { statsCommand } from '../../commands/stats';
 import { todayCommand } from '../../commands/today';
-import handleAutocomplete from './handlers/autocomplete';
-import handleButton from './handlers/button';
-import handleChatInputCommand from './handlers/chatInputCommand';
+import { handleAutocomplete } from './handlers/autocomplete';
+import { handleButton } from './handlers/button';
+import { handleChatInputCommand } from './handlers/chatInputCommand';
 
 export type InteractionRawReturnable =
   | string
@@ -130,9 +130,7 @@ commands.then((awaitedCommands) => {
   );
 });
 
-export default async function interactionCreate(
-  interaction: Interaction<CacheType>,
-) {
+export async function interactionCreate(interaction: Interaction<CacheType>) {
   if (interaction.isAutocomplete()) {
     handleAutocomplete(interaction);
   } else if (interaction.isChatInputCommand()) {

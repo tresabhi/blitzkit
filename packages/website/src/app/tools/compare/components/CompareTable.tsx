@@ -6,10 +6,10 @@ import {
   checkConsumableProvisionInclusivity,
   consumableDefinitions,
   equipmentDefinitions,
+  permanentSkills,
   provisionDefinitions,
   skillDefinitions,
 } from '@blitzkit/core';
-import { permanentSkills } from '@blitzkit/core/src/blitz/permanentSkills';
 import { ComponentPlaceholderIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Popover, Slider, Table, Text } from '@radix-ui/themes';
 import { debounce, times } from 'lodash';

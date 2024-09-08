@@ -11,7 +11,7 @@ type PageWrapperProps = FlexProps & {
   padding?: RadixSize;
 };
 
-export default function PageWrapper({
+export function PageWrapper({
   style,
   color,
   size = 800,

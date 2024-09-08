@@ -1,7 +1,12 @@
-import { BlitzStats, emptyAllStats, Region } from '@blitzkit/core';
-import { DiffedTankStats } from '@blitzkit/core/src/statistics/filterStats';
+import {
+  BlitzStats,
+  DiffedTankStats,
+  emptyAllStats,
+  Region,
+} from '@blitzkit/core';
 import { Locale } from 'discord.js';
-import getTankHistories, {
+import {
+  getTankHistories,
   TankHistories,
   TankHistoryRaw,
 } from './getTankHistories';
@@ -16,7 +21,7 @@ const emptyTankHistoryNode: TankHistoryRaw = {
 };
 
 // BIG TODO: merge this neatly with diffNormalizedTankStats
-export default async function getStatsInPeriod(
+export async function getStatsInPeriod(
   server: Region,
   id: number,
   start: number,

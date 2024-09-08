@@ -15,6 +15,7 @@ import {
   ProvisionDefinitions,
   ProvisionEntry,
   ShellType,
+  SkillDefinitions,
   superCompress,
   TankClass,
   TankDefinitions,
@@ -23,7 +24,6 @@ import {
   Tier,
   Unlock,
 } from '@blitzkit/core';
-import { SkillDefinitions } from '@blitzkit/core/src/blitzkit/skillDefinitions';
 import { readdir } from 'fs/promises';
 import { parse as parsePath } from 'path';
 import { Vector3Tuple } from 'three';
@@ -820,8 +820,8 @@ export async function definitions() {
           treeType: tankTags.includes('collectible')
             ? 'collector'
             : (typeof tank.price === 'number' ? false : 'gold' in tank.price)
-            ? 'premium'
-            : 'researchable',
+              ? 'premium'
+              : 'researchable',
           tier: tank.level as Tier,
           class: tankTags[0] as TankClass,
           testing: tankTags.includes('testTank'),
@@ -1116,8 +1116,8 @@ export async function definitions() {
                   gun.armor.gun === undefined
                     ? 0
                     : typeof gun.armor.gun === 'number'
-                    ? gun.armor.gun
-                    : gun.armor.gun['#text'],
+                      ? gun.armor.gun
+                      : gun.armor.gun['#text'],
                 pitch: {
                   min: gunPitch[0],
                   max: gunPitch[1],
@@ -1167,7 +1167,7 @@ export async function definitions() {
                   type: blitzShellKindToBlitzkit[shell.kind],
                   explosionRadius:
                     shell.kind === 'HIGH_EXPLOSIVE'
-                      ? shell.explosionRadius ?? 0
+                      ? (shell.explosionRadius ?? 0)
                       : undefined,
                   icon: shell.icon,
                   penetration:

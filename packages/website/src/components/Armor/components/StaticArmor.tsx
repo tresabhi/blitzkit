@@ -1,4 +1,4 @@
-import { normalizeAngleRad } from '@blitzkit/core/src/math/normalizeAngleRad';
+import { normalizeAngleRad } from '@blitzkit/core';
 import { ThreeEvent, useThree } from '@react-three/fiber';
 import { memo, useRef } from 'react';
 import { Group, Plane, Vector2, Vector3 } from 'three';

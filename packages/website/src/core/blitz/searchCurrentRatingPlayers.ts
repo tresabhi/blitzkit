@@ -1,6 +1,6 @@
 import { Region } from '@blitzkit/core';
 import { context } from '../blitzkit/context';
-import regionToRegionSubdomain from './regionToRegionSubdomain';
+import { regionToRegionSubdomain } from './regionToRegionSubdomain';
 
 type CurrentRatingPlayerSearch = Record<
   number,

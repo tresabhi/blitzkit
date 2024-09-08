@@ -1,7 +1,7 @@
 import { AutocompleteInteraction, CacheType } from 'discord.js';
 import { commands } from '..';
 
-export default async function handleAutocomplete(
+export async function handleAutocomplete(
   interaction: AutocompleteInteraction<CacheType>,
 ) {
   const command = (await commands)[interaction.commandName];

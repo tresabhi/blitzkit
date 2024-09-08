@@ -1,4 +1,4 @@
-import { BoundingBox } from '@blitzkit/core/src/blitzkit/modelDefinitions';
+import { BoundingBox } from '@blitzkit/core';
 import { Vector3Tuple } from 'three';
 
 export function unionBoundingBox(a: BoundingBox, b: BoundingBox) {

@@ -1,4 +1,4 @@
-import { EquipmentPreset } from '@blitzkit/core/src/blitzkit/equipmentDefinitions';
+import { EquipmentPreset } from '@blitzkit/core';
 import { Flex } from '@radix-ui/themes';
 import { cloneDeep } from 'lodash';
 import { EquipmentMatrix } from '../stores/duel';

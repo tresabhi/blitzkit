@@ -1,7 +1,7 @@
 import { Region } from '@blitzkit/core';
+import fetchBlitz from '@blitzkit/core/src/blitz/fetchBlitz';
 import { Locale } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import fetchBlitz from '../../../website/src/core/blitz/fetchBlitz';
 import { AccountList } from '../../../website/src/core/blitz/searchPlayersAcrossRegions';
 import { usernamePattern } from '../../../website/src/core/blitz/searchPlayersAcrossRegions/constants';
 import addRegionChoices from '../core/discord/addRegionChoices';

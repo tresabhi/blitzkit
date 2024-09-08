@@ -1,3 +1,4 @@
+import { tankNames } from '@blitzkit/core';
 import {
   ApplicationCommandOptionChoiceData,
   AutocompleteInteraction,
@@ -8,13 +9,12 @@ import {
   DISCORD_CHOICES_MAX_NAME_SIZE,
   OVERFLOW_SUFFIX,
 } from './autocompleteClan/constants';
-import { tankNames } from '@blitzkit/core';
 
 export const tankNamesTechTreeOnly = tankNames.then((names) =>
   names.filter((tank) => tank.treeType === 'researchable'),
 );
 
-export default async function autocompleteTanks(
+export async function autocompleteTanks(
   interaction: AutocompleteInteraction<CacheType>,
   techTreeOnly = false,
   fields = ['tank'],

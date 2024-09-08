@@ -1,4 +1,4 @@
-import { ConsumableEntry } from '@blitzkit/core/src/blitzkit/consumableDefinitions';
+import { ConsumableEntry } from '@blitzkit/core';
 import { Flex, FlexProps } from '@radix-ui/themes';
 import { ConsumableButton } from './ModuleButtons/ConsumableButton';
 

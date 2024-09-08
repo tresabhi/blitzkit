@@ -5,7 +5,7 @@ import strings from '@blitzkit/core/lang/en-US.json';
 import { invalidate } from '@react-three/fiber';
 import { useEffect } from 'react';
 import { AdMidSectionResponsive } from '../../../../components/AdMidSectionResponsive';
-import PageWrapper from '../../../../components/PageWrapper';
+import { PageWrapper } from '../../../../components/PageWrapper';
 import { useAdExempt } from '../../../../hooks/useAdExempt';
 import * as Duel from '../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';

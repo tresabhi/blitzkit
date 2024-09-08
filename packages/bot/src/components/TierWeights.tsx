@@ -1,11 +1,11 @@
-import { TierWeightsRecord } from '@blitzkit/core/src/statistics/getTierWeights';
+import { TierWeightsRecord } from '@blitzkit/core';
 import { theme } from '../stitches.config';
 
 interface TierWeightsProps {
   weights: TierWeightsRecord;
 }
 
-export default function TierWeights({ weights }: TierWeightsProps) {
+export function TierWeights({ weights }: TierWeightsProps) {
   return (
     <div style={{ display: 'flex', gap: 8 }}>
       {Object.entries(weights).map(([tier, weight]) => (

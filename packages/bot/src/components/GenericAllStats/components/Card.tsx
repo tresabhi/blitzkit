@@ -1,6 +1,6 @@
-import { Percentile } from '@blitzkit/core/src/statistics/percentiles';
+import { Percentile } from '@blitzkit/core';
 import { theme } from '../../../stitches.config';
-import PercentileIndicator from '../../PercentileIndicator';
+import { PercentileIndicator } from '../../PercentileIndicator';
 
 interface CardItem {
   label: string;

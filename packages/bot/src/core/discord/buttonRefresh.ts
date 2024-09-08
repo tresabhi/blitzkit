@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import { translator } from '../localization/translator';
-import buttonPrimary from './buttonPrimary';
+import { buttonPrimary } from './buttonPrimary';
 
 export function buttonRefresh(
   interaction: ChatInputCommandInteraction,

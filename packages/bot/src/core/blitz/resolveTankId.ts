@@ -6,7 +6,7 @@ import { UserError } from '../../../../website/src/hooks/userError';
 import { tankNamesTechTreeOnly } from '../discord/autocompleteTanks';
 import { translator } from '../localization/translator';
 
-export default async function resolveTankId(
+export async function resolveTankId(
   tank: string | number,
   locale: Locale,
   techTreeOnly = false,

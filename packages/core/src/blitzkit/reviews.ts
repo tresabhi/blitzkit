@@ -1,4 +1,4 @@
-import { asset } from '@blitzkit/core/src/blitzkit/asset';
+import { asset } from '@blitzkit/core';
 import { decodeProtobuf } from '../protobuf';
 
 export interface Reviews {

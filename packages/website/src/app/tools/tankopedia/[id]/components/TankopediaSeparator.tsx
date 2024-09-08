@@ -1,5 +1,5 @@
 import { Separator } from '@radix-ui/themes';
-import PageWrapper from '../../../../../components/PageWrapper';
+import { PageWrapper } from '../../../../../components/PageWrapper';
 
 export function TankopediaSeparator() {
   return (

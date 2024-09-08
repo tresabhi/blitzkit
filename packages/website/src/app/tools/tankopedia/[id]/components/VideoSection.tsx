@@ -2,7 +2,7 @@ import { reviews, Var, youtubers } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { use } from 'react';
 import { Link } from '../../../../../components/Link';
-import PageWrapper from '../../../../../components/PageWrapper';
+import { PageWrapper } from '../../../../../components/PageWrapper';
 import { VerifiedIcon } from '../../../../../components/VerifiedIcon';
 import * as Duel from '../../../../../stores/duel';
 
