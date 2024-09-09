@@ -1,6 +1,7 @@
 'use client';
 
 import { Code, Heading } from '@radix-ui/themes';
+import { useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { PageWrapper } from '../../../../../components/PageWrapper';
 import * as EmbedState from '../../../../../stores/embedState';
@@ -13,16 +14,17 @@ export interface EmbedPreviewControllerProps {
 
 export default function Page({
   params,
-  searchParams,
 }: {
   params: { embed: keyof typeof configurations };
-  searchParams: { state: string };
 }) {
+  const searchParams = useSearchParams();
+  // TODO: check for this? idk lol
+  const stateParam = searchParams.get('state')!;
   const config = configurations[params.embed];
   const initialState = useMemo(
     () => ({
       ...extractEmbedConfigDefaults(config),
-      ...(JSON.parse(searchParams.state) as EmbedState.EmbedState),
+      ...(JSON.parse(stateParam) as EmbedState.EmbedState),
     }),
     [params.embed],
   );

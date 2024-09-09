@@ -35,10 +35,11 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^22.5.4",
     "esbuild": "^0.19.12",
     "prettier": "^3.3.3",
     "prisma": "^5.19.1",
-    "@types/bun": "latest",
     "typescript": "^5.5.4"
   }
 }

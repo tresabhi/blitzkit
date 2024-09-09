@@ -139,6 +139,7 @@ export const embedTool: Tool = {
   },
   image: 'Q0faRYg',
   branches: ['main', 'dev', 'opentest'],
+  href: '',
 };
 
 export const homeTool: Tool = {
@@ -154,6 +155,6 @@ export const TOOLS: Tool[] = [
   compareTool,
   tankPerformanceTool,
   sessionTool,
-  // embedTool,
+  embedTool,
   ratingTool,
 ];

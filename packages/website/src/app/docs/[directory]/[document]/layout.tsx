@@ -1,43 +1,28 @@
-import { assertSecret } from '@blitzkit/core';
+import { readdir } from 'fs/promises';
 
 export async function generateStaticParams() {
-  return await fetch(
-    `https://api.github.com/repos/tresabhi/blitzkit/contents/docs?ref=${assertSecret(
-      process.env.NEXT_PUBLIC_ASSET_BRANCH,
-    )}`,
-  )
-    .then((response) => response.json() as Promise<{ name: string }[]>)
-    .then((directories) =>
-      Promise.all(
-        directories
-          .filter(
-            (directory) =>
-              !['.vitepress', 'public', 'index.md'].includes(directory.name),
-          )
-          .map((directory) =>
-            fetch(
-              `https://api.github.com/repos/tresabhi/blitzkit/contents/docs/${directory.name}?ref=${assertSecret(
-                process.env.NEXT_PUBLIC_ASSET_BRANCH,
-              )}`,
-            )
-              .then(
-                (response) => response.json() as Promise<{ name: string }[]>,
-              )
-              .then((docs) =>
-                docs
-                  .map((document) => {
-                    console.log(`${directory.name}/${document.name}`);
-                    return document;
-                  })
-                  .map((document) => ({
-                    document: document.name.split('.').slice(0, -1).join('.'),
-                    directory: directory.name,
-                  })),
-              ),
+  return await readdir('../../docs').then((directories) =>
+    Promise.all(
+      directories
+        .filter(
+          (directory) =>
+            !['.vitepress', 'public'].includes(directory) &&
+            !directory.endsWith('.md'),
+        )
+        .map((directory) =>
+          readdir(`../../docs/${directory}`).then((files) =>
+            Promise.all(
+              files
+                .filter((file) => file.endsWith('.md'))
+                .map((file) => ({
+                  directory,
+                  document: file.replace(/\.md$/, ''),
+                })),
+            ),
           ),
-      ),
-    )
-    .then((docs) => docs.flat());
+        ),
+    ).then((directories) => directories.flat()),
+  );
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {

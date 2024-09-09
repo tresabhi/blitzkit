@@ -44,7 +44,8 @@ export function Navbar() {
   const pathname = usePathname();
   const logins = App.use((state) => state.logins);
   const mutateApp = App.useMutation();
-  const tools = [homeTool, ...TOOLS];
+  const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
+  const tools = [homeTool, ...toolsFiltered];
   const isBranchNamed =
     process.env.NEXT_PUBLIC_ASSET_BRANCH &&
     BRANCH_NAMES[process.env.NEXT_PUBLIC_ASSET_BRANCH];
@@ -99,7 +100,7 @@ export function Navbar() {
               justify="center"
               className={styles.tools}
             >
-              {TOOLS.map((tool, index) => {
+              {toolsFiltered.map((tool, index) => {
                 const unavailableOnBranch = tool.branches?.every(
                   (branch) =>
                     branch !==
