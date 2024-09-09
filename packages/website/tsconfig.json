@@ -10,6 +10,6 @@
   "include": [
     "src/**/*",
     ".next/types/**/*.ts",
-    "dist/website/types/**/*.ts"
+    "../../dist/website/types/**/*.ts"
   ]
 }

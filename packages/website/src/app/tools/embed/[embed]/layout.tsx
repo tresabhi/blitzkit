@@ -3,6 +3,10 @@ import * as EmbedState from '../../../../stores/embedState';
 import { configurations } from '../configurations';
 import { extractEmbedConfigDefaults } from '../utilities';
 
+export function generateStaticParams() {
+  return Object.keys(configurations).map((embed) => ({ embed }));
+}
+
 export default function Layout({
   params,
   children,

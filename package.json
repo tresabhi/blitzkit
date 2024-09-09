@@ -21,7 +21,7 @@
     "dev:website": "bun --filter=@blitzkit/website run dev",
     "dev:api": "bun --filter=@blitzkit/api run dev",
     "start:bot": "bun dist/bot/index.js",
-    "start:website": "next start",
+    "start:website": "bun --filter=@blitzkit/website run start",
     "host:docs": "vitepress preview docs",
     "lint": "tsc",
     "lint:website": "next lint",
