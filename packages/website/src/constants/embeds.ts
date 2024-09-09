@@ -5,7 +5,7 @@ import {
   BreakdownPreview,
   compositeStatsKeysOptions,
 } from '../app/tools/embed/configurations/breakdown';
-import { EmbedConfig } from '../stores/embedState';
+import { EmbedConfig, ExtractEmbedConfigTypes } from '../stores/embedState';
 import { EmbedItemType } from '../stores/embedState/constants';
 
 export const breakdownConfig = {
@@ -89,3 +89,10 @@ export const configurations = {
 export const previews = {
   breakdown: BreakdownPreview,
 } satisfies Record<string, () => ReactNode>;
+export function extractEmbedConfigDefaults<Config extends EmbedConfig>(
+  config: Config,
+) {
+  return Object.fromEntries(
+    Object.entries(config).map(([key, value]) => [key, value.default]),
+  ) as ExtractEmbedConfigTypes<Config>;
+}

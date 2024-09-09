@@ -4,9 +4,11 @@ import { Code, Heading } from '@radix-ui/themes';
 import { useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { PageWrapper } from '../../../../../components/PageWrapper';
-import { configurations } from '../../../../../constants/embeds';
+import {
+  configurations,
+  extractEmbedConfigDefaults,
+} from '../../../../../constants/embeds';
 import * as EmbedState from '../../../../../stores/embedState';
-import { extractEmbedConfigDefaults } from '../../utilities';
 
 export interface EmbedPreviewControllerProps {
   configKey: string;

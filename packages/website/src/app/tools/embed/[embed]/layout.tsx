@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
-import { configurations } from '../../../../constants/embeds';
+import {
+  configurations,
+  extractEmbedConfigDefaults,
+} from '../../../../constants/embeds';
 import * as EmbedState from '../../../../stores/embedState';
-import { extractEmbedConfigDefaults } from '../utilities';
 
 export function generateStaticParams() {
   return Object.keys(configurations).map((embed) => ({ embed }));
