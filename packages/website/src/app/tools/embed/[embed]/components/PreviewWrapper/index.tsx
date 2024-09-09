@@ -1,7 +1,7 @@
 import { Box } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
+import { previews } from '../../../../../../constants/embeds';
 import { useEmbedStateCurry } from '../../../../../../stores/embedState/utilities';
-import { previews } from '../../../configurations';
 import * as styles from './index.css';
 
 interface PreviewWrapperProps {

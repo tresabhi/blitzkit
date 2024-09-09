@@ -8,8 +8,8 @@ import { amberDark, blueDark } from '@radix-ui/colors';
 import { Flex, Text } from '@radix-ui/themes';
 import { times } from 'lodash';
 import { ReactNode } from 'react';
-import { breakdownConfig } from '../app/tools/embed/configurations/breakdown';
 import { toRadiusVar } from '../app/tools/embed/utilities';
+import { breakdownConfig } from '../constants/embeds';
 import { useEmbedStateCurry } from '../stores/embedState/utilities';
 import { ClassHeavy } from './ClassIcon/components/ClassHeavy';
 import { ClassLight } from './ClassIcon/components/ClassLight';
@@ -64,14 +64,14 @@ export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
               tank === null
                 ? undefined
                 : tank.treeType === 'researchable' ||
-                  !useState('cardTitleTypeColor')
-                ? undefined
-                : {
-                    color:
-                      tank.treeType === 'premium'
-                        ? amberDark.amber11
-                        : blueDark.blue11,
-                  },
+                    !useState('cardTitleTypeColor')
+                  ? undefined
+                  : {
+                      color:
+                        tank.treeType === 'premium'
+                          ? amberDark.amber11
+                          : blueDark.blue11,
+                    },
           }}
         >
           <Flex align="center" gap="1">
