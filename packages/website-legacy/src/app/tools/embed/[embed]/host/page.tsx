@@ -7,7 +7,7 @@ import { PageWrapper } from '../../../../../components/PageWrapper';
 import {
   configurations,
   extractEmbedConfigDefaults,
-} from '../../../../../constants/embeds';
+} from '../../../../../../../website/src/constants/embeds';
 import * as EmbedState from '../../../../../stores/embedState';
 
 export interface EmbedPreviewControllerProps {

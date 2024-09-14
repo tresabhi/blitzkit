@@ -1,6 +1,6 @@
 import { Box } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
-import { previews } from '../../../../../../constants/embeds';
+import { previews } from '../../../../../../../../website/src/constants/embeds';
 import { useEmbedStateCurry } from '../../../../../../stores/embedState/utilities';
 import * as styles from './index.css';
 

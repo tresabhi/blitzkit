@@ -5,7 +5,7 @@ import {
   BreakdownEmbedCard,
   BreakdownEmbedWrapper,
 } from '../../../../components/TanksEmbed';
-import { breakdownConfig } from '../../../../constants/embeds';
+import { breakdownConfig } from '../../../../../../website/src/constants/embeds';
 import { useEmbedStateCurry } from '../../../../stores/embedState/utilities';
 
 export const compositeStatsKeysOptions = compositeStatsKeys.map((value) => ({

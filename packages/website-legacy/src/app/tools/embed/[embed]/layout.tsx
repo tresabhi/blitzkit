@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import {
   configurations,
   extractEmbedConfigDefaults,
-} from '../../../../constants/embeds';
+} from '../../../../../../website/src/constants/embeds';
 import * as EmbedState from '../../../../stores/embedState';
 
 export function generateStaticParams() {

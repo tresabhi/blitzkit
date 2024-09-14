@@ -1,5 +1,7 @@
 ---
 import { Flex, Heading } from '@radix-ui/themes';
+import HomeHero from '../components/HomeHero.astro';
+import { Plugs } from '../components/Plugs.tsx';
 import ToolCard from '../components/ToolCard.astro';
 import {
   compareTool,
@@ -11,24 +13,26 @@ import {
   tankPerformanceTool,
 } from '../constants/tools';
 import RootLayout from '../layouts/RootLayout.astro';
+import * as App from '../stores/app';
 ---
 
-<RootLayout>
-  <!-- <Hero /> -->
+<App.Provider>
+  <RootLayout>
+    <HomeHero />
 
-  <!-- <Plugs /> -->
+    <Plugs />
 
-  <Flex p="4" justify="center" gap="4">
-    <Flex maxWidth="1024px" flexGrow="1" gap="4" direction="column">
-      <ToolCard tool={tankopediaTool} />
+    <Flex p="4" justify="center" gap="4">
+      <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">
+        <ToolCard tool={tankopediaTool} />
 
-      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
-        {/* <ToolCard tool={playerStatsTool} /> */}
-        <ToolCard tool={compareTool} />
-        <ToolCard tool={tankPerformanceTool} />
-      </Flex>
+        <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+          {/* <ToolCard tool={playerStatsTool} /> */}
+          <ToolCard tool={compareTool} />
+          <ToolCard tool={tankPerformanceTool} />
+        </Flex>
 
-      <!-- {
+        <!-- {
         !exempt && (
           <Flex justify="center">
             <AdMidSectionResponsive />
@@ -36,13 +40,13 @@ import RootLayout from '../layouts/RootLayout.astro';
         )
       } -->
 
-      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
-        <ToolCard tool={sessionTool} />
-        {/* <ToolCard tool={embedTool} /> */}
-        <ToolCard tool={ratingTool} />
-      </Flex>
+        <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+          <ToolCard tool={sessionTool} />
+          {/* <ToolCard tool={embedTool} /> */}
+          <ToolCard tool={ratingTool} />
+        </Flex>
 
-      <!-- {
+        <!-- {
         !exempt && (
           <Flex
             justify="center"
@@ -56,46 +60,47 @@ import RootLayout from '../layouts/RootLayout.astro';
         )
       } -->
 
-      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
-        <ToolCard tool={discordTool} />
-        <ToolCard tool={moreTool} />
-      </Flex>
+        <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+          <ToolCard tool={discordTool} />
+          <ToolCard tool={moreTool} />
+        </Flex>
 
-      <!-- {!exempt && <AdMidSectionResponsive />} -->
+        <!-- {!exempt && <AdMidSectionResponsive />} -->
 
-      <Heading>Other cool projects</Heading>
+        <Heading>Other cool projects</Heading>
 
-      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
-        <ToolCard
-          tool={{
-            button: {
-              text: 'Analyze',
-              color: 'blue',
-            },
-            description: 'Rich historic average stats',
-            id: 'blitz-analysis',
-            image: 'j76YXGl',
-            title: 'BlitzAnalysis[]',
-            href: 'https://blitzanalysiz.com/',
-          }}
-        />
-        <ToolCard
-          tool={{
-            button: {
-              color: 'purple',
-              text: 'Install',
-              highContrast: true,
-            },
-            image: 'zYrrYbR',
-            description: 'In-game session stats',
-            id: 'blitz-insider',
-            title: 'Blitz Insider',
-            href: 'https://discord.gg/UjWf9eGgtR',
-          }}
-        />
+        <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+          <ToolCard
+            tool={{
+              button: {
+                text: 'Analyze',
+                color: 'blue',
+              },
+              description: 'Rich historic average stats',
+              id: 'blitz-analysis',
+              image: 'j76YXGl',
+              title: 'BlitzAnalysis[]',
+              href: 'https://blitzanalysiz.com/',
+            }}
+          />
+          <ToolCard
+            tool={{
+              button: {
+                color: 'purple',
+                text: 'Install',
+                highContrast: true,
+              },
+              image: 'zYrrYbR',
+              description: 'In-game session stats',
+              id: 'blitz-insider',
+              title: 'Blitz Insider',
+              href: 'https://discord.gg/UjWf9eGgtR',
+            }}
+          />
+        </Flex>
       </Flex>
     </Flex>
-  </Flex>
 
-  <div style={{ flex: 1 }}></div>
-</RootLayout>
+    <div style={{ flex: 1 }}></div>
+  </RootLayout>
+</App.Provider>

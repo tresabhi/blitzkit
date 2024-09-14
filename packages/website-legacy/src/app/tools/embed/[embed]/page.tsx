@@ -16,7 +16,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { stringify } from 'urlon';
 import { CopyButton } from '../../../../components/CopyButton';
 import { PageWrapper } from '../../../../components/PageWrapper';
-import { configurations } from '../../../../constants/embeds';
+import { configurations } from '../../../../../../website/src/constants/embeds';
 import * as App from '../../../../stores/app';
 import * as EmbedState from '../../../../stores/embedState';
 import { EmbedConfig } from '../../../../stores/embedState';
