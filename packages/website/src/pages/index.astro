@@ -1,16 +1,101 @@
 ---
-
+import { Flex, Heading } from '@radix-ui/themes';
+import ToolCard from '../components/ToolCard.astro';
+import {
+  compareTool,
+  discordTool,
+  moreTool,
+  ratingTool,
+  sessionTool,
+  tankopediaTool,
+  tankPerformanceTool,
+} from '../constants/tools';
+import RootLayout from '../layouts/RootLayout.astro';
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
-  </head>
-  <body>
-    <h1>Astro</h1>
-  </body>
-</html>
+<RootLayout>
+  <!-- <Hero /> -->
+
+  <!-- <Plugs /> -->
+
+  <Flex p="4" justify="center" gap="4">
+    <Flex maxWidth="1024px" flexGrow="1" gap="4" direction="column">
+      <ToolCard tool={tankopediaTool} />
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        {/* <ToolCard tool={playerStatsTool} /> */}
+        <ToolCard tool={compareTool} />
+        <ToolCard tool={tankPerformanceTool} />
+      </Flex>
+
+      <!-- {
+        !exempt && (
+          <Flex justify="center">
+            <AdMidSectionResponsive />
+          </Flex>
+        )
+      } -->
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard tool={sessionTool} />
+        {/* <ToolCard tool={embedTool} /> */}
+        <ToolCard tool={ratingTool} />
+      </Flex>
+
+      <!-- {
+        !exempt && (
+          <Flex
+            justify="center"
+            display={{
+              initial: 'flex',
+              md: 'none',
+            }}
+          >
+            <AdMidSectionResponsive />
+          </Flex>
+        )
+      } -->
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard tool={discordTool} />
+        <ToolCard tool={moreTool} />
+      </Flex>
+
+      <!-- {!exempt && <AdMidSectionResponsive />} -->
+
+      <Heading>Other cool projects</Heading>
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard
+          tool={{
+            button: {
+              text: 'Analyze',
+              color: 'blue',
+            },
+            description: 'Rich historic average stats',
+            id: 'blitz-analysis',
+            image: 'j76YXGl',
+            title: 'BlitzAnalysis[]',
+            href: 'https://blitzanalysiz.com/',
+          }}
+        />
+        <ToolCard
+          tool={{
+            button: {
+              color: 'purple',
+              text: 'Install',
+              highContrast: true,
+            },
+            image: 'zYrrYbR',
+            description: 'In-game session stats',
+            id: 'blitz-insider',
+            title: 'Blitz Insider',
+            href: 'https://discord.gg/UjWf9eGgtR',
+          }}
+        />
+      </Flex>
+    </Flex>
+  </Flex>
+
+  <div style={{ flex: 1 }}></div>
+</RootLayout>

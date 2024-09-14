@@ -1,0 +1,57 @@
+---
+import { Flex, Theme } from '@radix-ui/themes';
+import '@radix-ui/themes/styles.css';
+const { pathname } = Astro.url;
+
+const isRoot = pathname === '/';
+---
+
+<style>
+  body {
+    margin: 0;
+  }
+</style>
+
+<!-- MIGRATION TODO: roboto flex font -->
+<html lang="en">
+  <head>
+    {
+      isRoot && (
+        <>
+          <title>BlitzKit</title>
+          <meta
+            name="description"
+            content="🎉 Tools for everything World of Tanks Blitz"
+          />
+        </>
+      )
+    }
+    <meta property="og:site_name" content="BlitzKit" />
+    <link rel="icon" type="image/x-icon" href="/favicon.png" />
+
+    <!-- <Party3 /> -->
+  </head>
+
+  <body>
+    <Theme
+      appearance="dark"
+      panelBackground="solid"
+      radius="full"
+      accentColor="amber"
+      suppressHydrationWarning
+      suppressContentEditableWarning
+    >
+      <Flex direction="column" minHeight="100vh">
+        <!-- {!hideNav && <Navbar />} -->
+
+        <!-- <Checks /> -->
+
+        <!-- <Suspense fallback={(<PageLoader />)}> -->
+        <slot />
+        <!-- </Suspense> -->
+
+        <!-- {!hideNav && <Footer />} -->
+      </Flex>
+    </Theme>
+  </body>
+</html>

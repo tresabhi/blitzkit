@@ -12,5 +12,5 @@
     ".next/types/**/*.ts",
     "../../dist/website/types/**/*.ts",
     "dist/website/types/**/*.ts"
-  ]
+, "../website/src/components/ToolCard.tsx", "../website/src/constants/tools.tsx"  ]
 }

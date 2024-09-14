@@ -1,5 +1,14 @@
 // @ts-check
+
+import react from '@astrojs/react';
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
+import purgecss from 'astro-purgecss';
 import { defineConfig } from 'astro/config';
 
-// https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  integrations: [react(), purgecss()],
+  vite: { plugins: [vanillaExtractPlugin()] },
+
+  devToolbar: { enabled: false },
+  outDir: '../../dist/website',
+});

@@ -4,7 +4,7 @@ import { imgur, ImgurSize } from '@blitzkit/core';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
-import { TOOLS } from '../../constants/tools';
+import { TOOLS } from '../../../../website/src/constants/tools';
 
 export default function Layout({ children }: { children: ReactNode }) {
   const pathname = usePathname();

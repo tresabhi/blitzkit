@@ -30,7 +30,7 @@ import {
 import { usePathname } from 'next/navigation';
 import { Fragment, Suspense, useState } from 'react';
 import { BRANCH_NAMES } from '../../app/components/Hero/constants';
-import { homeTool, TOOLS } from '../../constants/tools';
+import { homeTool, TOOLS } from '../../../../website/src/constants/tools';
 import * as App from '../../stores/app';
 import { Link } from '../Link';
 import { PatreonIcon } from '../PatreonIcon';
