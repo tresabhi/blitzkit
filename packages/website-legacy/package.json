@@ -1,5 +1,5 @@
 {
-  "name": "@blitzkit/website",
+  "name": "@blitzkit/website-legacy",
   "private": true,
   "type": "module",
   "scripts": {
