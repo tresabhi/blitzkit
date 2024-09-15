@@ -38,7 +38,7 @@ export * from './gameDefinitions';
 // export * from './sum';
 export * from './superCompress';
 export * from './superDecompress';
-// export * from './tankDefinitions';
+export * from './tankDefinitions';
 // export * from './tankIcon';
 // export * from './tankNames';
 // export * from './unionBoundingBox';

@@ -1,6 +1,5 @@
 ---
 import { Flex, Theme } from '@radix-ui/themes';
-import '@radix-ui/themes/styles.css';
 import Footer from '../components/Footer.astro';
 import Navbar from '../components/Navbar.astro';
 import Party3 from '../components/Party3.astro';
@@ -9,7 +8,9 @@ const { pathname } = Astro.url;
 const isRoot = pathname === '/';
 ---
 
-<style>
+<style is:global>
+  @import '@radix-ui/themes/styles.css';
+
   body {
     margin: 0;
   }

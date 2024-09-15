@@ -1,5 +1,5 @@
-import { BlitzStats, tankDefinitions } from '@blitzkit/core';
-import { context } from '../blitzkit/context';
+import { BlitzStats } from '@blitzkit/core';
+import { context } from '@blitzkit/core/src/blitzkit/context';
 
 interface SpecialStats {
   winrate: number;
@@ -79,14 +79,10 @@ export interface IndividualTankAverage {
   last_update: number;
 }
 
-tankDefinitions;
-
 export type BlitzStarsTankAverages = Record<number, IndividualTankAverage>;
 
 export const blitzStarsTankAverages = fetch(
-  context === 'website'
-    ? '/api/tank-averages'
-    : 'https://www.blitzstars.com/api/tankaverages.json',
+  'https://www.blitzstars.com/api/tankaverages.json',
 )
   .then((response) => response.json())
   .then((json) => {

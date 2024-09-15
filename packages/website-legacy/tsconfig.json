@@ -7,15 +7,5 @@
       }
     ]
   },
-  "include": [
-    "src/**/*",
-    ".next/types/**/*.ts",
-    "../../dist/website/types/**/*.ts",
-    "dist/website/types/**/*.ts",
-    "../website/src/components/ToolCard.tsx",
-    "../website/src/constants/tools.tsx",
-    "../website/src/components/Plugs.tsx",
-    "../website/src/constants/embeds.ts",
-    "../website/src/types"
-  ]
+  "include": ["src/**/*", ".next/types/**/*.ts"]
 }

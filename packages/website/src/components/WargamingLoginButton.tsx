@@ -28,7 +28,7 @@ export function WargamingLoginButton({ children, ...props }: ButtonProps) {
                 href={
                   typeof window !== 'undefined'
                     ? `https://api.worldoftanks.${region}/wot/auth/login/?application_id=${assertSecret(
-                        process.env.PUBLIC_WARGAMING_APPLICATION_ID,
+                        import.meta.env.PUBLIC_WARGAMING_APPLICATION_ID,
                       )}&redirect_uri=${encodeURIComponent(
                         `${location.origin}/auth/wargaming?return=${location.origin}${location.pathname}`,
                       )}`
