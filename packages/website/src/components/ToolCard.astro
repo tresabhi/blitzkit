@@ -12,8 +12,6 @@ const { tool } = Astro.props;
 const disabled = tool.branches?.every(
   (branch) => branch !== assertSecret(process.env.PUBLIC_ASSET_BRANCH),
 );
-
-console.log(process.env);
 ---
 
 <style>

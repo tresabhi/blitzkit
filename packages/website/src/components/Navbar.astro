@@ -1,0 +1,368 @@
+---
+import { assertSecret, imgur, ImgurSize } from '@blitzkit/core';
+import {
+  Cross1Icon,
+  DiscordLogoIcon,
+  GearIcon,
+  HamburgerMenuIcon,
+} from '@radix-ui/react-icons';
+import {
+  Box,
+  Code,
+  Flex,
+  Grid,
+  IconButton,
+  Link,
+  ScrollArea,
+  Separator,
+  Text,
+} from '@radix-ui/themes';
+import { BRANCH_NAMES } from '../constants/branches';
+import { NAVBAR_HEIGHT } from '../constants/navbar';
+import { homeTool, TOOLS } from '../constants/tools';
+import { PatreonIcon } from './PatreonIcon';
+
+const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
+const tools = [homeTool, ...toolsFiltered];
+const isBranchNamed =
+  process.env.PUBLIC_ASSET_BRANCH &&
+  BRANCH_NAMES[process.env.PUBLIC_ASSET_BRANCH];
+---
+
+<style>
+  .navbar {
+    height: var(--navbar-height);
+    margin-bottom: -1px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  .expander {
+    --min-width: 768px;
+    --navbar-height: 48px;
+
+    transition-duration: 250ms;
+    width: 100%;
+    overflow: hidden;
+    backdrop-filter: blur(4rem) brightness(0.75);
+    -webkit-backdrop-filter: blur(4rem) brightness(0.75);
+
+    @media (min-width: var(--min-width)) {
+      max-height: var(--navbar-height);
+    }
+
+    &[data-expanded='false'] {
+      max-height: var(--navbar-height);
+
+      *[data-expanded] {
+        display: none;
+      }
+    }
+
+    &[data-expanded='true'] {
+      max-height: 100vh;
+      overscroll-behavior: contain;
+
+      *[data-closed] {
+        display: none;
+      }
+    }
+  }
+
+  .hamburger {
+    display: inline-flex;
+
+    @media (min-width: var(--min-width)) {
+      display: none;
+    }
+  }
+
+  .tools {
+    display: none;
+
+    @media (min-width: var(--min-width)) {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  const expander = document.querySelector<HTMLDivElement>('.expander');
+  const hamburger = document.querySelector<HTMLButtonElement>('.hamburger');
+
+  expander?.addEventListener('click', () => {
+    expander.dataset.expanded = 'false';
+  });
+  hamburger?.addEventListener('click', (event) => {
+    if (!expander) return;
+
+    event.stopPropagation();
+    expander.dataset.expanded = `${expander.dataset.expanded === 'false'}`;
+  });
+</script>
+
+<Flex className="navbar">
+  <Flex className="expander" data-expanded="false" direction="column" gap="2">
+    <Flex justify="center">
+      <Flex flexGrow="1" maxWidth="1024px" p="3" align="center">
+        <Flex gap="3" align="center">
+          <IconButton variant="ghost" color="gray" className="hamburger">
+            <Cross1Icon data-expanded />
+            <HamburgerMenuIcon data-closed />
+          </IconButton>
+
+          <Link
+            color="gray"
+            highContrast
+            href="/"
+            underline="hover"
+            weight="bold"
+          >
+            <Flex align="center" gap="1">
+              BlitzKit
+              {
+                isBranchNamed && (
+                  <Code color="gray" size="1" highContrast variant="outline">
+                    {BRANCH_NAMES[process.env.PUBLIC_ASSET_BRANCH!]}
+                  </Code>
+                )
+              }
+            </Flex>
+          </Link>
+        </Flex>
+
+        <Box flexGrow="1" />
+
+        <Flex align="center" gap="2" justify="center" className="tools">
+          {
+            toolsFiltered.map((tool, index) => {
+              const unavailableOnBranch = tool.branches?.every(
+                (branch) =>
+                  branch !== assertSecret(process.env.PUBLIC_ASSET_BRANCH),
+              );
+              // const selected = window.location.pathname.startsWith(
+              //   `/tools/${tool.id}`,
+              // );
+              const selected = false;
+
+              if (unavailableOnBranch) return null;
+
+              return (
+                <Fragment key={tool.title}>
+                  {index > 0 && <Separator orientation="vertical" size="1" />}
+                  <Link
+                    color="gray"
+                    highContrast={selected}
+                    size="2"
+                    href={`/tools/${tool.id}`}
+                    underline={selected ? 'always' : 'hover'}
+                  >
+                    {tool.title}
+                  </Link>
+                </Fragment>
+              );
+            })
+          }
+        </Flex>
+
+        <Box flexGrow="1" />
+
+        <Flex align="center" gap="3">
+          <Link
+            style={{ display: 'flex', alignContent: 'center' }}
+            color="gray"
+            href="https://discord.gg/nDt7AjGJQH"
+            underline="none"
+            target="_blank"
+          >
+            <DiscordLogoIcon />
+          </Link>
+          <Link
+            style={{ display: 'flex', alignContent: 'center' }}
+            color="gray"
+            href="https://www.patreon.com/tresabhi"
+            underline="none"
+            target="_blank"
+          >
+            <PatreonIcon width="0.75em" height="0.75em" />
+          </Link>
+          <Link
+            style={{ display: 'flex', alignContent: 'center' }}
+            color="gray"
+            href="/settings"
+            underline="none"
+          >
+            <GearIcon />
+          </Link>
+          <!-- <Popover.Root>
+            <Popover.Trigger>
+              <IconButton variant="ghost" color="gray">
+                <PersonIcon />
+              </IconButton>
+            </Popover.Trigger>
+
+            <Popover.Content
+              align="end"
+              width="320px"
+              onOpenAutoFocus={(event) => event.preventDefault()}
+            >
+              {
+                (patreonLogin.token || wargamingLogin.token) && (
+                  <Flex direction="column" gap="2">
+                    <Text align="center" color="gray">
+                      Logged in accounts
+                    </Text>
+
+                    {patreonLogin.token && (
+                      <Flex align="center" gap="2" justify="center">
+                        <PatreonIcon width={15} height={15} />
+                        <Text>Patreon</Text>
+                        <Button
+                          color="red"
+                          variant="ghost"
+                          onClick={() => {
+                            $patreonLogin.set({ token: undefined });
+                          }}
+                        >
+                          Logout
+                        </Button>
+                      </Flex>
+                    )}
+
+                    {wargamingLogin.token && (
+                      <Flex align="center" gap="2" justify="center">
+                        <WargamingIcon width={15} height={15} />
+                        <Text>
+                          <Suspense
+                            fallback={<Skeleton height="1em" width="5rem" />}
+                          >
+                            <WargamingAccountName />
+                          </Suspense>
+                        </Text>
+                        <Button
+                          color="red"
+                          variant="ghost"
+                          onClick={() => {
+                            $wargamingLogin.set({ token: undefined });
+                          }}
+                        >
+                          Logout
+                        </Button>
+                      </Flex>
+                    )}
+                  </Flex>
+                )
+              }
+
+              {
+                !patreonLogin.token !== !wargamingLogin.token && (
+                  <Inset side="x">
+                    <Separator my="4" size="4" />
+                  </Inset>
+                )
+              }
+
+              {
+                (!patreonLogin.token || !wargamingLogin.token) && (
+                  <Flex direction="column" gap="2">
+                    <Text align="center" color="gray">
+                      Log in with...
+                    </Text>
+
+                    {!patreonLogin.token && (
+                      <Link style={{ width: '100%' }} href={patreonLoginUrl()}>
+                        <Button style={{ width: '100%' }} color="tomato">
+                          <PatreonIcon width={15} height={15} /> Patreon
+                        </Button>
+                      </Link>
+                    )}
+
+                    {!wargamingLogin.token && <WargamingLoginButton />}
+                  </Flex>
+                )
+              }
+            </Popover.Content>
+          </Popover.Root> -->
+        </Flex>
+      </Flex>
+    </Flex>
+
+    <ScrollArea>
+      <Grid
+        columns="repeat(auto-fill, minmax(192px, 1fr))"
+        flow="dense"
+        gap="2"
+        width="100%"
+        p="3"
+        pt="0"
+      >
+        {
+          tools.map((tool) => {
+            const unavailableOnBranch = tool.branches?.every(
+              (branch) =>
+                branch !== assertSecret(process.env.PUBLIC_ASSET_BRANCH),
+            );
+
+            if (unavailableOnBranch) return null;
+
+            return (
+              <Flex
+                key={tool.id}
+                style={{
+                  position: 'relative',
+                  borderRadius: 'var(--radius-2)',
+                  overflow: 'hidden',
+                  backgroundImage: `url(${imgur(tool.image, {
+                    format: 'jpeg',
+                    size: ImgurSize.MediumThumbnail,
+                  })})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  aspectRatio: '2 / 1',
+                }}
+              >
+                <Link
+                  href={tool.id.length === 0 ? '/' : `/tools/${tool.id}`}
+                  style={{
+                    display: 'flex',
+                    width: '100%',
+                    height: '100%',
+                    flexDirection: 'column',
+                    textDecoration: 'none',
+                    color: 'inherit',
+                  }}
+                >
+                  <Box
+                    flexGrow="1"
+                    style={{
+                      backgroundImage: `url(${imgur(tool.image, {
+                        format: 'jpeg',
+                        size: ImgurSize.MediumThumbnail,
+                      })})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  />
+
+                  <Flex
+                    p="2"
+                    align="center"
+                    width="100%"
+                    style={{
+                      backgroundColor: 'var(--color-panel-translucent)',
+                      backdropFilter: 'blur(4rem)',
+                      WebkitBackdropFilter: 'blur(4rem)',
+                    }}
+                  >
+                    <Text weight="medium">{tool.title}</Text>
+                  </Flex>
+                </Link>
+              </Flex>
+            );
+          })
+        }
+      </Grid>
+    </ScrollArea>
+  </Flex>
+</Flex>

@@ -1,4 +1,4 @@
-import { superDecompress } from '@blitzkit/core';
+import { superDecompress } from './superDecompress';
 
 export async function fetchCdonLz4<Type>(url: string) {
   return await fetch(url, { cache: 'no-store' })

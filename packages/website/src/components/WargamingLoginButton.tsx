@@ -1,7 +1,7 @@
 import { assertSecret, REGIONS } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
 import { Button, type ButtonProps, Dialog, Flex, Link } from '@radix-ui/themes';
-import { WargamingIcon } from '../../WargamingIcon';
+import { WargamingIcon } from './WargamingIcon';
 
 export function WargamingLoginButton({ children, ...props }: ButtonProps) {
   return (

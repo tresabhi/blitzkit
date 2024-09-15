@@ -3,7 +3,7 @@ import { useStore } from '@nanostores/react';
 import { Text } from '@radix-ui/themes';
 import { useMemo } from 'react';
 import usePromise from 'react-promise-suspense';
-import { $wargamingLogin } from '../../../stores/wargamingLogin';
+import { $wargamingLogin } from '../stores/wargamingLogin';
 
 export function WargamingAccountName() {
   const wargamingLogin = useStore($wargamingLogin);
