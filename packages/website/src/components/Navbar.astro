@@ -21,6 +21,7 @@ import { BRANCH_NAMES } from '../constants/branches';
 import { NAVBAR_HEIGHT } from '../constants/navbar';
 import { homeTool, TOOLS } from '../constants/tools';
 import { PatreonIcon } from './PatreonIcon';
+import { NavbarAccount } from './NavbarAccount';
 
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
 const tools = [homeTool, ...toolsFiltered];
@@ -39,7 +40,6 @@ const isBranchNamed =
   }
 
   .expander {
-    --min-width: 768px;
     --navbar-height: 48px;
 
     transition-duration: 250ms;
@@ -47,10 +47,6 @@ const isBranchNamed =
     overflow: hidden;
     backdrop-filter: blur(4rem) brightness(0.75);
     -webkit-backdrop-filter: blur(4rem) brightness(0.75);
-
-    @media (min-width: var(--min-width)) {
-      max-height: var(--navbar-height);
-    }
 
     &[data-expanded='false'] {
       max-height: var(--navbar-height);
@@ -72,17 +68,23 @@ const isBranchNamed =
 
   .hamburger {
     display: inline-flex;
-
-    @media (min-width: var(--min-width)) {
-      display: none;
-    }
   }
 
   .tools {
     display: none;
+  }
 
-    @media (min-width: var(--min-width)) {
+  @media (min-width: 768px) {
+    .hamburger {
+      display: none;
+    }
+
+    .tools {
       display: flex;
+    }
+
+    .expander {
+      max-height: var(--navbar-height);
     }
   }
 </style>
@@ -195,95 +197,8 @@ const isBranchNamed =
           >
             <GearIcon />
           </Link>
-          <!-- <Popover.Root>
-            <Popover.Trigger>
-              <IconButton variant="ghost" color="gray">
-                <PersonIcon />
-              </IconButton>
-            </Popover.Trigger>
 
-            <Popover.Content
-              align="end"
-              width="320px"
-              onOpenAutoFocus={(event) => event.preventDefault()}
-            >
-              {
-                (patreonLogin.token || wargamingLogin.token) && (
-                  <Flex direction="column" gap="2">
-                    <Text align="center" color="gray">
-                      Logged in accounts
-                    </Text>
-
-                    {patreonLogin.token && (
-                      <Flex align="center" gap="2" justify="center">
-                        <PatreonIcon width={15} height={15} />
-                        <Text>Patreon</Text>
-                        <Button
-                          color="red"
-                          variant="ghost"
-                          onClick={() => {
-                            $patreonLogin.set({ token: undefined });
-                          }}
-                        >
-                          Logout
-                        </Button>
-                      </Flex>
-                    )}
-
-                    {wargamingLogin.token && (
-                      <Flex align="center" gap="2" justify="center">
-                        <WargamingIcon width={15} height={15} />
-                        <Text>
-                          <Suspense
-                            fallback={<Skeleton height="1em" width="5rem" />}
-                          >
-                            <WargamingAccountName />
-                          </Suspense>
-                        </Text>
-                        <Button
-                          color="red"
-                          variant="ghost"
-                          onClick={() => {
-                            $wargamingLogin.set({ token: undefined });
-                          }}
-                        >
-                          Logout
-                        </Button>
-                      </Flex>
-                    )}
-                  </Flex>
-                )
-              }
-
-              {
-                !patreonLogin.token !== !wargamingLogin.token && (
-                  <Inset side="x">
-                    <Separator my="4" size="4" />
-                  </Inset>
-                )
-              }
-
-              {
-                (!patreonLogin.token || !wargamingLogin.token) && (
-                  <Flex direction="column" gap="2">
-                    <Text align="center" color="gray">
-                      Log in with...
-                    </Text>
-
-                    {!patreonLogin.token && (
-                      <Link style={{ width: '100%' }} href={patreonLoginUrl()}>
-                        <Button style={{ width: '100%' }} color="tomato">
-                          <PatreonIcon width={15} height={15} /> Patreon
-                        </Button>
-                      </Link>
-                    )}
-
-                    {!wargamingLogin.token && <WargamingLoginButton />}
-                  </Flex>
-                )
-              }
-            </Popover.Content>
-          </Popover.Root> -->
+          <NavbarAccount client:idle />
         </Flex>
       </Flex>
     </Flex>
