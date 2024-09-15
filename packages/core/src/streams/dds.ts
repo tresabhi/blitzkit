@@ -1,4 +1,4 @@
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { Vector3Tuple, Vector4Tuple } from 'three';
 import { WindowsReadStream } from './windows';
 

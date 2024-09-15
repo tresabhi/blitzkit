@@ -1,5 +1,5 @@
 import { Flex, FlexProps, Theme } from '@radix-ui/themes';
-import { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
 import { RadixSize } from '../../../website-legacy/src/stores/embedState';
 
 type PageWrapperProps = FlexProps & {

@@ -10,7 +10,7 @@ import {
   idToRegion,
   retryAbleBlitzFetchEvent,
 } from '@blitzkit/core';
-import { chunk, times, uniq } from 'lodash';
+import { chunk, times, uniq } from 'lodash-es';
 import { compress, decompress } from 'lz4js';
 import { commitAssets } from './core/github/commitAssets';
 

@@ -1,8 +1,6 @@
-'use client';
-
 import { imgur } from '@blitzkit/core';
 import { Box, BoxProps, Text } from '@radix-ui/themes';
-import { uniqueId } from 'lodash';
+import { uniqueId } from 'lodash-es';
 import { useEffect, useRef } from 'react';
 import { Vector2Tuple } from 'three';
 

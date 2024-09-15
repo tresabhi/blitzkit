@@ -1,4 +1,4 @@
-import { throttle } from 'lodash';
+import { throttle } from 'lodash-es';
 import { FileChange } from './commitMultipleFiles';
 import { octokit } from './octokit';
 

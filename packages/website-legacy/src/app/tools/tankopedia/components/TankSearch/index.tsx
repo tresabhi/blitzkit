@@ -1,5 +1,3 @@
-'use client';
-
 import {
   TANK_CLASSES,
   TankDefinition,
@@ -15,7 +13,7 @@ import {
 } from '@blitzkit/core';
 import { Callout, Flex, FlexProps, Link, Text } from '@radix-ui/themes';
 import { go } from 'fuzzysort';
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { Fragment, memo, use, useEffect, useMemo, useState } from 'react';
 import { AdMidSectionResponsive } from '../../../../../components/AdMidSectionResponsive';
 import { ExperimentIcon } from '../../../../../components/ExperimentIcon';

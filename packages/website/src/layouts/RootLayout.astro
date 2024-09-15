@@ -1,6 +1,9 @@
 ---
 import { Flex, Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
+import Footer from '../components/Footer.astro';
+import { Navbar } from '../components/Navbar';
+import Party3 from '../components/Party3.astro';
 const { pathname } = Astro.url;
 
 const isRoot = pathname === '/';
@@ -29,7 +32,7 @@ const isRoot = pathname === '/';
     <meta property="og:site_name" content="BlitzKit" />
     <link rel="icon" type="image/x-icon" href="/favicon.png" />
 
-    <!-- <Party3 /> -->
+    <Party3 />
   </head>
 
   <body>
@@ -42,7 +45,7 @@ const isRoot = pathname === '/';
       suppressContentEditableWarning
     >
       <Flex direction="column" minHeight="100vh">
-        <!-- {!hideNav && <Navbar />} -->
+        <Navbar client:idle />
 
         <!-- <Checks /> -->
 
@@ -50,7 +53,7 @@ const isRoot = pathname === '/';
         <slot />
         <!-- </Suspense> -->
 
-        <!-- {!hideNav && <Footer />} -->
+        <Footer />
       </Flex>
     </Theme>
   </body>

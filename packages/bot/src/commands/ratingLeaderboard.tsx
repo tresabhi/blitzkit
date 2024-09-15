@@ -20,7 +20,7 @@ import {
   Locale,
   SlashCommandSubcommandBuilder,
 } from 'discord.js';
-import { range } from 'lodash';
+import { range } from 'lodash-es';
 import markdownEscape from 'markdown-escape';
 import { CommandWrapper } from '../components/CommandWrapper';
 import * as Leaderboard from '../components/Leaderboard';

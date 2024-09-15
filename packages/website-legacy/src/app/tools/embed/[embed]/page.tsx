@@ -1,5 +1,3 @@
-'use client';
-
 import { imgur } from '@blitzkit/core';
 import {
   CodeIcon,
@@ -11,12 +9,12 @@ import {
   WidthIcon,
 } from '@radix-ui/react-icons';
 import { Box, Button, Flex, Heading, ScrollArea, Text } from '@radix-ui/themes';
-import { capitalize, startCase } from 'lodash';
+import { capitalize, startCase } from 'lodash-es';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { stringify } from 'urlon';
+import { configurations } from '../../../../../../website/src/constants/embeds';
 import { CopyButton } from '../../../../components/CopyButton';
 import { PageWrapper } from '../../../../components/PageWrapper';
-import { configurations } from '../../../../../../website/src/constants/embeds';
 import * as App from '../../../../stores/app';
 import * as EmbedState from '../../../../stores/embedState';
 import { EmbedConfig } from '../../../../stores/embedState';

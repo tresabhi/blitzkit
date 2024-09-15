@@ -9,7 +9,7 @@ import {
   getTankStats,
   tankDefinitions,
 } from '@blitzkit/core';
-import { chunk } from 'lodash';
+import { chunk } from 'lodash-es';
 import markdownEscape from 'markdown-escape';
 import { addTierChoices } from '../core/discord/addTierChoices';
 import { addUsernameChoices } from '../core/discord/addUsernameChoices';

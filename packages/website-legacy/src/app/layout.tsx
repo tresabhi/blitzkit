@@ -1,5 +1,3 @@
-'use client';
-
 import { Flex, Theme } from '@radix-ui/themes';
 import '@radix-ui/themes/styles.css';
 import { Roboto_Flex } from 'next/font/google';

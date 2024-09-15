@@ -1,5 +1,5 @@
 import { Button, Text, Tooltip } from '@radix-ui/themes';
-import { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 export interface TankComponentButtonProps
   extends ComponentProps<typeof Button> {

@@ -1,6 +1,6 @@
 import { asset } from '@blitzkit/core';
 import { Flex, Heading, Slider, TextField } from '@radix-ui/themes';
-import { clamp, debounce } from 'lodash';
+import { clamp, debounce } from 'lodash-es';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GenericTankComponentButton } from '../../../../../../../components/ModuleButtons/GenericTankComponentButton';
 import * as Duel from '../../../../../../../stores/duel';
@@ -61,10 +61,10 @@ export function Miscellaneous() {
             cooldownBooster === 0
               ? undefined
               : cooldownBooster === 1
-              ? '#afb0abc0'
-              : cooldownBooster === 2
-              ? '#5f72cbc0'
-              : '#9b3cc0c0'
+                ? '#afb0abc0'
+                : cooldownBooster === 2
+                  ? '#5f72cbc0'
+                  : '#9b3cc0c0'
           }
           iconStyles={{
             transform: 'translate(-50%, -50%) scale(0.8)',

@@ -1,5 +1,5 @@
 import { TankDefinition, tankDefinitions } from '@blitzkit/core';
-import { sumBy } from 'lodash';
+import { sumBy } from 'lodash-es';
 import { use, useMemo } from 'react';
 import * as Duel from '../stores/duel';
 

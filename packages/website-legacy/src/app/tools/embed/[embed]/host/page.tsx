@@ -1,13 +1,11 @@
-'use client';
-
 import { Code, Heading } from '@radix-ui/themes';
 import { useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
-import { PageWrapper } from '../../../../../components/PageWrapper';
 import {
   configurations,
   extractEmbedConfigDefaults,
 } from '../../../../../../../website/src/constants/embeds';
+import { PageWrapper } from '../../../../../components/PageWrapper';
 import * as EmbedState from '../../../../../stores/embedState';
 
 export interface EmbedPreviewControllerProps {

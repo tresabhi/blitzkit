@@ -6,7 +6,7 @@ import {
 import strings from '@blitzkit/core/lang/en-US.json';
 import { amberDark, blueDark } from '@radix-ui/colors';
 import { Flex, Text } from '@radix-ui/themes';
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { ReactNode } from 'react';
 import { toRadiusVar } from '../../../website-legacy/src/core/radix/utils';
 import { useEmbedStateCurry } from '../../../website-legacy/src/stores/embedState/utilities';

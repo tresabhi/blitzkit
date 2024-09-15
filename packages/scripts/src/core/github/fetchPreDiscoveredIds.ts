@@ -3,7 +3,7 @@ import {
   DidsReadStream,
   DiscoveredIdsDefinitions,
 } from '@blitzkit/core';
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { decompress } from 'lz4js';
 import ProgressBar from 'progress';
 

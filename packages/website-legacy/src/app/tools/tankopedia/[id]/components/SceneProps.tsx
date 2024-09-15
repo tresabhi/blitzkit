@@ -1,5 +1,5 @@
 import { useFrame, useLoader } from '@react-three/fiber';
-import { clamp } from 'lodash';
+import { clamp } from 'lodash-es';
 import { useRef } from 'react';
 import { MeshStandardMaterial, TextureLoader } from 'three';
 import * as TankopediaPersistent from '../../../../../stores/tankopediaPersistent';

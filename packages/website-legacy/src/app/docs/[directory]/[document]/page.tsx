@@ -13,7 +13,7 @@ export default function Page({
   const markdown = use(
     fetch(
       `https://raw.githubusercontent.com/tresabhi/blitzkit/${assertSecret(
-        process.env.NEXT_PUBLIC_ASSET_BRANCH,
+        process.env.PUBLIC_ASSET_BRANCH,
       )}/docs/${params.directory}/${params.document}.md`,
     ).then((response) => response.text()),
   );

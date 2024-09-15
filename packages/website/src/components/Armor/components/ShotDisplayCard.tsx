@@ -6,7 +6,7 @@ import {
   Separator,
   Text,
 } from '@radix-ui/themes';
-import { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
 import { radToDeg } from 'three/src/math/MathUtils';
 import * as TankopediaEphemeral from '../../../../../website-legacy/src/stores/tankopediaEphemeral';
 import { shotStatusColors } from './ShotDisplay';

@@ -4,7 +4,7 @@ import {
   Locale,
   SlashCommandStringOption,
 } from 'discord.js';
-import { range } from 'lodash';
+import { range } from 'lodash-es';
 import { translator } from '../localization/translator';
 import { localizationObject } from './localizationObject';
 

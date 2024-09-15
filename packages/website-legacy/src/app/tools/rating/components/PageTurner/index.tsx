@@ -4,7 +4,7 @@ import {
   SymbolIcon,
 } from '@radix-ui/react-icons';
 import { Flex, IconButton, TextField } from '@radix-ui/themes';
-import { range } from 'lodash';
+import { range } from 'lodash-es';
 import { useEffect, useRef } from 'react';
 import { infiniteSpin } from './index.css';
 

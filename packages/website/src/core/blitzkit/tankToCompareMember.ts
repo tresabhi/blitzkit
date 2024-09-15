@@ -1,5 +1,5 @@
 import { ProvisionDefinitions, TankDefinition } from '@blitzkit/core';
-import { uniqueId } from 'lodash';
+import { uniqueId } from 'lodash-es';
 import { CompareMember } from '../../stores/compareEphemeral';
 import { tankToDuelMember } from './tankToDuelMember';
 

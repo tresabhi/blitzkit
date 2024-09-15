@@ -2,8 +2,8 @@ import { J_HAT, K_HAT } from '@blitzkit/core';
 import { Box, Flex, Text } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { clamp } from 'lodash';
-import { ComponentProps, useEffect, useRef } from 'react';
+import { clamp } from 'lodash-es';
+import { type ComponentProps, useEffect, useRef } from 'react';
 import {
   BufferGeometry,
   DoubleSide,

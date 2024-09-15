@@ -1,5 +1,3 @@
-'use client';
-
 import { TIER_ROMAN_NUMERALS } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
 import { invalidate } from '@react-three/fiber';

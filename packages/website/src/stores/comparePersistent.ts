@@ -1,6 +1,4 @@
-'use client';
-
-import lodash from 'lodash';
+import lodash from 'lodash-es';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { createContextualSafeStore } from '../core/zustand/createContextualSafeStore';

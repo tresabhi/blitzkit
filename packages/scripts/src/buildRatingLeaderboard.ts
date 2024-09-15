@@ -14,7 +14,7 @@ import {
   regionSubdomainToRegion,
   superCompress,
 } from '@blitzkit/core';
-import { chunk } from 'lodash';
+import { chunk } from 'lodash-es';
 import { argv } from 'process';
 import { commitAssets } from './core/github/commitAssets';
 import { FileChange } from './core/github/commitMultipleFiles';

@@ -1,6 +1,6 @@
 import { I_HAT, J_HAT } from '@blitzkit/core';
 import { MeshProps, useThree } from '@react-three/fiber';
-import { clamp } from 'lodash';
+import { clamp } from 'lodash-es';
 import { useEffect, useMemo } from 'react';
 import {
   Box3,

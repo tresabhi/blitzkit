@@ -1,5 +1,3 @@
-'use client';
-
 import { DiscordLogoIcon, HomeIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Heading, Text } from '@radix-ui/themes';
 import Link from 'next/link';

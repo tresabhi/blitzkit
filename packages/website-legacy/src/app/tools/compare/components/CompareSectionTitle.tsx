@@ -1,5 +1,5 @@
 import { Heading, Table } from '@radix-ui/themes';
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { StickyColumnHeaderCell } from '../../../../components/StickyColumnHeaderCell';
 import * as CompareEphemeral from '../../../../stores/compareEphemeral';
 

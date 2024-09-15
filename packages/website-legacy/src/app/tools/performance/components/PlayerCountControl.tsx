@@ -1,5 +1,3 @@
-'use client';
-
 import { Flex, Select, Text } from '@radix-ui/themes';
 import * as TankPerformancePersistent from '../../../../stores/tankPerformancePersistent';
 import { PlayerCountPeriod } from '../../../../stores/tankPerformancePersistent/constants';

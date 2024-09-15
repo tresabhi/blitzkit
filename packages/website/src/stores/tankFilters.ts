@@ -1,5 +1,3 @@
-'use client';
-
 import { TankClass, Tier, TreeType } from '@blitzkit/core';
 import { create } from 'zustand';
 import { createContextualSafeStore } from '../core/zustand/createContextualSafeStore';

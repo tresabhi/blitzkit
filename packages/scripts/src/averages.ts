@@ -14,7 +14,7 @@ import {
   getTankStats,
   idToRegion,
 } from '@blitzkit/core';
-import { chunk, times } from 'lodash';
+import { chunk, times } from 'lodash-es';
 import { commitAssets } from './core/github/commitAssets';
 import { fetchPreDiscoveredIds } from './core/github/fetchPreDiscoveredIds';
 

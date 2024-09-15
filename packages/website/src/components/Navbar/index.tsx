@@ -1,11 +1,10 @@
-'use client';
-
 import {
   assertSecret,
   imgur,
   ImgurSize,
   patreonLoginUrl,
 } from '@blitzkit/core';
+import { useStore } from '@nanostores/react';
 import {
   Cross1Icon,
   DiscordLogoIcon,
@@ -21,18 +20,18 @@ import {
   Grid,
   IconButton,
   Inset,
+  Link,
   Popover,
   ScrollArea,
   Separator,
   Skeleton,
   Text,
 } from '@radix-ui/themes';
-import { usePathname } from 'next/navigation';
 import { Fragment, Suspense, useState } from 'react';
-import * as App from '../../../../website-legacy/src/stores/app';
-import { BRANCH_NAMES } from '../../../../website/src/components/Hero/constants';
+import { BRANCH_NAMES } from '../../constants/branches';
 import { homeTool, TOOLS } from '../../constants/tools';
-import { Link } from '../Link';
+import { $patreonLogin } from '../../stores/patreonLogin';
+import { $wargamingLogin } from '../../stores/wargamingLogin';
 import { PatreonIcon } from '../PatreonIcon';
 import { WargamingIcon } from '../WargamingIcon';
 import { WargamingAccountName } from './components/WargamingAccountName';
@@ -41,14 +40,13 @@ import * as styles from './index.css';
 
 export function Navbar() {
   const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
-  const pathname = usePathname();
-  const logins = App.use((state) => state.logins);
-  const mutateApp = App.useMutation();
+  const patreonLogin = useStore($patreonLogin);
+  const wargamingLogin = useStore($wargamingLogin);
   const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
   const tools = [homeTool, ...toolsFiltered];
   const isBranchNamed =
-    process.env.NEXT_PUBLIC_ASSET_BRANCH &&
-    BRANCH_NAMES[process.env.NEXT_PUBLIC_ASSET_BRANCH];
+    process.env.PUBLIC_ASSET_BRANCH &&
+    BRANCH_NAMES[process.env.PUBLIC_ASSET_BRANCH];
 
   return (
     <Flex className={styles.navbar}>
@@ -67,6 +65,7 @@ export function Navbar() {
                 className={styles.hamburger}
                 onClick={(event) => {
                   event.stopPropagation();
+                  console.log('click!');
                   setShowHamburgerMenu((state) => !state);
                 }}
               >
@@ -85,7 +84,7 @@ export function Navbar() {
                   BlitzKit
                   {isBranchNamed && (
                     <Code color="gray" size="1" highContrast variant="outline">
-                      {BRANCH_NAMES[process.env.NEXT_PUBLIC_ASSET_BRANCH!]}
+                      {BRANCH_NAMES[process.env.PUBLIC_ASSET_BRANCH!]}
                     </Code>
                   )}
                 </Flex>
@@ -103,10 +102,12 @@ export function Navbar() {
               {toolsFiltered.map((tool, index) => {
                 const unavailableOnBranch = tool.branches?.every(
                   (branch) =>
-                    branch !==
-                    assertSecret(process.env.NEXT_PUBLIC_ASSET_BRANCH),
+                    branch !== assertSecret(process.env.PUBLIC_ASSET_BRANCH),
                 );
-                const selected = pathname.startsWith(`/tools/${tool.id}`);
+                // const selected = window.location.pathname.startsWith(
+                //   `/tools/${tool.id}`,
+                // );
+                const selected = false;
 
                 if (unavailableOnBranch) return null;
 
@@ -172,31 +173,29 @@ export function Navbar() {
                   width="320px"
                   onOpenAutoFocus={(event) => event.preventDefault()}
                 >
-                  {(logins.patreon || logins.wargaming) && (
+                  {(patreonLogin.token || wargamingLogin.token) && (
                     <Flex direction="column" gap="2">
                       <Text align="center" color="gray">
                         Logged in accounts
                       </Text>
 
-                      {logins.patreon && (
+                      {patreonLogin.token && (
                         <Flex align="center" gap="2" justify="center">
                           <PatreonIcon width={15} height={15} />
                           <Text>Patreon</Text>
                           <Button
                             color="red"
                             variant="ghost"
-                            onClick={() =>
-                              mutateApp((draft) => {
-                                draft.logins.patreon = undefined;
-                              })
-                            }
+                            onClick={() => {
+                              $patreonLogin.set({ token: undefined });
+                            }}
                           >
                             Logout
                           </Button>
                         </Flex>
                       )}
 
-                      {logins.wargaming && (
+                      {wargamingLogin.token && (
                         <Flex align="center" gap="2" justify="center">
                           <WargamingIcon width={15} height={15} />
                           <Text>
@@ -209,11 +208,9 @@ export function Navbar() {
                           <Button
                             color="red"
                             variant="ghost"
-                            onClick={() =>
-                              mutateApp((draft) => {
-                                draft.logins.wargaming = undefined;
-                              })
-                            }
+                            onClick={() => {
+                              $wargamingLogin.set({ token: undefined });
+                            }}
                           >
                             Logout
                           </Button>
@@ -222,19 +219,19 @@ export function Navbar() {
                     </Flex>
                   )}
 
-                  {!logins.patreon !== !logins.wargaming && (
+                  {!patreonLogin.token !== !wargamingLogin.token && (
                     <Inset side="x">
                       <Separator my="4" size="4" />
                     </Inset>
                   )}
 
-                  {(!logins.patreon || !logins.wargaming) && (
+                  {(!patreonLogin.token || !wargamingLogin.token) && (
                     <Flex direction="column" gap="2">
                       <Text align="center" color="gray">
                         Log in with...
                       </Text>
 
-                      {!logins.patreon && (
+                      {!patreonLogin.token && (
                         <Link
                           style={{ width: '100%' }}
                           href={patreonLoginUrl()}
@@ -245,7 +242,7 @@ export function Navbar() {
                         </Link>
                       )}
 
-                      {!logins.wargaming && <WargamingLoginButton />}
+                      {!wargamingLogin.token && <WargamingLoginButton />}
                     </Flex>
                   )}
                 </Popover.Content>
@@ -266,7 +263,7 @@ export function Navbar() {
             {tools.map((tool) => {
               const unavailableOnBranch = tool.branches?.every(
                 (branch) =>
-                  branch !== assertSecret(process.env.NEXT_PUBLIC_ASSET_BRANCH),
+                  branch !== assertSecret(process.env.PUBLIC_ASSET_BRANCH),
               );
 
               if (unavailableOnBranch) return null;

@@ -51,8 +51,7 @@ export function MetaSection() {
             </Button>
           </Link>
 
-          {assertSecret(process.env.NEXT_PUBLIC_PROMOTE_OPENTEST) ===
-            'true' && (
+          {assertSecret(process.env.PUBLIC_PROMOTE_OPENTEST) === 'true' && (
             <Link
               href={`https://opentest.blitzkit.app/tools/tankopedia/${protagonist.id}`}
             >
@@ -134,8 +133,8 @@ export function MetaSection() {
                 protagonist.treeType === 'collector'
                   ? 'blue'
                   : protagonist.treeType === 'premium'
-                  ? 'amber'
-                  : undefined
+                    ? 'amber'
+                    : undefined
               }
             >
               {strings.common.tree_type[protagonist.treeType]}

@@ -1,4 +1,4 @@
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { ReactNode } from 'react';
 import { theme } from '../../../../stitches.config';
 import { Margin } from '../Margin';

@@ -1,5 +1,3 @@
-'use client';
-
 import { Table } from '@radix-ui/themes';
 import { RootProps } from '@radix-ui/themes/dist/cjs/components/table';
 import { useEffect, useRef } from 'react';

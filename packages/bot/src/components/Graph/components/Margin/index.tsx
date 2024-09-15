@@ -1,4 +1,4 @@
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { theme } from '../../../../stitches.config';
 import { MarginInputProps } from '../Root';
 import { MarginOrientation } from './constants';

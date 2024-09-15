@@ -1,7 +1,6 @@
-'use client';
-
 import { Flex, Heading } from '@radix-ui/themes';
 import { Hero } from '../../../website/src/components/Hero';
+import { Plugs } from '../../../website/src/components/Plugs';
 import { ToolCard } from '../../../website/src/components/ToolCard';
 import {
   compareTool,
@@ -14,7 +13,6 @@ import {
 } from '../../../website/src/constants/tools';
 import { AdMidSectionResponsive } from '../components/AdMidSectionResponsive';
 import { useAdExempt } from '../hooks/useAdExempt';
-import { Plugs } from '../../../website/src/components/Plugs';
 
 export default function Page() {
   const exempt = useAdExempt();

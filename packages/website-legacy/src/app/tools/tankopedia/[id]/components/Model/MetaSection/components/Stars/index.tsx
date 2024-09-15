@@ -1,6 +1,6 @@
 import { StarsInt } from '@blitzkit/core';
 import { Flex, Text, TextProps } from '@radix-ui/themes';
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { PartialStar } from './components/PartialStar';
 
 type StarsProps = TextProps & {

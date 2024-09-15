@@ -1,5 +1,3 @@
-'use client';
-
 import { ModelDefinition } from '@blitzkit/core';
 import { Vector3 } from 'three';
 import { create } from 'zustand';

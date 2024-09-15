@@ -1,5 +1,3 @@
-'use client';
-
 import { type Draft, produce } from 'immer';
 import {
   createContext,

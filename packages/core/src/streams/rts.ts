@@ -1,4 +1,4 @@
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { IndividualTankStats } from '..';
 import { BlitzStats } from '../statistics/compositeStats/constants';
 import { ReadStream, WriteStream } from './buffer';

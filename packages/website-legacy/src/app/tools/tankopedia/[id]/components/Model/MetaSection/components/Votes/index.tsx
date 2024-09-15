@@ -1,5 +1,3 @@
-'use client';
-
 import { formatCompact } from '@blitzkit/core';
 import { Flex, Heading, Skeleton, Text } from '@radix-ui/themes';
 import { memo } from 'react';

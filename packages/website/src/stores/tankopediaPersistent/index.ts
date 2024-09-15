@@ -1,7 +1,5 @@
-'use client';
-
 import { TankClass, Tier, TreeType } from '@blitzkit/core';
-import lodash from 'lodash';
+import lodash from 'lodash-es';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { ENVIRONMENTS } from '../../app/tools/tankopedia/[id]/components/Lighting';

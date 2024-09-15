@@ -9,7 +9,7 @@ import {
   tankIcon,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
-import { clamp } from 'lodash';
+import { clamp } from 'lodash-es';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { TitleBar } from '../components/TitleBar';
 import { iconPng } from '../core/blitzkit/iconPng';

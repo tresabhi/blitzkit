@@ -1,5 +1,3 @@
-'use client';
-
 import {
   AccountListWithServer,
   IndividualAccountInfo,
@@ -37,7 +35,7 @@ import {
   Text,
   TextField,
 } from '@radix-ui/themes';
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
 import { PageWrapper } from '../../../components/PageWrapper';
 import { TankRowHeaderCell } from '../../../components/TankRowHeaderCell';

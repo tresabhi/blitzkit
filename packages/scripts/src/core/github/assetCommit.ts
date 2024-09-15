@@ -11,7 +11,7 @@ export class AssetCommit {
 
     const blob = await createBlob(
       'tresabhi',
-      assertSecret(process.env.NEXT_PUBLIC_ASSET_REPO),
+      assertSecret(process.env.PUBLIC_ASSET_REPO),
       {
         content,
         encoding,
@@ -28,14 +28,14 @@ export class AssetCommit {
     const latestCommitSha = (
       await octokit.git.getRef({
         owner: 'tresabhi',
-        repo: assertSecret(process.env.NEXT_PUBLIC_ASSET_REPO),
-        ref: `heads/${assertSecret(process.env.NEXT_PUBLIC_ASSET_BRANCH)}`,
+        repo: assertSecret(process.env.PUBLIC_ASSET_REPO),
+        ref: `heads/${assertSecret(process.env.PUBLIC_ASSET_BRANCH)}`,
       })
     ).data.object.sha;
     const treeSha = (
       await octokit.git.getCommit({
         owner: 'tresabhi',
-        repo: assertSecret(process.env.NEXT_PUBLIC_ASSET_REPO),
+        repo: assertSecret(process.env.PUBLIC_ASSET_REPO),
         commit_sha: latestCommitSha,
       })
     ).data.tree.sha;
@@ -43,21 +43,21 @@ export class AssetCommit {
 
     const { data: treeData } = await octokit.git.createTree({
       owner: 'tresabhi',
-      repo: assertSecret(process.env.NEXT_PUBLIC_ASSET_REPO),
+      repo: assertSecret(process.env.PUBLIC_ASSET_REPO),
       base_tree: treeSha,
       tree: blobs,
     });
     const { data: newCommitData } = await octokit.git.createCommit({
       owner: 'tresabhi',
-      repo: assertSecret(process.env.NEXT_PUBLIC_ASSET_REPO),
+      repo: assertSecret(process.env.PUBLIC_ASSET_REPO),
       message: this.message,
       tree: treeData.sha,
       parents: [latestCommitSha],
     });
     await octokit.git.updateRef({
       owner: 'tresabhi',
-      repo: assertSecret(process.env.NEXT_PUBLIC_ASSET_REPO),
-      ref: `heads/${assertSecret(process.env.NEXT_PUBLIC_ASSET_BRANCH)}`,
+      repo: assertSecret(process.env.PUBLIC_ASSET_REPO),
+      ref: `heads/${assertSecret(process.env.PUBLIC_ASSET_BRANCH)}`,
       sha: newCommitData.sha,
     });
   }

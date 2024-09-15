@@ -1,5 +1,5 @@
 import { Table } from '@radix-ui/themes';
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { RowLoader } from './RowLoader';
 
 export function BodyLoader() {

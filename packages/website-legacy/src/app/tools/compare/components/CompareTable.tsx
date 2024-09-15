@@ -10,7 +10,7 @@ import {
 } from '@blitzkit/core';
 import { ComponentPlaceholderIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Popover, Slider, Table, Text } from '@radix-ui/themes';
-import { debounce, times } from 'lodash';
+import { debounce, times } from 'lodash-es';
 import { use } from 'react';
 import { BlitzkitButtonGrayIcon } from '../../../../components/BlitzkitButtonGrayIcon';
 import { ConsumablesManager } from '../../../../components/ConsumablesManager';

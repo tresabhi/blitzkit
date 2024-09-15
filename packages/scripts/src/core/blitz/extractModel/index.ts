@@ -6,7 +6,7 @@ import {
   VertexAttribute,
 } from '@blitzkit/core';
 import { Document, Material, Node, Scene } from '@gltf-transform/core';
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { dirname } from 'path';
 import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
 import { readDVPLFile } from '../readDVPLFile';

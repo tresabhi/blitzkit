@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Tooltip } from '@radix-ui/themes';
+import { Button, type ButtonProps, Tooltip } from '@radix-ui/themes';
 import { useState } from 'react';
 
 interface CopyButtonProps extends ButtonProps {

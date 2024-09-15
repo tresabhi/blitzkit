@@ -1,5 +1,3 @@
-'use client';
-
 import {
   asset,
   gameDefinitions,
@@ -10,7 +8,7 @@ import {
 import strings from '@blitzkit/core/lang/en-US.json';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { Box, Flex, IconButton, Text, Tooltip } from '@radix-ui/themes';
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { use } from 'react';
 import { classIcons } from '../../../../components/ClassIcon';
 import { ExperimentIcon } from '../../../../components/ExperimentIcon';

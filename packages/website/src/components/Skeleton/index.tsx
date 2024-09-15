@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
 import { skeleton } from './index.css';
 
 export function Skeleton({ className, ...props }: ComponentProps<'div'>) {

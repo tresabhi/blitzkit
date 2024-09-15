@@ -1,5 +1,5 @@
 import {
-  ShellType,
+  type ShellType,
   isExplosive,
   resolveNearPenetration,
   resolvePenetrationCoefficient,
@@ -7,7 +7,7 @@ import {
 import { useThree } from '@react-three/fiber';
 import { useCallback } from 'react';
 import {
-  Intersection,
+  type Intersection,
   MeshBasicMaterial,
   Object3D,
   Plane,
@@ -17,11 +17,8 @@ import {
   Vector3,
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
-import { hasEquipment } from '../../../../../../website-legacy/src/core/blitzkit/hasEquipment';
-import { jsxTree } from '../../../../../../website-legacy/src/core/blitzkit/jsxTree';
-import { discardClippingPlane } from '../../../../../../website-legacy/src/core/three/discardClippingPlane';
-import * as Duel from '../../../../../../website-legacy/src/stores/duel';
-import * as TankopediaEphemeral from '../../../../../../website-legacy/src/stores/tankopediaEphemeral';
+import * as Duel from '../../../../stores/duel';
+import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 import { ArmorType } from '../SpacedArmorScene';
 import { SpacedArmorSubExternal } from './components/SpacedArmorSubExternal';
 import { SpacedArmorSubSpaced } from './components/SpacedArmorSubSpaced';

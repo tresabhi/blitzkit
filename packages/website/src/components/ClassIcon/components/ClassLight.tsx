@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
 
 export function ClassLight(props: ComponentProps<'svg'>) {
   return (

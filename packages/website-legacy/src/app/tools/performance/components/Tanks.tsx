@@ -1,19 +1,14 @@
-'use client';
-
-import {
-  averageDefinitionsArray,
-  tankDefinitions,
-} from '@blitzkit/core';
+import { averageDefinitionsArray, tankDefinitions } from '@blitzkit/core';
 import { Table } from '@radix-ui/themes';
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { Suspense, use, useEffect, useMemo, useState } from 'react';
+import { filterTank } from '../../../../core/blitzkit/filterTank';
 import * as TankFilters from '../../../../stores/tankFilters';
 import * as TankPerformancePersistent from '../../../../stores/tankPerformancePersistent';
 import * as TankPerformanceSort from '../../../../stores/tankPerformanceSort';
 import { RowLoader } from './RowLoader';
 import { TankRow } from './TankRow';
 import { Total } from './Total';
-import { filterTank } from '../../../../core/blitzkit/filterTank';
 
 const PREVIEW_COUNT = 10;
 const DEFAULT_LOADED_ROWS = 25;

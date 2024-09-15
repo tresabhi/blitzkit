@@ -14,7 +14,7 @@ import {
   Popover,
   Text,
 } from '@radix-ui/themes';
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { useState } from 'react';
 
 const DAY_TITLES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

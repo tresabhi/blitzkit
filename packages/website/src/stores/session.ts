@@ -1,7 +1,5 @@
-'use client';
-
 import { IndividualTankStats, Region, Stat } from '@blitzkit/core';
-import lodash from 'lodash';
+import lodash from 'lodash-es';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { createContextualSafeStore } from '../core/zustand/createContextualSafeStore';

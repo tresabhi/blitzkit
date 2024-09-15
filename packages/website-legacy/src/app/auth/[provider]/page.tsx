@@ -1,5 +1,3 @@
-'use client';
-
 import { Flex, Heading, Text } from '@radix-ui/themes';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';

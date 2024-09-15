@@ -1,5 +1,3 @@
-'use client';
-
 import {
   averageDefinitionsArray,
   formatCompact,
@@ -12,7 +10,7 @@ import {
 import strings from '@blitzkit/core/lang/en-US.json';
 import { ResponsiveBar } from '@nivo/bar';
 import { Box, Flex, Heading } from '@radix-ui/themes';
-import { times } from 'lodash';
+import { times } from 'lodash-es';
 import { use } from 'react';
 import { nivoTheme } from '../../../../core/nivo/theme';
 

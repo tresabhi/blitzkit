@@ -1,5 +1,3 @@
-'use client';
-
 import {
   AccountList,
   AccountListItem,
@@ -33,7 +31,7 @@ import {
   TextField,
 } from '@radix-ui/themes';
 import { produce } from 'immer';
-import { debounce, range } from 'lodash';
+import { debounce, range } from 'lodash-es';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
 import { PageWrapper } from '../../../components/PageWrapper';

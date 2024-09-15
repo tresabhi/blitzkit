@@ -1,4 +1,4 @@
-import { Link, LinkProps } from '@radix-ui/themes';
+import { Link, type LinkProps } from '@radix-ui/themes';
 
 export function DummyLink({ href = '#', onClick, ...props }: LinkProps) {
   return (

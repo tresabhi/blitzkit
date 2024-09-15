@@ -120,6 +120,6 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           VIDEOS_SHEET: ${{ secrets.VIDEOS_SHEET }}
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-          NEXT_PUBLIC_ASSET_BRANCH: ${{ github.event.inputs.cdn_branch }}
+          PUBLIC_ASSET_BRANCH: ${{ github.event.inputs.cdn_branch }}
           WOTB_GLOSSARY: ${{ secrets.WOTB_GLOSSARY }}
         run: bun build:assets --all-targets --depot --production

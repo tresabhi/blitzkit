@@ -9,7 +9,7 @@ import {
 } from '@blitzkit/core';
 import { readdir } from 'fs/promises';
 import { google } from 'googleapis';
-import { cloneDeep, uniqBy } from 'lodash';
+import { cloneDeep, uniqBy } from 'lodash-es';
 import { parse as parseYaml } from 'yaml';
 import { DATA } from './buildAssets/constants';
 import {
@@ -118,7 +118,7 @@ for (const tank of tanksSanitized) {
           ({
             id: item.id!.videoId!,
             author: item.snippet!.channelId!,
-          } satisfies Video),
+          }) satisfies Video,
       ),
     };
 

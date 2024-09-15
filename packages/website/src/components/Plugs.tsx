@@ -1,6 +1,5 @@
-'use client';
-
 import { assertSecret, patreonLoginUrl } from '@blitzkit/core';
+import { useStore } from '@nanostores/react';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import {
   Badge,
@@ -13,17 +12,17 @@ import {
 } from '@radix-ui/themes';
 import { useLayoutEffect, useState } from 'react';
 import { useAdExempt } from '../hooks/useAdExempt';
-import * as App from '../stores/app';
+import { $patreonLogin } from '../stores/patreonLogin';
 import { PatreonIcon } from './PatreonIcon';
 
 export function Plugs() {
   const [hasPatreon, setHasPatreon] = useState(false);
   const exempt = useAdExempt();
-  const patreon = App.use((state) => state.logins.patreon);
+  const patreonLogin = useStore($patreonLogin);
 
   useLayoutEffect(() => {
-    setHasPatreon(patreon !== undefined);
-  }, [patreon]);
+    setHasPatreon(patreonLogin !== undefined);
+  }, [patreonLogin]);
 
   return (
     <Flex
@@ -34,8 +33,8 @@ export function Plugs() {
       py="8"
       gap="6"
     >
-      {assertSecret(process.env.NEXT_PUBLIC_PROMOTE_OPENTEST) === 'true' &&
-        assertSecret(process.env.NEXT_PUBLIC_ASSET_BRANCH) !== 'opentest' && (
+      {assertSecret(process.env.PUBLIC_PROMOTE_OPENTEST) === 'true' &&
+        assertSecret(process.env.PUBLIC_ASSET_BRANCH) !== 'opentest' && (
           <>
             <Flex direction="column" gap="3" align="center">
               <Flex align="center" gap="2">

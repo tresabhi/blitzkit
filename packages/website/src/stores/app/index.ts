@@ -1,28 +1,10 @@
-'use client';
-
-import lodash from 'lodash';
+import lodash from 'lodash-es';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { createContextualSafeStore } from '../../core/zustand/createContextualSafeStore';
 
-interface WargamingLogin {
-  id: number;
-  token: string;
-  expires: number;
-}
-
-interface PatreonLogin {
-  token: string;
-  refreshToken: string;
-  expires: number;
-}
-
 export interface App {
   developerMode: boolean;
-  logins: {
-    wargaming?: WargamingLogin;
-    patreon?: PatreonLogin;
-  };
   policiesAgreementIndex: number;
 }
 

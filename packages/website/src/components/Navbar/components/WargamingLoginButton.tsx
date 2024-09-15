@@ -1,7 +1,6 @@
 import { assertSecret, REGIONS } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
-import { Button, ButtonProps, Dialog, Flex } from '@radix-ui/themes';
-import { Link } from '../../Link';
+import { Button, type ButtonProps, Dialog, Flex, Link } from '@radix-ui/themes';
 import { WargamingIcon } from '../../WargamingIcon';
 
 export function WargamingLoginButton({ children, ...props }: ButtonProps) {
@@ -29,7 +28,7 @@ export function WargamingLoginButton({ children, ...props }: ButtonProps) {
                 href={
                   typeof window !== 'undefined'
                     ? `https://api.worldoftanks.${region}/wot/auth/login/?application_id=${assertSecret(
-                        process.env.NEXT_PUBLIC_WARGAMING_APPLICATION_ID,
+                        process.env.PUBLIC_WARGAMING_APPLICATION_ID,
                       )}&redirect_uri=${encodeURIComponent(
                         `${location.origin}/auth/wargaming?return=${location.origin}${location.pathname}`,
                       )}`

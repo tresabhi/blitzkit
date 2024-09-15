@@ -19,7 +19,7 @@ import {
   TextField,
   Tooltip,
 } from '@radix-ui/themes';
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import { Fragment, use, useEffect, useRef, useState } from 'react';
 import { lerp } from 'three/src/math/MathUtils';
 import { Ad, AdType } from '../../../../../../components/Ad';

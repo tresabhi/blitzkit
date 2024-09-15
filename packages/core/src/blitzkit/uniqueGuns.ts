@@ -1,4 +1,4 @@
-import { forEachRight } from 'lodash';
+import { forEachRight } from 'lodash-es';
 import { GunDefinition, TurretDefinition } from './tankDefinitions';
 
 export function uniqueGuns(turrets: TurretDefinition[]) {

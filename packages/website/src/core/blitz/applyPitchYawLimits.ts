@@ -1,5 +1,5 @@
 import { normalizeAngleRad, PitchLimits, YawLimits } from '@blitzkit/core';
-import { clamp } from 'lodash';
+import { clamp } from 'lodash-es';
 import { degToRad } from 'three/src/math/MathUtils';
 
 export function applyPitchYawLimits(

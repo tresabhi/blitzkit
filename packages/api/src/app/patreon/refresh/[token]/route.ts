@@ -9,7 +9,7 @@ export async function GET(
     `https://www.patreon.com/api/oauth2/token?grant_type=refresh_token&refresh_token=${
       params.token
     }&client_id=${assertSecret(
-      process.env.NEXT_PUBLIC_PATREON_CLIENT_ID,
+      process.env.PUBLIC_PATREON_CLIENT_ID,
     )}&client_secret=${assertSecret(process.env.PATREON_CLIENT_SECRET)}`,
     { method: 'POST' },
   );

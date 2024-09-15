@@ -1,21 +1,27 @@
 import { getAccountInfo, idToRegion } from '@blitzkit/core';
+import { useStore } from '@nanostores/react';
 import { Text } from '@radix-ui/themes';
-import { use, useMemo } from 'react';
-import * as App from '../../../../../website-legacy/src/stores/app';
+import { useMemo } from 'react';
+import usePromise from 'react-promise-suspense';
+import { $wargamingLogin } from '../../../stores/wargamingLogin';
 
 export function WargamingAccountName() {
-  const wargaming = App.use((state) => state.logins.wargaming!);
-  const promise = useMemo(
-    () =>
-      getAccountInfo(idToRegion(wargaming.id), wargaming.id, [], {
-        access_token: wargaming.token,
-      }).then((data) => {
-        console.log(data);
-        return data?.nickname as string | undefined;
-      }),
-    [wargaming],
-  );
-  const nickname = use(promise);
+  const wargamingLogin = useStore($wargamingLogin);
+  const promise = useMemo(async () => {
+    if (!wargamingLogin.token) return null;
+
+    const data = await getAccountInfo(
+      idToRegion(Number(wargamingLogin.id)),
+      Number(wargamingLogin.id),
+      [],
+      {
+        access_token: wargamingLogin.token,
+      },
+    );
+
+    return data?.nickname as string | undefined;
+  }, [wargamingLogin.token]);
+  const nickname = usePromise(() => promise, []);
 
   return nickname ?? <Text color="gray">Unknown Account</Text>;
 }

@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
 
 export function ScienceOffIcon(props: ComponentProps<'svg'>) {
   return (

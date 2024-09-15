@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
 
 export function ClassTankDestroyer(props: ComponentProps<'svg'>) {
   return (

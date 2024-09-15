@@ -1,5 +1,3 @@
-'use client';
-
 import { Flex } from '@radix-ui/themes';
 import { Suspense } from 'react';
 import { StickyTableRoot } from '../../../../components/StickyTableRoot';

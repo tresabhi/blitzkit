@@ -12,7 +12,7 @@ import {
   tankDefinitions,
 } from '@blitzkit/core';
 import { Locale } from 'discord.js';
-import { chunk } from 'lodash';
+import { chunk } from 'lodash-es';
 import * as Breakdown from '../../components/Breakdown';
 import { CommandWrapper } from '../../components/CommandWrapper';
 import { NoData } from '../../components/NoData';

@@ -1,5 +1,5 @@
-import { TankClass } from '@blitzkit/core';
-import { ComponentProps, ReactNode } from 'react';
+import { type TankClass } from '@blitzkit/core';
+import type { ComponentProps, ReactNode } from 'react';
 import { ClassHeavy } from './components/ClassHeavy';
 import { ClassLight } from './components/ClassLight';
 import { ClassMedium } from './components/ClassMedium';

@@ -1,4 +1,4 @@
-import { clamp, isEqual, times } from 'lodash';
+import { clamp, isEqual, times } from 'lodash-es';
 import { ReadStream } from './buffer';
 
 export enum PvrFlags {

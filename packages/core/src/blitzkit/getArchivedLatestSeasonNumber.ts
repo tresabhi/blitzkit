@@ -17,7 +17,7 @@ export async function getArchivedLatestSeasonNumber() {
     const regionsURL = (
       (await fetch(
         `https://api.github.com/repos/tresabhi/${assertSecret(
-          process.env.NEXT_PUBLIC_ASSET_REPO,
+          process.env.PUBLIC_ASSET_REPO,
         )}/git/trees/main`,
       ).then((response) => response.json())) as GitHubTrees
     ).tree.find(({ path }) => path === 'regions')!.url;

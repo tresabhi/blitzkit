@@ -29,8 +29,7 @@
     "react-fuzzysort": "^1.0.1",
     "immer": "^10.1.1",
     "@vanilla-extract/dynamic": "^2.1.2",
-    "zustand": "^4.5.5",
-    "react-promise-suspense": "^0.3.4"
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@types/react-dom": "^18",

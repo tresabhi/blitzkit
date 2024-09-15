@@ -1,20 +1,21 @@
+import { useStore } from '@nanostores/react';
 import { useLayoutEffect, useState } from 'react';
-import * as App from '../stores/app';
+import { $patreonLogin } from '../stores/patreonLogin';
 
 let cache: Record<string, boolean | Promise<boolean>> = {};
 
 export function useAdExempt() {
-  const patreon = App.use((state) => state.logins.patreon);
+  const patreonLogin = useStore($patreonLogin);
   const [exempt, setExempt] = useState(false);
 
   useLayoutEffect(() => {
     (async () => {
-      if (!patreon) return setExempt(false);
+      if (!patreonLogin.token) return setExempt(false);
 
-      if (!(patreon.token in cache)) {
-        cache[patreon.token] = new Promise<boolean>(async (resolve) => {
+      if (!(patreonLogin.token in cache)) {
+        cache[patreonLogin.token] = new Promise<boolean>(async (resolve) => {
           const response = await fetch(
-            `/api/patreon/membership/${patreon.token}`,
+            `/api/patreon/membership/${patreonLogin.token}`,
             { cache: 'force-cache' },
           );
 
@@ -23,12 +24,12 @@ export function useAdExempt() {
           const json = await response.json();
           const exempt = typeof json === 'boolean' && json;
 
-          cache[patreon.token] = exempt;
+          cache[patreonLogin.token] = exempt;
           resolve(exempt);
         });
       }
 
-      setExempt(await cache[patreon.token]);
+      setExempt(await cache[patreonLogin.token]);
     })();
   }, []);
 

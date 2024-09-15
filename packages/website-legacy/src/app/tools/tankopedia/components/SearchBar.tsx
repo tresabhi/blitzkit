@@ -1,7 +1,7 @@
 import { TankDefinition } from '@blitzkit/core';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Flex, Spinner, TextField } from '@radix-ui/themes';
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import { useRouter } from 'next/navigation';
 import { KeyboardEventHandler, useCallback, useRef } from 'react';
 import * as TankFilters from '../../../../stores/tankFilters';

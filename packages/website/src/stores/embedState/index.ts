@@ -1,5 +1,3 @@
-'use client';
-
 import * as radixColors from '@radix-ui/colors';
 import { create } from 'zustand';
 import { createContextualSafeStore } from '../../core/zustand/createContextualSafeStore';
