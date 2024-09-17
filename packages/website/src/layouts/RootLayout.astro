@@ -1,5 +1,6 @@
 ---
-import { Flex, Theme } from '@radix-ui/themes';
+import { Flex } from '@radix-ui/themes';
+import { BlitzKitTheme } from '../components/BlitzKitTheme';
 import Footer from '../components/Footer.astro';
 import Navbar from '../components/Navbar.astro';
 import Party3 from '../components/Party3.astro';
@@ -37,14 +38,7 @@ const isRoot = pathname === '/';
   </head>
 
   <body>
-    <Theme
-      appearance="dark"
-      panelBackground="solid"
-      radius="full"
-      accentColor="amber"
-      suppressHydrationWarning
-      suppressContentEditableWarning
-    >
+    <BlitzKitTheme>
       <Flex direction="column" minHeight="100vh">
         <Navbar />
 
@@ -56,6 +50,6 @@ const isRoot = pathname === '/';
 
         <Footer />
       </Flex>
-    </Theme>
+    </BlitzKitTheme>
   </body>
 </html>

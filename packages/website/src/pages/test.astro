@@ -1,11 +1,16 @@
 ---
-import { Theme } from '@radix-ui/themes';
-import '@radix-ui/themes/styles.css';
+import { BlitzKitTheme } from '../components/BlitzKitTheme';
 import { TestComponent } from './TestComponent';
 ---
 
-Minimal!
+<style is:global>
+  @import '@radix-ui/themes/styles.css';
+</style>
 
-<Theme>
-  <TestComponent client:only="react" />
-</Theme>
+<html>
+  <body>
+    <BlitzKitTheme>
+      <TestComponent client:idle />
+    </BlitzKitTheme>
+  </body>
+</html>

@@ -22,6 +22,7 @@ import { NAVBAR_HEIGHT } from '../constants/navbar';
 import { homeTool, TOOLS } from '../constants/tools';
 import { PatreonIcon } from './PatreonIcon';
 import { NavbarAccount } from './NavbarAccount';
+import { TestComponent } from '../pages/TestComponent';
 
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
 const tools = [homeTool, ...toolsFiltered];
@@ -44,7 +45,7 @@ const isBranchNamed =
 
     transition-duration: 250ms;
     width: 100%;
-    overflow: hidden;
+    /* overflow: hidden; */
     backdrop-filter: blur(4rem) brightness(0.75);
     -webkit-backdrop-filter: blur(4rem) brightness(0.75);
 
@@ -198,7 +199,7 @@ const isBranchNamed =
             <GearIcon />
           </Link>
 
-          <NavbarAccount client:load />
+          <NavbarAccount client:idle />
         </Flex>
       </Flex>
     </Flex>
