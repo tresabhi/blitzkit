@@ -3,14 +3,6 @@ import { useModel } from '../../../../../hooks/useModel';
 import * as Duel from '../../../../../stores/duel';
 import * as TankopediaPersistent from '../../../../../stores/tankopediaPersistent';
 
-export const ENVIRONMENTS = [
-  'lobby',
-  'apartment',
-  'warehouse',
-  'dawn',
-  'sunset',
-] as const;
-
 export function Lighting() {
   const protagonist = Duel.use((state) => state.protagonist);
   const { hasPbr } = useModel(protagonist.tank.id);

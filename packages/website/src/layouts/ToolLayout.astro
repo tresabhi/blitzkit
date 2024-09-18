@@ -1,0 +1,66 @@
+---
+import { imgur, ImgurSize } from '@blitzkit/core';
+import { Box, Flex, Heading, Text } from '@radix-ui/themes';
+import { TOOLS } from '../constants/tools';
+import RootLayout from './RootLayout.astro';
+
+const { pathname } = Astro.url;
+const pathSplit = pathname.split('/');
+const toolId = pathSplit.at(2);
+const isToolRoot = pathname === `/tools/${toolId}`;
+const tool = TOOLS.find((tool) => tool.id === toolId);
+---
+
+<RootLayout>
+  {
+    tool && (
+      <>
+        {isToolRoot && (
+          <>
+            <title>{tool.title}</title>
+            <meta property="og:image" content={imgur(tool.image)} />
+
+            {tool.pageDescription !== undefined && (
+              <>
+                <meta name="description" content={tool.pageDescription} />
+                <meta
+                  property="og:description"
+                  content={tool.pageDescription}
+                />
+              </>
+            )}
+          </>
+        )}
+      </>
+    )
+  }
+
+  {
+    pathSplit.length === 3 && (
+      <Box
+        style={{
+          backgroundImage: `url(${imgur(tool!.image, {
+            format: 'jpeg',
+            size: ImgurSize.HugeThumbnail,
+          })})`,
+          backgroundSize: 'cover',
+        }}
+      >
+        <Flex
+          direction="column"
+          align="center"
+          py="6"
+          style={{
+            backdropFilter: 'blur(4rem)',
+            WebkitBackdropFilter: 'blur(4rem)',
+          }}
+        >
+          <Heading size="7">{tool?.title}</Heading>
+          <Text>{tool?.description}</Text>
+        </Flex>
+      </Box>
+    )
+  }
+
+  <slot />
+</RootLayout>

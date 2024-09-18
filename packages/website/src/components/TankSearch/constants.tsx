@@ -1,4 +1,4 @@
-import { TreeType } from '@blitzkit/core';
+import type { TreeType } from '@blitzkit/core';
 
 export const treeTypeOrder: TreeType[] = [
   'researchable',

@@ -2,7 +2,7 @@ import { TankClass, Tier, TreeType } from '@blitzkit/core';
 import lodash from 'lodash-es';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
-import { ENVIRONMENTS } from '../../app/tools/tankopedia/[id]/components/Lighting';
+import { ENVIRONMENTS } from '../../constants/lightingEnvironments';
 import { createContextualSafeStore } from '../../core/zustand/createContextualSafeStore';
 import { SORT_NAMES, TankopediaDisplay } from './constants';
 

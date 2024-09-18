@@ -1,17 +1,17 @@
 import { type TankDefinition } from '@blitzkit/core';
+import { useStore } from '@nanostores/react';
 import { CaretRightIcon } from '@radix-ui/react-icons';
 import { Button, Link, TextField } from '@radix-ui/themes';
-import * as TankFilters from '../../../../stores/tankFilters';
+import { $tankFilters } from '../../../stores/tankFilters';
 
 interface QuickLinkProps {
   topResult?: TankDefinition;
 }
 
 export function QuickLink({ topResult }: QuickLinkProps) {
-  const search = TankFilters.use((state) => state.search);
-  const searching = TankFilters.use((state) => state.searching);
+  const tankFilters = useStore($tankFilters);
 
-  if (!search || !topResult || searching) return null;
+  if (!tankFilters.search || !topResult || tankFilters.searching) return null;
 
   return (
     <TextField.Slot>

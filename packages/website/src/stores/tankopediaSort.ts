@@ -1,8 +1,7 @@
-import { create } from 'zustand';
-import { createContextualSafeStore } from '../core/zustand/createContextualSafeStore';
+import { map } from 'nanostores';
 import {
-  TankopediaSortBy,
-  TankopediaSortDirection,
+  type TankopediaSortBy,
+  type TankopediaSortDirection,
 } from './tankopediaPersistent';
 
 export interface TankopediaSort {
@@ -10,10 +9,7 @@ export interface TankopediaSort {
   direction: TankopediaSortDirection;
 }
 
-export const { Provider, use, useMutation, useStore } =
-  createContextualSafeStore(() =>
-    create<TankopediaSort>()(() => ({
-      by: 'meta.none',
-      direction: 'descending',
-    })),
-  );
+export const $tankopediaSort = map<TankopediaSort>({
+  by: 'meta.none',
+  direction: 'descending',
+});

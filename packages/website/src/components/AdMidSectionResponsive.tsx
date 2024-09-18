@@ -1,4 +1,4 @@
-import { Flex, FlexProps } from '@radix-ui/themes';
+import { Flex, type FlexProps } from '@radix-ui/themes';
 import { Ad, AdType } from './Ad';
 
 export function AdMidSectionResponsive(props: FlexProps) {

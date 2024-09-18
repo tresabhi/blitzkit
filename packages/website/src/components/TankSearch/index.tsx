@@ -1,6 +1,5 @@
 import {
   TANK_CLASSES,
-  TankDefinition,
   gameDefinitions,
   modelDefinitions,
   normalizeBoundingBox,
@@ -10,28 +9,31 @@ import {
   tankDefinitionsArray,
   tankNames,
   unionBoundingBox,
+  type TankDefinition,
 } from '@blitzkit/core';
-import { Callout, Flex, FlexProps, Link, Text } from '@radix-ui/themes';
-import { go } from 'fuzzysort';
+import { useStore } from '@nanostores/react';
+import { Callout, Flex, Link, Text, type FlexProps } from '@radix-ui/themes';
+import fuzzysort from 'fuzzysort';
 import { times } from 'lodash-es';
-import { Fragment, memo, use, useEffect, useMemo, useState } from 'react';
-import { AdMidSectionResponsive } from '../../../../../components/AdMidSectionResponsive';
-import { ExperimentIcon } from '../../../../../components/ExperimentIcon';
-import { filterTank } from '../../../../../core/blitzkit/filterTank';
-import { resolveReload } from '../../../../../core/blitzkit/resolveReload';
-import { useAdExempt } from '../../../../../hooks/useAdExempt';
-import * as TankFilters from '../../../../../stores/tankFilters';
+import { Fragment, memo, useEffect, useMemo, useState } from 'react';
+import { filterTank } from '../../core/blitzkit/filterTank';
+import { resolveReload } from '../../core/blitzkit/resolveReload';
+import { useAdExempt } from '../../hooks/useAdExempt';
+import { useAwait } from '../../hooks/useAwait';
+import { $tankFilters } from '../../stores/tankFilters';
 import {
   SORT_NAMES,
   SORT_UNITS,
-} from '../../../../../stores/tankopediaPersistent/constants';
-import * as TankopediaSort from '../../../../../stores/tankopediaSort';
-import { FilterControl } from '../FilterControl';
-import { NoResults } from '../NoResults';
-import { SearchBar } from '../SearchBar';
-import { SkeletonTankCard } from '../SkeletonTankCard';
-import { TankCard } from '../TankCard';
-import { TankCardWrapper } from '../TankCardWrapper';
+} from '../../stores/tankopediaPersistent/constants';
+import { $tankopediaSort } from '../../stores/tankopediaSort';
+import { AdMidSectionResponsive } from '../AdMidSectionResponsive';
+import { ExperimentIcon } from '../ExperimentIcon';
+import { FilterControl } from './components/FilterControl';
+import { NoResults } from './components/NoResults';
+import { SearchBar } from './components/SearchBar';
+import { SkeletonTankCard } from './components/SkeletonTankCard';
+import { TankCard } from './components/TankCard';
+import { TankCardWrapper } from './components/TankCardWrapper';
 import { treeTypeOrder } from './constants';
 
 type TankSearchProps = Omit<FlexProps, 'onSelect'> & {
@@ -46,21 +48,23 @@ const DEFAULT_LOADED_CARDS = 75;
 export const TankSearch = memo<TankSearchProps>(
   ({ compact, onSelect, onSelectAll, ...props }) => {
     const exempt = useAdExempt();
-    const awaitedGameDefinitions = use(gameDefinitions);
-    const awaitedModelDefinitions = use(modelDefinitions);
-    const awaitedTankDefinitions = use(tankDefinitions);
-    const awaitedTanksDefinitionsArray = use(tankDefinitionsArray);
-    const awaitedTankNames = use(tankNames);
-    const filters = TankFilters.use();
-    const sort = TankopediaSort.use();
+    const awaitedGameDefinitions = useAwait(gameDefinitions);
+    const awaitedModelDefinitions = useAwait(modelDefinitions);
+    const awaitedTankDefinitions = useAwait(tankDefinitions);
+    const awaitedTanksDefinitionsArray = useAwait(tankDefinitionsArray);
+    const awaitedTankNames = useAwait(tankNames);
+    const tankFilters = useStore($tankFilters);
+    const tankopediaSort = useStore($tankopediaSort);
     const tanksFiltered = useMemo(() => {
-      if (filters.search === undefined) {
+      console.log(awaitedTanksDefinitionsArray);
+
+      if (tankFilters.search === undefined) {
         const filtered = awaitedTanksDefinitionsArray.filter((tank) =>
-          filterTank(filters, tank),
+          filterTank(tankFilters, tank),
         );
         let sorted: TankDefinition[];
 
-        switch (sort.by) {
+        switch (tankopediaSort.by) {
           case 'meta.none':
             sorted = filtered
               .sort((a, b) => b.tier - a.tier)
@@ -370,9 +374,11 @@ export const TankSearch = memo<TankSearchProps>(
             break;
         }
 
-        return sort.direction === 'ascending' ? sorted : sorted.reverse();
+        return tankopediaSort.direction === 'ascending'
+          ? sorted
+          : sorted.reverse();
       } else {
-        const searchedRaw = go(filters.search, awaitedTankNames, {
+        const searchedRaw = fuzzysort.go(tankFilters.search, awaitedTankNames, {
           keys: ['searchableName', 'searchableNameDeburr', 'camouflages'],
         });
         const searchedTanks = searchedRaw.map(
@@ -380,19 +386,19 @@ export const TankSearch = memo<TankSearchProps>(
         );
         return searchedTanks;
       }
-    }, [filters, sort]);
+    }, [tankFilters, tankopediaSort]);
     const [loadedRows, setLoadedRows] = useState(DEFAULT_LOADED_CARDS);
     const tanks = tanksFiltered.slice(0, loadedRows);
 
     useEffect(() => {
       setLoadedRows(DEFAULT_LOADED_CARDS);
-    }, [filters, sort]);
+    }, [tankFilters, tankopediaSort]);
 
     return (
       <Flex direction="column" gap="4" flexGrow="1" {...props}>
         <SearchBar topResult={tanks?.[0]} onSelect={onSelect} />
 
-        {!filters.search && !filters.searching && (
+        {!tankFilters.search && !tankFilters.searching && (
           <FilterControl compact={compact} />
         )}
 
@@ -413,18 +419,18 @@ export const TankSearch = memo<TankSearchProps>(
             )}
           </Flex>
 
-          {sort.by !== 'meta.none' && (
+          {tankopediaSort.by !== 'meta.none' && (
             <Text color="gray">
-              Sorting by {SORT_NAMES[sort.by]}
-              {SORT_UNITS[sort.by] === undefined
+              Sorting by {SORT_NAMES[tankopediaSort.by]}
+              {SORT_UNITS[tankopediaSort.by] === undefined
                 ? ''
-                : ` (${SORT_UNITS[sort.by]})`}
-              , {sort.direction}
+                : ` (${SORT_UNITS[tankopediaSort.by]})`}
+              , {tankopediaSort.direction}
             </Text>
           )}
         </Flex>
 
-        {filters.testing === 'only' && (
+        {tankFilters.testing === 'only' && (
           <Flex justify="center" mt="4">
             <Callout.Root color="amber">
               <Callout.Icon>
@@ -438,7 +444,7 @@ export const TankSearch = memo<TankSearchProps>(
           </Flex>
         )}
 
-        {!filters.searching && (
+        {!tankFilters.searching && (
           <>
             {tanks.length > 0 && (
               <TankCardWrapper>
@@ -477,7 +483,7 @@ export const TankSearch = memo<TankSearchProps>(
           </>
         )}
 
-        {filters.searching && (
+        {tankFilters.searching && (
           <TankCardWrapper>
             {times(Math.round(10 + 10 * Math.random()), (index) => (
               <SkeletonTankCard key={index} />

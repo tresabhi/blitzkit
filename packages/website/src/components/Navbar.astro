@@ -18,11 +18,9 @@ import {
   Text,
 } from '@radix-ui/themes';
 import { BRANCH_NAMES } from '../constants/branches';
-import { NAVBAR_HEIGHT } from '../constants/navbar';
 import { homeTool, TOOLS } from '../constants/tools';
 import { PatreonIcon } from './PatreonIcon';
 import { NavbarAccount } from './NavbarAccount';
-import { TestComponent } from '../pages/TestComponent';
 
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
 const tools = [homeTool, ...toolsFiltered];

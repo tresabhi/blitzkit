@@ -1,4 +1,4 @@
-import { RefObject, useLayoutEffect, useRef } from 'react';
+import { type RefObject, useLayoutEffect, useRef } from 'react';
 
 interface UseIntersectionOptions extends IntersectionObserverInit {
   disabled: boolean;

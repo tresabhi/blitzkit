@@ -7,5 +7,9 @@
       }
     ]
   },
-  "include": ["src/**/*", ".next/types/**/*.ts"]
+  "include": [
+    "src/**/*",
+    ".next/types/**/*.ts",
+    "../website/src/components/TankSearch/components/FilterControl.tsx"
+  ]
 }

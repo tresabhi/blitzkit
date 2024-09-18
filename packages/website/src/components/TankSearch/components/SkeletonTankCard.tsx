@@ -1,6 +1,6 @@
 import { Flex, Skeleton } from '@radix-ui/themes';
 import { memo, useRef } from 'react';
-import { useIntersection } from '../../../../hooks/useIntersection';
+import { useIntersection } from '../../../hooks/useIntersection';
 
 interface SkeletonTankCardProps {
   onIntersection?: () => void;

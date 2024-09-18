@@ -1,5 +1,5 @@
-import { Flex, FlexProps, Text } from '@radix-ui/themes';
-import { ReactNode } from 'react';
+import { Flex, type FlexProps, Text } from '@radix-ui/themes';
+import type { ReactNode } from 'react';
 
 type SpeedometerProps = FlexProps & {
   value: ReactNode;

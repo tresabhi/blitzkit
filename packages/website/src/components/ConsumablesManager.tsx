@@ -1,5 +1,5 @@
 import { ConsumableEntry } from '@blitzkit/core';
-import { Flex, FlexProps } from '@radix-ui/themes';
+import { Flex, type FlexProps } from '@radix-ui/themes';
 import { ConsumableButton } from './ModuleButtons/ConsumableButton';
 
 type ConsumablesManagerProps = FlexProps & {
