@@ -1,5 +1,6 @@
-import type { TankClass, Tier, TreeType } from '@blitzkit/core';
-import { map } from 'nanostores';
+import { TankClass, Tier, TreeType } from '@blitzkit/core';
+import { create } from 'zustand';
+import { createContextualSafeStore } from '../core/zustand/createContextualSafeStore';
 
 export interface TankFilters {
   tiers: Tier[];
@@ -11,12 +12,15 @@ export interface TankFilters {
   searching: boolean;
 }
 
-export const $tankFilters = map<TankFilters>({
-  tiers: [],
-  nations: [],
-  classes: [],
-  types: [],
-  testing: 'include',
-  search: undefined,
-  searching: false,
-});
+export const { Provider, use, useMutation, useStore } =
+  createContextualSafeStore(() =>
+    create<TankFilters>()(() => ({
+      tiers: [],
+      nations: [],
+      classes: [],
+      types: [],
+      testing: 'include',
+      search: undefined,
+      searching: false,
+    })),
+  );
