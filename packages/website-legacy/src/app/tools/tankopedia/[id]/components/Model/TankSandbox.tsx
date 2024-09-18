@@ -24,7 +24,7 @@ import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemer
 import * as TankopediaPersistent from '../../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
 import { Controls } from '../Control';
-import { Lighting } from '../../../../../../../../website/src/components/Sandbox/components/Lighting';
+import { Lighting } from '../Lighting';
 import { SceneProps } from '../SceneProps';
 import { AutoClear } from './AutoClear';
 import { ModelLoader } from './components/ModelLoader';

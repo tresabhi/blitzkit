@@ -1,13 +1,12 @@
-import type { TankDefinition } from '@blitzkit/core';
-import { useStore } from '@nanostores/react';
+import { TankDefinition } from '@blitzkit/core';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Flex, Spinner, TextField } from '@radix-ui/themes';
 import { debounce } from 'lodash-es';
 import { useRouter } from 'next/navigation';
-import { useCallback, useRef, type KeyboardEventHandler } from 'react';
-import { QuickLink } from '../../../../../website-legacy/src/app/tools/tankopedia/components/QuickLink';
-import { Sort } from '../../../../../website-legacy/src/app/tools/tankopedia/components/Sort';
-import { $tankFilters } from '../../../stores/tankFilters';
+import { KeyboardEventHandler, useCallback, useRef } from 'react';
+import * as TankFilters from '../../../../stores/tankFilters';
+import { QuickLink } from './QuickLink';
+import { Sort } from './Sort';
 
 interface SearchBarProps {
   topResult?: TankDefinition;
@@ -15,34 +14,35 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ topResult, onSelect }: SearchBarProps) {
-  const tankFilters = useStore($tankFilters);
+  const tankFiltersStore = TankFilters.useStore();
+  const lastSearch = tankFiltersStore.getState().search;
   const router = useRouter();
   const input = useRef<HTMLInputElement>(null);
+  const searching = TankFilters.use((state) => state.searching);
   const performSearch = useCallback(
     debounce(() => {
-      $tankFilters.setKey('searching', false);
+      tankFiltersStore.setState({ searching: false });
 
       if (!input.current) return;
 
       const sanitized = input.current.value.trim();
 
-      $tankFilters.setKey(
-        'search',
-        sanitized.length === 0 ? undefined : sanitized,
-      );
+      tankFiltersStore.setState({
+        search: sanitized.length === 0 ? undefined : sanitized,
+      });
     }, 500),
     [],
   );
   const handleChange = useCallback(() => {
-    if (!tankFilters.searching) {
-      $tankFilters.setKey('searching', true);
+    if (!tankFiltersStore.getState().searching) {
+      tankFiltersStore.setState({ searching: true });
     }
 
     performSearch();
-  }, [tankFilters]);
+  }, []);
   const handleKeyDown = useCallback<KeyboardEventHandler>(
     (event) => {
-      if (event.key !== 'Enter' || !topResult || tankFilters.searching) return;
+      if (event.key !== 'Enter' || !topResult || searching) return;
 
       event.preventDefault();
 
@@ -59,7 +59,7 @@ export function SearchBar({ topResult, onSelect }: SearchBarProps) {
     <Flex justify="center" mt="4">
       <Flex gap="2" flexGrow="1">
         <TextField.Root
-          defaultValue={tankFilters.search}
+          defaultValue={lastSearch}
           style={{ flex: 1 }}
           ref={input}
           placeholder="Search tanks..."
@@ -67,7 +67,7 @@ export function SearchBar({ topResult, onSelect }: SearchBarProps) {
           onKeyDown={handleKeyDown}
         >
           <TextField.Slot>
-            {tankFilters.searching ? <Spinner /> : <MagnifyingGlassIcon />}
+            {searching ? <Spinner /> : <MagnifyingGlassIcon />}
           </TextField.Slot>
 
           <QuickLink topResult={topResult} />
