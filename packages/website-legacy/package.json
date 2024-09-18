@@ -32,10 +32,10 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
+    "@types/react-dom": "^18",
     "@types/lodash": "^4.17.7",
     "@types/three": "^0.160.0",
     "@vanilla-extract/next-plugin": "^2.4.5",
-    "@types/react": "^18.3.5",
-    "@types/react-dom": "^18"
+    "@types/react": "^18.3.5"
   }
 }

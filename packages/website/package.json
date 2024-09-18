@@ -26,8 +26,6 @@
     "react-promise-suspense": "^0.3.4"
   },
   "devDependencies": {
-    "@vanilla-extract/vite-plugin": "^4.0.15",
-    "@types/react": "^18.3.5",
-    "@types/react-dom": "^18"
+    "@vanilla-extract/vite-plugin": "^4.0.15"
   }
 }
