@@ -1,4 +1,7 @@
 import { Environment } from '@react-three/drei';
+import { useModel } from '../../../../../hooks/useModel';
+import * as Duel from '../../../../../stores/duel';
+import * as TankopediaPersistent from '../../../../../stores/tankopediaPersistent';
 
 export const ENVIRONMENTS = [
   'lobby',

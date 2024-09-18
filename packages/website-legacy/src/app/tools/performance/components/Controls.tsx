@@ -1,4 +1,4 @@
-import { FilterControl } from '../../../../../../website/src/components/TankSearch/components/FilterControl';
+import { FilterControl } from '../../tankopedia/components/FilterControl';
 import { PlayerCountControl } from './PlayerCountControl';
 
 export function Controls() {
