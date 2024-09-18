@@ -1,0 +1,16 @@
+---
+import { BlitzKitTheme } from '../components/BlitzKitTheme';
+import { TestComponent } from './TestComponent';
+---
+
+<style is:global>
+  @import '@radix-ui/themes/styles.css';
+</style>
+
+<html>
+  <body>
+    <BlitzKitTheme>
+      <TestComponent client:idle />
+    </BlitzKitTheme>
+  </body>
+</html>
