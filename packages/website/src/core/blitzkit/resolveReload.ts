@@ -1,4 +1,4 @@
-import { GunDefinition } from '@blitzkit/core';
+import type { GunDefinition } from '@blitzkit/core';
 
 export function resolveReload(gun: GunDefinition) {
   if (gun.type === 'regular') {

@@ -25,8 +25,8 @@ import { NavbarAccount } from './NavbarAccount';
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
 const tools = [homeTool, ...toolsFiltered];
 const isBranchNamed =
-  process.env.PUBLIC_ASSET_BRANCH &&
-  BRANCH_NAMES[process.env.PUBLIC_ASSET_BRANCH];
+  import.meta.env.PUBLIC_ASSET_BRANCH &&
+  BRANCH_NAMES[import.meta.env.PUBLIC_ASSET_BRANCH];
 ---
 
 <style>
@@ -125,7 +125,7 @@ const isBranchNamed =
               {
                 isBranchNamed && (
                   <Code color="gray" size="1" highContrast variant="outline">
-                    {BRANCH_NAMES[process.env.PUBLIC_ASSET_BRANCH!]}
+                    {BRANCH_NAMES[import.meta.env.PUBLIC_ASSET_BRANCH!]}
                   </Code>
                 )
               }
@@ -140,7 +140,7 @@ const isBranchNamed =
             toolsFiltered.map((tool, index) => {
               const unavailableOnBranch = tool.branches?.every(
                 (branch) =>
-                  branch !== assertSecret(process.env.PUBLIC_ASSET_BRANCH),
+                  branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
               );
               // const selected = window.location.pathname.startsWith(
               //   `/tools/${tool.id}`,
@@ -215,7 +215,7 @@ const isBranchNamed =
           tools.map((tool) => {
             const unavailableOnBranch = tool.branches?.every(
               (branch) =>
-                branch !== assertSecret(process.env.PUBLIC_ASSET_BRANCH),
+                branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
             );
 
             if (unavailableOnBranch) return null;

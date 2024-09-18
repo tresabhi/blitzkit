@@ -1,4 +1,4 @@
-import { TankClass, Tier, TreeType } from '@blitzkit/core';
+import type { TankClass, Tier, TreeType } from '@blitzkit/core';
 import lodash from 'lodash-es';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';

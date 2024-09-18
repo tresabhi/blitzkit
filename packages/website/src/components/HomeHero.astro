@@ -4,8 +4,8 @@ import { Code, Flex, Heading, Text } from '@radix-ui/themes';
 import { BRANCH_NAMES } from '../constants/branches';
 
 const isBranchNamed =
-  process.env.PUBLIC_ASSET_BRANCH &&
-  BRANCH_NAMES[process.env.PUBLIC_ASSET_BRANCH];
+  import.meta.env.PUBLIC_ASSET_BRANCH &&
+  BRANCH_NAMES[import.meta.env.PUBLIC_ASSET_BRANCH];
 ---
 
 <style>
@@ -58,7 +58,7 @@ const isBranchNamed =
           {
             isBranchNamed && (
               <Code size="8" color="gray" highContrast variant="outline">
-                {BRANCH_NAMES[process.env.PUBLIC_ASSET_BRANCH!]}
+                {BRANCH_NAMES[import.meta.env.PUBLIC_ASSET_BRANCH!]}
               </Code>
             )
           }

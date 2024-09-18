@@ -136,7 +136,7 @@ const awaitedGameDefinitions = await gameDefinitions;
         {awaitedGameDefinitions.version}
       </Code>
       <Code size="2" color="gray">
-        {process.env.PUBLIC_ASSET_BRANCH}
+        {import.meta.env.PUBLIC_ASSET_BRANCH}
       </Code>
     </Flex>
   </Flex>
@@ -152,7 +152,7 @@ const awaitedGameDefinitions = await gameDefinitions;
     </Code>
     <Text size="2" color="gray"> CDN </Text>
     <Code size="2" color="gray">
-      {process.env.PUBLIC_ASSET_BRANCH}
+      {import.meta.env.PUBLIC_ASSET_BRANCH}
     </Code>
   </Flex>
 </Flex>

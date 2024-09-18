@@ -1,4 +1,4 @@
-import { TankopediaSortBy } from '.';
+import type { TankopediaSortBy } from '.';
 
 export const SORT_UNITS: Record<TankopediaSortBy, string | undefined> = {
   'meta.none': undefined,

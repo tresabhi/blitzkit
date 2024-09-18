@@ -49,15 +49,15 @@ export const TankSearch = memo<TankSearchProps>(
   ({ compact, onSelect, onSelectAll, ...props }) => {
     const exempt = useAdExempt();
     const awaitedGameDefinitions = useAwait(gameDefinitions);
+    console.log(awaitedGameDefinitions);
     const awaitedModelDefinitions = useAwait(modelDefinitions);
     const awaitedTankDefinitions = useAwait(tankDefinitions);
     const awaitedTanksDefinitionsArray = useAwait(tankDefinitionsArray);
     const awaitedTankNames = useAwait(tankNames);
     const tankFilters = useStore($tankFilters);
     const tankopediaSort = useStore($tankopediaSort);
-    const tanksFiltered = useMemo(() => {
-      console.log(awaitedTanksDefinitionsArray);
 
+    const tanksFiltered = useMemo(() => {
       if (tankFilters.search === undefined) {
         const filtered = awaitedTanksDefinitionsArray.filter((tank) =>
           filterTank(tankFilters, tank),

@@ -9,9 +9,8 @@ import {
   type TankDefinition,
 } from '@blitzkit/core';
 import { useStore } from '@nanostores/react';
-import { Flex, Text } from '@radix-ui/themes';
+import { Flex, Link, Text } from '@radix-ui/themes';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import Link from 'next/link';
 import { useMemo } from 'react';
 import { resolveReload } from '../../../core/blitzkit/resolveReload';
 import { useAwait } from '../../../hooks/useAwait';
@@ -158,7 +157,6 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
       <Link
         className={styles.link}
         href={onSelect ? '#' : `/tools/tankopedia/${tank.id}`}
-        prefetch={false}
       >
         <img alt={tank.name} src={tankIcon(tank.id)} className={styles.image} />
 

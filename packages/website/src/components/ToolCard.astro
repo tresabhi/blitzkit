@@ -10,7 +10,7 @@ interface Props {
 
 const { tool } = Astro.props;
 const disabled = tool.branches?.every(
-  (branch) => branch !== assertSecret(process.env.PUBLIC_ASSET_BRANCH),
+  (branch) => branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
 );
 ---
 
@@ -106,7 +106,7 @@ const disabled = tool.branches?.every(
             disabled ? (
               <>
                 Unavailable on{' '}
-                <Code>{assertSecret(process.env.PUBLIC_ASSET_BRANCH)}</Code>
+                <Code>{assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH)}</Code>
               </>
             ) : (
               tool.description

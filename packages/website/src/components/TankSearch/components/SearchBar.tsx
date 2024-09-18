@@ -3,10 +3,9 @@ import { useStore } from '@nanostores/react';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Flex, Spinner, TextField } from '@radix-ui/themes';
 import { debounce } from 'lodash-es';
-import { useRouter } from 'next/navigation';
 import { type KeyboardEventHandler, useCallback, useRef } from 'react';
-import { QuickLink } from './QuickLink';
 import { $tankFilters } from '../../../stores/tankFilters';
+import { QuickLink } from './QuickLink';
 import { Sort } from './Sort';
 
 interface SearchBarProps {
@@ -16,7 +15,6 @@ interface SearchBarProps {
 
 export function SearchBar({ topResult, onSelect }: SearchBarProps) {
   const tankFilters = useStore($tankFilters);
-  const router = useRouter();
   const input = useRef<HTMLInputElement>(null);
   const performSearch = useCallback(
     debounce(() => {
@@ -56,7 +54,7 @@ export function SearchBar({ topResult, onSelect }: SearchBarProps) {
       if (onSelect) {
         onSelect(topResult);
       } else {
-        router.push(`/tools/tankopedia/${topResult.id}`);
+        window.location.href = `/tools/tankopedia/${topResult.id}`;
       }
     },
     [topResult],

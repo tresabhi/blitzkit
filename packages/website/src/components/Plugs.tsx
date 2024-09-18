@@ -33,8 +33,8 @@ export function Plugs() {
       py="8"
       gap="6"
     >
-      {assertSecret(process.env.PUBLIC_PROMOTE_OPENTEST) === 'true' &&
-        assertSecret(process.env.PUBLIC_ASSET_BRANCH) !== 'opentest' && (
+      {assertSecret(import.meta.env.PUBLIC_PROMOTE_OPENTEST) === 'true' &&
+        assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) !== 'opentest' && (
           <>
             <Flex direction="column" gap="3" align="center">
               <Flex align="center" gap="2">
