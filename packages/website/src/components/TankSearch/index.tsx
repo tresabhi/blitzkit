@@ -3,15 +3,19 @@ import {
   TANK_CLASSES,
   gameDefinitions,
   modelDefinitions,
+  normalizeBoundingBox,
+  resolveDpm,
   resolveNearPenetration,
   tankDefinitions,
   tankDefinitionsArray,
   tankNames,
+  unionBoundingBox,
 } from '@blitzkit/core';
 import { useStore } from '@nanostores/react';
-import { type FlexProps, Callout, Flex, Link } from '@radix-ui/themes';
+import { type FlexProps, Callout, Flex, Link, Text } from '@radix-ui/themes';
+import fuzzysort from 'fuzzysort';
 import { times } from 'lodash-es';
-import { memo, use, useEffect, useMemo, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { Fragment } from 'react/jsx-runtime';
 import { filterTank } from '../../core/blitzkit/filterTank';
 import { resolveReload } from '../../core/blitzkit/resolveReload';
@@ -24,6 +28,12 @@ import {
 import { $tankopediaSort } from '../../stores/tankopediaSort';
 import { AdMidSectionResponsive } from '../AdMidSectionResponsive';
 import { ExperimentIcon } from '../ExperimentIcon';
+import { FilterControl } from './components/FilterControl';
+import { NoResults } from './components/NoResults';
+import { SearchBar } from './components/SearchBar';
+import { SkeletonTankCard } from './components/SkeletonTankCard';
+import { TankCard } from './components/TankCard';
+import { TankCardWrapper } from './components/TankCardWrapper';
 import { treeTypeOrder } from './constants';
 
 type TankSearchProps = Omit<FlexProps, 'onSelect'> & {
@@ -38,11 +48,11 @@ const DEFAULT_LOADED_CARDS = 75;
 export const TankSearch = memo<TankSearchProps>(
   ({ compact, onSelect, onSelectAll, ...props }) => {
     const exempt = useAdExempt();
-    const awaitedGameDefinitions = use(gameDefinitions);
-    const awaitedModelDefinitions = use(modelDefinitions);
-    const awaitedTankDefinitions = use(tankDefinitions);
-    const awaitedTanksDefinitionsArray = use(tankDefinitionsArray);
-    const awaitedTankNames = use(tankNames);
+    const awaitedGameDefinitions = React.use(gameDefinitions);
+    const awaitedModelDefinitions = React.use(modelDefinitions);
+    const awaitedTankDefinitions = React.use(tankDefinitions);
+    const awaitedTanksDefinitionsArray = React.use(tankDefinitionsArray);
+    const awaitedTankNames = React.use(tankNames);
     const tankFilters = useStore($tankFilters);
     const tankopediaSort = useStore($tankopediaSort);
     const tanksFiltered = useMemo(() => {
@@ -366,7 +376,7 @@ export const TankSearch = memo<TankSearchProps>(
           ? sorted
           : sorted.reverse();
       } else {
-        const searchedRaw = go(tankFilters.search, awaitedTankNames, {
+        const searchedRaw = fuzzysort.go(tankFilters.search, awaitedTankNames, {
           keys: ['searchableName', 'searchableNameDeburr', 'camouflages'],
         });
         const searchedTanks = searchedRaw.map(

@@ -1,5 +1,6 @@
 import { deburr } from 'lodash-es';
-import { camouflageDefinitions, tankDefinitionsArray } from '.';
+import { camouflageDefinitions } from './camouflageDefinitions';
+import { tankDefinitionsArray } from './tankDefinitions';
 
 export const tankNames = Promise.all([
   tankDefinitionsArray,

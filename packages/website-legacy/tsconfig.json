@@ -1,11 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
+    "plugins": [{ "name": "next" }]
   },
-  "include": ["src/**/*", ".next/types/**/*.ts"]
+  "include": ["src/**/*", ".next/types/**/*.ts", "../website/src/components/Sandbox/components/Lighting.tsx"]
 }

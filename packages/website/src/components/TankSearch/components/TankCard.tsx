@@ -4,17 +4,18 @@ import {
   normalizeBoundingBox,
   resolveDpm,
   resolveNearPenetration,
-  TankDefinition,
   tankIcon,
   unionBoundingBox,
+  type TankDefinition,
 } from '@blitzkit/core';
+import { useStore } from '@nanostores/react';
 import { Flex, Text } from '@radix-ui/themes';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import Link from 'next/link';
 import { use, useMemo } from 'react';
-import { classIcons } from '../../../../components/ClassIcon';
-import { resolveReload } from '../../../../core/blitzkit/resolveReload';
-import * as TankopediaSort from '../../../../stores/tankopediaSort';
+import { resolveReload } from '../../../core/blitzkit/resolveReload';
+import { $tankopediaSort } from '../../../stores/tankopediaSort';
+import { classIcons } from '../../ClassIcon';
 import * as styles from './TankCard.css';
 
 interface TankCardProps {
@@ -25,9 +26,9 @@ interface TankCardProps {
 export function TankCard({ tank, onSelect }: TankCardProps) {
   const awaitedModelDefinitions = use(modelDefinitions);
   const Icon = classIcons[tank.class];
-  const sortBy = TankopediaSort.use((state) => state.by);
+  const tankopediaSortBy = useStore($tankopediaSort).by;
   const discriminator = useMemo(() => {
-    if (sortBy.startsWith('meta')) return undefined;
+    if (tankopediaSortBy.startsWith('meta')) return undefined;
 
     const turret = tank.turrets.at(-1)!;
     const gun = turret.guns.at(-1)!;
@@ -39,7 +40,7 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
     const turretModelDefinition = tankModelDefinition.turrets[turret.id];
     const gunModelDefinition = turretModelDefinition.guns[gun.id];
 
-    switch (sortBy) {
+    switch (tankopediaSortBy) {
       case 'fire.aimTime':
         return gun.aimTime.toFixed(2);
       case 'fire.caliber':
@@ -131,7 +132,7 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
           ),
         ).toFixed(0);
     }
-  }, [sortBy]);
+  }, [tankopediaSortBy]);
 
   return (
     <Text
@@ -141,8 +142,8 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
         tank.treeType === 'collector'
           ? 'blue'
           : tank.treeType === 'premium'
-          ? 'amber'
-          : 'gray'
+            ? 'amber'
+            : 'gray'
       }
       highContrast={tank.treeType === 'researchable'}
       onClick={onSelect ? () => onSelect(tank) : undefined}
