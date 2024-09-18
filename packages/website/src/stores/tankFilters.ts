@@ -11,7 +11,7 @@ export interface TankFilters {
   searching: boolean;
 }
 
-export const $tankFilters = map<TankFilters>({
+export const initialTankFilters : TankFilters = {
   tiers: [],
   nations: [],
   classes: [],
@@ -19,4 +19,6 @@ export const $tankFilters = map<TankFilters>({
   testing: 'include',
   search: undefined,
   searching: false,
-});
+}
+
+export const $tankFilters = map<TankFilters>(initialTankFilters);

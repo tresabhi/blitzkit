@@ -1,12 +1,11 @@
 import { Flex, Link, Text } from '@radix-ui/themes';
-import * as TankFilters from '../../../../stores/tankFilters';
+import { $tankFilters, initialTankFilters } from '../../../stores/tankFilters';
 
 interface NoResultsProps {
   type?: 'filters' | 'search';
 }
 
 export function NoResults({ type = 'filters' }: NoResultsProps) {
-  const tankFiltersStore = TankFilters.useStore();
 
   return (
     <Flex flexGrow="1" align="center" justify="center">
@@ -17,7 +16,7 @@ export function NoResults({ type = 'filters' }: NoResultsProps) {
           underline="always"
           color="red"
           onClick={() =>
-            tankFiltersStore.setState(tankFiltersStore.getInitialState(), true)
+            $tankFilters.set(initialTankFilters)
           }
         >
           {type === 'filters' ? 'Try clearing filters' : 'Try searching again'}

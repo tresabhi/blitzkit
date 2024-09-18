@@ -31,7 +31,7 @@ import * as TankopediaEphemeral from '../../../../../../../../stores/tankopediaE
 import * as TankopediaPersistent from '../../../../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../../../../stores/tankopediaPersistent/constants';
 import { TankSearch } from '../../../../../components/TankSearch';
-import { ENVIRONMENTS } from '../../../Lighting';
+import { ENVIRONMENTS } from '../../../../../../../../../../website/src/components/Sandbox/components/Lighting';
 import { QuickInputs } from '../../../QuickInputs';
 import { Thicknesses } from '../../../Thicknesses';
 import { DynamicArmorSwitcher } from './components/DynamicArmorSwitcher';
