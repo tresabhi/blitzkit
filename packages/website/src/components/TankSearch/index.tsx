@@ -19,7 +19,6 @@ import { Fragment, memo, useEffect, useMemo, useState } from 'react';
 import { filterTank } from '../../core/blitzkit/filterTank';
 import { resolveReload } from '../../core/blitzkit/resolveReload';
 import { useAdExempt } from '../../hooks/useAdExempt';
-import { useAwait } from '../../hooks/useAwait';
 import { $tankFilters } from '../../stores/tankFilters';
 import {
   SORT_NAMES,
@@ -45,15 +44,20 @@ type TankSearchProps = Omit<FlexProps, 'onSelect'> & {
 const PREVIEW_COUNT = 25;
 const DEFAULT_LOADED_CARDS = 75;
 
+const awaitedGameDefinitions = await gameDefinitions;
+const awaitedModelDefinitions = await modelDefinitions;
+const awaitedTankDefinitions = await tankDefinitions;
+const awaitedTanksDefinitionsArray = await tankDefinitionsArray;
+const awaitedTankNames = await tankNames;
+
 export const TankSearch = memo<TankSearchProps>(
   ({ compact, onSelect, onSelectAll, ...props }) => {
     const exempt = useAdExempt();
-    const awaitedGameDefinitions = useAwait(gameDefinitions);
-    console.log(awaitedGameDefinitions);
-    const awaitedModelDefinitions = useAwait(modelDefinitions);
-    const awaitedTankDefinitions = useAwait(tankDefinitions);
-    const awaitedTanksDefinitionsArray = useAwait(tankDefinitionsArray);
-    const awaitedTankNames = useAwait(tankNames);
+    // const awaitedGameDefinitions = useAwait(gameDefinitions);
+    // const awaitedModelDefinitions = useAwait(modelDefinitions);
+    // const awaitedTankDefinitions = useAwait(tankDefinitions);
+    // const awaitedTanksDefinitionsArray = useAwait(tankDefinitionsArray);
+    // const awaitedTankNames = useAwait(tankNames);
     const tankFilters = useStore($tankFilters);
     const tankopediaSort = useStore($tankopediaSort);
 
@@ -405,7 +409,8 @@ export const TankSearch = memo<TankSearchProps>(
         <Flex mt="2" gap="1" align="center" justify="center" direction="column">
           <Flex gap="2">
             <Text color="gray">
-              {tanksFiltered.length} tank{tanksFiltered.length === 1 ? '' : 's'}
+              {tanksFiltered.length} tank
+              {tanksFiltered.length === 1 ? '' : 's'}
             </Text>
 
             {onSelectAll && (

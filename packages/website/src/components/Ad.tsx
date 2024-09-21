@@ -23,6 +23,8 @@ type AdProps = BoxProps & {
 };
 
 export function Ad({ type, style, ...props }: AdProps) {
+  return null;
+
   const id = useRef(uniqueId());
   const dimensions = AD_DIMENSIONS[type];
 

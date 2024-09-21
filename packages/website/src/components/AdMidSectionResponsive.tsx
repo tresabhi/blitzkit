@@ -2,6 +2,8 @@ import { Flex, type FlexProps } from '@radix-ui/themes';
 import { Ad, AdType } from './Ad';
 
 export function AdMidSectionResponsive(props: FlexProps) {
+  return null;
+
   return (
     <Flex justify="center" py="4" gap="4" {...props}>
       <Ad

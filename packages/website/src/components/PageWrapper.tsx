@@ -1,6 +1,7 @@
 import { Flex, type FlexProps, Theme } from '@radix-ui/themes';
 import type { ComponentProps } from 'react';
 import type { RadixSize } from '../stores/embedState';
+import { BlitzKitTheme } from './BlitzKitTheme';
 
 type PageWrapperProps = FlexProps & {
   color?: ComponentProps<typeof Theme>['accentColor'];
@@ -23,7 +24,7 @@ export function PageWrapper({
   ...props
 }: PageWrapperProps) {
   return (
-    <Theme
+    <BlitzKitTheme
       accentColor={color}
       style={{
         flex: noFlex1 ? undefined : 1,
@@ -49,6 +50,6 @@ export function PageWrapper({
       >
         {children}
       </Flex>
-    </Theme>
+    </BlitzKitTheme>
   );
 }
