@@ -2,7 +2,7 @@ import { IndividualTankStats, Region, Stat } from '@blitzkit/core';
 import lodash from 'lodash-es';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { createContextualSafeStore } from '../core/zustand/createContextualSafeStore';
+import { createContextualStore } from '../core/zustand/createContextualStore';
 
 interface SessionBase {
   columns: Stat[];
@@ -24,8 +24,8 @@ interface SessionNotTracking extends SessionBase {
 
 type Session = SessionTracking | SessionNotTracking;
 
-export const { Provider, use, useMutation, useStore } =
-  createContextualSafeStore(() =>
+export const { Provider, use, useMutation, useStore } = createContextualStore(
+  () =>
     create<Session>()(
       persist(
         (set) => ({
@@ -35,4 +35,4 @@ export const { Provider, use, useMutation, useStore } =
         { name: 'session-2', merge: (a, b) => lodash.merge(b, a) },
       ),
     ),
-  );
+);

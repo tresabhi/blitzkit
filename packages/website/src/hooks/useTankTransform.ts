@@ -1,5 +1,5 @@
 import { I_HAT, J_HAT, K_HAT } from '@blitzkit/core';
-import { RefObject, useEffect } from 'react';
+import { type RefObject, useEffect } from 'react';
 import { Euler, Group, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 import { correctZYTuple } from '../core/blitz/correctZYTuple';

@@ -3,7 +3,7 @@ export * from './blitzkit';
 // export * from './blitzstars';
 // export * from './databases';
 export * from './imgur';
-// export * from './math';
+export * from './math';
 export * from './patreon';
 // export * from './protobuf';
 export * from './statistics';

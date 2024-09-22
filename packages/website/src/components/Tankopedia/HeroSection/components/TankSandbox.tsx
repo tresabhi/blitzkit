@@ -23,12 +23,12 @@ import * as Duel from '../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemeral';
 import * as TankopediaPersistent from '../../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
-import { Controls } from '../Control';
-import { Lighting } from '../Lighting';
-import { SceneProps } from '../SceneProps';
-import { AutoClear } from './AutoClear';
-import { ModelLoader } from './components/ModelLoader';
-import { TankModel } from './components/TankModel';
+import { Controls } from '../../../../../../website-legacy/src/app/tools/tankopedia/[id]/components/Control';
+import { Lighting } from '../../../../../../website-legacy/src/app/tools/tankopedia/[id]/components/Lighting';
+import { SceneProps } from '../../../../../../website-legacy/src/app/tools/tankopedia/[id]/components/SceneProps';
+import { AutoClear } from '../../../../../../website-legacy/src/app/tools/tankopedia/[id]/components/Model/AutoClear';
+import { ModelLoader } from '../../../../../../website-legacy/src/app/tools/tankopedia/[id]/components/Model/components/ModelLoader';
+import { TankModel } from '../../../../../../website-legacy/src/app/tools/tankopedia/[id]/components/Model/components/TankModel';
 
 interface TankSandboxProps {
   thicknessRange: ThicknessRange;

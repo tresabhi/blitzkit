@@ -7,7 +7,7 @@ import {
 import strings from '@blitzkit/core/lang/en-US.json';
 import { ChevronLeftIcon, MixIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { Button, Code, Dialog, Flex } from '@radix-ui/themes';
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { classIcons } from '../../../../../../../components/ClassIcon';
 import { Link } from '../../../../../../../components/Link';
 import { ScienceIcon } from '../../../../../../../components/ScienceIcon';
@@ -17,6 +17,9 @@ import * as Duel from '../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
 import { TankSearch } from '../../../../components/TankSearch';
 import { Listing } from './components/Listing';
+
+const awaitedProvisionDefinitions = await provisionDefinitions;
+const awaitedModelDefinitions = await modelDefinitions;
 
 export function MetaSection() {
   const developerMode = App.useDeferred(false, (state) => state.developerMode);
@@ -29,9 +32,7 @@ export function MetaSection() {
       : [protagonist.id, antagonist.id];
   const mutateDuel = Duel.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
-  const awaitedProvisionDefinitions = use(provisionDefinitions);
   const [showSwapDialog, setShowSwapDialog] = useState(false);
-  const awaitedModelDefinitions = use(modelDefinitions);
 
   return (
     <Flex justify="center" align="center">

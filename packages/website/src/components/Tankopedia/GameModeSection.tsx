@@ -5,14 +5,14 @@ import {
   provisionDefinitions,
 } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
-import { use } from 'react';
 import * as Duel from '../../../../../../stores/duel';
+
+const awaitedGameDefinitions = await gameDefinitions;
+const awaitedConsumableDefinitions = await consumableDefinitions;
+const awaitedProvisionDefinitions = await provisionDefinitions;
 
 export function GameModeSection() {
   const tank = Duel.use((state) => state.protagonist.tank);
-  const awaitedGameDefinitions = use(gameDefinitions);
-  const awaitedConsumableDefinitions = use(consumableDefinitions);
-  const awaitedProvisionDefinitions = use(provisionDefinitions);
   const roles = Object.entries(tank.roles);
 
   if (roles.length === 0) return null;

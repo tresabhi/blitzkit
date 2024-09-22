@@ -1,20 +1,25 @@
 import { resolveNearPenetration, tankDefinitions } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
-import { Suspense, use, useEffect, useMemo, useRef, useState } from 'react';
-import { ThicknessRange } from '../../../../../../components/Armor/components/StaticArmor';
-import { classIcons } from '../../../../../../components/ClassIcon';
-import { NAVBAR_HEIGHT } from '../../../../../../components/Navbar/index.css';
-import { Var } from '../../../../../../core/radix/var';
-import { useFullScreen } from '../../../../../../hooks/useFullScreen';
-import * as Duel from '../../../../../../stores/duel';
-import { TankSandbox } from './TankSandbox';
-import { TankSandboxLoader } from './TankSandboxLoader';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { NAVBAR_HEIGHT } from '../../../constants/navbar';
+import { Var } from '../../../core/radix/var';
+import { useFullScreen } from '../../../hooks/useFullScreen';
+import type { ThicknessRange } from '../../Armor/components/StaticArmor';
+import { classIcons } from '../../ClassIcon';
 import { Options } from './components/Options';
+import { TankSandbox } from './components/TankSandbox';
+import { TankSandboxLoader } from './components/TankSandboxLoader';
 
-export function HeroSection() {
+const awaitedTankDefinitions = await tankDefinitions;
+
+interface HeroSectionProps {
+  id: number;
+}
+
+export function HeroSection({ id }: HeroSectionProps) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const isFullScreen = useFullScreen();
-  const protagonist = Duel.use((state) => state.protagonist.tank);
+  const protagonist = awaitedTankDefinitions[id];
   const Icon = classIcons[protagonist.class];
   const [dummyLoader, setDummyLoader] = useState(true);
   const treeColor =
@@ -23,7 +28,6 @@ export function HeroSection() {
       : protagonist.treeType === 'premium'
         ? 'amber'
         : undefined;
-  const awaitedTankDefinitions = use(tankDefinitions);
   const thicknessRange = useMemo(() => {
     const entries = Object.values(awaitedTankDefinitions);
     const filtered = entries.filter(

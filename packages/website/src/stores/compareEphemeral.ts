@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { DuelMember } from './duel';
+import { createContextualStore } from '../core/zustand/createContextualStore';
+import type { DuelMember } from './duel';
 
 export interface CompareMember extends DuelMember {
   key: string;
@@ -14,10 +15,10 @@ export interface CompareEphemeral {
   };
 }
 
-export const { Provider, use, useMutation, useStore } =
-  createContextualSafeStore(() =>
+export const { Provider, use, useMutation, useStore } = createContextualStore(
+  () =>
     create<CompareEphemeral>()(() => ({
       crewSkills: {},
       members: [],
     })),
-  );
+);

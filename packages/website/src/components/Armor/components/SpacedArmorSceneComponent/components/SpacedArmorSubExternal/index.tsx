@@ -1,7 +1,7 @@
 import {
-  ShellDefinition,
   resolveNearPenetration,
   resolvePenetrationCoefficient,
+  type ShellDefinition,
 } from '@blitzkit/core';
 import { useEffect } from 'react';
 import {
@@ -11,10 +11,10 @@ import {
   Plane,
   ShaderMaterial,
 } from 'three';
-import { ArmorUserData, ExternalModuleVariant } from '../..';
-import { hasEquipment } from '../../../../../../../../website-legacy/src/core/blitzkit/hasEquipment';
-import { jsxTree } from '../../../../../../../../website-legacy/src/core/blitzkit/jsxTree';
-import * as Duel from '../../../../../../../../website-legacy/src/stores/duel';
+import type { ArmorUserData, ExternalModuleVariant } from '../..';
+import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
+import { jsxTree } from '../../../../../../core/blitzkit/jsxTree';
+import { Duel, type EquipmentMatrix } from '../../../../../../stores/duel';
 import { ArmorType } from '../../../SpacedArmorScene';
 import fragmentShader from './shaders/fragment.glsl';
 import vertexShader from './shaders/vertex.glsl';
@@ -56,7 +56,7 @@ export function SpacedArmorSubExternal({
       );
     }
     async function handleProtagonistEquipmentChange(
-      equipment: Duel.EquipmentMatrix,
+      equipment: EquipmentMatrix,
     ) {
       const duel = duelStore.getState();
       const hasEnhancedArmor = await hasEquipment(
@@ -68,9 +68,7 @@ export function SpacedArmorSubExternal({
         ? thickness * 1.03
         : thickness;
     }
-    async function handleAntagonistEquipmentChange(
-      equipment: Duel.EquipmentMatrix,
-    ) {
+    async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
       const duel = duelStore.getState();
       const shell = duel.antagonist.shell;
       const penetration = resolveNearPenetration(shell.penetration);

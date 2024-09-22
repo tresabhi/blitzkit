@@ -1,4 +1,11 @@
-import { asset, imgur, resolveNearPenetration, resolvePenetrationCoefficient, TIER_ROMAN_NUMERALS, uniqueGuns } from '@blitzkit/core';
+import {
+  asset,
+  imgur,
+  resolveNearPenetration,
+  resolvePenetrationCoefficient,
+  TIER_ROMAN_NUMERALS,
+  uniqueGuns,
+} from '@blitzkit/core';
 import {
   CameraIcon,
   CopyIcon,
@@ -21,24 +28,22 @@ import {
   Tooltip,
 } from '@radix-ui/themes';
 import { invalidate } from '@react-three/fiber';
-import { RefObject, useEffect, useState } from 'react';
-import { useEquipment } from '../../../../../../../../hooks/useEquipment';
-import { useFullScreen } from '../../../../../../../../hooks/useFullScreen';
-import { useFullscreenAvailability } from '../../../../../../../../hooks/useFullscreenAvailability';
-import * as App from '../../../../../../../../stores/app';
-import * as Duel from '../../../../../../../../stores/duel';
-import * as TankopediaEphemeral from '../../../../../../../../stores/tankopediaEphemeral';
-import * as TankopediaPersistent from '../../../../../../../../stores/tankopediaPersistent';
-import { TankopediaDisplay } from '../../../../../../../../stores/tankopediaPersistent/constants';
-import { TankSearch } from '../../../../../components/TankSearch';
-import { ENVIRONMENTS } from '../../../Lighting';
-import { QuickInputs } from '../../../QuickInputs';
-import { Thicknesses } from '../../../Thicknesses';
+import { type RefObject, useState } from 'react';
+import { ENVIRONMENTS } from '../../../../../constants/lightingEnvironments';
+import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
+import { useEquipment } from '../../../../../hooks/useEquipment';
+import { useFullScreen } from '../../../../../hooks/useFullScreen';
+import { useFullscreenAvailability } from '../../../../../hooks/useFullscreenAvailability';
+import { useStoreBoolean } from '../../../../../hooks/useStoreBoolean';
+import { useStoreKey } from '../../../../../hooks/useStoreKey';
+import { $app } from '../../../../../stores/app';
+import { $tankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
+import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/constants';
+import type { ThicknessRange } from '../../../../Armor/components/StaticArmor';
+import { ModuleButton } from '../../../../ModuleButtons/ModuleButton';
+import { SmallTankIcon } from '../../../../SmallTankIcon';
+import { TankSearch } from '../../../../TankSearch';
 import { DynamicArmorSwitcher } from './components/DynamicArmorSwitcher';
-import { ThicknessRange } from '../../../../../../../../components/Armor/components/StaticArmor';
-import { ModuleButton } from '../../../../../../../../components/ModuleButtons/ModuleButton';
-import { SmallTankIcon } from '../../../../../../../../components/SmallTankIcon';
-import { poseEvent, Pose } from '../../../../../../../../core/blitzkit/pose';
 
 interface OptionsProps {
   thicknessRange: ThicknessRange;
@@ -46,31 +51,23 @@ interface OptionsProps {
 }
 
 export function Options({ thicknessRange, canvas }: OptionsProps) {
-  const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
-  const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
-  const displayRaw = TankopediaPersistent.use((state) => state.display);
-  const [display, setDisplay] = useState<TankopediaDisplay>(
-    TankopediaDisplay.Model,
-  );
+  // const { display } = useStore($tankopediaPersistent, { keys: ['display'] });
+  const display = useStoreKey($tankopediaPersistent, 'display');
   const isFullScreen = useFullScreen();
-  const showGrid = TankopediaPersistent.use(
-    (state) => state.model.visual.showGrid,
+  const showGrid = useStoreBoolean($tankopediaPersistent, 'showGrid');
+  const showEnvironment = useStoreBoolean(
+    $tankopediaPersistent,
+    'showEnvironment',
   );
-  const showEnvironment = TankopediaPersistent.use(
-    (state) => state.model.visual.showEnvironment,
+  const greenPenetration = useStoreBoolean(
+    $tankopediaPersistent,
+    'greenPenetration',
   );
-  const greenPenetration = TankopediaPersistent.use(
-    (state) => state.model.visual.greenPenetration,
-  );
-  const wireframe = TankopediaPersistent.use(
-    (state) => state.model.visual.wireframe,
-  );
-  const opaque = TankopediaPersistent.use((state) => state.model.visual.opaque);
+  const wireframe = useStoreBoolean($tankopediaPersistent, 'wireframe');
+  const opaque = useStoreBoolean($tankopediaPersistent, 'opaque');
   const fullScreenAvailable = useFullscreenAvailability();
-  const environment = TankopediaPersistent.use(
-    (state) => state.model.visual.environment,
-  );
-  const developerMode = App.useDeferred(false, (state) => state.developerMode);
+  const environment = useStoreKey($tankopediaPersistent, 'environment');
+  const developerMode = useStoreBoolean($app, 'developerMode');
   const protagonistTank = Duel.use((state) => state.protagonist.tank);
   const antagonistGun = Duel.use((state) => state.antagonist.gun);
   const antagonistShell = Duel.use((state) => state.antagonist.shell);
@@ -81,8 +78,6 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
   const mutateDuel = Duel.useMutation();
   const hasEnhancedArmor = useEquipment(110);
   const antagonistUniqueGuns = uniqueGuns(antagonistTank.turrets);
-
-  useEffect(() => setDisplay(displayRaw), [displayRaw]);
 
   return (
     <>

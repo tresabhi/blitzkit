@@ -1,20 +1,19 @@
 import { normalizeAngleRad } from '@blitzkit/core';
-import { ThreeEvent, useThree } from '@react-three/fiber';
+import { useThree, type ThreeEvent } from '@react-three/fiber';
 import { memo, useRef } from 'react';
 import { Group, Plane, Vector2, Vector3 } from 'three';
-import { applyPitchYawLimits } from '../../../../../website-legacy/src/core/blitz/applyPitchYawLimits';
-import { correctZYTuple } from '../../../../../website-legacy/src/core/blitz/correctZYTuple';
-import { hasEquipment } from '../../../../../website-legacy/src/core/blitzkit/hasEquipment';
-import { modelTransformEvent } from '../../../../../website-legacy/src/core/blitzkit/modelTransform';
-import { nameToArmorId } from '../../../../../website-legacy/src/core/blitzkit/nameToArmorId';
-import { resolveArmor } from '../../../../../website-legacy/src/core/blitzkit/resolveThickness';
-import { useArmor } from '../../../../../website-legacy/src/hooks/useArmor';
-import { useModel } from '../../../../../website-legacy/src/hooks/useModel';
-import { useTankModelDefinition } from '../../../../../website-legacy/src/hooks/useTankModelDefinition';
-import { useTankTransform } from '../../../../../website-legacy/src/hooks/useTankTransform';
-import * as Duel from '../../../../../website-legacy/src/stores/duel';
-import * as TankopediaEphemeral from '../../../../../website-legacy/src/stores/tankopediaEphemeral';
-import * as TankopediaPersistent from '../../../../../website-legacy/src/stores/tankopediaPersistent';
+import { applyPitchYawLimits } from '../../../core/blitz/applyPitchYawLimits';
+import { correctZYTuple } from '../../../core/blitz/correctZYTuple';
+import { hasEquipment } from '../../../core/blitzkit/hasEquipment';
+import { modelTransformEvent } from '../../../core/blitzkit/modelTransform';
+import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
+import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
+import { useArmor } from '../../../hooks/useArmor';
+import { useModel } from '../../../hooks/useModel';
+import { useTankModelDefinition } from '../../../hooks/useTankModelDefinition';
+import { useTankTransform } from '../../../hooks/useTankTransform';
+import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
+import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
 import { ModelTankWrapper } from './ModelTankWrapper';
 import { ArmorType } from './SpacedArmorScene';
 import { StaticArmorSceneComponent } from './StaticArmorSceneComponent';
@@ -56,13 +55,13 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
       ? undefined
       : gunModelDefinition.mask + hullOrigin.y + turretOrigin.y + gunOrigin.y;
   const showPrimaryArmor = TankopediaPersistent.use(
-    (state) => state.model.visual.showPrimaryArmor,
+    (state) => state.showPrimaryArmor,
   );
   const showSpacedArmor = TankopediaPersistent.use(
-    (state) => state.model.visual.showSpacedArmor,
+    (state) => state.showSpacedArmor,
   );
   const showExternalModules = TankopediaPersistent.use(
-    (state) => state.model.visual.showExternalModules,
+    (state) => state.showExternalModules,
   );
   const isDynamicArmorActive = Duel.use((state) =>
     state.protagonist.consumables.includes(73),

@@ -1,4 +1,4 @@
-import { GroupProps } from '@react-three/fiber';
+import type { GroupProps } from '@react-three/fiber';
 import { forwardRef } from 'react';
 import { Group } from 'three';
 

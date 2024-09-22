@@ -1,6 +1,6 @@
 import { asset } from '@blitzkit/core';
-import { ObjectMap, useLoader } from '@react-three/fiber';
-import { GLTF, GLTFLoader } from 'three-stdlib';
+import { type ObjectMap, useLoader } from '@react-three/fiber';
+import { type GLTF, GLTFLoader } from 'three-stdlib';
 
 const cache: Record<
   number,

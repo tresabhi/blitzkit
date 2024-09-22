@@ -1,6 +1,6 @@
 import * as radixColors from '@radix-ui/colors';
 import { create } from 'zustand';
-import { createContextualSafeStore } from '../../core/zustand/createContextualSafeStore';
+import { createContextualStore } from '../../core/zustand/createContextualStore';
 import {
   type EmbedConfigItemType,
   EmbedItemType,
@@ -104,7 +104,6 @@ export type EmbedConfigItem = (
 
 export type EmbedState = Record<string, EmbedConfigItem['default']>;
 
-export const { Provider, use, useMutation, useStore } =
-  createContextualSafeStore((init: EmbedState) =>
-    create<EmbedState>()(() => init),
-  );
+export const { Provider, use, useMutation, useStore } = createContextualStore(
+  (init: EmbedState) => create<EmbedState>()(() => init),
+);

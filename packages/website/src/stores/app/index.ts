@@ -1,23 +1,14 @@
-import lodash from 'lodash-es';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { createContextualSafeStore } from '../../core/zustand/createContextualSafeStore';
+import { createContextualStore } from '../../core/zustand/createContextualStore';
 
-export interface App {
+interface AppStore {
   developerMode: boolean;
   policiesAgreementIndex: number;
 }
 
-export const { Provider, use, useMutation, useStore, useDeferred } =
-  createContextualSafeStore(() =>
-    create<App>()(
-      persist(
-        (set) => ({
-          developerMode: false,
-          policiesAgreementIndex: -1,
-          logins: {},
-        }),
-        { name: 'app', merge: (a, b) => lodash.merge(b, a) },
-      ),
-    ),
-  );
+export const App = createContextualStore(() =>
+  create<AppStore>()(() => ({
+    developerMode: false,
+    policiesAgreementIndex: 0,
+  })),
+);

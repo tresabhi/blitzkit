@@ -1,7 +1,7 @@
 import { asset, imgur, tankDefinitions } from '@blitzkit/core';
 import { CaretLeftIcon, CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, IconButton, ScrollArea, Text } from '@radix-ui/themes';
-import { Fragment, use, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import * as Duel from '../../../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
 import { Arrow } from './components/Arrow';
@@ -9,13 +9,14 @@ import { Node } from './components/Node';
 
 type Line = number[];
 
+const awaitedTankDefinitions = await tankDefinitions;
+
 export const XP_MULTIPLIERS = [1, 2, 3, 4, 5, 10];
 
 export function TechTreeSection() {
   const xpMultiplier = TankopediaEphemeral.use((state) => state.xpMultiplier);
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const master = Duel.use((state) => state.protagonist.tank);
-  const awaitedTankDefinitions = use(tankDefinitions);
   const container = useRef<HTMLDivElement>(null);
   const lines = useMemo(() => {
     function extend(line: Line): Line[] {

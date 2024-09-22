@@ -1,15 +1,15 @@
 import lodash from 'lodash-es';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
-import { createContextualSafeStore } from '../core/zustand/createContextualSafeStore';
+import { createContextualStore } from '../core/zustand/createContextualStore';
 
 export type DeltaMode = 'none' | 'percentage' | 'absolute';
 export interface ComparePersistent {
   deltaMode: DeltaMode;
 }
 
-export const { Provider, use, useMutation, useStore } =
-  createContextualSafeStore(() =>
+export const { Provider, use, useMutation, useStore } = createContextualStore(
+  () =>
     create<ComparePersistent>()(
       persist(
         subscribeWithSelector<ComparePersistent>(() => ({
@@ -21,4 +21,4 @@ export const { Provider, use, useMutation, useStore } =
         },
       ),
     ),
-  );
+);

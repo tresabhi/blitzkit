@@ -17,8 +17,6 @@
     "lodash": "^4.17.21",
     "next": "^14.2.7",
     "three-stdlib": "^2.32.2",
-    "@react-three/drei": "^9.111.5",
-    "@react-three/fiber": "^8.17.6",
     "urlon": "^3.1.0",
     "react": "^18.3.1",
     "@vanilla-extract/css": "^1.15.5",
@@ -29,7 +27,6 @@
     "react-fuzzysort": "^1.0.1",
     "immer": "^10.1.1",
     "@vanilla-extract/dynamic": "^2.1.2",
-    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@types/react-dom": "^18",

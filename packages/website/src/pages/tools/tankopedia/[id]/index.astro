@@ -1,0 +1,17 @@
+---
+import { tankDefinitions } from '@blitzkit/core';
+import type { GetStaticPaths } from 'astro';
+import { Page } from './index';
+
+export const getStaticPaths = (async () => {
+  const awaitedTankDefinitions = await tankDefinitions;
+
+  return Object.values(awaitedTankDefinitions).map((tank) => ({
+    params: { id: tank.id },
+  }));
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.params;
+---
+
+<Page id={id} client:load />

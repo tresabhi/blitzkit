@@ -7,7 +7,6 @@ import {
 } from '@blitzkit/core';
 import { Box, Flex, Text } from '@radix-ui/themes';
 import Link from 'next/link';
-import { use } from 'react';
 import * as TankopediaEphemeral from '../../../../../../../../stores/tankopediaEphemeral';
 
 interface NodeProps {
@@ -16,12 +15,13 @@ interface NodeProps {
   highlight?: boolean;
 }
 
+const awaitedTankDefinitions = await tankDefinitions;
+const awaitedAverageDefinitions = await averageDefinitions;
+
 export function Node({ id, highlight, nextIds }: NodeProps) {
   const xpMultiplier = TankopediaEphemeral.use((state) => state.xpMultiplier);
-  const awaitedTankDefinitions = use(tankDefinitions);
   const tank = awaitedTankDefinitions[id];
   const nextTanks = nextIds?.map((id) => awaitedTankDefinitions[id]);
-  const awaitedAverageDefinitions = use(averageDefinitions);
   const thisTankXp =
     tank.xp === undefined || tank.tier === 1 ? 0 : tank.xp! / xpMultiplier;
   const nextTanksXp = nextTanks?.reduce(

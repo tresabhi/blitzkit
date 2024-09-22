@@ -10,6 +10,13 @@
   "include": [
     "src/**/*",
     ".next/types/**/*.ts",
-    "../website/src/components/TankSearch/components/FilterControl.tsx"
+    "../website/src/components/TankSearch/components/FilterControl.tsx",
+    "../website/src/components/Tankopedia/HeroSection/index.tsx",
+    "../website/src/components/Tankopedia/GameModeSection.tsx",
+    "../website/src/components/Tankopedia/CharacteristicsSection.tsx",
+    "../website/src/components/Tankopedia/MetaSection",
+    "../website/src/components/Tankopedia/HistorySection.tsx",
+    "../website/src/components/Tankopedia/CalloutsSection.tsx",
+    "../website/src/components/Tankopedia/ShotDisplaySection.tsx"
   ]
 }

@@ -5,17 +5,17 @@ import { $patreonLogin } from '../stores/patreonLogin';
 let cache: Record<string, boolean | Promise<boolean>> = {};
 
 export function useAdExempt() {
-  const patreonLogin = useStore($patreonLogin);
+  const patreon = useStore($patreonLogin);
   const [exempt, setExempt] = useState(false);
 
   useLayoutEffect(() => {
     (async () => {
-      if (!patreonLogin.token) return setExempt(false);
+      if (!patreon.token) return setExempt(false);
 
-      if (!(patreonLogin.token in cache)) {
-        cache[patreonLogin.token] = new Promise<boolean>(async (resolve) => {
+      if (!(patreon.token in cache)) {
+        cache[patreon.token] = new Promise<boolean>(async (resolve) => {
           const response = await fetch(
-            `/api/patreon/membership/${patreonLogin.token}`,
+            `/api/patreon/membership/${patreon.token}`,
             { cache: 'force-cache' },
           );
 
@@ -24,12 +24,12 @@ export function useAdExempt() {
           const json = await response.json();
           const exempt = typeof json === 'boolean' && json;
 
-          cache[patreonLogin.token] = exempt;
+          cache[patreon.token] = exempt;
           resolve(exempt);
         });
       }
 
-      setExempt(await cache[patreonLogin.token]);
+      setExempt(await cache[patreon.token]);
     })();
   }, []);
 

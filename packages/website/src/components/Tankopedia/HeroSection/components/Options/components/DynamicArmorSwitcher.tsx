@@ -1,9 +1,8 @@
 import { asset } from '@blitzkit/core';
 import { IconButton } from '@radix-ui/themes';
 import { invalidate } from '@react-three/fiber';
-import { useArmor } from '../../../../../../../../../hooks/useArmor';
-import * as Duel from '../../../../../../../../../stores/duel';
-import * as TankopediaEphemeral from '../../../../../../../../../stores/tankopediaEphemeral';
+import { useArmor } from '../../../../../../hooks/useArmor';
+import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 
 export function DynamicArmorSwitcher() {
   const tank = Duel.use((state) => state.protagonist.tank);

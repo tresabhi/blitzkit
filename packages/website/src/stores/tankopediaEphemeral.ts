@@ -1,34 +1,11 @@
-import { ModelDefinition } from '@blitzkit/core';
+import type { ModelDefinition } from '@blitzkit/core';
 import { Vector3 } from 'three';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import { XP_MULTIPLIERS } from '../app/tools/tankopedia/[id]/components/Model/TechTreeSection';
 import { ArmorType } from '../components/Armor/components/SpacedArmorScene';
-import { ExternalModuleVariant } from '../components/Armor/components/SpacedArmorSceneComponent';
-import { createContextualSafeStore } from '../core/zustand/createContextualSafeStore';
-
-interface TankopediaEphemeral {
-  shot?: Shot;
-  skills: Record<string, number>;
-  controlsEnabled: boolean;
-  model: ModelDefinition;
-  editStatic: boolean;
-  highlightArmor?: {
-    editingPlate: boolean;
-    name: string;
-    point: Vector3;
-    thickness: number;
-    color: string;
-  } & (
-    | {
-        type: ArmorType.Primary | ArmorType.Spaced;
-        thicknessAngled: number;
-        angle: number;
-      }
-    | { type: ArmorType.External }
-  );
-  xpMultiplier: (typeof XP_MULTIPLIERS)[number];
-}
+import type { ExternalModuleVariant } from '../components/Armor/components/SpacedArmorSceneComponent';
+import type { XP_MULTIPLIERS } from '../components/Tankopedia/TechTreeSection';
+import { createContextualStore } from '../core/zustand/createContextualStore';
 
 export interface ShotLayerBase {
   index: number;
@@ -89,8 +66,8 @@ export type ArmorPiercingLayer =
       gap: number;
     };
 
-export const { Provider, use, useMutation, useStore } =
-  createContextualSafeStore((model: ModelDefinition) =>
+export const TankopediaEphemeral = createContextualStore(
+  (model: ModelDefinition) =>
     create<TankopediaEphemeral>()(
       subscribeWithSelector<TankopediaEphemeral>(() => ({
         editStatic: false,
@@ -100,4 +77,27 @@ export const { Provider, use, useMutation, useStore } =
         xpMultiplier: 1,
       })),
     ),
+);
+
+interface TankopediaEphemeral {
+  shot?: Shot;
+  skills: Record<string, number>;
+  controlsEnabled: boolean;
+  model: ModelDefinition;
+  editStatic: boolean;
+  highlightArmor?: {
+    editingPlate: boolean;
+    name: string;
+    point: Vector3;
+    thickness: number;
+    color: string;
+  } & (
+    | {
+        type: ArmorType.Primary | ArmorType.Spaced;
+        thicknessAngled: number;
+        angle: number;
+      }
+    | { type: ArmorType.External }
   );
+  xpMultiplier: (typeof XP_MULTIPLIERS)[number];
+}

@@ -1,10 +1,9 @@
 import { averageDefinitions, discoveredIdsDefinitions } from '@blitzkit/core';
-import { use } from 'react';
+
+const awaitedDiscoveredIdsDefinitions = await discoveredIdsDefinitions;
+const awaitedAverageDefinitions = await averageDefinitions;
 
 export function useAveragesExclusionRatio() {
-  const awaitedDiscoveredIdsDefinitions = use(discoveredIdsDefinitions);
-  const awaitedAverageDefinitions = use(averageDefinitions);
-
   return (
     awaitedDiscoveredIdsDefinitions.count /
     awaitedAverageDefinitions.samples.total

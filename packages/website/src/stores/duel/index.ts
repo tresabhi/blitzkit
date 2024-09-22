@@ -10,7 +10,7 @@ import {
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { tankToDuelMember } from '../../core/blitzkit/tankToDuelMember';
-import { createContextualSafeStore } from '../../core/zustand/createContextualSafeStore';
+import { createContextualStore } from '../../core/zustand/createContextualStore';
 
 type EquipmentMatrixItem = -1 | 0 | 1;
 type EquipmentMatrixRow = [
@@ -41,27 +41,26 @@ export interface DuelMember {
   cooldownBooster: number;
 }
 
-export interface Duel {
+export interface DuelStore {
   protagonist: DuelMember;
   antagonist: DuelMember;
 }
 
-export const { Provider, use, useMutation, useStore } =
-  createContextualSafeStore(
-    ({
-      tank,
-      provisionDefinitions,
-    }: {
-      tank: TankDefinition;
-      provisionDefinitions: ProvisionDefinitions;
-    }) => {
-      const protagonist = tankToDuelMember(tank, provisionDefinitions);
+export const Duel = createContextualStore(
+  ({
+    tank,
+    provisionDefinitions,
+  }: {
+    tank: TankDefinition;
+    provisionDefinitions: ProvisionDefinitions;
+  }) => {
+    const protagonist = tankToDuelMember(tank, provisionDefinitions);
 
-      return create<Duel>()(
-        subscribeWithSelector<Duel>(() => ({
-          protagonist,
-          antagonist: protagonist,
-        })),
-      );
-    },
-  );
+    return create<DuelStore>()(
+      subscribeWithSelector<DuelStore>(() => ({
+        protagonist,
+        antagonist: protagonist,
+      })),
+    );
+  },
+);

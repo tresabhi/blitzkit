@@ -2,11 +2,10 @@ import {
   asset,
   permanentSkills,
   skillDefinitions,
-  Tier,
   TIER_ROMAN_NUMERALS,
+  type Tier,
 } from '@blitzkit/core';
 import { Flex } from '@radix-ui/themes';
-import { use } from 'react';
 import { GenericTankComponentButton } from './ModuleButtons/GenericTankComponentButton';
 
 interface CrewSkillManagerProps {
@@ -14,12 +13,12 @@ interface CrewSkillManagerProps {
   onChange?: (skillLevels: Record<string, number>) => void;
 }
 
+const awaitedSkillDefinitions = await skillDefinitions;
+
 export function CrewSkillManager({
   skillLevels,
   onChange,
 }: CrewSkillManagerProps) {
-  const awaitedSkillDefinitions = use(skillDefinitions);
-
   return (
     <Flex direction="column" gap="2">
       {Object.entries(awaitedSkillDefinitions.classes).map(

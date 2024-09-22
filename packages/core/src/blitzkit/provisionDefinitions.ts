@@ -1,5 +1,5 @@
-import { TankFilterDefinition } from '@blitzkit/core';
 import { asset } from './asset';
+import { TankFilterDefinition } from './consumableDefinitions';
 import { fetchCdonLz4 } from './fetchCdonLz4';
 
 export type ProvisionEntry = {

@@ -6,21 +6,21 @@ import usePromise from 'react-promise-suspense';
 import { $wargamingLogin } from '../stores/wargamingLogin';
 
 export function WargamingAccountName() {
-  const wargamingLogin = useStore($wargamingLogin);
+  const wargaming = useStore($wargamingLogin);
   const promise = useMemo(async () => {
-    if (!wargamingLogin.token) return null;
+    if (!wargaming.token) return null;
 
     const data = await getAccountInfo(
-      idToRegion(Number(wargamingLogin.id)),
-      Number(wargamingLogin.id),
+      idToRegion(Number(wargaming.id)),
+      Number(wargaming.id),
       [],
       {
-        access_token: wargamingLogin.token,
+        access_token: wargaming.token,
       },
     );
 
     return data?.nickname as string | undefined;
-  }, [wargamingLogin.token]);
+  }, [wargaming]);
   const nickname = usePromise(() => promise, []);
 
   return nickname ?? <Text color="gray">Unknown Account</Text>;

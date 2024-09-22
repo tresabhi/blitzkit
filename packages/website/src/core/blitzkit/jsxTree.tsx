@@ -1,4 +1,4 @@
-import { GroupProps, MeshProps } from '@react-three/fiber';
+import type { GroupProps, MeshProps } from '@react-three/fiber';
 import { Mesh, Object3D } from 'three';
 
 export function jsxTree(

@@ -9,11 +9,7 @@ import {
 } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { useRef } from 'react';
-import { radToDeg } from 'three/src/math/MathUtils';
-import { resolveArmorIndex } from '../../../../../website-legacy/src/core/blitzkit/resolveArmorIndex';
-import * as App from '../../../../../website-legacy/src/stores/app';
-import * as Duel from '../../../../../website-legacy/src/stores/duel';
-import * as TankopediaEphemeral from '../../../../../website-legacy/src/stores/tankopediaEphemeral';
+import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import { layerTypeNames } from './ShotDisplayCard';
 import { ArmorType } from './SpacedArmorScene';
 

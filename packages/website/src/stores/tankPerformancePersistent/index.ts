@@ -1,15 +1,15 @@
 import lodash from 'lodash-es';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
-import { createContextualSafeStore } from '../../core/zustand/createContextualSafeStore';
+import { createContextualStore } from '../../core/zustand/createContextualStore';
 import { PlayerCountPeriod } from './constants';
 
 export interface TankPerformancePersistent {
   playerCountPeriod: PlayerCountPeriod;
 }
 
-export const { Provider, use, useMutation, useStore } =
-  createContextualSafeStore(() =>
+export const { Provider, use, useMutation, useStore } = createContextualStore(
+  () =>
     create<TankPerformancePersistent>()(
       persist(
         subscribeWithSelector<TankPerformancePersistent>(() => ({
@@ -18,4 +18,4 @@ export const { Provider, use, useMutation, useStore } =
         { name: 'tank-performance', merge: (a, b) => lodash.merge(b, a) },
       ),
     ),
-  );
+);

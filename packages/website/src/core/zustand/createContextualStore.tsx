@@ -20,7 +20,7 @@ type ExtractState<S> = S extends {
   ? T
   : never;
 
-export function createContextualSafeStore<
+export function createContextualStore<
   Store extends StoreApi<unknown>,
   InitData,
 >(initialize: (data: InitData) => Store) {

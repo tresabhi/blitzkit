@@ -1,4 +1,4 @@
-import { Vector3, Vector3Tuple } from 'three';
+import { Vector3, type Vector3Tuple } from 'three';
 import { rotateDavaVector } from './rotateDavaVector';
 
 export function correctZYTuple(tuple: Vector3Tuple) {

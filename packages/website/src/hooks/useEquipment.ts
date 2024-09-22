@@ -1,9 +1,10 @@
 import { equipmentDefinitions } from '@blitzkit/core';
-import { use, useMemo } from 'react';
+import { useMemo } from 'react';
 import * as Duel from '../stores/duel';
 
+const awaitedEquipmentDefinitions = await equipmentDefinitions;
+
 export function useEquipment(id: number, antagonist = false) {
-  const awaitedEquipmentDefinitions = use(equipmentDefinitions);
   const member = Duel.use(
     (state) => state[antagonist ? 'antagonist' : 'protagonist']!,
   );

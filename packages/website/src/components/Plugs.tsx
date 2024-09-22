@@ -10,19 +10,13 @@ import {
   Separator,
   Text,
 } from '@radix-ui/themes';
-import { useLayoutEffect, useState } from 'react';
 import { useAdExempt } from '../hooks/useAdExempt';
 import { $patreonLogin } from '../stores/patreonLogin';
 import { PatreonIcon } from './PatreonIcon';
 
 export function Plugs() {
-  const [hasPatreon, setHasPatreon] = useState(false);
   const exempt = useAdExempt();
-  const patreonLogin = useStore($patreonLogin);
-
-  useLayoutEffect(() => {
-    setHasPatreon(patreonLogin !== undefined);
-  }, [patreonLogin]);
+  const hasPatreon = useStore($patreonLogin).token !== undefined;
 
   return (
     <Flex

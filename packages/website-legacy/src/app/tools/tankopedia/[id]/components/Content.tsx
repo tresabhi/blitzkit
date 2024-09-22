@@ -2,19 +2,19 @@ import { TIER_ROMAN_NUMERALS } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
 import { invalidate } from '@react-three/fiber';
 import { useEffect } from 'react';
+import { CalloutsSection } from '../../../../../../../website/src/components/Tankopedia/CalloutsSection';
+import { CharacteristicsSection } from '../../../../../../../website/src/components/Tankopedia/CharacteristicsSection';
+import { GameModeSection } from '../../../../../../../website/src/components/Tankopedia/GameModeSection';
+import { HeroSection } from '../../../../../../../website/src/components/Tankopedia/HeroSection';
+import { HistorySection } from '../../../../../../../website/src/components/Tankopedia/HistorySection';
+import { MetaSection } from '../../../../../../../website/src/components/Tankopedia/MetaSection';
+import { ShotDisplaySection } from '../../../../../../../website/src/components/Tankopedia/ShotDisplaySection';
+import { TechTreeSection } from '../../../../../../../website/src/components/Tankopedia/TechTreeSection';
 import { AdMidSectionResponsive } from '../../../../../components/AdMidSectionResponsive';
 import { PageWrapper } from '../../../../../components/PageWrapper';
 import { useAdExempt } from '../../../../../hooks/useAdExempt';
 import * as Duel from '../../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../../stores/tankopediaEphemeral';
-import { CalloutsSection } from './CalloutsSection';
-import { HistorySection } from './HistorySection';
-import { CharacteristicsSection } from './Model/CharacteristicsSection';
-import { GameModeSection } from './Model/GameModeSection';
-import { HeroSection } from './Model/HeroSection';
-import { MetaSection } from './Model/MetaSection';
-import { TechTreeSection } from './Model/TechTreeSection';
-import { ShotDisplaySection } from './ShotDisplaySection';
 import { VideoSection } from './VideoSection';
 
 export function Content() {

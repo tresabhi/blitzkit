@@ -1,12 +1,11 @@
 import { memo, useRef } from 'react';
 import { Group } from 'three';
-import { correctZYTuple } from '../../../../../website-legacy/src/core/blitz/correctZYTuple';
-import { nameToArmorId } from '../../../../../website-legacy/src/core/blitzkit/nameToArmorId';
-import { resolveArmor } from '../../../../../website-legacy/src/core/blitzkit/resolveThickness';
-import { useArmor } from '../../../../../website-legacy/src/hooks/useArmor';
-import { useTankModelDefinition } from '../../../../../website-legacy/src/hooks/useTankModelDefinition';
-import { useTankTransform } from '../../../../../website-legacy/src/hooks/useTankTransform';
-import * as Duel from '../../../../../website-legacy/src/stores/duel';
+import { correctZYTuple } from '../../../core/blitz/correctZYTuple';
+import { nameToArmorId } from '../../../core/blitzkit/nameToArmorId';
+import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
+import { useArmor } from '../../../hooks/useArmor';
+import { useTankModelDefinition } from '../../../hooks/useTankModelDefinition';
+import { useTankTransform } from '../../../hooks/useTankTransform';
 import { ModelTankWrapper } from './ModelTankWrapper';
 import { PrimaryArmorSceneComponent } from './PrimaryArmorSceneComponent';
 
