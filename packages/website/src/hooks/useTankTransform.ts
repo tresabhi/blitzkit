@@ -1,13 +1,13 @@
 import { I_HAT, J_HAT, K_HAT } from '@blitzkit/core';
 import { type RefObject, useEffect } from 'react';
 import { Euler, Group, Vector3 } from 'three';
-import { degToRad } from 'three/src/math/MathUtils';
+import { degToRad } from 'three/src/math/MathUtils.js';
 import { correctZYTuple } from '../core/blitz/correctZYTuple';
 import {
-  ModelTransformEventData,
+  type ModelTransformEventData,
   modelTransformEvent,
 } from '../core/blitzkit/modelTransform';
-import { DuelMember } from '../stores/duel';
+import type { DuelMember } from '../stores/duel';
 import { useTankModelDefinition } from './useTankModelDefinition';
 
 export function useTankTransform(

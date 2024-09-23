@@ -6,6 +6,7 @@ import { resolveArmor } from '../../../core/blitzkit/resolveThickness';
 import { useArmor } from '../../../hooks/useArmor';
 import { useTankModelDefinition } from '../../../hooks/useTankModelDefinition';
 import { useTankTransform } from '../../../hooks/useTankTransform';
+import { Duel } from '../../../stores/duel';
 import { ModelTankWrapper } from './ModelTankWrapper';
 import { PrimaryArmorSceneComponent } from './PrimaryArmorSceneComponent';
 

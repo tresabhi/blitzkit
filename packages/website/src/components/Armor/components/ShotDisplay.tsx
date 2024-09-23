@@ -1,9 +1,9 @@
-import { J_HAT, K_HAT } from '@blitzkit/core';
-import { Box, Flex, Text } from '@radix-ui/themes';
+import { K_HAT } from '@blitzkit/core';
+import { Box, Text } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { clamp } from 'lodash-es';
-import { type ComponentProps, useEffect, useRef } from 'react';
+import { useEffect, useRef, type ComponentProps } from 'react';
 import {
   BufferGeometry,
   DoubleSide,
@@ -16,12 +16,16 @@ import {
   Path,
   Quaternion,
 } from 'three';
-import { useFullScreen } from '../../../../../website-legacy/src/hooks/useFullScreen';
-import * as TankopediaEphemeral from '../../../../../website-legacy/src/stores/tankopediaEphemeral';
+import { useFullScreen } from '../../../hooks/useFullScreen';
+import {
+  TankopediaEphemeral,
+  type ShotLayerNonExternal,
+  type ShotStatus,
+} from '../../../stores/tankopediaEphemeral';
 import { ShotDisplayCard } from './ShotDisplayCard';
 
 export const shotStatusColors: Record<
-  TankopediaEphemeral.ShotStatus,
+  ShotStatus,
   ComponentProps<typeof Text>['color']
 > = {
   blocked: 'red',
@@ -127,16 +131,13 @@ export function ShotDisplay() {
     }, 0) + SHOT_DISPLAY_LENGTH_INFINITY;
   const outLength =
     shot.out && shot.out.layers.length > 0
-      ? (
-          shot.in.layers.at(-1) as TankopediaEphemeral.ShotLayerNonExternal
-        ).point.distanceTo(
-          (shot.out.layers.at(-1) as TankopediaEphemeral.ShotLayerNonExternal)
-            .point,
+      ? (shot.in.layers.at(-1) as ShotLayerNonExternal).point.distanceTo(
+          (shot.out.layers.at(-1) as ShotLayerNonExternal).point,
         )
       : SHOT_DISPLAY_LENGTH_INFINITY;
   const inLast = shot.in.layers.findLast(
     (layer) => layer.type !== null,
-  ) as TankopediaEphemeral.ShotLayerNonExternal;
+  ) as ShotLayerNonExternal;
   const outTitleColor = shot.out
     ? shotStatusColors[shot.out.status]
     : undefined;
@@ -182,7 +183,7 @@ export function ShotDisplay() {
         </Box>
       </Html>
 
-      {[...shot.in.layers, ...(shot.out?.layers ?? [])].map((layer, index) => {
+      {/* {[...shot.in.layers, ...(shot.out?.layers ?? [])].map((layer, index) => {
         if (layer.type === null) return null;
 
         const shotStatusColor =
@@ -275,7 +276,7 @@ export function ShotDisplay() {
             />
           </mesh>
         </group>
-      )}
+      )} */}
     </group>
   );
 }

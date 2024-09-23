@@ -1,9 +1,9 @@
 import {
   availableProvisions,
-  ProvisionDefinitions,
-  TankDefinition,
+  type ProvisionDefinitions,
+  type TankDefinition,
 } from '@blitzkit/core';
-import { DuelMember } from '../../stores/duel';
+import type { DuelMember } from '../../stores/duel';
 import { genericDefaultEquipmentMatrix } from '../../stores/duel/constants';
 
 const PROVISION_PREFERENCES = [

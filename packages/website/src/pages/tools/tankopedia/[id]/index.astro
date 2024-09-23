@@ -1,6 +1,7 @@
 ---
 import { tankDefinitions } from '@blitzkit/core';
 import type { GetStaticPaths } from 'astro';
+import ToolLayout from '../../../../layouts/ToolLayout.astro';
 import { Page } from './index';
 
 export const getStaticPaths = (async () => {
@@ -14,4 +15,6 @@ export const getStaticPaths = (async () => {
 const { id } = Astro.params;
 ---
 
-<Page id={id} client:load />
+<ToolLayout>
+  <Page id={id} client:load />
+</ToolLayout>

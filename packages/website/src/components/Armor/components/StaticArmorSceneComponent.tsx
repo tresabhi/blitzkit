@@ -1,5 +1,5 @@
 import { I_HAT, J_HAT } from '@blitzkit/core';
-import { MeshProps, useThree } from '@react-three/fiber';
+import { type MeshProps, useThree } from '@react-three/fiber';
 import { clamp } from 'lodash-es';
 import { useEffect, useMemo } from 'react';
 import {
@@ -15,20 +15,20 @@ import {
   Quaternion,
   Vector3,
 } from 'three';
-import { unrotateDavaVector } from '../../../../../website-legacy/src/core/blitz/unrotateDavaVector';
-import { jsxTree } from '../../../../../website-legacy/src/core/blitzkit/jsxTree';
+import { unrotateDavaVector } from '../../../core/blitz/unrotateDavaVector';
+import { jsxTree } from '../../../core/blitzkit/jsxTree';
 import {
-  ModelTransformEventData,
+  type ModelTransformEventData,
   modelTransformEvent,
-} from '../../../../../website-legacy/src/core/blitzkit/modelTransform';
-import { discardClippingPlane } from '../../../../../website-legacy/src/core/three/discardClippingPlane';
-import * as TankopediaEphemeral from '../../../../../website-legacy/src/stores/tankopediaEphemeral';
+} from '../../../core/blitzkit/modelTransform';
+import { discardClippingPlane } from '../../../core/three/discardClippingPlane';
+import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import { ArmorType } from './SpacedArmorScene';
-import {
+import type {
   ArmorUserData,
   ExternalModuleVariant,
 } from './SpacedArmorSceneComponent';
-import { ThicknessRange } from './StaticArmor';
+import type { ThicknessRange } from './StaticArmor';
 
 type StaticArmorSceneComponentProps = {
   name: string;

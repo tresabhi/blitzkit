@@ -1,6 +1,6 @@
 import * as lodash from 'lodash-es';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { ENVIRONMENTS } from '../../constants/lightingEnvironments';
 import { createContextualStore } from '../../core/zustand/createContextualStore';
 import { SORT_NAMES, TankopediaDisplay } from './constants';
@@ -31,13 +31,13 @@ export interface TankopediaPersistentStore {
 export const TankopediaPersistent = createContextualStore(() =>
   create<TankopediaPersistentStore>()(
     persist(
-      (set) => ({
+      subscribeWithSelector<TankopediaPersistentStore>(() => ({
         wireframe: false,
         opaque: false,
         environment: ENVIRONMENTS[0],
         showGrid: true,
-        greenPenetration: true,
-        showEnvironment: true,
+        greenPenetration: false,
+        showEnvironment: false,
         showSpacedArmor: true,
         showExternalModules: true,
         showPrimaryArmor: true,
@@ -46,7 +46,7 @@ export const TankopediaPersistent = createContextualStore(() =>
           direction: 'ascending',
         },
         display: TankopediaDisplay.Model,
-      }),
+      })),
       { name: 'tankopedia', merge: (a, b) => lodash.merge(b, a) },
     ),
   ),

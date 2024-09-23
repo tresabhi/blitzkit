@@ -28,22 +28,24 @@ import {
   Tooltip,
 } from '@radix-ui/themes';
 import { invalidate } from '@react-three/fiber';
-import { type RefObject, useState } from 'react';
+import { useState, type RefObject } from 'react';
 import { ENVIRONMENTS } from '../../../../../constants/lightingEnvironments';
 import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
 import { useEquipment } from '../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../hooks/useFullScreen';
 import { useFullscreenAvailability } from '../../../../../hooks/useFullscreenAvailability';
-import { useStoreBoolean } from '../../../../../hooks/useStoreBoolean';
-import { useStoreKey } from '../../../../../hooks/useStoreKey';
-import { $app } from '../../../../../stores/app';
-import { $tankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
+import { App } from '../../../../../stores/app';
+import { Duel } from '../../../../../stores/duel';
+import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
+import { TankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/constants';
 import type { ThicknessRange } from '../../../../Armor/components/StaticArmor';
 import { ModuleButton } from '../../../../ModuleButtons/ModuleButton';
 import { SmallTankIcon } from '../../../../SmallTankIcon';
 import { TankSearch } from '../../../../TankSearch';
 import { DynamicArmorSwitcher } from './components/DynamicArmorSwitcher';
+import { QuickInputs } from './components/QuickInputs';
+import { Thicknesses } from './components/Thicknesses';
 
 interface OptionsProps {
   thicknessRange: ThicknessRange;
@@ -51,23 +53,20 @@ interface OptionsProps {
 }
 
 export function Options({ thicknessRange, canvas }: OptionsProps) {
-  // const { display } = useStore($tankopediaPersistent, { keys: ['display'] });
-  const display = useStoreKey($tankopediaPersistent, 'display');
+  const display = TankopediaPersistent.use((state) => state.display);
   const isFullScreen = useFullScreen();
-  const showGrid = useStoreBoolean($tankopediaPersistent, 'showGrid');
-  const showEnvironment = useStoreBoolean(
-    $tankopediaPersistent,
-    'showEnvironment',
+  const showGrid = TankopediaPersistent.use((state) => state.showGrid);
+  const showEnvironment = TankopediaPersistent.use(
+    (state) => state.showEnvironment,
   );
-  const greenPenetration = useStoreBoolean(
-    $tankopediaPersistent,
-    'greenPenetration',
+  const greenPenetration = TankopediaPersistent.use(
+    (state) => state.greenPenetration,
   );
-  const wireframe = useStoreBoolean($tankopediaPersistent, 'wireframe');
-  const opaque = useStoreBoolean($tankopediaPersistent, 'opaque');
+  const wireframe = TankopediaPersistent.use((state) => state.wireframe);
+  const opaque = TankopediaPersistent.use((state) => state.opaque);
   const fullScreenAvailable = useFullscreenAvailability();
-  const environment = useStoreKey($tankopediaPersistent, 'environment');
-  const developerMode = useStoreBoolean($app, 'developerMode');
+  const environment = TankopediaPersistent.use((state) => state.environment);
+  const developerMode = App.use((state) => state.developerMode);
   const protagonistTank = Duel.use((state) => state.protagonist.tank);
   const antagonistGun = Duel.use((state) => state.antagonist.gun);
   const antagonistShell = Duel.use((state) => state.antagonist.shell);
@@ -78,6 +77,8 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
   const mutateDuel = Duel.useMutation();
   const hasEnhancedArmor = useEquipment(110);
   const antagonistUniqueGuns = uniqueGuns(antagonistTank.turrets);
+  const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
+  const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
 
   return (
     <>
@@ -395,7 +396,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                     checked={greenPenetration}
                     onCheckedChange={(checked) => {
                       mutateTankopediaPersistent((draft) => {
-                        draft.model.visual.greenPenetration = checked;
+                        draft.greenPenetration = checked;
                       });
                     }}
                   >
@@ -406,7 +407,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                     checked={opaque}
                     onCheckedChange={(checked) => {
                       mutateTankopediaPersistent((draft) => {
-                        draft.model.visual.opaque = checked;
+                        draft.opaque = checked;
                       });
                     }}
                   >
@@ -418,7 +419,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                       checked={wireframe}
                       onCheckedChange={(checked) => {
                         mutateTankopediaPersistent((draft) => {
-                          draft.model.visual.wireframe = checked;
+                          draft.wireframe = checked;
                         });
                       }}
                     >
@@ -434,7 +435,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 checked={showGrid}
                 onCheckedChange={(checked) => {
                   mutateTankopediaPersistent((draft) => {
-                    draft.model.visual.showGrid = checked;
+                    draft.showGrid = checked;
                   });
                 }}
               >
@@ -445,7 +446,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 checked={showEnvironment}
                 onCheckedChange={(checked) => {
                   mutateTankopediaPersistent((draft) => {
-                    draft.model.visual.showEnvironment = checked;
+                    draft.showEnvironment = checked;
                   });
                 }}
               >
@@ -463,7 +464,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                         value={environment}
                         onClick={() => {
                           mutateTankopediaPersistent((draft) => {
-                            draft.model.visual.environment = environment;
+                            draft.environment = environment;
                           });
                         }}
                       >

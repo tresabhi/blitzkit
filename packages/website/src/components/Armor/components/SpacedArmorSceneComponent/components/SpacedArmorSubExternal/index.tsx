@@ -16,8 +16,8 @@ import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../../../core/blitzkit/jsxTree';
 import { Duel, type EquipmentMatrix } from '../../../../../../stores/duel';
 import { ArmorType } from '../../../SpacedArmorScene';
-import fragmentShader from './shaders/fragment.glsl';
-import vertexShader from './shaders/vertex.glsl';
+import fragmentShader from './shaders/fragment.glsl?raw';
+import vertexShader from './shaders/vertex.glsl?raw';
 
 interface SpacedArmorSubExternalProps {
   node: Object3D;

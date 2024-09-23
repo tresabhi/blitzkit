@@ -12,6 +12,7 @@ import { useArmor } from '../../../hooks/useArmor';
 import { useModel } from '../../../hooks/useModel';
 import { useTankModelDefinition } from '../../../hooks/useTankModelDefinition';
 import { useTankTransform } from '../../../hooks/useTankTransform';
+import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
 import { ModelTankWrapper } from './ModelTankWrapper';

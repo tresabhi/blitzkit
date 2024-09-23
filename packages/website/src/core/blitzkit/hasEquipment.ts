@@ -1,5 +1,5 @@
 import { equipmentDefinitions } from '@blitzkit/core';
-import { EquipmentMatrix } from '../../stores/duel';
+import type { EquipmentMatrix } from '../../stores/duel';
 
 export async function hasEquipment(
   id: number,

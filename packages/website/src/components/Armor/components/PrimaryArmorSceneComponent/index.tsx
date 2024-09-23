@@ -1,5 +1,5 @@
 import {
-  ShellDefinition,
+  type ShellDefinition,
   canSplash,
   isExplosive,
   resolveNearPenetration,
@@ -8,13 +8,13 @@ import {
 import { useFrame } from '@react-three/fiber';
 import { useEffect } from 'react';
 import { MeshBasicMaterial, Object3D, ShaderMaterial, Vector2 } from 'three';
-import { degToRad } from 'three/src/math/MathUtils';
-import { hasEquipment } from '../../../../../../website-legacy/src/core/blitzkit/hasEquipment';
-import { jsxTree } from '../../../../../../website-legacy/src/core/blitzkit/jsxTree';
-import * as Duel from '../../../../../../website-legacy/src/stores/duel';
-import * as TankopediaPersistent from '../../../../../../website-legacy/src/stores/tankopediaPersistent';
-import fragmentShader from './shaders/fragment.glsl';
-import vertexShader from './shaders/vertex.glsl';
+import { degToRad } from 'three/src/math/MathUtils.js';
+import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
+import { jsxTree } from '../../../../core/blitzkit/jsxTree';
+import { Duel, type EquipmentMatrix } from '../../../../stores/duel';
+import { TankopediaPersistent } from '../../../../stores/tankopediaPersistent';
+import fragmentShader from './shaders/fragment.glsl?raw';
+import vertexShader from './shaders/vertex.glsl?raw';
 import { spacedArmorRenderTarget } from './target';
 
 interface PrimaryArmorSceneComponentProps {
@@ -76,15 +76,17 @@ export function PrimaryArmorSceneComponent({
       await handleProtagonistEquipmentChange(duel.protagonist.equipmentMatrix);
       await handleAntagonistEquipmentChange(duel.antagonist.equipmentMatrix);
     }
-    function handleVisualChange(
-      visual: TankopediaPersistent.TankopediaPersistent['model']['visual'],
-    ) {
-      material.uniforms.greenPenetration.value = visual.greenPenetration;
-      material.uniforms.opaque.value = visual.opaque || visual.wireframe;
-      material.wireframe = visual.wireframe;
+    function handleGreenPenetrationChange(greenPenetration: boolean) {
+      material.uniforms.greenPenetration.value = greenPenetration;
+    }
+    function handleOpaqueChange(opaque: boolean) {
+      material.uniforms.opaque.value = opaque;
+    }
+    function handleWireframeChange(wireframe: boolean) {
+      material.wireframe = wireframe;
     }
     async function handleProtagonistEquipmentChange(
-      equipment: Duel.EquipmentMatrix,
+      equipment: EquipmentMatrix,
     ) {
       const duel = duelStore.getState();
       const hasEnhancedArmor = await hasEquipment(
@@ -96,9 +98,7 @@ export function PrimaryArmorSceneComponent({
         ? thickness * 1.03
         : thickness;
     }
-    async function handleAntagonistEquipmentChange(
-      equipment: Duel.EquipmentMatrix,
-    ) {
+    async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
       const duel = duelStore.getState();
       const shell = duel.antagonist.shell;
       const penetration = resolveNearPenetration(shell.penetration);
@@ -114,7 +114,11 @@ export function PrimaryArmorSceneComponent({
     }
 
     handleShellChange(duelStore.getState().antagonist.shell);
-    handleVisualChange(tankopediaPersistentStore.getState().model.visual);
+    handleGreenPenetrationChange(
+      tankopediaPersistentStore.getState().greenPenetration,
+    );
+    handleOpaqueChange(tankopediaPersistentStore.getState().opaque);
+    handleWireframeChange(tankopediaPersistentStore.getState().wireframe);
     handleProtagonistEquipmentChange(
       duelStore.getState().protagonist.equipmentMatrix,
     );
@@ -125,9 +129,10 @@ export function PrimaryArmorSceneComponent({
     const unsubscribes = [
       duelStore.subscribe((state) => state.antagonist.shell, handleShellChange),
       tankopediaPersistentStore.subscribe(
-        (state) => state.model.visual,
-        handleVisualChange,
+        (state) => state.greenPenetration,
+        handleGreenPenetrationChange,
       ),
+
       duelStore.subscribe(
         (state) => state.protagonist.equipmentMatrix,
         handleProtagonistEquipmentChange,

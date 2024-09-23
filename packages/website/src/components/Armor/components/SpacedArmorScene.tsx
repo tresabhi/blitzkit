@@ -7,6 +7,7 @@ import { useArmor } from '../../../hooks/useArmor';
 import { useModel } from '../../../hooks/useModel';
 import { useTankModelDefinition } from '../../../hooks/useTankModelDefinition';
 import { useTankTransform } from '../../../hooks/useTankTransform';
+import { Duel } from '../../../stores/duel';
 import { ModelTankWrapper } from './ModelTankWrapper';
 import { SpacedArmorSceneComponent } from './SpacedArmorSceneComponent';
 

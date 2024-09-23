@@ -1,12 +1,15 @@
 import { HeightIcon, WidthIcon } from '@radix-ui/react-icons';
 import { Flex, TextField } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
-import { degToRad, radToDeg } from 'three/src/math/MathUtils';
-import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
-import { modelTransformEvent, ModelTransformEventData } from '../../../../../../core/blitzkit/modelTransform';
-import { useEquipment } from '../../../../../../hooks/useEquipment';
-import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefinition';
-import * as Duel from '../../../../../../stores/duel';
+import { degToRad, radToDeg } from 'three/src/math/MathUtils.js';
+import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
+import {
+  type ModelTransformEventData,
+  modelTransformEvent,
+} from '../../../../../../../core/blitzkit/modelTransform';
+import { useEquipment } from '../../../../../../../hooks/useEquipment';
+import { useTankModelDefinition } from '../../../../../../../hooks/useTankModelDefinition';
+import { Duel } from '../../../../../../../stores/duel';
 import * as styles from './index.css';
 
 export function QuickInputs() {
@@ -22,13 +25,19 @@ export function QuickInputs() {
   const hasImprovedVerticalStabilizer = useEquipment(122);
 
   useEffect(() => {
-    yawInput.current!.value = radToDeg(protagonist.yaw).toFixed(1);
+    if (!yawInput.current) return;
+
+    yawInput.current.value = radToDeg(protagonist.yaw).toFixed(1);
   }, [protagonist.yaw]);
+
   useEffect(() => {
-    pitchInput.current!.value = (
+    if (!pitchInput.current) return;
+
+    pitchInput.current.value = (
       -radToDeg(protagonist.pitch) + initialGunPitch
     ).toFixed(1);
   }, [protagonist.pitch]);
+
   useEffect(() => {
     function handleTransformEvent({ pitch, yaw }: ModelTransformEventData) {
       if (!pitchInput.current || !yawInput.current) return;
@@ -66,10 +75,8 @@ export function QuickInputs() {
       <TextField.Root
         size="1"
         radius="full"
-        style={{
-          flex: 1,
-          textAlign: 'right',
-        }}
+        style={{ flex: 1, textAlign: 'right' }}
+        defaultValue="0.0"
         onBlur={() => {
           const value = Number(yawInput.current!.value);
           if (isNaN(value)) {
@@ -98,23 +105,17 @@ export function QuickInputs() {
         onFocus={() => yawInput.current?.focus()}
         ref={yawInput}
       >
-        <TextField.Slot
-          style={{
-            userSelect: 'none',
-          }}
-        >
+        <TextField.Slot style={{ userSelect: 'none' }}>
           <WidthIcon />
         </TextField.Slot>
-        <TextField.Slot style={{ userSelect: 'none' }}>°</TextField.Slot>
+        <TextField.Slot />
       </TextField.Root>
 
       <TextField.Root
         size="1"
         radius="full"
-        style={{
-          flex: 1,
-          textAlign: 'right',
-        }}
+        style={{ flex: 1, textAlign: 'right' }}
+        defaultValue="0.0"
         onBlur={() => {
           const value = Number(pitchInput.current!.value);
           if (isNaN(value)) {
@@ -154,13 +155,7 @@ export function QuickInputs() {
         >
           <HeightIcon />
         </TextField.Slot>
-        <TextField.Slot
-          style={{
-            userSelect: 'none',
-          }}
-        >
-          °
-        </TextField.Slot>
+        <TextField.Slot />
       </TextField.Root>
     </Flex>
   );

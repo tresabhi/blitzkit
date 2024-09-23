@@ -13,7 +13,6 @@
     "@blitzkit/core": "workspace:*",
     "fuzzysort": "^2.0.4",
     "@nivo/bar": "^0.87.0",
-    "three": "0.159.0",
     "lodash": "^4.17.21",
     "next": "^14.2.7",
     "three-stdlib": "^2.32.2",
@@ -26,13 +25,10 @@
     "react-dom": "^18.3.1",
     "react-fuzzysort": "^1.0.1",
     "immer": "^10.1.1",
-    "@vanilla-extract/dynamic": "^2.1.2",
+    "@vanilla-extract/dynamic": "^2.1.2"
   },
   "devDependencies": {
-    "@types/react-dom": "^18",
     "@types/lodash": "^4.17.7",
-    "@types/three": "^0.160.0",
-    "@vanilla-extract/next-plugin": "^2.4.5",
-    "@types/react": "^18.3.5"
+    "@vanilla-extract/next-plugin": "^2.4.5"
   }
 }

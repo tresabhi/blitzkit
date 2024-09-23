@@ -6,29 +6,29 @@ import {
   useImperativeHandle,
   useRef,
 } from 'react';
-import { Armor } from '../../../../../../components/Armor';
-import { ArmorPlateDisplay } from '../../../../../../components/Armor/components/ArmorPlateDisplay';
-import { ShotDisplay } from '../../../../../../components/Armor/components/ShotDisplay';
+import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
+import { modelTransformEvent } from '../../../../../core/blitzkit/modelTransform';
+import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
+import { useEquipment } from '../../../../../hooks/useEquipment';
+import { useOnScreen } from '../../../../../hooks/useOnScreen';
+import { useTankModelDefinition } from '../../../../../hooks/useTankModelDefinition';
+import { Duel } from '../../../../../stores/duel';
+import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
+import { TankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
+import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/constants';
+import { Armor } from '../../../../Armor';
+import { ArmorPlateDisplay } from '../../../../Armor/components/ArmorPlateDisplay';
+import { ShotDisplay } from '../../../../Armor/components/ShotDisplay';
 import {
   StaticArmor,
-  ThicknessRange,
-} from '../../../../../../components/Armor/components/StaticArmor';
-import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
-import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
-import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
-import { useEquipment } from '../../../../../../hooks/useEquipment';
-import { useOnScreen } from '../../../../../../hooks/useOnScreen';
-import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefinition';
-import * as Duel from '../../../../../../stores/duel';
-import * as TankopediaEphemeral from '../../../../../../stores/tankopediaEphemeral';
-import * as TankopediaPersistent from '../../../../../../stores/tankopediaPersistent';
-import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
-import { Controls } from '../../../../../../website-legacy/src/app/tools/tankopedia/[id]/components/Control';
-import { Lighting } from '../../../../../../website-legacy/src/app/tools/tankopedia/[id]/components/Lighting';
-import { SceneProps } from '../../../../../../website-legacy/src/app/tools/tankopedia/[id]/components/SceneProps';
-import { AutoClear } from '../../../../../../website-legacy/src/app/tools/tankopedia/[id]/components/Model/AutoClear';
-import { ModelLoader } from '../../../../../../website-legacy/src/app/tools/tankopedia/[id]/components/Model/components/ModelLoader';
-import { TankModel } from '../../../../../../website-legacy/src/app/tools/tankopedia/[id]/components/Model/components/TankModel';
+  type ThicknessRange,
+} from '../../../../Armor/components/StaticArmor';
+import { AutoClear } from './components/AutoClear';
+import { Controls } from './components/Control';
+import { Lighting } from './components/Lighting';
+import { ModelLoader } from './components/ModelLoader';
+import { SceneProps } from './components/SceneProps';
+import { TankModel } from './components/TankModel';
 
 interface TankSandboxProps {
   thicknessRange: ThicknessRange;
@@ -178,7 +178,6 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
         <Controls />
         <SceneProps />
         {display !== TankopediaDisplay.StaticArmor && <TankModel />}
-
         <ShotDisplay />
         <ArmorPlateDisplay />
         <AutoClear />

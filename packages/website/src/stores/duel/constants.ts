@@ -1,4 +1,4 @@
-import { EquipmentMatrix } from '.';
+import type { EquipmentMatrix } from '.';
 
 export const genericDefaultEquipmentMatrix: EquipmentMatrix = [
   [-1, 1, -1],

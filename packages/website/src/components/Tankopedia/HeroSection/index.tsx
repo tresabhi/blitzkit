@@ -4,6 +4,7 @@ import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { NAVBAR_HEIGHT } from '../../../constants/navbar';
 import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
+import { Duel } from '../../../stores/duel';
 import type { ThicknessRange } from '../../Armor/components/StaticArmor';
 import { classIcons } from '../../ClassIcon';
 import { Options } from './components/Options';
@@ -12,14 +13,10 @@ import { TankSandboxLoader } from './components/TankSandboxLoader';
 
 const awaitedTankDefinitions = await tankDefinitions;
 
-interface HeroSectionProps {
-  id: number;
-}
-
-export function HeroSection({ id }: HeroSectionProps) {
+export function HeroSection() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const isFullScreen = useFullScreen();
-  const protagonist = awaitedTankDefinitions[id];
+  const protagonist = Duel.use((state) => state.protagonist.tank);
   const Icon = classIcons[protagonist.class];
   const [dummyLoader, setDummyLoader] = useState(true);
   const treeColor =

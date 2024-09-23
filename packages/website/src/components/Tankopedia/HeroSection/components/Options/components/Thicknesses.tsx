@@ -1,11 +1,11 @@
 import { EyeClosedIcon, EyeOpenIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Box, Button, Checkbox, Flex, Text } from '@radix-ui/themes';
-import { ThicknessRange } from '../../../../../components/Armor/components/StaticArmor';
-import { useArmor } from '../../../../../hooks/useArmor';
-import * as Duel from '../../../../../stores/duel';
-import * as TankopediaEphemeral from '../../../../../stores/tankopediaEphemeral';
-import * as TankopediaPersistent from '../../../../../stores/tankopediaPersistent';
-import { DynamicArmorSwitcher } from './Model/components/Options/components/DynamicArmorSwitcher';
+import { useArmor } from '../../../../../../hooks/useArmor';
+import { Duel } from '../../../../../../stores/duel';
+import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
+import { TankopediaPersistent } from '../../../../../../stores/tankopediaPersistent';
+import type { ThicknessRange } from '../../../../../Armor/components/StaticArmor';
+import { DynamicArmorSwitcher } from './DynamicArmorSwitcher';
 
 interface ThicknessesProps {
   thicknessRange: ThicknessRange;
@@ -13,13 +13,13 @@ interface ThicknessesProps {
 
 export function Thicknesses({ thicknessRange }: ThicknessesProps) {
   const showExternalModules = TankopediaPersistent.use(
-    (state) => state.model.visual.showExternalModules,
+    (state) => state.showExternalModules,
   );
   const showSpacedArmor = TankopediaPersistent.use(
-    (state) => state.model.visual.showSpacedArmor,
+    (state) => state.showSpacedArmor,
   );
   const showPrimaryArmor = TankopediaPersistent.use(
-    (state) => state.model.visual.showPrimaryArmor,
+    (state) => state.showPrimaryArmor,
   );
   const mutateDuel = Duel.useMutation();
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
@@ -46,8 +46,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
         style={{ opacity: showPrimaryArmor ? 1 : 0.5, cursor: 'pointer' }}
         onClick={() => {
           mutateTankopediaPersistent((draft) => {
-            draft.model.visual.showPrimaryArmor =
-              !draft.model.visual.showPrimaryArmor;
+            draft.showPrimaryArmor = !draft.showPrimaryArmor;
           });
           mutateTankopediaEphemeral((draft) => {
             draft.highlightArmor = undefined;
@@ -83,8 +82,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
         style={{ opacity: showSpacedArmor ? 1 : 0.5, cursor: 'pointer' }}
         onClick={() => {
           mutateTankopediaPersistent((draft) => {
-            draft.model.visual.showSpacedArmor =
-              !draft.model.visual.showSpacedArmor;
+            draft.showSpacedArmor = !draft.showSpacedArmor;
           });
           mutateTankopediaEphemeral((draft) => {
             draft.highlightArmor = undefined;
@@ -119,8 +117,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
         style={{ opacity: showExternalModules ? 1 : 0.5, cursor: 'pointer' }}
         onClick={() => {
           mutateTankopediaPersistent((draft) => {
-            draft.model.visual.showExternalModules =
-              !draft.model.visual.showExternalModules;
+            draft.showExternalModules = !draft.showExternalModules;
           });
           mutateTankopediaEphemeral((draft) => {
             draft.highlightArmor = undefined;

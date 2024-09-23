@@ -1,19 +1,19 @@
 import { normalizeAngleRad } from '@blitzkit/core';
-import { invalidate, ThreeEvent, useThree } from '@react-three/fiber';
+import { invalidate, useThree, type ThreeEvent } from '@react-three/fiber';
 import { memo, useRef } from 'react';
 import { Group, Mesh, MeshStandardMaterial, Vector2 } from 'three';
-import { ModelTankWrapper } from '../../../../../../../components/Armor/components/ModelTankWrapper';
-import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
-import { hasEquipment } from '../../../../../../../core/blitzkit/hasEquipment';
-import { jsxTree } from '../../../../../../../core/blitzkit/jsxTree';
-import { modelTransformEvent } from '../../../../../../../core/blitzkit/modelTransform';
-import { useModel } from '../../../../../../../hooks/useModel';
-import { useTankModelDefinition } from '../../../../../../../hooks/useTankModelDefinition';
-import { useTankTransform } from '../../../../../../../hooks/useTankTransform';
-import * as Duel from '../../../../../../../stores/duel';
-import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
-import * as TankopediaPersistent from '../../../../../../../stores/tankopediaPersistent';
-import { TankopediaDisplay } from '../../../../../../../stores/tankopediaPersistent/constants';
+import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
+import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
+import { jsxTree } from '../../../../../../core/blitzkit/jsxTree';
+import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
+import { useModel } from '../../../../../../hooks/useModel';
+import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefinition';
+import { useTankTransform } from '../../../../../../hooks/useTankTransform';
+import { Duel } from '../../../../../../stores/duel';
+import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
+import { TankopediaPersistent } from '../../../../../../stores/tankopediaPersistent';
+import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
+import { ModelTankWrapper } from '../../../../../Armor/components/ModelTankWrapper';
 
 export const TankModel = memo(() => {
   const mutateDuel = Duel.useMutation();

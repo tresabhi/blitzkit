@@ -1,7 +1,7 @@
 import type { HTMLAttributes } from 'react';
 import {
   TankComponentButton,
-  TankComponentButtonProps,
+  type TankComponentButtonProps,
 } from './TankComponentButton';
 
 interface GenericTankComponentButtonProps extends TankComponentButtonProps {

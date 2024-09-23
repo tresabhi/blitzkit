@@ -1,17 +1,11 @@
-import {
-  Card,
-  CardProps,
-  Flex,
-  Inset,
-  Separator,
-  Text,
-} from '@radix-ui/themes';
+import { Flex, Text } from '@radix-ui/themes';
 import type { ComponentProps } from 'react';
-import { radToDeg } from 'three/src/math/MathUtils';
-import * as TankopediaEphemeral from '../../../../../website-legacy/src/stores/tankopediaEphemeral';
-import { shotStatusColors } from './ShotDisplay';
+import type {
+  ShotLayer,
+  ShotStatus,
+} from '../../../stores/tankopediaEphemeral';
 import { ArmorType } from './SpacedArmorScene';
-import { ExternalModuleVariant } from './SpacedArmorSceneComponent';
+import type { ExternalModuleVariant } from './SpacedArmorSceneComponent';
 
 export const layerTypeNames: Record<ArmorType | 'null', string> = {
   [ArmorType.Primary]: 'Primary',
@@ -25,7 +19,7 @@ const externalLayerNames: Record<ExternalModuleVariant, string> = {
   track: 'Tracks',
 };
 
-const shotStatusNames: Record<TankopediaEphemeral.ShotStatus, string> = {
+const shotStatusNames: Record<ShotStatus, string> = {
   blocked: 'Blocked',
   ricochet: 'Ricochet',
   penetration: 'penetration',
@@ -42,7 +36,7 @@ function LayerEntry({
   layerIndex?: string;
   shotStatusColor: ComponentProps<typeof Text>['color'];
   layerName: string;
-  layer: TankopediaEphemeral.ShotLayer;
+  layer: ShotLayer;
   angle?: number;
 }) {
   return (
@@ -95,7 +89,7 @@ function LayerEntry({
 }
 
 interface ShotDisplayCardProps extends CardProps {
-  shot: TankopediaEphemeral.Shot;
+  shot: Shot;
 }
 
 export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {

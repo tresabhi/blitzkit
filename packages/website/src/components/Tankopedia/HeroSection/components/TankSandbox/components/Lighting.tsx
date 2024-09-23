@@ -1,17 +1,15 @@
 import { Environment } from '@react-three/drei';
-import { useModel } from '../../../../../hooks/useModel';
-import * as Duel from '../../../../../stores/duel';
-import * as TankopediaPersistent from '../../../../../stores/tankopediaPersistent';
+import { useModel } from '../../../../../../hooks/useModel';
+import { Duel } from '../../../../../../stores/duel';
+import { TankopediaPersistent } from '../../../../../../stores/tankopediaPersistent';
 
 export function Lighting() {
   const protagonist = Duel.use((state) => state.protagonist);
   const { hasPbr } = useModel(protagonist.tank.id);
   const showEnvironment = TankopediaPersistent.use(
-    (state) => state.model.visual.showEnvironment,
+    (state) => state.showEnvironment,
   );
-  const environment = TankopediaPersistent.use(
-    (state) => state.model.visual.environment,
-  );
+  const environment = TankopediaPersistent.use((state) => state.environment);
 
   return (
     <>

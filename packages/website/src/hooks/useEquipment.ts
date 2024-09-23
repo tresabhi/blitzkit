@@ -1,6 +1,6 @@
 import { equipmentDefinitions } from '@blitzkit/core';
 import { useMemo } from 'react';
-import * as Duel from '../stores/duel';
+import { Duel } from '../stores/duel';
 
 const awaitedEquipmentDefinitions = await equipmentDefinitions;
 

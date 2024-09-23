@@ -1,8 +1,8 @@
 import type { ModelDefinition } from '@blitzkit/core';
-import { Vector3 } from 'three';
+import type { Vector3 } from 'three';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import { ArmorType } from '../components/Armor/components/SpacedArmorScene';
+import type { ArmorType } from '../components/Armor/components/SpacedArmorScene';
 import type { ExternalModuleVariant } from '../components/Armor/components/SpacedArmorSceneComponent';
 import type { XP_MULTIPLIERS } from '../components/Tankopedia/TechTreeSection';
 import { createContextualStore } from '../core/zustand/createContextualStore';
@@ -66,19 +66,6 @@ export type ArmorPiercingLayer =
       gap: number;
     };
 
-export const TankopediaEphemeral = createContextualStore(
-  (model: ModelDefinition) =>
-    create<TankopediaEphemeral>()(
-      subscribeWithSelector<TankopediaEphemeral>(() => ({
-        editStatic: false,
-        skills: {},
-        model,
-        controlsEnabled: true,
-        xpMultiplier: 1,
-      })),
-    ),
-);
-
 interface TankopediaEphemeral {
   shot?: Shot;
   skills: Record<string, number>;
@@ -101,3 +88,16 @@ interface TankopediaEphemeral {
   );
   xpMultiplier: (typeof XP_MULTIPLIERS)[number];
 }
+
+export const TankopediaEphemeral = createContextualStore(
+  (model: ModelDefinition) =>
+    create<TankopediaEphemeral>()(
+      subscribeWithSelector<TankopediaEphemeral>(() => ({
+        editStatic: false,
+        skills: {},
+        model,
+        controlsEnabled: true,
+        xpMultiplier: 1,
+      })),
+    ),
+);
