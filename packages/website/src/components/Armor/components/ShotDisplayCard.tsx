@@ -1,9 +1,19 @@
-import { Flex, Text } from '@radix-ui/themes';
+import {
+  Card,
+  Flex,
+  Inset,
+  Separator,
+  Text,
+  type CardProps,
+} from '@radix-ui/themes';
 import type { ComponentProps } from 'react';
+import { radToDeg } from 'three/src/math/MathUtils.js';
 import type {
+  Shot,
   ShotLayer,
   ShotStatus,
 } from '../../../stores/tankopediaEphemeral';
+import { shotStatusColors } from './ShotDisplay';
 import { ArmorType } from './SpacedArmorScene';
 import type { ExternalModuleVariant } from './SpacedArmorSceneComponent';
 

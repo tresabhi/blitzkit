@@ -1,6 +1,6 @@
 import { resolveNearPenetration, tankDefinitions } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useEffect, useMemo, useRef } from 'react';
 import { NAVBAR_HEIGHT } from '../../../constants/navbar';
 import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
@@ -18,7 +18,7 @@ export function HeroSection() {
   const isFullScreen = useFullScreen();
   const protagonist = Duel.use((state) => state.protagonist.tank);
   const Icon = classIcons[protagonist.class];
-  const [dummyLoader, setDummyLoader] = useState(true);
+  // const [dummyLoader, setDummyLoader] = useState(true);
   const treeColor =
     protagonist.treeType === 'collector'
       ? 'blue'
@@ -46,7 +46,7 @@ export function HeroSection() {
   }, [protagonist]);
 
   useEffect(() => {
-    setDummyLoader(false);
+    // setDummyLoader(false);
   }, []);
 
   return (
@@ -109,19 +109,7 @@ export function HeroSection() {
         >
           <Box position="absolute" width="100%" height="100%">
             <Box width="100%" height="100%">
-              <TankSandboxLoader
-                id={protagonist.id}
-                display={dummyLoader ? 'flex' : 'none'}
-              />
-
-              <Suspense
-                fallback={
-                  <TankSandboxLoader
-                    id={protagonist.id}
-                    display={dummyLoader ? 'none' : 'flex'}
-                  />
-                }
-              >
+              <Suspense fallback={<TankSandboxLoader id={protagonist.id} />}>
                 <TankSandbox ref={canvas} thicknessRange={thicknessRange} />
               </Suspense>
             </Box>

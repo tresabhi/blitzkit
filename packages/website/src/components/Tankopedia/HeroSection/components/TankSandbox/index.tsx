@@ -45,7 +45,10 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
     const turretModelDefinition =
       tankModelDefinition.turrets[protagonist.turret.id];
     const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
-    const display = TankopediaPersistent.use((state) => state.display);
+    const display = TankopediaPersistent.useDeferred(
+      (state) => state.display,
+      TankopediaDisplay.Model,
+    );
     const onScreen = useOnScreen(canvas);
 
     useImperativeHandle(ref, () => canvas.current!, []);

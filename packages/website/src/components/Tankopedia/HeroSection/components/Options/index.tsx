@@ -53,7 +53,10 @@ interface OptionsProps {
 }
 
 export function Options({ thicknessRange, canvas }: OptionsProps) {
-  const display = TankopediaPersistent.use((state) => state.display);
+  const display = TankopediaPersistent.useDeferred(
+    (state) => state.display,
+    TankopediaDisplay.Model,
+  );
   const isFullScreen = useFullScreen();
   const showGrid = TankopediaPersistent.use((state) => state.showGrid);
   const showEnvironment = TankopediaPersistent.use(

@@ -123,8 +123,8 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
             return null;
 
           return (
-            <group position={hullOrigin}>
-              <group key={node.uuid} position={turretOrigin}>
+            <group position={hullOrigin} key={node.uuid}>
+              <group position={turretOrigin}>
                 <SpacedArmorSceneComponent
                   scene={scene}
                   key={node.uuid}
@@ -158,11 +158,8 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
               return null;
 
             return (
-              <group position={hullOrigin}>
-                <group
-                  key={node.uuid}
-                  position={turretOrigin.clone().add(gunOrigin)}
-                >
+              <group position={hullOrigin} key={node.uuid}>
+                <group position={turretOrigin.clone().add(gunOrigin)}>
                   <SpacedArmorSceneComponent
                     scene={scene}
                     type={spaced ? ArmorType.Spaced : ArmorType.Primary}

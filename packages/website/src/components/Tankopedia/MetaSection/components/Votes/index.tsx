@@ -1,10 +1,11 @@
 import { formatCompact } from '@blitzkit/core';
+import { useStore } from '@nanostores/react';
 import { Flex, Heading, Skeleton, Text } from '@radix-ui/themes';
 import { memo } from 'react';
-import { WargamingLoginButton } from '../../../../../../../../../components/Navbar/components/WargamingLoginButton';
-import { useTankVotes } from '../../../../../../../../../hooks/useTankVotes';
-import * as App from '../../../../../../../../../stores/app';
-import * as Duel from '../../../../../../../../../stores/duel';
+import { useTankVotes } from '../../../../../hooks/useTankVotes';
+import { Duel } from '../../../../../stores/duel';
+import { $wargamingLogin } from '../../../../../stores/wargamingLogin';
+import { WargamingLoginButton } from '../../../../WargamingLoginButton';
 import { StarRow } from './components/StarRow';
 import { VoteCaster } from './components/VoteCaster';
 
@@ -12,10 +13,7 @@ export const Votes = memo(
   () => {
     const id = Duel.use((state) => state.protagonist.tank.id);
     const votes = useTankVotes(id);
-    const wargaming = App.useDeferred(
-      undefined,
-      (state) => state.logins.wargaming,
-    );
+    const wargaming = useStore($wargamingLogin);
 
     return (
       <Flex direction="column" gap="3">

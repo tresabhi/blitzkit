@@ -1,7 +1,5 @@
 import { EyeClosedIcon, EyeOpenIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Box, Button, Checkbox, Flex, Text } from '@radix-ui/themes';
-import { useArmor } from '../../../../../../hooks/useArmor';
-import { Duel } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../../stores/tankopediaPersistent';
 import type { ThicknessRange } from '../../../../../Armor/components/StaticArmor';
@@ -21,13 +19,10 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
   const showPrimaryArmor = TankopediaPersistent.use(
     (state) => state.showPrimaryArmor,
   );
-  const mutateDuel = Duel.useMutation();
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const editStatic = TankopediaEphemeral.use((state) => state.editStatic);
-  const protagonistTank = Duel.use((state) => state.protagonist.tank);
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
-  const { hasDynamicArmor } = useArmor(protagonistTank.id);
 
   return (
     <Flex

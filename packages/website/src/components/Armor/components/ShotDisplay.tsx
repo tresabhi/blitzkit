@@ -1,5 +1,5 @@
-import { K_HAT } from '@blitzkit/core';
-import { Box, Text } from '@radix-ui/themes';
+import { J_HAT, K_HAT } from '@blitzkit/core';
+import { Box, Flex, Text } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { clamp } from 'lodash-es';
@@ -183,7 +183,7 @@ export function ShotDisplay() {
         </Box>
       </Html>
 
-      {/* {[...shot.in.layers, ...(shot.out?.layers ?? [])].map((layer, index) => {
+      {[...shot.in.layers, ...(shot.out?.layers ?? [])].map((layer, index) => {
         if (layer.type === null) return null;
 
         const shotStatusColor =
@@ -276,7 +276,7 @@ export function ShotDisplay() {
             />
           </mesh>
         </group>
-      )} */}
+      )}
     </group>
   );
 }

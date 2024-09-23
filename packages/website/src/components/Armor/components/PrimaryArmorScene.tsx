@@ -87,8 +87,8 @@ export const PrimaryArmorScene = memo(() => {
             return null;
 
           return (
-            <group position={hullOrigin}>
-              <group key={node.uuid} position={turretOrigin}>
+            <group position={hullOrigin} key={node.uuid}>
+              <group position={turretOrigin}>
                 <PrimaryArmorSceneComponent
                   key={node.uuid}
                   thickness={thickness}
@@ -121,11 +121,8 @@ export const PrimaryArmorScene = memo(() => {
               return null;
 
             return (
-              <group position={hullOrigin}>
-                <group
-                  key={node.uuid}
-                  position={turretOrigin.clone().add(gunOrigin)}
-                >
+              <group position={hullOrigin} key={node.uuid}>
+                <group position={turretOrigin.clone().add(gunOrigin)}>
                   <PrimaryArmorSceneComponent
                     thickness={thickness}
                     node={node}

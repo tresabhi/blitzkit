@@ -58,8 +58,8 @@ export function createContextualStore<
   }
 
   function useDeferred<Slice = Type>(
-    initial: Slice,
     selector: (store: Type) => Slice = (state) => state as Slice,
+    initial: Slice,
   ) {
     const [state, setState] = useState(initial);
     const trueState = use(selector);

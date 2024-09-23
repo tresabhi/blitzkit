@@ -6,23 +6,22 @@ import {
 } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
 import { ChevronLeftIcon, MixIcon, UpdateIcon } from '@radix-ui/react-icons';
-import { Button, Code, Dialog, Flex } from '@radix-ui/themes';
+import { Button, Code, Dialog, Flex, Link } from '@radix-ui/themes';
 import { useState } from 'react';
-import { classIcons } from '../../../../../../../components/ClassIcon';
-import { Link } from '../../../../../../../components/Link';
-import { ScienceIcon } from '../../../../../../../components/ScienceIcon';
-import { tankToDuelMember } from '../../../../../../../core/blitzkit/tankToDuelMember';
-import * as App from '../../../../../../../stores/app';
-import * as Duel from '../../../../../../../stores/duel';
-import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
-import { TankSearch } from '../../../../components/TankSearch';
+import { tankToDuelMember } from '../../../core/blitzkit/tankToDuelMember';
+import { App } from '../../../stores/app';
+import { Duel } from '../../../stores/duel';
+import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
+import { classIcons } from '../../ClassIcon';
+import { ScienceIcon } from '../../ScienceIcon';
+import { TankSearch } from '../../TankSearch';
 import { Listing } from './components/Listing';
 
 const awaitedProvisionDefinitions = await provisionDefinitions;
 const awaitedModelDefinitions = await modelDefinitions;
 
 export function MetaSection() {
-  const developerMode = App.useDeferred(false, (state) => state.developerMode);
+  const developerMode = App.useDeferred((state) => state.developerMode, false);
   const protagonist = Duel.use((state) => state.protagonist.tank);
   const ClassIcon = classIcons[protagonist.class];
   const antagonist = Duel.use((state) => state.antagonist.tank);
