@@ -1,9 +1,10 @@
-import { asset, consumableDefinitions } from '@blitzkit/core';
+import { asset } from '@blitzkit/core';
+import { consumableDefinitions } from '@blitzkit/core/src/blitzkit/consumableDefinitions';
 import { ClockIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Flex, Text } from '@radix-ui/themes';
-import { useDelta } from '../../../../website-legacy/src/hooks/useDelta';
+import { useDelta } from '../../hooks/useDelta';
 import { GenericTankComponentButton } from './GenericTankComponentButton';
-import { TankComponentButtonProps } from './TankComponentButton';
+import type { TankComponentButtonProps } from './TankComponentButton';
 
 interface ConsumableButtonProps extends TankComponentButtonProps {
   consumable: number;

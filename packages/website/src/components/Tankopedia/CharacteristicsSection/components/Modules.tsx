@@ -1,14 +1,14 @@
 import {
   asset,
   formatCompact,
-  ModuleDefinition,
-  ModuleType,
-  TankDefinition,
   tankDefinitions,
   tankIcon,
-  Tier,
   TIER_ROMAN_NUMERALS,
-  Unlock,
+  type ModuleDefinition,
+  type ModuleType,
+  type TankDefinition,
+  type Tier,
+  type Unlock,
 } from '@blitzkit/core';
 import {
   Button,
@@ -19,9 +19,8 @@ import {
   Link,
   Text,
 } from '@radix-ui/themes';
-import { use } from 'react';
-import * as Duel from '../../../../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
+import { Duel } from '../../../../stores/duel';
 
 function ModuleButton({
   tier,
@@ -112,9 +111,10 @@ function ModuleButton({
   );
 }
 
+const awaitedTankDefinitions = await tankDefinitions;
+
 export function Modules() {
   const mutateDuel = Duel.useMutation();
-  const awaitedTankDefinitions = use(tankDefinitions);
   const tank = Duel.use((state) => state.protagonist.tank);
   const hasUpgrades =
     tank.turrets.length > 1 ||
@@ -264,23 +264,23 @@ export function Modules() {
                   (unlock.type === 'turret'
                     ? turret.id
                     : unlock.type === 'gun'
-                    ? gun.id
-                    : unlock.type === 'engine'
-                    ? engine.id
-                    : unlock.type === 'chassis'
-                    ? track.id
-                    : -1) === unlock.id
+                      ? gun.id
+                      : unlock.type === 'engine'
+                        ? engine.id
+                        : unlock.type === 'chassis'
+                          ? track.id
+                          : -1) === unlock.id
                 }
                 top={
                   unlock.type === 'turret'
                     ? module.id == topTurret.id
                     : unlock.type === 'gun'
-                    ? module.id === topGun.id
-                    : unlock.type === 'engine'
-                    ? module.id === topEngine.id
-                    : unlock.type === 'chassis'
-                    ? module.id === topTrack.id
-                    : false
+                      ? module.id === topGun.id
+                      : unlock.type === 'engine'
+                        ? module.id === topEngine.id
+                        : unlock.type === 'chassis'
+                          ? module.id === topTrack.id
+                          : false
                 }
                 onClick={() => setByUnlock(unlock)}
               />

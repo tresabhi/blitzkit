@@ -51,7 +51,7 @@ export function MetaSection() {
             </Button>
           </Link>
 
-          {assertSecret(process.env.PUBLIC_PROMOTE_OPENTEST) === 'true' && (
+          {assertSecret(import.meta.env.PUBLIC_PROMOTE_OPENTEST) === 'true' && (
             <Link
               href={`https://opentest.blitzkit.app/tools/tankopedia/${protagonist.id}`}
             >

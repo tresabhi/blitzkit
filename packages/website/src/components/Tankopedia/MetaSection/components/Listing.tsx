@@ -1,4 +1,4 @@
-import { Flex, Text, TextProps } from '@radix-ui/themes';
+import { Flex, Text, type TextProps } from '@radix-ui/themes';
 
 type ListingProps = TextProps & {
   label: string;

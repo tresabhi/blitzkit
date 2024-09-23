@@ -4,7 +4,15 @@ import {
   tankDefinitions,
 } from '@blitzkit/core';
 import { PageWrapper } from '../../../../components/PageWrapper';
+import { CalloutsSection } from '../../../../components/Tankopedia/CalloutsSection';
+import { CharacteristicsSection } from '../../../../components/Tankopedia/CharacteristicsSection';
+import { GameModeSection } from '../../../../components/Tankopedia/GameModeSection';
 import { HeroSection } from '../../../../components/Tankopedia/HeroSection';
+import { HistorySection } from '../../../../components/Tankopedia/HistorySection';
+import { MetaSection } from '../../../../components/Tankopedia/MetaSection';
+import { ShotDisplaySection } from '../../../../components/Tankopedia/ShotDisplaySection';
+import { TechTreeSection } from '../../../../components/Tankopedia/TechTreeSection';
+import { VideoSection } from '../../../../components/Tankopedia/VideoSection';
 import { App } from '../../../../stores/app';
 import { Duel } from '../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
@@ -31,17 +39,17 @@ export function Page({ id }: PageProps) {
           >
             <PageWrapper p="0" noMaxWidth color="purple" size={1600} gap="9">
               <HeroSection />
-              {/* <ShotDisplaySection />
-      <MetaSection />
-      <TechTreeSection />
-      {!exempt && <AdMidSectionResponsive />}
-      <CalloutsSection />
-      <CharacteristicsSection />
-      {!exempt && <AdMidSectionResponsive />}
-      <GameModeSection />
-      <VideoSection />
-      <HistorySection />
-      {!exempt && <AdMidSectionResponsive mb="6" />} */}
+              <ShotDisplaySection />
+              <CalloutsSection />
+              <MetaSection />
+              <TechTreeSection />
+              {/* {!exempt && <AdMidSectionResponsive />} */}
+              <CharacteristicsSection />
+              {/* {!exempt && <AdMidSectionResponsive />} */}
+              <GameModeSection />
+              <VideoSection />
+              <HistorySection />
+              {/* {!exempt && <AdMidSectionResponsive mb="6" />} */}
             </PageWrapper>
           </Duel.Provider>
         </TankopediaPersistent.Provider>

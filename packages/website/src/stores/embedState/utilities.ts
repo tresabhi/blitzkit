@@ -1,7 +1,6 @@
-import { TextProps } from '@radix-ui/themes';
-import { EmbedConfig } from '.';
-import * as EmbedState from './';
-import { EmbedConfigItemType, EmbedItemType } from './constants';
+import type { TextProps } from '@radix-ui/themes';
+import type { EmbedConfig } from '.';
+import type { EmbedConfigItemType, EmbedItemType } from './constants';
 
 export function useEmbedStateCurry<Config extends EmbedConfig>() {
   function useState<Key extends keyof Config>(key: Key) {

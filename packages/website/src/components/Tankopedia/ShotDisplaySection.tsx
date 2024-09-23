@@ -1,9 +1,9 @@
 import { Flex } from '@radix-ui/themes';
-import { ShotDisplayCard } from '../../../../../components/Armor/components/ShotDisplayCard';
-import * as TankEphemeral from '../../../../../stores/tankopediaEphemeral';
+import { TankopediaEphemeral } from '../../stores/tankopediaEphemeral';
+import { ShotDisplayCard } from '../Armor/components/ShotDisplayCard';
 
 export function ShotDisplaySection() {
-  const shot = TankEphemeral.use((state) => state.shot);
+  const shot = TankopediaEphemeral.use((state) => state.shot);
 
   if (!shot) return null;
 

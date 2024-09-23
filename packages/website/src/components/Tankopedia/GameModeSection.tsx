@@ -5,7 +5,7 @@ import {
   provisionDefinitions,
 } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
-import * as Duel from '../../../../../../stores/duel';
+import { Duel } from '../../stores/duel';
 
 const awaitedGameDefinitions = await gameDefinitions;
 const awaitedConsumableDefinitions = await consumableDefinitions;

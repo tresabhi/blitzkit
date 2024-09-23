@@ -20,16 +20,19 @@ import {
   Tooltip,
 } from '@radix-ui/themes';
 import { debounce } from 'lodash-es';
-import { Fragment, useEffect, useRef, useState } from 'react';
-import { Ad, AdType } from '../../../../../../../../website/src/components/Ad';
-import { InfoWithDelta } from '../../../../../../../../website/src/components/Tankopedia/CharacteristicsSection/components/Characteristics/components/InfoWithDelta';
-import { applyPitchYawLimits } from '../../../../../../../../website/src/core/blitz/applyPitchYawLimits';
-import { useAdExempt } from '../../../../../../../../website/src/hooks/useAdExempt';
-import { useEquipment } from '../../../../../../../../website/src/hooks/useEquipment';
-import { useTankModelDefinition } from '../../../../../../../../website/src/hooks/useTankModelDefinition';
-import { Duel } from '../../../../../../../../website/src/stores/duel';
-import { TankopediaEphemeral } from '../../../../../../../../website/src/stores/tankopediaEphemeral';
-import { Info } from '../../../../performance/components/Info';
+import { useEffect, useRef, useState } from 'react';
+import { Fragment } from 'react/jsx-runtime';
+import { lerp } from 'three/src/math/MathUtils.js';
+import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
+import { tankCharacteristics } from '../../../../../core/blitzkit/tankCharacteristics';
+import { useAdExempt } from '../../../../../hooks/useAdExempt';
+import { useEquipment } from '../../../../../hooks/useEquipment';
+import { useTankModelDefinition } from '../../../../../hooks/useTankModelDefinition';
+import { Duel } from '../../../../../stores/duel';
+import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
+import { Ad, AdType } from '../../../../Ad';
+import { Info } from './components/Info';
+import { InfoWithDelta } from './components/InfoWithDelta';
 
 const awaitedEquipmentDefinitions = await equipmentDefinitions;
 const awaitedProvisionDefinitions = await provisionDefinitions;

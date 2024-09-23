@@ -9,13 +9,13 @@ import {
   Popover,
   Text,
 } from '@radix-ui/themes';
-import { use } from 'react';
-import { CrewSkillManager } from '../../../../../../../../components/CrewSkillManager';
-import * as TankopediaEphemeral from '../../../../../../../../stores/tankopediaEphemeral';
-import { ConfigurationChildWrapper } from '../ConfigurationChildWrapper';
+import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
+import { CrewSkillManager } from '../../../CrewSkillManager';
+import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
+
+const awaitedSkillDefinitions = await skillDefinitions;
 
 export function Skills() {
-  const awaitedSkillDefinitions = use(skillDefinitions);
   const skillLevels = TankopediaEphemeral.use((state) => state.skills);
   const mutateTankopediaTemporary = TankopediaEphemeral.useMutation();
 

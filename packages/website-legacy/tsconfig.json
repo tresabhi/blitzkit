@@ -18,5 +18,5 @@
     "../website/src/components/Tankopedia/HistorySection.tsx",
     "../website/src/components/Tankopedia/CalloutsSection.tsx",
     "../website/src/components/Tankopedia/ShotDisplaySection.tsx"
-  ]
+, "../website/src/components/Tankopedia/CharacteristicsSection/components/ConfigurationChildWrapper.tsx", "../website/src/components/Tankopedia/VideoSection.tsx"  ]
 }

@@ -1,6 +1,6 @@
 import { Heading, Text } from '@radix-ui/themes';
-import { PageWrapper } from '../../../../../components/PageWrapper';
-import * as Duel from '../../../../../stores/duel';
+import { Duel } from '../../stores/duel';
+import { PageWrapper } from '../PageWrapper';
 
 export function HistorySection() {
   const tank = Duel.use((state) => state.protagonist.tank);

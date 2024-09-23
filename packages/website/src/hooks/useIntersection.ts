@@ -1,4 +1,4 @@
-import { type RefObject, useLayoutEffect, useRef } from 'react';
+import { type RefObject, useEffect, useRef } from 'react';
 
 interface UseIntersectionOptions extends IntersectionObserverInit {
   disabled: boolean;
@@ -11,7 +11,7 @@ export function useIntersection(
 ) {
   const observer = useRef<IntersectionObserver>();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (options?.disabled || !ref.current) return;
 
     const rect = ref.current.getBoundingClientRect();

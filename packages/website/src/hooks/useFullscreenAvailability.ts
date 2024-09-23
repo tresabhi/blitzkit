@@ -1,9 +1,9 @@
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function useFullscreenAvailability() {
   const [available, setAvailable] = useState(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setAvailable(document.fullscreenEnabled);
   }, []);
 

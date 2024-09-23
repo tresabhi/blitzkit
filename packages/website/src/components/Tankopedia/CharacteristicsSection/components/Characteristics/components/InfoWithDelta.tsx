@@ -1,5 +1,5 @@
-import { useDelta } from '../../../../../../../hooks/useDelta';
-import { Info, InfoProps } from './Info';
+import { useDelta } from '../../../../../../hooks/useDelta';
+import { type InfoProps, Info } from './Info';
 
 interface InfoWithDeltaProps extends InfoProps {
   children: number;

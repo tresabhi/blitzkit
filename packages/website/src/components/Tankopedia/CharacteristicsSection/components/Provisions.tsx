@@ -1,15 +1,15 @@
 import { availableProvisions, provisionDefinitions } from '@blitzkit/core';
 import { Button, Flex, Heading } from '@radix-ui/themes';
-import { use } from 'react';
-import { ProvisionsManager } from '../../../../../../../components/ProvisionsManager';
-import * as Duel from '../../../../../../../stores/duel';
+import { Duel } from '../../../../stores/duel';
+import { ProvisionsManager } from '../../../ProvisionsManager';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
+
+const awaitedProvisionDefinitions = await provisionDefinitions;
 
 export function Provisions() {
   const mutateDuel = Duel.useMutation();
   const { tank, gun } = Duel.use((state) => state.protagonist);
   const provisions = Duel.use((state) => state.protagonist.provisions);
-  const awaitedProvisionDefinitions = use(provisionDefinitions);
   const provisionsList = availableProvisions(
     tank,
     gun,

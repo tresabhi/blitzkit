@@ -65,7 +65,7 @@ export const averageDefinitionsArray = averageDefinitions.then((data) =>
         ({
           id: Number(key),
           ...(value as AverageDefinitionsEntry),
-        } satisfies AverageDefinitionsEntryWithId),
+        }) satisfies AverageDefinitionsEntryWithId,
     )
     .filter((tank) => tank.mu.battles > 0),
 );

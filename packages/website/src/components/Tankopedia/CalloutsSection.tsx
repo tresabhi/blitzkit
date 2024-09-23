@@ -1,7 +1,7 @@
 import { MinusCircledIcon } from '@radix-ui/react-icons';
 import { Callout, Flex } from '@radix-ui/themes';
-import { ExperimentIcon } from '../../../../../components/ExperimentIcon';
-import * as Duel from '../../../../../stores/duel';
+import { Duel } from '../../stores/duel';
+import { ExperimentIcon } from '../ExperimentIcon';
 
 export function CalloutsSection() {
   const tank = Duel.use((state) => state.protagonist.tank);

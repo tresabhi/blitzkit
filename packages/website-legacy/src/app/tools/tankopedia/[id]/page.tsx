@@ -15,7 +15,7 @@ import { PageWrapper } from '../../../../components/PageWrapper';
 import { useAdExempt } from '../../../../hooks/useAdExempt';
 import * as Duel from '../../../../stores/duel';
 import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
-import { VideoSection } from './components/VideoSection';
+import { VideoSection } from '../../../../../../website/src/components/Tankopedia/VideoSection';
 
 export default function Page() {
   const exempt = useAdExempt();

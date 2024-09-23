@@ -1,6 +1,6 @@
 import { asset, provisionDefinitions } from '@blitzkit/core';
 import { GenericTankComponentButton } from './GenericTankComponentButton';
-import { TankComponentButtonProps } from './TankComponentButton';
+import type { TankComponentButtonProps } from './TankComponentButton';
 
 interface ProvisionButtonProps extends TankComponentButtonProps {
   provision: number;

@@ -2,8 +2,8 @@ import { asset } from '@blitzkit/core';
 import { Flex, Heading, Slider, TextField } from '@radix-ui/themes';
 import { clamp, debounce } from 'lodash-es';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { GenericTankComponentButton } from '../../../../../../../components/ModuleButtons/GenericTankComponentButton';
-import * as Duel from '../../../../../../../stores/duel';
+import { Duel } from '../../../../stores/duel';
+import { GenericTankComponentButton } from '../../../ModuleButtons/GenericTankComponentButton';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 export function Miscellaneous() {

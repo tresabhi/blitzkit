@@ -2,8 +2,8 @@ import { asset, imgur, tankDefinitions } from '@blitzkit/core';
 import { CaretLeftIcon, CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, IconButton, ScrollArea, Text } from '@radix-ui/themes';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
-import * as Duel from '../../../../../../../stores/duel';
-import * as TankopediaEphemeral from '../../../../../../../stores/tankopediaEphemeral';
+import { Duel } from '../../../stores/duel';
+import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import { Arrow } from './components/Arrow';
 import { Node } from './components/Node';
 
@@ -168,6 +168,7 @@ export function TechTreeSection() {
             return (
               <Fragment key={id}>
                 {index > 0 && <Arrow key={`${id}-arrow`} />}
+
                 <Node
                   key={`${id}-node`}
                   id={id}

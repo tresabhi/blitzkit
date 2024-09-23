@@ -1,5 +1,5 @@
 import { useStore } from '@nanostores/react';
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { $patreonLogin } from '../stores/patreonLogin';
 
 let cache: Record<string, boolean | Promise<boolean>> = {};
@@ -8,7 +8,7 @@ export function useAdExempt() {
   const patreon = useStore($patreonLogin);
   const [exempt, setExempt] = useState(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     (async () => {
       if (!patreon.token) return setExempt(false);
 

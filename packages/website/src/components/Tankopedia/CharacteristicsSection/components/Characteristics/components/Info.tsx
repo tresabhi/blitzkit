@@ -1,6 +1,6 @@
 import { CaretDownIcon, CaretUpIcon } from '@radix-ui/react-icons';
-import { Flex, Text } from '@radix-ui/themes';
-import { ReactNode } from 'react';
+import { Flex, Separator, Text } from '@radix-ui/themes';
+import type { ReactNode } from 'react';
 
 export interface InfoProps {
   name: ReactNode;
@@ -41,15 +41,7 @@ export function Info({
         )}
       </Text>
 
-      {children !== undefined && (
-        <div
-          style={{
-            flex: 1,
-            height: 1,
-            backgroundColor: 'red',
-          }}
-        />
-      )}
+      {children !== undefined && <Separator style={{ flex: 1 }} />}
 
       {children !== undefined && (
         <Flex align="center" gap="1">

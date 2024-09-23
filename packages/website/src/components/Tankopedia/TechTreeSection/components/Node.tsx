@@ -5,9 +5,8 @@ import {
   tankDefinitions,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
-import { Box, Flex, Text } from '@radix-ui/themes';
-import Link from 'next/link';
-import * as TankopediaEphemeral from '../../../../../../../../stores/tankopediaEphemeral';
+import { Box, Flex, Link, Text } from '@radix-ui/themes';
+import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
 
 interface NodeProps {
   id: number;

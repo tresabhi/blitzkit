@@ -1,6 +1,6 @@
 import { asset, equipmentDefinitions } from '@blitzkit/core';
 import { GenericTankComponentButton } from './GenericTankComponentButton';
-import { TankComponentButtonProps } from './TankComponentButton';
+import type { TankComponentButtonProps } from './TankComponentButton';
 
 interface EquipmentButtonProps extends TankComponentButtonProps {
   equipment: number;

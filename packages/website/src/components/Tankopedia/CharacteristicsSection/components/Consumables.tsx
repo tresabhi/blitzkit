@@ -1,7 +1,6 @@
-import {
-  checkConsumableProvisionInclusivity,
-  consumableDefinitions,
-} from '@blitzkit/core';
+import {} from '@blitzkit/core';
+import { checkConsumableProvisionInclusivity } from '@blitzkit/core/src/blitzkit/checkConsumableProvisionInclusivity';
+import { consumableDefinitions } from '@blitzkit/core/src/blitzkit/consumableDefinitions';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import {
   Button,
@@ -11,16 +10,16 @@ import {
   Popover,
   Text,
 } from '@radix-ui/themes';
-import { use } from 'react';
-import { ConsumablesManager } from '../../../../../../../components/ConsumablesManager';
-import { useEquipment } from '../../../../../../../hooks/useEquipment';
-import * as Duel from '../../../../../../../stores/duel';
+import { useEquipment } from '../../../../hooks/useEquipment';
+import { Duel } from '../../../../stores/duel';
+import { ConsumablesManager } from '../../../ConsumablesManager';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
+
+const awaitedConsumableDefinitions = await consumableDefinitions;
 
 export function Consumables() {
   const mutateDuel = Duel.useMutation();
   const protagonist = Duel.use((state) => state.protagonist);
-  const awaitedConsumableDefinitions = use(consumableDefinitions);
   const consumables = Duel.use((state) => state.protagonist.consumables);
   const consumablesList = Object.values(awaitedConsumableDefinitions).filter(
     (consumable) =>
