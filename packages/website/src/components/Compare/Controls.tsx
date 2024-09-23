@@ -1,23 +1,26 @@
 import { provisionDefinitions } from '@blitzkit/core';
 import { PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, SegmentedControl } from '@radix-ui/themes';
-import { use } from 'react';
-import { tankToCompareMember } from '../../../../core/blitzkit/tankToCompareMember';
-import * as CompareEphemeral from '../../../../stores/compareEphemeral';
-import * as ComparePersistent from '../../../../stores/comparePersistent';
-import { TankSearch } from '../../tankopedia/components/TankSearch';
+import { tankToCompareMember } from '../../core/blitzkit/tankToCompareMember';
+import { CompareEphemeral } from '../../stores/compareEphemeral';
+import {
+  ComparePersistent,
+  type DeltaMode,
+} from '../../stores/comparePersistent';
+import { TankSearch } from '../TankSearch';
 
 interface ControlsProps {
   addTankDialogOpen: boolean;
   onAddTankDialogOpenChange: (open: boolean) => void;
 }
 
+const awaitedProvisionDefinitions = await provisionDefinitions;
+
 export function Controls({
   addTankDialogOpen,
   onAddTankDialogOpenChange,
 }: ControlsProps) {
   const deltaMode = ComparePersistent.use((state) => state.deltaMode);
-  const awaitedProvisionDefinitions = use(provisionDefinitions);
   const mutateCompareEphemeral = CompareEphemeral.useMutation();
   const mutateComparePersistent = ComparePersistent.useMutation();
 
@@ -88,23 +91,17 @@ export function Controls({
         value={deltaMode}
         onValueChange={(value) => {
           mutateComparePersistent((draft) => {
-            draft.deltaMode = value as ComparePersistent.DeltaMode;
+            draft.deltaMode = value as DeltaMode;
           });
         }}
       >
-        <SegmentedControl.Item
-          value={'none' satisfies ComparePersistent.DeltaMode}
-        >
+        <SegmentedControl.Item value={'none' satisfies DeltaMode}>
           No deltas
         </SegmentedControl.Item>
-        <SegmentedControl.Item
-          value={'percentage' satisfies ComparePersistent.DeltaMode}
-        >
+        <SegmentedControl.Item value={'percentage' satisfies DeltaMode}>
           Percentage
         </SegmentedControl.Item>
-        <SegmentedControl.Item
-          value={'absolute' satisfies ComparePersistent.DeltaMode}
-        >
+        <SegmentedControl.Item value={'absolute' satisfies DeltaMode}>
           Absolute
         </SegmentedControl.Item>
       </SegmentedControl.Root>

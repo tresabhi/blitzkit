@@ -1,7 +1,7 @@
-import { TankDefinition, tankIcon } from '@blitzkit/core';
+import { type TankDefinition, tankIcon } from '@blitzkit/core';
+import { Link } from '@radix-ui/themes';
 import { classIcons } from './ClassIcon';
 import { ExperimentIcon } from './ExperimentIcon';
-import { Link } from './Link';
 import { StickyRowHeaderCell } from './StickyRowHeaderCell';
 
 interface TankRowHeaderCellProps {

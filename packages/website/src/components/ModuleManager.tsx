@@ -1,11 +1,11 @@
 import {
-  EngineDefinition,
-  GunDefinition,
-  ShellDefinition,
-  TankDefinition,
   TIER_ROMAN_NUMERALS,
-  TrackDefinition,
-  TurretDefinition,
+  type EngineDefinition,
+  type GunDefinition,
+  type ShellDefinition,
+  type TankDefinition,
+  type TrackDefinition,
+  type TurretDefinition,
 } from '@blitzkit/core';
 import { DropdownMenu, Flex } from '@radix-ui/themes';
 import { useState } from 'react';

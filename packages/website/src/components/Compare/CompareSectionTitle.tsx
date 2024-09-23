@@ -1,7 +1,7 @@
 import { Heading, Table } from '@radix-ui/themes';
 import { times } from 'lodash-es';
-import { StickyColumnHeaderCell } from '../../../../components/StickyColumnHeaderCell';
-import * as CompareEphemeral from '../../../../stores/compareEphemeral';
+import { CompareEphemeral } from '../../stores/compareEphemeral';
+import { StickyColumnHeaderCell } from '../StickyColumnHeaderCell';
 
 export function CompareSectionTitle({ children }: { children: string }) {
   const memberCount = CompareEphemeral.use((state) => state.members.length);

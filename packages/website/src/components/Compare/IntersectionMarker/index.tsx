@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Var } from '../../../../../core/radix/var';
+import { Var } from '../../../core/radix/var';
 import { insertionMarkers } from './constants';
 
 export function InsertionMarker({ index }: { index: number }) {

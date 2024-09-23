@@ -2,18 +2,19 @@ import { provisionDefinitions } from '@blitzkit/core';
 import { ExternalLinkIcon, LoopIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Dialog, Flex, IconButton } from '@radix-ui/themes';
 import Link from 'next/link';
-import { use, useState } from 'react';
-import { tankToCompareMember } from '../../../../core/blitzkit/tankToCompareMember';
-import * as CompareEphemeral from '../../../../stores/compareEphemeral';
-import { TankSearch } from '../../tankopedia/components/TankSearch';
+import { useState } from 'react';
+import { tankToCompareMember } from '../../core/blitzkit/tankToCompareMember';
+import { CompareEphemeral } from '../../stores/compareEphemeral';
+import { TankSearch } from '../TankSearch';
 
 interface TankControlProps {
   index: number;
   id: number;
 }
 
+const awaitedProvisionDefinitions = await provisionDefinitions;
+
 export function TankControl({ index, id }: TankControlProps) {
-  const awaitedProvisionDefinitions = use(provisionDefinitions);
   const [switchTankDialogOpen, setSwitchTankDialogOpen] = useState(false);
   const mutateCompareEphemeral = CompareEphemeral.useMutation();
 

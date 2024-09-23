@@ -1,36 +1,37 @@
 import {
-  createDefaultSkills,
   equipmentDefinitions,
   modelDefinitions,
   provisionDefinitions,
-  skillDefinitions,
-  tankDefinitions,
 } from '@blitzkit/core';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, IconButton, Text } from '@radix-ui/themes';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { use, useCallback, useEffect, useMemo, useState } from 'react';
-import { CompareControls } from '../../../../../website/src/components/Controls';
-import { DamageWarning } from '../../../../../website/src/components/DamageWarning';
+import { useMemo, useState } from 'react';
+import { CompareTable } from '../../../components/Compare/CompareTable';
+import { Controls } from '../../../components/Compare/Controls';
+import { DamageWarning } from '../../../components/DamageWarning';
 import { PageWrapper } from '../../../components/PageWrapper';
 import { tankCharacteristics } from '../../../core/blitzkit/tankCharacteristics';
-import { tankToCompareMember } from '../../../core/blitzkit/tankToCompareMember';
-import * as CompareEphemeral from '../../../stores/compareEphemeral';
-import { CompareTable } from '../../../../../website/src/components/Compare/CompareTable';
+import { CompareEphemeral } from '../../../stores/compareEphemeral';
+import { ComparePersistent } from '../../../stores/comparePersistent';
 
-export default function Page() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const awaitedTankDefinitions = use(tankDefinitions);
-  const awaitedSkillDefinitions = use(skillDefinitions);
-  const searchParams = useSearchParams();
+const awaitedModelDefinitions = await modelDefinitions;
+const awaitedEquipmentDefinitions = await equipmentDefinitions;
+const awaitedProvisionDefinitions = await provisionDefinitions;
+
+export function Page() {
+  return (
+    <ComparePersistent.Provider>
+      <CompareEphemeral.Provider>
+        <Content />
+      </CompareEphemeral.Provider>
+    </ComparePersistent.Provider>
+  );
+}
+
+function Content() {
   const members = CompareEphemeral.use((state) => state.members);
   const [addTankDialogOpen, setAddTankDialogOpen] = useState(false);
-  const awaitedModelDefinitions = use(modelDefinitions);
-  const awaitedEquipmentDefinitions = use(equipmentDefinitions);
-  const awaitedProvisionDefinitions = use(provisionDefinitions);
   const crewSkills = CompareEphemeral.use((state) => state.crewSkills);
-  const mutateCompareEphemeral = CompareEphemeral.useMutation();
   const stats = useMemo<ReturnType<typeof tankCharacteristics>[]>(
     () =>
       members.map((thisMember) =>
@@ -67,56 +68,12 @@ export default function Page() {
       ),
     [members, crewSkills],
   );
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-
-      return params.toString();
-    },
-    [searchParams],
-  );
-
-  useEffect(() => {
-    router.push(
-      pathname +
-        '?' +
-        createQueryString(
-          'tanks',
-          members.map(({ tank }) => tank.id).join(','),
-        ),
-    );
-  }, [members]);
-
-  useEffect(() => {
-    const tanksParam = searchParams.get('tanks');
-
-    if (tanksParam) {
-      mutateCompareEphemeral((draft) => {
-        draft.members = tanksParam
-          .split(',')
-          .map(Number)
-          .map((id) =>
-            tankToCompareMember(
-              awaitedTankDefinitions[id],
-              awaitedProvisionDefinitions,
-            ),
-          );
-      });
-    }
-
-    if (Object.keys(crewSkills).length === 0) {
-      mutateCompareEphemeral((draft) => {
-        draft.crewSkills = createDefaultSkills(awaitedSkillDefinitions);
-      });
-    }
-  }, []);
 
   return (
     <PageWrapper color="crimson" size="100%">
       <Flex justify="center" gap="4" align="center" direction="column">
         <DamageWarning />
-        <CompareControls
+        <Controls
           addTankDialogOpen={addTankDialogOpen}
           onAddTankDialogOpenChange={setAddTankDialogOpen}
         />

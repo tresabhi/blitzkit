@@ -1,5 +1,5 @@
 import { Table } from '@radix-ui/themes';
-import { ColumnHeaderCellProps } from '@radix-ui/themes/dist/cjs/components/table';
+import type { ColumnHeaderCellProps } from '@radix-ui/themes/src/components/table.js';
 
 interface StickyColumnHeaderCellProps extends ColumnHeaderCellProps {
   top?: number | string;

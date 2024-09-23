@@ -1,29 +1,28 @@
 import {
   asset,
   availableProvisions,
-  checkConsumableProvisionInclusivity,
   consumableDefinitions,
   equipmentDefinitions,
   permanentSkills,
   provisionDefinitions,
   skillDefinitions,
 } from '@blitzkit/core';
+import { checkConsumableProvisionInclusivity } from '@blitzkit/core/src/blitzkit/checkConsumableProvisionInclusivity';
 import { ComponentPlaceholderIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Popover, Slider, Table, Text } from '@radix-ui/themes';
 import { debounce, times } from 'lodash-es';
-import { use } from 'react';
-import { BlitzkitButtonGrayIcon } from '../../../../components/BlitzkitButtonGrayIcon';
-import { ConsumablesManager } from '../../../../components/ConsumablesManager';
-import { CrewSkillManager } from '../../../../components/CrewSkillManager';
-import { EquipmentManager } from '../../../../components/EquipmentManager';
-import { ModuleManager } from '../../../../components/ModuleManager';
-import { ProvisionsManager } from '../../../../components/ProvisionsManager';
-import { StickyColumnHeaderCell } from '../../../../components/StickyColumnHeaderCell';
-import { StickyTableRoot } from '../../../../components/StickyTableRoot';
-import { TankCharacteristics } from '../../../../core/blitzkit/tankCharacteristics';
-import { Var } from '../../../../core/radix/var';
-import * as CompareEphemeral from '../../../../stores/compareEphemeral';
-import { EquipmentMatrix } from '../../../../stores/duel';
+import type { TankCharacteristics } from '../../core/blitzkit/tankCharacteristics';
+import { Var } from '../../core/radix/var';
+import { CompareEphemeral } from '../../stores/compareEphemeral';
+import type { EquipmentMatrix } from '../../stores/duel';
+import { BlitzkitButtonGrayIcon } from '../BlitzkitButtonGrayIcon';
+import { ConsumablesManager } from '../ConsumablesManager';
+import { CrewSkillManager } from '../CrewSkillManager';
+import { EquipmentManager } from '../EquipmentManager';
+import { ModuleManager } from '../ModuleManager';
+import { ProvisionsManager } from '../ProvisionsManager';
+import { StickyColumnHeaderCell } from '../StickyColumnHeaderCell';
+import { StickyTableRoot } from '../StickyTableRoot';
 import { Body } from './Body';
 import { InsertionMarker } from './IntersectionMarker';
 import { TankCard } from './TankCard';
@@ -32,14 +31,15 @@ interface CompareTableProps {
   stats: TankCharacteristics[];
 }
 
+const awaitedSkillDefinitions = await skillDefinitions;
+const awaitedEquipmentDefinitions = await equipmentDefinitions;
+const awaitedConsumableDefinitions = await consumableDefinitions;
+const awaitedProvisionDefinitions = await provisionDefinitions;
+
 export function CompareTable({ stats }: CompareTableProps) {
   const crewSkills = CompareEphemeral.use((state) => state.crewSkills);
   const members = CompareEphemeral.use((state) => state.members);
-  const awaitedSkillDefinitions = use(skillDefinitions);
   const mutateCompareEphemeral = CompareEphemeral.useMutation();
-  const awaitedEquipmentDefinitions = use(equipmentDefinitions);
-  const awaitedConsumableDefinitions = use(consumableDefinitions);
-  const awaitedProvisionDefinitions = use(provisionDefinitions);
 
   return (
     <StickyTableRoot

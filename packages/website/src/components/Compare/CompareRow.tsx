@@ -4,11 +4,11 @@ import {
   CaretSortIcon,
 } from '@radix-ui/react-icons';
 import { Flex, IconButton, Table, Text } from '@radix-ui/themes';
-import { StickyRowHeaderCell } from '../../../../components/StickyRowHeaderCell';
-import { TankCharacteristics } from '../../../../core/blitzkit/tankCharacteristics';
-import { Var } from '../../../../core/radix/var';
-import * as CompareEphemeral from '../../../../stores/compareEphemeral';
-import * as ComparePersistent from '../../../../stores/comparePersistent';
+import type { TankCharacteristics } from '../../core/blitzkit/tankCharacteristics';
+import { Var } from '../../core/radix/var';
+import { CompareEphemeral } from '../../stores/compareEphemeral';
+import { ComparePersistent } from '../../stores/comparePersistent';
+import { StickyRowHeaderCell } from '../StickyRowHeaderCell';
 
 interface CompareRowProps {
   name: string;

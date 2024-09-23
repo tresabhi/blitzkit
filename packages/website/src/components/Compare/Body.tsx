@@ -1,8 +1,8 @@
 import { asset } from '@blitzkit/core';
 import { Flex, Heading, IconButton, Table } from '@radix-ui/themes';
-import { StickyColumnHeaderCell } from '../../../../components/StickyColumnHeaderCell';
-import { TankCharacteristics } from '../../../../core/blitzkit/tankCharacteristics';
-import * as CompareEphemeral from '../../../../stores/compareEphemeral';
+import type { TankCharacteristics } from '../../core/blitzkit/tankCharacteristics';
+import { CompareEphemeral } from '../../stores/compareEphemeral';
+import { StickyColumnHeaderCell } from '../StickyColumnHeaderCell';
 import { CompareRow } from './CompareRow';
 import { CompareSectionTitle } from './CompareSectionTitle';
 

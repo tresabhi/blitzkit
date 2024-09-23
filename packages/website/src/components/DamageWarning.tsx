@@ -1,6 +1,6 @@
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { Callout } from '@radix-ui/themes';
-import * as CompareEphemeral from '../../../../stores/compareEphemeral';
+import { CompareEphemeral } from '../stores/compareEphemeral';
 
 export function DamageWarning() {
   const members = CompareEphemeral.use((state) => state.members);

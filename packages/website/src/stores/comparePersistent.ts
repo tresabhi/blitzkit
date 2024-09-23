@@ -1,4 +1,4 @@
-import lodash from 'lodash-es';
+import * as lodash from 'lodash-es';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { createContextualStore } from '../core/zustand/createContextualStore';
@@ -8,17 +8,16 @@ export interface ComparePersistent {
   deltaMode: DeltaMode;
 }
 
-export const { Provider, use, useMutation, useStore } = createContextualStore(
-  () =>
-    create<ComparePersistent>()(
-      persist(
-        subscribeWithSelector<ComparePersistent>(() => ({
-          deltaMode: 'none',
-        })),
-        {
-          name: 'compare',
-          merge: (a, b) => lodash.merge(b, a),
-        },
-      ),
+export const ComparePersistent = createContextualStore(() =>
+  create<ComparePersistent>()(
+    persist(
+      subscribeWithSelector<ComparePersistent>(() => ({
+        deltaMode: 'none',
+      })),
+      {
+        name: 'compare',
+        merge: (a, b) => lodash.merge(b, a),
+      },
     ),
+  ),
 );

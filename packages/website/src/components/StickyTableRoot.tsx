@@ -1,5 +1,5 @@
 import { Table } from '@radix-ui/themes';
-import { RootProps } from '@radix-ui/themes/dist/cjs/components/table';
+import type { RootProps } from '@radix-ui/themes/src/components/table.js';
 import { useEffect, useRef } from 'react';
 
 export function StickyTableRoot({ style, ...props }: RootProps) {

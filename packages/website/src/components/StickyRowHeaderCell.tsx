@@ -1,5 +1,5 @@
 import { Table } from '@radix-ui/themes';
-import { RowHeaderCellProps } from '@radix-ui/themes/dist/cjs/components/table';
+import type { RowHeaderCellProps } from '@radix-ui/themes/src/components/table.js';
 
 export function StickyRowHeaderCell({ style, ...props }: RowHeaderCellProps) {
   return (

@@ -15,10 +15,9 @@ export interface CompareEphemeral {
   };
 }
 
-export const { Provider, use, useMutation, useStore } = createContextualStore(
-  () =>
-    create<CompareEphemeral>()(() => ({
-      crewSkills: {},
-      members: [],
-    })),
+export const CompareEphemeral = createContextualStore(() =>
+  create<CompareEphemeral>()(() => ({
+    crewSkills: {},
+    members: [],
+  })),
 );
