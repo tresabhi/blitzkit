@@ -142,10 +142,9 @@ const isBranchNamed =
                 (branch) =>
                   branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
               );
-              // const selected = window.location.pathname.startsWith(
-              //   `/tools/${tool.id}`,
-              // );
-              const selected = false;
+              const selected = Astro.url.pathname.startsWith(
+                `/tools/${tool.id}`,
+              );
 
               if (unavailableOnBranch) return null;
 
