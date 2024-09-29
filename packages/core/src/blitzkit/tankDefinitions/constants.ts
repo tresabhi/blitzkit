@@ -1,10 +1,10 @@
 import {
-  CrewMember,
+  CrewType,
   GunDefinition,
   ShellType,
   TankClass,
+  TankType,
   Tier,
-  TreeType,
 } from '.';
 
 export const SHELL_NAMES: Record<ShellType, string> = {
@@ -13,7 +13,7 @@ export const SHELL_NAMES: Record<ShellType, string> = {
   hc: 'HEAT',
   he: 'HE',
 };
-export const CREW_MEMBER_NAMES: Record<CrewMember, string> = {
+export const CREW_MEMBER_NAMES: Record<CrewType, string> = {
   commander: 'Commander',
   radioman: 'Radioman',
   gunner: 'Gunner',
@@ -77,7 +77,7 @@ export const flags: Record<string, string> = {
   european: '🇪🇺',
   other: '<:other:1218421572243558482>',
 };
-export const TREE_TYPE_ICONS: Record<TreeType, Record<TankClass, string>> = {
+export const TREE_TYPE_ICONS: Record<TankType, Record<TankClass, string>> = {
   researchable: TANK_ICONS,
   premium: TANK_ICONS_PREMIUM,
   collector: TANK_ICONS_COLLECTOR,

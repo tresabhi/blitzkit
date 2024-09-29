@@ -1,0 +1,223 @@
+syntax = "proto3";
+
+package blitzkit;
+
+message TankDefinitions {
+  map<uint32, TankDefinition> tanks = 1;
+}
+
+message TankDefinition {
+  uint32 id = 1;
+  map<uint32, uint32> roles = 2;
+  optional string description = 3;
+  bool fixed_camouflage = 4;
+  repeated int32 camouflages = 5;
+  repeated int32 ancestors = 6;
+  repeated int32 successors = 7;
+  repeated Crew crew = 8;
+  uint32 health = 9;
+  string nation = 10;
+  string name = 11;
+  optional string name_full = 12;
+  TankType type = 13;
+  uint32 max_consumables = 14;
+  uint32 max_provisions = 15;
+  Tier tier = 16;
+  TankClass class = 17;
+  bool testing = 18;
+  bool deprecated = 19;
+  repeated TurretDefinition turrets = 20;
+  repeated EngineDefinition engines = 21;
+  repeated TrackDefinition tracks = 22;
+  TankPrice price = 23;
+  optional uint32 xp = 24;
+  float speed_forwards = 25;
+  float speed_backwards = 26;
+  float camouflage_still = 27;
+  float camouflage_moving = 28;
+  float camouflage_onFire = 29;
+  string equipment_preset = 30;
+  uint32 weight = 31;
+}
+
+enum TankPriceType {
+  TYPE_UNSPECIFIED = 0;
+  TYPE_CREDITS = 1;
+  TYPE_GOLD = 2;
+}
+
+message TankPrice {
+  TankPriceType type = 1;
+  uint32 value = 2;
+}
+
+message TrackDefinition {
+  uint32 id = 1;
+  Tier tier = 2;
+  string name = 3;
+  uint32 weight = 4;
+  float traverse_speed = 5;
+  optional uint32 xp = 6;
+  float dispersion_move = 7;
+  float dispersion_traverse = 8;
+  float resistance_hard = 9;
+  float resistance_medium = 10;
+  float resistance_soft = 11;
+  repeated Unlock unlocks = 12;
+}
+
+message EngineDefinition {
+  uint32 id = 1;
+  string name = 2;
+  optional uint32 xp = 3;
+  Tier tier = 4;
+  optional float fire_chance = 5;
+  uint32 power = 6;
+  uint32 weight = 7;
+  repeated Unlock unlocks = 8;
+}
+
+message TurretDefinition {
+  uint32 id = 1;
+  uint32 health = 2;
+  uint32 view_range = 3;
+  float traverse_speed = 4;
+  optional uint32 xp = 5;
+  string name = 6;
+  uint32 tier = 7;
+  uint32 weight = 8;
+  repeated GunDefinition guns = 9;
+  repeated Unlock unlocks = 10;
+}
+
+message GunDefinition {
+  oneof gun_type {
+    GunDefinitionRegular regular = 1;
+    GunDefinitionAutoLoader auto_loader = 2;
+    GunDefinitionAutoReloader auto_reloader = 3;
+  }
+}
+
+message GunDefinitionRegular {
+  GunDefinitionBase gun = 1;
+  GunDefinitionRegularProperties regular = 2;
+}
+
+message GunDefinitionAutoLoader {
+  GunDefinitionBase gun = 1;
+  GunDefinitionAutoLoaderProperties auto_loader = 2;
+}
+
+message GunDefinitionAutoReloader {
+  GunDefinitionBase gun = 1;
+  GunDefinitionAutoReloaderProperties auto_reloader = 2;
+}
+
+message GunDefinitionBase {
+  uint32 id = 1;
+  float rotation_speed = 2;
+  optional uint32 xp = 3;
+  uint32 weight = 4;
+  string name = 5;
+  uint32 tier = 6;
+  repeated ShellDefinition shells = 7;
+  float camouflage_loss = 8;
+  float aim_time = 9;
+  float dispersion_base = 10;
+  float dispersion_traverse = 11;
+  float dispersion_shot = 12;
+  float dispersion_damaged = 13;
+  repeated Unlock unlocks = 14;
+}
+
+message ShellDefinition {
+  uint32 id = 1;
+  string name = 2;
+  uint32 velocity = 3;
+  uint32 armor_damage = 4;
+  uint32 module_damage = 5;
+  uint32 caliber = 6;
+  string icon = 7;
+  ShellPenetration penetration = 8;
+  ShellType type = 9;
+  uint32 normalization = 10;
+  uint32 ricochet = 11;
+  uint32 explosion_radius = 12;
+}
+
+enum ShellType {
+  SHELL_UNSPECIFIED = 0;
+  SHELL_AP = 1;
+  SHELL_APCR = 2;
+  SHELL_HEAT = 3;
+  SHELL_HE = 4;
+}
+
+message ShellPenetration {
+  uint32 near = 1;
+  uint32 far = 2;
+}
+
+message Unlock {
+  int32 id = 1;
+  ModuleType type = 2;
+  UnlockCost cost = 3;
+}
+
+message UnlockCost {
+  string type = 1;
+  int32 value = 2;
+}
+
+enum ModuleType {
+  MODULE_UNSPECIFIED = 0;
+  MODULE_VEHICLE = 1;
+  MODULE_ENGINE = 2;
+  MODULE_TRACKS = 3;
+  MODULE_TURRET = 4;
+  MODULE_GUN = 5;
+}
+
+enum TankClass {
+  CLASS_UNSPECIFIED = 0;
+  CLASS_LIGHT = 1;
+  CLASS_MEDIUM = 2;
+  CLASS_HEAVY = 3;
+  CLASS_TANK_DESTROYER = 4;
+}
+
+enum Tier {
+  TIER_UNSPECIFIED = 0;
+  TIER_I = 1;
+  TIER_II = 2;
+  TIER_III = 3;
+  TIER_IV = 4;
+  TIER_V = 5;
+  TIER_VI = 6;
+  TIER_VII = 7;
+  TIER_VIII = 8;
+  TIER_IX = 9;
+  TIER_X = 10;
+}
+
+enum TankType {
+  TYPE_UNSPECIFIED = 0;
+  TYPE_RESEARCHABLE = 1;
+  TYPE_PREMIUM = 2;
+  TYPE_COLLECTOR = 3;
+}
+
+message Crew {
+  CrewType type = 1;
+  uint32 count = 2;
+  repeated CrewType substitute = 3;
+}
+
+enum CrewType {
+  CREW_UNSPECIFIED = 0;
+  CREW_COMMANDER = 1;
+  CREW_RADIOMAN = 2;
+  CREW_GUNNER = 3;
+  CREW_DRIVER = 4;
+  CREW_LOADER = 5;
+}

@@ -1,6 +1,5 @@
 export * from './bkrl';
 export * from './buffer';
-export * from './cdon';
 export * from './dds';
 export * from './dids';
 export * from './pvr';

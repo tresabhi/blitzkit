@@ -1,27 +1,48 @@
 import { Vector2Tuple } from 'three';
-import { TANK_CLASSES, TREE_TYPES } from '../../blitz/constants';
 import { asset } from '../asset';
 import { fetchCdonLz4 } from '../fetchCdonLz4';
-import { TIERS } from './constants';
 
-export type TankClass = (typeof TANK_CLASSES)[number];
-export type TreeType = (typeof TREE_TYPES)[number];
-
-export enum ShellType {
-  AP = 'ap',
-  APCR = 'ap_cr',
-  HEAT = 'hc',
-  HE = 'he',
+export enum TankClass {
+  Unspecified,
+  Light,
+  Medium,
+  Heavy,
+  TankDestroyer,
+}
+export enum TankType {
+  Unspecified,
+  Researchable,
+  Premium,
+  Collector,
 }
 
-export type CrewMember =
-  | 'commander'
-  | 'radioman'
-  | 'gunner'
-  | 'driver'
-  | 'loader';
+export enum ShellType {
+  Unspecified,
+  AP,
+  APCR,
+  HEAT,
+  HE,
+}
+
+export enum CrewType {
+  Unspecified,
+  Commander,
+  Radioman,
+  Gunner,
+  Driver,
+  Loader,
+}
+
 export type TankDefinitions = Record<number, TankDefinition>;
-export type ModuleType = 'vehicle' | 'engine' | 'chassis' | 'turret' | 'gun';
+export enum ModuleType {
+  Unspecified,
+  Vehicle,
+  Engine,
+  Tracks,
+  Turret,
+  Gun,
+}
+
 export interface Unlock {
   type: ModuleType;
   id: number;
@@ -32,9 +53,9 @@ export interface Unlock {
   };
 }
 export interface Crew {
-  type: CrewMember;
+  type: CrewType;
   count?: number;
-  substitute?: CrewMember[];
+  substitute?: CrewType[];
 }
 export type ModuleDefinition =
   | TrackDefinition
@@ -45,18 +66,18 @@ export interface TankDefinition {
   id: number;
   roles: Record<number, number>;
   description?: string;
-  fixedCamouflage?: boolean;
-  camouflages?: number[];
-  ancestors?: number[];
-  successors?: number[];
+  fixed_camouflage: boolean;
+  camouflages: number[];
+  ancestors: number[];
+  successors: number[];
   crew: Crew[];
   health: number;
   nation: string;
   name: string;
   nameFull?: string;
-  treeType: TreeType;
-  consumables: number;
-  provisions: number;
+  type: TankType;
+  max_consumables: number;
+  max_provisions: number;
   tier: Tier;
   class: TankClass;
   testing: boolean;
@@ -66,16 +87,12 @@ export interface TankDefinition {
   tracks: TrackDefinition[];
   price: TankPrice;
   xp?: number;
-  speed: {
-    forwards: number;
-    backwards: number;
-  };
-  camouflage: {
-    still: number;
-    moving: number;
-    onFire: number;
-  };
-  equipment: string;
+  speed_forwards: number;
+  speed_backwards: number;
+  camouflage_still: number;
+  camouflage_moving: number;
+  camouflage_onFire: number;
+  equipment_preset: string;
   weight: number;
 }
 export interface TrackDefinition {
@@ -83,17 +100,13 @@ export interface TrackDefinition {
   tier: Tier;
   name: string;
   weight: number;
-  traverseSpeed: number;
+  traverse_speed: number;
   xp?: number;
-  dispersion: {
-    move: number;
-    traverse: number;
-  };
-  resistance: {
-    hard: number;
-    medium: number;
-    soft: number;
-  };
+  dispersion_move: number;
+  dispersion_traverse: number;
+  resistance_hard: number;
+  resistance_medium: number;
+  resistance_soft: number;
   unlocks?: Unlock[];
 }
 export interface EngineDefinition {
@@ -101,18 +114,24 @@ export interface EngineDefinition {
   name: string;
   xp?: number;
   tier: Tier;
-  fireChance: number;
+  fire_chance: number;
   power: number;
   weight: number;
   unlocks?: Unlock[];
 }
-export type TankPrice =
-  | { type: 'credits'; value: number }
-  | { type: 'gold'; value: number };
+export type TankPrice = {
+  type: TankPriceType;
+  value: number;
+};
+enum TankPriceType {
+  Unspecified,
+  Credits,
+  Gold,
+}
 export interface TurretDefinition {
   health: number;
-  viewRange: number;
-  traverseSpeed: number;
+  view_range: number;
+  traverse_speed: number;
   xp?: number;
   id: number;
   name: string;
@@ -126,52 +145,60 @@ export type GunDefinition =
   | GunDefinitionAutoLoader
   | GunDefinitionAutoReloader;
 interface GunDefinitionBase {
-  rotationSpeed: number;
+  rotation_speed: number;
   xp?: number;
   weight: number;
   id: number;
   name: string;
   tier: Tier;
   shells: ShellDefinition[];
-  camouflageLoss: number;
-  aimTime: number;
-  dispersion: {
-    base: number;
-    traverse: number;
-    shot: number;
-    damaged: number;
-  };
+  camouflage_loss: number;
+  aim_time: number;
+  dispersion_base: number;
+  dispersion_traverse: number;
+  dispersion_shot: number;
+  dispersion_damaged: number;
   unlocks?: Unlock[];
 }
-interface GunDefinitionRegular extends GunDefinitionBase {
-  type: 'regular';
+interface GunDefinitionRegular {
+  gun: GunDefinitionBase;
+  regular: GunDefinitionRegularProperties;
+}
+interface GunDefinitionRegularProperties {
   reload: number;
 }
-interface GunDefinitionAutoLoader extends GunDefinitionBase {
-  type: 'autoLoader';
+interface GunDefinitionAutoLoader {
+  gun: GunDefinitionBase;
+  auto_loader: GunDefinitionAutoLoaderProperties;
+}
+interface GunDefinitionAutoLoaderProperties {
   reload: number;
-  intraClip: number;
+  intra_clip: number;
   count: number;
 }
-interface GunDefinitionAutoReloader extends GunDefinitionBase {
-  type: 'autoReloader';
+interface GunDefinitionAutoReloader {
+  gun: GunDefinitionBase;
+  auto_reloader: GunDefinitionAutoReloaderProperties;
+}
+interface GunDefinitionAutoReloaderProperties {
   reload: number[];
   intraClip: number;
   count: number;
 }
-export type ShellDefinition = {
+export interface ShellDefinition {
   id: number;
   name: string;
-  speed: number;
-  damage: { armor: number; module: number };
+  velocity: number;
+  armor_damage: number;
+  module_damage: number;
   caliber: number;
   icon: string;
   penetration: number | Vector2Tuple;
   type: ShellType;
   normalization?: number;
   ricochet?: number;
-  explosionRadius?: number;
-};
+  explosion_radius?: number;
+}
 
 export const tankDefinitions = fetchCdonLz4<TankDefinitions>(
   asset('definitions/tanks.cdon.lz4'),
@@ -180,6 +207,18 @@ export const tankDefinitions = fetchCdonLz4<TankDefinitions>(
 export const tankDefinitionsArray = tankDefinitions.then((tanks) =>
   Object.values(tanks),
 );
-export type Tier = (typeof TIERS)[number];
+export enum Tier {
+  Unspecified,
+  I,
+  II,
+  III,
+  IV,
+  V,
+  VI,
+  VII,
+  VIII,
+  IX,
+  X,
+}
 
 export * from './constants';

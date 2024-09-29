@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-message PlayerAvatarInfo {
-  uint32 id = 1;
-  string image = 2;
-  string image_retina = 3;
-  string grade = 4;
-}

@@ -807,7 +807,7 @@ export async function definitions() {
             forwards: tankDefinition.root.speedLimits.forward,
             backwards: tankDefinition.root.speedLimits.backward,
           },
-          equipment:
+          equipment_preset:
             typeof equipment === 'string' ? equipment : equipment.at(-1)!,
           consumables: tankDefinition.root.consumableSlots,
           provisions: tankDefinition.root.provisionSlots,
@@ -888,7 +888,7 @@ export async function definitions() {
             id: trackId,
             weight: track.weight,
             name: strings[track.userString],
-            traverseSpeed: track.rotationSpeed,
+            traverse_speed: track.rotationSpeed,
             dispersion: {
               move: track.shotDispersionFactors.vehicleMovement,
               traverse: track.shotDispersionFactors.vehicleRotation,
@@ -920,7 +920,7 @@ export async function definitions() {
           tankDefinitions[tankId].engines.push({
             id: engineId,
             name: strings[engineListEntry.userString],
-            fireChance: engineListEntry.fireStartingChance,
+            fire_chance: engineListEntry.fireStartingChance,
             tier: engineListEntry.level as Tier,
             weight: engineListEntry.weight,
             power: engineListEntry.power,

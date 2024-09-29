@@ -28,19 +28,21 @@
     "format": "prettier --write \"**/*.@(json|js|jsx|css|md|ts|tsx|html|xml|yml|gltf)\"",
     "update": "yarn upgrade --latest",
     "tunnel": "cloudflared tunnel --url http://localhost:3000",
-    "discoverids": "scripts/discoverIds.ts"
+    "discoverids": "scripts/discoverIds.ts",
+    "build:protos": "bun packages/scripts/src/protos.ts"
   },
   "license": "MIT",
   "dependencies": {
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.12",
     "@types/bun": "latest",
+    "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.5.4",
     "esbuild": "^0.19.12",
     "prettier": "^3.3.3",
     "prisma": "^5.19.1",
+    "ts-protoc-gen": "^0.15.0",
     "typescript": "^5.5.4"
   }
 }
