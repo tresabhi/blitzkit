@@ -22,4 +22,5 @@ depots
 public/sitemap*
 /firebase.json
 target
-packages/core/src/protos/generated/*
+packages/core/src/protos/*
+!packages/core/src/protos/*.proto
