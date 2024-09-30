@@ -1,28 +1,10 @@
+import { EquipmentDefinitions } from '../protos';
 import { asset } from './asset';
-import { fetchCdonLz4 } from './fetchCdonLz4';
 
-type EquipmentOptions = [number, number];
+export async function fetchEquipmentDefinitions() {
+  const response = await fetch(asset('definitions/equipment.pb'));
+  const buffer = await response.arrayBuffer();
+  const array = new Uint8Array(buffer);
 
-export type EquipmentRow = [
-  EquipmentOptions,
-  EquipmentOptions,
-  EquipmentOptions,
-];
-
-export type EquipmentPreset = [EquipmentRow, EquipmentRow, EquipmentRow];
-
-export interface EquipmentDefinitions {
-  presets: {
-    [key: string]: EquipmentPreset;
-  };
-  equipments: {
-    [key: number]: {
-      name: string;
-      description: string;
-    };
-  };
+  return EquipmentDefinitions.deserializeBinary(array).toObject();
 }
-
-export const equipmentDefinitions = fetchCdonLz4<EquipmentDefinitions>(
-  asset('definitions/equipment.cdon.lz4'),
-);

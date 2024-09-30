@@ -84,7 +84,7 @@ message TurretDefinition {
   float traverse_speed = 4;
   optional uint32 xp = 5;
   string name = 6;
-  uint32 tier = 7;
+  Tier tier = 7;
   uint32 weight = 8;
   repeated GunDefinition guns = 9;
   repeated Unlock unlocks = 10;
@@ -135,7 +135,7 @@ message GunDefinitionBase {
   optional uint32 xp = 3;
   uint32 weight = 4;
   string name = 5;
-  uint32 tier = 6;
+  Tier tier = 6;
   repeated ShellDefinition shells = 7;
   float camouflage_loss = 8;
   float aim_time = 9;

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package blitzkit;
+
+message CamouflageDefinitions {
+  map<uint32, Camouflage> camouflages = 1;
+}
+
+message Camouflage {
+  uint32 id = 1;
+  string name = 2;
+  optional string tank_name = 3;
+  optional string tank_name_full = 4;
+}

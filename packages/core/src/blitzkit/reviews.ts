@@ -6,5 +6,5 @@ export async function fetchReviews() {
   const buffer = await response.arrayBuffer();
   const array = new Uint8Array(buffer);
 
-  return Reviews.deserializeBinary(array);
+  return Reviews.deserializeBinary(array).toObject();
 }

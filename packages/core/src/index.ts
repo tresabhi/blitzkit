@@ -8,4 +8,4 @@ export * from './math';
 export * from './patreon';
 export * from './statistics';
 // export * from './streams';
-// export * from './types';
+export * from './types';

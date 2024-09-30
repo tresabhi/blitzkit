@@ -1,16 +1,10 @@
+import { CamouflageDefinitions } from '../protos';
 import { asset } from './asset';
-import { fetchCdonLz4 } from './fetchCdonLz4';
 
-export type CamouflageDefinitions = Record<
-  number,
-  {
-    id: number;
-    name: string;
-    tankName?: string;
-    tankNameFull?: string;
-  }
->;
+export async function fetchCamouflageDefinitions() {
+  const response = await fetch(asset('definitions/camoufles.pb'));
+  const buffer = await response.arrayBuffer();
+  const array = new Uint8Array(buffer);
 
-export const camouflageDefinitions = fetchCdonLz4<CamouflageDefinitions>(
-  asset('definitions/camouflages.cdon.lz4'),
-);
+  return CamouflageDefinitions.deserializeBinary(array).toObject();
+}

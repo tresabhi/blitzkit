@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package blitzkit;
+
+message EquipmentDefinitions {
+  map<string, EquipmentPreset> presets = 1;
+  map<uint32, Equipment> equipments = 2;
+}
+
+message Equipment {
+  string name = 1;
+  string description = 2;
+}
+
+message EquipmentPreset {
+  repeated EquipmentSlot slots = 1;
+}
+
+message EquipmentSlot {
+  uint32 left = 1;
+  uint32 right = 2;
+}

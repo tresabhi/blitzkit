@@ -6,7 +6,7 @@ export async function fetchTankDefinitions() {
   const buffer = await response.arrayBuffer();
   const array = new Uint8Array(buffer);
 
-  return TankDefinitions.deserializeBinary(array);
+  return TankDefinitions.deserializeBinary(array).toObject();
 }
 
 export * from './constants';

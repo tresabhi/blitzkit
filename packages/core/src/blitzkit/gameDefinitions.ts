@@ -1,23 +1,10 @@
+import { GameDefinitions } from '../protos';
 import { asset } from './asset';
-import { fetchCdonLz4 } from './fetchCdonLz4';
 
-interface GameMode {
-  name: string;
+export async function fetchGameDefinitions() {
+  const response = await fetch(asset('definitions/game.pb'));
+  const buffer = await response.arrayBuffer();
+  const array = new Uint8Array(buffer);
+
+  return GameDefinitions.deserializeBinary(array).toObject();
 }
-
-export interface GameDefinitions {
-  version: string;
-  nations: string[];
-  gameModes: Record<number, GameMode>;
-  roles: Record<
-    number,
-    {
-      provisions: number[];
-      consumables: number[];
-    }
-  >;
-}
-
-export const gameDefinitions = fetchCdonLz4<GameDefinitions>(
-  asset('definitions/game.cdon.lz4'),
-);

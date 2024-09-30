@@ -1,11 +1,10 @@
+import { SkillDefinitions } from '../protos';
 import { asset } from './asset';
-import { fetchCdonLz4 } from './fetchCdonLz4';
-import { TankClass } from './tankDefinitions';
 
-export interface SkillDefinitions {
-  classes: Record<TankClass, string[]>;
+export async function fetchSkillDefinitions() {
+  const response = await fetch(asset('definitions/skills.pb'));
+  const buffer = await response.arrayBuffer();
+  const array = new Uint8Array(buffer);
+
+  return SkillDefinitions.deserializeBinary(array).toObject();
 }
-
-export const skillDefinitions = fetchCdonLz4<SkillDefinitions>(
-  asset('definitions/skills.cdon.lz4'),
-);

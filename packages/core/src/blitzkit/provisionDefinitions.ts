@@ -1,26 +1,10 @@
+import { ProvisionDefinitions } from '../protos';
 import { asset } from './asset';
-import { TankFilterDefinition } from './consumableDefinitions';
-import { fetchCdonLz4 } from './fetchCdonLz4';
 
-export type ProvisionEntry = {
-  id: number;
-  name: string;
-  crew?: number;
-} & (
-  | {
-      gameMode: false;
-      include: TankFilterDefinition[];
-      exclude?: TankFilterDefinition[];
-    }
-  | {
-      gameMode: true;
-    }
-);
+export async function fetchProvisionDefinitions() {
+  const response = await fetch(asset('definitions/provisions.pb'));
+  const buffer = await response.arrayBuffer();
+  const array = new Uint8Array(buffer);
 
-export interface ProvisionDefinitions {
-  [key: string]: ProvisionEntry;
+  return ProvisionDefinitions.deserializeBinary(array).toObject();
 }
-
-export const provisionDefinitions = fetchCdonLz4<ProvisionDefinitions>(
-  asset('definitions/provisions.cdon.lz4'),
-);
