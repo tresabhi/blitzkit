@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package blitzkit;
 
-import "packages/core/src/protos/raw/tank_definitions.proto";
+import "packages/core/src/protos/tank_definitions.proto";
 
 message ConsumableDefinitions {
   map<uint32, Consumable> consumables = 1;
