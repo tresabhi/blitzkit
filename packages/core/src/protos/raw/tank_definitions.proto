@@ -41,9 +41,9 @@ message TankDefinition {
 }
 
 enum TankPriceType {
-  TYPE_UNSPECIFIED = 0;
-  TYPE_CREDITS = 1;
-  TYPE_GOLD = 2;
+  TANK_PRICE_TYPE_UNSPECIFIED = 0;
+  TANK_PRICE_TYPE_CREDITS = 1;
+  TANK_PRICE_TYPE_GOLD = 2;
 }
 
 message TankPrice {
@@ -103,14 +103,30 @@ message GunDefinitionRegular {
   GunDefinitionRegularProperties regular = 2;
 }
 
+message GunDefinitionRegularProperties {
+  float reload = 1;
+}
+
 message GunDefinitionAutoLoader {
   GunDefinitionBase gun = 1;
   GunDefinitionAutoLoaderProperties auto_loader = 2;
 }
 
+message GunDefinitionAutoLoaderProperties {
+  float clip_reload = 1;
+  float intra_clip = 2;
+  float shell_count = 3;
+}
+
 message GunDefinitionAutoReloader {
   GunDefinitionBase gun = 1;
   GunDefinitionAutoReloaderProperties auto_reloader = 2;
+}
+
+message GunDefinitionAutoReloaderProperties {
+  repeated float shell_reloads = 1;
+  float intra_clip = 2;
+  float shell_count = 3;
 }
 
 message GunDefinitionBase {
@@ -146,11 +162,11 @@ message ShellDefinition {
 }
 
 enum ShellType {
-  SHELL_UNSPECIFIED = 0;
-  SHELL_AP = 1;
-  SHELL_APCR = 2;
-  SHELL_HEAT = 3;
-  SHELL_HE = 4;
+  SHELL_TYPE_UNSPECIFIED = 0;
+  SHELL_TYPE_AP = 1;
+  SHELL_TYPE_APCR = 2;
+  SHELL_TYPE_HEAT = 3;
+  SHELL_TYPE_HE = 4;
 }
 
 message ShellPenetration {
@@ -170,20 +186,20 @@ message UnlockCost {
 }
 
 enum ModuleType {
-  MODULE_UNSPECIFIED = 0;
-  MODULE_VEHICLE = 1;
-  MODULE_ENGINE = 2;
-  MODULE_TRACKS = 3;
-  MODULE_TURRET = 4;
-  MODULE_GUN = 5;
+  MODULE_TYPE_UNSPECIFIED = 0;
+  MODULE_TYPE_VEHICLE = 1;
+  MODULE_TYPE_ENGINE = 2;
+  MODULE_TYPE_TRACKS = 3;
+  MODULE_TYPE_TURRET = 4;
+  MODULE_TYPE_GUN = 5;
 }
 
 enum TankClass {
-  CLASS_UNSPECIFIED = 0;
-  CLASS_LIGHT = 1;
-  CLASS_MEDIUM = 2;
-  CLASS_HEAVY = 3;
-  CLASS_TANK_DESTROYER = 4;
+  TANK_CLASS_UNSPECIFIED = 0;
+  TANK_CLASS_LIGHT = 1;
+  TANK_CLASS_MEDIUM = 2;
+  TANK_CLASS_HEAVY = 3;
+  TANK_CLASS_TANK_DESTROYER = 4;
 }
 
 enum Tier {
@@ -201,10 +217,10 @@ enum Tier {
 }
 
 enum TankType {
-  TYPE_UNSPECIFIED = 0;
-  TYPE_RESEARCHABLE = 1;
-  TYPE_PREMIUM = 2;
-  TYPE_COLLECTOR = 3;
+  TANK_TYPE_UNSPECIFIED = 0;
+  TANK_TYPE_RESEARCHABLE = 1;
+  TANK_TYPE_PREMIUM = 2;
+  TANK_TYPE_COLLECTOR = 3;
 }
 
 message Crew {
@@ -214,10 +230,10 @@ message Crew {
 }
 
 enum CrewType {
-  CREW_UNSPECIFIED = 0;
-  CREW_COMMANDER = 1;
-  CREW_RADIOMAN = 2;
-  CREW_GUNNER = 3;
-  CREW_DRIVER = 4;
-  CREW_LOADER = 5;
+  CREW_TYPE_UNSPECIFIED = 0;
+  CREW_TYPE_COMMANDER = 1;
+  CREW_TYPE_RADIOMAN = 2;
+  CREW_TYPE_GUNNER = 3;
+  CREW_TYPE_DRIVER = 4;
+  CREW_TYPE_LOADER = 5;
 }

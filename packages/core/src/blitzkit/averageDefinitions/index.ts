@@ -1,40 +1,5 @@
-import { decodeProtobuf } from '../../protobuf/decodeProtobuf';
-import { BlitzkitStats } from '../../statistics';
+import { AverageDefinitions } from '../../protos';
 import { asset } from '../asset';
-
-export interface AverageDefinitionsEntry {
-  mu: BlitzkitStats;
-  sigma: BlitzkitStats;
-  r: BlitzkitStats;
-  samples: Samples;
-}
-
-export interface AverageDefinitionsEntrySubPartial {
-  mu: Partial<BlitzkitStats>;
-  sigma: Partial<BlitzkitStats>;
-  r: Partial<BlitzkitStats>;
-  samples: Samples;
-}
-
-export interface AverageDefinitionsEntryWithId extends AverageDefinitionsEntry {
-  id: number;
-}
-
-export interface AverageDefinitions {
-  averages: Record<number, AverageDefinitionsEntry>;
-  samples: Samples;
-  time: number;
-}
-
-export interface Samples {
-  d_1: number;
-  d_7: number;
-  d_30: number;
-  d_60: number;
-  d_90: number;
-  d_120: number;
-  total: number;
-}
 
 export interface AverageDefinitionsManifest {
   version: 1;
@@ -44,30 +9,18 @@ export interface AverageDefinitionsManifest {
   latest: number;
 }
 
-export const averageDefinitions = fetch(asset('averages/manifest.json'), {
-  cache: 'no-store',
-})
-  .then((response) => response.json() as Promise<AverageDefinitionsManifest>)
-  .then((manifest) => fetch(asset(`averages/${manifest.latest}.pb`)))
-  .then((response) => response.arrayBuffer())
-  .then((buffer) =>
-    decodeProtobuf<AverageDefinitions>(
-      'average_definitions',
-      'blitzkit.AverageDefinitions',
-      new Uint8Array(buffer),
-    ),
+export async function fetchAverageDefinitions() {
+  const manifestResponse = await fetch(asset('averages/manifest.json'));
+  const manifestJson =
+    (await manifestResponse.json()) as AverageDefinitionsManifest;
+  const averageDefinitionsResponse = await fetch(
+    asset(`averages/${manifestJson.latest}.pb`),
   );
+  const averageDefinitionsBuffer =
+    await averageDefinitionsResponse.arrayBuffer();
+  const averageDefinitionsArray = new Uint8Array(averageDefinitionsBuffer);
 
-export const averageDefinitionsArray = averageDefinitions.then((data) =>
-  Object.entries(data.averages)
-    .map(
-      ([key, value]) =>
-        ({
-          id: Number(key),
-          ...(value as AverageDefinitionsEntry),
-        }) satisfies AverageDefinitionsEntryWithId,
-    )
-    .filter((tank) => tank.mu.battles > 0),
-);
+  return AverageDefinitions.deserializeBinary(averageDefinitionsArray);
+}
 
 export * from './constants';

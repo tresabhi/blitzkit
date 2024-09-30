@@ -1,26 +1,10 @@
-import { decodeProtobuf } from '../protobuf';
+import { Reviews } from '../protos';
 import { asset } from './asset';
 
-export interface Reviews {
-  reviews: Record<number, Review>;
-}
+export async function fetchReviews() {
+  const response = await fetch(asset('definitions/reviews.pb'));
+  const buffer = await response.arrayBuffer();
+  const array = new Uint8Array(buffer);
 
-interface Review {
-  last_updated: number;
-  videos?: Video[];
+  return Reviews.deserializeBinary(array);
 }
-
-export interface Video {
-  id: string;
-  author: string;
-}
-
-export const reviews = fetch(asset('definitions/reviews.pb'))
-  .then((response) => response.arrayBuffer())
-  .then((buffer) =>
-    decodeProtobuf<Reviews>(
-      'reviews',
-      'blitzkit.Reviews',
-      new Uint8Array(buffer),
-    ),
-  );
