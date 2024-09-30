@@ -1,3 +1,4 @@
+import { toUniqueId } from '@blitzkit/core';
 import { NodeIO } from '@gltf-transform/core';
 import { readdir } from 'fs/promises';
 import { extractArmor } from '../core/blitz/extractArmor';
@@ -6,7 +7,6 @@ import { commitAssets } from '../core/github/commitAssets';
 import { FileChange } from '../core/github/commitMultipleFiles';
 import { DATA } from './constants';
 import { VehicleDefinitionList } from './definitions';
-import { toUniqueId } from '@blitzkit/core';
 
 export async function tankArmors() {
   console.log('Building tank armors...');

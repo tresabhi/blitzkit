@@ -26,10 +26,8 @@ await Promise.all(
 
 const files = filesRaw.filter((file) => file.endsWith('.proto'));
 const args = [
-  `--plugin="protoc-gen-ts=./node_modules/.bin/protoc-gen-ts${executableFileExtension}"`,
-  '--ts_opt=esModuleInterop=true',
-  `--js_out="import_style=commonjs,binary:."`,
-  `--ts_out="."`,
+  `--plugin=./node_modules/.bin/protoc-gen-ts_proto${executableFileExtension}`,
+  '--ts_proto_out=.',
   ...files.map((file) => `${ROOT}/${file}`),
 ];
 
@@ -38,6 +36,6 @@ await writeFile(
   `${ROOT}/index.ts`,
   files
     .map((file) => file.replace('.proto', ''))
-    .map((file) => `export * from './${file}_pb';`)
+    .map((file) => `export * from './${file}.ts';`)
     .join('\n'),
 );

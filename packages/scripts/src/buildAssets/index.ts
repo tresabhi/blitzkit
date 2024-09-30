@@ -13,7 +13,7 @@ import { boosterIcons } from './boosterIcons';
 import { camouflageIcons } from './camouflageIcons';
 import { consumableProvisionIcons } from './consumableProvisionIcons';
 import { currencies } from './currencies';
-import { definitions } from './definitions';
+import { tankDefinitions } from './definitions';
 import { equipmentIcons } from './equipmentIcons';
 import { flags } from './flags';
 import { gameModeBanners } from './gameModeBanners';
@@ -30,7 +30,7 @@ const methods = [
   tankModels,
   tankArmors,
   gameModeBanners,
-  definitions,
+  tankDefinitions,
   tankIcons,
   currencies,
   skillIcons,
