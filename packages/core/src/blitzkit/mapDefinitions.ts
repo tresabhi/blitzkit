@@ -1,13 +1,7 @@
+import { MapDefinitions } from '../protos';
+import { fetchPB } from '../types';
 import { asset } from './asset';
-import { fetchCdonLz4 } from './fetchCdonLz4';
 
-export interface MapDefinitions {
-  [id: number]: {
-    id: number;
-    name: string;
-  };
+export function fetchMapDefinitions() {
+  return fetchPB(asset('definitions/maps.pb'), MapDefinitions);
 }
-
-export const mapDefinitions = fetchCdonLz4<MapDefinitions>(
-  asset('definitions/maps.cdon.lz4'),
-);

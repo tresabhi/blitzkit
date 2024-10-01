@@ -1,4 +1,5 @@
 import { AverageDefinitions } from '../../protos';
+import { fetchPB } from '../../types';
 import { asset } from '../asset';
 
 export interface AverageDefinitionsManifest {
@@ -13,14 +14,10 @@ export async function fetchAverageDefinitions() {
   const manifestResponse = await fetch(asset('averages/manifest.json'));
   const manifestJson =
     (await manifestResponse.json()) as AverageDefinitionsManifest;
-  const averageDefinitionsResponse = await fetch(
+  return await fetchPB(
     asset(`averages/${manifestJson.latest}.pb`),
+    AverageDefinitions,
   );
-  const averageDefinitionsBuffer =
-    await averageDefinitionsResponse.arrayBuffer();
-  const averageDefinitionsArray = new Uint8Array(averageDefinitionsBuffer);
-
-  return AverageDefinitions.deserializeBinary(averageDefinitionsArray);
 }
 
 export * from './constants';

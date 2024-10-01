@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package blitzkit;
+
+message MapDefinitions {
+  map<int32, MapDefinition> maps = 1;
+}
+
+message MapDefinition {
+  uint32 id = 1;
+  string name = 2;
+}

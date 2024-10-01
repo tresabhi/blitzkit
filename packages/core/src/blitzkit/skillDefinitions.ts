@@ -1,10 +1,7 @@
 import { SkillDefinitions } from '../protos';
+import { fetchPB } from '../types';
 import { asset } from './asset';
 
-export async function fetchSkillDefinitions() {
-  const response = await fetch(asset('definitions/skills.pb'));
-  const buffer = await response.arrayBuffer();
-  const array = new Uint8Array(buffer);
-
-  return SkillDefinitions.deserializeBinary(array).toObject();
+export function fetchSkillDefinitions() {
+  return fetchPB(asset('definitions/skills.pb'), SkillDefinitions);
 }

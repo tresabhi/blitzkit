@@ -1,10 +1,7 @@
 import { EquipmentDefinitions } from '../protos';
+import { fetchPB } from '../types';
 import { asset } from './asset';
 
-export async function fetchEquipmentDefinitions() {
-  const response = await fetch(asset('definitions/equipment.pb'));
-  const buffer = await response.arrayBuffer();
-  const array = new Uint8Array(buffer);
-
-  return EquipmentDefinitions.deserializeBinary(array).toObject();
+export function fetchEquipmentDefinitions() {
+  return fetchPB(asset('definitions/equipment.pb'), EquipmentDefinitions);
 }

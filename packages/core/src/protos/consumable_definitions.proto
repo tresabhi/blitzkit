@@ -20,10 +20,10 @@ message Consumable {
 
 message ConsumableTankFilter {
   oneof filter_type {
-    ConsumableTankTierFilter tier = 1;
+    ConsumableTankTierFilter tiers = 1;
     ConsumableTankIdsFilter ids = 2;
-    ConsumableTankCategoryFilter category = 3;
-    ConsumableTankNationFilter nation = 4;
+    ConsumableTankCategoryFilter categories = 3;
+    ConsumableTankNationFilter nations = 4;
   }
 }
 
@@ -41,8 +41,7 @@ message ConsumableTankCategoryFilter {
 }
 
 enum ConsumableTankCategoryFilterCategory {
-  TANK_CATEGORY_UNSPECIFIED = 0;
-  TANK_CATEGORY_CLIP = 1;
+  TANK_CATEGORY_CLIP = 0;
 }
 
 message ConsumableTankNationFilter {
