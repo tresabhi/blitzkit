@@ -1,20 +1,20 @@
-import { TankDefinition, tankDefinitions } from '@blitzkit/core';
+import { fetchTankDefinitions, TankDefinition } from '@blitzkit/core';
 import { sumBy } from 'lodash-es';
 import { useMemo } from 'react';
-import * as Duel from '../stores/duel';
+import { Duel } from '../stores/duel';
 
 export enum UseEccentricityMode {
   Tier,
   Class,
 }
 
-const awaitedTankDefinitions = await tankDefinitions;
+const tankDefinitions = await fetchTankDefinitions();
 
 export function useEccentricity(mode: UseEccentricityMode) {
   const tank = Duel.use((state) => state.protagonist.tank);
   const similarTanks = useMemo(
     () =>
-      Object.values(awaitedTankDefinitions).filter(
+      Object.values(tankDefinitions).filter(
         (tankB) =>
           tank.tier === tankB.tier &&
           (mode === UseEccentricityMode.Class

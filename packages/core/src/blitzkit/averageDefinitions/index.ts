@@ -1,5 +1,5 @@
+import { fetchPB } from '../../protobuf';
 import { AverageDefinitions } from '../../protos';
-import { fetchPB } from '../../types';
 import { asset } from '../asset';
 
 export interface AverageDefinitionsManifest {

@@ -1,5 +1,5 @@
+import { fetchPB } from '../protobuf';
 import { ModelDefinitions } from '../protos';
-import { fetchPB } from '../types';
 import { asset } from './asset';
 
 export function fetchModelDefinitions() {

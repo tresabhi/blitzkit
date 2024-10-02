@@ -1,12 +1,14 @@
+import { TankClass } from '../protos';
 import { BlitzStats } from '../statistics';
 
 export const TREE_TYPES = ['researchable', 'premium', 'collector'] as const;
 
 export const TANK_CLASSES = [
-  'lightTank',
-  'mediumTank',
-  'heavyTank',
-  'AT-SPG',
+  TankClass.TANK_CLASS_LIGHT,
+  TankClass.TANK_CLASS_MEDIUM,
+  TankClass.TANK_CLASS_HEAVY,
+  TankClass.TANK_CLASS_TANK_DESTROYER,
+  TankClass.UNRECOGNIZED,
 ] as const;
 
 export const emptyAllStats: BlitzStats = {

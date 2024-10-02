@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+message Test {
+  Child child_b = 1;
+  uint32 child_a = 2;
+}
+
+message Child {
+  string value = 1;
+}

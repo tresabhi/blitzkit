@@ -1,7 +1,7 @@
 import {
-  modelDefinitions,
-  provisionDefinitions,
-  tankDefinitions,
+  fetchModelDefinitions,
+  fetchProvisionDefinitions,
+  fetchTankDefinitions,
 } from '@blitzkit/core';
 import { PageWrapper } from '../../../../components/PageWrapper';
 import { CalloutsSection } from '../../../../components/Tankopedia/CalloutsSection';
@@ -22,20 +22,20 @@ interface PageProps {
   id: number;
 }
 
-const awaitedTankDefinitions = await tankDefinitions;
-const awaitedProvisionDefinitions = await provisionDefinitions;
-const awaitedModelDefinitions = await modelDefinitions;
+const tankDefinitions = await fetchTankDefinitions();
+const provisionDefinitions = await fetchProvisionDefinitions();
+const modelDefinitions = await fetchModelDefinitions();
 
 export function Page({ id }: PageProps) {
-  const tank = awaitedTankDefinitions[id];
-  const model = awaitedModelDefinitions[id];
+  const tank = tankDefinitions.tanks[id];
+  const model = modelDefinitions.models[id];
 
   return (
     <TankopediaEphemeral.Provider data={model}>
       <App.Provider>
         <TankopediaPersistent.Provider>
           <Duel.Provider
-            data={{ tank, provisionDefinitions: awaitedProvisionDefinitions }}
+            data={{ tank, provisionDefinitions: provisionDefinitions }}
           >
             <PageWrapper p="0" noMaxWidth color="purple" size={1600} gap="9">
               <HeroSection />

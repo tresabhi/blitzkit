@@ -1,13 +1,13 @@
 import {
   TANK_CLASSES,
-  gameDefinitions,
-  modelDefinitions,
+  fetchGameDefinitions,
+  fetchModelDefinitions,
+  fetchTankDefinitions,
+  fetchTankNames,
   normalizeBoundingBox,
   resolveDpm,
+  resolveGun,
   resolveNearPenetration,
-  tankDefinitions,
-  tankDefinitionsArray,
-  tankNames,
   unionBoundingBox,
   type TankDefinition,
 } from '@blitzkit/core';
@@ -44,20 +44,15 @@ type TankSearchProps = Omit<FlexProps, 'onSelect'> & {
 const PREVIEW_COUNT = 25;
 const DEFAULT_LOADED_CARDS = 75;
 
-const awaitedGameDefinitions = await gameDefinitions;
-const awaitedModelDefinitions = await modelDefinitions;
-const awaitedTankDefinitions = await tankDefinitions;
-const awaitedTanksDefinitionsArray = await tankDefinitionsArray;
-const awaitedTankNames = await tankNames;
+const gameDefinitions = await fetchGameDefinitions();
+const modelDefinitions = await fetchModelDefinitions();
+const tankDefinitions = await fetchTankDefinitions();
+const tankNames = await fetchTankNames();
 
 export const TankSearch = memo<TankSearchProps>(
   ({ compact, onSelect, onSelectAll, ...props }) => {
+    const awaitedTanksDefinitionsArray = Object.values(tankDefinitions.tanks);
     const exempt = useAdExempt();
-    // const awaitedGameDefinitions = useAwait(gameDefinitions);
-    // const awaitedModelDefinitions = useAwait(modelDefinitions);
-    // const awaitedTankDefinitions = useAwait(tankDefinitions);
-    // const awaitedTanksDefinitionsArray = useAwait(tankDefinitionsArray);
-    // const awaitedTankNames = useAwait(tankNames);
     const tankFilters = useStore($tankFilters);
     const tankopediaSort = useStore($tankopediaSort);
 
@@ -74,8 +69,7 @@ export const TankSearch = memo<TankSearchProps>(
               .sort((a, b) => b.tier - a.tier)
               .sort(
                 (a, b) =>
-                  treeTypeOrder.indexOf(b.treeType) -
-                  treeTypeOrder.indexOf(a.treeType),
+                  treeTypeOrder.indexOf(b.type) - treeTypeOrder.indexOf(a.type),
               )
               .sort(
                 (a, b) =>
@@ -83,8 +77,8 @@ export const TankSearch = memo<TankSearchProps>(
               )
               .sort(
                 (a, b) =>
-                  awaitedGameDefinitions.nations.indexOf(b.nation) -
-                  awaitedGameDefinitions.nations.indexOf(a.nation),
+                  gameDefinitions.nations.indexOf(b.nation) -
+                  gameDefinitions.nations.indexOf(a.nation),
               )
               .sort((a, b) => a.tier - b.tier);
             break;
@@ -102,36 +96,38 @@ export const TankSearch = memo<TankSearchProps>(
           case 'survivability.viewRange':
             sorted = filtered.sort(
               (a, b) =>
-                a.turrets.at(-1)!.viewRange - b.turrets.at(-1)!.viewRange,
+                a.turrets.at(-1)!.view_range - b.turrets.at(-1)!.view_range,
             );
             break;
 
           case 'survivability.camouflageStill':
             sorted = filtered.sort(
-              (a, b) => a.camouflage.still - b.camouflage.still,
+              (a, b) => a.camouflageStill - b.camouflageStill,
             );
             break;
 
           case 'survivability.camouflageMoving':
             sorted = filtered.sort(
-              (a, b) => a.camouflage.moving - b.camouflage.moving,
+              (a, b) => a.camouflageMoving - b.camouflageMoving,
             );
             break;
 
           case 'survivability.camouflageShooting':
             sorted = filtered.sort(
               (a, b) =>
-                a.camouflage.still *
-                  a.turrets.at(-1)!.guns.at(-1)!.camouflageLoss -
-                b.camouflage.still *
-                  b.turrets.at(-1)!.guns.at(-1)!.camouflageLoss,
+                a.camouflageStill *
+                  resolveGun(a.turrets.at(-1)!.guns.at(-1)!).gun!
+                    .camouflageLoss -
+                b.camouflageStill *
+                  resolveGun(b.turrets.at(-1)!.guns.at(-1)!).gun!
+                    .camouflageLoss,
             );
             break;
 
           case 'survivability.volume':
             sorted = filtered.sort((a, b) => {
-              const aTankModelDefinition = awaitedModelDefinitions[a.id];
-              const bTankModelDefinition = awaitedModelDefinitions[b.id];
+              const aTankModelDefinition = modelDefinitions.models[a.id];
+              const bTankModelDefinition = modelDefinitions.models[b.id];
               const aTurretModelDefinition =
                 aTankModelDefinition.turrets[a.turrets.at(-1)!.id];
               const bTurretModelDefinition =
@@ -157,8 +153,8 @@ export const TankSearch = memo<TankSearchProps>(
 
           case 'survivability.length':
             sorted = filtered.sort((a, b) => {
-              const aTankModelDefinition = awaitedModelDefinitions[a.id];
-              const bTankModelDefinition = awaitedModelDefinitions[b.id];
+              const aTankModelDefinition = modelDefinitions[a.id];
+              const bTankModelDefinition = modelDefinitions[b.id];
               const aTurretModelDefinition =
                 aTankModelDefinition.turrets[a.turrets.at(-1)!.id];
               const bTurretModelDefinition =
@@ -297,24 +293,28 @@ export const TankSearch = memo<TankSearchProps>(
           case 'fire.gunDepression':
             sorted = filtered.sort(
               (a, b) =>
-                awaitedModelDefinitions[a.id].turrets[a.turrets.at(-1)!.id]
-                  .guns[a.turrets.at(-1)!.guns.at(-1)!.id].pitch.max +
-                (awaitedModelDefinitions[a.id].turretRotation?.pitch ?? 0) -
-                awaitedModelDefinitions[b.id].turrets[b.turrets.at(-1)!.id]
-                  .guns[b.turrets.at(-1)!.guns.at(-1)!.id].pitch.max -
-                (awaitedModelDefinitions[b.id].turretRotation?.pitch ?? 0),
+                modelDefinitions[a.id].turrets[a.turrets.at(-1)!.id].guns[
+                  a.turrets.at(-1)!.guns.at(-1)!.id
+                ].pitch.max +
+                (modelDefinitions[a.id].turretRotation?.pitch ?? 0) -
+                modelDefinitions[b.id].turrets[b.turrets.at(-1)!.id].guns[
+                  b.turrets.at(-1)!.guns.at(-1)!.id
+                ].pitch.max -
+                (modelDefinitions[b.id].turretRotation?.pitch ?? 0),
             );
             break;
 
           case 'fire.gunElevation':
             sorted = filtered.sort(
               (a, b) =>
-                awaitedModelDefinitions[b.id].turrets[b.turrets.at(-1)!.id]
-                  .guns[b.turrets.at(-1)!.guns.at(-1)!.id].pitch.min +
-                (awaitedModelDefinitions[b.id].turretRotation?.pitch ?? 0) -
-                awaitedModelDefinitions[a.id].turrets[a.turrets.at(-1)!.id]
-                  .guns[a.turrets.at(-1)!.guns.at(-1)!.id].pitch.min -
-                (awaitedModelDefinitions[a.id].turretRotation?.pitch ?? 0),
+                modelDefinitions[b.id].turrets[b.turrets.at(-1)!.id].guns[
+                  b.turrets.at(-1)!.guns.at(-1)!.id
+                ].pitch.min +
+                (modelDefinitions[b.id].turretRotation?.pitch ?? 0) -
+                modelDefinitions[a.id].turrets[a.turrets.at(-1)!.id].guns[
+                  a.turrets.at(-1)!.guns.at(-1)!.id
+                ].pitch.min -
+                (modelDefinitions[a.id].turretRotation?.pitch ?? 0),
             );
             break;
 
@@ -382,11 +382,11 @@ export const TankSearch = memo<TankSearchProps>(
           ? sorted
           : sorted.reverse();
       } else {
-        const searchedRaw = fuzzysort.go(tankFilters.search, awaitedTankNames, {
+        const searchedRaw = fuzzysort.go(tankFilters.search, tankNames, {
           keys: ['searchableName', 'searchableNameDeburr', 'camouflages'],
         });
         const searchedTanks = searchedRaw.map(
-          (result) => awaitedTankDefinitions[result.obj.id],
+          (result) => tankDefinitions[result.obj.id],
         );
         return searchedTanks;
       }

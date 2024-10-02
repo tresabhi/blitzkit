@@ -1,13 +1,13 @@
 ---
-import { tankDefinitions } from '@blitzkit/core';
+import { fetchTankDefinitions } from '@blitzkit/core';
 import type { GetStaticPaths } from 'astro';
 import ToolLayout from '../../../../layouts/ToolLayout.astro';
 import { Page } from './index';
 
 export const getStaticPaths = (async () => {
-  const awaitedTankDefinitions = await tankDefinitions;
+  const tankDefinitions = await fetchTankDefinitions();
 
-  return Object.values(awaitedTankDefinitions).map((tank) => ({
+  return Object.values(tankDefinitions).map((tank) => ({
     params: { id: tank.id },
   }));
 }) satisfies GetStaticPaths;

@@ -1,8 +1,8 @@
 import {
   BlitzkitResponse,
   BlitzkitResponseError,
+  fetchTankDefinitions,
   isValidBlitzId,
-  tankDefinitions,
   TankVotes,
   usersDatabase,
 } from '@blitzkit/core';
@@ -13,9 +13,9 @@ export async function GET(
   { params }: { params: { id: string } },
 ) {
   const id = Number(params.id);
-  const awaitedTankDefinitions = await tankDefinitions;
+  const tankDefinitions = await fetchTankDefinitions();
 
-  if (isNaN(id) || !awaitedTankDefinitions[id]) {
+  if (isNaN(id) || !tankDefinitions.tanks[id]) {
     return NextResponse.json({
       status: 'error',
       error: 'INVALID_TANK_ID',

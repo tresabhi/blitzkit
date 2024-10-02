@@ -41,7 +41,7 @@ message ConsumableTankCategoryFilter {
 }
 
 enum ConsumableTankCategoryFilterCategory {
-  TANK_CATEGORY_CLIP = 0;
+  CONSUMABLE_TANK_CATEGORY_FILTER_CATEGORY_CLIP = 0;
 }
 
 message ConsumableTankNationFilter {

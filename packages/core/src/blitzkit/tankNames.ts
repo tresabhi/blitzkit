@@ -1,14 +1,17 @@
 import { deburr } from 'lodash-es';
-import { tankDefinitionsArray } from '.';
-import { camouflageDefinitions } from './camouflageDefinitions';
+import { fetchCamouflageDefinitions } from './camouflageDefinitions';
+import { fetchTankDefinitions } from './tankDefinitions';
 
-export const tankNames = Promise.all([
-  tankDefinitionsArray,
-  camouflageDefinitions,
-]).then(([tanks, camouflages]) =>
-  Promise.all(
-    tanks.map(async (tank, index) => {
-      const { id } = (await tankDefinitionsArray)[index];
+export async function fetchTankNames() {
+  const [tankDefinitions, camouflageDefinitions] = await Promise.all([
+    fetchTankDefinitions(),
+    fetchCamouflageDefinitions(),
+  ]);
+  const tankDefinitionsArray = Object.values(tankDefinitions.tanks);
+
+  return await Promise.all(
+    tankDefinitionsArray.map(async (tank, index) => {
+      const { id } = tankDefinitionsArray[index];
 
       return {
         id,
@@ -17,10 +20,10 @@ export const tankNames = Promise.all([
         searchableName: tank.nameFull ?? tank.name,
         searchableNameDeburr: deburr(tank.nameFull ?? tank.name),
         camouflages: tank.camouflages
-          ?.map((id) => camouflages[id].name)
+          ?.map((id) => camouflageDefinitions.camouflages[id].name)
           .join(' '),
-        treeType: tank.treeType,
+        treeType: tank.type,
       };
     }),
-  ),
-);
+  );
+}

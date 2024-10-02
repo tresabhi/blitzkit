@@ -1,5 +1,5 @@
+import { fetchPB } from '../protobuf';
 import { GameDefinitions } from '../protos';
-import { fetchPB } from '../types';
 import { asset } from './asset';
 
 export function fetchGameDefinitions() {

@@ -9,7 +9,7 @@ const exec = promisify(execSync);
 
 let executableFileExtension: string;
 
-if (existsSync('node_modules/.bin/protoc-gen-ts.exe')) {
+if (existsSync('node_modules/.bin/protoc-gen-ts_proto.exe')) {
   executableFileExtension = '.exe';
 } else {
   executableFileExtension = '';
@@ -27,6 +27,12 @@ await Promise.all(
 const files = filesRaw.filter((file) => file.endsWith('.proto'));
 const args = [
   `--plugin=./node_modules/.bin/protoc-gen-ts_proto${executableFileExtension}`,
+  '--ts_proto_opt=esModuleInterop=true',
+  '--ts_proto_opt=oneof=unions',
+  '--ts_proto_opt=removeEnumPrefix=true',
+  '--ts_proto_opt=snakeToCamel=false',
+  '--ts_proto_opt=useOptionals=none',
+  '--ts_proto_opt=noDefaultsForOptionals=true',
   '--ts_proto_out=.',
   ...files.map((file) => `${ROOT}/${file}`),
 ];
