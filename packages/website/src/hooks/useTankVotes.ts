@@ -1,18 +1,21 @@
 import {
-  BlitzkitResponse,
-  TankVotes,
   unwrapBlitzkitResponse,
+  type BlitzkitResponse,
+  type TankVotes,
 } from '@blitzkit/core';
+import { useStore } from '@nanostores/react';
 import { useEffect, useState } from 'react';
-import * as App from '../stores/app';
+import { $wargamingLogin } from '../stores/wargamingLogin';
 
 const cache: Record<string, Promise<TankVotes> | TankVotes> = {};
 
 export function useTankVotes(id: number) {
-  const wargaming = App.use((state) => state.logins.wargaming);
   const [votes, setVotes] = useState<TankVotes | null>(null);
+  const wargaming = useStore($wargamingLogin);
 
   useEffect(() => {
+    if (!wargaming.token) return;
+
     if (id in cache) {
       Promise.all([cache[id]]).then(([votes]) => setVotes(votes));
     } else {

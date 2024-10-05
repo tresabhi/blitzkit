@@ -1,4 +1,4 @@
-import { provisionDefinitions } from '@blitzkit/core';
+import { fetchProvisionDefinitions } from '@blitzkit/core';
 import { PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, SegmentedControl } from '@radix-ui/themes';
 import { tankToCompareMember } from '../../core/blitzkit/tankToCompareMember';
@@ -14,7 +14,7 @@ interface ControlsProps {
   onAddTankDialogOpenChange: (open: boolean) => void;
 }
 
-const awaitedProvisionDefinitions = await provisionDefinitions;
+const provisionDefinitions = await fetchProvisionDefinitions();
 
 export function Controls({
   addTankDialogOpen,
@@ -51,7 +51,7 @@ export function Controls({
                 onSelect={(tank) => {
                   mutateCompareEphemeral((draft) => {
                     draft.members.push(
-                      tankToCompareMember(tank, awaitedProvisionDefinitions),
+                      tankToCompareMember(tank, provisionDefinitions),
                     );
                     draft.sorting = undefined;
                   });
@@ -61,7 +61,7 @@ export function Controls({
                   mutateCompareEphemeral((draft) => {
                     draft.members.push(
                       ...tanks.map((tank) =>
-                        tankToCompareMember(tank, awaitedProvisionDefinitions),
+                        tankToCompareMember(tank, provisionDefinitions),
                       ),
                     );
                     draft.sorting = undefined;

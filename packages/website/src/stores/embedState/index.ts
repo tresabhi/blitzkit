@@ -102,8 +102,8 @@ export type EmbedConfigItem = (
   pad?: boolean;
 };
 
-export type EmbedState = Record<string, EmbedConfigItem['default']>;
+export type EmbedStateStore = Record<string, EmbedConfigItem['default']>;
 
-export const { Provider, use, useMutation, useStore } = createContextualStore(
-  (init: EmbedState) => create<EmbedState>()(() => init),
+export const EmbedState = createContextualStore((init: EmbedStateStore) =>
+  create<EmbedStateStore>()(() => init),
 );

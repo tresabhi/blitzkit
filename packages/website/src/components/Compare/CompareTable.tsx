@@ -1,11 +1,11 @@
 import {
   asset,
   availableProvisions,
-  consumableDefinitions,
-  equipmentDefinitions,
+  fetchConsumableDefinitions,
+  fetchEquipmentDefinitions,
+  fetchProvisionDefinitions,
+  fetchSkillDefinitions,
   permanentSkills,
-  provisionDefinitions,
-  skillDefinitions,
 } from '@blitzkit/core';
 import { checkConsumableProvisionInclusivity } from '@blitzkit/core/src/blitzkit/checkConsumableProvisionInclusivity';
 import { ComponentPlaceholderIcon } from '@radix-ui/react-icons';
@@ -31,10 +31,10 @@ interface CompareTableProps {
   stats: TankCharacteristics[];
 }
 
-const awaitedSkillDefinitions = await skillDefinitions;
-const awaitedEquipmentDefinitions = await equipmentDefinitions;
-const awaitedConsumableDefinitions = await consumableDefinitions;
-const awaitedProvisionDefinitions = await provisionDefinitions;
+const skillDefinitions = await fetchSkillDefinitions();
+const equipmentDefinitions = await fetchEquipmentDefinitions();
+const consumableDefinitions = await fetchConsumableDefinitions();
+const provisionDefinitions = await fetchProvisionDefinitions();
 
 export function CompareTable({ stats }: CompareTableProps) {
   const crewSkills = CompareEphemeral.use((state) => state.crewSkills);
@@ -84,10 +84,10 @@ export function CompareTable({ stats }: CompareTableProps) {
                 <Popover.Trigger>
                   <Button variant="ghost" radius="large">
                     <Flex direction="column" style={{ gap: 2 }}>
-                      {Object.entries(awaitedSkillDefinitions.classes).map(
+                      {Object.entries(skillDefinitions.classes).map(
                         ([tankClass, skills]) => (
                           <Flex key={tankClass} style={{ gap: 2 }}>
-                            {skills.map((skill) => (
+                            {skills.skills.map((skill) => (
                               <div
                                 key={skill}
                                 style={{
@@ -169,14 +169,14 @@ export function CompareTable({ stats }: CompareTableProps) {
               index,
             ) => {
               const equipmentPreset =
-                awaitedEquipmentDefinitions.presets[tank.equipment];
+                equipmentDefinitions.presets[tank.equipmentPreset];
               const provisionsList = availableProvisions(
                 tank,
                 gun,
-                awaitedProvisionDefinitions,
+                provisionDefinitions,
               );
               const consumablesList = Object.values(
-                awaitedConsumableDefinitions,
+                consumableDefinitions,
               ).filter((consumable) =>
                 checkConsumableProvisionInclusivity(consumable, tank, gun),
               );
@@ -238,7 +238,8 @@ export function CompareTable({ stats }: CompareTableProps) {
 
                                 member.turret = member.tank.turrets[0];
                                 member.gun = member.turret.guns[0];
-                                member.shell = member.gun.shells[0];
+                                member.shell =
+                                  member.gun.gunType!.value.base.shells[0];
                                 member.engine = member.tank.engines[0];
                                 member.track = member.tank.tracks[0];
                               });
@@ -254,7 +255,8 @@ export function CompareTable({ stats }: CompareTableProps) {
 
                                 member.turret = member.tank.turrets.at(-1)!;
                                 member.gun = member.turret.guns.at(-1)!;
-                                member.shell = member.gun.shells[0];
+                                member.shell =
+                                  member.gun.gunType!.value.base.shells[0];
                                 member.engine = member.tank.engines.at(-1)!;
                                 member.track = member.tank.tracks.at(-1)!;
                               });
@@ -282,7 +284,8 @@ export function CompareTable({ stats }: CompareTableProps) {
                               {provisions.map((provision, index) => (
                                 <img
                                   alt={
-                                    awaitedProvisionDefinitions[provision].name
+                                    provisionDefinitions.provisions[provision]
+                                      .name
                                   }
                                   key={provision}
                                   src={asset(
@@ -326,7 +329,7 @@ export function CompareTable({ stats }: CompareTableProps) {
                               (provision) => provision.id,
                             )}
                             selected={provisions}
-                            disabled={tank.provisions === provisions.length}
+                            disabled={tank.maxProvisions === provisions.length}
                             onChange={(provisions) => {
                               mutateCompareEphemeral((draft) => {
                                 draft.members[index].provisions = provisions;
@@ -462,8 +465,9 @@ export function CompareTable({ stats }: CompareTableProps) {
                               {consumables.map((consumable, index) => (
                                 <img
                                   alt={
-                                    awaitedConsumableDefinitions[consumable]
-                                      .name
+                                    consumableDefinitions.consumables[
+                                      consumable
+                                    ].name
                                   }
                                   key={consumable}
                                   src={asset(
@@ -510,7 +514,9 @@ export function CompareTable({ stats }: CompareTableProps) {
                                 draft.members[index].consumables = consumables;
                               });
                             }}
-                            disabled={tank.consumables === consumables.length}
+                            disabled={
+                              tank.maxConsumables === consumables.length
+                            }
                           />
 
                           <Flex justify="end" mt="4">

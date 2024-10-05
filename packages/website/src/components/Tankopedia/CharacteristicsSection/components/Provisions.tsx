@@ -1,20 +1,16 @@
-import { availableProvisions, provisionDefinitions } from '@blitzkit/core';
+import { availableProvisions, fetchProvisionDefinitions } from '@blitzkit/core';
 import { Button, Flex, Heading } from '@radix-ui/themes';
 import { Duel } from '../../../../stores/duel';
 import { ProvisionsManager } from '../../../ProvisionsManager';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
-const awaitedProvisionDefinitions = await provisionDefinitions;
+const provisionDefinitions = await fetchProvisionDefinitions();
 
 export function Provisions() {
   const mutateDuel = Duel.useMutation();
   const { tank, gun } = Duel.use((state) => state.protagonist);
   const provisions = Duel.use((state) => state.protagonist.provisions);
-  const provisionsList = availableProvisions(
-    tank,
-    gun,
-    awaitedProvisionDefinitions,
-  );
+  const provisionsList = availableProvisions(tank, gun, provisionDefinitions);
 
   return (
     <ConfigurationChildWrapper>
@@ -36,7 +32,7 @@ export function Provisions() {
       <ProvisionsManager
         provisions={provisionsList.map((provision) => provision.id)}
         selected={provisions}
-        disabled={tank.provisions === provisions.length}
+        disabled={tank.maxProvisions === provisions.length}
         onChange={(provisions) => {
           mutateDuel((draft) => {
             draft.protagonist.provisions = provisions;

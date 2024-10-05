@@ -1,4 +1,4 @@
-import { provisionDefinitions } from '@blitzkit/core';
+import { fetchProvisionDefinitions } from '@blitzkit/core';
 import { ExternalLinkIcon, LoopIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Dialog, Flex, IconButton } from '@radix-ui/themes';
 import Link from 'next/link';
@@ -12,7 +12,7 @@ interface TankControlProps {
   id: number;
 }
 
-const awaitedProvisionDefinitions = await provisionDefinitions;
+const provisionDefinitions = await fetchProvisionDefinitions();
 
 export function TankControl({ index, id }: TankControlProps) {
   const [switchTankDialogOpen, setSwitchTankDialogOpen] = useState(false);
@@ -58,7 +58,7 @@ export function TankControl({ index, id }: TankControlProps) {
                   mutateCompareEphemeral((draft) => {
                     draft.members[index] = tankToCompareMember(
                       tank,
-                      awaitedProvisionDefinitions,
+                      provisionDefinitions,
                     );
                     draft.sorting = undefined;
                   });

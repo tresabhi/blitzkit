@@ -1,7 +1,7 @@
 import {
-  equipmentDefinitions,
-  modelDefinitions,
-  provisionDefinitions,
+  fetchEquipmentDefinitions,
+  fetchModelDefinitions,
+  fetchProvisionDefinitions,
 } from '@blitzkit/core';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, IconButton, Text } from '@radix-ui/themes';
@@ -14,9 +14,9 @@ import { tankCharacteristics } from '../../../core/blitzkit/tankCharacteristics'
 import { CompareEphemeral } from '../../../stores/compareEphemeral';
 import { ComparePersistent } from '../../../stores/comparePersistent';
 
-const awaitedModelDefinitions = await modelDefinitions;
-const awaitedEquipmentDefinitions = await equipmentDefinitions;
-const awaitedProvisionDefinitions = await provisionDefinitions;
+const modelDefinitions = await fetchModelDefinitions();
+const equipmentDefinitions = await fetchEquipmentDefinitions();
+const provisionDefinitions = await fetchProvisionDefinitions();
 
 export function Page() {
   return (
@@ -60,9 +60,9 @@ function Content() {
             ),
           },
           {
-            equipmentDefinitions: awaitedEquipmentDefinitions,
-            provisionDefinitions: awaitedProvisionDefinitions,
-            tankModelDefinition: awaitedModelDefinitions[thisMember.tank.id],
+            equipmentDefinitions: equipmentDefinitions,
+            provisionDefinitions: provisionDefinitions,
+            tankModelDefinition: modelDefinitions.models[thisMember.tank.id],
           },
         ),
       ),

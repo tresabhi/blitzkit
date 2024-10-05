@@ -1,6 +1,6 @@
 import type { EquipmentPreset } from '@blitzkit/core';
 import { Flex } from '@radix-ui/themes';
-import { cloneDeep } from 'lodash-es';
+import { chunk, cloneDeep } from 'lodash-es';
 import type { EquipmentMatrix } from '../stores/duel';
 import { EquipmentButton } from './ModuleButtons/EquipmentButton';
 
@@ -17,12 +17,12 @@ export function EquipmentManager({
 }: EquipmentManagerProps) {
   return (
     <Flex direction="column" gap="2">
-      {preset.map((equipmentRow, rowIndex) => (
+      {chunk(preset.slots, 3).map((equipmentRow, rowIndex) => (
         <Flex gap="2" key={rowIndex}>
           {equipmentRow.map((equipment, columnIndex) => (
             <Flex key={columnIndex}>
               <EquipmentButton
-                equipment={equipment[0]}
+                equipment={equipment.left}
                 style={{
                   borderTopRightRadius: 0,
                   borderBottomRightRadius: 0,
@@ -41,7 +41,7 @@ export function EquipmentManager({
                 }}
               />
               <EquipmentButton
-                equipment={equipment[1]}
+                equipment={equipment.right}
                 style={{
                   borderTopLeftRadius: 0,
                   borderBottomLeftRadius: 0,

@@ -1,6 +1,5 @@
-import {} from '@blitzkit/core';
+import { fetchConsumableDefinitions } from '@blitzkit/core';
 import { checkConsumableProvisionInclusivity } from '@blitzkit/core/src/blitzkit/checkConsumableProvisionInclusivity';
-import { consumableDefinitions } from '@blitzkit/core/src/blitzkit/consumableDefinitions';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import {
   Button,
@@ -15,13 +14,13 @@ import { Duel } from '../../../../stores/duel';
 import { ConsumablesManager } from '../../../ConsumablesManager';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
-const awaitedConsumableDefinitions = await consumableDefinitions;
+const consumableDefinitions = await fetchConsumableDefinitions();
 
 export function Consumables() {
   const mutateDuel = Duel.useMutation();
   const protagonist = Duel.use((state) => state.protagonist);
   const consumables = Duel.use((state) => state.protagonist.consumables);
-  const consumablesList = Object.values(awaitedConsumableDefinitions).filter(
+  const consumablesList = Object.values(consumableDefinitions).filter(
     (consumable) =>
       checkConsumableProvisionInclusivity(
         consumable,
@@ -74,7 +73,7 @@ export function Consumables() {
         consumables={consumablesList}
         selected={consumables}
         cooldownBooster={cooldownBooster}
-        disabled={protagonist.tank.consumables === consumables.length}
+        disabled={protagonist.tank.maxConsumables === consumables.length}
         hasConsumableDeliverySystem={hasConsumableDeliverySystem}
         hasHighEndConsumables={hasHighEndConsumables}
         timers

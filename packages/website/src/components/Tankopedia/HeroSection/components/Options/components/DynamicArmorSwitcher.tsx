@@ -28,8 +28,8 @@ export function DynamicArmorSwitcher() {
             draft.protagonist.consumables =
               draft.protagonist.consumables.filter((id) => id !== 73);
           } else {
-            if (draft.protagonist.consumables.length === tank.consumables) {
-              draft.protagonist.consumables[tank.consumables - 1] = 73;
+            if (draft.protagonist.consumables.length === tank.maxConsumables) {
+              draft.protagonist.consumables[tank.maxConsumables - 1] = 73;
             } else {
               draft.protagonist.consumables.push(73);
             }

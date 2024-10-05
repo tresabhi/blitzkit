@@ -1,11 +1,11 @@
-import type { TankClass, Tier, TreeType } from '@blitzkit/core';
+import type { TankClass, TankType, Tier } from '@blitzkit/core';
 import { map } from 'nanostores';
 
 export interface TankFilters {
   tiers: Tier[];
   nations: string[];
   classes: TankClass[];
-  types: TreeType[];
+  types: TankType[];
   testing: 'include' | 'exclude' | 'only';
   search?: string;
   searching: boolean;

@@ -1,15 +1,15 @@
 import {
   asset,
-  consumableDefinitions,
-  gameDefinitions,
-  provisionDefinitions,
+  fetchConsumableDefinitions,
+  fetchGameDefinitions,
+  fetchProvisionDefinitions,
 } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { Duel } from '../../stores/duel';
 
-const awaitedGameDefinitions = await gameDefinitions;
-const awaitedConsumableDefinitions = await consumableDefinitions;
-const awaitedProvisionDefinitions = await provisionDefinitions;
+const gameDefinitions = await fetchGameDefinitions();
+const consumableDefinitions = await fetchConsumableDefinitions();
+const provisionDefinitions = await fetchProvisionDefinitions();
 
 export function GameModeSection() {
   const tank = Duel.use((state) => state.protagonist.tank);
@@ -24,7 +24,7 @@ export function GameModeSection() {
       <Flex justify="center" gap="4" wrap="wrap" px="4">
         {roles.map(([key, value]) => {
           const id = Number(key);
-          const gameMode = awaitedGameDefinitions.gameModes[id];
+          const gameMode = gameDefinitions.gameModes[id];
 
           return (
             <Flex
@@ -70,8 +70,8 @@ export function GameModeSection() {
                 </Text>
 
                 <Flex direction="column">
-                  {awaitedGameDefinitions.roles[value].provisions.map((id) => {
-                    const provisions = awaitedProvisionDefinitions[id];
+                  {gameDefinitions.roles[value].provisions.map((id) => {
+                    const provisions = provisionDefinitions.provisions[id];
 
                     return (
                       <Text color="gray" wrap="nowrap" key={id}>
@@ -90,8 +90,8 @@ export function GameModeSection() {
                       </Text>
                     );
                   })}
-                  {awaitedGameDefinitions.roles[value].consumables.map((id) => {
-                    const consumable = awaitedConsumableDefinitions[id];
+                  {gameDefinitions.roles[value].consumables.map((id) => {
+                    const consumable = consumableDefinitions.consumables[id];
 
                     return (
                       <Text color="gray" wrap="nowrap" key={id}>

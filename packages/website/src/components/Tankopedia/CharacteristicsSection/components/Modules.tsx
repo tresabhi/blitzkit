@@ -1,11 +1,14 @@
 import {
   asset,
+  EngineDefinition,
+  fetchTankDefinitions,
   formatCompact,
-  tankDefinitions,
+  GunDefinition,
+  ModuleType,
   tankIcon,
   TIER_ROMAN_NUMERALS,
-  type ModuleDefinition,
-  type ModuleType,
+  TrackDefinition,
+  TurretDefinition,
   type TankDefinition,
   type Tier,
   type Unlock,
@@ -19,8 +22,25 @@ import {
   Link,
   Text,
 } from '@radix-ui/themes';
-import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 import { Duel } from '../../../../stores/duel';
+import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
+
+type ModuleDefinition =
+  | TurretDefinition
+  | GunDefinition
+  | TrackDefinition
+  | EngineDefinition;
+
+function extractModule(raw: ModuleDefinition | TankDefinition) {
+  if ('gunType' in raw) {
+    return raw.gunType!.value.base;
+  } else
+    return raw as Exclude<ModuleDefinition | TankDefinition, GunDefinition>;
+}
+
+interface ModuleWithUnlocks {
+  unlocks: Unlock[];
+}
 
 function ModuleButton({
   tier,
@@ -35,7 +55,7 @@ function ModuleButton({
   top: boolean;
   onClick: () => void;
 }) {
-  const isTank = unlock.type === 'vehicle';
+  const isTank = unlock.type === ModuleType.VEHICLE;
   const button = (
     <IconButton
       size="4"
@@ -89,7 +109,7 @@ function ModuleButton({
       )}
 
       <img
-        alt={unlock.type}
+        alt={ModuleType[unlock.type]}
         src={
           isTank
             ? tankIcon(unlock.id)
@@ -111,7 +131,7 @@ function ModuleButton({
   );
 }
 
-const awaitedTankDefinitions = await tankDefinitions;
+const tankDefinitions = await fetchTankDefinitions();
 
 export function Modules() {
   const mutateDuel = Duel.useMutation();
@@ -136,44 +156,48 @@ export function Modules() {
 
   function setByUnlock(unlock: Unlock) {
     mutateDuel((draft) => {
-      if (unlock.type === 'turret') {
+      if (unlock.type === ModuleType.TURRET) {
         draft.protagonist.turret = draft.protagonist.tank.turrets.find(
           (turret) => turret.id === unlock.id,
         )!;
 
         if (
           !draft.protagonist.turret.guns.some(
-            (gun) => gun.id === draft.protagonist.gun.id,
+            (gun) =>
+              gun.gunType!.value.base.id ===
+              draft.protagonist.gun.gunType!.value.base.id,
           )
         ) {
           draft.protagonist.gun = draft.protagonist.turret.guns.at(-1)!;
-          draft.protagonist.shell = draft.protagonist.gun.shells[0];
+          draft.protagonist.shell =
+            draft.protagonist.gun.gunType!.value.base.shells[0];
         }
-      } else if (unlock.type === 'gun') {
+      } else if (unlock.type === ModuleType.GUN) {
         const gunInTurret = draft.protagonist.turret.guns.find(
-          (gun) => gun.id === unlock.id,
+          (gun) => gun.gunType!.value.base.id === unlock.id,
         );
         if (gunInTurret) {
           draft.protagonist.gun = gunInTurret;
-          draft.protagonist.shell = gunInTurret.shells[0];
+          draft.protagonist.shell = gunInTurret.gunType!.value.base.shells[0];
         } else {
           // TODO: warn somehow?
           const suitableTurret = draft.protagonist.tank.turrets.find((turret) =>
-            turret.guns.some((gun) => gun.id === unlock.id),
+            turret.guns.some((gun) => gun.gunType!.value.base.id === unlock.id),
           )!;
           const gunInSuitableTurret = suitableTurret.guns.find(
-            (gun) => gun.id === unlock.id,
+            (gun) => gun.gunType!.value.base.id === unlock.id,
           )!;
 
           draft.protagonist.turret = suitableTurret;
           draft.protagonist.gun = gunInSuitableTurret;
-          draft.protagonist.shell = gunInSuitableTurret.shells[0];
+          draft.protagonist.shell =
+            gunInSuitableTurret.gunType!.value.base.shells[0];
         }
-      } else if (unlock.type === 'engine') {
+      } else if (unlock.type === ModuleType.ENGINE) {
         draft.protagonist.engine = draft.protagonist.tank.engines.find(
           (engine) => engine.id === unlock.id,
         )!;
-      } else if (unlock.type === 'chassis') {
+      } else if (unlock.type === ModuleType.TRACKS) {
         draft.protagonist.track = draft.protagonist.tank.tracks.find(
           (track) => track.id === unlock.id,
         )!;
@@ -190,20 +214,22 @@ export function Modules() {
           const central = !first && !last;
           let module: ModuleDefinition | TankDefinition | undefined = undefined;
 
-          if (unlock.type === 'chassis') {
+          if (unlock.type === ModuleType.TRACKS) {
             module = tank.tracks.find((track) => track.id === unlock.id)!;
-          } else if (unlock.type === 'engine') {
+          } else if (unlock.type === ModuleType.ENGINE) {
             module = tank.engines.find((engine) => engine.id === unlock.id)!;
-          } else if (unlock.type === 'turret') {
+          } else if (unlock.type === ModuleType.TURRET) {
             module = tank.turrets.find((turret) => turret.id === unlock.id)!;
-          } else if (unlock.type === 'gun') {
+          } else if (unlock.type === ModuleType.GUN) {
             module = tank.turrets
               .find((turret) =>
-                turret.guns.some((gun) => gun.id === unlock.id),
+                turret.guns.some(
+                  (gun) => gun.gunType!.value.base.id === unlock.id,
+                ),
               )!
-              .guns.find((gun) => gun.id === unlock.id)!;
-          } else if (unlock.type === 'vehicle') {
-            module = awaitedTankDefinitions[unlock.id];
+              .guns.find((gun) => gun.gunType!.value.base.id === unlock.id)!;
+          } else if (unlock.type === ModuleType.VEHICLE) {
+            module = tankDefinitions.tanks[unlock.id];
           }
 
           if (module === undefined) return null;
@@ -259,34 +285,36 @@ export function Modules() {
 
               <ModuleButton
                 unlock={unlock}
-                tier={module.tier}
+                tier={extractModule(module).tier}
                 selected={
-                  (unlock.type === 'turret'
+                  (unlock.type === ModuleType.TURRET
                     ? turret.id
-                    : unlock.type === 'gun'
-                      ? gun.id
-                      : unlock.type === 'engine'
+                    : unlock.type === ModuleType.GUN
+                      ? gun.gunType!.value.base.id
+                      : unlock.type === ModuleType.ENGINE
                         ? engine.id
-                        : unlock.type === 'chassis'
+                        : unlock.type === ModuleType.TRACKS
                           ? track.id
                           : -1) === unlock.id
                 }
                 top={
-                  unlock.type === 'turret'
-                    ? module.id == topTurret.id
-                    : unlock.type === 'gun'
-                      ? module.id === topGun.id
-                      : unlock.type === 'engine'
-                        ? module.id === topEngine.id
-                        : unlock.type === 'chassis'
-                          ? module.id === topTrack.id
+                  unlock.type === ModuleType.TURRET
+                    ? extractModule(module).id == topTurret.id
+                    : unlock.type === ModuleType.GUN
+                      ? extractModule(module).id ===
+                        topGun.gunType!.value.base.id
+                      : unlock.type === ModuleType.ENGINE
+                        ? extractModule(module).id === topEngine.id
+                        : unlock.type === ModuleType.TRACKS
+                          ? extractModule(module).id === topTrack.id
                           : false
                 }
                 onClick={() => setByUnlock(unlock)}
               />
 
-              {(module as ModuleDefinition).unlocks &&
-                (module as ModuleDefinition).unlocks!.length > 1 && (
+              {(extractModule(module) as ModuleWithUnlocks).unlocks &&
+                (extractModule(module) as ModuleWithUnlocks).unlocks!.length >
+                  1 && (
                   <div
                     style={{
                       backgroundColor: 'currentcolor',
@@ -297,8 +325,11 @@ export function Modules() {
                   />
                 )}
 
-              {(module as ModuleDefinition).unlocks &&
-                tree(type, (module as ModuleDefinition).unlocks!)}
+              {(extractModule(module) as ModuleWithUnlocks).unlocks &&
+                tree(
+                  type,
+                  (extractModule(module) as ModuleWithUnlocks).unlocks!,
+                )}
             </Flex>
           );
         })}
@@ -320,7 +351,8 @@ export function Modules() {
                 mutateDuel((draft) => {
                   draft.protagonist.turret = draft.protagonist.tank.turrets[0];
                   draft.protagonist.gun = draft.protagonist.turret.guns[0];
-                  draft.protagonist.shell = draft.protagonist.gun.shells[0];
+                  draft.protagonist.shell =
+                    draft.protagonist.gun.gunType!.value.base.shells[0];
                   draft.protagonist.engine = draft.protagonist.tank.engines[0];
                   draft.protagonist.track = draft.protagonist.tank.tracks[0];
                 });
@@ -335,7 +367,8 @@ export function Modules() {
                   draft.protagonist.turret =
                     draft.protagonist.tank.turrets.at(-1)!;
                   draft.protagonist.gun = draft.protagonist.turret.guns.at(-1)!;
-                  draft.protagonist.shell = draft.protagonist.gun.shells[0];
+                  draft.protagonist.shell =
+                    draft.protagonist.gun.gunType!.value.base.shells[0];
                   draft.protagonist.engine =
                     draft.protagonist.tank.engines.at(-1)!;
                   draft.protagonist.track =
@@ -350,32 +383,32 @@ export function Modules() {
       </Flex>
 
       <Flex gap="2" wrap="wrap" gapY="6">
-        {tree('engine', [
+        {tree(ModuleType.ENGINE, [
           {
             cost: { type: 'xp', value: 0 },
             id: engine0.id,
-            type: 'engine',
+            type: ModuleType.ENGINE,
           },
         ])}
-        {tree('chassis', [
+        {tree(ModuleType.TRACKS, [
           {
             cost: { type: 'xp', value: 0 },
             id: track0.id,
-            type: 'chassis',
+            type: ModuleType.TRACKS,
           },
         ])}
-        {tree('turret', [
+        {tree(ModuleType.TURRET, [
           {
             cost: { type: 'xp', value: 0 },
             id: turret0.id,
-            type: 'turret',
+            type: ModuleType.TURRET,
           },
         ])}
-        {tree('gun', [
+        {tree(ModuleType.GUN, [
           {
             cost: { type: 'xp', value: 0 },
-            id: gun0.id,
-            type: 'gun',
+            id: gun0.gunType!.value.base.id,
+            type: ModuleType.GUN,
           },
         ])}
       </Flex>

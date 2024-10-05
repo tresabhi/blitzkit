@@ -20,8 +20,9 @@ export function QuickInputs() {
   const tankModelDefinition = useTankModelDefinition();
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
-  const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
-  const initialGunPitch = tankModelDefinition.turretRotation?.pitch ?? 0;
+  const gunModelDefinition =
+    turretModelDefinition.guns[protagonist.gun.gunType!.value.base.id];
+  const initialGunPitch = tankModelDefinition.initialTurretRotation?.pitch ?? 0;
   const hasImprovedVerticalStabilizer = useEquipment(122);
 
   useEffect(() => {
@@ -43,7 +44,8 @@ export function QuickInputs() {
       if (!pitchInput.current || !yawInput.current) return;
 
       pitchInput.current.value = (
-        -radToDeg(pitch) + (tankModelDefinition.turretRotation?.pitch ?? 0)
+        -radToDeg(pitch) +
+        (tankModelDefinition.initialTurretRotation?.pitch ?? 0)
       ).toFixed(1);
 
       if (yaw === undefined) return;

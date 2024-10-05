@@ -1,4 +1,4 @@
-import { createDefaultSkills, skillDefinitions } from '@blitzkit/core';
+import { createDefaultSkills, fetchSkillDefinitions } from '@blitzkit/core';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import {
   Button,
@@ -13,7 +13,7 @@ import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
 import { CrewSkillManager } from '../../../CrewSkillManager';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
-const awaitedSkillDefinitions = await skillDefinitions;
+const skillDefinitions = await fetchSkillDefinitions();
 
 export function Skills() {
   const skillLevels = TankopediaEphemeral.use((state) => state.skills);
@@ -21,7 +21,7 @@ export function Skills() {
 
   if (Object.keys(skillLevels).length === 0) {
     mutateTankopediaTemporary((draft) => {
-      draft.skills = createDefaultSkills(awaitedSkillDefinitions);
+      draft.skills = createDefaultSkills(skillDefinitions);
     });
 
     return null;

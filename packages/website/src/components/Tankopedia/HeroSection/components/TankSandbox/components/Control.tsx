@@ -1,4 +1,4 @@
-import { modelDefinitions } from '@blitzkit/core';
+import { fetchModelDefinitions } from '@blitzkit/core';
 import { OrbitControls } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { useEffect, useRef, useState } from 'react';
@@ -7,7 +7,6 @@ import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
-import { useAwait } from '../../../../../../hooks/useAwait';
 import { Duel } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 
@@ -18,20 +17,21 @@ const poseDistances: Record<Pose, number> = {
   [Pose.Default]: -1,
 };
 
+const modelDefinitions = await fetchModelDefinitions();
+
 export function Controls() {
   const duelStore = Duel.useStore();
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
   const camera = useThree((state) => state.camera);
   const canvas = useThree((state) => state.gl.domElement);
   const orbitControls = useRef<OrbitControlsClass>(null);
-  const awaitedModelDefinitions = useAwait(modelDefinitions);
   const protagonist = Duel.use((state) => state.protagonist);
   const antagonist = Duel.use((state) => state.antagonist);
   const protagonistModelDefinition =
-    awaitedModelDefinitions[protagonist.tank.id];
+    modelDefinitions.models[protagonist.tank.id];
   const protagonistTrackModelDefinition =
-    awaitedModelDefinitions[protagonist.tank.id].tracks[protagonist.track.id];
-  const antagonistModelDefinition = awaitedModelDefinitions[antagonist.tank.id];
+    modelDefinitions.models[protagonist.tank.id].tracks[protagonist.track.id];
+  const antagonistModelDefinition = modelDefinitions.models[antagonist.tank.id];
   const protagonistTurretModelDefinition =
     protagonistModelDefinition.turrets[protagonist.turret.id];
   const antagonistTurretModelDefinition =

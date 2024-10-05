@@ -1,7 +1,6 @@
 import {
   asset,
   imgur,
-  resolveNearPenetration,
   resolvePenetrationCoefficient,
   TIER_ROMAN_NUMERALS,
   uniqueGuns,
@@ -105,7 +104,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               resolvePenetrationCoefficient(
                 hasCalibratedShells,
                 antagonistShell.type,
-              ) * resolveNearPenetration(antagonistShell.penetration)
+              ) * antagonistShell.penetration.near
             ).toFixed(0)}
             mm
           </Text>
@@ -130,7 +129,11 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                     mr="2"
                     mb="1"
                   >
-                    {TIER_ROMAN_NUMERALS[antagonistGun.tier]}
+                    {
+                      TIER_ROMAN_NUMERALS[
+                        antagonistGun.gunType!.value.base.tier
+                      ]
+                    }
                   </Text>
 
                   <img
@@ -149,19 +152,25 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 <Flex gap="2">
                   {[...antagonistUniqueGuns]
                     .reverse()
-                    .map(({ gun, turret }, index) => (
+                    .map(({ gun, turret }) => (
                       <ModuleButton
                         module="gun"
-                        key={gun.id}
+                        key={gun.gunType!.value.base.id}
                         onClick={() =>
                           mutateDuel((draft) => {
                             draft.antagonist.turret = turret;
                             draft.antagonist.gun = gun;
-                            draft.antagonist.shell = gun.shells[0];
+                            draft.antagonist.shell =
+                              gun.gunType!.value.base.shells[0];
                           })
                         }
-                        selected={gun.id === antagonistGun.id}
-                        discriminator={TIER_ROMAN_NUMERALS[gun.tier]}
+                        selected={
+                          gun.gunType!.value.base.id ===
+                          antagonistGun.gunType!.value.base.id
+                        }
+                        discriminator={
+                          TIER_ROMAN_NUMERALS[gun.gunType!.value.base.tier]
+                        }
                       />
                     ))}
                 </Flex>
@@ -175,36 +184,40 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             }}
             overflow="hidden"
           >
-            {antagonistGun.shells.map((thisShell, shellIndex) => (
-              <IconButton
-                color={thisShell.id === antagonistShell.id ? undefined : 'gray'}
-                variant="soft"
-                key={thisShell.id}
-                size={{ initial: '2', sm: '3' }}
-                radius="none"
-                style={{
-                  marginTop: shellIndex === 0 ? 0 : -1,
-                }}
-                onClick={() => {
-                  invalidate();
-                  mutateDuel((draft) => {
-                    draft.antagonist.shell = thisShell;
-                  });
-                  mutateTankopediaEphemeral((draft) => {
-                    draft.shot = undefined;
-                  });
-                }}
-              >
-                <img
-                  alt={thisShell.name}
-                  src={asset(`icons/shells/${thisShell.icon}.webp`)}
+            {antagonistGun.gunType!.value.base.shells.map(
+              (thisShell, shellIndex) => (
+                <IconButton
+                  color={
+                    thisShell.id === antagonistShell.id ? undefined : 'gray'
+                  }
+                  variant="soft"
+                  key={thisShell.id}
+                  size={{ initial: '2', sm: '3' }}
+                  radius="none"
                   style={{
-                    width: '50%',
-                    height: '50%',
+                    marginTop: shellIndex === 0 ? 0 : -1,
                   }}
-                />
-              </IconButton>
-            ))}
+                  onClick={() => {
+                    invalidate();
+                    mutateDuel((draft) => {
+                      draft.antagonist.shell = thisShell;
+                    });
+                    mutateTankopediaEphemeral((draft) => {
+                      draft.shot = undefined;
+                    });
+                  }}
+                >
+                  <img
+                    alt={thisShell.name}
+                    src={asset(`icons/shells/${thisShell.icon}.webp`)}
+                    style={{
+                      width: '50%',
+                      height: '50%',
+                    }}
+                  />
+                </IconButton>
+              ),
+            )}
           </Flex>
 
           <Flex
@@ -318,7 +331,8 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                         draft.antagonist.turret = tank.turrets.at(-1)!;
                         draft.antagonist.gun =
                           draft.antagonist.turret.guns.at(-1)!;
-                        draft.antagonist.shell = draft.antagonist.gun.shells[0];
+                        draft.antagonist.shell =
+                          draft.antagonist.gun.gunType!.value.base.shells[0];
                       });
                       setAntagonistSelectorOpen(false);
                     }}
