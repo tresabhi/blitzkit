@@ -30,9 +30,6 @@ const args = [
   '--ts_proto_opt=esModuleInterop=true',
   '--ts_proto_opt=oneof=unions',
   '--ts_proto_opt=removeEnumPrefix=true',
-  '--ts_proto_opt=snakeToCamel=false',
-  '--ts_proto_opt=useOptionals=none',
-  '--ts_proto_opt=noDefaultsForOptionals=true',
   '--ts_proto_out=.',
   ...files.map((file) => `${ROOT}/${file}`),
 ];

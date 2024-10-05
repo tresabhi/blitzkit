@@ -42,7 +42,6 @@
     "esbuild": "^0.19.12",
     "prettier": "^3.3.3",
     "prisma": "^5.19.1",
-    "ts-proto": "^2.2.1",
     "typescript": "^5.5.4"
   }
 }

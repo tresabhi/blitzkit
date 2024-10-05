@@ -46,17 +46,17 @@ const blitzTankFilterDefinitionCategoryToBlitzkit: Record<
   BlitzTankFilterDefinitionCategory,
   ConsumableTankCategoryFilterCategory
 > = {
-  clip: ConsumableTankCategoryFilterCategory.TANK_CATEGORY_CLIP,
+  clip: ConsumableTankCategoryFilterCategory.CLIP,
 };
 function vector3TupleToBlitzkit(tuple: Vector3Tuple) {
   return { x: tuple[0], y: tuple[1], z: tuple[2] } satisfies Vector3;
 }
 type BlitzTankClass = 'lightTank' | 'mediumTank' | 'heavyTank' | 'AT-SPG';
 const blitzTankClassToBlitzkit: Record<BlitzTankClass, TankClass> = {
-  lightTank: TankClass.TANK_CLASS_LIGHT,
-  'AT-SPG': TankClass.TANK_CLASS_TANK_DESTROYER,
-  heavyTank: TankClass.TANK_CLASS_HEAVY,
-  mediumTank: TankClass.TANK_CLASS_MEDIUM,
+  lightTank: TankClass.LIGHT,
+  'AT-SPG': TankClass.TANK_DESTROYER,
+  heavyTank: TankClass.HEAVY,
+  mediumTank: TankClass.MEDIUM,
 };
 export interface BlitzStrings {
   [key: string]: string;
@@ -115,18 +115,18 @@ type BlitzModuleType = {
 type UnlocksListing = BlitzModuleType | undefined;
 type BlitzCrewType = 'commander' | 'radioman' | 'gunner' | 'driver' | 'loader';
 const blitzCrewTypeToBlitzkit: Record<BlitzCrewType, CrewType> = {
-  commander: CrewType.CREW_TYPE_COMMANDER,
-  driver: CrewType.CREW_TYPE_DRIVER,
-  gunner: CrewType.CREW_TYPE_GUNNER,
-  loader: CrewType.CREW_TYPE_LOADER,
-  radioman: CrewType.CREW_TYPE_RADIOMAN,
+  commander: CrewType.COMMANDER,
+  driver: CrewType.DRIVER,
+  gunner: CrewType.GUNNER,
+  loader: CrewType.LOADER,
+  radioman: CrewType.RADIOMAN,
 };
 const blitzkitCrewTypeToBlitz: Record<CrewType, BlitzCrewType> = {
-  [CrewType.CREW_TYPE_COMMANDER]: 'commander',
-  [CrewType.CREW_TYPE_DRIVER]: 'driver',
-  [CrewType.CREW_TYPE_GUNNER]: 'gunner',
-  [CrewType.CREW_TYPE_LOADER]: 'loader',
-  [CrewType.CREW_TYPE_RADIOMAN]: 'radioman',
+  [CrewType.COMMANDER]: 'commander',
+  [CrewType.DRIVER]: 'driver',
+  [CrewType.GUNNER]: 'gunner',
+  [CrewType.LOADER]: 'loader',
+  [CrewType.RADIOMAN]: 'radioman',
 
   // this should never happen... i hope 😢
   [CrewType.UNRECOGNIZED]: 'radioman',
@@ -474,21 +474,21 @@ type CombatRolesYaml = Record<
 >;
 
 const blitzShellKindToBlitzkit: Record<ShellKind, ShellType> = {
-  ARMOR_PIERCING: ShellType.SHELL_TYPE_AP,
-  ARMOR_PIERCING_CR: ShellType.SHELL_TYPE_APCR,
-  HIGH_EXPLOSIVE: ShellType.SHELL_TYPE_HE,
-  HOLLOW_CHARGE: ShellType.SHELL_TYPE_HEAT,
+  ARMOR_PIERCING: ShellType.AP,
+  ARMOR_PIERCING_CR: ShellType.APCR,
+  HIGH_EXPLOSIVE: ShellType.HE,
+  HOLLOW_CHARGE: ShellType.HEAT,
 };
 const missingStrings: Record<string, string> = {
   '#artefacts:tungstentip/name': 'Tungsten Shells',
 };
 export const botPattern = /^.+((tutorial_bot(\d+)?)|(TU(R?)))$/;
 const blitzModuleTypeToBlitzkit: Record<keyof BlitzModuleType, ModuleType> = {
-  chassis: ModuleType.MODULE_TYPE_TRACKS,
-  engine: ModuleType.MODULE_TYPE_ENGINE,
-  gun: ModuleType.MODULE_TYPE_GUN,
-  turret: ModuleType.MODULE_TYPE_TURRET,
-  vehicle: ModuleType.MODULE_TYPE_VEHICLE,
+  chassis: ModuleType.TRACKS,
+  engine: ModuleType.ENGINE,
+  gun: ModuleType.GUN,
+  turret: ModuleType.TURRET,
+  vehicle: ModuleType.VEHICLE,
 };
 
 export async function definitions() {
@@ -524,10 +524,10 @@ export async function definitions() {
   const provisionDefinitions: ProvisionDefinitions = { provisions: {} };
   const skillDefinitions: SkillDefinitions = {
     classes: {
-      [TankClass.TANK_CLASS_LIGHT]: { skills: [] },
-      [TankClass.TANK_CLASS_MEDIUM]: { skills: [] },
-      [TankClass.TANK_CLASS_HEAVY]: { skills: [] },
-      [TankClass.TANK_CLASS_TANK_DESTROYER]: { skills: [] },
+      [TankClass.LIGHT]: { skills: [] },
+      [TankClass.MEDIUM]: { skills: [] },
+      [TankClass.HEAVY]: { skills: [] },
+      [TankClass.TANK_DESTROYER]: { skills: [] },
     },
   };
   const nations = await readdir(`${DATA}/XML/item_defs/vehicles`).then(
@@ -749,17 +749,17 @@ export async function definitions() {
 
         if (tank.sellPrice) {
           tankPrice = {
-            type: TankPriceType.TANK_PRICE_TYPE_GOLD,
+            type: TankPriceType.GOLD,
             value: tank.sellPrice['#text'] * 2,
           };
         } else if (typeof tank.price === 'number') {
           tankPrice = {
-            type: TankPriceType.TANK_PRICE_TYPE_CREDITS,
+            type: TankPriceType.CREDITS,
             value: tank.price,
           };
         } else {
           tankPrice = {
-            type: TankPriceType.TANK_PRICE_TYPE_CREDITS,
+            type: TankPriceType.CREDITS,
             value: tank.price['#text'] * 400,
           };
         }
@@ -869,10 +869,10 @@ export async function definitions() {
           nameFull: strings[tank.userString],
           nation,
           type: tankTags.includes('collectible')
-            ? TankType.TANK_TYPE_COLLECTOR
+            ? TankType.COLLECTOR
             : (typeof tank.price === 'number' ? false : 'gold' in tank.price)
-              ? TankType.TANK_TYPE_PREMIUM
-              : TankType.TANK_TYPE_RESEARCHABLE,
+              ? TankType.PREMIUM
+              : TankType.RESEARCHABLE,
           tier: tank.level as Tier,
           class: blitzTankClassToBlitzkit[tankTags[0] as BlitzTankClass],
           testing: tankTags.includes('testTank'),
@@ -1398,22 +1398,31 @@ export async function definitions() {
 
         if ('minLevel' in includeRaw) {
           entry.include.push({
-            tiers: { min: includeRaw.minLevel, max: includeRaw.maxLevel },
+            filterType: {
+              $case: 'tiers',
+              tiers: { min: includeRaw.minLevel, max: includeRaw.maxLevel },
+            },
           });
         } else if ('name' in includeRaw) {
           entry.include.push({
-            ids: {
-              ids: includeRaw.name
-                .split(' ')
-                .map((key) => tankStringIdMap[key]),
+            filterType: {
+              $case: 'ids',
+              ids: {
+                ids: includeRaw.name
+                  .split(' ')
+                  .map((key) => tankStringIdMap[key]),
+              },
             },
           });
         } else throw new SyntaxError('Unhandled include type');
 
         if (consumable.vehicleFilter?.include.nations) {
           entry.include.push({
-            nations: {
-              nations: consumable.vehicleFilter.include.nations.split(' '),
+            filterType: {
+              $case: 'nations',
+              nations: {
+                nations: consumable.vehicleFilter.include.nations.split(' '),
+              },
             },
           });
         }
@@ -1424,31 +1433,40 @@ export async function definitions() {
 
         if ('name' in excludeRaw) {
           entry.exclude!.push({
-            ids: {
-              ids: excludeRaw.name
-                .split(' ')
-                .map((key) => tankStringIdMap[key]),
+            filterType: {
+              $case: 'ids',
+              ids: {
+                ids: excludeRaw.name
+                  .split(' ')
+                  .map((key) => tankStringIdMap[key]),
+              },
             },
           });
         } else if ('extendedTags' in excludeRaw) {
           entry.exclude!.push({
-            categories: {
-              categories: excludeRaw.extendedTags
-                .split(' ')
-                .map(
-                  (item) =>
-                    blitzTankFilterDefinitionCategoryToBlitzkit[
-                      item as BlitzTankFilterDefinitionCategory
-                    ],
-                ),
+            filterType: {
+              $case: 'categories',
+              categories: {
+                categories: excludeRaw.extendedTags
+                  .split(' ')
+                  .map(
+                    (item) =>
+                      blitzTankFilterDefinitionCategoryToBlitzkit[
+                        item as BlitzTankFilterDefinitionCategory
+                      ],
+                  ),
+              },
             },
           });
         } else throw new SyntaxError('Unhandled exclude type');
 
         if (consumable.vehicleFilter?.exclude?.nations) {
           entry.exclude!.push({
-            nations: {
-              nations: consumable.vehicleFilter.exclude.nations.split(' '),
+            filterType: {
+              $case: 'nations',
+              nations: {
+                nations: consumable.vehicleFilter.exclude.nations.split(' '),
+              },
             },
           });
         }
@@ -1480,25 +1498,34 @@ export async function definitions() {
 
         if ('minLevel' in includeRaw) {
           entry.include.push({
-            tiers: {
-              min: includeRaw.minLevel,
-              max: includeRaw.maxLevel,
+            filterType: {
+              $case: 'tiers',
+              tiers: {
+                min: includeRaw.minLevel,
+                max: includeRaw.maxLevel,
+              },
             },
           });
         } else if ('name' in includeRaw) {
           entry.include.push({
-            ids: {
-              ids: includeRaw.name
-                .split(' ')
-                .map((key) => tankStringIdMap[key]),
+            filterType: {
+              $case: 'ids',
+              ids: {
+                ids: includeRaw.name
+                  .split(' ')
+                  .map((key) => tankStringIdMap[key]),
+              },
             },
           });
         } else throw new SyntaxError('Unhandled include type');
 
         if (provision.vehicleFilter?.include.nations) {
           entry.include.push({
-            nations: {
-              nations: provision.vehicleFilter.include.nations.split(' '),
+            filterType: {
+              $case: 'nations',
+              nations: {
+                nations: provision.vehicleFilter.include.nations.split(' '),
+              },
             },
           });
         }
@@ -1509,31 +1536,40 @@ export async function definitions() {
 
         if ('name' in excludeRaw) {
           entry.exclude!.push({
-            ids: {
-              ids: excludeRaw.name
-                .split(' ')
-                .map((key) => tankStringIdMap[key]),
+            filterType: {
+              $case: 'ids',
+              ids: {
+                ids: excludeRaw.name
+                  .split(' ')
+                  .map((key) => tankStringIdMap[key]),
+              },
             },
           });
         } else if ('extendedTags' in excludeRaw) {
           entry.exclude!.push({
-            categories: {
-              categories: excludeRaw.extendedTags
-                .split(' ')
-                .map(
-                  (item) =>
-                    blitzTankFilterDefinitionCategoryToBlitzkit[
-                      item as BlitzTankFilterDefinitionCategory
-                    ],
-                ),
+            filterType: {
+              $case: 'categories',
+              categories: {
+                categories: excludeRaw.extendedTags
+                  .split(' ')
+                  .map(
+                    (item) =>
+                      blitzTankFilterDefinitionCategoryToBlitzkit[
+                        item as BlitzTankFilterDefinitionCategory
+                      ],
+                  ),
+              },
             },
           });
         } else throw new SyntaxError('Unhandled exclude type');
 
         if (provision.vehicleFilter?.exclude?.nations) {
           entry.exclude!.push({
-            nations: {
-              nations: provision.vehicleFilter.exclude.nations.split(' '),
+            filterType: {
+              $case: 'nations',
+              nations: {
+                nations: provision.vehicleFilter.exclude.nations.split(' '),
+              },
             },
           });
         }

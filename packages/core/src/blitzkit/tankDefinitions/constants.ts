@@ -5,65 +5,74 @@ import {
   TankClass,
   TankType,
   Tier,
-} from '.';
+} from '../../protos';
 
 export const SHELL_NAMES: Record<ShellType, string> = {
-  ap: 'AP',
-  ap_cr: 'APCR',
-  hc: 'HEAT',
-  he: 'HE',
+  [ShellType.AP]: 'AP',
+  [ShellType.APCR]: 'APCR',
+  [ShellType.HEAT]: 'HEAT',
+  [ShellType.HE]: 'HE',
+  [ShellType.UNRECOGNIZED]: 'unrecognized',
 };
 export const CREW_MEMBER_NAMES: Record<CrewType, string> = {
-  commander: 'Commander',
-  radioman: 'Radioman',
-  gunner: 'Gunner',
-  driver: 'Driver',
-  loader: 'Loader',
+  [CrewType.COMMANDER]: 'Commander',
+  [CrewType.DRIVER]: 'Driver',
+  [CrewType.GUNNER]: 'Gunner',
+  [CrewType.LOADER]: 'Loader',
+  [CrewType.RADIOMAN]: 'Radioman',
+  [CrewType.UNRECOGNIZED]: 'unrecognized',
 };
-export const GUN_TYPE_NAMES: Record<GunDefinition['type'], string> = {
-  regular: 'Regular',
+export const GUN_TYPE_NAMES: Record<
+  Exclude<GunDefinition['gunType'], undefined>['$case'],
+  string
+> = {
   autoLoader: 'Auto loader',
   autoReloader: 'Auto reloader',
+  regular: 'Regular',
 };
 /**
  * @deprecated use svg
  */
 export const TANK_ICONS: Record<TankClass, string> = {
-  'AT-SPG': 'https://i.imgur.com/BIHSEH0.png',
-  lightTank: 'https://i.imgur.com/CSNha5V.png',
-  mediumTank: 'https://i.imgur.com/wvf3ltm.png',
-  heavyTank: 'https://i.imgur.com/ECeqlZa.png',
+  [TankClass.TANK_DESTROYER]: 'https://i.imgur.com/BIHSEH0.png',
+  [TankClass.LIGHT]: 'https://i.imgur.com/CSNha5V.png',
+  [TankClass.MEDIUM]: 'https://i.imgur.com/wvf3ltm.png',
+  [TankClass.HEAVY]: 'https://i.imgur.com/ECeqlZa.png',
+  [TankClass.UNRECOGNIZED]: 'https://i.imgur.com/6FBBzb9.png', // lmfao click on this
 };
 /**
  * @deprecated use svg
  */
 export const TANK_ICONS_PREMIUM: Record<TankClass, string> = {
-  'AT-SPG': 'https://i.imgur.com/TCu3EdR.png',
-  lightTank: 'https://i.imgur.com/zdkpTRb.png',
-  mediumTank: 'https://i.imgur.com/3z7eHX6.png',
-  heavyTank: 'https://i.imgur.com/P3vbmyA.png',
+  [TankClass.TANK_DESTROYER]: 'https://i.imgur.com/TCu3EdR.png',
+  [TankClass.LIGHT]: 'https://i.imgur.com/zdkpTRb.png',
+  [TankClass.MEDIUM]: 'https://i.imgur.com/3z7eHX6.png',
+  [TankClass.HEAVY]: 'https://i.imgur.com/P3vbmyA.png',
+  [TankClass.UNRECOGNIZED]: 'https://i.imgur.com/6FBBzb9.png',
 };
 /**
  * @deprecated use svg
  */
 export const TANK_ICONS_COLLECTOR: Record<TankClass, string> = {
-  'AT-SPG': 'https://i.imgur.com/WTjeirB.png',
-  lightTank: 'https://i.imgur.com/EwhtKkU.png',
-  mediumTank: 'https://i.imgur.com/u8YDMBh.png',
-  heavyTank: 'https://i.imgur.com/8xRf3nc.png',
+  [TankClass.TANK_DESTROYER]: 'https://i.imgur.com/WTjeirB.png',
+  [TankClass.LIGHT]: 'https://i.imgur.com/EwhtKkU.png',
+  [TankClass.MEDIUM]: 'https://i.imgur.com/u8YDMBh.png',
+  [TankClass.HEAVY]: 'https://i.imgur.com/8xRf3nc.png',
+  [TankClass.UNRECOGNIZED]: 'https://i.imgur.com/6FBBzb9.png',
 };
 export const TIERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
 export const TIER_ROMAN_NUMERALS: Record<Tier, string> = {
-  1: 'I',
-  2: 'II',
-  3: 'III',
-  4: 'IV',
-  5: 'V',
-  6: 'VI',
-  7: 'VII',
-  8: 'VIII',
-  9: 'IX',
-  10: 'X',
+  [Tier.I]: 'I',
+  [Tier.II]: 'II',
+  [Tier.III]: 'III',
+  [Tier.IV]: 'IV',
+  [Tier.V]: 'V',
+  [Tier.VI]: 'VI',
+  [Tier.VII]: 'VII',
+  [Tier.VIII]: 'VIII',
+  [Tier.IX]: 'IX',
+  [Tier.X]: 'X',
+  [Tier.UNRECOGNIZED]: 'unrecognized',
 };
 
 export const flags: Record<string, string> = {
@@ -78,7 +87,14 @@ export const flags: Record<string, string> = {
   other: '<:other:1218421572243558482>',
 };
 export const TREE_TYPE_ICONS: Record<TankType, Record<TankClass, string>> = {
-  researchable: TANK_ICONS,
-  premium: TANK_ICONS_PREMIUM,
-  collector: TANK_ICONS_COLLECTOR,
+  [TankType.RESEARCHABLE]: TANK_ICONS,
+  [TankType.PREMIUM]: TANK_ICONS_PREMIUM,
+  [TankType.COLLECTOR]: TANK_ICONS_COLLECTOR,
+  [TankType.UNRECOGNIZED]: {
+    '-1': 'https://i.imgur.com/6FBBzb9.png',
+    '0': 'https://i.imgur.com/6FBBzb9.png',
+    '1': 'https://i.imgur.com/6FBBzb9.png',
+    '2': 'https://i.imgur.com/6FBBzb9.png',
+    '3': 'https://i.imgur.com/6FBBzb9.png',
+  },
 };

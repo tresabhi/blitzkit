@@ -1,4 +1,4 @@
-syntax = "proto3";
+syntax = "proto2";
 
 package blitzkit;
 
@@ -7,11 +7,11 @@ message Reviews {
 }
 
 message Review {
-  float last_updated = 1;
+  required float last_updated = 1;
   repeated Video videos = 2;
 }
 
 message Video {
-  string id = 1;
-  string author = 2;
+  required string id = 1;
+  required string author = 2;
 }

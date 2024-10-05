@@ -1,4 +1,4 @@
-syntax = "proto3";
+syntax = "proto2";
 
 package blitzkit;
 
@@ -7,6 +7,6 @@ message MapDefinitions {
 }
 
 message MapDefinition {
-  uint32 id = 1;
-  string name = 2;
+  required uint32 id = 1;
+  required string name = 2;
 }

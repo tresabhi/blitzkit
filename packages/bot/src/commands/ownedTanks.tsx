@@ -4,13 +4,15 @@ import {
   TankDefinition,
   Tier,
   flags,
-  gameDefinitions,
   getAccountInfo,
   getTankStats,
-  tankDefinitions,
 } from '@blitzkit/core';
 import { chunk } from 'lodash-es';
 import markdownEscape from 'markdown-escape';
+import {
+  gameDefinitions,
+  tankDefinitions,
+} from '../core/blitzkit/nonBlockingPromises';
 import { addTierChoices } from '../core/discord/addTierChoices';
 import { addUsernameChoices } from '../core/discord/addUsernameChoices';
 import { autocompleteUsername } from '../core/discord/autocompleteUsername';
@@ -41,7 +43,7 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
       const filteredTanks = (
         await Promise.all(
           tankStats.map(async (tankData) => ({
-            tankDefinitions: (await tankDefinitions)[tankData.tank_id]!,
+            tankDefinitions: (await tankDefinitions).tanks[tankData.tank_id]!,
             id: tankData.tank_id,
           })),
         )
@@ -61,7 +63,7 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
       const awaitedTankDefinitions = await tankDefinitions;
       const awaitedGameDefinitions = await gameDefinitions;
       const lines = tankStats
-        .map(({ tank_id }) => awaitedTankDefinitions[tank_id])
+        .map(({ tank_id }) => awaitedTankDefinitions.tanks[tank_id])
         .filter((tank) => tank.tier === tier)
         .sort(
           (a, b) =>
