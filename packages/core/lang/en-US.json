@@ -52,17 +52,18 @@
     },
 
     "tank_class_short": {
-      "lightTank": "Light",
-      "mediumTank": "Medium",
-      "heavyTank": "Heavy",
-      "AT-SPG": "TD"
+      "0": "Light",
+      "1": "Medium",
+      "2": "Heavy",
+      "3": "TD"
     },
 
     "tank_class_medium": {
-      "lightTank": "Light",
-      "mediumTank": "Medium",
-      "heavyTank": "Heavy",
-      "AT-SPG": "Tank destroyer"
+      "-1": "unrecognized",
+      "0": "Light",
+      "1": "Medium",
+      "2": "Heavy",
+      "3": "Tank destroyer"
     },
 
     "tree_type": {

@@ -1,7 +1,10 @@
-import { averageDefinitions, discoveredIdsDefinitions } from '@blitzkit/core';
+import {
+  fetchAverageDefinitions,
+  fetchDiscoveredIdsDefinitions,
+} from '@blitzkit/core';
 
-const awaitedDiscoveredIdsDefinitions = await discoveredIdsDefinitions;
-const awaitedAverageDefinitions = await averageDefinitions;
+const awaitedDiscoveredIdsDefinitions = await fetchDiscoveredIdsDefinitions();
+const awaitedAverageDefinitions = await fetchAverageDefinitions();
 
 export function useAveragesExclusionRatio() {
   return (

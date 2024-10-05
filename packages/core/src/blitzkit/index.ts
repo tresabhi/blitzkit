@@ -9,7 +9,7 @@ export * from './consumableDefinitions';
 // export * from './context';
 export * from './createDefaultSkills';
 export * from './degressiveStat';
-// export * from './discoveredIdDefinitions';
+export * from './discoveredIdDefinitions';
 // export * from './emblemURL';
 export * from './equipmentDefinitions';
 export * from './eventManager';

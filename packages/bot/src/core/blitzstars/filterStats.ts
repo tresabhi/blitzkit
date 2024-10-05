@@ -1,15 +1,16 @@
-import { blitzStarsTankAverages } from './tankAverages';
+import { TankClass, TankType } from '@blitzkit/core';
 import { SupplementaryStats } from '@blitzkit/core/src/blitz/getAccountInfo';
-import { tankDefinitions, TreeType } from '@blitzkit/core/src/blitzkit/tankDefinitions';
 import { calculateWN8 } from '@blitzkit/core/src/statistics/calculateWN8';
 import { BlitzStats } from '@blitzkit/core/src/statistics/compositeStats';
 import { sumAllStats } from '@blitzkit/core/src/statistics/sumAllStats';
+import { tankDefinitions } from '../blitzkit/nonBlockingPromises';
+import { blitzStarsTankAverages } from './tankAverages';
 
 export interface StatFilters {
   nation?: string;
   tier?: number;
-  tankType?: string;
-  treeType?: TreeType;
+  class?: TankClass;
+  type?: TankType;
   tank?: number;
 }
 
@@ -23,18 +24,20 @@ export async function filterStats(
   const awaitedTankDefinitions = await tankDefinitions;
   const awaitedTankAverages = await blitzStarsTankAverages;
   const filteredOrder = order.filter((id) => {
-    const entry = awaitedTankDefinitions[id];
+    const entry = awaitedTankDefinitions.tanks[id];
 
     return (
       entry &&
       (filters.nation === undefined || entry.nation === filters.nation) &&
       (filters.tier === undefined || entry.tier === filters.tier) &&
-      (filters.tankType === undefined || entry.class === filters.tankType) &&
-      (filters.treeType === undefined ||
-        (filters.treeType === 'collector' && entry.treeType === 'collector') ||
-        (filters.treeType === 'premium' && entry.treeType === 'premium') ||
-        (filters.treeType === 'researchable' &&
-          entry.treeType === 'researchable')) &&
+      (filters.class === undefined || entry.class === filters.class) &&
+      (filters.type === undefined ||
+        (filters.type === TankType.COLLECTOR &&
+          entry.type === TankType.COLLECTOR) ||
+        (filters.type === TankType.PREMIUM &&
+          entry.type === TankType.PREMIUM) ||
+        (filters.type === TankType.RESEARCHABLE &&
+          entry.type === TankType.RESEARCHABLE)) &&
       (filters.tank === undefined || entry.id === filters.tank)
     );
   });
@@ -46,7 +49,9 @@ export async function filterStats(
   );
   const battlesOfTanksWithTankDefinition = filteredOrder.reduce<number>(
     (accumulator, id) =>
-      awaitedTankDefinitions[id] ? accumulator + diff[id].battles : accumulator,
+      awaitedTankDefinitions.tanks[id]
+        ? accumulator + diff[id].battles
+        : accumulator,
     0,
   );
   const supplementary = {
@@ -63,8 +68,9 @@ export async function filterStats(
     tier:
       filteredOrder.reduce<number>(
         (accumulator, id) =>
-          awaitedTankDefinitions[id]
-            ? accumulator + awaitedTankDefinitions[id]!.tier * diff[id].battles
+          awaitedTankDefinitions.tanks[id]
+            ? accumulator +
+              awaitedTankDefinitions.tanks[id]!.tier * diff[id].battles
             : accumulator,
         0,
       ) / battlesOfTanksWithTankDefinition,

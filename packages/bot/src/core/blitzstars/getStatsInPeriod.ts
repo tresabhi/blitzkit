@@ -1,10 +1,6 @@
-import {
-  BlitzStats,
-  DiffedTankStats,
-  emptyAllStats,
-  Region,
-} from '@blitzkit/core';
+import { BlitzStats, emptyAllStats, Region } from '@blitzkit/core';
 import { Locale } from 'discord.js';
+import { DiffedTankStats } from './filterStats';
 import {
   getTankHistories,
   TankHistories,

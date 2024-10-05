@@ -1,4 +1,4 @@
-import { type TankDefinition, tankIcon } from '@blitzkit/core';
+import { type TankDefinition, tankIcon, TankType } from '@blitzkit/core';
 import { Link } from '@radix-ui/themes';
 import { classIcons } from './ClassIcon';
 import { ExperimentIcon } from './ExperimentIcon';
@@ -32,13 +32,13 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
 
       <Link
         color={
-          tank.treeType === 'collector'
+          tank.type === TankType.COLLECTOR
             ? 'blue'
-            : tank.treeType === 'premium'
+            : tank.type === TankType.PREMIUM
               ? 'amber'
               : 'gray'
         }
-        highContrast={tank.treeType === 'researchable'}
+        highContrast={tank.type === TankType.RESEARCHABLE}
         underline="hover"
         wrap="nowrap"
         href={`/tools/tankopedia/${tank.id}`}

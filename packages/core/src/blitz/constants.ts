@@ -4,10 +4,10 @@ import { BlitzStats } from '../statistics';
 export const TREE_TYPES = ['researchable', 'premium', 'collector'] as const;
 
 export const TANK_CLASSES = [
-  TankClass.TANK_CLASS_LIGHT,
-  TankClass.TANK_CLASS_MEDIUM,
-  TankClass.TANK_CLASS_HEAVY,
-  TankClass.TANK_CLASS_TANK_DESTROYER,
+  TankClass.LIGHT,
+  TankClass.MEDIUM,
+  TankClass.HEAVY,
+  TankClass.TANK_DESTROYER,
   TankClass.UNRECOGNIZED,
 ] as const;
 

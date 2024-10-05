@@ -1,15 +1,11 @@
 import {
-  blitzStarsTankAverages,
   BlitzStats,
   calculateWN8,
-  filterStats,
   getAccountInfo,
   getClanAccountInfo,
   getTankStats,
   getWN8Percentile,
-  StatFilters,
   TankDefinition,
-  tankDefinitions,
 } from '@blitzkit/core';
 import { Locale } from 'discord.js';
 import { chunk } from 'lodash-es';
@@ -18,8 +14,11 @@ import { CommandWrapper } from '../../components/CommandWrapper';
 import { NoData } from '../../components/NoData';
 import { TitleBar } from '../../components/TitleBar';
 import { filtersToDescription } from '../../core/blitzkit/filtersToDescription';
+import { tankDefinitions } from '../../core/blitzkit/nonBlockingPromises';
 import { UserError } from '../../core/blitzkit/userError';
+import { filterStats, StatFilters } from '../../core/blitzstars/filterStats';
 import { getStatsInPeriod } from '../../core/blitzstars/getStatsInPeriod';
+import { blitzStarsTankAverages } from '../../core/blitzstars/tankAverages';
 import { ResolvedPeriod } from '../../core/discord/resolvePeriodFromCommand';
 import { ResolvedPlayer } from '../../core/discord/resolvePlayerFromCommand';
 import { translator } from '../../core/localization/translator';
@@ -136,7 +135,7 @@ export async function renderBreakdown(
     children.push(
       <Breakdown.Row
         key={id}
-        type="summary"
+        displayType="summary"
         title={t`bot.commands.breakdown.body.total`}
         stats={[
           {
@@ -176,7 +175,7 @@ export async function renderBreakdown(
     );
 
     filteredOrder.forEach((id, index) => {
-      const tankDefinition = awaitedTankDefinitions[id] as
+      const tankDefinition = awaitedTankDefinitions.tanks[id] as
         | TankDefinition
         | undefined;
       const current = orderedCurrentStats[index];
@@ -187,9 +186,9 @@ export async function renderBreakdown(
       children.push(
         <Breakdown.Row
           key={id}
-          type="tank"
-          tankType={tankDefinition?.class}
-          treeType={tankDefinition?.treeType}
+          displayType="tank"
+          class={tankDefinition?.class}
+          displayType={tankDefinition?.type}
           title={
             tankDefinition?.name ??
             translate('bot.commands.breakdown.body.unknown_tank', [`${id}`])

@@ -1,7 +1,7 @@
-import type { TreeType } from '@blitzkit/core';
+import { TankType } from '@blitzkit/core';
 
-export const treeTypeOrder: TreeType[] = [
-  'researchable',
-  'premium',
-  'collector',
+export const treeTypeOrder = [
+  TankType.RESEARCHABLE,
+  TankType.PREMIUM,
+  TankType.COLLECTOR,
 ];

@@ -1,12 +1,15 @@
-import { CompositeStatsKey } from '@blitzkit/core';
+import type { CompositeStatsKey } from '@blitzkit/core';
 import { grayA, grayDark, grayDarkA } from '@radix-ui/colors';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import {
   BreakdownPreview,
   compositeStatsKeysOptions,
 } from '../../../website-legacy/src/app/tools/embed/configurations/breakdown';
-import { EmbedConfig, ExtractEmbedConfigTypes } from '../../../website-legacy/src/stores/embedState';
-import { EmbedItemType } from '../../../website-legacy/src/stores/embedState/constants';
+import type {
+  EmbedConfig,
+  ExtractEmbedConfigTypes,
+} from '../stores/embedState';
+import { EmbedItemType } from '../stores/embedState/constants';
 
 export const breakdownConfig = {
   width: { type: EmbedItemType.Slider, default: 320, min: 128, max: 640 },

@@ -7,7 +7,6 @@ import {
   normalizeBoundingBox,
   resolveDpm,
   resolveGun,
-  resolveNearPenetration,
   unionBoundingBox,
   type TankDefinition,
 } from '@blitzkit/core';
@@ -96,7 +95,7 @@ export const TankSearch = memo<TankSearchProps>(
           case 'survivability.viewRange':
             sorted = filtered.sort(
               (a, b) =>
-                a.turrets.at(-1)!.view_range - b.turrets.at(-1)!.view_range,
+                a.turrets.at(-1)!.viewRange - b.turrets.at(-1)!.viewRange,
             );
             break;
 
@@ -153,8 +152,8 @@ export const TankSearch = memo<TankSearchProps>(
 
           case 'survivability.length':
             sorted = filtered.sort((a, b) => {
-              const aTankModelDefinition = modelDefinitions[a.id];
-              const bTankModelDefinition = modelDefinitions[b.id];
+              const aTankModelDefinition = modelDefinitions.models[a.id];
+              const bTankModelDefinition = modelDefinitions.models[b.id];
               const aTurretModelDefinition =
                 aTankModelDefinition.turrets[a.turrets.at(-1)!.id];
               const bTurretModelDefinition =
@@ -183,11 +182,11 @@ export const TankSearch = memo<TankSearchProps>(
               (a, b) =>
                 resolveDpm(
                   a.turrets.at(-1)!.guns.at(-1)!,
-                  a.turrets.at(-1)!.guns.at(-1)!.shells[0],
+                  a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.shells[0],
                 ) -
                 resolveDpm(
                   b.turrets.at(-1)!.guns.at(-1)!,
-                  b.turrets.at(-1)!.guns.at(-1)!.shells[0],
+                  b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.shells[0],
                 ),
             );
             break;
@@ -195,16 +194,18 @@ export const TankSearch = memo<TankSearchProps>(
           case 'fire.dpmPremium':
             sorted = filtered.sort(
               (a, b) =>
-                (a.turrets.at(-1)!.guns.at(-1)!.shells[1]
+                (a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.shells[1]
                   ? resolveDpm(
                       a.turrets.at(-1)!.guns.at(-1)!,
-                      a.turrets.at(-1)!.guns.at(-1)!.shells[1],
+                      a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun
+                        .shells[1],
                     )
                   : 0) -
-                (b.turrets.at(-1)!.guns.at(-1)!.shells[1]
+                (b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.shells[1]
                   ? resolveDpm(
                       b.turrets.at(-1)!.guns.at(-1)!,
-                      b.turrets.at(-1)!.guns.at(-1)!.shells[1],
+                      b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun
+                        .shells[1],
                     )
                   : 0),
             );
@@ -221,112 +222,118 @@ export const TankSearch = memo<TankSearchProps>(
           case 'fire.caliber':
             sorted = filtered.sort(
               (a, b) =>
-                a.turrets.at(-1)!.guns.at(-1)!.shells[0].caliber -
-                b.turrets.at(-1)!.guns.at(-1)!.shells[0].caliber,
+                a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.shells[0]
+                  .caliber -
+                b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.shells[0]
+                  .caliber,
             );
             break;
 
           case 'fire.standardPenetration':
             sorted = filtered.sort(
               (a, b) =>
-                resolveNearPenetration(
-                  a.turrets.at(-1)!.guns.at(-1)!.shells[0].penetration,
-                ) -
-                resolveNearPenetration(
-                  b.turrets.at(-1)!.guns.at(-1)!.shells[0].penetration,
-                ),
+                a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.shells[0]
+                  .penetration.near -
+                b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.shells[0]
+                  .penetration.near,
             );
             break;
 
           case 'fire.premiumPenetration':
             sorted = filtered.sort(
               (a, b) =>
-                resolveNearPenetration(
-                  a.turrets.at(-1)!.guns.at(-1)!.shells[1]?.penetration ?? 0,
-                ) -
-                resolveNearPenetration(
-                  b.turrets.at(-1)!.guns.at(-1)!.shells[1]?.penetration ?? 0,
-                ),
+                (a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.shells[1]
+                  ?.penetration.near ?? 0) -
+                (b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.shells[1]
+                  ?.penetration.near ?? 0),
             );
             break;
 
           case 'fire.damage':
             sorted = filtered.sort(
               (a, b) =>
-                a.turrets.at(-1)!.guns.at(-1)!.shells[0].damage.armor -
-                b.turrets.at(-1)!.guns.at(-1)!.shells[0].damage.armor,
+                a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.shells[0]
+                  .armorDamage -
+                b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.shells[0]
+                  .armorDamage,
             );
             break;
 
           case 'fire.shellVelocity':
             sorted = filtered.sort(
               (a, b) =>
-                a.turrets.at(-1)!.guns.at(-1)!.shells[0].speed -
-                b.turrets.at(-1)!.guns.at(-1)!.shells[0].speed,
+                a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.shells[0]
+                  .velocity -
+                b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.shells[0]
+                  .velocity,
             );
             break;
 
           case 'fire.aimTime':
             sorted = filtered.sort(
               (a, b) =>
-                a.turrets.at(-1)!.guns.at(-1)!.aimTime -
-                b.turrets.at(-1)!.guns.at(-1)!.aimTime,
+                a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.aimTime -
+                b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.aimTime,
             );
             break;
 
           case 'fire.dispersionStill':
             sorted = filtered.sort(
               (a, b) =>
-                a.turrets.at(-1)!.guns.at(-1)!.dispersion.base -
-                b.turrets.at(-1)!.guns.at(-1)!.dispersion.base,
+                a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun
+                  .dispersionBase -
+                b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun
+                  .dispersionBase,
             );
             break;
 
           case 'fire.dispersionMoving':
             sorted = filtered.sort(
               (a, b) =>
-                a.tracks.at(-1)!.dispersion.move -
-                b.tracks.at(-1)!.dispersion.move,
+                a.tracks.at(-1)!.dispersionMove -
+                b.tracks.at(-1)!.dispersionMove,
             );
             break;
 
           case 'fire.gunDepression':
             sorted = filtered.sort(
               (a, b) =>
-                modelDefinitions[a.id].turrets[a.turrets.at(-1)!.id].guns[
-                  a.turrets.at(-1)!.guns.at(-1)!.id
-                ].pitch.max +
-                (modelDefinitions[a.id].turretRotation?.pitch ?? 0) -
-                modelDefinitions[b.id].turrets[b.turrets.at(-1)!.id].guns[
-                  b.turrets.at(-1)!.guns.at(-1)!.id
-                ].pitch.max -
-                (modelDefinitions[b.id].turretRotation?.pitch ?? 0),
+                modelDefinitions.models[a.id].turrets[a.turrets.at(-1)!.id]
+                  .guns[a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.id]
+                  .pitch.max +
+                (modelDefinitions.models[a.id].initialTurretRotation?.pitch ??
+                  0) -
+                modelDefinitions.models[b.id].turrets[b.turrets.at(-1)!.id]
+                  .guns[b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.id]
+                  .pitch.max -
+                (modelDefinitions.models[b.id].initialTurretRotation?.pitch ??
+                  0),
             );
             break;
 
           case 'fire.gunElevation':
             sorted = filtered.sort(
               (a, b) =>
-                modelDefinitions[b.id].turrets[b.turrets.at(-1)!.id].guns[
-                  b.turrets.at(-1)!.guns.at(-1)!.id
-                ].pitch.min +
-                (modelDefinitions[b.id].turretRotation?.pitch ?? 0) -
-                modelDefinitions[a.id].turrets[a.turrets.at(-1)!.id].guns[
-                  a.turrets.at(-1)!.guns.at(-1)!.id
-                ].pitch.min -
-                (modelDefinitions[a.id].turretRotation?.pitch ?? 0),
+                modelDefinitions.models[b.id].turrets[b.turrets.at(-1)!.id]
+                  .guns[b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.id]
+                  .pitch.min +
+                (modelDefinitions.models[b.id].initialTurretRotation?.pitch ??
+                  0) -
+                modelDefinitions.models[a.id].turrets[a.turrets.at(-1)!.id]
+                  .guns[a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.id]
+                  .pitch.min -
+                (modelDefinitions.models[a.id].initialTurretRotation?.pitch ??
+                  0),
             );
             break;
 
           case 'maneuverability.forwardsSpeed':
-            sorted = filtered.sort(
-              (a, b) => a.speed.forwards - b.speed.forwards,
-            );
+            sorted = filtered.sort((a, b) => a.speedForwards - b.speedForwards);
             break;
 
           case 'maneuverability.backwardsSpeed':
             sorted = filtered.sort(
-              (a, b) => a.speed.backwards - b.speed.backwards,
+              (a, b) => a.speedBackwards - b.speedBackwards,
             );
             break;
 
@@ -344,13 +351,13 @@ export const TankSearch = memo<TankSearchProps>(
                     a.engines.at(-1)!.weight +
                     a.tracks.at(-1)!.weight +
                     a.turrets.at(-1)!.weight +
-                    a.turrets.at(-1)!.guns.at(-1)!.weight) -
+                    a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.weight) -
                 b.engines.at(-1)!.power /
                   (b.weight +
                     b.engines.at(-1)!.weight +
                     b.tracks.at(-1)!.weight +
                     b.turrets.at(-1)!.weight +
-                    b.turrets.at(-1)!.guns.at(-1)!.weight),
+                    b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.weight),
             );
             break;
 
@@ -361,12 +368,12 @@ export const TankSearch = memo<TankSearchProps>(
                 a.engines.at(-1)!.weight +
                 a.tracks.at(-1)!.weight +
                 a.turrets.at(-1)!.weight +
-                a.turrets.at(-1)!.guns.at(-1)!.weight -
+                a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.weight -
                 (b.weight +
                   b.engines.at(-1)!.weight +
                   b.tracks.at(-1)!.weight +
                   b.turrets.at(-1)!.weight +
-                  b.turrets.at(-1)!.guns.at(-1)!.weight),
+                  b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.gun.weight),
             );
             break;
 
@@ -386,7 +393,7 @@ export const TankSearch = memo<TankSearchProps>(
           keys: ['searchableName', 'searchableNameDeburr', 'camouflages'],
         });
         const searchedTanks = searchedRaw.map(
-          (result) => tankDefinitions[result.obj.id],
+          (result) => tankDefinitions.tanks[result.obj.id],
         );
         return searchedTanks;
       }

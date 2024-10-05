@@ -1,6 +1,6 @@
 import {
   asset,
-  gameDefinitions,
+  fetchGameDefinitions,
   TANK_CLASSES,
   TIER_ROMAN_NUMERALS,
   type Tier,
@@ -10,7 +10,6 @@ import { useStore } from '@nanostores/react';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { Box, Flex, IconButton, Text, Tooltip } from '@radix-ui/themes';
 import { times } from 'lodash-es';
-import { useAwait } from '../../../hooks/useAwait';
 import { $tankFilters, initialTankFilters } from '../../../stores/tankFilters';
 import { classIcons } from '../../ClassIcon';
 import { ExperimentIcon } from '../../ExperimentIcon';
@@ -22,8 +21,9 @@ interface FilterControlProps {
   compact?: boolean;
 }
 
+const gameDefinitions = await fetchGameDefinitions();
+
 export function FilterControl({ compact }: FilterControlProps) {
-  const awaitedGameDefinitions = useAwait(gameDefinitions);
   const tankFilters = useStore($tankFilters);
 
   return (
@@ -126,8 +126,8 @@ export function FilterControl({ compact }: FilterControlProps) {
         style={{ borderRadius: 'var(--radius-5)' }}
       >
         <Flex direction={compact ? 'column' : { sm: 'row', initial: 'column' }}>
-          {awaitedGameDefinitions.nations
-            .slice(0, Math.ceil(awaitedGameDefinitions.nations.length / 2))
+          {gameDefinitions.nations
+            .slice(0, Math.ceil(gameDefinitions.nations.length / 2))
             .map((nation) => {
               const selected = tankFilters.nations?.includes(nation);
 
@@ -180,8 +180,8 @@ export function FilterControl({ compact }: FilterControlProps) {
             })}
         </Flex>
         <Flex direction={compact ? 'column' : { sm: 'row', initial: 'column' }}>
-          {awaitedGameDefinitions.nations
-            .slice(Math.ceil(awaitedGameDefinitions.nations.length / 2))
+          {gameDefinitions.nations
+            .slice(Math.ceil(gameDefinitions.nations.length / 2))
             .map((nation) => {
               const selected = tankFilters.nations?.includes(nation);
 

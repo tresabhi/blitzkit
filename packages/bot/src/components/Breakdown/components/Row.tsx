@@ -1,8 +1,8 @@
 import {
   Percentile,
   TankClass,
+  TankType,
   TREE_TYPE_ICONS,
-  TreeType,
 } from '@blitzkit/core';
 import { createColors } from 'bepaint';
 import {
@@ -21,12 +21,12 @@ export interface RowStatItem {
 }
 
 interface RowProps {
-  type?: 'tank' | 'summary';
+  displayType?: 'tank' | 'summary';
   naked?: boolean;
   title: string;
   minimized?: boolean;
-  treeType?: TreeType;
-  tankType?: TankClass;
+  type?: TankType;
+  class?: TankClass;
   color?: AccentColor | GrayColor;
   stats: (RowStatItem | undefined)[];
 }
@@ -36,10 +36,10 @@ export function Row({
   stats,
   title,
   minimized,
-  tankType,
-  treeType,
-  naked = false,
+  class: tankClass,
   type,
+  naked = false,
+  displayType,
 }: RowProps) {
   const palette = PALETTES[`${color}Dark`];
   const theme = createColors(palette);
@@ -70,10 +70,10 @@ export function Row({
             : theme.componentInteractive,
         }}
       >
-        {type === 'tank' && tankType !== undefined && (
+        {displayType === 'tank' && tankClass !== undefined && (
           <img
-            alt={tankType}
-            src={TREE_TYPE_ICONS[treeType ?? 'researchable'][tankType]}
+            alt={TankClass[tankClass]}
+            src={TREE_TYPE_ICONS[type ?? TankType.RESEARCHABLE][tankClass]}
             style={{ width: 16, height: 16 }}
           />
         )}
@@ -81,8 +81,8 @@ export function Row({
         <span
           style={{
             color:
-              type === 'tank'
-                ? treeType === 'collector'
+              displayType === 'tank'
+                ? type === TankType.COLLECTOR
                   ? theme.textLowContrast_blue
                   : treeType === 'premium'
                     ? theme.textLowContrast_amber
