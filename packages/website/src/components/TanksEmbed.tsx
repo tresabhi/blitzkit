@@ -1,16 +1,18 @@
 import {
-  CompositeStatsKey,
   previewCompositeStat,
+  TankClass,
   TankDefinition,
+  TankType,
+  type CompositeStatsKey,
 } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
 import { amberDark, blueDark } from '@radix-ui/colors';
 import { Flex, Text } from '@radix-ui/themes';
 import { times } from 'lodash-es';
-import { ReactNode } from 'react';
-import { toRadiusVar } from '../../../website-legacy/src/core/radix/utils';
-import { useEmbedStateCurry } from '../../../website-legacy/src/stores/embedState/utilities';
+import type { ReactNode } from 'react';
 import { breakdownConfig } from '../constants/embeds';
+import { toRadiusVar } from '../core/radix/utils';
+import { useEmbedStateCurry } from '../stores/embedState/utilities';
 import { ClassHeavy } from './ClassIcon/components/ClassHeavy';
 import { ClassLight } from './ClassIcon/components/ClassLight';
 import { ClassMedium } from './ClassIcon/components/ClassMedium';
@@ -63,12 +65,12 @@ export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
             style:
               tank === null
                 ? undefined
-                : tank.treeType === 'researchable' ||
+                : tank.type === TankType.RESEARCHABLE ||
                     !useState('cardTitleTypeColor')
                   ? undefined
                   : {
                       color:
-                        tank.treeType === 'premium'
+                        tank.type === TankType.PREMIUM
                           ? amberDark.amber11
                           : blueDark.blue11,
                     },
@@ -77,16 +79,16 @@ export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
           <Flex align="center" gap="1">
             {useState('cardTitleClassIcon') && tank !== null && (
               <>
-                {tank.class === 'lightTank' && (
+                {tank.class === TankClass.LIGHT && (
                   <ClassLight width="1em" height="1em" />
                 )}
-                {tank.class === 'mediumTank' && (
+                {tank.class === TankClass.MEDIUM && (
                   <ClassMedium width="1em" height="1em" />
                 )}
-                {tank.class === 'heavyTank' && (
+                {tank.class === TankClass.HEAVY && (
                   <ClassHeavy width="1em" height="1em" />
                 )}
-                {tank.class === 'AT-SPG' && (
+                {tank.class === TankClass.TANK_DESTROYER && (
                   <ClassTankDestroyer width="1em" height="1em" />
                 )}
               </>

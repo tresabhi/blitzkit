@@ -1,4 +1,4 @@
-import { asset, imgur, tankDefinitions } from '@blitzkit/core';
+import { asset, fetchTankDefinitions, imgur, TankType } from '@blitzkit/core';
 import { CaretLeftIcon, CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, IconButton, ScrollArea, Text } from '@radix-ui/themes';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
@@ -9,7 +9,7 @@ import { Node } from './components/Node';
 
 type Line = number[];
 
-const awaitedTankDefinitions = await tankDefinitions;
+const tankDefinitions = await fetchTankDefinitions();
 
 export const XP_MULTIPLIERS = [1, 2, 3, 4, 5, 10];
 
@@ -20,7 +20,7 @@ export function TechTreeSection() {
   const container = useRef<HTMLDivElement>(null);
   const lines = useMemo(() => {
     function extend(line: Line): Line[] {
-      const root = awaitedTankDefinitions[line.at(-1)!];
+      const root = tankDefinitions.tanks[line.at(-1)!];
 
       if (root.ancestors === undefined || root.tier === 1) {
         return [line];
@@ -28,7 +28,7 @@ export function TechTreeSection() {
         if (root.ancestors.length === 1 || root.tier === 2) {
           line.push(
             root.ancestors.find(
-              (ancestor) => !awaitedTankDefinitions[ancestor].deprecated,
+              (ancestor) => !tankDefinitions.tanks[ancestor].deprecated,
             ) ?? root.ancestors[0],
           );
           return extend(line);
@@ -53,14 +53,14 @@ export function TechTreeSection() {
   const totalXp = line.reduce(
     (xp, id) =>
       xp +
-      (awaitedTankDefinitions[id].xp === undefined ||
-      awaitedTankDefinitions[id].tier === 1
+      (tankDefinitions.tanks[id].xp === undefined ||
+      tankDefinitions.tanks[id].tier === 1
         ? 0
-        : awaitedTankDefinitions[id].xp),
+        : tankDefinitions.tanks[id].xp),
     0,
   );
   const totalCredits = line.reduce(
-    (credits, id) => credits + awaitedTankDefinitions[id].price.value,
+    (credits, id) => credits + tankDefinitions.tanks[id].price.value,
     0,
   );
 
@@ -70,7 +70,7 @@ export function TechTreeSection() {
   });
 
   if (
-    master.treeType !== 'researchable' ||
+    master.type !== TankType.RESEARCHABLE ||
     master.ancestors === undefined ||
     master.ancestors.length === 0
   ) {
@@ -163,7 +163,7 @@ export function TechTreeSection() {
         <Flex align="center" gap="2" justify="center" p="4">
           {line.map((id, index) => {
             const last = index === line.length - 1;
-            const tank = awaitedTankDefinitions[id];
+            const tank = tankDefinitions.tanks[id];
 
             return (
               <Fragment key={id}>

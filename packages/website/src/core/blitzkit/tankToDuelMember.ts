@@ -37,11 +37,11 @@ export function tankToDuelMember(
           infinityFallback(PROVISION_PREFERENCES.indexOf(b.id)),
       )
       .sort((a, b) => (b.crew ?? 0) - (a.crew ?? 0))
-      .slice(0, tank.provisions)
+      .slice(0, tank.maxProvisions)
       .map(({ id }) => id),
     engine: tank.engines.at(-1)!,
     gun,
-    shell: tank.turrets.at(-1)!.guns.at(-1)!.shells[0],
+    shell: tank.turrets.at(-1)!.guns.at(-1)!.gunType!.value.base.shells[0],
     tank,
     track: tank.tracks.at(-1)!,
     yaw: 0,

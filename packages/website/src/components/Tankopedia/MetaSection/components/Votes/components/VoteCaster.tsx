@@ -1,4 +1,4 @@
-import { BlitzkitResponse, StarsInt } from '@blitzkit/core';
+import type { BlitzkitResponse, StarsInt } from '@blitzkit/core';
 import { PaperPlaneIcon } from '@radix-ui/react-icons';
 import {
   AlertDialog,
@@ -9,8 +9,9 @@ import {
   Text,
 } from '@radix-ui/themes';
 import { useState } from 'react';
-import * as App from '../../../../../../../../../../stores/app';
-import * as Duel from '../../../../../../../../../../stores/duel';
+import { App } from '../../../../../../stores/app';
+import { Duel } from '../../../../../../stores/duel';
+import { $wargamingLogin } from '../../../../../../stores/wargamingLogin';
 import { Stars } from '../../Stars';
 
 export function VoteCaster() {
@@ -98,9 +99,9 @@ export function VoteCaster() {
                   survivability === null)
               }
               onClick={() => {
-                const wargaming = appStore.getState().logins.wargaming;
+                const wargaming = $wargamingLogin.get();
 
-                if (!wargaming) {
+                if (!wargaming.token) {
                   return setShowDialogue(false);
                 }
 

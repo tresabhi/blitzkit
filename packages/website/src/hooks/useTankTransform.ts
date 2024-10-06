@@ -52,12 +52,16 @@ export function useTankTransform(
         .applyAxisAngle(new Vector3(0, 0, 1), yaw);
       turretRotation.set(0, 0, yaw);
 
-      if (tankModelDefinition.turretRotation) {
+      if (tankModelDefinition.initialTurretRotation) {
         const initialPitch = -degToRad(
-          tankModelDefinition.turretRotation.pitch,
+          tankModelDefinition.initialTurretRotation.pitch,
         );
-        const initialYaw = -degToRad(tankModelDefinition.turretRotation.yaw);
-        const initialRoll = -degToRad(tankModelDefinition.turretRotation.roll);
+        const initialYaw = -degToRad(
+          tankModelDefinition.initialTurretRotation.yaw,
+        );
+        const initialRoll = -degToRad(
+          tankModelDefinition.initialTurretRotation.roll,
+        );
 
         turretPosition
           .applyAxisAngle(I_HAT, initialPitch)

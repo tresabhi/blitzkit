@@ -98,7 +98,8 @@ export function ArmorPlateDisplay() {
                         const { protagonist } = duelStore.getState();
                         const tank = draft.model;
                         const turret = tank.turrets[protagonist.turret.id];
-                        const gun = turret.guns[protagonist.gun.id];
+                        const gun =
+                          turret.guns[protagonist.gun.gunType!.value.base.id];
                         const track = tank.tracks[protagonist.track.id];
 
                         console.log(highlightArmor.name);
@@ -152,8 +153,12 @@ export function ArmorPlateDisplay() {
                       const turret = tank.turrets[protagonist.turret.id];
                       const initialTurret =
                         initialTank.turrets[protagonist.turret.id];
-                      const gun = turret.guns[protagonist.gun.id];
-                      const initialGun = initialTurret.guns[protagonist.gun.id];
+                      const gun =
+                        turret.guns[protagonist.gun.gunType!.value.base.id];
+                      const initialGun =
+                        initialTurret.guns[
+                          protagonist.gun.gunType!.value.base.id
+                        ];
                       const track = tank.tracks[protagonist.track.id];
                       const initialTrack =
                         initialTank.tracks[protagonist.track.id];

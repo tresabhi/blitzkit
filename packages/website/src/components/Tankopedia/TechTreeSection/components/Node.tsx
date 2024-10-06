@@ -1,8 +1,8 @@
 import {
   asset,
-  averageDefinitions,
+  fetchAverageDefinitions,
+  fetchTankDefinitions,
   formatCompact,
-  tankDefinitions,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
 import { Box, Flex, Link, Text } from '@radix-ui/themes';
@@ -14,13 +14,13 @@ interface NodeProps {
   highlight?: boolean;
 }
 
-const awaitedTankDefinitions = await tankDefinitions;
-const awaitedAverageDefinitions = await averageDefinitions;
+const tankDefinitions = await fetchTankDefinitions();
+const averageDefinitions = await fetchAverageDefinitions();
 
 export function Node({ id, highlight, nextIds }: NodeProps) {
   const xpMultiplier = TankopediaEphemeral.use((state) => state.xpMultiplier);
-  const tank = awaitedTankDefinitions[id];
-  const nextTanks = nextIds?.map((id) => awaitedTankDefinitions[id]);
+  const tank = tankDefinitions.tanks[id];
+  const nextTanks = nextIds?.map((id) => tankDefinitions.tanks[id]);
   const thisTankXp =
     tank.xp === undefined || tank.tier === 1 ? 0 : tank.xp! / xpMultiplier;
   const nextTanksXp = nextTanks?.reduce(
@@ -29,7 +29,7 @@ export function Node({ id, highlight, nextIds }: NodeProps) {
       (tank.xp === undefined || tank.tier === 1 ? 0 : tank.xp! / xpMultiplier),
     0,
   );
-  const averages = awaitedAverageDefinitions.averages[tank.id]?.mu;
+  const averages = averageDefinitions.averages[tank.id]?.mu;
   const averageXp = averages ? averages.xp / averages.battles : undefined;
   const games =
     averages && nextTanks ? Math.round(nextTanksXp! / averageXp!) : undefined;

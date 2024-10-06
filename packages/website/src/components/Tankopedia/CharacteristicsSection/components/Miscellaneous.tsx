@@ -1,4 +1,4 @@
-import { asset } from '@blitzkit/core';
+import { asset, TankType } from '@blitzkit/core';
 import { Flex, Heading, Slider, TextField } from '@radix-ui/themes';
 import { clamp, debounce } from 'lodash-es';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -78,7 +78,7 @@ export function Miscellaneous() {
           }}
         />
 
-        {tank.treeType === 'researchable' && (
+        {tank.type === TankType.RESEARCHABLE && (
           <Flex
             align="center"
             direction="column"

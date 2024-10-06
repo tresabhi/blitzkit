@@ -1,6 +1,6 @@
 import { persistentMap } from '@nanostores/persistent';
 
-type PatreonLogin =
+type WargamingLogin =
   | {
       token: undefined;
     }
@@ -10,6 +10,6 @@ type PatreonLogin =
       expires: string;
     };
 
-export const $wargamingLogin = persistentMap<PatreonLogin>('wargaming:', {
+export const $wargamingLogin = persistentMap<WargamingLogin>('wargaming:', {
   token: undefined,
 });

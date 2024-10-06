@@ -1,8 +1,10 @@
 import {
   assertSecret,
   asset,
-  modelDefinitions,
-  provisionDefinitions,
+  fetchModelDefinitions,
+  fetchProvisionDefinitions,
+  TankPriceType,
+  TankType,
 } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
 import { ChevronLeftIcon, MixIcon, UpdateIcon } from '@radix-ui/react-icons';
@@ -17,8 +19,8 @@ import { ScienceIcon } from '../../ScienceIcon';
 import { TankSearch } from '../../TankSearch';
 import { Listing } from './components/Listing';
 
-const awaitedProvisionDefinitions = await provisionDefinitions;
-const awaitedModelDefinitions = await modelDefinitions;
+const provisionDefinitions = await fetchProvisionDefinitions();
+const modelDefinitions = await fetchModelDefinitions();
 
 export function MetaSection() {
   const developerMode = App.useDeferred((state) => state.developerMode, false);
@@ -78,12 +80,12 @@ export function MetaSection() {
                 onSelect={(tank) => {
                   setShowSwapDialog(false);
                   mutateTankopediaEphemeral((draft) => {
-                    draft.model = awaitedModelDefinitions[tank.id];
+                    draft.model = modelDefinitions.models[tank.id];
                   });
                   mutateDuel((draft) => {
                     draft.protagonist = tankToDuelMember(
                       tank,
-                      awaitedProvisionDefinitions,
+                      provisionDefinitions,
                     );
                   });
 
@@ -130,14 +132,14 @@ export function MetaSection() {
             <Listing
               label="Type"
               color={
-                protagonist.treeType === 'collector'
+                protagonist.type === TankType.COLLECTOR
                   ? 'blue'
-                  : protagonist.treeType === 'premium'
+                  : protagonist.type === TankType.PREMIUM
                     ? 'amber'
                     : undefined
               }
             >
-              {strings.common.tree_type[protagonist.treeType]}
+              {strings.common.tree_type[protagonist.type]}
             </Listing>
           </Flex>
 
@@ -147,7 +149,7 @@ export function MetaSection() {
                 <Code>{protagonist.id}</Code>
               </Listing>
             )}
-            {protagonist.treeType === 'premium' && (
+            {protagonist.type === TankType.PREMIUM && (
               <Listing label="Purchase price">
                 <Flex align="center" gap="1">
                   {protagonist.price.value / 400}
@@ -161,7 +163,7 @@ export function MetaSection() {
             )}
             <Listing
               label={`${
-                protagonist.treeType === 'researchable'
+                protagonist.type === TankType.RESEARCHABLE
                   ? 'Purchase'
                   : 'Restoration'
               } price`}
@@ -170,10 +172,12 @@ export function MetaSection() {
                 {protagonist.price.value.toLocaleString()}
                 <img
                   style={{ width: '1em', height: '1em' }}
-                  alt={protagonist.price.type}
+                  alt={TankPriceType[protagonist.price.type]}
                   src={asset(
                     `icons/currencies/${
-                      protagonist.price.type === 'gold' ? 'gold' : 'silver'
+                      protagonist.price.type === TankPriceType.GOLD
+                        ? 'gold'
+                        : 'silver'
                     }.webp`,
                   )}
                 />
@@ -184,10 +188,12 @@ export function MetaSection() {
                 {(protagonist.price.value / 2).toLocaleString()}
                 <img
                   style={{ width: '1em', height: '1em' }}
-                  alt={protagonist.price.type}
+                  alt={TankPriceType[protagonist.price.type]}
                   src={asset(
                     `icons/currencies/${
-                      protagonist.price.type === 'gold' ? 'gold' : 'silver'
+                      protagonist.price.type === TankPriceType.GOLD
+                        ? 'gold'
+                        : 'silver'
                     }.webp`,
                   )}
                 />

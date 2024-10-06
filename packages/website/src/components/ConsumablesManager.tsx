@@ -1,9 +1,9 @@
-import type { ConsumableEntry } from '@blitzkit/core/src/blitzkit/consumableDefinitions';
+import type { Consumable } from '@blitzkit/core';
 import { Flex, type FlexProps } from '@radix-ui/themes';
 import { ConsumableButton } from './ModuleButtons/ConsumableButton';
 
 type ConsumablesManagerProps = FlexProps & {
-  consumables: ConsumableEntry[];
+  consumables: Consumable[];
   selected: number[];
   onConsumablesChange?: (consumables: number[]) => void;
   disabled?: boolean;

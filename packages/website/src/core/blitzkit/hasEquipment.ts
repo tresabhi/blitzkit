@@ -1,4 +1,4 @@
-import { equipmentDefinitions } from '@blitzkit/core';
+import { fetchEquipmentDefinitions } from '@blitzkit/core';
 import type { EquipmentMatrix } from '../../stores/duel';
 
 export async function hasEquipment(
@@ -6,14 +6,17 @@ export async function hasEquipment(
   equipmentPreset: string,
   equipmentMatrix: EquipmentMatrix,
 ) {
-  const awaitedEquipmentDefinitions = await equipmentDefinitions;
-  const presetRows = awaitedEquipmentDefinitions.presets[equipmentPreset];
-  return presetRows.some((equipmentRow, rowIndex) => {
-    return equipmentRow.some((equipment, columnIndex) => {
-      const choice = equipmentMatrix[rowIndex][columnIndex];
-      if (choice === 0) return false;
-      const equipped = equipment[choice === -1 ? 0 : 1];
-      return equipped === id;
-    });
+  const equipmentDefinitions = await fetchEquipmentDefinitions();
+  const preset = equipmentDefinitions.presets[equipmentPreset];
+  return preset.slots.some((slot, index) => {
+    const row = Math.floor(index / 3);
+    const column = index % 3;
+    const choice = equipmentMatrix[row][column];
+
+    if (choice === 0) return false;
+
+    const equipped = slot[choice === -1 ? 'left' : 'right'];
+
+    return equipped === id;
   });
 }

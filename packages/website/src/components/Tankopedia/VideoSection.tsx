@@ -1,15 +1,15 @@
-import { reviews, youtubers } from '@blitzkit/core';
+import { fetchReviews, youtubers } from '@blitzkit/core';
 import { Box, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import { Var } from '../../core/radix/var';
 import { Duel } from '../../stores/duel';
 import { PageWrapper } from '../PageWrapper';
 import { VerifiedIcon } from '../VerifiedIcon';
 
-const awaitedReviews = await reviews;
+const reviews = await fetchReviews();
 
 export function VideoSection() {
   const tank = Duel.use((state) => state.protagonist.tank);
-  const videos = awaitedReviews.reviews[tank.id]?.videos;
+  const videos = reviews.reviews[tank.id]?.videos;
 
   if (!videos) return null;
 

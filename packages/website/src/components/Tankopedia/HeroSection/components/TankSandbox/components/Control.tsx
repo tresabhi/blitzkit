@@ -37,26 +37,28 @@ export function Controls() {
   const antagonistTurretModelDefinition =
     antagonistModelDefinition.turrets[antagonist.turret.id];
   const protagonistGunModelDefinition =
-    protagonistTurretModelDefinition.guns[protagonist.gun.id];
+    protagonistTurretModelDefinition.guns[
+      protagonist.gun.gunType!.value.base.id
+    ];
   const protagonistHullOrigin = new Vector3(
-    protagonistTrackModelDefinition.origin[0],
-    protagonistTrackModelDefinition.origin[1],
-    -protagonistTrackModelDefinition.origin[2],
+    protagonistTrackModelDefinition.origin.x,
+    protagonistTrackModelDefinition.origin.y,
+    -protagonistTrackModelDefinition.origin.z,
   );
   const protagonistTurretOrigin = new Vector3(
-    protagonistModelDefinition.turretOrigin[0],
-    protagonistModelDefinition.turretOrigin[1],
-    -protagonistModelDefinition.turretOrigin[2],
+    protagonistModelDefinition.turretOrigin.x,
+    protagonistModelDefinition.turretOrigin.y,
+    -protagonistModelDefinition.turretOrigin.z,
   );
   const protagonistGunOrigin = new Vector3(
-    protagonistTurretModelDefinition.gunOrigin[0],
-    protagonistTurretModelDefinition.gunOrigin[1],
-    -protagonistTurretModelDefinition.gunOrigin[2],
+    protagonistTurretModelDefinition.gunOrigin.x,
+    protagonistTurretModelDefinition.gunOrigin.y,
+    -protagonistTurretModelDefinition.gunOrigin.z,
   );
   const antagonistGunHeight =
-    protagonistTrackModelDefinition.origin[1] +
-    antagonistModelDefinition.turretOrigin[1] +
-    antagonistTurretModelDefinition.gunOrigin[1];
+    protagonistTrackModelDefinition.origin.y +
+    antagonistModelDefinition.turretOrigin.y +
+    antagonistTurretModelDefinition.gunOrigin.y;
   const [autoRotate, setAutoRotate] = useState(true);
 
   useEffect(() => {
@@ -76,7 +78,7 @@ export function Controls() {
       const duel = duelStore.getState();
       const hasImprovedVerticalStabilizer = await hasEquipment(
         122,
-        duel.protagonist.tank.equipment,
+        duel.protagonist.tank.equipmentPreset,
         duel.protagonist.equipmentMatrix,
       );
 

@@ -52,6 +52,7 @@
     },
 
     "tank_class_short": {
+      "-1": "unrecognized",
       "0": "Light",
       "1": "Medium",
       "2": "Heavy",
@@ -67,9 +68,10 @@
     },
 
     "tree_type": {
-      "researchable": "Tech tree",
-      "premium": "Premium",
-      "collector": "Collector"
+      "-1": "unrecognized",
+      "0": "Tech tree",
+      "1": "Premium",
+      "2": "Collector"
     },
 
     "regions": {
