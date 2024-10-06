@@ -2,7 +2,6 @@ import {
   type ShellDefinition,
   canSplash,
   isExplosive,
-  resolveNearPenetration,
   resolvePenetrationCoefficient,
 } from '@blitzkit/core';
 import { useFrame } from '@react-three/fiber';
@@ -69,7 +68,7 @@ export function PrimaryArmorSceneComponent({
       );
       material.uniforms.isExplosive.value = isExplosive(shell.type);
       material.uniforms.canSplash.value = canSplash(shell.type);
-      material.uniforms.damage.value = shell.damage.armor;
+      material.uniforms.damage.value = shell.armorDamage;
       material.uniforms.explosionRadius.value = shell.explosionRadius;
 
       const duel = duelStore.getState();
@@ -91,7 +90,7 @@ export function PrimaryArmorSceneComponent({
       const duel = duelStore.getState();
       const hasEnhancedArmor = await hasEquipment(
         110,
-        duel.protagonist.tank.equipment,
+        duel.protagonist.tank.equipmentPreset,
         equipment,
       );
       material.uniforms.thickness.value = hasEnhancedArmor
@@ -101,10 +100,10 @@ export function PrimaryArmorSceneComponent({
     async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
       const duel = duelStore.getState();
       const shell = duel.antagonist.shell;
-      const penetration = resolveNearPenetration(shell.penetration);
+      const penetration = shell.penetration.near;
       const hasCalibratedShells = await hasEquipment(
         103,
-        duel.antagonist.tank.equipment,
+        duel.antagonist.tank.equipmentPreset,
         equipment,
       );
 

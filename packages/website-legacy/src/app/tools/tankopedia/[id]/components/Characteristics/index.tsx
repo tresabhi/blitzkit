@@ -2,10 +2,10 @@ import {
   asset,
   coefficient,
   CREW_MEMBER_NAMES,
-  equipmentDefinitions,
+  fetchEquipmentDefinitions,
+  fetchProvisionDefinitions,
   GUN_TYPE_NAMES,
   isExplosive,
-  provisionDefinitions,
   resolvePenetrationCoefficient,
 } from '@blitzkit/core';
 import { AccessibilityIcon, InfoCircledIcon } from '@radix-ui/react-icons';
@@ -24,15 +24,15 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 import { Ad, AdType } from '../../../../../../../../website/src/components/Ad';
 import { InfoWithDelta } from '../../../../../../../../website/src/components/Tankopedia/CharacteristicsSection/components/Characteristics/components/InfoWithDelta';
 import { applyPitchYawLimits } from '../../../../../../../../website/src/core/blitz/applyPitchYawLimits';
+import { tankCharacteristics } from '../../../../../../../../website/src/core/blitzkit/tankCharacteristics';
 import { useAdExempt } from '../../../../../../../../website/src/hooks/useAdExempt';
 import { useEquipment } from '../../../../../../../../website/src/hooks/useEquipment';
 import { useTankModelDefinition } from '../../../../../../../../website/src/hooks/useTankModelDefinition';
 import { Duel } from '../../../../../../../../website/src/stores/duel';
 import { TankopediaEphemeral } from '../../../../../../../../website/src/stores/tankopediaEphemeral';
-import { Info } from '../../../../performance/components/Info';
 
-const awaitedEquipmentDefinitions = await equipmentDefinitions;
-const awaitedProvisionDefinitions = await provisionDefinitions;
+const equipmentDefinitions = await fetchEquipmentDefinitions();
+const provisionDefinitions = await fetchProvisionDefinitions();
 
 export function Characteristics() {
   const mutateDuel = Duel.useMutation();
@@ -50,8 +50,8 @@ export function Characteristics() {
   const provisionCrewBonus =
     provisions.reduce(
       (total, provision) =>
-        awaitedProvisionDefinitions[provision].crew
-          ? total + awaitedProvisionDefinitions[provision].crew! / 100
+        provisionDefinitions.provisions[provision].crew
+          ? total + provisionDefinitions.provisions[provision].crew! / 100
           : total,
       0,
     ) + (hasImprovedVentilation ? 0.08 : 0);
@@ -70,7 +70,8 @@ export function Characteristics() {
   const stockGun = stockTurret.guns[0];
   const tankModelDefinition = useTankModelDefinition();
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
-  const gunModelDefinition = turretModelDefinition.guns[gun.id];
+  const gunModelDefinition =
+    turretModelDefinition.guns[gun.gunType!.value.base.id];
   const stats = tankCharacteristics(
     {
       tank,
@@ -95,8 +96,8 @@ export function Characteristics() {
     },
     {
       tankModelDefinition,
-      equipmentDefinitions: awaitedEquipmentDefinitions,
-      provisionDefinitions: awaitedProvisionDefinitions,
+      equipmentDefinitions: equipmentDefinitions,
+      provisionDefinitions: provisionDefinitions,
     },
   );
 
@@ -143,7 +144,7 @@ export function Characteristics() {
             <Heading size="5">Firepower</Heading>
 
             <Flex>
-              {gun.shells.map((thisShell, shellIndex) => (
+              {gun.gunType!.value.base.shells.map((thisShell, shellIndex) => (
                 <Tooltip content={thisShell.name} key={thisShell.id}>
                   <IconButton
                     color={thisShell.id === shell.id ? undefined : 'gray'}
@@ -152,9 +153,13 @@ export function Characteristics() {
                       borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
                       borderBottomLeftRadius: shellIndex === 0 ? undefined : 0,
                       borderTopRightRadius:
-                        shellIndex === gun.shells.length - 1 ? undefined : 0,
+                        shellIndex === gun.gunType!.value.base.shells.length - 1
+                          ? undefined
+                          : 0,
                       borderBottomRightRadius:
-                        shellIndex === gun.shells.length - 1 ? undefined : 0,
+                        shellIndex === gun.gunType!.value.base.shells.length - 1
+                          ? undefined
+                          : 0,
                       marginLeft: shellIndex === 0 ? 0 : -1,
                     }}
                     onClick={() => {
@@ -174,7 +179,7 @@ export function Characteristics() {
               ))}
             </Flex>
           </Flex>
-          <Info name="Gun type">{GUN_TYPE_NAMES[gun.type]}</Info>
+          <Info name="Gun type">{GUN_TYPE_NAMES[gun.gunType!.$case]}</Info>
           <InfoWithDelta name="DPM" decimals={0} unit="hp / min">
             {stats.dpm}
           </InfoWithDelta>

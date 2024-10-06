@@ -3,7 +3,6 @@ import { PlusIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, IconButton, Text } from '@radix-ui/themes';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
-import * as CompareEphemeral from '../../../stores/compareEphemeral';
 
 export default function Page() {
   const pathname = usePathname();

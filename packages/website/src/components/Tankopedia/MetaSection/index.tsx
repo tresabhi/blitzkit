@@ -199,10 +199,12 @@ export function MetaSection() {
                 />
               </Flex>
             </Listing>
-            {protagonist.xp && (
+            {protagonist.researchCost && (
               <Listing label="Research XP">
                 <Flex align="center" gap="1">
-                  {protagonist.xp.toLocaleString()}
+                  {(
+                    protagonist.researchCost.researchCostType!.value as number
+                  ).toLocaleString()}
                   <img
                     style={{ width: '1em', height: '1em' }}
                     alt="xp"

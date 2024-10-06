@@ -1,7 +1,7 @@
 import {
   asset,
+  fetchSkillDefinitions,
   permanentSkills,
-  skillDefinitions,
   TIER_ROMAN_NUMERALS,
   type Tier,
 } from '@blitzkit/core';
@@ -13,7 +13,7 @@ interface CrewSkillManagerProps {
   onChange?: (skillLevels: Record<string, number>) => void;
 }
 
-const awaitedSkillDefinitions = await skillDefinitions;
+const skillDefinitions = await fetchSkillDefinitions();
 
 export function CrewSkillManager({
   skillLevels,
@@ -21,41 +21,39 @@ export function CrewSkillManager({
 }: CrewSkillManagerProps) {
   return (
     <Flex direction="column" gap="2">
-      {Object.entries(awaitedSkillDefinitions.classes).map(
-        ([tankClass, skills]) => (
-          <Flex gap="2" key={tankClass}>
-            {skills.map((skill) => {
-              const level = skillLevels[skill];
+      {Object.entries(skillDefinitions.classes).map(([tankClass, skills]) => (
+        <Flex gap="2" key={tankClass}>
+          {skills.skills.map((skill) => {
+            const level = skillLevels[skill];
 
-              return (
-                <GenericTankComponentButton
-                  key={skill}
-                  special={!permanentSkills.includes(skill)}
-                  selected={level > 0}
-                  discriminator={
-                    level === 0 ? undefined : TIER_ROMAN_NUMERALS[level as Tier]
+            return (
+              <GenericTankComponentButton
+                key={skill}
+                special={!permanentSkills.includes(skill)}
+                selected={level > 0}
+                discriminator={
+                  level === 0 ? undefined : TIER_ROMAN_NUMERALS[level as Tier]
+                }
+                icon={asset(`icons/skills/${skill}.webp`)}
+                onClick={(event) => {
+                  if (!onChange) return;
+
+                  const draft = { ...skillLevels };
+
+                  if (event.shiftKey) {
+                    draft[skill] = draft[skill] === 0 ? 7 : 0;
+                  } else {
+                    draft[skill] = level - 1;
+                    if (draft[skill] < 0) draft[skill] = 7;
                   }
-                  icon={asset(`icons/skills/${skill}.webp`)}
-                  onClick={(event) => {
-                    if (!onChange) return;
 
-                    const draft = { ...skillLevels };
-
-                    if (event.shiftKey) {
-                      draft[skill] = draft[skill] === 0 ? 7 : 0;
-                    } else {
-                      draft[skill] = level - 1;
-                      if (draft[skill] < 0) draft[skill] = 7;
-                    }
-
-                    onChange(draft);
-                  }}
-                />
-              );
-            })}
-          </Flex>
-        ),
-      )}
+                  onChange(draft);
+                }}
+              />
+            );
+          })}
+        </Flex>
+      ))}
     </Flex>
   );
 }

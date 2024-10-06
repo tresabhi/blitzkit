@@ -1,6 +1,6 @@
 import { fetchTankDefinitions, TankType } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
-import { Suspense, useEffect, useMemo, useRef } from 'react';
+import { Suspense, useMemo, useRef } from 'react';
 import { NAVBAR_HEIGHT } from '../../../constants/navbar';
 import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
@@ -43,10 +43,6 @@ export function HeroSection() {
 
     return { value } satisfies ThicknessRange;
   }, [protagonist]);
-
-  useEffect(() => {
-    // setDummyLoader(false);
-  }, []);
 
   return (
     <Flex justify="center" style={{ backgroundColor: Var('color-surface') }}>

@@ -507,9 +507,9 @@ export function tankCharacteristics(
     gun.gunType!.value.base.camouflageLoss;
   const camouflageCaughtOnFire =
     tank.camouflageOnFire * tank.camouflageStill * camouflageCoefficientStill;
-  const width = size[2];
-  const height = size[0];
-  const length = size[1];
+  const width = size.z;
+  const height = size.x;
+  const length = size.y;
   const volume = width * height * length;
   const shellNormalization = shell.normalization ?? 0;
   const shellRicochet = isExplosive(shell.type) ? undefined : shell.ricochet;

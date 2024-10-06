@@ -1,7 +1,6 @@
 import {
   ShellType,
   isExplosive,
-  resolveNearPenetration,
   resolvePenetrationCoefficient,
 } from '@blitzkit/core';
 import { useThree } from '@react-three/fiber';
@@ -104,16 +103,16 @@ export function SpacedArmorSceneComponent({
 
       const hasCalibratedShells = await hasEquipment(
         103,
-        antagonist.tank.equipment,
+        antagonist.tank.equipmentPreset,
         antagonist.equipmentMatrix,
       );
       const hasEnhancedArmor = await hasEquipment(
         110,
-        protagonist.tank.equipment,
+        protagonist.tank.equipmentPreset,
         protagonist.equipmentMatrix,
       );
       const penetration =
-        resolveNearPenetration(shell.penetration) *
+        shell.penetration.near *
         resolvePenetrationCoefficient(hasCalibratedShells, shell.type);
       const thicknessCoefficient = hasEnhancedArmor ? 1.03 : 1;
       const filteredIntersections = intersections.filter(
@@ -289,7 +288,7 @@ export function SpacedArmorSceneComponent({
           const finalDamage = Math.max(
             0,
             0.5 *
-              shell.damage.armor *
+              shell.armorDamage *
               (1 - distanceFromSpacedArmor / shell.explosionRadius!) -
               1.1 *
                 (lastLayer.thicknessAngled +
@@ -312,7 +311,7 @@ export function SpacedArmorSceneComponent({
             shot.damage = finalDamage;
           } else {
             shot.in.status = 'penetration';
-            shot.damage = shell.damage.armor;
+            shot.damage = shell.armorDamage;
           }
         } else {
           if (lastLayer.status === 'blocked') {
@@ -320,7 +319,7 @@ export function SpacedArmorSceneComponent({
             shot.damage = 0;
           } else if (lastLayer.status === 'penetration') {
             shot.in.status = 'penetration';
-            shot.damage = shell.damage.armor;
+            shot.damage = shell.armorDamage;
           } else {
             const caster = new Raycaster();
             // https://math.stackexchange.com/a/13263/1222875

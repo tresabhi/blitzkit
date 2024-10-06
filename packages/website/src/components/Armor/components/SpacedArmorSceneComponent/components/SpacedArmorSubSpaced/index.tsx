@@ -1,6 +1,5 @@
 import {
   isExplosive,
-  resolveNearPenetration,
   resolvePenetrationCoefficient,
   type ShellDefinition,
 } from '@blitzkit/core';
@@ -54,9 +53,7 @@ export function SpacedArmorSubSpaced({
 
   useEffect(() => {
     function handleShellChange(shell: ShellDefinition) {
-      material.uniforms.penetration.value = resolveNearPenetration(
-        shell.penetration,
-      );
+      material.uniforms.penetration.value = shell.penetration.near;
       material.uniforms.caliber.value = shell.caliber;
       material.uniforms.ricochet.value = degToRad(
         isExplosive(shell.type) ? 90 : shell.ricochet!,
@@ -71,7 +68,7 @@ export function SpacedArmorSubSpaced({
       const duel = duelStore.getState();
       const hasEnhancedArmor = await hasEquipment(
         110,
-        duel.protagonist.tank.equipment,
+        duel.protagonist.tank.equipmentPreset,
         equipment,
       );
       material.uniforms.thickness.value = hasEnhancedArmor
@@ -81,10 +78,10 @@ export function SpacedArmorSubSpaced({
     async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
       const duel = duelStore.getState();
       const shell = duelStore.getState().antagonist.shell;
-      const penetration = resolveNearPenetration(shell.penetration);
+      const penetration = shell.penetration.near;
       const hasCalibratedShells = await hasEquipment(
         103,
-        duel.antagonist.tank.equipment,
+        duel.antagonist.tank.equipmentPreset,
         equipment,
       );
 

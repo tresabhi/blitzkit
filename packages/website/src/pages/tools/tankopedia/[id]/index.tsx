@@ -43,13 +43,10 @@ export function Page({ id }: PageProps) {
               <CalloutsSection />
               <MetaSection />
               <TechTreeSection />
-              {/* {!exempt && <AdMidSectionResponsive />} */}
               <CharacteristicsSection />
-              {/* {!exempt && <AdMidSectionResponsive />} */}
               <GameModeSection />
               <VideoSection />
               <HistorySection />
-              {/* {!exempt && <AdMidSectionResponsive mb="6" />} */}
             </PageWrapper>
           </Duel.Provider>
         </TankopediaPersistent.Provider>

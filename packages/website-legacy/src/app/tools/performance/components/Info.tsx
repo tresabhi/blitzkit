@@ -1,18 +1,18 @@
 import {
-  averageDefinitions,
-  discoveredIdsDefinitions,
+  fetchAverageDefinitions,
+  fetchDiscoveredIdsDefinitions,
   formatCompact,
 } from '@blitzkit/core';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { Callout, Flex } from '@radix-ui/themes';
-import { use } from 'react';
+
+const discoveredIdsDefinitions = await fetchDiscoveredIdsDefinitions();
+const averageDefinitions = await fetchAverageDefinitions();
 
 export function Info() {
-  const awaitedDiscoveredIdsDefinitions = use(discoveredIdsDefinitions);
-  const awaitedAverageDefinitions = use(averageDefinitions);
-  const samples = awaitedDiscoveredIdsDefinitions.count;
+  const samples = discoveredIdsDefinitions.count;
   const minutesAgo = Math.floor(
-    (Date.now() - awaitedAverageDefinitions.time) / (1000 * 60),
+    (Date.now() - averageDefinitions.time) / (1000 * 60),
   );
   const hoursAgo = Math.floor(minutesAgo / 60);
 

@@ -147,9 +147,6 @@ const blitzkitCrewTypeToBlitz: Record<CrewType, BlitzCrewType> = {
   [CrewType.GUNNER]: 'gunner',
   [CrewType.LOADER]: 'loader',
   [CrewType.RADIOMAN]: 'radioman',
-
-  // this should never happen... i hope 😢
-  [CrewType.UNRECOGNIZED]: 'radioman',
 };
 interface VehicleDefinitions {
   invisibility: {

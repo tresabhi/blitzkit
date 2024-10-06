@@ -12,7 +12,6 @@ export const SHELL_NAMES: Record<ShellType, string> = {
   [ShellType.APCR]: 'APCR',
   [ShellType.HEAT]: 'HEAT',
   [ShellType.HE]: 'HE',
-  [ShellType.UNRECOGNIZED]: 'unrecognized',
 };
 export const CREW_MEMBER_NAMES: Record<CrewType, string> = {
   [CrewType.COMMANDER]: 'Commander',
@@ -20,7 +19,6 @@ export const CREW_MEMBER_NAMES: Record<CrewType, string> = {
   [CrewType.GUNNER]: 'Gunner',
   [CrewType.LOADER]: 'Loader',
   [CrewType.RADIOMAN]: 'Radioman',
-  [CrewType.UNRECOGNIZED]: 'unrecognized',
 };
 export const GUN_TYPE_NAMES: Record<
   Exclude<GunDefinition['gunType'], undefined>['$case'],
@@ -38,7 +36,6 @@ export const TANK_ICONS: Record<TankClass, string> = {
   [TankClass.LIGHT]: 'https://i.imgur.com/CSNha5V.png',
   [TankClass.MEDIUM]: 'https://i.imgur.com/wvf3ltm.png',
   [TankClass.HEAVY]: 'https://i.imgur.com/ECeqlZa.png',
-  [TankClass.UNRECOGNIZED]: 'https://i.imgur.com/6FBBzb9.png', // lmfao click on this
 };
 /**
  * @deprecated use svg
@@ -48,7 +45,6 @@ export const TANK_ICONS_PREMIUM: Record<TankClass, string> = {
   [TankClass.LIGHT]: 'https://i.imgur.com/zdkpTRb.png',
   [TankClass.MEDIUM]: 'https://i.imgur.com/3z7eHX6.png',
   [TankClass.HEAVY]: 'https://i.imgur.com/P3vbmyA.png',
-  [TankClass.UNRECOGNIZED]: 'https://i.imgur.com/6FBBzb9.png',
 };
 /**
  * @deprecated use svg
@@ -58,7 +54,6 @@ export const TANK_ICONS_COLLECTOR: Record<TankClass, string> = {
   [TankClass.LIGHT]: 'https://i.imgur.com/EwhtKkU.png',
   [TankClass.MEDIUM]: 'https://i.imgur.com/u8YDMBh.png',
   [TankClass.HEAVY]: 'https://i.imgur.com/8xRf3nc.png',
-  [TankClass.UNRECOGNIZED]: 'https://i.imgur.com/6FBBzb9.png',
 };
 export const TIERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
 export const TIER_ROMAN_NUMERALS: Record<Tier, string> = {
@@ -72,7 +67,6 @@ export const TIER_ROMAN_NUMERALS: Record<Tier, string> = {
   [Tier.VIII]: 'VIII',
   [Tier.IX]: 'IX',
   [Tier.X]: 'X',
-  [Tier.UNRECOGNIZED]: 'unrecognized',
 };
 
 export const flags: Record<string, string> = {
@@ -90,11 +84,4 @@ export const TREE_TYPE_ICONS: Record<TankType, Record<TankClass, string>> = {
   [TankType.RESEARCHABLE]: TANK_ICONS,
   [TankType.PREMIUM]: TANK_ICONS_PREMIUM,
   [TankType.COLLECTOR]: TANK_ICONS_COLLECTOR,
-  [TankType.UNRECOGNIZED]: {
-    '-1': 'https://i.imgur.com/6FBBzb9.png',
-    '0': 'https://i.imgur.com/6FBBzb9.png',
-    '1': 'https://i.imgur.com/6FBBzb9.png',
-    '2': 'https://i.imgur.com/6FBBzb9.png',
-    '3': 'https://i.imgur.com/6FBBzb9.png',
-  },
 };

@@ -28,7 +28,8 @@ export const TankModel = memo(() => {
   const tankModelDefinition = useTankModelDefinition();
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
-  const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
+  const gunModelDefinition =
+    turretModelDefinition.guns[protagonist.gun.gunType!.value.base.id];
   const { gltf } = useModel(protagonist.tank.id);
   const nodes = Object.values(gltf.nodes);
   const isDynamicArmorActive = Duel.use((state) =>
@@ -135,7 +136,7 @@ export const TankModel = memo(() => {
           const isTurret = node.name.startsWith('turret_');
           const isCurrentTurret =
             node.name ===
-            `turret_${turretModelDefinition.model.toString().padStart(2, '0')}`;
+            `turret_${turretModelDefinition.modelId.toString().padStart(2, '0')}`;
           const isVisible = isCurrentTurret;
           const position = new Vector2();
           const delta = new Vector2();
@@ -168,7 +169,7 @@ export const TankModel = memo(() => {
             const duel = duelStore.getState();
             const hasImprovedVerticalStabilizer = await hasEquipment(
               122,
-              duel.protagonist.tank.equipment,
+              duel.protagonist.tank.equipmentPreset,
               duel.protagonist.equipmentMatrix,
             );
             const boundingRect = canvas.getBoundingClientRect();
@@ -231,12 +232,12 @@ export const TankModel = memo(() => {
           {nodes.map((node) => {
             const isCurrentMantlet =
               node.name ===
-              `gun_${gunModelDefinition.model
+              `gun_${gunModelDefinition.modelId
                 .toString()
                 .padStart(2, '0')}_mask`;
             const isCurrentGun =
               node.name ===
-              `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`;
+              `gun_${gunModelDefinition.modelId.toString().padStart(2, '0')}`;
             const isVisible = isCurrentGun || isCurrentMantlet;
             const position = new Vector2();
             const delta = new Vector2();
@@ -268,7 +269,7 @@ export const TankModel = memo(() => {
               const duel = duelStore.getState();
               const hasImprovedVerticalStabilizer = await hasEquipment(
                 122,
-                duel.protagonist.tank.equipment,
+                duel.protagonist.tank.equipmentPreset,
                 duel.protagonist.equipmentMatrix,
               );
               const boundingRect = canvas.getBoundingClientRect();

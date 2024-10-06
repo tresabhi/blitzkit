@@ -7,7 +7,7 @@ import { Page } from './index';
 export const getStaticPaths = (async () => {
   const tankDefinitions = await fetchTankDefinitions();
 
-  return Object.values(tankDefinitions).map((tank) => ({
+  return Object.values(tankDefinitions.tanks).map((tank) => ({
     params: { id: tank.id },
   }));
 }) satisfies GetStaticPaths;

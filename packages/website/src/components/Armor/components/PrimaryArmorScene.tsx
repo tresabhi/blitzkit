@@ -24,7 +24,8 @@ export const PrimaryArmorScene = memo(() => {
   const tankModelDefinition = useTankModelDefinition();
   const trackModelDefinition = tankModelDefinition.tracks[track.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
-  const gunModelDefinition = turretModelDefinition.guns[gun.id];
+  const gunModelDefinition =
+    turretModelDefinition.guns[gun.gunType!.value.base.id];
   const hullOrigin = correctZYTuple(trackModelDefinition.origin);
   const turretOrigin = correctZYTuple(tankModelDefinition.turretOrigin);
   const gunOrigin = correctZYTuple(turretModelDefinition.gunOrigin);
@@ -68,7 +69,7 @@ export const PrimaryArmorScene = memo(() => {
       <group ref={turretContainer}>
         {armorNodes.map((node) => {
           const isCurrentTurret = node.name.startsWith(
-            `turret_${turretModelDefinition.model.toString().padStart(2, '0')}`,
+            `turret_${turretModelDefinition.modelId.toString().padStart(2, '0')}`,
           );
           const isVisible = isCurrentTurret;
           const armorId = nameToArmorId(node.name);
@@ -102,7 +103,7 @@ export const PrimaryArmorScene = memo(() => {
         <group ref={gunContainer}>
           {armorNodes.map((node) => {
             const isCurrentGun = node.name.startsWith(
-              `gun_${gunModelDefinition.model.toString().padStart(2, '0')}`,
+              `gun_${gunModelDefinition.modelId.toString().padStart(2, '0')}`,
             );
             const isVisible = isCurrentGun;
             const armorId = nameToArmorId(node.name);

@@ -10,17 +10,16 @@ export async function fetchTankNames() {
   const tankDefinitionsArray = Object.values(tankDefinitions.tanks);
 
   return await Promise.all(
-    tankDefinitionsArray.map(async (tank, index) => {
-      const { id } = tankDefinitionsArray[index];
-
+    tankDefinitionsArray.map(async (tank) => {
       return {
-        id,
+        id: tank.id,
         name: tank.name,
         nameFull: tank.nameFull,
         searchableName: tank.nameFull ?? tank.name,
         searchableNameDeburr: deburr(tank.nameFull ?? tank.name),
         camouflages: tank.camouflages
-          ?.map((id) => camouflageDefinitions.camouflages[id].name)
+          ?.map((id) => camouflageDefinitions.camouflages[id]?.name)
+          .filter(Boolean)
           .join(' '),
         treeType: tank.type,
       };

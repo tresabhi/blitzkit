@@ -1,16 +1,16 @@
-import { equipmentDefinitions } from '@blitzkit/core';
+import { fetchEquipmentDefinitions } from '@blitzkit/core';
 import { Button, Flex, Heading } from '@radix-ui/themes';
 import { Duel } from '../../../../stores/duel';
 import { EquipmentManager } from '../../../EquipmentManager';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
-const awaitedEquipmentDefinitions = await equipmentDefinitions;
+const equipmentDefinitions = await fetchEquipmentDefinitions();
 
 export function Equipment() {
   const mutateDuel = Duel.useMutation();
   const protagonist = Duel.use((state) => state.protagonist);
   const equipmentPreset =
-    awaitedEquipmentDefinitions.presets[protagonist.tank.equipment];
+    equipmentDefinitions.presets[protagonist.tank.equipmentPreset];
   const equipmentMatrix = Duel.use(
     (state) => state.protagonist.equipmentMatrix,
   );

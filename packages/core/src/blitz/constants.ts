@@ -8,7 +8,6 @@ export const TANK_CLASSES = [
   TankClass.MEDIUM,
   TankClass.HEAVY,
   TankClass.TANK_DESTROYER,
-  TankClass.UNRECOGNIZED,
 ] as const;
 
 export const emptyAllStats: BlitzStats = {

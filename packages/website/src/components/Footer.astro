@@ -1,9 +1,9 @@
 ---
-import { gameDefinitions } from '@blitzkit/core';
+import { fetchGameDefinitions } from '@blitzkit/core';
 import { Code, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import packageJson from '../../../../package.json';
 
-const awaitedGameDefinitions = await gameDefinitions;
+const gameDefinitions = await fetchGameDefinitions();
 ---
 
 <Flex
@@ -133,7 +133,7 @@ const awaitedGameDefinitions = await gameDefinitions;
         {packageJson.version}
       </Code>
       <Code size="2" color="gray">
-        {awaitedGameDefinitions.version}
+        {gameDefinitions.version}
       </Code>
       <Code size="2" color="gray">
         {import.meta.env.PUBLIC_ASSET_BRANCH}
@@ -148,7 +148,7 @@ const awaitedGameDefinitions = await gameDefinitions;
     </Code>
     <Text size="2" color="gray"> WoT Blitz </Text>
     <Code size="2" color="gray">
-      {awaitedGameDefinitions.version}
+      {gameDefinitions.version}
     </Code>
     <Text size="2" color="gray"> CDN </Text>
     <Code size="2" color="gray">

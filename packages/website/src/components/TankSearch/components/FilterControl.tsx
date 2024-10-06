@@ -2,6 +2,7 @@ import {
   asset,
   fetchGameDefinitions,
   TANK_CLASSES,
+  TankType,
   TIER_ROMAN_NUMERALS,
   type Tier,
 } from '@blitzkit/core';
@@ -35,7 +36,7 @@ export function FilterControl({ compact }: FilterControlProps) {
       >
         <Flex direction={compact ? 'column' : { sm: 'row', initial: 'column' }}>
           {times(5, (index) => {
-            const tier = (index + 1) as Tier;
+            const tier = index as Tier;
             const selected = tankFilters.tiers?.includes(tier);
 
             return (
@@ -46,29 +47,19 @@ export function FilterControl({ compact }: FilterControlProps) {
                   radius="none"
                   color={selected ? undefined : 'gray'}
                   highContrast
-                  onClick={() =>
-                    // mutateTankFilters((draft) => {
-                    //   if (draft.tiers?.includes(tier)) {
-                    //     draft.tiers = draft.tiers?.filter((t) => t !== tier);
-                    //   } else {
-                    //     draft.tiers = [...(draft.tiers ?? []), tier];
-                    //   }
-                    // })
-
-                    {
-                      if (tankFilters.tiers.includes(tier)) {
-                        $tankFilters.setKey(
-                          'tiers',
-                          tankFilters.tiers.filter((t) => t !== tier),
-                        );
-                      } else {
-                        $tankFilters.setKey('tiers', [
-                          ...tankFilters.tiers,
-                          tier,
-                        ]);
-                      }
+                  onClick={() => {
+                    if (tankFilters.tiers.includes(tier)) {
+                      $tankFilters.setKey(
+                        'tiers',
+                        tankFilters.tiers.filter((t) => t !== tier),
+                      );
+                    } else {
+                      $tankFilters.setKey('tiers', [
+                        ...tankFilters.tiers,
+                        tier,
+                      ]);
                     }
-                  }
+                  }}
                 >
                   <Text size="2">{TIER_ROMAN_NUMERALS[tier]}</Text>
                 </IconButton>
@@ -78,7 +69,7 @@ export function FilterControl({ compact }: FilterControlProps) {
         </Flex>
         <Flex direction={compact ? 'column' : { sm: 'row', initial: 'column' }}>
           {times(5, (index) => {
-            const tier = (index + 6) as Tier;
+            const tier = (index + 5) as Tier;
             const selected = tankFilters.tiers?.includes(tier);
 
             return (
@@ -89,28 +80,19 @@ export function FilterControl({ compact }: FilterControlProps) {
                   radius="none"
                   color={selected ? undefined : 'gray'}
                   highContrast
-                  onClick={() =>
-                    // mutateTankFilters((draft) => {
-                    //   if (draft.tiers?.includes(tier)) {
-                    //     draft.tiers = draft.tiers?.filter((t) => t !== tier);
-                    //   } else {
-                    //     draft.tiers = [...(draft.tiers ?? []), tier];
-                    //   }
-                    // })
-                    {
-                      if (tankFilters.tiers.includes(tier)) {
-                        $tankFilters.setKey(
-                          'tiers',
-                          tankFilters.tiers.filter((t) => t !== tier),
-                        );
-                      } else {
-                        $tankFilters.setKey('tiers', [
-                          ...tankFilters.tiers,
-                          tier,
-                        ]);
-                      }
+                  onClick={() => {
+                    if (tankFilters.tiers.includes(tier)) {
+                      $tankFilters.setKey(
+                        'tiers',
+                        tankFilters.tiers.filter((t) => t !== tier),
+                      );
+                    } else {
+                      $tankFilters.setKey('tiers', [
+                        ...tankFilters.tiers,
+                        tier,
+                      ]);
                     }
-                  }
+                  }}
                 >
                   <Text size="2">{TIER_ROMAN_NUMERALS[tier]}</Text>
                 </IconButton>
@@ -256,30 +238,19 @@ export function FilterControl({ compact }: FilterControlProps) {
                 radius="none"
                 color={selected ? undefined : 'gray'}
                 highContrast
-                onClick={() =>
-                  // mutateTankFilters((draft) => {
-                  //   if (draft.classes?.includes(tankClass)) {
-                  //     draft.classes = draft.classes?.filter(
-                  //       (c) => c !== tankClass,
-                  //     );
-                  //   } else {
-                  //     draft.classes = [...(draft.classes ?? []), tankClass];
-                  //   }
-                  // })
-                  {
-                    if (tankFilters.classes.includes(tankClass)) {
-                      $tankFilters.setKey(
-                        'classes',
-                        tankFilters.classes.filter((c) => c !== tankClass),
-                      );
-                    } else {
-                      $tankFilters.setKey('classes', [
-                        ...tankFilters.classes,
-                        tankClass,
-                      ]);
-                    }
+                onClick={() => {
+                  if (tankFilters.classes.includes(tankClass)) {
+                    $tankFilters.setKey(
+                      'classes',
+                      tankFilters.classes.filter((c) => c !== tankClass),
+                    );
+                  } else {
+                    $tankFilters.setKey('classes', [
+                      ...tankFilters.classes,
+                      tankClass,
+                    ]);
                   }
-                }
+                }}
               >
                 <Icon style={{ width: '1em', height: '1em' }} />
               </IconButton>
@@ -296,73 +267,63 @@ export function FilterControl({ compact }: FilterControlProps) {
         <Tooltip content="Researchable">
           <IconButton
             variant={
-              tankFilters.types?.includes('researchable') ? 'solid' : 'soft'
+              tankFilters.types?.includes(TankType.RESEARCHABLE)
+                ? 'solid'
+                : 'soft'
             }
             radius="none"
             color={
-              tankFilters.types?.includes('researchable') ? undefined : 'gray'
+              tankFilters.types?.includes(TankType.RESEARCHABLE)
+                ? undefined
+                : 'gray'
             }
             highContrast
-            onClick={() =>
-              // mutateTankFilters((draft) => {
-              //   if (draft.types?.includes('researchable')) {
-              //     draft.types = draft.types?.filter(
-              //       (t) => t !== 'researchable',
-              //     );
-              //   } else {
-              //     draft.types = [...(draft.types ?? []), 'researchable'];
-              //   }
-              // })
-              {
-                if (tankFilters.types.includes('researchable')) {
-                  $tankFilters.setKey(
-                    'types',
-                    tankFilters.types.filter((t) => t !== 'researchable'),
-                  );
-                } else {
-                  $tankFilters.setKey('types', [
-                    ...tankFilters.types,
-                    'researchable',
-                  ]);
-                }
+            onClick={() => {
+              if (tankFilters.types.includes(TankType.RESEARCHABLE)) {
+                $tankFilters.setKey(
+                  'types',
+                  tankFilters.types.filter((t) => t !== TankType.RESEARCHABLE),
+                );
+              } else {
+                $tankFilters.setKey('types', [
+                  ...tankFilters.types,
+                  TankType.RESEARCHABLE,
+                ]);
               }
-            }
+            }}
           >
             <ResearchedIcon style={{ width: '1em', height: '1em' }} />
           </IconButton>
         </Tooltip>
         <Tooltip content="Premium">
           <IconButton
-            variant={tankFilters.types?.includes('premium') ? 'solid' : 'soft'}
-            radius="none"
-            color={tankFilters.types?.includes('premium') ? 'amber' : 'gray'}
-            highContrast
-            onClick={() =>
-              // mutateTankFilters((draft) => {
-              //   if (draft.types?.includes('premium')) {
-              //     draft.types = draft.types?.filter((t) => t !== 'premium');
-              //   } else {
-              //     draft.types = [...(draft.types ?? []), 'premium'];
-              //   }
-              // })
-              {
-                if (tankFilters.types.includes('premium')) {
-                  $tankFilters.setKey(
-                    'types',
-                    tankFilters.types.filter((t) => t !== 'premium'),
-                  );
-                } else {
-                  $tankFilters.setKey('types', [
-                    ...tankFilters.types,
-                    'premium',
-                  ]);
-                }
-              }
+            variant={
+              tankFilters.types?.includes(TankType.PREMIUM) ? 'solid' : 'soft'
             }
+            radius="none"
+            color={
+              tankFilters.types?.includes(TankType.PREMIUM) ? 'amber' : 'gray'
+            }
+            highContrast
+            onClick={() => {
+              if (tankFilters.types.includes(TankType.PREMIUM)) {
+                $tankFilters.setKey(
+                  'types',
+                  tankFilters.types.filter((t) => t !== TankType.PREMIUM),
+                );
+              } else {
+                $tankFilters.setKey('types', [
+                  ...tankFilters.types,
+                  TankType.PREMIUM,
+                ]);
+              }
+            }}
           >
             <Text
               color={
-                tankFilters.types?.includes('premium') ? undefined : 'amber'
+                tankFilters.types?.includes(TankType.PREMIUM)
+                  ? undefined
+                  : 'amber'
               }
               style={{ display: 'flex', justifyContent: 'center' }}
             >
@@ -373,37 +334,32 @@ export function FilterControl({ compact }: FilterControlProps) {
         <Tooltip content="Collector">
           <IconButton
             variant={
-              tankFilters.types?.includes('collector') ? 'solid' : 'soft'
+              tankFilters.types?.includes(TankType.COLLECTOR) ? 'solid' : 'soft'
             }
             radius="none"
-            color={tankFilters.types?.includes('collector') ? 'blue' : 'gray'}
-            highContrast
-            onClick={() =>
-              // mutateTankFilters((draft) => {
-              //   if (draft.types?.includes('collector')) {
-              //     draft.types = draft.types?.filter((t) => t !== 'collector');
-              //   } else {
-              //     draft.types = [...(draft.types ?? []), 'collector'];
-              //   }
-              // })
-              {
-                if (tankFilters.types.includes('collector')) {
-                  $tankFilters.setKey(
-                    'types',
-                    tankFilters.types.filter((t) => t !== 'collector'),
-                  );
-                } else {
-                  $tankFilters.setKey('types', [
-                    ...tankFilters.types,
-                    'collector',
-                  ]);
-                }
-              }
+            color={
+              tankFilters.types?.includes(TankType.COLLECTOR) ? 'blue' : 'gray'
             }
+            highContrast
+            onClick={() => {
+              if (tankFilters.types.includes(TankType.COLLECTOR)) {
+                $tankFilters.setKey(
+                  'types',
+                  tankFilters.types.filter((t) => t !== TankType.COLLECTOR),
+                );
+              } else {
+                $tankFilters.setKey('types', [
+                  ...tankFilters.types,
+                  TankType.COLLECTOR,
+                ]);
+              }
+            }}
           >
             <Text
               color={
-                tankFilters.types?.includes('collector') ? undefined : 'blue'
+                tankFilters.types?.includes(TankType.COLLECTOR)
+                  ? undefined
+                  : 'blue'
               }
               style={{ display: 'flex', justifyContent: 'center' }}
             >
@@ -424,14 +380,9 @@ export function FilterControl({ compact }: FilterControlProps) {
             radius="none"
             color={tankFilters.testing === 'include' ? undefined : 'gray'}
             highContrast
-            onClick={() =>
-              // mutateTankFilters((draft) => {
-              //   draft.testing = 'include';
-              // })
-              {
-                $tankFilters.setKey('testing', 'include');
-              }
-            }
+            onClick={() => {
+              $tankFilters.setKey('testing', 'include');
+            }}
           >
             <ExperimentIcon
               style={{ width: '1em', height: '1em', color: 'currentColor' }}
@@ -484,7 +435,6 @@ export function FilterControl({ compact }: FilterControlProps) {
         <IconButton
           color="red"
           onClick={() => {
-            // tankFiltersStore.setState(tankFiltersStore.getInitialState(), true);
             $tankFilters.set(initialTankFilters);
           }}
         >

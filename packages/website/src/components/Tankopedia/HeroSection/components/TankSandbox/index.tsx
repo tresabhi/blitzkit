@@ -44,7 +44,8 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
     const tankModelDefinition = useTankModelDefinition();
     const turretModelDefinition =
       tankModelDefinition.turrets[protagonist.turret.id];
-    const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
+    const gunModelDefinition =
+      turretModelDefinition.guns[protagonist.gun.gunType!.value.base.id];
     const display = TankopediaPersistent.useDeferred(
       (state) => state.display,
       TankopediaDisplay.Model,
@@ -185,7 +186,6 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
         <ArmorPlateDisplay />
         <AutoClear />
 
-        {/* idk why the shot display doesn't work without suspense here lol */}
         <Suspense fallback={<ModelLoader />}>
           {display === TankopediaDisplay.DynamicArmor && <Armor />}
           {display === TankopediaDisplay.StaticArmor && (
