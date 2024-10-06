@@ -7,16 +7,5 @@
       }
     ]
   },
-  "include": [
-    "src/**/*",
-    ".next/types/**/*.ts",
-    "../website/src/components/TankSearch/components/FilterControl.tsx",
-    "../website/src/components/Tankopedia/HeroSection/index.tsx",
-    "../website/src/components/Tankopedia/GameModeSection.tsx",
-    "../website/src/components/Tankopedia/CharacteristicsSection.tsx",
-    "../website/src/components/Tankopedia/MetaSection",
-    "../website/src/components/Tankopedia/HistorySection.tsx",
-    "../website/src/components/Tankopedia/CalloutsSection.tsx",
-    "../website/src/components/Tankopedia/ShotDisplaySection.tsx"
-, "../website/src/components/Tankopedia/CharacteristicsSection/components/ConfigurationChildWrapper.tsx", "../website/src/components/Tankopedia/VideoSection.tsx", "../website/src/components/DamageWarning.tsx", "../website/src/components/Controls.tsx", "../website/src/components/Compare/CompareTable.tsx"  ]
+  "include": ["src/**/*", ".next/types/**/*.ts"]
 }

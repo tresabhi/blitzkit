@@ -188,7 +188,7 @@ export async function renderBreakdown(
           key={id}
           displayType="tank"
           class={tankDefinition?.class}
-          displayType={tankDefinition?.type}
+          type={tankDefinition?.type}
           title={
             tankDefinition?.name ??
             translate('bot.commands.breakdown.body.unknown_tank', [`${id}`])

@@ -16,7 +16,7 @@ message ModelDefinition {
 }
 
 message Armor {
-  map<uint32, uint32> thickness = 1;
+  map<uint32, float> thickness = 1;
   repeated uint32 spaced = 2;
 }
 
@@ -52,13 +52,13 @@ message BoundingBox {
 }
 
 message TrackModelDefinition {
-  required uint32 thickness = 1;
+  required float thickness = 1;
   required Vector3 origin = 2;
 }
 
 message GunModelDefinition {
   required Armor armor = 1;
-  required uint32 thickness = 2;
+  required float thickness = 2;
   required uint32 model_id = 3;
   required PitchLimits pitch = 4;
   optional float mask = 5;

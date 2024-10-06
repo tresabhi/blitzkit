@@ -1,4 +1,4 @@
-import { resolveNearPenetration, tankDefinitions } from '@blitzkit/core';
+import { fetchTankDefinitions, TankType } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { Suspense, useEffect, useMemo, useRef } from 'react';
 import { NAVBAR_HEIGHT } from '../../../constants/navbar';
@@ -11,7 +11,7 @@ import { Options } from './components/Options';
 import { TankSandbox } from './components/TankSandbox';
 import { TankSandboxLoader } from './components/TankSandboxLoader';
 
-const awaitedTankDefinitions = await tankDefinitions;
+const tankDefinitions = await fetchTankDefinitions();
 
 export function HeroSection() {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -20,13 +20,13 @@ export function HeroSection() {
   const Icon = classIcons[protagonist.class];
   // const [dummyLoader, setDummyLoader] = useState(true);
   const treeColor =
-    protagonist.treeType === 'collector'
+    protagonist.type === TankType.COLLECTOR
       ? 'blue'
-      : protagonist.treeType === 'premium'
+      : protagonist.type === TankType.PREMIUM
         ? 'amber'
         : undefined;
   const thicknessRange = useMemo(() => {
-    const entries = Object.values(awaitedTankDefinitions);
+    const entries = Object.values(tankDefinitions.tanks);
     const filtered = entries.filter(
       (thisTank) => thisTank.tier === protagonist.tier,
     );
@@ -34,9 +34,8 @@ export function HeroSection() {
       (filtered.reduce((accumulator, thisTank) => {
         return (
           accumulator +
-          resolveNearPenetration(
-            thisTank.turrets.at(-1)!.guns.at(-1)!.shells[0].penetration,
-          )
+          thisTank.turrets.at(-1)!.guns.at(-1)!.gunType!.value.base.shells[0]
+            .penetration.near
         );
       }, 0) /
         filtered.length) *

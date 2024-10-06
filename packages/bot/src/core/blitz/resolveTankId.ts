@@ -1,7 +1,7 @@
-import { tankDefinitions, tankNames } from '@blitzkit/core';
 import { Locale } from 'discord.js';
 import { go } from 'fuzzysort';
 import markdownEscape from 'markdown-escape';
+import { tankNames } from '../blitzkit/nonBlockingPromises';
 import { UserError } from '../blitzkit/userError';
 import { tankNamesTechTreeOnly } from '../discord/autocompleteTanks';
 import { translator } from '../localization/translator';

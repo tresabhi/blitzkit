@@ -1,20 +1,20 @@
 import {
-  modelDefinitions,
-  provisionDefinitions,
-  tankDefinitions,
-  tankDefinitionsArray,
+  fetchModelDefinitions,
+  fetchTankDefinitions,
   tankIcon,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
 import { ReactNode } from 'react';
-import * as Duel from '../../../../stores/duel';
-import * as TankopediaEphemeral from '../../../../stores/tankopediaEphemeral';
 
 export async function generateStaticParams() {
-  const tanks = await tankDefinitionsArray;
+  const tankDefinitions = await fetchTankDefinitions();
+  const tanks = Object.values(tankDefinitions.tanks);
   return tanks.map((tank) => ({ id: `${tank.id}` }));
 }
+
+const tankDefinitions = await fetchTankDefinitions();
+const definitions = await fetchModelDefinitions();
 
 export default async function Layout({
   children,
@@ -24,11 +24,9 @@ export default async function Layout({
   params: { id: string };
 }) {
   const id = Number(params.id);
-  const awaitedTankDefinitions = await tankDefinitions;
-  const awaitedModelDefinitions = await modelDefinitions;
-  const tankModelDefinition = awaitedModelDefinitions[id];
+  const tankModelDefinition = definitions[id];
   const awaitedProvisionDefinitions = await provisionDefinitions;
-  const tank = awaitedTankDefinitions[id];
+  const tank = tankDefinitions[id];
   const title = `${tank.name} - Tier ${TIER_ROMAN_NUMERALS[tank.tier]} ${
     (strings.common.nations_adjectives as Record<string, string>)[tank.nation]
   } ${strings.common.tank_class_short[tank.class]}`;
@@ -38,7 +36,7 @@ export default async function Layout({
     <TankopediaEphemeral.Provider data={tankModelDefinition}>
       <Duel.Provider
         data={{
-          tank: awaitedTankDefinitions[id],
+          tank: tankDefinitions[id],
           provisionDefinitions: awaitedProvisionDefinitions,
         }}
       >

@@ -48,7 +48,8 @@ for (const method of methods) {
     try {
       await method();
     } catch (error) {
-      console.warn(`Failed method ${method.name}; skipping...`, error);
+      console.warn(`Failed method ${method.name}; skipping...`);
+      console.error(error);
     }
   }
 }

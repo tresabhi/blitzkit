@@ -1,4 +1,4 @@
-import { tankNames } from '@blitzkit/core';
+import { fetchTankNames, TankType } from '@blitzkit/core';
 import {
   ApplicationCommandOptionChoiceData,
   AutocompleteInteraction,
@@ -9,9 +9,10 @@ import {
   DISCORD_CHOICES_MAX_NAME_SIZE,
   OVERFLOW_SUFFIX,
 } from './autocompleteClan/constants';
+import { tankNames } from '../blitzkit/nonBlockingPromises';
 
-export const tankNamesTechTreeOnly = tankNames.then((names) =>
-  names.filter((tank) => tank.treeType === 'researchable'),
+export const tankNamesTechTreeOnly = fetchTankNames().then((names) =>
+  names.filter((tank) => tank.treeType === TankType.RESEARCHABLE),
 );
 
 export async function autocompleteTanks(

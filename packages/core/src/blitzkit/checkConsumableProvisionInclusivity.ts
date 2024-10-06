@@ -1,53 +1,64 @@
-import { ConsumableEntry, ProvisionEntry } from '@blitzkit/core';
-import { GunDefinition, TankDefinition } from './tankDefinitions';
+import {
+  Consumable,
+  ConsumableTankCategoryFilterCategory,
+  GunDefinition,
+  Provision,
+  TankDefinition,
+} from '../protos';
 
 export function checkConsumableProvisionInclusivity(
-  consumableProvision: ConsumableEntry | ProvisionEntry,
+  consumableProvision: Consumable | Provision,
   tank: TankDefinition,
   gun: GunDefinition,
 ) {
   const included =
-    !consumableProvision.gameMode &&
+    !consumableProvision.gameModeExclusive &&
     consumableProvision.include?.every((rule) => {
-      switch (rule.type) {
-        case 'tier':
-          return rule.min <= tank.tier && tank.tier <= rule.max;
+      switch (rule.filterType!.$case) {
+        case 'tiers':
+          return (
+            rule.filterType!.value.min <= tank.tier &&
+            tank.tier <= rule.filterType!.value.max
+          );
 
         case 'ids':
-          return rule.ids.includes(tank.id);
+          return rule.filterType!.value.ids.includes(tank.id);
 
-        case 'nation':
-          return rule.nations.includes(tank.nation);
+        case 'nations':
+          return rule.filterType!.value.nations.includes(tank.nation);
 
-        case 'category':
+        case 'categories':
           throw new SyntaxError('Category filtering found in include rule');
       }
     });
   const excluded =
-    consumableProvision.gameMode ||
+    consumableProvision.gameModeExclusive ||
     consumableProvision.exclude?.some((rule) => {
-      switch (rule.type) {
-        case 'tier':
-          return rule.min <= tank.tier && tank.tier <= rule.max;
+      switch (rule.filterType!.$case) {
+        case 'tiers':
+          return (
+            rule.filterType!.value.min <= tank.tier &&
+            tank.tier <= rule.filterType!.value.max
+          );
 
         case 'ids':
-          return rule.ids.includes(tank.id);
+          return rule.filterType!.value.ids.includes(tank.id);
 
-        case 'nation':
-          return rule.nations.includes(tank.nation);
+        case 'nations':
+          return rule.filterType!.value.nations.includes(tank.nation);
 
-        case 'category':
-          return rule.categories.some((category) => {
+        case 'categories':
+          return rule.filterType!.value.categories.some((category) => {
             switch (category) {
-              case 'clip':
-                return gun.type !== 'regular';
+              case ConsumableTankCategoryFilterCategory.CLIP:
+                return gun.gunType!.$case !== 'regular';
             }
           });
       }
     });
 
   return (
-    !consumableProvision.gameMode &&
+    !consumableProvision.gameModeExclusive &&
     consumableProvision.include?.length > 0 &&
     included &&
     !excluded

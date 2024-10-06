@@ -1,22 +1,9 @@
-import {
-  createDefaultSkills,
-  equipmentDefinitions,
-  modelDefinitions,
-  provisionDefinitions,
-  skillDefinitions,
-  tankDefinitions,
-} from '@blitzkit/core';
+import { createDefaultSkills } from '@blitzkit/core';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, IconButton, Text } from '@radix-ui/themes';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo, useState } from 'react';
-import { CompareControls } from '../../../../../website/src/components/Controls';
-import { DamageWarning } from '../../../../../website/src/components/DamageWarning';
-import { PageWrapper } from '../../../components/PageWrapper';
-import { tankCharacteristics } from '../../../core/blitzkit/tankCharacteristics';
-import { tankToCompareMember } from '../../../core/blitzkit/tankToCompareMember';
 import * as CompareEphemeral from '../../../stores/compareEphemeral';
-import { CompareTable } from '../../../../../website/src/components/Compare/CompareTable';
 
 export default function Page() {
   const pathname = usePathname();

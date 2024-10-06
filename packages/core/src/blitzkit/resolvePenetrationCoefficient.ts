@@ -1,4 +1,4 @@
-import { ShellType } from '../blitzkit/tankDefinitions';
+import { ShellType } from '../protos';
 
 export function resolvePenetrationCoefficient(
   calibratedShells: boolean,
@@ -6,11 +6,11 @@ export function resolvePenetrationCoefficient(
 ) {
   if (!calibratedShells) return 1;
 
-  return type === 'ap'
+  return type === ShellType.AP
     ? 1.08
-    : type === 'ap_cr'
+    : type === ShellType.APCR
       ? 1.05
-      : type === 'hc'
+      : type === ShellType.HEAT
         ? 1.13
         : 1.08;
 }

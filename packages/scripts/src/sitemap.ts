@@ -1,12 +1,12 @@
-import { tankDefinitions } from '@blitzkit/core';
+import { fetchTankDefinitions } from '@blitzkit/core';
 
 // random vercel bug forces require import
 const { writeFileSync } = require('fs');
 
 console.log('Building sitemap...');
 
-const awaitedTankDefinitions = await tankDefinitions;
-const values = Object.values(awaitedTankDefinitions);
+const tankDefinitions = await fetchTankDefinitions();
+const values = Object.values(tankDefinitions);
 const txt = values
   .map((tank) => `https://blitzkit.app/tools/tankopedia/${tank.id}/`)
   .join('\n');

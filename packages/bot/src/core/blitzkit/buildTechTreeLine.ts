@@ -1,9 +1,9 @@
-import { tankDefinitions } from '@blitzkit/core';
+import { fetchTankDefinitions } from '@blitzkit/core';
 import { resolveAncestry } from './resolveAncestry';
 
 export async function buildTechTreeLine(start: number, end: number) {
-  const awaitedTankDefinitions = await tankDefinitions;
-  const endTank = awaitedTankDefinitions[end];
+  const tankDefinitions = await fetchTankDefinitions();
+  const endTank = tankDefinitions.tanks[end];
   if (!endTank.ancestors) throw new Error('End tank has no ancestors');
   const line = [end];
 

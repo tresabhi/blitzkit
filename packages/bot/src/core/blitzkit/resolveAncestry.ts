@@ -1,8 +1,8 @@
-import { tankDefinitions } from '@blitzkit/core';
+import { fetchTankDefinitions } from '@blitzkit/core';
 
 export async function resolveAncestry(id: number) {
-  const awaitedTankDefinitions = await tankDefinitions;
-  const tank = awaitedTankDefinitions[id];
+  const tankDefinitions = await fetchTankDefinitions();
+  const tank = tankDefinitions.tanks[id];
   const ancestors: number[] = [];
 
   if (tank.ancestors) {
@@ -20,6 +20,6 @@ export async function resolveAncestry(id: number) {
   }
 
   return ancestors.sort(
-    (a, b) => awaitedTankDefinitions[b].tier - awaitedTankDefinitions[a].tier,
+    (a, b) => tankDefinitions.tanks[b].tier - tankDefinitions.tanks[a].tier,
   );
 }

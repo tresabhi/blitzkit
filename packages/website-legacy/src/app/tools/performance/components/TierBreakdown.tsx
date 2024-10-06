@@ -1,9 +1,7 @@
 import {
-  averageDefinitionsArray,
   formatCompact,
   TANK_CLASSES,
   TankClass,
-  tankDefinitions,
   Tier,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';

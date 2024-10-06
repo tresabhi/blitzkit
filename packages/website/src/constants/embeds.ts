@@ -1,10 +1,10 @@
-import type { CompositeStatsKey } from '@blitzkit/core';
+import { type CompositeStatsKey } from '@blitzkit/core';
 import { grayA, grayDark, grayDarkA } from '@radix-ui/colors';
 import type { ReactNode } from 'react';
 import {
   BreakdownPreview,
   compositeStatsKeysOptions,
-} from '../../../website-legacy/src/app/tools/embed/configurations/breakdown';
+} from '../components/Embeds/breakdown';
 import type {
   EmbedConfig,
   ExtractEmbedConfigTypes,

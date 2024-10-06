@@ -1,11 +1,6 @@
-import { averageDefinitionsArray, tankDefinitions } from '@blitzkit/core';
 import { Table } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import { Suspense, use, useEffect, useMemo, useState } from 'react';
-import { filterTank } from '../../../../core/blitzkit/filterTank';
-import * as TankFilters from '../../../../stores/tankFilters';
-import * as TankPerformancePersistent from '../../../../stores/tankPerformancePersistent';
-import * as TankPerformanceSort from '../../../../stores/tankPerformanceSort';
 import { RowLoader } from './RowLoader';
 import { TankRow } from './TankRow';
 import { Total } from './Total';

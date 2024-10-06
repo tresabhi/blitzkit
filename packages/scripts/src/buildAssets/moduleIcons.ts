@@ -9,9 +9,7 @@ export async function moduleIcons() {
   console.log('Building module icons...');
 
   const changes = await Promise.all(
-    (
-      await readdir(`${DATA}/Gfx/UI/ModulesTechTree`)
-    )
+    (await readdir(`${DATA}/Gfx/UI/ModulesTechTree`))
       .filter(
         (file) =>
           !file.endsWith('@2x.packed.webp.dvpl') && file.startsWith('vehicle'),

@@ -1,6 +1,9 @@
-import { ProvisionDefinitions } from '@blitzkit/core';
+import {
+  GunDefinition,
+  ProvisionDefinitions,
+  TankDefinition,
+} from '@blitzkit/core';
 import { checkConsumableProvisionInclusivity } from './checkConsumableProvisionInclusivity';
-import { GunDefinition, TankDefinition } from './tankDefinitions';
 
 export function availableProvisions(
   tank: TankDefinition,

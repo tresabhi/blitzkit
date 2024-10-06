@@ -1,11 +1,8 @@
 import {
-  blitzStarsTankAverages,
   calculateWN8,
   emblemURL,
   getClanAccountInfo,
   idToRegion,
-  mapDefinitions,
-  tankDefinitions,
   tankIcon,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
@@ -13,7 +10,12 @@ import { clamp } from 'lodash-es';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { TitleBar } from '../components/TitleBar';
 import { iconPng } from '../core/blitzkit/iconPng';
+import {
+  mapDefinitions,
+  tankDefinitions,
+} from '../core/blitzkit/nonBlockingPromises';
 import { RenderConfiguration } from '../core/blitzkit/renderConfiguration';
+import { blitzStarsTankAverages } from '../core/blitzstars/tankAverages';
 import { buttonLink } from '../core/discord/buttonLink';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { CommandRegistry } from '../events/interactionCreate';
@@ -223,7 +225,7 @@ async function playerListing(
 ) {
   const awaitedTankAverages = await blitzStarsTankAverages;
   const awaitedTankDefinitions = await tankDefinitions;
-  const tank = awaitedTankDefinitions[player.vehicle_descr];
+  const tank = awaitedTankDefinitions.tanks[player.vehicle_descr];
   const blockAccent = recordingPlayer ? '_amber' : '';
   const healthAccent = protagonistTeam
     ? recordingPlayer
@@ -502,7 +504,7 @@ export const replayCommand = new Promise<CommandRegistry>((resolve) => {
               replayData.protagonist_team === replayData.winner_team
                 ? 'Victory'
                 : 'Defeat'
-            } • ${awaitedMapDefinitions[replayData.map_id].name}`}
+            } • ${awaitedMapDefinitions.maps[replayData.map_id].name}`}
           />
 
           <div

@@ -6,7 +6,6 @@ import {
   fetchTankNames,
   normalizeBoundingBox,
   resolveDpm,
-  resolveGun,
   unionBoundingBox,
   type TankDefinition,
 } from '@blitzkit/core';
@@ -115,10 +114,10 @@ export const TankSearch = memo<TankSearchProps>(
             sorted = filtered.sort(
               (a, b) =>
                 a.camouflageStill *
-                  resolveGun(a.turrets.at(-1)!.guns.at(-1)!).gun!
+                  a.turrets.at(-1)!.guns.at(-1)!.gunType!.value.base
                     .camouflageLoss -
                 b.camouflageStill *
-                  resolveGun(b.turrets.at(-1)!.guns.at(-1)!).gun!
+                  b.turrets.at(-1)!.guns.at(-1)!.gunType!.value.base
                     .camouflageLoss,
             );
             break;
@@ -143,8 +142,8 @@ export const TankSearch = memo<TankSearchProps>(
                   bTurretModelDefinition.boundingBox,
                 ),
               );
-              const aVolume = aSize[0] * aSize[1] * aSize[2];
-              const bVolume = bSize[0] * bSize[1] * bSize[2];
+              const aVolume = aSize.x * aSize.y * aSize.z;
+              const bVolume = bSize.x * bSize.y * bSize.z;
 
               return aVolume - bVolume;
             });
@@ -170,8 +169,8 @@ export const TankSearch = memo<TankSearchProps>(
                   bTurretModelDefinition.boundingBox,
                 ),
               );
-              const aLength = Math.max(aSize[0], aSize[1], aSize[2]);
-              const bLength = Math.max(bSize[0], bSize[1], bSize[2]);
+              const aLength = Math.max(aSize.x, aSize.y, aSize.z);
+              const bLength = Math.max(bSize.x, bSize.y, bSize.z);
 
               return aLength - bLength;
             });

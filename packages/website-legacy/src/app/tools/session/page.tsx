@@ -6,8 +6,8 @@ import {
   STAT_NAMES,
   Stat,
   UNLOCALIZED_REGION_NAMES_SHORT,
-  blitzStarsTankAverages,
   deltaTankStats,
+  fetchTankDefinitions,
   generateStats,
   getAccountInfo,
   getTankStats,
@@ -15,7 +15,6 @@ import {
   prettifyStats,
   searchPlayersAcrossRegions,
   sumBlitzStarsStats,
-  tankDefinitions,
 } from '@blitzkit/core';
 import {
   ArrowDownIcon,
@@ -37,9 +36,8 @@ import {
 } from '@radix-ui/themes';
 import { debounce } from 'lodash-es';
 import { use, useEffect, useMemo, useRef, useState } from 'react';
-import { PageWrapper } from '../../../components/PageWrapper';
-import { TankRowHeaderCell } from '../../../components/TankRowHeaderCell';
-import * as Session from '../../../stores/session';
+
+const awaitedTankDefinitions = await fetchTankDefinitions();
 
 export default function Page({
   searchParams,
@@ -47,8 +45,6 @@ export default function Page({
   searchParams: { id?: string };
 }) {
   const [loaded, setLoaded] = useState(false);
-  const awaitedTankDefinitions = use(tankDefinitions);
-  const awaitedTankAvearges = use(blitzStarsTankAverages);
   const [showSearch, setShowSearch] = useState(false);
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<AccountListWithServer>([]);

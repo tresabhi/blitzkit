@@ -12,11 +12,13 @@ import {
   EquipmentSlot,
   GameDefinitions,
   GunDefinition,
+  GunDefinitionBase,
   MapDefinitions,
   ModelDefinitions,
   ModuleType,
   Provision,
   ProvisionDefinitions,
+  ResearchCost,
   ShellType,
   SkillDefinitions,
   TankClass,
@@ -40,6 +42,24 @@ import { commitAssets } from '../core/github/commitAssets';
 import { DATA } from './constants';
 import { Avatar } from './skillIcons';
 import { TankParameters } from './tankIcons';
+
+function parseResearchCost(raw: number | string) {
+  if (typeof raw === 'number') {
+    return {
+      researchCostType: { $case: 'xp', value: raw },
+    } satisfies ResearchCost;
+  } else {
+    return {
+      researchCostType: {
+        $case: 'seasonalTokens',
+        value: {
+          season: Number(/prx_season_(\d+):\d+/.exec(raw)![1]),
+          tokens: Number(/prx_season_\d+:(\d+)/.exec(raw)![1]),
+        },
+      },
+    } satisfies ResearchCost;
+  }
+}
 
 type BlitzTankFilterDefinitionCategory = 'clip';
 const blitzTankFilterDefinitionCategoryToBlitzkit: Record<
@@ -75,8 +95,8 @@ type ShellDefinitionsList = Record<
     kind: ShellKind;
     caliber: number;
     damage: { armor: number; devices: number };
-    normalizationAngle: number;
-    ricochetAngle: number;
+    normalizationAngle?: number;
+    ricochetAngle?: number;
     explosionRadius?: number;
   }
 > & {
@@ -593,7 +613,7 @@ export async function definitions() {
     `${DATA}/XML/item_defs/tankmen/avatar.xml.dvpl`,
   );
   const maps = await readYAMLDVPL<Maps>(`${DATA}/maps.yaml.dvpl`);
-  const tankXps = new Map<number, number>();
+  const tankXps = new Map<number, ResearchCost>();
   const camouflagesXml = await readXMLDVPL<{ root: CamouflagesXML }>(
     `${DATA}/XML/item_defs/vehicles/common/camouflages.xml.dvpl`,
   );
@@ -726,10 +746,10 @@ export async function definitions() {
       for (const tankKey in tankList.root) {
         if (botPattern.test(tankKey)) continue;
 
-        const gunXps = new Map<number, number>();
-        const turretXps = new Map<number, number>();
-        const engineXps = new Map<number, number>();
-        const trackXps = new Map<number, number>();
+        const gunXps = new Map<number, ResearchCost>();
+        const turretXps = new Map<number, ResearchCost>();
+        const engineXps = new Map<number, ResearchCost>();
+        const trackXps = new Map<number, ResearchCost>();
         const tank = tankList.root[tankKey];
         let tankPrice: TankPrice;
         const tankDefinition = await readXMLDVPL<{ root: VehicleDefinitions }>(
@@ -794,6 +814,7 @@ export async function definitions() {
             ({ type }) => blitzkitCrewTypeToBlitz[type] === crewKey,
           );
           if (index === -1) {
+            if (crewKey === '#text') return;
             entry = {
               type: blitzCrewTypeToBlitzkit[crewKey as BlitzCrewType],
               count: 1,
@@ -808,12 +829,9 @@ export async function definitions() {
             entry.count++;
 
             if (value !== '') {
-              entry.substitute = value
-                .split('\n')
-                .map(
-                  (member) =>
-                    blitzCrewTypeToBlitzkit[member.trim() as BlitzCrewType],
-                );
+              entry.substitute = value.split(/\n| /).map((member) => {
+                return blitzCrewTypeToBlitzkit[member.trim() as BlitzCrewType];
+              });
             }
           } else {
             if (entry.count === undefined) {
@@ -1091,14 +1109,9 @@ export async function definitions() {
                     ? 'autoReloader'
                     : 'autoLoader'
                   : 'regular';
-              const gunReload =
-                gunType === 'autoReloader'
-                  ? gun.pumpGunReloadTimes!.split(' ').map(Number)
-                  : gun.reloadTime;
-              const gunClipCount =
-                gunType === 'regular' ? undefined : gun.clip!.count;
-              const gunIntraClip =
-                gunType === 'regular' ? undefined : 60 / gun.clip!.rate;
+              // const gunReload = gun.reloadTime;
+              // const shellReloads =
+              const gunClipCount = gunType === 'regular' ? 1 : gun.clip!.count;
               const front = gun.extraPitchLimits?.front
                 ? gun.extraPitchLimits.front.split(' ').map(Number)
                 : undefined;
@@ -1144,32 +1157,62 @@ export async function definitions() {
                   }
                 });
 
-              tankDefinitions.tanks[tankId].turrets[turretIndex].guns.push({
+              const base = {
                 id: gunId,
                 weight: gunListEntry.weight,
                 rotationSpeed: gunListEntry.rotationSpeed,
                 name: gunName,
                 tier: gunListEntry.level as Tier,
                 shells: [],
-                type: gunType,
-                reload: gunReload,
-                count: gunClipCount,
-                intraClip: gunIntraClip,
                 camouflageLoss:
                   typeof gun.invisibilityFactorAtShot === 'number'
                     ? gun.invisibilityFactorAtShot
                     : gun.invisibilityFactorAtShot.at(-1)!,
                 aimTime: gun.aimingTime ?? gunListEntry.aimingTime,
-                dispersion: {
-                  base:
-                    gun.shotDispersionRadius ??
-                    gunListEntry.shotDispersionRadius,
-                  damaged: shotDispersionFactors.whileGunDamaged,
-                  shot: shotDispersionFactors.afterShot,
-                  traverse: shotDispersionFactors.turretRotation,
-                },
+                dispersionBase:
+                  gun.shotDispersionRadius ?? gunListEntry.shotDispersionRadius,
+                dispersionDamaged: shotDispersionFactors.whileGunDamaged,
+                dispersionShot: shotDispersionFactors.afterShot,
+                dispersionTraverse: shotDispersionFactors.turretRotation,
                 unlocks: resolveUnlocks(gun.unlocks),
-              } as GunDefinition);
+              } satisfies GunDefinitionBase;
+
+              tankDefinitions.tanks[tankId].turrets[turretIndex].guns.push({
+                gunType:
+                  gunType === 'regular'
+                    ? {
+                        $case: 'regular',
+                        value: {
+                          base,
+                          extension: { reload: gun.reloadTime },
+                        },
+                      }
+                    : gunType === 'autoReloader'
+                      ? {
+                          $case: 'autoReloader',
+                          value: {
+                            base,
+                            extension: {
+                              intraClip: 60 / gun.clip!.rate,
+                              shellCount: gunClipCount,
+                              shellReloads: gun
+                                .pumpGunReloadTimes!.split(' ')
+                                .map(Number),
+                            },
+                          },
+                        }
+                      : {
+                          $case: 'autoLoader',
+                          value: {
+                            base,
+                            extension: {
+                              intraClip: 60 / gun.clip!.rate,
+                              clipReload: gun.reloadTime,
+                              shellCount: gunClipCount,
+                            },
+                          },
+                        },
+              } satisfies GunDefinition);
 
               modelDefinitions.models[tankId].turrets[turretId].guns[gunId] = {
                 armor: gunArmor,
@@ -1214,33 +1257,27 @@ export async function definitions() {
                   .filter((penetrationString) => penetrationString !== '')
                   .map(Number);
 
-                Object.values(
-                  tankDefinitions.tanks[tankId].turrets[turretIndex].guns[
-                    gunIndex
-                  ],
-                ).forEach((gun) => {
-                  gun.shells.push({
-                    id: shellId,
-                    name: shellName,
-                    speed: gunShellEntry.speed,
-                    damage: {
-                      armor: shell.damage.armor,
-                      module: shell.damage.devices,
-                    },
-                    caliber: shell.caliber,
-                    normalization: shell.normalizationAngle,
-                    ricochet: shell.ricochetAngle,
-                    type: blitzShellKindToBlitzkit[shell.kind],
-                    explosionRadius:
-                      shell.kind === 'HIGH_EXPLOSIVE'
-                        ? (shell.explosionRadius ?? 0)
-                        : undefined,
-                    icon: shell.icon,
-                    penetration:
-                      penetrationRaw[0] === penetrationRaw[1]
-                        ? penetrationRaw[0]
-                        : [penetrationRaw[0], penetrationRaw[1]],
-                  });
+                tankDefinitions.tanks[tankId].turrets[turretIndex].guns[
+                  gunIndex
+                ].gunType!.value.base.shells.push({
+                  id: shellId,
+                  name: shellName,
+                  velocity: gunShellEntry.speed,
+                  armorDamage: shell.damage.armor,
+                  moduleDamage: shell.damage.devices,
+                  caliber: shell.caliber,
+                  normalization: shell.normalizationAngle,
+                  ricochet: shell.ricochetAngle,
+                  type: blitzShellKindToBlitzkit[shell.kind],
+                  explosionRadius:
+                    shell.kind === 'HIGH_EXPLOSIVE'
+                      ? (shell.explosionRadius ?? 0)
+                      : undefined,
+                  icon: shell.icon,
+                  penetration: {
+                    near: penetrationRaw[0],
+                    far: penetrationRaw[1],
+                  },
                 });
               });
             });
@@ -1258,7 +1295,7 @@ export async function definitions() {
                   const currentTank = tankDefinitions.tanks[tankId];
                   const successorId = toUniqueId(nation, tankListEntry.id);
 
-                  tankXps.set(successorId, vehicle.cost as number);
+                  tankXps.set(successorId, parseResearchCost(vehicle.cost));
 
                   if (currentTank.successors === undefined) {
                     currentTank.successors = [];
@@ -1272,7 +1309,7 @@ export async function definitions() {
                 case 'gun': {
                   gunXps.set(
                     toUniqueId(nation, gunList.root.ids[vehicle['#text']]),
-                    vehicle.cost as number,
+                    parseResearchCost(vehicle.cost),
                   );
                   break;
                 }
@@ -1280,7 +1317,7 @@ export async function definitions() {
                 case 'turret': {
                   turretXps.set(
                     toUniqueId(nation, turretList.root.ids[vehicle['#text']]),
-                    vehicle.cost as number,
+                    parseResearchCost(vehicle.cost),
                   );
                   break;
                 }
@@ -1288,7 +1325,7 @@ export async function definitions() {
                 case 'engine': {
                   engineXps.set(
                     toUniqueId(nation, enginesList.root.ids[vehicle['#text']]),
-                    vehicle.cost as number,
+                    parseResearchCost(vehicle.cost),
                   );
                   break;
                 }
@@ -1296,7 +1333,7 @@ export async function definitions() {
                 case 'chassis': {
                   trackXps.set(
                     toUniqueId(nation, chassisList.root.ids[vehicle['#text']]),
-                    vehicle.cost as number,
+                    parseResearchCost(vehicle.cost),
                   );
                   break;
                 }
@@ -1307,31 +1344,31 @@ export async function definitions() {
 
         Object.values(tankDefinitions.tanks[tankId].turrets).forEach(
           (turret) => {
-            turret.xp = turretXps.get(turret.id);
+            turret.researchCost = turretXps.get(turret.id);
 
             Object.values(turret.guns).forEach((gunRaw) => {
-              Object.values(gunRaw).forEach((gun) => {
-                gun.xp = gunXps.get(gun.id);
-              });
+              gunRaw.gunType!.value.base.researchCost = gunXps.get(
+                gunRaw.gunType!.value.base.id,
+              );
             });
           },
         );
 
         Object.values(tankDefinitions.tanks[tankId].engines).forEach(
           (engine) => {
-            engine.xp = engineXps.get(engine.id);
+            engine.researchCost = engineXps.get(engine.id);
           },
         );
 
         Object.values(tankDefinitions.tanks[tankId].tracks).forEach((track) => {
-          track.xp = trackXps.get(track.id);
+          track.researchCost = trackXps.get(track.id);
         });
       }
     }),
   );
 
   Object.values(tankDefinitions.tanks).forEach((tank) => {
-    tank.xp = tankXps.get(tank.id);
+    tank.researchCost = tankXps.get(tank.id);
   });
 
   Object.values(tankDefinitions.tanks).forEach((tank) => {
@@ -1357,18 +1394,18 @@ export async function definitions() {
     ([optionalDeviceSlotKey, optionalDeviceSlotEntry]) => {
       if (optionalDeviceSlotKey === 'emptyPreset') return;
 
-      equipmentDefinitions.presets[optionalDeviceSlotKey].slots = Object.values(
-        optionalDeviceSlotEntry,
-      )
-        .map((level) => {
-          return Object.values(level).map((options) => {
-            return {
-              left: optionalDevices.root[options.device0].id,
-              right: optionalDevices.root[options.device1].id,
-            } satisfies EquipmentSlot;
-          });
-        })
-        .flat();
+      equipmentDefinitions.presets[optionalDeviceSlotKey] = {
+        slots: Object.values(optionalDeviceSlotEntry)
+          .map((level) => {
+            return Object.values(level).map((options) => {
+              return {
+                left: optionalDevices.root[options.device0].id,
+                right: optionalDevices.root[options.device1].id,
+              } satisfies EquipmentSlot;
+            });
+          })
+          .flat(),
+      };
     },
   );
 
@@ -1400,17 +1437,17 @@ export async function definitions() {
           entry.include.push({
             filterType: {
               $case: 'tiers',
-              tiers: { min: includeRaw.minLevel, max: includeRaw.maxLevel },
+              value: { min: includeRaw.minLevel, max: includeRaw.maxLevel },
             },
           });
         } else if ('name' in includeRaw) {
           entry.include.push({
             filterType: {
               $case: 'ids',
-              ids: {
-                ids: includeRaw.name
-                  .split(' ')
-                  .map((key) => tankStringIdMap[key]),
+              value: {
+                ids: includeRaw.name.split(/ +/).map((key) => {
+                  return tankStringIdMap[key];
+                }),
               },
             },
           });
@@ -1420,7 +1457,7 @@ export async function definitions() {
           entry.include.push({
             filterType: {
               $case: 'nations',
-              nations: {
+              value: {
                 nations: consumable.vehicleFilter.include.nations.split(' '),
               },
             },
@@ -1435,10 +1472,10 @@ export async function definitions() {
           entry.exclude!.push({
             filterType: {
               $case: 'ids',
-              ids: {
-                ids: excludeRaw.name
-                  .split(' ')
-                  .map((key) => tankStringIdMap[key]),
+              value: {
+                ids: excludeRaw.name.split(/ +/).map((key) => {
+                  return tankStringIdMap[key];
+                }),
               },
             },
           });
@@ -1446,7 +1483,7 @@ export async function definitions() {
           entry.exclude!.push({
             filterType: {
               $case: 'categories',
-              categories: {
+              value: {
                 categories: excludeRaw.extendedTags
                   .split(' ')
                   .map(
@@ -1464,7 +1501,7 @@ export async function definitions() {
           entry.exclude!.push({
             filterType: {
               $case: 'nations',
-              nations: {
+              value: {
                 nations: consumable.vehicleFilter.exclude.nations.split(' '),
               },
             },
@@ -1500,7 +1537,7 @@ export async function definitions() {
           entry.include.push({
             filterType: {
               $case: 'tiers',
-              tiers: {
+              value: {
                 min: includeRaw.minLevel,
                 max: includeRaw.maxLevel,
               },
@@ -1510,10 +1547,10 @@ export async function definitions() {
           entry.include.push({
             filterType: {
               $case: 'ids',
-              ids: {
-                ids: includeRaw.name
-                  .split(' ')
-                  .map((key) => tankStringIdMap[key]),
+              value: {
+                ids: includeRaw.name.split(/ +/).map((key) => {
+                  return tankStringIdMap[key];
+                }),
               },
             },
           });
@@ -1523,7 +1560,7 @@ export async function definitions() {
           entry.include.push({
             filterType: {
               $case: 'nations',
-              nations: {
+              value: {
                 nations: provision.vehicleFilter.include.nations.split(' '),
               },
             },
@@ -1538,9 +1575,9 @@ export async function definitions() {
           entry.exclude!.push({
             filterType: {
               $case: 'ids',
-              ids: {
+              value: {
                 ids: excludeRaw.name
-                  .split(' ')
+                  .split(/ +/)
                   .map((key) => tankStringIdMap[key]),
               },
             },
@@ -1549,7 +1586,7 @@ export async function definitions() {
           entry.exclude!.push({
             filterType: {
               $case: 'categories',
-              categories: {
+              value: {
                 categories: excludeRaw.extendedTags
                   .split(' ')
                   .map(
@@ -1567,7 +1604,7 @@ export async function definitions() {
           entry.exclude!.push({
             filterType: {
               $case: 'nations',
-              nations: {
+              value: {
                 nations: provision.vehicleFilter.exclude.nations.split(' '),
               },
             },
@@ -1617,47 +1654,47 @@ export async function definitions() {
     {
       content: encodePB64(GameDefinitions, gameDefinitions),
       encoding: 'base64',
-      path: 'definitions/game.cdon.lz4',
+      path: 'definitions/game.pb',
     },
     {
       content: encodePB64(TankDefinitions, tankDefinitions),
       encoding: 'base64',
-      path: 'definitions/tanks.cdon.lz4',
+      path: 'definitions/tanks.pb',
     },
     {
       content: encodePB64(ModelDefinitions, modelDefinitions),
       encoding: 'base64',
-      path: 'definitions/models.cdon.lz4',
+      path: 'definitions/models.pb',
     },
     {
       content: encodePB64(EquipmentDefinitions, equipmentDefinitions),
       encoding: 'base64',
-      path: 'definitions/equipment.cdon.lz4',
+      path: 'definitions/equipment.pb',
     },
     {
       content: encodePB64(ConsumableDefinitions, consumableDefinitions),
       encoding: 'base64',
-      path: 'definitions/consumables.cdon.lz4',
+      path: 'definitions/consumables.pb',
     },
     {
       content: encodePB64(ProvisionDefinitions, provisionDefinitions),
       encoding: 'base64',
-      path: 'definitions/provisions.cdon.lz4',
+      path: 'definitions/provisions.pb',
     },
     {
       content: encodePB64(SkillDefinitions, skillDefinitions),
       encoding: 'base64',
-      path: 'definitions/skills.cdon.lz4',
+      path: 'definitions/skills.pb',
     },
     {
       content: encodePB64(MapDefinitions, mapDefinitions),
       encoding: 'base64',
-      path: 'definitions/maps.cdon.lz4',
+      path: 'definitions/maps.pb',
     },
     {
       content: encodePB64(CamouflageDefinitions, camouflageDefinitions),
       encoding: 'base64',
-      path: 'definitions/camouflages.cdon.lz4',
+      path: 'definitions/camouflages.pb',
     },
   ]);
 }

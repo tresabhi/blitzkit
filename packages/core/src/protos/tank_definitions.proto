@@ -30,7 +30,7 @@ message TankDefinition {
   repeated EngineDefinition engines = 21;
   repeated TrackDefinition tracks = 22;
   required TankPrice price = 23;
-  optional uint32 xp = 24;
+  optional ResearchCost research_cost = 24;
   required float speed_forwards = 25;
   required float speed_backwards = 26;
   required float camouflage_still = 27;
@@ -38,6 +38,18 @@ message TankDefinition {
   required float camouflage_onFire = 29;
   required string equipment_preset = 30;
   required uint32 weight = 31;
+}
+
+message ResearchCost {
+  oneof research_cost_type {
+    uint32 xp = 1;
+    ResearchCostSeasonalTokens seasonal_tokens = 2;
+  }
+}
+
+message ResearchCostSeasonalTokens {
+  required uint32 season = 1;
+  required uint32 tokens = 2;
 }
 
 enum TankPriceType {
@@ -56,7 +68,7 @@ message TrackDefinition {
   required string name = 3;
   required uint32 weight = 4;
   required float traverse_speed = 5;
-  optional uint32 xp = 6;
+  optional ResearchCost research_cost = 6;
   required float dispersion_move = 7;
   required float dispersion_traverse = 8;
   required float resistance_hard = 9;
@@ -68,7 +80,7 @@ message TrackDefinition {
 message EngineDefinition {
   required uint32 id = 1;
   required string name = 2;
-  optional uint32 xp = 3;
+  optional ResearchCost research_cost = 3;
   required Tier tier = 4;
   required float fire_chance = 5;
   required uint32 power = 6;
@@ -81,7 +93,7 @@ message TurretDefinition {
   required uint32 health = 2;
   required uint32 view_range = 3;
   required float traverse_speed = 4;
-  optional uint32 xp = 5;
+  optional ResearchCost research_cost = 5;
   required string name = 6;
   required Tier tier = 7;
   required uint32 weight = 8;
@@ -131,7 +143,7 @@ message GunDefinitionAutoReloaderProperties {
 message GunDefinitionBase {
   required uint32 id = 1;
   required float rotation_speed = 2;
-  optional uint32 xp = 3;
+  optional ResearchCost research_cost = 3;
   required uint32 weight = 4;
   required string name = 5;
   required Tier tier = 6;
@@ -151,13 +163,13 @@ message ShellDefinition {
   required uint32 velocity = 3;
   required uint32 armor_damage = 4;
   required uint32 module_damage = 5;
-  required uint32 caliber = 6;
+  required float caliber = 6;
   required string icon = 7;
   required ShellPenetration penetration = 8;
   required ShellType type = 9;
-  required uint32 normalization = 10;
-  required uint32 ricochet = 11;
-  required uint32 explosion_radius = 12;
+  optional float normalization = 10;
+  optional float ricochet = 11;
+  optional float explosion_radius = 12;
 }
 
 enum ShellType {
@@ -168,8 +180,8 @@ enum ShellType {
 }
 
 message ShellPenetration {
-  required uint32 near = 1;
-  required uint32 far = 2;
+  required float near = 1;
+  required float far = 2;
 }
 
 message Unlock {

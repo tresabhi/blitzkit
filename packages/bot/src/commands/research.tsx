@@ -6,7 +6,7 @@ import {
   getClanAccountInfo,
   getTankStats,
   TANK_ICONS,
-  tankDefinitions,
+  TankType,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
 import { escapeMarkdown, Locale } from 'discord.js';
@@ -15,6 +15,7 @@ import { TitleBar } from '../components/TitleBar';
 import { resolveTankId } from '../core/blitz/resolveTankId';
 import { buildTechTreeLine } from '../core/blitzkit/buildTechTreeLine';
 import { iconPng } from '../core/blitzkit/iconPng';
+import { tankDefinitions } from '../core/blitzkit/nonBlockingPromises';
 import { resolveAncestry } from '../core/blitzkit/resolveAncestry';
 import { tankIconPng } from '../core/blitzkit/tankIconPng';
 import { addUsernameChoices } from '../core/discord/addUsernameChoices';
@@ -76,7 +77,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
         true,
       );
       const startingTankRaw = interaction.options.getString('starting-tank');
-      const targetTank = awaitedTankDefinitions[targetTankId];
+      const targetTank = awaitedTankDefinitions.tanks[targetTankId];
       const { id, region } = await resolvePlayerFromCommand(interaction);
       let startingTankId: number;
       const targetTankAncestry = await resolveAncestry(targetTankId);
@@ -94,7 +95,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
           ]);
         }
 
-        const startingTank = awaitedTankDefinitions[startingTankId];
+        const startingTank = awaitedTankDefinitions.tanks[startingTankId];
 
         if (startingTank.tier > targetTank.tier) {
           return translate('bot.commands.research.errors.unordered', [
@@ -111,7 +112,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
           ]);
         }
       } else {
-        if (targetTank.treeType !== 'researchable') {
+        if (targetTank.type !== TankType.RESEARCHABLE) {
           return translate('bot.commands.research.errors.non_tech_tree', [
             escapeMarkdown(targetTank.name),
           ]);
@@ -137,7 +138,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
 
         const foundAncestor = targetTankAncestry.find(
           (id) =>
-            awaitedTankDefinitions[id].tier === 1 ||
+            awaitedTankDefinitions.tanks[id].tier === 1 ||
             tankStats.some(({ tank_id }) => tank_id === id),
         );
 
@@ -159,7 +160,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
       const clanImage = clan ? emblemURL(clan.emblem_set_id) : undefined;
       const costs = await Promise.all(
         line.map(async (id) => {
-          const tank = awaitedTankDefinitions[id];
+          const tank = awaitedTankDefinitions.tanks[id];
           const turretXps = new Map<number, number>();
           const gunXps = new Map<number, number>();
           const engineXps = new Map<number, number>();
@@ -171,8 +172,11 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
             }
 
             turret.guns.forEach((gun) => {
-              if (gun.xp !== undefined) {
-                gunXps.set(gun.id, gun.xp);
+              if (gun.gunType!.value.base.xp !== undefined) {
+                gunXps.set(
+                  gun.gunType!.value.base.id,
+                  gun.gunType!.value.base.xp,
+                );
               }
             });
           });
@@ -353,7 +357,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
 
             {await Promise.all(
               line.map(async (id, index) => {
-                const tank = awaitedTankDefinitions[id];
+                const tank = awaitedTankDefinitions.tanks[id];
 
                 return (
                   <div

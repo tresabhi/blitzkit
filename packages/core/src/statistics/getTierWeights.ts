@@ -1,15 +1,16 @@
-import { tankDefinitions, Tier } from '../blitzkit/tankDefinitions';
+import { fetchTankDefinitions } from '../blitzkit';
+import { Tier } from '../protos';
 import { BlitzStats } from './compositeStats/constants';
 
 export async function getTierWeights(
   stats: Record<number, BlitzStats>,
   order: number[] = Object.keys(stats).map(parseInt),
 ) {
-  const awaitedTankDefinitions = await tankDefinitions;
+  const tankDefinitions = await fetchTankDefinitions();
   const tierWeights: TierWeightsRecord = {};
 
   order.forEach((id) => {
-    const entry = awaitedTankDefinitions[id];
+    const entry = tankDefinitions.tanks[id];
 
     if (!entry) return;
     if (!tierWeights[entry.tier]) tierWeights[entry.tier] = 0;
