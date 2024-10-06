@@ -20,13 +20,14 @@ export function Consumables() {
   const mutateDuel = Duel.useMutation();
   const protagonist = Duel.use((state) => state.protagonist);
   const consumables = Duel.use((state) => state.protagonist.consumables);
-  const consumablesList = Object.values(consumableDefinitions).filter(
-    (consumable) =>
-      checkConsumableProvisionInclusivity(
-        consumable,
-        protagonist.tank,
-        protagonist.gun,
-      ),
+  const consumablesList = Object.values(
+    consumableDefinitions.consumables,
+  ).filter((consumable) =>
+    checkConsumableProvisionInclusivity(
+      consumable,
+      protagonist.tank,
+      protagonist.gun,
+    ),
   );
   const cooldownBooster = Duel.use(
     (state) => state.protagonist.cooldownBooster,

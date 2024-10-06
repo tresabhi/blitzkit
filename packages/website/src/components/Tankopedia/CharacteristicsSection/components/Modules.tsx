@@ -42,6 +42,14 @@ interface ModuleWithUnlocks {
   unlocks: Unlock[];
 }
 
+const moduleTypeTypeIconName: Record<ModuleType, string> = {
+  [ModuleType.VEHICLE]: '',
+  [ModuleType.ENGINE]: 'engine',
+  [ModuleType.TRACKS]: 'chassis',
+  [ModuleType.TURRET]: 'turret',
+  [ModuleType.GUN]: 'gun',
+};
+
 function ModuleButton({
   tier,
   selected,
@@ -113,7 +121,7 @@ function ModuleButton({
         src={
           isTank
             ? tankIcon(unlock.id)
-            : asset(`icons/modules/${unlock.type}.webp`)
+            : asset(`icons/modules/${moduleTypeTypeIconName[unlock.type]}.webp`)
         }
         style={{
           width: isTank ? 64 : 32,

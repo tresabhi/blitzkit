@@ -10,7 +10,7 @@ export function availableProvisions(
   gun: GunDefinition,
   provisionDefinitions: ProvisionDefinitions,
 ) {
-  return Object.values(provisionDefinitions).filter((provision) =>
+  return Object.values(provisionDefinitions.provisions).filter((provision) =>
     checkConsumableProvisionInclusivity(provision, tank, gun),
   );
 }

@@ -16,7 +16,7 @@ export function ProvisionsManager({
 }: ProvisionsManagerProps) {
   return (
     <Flex wrap="wrap" gap="2">
-      {provisions.map((provision, index) => {
+      {provisions.map((provision) => {
         const isSelected = selected.includes(provision);
 
         return (
