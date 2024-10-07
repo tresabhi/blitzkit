@@ -19,8 +19,6 @@
     "urlon": "^3.1.0",
     "react": "^18.3.1",
     "@vanilla-extract/css": "^1.15.5",
-    "markdown-to-jsx": "^7.5.0",
-    "compare-versions": "^6.1.1",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.3.1",
     "react-fuzzysort": "^1.0.1",
