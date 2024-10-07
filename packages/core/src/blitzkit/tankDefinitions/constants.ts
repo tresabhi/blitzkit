@@ -21,11 +21,11 @@ export const CREW_MEMBER_NAMES: Record<CrewType, string> = {
   [CrewType.RADIOMAN]: 'Radioman',
 };
 export const GUN_TYPE_NAMES: Record<
-  Exclude<GunDefinition['gunType'], undefined>['$case'],
+  Exclude<GunDefinition['gun_type'], undefined>['$case'],
   string
 > = {
-  autoLoader: 'Auto loader',
-  autoReloader: 'Auto reloader',
+  auto_loader: 'Auto loader',
+  auto_reloader: 'Auto reloader',
   regular: 'Regular',
 };
 /**

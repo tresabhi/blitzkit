@@ -7,8 +7,8 @@ export function uniqueGuns(turrets: TurretDefinition[]) {
 
   forEachRight(turrets, (turret) => {
     forEachRight(turret.guns, (gun) => {
-      if (!gunIds.has(gun.gunType!.value.base.id)) {
-        gunIds.add(gun.gunType!.value.base.id);
+      if (!gunIds.has(gun.gun_type!.value.base.id)) {
+        gunIds.add(gun.gun_type!.value.base.id);
         guns.push({ turret, gun });
       }
     });

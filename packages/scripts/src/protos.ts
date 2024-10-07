@@ -39,8 +39,9 @@ const args = [
 await exec(`protoc ${args.join(' ')}`);
 await writeFile(
   `${ROOT}/index.ts`,
-  files
-    .map((file) => file.replace('.proto', ''))
-    .map((file) => `export * from './${file}.ts';`)
-    .join('\n'),
+  '// @ts-nocheck\n' +
+    files
+      .map((file) => file.replace('.proto', ''))
+      .map((file) => `export * from './${file}.ts';`)
+      .join('\n'),
 );

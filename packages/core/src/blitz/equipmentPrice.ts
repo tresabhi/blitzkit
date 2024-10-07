@@ -12,5 +12,4 @@ export const equipmentPriceMatrix: Record<Tier, Vector3Tuple> = {
   [Tier.VIII]: [200_000, 225_000, 250_000],
   [Tier.IX]: [250_000, 275_000, 300_000],
   [Tier.X]: [300_000, 350_000, 400_000],
-  [Tier.UNRECOGNIZED]: [0, 0, 0],
 };

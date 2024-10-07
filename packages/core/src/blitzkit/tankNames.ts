@@ -14,9 +14,9 @@ export async function fetchTankNames() {
       return {
         id: tank.id,
         name: tank.name,
-        nameFull: tank.nameFull,
-        searchableName: tank.nameFull ?? tank.name,
-        searchableNameDeburr: deburr(tank.nameFull ?? tank.name),
+        nameFull: tank.name_full,
+        searchableName: tank.name_full ?? tank.name,
+        searchableNameDeburr: deburr(tank.name_full ?? tank.name),
         camouflages: tank.camouflages
           ?.map((id) => camouflageDefinitions.camouflages[id]?.name)
           .filter(Boolean)
