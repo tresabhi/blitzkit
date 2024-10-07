@@ -1,7 +1,6 @@
 import { provisionDefinitions, TREE_TYPE_ICONS } from '@blitzkit/core';
 import { CaretRightIcon, UpdateIcon } from '@radix-ui/react-icons';
-import { Button, Dialog, Flex, Heading } from '@radix-ui/themes';
-import Link from 'next/link';
+import { Button, Dialog, Flex, Heading, Link } from '@radix-ui/themes';
 import { use, useState } from 'react';
 import { pushTankopediaPath } from '../../../../../core/blitzkit/pushTankopediaPath';
 import { tankToDuelMember } from '../../../../../core/blitzkit/tankToDuelMember';

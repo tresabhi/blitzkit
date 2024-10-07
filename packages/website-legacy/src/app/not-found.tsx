@@ -1,6 +1,5 @@
 import { DiscordLogoIcon, HomeIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Heading, Text } from '@radix-ui/themes';
-import Link from 'next/link';
 import { redirect, usePathname } from 'next/navigation';
 import { PageWrapper } from '../components/PageWrapper';
 

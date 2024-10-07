@@ -1,7 +1,6 @@
 import { fetchProvisionDefinitions } from '@blitzkit/core';
 import { ExternalLinkIcon, LoopIcon, TrashIcon } from '@radix-ui/react-icons';
-import { Dialog, Flex, IconButton } from '@radix-ui/themes';
-import Link from 'next/link';
+import { Dialog, Flex, IconButton, Link } from '@radix-ui/themes';
 import { useState } from 'react';
 import { tankToCompareMember } from '../../core/blitzkit/tankToCompareMember';
 import { CompareEphemeral } from '../../stores/compareEphemeral';
@@ -70,7 +69,7 @@ export function TankControl({ index, id }: TankControlProps) {
         </Dialog.Content>
       </Dialog.Root>
 
-      <Link href={`/tools/tankopedia/${id}`} target="_blank" prefetch={false}>
+      <Link href={`/tools/tankopedia/${id}`} target="_blank">
         <IconButton variant="ghost">
           <ExternalLinkIcon />
         </IconButton>
