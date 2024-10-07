@@ -53,10 +53,11 @@ export function TechTreeSection() {
   const totalXp = line.reduce(
     (xp, id) =>
       xp +
-      (tankDefinitions.tanks[id].xp === undefined ||
+      (tankDefinitions.tanks[id].researchCost === undefined ||
       tankDefinitions.tanks[id].tier === 1
         ? 0
-        : tankDefinitions.tanks[id].xp),
+        : (tankDefinitions.tanks[id].researchCost.researchCostType!
+            .value as number)),
     0,
   );
   const totalCredits = line.reduce(

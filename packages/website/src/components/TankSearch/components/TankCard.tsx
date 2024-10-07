@@ -122,18 +122,19 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
           ),
         );
 
-        return (dimensions[0] * dimensions[1] * dimensions[2]).toFixed(0);
+        return (dimensions.x * dimensions.y * dimensions.z).toFixed(0);
       }
 
-      case 'survivability.length':
-        return Math.max(
-          ...normalizeBoundingBox(
-            unionBoundingBox(
-              tankModelDefinition.boundingBox,
-              turretModelDefinition.boundingBox,
-            ),
+      case 'survivability.length': {
+        const bounds = normalizeBoundingBox(
+          unionBoundingBox(
+            tankModelDefinition.boundingBox,
+            turretModelDefinition.boundingBox,
           ),
-        ).toFixed(0);
+        );
+
+        return Math.max(bounds.x, bounds.y, bounds.z).toFixed(0);
+      }
     }
   }, [tankopediaSort.by]);
 

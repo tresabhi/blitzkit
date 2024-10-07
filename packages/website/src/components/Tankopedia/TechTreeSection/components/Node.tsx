@@ -22,11 +22,15 @@ export function Node({ id, highlight, nextIds }: NodeProps) {
   const tank = tankDefinitions.tanks[id];
   const nextTanks = nextIds?.map((id) => tankDefinitions.tanks[id]);
   const thisTankXp =
-    tank.xp === undefined || tank.tier === 1 ? 0 : tank.xp! / xpMultiplier;
+    tank.researchCost === undefined || tank.tier === 1
+      ? 0
+      : (tank.researchCost.researchCostType!.value as number)! / xpMultiplier;
   const nextTanksXp = nextTanks?.reduce(
     (xp, tank) =>
       xp +
-      (tank.xp === undefined || tank.tier === 1 ? 0 : tank.xp! / xpMultiplier),
+      (tank.researchCost === undefined || tank.tier === 1
+        ? 0
+        : (tank.researchCost.researchCostType!.value as number) / xpMultiplier),
     0,
   );
   const averages = averageDefinitions.averages[tank.id]?.mu;

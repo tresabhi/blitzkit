@@ -1,6 +1,5 @@
 import { TankClass } from '@blitzkit/core';
 import type { ComponentProps, ReactNode } from 'react';
-import { StupidCat } from '../StupidCat';
 import { ClassHeavy } from './components/ClassHeavy';
 import { ClassLight } from './components/ClassLight';
 import { ClassMedium } from './components/ClassMedium';
@@ -14,5 +13,4 @@ export const classIcons: Record<
   [TankClass.HEAVY]: ClassHeavy,
   [TankClass.LIGHT]: ClassLight,
   [TankClass.MEDIUM]: ClassMedium,
-  [TankClass.UNRECOGNIZED]: StupidCat,
 };
