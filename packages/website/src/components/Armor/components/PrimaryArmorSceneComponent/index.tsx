@@ -68,8 +68,8 @@ export function PrimaryArmorSceneComponent({
       );
       material.uniforms.isExplosive.value = isExplosive(shell.type);
       material.uniforms.canSplash.value = canSplash(shell.type);
-      material.uniforms.damage.value = shell.armorDamage;
-      material.uniforms.explosionRadius.value = shell.explosionRadius;
+      material.uniforms.damage.value = shell.armor_damage;
+      material.uniforms.explosionRadius.value = shell.explosion_radius;
 
       const duel = duelStore.getState();
       await handleProtagonistEquipmentChange(duel.protagonist.equipmentMatrix);
@@ -90,7 +90,7 @@ export function PrimaryArmorSceneComponent({
       const duel = duelStore.getState();
       const hasEnhancedArmor = await hasEquipment(
         110,
-        duel.protagonist.tank.equipmentPreset,
+        duel.protagonist.tank.equipment_preset,
         equipment,
       );
       material.uniforms.thickness.value = hasEnhancedArmor
@@ -103,7 +103,7 @@ export function PrimaryArmorSceneComponent({
       const penetration = shell.penetration.near;
       const hasCalibratedShells = await hasEquipment(
         103,
-        duel.antagonist.tank.equipmentPreset,
+        duel.antagonist.tank.equipment_preset,
         equipment,
       );
 

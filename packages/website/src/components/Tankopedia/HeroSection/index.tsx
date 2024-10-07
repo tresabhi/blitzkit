@@ -34,7 +34,7 @@ export function HeroSection() {
       (filtered.reduce((accumulator, thisTank) => {
         return (
           accumulator +
-          thisTank.turrets.at(-1)!.guns.at(-1)!.gunType!.value.base.shells[0]
+          thisTank.turrets.at(-1)!.guns.at(-1)!.gun_type!.value.base.shells[0]
             .penetration.near
         );
       }, 0) /

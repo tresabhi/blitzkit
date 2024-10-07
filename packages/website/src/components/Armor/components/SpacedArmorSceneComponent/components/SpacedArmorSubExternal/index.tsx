@@ -58,7 +58,7 @@ export function SpacedArmorSubExternal({
       const duel = duelStore.getState();
       const hasEnhancedArmor = await hasEquipment(
         110,
-        duel.protagonist.tank.equipmentPreset,
+        duel.protagonist.tank.equipment_preset,
         equipment,
       );
       material.uniforms.thickness.value = hasEnhancedArmor
@@ -71,7 +71,7 @@ export function SpacedArmorSubExternal({
       const penetration = shell.penetration.near;
       const hasCalibratedShells = await hasEquipment(
         103,
-        duel.antagonist.tank.equipmentPreset,
+        duel.antagonist.tank.equipment_preset,
         equipment,
       );
 

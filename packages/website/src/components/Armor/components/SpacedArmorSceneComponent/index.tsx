@@ -91,7 +91,7 @@ export function SpacedArmorSceneComponent({
       const shell = antagonist.shell;
       const cameraNormal = camera.position.clone().sub(point).normalize();
       const shot: Shot = {
-        splashRadius: shell.explosionRadius,
+        splashRadius: shell.explosion_radius,
         damage: -1,
         containsGaps: shell.type === ShellType.HEAT,
         in: {
@@ -103,12 +103,12 @@ export function SpacedArmorSceneComponent({
 
       const hasCalibratedShells = await hasEquipment(
         103,
-        antagonist.tank.equipmentPreset,
+        antagonist.tank.equipment_preset,
         antagonist.equipmentMatrix,
       );
       const hasEnhancedArmor = await hasEquipment(
         110,
-        protagonist.tank.equipmentPreset,
+        protagonist.tank.equipment_preset,
         protagonist.equipmentMatrix,
       );
       const penetration =
@@ -288,8 +288,8 @@ export function SpacedArmorSceneComponent({
           const finalDamage = Math.max(
             0,
             0.5 *
-              shell.armorDamage *
-              (1 - distanceFromSpacedArmor / shell.explosionRadius!) -
+              shell.armor_damage *
+              (1 - distanceFromSpacedArmor / shell.explosion_radius!) -
               1.1 *
                 (lastLayer.thicknessAngled +
                   Math.min(penetration, totalSpacedArmorThickness)),
@@ -311,7 +311,7 @@ export function SpacedArmorSceneComponent({
             shot.damage = finalDamage;
           } else {
             shot.in.status = 'penetration';
-            shot.damage = shell.armorDamage;
+            shot.damage = shell.armor_damage;
           }
         } else {
           if (lastLayer.status === 'blocked') {
@@ -319,7 +319,7 @@ export function SpacedArmorSceneComponent({
             shot.damage = 0;
           } else if (lastLayer.status === 'penetration') {
             shot.in.status = 'penetration';
-            shot.damage = shell.armorDamage;
+            shot.damage = shell.armor_damage;
           } else {
             const caster = new Raycaster();
             // https://math.stackexchange.com/a/13263/1222875

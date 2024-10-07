@@ -105,8 +105,8 @@ export function MetaSection() {
           direction={{ initial: 'column', sm: 'row' }}
         >
           <Flex direction="column" width="100%">
-            {protagonist.nameFull && (
-              <Listing label="Full-name">{protagonist.nameFull}</Listing>
+            {protagonist.name_full && (
+              <Listing label="Full-name">{protagonist.name_full}</Listing>
             )}
             <Listing label="Nation">
               <Flex align="center" gap="1">
@@ -199,11 +199,12 @@ export function MetaSection() {
                 />
               </Flex>
             </Listing>
-            {protagonist.researchCost && (
+            {protagonist.research_cost && (
               <Listing label="Research XP">
                 <Flex align="center" gap="1">
                   {(
-                    protagonist.researchCost.researchCostType!.value as number
+                    protagonist.research_cost.research_cost_type!
+                      .value as number
                   ).toLocaleString()}
                   <img
                     style={{ width: '1em', height: '1em' }}

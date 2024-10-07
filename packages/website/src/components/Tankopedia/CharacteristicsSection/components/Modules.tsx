@@ -32,8 +32,8 @@ type ModuleDefinition =
   | EngineDefinition;
 
 function extractModule(raw: ModuleDefinition | TankDefinition) {
-  if ('gunType' in raw) {
-    return raw.gunType!.value.base;
+  if ('gun_type' in raw) {
+    return raw.gun_type!.value.base;
   } else
     return raw as Exclude<ModuleDefinition | TankDefinition, GunDefinition>;
 }
@@ -172,34 +172,36 @@ export function Modules() {
         if (
           !draft.protagonist.turret.guns.some(
             (gun) =>
-              gun.gunType!.value.base.id ===
-              draft.protagonist.gun.gunType!.value.base.id,
+              gun.gun_type!.value.base.id ===
+              draft.protagonist.gun.gun_type!.value.base.id,
           )
         ) {
           draft.protagonist.gun = draft.protagonist.turret.guns.at(-1)!;
           draft.protagonist.shell =
-            draft.protagonist.gun.gunType!.value.base.shells[0];
+            draft.protagonist.gun.gun_type!.value.base.shells[0];
         }
       } else if (unlock.type === ModuleType.GUN) {
         const gunInTurret = draft.protagonist.turret.guns.find(
-          (gun) => gun.gunType!.value.base.id === unlock.id,
+          (gun) => gun.gun_type!.value.base.id === unlock.id,
         );
         if (gunInTurret) {
           draft.protagonist.gun = gunInTurret;
-          draft.protagonist.shell = gunInTurret.gunType!.value.base.shells[0];
+          draft.protagonist.shell = gunInTurret.gun_type!.value.base.shells[0];
         } else {
           // TODO: warn somehow?
           const suitableTurret = draft.protagonist.tank.turrets.find((turret) =>
-            turret.guns.some((gun) => gun.gunType!.value.base.id === unlock.id),
+            turret.guns.some(
+              (gun) => gun.gun_type!.value.base.id === unlock.id,
+            ),
           )!;
           const gunInSuitableTurret = suitableTurret.guns.find(
-            (gun) => gun.gunType!.value.base.id === unlock.id,
+            (gun) => gun.gun_type!.value.base.id === unlock.id,
           )!;
 
           draft.protagonist.turret = suitableTurret;
           draft.protagonist.gun = gunInSuitableTurret;
           draft.protagonist.shell =
-            gunInSuitableTurret.gunType!.value.base.shells[0];
+            gunInSuitableTurret.gun_type!.value.base.shells[0];
         }
       } else if (unlock.type === ModuleType.ENGINE) {
         draft.protagonist.engine = draft.protagonist.tank.engines.find(
@@ -232,10 +234,10 @@ export function Modules() {
             module = tank.turrets
               .find((turret) =>
                 turret.guns.some(
-                  (gun) => gun.gunType!.value.base.id === unlock.id,
+                  (gun) => gun.gun_type!.value.base.id === unlock.id,
                 ),
               )!
-              .guns.find((gun) => gun.gunType!.value.base.id === unlock.id)!;
+              .guns.find((gun) => gun.gun_type!.value.base.id === unlock.id)!;
           } else if (unlock.type === ModuleType.VEHICLE) {
             module = tankDefinitions.tanks[unlock.id];
           }
@@ -298,7 +300,7 @@ export function Modules() {
                   (unlock.type === ModuleType.TURRET
                     ? turret.id
                     : unlock.type === ModuleType.GUN
-                      ? gun.gunType!.value.base.id
+                      ? gun.gun_type!.value.base.id
                       : unlock.type === ModuleType.ENGINE
                         ? engine.id
                         : unlock.type === ModuleType.TRACKS
@@ -310,7 +312,7 @@ export function Modules() {
                     ? extractModule(module).id == topTurret.id
                     : unlock.type === ModuleType.GUN
                       ? extractModule(module).id ===
-                        topGun.gunType!.value.base.id
+                        topGun.gun_type!.value.base.id
                       : unlock.type === ModuleType.ENGINE
                         ? extractModule(module).id === topEngine.id
                         : unlock.type === ModuleType.TRACKS
@@ -360,7 +362,7 @@ export function Modules() {
                   draft.protagonist.turret = draft.protagonist.tank.turrets[0];
                   draft.protagonist.gun = draft.protagonist.turret.guns[0];
                   draft.protagonist.shell =
-                    draft.protagonist.gun.gunType!.value.base.shells[0];
+                    draft.protagonist.gun.gun_type!.value.base.shells[0];
                   draft.protagonist.engine = draft.protagonist.tank.engines[0];
                   draft.protagonist.track = draft.protagonist.tank.tracks[0];
                 });
@@ -376,7 +378,7 @@ export function Modules() {
                     draft.protagonist.tank.turrets.at(-1)!;
                   draft.protagonist.gun = draft.protagonist.turret.guns.at(-1)!;
                   draft.protagonist.shell =
-                    draft.protagonist.gun.gunType!.value.base.shells[0];
+                    draft.protagonist.gun.gun_type!.value.base.shells[0];
                   draft.protagonist.engine =
                     draft.protagonist.tank.engines.at(-1)!;
                   draft.protagonist.track =
@@ -415,7 +417,7 @@ export function Modules() {
         {tree(ModuleType.GUN, [
           {
             cost: { type: 'xp', value: 0 },
-            id: gun0.gunType!.value.base.id,
+            id: gun0.gun_type!.value.base.id,
             type: ModuleType.GUN,
           },
         ])}

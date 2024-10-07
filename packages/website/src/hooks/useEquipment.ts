@@ -8,7 +8,7 @@ export function useEquipment(id: number, antagonist = false) {
   const member = Duel.use(
     (state) => state[antagonist ? 'antagonist' : 'protagonist']!,
   );
-  const preset = equipmentDefinitions.presets[member.tank.equipmentPreset];
+  const preset = equipmentDefinitions.presets[member.tank.equipment_preset];
   const equipmentMatrix = Duel.use(
     (state) =>
       state[antagonist ? 'antagonist' : 'protagonist']!.equipmentMatrix,

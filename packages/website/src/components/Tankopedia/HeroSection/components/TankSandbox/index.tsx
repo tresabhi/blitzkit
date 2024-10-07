@@ -45,7 +45,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
     const turretModelDefinition =
       tankModelDefinition.turrets[protagonist.turret.id];
     const gunModelDefinition =
-      turretModelDefinition.guns[protagonist.gun.gunType!.value.base.id];
+      turretModelDefinition.guns[protagonist.gun.gun_type!.value.base.id];
     const display = TankopediaPersistent.useDeferred(
       (state) => state.display,
       TankopediaDisplay.Model,

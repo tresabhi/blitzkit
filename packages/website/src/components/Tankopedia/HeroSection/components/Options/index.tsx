@@ -131,7 +131,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                   >
                     {
                       TIER_ROMAN_NUMERALS[
-                        antagonistGun.gunType!.value.base.tier
+                        antagonistGun.gun_type!.value.base.tier
                       ]
                     }
                   </Text>
@@ -155,21 +155,21 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                     .map(({ gun, turret }) => (
                       <ModuleButton
                         module="gun"
-                        key={gun.gunType!.value.base.id}
+                        key={gun.gun_type!.value.base.id}
                         onClick={() =>
                           mutateDuel((draft) => {
                             draft.antagonist.turret = turret;
                             draft.antagonist.gun = gun;
                             draft.antagonist.shell =
-                              gun.gunType!.value.base.shells[0];
+                              gun.gun_type!.value.base.shells[0];
                           })
                         }
                         selected={
-                          gun.gunType!.value.base.id ===
-                          antagonistGun.gunType!.value.base.id
+                          gun.gun_type!.value.base.id ===
+                          antagonistGun.gun_type!.value.base.id
                         }
                         discriminator={
-                          TIER_ROMAN_NUMERALS[gun.gunType!.value.base.tier]
+                          TIER_ROMAN_NUMERALS[gun.gun_type!.value.base.tier]
                         }
                       />
                     ))}
@@ -184,7 +184,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             }}
             overflow="hidden"
           >
-            {antagonistGun.gunType!.value.base.shells.map(
+            {antagonistGun.gun_type!.value.base.shells.map(
               (thisShell, shellIndex) => (
                 <IconButton
                   color={
@@ -332,7 +332,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                         draft.antagonist.gun =
                           draft.antagonist.turret.guns.at(-1)!;
                         draft.antagonist.shell =
-                          draft.antagonist.gun.gunType!.value.base.shells[0];
+                          draft.antagonist.gun.gun_type!.value.base.shells[0];
                       });
                       setAntagonistSelectorOpen(false);
                     }}

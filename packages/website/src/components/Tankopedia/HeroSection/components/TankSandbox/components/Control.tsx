@@ -38,7 +38,7 @@ export function Controls() {
     antagonistModelDefinition.turrets[antagonist.turret.id];
   const protagonistGunModelDefinition =
     protagonistTurretModelDefinition.guns[
-      protagonist.gun.gunType!.value.base.id
+      protagonist.gun.gun_type!.value.base.id
     ];
   const protagonistHullOrigin = new Vector3(
     protagonistTrackModelDefinition.origin.x,
@@ -46,19 +46,19 @@ export function Controls() {
     -protagonistTrackModelDefinition.origin.z,
   );
   const protagonistTurretOrigin = new Vector3(
-    protagonistModelDefinition.turretOrigin.x,
-    protagonistModelDefinition.turretOrigin.y,
-    -protagonistModelDefinition.turretOrigin.z,
+    protagonistModelDefinition.turret_origin.x,
+    protagonistModelDefinition.turret_origin.y,
+    -protagonistModelDefinition.turret_origin.z,
   );
   const protagonistGunOrigin = new Vector3(
-    protagonistTurretModelDefinition.gunOrigin.x,
-    protagonistTurretModelDefinition.gunOrigin.y,
-    -protagonistTurretModelDefinition.gunOrigin.z,
+    protagonistTurretModelDefinition.gun_origin.x,
+    protagonistTurretModelDefinition.gun_origin.y,
+    -protagonistTurretModelDefinition.gun_origin.z,
   );
   const antagonistGunHeight =
     protagonistTrackModelDefinition.origin.y +
-    antagonistModelDefinition.turretOrigin.y +
-    antagonistTurretModelDefinition.gunOrigin.y;
+    antagonistModelDefinition.turret_origin.y +
+    antagonistTurretModelDefinition.gun_origin.y;
   const [autoRotate, setAutoRotate] = useState(true);
 
   useEffect(() => {
@@ -78,7 +78,7 @@ export function Controls() {
       const duel = duelStore.getState();
       const hasImprovedVerticalStabilizer = await hasEquipment(
         122,
-        duel.protagonist.tank.equipmentPreset,
+        duel.protagonist.tank.equipment_preset,
         duel.protagonist.equipmentMatrix,
       );
 

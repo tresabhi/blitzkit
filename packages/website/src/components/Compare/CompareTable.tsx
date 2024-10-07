@@ -169,7 +169,7 @@ export function CompareTable({ stats }: CompareTableProps) {
               index,
             ) => {
               const equipmentPreset =
-                equipmentDefinitions.presets[tank.equipmentPreset];
+                equipmentDefinitions.presets[tank.equipment_preset];
               const provisionsList = availableProvisions(
                 tank,
                 gun,
@@ -239,7 +239,7 @@ export function CompareTable({ stats }: CompareTableProps) {
                                 member.turret = member.tank.turrets[0];
                                 member.gun = member.turret.guns[0];
                                 member.shell =
-                                  member.gun.gunType!.value.base.shells[0];
+                                  member.gun.gun_type!.value.base.shells[0];
                                 member.engine = member.tank.engines[0];
                                 member.track = member.tank.tracks[0];
                               });
@@ -256,7 +256,7 @@ export function CompareTable({ stats }: CompareTableProps) {
                                 member.turret = member.tank.turrets.at(-1)!;
                                 member.gun = member.turret.guns.at(-1)!;
                                 member.shell =
-                                  member.gun.gunType!.value.base.shells[0];
+                                  member.gun.gun_type!.value.base.shells[0];
                                 member.engine = member.tank.engines.at(-1)!;
                                 member.track = member.tank.tracks.at(-1)!;
                               });
@@ -329,7 +329,7 @@ export function CompareTable({ stats }: CompareTableProps) {
                               (provision) => provision.id,
                             )}
                             selected={provisions}
-                            disabled={tank.maxProvisions === provisions.length}
+                            disabled={tank.max_provisions === provisions.length}
                             onChange={(provisions) => {
                               mutateCompareEphemeral((draft) => {
                                 draft.members[index].provisions = provisions;
@@ -515,7 +515,7 @@ export function CompareTable({ stats }: CompareTableProps) {
                               });
                             }}
                             disabled={
-                              tank.maxConsumables === consumables.length
+                              tank.max_consumables === consumables.length
                             }
                           />
 

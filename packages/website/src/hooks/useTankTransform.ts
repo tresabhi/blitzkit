@@ -22,8 +22,8 @@ export function useTankTransform(
     const turretModelDefinition = tankModelDefinition.turrets[member.turret.id];
 
     const hullOrigin = correctZYTuple(trackModelDefinition.origin);
-    const turretOrigin = correctZYTuple(tankModelDefinition.turretOrigin);
-    const gunOrigin = correctZYTuple(turretModelDefinition.gunOrigin);
+    const turretOrigin = correctZYTuple(tankModelDefinition.turret_origin);
+    const gunOrigin = correctZYTuple(turretModelDefinition.gun_origin);
     const turretPosition = new Vector3();
     const turretRotation = new Euler();
     const gunPosition = new Vector3();
@@ -52,15 +52,15 @@ export function useTankTransform(
         .applyAxisAngle(new Vector3(0, 0, 1), yaw);
       turretRotation.set(0, 0, yaw);
 
-      if (tankModelDefinition.initialTurretRotation) {
+      if (tankModelDefinition.initial_turret_rotation) {
         const initialPitch = -degToRad(
-          tankModelDefinition.initialTurretRotation.pitch,
+          tankModelDefinition.initial_turret_rotation.pitch,
         );
         const initialYaw = -degToRad(
-          tankModelDefinition.initialTurretRotation.yaw,
+          tankModelDefinition.initial_turret_rotation.yaw,
         );
         const initialRoll = -degToRad(
-          tankModelDefinition.initialTurretRotation.roll,
+          tankModelDefinition.initial_turret_rotation.roll,
         );
 
         turretPosition

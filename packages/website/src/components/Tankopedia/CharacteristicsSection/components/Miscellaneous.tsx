@@ -38,7 +38,7 @@ export function Miscellaneous() {
       <Heading size="4">Miscellaneous</Heading>
 
       <Flex gap="2" align="center">
-        {!tank.fixedCamouflage && (
+        {!tank.fixed_camouflage && (
           <GenericTankComponentButton
             icon={asset('icons/camo.webp')}
             selected={camouflage}

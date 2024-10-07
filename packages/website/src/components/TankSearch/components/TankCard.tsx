@@ -32,26 +32,26 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
 
     const turret = tank.turrets.at(-1)!;
     const gun = turret.guns.at(-1)!;
-    const shell0 = gun.gunType!.value.base.shells[0];
-    const shell1 = gun.gunType!.value.base.shells[1];
+    const shell0 = gun.gun_type!.value.base.shells[0];
+    const shell1 = gun.gun_type!.value.base.shells[1];
     const tracks = tank.tracks.at(-1)!;
     const engine = tank.engines.at(-1)!;
     const tankModelDefinition = modelDefinitions.models[tank.id];
     const turretModelDefinition = tankModelDefinition.turrets[turret.id];
     const gunModelDefinition =
-      turretModelDefinition.guns[gun.gunType!.value.base.id];
+      turretModelDefinition.guns[gun.gun_type!.value.base.id];
 
     switch (tankopediaSort.by) {
       case 'fire.aimTime':
-        return gun.gunType!.value.base.aimTime.toFixed(2);
+        return gun.gun_type!.value.base.aim_time.toFixed(2);
       case 'fire.caliber':
         return shell0.caliber.toFixed(0);
       case 'fire.damage':
-        return shell0.armorDamage.toFixed(0);
+        return shell0.armor_damage.toFixed(0);
       case 'fire.dispersionMoving':
-        return tracks.dispersionMove.toFixed(3);
+        return tracks.dispersion_move.toFixed(3);
       case 'fire.dispersionStill':
-        return gun.gunType!.value.base.dispersionBase.toFixed(3);
+        return gun.gun_type!.value.base.dispersion_base.toFixed(3);
       case 'fire.dpm':
         return resolveDpm(gun, shell0).toFixed(0);
       case 'fire.dpmPremium':
@@ -67,17 +67,17 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
       case 'fire.gunDepression':
         return (
           gunModelDefinition.pitch.max +
-          (tankModelDefinition.initialTurretRotation?.pitch ?? 0)
+          (tankModelDefinition.initial_turret_rotation?.pitch ?? 0)
         ).toFixed(1);
       case 'fire.gunElevation':
         return (
           -gunModelDefinition.pitch.min -
-          (tankModelDefinition.initialTurretRotation?.pitch ?? 0)
+          (tankModelDefinition.initial_turret_rotation?.pitch ?? 0)
         ).toFixed(1);
       case 'maneuverability.forwardsSpeed':
-        return tank.speedForwards.toFixed(0);
+        return tank.speed_forwards.toFixed(0);
       case 'maneuverability.backwardsSpeed':
-        return tank.speedBackwards.toFixed(0);
+        return tank.speed_backwards.toFixed(0);
       case 'maneuverability.power':
         return engine.power.toFixed(0);
       case 'maneuverability.powerToWeight':
@@ -87,7 +87,7 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
             engine.weight +
             tracks.weight +
             turret.weight +
-            gun.gunType!.value.base.weight)
+            gun.gun_type!.value.base.weight)
         ).toFixed(1);
       case 'maneuverability.weight':
         return (
@@ -95,30 +95,30 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
             engine.weight +
             tracks.weight +
             turret.weight +
-            gun.gunType!.value.base.weight) /
+            gun.gun_type!.value.base.weight) /
           1000
         ).toFixed(1);
       case 'maneuverability.traverseSpeed':
-        return tracks.traverseSpeed.toFixed(1);
+        return tracks.traverse_speed.toFixed(1);
       case 'survivability.health':
         return (tank.health + turret.health).toFixed(0);
       case 'survivability.viewRange':
-        return turret.viewRange.toFixed(0);
+        return turret.view_range.toFixed(0);
       case 'survivability.camouflageStill':
-        return (tank.camouflageStill * 100).toFixed(0);
+        return (tank.camouflage_still * 100).toFixed(0);
       case 'survivability.camouflageMoving':
-        return (tank.camouflageMoving * 100).toFixed(0);
+        return (tank.camouflage_moving * 100).toFixed(0);
       case 'survivability.camouflageShooting':
         return (
-          tank.camouflageStill *
-          gun.gunType!.value.base.camouflageLoss *
+          tank.camouflage_still *
+          gun.gun_type!.value.base.camouflage_loss *
           100
         ).toFixed(0);
       case 'survivability.volume': {
         const dimensions = normalizeBoundingBox(
           unionBoundingBox(
-            tankModelDefinition.boundingBox,
-            turretModelDefinition.boundingBox,
+            tankModelDefinition.bounding_box,
+            turretModelDefinition.bounding_box,
           ),
         );
 
@@ -128,8 +128,8 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
       case 'survivability.length': {
         const bounds = normalizeBoundingBox(
           unionBoundingBox(
-            tankModelDefinition.boundingBox,
-            turretModelDefinition.boundingBox,
+            tankModelDefinition.bounding_box,
+            turretModelDefinition.bounding_box,
           ),
         );
 

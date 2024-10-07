@@ -44,10 +44,10 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
   const trackModelDefinition = tankModelDefinition.tracks[track.id];
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition =
-    turretModelDefinition.guns[gun.gunType!.value.base.id];
+    turretModelDefinition.guns[gun.gun_type!.value.base.id];
   const hullOrigin = correctZYTuple(trackModelDefinition.origin);
-  const turretOrigin = correctZYTuple(tankModelDefinition.turretOrigin);
-  const gunOrigin = correctZYTuple(turretModelDefinition.gunOrigin);
+  const turretOrigin = correctZYTuple(tankModelDefinition.turret_origin);
+  const gunOrigin = correctZYTuple(turretModelDefinition.gun_origin);
   const mutateDuel = Duel.useMutation();
   const canvas = useThree((state) => state.gl.domElement);
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
@@ -131,7 +131,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
       <group ref={turretContainer}>
         {armorNodes.map((node) => {
           const isCurrentTurret = node.name.startsWith(
-            `turret_${turretModelDefinition.modelId.toString().padStart(2, '0')}`,
+            `turret_${turretModelDefinition.model_id.toString().padStart(2, '0')}`,
           );
           const isVisible = isCurrentTurret;
           const armorId = nameToArmorId(node.name);
@@ -177,7 +177,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
             const duel = duelStore.getState();
             const hasImprovedVerticalStabilizer = await hasEquipment(
               122,
-              duel.protagonist.tank.equipmentPreset,
+              duel.protagonist.tank.equipment_preset,
               duel.protagonist.equipmentMatrix,
             );
             const boundingRect = canvas.getBoundingClientRect();
@@ -226,7 +226,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
         <group ref={gunContainer}>
           {armorNodes.map((node) => {
             const isCurrentGun = node.name.startsWith(
-              `gun_${gunModelDefinition.modelId.toString().padStart(2, '0')}`,
+              `gun_${gunModelDefinition.model_id.toString().padStart(2, '0')}`,
             );
             const isVisible = isCurrentGun;
             const armorId = nameToArmorId(node.name);
@@ -272,7 +272,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
               const duel = duelStore.getState();
               const hasImprovedVerticalStabilizer = await hasEquipment(
                 122,
-                duel.protagonist.tank.equipmentPreset,
+                duel.protagonist.tank.equipment_preset,
                 duel.protagonist.equipmentMatrix,
               );
               const boundingRect = canvas.getBoundingClientRect();
@@ -317,7 +317,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
           })}
 
           {modelNodes.map((node) => {
-            const gunString = `gun_${gunModelDefinition.modelId
+            const gunString = `gun_${gunModelDefinition.model_id
               .toString()
               .padStart(2, '0')}`;
             const isCurrentGun = gunModelDefinition.mask
@@ -354,7 +354,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
               const duel = duelStore.getState();
               const hasImprovedVerticalStabilizer = await hasEquipment(
                 122,
-                duel.protagonist.tank.equipmentPreset,
+                duel.protagonist.tank.equipment_preset,
                 duel.protagonist.equipmentMatrix,
               );
               const boundingRect = canvas.getBoundingClientRect();

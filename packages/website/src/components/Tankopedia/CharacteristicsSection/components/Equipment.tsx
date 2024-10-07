@@ -10,7 +10,7 @@ export function Equipment() {
   const mutateDuel = Duel.useMutation();
   const protagonist = Duel.use((state) => state.protagonist);
   const equipmentPreset =
-    equipmentDefinitions.presets[protagonist.tank.equipmentPreset];
+    equipmentDefinitions.presets[protagonist.tank.equipment_preset];
   const equipmentMatrix = Duel.use(
     (state) => state.protagonist.equipmentMatrix,
   );

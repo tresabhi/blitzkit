@@ -60,7 +60,7 @@ export function ModuleManager({
                     const draft = { ...modules };
                     draft.turret = turret;
                     draft.gun = draft.turret.guns.at(-1)!;
-                    draft.shell = draft.gun.gunType!.value.base.shells[0];
+                    draft.shell = draft.gun.gun_type!.value.base.shells[0];
 
                     onChange?.(draft);
                     setTurretMenuOpen(false);
@@ -82,7 +82,7 @@ export function ModuleManager({
       <ModuleButton
         module="gun"
         discriminator={
-          TIER_ROMAN_NUMERALS[modules.gun.gunType!.value.base.tier]
+          TIER_ROMAN_NUMERALS[modules.gun.gun_type!.value.base.tier]
         }
         onClick={() => setGunMenuOpen(true)}
       />
@@ -94,17 +94,17 @@ export function ModuleManager({
 
         <DropdownMenu.Content>
           <DropdownMenu.RadioGroup
-            value={`${modules.gun.gunType!.value.base.id}`}
+            value={`${modules.gun.gun_type!.value.base.id}`}
           >
             {[...modules.turret.guns].reverse().map((gun) => {
               return (
                 <DropdownMenu.RadioItem
-                  key={gun.gunType!.value.base.id}
-                  value={`${gun.gunType!.value.base.id}`}
+                  key={gun.gun_type!.value.base.id}
+                  value={`${gun.gun_type!.value.base.id}`}
                   onClick={() => {
                     const draft = { ...modules };
                     draft.gun = gun;
-                    draft.shell = draft.gun.gunType!.value.base.shells[0];
+                    draft.shell = draft.gun.gun_type!.value.base.shells[0];
 
                     onChange?.(draft);
                     setGunMenuOpen(false);
@@ -114,10 +114,10 @@ export function ModuleManager({
                     variant="ghost"
                     module="gun"
                     discriminator={
-                      TIER_ROMAN_NUMERALS[gun.gunType!.value.base.tier]
+                      TIER_ROMAN_NUMERALS[gun.gun_type!.value.base.tier]
                     }
                   />{' '}
-                  {gun.gunType!.value.base.name}
+                  {gun.gun_type!.value.base.name}
                 </DropdownMenu.RadioItem>
               );
             })}

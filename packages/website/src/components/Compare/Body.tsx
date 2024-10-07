@@ -13,7 +13,7 @@ interface BodyProps {
 export function Body({ stats }: BodyProps) {
   const members = CompareEphemeral.use((state) => state.members);
   const hasNonRegularGun = members.some(
-    ({ gun }) => gun.gunType!.$case !== 'regular',
+    ({ gun }) => gun.gun_type!.$case !== 'regular',
   );
   const mutateCompareEphemeral = CompareEphemeral.useMutation();
 
@@ -31,7 +31,7 @@ export function Body({ stats }: BodyProps) {
             <StickyColumnHeaderCell key={key} top={137}>
               <Flex justify="center">
                 <Flex>
-                  {gun.gunType!.value.base.shells.map(
+                  {gun.gun_type!.value.base.shells.map(
                     (thisShell, shellIndex) => (
                       <IconButton
                         color={thisShell.id === shell.id ? undefined : 'gray'}
@@ -43,12 +43,12 @@ export function Body({ stats }: BodyProps) {
                             shellIndex === 0 ? undefined : 0,
                           borderTopRightRadius:
                             shellIndex ===
-                            gun.gunType!.value.base.shells.length - 1
+                            gun.gun_type!.value.base.shells.length - 1
                               ? undefined
                               : 0,
                           borderBottomRightRadius:
                             shellIndex ===
-                            gun.gunType!.value.base.shells.length - 1
+                            gun.gun_type!.value.base.shells.length - 1
                               ? undefined
                               : 0,
                           marginLeft: shellIndex === 0 ? 0 : -1,

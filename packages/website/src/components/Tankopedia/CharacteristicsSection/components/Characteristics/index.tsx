@@ -75,7 +75,7 @@ export function Characteristics() {
   const tankModelDefinition = useTankModelDefinition();
   const turretModelDefinition = tankModelDefinition.turrets[turret.id];
   const gunModelDefinition =
-    turretModelDefinition.guns[gun.gunType!.value.base.id];
+    turretModelDefinition.guns[gun.gun_type!.value.base.id];
   const stats = tankCharacteristics(
     {
       tank,
@@ -148,7 +148,7 @@ export function Characteristics() {
             <Heading size="5">Firepower</Heading>
 
             <Flex>
-              {gun.gunType!.value.base.shells.map((thisShell, shellIndex) => (
+              {gun.gun_type!.value.base.shells.map((thisShell, shellIndex) => (
                 <Tooltip content={thisShell.name} key={thisShell.id}>
                   <IconButton
                     color={thisShell.id === shell.id ? undefined : 'gray'}
@@ -157,11 +157,13 @@ export function Characteristics() {
                       borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
                       borderBottomLeftRadius: shellIndex === 0 ? undefined : 0,
                       borderTopRightRadius:
-                        shellIndex === gun.gunType!.value.base.shells.length - 1
+                        shellIndex ===
+                        gun.gun_type!.value.base.shells.length - 1
                           ? undefined
                           : 0,
                       borderBottomRightRadius:
-                        shellIndex === gun.gunType!.value.base.shells.length - 1
+                        shellIndex ===
+                        gun.gun_type!.value.base.shells.length - 1
                           ? undefined
                           : 0,
                       marginLeft: shellIndex === 0 ? 0 : -1,
@@ -183,11 +185,11 @@ export function Characteristics() {
               ))}
             </Flex>
           </Flex>
-          <Info name="Gun type">{GUN_TYPE_NAMES[gun.gunType!.$case]}</Info>
+          <Info name="Gun type">{GUN_TYPE_NAMES[gun.gun_type!.$case]}</Info>
           <InfoWithDelta name="DPM" decimals={0} unit="hp / min">
             {stats.dpm}
           </InfoWithDelta>
-          {gun.gunType!.$case === 'autoReloader' && (
+          {gun.gun_type!.$case === 'auto_reloader' && (
             <InfoWithDelta
               decimals={0}
               indent
@@ -197,10 +199,10 @@ export function Characteristics() {
               {stats.dpmEffective!}
             </InfoWithDelta>
           )}
-          {gun.gunType!.$case !== 'regular' && (
+          {gun.gun_type!.$case !== 'regular' && (
             <InfoWithDelta name="Shells">{stats.shells}</InfoWithDelta>
           )}
-          {gun.gunType!.$case === 'autoReloader' ? (
+          {gun.gun_type!.$case === 'auto_reloader' ? (
             <>
               <Info indent name="Most optimal shell index">
                 {stats.mostOptimalShellIndex! + 1}
@@ -228,8 +230,8 @@ export function Characteristics() {
               {stats.shellReload!}
             </InfoWithDelta>
           )}
-          {(gun.gunType!.$case === 'autoLoader' ||
-            gun.gunType!.$case === 'autoReloader') && (
+          {(gun.gun_type!.$case === 'auto_loader' ||
+            gun.gun_type!.$case === 'auto_reloader') && (
             <InfoWithDelta
               indent
               decimals={2}
@@ -300,7 +302,7 @@ export function Characteristics() {
           <InfoWithDelta name="Damage" unit="hp" decimals={0}>
             {stats.damage}
           </InfoWithDelta>
-          {gun.gunType!.$case !== 'regular' && (
+          {gun.gun_type!.$case !== 'regular' && (
             <InfoWithDelta name="Clipping potential" indent>
               {stats.clipDamage!}
             </InfoWithDelta>

@@ -74,7 +74,7 @@ export function Consumables() {
         consumables={consumablesList}
         selected={consumables}
         cooldownBooster={cooldownBooster}
-        disabled={protagonist.tank.maxConsumables === consumables.length}
+        disabled={protagonist.tank.max_consumables === consumables.length}
         hasConsumableDeliverySystem={hasConsumableDeliverySystem}
         hasHighEndConsumables={hasHighEndConsumables}
         timers
