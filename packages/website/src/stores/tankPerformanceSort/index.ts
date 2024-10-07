@@ -9,10 +9,9 @@ export interface TankPerformanceSort {
   direction: -1 | 1;
 }
 
-export const { Provider, use, useMutation, useStore } = createContextualStore(
-  () =>
-    create<TankPerformanceSort>()(() => ({
-      type: 'winrate',
-      direction: -1,
-    })),
+export const TankPerformanceSort = createContextualStore(() =>
+  create<TankPerformanceSort>()(() => ({
+    type: 'winrate',
+    direction: -1,
+  })),
 );

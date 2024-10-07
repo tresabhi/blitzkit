@@ -4,12 +4,12 @@ import {
   CaretUpIcon,
 } from '@radix-ui/react-icons';
 import { Flex, IconButton, Table } from '@radix-ui/themes';
-import { StickyColumnHeaderCell } from '../../../../components/StickyColumnHeaderCell';
-import * as TankPerformanceSort from '../../../../stores/tankPerformanceSort';
+import { TankPerformanceSort } from '../../stores/tankPerformanceSort';
 import {
   TankPerformanceSortTypeNames,
   TankPerformanceSortTypeNamesArray,
-} from '../../../../stores/tankPerformanceSort/constants';
+} from '../../stores/tankPerformanceSort/constants';
+import { StickyColumnHeaderCell } from '../StickyColumnHeaderCell';
 
 export function Header() {
   const sort = TankPerformanceSort.use();

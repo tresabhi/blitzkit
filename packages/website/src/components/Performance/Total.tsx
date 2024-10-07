@@ -1,22 +1,27 @@
 import {
-  averageDefinitions,
-  AverageDefinitionsEntryWithId,
-  BlitzkitStats,
+  AverageDefinitionsEntry,
+  fetchAverageDefinitions,
   formatCompact,
+  type BlitzkitStats,
 } from '@blitzkit/core';
 import { Table } from '@radix-ui/themes';
-import { memo, use, useCallback } from 'react';
-import { StickyRowHeaderCell } from '../../../../components/StickyRowHeaderCell';
-import { useAveragesExclusionRatio } from '../../../../hooks/useAveragesExclusionRatio';
-import * as TankPerformancePersistent from '../../../../stores/tankPerformancePersistent';
+import { memo, useCallback } from 'react';
+import { useAveragesExclusionRatio } from '../../hooks/useAveragesExclusionRatio';
+import { TankPerformancePersistent } from '../../stores/tankPerformancePersistent';
+import { StickyRowHeaderCell } from '../StickyRowHeaderCell';
+
+interface AverageDefinitionsEntryWithId extends AverageDefinitionsEntry {
+  id: number;
+}
 
 interface TotalProps {
   tanks: AverageDefinitionsEntryWithId[];
 }
 
+const averageDefinitions = await fetchAverageDefinitions();
+
 export const Total = memo<TotalProps>(
   ({ tanks }) => {
-    const awaitedAverageDefinitions = use(averageDefinitions);
     const playerCountPeriod = TankPerformancePersistent.use(
       (state) => state.playerCountPeriod,
     );
@@ -53,9 +58,7 @@ export const Total = memo<TotalProps>(
         </StickyRowHeaderCell>
         <Table.Cell align="center">{(winrate * 100).toFixed(1)}%</Table.Cell>
         <Table.Cell align="center">
-          {formatCompact(
-            ratio * awaitedAverageDefinitions.samples[playerCountPeriod],
-          )}
+          {formatCompact(ratio * averageDefinitions.samples[playerCountPeriod])}
         </Table.Cell>
         <Table.Cell align="center">
           {Math.round(damage).toLocaleString()}

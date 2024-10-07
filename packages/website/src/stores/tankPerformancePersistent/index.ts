@@ -8,14 +8,13 @@ export interface TankPerformancePersistent {
   playerCountPeriod: PlayerCountPeriod;
 }
 
-export const { Provider, use, useMutation, useStore } = createContextualStore(
-  () =>
-    create<TankPerformancePersistent>()(
-      persist(
-        subscribeWithSelector<TankPerformancePersistent>(() => ({
-          playerCountPeriod: PlayerCountPeriod.ThisMonth,
-        })),
-        { name: 'tank-performance', merge: (a, b) => lodash.merge(b, a) },
-      ),
+export const TankPerformancePersistent = createContextualStore(() =>
+  create<TankPerformancePersistent>()(
+    persist(
+      subscribeWithSelector<TankPerformancePersistent>(() => ({
+        playerCountPeriod: PlayerCountPeriod.ThisMonth,
+      })),
+      { name: 'tank-performance', merge: (a, b) => lodash.merge(b, a) },
     ),
+  ),
 );

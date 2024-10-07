@@ -1,22 +1,23 @@
 import {
   TankDefinition,
-  averageDefinitions,
+  fetchAverageDefinitions,
   formatCompact,
 } from '@blitzkit/core';
 import { Table } from '@radix-ui/themes';
-import { memo, use } from 'react';
-import { TankRowHeaderCell } from '../../../../components/TankRowHeaderCell';
-import { useAveragesExclusionRatio } from '../../../../hooks/useAveragesExclusionRatio';
-import * as TankPerformancePersistent from '../../../../stores/tankPerformancePersistent';
+import { memo } from 'react';
+import { useAveragesExclusionRatio } from '../../hooks/useAveragesExclusionRatio';
+import { TankPerformancePersistent } from '../../stores/tankPerformancePersistent';
+import { TankRowHeaderCell } from '../TankRowHeaderCell';
 
 interface TankRowProps {
   tank: TankDefinition;
 }
 
+const averageDefinitions = await fetchAverageDefinitions();
+
 export const TankRow = memo<TankRowProps>(
   ({ tank }) => {
-    const awaitedAverageDefinitions = use(averageDefinitions);
-    const averages = awaitedAverageDefinitions.averages[tank.id];
+    const averages = averageDefinitions.averages[tank.id];
     const ratio = useAveragesExclusionRatio();
     const playerCountPeriod = TankPerformancePersistent.use(
       (state) => state.playerCountPeriod,

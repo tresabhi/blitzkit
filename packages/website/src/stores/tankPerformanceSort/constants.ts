@@ -1,4 +1,4 @@
-import { TankPerformanceSortType } from '.';
+import type { TankPerformanceSortType } from '.';
 
 export const TankPerformanceSortTypeNames = {
   winrate: 'Winrate',

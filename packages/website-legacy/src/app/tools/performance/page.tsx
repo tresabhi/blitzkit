@@ -1,7 +1,7 @@
+import { Controls } from '../../../../../website/src/components/Performance/Controls';
+import { Info } from '../../../../../website/src/components/Performance/PerformanceInfo';
+import { TankTable } from '../../../../../website/src/components/Performance/Table';
 import { PageWrapper } from '../../../components/PageWrapper';
-import { Controls } from './components/Controls';
-import { Info } from './components/Info';
-import { TankTable } from './components/Table';
 
 export default function Page() {
   return (

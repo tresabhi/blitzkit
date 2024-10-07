@@ -9,7 +9,7 @@ import { Callout, Flex } from '@radix-ui/themes';
 const discoveredIdsDefinitions = await fetchDiscoveredIdsDefinitions();
 const averageDefinitions = await fetchAverageDefinitions();
 
-export function Info() {
+export function PerformanceInfo() {
   const samples = discoveredIdsDefinitions.count;
   const minutesAgo = Math.floor(
     (Date.now() - averageDefinitions.time) / (1000 * 60),

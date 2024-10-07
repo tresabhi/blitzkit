@@ -1,6 +1,6 @@
 import { Flex } from '@radix-ui/themes';
 import { Suspense } from 'react';
-import { StickyTableRoot } from '../../../../components/StickyTableRoot';
+import { StickyTableRoot } from '../StickyTableRoot';
 import { BodyLoader } from './BodyLoader';
 import { Header } from './Header';
 import { Tanks } from './Tanks';

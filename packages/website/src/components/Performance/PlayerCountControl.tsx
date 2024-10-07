@@ -1,6 +1,6 @@
 import { Flex, Select, Text } from '@radix-ui/themes';
-import * as TankPerformancePersistent from '../../../../stores/tankPerformancePersistent';
-import { PlayerCountPeriod } from '../../../../stores/tankPerformancePersistent/constants';
+import { TankPerformancePersistent } from '../../stores/tankPerformancePersistent';
+import { PlayerCountPeriod } from '../../stores/tankPerformancePersistent/constants';
 
 export function PlayerCountControl() {
   const playerCountPeriod = TankPerformancePersistent.use(

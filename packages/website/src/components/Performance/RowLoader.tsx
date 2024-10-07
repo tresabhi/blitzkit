@@ -1,8 +1,8 @@
 import { Skeleton, Table } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import { memo, useRef } from 'react';
-import { useIntersection } from '../../../../hooks/useIntersection';
-import { TankPerformanceSortTypeNamesArray } from '../../../../stores/tankPerformanceSort/constants';
+import { useIntersection } from '../../hooks/useIntersection';
+import { TankPerformanceSortTypeNamesArray } from '../../stores/tankPerformanceSort/constants';
 
 interface RowLoaderProps {
   onIntersection?: () => void;
