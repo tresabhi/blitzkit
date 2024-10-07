@@ -14,9 +14,12 @@ const tankDefinitions = await fetchTankDefinitions();
 export const XP_MULTIPLIERS = [1, 2, 3, 4, 5, 10];
 
 export function TechTreeSection() {
+  const master = Duel.use((state) => state.protagonist.tank);
+
+  if (master.type !== TankType.RESEARCHABLE) return null;
+
   const xpMultiplier = TankopediaEphemeral.use((state) => state.xpMultiplier);
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
-  const master = Duel.use((state) => state.protagonist.tank);
   const container = useRef<HTMLDivElement>(null);
   const lines = useMemo(() => {
     function extend(line: Line): Line[] {
