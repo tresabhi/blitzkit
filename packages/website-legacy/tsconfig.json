@@ -11,6 +11,6 @@
     "src/**/*",
     ".next/types/**/*.ts",
     "../website/src/components/Performance/PerformanceInfo.tsx",
-    "../website/src/pages/tools/session/index.tsx"
+    "../website/src/pages/tools/session/_index.tsx"
   ]
 }
