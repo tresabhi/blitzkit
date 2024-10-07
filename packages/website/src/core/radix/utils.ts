@@ -1,4 +1,4 @@
-import { RadixColorCompound, RadixRadius } from '../../stores/embedState';
+import type { RadixColorCompound, RadixRadius } from '../../stores/embedState';
 
 export function toWidthVar(state: number) {
   return `${state}px`;

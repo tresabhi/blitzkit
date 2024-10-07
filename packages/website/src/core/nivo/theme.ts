@@ -1,4 +1,4 @@
-import { Theme } from '@nivo/core';
+import type { Theme } from '@nivo/core';
 
 export const nivoTheme = {
   theme: {

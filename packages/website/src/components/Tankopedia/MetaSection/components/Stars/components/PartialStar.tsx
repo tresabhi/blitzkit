@@ -1,5 +1,5 @@
 import { StarFilledIcon, StarIcon } from '@radix-ui/react-icons';
-import { Box, BoxProps } from '@radix-ui/themes';
+import { Box, type BoxProps } from '@radix-ui/themes';
 
 type PartialStarProps = BoxProps & {
   fill: number;

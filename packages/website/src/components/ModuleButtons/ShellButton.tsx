@@ -1,6 +1,6 @@
 import { asset } from '@blitzkit/core';
 import { GenericTankComponentButton } from './GenericTankComponentButton';
-import { TankComponentButtonProps } from './TankComponentButton';
+import type { TankComponentButtonProps } from './TankComponentButton';
 
 interface ShellButtonProps extends TankComponentButtonProps {
   shell: string;
