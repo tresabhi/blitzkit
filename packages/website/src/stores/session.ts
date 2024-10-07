@@ -1,5 +1,5 @@
-import { IndividualTankStats, Region, Stat } from '@blitzkit/core';
-import lodash from 'lodash-es';
+import type { IndividualTankStats, Region, Stat } from '@blitzkit/core';
+import { merge } from 'lodash-es';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { createContextualStore } from '../core/zustand/createContextualStore';
@@ -24,15 +24,14 @@ interface SessionNotTracking extends SessionBase {
 
 type Session = SessionTracking | SessionNotTracking;
 
-export const { Provider, use, useMutation, useStore } = createContextualStore(
-  () =>
-    create<Session>()(
-      persist(
-        (set) => ({
-          columns: ['battles', 'winrate', 'wn8', 'averageDamage'],
-          tracking: false,
-        }),
-        { name: 'session-2', merge: (a, b) => lodash.merge(b, a) },
-      ),
+export const Session = createContextualStore(() =>
+  create<Session>()(
+    persist(
+      (set) => ({
+        columns: ['battles', 'winrate', 'wn8', 'averageDamage'],
+        tracking: false,
+      }),
+      { name: 'session-2', merge: (a, b) => merge(b, a) },
     ),
+  ),
 );

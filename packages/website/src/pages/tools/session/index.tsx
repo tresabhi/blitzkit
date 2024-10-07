@@ -1,12 +1,9 @@
 import {
-  AccountListWithServer,
-  IndividualAccountInfo,
-  IndividualTankStats,
   STAT_KEYS,
   STAT_NAMES,
-  Stat,
   UNLOCALIZED_REGION_NAMES_SHORT,
   deltaTankStats,
+  fetchAverageDefinitions,
   fetchTankDefinitions,
   generateStats,
   getAccountInfo,
@@ -15,6 +12,10 @@ import {
   prettifyStats,
   searchPlayersAcrossRegions,
   sumBlitzStarsStats,
+  type AccountListWithServer,
+  type IndividualAccountInfo,
+  type IndividualTankStats,
+  type Stat,
 } from '@blitzkit/core';
 import {
   ArrowDownIcon,
@@ -29,22 +30,29 @@ import {
   Heading,
   IconButton,
   Select,
-  Spinner,
   Table,
   Text,
   TextField,
 } from '@radix-ui/themes';
 import { debounce } from 'lodash-es';
-import { use, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import usePromise from 'react-promise-suspense';
+import { PageWrapper } from '../../../components/PageWrapper';
+import { TankRowHeaderCell } from '../../../components/TankRowHeaderCell';
+import { Session, type SessionTracking } from '../../../stores/session';
 
-const awaitedTankDefinitions = await fetchTankDefinitions();
+const tankDefinitions = await fetchTankDefinitions();
+const tankAverages = await fetchAverageDefinitions();
 
-export default function Page({
-  searchParams,
-}: {
-  searchParams: { id?: string };
-}) {
-  const [loaded, setLoaded] = useState(false);
+export function Page() {
+  return (
+    <Session.Provider>
+      <Content />
+    </Session.Provider>
+  );
+}
+
+function Content() {
   const [showSearch, setShowSearch] = useState(false);
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<AccountListWithServer>([]);
@@ -56,27 +64,26 @@ export default function Page({
   const [tankStatsB, setTankStatsB] = useState<IndividualTankStats[] | null>(
     null,
   );
-  const accountInfoPromise = useMemo(
-    () =>
+  const accountInfo = usePromise(
+    (id?: number) =>
       new Promise<IndividualAccountInfo | null>(async (resolve) => {
+        if (!id) return resolve(null);
+
         resolve(
-          session.tracking
-            ? await getAccountInfo(session.player.region, session.player.id)
-            : null,
+          session.tracking ? await getAccountInfo(idToRegion(id), id) : null,
         );
       }),
-    [session.tracking && session.player.id],
+    [session.tracking ? session.player.id : undefined],
   );
-  const accountInfo = use(accountInfoPromise);
   const delta = useMemo(
     () =>
       session.tracking && tankStatsB
         ? deltaTankStats(session.player.stats, tankStatsB)
             .sort((a, b) => b.last_battle_time - a.last_battle_time)
             .map((entry) => {
-              const tank = awaitedTankDefinitions[entry.tank_id];
-              const average = awaitedTankAvearges[tank.id];
-              const stats = generateStats(entry.all, average?.all);
+              const tank = tankDefinitions.tanks[entry.tank_id];
+              const average = tankAverages.averages[tank.id];
+              const stats = generateStats(entry.all, average.mu);
               const statsPretty = prettifyStats(stats);
 
               return {
@@ -119,7 +126,7 @@ export default function Page({
       if (!input.current) return;
 
       draft.tracking = true;
-      (draft as Session.SessionTracking).player = {
+      (draft as SessionTracking).player = {
         id,
         region,
         since: Date.now(),
@@ -147,22 +154,6 @@ export default function Page({
     return () => clearInterval(interval);
   }, [session.tracking && session.player.id]);
 
-  useEffect(() => {
-    setLoaded(true);
-
-    if (searchParams.id && !session.tracking) {
-      track(Number(searchParams.id));
-    }
-  }, []);
-
-  if (!loaded) {
-    return (
-      <PageWrapper align="center" justify="center">
-        <Spinner />
-      </PageWrapper>
-    );
-  }
-
   return (
     <PageWrapper color="blue">
       <AlertDialog.Root
@@ -186,39 +177,6 @@ export default function Page({
           </Flex>
         </AlertDialog.Content>
       </AlertDialog.Root>
-
-      {searchParams.id &&
-        session.tracking &&
-        Number(searchParams.id) !== session.player.id && (
-          <AlertDialog.Root
-            open={showLinkOverridePrompt}
-            onOpenChange={setShowLinkOverridePrompt}
-          >
-            <AlertDialog.Content>
-              <AlertDialog.Title>
-                You are currently tracking {accountInfo?.nickname}
-              </AlertDialog.Title>
-              <AlertDialog.Description>
-                Would you like to stop tracking {accountInfo?.nickname} and
-                start tracking a new player?
-              </AlertDialog.Description>
-
-              <Flex mt="4" justify="end">
-                <AlertDialog.Action>
-                  <Button
-                    variant="solid"
-                    onClick={() => {
-                      setShowLinkOverridePrompt(false);
-                      track(Number(searchParams.id));
-                    }}
-                  >
-                    Proceed
-                  </Button>
-                </AlertDialog.Action>
-              </Flex>
-            </AlertDialog.Content>
-          </AlertDialog.Root>
-        )}
 
       {!session.tracking && (
         <Flex
@@ -325,7 +283,7 @@ export default function Page({
                 }
 
                 mutateSession((draft) => {
-                  (draft as Session.SessionTracking).player.stats = stats;
+                  (draft as SessionTracking).player.stats = stats;
                 });
               }}
             >
@@ -383,9 +341,9 @@ export default function Page({
                             key={key}
                             onClick={() => {
                               mutateSession((draft) => {
-                                (
-                                  draft as Session.SessionTracking
-                                ).columns.unshift(key as Stat);
+                                (draft as SessionTracking).columns.unshift(
+                                  key as Stat,
+                                );
                               });
                             }}
                           >
@@ -401,12 +359,9 @@ export default function Page({
                     onValueChange={(value) => {
                       mutateSession((draft) => {
                         if (value === 'remove') {
-                          (draft as Session.SessionTracking).columns.splice(
-                            index,
-                            1,
-                          );
+                          (draft as SessionTracking).columns.splice(index, 1);
                         } else {
-                          (draft as Session.SessionTracking).columns[index] =
+                          (draft as SessionTracking).columns[index] =
                             value as Stat;
                         }
                       });
