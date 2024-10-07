@@ -33,19 +33,19 @@ export const tankopediaTool: Tool = {
   branches: ['main', 'dev', 'opentest'],
 };
 
-export const ratingTool: Tool = {
-  id: 'rating',
-  title: 'Rating',
-  description: 'Full rating leaderboard',
-  pageDescription:
-    'Live and archived full rating leaderboard for World of Tanks Blitz',
-  image: 'WEyMZH3',
-  button: {
-    text: 'View leaderboard',
-    color: 'orange',
-  },
-  branches: ['main', 'dev'],
-};
+// export const ratingTool: Tool = {
+//   id: 'rating',
+//   title: 'Rating',
+//   description: 'Full rating leaderboard',
+//   pageDescription:
+//     'Live and archived full rating leaderboard for World of Tanks Blitz',
+//   image: 'WEyMZH3',
+//   button: {
+//     text: 'View leaderboard',
+//     color: 'orange',
+//   },
+//   branches: ['main', 'dev'],
+// };
 
 export const compareTool: Tool = {
   id: 'compare',
@@ -156,5 +156,5 @@ export const TOOLS: Tool[] = [
   tankPerformanceTool,
   sessionTool,
   embedTool,
-  ratingTool,
+  // ratingTool,
 ];

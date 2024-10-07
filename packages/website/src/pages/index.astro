@@ -1,5 +1,5 @@
 ---
-import { Flex, Heading } from '@radix-ui/themes';
+import { Box, Flex, Heading } from '@radix-ui/themes';
 import HomeHero from '../components/HomeHero.astro';
 import { Plugs } from '../components/Plugs.tsx';
 import ToolCard from '../components/ToolCard.astro';
@@ -7,7 +7,6 @@ import {
   compareTool,
   discordTool,
   moreTool,
-  ratingTool,
   sessionTool,
   tankopediaTool,
   tankPerformanceTool,
@@ -41,7 +40,8 @@ import RootLayout from '../layouts/RootLayout.astro';
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={sessionTool} />
         {/* <ToolCard tool={embedTool} /> */}
-        <ToolCard tool={ratingTool} />
+        <!-- <ToolCard tool={ratingTool} /> -->
+        <ToolCard tool={discordTool} />
       </Flex>
 
       <!-- {
@@ -59,8 +59,8 @@ import RootLayout from '../layouts/RootLayout.astro';
       } -->
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
-        <ToolCard tool={discordTool} />
         <ToolCard tool={moreTool} />
+        <Box flexGrow="1" />
       </Flex>
 
       <!-- {!exempt && <AdMidSectionResponsive />} -->
