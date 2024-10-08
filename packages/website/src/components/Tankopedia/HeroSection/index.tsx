@@ -89,7 +89,7 @@ export function HeroSection() {
             color="gray"
             size="3"
             weight="light"
-            ml={{ initial: '0', md: '9' }}
+            ml={{ initial: '0', md: '7', lg: '9' }}
           >
             BlitzKit Tankopedia
           </Text>
