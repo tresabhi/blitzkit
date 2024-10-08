@@ -176,7 +176,7 @@ export function CompareTable({ stats }: CompareTableProps) {
                 provisionDefinitions,
               );
               const consumablesList = Object.values(
-                consumableDefinitions,
+                consumableDefinitions.consumables,
               ).filter((consumable) =>
                 checkConsumableProvisionInclusivity(consumable, tank, gun),
               );
@@ -336,7 +336,6 @@ export function CompareTable({ stats }: CompareTableProps) {
                               });
                             }}
                           />
-
                           <Flex justify="end" mt="4">
                             <Button
                               variant="ghost"
