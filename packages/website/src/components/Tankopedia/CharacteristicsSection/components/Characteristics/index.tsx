@@ -398,15 +398,6 @@ export function Characteristics() {
           >
             {stats.dispersionGunDamaged}
           </InfoWithDelta>
-          <InfoWithDelta
-            decimals={3}
-            indent
-            name="Maximum"
-            unit="m"
-            deltaType="lowerIsBetter"
-          >
-            {stats.maxDispersion}
-          </InfoWithDelta>
           <Info name="Gun flexibility" unit="°" />
           <InfoWithDelta decimals={1} indent name="Depression">
             {stats.gunDepression}

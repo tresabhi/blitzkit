@@ -206,14 +206,6 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
-          name="maximum"
-          indent
-          value="maxDispersion"
-          deltaType="lowerIsBetter"
-          decimals={3}
-        />
-        <CompareRow
-          stats={stats}
           name="Gun depression"
           value="gunDepression"
           decimals={1}
