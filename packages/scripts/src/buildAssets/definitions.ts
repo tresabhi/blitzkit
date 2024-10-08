@@ -46,12 +46,12 @@ import { TankParameters } from './tankIcons';
 function parseResearchCost(raw: number | string) {
   if (typeof raw === 'number') {
     return {
-      researchCostType: { $case: 'xp', value: raw },
+      research_cost_type: { $case: 'xp', value: raw },
     } satisfies ResearchCost;
   } else {
     return {
-      researchCostType: {
-        $case: 'seasonalTokens',
+      research_cost_type: {
+        $case: 'seasonal_tokens',
         value: {
           season: Number(/prx_season_(\d+):\d+/.exec(raw)![1]),
           tokens: Number(/prx_season_\d+:(\d+)/.exec(raw)![1]),
@@ -668,8 +668,8 @@ export async function definitions() {
     camouflageDefinitions.camouflages[camo.id] = {
       id: camo.id,
       name: strings[camo.userString],
-      tankName: resolvedTankName,
-      tankNameFull: resolvedTankNameFull,
+      tank_name: resolvedTankName,
+      tank_name_full: resolvedTankNameFull,
     };
   });
 
@@ -867,35 +867,35 @@ export async function definitions() {
           camouflages: camouflages,
           description:
             wargamingTankopedia.data[tankId]?.description ?? undefined,
-          fixedCamouflage: fixedCamouflage,
+          fixed_camouflage: fixedCamouflage,
           crew,
           weight: tankDefinition.root.hull.weight,
           health: tankDefinition.root.hull.maxHealth,
-          speedForwards: tankDefinition.root.speedLimits.forward,
-          speedBackwards: tankDefinition.root.speedLimits.backward,
-          equipmentPreset:
+          speed_forwards: tankDefinition.root.speedLimits.forward,
+          speed_backwards: tankDefinition.root.speedLimits.backward,
+          equipment_preset:
             typeof equipment === 'string' ? equipment : equipment.at(-1)!,
-          maxConsumables: tankDefinition.root.consumableSlots,
-          maxProvisions: tankDefinition.root.provisionSlots,
+          max_consumables: tankDefinition.root.consumableSlots,
+          max_provisions: tankDefinition.root.provisionSlots,
           name:
             (tank.shortUserString
               ? strings[tank.shortUserString]
               : undefined) ?? strings[tank.userString],
-          nameFull: strings[tank.userString],
+          name_full: strings[tank.userString],
           nation,
           type: tankTags.includes('collectible')
             ? TankType.COLLECTOR
             : (typeof tank.price === 'number' ? false : 'gold' in tank.price)
               ? TankType.PREMIUM
               : TankType.RESEARCHABLE,
-          tier: tank.level as Tier,
+          tier: (tank.level - 1) as Tier,
           class: blitzTankClassToBlitzkit[tankTags[0] as BlitzTankClass],
           testing: tankTags.includes('testTank'),
           deprecated: tankTags.includes('deprecated'),
           price: tankPrice,
-          camouflageStill: tankDefinition.root.invisibility.still,
-          camouflageMoving: tankDefinition.root.invisibility.moving,
-          camouflageOnFire: tankDefinition.root.invisibility.firePenalty,
+          camouflage_still: tankDefinition.root.invisibility.still,
+          camouflage_moving: tankDefinition.root.invisibility.moving,
+          camouflage_onFire: tankDefinition.root.invisibility.firePenalty,
           turrets: [],
           engines: [],
           tracks: [],
@@ -919,22 +919,23 @@ export async function definitions() {
 
         if (
           tankDefinitions.tanks[tankId].name ===
-          tankDefinitions.tanks[tankId].nameFull
+          tankDefinitions.tanks[tankId].name_full
         ) {
-          delete tankDefinitions.tanks[tankId].nameFull;
+          delete tankDefinitions.tanks[tankId].name_full;
         }
 
         modelDefinitions.models[tankId] = {
           armor: hullArmor,
-          turretOrigin: vector3TupleToBlitzkit(turretOrigin),
-          initialTurretRotation: tankDefinition.root.hull.turretInitialRotation
+          turret_origin: vector3TupleToBlitzkit(turretOrigin),
+          initial_turret_rotation: tankDefinition.root.hull
+            .turretInitialRotation
             ? {
                 yaw: tankDefinition.root.hull.turretInitialRotation.yaw,
                 pitch: tankDefinition.root.hull.turretInitialRotation.pitch,
                 roll: tankDefinition.root.hull.turretInitialRotation.roll,
               }
             : undefined,
-          boundingBox: {
+          bounding_box: {
             min: vector3TupleToBlitzkit(tankParameters.collision.hull.bbox.min),
             max: vector3TupleToBlitzkit(tankParameters.collision.hull.bbox.max),
           },
@@ -958,13 +959,13 @@ export async function definitions() {
             id: trackId,
             weight: track.weight,
             name: strings[track.userString],
-            traverseSpeed: track.rotationSpeed,
-            dispersionMove: track.shotDispersionFactors.vehicleMovement,
-            dispersionTraverse: track.shotDispersionFactors.vehicleRotation,
-            resistanceHard: terrainResistances[0],
-            resistanceMedium: terrainResistances[1],
-            resistanceSoft: terrainResistances[2],
-            tier: track.level as Tier,
+            traverse_speed: track.rotationSpeed,
+            dispersion_move: track.shotDispersionFactors.vehicleMovement,
+            dispersion_traverse: track.shotDispersionFactors.vehicleRotation,
+            resistance_hard: terrainResistances[0],
+            resistance_medium: terrainResistances[1],
+            resistance_soft: terrainResistances[2],
+            tier: (track.level - 1) as Tier,
             unlocks: resolveUnlocks(track.unlocks),
           });
 
@@ -986,8 +987,8 @@ export async function definitions() {
           tankDefinitions.tanks[tankId].engines.push({
             id: engineId,
             name: strings[engineListEntry.userString],
-            fireChance: engineListEntry.fireStartingChance,
-            tier: engineListEntry.level as Tier,
+            fire_chance: engineListEntry.fireStartingChance,
+            tier: (engineListEntry.level - 1) as Tier,
             weight: engineListEntry.weight,
             power: engineListEntry.power,
             unlocks: resolveUnlocks(engine.unlocks),
@@ -1041,30 +1042,30 @@ export async function definitions() {
 
             tankDefinitions.tanks[tankId].turrets.push({
               id: turretId,
-              traverseSpeed: turret.rotationSpeed,
+              traverse_speed: turret.rotationSpeed,
               name:
                 strings[turret.userString] ??
                 turretKey
                   .replaceAll('_', ' ')
                   .replace(/^(Turret ([0-9] )?)+/, ''),
-              tier: turret.level as Tier,
+              tier: (turret.level - 1) as Tier,
               guns: [],
               health: turret.maxHealth,
-              viewRange: turret.circularVisionRadius,
+              view_range: turret.circularVisionRadius,
               weight: turret.weight,
               unlocks: resolveUnlocks(turret.unlocks),
             });
 
             modelDefinitions.models[tankId].turrets[turretId] = {
               armor: turretArmor,
-              gunOrigin: vector3TupleToBlitzkit(gunOrigin),
-              modelId: turretModel,
+              gun_origin: vector3TupleToBlitzkit(gunOrigin),
+              model_id: turretModel,
               yaw:
                 -turretYaw[0] + turretYaw[1] === 360
                   ? undefined
                   : { min: turretYaw[0], max: turretYaw[1] },
               guns: {},
-              boundingBox: {
+              bounding_box: {
                 min: vector3TupleToBlitzkit(
                   tankParameters.collision[
                     parsePath(
@@ -1157,25 +1158,25 @@ export async function definitions() {
               const base = {
                 id: gunId,
                 weight: gunListEntry.weight,
-                rotationSpeed: gunListEntry.rotationSpeed,
+                rotation_speed: gunListEntry.rotationSpeed,
                 name: gunName,
-                tier: gunListEntry.level as Tier,
+                tier: (gunListEntry.level - 1) as Tier,
                 shells: [],
-                camouflageLoss:
+                camouflage_loss:
                   typeof gun.invisibilityFactorAtShot === 'number'
                     ? gun.invisibilityFactorAtShot
                     : gun.invisibilityFactorAtShot.at(-1)!,
-                aimTime: gun.aimingTime ?? gunListEntry.aimingTime,
-                dispersionBase:
+                aim_time: gun.aimingTime ?? gunListEntry.aimingTime,
+                dispersion_base:
                   gun.shotDispersionRadius ?? gunListEntry.shotDispersionRadius,
-                dispersionDamaged: shotDispersionFactors.whileGunDamaged,
-                dispersionShot: shotDispersionFactors.afterShot,
-                dispersionTraverse: shotDispersionFactors.turretRotation,
+                dispersion_damaged: shotDispersionFactors.whileGunDamaged,
+                dispersion_shot: shotDispersionFactors.afterShot,
+                dispersion_traverse: shotDispersionFactors.turretRotation,
                 unlocks: resolveUnlocks(gun.unlocks),
               } satisfies GunDefinitionBase;
 
               tankDefinitions.tanks[tankId].turrets[turretIndex].guns.push({
-                gunType:
+                gun_type:
                   gunType === 'regular'
                     ? {
                         $case: 'regular',
@@ -1186,26 +1187,26 @@ export async function definitions() {
                       }
                     : gunType === 'autoReloader'
                       ? {
-                          $case: 'autoReloader',
+                          $case: 'auto_reloader',
                           value: {
                             base,
                             extension: {
-                              intraClip: 60 / gun.clip!.rate,
-                              shellCount: gunClipCount,
-                              shellReloads: gun
+                              intra_clip: 60 / gun.clip!.rate,
+                              shell_count: gunClipCount,
+                              shell_reloads: gun
                                 .pumpGunReloadTimes!.split(' ')
                                 .map(Number),
                             },
                           },
                         }
                       : {
-                          $case: 'autoLoader',
+                          $case: 'auto_loader',
                           value: {
                             base,
                             extension: {
-                              intraClip: 60 / gun.clip!.rate,
-                              clipReload: gun.reloadTime,
-                              shellCount: gunClipCount,
+                              intra_clip: 60 / gun.clip!.rate,
+                              clip_reload: gun.reloadTime,
+                              shell_count: gunClipCount,
                             },
                           },
                         },
@@ -1213,7 +1214,7 @@ export async function definitions() {
 
               modelDefinitions.models[tankId].turrets[turretId].guns[gunId] = {
                 armor: gunArmor,
-                modelId: gunModel,
+                model_id: gunModel,
                 mask,
                 thickness:
                   gun.armor.gun === undefined
@@ -1256,17 +1257,17 @@ export async function definitions() {
 
                 tankDefinitions.tanks[tankId].turrets[turretIndex].guns[
                   gunIndex
-                ].gunType!.value.base.shells.push({
+                ].gun_type!.value.base.shells.push({
                   id: shellId,
                   name: shellName,
                   velocity: gunShellEntry.speed,
-                  armorDamage: shell.damage.armor,
-                  moduleDamage: shell.damage.devices,
+                  armor_damage: shell.damage.armor,
+                  module_damage: shell.damage.devices,
                   caliber: shell.caliber,
                   normalization: shell.normalizationAngle,
                   ricochet: shell.ricochetAngle,
                   type: blitzShellKindToBlitzkit[shell.kind],
-                  explosionRadius:
+                  explosion_radius:
                     shell.kind === 'HIGH_EXPLOSIVE'
                       ? (shell.explosionRadius ?? 0)
                       : undefined,
@@ -1341,11 +1342,11 @@ export async function definitions() {
 
         Object.values(tankDefinitions.tanks[tankId].turrets).forEach(
           (turret) => {
-            turret.researchCost = turretXps.get(turret.id);
+            turret.research_cost = turretXps.get(turret.id);
 
             Object.values(turret.guns).forEach((gunRaw) => {
-              gunRaw.gunType!.value.base.researchCost = gunXps.get(
-                gunRaw.gunType!.value.base.id,
+              gunRaw.gun_type!.value.base.research_cost = gunXps.get(
+                gunRaw.gun_type!.value.base.id,
               );
             });
           },
@@ -1353,19 +1354,19 @@ export async function definitions() {
 
         Object.values(tankDefinitions.tanks[tankId].engines).forEach(
           (engine) => {
-            engine.researchCost = engineXps.get(engine.id);
+            engine.research_cost = engineXps.get(engine.id);
           },
         );
 
         Object.values(tankDefinitions.tanks[tankId].tracks).forEach((track) => {
-          track.researchCost = trackXps.get(track.id);
+          track.research_cost = trackXps.get(track.id);
         });
       }
     }),
   );
 
   Object.values(tankDefinitions.tanks).forEach((tank) => {
-    tank.researchCost = tankXps.get(tank.id);
+    tank.research_cost = tankXps.get(tank.id);
   });
 
   Object.values(tankDefinitions.tanks).forEach((tank) => {
@@ -1411,7 +1412,7 @@ export async function definitions() {
 
     const entry: Consumable = {
       id: consumable.id,
-      gameModeExclusive: 'gameModeFilter' in consumable,
+      game_mode_exclusive: 'gameModeFilter' in consumable,
       cooldown: consumable.script.cooldown,
       duration: consumable.script.duration,
       name:
@@ -1426,20 +1427,20 @@ export async function definitions() {
     const includeRaw = consumable.vehicleFilter?.include.vehicle;
     const excludeRaw = consumable.vehicleFilter?.exclude?.vehicle;
 
-    if (!entry.gameModeExclusive) {
+    if (!entry.game_mode_exclusive) {
       if (includeRaw) {
         entry.include = [];
 
         if ('minLevel' in includeRaw) {
           entry.include.push({
-            filterType: {
+            filter_type: {
               $case: 'tiers',
               value: { min: includeRaw.minLevel, max: includeRaw.maxLevel },
             },
           });
         } else if ('name' in includeRaw) {
           entry.include.push({
-            filterType: {
+            filter_type: {
               $case: 'ids',
               value: {
                 ids: includeRaw.name.split(/ +/).map((key) => {
@@ -1452,7 +1453,7 @@ export async function definitions() {
 
         if (consumable.vehicleFilter?.include.nations) {
           entry.include.push({
-            filterType: {
+            filter_type: {
               $case: 'nations',
               value: {
                 nations: consumable.vehicleFilter.include.nations.split(' '),
@@ -1467,7 +1468,7 @@ export async function definitions() {
 
         if ('name' in excludeRaw) {
           entry.exclude!.push({
-            filterType: {
+            filter_type: {
               $case: 'ids',
               value: {
                 ids: excludeRaw.name.split(/ +/).map((key) => {
@@ -1478,7 +1479,7 @@ export async function definitions() {
           });
         } else if ('extendedTags' in excludeRaw) {
           entry.exclude!.push({
-            filterType: {
+            filter_type: {
               $case: 'categories',
               value: {
                 categories: excludeRaw.extendedTags
@@ -1496,7 +1497,7 @@ export async function definitions() {
 
         if (consumable.vehicleFilter?.exclude?.nations) {
           entry.exclude!.push({
-            filterType: {
+            filter_type: {
               $case: 'nations',
               value: {
                 nations: consumable.vehicleFilter.exclude.nations.split(' '),
@@ -1515,7 +1516,7 @@ export async function definitions() {
       id: provision.id,
       exclude: [],
       include: [],
-      gameModeExclusive: 'gameModeFilter' in provision,
+      game_mode_exclusive: 'gameModeFilter' in provision,
       name:
         strings[provision.userString] ??
         missingStrings[provision.userString] ??
@@ -1526,13 +1527,13 @@ export async function definitions() {
     const includeRaw = provision.vehicleFilter?.include.vehicle;
     const excludeRaw = provision.vehicleFilter?.exclude?.vehicle;
 
-    if (!entry.gameModeExclusive) {
+    if (!entry.game_mode_exclusive) {
       if (includeRaw) {
         entry.include = [];
 
         if ('minLevel' in includeRaw) {
           entry.include.push({
-            filterType: {
+            filter_type: {
               $case: 'tiers',
               value: {
                 min: includeRaw.minLevel,
@@ -1542,7 +1543,7 @@ export async function definitions() {
           });
         } else if ('name' in includeRaw) {
           entry.include.push({
-            filterType: {
+            filter_type: {
               $case: 'ids',
               value: {
                 ids: includeRaw.name.split(/ +/).map((key) => {
@@ -1555,7 +1556,7 @@ export async function definitions() {
 
         if (provision.vehicleFilter?.include.nations) {
           entry.include.push({
-            filterType: {
+            filter_type: {
               $case: 'nations',
               value: {
                 nations: provision.vehicleFilter.include.nations.split(' '),
@@ -1570,7 +1571,7 @@ export async function definitions() {
 
         if ('name' in excludeRaw) {
           entry.exclude!.push({
-            filterType: {
+            filter_type: {
               $case: 'ids',
               value: {
                 ids: excludeRaw.name
@@ -1581,7 +1582,7 @@ export async function definitions() {
           });
         } else if ('extendedTags' in excludeRaw) {
           entry.exclude!.push({
-            filterType: {
+            filter_type: {
               $case: 'categories',
               value: {
                 categories: excludeRaw.extendedTags
@@ -1599,7 +1600,7 @@ export async function definitions() {
 
         if (provision.vehicleFilter?.exclude?.nations) {
           entry.exclude!.push({
-            filterType: {
+            filter_type: {
               $case: 'nations',
               value: {
                 nations: provision.vehicleFilter.exclude.nations.split(' '),
