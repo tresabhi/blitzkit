@@ -6,7 +6,15 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   integrations: [react()],
-  vite: { plugins: [vanillaExtractPlugin()] },
+  vite: {
+    plugins: [vanillaExtractPlugin()],
+    resolve: {
+      alias: {
+        '.prisma/client/index-browser':
+          '../../node_modules/.prisma/client/index-browser.js',
+      },
+    },
+  },
 
   devToolbar: { enabled: false },
   outDir: '../../dist/website',
