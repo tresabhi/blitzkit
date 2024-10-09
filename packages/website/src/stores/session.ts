@@ -27,7 +27,7 @@ type Session = SessionTracking | SessionNotTracking;
 export const Session = createContextualStore(() =>
   create<Session>()(
     persist(
-      (set) => ({
+      (_) => ({
         columns: ['battles', 'winrate', 'wn8', 'averageDamage'],
         tracking: false,
       }),

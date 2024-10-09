@@ -174,10 +174,6 @@ export function tankCharacteristics(
     [hasSupercharger, 0.35],
     [hasImprovedGunPowder, 0.3],
   );
-  const penetrationLossOverDistanceCoefficient = coefficient([
-    hasSupercharger,
-    -0.6,
-  ]);
   const aimTimeCoefficient =
     coefficient(
       [hasEnhancedGunLayingDrive, -0.15],

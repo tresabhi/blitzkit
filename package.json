@@ -24,7 +24,7 @@
     "start:website": "bun --filter=@blitzkit/website run start",
     "host:docs": "vitepress preview docs",
     "lint": "tsc",
-    "lint:website": "next lint",
+    "lint:website": "bun --filter=@blitzkit/website run lint",
     "format": "prettier --write \"**/*.@(json|js|jsx|css|md|ts|tsx|html|xml|yml|gltf)\"",
     "update": "yarn upgrade --latest",
     "tunnel": "cloudflared tunnel --url http://localhost:3000",

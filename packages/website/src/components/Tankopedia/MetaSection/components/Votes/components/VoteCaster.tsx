@@ -9,7 +9,6 @@ import {
   Text,
 } from '@radix-ui/themes';
 import { useState } from 'react';
-import { App } from '../../../../../../stores/app';
 import { Duel } from '../../../../../../stores/duel';
 import { $wargamingLogin } from '../../../../../../stores/wargamingLogin';
 import { Stars } from '../../Stars';
@@ -20,7 +19,6 @@ export function VoteCaster() {
   const [firepower, setFirepower] = useState<StarsInt | null>(null);
   const [maneuverability, setManeuverability] = useState<StarsInt | null>(null);
   const [survivability, setSurvivability] = useState<StarsInt | null>(null);
-  const appStore = App.useStore();
   // true = vote successful, false = vote failed, null = hide alert
   const [postVote, setPostVote] = useState<boolean | null>(null);
   // true = open, false = closed, null = casting

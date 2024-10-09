@@ -1,7 +1,6 @@
 import {
   STAT_KEYS,
   STAT_NAMES,
-  UNLOCALIZED_REGION_NAMES_SHORT,
   deltaTankStats,
   fetchAverageDefinitions,
   fetchTankDefinitions,
@@ -17,6 +16,7 @@ import {
   type IndividualTankStats,
   type Stat,
 } from '@blitzkit/core';
+import strings from '@blitzkit/core/lang/en-US.json';
 import {
   ArrowDownIcon,
   MagnifyingGlassIcon,
@@ -102,8 +102,6 @@ function Content() {
         : undefined,
     [delta],
   );
-  const [showLinkOverridePrompt, setShowLinkOverridePrompt] = useState(true);
-
   const search = debounce(async () => {
     if (!input.current) return;
 
@@ -242,7 +240,7 @@ function Content() {
                       onClick={() => track(player.account_id)}
                     >
                       {player.nickname} (
-                      {UNLOCALIZED_REGION_NAMES_SHORT[player.region]})
+                      {strings.common.regions.short[player.region]})
                     </Button>
                   ))}
                 </Flex>

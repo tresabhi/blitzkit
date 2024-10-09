@@ -32,9 +32,6 @@ export const TankModel = memo(() => {
     turretModelDefinition.guns[protagonist.gun.gun_type!.value.base.id];
   const { gltf } = useModel(protagonist.tank.id);
   const nodes = Object.values(gltf.nodes);
-  const isDynamicArmorActive = Duel.use((state) =>
-    state.protagonist.consumables.includes(73),
-  );
 
   useTankTransform(protagonist, turretContainer, gunContainer);
 
