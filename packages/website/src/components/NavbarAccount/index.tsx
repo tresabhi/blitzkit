@@ -1,5 +1,4 @@
 import { patreonLoginUrl } from '@blitzkit/core';
-import { useStore } from '@nanostores/react';
 import { PersonIcon } from '@radix-ui/react-icons';
 import {
   Button,
@@ -14,8 +13,6 @@ import {
 } from '@radix-ui/themes';
 import { Suspense } from 'react';
 import { App } from '../../stores/app';
-import { $patreonLogin } from '../../stores/patreonLogin';
-import { $wargamingLogin } from '../../stores/wargamingLogin';
 import { BlitzKitTheme } from '../BlitzKitTheme';
 import { PatreonIcon } from '../PatreonIcon';
 import { WargamingAccountName } from '../WargamingAccountName';
@@ -23,8 +20,16 @@ import { WargamingIcon } from '../WargamingIcon';
 import { WargamingLoginButton } from '../WargamingLoginButton';
 
 export function NavbarAccount() {
-  const patreon = useStore($patreonLogin);
-  const wargaming = useStore($wargamingLogin);
+  return (
+    <App.Provider>
+      <Content />
+    </App.Provider>
+  );
+}
+
+function Content() {
+  const logins = App.use((state) => state.logins);
+  const mutateApp = App.useMutation();
 
   return (
     <App.Provider>
@@ -41,13 +46,13 @@ export function NavbarAccount() {
             width="320px"
             onOpenAutoFocus={(event) => event.preventDefault()}
           >
-            {(patreon.token || wargaming.token) && (
+            {(logins.patreon || logins.wargaming) && (
               <Flex direction="column" gap="2">
                 <Text align="center" color="gray">
                   Logged in accounts
                 </Text>
 
-                {patreon.token && (
+                {logins.patreon && (
                   <Flex align="center" gap="2" justify="center">
                     <PatreonIcon width={15} height={15} />
                     <Text>Patreon</Text>
@@ -55,7 +60,9 @@ export function NavbarAccount() {
                       color="red"
                       variant="ghost"
                       onClick={() => {
-                        $patreonLogin.setKey('token', undefined);
+                        mutateApp((draft) => {
+                          draft.logins.patreon = undefined;
+                        });
                       }}
                     >
                       Logout
@@ -63,7 +70,7 @@ export function NavbarAccount() {
                   </Flex>
                 )}
 
-                {wargaming.token && (
+                {logins.wargaming && (
                   <Flex align="center" gap="2" justify="center">
                     <WargamingIcon width={15} height={15} />
                     <Text>
@@ -77,7 +84,9 @@ export function NavbarAccount() {
                       color="red"
                       variant="ghost"
                       onClick={() => {
-                        $wargamingLogin.setKey('token', undefined);
+                        mutateApp((draft) => {
+                          draft.logins.wargaming = undefined;
+                        });
                       }}
                     >
                       Logout
@@ -87,19 +96,19 @@ export function NavbarAccount() {
               </Flex>
             )}
 
-            {!patreon.token !== !wargaming.token && (
+            {!logins.patreon !== !logins.wargaming && (
               <Inset side="x">
                 <Separator my="4" size="4" />
               </Inset>
             )}
 
-            {(!patreon.token || !wargaming.token) && (
+            {(!logins.patreon || !logins.wargaming) && (
               <Flex direction="column" gap="2">
                 <Text align="center" color="gray">
                   Log in with...
                 </Text>
 
-                {!patreon.token && (
+                {!logins.patreon && (
                   <Link style={{ width: '100%' }} href={patreonLoginUrl()}>
                     <Button style={{ width: '100%' }} color="tomato">
                       <PatreonIcon width={15} height={15} /> Patreon
@@ -107,7 +116,7 @@ export function NavbarAccount() {
                   </Link>
                 )}
 
-                {!wargaming.token && <WargamingLoginButton />}
+                {!logins.wargaming && <WargamingLoginButton />}
               </Flex>
             )}
           </Popover.Content>

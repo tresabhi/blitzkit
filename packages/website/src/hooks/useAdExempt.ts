@@ -1,16 +1,15 @@
-import { useStore } from '@nanostores/react';
 import { useEffect, useState } from 'react';
-import { $patreonLogin } from '../stores/patreonLogin';
+import { App } from '../stores/app';
 
 let cache: Record<string, boolean | Promise<boolean>> = {};
 
 export function useAdExempt() {
-  const patreon = useStore($patreonLogin);
+  const patreon = App.use((state) => state.logins.patreon);
   const [exempt, setExempt] = useState(false);
 
   useEffect(() => {
     (async () => {
-      if (!patreon.token) return setExempt(false);
+      if (!patreon) return setExempt(false);
 
       if (!(patreon.token in cache)) {
         cache[patreon.token] = new Promise<boolean>(async (resolve) => {

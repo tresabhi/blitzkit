@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { $patreonLogin } from '../../../stores/patreonLogin';
+import { App } from '../../../stores/app';
 import { $wargamingLogin } from '../../../stores/wargamingLogin';
 
 export const AUTH_PROVIDERS = ['wargaming', 'patreon'] as const;
@@ -25,6 +25,8 @@ interface AuthorizeProps {
 }
 
 export function Authorize({ provider }: AuthorizeProps) {
+  const mutateApp = App.useMutation();
+
   useEffect(() => {
     (async () => {
       const searchParams = new URLSearchParams(window.location.search);
@@ -56,10 +58,12 @@ export function Authorize({ provider }: AuthorizeProps) {
           );
           const data = (await response.json()) as PatreonAuthResponse;
 
-          $patreonLogin.set({
-            token: data.access_token,
-            refreshToken: data.refresh_token,
-            expires: `${Date.now() + data.expires_in * 1000}`,
+          mutateApp((draft) => {
+            draft.logins.patreon = {
+              token: data.access_token,
+              refreshToken: data.refresh_token,
+              expires: Date.now() + data.expires_in * 1000,
+            };
           });
 
           break;

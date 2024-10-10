@@ -1,7 +1,6 @@
 import {
   asset,
-  decodeProtobuf,
-  encodeProtobufToBase64,
+  encodePB64,
   Reviews,
   toUniqueId,
   Video,
@@ -27,13 +26,7 @@ console.log('Finding reviews...');
 
 const currentReviews = await fetch(asset('definitions/reviews.pb'))
   .then((response) => response.arrayBuffer())
-  .then((buffer) =>
-    decodeProtobuf<Reviews>(
-      'reviews',
-      'blitzkit.Reviews',
-      new Uint8Array(buffer),
-    ),
-  );
+  .then((buffer) => Reviews.decode(new Uint8Array(buffer)));
 const auth = await google.auth.getClient({
   scopes: ['https://www.googleapis.com/auth/youtube.readonly'],
 });
@@ -131,12 +124,10 @@ for (const tank of tanksSanitized) {
   }
 }
 
-const content = await encodeProtobufToBase64(
-  'reviews',
-  'blitzkit.Reviews',
-  reviews,
-);
-
 await commitAssets('reviews', [
-  { content, encoding: 'base64', path: 'definitions/reviews.pb' },
+  {
+    content: encodePB64(Reviews, reviews),
+    encoding: 'base64',
+    path: 'definitions/reviews.pb',
+  },
 ]);

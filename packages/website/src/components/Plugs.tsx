@@ -1,5 +1,4 @@
 import { assertSecret, patreonLoginUrl } from '@blitzkit/core';
-import { useStore } from '@nanostores/react';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import {
   Badge,
@@ -11,12 +10,20 @@ import {
   Text,
 } from '@radix-ui/themes';
 import { useAdExempt } from '../hooks/useAdExempt';
-import { $patreonLogin } from '../stores/patreonLogin';
+import { App } from '../stores/app';
 import { PatreonIcon } from './PatreonIcon';
 
 export function Plugs() {
+  return (
+    <App.Provider>
+      <Content />
+    </App.Provider>
+  );
+}
+
+function Content() {
   const exempt = useAdExempt();
-  const hasPatreon = useStore($patreonLogin).token !== undefined;
+  const hasPatreon = App.use((state) => state.logins.patreon !== undefined);
 
   return (
     <Flex

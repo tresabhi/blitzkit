@@ -9,11 +9,12 @@ import {
   Text,
 } from '@radix-ui/themes';
 import { useState } from 'react';
+import { App } from '../../../../../../stores/app';
 import { Duel } from '../../../../../../stores/duel';
-import { $wargamingLogin } from '../../../../../../stores/wargamingLogin';
 import { Stars } from '../../Stars';
 
 export function VoteCaster() {
+  const appStore = App.useStore();
   const tank = Duel.use((state) => state.protagonist.tank);
   const [easiness, setEasiness] = useState<StarsInt | null>(null);
   const [firepower, setFirepower] = useState<StarsInt | null>(null);
@@ -97,9 +98,9 @@ export function VoteCaster() {
                   survivability === null)
               }
               onClick={() => {
-                const wargaming = $wargamingLogin.get();
+                const { wargaming } = appStore.getState().logins;
 
-                if (!wargaming.token) {
+                if (!wargaming) {
                   return setShowDialogue(false);
                 }
 

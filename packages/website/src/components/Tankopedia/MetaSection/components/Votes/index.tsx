@@ -1,10 +1,9 @@
 import { formatCompact } from '@blitzkit/core';
-import { useStore } from '@nanostores/react';
 import { Flex, Heading, Skeleton, Text } from '@radix-ui/themes';
 import { memo } from 'react';
 import { useTankVotes } from '../../../../../hooks/useTankVotes';
+import { App } from '../../../../../stores/app';
 import { Duel } from '../../../../../stores/duel';
-import { $wargamingLogin } from '../../../../../stores/wargamingLogin';
 import { WargamingLoginButton } from '../../../../WargamingLoginButton';
 import { StarRow } from './components/StarRow';
 import { VoteCaster } from './components/VoteCaster';
@@ -13,7 +12,7 @@ export const Votes = memo(
   () => {
     const id = Duel.use((state) => state.protagonist.tank.id);
     const votes = useTankVotes(id);
-    const wargaming = useStore($wargamingLogin);
+    const wargaming = App.use((state) => state.logins.wargaming);
 
     return (
       <Flex direction="column" gap="3">

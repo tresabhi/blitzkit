@@ -27,7 +27,7 @@ export * from './modelDefinitions';
 export * from './normalizeBoundingBox';
 // export * from './parseBkni';
 // export * from './patientFetch';
-// export * from './patientFetchJSON';
+export * from './patientFetchJSON';
 export * from './progressiveStat';
 export * from './provisionDefinitions';
 export * from './resolveDpm';

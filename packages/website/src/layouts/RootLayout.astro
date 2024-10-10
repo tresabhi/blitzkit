@@ -1,6 +1,7 @@
 ---
 import { Flex } from '@radix-ui/themes';
 import { BlitzKitTheme } from '../components/BlitzKitTheme';
+import { Checks } from '../components/Checks';
 import Footer from '../components/Footer.astro';
 import Navbar from '../components/Navbar.astro';
 import Party3 from '../components/Party3.astro';
@@ -43,11 +44,9 @@ const isRoot = pathname === '/';
       <Flex direction="column" minHeight="100vh">
         <Navbar />
 
-        <!-- <Checks /> -->
+        <Checks client:only />
 
-        <!-- <Suspense fallback={(<PageLoader />)}> -->
         <slot />
-        <!-- </Suspense> -->
 
         <Footer />
       </Flex>
