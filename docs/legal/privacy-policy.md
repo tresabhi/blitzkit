@@ -205,4 +205,4 @@ You are advised to review this Privacy Policy periodically for any changes. Chan
 
 If you have any questions about this Privacy Policy, You can contact us:
 
-- By visiting this page on our website: [https://discord.gg/nDt7AjGJQH](https://discord.gg/nDt7AjGJQH)
+- By emailing blitzkriegautomation@gmail.com
