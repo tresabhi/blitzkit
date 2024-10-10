@@ -1,25 +1,26 @@
 import { Box, type BoxProps } from '@radix-ui/themes';
-import { useEffect } from 'react';
+import { uniqueId } from 'lodash-es';
+import { useEffect, useRef } from 'react';
 
 type AdProps = BoxProps & {};
 
 export function Ad({ ...props }: AdProps) {
-  const id = 'test';
+  const id = useRef(uniqueId('ad-'));
 
   useEffect(() => {
-    (window as any).nitroAds.createAd('test', {
-      demo: true,
+    (window as any).nitroAds.createAd(id.current, {
       refreshTime: 30,
-      renderVisibleOnly: false,
-      sizes: [],
+      demo: import.meta.env.MODE === 'development',
+      renderVisibleOnly: true,
+      delayLoading: true,
       report: {
-        enabled: true,
+        enabled: false,
         icon: true,
         wording: 'Report Ad',
         position: 'top-right',
       },
     });
-  }, [id]);
+  }, []);
 
-  return <Box id={id} {...props} />;
+  return <Box id={id.current} width="100%" {...props} />;
 }

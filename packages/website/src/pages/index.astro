@@ -24,12 +24,6 @@ import RootLayout from '../layouts/RootLayout.astro';
     <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">
       <ToolCard tool={tankopediaTool} />
 
-      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
-        {/* <ToolCard tool={playerStatsTool} /> */}
-        <ToolCard tool={compareTool} />
-        <ToolCard tool={tankPerformanceTool} />
-      </Flex>
-
       {
         (
           <Flex justify="center">
@@ -37,6 +31,12 @@ import RootLayout from '../layouts/RootLayout.astro';
           </Flex>
         )
       }
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        {/* <ToolCard tool={playerStatsTool} /> */}
+        <ToolCard tool={compareTool} />
+        <ToolCard tool={tankPerformanceTool} />
+      </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={sessionTool} />
