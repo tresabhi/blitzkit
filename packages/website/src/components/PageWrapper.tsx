@@ -1,5 +1,6 @@
 import { Flex, type FlexProps, Theme } from '@radix-ui/themes';
 import type { ComponentProps } from 'react';
+import { NAVBAR_HEIGHT } from '../constants/navbar';
 import type { RadixSize } from '../stores/embedState';
 import { BlitzKitTheme } from './BlitzKitTheme';
 
@@ -29,8 +30,8 @@ export function PageWrapper({
       style={{
         flex: noFlex1 ? undefined : 1,
         display: 'flex',
+        minHeight: `calc(100dvh - ${NAVBAR_HEIGHT}px)`,
         flexDirection: 'column',
-        minHeight: 'unset',
         ...containerProps?.style,
       }}
       {...containerProps}
