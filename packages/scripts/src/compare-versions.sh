@@ -1,1 +1,1 @@
-git diff HEAD^ HEAD -- packages/website/package.json | grep '"version"'
+git diff HEAD^ HEAD -- package.json | grep '"version"'
