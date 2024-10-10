@@ -10,8 +10,6 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.3",
-    "@astrojs/react": "^3.6.2",
     "@blitzkit/core": "workspace:*",
     "@nanostores/persistent": "^0.10.2",
     "@nanostores/react": "^0.7.3",
@@ -22,12 +20,10 @@
     "@react-three/fiber": "^8.17.6",
     "@vanilla-extract/css": "^1.15.5",
     "@vanilla-extract/dynamic": "^2.1.2",
-    "astro": "^4.15.6",
     "compare-versions": "^6.1.1",
     "immer": "^10.1.1",
     "markdown-to-jsx": "^7.5.0",
     "nanostores": "^0.11.3",
-    "purgecss": "^6.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-promise-suspense": "^0.3.4",
@@ -35,9 +31,13 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.3",
+    "@astrojs/react": "^3.6.2",
+    "@astrojs/vercel": "^7.8.1",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18",
     "@types/three": "^0.160.0",
     "@vanilla-extract/vite-plugin": "^4.0.15",
-    "@types/react-dom": "^18",
-    "@types/react": "^18.3.5"
+    "astro": "^4.15.6"
   }
 }

@@ -12,13 +12,13 @@
     "build:assets": "bun --filter=@blitzkit/scripts run build:assets",
     "build:averages": "bun --filter=@blitzkit/scripts run build:averages",
     "build:bot": "rm -rf dist/bot && mkdir -p dist/bot/prisma && bun build src/index.ts src/workers/bot.ts src/workers/render.ts --outdir dist/bot --target=bun --splitting --sourcemap=inline --external sharp && cp -R src/lang dist/bot/lang && prisma generate && cp prisma/schema.prisma dist/bot/prisma/schema.prisma && cp -R node_modules/prisma/*.node dist/bot/prisma && cd dist/bot && bun init -y && bun add sharp",
-    "build:website": "prisma generate && cd packages/website && bun run build && cd ../..",
+    "build:website": "prisma generate && cd packages/website && bun run build",
     "build:sitemap": "bun scripts/sitemap.ts",
     "build:docs": "vitepress build docs",
     "build:ratingleaderboard": "bun --script scripts/buildRatingLeaderboard.ts",
     "dev:bot": "bun build:bot && bun start:bot",
     "dev:docs": "vitepress dev docs",
-    "dev:website": "cd packages/website && bun run dev && cd ../..",
+    "dev:website": "cd packages/website && bun run dev",
     "dev:api": "bun --filter=@blitzkit/api run dev",
     "start:bot": "bun dist/bot/index.js",
     "start:website": "bun --filter=@blitzkit/website run start",
@@ -29,7 +29,8 @@
     "update": "yarn upgrade --latest",
     "tunnel": "cloudflared tunnel --url http://localhost:3000",
     "discoverids": "scripts/discoverIds.ts",
-    "build:protos": "bun packages/scripts/src/protos.ts"
+    "build:protos": "bun packages/scripts/src/protos.ts",
+    "preview:website": "cd packages/website && bun run preview"
   },
   "license": "MIT",
   "dependencies": {
