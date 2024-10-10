@@ -73,7 +73,7 @@ export function fetchBlitz<Data extends object>(
     queue.push({
       url: `https://api.wotblitz.${region}/wotb/${path}/?${Object.entries({
         application_id: assertSecret(
-          process.env.PUBLIC_WARGAMING_APPLICATION_ID,
+          import.meta.env.PUBLIC_WARGAMING_APPLICATION_ID,
         ),
         ...params,
       })

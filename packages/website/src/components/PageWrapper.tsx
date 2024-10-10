@@ -11,6 +11,7 @@ type PageWrapperProps = FlexProps & {
   containerProps?: ComponentProps<typeof Theme>;
   noFlex1?: boolean;
   padding?: RadixSize;
+  noMinHeight?: boolean;
 };
 
 export function PageWrapper({
@@ -21,6 +22,7 @@ export function PageWrapper({
   noMaxWidth = false,
   noFlex1 = false,
   containerProps,
+  noMinHeight = false,
   padding = '4',
   ...props
 }: PageWrapperProps) {
@@ -30,7 +32,7 @@ export function PageWrapper({
       style={{
         flex: noFlex1 ? undefined : 1,
         display: 'flex',
-        minHeight: `calc(100dvh - ${NAVBAR_HEIGHT}px)`,
+        minHeight: noMinHeight ? 'unset' : `calc(100dvh - ${NAVBAR_HEIGHT}px)`,
         flexDirection: 'column',
         ...containerProps?.style,
       }}
