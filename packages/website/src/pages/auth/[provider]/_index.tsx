@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { App } from '../../../stores/app';
-import { $wargamingLogin } from '../../../stores/wargamingLogin';
 
 export const AUTH_PROVIDERS = ['wargaming', 'patreon'] as const;
 
@@ -41,10 +40,12 @@ export function Authorize({ provider }: AuthorizeProps) {
             break;
           }
 
-          $wargamingLogin.set({
-            expires: `${Number(searchParams.get('expires_at')) * 1000}`,
-            token: searchParams.get('access_token')!,
-            id: searchParams.get('account_id')!,
+          mutateApp((draft) => {
+            draft.logins.wargaming = {
+              expires: Number(searchParams.get('expires_at')) * 1000,
+              token: searchParams.get('access_token')!,
+              id: Number(searchParams.get('account_id'))!,
+            };
           });
 
           break;
