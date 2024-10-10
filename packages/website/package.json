@@ -5,7 +5,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "lint": "astro check",
-    "build": "astro check && astro build",
+    "build": "astro check && prisma generate && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
