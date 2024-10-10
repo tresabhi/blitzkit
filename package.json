@@ -1,7 +1,7 @@
 {
   "name": "blitzkit",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.0.0-beta.2",
   "description": "🎉 Tools for everything World of Tanks Blitz",
   "type": "module",
   "types": "./types.d.ts",
