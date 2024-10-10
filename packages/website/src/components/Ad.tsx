@@ -1,71 +1,25 @@
-import { type BoxProps } from '@radix-ui/themes';
+import { Box, type BoxProps } from '@radix-ui/themes';
+import { useEffect } from 'react';
 
-export enum AdType {
-  MediumRectangleHorizontalPurple = 738182777,
-  LeaderboardHorizontalPurple = 84051521,
-  WideSkyscraperVerticalPurple = 1755617140,
-  HalfPageVerticalPurple = 880185176,
-}
+type AdProps = BoxProps & {};
 
-// const AD_DIMENSIONS: Record<AdType, Vector2Tuple> = {
-//   [AdType.MediumRectangleHorizontalPurple]: [300, 250],
-//   [AdType.LeaderboardHorizontalPurple]: [728, 90],
-//   [AdType.WideSkyscraperVerticalPurple]: [160, 600],
-//   [AdType.HalfPageVerticalPurple]: [300, 600],
-// };
+export function Ad({ ...props }: AdProps) {
+  const id = 'test';
 
-type AdProps = BoxProps & {
-  type: AdType;
-};
+  useEffect(() => {
+    (window as any).nitroAds.createAd('test', {
+      demo: true,
+      refreshTime: 30,
+      renderVisibleOnly: false,
+      sizes: [],
+      report: {
+        enabled: true,
+        icon: true,
+        wording: 'Report Ad',
+        position: 'top-right',
+      },
+    });
+  }, [id]);
 
-export function Ad({}: AdProps) {
-  return null;
-
-  // const id = useRef(uniqueId());
-  // const dimensions = AD_DIMENSIONS[type];
-
-  // useEffect(() => {
-  //   (window as any).msAdsQueue.push(function () {
-  //     (window as any).mmnow.render({
-  //       adUnitId: type,
-  //       elementId: `${type}-${id.current}`,
-  //     });
-  //   });
-  // }, [type]);
-
-  // return (
-  //   <Box
-  //     position="relative"
-  //     width={`${dimensions[0]}px`}
-  //     height={`${dimensions[1]}px`}
-  //     style={{
-  //       outline: '1px solid var(--gray-3)',
-  //       borderRadius: 'var(--radius-1)',
-  //       background: `url(${imgur('DK21EHY')})`,
-
-  //       ...style,
-  //     }}
-  //     {...props}
-  //   >
-  //     <Text
-  //       color="gray"
-  //       style={{
-  //         position: 'absolute',
-  //         top: '50%',
-  //         left: '50%',
-  //         transform: 'translate(-50%, -50%)',
-  //       }}
-  //       align="center"
-  //     >
-  //       Advertisement
-  //     </Text>
-
-  //     <Box
-  //       width={`${dimensions[0]}px`}
-  //       height={`${dimensions[1]}px`}
-  //       position="relative"
-  //       id={`${type}-${id.current}`}
-  //     />
-  //   </Box>
-  // );
+  return <Box id={id} {...props} />;
 }

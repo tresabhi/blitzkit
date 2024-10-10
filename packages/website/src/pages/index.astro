@@ -1,5 +1,6 @@
 ---
 import { Box, Flex, Heading } from '@radix-ui/themes';
+import { Ad } from '../components/Ad';
 import HomeHero from '../components/HomeHero.astro';
 import { Plugs } from '../components/Plugs.tsx';
 import ToolCard from '../components/ToolCard.astro';
@@ -29,13 +30,13 @@ import RootLayout from '../layouts/RootLayout.astro';
         <ToolCard tool={tankPerformanceTool} />
       </Flex>
 
-      <!-- {
-        !exempt && (
+      {
+        (
           <Flex justify="center">
-            <AdMidSectionResponsive />
+            <Ad client:only="react" />
           </Flex>
         )
-      } -->
+      }
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={sessionTool} />

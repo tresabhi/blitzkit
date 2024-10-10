@@ -1,3 +1,4 @@
+{/* google analytics */}
 <script
   is:inline
   async
@@ -11,3 +12,24 @@
   gtag('js', new Date());
   gtag('config', 'G-GL2JVHCGPQ');
 </script>
+
+{/* nitro ads */}
+<script data-cfasync="false" is:inline>
+  window.nitroAds = window.nitroAds || {
+    createAd: function () {
+      return new Promise((e) => {
+        window.nitroAds.queue.push(['createAd', arguments, e]);
+      });
+    },
+    addUserToken: function () {
+      window.nitroAds.queue.push(['addUserToken', arguments]);
+    },
+    queue: [],
+  };
+</script>
+<script
+  is:inline
+  data-cfasync="false"
+  async
+  src={`https://s.nitropay.com/ads-${import.meta.env.PUBLIC_NITROPAY_ID}.js`}
+></script>
