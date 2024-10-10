@@ -1,14 +1,13 @@
 import { Box, type BoxProps } from '@radix-ui/themes';
-import { uniqueId } from 'lodash-es';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
-type AdProps = BoxProps & {};
+type AdProps = BoxProps & {
+  id: string;
+};
 
-export function Ad({ ...props }: AdProps) {
-  const id = useRef(uniqueId('ad-'));
-
+export function Ad({ id, ...props }: AdProps) {
   useEffect(() => {
-    (window as any).nitroAds.createAd(id.current, {
+    (window as any).nitroAds.createAd(id, {
       refreshTime: 30,
       demo: import.meta.env.MODE === 'development',
       renderVisibleOnly: true,
@@ -22,5 +21,5 @@ export function Ad({ ...props }: AdProps) {
     });
   }, []);
 
-  return <Box id={id.current} width="100%" {...props} />;
+  return <Box id={id} width="100%" {...props} />;
 }

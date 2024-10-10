@@ -31,7 +31,6 @@ import { useEquipment } from '../../../../../hooks/useEquipment';
 import { useTankModelDefinition } from '../../../../../hooks/useTankModelDefinition';
 import { Duel } from '../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
-import { Ad, AdType } from '../../../../Ad';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
 
@@ -504,7 +503,8 @@ export function Characteristics() {
         </Flex>
       </Flex>
 
-      {!exempt && (
+      {/* AD TODO: */}
+      {/* {!exempt && (
         <Flex
           justify="center"
           display={{
@@ -514,7 +514,7 @@ export function Characteristics() {
         >
           <Ad type={AdType.MediumRectangleHorizontalPurple} />
         </Flex>
-      )}
+      )} */}
 
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
         <Flex direction="column" gap="2">

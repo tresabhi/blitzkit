@@ -24,13 +24,7 @@ import RootLayout from '../layouts/RootLayout.astro';
     <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">
       <ToolCard tool={tankopediaTool} />
 
-      {
-        (
-          <Flex justify="center">
-            <Ad client:only="react" />
-          </Flex>
-        )
-      }
+      <Ad client:only="react" id="ad-1" />
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         {/* <ToolCard tool={playerStatsTool} /> */}
@@ -41,34 +35,20 @@ import RootLayout from '../layouts/RootLayout.astro';
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={sessionTool} />
         {/* <ToolCard tool={embedTool} /> */}
-        <!-- <ToolCard tool={ratingTool} /> -->
+        {/* <ToolCard tool={ratingTool} /> */}
         <ToolCard tool={discordTool} />
       </Flex>
 
-      <!-- {
-        !exempt && (
-          <Flex
-            justify="center"
-            display={{
-              initial: 'flex',
-              md: 'none',
-            }}
-          >
-            <AdMidSectionResponsive />
-          </Flex>
-        )
-      } -->
+      <Ad client:only="react" id="ad-2" />
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={moreTool} />
         <Box flexGrow="1" />
       </Flex>
 
-      <!-- {!exempt && <AdMidSectionResponsive />} -->
+      <Heading align="center" mt="6">Other cool projects</Heading>
 
-      <Heading mt="6">Other cool projects</Heading>
-
-      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+      <Flex gap="4" mb="6" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard
           tool={{
             button: {
