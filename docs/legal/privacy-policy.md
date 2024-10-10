@@ -8,23 +8,6 @@ We use Your Personal data to provide and improve the Service. By using the Servi
 
 ## Interpretation and Definitions
 
-### California Consumer Privacy Act (CCPA)
-
-If you are a California resident, you have specific rights regarding your personal information under the California Consumer Privacy Act (CCPA). This section describes your CCPA rights and explains how to exercise those rights.
-
-#### Rights under CCPA
-
-Under CCPA, California residents have the following rights:
-
-1. Right to Know: You have the right to request that we disclose certain information to you about our collection and use of your personal information over the past 12 months.
-2. Right to Delete: You have the right to request that we delete any of your personal information that we collected from you and retained, subject to certain exceptions.
-3. Right to Opt-Out of Sale: You have the right to opt-out of the sale of your personal information. Note that we do not sell personal information as defined by the CCPA.
-4. Right to Non-Discrimination: You have the right not to be discriminated against for exercising any of your CCPA rights.
-
-#### Exercising Your CCPA Rights
-
-To exercise your rights under CCPA and to opt-out of the sale of your personal information, you can click on the "Do not sell my personal information" link in the footer of any page on our website.
-
 ### Interpretation
 
 The words of which the initial letter is capitalized have meanings defined under the following conditions. The following definitions shall have the same meaning regardless of whether they appear in singular or in plural.
@@ -146,6 +129,23 @@ Your information, including Personal Data, is processed at the Company's operati
 Your consent to this Privacy Policy followed by Your submission of such information represents Your agreement to that transfer.
 
 The Company will take all steps reasonably necessary to ensure that Your data is treated securely and in accordance with this Privacy Policy and no transfer of Your Personal Data will take place to an organization or a country unless there are adequate controls in place including the security of Your data and other personal information.
+
+### California Consumer Privacy Act (CCPA)
+
+If you are a California resident, you have specific rights regarding your personal information under the California Consumer Privacy Act (CCPA). This section describes your CCPA rights and explains how to exercise those rights.
+
+#### Rights under CCPA
+
+Under CCPA, California residents have the following rights:
+
+1. Right to Know: You have the right to request that we disclose certain information to you about our collection and use of your personal information over the past 12 months.
+2. Right to Delete: You have the right to request that we delete any of your personal information that we collected from you and retained, subject to certain exceptions.
+3. Right to Opt-Out of Sale: You have the right to opt-out of the sale of your personal information. Note that we do not sell personal information as defined by the CCPA.
+4. Right to Non-Discrimination: You have the right not to be discriminated against for exercising any of your CCPA rights.
+
+#### Exercising Your CCPA Rights
+
+To exercise your rights under CCPA and to opt-out of the sale of your personal information, you can click on the "Do not sell my personal information" link in the footer of any page on our website.
 
 ### Delete Your Personal Data
 
