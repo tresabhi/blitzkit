@@ -8,6 +8,7 @@ interface BlitzKitThemeProps extends ThemeProps {
 export function BlitzKitTheme({ children, ...props }: BlitzKitThemeProps) {
   return (
     <Theme
+      grayColor="mauve"
       style={{ minHeight: 'unset' }}
       appearance="dark"
       panelBackground="solid"

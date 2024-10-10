@@ -30,6 +30,7 @@ export function PageWrapper({
         flex: noFlex1 ? undefined : 1,
         display: 'flex',
         flexDirection: 'column',
+        minHeight: 'unset',
         ...containerProps?.style,
       }}
       {...containerProps}
