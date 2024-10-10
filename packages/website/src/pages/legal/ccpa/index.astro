@@ -1,0 +1,26 @@
+---
+import { Flex, Heading, Link, Text } from '@radix-ui/themes';
+import { PageWrapper } from '../../../components/PageWrapper';
+import RootLayout from '../../../layouts/RootLayout.astro';
+import { Options } from './_index';
+---
+
+<title>California Consumer Privacy Act (CCPA)</title>
+
+<RootLayout>
+  <PageWrapper justify="center">
+    <Flex direction="column">
+      <Heading>California Consumer Privacy Act (CCPA)</Heading>
+      <Text color="gray" mb="4">Do not sell my personal information</Text>
+      <Text>
+        If you are a resident of California, you have the right under the CCPA
+        to opt out of the sale of personal information to third parties. Use the
+        options below to exercise this right, and please review our <Link
+          href="/docs/legal/privacy-policy">privacy policy</Link
+        > for complete information on how your data is used and stored.
+      </Text>
+    </Flex>
+
+    <Options client:load />
+  </PageWrapper>
+</RootLayout>

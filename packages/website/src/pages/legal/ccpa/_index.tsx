@@ -1,9 +1,9 @@
-import { Flex, Switch, Text } from '@radix-ui/themes';
+import { RadioGroup } from '@radix-ui/themes';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import { App } from '../../../stores/app';
 
-export function Toggles() {
+export function Options() {
   return (
     <App.Provider>
       <Content />
@@ -27,9 +27,17 @@ function Content() {
   }, [doNotSell]);
 
   return (
-    <Flex gap="2" align="center">
-      <Text>Do not sell my personal information</Text>
-      <Switch checked={doNotSell} onCheckedChange={setDoNotSell} />
-    </Flex>
+    <RadioGroup.Root
+      value={`${doNotSell}`}
+      onValueChange={(value) => setDoNotSell(value === 'true')}
+    >
+      <RadioGroup.Item value="false">
+        My personal information may be used for the purposes defined in the
+        privacy policy.
+      </RadioGroup.Item>
+      <RadioGroup.Item value="true">
+        Do not sell my personal information.
+      </RadioGroup.Item>
+    </RadioGroup.Root>
   );
 }
