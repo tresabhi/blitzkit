@@ -23,7 +23,15 @@ interface AuthorizeProps {
   provider: AuthProvider;
 }
 
-export function Authorize({ provider }: AuthorizeProps) {
+export function Authorize(props: AuthorizeProps) {
+  return (
+    <App.Provider>
+      <Content {...props} />
+    </App.Provider>
+  );
+}
+
+function Content({ provider }: AuthorizeProps) {
   const mutateApp = App.useMutation();
 
   useEffect(() => {
