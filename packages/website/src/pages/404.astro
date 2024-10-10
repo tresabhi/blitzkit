@@ -1,0 +1,28 @@
+---
+import { DiscordLogoIcon, HomeIcon } from '@radix-ui/react-icons';
+import { Button, Flex, Heading, Link, Text } from '@radix-ui/themes';
+import { PageWrapper } from '../components/PageWrapper';
+import RootLayout from '../layouts/RootLayout.astro';
+---
+
+<RootLayout>
+  <PageWrapper>
+    <Flex direction="column" justify="center" align="center" flexGrow="1">
+      <Heading>404: page not found</Heading>
+      <Text color="gray">Where would you like to go?</Text>
+
+      <Flex mt="4" gap="2">
+        <Link href="/">
+          <Button>
+            <HomeIcon /> Home
+          </Button>
+        </Link>
+        <Link href="https://discord.gg/nDt7AjGJQH">
+          <Button variant="outline">
+            <DiscordLogoIcon /> Discord
+          </Button>
+        </Link>
+      </Flex>
+    </Flex>
+  </PageWrapper>
+</RootLayout>
