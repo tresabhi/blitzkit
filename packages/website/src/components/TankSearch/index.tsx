@@ -470,20 +470,26 @@ export const TankSearch = memo<TankSearchProps>(
           <>
             {tanks.length > 0 && (
               <TankCardWrapper>
-                {tanks.map((tank, index) => (
-                  <Fragment key={tank.id}>
-                    <TankCard onSelect={onSelect} tank={tank} />
+                {tanks.map((tank, index) => {
+                  const hasAd = (index + 16) % 32 === 0;
 
-                    {!exempt &&
-                      !compact &&
-                      (index + 16) % 32 === 0 &&
-                      index !== tanks.length - 1 && (
-                        <Box gridColumn="1 / -1">
-                          <Ad id={`ad-${index}`} />
-                        </Box>
-                      )}
-                  </Fragment>
-                ))}
+                  return (
+                    <Fragment key={tank.id}>
+                      <TankCard onSelect={onSelect} tank={tank} />
+
+                      {!exempt &&
+                        !compact &&
+                        hasAd &&
+                        index !== tanks.length - 1 && (
+                          <Box gridColumn="1 / -1">
+                            <Ad
+                              id={`tankopedia-search-ad-${Math.floor(index / 32)}`}
+                            />
+                          </Box>
+                        )}
+                    </Fragment>
+                  );
+                })}
 
                 {times(
                   Math.min(PREVIEW_COUNT, tanksFiltered.length - loadedRows),
