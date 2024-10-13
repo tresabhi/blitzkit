@@ -62,9 +62,9 @@ function Content({ provider }: AuthorizeProps) {
         case 'patreon': {
           if (!searchParams.get('code')) break;
 
-          const response = await fetch(
-            `/api/patreon/auth/${searchParams.get('code')}`,
-          );
+          const response = await fetch('/api/patreon/auth', {
+            headers: { code: searchParams.get('code')! },
+          });
           const data = (await response.json()) as PatreonAuthResponse;
 
           mutateApp((draft) => {
