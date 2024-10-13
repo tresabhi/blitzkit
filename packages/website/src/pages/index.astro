@@ -8,14 +8,14 @@ import {
   compareTool,
   discordTool,
   moreTool,
+  performanceTool,
   sessionTool,
   tankopediaTool,
-  tankPerformanceTool,
 } from '../constants/tools';
-import RootLayout from '../layouts/RootLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<RootLayout>
+<BaseLayout>
   <HomeHero />
 
   <Plugs />
@@ -29,7 +29,7 @@ import RootLayout from '../layouts/RootLayout.astro';
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         {/* <ToolCard tool={playerStatsTool} /> */}
         <ToolCard tool={compareTool} />
-        <ToolCard tool={tankPerformanceTool} />
+        <ToolCard tool={performanceTool} />
       </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
@@ -81,4 +81,4 @@ import RootLayout from '../layouts/RootLayout.astro';
   </Flex>
 
   <div style={{ flex: 1 }}></div>
-</RootLayout>
+</BaseLayout>

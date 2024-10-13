@@ -1,8 +1,8 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import { readFile } from 'fs/promises';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { Page } from './_index';
-import RootLayout from '../../../../layouts/RootLayout.astro';
 
 export const getStaticPaths = (async () => {
   const ROOT = '../../../../../../../docs/';
@@ -30,6 +30,6 @@ const { content } = Astro.props;
 ---
 
 <!-- <title>{title}</title> -->
-<RootLayout>
+<BaseLayout>
   <Page content={content} />
-</RootLayout>
+</BaseLayout>

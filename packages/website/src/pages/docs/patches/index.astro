@@ -3,7 +3,7 @@ import { MagicWandIcon, StarFilledIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, Link } from '@radix-ui/themes';
 import { compareVersions } from 'compare-versions';
 import { PageWrapper } from '../../../components/PageWrapper';
-import RootLayout from '../../../layouts/RootLayout.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
 
 // this can't be used in template literal :(
 const ROOT = '../../../../../../docs/changelogs/';
@@ -18,7 +18,7 @@ const versions = Object.keys(
   .reverse();
 ---
 
-<RootLayout>
+<BaseLayout>
   <PageWrapper align="center">
     <Heading mt="6" mb="4">BlitzKit patches</Heading>
 
@@ -45,4 +45,4 @@ const versions = Object.keys(
       }
     </Flex>
   </PageWrapper>
-</RootLayout>
+</BaseLayout>

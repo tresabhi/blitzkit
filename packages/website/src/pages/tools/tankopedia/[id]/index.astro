@@ -2,7 +2,7 @@
 import { fetchTankDefinitions, TIER_ROMAN_NUMERALS } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
 import type { GetStaticPaths } from 'astro';
-import ToolLayout from '../../../../layouts/ToolLayout.astro';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { Page } from './_index';
 
 export const getStaticPaths = (async () => {
@@ -29,6 +29,6 @@ const tank = tankDefinitions.tanks[id];
   {strings.common.tank_class_short[tank.class]}
 </title>
 
-<ToolLayout>
+<BaseLayout>
   <Page id={id} client:load />
-</ToolLayout>
+</BaseLayout>

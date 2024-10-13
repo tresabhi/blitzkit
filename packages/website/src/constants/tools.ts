@@ -114,7 +114,7 @@ export const playerStatsTool: Tool = {
   branches: ['main', 'dev'],
 };
 
-export const tankPerformanceTool: Tool = {
+export const performanceTool: Tool = {
   id: 'performance',
   title: 'Performance',
   description: 'Tank performance statistics',
@@ -153,7 +153,7 @@ export const homeTool: Tool = {
 export const TOOLS: Tool[] = [
   tankopediaTool,
   compareTool,
-  tankPerformanceTool,
+  performanceTool,
   sessionTool,
   embedTool,
   // ratingTool,
