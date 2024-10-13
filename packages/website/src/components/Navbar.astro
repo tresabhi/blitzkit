@@ -21,7 +21,6 @@ import { resolveBranchName } from '../core/blitzkit/branches';
 import { homeTool, TOOLS } from '../constants/tools';
 import { PatreonIcon } from './PatreonIcon';
 import { NavbarAccount } from './NavbarAccount';
-import { undefined } from 'astro:schema';
 
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
 const tools = [homeTool, ...toolsFiltered];
