@@ -17,16 +17,16 @@ import {
   Separator,
   Text,
 } from '@radix-ui/themes';
-import { BRANCH_NAMES } from '../constants/branches';
+import { resolveBranchName } from '../core/blitzkit/branches';
 import { homeTool, TOOLS } from '../constants/tools';
 import { PatreonIcon } from './PatreonIcon';
 import { NavbarAccount } from './NavbarAccount';
+import { undefined } from 'astro:schema';
 
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
 const tools = [homeTool, ...toolsFiltered];
-const isBranchNamed =
-  import.meta.env.PUBLIC_ASSET_BRANCH &&
-  BRANCH_NAMES[import.meta.env.PUBLIC_ASSET_BRANCH];
+const branchName = resolveBranchName();
+const isBranchNamed = branchName !== undefined;
 ---
 
 <style>
@@ -124,7 +124,7 @@ const isBranchNamed =
               {
                 isBranchNamed && (
                   <Code color="gray" size="1" highContrast variant="outline">
-                    {BRANCH_NAMES[import.meta.env.PUBLIC_ASSET_BRANCH!]}
+                    {branchName}
                   </Code>
                 )
               }
