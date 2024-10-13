@@ -43,9 +43,7 @@ const disabled = tool.branches?.every(
   style={{
     backgroundImage: `url(${imgur(tool.image, {
       format: 'jpeg',
-      size: tool.significant
-        ? ImgurSize.HugeThumbnail
-        : ImgurSize.LargeThumbnail,
+      size: ImgurSize.SmallThumbnail,
     })})`,
   }}
   data-disabled={disabled}
@@ -65,7 +63,12 @@ const disabled = tool.branches?.every(
     <Box
       flexGrow="1"
       style={{
-        backgroundImage: `url(${imgur(tool.image, { format: 'jpeg' })})`,
+        backgroundImage: `url(${imgur(tool.image, {
+          format: 'jpeg',
+          size: tool.significant
+            ? ImgurSize.HugeThumbnail
+            : ImgurSize.LargeThumbnail,
+        })})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
