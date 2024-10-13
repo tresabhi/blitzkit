@@ -1,6 +1,6 @@
 ---
 import { Box, Flex, Heading } from '@radix-ui/themes';
-import { AdWithContext } from '../components/AdWithContext';
+import { Ad } from '../components/Ad.tsx';
 import HomeHero from '../components/HomeHero.astro';
 import { Plugs } from '../components/Plugs.tsx';
 import ToolCard from '../components/ToolCard.astro';
@@ -18,13 +18,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <BaseLayout>
   <HomeHero />
 
-  <Plugs />
+  <Plugs client:idle />
 
   <Flex p="4" justify="center" gap="4">
     <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">
       <ToolCard tool={tankopediaTool} />
 
-      <AdWithContext client:only="react" id="homepage-ad-1" />
+      <Flex justify="center">
+        <Ad client:idle id="homepage-ad-1" commonHeight={250} />
+      </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         {/* <ToolCard tool={playerStatsTool} /> */}
@@ -39,7 +41,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <ToolCard tool={discordTool} />
       </Flex>
 
-      <AdWithContext client:only="react" id="homepage-ad-2" />
+      <Flex justify="center">
+        <Ad client:idle id="homepage-ad-2" commonHeight={250} />
+      </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={moreTool} />

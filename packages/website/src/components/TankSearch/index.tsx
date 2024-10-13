@@ -10,14 +10,7 @@ import {
   type TankDefinition,
 } from '@blitzkit/core';
 import { useStore } from '@nanostores/react';
-import {
-  Box,
-  Callout,
-  Flex,
-  Link,
-  Text,
-  type FlexProps,
-} from '@radix-ui/themes';
+import { Callout, Flex, Link, Text, type FlexProps } from '@radix-ui/themes';
 import fuzzysort from 'fuzzysort';
 import { times } from 'lodash-es';
 import { Fragment, memo, useEffect, useMemo, useState } from 'react';
@@ -481,11 +474,12 @@ export const TankSearch = memo<TankSearchProps>(
                         !compact &&
                         hasAd &&
                         index !== tanks.length - 1 && (
-                          <Box gridColumn="1 / -1">
+                          <Flex gridColumn="1 / -1">
                             <Ad
+                              commonHeight={250}
                               id={`tankopedia-search-ad-${Math.floor(index / 32)}`}
                             />
-                          </Box>
+                          </Flex>
                         )}
                     </Fragment>
                   );

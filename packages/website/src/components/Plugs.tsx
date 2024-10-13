@@ -1,14 +1,6 @@
 import { assertSecret, patreonLoginUrl } from '@blitzkit/core';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
-import {
-  Badge,
-  Button,
-  Code,
-  Flex,
-  Link,
-  Separator,
-  Text,
-} from '@radix-ui/themes';
+import { Button, Code, Flex, Link, Separator, Text } from '@radix-ui/themes';
 import { useAdExempt } from '../hooks/useAdExempt';
 import { App } from '../stores/app';
 import { PatreonIcon } from './PatreonIcon';
@@ -38,16 +30,13 @@ function Content() {
         assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) !== 'opentest' && (
           <>
             <Flex direction="column" gap="3" align="center">
-              <Flex align="center" gap="2">
-                <Badge color="green">NEW</Badge>
-                <Text size="5">
-                  BlitzKit{' '}
-                  <Code variant="outline" size="4" color="gray" highContrast>
-                    opentest
-                  </Code>{' '}
-                  is available now{' '}
-                </Text>
-              </Flex>
+              <Text size="5">
+                BlitzKit{' '}
+                <Code variant="outline" size="4" color="gray" highContrast>
+                  opentest
+                </Code>{' '}
+                is available now{' '}
+              </Text>
 
               <Link href="https://opentest.blitzkit.app/" target="_blank">
                 <Button color="green">

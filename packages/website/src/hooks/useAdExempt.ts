@@ -5,7 +5,7 @@ let cache: Record<string, boolean | Promise<boolean>> = {};
 
 export function useAdExempt() {
   const patreon = App.use((state) => state.logins.patreon);
-  const [exempt, setExempt] = useState(true);
+  const [exempt, setExempt] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -21,9 +21,6 @@ export function useAdExempt() {
           if (!response.ok) return resolve(false);
 
           const json = await response.json();
-
-          console.log(json);
-
           const exempt = typeof json === 'boolean' && json;
 
           cache[patreon.token] = exempt;
