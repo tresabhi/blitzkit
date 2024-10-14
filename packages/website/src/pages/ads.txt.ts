@@ -1,8 +1,6 @@
 import { assertSecret } from '@blitzkit/core';
 import type { APIContext } from 'astro';
 
-export const prerender = false;
-
 export async function GET({}: APIContext) {
   const response = await fetch(
     `https://api.nitropay.com/v1/ads-${assertSecret(
