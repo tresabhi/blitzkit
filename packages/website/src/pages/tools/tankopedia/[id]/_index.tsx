@@ -3,6 +3,7 @@ import {
   fetchProvisionDefinitions,
   fetchTankDefinitions,
 } from '@blitzkit/core';
+import { Ad } from '../../../../components/Ad';
 import { PageWrapper } from '../../../../components/PageWrapper';
 import { CalloutsSection } from '../../../../components/Tankopedia/CalloutsSection';
 import { CharacteristicsSection } from '../../../../components/Tankopedia/CharacteristicsSection';
@@ -47,12 +48,16 @@ export function Page({ id }: PageProps) {
             >
               <HeroSection />
               <ShotDisplaySection />
+              <Ad id="tankopedia-ad-1" commonHeight={250} />
               <CalloutsSection />
               <MetaSection />
               <TechTreeSection />
+              <Ad id="tankopedia-ad-2" commonHeight={250} />
               <CharacteristicsSection />
+              <Ad id="tankopedia-ad-3" commonHeight={250} />
               <GameModeSection />
               <VideoSection />
+              <Ad id="tankopedia-ad-4" commonHeight={250} />
               <HistorySection />
             </PageWrapper>
           </Duel.Provider>
