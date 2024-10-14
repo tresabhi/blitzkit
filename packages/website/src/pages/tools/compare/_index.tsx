@@ -1,7 +1,9 @@
 import {
+  createDefaultSkills,
   fetchEquipmentDefinitions,
   fetchModelDefinitions,
   fetchProvisionDefinitions,
+  fetchSkillDefinitions,
 } from '@blitzkit/core';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, IconButton, Text } from '@radix-ui/themes';
@@ -18,12 +20,13 @@ import { ComparePersistent } from '../../../stores/comparePersistent';
 const modelDefinitions = await fetchModelDefinitions();
 const equipmentDefinitions = await fetchEquipmentDefinitions();
 const provisionDefinitions = await fetchProvisionDefinitions();
+const skillDefinitions = await fetchSkillDefinitions();
 
 export function Page() {
   return (
     <App.Provider>
       <ComparePersistent.Provider>
-        <CompareEphemeral.Provider>
+        <CompareEphemeral.Provider data={createDefaultSkills(skillDefinitions)}>
           <Content />
         </CompareEphemeral.Provider>
       </ComparePersistent.Provider>
