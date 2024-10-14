@@ -23,7 +23,7 @@ import {
   SORT_UNITS,
 } from '../../stores/tankopediaPersistent/constants';
 import { $tankopediaSort } from '../../stores/tankopediaSort';
-import { Ad } from '../Ad';
+import { AdResponsiveHorizontal } from '../AdResponsiveHorizontal';
 import { ExperimentIcon } from '../ExperimentIcon';
 import { FilterControl } from './components/FilterControl';
 import { NoResults } from './components/NoResults';
@@ -476,8 +476,7 @@ export const TankSearch = memo<TankSearchProps>(
                         hasAd &&
                         index !== tanks.length - 1 && (
                           <Flex gridColumn="1 / -1">
-                            <Ad
-                              commonHeight={250}
+                            <AdResponsiveHorizontal
                               id={`tankopedia-search-${adId}`}
                             />
                           </Flex>

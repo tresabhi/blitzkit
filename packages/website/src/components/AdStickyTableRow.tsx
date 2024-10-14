@@ -1,5 +1,5 @@
 import { Flex, Table } from '@radix-ui/themes';
-import { Ad } from './Ad';
+import { AdResponsiveHorizontal } from './AdResponsiveHorizontal';
 
 interface AdStickyTableRowProps {
   id: string;
@@ -16,7 +16,7 @@ export function AdStickyTableRow({ id }: AdStickyTableRowProps) {
           width="100%"
           left="0"
         >
-          <Ad commonHeight={250} id={id} />
+          <AdResponsiveHorizontal id={id} />
         </Flex>
       </Table.Row>
     </Table.Body>
