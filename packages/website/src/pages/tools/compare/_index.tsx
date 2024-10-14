@@ -11,6 +11,7 @@ import { Controls } from '../../../components/Compare/Controls';
 import { DamageWarning } from '../../../components/DamageWarning';
 import { PageWrapper } from '../../../components/PageWrapper';
 import { tankCharacteristics } from '../../../core/blitzkit/tankCharacteristics';
+import { App } from '../../../stores/app';
 import { CompareEphemeral } from '../../../stores/compareEphemeral';
 import { ComparePersistent } from '../../../stores/comparePersistent';
 
@@ -20,11 +21,13 @@ const provisionDefinitions = await fetchProvisionDefinitions();
 
 export function Page() {
   return (
-    <ComparePersistent.Provider>
-      <CompareEphemeral.Provider>
-        <Content />
-      </CompareEphemeral.Provider>
-    </ComparePersistent.Provider>
+    <App.Provider>
+      <ComparePersistent.Provider>
+        <CompareEphemeral.Provider>
+          <Content />
+        </CompareEphemeral.Provider>
+      </ComparePersistent.Provider>
+    </App.Provider>
   );
 }
 
