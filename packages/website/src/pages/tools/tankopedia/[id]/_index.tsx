@@ -48,16 +48,16 @@ export function Page({ id }: PageProps) {
             >
               <HeroSection />
               <ShotDisplaySection />
-              <Ad id="tankopedia-ad-1" commonHeight={250} />
+              <Ad id="tankopedia-1" commonHeight={250} />
               <CalloutsSection />
               <MetaSection />
               <TechTreeSection />
-              <Ad id="tankopedia-ad-2" commonHeight={250} />
+              <Ad id="tankopedia-2" commonHeight={250} />
               <CharacteristicsSection />
-              <Ad id="tankopedia-ad-3" commonHeight={250} />
+              <Ad id="tankopedia-3" commonHeight={250} />
               <GameModeSection />
               <VideoSection />
-              <Ad id="tankopedia-ad-4" commonHeight={250} />
+              <Ad id="tankopedia-4" commonHeight={250} />
               <HistorySection />
             </PageWrapper>
           </Duel.Provider>

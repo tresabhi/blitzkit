@@ -45,7 +45,10 @@ export function CompareTable({ stats }: CompareTableProps) {
     <StickyTableRoot
       size="1"
       variant="surface"
-      style={{ maxWidth: '100%', height: 'calc(100vh - 128px)' }}
+      style={{
+        maxWidth: '100%',
+        // height: 'calc(100vh - 128px)'
+      }}
     >
       <Table.Header>
         <Table.Row>

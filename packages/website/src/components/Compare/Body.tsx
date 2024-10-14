@@ -2,6 +2,7 @@ import { asset } from '@blitzkit/core';
 import { Flex, Heading, IconButton, Table } from '@radix-ui/themes';
 import type { TankCharacteristics } from '../../core/blitzkit/tankCharacteristics';
 import { CompareEphemeral } from '../../stores/compareEphemeral';
+import { AdStickyTableRow } from '../AdStickyTableRow';
 import { StickyColumnHeaderCell } from '../StickyColumnHeaderCell';
 import { CompareRow } from './CompareRow';
 import { CompareSectionTitle } from './CompareSectionTitle';
@@ -74,6 +75,9 @@ export function Body({ stats }: BodyProps) {
           ))}
         </Table.Row>
       </Table.Header>
+
+      <AdStickyTableRow id="compare-1" />
+
       <Table.Body>
         <CompareRow stats={stats} name="DPM" value="dpm" decimals={0} />
         <CompareRow
@@ -219,6 +223,8 @@ export function Body({ stats }: BodyProps) {
         />
       </Table.Body>
 
+      <AdStickyTableRow id="compare-2" />
+
       <CompareSectionTitle>Maneuverability</CompareSectionTitle>
       <Table.Body>
         <CompareRow
@@ -328,6 +334,8 @@ export function Body({ stats }: BodyProps) {
           decimals={1}
         />
       </Table.Body>
+
+      <AdStickyTableRow id="compare-3" />
 
       <CompareSectionTitle>Survivability</CompareSectionTitle>
       <Table.Body>

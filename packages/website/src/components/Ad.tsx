@@ -58,6 +58,7 @@ export function Ad({ id, commonHeight, ...props }: AdProps) {
     <Box
       id={id}
       width="100%"
+      className="ad-container"
       height={commonHeight ? `${commonHeight}px` : 'auto'}
       {...props}
     />

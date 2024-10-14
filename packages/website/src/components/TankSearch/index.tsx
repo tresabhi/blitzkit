@@ -477,7 +477,7 @@ export const TankSearch = memo<TankSearchProps>(
                           <Flex gridColumn="1 / -1">
                             <Ad
                               commonHeight={250}
-                              id={`tankopedia-search-ad-${Math.floor(index / 32)}`}
+                              id={`tankopedia-search-${Math.floor(index / 32)}`}
                             />
                           </Flex>
                         )}
