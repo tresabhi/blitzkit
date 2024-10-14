@@ -14,7 +14,7 @@ export function VideoSection() {
   if (!videos) return null;
 
   return (
-    <PageWrapper noFlex1>
+    <PageWrapper noFlex1 noMinHeight>
       <Flex direction="column" gap="6" align="center">
         <Flex direction="column" align="center">
           <Heading size="6">Review videos</Heading>
