@@ -465,6 +465,7 @@ export const TankSearch = memo<TankSearchProps>(
               <TankCardWrapper>
                 {tanks.map((tank, index) => {
                   const hasAd = (index + 16) % 32 === 0;
+                  const adId = Math.floor(index / 32);
 
                   return (
                     <Fragment key={tank.id}>
@@ -477,7 +478,7 @@ export const TankSearch = memo<TankSearchProps>(
                           <Flex gridColumn="1 / -1">
                             <Ad
                               commonHeight={250}
-                              id={`tankopedia-search-${Math.floor(index / 32)}`}
+                              id={`tankopedia-search-${adId}`}
                             />
                           </Flex>
                         )}

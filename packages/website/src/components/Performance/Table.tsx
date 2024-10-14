@@ -11,7 +11,10 @@ export function TankTable() {
       <StickyTableRoot
         size={{ initial: '1', sm: '2' }}
         variant="surface"
-        style={{ maxWidth: '100%', maxHeight: 'calc(100vh - 256px)' }}
+        style={{
+          maxWidth: '100%',
+          // maxHeight: 'calc(100vh - 256px)'
+        }}
       >
         <Header />
         <Suspense fallback={<BodyLoader />}>

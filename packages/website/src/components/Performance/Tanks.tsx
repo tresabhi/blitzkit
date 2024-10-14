@@ -2,11 +2,12 @@ import { fetchAverageDefinitions, fetchTankDefinitions } from '@blitzkit/core';
 import { useStore } from '@nanostores/react';
 import { Table } from '@radix-ui/themes';
 import { times } from 'lodash-es';
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { Fragment, Suspense, useEffect, useMemo, useState } from 'react';
 import { filterTank } from '../../core/blitzkit/filterTank';
 import { $tankFilters } from '../../stores/tankFilters';
 import { TankPerformancePersistent } from '../../stores/tankPerformancePersistent';
 import { TankPerformanceSort } from '../../stores/tankPerformanceSort';
+import { AdStickyTableRow } from '../AdStickyTableRow';
 import { RowLoader } from './RowLoader';
 import { TankRow } from './TankRow';
 import { Total } from './Total';
@@ -129,19 +130,28 @@ export function Tanks() {
     <Table.Body>
       <Total tanks={tanks} />
 
-      {tanks.slice(0, loadedRows).map((averages) => {
+      {tanks.slice(0, loadedRows).map((averages, index) => {
         const tank = tankDefinitions.tanks[averages.id];
+        const hasAd = index % 16 === 0;
+        const adId = Math.floor(index / 16);
 
         if (tank === undefined) return null;
 
         return (
-          <Suspense key={tank.id} fallback={<RowLoader />}>
-            <TankRow tank={tank} />
-          </Suspense>
+          <Fragment key={tank.id}>
+            {hasAd && (
+              <AdStickyTableRow id={`performance-${adId}-${tank.id}`} />
+            )}
+            <Suspense fallback={<RowLoader />}>
+              <TankRow tank={tank} />
+            </Suspense>
+          </Fragment>
         );
       })}
 
       {times(Math.min(PREVIEW_COUNT, tanks.length - loadedRows), (index) => {
+        console.log(index);
+
         return (
           <RowLoader
             key={index}
