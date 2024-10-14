@@ -107,7 +107,6 @@ export const TankModel = memo(() => {
               onPointerDown,
             },
             // group(group) {
-            //   console.log(group.name);
             //   return {
             //     visible:
             //       group.name !== 'ST_base' &&

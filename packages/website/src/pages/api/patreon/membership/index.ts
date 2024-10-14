@@ -56,8 +56,6 @@ export async function GET({ request }: APIContext) {
 
   if (!token) return Response.json(false);
 
-  console.log('doing it');
-
   const patreonResponse = await fetch(
     encodeURI(
       'https://www.patreon.com/api/oauth2/v2/identity?include=memberships.campaign&fields[member]=patron_status',

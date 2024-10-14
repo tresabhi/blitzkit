@@ -102,7 +102,6 @@ export function ArmorPlateDisplay() {
                           turret.guns[protagonist.gun.gun_type!.value.base.id];
                         const track = tank.tracks[protagonist.track.id];
 
-                        console.log(highlightArmor.name);
                         if (highlightArmor.name.startsWith('hull_')) {
                           tank.armor.thickness[index] = thickness;
                         } else if (highlightArmor.name.startsWith('turret_')) {
@@ -163,7 +162,6 @@ export function ArmorPlateDisplay() {
                       const initialTrack =
                         initialTank.tracks[protagonist.track.id];
 
-                      console.log(highlightArmor.name);
                       if (highlightArmor.name.startsWith('hull_')) {
                         tank.armor.thickness[index] =
                           initialTank.armor.thickness[index];

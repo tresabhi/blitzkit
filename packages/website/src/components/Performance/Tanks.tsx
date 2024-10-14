@@ -150,8 +150,6 @@ export function Tanks() {
       })}
 
       {times(Math.min(PREVIEW_COUNT, tanks.length - loadedRows), (index) => {
-        console.log(index);
-
         return (
           <RowLoader
             key={index}
