@@ -9,6 +9,7 @@ export default defineConfig({
   devToolbar: { enabled: false },
   output: 'static',
   site: 'https://blitzkit.app',
+  outDir: '../../dist/website',
 
   integrations: [react(), sitemap()],
   vite: {
