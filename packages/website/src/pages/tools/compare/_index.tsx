@@ -4,15 +4,17 @@ import {
   fetchModelDefinitions,
   fetchProvisionDefinitions,
   fetchSkillDefinitions,
+  fetchTankDefinitions,
 } from '@blitzkit/core';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, IconButton, Text } from '@radix-ui/themes';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { CompareTable } from '../../../components/Compare/CompareTable';
 import { Controls } from '../../../components/Compare/Controls';
 import { DamageWarning } from '../../../components/DamageWarning';
 import { PageWrapper } from '../../../components/PageWrapper';
 import { tankCharacteristics } from '../../../core/blitzkit/tankCharacteristics';
+import { tankToCompareMember } from '../../../core/blitzkit/tankToCompareMember';
 import { App } from '../../../stores/app';
 import { CompareEphemeral } from '../../../stores/compareEphemeral';
 import { ComparePersistent } from '../../../stores/comparePersistent';
@@ -21,6 +23,7 @@ const modelDefinitions = await fetchModelDefinitions();
 const equipmentDefinitions = await fetchEquipmentDefinitions();
 const provisionDefinitions = await fetchProvisionDefinitions();
 const skillDefinitions = await fetchSkillDefinitions();
+const tankDefinitions = await fetchTankDefinitions();
 
 export function Page() {
   return (
@@ -74,6 +77,26 @@ function Content() {
       ),
     [members, crewSkills],
   );
+  const mutateCompareEphemeral = CompareEphemeral.useMutation();
+
+  useEffect(() => {
+    const search = new URLSearchParams(window.location.search);
+    const tanksQuery = search.get('tanks');
+
+    if (tanksQuery === null) return;
+
+    const tanks = tanksQuery.split(',').map(Number);
+
+    mutateCompareEphemeral((draft) => {
+      tanks.forEach((id) => {
+        const tank = tankDefinitions.tanks[id];
+
+        if (tank === undefined) return;
+
+        draft.members.push(tankToCompareMember(tank, provisionDefinitions));
+      });
+    });
+  }, []);
 
   return (
     <PageWrapper color="crimson" size="100%">
