@@ -3,7 +3,6 @@
 import { idToRegion } from '@blitzkit/core';
 import { Button, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
-import type { PatreonAuthResponse } from '../pages/auth/[provider]/_index';
 import { App } from '../stores/app';
 import { CURRENT_POLICIES_AGREEMENT_INDEX } from '../stores/app/constants';
 
@@ -30,7 +29,6 @@ export function Checks() {
 
 /**
  * Wargaming: 14 (refresh: 7)
- * Patreon: 31 (refresh: 15)
  */
 function Content() {
   const logins = App.use((state) => state.logins);
@@ -99,33 +97,6 @@ function Content() {
                   expires: json.data.expires_at * 1000,
                 };
               }
-            });
-          });
-      }
-    }
-
-    if (logins.patreon) {
-      const expiresIn = logins.patreon.expires - Date.now();
-      const expiresInDays = expiresIn / 1000 / 60 / 60 / 24;
-
-      if (expiresInDays < 0) {
-        mutateApp((draft) => {
-          draft.logins.patreon = undefined;
-        });
-      } else if (expiresInDays < 15) {
-        const { patreon } = appStore.getState().logins;
-
-        if (!patreon) return;
-
-        fetch(`/api/patreon/refresh/${patreon.refreshToken}`)
-          .then((response) => response.json() as Promise<PatreonAuthResponse>)
-          .then((data) => {
-            mutateApp((draft) => {
-              draft.logins.patreon = {
-                token: data.access_token,
-                refreshToken: data.refresh_token,
-                expires: Date.now() + data.expires_in * 1000,
-              };
             });
           });
       }

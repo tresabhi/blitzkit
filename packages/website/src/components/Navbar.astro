@@ -19,7 +19,6 @@ import {
 } from '@radix-ui/themes';
 import { resolveBranchName } from '../core/blitzkit/branches';
 import { homeTool, TOOLS } from '../constants/tools';
-import { PatreonIcon } from './PatreonIcon';
 import { NavbarAccount } from './NavbarAccount';
 
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
@@ -175,15 +174,6 @@ const isBranchNamed = branchName !== undefined;
             target="_blank"
           >
             <DiscordLogoIcon />
-          </Link>
-          <Link
-            style={{ display: 'flex', alignContent: 'center' }}
-            color="gray"
-            href="https://www.patreon.com/tresabhi"
-            underline="none"
-            target="_blank"
-          >
-            <PatreonIcon width="0.75em" height="0.75em" />
           </Link>
           <Link
             style={{ display: 'flex', alignContent: 'center' }}

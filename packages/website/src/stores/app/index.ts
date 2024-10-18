@@ -8,7 +8,6 @@ interface AppStore {
   policiesAgreementIndex: number;
   logins: {
     wargaming?: { token: string; id: number; expires: number };
-    patreon?: { token: string; refreshToken: string; expires: number };
   };
 }
 

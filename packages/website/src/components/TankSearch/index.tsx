@@ -16,7 +16,6 @@ import { times } from 'lodash-es';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { filterTank } from '../../core/blitzkit/filterTank';
 import { resolveReload } from '../../core/blitzkit/resolveReload';
-import { useAdExempt } from '../../hooks/useAdExempt';
 import { $tankFilters } from '../../stores/tankFilters';
 import {
   SORT_NAMES,
@@ -49,7 +48,6 @@ const tankNames = await fetchTankNames();
 export const TankSearch = memo<TankSearchProps>(
   ({ compact, onSelect, onSelectAll, ...props }) => {
     const awaitedTanksDefinitionsArray = Object.values(tankDefinitions.tanks);
-    const exempt = useAdExempt();
     const tankFilters = useStore($tankFilters);
     const tankopediaSort = useStore($tankopediaSort);
 

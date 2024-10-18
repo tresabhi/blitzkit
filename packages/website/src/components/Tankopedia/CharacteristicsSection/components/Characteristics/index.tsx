@@ -26,7 +26,6 @@ import { Fragment } from 'react/jsx-runtime';
 import { lerp } from 'three/src/math/MathUtils.js';
 import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
 import { tankCharacteristics } from '../../../../../core/blitzkit/tankCharacteristics';
-import { useAdExempt } from '../../../../../hooks/useAdExempt';
 import { useEquipment } from '../../../../../hooks/useEquipment';
 import { useTankModelDefinition } from '../../../../../hooks/useTankModelDefinition';
 import { Duel } from '../../../../../stores/duel';
@@ -39,7 +38,6 @@ const provisionDefinitions = await fetchProvisionDefinitions();
 
 export function Characteristics() {
   const mutateDuel = Duel.useMutation();
-  const exempt = useAdExempt();
   const crewSkills = TankopediaEphemeral.use((state) => state.skills);
   const penetrationDistanceInput = useRef<HTMLInputElement>(null);
   const hasImprovedVentilation = useEquipment(102);
