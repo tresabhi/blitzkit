@@ -19,6 +19,7 @@ env:
   PUBLIC_ASSET_REPO: ${{ secrets.PUBLIC_ASSET_REPO }}
   PUBLIC_ASSET_BRANCH: ${{ secrets.PUBLIC_ASSET_BRANCH }}
   PUBLIC_PROMOTE_OPENTEST: ${{ secrets.PUBLIC_PROMOTE_OPENTEST }}
+  ALLOW_ROBOTS: ${{ secrets.ALLOW_ROBOTS }}
 
 jobs:
   build:
