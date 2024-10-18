@@ -18,7 +18,6 @@ export function HeroSection() {
   const isFullScreen = useFullScreen();
   const protagonist = Duel.use((state) => state.protagonist.tank);
   const Icon = classIcons[protagonist.class];
-  // const [dummyLoader, setDummyLoader] = useState(true);
   const treeColor =
     protagonist.type === TankType.COLLECTOR
       ? 'blue'

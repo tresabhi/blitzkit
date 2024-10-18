@@ -414,7 +414,7 @@ export function tankCharacteristics(
     gun.gun_type!.value.base.dispersion_base * dispersionStillCoefficient;
   const dispersionMoving = track.dispersion_move * dispersionMovingCoefficient;
   const dispersionHullTraversing =
-    track.traverse_speed * dispersionHullTraverseCoefficient;
+    track.dispersion_traverse * dispersionHullTraverseCoefficient;
   const dispersionTurretTraversing =
     gun.gun_type!.value.base.dispersion_traverse *
     dispersionTurretTraverseCoefficient;

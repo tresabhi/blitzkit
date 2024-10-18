@@ -1,4 +1,8 @@
-import type { ModelDefinition } from '@blitzkit/core';
+import {
+  createDefaultSkills,
+  fetchSkillDefinitions,
+  type ModelDefinition,
+} from '@blitzkit/core';
 import type { Vector3 } from 'three';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
@@ -89,15 +93,18 @@ interface TankopediaEphemeral {
   xpMultiplier: (typeof XP_MULTIPLIERS)[number];
 }
 
+const skillDefinitions = await fetchSkillDefinitions();
+
 export const TankopediaEphemeral = createContextualStore(
-  (model: ModelDefinition) =>
-    create<TankopediaEphemeral>()(
+  (model: ModelDefinition) => {
+    return create<TankopediaEphemeral>()(
       subscribeWithSelector<TankopediaEphemeral>(() => ({
         editStatic: false,
-        skills: {},
+        skills: createDefaultSkills(skillDefinitions),
         model,
         controlsEnabled: true,
         xpMultiplier: 1,
       })),
-    ),
+    );
+  },
 );
