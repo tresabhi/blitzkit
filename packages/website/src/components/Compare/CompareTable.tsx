@@ -200,6 +200,7 @@ export function CompareTable({ stats }: CompareTableProps) {
                               ['turret', 'gun', 'engine', 'chassis'] as const
                             ).map((module, index) => (
                               <img
+                                key={module}
                                 alt={module}
                                 width={24}
                                 height={24}
