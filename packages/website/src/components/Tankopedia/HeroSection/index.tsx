@@ -1,6 +1,7 @@
 import { fetchTankDefinitions, TankType } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
-import { Suspense, useMemo, useRef } from 'react';
+import { times } from 'lodash-es';
+import { Suspense, useEffect, useMemo, useRef } from 'react';
 import { NAVBAR_HEIGHT } from '../../../constants/navbar';
 import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
@@ -42,6 +43,26 @@ export function HeroSection() {
 
     return { value } satisfies ThicknessRange;
   }, [protagonist]);
+  const duelStore = Duel.useStore();
+  const mutateDuel = Duel.useMutation();
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      const { shells } =
+        duelStore.getState().antagonist.gun.gun_type!.value.base;
+
+      times(3, (index) => {
+        if (event.key === `${index + 1}` && shells.length > index) {
+          mutateDuel((draft) => {
+            draft.antagonist.shell = shells[index];
+          });
+        }
+      });
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <Flex justify="center" style={{ backgroundColor: Var('color-surface') }}>
