@@ -161,6 +161,9 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
       <Link
         className={styles.link}
         href={onSelect ? '#' : `/tools/tankopedia/${tank.id}`}
+        onClick={(event) => {
+          if (onSelect) event.preventDefault();
+        }}
       >
         <img alt={tank.name} src={tankIcon(tank.id)} className={styles.image} />
 
