@@ -38,6 +38,9 @@ export function Controls({
 
         <Dialog.Content>
           <Dialog.Title align="center">Add tanks</Dialog.Title>
+          <Dialog.Description align="center">
+            Select tanks to add to comparison
+          </Dialog.Description>
 
           <Flex gap="4" direction="column">
             <Flex
