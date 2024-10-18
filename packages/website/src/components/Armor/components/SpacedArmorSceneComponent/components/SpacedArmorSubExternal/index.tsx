@@ -2,6 +2,7 @@ import {
   resolvePenetrationCoefficient,
   type ShellDefinition,
 } from '@blitzkit/core';
+import { invalidate } from '@react-three/fiber';
 import { useEffect } from 'react';
 import {
   AdditiveBlending,
@@ -51,6 +52,7 @@ export function SpacedArmorSubExternal({
   useEffect(() => {
     function handleShellChange(shell: ShellDefinition) {
       material.uniforms.penetration.value = shell.penetration.near;
+      invalidate();
     }
     async function handleProtagonistEquipmentChange(
       equipment: EquipmentMatrix,
@@ -64,6 +66,8 @@ export function SpacedArmorSubExternal({
       material.uniforms.thickness.value = hasEnhancedArmor
         ? thickness * 1.03
         : thickness;
+
+      invalidate();
     }
     async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
       const duel = duelStore.getState();
@@ -78,6 +82,8 @@ export function SpacedArmorSubExternal({
       material.uniforms.penetration.value =
         penetration *
         resolvePenetrationCoefficient(hasCalibratedShells, shell.type);
+
+      invalidate();
     }
 
     handleShellChange(duelStore.getState().antagonist.shell);

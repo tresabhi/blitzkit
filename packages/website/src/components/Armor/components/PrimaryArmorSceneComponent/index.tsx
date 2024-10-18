@@ -4,7 +4,7 @@ import {
   isExplosive,
   resolvePenetrationCoefficient,
 } from '@blitzkit/core';
-import { useFrame } from '@react-three/fiber';
+import { invalidate, useFrame } from '@react-three/fiber';
 import { useEffect } from 'react';
 import { MeshBasicMaterial, Object3D, ShaderMaterial, Vector2 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils.js';
@@ -74,12 +74,15 @@ export function PrimaryArmorSceneComponent({
       const duel = duelStore.getState();
       await handleProtagonistEquipmentChange(duel.protagonist.equipmentMatrix);
       await handleAntagonistEquipmentChange(duel.antagonist.equipmentMatrix);
+      invalidate();
     }
     function handleGreenPenetrationChange(greenPenetration: boolean) {
       material.uniforms.greenPenetration.value = greenPenetration;
+      invalidate();
     }
     function handleOpaqueChange(opaque: boolean) {
       material.uniforms.opaque.value = opaque;
+      invalidate();
     }
     function handleWireframeChange(wireframe: boolean) {
       material.wireframe = wireframe;
@@ -96,6 +99,8 @@ export function PrimaryArmorSceneComponent({
       material.uniforms.thickness.value = hasEnhancedArmor
         ? thickness * 1.03
         : thickness;
+
+      invalidate();
     }
     async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
       const duel = duelStore.getState();
@@ -110,6 +115,8 @@ export function PrimaryArmorSceneComponent({
       material.uniforms.penetration.value =
         penetration *
         resolvePenetrationCoefficient(hasCalibratedShells, shell.type);
+
+      invalidate();
     }
 
     handleShellChange(duelStore.getState().antagonist.shell);
@@ -156,6 +163,8 @@ export function PrimaryArmorSceneComponent({
       spacedArmorRenderTarget.depthTexture;
     material.uniforms.inverseProjectionMatrix.value =
       camera.projectionMatrixInverse;
+
+    invalidate();
   });
 
   return (
