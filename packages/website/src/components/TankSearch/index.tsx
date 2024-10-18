@@ -424,7 +424,10 @@ export const TankSearch = memo<TankSearchProps>(
               <Link
                 underline="always"
                 href="#"
-                onClick={() => onSelectAll(tanksFiltered)}
+                onClick={(event) => {
+                  event.preventDefault();
+                  onSelectAll(tanksFiltered);
+                }}
               >
                 Select all
               </Link>
