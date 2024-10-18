@@ -12,7 +12,7 @@
     "build:assets": "bun --filter=@blitzkit/scripts run build:assets",
     "build:averages": "bun --filter=@blitzkit/scripts run build:averages",
     "build:bot": "rm -rf dist/bot && mkdir -p dist/bot/prisma && bun build src/index.ts src/workers/bot.ts src/workers/render.ts --outdir dist/bot --target=bun --splitting --sourcemap=inline --external sharp && cp -R src/lang dist/bot/lang && prisma generate && cp prisma/schema.prisma dist/bot/prisma/schema.prisma && cp -R node_modules/prisma/*.node dist/bot/prisma && cd dist/bot && bun init -y && bun add sharp",
-    "build:website": "rm -rf .vercel && bun build:prisma && bun --filter=@blitzkit/website run build && mv packages/website/.vercel .",
+    "build:website": "bun build:prisma && bun --filter=@blitzkit/website run build",
     "build:prisma": "prisma generate",
     "build:sitemap": "bun scripts/sitemap.ts",
     "build:docs": "vitepress build docs",
