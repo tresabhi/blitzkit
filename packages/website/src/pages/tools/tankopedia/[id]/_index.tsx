@@ -3,7 +3,6 @@ import {
   fetchProvisionDefinitions,
   fetchTankDefinitions,
 } from '@blitzkit/core';
-import { AdResponsiveHorizontal } from '../../../../components/AdResponsiveHorizontal';
 import { PageWrapper } from '../../../../components/PageWrapper';
 import { CalloutsSection } from '../../../../components/Tankopedia/CalloutsSection';
 import { CharacteristicsSection } from '../../../../components/Tankopedia/CharacteristicsSection';
@@ -48,16 +47,12 @@ export function Page({ id }: PageProps) {
             >
               <HeroSection />
               <ShotDisplaySection />
-              <AdResponsiveHorizontal id="tankopedia-1" />
               <CalloutsSection />
               <MetaSection />
               <TechTreeSection />
-              <AdResponsiveHorizontal id="tankopedia-2" />
               <CharacteristicsSection />
-              <AdResponsiveHorizontal id="tankopedia-3" />
               <GameModeSection />
               <VideoSection />
-              <AdResponsiveHorizontal id="tankopedia-4" />
               <HistorySection />
             </PageWrapper>
           </Duel.Provider>

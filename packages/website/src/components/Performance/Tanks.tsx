@@ -7,7 +7,7 @@ import { filterTank } from '../../core/blitzkit/filterTank';
 import { $tankFilters } from '../../stores/tankFilters';
 import { TankPerformancePersistent } from '../../stores/tankPerformancePersistent';
 import { TankPerformanceSort } from '../../stores/tankPerformanceSort';
-import { AdStickyTableRow } from '../AdStickyTableRow';
+import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
 import { RowLoader } from './RowLoader';
 import { TankRow } from './TankRow';
 import { Total } from './Total';
@@ -24,7 +24,17 @@ const averageDefinitionsArray = await fetchAverageDefinitions().then(
     })),
 );
 
-export function Tanks() {
+export function Tanks({ skeleton }: MaybeSkeletonComponentProps) {
+  if (skeleton) {
+    return (
+      <Table.Body>
+        {times(16, (index) => (
+          <RowLoader key={index} />
+        ))}
+      </Table.Body>
+    );
+  }
+
   const sort = TankPerformanceSort.use();
   const tankPerformancePersistentStore = TankPerformancePersistent.useStore();
   const filters = useStore($tankFilters);
@@ -132,16 +142,11 @@ export function Tanks() {
 
       {tanks.slice(0, loadedRows).map((averages, index) => {
         const tank = tankDefinitions.tanks[averages.id];
-        const hasAd = index % 16 === 0;
-        const adId = Math.floor(index / 16);
 
         if (tank === undefined) return null;
 
         return (
           <Fragment key={tank.id}>
-            {hasAd && (
-              <AdStickyTableRow id={`performance-${adId}-${tank.id}`} />
-            )}
             <Suspense fallback={<RowLoader />}>
               <TankRow tank={tank} />
             </Suspense>

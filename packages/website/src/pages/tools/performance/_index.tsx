@@ -4,23 +4,24 @@ import { PerformanceInfo } from '../../../components/Performance/PerformanceInfo
 import { TankTable } from '../../../components/Performance/Table';
 import { TankPerformancePersistent } from '../../../stores/tankPerformancePersistent';
 import { TankPerformanceSort } from '../../../stores/tankPerformanceSort';
+import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
 
-export function Page() {
+export function Page({ skeleton }: MaybeSkeletonComponentProps) {
   return (
     <TankPerformanceSort.Provider>
       <TankPerformancePersistent.Provider>
-        <Content />
+        <Content skeleton={skeleton} />
       </TankPerformancePersistent.Provider>
     </TankPerformanceSort.Provider>
   );
 }
 
-function Content() {
+function Content({ skeleton }: MaybeSkeletonComponentProps) {
   return (
     <PageWrapper color="jade" noMaxWidth>
-      <PerformanceInfo />
+      <PerformanceInfo skeleton={skeleton} />
       <Controls />
-      <TankTable />
+      <TankTable skeleton={skeleton} />
     </PageWrapper>
   );
 }

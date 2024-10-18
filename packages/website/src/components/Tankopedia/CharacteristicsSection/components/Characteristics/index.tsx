@@ -503,19 +503,6 @@ export function Characteristics() {
         </Flex>
       </Flex>
 
-      {/* AD TODO: */}
-      {/* {!exempt && (
-        <Flex
-          justify="center"
-          display={{
-            initial: 'flex',
-            xs: 'none',
-          }}
-        >
-          <Ad type={AdType.MediumRectangleHorizontalPurple} />
-        </Flex>
-      )} */}
-
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
         <Flex direction="column" gap="2">
           <Heading size="5">Maneuverability</Heading>

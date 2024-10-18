@@ -13,7 +13,7 @@ import { useStore } from '@nanostores/react';
 import { Callout, Flex, Link, Text, type FlexProps } from '@radix-ui/themes';
 import fuzzysort from 'fuzzysort';
 import { times } from 'lodash-es';
-import { Fragment, memo, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { filterTank } from '../../core/blitzkit/filterTank';
 import { resolveReload } from '../../core/blitzkit/resolveReload';
 import { useAdExempt } from '../../hooks/useAdExempt';
@@ -23,7 +23,6 @@ import {
   SORT_UNITS,
 } from '../../stores/tankopediaPersistent/constants';
 import { $tankopediaSort } from '../../stores/tankopediaSort';
-import { AdResponsiveHorizontal } from '../AdResponsiveHorizontal';
 import { ExperimentIcon } from '../ExperimentIcon';
 import { FilterControl } from './components/FilterControl';
 import { NoResults } from './components/NoResults';
@@ -463,27 +462,9 @@ export const TankSearch = memo<TankSearchProps>(
           <>
             {tanks.length > 0 && (
               <TankCardWrapper>
-                {tanks.map((tank, index) => {
-                  const hasAd = (index + 16) % 32 === 0;
-                  const adId = Math.floor(index / 32);
-
-                  return (
-                    <Fragment key={tank.id}>
-                      <TankCard onSelect={onSelect} tank={tank} />
-
-                      {!exempt &&
-                        !compact &&
-                        hasAd &&
-                        index !== tanks.length - 1 && (
-                          <Flex gridColumn="1 / -1">
-                            <AdResponsiveHorizontal
-                              id={`tankopedia-search-${adId}`}
-                            />
-                          </Flex>
-                        )}
-                    </Fragment>
-                  );
-                })}
+                {tanks.map((tank) => (
+                  <TankCard key={tank.id} onSelect={onSelect} tank={tank} />
+                ))}
 
                 {times(
                   Math.min(PREVIEW_COUNT, tanksFiltered.length - loadedRows),

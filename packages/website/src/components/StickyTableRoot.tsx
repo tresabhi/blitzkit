@@ -6,9 +6,9 @@ export function StickyTableRoot({ style, ...props }: RootProps) {
   const table = useRef<HTMLTableElement>(null);
 
   useEffect(() => {
-    table.current
-      ?.querySelector('table')
-      ?.style.setProperty('overflow', 'auto');
+    // table.current
+    //   ?.querySelector('table')
+    //   ?.style.setProperty('overflow', 'auto');
   }, []);
 
   return (

@@ -1,6 +1,5 @@
 ---
 import { Box, Flex, Heading } from '@radix-ui/themes';
-import { AdResponsiveHorizontal } from '../components/AdResponsiveHorizontal';
 import HomeHero from '../components/HomeHero.astro';
 import { Plugs } from '../components/Plugs.tsx';
 import ToolCard from '../components/ToolCard.astro';
@@ -24,10 +23,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">
       <ToolCard tool={tankopediaTool} />
 
-      <Flex justify="center">
-        <AdResponsiveHorizontal client:idle id="homepage-1" />
-      </Flex>
-
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         {/* <ToolCard tool={playerStatsTool} /> */}
         <ToolCard tool={compareTool} />
@@ -39,10 +34,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         {/* <ToolCard tool={embedTool} /> */}
         {/* <ToolCard tool={ratingTool} /> */}
         <ToolCard tool={discordTool} />
-      </Flex>
-
-      <Flex justify="center">
-        <AdResponsiveHorizontal client:idle id="homepage-2" />
       </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>

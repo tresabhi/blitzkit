@@ -1,25 +1,19 @@
 import { Flex } from '@radix-ui/themes';
-import { Suspense } from 'react';
+import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
 import { StickyTableRoot } from '../StickyTableRoot';
-import { BodyLoader } from './BodyLoader';
 import { Header } from './Header';
 import { Tanks } from './Tanks';
 
-export function TankTable() {
+export function TankTable({ skeleton }: MaybeSkeletonComponentProps) {
   return (
     <Flex justify="center">
       <StickyTableRoot
         size={{ initial: '1', sm: '2' }}
         variant="surface"
-        style={{
-          maxWidth: '100%',
-          // maxHeight: 'calc(100vh - 256px)'
-        }}
+        style={{ maxWidth: '100%' }}
       >
         <Header />
-        <Suspense fallback={<BodyLoader />}>
-          <Tanks />
-        </Suspense>
+        <Tanks skeleton={skeleton} />
       </StickyTableRoot>
     </Flex>
   );
