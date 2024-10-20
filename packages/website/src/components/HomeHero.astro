@@ -1,5 +1,4 @@
 ---
-import { imgur } from '@blitzkit/core';
 import { Code, Flex, Heading, Text } from '@radix-ui/themes';
 import { resolveBranchName } from '../core/blitzkit/branches';
 
@@ -8,36 +7,66 @@ const isBranchNamed = branchName !== undefined;
 ---
 
 <style>
-  .container {
-    background: var(--backgroundImage);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+  #home-hero {
+    --p-1: 0%;
+    --p-2: 0%;
+    --p-3: 0%;
+
+    --gradient-color-1: color-mix(
+      in srgb,
+      var(--jade-1),
+      var(--jade-9) var(--p-1)
+    );
+    --gradient-color-2: color-mix(
+      in srgb,
+      var(--blue-1),
+      var(--blue-9) var(--p-2)
+    );
+    --gradient-color-3: color-mix(
+      in srgb,
+      var(--purple-1),
+      var(--purple-9) var(--p-3)
+    );
+
+    background: linear-gradient(
+      45deg,
+      var(--gradient-color-1),
+      var(--gradient-color-2),
+      var(--gradient-color-3)
+    );
   }
 </style>
 
+<script>
+  import { clamp } from 'lodash-es';
+
+  const homeHero = document.getElementById('home-hero');
+
+  if (homeHero) {
+    window.addEventListener('pointermove', (event) => {
+      const p = event.clientX / window.innerWidth;
+      const c = 1 - event.clientY / window.innerHeight;
+      const p1 = c * clamp(-2 * p + 1, 0, 1);
+      const p2 = c * clamp(-Math.abs(2 * p - 1) + 1, 0, 1);
+      const p3 = c * clamp(2 * p - 1, 0, 1);
+
+      homeHero.style.setProperty('--p-1', `${p1 * 100}%`);
+      homeHero.style.setProperty('--p-2', `${p2 * 100}%`);
+      homeHero.style.setProperty('--p-3', `${p3 * 100}%`);
+    });
+  }
+</script>
+
 <Flex
-  className="container"
-  style={{ backgroundImage: `url(${imgur('rUPie9G', { format: 'jpeg' })})` }}
+  mb="3"
+  id="home-hero"
   align="center"
   justify="center"
   position="relative"
   px="4"
   py="9"
+  overflow="hidden"
 >
-  <div
-    style={{
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      background:
-        'linear-gradient(var(--color-panel-translucent), var(--color-background))',
-    }}
-  >
-  </div>
-
   <Flex
     direction="column"
     gap="6"
