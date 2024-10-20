@@ -1,7 +1,6 @@
 import {
   AverageDefinitions,
   AverageDefinitionsEntry,
-  AverageDefinitionsEntrySubPartial,
   AverageDefinitionsManifest,
   IndividualTankStats,
   REGIONS,
@@ -9,7 +8,7 @@ import {
   Samples,
   averageDefinitionsAllStatsKeys,
   emptySamples,
-  encodeProtobufToBase64,
+  encodePB64,
   getAccountInfo,
   getTankStats,
   idToRegion,
@@ -23,6 +22,17 @@ interface DataPoint {
   y: number;
   w: number;
 }
+
+type OptionalSecondLevel<T> = {
+  [P in keyof T]: P extends 'samples'
+    ? T[P]
+    : {
+        [K in keyof T[P]]?: T[P][K];
+      };
+};
+
+type AverageDefinitionsEntrySubPartial =
+  OptionalSecondLevel<AverageDefinitionsEntry>;
 
 const MINUTE = 60 * 1000;
 const HOUR = 60 * MINUTE;
@@ -225,11 +235,7 @@ async function postWork() {
   commitAssets('averages', [
     {
       path: `averages/${latest}.pb`,
-      content: await encodeProtobufToBase64(
-        'average_definitions',
-        'blitzkit.AverageDefinitions',
-        averageDefinitions,
-      ),
+      content: encodePB64(AverageDefinitions, averageDefinitions),
       encoding: 'base64',
     },
     {
