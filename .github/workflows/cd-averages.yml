@@ -9,6 +9,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  PUBLIC_ASSET_REPO: ${{ secrets.PUBLIC_ASSET_REPO }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
