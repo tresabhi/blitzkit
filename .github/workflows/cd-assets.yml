@@ -62,7 +62,7 @@ jobs:
         if: github.event.inputs.zip_url == ''
         run: |
           chmod +x ./temp/depotDownloader/DepotDownloader
-          ./temp/depotDownloader/DepotDownloader -os windows -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
+          ./temp/depotDownloader/DepotDownloader -q -os windows -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
 
       - name: (Steam) Apply patches
         if: github.event.inputs.zip_url == ''
