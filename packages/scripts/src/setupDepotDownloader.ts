@@ -2,9 +2,9 @@ import decompress from 'decompress';
 import { existsSync } from 'fs';
 import { mkdir, readdir, writeFile } from 'fs/promises';
 
-if (!existsSync('temp')) {
+if (!existsSync('../../temp')) {
   console.log('Creating temp directory...');
-  await mkdir('temp');
+  await mkdir('../../temp');
 }
 
 console.log('Downloading depot downloader...');
@@ -24,10 +24,16 @@ await fetch(
   })
   .then((response) => response.arrayBuffer())
   .then((arrayBuffer) =>
-    writeFile('temp/depotDownloader.zip', new Uint8Array(arrayBuffer)),
+    writeFile('../../temp/depotDownloader.zip', new Uint8Array(arrayBuffer)),
   );
 
 console.log('Unzipping...');
-await decompress('temp/depotDownloader.zip', 'temp/depotDownloader');
+await decompress(
+  '../../temp/depotDownloader.zip',
+  '../../temp/depotDownloader',
+);
 
-console.log('Download complete; files:', await readdir('temp/depotDownloader'));
+console.log(
+  'Download complete; files:',
+  await readdir('../../temp/depotDownloader'),
+);
