@@ -11,6 +11,7 @@ concurrency:
 
 env:
   PUBLIC_ASSET_REPO: ${{ secrets.PUBLIC_ASSET_REPO }}
+  PUBLIC_WARGAMING_APPLICATION_ID: ${{ secrets.PUBLIC_WARGAMING_APPLICATION_ID }}
 
 jobs:
   build:
