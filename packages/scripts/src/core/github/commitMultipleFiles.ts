@@ -11,8 +11,44 @@ export async function commitMultipleFiles(
   repoRaw: string,
   branch: string,
   message: string,
-  changes: FileChange[],
+  changesRaw: FileChange[],
 ) {
+  const changes: FileChange[] = [];
+
+  await Promise.all(
+    changesRaw.map(async (change) => {
+      const blobPath = `${repoRaw}/${branch}/${change.path}`;
+      const response = await fetch(
+        `https://raw.githubusercontent.com/${blobPath}`,
+      );
+
+      if (response.status === 404) {
+        console.log(
+          `🟢 (+${change.content.length.toLocaleString()}B) ${blobPath}`,
+        );
+        changes.push(change);
+      } else if (response.status === 200) {
+        const buffer = Buffer.from(await response.arrayBuffer());
+
+        if (!buffer.equals(change.content)) {
+          const diff = change.content.length - buffer.length;
+
+          console.log(
+            `🟡 (${diff > 0 ? '+' : ''}${diff.toLocaleString()}B) ${blobPath}`,
+          );
+
+          changes.push(change);
+        }
+      } else {
+        throw new Error(
+          `Unexpected status code ${response.status} for ${blobPath}`,
+        );
+      }
+    }),
+  );
+
+  if (changes.length === 0) return;
+
   const [owner, repo] = repoRaw.split('/');
   const latestCommitSha = (
     await octokit.git.getRef({
@@ -31,9 +67,7 @@ export async function commitMultipleFiles(
   const blobs: GithubChangeBlob[] = [];
   const bar = new ProgressBar('Blobs :bar', changes.length);
 
-  for (const changeIndexString in changes) {
-    const changeIndex = parseInt(changeIndexString);
-    const change = changes[changeIndex];
+  for (const change of changes) {
     const createdBlob = await createBlob(owner, repo, change);
     blobs.push(createdBlob!);
     bar.tick();
