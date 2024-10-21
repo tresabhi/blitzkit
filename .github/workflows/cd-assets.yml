@@ -72,7 +72,7 @@ jobs:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           WOTB_DLC_CDN: ${{ secrets.WOTB_DLC_CDN }}
-        run: bun scripts/applyPatches.ts --depot
+        run: bun setup:patches --depot
 
       - name: (ZIP) Download client
         if: github.event.inputs.zip_url != ''

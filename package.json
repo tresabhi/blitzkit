@@ -23,6 +23,7 @@
     "dev:api": "bun --filter=@blitzkit/api run dev",
     "start:bot": "bun dist/bot/index.js",
     "setup:depotdownloader": "bun --filter=@blitzkit/scripts run setup:depotdownloader",
+    "setup:patches": "bun --filter=@blitzkit/scripts run setup:patches",
     "start:website": "bun --filter=@blitzkit/website run start",
     "host:docs": "vitepress preview docs",
     "lint": "tsc",
