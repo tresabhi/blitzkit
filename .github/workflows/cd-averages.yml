@@ -29,4 +29,4 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           VIDEOS_SHEET: ${{ secrets.VIDEOS_SHEET }}
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-        run: bun scripts/averages.ts --production
+        run: bun run build:averages --production
