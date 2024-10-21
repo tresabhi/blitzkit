@@ -36,7 +36,6 @@ import {
 } from '@radix-ui/themes';
 import { debounce } from 'lodash-es';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import usePromise from 'react-promise-suspense';
 import { PageWrapper } from '../../../components/PageWrapper';
 import { TankRowHeaderCell } from '../../../components/TankRowHeaderCell';
 import { Session, type SessionTracking } from '../../../stores/session';
@@ -64,17 +63,20 @@ function Content() {
   const [tankStatsB, setTankStatsB] = useState<IndividualTankStats[] | null>(
     null,
   );
-  const accountInfo = usePromise(
-    (id?: number) =>
-      new Promise<IndividualAccountInfo | null>(async (resolve) => {
-        if (!id) return resolve(null);
+  const [accountInfo, setAccountInfo] = useState<
+    IndividualAccountInfo | null | undefined
+  >(undefined);
 
-        resolve(
-          session.tracking ? await getAccountInfo(idToRegion(id), id) : null,
-        );
-      }),
-    [session.tracking ? session.player.id : undefined],
-  );
+  useEffect(() => {
+    (async () => {
+      const id = session.tracking ? session.player.id : undefined;
+      if (!id) return setAccountInfo(null);
+
+      setAccountInfo(
+        session.tracking ? await getAccountInfo(idToRegion(id), id) : null,
+      );
+    })();
+  }, [session.tracking && session.player.id]);
   const delta = useMemo(
     () =>
       session.tracking && tankStatsB
@@ -83,7 +85,7 @@ function Content() {
             .map((entry) => {
               const tank = tankDefinitions.tanks[entry.tank_id];
               const average = tankAverages.averages[tank.id];
-              const stats = generateStats(entry.all, average.mu);
+              const stats = generateStats(entry.all, average?.mu);
               const statsPretty = prettifyStats(stats);
 
               return {
