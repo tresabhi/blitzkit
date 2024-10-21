@@ -56,7 +56,7 @@ jobs:
 
       - name: (Steam) Setup DepotDownloader
         if: github.event.inputs.zip_url == ''
-        run: bun scripts/setupDepotDownloader.ts
+        run: bun run setup:depotdownloader
 
       - name: (Steam) Download client
         if: github.event.inputs.zip_url == ''
@@ -122,4 +122,4 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
           PUBLIC_ASSET_BRANCH: ${{ github.event.inputs.cdn_branch }}
           WOTB_GLOSSARY: ${{ secrets.WOTB_GLOSSARY }}
-        run: bun build:assets --all-targets --depot --production
+        run: bun run build:assets --all-targets --depot --production
