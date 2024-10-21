@@ -63,7 +63,7 @@ const isBranchNamed = branchName !== undefined;
 
   if (homeHero) {
     if (new Date().getMonth() === 5) {
-      homeHero.classList.add('data-pride');
+      homeHero.dataset.pride = 'true';
     }
 
     window.addEventListener('pointermove', (event) => {
