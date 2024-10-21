@@ -5,7 +5,7 @@
   "scripts": {
     "build:assets": "bun src/buildAssets/index.ts",
     "build:averages": "bun src/averages.ts",
-    "setup:depotdownloader": "bun --filter=@blitzkit/scripts run setup:depotdownloader"
+    "setup:depotdownloader": "bun src/setupDepotDownloader.ts"
   },
   "dependencies": {
     "progress": "^2.0.3",
