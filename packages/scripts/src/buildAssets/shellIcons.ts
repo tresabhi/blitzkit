@@ -16,9 +16,7 @@ export async function shellIcons() {
   );
 
   const changes = await Promise.all(
-    (
-      await readdir(`${DATA}/Gfx/Shared/tank-supply/ammunition/big`)
-    )
+    (await readdir(`${DATA}/Gfx/Shared/tank-supply/ammunition/big`))
       .filter((file) => file.endsWith('_l.txt.dvpl'))
       .map(async (file) => {
         const name = file.match(/(.+)_l\.txt\.dvpl/)![1];
@@ -32,18 +30,15 @@ export async function shellIcons() {
           .map(Number);
 
         return {
-          content: (
-            await image
-              .clone()
-              .extract({
-                left: sizes[0],
-                top: sizes[1],
-                width: sizes[2],
-                height: sizes[3],
-              })
-              .toBuffer()
-          ).toString('base64'),
-          encoding: 'base64',
+          content: await image
+            .clone()
+            .extract({
+              left: sizes[0],
+              top: sizes[1],
+              width: sizes[2],
+              height: sizes[3],
+            })
+            .toBuffer(),
           path: `icons/shells/${name}.webp`,
         } satisfies FileChange;
       }),

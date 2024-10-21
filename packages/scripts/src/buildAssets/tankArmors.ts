@@ -32,10 +32,7 @@ export async function tankArmors() {
 
           changes.push({
             path: `3d/tanks/armor/${id}.glb`,
-            encoding: 'base64',
-            content: Buffer.from(await nodeIO.writeBinary(model)).toString(
-              'base64',
-            ),
+            content: Buffer.from(await nodeIO.writeBinary(model)),
           });
         }),
       );

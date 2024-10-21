@@ -29,17 +29,14 @@ export async function currencies() {
 
   await Promise.all(
     ICONS.map(async ([file, name]) => {
-      const content = (
-        await sharp(
-          await readDVPLFile(`${DATA}/Gfx/Lobby/currency/${file}.dvpl`),
-        )
-          .trim()
-          .toBuffer()
-      ).toString('base64');
+      const content = await sharp(
+        await readDVPLFile(`${DATA}/Gfx/Lobby/currency/${file}.dvpl`),
+      )
+        .trim()
+        .toBuffer();
 
       changes.push({
         content,
-        encoding: 'base64',
         path: `icons/currencies/${name}.webp`,
       });
     }),
@@ -58,18 +55,15 @@ export async function currencies() {
         const imageRaw = await fetch(item.image_url).then((response) =>
           response.arrayBuffer(),
         );
-        const content = (
-          await sharp(imageRaw)
-            .trim({
-              threshold: 100,
-              background: { r: 0, g: 0, b: 0, alpha: 0 },
-            })
-            .toBuffer()
-        ).toString('base64');
+        const content = await sharp(imageRaw)
+          .trim({
+            threshold: 100,
+            background: { r: 0, g: 0, b: 0, alpha: 0 },
+          })
+          .toBuffer();
 
         changes.push({
           content,
-          encoding: 'base64',
           path: `icons/currencies/${key}.webp`,
         });
       }),

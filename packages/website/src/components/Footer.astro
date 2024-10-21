@@ -1,5 +1,5 @@
 ---
-import { fetchGameDefinitions } from '@blitzkit/core';
+import { assertSecret, fetchGameDefinitions } from '@blitzkit/core';
 import { Code, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import packageJson from '../../../../package.json';
 
@@ -134,7 +134,7 @@ const gameDefinitions = await fetchGameDefinitions();
         {gameDefinitions.version}
       </Code>
       <Code size="2" color="gray">
-        {import.meta.env.PUBLIC_ASSET_BRANCH}
+        {assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH)}
       </Code>
     </Flex>
   </Flex>
@@ -150,7 +150,7 @@ const gameDefinitions = await fetchGameDefinitions();
     </Code>
     <Text size="2" color="gray"> CDN </Text>
     <Code size="2" color="gray">
-      {import.meta.env.PUBLIC_ASSET_BRANCH}
+      {assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH)}
     </Code>
   </Flex>
 </Flex>

@@ -8,7 +8,7 @@ import {
   Samples,
   averageDefinitionsAllStatsKeys,
   emptySamples,
-  encodePB64,
+  encodePBBuffer,
   getAccountInfo,
   getTankStats,
   idToRegion,
@@ -235,13 +235,11 @@ async function postWork() {
   commitAssets('averages', [
     {
       path: `averages/${latest}.pb`,
-      content: encodePB64(AverageDefinitions, averageDefinitions),
-      encoding: 'base64',
+      content: encodePBBuffer(AverageDefinitions, averageDefinitions),
     },
     {
       path: 'averages/manifest.json',
-      content: JSON.stringify(manifest),
-      encoding: 'utf-8',
+      content: Buffer.from(JSON.stringify(manifest), 'utf-8'),
     },
   ]);
 }

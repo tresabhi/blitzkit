@@ -1,6 +1,6 @@
 import {
   asset,
-  encodePB64,
+  encodePBBuffer,
   Reviews,
   toUniqueId,
   Video,
@@ -126,8 +126,7 @@ for (const tank of tanksSanitized) {
 
 await commitAssets('reviews', [
   {
-    content: encodePB64(Reviews, reviews),
-    encoding: 'base64',
+    content: encodePBBuffer(Reviews, reviews),
     path: 'definitions/reviews.pb',
   },
 ]);

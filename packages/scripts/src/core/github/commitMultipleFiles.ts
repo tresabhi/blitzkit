@@ -4,17 +4,16 @@ import { octokit } from './octokit';
 
 export interface FileChange {
   path: string;
-  content: string;
-  encoding: 'utf-8' | 'base64';
+  content: Buffer;
 }
 
 export async function commitMultipleFiles(
-  owner: string,
-  repo: string,
+  repoRaw: string,
   branch: string,
   message: string,
   changes: FileChange[],
 ) {
+  const [owner, repo] = repoRaw.split('/');
   const latestCommitSha = (
     await octokit.git.getRef({
       owner,

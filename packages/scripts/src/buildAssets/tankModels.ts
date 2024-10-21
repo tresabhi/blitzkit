@@ -42,10 +42,7 @@ export async function tankModels() {
 
         changes.push({
           path: `3d/tanks/models/${id}.glb`,
-          content: Buffer.from(await nodeIO.writeBinary(model)).toString(
-            'base64',
-          ),
-          encoding: 'base64',
+          content: Buffer.from(await nodeIO.writeBinary(model)),
         });
       }),
     );

@@ -59,31 +59,27 @@ export async function equipmentIcons() {
           const image = sharp(
             await readDVPLFile(`${DATA}/${configPathWebp}.packed.webp.dvpl`),
           );
-          const content = (await image.trim().toBuffer()).toString('base64');
+          const content = await image.trim().toBuffer();
 
           changes.push({
             path: `icons/equipment/${optionalDevice.id}.webp`,
-            encoding: 'base64',
             content,
           });
         } else {
           const config = await readStringDVPL(`${DATA}/${configPath}.dvpl`);
           const sizes = config.split('\n')[4].split(' ').map(Number);
-          const content = (
-            await image
-              .clone()
-              .extract({
-                left: sizes[0],
-                top: sizes[1],
-                width: sizes[2],
-                height: sizes[3],
-              })
-              .toBuffer()
-          ).toString('base64');
+          const content = await image
+            .clone()
+            .extract({
+              left: sizes[0],
+              top: sizes[1],
+              width: sizes[2],
+              height: sizes[3],
+            })
+            .toBuffer();
 
           changes.push({
             path: `icons/equipment/${optionalDevice.id}.webp`,
-            encoding: 'base64',
             content,
           });
         }

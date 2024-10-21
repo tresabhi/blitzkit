@@ -1,6 +1,6 @@
 'use client';
 
-import { idToRegion } from '@blitzkit/core';
+import { assertSecret, idToRegion } from '@blitzkit/core';
 import { Button, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
 import { App } from '../stores/app';
@@ -81,9 +81,9 @@ function Content() {
         fetch(
           `https://api.worldoftanks.${idToRegion(
             wargaming.id,
-          )}/wot/auth/prolongate/?application_id=${
-            import.meta.env.PUBLIC_WARGAMING_APPLICATION_ID
-          }&access_token=${wargaming.token}`,
+          )}/wot/auth/prolongate/?application_id=${assertSecret(
+            import.meta.env.PUBLIC_WARGAMING_APPLICATION_ID,
+          )}&access_token=${wargaming.token}`,
         )
           .then((response) => response.json() as Promise<Extension>)
           .then((json) => {

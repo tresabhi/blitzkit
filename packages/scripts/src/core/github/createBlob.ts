@@ -20,8 +20,8 @@ export const createBlob = throttle(
           await octokit.git.createBlob({
             owner,
             repo,
-            content: change.content,
-            encoding: change.encoding,
+            content: change.content.toString('base64'),
+            encoding: 'base64',
           })
         ).data;
 
@@ -34,7 +34,6 @@ export const createBlob = throttle(
       } catch (error) {
         console.warn(
           `Failed blob ${change.path}; retrying in ${TIME_PER_BLOB}ms...`,
-          // error,
         );
 
         await new Promise((resolve) => setTimeout(resolve, TIME_PER_BLOB));

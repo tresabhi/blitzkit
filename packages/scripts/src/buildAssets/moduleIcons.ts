@@ -17,18 +17,15 @@ export async function moduleIcons() {
       .map(async (file) => {
         const nameRaw = file.match(/vehicle(.+)\.packed\.webp\.dvpl/)![1];
         const name = nameRaw[0].toLowerCase() + nameRaw.slice(1);
-        const content = (
-          await sharp(
-            await readDVPLFile(`${DATA}/Gfx/UI/ModulesTechTree/${file}`),
-          )
-            .trim()
-            .toBuffer()
-        ).toString('base64');
+        const content = await sharp(
+          await readDVPLFile(`${DATA}/Gfx/UI/ModulesTechTree/${file}`),
+        )
+          .trim()
+          .toBuffer();
 
         return {
           content,
           path: `icons/modules/${name}.webp`,
-          encoding: 'base64',
         } satisfies FileChange;
       }),
   );

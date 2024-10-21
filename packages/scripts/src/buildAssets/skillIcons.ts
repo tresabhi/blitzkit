@@ -37,11 +37,10 @@ export async function skillIcons() {
       const name = icon.name.split('/').at(-1)!.replace(/_\d$/, '');
       const path = `${DATA}${icon.name.replace('~res:', '')}.packed.webp.dvpl`;
       const image = sharp(await readDVPLFile(path)).trim();
-      const content = (await image.toBuffer()).toString('base64');
+      const content = await image.toBuffer();
 
       return {
         content,
-        encoding: 'base64',
         path: `icons/skills/${name}.webp`,
       } satisfies FileChange;
     }),

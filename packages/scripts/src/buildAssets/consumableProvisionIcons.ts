@@ -74,13 +74,10 @@ export async function consumableProvisionIcons() {
           const image = sharp(
             await readDVPLFile(`${DATA}/${configPath}.packed.webp.dvpl`),
           );
-          const content = (
-            await image.trim({ threshold: 100 }).toBuffer()
-          ).toString('base64');
+          const content = await image.trim({ threshold: 100 }).toBuffer();
 
           changes.push({
             path: `icons/consumables/${consumable.id}.webp`,
-            encoding: 'base64',
             content,
           });
         } else {
@@ -93,21 +90,18 @@ export async function consumableProvisionIcons() {
             .split('\n')[4]
             .split(' ')
             .map(Number);
-          const content = (
-            await consumablesTexture
-              .clone()
-              .extract({
-                left: sizes[0],
-                top: sizes[1],
-                width: sizes[2],
-                height: sizes[3],
-              })
-              .toBuffer()
-          ).toString('base64');
+          const content = await consumablesTexture
+            .clone()
+            .extract({
+              left: sizes[0],
+              top: sizes[1],
+              width: sizes[2],
+              height: sizes[3],
+            })
+            .toBuffer();
 
           changes.push({
             path: `icons/consumables/${consumable.id}.webp`,
-            encoding: 'base64',
             content,
           });
         }
@@ -147,13 +141,10 @@ export async function consumableProvisionIcons() {
           const image = sharp(
             await readDVPLFile(`${DATA}/${configPath}.packed.webp.dvpl`),
           );
-          const content = (
-            await image.trim({ threshold: 100 }).toBuffer()
-          ).toString('base64');
+          const content = await image.trim({ threshold: 100 }).toBuffer();
 
           changes.push({
             path: `icons/provisions/${provision.id}.webp`,
-            encoding: 'base64',
             content,
           });
         } else {
@@ -166,21 +157,18 @@ export async function consumableProvisionIcons() {
             .split('\n')[4]
             .split(' ')
             .map(Number);
-          const content = (
-            await provisionsTexture
-              .clone()
-              .extract({
-                left: sizes[0],
-                top: sizes[1],
-                width: sizes[2],
-                height: sizes[3],
-              })
-              .toBuffer()
-          ).toString('base64');
+          const content = await provisionsTexture
+            .clone()
+            .extract({
+              left: sizes[0],
+              top: sizes[1],
+              width: sizes[2],
+              height: sizes[3],
+            })
+            .toBuffer();
 
           changes.push({
             path: `icons/provisions/${provision.id}.webp`,
-            encoding: 'base64',
             content,
           });
         }

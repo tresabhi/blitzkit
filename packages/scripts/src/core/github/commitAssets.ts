@@ -7,7 +7,6 @@ export async function commitAssets(message: string, changes: FileChange[]) {
   if (changes.length === 0) return;
 
   await commitMultipleFiles(
-    'tresabhi',
     assertSecret(process.env.PUBLIC_ASSET_REPO),
     assertSecret(process.env.PUBLIC_ASSET_BRANCH),
     `${message} - ${new Date().toDateString()}`,

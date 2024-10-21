@@ -37,16 +37,15 @@ export async function gameModeBanners() {
       path = `/Gfx/UI/Hangar/GameTypes/battle-type_${name.toLowerCase()}`;
     }
 
-    const content = (
-      await sharp(await readDVPLFile(`${DATA}${path}.packed.webp.dvpl`))
-        .trim({ background: { r: 0, g: 0, b: 0, alpha: 0 } })
-        .toBuffer()
-    ).toString('base64');
+    const content = await sharp(
+      await readDVPLFile(`${DATA}${path}.packed.webp.dvpl`),
+    )
+      .trim({ background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .toBuffer();
 
     changes.push({
       path: `icons/game_mode_banners/${id}.webp`,
       content,
-      encoding: 'base64',
     });
   }
 

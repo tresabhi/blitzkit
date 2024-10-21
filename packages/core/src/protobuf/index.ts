@@ -1,3 +1,3 @@
-export * from './encodePB64';
+export * from './encodePBBuffer';
 export * from './fetchPB';
 export * from './pbMap';

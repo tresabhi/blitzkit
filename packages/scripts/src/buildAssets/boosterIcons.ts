@@ -27,22 +27,19 @@ export async function boosterIcons() {
         .split('\n')[4]
         .split(' ')
         .map(Number);
-      const content = (
-        await image
-          .clone()
-          .extract({
-            left: sizes[0],
-            top: sizes[1],
-            width: sizes[2],
-            height: sizes[3],
-          })
-          .toBuffer()
-      ).toString('base64');
+      const content = await image
+        .clone()
+        .extract({
+          left: sizes[0],
+          top: sizes[1],
+          width: sizes[2],
+          height: sizes[3],
+        })
+        .toBuffer();
 
       changes.push({
         path: `icons/boosters/${name}.webp`,
         content,
-        encoding: 'base64',
       });
     }),
   );

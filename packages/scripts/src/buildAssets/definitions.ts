@@ -7,7 +7,7 @@ import {
   ConsumableTankCategoryFilterCategory,
   Crew,
   CrewType,
-  encodePB64,
+  encodePBBuffer,
   EquipmentDefinitions,
   EquipmentSlot,
   GameDefinitions,
@@ -1650,48 +1650,39 @@ export async function definitions() {
 
   await commitAssets('definitions', [
     {
-      content: encodePB64(GameDefinitions, gameDefinitions),
-      encoding: 'base64',
+      content: encodePBBuffer(GameDefinitions, gameDefinitions),
       path: 'definitions/game.pb',
     },
     {
-      content: encodePB64(TankDefinitions, tankDefinitions),
-      encoding: 'base64',
+      content: encodePBBuffer(TankDefinitions, tankDefinitions),
       path: 'definitions/tanks.pb',
     },
     {
-      content: encodePB64(ModelDefinitions, modelDefinitions),
-      encoding: 'base64',
+      content: encodePBBuffer(ModelDefinitions, modelDefinitions),
       path: 'definitions/models.pb',
     },
     {
-      content: encodePB64(EquipmentDefinitions, equipmentDefinitions),
-      encoding: 'base64',
+      content: encodePBBuffer(EquipmentDefinitions, equipmentDefinitions),
       path: 'definitions/equipment.pb',
     },
     {
-      content: encodePB64(ConsumableDefinitions, consumableDefinitions),
-      encoding: 'base64',
+      content: encodePBBuffer(ConsumableDefinitions, consumableDefinitions),
       path: 'definitions/consumables.pb',
     },
     {
-      content: encodePB64(ProvisionDefinitions, provisionDefinitions),
-      encoding: 'base64',
+      content: encodePBBuffer(ProvisionDefinitions, provisionDefinitions),
       path: 'definitions/provisions.pb',
     },
     {
-      content: encodePB64(SkillDefinitions, skillDefinitions),
-      encoding: 'base64',
+      content: encodePBBuffer(SkillDefinitions, skillDefinitions),
       path: 'definitions/skills.pb',
     },
     {
-      content: encodePB64(MapDefinitions, mapDefinitions),
-      encoding: 'base64',
+      content: encodePBBuffer(MapDefinitions, mapDefinitions),
       path: 'definitions/maps.pb',
     },
     {
-      content: encodePB64(CamouflageDefinitions, camouflageDefinitions),
-      encoding: 'base64',
+      content: encodePBBuffer(CamouflageDefinitions, camouflageDefinitions),
       path: 'definitions/camouflages.pb',
     },
   ]);

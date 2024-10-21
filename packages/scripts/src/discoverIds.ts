@@ -13,6 +13,7 @@ import {
 import { chunk, times, uniq } from 'lodash-es';
 import { compress, decompress } from 'lz4js';
 import { commitAssets } from './core/github/commitAssets';
+import { FileChange } from './core/github/commitMultipleFiles';
 
 const CHUNK_SIZE = 2 ** 21;
 const RUN_TIME = 1000 * 60 * 60 * 5.5;
@@ -139,24 +140,25 @@ function post() {
       `Chunk ${index} with ${chunk.length} ids (compressed: ${compressed.length}; uncompressed: ${buffer.length})`,
     );
 
-    const content = Buffer.from(compressed).toString('base64');
+    const content = Buffer.from(compressed);
 
     return {
       content,
-      encoding: 'base64' as const,
       path: `ids/${index}.dids.lz4`,
-    };
+    } satisfies FileChange;
   });
 
   commitAssets('discovered ids', [
     ...files,
     {
-      content: JSON.stringify({
-        chunks: idsChunked.length,
-        count: ids.length,
-        time: Date.now(),
-      } satisfies DiscoveredIdsDefinitions),
-      encoding: 'utf-8',
+      content: Buffer.from(
+        JSON.stringify({
+          chunks: idsChunked.length,
+          count: ids.length,
+          time: Date.now(),
+        } satisfies DiscoveredIdsDefinitions),
+        'utf-8',
+      ),
       path: 'ids/manifest.json',
     },
   ]);

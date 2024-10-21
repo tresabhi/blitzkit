@@ -80,15 +80,13 @@ export async function tankIcons() {
 
           if (big) {
             changes.push({
-              content: big.toString('base64'),
-              encoding: 'base64',
+              content: big,
               path: `icons/tanks/big/${id}.webp`,
             });
           }
           if (small) {
             changes.push({
-              content: small.toString('base64'),
-              encoding: 'base64',
+              content: small,
               path: `icons/tanks/small/${id}.webp`,
             });
           }
