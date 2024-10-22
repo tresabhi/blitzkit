@@ -55,7 +55,18 @@ export const TANK_ICONS_COLLECTOR: Record<TankClass, string> = {
   [TankClass.MEDIUM]: 'https://i.imgur.com/u8YDMBh.png',
   [TankClass.HEAVY]: 'https://i.imgur.com/8xRf3nc.png',
 };
-export const TIERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
+export const TIERS = [
+  Tier.I,
+  Tier.II,
+  Tier.III,
+  Tier.IV,
+  Tier.V,
+  Tier.VI,
+  Tier.VII,
+  Tier.VIII,
+  Tier.IX,
+  Tier.X,
+];
 export const TIER_ROMAN_NUMERALS: Record<Tier, string> = {
   [Tier.I]: 'I',
   [Tier.II]: 'II',

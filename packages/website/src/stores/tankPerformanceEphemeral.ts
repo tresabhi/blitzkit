@@ -23,6 +23,6 @@ export enum PlayerCountPeriod {
 export const TankPerformanceEphemeral = createContextualStore(() =>
   create<TankPerformanceEphemeral>()(() => ({
     playerCountPeriod: PlayerCountPeriod.ThisMonth,
-    mode: TankPerformanceMode.Table,
+    mode: TankPerformanceMode.Charts,
   })),
 );

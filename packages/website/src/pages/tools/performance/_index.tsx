@@ -31,14 +31,9 @@ function Content({ skeleton }: MaybeSkeletonComponentProps) {
 
       <PerformanceInfo skeleton={skeleton} />
       <FilterControl />
+      <PlayerCountControl />
 
-      {mode === TankPerformanceMode.Table && (
-        <>
-          <PlayerCountControl />
-          <TankTable skeleton={skeleton} />
-        </>
-      )}
-
+      {mode === TankPerformanceMode.Table && <TankTable skeleton={skeleton} />}
       {mode === TankPerformanceMode.Charts && <Charts />}
     </PageWrapper>
   );
