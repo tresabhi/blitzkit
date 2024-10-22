@@ -28,9 +28,9 @@ export function PerformanceInfo({ skeleton }: MaybeSkeletonComponentProps) {
           <InfoCircledIcon />
         </Callout.Icon>
         <Callout.Text>
-          Career stats based on{' '}
+          Estimated stats based on{' '}
           {skeleton ? <InlineSkeleton width="2rem" /> : samples} players.
-          Updated {skeleton ? <InlineSkeleton width="4rem" /> : timeAgo} ago.
+          Updated {skeleton ? <InlineSkeleton width="3rem" /> : timeAgo} ago.
         </Callout.Text>
       </Callout.Root>
     </Flex>

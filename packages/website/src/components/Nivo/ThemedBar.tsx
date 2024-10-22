@@ -12,6 +12,7 @@ export function ThemedBar<RawDatum extends BarDatum>(
     <ResponsiveBar
       colors={{ scheme: 'yellow_green_blue' }}
       theme={nivoTheme}
+      borderRadius={4}
       {...props}
     />
   );
