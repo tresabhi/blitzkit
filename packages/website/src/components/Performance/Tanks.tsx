@@ -5,7 +5,7 @@ import { times } from 'lodash-es';
 import { Fragment, Suspense, useEffect, useMemo, useState } from 'react';
 import { filterTank } from '../../core/blitzkit/filterTank';
 import { $tankFilters } from '../../stores/tankFilters';
-import { TankPerformancePersistent } from '../../stores/tankPerformancePersistent';
+import { TankPerformanceEphemeral } from '../../stores/tankPerformanceEphemeral';
 import { TankPerformanceSort } from '../../stores/tankPerformanceSort';
 import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
 import { RowLoader } from './RowLoader';
@@ -36,7 +36,7 @@ export function Tanks({ skeleton }: MaybeSkeletonComponentProps) {
   }
 
   const sort = TankPerformanceSort.use();
-  const tankPerformancePersistentStore = TankPerformancePersistent.useStore();
+  const tankPerformancePersistentStore = TankPerformanceEphemeral.useStore();
   const filters = useStore($tankFilters);
   const tanksSorted = useMemo(() => {
     const { playerCountPeriod } = tankPerformancePersistentStore.getState();

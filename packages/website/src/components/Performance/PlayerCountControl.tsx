@@ -1,12 +1,14 @@
 import { Flex, Select, Text } from '@radix-ui/themes';
-import { TankPerformancePersistent } from '../../stores/tankPerformancePersistent';
-import { PlayerCountPeriod } from '../../stores/tankPerformancePersistent/constants';
+import {
+  PlayerCountPeriod,
+  TankPerformanceEphemeral,
+} from '../../stores/tankPerformanceEphemeral';
 
 export function PlayerCountControl() {
-  const playerCountPeriod = TankPerformancePersistent.use(
+  const playerCountPeriod = TankPerformanceEphemeral.use(
     (state) => state.playerCountPeriod,
   );
-  const mutateTankPerformanceSort = TankPerformancePersistent.useMutation();
+  const mutateTankPerformanceSort = TankPerformanceEphemeral.useMutation();
 
   return (
     <Flex justify="center" align="center" gap="2">

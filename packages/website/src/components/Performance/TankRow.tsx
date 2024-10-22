@@ -6,7 +6,7 @@ import {
 import { Table } from '@radix-ui/themes';
 import { memo } from 'react';
 import { useAveragesExclusionRatio } from '../../hooks/useAveragesExclusionRatio';
-import { TankPerformancePersistent } from '../../stores/tankPerformancePersistent';
+import { TankPerformanceEphemeral } from '../../stores/tankPerformanceEphemeral';
 import { TankRowHeaderCell } from '../TankRowHeaderCell';
 
 interface TankRowProps {
@@ -19,7 +19,7 @@ export const TankRow = memo<TankRowProps>(
   ({ tank }) => {
     const averages = averageDefinitions.averages[tank.id];
     const ratio = useAveragesExclusionRatio();
-    const playerCountPeriod = TankPerformancePersistent.use(
+    const playerCountPeriod = TankPerformanceEphemeral.use(
       (state) => state.playerCountPeriod,
     );
 

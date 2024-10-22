@@ -1,27 +1,45 @@
 import { PageWrapper } from '../../../components/PageWrapper';
-import { Controls } from '../../../components/Performance/Controls';
+import { Charts } from '../../../components/Performance/Charts';
+import { ModeSwitcher } from '../../../components/Performance/ModeSwitcher';
 import { PerformanceInfo } from '../../../components/Performance/PerformanceInfo';
+import { PlayerCountControl } from '../../../components/Performance/PlayerCountControl';
 import { TankTable } from '../../../components/Performance/Table';
-import { TankPerformancePersistent } from '../../../stores/tankPerformancePersistent';
+import { FilterControl } from '../../../components/TankSearch/components/FilterControl';
+import {
+  TankPerformanceEphemeral,
+  TankPerformanceMode,
+} from '../../../stores/tankPerformanceEphemeral';
 import { TankPerformanceSort } from '../../../stores/tankPerformanceSort';
 import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
 
 export function Page({ skeleton }: MaybeSkeletonComponentProps) {
   return (
     <TankPerformanceSort.Provider>
-      <TankPerformancePersistent.Provider>
+      <TankPerformanceEphemeral.Provider>
         <Content skeleton={skeleton} />
-      </TankPerformancePersistent.Provider>
+      </TankPerformanceEphemeral.Provider>
     </TankPerformanceSort.Provider>
   );
 }
 
 function Content({ skeleton }: MaybeSkeletonComponentProps) {
+  const mode = TankPerformanceEphemeral.use((state) => state.mode);
+
   return (
     <PageWrapper color="jade" noMaxWidth>
+      <ModeSwitcher />
+
       <PerformanceInfo skeleton={skeleton} />
-      <Controls />
-      <TankTable skeleton={skeleton} />
+      <FilterControl />
+
+      {mode === TankPerformanceMode.Table && (
+        <>
+          <PlayerCountControl />
+          <TankTable skeleton={skeleton} />
+        </>
+      )}
+
+      {mode === TankPerformanceMode.Charts && <Charts />}
     </PageWrapper>
   );
 }
