@@ -29,7 +29,7 @@ export const Total = memo<TotalProps>(
     const sum = useCallback(
       (slice: (tank: BlitzkitStats) => number) => {
         return tanks.reduce(
-          (acc, tank) => acc + tank.samples.total * slice(tank.mu),
+          (acc, tank) => acc + tank.samples[playerCountPeriod] * slice(tank.mu),
           0,
         );
       },
