@@ -1,11 +1,11 @@
 import { Flex } from '@radix-ui/themes';
-import { BattleDistributionAcrossTiers } from './components/BattleDistributionAcrossTiers';
+import { PlayersByTierAndClass } from './components/PlayersByTierAndClass';
 
 export function Charts() {
   return (
     <Flex justify="center">
       <Flex direction="column" maxWidth="45rem" flexGrow="1" py="6" gap="9">
-        <BattleDistributionAcrossTiers />
+        <PlayersByTierAndClass />
       </Flex>
     </Flex>
   );

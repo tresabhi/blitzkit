@@ -20,7 +20,7 @@ const averageDefinitions = await fetchAverageDefinitions();
 const tankDefinitions = await fetchTankDefinitions();
 const averageDefinitionsArray = Object.entries(averageDefinitions.averages);
 
-export function BattleDistributionAcrossTiers() {
+export function PlayersByTierAndClass() {
   const playerCountPeriod = TankPerformanceEphemeral.use(
     (state) => state.playerCountPeriod,
   );
