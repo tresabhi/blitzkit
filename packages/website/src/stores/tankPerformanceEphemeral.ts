@@ -1,3 +1,4 @@
+import type { Samples } from '@blitzkit/core';
 import { create } from 'zustand';
 import { createContextualStore } from '../core/zustand/createContextualStore';
 
@@ -11,18 +12,11 @@ export enum TankPerformanceMode {
   Charts,
 }
 
-export enum PlayerCountPeriod {
-  Past120Days = 'd_120',
-  Past90Days = 'd_90',
-  Past60Days = 'd_60',
-  ThisMonth = 'd_30',
-  ThisWeek = 'd_7',
-  Yesterday = 'd_1',
-}
+export type PlayerCountPeriod = keyof Samples;
 
 export const TankPerformanceEphemeral = createContextualStore(() =>
   create<TankPerformanceEphemeral>()(() => ({
-    playerCountPeriod: PlayerCountPeriod.ThisMonth,
+    playerCountPeriod: 'd_30',
     mode: TankPerformanceMode.Charts,
   })),
 );

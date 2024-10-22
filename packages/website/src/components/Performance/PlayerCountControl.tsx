@@ -1,7 +1,7 @@
 import { Flex, Select, Text } from '@radix-ui/themes';
 import {
-  PlayerCountPeriod,
   TankPerformanceEphemeral,
+  type PlayerCountPeriod,
 } from '../../stores/tankPerformanceEphemeral';
 
 export function PlayerCountControl() {
@@ -23,24 +23,13 @@ export function PlayerCountControl() {
       >
         <Select.Trigger />
         <Select.Content>
-          <Select.Item value={PlayerCountPeriod.Past120Days}>
-            Past 120 days
-          </Select.Item>
-          <Select.Item value={PlayerCountPeriod.Past90Days}>
-            Past 90 days
-          </Select.Item>
-          <Select.Item value={PlayerCountPeriod.Past60Days}>
-            Past 60 days
-          </Select.Item>
-          <Select.Item value={PlayerCountPeriod.ThisMonth}>
-            This month
-          </Select.Item>
-          <Select.Item value={PlayerCountPeriod.ThisWeek}>
-            This week
-          </Select.Item>
-          <Select.Item value={PlayerCountPeriod.Yesterday}>
-            Yesterday
-          </Select.Item>
+          <Select.Item value="total">Total</Select.Item>
+          <Select.Item value="d_120">Past 120 days</Select.Item>
+          <Select.Item value="d_90">Past 90 days</Select.Item>
+          <Select.Item value="d_60">Past 60 days</Select.Item>
+          <Select.Item value="d_30">This month</Select.Item>
+          <Select.Item value="d_7">This week</Select.Item>
+          <Select.Item value="d_1">Yesterday</Select.Item>
         </Select.Content>
       </Select.Root>
     </Flex>
