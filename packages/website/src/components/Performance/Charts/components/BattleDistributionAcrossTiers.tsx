@@ -8,8 +8,11 @@ import {
   TIERS,
 } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
+import { useStore } from '@nanostores/react';
 import { Box, Flex, Heading } from '@radix-ui/themes';
+import { filterTank } from '../../../../core/blitzkit/filterTank';
 import { useAveragesExclusionRatio } from '../../../../hooks/useAveragesExclusionRatio';
+import { $tankFilters } from '../../../../stores/tankFilters';
 import { TankPerformanceEphemeral } from '../../../../stores/tankPerformanceEphemeral';
 import { ThemedBar } from '../../../Nivo/ThemedBar';
 
@@ -22,6 +25,7 @@ export function BattleDistributionAcrossTiers() {
     (state) => state.playerCountPeriod,
   );
   const ratio = useAveragesExclusionRatio();
+  const filters = useStore($tankFilters);
 
   return (
     <Flex direction="column" gap="4">
@@ -40,7 +44,13 @@ export function BattleDistributionAcrossTiers() {
               const id = Number(idString);
               const tank = tankDefinitions.tanks[id];
 
-              if (tank === undefined || tank.tier !== tier) return;
+              if (
+                tank === undefined ||
+                tank.tier !== tier ||
+                !filterTank(filters, tank)
+              ) {
+                return;
+              }
 
               players[tank.class] += entry.samples[playerCountPeriod] * ratio;
             });

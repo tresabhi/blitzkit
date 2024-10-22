@@ -1,5 +1,5 @@
 import { Flex } from '@radix-ui/themes';
-import { BattleDistributionAcrossTiers } from './components/BattleDistributionAcrossTiersNivo';
+import { BattleDistributionAcrossTiers } from './components/BattleDistributionAcrossTiers';
 
 export function Charts() {
   return (
