@@ -5,7 +5,7 @@ import { BattleDistributionAcrossTiersByClass } from './components/BattleDistrib
 export function Charts() {
   return (
     <Flex justify="center">
-      <Flex direction="column" maxWidth="35rem" flexGrow="1" py="6" gap="9">
+      <Flex direction="column" maxWidth="45rem" flexGrow="1" py="6" gap="9">
         <BattleDistributionAcrossTiers />
         <BattleDistributionAcrossTiersByClass />
       </Flex>
