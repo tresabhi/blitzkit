@@ -108,7 +108,7 @@ Forming the corelation matrix will create an $I \times I$ matrix where. This mat
 | $x_3$ | $r_{1 \leftrightarrow 3}^2$ | $r_{2 \leftrightarrow 3}^2$ | $1$                         | $r_{3 \leftrightarrow j}^2$ |
 | $x_j$ | $r_{1 \leftrightarrow j}^2$ | $r_{2 \leftrightarrow j}^2$ | $r_{3 \leftrightarrow j}^2$ | $1$                         |
 
-It should not be a surprise to find $r_{i \leftrightarrow i}^2=1$ which forms a neat diagonal across the table. Note that there are many duplicates within the $I^2$ entries. The "bottom-right triangle" can be eliminated to remove redundancies leaving us with only $\frac{I(I-1)}{2}$ fields occupied.
+It should not be a surprise to find $r_{i \leftrightarrow i}^2=1$ which forms a neat diagonal across the table. Note that there are many duplicates within the $I^2$ entries. The "bottom-right triangle" can be eliminated to remove redundancies leaving us with only $\frac{I(I+1)}{2}$ fields occupied.
 
 |       | $x_1$ | $x_2$                       | $x_3$                       | $x_j$                       |
 | ----- | ----- | --------------------------- | --------------------------- | --------------------------- |
@@ -117,9 +117,11 @@ It should not be a surprise to find $r_{i \leftrightarrow i}^2=1$ which forms a 
 | $x_3$ |       |                             | $1$                         | $r_{3 \leftrightarrow j}^2$ |
 | $x_j$ |       |                             |                             | $1$                         |
 
-When programming this matrix into an array, $r_{i \leftrightarrow i}^2=1$ will be redundant. I recommend condensing the matrix into an array of size $\frac{I(I-1)}{2}-I=\frac{I(I-3)}{2}$ to avoid all redundant entries. For $I=4$, the array will look something like the one illustrated below.
+When programming this matrix into an array, $r_{i \leftrightarrow i}^2=1$ will be redundant. I recommend condensing the matrix into an array of size $\frac{I(I+1)}{2}+I=\frac{I(I-1)}{2}$ to avoid all redundant entries. For $I=4$, the array will look something like the one illustrated below (here, $j=4$).
 
-TODO:
+$$
+[r_{1 \leftrightarrow 2}^2, r_{1 \leftrightarrow 3}^2, r_{1 \leftrightarrow 4}^2, r_{2 \leftrightarrow 3}^2, r_{2 \leftrightarrow 4}^2, r_{3 \leftrightarrow 4}^2]
+$$
 
 ## Understanding the Weights
 
