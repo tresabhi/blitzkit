@@ -63,9 +63,33 @@ $$
 
 Polynomial regression coefficients $\beta$ can be acquired through basic linear algebra where an $m \times m$ of constants is multiplied with $m \times 1$ of unknowns which equals another $m \times 1$ of constants.
 
-$$
-\begin{bmatrix} \sum_{k=1}^n x_i^0 & \sum_{k=1}^n x_i^1 & \sum_{k=1}^n x_i^2 & \dots & \sum_{k=1}^n x_i^m \\ \sum_{k=1}^n x_i^1 & \sum_{k=1}^n x_i^2 & \sum_{k=1}^n x_i^3 & \dots & \sum_{k=1}^n x_i^{m+1} \\ \sum_{k=1}^n x_i^2 & \sum_{k=1}^n x_i^3 & \sum_{k=1}^n x_i^4 & \dots & \sum_{k=1}^n x_i^{m+2} \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ \sum_{k=1}^n x_i^m & \sum_{k=1}^n x_i^{m+1} & \sum_{k=1}^n x_i^{m+1} & \dots & \sum_{k=1}^n x_i^{2m} \\ \end{bmatrix} \begin{bmatrix} \beta_0 \\ \beta_1 \\ \beta_2 \\ \vdots \\ \beta_m \end{bmatrix} = \begin{bmatrix} \sum_{k=1}^n x_jx_i^0 \\ \sum_{k=1}^n x_jx_i^1 \\ \sum_{k=1}^n x_jx_i^2 \\ \vdots \\ \sum_{k=1}^n x_jx_i^m \end{bmatrix}
-$$
+```math
+\begin{bmatrix}
+\sum_{k=1}^n x_i^0 & \sum_{k=1}^n x_i^1 & \sum_{k=1}^n x_i^2 & \dots & \sum_{k=1}^n x_i^m \\
+\sum_{k=1}^n x_i^1 & \sum_{k=1}^n x_i^2 & \sum_{k=1}^n x_i^3 & \dots & \sum_{k=1}^n x_i^{m+1} \\
+\sum_{k=1}^n x_i^2 & \sum_{k=1}^n x_i^3 & \sum_{k=1}^n x_i^4 & \dots & \sum_{k=1}^n x_i^{m+2} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+\sum_{k=1}^n x_i^m & \sum_{k=1}^n x_i^{m+1} & \sum_{k=1}^n x_i^{m+1} & \dots & \sum_{k=1}^n x_i^{2m} \\
+\end{bmatrix}
+
+\begin{bmatrix}
+\beta_0 \\
+\beta_1 \\
+\beta_2 \\
+\vdots \\
+\beta_m
+\end{bmatrix}
+
+=
+
+\begin{bmatrix}
+\sum_{k=1}^n x_jx_i^0 \\
+\sum_{k=1}^n x_jx_i^1 \\
+\sum_{k=1}^n x_jx_i^2 \\
+\vdots \\
+\sum_{k=1}^n x_jx_i^m
+\end{bmatrix}
+```
 
 The weight $w$ is a slice of the Pearson corelation matrix. The numerator is the corelation between the $i$th statistic and the target statistic $j$ while the denominator the sum of the corelations between the $i$th statistic and all statistics but the target statistic $j$ (including itself which will always result in $r=1$).
 
