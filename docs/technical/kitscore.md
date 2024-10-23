@@ -6,11 +6,11 @@ A performance metric that makes sense. This metric can be applied to any game, v
 
 ## Consumption of Observations
 
-KitScore is driven solely by the behavior of other players and finding meaning of a new observation within a pool of condensed data based on previously observed data. Generally, we will be provided with a number of statistics (the $x_i$ of an observation) per player (WoTB: $x_\text{frags}$, $x_\text{damage\_dealt}$, $x_\text{spots}$, etc.) including a target statistic (the $x_j$ of an observation) that all other statistics try to maximize (WoTB: "winrate" which we will defined later as $x_j$).
+KitScore is driven solely by the behavior of other players and finding meaning of a new observation within a pool of condensed data based on previously observed data. Generally, we will be provided with a number of statistics (the $x_i$ of an observation) per player (WoTB: $x_\text{frags}$, $x_\text{xp}$, $x_\text{spots}$, etc.) including a target statistic (the $x_j$ of an observation) that all other statistics try to maximize (WoTB: "winrate" which we will defined later as $x_j$).
 
 If the statistics are cumulative, they will have to be normalized (WoTB: statistics fetched from Wargaming are indeed cumulative even for a single player; $x_\text{frags}=\frac{\Sigma x_\text{frags}}{\Sigma x_\text{battles}}$, $x_\text{spots}=\frac{\Sigma x_\text{spots}}{\Sigma x_\text{battles}}$, $x_j=\frac{\Sigma x_\text{wins}}{\Sigma x_\text{battles}}$, etc.). Each player will have such average statistics, giving us many points of data to work with. If the statistics are not cumulative, then you will be dealing with multiple observations per player which will only help improve accuracy.
 
-## It’s Impossible to "Find What Makes the Metric Tick"
+## It's Impossible to "Find What Makes the Metric Tick"
 
 WN8, a widely adopted metric in the World of Tanks and World of Tanks Blitz communities is plagued with problems. One of them being that people often "what makes the metric tick." In other words, people easily exploit the rudimentary nature of WN8 to score undeservedly high.
 
@@ -64,31 +64,7 @@ $$
 Polynomial regression coefficients $\beta$ can be acquired through basic linear algebra where an $m \times m$ of constants is multiplied with $m \times 1$ of unknowns which equals another $m \times 1$ of constants.
 
 $$
-\begin{bmatrix}
-\sum_{k=1}^n x_i^0 & \sum_{k=1}^n x_i^1 & \sum_{k=1}^n x_i^2 & \dots & \sum_{k=1}^n x_i^m \\
-\sum_{k=1}^n x_i^1 & \sum_{k=1}^n x_i^2 & \sum_{k=1}^n x_i^3 & \dots & \sum_{k=1}^n x_i^{m+1} \\
-\sum_{k=1}^n x_i^2 & \sum_{k=1}^n x_i^3 & \sum_{k=1}^n x_i^4 & \dots & \sum_{k=1}^n x_i^{m+2} \\
-\vdots & \vdots & \vdots & \ddots & \vdots \\
-\sum_{k=1}^n x_i^m & \sum_{k=1}^n x_i^{m+1} & \sum_{k=1}^n x_i^{m+1} & \dots & \sum_{k=1}^n x_i^{2m} \\
-\end{bmatrix}
-
-\begin{bmatrix}
-\beta_0 \\
-\beta_1 \\
-\beta_2 \\
-\vdots \\
-\beta_m
-\end{bmatrix}
-
-=
-
-\begin{bmatrix}
-\sum_{k=1}^n x_jx_i^0 \\
-\sum_{k=1}^n x_jx_i^1 \\
-\sum_{k=1}^n x_jx_i^2 \\
-\vdots \\
-\sum_{k=1}^n x_jx_i^m
-\end{bmatrix}
+\begin{bmatrix} \sum_{k=1}^n x_i^0 & \sum_{k=1}^n x_i^1 & \sum_{k=1}^n x_i^2 & \dots & \sum_{k=1}^n x_i^m \\ \sum_{k=1}^n x_i^1 & \sum_{k=1}^n x_i^2 & \sum_{k=1}^n x_i^3 & \dots & \sum_{k=1}^n x_i^{m+1} \\ \sum_{k=1}^n x_i^2 & \sum_{k=1}^n x_i^3 & \sum_{k=1}^n x_i^4 & \dots & \sum_{k=1}^n x_i^{m+2} \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ \sum_{k=1}^n x_i^m & \sum_{k=1}^n x_i^{m+1} & \sum_{k=1}^n x_i^{m+1} & \dots & \sum_{k=1}^n x_i^{2m} \\ \end{bmatrix} \begin{bmatrix} \beta_0 \\ \beta_1 \\ \beta_2 \\ \vdots \\ \beta_m \end{bmatrix} = \begin{bmatrix} \sum_{k=1}^n x_jx_i^0 \\ \sum_{k=1}^n x_jx_i^1 \\ \sum_{k=1}^n x_jx_i^2 \\ \vdots \\ \sum_{k=1}^n x_jx_i^m \end{bmatrix}
 $$
 
 The weight $w$ is a slice of the Pearson corelation matrix. The numerator is the corelation between the $i$th statistic and the target statistic $j$ while the denominator the sum of the corelations between the $i$th statistic and all statistics but the target statistic $j$ (including itself which will always result in $r=1$).
