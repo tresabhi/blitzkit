@@ -2,7 +2,7 @@
 
 ## Memo
 
-A performance metric that makes sense. This metric can be applied to any game, virtual or real. Specific pieces of information relating directly to World of Tanks Blitz will be provided within parentheses and with a "WoTB:" prefix.
+KitScore is a performance metric that makes sense. This metric can be applied to any game, virtual or real. Specific pieces of information relating directly to World of Tanks Blitz will be provided within parentheses and with a "WoTB:" prefix.
 
 ## Consumption of Observations
 
@@ -12,9 +12,9 @@ If the statistics are cumulative, they will have to be normalized (WoTB: statist
 
 ## It's Impossible to "Find What Makes the Metric Tick"
 
-WN8, a widely adopted metric in the World of Tanks and World of Tanks Blitz communities is plagued with problems. One of them being that people often "what makes the metric tick." In other words, people easily exploit the rudimentary nature of WN8 to score undeservedly high.
+WN8, a widely adopted metric in the World of Tanks and World of Tanks Blitz communities is plagued with problems. One of them being that people often find and exploit "what makes the metric tick." In other words, people easily exploit the rudimentary nature of WN8 to score undeservedly high.
 
-In WN8, the gains of some rewarding categories overshadow the losses of others. KitScore makes this nearly impossible as it punishes a player for scoring well solely high in a certain category. You will never exploit KitScore. Period.
+In WN8, the gains of some rewarding categories overshadow the losses of others though that may not necessarily be in the best interest in maximizing winrate. KitScore makes this nearly impossible as it punishes a player for scoring well solely high in a certain category. You will never exploit KitScore. Period.
 
 ## Generating Reasonable Values
 
@@ -43,10 +43,10 @@ $$
 A_\text{human}=CA
 $$
 
-The final metric $A$ is the weighted average of individual scores $a$ which are functions of the $i$th statistic.
+The final metric $A$ is the weighted average of individual scores $a$ which are functions of the $i$th statistic excluding the target statistic $j$ itself.
 
 $$
-A=\frac{\sum w_{i}a_{i}}{\sum w_{i}}
+A=\frac{\sum_{i \neq j} w_{i}a_{i}}{\sum_{i \neq j} w_{i}}
 $$
 
 The "atomic" score $a$ is the difference between the predicted target statistic $P_{i \leftrightarrow j}(x_i)$ acquired using a polynomial regression of degree $m$ and the actual newly observed $x_j$.
@@ -58,7 +58,7 @@ $$
 The polynomial regression of $m$th degree can be written as follows:
 
 $$
-P_i(x)=\beta_0x^0+\beta_1x^1+\beta_2x^2+\dots+\beta_mx^m
+P(x)=\beta_0x^0+\beta_1x^1+\beta_2x^2+\dots+\beta_mx^m
 $$
 
 Polynomial regression coefficients $\beta$ can be acquired through basic linear algebra where an $m \times m$ of constants is multiplied with $m \times 1$ of unknowns which equals another $m \times 1$ of constants.
@@ -91,11 +91,35 @@ Polynomial regression coefficients $\beta$ can be acquired through basic linear 
 \end{bmatrix}
 ```
 
-The weight $w$ is a slice of the Pearson corelation matrix. The numerator is the corelation between the $i$th statistic and the target statistic $j$ while the denominator the sum of the corelations between the $i$th statistic and all statistics but the target statistic $j$ (including itself which will always result in $r=1$).
+The weight $w$ is a slice of the Pearson corelation matrix. The numerator is the corelation between the $i$th statistic and the target statistic $j$ while the denominator the sum of the corelations between the $i$th statistic and all statistics but the target statistic $j$.
 
 $$
 w_{i}=\frac{r_{i\leftrightarrow j}^2}{\sum_{i_{k}\neq j}r_{i\leftrightarrow i_{k}}^2}
 $$
+
+## Understanding the Corelation Matrix
+
+Forming the corelation matrix will create an $I \times I$ matrix where. This matrix is best represented as a table. The example below illustrates a matrix/table for $I=4$ which includes $3$ entries for $i$ statistics and $1$ entry for the $j$ target statistic.
+
+|       | $x_1$                       | $x_2$                       | $x_3$                       | $x_j$                       |
+| ----- | --------------------------- | --------------------------- | --------------------------- | --------------------------- |
+| $x_1$ | $1$                         | $r_{1 \leftrightarrow 2}^2$ | $r_{1 \leftrightarrow 3}^2$ | $r_{1 \leftrightarrow j}^2$ |
+| $x_2$ | $r_{1 \leftrightarrow 2}^2$ | $1$                         | $r_{2 \leftrightarrow 3}^2$ | $r_{2 \leftrightarrow j}^2$ |
+| $x_3$ | $r_{1 \leftrightarrow 3}^2$ | $r_{2 \leftrightarrow 3}^2$ | $1$                         | $r_{3 \leftrightarrow j}^2$ |
+| $x_j$ | $r_{1 \leftrightarrow j}^2$ | $r_{2 \leftrightarrow j}^2$ | $r_{3 \leftrightarrow j}^2$ | $1$                         |
+
+It should not be a surprise to find $r_{i \leftrightarrow i}^2=1$ which forms a neat diagonal across the table. Note that there are many duplicates within the $I^2$ entries. The "bottom-right triangle" can be eliminated to remove redundancies leaving us with only $\frac{I(I-1)}{2}$ fields occupied.
+
+|       | $x_1$ | $x_2$                       | $x_3$                       | $x_j$                       |
+| ----- | ----- | --------------------------- | --------------------------- | --------------------------- |
+| $x_1$ | $1$   | $r_{1 \leftrightarrow 2}^2$ | $r_{1 \leftrightarrow 3}^2$ | $r_{1 \leftrightarrow j}^2$ |
+| $x_2$ |       | $1$                         | $r_{2 \leftrightarrow 3}^2$ | $r_{2 \leftrightarrow j}^2$ |
+| $x_3$ |       |                             | $1$                         | $r_{3 \leftrightarrow j}^2$ |
+| $x_j$ |       |                             |                             | $1$                         |
+
+When programming this matrix into an array, $r_{i \leftrightarrow i}^2=1$ will be redundant. I recommend condensing the matrix into an array of size $\frac{I(I-1)}{2}-I=\frac{I(I-3)}{2}$ to avoid all redundant entries. For $I=4$, the array will look something like the one illustrated below.
+
+TODO:
 
 ## Understanding the Weights
 
