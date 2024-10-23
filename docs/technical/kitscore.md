@@ -1,16 +1,47 @@
 # KitScore
 
+## Memo
+
 A performance metric that makes sense. This metric can be applied to any game, virtual or real. Specific pieces of information relating directly to World of Tanks Blitz will be provided within parentheses and with a "WoTB:" prefix.
 
-KS is driven solely by the behavior of other players and finding meaning of a new observation within a pool of condensed data. Generally, we will be provided with a number of statistics (WoTB: `frags`, `damage_dealt`, `spots`, etc.) including a target statistic that all other statistics try to maximize (WoTB: `winrate`).
+## Consumption of Observations
 
-If the statistics are cumulative, they will have to be normalized (WoTB: `average.frags = frags / battles`, `average.winrate = wins / battles`). Each player will have such average statistics, giving us many points of data to work with.
+KitScore is driven solely by the behavior of other players and finding meaning of a new observation within a pool of condensed data based on previously observed data. Generally, we will be provided with a number of statistics (the $x_i$ of an observation) per player (WoTB: $x_\text{frags}$, $x_\text{damage\_dealt}$, $x_\text{spots}$, etc.) including a target statistic (the $x_j$ of an observation) that all other statistics try to maximize (WoTB: "winrate" which we will defined later as $x_j$).
 
-Though the averages of a single player is technically a $n + 1$ dimensional vector where $n$ is the number of average statistics that are now the target statistic and the $1$ is the dependent variable/target statistic, we will be working with $n$ 2-dimensional plots of each individual average statistic vs. the target statistic.
+If the statistics are cumulative, they will have to be normalized (WoTB: statistics fetched from Wargaming are indeed cumulative even for a single player; $x_\text{frags}=\frac{\Sigma x_\text{frags}}{\Sigma x_\text{battles}}$, $x_\text{spots}=\frac{\Sigma x_\text{spots}}{\Sigma x_\text{battles}}$, $x_j=\frac{\Sigma x_\text{wins}}{\Sigma x_\text{battles}}$, etc.). Each player will have such average statistics, giving us many points of data to work with. If the statistics are not cumulative, then you will be dealing with multiple observations per player which will only help improve accuracy.
 
-## Interpreting Observations
+## It’s Impossible to "Find What Makes the Metric Tick"
+
+WN8, a widely adopted metric in the World of Tanks and World of Tanks Blitz communities is plagued with problems. One of them being that people often "what makes the metric tick." In other words, people easily exploit the rudimentary nature of WN8 to score undeservedly high.
+
+In WN8, the gains of some rewarding categories overshadow the losses of others. KitScore makes this nearly impossible as it punishes a player for scoring well solely high in a certain category. You will never exploit KitScore. Period.
+
+## Generating Reasonable Values
+
+TODO: there's like no runaway cases
+
+## Symbol Interpretation
+
+| Symbol           | Interpretation                                                                                                                                         |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| $A_\text{human}$ | The human readable version of the raw score $A$.                                                                                                       |
+| $A$              | The raw KitScore.                                                                                                                                      |
+| $C$              | An arbitrary coefficient.                                                                                                                              |
+| $I$              | The number of statistics including the target statistic. This means that there are $I-1$ entries for $x_i$ and $1$ entry for $y$ for each observation. |
+| $i$              | The statistic index of where there are $I$ entries.                                                                                                    |
+| $j$              | A discriminator for the target statistic. There may never be more than $1$ entries for $j$.                                                            |
+| $m$              | The degree of the polynomial regression.                                                                                                               |
+| $n$              | The number of observations.                                                                                                                            |
+| $a$              | An "atomic" score which is a function of the $i$th statistic.                                                                                          |
+| $w$              | The weight of the $i$th atomic statistic.                                                                                                              |
 
 ## Computing the Score
+
+The final metric $A_\text{human}$ is an arbitrarily scaled value of the raw score $A$ where $C$ is any coefficient of your liking. BlitzKit uses $C=10^3$.
+
+$$
+A_\text{human}=CA
+$$
 
 The final metric $A$ is the weighted average of individual scores $a$ which are functions of the $i$th statistic.
 
@@ -24,32 +55,50 @@ $$
 w_{i}=\frac{r_{i\leftrightarrow j}^2}{\sum_{i_{k}\neq j}r_{i\leftrightarrow i_{k}}^2}
 $$
 
-The atomic score $a_i$ is the normalized integral of the skewed normal till the new observation $x_{i}$ such that the range is $[0,1]$.
+## Understanding the Weights
+
+Some may find the weight equation arbitrary; it evidently isn't. The goal of $w$ is to eliminate over-rewarding the same behavior represented in multiple statistics. It makes all atomic statistics concurrent by leveraging the Pearson corelation matrix.
+
+A simplified example will clarify the idea. First, we compute a Pearson corelation matrix for $I=3$ statistics. We have $x_1$ and $x_2$, the statistics that are trying to maximize $x_j$. Reminder: a Pearson corelation matrix finds the $r$ value not only between $x_i$ and $x_j$ but also between all combinations of $x_i$ and themselves. Here, $r^2$ is calculated using polynomial regression corelation analysis to the $m$th degree.
+
+|       | $x_1$ | $x_2$       | $x_3$ | $x_j$ |
+| ----- | ----- | ----------- | ----- | ----- |
+| $x_1$ | $1$   | $\boxed{0}$ | $0$   | $1$   |
+| $x_2$ |       | $1$         | $0$   | $1$   |
+| $x_3$ |       |             | $1$   | $1$   |
+| $x_j$ |       |             |       | $1$   |
+
+In the case above, $r^2_{1 \leftrightarrow 2}=0$ meaning that both statistics have absolutely nothing to do with each other. Hence, the player will be awarded for optimizing both individually. And since $r^2_{1 \leftrightarrow j}=r^2_{2 \leftrightarrow j}$, they should both be rewarded equally; in other words, they should have equal weights.
 
 $$
-a_{i}=\Phi\left(\beta_{i}\right)-2T\left(\beta_{i},\alpha\right)
+w_{1}=\frac{1}{1 + 0 + 0}=1
 $$
 
-$\beta$ is extrapolated away to remain concise.
-
 $$
-\beta_{i}=\frac{x_{i}-\xi_{i}}{\omega_{i}}
+w_{2}=\frac{1}{0 + 1 + 0}=1
 $$
 
-$\Phi$ is the cumulative distribution function of the normal distribution.
-
 $$
-\Phi\left(x\right)=\frac{1}{2}\left(1+\operatorname{erf}\left(\frac{x}{\sqrt{2}}\right)\right)
+w_{3}=\frac{1}{0 + 0 + 1}=1
 $$
 
-$erf$ is the error function.
+Now consider a case where $x_1$ and $x_2$ are fully correlated. It would be a bad idea to reward them equally; hence, their weights suffer.
+
+|       | $x_1$ | $x_2$       | $x_3$ | $x_j$ |
+| ----- | ----- | ----------- | ----- | ----- |
+| $x_1$ | $1$   | $\boxed{1}$ | $0$   | $1$   |
+| $x_2$ |       | $1$         | $0$   | $1$   |
+| $x_3$ |       |             | $1$   | $1$   |
+| $x_j$ |       |             |       | $1$   |
 
 $$
-\operatorname{erf}\left(z\right)=\frac{2}{\sqrt{\pi}}\int_{0}^{z}e^{-t^{2}}dt
+w_{1}=\frac{1}{1 + 1 + 0}=0.5
 $$
 
-$T$ is Owen's T function to deal with skewness.
+$$
+w_{2}=\frac{1}{1 + 1 + 0}=0.5
+$$
 
 $$
-T\left(h,a\right)=\frac{1}{2\pi}\int_{0}^{a}\frac{e^{-\frac{1}{2}h^{2}\left(1+x^{2}\right)}}{1+x^{2}}dx
+w_{3}=\frac{1}{0 + 0 + 1}=1
 $$
