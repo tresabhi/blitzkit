@@ -1,0 +1,128 @@
+---
+import { Code, Flex, Heading, Text } from '@radix-ui/themes';
+import { resolveBranchName } from '../core/blitzkit/branches';
+
+const branchName = resolveBranchName();
+const isBranchNamed = branchName !== undefined;
+---
+
+<style>
+  #home-hero {
+    --p-1: 0%;
+    --p-2: 0%;
+    --p-3: 0%;
+    --p-4: 0%;
+    --p-5: 0%;
+
+    --g-1-dark: var(--blue-3);
+    --g-1-light: var(--blue-5);
+    --g-2-dark: var(--violet-3);
+    --g-2-light: var(--violet-5);
+    --g-3-dark: var(--purple-3);
+    --g-3-light: var(--purple-5);
+    --g-4-dark: var(--crimson-3);
+    --g-4-light: var(--crimson-5);
+    --g-5-dark: var(--tomato-3);
+    --g-5-light: var(--tomato-5);
+
+    --g-1: color-mix(in srgb, var(--g-1-dark), var(--g-1-light) var(--p-1));
+    --g-2: color-mix(in srgb, var(--g-2-dark), var(--g-2-light) var(--p-2));
+    --g-3: color-mix(in srgb, var(--g-3-dark), var(--g-3-light) var(--p-3));
+    --g-4: color-mix(in srgb, var(--g-4-dark), var(--g-4-light) var(--p-4));
+    --g-5: color-mix(in srgb, var(--g-5-dark), var(--g-5-light) var(--p-5));
+
+    background: linear-gradient(
+      45deg,
+      var(--g-1),
+      var(--g-2),
+      var(--g-3),
+      var(--g-4),
+      var(--g-5)
+    );
+  }
+
+  #home-hero[data-pride] {
+    --g-1-dark: var(--crimson-3);
+    --g-1-light: var(--crimson-5);
+    --g-2-dark: var(--orange-3);
+    --g-2-light: var(--orange-5);
+    --g-3-dark: var(--yellow-3);
+    --g-3-light: var(--yellow-5);
+    --g-4-dark: var(--blue-3);
+    --g-4-light: var(--blue-5);
+    --g-5-dark: var(--purple-3);
+    --g-5-light: var(--purple-5);
+  }
+</style>
+
+<script>
+  import { clamp, times } from 'lodash-es';
+
+  const n = 5;
+  const homeHero = document.getElementById('home-hero');
+
+  if (homeHero) {
+    if (new Date().getMonth() === 5) {
+      homeHero.dataset.pride = 'true';
+    }
+
+    window.addEventListener('pointermove', (event) => {
+      const x = event.clientX / window.innerWidth;
+      const c = clamp(
+        (1 -
+          (event.clientY + homeHero.getBoundingClientRect().top) /
+            window.innerHeight) **
+          2,
+        0,
+        1,
+      );
+
+      // https://www.desmos.com/calculator/ndz2poxk32
+      times(n, (i) => {
+        const p = c * clamp(-n * Math.abs(x - i / (n - 1)) + 1, 0, 3);
+        homeHero.style.setProperty(`--p-${i + 1}`, `${p * 100}%`);
+      });
+    });
+  }
+</script>
+
+<Flex
+  mb="3"
+  id="home-hero"
+  align="center"
+  justify="center"
+  position="relative"
+  px="4"
+  py="9"
+  overflow="hidden"
+>
+  <Flex
+    direction="column"
+    gap="6"
+    align="center"
+    justify="center"
+    position="relative"
+    width="100%"
+  >
+    <Flex direction="column" align="center">
+      <Heading size="9" weight="bold" align="center">
+        <Flex
+          align="center"
+          gap={{ initial: '1', xs: '4' }}
+          direction={{ initial: 'column', xs: 'row' }}
+        >
+          BlitzKit
+          {
+            isBranchNamed && (
+              <Code size="8" color="gray" highContrast variant="outline">
+                {branchName}
+              </Code>
+            )
+          }
+        </Flex>
+      </Heading>
+
+      <Text color="gray" align="center" size="4"> By TrèsAbhi ❤️ </Text>
+    </Flex>
+  </Flex>
+</Flex>

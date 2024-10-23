@@ -1,0 +1,11 @@
+---
+import { performanceTool } from '../../../constants/tools';
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+import { Page } from './_index';
+---
+
+<ToolLayout tool={performanceTool}>
+  <Page client:only="react">
+    <Page skeleton slot="fallback" />
+  </Page>
+</ToolLayout>

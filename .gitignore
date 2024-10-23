@@ -22,3 +22,7 @@ depots
 public/sitemap*
 /firebase.json
 target
+# packages/core/src/protos/*
+# !packages/core/src/protos/*.proto
+/.vercel
+/.astro

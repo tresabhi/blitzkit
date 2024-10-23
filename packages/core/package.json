@@ -1,0 +1,26 @@
+{
+  "name": "@blitzkit/core",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "@octokit/plugin-throttling": "^8.2.0",
+    "@octokit/rest": "^20.1.1",
+    "@prisma/client": "^5.19.1",
+    "adm-zip": "^0.5.16",
+    "crc": "^4.3.2",
+    "dotenv": "^16.4.5",
+    "lodash": "^4.17.21",
+    "lz4js": "^0.2.0",
+    "pickleparser": "^0.2.1",
+    "protobufjs": "^7.4.0",
+    "sharp": "^0.33.5",
+    "ts-proto": "^2.2.2",
+    "yaml": "^2.5.0"
+  },
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.5",
+    "@types/lodash": "^4.17.7",
+    "@types/lz4js": "^0.2.1"
+  }
+}

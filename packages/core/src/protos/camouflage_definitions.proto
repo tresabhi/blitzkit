@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package blitzkit;
+
+message CamouflageDefinitions {
+  map<uint32, Camouflage> camouflages = 1;
+}
+
+message Camouflage {
+  required uint32 id = 1;
+  required string name = 2;
+  optional string tank_name = 3;
+  optional string tank_name_full = 4;
+}

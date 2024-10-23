@@ -1,0 +1,139 @@
+---
+import { assertSecret, imgur, ImgurSize } from '@blitzkit/core';
+import { CaretRightIcon } from '@radix-ui/react-icons';
+import { Box, Button, Code, Flex, Heading, Link, Text } from '@radix-ui/themes';
+import type { Tool } from '../constants/tools';
+
+interface Props {
+  tool: Tool;
+}
+
+const { tool } = Astro.props;
+const disabled = tool.branches?.every(
+  (branch) => branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
+);
+---
+
+<style>
+  .container {
+    border-radius: var(--radius-2);
+    background-size: cover;
+    background-position: center;
+    height: 16rem;
+
+    &[data-disabled='true'] {
+      opacity: 0.25;
+    }
+
+    &[data-significant='true'] {
+      height: min(20rem, 50vh);
+    }
+  }
+
+  .link {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    color: inherit;
+  }
+</style>
+
+<Flex
+  style={{
+    backgroundImage: `url(${imgur(tool.image, {
+      format: 'jpeg',
+      size: ImgurSize.SmallThumbnail,
+    })})`,
+  }}
+  data-disabled={disabled}
+  data-significant={tool.significant}
+  className="container"
+  position="relative"
+  overflow="hidden"
+  flexGrow={tool.significant ? undefined : '1'}
+  flexBasis={tool.significant ? undefined : { initial: undefined, sm: '0' }}
+>
+  <Link
+    className="link"
+    underline="none"
+    href={disabled ? '#' : (tool.href ?? `/tools/${tool.id}`)}
+    target={tool.href ? '_blank' : undefined}
+  >
+    <Box
+      flexGrow="1"
+      style={{
+        backgroundImage: `url(${imgur(tool.image, {
+          format: 'jpeg',
+          size: tool.significant
+            ? ImgurSize.HugeThumbnail
+            : ImgurSize.LargeThumbnail,
+        })})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    />
+
+    <Flex
+      px={{ initial: '6', md: tool.significant ? '8' : '6' }}
+      py={{ initial: '4', sm: tool.significant ? '6' : '4' }}
+      gap="4"
+      align="center"
+      justify="between"
+      width="100%"
+      direction={{ initial: 'column', xs: 'row' }}
+      style={{
+        backgroundColor: 'var(--color-panel-translucent)',
+        backdropFilter: 'blur(64px)',
+        WebkitBackdropFilter: 'blur(64px)',
+      }}
+    >
+      <Flex
+        direction="column"
+        justify="center"
+        align={{ initial: 'center', xs: 'start' }}
+      >
+        <Heading
+          align={{ initial: 'center', sm: 'left' }}
+          size={{ initial: '6', sm: tool.significant ? '7' : '5' }}
+          weight="medium"
+        >
+          {tool.title}
+        </Heading>
+        <Text
+          align={{ initial: 'center', sm: 'left' }}
+          size={{ initial: '3', sm: tool.significant ? '4' : '3' }}
+          color="gray"
+        >
+          {
+            disabled ? (
+              <>
+                Unavailable on{' '}
+                <Code>{assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH)}</Code>
+              </>
+            ) : (
+              tool.description
+            )
+          }
+        </Text>
+      </Flex>
+
+      {
+        !disabled && (
+          <Button
+            highContrast={tool.button.highContrast}
+            size={{
+              initial: undefined,
+              sm: tool.significant ? '3' : undefined,
+            }}
+            color={tool.button.color}
+            style={{ cursor: 'inherit' }}
+          >
+            {tool.button.text}
+            <CaretRightIcon />
+          </Button>
+        )
+      }
+    </Flex>
+  </Link>
+</Flex>

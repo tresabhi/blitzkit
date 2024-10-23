@@ -1,0 +1,79 @@
+---
+import { Box, Flex, Heading } from '@radix-ui/themes';
+import HomeHero from '../components/HomeHero.astro';
+import { Plugs } from '../components/Plugs.tsx';
+import ToolCard from '../components/ToolCard.astro';
+import {
+  compareTool,
+  discordTool,
+  moreTool,
+  performanceTool,
+  sessionTool,
+  tankopediaTool,
+} from '../constants/tools';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout>
+  <HomeHero />
+
+  <Plugs client:idle />
+
+  <Flex p="4" justify="center" gap="4" mt="3">
+    <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">
+      <ToolCard tool={tankopediaTool} />
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        {/* <ToolCard tool={playerStatsTool} /> */}
+        <ToolCard tool={compareTool} />
+        <ToolCard tool={performanceTool} />
+      </Flex>
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard tool={sessionTool} />
+        {/* <ToolCard tool={embedTool} /> */}
+        {/* <ToolCard tool={ratingTool} /> */}
+        <ToolCard tool={discordTool} />
+      </Flex>
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard tool={moreTool} />
+        <Box flexGrow="1" />
+      </Flex>
+
+      <Heading align="center" mt="6">Other cool projects</Heading>
+
+      <Flex gap="4" mb="6" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard
+          tool={{
+            button: {
+              text: 'Analyze',
+              color: 'blue',
+            },
+            description: 'Rich historic average stats',
+            id: 'blitz-analysis',
+            image: 'j76YXGl',
+            title: 'BlitzAnalysis[]',
+            href: 'https://blitzanalysiz.com/',
+          }}
+        />
+        <ToolCard
+          tool={{
+            button: {
+              color: 'purple',
+              text: 'Install',
+              highContrast: true,
+            },
+            image: 'zYrrYbR',
+            description: 'In-game session stats',
+            id: 'blitz-insider',
+            title: 'Blitz Insider',
+            href: 'https://discord.gg/UjWf9eGgtR',
+          }}
+        />
+      </Flex>
+    </Flex>
+  </Flex>
+
+  <div style={{ flex: 1 }}></div>
+</BaseLayout>

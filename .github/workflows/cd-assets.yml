@@ -27,13 +27,27 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event.inputs.cdn_branch }}
   cancel-in-progress: true
 
+env:
+  DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  VIDEOS_SHEET: ${{ secrets.VIDEOS_SHEET }}
+  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+  WOTB_GLOSSARY: ${{ secrets.WOTB_GLOSSARY }}
+  WOTB_DLC_CDN: ${{ secrets.WOTB_DLC_CDN }}
+  PUBLIC_WARGAMING_APPLICATION_ID: ${{ secrets.PUBLIC_WARGAMING_APPLICATION_ID }}
+  PUBLIC_ASSET_REPO: ${{ secrets.PUBLIC_ASSET_REPO }}
+  PUBLIC_ASSET_BRANCH: ${{ github.event.inputs.cdn_branch || secrets.PUBLIC_ASSET_BRANCH }}
+
 jobs:
   download_client:
     name: Download client
     runs-on: ubuntu-latest
 
     steps:
-      - name: Maximize build space
+      - name: (ZIP) Maximize build space
+        if: github.event.inputs.zip_url != ''
         uses: easimon/maximize-build-space@master
         with:
           root-reserve-mb: 512
@@ -55,23 +69,17 @@ jobs:
 
       - name: (Steam) Setup DepotDownloader
         if: github.event.inputs.zip_url == ''
-        run: bun scripts/setupDepotDownloader.ts
+        run: bun run setup:depotdownloader
 
       - name: (Steam) Download client
         if: github.event.inputs.zip_url == ''
         run: |
           chmod +x ./temp/depotDownloader/DepotDownloader
-          ./temp/depotDownloader/DepotDownloader -os windows -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
+          ./temp/depotDownloader/DepotDownloader -q -os windows -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
 
       - name: (Steam) Apply patches
         if: github.event.inputs.zip_url == ''
-        env:
-          DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          WOTB_DLC_CDN: ${{ secrets.WOTB_DLC_CDN }}
-        run: bun scripts/applyPatches.ts --depot
+        run: bun setup:patches --depot
 
       - name: (ZIP) Download client
         if: github.event.inputs.zip_url != ''
@@ -112,13 +120,4 @@ jobs:
           path: depots
 
       - name: Build assets
-        env:
-          DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          VIDEOS_SHEET: ${{ secrets.VIDEOS_SHEET }}
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-          NEXT_PUBLIC_ASSET_BRANCH: ${{ github.event.inputs.cdn_branch }}
-          WOTB_GLOSSARY: ${{ secrets.WOTB_GLOSSARY }}
-        run: bun build:assets --all-targets --depot --production
+        run: bun run build:assets --all-targets --depot --production

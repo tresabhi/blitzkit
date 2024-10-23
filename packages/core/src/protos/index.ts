@@ -1,0 +1,12 @@
+// @ts-nocheck
+export * from './average_definitions.ts';
+export * from './camouflage_definitions.ts';
+export * from './consumable_definitions.ts';
+export * from './equipment_definitions.ts';
+export * from './game_definitions.ts';
+export * from './map_definitions.ts';
+export * from './model_definitions.ts';
+export * from './provision_definitions.ts';
+export * from './reviews.ts';
+export * from './skill_definitions.ts';
+export * from './tank_definitions.ts';

@@ -9,6 +9,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  PUBLIC_ASSET_REPO: ${{ secrets.PUBLIC_ASSET_REPO }}
+  PUBLIC_WARGAMING_APPLICATION_ID: ${{ secrets.PUBLIC_WARGAMING_APPLICATION_ID }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,10 +26,11 @@ jobs:
 
       - name: Build averages
         env:
+          PUBLIC_ASSET_BRANCH: main
           DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           VIDEOS_SHEET: ${{ secrets.VIDEOS_SHEET }}
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-        run: bun scripts/averages.ts --production
+        run: bun run build:averages --production
