@@ -814,7 +814,7 @@ export async function definitions() {
             if (crewKey === '#text') return;
             entry = {
               type: blitzCrewTypeToBlitzkit[crewKey as BlitzCrewType],
-              count: 1,
+              count: 0,
               substitute: [],
             };
             crew.push(entry);

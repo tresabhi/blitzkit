@@ -454,14 +454,12 @@ export function Characteristics() {
           </Flex>
 
           {tank.crew.map((member) => {
-            const count = member.count ?? 1;
-
             return (
               <Fragment key={member.type}>
                 <InfoWithDelta
                   key={`${member.type}-root`}
                   name={`${CREW_MEMBER_NAMES[member.type]}${
-                    count > 1 ? ` x ${count}` : ''
+                    member.count > 1 ? ` x ${member.count}` : ''
                   }`}
                   unit="%"
                   decimals={0}
