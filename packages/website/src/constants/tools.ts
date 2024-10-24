@@ -150,10 +150,24 @@ export const homeTool: Tool = {
   image: 'rUPie9G',
 };
 
+export const galleryTool: Tool = {
+  id: 'gallery',
+  title: 'Gallery',
+  description: 'Blitz player avatars',
+  pageDescription: 'All World of Tanks Blitz player avatars',
+  button: {
+    text: 'Browse',
+    color: 'gold',
+  },
+  image: 'VhKlknk',
+  branches: ['main', 'dev'],
+};
+
 export const TOOLS: Tool[] = [
   tankopediaTool,
   compareTool,
   performanceTool,
+  galleryTool,
   sessionTool,
   embedTool,
   // ratingTool,

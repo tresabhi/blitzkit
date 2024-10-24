@@ -140,7 +140,7 @@ export function Tanks({ skeleton }: MaybeSkeletonComponentProps) {
     <Table.Body>
       <Total tanks={tanks} />
 
-      {tanks.slice(0, loadedRows).map((averages, index) => {
+      {tanks.slice(0, loadedRows).map((averages) => {
         const tank = tankDefinitions.tanks[averages.id];
 
         if (tank === undefined) return null;

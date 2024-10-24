@@ -1,0 +1,45 @@
+---
+import { assertSecret, type BlitzGlossary } from '@blitzkit/core';
+import { Flex, Text } from '@radix-ui/themes';
+import { PageWrapper } from '../../../components/PageWrapper';
+import { galleryTool } from '../../../constants/tools';
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+
+const response = await fetch(assertSecret(import.meta.env.WOTB_GLOSSARY), {
+  cache: 'force-cache',
+});
+const avatars = Object.entries((await response.json()) as BlitzGlossary)
+  .filter(
+    ([key, value]) =>
+      key.startsWith('avatar') &&
+      !key.endsWith('_part') &&
+      value.image_url !== null,
+  )
+  .sort(([, a], [, b]) => a.title.localeCompare(b.title));
+---
+
+<ToolLayout tool={galleryTool}>
+  <PageWrapper>
+    <Flex wrap="wrap" gap="4">
+      {
+        avatars.map(([key, value]) => {
+          return (
+            <Flex direction="column" align="center">
+              <img
+                style={{
+                  width: '4rem',
+                  aspectRatio: '7 / 8',
+                  objectFit: 'cover',
+                }}
+                src={`/api/gallery/${key.replace('avatar_', '')}.webp`}
+              />
+              <Text style={{ maxWidth: '6rem' }} align="center">
+                {value.title}
+              </Text>
+            </Flex>
+          );
+        })
+      }
+    </Flex>
+  </PageWrapper>
+</ToolLayout>

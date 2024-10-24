@@ -1,4 +1,4 @@
-import { assertSecret } from '@blitzkit/core';
+import { assertSecret, BlitzGlossary } from '@blitzkit/core';
 import sharp from 'sharp';
 import { readDVPLFile } from '../../src/core/blitz/readDVPLFile';
 import { commitAssets } from '../core/github/commitAssets';
@@ -14,13 +14,6 @@ const ICONS = [
   ['currency_crew-xp_xl.packed.webp', 'crew-xp'],
   ['currency_battle-xp_xl.packed.webp', 'xp'],
 ];
-
-type BlitzGlossary = Record<
-  string,
-  {
-    image_url: null | string;
-  }
->;
 
 export async function currencies() {
   console.log('Building currency icons...');
