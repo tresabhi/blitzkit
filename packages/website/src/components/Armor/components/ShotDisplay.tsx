@@ -1,7 +1,7 @@
 import { J_HAT, K_HAT } from '@blitzkit/core';
 import { Box, Flex, Text } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
+import { invalidate, useFrame } from '@react-three/fiber';
 import { clamp } from 'lodash-es';
 import { useEffect, useRef, type ComponentProps } from 'react';
 import {
@@ -104,6 +104,8 @@ export function ShotDisplay() {
         outTracer.current.scale.set(1, 1 - 2 * Math.abs(tracerT2 - 0.5), 1);
         outTracer.current.position.set(0, tracerT2 * outLength, 0);
       }
+
+      invalidate();
     }
 
     if (
@@ -119,6 +121,8 @@ export function ShotDisplay() {
 
       splashRadiusWrapper.current.scale.set(scale, scale, scale);
       splashRadiusMaterial.current.opacity = opacity;
+
+      invalidate();
     }
   });
 
