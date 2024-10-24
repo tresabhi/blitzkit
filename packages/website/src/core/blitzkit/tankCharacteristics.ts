@@ -153,7 +153,7 @@ export function tankCharacteristics(
   const damageCoefficient =
     coefficient([hasTungsten, 0.15]) *
     coefficient(
-      [applyReactiveArmor, -0.27],
+      [applyReactiveArmor && shell.type !== ShellType.HE, -0.27],
       [applyDynamicArmor, -0.1],
       [applySpallLiner && shell.type === ShellType.HE, -0.2],
     );
