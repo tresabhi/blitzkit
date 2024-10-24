@@ -1,45 +1,28 @@
 ---
-import { assertSecret, type BlitzGlossary } from '@blitzkit/core';
-import { Flex, Text } from '@radix-ui/themes';
+import type { Avatar } from '../../../components/Gallery/List';
 import { PageWrapper } from '../../../components/PageWrapper';
 import { galleryTool } from '../../../constants/tools';
+import { fetchGlossary } from '../../../core/blitz/fetchGlossary';
 import ToolLayout from '../../../layouts/ToolLayout.astro';
+import { Page } from './_index';
 
-const response = await fetch(assertSecret(import.meta.env.WOTB_GLOSSARY), {
-  cache: 'force-cache',
-});
-const avatars = Object.entries((await response.json()) as BlitzGlossary)
+const glossary = await fetchGlossary();
+const avatars = Object.entries(glossary)
   .filter(
     ([key, value]) =>
       key.startsWith('avatar') &&
       !key.endsWith('_part') &&
       value.image_url !== null,
   )
-  .sort(([, a], [, b]) => a.title.localeCompare(b.title));
+  .map(
+    ([key, value]) =>
+      ({ id: key.replace('avatar_', ''), name: value.title }) satisfies Avatar,
+  )
+  .sort((a, b) => a.name.localeCompare(b.name));
 ---
 
 <ToolLayout tool={galleryTool}>
-  <PageWrapper>
-    <Flex wrap="wrap" gap="4">
-      {
-        avatars.map(([key, value]) => {
-          return (
-            <Flex direction="column" align="center">
-              <img
-                style={{
-                  width: '4rem',
-                  aspectRatio: '7 / 8',
-                  objectFit: 'cover',
-                }}
-                src={`/api/gallery/${key.replace('avatar_', '')}.webp`}
-              />
-              <Text style={{ maxWidth: '6rem' }} align="center">
-                {value.title}
-              </Text>
-            </Flex>
-          );
-        })
-      }
-    </Flex>
+  <PageWrapper color="gold">
+    <Page {avatars} client:load />
   </PageWrapper>
 </ToolLayout>

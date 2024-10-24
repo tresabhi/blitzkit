@@ -61,7 +61,7 @@ export function SearchBar({ topResult, onSelect }: SearchBarProps) {
   );
 
   return (
-    <Flex justify="center" mt="4">
+    <Flex justify="center">
       <Flex gap="2" flexGrow="1">
         <TextField.Root
           defaultValue={tankFilters.search}
