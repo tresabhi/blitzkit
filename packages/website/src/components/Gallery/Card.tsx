@@ -85,7 +85,7 @@ export function GalleryCard(props: GalleryCardProps) {
           </Dialog.Close>
         </Flex>
 
-        <Flex px="4">
+        <Flex px="4" justify="center" mt="3">
           <img src={src} alt={props.name} />
         </Flex>
 
