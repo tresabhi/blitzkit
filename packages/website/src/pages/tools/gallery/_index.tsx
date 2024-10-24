@@ -1,5 +1,6 @@
 import { GalleryList, type Avatar } from '../../../components/Gallery/List';
 import { GallerySearch } from '../../../components/Gallery/Search';
+import { PageWrapper } from '../../../components/PageWrapper';
 import { GalleryEphemeral } from '../../../stores/galleryEphemeral';
 
 interface PageProps {
@@ -8,9 +9,11 @@ interface PageProps {
 
 export function Page({ avatars }: PageProps) {
   return (
-    <GalleryEphemeral.Provider>
-      <GallerySearch />
-      <GalleryList avatars={avatars} />
-    </GalleryEphemeral.Provider>
+    <PageWrapper color="gold">
+      <GalleryEphemeral.Provider>
+        <GallerySearch />
+        <GalleryList avatars={avatars} />
+      </GalleryEphemeral.Provider>
+    </PageWrapper>
   );
 }
