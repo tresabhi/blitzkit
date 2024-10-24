@@ -10,6 +10,7 @@ export default defineConfig({
   output: 'static',
   site: 'https://blitzkit.app',
   outDir: '../../dist/website',
+  prefetch: true,
 
   integrations: [react(), sitemap()],
   vite: {
