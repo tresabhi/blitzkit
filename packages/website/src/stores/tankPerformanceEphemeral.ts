@@ -17,6 +17,6 @@ export type PlayerCountPeriod = keyof Samples;
 export const TankPerformanceEphemeral = createContextualStore(() =>
   create<TankPerformanceEphemeral>()(() => ({
     playerCountPeriod: 'd_30',
-    mode: TankPerformanceMode.Charts,
+    mode: TankPerformanceMode.Table,
   })),
 );
