@@ -199,7 +199,7 @@ export function SpacedArmorSceneComponent({
             variant: layer.variant,
           });
         } else {
-          const thickness = layer.thickness;
+          const thickness = layer.thickness * thicknessCoefficient;
           const ricochet = degToRad(
             isExplosive(shell.type) ? 90 : shell.ricochet!,
           );
