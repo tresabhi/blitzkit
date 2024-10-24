@@ -5,6 +5,7 @@ import {
   fetchProvisionDefinitions,
   TankPriceType,
   TankType,
+  TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
 import { ChevronLeftIcon, MixIcon, UpdateIcon } from '@radix-ui/react-icons';
@@ -128,7 +129,9 @@ export function MetaSection() {
                 {strings.common.tank_class_short[protagonist.class]}
               </Flex>
             </Listing>
-            <Listing label="Tier">{protagonist.tier}</Listing>
+            <Listing label="Tier">
+              {TIER_ROMAN_NUMERALS[protagonist.tier]}
+            </Listing>
             <Listing
               label="Type"
               color={
