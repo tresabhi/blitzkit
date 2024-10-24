@@ -56,11 +56,18 @@ export function MetaSection() {
 
           {assertSecret(import.meta.env.PUBLIC_PROMOTE_OPENTEST) === 'true' && (
             <Link
-              href={`https://opentest.blitzkit.app/tools/tankopedia/${protagonist.id}`}
+              href={`https://${
+                assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) === 'opentest'
+                  ? ''
+                  : 'opentest.'
+              }blitzkit.app/tools/tankopedia/${protagonist.id}`}
             >
               <Button variant="outline" color="green">
                 <ScienceIcon height="1.25em" width="1.25em" />
-                OpenTest
+                {assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) ===
+                'opentest'
+                  ? 'Vanilla'
+                  : 'OpenTest'}
               </Button>
             </Link>
           )}
