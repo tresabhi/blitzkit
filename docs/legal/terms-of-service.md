@@ -1,4 +1,4 @@
-# BLitzKit Terms and Conditions
+# BlitzKit Terms and Conditions
 
 Last updated: May 23, 2024
 
