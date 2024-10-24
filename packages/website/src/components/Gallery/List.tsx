@@ -1,7 +1,9 @@
-import { Flex, Text } from '@radix-ui/themes';
+import { Flex } from '@radix-ui/themes';
 import fuzzysort from 'fuzzysort';
-import { useMemo } from 'react';
+import { times } from 'lodash-es';
+import { useMemo, useState } from 'react';
 import { GalleryEphemeral } from '../../stores/galleryEphemeral';
+import { GalleryCard } from './Card';
 
 interface GalleryListProps {
   avatars: Avatar[];
@@ -12,9 +14,15 @@ export interface Avatar {
   id: string;
 }
 
+const DEFAULT_LOADED = 25;
+const PREVIEW_COUNT = 10;
+
 export function GalleryList({ avatars }: GalleryListProps) {
   const search = GalleryEphemeral.use((state) => state.search);
+  const [loadedCards, setLoadedCards] = useState(DEFAULT_LOADED);
   const filtered = useMemo(() => {
+    setLoadedCards(DEFAULT_LOADED);
+
     if (search === undefined) {
       return avatars;
     } else {
@@ -26,23 +34,20 @@ export function GalleryList({ avatars }: GalleryListProps) {
 
   return (
     <Flex wrap="wrap" gap="4">
-      {filtered.map((avatar) => {
-        return (
-          <Flex key={avatar.id} direction="column" align="center" width="6rem">
-            <img
-              style={{
-                width: '4rem',
-                aspectRatio: '7 / 8',
-                objectFit: 'cover',
-              }}
-              src={`/api/gallery/${avatar.id}.webp`}
-            />
-            <Text align="center" style={{ maxWidth: '100%' }}>
-              {avatar.name}
-            </Text>
-          </Flex>
-        );
-      })}
+      {filtered.slice(0, loadedCards).map((avatar) => (
+        <GalleryCard key={avatar.id} id={avatar.id} name={avatar.name} />
+      ))}
+
+      {times(
+        Math.min(PREVIEW_COUNT, filtered.length - loadedCards),
+        (index) => (
+          <GalleryCard
+            key={index}
+            skeleton
+            onIntersection={() => setLoadedCards((state) => state + 2)}
+          />
+        ),
+      )}
     </Flex>
   );
 }

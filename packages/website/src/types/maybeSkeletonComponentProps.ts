@@ -1,3 +1,8 @@
-export interface MaybeSkeletonComponentProps {
-  skeleton?: boolean;
-}
+export type MaybeSkeletonComponentProps<T = {}> =
+  | {
+      skeleton: true;
+      onIntersection?: () => void;
+    }
+  | (T & {
+      skeleton?: false;
+    });
