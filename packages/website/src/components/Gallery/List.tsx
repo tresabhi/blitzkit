@@ -1,4 +1,4 @@
-import { Flex } from '@radix-ui/themes';
+import { Flex, Text } from '@radix-ui/themes';
 import fuzzysort from 'fuzzysort';
 import { times } from 'lodash-es';
 import { useMemo, useState } from 'react';
@@ -14,8 +14,8 @@ export interface Avatar {
   id: string;
 }
 
-const DEFAULT_LOADED = 25;
-const PREVIEW_COUNT = 10;
+const DEFAULT_LOADED = 42;
+const PREVIEW_COUNT = 14;
 
 export function GalleryList({ avatars }: GalleryListProps) {
   const search = GalleryEphemeral.use((state) => state.search);
@@ -33,21 +33,27 @@ export function GalleryList({ avatars }: GalleryListProps) {
   }, [search]);
 
   return (
-    <Flex wrap="wrap" gap="4">
-      {filtered.slice(0, loadedCards).map((avatar) => (
-        <GalleryCard key={avatar.id} id={avatar.id} name={avatar.name} />
-      ))}
+    <>
+      <Text align="center" color="gray">
+        {filtered.length.toLocaleString()} avatars
+      </Text>
 
-      {times(
-        Math.min(PREVIEW_COUNT, filtered.length - loadedCards),
-        (index) => (
-          <GalleryCard
-            key={index}
-            skeleton
-            onIntersection={() => setLoadedCards((state) => state + 2)}
-          />
-        ),
-      )}
-    </Flex>
+      <Flex wrap="wrap" gap="4">
+        {filtered.slice(0, loadedCards).map((avatar) => (
+          <GalleryCard key={avatar.id} id={avatar.id} name={avatar.name} />
+        ))}
+
+        {times(
+          Math.min(PREVIEW_COUNT, filtered.length - loadedCards),
+          (index) => (
+            <GalleryCard
+              key={index}
+              skeleton
+              onIntersection={() => setLoadedCards((state) => state + 2)}
+            />
+          ),
+        )}
+      </Flex>
+    </>
   );
 }
