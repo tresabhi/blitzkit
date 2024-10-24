@@ -150,13 +150,14 @@ export function tankCharacteristics(
     commanderMastery *
     (tank.crew.some(({ type }) => type === CrewType.DRIVER) ? 1.1 : 1.05);
   const intraClipCoefficient = coefficient([hasShellReloadBoost, -0.3]);
-  const damageCoefficient =
+  const armorDamageCoefficient =
     coefficient([hasTungsten, 0.15]) *
     coefficient(
       [applyReactiveArmor && shell.type !== ShellType.HE, -0.27],
       [applyDynamicArmor, -0.1],
       [applySpallLiner && shell.type === ShellType.HE, -0.2],
     );
+  const moduleDamageCoefficient = coefficient([hasTungsten, 0.15]);
   const reloadCoefficient =
     (coefficient([hasGunRammer, -0.05]) *
       coefficient([true, degressiveStat(loaderMastery)])) /
@@ -328,7 +329,7 @@ export function tankCharacteristics(
   const dpm = resolveDpm(
     gun,
     shell,
-    damageCoefficient,
+    armorDamageCoefficient,
     reloadCoefficient,
     intraClipCoefficient,
   );
@@ -351,13 +352,13 @@ export function tankCharacteristics(
           return current;
         }, null)!.index
       : undefined;
-  const damage = shell.armor_damage * damageCoefficient;
+  const damage = shell.armor_damage * armorDamageCoefficient;
   const dpmEffective =
     gun.gun_type!.$case === 'auto_reloader'
       ? gun.gun_type!.value.extension.shell_reloads[0] >
         gun.gun_type!.value.extension.shell_reloads[1] +
           gun.gun_type!.value.extension.intra_clip
-        ? ((damageCoefficient * shell.armor_damage) /
+        ? ((armorDamageCoefficient * shell.armor_damage) /
             (gun.gun_type!.value.extension.shell_reloads.at(-1)! *
               reloadCoefficient +
               gun.gun_type!.value.extension.intra_clip *
@@ -367,10 +368,10 @@ export function tankCharacteristics(
                 1) *
                 gun.gun_type!.value.extension.intra_clip *
                 intraClipCoefficient) +
-          damageCoefficient *
+          armorDamageCoefficient *
             shell.armor_damage *
             gun.gun_type!.value.extension.shell_reloads.slice(0, -1).length
-        : ((damageCoefficient * shell.armor_damage) /
+        : ((armorDamageCoefficient * shell.armor_damage) /
             (gun.gun_type!.value.extension.shell_reloads[0] *
               reloadCoefficient +
               gun.gun_type!.value.extension.intra_clip *
@@ -380,7 +381,7 @@ export function tankCharacteristics(
                 1) *
                 gun.gun_type!.value.extension.intra_clip *
                 intraClipCoefficient) +
-          damageCoefficient *
+          armorDamageCoefficient *
             shell.armor_damage *
             gun.gun_type!.value.extension.shell_reloads.slice(1).length
       : undefined;
@@ -406,7 +407,7 @@ export function tankCharacteristics(
     gun.gun_type!.$case === 'regular'
       ? undefined
       : gun.gun_type!.value.extension.shell_count * damage;
-  const moduleDamage = shell.module_damage * damageCoefficient;
+  const moduleDamage = shell.module_damage * moduleDamageCoefficient;
   const explosionRadius = shell.explosion_radius;
   const shellVelocity = shell.velocity * shellVelocityCoefficient;
   const aimTime = gun.gun_type!.value.base.aim_time * aimTimeCoefficient;
