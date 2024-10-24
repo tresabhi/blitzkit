@@ -6,10 +6,9 @@ import {
   TIER_ROMAN_NUMERALS,
   type Tier,
 } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en-US.json';
 import { useStore } from '@nanostores/react';
 import { ReloadIcon } from '@radix-ui/react-icons';
-import { Box, Flex, IconButton, Text, Tooltip } from '@radix-ui/themes';
+import { Box, Flex, IconButton, Text } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import { $tankFilters, initialTankFilters } from '../../../stores/tankFilters';
 import { classIcons } from '../../ClassIcon';
@@ -40,30 +39,25 @@ export function FilterControl({ compact }: FilterControlProps) {
             const selected = tankFilters.tiers?.includes(tier);
 
             return (
-              <Tooltip key={tier} content={`Tier ${tier}`}>
-                <IconButton
-                  key={tier}
-                  variant={selected ? 'solid' : 'soft'}
-                  radius="none"
-                  color={selected ? undefined : 'gray'}
-                  highContrast
-                  onClick={() => {
-                    if (tankFilters.tiers.includes(tier)) {
-                      $tankFilters.setKey(
-                        'tiers',
-                        tankFilters.tiers.filter((t) => t !== tier),
-                      );
-                    } else {
-                      $tankFilters.setKey('tiers', [
-                        ...tankFilters.tiers,
-                        tier,
-                      ]);
-                    }
-                  }}
-                >
-                  <Text size="2">{TIER_ROMAN_NUMERALS[tier]}</Text>
-                </IconButton>
-              </Tooltip>
+              <IconButton
+                key={tier}
+                variant={selected ? 'solid' : 'soft'}
+                radius="none"
+                color={selected ? undefined : 'gray'}
+                highContrast
+                onClick={() => {
+                  if (tankFilters.tiers.includes(tier)) {
+                    $tankFilters.setKey(
+                      'tiers',
+                      tankFilters.tiers.filter((t) => t !== tier),
+                    );
+                  } else {
+                    $tankFilters.setKey('tiers', [...tankFilters.tiers, tier]);
+                  }
+                }}
+              >
+                <Text size="2">{TIER_ROMAN_NUMERALS[tier]}</Text>
+              </IconButton>
             );
           })}
         </Flex>
@@ -73,30 +67,25 @@ export function FilterControl({ compact }: FilterControlProps) {
             const selected = tankFilters.tiers?.includes(tier);
 
             return (
-              <Tooltip key={tier} content={`Tier ${tier}`}>
-                <IconButton
-                  key={tier}
-                  variant={selected ? 'solid' : 'soft'}
-                  radius="none"
-                  color={selected ? undefined : 'gray'}
-                  highContrast
-                  onClick={() => {
-                    if (tankFilters.tiers.includes(tier)) {
-                      $tankFilters.setKey(
-                        'tiers',
-                        tankFilters.tiers.filter((t) => t !== tier),
-                      );
-                    } else {
-                      $tankFilters.setKey('tiers', [
-                        ...tankFilters.tiers,
-                        tier,
-                      ]);
-                    }
-                  }}
-                >
-                  <Text size="2">{TIER_ROMAN_NUMERALS[tier]}</Text>
-                </IconButton>
-              </Tooltip>
+              <IconButton
+                key={tier}
+                variant={selected ? 'solid' : 'soft'}
+                radius="none"
+                color={selected ? undefined : 'gray'}
+                highContrast
+                onClick={() => {
+                  if (tankFilters.tiers.includes(tier)) {
+                    $tankFilters.setKey(
+                      'tiers',
+                      tankFilters.tiers.filter((t) => t !== tier),
+                    );
+                  } else {
+                    $tankFilters.setKey('tiers', [...tankFilters.tiers, tier]);
+                  }
+                }}
+              >
+                <Text size="2">{TIER_ROMAN_NUMERALS[tier]}</Text>
+              </IconButton>
             );
           })}
         </Flex>
@@ -114,50 +103,31 @@ export function FilterControl({ compact }: FilterControlProps) {
               const selected = tankFilters.nations?.includes(nation);
 
               return (
-                <Tooltip
-                  content={
-                    strings.common.nations[
-                      nation as keyof typeof strings.common.nations
-                    ]
-                  }
+                <IconButton
                   key={nation}
-                >
-                  <IconButton
-                    variant={selected ? 'solid' : 'soft'}
-                    color={selected ? undefined : 'gray'}
-                    highContrast
-                    radius="none"
-                    onClick={() =>
-                      // mutateTankFilters((draft) => {
-                      //   if (draft.nations?.includes(nation)) {
-                      //     draft.nations = draft.nations?.filter(
-                      //       (n) => n !== nation,
-                      //     );
-                      //   } else {
-                      //     draft.nations = [...(draft.nations ?? []), nation];
-                      //   }
-                      // })
-                      {
-                        if (tankFilters.nations.includes(nation)) {
-                          $tankFilters.setKey(
-                            'nations',
-                            tankFilters.nations.filter((n) => n !== nation),
-                          );
-                        } else {
-                          $tankFilters.setKey('nations', [
-                            ...tankFilters.nations,
-                            nation,
-                          ]);
-                        }
-                      }
+                  variant={selected ? 'solid' : 'soft'}
+                  color={selected ? undefined : 'gray'}
+                  highContrast
+                  radius="none"
+                  onClick={() => {
+                    if (tankFilters.nations.includes(nation)) {
+                      $tankFilters.setKey(
+                        'nations',
+                        tankFilters.nations.filter((n) => n !== nation),
+                      );
+                    } else {
+                      $tankFilters.setKey('nations', [
+                        ...tankFilters.nations,
+                        nation,
+                      ]);
                     }
-                  >
-                    <img
-                      style={{ width: '1em', height: '1em' }}
-                      src={asset(`flags/circle/${nation}.webp`)}
-                    />
-                  </IconButton>
-                </Tooltip>
+                  }}
+                >
+                  <img
+                    style={{ width: '1em', height: '1em' }}
+                    src={asset(`flags/circle/${nation}.webp`)}
+                  />
+                </IconButton>
               );
             })}
         </Flex>
@@ -168,52 +138,32 @@ export function FilterControl({ compact }: FilterControlProps) {
               const selected = tankFilters.nations?.includes(nation);
 
               return (
-                <Tooltip
-                  content={
-                    strings.common.nations[
-                      nation as keyof typeof strings.common.nations
-                    ]
-                  }
+                <IconButton
                   key={nation}
-                >
-                  <IconButton
-                    key={nation}
-                    style={{ flex: 1 }}
-                    variant={selected ? 'solid' : 'soft'}
-                    color={selected ? undefined : 'gray'}
-                    highContrast
-                    radius="none"
-                    onClick={() =>
-                      // mutateTankFilters((draft) => {
-                      //   if (draft.nations?.includes(nation)) {
-                      //     draft.nations = draft.nations?.filter(
-                      //       (n) => n !== nation,
-                      //     );
-                      //   } else {
-                      //     draft.nations = [...(draft.nations ?? []), nation];
-                      //   }
-                      // })
-                      {
-                        if (tankFilters.nations.includes(nation)) {
-                          $tankFilters.setKey(
-                            'nations',
-                            tankFilters.nations.filter((n) => n !== nation),
-                          );
-                        } else {
-                          $tankFilters.setKey('nations', [
-                            ...tankFilters.nations,
-                            nation,
-                          ]);
-                        }
-                      }
+                  style={{ flex: 1 }}
+                  variant={selected ? 'solid' : 'soft'}
+                  color={selected ? undefined : 'gray'}
+                  highContrast
+                  radius="none"
+                  onClick={() => {
+                    if (tankFilters.nations.includes(nation)) {
+                      $tankFilters.setKey(
+                        'nations',
+                        tankFilters.nations.filter((n) => n !== nation),
+                      );
+                    } else {
+                      $tankFilters.setKey('nations', [
+                        ...tankFilters.nations,
+                        nation,
+                      ]);
                     }
-                  >
-                    <img
-                      style={{ width: '1em', height: '1em' }}
-                      src={asset(`flags/circle/${nation}.webp`)}
-                    />
-                  </IconButton>
-                </Tooltip>
+                  }}
+                >
+                  <img
+                    style={{ width: '1em', height: '1em' }}
+                    src={asset(`flags/circle/${nation}.webp`)}
+                  />
+                </IconButton>
               );
             })}
         </Flex>
@@ -229,32 +179,28 @@ export function FilterControl({ compact }: FilterControlProps) {
           const selected = tankFilters.classes?.includes(tankClass);
 
           return (
-            <Tooltip
-              content={strings.common.tank_class_medium[tankClass]}
+            <IconButton
               key={tankClass}
+              variant={selected ? 'solid' : 'soft'}
+              radius="none"
+              color={selected ? undefined : 'gray'}
+              highContrast
+              onClick={() => {
+                if (tankFilters.classes.includes(tankClass)) {
+                  $tankFilters.setKey(
+                    'classes',
+                    tankFilters.classes.filter((c) => c !== tankClass),
+                  );
+                } else {
+                  $tankFilters.setKey('classes', [
+                    ...tankFilters.classes,
+                    tankClass,
+                  ]);
+                }
+              }}
             >
-              <IconButton
-                variant={selected ? 'solid' : 'soft'}
-                radius="none"
-                color={selected ? undefined : 'gray'}
-                highContrast
-                onClick={() => {
-                  if (tankFilters.classes.includes(tankClass)) {
-                    $tankFilters.setKey(
-                      'classes',
-                      tankFilters.classes.filter((c) => c !== tankClass),
-                    );
-                  } else {
-                    $tankFilters.setKey('classes', [
-                      ...tankFilters.classes,
-                      tankClass,
-                    ]);
-                  }
-                }}
-              >
-                <Icon style={{ width: '1em', height: '1em' }} />
-              </IconButton>
-            </Tooltip>
+              <Icon style={{ width: '1em', height: '1em' }} />
+            </IconButton>
           );
         })}
       </Flex>
@@ -264,109 +210,103 @@ export function FilterControl({ compact }: FilterControlProps) {
         style={{ borderRadius: 'var(--radius-full)' }}
         direction={compact ? 'column' : { sm: 'row', initial: 'column' }}
       >
-        <Tooltip content="Researchable">
-          <IconButton
-            variant={
-              tankFilters.types?.includes(TankType.RESEARCHABLE)
-                ? 'solid'
-                : 'soft'
+        <IconButton
+          variant={
+            tankFilters.types?.includes(TankType.RESEARCHABLE)
+              ? 'solid'
+              : 'soft'
+          }
+          radius="none"
+          color={
+            tankFilters.types?.includes(TankType.RESEARCHABLE)
+              ? undefined
+              : 'gray'
+          }
+          highContrast
+          onClick={() => {
+            if (tankFilters.types.includes(TankType.RESEARCHABLE)) {
+              $tankFilters.setKey(
+                'types',
+                tankFilters.types.filter((t) => t !== TankType.RESEARCHABLE),
+              );
+            } else {
+              $tankFilters.setKey('types', [
+                ...tankFilters.types,
+                TankType.RESEARCHABLE,
+              ]);
             }
-            radius="none"
+          }}
+        >
+          <ResearchedIcon style={{ width: '1em', height: '1em' }} />
+        </IconButton>
+        <IconButton
+          variant={
+            tankFilters.types?.includes(TankType.PREMIUM) ? 'solid' : 'soft'
+          }
+          radius="none"
+          color={
+            tankFilters.types?.includes(TankType.PREMIUM) ? 'amber' : 'gray'
+          }
+          highContrast
+          onClick={() => {
+            if (tankFilters.types.includes(TankType.PREMIUM)) {
+              $tankFilters.setKey(
+                'types',
+                tankFilters.types.filter((t) => t !== TankType.PREMIUM),
+              );
+            } else {
+              $tankFilters.setKey('types', [
+                ...tankFilters.types,
+                TankType.PREMIUM,
+              ]);
+            }
+          }}
+        >
+          <Text
             color={
-              tankFilters.types?.includes(TankType.RESEARCHABLE)
+              tankFilters.types?.includes(TankType.PREMIUM)
                 ? undefined
-                : 'gray'
+                : 'amber'
             }
-            highContrast
-            onClick={() => {
-              if (tankFilters.types.includes(TankType.RESEARCHABLE)) {
-                $tankFilters.setKey(
-                  'types',
-                  tankFilters.types.filter((t) => t !== TankType.RESEARCHABLE),
-                );
-              } else {
-                $tankFilters.setKey('types', [
-                  ...tankFilters.types,
-                  TankType.RESEARCHABLE,
-                ]);
-              }
-            }}
+            style={{ display: 'flex', justifyContent: 'center' }}
           >
             <ResearchedIcon style={{ width: '1em', height: '1em' }} />
-          </IconButton>
-        </Tooltip>
-        <Tooltip content="Premium">
-          <IconButton
-            variant={
-              tankFilters.types?.includes(TankType.PREMIUM) ? 'solid' : 'soft'
+          </Text>
+        </IconButton>
+        <IconButton
+          variant={
+            tankFilters.types?.includes(TankType.COLLECTOR) ? 'solid' : 'soft'
+          }
+          radius="none"
+          color={
+            tankFilters.types?.includes(TankType.COLLECTOR) ? 'blue' : 'gray'
+          }
+          highContrast
+          onClick={() => {
+            if (tankFilters.types.includes(TankType.COLLECTOR)) {
+              $tankFilters.setKey(
+                'types',
+                tankFilters.types.filter((t) => t !== TankType.COLLECTOR),
+              );
+            } else {
+              $tankFilters.setKey('types', [
+                ...tankFilters.types,
+                TankType.COLLECTOR,
+              ]);
             }
-            radius="none"
+          }}
+        >
+          <Text
             color={
-              tankFilters.types?.includes(TankType.PREMIUM) ? 'amber' : 'gray'
+              tankFilters.types?.includes(TankType.COLLECTOR)
+                ? undefined
+                : 'blue'
             }
-            highContrast
-            onClick={() => {
-              if (tankFilters.types.includes(TankType.PREMIUM)) {
-                $tankFilters.setKey(
-                  'types',
-                  tankFilters.types.filter((t) => t !== TankType.PREMIUM),
-                );
-              } else {
-                $tankFilters.setKey('types', [
-                  ...tankFilters.types,
-                  TankType.PREMIUM,
-                ]);
-              }
-            }}
+            style={{ display: 'flex', justifyContent: 'center' }}
           >
-            <Text
-              color={
-                tankFilters.types?.includes(TankType.PREMIUM)
-                  ? undefined
-                  : 'amber'
-              }
-              style={{ display: 'flex', justifyContent: 'center' }}
-            >
-              <ResearchedIcon style={{ width: '1em', height: '1em' }} />
-            </Text>
-          </IconButton>
-        </Tooltip>
-        <Tooltip content="Collector">
-          <IconButton
-            variant={
-              tankFilters.types?.includes(TankType.COLLECTOR) ? 'solid' : 'soft'
-            }
-            radius="none"
-            color={
-              tankFilters.types?.includes(TankType.COLLECTOR) ? 'blue' : 'gray'
-            }
-            highContrast
-            onClick={() => {
-              if (tankFilters.types.includes(TankType.COLLECTOR)) {
-                $tankFilters.setKey(
-                  'types',
-                  tankFilters.types.filter((t) => t !== TankType.COLLECTOR),
-                );
-              } else {
-                $tankFilters.setKey('types', [
-                  ...tankFilters.types,
-                  TankType.COLLECTOR,
-                ]);
-              }
-            }}
-          >
-            <Text
-              color={
-                tankFilters.types?.includes(TankType.COLLECTOR)
-                  ? undefined
-                  : 'blue'
-              }
-              style={{ display: 'flex', justifyContent: 'center' }}
-            >
-              <ResearchedIcon style={{ width: '1em', height: '1em' }} />
-            </Text>
-          </IconButton>
-        </Tooltip>
+            <ResearchedIcon style={{ width: '1em', height: '1em' }} />
+          </Text>
+        </IconButton>
       </Flex>
 
       <Flex
@@ -374,61 +314,45 @@ export function FilterControl({ compact }: FilterControlProps) {
         style={{ borderRadius: 'var(--radius-full)' }}
         direction={compact ? 'column' : { sm: 'row', initial: 'column' }}
       >
-        <Tooltip content="Include test tank">
-          <IconButton
-            variant={tankFilters.testing === 'include' ? 'solid' : 'soft'}
-            radius="none"
-            color={tankFilters.testing === 'include' ? undefined : 'gray'}
-            highContrast
-            onClick={() => {
-              $tankFilters.setKey('testing', 'include');
-            }}
-          >
-            <ExperimentIcon
-              style={{ width: '1em', height: '1em', color: 'currentColor' }}
-            />
-          </IconButton>
-        </Tooltip>
-        <Tooltip content="Exclude test tank">
-          <IconButton
-            variant={tankFilters.testing === 'exclude' ? 'solid' : 'soft'}
-            radius="none"
-            color={tankFilters.testing === 'exclude' ? undefined : 'gray'}
-            highContrast
-            onClick={() =>
-              // mutateTankFilters((draft) => {
-              //   draft.testing = 'exclude';
-              // })
-              {
-                $tankFilters.setKey('testing', 'exclude');
-              }
-            }
-          >
-            <ScienceOffIcon
-              style={{ width: '1em', height: '1em', color: 'currentColor' }}
-            />
-          </IconButton>
-        </Tooltip>
-        <Tooltip content="Only test tank">
-          <IconButton
-            variant={tankFilters.testing === 'only' ? 'solid' : 'soft'}
-            radius="none"
-            color={tankFilters.testing === 'only' ? undefined : 'gray'}
-            highContrast
-            onClick={() =>
-              // mutateTankFilters((draft) => {
-              //   draft.testing = 'only';
-              // })
-              {
-                $tankFilters.setKey('testing', 'only');
-              }
-            }
-          >
-            <ScienceIcon
-              style={{ width: '1em', height: '1em', color: 'currentColor' }}
-            />
-          </IconButton>
-        </Tooltip>
+        <IconButton
+          variant={tankFilters.testing === 'include' ? 'solid' : 'soft'}
+          radius="none"
+          color={tankFilters.testing === 'include' ? undefined : 'gray'}
+          highContrast
+          onClick={() => {
+            $tankFilters.setKey('testing', 'include');
+          }}
+        >
+          <ExperimentIcon
+            style={{ width: '1em', height: '1em', color: 'currentColor' }}
+          />
+        </IconButton>
+        <IconButton
+          variant={tankFilters.testing === 'exclude' ? 'solid' : 'soft'}
+          radius="none"
+          color={tankFilters.testing === 'exclude' ? undefined : 'gray'}
+          highContrast
+          onClick={() => {
+            $tankFilters.setKey('testing', 'exclude');
+          }}
+        >
+          <ScienceOffIcon
+            style={{ width: '1em', height: '1em', color: 'currentColor' }}
+          />
+        </IconButton>
+        <IconButton
+          variant={tankFilters.testing === 'only' ? 'solid' : 'soft'}
+          radius="none"
+          color={tankFilters.testing === 'only' ? undefined : 'gray'}
+          highContrast
+          onClick={() => {
+            $tankFilters.setKey('testing', 'only');
+          }}
+        >
+          <ScienceIcon
+            style={{ width: '1em', height: '1em', color: 'currentColor' }}
+          />
+        </IconButton>
       </Flex>
 
       <Box>
