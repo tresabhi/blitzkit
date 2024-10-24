@@ -38,7 +38,7 @@ export function GalleryList({ avatars }: GalleryListProps) {
         {filtered.length.toLocaleString()} avatars
       </Text>
 
-      <Flex wrap="wrap" gap="4">
+      <Flex wrap="wrap" gap="4" justify="center">
         {filtered.slice(0, loadedCards).map((avatar) => (
           <GalleryCard key={avatar.id} id={avatar.id} name={avatar.name} />
         ))}
