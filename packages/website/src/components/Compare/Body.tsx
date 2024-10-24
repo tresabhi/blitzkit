@@ -266,6 +266,7 @@ export function Body({ stats }: BodyProps) {
           stats={stats}
           name="Raw terrain coefficient"
           value="hardTerrainCoefficientRaw"
+          deltaType="lowerIsBetter"
           decimals={2}
         />
         <CompareRow
@@ -273,6 +274,7 @@ export function Body({ stats }: BodyProps) {
           name="medium terrain"
           indent
           value="mediumTerrainCoefficientRaw"
+          deltaType="lowerIsBetter"
           decimals={2}
         />
         <CompareRow
@@ -280,6 +282,7 @@ export function Body({ stats }: BodyProps) {
           name="soft terrain"
           indent
           value="softTerrainCoefficientRaw"
+          deltaType="lowerIsBetter"
           decimals={2}
         />
         <CompareRow
