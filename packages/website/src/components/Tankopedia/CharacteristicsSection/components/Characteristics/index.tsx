@@ -41,7 +41,6 @@ export function Characteristics() {
   const crewSkills = TankopediaEphemeral.use((state) => state.skills);
   const penetrationDistanceInput = useRef<HTMLInputElement>(null);
   const hasImprovedVentilation = useEquipment(102);
-  const crewMastery = Duel.use((state) => state.protagonist.crewMastery);
   const [penetrationDistance, setPenetrationDistance] = useState(250);
   const setPenetrationDistanceDebounced = debounce((value: number) => {
     setPenetrationDistance(value);
@@ -56,7 +55,7 @@ export function Characteristics() {
           : total,
       0,
     ) + (hasImprovedVentilation ? 0.08 : 0);
-  const commanderMastery = crewMastery + provisionCrewBonus;
+  const commanderMastery = 1 + provisionCrewBonus;
   const consumables = Duel.use((state) => state.protagonist.consumables);
   const camouflage = Duel.use((state) => state.protagonist.camouflage);
   const equipmentMatrix = Duel.use(
@@ -78,7 +77,6 @@ export function Characteristics() {
       tank,
       camouflage,
       consumables,
-      crewMastery,
       crewSkills,
       engine,
       equipmentMatrix,

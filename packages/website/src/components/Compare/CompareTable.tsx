@@ -9,8 +9,8 @@ import {
 } from '@blitzkit/core';
 import { checkConsumableProvisionInclusivity } from '@blitzkit/core/src/blitzkit/checkConsumableProvisionInclusivity';
 import { ComponentPlaceholderIcon } from '@radix-ui/react-icons';
-import { Button, Flex, Popover, Slider, Table, Text } from '@radix-ui/themes';
-import { debounce, times } from 'lodash-es';
+import { Button, Flex, Popover, Table } from '@radix-ui/themes';
+import { times } from 'lodash-es';
 import type { TankCharacteristics } from '../../core/blitzkit/tankCharacteristics';
 import { Var } from '../../core/radix/var';
 import { CompareEphemeral } from '../../stores/compareEphemeral';
@@ -167,7 +167,6 @@ export function CompareTable({ stats }: CompareTableProps) {
                 engine,
                 track,
                 consumables,
-                crewMastery,
               },
               index,
             ) => {
@@ -536,23 +535,6 @@ export function CompareTable({ stats }: CompareTableProps) {
                           </Flex>
                         </Popover.Content>
                       </Popover.Root>
-                    </Flex>
-
-                    <Flex gap="2" width="100%" align="center">
-                      <Text>{Math.round(crewMastery * 100)}%</Text>
-                      <Flex flexGrow="1">
-                        <Slider
-                          defaultValue={[crewMastery]}
-                          min={0.5}
-                          max={1}
-                          step={1 / 100}
-                          onValueChange={debounce(([value]: number[]) => {
-                            mutateCompareEphemeral((draft) => {
-                              draft.members[index].crewMastery = value;
-                            });
-                          }, 500)}
-                        />
-                      </Flex>
                     </Flex>
                   </Flex>
                 </Table.Cell>

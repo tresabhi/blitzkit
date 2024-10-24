@@ -29,7 +29,6 @@ export function tankToDuelMember(
     consumables: [],
     equipmentMatrix: genericDefaultEquipmentMatrix,
     cooldownBooster: 0,
-    crewMastery: 1,
     provisions: provisionsList
       .sort(
         (a, b) =>

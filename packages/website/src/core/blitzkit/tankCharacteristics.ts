@@ -33,7 +33,6 @@ export function tankCharacteristics(
     shell,
     consumables,
     equipmentMatrix,
-    crewMastery,
     provisions,
     engine,
     crewSkills,
@@ -59,7 +58,6 @@ export function tankCharacteristics(
     stockGun: GunDefinition;
     consumables: number[];
     equipmentMatrix: EquipmentMatrix;
-    crewMastery: number;
     provisions: number[];
     crewSkills: Record<string, number>;
     camouflage: boolean;
@@ -139,7 +137,7 @@ export function tankCharacteristics(
           : total,
       0,
     ) + (hasImprovedVentilation ? 0.08 : 0);
-  const commanderMastery = crewMastery + provisionCrewBonus;
+  const commanderMastery = 1 + provisionCrewBonus;
   const loaderMastery =
     commanderMastery *
     (tank.crew.some(({ type }) => type === CrewType.LOADER) ? 1.1 : 1.05);

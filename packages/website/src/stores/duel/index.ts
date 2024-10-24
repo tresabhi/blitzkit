@@ -35,7 +35,6 @@ export interface DuelMember {
   pitch: number;
   yaw: number;
   consumables: number[];
-  crewMastery: number;
   provisions: number[];
   camouflage: boolean;
   cooldownBooster: number;
