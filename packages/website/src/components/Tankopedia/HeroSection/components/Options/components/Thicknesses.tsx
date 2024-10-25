@@ -132,7 +132,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
           style={{
             borderRadius: 'var(--radius-full)',
             overflow: 'hidden',
-            backgroundColor: '#3eb0c6',
+            backgroundColor: '#c0c0c0',
           }}
         />
       </Flex>

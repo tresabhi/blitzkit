@@ -58,7 +58,7 @@ type StaticArmorSceneComponentProps = {
   );
 
 const unselectedColor = new Color(0x404040);
-const externalModuleColor = new Color(0, 1 / 4, 1 / 2);
+const externalModuleColor = new Color(192 / 255, 192 / 255, 192 / 255);
 
 export function StaticArmorSceneComponent({
   name,
