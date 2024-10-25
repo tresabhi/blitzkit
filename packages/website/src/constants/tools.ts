@@ -156,7 +156,7 @@ export const galleryTool: Tool = {
   description: 'Blitz player avatars',
   pageDescription: 'All World of Tanks Blitz player avatars',
   button: {
-    text: 'Browse',
+    text: 'Browse all',
     color: 'gold',
   },
   image: 'VhKlknk',
