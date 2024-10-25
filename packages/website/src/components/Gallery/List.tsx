@@ -27,7 +27,7 @@ export function GalleryList({ avatars }: GalleryListProps) {
       return avatars;
     } else {
       return fuzzysort
-        .go(search, avatars, { key: 'name' })
+        .go(search, avatars, { keys: ['name', 'id'] })
         .map((result) => result.obj);
     }
   }, [search]);

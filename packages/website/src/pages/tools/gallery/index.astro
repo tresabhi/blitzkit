@@ -18,8 +18,9 @@ const avatars = Object.entries(glossary)
       ({ id: key.replace('avatar_', ''), name: value.title }) satisfies Avatar,
   )
   .sort((a, b) => a.name.localeCompare(b.name));
+const lastUpdated = new Date().toLocaleDateString();
 ---
 
 <ToolLayout tool={galleryTool}>
-  <Page {avatars} client:load />
+  <Page {avatars} {lastUpdated} client:load />
 </ToolLayout>
