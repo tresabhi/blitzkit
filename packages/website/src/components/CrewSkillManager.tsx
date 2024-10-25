@@ -2,8 +2,7 @@ import {
   asset,
   fetchSkillDefinitions,
   permanentSkills,
-  TIER_ROMAN_NUMERALS,
-  type Tier,
+  romanize,
 } from '@blitzkit/core';
 import { Flex } from '@radix-ui/themes';
 import { GenericTankComponentButton } from './ModuleButtons/GenericTankComponentButton';
@@ -31,9 +30,7 @@ export function CrewSkillManager({
                 key={skill}
                 special={!permanentSkills.includes(skill)}
                 selected={level > 0}
-                discriminator={
-                  level === 0 ? undefined : TIER_ROMAN_NUMERALS[level as Tier]
-                }
+                discriminator={level === 0 ? undefined : romanize(level)}
                 icon={asset(`icons/skills/${skill}.webp`)}
                 onClick={(event) => {
                   if (!onChange) return;
