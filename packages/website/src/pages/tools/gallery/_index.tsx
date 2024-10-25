@@ -1,4 +1,4 @@
-import { InfoCircledIcon } from '@radix-ui/react-icons';
+import { CalendarIcon } from '@radix-ui/react-icons';
 import { Callout, Flex } from '@radix-ui/themes';
 import { GalleryList, type Avatar } from '../../../components/Gallery/List';
 import { GallerySearch } from '../../../components/Gallery/Search';
@@ -16,7 +16,7 @@ export function Page({ avatars, lastUpdated }: PageProps) {
       <Flex justify="center">
         <Callout.Root size="1">
           <Callout.Icon>
-            <InfoCircledIcon />
+            <CalendarIcon />
           </Callout.Icon>
           <Callout.Text>Last updated on {lastUpdated}</Callout.Text>
         </Callout.Root>
