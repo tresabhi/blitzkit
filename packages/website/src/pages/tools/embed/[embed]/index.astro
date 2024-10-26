@@ -1,0 +1,16 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { configurations } from '../../../../constants/embeds';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { Page } from './_index';
+
+export const getStaticPaths = (() => {
+  return Object.keys(configurations).map((embed) => ({
+    params: { embed: embed as keyof typeof configurations },
+  }));
+}) satisfies GetStaticPaths;
+---
+
+<BaseLayout>
+  <Page client:load embed={Astro.params.embed} />
+</BaseLayout>

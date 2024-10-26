@@ -1,0 +1,16 @@
+---
+import { PageWrapper } from '../../../components/PageWrapper';
+import { configurations } from '../../../constants/embeds';
+import { embedTool } from '../../../constants/tools';
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+---
+
+<ToolLayout tool={embedTool}>
+  <PageWrapper>
+    {
+      Object.entries(configurations).map(([embed, config]) => (
+        <a href={`/tools/embed/${embed}`}>{embed}</a>
+      ))
+    }
+  </PageWrapper>
+</ToolLayout>
