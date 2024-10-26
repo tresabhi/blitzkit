@@ -3,11 +3,17 @@ import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { createContextualStore } from '../../core/zustand/createContextualStore';
 
+export interface WargamingLogin {
+  token: string;
+  id: number;
+  expires: number;
+}
+
 interface AppStore {
   developerMode: boolean;
   policiesAgreementIndex: number;
   logins: {
-    wargaming?: { token: string; id: number; expires: number };
+    wargaming?: WargamingLogin;
   };
 }
 

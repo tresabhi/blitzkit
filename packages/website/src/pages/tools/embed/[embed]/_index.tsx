@@ -25,6 +25,7 @@ import { SizeWithout0 } from '../../../../components/Embeds/SizeWithout0';
 import { Slider } from '../../../../components/Embeds/Slider';
 import { TextController } from '../../../../components/Embeds/TextController';
 import { PageWrapper } from '../../../../components/PageWrapper';
+import { WargamingLoginButton } from '../../../../components/WargamingLoginButton';
 import {
   configurations,
   extractEmbedConfigDefaults,
@@ -59,6 +60,10 @@ export function Page({ embed }: PageProps) {
 }
 
 function Content({ embed }: PageProps) {
+  const wargaming = App.useDeferred(
+    (state) => state.logins.wargaming,
+    undefined,
+  );
   const embedStateStore = EmbedState.useStore();
   const appStore = App.useStore();
   const config = configurations[embed] as EmbedConfig;
@@ -96,6 +101,7 @@ function Content({ embed }: PageProps) {
 
             <Flex mb="6" gap="2" wrap="wrap">
               <CopyButton
+                disabled={!wargaming}
                 copy={() => {
                   const { wargaming } = appStore.getState().logins;
 
@@ -120,8 +126,13 @@ function Content({ embed }: PageProps) {
                 }}
               >
                 <Link2Icon />
-                Copy URL
+                {wargaming ? 'Copy URL' : 'Log in to general URL'}
               </CopyButton>
+              {!wargaming && (
+                <WargamingLoginButton>
+                  Log in with Wargaming
+                </WargamingLoginButton>
+              )}
               <CopyButton
                 variant="outline"
                 copy={() =>
