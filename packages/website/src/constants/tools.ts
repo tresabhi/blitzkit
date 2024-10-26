@@ -26,7 +26,7 @@ export const tankopediaTool: Tool = {
     'Statistics, armor, and more for all tanks in World of Tanks Blitz',
   image: 'D8j6GZx',
   button: {
-    text: 'Find your tank',
+    text: 'Find tanks',
     color: 'purple',
   },
   significant: true,
@@ -134,12 +134,11 @@ export const embedTool: Tool = {
   pageDescription:
     'Create embeds for streaming World of Tanks Blitz with extreme customization',
   button: {
-    text: 'Create',
+    text: 'Create now',
     color: 'red',
   },
   image: 'Q0faRYg',
   branches: ['main', 'dev', 'opentest'],
-  href: '',
 };
 
 export const homeTool: Tool = {

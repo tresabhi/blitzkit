@@ -1,11 +1,12 @@
 ---
-import { Flex, Heading } from '@radix-ui/themes';
+import { Box, Flex, Heading } from '@radix-ui/themes';
 import HomeHero from '../components/HomeHero.astro';
 import { Plugs } from '../components/Plugs.tsx';
 import ToolCard from '../components/ToolCard.astro';
 import {
   compareTool,
   discordTool,
+  embedTool,
   galleryTool,
   moreTool,
   performanceTool,
@@ -33,13 +34,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={galleryTool} />
         <ToolCard tool={sessionTool} />
-        {/* <ToolCard tool={embedTool} /> */}
         {/* <ToolCard tool={ratingTool} /> */}
       </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard tool={embedTool} />
         <ToolCard tool={discordTool} />
+      </Flex>
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={moreTool} />
+        <Box flexGrow="1" />
       </Flex>
 
       <Heading align="center" mt="6">Other cool projects</Heading>
