@@ -62,7 +62,9 @@ function Content({ embed }: PageProps) {
   const embedStateStore = EmbedState.useStore();
   const appStore = App.useStore();
   const config = configurations[embed] as EmbedConfig;
-  const [backgroundImage, setBackgroundImage] = useState(imgur('SO13zur'));
+  const [backgroundImage, setBackgroundImage] = useState(
+    imgur('SO13zur', { format: 'jpeg' }),
+  );
   const fileInput = useRef<HTMLInputElement>();
 
   useEffect(() => {
@@ -143,7 +145,7 @@ function Content({ embed }: PageProps) {
                 <HeightIcon />
                 Copy height
               </CopyButton>
-              <CopyButton variant="outline" copy={() => '`'}>
+              <CopyButton variant="outline" copy={() => '1'}>
                 <TimerIcon />
                 Copy framerate
               </CopyButton>
