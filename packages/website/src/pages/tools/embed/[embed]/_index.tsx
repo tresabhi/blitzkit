@@ -228,6 +228,7 @@ function Content({ embed }: PageProps) {
 
               return (
                 <Flex
+                  key={configKey}
                   direction={oneLiner ? undefined : 'column'}
                   gap={oneLiner ? '2' : '1'}
                   justify={oneLiner ? 'between' : undefined}

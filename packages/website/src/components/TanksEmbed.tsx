@@ -106,6 +106,7 @@ export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
 
           return (
             <Flex
+              key={column}
               direction="column"
               align="center"
               gap={useState('columnGap')}
