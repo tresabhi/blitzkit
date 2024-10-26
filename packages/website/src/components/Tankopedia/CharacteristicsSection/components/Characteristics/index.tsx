@@ -579,6 +579,9 @@ export function Characteristics() {
           <InfoWithDelta name="Health" unit="hp" decimals={0}>
             {stats.health}
           </InfoWithDelta>
+          <InfoWithDelta name="Crew count" decimals={0}>
+            {stats.crewCount}
+          </InfoWithDelta>
           <InfoWithDelta
             name="Fire chance"
             unit="%"
