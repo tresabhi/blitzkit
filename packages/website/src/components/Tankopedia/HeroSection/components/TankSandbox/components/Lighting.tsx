@@ -9,7 +9,7 @@ export function Lighting() {
   const display = TankopediaPersistent.use((state) => state.display);
   const { hasPbr } = useModel(protagonist.tank.id);
   const isBrighterLighting =
-    hasPbr && display !== TankopediaDisplay.StaticArmor;
+    !hasPbr && display !== TankopediaDisplay.StaticArmor;
   const showEnvironment = TankopediaPersistent.use(
     (state) => state.showEnvironment,
   );
