@@ -469,7 +469,7 @@ export function Characteristics() {
                     : commanderMastery * 1.1) * 100}
                 </InfoWithDelta>
 
-                {member.substitute && (
+                {member.substitute.length > 0 && (
                   <InfoWithDelta
                     key={`${member.type}-substitute`}
                     decimals={0}
