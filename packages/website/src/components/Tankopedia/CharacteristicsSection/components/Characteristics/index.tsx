@@ -453,6 +453,10 @@ export function Characteristics() {
             </Popover.Root>
           </Flex>
 
+          <InfoWithDelta name="Crew count" decimals={0}>
+            {stats.crewCount}
+          </InfoWithDelta>
+
           {tank.crew.map((member) => {
             return (
               <Fragment key={member.type}>
@@ -578,9 +582,6 @@ export function Characteristics() {
           <Heading size="5">Survivability</Heading>
           <InfoWithDelta name="Health" unit="hp" decimals={0}>
             {stats.health}
-          </InfoWithDelta>
-          <InfoWithDelta name="Crew count" decimals={0}>
-            {stats.crewCount}
           </InfoWithDelta>
           <InfoWithDelta
             name="Fire chance"
