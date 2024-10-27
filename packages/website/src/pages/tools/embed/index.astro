@@ -1,9 +1,17 @@
 ---
+import { Link } from '@radix-ui/themes';
+import { PageWrapper } from '../../../components/PageWrapper';
+import { configurations } from '../../../constants/embeds';
 import { embedTool } from '../../../constants/tools';
 import ToolLayout from '../../../layouts/ToolLayout.astro';
-import { Page } from './_index';
 ---
 
 <ToolLayout tool={embedTool}>
-  <Page client:load />
+  <PageWrapper color="red">
+    {
+      Object.entries(configurations).map(([embed, config]) => (
+        <Link href={`/tools/embed/${embed}`}>{embed}</Link>
+      ))
+    }
+  </PageWrapper>
 </ToolLayout>

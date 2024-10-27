@@ -3,7 +3,6 @@ import {
   CodeIcon,
   HeightIcon,
   ImageIcon,
-  Link2Icon,
   ResetIcon,
   TimerIcon,
   WidthIcon,
@@ -11,10 +10,10 @@ import {
 import { Box, Button, Flex, Heading, ScrollArea, Text } from '@radix-ui/themes';
 import { capitalize, startCase } from 'lodash-es';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { stringify } from 'urlon';
 import { CopyButton } from '../../../../components/CopyButton';
 import { Boolean } from '../../../../components/Embeds/Boolean';
 import { Color } from '../../../../components/Embeds/Color';
+import { CopyURL } from '../../../../components/Embeds/CopyURL';
 import { Enum } from '../../../../components/Embeds/Enum';
 import { Import } from '../../../../components/Embeds/Import';
 import { PreviewWrapper } from '../../../../components/Embeds/PreviewWrapper';
@@ -25,18 +24,13 @@ import { SizeWithout0 } from '../../../../components/Embeds/SizeWithout0';
 import { Slider } from '../../../../components/Embeds/Slider';
 import { TextController } from '../../../../components/Embeds/TextController';
 import { PageWrapper } from '../../../../components/PageWrapper';
-import { WargamingLoginButton } from '../../../../components/WargamingLoginButton';
 import {
   configurations,
   extractEmbedConfigDefaults,
 } from '../../../../constants/embeds';
 import { NAVBAR_HEIGHT } from '../../../../constants/navbar';
 import { App } from '../../../../stores/app';
-import {
-  EmbedState,
-  type EmbedConfig,
-  type EmbedStateStore,
-} from '../../../../stores/embedState';
+import { EmbedState, type EmbedConfig } from '../../../../stores/embedState';
 import { EmbedItemType } from '../../../../stores/embedState/constants';
 
 export interface EmbedPreviewControllerProps {
@@ -60,10 +54,6 @@ export function Page({ embed }: PageProps) {
 }
 
 function Content({ embed }: PageProps) {
-  const wargaming = App.useDeferred(
-    (state) => state.logins.wargaming,
-    undefined,
-  );
   const embedStateStore = EmbedState.useStore();
   const appStore = App.useStore();
   const config = configurations[embed] as EmbedConfig;
@@ -100,39 +90,7 @@ function Content({ embed }: PageProps) {
             </Text>
 
             <Flex mb="6" gap="2" wrap="wrap">
-              <CopyButton
-                disabled={!wargaming}
-                copy={() => {
-                  const { wargaming } = appStore.getState().logins;
-
-                  if (!wargaming) return;
-
-                  const state = embedStateStore.getState();
-                  const initial = embedStateStore.getInitialState();
-                  const shallowState: EmbedStateStore = {};
-
-                  Object.entries(state).forEach(([key, value]) => {
-                    if (value !== initial[key]) {
-                      shallowState[key] = value;
-                    }
-                  });
-
-                  const searchParams = new URLSearchParams({
-                    id: `${wargaming.id}`,
-                    state: stringify(shallowState),
-                  });
-
-                  return `${location.origin}/tools/embed/${embed}/host?${searchParams.toString()}`;
-                }}
-              >
-                <Link2Icon />
-                {wargaming ? 'Copy URL' : 'Log in to general URL'}
-              </CopyButton>
-              {!wargaming && (
-                <WargamingLoginButton>
-                  Log in with Wargaming
-                </WargamingLoginButton>
-              )}
+              <CopyURL embed={embed} />
               <CopyButton
                 variant="outline"
                 copy={() =>
