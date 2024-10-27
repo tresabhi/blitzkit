@@ -18,7 +18,6 @@ import { debounce } from 'lodash-es';
 import { useCallback, useRef, useState } from 'react';
 import { stringify } from 'urlon';
 import type { configurations } from '../../constants/embeds';
-import { App } from '../../stores/app';
 import { EmbedState, type EmbedStateStore } from '../../stores/embedState';
 import { CopyButton } from '../CopyButton';
 
@@ -27,7 +26,7 @@ interface CopyURLProps {
 }
 
 export function CopyURL({ embed }: CopyURLProps) {
-  const appStore = App.useStore();
+  const [dialogOpen, setDialogOpen] = useState(false);
   const embedStateStore = EmbedState.useStore();
   const input = useRef<HTMLInputElement>(null);
   const [searching, setSearching] = useState(false);
@@ -65,7 +64,7 @@ export function CopyURL({ embed }: CopyURLProps) {
   }, []);
 
   return (
-    <Dialog.Root>
+    <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
       <Dialog.Trigger>
         <Button>
           <Link2Icon />
@@ -131,6 +130,8 @@ export function CopyURL({ embed }: CopyURLProps) {
                       id: `${result.account_id}`,
                       state: stringify(shallowState),
                     });
+
+                    setDialogOpen(false);
 
                     return `${location.origin}/tools/embed/${embed}/host?${searchParams.toString()}`;
                   }}
