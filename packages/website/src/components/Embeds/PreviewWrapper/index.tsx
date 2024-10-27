@@ -1,18 +1,18 @@
 import { Box } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
-import { previews } from '../../../constants/embeds';
+import { embedPreviews } from '../../../constants/embeds';
 import { useEmbedStateCurry } from '../../../stores/embedState/utilities';
 import * as styles from './index.css';
 
 interface PreviewWrapperProps {
-  name: keyof typeof previews;
+  name: keyof typeof embedPreviews;
 }
 
 export function PreviewWrapper({ name }: PreviewWrapperProps) {
   const { useState } = useEmbedStateCurry();
   const width = useState('width');
   const height = useState('height');
-  const Preview = previews[name];
+  const Preview = embedPreviews[name];
   const wrapper = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

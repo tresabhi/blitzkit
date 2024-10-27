@@ -25,7 +25,7 @@ import { Slider } from '../../../../components/Embeds/Slider';
 import { TextController } from '../../../../components/Embeds/TextController';
 import { PageWrapper } from '../../../../components/PageWrapper';
 import {
-  configurations,
+  embedConfigurations,
   extractEmbedConfigDefaults,
 } from '../../../../constants/embeds';
 import { NAVBAR_HEIGHT } from '../../../../constants/navbar';
@@ -38,11 +38,11 @@ export interface EmbedPreviewControllerProps {
 }
 
 interface PageProps {
-  embed: keyof typeof configurations;
+  embed: keyof typeof embedConfigurations;
 }
 
 export function Page({ embed }: PageProps) {
-  const config = configurations[embed];
+  const config = embedConfigurations[embed];
 
   return (
     <App.Provider>
@@ -56,7 +56,7 @@ export function Page({ embed }: PageProps) {
 function Content({ embed }: PageProps) {
   const embedStateStore = EmbedState.useStore();
   const appStore = App.useStore();
-  const config = configurations[embed] as EmbedConfig;
+  const config = embedConfigurations[embed] as EmbedConfig;
   const [backgroundImage, setBackgroundImage] = useState(
     imgur('SO13zur', { format: 'jpeg' }),
   );

@@ -17,12 +17,12 @@ import {
 import { debounce } from 'lodash-es';
 import { useCallback, useRef, useState } from 'react';
 import { stringify } from 'urlon';
-import type { configurations } from '../../constants/embeds';
+import type { embedConfigurations } from '../../constants/embeds';
 import { EmbedState, type EmbedStateStore } from '../../stores/embedState';
 import { CopyButton } from '../CopyButton';
 
 interface CopyURLProps {
-  embed: keyof typeof configurations;
+  embed: keyof typeof embedConfigurations;
 }
 
 export function CopyURL({ embed }: CopyURLProps) {

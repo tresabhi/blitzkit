@@ -1,0 +1,14 @@
+---
+import { embedPreviews } from '../../../../../constants/embeds';
+import { EmbedState } from '../../../../../stores/embedState';
+
+export { getStaticPaths } from '../index.astro';
+
+const Test = embedPreviews.breakdown;
+---
+
+sploinky sploinky splonk
+
+<EmbedState.Provider>
+  <Test />
+</EmbedState.Provider>

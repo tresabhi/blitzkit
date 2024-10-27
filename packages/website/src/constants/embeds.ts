@@ -85,11 +85,11 @@ export const breakdownConfig = {
   column4CustomLabel: { type: EmbedItemType.String, default: '' },
 } satisfies EmbedConfig;
 
-export const configurations = {
+export const embedConfigurations = {
   breakdown: breakdownConfig,
 } satisfies Record<string, EmbedConfig>;
 
-export const previews = {
+export const embedPreviews = {
   breakdown: BreakdownPreview,
 } satisfies Record<string, () => ReactNode>;
 export function extractEmbedConfigDefaults<Config extends EmbedConfig>(
