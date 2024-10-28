@@ -55,7 +55,6 @@ export function Page({ embed }: PageProps) {
 
 function Content({ embed }: PageProps) {
   const embedStateStore = EmbedState.useStore();
-  const appStore = App.useStore();
   const config = embedConfigurations[embed] as EmbedConfig;
   const [backgroundImage, setBackgroundImage] = useState(
     imgur('SO13zur', { format: 'jpeg' }),

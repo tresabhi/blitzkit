@@ -6,9 +6,10 @@ import * as styles from './index.css';
 
 interface PreviewWrapperProps {
   name: keyof typeof embedPreviews;
+  naked?: boolean;
 }
 
-export function PreviewWrapper({ name }: PreviewWrapperProps) {
+export function PreviewWrapper({ name, naked }: PreviewWrapperProps) {
   const { useEmbedState } = useEmbedStateCurry();
   const width = useEmbedState('width');
   const height = useEmbedState('height');
@@ -23,10 +24,29 @@ export function PreviewWrapper({ name }: PreviewWrapperProps) {
     wrapper.current.classList.add(styles.animated);
   }, [width, height]);
 
+  if (naked) {
+    return (
+      <Box
+        position="absolute"
+        top="0"
+        left="50%"
+        style={{ transform: 'translate(-50%, 0) scale(0.75)' }}
+        width={`${width}px`}
+        height={`${height}px`}
+      >
+        <Preview />
+      </Box>
+    );
+  }
+
   return (
     <Box
+      position="absolute"
+      top="50%"
+      left="50%"
+      overflow="hidden"
+      style={{ transform: naked ? 'scale(0.25)' : 'translate(-50%, -50%)' }}
       ref={wrapper}
-      className={styles.wrapper}
       width={`${width}px`}
       height={`${height}px`}
     >

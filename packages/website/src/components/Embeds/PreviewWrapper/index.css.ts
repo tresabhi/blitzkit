@@ -9,14 +9,6 @@ const fadeOutBorder = keyframes({
   },
 });
 
-export const wrapper = style({
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  overflow: 'hidden',
-});
-
 export const animated = style({
   animation: `${fadeOutBorder} 0.5s linear`,
 
