@@ -13,8 +13,8 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { CopyButton } from '../../../../components/CopyButton';
 import { Boolean } from '../../../../components/Embeds/Boolean';
 import { Color } from '../../../../components/Embeds/Color';
-import { CopyURL } from '../../../../components/Embeds/CopyURL';
 import { Enum } from '../../../../components/Embeds/Enum';
+import { GenerateURL } from '../../../../components/Embeds/GenerateURL';
 import { Import } from '../../../../components/Embeds/Import';
 import { PreviewWrapper } from '../../../../components/Embeds/PreviewWrapper';
 import { Radius } from '../../../../components/Embeds/Radius';
@@ -90,7 +90,7 @@ function Content({ embed }: PageProps) {
             </Text>
 
             <Flex mb="6" gap="2" wrap="wrap">
-              <CopyURL embed={embed} />
+              <GenerateURL embed={embed} />
               <CopyButton
                 variant="outline"
                 copy={() =>
