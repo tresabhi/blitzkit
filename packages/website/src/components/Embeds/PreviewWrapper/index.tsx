@@ -9,9 +9,9 @@ interface PreviewWrapperProps {
 }
 
 export function PreviewWrapper({ name }: PreviewWrapperProps) {
-  const { useState } = useEmbedStateCurry();
-  const width = useState('width');
-  const height = useState('height');
+  const { useEmbedState } = useEmbedStateCurry();
+  const width = useEmbedState('width');
+  const height = useEmbedState('height');
   const Preview = embedPreviews[name];
   const wrapper = useRef<HTMLDivElement>(null);
 

@@ -40,9 +40,9 @@ export function Page({ embed }: PageProps) {
 
 function Content({ embed }: PageProps) {
   const Renderer = embedRenderers[embed];
-  const { useState } = useEmbedStateCurry();
-  const width = useState('width');
-  const height = useState('height');
+  const { useEmbedState } = useEmbedStateCurry();
+  const width = useEmbedState('width');
+  const height = useEmbedState('height');
 
   return (
     <BlitzKitTheme style={{ background: 'transparent' }}>

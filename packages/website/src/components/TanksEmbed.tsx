@@ -25,10 +25,10 @@ interface BreakdownEmbedWrapperProps {
 export function BreakdownEmbedWrapper({
   children,
 }: BreakdownEmbedWrapperProps) {
-  const { useState } = useEmbedStateCurry<typeof breakdownConfig>();
+  const { useEmbedState } = useEmbedStateCurry<typeof breakdownConfig>();
 
   return (
-    <Flex direction="column" gap={useState('listGap')} height="100%">
+    <Flex direction="column" gap={useEmbedState('listGap')} height="100%">
       {children}
     </Flex>
   );
@@ -39,7 +39,7 @@ interface BreakdownEmbedCardProps {
 }
 
 export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
-  const { useState, useRichText } =
+  const { useEmbedState, useRichText } =
     useEmbedStateCurry<typeof breakdownConfig>();
 
   return (
@@ -47,17 +47,17 @@ export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
       flexShrink="0"
       direction="column"
       style={{
-        borderRadius: toRadiusVar(useState('cardRadius')),
+        borderRadius: toRadiusVar(useEmbedState('cardRadius')),
         overflow: 'hidden',
-        backgroundColor: useState('cardBodyBackgroundColor'),
+        backgroundColor: useEmbedState('cardBodyBackgroundColor'),
       }}
     >
       <Flex
         justify="center"
         style={{
-          backgroundColor: useState('cardHeaderBackgroundColor'),
+          backgroundColor: useEmbedState('cardHeaderBackgroundColor'),
         }}
-        p={useState('cardHeaderPadding')}
+        p={useEmbedState('cardHeaderPadding')}
       >
         <Text
           {...{
@@ -66,7 +66,7 @@ export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
               tank === null
                 ? undefined
                 : tank.type === TankType.RESEARCHABLE ||
-                    !useState('cardTitleTypeColor')
+                    !useEmbedState('cardTitleTypeColor')
                   ? undefined
                   : {
                       color:
@@ -77,7 +77,7 @@ export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
           }}
         >
           <Flex align="center" gap="1">
-            {useState('cardTitleClassIcon') && tank !== null && (
+            {useEmbedState('cardTitleClassIcon') && tank !== null && (
               <>
                 {tank.class === TankClass.LIGHT && (
                   <ClassLight width="1em" height="1em" />
@@ -98,18 +98,20 @@ export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
         </Text>
       </Flex>
 
-      <Flex p={useState('cardBodyPadding')}>
+      <Flex p={useEmbedState('cardBodyPadding')}>
         {times(4, (index) => {
           const column = (index + 1) as 1 | 2 | 3 | 4;
-          const columnState = useState(`column${column}`) as CompositeStatsKey;
-          const customLabel = useState(`column${column}CustomLabel`);
+          const columnState = useEmbedState(
+            `column${column}`,
+          ) as CompositeStatsKey;
+          const customLabel = useEmbedState(`column${column}CustomLabel`);
 
           return (
             <Flex
               key={column}
               direction="column"
               align="center"
-              gap={useState('columnGap')}
+              gap={useEmbedState('columnGap')}
               flexGrow="1"
             >
               <Text {...useRichText('columnValue')}>

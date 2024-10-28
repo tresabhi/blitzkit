@@ -3,7 +3,7 @@ import { EmbedState, type EmbedConfig, type ExtractEmbedConfigTypes } from '.';
 import type { EmbedConfigItemType, EmbedItemType } from './constants';
 
 export function useEmbedStateCurry<Config extends EmbedConfig>() {
-  function useState<Key extends keyof Config>(key: Key) {
+  function useEmbedState<Key extends keyof Config>(key: Key) {
     return EmbedState.use((state) => {
       return (state as ExtractEmbedConfigTypes<Config>)[key];
     });
@@ -16,7 +16,7 @@ export function useEmbedStateCurry<Config extends EmbedConfig>() {
         : never;
     }[keyof Config],
   >(key: Key) {
-    const { color, ...state } = useState(
+    const { color, ...state } = useEmbedState(
       key,
     ) as EmbedConfigItemType<EmbedItemType.RichText>['default'];
 
@@ -26,5 +26,5 @@ export function useEmbedStateCurry<Config extends EmbedConfig>() {
     } satisfies TextProps;
   }
 
-  return { useState, useRichText };
+  return { useEmbedState, useRichText };
 }

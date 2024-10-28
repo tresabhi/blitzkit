@@ -1,6 +1,15 @@
-import { compositeStatsKeys, fetchTankDefinitions } from '@blitzkit/core';
+import {
+  compositeStatsKeys,
+  deltaTankStats,
+  fetchTankDefinitions,
+  getTankStats,
+  idToRegion,
+  type IndividualTankStats,
+} from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
+import { useEffect, useMemo, useState } from 'react';
 import { breakdownConfig } from '../../constants/embeds';
+import { EmbedBreakdownPersistent } from '../../stores/embedBreakdownPersistent';
 import { useEmbedStateCurry } from '../../stores/embedState/utilities';
 import { BreakdownEmbedCard, BreakdownEmbedWrapper } from '../TanksEmbed';
 
@@ -9,18 +18,17 @@ export const compositeStatsKeysOptions = compositeStatsKeys.map((value) => ({
   value,
 }));
 
-const tanks = await fetchTankDefinitions().then((tanks) =>
-  Object.values(tanks.tanks),
-);
+const tankDefinitions = await fetchTankDefinitions();
+const tanks = Object.values(tankDefinitions);
 
 export function BreakdownPreview() {
-  const { useState } = useEmbedStateCurry<typeof breakdownConfig>();
+  const { useEmbedState } = useEmbedStateCurry<typeof breakdownConfig>();
 
   return (
     <BreakdownEmbedWrapper>
-      {useState('showTotal') && <BreakdownEmbedCard tank={null} />}
+      {useEmbedState('showTotal') && <BreakdownEmbedCard tank={null} />}
 
-      {tanks.slice(0, useState('listMaxTanks')).map((tank) => (
+      {tanks.slice(0, useEmbedState('listMaxTanks')).map((tank) => (
         <BreakdownEmbedCard key={tank.id} tank={tank} />
       ))}
     </BreakdownEmbedWrapper>
@@ -28,15 +36,48 @@ export function BreakdownPreview() {
 }
 
 export function BreakdownRenderer() {
-  const { useState } = useEmbedStateCurry<typeof breakdownConfig>();
+  return (
+    <EmbedBreakdownPersistent.Provider>
+      <BreakdownRendererContent />
+    </EmbedBreakdownPersistent.Provider>
+  );
+}
+
+function BreakdownRendererContent() {
+  const { useEmbedState } = useEmbedStateCurry<typeof breakdownConfig>();
+  const params = new URLSearchParams(window.location.search);
+  const id = Number(params.get('id'));
+  const tankStatsA = EmbedBreakdownPersistent.use((state) => state[id] ?? []);
+  const [tankStatsB, setTankStatsB] = useState<IndividualTankStats[]>([]);
+  const diff = useMemo(
+    () =>
+      deltaTankStats(tankStatsA, tankStatsB).sort(
+        (a, b) => b.last_battle_time - a.last_battle_time,
+      ),
+    [tankStatsB],
+  );
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const newB = await getTankStats(idToRegion(id), id);
+
+      if (newB === null) return;
+
+      setTankStatsB(newB);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <BreakdownEmbedWrapper>
-      {useState('showTotal') && <BreakdownEmbedCard tank={null} />}
+      {useEmbedState('showTotal') && <BreakdownEmbedCard tank={null} />}
 
-      {tanks.slice(0, useState('listMaxTanks')).map((tank) => (
-        <BreakdownEmbedCard key={tank.id} tank={tank} />
-      ))}
+      {diff.slice(0, useEmbedState('listMaxTanks')).map((diff) => {
+        const tank = tankDefinitions.tanks[diff.tank_id];
+
+        return <BreakdownEmbedCard key={tank.id} tank={tank} />;
+      })}
     </BreakdownEmbedWrapper>
   );
 }
