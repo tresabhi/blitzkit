@@ -1,5 +1,7 @@
+import { Box } from '@radix-ui/themes';
 import { useMemo } from 'react';
 import { parse } from 'urlon';
+import { BlitzKitTheme } from '../../../../../components/BlitzKitTheme';
 import {
   embedConfigurations,
   embedRenderers,
@@ -10,6 +12,7 @@ import {
   type EmbedConfig,
   type ExtractEmbedConfigTypes,
 } from '../../../../../stores/embedState';
+import { useEmbedStateCurry } from '../../../../../stores/embedState/utilities';
 
 interface PageProps {
   embed: keyof typeof embedConfigurations;
@@ -27,11 +30,25 @@ export function Page({ embed }: PageProps) {
 
     return state;
   }, [embed]);
-  const Renderer = embedRenderers[embed];
 
   return (
     <EmbedState.Provider data={state}>
-      <Renderer />
+      <Content embed={embed} />
     </EmbedState.Provider>
+  );
+}
+
+function Content({ embed }: PageProps) {
+  const Renderer = embedRenderers[embed];
+  const { useState } = useEmbedStateCurry();
+  const width = useState('width');
+  const height = useState('height');
+
+  return (
+    <BlitzKitTheme style={{ background: 'transparent' }}>
+      <Box width={`${width}px`} height={`${height}px`} overflow="hidden">
+        <Renderer />
+      </Box>
+    </BlitzKitTheme>
   );
 }

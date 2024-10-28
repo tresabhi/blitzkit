@@ -30,5 +30,13 @@ export function BreakdownPreview() {
 export function BreakdownRenderer() {
   const { useState } = useEmbedStateCurry<typeof breakdownConfig>();
 
-  return useState('cardBodyBackgroundColor');
+  return (
+    <BreakdownEmbedWrapper>
+      {useState('showTotal') && <BreakdownEmbedCard tank={null} />}
+
+      {tanks.slice(0, useState('listMaxTanks')).map((tank) => (
+        <BreakdownEmbedCard key={tank.id} tank={tank} />
+      ))}
+    </BreakdownEmbedWrapper>
+  );
 }
