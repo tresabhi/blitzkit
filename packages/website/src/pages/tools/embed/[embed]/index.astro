@@ -1,5 +1,6 @@
 ---
 import type { GetStaticPaths } from 'astro';
+import { capitalize } from 'lodash-es';
 import { embedConfigurations } from '../../../../constants/embeds';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { Page } from './_index';
@@ -10,6 +11,8 @@ export const getStaticPaths = (() => {
   }));
 }) satisfies GetStaticPaths;
 ---
+
+<title>BlitzKit - {capitalize(Astro.params.embed)} embed</title>
 
 <BaseLayout>
   <Page client:load embed={Astro.params.embed} />
