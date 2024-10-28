@@ -1,14 +1,13 @@
 ---
-import { embedPreviews } from '../../../../../constants/embeds';
-import { EmbedState } from '../../../../../stores/embedState';
+import { capitalize } from 'lodash-es';
+import EmbedLayout from '../../../../../layouts/EmbedLayout.astro';
+import { Page } from './_index';
 
 export { getStaticPaths } from '../index.astro';
-
-const Test = embedPreviews.breakdown;
 ---
 
-sploinky sploinky splonk
+<title>BlitzKit - {capitalize(Astro.params.embed)} embed</title>
 
-<EmbedState.Provider>
-  <Test />
-</EmbedState.Provider>
+<EmbedLayout>
+  <Page client:only="react" embed={Astro.params.embed} />
+</EmbedLayout>

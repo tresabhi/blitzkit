@@ -26,3 +26,9 @@ export function BreakdownPreview() {
     </BreakdownEmbedWrapper>
   );
 }
+
+export function BreakdownRenderer() {
+  const { useState } = useEmbedStateCurry<typeof breakdownConfig>();
+
+  return useState('cardBodyBackgroundColor');
+}

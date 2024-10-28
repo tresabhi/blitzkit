@@ -5,25 +5,12 @@ import { Checks } from '../components/Checks';
 import Footer from '../components/Footer.astro';
 import Navbar from '../components/Navbar.astro';
 import Party3 from '../components/Party3.astro';
+import './base.css';
 
 const { pathname } = Astro.url;
 const isRoot = pathname === '/';
 ---
 
-<style is:global>
-  @import '@radix-ui/themes/styles.css';
-
-  body {
-    margin: 0;
-  }
-
-  .ad-container {
-    display: flex;
-    align-items: center;
-  }
-</style>
-
-<!-- MIGRATION TODO: roboto flex font -->
 <html lang="en">
   <head>
     {

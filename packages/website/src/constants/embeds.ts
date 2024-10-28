@@ -3,6 +3,7 @@ import { grayA, grayDark, grayDarkA } from '@radix-ui/colors';
 import type { ReactNode } from 'react';
 import {
   BreakdownPreview,
+  BreakdownRenderer,
   compositeStatsKeysOptions,
 } from '../components/Embeds/breakdown';
 import type {
@@ -99,3 +100,7 @@ export function extractEmbedConfigDefaults<Config extends EmbedConfig>(
     Object.entries(config).map(([key, value]) => [key, value.default]),
   ) as ExtractEmbedConfigTypes<Config>;
 }
+
+export const embedRenderers = {
+  breakdown: BreakdownRenderer,
+} satisfies Record<string, () => ReactNode>;
