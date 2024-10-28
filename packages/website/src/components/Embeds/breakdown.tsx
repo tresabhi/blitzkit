@@ -19,9 +19,9 @@ export const compositeStatsKeysOptions = compositeStatsKeys.map((value) => ({
 }));
 
 const tankDefinitions = await fetchTankDefinitions();
-const tanks = Object.values(tankDefinitions);
 
 export function BreakdownPreview() {
+  const tanks = Object.values(tankDefinitions.tanks);
   const { useEmbedState } = useEmbedStateCurry<typeof breakdownConfig>();
 
   return (
