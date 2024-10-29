@@ -6,6 +6,8 @@ import {
   VertexAttribute,
 } from '@blitzkit/core';
 import { Document, Material, Node, Scene } from '@gltf-transform/core';
+import { KHRDracoMeshCompression } from '@gltf-transform/extensions';
+import { dedup, prune } from '@gltf-transform/functions';
 import { times } from 'lodash-es';
 import { dirname } from 'path';
 import { Matrix4, Quaternion, Vector3, Vector4Tuple } from 'three';
@@ -223,7 +225,9 @@ export async function extractModel(data: string, path: string) {
               const primitive = document
                 .createPrimitive()
                 .setIndices(indicesAccessor)
-                .setMaterial(material);
+                .setMaterial(material)
+                .setName(batchKey);
+
               const attributes = new Map<VertexAttribute, number[][]>();
 
               polygonGroup.vertices.forEach((vertex) => {
@@ -236,25 +240,23 @@ export async function extractModel(data: string, path: string) {
                 });
               });
 
-              if (attributes.has(VertexAttribute.TANGENT)) {
-                attributes.set(
-                  VertexAttribute.TANGENT,
-                  attributes
-                    .get(VertexAttribute.TANGENT)!
-                    .map((tangent) => [...tangent, 1]),
-                );
-              }
-
               attributes.forEach((value, attribute) => {
                 const name = vertexAttributeGLTFName[attribute];
-                if (!name || primitive.getAttribute(name)) return;
-                const vertexSize = vertexAttributeGltfVectorSizes[attribute];
 
+                if (
+                  name === undefined ||
+                  primitive.getAttribute(name) !== null
+                ) {
+                  return;
+                }
+
+                const vertexSize = vertexAttributeGltfVectorSizes[attribute];
                 const attributeAccessor = document
                   .createAccessor(name)
                   .setType(vertexSize === 1 ? 'SCALAR' : `VEC${vertexSize}`)
                   .setArray(new Float32Array(value.flat()))
                   .setBuffer(buffer);
+
                 primitive.setAttribute(name, attributeAccessor);
               });
 
@@ -287,6 +289,20 @@ export async function extractModel(data: string, path: string) {
   }
 
   parseHierarchies(sc2['#hierarchy'], scene);
+
+  scene.addChild(document.createNode('test'));
+
+  await document.transform(prune({ keepAttributes: true }), dedup());
+
+  document
+    .createExtension(KHRDracoMeshCompression)
+    .setRequired(true)
+    .setEncoderOptions({
+      method: KHRDracoMeshCompression.EncoderMethod.EDGEBREAKER,
+      encodeSpeed: 0,
+      decodeSpeed: 0,
+      quantizationVolume: 'scene',
+    });
 
   return document;
 }

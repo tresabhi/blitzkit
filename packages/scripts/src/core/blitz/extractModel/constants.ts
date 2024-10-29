@@ -8,9 +8,6 @@ export const vertexAttributeGLTFName: Partial<Record<VertexAttribute, string>> =
     [VertexAttribute.TEXCOORD1]: 'TEXCOORD_0',
     [VertexAttribute.TEXCOORD2]: 'TEXCOORD_0',
     [VertexAttribute.TEXCOORD3]: 'TEXCOORD_0',
-    [VertexAttribute.TANGENT]: 'TANGENT',
-    [VertexAttribute.JOINTINDEX]: 'JOINT_0',
-    [VertexAttribute.JOINTWEIGHT]: 'WEIGHT_0',
   };
 export const vertexAttributeGltfVectorSizes = {
   ...vertexAttributeVectorSizes,
