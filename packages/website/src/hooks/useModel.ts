@@ -2,7 +2,7 @@ import { asset } from '@blitzkit/core';
 import { type ObjectMap, useLoader } from '@react-three/fiber';
 import { Mesh, MeshStandardMaterial } from 'three';
 import { type GLTF, GLTFLoader } from 'three-stdlib';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 const cache: Record<
   number,
@@ -19,6 +19,7 @@ export function useModel(id: number) {
     (loader) => {
       const dracoLoader = new DRACOLoader();
       dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+      // @ts-ignore
       loader.setDRACOLoader(dracoLoader);
     },
   );
