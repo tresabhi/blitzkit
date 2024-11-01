@@ -14,6 +14,25 @@ export const getStaticPaths = (() => {
 
 <title>BlitzKit - {capitalize(Astro.params.embed)} embed</title>
 
+<style is:global>
+  @keyframes fade-out-border {
+    from {
+      outline: 1rem solid #ff0000ff;
+    }
+    to {
+      outline: 0.75rem solid #ff000000;
+    }
+  }
+
+  .preview-container-animated {
+    animation: fade-out-border 0.5s linear;
+  }
+
+  .preview-container-animated:hover {
+    outline: 1rem solid #ff000080;
+  }
+</style>
+
 <BaseLayout>
   <Page client:load embed={Astro.params.embed} />
 </BaseLayout>

@@ -1,8 +1,7 @@
 import { Box } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
-import { embedPreviews } from '../../../constants/embeds';
-import { useEmbedStateCurry } from '../../../stores/embedState/utilities';
-import * as styles from './index.css';
+import { embedPreviews } from '../../constants/embeds';
+import { useEmbedStateCurry } from '../../stores/embedState/utilities';
 
 interface PreviewWrapperProps {
   name: keyof typeof embedPreviews;
@@ -19,9 +18,9 @@ export function PreviewWrapper({ name, naked }: PreviewWrapperProps) {
   useEffect(() => {
     if (!wrapper.current) return;
 
-    wrapper.current.classList.remove(styles.animated);
+    wrapper.current.classList.remove('preview-container-animated');
     void wrapper.current.offsetWidth;
-    wrapper.current.classList.add(styles.animated);
+    wrapper.current.classList.add('preview-container-animated');
   }, [width, height]);
 
   if (naked) {
@@ -47,6 +46,7 @@ export function PreviewWrapper({ name, naked }: PreviewWrapperProps) {
       overflow="hidden"
       style={{ transform: naked ? 'scale(0.25)' : 'translate(-50%, -50%)' }}
       ref={wrapper}
+      className="preview-container-animated"
       width={`${width}px`}
       height={`${height}px`}
     >
