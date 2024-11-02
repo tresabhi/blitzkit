@@ -1,0 +1,37 @@
+.tank-search-card {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  background-position: top left;
+  background-size: contain;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.tank-search-card .link {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tank-search-card .image {
+  width: 100%;
+  height: 4rem;
+  object-position: center right;
+  object-fit: contain;
+}
+
+.tank-search-card .class-icon {
+  width: 1em;
+  height: 1em;
+  min-width: 1em;
+  min-height: 1em;
+}
+
+.tank-search-card .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

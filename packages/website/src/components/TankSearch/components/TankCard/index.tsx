@@ -10,12 +10,11 @@ import {
 } from '@blitzkit/core';
 import { useStore } from '@nanostores/react';
 import { Flex, Link, Text } from '@radix-ui/themes';
-import { assignInlineVars } from '@vanilla-extract/dynamic';
 import { useMemo } from 'react';
-import { resolveReload } from '../../../core/blitzkit/resolveReload';
-import { $tankopediaSort } from '../../../stores/tankopediaSort';
-import { classIcons } from '../../ClassIcon';
-import * as styles from './TankCard.css';
+import { resolveReload } from '../../../../core/blitzkit/resolveReload';
+import { $tankopediaSort } from '../../../../stores/tankopediaSort';
+import { classIcons } from '../../../ClassIcon';
+import './index.css';
 
 interface TankCardProps {
   tank: TankDefinition;
@@ -151,21 +150,22 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
       }
       highContrast={tank.type === TankType.RESEARCHABLE}
       onClick={onSelect ? () => onSelect(tank) : undefined}
-      className={styles.card}
-      style={assignInlineVars({
-        [styles.cardBackgroundVar]: `top left / contain no-repeat url(${asset(
-          `flags/scratched/${tank.nation}.webp`,
-        )})`,
-      })}
+      className="tank-search-card"
+      style={{
+        backgroundImage: `url(${asset(`flags/scratched/${tank.nation}.webp`)})`,
+      }}
     >
       <Link
-        className={styles.link}
+        className="link"
+        color="gray"
+        highContrast
+        underline="hover"
         href={onSelect ? '#' : `/tools/tankopedia/${tank.id}`}
         onClick={(event) => {
           if (onSelect) event.preventDefault();
         }}
       >
-        <img alt={tank.name} src={tankIcon(tank.id)} className={styles.image} />
+        <img alt={tank.name} src={tankIcon(tank.id)} className="image" />
 
         <Flex
           justify="center"
@@ -174,8 +174,8 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
           overflow="hidden"
           width="100%"
         >
-          <Icon className={styles.classIcon} />
-          <Text align="center" className={styles.name}>
+          <Icon className="class-icon" />
+          <Text align="center" className="name">
             {tank.name}
           </Text>
         </Flex>

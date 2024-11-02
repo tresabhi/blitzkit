@@ -10,7 +10,7 @@ import {
 import { useEquipment } from '../../../../../../../hooks/useEquipment';
 import { useTankModelDefinition } from '../../../../../../../hooks/useTankModelDefinition';
 import { Duel } from '../../../../../../../stores/duel';
-import * as styles from './index.css';
+import './index.css';
 
 export function QuickInputs() {
   const mutateDuel = Duel.useMutation();
@@ -73,7 +73,7 @@ export function QuickInputs() {
         top: 16,
         transform: 'translateX(-50%)',
       }}
-      className={styles.container}
+      className="quick-inputs"
     >
       <TextField.Root
         size="1"
