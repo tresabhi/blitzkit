@@ -16,6 +16,7 @@ import {
 } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import { useState } from 'react';
+import './index.css';
 
 const DAY_TITLES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const YEAR_OPTIONS = 7;
@@ -59,7 +60,7 @@ export function DatePicker({
   ).getDay();
 
   return (
-    <Flex direction="column" width="fit-content">
+    <Flex direction="column" width="fit-content" className="date-picker">
       <Flex justify="between" mb="2" align="center" py="2">
         <IconButton
           size="3"
@@ -173,9 +174,7 @@ export function DatePicker({
       <Flex mb="1">
         {times(7, (index) => (
           <Text
-            style={{
-              flex: 1,
-            }}
+            className="day"
             size="2"
             align="center"
             key={index}

@@ -1,10 +1,9 @@
-'use client';
-
 import { assertSecret, idToRegion } from '@blitzkit/core';
 import { Button, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
-import { App } from '../stores/app';
-import { CURRENT_POLICIES_AGREEMENT_INDEX } from '../stores/app/constants';
+import { App } from '../../stores/app';
+import { CURRENT_POLICIES_AGREEMENT_INDEX } from '../../stores/app/constants';
+import './index.css';
 
 type Extension =
   | {
@@ -106,34 +105,9 @@ function Content() {
   if (!showPoliciesAgreement) return null;
 
   return (
-    <Flex
-      align="end"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        background: 'var(--color-overlay)',
-        zIndex: 2,
-      }}
-    >
-      <Flex
-        p="8"
-        style={{
-          width: '100%',
-          background: 'var(--color-panel-solid)',
-        }}
-        justify="center"
-      >
-        <Flex
-          align="start"
-          gap="4"
-          style={{
-            maxWidth: 640 * 2,
-          }}
-          direction="column"
-        >
+    <Flex className="policies-agreement" align="end">
+      <Flex p="8" className="content-wrapper" justify="center">
+        <Flex align="start" gap="4" className="content" direction="column">
           <Flex direction="column" gap="2">
             <Heading>
               {policiesAgreementIndex === -1

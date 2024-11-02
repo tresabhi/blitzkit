@@ -6,13 +6,13 @@ import packageJson from '../../../../package.json';
 const gameDefinitions = await fetchGameDefinitions();
 ---
 
-<Flex
-  gap="6"
-  p="6"
-  direction="column"
-  align="center"
-  style={{ backgroundColor: 'var(--color-panel)' }}
->
+<style>
+  .footer {
+    backgroundcolor: var(--color-panel);
+  }
+</style>
+
+<Flex className="footer" gap="6" p="6" direction="column" align="center">
   <Flex
     align="center"
     justify="between"
