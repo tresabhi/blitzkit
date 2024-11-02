@@ -41,7 +41,7 @@ const isBranchNamed = branchName !== undefined;
     );
   }
 
-  #home-hero[data-pride] {
+  #home-hero[data-variant='pride'] {
     --g-1-dark: var(--crimson-3);
     --g-1-light: var(--crimson-5);
     --g-2-dark: var(--orange-3);
@@ -53,6 +53,19 @@ const isBranchNamed = branchName !== undefined;
     --g-5-dark: var(--purple-3);
     --g-5-light: var(--purple-5);
   }
+
+  #home-hero[data-variant='spooky'] {
+    --g-1-dark: var(--orange-3);
+    --g-1-light: var(--orange-5);
+    --g-2-dark: var(--tomato-3);
+    --g-2-light: var(--tomato-5);
+    --g-3-dark: var(--orange-3);
+    --g-3-light: var(--orange-5);
+    --g-4-dark: var(--tomato-3);
+    --g-4-light: var(--tomato-5);
+    --g-5-dark: var(--orange-3);
+    --g-5-light: var(--orange-5);
+  }
 </style>
 
 <script>
@@ -62,8 +75,14 @@ const isBranchNamed = branchName !== undefined;
   const homeHero = document.getElementById('home-hero');
 
   if (homeHero) {
-    if (new Date().getMonth() === 5) {
-      homeHero.dataset.pride = 'true';
+    switch (new Date().getMonth()) {
+      case 5:
+        homeHero.dataset.variant = 'pride';
+        break;
+
+      case 9:
+        homeHero.dataset.variant = 'spooky';
+        break;
     }
 
     window.addEventListener('pointermove', (event) => {
