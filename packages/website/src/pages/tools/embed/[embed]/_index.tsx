@@ -10,11 +10,11 @@ import {
 import { Box, Button, Flex, Heading, ScrollArea, Text } from '@radix-ui/themes';
 import { capitalize, startCase } from 'lodash-es';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { stringify } from 'urlon';
 import { CopyButton } from '../../../../components/CopyButton';
 import { Boolean } from '../../../../components/Embeds/Boolean';
 import { Color } from '../../../../components/Embeds/Color';
 import { Enum } from '../../../../components/Embeds/Enum';
-import { GenerateURL } from '../../../../components/Embeds/GenerateURL';
 import { Import } from '../../../../components/Embeds/Import';
 import { PreviewWrapper } from '../../../../components/Embeds/PreviewWrapper';
 import { Radius } from '../../../../components/Embeds/Radius';
@@ -24,13 +24,18 @@ import { SizeWithout0 } from '../../../../components/Embeds/SizeWithout0';
 import { Slider } from '../../../../components/Embeds/Slider';
 import { TextController } from '../../../../components/Embeds/TextController';
 import { PageWrapper } from '../../../../components/PageWrapper';
+import { WargamingLoginButton } from '../../../../components/WargamingLoginButton';
 import {
   embedConfigurations,
   extractEmbedConfigDefaults,
 } from '../../../../constants/embeds';
 import { NAVBAR_HEIGHT } from '../../../../constants/navbar';
 import { App } from '../../../../stores/app';
-import { EmbedState, type EmbedConfig } from '../../../../stores/embedState';
+import {
+  EmbedState,
+  type EmbedConfig,
+  type EmbedStateStore,
+} from '../../../../stores/embedState';
 import { EmbedItemType } from '../../../../stores/embedState/constants';
 
 export interface EmbedPreviewControllerProps {
@@ -54,6 +59,10 @@ export function Page({ embed }: PageProps) {
 }
 
 function Content({ embed }: PageProps) {
+  const wargaming = App.useDeferred(
+    (state) => state.logins.wargaming,
+    undefined,
+  );
   const embedStateStore = EmbedState.useStore();
   const config = embedConfigurations[embed] as EmbedConfig;
   const [backgroundImage, setBackgroundImage] = useState(
@@ -89,7 +98,36 @@ function Content({ embed }: PageProps) {
             </Text>
 
             <Flex mb="6" gap="2" wrap="wrap">
-              <GenerateURL embed={embed} />
+              {!wargaming && (
+                <WargamingLoginButton>
+                  Log in to generate URL
+                </WargamingLoginButton>
+              )}
+              {wargaming && (
+                <CopyButton
+                  copy={() => {
+                    const state = embedStateStore.getState();
+                    const initial = embedStateStore.getInitialState();
+                    const shallowState: EmbedStateStore = {};
+
+                    Object.entries(state).forEach(([key, value]) => {
+                      if (value !== initial[key]) {
+                        shallowState[key] = value;
+                      }
+                    });
+
+                    const searchParams = new URLSearchParams({
+                      id: `${wargaming.id}`,
+                      state: stringify(shallowState),
+                    });
+
+                    return `${location.origin}/tools/embed/${embed}/host?${searchParams.toString()}`;
+                  }}
+                >
+                  Generate URL
+                </CopyButton>
+              )}
+
               <CopyButton
                 variant="outline"
                 copy={() =>
