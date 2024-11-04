@@ -1,6 +1,5 @@
 import { Theme, type ThemeProps } from '@radix-ui/themes';
 import type { ReactNode } from 'react';
-import './index.css';
 
 interface BlitzKitThemeProps extends ThemeProps {
   children: ReactNode;
@@ -8,12 +7,14 @@ interface BlitzKitThemeProps extends ThemeProps {
 
 export function BlitzKitTheme({
   children,
+  className,
   style,
   ...props
 }: BlitzKitThemeProps) {
   return (
     <Theme
-      className="blitzkit-theme"
+      style={{ minHeight: 'unset', ...style }}
+      className={`blitzkit-theme ${className}`}
       grayColor="mauve"
       appearance="dark"
       panelBackground="solid"
