@@ -7,7 +7,7 @@ import {
 } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
 import { amberDark, blueDark } from '@radix-ui/colors';
-import { Flex, Text } from '@radix-ui/themes';
+import { Flex, Text, type FlexProps } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import type { ReactNode } from 'react';
 import { breakdownConfig } from '../constants/embeds';
@@ -18,17 +18,23 @@ import { ClassLight } from './ClassIcon/components/ClassLight';
 import { ClassMedium } from './ClassIcon/components/ClassMedium';
 import { ClassTankDestroyer } from './ClassIcon/components/ClassTankDestroyer';
 
-interface BreakdownEmbedWrapperProps {
+type BreakdownEmbedWrapperProps = FlexProps & {
   children: ReactNode;
-}
+};
 
 export function BreakdownEmbedWrapper({
   children,
+  ...props
 }: BreakdownEmbedWrapperProps) {
   const { useEmbedState } = useEmbedStateCurry<typeof breakdownConfig>();
 
   return (
-    <Flex direction="column" gap={useEmbedState('listGap')} height="100%">
+    <Flex
+      direction="column"
+      gap={useEmbedState('listGap')}
+      height="100%"
+      {...props}
+    >
       {children}
     </Flex>
   );

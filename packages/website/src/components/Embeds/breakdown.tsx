@@ -7,6 +7,8 @@ import {
   type IndividualTankStats,
 } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
+import { ReloadIcon } from '@radix-ui/react-icons';
+import { ContextMenu } from '@radix-ui/themes';
 import { useEffect, useMemo, useState } from 'react';
 import { breakdownConfig } from '../../constants/embeds';
 import { EmbedBreakdownPersistent } from '../../stores/embedBreakdownPersistent';
@@ -46,6 +48,7 @@ export function BreakdownRenderer() {
 function BreakdownRendererContent() {
   const { useEmbedState } = useEmbedStateCurry<typeof breakdownConfig>();
   const params = new URLSearchParams(window.location.search);
+  const mutateEmbedBreakdownPersistent = EmbedBreakdownPersistent.useMutation();
   const id = Number(params.get('id'));
   const tankStatsA = EmbedBreakdownPersistent.use((state) => state[id] ?? []);
   const [tankStatsB, setTankStatsB] = useState<IndividualTankStats[]>([]);
@@ -70,14 +73,35 @@ function BreakdownRendererContent() {
   }, []);
 
   return (
-    <BreakdownEmbedWrapper>
-      {useEmbedState('showTotal') && <BreakdownEmbedCard tank={null} />}
+    <ContextMenu.Root>
+      <ContextMenu.Trigger>
+        <BreakdownEmbedWrapper>
+          {useEmbedState('showTotal') && <BreakdownEmbedCard tank={null} />}
 
-      {diff.slice(0, useEmbedState('listMaxTanks')).map((diff) => {
-        const tank = tankDefinitions.tanks[diff.tank_id];
+          {diff.slice(0, useEmbedState('listMaxTanks')).map((diff) => {
+            const tank = tankDefinitions.tanks[diff.tank_id];
 
-        return <BreakdownEmbedCard key={tank.id} tank={tank} />;
-      })}
-    </BreakdownEmbedWrapper>
+            return <BreakdownEmbedCard key={tank.id} tank={tank} />;
+          })}
+        </BreakdownEmbedWrapper>
+      </ContextMenu.Trigger>
+
+      <ContextMenu.Content>
+        <ContextMenu.Item
+          color="red"
+          onClick={async () => {
+            const newA = await getTankStats(idToRegion(id), id);
+
+            if (newA === null) return;
+
+            mutateEmbedBreakdownPersistent((draft) => {
+              draft[id] = newA;
+            });
+          }}
+        >
+          <ReloadIcon /> Reset
+        </ContextMenu.Item>
+      </ContextMenu.Content>
+    </ContextMenu.Root>
   );
 }
