@@ -41,7 +41,7 @@ export function BreakdownEmbedWrapper({
 }
 
 interface BreakdownEmbedCardProps {
-  tank: TankDefinition | null;
+  tank: TankDefinition | null | undefined;
 }
 
 export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
@@ -71,7 +71,8 @@ export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
             style:
               tank === null
                 ? undefined
-                : tank.type === TankType.RESEARCHABLE ||
+                : tank === undefined ||
+                    tank.type === TankType.RESEARCHABLE ||
                     !useEmbedState('cardTitleTypeColor')
                   ? undefined
                   : {
@@ -83,23 +84,29 @@ export function BreakdownEmbedCard({ tank }: BreakdownEmbedCardProps) {
           }}
         >
           <Flex align="center" gap="1">
-            {useEmbedState('cardTitleClassIcon') && tank !== null && (
-              <>
-                {tank.class === TankClass.LIGHT && (
-                  <ClassLight width="1em" height="1em" />
-                )}
-                {tank.class === TankClass.MEDIUM && (
-                  <ClassMedium width="1em" height="1em" />
-                )}
-                {tank.class === TankClass.HEAVY && (
-                  <ClassHeavy width="1em" height="1em" />
-                )}
-                {tank.class === TankClass.TANK_DESTROYER && (
-                  <ClassTankDestroyer width="1em" height="1em" />
-                )}
-              </>
-            )}{' '}
-            {tank === null ? 'Total' : tank.name}
+            {useEmbedState('cardTitleClassIcon') &&
+              tank !== null &&
+              tank !== undefined && (
+                <>
+                  {tank.class === TankClass.LIGHT && (
+                    <ClassLight width="1em" height="1em" />
+                  )}
+                  {tank.class === TankClass.MEDIUM && (
+                    <ClassMedium width="1em" height="1em" />
+                  )}
+                  {tank.class === TankClass.HEAVY && (
+                    <ClassHeavy width="1em" height="1em" />
+                  )}
+                  {tank.class === TankClass.TANK_DESTROYER && (
+                    <ClassTankDestroyer width="1em" height="1em" />
+                  )}
+                </>
+              )}{' '}
+            {tank === null
+              ? 'Total'
+              : tank === undefined
+                ? `Unknown tank`
+                : tank.name}
           </Flex>
         </Text>
       </Flex>
