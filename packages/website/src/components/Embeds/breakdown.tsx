@@ -1,9 +1,13 @@
 import {
+  calculateCompositeStats,
+  compositeStats,
   compositeStatsKeys,
   deltaTankStats,
+  fetchAverageDefinitions,
   fetchTankDefinitions,
   getTankStats,
   idToRegion,
+  sumCompositeStats,
   type IndividualTankStats,
 } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
@@ -21,6 +25,31 @@ export const compositeStatsKeysOptions = compositeStatsKeys.map((value) => ({
 }));
 
 const tankDefinitions = await fetchTankDefinitions();
+const averageDefinitions = await fetchAverageDefinitions();
+
+export const fakeCompositeStats = compositeStats(
+  {
+    battle_life_time: 5 * 50 * 60,
+    battles: 50,
+    capture_points: 5,
+    damage_dealt: 3201 * 50,
+    damage_received: 1093 * 50,
+    dropped_capture_points: 40,
+    frags: 99,
+    frags8p: 0,
+    hits: 50 * 13,
+    losses: 20,
+    max_frags: 7,
+    max_xp: 1203,
+    shots: 50 * 14,
+    spotted: 50 * 1.5,
+    survived_battles: 32,
+    win_and_survived: 28,
+    wins: 30,
+    xp: 1230 * 50,
+  },
+  averageDefinitions.averages[7297].mu,
+);
 
 export function BreakdownPreview() {
   const tanks = Object.values(tankDefinitions.tanks);
@@ -28,10 +57,16 @@ export function BreakdownPreview() {
 
   return (
     <BreakdownEmbedWrapper>
-      {useEmbedState('showTotal') && <BreakdownEmbedCard tank={null} />}
+      {useEmbedState('showTotal') && (
+        <BreakdownEmbedCard composite={fakeCompositeStats} tank={null} />
+      )}
 
       {tanks.slice(0, useEmbedState('listMaxTanks')).map((tank) => (
-        <BreakdownEmbedCard key={tank.id} tank={tank} />
+        <BreakdownEmbedCard
+          composite={fakeCompositeStats}
+          key={tank.id}
+          tank={tank}
+        />
       ))}
     </BreakdownEmbedWrapper>
   );
@@ -59,6 +94,23 @@ function BreakdownRendererContent() {
       ),
     [tankStatsB],
   );
+  const compositeStats = diff
+    .map((diff) => {
+      const average = averageDefinitions.averages[diff.tank_id];
+
+      if (average === undefined) return null;
+
+      const compositeStats = calculateCompositeStats(
+        { battle_life_time: diff.battle_life_time, ...diff.all },
+        average.mu,
+      );
+
+      return { id: diff.tank_id, compositeStats };
+    })
+    .filter((stats) => stats !== null);
+  const sum = sumCompositeStats(
+    compositeStats.map(({ compositeStats }) => compositeStats),
+  );
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -76,13 +128,23 @@ function BreakdownRendererContent() {
     <ContextMenu.Root>
       <ContextMenu.Trigger>
         <BreakdownEmbedWrapper>
-          {useEmbedState('showTotal') && <BreakdownEmbedCard tank={null} />}
+          {useEmbedState('showTotal') && (
+            <BreakdownEmbedCard composite={sum} tank={null} />
+          )}
 
-          {diff.slice(0, useEmbedState('listMaxTanks')).map((diff) => {
-            const tank = tankDefinitions.tanks[diff.tank_id];
+          {compositeStats
+            .slice(0, useEmbedState('listMaxTanks'))
+            .map(({ id, compositeStats }) => {
+              const tank = tankDefinitions.tanks[id];
 
-            return <BreakdownEmbedCard key={tank.id} tank={tank} />;
-          })}
+              return (
+                <BreakdownEmbedCard
+                  key={tank.id}
+                  tank={tank}
+                  composite={compositeStats}
+                />
+              );
+            })}
         </BreakdownEmbedWrapper>
       </ContextMenu.Trigger>
 

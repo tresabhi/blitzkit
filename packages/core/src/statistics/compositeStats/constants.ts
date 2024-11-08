@@ -1,3 +1,5 @@
+import { calculateWN8 } from '../calculateWN8';
+
 export const blitzStatsKeys = [
   'battles',
   'capture_points',
@@ -131,70 +133,256 @@ export type CompositeStatsKey =
   | `cumulative_${(typeof cumulativeCompositeStatsKeys)[number]}`;
 export type CompositeStats = Record<CompositeStatsKey, number>;
 
+enum CumulationType {
+  Sum,
+  WeightedSum,
+}
+
 export const compositeStatsFormatting: {
   [Key in CompositeStatsKey]: {
     unit?: string;
     fixed: number;
     coefficient?: number;
-    preview: number;
     localeFormat?: boolean;
+    cumulate: CumulationType;
   };
 } = {
-  normalized_damage_dealt: { fixed: 0, preview: 3246, localeFormat: true },
-  normalized_damage_received: { fixed: 0, preview: 966, localeFormat: true },
-  normalized_deaths: { fixed: 0, unit: '%', coefficient: 100, preview: 0.09 },
-  normalized_frags: { fixed: 2, preview: 2.1 },
-  normalized_hits: { fixed: 2, preview: 12.33 },
-  normalized_losses: { fixed: 0, unit: '%', coefficient: 100, preview: 0.3 },
-  normalized_misses: { fixed: 2, preview: 1.02 },
-  normalized_shots: { fixed: 2, preview: 14.54 },
-  normalized_spotted: { fixed: 2, preview: 2.02 },
+  normalized_damage_dealt: {
+    fixed: 0,
+    localeFormat: true,
+    cumulate: CumulationType.WeightedSum,
+  },
+  normalized_damage_received: {
+    fixed: 0,
+    localeFormat: true,
+    cumulate: CumulationType.WeightedSum,
+  },
+  normalized_deaths: {
+    fixed: 0,
+    unit: '%',
+    coefficient: 100,
+    cumulate: CumulationType.WeightedSum,
+  },
+  normalized_frags: {
+    fixed: 2,
+    cumulate: CumulationType.WeightedSum,
+  },
+  normalized_hits: {
+    fixed: 2,
+    cumulate: CumulationType.WeightedSum,
+  },
+  normalized_losses: {
+    fixed: 0,
+    unit: '%',
+    coefficient: 100,
+    cumulate: CumulationType.WeightedSum,
+  },
+  normalized_misses: {
+    fixed: 2,
+    cumulate: CumulationType.WeightedSum,
+  },
+  normalized_shots: {
+    fixed: 2,
+    cumulate: CumulationType.WeightedSum,
+  },
+  normalized_spotted: {
+    fixed: 2,
+    cumulate: CumulationType.WeightedSum,
+  },
   normalized_survived_battles: {
     fixed: 0,
     unit: '%',
     coefficient: 100,
-    preview: 0.65,
+    cumulate: CumulationType.WeightedSum,
   },
   normalized_win_and_survived: {
     fixed: 0,
     unit: '%',
     coefficient: 100,
-    preview: 0.59,
+    cumulate: CumulationType.WeightedSum,
   },
-  normalized_wins: { fixed: 0, unit: '%', coefficient: 100, preview: 0.72 },
-  normalized_xp: { fixed: 0, preview: 982, localeFormat: true },
-  normalized_battle_life_time: { fixed: 1, preview: 4.6, coefficient: 1 / 60 },
+  normalized_wins: {
+    fixed: 0,
+    unit: '%',
+    coefficient: 100,
+    cumulate: CumulationType.WeightedSum,
+  },
+  normalized_xp: {
+    fixed: 0,
+    localeFormat: true,
+    cumulate: CumulationType.WeightedSum,
+  },
+  normalized_battle_life_time: {
+    fixed: 1,
+    coefficient: 1 / 60,
+    cumulate: CumulationType.WeightedSum,
+  },
 
-  cumulative_accuracy: { fixed: 0, unit: '%', coefficient: 100, preview: 0.91 },
-  cumulative_battles: { fixed: 0, preview: 12 },
-  cumulative_capture_points: { fixed: 2, preview: 0.12 },
-  cumulative_damage_dealt: { fixed: 0, preview: 45023, localeFormat: true },
-  cumulative_damage_ratio: { fixed: 2, preview: 2.83 },
-  cumulative_damage_received: { fixed: 0, preview: 10093, localeFormat: true },
-  cumulative_deaths: { fixed: 0, preview: 2 },
-  cumulative_dropped_capture_points: { fixed: 2, preview: 15 },
-  cumulative_frags: { fixed: 0, preview: 26 },
-  cumulative_hits: { fixed: 0, preview: 480 },
+  cumulative_accuracy: {
+    fixed: 0,
+    unit: '%',
+    coefficient: 100,
+    cumulate: CumulationType.WeightedSum,
+  },
+  cumulative_battles: {
+    fixed: 0,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_capture_points: {
+    fixed: 2,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_damage_dealt: {
+    fixed: 0,
+    localeFormat: true,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_damage_ratio: {
+    fixed: 2,
+    cumulate: CumulationType.WeightedSum,
+  },
+  cumulative_damage_received: {
+    fixed: 0,
+    localeFormat: true,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_deaths: {
+    fixed: 0,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_dropped_capture_points: {
+    fixed: 2,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_frags: {
+    fixed: 0,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_hits: {
+    fixed: 0,
+    cumulate: CumulationType.Sum,
+  },
   cumulative_inaccuracy: {
     fixed: 0,
     unit: '%',
     coefficient: 100,
-    preview: 0.08,
+    cumulate: CumulationType.WeightedSum,
   },
-  cumulative_kills_to_death_ratio: { fixed: 2, preview: 2.3 },
-  cumulative_losses: { fixed: 0, preview: 3 },
-  cumulative_misses: { fixed: 0, preview: 13 },
-  cumulative_shots: { fixed: 0, preview: 309 },
-  cumulative_spotted: { fixed: 0, preview: 99 },
-  cumulative_survived_battles: { fixed: 0, preview: 10 },
-  cumulative_win_and_survived: { fixed: 0, preview: 9 },
-  cumulative_wins: { fixed: 0, preview: 8 },
-  cumulative_xp: { fixed: 0, preview: 19403, localeFormat: true },
-  cumulative_wn8: { fixed: 0, preview: 3103, localeFormat: true },
+  cumulative_kills_to_death_ratio: {
+    fixed: 2,
+    cumulate: CumulationType.WeightedSum,
+  },
+  cumulative_losses: {
+    fixed: 0,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_misses: {
+    fixed: 0,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_shots: {
+    fixed: 0,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_spotted: {
+    fixed: 0,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_survived_battles: {
+    fixed: 0,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_win_and_survived: {
+    fixed: 0,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_wins: {
+    fixed: 0,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_xp: {
+    fixed: 0,
+    localeFormat: true,
+    cumulate: CumulationType.Sum,
+  },
+  cumulative_wn8: {
+    fixed: 0,
+    localeFormat: false,
+    cumulate: CumulationType.WeightedSum,
+  },
   cumulative_battle_life_time: {
     fixed: 0,
-    preview: 109,
     coefficient: 1 / 60,
     localeFormat: true,
+    cumulate: CumulationType.Sum,
   },
 };
+
+export function calculateCompositeStats(s: BlitzkitStats, a: BlitzStats) {
+  return {
+    cumulative_accuracy: s.hits / s.shots,
+    cumulative_battle_life_time: s.battle_life_time,
+    cumulative_battles: s.battles,
+    cumulative_capture_points: s.capture_points,
+    cumulative_damage_dealt: s.damage_dealt,
+    cumulative_damage_ratio: s.damage_dealt / s.damage_received,
+    cumulative_damage_received: s.damage_received,
+    cumulative_deaths: s.battles - s.survived_battles,
+    cumulative_dropped_capture_points: s.dropped_capture_points,
+    cumulative_frags: s.frags,
+    cumulative_hits: s.hits,
+    cumulative_inaccuracy: (s.shots - s.hits) / s.shots,
+    cumulative_kills_to_death_ratio: s.frags / (s.battles - s.survived_battles),
+    cumulative_losses: s.losses,
+    cumulative_misses: s.shots - s.hits,
+    cumulative_shots: s.shots,
+    cumulative_spotted: s.spotted,
+    cumulative_survived_battles: s.survived_battles,
+    cumulative_win_and_survived: s.win_and_survived,
+    cumulative_wins: s.wins,
+    cumulative_wn8: calculateWN8(a, s),
+    cumulative_xp: s.xp,
+    normalized_battle_life_time: s.battle_life_time / s.battles,
+    normalized_damage_dealt: s.damage_dealt / s.battles,
+    normalized_damage_received: s.damage_received / s.battles,
+    normalized_deaths: (s.battles - s.survived_battles) / s.battles,
+    normalized_frags: s.frags / s.battles,
+    normalized_hits: s.hits / s.battles,
+    normalized_losses: s.losses / s.battles,
+    normalized_misses: (s.shots - s.hits) / s.battles,
+    normalized_shots: s.shots / s.battles,
+    normalized_spotted: s.spotted / s.battles,
+    normalized_survived_battles: s.survived_battles / s.battles,
+    normalized_win_and_survived: s.win_and_survived / s.battles,
+    normalized_wins: s.wins / s.battles,
+    normalized_xp: s.xp / s.battles,
+  } satisfies CompositeStats;
+}
+
+export function sumCompositeStats(stats: CompositeStats[]) {
+  const battles = stats.reduce((a, b) => a + b.cumulative_battles, 0);
+  const summed: Partial<CompositeStats> = {};
+
+  Object.entries(compositeStatsFormatting).forEach(([key, value]) => {
+    switch (value.cumulate) {
+      case CumulationType.Sum: {
+        summed[key as keyof CompositeStats] = stats.reduce(
+          (a, b) => a + b[key as keyof CompositeStats],
+          0,
+        );
+        break;
+      }
+
+      case CumulationType.WeightedSum: {
+        summed[key as keyof CompositeStats] =
+          stats.reduce(
+            (a, b) => a + b[key as keyof CompositeStats] * b.cumulative_battles,
+            0,
+          ) / battles;
+        break;
+      }
+    }
+  });
+
+  return summed as CompositeStats;
+}

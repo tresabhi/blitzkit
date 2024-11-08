@@ -49,19 +49,20 @@ export function compositeStats(stats: BlitzkitStats, average: BlitzkitStats) {
   } satisfies CompositeStats;
 }
 
-export function formatCompositeStat(value: number, key: CompositeStatsKey) {
+export function formatCompositeStat(
+  value: number,
+  key: CompositeStatsKey,
+  composite: CompositeStats,
+) {
+  if (composite.cumulative_battles === 0) return '--';
+
   const formatting = compositeStatsFormatting[key];
   const resolvedValue = (formatting.coefficient ?? 1) * value;
   return `${
     formatting.localeFormat
-      ? resolvedValue.toLocaleString()
+      ? Math.round(resolvedValue).toLocaleString()
       : resolvedValue.toFixed(formatting.fixed)
   }${formatting.unit ?? ''}`;
-}
-
-export function previewCompositeStat(key: CompositeStatsKey) {
-  const { preview } = compositeStatsFormatting[key];
-  return formatCompositeStat(preview, key);
 }
 
 export * from './constants';
