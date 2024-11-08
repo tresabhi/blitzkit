@@ -25,4 +25,4 @@ jobs:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: bun scripts/discoverIds.ts --production
+        run: bun packages/scripts/src/discoverIds.ts --production
