@@ -158,7 +158,7 @@ export function GenerateURL({ embed }: GenerateURLProps) {
                 setSearchDialogOpen(true);
               }}
             >
-              <CaretLeftIcon /> Search
+              <CaretLeftIcon /> Back
             </Button>
             <CopyButton
               style={{ flex: 1 }}

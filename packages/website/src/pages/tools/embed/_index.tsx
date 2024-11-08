@@ -1,10 +1,8 @@
 import { imgur, ImgurSize } from '@blitzkit/core';
-import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
-import { Box, Callout, Flex, Link, Text } from '@radix-ui/themes';
+import { Box, Flex, Link, Text } from '@radix-ui/themes';
 import { capitalize } from 'lodash-es';
 import { PreviewWrapper } from '../../../components/Embeds/PreviewWrapper';
 import { PageWrapper } from '../../../components/PageWrapper';
-import { WargamingLoginButton } from '../../../components/WargamingLoginButton';
 import {
   embedConfigurations,
   extractEmbedConfigDefaults,
@@ -22,15 +20,15 @@ export function Page() {
 }
 
 function Content() {
-  const wargaming = App.useDeferred((state) => state.logins.wargaming, {
-    token: '',
-    id: 0,
-    expires: 0,
-  });
+  // const wargaming = App.useDeferred((state) => state.logins.wargaming, {
+  //   token: '',
+  //   id: 0,
+  //   expires: 0,
+  // });
 
   return (
     <PageWrapper color="red">
-      {!wargaming && (
+      {/* {!wargaming && (
         <Flex direction="column" align="center" gap="2">
           <Callout.Root>
             <Callout.Icon>
@@ -43,7 +41,7 @@ function Content() {
 
           <WargamingLoginButton>Log in with Wargaming</WargamingLoginButton>
         </Flex>
-      )}
+      )} */}
 
       <Text align="center" mt="3">
         More embeds coming soon.{' '}
