@@ -8,6 +8,7 @@ import {
   Tooltip,
 } from '@radix-ui/themes';
 import { useRef, useState } from 'react';
+import { parse } from 'urlon';
 import { EmbedState } from '../../stores/embedState';
 
 export function Import() {
@@ -57,7 +58,7 @@ export function Import() {
                 const url = new URL(importInput.current.value);
                 const state = url.searchParams.get('state');
                 if (state === null) throw undefined;
-                const json = JSON.parse(state);
+                const json = parse(state);
 
                 mutateEmbedState((draft) => {
                   Object.assign(draft, json);
