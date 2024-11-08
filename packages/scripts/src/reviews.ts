@@ -1,23 +1,13 @@
 import {
   asset,
   encodePBBuffer,
+  fetchTankDefinitions,
   Reviews,
-  toUniqueId,
   Video,
   youtubers,
 } from '@blitzkit/core';
-import { readdir } from 'fs/promises';
 import { google } from 'googleapis';
 import { cloneDeep, uniqBy } from 'lodash-es';
-import { parse as parseYaml } from 'yaml';
-import { DATA } from './buildAssets/constants';
-import {
-  BlitzStrings,
-  botPattern,
-  VehicleDefinitionList,
-} from './buildAssets/definitions';
-import { readXMLDVPL } from './core/blitz/readXMLDVPL';
-import { readYAMLDVPL } from './core/blitz/readYAMLDVPL';
 import { commitAssets } from './core/github/commitAssets';
 
 const MAX_QUERIES = 128;
@@ -32,43 +22,8 @@ const auth = await google.auth.getClient({
 });
 const youtube = google.youtube({ version: 'v3', auth });
 
-const nations = await readdir(`${DATA}/XML/item_defs/vehicles`).then(
-  (nations) => nations.filter((nation) => nation !== 'common'),
-);
-const stringsPreInstalled = await readYAMLDVPL<BlitzStrings>(
-  `${DATA}/Strings/en.yaml.dvpl`,
-);
-const stringsCache = await fetch(
-  'https://stufficons.wgcdn.co/localizations/en.yaml',
-)
-  .then((response) => response.text())
-  .then((string) => parseYaml(string) as BlitzStrings);
-const strings = {
-  ...stringsPreInstalled,
-  ...stringsCache,
-};
-const tanks: { id: number; name: string; tier: number }[] = [];
-await Promise.all(
-  nations.map(async (nation) => {
-    const tankList = await readXMLDVPL<{ root: VehicleDefinitionList }>(
-      `${DATA}/XML/item_defs/vehicles/${nation}/list.xml.dvpl`,
-    );
-
-    await Promise.all(
-      Object.entries(tankList.root).map(async ([tankKey, tank]) => {
-        if (botPattern.test(tankKey)) return null;
-
-        const id = toUniqueId(nation, tank.id);
-        const name =
-          (tank.shortUserString ? strings[tank.shortUserString] : undefined) ??
-          strings[tank.userString];
-        const tier = tank.level;
-
-        tanks.push({ id, name, tier });
-      }),
-    );
-  }),
-);
+const tankDefinitions = await fetchTankDefinitions();
+const tanks = Object.values(tankDefinitions.tanks);
 
 const tanksSanitized = tanks
   .sort((a, b) => b.tier - a.tier)
@@ -80,6 +35,7 @@ const tanksSanitized = tanks
 const reviews: Reviews = cloneDeep(currentReviews);
 
 let done = 0;
+
 for (const tank of tanksSanitized) {
   if (done >= MAX_QUERIES) {
     console.log(`Limit reached with ${done} queries; stopping...`);
@@ -123,7 +79,6 @@ for (const tank of tanksSanitized) {
     break;
   }
 }
-
 await commitAssets('reviews', [
   {
     content: encodePBBuffer(Reviews, reviews),
