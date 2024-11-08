@@ -9,6 +9,13 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  PUBLIC_ASSET_BRANCH: ${{ secrets.PUBLIC_ASSET_BRANCH }}
+  PUBLIC_ASSET_REPO: ${{ secrets.PUBLIC_ASSET_REPO }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,8 +28,4 @@ jobs:
         run: bun install
 
       - name: Discover IDs
-        env:
-          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: bun packages/scripts/src/discoverIds.ts --production
