@@ -184,7 +184,7 @@ export const CamouflageDefinitions_CamouflagesEntry: MessageFns<CamouflageDefini
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? Camouflage.fromPartial(object.value)
-      : undefined;
+      : createBaseCamouflage();
     return message;
   },
 };

@@ -187,7 +187,7 @@ export const ProvisionDefinitions_ProvisionsEntry: MessageFns<ProvisionDefinitio
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? Provision.fromPartial(object.value)
-      : undefined;
+      : createBaseProvision();
     return message;
   },
 };

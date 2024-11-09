@@ -259,7 +259,7 @@ export const GameDefinitions_GameModesEntry: MessageFns<GameDefinitions_GameMode
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? GameMode.fromPartial(object.value)
-      : undefined;
+      : createBaseGameMode();
     return message;
   },
 };
@@ -337,7 +337,7 @@ export const GameDefinitions_RolesEntry: MessageFns<GameDefinitions_RolesEntry> 
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? GameModeRole.fromPartial(object.value)
-      : undefined;
+      : createBaseGameModeRole();
     return message;
   },
 };

@@ -175,7 +175,7 @@ export const MapDefinitions_MapsEntry: MessageFns<MapDefinitions_MapsEntry> = {
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? MapDefinition.fromPartial(object.value)
-      : undefined;
+      : createBaseMapDefinition();
     return message;
   },
 };

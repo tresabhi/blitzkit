@@ -679,7 +679,7 @@ export const TankDefinitions_TanksEntry: MessageFns<TankDefinitions_TanksEntry> 
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? TankDefinition.fromPartial(object.value)
-      : undefined;
+      : createBaseTankDefinition();
     return message;
   },
 };

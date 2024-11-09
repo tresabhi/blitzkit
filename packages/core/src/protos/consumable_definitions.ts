@@ -241,7 +241,7 @@ export const ConsumableDefinitions_ConsumablesEntry: MessageFns<ConsumableDefini
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? Consumable.fromPartial(object.value)
-      : undefined;
+      : createBaseConsumable();
     return message;
   },
 };

@@ -175,7 +175,9 @@ export const SkillDefinitions_ClassesEntry: MessageFns<SkillDefinitions_ClassesE
   ): SkillDefinitions_ClassesEntry {
     const message = createBaseSkillDefinitions_ClassesEntry();
     message.key = object.key ?? 0;
-    message.value = (object.value !== undefined && object.value !== null) ? Skill.fromPartial(object.value) : undefined;
+    message.value = (object.value !== undefined && object.value !== null)
+      ? Skill.fromPartial(object.value)
+      : createBaseSkill();
     return message;
   },
 };

@@ -235,7 +235,7 @@ export const EquipmentDefinitions_PresetsEntry: MessageFns<EquipmentDefinitions_
     message.key = object.key ?? "";
     message.value = (object.value !== undefined && object.value !== null)
       ? EquipmentPreset.fromPartial(object.value)
-      : undefined;
+      : createBaseEquipmentPreset();
     return message;
   },
 };
@@ -317,7 +317,7 @@ export const EquipmentDefinitions_EquipmentsEntry: MessageFns<EquipmentDefinitio
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? Equipment.fromPartial(object.value)
-      : undefined;
+      : createBaseEquipment();
     return message;
   },
 };
