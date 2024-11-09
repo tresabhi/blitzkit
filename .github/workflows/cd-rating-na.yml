@@ -1,8 +1,9 @@
 name: CD Rating North America
 
 on:
-  schedule:
-    - cron: '0 5 * * *'
+  workflow_dispatch:
+  # schedule:
+  # - cron: '0 5 * * *'
 
 jobs:
   host:

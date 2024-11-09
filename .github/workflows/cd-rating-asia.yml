@@ -1,8 +1,9 @@
 name: CD Rating Asia
 
 on:
-  schedule:
-    - cron: '0 17 * * *'
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '0 17 * * *'
 
 jobs:
   host:
