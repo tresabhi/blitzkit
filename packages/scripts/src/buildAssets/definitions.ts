@@ -1650,7 +1650,6 @@ export async function definitions() {
     };
   });
 
-  return;
   await commitAssets('definitions', [
     {
       content: encodePBBuffer(GameDefinitions, gameDefinitions),

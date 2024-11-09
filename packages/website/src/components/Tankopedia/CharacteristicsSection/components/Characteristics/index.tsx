@@ -329,6 +329,10 @@ export function Characteristics() {
           <InfoWithDelta name="Shell velocity" unit="m/s" decimals={0}>
             {stats.shellVelocity}
           </InfoWithDelta>
+
+          <InfoWithDelta name="Shell range" unit="m/s" decimals={0}>
+            {stats.shellRange}
+          </InfoWithDelta>
           <InfoWithDelta
             decimals={2}
             name="Aim time"

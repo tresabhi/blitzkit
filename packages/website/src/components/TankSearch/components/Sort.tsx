@@ -117,6 +117,14 @@ export function Sort() {
               Shell velocity
             </DropdownMenu.CheckboxItem>
             <DropdownMenu.CheckboxItem
+              checked={tankopediaSort.by === 'fire.shellRange'}
+              onClick={() => {
+                $tankopediaSort.setKey('by', 'fire.shellRange');
+              }}
+            >
+              Shell range
+            </DropdownMenu.CheckboxItem>
+            <DropdownMenu.CheckboxItem
               checked={tankopediaSort.by === 'fire.aimTime'}
               onClick={() => {
                 $tankopediaSort.setKey('by', 'fire.aimTime');

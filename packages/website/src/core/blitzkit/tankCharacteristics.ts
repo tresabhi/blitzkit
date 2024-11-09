@@ -505,6 +505,7 @@ export function tankCharacteristics(
   const shellNormalization = shell.normalization ?? 0;
   const shellRicochet = isExplosive(shell.type) ? undefined : shell.ricochet;
   const crewCount = tank.crew.length;
+  const shellRange = shell.range;
 
   return {
     crewCount,
@@ -568,5 +569,6 @@ export function tankCharacteristics(
     height,
     length,
     volume,
+    shellRange,
   };
 }
