@@ -323,6 +323,7 @@ interface GunDefinitionsList {
         [key: string]: {
           speed: number;
           piercingPower: string;
+          maxDistance: number;
         };
       };
     };
@@ -1276,6 +1277,7 @@ export async function definitions() {
                     near: penetrationRaw[0],
                     far: penetrationRaw[1],
                   },
+                  range: gunShellEntry.maxDistance,
                 });
               });
             });
@@ -1648,6 +1650,7 @@ export async function definitions() {
     };
   });
 
+  return;
   await commitAssets('definitions', [
     {
       content: encodePBBuffer(GameDefinitions, gameDefinitions),

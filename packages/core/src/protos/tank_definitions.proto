@@ -170,6 +170,7 @@ message ShellDefinition {
   optional float normalization = 10;
   optional float ricochet = 11;
   optional float explosion_radius = 12;
+  required uint32 range = 13;
 }
 
 enum ShellType {

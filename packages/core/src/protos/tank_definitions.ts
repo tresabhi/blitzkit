@@ -499,6 +499,7 @@ export interface ShellDefinition {
   normalization?: number | undefined;
   ricochet?: number | undefined;
   explosion_radius?: number | undefined;
+  range: number;
 }
 
 export interface ShellPenetration {
@@ -3232,6 +3233,7 @@ function createBaseShellDefinition(): ShellDefinition {
     normalization: undefined,
     ricochet: undefined,
     explosion_radius: undefined,
+    range: 0,
   };
 }
 
@@ -3272,6 +3274,9 @@ export const ShellDefinition: MessageFns<ShellDefinition> = {
     }
     if (message.explosion_radius !== undefined && message.explosion_radius !== undefined) {
       writer.uint32(101).float(message.explosion_radius);
+    }
+    if (message.range !== 0) {
+      writer.uint32(104).uint32(message.range);
     }
     return writer;
   },
@@ -3379,6 +3384,14 @@ export const ShellDefinition: MessageFns<ShellDefinition> = {
           message.explosion_radius = reader.float();
           continue;
         }
+        case 13: {
+          if (tag !== 104) {
+            break;
+          }
+
+          message.range = reader.uint32();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -3402,6 +3415,7 @@ export const ShellDefinition: MessageFns<ShellDefinition> = {
       normalization: isSet(object.normalization) ? globalThis.Number(object.normalization) : undefined,
       ricochet: isSet(object.ricochet) ? globalThis.Number(object.ricochet) : undefined,
       explosion_radius: isSet(object.explosion_radius) ? globalThis.Number(object.explosion_radius) : undefined,
+      range: globalThis.Number(assertSet("ShellDefinition.range", object.range)),
     };
   },
 
@@ -3443,6 +3457,9 @@ export const ShellDefinition: MessageFns<ShellDefinition> = {
     if (message.explosion_radius !== undefined && message.explosion_radius !== undefined) {
       obj.explosion_radius = message.explosion_radius;
     }
+    if (message.range !== 0) {
+      obj.range = Math.round(message.range);
+    }
     return obj;
   },
 
@@ -3465,6 +3482,7 @@ export const ShellDefinition: MessageFns<ShellDefinition> = {
     message.normalization = object.normalization ?? undefined;
     message.ricochet = object.ricochet ?? undefined;
     message.explosion_radius = object.explosion_radius ?? undefined;
+    message.range = object.range ?? 0;
     return message;
   },
 };
