@@ -3,6 +3,7 @@ import {
   fetchAverageDefinitions,
   fetchTankDefinitions,
   formatCompact,
+  Tier,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
 import { Box, Flex, Link, Skeleton, Text } from '@radix-ui/themes';
@@ -124,7 +125,7 @@ export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
               </Text>
             </Flex>
 
-            {averages && nextTanks && (
+            {averages && nextTanks && tank.tier !== Tier.X && (
               <Text color="gray" size="1" mt="2">
                 {skeleton && <Skeleton height="1em" width="4em" />}
                 {!skeleton && (
