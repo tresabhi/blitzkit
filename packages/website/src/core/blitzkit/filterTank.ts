@@ -9,6 +9,19 @@ export function filterTank(filters: TankFilters, tank: TankDefinition) {
     (filters.types.length === 0 || filters.types.includes(tank.type)) &&
     (filters.testing === 'include' ||
       (filters.testing === 'only' && tank.testing) ||
-      (filters.testing === 'exclude' && !tank.testing))
+      (filters.testing === 'exclude' && !tank.testing)) &&
+    (filters.gunType.length === 0 ||
+      (filters.gunType.includes('regular') &&
+        tank.turrets.some((turret) =>
+          turret.guns.some((gun) => gun.gun_type!.$case === 'regular'),
+        )) ||
+      (filters.gunType.includes('auto_loader') &&
+        tank.turrets.some((turret) =>
+          turret.guns.some((gun) => gun.gun_type!.$case === 'auto_loader'),
+        )) ||
+      (filters.gunType.includes('auto_reloader') &&
+        tank.turrets.some((turret) =>
+          turret.guns.some((gun) => gun.gun_type!.$case === 'auto_reloader'),
+        )))
   );
 }

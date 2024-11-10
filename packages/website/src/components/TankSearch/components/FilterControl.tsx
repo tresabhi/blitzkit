@@ -13,6 +13,9 @@ import { times } from 'lodash-es';
 import { $tankFilters, initialTankFilters } from '../../../stores/tankFilters';
 import { classIcons } from '../../ClassIcon';
 import { ExperimentIcon } from '../../ExperimentIcon';
+import { GunAutoloaderIcon } from '../../GunAutoloaderIcon';
+import { GunAutoreloaderIcon } from '../../GunAutoreloaderIcon';
+import { GunRegularIcon } from '../../GunRegularIcon';
 import { ResearchedIcon } from '../../ResearchedIcon';
 import { ScienceIcon } from '../../ScienceIcon';
 import { ScienceOffIcon } from '../../ScienceOffIcon';
@@ -29,11 +32,11 @@ export function FilterControl({ compact }: FilterControlProps) {
   return (
     <Flex height="fit-content" gap="2" align="start" justify="center">
       <Flex
-        direction={compact ? 'row' : { initial: 'row', sm: 'column' }}
+        direction={compact ? 'row' : { initial: 'row', md: 'column' }}
         overflow="hidden"
         style={{ borderRadius: 'var(--radius-5)' }}
       >
-        <Flex direction={compact ? 'column' : { sm: 'row', initial: 'column' }}>
+        <Flex direction={compact ? 'column' : { md: 'row', initial: 'column' }}>
           {times(5, (index) => {
             const tier = index as Tier;
             const selected = tankFilters.tiers?.includes(tier);
@@ -61,7 +64,7 @@ export function FilterControl({ compact }: FilterControlProps) {
             );
           })}
         </Flex>
-        <Flex direction={compact ? 'column' : { sm: 'row', initial: 'column' }}>
+        <Flex direction={compact ? 'column' : { md: 'row', initial: 'column' }}>
           {times(5, (index) => {
             const tier = (index + 5) as Tier;
             const selected = tankFilters.tiers?.includes(tier);
@@ -92,11 +95,11 @@ export function FilterControl({ compact }: FilterControlProps) {
       </Flex>
 
       <Flex
-        direction={compact ? 'row' : { initial: 'row', sm: 'column' }}
+        direction={compact ? 'row' : { initial: 'row', md: 'column' }}
         overflow="hidden"
         style={{ borderRadius: 'var(--radius-5)' }}
       >
-        <Flex direction={compact ? 'column' : { sm: 'row', initial: 'column' }}>
+        <Flex direction={compact ? 'column' : { md: 'row', initial: 'column' }}>
           {gameDefinitions.nations
             .slice(0, Math.ceil(gameDefinitions.nations.length / 2))
             .map((nation) => {
@@ -131,7 +134,7 @@ export function FilterControl({ compact }: FilterControlProps) {
               );
             })}
         </Flex>
-        <Flex direction={compact ? 'column' : { sm: 'row', initial: 'column' }}>
+        <Flex direction={compact ? 'column' : { md: 'row', initial: 'column' }}>
           {gameDefinitions.nations
             .slice(Math.ceil(gameDefinitions.nations.length / 2))
             .map((nation) => {
@@ -172,7 +175,7 @@ export function FilterControl({ compact }: FilterControlProps) {
       <Flex
         overflow="hidden"
         style={{ borderRadius: 'var(--radius-full)' }}
-        direction={compact ? 'column' : { sm: 'row', initial: 'column' }}
+        direction={compact ? 'column' : { md: 'row', initial: 'column' }}
       >
         {TANK_CLASSES.map((tankClass) => {
           const Icon = classIcons[tankClass];
@@ -208,7 +211,85 @@ export function FilterControl({ compact }: FilterControlProps) {
       <Flex
         overflow="hidden"
         style={{ borderRadius: 'var(--radius-full)' }}
-        direction={compact ? 'column' : { sm: 'row', initial: 'column' }}
+        direction={compact ? 'column' : { md: 'row', initial: 'column' }}
+      >
+        <IconButton
+          variant={tankFilters.gunType.includes('regular') ? 'solid' : 'soft'}
+          radius="none"
+          color={tankFilters.gunType.includes('regular') ? undefined : 'gray'}
+          highContrast
+          onClick={() => {
+            if (tankFilters.gunType.includes('regular')) {
+              $tankFilters.setKey(
+                'gunType',
+                tankFilters.gunType.filter((t) => t !== 'regular'),
+              );
+            } else {
+              $tankFilters.setKey('gunType', [
+                ...tankFilters.gunType,
+                'regular',
+              ]);
+            }
+          }}
+        >
+          <GunRegularIcon style={{ width: '1em', height: '1em' }} />
+        </IconButton>
+        <IconButton
+          variant={
+            tankFilters.gunType.includes('auto_loader') ? 'solid' : 'soft'
+          }
+          radius="none"
+          color={
+            tankFilters.gunType.includes('auto_loader') ? undefined : 'gray'
+          }
+          highContrast
+          onClick={() => {
+            if (tankFilters.gunType.includes('auto_loader')) {
+              $tankFilters.setKey(
+                'gunType',
+                tankFilters.gunType.filter((t) => t !== 'auto_loader'),
+              );
+            } else {
+              $tankFilters.setKey('gunType', [
+                ...tankFilters.gunType,
+                'auto_loader',
+              ]);
+            }
+          }}
+        >
+          <GunAutoloaderIcon style={{ width: '1em', height: '1em' }} />
+        </IconButton>
+        <IconButton
+          variant={
+            tankFilters.gunType.includes('auto_reloader') ? 'solid' : 'soft'
+          }
+          radius="none"
+          color={
+            tankFilters.gunType.includes('auto_reloader') ? undefined : 'gray'
+          }
+          highContrast
+          onClick={() => {
+            if (tankFilters.gunType.includes('auto_reloader')) {
+              $tankFilters.setKey(
+                'gunType',
+                tankFilters.gunType.filter((t) => t !== 'auto_reloader'),
+              );
+            } else {
+              $tankFilters.setKey('gunType', [
+                ...tankFilters.gunType,
+                'auto_reloader',
+              ]);
+            }
+          }}
+        >
+          <GunAutoreloaderIcon style={{ width: '1em', height: '1em' }} />
+        </IconButton>
+      </Flex>
+
+      <Flex
+        overflow="hidden"
+        style={{ borderRadius: 'var(--radius-full)' }}
+        direction={compact ? 'column' : { md: 'row', initial: 'column' }}
       >
         <IconButton
           variant={
@@ -312,7 +393,7 @@ export function FilterControl({ compact }: FilterControlProps) {
       <Flex
         overflow="hidden"
         style={{ borderRadius: 'var(--radius-full)' }}
-        direction={compact ? 'column' : { sm: 'row', initial: 'column' }}
+        direction={compact ? 'column' : { md: 'row', initial: 'column' }}
       >
         <IconButton
           variant={tankFilters.testing === 'include' ? 'solid' : 'soft'}

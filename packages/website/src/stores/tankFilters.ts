@@ -1,5 +1,11 @@
-import type { TankClass, TankType, Tier } from '@blitzkit/core';
+import type { GunDefinition, TankClass, TankType, Tier } from '@blitzkit/core';
 import { map } from 'nanostores';
+
+export type CaseType<T> = T extends {
+  gun_type?: { $case: infer U; value: any };
+}
+  ? U
+  : never;
 
 export interface TankFilters {
   tiers: Tier[];
@@ -9,6 +15,7 @@ export interface TankFilters {
   testing: 'include' | 'exclude' | 'only';
   search?: string;
   searching: boolean;
+  gunType: CaseType<GunDefinition>[];
 }
 
 export const initialTankFilters: TankFilters = {
@@ -19,6 +26,7 @@ export const initialTankFilters: TankFilters = {
   testing: 'include',
   search: undefined,
   searching: false,
+  gunType: [],
 };
 
 export const $tankFilters = map<TankFilters>(initialTankFilters);
