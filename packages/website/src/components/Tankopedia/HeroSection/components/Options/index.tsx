@@ -194,9 +194,6 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                   key={thisShell.id}
                   size={{ initial: '2', sm: '3' }}
                   radius="none"
-                  style={{
-                    marginTop: shellIndex === 0 ? 0 : -1,
-                  }}
                   onClick={() => {
                     invalidate();
                     mutateDuel((draft) => {
@@ -218,6 +215,33 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 </IconButton>
               ),
             )}
+
+            <IconButton
+              // color={
+              //   thisShell.id === antagonistShell.id ? undefined : 'gray'
+              // }
+              variant="soft"
+              size={{ initial: '2', sm: '3' }}
+              radius="none"
+              onClick={() => {
+                invalidate();
+                // mutateDuel((draft) => {
+                //   draft.antagonist.shell = thisShell;
+                // });
+                mutateTankopediaEphemeral((draft) => {
+                  draft.shot = undefined;
+                });
+              }}
+            >
+              <img
+                alt="custom shell"
+                src={imgur('j2CoXak')}
+                style={{
+                  width: '50%',
+                  height: '50%',
+                }}
+              />
+            </IconButton>
           </Flex>
 
           <Flex
@@ -258,7 +282,6 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               color={hasEnhancedArmor ? undefined : 'gray'}
               variant="soft"
               size={{ initial: '2', sm: '3' }}
-              style={{ marginTop: -1 }}
               radius="none"
               onClick={() => {
                 invalidate();
