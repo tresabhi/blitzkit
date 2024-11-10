@@ -506,6 +506,7 @@ export function tankCharacteristics(
   const shellRicochet = isExplosive(shell.type) ? undefined : shell.ricochet;
   const crewCount = tank.crew.length;
   const shellRange = shell.range;
+  const shellCapacity = gun.gun_type!.value.base.shell_capacity;
 
   return {
     crewCount,
@@ -570,5 +571,6 @@ export function tankCharacteristics(
     length,
     volume,
     shellRange,
+    shellCapacity,
   };
 }

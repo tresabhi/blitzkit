@@ -484,6 +484,7 @@ export interface GunDefinitionBase {
   dispersion_shot: number;
   dispersion_damaged: number;
   unlocks: Unlock[];
+  shell_capacity: number;
 }
 
 export interface ShellDefinition {
@@ -2944,6 +2945,7 @@ function createBaseGunDefinitionBase(): GunDefinitionBase {
     dispersion_shot: 0,
     dispersion_damaged: 0,
     unlocks: [],
+    shell_capacity: 0,
   };
 }
 
@@ -2990,6 +2992,9 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
     }
     for (const v of message.unlocks) {
       Unlock.encode(v!, writer.uint32(114).fork()).join();
+    }
+    if (message.shell_capacity !== 0) {
+      writer.uint32(120).uint32(message.shell_capacity);
     }
     return writer;
   },
@@ -3113,6 +3118,14 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
           message.unlocks.push(Unlock.decode(reader, reader.uint32()));
           continue;
         }
+        case 15: {
+          if (tag !== 120) {
+            break;
+          }
+
+          message.shell_capacity = reader.uint32();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -3144,6 +3157,7 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
         assertSet("GunDefinitionBase.dispersion_damaged", object.dispersion_damaged),
       ),
       unlocks: globalThis.Array.isArray(object?.unlocks) ? object.unlocks.map((e: any) => Unlock.fromJSON(e)) : [],
+      shell_capacity: globalThis.Number(assertSet("GunDefinitionBase.shell_capacity", object.shell_capacity)),
     };
   },
 
@@ -3191,6 +3205,9 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
     if (message.unlocks?.length) {
       obj.unlocks = message.unlocks.map((e) => Unlock.toJSON(e));
     }
+    if (message.shell_capacity !== 0) {
+      obj.shell_capacity = Math.round(message.shell_capacity);
+    }
     return obj;
   },
 
@@ -3215,6 +3232,7 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
     message.dispersion_shot = object.dispersion_shot ?? 0;
     message.dispersion_damaged = object.dispersion_damaged ?? 0;
     message.unlocks = object.unlocks?.map((e) => Unlock.fromPartial(e)) || [];
+    message.shell_capacity = object.shell_capacity ?? 0;
     return message;
   },
 };

@@ -311,6 +311,7 @@ interface GunDefinitionsList {
         afterShot: number;
         whileGunDamaged: number;
       };
+      maxAmmo: number;
       aimingTime: number;
       shotDispersionRadius: number;
       userString: string;
@@ -1174,6 +1175,7 @@ export async function definitions() {
                 dispersion_shot: shotDispersionFactors.afterShot,
                 dispersion_traverse: shotDispersionFactors.turretRotation,
                 unlocks: resolveUnlocks(gun.unlocks),
+                shell_capacity: gun.maxAmmo ?? gunListEntry.maxAmmo,
               } satisfies GunDefinitionBase;
 
               tankDefinitions.tanks[tankId].turrets[turretIndex].guns.push({

@@ -155,6 +155,7 @@ message GunDefinitionBase {
   required float dispersion_shot = 12;
   required float dispersion_damaged = 13;
   repeated Unlock unlocks = 14;
+  required uint32 shell_capacity = 15;
 }
 
 message ShellDefinition {

@@ -159,6 +159,12 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
+          name="Shell capacity"
+          value="shellCapacity"
+          decimals={0}
+        />
+        <CompareRow
+          stats={stats}
           name="Aim time"
           value="aimTime"
           deltaType="lowerIsBetter"

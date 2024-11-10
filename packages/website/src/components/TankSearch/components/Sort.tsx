@@ -125,6 +125,14 @@ export function Sort() {
               Shell range
             </DropdownMenu.CheckboxItem>
             <DropdownMenu.CheckboxItem
+              checked={tankopediaSort.by === 'fire.shellCapacity'}
+              onClick={() => {
+                $tankopediaSort.setKey('by', 'fire.shellCapacity');
+              }}
+            >
+              Shell capacity
+            </DropdownMenu.CheckboxItem>
+            <DropdownMenu.CheckboxItem
               checked={tankopediaSort.by === 'fire.aimTime'}
               onClick={() => {
                 $tankopediaSort.setKey('by', 'fire.aimTime');

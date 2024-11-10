@@ -275,6 +275,16 @@ export const TankSearch = memo<TankSearchProps>(
             );
             break;
 
+          case 'fire.shellCapacity':
+            sorted = filtered.sort(
+              (a, b) =>
+                a.turrets.at(-1)!.guns.at(-1)!.gun_type!.value.base
+                  .shell_capacity -
+                b.turrets.at(-1)!.guns.at(-1)!.gun_type!.value.base
+                  .shell_capacity,
+            );
+            break;
+
           case 'fire.aimTime':
             sorted = filtered.sort(
               (a, b) =>
