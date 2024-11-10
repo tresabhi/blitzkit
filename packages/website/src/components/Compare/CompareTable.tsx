@@ -9,7 +9,7 @@ import {
 } from '@blitzkit/core';
 import { checkConsumableProvisionInclusivity } from '@blitzkit/core/src/blitzkit/checkConsumableProvisionInclusivity';
 import { ComponentPlaceholderIcon } from '@radix-ui/react-icons';
-import { Button, Flex, Popover, Table } from '@radix-ui/themes';
+import { Button, Flex, IconButton, Popover, Table } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import type { TankCharacteristics } from '../../core/blitzkit/tankCharacteristics';
 import { Var } from '../../core/radix/var';
@@ -167,6 +167,7 @@ export function CompareTable({ stats }: CompareTableProps) {
                 engine,
                 track,
                 consumables,
+                camouflage,
               },
               index,
             ) => {
@@ -536,6 +537,24 @@ export function CompareTable({ stats }: CompareTableProps) {
                         </Popover.Content>
                       </Popover.Root>
                     </Flex>
+
+                    <IconButton
+                      onClick={() => {
+                        mutateCompareEphemeral((draft) => {
+                          draft.members[index].camouflage = !camouflage;
+                        });
+                      }}
+                      variant={camouflage ? 'solid' : 'outline'}
+                    >
+                      <img
+                        src={asset('icons/camo.webp')}
+                        style={{
+                          width: '1em',
+                          height: '1em',
+                          transform: 'scale(2) translate(15%, 15%)',
+                        }}
+                      />
+                    </IconButton>
                   </Flex>
                 </Table.Cell>
               );
