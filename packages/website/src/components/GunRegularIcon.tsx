@@ -15,7 +15,7 @@ export function GunRegularIcon(props: ComponentProps<'svg'>) {
         fill="currentColor"
         stroke="currentColor"
         stroke-width="2"
-        stroke-linejoin="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

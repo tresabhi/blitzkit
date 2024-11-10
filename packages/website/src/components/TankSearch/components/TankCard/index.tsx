@@ -63,6 +63,10 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
         return shell1 ? shell1.penetration.near.toFixed(0) : '--';
       case 'fire.shellVelocity':
         return shell0.velocity.toFixed(0);
+      case 'fire.shellCapacity':
+        return gun.gun_type!.value.base.shell_capacity.toFixed(0);
+      case 'fire.shellRange':
+        return shell0.range.toFixed(0);
       case 'fire.gunDepression':
         return (
           gunModelDefinition.pitch.max +
