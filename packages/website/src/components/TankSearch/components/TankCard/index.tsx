@@ -47,6 +47,8 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
         return shell0.caliber.toFixed(0);
       case 'fire.damage':
         return shell0.armor_damage.toFixed(0);
+      case 'fire.moduleDamage':
+        return shell0.armor_damage.toFixed(0);
       case 'fire.dispersionMoving':
         return tracks.dispersion_move.toFixed(3);
       case 'fire.dispersionStill':

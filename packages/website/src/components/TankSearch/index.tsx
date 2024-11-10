@@ -255,6 +255,16 @@ export const TankSearch = memo<TankSearchProps>(
             );
             break;
 
+          case 'fire.moduleDamage':
+            sorted = filtered.sort(
+              (a, b) =>
+                a.turrets.at(-1)!.guns.at(-1)!.gun_type!.value.base.shells[0]
+                  .module_damage -
+                b.turrets.at(-1)!.guns.at(-1)!.gun_type!.value.base.shells[0]
+                  .module_damage,
+            );
+            break;
+
           case 'fire.shellVelocity':
             sorted = filtered.sort(
               (a, b) =>

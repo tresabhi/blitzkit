@@ -109,6 +109,14 @@ export function Sort() {
               Damage
             </DropdownMenu.CheckboxItem>
             <DropdownMenu.CheckboxItem
+              checked={tankopediaSort.by === 'fire.moduleDamage'}
+              onClick={() => {
+                $tankopediaSort.setKey('by', 'fire.moduleDamage');
+              }}
+            >
+              Module damage
+            </DropdownMenu.CheckboxItem>
+            <DropdownMenu.CheckboxItem
               checked={tankopediaSort.by === 'fire.shellVelocity'}
               onClick={() => {
                 $tankopediaSort.setKey('by', 'fire.shellVelocity');
