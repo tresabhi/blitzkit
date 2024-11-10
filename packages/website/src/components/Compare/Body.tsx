@@ -366,40 +366,40 @@ export function Body({ stats }: BodyProps) {
           stats={stats}
           name="Camouflage"
           value="camouflageStill"
-          display={(stats) => (stats.camouflageStill * 100).toFixed(0)}
-          deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
+          display={(stats) => (stats.camouflageStill * 100).toFixed(2)}
+          deltaNominalDisplay={(delta) => (delta * 100).toFixed(2)}
         />
         <CompareRow
           stats={stats}
           name="moving"
           indent
           value="camouflageMoving"
-          display={(stats) => (stats.camouflageMoving * 100).toFixed(0)}
-          deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
+          display={(stats) => (stats.camouflageMoving * 100).toFixed(2)}
+          deltaNominalDisplay={(delta) => (delta * 100).toFixed(2)}
         />
         <CompareRow
           stats={stats}
           name="shooting"
           indent
           value="camouflageShootingStill"
-          display={(stats) => (stats.camouflageShootingStill * 100).toFixed(0)}
-          deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
+          display={(stats) => (stats.camouflageShootingStill * 100).toFixed(2)}
+          deltaNominalDisplay={(delta) => (delta * 100).toFixed(2)}
         />
         <CompareRow
           stats={stats}
           name="shooting & moving"
           indent
           value="camouflageShootingMoving"
-          display={(stats) => (stats.camouflageShootingMoving * 100).toFixed(0)}
-          deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
+          display={(stats) => (stats.camouflageShootingMoving * 100).toFixed(2)}
+          deltaNominalDisplay={(delta) => (delta * 100).toFixed(2)}
         />
         <CompareRow
           stats={stats}
           name="caught on fire"
           indent
           value="camouflageCaughtOnFire"
-          display={(stats) => (stats.camouflageCaughtOnFire * 100).toFixed(0)}
-          deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
+          display={(stats) => (stats.camouflageCaughtOnFire * 100).toFixed(2)}
+          deltaNominalDisplay={(delta) => (delta * 100).toFixed(2)}
         />
         <CompareRow
           stats={stats}

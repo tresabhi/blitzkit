@@ -601,19 +601,19 @@ export function Characteristics() {
             {stats.viewRange}
           </InfoWithDelta>
           <Info name="Camouflage" unit="%" />
-          <InfoWithDelta indent name="Still" decimals={0}>
+          <InfoWithDelta indent name="Still" decimals={2}>
             {stats.camouflageStill * 100}
           </InfoWithDelta>
-          <InfoWithDelta indent name="Moving" decimals={0}>
+          <InfoWithDelta indent name="Moving" decimals={2}>
             {stats.camouflageMoving * 100}
           </InfoWithDelta>
-          <InfoWithDelta indent name="Shooting still" decimals={0}>
+          <InfoWithDelta indent name="Shooting still" decimals={2}>
             {stats.camouflageShootingStill * 100}
           </InfoWithDelta>
-          <InfoWithDelta indent name="Shooting moving" decimals={0}>
+          <InfoWithDelta indent name="Shooting moving" decimals={2}>
             {stats.camouflageShootingMoving * 100}
           </InfoWithDelta>
-          <InfoWithDelta indent name="Caught on fire" decimals={0}>
+          <InfoWithDelta indent name="Caught on fire" decimals={2}>
             {stats.camouflageCaughtOnFire * 100}
           </InfoWithDelta>
           <Info name="Width" unit="m" decimals={0} deltaType="lowerIsBetter">
