@@ -5,19 +5,20 @@ import {
   formatCompact,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
-import { Box, Flex, Link, Text } from '@radix-ui/themes';
+import { Box, Flex, Link, Skeleton, Text } from '@radix-ui/themes';
 import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
+import type { MaybeSkeletonComponentProps } from '../../../../types/maybeSkeletonComponentProps';
 
-interface NodeProps {
+type NodeProps = MaybeSkeletonComponentProps & {
   id: number;
   nextIds?: number[];
   highlight?: boolean;
-}
+};
 
 const tankDefinitions = await fetchTankDefinitions();
 const averageDefinitions = await fetchAverageDefinitions();
 
-export function Node({ id, highlight, nextIds }: NodeProps) {
+export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
   const xpMultiplier = TankopediaEphemeral.use((state) => state.xpMultiplier);
   const tank = tankDefinitions.tanks[id];
   const nextTanks = nextIds?.map((id) => tankDefinitions.tanks[id]);
@@ -125,7 +126,12 @@ export function Node({ id, highlight, nextIds }: NodeProps) {
 
             {averages && nextTanks && (
               <Text color="gray" size="1" mt="2">
-                {games!} {games === 1 ? 'battle' : 'battles'}
+                {skeleton && <Skeleton height="1em" width="4em" />}
+                {!skeleton && (
+                  <>
+                    {games!} {games === 1 ? 'battle' : 'battles'}
+                  </>
+                )}
               </Text>
             )}
           </Flex>

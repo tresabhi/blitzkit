@@ -6,6 +6,7 @@ import { NAVBAR_HEIGHT } from '../../../constants/navbar';
 import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
 import { Duel } from '../../../stores/duel';
+import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
 import type { ThicknessRange } from '../../Armor/components/StaticArmor';
 import { classIcons } from '../../ClassIcon';
 import { Options } from './components/Options';
@@ -14,7 +15,7 @@ import { TankSandboxLoader } from './components/TankSandboxLoader';
 
 const tankDefinitions = await fetchTankDefinitions();
 
-export function HeroSection() {
+export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const isFullScreen = useFullScreen();
   const protagonist = Duel.use((state) => state.protagonist.tank);
@@ -124,6 +125,8 @@ export function HeroSection() {
         >
           <Box position="absolute" width="100%" height="100%">
             <Box width="100%" height="100%">
+              {skeleton && <TankSandboxLoader id={protagonist.id} />}
+
               <Suspense fallback={<TankSandboxLoader id={protagonist.id} />}>
                 <TankSandbox ref={canvas} thicknessRange={thicknessRange} />
               </Suspense>

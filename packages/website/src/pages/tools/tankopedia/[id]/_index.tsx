@@ -17,16 +17,17 @@ import { App } from '../../../../stores/app';
 import { Duel } from '../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../stores/tankopediaPersistent';
+import type { MaybeSkeletonComponentProps } from '../../../../types/maybeSkeletonComponentProps';
 
-interface PageProps {
+type PageProps = MaybeSkeletonComponentProps & {
   id: number;
-}
+};
 
 const tankDefinitions = await fetchTankDefinitions();
 const provisionDefinitions = await fetchProvisionDefinitions();
 const modelDefinitions = await fetchModelDefinitions();
 
-export function Page({ id }: PageProps) {
+export function Page({ id, skeleton }: PageProps) {
   const tank = tankDefinitions.tanks[id];
   const model = modelDefinitions.models[id];
 
@@ -45,14 +46,14 @@ export function Page({ id }: PageProps) {
               gap="9"
               pb="9"
             >
-              <HeroSection />
+              <HeroSection skeleton={skeleton} />
               <ShotDisplaySection />
               <CalloutsSection />
               <MetaSection />
-              <TechTreeSection />
+              <TechTreeSection skeleton={skeleton} />
               <CharacteristicsSection />
               <GameModeSection />
-              <VideoSection />
+              <VideoSection skeleton={skeleton} />
               <HistorySection />
             </PageWrapper>
           </Duel.Provider>

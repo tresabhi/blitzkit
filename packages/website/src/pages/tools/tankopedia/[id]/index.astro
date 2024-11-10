@@ -30,5 +30,7 @@ const tank = tankDefinitions.tanks[id];
 </title>
 
 <BaseLayout>
-  <Page id={id} client:load />
+  <Page id={id} client:only="react">
+    <Page id={id} skeleton slot="fallback" />
+  </Page>
 </BaseLayout>

@@ -10,6 +10,7 @@ import { Flex, Heading, IconButton, ScrollArea, Text } from '@radix-ui/themes';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
+import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
 import { Arrow } from './components/Arrow';
 import { Node } from './components/Node';
 
@@ -19,7 +20,7 @@ const tankDefinitions = await fetchTankDefinitions();
 
 export const XP_MULTIPLIERS = [1, 2, 3, 4, 5, 10];
 
-export function TechTreeSection() {
+export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
   const master = Duel.use((state) => state.protagonist.tank);
 
   if (master.type !== TankType.RESEARCHABLE || master.deprecated) return null;
@@ -184,6 +185,7 @@ export function TechTreeSection() {
                   id={id}
                   nextIds={last ? tank.successors : [line[index + 1]]}
                   highlight={last}
+                  skeleton={skeleton}
                 />
               </Fragment>
             );
@@ -199,7 +201,7 @@ export function TechTreeSection() {
                       <PlusIcon />
                     </Text>
                   )}
-                  <Node key={`${id}-node}`} id={id} />
+                  <Node key={`${id}-node}`} id={id} skeleton={skeleton} />
                 </Fragment>
               ))}
             </>

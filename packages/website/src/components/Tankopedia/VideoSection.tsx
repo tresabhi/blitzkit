@@ -1,13 +1,14 @@
 import { fetchReviews, youtubers } from '@blitzkit/core';
-import { Box, Flex, Heading, Link, Text } from '@radix-ui/themes';
+import { Box, Flex, Heading, Link, Skeleton, Text } from '@radix-ui/themes';
 import { Var } from '../../core/radix/var';
 import { Duel } from '../../stores/duel';
+import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
 import { PageWrapper } from '../PageWrapper';
 import { VerifiedIcon } from '../VerifiedIcon';
 
 const reviews = await fetchReviews();
 
-export function VideoSection() {
+export function VideoSection({ skeleton }: MaybeSkeletonComponentProps) {
   const tank = Duel.use((state) => state.protagonist.tank);
   const videos = reviews.reviews[tank.id]?.videos;
 
@@ -45,14 +46,16 @@ export function VideoSection() {
                   style={{
                     borderRadius: 'var(--radius-3)',
                     overflow: 'hidden',
-                    background: `url(${image})`,
+                    background: skeleton
+                      ? Var('color-panel-solid')
+                      : `url(${image})`,
                     backgroundPosition: '0 18px',
                     backgroundSize: 'cover',
                   }}
                 >
                   <Box
                     style={{
-                      background: `url(${image})`,
+                      background: skeleton ? 'transparent' : `url(${image})`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       height: 128,
@@ -70,8 +73,11 @@ export function VideoSection() {
                     align="center"
                     gap="1"
                   >
-                    <Text>{youtuber.name}</Text>
-                    <VerifiedIcon width="1em" height="1em" />
+                    <Text>
+                      {!skeleton && youtuber.name}
+                      {skeleton && <Skeleton height="1em" width="7rem" />}
+                    </Text>
+                    {!skeleton && <VerifiedIcon width="1em" height="1em" />}
                   </Flex>
                 </Flex>
               </Link>
