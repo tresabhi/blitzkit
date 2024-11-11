@@ -72,7 +72,7 @@ export function Root({
                 vector-effect="non-scaling-stroke"
                 fill="none"
                 stroke={theme.colors.borderNonInteractive}
-                stroke-width="2"
+                strokeWidth="2"
                 points={`0,${y}, ${GRAPH_WIDTH},${y}`}
               />
             );

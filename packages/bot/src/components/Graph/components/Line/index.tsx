@@ -57,7 +57,7 @@ export function Line({
       vector-effect="non-scaling-stroke"
       fill="none"
       stroke={LINE_COLORS[color]}
-      stroke-width={lineWidth}
+      strokeWidth={lineWidth}
       stroke-dasharray={LINE_STYLES[style]}
       points={points}
     />

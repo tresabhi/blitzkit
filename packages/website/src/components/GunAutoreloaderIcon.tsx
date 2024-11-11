@@ -15,7 +15,7 @@ export function GunAutoreloaderIcon(props: ComponentProps<'svg'>) {
           d="M38 49H26V28.7846C26 19.6462 26.9979 16.6266 32 13C37.0021 16.6266 38 19.6462 38 28.7846V49Z"
           fill="currentColor"
           stroke="currentColor"
-          stroke-width="2"
+          strokeWidth="2"
           strokeLinejoin="round"
         />
         <path
