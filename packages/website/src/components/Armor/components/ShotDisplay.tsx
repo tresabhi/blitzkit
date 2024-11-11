@@ -173,7 +173,6 @@ export function ShotDisplay() {
 
       <Html position={inLast.point} center>
         <Box
-          display={isFullscreen ? undefined : { initial: 'none', sm: 'block' }}
           style={{
             pointerEvents: 'none',
             transform: `translateY(${tracerGoingUp ? 50 : -50}%)`,

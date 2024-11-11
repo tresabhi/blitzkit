@@ -10,7 +10,6 @@ import { GameModeSection } from '../../../../components/Tankopedia/GameModeSecti
 import { HeroSection } from '../../../../components/Tankopedia/HeroSection';
 import { HistorySection } from '../../../../components/Tankopedia/HistorySection';
 import { MetaSection } from '../../../../components/Tankopedia/MetaSection';
-import { ShotDisplaySection } from '../../../../components/Tankopedia/ShotDisplaySection';
 import { TechTreeSection } from '../../../../components/Tankopedia/TechTreeSection';
 import { VideoSection } from '../../../../components/Tankopedia/VideoSection';
 import { App } from '../../../../stores/app';
@@ -47,7 +46,6 @@ export function Page({ id, skeleton }: PageProps) {
               pb="9"
             >
               <HeroSection skeleton={skeleton} />
-              <ShotDisplaySection />
               <CalloutsSection />
               <MetaSection />
               <TechTreeSection skeleton={skeleton} />
