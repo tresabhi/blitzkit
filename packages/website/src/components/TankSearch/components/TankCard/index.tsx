@@ -175,8 +175,6 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
     >
       <Link
         className="link"
-        color="gray"
-        highContrast
         underline="hover"
         href={onSelect ? '#' : `/tools/tankopedia/${tank.id}`}
         onClick={(event) => {
