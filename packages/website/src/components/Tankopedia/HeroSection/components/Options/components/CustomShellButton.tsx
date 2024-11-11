@@ -163,19 +163,20 @@ export function CustomShellButton() {
                       minWidth="8rem"
                     >
                       <Text color="gray">
-                        {customShell.normalization ?? 0}°
+                        {Math.round(customShell.normalization ?? 0)}°
                       </Text>
                       <Slider
                         min={0}
                         max={90}
-                        value={[customShell.normalization ?? 0]}
-                        onValueChange={throttle(([value]) => {
+                        step={Number.EPSILON}
+                        defaultValue={[customShell.normalization ?? 0]}
+                        onValueChange={([value]) => {
                           console.log('asd');
 
                           mutateTankopediaEphemeral((draft) => {
                             draft.customShell!.normalization = value;
                           });
-                        }, 1000)}
+                        }}
                       />
                     </Flex>
                   </Flex>
@@ -184,11 +185,14 @@ export function CustomShellButton() {
                     <Text>Ricochet</Text>
 
                     <Flex align="center" gap="2" flexGrow="1" maxWidth="15rem">
-                      <Text color="gray">{customShell.ricochet ?? 90}°</Text>
+                      <Text color="gray">
+                        {Math.round(customShell.ricochet ?? 90)}°
+                      </Text>
                       <Slider
                         min={0}
                         max={90}
-                        value={[customShell.ricochet ?? 90]}
+                        step={Number.EPSILON}
+                        defaultValue={[customShell.ricochet ?? 90]}
                         onValueChange={throttle(([value]) => {
                           mutateTankopediaEphemeral((draft) => {
                             draft.customShell!.ricochet = value;
