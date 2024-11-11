@@ -76,8 +76,14 @@ export function PrimaryArmorSceneComponent({
       material.uniforms.damage.value = shell.armor_damage;
       material.uniforms.explosionRadius.value = shell.explosion_radius;
 
-      await handleProtagonistEquipmentChange(duel.protagonist.equipmentMatrix);
-      await handleAntagonistEquipmentChange(duel.antagonist.equipmentMatrix);
+      await handleProtagonistEquipmentChange(
+        duel.protagonist.equipmentMatrix,
+        true,
+      );
+      await handleAntagonistEquipmentChange(
+        duel.antagonist.equipmentMatrix,
+        true,
+      );
 
       // console.log('handleShellChange');
 
@@ -96,6 +102,7 @@ export function PrimaryArmorSceneComponent({
     }
     async function handleProtagonistEquipmentChange(
       equipment: EquipmentMatrix,
+      noInvalidate = false,
     ) {
       const duel = duelStore.getState();
       const hasEnhancedArmor = await hasEquipment(
@@ -107,9 +114,12 @@ export function PrimaryArmorSceneComponent({
         ? thickness * 1.03
         : thickness;
 
-      // invalidate();
+      if (!noInvalidate) invalidate();
     }
-    async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
+    async function handleAntagonistEquipmentChange(
+      equipment: EquipmentMatrix,
+      noInvalidate = false,
+    ) {
       const duel = duelStore.getState();
       const tankopediaEphemeral = tankopediaEphemeralStore.getState();
       const shell = tankopediaEphemeral.customShell ?? duel.antagonist.shell;
@@ -124,7 +134,7 @@ export function PrimaryArmorSceneComponent({
         penetration *
         resolvePenetrationCoefficient(hasCalibratedShells, shell.type);
 
-      invalidate();
+      if (!noInvalidate) invalidate();
     }
 
     handleShellChange();
@@ -153,11 +163,11 @@ export function PrimaryArmorSceneComponent({
 
       duelStore.subscribe(
         (state) => state.protagonist.equipmentMatrix,
-        handleProtagonistEquipmentChange,
+        (equipment) => handleProtagonistEquipmentChange(equipment),
       ),
       duelStore.subscribe(
         (state) => state.antagonist.equipmentMatrix,
-        handleAntagonistEquipmentChange,
+        (equipment) => handleAntagonistEquipmentChange(equipment),
       ),
     ];
 
