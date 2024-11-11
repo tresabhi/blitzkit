@@ -22,7 +22,7 @@ export function CustomShellButton() {
   return (
     <Popover.Root
       onOpenChange={(open) => {
-        if (!open) return;
+        if (!open || customShell) return;
 
         mutateTankopediaEphemeral((draft) => {
           draft.customShell = antagonistShell;
