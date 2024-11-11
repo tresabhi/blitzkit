@@ -53,7 +53,9 @@ interface OptionsProps {
 }
 
 export function Options({ thicknessRange, canvas }: OptionsProps) {
-  const customShell = TankopediaEphemeral.use((state) => state.customShell);
+  const hasCustomShell = TankopediaEphemeral.use(
+    (state) => state.customShell !== undefined,
+  );
   const display = TankopediaPersistent.useDeferred(
     (state) => state.display,
     TankopediaDisplay.Model,
@@ -101,15 +103,17 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
           style={{ position: 'absolute', transform: 'translateY(-50%)' }}
           align="end"
         >
-          <Text color="gray" size={{ initial: '1', sm: '2' }}>
-            {(
-              resolvePenetrationCoefficient(
-                hasCalibratedShells,
-                antagonistShell.type,
-              ) * antagonistShell.penetration.near
-            ).toFixed(0)}
-            mm
-          </Text>
+          {!hasCustomShell && (
+            <Text color="gray" size={{ initial: '1', sm: '2' }}>
+              {(
+                resolvePenetrationCoefficient(
+                  hasCalibratedShells,
+                  antagonistShell.type,
+                ) * antagonistShell.penetration.near
+              ).toFixed(0)}
+              mm
+            </Text>
+          )}
           {antagonistUniqueGuns.length > 1 && (
             <Popover.Root>
               <Popover.Trigger>
@@ -189,7 +193,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             {antagonistGun.gun_type!.value.base.shells.map((thisShell) => (
               <IconButton
                 color={
-                  thisShell.id === antagonistShell.id && !customShell
+                  thisShell.id === antagonistShell.id && !hasCustomShell
                     ? undefined
                     : 'gray'
                 }
