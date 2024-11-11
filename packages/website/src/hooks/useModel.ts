@@ -2,7 +2,6 @@ import { asset } from '@blitzkit/core';
 import { type ObjectMap, useLoader } from '@react-three/fiber';
 import { Mesh, MeshStandardMaterial } from 'three';
 import { type GLTF, GLTFLoader } from 'three-stdlib';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 const cache: Record<
   number,
@@ -13,16 +12,7 @@ const cache: Record<
 > = {};
 
 export function useModel(id: number) {
-  const gltf = useLoader(
-    GLTFLoader,
-    asset(`3d/tanks/models/${id}.glb`),
-    (loader) => {
-      const dracoLoader = new DRACOLoader();
-      dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
-      // @ts-ignore
-      loader.setDRACOLoader(dracoLoader);
-    },
-  );
+  const gltf = useLoader(GLTFLoader, asset(`3d/tanks/models/${id}.glb`));
 
   if (!cache[id]) {
     cache[id] = {

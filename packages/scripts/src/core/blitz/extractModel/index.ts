@@ -6,7 +6,6 @@ import {
   VertexAttribute,
 } from '@blitzkit/core';
 import { Document, Material, Node, Scene } from '@gltf-transform/core';
-import { KHRDracoMeshCompression } from '@gltf-transform/extensions';
 import { dedup, prune } from '@gltf-transform/functions';
 import { times } from 'lodash-es';
 import { dirname } from 'path';
@@ -293,16 +292,6 @@ export async function extractModel(data: string, path: string) {
   scene.addChild(document.createNode('test'));
 
   await document.transform(prune({ keepAttributes: true }), dedup());
-
-  document
-    .createExtension(KHRDracoMeshCompression)
-    .setRequired(true)
-    .setEncoderOptions({
-      method: KHRDracoMeshCompression.EncoderMethod.EDGEBREAKER,
-      encodeSpeed: 0,
-      decodeSpeed: 0,
-      quantizationVolume: 'scene',
-    });
 
   return document;
 }

@@ -1,7 +1,6 @@
 import { toUniqueId } from '@blitzkit/core';
 import { NodeIO } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
-import draco3d from 'draco3dgltf';
 import { readdir } from 'fs/promises';
 import { extractModel } from '../core/blitz/extractModel';
 import { readXMLDVPL } from '../core/blitz/readXMLDVPL';
@@ -15,12 +14,7 @@ import { TankParameters } from './tankIcons';
 export async function tankModels() {
   console.log('Building tank models...');
 
-  const nodeIO = new NodeIO()
-    .registerExtensions(ALL_EXTENSIONS)
-    .registerDependencies({
-      'draco3d.decoder': await draco3d.createDecoderModule(),
-      'draco3d.encoder': await draco3d.createEncoderModule(),
-    });
+  const nodeIO = new NodeIO().registerExtensions(ALL_EXTENSIONS);
   const nations = await readdir(`${DATA}/XML/item_defs/vehicles`).then(
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
