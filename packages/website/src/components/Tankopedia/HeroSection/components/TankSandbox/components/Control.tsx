@@ -1,6 +1,6 @@
 import { fetchModelDefinitions } from '@blitzkit/core';
 import { OrbitControls } from '@react-three/drei';
-import { useThree } from '@react-three/fiber';
+import { invalidate, useThree } from '@react-three/fiber';
 import { useEffect, useRef, useState } from 'react';
 import { Vector3 } from 'three';
 import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
@@ -158,6 +158,8 @@ export function Controls() {
           break;
         }
       }
+
+      invalidate();
     }
 
     poseEvent.on(handlePoseEvent);
