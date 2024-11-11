@@ -10,10 +10,13 @@ import {
 } from '@blitzkit/core';
 import { useStore } from '@nanostores/react';
 import { Flex, Link, Text } from '@radix-ui/themes';
+import { uniq } from 'lodash-es';
 import { useMemo } from 'react';
 import { resolveReload } from '../../../../core/blitzkit/resolveReload';
+import { TankopediaPersistent } from '../../../../stores/tankopediaPersistent';
 import { $tankopediaSort } from '../../../../stores/tankopediaSort';
 import { classIcons } from '../../../ClassIcon';
+import { MAX_RECENTLY_VIEWED } from '../../constants';
 import './index.css';
 
 interface TankCardProps {
@@ -24,6 +27,7 @@ interface TankCardProps {
 const modelDefinitions = await fetchModelDefinitions();
 
 export function TankCard({ tank, onSelect }: TankCardProps) {
+  const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
   const Icon = classIcons[tank.class];
   const tankopediaSort = useStore($tankopediaSort);
   const discriminator = useMemo(() => {
@@ -155,7 +159,15 @@ export function TankCard({ tank, onSelect }: TankCardProps) {
             : 'gray'
       }
       highContrast={tank.type === TankType.RESEARCHABLE}
-      onClick={onSelect ? () => onSelect(tank) : undefined}
+      onClick={() => {
+        onSelect?.(tank);
+        mutateTankopediaPersistent((draft) => {
+          draft.recentlyViewed = uniq([tank.id, ...draft.recentlyViewed]).slice(
+            0,
+            MAX_RECENTLY_VIEWED,
+          );
+        });
+      }}
       className="tank-search-card"
       style={{
         backgroundImage: `url(${asset(`flags/scratched/${tank.nation}.webp`)})`,

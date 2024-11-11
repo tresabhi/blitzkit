@@ -34,7 +34,7 @@ const testTanks = tanks
 const mostPlayedTanks = tankAverages
   .sort((a, b) => b.samples.d_1 - a.samples.d_1)
   .map(({ id }) => tankDefinitions.tanks[id])
-  .filter(Boolean);
+  .filter((tank) => tank !== undefined && !tank.testing);
 const popularTanks = [...testTanks, ...mostPlayedTanks].slice(0, 8);
 ---
 

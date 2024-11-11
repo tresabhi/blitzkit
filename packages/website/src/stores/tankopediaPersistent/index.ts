@@ -19,6 +19,7 @@ export interface TankopediaPersistentStore {
   showSpacedArmor: boolean;
   showExternalModules: boolean;
   showPrimaryArmor: boolean;
+  recentlyViewed: number[];
 
   sort: {
     by: TankopediaSortBy;
@@ -41,6 +42,7 @@ export const TankopediaPersistent = createContextualStore(() =>
         showSpacedArmor: true,
         showExternalModules: true,
         showPrimaryArmor: true,
+        recentlyViewed: [],
         sort: {
           by: 'meta.none',
           direction: 'ascending',

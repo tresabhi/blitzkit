@@ -5,3 +5,5 @@ export const treeTypeOrder = [
   TankType.PREMIUM,
   TankType.COLLECTOR,
 ];
+
+export const MAX_RECENTLY_VIEWED = 9;

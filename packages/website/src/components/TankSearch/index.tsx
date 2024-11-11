@@ -12,11 +12,12 @@ import {
 import { useStore } from '@nanostores/react';
 import { Callout, Flex, Link, Text, type FlexProps } from '@radix-ui/themes';
 import fuzzysort from 'fuzzysort';
-import { times } from 'lodash-es';
+import { times, uniq } from 'lodash-es';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { filterTank } from '../../core/blitzkit/filterTank';
 import { resolveReload } from '../../core/blitzkit/resolveReload';
 import { $tankFilters } from '../../stores/tankFilters';
+import { TankopediaPersistent } from '../../stores/tankopediaPersistent';
 import {
   SORT_NAMES,
   SORT_UNITS,
@@ -25,11 +26,12 @@ import { $tankopediaSort } from '../../stores/tankopediaSort';
 import { ExperimentIcon } from '../ExperimentIcon';
 import { FilterControl } from './components/FilterControl';
 import { NoResults } from './components/NoResults';
+import { RecentlyViewed } from './components/RecentlyViewed';
 import { SearchBar } from './components/SearchBar';
 import { SkeletonTankCard } from './components/SkeletonTankCard';
 import { TankCard } from './components/TankCard';
 import { TankCardWrapper } from './components/TankCardWrapper';
-import { treeTypeOrder } from './constants';
+import { MAX_RECENTLY_VIEWED, treeTypeOrder } from './constants';
 
 type TankSearchProps = Omit<FlexProps, 'onSelect'> & {
   compact?: boolean;
@@ -47,10 +49,10 @@ const tankNames = await fetchTankNames();
 
 export const TankSearch = memo<TankSearchProps>(
   ({ compact, onSelect, onSelectAll, ...props }) => {
+    const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
     const awaitedTanksDefinitionsArray = Object.values(tankDefinitions.tanks);
     const tankFilters = useStore($tankFilters);
     const tankopediaSort = useStore($tankopediaSort);
-
     const tanksFiltered = useMemo(() => {
       if (tankFilters.search === undefined) {
         const filtered = awaitedTanksDefinitionsArray.filter((tank) =>
@@ -443,6 +445,8 @@ export const TankSearch = memo<TankSearchProps>(
           <FilterControl compact={compact} />
         )}
 
+        <RecentlyViewed />
+
         <Flex mt="2" gap="1" align="center" justify="center" direction="column">
           <Flex gap="2">
             <Text color="gray">
@@ -457,6 +461,12 @@ export const TankSearch = memo<TankSearchProps>(
                 onClick={(event) => {
                   event.preventDefault();
                   onSelectAll(tanksFiltered);
+                  mutateTankopediaPersistent((draft) => {
+                    draft.recentlyViewed = uniq([
+                      ...tanksFiltered.map(({ id }) => id),
+                      ...draft.recentlyViewed,
+                    ]).slice(0, MAX_RECENTLY_VIEWED);
+                  });
                 }}
               >
                 Select all

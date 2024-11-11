@@ -18,6 +18,7 @@ import { tankToCompareMember } from '../../../core/blitzkit/tankToCompareMember'
 import { App } from '../../../stores/app';
 import { CompareEphemeral } from '../../../stores/compareEphemeral';
 import { ComparePersistent } from '../../../stores/comparePersistent';
+import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
 
 const modelDefinitions = await fetchModelDefinitions();
 const equipmentDefinitions = await fetchEquipmentDefinitions();
@@ -28,11 +29,15 @@ const tankDefinitions = await fetchTankDefinitions();
 export function Page() {
   return (
     <App.Provider>
-      <ComparePersistent.Provider>
-        <CompareEphemeral.Provider data={createDefaultSkills(skillDefinitions)}>
-          <Content />
-        </CompareEphemeral.Provider>
-      </ComparePersistent.Provider>
+      <TankopediaPersistent.Provider>
+        <ComparePersistent.Provider>
+          <CompareEphemeral.Provider
+            data={createDefaultSkills(skillDefinitions)}
+          >
+            <Content />
+          </CompareEphemeral.Provider>
+        </ComparePersistent.Provider>
+      </TankopediaPersistent.Provider>
     </App.Provider>
   );
 }
