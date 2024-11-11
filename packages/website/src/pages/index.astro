@@ -1,7 +1,9 @@
 ---
+import { fetchAverageDefinitions, fetchTankDefinitions } from '@blitzkit/core';
 import { Box, Flex, Heading } from '@radix-ui/themes';
 import HomeHero from '../components/HomeHero.astro';
 import { Plugs } from '../components/Plugs.tsx';
+import { TankCard } from '../components/TankSearch/components/TankCard';
 import ToolCard from '../components/ToolCard.astro';
 import {
   compareTool,
@@ -14,6 +16,26 @@ import {
   tankopediaTool,
 } from '../constants/tools';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const tankDefinitions = await fetchTankDefinitions();
+const averageDefinitions = await fetchAverageDefinitions();
+const tanks = Object.values(tankDefinitions.tanks);
+const tankAverages = Object.entries(averageDefinitions.averages).map(
+  ([id, average]) => ({
+    id: Number(id),
+    ...average,
+  }),
+);
+
+// lol don't ask questions
+const testTanks = tanks
+  .filter((tank) => tank.testing && tank.tier >= 8)
+  .sort((a, b) => b.tier - a.tier);
+const mostPlayedTanks = tankAverages
+  .sort((a, b) => b.samples.d_1 - a.samples.d_1)
+  .map(({ id }) => tankDefinitions.tanks[id])
+  .filter(Boolean);
+const popularTanks = [...testTanks, ...mostPlayedTanks].slice(0, 8);
 ---
 
 <BaseLayout>
@@ -24,6 +46,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <Flex p="4" justify="center" gap="4" mt="3">
     <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">
       <ToolCard tool={tankopediaTool} />
+
+      <Flex direction="column" gap="4" pt="4" pb="8">
+        <Heading align="center" size="5">Popular tanks</Heading>
+
+        <Flex justify="center" gap="4" wrap="wrap">
+          {
+            popularTanks.map((tank) => (
+              <Box width="7rem">
+                <TankCard {tank} />
+              </Box>
+            ))
+          }
+        </Flex>
+      </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         {/* <ToolCard tool={playerStatsTool} /> */}
