@@ -42,6 +42,7 @@ import type { ThicknessRange } from '../../../../Armor/components/StaticArmor';
 import { ModuleButton } from '../../../../ModuleButtons/ModuleButton';
 import { SmallTankIcon } from '../../../../SmallTankIcon';
 import { TankSearch } from '../../../../TankSearch';
+import { CustomShellButton } from './components/CustomShellButton';
 import { DynamicArmorSwitcher } from './components/DynamicArmorSwitcher';
 import { QuickInputs } from './components/QuickInputs';
 import { Thicknesses } from './components/Thicknesses';
@@ -52,6 +53,7 @@ interface OptionsProps {
 }
 
 export function Options({ thicknessRange, canvas }: OptionsProps) {
+  const customShell = TankopediaEphemeral.use((state) => state.customShell);
   const display = TankopediaPersistent.useDeferred(
     (state) => state.display,
     TankopediaDisplay.Model,
@@ -184,64 +186,40 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             }}
             overflow="hidden"
           >
-            {antagonistGun.gun_type!.value.base.shells.map(
-              (thisShell, shellIndex) => (
-                <IconButton
-                  color={
-                    thisShell.id === antagonistShell.id ? undefined : 'gray'
-                  }
-                  variant="soft"
-                  key={thisShell.id}
-                  size={{ initial: '2', sm: '3' }}
-                  radius="none"
-                  onClick={() => {
-                    invalidate();
-                    mutateDuel((draft) => {
-                      draft.antagonist.shell = thisShell;
-                    });
-                    mutateTankopediaEphemeral((draft) => {
-                      draft.shot = undefined;
-                    });
-                  }}
-                >
-                  <img
-                    alt={thisShell.name}
-                    src={asset(`icons/shells/${thisShell.icon}.webp`)}
-                    style={{
-                      width: '50%',
-                      height: '50%',
-                    }}
-                  />
-                </IconButton>
-              ),
-            )}
-
-            <IconButton
-              // color={
-              //   thisShell.id === antagonistShell.id ? undefined : 'gray'
-              // }
-              variant="soft"
-              size={{ initial: '2', sm: '3' }}
-              radius="none"
-              onClick={() => {
-                invalidate();
-                // mutateDuel((draft) => {
-                //   draft.antagonist.shell = thisShell;
-                // });
-                mutateTankopediaEphemeral((draft) => {
-                  draft.shot = undefined;
-                });
-              }}
-            >
-              <img
-                alt="custom shell"
-                src={imgur('j2CoXak')}
-                style={{
-                  width: '50%',
-                  height: '50%',
+            {antagonistGun.gun_type!.value.base.shells.map((thisShell) => (
+              <IconButton
+                color={
+                  thisShell.id === antagonistShell.id && !customShell
+                    ? undefined
+                    : 'gray'
+                }
+                variant="soft"
+                key={thisShell.id}
+                size={{ initial: '2', sm: '3' }}
+                radius="none"
+                onClick={() => {
+                  invalidate();
+                  mutateDuel((draft) => {
+                    draft.antagonist.shell = thisShell;
+                  });
+                  mutateTankopediaEphemeral((draft) => {
+                    draft.shot = undefined;
+                    draft.customShell = undefined;
+                  });
                 }}
-              />
-            </IconButton>
+              >
+                <img
+                  alt={thisShell.name}
+                  src={asset(`icons/shells/${thisShell.icon}.webp`)}
+                  style={{
+                    width: '50%',
+                    height: '50%',
+                  }}
+                />
+              </IconButton>
+            ))}
+
+            <CustomShellButton />
           </Flex>
 
           <Flex

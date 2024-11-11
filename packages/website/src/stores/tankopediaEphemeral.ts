@@ -1,6 +1,7 @@
 import {
   createDefaultSkills,
   fetchSkillDefinitions,
+  ShellDefinition,
   type ModelDefinition,
 } from '@blitzkit/core';
 import type { Vector3 } from 'three';
@@ -91,6 +92,7 @@ interface TankopediaEphemeral {
     | { type: ArmorType.External }
   );
   xpMultiplier: (typeof XP_MULTIPLIERS)[number];
+  customShell?: ShellDefinition;
 }
 
 const skillDefinitions = await fetchSkillDefinitions();
