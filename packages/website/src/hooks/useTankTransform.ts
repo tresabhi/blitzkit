@@ -1,26 +1,30 @@
-import { I_HAT, J_HAT, K_HAT } from '@blitzkit/core';
+import {
+  I_HAT,
+  J_HAT,
+  K_HAT,
+  TrackDefinition,
+  TurretDefinition,
+} from '@blitzkit/core';
 import { type RefObject, useEffect } from 'react';
 import { Euler, Group, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils.js';
 import { correctZYTuple } from '../core/blitz/correctZYTuple';
-import {
-  type ModelTransformEventData,
-  modelTransformEvent,
-} from '../core/blitzkit/modelTransform';
-import type { DuelMember } from '../stores/duel';
+import { modelTransformEvent } from '../core/blitzkit/modelTransform';
+import { Duel } from '../stores/duel';
 import { useTankModelDefinition } from './useTankModelDefinition';
 
 export function useTankTransform(
-  member: DuelMember,
+  track: TrackDefinition,
+  turret: TurretDefinition,
   turretContainer: RefObject<Group>,
   gunContainer: RefObject<Group>,
 ) {
   const tankModelDefinition = useTankModelDefinition();
+  const duelStore = Duel.useStore();
 
   useEffect(() => {
-    const trackModelDefinition = tankModelDefinition.tracks[member.track.id];
-    const turretModelDefinition = tankModelDefinition.turrets[member.turret.id];
-
+    const trackModelDefinition = tankModelDefinition.tracks[track.id];
+    const turretModelDefinition = tankModelDefinition.turrets[turret.id];
     const hullOrigin = correctZYTuple(trackModelDefinition.origin);
     const turretOrigin = correctZYTuple(tankModelDefinition.turret_origin);
     const gunOrigin = correctZYTuple(turretModelDefinition.gun_origin);
@@ -29,7 +33,8 @@ export function useTankTransform(
     const gunPosition = new Vector3();
     const gunRotation = new Euler();
 
-    function handleModelTransform({ yaw, pitch }: ModelTransformEventData) {
+    function handleModelTransform() {
+      const { yaw, pitch } = duelStore.getState().protagonist;
       gunPosition
         .set(0, 0, 0)
         .sub(hullOrigin)
@@ -77,11 +82,24 @@ export function useTankTransform(
       turretContainer.current?.rotation.copy(turretRotation);
     }
 
-    handleModelTransform(member);
+    handleModelTransform();
+
     modelTransformEvent.on(handleModelTransform);
 
+    const unsubscribes = [
+      duelStore.subscribe(
+        (state) => state.protagonist.pitch,
+        handleModelTransform,
+      ),
+      duelStore.subscribe(
+        (state) => state.protagonist.yaw,
+        handleModelTransform,
+      ),
+      () => modelTransformEvent.off(handleModelTransform),
+    ];
+
     return () => {
-      modelTransformEvent.off(handleModelTransform);
+      unsubscribes.forEach((unsubscribe) => unsubscribe());
     };
-  }, [member]);
+  }, [track, turret]);
 }

@@ -69,7 +69,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
     state.protagonist.consumables.includes(73),
   );
 
-  useTankTransform(protagonist, turretContainer, gunContainer);
+  useTankTransform(track, turret, turretContainer, gunContainer);
 
   return (
     <ModelTankWrapper ref={wrapper}>

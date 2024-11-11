@@ -1,6 +1,5 @@
 import { asset } from '@blitzkit/core';
 import { IconButton } from '@radix-ui/themes';
-import { invalidate } from '@react-three/fiber';
 import { useArmor } from '../../../../../../hooks/useArmor';
 import { Duel } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
@@ -22,7 +21,7 @@ export function DynamicArmorSwitcher() {
       variant="soft"
       size={{ initial: '2', sm: '3' }}
       onClick={() => {
-        invalidate();
+        // invalidate();
         mutateDuel((draft) => {
           if (draft.protagonist.consumables.includes(73)) {
             draft.protagonist.consumables =

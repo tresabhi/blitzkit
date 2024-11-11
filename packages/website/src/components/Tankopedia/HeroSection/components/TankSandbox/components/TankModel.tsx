@@ -1,5 +1,5 @@
 import { normalizeAngleRad } from '@blitzkit/core';
-import { invalidate, useThree, type ThreeEvent } from '@react-three/fiber';
+import { useThree, type ThreeEvent } from '@react-three/fiber';
 import { memo, useRef } from 'react';
 import { Group, Mesh, MeshStandardMaterial, Vector2 } from 'three';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
@@ -20,6 +20,8 @@ export const TankModel = memo(() => {
   const duelStore = Duel.useStore();
   const protagonist = Duel.use((draft) => draft.protagonist);
   const tankopediaPersistentStore = TankopediaPersistent.useStore();
+  const track = Duel.use((state) => state.protagonist.track);
+  const turret = Duel.use((state) => state.protagonist.turret);
   const canvas = useThree((state) => state.gl.domElement);
   const hullContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
@@ -33,7 +35,7 @@ export const TankModel = memo(() => {
   const { gltf } = useModel(protagonist.tank.id);
   const nodes = Object.values(gltf.nodes);
 
-  useTankTransform(protagonist, turretContainer, gunContainer);
+  useTankTransform(track, turret, turretContainer, gunContainer);
 
   return (
     <ModelTankWrapper ref={hullContainer}>
@@ -53,7 +55,7 @@ export const TankModel = memo(() => {
 
           if (!material) return;
 
-          invalidate();
+          // invalidate();
 
           if (material.map) material.map.offset.y += offset;
           if (material.aoMap) material.aoMap.offset.y += offset;

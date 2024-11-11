@@ -1,5 +1,4 @@
 import { isExplosive, resolvePenetrationCoefficient } from '@blitzkit/core';
-import { invalidate } from '@react-three/fiber';
 import { useEffect } from 'react';
 import {
   AdditiveBlending,
@@ -65,7 +64,7 @@ export function SpacedArmorSubSpaced({
         shell.normalization ?? 0,
       );
 
-      invalidate();
+      // invalidate();
     }
     async function handleProtagonistEquipmentChange(
       equipment: EquipmentMatrix,
@@ -80,7 +79,7 @@ export function SpacedArmorSubSpaced({
         ? thickness * 1.03
         : thickness;
 
-      invalidate();
+      // invalidate();
     }
     async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
       const duel = duelStore.getState();
@@ -96,8 +95,6 @@ export function SpacedArmorSubSpaced({
       material.uniforms.penetration.value =
         penetration *
         resolvePenetrationCoefficient(hasCalibratedShells, shell.type);
-
-      invalidate();
     }
 
     handleShellChange();

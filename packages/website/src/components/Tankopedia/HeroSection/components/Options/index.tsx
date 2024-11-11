@@ -26,7 +26,6 @@ import {
   Text,
   Tooltip,
 } from '@radix-ui/themes';
-import { invalidate } from '@react-three/fiber';
 import { useState, type RefObject } from 'react';
 import { ENVIRONMENTS } from '../../../../../constants/lightingEnvironments';
 import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
@@ -202,7 +201,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 size={{ initial: '2', sm: '3' }}
                 radius="none"
                 onClick={() => {
-                  invalidate();
+                  // invalidate();
                   mutateDuel((draft) => {
                     draft.antagonist.shell = thisShell;
                   });
@@ -240,7 +239,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               size={{ initial: '2', sm: '3' }}
               radius="none"
               onClick={() => {
-                invalidate();
+                // invalidate();
                 mutateDuel((draft) => {
                   draft.antagonist.equipmentMatrix[0][0] = hasCalibratedShells
                     ? 0
@@ -266,7 +265,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               size={{ initial: '2', sm: '3' }}
               radius="none"
               onClick={() => {
-                invalidate();
+                // invalidate();
                 mutateDuel((draft) => {
                   draft.protagonist.equipmentMatrix[1][1] = hasEnhancedArmor
                     ? 0

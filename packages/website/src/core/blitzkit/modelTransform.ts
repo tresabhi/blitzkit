@@ -1,5 +1,4 @@
 import { EventManager } from '@blitzkit/core';
-import { invalidate } from '@react-three/fiber';
 
 export interface ModelTransformEventData {
   yaw?: number;
@@ -7,4 +6,6 @@ export interface ModelTransformEventData {
 }
 
 export const modelTransformEvent = new EventManager<ModelTransformEventData>();
-modelTransformEvent.on(() => invalidate());
+modelTransformEvent.on(() => {
+  // invalidate();
+});

@@ -78,15 +78,18 @@ export function PrimaryArmorSceneComponent({
 
       await handleProtagonistEquipmentChange(duel.protagonist.equipmentMatrix);
       await handleAntagonistEquipmentChange(duel.antagonist.equipmentMatrix);
+
+      // console.log('handleShellChange');
+
       invalidate();
     }
     function handleGreenPenetrationChange(greenPenetration: boolean) {
       material.uniforms.greenPenetration.value = greenPenetration;
-      invalidate();
     }
     function handleOpaqueChange(opaque: boolean) {
       material.uniforms.opaque.value = opaque;
-      invalidate();
+
+      // invalidate();
     }
     function handleWireframeChange(wireframe: boolean) {
       material.wireframe = wireframe;
@@ -104,7 +107,7 @@ export function PrimaryArmorSceneComponent({
         ? thickness * 1.03
         : thickness;
 
-      invalidate();
+      // invalidate();
     }
     async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
       const duel = duelStore.getState();
@@ -173,7 +176,7 @@ export function PrimaryArmorSceneComponent({
     material.uniforms.inverseProjectionMatrix.value =
       camera.projectionMatrixInverse;
 
-    invalidate();
+    // invalidate();
   });
 
   return (

@@ -1,5 +1,4 @@
 import { resolvePenetrationCoefficient } from '@blitzkit/core';
-import { invalidate } from '@react-three/fiber';
 import { useEffect } from 'react';
 import {
   AdditiveBlending,
@@ -54,7 +53,7 @@ export function SpacedArmorSubExternal({
       const tankopediaEphemeral = tankopediaEphemeralStore.getState();
       const shell = tankopediaEphemeral.customShell ?? duel.antagonist.shell;
       material.uniforms.penetration.value = shell.penetration.near;
-      invalidate();
+      // invalidate();
     }
     async function handleProtagonistEquipmentChange(
       equipment: EquipmentMatrix,
@@ -69,7 +68,7 @@ export function SpacedArmorSubExternal({
         ? thickness * 1.03
         : thickness;
 
-      invalidate();
+      // invalidate();
     }
     async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
       const duel = duelStore.getState();
@@ -86,7 +85,7 @@ export function SpacedArmorSubExternal({
         penetration *
         resolvePenetrationCoefficient(hasCalibratedShells, shell.type);
 
-      invalidate();
+      // invalidate();
     }
 
     handleShellChange();

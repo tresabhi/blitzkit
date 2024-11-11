@@ -9,6 +9,7 @@ import {
   Text,
   TextField,
 } from '@radix-ui/themes';
+import { throttle } from 'lodash-es';
 import { type ChangeEvent } from 'react';
 import { Duel } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
@@ -154,7 +155,13 @@ export function CustomShellButton() {
                   <Flex align="center" justify="between" gap="4" py="1">
                     <Text>Normalization</Text>
 
-                    <Flex align="center" gap="2" flexGrow="1" maxWidth="15rem">
+                    <Flex
+                      align="center"
+                      gap="2"
+                      flexGrow="1"
+                      maxWidth="15rem"
+                      minWidth="8rem"
+                    >
                       <Text color="gray">
                         {customShell.normalization ?? 0}°
                       </Text>
@@ -162,11 +169,13 @@ export function CustomShellButton() {
                         min={0}
                         max={90}
                         value={[customShell.normalization ?? 0]}
-                        onValueChange={([value]) => {
+                        onValueChange={throttle(([value]) => {
+                          console.log('asd');
+
                           mutateTankopediaEphemeral((draft) => {
                             draft.customShell!.normalization = value;
                           });
-                        }}
+                        }, 1000)}
                       />
                     </Flex>
                   </Flex>
@@ -180,11 +189,11 @@ export function CustomShellButton() {
                         min={0}
                         max={90}
                         value={[customShell.ricochet ?? 90]}
-                        onValueChange={([value]) => {
+                        onValueChange={throttle(([value]) => {
                           mutateTankopediaEphemeral((draft) => {
                             draft.customShell!.ricochet = value;
                           });
-                        }}
+                        }, 1000)}
                       />
                     </Flex>
                   </Flex>

@@ -14,7 +14,7 @@ export const PrimaryArmorScene = memo(() => {
   const wrapper = useRef<Group>(null);
   const turretContainer = useRef<Group>(null);
   const gunContainer = useRef<Group>(null);
-  const protagonist = Duel.use((draft) => draft.protagonist);
+  // const protagonist = Duel.use((draft) => draft.protagonist);
   const tank = Duel.use((state) => state.protagonist.tank);
   const track = Duel.use((state) => state.protagonist.track);
   const turret = Duel.use((state) => state.protagonist.turret);
@@ -33,7 +33,7 @@ export const PrimaryArmorScene = memo(() => {
     state.protagonist.consumables.includes(73),
   );
 
-  useTankTransform(protagonist, turretContainer, gunContainer);
+  useTankTransform(track, turret, turretContainer, gunContainer);
 
   return (
     <ModelTankWrapper ref={wrapper}>
