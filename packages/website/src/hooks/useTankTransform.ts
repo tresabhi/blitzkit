@@ -5,11 +5,15 @@ import {
   TrackDefinition,
   TurretDefinition,
 } from '@blitzkit/core';
+import { invalidate } from '@react-three/fiber';
 import { type RefObject, useEffect } from 'react';
 import { Euler, Group, Vector3 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils.js';
 import { correctZYTuple } from '../core/blitz/correctZYTuple';
-import { modelTransformEvent } from '../core/blitzkit/modelTransform';
+import {
+  modelTransformEvent,
+  type ModelTransformEventData,
+} from '../core/blitzkit/modelTransform';
 import { Duel } from '../stores/duel';
 import { useTankModelDefinition } from './useTankModelDefinition';
 
@@ -33,8 +37,11 @@ export function useTankTransform(
     const gunPosition = new Vector3();
     const gunRotation = new Euler();
 
-    function handleModelTransform() {
-      const { yaw, pitch } = duelStore.getState().protagonist;
+    function handleModelTransform(modelTransform?: ModelTransformEventData) {
+      const duel = duelStore.getState();
+      const yaw = modelTransform?.yaw ?? duel.protagonist.yaw;
+      const pitch = modelTransform?.pitch ?? duel.protagonist.pitch;
+
       gunPosition
         .set(0, 0, 0)
         .sub(hullOrigin)
@@ -80,6 +87,8 @@ export function useTankTransform(
       turretPosition.add(turretOrigin).add(hullOrigin);
       turretContainer.current?.position.copy(turretPosition);
       turretContainer.current?.rotation.copy(turretRotation);
+
+      invalidate();
     }
 
     handleModelTransform();
@@ -89,11 +98,11 @@ export function useTankTransform(
     const unsubscribes = [
       duelStore.subscribe(
         (state) => state.protagonist.pitch,
-        handleModelTransform,
+        () => handleModelTransform(),
       ),
       duelStore.subscribe(
         (state) => state.protagonist.yaw,
-        handleModelTransform,
+        () => handleModelTransform(),
       ),
       () => modelTransformEvent.off(handleModelTransform),
     ];
