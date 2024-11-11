@@ -16,6 +16,7 @@ import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemera
 
 export function CustomShellButton() {
   const customShell = TankopediaEphemeral.use((state) => state.customShell);
+  const gun = Duel.use((state) => state.protagonist.gun);
   const antagonistShell = Duel.use((state) => state.antagonist.shell);
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
 
@@ -65,17 +66,27 @@ export function CustomShellButton() {
                       case ShellType.AP: {
                         modified.normalization = 5;
                         modified.ricochet = 70;
+                        modified.explosion_radius = undefined;
                         break;
                       }
                       case ShellType.APCR: {
                         modified.normalization = 2;
                         modified.ricochet = 70;
+                        modified.explosion_radius = undefined;
                         break;
                       }
-                      case ShellType.HEAT:
+                      case ShellType.HEAT: {
+                        modified.normalization = undefined;
+                        modified.ricochet = undefined;
+                        modified.explosion_radius = undefined;
+                      }
                       case ShellType.HE: {
                         modified.normalization = undefined;
                         modified.ricochet = undefined;
+                        modified.explosion_radius =
+                          gun.gun_type!.value.base.shells.find(
+                            (shell) => shell.type === ShellType.HE,
+                          )?.explosion_radius ?? 1;
                         break;
                       }
                     }
@@ -206,6 +217,37 @@ export function CustomShellButton() {
                     </Flex>
                   </Flex>
                 </>
+              )}
+
+              {customShell.type === ShellType.HE && (
+                <Flex align="center" justify="between" gap="4">
+                  <Text>Explosion radius</Text>
+                  <TextField.Root
+                    style={{ maxWidth: '6rem' }}
+                    defaultValue={customShell.explosion_radius ?? 0}
+                    type="number"
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                      mutateTankopediaEphemeral((draft) => {
+                        draft.customShell!.explosion_radius =
+                          event.target.valueAsNumber;
+                      });
+                    }}
+                    onFocus={(event) => event.target.select()}
+                    onKeyDown={(event) => {
+                      event.stopPropagation();
+
+                      if (event.key === 'Enter') {
+                        (event.target as HTMLInputElement).blur();
+                      } else if (event.key === 'Escape') {
+                        (event.target as HTMLInputElement).valueAsNumber =
+                          customShell.explosion_radius ?? 1;
+                        (event.target as HTMLInputElement).blur();
+                      }
+                    }}
+                  >
+                    <TextField.Slot side="right">m</TextField.Slot>
+                  </TextField.Root>
+                </Flex>
               )}
             </Flex>
 
