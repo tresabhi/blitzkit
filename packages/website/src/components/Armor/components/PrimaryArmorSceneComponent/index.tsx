@@ -85,8 +85,6 @@ export function PrimaryArmorSceneComponent({
         true,
       );
 
-      // console.log('handleShellChange');
-
       invalidate();
     }
     function handleGreenPenetrationChange(greenPenetration: boolean) {
@@ -94,8 +92,6 @@ export function PrimaryArmorSceneComponent({
     }
     function handleOpaqueChange(opaque: boolean) {
       material.uniforms.opaque.value = opaque;
-
-      // invalidate();
     }
     function handleWireframeChange(wireframe: boolean) {
       material.wireframe = wireframe;
@@ -185,8 +181,6 @@ export function PrimaryArmorSceneComponent({
       spacedArmorRenderTarget.depthTexture;
     material.uniforms.inverseProjectionMatrix.value =
       camera.projectionMatrixInverse;
-
-    // invalidate();
   });
 
   return (

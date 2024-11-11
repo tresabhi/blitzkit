@@ -63,8 +63,6 @@ export function SpacedArmorSubSpaced({
       material.uniforms.normalization.value = degToRad(
         shell.normalization ?? 0,
       );
-
-      // invalidate();
     }
     async function handleProtagonistEquipmentChange(
       equipment: EquipmentMatrix,
@@ -78,8 +76,6 @@ export function SpacedArmorSubSpaced({
       material.uniforms.thickness.value = hasEnhancedArmor
         ? thickness * 1.03
         : thickness;
-
-      // invalidate();
     }
     async function handleAntagonistEquipmentChange(equipment: EquipmentMatrix) {
       const duel = duelStore.getState();

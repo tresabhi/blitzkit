@@ -201,7 +201,6 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 size={{ initial: '2', sm: '3' }}
                 radius="none"
                 onClick={() => {
-                  // invalidate();
                   mutateDuel((draft) => {
                     draft.antagonist.shell = thisShell;
                   });
@@ -239,7 +238,6 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               size={{ initial: '2', sm: '3' }}
               radius="none"
               onClick={() => {
-                // invalidate();
                 mutateDuel((draft) => {
                   draft.antagonist.equipmentMatrix[0][0] = hasCalibratedShells
                     ? 0
@@ -265,7 +263,6 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               size={{ initial: '2', sm: '3' }}
               radius="none"
               onClick={() => {
-                // invalidate();
                 mutateDuel((draft) => {
                   draft.protagonist.equipmentMatrix[1][1] = hasEnhancedArmor
                     ? 0

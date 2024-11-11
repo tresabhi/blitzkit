@@ -21,7 +21,6 @@ export function DynamicArmorSwitcher() {
       variant="soft"
       size={{ initial: '2', sm: '3' }}
       onClick={() => {
-        // invalidate();
         mutateDuel((draft) => {
           if (draft.protagonist.consumables.includes(73)) {
             draft.protagonist.consumables =

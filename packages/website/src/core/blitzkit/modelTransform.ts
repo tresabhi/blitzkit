@@ -6,6 +6,3 @@ export interface ModelTransformEventData {
 }
 
 export const modelTransformEvent = new EventManager<ModelTransformEventData>();
-modelTransformEvent.on(() => {
-  // invalidate();
-});

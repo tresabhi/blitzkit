@@ -1,5 +1,5 @@
 import { normalizeAngleRad } from '@blitzkit/core';
-import { useThree, type ThreeEvent } from '@react-three/fiber';
+import { invalidate, useThree, type ThreeEvent } from '@react-three/fiber';
 import { memo, useRef } from 'react';
 import { Group, Mesh, MeshStandardMaterial, Vector2 } from 'three';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
@@ -55,7 +55,7 @@ export const TankModel = memo(() => {
 
           if (!material) return;
 
-          // invalidate();
+          invalidate();
 
           if (material.map) material.map.offset.y += offset;
           if (material.aoMap) material.aoMap.offset.y += offset;
