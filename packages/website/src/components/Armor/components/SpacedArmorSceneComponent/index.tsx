@@ -88,7 +88,8 @@ export function SpacedArmorSceneComponent({
       remainingPenetrationInput?: number,
     ) => {
       const { antagonist, protagonist } = duelStore.getState();
-      const shell = antagonist.shell;
+      const { customShell } = tankopediaEphemeralStore.getState();
+      const shell = customShell ?? antagonist.shell;
       const cameraNormal = camera.position.clone().sub(point).normalize();
       const shot: Shot = {
         splashRadius: shell.explosion_radius,

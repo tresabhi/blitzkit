@@ -200,6 +200,14 @@ export function CustomShellButton() {
               Cancel
             </Button>
           </Dialog.Close>
+          <Button
+            color="red"
+            onClick={() => {
+              setCustomShellDraft(antagonistShell);
+            }}
+          >
+            Reset
+          </Button>
           <Dialog.Close>
             <Button
               onClick={() => {

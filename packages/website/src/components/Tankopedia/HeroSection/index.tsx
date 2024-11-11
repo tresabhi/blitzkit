@@ -6,6 +6,7 @@ import { NAVBAR_HEIGHT } from '../../../constants/navbar';
 import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
 import { Duel } from '../../../stores/duel';
+import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
 import type { ThicknessRange } from '../../Armor/components/StaticArmor';
 import { classIcons } from '../../ClassIcon';
@@ -46,6 +47,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
   }, [protagonist]);
   const duelStore = Duel.useStore();
   const mutateDuel = Duel.useMutation();
+  const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -56,6 +58,9 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
         if (event.key === `${index + 1}` && shells.length > index) {
           mutateDuel((draft) => {
             draft.antagonist.shell = shells[index];
+          });
+          mutateTankopediaEphemeral((draft) => {
+            draft.customShell = undefined;
           });
         }
       });
