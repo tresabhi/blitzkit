@@ -109,6 +109,8 @@ export function CustomShellButton() {
                   }}
                   onFocus={(event) => event.target.select()}
                   onKeyDown={(event) => {
+                    event.stopPropagation();
+
                     if (event.key === 'Enter') {
                       (event.target as HTMLInputElement).blur();
                     } else if (event.key === 'Escape') {
@@ -136,6 +138,8 @@ export function CustomShellButton() {
                   }}
                   onFocus={(event) => event.target.select()}
                   onKeyDown={(event) => {
+                    event.stopPropagation();
+
                     if (event.key === 'Enter') {
                       (event.target as HTMLInputElement).blur();
                     } else if (event.key === 'Escape') {
