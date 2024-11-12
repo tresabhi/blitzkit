@@ -104,7 +104,12 @@ export function InfoWithDelta({
 
       {!noRanking && (
         <Flex pl={indent ? '2' : '0'} align="center" gap="2">
-          <Progress variant="soft" size="1" value={50} color="gray" />
+          <Progress
+            variant="soft"
+            size="1"
+            value={((betterTanks.length + 1) / others.length) * 100}
+            color="gray"
+          />
           <Text color="gray" size="1">
             {betterTanks.length + 1} / {others.length}
           </Text>
