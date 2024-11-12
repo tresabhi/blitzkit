@@ -1,20 +1,19 @@
 import {
-  STAT_KEYS,
-  STAT_NAMES,
+  compositeStats,
+  compositeStatsKeys,
   deltaTankStats,
   fetchAverageDefinitions,
   fetchTankDefinitions,
-  generateStats,
+  formatCompositeStat,
   getAccountInfo,
   getTankStats,
   idToRegion,
-  prettifyStats,
   searchPlayersAcrossRegions,
-  sumBlitzStarsStats,
+  sumCompositeStats,
   type AccountListWithServer,
+  type CompositeStatsKey,
   type IndividualAccountInfo,
   type IndividualTankStats,
-  type Stat,
 } from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
 import {
@@ -85,14 +84,12 @@ function Content() {
             .map((entry) => {
               const tank = tankDefinitions.tanks[entry.tank_id];
               const average = tankAverages.averages[tank.id];
-              const stats = generateStats(entry.all, average?.mu);
-              const statsPretty = prettifyStats(stats);
+              const composite = compositeStats(
+                { ...entry.all, battle_life_time: entry.battle_life_time },
+                average?.mu,
+              );
 
-              return {
-                tank,
-                stats,
-                statsPretty,
-              };
+              return { tank, composite };
             })
         : undefined,
     [session.tracking && session.player, tankStatsB],
@@ -100,7 +97,7 @@ function Content() {
   const total = useMemo(
     () =>
       delta
-        ? prettifyStats(sumBlitzStarsStats(delta.map(({ stats }) => stats)))
+        ? sumCompositeStats(delta.map(({ composite }) => composite))
         : undefined,
     [delta],
   );
@@ -307,13 +304,12 @@ function Content() {
           <Table.Header>
             <Table.Row>
               <Table.ColumnHeaderCell>Tank</Table.ColumnHeaderCell>
+
               {session.columns.map((column, index) => (
                 <Table.ColumnHeaderCell
                   width="0"
                   key={column}
-                  style={{
-                    position: 'relative',
-                  }}
+                  style={{ position: 'relative' }}
                 >
                   {index === 0 && session.columns.length < 4 && (
                     <DropdownMenu.Root>
@@ -334,22 +330,22 @@ function Content() {
                       </DropdownMenu.Trigger>
 
                       <DropdownMenu.Content>
-                        {STAT_KEYS.filter(
-                          (item) => !session.columns.includes(item),
-                        ).map((key) => (
-                          <DropdownMenu.Item
-                            key={key}
-                            onClick={() => {
-                              mutateSession((draft) => {
-                                (draft as SessionTracking).columns.unshift(
-                                  key as Stat,
-                                );
-                              });
-                            }}
-                          >
-                            {STAT_NAMES[key]}
-                          </DropdownMenu.Item>
-                        ))}
+                        {compositeStatsKeys
+                          .filter((item) => !session.columns.includes(item))
+                          .map((key) => (
+                            <DropdownMenu.Item
+                              key={key}
+                              onClick={() => {
+                                mutateSession((draft) => {
+                                  (draft as SessionTracking).columns.unshift(
+                                    key,
+                                  );
+                                });
+                              }}
+                            >
+                              {strings.common.composite_stats[key]}
+                            </DropdownMenu.Item>
+                          ))}
                       </DropdownMenu.Content>
                     </DropdownMenu.Root>
                   )}
@@ -362,7 +358,7 @@ function Content() {
                           (draft as SessionTracking).columns.splice(index, 1);
                         } else {
                           (draft as SessionTracking).columns[index] =
-                            value as Stat;
+                            value as CompositeStatsKey;
                         }
                       });
                     }}
@@ -370,14 +366,16 @@ function Content() {
                     <Select.Trigger variant="ghost" />
 
                     <Select.Content>
-                      {STAT_KEYS.filter(
-                        (item) =>
-                          !session.columns.includes(item) || item === column,
-                      ).map((key) => (
-                        <Select.Item key={key} value={key}>
-                          {STAT_NAMES[key]}
-                        </Select.Item>
-                      ))}
+                      {compositeStatsKeys
+                        .filter(
+                          (item) =>
+                            !session.columns.includes(item) || item === column,
+                        )
+                        .map((key) => (
+                          <Select.Item key={key} value={key}>
+                            {strings.common.composite_stats[key]}
+                          </Select.Item>
+                        ))}
 
                       <Select.Separator />
 
@@ -405,11 +403,13 @@ function Content() {
                 Total
               </Table.RowHeaderCell>
               {session.columns.map((column) => (
-                <Table.Cell key={column}>{total![column]}</Table.Cell>
+                <Table.Cell key={column}>
+                  {formatCompositeStat(total![column], column, total!)}
+                </Table.Cell>
               ))}
             </Table.Row>
 
-            {delta.map(({ statsPretty, tank }) => {
+            {delta.map(({ tank, composite }) => {
               return (
                 <Table.Row
                   key={tank.id}
@@ -419,7 +419,13 @@ function Content() {
                 >
                   <TankRowHeaderCell tank={tank} />
                   {session.columns.map((column) => (
-                    <Table.Cell key={column}>{statsPretty[column]}</Table.Cell>
+                    <Table.Cell key={column}>
+                      {formatCompositeStat(
+                        composite[column],
+                        column,
+                        composite,
+                      )}
+                    </Table.Cell>
                   ))}
                 </Table.Row>
               );
