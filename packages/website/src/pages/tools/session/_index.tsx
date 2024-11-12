@@ -36,6 +36,7 @@ import {
 import { debounce } from 'lodash-es';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { PageWrapper } from '../../../components/PageWrapper';
+import { StickyRowHeaderCell } from '../../../components/StickyRowHeaderCell';
 import { StickyTableRoot } from '../../../components/StickyTableRoot';
 import { TankRowHeaderCell } from '../../../components/TankRowHeaderCell';
 import { Session, type SessionTracking } from '../../../stores/session';
@@ -397,7 +398,7 @@ function Content() {
                   overflow: 'hidden',
                 }}
               >
-                <Table.RowHeaderCell
+                <StickyRowHeaderCell
                   style={{
                     paddingLeft: 32,
                     position: 'relative',
@@ -405,7 +406,7 @@ function Content() {
                   }}
                 >
                   Total
-                </Table.RowHeaderCell>
+                </StickyRowHeaderCell>
                 {session.columns.map((column) => (
                   <Table.Cell align="center" key={column}>
                     {formatCompositeStat(total![column], column, total!)}
