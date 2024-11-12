@@ -176,6 +176,11 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                         discriminator={
                           TIER_ROMAN_NUMERALS[gun.gun_type!.value.base.tier]
                         }
+                        secondaryDiscriminator={
+                          <Text style={{ fontSize: '0.75em' }}>
+                            {gun.gun_type!.value.base.shells[0].caliber}mm
+                          </Text>
+                        }
                       />
                     ))}
                 </Flex>

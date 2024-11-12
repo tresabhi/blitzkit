@@ -6,6 +6,7 @@ export interface TankComponentButtonProps
   selected?: boolean;
   children?: ReactNode;
   discriminator?: ReactNode;
+  secondaryDiscriminator?: ReactNode;
   disabled?: boolean;
   banner?: string;
   special?: boolean;
@@ -16,6 +17,7 @@ export function TankComponentButton({
   variant,
   selected,
   discriminator,
+  secondaryDiscriminator,
   special,
   children,
   banner,
@@ -71,6 +73,22 @@ export function TankComponentButton({
           color={variant === 'ghost' ? 'gray' : undefined}
         >
           {discriminator}
+        </Text>
+      )}
+
+      {secondaryDiscriminator !== undefined && (
+        <Text
+          size="1"
+          style={{
+            textShadow: '0 0 4px black',
+            position: 'absolute',
+            bottom: '50%',
+            right: 8,
+            textAlign: 'right',
+          }}
+          color={variant === 'ghost' ? 'gray' : undefined}
+        >
+          {secondaryDiscriminator}
         </Text>
       )}
     </Button>
