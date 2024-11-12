@@ -138,7 +138,7 @@ export function Characteristics() {
       }}
     >
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
-        <Flex direction="column" gap="2">
+        <Flex direction="column" gap="4">
           <Flex align="center" gap="4">
             <Heading size="5">Firepower</Heading>
 
@@ -215,6 +215,7 @@ export function Characteristics() {
                   name={`Shell ${index + 1}`}
                   decimals={2}
                   deltaType="lowerIsBetter"
+                  noRanking
                   value={() => reload}
                 />
               ))}
@@ -255,6 +256,7 @@ export function Characteristics() {
                 indent
                 decimals={0}
                 name={`At ${penetrationDistance}m`}
+                noRanking
                 value={() =>
                   lerp(
                     shell.penetration.near,
@@ -331,6 +333,7 @@ export function Characteristics() {
               stats={stats}
               name="Splash radius"
               unit="m"
+              noRanking
               decimals={0}
               value="explosionRadius"
             />
@@ -347,12 +350,14 @@ export function Characteristics() {
             name="Normalization"
             decimals={0}
             unit="°"
+            noRanking
             value="shellNormalization"
           />
           {!isExplosive(shell.type) && (
             <InfoWithDelta
               stats={stats}
               name="Ricochet"
+              noRanking
               decimals={0}
               deltaType="lowerIsBetter"
               unit="°"
@@ -514,7 +519,8 @@ export function Characteristics() {
             </>
           )}
         </Flex>
-        <Flex direction="column" gap="2">
+
+        <Flex direction="column" gap="4">
           <Flex gap="2" align="center">
             <Heading size="5">Crew training</Heading>
 
@@ -554,6 +560,7 @@ export function Characteristics() {
                   }`}
                   unit="%"
                   decimals={0}
+                  noRanking
                   value={() =>
                     (member.type === CrewType.COMMANDER
                       ? commanderMastery
@@ -580,6 +587,7 @@ export function Characteristics() {
                         </Flex>
                       </>
                     }
+                    noRanking
                     value={() => commanderMastery * 1.05 * 100}
                   />
                 )}
@@ -590,7 +598,7 @@ export function Characteristics() {
       </Flex>
 
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
-        <Flex direction="column" gap="2">
+        <Flex direction="column" gap="4">
           <Heading size="5">Maneuverability</Heading>
           <Info name="Speed" unit="kph" />
           <InfoWithDelta
@@ -726,7 +734,8 @@ export function Characteristics() {
             value="hullTraverseSoftTerrain"
           />
         </Flex>
-        <Flex direction="column" gap="2">
+
+        <Flex direction="column" gap="4">
           <Heading size="5">Survivability</Heading>
           <InfoWithDelta
             value="health"
@@ -741,7 +750,7 @@ export function Characteristics() {
             unit="%"
             deltaType="lowerIsBetter"
             decimals={0}
-            value={() => stats.fireChance * 100}
+            value={(stats) => stats.fireChance * 100}
           />
           <InfoWithDelta
             value="viewRange"
@@ -752,14 +761,14 @@ export function Characteristics() {
           />
           <Info name="Camouflage" unit="%" />
           <InfoWithDelta
-            value={() => stats.camouflageStill * 100}
+            value={(stats) => stats.camouflageStill * 100}
             stats={stats}
             indent
             name="Still"
             decimals={2}
           />
           <InfoWithDelta
-            value={() => stats.camouflageMoving * 100}
+            value={(stats) => stats.camouflageMoving * 100}
             stats={stats}
             indent
             name="Moving"
@@ -770,21 +779,21 @@ export function Characteristics() {
             indent
             name="Shooting still"
             decimals={2}
-            value={() => stats.camouflageShootingStill * 100}
+            value={(stats) => stats.camouflageShootingStill * 100}
           />
           <InfoWithDelta
             stats={stats}
             indent
             name="Shooting moving"
             decimals={2}
-            value={() => stats.camouflageShootingMoving * 100}
+            value={(stats) => stats.camouflageShootingMoving * 100}
           />
           <InfoWithDelta
             stats={stats}
             indent
             name="Caught on fire"
             decimals={2}
-            value={() => stats.camouflageCaughtOnFire * 100}
+            value={(stats) => stats.camouflageCaughtOnFire * 100}
           />
           <InfoWithDelta
             name="Width"
