@@ -40,7 +40,7 @@ function Content() {
 
       <Flex justify="center" gap="4" wrap="wrap">
         {popularTanks.map((tank) => (
-          <Box width="7rem">
+          <Box width="7rem" key={tank.id}>
             <TankCard tank={tank} />
           </Box>
         ))}
