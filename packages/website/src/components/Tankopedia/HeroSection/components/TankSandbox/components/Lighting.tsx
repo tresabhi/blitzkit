@@ -17,19 +17,10 @@ export function Lighting() {
 
   return (
     <>
-      <Environment preset={environment} background={showEnvironment} blur={0} />
-
-      <directionalLight
-        position={[1, 1, -1]}
-        intensity={isBrighterLighting ? 5 : 1}
-        castShadow
-        color={'rgb(225, 225, 255)'}
-      />
-      <directionalLight
-        position={[-1, 1, 1]}
-        intensity={isBrighterLighting ? 4 : 1}
-        castShadow
-        color={'rgb(240, 255, 240)'}
+      <Environment
+        preset={environment}
+        background={showEnvironment}
+        environmentIntensity={isBrighterLighting ? 4 : 2}
       />
     </>
   );

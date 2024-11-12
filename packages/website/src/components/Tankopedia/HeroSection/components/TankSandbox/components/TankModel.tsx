@@ -103,11 +103,7 @@ export const TankModel = memo(() => {
         return jsxTree(
           node,
           {
-            mesh: {
-              castShadow: true,
-              receiveShadow: true,
-              onPointerDown,
-            },
+            mesh: { onPointerDown },
             // group(group) {
             //   return {
             //     visible:
@@ -199,11 +195,7 @@ export const TankModel = memo(() => {
           return jsxTree(
             node,
             {
-              mesh: {
-                castShadow: true,
-                receiveShadow: true,
-                onPointerDown,
-              },
+              mesh: { onPointerDown },
               // group(group) {
               //   return {
               //     visible:
@@ -298,11 +290,7 @@ export const TankModel = memo(() => {
             return jsxTree(
               node,
               {
-                mesh: {
-                  castShadow: true,
-                  receiveShadow: true,
-                  onPointerDown,
-                },
+                mesh: { onPointerDown },
                 // group(group) {
                 //   return {
                 //     visible:
