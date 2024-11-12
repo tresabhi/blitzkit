@@ -181,21 +181,25 @@ export function Characteristics() {
             </Flex>
           </Flex>
           <Info name="Gun type">{GUN_TYPE_NAMES[gun.gun_type!.$case]}</Info>
-          <InfoWithDelta name="DPM" decimals={0} unit="hp / min">
-            {stats.dpm}
-          </InfoWithDelta>
+          <InfoWithDelta
+            stats={stats}
+            name="DPM"
+            decimals={0}
+            unit="hp / min"
+            value="dpm"
+          />
           {gun.gun_type!.$case === 'auto_reloader' && (
             <InfoWithDelta
+              stats={stats}
               decimals={0}
               indent
               name="Effective at 60s"
               unit="hp / min"
-            >
-              {stats.dpmEffective!}
-            </InfoWithDelta>
+              value="dpmEffective"
+            />
           )}
           {gun.gun_type!.$case !== 'regular' && (
-            <InfoWithDelta name="Shells">{stats.shells}</InfoWithDelta>
+            <InfoWithDelta stats={stats} name="Shells" value="shells" />
           )}
           {gun.gun_type!.$case === 'auto_reloader' ? (
             <>
@@ -205,56 +209,62 @@ export function Characteristics() {
               <Info name="Shell reloads" unit="s" />
               {stats.shellReloads!.map((reload, index) => (
                 <InfoWithDelta
+                  stats={stats}
                   key={index}
                   indent
                   name={`Shell ${index + 1}`}
                   decimals={2}
                   deltaType="lowerIsBetter"
-                >
-                  {reload}
-                </InfoWithDelta>
+                  value={() => reload}
+                />
               ))}
             </>
           ) : (
             <InfoWithDelta
+              stats={stats}
               decimals={2}
               name="Reload"
               unit="s"
               deltaType="lowerIsBetter"
-            >
-              {stats.shellReload!}
-            </InfoWithDelta>
+              value="shellReload"
+            />
           )}
           {(gun.gun_type!.$case === 'auto_loader' ||
             gun.gun_type!.$case === 'auto_reloader') && (
             <InfoWithDelta
+              stats={stats}
               indent
               decimals={2}
               name="Intra-clip"
               unit="s"
               deltaType="lowerIsBetter"
-            >
-              {stats.intraClip!}
-            </InfoWithDelta>
+              value="intraClip"
+            />
           )}
-          <InfoWithDelta decimals={0} name="Penetration" unit="mm">
-            {stats.penetration}
-          </InfoWithDelta>
+          <InfoWithDelta
+            stats={stats}
+            decimals={0}
+            name="Penetration"
+            unit="mm"
+            value="penetration"
+          />
           {typeof shell.penetration !== 'number' && (
             <>
               <InfoWithDelta
+                stats={stats}
                 indent
                 decimals={0}
                 name={`At ${penetrationDistance}m`}
-              >
-                {lerp(
-                  shell.penetration.near,
-                  shell.penetration.far,
-                  (penetrationDistance *
-                    penetrationLossOverDistanceCoefficient) /
-                    500,
-                ) * penetrationCoefficient}
-              </InfoWithDelta>
+                value={() =>
+                  lerp(
+                    shell.penetration.near,
+                    shell.penetration.far,
+                    (penetrationDistance *
+                      penetrationLossOverDistanceCoefficient) /
+                      500,
+                  ) * penetrationCoefficient
+                }
+              />
               <Flex align="center" gap="2" style={{ paddingLeft: 24 }}>
                 <Text color="gray">Distance</Text>
                 <Slider
@@ -294,146 +304,213 @@ export function Characteristics() {
               </Flex>
             </>
           )}
-          <InfoWithDelta name="Damage" unit="hp" decimals={0}>
-            {stats.damage}
-          </InfoWithDelta>
+          <InfoWithDelta
+            stats={stats}
+            name="Damage"
+            unit="hp"
+            decimals={0}
+            value="damage"
+          />
           {gun.gun_type!.$case !== 'regular' && (
-            <InfoWithDelta name="Clipping potential" indent>
-              {stats.clipDamage!}
-            </InfoWithDelta>
+            <InfoWithDelta
+              stats={stats}
+              name="Clipping potential"
+              indent
+              value="clipDamage"
+            />
           )}
-          <InfoWithDelta name="Module damage" unit="hp" decimals={0}>
-            {stats.moduleDamage}
-          </InfoWithDelta>
+          <InfoWithDelta
+            stats={stats}
+            name="Module damage"
+            unit="hp"
+            decimals={0}
+            value="moduleDamage"
+          />
           {isExplosive(shell.type) && (
-            <InfoWithDelta name="Splash radius" unit="m" decimals={0}>
-              {stats.explosionRadius!}
-            </InfoWithDelta>
+            <InfoWithDelta
+              stats={stats}
+              name="Splash radius"
+              unit="m"
+              decimals={0}
+              value="explosionRadius"
+            />
           )}
-          <InfoWithDelta name="Caliber" decimals={0} unit="mm">
-            {stats.caliber}
-          </InfoWithDelta>
-          <InfoWithDelta name="Normalization" decimals={0} unit="°">
-            {stats.shellNormalization}
-          </InfoWithDelta>
+          <InfoWithDelta
+            stats={stats}
+            name="Caliber"
+            decimals={0}
+            unit="mm"
+            value="caliber"
+          />
+          <InfoWithDelta
+            stats={stats}
+            name="Normalization"
+            decimals={0}
+            unit="°"
+            value="shellNormalization"
+          />
           {!isExplosive(shell.type) && (
             <InfoWithDelta
+              stats={stats}
               name="Ricochet"
               decimals={0}
               deltaType="lowerIsBetter"
               unit="°"
-            >
-              {stats.shellRicochet!}
-            </InfoWithDelta>
+              value="shellRicochet"
+            />
           )}
-          <InfoWithDelta name="Shell velocity" unit="m/s" decimals={0}>
-            {stats.shellVelocity}
-          </InfoWithDelta>
-          <InfoWithDelta name="Shell range" unit="m/s" decimals={0}>
-            {stats.shellRange}
-          </InfoWithDelta>
-          <InfoWithDelta name="Shell capacity" unit="m/s" decimals={0}>
-            {stats.shellCapacity}
-          </InfoWithDelta>
           <InfoWithDelta
+            stats={stats}
+            name="Shell velocity"
+            unit="m/s"
+            decimals={0}
+            value="shellVelocity"
+          />
+          <InfoWithDelta
+            stats={stats}
+            name="Shell range"
+            unit="m/s"
+            decimals={0}
+            value="shellRange"
+          />
+          <InfoWithDelta
+            stats={stats}
+            name="Shell capacity"
+            unit="m/s"
+            decimals={0}
+            value="shellCapacity"
+          />
+          <InfoWithDelta
+            stats={stats}
             decimals={2}
             name="Aim time"
             unit="s"
             deltaType="lowerIsBetter"
-          >
-            {stats.aimTime}
-          </InfoWithDelta>
+            value="aimTime"
+          />
           <Info name="Dispersion at 100m" />
           <InfoWithDelta
+            stats={stats}
             decimals={3}
             indent
             name="Still"
             unit="m"
             deltaType="lowerIsBetter"
-          >
-            {stats.dispersion}
-          </InfoWithDelta>
+            value="dispersion"
+          />
           <InfoWithDelta
+            stats={stats}
             prefix="+"
             decimals={3}
             indent
             name="Moving"
             deltaType="lowerIsBetter"
-          >
-            {stats.dispersionMoving}
-          </InfoWithDelta>
+            value="dispersionMoving"
+          />
           <InfoWithDelta
+            stats={stats}
             decimals={3}
             prefix="+"
             indent
             name="Hull traversing"
             deltaType="lowerIsBetter"
-          >
-            {stats.dispersionHullTraversing}
-          </InfoWithDelta>
+            value="dispersionHullTraversing"
+          />
           <InfoWithDelta
+            stats={stats}
             decimals={3}
             prefix="+"
             indent
             name="Turret traversing"
             deltaType="lowerIsBetter"
-          >
-            {stats.dispersionTurretTraversing}
-          </InfoWithDelta>
+            value="dispersionTurretTraversing"
+          />
           <InfoWithDelta
+            stats={stats}
             decimals={3}
             prefix="+"
             indent
             name="After shooting"
             deltaType="lowerIsBetter"
-          >
-            {stats.dispersionShooting}
-          </InfoWithDelta>
+            value="dispersionShooting"
+          />
           <InfoWithDelta
+            stats={stats}
             decimals={1}
             prefix="x "
             indent
             name="Gun damaged"
             unit="scalar"
             deltaType="lowerIsBetter"
-          >
-            {stats.dispersionGunDamaged}
-          </InfoWithDelta>
+            value="dispersionGunDamaged"
+          />
           <Info name="Gun flexibility" unit="°" />
-          <InfoWithDelta decimals={1} indent name="Depression">
-            {stats.gunDepression}
-          </InfoWithDelta>
-          <InfoWithDelta decimals={1} indent name="Elevation">
-            {stats.gunElevation}
-          </InfoWithDelta>
+          <InfoWithDelta
+            value="gunDepression"
+            stats={stats}
+            decimals={1}
+            indent
+            name="Depression"
+          />
+          <InfoWithDelta
+            stats={stats}
+            decimals={1}
+            indent
+            name="Elevation"
+            value="gunElevation"
+          />
           {gunModelDefinition.pitch.front && (
             <>
-              <InfoWithDelta decimals={1} indent name="Frontal depression">
-                {stats.gunFrontalDepression!}
-              </InfoWithDelta>
-              <InfoWithDelta decimals={1} indent name="Frontal elevation">
-                {stats.gunFrontalElevation!}
-              </InfoWithDelta>
+              <InfoWithDelta
+                stats={stats}
+                decimals={1}
+                indent
+                name="Frontal depression"
+                value="gunFrontalDepression"
+              />
+              <InfoWithDelta
+                stats={stats}
+                decimals={1}
+                indent
+                name="Frontal elevation"
+                value="gunFrontalElevation"
+              />
             </>
           )}
           {gunModelDefinition.pitch.back && (
             <>
-              <InfoWithDelta decimals={1} indent name="Rear depression">
-                {stats.gunRearDepression!}
-              </InfoWithDelta>
-              <InfoWithDelta decimals={1} indent name="Rear elevation">
-                {stats.gunRearElevation!}
-              </InfoWithDelta>
+              <InfoWithDelta
+                stats={stats}
+                decimals={1}
+                indent
+                name="Rear depression"
+                value="gunRearDepression"
+              />
+              <InfoWithDelta
+                stats={stats}
+                decimals={1}
+                indent
+                name="Rear elevation"
+                value="gunRearElevation"
+              />
             </>
           )}
           {turretModelDefinition.yaw && (
             <>
-              <InfoWithDelta decimals={1} indent name="Azimuth left">
-                {stats.azimuthLeft!}
-              </InfoWithDelta>
-              <InfoWithDelta decimals={1} indent name="Azimuth right">
-                {stats.azimuthRight!}
-              </InfoWithDelta>
+              <InfoWithDelta
+                stats={stats}
+                decimals={1}
+                indent
+                name="Azimuth left"
+                value="azimuthLeft"
+              />
+              <InfoWithDelta
+                stats={stats}
+                decimals={1}
+                indent
+                name="Azimuth right"
+                value="azimuthRight"
+              />
             </>
           )}
         </Flex>
@@ -459,28 +536,34 @@ export function Characteristics() {
             </Popover.Root>
           </Flex>
 
-          <InfoWithDelta name="Crew count" decimals={0}>
-            {stats.crewCount}
-          </InfoWithDelta>
+          <InfoWithDelta
+            value="crewCount"
+            stats={stats}
+            name="Crew count"
+            decimals={0}
+          />
 
           {tank.crew.map((member) => {
             return (
               <Fragment key={member.type}>
                 <InfoWithDelta
+                  stats={stats}
                   key={`${member.type}-root`}
                   name={`${CREW_MEMBER_NAMES[member.type]}${
                     member.count > 1 ? ` x ${member.count}` : ''
                   }`}
                   unit="%"
                   decimals={0}
-                >
-                  {(member.type === CrewType.COMMANDER
-                    ? commanderMastery
-                    : commanderMastery * 1.1) * 100}
-                </InfoWithDelta>
+                  value={() =>
+                    (member.type === CrewType.COMMANDER
+                      ? commanderMastery
+                      : commanderMastery * 1.1) * 100
+                  }
+                />
 
                 {member.substitute.length > 0 && (
                   <InfoWithDelta
+                    stats={stats}
                     key={`${member.type}-substitute`}
                     decimals={0}
                     unit="%"
@@ -497,9 +580,8 @@ export function Characteristics() {
                         </Flex>
                       </>
                     }
-                  >
-                    {commanderMastery * 1.05 * 100}
-                  </InfoWithDelta>
+                    value={() => commanderMastery * 1.05 * 100}
+                  />
                 )}
               </Fragment>
             );
@@ -511,123 +593,231 @@ export function Characteristics() {
         <Flex direction="column" gap="2">
           <Heading size="5">Maneuverability</Heading>
           <Info name="Speed" unit="kph" />
-          <InfoWithDelta decimals={0} indent name="Forwards">
-            {stats.speedForwards}
-          </InfoWithDelta>
-          <InfoWithDelta decimals={0} indent name="Backwards">
-            {stats.speedBackwards}
-          </InfoWithDelta>
-          <InfoWithDelta decimals={0} name="Engine power" unit="hp">
-            {stats.enginePower}
-          </InfoWithDelta>
           <InfoWithDelta
+            value="speedForwards"
+            stats={stats}
+            decimals={0}
+            indent
+            name="Forwards"
+          />
+          <InfoWithDelta
+            value="speedBackwards"
+            stats={stats}
+            decimals={0}
+            indent
+            name="Backwards"
+          />
+          <InfoWithDelta
+            stats={stats}
+            decimals={0}
+            name="Engine power"
+            unit="hp"
+            value="enginePower"
+          />
+          <InfoWithDelta
+            stats={stats}
             decimals={1}
             name="Weight"
             unit="tn"
             deltaType="lowerIsBetter"
-          >
-            {stats.weight}
-          </InfoWithDelta>
+            value="weight"
+          />
           <Info name="Terrain coefficients" />
-          <InfoWithDelta decimals={0} unit="%" indent name="Hard">
-            {stats.hardTerrainCoefficient}
-          </InfoWithDelta>
-          <InfoWithDelta decimals={0} unit="%" indent name="Medium">
-            {stats.mediumTerrainCoefficient}
-          </InfoWithDelta>
-          <InfoWithDelta decimals={0} unit="%" indent name="Soft">
-            {stats.softTerrainCoefficient}
-          </InfoWithDelta>
-          <Info name="Raw terrain coefficients" deltaType="lowerIsBetter" />
-          <InfoWithDelta decimals={2} unit="%" indent name="Hard">
-            {stats.hardTerrainCoefficientRaw}
-          </InfoWithDelta>
           <InfoWithDelta
+            value="hardTerrainCoefficient"
+            stats={stats}
+            decimals={0}
+            unit="%"
+            indent
+            name="Hard"
+          />
+          <InfoWithDelta
+            stats={stats}
+            decimals={0}
+            unit="%"
+            indent
+            name="Medium"
+            value="mediumTerrainCoefficient"
+          />
+          <InfoWithDelta
+            value="softTerrainCoefficient"
+            stats={stats}
+            decimals={0}
+            unit="%"
+            indent
+            name="Soft"
+          />
+          <Info name="Raw terrain coefficients" deltaType="lowerIsBetter" />
+          <InfoWithDelta
+            value="hardTerrainCoefficientRaw"
+            stats={stats}
+            decimals={2}
+            unit="%"
+            indent
+            name="Hard"
+          />
+          <InfoWithDelta
+            stats={stats}
             decimals={2}
             unit="%"
             indent
             name="Medium"
             deltaType="lowerIsBetter"
-          >
-            {stats.mediumTerrainCoefficientRaw}
-          </InfoWithDelta>
+            value="mediumTerrainCoefficientRaw"
+          />
           <InfoWithDelta
+            stats={stats}
             decimals={2}
             unit="%"
             indent
             name="Soft"
             deltaType="lowerIsBetter"
-          >
-            {stats.softTerrainCoefficientRaw}
-          </InfoWithDelta>
+            value="softTerrainCoefficientRaw"
+          />
           <Info name="Power to weight ratio" unit="hp/tn" />
-          <InfoWithDelta decimals={1} indent name="On hard terrain">
-            {stats.powerToWeightRatioHardTerrain}
-          </InfoWithDelta>
-          <InfoWithDelta decimals={1} indent name="On medium terrain">
-            {stats.powerToWeightRatioMediumTerrain}
-          </InfoWithDelta>
-          <InfoWithDelta decimals={1} indent name="On soft terrain">
-            {stats.powerToWeightRatioSoftTerrain}
-          </InfoWithDelta>
-          <InfoWithDelta name="Turret traverse speed" unit="°/s" decimals={1}>
-            {stats.turretTraverseSpeed}
-          </InfoWithDelta>
+          <InfoWithDelta
+            stats={stats}
+            decimals={1}
+            indent
+            name="On hard terrain"
+            value="powerToWeightRatioHardTerrain"
+          />
+          <InfoWithDelta
+            stats={stats}
+            decimals={1}
+            indent
+            name="On medium terrain"
+            value="powerToWeightRatioMediumTerrain"
+          />
+          <InfoWithDelta
+            stats={stats}
+            decimals={1}
+            indent
+            name="On soft terrain"
+            value="powerToWeightRatioSoftTerrain"
+          />
+          <InfoWithDelta
+            stats={stats}
+            name="Turret traverse speed"
+            unit="°/s"
+            decimals={1}
+            value="turretTraverseSpeed"
+          />
           <Info name="Hull traverse speed" unit="°/s" />
-          <InfoWithDelta decimals={1} indent name="On hard terrain">
-            {stats.hullTraverseHardTerrain}
-          </InfoWithDelta>
-          <InfoWithDelta decimals={1} indent name="On medium terrain">
-            {stats.hullTraverseMediumTerrain}
-          </InfoWithDelta>
-          <InfoWithDelta decimals={1} indent name="On soft terrain">
-            {stats.hullTraverseSoftTerrain}
-          </InfoWithDelta>
+          <InfoWithDelta
+            stats={stats}
+            decimals={1}
+            indent
+            name="On hard terrain"
+            value="hullTraverseHardTerrain"
+          />
+          <InfoWithDelta
+            stats={stats}
+            decimals={1}
+            indent
+            name="On medium terrain"
+            value="hullTraverseMediumTerrain"
+          />
+          <InfoWithDelta
+            stats={stats}
+            decimals={1}
+            indent
+            name="On soft terrain"
+            value="hullTraverseSoftTerrain"
+          />
         </Flex>
         <Flex direction="column" gap="2">
           <Heading size="5">Survivability</Heading>
-          <InfoWithDelta name="Health" unit="hp" decimals={0}>
-            {stats.health}
-          </InfoWithDelta>
           <InfoWithDelta
+            value="health"
+            stats={stats}
+            name="Health"
+            unit="hp"
+            decimals={0}
+          />
+          <InfoWithDelta
+            stats={stats}
             name="Fire chance"
             unit="%"
             deltaType="lowerIsBetter"
             decimals={0}
-          >
-            {stats.fireChance * 100}
-          </InfoWithDelta>
-          <InfoWithDelta name="View range" unit="m" decimals={0}>
-            {stats.viewRange}
-          </InfoWithDelta>
+            value={() => stats.fireChance * 100}
+          />
+          <InfoWithDelta
+            value="viewRange"
+            stats={stats}
+            name="View range"
+            unit="m"
+            decimals={0}
+          />
           <Info name="Camouflage" unit="%" />
-          <InfoWithDelta indent name="Still" decimals={2}>
-            {stats.camouflageStill * 100}
-          </InfoWithDelta>
-          <InfoWithDelta indent name="Moving" decimals={2}>
-            {stats.camouflageMoving * 100}
-          </InfoWithDelta>
-          <InfoWithDelta indent name="Shooting still" decimals={2}>
-            {stats.camouflageShootingStill * 100}
-          </InfoWithDelta>
-          <InfoWithDelta indent name="Shooting moving" decimals={2}>
-            {stats.camouflageShootingMoving * 100}
-          </InfoWithDelta>
-          <InfoWithDelta indent name="Caught on fire" decimals={2}>
-            {stats.camouflageCaughtOnFire * 100}
-          </InfoWithDelta>
-          <Info name="Width" unit="m" decimals={0} deltaType="lowerIsBetter">
-            {stats.width}
-          </Info>
-          <Info name="Height" unit="m" decimals={0} deltaType="lowerIsBetter">
-            {stats.height}
-          </Info>
-          <Info name="Length" unit="m" decimals={0} deltaType="lowerIsBetter">
-            {stats.length}
-          </Info>
-          <Info name="Volume" unit="m" decimals={0} deltaType="lowerIsBetter">
-            {stats.volume}
-          </Info>
+          <InfoWithDelta
+            value={() => stats.camouflageStill * 100}
+            stats={stats}
+            indent
+            name="Still"
+            decimals={2}
+          />
+          <InfoWithDelta
+            value={() => stats.camouflageMoving * 100}
+            stats={stats}
+            indent
+            name="Moving"
+            decimals={2}
+          />
+          <InfoWithDelta
+            stats={stats}
+            indent
+            name="Shooting still"
+            decimals={2}
+            value={() => stats.camouflageShootingStill * 100}
+          />
+          <InfoWithDelta
+            stats={stats}
+            indent
+            name="Shooting moving"
+            decimals={2}
+            value={() => stats.camouflageShootingMoving * 100}
+          />
+          <InfoWithDelta
+            stats={stats}
+            indent
+            name="Caught on fire"
+            decimals={2}
+            value={() => stats.camouflageCaughtOnFire * 100}
+          />
+          <InfoWithDelta
+            name="Width"
+            unit="m"
+            decimals={0}
+            deltaType="lowerIsBetter"
+            stats={stats}
+            value="width"
+          />
+          <InfoWithDelta
+            name="Height"
+            unit="m"
+            decimals={0}
+            deltaType="lowerIsBetter"
+            stats={stats}
+            value="height"
+          />
+          <InfoWithDelta
+            name="Length"
+            unit="m"
+            decimals={0}
+            deltaType="lowerIsBetter"
+            stats={stats}
+            value="length"
+          />
+          <InfoWithDelta
+            name="Volume"
+            unit="m"
+            decimals={0}
+            deltaType="lowerIsBetter"
+            stats={stats}
+            value="volume"
+          />
         </Flex>
       </Flex>
     </Flex>

@@ -13,8 +13,8 @@ import { StickyRowHeaderCell } from '../StickyRowHeaderCell';
 interface CompareRowProps {
   name: string;
   value:
-    | keyof Awaited<TankCharacteristics>
-    | ((member: Awaited<TankCharacteristics>) => number | undefined);
+    | keyof TankCharacteristics
+    | ((member: TankCharacteristics) => number | undefined);
   display?: (
     member: Awaited<TankCharacteristics>,
   ) => number | string | undefined;
@@ -38,7 +38,6 @@ export function CompareRow({
   const mutateCompareEphemeral = CompareEphemeral.useMutation();
   const sorting = CompareEphemeral.use((state) => state.sorting);
   const deltaMode = ComparePersistent.use((state) => state.deltaMode);
-
   const values = stats.map((stat) =>
     typeof value === 'function' ? value(stat)! : (stat[value] as number),
   );
