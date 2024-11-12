@@ -36,6 +36,7 @@ import {
 import { debounce } from 'lodash-es';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { PageWrapper } from '../../../components/PageWrapper';
+import { StickyTableRoot } from '../../../components/StickyTableRoot';
 import { TankRowHeaderCell } from '../../../components/TankRowHeaderCell';
 import { Session, type SessionTracking } from '../../../stores/session';
 
@@ -300,138 +301,142 @@ function Content() {
       )}
 
       {session.tracking && delta && delta.length > 0 && (
-        <Table.Root variant="surface">
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeaderCell>Tank</Table.ColumnHeaderCell>
+        <Flex justify="center">
+          <StickyTableRoot variant="surface">
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeaderCell>Tank</Table.ColumnHeaderCell>
 
-              {session.columns.map((column, index) => (
-                <Table.ColumnHeaderCell
-                  width="0"
-                  key={column}
-                  style={{ position: 'relative' }}
-                >
-                  {index === 0 && session.columns.length < 4 && (
-                    <DropdownMenu.Root>
-                      <DropdownMenu.Trigger>
-                        <IconButton
-                          size="1"
-                          variant="surface"
-                          style={{
-                            position: 'absolute',
-                            left: 0,
-                            top: '50%',
-                            transform: 'translate(-100%, -50%)',
-                            zIndex: 1,
-                          }}
-                        >
-                          <PlusIcon />
-                        </IconButton>
-                      </DropdownMenu.Trigger>
-
-                      <DropdownMenu.Content>
-                        {compositeStatsKeys
-                          .filter((item) => !session.columns.includes(item))
-                          .map((key) => (
-                            <DropdownMenu.Item
-                              key={key}
-                              onClick={() => {
-                                mutateSession((draft) => {
-                                  (draft as SessionTracking).columns.unshift(
-                                    key,
-                                  );
-                                });
-                              }}
-                            >
-                              {strings.common.composite_stats[key]}
-                            </DropdownMenu.Item>
-                          ))}
-                      </DropdownMenu.Content>
-                    </DropdownMenu.Root>
-                  )}
-
-                  <Select.Root
-                    value={column}
-                    onValueChange={(value) => {
-                      mutateSession((draft) => {
-                        if (value === 'remove') {
-                          (draft as SessionTracking).columns.splice(index, 1);
-                        } else {
-                          (draft as SessionTracking).columns[index] =
-                            value as CompositeStatsKey;
-                        }
-                      });
-                    }}
+                {session.columns.map((column, index) => (
+                  <Table.ColumnHeaderCell
+                    align="center"
+                    width="0"
+                    key={column}
+                    style={{ position: 'relative' }}
                   >
-                    <Select.Trigger variant="ghost" />
+                    {index === 0 && session.columns.length < 4 && (
+                      <DropdownMenu.Root>
+                        <DropdownMenu.Trigger>
+                          <IconButton
+                            size="1"
+                            variant="surface"
+                            style={{
+                              position: 'absolute',
+                              left: 0,
+                              top: '50%',
+                              transform: 'translate(-100%, -50%)',
+                              zIndex: 1,
+                            }}
+                          >
+                            <PlusIcon />
+                          </IconButton>
+                        </DropdownMenu.Trigger>
 
-                    <Select.Content>
-                      {compositeStatsKeys
-                        .filter(
-                          (item) =>
-                            !session.columns.includes(item) || item === column,
-                        )
-                        .map((key) => (
-                          <Select.Item key={key} value={key}>
-                            {strings.common.composite_stats[key]}
-                          </Select.Item>
-                        ))}
+                        <DropdownMenu.Content>
+                          {compositeStatsKeys
+                            .filter((item) => !session.columns.includes(item))
+                            .map((key) => (
+                              <DropdownMenu.Item
+                                key={key}
+                                onClick={() => {
+                                  mutateSession((draft) => {
+                                    (draft as SessionTracking).columns.unshift(
+                                      key,
+                                    );
+                                  });
+                                }}
+                              >
+                                {strings.common.composite_stats[key]}
+                              </DropdownMenu.Item>
+                            ))}
+                        </DropdownMenu.Content>
+                      </DropdownMenu.Root>
+                    )}
 
-                      <Select.Separator />
+                    <Select.Root
+                      value={column}
+                      onValueChange={(value) => {
+                        mutateSession((draft) => {
+                          if (value === 'remove') {
+                            (draft as SessionTracking).columns.splice(index, 1);
+                          } else {
+                            (draft as SessionTracking).columns[index] =
+                              value as CompositeStatsKey;
+                          }
+                        });
+                      }}
+                    >
+                      <Select.Trigger variant="ghost" />
 
-                      <Select.Item value="remove">Remove</Select.Item>
-                    </Select.Content>
-                  </Select.Root>
-                </Table.ColumnHeaderCell>
-              ))}
-            </Table.Row>
-          </Table.Header>
+                      <Select.Content>
+                        {compositeStatsKeys
+                          .filter(
+                            (item) =>
+                              !session.columns.includes(item) ||
+                              item === column,
+                          )
+                          .map((key) => (
+                            <Select.Item key={key} value={key}>
+                              {strings.common.composite_stats[key]}
+                            </Select.Item>
+                          ))}
 
-          <Table.Body>
-            <Table.Row
-              style={{
-                overflow: 'hidden',
-              }}
-            >
-              <Table.RowHeaderCell
+                        <Select.Separator />
+
+                        <Select.Item value="remove">Remove</Select.Item>
+                      </Select.Content>
+                    </Select.Root>
+                  </Table.ColumnHeaderCell>
+                ))}
+              </Table.Row>
+            </Table.Header>
+
+            <Table.Body>
+              <Table.Row
                 style={{
-                  paddingLeft: 32,
-                  position: 'relative',
-                  overflowY: 'hidden',
+                  overflow: 'hidden',
                 }}
               >
-                Total
-              </Table.RowHeaderCell>
-              {session.columns.map((column) => (
-                <Table.Cell key={column}>
-                  {formatCompositeStat(total![column], column, total!)}
-                </Table.Cell>
-              ))}
-            </Table.Row>
-
-            {delta.map(({ tank, composite }) => {
-              return (
-                <Table.Row
-                  key={tank.id}
+                <Table.RowHeaderCell
                   style={{
-                    overflow: 'hidden',
+                    paddingLeft: 32,
+                    position: 'relative',
+                    overflowY: 'hidden',
                   }}
                 >
-                  <TankRowHeaderCell tank={tank} />
-                  {session.columns.map((column) => (
-                    <Table.Cell key={column}>
-                      {formatCompositeStat(
-                        composite[column],
-                        column,
-                        composite,
-                      )}
-                    </Table.Cell>
-                  ))}
-                </Table.Row>
-              );
-            })}
-          </Table.Body>
-        </Table.Root>
+                  Total
+                </Table.RowHeaderCell>
+                {session.columns.map((column) => (
+                  <Table.Cell align="center" key={column}>
+                    {formatCompositeStat(total![column], column, total!)}
+                  </Table.Cell>
+                ))}
+              </Table.Row>
+
+              {delta.map(({ tank, composite }) => {
+                return (
+                  <Table.Row
+                    key={tank.id}
+                    style={{
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <TankRowHeaderCell tank={tank} />
+                    {session.columns.map((column) => (
+                      <Table.Cell align="center" key={column}>
+                        {formatCompositeStat(
+                          composite[column],
+                          column,
+                          composite,
+                        )}
+                      </Table.Cell>
+                    ))}
+                  </Table.Row>
+                );
+              })}
+            </Table.Body>
+          </StickyTableRoot>
+        </Flex>
       )}
 
       {session.tracking && delta && delta.length === 0 && (
