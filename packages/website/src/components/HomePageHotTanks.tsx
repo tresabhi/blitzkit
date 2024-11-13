@@ -15,7 +15,7 @@ const tankAverages = Object.entries(averageDefinitions.averages).map(
 
 // lol don't ask questions
 const testTanks = tanks
-  .filter((tank) => tank.testing && tank.tier >= 8)
+  .filter((tank) => tank.testing)
   .sort((a, b) => b.tier - a.tier);
 const mostPlayedTanks = tankAverages
   .sort((a, b) => b.samples.d_1 - a.samples.d_1)
