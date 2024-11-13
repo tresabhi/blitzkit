@@ -1,6 +1,7 @@
 name: CI Build Bot
 
-on: push
+on:
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
