@@ -20,6 +20,7 @@ import {
 import { resolveBranchName } from '../core/blitzkit/branches';
 import { homeTool, TOOLS } from '../constants/tools';
 import { NavbarAccount } from './NavbarAccount';
+import { times } from 'lodash-es';
 
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
 const tools = [homeTool, ...toolsFiltered];
@@ -30,7 +31,6 @@ const isBranchNamed = branchName !== undefined;
 <style>
   .navbar {
     height: var(--navbar-height);
-    position: sticky;
     top: 0;
     z-index: 1;
   }
@@ -38,28 +38,30 @@ const isBranchNamed = branchName !== undefined;
   .expander {
     --navbar-height: 48px;
 
+    overflow: hidden;
     transition-duration: 250ms;
     width: 100%;
     /* overflow: hidden; */
     backdrop-filter: blur(4rem) brightness(0.75);
     -webkit-backdrop-filter: blur(4rem) brightness(0.75);
+  }
 
-    &[data-expanded='false'] {
-      max-height: var(--navbar-height);
+  .expander[data-expanded='false'] {
+    max-height: var(--navbar-height);
+    min-height: 0;
+  }
 
-      *[data-expanded] {
-        display: none;
-      }
-    }
+  .expander[data-expanded='false'] *[data-expanded] {
+    display: none;
+  }
 
-    &[data-expanded='true'] {
-      max-height: 100vh;
-      overscroll-behavior: contain;
+  .expander[data-expanded='true'] {
+    max-height: 200vh;
+    min-height: 100vh;
+  }
 
-      *[data-closed] {
-        display: none;
-      }
-    }
+  .expander[data-expanded='true'] *[data-closed] {
+    display: none;
   }
 
   .hamburger {
@@ -80,8 +82,14 @@ const isBranchNamed = branchName !== undefined;
     }
 
     .expander {
-      max-height: var(--navbar-height);
+      max-height: var(--navbar-height) !important;
     }
+  }
+
+  .scroll-area {
+    max-height: 200px;
+    height: 200px;
+    background-color: red;
   }
 </style>
 
@@ -189,81 +197,79 @@ const isBranchNamed = branchName !== undefined;
       </Flex>
     </Flex>
 
-    <ScrollArea>
-      <Grid
-        columns="repeat(auto-fill, minmax(192px, 1fr))"
-        flow="dense"
-        gap="2"
-        width="100%"
-        p="3"
-        pt="0"
-      >
-        {
-          tools.map((tool) => {
-            const unavailableOnBranch = tool.branches?.every(
-              (branch) =>
-                branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
-            );
+    <Grid
+      columns="repeat(auto-fill, minmax(192px, 1fr))"
+      flow="dense"
+      gap="2"
+      width="100%"
+      p="3"
+      pt="0"
+    >
+      {
+        tools.map((tool) => {
+          const unavailableOnBranch = tool.branches?.every(
+            (branch) =>
+              branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
+          );
 
-            if (unavailableOnBranch) return null;
+          if (unavailableOnBranch) return null;
 
-            return (
-              <Flex
-                key={tool.id}
+          return (
+            <Flex
+              key={tool.id}
+              style={{
+                position: 'relative',
+                borderRadius: 'var(--radius-2)',
+                overflow: 'hidden',
+                backgroundImage: `url(${imgur(tool.image, {
+                  format: 'jpeg',
+                  size: ImgurSize.MediumThumbnail,
+                })})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                aspectRatio: '2 / 1',
+              }}
+            >
+              <Link
+                href={tool.id.length === 0 ? '/' : `/tools/${tool.id}`}
                 style={{
-                  position: 'relative',
-                  borderRadius: 'var(--radius-2)',
-                  overflow: 'hidden',
-                  backgroundImage: `url(${imgur(tool.image, {
-                    format: 'jpeg',
-                    size: ImgurSize.MediumThumbnail,
-                  })})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  aspectRatio: '2 / 1',
+                  display: 'flex',
+                  width: '100%',
+                  height: '100%',
+                  flexDirection: 'column',
+                  textDecoration: 'none',
+                  color: 'inherit',
                 }}
               >
-                <Link
-                  href={tool.id.length === 0 ? '/' : `/tools/${tool.id}`}
+                <Box
+                  flexGrow="1"
                   style={{
-                    display: 'flex',
-                    width: '100%',
-                    height: '100%',
-                    flexDirection: 'column',
-                    textDecoration: 'none',
-                    color: 'inherit',
+                    backgroundImage: `url(${imgur(tool.image, {
+                      format: 'jpeg',
+                      size: ImgurSize.MediumThumbnail,
+                    })})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                />
+
+                <Flex
+                  p="2"
+                  align="center"
+                  width="100%"
+                  style={{
+                    backgroundColor: 'var(--color-panel-translucent)',
+                    backdropFilter: 'blur(4rem)',
+                    WebkitBackdropFilter: 'blur(4rem)',
                   }}
                 >
-                  <Box
-                    flexGrow="1"
-                    style={{
-                      backgroundImage: `url(${imgur(tool.image, {
-                        format: 'jpeg',
-                        size: ImgurSize.MediumThumbnail,
-                      })})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
-                  />
-
-                  <Flex
-                    p="2"
-                    align="center"
-                    width="100%"
-                    style={{
-                      backgroundColor: 'var(--color-panel-translucent)',
-                      backdropFilter: 'blur(4rem)',
-                      WebkitBackdropFilter: 'blur(4rem)',
-                    }}
-                  >
-                    <Text weight="medium">{tool.title}</Text>
-                  </Flex>
-                </Link>
-              </Flex>
-            );
-          })
-        }
-      </Grid>
-    </ScrollArea>
+                  <Text weight="medium">{tool.title}</Text>
+                </Flex>
+              </Link>
+            </Flex>
+          );
+        })
+      }
+    </Grid>
   </Flex>
 </Flex>
