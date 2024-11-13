@@ -445,7 +445,7 @@ export const TankSearch = memo<TankSearchProps>(
           <FilterControl compact={compact} />
         )}
 
-        <RecentlyViewed />
+        {!compact && <RecentlyViewed />}
 
         <Flex mt="2" gap="1" align="center" justify="center" direction="column">
           <Flex gap="2">
