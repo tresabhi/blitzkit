@@ -93,6 +93,8 @@ function Content() {
     const tanks = tanksQuery.split(',').map(Number);
 
     mutateCompareEphemeral((draft) => {
+      draft.members = [];
+
       tanks.forEach((id) => {
         const tank = tankDefinitions.tanks[id];
 
