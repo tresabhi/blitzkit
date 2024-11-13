@@ -119,9 +119,7 @@ function Content() {
               This website utilizes cookies to perform analytics and personalize
               your experience. You can learn more through{' '}
               <Link href="/docs/legal/privacy-policy">our privacy policy</Link>.
-              You may opt out of personalized advertizement by visiting{' '}
-              <Link href="https://optout.aboutads.info/">WebChoices</Link>. By
-              using BlitzKit, you also agree to our{' '}
+              By using BlitzKit, you also agree to our{' '}
               <Link href="/docs/legal/terms-of-service">terms of service</Link>.
             </Text>
           </Flex>
