@@ -7,7 +7,7 @@ import {
   fetchTankDefinitions,
 } from '@blitzkit/core';
 import { Flex, Progress, Text } from '@radix-ui/themes';
-import { useMemo } from 'react';
+import { useMemo, type ComponentProps } from 'react';
 import {
   tankCharacteristics,
   type TankCharacteristics,
@@ -95,6 +95,13 @@ export function InfoWithDelta({
       ? othersValue < uhWhatDoICallThisVariable
       : othersValue > uhWhatDoICallThisVariable;
   });
+  const goodness = (others.length - betterTanks.length) / others.length;
+  let color: ComponentProps<typeof Progress>['color'];
+
+  if (goodness <= 0.25) color = 'red';
+  else if (goodness <= 0.5) color = 'orange';
+  else if (goodness <= 0.75) color = 'yellow';
+  else color = 'green';
 
   return (
     <Flex direction="column">
@@ -103,12 +110,12 @@ export function InfoWithDelta({
       </Info>
 
       {!noRanking && (
-        <Flex pl={indent ? '2' : '0'} align="center" gap="2">
+        <Flex pl={indent ? '2' : '0'} align="center" gap="2" mb="2">
           <Progress
             variant="soft"
             size="1"
-            value={((betterTanks.length + 1) / others.length) * 100}
-            color="gray"
+            value={goodness * 100}
+            color={color}
           />
           <Text color="gray" size="1">
             {betterTanks.length + 1} / {others.length}

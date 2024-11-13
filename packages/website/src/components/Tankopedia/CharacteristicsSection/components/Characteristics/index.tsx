@@ -138,7 +138,7 @@ export function Characteristics() {
       }}
     >
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
-        <Flex direction="column" gap="4">
+        <Flex direction="column" gap="2">
           <Flex align="center" gap="4">
             <Heading size="5">Firepower</Heading>
 
@@ -520,7 +520,7 @@ export function Characteristics() {
           )}
         </Flex>
 
-        <Flex direction="column" gap="4">
+        <Flex direction="column" gap="2">
           <Flex gap="2" align="center">
             <Heading size="5">Crew training</Heading>
 
@@ -598,7 +598,7 @@ export function Characteristics() {
       </Flex>
 
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
-        <Flex direction="column" gap="4">
+        <Flex direction="column" gap="2">
           <Heading size="5">Maneuverability</Heading>
           <Info name="Speed" unit="kph" />
           <InfoWithDelta
@@ -735,7 +735,7 @@ export function Characteristics() {
           />
         </Flex>
 
-        <Flex direction="column" gap="4">
+        <Flex direction="column" gap="2">
           <Heading size="5">Survivability</Heading>
           <InfoWithDelta
             value="health"
