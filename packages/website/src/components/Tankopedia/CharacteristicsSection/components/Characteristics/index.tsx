@@ -663,6 +663,7 @@ export function Characteristics() {
             decimals={2}
             unit="%"
             indent
+            deltaType="lowerIsBetter"
             name="Hard"
           />
           <InfoWithDelta
