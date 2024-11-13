@@ -15,7 +15,7 @@ export function ProvisionsManager({
   disabled,
 }: ProvisionsManagerProps) {
   return (
-    <Flex wrap="wrap" gap="2">
+    <Flex wrap="wrap" gap="2" justify={{ initial: 'center', sm: 'start' }}>
       {provisions.map((provision) => {
         const isSelected = selected.includes(provision);
 
