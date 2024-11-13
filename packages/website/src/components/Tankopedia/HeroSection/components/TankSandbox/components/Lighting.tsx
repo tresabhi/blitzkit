@@ -20,7 +20,7 @@ export function Lighting() {
       <Environment
         preset={environment}
         background={showEnvironment}
-        environmentIntensity={isBrighterLighting ? 4 : 2}
+        environmentIntensity={isBrighterLighting ? 3 : 1}
       />
     </>
   );
