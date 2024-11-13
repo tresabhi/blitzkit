@@ -11,6 +11,10 @@ import { ReloadIcon } from '@radix-ui/react-icons';
 import { Box, Flex, IconButton, Text } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import { $tankFilters, initialTankFilters } from '../../../stores/tankFilters';
+import {
+  $tankopediaSort,
+  initialTankopediaSort,
+} from '../../../stores/tankopediaSort';
 import { classIcons } from '../../ClassIcon';
 import { ExperimentIcon } from '../../ExperimentIcon';
 import { GunAutoloaderIcon } from '../../GunAutoloaderIcon';
@@ -441,6 +445,7 @@ export function FilterControl({ compact }: FilterControlProps) {
           color="red"
           onClick={() => {
             $tankFilters.set(initialTankFilters);
+            $tankopediaSort.set(initialTankopediaSort);
           }}
         >
           <ReloadIcon />

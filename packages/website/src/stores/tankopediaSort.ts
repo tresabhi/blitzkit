@@ -9,7 +9,9 @@ export interface TankopediaSort {
   direction: TankopediaSortDirection;
 }
 
-export const $tankopediaSort = map<TankopediaSort>({
+export const initialTankopediaSort: TankopediaSort = {
   by: 'meta.none',
   direction: 'descending',
-});
+};
+
+export const $tankopediaSort = map<TankopediaSort>(initialTankopediaSort);
