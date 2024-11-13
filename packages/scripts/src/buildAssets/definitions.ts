@@ -1439,7 +1439,10 @@ export async function definitions() {
           entry.include.push({
             filter_type: {
               $case: 'tiers',
-              value: { min: includeRaw.minLevel, max: includeRaw.maxLevel },
+              value: {
+                min: (includeRaw.minLevel - 1) as Tier,
+                max: (includeRaw.maxLevel - 1) as Tier,
+              },
             },
           });
         } else if ('name' in includeRaw) {
@@ -1540,8 +1543,8 @@ export async function definitions() {
             filter_type: {
               $case: 'tiers',
               value: {
-                min: includeRaw.minLevel,
-                max: includeRaw.maxLevel,
+                min: (includeRaw.minLevel - 1) as Tier,
+                max: (includeRaw.maxLevel - 1) as Tier,
               },
             },
           });
