@@ -103,6 +103,18 @@ function Content() {
     });
   }, []);
 
+  useEffect(() => {
+    const search = new URLSearchParams(window.location.search);
+
+    search.set('tanks', members.map((member) => member.tank.id).join(','));
+
+    window.history.replaceState(
+      {},
+      '',
+      `${window.location.pathname}?${search.toString()}`,
+    );
+  }, [members]);
+
   return (
     <PageWrapper color="crimson" size="100%">
       <Flex justify="center" gap="4" align="center" direction="column">
