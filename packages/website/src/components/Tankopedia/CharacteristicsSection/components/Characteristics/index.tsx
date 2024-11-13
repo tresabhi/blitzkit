@@ -318,6 +318,7 @@ export function Characteristics() {
               stats={stats}
               name="Clipping potential"
               indent
+              decimals={0}
               value="clipDamage"
             />
           )}
