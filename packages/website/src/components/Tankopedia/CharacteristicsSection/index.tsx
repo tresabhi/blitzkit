@@ -1,5 +1,6 @@
 import { Flex, Heading } from '@radix-ui/themes';
 import { Characteristics } from './components/Characteristics';
+import { CharacteristicsHeading } from './components/Characteristics/components/Heading';
 import { Consumables } from './components/Consumables';
 import { Equipment } from './components/Equipment';
 import { Miscellaneous } from './components/Miscellaneous';
@@ -38,9 +39,7 @@ export function CharacteristicsSection() {
           gap="6"
           width="100%"
         >
-          <Heading align={{ initial: 'center', sm: 'left' }}>
-            Characteristics
-          </Heading>
+          <CharacteristicsHeading />
           <Characteristics />
         </Flex>
       </Flex>

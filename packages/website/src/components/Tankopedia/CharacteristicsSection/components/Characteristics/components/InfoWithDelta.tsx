@@ -15,6 +15,10 @@ import {
 import { tankToDuelMember } from '../../../../../../core/blitzkit/tankToDuelMember';
 import { useDelta } from '../../../../../../hooks/useDelta';
 import { Duel } from '../../../../../../stores/duel';
+import {
+  TankopediaEphemeral,
+  TankopediaRelativeAgainst,
+} from '../../../../../../stores/tankopediaEphemeral';
 import { Info, type InfoProps } from './Info';
 
 interface InfoWithDeltaProps extends InfoProps {
@@ -39,6 +43,9 @@ export function InfoWithDelta({
   deltaType,
   ...props
 }: InfoWithDeltaProps) {
+  const relativeAgainst = TankopediaEphemeral.use(
+    (state) => state.relativeAgainst,
+  );
   const uhWhatDoICallThisVariable =
     typeof value === 'function' ? value(stats)! : (stats[value] as number);
   const delta = useDelta(uhWhatDoICallThisVariable);
@@ -47,7 +54,15 @@ export function InfoWithDelta({
     const defaultSkills = createDefaultSkills(skillDefinitions);
 
     return Object.values(tankDefinitions.tanks)
-      .filter((tank) => tank.tier === protagonistTank.tier)
+      .filter(
+        (tank) =>
+          (relativeAgainst === TankopediaRelativeAgainst.Class &&
+            tank.tier === protagonistTank.tier &&
+            tank.class === protagonistTank.class) ||
+          (relativeAgainst === TankopediaRelativeAgainst.Tier &&
+            tank.tier === protagonistTank.tier) ||
+          relativeAgainst === TankopediaRelativeAgainst.All,
+      )
       .map((tank) => {
         const member = tankToDuelMember(tank, provisionDefinitions);
 
@@ -85,7 +100,7 @@ export function InfoWithDelta({
 
         return othersValue !== undefined;
       });
-  }, []);
+  }, [relativeAgainst]);
   const betterTanks = others.filter((tank) => {
     const othersValue =
       typeof value === 'function' ? value(tank)! : (tank[value] as number);
@@ -116,6 +131,7 @@ export function InfoWithDelta({
             size="1"
             value={goodness * 100}
             color={color}
+            style={{ height: '0.125rem' }}
           />
           <Text color="gray" size="1">
             {betterTanks.length + 1} / {others.length}

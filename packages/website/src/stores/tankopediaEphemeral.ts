@@ -71,9 +71,16 @@ export type ArmorPiercingLayer =
       gap: number;
     };
 
+export enum TankopediaRelativeAgainst {
+  Class,
+  Tier,
+  All,
+}
+
 interface TankopediaEphemeral {
   shot?: Shot;
   skills: Record<string, number>;
+  relativeAgainst: TankopediaRelativeAgainst;
   controlsEnabled: boolean;
   model: ModelDefinition;
   editStatic: boolean;
@@ -101,6 +108,7 @@ export const TankopediaEphemeral = createContextualStore(
   (model: ModelDefinition) => {
     return create<TankopediaEphemeral>()(
       subscribeWithSelector<TankopediaEphemeral>(() => ({
+        relativeAgainst: TankopediaRelativeAgainst.Class,
         editStatic: false,
         skills: createDefaultSkills(skillDefinitions),
         model,

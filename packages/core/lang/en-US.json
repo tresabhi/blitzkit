@@ -59,6 +59,13 @@
       "3": "TD"
     },
 
+    "tank_class_short_plural_lowercase": {
+      "0": "lights",
+      "1": "mediums",
+      "2": "heavies",
+      "3": "TDs"
+    },
+
     "tank_class_medium": {
       "-1": "unrecognized",
       "0": "Light",
