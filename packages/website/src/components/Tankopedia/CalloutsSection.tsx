@@ -1,10 +1,24 @@
 import { MinusCircledIcon } from '@radix-ui/react-icons';
 import { Callout, Flex } from '@radix-ui/themes';
+import { uniq } from 'lodash-es';
+import { useEffect } from 'react';
 import { Duel } from '../../stores/duel';
+import { TankopediaPersistent } from '../../stores/tankopediaPersistent';
 import { ExperimentIcon } from '../ExperimentIcon';
+import { MAX_RECENTLY_VIEWED } from '../TankSearch/constants';
 
 export function CalloutsSection() {
   const tank = Duel.use((state) => state.protagonist.tank);
+  const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
+
+  useEffect(() => {
+    mutateTankopediaPersistent((draft) => {
+      draft.recentlyViewed = uniq([tank.id, ...draft.recentlyViewed]).slice(
+        0,
+        MAX_RECENTLY_VIEWED,
+      );
+    });
+  }, [tank]);
 
   if (!tank.testing && !tank.deprecated) return null;
 
