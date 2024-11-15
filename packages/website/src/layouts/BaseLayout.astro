@@ -7,6 +7,11 @@ import Navbar from '../components/Navbar.astro';
 import Party3 from '../components/Party3.astro';
 import './base.css';
 
+export interface Props {
+  noFooter?: boolean;
+}
+
+const { noFooter } = Astro.props;
 const { pathname } = Astro.url;
 const isRoot = pathname === '/';
 ---
@@ -42,7 +47,7 @@ const isRoot = pathname === '/';
 
         <slot />
 
-        <Footer />
+        {!noFooter && <Footer />}
       </Flex>
     </BlitzKitTheme>
   </body>

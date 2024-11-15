@@ -1,9 +1,8 @@
 ---
-import { compareTool } from '../../../constants/tools';
-import ToolLayout from '../../../layouts/ToolLayout.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { Page } from './_index';
 ---
 
-<ToolLayout tool={compareTool}>
+<BaseLayout noFooter>
   <Page client:load />
-</ToolLayout>
+</BaseLayout>

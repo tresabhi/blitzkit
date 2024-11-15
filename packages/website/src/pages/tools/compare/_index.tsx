@@ -7,7 +7,7 @@ import {
   fetchTankDefinitions,
 } from '@blitzkit/core';
 import { PlusIcon } from '@radix-ui/react-icons';
-import { Box, Flex, Heading, IconButton, Text } from '@radix-ui/themes';
+import { Flex, Heading, Text } from '@radix-ui/themes';
 import { useEffect, useMemo, useState } from 'react';
 import { CompareTable } from '../../../components/Compare/CompareTable';
 import { Controls } from '../../../components/Compare/Controls';
@@ -128,23 +128,21 @@ function Content() {
       </Flex>
 
       {members.length > 0 && (
-        <Flex justify="center">
-          <Box maxWidth="100%" position="relative">
-            <CompareTable stats={stats} />
+        <Flex justify="center" flexGrow="1" position="relative">
+          <CompareTable stats={stats} />
 
-            <IconButton
-              style={{
-                position: 'absolute',
-                right: 0,
-                top: 73,
-                transform: 'translate(50%, -50%)',
-                zIndex: 1,
-              }}
-              onClick={() => setAddTankDialogOpen(true)}
-            >
-              <PlusIcon />
-            </IconButton>
-          </Box>
+          {/* <IconButton
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: 73,
+              transform: 'translate(50%, -50%)',
+              zIndex: 1,
+            }}
+            onClick={() => setAddTankDialogOpen(true)}
+          >
+            <PlusIcon />
+          </IconButton> */}
         </Flex>
       )}
 
