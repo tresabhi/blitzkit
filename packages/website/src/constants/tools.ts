@@ -162,12 +162,27 @@ export const galleryTool: Tool = {
   branches: ['main', 'dev'],
 };
 
+export const tierListTool: Tool = {
+  id: 'tier-list',
+  title: 'Tier list',
+  description: 'Rank Blitz tanks',
+  pageDescription:
+    'Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz',
+  button: {
+    text: 'Rank tanks',
+    color: 'orange',
+  },
+  image: 'oKKc8Xv',
+  branches: ['main', 'dev'],
+};
+
 export const TOOLS: Tool[] = [
   tankopediaTool,
   compareTool,
   performanceTool,
   galleryTool,
   sessionTool,
+  tierListTool,
   embedTool,
   // ratingTool,
 ];
