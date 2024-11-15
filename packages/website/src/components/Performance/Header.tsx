@@ -3,7 +3,7 @@ import {
   CaretSortIcon,
   CaretUpIcon,
 } from '@radix-ui/react-icons';
-import { Flex, IconButton, Table } from '@radix-ui/themes';
+import { Button, Flex, Table } from '@radix-ui/themes';
 import { TankPerformanceSort } from '../../stores/tankPerformanceSort';
 import {
   TankPerformanceSortTypeNames,
@@ -30,11 +30,8 @@ export function Header() {
               justify="center"
             >
               <Flex align="center" gap="1">
-                {TankPerformanceSortTypeNames[type]}
-
-                <IconButton
-                  size={isSelected ? '1' : '2'}
-                  variant={isSelected ? 'soft' : 'ghost'}
+                <Button
+                  variant="ghost"
                   color={isSelected ? undefined : 'gray'}
                   highContrast={!isSelected}
                   onClick={() => {
@@ -45,6 +42,8 @@ export function Header() {
                     }
                   }}
                 >
+                  {TankPerformanceSortTypeNames[type]}
+
                   {!isSelected && <CaretSortIcon />}
                   {isSelected && (
                     <>
@@ -52,7 +51,7 @@ export function Header() {
                       {sort.direction === -1 && <CaretDownIcon />}
                     </>
                   )}
-                </IconButton>
+                </Button>
               </Flex>
             </StickyColumnHeaderCell>
           );
