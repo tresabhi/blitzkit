@@ -16,7 +16,6 @@ import {
   Path,
   Quaternion,
 } from 'three';
-import { useFullScreen } from '../../../hooks/useFullScreen';
 import {
   TankopediaEphemeral,
   type ShotLayerNonExternal,
@@ -40,7 +39,6 @@ const TRACER_THICK = 1 / 32;
 const TRACER_THIN = TRACER_THICK / 2;
 
 export function ShotDisplay() {
-  const isFullscreen = useFullScreen();
   const shot = TankopediaEphemeral.use((state) => state.shot);
   const inTracer = useRef<Mesh>(null);
   const outTracer = useRef<Mesh>(null);

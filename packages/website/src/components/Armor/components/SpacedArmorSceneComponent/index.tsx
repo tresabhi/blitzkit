@@ -92,7 +92,8 @@ export function SpacedArmorSceneComponent({
       const shell = customShell ?? antagonist.shell;
       const cameraNormal = camera.position.clone().sub(point).normalize();
       const shot: Shot = {
-        splashRadius: shell.explosion_radius,
+        splashRadius:
+          shell.type === ShellType.HE ? shell.explosion_radius : undefined,
         damage: -1,
         containsGaps: shell.type === ShellType.HEAT,
         in: {
