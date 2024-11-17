@@ -8,7 +8,7 @@ export async function GET({}: APIContext) {
   return new Response(
     `
 User-agent: *
-${allowRobots ? 'Allow' : 'Disallow'}: /
+Allow: /
 
 ${
   allowRobots
