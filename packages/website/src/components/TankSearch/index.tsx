@@ -24,7 +24,7 @@ import {
 } from '../../stores/tankopediaPersistent/constants';
 import { $tankopediaSort } from '../../stores/tankopediaSort';
 import { ExperimentIcon } from '../ExperimentIcon';
-import { TankCard } from '../TankCard';
+import { TankSearchCard } from './components/Card';
 import { FilterControl } from './components/FilterControl';
 import { NoResults } from './components/NoResults';
 import { RecentlyViewed } from './components/RecentlyViewed';
@@ -504,7 +504,11 @@ export const TankSearch = memo<TankSearchProps>(
             {tanks.length > 0 && (
               <TankCardWrapper>
                 {tanks.map((tank) => (
-                  <TankCard key={tank.id} onSelect={onSelect} tank={tank} />
+                  <TankSearchCard
+                    tank={tank}
+                    key={tank.id}
+                    onSelect={onSelect}
+                  />
                 ))}
 
                 {times(

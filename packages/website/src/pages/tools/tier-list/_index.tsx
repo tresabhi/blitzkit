@@ -1,6 +1,6 @@
 import { PageWrapper } from '../../../components/PageWrapper';
-import { TierListTable } from '../../../components/TierList/Table';
 import { TierListTiles } from '../../../components/TierList/Tiles';
+import { TierListTable } from '../../../components/TierList/Table';
 import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
 
 export function Page() {

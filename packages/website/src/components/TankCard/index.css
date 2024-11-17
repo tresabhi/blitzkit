@@ -1,5 +1,5 @@
 .tank-search-card {
-  cursor: pointer;
+  user-select: none;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,6 +8,10 @@
   background-size: contain;
   background-repeat: no-repeat;
   overflow: hidden;
+}
+
+.tank-search-card[data-provide-link='true'] {
+  cursor: pointer;
 }
 
 .tank-search-card .link {
