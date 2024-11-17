@@ -4,7 +4,7 @@ import { tierListRows } from './constants';
 
 export function TierListTable() {
   return (
-    <Table.Root variant="surface">
+    <Table.Root variant="surface" mb="6">
       <Table.Body>
         {tierListRows.map((_, index) => (
           <TierListRow index={index} key={index} />

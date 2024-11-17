@@ -41,7 +41,7 @@ export function Page({ id, skeleton }: PageProps) {
               p="0"
               noMaxWidth
               color="purple"
-              size={1600}
+              maxWidth="100rem"
               gap="9"
               pb="9"
             >

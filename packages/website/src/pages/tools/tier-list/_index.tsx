@@ -1,4 +1,6 @@
 import { PageWrapper } from '../../../components/PageWrapper';
+import { FilterControl } from '../../../components/TankSearch/components/FilterControl';
+import { TierListControls } from '../../../components/TierList/Controls';
 import { TierListTable } from '../../../components/TierList/Table';
 import { TierListTiles } from '../../../components/TierList/Tiles';
 import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
@@ -16,8 +18,10 @@ export function Page() {
 
 function Content() {
   return (
-    <PageWrapper color="orange">
+    <PageWrapper color="orange" maxWidth="100rem">
+      <TierListControls />
       <TierListTable />
+      <FilterControl />
       <TierListTiles />
     </PageWrapper>
   );

@@ -6,7 +6,6 @@ import { BlitzKitTheme } from './BlitzKitTheme';
 
 type PageWrapperProps = FlexProps & {
   color?: ComponentProps<typeof Theme>['accentColor'];
-  size?: number | string;
   noMaxWidth?: boolean;
   containerProps?: ComponentProps<typeof Theme>;
   noFlex1?: boolean;
@@ -17,7 +16,6 @@ type PageWrapperProps = FlexProps & {
 export function PageWrapper({
   style,
   color,
-  size = 800,
   children,
   noMaxWidth = false,
   noFlex1 = false,
@@ -44,7 +42,6 @@ export function PageWrapper({
         p={padding}
         style={{
           width: '100%',
-          maxWidth: noMaxWidth ? undefined : size,
           margin: 'auto',
           boxSizing: 'border-box',
           flex: 1,
