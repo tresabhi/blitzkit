@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import { $tankFilters, initialTankFilters } from '../../../stores/tankFilters';
 import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
 import { $tankopediaSort } from '../../../stores/tankopediaSort';
-import { TankCard } from './TankCard';
+import { TankCard } from '../../TankCard';
 import { TankCardWrapper } from './TankCardWrapper';
 
 const tankDefinitions = await fetchTankDefinitions();

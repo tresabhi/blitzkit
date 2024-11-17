@@ -12,11 +12,11 @@ import { useStore } from '@nanostores/react';
 import { Flex, Link, Text } from '@radix-ui/themes';
 import { uniq } from 'lodash-es';
 import { useMemo } from 'react';
-import { resolveReload } from '../../../../core/blitzkit/resolveReload';
-import { TankopediaPersistent } from '../../../../stores/tankopediaPersistent';
-import { $tankopediaSort } from '../../../../stores/tankopediaSort';
-import { classIcons } from '../../../ClassIcon';
-import { MAX_RECENTLY_VIEWED } from '../../constants';
+import { resolveReload } from '../../core/blitzkit/resolveReload';
+import { TankopediaPersistent } from '../../stores/tankopediaPersistent';
+import { $tankopediaSort } from '../../stores/tankopediaSort';
+import { classIcons } from '../ClassIcon';
+import { MAX_RECENTLY_VIEWED } from '../TankSearch/constants';
 import './index.css';
 
 interface TankCardProps {

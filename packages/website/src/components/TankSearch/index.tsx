@@ -24,12 +24,12 @@ import {
 } from '../../stores/tankopediaPersistent/constants';
 import { $tankopediaSort } from '../../stores/tankopediaSort';
 import { ExperimentIcon } from '../ExperimentIcon';
+import { TankCard } from '../TankCard';
 import { FilterControl } from './components/FilterControl';
 import { NoResults } from './components/NoResults';
 import { RecentlyViewed } from './components/RecentlyViewed';
 import { SearchBar } from './components/SearchBar';
 import { SkeletonTankCard } from './components/SkeletonTankCard';
-import { TankCard } from './components/TankCard';
 import { TankCardWrapper } from './components/TankCardWrapper';
 import { MAX_RECENTLY_VIEWED, treeTypeOrder } from './constants';
 
