@@ -1,13 +1,16 @@
 import { PageWrapper } from '../../../components/PageWrapper';
-import { TierListTiles } from '../../../components/TierList/Tiles';
 import { TierListTable } from '../../../components/TierList/Table';
+import { TierListTiles } from '../../../components/TierList/Tiles';
 import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
+import { TierList } from '../../../stores/tierList';
 
 export function Page() {
   return (
-    <TankopediaPersistent.Provider>
-      <Content />
-    </TankopediaPersistent.Provider>
+    <TierList.Provider>
+      <TankopediaPersistent.Provider>
+        <Content />
+      </TankopediaPersistent.Provider>
+    </TierList.Provider>
   );
 }
 

@@ -1,0 +1,9 @@
+.drop-off {
+  width: 0.125rem;
+  height: 100%;
+  border-radius: var(--radius-1);
+}
+
+.drop-off[data-dragging='true'] {
+  background-color: var(--accent-indicator);
+}
