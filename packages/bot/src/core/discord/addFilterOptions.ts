@@ -1,4 +1,8 @@
-import { TANK_CLASSES, TREE_TYPES } from '@blitzkit/core';
+import {
+  TANK_CLASSES,
+  TANK_TYPE_COMMAND_NAMES,
+  TANK_TYPES,
+} from '@blitzkit/core';
 import {
   APIApplicationCommandOptionChoice,
   Locale,
@@ -87,10 +91,10 @@ export function addFilterOptions<
             ),
           )
           .addChoices(
-            ...TREE_TYPES.map(
+            ...TANK_TYPES.map(
               (treeType) =>
                 ({
-                  value: treeType,
+                  value: TANK_TYPE_COMMAND_NAMES[treeType],
                   name: translate(`common.tree_type.${treeType}`),
                   name_localizations: localizationObject(
                     `common.tree_type.${treeType}`,

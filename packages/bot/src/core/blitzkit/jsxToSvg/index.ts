@@ -10,7 +10,7 @@ const fontsPromise = [
   { file: robotoBold, weight: 700 as const },
   { file: robotoBlack, weight: 900 as const },
 ].map(async ({ file, weight }) => {
-  const data = await readFile(`dist/bot/workers/${file}`);
+  const data = await readFile(file);
   return { name: 'Roboto', weight, data };
 });
 
