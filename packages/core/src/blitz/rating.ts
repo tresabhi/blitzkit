@@ -7,22 +7,6 @@ export const LEAGUES = [
   { name: 'silver', minScore: 2000, index: 3 },
   { name: 'bronze', minScore: -Infinity, index: 4 },
 ];
-export type RatingInfo =
-  | {
-      detail: undefined;
-
-      title: string;
-      icon: string | null;
-      start_at: string;
-      finish_at: string;
-      current_season: number;
-      updated_at: string;
-      count: number;
-
-      rewards: RatingReward[];
-      leagues: RatingLeague[];
-    }
-  | { detail: { error: string } };
 export interface RatingNeighbors {
   neighbors: RatingPlayer[];
 }

@@ -167,29 +167,52 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
           const trackXps = new Map<number, number>();
 
           tank.turrets.forEach((turret) => {
-            if (turret.xp !== undefined) {
-              turretXps.set(turret.id, turret.xp);
+            if (
+              turret.research_cost !== undefined &&
+              typeof turret.research_cost.research_cost_type!.value === 'number'
+            ) {
+              turretXps.set(
+                turret.id,
+                turret.research_cost.research_cost_type!.value,
+              );
             }
 
             turret.guns.forEach((gun) => {
-              if (gun.gunType!.value.base.xp !== undefined) {
+              if (
+                gun.gun_type!.value.base.research_cost !== undefined &&
+                typeof gun.gun_type!.value.base.research_cost
+                  .research_cost_type!.value === 'number'
+              ) {
                 gunXps.set(
-                  gun.gunType!.value.base.id,
-                  gun.gunType!.value.base.xp,
+                  gun.gun_type!.value.base.id,
+                  gun.gun_type!.value.base.research_cost.research_cost_type!
+                    .value,
                 );
               }
             });
           });
 
           tank.engines.forEach((engine) => {
-            if (engine.xp !== undefined) {
-              engineXps.set(engine.id, engine.xp);
+            if (
+              engine.research_cost !== undefined &&
+              typeof engine.research_cost.research_cost_type!.value === 'number'
+            ) {
+              engineXps.set(
+                engine.id,
+                engine.research_cost.research_cost_type!.value,
+              );
             }
           });
 
           tank.tracks.forEach((track) => {
-            if (track.xp !== undefined) {
-              trackXps.set(track.id, track.xp);
+            if (
+              track.research_cost !== undefined &&
+              typeof track.research_cost.research_cost_type!.value === 'number'
+            ) {
+              trackXps.set(
+                track.id,
+                track.research_cost.research_cost_type!.value,
+              );
             }
           });
 
@@ -208,7 +231,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
           });
 
           return {
-            research: tank.xp,
+            research: tank.research_cost!.research_cost_type!.value as number,
             upgrades: moduleXp,
             purchase: tank.price.value,
             equipment: equipmentPriceMatrix[tank.tier].reduce(

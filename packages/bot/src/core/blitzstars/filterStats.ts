@@ -1,4 +1,4 @@
-import { TankClass, TankType } from '@blitzkit/core';
+import { TankClass, TankType, Tier } from '@blitzkit/core';
 import { SupplementaryStats } from '@blitzkit/core/src/blitz/getAccountInfo';
 import { calculateWN8 } from '@blitzkit/core/src/statistics/calculateWN8';
 import { BlitzStats } from '@blitzkit/core/src/statistics/compositeStats';
@@ -8,7 +8,7 @@ import { blitzStarsTankAverages } from './tankAverages';
 
 export interface StatFilters {
   nation?: string;
-  tier?: number;
+  tier?: Tier;
   class?: TankClass;
   type?: TankType;
   tank?: number;

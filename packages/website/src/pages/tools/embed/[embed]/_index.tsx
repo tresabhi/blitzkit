@@ -78,7 +78,7 @@ function Content({ embed }: PageProps) {
   }, []);
 
   return (
-    <PageWrapper padding="0" size={1028 + 640} color="red">
+    <PageWrapper padding="0" maxWidth="104rem" color="red">
       <Flex>
         <ScrollArea
           scrollbars="vertical"

@@ -1,4 +1,4 @@
-import { gameDefinitions } from '@blitzkit/core';
+import { gameDefinitions } from '../core/blitzkit/nonBlockingPromises';
 import { getBlitzStarsLinkButton } from '../core/blitzstars/getBlitzStarsLinkButton';
 import { addFilterOptions } from '../core/discord/addFilterOptions';
 import { addUsernameChoices } from '../core/discord/addUsernameChoices';

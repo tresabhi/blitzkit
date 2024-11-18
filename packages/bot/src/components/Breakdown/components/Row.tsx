@@ -84,7 +84,7 @@ export function Row({
               displayType === 'tank'
                 ? type === TankType.COLLECTOR
                   ? theme.textLowContrast_blue
-                  : treeType === 'premium'
+                  : type === TankType.PREMIUM
                     ? theme.textLowContrast_amber
                     : theme.textHighContrast
                 : theme.textLowContrast,

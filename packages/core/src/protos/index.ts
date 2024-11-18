@@ -7,6 +7,7 @@ export * from './game_definitions.ts';
 export * from './map_definitions.ts';
 export * from './model_definitions.ts';
 export * from './provision_definitions.ts';
+export * from './rating_leaderboard.ts';
 export * from './reviews.ts';
 export * from './skill_definitions.ts';
 export * from './tank_definitions.ts';

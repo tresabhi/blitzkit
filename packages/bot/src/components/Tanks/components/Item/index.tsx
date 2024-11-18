@@ -1,19 +1,23 @@
-import { TankClass, TREE_TYPE_ICONS, TreeType } from '@blitzkit/core';
+import { TankClass, TankType, TREE_TYPE_ICONS } from '@blitzkit/core';
 import { theme } from '../../../../stitches.config';
 
 export interface ItemProps {
-  tankType?: TankClass;
+  tankClass?: TankClass;
   name: string;
-  treeType: TreeType;
+  tankType: TankType;
 }
 
 const TREE_TYPE_COLOR = {
-  researchable: '',
-  premium: '_amber',
-  collector: '_blue',
+  [TankType.RESEARCHABLE]: '',
+  [TankType.PREMIUM]: '_amber',
+  [TankType.COLLECTOR]: '_blue',
 } as const;
 
-export function Item({ tankType, name, treeType }: ItemProps) {
+export function Item({
+  tankClass: tankType,
+  name,
+  tankType: treeType,
+}: ItemProps) {
   return (
     <div
       style={{
@@ -40,7 +44,7 @@ export function Item({ tankType, name, treeType }: ItemProps) {
       >
         {tankType && (
           <img
-            alt={tankType}
+            alt={TankType[tankType]}
             src={TREE_TYPE_ICONS[treeType][tankType]}
             style={{ width: 14, height: 14 }}
           />

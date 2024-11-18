@@ -1,6 +1,7 @@
-import { StatFilters, TreeType } from '@blitzkit/core';
+import { TankClass, TankType } from '@blitzkit/core';
 import { ChatInputCommandInteraction } from 'discord.js';
 import { resolveTankId } from '../blitz/resolveTankId';
+import { StatFilters } from '../blitzstars/filterStats';
 
 export async function getFiltersFromCommand(
   interaction: ChatInputCommandInteraction,
@@ -9,10 +10,13 @@ export async function getFiltersFromCommand(
 
   return {
     nation: interaction.options.getString('nation') ?? undefined,
-    tier: parseInt(interaction.options.getString('tier') ?? '0') || undefined,
-    tankType: interaction.options.getString('tank-class') ?? undefined,
-    treeType:
-      (interaction.options.getString('tree-type') as TreeType | undefined) ??
+    tier: Number(interaction.options.getString('tier')),
+    class:
+      (Number(interaction.options.getString('class')) as
+        | TankClass
+        | undefined) ?? undefined,
+    type:
+      (Number(interaction.options.getString('type')) as TankType | undefined) ??
       undefined,
     tank:
       tankRaw === null

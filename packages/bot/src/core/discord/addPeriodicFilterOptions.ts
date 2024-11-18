@@ -1,9 +1,9 @@
-import { gameDefinitions } from '@blitzkit/core';
 import {
   SlashCommandBuilder,
   SlashCommandSubcommandBuilder,
   SlashCommandSubcommandGroupBuilder,
 } from 'discord.js';
+import { gameDefinitions } from '../blitzkit/nonBlockingPromises';
 import { addFilterOptions } from './addFilterOptions';
 import { addPeriodSubCommands } from './addPeriodSubCommands';
 

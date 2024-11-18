@@ -62,7 +62,7 @@ export function addFilterOptions<
             ...TANK_CLASSES.map(
               (tankType) =>
                 ({
-                  value: tankType,
+                  value: `${tankType}`,
                   name: translate(`common.tank_class_short.${tankType}`),
                   name_localizations: localizationObject(
                     `common.tank_class_short.${tankType}`,

@@ -16,7 +16,8 @@
     "markdown-escape": "^2.0.0"
   },
   "scripts": {
-    "dev": "bun --watch src/main.ts"
+    "dev": "bun --watch src/main.ts",
+    "start": "bun src/main.ts"
   },
   "devDependencies": {
     "@types/markdown-escape": "^1.1.3"

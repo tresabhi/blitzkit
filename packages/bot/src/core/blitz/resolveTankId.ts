@@ -1,7 +1,7 @@
 import { Locale } from 'discord.js';
 import { go } from 'fuzzysort';
 import markdownEscape from 'markdown-escape';
-import { tankNames } from '../blitzkit/nonBlockingPromises';
+import { tankDefinitions, tankNames } from '../blitzkit/nonBlockingPromises';
 import { UserError } from '../blitzkit/userError';
 import { tankNamesTechTreeOnly } from '../discord/autocompleteTanks';
 import { translator } from '../localization/translator';
@@ -34,7 +34,9 @@ export async function resolveTankId(
       return searchResult[0].obj.id;
     }
   } else {
-    if ((await tankDefinitions)[number]) {
+    const awaitedTankDefinitions = await tankDefinitions;
+
+    if (awaitedTankDefinitions.tanks[number]) {
       return number;
     } else {
       throw new UserError(

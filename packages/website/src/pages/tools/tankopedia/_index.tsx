@@ -5,7 +5,7 @@ import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
 
 export function Page() {
   return (
-    <PageWrapper color="purple" size={1028}>
+    <PageWrapper color="purple" maxWidth="64rem">
       <TankopediaPersistent.Provider>
         <App.Provider>
           <TankSearch />

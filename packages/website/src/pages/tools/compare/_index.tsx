@@ -118,7 +118,7 @@ function Content() {
   }, [members]);
 
   return (
-    <PageWrapper color="crimson" size="100%">
+    <PageWrapper color="crimson" maxWidth="100%">
       <Flex justify="center" gap="4" align="center" direction="column">
         <DamageWarning />
         <Controls
