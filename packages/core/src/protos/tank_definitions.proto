@@ -22,7 +22,7 @@ message TankDefinition {
   required TankType type = 13;
   required uint32 max_consumables = 14;
   required uint32 max_provisions = 15;
-  required Tier tier = 16;
+  required uint32 tier = 16;
   required TankClass class = 17;
   required bool testing = 18;
   required bool deprecated = 19;
@@ -64,7 +64,7 @@ message TankPrice {
 
 message TrackDefinition {
   required uint32 id = 1;
-  required Tier tier = 2;
+  required uint32 tier = 2;
   required string name = 3;
   required uint32 weight = 4;
   required float traverse_speed = 5;
@@ -81,7 +81,7 @@ message EngineDefinition {
   required uint32 id = 1;
   required string name = 2;
   optional ResearchCost research_cost = 3;
-  required Tier tier = 4;
+  required uint32 tier = 4;
   required float fire_chance = 5;
   required uint32 power = 6;
   required uint32 weight = 7;
@@ -95,7 +95,7 @@ message TurretDefinition {
   required float traverse_speed = 4;
   optional ResearchCost research_cost = 5;
   required string name = 6;
-  required Tier tier = 7;
+  required uint32 tier = 7;
   required uint32 weight = 8;
   repeated GunDefinition guns = 9;
   repeated Unlock unlocks = 10;
@@ -146,7 +146,7 @@ message GunDefinitionBase {
   optional ResearchCost research_cost = 3;
   required uint32 weight = 4;
   required string name = 5;
-  required Tier tier = 6;
+  required uint32 tier = 6;
   repeated ShellDefinition shells = 7;
   required float camouflage_loss = 8;
   required float aim_time = 9;
@@ -210,19 +210,6 @@ enum TankClass {
   TANK_CLASS_MEDIUM = 1;
   TANK_CLASS_HEAVY = 2;
   TANK_CLASS_TANK_DESTROYER = 3;
-}
-
-enum Tier {
-  TIER_I = 0;
-  TIER_II = 1;
-  TIER_III = 2;
-  TIER_IV = 3;
-  TIER_V = 4;
-  TIER_VI = 5;
-  TIER_VII = 6;
-  TIER_VIII = 7;
-  TIER_IX = 8;
-  TIER_X = 9;
 }
 
 enum TankType {

@@ -2,8 +2,6 @@ syntax = "proto2";
 
 package blitzkit;
 
-import "packages/core/src/protos/tank_definitions.proto";
-
 message ConsumableDefinitions {
   map<uint32, Consumable> consumables = 1;
 }
@@ -28,8 +26,8 @@ message ConsumableTankFilter {
 }
 
 message ConsumableTankTierFilter {
-  required Tier min = 1;
-  required Tier max = 2;
+  required uint32 min = 1;
+  required uint32 max = 2;
 }
 
 message ConsumableTankIdsFilter {

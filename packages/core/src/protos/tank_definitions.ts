@@ -167,83 +167,6 @@ export function tankClassToJSON(object: TankClass): string {
   }
 }
 
-export enum Tier {
-  I = 0,
-  II = 1,
-  III = 2,
-  IV = 3,
-  V = 4,
-  VI = 5,
-  VII = 6,
-  VIII = 7,
-  IX = 8,
-  X = 9,
-}
-
-export function tierFromJSON(object: any): Tier {
-  switch (object) {
-    case 0:
-    case "TIER_I":
-      return Tier.I;
-    case 1:
-    case "TIER_II":
-      return Tier.II;
-    case 2:
-    case "TIER_III":
-      return Tier.III;
-    case 3:
-    case "TIER_IV":
-      return Tier.IV;
-    case 4:
-    case "TIER_V":
-      return Tier.V;
-    case 5:
-    case "TIER_VI":
-      return Tier.VI;
-    case 6:
-    case "TIER_VII":
-      return Tier.VII;
-    case 7:
-    case "TIER_VIII":
-      return Tier.VIII;
-    case 8:
-    case "TIER_IX":
-      return Tier.IX;
-    case 9:
-    case "TIER_X":
-      return Tier.X;
-    default:
-      throw new globalThis.Error("Unrecognized enum value " + object + " for enum Tier");
-  }
-}
-
-export function tierToJSON(object: Tier): string {
-  switch (object) {
-    case Tier.I:
-      return "TIER_I";
-    case Tier.II:
-      return "TIER_II";
-    case Tier.III:
-      return "TIER_III";
-    case Tier.IV:
-      return "TIER_IV";
-    case Tier.V:
-      return "TIER_V";
-    case Tier.VI:
-      return "TIER_VI";
-    case Tier.VII:
-      return "TIER_VII";
-    case Tier.VIII:
-      return "TIER_VIII";
-    case Tier.IX:
-      return "TIER_IX";
-    case Tier.X:
-      return "TIER_X";
-    default:
-      throw new globalThis.Error("Unrecognized enum value " + object + " for enum Tier");
-  }
-}
-
 export enum TankType {
   RESEARCHABLE = 0,
   PREMIUM = 1,
@@ -351,7 +274,7 @@ export interface TankDefinition {
   type: TankType;
   max_consumables: number;
   max_provisions: number;
-  tier: Tier;
+  tier: number;
   class: TankClass;
   testing: boolean;
   deprecated: boolean;
@@ -393,7 +316,7 @@ export interface TankPrice {
 
 export interface TrackDefinition {
   id: number;
-  tier: Tier;
+  tier: number;
   name: string;
   weight: number;
   traverse_speed: number;
@@ -410,7 +333,7 @@ export interface EngineDefinition {
   id: number;
   name: string;
   research_cost?: ResearchCost | undefined;
-  tier: Tier;
+  tier: number;
   fire_chance: number;
   power: number;
   weight: number;
@@ -424,7 +347,7 @@ export interface TurretDefinition {
   traverse_speed: number;
   research_cost?: ResearchCost | undefined;
   name: string;
-  tier: Tier;
+  tier: number;
   weight: number;
   guns: GunDefinition[];
   unlocks: Unlock[];
@@ -475,7 +398,7 @@ export interface GunDefinitionBase {
   research_cost?: ResearchCost | undefined;
   weight: number;
   name: string;
-  tier: Tier;
+  tier: number;
   shells: ShellDefinition[];
   camouflage_loss: number;
   aim_time: number;
@@ -775,7 +698,7 @@ export const TankDefinition: MessageFns<TankDefinition> = {
       writer.uint32(120).uint32(message.max_provisions);
     }
     if (message.tier !== 0) {
-      writer.uint32(128).int32(message.tier);
+      writer.uint32(128).uint32(message.tier);
     }
     if (message.class !== 0) {
       writer.uint32(136).int32(message.class);
@@ -990,7 +913,7 @@ export const TankDefinition: MessageFns<TankDefinition> = {
             break;
           }
 
-          message.tier = reader.int32() as any;
+          message.tier = reader.uint32();
           continue;
         }
         case 17: {
@@ -1150,7 +1073,7 @@ export const TankDefinition: MessageFns<TankDefinition> = {
       type: tankTypeFromJSON(assertSet("TankDefinition.type", object.type)),
       max_consumables: globalThis.Number(assertSet("TankDefinition.max_consumables", object.max_consumables)),
       max_provisions: globalThis.Number(assertSet("TankDefinition.max_provisions", object.max_provisions)),
-      tier: tierFromJSON(assertSet("TankDefinition.tier", object.tier)),
+      tier: globalThis.Number(assertSet("TankDefinition.tier", object.tier)),
       class: tankClassFromJSON(assertSet("TankDefinition.class", object.class)),
       testing: globalThis.Boolean(assertSet("TankDefinition.testing", object.testing)),
       deprecated: globalThis.Boolean(assertSet("TankDefinition.deprecated", object.deprecated)),
@@ -1229,7 +1152,7 @@ export const TankDefinition: MessageFns<TankDefinition> = {
       obj.max_provisions = Math.round(message.max_provisions);
     }
     if (message.tier !== 0) {
-      obj.tier = tierToJSON(message.tier);
+      obj.tier = Math.round(message.tier);
     }
     if (message.class !== 0) {
       obj.class = tankClassToJSON(message.class);
@@ -1678,7 +1601,7 @@ export const TrackDefinition: MessageFns<TrackDefinition> = {
       writer.uint32(8).uint32(message.id);
     }
     if (message.tier !== 0) {
-      writer.uint32(16).int32(message.tier);
+      writer.uint32(16).uint32(message.tier);
     }
     if (message.name !== "") {
       writer.uint32(26).string(message.name);
@@ -1733,7 +1656,7 @@ export const TrackDefinition: MessageFns<TrackDefinition> = {
             break;
           }
 
-          message.tier = reader.int32() as any;
+          message.tier = reader.uint32();
           continue;
         }
         case 3: {
@@ -1828,7 +1751,7 @@ export const TrackDefinition: MessageFns<TrackDefinition> = {
   fromJSON(object: any): TrackDefinition {
     return {
       id: globalThis.Number(assertSet("TrackDefinition.id", object.id)),
-      tier: tierFromJSON(assertSet("TrackDefinition.tier", object.tier)),
+      tier: globalThis.Number(assertSet("TrackDefinition.tier", object.tier)),
       name: globalThis.String(assertSet("TrackDefinition.name", object.name)),
       weight: globalThis.Number(assertSet("TrackDefinition.weight", object.weight)),
       traverse_speed: globalThis.Number(assertSet("TrackDefinition.traverse_speed", object.traverse_speed)),
@@ -1850,7 +1773,7 @@ export const TrackDefinition: MessageFns<TrackDefinition> = {
       obj.id = Math.round(message.id);
     }
     if (message.tier !== 0) {
-      obj.tier = tierToJSON(message.tier);
+      obj.tier = Math.round(message.tier);
     }
     if (message.name !== "") {
       obj.name = message.name;
@@ -1924,7 +1847,7 @@ export const EngineDefinition: MessageFns<EngineDefinition> = {
       ResearchCost.encode(message.research_cost, writer.uint32(26).fork()).join();
     }
     if (message.tier !== 0) {
-      writer.uint32(32).int32(message.tier);
+      writer.uint32(32).uint32(message.tier);
     }
     if (message.fire_chance !== 0) {
       writer.uint32(45).float(message.fire_chance);
@@ -1977,7 +1900,7 @@ export const EngineDefinition: MessageFns<EngineDefinition> = {
             break;
           }
 
-          message.tier = reader.int32() as any;
+          message.tier = reader.uint32();
           continue;
         }
         case 5: {
@@ -2026,7 +1949,7 @@ export const EngineDefinition: MessageFns<EngineDefinition> = {
       id: globalThis.Number(assertSet("EngineDefinition.id", object.id)),
       name: globalThis.String(assertSet("EngineDefinition.name", object.name)),
       research_cost: isSet(object.research_cost) ? ResearchCost.fromJSON(object.research_cost) : undefined,
-      tier: tierFromJSON(assertSet("EngineDefinition.tier", object.tier)),
+      tier: globalThis.Number(assertSet("EngineDefinition.tier", object.tier)),
       fire_chance: globalThis.Number(assertSet("EngineDefinition.fire_chance", object.fire_chance)),
       power: globalThis.Number(assertSet("EngineDefinition.power", object.power)),
       weight: globalThis.Number(assertSet("EngineDefinition.weight", object.weight)),
@@ -2046,7 +1969,7 @@ export const EngineDefinition: MessageFns<EngineDefinition> = {
       obj.research_cost = ResearchCost.toJSON(message.research_cost);
     }
     if (message.tier !== 0) {
-      obj.tier = tierToJSON(message.tier);
+      obj.tier = Math.round(message.tier);
     }
     if (message.fire_chance !== 0) {
       obj.fire_chance = message.fire_chance;
@@ -2118,7 +2041,7 @@ export const TurretDefinition: MessageFns<TurretDefinition> = {
       writer.uint32(50).string(message.name);
     }
     if (message.tier !== 0) {
-      writer.uint32(56).int32(message.tier);
+      writer.uint32(56).uint32(message.tier);
     }
     if (message.weight !== 0) {
       writer.uint32(64).uint32(message.weight);
@@ -2192,7 +2115,7 @@ export const TurretDefinition: MessageFns<TurretDefinition> = {
             break;
           }
 
-          message.tier = reader.int32() as any;
+          message.tier = reader.uint32();
           continue;
         }
         case 8: {
@@ -2236,7 +2159,7 @@ export const TurretDefinition: MessageFns<TurretDefinition> = {
       traverse_speed: globalThis.Number(assertSet("TurretDefinition.traverse_speed", object.traverse_speed)),
       research_cost: isSet(object.research_cost) ? ResearchCost.fromJSON(object.research_cost) : undefined,
       name: globalThis.String(assertSet("TurretDefinition.name", object.name)),
-      tier: tierFromJSON(assertSet("TurretDefinition.tier", object.tier)),
+      tier: globalThis.Number(assertSet("TurretDefinition.tier", object.tier)),
       weight: globalThis.Number(assertSet("TurretDefinition.weight", object.weight)),
       guns: globalThis.Array.isArray(object?.guns) ? object.guns.map((e: any) => GunDefinition.fromJSON(e)) : [],
       unlocks: globalThis.Array.isArray(object?.unlocks) ? object.unlocks.map((e: any) => Unlock.fromJSON(e)) : [],
@@ -2264,7 +2187,7 @@ export const TurretDefinition: MessageFns<TurretDefinition> = {
       obj.name = message.name;
     }
     if (message.tier !== 0) {
-      obj.tier = tierToJSON(message.tier);
+      obj.tier = Math.round(message.tier);
     }
     if (message.weight !== 0) {
       obj.weight = Math.round(message.weight);
@@ -2967,7 +2890,7 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
       writer.uint32(42).string(message.name);
     }
     if (message.tier !== 0) {
-      writer.uint32(48).int32(message.tier);
+      writer.uint32(48).uint32(message.tier);
     }
     for (const v of message.shells) {
       ShellDefinition.encode(v!, writer.uint32(58).fork()).join();
@@ -3051,7 +2974,7 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
             break;
           }
 
-          message.tier = reader.int32() as any;
+          message.tier = reader.uint32();
           continue;
         }
         case 7: {
@@ -3142,7 +3065,7 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
       research_cost: isSet(object.research_cost) ? ResearchCost.fromJSON(object.research_cost) : undefined,
       weight: globalThis.Number(assertSet("GunDefinitionBase.weight", object.weight)),
       name: globalThis.String(assertSet("GunDefinitionBase.name", object.name)),
-      tier: tierFromJSON(assertSet("GunDefinitionBase.tier", object.tier)),
+      tier: globalThis.Number(assertSet("GunDefinitionBase.tier", object.tier)),
       shells: globalThis.Array.isArray(object?.shells)
         ? object.shells.map((e: any) => ShellDefinition.fromJSON(e))
         : [],
@@ -3179,7 +3102,7 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
       obj.name = message.name;
     }
     if (message.tier !== 0) {
-      obj.tier = tierToJSON(message.tier);
+      obj.tier = Math.round(message.tier);
     }
     if (message.shells?.length) {
       obj.shells = message.shells.map((e) => ShellDefinition.toJSON(e));

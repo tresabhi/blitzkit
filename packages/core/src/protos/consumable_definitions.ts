@@ -6,7 +6,6 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { Tier, tierFromJSON, tierToJSON } from "./tank_definitions";
 
 export const protobufPackage = "blitzkit";
 
@@ -66,8 +65,8 @@ export interface ConsumableTankFilter {
 }
 
 export interface ConsumableTankTierFilter {
-  min: Tier;
-  max: Tier;
+  min: number;
+  max: number;
 }
 
 export interface ConsumableTankIdsFilter {
@@ -561,10 +560,10 @@ function createBaseConsumableTankTierFilter(): ConsumableTankTierFilter {
 export const ConsumableTankTierFilter: MessageFns<ConsumableTankTierFilter> = {
   encode(message: ConsumableTankTierFilter, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.min !== 0) {
-      writer.uint32(8).int32(message.min);
+      writer.uint32(8).uint32(message.min);
     }
     if (message.max !== 0) {
-      writer.uint32(16).int32(message.max);
+      writer.uint32(16).uint32(message.max);
     }
     return writer;
   },
@@ -581,7 +580,7 @@ export const ConsumableTankTierFilter: MessageFns<ConsumableTankTierFilter> = {
             break;
           }
 
-          message.min = reader.int32() as any;
+          message.min = reader.uint32();
           continue;
         }
         case 2: {
@@ -589,7 +588,7 @@ export const ConsumableTankTierFilter: MessageFns<ConsumableTankTierFilter> = {
             break;
           }
 
-          message.max = reader.int32() as any;
+          message.max = reader.uint32();
           continue;
         }
       }
@@ -603,18 +602,18 @@ export const ConsumableTankTierFilter: MessageFns<ConsumableTankTierFilter> = {
 
   fromJSON(object: any): ConsumableTankTierFilter {
     return {
-      min: tierFromJSON(assertSet("ConsumableTankTierFilter.min", object.min)),
-      max: tierFromJSON(assertSet("ConsumableTankTierFilter.max", object.max)),
+      min: globalThis.Number(assertSet("ConsumableTankTierFilter.min", object.min)),
+      max: globalThis.Number(assertSet("ConsumableTankTierFilter.max", object.max)),
     };
   },
 
   toJSON(message: ConsumableTankTierFilter): unknown {
     const obj: any = {};
     if (message.min !== 0) {
-      obj.min = tierToJSON(message.min);
+      obj.min = Math.round(message.min);
     }
     if (message.max !== 0) {
-      obj.max = tierToJSON(message.max);
+      obj.max = Math.round(message.max);
     }
     return obj;
   },
