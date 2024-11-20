@@ -1,4 +1,4 @@
-import type { GunDefinition, TankClass, TankType, Tier } from '@blitzkit/core';
+import type { GunDefinition, TankClass, TankType } from '@blitzkit/core';
 import { map } from 'nanostores';
 
 export type CaseType<T> = T extends {
@@ -8,7 +8,7 @@ export type CaseType<T> = T extends {
   : never;
 
 export interface TankFilters {
-  tiers: Tier[];
+  tiers: number[];
   nations: string[];
   classes: TankClass[];
   types: TankType[];

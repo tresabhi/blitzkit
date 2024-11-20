@@ -26,7 +26,6 @@ import {
   TankPrice,
   TankPriceType,
   TankType,
-  Tier,
   toUniqueId,
   Unlock,
   Vector3,
@@ -890,7 +889,7 @@ export async function definitions() {
             : (typeof tank.price === 'number' ? false : 'gold' in tank.price)
               ? TankType.PREMIUM
               : TankType.RESEARCHABLE,
-          tier: (tank.level - 1) as Tier,
+          tier: tank.level,
           class: blitzTankClassToBlitzkit[tankTags[0] as BlitzTankClass],
           testing: tankTags.includes('testTank'),
           deprecated: tankTags.includes('deprecated'),
@@ -967,7 +966,7 @@ export async function definitions() {
             resistance_hard: terrainResistances[0],
             resistance_medium: terrainResistances[1],
             resistance_soft: terrainResistances[2],
-            tier: (track.level - 1) as Tier,
+            tier: track.level,
             unlocks: resolveUnlocks(track.unlocks),
           });
 
@@ -990,7 +989,7 @@ export async function definitions() {
             id: engineId,
             name: strings[engineListEntry.userString],
             fire_chance: engineListEntry.fireStartingChance,
-            tier: (engineListEntry.level - 1) as Tier,
+            tier: engineListEntry.level,
             weight: engineListEntry.weight,
             power: engineListEntry.power,
             unlocks: resolveUnlocks(engine.unlocks),
@@ -1050,7 +1049,7 @@ export async function definitions() {
                 turretKey
                   .replaceAll('_', ' ')
                   .replace(/^(Turret ([0-9] )?)+/, ''),
-              tier: (turret.level - 1) as Tier,
+              tier: turret.level,
               guns: [],
               health: turret.maxHealth,
               view_range: turret.circularVisionRadius,
@@ -1162,7 +1161,7 @@ export async function definitions() {
                 weight: gunListEntry.weight,
                 rotation_speed: gunListEntry.rotationSpeed,
                 name: gunName,
-                tier: (gunListEntry.level - 1) as Tier,
+                tier: gunListEntry.level,
                 shells: [],
                 camouflage_loss:
                   typeof gun.invisibilityFactorAtShot === 'number'
@@ -1440,8 +1439,8 @@ export async function definitions() {
             filter_type: {
               $case: 'tiers',
               value: {
-                min: (includeRaw.minLevel - 1) as Tier,
-                max: (includeRaw.maxLevel - 1) as Tier,
+                min: includeRaw.minLevel,
+                max: includeRaw.maxLevel,
               },
             },
           });
@@ -1543,8 +1542,8 @@ export async function definitions() {
             filter_type: {
               $case: 'tiers',
               value: {
-                min: (includeRaw.minLevel - 1) as Tier,
-                max: (includeRaw.maxLevel - 1) as Tier,
+                min: includeRaw.minLevel,
+                max: includeRaw.maxLevel,
               },
             },
           });

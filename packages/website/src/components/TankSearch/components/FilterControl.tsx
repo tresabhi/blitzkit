@@ -4,7 +4,6 @@ import {
   TANK_CLASSES,
   TankType,
   TIER_ROMAN_NUMERALS,
-  type Tier,
 } from '@blitzkit/core';
 import { useStore } from '@nanostores/react';
 import { ReloadIcon } from '@radix-ui/react-icons';
@@ -42,7 +41,7 @@ export function FilterControl({ compact }: FilterControlProps) {
       >
         <Flex direction={compact ? 'column' : { md: 'row', initial: 'column' }}>
           {times(5, (index) => {
-            const tier = index as Tier;
+            const tier = index + 1;
             const selected = tankFilters.tiers?.includes(tier);
 
             return (
@@ -70,7 +69,7 @@ export function FilterControl({ compact }: FilterControlProps) {
         </Flex>
         <Flex direction={compact ? 'column' : { md: 'row', initial: 'column' }}>
           {times(5, (index) => {
-            const tier = (index + 5) as Tier;
+            const tier = index + 6;
             const selected = tankFilters.tiers?.includes(tier);
 
             return (

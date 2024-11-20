@@ -2,7 +2,6 @@ import {
   TANK_CLASSES,
   TIER_ROMAN_NUMERALS,
   TankDefinition,
-  Tier,
   flags,
   getAccountInfo,
   getTankStats,
@@ -80,7 +79,7 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
         index === 0
           ? `${translate('bot.commands.owned_tanks.body.title', [
               markdownEscape(accountInfo.nickname),
-              TIER_ROMAN_NUMERALS[tier as Tier],
+              TIER_ROMAN_NUMERALS[tier],
             ])}${lines.join('\n')}`
           : lines.join('\n'),
       );

@@ -1,8 +1,4 @@
-import {
-  fetchTankDefinitions,
-  Tier,
-  TIER_ROMAN_NUMERALS,
-} from '@blitzkit/core';
+import { fetchTankDefinitions, TIER_ROMAN_NUMERALS } from '@blitzkit/core';
 import { Locale } from 'discord.js';
 import { StatFilters } from '../blitzstars/filterStats';
 import { translator } from '../localization/translator';
@@ -20,7 +16,7 @@ export async function filtersToDescription(
   if (nation) info.push(translate(`common.nations.${nation}`));
   if (tier) {
     info.push(
-      translate('bot.common.filters.tier', [TIER_ROMAN_NUMERALS[tier as Tier]]),
+      translate('bot.common.filters.tier', [TIER_ROMAN_NUMERALS[tier]]),
     );
   }
   if (tankClass) info.push(translate(`common.tank_class_short.${tankClass}`));

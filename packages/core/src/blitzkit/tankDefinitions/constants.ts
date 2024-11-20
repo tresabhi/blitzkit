@@ -1,10 +1,10 @@
+import { times } from 'lodash';
 import {
   CrewType,
   GunDefinition,
   ShellType,
   TankClass,
   TankType,
-  Tier,
 } from '../../protos';
 
 export const SHELL_NAMES: Record<ShellType, string> = {
@@ -55,29 +55,18 @@ export const TANK_ICONS_COLLECTOR: Record<TankClass, string> = {
   [TankClass.MEDIUM]: 'https://i.imgur.com/u8YDMBh.png',
   [TankClass.HEAVY]: 'https://i.imgur.com/8xRf3nc.png',
 };
-export const TIERS = [
-  Tier.I,
-  Tier.II,
-  Tier.III,
-  Tier.IV,
-  Tier.V,
-  Tier.VI,
-  Tier.VII,
-  Tier.VIII,
-  Tier.IX,
-  Tier.X,
-];
-export const TIER_ROMAN_NUMERALS: Record<Tier, string> = {
-  [Tier.I]: 'I',
-  [Tier.II]: 'II',
-  [Tier.III]: 'III',
-  [Tier.IV]: 'IV',
-  [Tier.V]: 'V',
-  [Tier.VI]: 'VI',
-  [Tier.VII]: 'VII',
-  [Tier.VIII]: 'VIII',
-  [Tier.IX]: 'IX',
-  [Tier.X]: 'X',
+export const TIERS = times(10, (index) => index + 1);
+export const TIER_ROMAN_NUMERALS: Record<number, string> = {
+  1: 'I',
+  2: 'II',
+  3: 'III',
+  4: 'IV',
+  5: 'V',
+  6: 'VI',
+  7: 'VII',
+  8: 'VIII',
+  9: 'IX',
+  10: 'X',
 };
 
 export const flags: Record<string, string> = {

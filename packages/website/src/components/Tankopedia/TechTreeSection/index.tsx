@@ -1,10 +1,4 @@
-import {
-  asset,
-  fetchTankDefinitions,
-  imgur,
-  TankType,
-  Tier,
-} from '@blitzkit/core';
+import { asset, fetchTankDefinitions, imgur, TankType } from '@blitzkit/core';
 import { CaretLeftIcon, CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, IconButton, ScrollArea, Text } from '@radix-ui/themes';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
@@ -32,10 +26,10 @@ export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
     function extend(line: Line): Line[] {
       const root = tankDefinitions.tanks[line.at(-1)!];
 
-      if (root.ancestors === undefined || root.tier === Tier.I) {
+      if (root.ancestors === undefined || root.tier === 1) {
         return [line];
       } else {
-        if (root.ancestors.length === 1 || root.tier === Tier.II) {
+        if (root.ancestors.length === 1 || root.tier === 2) {
           line.push(
             root.ancestors.find(
               (ancestor) => !tankDefinitions.tanks[ancestor].deprecated,
@@ -64,7 +58,7 @@ export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
     (xp, id) =>
       xp +
       (tankDefinitions.tanks[id].research_cost === undefined ||
-      tankDefinitions.tanks[id].tier === Tier.I
+      tankDefinitions.tanks[id].tier === 1
         ? 0
         : (tankDefinitions.tanks[id].research_cost.research_cost_type!
             .value as number)),
@@ -191,7 +185,7 @@ export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
             );
           })}
 
-          {master.tier < Tier.X && (
+          {master.tier < 10 && (
             <>
               <Arrow />
               {master.successors!.map((id, index) => (

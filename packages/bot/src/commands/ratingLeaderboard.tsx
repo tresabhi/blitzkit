@@ -3,7 +3,6 @@ import {
   FIRST_MINIMAL_ARCHIVED_RATING_SEASON,
   getAccountInfo,
   getArchivedLatestSeasonNumber,
-  getArchivedRatingInfo,
   getArchivedRatingLeaderboard,
   getArchivedRatingMidnightLeaderboard,
   getClanAccountInfo,
@@ -12,7 +11,6 @@ import {
   getRatingNeighbors,
   isOnGoingRatingSeason,
   LEAGUES,
-  RatingInfo,
   Region,
 } from '@blitzkit/core';
 import {

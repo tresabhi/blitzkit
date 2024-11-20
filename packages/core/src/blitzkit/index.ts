@@ -16,7 +16,7 @@ export * from './eventManager';
 // export * from './flagUserActivity';
 export * from './gameDefinitions';
 export * from './getArchivedLatestSeasonNumber';
-export * from './getArchivedRatingInfo';
+// export * from './getArchivedRatingInfo';
 export * from './getArchivedRatingLeaderboard';
 export * from './getArchivedRatingMidnightLeaderboard';
 export * from './getTimeDaysAgo';

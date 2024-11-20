@@ -9,7 +9,7 @@ export * from './getAccountInfo';
 export * from './getClanAccountInfo';
 export * from './getClanInfo';
 export * from './getLeagueFromScore';
-export * from './getRatingInfo';
+// export * from './getRatingInfo';
 export * from './getRatingLeague';
 export * from './getRatingNeighbors';
 export * from './getTankStats';

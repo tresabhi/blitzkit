@@ -10,7 +10,6 @@ import {
   TrackDefinition,
   TurretDefinition,
   type TankDefinition,
-  type Tier,
   type Unlock,
 } from '@blitzkit/core';
 import {
@@ -58,7 +57,7 @@ function ModuleButton({
   onClick,
 }: {
   unlock: Unlock;
-  tier: Tier;
+  tier: number;
   selected: boolean;
   top: boolean;
   onClick: () => void;

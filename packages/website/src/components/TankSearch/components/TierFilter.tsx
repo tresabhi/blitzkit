@@ -1,4 +1,4 @@
-import { type Tier, TIER_ROMAN_NUMERALS } from '@blitzkit/core';
+import { TIER_ROMAN_NUMERALS } from '@blitzkit/core';
 import { useStore } from '@nanostores/react';
 import { Flex, IconButton, Text } from '@radix-ui/themes';
 import { times } from 'lodash-es';
@@ -20,7 +20,7 @@ export const TierFilter = memo(() => {
         style={{ borderRadius: 'var(--radius-full)' }}
       >
         {times(10, (index) => {
-          const tier = (10 - index) as Tier;
+          const tier = 10 - index;
           const selected = tankFilters.tiers.includes(tier);
 
           return (
@@ -30,25 +30,16 @@ export const TierFilter = memo(() => {
               radius="none"
               color={selected ? undefined : 'gray'}
               highContrast
-              onClick={() =>
-                // mutateTankFilters((draft) => {
-                //   if (draft.tiers?.includes(tier)) {
-                //     draft.tiers = draft.tiers?.filter((t) => t !== tier);
-                //   } else {
-                //     draft.tiers = [...(draft.tiers ?? []), tier];
-                //   }
-                // })
-                {
-                  if (tankFilters.tiers.includes(tier)) {
-                    $tankFilters.setKey(
-                      'tiers',
-                      tankFilters.tiers.filter((t) => t !== tier),
-                    );
-                  } else {
-                    $tankFilters.setKey('tiers', [...tankFilters.tiers, tier]);
-                  }
+              onClick={() => {
+                if (tankFilters.tiers.includes(tier)) {
+                  $tankFilters.setKey(
+                    'tiers',
+                    tankFilters.tiers.filter((t) => t !== tier),
+                  );
+                } else {
+                  $tankFilters.setKey('tiers', [...tankFilters.tiers, tier]);
                 }
-              }
+              }}
             >
               <Text size="2">{TIER_ROMAN_NUMERALS[tier]}</Text>
             </IconButton>
