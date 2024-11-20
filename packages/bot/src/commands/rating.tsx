@@ -1,9 +1,8 @@
 import {
-  BkrlFormat,
   deltaBkrlBlitzStats,
   emblemURL,
   getAccountInfo,
-  getArchivedRatingMidnightLeaderboard,
+  getArchivedRatingLeaderboard,
   getClanAccountInfo,
   getLeagueFromScore,
   getRatingInfo,
@@ -64,12 +63,12 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
         throw new Error(`Rating info not available for ${region}`);
       }
 
-      const leaderboard = await getArchivedRatingMidnightLeaderboard(
+      const leaderboard = await getArchivedRatingLeaderboard(
         region,
         ratingInfo.current_season - (subcommand === 'today' ? 0 : 1),
       );
 
-      if (leaderboard?.format === BkrlFormat.Base) {
+      if (leaderboard.version!.$case === 'v1') {
         throw new Error(
           'Encountered bkrl minimal format in latest season. Wait till next cron?',
         );
@@ -78,10 +77,12 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
       const accountInfo = await getAccountInfo(region, id, [
         'statistics.rating',
       ]);
-      const statsIndex = leaderboard?.entries.findIndex(
+      const statsIndex = leaderboard.version!.value.entries.findIndex(
         (entry) => entry.id === id,
       );
-      const statsA = leaderboard ? leaderboard.entries[statsIndex!] : null;
+      const statsA = leaderboard
+        ? leaderboard.version!.value.entries[statsIndex!]
+        : null;
       const positionA = leaderboard ? statsIndex! + 1 : undefined;
       const statsB1 = accountInfo.statistics.rating!;
       const statsB2Array = (await getRatingNeighbors(region, id, 0)).neighbors;

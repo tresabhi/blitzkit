@@ -18,7 +18,7 @@ export * from './gameDefinitions';
 export * from './getArchivedLatestSeasonNumber';
 // export * from './getArchivedRatingInfo';
 export * from './getArchivedRatingLeaderboard';
-export * from './getArchivedRatingMidnightLeaderboard';
+// export * from './getArchivedRatingMidnightLeaderboard';
 export * from './getTimeDaysAgo';
 export * from './isExplosive';
 export * from './linkBlitzAndDiscord';

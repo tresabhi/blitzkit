@@ -1,16 +1,18 @@
 import {
-  BkrlDiscriminatedEntries,
   FIRST_MINIMAL_ARCHIVED_RATING_SEASON,
   getAccountInfo,
   getArchivedLatestSeasonNumber,
   getArchivedRatingLeaderboard,
-  getArchivedRatingMidnightLeaderboard,
   getClanAccountInfo,
+  getLeagueFromScore,
   getRatingInfo,
   getRatingLeague,
   getRatingNeighbors,
+  imgur,
   isOnGoingRatingSeason,
   LEAGUES,
+  RatingInfo,
+  RatingLeaderboard,
   Region,
 } from '@blitzkit/core';
 import {
@@ -199,9 +201,9 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
         let titleDescription: string;
         let playersAfter: number;
         let players: SimplifiedPlayer[] | undefined;
-        let midnightLeaderboard: BkrlDiscriminatedEntries | null;
+        let archivedLeaderboard: RatingLeaderboard | null;
         let playerId: number | undefined;
-        let regionRatingInfo: RatingInfo;
+        let regionRatingInfo: RatingInfo | null;
 
         if (subcommand === 'league') {
           const leagueIndex = parseInt(
@@ -210,10 +212,14 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
           const region = interaction.options.getString('region') as Region;
           regionRatingInfo = await (isCurrentSeason
             ? getRatingInfo(region)
-            : getArchivedRatingInfo(region, season!));
+            : null);
 
-          if (regionRatingInfo.detail !== undefined)
+          if (
+            regionRatingInfo !== null &&
+            regionRatingInfo.detail !== undefined
+          ) {
             return t`bot.commands.rating_leaderboard.body.no_ongoing_season`;
+          }
 
           const result = isCurrentSeason
             ? await getRatingLeague(region, leagueIndex).then(async (result) =>
@@ -233,12 +239,12 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                   const firstPlayerIndex =
                     leagueIndex === 0
                       ? 0
-                      : players.entries.findIndex(
+                      : players.version!.value.entries.findIndex(
                           (player) =>
                             player.score < LEAGUES[leagueIndex - 1].minScore,
                         );
                   const lastPlayerIndex = firstPlayerIndex + limit - 1;
-                  const trimmed = players.entries.slice(
+                  const trimmed = players.version!.value.entries.slice(
                     firstPlayerIndex,
                     lastPlayerIndex + 1,
                   );
@@ -265,25 +271,24 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                   );
                 },
               );
-          const leagueInfo = regionRatingInfo.leagues[leagueIndex];
-          midnightLeaderboard = isCurrentSeason
-            ? await getArchivedRatingMidnightLeaderboard(
-                region,
-                regionRatingInfo.current_season,
-              )
-            : await getArchivedRatingMidnightLeaderboard(region, season!);
+          const score = result.find(({ id }) => id === playerId)!.score;
+          const leagueInfo = getLeagueFromScore(score);
+          archivedLeaderboard = await getArchivedRatingLeaderboard(
+            region,
+            season,
+          );
 
           players = result;
           playersAfter =
-            regionRatingInfo.count - result[result.length - 1].position;
+            (regionRatingInfo === null
+              ? archivedLeaderboard.version!.value.entries.length
+              : regionRatingInfo.count) - result[result.length - 1].position;
           titleName = `${
             leagueInfo
               ? translate(`common.leagues.${LEAGUES[leagueInfo.index].name}`)
               : ''
           } - ${translate(`common.regions.short.${region}`)}`;
-          titleImage = leagueInfo.big_icon.startsWith('http')
-            ? leagueInfo.big_icon
-            : `https:${leagueInfo.big_icon}`;
+          titleImage = imgur(leagueInfo.icon);
           titleDescription = translate(
             'bot.commands.rating_leaderboard.body.top_players',
             [`${limit}`],
@@ -292,10 +297,14 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
           const { region, id } = await resolvePlayerFromCommand(interaction);
           regionRatingInfo = isCurrentSeason
             ? await getRatingInfo(region)
-            : await getArchivedRatingInfo(region, season!);
+            : null;
 
-          if (regionRatingInfo.detail !== undefined)
+          if (
+            regionRatingInfo !== null &&
+            regionRatingInfo.detail !== undefined
+          ) {
             return t`bot.commands.rating_leaderboard.body.no_ongoing_season`;
+          }
 
           const accountInfo = await getAccountInfo(region, id);
           const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
@@ -315,7 +324,7 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
               )
             : await getArchivedRatingLeaderboard(region, season!).then(
                 async (players) => {
-                  const playerIndex = players.entries.findIndex(
+                  const playerIndex = players.version!.value.entries.findIndex(
                     (player) => player.id === id,
                   );
 
@@ -329,7 +338,7 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                   }
 
                   const halfRange = Math.round(limit / 2);
-                  const trimmed = players.entries.slice(
+                  const trimmed = players.version!.value.entries.slice(
                     playerIndex - halfRange,
                     playerIndex + halfRange + 1,
                   );
@@ -350,12 +359,10 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                   }));
                 },
               );
-          midnightLeaderboard = isCurrentSeason
-            ? await getArchivedRatingMidnightLeaderboard(
-                region,
-                regionRatingInfo.current_season,
-              )
-            : await getArchivedRatingMidnightLeaderboard(region, season!);
+          archivedLeaderboard = await getArchivedRatingLeaderboard(
+            region,
+            season,
+          );
 
           players = neighbors;
           titleImage = clan
@@ -364,18 +371,23 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
           titleName = neighbors ? accountInfo.nickname : '';
           titleDescription = t`bot.commands.rating_leaderboard.body.neighbors`;
           playersAfter =
-            regionRatingInfo.count - neighbors[neighbors.length - 1].position;
+            (regionRatingInfo === null
+              ? archivedLeaderboard.version!.value.entries.length
+              : regionRatingInfo.count) -
+            neighbors[neighbors.length - 1].position;
           playerId = id;
         }
 
         const items = players.map((player) => {
-          const midnightIndex = midnightLeaderboard?.entries.findIndex(
-            (item) => item.id === player.id,
-          );
+          const midnightIndex =
+            archivedLeaderboard?.version!.value.entries.findIndex(
+              (item) => item.id === player.id,
+            );
           const midnightScore =
             midnightIndex === undefined
               ? player.score
-              : midnightLeaderboard!.entries[midnightIndex].score;
+              : archivedLeaderboard!.version!.value.entries[midnightIndex]
+                  .score;
           const midnightPosition =
             midnightIndex === undefined ? player.position : midnightIndex + 1;
 

@@ -1,24 +1,41 @@
-// import { Region } from '@blitzkit/core';
-// import { context } from '../blitzkit/context';
-// import { patientFetch } from '../blitzkit/patientFetch';
-// import { regionToRegionSubdomain } from './regionToRegionSubdomain';
+import { RatingLeague, RatingReward, Region } from '@blitzkit/core';
+import { context } from '../blitzkit/context';
+import { patientFetch } from '../blitzkit/patientFetch';
+import { regionToRegionSubdomain } from './regionToRegionSubdomain';
 
-// const cache: Partial<Record<Region, RatingInfo>> = {};
+export type RatingInfo =
+  | {
+      detail: undefined;
 
-// export async function getRatingInfo(region: Region) {
-//   if (cache[region]) return cache[region]!;
+      title: string;
+      icon: string | null;
+      start_at: string;
+      finish_at: string;
+      current_season: number;
+      updated_at: string;
+      count: number;
 
-//   const response = await patientFetch(
-//     context === 'website'
-//       ? `/api/${region}/rating/current/info`
-//       : `https://${regionToRegionSubdomain(
-//           region,
-//         )}.wotblitz.com/en/api/rating-leaderboards/season/`,
-//     undefined,
-//   );
-//   const data = (await response.json()) as RatingInfo;
+      rewards: RatingReward[];
+      leagues: RatingLeague[];
+    }
+  | { detail: { error: string } };
 
-//   cache[region] = data;
+const cache: Partial<Record<Region, RatingInfo>> = {};
 
-//   return data;
-// }
+export async function getRatingInfo(region: Region) {
+  if (cache[region]) return cache[region]!;
+
+  const response = await patientFetch(
+    context === 'website'
+      ? `/api/${region}/rating/current/info`
+      : `https://${regionToRegionSubdomain(
+          region,
+        )}.wotblitz.com/en/api/rating-leaderboards/season/`,
+    undefined,
+  );
+  const data = (await response.json()) as RatingInfo;
+
+  cache[region] = data;
+
+  return data;
+}
