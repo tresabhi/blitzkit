@@ -4,7 +4,6 @@ import {
   getArchivedLatestSeasonNumber,
   getArchivedRatingLeaderboard,
   getClanAccountInfo,
-  getLeagueFromScore,
   getRatingInfo,
   getRatingLeague,
   getRatingNeighbors,
@@ -271,8 +270,7 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                   );
                 },
               );
-          const score = result.find(({ id }) => id === playerId)!.score;
-          const leagueInfo = getLeagueFromScore(score);
+          const leagueInfo = LEAGUES[leagueIndex];
           archivedLeaderboard = await getArchivedRatingLeaderboard(
             region,
             season,
