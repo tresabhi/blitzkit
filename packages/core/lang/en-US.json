@@ -356,9 +356,9 @@
             "$": "timezones",
             "description": "How BlitzKit infers and uses your timezone"
           },
-          "creators": {
-            "$": "creators",
-            "description": "People who have worked on the bot"
+          "credits": {
+            "$": "credits",
+            "description": "People who have helped BlitzKit"
           }
         }
       },

@@ -7,7 +7,7 @@ const subcommands = [
   'introduction',
   'invite',
   'timezones',
-  'creators',
+  'credits',
 ] as const;
 type Subcommand = (typeof subcommands)[number];
 
@@ -16,7 +16,7 @@ const DOCS: Record<Subcommand, string> = {
   introduction: 'guide/introduction',
   invite: 'guide/invite',
   timezones: 'guide/timezones',
-  creators: 'guide/creators',
+  credits: 'about/credits',
 };
 
 export const aboutCommand = new Promise<CommandRegistry>(async (resolve) => {
