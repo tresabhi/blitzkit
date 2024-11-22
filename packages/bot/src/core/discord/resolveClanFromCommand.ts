@@ -1,19 +1,19 @@
-import { Region, searchClansAcrossRegions } from '@blitzkit/core';
+import { idToRegion, searchClansAcrossRegions } from '@blitzkit/core';
 import { ChatInputCommandInteraction } from 'discord.js';
 import markdownEscape from 'markdown-escape';
-import { translator } from '../localization/translator';
-import { serverAndIdPattern } from './resolvePlayerFromCommand/constants';
 import { UserError } from '../blitzkit/userError';
+import { translator } from '../localization/translator';
 
 export async function resolveClanFromCommand(
   interaction: ChatInputCommandInteraction,
 ) {
   const { translate } = translator(interaction.locale);
   const clan = interaction.options.getString('clan', true);
+  const id = parseInt(clan);
 
-  if (serverAndIdPattern.test(clan)) {
-    const [server, accountId] = clan.split('/');
-    return { region: server as Region, id: Number(accountId) };
+  if (isNaN(id)) {
+    const region = idToRegion(id);
+    return { region, id };
   } else {
     const accounts = await searchClansAcrossRegions(clan);
 
