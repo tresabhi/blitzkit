@@ -1,5 +1,7 @@
 ---
+import { assertSecret } from '@blitzkit/core';
 import { Flex, Heading } from '@radix-ui/themes';
+import { AesonPlug } from '../components/AesonPlug';
 import HomeHero from '../components/HomeHero.astro';
 import { HomePageHotTanks } from '../components/HomePageHotTanks';
 import { Plugs } from '../components/Plugs.tsx';
@@ -16,12 +18,22 @@ import {
   tierListTool,
 } from '../constants/tools';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const branch = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
 ---
 
 <BaseLayout>
   <HomeHero />
 
   <Plugs client:idle />
+
+  {
+    branch === 'preview' && (
+      <Flex justify="center" my="8" px="4">
+        <AesonPlug />
+      </Flex>
+    )
+  }
 
   <Flex p="4" justify="center" gap="4" mt="3">
     <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">

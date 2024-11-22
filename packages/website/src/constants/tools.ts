@@ -30,7 +30,7 @@ export const tankopediaTool: Tool = {
     color: 'purple',
   },
   significant: true,
-  branches: ['main', 'dev', 'opentest'],
+  branches: ['main', 'dev', 'opentest', 'preview'],
 };
 
 // export const ratingTool: Tool = {
@@ -58,7 +58,7 @@ export const compareTool: Tool = {
     text: 'Compare tanks',
     color: 'crimson',
   },
-  branches: ['main', 'dev', 'opentest'],
+  branches: ['main', 'dev', 'opentest', 'preview'],
 };
 
 export const sessionTool: Tool = {
@@ -138,7 +138,7 @@ export const embedTool: Tool = {
     color: 'red',
   },
   image: 'Q0faRYg',
-  branches: ['main', 'dev', 'opentest'],
+  branches: ['main', 'dev'],
 };
 
 export const homeTool: Tool = {
@@ -173,7 +173,7 @@ export const tierListTool: Tool = {
     color: 'orange',
   },
   image: 'oKKc8Xv',
-  branches: ['main', 'dev'],
+  branches: ['main', 'dev', 'opentest', 'preview'],
 };
 
 export const TOOLS: Tool[] = [
