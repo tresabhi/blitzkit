@@ -36,7 +36,7 @@ export async function autocompleteClan(
 
           return {
             name,
-            value: `${clan.region}/${clan.clan_id}`,
+            value: `${clan.clan_id}`,
           } satisfies ApplicationCommandOptionChoiceData<string>;
         })
       : [],

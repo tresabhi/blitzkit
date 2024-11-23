@@ -39,7 +39,7 @@ export async function autocompleteUsername(
 
             return {
               name,
-              value: `${player.region}/${player.account_id}`,
+              value: `${player.account_id}`,
             } satisfies ApplicationCommandOptionChoiceData<string>;
           })
         : [],

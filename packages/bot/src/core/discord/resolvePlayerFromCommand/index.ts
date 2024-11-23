@@ -1,10 +1,9 @@
-import { Region, searchPlayersAcrossRegions } from '@blitzkit/core';
+import { idToRegion, Region, searchPlayersAcrossRegions } from '@blitzkit/core';
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { getBlitzFromDiscord } from '../../blitzkit/getBlitzFromDiscord';
-import { translator } from '../../localization/translator';
-import { serverAndIdPattern } from './constants';
 import { UserError } from '../../blitzkit/userError';
+import { translator } from '../../localization/translator';
 
 export interface ResolvedPlayer {
   region: Region;
@@ -17,14 +16,12 @@ export async function resolvePlayerFromCommand(
   const { t, translate } = translator(interaction.locale);
   const commandUsername = interaction.options.getString('username');
 
-  if (commandUsername) {
-    if (serverAndIdPattern.test(commandUsername)) {
-      const [server, accountId] = commandUsername.split('/');
+  if (commandUsername !== null) {
+    const id = parseInt(commandUsername);
 
-      return {
-        region: server as Region,
-        id: Number(accountId),
-      } satisfies ResolvedPlayer;
+    if (!isNaN(id)) {
+      const region = idToRegion(id);
+      return { region, id } satisfies ResolvedPlayer;
     } else {
       const accounts = await searchPlayersAcrossRegions(commandUsername);
 
