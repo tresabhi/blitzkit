@@ -92,6 +92,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
         left={isFullScreen ? '0' : undefined}
       >
         <Flex
+          display={isFullScreen ? 'none' : 'flex'}
           style={{ userSelect: 'none' }}
           direction="column"
           align={{ initial: 'center', md: 'start' }}
