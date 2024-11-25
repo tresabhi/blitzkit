@@ -40,8 +40,8 @@ export function PageWrapper({
         direction="column"
         gap="4"
         p={padding}
+        width="100%"
         style={{
-          width: '100%',
           margin: 'auto',
           boxSizing: 'border-box',
           flex: 1,
