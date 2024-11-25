@@ -35,7 +35,7 @@ function Content() {
           </IconButton>
         </Popover.Trigger>
 
-        <BlitzKitTheme>
+        <BlitzKitTheme style={{ display: 'contents' }}>
           <Popover.Content
             align="end"
             width="320px"

@@ -32,7 +32,7 @@ function Content() {
         <Flex direction="column" gap="3" align="center">
           <Text size="5">
             BlitzKit{' '}
-            <Code variant="outline" size="4" color="gray" highContrast>
+            <Code variant="outline" size="4" color="gray">
               opentest
             </Code>{' '}
             is available now{' '}
