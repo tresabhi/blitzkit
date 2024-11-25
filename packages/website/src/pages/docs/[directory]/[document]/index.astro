@@ -27,9 +27,12 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { content } = Astro.props;
+
+const title = content.split('\n')[0].replace('# ', '');
 ---
 
-<!-- <title>{title}</title> -->
+<title>{title}</title>
+
 <BaseLayout>
   <Page content={content} />
 </BaseLayout>
