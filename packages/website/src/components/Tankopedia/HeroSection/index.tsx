@@ -91,35 +91,43 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
         top={isFullScreen ? '0' : undefined}
         left={isFullScreen ? '0' : undefined}
       >
-        <Flex
-          display={isFullScreen ? 'none' : 'flex'}
-          style={{ userSelect: 'none' }}
-          direction="column"
-          align={{ initial: 'center', md: 'start' }}
-          justify="center"
-          pl={{ initial: '0', md: '9' }}
-          pt={{ initial: '5', md: '0' }}
-        >
-          <Heading
-            weight="bold"
-            size={{ initial: '8', lg: '9' }}
-            wrap="nowrap"
-            color={treeColor}
+        <Flex justify="center">
+          <Flex
+            display={isFullScreen ? 'none' : 'flex'}
+            style={{ userSelect: 'none' }}
+            direction="column"
+            align={{ initial: 'center', md: 'start' }}
+            justify="center"
+            pl={{ initial: '0', md: '9' }}
+            pt={{ initial: '5', md: '0' }}
+            overflow="hidden"
+            flexGrow="1"
+            maxWidth="40rem"
           >
-            <Flex align="center" gap="3">
-              <Icon width="0.8em" height="0.8em" />
-              {protagonist.name}
-            </Flex>
-          </Heading>
+            <Flex align="center" gap="2">
+              <Heading size={{ initial: '7', lg: '8' }}>
+                <Icon width="1em" height="1em" />
+              </Heading>
 
-          <Text
-            color="gray"
-            size="3"
-            weight="light"
-            ml={{ initial: '0', md: '7', lg: '9' }}
-          >
-            BlitzKit Tankopedia
-          </Text>
+              <Heading
+                weight="bold"
+                size={{ initial: '8', lg: '9' }}
+                wrap="nowrap"
+                color={treeColor}
+              >
+                {protagonist.name}
+              </Heading>
+            </Flex>
+
+            <Text
+              color="gray"
+              size="3"
+              weight="light"
+              ml={{ initial: '0', md: '7', lg: '8' }}
+            >
+              BlitzKit Tankopedia
+            </Text>
+          </Flex>
         </Flex>
 
         <Box
