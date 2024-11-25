@@ -107,6 +107,7 @@ export function TierListTile(props: TierListTileProps) {
             row.filter((tankId) => tankId !== props.tank.id),
           );
           draft.tanks[rowIndex].splice(tileIndex, 0, props.tank.id);
+          draft.placedTanks.add(props.tank.id);
         });
 
         wasPlaced = true;
@@ -120,6 +121,7 @@ export function TierListTile(props: TierListTileProps) {
           row.filter((tankId) => tankId !== props.tank.id),
         );
         draft.tanks[rowIndex].push(props.tank.id);
+        draft.placedTanks.add(props.tank.id);
       });
 
       wasPlaced = true;
@@ -133,6 +135,7 @@ export function TierListTile(props: TierListTileProps) {
         draft.tanks = draft.tanks.map((row) =>
           row.filter((tankId) => tankId !== props.tank.id),
         );
+        draft.placedTanks.delete(props.tank.id);
       });
     }
 

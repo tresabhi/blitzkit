@@ -8,6 +8,7 @@ import { times } from 'lodash-es';
 import { useMemo, useState } from 'react';
 import { filterTank } from '../../core/blitzkit/filterTank';
 import { $tankFilters } from '../../stores/tankFilters';
+import { TierList } from '../../stores/tierList';
 import { SkeletonTankCard } from '../TankSearch/components/SkeletonTankCard';
 import { TankCardWrapper } from '../TankSearch/components/TankCardWrapper';
 import { TierListTile } from './Tile';
@@ -21,13 +22,16 @@ const DEFAULT_LOADED_CARDS = 75;
 
 export function TierListTiles() {
   const filters = useStore($tankFilters);
+  const placedTanks = TierList.use((state) => state.placedTanks);
   const sorted = useMemo(
     () =>
       metaSortTank(
-        tanks.filter((tank) => filterTank(filters, tank)),
+        tanks.filter(
+          (tank) => filterTank(filters, tank) && !placedTanks.has(tank.id),
+        ),
         gameDefinitions,
       ).reverse(),
-    [filters],
+    [filters, placedTanks],
   );
   const [loadedTiles, setLoadedTiles] = useState(DEFAULT_LOADED_CARDS);
 
