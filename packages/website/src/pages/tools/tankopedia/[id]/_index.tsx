@@ -37,7 +37,7 @@ export function Page({ id, skeleton }: PageProps) {
           <Duel.Provider
             data={{ tank, provisionDefinitions: provisionDefinitions }}
           >
-            <PageWrapper p="0" noMaxWidth color="purple" gap="9" pb="9">
+            <PageWrapper p="0" maxWidth="unset" color="purple" gap="9" pb="9">
               <HeroSection skeleton={skeleton} />
               <CalloutsSection />
               <MetaSection />

@@ -26,7 +26,7 @@ function Content({ skeleton }: MaybeSkeletonComponentProps) {
   const mode = TankPerformanceEphemeral.use((state) => state.mode);
 
   return (
-    <PageWrapper color="jade" noMaxWidth>
+    <PageWrapper color="jade" maxWidth="unset">
       <ModeSwitcher />
 
       <PerformanceInfo skeleton={skeleton} />
