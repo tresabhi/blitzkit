@@ -123,17 +123,17 @@ const isBranchNamed = branchName !== undefined;
     position="relative"
     width="100%"
   >
-    <Flex direction="column" align="center">
-      <Heading size="9" weight="bold" align="center">
-        <Flex
-          align="center"
-          gap={{ initial: '1', xs: '4' }}
-          direction={{ initial: 'column', xs: 'row' }}
-        >
+    <Flex direction="column" align="center" gap="1">
+      <Heading size={{ initial: '8', xs: '9' }} weight="bold" align="center">
+        <Flex align="center" gap={{ initial: '2', xs: '4' }}>
           BlitzKit
           {
             isBranchNamed && (
-              <Code size="8" color="gray" variant="outline">
+              <Code
+                size={{ initial: '7', xs: '8' }}
+                color="gray"
+                variant="outline"
+              >
                 {branchName}
               </Code>
             )
