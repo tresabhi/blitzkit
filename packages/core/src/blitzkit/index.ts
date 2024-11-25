@@ -43,5 +43,6 @@ export * from './uniqueGuns';
 export * from './unwrapBlitzkitResponse';
 export * from './votes';
 // export * from './withCORSProxy';
+export * from './metaSortTank';
 export * from './romanize';
 export * from './youtubers';

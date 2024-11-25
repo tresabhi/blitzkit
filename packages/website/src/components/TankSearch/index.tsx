@@ -1,9 +1,9 @@
 import {
-  TANK_CLASSES,
   fetchGameDefinitions,
   fetchModelDefinitions,
   fetchTankDefinitions,
   fetchTankNames,
+  metaSortTank,
   normalizeBoundingBox,
   resolveDpm,
   unionBoundingBox,
@@ -31,7 +31,7 @@ import { RecentlyViewed } from './components/RecentlyViewed';
 import { SearchBar } from './components/SearchBar';
 import { SkeletonTankCard } from './components/SkeletonTankCard';
 import { TankCardWrapper } from './components/TankCardWrapper';
-import { MAX_RECENTLY_VIEWED, treeTypeOrder } from './constants';
+import { MAX_RECENTLY_VIEWED } from './constants';
 
 type TankSearchProps = Omit<FlexProps, 'onSelect'> & {
   compact?: boolean;
@@ -62,22 +62,7 @@ export const TankSearch = memo<TankSearchProps>(
 
         switch (tankopediaSort.by) {
           case 'meta.none':
-            sorted = filtered
-              .sort((a, b) => b.tier - a.tier)
-              .sort(
-                (a, b) =>
-                  treeTypeOrder.indexOf(b.type) - treeTypeOrder.indexOf(a.type),
-              )
-              .sort(
-                (a, b) =>
-                  TANK_CLASSES.indexOf(b.class) - TANK_CLASSES.indexOf(a.class),
-              )
-              .sort(
-                (a, b) =>
-                  gameDefinitions.nations.indexOf(b.nation) -
-                  gameDefinitions.nations.indexOf(a.nation),
-              )
-              .sort((a, b) => a.tier - b.tier);
+            sorted = metaSortTank(filtered, gameDefinitions);
             break;
 
           case 'survivability.health': {
