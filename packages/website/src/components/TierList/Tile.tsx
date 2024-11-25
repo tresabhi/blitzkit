@@ -71,6 +71,7 @@ export function TierListTile(props: TierListTileProps) {
     const cardRect = card.current.getBoundingClientRect();
     const cardX = (cardRect.left + cardRect.right) / 2;
     const cardY = (cardRect.top + cardRect.bottom) / 2;
+    let wasPlaced = false;
 
     rowLoop: for (const row of tierListRowElements) {
       const rowRect = row.getBoundingClientRect();
@@ -108,6 +109,8 @@ export function TierListTile(props: TierListTileProps) {
           draft.tanks[rowIndex].splice(tileIndex, 0, props.tank.id);
         });
 
+        wasPlaced = true;
+
         break rowLoop;
       }
 
@@ -119,7 +122,18 @@ export function TierListTile(props: TierListTileProps) {
         draft.tanks[rowIndex].push(props.tank.id);
       });
 
+      wasPlaced = true;
+
       break;
+    }
+
+    if (!wasPlaced) {
+      mutateTierList((draft) => {
+        draft.dragging = false;
+        draft.tanks = draft.tanks.map((row) =>
+          row.filter((tankId) => tankId !== props.tank.id),
+        );
+      });
     }
 
     card.current.style.position = 'static';

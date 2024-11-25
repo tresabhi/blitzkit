@@ -15,3 +15,4 @@ export const tierListRowElements = new Set<HTMLTableRowElement>();
 export const tierListCardElements = tierListRows.map(
   () => new Set<HTMLDivElement>(),
 );
+export const placedTanks = new Set<number>();

@@ -39,7 +39,7 @@ export function TierListRow({ index }: TierListRowProps) {
       </Table.RowHeaderCell>
 
       <Table.Cell>
-        <Flex wrap="wrap" height="100%" gap="2">
+        <Flex wrap="wrap" height="100%">
           {tanks.map((id, tankIndex) => {
             const tank = tankDefinitions.tanks[id];
             return (
