@@ -12,7 +12,7 @@ interface PageProps {
 
 export function Page({ avatars, lastUpdated }: PageProps) {
   return (
-    <PageWrapper color="gold">
+    <PageWrapper maxWidth="80rem" color="gold">
       <Flex justify="center">
         <Callout.Root size="1">
           <Callout.Icon>

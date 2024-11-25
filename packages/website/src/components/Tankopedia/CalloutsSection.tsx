@@ -28,7 +28,7 @@ export function CalloutsSection() {
 
   return (
     <Flex direction="column" align="center" gap="2" mb="4">
-      <AesonPlug />
+      {promoteAeson && <AesonPlug />}
 
       {tank.deprecated && (
         <Callout.Root color="red">

@@ -15,7 +15,7 @@ export interface Avatar {
 }
 
 const DEFAULT_LOADED = 42;
-const PREVIEW_COUNT = 14;
+const PREVIEW_COUNT = 28;
 
 export function GalleryList({ avatars }: GalleryListProps) {
   const search = GalleryEphemeral.use((state) => state.search);

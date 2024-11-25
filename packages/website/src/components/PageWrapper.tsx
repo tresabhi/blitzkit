@@ -41,6 +41,7 @@ export function PageWrapper({
         gap="4"
         p={padding}
         width="100%"
+        maxWidth={noMaxWidth ? undefined : '50rem'}
         style={{
           margin: 'auto',
           boxSizing: 'border-box',
