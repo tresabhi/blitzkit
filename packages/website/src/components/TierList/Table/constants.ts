@@ -10,3 +10,8 @@ export const tierListRows: {
   { name: 'C', color: 'green-9' },
   { name: 'D', color: 'blue-9' },
 ];
+
+export const tierListRowElements = new Set<HTMLTableRowElement>();
+export const tierListCardElements = tierListRows.map(
+  () => new Set<HTMLDivElement>(),
+);

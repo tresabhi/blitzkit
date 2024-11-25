@@ -15,7 +15,7 @@ export function TierListTiles() {
     <TankCardWrapper>
       {tanks
         .filter((tank) => filterTank(filters, tank))
-        .map((tank) => (
+        .map((tank, tileIndex) => (
           <TierListTile key={tank.id} tank={tank} />
         ))}
     </TankCardWrapper>

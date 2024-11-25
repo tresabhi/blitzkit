@@ -1,10 +1,9 @@
 import { fetchTankDefinitions } from '@blitzkit/core';
 import { Flex, Heading, Table } from '@radix-ui/themes';
-import { Fragment } from 'react';
+import { useEffect, useRef } from 'react';
 import { Var } from '../../core/radix/var';
 import { TierList } from '../../stores/tierList';
-import { DropOff } from './DropOff';
-import { tierListRows } from './Table/constants';
+import { tierListRowElements, tierListRows } from './Table/constants';
 import { TierListTile } from './Tile';
 
 interface TierListRowProps {
@@ -14,30 +13,43 @@ interface TierListRowProps {
 const tankDefinitions = await fetchTankDefinitions();
 
 export function TierListRow({ index }: TierListRowProps) {
-  const row = tierListRows[index];
+  const rowStyle = tierListRows[index];
   const tanks = TierList.use((state) => state.tanks[index]);
+  const row = useRef<HTMLTableRowElement>(null);
+
+  useEffect(() => {
+    if (!row.current) return;
+
+    tierListRowElements.add(row.current);
+
+    return () => {
+      if (!row.current) return;
+
+      tierListRowElements.delete(row.current);
+    };
+  });
 
   return (
-    <Table.Row key={row.name}>
+    <Table.Row key={rowStyle.name} ref={row} data-index={index}>
       <Table.RowHeaderCell
         width="0"
-        style={{ backgroundColor: Var(row.color) }}
+        style={{ backgroundColor: Var(rowStyle.color) }}
       >
-        <Heading>{row.name}</Heading>
+        <Heading>{rowStyle.name}</Heading>
       </Table.RowHeaderCell>
 
       <Table.Cell>
         <Flex wrap="wrap" height="100%" gap="2">
-          <DropOff row={index} index={0} />
-
           {tanks.map((id, tankIndex) => {
             const tank = tankDefinitions.tanks[id];
-
             return (
-              <Fragment key={id}>
-                <TierListTile tank={tank} />
-                <DropOff row={index} index={tankIndex + 1} />
-              </Fragment>
+              <TierListTile
+                isPlaced
+                key={id}
+                tank={tank}
+                rowIndex={index}
+                tileIndex={tankIndex}
+              />
             );
           })}
         </Flex>

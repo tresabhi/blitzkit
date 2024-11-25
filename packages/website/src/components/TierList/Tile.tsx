@@ -1,18 +1,28 @@
 import type { TankDefinition } from '@blitzkit/core';
 import {
   useCallback,
+  useEffect,
   useRef,
   type PointerEvent as ReactPointerEvent,
 } from 'react';
 import { TierList } from '../../stores/tierList';
 import { TankCard } from '../TankCard';
-import { tierListDropOffs } from './DropOff/constants';
+import { tierListCardElements, tierListRowElements } from './Table/constants';
 
-interface TierListTileProps {
+type TierListTileProps = {
   tank: TankDefinition;
-}
+} & (
+  | {
+      isPlaced?: false;
+    }
+  | {
+      isPlaced: true;
+      rowIndex: number;
+      tileIndex: number;
+    }
+);
 
-export function TierListTile({ tank }: TierListTileProps) {
+export function TierListTile(props: TierListTileProps) {
   const card = useRef<HTMLDivElement>(null);
   const mutateTierList = TierList.useMutation();
   const lastPosition = useRef({ x: 0, y: 0 });
@@ -58,43 +68,59 @@ export function TierListTile({ tank }: TierListTileProps) {
   const handlePointerUp = useCallback((event: PointerEvent) => {
     if (!card.current) return;
 
-    const rect = card.current.getBoundingClientRect();
-    let dropOff: { row: number; index: number; distance: number };
+    const cardRect = card.current.getBoundingClientRect();
+    const cardX = (cardRect.left + cardRect.right) / 2;
+    const cardY = (cardRect.top + cardRect.bottom) / 2;
 
-    tierListDropOffs.forEach((element) => {
-      const thisRect = element.getBoundingClientRect();
-      const thisX = (thisRect.left + thisRect.right) / 2;
-      const thisY = (thisRect.top + thisRect.bottom) / 2;
-      let distance = 0;
+    rowLoop: for (const row of tierListRowElements) {
+      const rowRect = row.getBoundingClientRect();
+      const isWithinRow =
+        cardX >= rowRect.left &&
+        cardX <= rowRect.right &&
+        cardY >= rowRect.top &&
+        cardY <= rowRect.bottom;
 
-      if (
-        (thisX < rect.left || thisX > rect.right) &&
-        (thisY < rect.top || thisY > rect.bottom)
-      ) {
-        const rectX = (rect.left + rect.right) / 2;
-        const rectY = (rect.top + rect.bottom) / 2;
-        distance = Math.sqrt((thisX - rectX) ** 2 + (thisY - rectY) ** 2);
+      if (!isWithinRow) continue;
+
+      const rowIndex = Number(row.dataset.index);
+
+      for (const tile of tierListCardElements[rowIndex]) {
+        const tileId = Number(tile.dataset.tileId);
+
+        if (tileId === props.tank.id) continue;
+
+        const tileRect = tile.getBoundingClientRect();
+        const isWithinTile =
+          cardX >= tileRect.left &&
+          cardX <= tileRect.right &&
+          cardY >= tileRect.top &&
+          cardY <= tileRect.bottom;
+
+        if (!isWithinTile) continue;
+
+        const tileIndex = Number(tile.dataset.tileIndex);
+
+        mutateTierList((draft) => {
+          draft.dragging = false;
+          draft.tanks = draft.tanks.map((row) =>
+            row.filter((tankId) => tankId !== props.tank.id),
+          );
+          draft.tanks[rowIndex].splice(tileIndex, 0, props.tank.id);
+        });
+
+        break rowLoop;
       }
 
-      if (dropOff === undefined || dropOff.distance > distance) {
-        dropOff = {
-          row: Number(element.dataset.row),
-          index: Number(element.dataset.index),
-          distance,
-        };
-      }
-    });
+      mutateTierList((draft) => {
+        draft.dragging = false;
+        draft.tanks = draft.tanks.map((row) =>
+          row.filter((tankId) => tankId !== props.tank.id),
+        );
+        draft.tanks[rowIndex].push(props.tank.id);
+      });
 
-    mutateTierList((draft) => {
-      draft.dragging = false;
-      draft.tanks = draft.tanks.map((tanks) =>
-        tanks.filter((id) => id !== tank.id),
-      );
-
-      if (dropOff) {
-        draft.tanks[dropOff.row].splice(dropOff.index, 0, tank.id);
-      }
-    });
+      break;
+    }
 
     card.current.style.position = 'static';
     card.current.style.zIndex = 'unset';
@@ -104,11 +130,25 @@ export function TierListTile({ tank }: TierListTileProps) {
     window.removeEventListener('pointerup', handlePointerUp);
   }, []);
 
+  useEffect(() => {
+    if (!props.isPlaced || !card.current) return;
+
+    tierListCardElements[props.rowIndex].add(card.current);
+
+    return () => {
+      if (!card.current) return;
+
+      tierListCardElements[props.rowIndex].delete(card.current);
+    };
+  }, []);
+
   return (
     <TankCard
+      data-tile-index={props.isPlaced ? props.tileIndex : undefined}
+      data-tile-id={props.tank.id}
       ref={card}
       noLink
-      tank={tank}
+      tank={props.tank}
       style={{ cursor: 'grab' }}
       onPointerDown={handlePointerDown}
     />
