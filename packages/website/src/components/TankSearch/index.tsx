@@ -415,11 +415,11 @@ export const TankSearch = memo<TankSearchProps>(
         return searchedTanks;
       }
     }, [tankFilters, tankopediaSort]);
-    const [loadedRows, setLoadedRows] = useState(DEFAULT_LOADED_CARDS);
-    const tanks = tanksFiltered.slice(0, loadedRows);
+    const [loadedCards, setLoadedCards] = useState(DEFAULT_LOADED_CARDS);
+    const tanks = tanksFiltered.slice(0, loadedCards);
 
     useEffect(() => {
-      setLoadedRows(DEFAULT_LOADED_CARDS);
+      setLoadedCards(DEFAULT_LOADED_CARDS);
     }, [tankFilters, tankopediaSort]);
 
     return (
@@ -497,13 +497,13 @@ export const TankSearch = memo<TankSearchProps>(
                 ))}
 
                 {times(
-                  Math.min(PREVIEW_COUNT, tanksFiltered.length - loadedRows),
+                  Math.min(PREVIEW_COUNT, tanksFiltered.length - loadedCards),
                   (index) => {
                     return (
                       <SkeletonTankCard
                         key={index}
                         onIntersection={() => {
-                          setLoadedRows((state) =>
+                          setLoadedCards((state) =>
                             Math.min(state + 2, tanksFiltered.length),
                           );
                         }}
