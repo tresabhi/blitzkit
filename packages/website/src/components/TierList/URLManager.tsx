@@ -1,6 +1,9 @@
+import { fetchTankDefinitions } from '@blitzkit/core';
 import { useEffect } from 'react';
 import { generateTierListParams } from '../../core/blitzkit/generateTierListParams';
 import { TierList } from '../../stores/tierList';
+
+const tankDefinitions = await fetchTankDefinitions();
 
 export function URLManager() {
   const tanks = TierList.use((state) => state.tanks);
@@ -12,7 +15,10 @@ export function URLManager() {
     params.forEach((value, key) => {
       if (key.startsWith('row-')) {
         const index = Number.parseInt(key.slice(4), 10);
-        const values = value.split(',').map(parseInt).filter(Boolean);
+        const values = value
+          .split(',')
+          .map(Number)
+          .filter((id) => id in tankDefinitions.tanks);
 
         mutateTierList((draft) => {
           draft.tanks[index] = values;

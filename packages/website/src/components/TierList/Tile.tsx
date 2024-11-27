@@ -42,6 +42,8 @@ export function TierListTile(props: TierListTileProps) {
 
       lastPosition.current = { x: event.clientX, y: event.clientY };
 
+      window.scrollTo({ behavior: 'smooth', top: 124 });
+
       window.addEventListener('pointermove', handlePointerMove);
       window.addEventListener('pointerup', handlePointerUp);
 
