@@ -8,9 +8,11 @@
     "setup:depotdownloader": "bun src/setupDepotDownloader.ts",
     "setup:patches": "bun src/applyPatches.ts",
     "build:reviews": "bun src/reviews.ts",
-    "build:ids": "bun src/discoverIds.ts"
+    "build:ids": "bun src/discoverIds.ts",
+    "build:bot": "bun src/buildBot.ts"
   },
   "dependencies": {
+    "esbuild": "^0.19.12",
     "@blitzkit/core": "workspace:*",
     "@gltf-transform/core": "^4.0.10",
     "@gltf-transform/extensions": "^4.0.10",

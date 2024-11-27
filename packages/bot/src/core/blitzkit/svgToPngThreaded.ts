@@ -3,7 +3,7 @@ import { Worker } from 'worker_threads';
 const RENDER_WORKERS = 1;
 
 const workers = [...Array(RENDER_WORKERS)].map(() => {
-  const worker = new Worker('src/workers/render.ts');
+  const worker = new Worker('dist/bot/workers/render.js');
   console.log(`🟡 Launching render worker ${worker.threadId}`);
   return worker;
 });
