@@ -1,13 +1,14 @@
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { Button, Flex } from '@radix-ui/themes';
-import { TierList } from '../../stores/tierList';
-import { tierListRows } from './Table/constants';
+import { TierList } from '../../../stores/tierList';
+import { tierListRows } from '../Table/constants';
+import { Share } from './components/Share';
 
 export function TierListControls() {
   const mutateTierList = TierList.useMutation();
 
   return (
-    <Flex justify="center">
+    <Flex justify="center" gap="2">
       <Button
         color="red"
         onClick={() => {
@@ -18,6 +19,8 @@ export function TierListControls() {
       >
         <ReloadIcon /> Reset
       </Button>
+
+      <Share />
     </Flex>
   );
 }

@@ -3,6 +3,7 @@ import { FilterControl } from '../../../components/TankSearch/components/FilterC
 import { TierListControls } from '../../../components/TierList/Controls';
 import { TierListTable } from '../../../components/TierList/Table';
 import { TierListTiles } from '../../../components/TierList/Tiles';
+import { URLManager } from '../../../components/TierList/URLManager';
 import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
 import { TierList } from '../../../stores/tierList';
 
@@ -19,6 +20,7 @@ export function Page() {
 function Content() {
   return (
     <PageWrapper color="orange" maxWidth="100rem">
+      <URLManager />
       <TierListControls />
       <TierListTable />
       <FilterControl />
