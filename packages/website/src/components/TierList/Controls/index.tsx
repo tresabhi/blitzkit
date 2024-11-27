@@ -1,7 +1,6 @@
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { Button, Flex } from '@radix-ui/themes';
-import { TierList } from '../../../stores/tierList';
-import { tierListRows } from '../Table/constants';
+import { TierList, tierListInitialState } from '../../../stores/tierList';
 import { Share } from './components/Share';
 
 export function TierListControls() {
@@ -13,7 +12,7 @@ export function TierListControls() {
         color="red"
         onClick={() => {
           mutateTierList((draft) => {
-            draft.tanks = tierListRows.map(() => []);
+            Object.assign(draft, tierListInitialState);
           });
         }}
       >

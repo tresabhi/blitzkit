@@ -1,10 +1,10 @@
 import { fetchTankDefinitions } from '@blitzkit/core';
-import { Flex, Heading, Table } from '@radix-ui/themes';
+import { Flex, Table } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
-import { Var } from '../../core/radix/var';
-import { TierList } from '../../stores/tierList';
-import { tierListRowElements, tierListRows } from './Table/constants';
-import { TierListTile } from './Tile';
+import { TierList } from '../../../stores/tierList';
+import { tierListRowElements } from '../Table/constants';
+import { TierListTile } from '../Tile';
+import { Header } from './components/Header';
 
 interface TierListRowProps {
   index: number;
@@ -13,8 +13,7 @@ interface TierListRowProps {
 const tankDefinitions = await fetchTankDefinitions();
 
 export function TierListRow({ index }: TierListRowProps) {
-  const rowStyle = tierListRows[index];
-  const tanks = TierList.use((state) => state.tanks[index]);
+  const tanks = TierList.use((state) => state.rows[index].tanks);
   const row = useRef<HTMLTableRowElement>(null);
 
   useEffect(() => {
@@ -30,13 +29,8 @@ export function TierListRow({ index }: TierListRowProps) {
   });
 
   return (
-    <Table.Row key={rowStyle.name} ref={row} data-index={index}>
-      <Table.RowHeaderCell
-        width="0"
-        style={{ backgroundColor: Var(rowStyle.color) }}
-      >
-        <Heading>{rowStyle.name}</Heading>
-      </Table.RowHeaderCell>
+    <Table.Row ref={row} data-index={index}>
+      <Header index={index} />
 
       <Table.Cell>
         <Flex wrap="wrap" height="100%">

@@ -1,8 +1,10 @@
-export function generateTierListParams(tanks: number[][]) {
+import type { TierList } from '../../stores/tierList';
+
+export function generateTierListParams(rows: TierList['rows']) {
   const params = new URLSearchParams();
 
-  tanks.forEach((row, index) => {
-    params.set(`row-${index}`, row.join(','));
+  rows.forEach((row, index) => {
+    params.set(`row-${index}`, row.tanks.join(','));
   });
 
   return params;

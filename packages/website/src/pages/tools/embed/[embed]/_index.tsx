@@ -54,10 +54,6 @@ export function Page({ embed }: PageProps) {
 }
 
 function Content({ embed }: PageProps) {
-  const wargaming = App.useDeferred(
-    (state) => state.logins.wargaming,
-    undefined,
-  );
   const embedStateStore = EmbedState.useStore();
   const config = embedConfigurations[embed] as EmbedConfig;
   const [backgroundImage, setBackgroundImage] = useState(

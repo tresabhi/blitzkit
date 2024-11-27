@@ -6,18 +6,23 @@ import { createContextualStore } from '../core/zustand/createContextualStore';
 
 export interface TierList {
   dragging: boolean;
-  tanks: number[][];
+  rows: { name: string; tanks: number[] }[];
   placedTanks: Set<number>;
 }
 
 enableMapSet();
 
+export const tierListInitialState: TierList = {
+  dragging: false,
+  rows: tierListRows.map((row) => ({
+    name: row.name,
+    tanks: [],
+  })),
+  placedTanks: new Set(),
+};
+
 export const TierList = createContextualStore(() =>
   create<TierList>()(
-    subscribeWithSelector<TierList>(() => ({
-      dragging: false,
-      tanks: tierListRows.map(() => []),
-      placedTanks: new Set(),
-    })),
+    subscribeWithSelector<TierList>(() => tierListInitialState),
   ),
 );

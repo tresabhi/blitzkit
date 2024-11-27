@@ -6,7 +6,7 @@ import { TierList } from '../../stores/tierList';
 const tankDefinitions = await fetchTankDefinitions();
 
 export function URLManager() {
-  const tanks = TierList.use((state) => state.tanks);
+  const rows = TierList.use((state) => state.rows);
   const mutateTierList = TierList.useMutation();
 
   useEffect(() => {
@@ -21,15 +21,15 @@ export function URLManager() {
           .filter((id) => id in tankDefinitions.tanks);
 
         mutateTierList((draft) => {
-          draft.tanks[index] = values;
+          draft.rows[index].tanks = values;
         });
       }
     });
   }, []);
 
   useEffect(() => {
-    window.history.replaceState(null, '', `?${generateTierListParams(tanks)}`);
-  }, [tanks]);
+    window.history.replaceState(null, '', `?${generateTierListParams(rows)}`);
+  }, [rows]);
 
   return null;
 }

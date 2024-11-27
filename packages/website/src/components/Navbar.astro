@@ -20,7 +20,6 @@ import {
 import { resolveBranchName } from '../core/blitzkit/branches';
 import { homeTool, TOOLS } from '../constants/tools';
 import { NavbarAccount } from './NavbarAccount';
-import { times } from 'lodash-es';
 
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
 const tools = [homeTool, ...toolsFiltered];

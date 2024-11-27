@@ -106,10 +106,10 @@ export function TierListTile(props: TierListTileProps) {
 
         mutateTierList((draft) => {
           draft.dragging = false;
-          draft.tanks = draft.tanks.map((row) =>
-            row.filter((tankId) => tankId !== props.tank.id),
-          );
-          draft.tanks[rowIndex].splice(tileIndex, 0, props.tank.id);
+          draft.rows.forEach((row) => {
+            row.tanks = row.tanks.filter((tankId) => tankId !== props.tank.id);
+          });
+          draft.rows[rowIndex].tanks.splice(tileIndex, 0, props.tank.id);
           draft.placedTanks.add(props.tank.id);
         });
 
@@ -120,10 +120,10 @@ export function TierListTile(props: TierListTileProps) {
 
       mutateTierList((draft) => {
         draft.dragging = false;
-        draft.tanks = draft.tanks.map((row) =>
-          row.filter((tankId) => tankId !== props.tank.id),
-        );
-        draft.tanks[rowIndex].push(props.tank.id);
+        draft.rows.forEach((row) => {
+          row.tanks = row.tanks.filter((tankId) => tankId !== props.tank.id);
+        });
+        draft.rows[rowIndex].tanks.push(props.tank.id);
         draft.placedTanks.add(props.tank.id);
       });
 
@@ -135,9 +135,9 @@ export function TierListTile(props: TierListTileProps) {
     if (!wasPlaced) {
       mutateTierList((draft) => {
         draft.dragging = false;
-        draft.tanks = draft.tanks.map((row) =>
-          row.filter((tankId) => tankId !== props.tank.id),
-        );
+        draft.rows.forEach((row) => {
+          row.tanks = row.tanks.filter((tankId) => tankId !== props.tank.id);
+        });
         draft.placedTanks.delete(props.tank.id);
       });
     }
