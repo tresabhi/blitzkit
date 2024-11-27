@@ -166,7 +166,7 @@ export function TierListTile(props: TierListTileProps) {
       ref={card}
       noLink
       tank={props.tank}
-      style={{ cursor: 'grab' }}
+      style={{ cursor: 'grab', touchAction: 'none' }}
       onPointerDown={handlePointerDown}
     />
   );
