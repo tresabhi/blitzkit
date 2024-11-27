@@ -1,4 +1,5 @@
 import type { TankDefinition } from '@blitzkit/core';
+import { Box } from '@radix-ui/themes';
 import {
   useCallback,
   useEffect,
@@ -162,14 +163,15 @@ export function TierListTile(props: TierListTileProps) {
   }, []);
 
   return (
-    <TankCard
+    <Box
+      p="2"
+      ref={card}
       data-tile-index={props.isPlaced ? props.tileIndex : undefined}
       data-tile-id={props.tank.id}
-      ref={card}
-      noLink
-      tank={props.tank}
-      style={{ cursor: 'grab', touchAction: 'none' }}
       onPointerDown={handlePointerDown}
-    />
+      style={{ cursor: 'grab', touchAction: 'none' }}
+    >
+      <TankCard noLink tank={props.tank} />
+    </Box>
   );
 }
