@@ -1,4 +1,4 @@
-name: CI Build Bot
+name: Build Bot
 
 on:
   workflow_dispatch:
@@ -22,7 +22,7 @@ jobs:
       - name: Build Prisma
         run: bun prisma generate
 
-      - name: Build
+      - name: Build bot
         run: bun build:bot
 
       - name: Archive build

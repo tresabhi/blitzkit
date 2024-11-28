@@ -1,4 +1,4 @@
-name: CD Rating Europe
+name: Rating Europe
 
 on:
   workflow_dispatch:

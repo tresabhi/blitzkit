@@ -1,4 +1,4 @@
-name: CD Discover IDs
+name: Discover IDs
 
 on:
   workflow_dispatch:

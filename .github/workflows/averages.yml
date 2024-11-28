@@ -1,4 +1,4 @@
-name: CD Averages
+name: Averages
 
 on:
   workflow_dispatch:

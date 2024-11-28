@@ -1,4 +1,4 @@
-name: CD Build Assets
+name: Build Assets
 
 on:
   push:

@@ -1,9 +1,9 @@
-name: CD Rating Latest
+name: Rating Asia
 
 on:
   workflow_dispatch:
   # schedule:
-  #   - cron: '0 0 * * *'
+  #   - cron: '0 17 * * *'
 
 jobs:
   host:
@@ -16,11 +16,11 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Generate all leaderboards
+      - name: Generate leaderboard
         env:
           PUBLIC_ASSET_BRANCH: main
           DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: bun scripts/buildRatingLeaderboard.ts --region=na,asia,eu --target=latest --production
+        run: bun scripts/buildRatingLeaderboard.ts --region=asia --target=midnight --production

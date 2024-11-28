@@ -1,4 +1,4 @@
-name: CD Host
+name: Host Bot
 
 on:
   push:
@@ -39,7 +39,4 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
         run: |
-          mv dist/bot/prisma .
-          mv dist/bot/node_modules .
-          mv dist/bot/package.json .
-          bun dist/bot/index.js --production
+          bun dist/bot/main.js
