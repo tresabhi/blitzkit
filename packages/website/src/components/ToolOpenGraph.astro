@@ -1,0 +1,22 @@
+---
+import { imgur } from '@blitzkit/core';
+import { type Tool } from '../constants/tools';
+
+interface Props {
+  tool: Tool;
+}
+
+const { tool } = Astro.props;
+---
+
+<title>{tool.title}</title>
+<meta property="og:image" content={imgur(tool.image)} />
+
+{
+  tool.pageDescription !== undefined && (
+    <>
+      <meta name="description" content={tool.pageDescription} />
+      <meta property="og:description" content={tool.pageDescription} />
+    </>
+  )
+}

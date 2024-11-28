@@ -1,9 +1,11 @@
 ---
+import ToolOpenGraph from '../../../components/ToolOpenGraph.astro';
+import { compareTool } from '../../../constants/tools';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { Page } from './_index';
 ---
 
-<title>Compare</title>
+<ToolOpenGraph tool={compareTool} />
 
 <BaseLayout noFooter>
   <Page client:load />

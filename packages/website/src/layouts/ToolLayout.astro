@@ -1,6 +1,7 @@
 ---
 import { imgur, ImgurSize } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
+import ToolOpenGraph from '../components/ToolOpenGraph.astro';
 import { type Tool } from '../constants/tools';
 import BaseLayout from './BaseLayout.astro';
 
@@ -11,19 +12,9 @@ interface Props {
 const { tool } = Astro.props;
 ---
 
+<ToolOpenGraph tool={tool} />
+
 <BaseLayout>
-  <title>{tool.title}</title>
-  <meta property="og:image" content={imgur(tool.image)} />
-
-  {
-    tool.pageDescription !== undefined && (
-      <>
-        <meta name="description" content={tool.pageDescription} />
-        <meta property="og:description" content={tool.pageDescription} />
-      </>
-    )
-  }
-
   <Box
     style={{
       backgroundImage: `url(${imgur(tool!.image, {
