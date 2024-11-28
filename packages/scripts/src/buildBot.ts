@@ -2,9 +2,10 @@ import { build } from 'esbuild';
 import { cp, readdir, rm } from 'fs/promises';
 import { argv } from 'process';
 
-const srcRoot = '../bot';
-const distRoot = '../../dist/bot';
-const modulesRoot = '../../node_modules';
+const projectDir = '../..';
+const srcRoot = `${projectDir}/packages/bot`;
+const distRoot = `${projectDir}/dist/bot`;
+const modulesRoot = `${projectDir}/node_modules`;
 const workers = await readdir(`${srcRoot}/src/workers`);
 const dev = argv.includes('--dev');
 
@@ -29,19 +30,25 @@ build({
   sourcemap: !dev,
 });
 
-await Promise.all(
-  (await readdir(`${modulesRoot}/@resvg`)).map(async (module) => {
-    const files = await readdir(`${modulesRoot}/@resvg/${module}`).then(
-      (files) => files.filter((file) => file.endsWith('.node')),
-    );
-
-    await Promise.all(
-      files.map(async (file) => {
-        await cp(
+for (const module of await readdir(`${modulesRoot}/@resvg`)) {
+  readdir(`${modulesRoot}/@resvg/${module}`).then((files) =>
+    files
+      .filter((file) => file.endsWith('.node'))
+      .map((file) =>
+        cp(
           `${modulesRoot}/@resvg/${module}/${file}`,
           `${distRoot}/workers/${file}`,
-        );
-      }),
-    );
-  }),
-);
+        ),
+      ),
+  );
+}
+
+if (!dev) {
+  await cp(`${projectDir}/prisma`, `${distRoot}/prisma`, { recursive: true });
+
+  for (const file of await readdir(`${modulesRoot}/prisma`).then((files) =>
+    files.filter((file) => file.endsWith('.node')),
+  )) {
+    cp(`${modulesRoot}/prisma/${file}`, `${distRoot}/prisma/${file}`);
+  }
+}

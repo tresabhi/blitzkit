@@ -39,4 +39,5 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
         run: |
+          mv dist/bot/prisma .
           bun dist/bot/main.js
