@@ -2,8 +2,8 @@ name: Rating Europe
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: '0 23 * * *'
+  schedule:
+    - cron: '0 23 * * *'
 
 jobs:
   host:
